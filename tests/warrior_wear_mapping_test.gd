@@ -11,14 +11,33 @@ func _run() -> void:
 	assert(int(manifest.get("schemaVersion", 0)) == 2, "战士穿戴映射版本错误")
 	assert(manifest.get("sourcePolicy", {}).get("distributionId", "") == "client.classic_raw_complete", "战士穿戴必须使用主客户端资料")
 	assert(manifest.get("formulaEvidence", {}).get("confidence", "") == "A", "Shape×2+性别及600帧公式必须保留A源")
+	assert(manifest.get("primaryGapShapeSource", {}).get("distributionId", "") == "server.crystal.cjlaaa", "缺口Shape必须来自服务端数据主源")
 	var mappings: Dictionary = manifest.get("runtimeMappings", {})
-	assert(mappings.size() == 24, "男性战士武器/衣服首批映射数量错误")
-	assert(manifest.get("rejectedMappings", []).size() == 7, "不兼容或缺失Shape必须显式保留")
+	assert(mappings.size() == 26, "男性战士映射应在既有24条上只补两条主源兼容记录")
+	assert(manifest.get("rejectedMappings", []).size() == 5, "其余缺源、越界和女性条目必须显式保留")
+	var accepted_baseline_features := {
+		"木剑": 0, "匕首": 2, "乌木剑": 0, "青铜剑": 4, "短剑": 6,
+		"铁剑": 4, "青铜斧": 8, "八荒": 10, "凌风": 16, "破魂": 24,
+		"斩马刀": 18, "修罗": 28, "凝霜": 30, "炼狱": 32, "井中月": 38,
+		"裁决之杖": 48, "屠龙": 58, "命运之刃": 48, "赤血魔剑": 50,
+		"祈祷之刃": 26, "布衣(男)": 2, "轻型盔甲(男)": 4,
+		"重盔甲(男)": 6, "战神盔甲(男)": 6,
+	}
+	for item_name: String in accepted_baseline_features:
+		var art: Dictionary = mappings.get(item_name, {})
+		var appearance: Dictionary = art.get("weaponAppearance", art.get("dressAppearance", {}))
+		assert(int(appearance.get("feature", -1)) == int(accepted_baseline_features[item_name]), "主工作树已验收映射发生变化：%s" % item_name)
 	var pickaxe_rejected := false
+	var female_armor_rejected := false
 	for value: Variant in manifest.get("rejectedMappings", []):
 		if value is Dictionary and value.get("name", "") == "鹤嘴锄" and "超出" in str(value.get("reason", "")):
 			pickaxe_rejected = true
+		if value is Dictionary and value.get("name", "") == "圣战宝甲" and "女性角色" in str(value.get("reason", "")):
+			female_armor_rejected = true
 	assert(pickaxe_rejected, "越出经典Weapon.wil容量的鹤嘴锄候选不得强行接入")
+	assert(female_armor_rejected and not mappings.has("圣战宝甲"), "女性盔甲不得进入当前运行映射")
+	assert(int(mappings.get("怒斩", {}).get("weaponAppearance", {}).get("feature", -1)) == 54, "怒斩主源Shape没有补入男战士映射")
+	assert(int(mappings.get("中型盔甲(男)", {}).get("dressAppearance", {}).get("feature", -1)) == 4, "中型男甲主源Shape没有补入男战士映射")
 
 	var dagger: Dictionary = mappings.get("匕首", {}).get("weaponAppearance", {})
 	assert(int(dagger.get("shape", -1)) == 1 and int(dagger.get("feature", -1)) == 2, "武器Shape到feature转换错误")
@@ -59,5 +78,5 @@ func _run() -> void:
 	assert(body_actor_origin == weapon_actor_origin, "武器与人物必须共享经典角色原点")
 	assert(int(PlayerState.computed_stats.get("attack_max", 0)) < 25, "零耐久装备不得恢复属性")
 
-	print("WARRIOR_WEAR_MAPPING_PASS：Shape证据、越界拒绝、五动作图集、零耐久外观与属性边界正确")
+	print("WARRIOR_WEAR_MAPPING_PASS：保留24条既有男战士基线、主源补两条、越界/缺源/女性隔离正确")
 	get_tree().quit(0)

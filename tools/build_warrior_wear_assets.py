@@ -15,6 +15,8 @@ ROOT = Path(__file__).resolve().parents[1]
 CLIENT_DATA = ROOT / "dev_art_sources/reference/mir2_client_raw/Data"
 SOURCE_CSV = ROOT / "dev_art_sources/reference/mir2_database/angelk727/2_物品数据.csv"
 CATALOG = ROOT / "assets/data/legend176_data.json"
+SERVICE_CATALOG = ROOT / "assets/data/service_item_catalog.json"
+SOURCE_POLICY = ROOT / "assets/data/source_priority_policy.json"
 OUTPUT = ROOT / "assets/art/characters/warrior/wear"
 MANIFEST = ROOT / "assets/data/warrior_wear_sources.json"
 
@@ -47,6 +49,23 @@ ACTIONS = {
 CLASSIC_SHAPE_OVERRIDES = {
     "裁决之杖": 24,
 }
+# Immutable EQUIPMENT-WEAR-1 acceptance baseline from the integration tree.
+# New source snapshots may fill rejected gaps, but must never silently remap
+# these 24 names or regenerate them under different Weapon/Hum features.
+ACCEPTED_BASELINE_SHAPES = {
+    "木剑": 0, "匕首": 1, "乌木剑": 0, "青铜剑": 2, "短剑": 3,
+    "铁剑": 2, "青铜斧": 4, "八荒": 5, "凌风": 8, "破魂": 12,
+    "斩马刀": 9, "修罗": 14, "凝霜": 15, "炼狱": 16, "井中月": 19,
+    "裁决之杖": 24, "屠龙": 29, "命运之刃": 24, "赤血魔剑": 25,
+    "祈祷之刃": 13, "布衣(男)": 1, "轻型盔甲(男)": 2,
+    "重盔甲(男)": 3, "战神盔甲(男)": 3,
+}
+# These records were absent or unusable when EQUIPMENT-WEAR-1 was accepted.
+# The complete item scan subsequently found three matching records in the
+# authorized primary server distribution.  Only use that primary source to
+# revisit the original gaps; never replace the 24 already accepted mappings.
+PRIMARY_GAP_NAMES = {"鹤嘴锄", "怒斩", "中型盔甲(男)"}
+FEMALE_ONLY_ARMOR = {"圣战宝甲"}
 
 
 def source_rows() -> dict[str, dict]:
@@ -58,6 +77,23 @@ def source_rows() -> dict[str, dict]:
         if name and name not in result:
             result[name] = row
     return result
+
+
+def primary_service_rows() -> tuple[str, dict[str, dict]]:
+    policy = json.loads(SOURCE_POLICY.read_text(encoding="utf-8"))
+    server_sources = policy.get("lanes", {}).get("server_data", {}).get("sources", [])
+    if not server_sources or server_sources[0].get("tier") != "primary":
+        raise ValueError("server_data primary source is not configured")
+    primary_distribution = str(server_sources[0].get("distribution", ""))
+    catalog = json.loads(SERVICE_CATALOG.read_text(encoding="utf-8"))
+    rows = {}
+    for record in catalog.get("serviceEquipmentReference", []):
+        if record.get("source", {}).get("distribution") != primary_distribution:
+            continue
+        name = str(record.get("name", ""))
+        if name and name not in rows:
+            rows[name] = record
+    return primary_distribution, rows
 
 
 def weapon_tip_offset(image: Image.Image, meta: dict) -> list[int]:
@@ -136,6 +172,7 @@ def build_action(library: Path, feature: int, action: str, target: Path, appeara
 def main() -> None:
     catalog = json.loads(CATALOG.read_text(encoding="utf-8")).get("items", [])
     candidates = source_rows()
+    primary_distribution, primary_rows = primary_service_rows()
     target_names = {
         str(item.get("name", "")): item
         for item in catalog
@@ -153,16 +190,34 @@ def main() -> None:
     mappings, rejected = {}, []
     atlas_cache = {}
     for name, item in target_names.items():
+        if name in FEMALE_ONLY_ARMOR:
+            rejected.append({"name": name, "reason": "女性角色不在当前开发范围"})
+            continue
+        primary_row = primary_rows.get(name) if name in PRIMARY_GAP_NAMES else None
         row = candidates.get(name)
-        if row is None or not str(row.get("ItemShape", "")).isdigit():
+        if primary_row is not None:
+            shape = int(primary_row["shape"])
+            mapping_source = (
+                f"{primary_distribution} Server.MirDB "
+                f"ItemInfo[{int(primary_row['serviceIndex'])}]"
+            )
+            mapping_confidence = "B"
+        elif row is not None and str(row.get("ItemShape", "")).isdigit():
+            shape = CLASSIC_SHAPE_OVERRIDES.get(name, int(row["ItemShape"]))
+            mapping_source = (
+                "经典 Weapon.wil 外观表：裁决之杖 Shape 24（覆盖候选CSV Shape 21）"
+                if name in CLASSIC_SHAPE_OVERRIDES
+                else "angelk727/Mir2ServerDatabases Exports/2_物品数据.csv"
+            )
+            mapping_confidence = "B"
+        else:
             rejected.append({"name": name, "reason": "候选数据库无同名Shape"})
             continue
-        shape = CLASSIC_SHAPE_OVERRIDES.get(name, int(row["ItemShape"]))
-        mapping_source = (
-            "经典 Weapon.wil 外观表：裁决之杖 Shape 24（覆盖候选CSV Shape 21）"
-            if name in CLASSIC_SHAPE_OVERRIDES
-            else "angelk727/Mir2ServerDatabases Exports/2_物品数据.csv"
-        )
+        if name in ACCEPTED_BASELINE_SHAPES and shape != ACCEPTED_BASELINE_SHAPES[name]:
+            raise ValueError(
+                f"accepted male-warrior baseline changed: {name} "
+                f"expected Shape {ACCEPTED_BASELINE_SHAPES[name]}, got {shape}"
+            )
         appearance_type = "weaponAppearance" if item.get("category") == "武器" else "dressAppearance"
         # This task targets the current male warrior; classic server feature = Shape*2 + gender(0).
         feature = shape * 2
@@ -176,7 +231,7 @@ def main() -> None:
                     "feature": feature,
                     "visible": False,
                     "actions": {},
-                    "mappingConfidence": "B",
+                    "mappingConfidence": mapping_confidence,
                     "mappingSource": mapping_source,
                     "runtimeRule": "经典客户端m_btWeapon<2不绘制武器层",
                 }
@@ -197,11 +252,17 @@ def main() -> None:
                 "feature": feature,
                 "visible": True,
                 "actions": atlas_cache[cache_key],
-                "mappingConfidence": "B",
+                "mappingConfidence": mapping_confidence,
                 "mappingSource": mapping_source,
                 "clientSource": f"dev_art_sources/reference/mir2_client_raw/Data/{libraries[appearance_type].name}",
             }
         }
+
+    missing_baseline = [name for name in ACCEPTED_BASELINE_SHAPES if name not in mappings]
+    if missing_baseline:
+        raise ValueError(f"accepted male-warrior mappings disappeared: {missing_baseline}")
+    ordered_mappings = {name: mappings[name] for name in ACCEPTED_BASELINE_SHAPES}
+    ordered_mappings.update({name: value for name, value in mappings.items() if name not in ordered_mappings})
 
     payload = {
         "schemaVersion": 2,
@@ -217,6 +278,13 @@ def main() -> None:
             "confidence": "B",
             "reason": "非2003官服StdItems；仅在名称匹配且客户端容量有效时采用",
         },
+        "primaryGapShapeSource": {
+            "distributionId": primary_distribution,
+            "catalog": "res://assets/data/service_item_catalog.json",
+            "scope": sorted(PRIMARY_GAP_NAMES),
+            "confidence": "B",
+            "reason": "只补EQUIPMENT-WEAR-1拒绝项；不覆盖24条已验收男战士映射，也不声明等同官服1.76",
+        },
         "sourcePolicy": {
             "lane": "client_assets",
             "distributionId": "client.classic_raw_complete",
@@ -229,7 +297,7 @@ def main() -> None:
             "blockFrames": 600,
             "actions": ACTIONS,
         },
-        "runtimeMappings": mappings,
+        "runtimeMappings": ordered_mappings,
         "rejectedMappings": rejected,
         "generatedAtlases": len(atlas_cache) * len(ACTIONS),
         "policy": "帧公式和客户端像素为A；逐件Shape为B。越界、缺名或不兼容值拒绝运行，不猜测替换。",

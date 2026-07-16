@@ -12,6 +12,17 @@
     "confidence": "B",
     "reason": "非2003官服StdItems；仅在名称匹配且客户端容量有效时采用"
   },
+  "primaryGapShapeSource": {
+    "distributionId": "server.crystal.cjlaaa",
+    "catalog": "res://assets/data/service_item_catalog.json",
+    "scope": [
+      "中型盔甲(男)",
+      "怒斩",
+      "鹤嘴锄"
+    ],
+    "confidence": "B",
+    "reason": "只补EQUIPMENT-WEAR-1拒绝项；不覆盖24条已验收男战士映射，也不声明等同官服1.76"
+  },
   "sourcePolicy": {
     "lane": "client_assets",
     "distributionId": "client.classic_raw_complete",
@@ -58519,6 +58530,5196 @@
         "mappingSource": "angelk727/Mir2ServerDatabases Exports/2_物品数据.csv",
         "clientSource": "dev_art_sources/reference/mir2_client_raw/Data/Hum.wil"
       }
+    },
+    "怒斩": {
+      "weaponAppearance": {
+        "shape": 27,
+        "feature": 54,
+        "visible": true,
+        "actions": {
+          "idle": {
+            "path": "res://assets/art/characters/warrior/wear/weapon/weapon_054_idle.png",
+            "cell": [
+              192,
+              224
+            ],
+            "footAnchor": [
+              68,
+              112
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "sourceFeature": 54,
+            "sourceFrames": [
+              {
+                "index": 32400,
+                "direction": 0,
+                "frame": 0,
+                "drawOffset": [
+                  35,
+                  -22
+                ],
+                "sourceSize": [
+                  12,
+                  14
+                ]
+              },
+              {
+                "index": 32401,
+                "direction": 0,
+                "frame": 1,
+                "drawOffset": [
+                  35,
+                  -25
+                ],
+                "sourceSize": [
+                  12,
+                  18
+                ]
+              },
+              {
+                "index": 32402,
+                "direction": 0,
+                "frame": 2,
+                "drawOffset": [
+                  35,
+                  -26
+                ],
+                "sourceSize": [
+                  12,
+                  21
+                ]
+              },
+              {
+                "index": 32403,
+                "direction": 0,
+                "frame": 3,
+                "drawOffset": [
+                  35,
+                  -25
+                ],
+                "sourceSize": [
+                  12,
+                  18
+                ]
+              },
+              {
+                "index": 32408,
+                "direction": 1,
+                "frame": 0,
+                "drawOffset": [
+                  7,
+                  -12
+                ],
+                "sourceSize": [
+                  56,
+                  17
+                ]
+              },
+              {
+                "index": 32409,
+                "direction": 1,
+                "frame": 1,
+                "drawOffset": [
+                  7,
+                  -14
+                ],
+                "sourceSize": [
+                  56,
+                  16
+                ]
+              },
+              {
+                "index": 32410,
+                "direction": 1,
+                "frame": 2,
+                "drawOffset": [
+                  7,
+                  -15
+                ],
+                "sourceSize": [
+                  60,
+                  16
+                ]
+              },
+              {
+                "index": 32411,
+                "direction": 1,
+                "frame": 3,
+                "drawOffset": [
+                  8,
+                  -14
+                ],
+                "sourceSize": [
+                  56,
+                  16
+                ]
+              },
+              {
+                "index": 32416,
+                "direction": 2,
+                "frame": 0,
+                "drawOffset": [
+                  -13,
+                  -26
+                ],
+                "sourceSize": [
+                  72,
+                  49
+                ]
+              },
+              {
+                "index": 32417,
+                "direction": 2,
+                "frame": 1,
+                "drawOffset": [
+                  -14,
+                  -24
+                ],
+                "sourceSize": [
+                  76,
+                  45
+                ]
+              },
+              {
+                "index": 32418,
+                "direction": 2,
+                "frame": 2,
+                "drawOffset": [
+                  -15,
+                  -23
+                ],
+                "sourceSize": [
+                  76,
+                  43
+                ]
+              },
+              {
+                "index": 32419,
+                "direction": 2,
+                "frame": 3,
+                "drawOffset": [
+                  -13,
+                  -24
+                ],
+                "sourceSize": [
+                  76,
+                  45
+                ]
+              },
+              {
+                "index": 32424,
+                "direction": 3,
+                "frame": 0,
+                "drawOffset": [
+                  -11,
+                  -46
+                ],
+                "sourceSize": [
+                  52,
+                  78
+                ]
+              },
+              {
+                "index": 32425,
+                "direction": 3,
+                "frame": 1,
+                "drawOffset": [
+                  -12,
+                  -45
+                ],
+                "sourceSize": [
+                  56,
+                  77
+                ]
+              },
+              {
+                "index": 32426,
+                "direction": 3,
+                "frame": 2,
+                "drawOffset": [
+                  -13,
+                  -44
+                ],
+                "sourceSize": [
+                  56,
+                  75
+                ]
+              },
+              {
+                "index": 32427,
+                "direction": 3,
+                "frame": 3,
+                "drawOffset": [
+                  -12,
+                  -44
+                ],
+                "sourceSize": [
+                  56,
+                  76
+                ]
+              },
+              {
+                "index": 32432,
+                "direction": 4,
+                "frame": 0,
+                "drawOffset": [
+                  1,
+                  -60
+                ],
+                "sourceSize": [
+                  12,
+                  89
+                ]
+              },
+              {
+                "index": 32433,
+                "direction": 4,
+                "frame": 1,
+                "drawOffset": [
+                  2,
+                  -59
+                ],
+                "sourceSize": [
+                  12,
+                  88
+                ]
+              },
+              {
+                "index": 32434,
+                "direction": 4,
+                "frame": 2,
+                "drawOffset": [
+                  2,
+                  -58
+                ],
+                "sourceSize": [
+                  12,
+                  87
+                ]
+              },
+              {
+                "index": 32435,
+                "direction": 4,
+                "frame": 3,
+                "drawOffset": [
+                  2,
+                  -59
+                ],
+                "sourceSize": [
+                  12,
+                  89
+                ]
+              },
+              {
+                "index": 32440,
+                "direction": 5,
+                "frame": 0,
+                "drawOffset": [
+                  -14,
+                  -59
+                ],
+                "sourceSize": [
+                  56,
+                  73
+                ]
+              },
+              {
+                "index": 32441,
+                "direction": 5,
+                "frame": 1,
+                "drawOffset": [
+                  -15,
+                  -59
+                ],
+                "sourceSize": [
+                  56,
+                  73
+                ]
+              },
+              {
+                "index": 32442,
+                "direction": 5,
+                "frame": 2,
+                "drawOffset": [
+                  -16,
+                  -58
+                ],
+                "sourceSize": [
+                  60,
+                  72
+                ]
+              },
+              {
+                "index": 32443,
+                "direction": 5,
+                "frame": 3,
+                "drawOffset": [
+                  -15,
+                  -58
+                ],
+                "sourceSize": [
+                  56,
+                  72
+                ]
+              },
+              {
+                "index": 32448,
+                "direction": 6,
+                "frame": 0,
+                "drawOffset": [
+                  -9,
+                  -43
+                ],
+                "sourceSize": [
+                  72,
+                  41
+                ]
+              },
+              {
+                "index": 32449,
+                "direction": 6,
+                "frame": 1,
+                "drawOffset": [
+                  -12,
+                  -42
+                ],
+                "sourceSize": [
+                  76,
+                  39
+                ]
+              },
+              {
+                "index": 32450,
+                "direction": 6,
+                "frame": 2,
+                "drawOffset": [
+                  -12,
+                  -41
+                ],
+                "sourceSize": [
+                  76,
+                  37
+                ]
+              },
+              {
+                "index": 32451,
+                "direction": 6,
+                "frame": 3,
+                "drawOffset": [
+                  -12,
+                  -42
+                ],
+                "sourceSize": [
+                  76,
+                  39
+                ]
+              },
+              {
+                "index": 32456,
+                "direction": 7,
+                "frame": 0,
+                "drawOffset": [
+                  9,
+                  -24
+                ],
+                "sourceSize": [
+                  52,
+                  11
+                ]
+              },
+              {
+                "index": 32457,
+                "direction": 7,
+                "frame": 1,
+                "drawOffset": [
+                  8,
+                  -25
+                ],
+                "sourceSize": [
+                  52,
+                  10
+                ]
+              },
+              {
+                "index": 32458,
+                "direction": 7,
+                "frame": 2,
+                "drawOffset": [
+                  7,
+                  -26
+                ],
+                "sourceSize": [
+                  56,
+                  10
+                ]
+              },
+              {
+                "index": 32459,
+                "direction": 7,
+                "frame": 3,
+                "drawOffset": [
+                  7,
+                  -25
+                ],
+                "sourceSize": [
+                  56,
+                  10
+                ]
+              }
+            ],
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "walk": {
+            "path": "res://assets/art/characters/warrior/wear/weapon/weapon_054_walk.png",
+            "cell": [
+              192,
+              224
+            ],
+            "footAnchor": [
+              68,
+              112
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 54,
+            "sourceFrames": [
+              {
+                "index": 32464,
+                "direction": 0,
+                "frame": 0,
+                "drawOffset": [
+                  29,
+                  -23
+                ],
+                "sourceSize": [
+                  24,
+                  22
+                ]
+              },
+              {
+                "index": 32465,
+                "direction": 0,
+                "frame": 1,
+                "drawOffset": [
+                  33,
+                  -34
+                ],
+                "sourceSize": [
+                  16,
+                  40
+                ]
+              },
+              {
+                "index": 32466,
+                "direction": 0,
+                "frame": 2,
+                "drawOffset": [
+                  33,
+                  -44
+                ],
+                "sourceSize": [
+                  12,
+                  50
+                ]
+              },
+              {
+                "index": 32467,
+                "direction": 0,
+                "frame": 3,
+                "drawOffset": [
+                  30,
+                  -52
+                ],
+                "sourceSize": [
+                  12,
+                  59
+                ]
+              },
+              {
+                "index": 32468,
+                "direction": 0,
+                "frame": 4,
+                "drawOffset": [
+                  33,
+                  -38
+                ],
+                "sourceSize": [
+                  12,
+                  41
+                ]
+              },
+              {
+                "index": 32469,
+                "direction": 0,
+                "frame": 5,
+                "drawOffset": [
+                  30,
+                  -26
+                ],
+                "sourceSize": [
+                  24,
+                  25
+                ]
+              },
+              {
+                "index": 32472,
+                "direction": 1,
+                "frame": 0,
+                "drawOffset": [
+                  -3,
+                  -10
+                ],
+                "sourceSize": [
+                  68,
+                  16
+                ]
+              },
+              {
+                "index": 32473,
+                "direction": 1,
+                "frame": 1,
+                "drawOffset": [
+                  0,
+                  -19
+                ],
+                "sourceSize": [
+                  68,
+                  20
+                ]
+              },
+              {
+                "index": 32474,
+                "direction": 1,
+                "frame": 2,
+                "drawOffset": [
+                  8,
+                  -30
+                ],
+                "sourceSize": [
+                  64,
+                  35
+                ]
+              },
+              {
+                "index": 32475,
+                "direction": 1,
+                "frame": 3,
+                "drawOffset": [
+                  12,
+                  -39
+                ],
+                "sourceSize": [
+                  60,
+                  46
+                ]
+              },
+              {
+                "index": 32476,
+                "direction": 1,
+                "frame": 4,
+                "drawOffset": [
+                  5,
+                  -25
+                ],
+                "sourceSize": [
+                  64,
+                  26
+                ]
+              },
+              {
+                "index": 32477,
+                "direction": 1,
+                "frame": 5,
+                "drawOffset": [
+                  -1,
+                  -13
+                ],
+                "sourceSize": [
+                  68,
+                  15
+                ]
+              },
+              {
+                "index": 32480,
+                "direction": 2,
+                "frame": 0,
+                "drawOffset": [
+                  -19,
+                  -28
+                ],
+                "sourceSize": [
+                  76,
+                  52
+                ]
+              },
+              {
+                "index": 32481,
+                "direction": 2,
+                "frame": 1,
+                "drawOffset": [
+                  -20,
+                  -19
+                ],
+                "sourceSize": [
+                  84,
+                  35
+                ]
+              },
+              {
+                "index": 32482,
+                "direction": 2,
+                "frame": 2,
+                "drawOffset": [
+                  -14,
+                  -12
+                ],
+                "sourceSize": [
+                  88,
+                  19
+                ]
+              },
+              {
+                "index": 32483,
+                "direction": 2,
+                "frame": 3,
+                "drawOffset": [
+                  -10,
+                  -15
+                ],
+                "sourceSize": [
+                  92,
+                  14
+                ]
+              },
+              {
+                "index": 32484,
+                "direction": 2,
+                "frame": 4,
+                "drawOffset": [
+                  -15,
+                  -16
+                ],
+                "sourceSize": [
+                  84,
+                  27
+                ]
+              },
+              {
+                "index": 32485,
+                "direction": 2,
+                "frame": 5,
+                "drawOffset": [
+                  -18,
+                  -26
+                ],
+                "sourceSize": [
+                  80,
+                  47
+                ]
+              },
+              {
+                "index": 32488,
+                "direction": 3,
+                "frame": 0,
+                "drawOffset": [
+                  -10,
+                  -49
+                ],
+                "sourceSize": [
+                  44,
+                  81
+                ]
+              },
+              {
+                "index": 32489,
+                "direction": 3,
+                "frame": 1,
+                "drawOffset": [
+                  -13,
+                  -41
+                ],
+                "sourceSize": [
+                  56,
+                  69
+                ]
+              },
+              {
+                "index": 32490,
+                "direction": 3,
+                "frame": 2,
+                "drawOffset": [
+                  -14,
+                  -32
+                ],
+                "sourceSize": [
+                  68,
+                  57
+                ]
+              },
+              {
+                "index": 32491,
+                "direction": 3,
+                "frame": 3,
+                "drawOffset": [
+                  -12,
+                  -25
+                ],
+                "sourceSize": [
+                  72,
+                  47
+                ]
+              },
+              {
+                "index": 32492,
+                "direction": 3,
+                "frame": 4,
+                "drawOffset": [
+                  -12,
+                  -37
+                ],
+                "sourceSize": [
+                  64,
+                  65
+                ]
+              },
+              {
+                "index": 32493,
+                "direction": 3,
+                "frame": 5,
+                "drawOffset": [
+                  -10,
+                  -47
+                ],
+                "sourceSize": [
+                  48,
+                  78
+                ]
+              },
+              {
+                "index": 32496,
+                "direction": 4,
+                "frame": 0,
+                "drawOffset": [
+                  -5,
+                  -60
+                ],
+                "sourceSize": [
+                  24,
+                  84
+                ]
+              },
+              {
+                "index": 32497,
+                "direction": 4,
+                "frame": 1,
+                "drawOffset": [
+                  -2,
+                  -54
+                ],
+                "sourceSize": [
+                  20,
+                  79
+                ]
+              },
+              {
+                "index": 32498,
+                "direction": 4,
+                "frame": 2,
+                "drawOffset": [
+                  5,
+                  -47
+                ],
+                "sourceSize": [
+                  12,
+                  74
+                ]
+              },
+              {
+                "index": 32499,
+                "direction": 4,
+                "frame": 3,
+                "drawOffset": [
+                  6,
+                  -40
+                ],
+                "sourceSize": [
+                  12,
+                  66
+                ]
+              },
+              {
+                "index": 32500,
+                "direction": 4,
+                "frame": 4,
+                "drawOffset": [
+                  4,
+                  -50
+                ],
+                "sourceSize": [
+                  12,
+                  79
+                ]
+              },
+              {
+                "index": 32501,
+                "direction": 4,
+                "frame": 5,
+                "drawOffset": [
+                  -3,
+                  -58
+                ],
+                "sourceSize": [
+                  24,
+                  84
+                ]
+              },
+              {
+                "index": 32504,
+                "direction": 5,
+                "frame": 0,
+                "drawOffset": [
+                  -17,
+                  -55
+                ],
+                "sourceSize": [
+                  68,
+                  62
+                ]
+              },
+              {
+                "index": 32505,
+                "direction": 5,
+                "frame": 1,
+                "drawOffset": [
+                  -20,
+                  -50
+                ],
+                "sourceSize": [
+                  72,
+                  57
+                ]
+              },
+              {
+                "index": 32506,
+                "direction": 5,
+                "frame": 2,
+                "drawOffset": [
+                  -22,
+                  -47
+                ],
+                "sourceSize": [
+                  64,
+                  57
+                ]
+              },
+              {
+                "index": 32507,
+                "direction": 5,
+                "frame": 3,
+                "drawOffset": [
+                  -23,
+                  -42
+                ],
+                "sourceSize": [
+                  60,
+                  52
+                ]
+              },
+              {
+                "index": 32508,
+                "direction": 5,
+                "frame": 4,
+                "drawOffset": [
+                  -20,
+                  -49
+                ],
+                "sourceSize": [
+                  64,
+                  61
+                ]
+              },
+              {
+                "index": 32509,
+                "direction": 5,
+                "frame": 5,
+                "drawOffset": [
+                  -18,
+                  -53
+                ],
+                "sourceSize": [
+                  68,
+                  61
+                ]
+              },
+              {
+                "index": 32512,
+                "direction": 6,
+                "frame": 0,
+                "drawOffset": [
+                  -8,
+                  -34
+                ],
+                "sourceSize": [
+                  76,
+                  24
+                ]
+              },
+              {
+                "index": 32513,
+                "direction": 6,
+                "frame": 1,
+                "drawOffset": [
+                  -16,
+                  -30
+                ],
+                "sourceSize": [
+                  84,
+                  16
+                ]
+              },
+              {
+                "index": 32514,
+                "direction": 6,
+                "frame": 2,
+                "drawOffset": [
+                  -25,
+                  -31
+                ],
+                "sourceSize": [
+                  88,
+                  17
+                ]
+              },
+              {
+                "index": 32515,
+                "direction": 6,
+                "frame": 3,
+                "drawOffset": [
+                  -31,
+                  -28
+                ],
+                "sourceSize": [
+                  92,
+                  12
+                ]
+              },
+              {
+                "index": 32516,
+                "direction": 6,
+                "frame": 4,
+                "drawOffset": [
+                  -21,
+                  -32
+                ],
+                "sourceSize": [
+                  88,
+                  22
+                ]
+              },
+              {
+                "index": 32517,
+                "direction": 6,
+                "frame": 5,
+                "drawOffset": [
+                  -12,
+                  -34
+                ],
+                "sourceSize": [
+                  80,
+                  24
+                ]
+              },
+              {
+                "index": 32520,
+                "direction": 7,
+                "frame": 0,
+                "drawOffset": [
+                  16,
+                  -28
+                ],
+                "sourceSize": [
+                  44,
+                  17
+                ]
+              },
+              {
+                "index": 32521,
+                "direction": 7,
+                "frame": 1,
+                "drawOffset": [
+                  7,
+                  -36
+                ],
+                "sourceSize": [
+                  56,
+                  30
+                ]
+              },
+              {
+                "index": 32522,
+                "direction": 7,
+                "frame": 2,
+                "drawOffset": [
+                  -3,
+                  -42
+                ],
+                "sourceSize": [
+                  68,
+                  34
+                ]
+              },
+              {
+                "index": 32523,
+                "direction": 7,
+                "frame": 3,
+                "drawOffset": [
+                  -9,
+                  -47
+                ],
+                "sourceSize": [
+                  72,
+                  40
+                ]
+              },
+              {
+                "index": 32524,
+                "direction": 7,
+                "frame": 4,
+                "drawOffset": [
+                  -1,
+                  -36
+                ],
+                "sourceSize": [
+                  64,
+                  27
+                ]
+              },
+              {
+                "index": 32525,
+                "direction": 7,
+                "frame": 5,
+                "drawOffset": [
+                  12,
+                  -30
+                ],
+                "sourceSize": [
+                  48,
+                  19
+                ]
+              }
+            ],
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "attack": {
+            "path": "res://assets/art/characters/warrior/wear/weapon/weapon_054_attack.png",
+            "cell": [
+              192,
+              224
+            ],
+            "footAnchor": [
+              68,
+              112
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 54,
+            "sourceFrames": [
+              {
+                "index": 32600,
+                "direction": 0,
+                "frame": 0,
+                "drawOffset": [
+                  34,
+                  -62
+                ],
+                "sourceSize": [
+                  48,
+                  73
+                ],
+                "weaponTipOffset": [
+                  75,
+                  -57
+                ]
+              },
+              {
+                "index": 32601,
+                "direction": 0,
+                "frame": 1,
+                "drawOffset": [
+                  -22,
+                  -16
+                ],
+                "sourceSize": [
+                  80,
+                  22
+                ],
+                "weaponTipOffset": [
+                  52,
+                  -16
+                ]
+              },
+              {
+                "index": 32602,
+                "direction": 0,
+                "frame": 2,
+                "drawOffset": [
+                  16,
+                  -71
+                ],
+                "sourceSize": [
+                  44,
+                  56
+                ],
+                "weaponTipOffset": [
+                  57,
+                  -67
+                ]
+              },
+              {
+                "index": 32603,
+                "direction": 0,
+                "frame": 3,
+                "drawOffset": [
+                  26,
+                  -84
+                ],
+                "sourceSize": [
+                  48,
+                  39
+                ],
+                "weaponTipOffset": [
+                  71,
+                  -79
+                ]
+              },
+              {
+                "index": 32604,
+                "direction": 0,
+                "frame": 4,
+                "drawOffset": [
+                  -4,
+                  -33
+                ],
+                "sourceSize": [
+                  48,
+                  14
+                ],
+                "weaponTipOffset": [
+                  41,
+                  -21
+                ]
+              },
+              {
+                "index": 32605,
+                "direction": 0,
+                "frame": 5,
+                "drawOffset": [
+                  26,
+                  -36
+                ],
+                "sourceSize": [
+                  24,
+                  32
+                ],
+                "weaponTipOffset": [
+                  36,
+                  -26
+                ]
+              },
+              {
+                "index": 32608,
+                "direction": 1,
+                "frame": 0,
+                "drawOffset": [
+                  25,
+                  -39
+                ],
+                "sourceSize": [
+                  48,
+                  52
+                ],
+                "weaponTipOffset": [
+                  68,
+                  -33
+                ]
+              },
+              {
+                "index": 32609,
+                "direction": 1,
+                "frame": 1,
+                "drawOffset": [
+                  -52,
+                  -35
+                ],
+                "sourceSize": [
+                  88,
+                  30
+                ],
+                "weaponTipOffset": [
+                  -50,
+                  -32
+                ]
+              },
+              {
+                "index": 32610,
+                "direction": 1,
+                "frame": 2,
+                "drawOffset": [
+                  -12,
+                  -49
+                ],
+                "sourceSize": [
+                  84,
+                  24
+                ],
+                "weaponTipOffset": [
+                  67,
+                  -48
+                ]
+              },
+              {
+                "index": 32611,
+                "direction": 1,
+                "frame": 3,
+                "drawOffset": [
+                  60,
+                  -57
+                ],
+                "sourceSize": [
+                  20,
+                  22
+                ],
+                "weaponTipOffset": [
+                  75,
+                  -53
+                ]
+              },
+              {
+                "index": 32612,
+                "direction": 1,
+                "frame": 4,
+                "drawOffset": [
+                  39,
+                  -33
+                ],
+                "sourceSize": [
+                  16,
+                  23
+                ],
+                "weaponTipOffset": [
+                  50,
+                  -29
+                ]
+              },
+              {
+                "index": 32613,
+                "direction": 1,
+                "frame": 5,
+                "drawOffset": [
+                  24,
+                  -24
+                ],
+                "sourceSize": [
+                  48,
+                  26
+                ],
+                "weaponTipOffset": [
+                  67,
+                  -19
+                ]
+              },
+              {
+                "index": 32616,
+                "direction": 2,
+                "frame": 0,
+                "drawOffset": [
+                  15,
+                  -24
+                ],
+                "sourceSize": [
+                  24,
+                  35
+                ],
+                "weaponTipOffset": [
+                  36,
+                  -21
+                ]
+              },
+              {
+                "index": 32617,
+                "direction": 2,
+                "frame": 1,
+                "drawOffset": [
+                  -42,
+                  -72
+                ],
+                "sourceSize": [
+                  48,
+                  64
+                ],
+                "weaponTipOffset": [
+                  -40,
+                  -69
+                ]
+              },
+              {
+                "index": 32618,
+                "direction": 2,
+                "frame": 2,
+                "drawOffset": [
+                  -23,
+                  -55
+                ],
+                "sourceSize": [
+                  80,
+                  30
+                ],
+                "weaponTipOffset": [
+                  26,
+                  -37
+                ]
+              },
+              {
+                "index": 32619,
+                "direction": 2,
+                "frame": 3,
+                "drawOffset": [
+                  41,
+                  -36
+                ],
+                "sourceSize": [
+                  32,
+                  25
+                ],
+                "weaponTipOffset": [
+                  68,
+                  -17
+                ]
+              },
+              {
+                "index": 32620,
+                "direction": 2,
+                "frame": 4,
+                "drawOffset": [
+                  26,
+                  -10
+                ],
+                "sourceSize": [
+                  60,
+                  12
+                ],
+                "weaponTipOffset": [
+                  82,
+                  -4
+                ]
+              },
+              {
+                "index": 32621,
+                "direction": 2,
+                "frame": 5,
+                "drawOffset": [
+                  2,
+                  -5
+                ],
+                "sourceSize": [
+                  80,
+                  20
+                ],
+                "weaponTipOffset": [
+                  77,
+                  9
+                ]
+              },
+              {
+                "index": 32624,
+                "direction": 3,
+                "frame": 0,
+                "drawOffset": [
+                  -7,
+                  -28
+                ],
+                "sourceSize": [
+                  20,
+                  33
+                ],
+                "weaponTipOffset": [
+                  -2,
+                  -27
+                ]
+              },
+              {
+                "index": 32625,
+                "direction": 3,
+                "frame": 1,
+                "drawOffset": [
+                  -11,
+                  -94
+                ],
+                "sourceSize": [
+                  28,
+                  71
+                ],
+                "weaponTipOffset": [
+                  8,
+                  -90
+                ]
+              },
+              {
+                "index": 32626,
+                "direction": 3,
+                "frame": 2,
+                "drawOffset": [
+                  -8,
+                  -76
+                ],
+                "sourceSize": [
+                  32,
+                  59
+                ],
+                "weaponTipOffset": [
+                  -6,
+                  -73
+                ]
+              },
+              {
+                "index": 32627,
+                "direction": 3,
+                "frame": 3,
+                "drawOffset": [
+                  4,
+                  -36
+                ],
+                "sourceSize": [
+                  56,
+                  48
+                ],
+                "weaponTipOffset": [
+                  55,
+                  8
+                ]
+              },
+              {
+                "index": 32628,
+                "direction": 3,
+                "frame": 4,
+                "drawOffset": [
+                  12,
+                  -10
+                ],
+                "sourceSize": [
+                  76,
+                  44
+                ],
+                "weaponTipOffset": [
+                  83,
+                  29
+                ]
+              },
+              {
+                "index": 32629,
+                "direction": 3,
+                "frame": 5,
+                "drawOffset": [
+                  -7,
+                  -20
+                ],
+                "sourceSize": [
+                  72,
+                  59
+                ],
+                "weaponTipOffset": [
+                  59,
+                  35
+                ]
+              },
+              {
+                "index": 32632,
+                "direction": 4,
+                "frame": 0,
+                "drawOffset": [
+                  -31,
+                  -48
+                ],
+                "sourceSize": [
+                  48,
+                  47
+                ],
+                "weaponTipOffset": [
+                  -26,
+                  -45
+                ]
+              },
+              {
+                "index": 32633,
+                "direction": 4,
+                "frame": 1,
+                "drawOffset": [
+                  -7,
+                  -88
+                ],
+                "sourceSize": [
+                  80,
+                  47
+                ],
+                "weaponTipOffset": [
+                  65,
+                  -83
+                ]
+              },
+              {
+                "index": 32634,
+                "direction": 4,
+                "frame": 2,
+                "drawOffset": [
+                  -12,
+                  -84
+                ],
+                "sourceSize": [
+                  44,
+                  57
+                ],
+                "weaponTipOffset": [
+                  25,
+                  -81
+                ]
+              },
+              {
+                "index": 32635,
+                "direction": 4,
+                "frame": 3,
+                "drawOffset": [
+                  -26,
+                  -54
+                ],
+                "sourceSize": [
+                  48,
+                  74
+                ],
+                "weaponTipOffset": [
+                  -22,
+                  -50
+                ]
+              },
+              {
+                "index": 32636,
+                "direction": 4,
+                "frame": 4,
+                "drawOffset": [
+                  4,
+                  -19
+                ],
+                "sourceSize": [
+                  52,
+                  76
+                ],
+                "weaponTipOffset": [
+                  50,
+                  54
+                ]
+              },
+              {
+                "index": 32637,
+                "direction": 4,
+                "frame": 5,
+                "drawOffset": [
+                  1,
+                  -35
+                ],
+                "sourceSize": [
+                  24,
+                  82
+                ],
+                "weaponTipOffset": [
+                  18,
+                  44
+                ]
+              },
+              {
+                "index": 32640,
+                "direction": 5,
+                "frame": 0,
+                "drawOffset": [
+                  -24,
+                  -73
+                ],
+                "sourceSize": [
+                  48,
+                  69
+                ],
+                "weaponTipOffset": [
+                  -18,
+                  -70
+                ]
+              },
+              {
+                "index": 32641,
+                "direction": 5,
+                "frame": 1,
+                "drawOffset": [
+                  16,
+                  -56
+                ],
+                "sourceSize": [
+                  84,
+                  15
+                ],
+                "weaponTipOffset": [
+                  96,
+                  -51
+                ]
+              },
+              {
+                "index": 32642,
+                "direction": 5,
+                "frame": 2,
+                "drawOffset": [
+                  -24,
+                  -74
+                ],
+                "sourceSize": [
+                  84,
+                  24
+                ],
+                "weaponTipOffset": [
+                  56,
+                  -71
+                ]
+              },
+              {
+                "index": 32643,
+                "direction": 5,
+                "frame": 3,
+                "drawOffset": [
+                  -30,
+                  -79
+                ],
+                "sourceSize": [
+                  20,
+                  88
+                ],
+                "weaponTipOffset": [
+                  -26,
+                  -76
+                ]
+              },
+              {
+                "index": 32644,
+                "direction": 5,
+                "frame": 4,
+                "drawOffset": [
+                  -5,
+                  -29
+                ],
+                "sourceSize": [
+                  16,
+                  87
+                ],
+                "weaponTipOffset": [
+                  0,
+                  55
+                ]
+              },
+              {
+                "index": 32645,
+                "direction": 5,
+                "frame": 5,
+                "drawOffset": [
+                  -23,
+                  -41
+                ],
+                "sourceSize": [
+                  48,
+                  75
+                ],
+                "weaponTipOffset": [
+                  22,
+                  -39
+                ]
+              },
+              {
+                "index": 32648,
+                "direction": 6,
+                "frame": 0,
+                "drawOffset": [
+                  11,
+                  -86
+                ],
+                "sourceSize": [
+                  24,
+                  85
+                ],
+                "weaponTipOffset": [
+                  14,
+                  -82
+                ]
+              },
+              {
+                "index": 32649,
+                "direction": 6,
+                "frame": 1,
+                "drawOffset": [
+                  43,
+                  -49
+                ],
+                "sourceSize": [
+                  48,
+                  43
+                ],
+                "weaponTipOffset": [
+                  86,
+                  -12
+                ]
+              },
+              {
+                "index": 32650,
+                "direction": 6,
+                "frame": 2,
+                "drawOffset": [
+                  -9,
+                  -72
+                ],
+                "sourceSize": [
+                  80,
+                  33
+                ],
+                "weaponTipOffset": [
+                  68,
+                  -48
+                ]
+              },
+              {
+                "index": 32651,
+                "direction": 6,
+                "frame": 3,
+                "drawOffset": [
+                  -25,
+                  -98
+                ],
+                "sourceSize": [
+                  32,
+                  85
+                ],
+                "weaponTipOffset": [
+                  0,
+                  -94
+                ]
+              },
+              {
+                "index": 32652,
+                "direction": 6,
+                "frame": 4,
+                "drawOffset": [
+                  -39,
+                  -32
+                ],
+                "sourceSize": [
+                  64,
+                  70
+                ],
+                "weaponTipOffset": [
+                  -36,
+                  33
+                ]
+              },
+              {
+                "index": 32653,
+                "direction": 6,
+                "frame": 5,
+                "drawOffset": [
+                  -33,
+                  -33
+                ],
+                "sourceSize": [
+                  80,
+                  41
+                ],
+                "weaponTipOffset": [
+                  43,
+                  -32
+                ]
+              },
+              {
+                "index": 32656,
+                "direction": 7,
+                "frame": 0,
+                "drawOffset": [
+                  36,
+                  -82
+                ],
+                "sourceSize": [
+                  20,
+                  87
+                ],
+                "weaponTipOffset": [
+                  52,
+                  -77
+                ]
+              },
+              {
+                "index": 32657,
+                "direction": 7,
+                "frame": 1,
+                "drawOffset": [
+                  32,
+                  -34
+                ],
+                "sourceSize": [
+                  28,
+                  48
+                ],
+                "weaponTipOffset": [
+                  57,
+                  -30
+                ]
+              },
+              {
+                "index": 32658,
+                "direction": 7,
+                "frame": 2,
+                "drawOffset": [
+                  25,
+                  -80
+                ],
+                "sourceSize": [
+                  32,
+                  60
+                ],
+                "weaponTipOffset": [
+                  27,
+                  -76
+                ]
+              },
+              {
+                "index": 32659,
+                "direction": 7,
+                "frame": 3,
+                "drawOffset": [
+                  -10,
+                  -101
+                ],
+                "sourceSize": [
+                  56,
+                  66
+                ],
+                "weaponTipOffset": [
+                  40,
+                  -96
+                ]
+              },
+              {
+                "index": 32660,
+                "direction": 7,
+                "frame": 4,
+                "drawOffset": [
+                  -41,
+                  -29
+                ],
+                "sourceSize": [
+                  80,
+                  35
+                ],
+                "weaponTipOffset": [
+                  34,
+                  -28
+                ]
+              },
+              {
+                "index": 32661,
+                "direction": 7,
+                "frame": 5,
+                "drawOffset": [
+                  -15,
+                  -29
+                ],
+                "sourceSize": [
+                  72,
+                  12
+                ],
+                "weaponTipOffset": [
+                  52,
+                  -19
+                ]
+              }
+            ],
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "hit": {
+            "path": "res://assets/art/characters/warrior/wear/weapon/weapon_054_hit.png",
+            "cell": [
+              192,
+              224
+            ],
+            "footAnchor": [
+              68,
+              112
+            ],
+            "directions": 8,
+            "framesPerDirection": 3,
+            "sourceFeature": 54,
+            "sourceFrames": [
+              {
+                "index": 32872,
+                "direction": 0,
+                "frame": 0,
+                "drawOffset": [
+                  1,
+                  -11
+                ],
+                "sourceSize": [
+                  88,
+                  20
+                ]
+              },
+              {
+                "index": 32873,
+                "direction": 0,
+                "frame": 1,
+                "drawOffset": [
+                  6,
+                  -26
+                ],
+                "sourceSize": [
+                  80,
+                  33
+                ]
+              },
+              {
+                "index": 32874,
+                "direction": 0,
+                "frame": 2,
+                "drawOffset": [
+                  11,
+                  -37
+                ],
+                "sourceSize": [
+                  72,
+                  43
+                ]
+              },
+              {
+                "index": 32880,
+                "direction": 1,
+                "frame": 0,
+                "drawOffset": [
+                  -9,
+                  -9
+                ],
+                "sourceSize": [
+                  76,
+                  37
+                ]
+              },
+              {
+                "index": 32881,
+                "direction": 1,
+                "frame": 1,
+                "drawOffset": [
+                  -8,
+                  -9
+                ],
+                "sourceSize": [
+                  88,
+                  24
+                ]
+              },
+              {
+                "index": 32882,
+                "direction": 1,
+                "frame": 2,
+                "drawOffset": [
+                  -5,
+                  -10
+                ],
+                "sourceSize": [
+                  92,
+                  15
+                ]
+              },
+              {
+                "index": 32888,
+                "direction": 2,
+                "frame": 0,
+                "drawOffset": [
+                  -1,
+                  -24
+                ],
+                "sourceSize": [
+                  20,
+                  60
+                ]
+              },
+              {
+                "index": 32889,
+                "direction": 2,
+                "frame": 1,
+                "drawOffset": [
+                  -4,
+                  -25
+                ],
+                "sourceSize": [
+                  44,
+                  58
+                ]
+              },
+              {
+                "index": 32890,
+                "direction": 2,
+                "frame": 2,
+                "drawOffset": [
+                  -4,
+                  -23
+                ],
+                "sourceSize": [
+                  60,
+                  51
+                ]
+              },
+              {
+                "index": 32896,
+                "direction": 3,
+                "frame": 0,
+                "drawOffset": [
+                  -30,
+                  -31
+                ],
+                "sourceSize": [
+                  56,
+                  49
+                ]
+              },
+              {
+                "index": 32897,
+                "direction": 3,
+                "frame": 1,
+                "drawOffset": [
+                  -12,
+                  -34
+                ],
+                "sourceSize": [
+                  32,
+                  61
+                ]
+              },
+              {
+                "index": 32898,
+                "direction": 3,
+                "frame": 2,
+                "drawOffset": [
+                  1,
+                  -33
+                ],
+                "sourceSize": [
+                  16,
+                  63
+                ]
+              },
+              {
+                "index": 32904,
+                "direction": 4,
+                "frame": 0,
+                "drawOffset": [
+                  -41,
+                  -26
+                ],
+                "sourceSize": [
+                  88,
+                  12
+                ]
+              },
+              {
+                "index": 32905,
+                "direction": 4,
+                "frame": 1,
+                "drawOffset": [
+                  -37,
+                  -31
+                ],
+                "sourceSize": [
+                  80,
+                  32
+                ]
+              },
+              {
+                "index": 32906,
+                "direction": 4,
+                "frame": 2,
+                "drawOffset": [
+                  -33,
+                  -33
+                ],
+                "sourceSize": [
+                  72,
+                  42
+                ]
+              },
+              {
+                "index": 32912,
+                "direction": 5,
+                "frame": 0,
+                "drawOffset": [
+                  -16,
+                  -51
+                ],
+                "sourceSize": [
+                  76,
+                  42
+                ]
+              },
+              {
+                "index": 32913,
+                "direction": 5,
+                "frame": 1,
+                "drawOffset": [
+                  -29,
+                  -40
+                ],
+                "sourceSize": [
+                  88,
+                  24
+                ]
+              },
+              {
+                "index": 32914,
+                "direction": 5,
+                "frame": 2,
+                "drawOffset": [
+                  -36,
+                  -33
+                ],
+                "sourceSize": [
+                  92,
+                  13
+                ]
+              },
+              {
+                "index": 32920,
+                "direction": 6,
+                "frame": 0,
+                "drawOffset": [
+                  31,
+                  -56
+                ],
+                "sourceSize": [
+                  20,
+                  64
+                ]
+              },
+              {
+                "index": 32921,
+                "direction": 6,
+                "frame": 1,
+                "drawOffset": [
+                  9,
+                  -53
+                ],
+                "sourceSize": [
+                  44,
+                  55
+                ]
+              },
+              {
+                "index": 32922,
+                "direction": 6,
+                "frame": 2,
+                "drawOffset": [
+                  -6,
+                  -53
+                ],
+                "sourceSize": [
+                  60,
+                  49
+                ]
+              },
+              {
+                "index": 32928,
+                "direction": 7,
+                "frame": 0,
+                "drawOffset": [
+                  24,
+                  -41
+                ],
+                "sourceSize": [
+                  56,
+                  56
+                ]
+              },
+              {
+                "index": 32929,
+                "direction": 7,
+                "frame": 1,
+                "drawOffset": [
+                  30,
+                  -49
+                ],
+                "sourceSize": [
+                  32,
+                  60
+                ]
+              },
+              {
+                "index": 32930,
+                "direction": 7,
+                "frame": 2,
+                "drawOffset": [
+                  34,
+                  -55
+                ],
+                "sourceSize": [
+                  16,
+                  62
+                ]
+              }
+            ],
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "death": {
+            "path": "res://assets/art/characters/warrior/wear/weapon/weapon_054_death.png",
+            "cell": [
+              192,
+              224
+            ],
+            "footAnchor": [
+              68,
+              112
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "sourceFeature": 54,
+            "sourceFrames": [
+              {
+                "index": 32936,
+                "direction": 0,
+                "frame": 0,
+                "drawOffset": [
+                  24,
+                  -68
+                ],
+                "sourceSize": [
+                  56,
+                  58
+                ]
+              },
+              {
+                "index": 32937,
+                "direction": 0,
+                "frame": 1,
+                "drawOffset": [
+                  -3,
+                  -49
+                ],
+                "sourceSize": [
+                  68,
+                  14
+                ]
+              },
+              {
+                "index": 32938,
+                "direction": 0,
+                "frame": 2,
+                "drawOffset": [
+                  0,
+                  18
+                ],
+                "sourceSize": [
+                  84,
+                  35
+                ]
+              },
+              {
+                "index": 32939,
+                "direction": 0,
+                "frame": 3,
+                "drawOffset": [
+                  28,
+                  21
+                ],
+                "sourceSize": [
+                  56,
+                  65
+                ]
+              },
+              {
+                "index": 32944,
+                "direction": 1,
+                "frame": 0,
+                "drawOffset": [
+                  51,
+                  -55
+                ],
+                "sourceSize": [
+                  24,
+                  67
+                ]
+              },
+              {
+                "index": 32945,
+                "direction": 1,
+                "frame": 1,
+                "drawOffset": [
+                  -5,
+                  -63
+                ],
+                "sourceSize": [
+                  84,
+                  40
+                ]
+              },
+              {
+                "index": 32946,
+                "direction": 1,
+                "frame": 2,
+                "drawOffset": [
+                  -36,
+                  19
+                ],
+                "sourceSize": [
+                  80,
+                  22
+                ]
+              },
+              {
+                "index": 32947,
+                "direction": 1,
+                "frame": 3,
+                "drawOffset": [
+                  -30,
+                  45
+                ],
+                "sourceSize": [
+                  88,
+                  29
+                ]
+              },
+              {
+                "index": 32952,
+                "direction": 2,
+                "frame": 0,
+                "drawOffset": [
+                  9,
+                  -29
+                ],
+                "sourceSize": [
+                  76,
+                  45
+                ]
+              },
+              {
+                "index": 32953,
+                "direction": 2,
+                "frame": 1,
+                "drawOffset": [
+                  8,
+                  -73
+                ],
+                "sourceSize": [
+                  52,
+                  74
+                ]
+              },
+              {
+                "index": 32954,
+                "direction": 2,
+                "frame": 2,
+                "drawOffset": [
+                  -40,
+                  -11
+                ],
+                "sourceSize": [
+                  36,
+                  49
+                ]
+              },
+              {
+                "index": 32955,
+                "direction": 2,
+                "frame": 3,
+                "drawOffset": [
+                  -61,
+                  25
+                ],
+                "sourceSize": [
+                  72,
+                  27
+                ]
+              },
+              {
+                "index": 32960,
+                "direction": 3,
+                "frame": 0,
+                "drawOffset": [
+                  -25,
+                  -7
+                ],
+                "sourceSize": [
+                  88,
+                  11
+                ]
+              },
+              {
+                "index": 32961,
+                "direction": 3,
+                "frame": 1,
+                "drawOffset": [
+                  22,
+                  -72
+                ],
+                "sourceSize": [
+                  16,
+                  82
+                ]
+              },
+              {
+                "index": 32962,
+                "direction": 3,
+                "frame": 2,
+                "drawOffset": [
+                  -40,
+                  -32
+                ],
+                "sourceSize": [
+                  44,
+                  43
+                ]
+              },
+              {
+                "index": 32963,
+                "direction": 3,
+                "frame": 3,
+                "drawOffset": [
+                  -42,
+                  -14
+                ],
+                "sourceSize": [
+                  16,
+                  48
+                ]
+              },
+              {
+                "index": 32968,
+                "direction": 4,
+                "frame": 0,
+                "drawOffset": [
+                  -31,
+                  -32
+                ],
+                "sourceSize": [
+                  56,
+                  44
+                ]
+              },
+              {
+                "index": 32969,
+                "direction": 4,
+                "frame": 1,
+                "drawOffset": [
+                  -14,
+                  -63
+                ],
+                "sourceSize": [
+                  68,
+                  62
+                ]
+              },
+              {
+                "index": 32970,
+                "direction": 4,
+                "frame": 2,
+                "drawOffset": [
+                  -36,
+                  -35
+                ],
+                "sourceSize": [
+                  84,
+                  12
+                ]
+              },
+              {
+                "index": 32971,
+                "direction": 4,
+                "frame": 3,
+                "drawOffset": [
+                  -35,
+                  -33
+                ],
+                "sourceSize": [
+                  56,
+                  36
+                ]
+              },
+              {
+                "index": 32976,
+                "direction": 5,
+                "frame": 0,
+                "drawOffset": [
+                  -24,
+                  -55
+                ],
+                "sourceSize": [
+                  24,
+                  54
+                ]
+              },
+              {
+                "index": 32977,
+                "direction": 5,
+                "frame": 1,
+                "drawOffset": [
+                  -28,
+                  -50
+                ],
+                "sourceSize": [
+                  84,
+                  24
+                ]
+              },
+              {
+                "index": 32978,
+                "direction": 5,
+                "frame": 2,
+                "drawOffset": [
+                  4,
+                  -47
+                ],
+                "sourceSize": [
+                  80,
+                  41
+                ]
+              },
+              {
+                "index": 32979,
+                "direction": 5,
+                "frame": 3,
+                "drawOffset": [
+                  -8,
+                  -24
+                ],
+                "sourceSize": [
+                  88,
+                  13
+                ]
+              },
+              {
+                "index": 32984,
+                "direction": 6,
+                "frame": 0,
+                "drawOffset": [
+                  -35,
+                  -57
+                ],
+                "sourceSize": [
+                  76,
+                  33
+                ]
+              },
+              {
+                "index": 32985,
+                "direction": 6,
+                "frame": 1,
+                "drawOffset": [
+                  -11,
+                  -50
+                ],
+                "sourceSize": [
+                  52,
+                  22
+                ]
+              },
+              {
+                "index": 32986,
+                "direction": 6,
+                "frame": 2,
+                "drawOffset": [
+                  55,
+                  -42
+                ],
+                "sourceSize": [
+                  36,
+                  69
+                ]
+              },
+              {
+                "index": 32987,
+                "direction": 6,
+                "frame": 3,
+                "drawOffset": [
+                  38,
+                  -27
+                ],
+                "sourceSize": [
+                  72,
+                  53
+                ]
+              },
+              {
+                "index": 32992,
+                "direction": 7,
+                "frame": 0,
+                "drawOffset": [
+                  -14,
+                  -60
+                ],
+                "sourceSize": [
+                  88,
+                  22
+                ]
+              },
+              {
+                "index": 32993,
+                "direction": 7,
+                "frame": 1,
+                "drawOffset": [
+                  11,
+                  -59
+                ],
+                "sourceSize": [
+                  16,
+                  33
+                ]
+              },
+              {
+                "index": 32994,
+                "direction": 7,
+                "frame": 2,
+                "drawOffset": [
+                  46,
+                  -16
+                ],
+                "sourceSize": [
+                  44,
+                  66
+                ]
+              },
+              {
+                "index": 32995,
+                "direction": 7,
+                "frame": 3,
+                "drawOffset": [
+                  74,
+                  -9
+                ],
+                "sourceSize": [
+                  16,
+                  74
+                ]
+              }
+            ],
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          }
+        },
+        "mappingConfidence": "B",
+        "mappingSource": "server.crystal.cjlaaa Server.MirDB ItemInfo[261]",
+        "clientSource": "dev_art_sources/reference/mir2_client_raw/Data/Weapon.wil"
+      }
+    },
+    "中型盔甲(男)": {
+      "dressAppearance": {
+        "shape": 2,
+        "feature": 4,
+        "visible": true,
+        "actions": {
+          "idle": {
+            "path": "res://assets/art/characters/warrior/wear/dress/dress_004_idle.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "sourceFeature": 4,
+            "sourceFrames": [
+              {
+                "index": 2400,
+                "direction": 0,
+                "frame": 0,
+                "drawOffset": [
+                  8,
+                  -48
+                ],
+                "sourceSize": [
+                  64,
+                  72
+                ]
+              },
+              {
+                "index": 2401,
+                "direction": 0,
+                "frame": 1,
+                "drawOffset": [
+                  8,
+                  -48
+                ],
+                "sourceSize": [
+                  64,
+                  72
+                ]
+              },
+              {
+                "index": 2402,
+                "direction": 0,
+                "frame": 2,
+                "drawOffset": [
+                  8,
+                  -48
+                ],
+                "sourceSize": [
+                  64,
+                  72
+                ]
+              },
+              {
+                "index": 2403,
+                "direction": 0,
+                "frame": 3,
+                "drawOffset": [
+                  8,
+                  -48
+                ],
+                "sourceSize": [
+                  64,
+                  72
+                ]
+              },
+              {
+                "index": 2408,
+                "direction": 1,
+                "frame": 0,
+                "drawOffset": [
+                  13,
+                  -48
+                ],
+                "sourceSize": [
+                  56,
+                  72
+                ]
+              },
+              {
+                "index": 2409,
+                "direction": 1,
+                "frame": 1,
+                "drawOffset": [
+                  13,
+                  -48
+                ],
+                "sourceSize": [
+                  56,
+                  72
+                ]
+              },
+              {
+                "index": 2410,
+                "direction": 1,
+                "frame": 2,
+                "drawOffset": [
+                  13,
+                  -48
+                ],
+                "sourceSize": [
+                  56,
+                  72
+                ]
+              },
+              {
+                "index": 2411,
+                "direction": 1,
+                "frame": 3,
+                "drawOffset": [
+                  13,
+                  -48
+                ],
+                "sourceSize": [
+                  56,
+                  72
+                ]
+              },
+              {
+                "index": 2416,
+                "direction": 2,
+                "frame": 0,
+                "drawOffset": [
+                  15,
+                  -47
+                ],
+                "sourceSize": [
+                  52,
+                  71
+                ]
+              },
+              {
+                "index": 2417,
+                "direction": 2,
+                "frame": 1,
+                "drawOffset": [
+                  15,
+                  -47
+                ],
+                "sourceSize": [
+                  52,
+                  71
+                ]
+              },
+              {
+                "index": 2418,
+                "direction": 2,
+                "frame": 2,
+                "drawOffset": [
+                  15,
+                  -47
+                ],
+                "sourceSize": [
+                  52,
+                  71
+                ]
+              },
+              {
+                "index": 2419,
+                "direction": 2,
+                "frame": 3,
+                "drawOffset": [
+                  15,
+                  -47
+                ],
+                "sourceSize": [
+                  52,
+                  71
+                ]
+              },
+              {
+                "index": 2424,
+                "direction": 3,
+                "frame": 0,
+                "drawOffset": [
+                  11,
+                  -47
+                ],
+                "sourceSize": [
+                  56,
+                  71
+                ]
+              },
+              {
+                "index": 2425,
+                "direction": 3,
+                "frame": 1,
+                "drawOffset": [
+                  11,
+                  -47
+                ],
+                "sourceSize": [
+                  56,
+                  71
+                ]
+              },
+              {
+                "index": 2426,
+                "direction": 3,
+                "frame": 2,
+                "drawOffset": [
+                  11,
+                  -47
+                ],
+                "sourceSize": [
+                  56,
+                  71
+                ]
+              },
+              {
+                "index": 2427,
+                "direction": 3,
+                "frame": 3,
+                "drawOffset": [
+                  12,
+                  -47
+                ],
+                "sourceSize": [
+                  56,
+                  71
+                ]
+              },
+              {
+                "index": 2432,
+                "direction": 4,
+                "frame": 0,
+                "drawOffset": [
+                  9,
+                  -47
+                ],
+                "sourceSize": [
+                  64,
+                  72
+                ]
+              },
+              {
+                "index": 2433,
+                "direction": 4,
+                "frame": 1,
+                "drawOffset": [
+                  8,
+                  -47
+                ],
+                "sourceSize": [
+                  64,
+                  72
+                ]
+              },
+              {
+                "index": 2434,
+                "direction": 4,
+                "frame": 2,
+                "drawOffset": [
+                  8,
+                  -47
+                ],
+                "sourceSize": [
+                  64,
+                  72
+                ]
+              },
+              {
+                "index": 2435,
+                "direction": 4,
+                "frame": 3,
+                "drawOffset": [
+                  9,
+                  -47
+                ],
+                "sourceSize": [
+                  64,
+                  72
+                ]
+              },
+              {
+                "index": 2440,
+                "direction": 5,
+                "frame": 0,
+                "drawOffset": [
+                  13,
+                  -47
+                ],
+                "sourceSize": [
+                  56,
+                  73
+                ]
+              },
+              {
+                "index": 2441,
+                "direction": 5,
+                "frame": 1,
+                "drawOffset": [
+                  13,
+                  -47
+                ],
+                "sourceSize": [
+                  56,
+                  73
+                ]
+              },
+              {
+                "index": 2442,
+                "direction": 5,
+                "frame": 2,
+                "drawOffset": [
+                  13,
+                  -47
+                ],
+                "sourceSize": [
+                  56,
+                  73
+                ]
+              },
+              {
+                "index": 2443,
+                "direction": 5,
+                "frame": 3,
+                "drawOffset": [
+                  12,
+                  -47
+                ],
+                "sourceSize": [
+                  56,
+                  73
+                ]
+              },
+              {
+                "index": 2448,
+                "direction": 6,
+                "frame": 0,
+                "drawOffset": [
+                  14,
+                  -47
+                ],
+                "sourceSize": [
+                  52,
+                  71
+                ]
+              },
+              {
+                "index": 2449,
+                "direction": 6,
+                "frame": 1,
+                "drawOffset": [
+                  14,
+                  -47
+                ],
+                "sourceSize": [
+                  52,
+                  71
+                ]
+              },
+              {
+                "index": 2450,
+                "direction": 6,
+                "frame": 2,
+                "drawOffset": [
+                  14,
+                  -47
+                ],
+                "sourceSize": [
+                  52,
+                  71
+                ]
+              },
+              {
+                "index": 2451,
+                "direction": 6,
+                "frame": 3,
+                "drawOffset": [
+                  14,
+                  -47
+                ],
+                "sourceSize": [
+                  52,
+                  71
+                ]
+              },
+              {
+                "index": 2456,
+                "direction": 7,
+                "frame": 0,
+                "drawOffset": [
+                  9,
+                  -47
+                ],
+                "sourceSize": [
+                  60,
+                  70
+                ]
+              },
+              {
+                "index": 2457,
+                "direction": 7,
+                "frame": 1,
+                "drawOffset": [
+                  10,
+                  -47
+                ],
+                "sourceSize": [
+                  56,
+                  70
+                ]
+              },
+              {
+                "index": 2458,
+                "direction": 7,
+                "frame": 2,
+                "drawOffset": [
+                  10,
+                  -47
+                ],
+                "sourceSize": [
+                  56,
+                  70
+                ]
+              },
+              {
+                "index": 2459,
+                "direction": 7,
+                "frame": 3,
+                "drawOffset": [
+                  10,
+                  -47
+                ],
+                "sourceSize": [
+                  56,
+                  70
+                ]
+              }
+            ],
+            "missingFrames": [],
+            "libraryImageCount": 10800,
+            "confidence": "A"
+          },
+          "walk": {
+            "path": "res://assets/art/characters/warrior/wear/dress/dress_004_walk.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 4,
+            "sourceFrames": [
+              {
+                "index": 2464,
+                "direction": 0,
+                "frame": 0,
+                "drawOffset": [
+                  10,
+                  -48
+                ],
+                "sourceSize": [
+                  60,
+                  79
+                ]
+              },
+              {
+                "index": 2465,
+                "direction": 0,
+                "frame": 1,
+                "drawOffset": [
+                  10,
+                  -48
+                ],
+                "sourceSize": [
+                  60,
+                  75
+                ]
+              },
+              {
+                "index": 2466,
+                "direction": 0,
+                "frame": 2,
+                "drawOffset": [
+                  9,
+                  -48
+                ],
+                "sourceSize": [
+                  60,
+                  72
+                ]
+              },
+              {
+                "index": 2467,
+                "direction": 0,
+                "frame": 3,
+                "drawOffset": [
+                  9,
+                  -48
+                ],
+                "sourceSize": [
+                  60,
+                  79
+                ]
+              },
+              {
+                "index": 2468,
+                "direction": 0,
+                "frame": 4,
+                "drawOffset": [
+                  8,
+                  -48
+                ],
+                "sourceSize": [
+                  64,
+                  75
+                ]
+              },
+              {
+                "index": 2469,
+                "direction": 0,
+                "frame": 5,
+                "drawOffset": [
+                  9,
+                  -48
+                ],
+                "sourceSize": [
+                  60,
+                  72
+                ]
+              },
+              {
+                "index": 2472,
+                "direction": 1,
+                "frame": 0,
+                "drawOffset": [
+                  7,
+                  -48
+                ],
+                "sourceSize": [
+                  60,
+                  72
+                ]
+              },
+              {
+                "index": 2473,
+                "direction": 1,
+                "frame": 1,
+                "drawOffset": [
+                  9,
+                  -48
+                ],
+                "sourceSize": [
+                  56,
+                  69
+                ]
+              },
+              {
+                "index": 2474,
+                "direction": 1,
+                "frame": 2,
+                "drawOffset": [
+                  11,
+                  -49
+                ],
+                "sourceSize": [
+                  56,
+                  72
+                ]
+              },
+              {
+                "index": 2475,
+                "direction": 1,
+                "frame": 3,
+                "drawOffset": [
+                  8,
+                  -48
+                ],
+                "sourceSize": [
+                  60,
+                  76
+                ]
+              },
+              {
+                "index": 2476,
+                "direction": 1,
+                "frame": 4,
+                "drawOffset": [
+                  11,
+                  -48
+                ],
+                "sourceSize": [
+                  56,
+                  73
+                ]
+              },
+              {
+                "index": 2477,
+                "direction": 1,
+                "frame": 5,
+                "drawOffset": [
+                  13,
+                  -48
+                ],
+                "sourceSize": [
+                  56,
+                  68
+                ]
+              },
+              {
+                "index": 2480,
+                "direction": 2,
+                "frame": 0,
+                "drawOffset": [
+                  3,
+                  -47
+                ],
+                "sourceSize": [
+                  64,
+                  69
+                ]
+              },
+              {
+                "index": 2481,
+                "direction": 2,
+                "frame": 1,
+                "drawOffset": [
+                  7,
+                  -47
+                ],
+                "sourceSize": [
+                  60,
+                  70
+                ]
+              },
+              {
+                "index": 2482,
+                "direction": 2,
+                "frame": 2,
+                "drawOffset": [
+                  15,
+                  -47
+                ],
+                "sourceSize": [
+                  52,
+                  70
+                ]
+              },
+              {
+                "index": 2483,
+                "direction": 2,
+                "frame": 3,
+                "drawOffset": [
+                  3,
+                  -47
+                ],
+                "sourceSize": [
+                  64,
+                  68
+                ]
+              },
+              {
+                "index": 2484,
+                "direction": 2,
+                "frame": 4,
+                "drawOffset": [
+                  8,
+                  -47
+                ],
+                "sourceSize": [
+                  60,
+                  68
+                ]
+              },
+              {
+                "index": 2485,
+                "direction": 2,
+                "frame": 5,
+                "drawOffset": [
+                  15,
+                  -47
+                ],
+                "sourceSize": [
+                  52,
+                  69
+                ]
+              },
+              {
+                "index": 2488,
+                "direction": 3,
+                "frame": 0,
+                "drawOffset": [
+                  9,
+                  -46
+                ],
+                "sourceSize": [
+                  60,
+                  74
+                ]
+              },
+              {
+                "index": 2489,
+                "direction": 3,
+                "frame": 1,
+                "drawOffset": [
+                  11,
+                  -47
+                ],
+                "sourceSize": [
+                  56,
+                  73
+                ]
+              },
+              {
+                "index": 2490,
+                "direction": 3,
+                "frame": 2,
+                "drawOffset": [
+                  14,
+                  -47
+                ],
+                "sourceSize": [
+                  56,
+                  70
+                ]
+              },
+              {
+                "index": 2491,
+                "direction": 3,
+                "frame": 3,
+                "drawOffset": [
+                  7,
+                  -46
+                ],
+                "sourceSize": [
+                  60,
+                  69
+                ]
+              },
+              {
+                "index": 2492,
+                "direction": 3,
+                "frame": 4,
+                "drawOffset": [
+                  10,
+                  -47
+                ],
+                "sourceSize": [
+                  56,
+                  68
+                ]
+              },
+              {
+                "index": 2493,
+                "direction": 3,
+                "frame": 5,
+                "drawOffset": [
+                  11,
+                  -47
+                ],
+                "sourceSize": [
+                  56,
+                  73
+                ]
+              },
+              {
+                "index": 2496,
+                "direction": 4,
+                "frame": 0,
+                "drawOffset": [
+                  9,
+                  -46
+                ],
+                "sourceSize": [
+                  64,
+                  75
+                ]
+              },
+              {
+                "index": 2497,
+                "direction": 4,
+                "frame": 1,
+                "drawOffset": [
+                  9,
+                  -47
+                ],
+                "sourceSize": [
+                  60,
+                  72
+                ]
+              },
+              {
+                "index": 2498,
+                "direction": 4,
+                "frame": 2,
+                "drawOffset": [
+                  9,
+                  -47
+                ],
+                "sourceSize": [
+                  64,
+                  73
+                ]
+              },
+              {
+                "index": 2499,
+                "direction": 4,
+                "frame": 3,
+                "drawOffset": [
+                  10,
+                  -46
+                ],
+                "sourceSize": [
+                  60,
+                  75
+                ]
+              },
+              {
+                "index": 2500,
+                "direction": 4,
+                "frame": 4,
+                "drawOffset": [
+                  10,
+                  -47
+                ],
+                "sourceSize": [
+                  60,
+                  72
+                ]
+              },
+              {
+                "index": 2501,
+                "direction": 4,
+                "frame": 5,
+                "drawOffset": [
+                  9,
+                  -47
+                ],
+                "sourceSize": [
+                  64,
+                  72
+                ]
+              },
+              {
+                "index": 2504,
+                "direction": 5,
+                "frame": 0,
+                "drawOffset": [
+                  4,
+                  -47
+                ],
+                "sourceSize": [
+                  64,
+                  69
+                ]
+              },
+              {
+                "index": 2505,
+                "direction": 5,
+                "frame": 1,
+                "drawOffset": [
+                  12,
+                  -47
+                ],
+                "sourceSize": [
+                  56,
+                  67
+                ]
+              },
+              {
+                "index": 2506,
+                "direction": 5,
+                "frame": 2,
+                "drawOffset": [
+                  10,
+                  -47
+                ],
+                "sourceSize": [
+                  56,
+                  73
+                ]
+              },
+              {
+                "index": 2507,
+                "direction": 5,
+                "frame": 3,
+                "drawOffset": [
+                  7,
+                  -47
+                ],
+                "sourceSize": [
+                  60,
+                  74
+                ]
+              },
+              {
+                "index": 2508,
+                "direction": 5,
+                "frame": 4,
+                "drawOffset": [
+                  12,
+                  -47
+                ],
+                "sourceSize": [
+                  56,
+                  73
+                ]
+              },
+              {
+                "index": 2509,
+                "direction": 5,
+                "frame": 5,
+                "drawOffset": [
+                  11,
+                  -47
+                ],
+                "sourceSize": [
+                  56,
+                  69
+                ]
+              },
+              {
+                "index": 2512,
+                "direction": 6,
+                "frame": 0,
+                "drawOffset": [
+                  2,
+                  -47
+                ],
+                "sourceSize": [
+                  64,
+                  69
+                ]
+              },
+              {
+                "index": 2513,
+                "direction": 6,
+                "frame": 1,
+                "drawOffset": [
+                  13,
+                  -47
+                ],
+                "sourceSize": [
+                  52,
+                  68
+                ]
+              },
+              {
+                "index": 2514,
+                "direction": 6,
+                "frame": 2,
+                "drawOffset": [
+                  11,
+                  -47
+                ],
+                "sourceSize": [
+                  52,
+                  69
+                ]
+              },
+              {
+                "index": 2515,
+                "direction": 6,
+                "frame": 3,
+                "drawOffset": [
+                  2,
+                  -46
+                ],
+                "sourceSize": [
+                  64,
+                  69
+                ]
+              },
+              {
+                "index": 2516,
+                "direction": 6,
+                "frame": 4,
+                "drawOffset": [
+                  13,
+                  -47
+                ],
+                "sourceSize": [
+                  52,
+                  70
+                ]
+              },
+              {
+                "index": 2517,
+                "direction": 6,
+                "frame": 5,
+                "drawOffset": [
+                  12,
+                  -47
+                ],
+                "sourceSize": [
+                  52,
+                  70
+                ]
+              },
+              {
+                "index": 2520,
+                "direction": 7,
+                "frame": 0,
+                "drawOffset": [
+                  6,
+                  -47
+                ],
+                "sourceSize": [
+                  60,
+                  76
+                ]
+              },
+              {
+                "index": 2521,
+                "direction": 7,
+                "frame": 1,
+                "drawOffset": [
+                  11,
+                  -46
+                ],
+                "sourceSize": [
+                  56,
+                  73
+                ]
+              },
+              {
+                "index": 2522,
+                "direction": 7,
+                "frame": 2,
+                "drawOffset": [
+                  10,
+                  -47
+                ],
+                "sourceSize": [
+                  56,
+                  68
+                ]
+              },
+              {
+                "index": 2523,
+                "direction": 7,
+                "frame": 3,
+                "drawOffset": [
+                  4,
+                  -47
+                ],
+                "sourceSize": [
+                  60,
+                  73
+                ]
+              },
+              {
+                "index": 2524,
+                "direction": 7,
+                "frame": 4,
+                "drawOffset": [
+                  12,
+                  -46
+                ],
+                "sourceSize": [
+                  56,
+                  69
+                ]
+              },
+              {
+                "index": 2525,
+                "direction": 7,
+                "frame": 5,
+                "drawOffset": [
+                  9,
+                  -47
+                ],
+                "sourceSize": [
+                  60,
+                  72
+                ]
+              }
+            ],
+            "missingFrames": [],
+            "libraryImageCount": 10800,
+            "confidence": "A"
+          },
+          "attack": {
+            "path": "res://assets/art/characters/warrior/wear/dress/dress_004_attack.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 4,
+            "sourceFrames": [
+              {
+                "index": 2600,
+                "direction": 0,
+                "frame": 0,
+                "drawOffset": [
+                  12,
+                  -40
+                ],
+                "sourceSize": [
+                  72,
+                  71
+                ]
+              },
+              {
+                "index": 2601,
+                "direction": 0,
+                "frame": 1,
+                "drawOffset": [
+                  10,
+                  -36
+                ],
+                "sourceSize": [
+                  56,
+                  75
+                ]
+              },
+              {
+                "index": 2602,
+                "direction": 0,
+                "frame": 2,
+                "drawOffset": [
+                  9,
+                  -49
+                ],
+                "sourceSize": [
+                  76,
+                  83
+                ]
+              },
+              {
+                "index": 2603,
+                "direction": 0,
+                "frame": 3,
+                "drawOffset": [
+                  -3,
+                  -63
+                ],
+                "sourceSize": [
+                  92,
+                  96
+                ]
+              },
+              {
+                "index": 2604,
+                "direction": 0,
+                "frame": 4,
+                "drawOffset": [
+                  2,
+                  -49
+                ],
+                "sourceSize": [
+                  60,
+                  81
+                ]
+              },
+              {
+                "index": 2605,
+                "direction": 0,
+                "frame": 5,
+                "drawOffset": [
+                  3,
+                  -49
+                ],
+                "sourceSize": [
+                  68,
+                  80
+                ]
+              },
+              {
+                "index": 2608,
+                "direction": 1,
+                "frame": 0,
+                "drawOffset": [
+                  15,
+                  -39
+                ],
+                "sourceSize": [
+                  60,
+                  71
+                ]
+              },
+              {
+                "index": 2609,
+                "direction": 1,
+                "frame": 1,
+                "drawOffset": [
+                  -10,
+                  -32
+                ],
+                "sourceSize": [
+                  84,
+                  65
+                ]
+              },
+              {
+                "index": 2610,
+                "direction": 1,
+                "frame": 2,
+                "drawOffset": [
+                  12,
+                  -47
+                ],
+                "sourceSize": [
+                  68,
+                  82
+                ]
+              },
+              {
+                "index": 2611,
+                "direction": 1,
+                "frame": 3,
+                "drawOffset": [
+                  14,
+                  -47
+                ],
+                "sourceSize": [
+                  100,
+                  82
+                ]
+              },
+              {
+                "index": 2612,
+                "direction": 1,
+                "frame": 4,
+                "drawOffset": [
+                  11,
+                  -42
+                ],
+                "sourceSize": [
+                  72,
+                  75
+                ]
+              },
+              {
+                "index": 2613,
+                "direction": 1,
+                "frame": 5,
+                "drawOffset": [
+                  14,
+                  -43
+                ],
+                "sourceSize": [
+                  68,
+                  74
+                ]
+              },
+              {
+                "index": 2616,
+                "direction": 2,
+                "frame": 0,
+                "drawOffset": [
+                  4,
+                  -39
+                ],
+                "sourceSize": [
+                  68,
+                  70
+                ]
+              },
+              {
+                "index": 2617,
+                "direction": 2,
+                "frame": 1,
+                "drawOffset": [
+                  -17,
+                  -42
+                ],
+                "sourceSize": [
+                  84,
+                  70
+                ]
+              },
+              {
+                "index": 2618,
+                "direction": 2,
+                "frame": 2,
+                "drawOffset": [
+                  -2,
+                  -41
+                ],
+                "sourceSize": [
+                  92,
+                  70
+                ]
+              },
+              {
+                "index": 2619,
+                "direction": 2,
+                "frame": 3,
+                "drawOffset": [
+                  -2,
+                  -43
+                ],
+                "sourceSize": [
+                  108,
+                  74
+                ]
+              },
+              {
+                "index": 2620,
+                "direction": 2,
+                "frame": 4,
+                "drawOffset": [
+                  0,
+                  -41
+                ],
+                "sourceSize": [
+                  88,
+                  72
+                ]
+              },
+              {
+                "index": 2621,
+                "direction": 2,
+                "frame": 5,
+                "drawOffset": [
+                  3,
+                  -35
+                ],
+                "sourceSize": [
+                  76,
+                  63
+                ]
+              },
+              {
+                "index": 2624,
+                "direction": 3,
+                "frame": 0,
+                "drawOffset": [
+                  2,
+                  -42
+                ],
+                "sourceSize": [
+                  72,
+                  68
+                ]
+              },
+              {
+                "index": 2625,
+                "direction": 3,
+                "frame": 1,
+                "drawOffset": [
+                  1,
+                  -59
+                ],
+                "sourceSize": [
+                  56,
+                  85
+                ]
+              },
+              {
+                "index": 2626,
+                "direction": 3,
+                "frame": 2,
+                "drawOffset": [
+                  -2,
+                  -47
+                ],
+                "sourceSize": [
+                  88,
+                  73
+                ]
+              },
+              {
+                "index": 2627,
+                "direction": 3,
+                "frame": 3,
+                "drawOffset": [
+                  -4,
+                  -32
+                ],
+                "sourceSize": [
+                  88,
+                  71
+                ]
+              },
+              {
+                "index": 2628,
+                "direction": 3,
+                "frame": 4,
+                "drawOffset": [
+                  -1,
+                  -35
+                ],
+                "sourceSize": [
+                  76,
+                  68
+                ]
+              },
+              {
+                "index": 2629,
+                "direction": 3,
+                "frame": 5,
+                "drawOffset": [
+                  3,
+                  -31
+                ],
+                "sourceSize": [
+                  68,
+                  61
+                ]
+              },
+              {
+                "index": 2632,
+                "direction": 4,
+                "frame": 0,
+                "drawOffset": [
+                  -6,
+                  -45
+                ],
+                "sourceSize": [
+                  68,
+                  79
+                ]
+              },
+              {
+                "index": 2633,
+                "direction": 4,
+                "frame": 1,
+                "drawOffset": [
+                  7,
+                  -63
+                ],
+                "sourceSize": [
+                  60,
+                  98
+                ]
+              },
+              {
+                "index": 2634,
+                "direction": 4,
+                "frame": 2,
+                "drawOffset": [
+                  5,
+                  -54
+                ],
+                "sourceSize": [
+                  64,
+                  88
+                ]
+              },
+              {
+                "index": 2635,
+                "direction": 4,
+                "frame": 3,
+                "drawOffset": [
+                  -1,
+                  -25
+                ],
+                "sourceSize": [
+                  80,
+                  59
+                ]
+              },
+              {
+                "index": 2636,
+                "direction": 4,
+                "frame": 4,
+                "drawOffset": [
+                  2,
+                  -26
+                ],
+                "sourceSize": [
+                  72,
+                  64
+                ]
+              },
+              {
+                "index": 2637,
+                "direction": 4,
+                "frame": 5,
+                "drawOffset": [
+                  4,
+                  -28
+                ],
+                "sourceSize": [
+                  64,
+                  62
+                ]
+              },
+              {
+                "index": 2640,
+                "direction": 5,
+                "frame": 0,
+                "drawOffset": [
+                  1,
+                  -47
+                ],
+                "sourceSize": [
+                  60,
+                  80
+                ]
+              },
+              {
+                "index": 2641,
+                "direction": 5,
+                "frame": 1,
+                "drawOffset": [
+                  3,
+                  -52
+                ],
+                "sourceSize": [
+                  96,
+                  85
+                ]
+              },
+              {
+                "index": 2642,
+                "direction": 5,
+                "frame": 2,
+                "drawOffset": [
+                  4,
+                  -60
+                ],
+                "sourceSize": [
+                  56,
+                  93
+                ]
+              },
+              {
+                "index": 2643,
+                "direction": 5,
+                "frame": 3,
+                "drawOffset": [
+                  -18,
+                  -37
+                ],
+                "sourceSize": [
+                  76,
+                  69
+                ]
+              },
+              {
+                "index": 2644,
+                "direction": 5,
+                "frame": 4,
+                "drawOffset": [
+                  -6,
+                  -25
+                ],
+                "sourceSize": [
+                  68,
+                  58
+                ]
+              },
+              {
+                "index": 2645,
+                "direction": 5,
+                "frame": 5,
+                "drawOffset": [
+                  0,
+                  -34
+                ],
+                "sourceSize": [
+                  56,
+                  67
+                ]
+              },
+              {
+                "index": 2648,
+                "direction": 6,
+                "frame": 0,
+                "drawOffset": [
+                  0,
+                  -45
+                ],
+                "sourceSize": [
+                  68,
+                  71
+                ]
+              },
+              {
+                "index": 2649,
+                "direction": 6,
+                "frame": 1,
+                "drawOffset": [
+                  -2,
+                  -36
+                ],
+                "sourceSize": [
+                  108,
+                  63
+                ]
+              },
+              {
+                "index": 2650,
+                "direction": 6,
+                "frame": 2,
+                "drawOffset": [
+                  -9,
+                  -59
+                ],
+                "sourceSize": [
+                  84,
+                  84
+                ]
+              },
+              {
+                "index": 2651,
+                "direction": 6,
+                "frame": 3,
+                "drawOffset": [
+                  -11,
+                  -56
+                ],
+                "sourceSize": [
+                  68,
+                  85
+                ]
+              },
+              {
+                "index": 2652,
+                "direction": 6,
+                "frame": 4,
+                "drawOffset": [
+                  -11,
+                  -33
+                ],
+                "sourceSize": [
+                  64,
+                  58
+                ]
+              },
+              {
+                "index": 2653,
+                "direction": 6,
+                "frame": 5,
+                "drawOffset": [
+                  0,
+                  -42
+                ],
+                "sourceSize": [
+                  48,
+                  68
+                ]
+              },
+              {
+                "index": 2656,
+                "direction": 7,
+                "frame": 0,
+                "drawOffset": [
+                  1,
+                  -42
+                ],
+                "sourceSize": [
+                  72,
+                  67
+                ]
+              },
+              {
+                "index": 2657,
+                "direction": 7,
+                "frame": 1,
+                "drawOffset": [
+                  -1,
+                  -39
+                ],
+                "sourceSize": [
+                  88,
+                  73
+                ]
+              },
+              {
+                "index": 2658,
+                "direction": 7,
+                "frame": 2,
+                "drawOffset": [
+                  -5,
+                  -53
+                ],
+                "sourceSize": [
+                  92,
+                  78
+                ]
+              },
+              {
+                "index": 2659,
+                "direction": 7,
+                "frame": 3,
+                "drawOffset": [
+                  -7,
+                  -67
+                ],
+                "sourceSize": [
+                  64,
+                  90
+                ]
+              },
+              {
+                "index": 2660,
+                "direction": 7,
+                "frame": 4,
+                "drawOffset": [
+                  -4,
+                  -44
+                ],
+                "sourceSize": [
+                  60,
+                  66
+                ]
+              },
+              {
+                "index": 2661,
+                "direction": 7,
+                "frame": 5,
+                "drawOffset": [
+                  -1,
+                  -48
+                ],
+                "sourceSize": [
+                  56,
+                  73
+                ]
+              }
+            ],
+            "missingFrames": [],
+            "libraryImageCount": 10800,
+            "confidence": "A"
+          },
+          "hit": {
+            "path": "res://assets/art/characters/warrior/wear/dress/dress_004_hit.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 3,
+            "sourceFeature": 4,
+            "sourceFrames": [
+              {
+                "index": 2872,
+                "direction": 0,
+                "frame": 0,
+                "drawOffset": [
+                  8,
+                  -31
+                ],
+                "sourceSize": [
+                  56,
+                  60
+                ]
+              },
+              {
+                "index": 2873,
+                "direction": 0,
+                "frame": 1,
+                "drawOffset": [
+                  9,
+                  -40
+                ],
+                "sourceSize": [
+                  60,
+                  69
+                ]
+              },
+              {
+                "index": 2874,
+                "direction": 0,
+                "frame": 2,
+                "drawOffset": [
+                  9,
+                  -48
+                ],
+                "sourceSize": [
+                  60,
+                  76
+                ]
+              },
+              {
+                "index": 2880,
+                "direction": 1,
+                "frame": 0,
+                "drawOffset": [
+                  3,
+                  -34
+                ],
+                "sourceSize": [
+                  44,
+                  65
+                ]
+              },
+              {
+                "index": 2881,
+                "direction": 1,
+                "frame": 1,
+                "drawOffset": [
+                  9,
+                  -42
+                ],
+                "sourceSize": [
+                  48,
+                  71
+                ]
+              },
+              {
+                "index": 2882,
+                "direction": 1,
+                "frame": 2,
+                "drawOffset": [
+                  15,
+                  -49
+                ],
+                "sourceSize": [
+                  52,
+                  78
+                ]
+              },
+              {
+                "index": 2888,
+                "direction": 2,
+                "frame": 0,
+                "drawOffset": [
+                  -2,
+                  -40
+                ],
+                "sourceSize": [
+                  60,
+                  68
+                ]
+              },
+              {
+                "index": 2889,
+                "direction": 2,
+                "frame": 1,
+                "drawOffset": [
+                  7,
+                  -43
+                ],
+                "sourceSize": [
+                  64,
+                  71
+                ]
+              },
+              {
+                "index": 2890,
+                "direction": 2,
+                "frame": 2,
+                "drawOffset": [
+                  9,
+                  -45
+                ],
+                "sourceSize": [
+                  72,
+                  74
+                ]
+              },
+              {
+                "index": 2896,
+                "direction": 3,
+                "frame": 0,
+                "drawOffset": [
+                  -3,
+                  -50
+                ],
+                "sourceSize": [
+                  64,
+                  72
+                ]
+              },
+              {
+                "index": 2897,
+                "direction": 3,
+                "frame": 1,
+                "drawOffset": [
+                  4,
+                  -49
+                ],
+                "sourceSize": [
+                  68,
+                  71
+                ]
+              },
+              {
+                "index": 2898,
+                "direction": 3,
+                "frame": 2,
+                "drawOffset": [
+                  7,
+                  -45
+                ],
+                "sourceSize": [
+                  76,
+                  68
+                ]
+              },
+              {
+                "index": 2904,
+                "direction": 4,
+                "frame": 0,
+                "drawOffset": [
+                  2,
+                  -53
+                ],
+                "sourceSize": [
+                  64,
+                  76
+                ]
+              },
+              {
+                "index": 2905,
+                "direction": 4,
+                "frame": 1,
+                "drawOffset": [
+                  2,
+                  -51
+                ],
+                "sourceSize": [
+                  68,
+                  78
+                ]
+              },
+              {
+                "index": 2906,
+                "direction": 4,
+                "frame": 2,
+                "drawOffset": [
+                  2,
+                  -46
+                ],
+                "sourceSize": [
+                  68,
+                  74
+                ]
+              },
+              {
+                "index": 2912,
+                "direction": 5,
+                "frame": 0,
+                "drawOffset": [
+                  14,
+                  -48
+                ],
+                "sourceSize": [
+                  68,
+                  73
+                ]
+              },
+              {
+                "index": 2913,
+                "direction": 5,
+                "frame": 1,
+                "drawOffset": [
+                  12,
+                  -49
+                ],
+                "sourceSize": [
+                  64,
+                  77
+                ]
+              },
+              {
+                "index": 2914,
+                "direction": 5,
+                "frame": 2,
+                "drawOffset": [
+                  7,
+                  -47
+                ],
+                "sourceSize": [
+                  60,
+                  77
+                ]
+              },
+              {
+                "index": 2920,
+                "direction": 6,
+                "frame": 0,
+                "drawOffset": [
+                  10,
+                  -36
+                ],
+                "sourceSize": [
+                  80,
+                  62
+                ]
+              },
+              {
+                "index": 2921,
+                "direction": 6,
+                "frame": 1,
+                "drawOffset": [
+                  9,
+                  -42
+                ],
+                "sourceSize": [
+                  72,
+                  68
+                ]
+              },
+              {
+                "index": 2922,
+                "direction": 6,
+                "frame": 2,
+                "drawOffset": [
+                  2,
+                  -46
+                ],
+                "sourceSize": [
+                  64,
+                  72
+                ]
+              },
+              {
+                "index": 2928,
+                "direction": 7,
+                "frame": 0,
+                "drawOffset": [
+                  7,
+                  -26
+                ],
+                "sourceSize": [
+                  68,
+                  51
+                ]
+              },
+              {
+                "index": 2929,
+                "direction": 7,
+                "frame": 1,
+                "drawOffset": [
+                  6,
+                  -35
+                ],
+                "sourceSize": [
+                  68,
+                  59
+                ]
+              },
+              {
+                "index": 2930,
+                "direction": 7,
+                "frame": 2,
+                "drawOffset": [
+                  2,
+                  -45
+                ],
+                "sourceSize": [
+                  68,
+                  68
+                ]
+              }
+            ],
+            "missingFrames": [],
+            "libraryImageCount": 10800,
+            "confidence": "A"
+          },
+          "death": {
+            "path": "res://assets/art/characters/warrior/wear/dress/dress_004_death.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "sourceFeature": 4,
+            "sourceFrames": [
+              {
+                "index": 2936,
+                "direction": 0,
+                "frame": 0,
+                "drawOffset": [
+                  -2,
+                  -50
+                ],
+                "sourceSize": [
+                  84,
+                  70
+                ]
+              },
+              {
+                "index": 2937,
+                "direction": 0,
+                "frame": 1,
+                "drawOffset": [
+                  6,
+                  -46
+                ],
+                "sourceSize": [
+                  68,
+                  67
+                ]
+              },
+              {
+                "index": 2938,
+                "direction": 0,
+                "frame": 2,
+                "drawOffset": [
+                  3,
+                  -23
+                ],
+                "sourceSize": [
+                  64,
+                  71
+                ]
+              },
+              {
+                "index": 2939,
+                "direction": 0,
+                "frame": 3,
+                "drawOffset": [
+                  5,
+                  -17
+                ],
+                "sourceSize": [
+                  56,
+                  75
+                ]
+              },
+              {
+                "index": 2944,
+                "direction": 1,
+                "frame": 0,
+                "drawOffset": [
+                  16,
+                  -50
+                ],
+                "sourceSize": [
+                  72,
+                  73
+                ]
+              },
+              {
+                "index": 2945,
+                "direction": 1,
+                "frame": 1,
+                "drawOffset": [
+                  5,
+                  -43
+                ],
+                "sourceSize": [
+                  68,
+                  66
+                ]
+              },
+              {
+                "index": 2946,
+                "direction": 1,
+                "frame": 2,
+                "drawOffset": [
+                  -6,
+                  -20
+                ],
+                "sourceSize": [
+                  72,
+                  67
+                ]
+              },
+              {
+                "index": 2947,
+                "direction": 1,
+                "frame": 3,
+                "drawOffset": [
+                  -30,
+                  -16
+                ],
+                "sourceSize": [
+                  92,
+                  74
+                ]
+              },
+              {
+                "index": 2952,
+                "direction": 2,
+                "frame": 0,
+                "drawOffset": [
+                  16,
+                  -45
+                ],
+                "sourceSize": [
+                  64,
+                  77
+                ]
+              },
+              {
+                "index": 2953,
+                "direction": 2,
+                "frame": 1,
+                "drawOffset": [
+                  8,
+                  -41
+                ],
+                "sourceSize": [
+                  64,
+                  69
+                ]
+              },
+              {
+                "index": 2954,
+                "direction": 2,
+                "frame": 2,
+                "drawOffset": [
+                  -22,
+                  -19
+                ],
+                "sourceSize": [
+                  80,
+                  51
+                ]
+              },
+              {
+                "index": 2955,
+                "direction": 2,
+                "frame": 3,
+                "drawOffset": [
+                  -35,
+                  0
+                ],
+                "sourceSize": [
+                  100,
+                  41
+                ]
+              },
+              {
+                "index": 2960,
+                "direction": 3,
+                "frame": 0,
+                "drawOffset": [
+                  11,
+                  -37
+                ],
+                "sourceSize": [
+                  80,
+                  73
+                ]
+              },
+              {
+                "index": 2961,
+                "direction": 3,
+                "frame": 1,
+                "drawOffset": [
+                  8,
+                  -43
+                ],
+                "sourceSize": [
+                  60,
+                  72
+                ]
+              },
+              {
+                "index": 2962,
+                "direction": 3,
+                "frame": 2,
+                "drawOffset": [
+                  -21,
+                  -30
+                ],
+                "sourceSize": [
+                  84,
+                  62
+                ]
+              },
+              {
+                "index": 2963,
+                "direction": 3,
+                "frame": 3,
+                "drawOffset": [
+                  -35,
+                  -22
+                ],
+                "sourceSize": [
+                  96,
+                  61
+                ]
+              },
+              {
+                "index": 2968,
+                "direction": 4,
+                "frame": 0,
+                "drawOffset": [
+                  -6,
+                  -34
+                ],
+                "sourceSize": [
+                  84,
+                  64
+                ]
+              },
+              {
+                "index": 2969,
+                "direction": 4,
+                "frame": 1,
+                "drawOffset": [
+                  4,
+                  -42
+                ],
+                "sourceSize": [
+                  68,
+                  69
+                ]
+              },
+              {
+                "index": 2970,
+                "direction": 4,
+                "frame": 2,
+                "drawOffset": [
+                  0,
+                  -37
+                ],
+                "sourceSize": [
+                  56,
+                  68
+                ]
+              },
+              {
+                "index": 2971,
+                "direction": 4,
+                "frame": 3,
+                "drawOffset": [
+                  -11,
+                  -25
+                ],
+                "sourceSize": [
+                  56,
+                  64
+                ]
+              },
+              {
+                "index": 2976,
+                "direction": 5,
+                "frame": 0,
+                "drawOffset": [
+                  -12,
+                  -39
+                ],
+                "sourceSize": [
+                  72,
+                  74
+                ]
+              },
+              {
+                "index": 2977,
+                "direction": 5,
+                "frame": 1,
+                "drawOffset": [
+                  3,
+                  -43
+                ],
+                "sourceSize": [
+                  72,
+                  72
+                ]
+              },
+              {
+                "index": 2978,
+                "direction": 5,
+                "frame": 2,
+                "drawOffset": [
+                  -6,
+                  -31
+                ],
+                "sourceSize": [
+                  76,
+                  63
+                ]
+              },
+              {
+                "index": 2979,
+                "direction": 5,
+                "frame": 3,
+                "drawOffset": [
+                  -14,
+                  -22
+                ],
+                "sourceSize": [
+                  96,
+                  58
+                ]
+              },
+              {
+                "index": 2984,
+                "direction": 6,
+                "frame": 0,
+                "drawOffset": [
+                  -1,
+                  -46
+                ],
+                "sourceSize": [
+                  52,
+                  74
+                ]
+              },
+              {
+                "index": 2985,
+                "direction": 6,
+                "frame": 1,
+                "drawOffset": [
+                  8,
+                  -44
+                ],
+                "sourceSize": [
+                  64,
+                  70
+                ]
+              },
+              {
+                "index": 2986,
+                "direction": 6,
+                "frame": 2,
+                "drawOffset": [
+                  -6,
+                  -27
+                ],
+                "sourceSize": [
+                  88,
+                  57
+                ]
+              },
+              {
+                "index": 2987,
+                "direction": 6,
+                "frame": 3,
+                "drawOffset": [
+                  -14,
+                  -6
+                ],
+                "sourceSize": [
+                  100,
+                  37
+                ]
+              },
+              {
+                "index": 2992,
+                "direction": 7,
+                "frame": 0,
+                "drawOffset": [
+                  -12,
+                  -48
+                ],
+                "sourceSize": [
+                  80,
+                  68
+                ]
+              },
+              {
+                "index": 2993,
+                "direction": 7,
+                "frame": 1,
+                "drawOffset": [
+                  3,
+                  -45
+                ],
+                "sourceSize": [
+                  68,
+                  68
+                ]
+              },
+              {
+                "index": 2994,
+                "direction": 7,
+                "frame": 2,
+                "drawOffset": [
+                  -3,
+                  -27
+                ],
+                "sourceSize": [
+                  84,
+                  63
+                ]
+              },
+              {
+                "index": 2995,
+                "direction": 7,
+                "frame": 3,
+                "drawOffset": [
+                  -12,
+                  -12
+                ],
+                "sourceSize": [
+                  96,
+                  67
+                ]
+              }
+            ],
+            "missingFrames": [],
+            "libraryImageCount": 10800,
+            "confidence": "A"
+          }
+        },
+        "mappingConfidence": "B",
+        "mappingSource": "server.crystal.cjlaaa Server.MirDB ItemInfo[321]",
+        "clientSource": "dev_art_sources/reference/mir2_client_raw/Data/Hum.wil"
+      }
     }
   },
   "rejectedMappings": [
@@ -58537,22 +63738,14 @@
       "reason": "候选数据库无同名Shape"
     },
     {
-      "name": "怒斩",
-      "reason": "候选数据库无同名Shape"
-    },
-    {
-      "name": "中型盔甲(男)",
-      "reason": "候选数据库无同名Shape"
-    },
-    {
       "name": "天魔神甲",
       "reason": "候选数据库无同名Shape"
     },
     {
       "name": "圣战宝甲",
-      "reason": "候选数据库无同名Shape"
+      "reason": "女性角色不在当前开发范围"
     }
   ],
-  "generatedAtlases": 95,
+  "generatedAtlases": 100,
   "policy": "帧公式和客户端像素为A；逐件Shape为B。越界、缺名或不兼容值拒绝运行，不猜测替换。"
 }
