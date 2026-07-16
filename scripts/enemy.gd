@@ -2,13 +2,16 @@ class_name EnemyActor
 extends CharacterBody2D
 
 const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
+const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
-const LARGE_CLIENT_BOSSES := ["骷髅精灵", "尸王"]
 
 signal died(enemy: EnemyActor, monster_data: Dictionary)
 signal target_requested(enemy: EnemyActor)
+signal summon_requested(enemy: EnemyActor, monster_ids: Array, count: int, max_active: int)
+signal relocation_requested(enemy: EnemyActor, radius_cells: int)
 
 var monster_data: Dictionary = {}
+var monster_id := -1
 var display_name := "怪物"
 var max_hp := 20
 var current_hp := 20
@@ -43,6 +46,7 @@ var collision_radius := ArtSpec.MONSTER_COLLISION_RADIUS
 var environment_blocker: Node
 var _dying := false
 var boss_rule: Dictionary = {}
+var behavior_profile: Dictionary = {}
 
 var _attack_timer := 0.0
 var _attack_interval := 1.55
@@ -59,6 +63,11 @@ var _boss_phase_enabled := true
 var _boss_skill_enabled := true
 var _boss_skill_direction := Vector2.DOWN
 var _last_boss_skill_hit := false
+var _boss_health_stage := -1
+var _boss_rage_time := 0.0
+var _boss_base_move_speed := 0.0
+var _boss_base_attack_interval := 0.0
+var _burrowed := false
 var _rng := RandomNumberGenerator.new()
 var _threat_table := {}
 var _threat_decay_per_second := 4.0
@@ -68,6 +77,7 @@ var _control_anchor := Vector2.INF
 
 func setup(data: Dictionary, player_target: PlayerCharacter, boss := false) -> void:
 	monster_data = data
+	monster_id = MonsterIdentityScript.monster_id(data)
 	target = player_target
 	primary_target = player_target
 	is_boss = boss
@@ -82,67 +92,23 @@ func setup(data: Dictionary, player_target: PlayerCharacter, boss := false) -> v
 	move_speed = 40.0 if is_boss else 58.0
 	if not is_boss and int(data.get("attackIntervalMs", 0)) > 0:
 		_attack_interval = float(data.get("attackIntervalMs")) / 1000.0
+	behavior_profile = MonsterIdentityScript.behavior_profile(data)
+	_apply_behavior_profile()
 	if is_boss:
-		boss_rule = GameData.boss_service_rules.get("runtimeRules", {}).get(display_name, {}).duplicate(true)
+		boss_rule = MonsterIdentityScript.boss_rule(data, GameData.boss_service_rules)
 		if not boss_rule.is_empty():
 			_apply_boss_rule()
-	if display_name == "骷髅精灵" and boss_rule.is_empty():
-		attack_range = 60.0
-		move_speed = 48.0
-		aggro_radius = 380.0
-		_boss_skill_cooldown = 2.8
-	if display_name == "森林雪人":
-		move_speed = 52.0
-		attack_range = 44.0
-		aggro_radius = 330.0
-	if display_name == "食人花":
-		move_speed = 0.0
-		attack_range = 78.0
-		aggro_radius = 240.0
-	if display_name == "洞蛆":
-		move_speed = 32.0
-		attack_range = 40.0
-	if display_name == "山洞蝙蝠":
-		move_speed = 62.0
-		attack_range = 36.0
-	if display_name == "蝎子":
-		move_speed = 48.0
-		attack_range = 45.0
-	if "火焰沃玛" in display_name:
-		attack_range = 155.0
-		move_speed = 46.0
-		aggro_radius = 360.0
-	if display_name == "触龙神":
-		attack_range = 210.0
-		move_speed = 0.0
-		aggro_radius = 430.0
-	if display_name == "千年树妖":
-		attack_range = 230.0
-		move_speed = 0.0
-		aggro_radius = 440.0
-	if display_name == "幻影蜘蛛":
-		attack_range = 210.0
-		move_speed = 0.0
-		aggro_radius = 400.0
-	if display_name == "赤月恶魔":
-		attack_range = 260.0
-		move_speed = 0.0
-		aggro_radius = 470.0
-	if display_name == "虹魔教主":
-		life_steal_ratio = 0.33
-	if display_name == "祖玛弓箭手":
-		attack_range = 205.0
-		move_speed = 44.0
-	if display_name in ["骷髅弓箭手", "牛魔法师"]:
-		attack_range = 205.0
-		move_speed = 43.0
-	if display_name == "牛魔祭司":
-		attack_range = 175.0
-		life_steal_ratio = 0.2
-	if display_name in ["祖玛雕像", "祖玛卫士"]:
-		dormant = true
-	if display_name in ["楔蛾", "月魔蜘蛛"]:
-		control_on_hit_seconds = 1.2
+
+
+func _apply_behavior_profile() -> void:
+	var projection: Dictionary = behavior_profile.get("runtimeProjection", {})
+	move_speed = float(projection.get("moveSpeed", move_speed))
+	attack_range = float(projection.get("attackRange", attack_range))
+	aggro_radius = float(projection.get("aggroRadius", aggro_radius))
+	life_steal_ratio = float(behavior_profile.get("lifeStealRatio", life_steal_ratio))
+	dormant = bool(behavior_profile.get("dormant", dormant))
+	var on_hit: Dictionary = behavior_profile.get("onHit", {})
+	control_on_hit_seconds = float(on_hit.get("controlSeconds", control_on_hit_seconds))
 
 
 func _apply_boss_rule() -> void:
@@ -154,8 +120,20 @@ func _apply_boss_rule() -> void:
 	_attack_interval = float(timing.get("attackIntervalMs", 1550)) / 1000.0
 	_attack_animation_duration = float(timing.get("attackAnimationMs", 460)) / 1000.0
 	_attack_hit_delay = float(timing.get("hitDelayMs", 0)) / 1000.0
-	_boss_skill_enabled = bool(boss_rule.get("specialSkill", {}).get("enabled", false))
+	var special: Dictionary = boss_rule.get("specialSkill", {})
+	_boss_skill_enabled = bool(special.get("enabled", false))
+	_boss_skill_cooldown = float(special.get("initialCooldownSeconds", _boss_skill_cooldown))
 	_boss_phase_enabled = bool(boss_rule.get("phaseTwo", {}).get("enabled", false))
+	var mechanics: Dictionary = boss_rule.get("mechanics", {})
+	var burrow: Dictionary = mechanics.get("burrowAmbush", {})
+	_burrowed = bool(burrow.get("enabled", false))
+	if _burrowed:
+		dormant = true
+	var summon: Dictionary = mechanics.get("healthStageSummon", {})
+	var rage: Dictionary = mechanics.get("healthStageRage", {})
+	_boss_health_stage = int(summon.get("stages", rage.get("stages", -1)))
+	_boss_base_move_speed = move_speed
+	_boss_base_attack_interval = _attack_interval
 
 
 func _ready() -> void:
@@ -163,7 +141,7 @@ func _ready() -> void:
 	input_pickable = true
 	collision_layer = WorldSpatialRulesScript.ENEMY_LAYER
 	collision_mask = WorldSpatialRulesScript.ENEMY_MASK
-	if display_name in ["山洞蝙蝠", "山洞蝙蝠0", "蝙蝠"]:
+	if not bool(behavior_profile.get("worldCollision", true)):
 		# 飞行怪参与攻击和选取，但不作为人物移动的实体墙。
 		collision_layer = 0
 		collision_mask = WorldSpatialRulesScript.WORLD_MASK
@@ -174,15 +152,15 @@ func _ready() -> void:
 	var collision := CollisionShape2D.new()
 	collision.name = "CollisionShape2D"
 	var shape := CircleShape2D.new()
-	var common_radius := {"洞蛆": 10.0, "山洞蝙蝠": 12.0, "蝎子": 17.0, "多钩猫": 18.0}.get(display_name, -1.0) as float
-	collision_radius = ArtSpec.BOSS_COLLISION_RADIUS if is_boss else (common_radius if common_radius > 0.0 else (20.0 if display_name in ["半兽人", "森林雪人"] else (18.0 if display_name == "食人花" else (15.0 if display_name == "稻草人" else ArtSpec.MONSTER_COLLISION_RADIUS))))
+	var authored_radius := float(behavior_profile.get("collisionRadius", -1.0))
+	collision_radius = ArtSpec.BOSS_COLLISION_RADIUS if is_boss else (authored_radius if authored_radius > 0.0 else ArtSpec.MONSTER_COLLISION_RADIUS)
 	shape.radius = collision_radius
 	collision.shape = shape
 	add_child(collision)
 	_resolve_invalid_spawn_overlap()
 	name_label = Label.new()
 	name_label.text = display_name
-	name_label.position = Vector2(-70, -116 if display_name in LARGE_CLIENT_BOSSES else (-62 if is_boss else -50))
+	name_label.position = Vector2(-70, -116 if bool(behavior_profile.get("largeClientBoss", false)) else (-62 if is_boss else -50))
 	name_label.size = Vector2(140, 24)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.add_theme_color_override("font_color", Color(1.0, 0.60, 0.34) if is_boss else Color(0.82, 0.78, 0.66))
@@ -191,6 +169,9 @@ func _ready() -> void:
 	visual.name = "MonsterVisual"
 	visual.setup(self)
 	add_child(visual)
+	if _burrowed:
+		visual.visible = false
+		name_label.visible = false
 	queue_redraw()
 
 
@@ -241,6 +222,19 @@ func _physics_process(delta: float) -> void:
 		return
 	var offset := target.global_position - global_position
 	var distance := offset.length()
+	if _burrowed:
+		var burrow: Dictionary = boss_rule.get("mechanics", {}).get("burrowAmbush", {})
+		if distance <= float(burrow.get("emergeRange", 128.0)):
+			_burrowed = false
+			dormant = false
+			if bool(burrow.get("healToFullOnEmerge", false)):
+				current_hp = max_hp
+			if visual != null:
+				visual.visible = true
+			name_label.visible = true
+		else:
+			velocity = Vector2.ZERO
+			return
 	var contact_distance := collision_radius + _target_collision_radius(target) + 14.0
 	var engagement_distance := maxf(attack_range, contact_distance)
 	if offset.length_squared() > 0.001:
@@ -250,7 +244,10 @@ func _physics_process(delta: float) -> void:
 		queue_redraw()
 		return
 	if dormant:
-		if distance <= 190.0:
+		var wake_range := float(behavior_profile.get("wakeRange", 190.0))
+		var stone_wake: Dictionary = boss_rule.get("mechanics", {}).get("stoneWake", {})
+		wake_range = float(stone_wake.get("wakeRange", wake_range))
+		if distance <= wake_range:
 			dormant = false
 		else:
 			velocity = Vector2.ZERO
@@ -324,7 +321,8 @@ func _move_with_spatial_rules() -> void:
 
 func _current_attack_interval() -> float:
 	if not boss_rule.is_empty():
-		return _attack_interval
+		var phase: Dictionary = boss_rule.get("phaseTwo", {})
+		return _attack_interval * (float(phase.get("attackIntervalMultiplier", 1.0)) if _boss_phase_two else 1.0)
 	return (0.78 if _boss_phase_two else 1.15) if is_boss else _attack_interval
 
 
@@ -357,8 +355,10 @@ func _deal_melee_hit(hit_target: Node2D, dealt_damage: int) -> void:
 	apply_life_steal(dealt_damage)
 	if control_on_hit_seconds > 0.0 and hit_target.has_method("apply_control"):
 		hit_target.apply_control(control_on_hit_seconds)
-	if display_name in ["邪恶钳虫", "触龙神", "赤月恶魔"] and hit_target.has_method("apply_poison"):
-		hit_target.apply_poison(4 if display_name == "触龙神" else 2, 8.0 if display_name == "触龙神" else 6.0)
+	var on_hit: Dictionary = behavior_profile.get("onHit", {})
+	var poison_damage_value := int(on_hit.get("poisonDamage", 0))
+	if poison_damage_value > 0 and hit_target.has_method("apply_poison"):
+		hit_target.apply_poison(poison_damage_value, float(on_hit.get("poisonSeconds", 0.0)))
 
 
 func _target_collision_radius(target_node: Node2D) -> float:
@@ -402,13 +402,16 @@ func take_damage(amount: int, attacker: Node2D = null) -> void:
 	if is_instance_valid(attacker):
 		_add_threat(attacker, float(maxi(1,amount))*5.0+25.0)
 	current_hp = maxi(0, current_hp - amount)
+	if is_boss and not boss_rule.is_empty():
+		_apply_health_stage_mechanics()
 	if visual != null and current_hp > 0:
 		visual.play_hit()
 	if is_boss and _boss_phase_enabled and not _boss_phase_two and current_hp <= max_hp / 2:
 		_boss_phase_two = true
-		move_speed *= 1.55
-		attack_range = 64.0 if display_name == "骷髅精灵" else 46.0
-		_boss_skill_cooldown = minf(_boss_skill_cooldown, 1.8)
+		var phase: Dictionary = boss_rule.get("phaseTwo", {})
+		move_speed *= float(phase.get("moveSpeedMultiplier", 1.0))
+		attack_range = float(phase.get("attackRange", attack_range))
+		_boss_skill_cooldown = minf(_boss_skill_cooldown, float(phase.get("skillCooldownSeconds", _boss_skill_cooldown)))
 	queue_redraw()
 	if current_hp == 0:
 		_begin_death()
@@ -470,8 +473,34 @@ func _update_status_effects(delta: float) -> void:
 	poison_time = maxf(0.0, poison_time - delta)
 	control_time = maxf(0.0, control_time - delta)
 	charm_time = maxf(0.0, charm_time - delta)
+	if _boss_rage_time > 0.0:
+		_boss_rage_time = maxf(0.0, _boss_rage_time - delta)
+		if _boss_rage_time <= 0.0:
+			move_speed = _boss_base_move_speed
+			_attack_interval = _boss_base_attack_interval
 	if poison_time > 0.0 and int(ceil(poison_time)) < previous_poison_second:
 		take_damage(poison_damage)
+
+
+func _apply_health_stage_mechanics() -> void:
+	if _boss_health_stage <= 0 or max_hp <= 0:
+		return
+	var mechanics: Dictionary = boss_rule.get("mechanics", {})
+	var summon: Dictionary = mechanics.get("healthStageSummon", {})
+	var rage: Dictionary = mechanics.get("healthStageRage", {})
+	var stage_count := int(summon.get("stages", rage.get("stages", _boss_health_stage)))
+	var current_stage := int(floor(float(current_hp) / float(max_hp) * float(stage_count)))
+	if current_stage >= _boss_health_stage:
+		return
+	_boss_health_stage -= 1
+	if bool(summon.get("enabled", false)):
+		var count := _rng.randi_range(int(summon.get("minCount", 6)), int(summon.get("maxCount", 11)))
+		var ids: Array = summon.get("monsterIds", []).duplicate()
+		summon_requested.emit(self, ids, count, int(summon.get("maxActive", 30)))
+	if bool(rage.get("enabled", false)):
+		_boss_rage_time = float(rage.get("durationSeconds", 8.0))
+		move_speed = _boss_base_move_speed * float(rage.get("moveSpeedMultiplier", 1.0))
+		_attack_interval = float(rage.get("attackIntervalSeconds", _boss_base_attack_interval))
 
 
 func _retarget(delta := 0.0) -> void:
@@ -571,21 +600,24 @@ func _draw() -> void:
 	if dormant:
 		draw_circle(Vector2(0, -5), radius + 3.0, Color(0.52, 0.50, 0.46, 0.72))
 	if _boss_warning > 0.0:
-		if display_name == "骷髅精灵":
+		var special: Dictionary = boss_rule.get("specialSkill", {})
+		var warning_radius := float(special.get("radius", 155.0))
+		if str(special.get("shape", "circle")) == "cone":
+			var half_angle := float(special.get("coneHalfAngleRadians", 0.68))
 			var sector := PackedVector2Array([Vector2.ZERO])
 			for index in range(15):
-				var angle := _boss_skill_direction.angle() - 0.68 + 1.36 * float(index) / 14.0
-				sector.append(Vector2.from_angle(angle) * 135.0)
+				var angle := _boss_skill_direction.angle() - half_angle + half_angle * 2.0 * float(index) / 14.0
+				sector.append(Vector2.from_angle(angle) * warning_radius)
 			draw_colored_polygon(sector, Color(0.95, 0.12, 0.04, 0.22))
-			draw_arc(Vector2.ZERO, 135.0, _boss_skill_direction.angle() - 0.68, _boss_skill_direction.angle() + 0.68, 24, Color(1.0, 0.34, 0.08, 0.92), 5.0)
+			draw_arc(Vector2.ZERO, warning_radius, _boss_skill_direction.angle() - half_angle, _boss_skill_direction.angle() + half_angle, 24, Color(1.0, 0.34, 0.08, 0.92), 5.0)
 		else:
-			draw_circle(Vector2.ZERO, 155.0, Color(0.95, 0.18, 0.06, 0.16))
-			draw_circle(Vector2.ZERO, 155.0, Color(1.0, 0.36, 0.12, 0.85), false, 5.0)
+			draw_circle(Vector2.ZERO, warning_radius, Color(0.95, 0.18, 0.06, 0.16))
+			draw_circle(Vector2.ZERO, warning_radius, Color(1.0, 0.36, 0.12, 0.85), false, 5.0)
 	if not uses_final_art:
 		draw_circle(body_center + Vector2(-radius * 0.35, -3), 3.0, Color(0.95, 0.75, 0.25))
 		draw_circle(body_center + Vector2(radius * 0.35, -3), 3.0, Color(0.95, 0.75, 0.25))
 	var bar_width := 80.0 if is_boss else 46.0
-	var bar_y := -92.0 if display_name in LARGE_CLIENT_BOSSES else -radius - 24.0
+	var bar_y := -92.0 if bool(behavior_profile.get("largeClientBoss", false)) else -radius - 24.0
 	draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width, 5), Color(0.10, 0.03, 0.03, 0.9))
 	draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width * float(current_hp) / float(max_hp), 5), Color(0.85, 0.12, 0.08))
 
@@ -598,26 +630,73 @@ func draw_ellipse_shadow(radius: float) -> void:
 
 
 func _update_boss_skill(delta: float, distance: float) -> void:
+	var special: Dictionary = boss_rule.get("specialSkill", {})
+	var phase: Dictionary = boss_rule.get("phaseTwo", {})
+	var skill_radius := float(special.get("radius", 155.0))
+	var damage_multiplier := int(special.get("damageMultiplier", 1))
+	if _boss_phase_two:
+		damage_multiplier = int(phase.get("skillDamageMultiplier", damage_multiplier))
 	if _boss_warning > 0.0:
 		_boss_warning -= delta
 		if _boss_warning <= 0.0:
 			_last_boss_skill_hit = false
-			if display_name == "骷髅精灵" and is_instance_valid(target):
+			if str(special.get("shape", "circle")) == "cone" and is_instance_valid(target):
 				var fresh_offset := target.global_position - global_position
-				var in_cone := fresh_offset.length() <= 135.0 and fresh_offset.normalized().dot(_boss_skill_direction) >= cos(0.68)
+				var in_cone := fresh_offset.length() <= skill_radius and fresh_offset.normalized().dot(_boss_skill_direction) >= cos(float(special.get("coneHalfAngleRadians", 0.68)))
 				if in_cone:
-					target.take_damage(_rng.randi_range(attack_min, attack_max) * (2 if _boss_phase_two else 1))
+					target.take_damage(_rng.randi_range(attack_min, attack_max) * damage_multiplier)
 					_last_boss_skill_hit = true
-				_boss_skill_cooldown = 1.8 if _boss_phase_two else 3.4
 			else:
-				if distance <= 155.0 and is_instance_valid(target):
-					target.take_damage(_rng.randi_range(attack_min, attack_max) * (2 if _boss_phase_two else 1))
+				var target_mode := str(special.get("targetMode", "current_target"))
+				var victims: Array[Node2D] = []
+				if target_mode == "all_combat_targets":
+					victims = _boss_skill_targets(skill_radius)
+				elif is_instance_valid(target):
+					victims.append(target)
+				for victim: Node2D in victims:
+					victim.take_damage(_rng.randi_range(attack_min, attack_max) * damage_multiplier)
+					_apply_boss_skill_status(victim, special)
 					_last_boss_skill_hit = true
-				_boss_skill_cooldown = 3.2 if _boss_phase_two else 4.6
+			_boss_skill_cooldown = float(phase.get("skillCooldownSeconds", special.get("cooldownSeconds", 4.6))) if _boss_phase_two else float(special.get("cooldownSeconds", 4.6))
 	elif _boss_skill_cooldown > 0.0:
 		_boss_skill_cooldown -= delta
-	elif distance <= 250.0:
+	elif distance <= float(special.get("triggerRange", 250.0)):
 		_boss_skill_direction = (target.global_position - global_position).normalized() if is_instance_valid(target) else facing
-		_boss_warning = 0.68 if display_name == "骷髅精灵" else 0.85
-		if display_name == "骷髅精灵" and visual != null:
-			visual.play_attack(0.72)
+		_boss_warning = maxf(0.001, float(special.get("warningSeconds", 0.85)))
+		if visual != null:
+			visual.play_attack(float(special.get("animationSeconds", _attack_animation_duration)))
+
+
+func _boss_skill_targets(radius: float) -> Array[Node2D]:
+	var result: Array[Node2D] = []
+	var candidates: Array[Node] = []
+	if is_instance_valid(primary_target):
+		candidates.append(primary_target)
+	for node: Node in get_tree().get_nodes_in_group("combat_targets"):
+		if not candidates.has(node):
+			candidates.append(node)
+	for node: Node in candidates:
+		if node is Node2D and node.has_method("take_damage") and global_position.distance_to(node.global_position) <= radius:
+			result.append(node)
+	return result
+
+
+func _apply_boss_skill_status(victim: Node2D, special: Dictionary) -> void:
+	if _rng.randf() > float(special.get("statusChance", 0.0)):
+		return
+	var poison_weight := maxi(0, int(special.get("poisonWeight", 0)))
+	var control_weight := maxi(0, int(special.get("controlWeight", 0)))
+	if poison_weight + control_weight <= 0:
+		return
+	if _rng.randi_range(1, poison_weight + control_weight) <= poison_weight and victim.has_method("apply_poison"):
+		victim.apply_poison(int(special.get("poisonDamage", 1)), float(special.get("poisonSeconds", 1.0)))
+	elif victim.has_method("apply_control"):
+		victim.apply_control(float(special.get("controlSeconds", 1.0)))
+
+
+func request_surrounded_relocation(blocking_neighbor_count: int) -> bool:
+	var relocation: Dictionary = boss_rule.get("mechanics", {}).get("surroundedRelocation", {})
+	if not bool(relocation.get("enabled", false)) or blocking_neighbor_count < int(relocation.get("blockingNeighbors", 5)):
+		return false
+	relocation_requested.emit(self, int(relocation.get("radiusCells", 4)))
+	return true

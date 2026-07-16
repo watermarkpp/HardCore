@@ -1,5 +1,7 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
+  "identity_key": "monsterId",
+  "compatibility_key": "name/baseName",
   "policy": {
     "required_actions": [
       "idle",
@@ -16,9 +18,9 @@
   },
   "summary": {
     "total": 214,
-    "formal": 42,
+    "formal": 48,
     "provisional": 0,
-    "missing": 172
+    "missing": 166
   },
   "monsters": [
     {
@@ -28,6 +30,7 @@
       "status": "formal",
       "source_type": "classic_client_wil",
       "source_confidence": "A",
+      "resource_lookup": "毒蜘蛛",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         336,
@@ -53,6 +56,7 @@
       "status": "formal",
       "source_type": "classic_client_wil",
       "source_confidence": "A",
+      "resource_lookup": "蛤蟆",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         192,
@@ -78,6 +82,7 @@
       "status": "formal",
       "source_type": "classic_client_wil",
       "source_confidence": "A",
+      "resource_lookup": "稻草人",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -103,6 +108,7 @@
       "status": "formal",
       "source_type": "classic_client_wil",
       "source_confidence": "A",
+      "resource_lookup": "稻草人",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -128,6 +134,7 @@
       "status": "formal",
       "source_type": "classic_client_wil",
       "source_confidence": "A",
+      "resource_lookup": "多钩猫",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         176,
@@ -153,6 +160,7 @@
       "status": "formal",
       "source_type": "classic_client_wil",
       "source_confidence": "A",
+      "resource_lookup": "多钩猫",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         176,
@@ -178,6 +186,7 @@
       "status": "formal",
       "source_type": "classic_client_wil",
       "source_confidence": "A",
+      "resource_lookup": "钉耙猫",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         208,
@@ -203,6 +212,7 @@
       "status": "formal",
       "source_type": "classic_client_wil",
       "source_confidence": "A",
+      "resource_lookup": "钉耙猫",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         208,
@@ -228,6 +238,7 @@
       "status": "formal",
       "source_type": "classic_client_wil",
       "source_confidence": "A",
+      "resource_lookup": "森林雪人",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         240,
@@ -253,6 +264,7 @@
       "status": "formal",
       "source_type": "classic_client_wil",
       "source_confidence": "A",
+      "resource_lookup": "森林雪人",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         240,
@@ -278,6 +290,7 @@
       "status": "formal",
       "source_type": "classic_client_wil",
       "source_confidence": "A",
+      "resource_lookup": "食人花",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         256,
@@ -330,6 +343,7 @@
       "status": "formal",
       "source_type": "classic_client_wil",
       "source_confidence": "A",
+      "resource_lookup": "半兽人",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         320,
@@ -355,6 +369,7 @@
       "status": "formal",
       "source_type": "classic_client_wil",
       "source_confidence": "A",
+      "resource_lookup": "半兽人",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         320,
@@ -434,6 +449,7 @@
       "status": "formal",
       "source_type": "classic_client_wil",
       "source_confidence": "A",
+      "resource_lookup": "山洞蝙蝠",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         192,
@@ -459,6 +475,7 @@
       "status": "formal",
       "source_type": "classic_client_wil",
       "source_confidence": "A",
+      "resource_lookup": "山洞蝙蝠",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         192,
@@ -484,6 +501,7 @@
       "status": "formal",
       "source_type": "classic_client_wil",
       "source_confidence": "A",
+      "resource_lookup": "蝎子",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         192,
@@ -509,6 +527,7 @@
       "status": "formal",
       "source_type": "classic_client_wil",
       "source_confidence": "A",
+      "resource_lookup": "洞蛆",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         96,
@@ -533,7 +552,8 @@
       "base_name": "骷髅",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "骷髅",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -558,7 +578,8 @@
       "base_name": "骷髅",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "骷髅",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -583,7 +604,8 @@
       "base_name": "掷斧骷髅",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "掷斧骷髅",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -608,7 +630,8 @@
       "base_name": "掷斧骷髅",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "掷斧骷髅",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -633,7 +656,8 @@
       "base_name": "掷斧骷髅",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "掷斧骷髅",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -658,7 +682,8 @@
       "base_name": "骷髅战士",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "骷髅战士",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -683,7 +708,8 @@
       "base_name": "骷髅战士",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "骷髅战士",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -708,7 +734,8 @@
       "base_name": "骷髅战将",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "骷髅战将",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -733,7 +760,8 @@
       "base_name": "骷髅战将",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "骷髅战将",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -758,7 +786,8 @@
       "base_name": "骷髅精灵",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "骷髅精灵",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -783,7 +812,8 @@
       "base_name": "骷髅精灵",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "骷髅精灵",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -808,7 +838,8 @@
       "base_name": "骷髅精灵",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "骷髅精灵",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -957,28 +988,79 @@
       "monster_id": 76,
       "name": "沃玛教主",
       "base_name": "沃玛教主",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "沃玛教主",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        352,
+        288
+      ],
+      "foot_anchor": [
+        146,
+        139
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 77,
       "name": "沃玛教主1",
       "base_name": "沃玛教主",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "沃玛教主",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        352,
+        288
+      ],
+      "foot_anchor": [
+        146,
+        139
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 78,
       "name": "沃玛教主9",
       "base_name": "沃玛教主",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "沃玛教主",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        352,
+        288
+      ],
+      "foot_anchor": [
+        146,
+        139
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 79,
@@ -986,7 +1068,8 @@
       "base_name": "僵尸",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "僵尸1",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -1011,7 +1094,8 @@
       "base_name": "僵尸",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "僵尸1",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -1036,7 +1120,8 @@
       "base_name": "僵尸",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "僵尸2",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -1061,7 +1146,8 @@
       "base_name": "僵尸",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "僵尸2",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -1086,7 +1172,8 @@
       "base_name": "僵尸",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "僵尸3",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -1111,7 +1198,8 @@
       "base_name": "僵尸",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "僵尸3",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -1136,7 +1224,8 @@
       "base_name": "僵尸",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "僵尸4",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -1161,7 +1250,8 @@
       "base_name": "僵尸",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "僵尸4",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -1186,7 +1276,8 @@
       "base_name": "僵尸",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "僵尸5",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -1211,7 +1302,8 @@
       "base_name": "僵尸",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "僵尸5",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -1236,7 +1328,8 @@
       "base_name": "尸王",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "尸王",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -1261,7 +1354,8 @@
       "base_name": "尸王",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "尸王",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -1286,7 +1380,8 @@
       "base_name": "尸王",
       "status": "formal",
       "source_type": "classic_client_wil",
-      "source_confidence": "A",
+      "source_confidence": "B",
+      "resource_lookup": "尸王",
       "direction_mode": "mir2_north_first",
       "frame_size": [
         160,
@@ -1579,10 +1674,27 @@
       "monster_id": 124,
       "name": "触龙神",
       "base_name": "触龙神",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "触龙神",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        192,
+        208
+      ],
+      "foot_anchor": [
+        55,
+        124
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 4,
+        "attack": 6,
+        "hit": 2,
+        "death": 8
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 126,
@@ -1894,19 +2006,53 @@
       "monster_id": 160,
       "name": "祖玛教主",
       "base_name": "祖玛教主",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "祖玛教主",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        384,
+        336
+      ],
+      "foot_anchor": [
+        114,
+        237
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 4,
+        "attack": 6,
+        "hit": 2,
+        "death": 8
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 161,
       "name": "祖玛教主9",
       "base_name": "祖玛教主",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "祖玛教主",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        384,
+        336
+      ],
+      "foot_anchor": [
+        114,
+        237
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 4,
+        "attack": 6,
+        "hit": 2,
+        "death": 8
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 162,

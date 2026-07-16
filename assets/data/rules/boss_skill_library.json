@@ -1,20 +1,26 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "layer": "rule_systems",
+  "identityKey": "monsterId",
   "skills": {
-    "cone_warning_slam": {"shape":"cone","warningSeconds":0.8,"effect":"physical_damage"},
-    "line_charge": {"shape":"line","warningSeconds":0.65,"effect":"charge_damage"},
-    "ground_smash": {"shape":"circle","warningSeconds":0.9,"effect":"area_damage"},
-    "summon_minions": {"shape":"self","effect":"spawn_group"},
-    "half_hp_enrage": {"trigger":"hp_below","threshold":0.5,"effect":"enrage"},
-    "ground_fire": {"shape":"circle","effect":"ground_dot"},
-    "random_mark": {"shape":"target","effect":"delayed_damage"},
-    "healing_phase": {"trigger":"phase","effect":"heal"},
-    "shield_phase": {"trigger":"phase","effect":"shield"},
-    "split_phase": {"trigger":"phase","effect":"split"}
+    "cone_warning_slam": {"shape":"cone","warningSeconds":0.8,"effect":"physical_damage","compatibilityOnly":true},
+    "ground_smash": {"shape":"circle","warningSeconds":0.9,"effect":"area_damage","compatibilityOnly":true},
+    "burrow_ambush": {"trigger":"target_in_range","effect":"emerge_and_restore"},
+    "poison_area": {"shape":"circle","effect":"damage_poison_or_control"},
+    "health_stage_rage": {"trigger":"health_stage","effect":"temporary_rage"},
+    "health_stage_summon": {"trigger":"health_stage","effect":"summon_group"},
+    "stone_wake": {"trigger":"target_in_range","effect":"wake"}
   },
+  "bossProfilesByMonsterId": {
+    "56": {"skills":[],"serviceClass":"TATMonster"},
+    "89": {"skills":[],"serviceClass":"TATMonster"},
+    "76": {"skills":["health_stage_rage"],"serviceClass":"WoomaTaurus","confidence":"C"},
+    "124": {"skills":["burrow_ambush","poison_area"],"serviceClass":"TCentipedeKingMonster","confidence":"A"},
+    "160": {"skills":["stone_wake","health_stage_summon"],"serviceClass":"TScultureKingMonster","confidence":"A"}
+  },
+  "legacyNameToMonsterId": {"骷髅精灵":56,"尸王":89,"沃玛教主":76,"触龙神":124,"祖玛教主":160},
   "bossProfiles": {
-    "骷髅精灵": {"skills":["cone_warning_slam","half_hp_enrage"]},
-    "尸王": {"skills":["ground_smash","half_hp_enrage"]}
+    "骷髅精灵": {"skills":["cone_warning_slam"],"compatibilityOnly":true},
+    "尸王": {"skills":["ground_smash"],"compatibilityOnly":true}
   }
 }

@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('critical', 'warrior', 'bich', 'equipment')]
+    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster')]
     [string]$Suite = 'critical',
     [int]$TimeoutSeconds = 8,
     [string[]]$TestPaths = @()
@@ -11,6 +11,18 @@ $Godot = Join-Path $ProjectRoot 'tools\godot-4.7\Godot_v4.7-stable_win64_console
 $LogRoot = Join-Path $ProjectRoot 'outputs\test_logs'
 
 $Suites = @{
+    monster = @(
+		'tests/monster_id_contract_test.tscn',
+		'tests/classic_boss_order_test.tscn',
+		'tests/monster_threat_animation_test.tscn',
+		'tests/bich_monster_visual_test.tscn',
+		'tests/bich_common_client_art_test.tscn',
+		'tests/bich_undead_client_art_test.tscn',
+		'tests/skeleton_spirit_boss_test.tscn',
+		'tests/corpse_king_boss_test.tscn',
+		'tests/crowd_grounding_test.tscn',
+		'tests/placeholder_attack_animation_test.tscn'
+	)
     warrior = @(
 		'tests/complete_client_resource_catalog_test.tscn',
 		'tests/player_movement_respawn_test.tscn',
@@ -72,7 +84,7 @@ $Suites = @{
         'tests/android_layout_test.tscn'
     )
 }
-$Suites.critical = @($Suites.warrior + $Suites.bich + $Suites.equipment | Select-Object -Unique)
+$Suites.critical = @($Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster | Select-Object -Unique)
 
 function Stop-TestProcessTree([int]$ProcessId) {
     $children = @(Get-CimInstance Win32_Process -Filter "ParentProcessId=$ProcessId" -ErrorAction SilentlyContinue)
