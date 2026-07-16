@@ -184,13 +184,31 @@
   "confidence": "B",
   "editable": false,
   "layer": "vanilla_core",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "skillProfiles": {
     "冰咆哮": {
       "cast_type": "area",
       "multiplier": 1.9,
       "profession": "法师",
-      "range": 300.0
+      "range": 300.0,
+      "profession_id": "wizard",
+      "skill_id": "wizard.ice_storm",
+      "display_name": "冰咆哮",
+      "formula_id": "wizard.ice_storm.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "刺杀剑术": {
       "cast_type": "line",
@@ -198,7 +216,25 @@
       "profession": "战士",
       "range": 175.0,
       "service_magic_id": 12,
-      "service_mode": "toggle_second_cell"
+      "service_mode": "toggle_second_cell",
+      "profession_id": "warrior",
+      "skill_id": "warrior.thrusting",
+      "display_name": "刺杀剑术",
+      "formula_id": "warrior.thrusting.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "A"
+        },
+        "cooldown": {
+          "source": "Client/Actor.pas",
+          "confidence": "A"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "not_applicable"
+        }
+      }
     },
     "半月弯刀": {
       "cast_type": "area",
@@ -206,43 +242,169 @@
       "profession": "战士",
       "range": 125.0,
       "service_magic_id": 25,
-      "service_mode": "toggle_three_directions"
+      "service_mode": "toggle_three_directions",
+      "profession_id": "warrior",
+      "skill_id": "warrior.half_moon",
+      "display_name": "半月弯刀",
+      "formula_id": "warrior.half_moon.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "A"
+        },
+        "cooldown": {
+          "source": "Client/Actor.pas",
+          "confidence": "A"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "not_applicable"
+        }
+      }
     },
     "召唤神兽": {
       "cast_type": "summon",
       "multiplier": 1.5,
       "profession": "道士",
-      "range": 0.0
+      "range": 0.0,
+      "profession_id": "taoist",
+      "skill_id": "taoist.summon_divine_beast",
+      "display_name": "召唤神兽",
+      "formula_id": "taoist.summon_divine_beast.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "召唤骷髅": {
       "cast_type": "summon",
       "multiplier": 1.0,
       "profession": "道士",
-      "range": 0.0
+      "range": 0.0,
+      "profession_id": "taoist",
+      "skill_id": "taoist.summon_skeleton",
+      "display_name": "召唤骷髅",
+      "formula_id": "taoist.summon_skeleton.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "困魔咒": {
       "cast_type": "root_area",
       "multiplier": 0.0,
       "profession": "道士",
-      "range": 260.0
+      "range": 260.0,
+      "profession_id": "taoist",
+      "skill_id": "taoist.entrapment",
+      "display_name": "困魔咒",
+      "formula_id": "taoist.entrapment.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "圣言术": {
       "cast_type": "execute",
       "multiplier": 1.0,
       "profession": "法师",
-      "range": 300.0
+      "range": 300.0,
+      "profession_id": "wizard",
+      "skill_id": "wizard.holy_word",
+      "display_name": "圣言术",
+      "formula_id": "wizard.holy_word.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "地狱火": {
       "cast_type": "line",
       "multiplier": 1.2,
       "profession": "法师",
-      "range": 260.0
+      "range": 260.0,
+      "profession_id": "wizard",
+      "skill_id": "wizard.hellfire",
+      "display_name": "地狱火",
+      "formula_id": "wizard.hellfire.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "地狱雷光": {
       "cast_type": "area",
       "multiplier": 1.1,
       "profession": "法师",
-      "range": 150.0
+      "range": 150.0,
+      "profession_id": "wizard",
+      "skill_id": "wizard.hell_lightning",
+      "display_name": "地狱雷光",
+      "formula_id": "wizard.hell_lightning.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "基本剑术": {
       "cast_type": "passive",
@@ -250,31 +412,121 @@
       "profession": "战士",
       "range": 0.0,
       "service_magic_id": 3,
-      "service_mode": "passive"
+      "service_mode": "passive",
+      "profession_id": "warrior",
+      "skill_id": "warrior.basic_swordsmanship",
+      "display_name": "基本剑术",
+      "formula_id": "warrior.basic_swordsmanship.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "A"
+        },
+        "cooldown": {
+          "source": "Client/Actor.pas",
+          "confidence": "A"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "not_applicable"
+        }
+      }
     },
     "大火球": {
       "cast_type": "projectile",
       "multiplier": 1.45,
       "profession": "法师",
-      "range": 390.0
+      "range": 390.0,
+      "profession_id": "wizard",
+      "skill_id": "wizard.great_fireball",
+      "display_name": "大火球",
+      "formula_id": "wizard.great_fireball.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "幽灵盾": {
       "cast_type": "magic_defense_buff",
       "multiplier": 0.0,
       "profession": "道士",
-      "range": 170.0
+      "range": 170.0,
+      "profession_id": "taoist",
+      "skill_id": "taoist.magic_defense",
+      "display_name": "幽灵盾",
+      "formula_id": "taoist.magic_defense.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "心灵启示": {
       "cast_type": "inspect",
       "multiplier": 0.0,
       "profession": "道士",
-      "range": 300.0
+      "range": 300.0,
+      "profession_id": "taoist",
+      "skill_id": "taoist.revelation",
+      "display_name": "心灵启示",
+      "formula_id": "taoist.revelation.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "抗拒火环": {
       "cast_type": "knockback",
       "multiplier": 0.0,
       "profession": "法师",
-      "range": 115.0
+      "range": 115.0,
+      "profession_id": "wizard",
+      "skill_id": "wizard.repulsion_ring",
+      "display_name": "抗拒火环",
+      "formula_id": "wizard.repulsion_ring.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "攻杀剑术": {
       "cast_type": "melee",
@@ -282,37 +534,145 @@
       "profession": "战士",
       "range": 105.0,
       "service_magic_id": 7,
-      "service_mode": "automatic_proc"
+      "service_mode": "automatic_proc",
+      "profession_id": "warrior",
+      "skill_id": "warrior.slaying_swordsmanship",
+      "display_name": "攻杀剑术",
+      "formula_id": "warrior.slaying_swordsmanship.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "A"
+        },
+        "cooldown": {
+          "source": "Client/Actor.pas",
+          "confidence": "A"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "not_applicable"
+        }
+      }
     },
     "施毒术": {
       "cast_type": "poison",
       "multiplier": 0.45,
       "profession": "道士",
-      "range": 330.0
+      "range": 330.0,
+      "profession_id": "taoist",
+      "skill_id": "taoist.poison",
+      "display_name": "施毒术",
+      "formula_id": "taoist.poison.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "治愈术": {
       "cast_type": "heal",
       "multiplier": 1.2,
       "profession": "道士",
-      "range": 280.0
+      "range": 280.0,
+      "profession_id": "taoist",
+      "skill_id": "taoist.healing",
+      "display_name": "治愈术",
+      "formula_id": "taoist.healing.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "火墙": {
       "cast_type": "ground_dot",
       "multiplier": 0.65,
       "profession": "法师",
-      "range": 250.0
+      "range": 250.0,
+      "profession_id": "wizard",
+      "skill_id": "wizard.fire_wall",
+      "display_name": "火墙",
+      "formula_id": "wizard.fire_wall.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "火球术": {
       "cast_type": "projectile",
       "multiplier": 1.0,
       "profession": "法师",
-      "range": 360.0
+      "range": 360.0,
+      "profession_id": "wizard",
+      "skill_id": "wizard.fireball",
+      "display_name": "火球术",
+      "formula_id": "wizard.fireball.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "灵魂火符": {
       "cast_type": "projectile",
       "multiplier": 1.35,
       "profession": "道士",
-      "range": 370.0
+      "range": 370.0,
+      "profession_id": "taoist",
+      "skill_id": "taoist.soul_fire_talisman",
+      "display_name": "灵魂火符",
+      "formula_id": "taoist.soul_fire_talisman.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "烈火剑法": {
       "cast_type": "melee",
@@ -320,49 +680,193 @@
       "profession": "战士",
       "range": 105.0,
       "service_magic_id": 26,
-      "service_mode": "arm_next_hit"
+      "service_mode": "arm_next_hit",
+      "profession_id": "warrior",
+      "skill_id": "warrior.fire_sword",
+      "display_name": "烈火剑法",
+      "formula_id": "warrior.fire_sword.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "A"
+        },
+        "cooldown": {
+          "source": "Client/Actor.pas",
+          "confidence": "A"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "not_applicable"
+        }
+      }
     },
     "爆裂火焰": {
       "cast_type": "area",
       "multiplier": 1.35,
       "profession": "法师",
-      "range": 260.0
+      "range": 260.0,
+      "profession_id": "wizard",
+      "skill_id": "wizard.exploding_flame",
+      "display_name": "爆裂火焰",
+      "formula_id": "wizard.exploding_flame.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "疾光电影": {
       "cast_type": "line",
       "multiplier": 1.7,
       "profession": "法师",
-      "range": 430.0
+      "range": 430.0,
+      "profession_id": "wizard",
+      "skill_id": "wizard.laser",
+      "display_name": "疾光电影",
+      "formula_id": "wizard.laser.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "瞬息移动": {
       "cast_type": "teleport",
       "multiplier": 0.0,
       "profession": "法师",
-      "range": 220.0
+      "range": 220.0,
+      "profession_id": "wizard",
+      "skill_id": "wizard.teleport",
+      "display_name": "瞬息移动",
+      "formula_id": "wizard.teleport.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "神圣战甲术": {
       "cast_type": "defense_buff",
       "multiplier": 0.0,
       "profession": "道士",
-      "range": 170.0
+      "range": 170.0,
+      "profession_id": "taoist",
+      "skill_id": "taoist.defense",
+      "display_name": "神圣战甲术",
+      "formula_id": "taoist.defense.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "精神力战法": {
       "cast_type": "passive",
       "multiplier": 1.0,
       "profession": "道士",
-      "range": 0.0
+      "range": 0.0,
+      "profession_id": "taoist",
+      "skill_id": "taoist.spiritual_warfare",
+      "display_name": "精神力战法",
+      "formula_id": "taoist.spiritual_warfare.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "群体治疗术": {
       "cast_type": "heal_area",
       "multiplier": 1.0,
       "profession": "道士",
-      "range": 190.0
+      "range": 190.0,
+      "profession_id": "taoist",
+      "skill_id": "taoist.mass_healing",
+      "display_name": "群体治疗术",
+      "formula_id": "taoist.mass_healing.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "诱惑之光": {
       "cast_type": "control",
       "multiplier": 0.0,
       "profession": "法师",
-      "range": 300.0
+      "range": 300.0,
+      "profession_id": "wizard",
+      "skill_id": "wizard.temptation_light",
+      "display_name": "诱惑之光",
+      "formula_id": "wizard.temptation_light.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "野蛮冲撞": {
       "cast_type": "dash",
@@ -370,31 +874,121 @@
       "profession": "战士",
       "range": 115.0,
       "service_magic_id": 27,
-      "service_mode": "rush"
+      "service_mode": "rush",
+      "profession_id": "warrior",
+      "skill_id": "warrior.wild_rush",
+      "display_name": "野蛮冲撞",
+      "formula_id": "warrior.wild_rush.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "A"
+        },
+        "cooldown": {
+          "source": "Client/Actor.pas",
+          "confidence": "A"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "not_applicable"
+        }
+      }
     },
     "隐身术": {
       "cast_type": "stealth",
       "multiplier": 0.0,
       "profession": "道士",
-      "range": 0.0
+      "range": 0.0,
+      "profession_id": "taoist",
+      "skill_id": "taoist.invisibility",
+      "display_name": "隐身术",
+      "formula_id": "taoist.invisibility.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "集体隐身术": {
       "cast_type": "stealth_area",
       "multiplier": 0.0,
       "profession": "道士",
-      "range": 170.0
+      "range": 170.0,
+      "profession_id": "taoist",
+      "skill_id": "taoist.mass_invisibility",
+      "display_name": "集体隐身术",
+      "formula_id": "taoist.mass_invisibility.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "雷电术": {
       "cast_type": "projectile",
       "multiplier": 1.35,
       "profession": "法师",
-      "range": 410.0
+      "range": 410.0,
+      "profession_id": "wizard",
+      "skill_id": "wizard.lightning",
+      "display_name": "雷电术",
+      "formula_id": "wizard.lightning.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     },
     "魔法盾": {
       "cast_type": "shield",
       "multiplier": 0.0,
       "profession": "法师",
-      "range": 0.0
+      "range": 0.0,
+      "profession_id": "wizard",
+      "skill_id": "wizard.magic_shield",
+      "display_name": "魔法盾",
+      "formula_id": "wizard.magic_shield.v1",
+      "source_trace": {
+        "runtime_profile": {
+          "source": "legacy_verified_adapter",
+          "confidence": "B"
+        },
+        "cooldown": {
+          "source": "mobile_runtime_candidate",
+          "confidence": "B"
+        },
+        "status_duration": {
+          "source": "profession_combat_rules.json",
+          "confidence": "B"
+        }
+      }
     }
   },
   "skillTimingOverrides": {
@@ -431,5 +1025,193 @@
       "windup": 0.17
     }
   },
-  "source": "legacy_verified_adapter"
+  "source": "legacy_verified_adapter",
+  "professionCatalog": {
+    "warrior": {
+      "profession_id": "warrior",
+      "display_name": "战士"
+    },
+    "wizard": {
+      "profession_id": "wizard",
+      "display_name": "法师"
+    },
+    "taoist": {
+      "profession_id": "taoist",
+      "display_name": "道士"
+    }
+  },
+  "skillCatalog": {
+    "warrior.basic_swordsmanship": {
+      "skill_id": "warrior.basic_swordsmanship",
+      "profession_id": "warrior",
+      "display_name": "基本剑术"
+    },
+    "warrior.slaying_swordsmanship": {
+      "skill_id": "warrior.slaying_swordsmanship",
+      "profession_id": "warrior",
+      "display_name": "攻杀剑术"
+    },
+    "warrior.thrusting": {
+      "skill_id": "warrior.thrusting",
+      "profession_id": "warrior",
+      "display_name": "刺杀剑术"
+    },
+    "warrior.half_moon": {
+      "skill_id": "warrior.half_moon",
+      "profession_id": "warrior",
+      "display_name": "半月弯刀"
+    },
+    "warrior.wild_rush": {
+      "skill_id": "warrior.wild_rush",
+      "profession_id": "warrior",
+      "display_name": "野蛮冲撞"
+    },
+    "warrior.fire_sword": {
+      "skill_id": "warrior.fire_sword",
+      "profession_id": "warrior",
+      "display_name": "烈火剑法"
+    },
+    "wizard.fireball": {
+      "skill_id": "wizard.fireball",
+      "profession_id": "wizard",
+      "display_name": "火球术"
+    },
+    "wizard.repulsion_ring": {
+      "skill_id": "wizard.repulsion_ring",
+      "profession_id": "wizard",
+      "display_name": "抗拒火环"
+    },
+    "wizard.temptation_light": {
+      "skill_id": "wizard.temptation_light",
+      "profession_id": "wizard",
+      "display_name": "诱惑之光"
+    },
+    "wizard.hellfire": {
+      "skill_id": "wizard.hellfire",
+      "profession_id": "wizard",
+      "display_name": "地狱火"
+    },
+    "wizard.lightning": {
+      "skill_id": "wizard.lightning",
+      "profession_id": "wizard",
+      "display_name": "雷电术"
+    },
+    "wizard.teleport": {
+      "skill_id": "wizard.teleport",
+      "profession_id": "wizard",
+      "display_name": "瞬息移动"
+    },
+    "wizard.great_fireball": {
+      "skill_id": "wizard.great_fireball",
+      "profession_id": "wizard",
+      "display_name": "大火球"
+    },
+    "wizard.exploding_flame": {
+      "skill_id": "wizard.exploding_flame",
+      "profession_id": "wizard",
+      "display_name": "爆裂火焰"
+    },
+    "wizard.fire_wall": {
+      "skill_id": "wizard.fire_wall",
+      "profession_id": "wizard",
+      "display_name": "火墙"
+    },
+    "wizard.laser": {
+      "skill_id": "wizard.laser",
+      "profession_id": "wizard",
+      "display_name": "疾光电影"
+    },
+    "wizard.hell_lightning": {
+      "skill_id": "wizard.hell_lightning",
+      "profession_id": "wizard",
+      "display_name": "地狱雷光"
+    },
+    "wizard.magic_shield": {
+      "skill_id": "wizard.magic_shield",
+      "profession_id": "wizard",
+      "display_name": "魔法盾"
+    },
+    "wizard.holy_word": {
+      "skill_id": "wizard.holy_word",
+      "profession_id": "wizard",
+      "display_name": "圣言术"
+    },
+    "wizard.ice_storm": {
+      "skill_id": "wizard.ice_storm",
+      "profession_id": "wizard",
+      "display_name": "冰咆哮"
+    },
+    "taoist.healing": {
+      "skill_id": "taoist.healing",
+      "profession_id": "taoist",
+      "display_name": "治愈术"
+    },
+    "taoist.spiritual_warfare": {
+      "skill_id": "taoist.spiritual_warfare",
+      "profession_id": "taoist",
+      "display_name": "精神力战法"
+    },
+    "taoist.poison": {
+      "skill_id": "taoist.poison",
+      "profession_id": "taoist",
+      "display_name": "施毒术"
+    },
+    "taoist.soul_fire_talisman": {
+      "skill_id": "taoist.soul_fire_talisman",
+      "profession_id": "taoist",
+      "display_name": "灵魂火符"
+    },
+    "taoist.summon_skeleton": {
+      "skill_id": "taoist.summon_skeleton",
+      "profession_id": "taoist",
+      "display_name": "召唤骷髅"
+    },
+    "taoist.invisibility": {
+      "skill_id": "taoist.invisibility",
+      "profession_id": "taoist",
+      "display_name": "隐身术"
+    },
+    "taoist.mass_invisibility": {
+      "skill_id": "taoist.mass_invisibility",
+      "profession_id": "taoist",
+      "display_name": "集体隐身术"
+    },
+    "taoist.magic_defense": {
+      "skill_id": "taoist.magic_defense",
+      "profession_id": "taoist",
+      "display_name": "幽灵盾"
+    },
+    "taoist.defense": {
+      "skill_id": "taoist.defense",
+      "profession_id": "taoist",
+      "display_name": "神圣战甲术"
+    },
+    "taoist.revelation": {
+      "skill_id": "taoist.revelation",
+      "profession_id": "taoist",
+      "display_name": "心灵启示"
+    },
+    "taoist.entrapment": {
+      "skill_id": "taoist.entrapment",
+      "profession_id": "taoist",
+      "display_name": "困魔咒"
+    },
+    "taoist.mass_healing": {
+      "skill_id": "taoist.mass_healing",
+      "profession_id": "taoist",
+      "display_name": "群体治疗术"
+    },
+    "taoist.summon_divine_beast": {
+      "skill_id": "taoist.summon_divine_beast",
+      "profession_id": "taoist",
+      "display_name": "召唤神兽"
+    }
+  },
+  "sourcePolicy": {
+    "identity": "stable English IDs are authoritative; Chinese names are display/legacy aliases",
+    "character_presentation": "male_only",
+    "service_values": "Magic.DB and server source take priority",
+    "client_timing": "original client source takes priority",
+    "candidate_values": "must remain explicitly marked until replaced by source-backed values"
+  }
 }

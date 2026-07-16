@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "generator": "OpenAI built-in image generation with chroma-key removal",
+  "generatedAt": "2026-07-17",
+  "target_gender": "male_only",
+  "sourcePolicy": "Generated runtime candidates are replaceable; stable skill IDs remain authoritative",
+  "assets": {
+    "arcane_projectile": {
+      "skill_ids": [
+        "wizard.fireball",
+        "wizard.great_fireball",
+        "wizard.lightning"
+      ],
+      "role": "projectile",
+      "source_file": "exec-4517c214-5330-4591-b2d2-59dbc4dca39a.png"
+    },
+    "area_burst": {
+      "skill_ids": [
+        "wizard.exploding_flame",
+        "wizard.fire_wall",
+        "wizard.ice_storm"
+      ],
+      "role": "area_effect",
+      "source_file": "exec-4d4dd2ed-156c-44e9-b437-2458e0e38840.png"
+    },
+    "soul_fire_talisman": {
+      "skill_ids": [
+        "taoist.soul_fire_talisman"
+      ],
+      "role": "projectile",
+      "source_file": "exec-37cf4c27-ab5f-421a-b139-739bf6f936a8.png"
+    },
+    "binding_circle": {
+      "skill_ids": [
+        "taoist.entrapment"
+      ],
+      "role": "area_effect",
+      "source_file": "exec-e15fb313-bbac-4110-b442-69c267bcc565.png"
+    },
+    "summon_skeleton": {
+      "skill_ids": [
+        "taoist.summon_skeleton"
+      ],
+      "role": "summon",
+      "source_file": "exec-3e7ba58b-40c3-4b9a-9b74-84a57090a786.png"
+    },
+    "summon_divine_beast": {
+      "skill_ids": [
+        "taoist.summon_divine_beast"
+      ],
+      "role": "summon",
+      "source_file": "exec-195d1cdc-53fa-4585-b4cf-0301bce42ed2.png"
+    }
+  },
+  "prompts": {
+    "style": "crisp pixel-art-inspired dark fantasy 2003-era isometric action RPG",
+    "background": "uniform #00ff00 chroma key, no shadow or floor",
+    "constraints": "single centered asset, no text, no watermark, generous padding"
+  },
+  "validation": {
+    "arcane_projectile": {
+      "path": "assets/art/characters/wizard/effects/arcane_projectile.png",
+      "size": [
+        128,
+        69
+      ],
+      "visible_pixels": 3780,
+      "transparent_corners": true
+    },
+    "area_burst": {
+      "path": "assets/art/characters/wizard/effects/area_burst.png",
+      "size": [
+        256,
+        256
+      ],
+      "visible_pixels": 33318,
+      "transparent_corners": true
+    },
+    "soul_fire_talisman": {
+      "path": "assets/art/characters/taoist/effects/soul_fire_talisman.png",
+      "size": [
+        128,
+        63
+      ],
+      "visible_pixels": 3590,
+      "transparent_corners": true
+    },
+    "binding_circle": {
+      "path": "assets/art/characters/taoist/effects/binding_circle.png",
+      "size": [
+        256,
+        255
+      ],
+      "visible_pixels": 27304,
+      "transparent_corners": true
+    },
+    "summon_skeleton": {
+      "path": "assets/art/characters/taoist/effects/summon_skeleton.png",
+      "size": [
+        136,
+        192
+      ],
+      "visible_pixels": 7437,
+      "transparent_corners": true
+    },
+    "summon_divine_beast": {
+      "path": "assets/art/characters/taoist/effects/summon_divine_beast.png",
+      "size": [
+        190,
+        224
+      ],
+      "visible_pixels": 18567,
+      "transparent_corners": true
+    }
+  }
+}
