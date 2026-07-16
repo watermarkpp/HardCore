@@ -6,9 +6,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import cv2
-import numpy as np
 from PIL import Image
+
+from pixel_template_match import find_masked_template
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,29 +25,34 @@ def main() -> None:
     if not cache_fresh:
         raise AssertionError("Godot CTEX is older than the current helmet PNG; run Godot --headless --import")
 
-    atlas = np.array(Image.open(ATLAS).convert("RGBA"))
-    screenshot = np.array(Image.open(SCREENSHOT).convert("RGB"))
-    cell = atlas[4 * 160 : 5 * 160, 0:192]
-    alpha = cell[:, :, 3]
-    ys, xs = np.where(alpha > 0)
-    template = cell[ys.min() : ys.max() + 1, xs.min() : xs.max() + 1]
-    template_rgb = cv2.resize(template[:, :, :3], None, fx=3, fy=3, interpolation=cv2.INTER_NEAREST)
-    template_mask = cv2.resize(template[:, :, 3], None, fx=3, fy=3, interpolation=cv2.INTER_NEAREST)
-    match = cv2.matchTemplate(screenshot, template_rgb, cv2.TM_CCORR_NORMED, mask=template_mask)
-    _, score, _, location = cv2.minMaxLoc(match)
+    atlas = Image.open(ATLAS).convert("RGBA")
+    screenshot = Image.open(SCREENSHOT).convert("RGB")
+    cell = atlas.crop((0, 4 * 160, 192, 5 * 160))
+    box = cell.getchannel("A").getbbox()
+    if box is None:
+        raise AssertionError("South idle helmet cell is empty")
+    template = cell.crop(box)
+    template = template.resize((template.width * 3, template.height * 3), Image.Resampling.NEAREST)
+    score, location = find_masked_template(screenshot, template)
     if score < 0.90:
         raise AssertionError(f"Runtime screenshot does not contain the current helmet pixels: score={score:.6f}")
-    visible_pixels = template[template[:, :, 3] > 0][:, :3]
-    mean_rgb = visible_pixels.mean(axis=0)
-    if float(mean_rgb.mean()) >= 120 or float(mean_rgb.max() - mean_rgb.min()) >= 18:
-        raise AssertionError(f"Runtime helmet is not dark neutral metal: mean_rgb={mean_rgb.tolist()}")
+    template_pixels = template.load()
+    visible_pixels = [
+        template_pixels[x, y][:3]
+        for y in range(template.height)
+        for x in range(template.width)
+        if template_pixels[x, y][3] >= 128
+    ]
+    mean_rgb = [sum(pixel[channel] for pixel in visible_pixels) / len(visible_pixels) for channel in range(3)]
+    if sum(mean_rgb) / 3.0 >= 120 or max(mean_rgb) - min(mean_rgb) >= 18:
+        raise AssertionError(f"Runtime helmet is not dark neutral metal: mean_rgb={mean_rgb}")
 
     payload = {
         "status": "pass",
         "cacheFresh": True,
         "pixelTemplateScore": round(float(score), 6),
         "pixelTemplateLocation": list(location),
-        "visibleMeanRgb": [round(float(value), 1) for value in mean_rgb],
+        "visibleMeanRgb": [round(value, 1) for value in mean_rgb],
         "atlas": ATLAS.relative_to(ROOT).as_posix(),
         "importedCtex": imported[0].relative_to(ROOT).as_posix(),
         "screenshot": SCREENSHOT.relative_to(ROOT).as_posix(),

@@ -1,17 +1,17 @@
 {
-  "schemaVersion": 6,
+  "schemaVersion": 7,
   "item": "Black Iron Helmet / 黑铁头盔",
   "classification": "project-generated presentation asset based on verified classic evidence",
   "referenceIcon": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00344.png",
   "referenceIconSha256": "24f535d351cdd18110b00ffda717a23dc2df3cf0b2890b1f7e80cf64d96b47df",
   "referenceIconImage": 344,
   "approvedDirectionReferences": {
-    "rearNNeNw": "res://dev_art_sources/reference/generated/black_iron_helmet/rear_n_ne_nw_transparent.png",
-    "rearNNeNwSha256": "c21c824ad91764772a1c2d00e98c42ea5acd46b36438b24b5956a902cc3f98b7",
-    "frontSideConcept": "res://dev_art_sources/reference/generated/black_iron_helmet/front_side_direction_concept.png",
-    "frontSideConceptSha256": "6f914181f66c5c6d326c11458bc6a84794675af5f125001ea040ef0160bafbe7",
-    "canonicalManifest": "res://dev_art_sources/reference/generated/black_iron_helmet/canonical_directions/manifest.json",
-    "canonicalManifestSha256": "2e7fea750d295072d89fce3380fdfb1dad92e316a919f6e418469a83859b267d",
+    "approvedConcept": "res://outputs/visual_acceptance/black_iron_helmet_approved_concept_20260717.png",
+    "approvedConceptSha256": "e09eaf75f6d319c75960656c38a976238bfab143c649f439645177bd40876953",
+    "godotRenderer": "res://tools/render_black_iron_helmet_3d.gd",
+    "godotRendererSha256": "5ccebde0b1e512eb1172d566ee184c49847283b25b0e66f83342411e5d88f1d3",
+    "godotRenderManifest": "res://outputs/visual_acceptance/black_iron_helmet_3d/manifest.json",
+    "godotRenderManifestSha256": "9125122f14a974e88706093eac20ade2f8434265fdd6838fb07c58ca8b07b7bd",
     "acceptedRowMapping": [
       "N",
       "NE",
@@ -27,7 +27,7 @@
   "anchorLibraryImageCount": 22242,
   "anchorAppearance": 2,
   "anchorStride": 2224,
-  "anchorUsage": "position/motion only; no anchor-source pixels copied",
+  "anchorUsage": "same-cell position/motion and death-facing calibration only; no anchor-source pixels copied",
   "completeClientScan": "res://outputs/resource_catalog/complete_client_frame_catalog/manifest.json",
   "completeClientCoverage": {
     "libraries": 122,
@@ -36,7 +36,7 @@
   },
   "clientHelmetParameterBaseline": {
     "path": "res://outputs/resource_catalog/black_iron_helmet/client_helmet_parameter_baseline.json",
-    "sha256": "30209081d1580a0c9c6dd7449390423b222ea82cec46279bbe4ecf11a5ba9f67",
+    "sha256": "217f0ae2266e744b7f1fd60a6a0576df3e3a6ce71bd1213787136135d489a263",
     "directionRuntimeMaxSize": {
       "N": [
         19,
@@ -71,7 +71,24 @@
         21
       ]
     },
+    "directionRuntimeOpaquePixels": {
+      "N": 141,
+      "NE": 158,
+      "E": 148,
+      "SE": 136,
+      "S": 113,
+      "SW": 142,
+      "W": 150,
+      "NW": 156
+    },
     "deathCanonicalRotate90Degrees": false
+  },
+  "deathPoseBaseline": {
+    "path": "res://outputs/resource_catalog/black_iron_helmet/death_pose_baseline.json",
+    "sha256": "ccec734996b10eb55f4c8fdb254970f05e961f1f710990d375489299d9053185",
+    "records": 32,
+    "mappingRule": "Every record is the same direction row and death-frame column in warrior_death.png, Helmet.wil and Hair.wil.",
+    "rendererPolicy": "A renderer must consume all 32 records independently; it may not copy one direction's death pose into another direction."
   },
   "sourceEvidence": {
     "runtimeHeadLibrary": "res://dev_art_sources/reference/mir2opensource_2013_client/MirObjects/PlayerObject.cs",
@@ -82,31 +99,23 @@
   },
   "generation": {
     "equipmentIcon": "Verified StateItem #344 remains the equipment-window icon and unique identity evidence; its old derived world pixels are not used.",
-    "runtimeDirections": "All eight runtime views come from the newly generated canonical direction family assembled from the user-supplied concept images.",
-    "rearDirections": "N/NE/NW come from the user-approved magenta-background rear sheet.",
-    "frontAndSideDirections": "E/SE/S/SW/W come from visual panels 2/3/4/6/7 of the supplied nine-panel concept; incorrect labels and duplicate panels are ignored.",
+    "runtimeDirections": "All eight runtime views are orthographic Godot renders of one complete procedural helmet geometry based on the user-approved redesign.",
+    "deathDirections": "Every N/NE/E/SE/S/SW/W/NW x F0/F1/F2/F3 cell is independently rendered from the same-row same-frame evidence record.",
     "authorship": "Project-generated extension; not claimed as an original client world frame.",
     "aiGenerated": true,
-    "aiPixelsLimitedTo": [
-      "N",
-      "NE",
-      "E",
-      "SE",
-      "S",
-      "SW",
-      "W",
-      "NW"
-    ],
+    "aiConceptUsed": true,
+    "aiPixelsLimitedTo": [],
+    "runtimePixelGenerator": "Godot 4.7 orthographic 3D renderer; no image-generation pixels are copied into the runtime atlases.",
     "oldDerivedStateItemWorldPixelsUsed": false,
-    "scalePolicy": "Fit each direction at 72.25% of the p75 width/height envelope measured from all six real client Helmet.wil appearances: two successive 15% reductions (0.85 * 0.85).",
-    "runtimeEnvelopeScale": 0.7224999999999999,
-    "deathPosePolicy": "Follow the per-frame client head anchor; South death frames 2/3 use a foreshortened crown derived from the approved Black Iron N/back-top geometry instead of a standing front sprite or whole-sprite 90-degree rotation."
+    "scalePolicy": "Fit each direction within the p75 width/height envelope and cap opaque visual mass at the same-direction client median; no arbitrary global reduction.",
+    "runtimeEnvelopeScale": 1.0,
+    "deathPosePolicy": "Use the exact same direction row and frame column in warrior_death.png and Hair.wil; invert that head vector through the documented Godot orthographic camera, render the complete helmet geometry, then centre it on the same-cell Hair anchor."
   },
   "directionReference": "res://outputs/visual_acceptance/black_iron_helmet_directions.png",
   "actions": {
     "idle": {
       "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
-      "sha256": "42e6ffba284d6141b4edca47f73a4d75f0dcfc365024e679fb67e8cd9c0cf5a5",
+      "sha256": "dd4fb5655a706cc7325c5d6074243262c5ffbf61a2ce12aa4714873f6c7ac3c2",
       "cell": [
         192,
         160
@@ -130,7 +139,7 @@
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -151,7 +160,7 @@
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -172,7 +181,7 @@
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -193,7 +202,7 @@
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -209,12 +218,12 @@
             47
           ],
           "paste": [
-            82,
+            81,
             27
           ],
           "generatedSize": [
-            13,
-            14
+            15,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -230,12 +239,12 @@
             46
           ],
           "paste": [
-            82,
+            81,
             27
           ],
           "generatedSize": [
-            13,
-            14
+            15,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -251,12 +260,12 @@
             46
           ],
           "paste": [
-            82,
+            81,
             27
           ],
           "generatedSize": [
-            13,
-            14
+            15,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -272,12 +281,12 @@
             46
           ],
           "paste": [
-            82,
+            81,
             27
           ],
           "generatedSize": [
-            13,
-            14
+            15,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -293,12 +302,12 @@
             44
           ],
           "paste": [
-            81,
+            82,
             27
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -314,12 +323,12 @@
             44
           ],
           "paste": [
-            82,
+            83,
             27
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -335,12 +344,12 @@
             44
           ],
           "paste": [
-            82,
+            83,
             27
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -356,12 +365,12 @@
             44
           ],
           "paste": [
-            82,
+            83,
             27
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -377,12 +386,12 @@
             47
           ],
           "paste": [
-            81,
+            82,
             27
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -398,12 +407,12 @@
             47
           ],
           "paste": [
-            81,
+            82,
             27
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -419,12 +428,12 @@
             47
           ],
           "paste": [
-            81,
+            82,
             27
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -440,12 +449,12 @@
             47
           ],
           "paste": [
-            81,
+            82,
             27
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -461,12 +470,12 @@
             46
           ],
           "paste": [
-            81,
+            83,
             27
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -482,12 +491,12 @@
             46
           ],
           "paste": [
-            81,
+            83,
             27
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -503,12 +512,12 @@
             46
           ],
           "paste": [
-            81,
+            83,
             27
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -524,12 +533,12 @@
             46
           ],
           "paste": [
-            81,
+            83,
             27
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -545,12 +554,12 @@
             45
           ],
           "paste": [
-            80,
+            81,
             26
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -566,12 +575,12 @@
             45
           ],
           "paste": [
-            80,
+            81,
             26
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -587,12 +596,12 @@
             45
           ],
           "paste": [
-            80,
+            81,
             26
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -608,12 +617,12 @@
             45
           ],
           "paste": [
-            80,
+            81,
             26
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -629,12 +638,12 @@
             44
           ],
           "paste": [
-            82,
+            83,
             28
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -650,12 +659,12 @@
             44
           ],
           "paste": [
-            82,
+            83,
             28
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -671,12 +680,12 @@
             44
           ],
           "paste": [
-            82,
+            83,
             27
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -692,12 +701,12 @@
             44
           ],
           "paste": [
-            82,
+            83,
             28
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -713,11 +722,11 @@
             47
           ],
           "paste": [
-            81,
+            80,
             28
           ],
           "generatedSize": [
-            13,
+            14,
             15
           ],
           "rotatedForDeath": false,
@@ -734,11 +743,11 @@
             47
           ],
           "paste": [
-            81,
+            80,
             28
           ],
           "generatedSize": [
-            13,
+            14,
             15
           ],
           "rotatedForDeath": false,
@@ -755,11 +764,11 @@
             47
           ],
           "paste": [
-            81,
+            80,
             28
           ],
           "generatedSize": [
-            13,
+            14,
             15
           ],
           "rotatedForDeath": false,
@@ -776,11 +785,11 @@
             47
           ],
           "paste": [
-            81,
+            80,
             28
           ],
           "generatedSize": [
-            13,
+            14,
             15
           ],
           "rotatedForDeath": false,
@@ -788,19 +797,19 @@
         }
       ],
       "directionSignatures": [
-        "1397a1908351f9e8044a032f7498f4983a90d1882ae01d55810157b4d8225b30",
-        "f926fe10d02a1c821789a1333bc2b389a91cff27ef2e41abe71a068499d2ebf8",
-        "207f741d93163dc84d1db637733990c48190a0506de4e71ab1fa91dc7af0f143",
-        "cdcdf84b8e8c013c344f8f02b3da43228e0134763461c6625e664556c0c351ae",
-        "0d10a80f8e1c23d935169897cd23cdfd4aaf9633c0eea28d177a75d6ee186506",
-        "39c48d286678a753c7bfa0ed32a9d4b530638f91aadaf6e1359440b16fb894a6",
-        "de74124f7d7ee07b06469d632f9bf2e02cfac9181d70efe18efc69ef7d689fcd",
-        "7ffd338b174d37129c1da48f5123f4a6bc81c5deb0cc5f70262b3d5de09fbc04"
+        "c4f35eb29877e863298df2625e33489288610397c87623d2ffd8d77e5dc66dbe",
+        "5dfd04f9f8f9fb5f2424f8955d3a28bd6066a21163653e6c924a427677bc86b5",
+        "8987d90baf93643e3b6c626e4a91f24e9f11a5b5dc0483280d5ec935eba722c8",
+        "8d4eec366dd00ee1ddc03341ac04e1a2fb79b9a8c9623605dc343916d91c2442",
+        "c34b93c2a96dcbc2f0d75d2a8421b983f2d9122646a867aedc08275b8880a6fc",
+        "e121f0822e5e6796218b2789eed9cf27f602d2a895207f5080828ef4ed962198",
+        "fbfa6b690634ca3e3504c70d4f149d26afbd2b8aa9e3fa682bb0be2c77e69f61",
+        "04872cb837e646865292053b0c0ab2937e412da827603bbe2a90034ade76f735"
       ]
     },
     "walk": {
       "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
-      "sha256": "d6a48bc67fb5bc401ccfd87d5208529118eb7716b5d26f788fc5f4068d5dc0d2",
+      "sha256": "795df97debcbcb3c6dc0a4747cc98755ac9f74c7d1d690bea78942e2c0845abc",
       "cell": [
         192,
         160
@@ -824,7 +833,7 @@
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -845,7 +854,7 @@
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -866,7 +875,7 @@
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -887,7 +896,7 @@
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -908,7 +917,7 @@
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -929,7 +938,7 @@
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -945,12 +954,12 @@
             47
           ],
           "paste": [
-            83,
+            82,
             27
           ],
           "generatedSize": [
-            13,
-            14
+            15,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -966,12 +975,12 @@
             47
           ],
           "paste": [
-            82,
+            81,
             27
           ],
           "generatedSize": [
-            13,
-            14
+            15,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -987,12 +996,12 @@
             46
           ],
           "paste": [
-            82,
+            81,
             27
           ],
           "generatedSize": [
-            13,
-            14
+            15,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1008,12 +1017,12 @@
             47
           ],
           "paste": [
-            82,
+            81,
             27
           ],
           "generatedSize": [
-            13,
-            14
+            15,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1029,12 +1038,12 @@
             48
           ],
           "paste": [
-            81,
+            80,
             27
           ],
           "generatedSize": [
-            13,
-            14
+            15,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1050,12 +1059,12 @@
             47
           ],
           "paste": [
-            81,
+            80,
             27
           ],
           "generatedSize": [
-            13,
-            14
+            15,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1071,12 +1080,12 @@
             44
           ],
           "paste": [
-            82,
+            83,
             27
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1092,12 +1101,12 @@
             44
           ],
           "paste": [
-            81,
+            82,
             27
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1113,12 +1122,12 @@
             44
           ],
           "paste": [
-            82,
+            83,
             27
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1134,12 +1143,12 @@
             44
           ],
           "paste": [
-            82,
+            83,
             27
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1155,12 +1164,12 @@
             44
           ],
           "paste": [
-            81,
+            82,
             27
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1176,12 +1185,12 @@
             44
           ],
           "paste": [
-            80,
+            81,
             27
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1197,12 +1206,12 @@
             47
           ],
           "paste": [
-            82,
+            83,
             28
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1218,12 +1227,12 @@
             47
           ],
           "paste": [
-            81,
+            82,
             27
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1239,12 +1248,12 @@
             47
           ],
           "paste": [
-            82,
+            83,
             27
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1260,12 +1269,12 @@
             47
           ],
           "paste": [
-            81,
+            82,
             28
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1281,12 +1290,12 @@
             46
           ],
           "paste": [
-            81,
+            82,
             27
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1302,12 +1311,12 @@
             46
           ],
           "paste": [
-            80,
+            81,
             27
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1323,12 +1332,12 @@
             47
           ],
           "paste": [
-            81,
+            83,
             27
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1344,12 +1353,12 @@
             46
           ],
           "paste": [
-            81,
+            83,
             27
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1365,12 +1374,12 @@
             46
           ],
           "paste": [
-            81,
+            83,
             27
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1386,12 +1395,12 @@
             47
           ],
           "paste": [
-            81,
+            83,
             27
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1407,12 +1416,12 @@
             46
           ],
           "paste": [
-            81,
+            83,
             27
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1428,12 +1437,12 @@
             46
           ],
           "paste": [
-            81,
+            83,
             26
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1449,12 +1458,12 @@
             46
           ],
           "paste": [
-            80,
+            81,
             27
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1470,12 +1479,12 @@
             46
           ],
           "paste": [
-            80,
+            81,
             26
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1491,12 +1500,12 @@
             46
           ],
           "paste": [
-            80,
+            81,
             26
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1512,12 +1521,12 @@
             46
           ],
           "paste": [
-            80,
+            81,
             27
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1533,12 +1542,12 @@
             45
           ],
           "paste": [
-            81,
+            82,
             26
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1554,12 +1563,12 @@
             45
           ],
           "paste": [
-            81,
+            82,
             26
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1575,12 +1584,12 @@
             44
           ],
           "paste": [
-            81,
+            82,
             28
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1596,12 +1605,12 @@
             44
           ],
           "paste": [
-            82,
+            83,
             27
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1617,12 +1626,12 @@
             44
           ],
           "paste": [
-            81,
+            82,
             27
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1638,12 +1647,12 @@
             45
           ],
           "paste": [
-            81,
+            82,
             28
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1659,12 +1668,12 @@
             44
           ],
           "paste": [
-            82,
+            83,
             28
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1680,12 +1689,12 @@
             44
           ],
           "paste": [
-            82,
+            83,
             27
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1701,11 +1710,11 @@
             47
           ],
           "paste": [
-            81,
+            80,
             28
           ],
           "generatedSize": [
-            13,
+            14,
             15
           ],
           "rotatedForDeath": false,
@@ -1722,11 +1731,11 @@
             47
           ],
           "paste": [
-            82,
+            81,
             28
           ],
           "generatedSize": [
-            13,
+            14,
             15
           ],
           "rotatedForDeath": false,
@@ -1743,11 +1752,11 @@
             47
           ],
           "paste": [
-            81,
+            80,
             27
           ],
           "generatedSize": [
-            13,
+            14,
             15
           ],
           "rotatedForDeath": false,
@@ -1764,11 +1773,11 @@
             48
           ],
           "paste": [
-            81,
+            80,
             28
           ],
           "generatedSize": [
-            13,
+            14,
             15
           ],
           "rotatedForDeath": false,
@@ -1785,11 +1794,11 @@
             48
           ],
           "paste": [
-            82,
+            81,
             28
           ],
           "generatedSize": [
-            13,
+            14,
             15
           ],
           "rotatedForDeath": false,
@@ -1806,11 +1815,11 @@
             48
           ],
           "paste": [
-            82,
+            81,
             27
           ],
           "generatedSize": [
-            13,
+            14,
             15
           ],
           "rotatedForDeath": false,
@@ -1818,19 +1827,19 @@
         }
       ],
       "directionSignatures": [
-        "bf6ea6910324ab9ca3dd949be5819c3f537c0763097eb7199317e75ce24ccca5",
-        "4b9d9194b316302e1a82dfb7ed348c5334badd3e8916ecf7572b3c0435d1a81b",
-        "24e65c916f5198e706d77b3ab36d667b87f0586f09fae8b52b19682fdce243c6",
-        "c5410cc4c75705f19c7d52469e7fd7cce83c361cf1f1e3b4e6a3e84596e51a89",
-        "ee1ffe8b61ee858ed314ce44c576b655945a90418e2ce6d1429cb3d728ef36ff",
-        "cb161dbc981d6fbb6534031134dcbe52abd62cac1c693159b68827419c65a562",
-        "5f4824a1dc450659e8c361c1dc1990926a17a434f518faa02eaa229f8704bc21",
-        "804e3210829fbf3a9ae22fe4801effc59591afcd69bac2b517d70d01c037bb30"
+        "27323b27449a0e8de59eba2300563b0e8d29fabf7f61cf4f2820387ff3f8155c",
+        "3c1b4fbccdd21ecd87a1d14e32cea78d21b8009d18b9bee03c979d1f652055d1",
+        "e967c48959f9be3e7b32705920c29e6fdac9b6936259c6782c561914bbc3dd3d",
+        "2a90cdd77fbf7289ad75f7ee43462f3908afc6a75dc8a55a6db122d44ab32e4a",
+        "b73f6fb77eeaa61d00109920517726248fd38ca882de5daa14927a3b24c3832f",
+        "996e48f15e0435487b2e0baf4b86e1da7740e879af8ff3cc93fb7490f30bbadd",
+        "7c787c65d938294242d8762ad16e749833321a962aeb7a0a6c0fd0ad8ed1d485",
+        "027fe5f1e6f3ff4fa55e6c8a41f9c64ea6f8574231da03583c8ddd1fd9868c3a"
       ]
     },
     "attack": {
       "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
-      "sha256": "e4c61b0a39ae575c631cfb87171da71b76bc46b430fc55c94ebd38e4b2b4bb4f",
+      "sha256": "357eecda529ebb4fc0fa838b963871bcd119c3b632eb2bd639c6405f677aec5d",
       "cell": [
         192,
         160
@@ -1854,7 +1863,7 @@
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1875,7 +1884,7 @@
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1896,7 +1905,7 @@
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1917,7 +1926,7 @@
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1938,7 +1947,7 @@
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1959,7 +1968,7 @@
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1975,12 +1984,12 @@
             56
           ],
           "paste": [
-            83,
+            82,
             37
           ],
           "generatedSize": [
-            13,
-            14
+            15,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -1996,12 +2005,12 @@
             63
           ],
           "paste": [
-            70,
+            69,
             45
           ],
           "generatedSize": [
-            13,
-            14
+            15,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2017,12 +2026,12 @@
             52
           ],
           "paste": [
-            93,
+            92,
             32
           ],
           "generatedSize": [
-            13,
-            14
+            15,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2038,12 +2047,12 @@
             52
           ],
           "paste": [
-            98,
+            97,
             32
           ],
           "generatedSize": [
-            13,
-            14
+            15,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2059,12 +2068,12 @@
             51
           ],
           "paste": [
-            100,
+            99,
             33
           ],
           "generatedSize": [
-            13,
-            14
+            15,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2080,12 +2089,12 @@
             53
           ],
           "paste": [
-            95,
+            94,
             32
           ],
           "generatedSize": [
-            13,
-            14
+            15,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2101,12 +2110,12 @@
             53
           ],
           "paste": [
-            77,
+            78,
             36
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2122,12 +2131,12 @@
             55
           ],
           "paste": [
-            63,
+            64,
             34
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2143,12 +2152,12 @@
             57
           ],
           "paste": [
-            91,
+            92,
             37
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2164,12 +2173,12 @@
             61
           ],
           "paste": [
-            99,
+            100,
             42
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2185,12 +2194,12 @@
             65
           ],
           "paste": [
-            103,
+            104,
             46
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2206,12 +2215,12 @@
             58
           ],
           "paste": [
-            94,
+            95,
             40
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2227,12 +2236,12 @@
             52
           ],
           "paste": [
-            74,
+            75,
             33
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2248,12 +2257,12 @@
             49
           ],
           "paste": [
-            71,
+            72,
             27
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2269,12 +2278,12 @@
             64
           ],
           "paste": [
-            84,
+            85,
             41
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2290,12 +2299,12 @@
             74
           ],
           "paste": [
-            90,
+            91,
             52
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2311,12 +2320,12 @@
             78
           ],
           "paste": [
-            92,
+            93,
             56
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2332,12 +2341,12 @@
             64
           ],
           "paste": [
-            85,
+            86,
             47
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2353,12 +2362,12 @@
             48
           ],
           "paste": [
-            75,
+            77,
             29
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2374,12 +2383,12 @@
             43
           ],
           "paste": [
-            86,
+            88,
             26
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2395,12 +2404,12 @@
             61
           ],
           "paste": [
-            76,
+            78,
             40
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2416,12 +2425,12 @@
             74
           ],
           "paste": [
-            77,
+            79,
             53
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2437,12 +2446,12 @@
             77
           ],
           "paste": [
-            78,
+            80,
             56
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2458,12 +2467,12 @@
             60
           ],
           "paste": [
-            76,
+            78,
             46
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2479,12 +2488,12 @@
             46
           ],
           "paste": [
-            80,
+            81,
             27
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2500,12 +2509,12 @@
             48
           ],
           "paste": [
-            98,
+            99,
             32
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2521,12 +2530,12 @@
             59
           ],
           "paste": [
-            71,
+            72,
             36
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2542,12 +2551,12 @@
             67
           ],
           "paste": [
-            64,
+            65,
             46
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2563,12 +2572,12 @@
             73
           ],
           "paste": [
-            63,
+            64,
             50
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2584,12 +2593,12 @@
             58
           ],
           "paste": [
-            67,
+            68,
             39
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2605,12 +2614,12 @@
             46
           ],
           "paste": [
-            86,
+            87,
             30
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2626,12 +2635,12 @@
             59
           ],
           "paste": [
-            100,
+            101,
             40
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2647,12 +2656,12 @@
             52
           ],
           "paste": [
-            73,
+            74,
             32
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2668,12 +2677,12 @@
             58
           ],
           "paste": [
-            64,
+            65,
             36
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2689,12 +2698,12 @@
             62
           ],
           "paste": [
-            61,
+            62,
             40
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2710,12 +2719,12 @@
             53
           ],
           "paste": [
-            69,
+            70,
             31
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2731,11 +2740,11 @@
             53
           ],
           "paste": [
-            88,
+            87,
             32
           ],
           "generatedSize": [
-            13,
+            14,
             15
           ],
           "rotatedForDeath": false,
@@ -2752,11 +2761,11 @@
             69
           ],
           "paste": [
-            93,
+            92,
             48
           ],
           "generatedSize": [
-            13,
+            14,
             15
           ],
           "rotatedForDeath": false,
@@ -2773,11 +2782,11 @@
             50
           ],
           "paste": [
-            77,
+            76,
             28
           ],
           "generatedSize": [
-            13,
+            14,
             15
           ],
           "rotatedForDeath": false,
@@ -2794,11 +2803,11 @@
             48
           ],
           "paste": [
-            72,
+            71,
             28
           ],
           "generatedSize": [
-            13,
+            14,
             15
           ],
           "rotatedForDeath": false,
@@ -2815,11 +2824,11 @@
             50
           ],
           "paste": [
-            70,
+            69,
             30
           ],
           "generatedSize": [
-            13,
+            14,
             15
           ],
           "rotatedForDeath": false,
@@ -2836,11 +2845,11 @@
             46
           ],
           "paste": [
-            77,
+            76,
             26
           ],
           "generatedSize": [
-            13,
+            14,
             15
           ],
           "rotatedForDeath": false,
@@ -2848,19 +2857,19 @@
         }
       ],
       "directionSignatures": [
-        "981fa8611d104ae821e631c09e04a23b02a10c77708d61fc229448b0296d34f9",
-        "75106e00c89a28e3549ae4ac91ec0d469b81babe354c8e1d5a47cd9a6bde77b1",
-        "7fd58608171db1af61c8e5e329d10f9dab35028440a649b5cf6221e5995f2f8b",
-        "ebea8470f8b4363ae09d089c10a40641840fb806a8387fcc5552596de9b0d859",
-        "553259dd05b9093c5db462c0b96e58bde4bc2c69907d23569a8a43c7116a6cd3",
-        "ea51839863884015f5d9091d8513c203bad2383996a0cdff752ebe9945760c01",
-        "bf134438cc1d195b30e17e16ee4579759bc8e230a33f72f312a6106cee203578",
-        "d7edae334120475ebf66fd6594211fb9018e91ba3a7becf1c170130003dd85fd"
+        "10c031b98ed443e5287a9361f61888e3d77b10c5bbd961bff30215b9c6a15da2",
+        "b9ffa91f78309dfc47a8e5ab32fbf0c1e6f90eda1e4241ef5a33930d9dd8cf10",
+        "f36a1e7da8546bda171c1272e2560628b2c8f78d3fbb83f5617b9914e523fe1b",
+        "7745130c3a3186d1bf1b30658a478624c9010dca5f8c0fdb9a53df389850d963",
+        "9e46f91f0b98bf842c615807400ce8547aec9b4b399fe5e3fee34b57a8d78be0",
+        "590a1791e5c2463dfd6778b852934db6594273a8ec463c989eb0bea5b05f17a5",
+        "1a4b4cdc3a1a393873520639130f1c8e12d82a3cf551fce36125760b437da8c9",
+        "7a4be4d126b740575ebc068f722a9d1a568d7e1638ef2f196049eae11b67a287"
       ]
     },
     "hit": {
       "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
-      "sha256": "f4f45136653b4ad9c774584665ff8ce6d12cb07b30ec2345e42d69be54df3fa3",
+      "sha256": "5fa3c6a15fe78555cc646aaf667545a931658cbba8e669a36253f05df2261bd9",
       "cell": [
         192,
         160
@@ -2884,7 +2893,7 @@
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2905,7 +2914,7 @@
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2926,7 +2935,7 @@
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2942,12 +2951,12 @@
             62
           ],
           "paste": [
-            66,
+            65,
             47
           ],
           "generatedSize": [
-            13,
-            14
+            15,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2963,12 +2972,12 @@
             57
           ],
           "paste": [
-            75,
+            74,
             39
           ],
           "generatedSize": [
-            13,
-            14
+            15,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -2984,12 +2993,12 @@
             50
           ],
           "paste": [
-            83,
+            82,
             29
           ],
           "generatedSize": [
-            13,
-            14
+            15,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -3005,12 +3014,12 @@
             53
           ],
           "paste": [
-            61,
+            62,
             35
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -3026,12 +3035,12 @@
             53
           ],
           "paste": [
-            70,
+            71,
             32
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -3047,12 +3056,12 @@
             48
           ],
           "paste": [
-            80,
+            81,
             30
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -3068,12 +3077,12 @@
             44
           ],
           "paste": [
-            68,
+            69,
             27
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -3089,12 +3098,12 @@
             45
           ],
           "paste": [
-            71,
+            72,
             28
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -3110,12 +3119,12 @@
             50
           ],
           "paste": [
-            79,
+            80,
             29
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            14
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -3131,12 +3140,12 @@
             38
           ],
           "paste": [
-            82,
+            84,
             24
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -3152,12 +3161,12 @@
             43
           ],
           "paste": [
-            80,
+            82,
             25
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -3173,12 +3182,12 @@
             47
           ],
           "paste": [
-            79,
+            81,
             28
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -3194,12 +3203,12 @@
             44
           ],
           "paste": [
-            96,
+            97,
             28
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -3215,12 +3224,12 @@
             43
           ],
           "paste": [
-            88,
+            89,
             26
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -3236,12 +3245,12 @@
             45
           ],
           "paste": [
-            80,
+            81,
             27
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -3257,12 +3266,12 @@
             53
           ],
           "paste": [
-            103,
+            104,
             40
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -3278,12 +3287,12 @@
             51
           ],
           "paste": [
-            96,
+            97,
             34
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -3299,12 +3308,12 @@
             45
           ],
           "paste": [
-            83,
+            84,
             29
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            15
           ],
           "rotatedForDeath": false,
           "poseVariant": "standing-direction"
@@ -3320,11 +3329,11 @@
             63
           ],
           "paste": [
-            95,
+            94,
             49
           ],
           "generatedSize": [
-            13,
+            14,
             15
           ],
           "rotatedForDeath": false,
@@ -3341,11 +3350,11 @@
             55
           ],
           "paste": [
-            92,
+            91,
             40
           ],
           "generatedSize": [
-            13,
+            14,
             15
           ],
           "rotatedForDeath": false,
@@ -3362,11 +3371,11 @@
             49
           ],
           "paste": [
-            83,
+            82,
             29
           ],
           "generatedSize": [
-            13,
+            14,
             15
           ],
           "rotatedForDeath": false,
@@ -3374,19 +3383,19 @@
         }
       ],
       "directionSignatures": [
-        "079da1f5fb5fac692817468aa1bb9e5380145372401ae36187b34fd4dd25d1af",
-        "2eaf4b83b4542dc035302e45d563e3e5812e28f8f04572fe535fcaa24bb56360",
-        "3393b23d8da6adceeb92bf4f71c68c61582170bb779de8aa28516afa68a3d8f8",
-        "6b311032726d5e509513cbbf021b5ad11a31b2814a64cc92bd125fd8c8ea16ab",
-        "84f6dc240faf525b85ccaa19c4ebac5676d4e4340066abc6ae17f5a0a4dfa55b",
-        "e13672c0e6816c4abeb6a3ebdd4dd26379a7d12202a4ef7db7999cbcf729ffb9",
-        "9a2cc2413cb9cd90693b9f79d69f27037b32492e4690fed694e0eb1feccccc02",
-        "2352c62e18f2e55a182ad4887302ceecb1e9aae285028969f2aef716484395b8"
+        "72cd655b9ea32550092b72f759a3b3e5b303481b7e3a9cbd91a0f5fef4f4ed24",
+        "d8c752f3ced5fd44c1581a7846efe105a148b867ead300f684e329f349a9412a",
+        "6f4293731ec7499cd613595ea14870dc7fd21209e5ac130631be9b95190e31b9",
+        "1506d2bcd1aac24a5a369fde557833fe63242aaecf3e6b24e30f62baf3c2d8de",
+        "9127c323209dc887e877a87c0ab2033ff878d18b054648914a8d64016b81d48c",
+        "4edb999194b0c78ba9bea5f3441546a86ffadfb5d0f3084ef4037c244ad9aad9",
+        "a9a0775a38407628a65fde5fc623008bb6df1e5df0eb47fefa3c866dcfdcdad6",
+        "a04f0c0e1f0b94fe99daba199a10a14e3a285b9db4f67fecf74f5fd16af0378c"
       ]
     },
     "death": {
       "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png",
-      "sha256": "5a4b3cf721e826206c86c1e1a7eb588abb831d3f8c82a844195b5f1970fba0a5",
+      "sha256": "42595944af60c3521ef771d90aee15618ed1c0f63475fe06c6294ab54a5bf732",
       "cell": [
         192,
         160
@@ -3405,15 +3414,15 @@
             50
           ],
           "paste": [
-            84,
-            26
+            85,
+            32
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 4985,
@@ -3427,14 +3436,14 @@
           ],
           "paste": [
             83,
-            37
+            38
           ],
           "generatedSize": [
             12,
             14
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 4986,
@@ -3447,15 +3456,15 @@
             116
           ],
           "paste": [
-            85,
-            98
+            88,
+            103
           ],
           "generatedSize": [
-            12,
+            11,
             14
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 4987,
@@ -3468,15 +3477,15 @@
             131
           ],
           "paste": [
-            86,
-            110
+            88,
+            118
           ],
           "generatedSize": [
-            12,
-            14
+            11,
+            13
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 4992,
@@ -3489,15 +3498,15 @@
             49
           ],
           "paste": [
-            91,
-            28
+            89,
+            32
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 4993,
@@ -3510,15 +3519,15 @@
             53
           ],
           "paste": [
-            78,
-            34
+            79,
+            36
           ],
           "generatedSize": [
-            13,
+            15,
             14
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 4994,
@@ -3531,15 +3540,15 @@
             110
           ],
           "paste": [
-            63,
-            94
+            61,
+            97
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 4995,
@@ -3552,15 +3561,15 @@
             122
           ],
           "paste": [
-            54,
-            103
+            53,
+            109
           ],
           "generatedSize": [
-            13,
-            14
+            12,
+            12
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5000,
@@ -3573,15 +3582,15 @@
             53
           ],
           "paste": [
-            89,
-            35
+            92,
+            36
           ],
           "generatedSize": [
-            14,
-            15
+            12,
+            14
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5001,
@@ -3594,15 +3603,15 @@
             53
           ],
           "paste": [
-            76,
-            33
+            78,
+            34
           ],
           "generatedSize": [
             14,
-            15
+            14
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5002,
@@ -3615,15 +3624,15 @@
             93
           ],
           "paste": [
-            48,
-            76
+            49,
+            82
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            13
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5003,
@@ -3637,14 +3646,14 @@
           ],
           "paste": [
             37,
-            85
+            88
           ],
           "generatedSize": [
-            14,
-            15
+            12,
+            12
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5008,
@@ -3657,15 +3666,15 @@
             60
           ],
           "paste": [
-            85,
-            40
+            87,
+            41
           ],
           "generatedSize": [
-            14,
-            16
+            12,
+            14
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5009,
@@ -3678,15 +3687,15 @@
             51
           ],
           "paste": [
-            77,
-            30
+            78,
+            34
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            12
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5010,
@@ -3699,15 +3708,15 @@
             80
           ],
           "paste": [
-            56,
-            64
+            55,
+            68
           ],
           "generatedSize": [
-            14,
-            16
+            12,
+            11
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5011,
@@ -3720,15 +3729,15 @@
             80
           ],
           "paste": [
-            49,
-            64
+            47,
+            68
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            12
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5016,
@@ -3741,15 +3750,15 @@
             58
           ],
           "paste": [
-            78,
-            40
+            80,
+            42
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5017,
@@ -3762,15 +3771,15 @@
             50
           ],
           "paste": [
-            78,
-            26
+            82,
+            33
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            13
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5018,
@@ -3783,15 +3792,15 @@
             68
           ],
           "paste": [
-            77,
-            58
+            78,
+            57
           ],
           "generatedSize": [
-            14,
-            8
+            10,
+            10
           ],
           "rotatedForDeath": false,
-          "poseVariant": "south-death-foreshortened-crown"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5019,
@@ -3804,15 +3813,15 @@
             67
           ],
           "paste": [
-            79,
-            58
+            78,
+            57
           ],
           "generatedSize": [
-            14,
-            7
+            11,
+            11
           ],
           "rotatedForDeath": false,
-          "poseVariant": "south-death-foreshortened-crown"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5024,
@@ -3826,14 +3835,14 @@
           ],
           "paste": [
             74,
-            36
+            37
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            14
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5025,
@@ -3846,15 +3855,15 @@
             49
           ],
           "paste": [
-            85,
-            27
+            86,
+            30
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            14
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5026,
@@ -3867,15 +3876,15 @@
             73
           ],
           "paste": [
-            99,
-            58
+            103,
+            62
           ],
           "generatedSize": [
-            15,
-            17
+            11,
+            10
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5027,
@@ -3888,15 +3897,15 @@
             75
           ],
           "paste": [
-            109,
-            60
+            110,
+            62
           ],
           "generatedSize": [
-            15,
-            17
+            12,
+            11
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5032,
@@ -3910,14 +3919,14 @@
           ],
           "paste": [
             75,
-            32
+            34
           ],
           "generatedSize": [
-            14,
+            12,
             14
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5033,
@@ -3931,14 +3940,14 @@
           ],
           "paste": [
             88,
-            33
+            34
           ],
           "generatedSize": [
-            14,
+            12,
             14
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5034,
@@ -3951,15 +3960,15 @@
             87
           ],
           "paste": [
-            116,
-            71
+            118,
+            76
           ],
           "generatedSize": [
-            14,
-            14
+            12,
+            12
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5035,
@@ -3972,15 +3981,15 @@
             93
           ],
           "paste": [
-            127,
-            78
+            130,
+            84
           ],
           "generatedSize": [
-            14,
-            14
+            12,
+            13
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5040,
@@ -3993,15 +4002,15 @@
             48
           ],
           "paste": [
-            79,
-            27
+            78,
+            31
           ],
           "generatedSize": [
-            13,
-            15
+            14,
+            14
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5041,
@@ -4014,15 +4023,15 @@
             52
           ],
           "paste": [
-            87,
-            35
+            86,
+            37
           ],
           "generatedSize": [
             13,
-            15
+            14
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5042,
@@ -4035,15 +4044,15 @@
             106
           ],
           "paste": [
-            108,
+            109,
             93
           ],
           "generatedSize": [
             13,
-            15
+            14
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5043,
@@ -4056,26 +4065,26 @@
             117
           ],
           "paste": [
-            115,
-            105
+            118,
+            107
           ],
           "generatedSize": [
             13,
-            15
+            13
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         }
       ],
       "directionSignatures": [
-        "9ce3e7b451b10d5c179a6f98ef5dd813b964929f9f0bb8ec917785c78ca85435",
-        "1ec38861d8128e60a4566e1fd81e8bf0cad682fda4bb0bf7a43fabbacf3245eb",
-        "ea493b4c031805fa880aa80deff172ea8f48b13f2e4b8c3a4a5f2d7c982cdf98",
-        "5faad962796b17ac07a82c078d8881b92c1d2f50b7b200f81d533a9cd5ca0580",
-        "3765aa9ebd3e8e70e5b5509c6c70e6a4b0d8ebe2d82232554c1aeaad3a805244",
-        "e008e2609ec40e8c29503e7bf0861e89a756ab1028c27f47cd0b0de064d97717",
-        "711a2dd1222c67f4a286cf18c188e612ec0c986cfdd72e5cd4b46dd3dc71d46e",
-        "38aceb6cea42bdc34b379979a1a3fcd59cf6e3c013b731af3302bb2820483665"
+        "a68365f400887bd65e62e7c49454fcf3b32ca9ee94cfc71e22c1b17978e03088",
+        "061026be1b32f8b2cee991c8ef900877d67fbfcd9b1c7dbd324883204365d66b",
+        "cfa320359acdb3f9eaf8b9cce8299c6100ef15f9dfae0eeb36b9391a23e2219e",
+        "c4477b699a13f553e38f86ecb5a1ac63e7952c0602d7831ca1bcab9d4bc637a9",
+        "e54ed06dbdaa30a057adefc51664623c9122b69bd9aa98eaa089c02fdd17e08f",
+        "373f67823e683c7f9adbf484fbe3ef332830de32e6aa6fba9c0b0af0f6e86cb2",
+        "1b91373bd301de2260dfc03168d4d081938f0f57352ed82a0a38802ff32537f8",
+        "e38a94d9f8bcd70e9023f77fcdd3475cab10423795ca2ec045c2d691877e651c"
       ]
     }
   },

@@ -2,7 +2,7 @@ extends Node
 
 const CROP := Rect2i(535, 205, 210, 220)
 const DIRECTION_NAMES := ["n", "ne", "e", "se", "s", "sw", "w", "nw"]
-const ACCEPTANCE_VERSION := "v07225_w_flipped_20260715b"
+const ACCEPTANCE_VERSION := "v100_godot3d_20260717"
 const DIRECTION_VECTORS := [
 	Vector2.UP,
 	Vector2(0.70710678, -0.70710678),
@@ -77,6 +77,19 @@ func _ready() -> void:
 	await get_tree().process_frame
 	_save_crop(output_dir.path_join("death_south.png"))
 	_save_crop(output_dir.path_join("%s_death_south.png" % ACCEPTANCE_VERSION))
+
+	# Death is a 32-cell authored mapping. Capture every direction and every
+	# frame so a correct south sample cannot hide a mismatched east/west row.
+	for direction_index in range(DIRECTION_NAMES.size()):
+		player.facing = DIRECTION_VECTORS[direction_index]
+		for death_frame in range(4):
+			visual.play_death(0.8)
+			visual._process((float(death_frame) + 0.1) * 0.2)
+			await get_tree().process_frame
+			assert(visual.current_direction == direction_index)
+			assert(visual.current_frame == death_frame)
+			_save_crop(output_dir.path_join("death_%s_f%d.png" % [DIRECTION_NAMES[direction_index], death_frame]))
+			_save_crop(output_dir.path_join("%s_death_%s_f%d.png" % [ACCEPTANCE_VERSION, DIRECTION_NAMES[direction_index], death_frame]))
 
 	assert(player.get_node("HealthBar").position == ArtSpec.PLAYER_HEALTH_BAR_OFFSET)
 	print("PLAYER_HELMET_HEALTH_CAPTURE_PASS")

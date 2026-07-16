@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
-"""Build the mixed-source Black Iron Helmet world animation layer.
+"""Build the evidence-calibrated Black Iron Helmet world animation layer.
 
 One complete client was scanned frame-by-frame and its paired runtime source
 was audited.  The verified classic item exists as StateItem #344, but the 2013
 runtime only draws Hair appearances and contains no matching worn Black Iron
 Helmet layer.  StateItem #344 remains the verified equipment-window identity,
-while all eight runtime directions come from the user's newly generated visual
-family.  The source Hair animation is used only as a per-frame head-motion
-anchor.  No Hair, unrelated Helmet, or old StateItem-derived world pixels are
-copied into the generated result.
+while the approved redesign is reconstructed as one complete procedural helmet
+and rendered by Godot's orthographic 3D pipeline.  The source Hair animation is
+used only as a per-frame head-motion anchor.  Death uses a 32-cell pose table
+calibrated from the matching body direction/frame, Hair anchor and six authored
+Helmet.wil appearances.  No Hair, unrelated Helmet, or old StateItem-derived
+world pixels are copied into the generated result.
 """
 
 from __future__ import annotations
 
 import hashlib
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -23,10 +26,10 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
 REFERENCE_ICON = ROOT / "assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00344.png"
-REAR_DIRECTION_REFERENCE = ROOT / "dev_art_sources/reference/generated/black_iron_helmet/rear_n_ne_nw_transparent.png"
-FRONT_SIDE_CONCEPT_REFERENCE = ROOT / "dev_art_sources/reference/generated/black_iron_helmet/front_side_direction_concept.png"
-CANONICAL_DIRECTION_ROOT = ROOT / "dev_art_sources/reference/generated/black_iron_helmet/canonical_directions"
-CANONICAL_DIRECTION_MANIFEST = CANONICAL_DIRECTION_ROOT / "manifest.json"
+APPROVED_CONCEPT = ROOT / "outputs/visual_acceptance/black_iron_helmet_approved_concept_20260717.png"
+GODOT_RENDER_ROOT = ROOT / "outputs/visual_acceptance/black_iron_helmet_3d"
+GODOT_RENDER_MANIFEST = GODOT_RENDER_ROOT / "manifest.json"
+DEATH_POSE_BASELINE = ROOT / "outputs/resource_catalog/black_iron_helmet/death_pose_baseline.json"
 ANCHOR_SOURCE = ROOT / "dev_art_sources/external/mir2opensource_full/Data/Hair.wil"
 SOURCE_CODE = ROOT / "dev_art_sources/reference/mir2opensource_2013_client/MirObjects/PlayerObject.cs"
 FRAME_CODE = ROOT / "dev_art_sources/reference/mir2opensource_2013_client/MirObjects/Frames.cs"
@@ -38,7 +41,7 @@ ANCHOR_APPEARANCE = 2
 ANCHOR_STRIDE = 2224
 CELL = (192, 160)
 SOURCE_DRAW_ORIGIN = (64, 80)
-RUNTIME_ENVELOPE_SCALE = 0.85 * 0.85
+RUNTIME_ENVELOPE_SCALE = 1.0
 ACTIONS = {
     "idle": {"start": 0, "frames": 4},
     "walk": {"start": 64, "frames": 6},
@@ -60,12 +63,13 @@ def sha256(path: Path) -> str:
 
 
 def build_direction_variants(client_baseline: dict) -> list[Image.Image]:
-    """Downsample all eight newly generated canonical views for world use."""
+    """Downsample the eight Godot-rendered views to real-client envelopes."""
     labels = ["n", "ne", "e", "se", "s", "sw", "w", "nw"]
     variants: list[Image.Image] = []
     runtime_envelopes: dict = client_baseline.get("directionRuntimeMaxSize", {})
+    runtime_opaque_pixels: dict = client_baseline.get("directionRuntimeOpaquePixels", {})
     for index, label in enumerate(labels):
-        path = CANONICAL_DIRECTION_ROOT / f"{index}_{label}.png"
+        path = GODOT_RENDER_ROOT / f"standing_{label}.png"
         image = Image.open(path).convert("RGBA")
         box = image.getchannel("A").getbbox()
         if not box:
@@ -76,23 +80,36 @@ def build_direction_variants(client_baseline: dict) -> list[Image.Image]:
         if not isinstance(envelope, list) or len(envelope) != 2:
             raise ValueError(f"Missing real-client helmet envelope for {direction}")
         max_width, max_height = int(envelope[0]), int(envelope[1])
-        # The first 85% pass was still visually oversized on the equipped
-        # warrior. Apply the requested additional 15% reduction to that size.
-        scale = min(max_width / image.width, max_height / image.height) * RUNTIME_ENVELOPE_SCALE
+        target_opaque = int(runtime_opaque_pixels.get(direction, 0))
+        if target_opaque <= 0:
+            raise ValueError(f"Missing real-client opaque-pixel baseline for {direction}")
+        source_opaque = sum(image.getchannel("A").histogram()[128:])
+        envelope_scale = min(max_width / image.width, max_height / image.height) * RUNTIME_ENVELOPE_SCALE
+        area_scale = math.sqrt(target_opaque / max(1, source_opaque))
+        scale = min(envelope_scale, area_scale)
         target_width = max(1, round(image.width * scale))
         target_height = max(1, round(image.height * scale))
-        # The approved E source is visibly narrower than real Helmet.wil E
-        # rows. Fill the measured client envelope in this direction so idle E
-        # and walk E do not look horizontally crushed.
-        if direction == "E":
-            target_width = max(1, round(max_width * RUNTIME_ENVELOPE_SCALE))
-            target_height = max(1, round(max_height * RUNTIME_ENVELOPE_SCALE))
         image = image.resize((target_width, target_height), Image.Resampling.NEAREST)
         # Runtime pixel art uses a hard alpha edge.  This also guarantees that
         # no grey concept-sheet background survives the extraction process.
         alpha = image.getchannel("A").point(lambda value: 255 if value >= 128 else 0)
         image.putalpha(alpha)
         variants.append(image)
+    return variants
+
+
+def load_death_variants() -> list[list[Image.Image]]:
+    labels = ["n", "ne", "e", "se", "s", "sw", "w", "nw"]
+    variants: list[list[Image.Image]] = []
+    for label in labels:
+        row: list[Image.Image] = []
+        for frame in range(4):
+            path = GODOT_RENDER_ROOT / f"death_{label}_f{frame}.png"
+            image = Image.open(path).convert("RGBA")
+            if image.getchannel("A").getbbox() is None:
+                raise ValueError(f"Godot death pose is empty: {label} F{frame}")
+            row.append(image)
+        variants.append(row)
     return variants
 
 
@@ -131,6 +148,8 @@ def build_action(
     palette: list,
     offsets: list[int],
     variants: list[Image.Image],
+    death_variants: list[list[Image.Image]],
+    death_pose_records: dict[tuple[int, int], dict],
     action_name: str,
 ) -> dict:
     spec = ACTIONS[action_name]
@@ -144,23 +163,20 @@ def build_action(
             box = anchor_bbox(data, palette, offsets, index)
             helmet = variants[direction]
             pose_variant = "standing-direction"
-            # South death frames 2/3 expose the crown as the body falls back.
-            # A standing S helmet leaves the front eye slit upright on the
-            # chest. Build a foreshortened crown from the approved N/back-top
-            # geometry instead; do not rotate the standing front sprite.
-            if action_name == "death" and direction == 4 and frame >= 2:
-                crown_height = 8 if frame == 2 else 7
-                helmet = variants[0].resize((variants[4].width, crown_height), Image.Resampling.NEAREST)
-                pose_variant = "south-death-foreshortened-crown"
+            pose_record: dict | None = None
+            if action_name == "death":
+                helmet = death_variants[direction][frame]
+                pose_record = death_pose_records[(direction, frame)]
+                pose_variant = "godot-orthographic-complete-helmet"
             rotated = False
             anchor_center_x = (box[0] + box[2]) // 2
             anchor_center_y = (box[1] + box[3]) // 2
+            if pose_record is not None:
+                hair_centroid = pose_record["hairAnchorCentroid"]
+                anchor_center_x = round(float(hair_centroid[0]))
+                anchor_center_y = round(float(hair_centroid[1]))
             paste_x = frame * CELL[0] + anchor_center_x - helmet.width // 2
-            paste_y_local = (
-                anchor_center_y - helmet.height // 2
-                if pose_variant == "south-death-foreshortened-crown"
-                else box[1] - 3
-            )
+            paste_y_local = anchor_center_y - helmet.height // 2 if pose_record is not None else box[1] - 3
             paste_y = direction * CELL[1] + paste_y_local
             atlas.alpha_composite(helmet, (paste_x, paste_y))
             frames.append(
@@ -200,9 +216,9 @@ def build_action(
 def main() -> None:
     for required in (
         REFERENCE_ICON,
-        REAR_DIRECTION_REFERENCE,
-        FRONT_SIDE_CONCEPT_REFERENCE,
-        CANONICAL_DIRECTION_MANIFEST,
+        APPROVED_CONCEPT,
+        GODOT_RENDER_MANIFEST,
+        DEATH_POSE_BASELINE,
         CLIENT_HELMET_BASELINE,
         ANCHOR_SOURCE,
         SOURCE_CODE,
@@ -213,36 +229,45 @@ def main() -> None:
             raise FileNotFoundError(f"Missing Black Iron Helmet evidence: {required}")
     scan = json.loads(COMPLETE_SCAN.read_text(encoding="utf-8"))
     client_helmet_baseline = json.loads(CLIENT_HELMET_BASELINE.read_text(encoding="utf-8"))
+    death_pose_baseline = json.loads(DEATH_POSE_BASELINE.read_text(encoding="utf-8"))
+    godot_render_manifest = json.loads(GODOT_RENDER_MANIFEST.read_text(encoding="utf-8"))
     if scan.get("libraryCount") != 122 or scan.get("indexedFramesScanned") != 962251:
         raise AssertionError("Complete-client scan is not complete")
     variants = build_direction_variants(client_helmet_baseline)
+    death_variants = load_death_variants()
+    death_pose_records = {
+        (int(record["directionRow"]), int(record["frame"])): record
+        for record in death_pose_baseline.get("records", [])
+    }
+    if len(death_pose_records) != 32 or len(godot_render_manifest.get("records", [])) != 32:
+        raise AssertionError("Godot death pipeline does not contain the complete 8x4 mapping")
     direction_reference = render_direction_reference(variants)
     data, palette, offsets, info = read_library(ANCHOR_SOURCE)
     actions = {
-        name: build_action(data, palette, offsets, variants, name)
+        name: build_action(data, palette, offsets, variants, death_variants, death_pose_records, name)
         for name in ACTIONS
     }
     payload = {
-        "schemaVersion": 6,
+        "schemaVersion": 7,
         "item": "Black Iron Helmet / 黑铁头盔",
         "classification": "project-generated presentation asset based on verified classic evidence",
         "referenceIcon": f"res://{REFERENCE_ICON.relative_to(ROOT).as_posix()}",
         "referenceIconSha256": sha256(REFERENCE_ICON),
         "referenceIconImage": 344,
         "approvedDirectionReferences": {
-            "rearNNeNw": f"res://{REAR_DIRECTION_REFERENCE.relative_to(ROOT).as_posix()}",
-            "rearNNeNwSha256": sha256(REAR_DIRECTION_REFERENCE),
-            "frontSideConcept": f"res://{FRONT_SIDE_CONCEPT_REFERENCE.relative_to(ROOT).as_posix()}",
-            "frontSideConceptSha256": sha256(FRONT_SIDE_CONCEPT_REFERENCE),
-            "canonicalManifest": f"res://{CANONICAL_DIRECTION_MANIFEST.relative_to(ROOT).as_posix()}",
-            "canonicalManifestSha256": sha256(CANONICAL_DIRECTION_MANIFEST),
+            "approvedConcept": f"res://{APPROVED_CONCEPT.relative_to(ROOT).as_posix()}",
+            "approvedConceptSha256": sha256(APPROVED_CONCEPT),
+            "godotRenderer": "res://tools/render_black_iron_helmet_3d.gd",
+            "godotRendererSha256": sha256(ROOT / "tools/render_black_iron_helmet_3d.gd"),
+            "godotRenderManifest": f"res://{GODOT_RENDER_MANIFEST.relative_to(ROOT).as_posix()}",
+            "godotRenderManifestSha256": sha256(GODOT_RENDER_MANIFEST),
             "acceptedRowMapping": ["N", "NE", "E", "SE", "S", "SW", "W", "NW"],
         },
         "anchorLibrary": f"res://{ANCHOR_SOURCE.relative_to(ROOT).as_posix()}",
         "anchorLibraryImageCount": int(info["image_count"]),
         "anchorAppearance": ANCHOR_APPEARANCE,
         "anchorStride": ANCHOR_STRIDE,
-        "anchorUsage": "position/motion only; no anchor-source pixels copied",
+        "anchorUsage": "same-cell position/motion and death-facing calibration only; no anchor-source pixels copied",
         "completeClientScan": f"res://{COMPLETE_SCAN.relative_to(ROOT).as_posix()}",
         "completeClientCoverage": {
             "libraries": scan["libraryCount"],
@@ -253,7 +278,15 @@ def main() -> None:
             "path": f"res://{CLIENT_HELMET_BASELINE.relative_to(ROOT).as_posix()}",
             "sha256": sha256(CLIENT_HELMET_BASELINE),
             "directionRuntimeMaxSize": client_helmet_baseline["directionRuntimeMaxSize"],
+            "directionRuntimeOpaquePixels": client_helmet_baseline["directionRuntimeOpaquePixels"],
             "deathCanonicalRotate90Degrees": client_helmet_baseline["deathFinal"]["canonicalSpriteRotate90Degrees"],
+        },
+        "deathPoseBaseline": {
+            "path": f"res://{DEATH_POSE_BASELINE.relative_to(ROOT).as_posix()}",
+            "sha256": sha256(DEATH_POSE_BASELINE),
+            "records": len(death_pose_records),
+            "mappingRule": death_pose_baseline["mappingRule"],
+            "rendererPolicy": death_pose_baseline["rendererPolicy"],
         },
         "sourceEvidence": {
             "runtimeHeadLibrary": f"res://{SOURCE_CODE.relative_to(ROOT).as_posix()}",
@@ -264,16 +297,17 @@ def main() -> None:
         },
         "generation": {
             "equipmentIcon": "Verified StateItem #344 remains the equipment-window icon and unique identity evidence; its old derived world pixels are not used.",
-            "runtimeDirections": "All eight runtime views come from the newly generated canonical direction family assembled from the user-supplied concept images.",
-            "rearDirections": "N/NE/NW come from the user-approved magenta-background rear sheet.",
-            "frontAndSideDirections": "E/SE/S/SW/W come from visual panels 2/3/4/6/7 of the supplied nine-panel concept; incorrect labels and duplicate panels are ignored.",
+            "runtimeDirections": "All eight runtime views are orthographic Godot renders of one complete procedural helmet geometry based on the user-approved redesign.",
+            "deathDirections": "Every N/NE/E/SE/S/SW/W/NW x F0/F1/F2/F3 cell is independently rendered from the same-row same-frame evidence record.",
             "authorship": "Project-generated extension; not claimed as an original client world frame.",
             "aiGenerated": True,
-            "aiPixelsLimitedTo": ["N", "NE", "E", "SE", "S", "SW", "W", "NW"],
+            "aiConceptUsed": True,
+            "aiPixelsLimitedTo": [],
+            "runtimePixelGenerator": "Godot 4.7 orthographic 3D renderer; no image-generation pixels are copied into the runtime atlases.",
             "oldDerivedStateItemWorldPixelsUsed": False,
-            "scalePolicy": "Fit each direction at 72.25% of the p75 width/height envelope measured from all six real client Helmet.wil appearances: two successive 15% reductions (0.85 * 0.85).",
+            "scalePolicy": "Fit each direction within the p75 width/height envelope and cap opaque visual mass at the same-direction client median; no arbitrary global reduction.",
             "runtimeEnvelopeScale": RUNTIME_ENVELOPE_SCALE,
-            "deathPosePolicy": "Follow the per-frame client head anchor; South death frames 2/3 use a foreshortened crown derived from the approved Black Iron N/back-top geometry instead of a standing front sprite or whole-sprite 90-degree rotation.",
+            "deathPosePolicy": "Use the exact same direction row and frame column in warrior_death.png and Hair.wil; invert that head vector through the documented Godot orthographic camera, render the complete helmet geometry, then centre it on the same-cell Hair anchor.",
         },
         "directionReference": f"res://{direction_reference.relative_to(ROOT).as_posix()}",
         "actions": actions,
@@ -282,7 +316,7 @@ def main() -> None:
     PROVENANCE.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(
         "BLACK_IRON_HELMET_GENERATED_PASS "
-        "runtime_reference=canonical_generated_8_directions actions=5 directions=8 old_stateitem_world_pixels=0 anchor_pixels_copied=0"
+        "runtime_reference=godot_orthographic_complete_geometry actions=5 directions=8 death_pose_records=32 old_stateitem_world_pixels=0 anchor_pixels_copied=0"
     )
 
 
