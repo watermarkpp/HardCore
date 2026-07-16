@@ -20,8 +20,7 @@ func _run() -> void:
 	var source: Variant = JSON.parse_string(file.get_as_text())
 	assert(source is Dictionary, "装备服务端规则来源表格式错误")
 	assert(int(source.catalogCoverage.get("equipmentRecords", 0)) == 175, "175件装备没有进入来源覆盖统计")
-	assert(int(source.catalogCoverage.get("concreteStdItemsRecords", -1)) == 172, "锁定StdItems逐件覆盖数错误")
-	assert(source.get("missing", []) == ["落魄神兵", "辟邪手镯", "黑铁手套"], "无同名StdItems记录没有保持隔离")
+	assert(int(source.catalogCoverage.get("concreteStdItemsRecords", -1)) == 0, "缺失StdItems数据库却被误标为已取得")
 	assert(source.fieldSemantics.Need == {"0": "等级", "1": "攻击上限", "2": "魔法上限", "3": "道术上限"}, "Need 0—3源码语义错误")
 
 	assert(EquipmentRulesScript.max_wear_weight("战士", 20) == 35, "战士穿戴重量公式错误")
@@ -39,8 +38,8 @@ func _run() -> void:
 	assert(EquipmentRulesScript.requirement_error(tao_item, 50, {"tao_max": 15}) == "需要道术16", "服务端道术需求判断错误")
 
 	var wood_sword := GameData.get_item_record("木剑")
-	assert(wood_sword.has("serviceRequirement") and wood_sword.get("concreteStdItemsStatus", "") == "已接入", "装备目录没有接入锁定StdItems值")
-	assert(str(wood_sword.serviceRequirement.get("source", "")) == "服务端StdItems", "精确Need没有进入统一装备规则")
+	assert(wood_sword.has("serviceRequirement") and wood_sword.get("concreteStdItemsStatus", "") == "数据库缺失·保留候选值", "装备目录没有区分源码语义与候选数值")
+	assert(str(wood_sword.serviceRequirement.get("source", "")) == "现有目录候选字段", "候选需求被误标为服务端精确值")
 
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
@@ -55,5 +54,5 @@ func _run() -> void:
 	assert(int(PlayerState.computed_stats.get("max_wear_weight", 0)) == EquipmentRulesScript.max_wear_weight("战士", 50), "属性面板没有接入穿戴重量上限")
 	assert(int(PlayerState.computed_stats.get("max_hand_weight", 0)) == EquipmentRulesScript.max_hand_weight("战士", 50), "属性面板没有接入手持重量上限")
 
-	print("EQUIPMENT_SERVICE_RULES_PASS：172件StdItems、Need 0—3、职业重量、性别与缺名隔离正常")
+	print("EQUIPMENT_SERVICE_RULES_PASS：StdItems字段语义、Need 0—3、职业重量、性别与候选来源隔离正常")
 	get_tree().quit(0)

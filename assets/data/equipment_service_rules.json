@@ -2,19 +2,14 @@
   "baseline": "2003官服1.76基准优先",
   "sources": [
     {
-      "path": "dev_art_sources/reference/original_gameofmir/Common/Grobal2.pas",
+      "path": "research/MIR2/GameOfMir/Common/Grobal2.pas",
       "role": "TStdItem字段结构",
       "confidence": "A"
     },
     {
-      "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+      "path": "research/MIR2/GameOfMir/M2Server/ObjBase.pas",
       "role": "CanUseItem穿戴判定与职业重量公式",
       "confidence": "A"
-    },
-    {
-      "path": "assets/data/equipment_stditems_176.json",
-      "role": "锁定社区1.76发行版逐件StdItems值",
-      "confidence": "A（对该发行版）"
     }
   ],
   "fieldSemantics": {
@@ -48,15 +43,14 @@
   },
   "catalogCoverage": {
     "equipmentRecords": 175,
-    "concreteStdItemsRecords": 172,
-    "candidateRecords": 3,
+    "concreteStdItemsRecords": 0,
+    "candidateRecords": 175,
     "confidenceA": 61,
     "confidenceB": 114
   },
   "missing": [
-    "落魄神兵",
-    "辟邪手镯",
-    "黑铁手套"
+    "服务端实际StdItems.DB/SQL记录",
+    "逐件StdMode/Shape/Looks/Need/NeedLevel原值"
   ],
-  "policy": "源码字段语义按A采用；172件数值对锁定社区1.76发行版精确，不能冒充2003官服原库；缺名记录继续隔离。"
+  "policy": "源码字段语义按A采用；具体175件数值在StdItems缺失时保留现有A/B候选，不升级为服务端精确值。"
 }

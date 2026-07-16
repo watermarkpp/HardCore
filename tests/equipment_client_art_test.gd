@@ -11,12 +11,9 @@ func _run() -> void:
 	var mappings: Dictionary = GameData.equipment_client_art.get("runtimeMappings", {})
 	assert(mappings.size() == 175, "175件装备客户端映射数量错误")
 	assert(GameData.equipment_client_art.get("unresolvedMappings", []).is_empty(), "客户端装备映射仍有未解析条目")
-	var missing_stditems: Array = GameData.equipment_client_art.get("missing", [])
-	assert(missing_stditems == ["落魄神兵", "辟邪手镯", "黑铁手套"], "Looks缺名隔离清单错误")
 	for item_name: String in mappings.keys():
 		var art: Dictionary = mappings[item_name]
-		var expected_confidence := "B" if item_name in missing_stditems else "A"
-		assert(art.get("mappingConfidence", "") == expected_confidence, "逐件Looks来源可信度错误：%s" % item_name)
+		assert(art.get("mappingConfidence", "") == "B", "StdItems缺失时名称映射不得冒充A源")
 		for field: String in ["inventoryIcon", "equippedIcon", "groundIcon"]:
 			var source: Dictionary = art.get(field, {})
 			assert(source.get("confidence", "") == "A", "客户端库索引必须保留A源标记")
@@ -24,7 +21,6 @@ func _run() -> void:
 
 	var wood := GameData.get_item_record("木剑")
 	assert(wood.get("art", {}).get("looks", -1) == 30, "默认客户端美术没有进入运行物品目录")
-	assert(GameData.get_item_record("怒斩").get("art", {}).get("looks", -1) == 70, "StdItems Looks没有覆盖旧网页候选")
 	var base: Array = [{"name": "测试剑", "category": "武器"}]
 	var mapped := GameData.apply_equipment_art_mappings(base, {"runtimeMappings": {"测试剑": {"looks": 30, "inventoryIcon": {"path": "old"}}}})
 	var customized := GameData.apply_equipment_customization(mapped, {"overrides": {"测试剑": {"fields": {"art": {"inventoryIcon": {"path": "res://custom.png"}}}}}})
