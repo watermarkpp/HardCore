@@ -1,0 +1,198 @@
+{
+  "batch_id": "A-005",
+  "title": "泥地组_02",
+  "source_file": "a005.png",
+  "expected_count": 6,
+  "grid": [
+    3,
+    2
+  ],
+  "target_canvas_size": [
+    64,
+    32
+  ],
+  "role": "base_tile",
+  "processing": "local_hsv_border_connected_key_removal",
+  "assets": [
+    {
+      "asset_id": "staging.v1_5.a005_01",
+      "file": "a005_01.png",
+      "source_cell": {
+        "index": 1,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "ground_base",
+      "occlusion": false,
+      "role": "base_tile",
+      "alpha_pixels": 1032,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.a005_02",
+      "file": "a005_02.png",
+      "source_cell": {
+        "index": 2,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "ground_base",
+      "occlusion": false,
+      "role": "base_tile",
+      "alpha_pixels": 1032,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.a005_03",
+      "file": "a005_03.png",
+      "source_cell": {
+        "index": 3,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "ground_base",
+      "occlusion": false,
+      "role": "base_tile",
+      "alpha_pixels": 1032,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.a005_04",
+      "file": "a005_04.png",
+      "source_cell": {
+        "index": 4,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "ground_base",
+      "occlusion": false,
+      "role": "base_tile",
+      "alpha_pixels": 1032,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.a005_05",
+      "file": "a005_05.png",
+      "source_cell": {
+        "index": 5,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "ground_base",
+      "occlusion": false,
+      "role": "base_tile",
+      "alpha_pixels": 1032,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.a005_06",
+      "file": "a005_06.png",
+      "source_cell": {
+        "index": 6,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "ground_base",
+      "occlusion": false,
+      "role": "base_tile",
+      "alpha_pixels": 1032,
+      "status": "staging_pending_visual_qa"
+    }
+  ]
+}

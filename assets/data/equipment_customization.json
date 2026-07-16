@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "policy": "此文件优先覆盖基础装备目录与客户端默认美术映射；可修改现有装备，也可在newEquipment中新增装备。art字段可指定inventoryIcon/equippedIcon/groundIcon以及未来weaponAppearance/dressAppearance。",
+  "overrides": {
+    "隐身戒指": {"fields": {"specialEffect": {"id": "stealth", "label": "隐身", "source_code": 111, "runtime": true, "confidence": "B"}}},
+    "传送戒指": {"fields": {"specialEffect": {"id": "teleport", "label": "安全传送", "source_code": 112, "runtime": true, "confidence": "B"}}},
+    "麻痹戒指": {"fields": {"specialEffect": {"id": "paralysis", "label": "近战麻痹", "source_code": 113, "runtime": true, "confidence": "B"}}},
+    "复活戒指": {"fields": {"specialEffect": {"id": "revival", "label": "60秒复活", "source_code": 114, "runtime": true, "confidence": "B"}}},
+    "火焰戒指": {"fields": {"specialEffect": {"id": "flame_skill", "label": "火球技能", "source_code": 115, "runtime": true, "confidence": "B"}}},
+    "防御戒指": {"fields": {"specialEffect": {"id": "recovery_skill", "label": "治愈技能", "source_code": 116, "runtime": true, "confidence": "B"}}},
+    "护身戒指": {"fields": {"specialEffect": {"id": "magic_shield", "label": "魔法值抵伤", "source_code": 118, "runtime": true, "confidence": "B"}}},
+    "超负载戒指": {"fields": {"specialEffect": {"id": "double_weight", "label": "负重上限翻倍", "source_code": 119, "runtime": true, "confidence": "B"}}},
+    "魔血项链": {"fields": {"profession": "通用", "setPiece": {"set": "magic_blood", "piece": "necklace", "power": 25, "confidence": "B"}}},
+    "魔血手镯": {"fields": {"profession": "通用", "setPiece": {"set": "magic_blood", "piece": "bracelet", "power": 25, "confidence": "B"}}},
+    "魔血戒指": {"fields": {"profession": "通用", "setPiece": {"set": "magic_blood", "piece": "ring", "power": 25, "confidence": "B"}}},
+    "虹魔项链": {"fields": {"profession": "通用", "setPiece": {"set": "rainbow_demon", "piece": "necklace", "power": 4, "confidence": "B"}}},
+    "虹魔手镯": {"fields": {"profession": "通用", "setPiece": {"set": "rainbow_demon", "piece": "bracelet", "power": 3, "confidence": "B"}}},
+    "虹魔戒指": {"fields": {"profession": "通用", "setPiece": {"set": "rainbow_demon", "piece": "ring", "power": 2, "confidence": "B"}}}
+  },
+  "newEquipment": [],
+  "supportedSpecialEffectIds": ["stealth", "teleport", "paralysis", "revival", "flame_skill", "recovery_skill", "magic_shield", "double_weight"],
+  "supportedSetIds": ["magic_blood", "rainbow_demon"]
+}

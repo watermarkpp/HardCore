@@ -1,0 +1,32 @@
+{
+  "layer": "expansion_layer",
+  "displayName": "扩展内容层 Expansion Layer",
+  "defaultEnabled": false,
+  "contentVersion": "创意扩展层",
+  "packages": [
+	{
+	  "id": "personal_expansion_001",
+	  "name": "私人创意扩展包001",
+	  "defaultEnabled": false,
+	  "activation": "explicit",
+	  "data": "res://assets/data/expansions/personal_expansion_001/manifest.json",
+	  "mergePolicy": "explicit_override"
+	},
+    {
+      "id": "later_176_content",
+      "name": "1.76后期追加内容",
+      "defaultEnabled": false,
+      "activation": "settings",
+      "mergePolicy": "add_only"
+    },
+    {
+      "id": "user_equipment",
+      "name": "用户自定义装备扩展",
+      "defaultEnabled": false,
+      "activation": "explicit",
+      "data": "res://assets/data/expansions/user_equipment.json",
+      "mergePolicy": "explicit_override"
+    }
+  ],
+  "policy": "扩展包使用独立ID和开关；覆盖必须显式声明，关闭扩展后基准层可独立运行。"
+}

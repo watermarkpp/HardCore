@@ -1,0 +1,15 @@
+{
+  "schema_version":2,
+  "profiles":{
+    "none_visual":{"shape_type":"none","footprint_tiles":[0,0],"navigation_policy":"ignore"},
+    "small_prop_1x1":{"shape_type":"diamond_footprint","footprint_tiles":[1,1],"navigation_policy":"block_player_and_monster"},
+    "tree_trunk_1x1":{"shape_type":"diamond_footprint","footprint_tiles":[1,1],"navigation_policy":"block_player_and_monster"},
+    "tree_large_base_2x2":{"shape_type":"diamond_footprint","footprint_tiles":[2,2],"navigation_policy":"block_player_and_monster"},
+    "rock_medium_2x2":{"shape_type":"diamond_footprint","footprint_tiles":[2,2],"navigation_policy":"block_player_and_monster"},
+    "rock_large_4x4":{"shape_type":"diamond_footprint","footprint_tiles":[4,4],"navigation_policy":"block_player_and_monster"},
+    "tent_blacksmith_standard":{"shape_type":"solid_footprint","footprint_tiles":[8,8],"navigation_policy":"block_player_and_monster","allow_instance_override":false},
+    "cave_entrance_8x6":{"shape_type":"custom_polygon","footprint_tiles":[8,6],"navigation_policy":"block_player_and_monster","door_clearance":true},
+    "fence_segment_2x1":{"shape_type":"line_segment","footprint_tiles":[2,1],"navigation_policy":"block_player_and_monster"},
+    "building_solid_footprint":{"shape_type":"solid_footprint","footprint_tiles":[6,6],"navigation_policy":"block_player_and_monster"}
+  }
+}

@@ -1,0 +1,435 @@
+{
+  "baseStats": {
+    "战士": {
+      "attack_max": 5,
+      "attack_min": 2,
+      "hp_base": 100,
+      "hp_per_level": 20,
+      "mp_base": 20,
+      "mp_per_level": 4
+    },
+    "法师": {
+      "attack_max": 3,
+      "attack_min": 1,
+      "hp_base": 55,
+      "hp_per_level": 8,
+      "mp_base": 55,
+      "mp_per_level": 18
+    },
+    "道士": {
+      "attack_max": 4,
+      "attack_min": 1,
+      "hp_base": 75,
+      "hp_per_level": 12,
+      "mp_base": 40,
+      "mp_per_level": 12
+    }
+  },
+  "castDefaults": {
+    "area": {
+      "area_radius": 115.0,
+      "cooldown": 0.72,
+      "hit_frame": 4,
+      "target_mode": "target_area",
+      "windup": 0.34
+    },
+    "control": {
+      "area_radius": 24.0,
+      "cooldown": 0.9,
+      "hit_frame": 4,
+      "target_mode": "single",
+      "windup": 0.38
+    },
+    "dash": {
+      "area_radius": 32.0,
+      "cooldown": 0.75,
+      "hit_frame": 2,
+      "target_mode": "direction",
+      "windup": 0.18
+    },
+    "defense_buff": {
+      "area_radius": 170.0,
+      "cooldown": 0.9,
+      "hit_frame": 4,
+      "target_mode": "self_area",
+      "windup": 0.4
+    },
+    "execute": {
+      "area_radius": 24.0,
+      "cooldown": 0.9,
+      "hit_frame": 4,
+      "target_mode": "single",
+      "windup": 0.4
+    },
+    "ground_dot": {
+      "area_radius": 74.0,
+      "cooldown": 0.85,
+      "hit_frame": 4,
+      "target_mode": "target_area",
+      "windup": 0.38
+    },
+    "heal": {
+      "area_radius": 0.0,
+      "cooldown": 0.75,
+      "hit_frame": 4,
+      "target_mode": "self",
+      "windup": 0.35
+    },
+    "heal_area": {
+      "area_radius": 190.0,
+      "cooldown": 1.0,
+      "hit_frame": 4,
+      "target_mode": "self_area",
+      "windup": 0.42
+    },
+    "inspect": {
+      "area_radius": 0.0,
+      "cooldown": 0.55,
+      "hit_frame": 3,
+      "target_mode": "single",
+      "windup": 0.22
+    },
+    "knockback": {
+      "area_radius": 115.0,
+      "cooldown": 0.8,
+      "hit_frame": 3,
+      "target_mode": "self_area",
+      "windup": 0.25
+    },
+    "line": {
+      "area_radius": 34.0,
+      "cooldown": 0.62,
+      "hit_frame": 3,
+      "target_mode": "direction",
+      "windup": 0.28
+    },
+    "magic_defense_buff": {
+      "area_radius": 170.0,
+      "cooldown": 0.9,
+      "hit_frame": 4,
+      "target_mode": "self_area",
+      "windup": 0.4
+    },
+    "melee": {
+      "area_radius": 0.0,
+      "cooldown": 0.55,
+      "hit_frame": 3,
+      "target_mode": "single",
+      "windup": 0.25
+    },
+    "passive": {
+      "area_radius": 0.0,
+      "cooldown": 0.0,
+      "hit_frame": 0,
+      "target_mode": "self",
+      "windup": 0.0
+    },
+    "poison": {
+      "area_radius": 24.0,
+      "cooldown": 0.72,
+      "hit_frame": 4,
+      "target_mode": "single",
+      "windup": 0.32
+    },
+    "projectile": {
+      "area_radius": 24.0,
+      "cooldown": 0.72,
+      "hit_frame": 4,
+      "target_mode": "single",
+      "windup": 0.32
+    },
+    "root_area": {
+      "area_radius": 115.0,
+      "cooldown": 1.0,
+      "hit_frame": 5,
+      "target_mode": "target_area",
+      "windup": 0.45
+    },
+    "shield": {
+      "area_radius": 0.0,
+      "cooldown": 0.9,
+      "hit_frame": 4,
+      "target_mode": "self",
+      "windup": 0.32
+    },
+    "stealth": {
+      "area_radius": 0.0,
+      "cooldown": 0.9,
+      "hit_frame": 4,
+      "target_mode": "self",
+      "windup": 0.35
+    },
+    "stealth_area": {
+      "area_radius": 170.0,
+      "cooldown": 1.0,
+      "hit_frame": 4,
+      "target_mode": "self_area",
+      "windup": 0.42
+    },
+    "summon": {
+      "area_radius": 0.0,
+      "cooldown": 1.2,
+      "hit_frame": 5,
+      "target_mode": "self",
+      "windup": 0.55
+    },
+    "teleport": {
+      "area_radius": 0.0,
+      "cooldown": 1.0,
+      "hit_frame": 2,
+      "target_mode": "direction",
+      "windup": 0.18
+    }
+  },
+  "confidence": "B",
+  "editable": false,
+  "layer": "vanilla_core",
+  "schemaVersion": 1,
+  "skillProfiles": {
+    "冰咆哮": {
+      "cast_type": "area",
+      "multiplier": 1.9,
+      "profession": "法师",
+      "range": 300.0
+    },
+    "刺杀剑术": {
+      "cast_type": "line",
+      "multiplier": 1.0,
+      "profession": "战士",
+      "range": 175.0,
+      "service_magic_id": 12,
+      "service_mode": "toggle_second_cell"
+    },
+    "半月弯刀": {
+      "cast_type": "area",
+      "multiplier": 1.0,
+      "profession": "战士",
+      "range": 125.0,
+      "service_magic_id": 25,
+      "service_mode": "toggle_three_directions"
+    },
+    "召唤神兽": {
+      "cast_type": "summon",
+      "multiplier": 1.5,
+      "profession": "道士",
+      "range": 0.0
+    },
+    "召唤骷髅": {
+      "cast_type": "summon",
+      "multiplier": 1.0,
+      "profession": "道士",
+      "range": 0.0
+    },
+    "困魔咒": {
+      "cast_type": "root_area",
+      "multiplier": 0.0,
+      "profession": "道士",
+      "range": 260.0
+    },
+    "圣言术": {
+      "cast_type": "execute",
+      "multiplier": 1.0,
+      "profession": "法师",
+      "range": 300.0
+    },
+    "地狱火": {
+      "cast_type": "line",
+      "multiplier": 1.2,
+      "profession": "法师",
+      "range": 260.0
+    },
+    "地狱雷光": {
+      "cast_type": "area",
+      "multiplier": 1.1,
+      "profession": "法师",
+      "range": 150.0
+    },
+    "基本剑术": {
+      "cast_type": "passive",
+      "multiplier": 1.0,
+      "profession": "战士",
+      "range": 0.0,
+      "service_magic_id": 3,
+      "service_mode": "passive"
+    },
+    "大火球": {
+      "cast_type": "projectile",
+      "multiplier": 1.45,
+      "profession": "法师",
+      "range": 390.0
+    },
+    "幽灵盾": {
+      "cast_type": "magic_defense_buff",
+      "multiplier": 0.0,
+      "profession": "道士",
+      "range": 170.0
+    },
+    "心灵启示": {
+      "cast_type": "inspect",
+      "multiplier": 0.0,
+      "profession": "道士",
+      "range": 300.0
+    },
+    "抗拒火环": {
+      "cast_type": "knockback",
+      "multiplier": 0.0,
+      "profession": "法师",
+      "range": 115.0
+    },
+    "攻杀剑术": {
+      "cast_type": "melee",
+      "multiplier": 1.0,
+      "profession": "战士",
+      "range": 105.0,
+      "service_magic_id": 7,
+      "service_mode": "automatic_proc"
+    },
+    "施毒术": {
+      "cast_type": "poison",
+      "multiplier": 0.45,
+      "profession": "道士",
+      "range": 330.0
+    },
+    "治愈术": {
+      "cast_type": "heal",
+      "multiplier": 1.2,
+      "profession": "道士",
+      "range": 280.0
+    },
+    "火墙": {
+      "cast_type": "ground_dot",
+      "multiplier": 0.65,
+      "profession": "法师",
+      "range": 250.0
+    },
+    "火球术": {
+      "cast_type": "projectile",
+      "multiplier": 1.0,
+      "profession": "法师",
+      "range": 360.0
+    },
+    "灵魂火符": {
+      "cast_type": "projectile",
+      "multiplier": 1.35,
+      "profession": "道士",
+      "range": 370.0
+    },
+    "烈火剑法": {
+      "cast_type": "melee",
+      "multiplier": 1.0,
+      "profession": "战士",
+      "range": 105.0,
+      "service_magic_id": 26,
+      "service_mode": "arm_next_hit"
+    },
+    "爆裂火焰": {
+      "cast_type": "area",
+      "multiplier": 1.35,
+      "profession": "法师",
+      "range": 260.0
+    },
+    "疾光电影": {
+      "cast_type": "line",
+      "multiplier": 1.7,
+      "profession": "法师",
+      "range": 430.0
+    },
+    "瞬息移动": {
+      "cast_type": "teleport",
+      "multiplier": 0.0,
+      "profession": "法师",
+      "range": 220.0
+    },
+    "神圣战甲术": {
+      "cast_type": "defense_buff",
+      "multiplier": 0.0,
+      "profession": "道士",
+      "range": 170.0
+    },
+    "精神力战法": {
+      "cast_type": "passive",
+      "multiplier": 1.0,
+      "profession": "道士",
+      "range": 0.0
+    },
+    "群体治疗术": {
+      "cast_type": "heal_area",
+      "multiplier": 1.0,
+      "profession": "道士",
+      "range": 190.0
+    },
+    "诱惑之光": {
+      "cast_type": "control",
+      "multiplier": 0.0,
+      "profession": "法师",
+      "range": 300.0
+    },
+    "野蛮冲撞": {
+      "cast_type": "dash",
+      "multiplier": 0.8,
+      "profession": "战士",
+      "range": 115.0,
+      "service_magic_id": 27,
+      "service_mode": "rush"
+    },
+    "隐身术": {
+      "cast_type": "stealth",
+      "multiplier": 0.0,
+      "profession": "道士",
+      "range": 0.0
+    },
+    "集体隐身术": {
+      "cast_type": "stealth_area",
+      "multiplier": 0.0,
+      "profession": "道士",
+      "range": 170.0
+    },
+    "雷电术": {
+      "cast_type": "projectile",
+      "multiplier": 1.35,
+      "profession": "法师",
+      "range": 410.0
+    },
+    "魔法盾": {
+      "cast_type": "shield",
+      "multiplier": 0.0,
+      "profession": "法师",
+      "range": 0.0
+    }
+  },
+  "skillTimingOverrides": {
+    "刺杀剑术": {
+      "action_duration": 0.51,
+      "cooldown": 0.85,
+      "hit_frame": 2,
+      "windup": 0.17
+    },
+    "半月弯刀": {
+      "action_duration": 0.51,
+      "area_radius": 125.0,
+      "cooldown": 0.85,
+      "hit_frame": 2,
+      "windup": 0.17
+    },
+    "攻杀剑术": {
+      "action_duration": 0.51,
+      "cooldown": 0.85,
+      "hit_frame": 2,
+      "windup": 0.17
+    },
+    "烈火剑法": {
+      "action_duration": 0.51,
+      "cooldown": 0.85,
+      "hit_frame": 2,
+      "service_arm_cooldown": 10.0,
+      "windup": 0.17
+    },
+    "野蛮冲撞": {
+      "action_duration": 0.51,
+      "cooldown": 3.0,
+      "hit_frame": 2,
+      "windup": 0.17
+    }
+  },
+  "source": "legacy_verified_adapter"
+}

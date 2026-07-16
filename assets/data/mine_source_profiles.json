@@ -1,0 +1,568 @@
+{
+  "baseline": "2003官服1.76基准版",
+  "generatedFrom": "客户端MAP与WIL/WIX原始资源",
+  "mapProfiles": {
+    "401": {
+      "name": "废矿入口",
+      "sourceMapCode": "D401",
+      "sourceMapPath": "research/mir2_client_raw/Map/D401.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 200,
+      "height": 200,
+      "blockedRatio": 0.7944,
+      "lightCells": 10,
+      "doorCells": 0,
+      "topTileImageIds": [
+        45,
+        1955,
+        1952,
+        1954,
+        1951,
+        1953,
+        2155,
+        2151
+      ],
+      "topObjectImageIds": [
+        "Objects2:7520",
+        "Objects2:7519",
+        "Objects2:7518",
+        "Objects2:7517",
+        "Objects2:7516",
+        "Objects2:7515",
+        "Objects2:7514",
+        "Objects2:7513",
+        "Objects2:7512",
+        "Objects2:7511",
+        "Objects2:7510",
+        "Objects2:7509"
+      ],
+      "areaCounts": {
+        "0": 36002,
+        "1": 3998
+      }
+    },
+    "402": {
+      "name": "矿区B一层",
+      "sourceMapCode": "D411",
+      "sourceMapPath": "research/mir2_client_raw/Map/D411.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 100,
+      "height": 100,
+      "blockedRatio": 0.7898,
+      "lightCells": 9,
+      "doorCells": 0,
+      "topTileImageIds": [
+        45,
+        1951,
+        1952,
+        1954,
+        1953,
+        1955,
+        2154,
+        2151
+      ],
+      "topObjectImageIds": [
+        "Objects2:7554",
+        "Objects2:7553",
+        "Objects2:7552",
+        "Objects2:7551",
+        "Objects2:7550",
+        "Objects2:7549",
+        "Objects2:7548",
+        "Objects2:7547",
+        "Objects2:7546",
+        "Objects2:7545",
+        "Objects2:7544",
+        "Objects2:7543"
+      ],
+      "areaCounts": {
+        "0": 8327,
+        "1": 1673
+      }
+    },
+    "403": {
+      "name": "矿区A一层",
+      "sourceMapCode": "D413",
+      "sourceMapPath": "research/mir2_client_raw/Map/D413.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 100,
+      "height": 100,
+      "blockedRatio": 0.7868,
+      "lightCells": 3,
+      "doorCells": 0,
+      "topTileImageIds": [
+        45,
+        2155,
+        1954,
+        2151,
+        1953,
+        1952,
+        2154,
+        1951
+      ],
+      "topObjectImageIds": [
+        "Objects2:7634",
+        "Objects2:7633",
+        "Objects2:7632",
+        "Objects2:7631",
+        "Objects2:7644",
+        "Objects2:7643",
+        "Objects2:7642",
+        "Objects2:7641",
+        "Objects2:7649",
+        "Objects2:7648",
+        "Objects2:7647",
+        "Objects2:7646"
+      ],
+      "areaCounts": {
+        "0": 8333,
+        "1": 1667
+      }
+    },
+    "404": {
+      "name": "废矿区东部",
+      "sourceMapCode": "D402",
+      "sourceMapPath": "research/mir2_client_raw/Map/D402.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 200,
+      "height": 200,
+      "blockedRatio": 0.8055,
+      "lightCells": 5,
+      "doorCells": 0,
+      "topTileImageIds": [
+        45,
+        1951,
+        1954,
+        1953,
+        1955,
+        1952,
+        2151,
+        2152
+      ],
+      "topObjectImageIds": [
+        "Objects2:7537",
+        "Objects2:7536",
+        "Objects2:7535",
+        "Objects2:7534",
+        "Objects2:7639",
+        "Objects2:7533",
+        "Objects2:7532",
+        "Objects2:7531",
+        "Objects2:7530",
+        "Objects2:7638",
+        "Objects2:7529",
+        "Objects2:7528"
+      ],
+      "areaCounts": {
+        "0": 35718,
+        "1": 4282
+      }
+    },
+    "405": {
+      "name": "矿区C一层",
+      "sourceMapCode": "D414",
+      "sourceMapPath": "research/mir2_client_raw/Map/D414.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 100,
+      "height": 100,
+      "blockedRatio": 0.9117,
+      "lightCells": 11,
+      "doorCells": 0,
+      "topTileImageIds": [
+        45,
+        1951,
+        1953,
+        1952,
+        1954,
+        1955,
+        2153,
+        2154
+      ],
+      "topObjectImageIds": [
+        "Objects2:7501",
+        "Objects2:7500",
+        "Objects2:7498",
+        "Objects2:7497",
+        "Objects2:7496",
+        "Objects2:7495",
+        "Objects2:7494",
+        "Objects2:7493",
+        "Objects2:7492",
+        "Objects2:7491",
+        "Objects2:7490",
+        "Objects2:7489"
+      ],
+      "areaCounts": {
+        "0": 8720,
+        "1": 1280
+      }
+    },
+    "406": {
+      "name": "矿区一层",
+      "sourceMapCode": "D403",
+      "sourceMapPath": "research/mir2_client_raw/Map/D403.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 200,
+      "height": 200,
+      "blockedRatio": 0.768,
+      "lightCells": 8,
+      "doorCells": 0,
+      "topTileImageIds": [
+        45,
+        1953,
+        1951,
+        1955,
+        1954,
+        1952,
+        2153,
+        2151
+      ],
+      "topObjectImageIds": [
+        "Objects2:7520",
+        "Objects2:7519",
+        "Objects2:7518",
+        "Objects2:7517",
+        "Objects2:7516",
+        "Objects2:7515",
+        "Objects2:7514",
+        "Objects2:7513",
+        "Objects2:7512",
+        "Objects2:7511",
+        "Objects2:7510",
+        "Objects2:7509"
+      ],
+      "areaCounts": {
+        "0": 35761,
+        "1": 4239
+      }
+    },
+    "407": {
+      "name": "桥一",
+      "sourceMapCode": "D412",
+      "sourceMapPath": "research/mir2_client_raw/Map/D412.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 100,
+      "height": 100,
+      "blockedRatio": 0.7262,
+      "lightCells": 4,
+      "doorCells": 0,
+      "topTileImageIds": [
+        45,
+        2153,
+        2151,
+        2154,
+        2152,
+        2155,
+        1953,
+        1951
+      ],
+      "topObjectImageIds": [
+        "Objects2:4216",
+        "Objects2:4215",
+        "Objects2:4214",
+        "Objects2:4213",
+        "Objects2:4212",
+        "Objects2:4211",
+        "Objects2:8026",
+        "Objects2:8025",
+        "Objects2:8024",
+        "Objects2:8023",
+        "Objects2:8021",
+        "Objects2:8020"
+      ],
+      "areaCounts": {
+        "0": 7817,
+        "1": 2183
+      }
+    },
+    "408": {
+      "name": "矿区B二层",
+      "sourceMapCode": "D404",
+      "sourceMapPath": "research/mir2_client_raw/Map/D404.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 200,
+      "height": 200,
+      "blockedRatio": 0.8018,
+      "lightCells": 4,
+      "doorCells": 0,
+      "topTileImageIds": [
+        1951,
+        45,
+        1953,
+        1954,
+        1955,
+        1952,
+        2153,
+        2152
+      ],
+      "topObjectImageIds": [
+        "Objects2:7576",
+        "Objects2:7575",
+        "Objects2:7574",
+        "Objects2:7573",
+        "Objects2:7572",
+        "Objects2:7571",
+        "Objects2:7570",
+        "Objects2:7569",
+        "Objects2:7568",
+        "Objects2:7567",
+        "Objects2:7566",
+        "Objects2:7565"
+      ],
+      "areaCounts": {
+        "0": 36241,
+        "1": 3759
+      }
+    },
+    "409": {
+      "name": "桥二",
+      "sourceMapCode": "D415",
+      "sourceMapPath": "research/mir2_client_raw/Map/D415.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 100,
+      "height": 100,
+      "blockedRatio": 0.8761,
+      "lightCells": 5,
+      "doorCells": 0,
+      "topTileImageIds": [
+        45,
+        1954,
+        1951,
+        1952,
+        1955,
+        1953,
+        2154,
+        2153
+      ],
+      "topObjectImageIds": [
+        "Objects2:7502",
+        "Objects2:7501",
+        "Objects2:7500",
+        "Objects2:7499",
+        "Objects2:7498",
+        "Objects2:7497",
+        "Objects2:7496",
+        "Objects2:7495",
+        "Objects2:7494",
+        "Objects2:7493",
+        "Objects2:7492",
+        "Objects2:7491"
+      ],
+      "areaCounts": {
+        "0": 8448,
+        "1": 1552
+      }
+    },
+    "410": {
+      "name": "矿物回收站",
+      "sourceMapCode": "D405",
+      "sourceMapPath": "research/mir2_client_raw/Map/D405.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 200,
+      "height": 200,
+      "blockedRatio": 0.793,
+      "lightCells": 19,
+      "doorCells": 0,
+      "topTileImageIds": [
+        1953,
+        1951,
+        1954,
+        1952,
+        1955,
+        45,
+        2155,
+        2152
+      ],
+      "topObjectImageIds": [
+        "Objects2:7644",
+        "Objects2:7643",
+        "Objects2:7642",
+        "Objects2:7641",
+        "Objects2:7248",
+        "Objects2:7247",
+        "Objects2:7246",
+        "Objects2:7245",
+        "Objects2:7537",
+        "Objects2:7536",
+        "Objects2:7535",
+        "Objects2:7534"
+      ],
+      "areaCounts": {
+        "0": 36222,
+        "1": 3778
+      }
+    },
+    "411": {
+      "name": "桥三",
+      "sourceMapCode": "D416",
+      "sourceMapPath": "research/mir2_client_raw/Map/D416.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 100,
+      "height": 100,
+      "blockedRatio": 0.8774,
+      "lightCells": 5,
+      "doorCells": 0,
+      "topTileImageIds": [
+        45,
+        2154,
+        2153,
+        2152,
+        2155,
+        2151,
+        1951,
+        1954
+      ],
+      "topObjectImageIds": [
+        "Objects2:7233",
+        "Objects2:7232",
+        "Objects2:7231",
+        "Objects2:7230",
+        "Objects2:7502",
+        "Objects2:7501",
+        "Objects2:7500",
+        "Objects2:7499",
+        "Objects2:7498",
+        "Objects2:7497",
+        "Objects2:7496",
+        "Objects2:7495"
+      ],
+      "areaCounts": {
+        "0": 7865,
+        "1": 2135
+      }
+    },
+    "412": {
+      "name": "废矿区南部",
+      "sourceMapCode": "D406",
+      "sourceMapPath": "research/mir2_client_raw/Map/D406.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 200,
+      "height": 200,
+      "blockedRatio": 0.793,
+      "lightCells": 3,
+      "doorCells": 0,
+      "topTileImageIds": [
+        1954,
+        1953,
+        1952,
+        1951,
+        1955,
+        45,
+        2155,
+        2153
+      ],
+      "topObjectImageIds": [
+        "Objects2:7644",
+        "Objects2:7643",
+        "Objects2:7642",
+        "Objects2:7641",
+        "Objects2:7634",
+        "Objects2:7633",
+        "Objects2:7632",
+        "Objects2:7631",
+        "Objects2:7486",
+        "Objects2:7485",
+        "Objects2:7484",
+        "Objects2:7483"
+      ],
+      "areaCounts": {
+        "0": 36382,
+        "1": 3618
+      }
+    },
+    "1578": {
+      "name": "尸王殿",
+      "sourceMapCode": "Q004",
+      "sourceMapPath": "research/mir2_client_raw/Map/Q004.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 30,
+      "height": 30,
+      "blockedRatio": 0.8,
+      "lightCells": 0,
+      "doorCells": 0,
+      "topTileImageIds": [
+        45,
+        2153,
+        1952,
+        2155,
+        2152,
+        2151,
+        1951,
+        1954
+      ],
+      "topObjectImageIds": [
+        "Objects2:7068",
+        "Objects2:7067",
+        "Objects2:7066",
+        "Objects2:7326",
+        "Objects2:7064",
+        "Objects2:7063",
+        "Objects2:7062",
+        "Objects2:7061",
+        "Objects2:7325",
+        "Objects2:7060",
+        "Objects2:7059",
+        "Objects2:7058"
+      ],
+      "areaCounts": {
+        "0": 781,
+        "1": 119
+      }
+    }
+  },
+  "runtimeCoordinateMapping": {
+    "projection": "isometric_64x32_full_size",
+    "cellHalfWidth": 32,
+    "cellHalfHeight": 16,
+    "maps": {
+      "401": [200, 200], "402": [100, 100], "403": [100, 100], "404": [200, 200],
+      "405": [100, 100], "406": [200, 200], "407": [100, 100], "408": [200, 200],
+      "409": [100, 100], "410": [200, 200], "411": [100, 100], "412": [200, 200],
+      "1578": [30, 30]
+    },
+    "candidatePolicy": "缺MapInfo时将旧样板位置展开为source_coordinate并标C；原MAP尺寸保持A",
+    "renderPolicy": "仅绘制镜头附近57×57逻辑格，世界坐标不压缩"
+  },
+  "assetSources": {
+    "ground": {
+      "library": "Data/Tiles.wil",
+      "indices": [
+        2150,
+        2151,
+        2152,
+        2153,
+        2154,
+        2150,
+        2152,
+        2154
+      ]
+    },
+    "props": {
+      "library": "Data/Objects2.wil",
+      "indices": [
+        7063,
+        4210,
+        7498,
+        7519,
+        7558,
+        7633,
+        8025,
+        7067
+      ]
+    },
+    "note": "地面和岩石纹理直接来自客户端；木支架、矿车、桥梁和矿灯以原图材质为底稿重组，以适应96×128手机场景图集。"
+  }
+}

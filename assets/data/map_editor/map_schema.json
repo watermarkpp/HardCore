@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "coordinateSystem": {"logical": "grid", "presentation": "pixel", "projection": "isometric_64x32"},
+  "requiredMapFields": ["mapId", "mapName", "size", "grid", "layers", "objects", "npcs", "spawns", "areas", "portals"],
+  "layers": [
+    {"id":"base_ground","order":0,"kind":"tile","name":"基础地面层"},
+    {"id":"transition","order":1,"kind":"tile","name":"地面过渡层"},
+    {"id":"road","order":2,"kind":"tile","name":"道路层"},
+    {"id":"ground_decoration","order":3,"kind":"object","name":"地面装饰层"},
+    {"id":"building_base","order":4,"kind":"object","name":"建筑底层"},
+    {"id":"obstacle","order":5,"kind":"object","name":"障碍物层"},
+    {"id":"foreground","order":6,"kind":"object","name":"前景遮挡层"},
+    {"id":"npc","order":7,"kind":"entity","name":"NPC层"},
+    {"id":"spawn","order":8,"kind":"entity","name":"怪物刷新层"},
+    {"id":"logic","order":9,"kind":"logic","name":"逻辑层"}
+  ],
+  "collisionCodes": {"0":"walkable","1":"blocked","2":"water","3":"safe_zone","4":"portal","5":"monster_blocked","6":"player_blocked","7":"projectile_blocked","8":"no_spawn"},
+  "areaShapes": ["rectangle","circle","polygon"],
+  "areaTypes": ["safe_zone","town","field","monster_zone","portal_zone","quest_trigger","music","weather","no_combat","no_summon","no_recall"]
+}

@@ -1,0 +1,19 @@
+{
+  "layer": "rule_systems",
+  "displayName": "规则系统层 Rule Systems",
+  "systems": {
+    "equipment": "res://scripts/equipment_rules.gd",
+    "profession": "res://scripts/profession_rules.gd",
+    "warriorCombat": "res://scripts/warrior_combat_math.gd",
+    "targeting": "res://scripts/targeting_system.gd",
+    "coordinates": "res://scripts/map_coordinate_mapper.gd",
+    "modifierEffectRuntime": "res://scripts/layers/rules/modifier_effect_runtime.gd",
+    "bossMechanics": "res://scripts/layers/rules/boss_mechanic_registry.gd"
+  },
+  "schemas": {
+    "modifiers": "res://assets/data/rules/modifier_schema.json",
+    "setBonuses": "res://assets/data/rules/set_bonus_schema.json",
+    "bossSkillLibrary": "res://assets/data/rules/boss_skill_library.json"
+  },
+  "policy": "规则只消费内容记录，不拥有美术路径，不直接修改基准数据。"
+}

@@ -1,0 +1,96 @@
+class_name MapEditorCollisionService
+extends RefCounted
+
+
+static func add_manual_shape(document: Dictionary, shape_type: String, data: Dictionary) -> Dictionary:
+	if shape_type not in ["rect", "ellipse", "polygon"]:
+		return {"ok": false, "errors": ["invalid_collision_shape"]}
+	var errors := _validate_shape(shape_type, data)
+	if not errors.is_empty(): return {"ok": false, "errors": errors}
+	var entries: Array = document.layers.collision
+	entries.append({"collision_id": "manual_%06d" % (entries.size() + 1), "shape": shape_type, "data": data.duplicate(true), "source": "manual", "blocks_player": true, "blocks_monster": true, "content_layer": "personal_expansion"})
+	document.layers.collision = entries
+	return {"ok": true, "collision": entries.back()}
+
+
+static func build_walkability(document: Dictionary) -> Dictionary:
+	var size: Array = document.design.design_size
+	var map_size := Vector2i(int(size[0]), int(size[1]))
+	var blocked := {}
+	var sources: Array = []
+	for instance: Dictionary in MapEditorInstanceService.all_instances(document):
+		var policy := str(instance.get("collision_policy", "none"))
+		if policy == "none": continue
+		var collision_size:=_collision_footprint(instance)
+		if collision_size.x<=0 or collision_size.y<=0:continue
+		var collision_origin := _collision_origin(instance)
+		_mark_rect(blocked, collision_origin, collision_size, map_size)
+		sources.append({"source":"instance","id":instance.instance_id,"policy":policy})
+	for manual: Dictionary in document.layers.collision:
+		_mark_manual(blocked, manual, map_size)
+		sources.append({"source":"manual","id":manual.collision_id,"shape":manual.shape})
+	return {"map_size":[map_size.x,map_size.y],"blocked_tiles":blocked,"blocked_count":blocked.size(),"walkable_count":map_size.x*map_size.y-blocked.size(),"sources":sources}
+
+
+static func _validate_shape(shape_type: String, data: Dictionary) -> Array[String]:
+	var errors: Array[String] = []
+	if shape_type in ["rect", "ellipse"]:
+		var rect: Array = data.get("rect", [])
+		if rect.size()!=4 or int(rect[2])<=0 or int(rect[3])<=0: errors.append("invalid_rect")
+	if shape_type == "polygon":
+		var points: Array = data.get("points", [])
+		if points.size()<3: errors.append("polygon_requires_three_points")
+	return errors
+
+
+static func _tile(instance: Dictionary) -> Vector2i:
+	var tile: Array=instance.get("tile",[0,0]); return Vector2i(int(tile[0]),int(tile[1]))
+
+
+static func _footprint(instance: Dictionary) -> Vector2i:
+	var value: Array=instance.get("footprint_tiles",[1,1]); return Vector2i(int(value[0]),int(value[1]))
+
+
+static func _collision_footprint(instance:Dictionary)->Vector2i:
+	var value:Array=instance.get("collision_footprint_tiles",instance.get("footprint_tiles",[1,1])); return Vector2i(int(value[0]),int(value[1]))
+
+
+static func _collision_origin(instance: Dictionary) -> Vector2i:
+	var visual_size := _footprint(instance)
+	var collision_size := _collision_footprint(instance)
+	# First centre a smaller collider inside its logical visual footprint.
+	var centred := _tile(instance) + Vector2i(
+		maxi(0, (visual_size.x - collision_size.x) / 2),
+		maxi(0, (visual_size.y - collision_size.y) / 2)
+	)
+	# In an isometric grid the placement anchor is the sprite's ground-contact
+	# point. A diamond centred on that point extends half of itself below the
+	# sprite, which is the ~50% downward error visible in Walkable Preview.
+	# Moving equally in -X/-Y raises it on screen without changing its shape.
+	var lift_tiles := maxi(1, roundi(float(collision_size.x + collision_size.y) / 4.0))
+	return centred - Vector2i(lift_tiles, lift_tiles)
+
+
+static func _mark_rect(blocked: Dictionary, position: Vector2i, extent: Vector2i, map_size: Vector2i) -> void:
+	for y in range(position.y,position.y+extent.y):
+		for x in range(position.x,position.x+extent.x):
+			if x>=0 and y>=0 and x<map_size.x and y<map_size.y: blocked["%d,%d"%[x,y]]=true
+
+
+static func _mark_manual(blocked: Dictionary, manual: Dictionary, map_size: Vector2i) -> void:
+	var shape:=str(manual.shape); var data:Dictionary=manual.data
+	if shape=="rect":
+		var r:Array=data.rect; _mark_rect(blocked,Vector2i(int(r[0]),int(r[1])),Vector2i(int(r[2]),int(r[3])),map_size); return
+	if shape=="ellipse":
+		var e:Array=data.rect; var center:=Vector2(float(e[0])+float(e[2])*0.5,float(e[1])+float(e[3])*0.5)
+		for y in range(int(e[1]),int(e[1])+int(e[3])):
+			for x in range(int(e[0]),int(e[0])+int(e[2])):
+				var p:=Vector2(x+0.5,y+0.5); var q:=Vector2((p.x-center.x)/(float(e[2])*0.5),(p.y-center.y)/(float(e[3])*0.5))
+				if q.length_squared()<=1.0 and x>=0 and y>=0 and x<map_size.x and y<map_size.y: blocked["%d,%d"%[x,y]]=true
+	if shape=="polygon":
+		var points := PackedVector2Array()
+		for point: Array in data.points:
+			points.append(Vector2(int(point[0]), int(point[1])))
+		for y in map_size.y:
+			for x in map_size.x:
+				if Geometry2D.is_point_in_polygon(Vector2(x+0.5,y+0.5),points): blocked["%d,%d"%[x,y]]=true

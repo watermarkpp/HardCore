@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="768" viewBox="0 0 256 768">
+  <defs>
+    <pattern id="frame" width="64" height="96" patternUnits="userSpaceOnUse">
+      <rect x="1" y="1" width="62" height="94" fill="#18202a" fill-opacity="0.35" stroke="#5d7087" stroke-width="1"/>
+      <ellipse cx="32" cy="84" rx="22" ry="8" fill="#000" fill-opacity="0.4"/>
+      <path d="M22 38 L42 38 L47 76 L17 76 Z" fill="#426b9a" stroke="#9fc4e8" stroke-width="2"/>
+      <circle cx="32" cy="25" r="12" fill="#d3aa78" stroke="#f1d2a3" stroke-width="2"/>
+      <path d="M20 44 L9 66 M44 44 L55 66" stroke="#d8e7f5" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="32" cy="80" r="2" fill="#ffda65"/>
+    </pattern>
+  </defs>
+  <rect width="256" height="768" fill="url(#frame)"/>
+  <g fill="#ffda65" font-family="sans-serif" font-size="10" text-anchor="middle">
+    <text x="32" y="12">S</text><text x="32" y="108">SW</text><text x="32" y="204">W</text><text x="32" y="300">NW</text>
+    <text x="32" y="396">N</text><text x="32" y="492">NE</text><text x="32" y="588">E</text><text x="32" y="684">SE</text>
+  </g>
+</svg>

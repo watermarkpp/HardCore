@@ -1,0 +1,50 @@
+extends Node
+
+
+func _ready() -> void:
+	_run.call_deferred()
+
+
+func _run() -> void:
+	PlayerState.test_mode = true
+	PlayerState.reset_progress()
+	var manifest: Dictionary = GameData.service_item_catalog
+	assert(int(manifest.get("database", {}).get("version", 0)) == 105, "主服务端物品数据库版本错误")
+	assert(int(manifest.get("counts", {}).get("allServiceRecords", 0)) == 1349, "主服务端1349条物品没有完整解析")
+	assert(int(manifest.get("counts", {}).get("runtimeNonEquipment", 0)) == 538, "非装备运行物品目录数量错误")
+	assert(GameData.item_catalog.size() >= 700, "统一运行物品目录未完成扩充")
+
+	var missing_art := PackedStringArray()
+	for record_value: Variant in GameData.item_catalog:
+		if not record_value is Dictionary:
+			continue
+		var record: Dictionary = record_value
+		var art: Dictionary = record.get("art", {})
+		for field: String in ["inventoryIcon", "groundIcon"]:
+			var art_record: Variant = art.get(field, {})
+			var path := str(art_record.get("path", "")) if art_record is Dictionary else str(art_record)
+			if path.is_empty() or not FileAccess.file_exists(path) or not ResourceLoader.exists(path):
+				missing_art.append("%s:%s" % [str(record.get("name", "")), field])
+	assert(missing_art.is_empty(), "运行物品仍有图标或地面外观缺失：%s" % ",".join(missing_art))
+
+	var small_hp := GameData.get_item_record("金创药(小量)")
+	assert(int(small_hp.get("restoreHealth", 0)) == 30 and int(small_hp.get("restoreMana", 0)) == 0)
+	assert(small_hp.get("art", {}).get("groundIcon", {}).get("distribution", "") == "client.classic_raw_complete")
+	var extra_hp := GameData.get_item_record("金创药(特大)")
+	assert(extra_hp.get("art", {}).get("groundIcon", {}).get("distribution", "") == "client.mir2opensource_2013_complete")
+	var resurrection := GameData.get_item_record("复活卷轴")
+	assert(resurrection.get("art", {}).get("groundIcon", {}).get("distribution", "") == "project.category_fallback")
+	assert(GameData.get_item_record("回城卷").get("useEffect", "") == "town_teleport")
+	assert(GameData.get_item_record("随机传送卷").get("useEffect", "") == "random_teleport")
+	assert(GameData.get_item_record("地牢逃脱卷").get("useEffect", "") == "dungeon_escape")
+	assert(GameData.get_item_kind("沃玛号角") == "quest_item")
+
+	PlayerState.add_item("金创药(小量)", 2)
+	assert(PlayerState.use_inventory_index(0).begins_with("使用"), "血瓶未接入使用链")
+	assert(PlayerState.has_item("金创药(小量)", 1), "血瓶单次使用数量错误")
+	PlayerState.reset_progress()
+	PlayerState.add_item("回城卷")
+	assert(PlayerState.use_inventory_index(0).begins_with("使用"), "回城卷未接入使用链")
+
+	print("COMPLETE_ITEM_SYSTEM_PASS: 1349 server records, 538 runtime items, exact/fallback art and potion/scroll rules are connected")
+	get_tree().quit(0)

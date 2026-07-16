@@ -1,0 +1,6 @@
+{
+  "layer": "runtime_services",
+  "displayName": "运行时服务层 Runtime Services",
+  "services": ["content_registry", "world_content", "game_data", "player_profiles", "save_service", "game_modes", "combat", "buff", "loot", "map", "spawn", "quest", "equipment", "skill", "targeting", "android_input", "automated_tests", "scene_runtime"],
+  "policy": "运行时服务负责装配、存档、生命周期和场景协调，不定义内容数值。"
+}

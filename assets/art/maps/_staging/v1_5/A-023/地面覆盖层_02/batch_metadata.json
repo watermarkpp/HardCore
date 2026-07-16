@@ -1,0 +1,258 @@
+{
+  "batch_id": "A-023",
+  "title": "地面覆盖层_02",
+  "source_file": "a023.png",
+  "expected_count": 8,
+  "grid": [
+    4,
+    2
+  ],
+  "target_canvas_size": [
+    64,
+    64
+  ],
+  "role": "overlay_detail",
+  "processing": "local_hsv_border_connected_key_removal",
+  "assets": [
+    {
+      "asset_id": "staging.v1_5.a023_01",
+      "file": "a023_01.png",
+      "source_cell": {
+        "index": 1,
+        "grid": [
+          4,
+          2
+        ]
+      },
+      "canvas_size": [
+        64,
+        64
+      ],
+      "anchor_px": [
+        32,
+        62
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "object_base",
+      "occlusion": false,
+      "role": "overlay_detail",
+      "alpha_pixels": 1773,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.a023_02",
+      "file": "a023_02.png",
+      "source_cell": {
+        "index": 2,
+        "grid": [
+          4,
+          2
+        ]
+      },
+      "canvas_size": [
+        64,
+        64
+      ],
+      "anchor_px": [
+        32,
+        62
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "object_base",
+      "occlusion": false,
+      "role": "overlay_detail",
+      "alpha_pixels": 1167,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.a023_03",
+      "file": "a023_03.png",
+      "source_cell": {
+        "index": 3,
+        "grid": [
+          4,
+          2
+        ]
+      },
+      "canvas_size": [
+        64,
+        64
+      ],
+      "anchor_px": [
+        32,
+        62
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "object_base",
+      "occlusion": false,
+      "role": "overlay_detail",
+      "alpha_pixels": 906,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.a023_04",
+      "file": "a023_04.png",
+      "source_cell": {
+        "index": 4,
+        "grid": [
+          4,
+          2
+        ]
+      },
+      "canvas_size": [
+        64,
+        64
+      ],
+      "anchor_px": [
+        32,
+        62
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "object_base",
+      "occlusion": false,
+      "role": "overlay_detail",
+      "alpha_pixels": 1149,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.a023_05",
+      "file": "a023_05.png",
+      "source_cell": {
+        "index": 5,
+        "grid": [
+          4,
+          2
+        ]
+      },
+      "canvas_size": [
+        64,
+        64
+      ],
+      "anchor_px": [
+        32,
+        62
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "object_base",
+      "occlusion": false,
+      "role": "overlay_detail",
+      "alpha_pixels": 1157,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.a023_06",
+      "file": "a023_06.png",
+      "source_cell": {
+        "index": 6,
+        "grid": [
+          4,
+          2
+        ]
+      },
+      "canvas_size": [
+        64,
+        64
+      ],
+      "anchor_px": [
+        32,
+        62
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "object_base",
+      "occlusion": false,
+      "role": "overlay_detail",
+      "alpha_pixels": 1607,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.a023_07",
+      "file": "a023_07.png",
+      "source_cell": {
+        "index": 7,
+        "grid": [
+          4,
+          2
+        ]
+      },
+      "canvas_size": [
+        64,
+        64
+      ],
+      "anchor_px": [
+        32,
+        62
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "object_base",
+      "occlusion": false,
+      "role": "overlay_detail",
+      "alpha_pixels": 1505,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.a023_08",
+      "file": "a023_08.png",
+      "source_cell": {
+        "index": 8,
+        "grid": [
+          4,
+          2
+        ]
+      },
+      "canvas_size": [
+        64,
+        64
+      ],
+      "anchor_px": [
+        32,
+        62
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "object_base",
+      "occlusion": false,
+      "role": "overlay_detail",
+      "alpha_pixels": 1403,
+      "status": "staging_pending_visual_qa"
+    }
+  ]
+}

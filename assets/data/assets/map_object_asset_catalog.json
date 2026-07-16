@@ -1,0 +1,238 @@
+{
+  "asset_schema_version": 2,
+  "assets": [
+    {
+      "asset_id": "prop.campfire_stone_01",
+      "display_name": "石环篝火",
+      "asset_type": "large_prop",
+      "category": "campfire",
+      "theme": "ancient_gothic",
+      "image": "assets/art/maps/_shared/props/prop_campfire_stone_01.png",
+      "thumbnail": "assets/art/maps/_shared/props/prop_campfire_stone_01.png",
+      "canvas_size": [
+        128,
+        88
+      ],
+      "image_size": [
+        128,
+        88
+      ],
+      "visible_bounds_px": [
+        1,
+        0,
+        127,
+        88
+      ],
+      "anchor_px": [
+        64,
+        87
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "tags": [
+        "campfire",
+        "gothic",
+        "stage4"
+      ],
+      "source_sha256": "17e730bcea2beb4b100ecc67b23c06aebc87871979d5a9782fda44141d1d163b",
+      "output_sha256": "55337528c7bc260d316da881359ac9fec4cd839a80c66426be7669bf6eb440cc",
+      "thumbnail_source_sha256": "55337528c7bc260d316da881359ac9fec4cd839a80c66426be7669bf6eb440cc",
+      "raw_import_path": "assets/raw_import/map_assets/object_sources/01_camp_props/01_camp_props_01_r01_c01.png",
+      "processing": "green_key_remove_crop_proportional_resize"
+    },
+    {
+      "asset_id": "prop.storage_chest_01",
+      "display_name": "木制宝箱",
+      "asset_type": "small_prop",
+      "category": "chest",
+      "theme": "ancient_gothic",
+      "image": "assets/art/maps/_shared/props/prop_storage_chest_01.png",
+      "thumbnail": "assets/art/maps/_shared/props/prop_storage_chest_01.png",
+      "canvas_size": [
+        64,
+        52
+      ],
+      "image_size": [
+        64,
+        52
+      ],
+      "visible_bounds_px": [
+        0,
+        0,
+        64,
+        52
+      ],
+      "anchor_px": [
+        32,
+        51
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "default_layer": "object_base",
+      "default_object_role": "interactable",
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "tags": [
+        "chest",
+        "gothic",
+        "stage4"
+      ],
+      "source_sha256": "7e3acc41a43bd79752fbdb5aed6d8d088c1a243f6b8b38626f4ebcd8be5b001b",
+      "output_sha256": "c714839ac57629d2dca687f8953a24374a65fbdb157d417b66229c9b5860a7be",
+      "thumbnail_source_sha256": "c714839ac57629d2dca687f8953a24374a65fbdb157d417b66229c9b5860a7be",
+      "raw_import_path": "assets/raw_import/map_assets/object_sources/03_storage_props/03_storage_props_01_r01_c01.png",
+      "processing": "green_key_remove_crop_proportional_resize"
+    },
+    {
+      "asset_id": "building.gothic_tent_01",
+      "display_name": "哥特营帐",
+      "asset_type": "building",
+      "category": "tent",
+      "theme": "ancient_gothic",
+      "image": "assets/art/maps/_shared/buildings/building_gothic_tent_01.png",
+      "thumbnail": "assets/art/maps/_shared/buildings/building_gothic_tent_01.png",
+      "canvas_size": [
+        160,
+        154
+      ],
+      "image_size": [
+        160,
+        154
+      ],
+      "visible_bounds_px": [
+        1,
+        0,
+        159,
+        154
+      ],
+      "anchor_px": [
+        80,
+        153
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        2
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "default_layer": "object_base",
+      "default_object_role": "building",
+      "collision_policy": "solid_footprint",
+      "navigation_policy": "block_player_and_monster",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "tags": [
+        "tent",
+        "gothic",
+        "stage4"
+      ],
+      "source_sha256": "6c1912a7cd7d20a55c1db3cdb6d12c6d98b9a754cb5686682b8b9814a78eab73",
+      "output_sha256": "71a7edc404a48ddc6e599d016b136f8ba0dd1d9834af7ccac7ab0f28a6c59554",
+      "thumbnail_source_sha256": "71a7edc404a48ddc6e599d016b136f8ba0dd1d9834af7ccac7ab0f28a6c59554",
+      "raw_import_path": "assets/raw_import/map_assets/object_sources/02_tents/02_tents_01_r01_c01.png",
+      "processing": "green_key_remove_crop_proportional_resize"
+    },
+    {
+      "asset_id": "building.blacksmith_forge_01",
+      "display_name": "铁匠炉",
+      "asset_type": "building",
+      "category": "forge",
+      "theme": "ancient_gothic",
+      "image": "assets/art/maps/_shared/buildings/building_blacksmith_forge_01.png",
+      "thumbnail": "assets/art/maps/_shared/buildings/building_blacksmith_forge_01.png",
+      "canvas_size": [
+        160,
+        147
+      ],
+      "image_size": [
+        160,
+        147
+      ],
+      "visible_bounds_px": [
+        1,
+        1,
+        158,
+        146
+      ],
+      "anchor_px": [
+        80,
+        146
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        2
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "default_layer": "object_base",
+      "default_object_role": "building",
+      "collision_policy": "solid_footprint",
+      "navigation_policy": "block_player_and_monster",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "tags": [
+        "forge",
+        "gothic",
+        "stage4"
+      ],
+      "source_sha256": "0ab03283e16345a3389d18ff9de772899528e0081d71fe1599bd8b205de32166",
+      "output_sha256": "004044aeb97980f88a93d8d85ac44d5d885ddde2691dc1ee1fddda2d5efed5d7",
+      "thumbnail_source_sha256": "004044aeb97980f88a93d8d85ac44d5d885ddde2691dc1ee1fddda2d5efed5d7",
+      "raw_import_path": "assets/raw_import/map_assets/object_sources/04_blacksmith_props/04_blacksmith_props_01_r01_c01.png",
+      "processing": "green_key_remove_crop_proportional_resize"
+    }
+  ],
+  "problems": []
+}

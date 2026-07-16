@@ -1,0 +1,20 @@
+{
+  "instance_schema_version": 1,
+  "required_layers": [
+    "ground_base", "ground_overlay", "terrain_base", "terrain_front", "object_base", "object_front",
+    "shadow", "collision", "npc_points", "monster_spawn", "boss_spawn", "door_points", "safe_area",
+    "light", "region_trigger", "editor_guides"
+  ],
+  "extension_layers": ["interactables", "region_semantics"],
+  "required_instance_fields": [
+    "instance_id", "object_role", "scene_intent", "gameplay_role", "placement_rule",
+    "collision_policy", "navigation_policy", "runtime_export", "content_layer"
+  ],
+  "object_roles": [
+    "decoration", "obstacle", "terrain", "building", "npc", "door", "monster_spawn",
+    "boss_spawn", "safe_area", "light", "region_trigger", "interactable"
+  ],
+  "collision_policies": ["none", "preset", "manual", "terrain_stamp_generated", "solid_footprint", "custom_polygon"],
+  "navigation_policies": ["ignore", "block_player", "block_monster", "block_player_and_monster", "safe_area_rule", "door_rule"],
+  "default_content_layer": "personal_expansion"
+}

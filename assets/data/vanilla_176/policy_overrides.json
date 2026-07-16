@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "layer": "vanilla_core",
+  "records": [
+    {
+      "id": "warrior_basic_attack_mobile",
+      "target": "combat.warrior.basic_attack.interval_ms",
+      "vanillaValue": 600,
+      "overrideValue": 850,
+      "reason": "手机按住续刀与完整收招手感",
+      "scope": "runtime_policy",
+      "source": "user_approved_mobile_policy",
+      "confidence": "POLICY",
+      "editable": false
+    }
+  ]
+}

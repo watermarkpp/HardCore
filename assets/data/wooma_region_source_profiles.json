@@ -1,0 +1,195 @@
+{
+  "baseline": "2003官服1.76基准版",
+  "generatedFrom": "客户端1/E001/E002 MAP与WIL/WIX原始资源",
+  "mapProfiles": {
+    "268": {
+      "name": "沃玛森林",
+      "sourceMapCode": "1",
+      "sourceMapPath": "research/mir2_client_raw/Map/1.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 600,
+      "height": 600,
+      "blockedRatio": 0.5514,
+      "lightCells": 1,
+      "doorCells": 8,
+      "topTileImageIds": [
+        1452,
+        1454,
+        1451,
+        1455,
+        1453,
+        1851,
+        1854,
+        1853,
+        1855,
+        1852
+      ],
+      "topObjectImageIds": [
+        "Objects1:1377",
+        "Objects1:1378",
+        "Objects1:1379",
+        "Objects1:1380",
+        "Objects1:1381",
+        "Objects1:1382",
+        "Objects1:1383",
+        "Objects1:1384",
+        "Objects1:1385",
+        "Objects1:1402",
+        "Objects1:1403",
+        "Objects1:1404",
+        "Objects1:1405",
+        "Objects1:1406"
+      ],
+      "areaCounts": {
+        "0": 359606,
+        "1": 53,
+        "3": 341
+      }
+    },
+    "1506": {
+      "name": "沃玛自然洞穴一",
+      "sourceMapCode": "E001",
+      "sourceMapPath": "research/mir2_client_raw/Map/E001.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 100,
+      "height": 100,
+      "blockedRatio": 0.8127,
+      "lightCells": 2,
+      "doorCells": 0,
+      "topTileImageIds": [
+        45,
+        1905,
+        1901,
+        1903,
+        1902,
+        1953,
+        1952,
+        1951,
+        1904,
+        1955
+      ],
+      "topObjectImageIds": [
+        "Objects1:4527",
+        "Objects1:4528",
+        "Objects1:4529",
+        "Objects1:4453",
+        "Objects1:4446",
+        "Objects1:4445",
+        "Objects1:4444",
+        "Objects1:4454",
+        "Objects1:4449",
+        "Objects1:4448",
+        "Objects1:4447",
+        "Objects1:4455",
+        "Objects1:4452",
+        "Objects1:4451"
+      ],
+      "areaCounts": {
+        "0": 9811,
+        "1": 101,
+        "5": 88
+      }
+    },
+    "1507": {
+      "name": "沃玛自然洞穴二",
+      "sourceMapCode": "E002",
+      "sourceMapPath": "research/mir2_client_raw/Map/E002.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 100,
+      "height": 100,
+      "blockedRatio": 0.7891,
+      "lightCells": 6,
+      "doorCells": 0,
+      "topTileImageIds": [
+        1905,
+        1902,
+        1904,
+        1901,
+        1903,
+        45,
+        1953,
+        1951,
+        1955,
+        1952
+      ],
+      "topObjectImageIds": [
+        "Objects1:4519",
+        "Objects1:4520",
+        "Objects1:4521",
+        "Objects1:4527",
+        "Objects1:4528",
+        "Objects1:4529",
+        "Objects1:4479",
+        "Objects1:4472",
+        "Objects1:4471",
+        "Objects1:4470",
+        "Objects1:4480",
+        "Objects1:4475",
+        "Objects1:4474",
+        "Objects1:4473"
+      ],
+      "areaCounts": {
+        "0": 9781,
+        "1": 219
+      }
+    }
+  },
+  "assetSources": {
+    "forestGround": {
+      "library": "Data/Tiles.wil",
+      "indices": [
+        1450,
+        1451,
+        1452,
+        1453,
+        1454,
+        1850,
+        1852,
+        1854
+      ]
+    },
+    "forestProps": {
+      "library": "Data/Objects.wil",
+      "indices": [
+        1376,
+        1386,
+        1392,
+        1402,
+        1408,
+        1412,
+        1380,
+        1404
+      ]
+    },
+    "caveGround": {
+      "library": "Data/Tiles.wil",
+      "indices": [
+        1900,
+        1901,
+        1902,
+        1903,
+        1904,
+        1900,
+        1902,
+        1904
+      ]
+    },
+    "caveProps": {
+      "library": "Data/Objects.wil",
+      "indices": [
+        4439,
+        4448,
+        4452,
+        4466,
+        4480,
+        4492,
+        4510,
+        4520
+      ]
+    },
+    "note": "原始纹理直接提取，大型树木、遗迹与洞穴物件按手机视野重组。"
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "blank_chunk_policy": "virtual_shared_until_dirty",
+  "chunk_grid_size": [
+    4.0,
+    2.0
+  ],
+  "chunk_size_px": [
+    1024.0,
+    1024.0
+  ],
+  "chunks": [
+    {
+      "baked_operation_count": 775.0,
+      "chunk_id": "c_0_0",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        0.0,
+        0.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_0_0.png",
+      "rect_px": [
+        0.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_0_0.json"
+    },
+    {
+      "baked_operation_count": 3030.0,
+      "chunk_id": "c_1_0",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        1.0,
+        0.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_1_0.png",
+      "rect_px": [
+        1024.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_1_0.json"
+    },
+    {
+      "baked_operation_count": 2576.0,
+      "chunk_id": "c_2_0",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        2.0,
+        0.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_2_0.png",
+      "rect_px": [
+        2048.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_2_0.json"
+    },
+    {
+      "baked_operation_count": 919.0,
+      "chunk_id": "c_3_0",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        3.0,
+        0.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_3_0.png",
+      "rect_px": [
+        3072.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_3_0.json"
+    },
+    {
+      "baked_operation_count": 743,
+      "chunk_id": "c_0_1",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        0.0,
+        1.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_0_1.png",
+      "rect_px": [
+        0.0,
+        1024.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_0_1.json"
+    },
+    {
+      "baked_operation_count": 3406,
+      "chunk_id": "c_1_1",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        1.0,
+        1.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_1_1.png",
+      "rect_px": [
+        1024.0,
+        1024.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_1_1.json"
+    },
+    {
+      "baked_operation_count": 2169.0,
+      "chunk_id": "c_2_1",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        2.0,
+        1.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_2_1.png",
+      "rect_px": [
+        2048.0,
+        1024.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_2_1.json"
+    },
+    {
+      "baked_operation_count": 713.0,
+      "chunk_id": "c_3_1",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        3.0,
+        1.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_3_1.png",
+      "rect_px": [
+        3072.0,
+        1024.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_3_1.json"
+    }
+  ],
+  "default_fill_asset_id": "ground.old_grass.001",
+  "design_size": [
+    64.0,
+    64.0
+  ],
+  "ground_pixel_size": [
+    4096.0,
+    2048.0
+  ],
+  "map_id": "sandbox_64",
+  "schema_version": 1.0
+}

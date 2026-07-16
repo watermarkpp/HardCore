@@ -1,0 +1,13 @@
+{
+  "schema_version":2,
+  "reference_character_asset_id":"warrior_male_reference",
+  "profiles":{
+    "small_prop":{"visual_footprint_tiles":[1,1]},
+    "tree_medium":{"visual_footprint_tiles":[4,6]},
+    "tree_large":{"visual_footprint_tiles":[6,8]},
+    "tent_blacksmith_standard":{"reference_asset_id":"direct.prop.02_tents.02_tents_01_r01_c01","visual_footprint_tiles":[8,8],"uniform_scale_only":true,"requires_user_reapproval_on_mismatch":true},
+    "cave_entrance":{"visual_footprint_tiles":[8,6]},
+    "building":{"visual_footprint_tiles":[6,6]},
+    "ground_decal":{"visual_footprint_tiles":[1,1]}
+  }
+}

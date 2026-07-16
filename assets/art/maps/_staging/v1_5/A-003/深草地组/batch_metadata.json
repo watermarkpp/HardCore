@@ -1,0 +1,138 @@
+{
+  "batch_id": "A-003",
+  "title": "深草地组",
+  "source_file": "a003.png",
+  "expected_count": 4,
+  "grid": [
+    4,
+    1
+  ],
+  "target_canvas_size": [
+    64,
+    32
+  ],
+  "role": "base_tile",
+  "processing": "local_hsv_border_connected_key_removal",
+  "assets": [
+    {
+      "asset_id": "staging.v1_5.a003_01",
+      "file": "a003_01.png",
+      "source_cell": {
+        "index": 1,
+        "grid": [
+          4,
+          1
+        ]
+      },
+      "canvas_size": [
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "ground_base",
+      "occlusion": false,
+      "role": "base_tile",
+      "alpha_pixels": 1032,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.a003_02",
+      "file": "a003_02.png",
+      "source_cell": {
+        "index": 2,
+        "grid": [
+          4,
+          1
+        ]
+      },
+      "canvas_size": [
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "ground_base",
+      "occlusion": false,
+      "role": "base_tile",
+      "alpha_pixels": 1032,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.a003_03",
+      "file": "a003_03.png",
+      "source_cell": {
+        "index": 3,
+        "grid": [
+          4,
+          1
+        ]
+      },
+      "canvas_size": [
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "ground_base",
+      "occlusion": false,
+      "role": "base_tile",
+      "alpha_pixels": 1032,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.a003_04",
+      "file": "a003_04.png",
+      "source_cell": {
+        "index": 4,
+        "grid": [
+          4,
+          1
+        ]
+      },
+      "canvas_size": [
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "ground_base",
+      "occlusion": false,
+      "role": "base_tile",
+      "alpha_pixels": 1032,
+      "status": "staging_pending_visual_qa"
+    }
+  ]
+}

@@ -1,0 +1,1166 @@
+{
+  "confidence": "B",
+  "editable": false,
+  "layer": "vanilla_core",
+  "records": [
+    {
+      "content": {
+        "name": "比奇省",
+        "runtime_home_position": {
+          "$vector2": [
+            -10528.0,
+            3328.0
+          ]
+        },
+        "service_home_coordinate": {
+          "$vector2": [
+            289,
+            618
+          ]
+        },
+        "service_map_id": 0,
+        "source_map": "0",
+        "source_map_path": "research/mir2_client_raw/Map/0.map",
+        "source_size": {
+          "$vector2": [
+            700,
+            700
+          ]
+        },
+        "status": "client_map_full_size"
+      },
+      "mapId": 4
+    },
+    {
+      "content": {
+        "name": "沃玛森林",
+        "source_map": "1",
+        "status": "client_map_vertical_slice"
+      },
+      "mapId": 268
+    },
+    {
+      "content": {
+        "name": "毒蛇山谷",
+        "source_map": "2",
+        "status": "client_map_vertical_slice"
+      },
+      "mapId": 338
+    },
+    {
+      "content": {
+        "name": "盟重省",
+        "status": "structure_candidate"
+      },
+      "mapId": 478
+    },
+    {
+      "content": {
+        "name": "沙巴克密道",
+        "status": "structure_candidate"
+      },
+      "mapId": 1183
+    },
+    {
+      "content": {
+        "name": "白日门",
+        "status": "structure_candidate"
+      },
+      "mapId": 2863
+    },
+    {
+      "content": {
+        "name": "丛林迷宫",
+        "status": "structure_candidate"
+      },
+      "mapId": 2934
+    },
+    {
+      "content": {
+        "name": "封魔谷",
+        "status": "structure_candidate"
+      },
+      "mapId": 3013
+    },
+    {
+      "content": {
+        "name": "苍月岛",
+        "status": "structure_candidate"
+      },
+      "mapId": 3165
+    },
+    {
+      "content": {
+        "name": "兽人古墓一层",
+        "source_map": "D001",
+        "source_map_path": "research/mir2_client_raw/Map/D001.map",
+        "source_size": {
+          "$vector2": [
+            400,
+            400
+          ]
+        },
+        "status": "client_map_full_size"
+      },
+      "mapId": 217
+    },
+    {
+      "content": {
+        "name": "兽人古墓二层",
+        "source_map": "D002",
+        "source_map_path": "research/mir2_client_raw/Map/D002.map",
+        "source_size": {
+          "$vector2": [
+            400,
+            400
+          ]
+        },
+        "status": "client_map_full_size"
+      },
+      "mapId": 218
+    },
+    {
+      "content": {
+        "name": "兽人古墓三层",
+        "source_map": "D003",
+        "source_map_path": "research/mir2_client_raw/Map/D003.map",
+        "source_size": {
+          "$vector2": [
+            400,
+            400
+          ]
+        },
+        "status": "client_map_full_size"
+      },
+      "mapId": 221
+    },
+    {
+      "content": {
+        "name": "洞穴一层",
+        "source_map": "D011",
+        "source_map_path": "research/mir2_client_raw/Map/D011.map",
+        "source_size": {
+          "$vector2": [
+            400,
+            400
+          ]
+        },
+        "status": "client_map_full_size"
+      },
+      "mapId": 248
+    },
+    {
+      "content": {
+        "name": "洞穴二层",
+        "source_map": "D012",
+        "source_map_path": "research/mir2_client_raw/Map/D012.map",
+        "source_size": {
+          "$vector2": [
+            400,
+            400
+          ]
+        },
+        "status": "client_map_full_size"
+      },
+      "mapId": 249
+    },
+    {
+      "content": {
+        "name": "废矿入口",
+        "source_map": "D401",
+        "source_size": {
+          "$vector2": [
+            200,
+            200
+          ]
+        },
+        "status": "client_map_full_size"
+      },
+      "mapId": 401
+    },
+    {
+      "content": {
+        "name": "矿区B一层",
+        "source_map": "D411",
+        "source_size": {
+          "$vector2": [
+            100,
+            100
+          ]
+        },
+        "status": "client_map_full_size"
+      },
+      "mapId": 402
+    },
+    {
+      "content": {
+        "name": "矿区A一层",
+        "source_map": "D413",
+        "source_size": {
+          "$vector2": [
+            100,
+            100
+          ]
+        },
+        "status": "client_map_full_size"
+      },
+      "mapId": 403
+    },
+    {
+      "content": {
+        "name": "废矿区东部",
+        "source_map": "D402",
+        "source_size": {
+          "$vector2": [
+            200,
+            200
+          ]
+        },
+        "status": "client_map_full_size"
+      },
+      "mapId": 404
+    },
+    {
+      "content": {
+        "name": "矿区C一层",
+        "source_map": "D414",
+        "source_size": {
+          "$vector2": [
+            100,
+            100
+          ]
+        },
+        "status": "client_map_full_size"
+      },
+      "mapId": 405
+    },
+    {
+      "content": {
+        "name": "矿区一层",
+        "source_map": "D403",
+        "source_size": {
+          "$vector2": [
+            200,
+            200
+          ]
+        },
+        "status": "client_map_full_size"
+      },
+      "mapId": 406
+    },
+    {
+      "content": {
+        "name": "桥",
+        "source_map": "D412",
+        "source_size": {
+          "$vector2": [
+            100,
+            100
+          ]
+        },
+        "status": "client_map_full_size"
+      },
+      "mapId": 407
+    },
+    {
+      "content": {
+        "name": "矿区B二层",
+        "source_map": "D404",
+        "source_size": {
+          "$vector2": [
+            200,
+            200
+          ]
+        },
+        "status": "client_map_full_size"
+      },
+      "mapId": 408
+    },
+    {
+      "content": {
+        "name": "桥",
+        "source_map": "D415",
+        "source_size": {
+          "$vector2": [
+            100,
+            100
+          ]
+        },
+        "status": "client_map_full_size"
+      },
+      "mapId": 409
+    },
+    {
+      "content": {
+        "name": "矿物回收站",
+        "source_map": "D405",
+        "source_size": {
+          "$vector2": [
+            200,
+            200
+          ]
+        },
+        "status": "client_map_full_size"
+      },
+      "mapId": 410
+    },
+    {
+      "content": {
+        "name": "桥",
+        "source_map": "D416",
+        "source_size": {
+          "$vector2": [
+            100,
+            100
+          ]
+        },
+        "status": "client_map_full_size"
+      },
+      "mapId": 411
+    },
+    {
+      "content": {
+        "name": "废矿区南部",
+        "source_map": "D406",
+        "source_size": {
+          "$vector2": [
+            200,
+            200
+          ]
+        },
+        "status": "client_map_full_size"
+      },
+      "mapId": 412
+    },
+    {
+      "content": {
+        "name": "尸王殿",
+        "source_map": "Q004",
+        "source_size": {
+          "$vector2": [
+            30,
+            30
+          ]
+        },
+        "status": "client_map_full_size"
+      },
+      "mapId": 1578
+    },
+    {
+      "content": {
+        "name": "沃玛自然洞穴",
+        "source_map": "E001",
+        "status": "client_map_vertical_slice"
+      },
+      "mapId": 1506
+    },
+    {
+      "content": {
+        "name": "沃玛自然洞穴",
+        "source_map": "E002",
+        "status": "client_map_vertical_slice"
+      },
+      "mapId": 1507
+    },
+    {
+      "content": {
+        "name": "沃玛寺庙入口",
+        "source_map": "D021",
+        "status": "client_map_vertical_slice"
+      },
+      "mapId": 312
+    },
+    {
+      "content": {
+        "name": "沃玛寺庙一层",
+        "source_map": "D022",
+        "status": "client_map_vertical_slice"
+      },
+      "mapId": 313
+    },
+    {
+      "content": {
+        "name": "沃玛寺庙二层",
+        "source_map": "D023",
+        "status": "client_map_vertical_slice"
+      },
+      "mapId": 314
+    },
+    {
+      "content": {
+        "name": "沃玛寺庙",
+        "source_map": "D024",
+        "status": "client_map_vertical_slice"
+      },
+      "mapId": 315
+    },
+    {
+      "content": {
+        "name": "山谷矿区",
+        "source_map": "D421",
+        "status": "client_map_vertical_slice"
+      },
+      "mapId": 457
+    },
+    {
+      "content": {
+        "name": "山谷矿区",
+        "source_map": "D422",
+        "status": "client_map_vertical_slice"
+      },
+      "mapId": 458
+    },
+    {
+      "content": {
+        "name": "地牢一层东",
+        "status": "structure_candidate"
+      },
+      "mapId": 1378
+    },
+    {
+      "content": {
+        "name": "地牢一层西",
+        "status": "structure_candidate"
+      },
+      "mapId": 1379
+    },
+    {
+      "content": {
+        "name": "地牢一层北",
+        "status": "structure_candidate"
+      },
+      "mapId": 1380
+    },
+    {
+      "content": {
+        "name": "地牢一层西",
+        "status": "structure_candidate"
+      },
+      "mapId": 1381
+    },
+    {
+      "content": {
+        "name": "地牢一层北",
+        "status": "structure_candidate"
+      },
+      "mapId": 1382
+    },
+    {
+      "content": {
+        "name": "死亡棺材",
+        "status": "structure_candidate"
+      },
+      "mapId": 1383
+    },
+    {
+      "content": {
+        "name": "铁灯笼屋",
+        "status": "structure_candidate"
+      },
+      "mapId": 1384
+    },
+    {
+      "content": {
+        "name": "紫水晶屋",
+        "status": "structure_candidate"
+      },
+      "mapId": 1385
+    },
+    {
+      "content": {
+        "name": "石墓小溪",
+        "status": "structure_candidate"
+      },
+      "mapId": 1386
+    },
+    {
+      "content": {
+        "name": "阴森石屋",
+        "status": "structure_candidate"
+      },
+      "mapId": 1387
+    },
+    {
+      "content": {
+        "name": "阴森石路",
+        "status": "structure_candidate"
+      },
+      "mapId": 1388
+    },
+    {
+      "content": {
+        "name": "黑暗地带",
+        "status": "structure_candidate"
+      },
+      "mapId": 1445
+    },
+    {
+      "content": {
+        "name": "生死之间",
+        "status": "structure_candidate"
+      },
+      "mapId": 1446
+    },
+    {
+      "content": {
+        "name": "传奇部落",
+        "status": "structure_candidate"
+      },
+      "mapId": 1447
+    },
+    {
+      "content": {
+        "name": "邪恶势力",
+        "status": "structure_candidate"
+      },
+      "mapId": 1448
+    },
+    {
+      "content": {
+        "name": "幽名圣域",
+        "status": "structure_candidate"
+      },
+      "mapId": 1449
+    },
+    {
+      "content": {
+        "name": "恐怖空间",
+        "status": "structure_candidate"
+      },
+      "mapId": 1450
+    },
+    {
+      "content": {
+        "name": "一线天",
+        "status": "structure_candidate"
+      },
+      "mapId": 1451
+    },
+    {
+      "content": {
+        "name": "连接通道",
+        "status": "structure_candidate"
+      },
+      "mapId": 1544
+    },
+    {
+      "content": {
+        "name": "连接通道",
+        "status": "structure_candidate"
+      },
+      "mapId": 1545
+    },
+    {
+      "content": {
+        "name": "连接通道",
+        "status": "structure_candidate"
+      },
+      "mapId": 1546
+    },
+    {
+      "content": {
+        "name": "未知暗殿",
+        "status": "structure_candidate"
+      },
+      "mapId": 1571
+    },
+    {
+      "content": {
+        "name": "石墓入口",
+        "status": "structure_candidate"
+      },
+      "mapId": 1197
+    },
+    {
+      "content": {
+        "name": "石墓一层",
+        "status": "structure_candidate"
+      },
+      "mapId": 1198
+    },
+    {
+      "content": {
+        "name": "石墓二层",
+        "status": "structure_candidate"
+      },
+      "mapId": 1199
+    },
+    {
+      "content": {
+        "name": "石墓三层",
+        "status": "structure_candidate"
+      },
+      "mapId": 1200
+    },
+    {
+      "content": {
+        "name": "石墓四层",
+        "status": "structure_candidate"
+      },
+      "mapId": 1201
+    },
+    {
+      "content": {
+        "name": "石墓五层",
+        "status": "structure_candidate"
+      },
+      "mapId": 1202
+    },
+    {
+      "content": {
+        "name": "石墓阵",
+        "status": "structure_candidate"
+      },
+      "mapId": 1203
+    },
+    {
+      "content": {
+        "name": "石墓六层",
+        "status": "structure_candidate"
+      },
+      "mapId": 1232
+    },
+    {
+      "content": {
+        "name": "石墓七层",
+        "status": "structure_candidate"
+      },
+      "mapId": 1233
+    },
+    {
+      "content": {
+        "name": "桃源之门",
+        "status": "structure_candidate"
+      },
+      "mapId": 1234
+    },
+    {
+      "content": {
+        "name": "香石墓穴",
+        "status": "structure_candidate"
+      },
+      "mapId": 1488
+    },
+    {
+      "content": {
+        "name": "香石墓穴",
+        "status": "structure_candidate"
+      },
+      "mapId": 1489
+    },
+    {
+      "content": {
+        "name": "香石墓穴",
+        "status": "structure_candidate"
+      },
+      "mapId": 1490
+    },
+    {
+      "content": {
+        "name": "祖玛寺长廊",
+        "status": "structure_candidate"
+      },
+      "mapId": 659
+    },
+    {
+      "content": {
+        "name": "祖玛寺庙一层",
+        "status": "structure_candidate"
+      },
+      "mapId": 660
+    },
+    {
+      "content": {
+        "name": "祖玛寺庙二层",
+        "status": "structure_candidate"
+      },
+      "mapId": 661
+    },
+    {
+      "content": {
+        "name": "祖玛寺庙三层",
+        "status": "structure_candidate"
+      },
+      "mapId": 662
+    },
+    {
+      "content": {
+        "name": "祖玛寺庙四层",
+        "status": "structure_candidate"
+      },
+      "mapId": 663
+    },
+    {
+      "content": {
+        "name": "祖玛寺庙五层",
+        "status": "structure_candidate"
+      },
+      "mapId": 664
+    },
+    {
+      "content": {
+        "name": "祖玛阁",
+        "status": "structure_candidate"
+      },
+      "mapId": 665
+    },
+    {
+      "content": {
+        "name": "祖玛神殿七层大厅",
+        "status": "structure_candidate"
+      },
+      "mapId": 674
+    },
+    {
+      "content": {
+        "name": "祖玛神殿七层",
+        "status": "structure_candidate"
+      },
+      "mapId": 675
+    },
+    {
+      "content": {
+        "name": "祖玛神殿七层",
+        "status": "structure_candidate"
+      },
+      "mapId": 676
+    },
+    {
+      "content": {
+        "name": "祖玛神殿七层",
+        "status": "structure_candidate"
+      },
+      "mapId": 677
+    },
+    {
+      "content": {
+        "name": "祖玛教主之家",
+        "status": "structure_candidate"
+      },
+      "mapId": 682
+    },
+    {
+      "content": {
+        "name": "赤月峡谷北入口",
+        "status": "structure_candidate"
+      },
+      "mapId": 2935
+    },
+    {
+      "content": {
+        "name": "赤月峡谷南入口",
+        "status": "structure_candidate"
+      },
+      "mapId": 2936
+    },
+    {
+      "content": {
+        "name": "赤月峡谷东入口",
+        "status": "structure_candidate"
+      },
+      "mapId": 2937
+    },
+    {
+      "content": {
+        "name": "赤月峡谷广场",
+        "status": "structure_candidate"
+      },
+      "mapId": 2938
+    },
+    {
+      "content": {
+        "name": "左回廊",
+        "status": "structure_candidate"
+      },
+      "mapId": 2939
+    },
+    {
+      "content": {
+        "name": "右回廊",
+        "status": "structure_candidate"
+      },
+      "mapId": 2940
+    },
+    {
+      "content": {
+        "name": "抉择之地",
+        "status": "structure_candidate"
+      },
+      "mapId": 2941
+    },
+    {
+      "content": {
+        "name": "山谷秘道",
+        "status": "structure_candidate"
+      },
+      "mapId": 2942
+    },
+    {
+      "content": {
+        "name": "山谷秘道",
+        "status": "structure_candidate"
+      },
+      "mapId": 2943
+    },
+    {
+      "content": {
+        "name": "恶魔祭坛",
+        "status": "structure_candidate"
+      },
+      "mapId": 2944
+    },
+    {
+      "content": {
+        "name": "赤月魔穴",
+        "status": "structure_candidate"
+      },
+      "mapId": 2945
+    },
+    {
+      "content": {
+        "name": "封魔矿区",
+        "status": "structure_candidate"
+      },
+      "mapId": 3025
+    },
+    {
+      "content": {
+        "name": "崎路",
+        "status": "structure_candidate"
+      },
+      "mapId": 3026
+    },
+    {
+      "content": {
+        "name": "连接通道",
+        "status": "structure_candidate"
+      },
+      "mapId": 3027
+    },
+    {
+      "content": {
+        "name": "封魔道",
+        "status": "structure_candidate"
+      },
+      "mapId": 3028
+    },
+    {
+      "content": {
+        "name": "疾风殿",
+        "status": "structure_candidate"
+      },
+      "mapId": 3029
+    },
+    {
+      "content": {
+        "name": "光芒回廊",
+        "status": "structure_candidate"
+      },
+      "mapId": 3030
+    },
+    {
+      "content": {
+        "name": "烈焰殿",
+        "status": "structure_candidate"
+      },
+      "mapId": 3031
+    },
+    {
+      "content": {
+        "name": "雷霆之路",
+        "status": "structure_candidate"
+      },
+      "mapId": 3032
+    },
+    {
+      "content": {
+        "name": "霸者大厅",
+        "status": "structure_candidate"
+      },
+      "mapId": 3033
+    },
+    {
+      "content": {
+        "name": "幽冥回廊",
+        "status": "structure_candidate"
+      },
+      "mapId": 3034
+    },
+    {
+      "content": {
+        "name": "纵横道",
+        "status": "structure_candidate"
+      },
+      "mapId": 3035
+    },
+    {
+      "content": {
+        "name": "魔魂殿",
+        "status": "structure_candidate"
+      },
+      "mapId": 3036
+    },
+    {
+      "content": {
+        "name": "炼狱回廊",
+        "status": "structure_candidate"
+      },
+      "mapId": 3037
+    },
+    {
+      "content": {
+        "name": "封魔殿",
+        "status": "structure_candidate"
+      },
+      "mapId": 3038
+    },
+    {
+      "content": {
+        "name": "尸魔洞一层",
+        "status": "structure_candidate"
+      },
+      "mapId": 3195
+    },
+    {
+      "content": {
+        "name": "尸魔洞二层",
+        "status": "structure_candidate"
+      },
+      "mapId": 3196
+    },
+    {
+      "content": {
+        "name": "尸魔洞三层",
+        "status": "structure_candidate"
+      },
+      "mapId": 3197
+    },
+    {
+      "content": {
+        "name": "骨魔洞一层",
+        "status": "structure_candidate"
+      },
+      "mapId": 3216
+    },
+    {
+      "content": {
+        "name": "骨魔洞二层",
+        "status": "structure_candidate"
+      },
+      "mapId": 3217
+    },
+    {
+      "content": {
+        "name": "骨魔洞三层",
+        "status": "structure_candidate"
+      },
+      "mapId": 3218
+    },
+    {
+      "content": {
+        "name": "骨魔洞四层",
+        "status": "structure_candidate"
+      },
+      "mapId": 3219
+    },
+    {
+      "content": {
+        "name": "骨魔洞五层",
+        "status": "structure_candidate"
+      },
+      "mapId": 3220
+    },
+    {
+      "content": {
+        "name": "牛魔寺庙入口",
+        "status": "structure_candidate"
+      },
+      "mapId": 3245
+    },
+    {
+      "content": {
+        "name": "牛魔寺庙一层",
+        "status": "structure_candidate"
+      },
+      "mapId": 3246
+    },
+    {
+      "content": {
+        "name": "牛魔寺庙二层",
+        "status": "structure_candidate"
+      },
+      "mapId": 3247
+    },
+    {
+      "content": {
+        "name": "牛魔寺庙三层",
+        "status": "structure_candidate"
+      },
+      "mapId": 3248
+    },
+    {
+      "content": {
+        "name": "牛魔寺庙四层",
+        "status": "structure_candidate"
+      },
+      "mapId": 3249
+    },
+    {
+      "content": {
+        "name": "牛魔寺庙五层",
+        "status": "structure_candidate"
+      },
+      "mapId": 3250
+    },
+    {
+      "content": {
+        "name": "牛魔寺庙六层",
+        "status": "structure_candidate"
+      },
+      "mapId": 3251
+    },
+    {
+      "content": {
+        "name": "牛魔寺庙大厅",
+        "status": "structure_candidate"
+      },
+      "mapId": 3252
+    },
+    {
+      "content": {
+        "name": "困惑殿堂",
+        "status": "structure_candidate"
+      },
+      "mapId": 3288
+    },
+    {
+      "content": {
+        "name": "地狱烈焰",
+        "status": "structure_candidate"
+      },
+      "mapId": 3291
+    },
+    {
+      "content": {
+        "name": "堕落坟场",
+        "status": "structure_candidate"
+      },
+      "mapId": 3294
+    },
+    {
+      "content": {
+        "name": "死亡神殿",
+        "status": "structure_candidate"
+      },
+      "mapId": 3297
+    },
+    {
+      "content": {
+        "name": "深渊魔域",
+        "status": "structure_candidate"
+      },
+      "mapId": 3300
+    },
+    {
+      "content": {
+        "name": "钳虫巢穴",
+        "status": "structure_candidate"
+      },
+      "mapId": 3303
+    },
+    {
+      "content": {
+        "name": "幻境一层",
+        "status": "structure_candidate"
+      },
+      "mapId": 900001
+    },
+    {
+      "content": {
+        "name": "幻境二层",
+        "status": "structure_candidate"
+      },
+      "mapId": 900002
+    },
+    {
+      "content": {
+        "name": "幻境三层",
+        "status": "structure_candidate"
+      },
+      "mapId": 900003
+    },
+    {
+      "content": {
+        "name": "幻境四层",
+        "status": "structure_candidate"
+      },
+      "mapId": 900004
+    },
+    {
+      "content": {
+        "name": "幻境五层",
+        "status": "structure_candidate"
+      },
+      "mapId": 900005
+    },
+    {
+      "content": {
+        "name": "幻境六层",
+        "status": "structure_candidate"
+      },
+      "mapId": 900006
+    },
+    {
+      "content": {
+        "name": "幻境七层",
+        "status": "structure_candidate"
+      },
+      "mapId": 900007
+    },
+    {
+      "content": {
+        "name": "幻境八层",
+        "status": "structure_candidate"
+      },
+      "mapId": 900008
+    },
+    {
+      "content": {
+        "name": "幻境九层",
+        "status": "structure_candidate"
+      },
+      "mapId": 900009
+    },
+    {
+      "content": {
+        "name": "幻境十层",
+        "status": "structure_candidate"
+      },
+      "mapId": 900010
+    },
+    {
+      "content": {
+        "name": "幻境迷宫",
+        "status": "structure_candidate"
+      },
+      "mapId": 900011
+    },
+    {
+      "content": {
+        "name": "圣域",
+        "status": "structure_candidate"
+      },
+      "mapId": 900012
+    },
+    {
+      "content": {
+        "name": "沙巴克藏宝阁",
+        "status": "structure_candidate"
+      },
+      "mapId": 900013
+    }
+  ],
+  "schemaVersion": 1,
+  "source": "legacy_verified_adapter",
+  "table": "map_content"
+}

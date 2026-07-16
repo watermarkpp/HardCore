@@ -1,0 +1,25 @@
+{
+  "asset_schema_version": 2,
+  "tile_size": [64, 32],
+  "coordinate_system": "godot_iso_64x32",
+  "catalog_layers": {
+    "source": "map_asset_source_catalog.json",
+    "import": "map_asset_import_catalog.json",
+    "placeable": "map_asset_catalog.json"
+  },
+  "ground_roles": ["base_tile", "road_tile", "transition_tile", "overlay_detail", "large_ground_stamp"],
+  "states": ["imported", "audited", "needs_calibration", "calibrated", "placeable", "rejected"],
+  "required_placeable_fields": [
+    "asset_id", "display_name", "asset_type", "category", "theme", "image",
+    "anchor_px", "anchor_tile", "anchor_mode", "footprint_tiles", "tile_size",
+    "collision_policy", "navigation_policy", "content_layer", "placeable", "tags",
+    "source_sha256", "output_sha256", "calibration_status"
+  ],
+  "policy": {
+    "dimensions_are_validation_only": true,
+    "footprint_must_be_declared": true,
+    "uncalibrated_assets_are_not_placeable": true,
+    "default_content_layer": "personal_expansion",
+    "source_images_are_immutable": true
+  }
+}

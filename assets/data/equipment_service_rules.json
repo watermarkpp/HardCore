@@ -1,0 +1,56 @@
+{
+  "baseline": "2003官服1.76基准优先",
+  "sources": [
+    {
+      "path": "research/MIR2/GameOfMir/Common/Grobal2.pas",
+      "role": "TStdItem字段结构",
+      "confidence": "A"
+    },
+    {
+      "path": "research/MIR2/GameOfMir/M2Server/ObjBase.pas",
+      "role": "CanUseItem穿戴判定与职业重量公式",
+      "confidence": "A"
+    }
+  ],
+  "fieldSemantics": {
+    "StdMode": "物品类型；10男衣、11女衣，装备类还包含15/19/20/21/22/23/24/26",
+    "Shape": "外形/功能子类型",
+    "Weight": "武器比较MaxHandWeight，其余装备比较替换槽后的MaxWearWeight",
+    "Looks": "Items.wil图像索引",
+    "DuraMax": "服务端以千分单位保存最大持久",
+    "AC_MAC_DC_MC_SC": "DWord低16位为下限、高16位为上限",
+    "Need": {
+      "0": "等级",
+      "1": "攻击上限",
+      "2": "魔法上限",
+      "3": "道术上限"
+    },
+    "NeedLevel": "Need对应阈值"
+  },
+  "weightFormula": {
+    "战士": {
+      "wear": "15+round(level/20*level)",
+      "hand": "12+round(level/13*level)"
+    },
+    "法师": {
+      "wear": "15+round(level/100*level)",
+      "hand": "12+round(level/90*level)"
+    },
+    "道士": {
+      "wear": "15+round(level/50*level)",
+      "hand": "12+round(level/42*level)"
+    }
+  },
+  "catalogCoverage": {
+    "equipmentRecords": 175,
+    "concreteStdItemsRecords": 0,
+    "candidateRecords": 175,
+    "confidenceA": 61,
+    "confidenceB": 114
+  },
+  "missing": [
+    "服务端实际StdItems.DB/SQL记录",
+    "逐件StdMode/Shape/Looks/Need/NeedLevel原值"
+  ],
+  "policy": "源码字段语义按A采用；具体175件数值在StdItems缺失时保留现有A/B候选，不升级为服务端精确值。"
+}

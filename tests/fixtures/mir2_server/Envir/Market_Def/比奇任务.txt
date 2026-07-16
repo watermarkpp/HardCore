@@ -1,0 +1,7 @@
+[@main]
+#IF
+CHECKLEVEL 7
+CHECKITEM 木剑 1
+#ACT
+TAKE 木剑 1
+GIVE 金币 100

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/crowd_grounding_test.gd" type="Script" id="1"]
+
+[node name="CrowdGroundingTest" type="Node2D"]
+script = ExtResource("1")

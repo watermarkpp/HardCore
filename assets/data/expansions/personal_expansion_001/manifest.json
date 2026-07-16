@@ -1,0 +1,16 @@
+{
+  "packageId": "personal_expansion_001",
+  "name": "私人创意扩展包001",
+  "contentLayer": "expansion_layer",
+  "defaultEnabled": false,
+  "mergePolicy": "explicit_override",
+  "tables": {
+    "items": "new_items.json",
+    "affixes": "new_affixes.json",
+    "sets": "new_sets.json",
+    "bosses": "new_bosses.json",
+    "maps": "new_maps.json",
+    "drops": "new_drops.json",
+    "tasks": "new_quests.json"
+  }
+}

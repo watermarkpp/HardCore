@@ -1,0 +1,78 @@
+{
+  "batch_id": "B-005",
+  "title": "小石头组补充",
+  "source_file": "b005.png",
+  "expected_count": 2,
+  "grid": [
+    2,
+    1
+  ],
+  "target_canvas_size": [
+    64,
+    64
+  ],
+  "role": "decoration",
+  "processing": "local_hsv_border_connected_key_removal",
+  "assets": [
+    {
+      "asset_id": "staging.v1_5.b005_01",
+      "file": "b005_01.png",
+      "source_cell": {
+        "index": 1,
+        "grid": [
+          2,
+          1
+        ]
+      },
+      "canvas_size": [
+        64,
+        64
+      ],
+      "anchor_px": [
+        32,
+        62
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": false,
+      "role": "decoration",
+      "alpha_pixels": 1895,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b005_02",
+      "file": "b005_02.png",
+      "source_cell": {
+        "index": 2,
+        "grid": [
+          2,
+          1
+        ]
+      },
+      "canvas_size": [
+        64,
+        64
+      ],
+      "anchor_px": [
+        32,
+        62
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": false,
+      "role": "decoration",
+      "alpha_pixels": 1101,
+      "status": "staging_pending_visual_qa"
+    }
+  ]
+}

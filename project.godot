@@ -1,0 +1,67 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="玛法离线原型"
+run/main_scene="res://scenes/brand_intro.tscn"
+config/auto_accept_quit=false
+config/quit_on_go_back=false
+config/features=PackedStringArray("4.7")
+config/icon="res://assets/branding/game_icon.png"
+boot_splash/image="res://assets/branding/boot_splash.png"
+boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/show_image=true
+boot_splash/fullsize=true
+boot_splash/use_filter=true
+boot_splash/minimum_display_time=500
+
+[autoload]
+
+ContentLayers="*res://scripts/layers/runtime/content_layer_registry.gd"
+WorldContent="*res://scripts/layers/runtime/world_content_service.gd"
+PresentationAssets="*res://scripts/layers/presentation/presentation_registry.gd"
+GameData="*res://scripts/game_data.gd"
+PlayerState="*res://scripts/player_state.gd"
+TargetingRuntime="*res://scripts/layers/runtime/targeting_runtime_service.gd"
+LootRuntime="*res://scripts/layers/runtime/loot_runtime_service.gd"
+CombatRuntime="*res://scripts/layers/runtime/combat_runtime_service.gd"
+DomainRuntime="*res://scripts/layers/runtime/domain_runtime_services.gd"
+BossMechanics="*res://scripts/layers/rules/boss_mechanic_registry.gd"
+GameModes="*res://scripts/layers/runtime/game_mode_service.gd"
+RuntimeServices="*res://scripts/layers/runtime/runtime_service_facade.gd"
+ArtSpec="*res://scripts/art_spec.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation=4
+
+[layer_names]
+
+2d_physics/layer_1="world"
+2d_physics/layer_2="player"
+2d_physics/layer_3="enemy"
+2d_physics/layer_4="interactable"
+2d_physics/layer_5="loot"
+2d_physics/layer_6="skill_area"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
+environment/defaults/default_clear_color=Color(0.035, 0.025, 0.022, 1)

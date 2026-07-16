@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "baseline": "2003官服1.76基准优先",
+  "serviceEvidence": {
+    "classFactory": "M2Server/UsrEngn.pas AddBaseObject: Race 89 and MONSTER_OMAKNIGHT(81) create TATMonster",
+    "activeTargeting": "M2Server/ObjMon.pas TATMonster.Run: no target search after 1000ms, periodic search after 8000ms",
+    "meleeAttack": "M2Server/ObjMon.pas TMonster.AttackTarget: GetAttackDir then m_nNextHitTime then Attack",
+    "databaseTiming": "M2Server/LocalDB.pas reads WALK_SPD and ATTACK_SPD; minimum 200ms",
+    "confidence": "A"
+  },
+  "mappingPolicy": "服务端类与状态机为A；名称到Race、2003属性和速度为B候选；攻击命中帧是客户端动作节奏映射B。原服务端类没有半血狂暴、扇形重击或范围震地。公开后期数据库只用于交叉验证时序，不覆盖2003属性。",
+  "timingCrosscheck": {
+    "path": "assets/data/bich_public_database_crosscheck.json",
+    "repositoryCommit": "16c49ad53f3bc2ff6f9f584117e61b5b9fe4970f",
+    "result": "骷髅精灵2000/1200ms、尸王2800/1500ms均一致",
+    "confidence": "B",
+    "baselineDecision": "仅交叉验证，不整表覆盖"
+  },
+  "runtimeRules": {
+    "骷髅精灵": {
+      "serviceRace": 89,
+      "serviceClass": "TATMonster",
+      "mappingConfidence": "B",
+      "stats": {"level": 40, "hp": 500, "exp": 600, "defense": 5, "magicDefense": 4, "attackMin": 7, "attackMax": 24, "confidence": "B"},
+      "timing": {"walkIntervalMs": 1200, "attackIntervalMs": 2000, "attackAnimationMs": 600, "hitDelayMs": 300, "confidence": "B"},
+      "targetSearch": {"withoutTargetMs": 1000, "withTargetMs": 8000, "confidence": "A"},
+      "runtimeProjection": {"moveSpeed": 48.0, "attackRange": 60.0, "aggroRadius": 380.0},
+      "specialSkill": {"enabled": false, "reason": "Race 89使用标准TATMonster，源码未发现专属技能"},
+      "phaseTwo": {"enabled": false},
+      "knockbackImmune": true,
+      "sourceUrl": "https://www.21cq.com/mir/Mob.aspx?id=56"
+    },
+    "尸王": {
+      "serviceRace": 81,
+      "serviceClass": "TATMonster",
+      "mappingConfidence": "B",
+      "stats": {"level": 40, "hp": 500, "exp": 800, "defense": 3, "magicDefense": 3, "attackMin": 18, "attackMax": 36, "confidence": "B"},
+      "timing": {"walkIntervalMs": 1500, "attackIntervalMs": 2800, "attackAnimationMs": 720, "hitDelayMs": 360, "confidence": "B"},
+      "targetSearch": {"withoutTargetMs": 1000, "withTargetMs": 8000, "confidence": "A"},
+      "runtimeProjection": {"moveSpeed": 40.0, "attackRange": 60.0, "aggroRadius": 380.0},
+      "specialSkill": {"enabled": false, "reason": "Race 81使用标准TATMonster，源码未发现专属技能"},
+      "phaseTwo": {"enabled": false},
+      "knockbackImmune": true,
+      "sourceUrl": "https://www.21cq.com/mir/Mob.aspx?id=89"
+    }
+  }
+}

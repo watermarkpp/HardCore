@@ -1,0 +1,21 @@
+{
+  "layer": "presentation_layer",
+  "displayName": "表现资源层 Presentation / Art Skin",
+  "activeSkin": "classic_client",
+  "skins": {
+    "classic_client": {
+	  "manifest": "res://assets/presentation/skins/classic_client/skin_manifest.json",
+      "characterMappings": "res://assets/data/warrior_client_art_sources.json",
+      "wearMappings": "res://assets/data/warrior_wear_sources.json",
+      "equipmentMappings": "res://assets/data/equipment_client_art_sources.json",
+      "monsterMappings": [
+        "res://assets/data/bich_common_client_art_sources.json",
+        "res://assets/data/bich_undead_client_art_sources.json"
+      ]
+    },
+    "gothic_bich_camp": {
+      "manifest": "res://assets/presentation/skins/gothic_bich_camp/skin_manifest.json"
+    }
+  },
+  "policy": "换皮只替换逻辑ID到资源路径的映射，不改变数值、碰撞和掉落规则。"
+}

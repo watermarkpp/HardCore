@@ -1,0 +1,191 @@
+{
+  "baseline": "2003官服1.76基准版",
+  "generatedFrom": "客户端2/D421/D422 MAP与WIL/WIX原始资源",
+  "mapProfiles": {
+    "338": {
+      "name": "毒蛇山谷",
+      "sourceMapCode": "2",
+      "sourceMapPath": "research/mir2_client_raw/Map/2.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 600,
+      "height": 600,
+      "blockedRatio": 0.585,
+      "lightCells": 7,
+      "doorCells": 26,
+      "topTileImageIds": [
+        353,
+        352,
+        355,
+        351,
+        354,
+        1455,
+        1452,
+        1453,
+        1451,
+        1454
+      ],
+      "topObjectImageIds": [
+        "Objects1:1402",
+        "Objects1:1403",
+        "Objects1:1404",
+        "Objects1:1405",
+        "Objects1:1406",
+        "Objects1:1407",
+        "Objects1:1408",
+        "Objects1:1409",
+        "Objects1:1410",
+        "Objects1:1411",
+        "Objects1:1377",
+        "Objects1:1378",
+        "Objects1:1379",
+        "Objects1:1380"
+      ],
+      "areaCounts": {
+        "0": 360000
+      }
+    },
+    "457": {
+      "name": "山谷矿区一",
+      "sourceMapCode": "D421",
+      "sourceMapPath": "research/mir2_client_raw/Map/D421.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 400,
+      "height": 400,
+      "blockedRatio": 0.8724,
+      "lightCells": 61,
+      "doorCells": 0,
+      "topTileImageIds": [
+        45,
+        1954,
+        1952,
+        1951,
+        1953,
+        1955,
+        2154,
+        2153,
+        2151,
+        2155
+      ],
+      "topObjectImageIds": [
+        "Objects2:7323",
+        "Objects2:7326",
+        "Objects2:7324",
+        "Objects2:7325",
+        "Objects2:7114",
+        "Objects2:7113",
+        "Objects2:7112",
+        "Objects2:7107",
+        "Objects2:7106",
+        "Objects2:7105",
+        "Objects2:7111",
+        "Objects2:7110",
+        "Objects2:7109",
+        "Objects2:7108"
+      ],
+      "areaCounts": {
+        "0": 139164,
+        "1": 20836
+      }
+    },
+    "458": {
+      "name": "山谷矿区二",
+      "sourceMapCode": "D422",
+      "sourceMapPath": "research/mir2_client_raw/Map/D422.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 400,
+      "height": 400,
+      "blockedRatio": 0.8251,
+      "lightCells": 9,
+      "doorCells": 0,
+      "topTileImageIds": [
+        45,
+        1951,
+        1953,
+        1954,
+        1952,
+        1955,
+        2155,
+        2153,
+        2151,
+        2152
+      ],
+      "topObjectImageIds": [
+        "Objects2:7452",
+        "Objects2:7451",
+        "Objects2:7450",
+        "Objects2:7449",
+        "Objects2:7448",
+        "Objects2:7447",
+        "Objects2:7446",
+        "Objects2:7445",
+        "Objects2:7444",
+        "Objects2:7443",
+        "Objects2:7442",
+        "Objects2:7441",
+        "Objects2:7440",
+        "Objects2:7439"
+      ],
+      "areaCounts": {
+        "0": 141167,
+        "1": 18833
+      }
+    }
+  },
+  "assetSources": {
+    "valleyGround": {
+      "library": "Tiles.wil",
+      "indices": [
+        350,
+        351,
+        352,
+        353,
+        354,
+        1450,
+        1452,
+        1454
+      ]
+    },
+    "valleyProps": {
+      "library": "Objects.wil",
+      "indices": [
+        1402,
+        1377,
+        1392,
+        1408,
+        1412,
+        1386,
+        1404,
+        1416
+      ]
+    },
+    "mineGround": {
+      "library": "Tiles.wil",
+      "indices": [
+        2150,
+        2151,
+        2152,
+        2153,
+        2154,
+        2150,
+        2152,
+        2154
+      ]
+    },
+    "mineProps": {
+      "library": "Objects2.wil",
+      "indices": [
+        7101,
+        7110,
+        7323,
+        7326,
+        7439,
+        7447,
+        7451,
+        7452
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "coordinate_system": {
+    "source": "mir2_48x32",
+    "editor": "godot_iso_64x32"
+  },
+  "templates": [
+	{"id":"bich_city_outdoor","default_size":[256,256],"max_size":[320,320],"strategy":"city_and_outdoor_composite"},
+    {"id":"outdoor_province","default_size":[256,256],"max_size":[320,320],"strategy":"remake_compact"},
+    {"id":"outdoor_field","default_size":[180,180],"max_size":[240,240],"strategy":"shrink_and_recompose"},
+    {"id":"city_embedded","default_size":[80,80],"max_size":[120,120],"strategy":"remake_compact"},
+    {"id":"shop_interior","default_size":[32,32],"max_size":[40,40],"strategy":"preserve_function"},
+    {"id":"palace_room","default_size":[64,64],"max_size":[80,80],"strategy":"preserve_function"},
+    {"id":"dungeon_floor","default_size":[128,128],"max_size":[180,180],"strategy":"shrink_and_recompose"},
+    {"id":"mine_floor","default_size":[160,160],"max_size":[200,200],"strategy":"shrink_and_recompose"},
+    {"id":"temple_floor","default_size":[140,140],"max_size":[180,180],"strategy":"shrink_and_recompose"},
+    {"id":"corridor","default_size":[96,96],"max_size":[120,120],"strategy":"preserve_route"},
+    {"id":"maze_room","default_size":[56,56],"max_size":[80,80],"strategy":"reduce_duplicates"},
+    {"id":"boss_room","default_size":[96,96],"max_size":[120,120],"strategy":"preserve_arena"},
+    {"id":"quest_room","default_size":[64,64],"max_size":[96,96],"strategy":"preserve_function"},
+    {"id":"arena_room","default_size":[96,96],"max_size":[120,120],"strategy":"preserve_arena"}
+  ]
+}

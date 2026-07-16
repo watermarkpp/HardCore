@@ -1,0 +1,158 @@
+class_name MapEditorInstanceService
+extends RefCounted
+
+const ROLE_DEFAULTS := {
+	"decoration": {"scene_intent": "visual_detail", "gameplay_role": "none", "placement_rule": "inside_map", "collision_policy": "none", "navigation_policy": "ignore"},
+	"obstacle": {"scene_intent": "block_path", "gameplay_role": "navigation_blocker", "placement_rule": "non_overlapping", "collision_policy": "preset", "navigation_policy": "block_player_and_monster"},
+	"building": {"scene_intent": "landmark", "gameplay_role": "service_or_landmark", "placement_rule": "non_overlapping", "collision_policy": "solid_footprint", "navigation_policy": "block_player_and_monster"},
+	"interactable": {"scene_intent": "visual_detail", "gameplay_role": "interactable", "placement_rule": "inside_map", "collision_policy": "preset", "navigation_policy": "block_player_and_monster"},
+	"terrain": {"scene_intent": "terrain_boundary", "gameplay_role": "navigation_blocker", "placement_rule": "non_overlapping", "collision_policy": "terrain_stamp_generated", "navigation_policy": "block_player_and_monster"},
+}
+
+
+static func create_instance(document: Dictionary, asset_id: String, object_role: String, tile: Vector2i, layer := "object_base") -> Dictionary:
+	var role := object_role if ROLE_DEFAULTS.has(object_role) else "decoration"
+	var validation := MapEditorPlacementValidator.validate(document, asset_id, tile, layer, role)
+	if not validation.ok:
+		return {"ok": false, "errors": validation.errors, "warnings": validation.warnings}
+	var asset: Dictionary = validation.asset
+	var placement := MapEditorPlacementResolver.resolve(document,asset_id,tile,layer,role)
+	var defaults: Dictionary = ROLE_DEFAULTS[role]
+	var instance := {
+		"instance_id": _next_id(document), "asset_id": asset_id, "object_role": role,
+		"scene_intent": defaults.scene_intent, "gameplay_role": defaults.gameplay_role, "placement_rule": defaults.placement_rule,
+		"tile": [tile.x, tile.y], "tile_anchor":[tile.x,tile.y], "offset_px": [0, 0], "position_mode":"tile_anchor", "layer": layer,
+		"anchor_px": [placement.placement_anchor_px.x,placement.placement_anchor_px.y], "placement_anchor_px":[placement.placement_anchor_px.x,placement.placement_anchor_px.y], "anchor_mode": asset.get("anchor_mode", "foot_tile"),
+		"footprint_tiles": asset.get("footprint_tiles", [1, 1]),
+		"collision_policy": asset.get("collision_policy", defaults.collision_policy),
+		"collision_profile_id":asset.get("collision_profile_id","none_visual"), "collision_footprint_tiles":asset.get("collision_footprint_tiles",[0,0]),
+		"navigation_policy": asset.get("navigation_policy", defaults.navigation_policy),
+		"occlusion": bool(asset.get("occlusion", false)), "runtime_export": true,
+		"content_layer": "personal_expansion", "rotation_deg": 0.0, "scale": [float(asset.get("approved_scale",1.0)),float(asset.get("approved_scale",1.0))], "flip_x": false, "flip_y": false,
+		"selectable":true,"movable":true,"selection_locked":false,
+	}
+	var layers: Dictionary = document.layers
+	var entries: Array = layers.get(layer, [])
+	entries.append(instance)
+	layers[layer] = entries
+	document.layers = layers
+	return {"ok": true, "instance": instance, "warnings": validation.warnings}
+
+
+static func move_instance(document: Dictionary, instance_id: String, tile: Vector2i) -> Dictionary:
+	var located := _locate(document, instance_id)
+	if not located.ok:
+		return located
+	var instance: Dictionary = located.instance
+	var validation := MapEditorPlacementValidator.validate(document, instance.asset_id, tile, instance.layer, instance.object_role, instance_id)
+	if not validation.ok:
+		return {"ok": false, "errors": validation.errors}
+	instance.tile = [tile.x, tile.y]
+	_located_replace(document, located, instance)
+	return {"ok": true, "instance": instance}
+
+
+static func delete_instance(document: Dictionary, instance_id: String) -> Dictionary:
+	var located := _locate(document, instance_id)
+	if not located.ok:
+		return located
+	var entries: Array = document.layers[located.layer]
+	entries.remove_at(located.index)
+	document.layers[located.layer] = entries
+	return {"ok": true, "deleted": instance_id}
+
+
+static func duplicate_instance(document: Dictionary, instance_id: String, tile: Vector2i) -> Dictionary:
+	var located := _locate(document, instance_id)
+	if not located.ok:
+		return located
+	return create_instance(document, located.instance.asset_id, located.instance.object_role, tile, located.layer)
+
+
+static func resize_instance(document: Dictionary, instance_id: String, direction: int) -> Dictionary:
+	var located := _locate(document, instance_id)
+	if not located.ok:
+		return located
+	var instance: Dictionary = located.instance
+	var asset := MapAssetCatalogService.find_asset(str(instance.get("asset_id", "")))
+	var base_fp: Array = asset.get("base_footprint_tiles", asset.get("footprint_tiles", [1, 1]))
+	var old_fp: Array = instance.get("footprint_tiles", base_fp)
+	var old_width := int(old_fp[0]); var old_height := int(old_fp[1])
+	if direction < 0 and old_width == 1 and old_height == 1:
+		return {"ok": true, "instance": instance}
+	var new_fp: Array
+	if int(base_fp[0]) == int(base_fp[1]):
+		var side := maxi(1, old_width + (1 if direction > 0 else -1))
+		new_fp = [side, side]
+	elif int(base_fp[0]) > int(base_fp[1]):
+		var width := maxi(1, old_width + (1 if direction > 0 else -1))
+		var height := maxi(1, roundi(float(width) * float(base_fp[1]) / float(base_fp[0])))
+		new_fp = [width, height]
+	else:
+		var height := maxi(1, old_height + (1 if direction > 0 else -1))
+		var width := maxi(1, roundi(float(height) * float(base_fp[0]) / float(base_fp[1])))
+		new_fp = [width, height]
+	var actual_delta := Vector2i(int(new_fp[0]) - int(old_fp[0]), int(new_fp[1]) - int(old_fp[1]))
+	if actual_delta == Vector2i.ZERO:
+		return {"ok": true, "instance": instance}
+	var old_tile: Array = instance.get("tile", [0, 0])
+	var old_tile_v := Vector2i(int(old_tile[0]), int(old_tile[1]))
+	var new_tile := old_tile_v - Vector2i(floori(float(actual_delta.x) / 2.0), floori(float(actual_delta.y) / 2.0))
+	var map_size: Array = document.design.design_size
+	if new_tile.x < 0 or new_tile.y < 0 or new_tile.x + int(new_fp[0]) > int(map_size[0]) or new_tile.y + int(new_fp[1]) > int(map_size[1]):
+		return {"ok": false, "errors": ["缩放后超出地图边界"]}
+	var ratio := minf(float(new_fp[0]) / float(base_fp[0]), float(new_fp[1]) / float(base_fp[1]))
+	var raw_size: Array = document.design.design_size
+	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
+	var old_center := MapEditorCoordinate.tile_to_ground_px(Vector2(old_tile_v) + Vector2(float(old_fp[0]),float(old_fp[1])) * 0.5, design_size)
+	var new_center := MapEditorCoordinate.tile_to_ground_px(Vector2(new_tile) + Vector2(float(new_fp[0]),float(new_fp[1])) * 0.5, design_size)
+	var old_offset: Array = instance.get("offset_px", [0,0])
+	var compensated_offset := Vector2(float(old_offset[0]),float(old_offset[1])) + old_center - new_center
+	instance["tile"] = [new_tile.x, new_tile.y]
+	instance["tile_anchor"] = [new_tile.x, new_tile.y]
+	instance["footprint_tiles"] = new_fp
+	instance["occupancy_footprint_tiles"] = new_fp
+	instance["visual_footprint_tiles"] = new_fp
+	instance["scale"] = [ratio, ratio]
+	instance["offset_px"] = [roundi(compensated_offset.x),roundi(compensated_offset.y)]
+	instance["instance_scale_level"] = int(instance.get("instance_scale_level", 0)) + (1 if direction > 0 else -1)
+	instance["instance_custom_scale"] = true
+	var collision: Array = instance.get("collision_footprint_tiles", [0, 0])
+	if int(collision[0]) > 0 and int(collision[1]) > 0:
+		var base_collision: Array = asset.get("collision_footprint_tiles", collision)
+		instance["collision_footprint_tiles"] = [maxi(1, roundi(float(base_collision[0]) * ratio)), maxi(1, roundi(float(base_collision[1]) * ratio))]
+	_located_replace(document, located, instance)
+	return {"ok": true, "instance": instance}
+
+
+static func all_instances(document: Dictionary) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for layer_name: String in document.get("layers", {}):
+		for instance: Dictionary in document.layers[layer_name]:
+			if instance.has("instance_id"):
+				result.append(instance)
+	return result
+
+
+static func _next_id(document: Dictionary) -> String:
+	var maximum := 0
+	for instance: Dictionary in all_instances(document):
+		var value := str(instance.get("instance_id", "")).trim_prefix("inst_").to_int()
+		maximum = maxi(maximum, value)
+	return "inst_%06d" % (maximum + 1)
+
+
+static func _locate(document: Dictionary, instance_id: String) -> Dictionary:
+	for layer_name: String in document.get("layers", {}):
+		var entries: Array = document.layers[layer_name]
+		for index in entries.size():
+			var instance: Dictionary = entries[index]
+			if str(instance.get("instance_id", "")) == instance_id:
+				return {"ok": true, "layer": layer_name, "index": index, "instance": instance}
+	return {"ok": false, "errors": ["instance_not_found"]}
+
+
+static func _located_replace(document: Dictionary, located: Dictionary, instance: Dictionary) -> void:
+	var entries: Array = document.layers[located.layer]
+	entries[located.index] = instance
+	document.layers[located.layer] = entries

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "layer": "rule_systems",
+  "sets": [],
+  "example": {
+    "setId": "flame_warrior_set",
+    "bonuses": [
+      {"pieces": 2, "effects": [{"stat": "hp_max", "op": "percent", "value": 10}]},
+      {"pieces": 4, "effects": [{"trigger": "on_attack", "effect": "burn_area", "chance": 0.15}]}
+    ]
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "batch_id": "B-003",
+  "title": "枯树组",
+  "source_file": "b003.png",
+  "expected_count": 4,
+  "grid": [
+    2,
+    2
+  ],
+  "target_canvas_size": [
+    96,
+    128
+  ],
+  "role": "decoration",
+  "processing": "local_hsv_border_connected_key_removal",
+  "assets": [
+    {
+      "asset_id": "staging.v1_5.b003_01",
+      "file": "b003_01.png",
+      "source_cell": {
+        "index": 1,
+        "grid": [
+          2,
+          2
+        ]
+      },
+      "canvas_size": [
+        96,
+        128
+      ],
+      "anchor_px": [
+        48,
+        126
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": true,
+      "role": "decoration",
+      "alpha_pixels": 1679,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b003_02",
+      "file": "b003_02.png",
+      "source_cell": {
+        "index": 2,
+        "grid": [
+          2,
+          2
+        ]
+      },
+      "canvas_size": [
+        96,
+        128
+      ],
+      "anchor_px": [
+        48,
+        126
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": true,
+      "role": "decoration",
+      "alpha_pixels": 1648,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b003_03",
+      "file": "b003_03.png",
+      "source_cell": {
+        "index": 3,
+        "grid": [
+          2,
+          2
+        ]
+      },
+      "canvas_size": [
+        96,
+        128
+      ],
+      "anchor_px": [
+        48,
+        126
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": true,
+      "role": "decoration",
+      "alpha_pixels": 1859,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b003_04",
+      "file": "b003_04.png",
+      "source_cell": {
+        "index": 4,
+        "grid": [
+          2,
+          2
+        ]
+      },
+      "canvas_size": [
+        96,
+        128
+      ],
+      "anchor_px": [
+        48,
+        126
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": true,
+      "role": "decoration",
+      "alpha_pixels": 1918,
+      "status": "staging_pending_visual_qa"
+    }
+  ]
+}

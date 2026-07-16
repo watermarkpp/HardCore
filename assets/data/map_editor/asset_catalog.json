@@ -1,0 +1,330 @@
+{
+  "schema_version": 1,
+  "build_policy": "deterministic_source_registry",
+  "assets": [
+    {
+      "asset_id": "atlas.bich.ground",
+      "display_name": "比奇地面来源图集",
+      "kind": "source_atlas",
+      "path": "assets/art/maps/bich/bich_ground_tiles.png",
+      "region": "bich",
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "footprint": null,
+      "collision": "none",
+      "version": "1",
+      "calibration_status": "needs_slicing",
+      "palette_enabled": false,
+      "source_status": "ok",
+      "sha256": "455a325e382f6592b8948dee6adaa0a73cbae1eeec7ecd0466db26a9bcb4e143",
+      "pixel_size": [
+        512,
+        32
+      ],
+      "editable_layer": "presentation"
+    },
+    {
+      "asset_id": "atlas.bich.props",
+      "display_name": "比奇装饰来源图集",
+      "kind": "source_atlas",
+      "path": "assets/art/maps/bich/bich_props.png",
+      "region": "bich",
+      "pivot": null,
+      "footprint": null,
+      "collision": "unresolved",
+      "version": "1",
+      "calibration_status": "needs_slicing",
+      "palette_enabled": false,
+      "source_status": "ok",
+      "sha256": "6fe183f6c95d1506e182c4c3c759b0da3897590c77de333c6b0ec901ae80e05f",
+      "pixel_size": [
+        384,
+        128
+      ],
+      "editable_layer": "presentation"
+    },
+    {
+      "asset_id": "atlas.mine.ground",
+      "display_name": "矿区地面来源图集",
+      "kind": "source_atlas",
+      "path": "assets/art/maps/mine/mine_ground_tiles.png",
+      "region": "mine",
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "footprint": null,
+      "collision": "none",
+      "version": "1",
+      "calibration_status": "needs_slicing",
+      "palette_enabled": false,
+      "source_status": "ok",
+      "sha256": "70c5f518e6b2fa8906799c9969f61063fdc7c9d1eebf2cedb430760f2fe12014",
+      "pixel_size": [
+        512,
+        32
+      ],
+      "editable_layer": "presentation"
+    },
+    {
+      "asset_id": "atlas.mine.props",
+      "display_name": "矿区装饰来源图集",
+      "kind": "source_atlas",
+      "path": "assets/art/maps/mine/mine_props.png",
+      "region": "mine",
+      "pivot": null,
+      "footprint": null,
+      "collision": "unresolved",
+      "version": "1",
+      "calibration_status": "needs_slicing",
+      "palette_enabled": false,
+      "source_status": "ok",
+      "sha256": "5f4caad36eba6d86da126188b31b4918d88ee887732292c3a6c5a3a50d07eaec",
+      "pixel_size": [
+        768,
+        128
+      ],
+      "editable_layer": "presentation"
+    },
+    {
+      "asset_id": "atlas.natural_cave.ground",
+      "display_name": "天然洞穴地面来源图集",
+      "kind": "source_atlas",
+      "path": "assets/art/maps/natural_cave/natural_cave_ground_tiles.png",
+      "region": "natural_cave",
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "footprint": null,
+      "collision": "none",
+      "version": "1",
+      "calibration_status": "needs_slicing",
+      "palette_enabled": false,
+      "source_status": "ok",
+      "sha256": "c2fee435a5843d8d5bee6919d9e624a4ccb0d6652842c8c8cc54d7fef68ebead",
+      "pixel_size": [
+        512,
+        32
+      ],
+      "editable_layer": "presentation"
+    },
+    {
+      "asset_id": "atlas.natural_cave.props",
+      "display_name": "天然洞穴装饰来源图集",
+      "kind": "source_atlas",
+      "path": "assets/art/maps/natural_cave/natural_cave_props.png",
+      "region": "natural_cave",
+      "pivot": null,
+      "footprint": null,
+      "collision": "unresolved",
+      "version": "1",
+      "calibration_status": "needs_slicing",
+      "palette_enabled": false,
+      "source_status": "ok",
+      "sha256": "031ff8779c565afc301381cffd53fd8083c1d7ef3251a7fb59932a139e8db48d",
+      "pixel_size": [
+        768,
+        128
+      ],
+      "editable_layer": "presentation"
+    },
+    {
+      "asset_id": "atlas.orc_tomb.ground",
+      "display_name": "兽人古墓地面来源图集",
+      "kind": "source_atlas",
+      "path": "assets/art/maps/orc_tomb/orc_tomb_ground_tiles.png",
+      "region": "orc_tomb",
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "footprint": null,
+      "collision": "none",
+      "version": "1",
+      "calibration_status": "needs_slicing",
+      "palette_enabled": false,
+      "source_status": "ok",
+      "sha256": "1df3ed6a40f8796c413770f9a62dc2f3f82c3f52316ae51ec9d243763b2e2245",
+      "pixel_size": [
+        512,
+        32
+      ],
+      "editable_layer": "presentation"
+    },
+    {
+      "asset_id": "atlas.orc_tomb.props",
+      "display_name": "兽人古墓装饰来源图集",
+      "kind": "source_atlas",
+      "path": "assets/art/maps/orc_tomb/orc_tomb_props.png",
+      "region": "orc_tomb",
+      "pivot": null,
+      "footprint": null,
+      "collision": "unresolved",
+      "version": "1",
+      "calibration_status": "needs_slicing",
+      "palette_enabled": false,
+      "source_status": "ok",
+      "sha256": "27ebf4ba41863dfe33ac023be50d09ce4c7ce060f05b8d10e4d6cfdc2b9d423a",
+      "pixel_size": [
+        768,
+        128
+      ],
+      "editable_layer": "presentation"
+    },
+    {
+      "asset_id": "atlas.snake_valley.ground",
+      "display_name": "毒蛇山谷地面来源图集",
+      "kind": "source_atlas",
+      "path": "assets/art/maps/snake_valley/snake_valley_ground_tiles.png",
+      "region": "snake_valley",
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "footprint": null,
+      "collision": "none",
+      "version": "1",
+      "calibration_status": "needs_slicing",
+      "palette_enabled": false,
+      "source_status": "ok",
+      "sha256": "60e9f4c7fbc92e27744f6eab0df931b62a68f1903748fb688501d2718ba10806",
+      "pixel_size": [
+        512,
+        32
+      ],
+      "editable_layer": "presentation"
+    },
+    {
+      "asset_id": "atlas.snake_valley.props",
+      "display_name": "毒蛇山谷装饰来源图集",
+      "kind": "source_atlas",
+      "path": "assets/art/maps/snake_valley/snake_valley_props.png",
+      "region": "snake_valley",
+      "pivot": null,
+      "footprint": null,
+      "collision": "unresolved",
+      "version": "1",
+      "calibration_status": "needs_slicing",
+      "palette_enabled": false,
+      "source_status": "ok",
+      "sha256": "95b88d462f6b40577dd8673e5e630f64e0939e8768e24407f6375fc4c13defa6",
+      "pixel_size": [
+        768,
+        128
+      ],
+      "editable_layer": "presentation"
+    },
+    {
+      "asset_id": "atlas.wooma_forest.ground",
+      "display_name": "沃玛森林地面来源图集",
+      "kind": "source_atlas",
+      "path": "assets/art/maps/wooma_region/wooma_forest_ground_tiles.png",
+      "region": "wooma_forest",
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "footprint": null,
+      "collision": "none",
+      "version": "1",
+      "calibration_status": "needs_slicing",
+      "palette_enabled": false,
+      "source_status": "ok",
+      "sha256": "5116a63c186449c9ea0b3dade025bf0144c2e01047363cf267bfacbe097acbd0",
+      "pixel_size": [
+        512,
+        32
+      ],
+      "editable_layer": "presentation"
+    },
+    {
+      "asset_id": "atlas.wooma_forest.props",
+      "display_name": "沃玛森林装饰来源图集",
+      "kind": "source_atlas",
+      "path": "assets/art/maps/wooma_region/wooma_forest_props.png",
+      "region": "wooma_forest",
+      "pivot": null,
+      "footprint": null,
+      "collision": "unresolved",
+      "version": "1",
+      "calibration_status": "needs_slicing",
+      "palette_enabled": false,
+      "source_status": "ok",
+      "sha256": "d281b1bb0b6de37302e411deeab768245eacba8201aff0d079bf421f1c6a6cfb",
+      "pixel_size": [
+        768,
+        128
+      ],
+      "editable_layer": "presentation"
+    },
+    {
+      "asset_id": "atlas.wooma_temple.ground",
+      "display_name": "沃玛寺庙地面来源图集",
+      "kind": "source_atlas",
+      "path": "assets/art/maps/wooma_temple/wooma_temple_ground_tiles.png",
+      "region": "wooma_temple",
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "footprint": null,
+      "collision": "none",
+      "version": "1",
+      "calibration_status": "needs_slicing",
+      "palette_enabled": false,
+      "source_status": "ok",
+      "sha256": "0d435c5c800614093c2f520681e7effa40d532cdc12841b21735e804d7f41fee",
+      "pixel_size": [
+        512,
+        32
+      ],
+      "editable_layer": "presentation"
+    },
+    {
+      "asset_id": "atlas.wooma_temple.props",
+      "display_name": "沃玛寺庙装饰来源图集",
+      "kind": "source_atlas",
+      "path": "assets/art/maps/wooma_temple/wooma_temple_props.png",
+      "region": "wooma_temple",
+      "pivot": null,
+      "footprint": null,
+      "collision": "unresolved",
+      "version": "1",
+      "calibration_status": "needs_slicing",
+      "palette_enabled": false,
+      "source_status": "ok",
+      "sha256": "fb521d3b424013d179b8799f74a765986dfff4a8672da0a60686b71c817d0153",
+      "pixel_size": [
+        768,
+        128
+      ],
+      "editable_layer": "presentation"
+    },
+    {
+      "asset_id": "builtin.blank_old_grass",
+      "display_name": "空白旧草地",
+      "kind": "procedural_ground",
+      "path": null,
+      "region": "shared",
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "footprint": [
+        1.0,
+        1.0
+      ],
+      "collision": "none",
+      "version": "1",
+      "calibration_status": "calibrated",
+      "palette_enabled": true,
+      "source_status": "builtin",
+      "sha256": "builtin:v1",
+      "pixel_size": null,
+      "editable_layer": "presentation"
+    }
+  ]
+}

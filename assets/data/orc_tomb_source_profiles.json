@@ -1,0 +1,956 @@
+{
+  "schemaVersion": 1,
+  "baseline": "2003官服1.76基准优先",
+  "generatedFrom": "客户端D001/D002/D003 MAP与Tiles/Objects WIL/WIX原始资源",
+  "mapProfiles": {
+    "217": {
+      "name": "兽人古墓一层",
+      "sourceMapCode": "D001",
+      "sourceMapPath": "research/mir2_client_raw/Map/D001.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 400,
+      "height": 400,
+      "byteLength": 1920052,
+      "sha256": "0047842a53a4806562746f6580859b3b06e2d64a7c4bfeb1ead40831bea2fa24",
+      "blockedRatio": 0.6908,
+      "walkableCells": 49476,
+      "lightCells": 32,
+      "doorCells": 0,
+      "doorRecords": [],
+      "lightRecords": [
+        [
+          24,
+          284,
+          5
+        ],
+        [
+          24,
+          332,
+          5
+        ],
+        [
+          44,
+          334,
+          5
+        ],
+        [
+          52,
+          9,
+          5
+        ],
+        [
+          52,
+          236,
+          5
+        ],
+        [
+          69,
+          271,
+          5
+        ],
+        [
+          80,
+          118,
+          5
+        ],
+        [
+          103,
+          249,
+          5
+        ],
+        [
+          113,
+          125,
+          5
+        ],
+        [
+          120,
+          116,
+          5
+        ],
+        [
+          144,
+          344,
+          5
+        ],
+        [
+          150,
+          338,
+          5
+        ],
+        [
+          151,
+          355,
+          5
+        ],
+        [
+          156,
+          360,
+          5
+        ],
+        [
+          164,
+          340,
+          5
+        ],
+        [
+          183,
+          44,
+          5
+        ],
+        [
+          189,
+          243,
+          5
+        ],
+        [
+          209,
+          367,
+          5
+        ],
+        [
+          235,
+          12,
+          5
+        ],
+        [
+          251,
+          217,
+          5
+        ],
+        [
+          259,
+          198,
+          5
+        ],
+        [
+          260,
+          333,
+          5
+        ],
+        [
+          266,
+          244,
+          5
+        ],
+        [
+          266,
+          268,
+          5
+        ],
+        [
+          268,
+          210,
+          5
+        ],
+        [
+          326,
+          353,
+          5
+        ],
+        [
+          344,
+          347,
+          5
+        ],
+        [
+          352,
+          39,
+          5
+        ],
+        [
+          356,
+          359,
+          5
+        ],
+        [
+          364,
+          21,
+          5
+        ],
+        [
+          382,
+          28,
+          5
+        ],
+        [
+          393,
+          32,
+          5
+        ]
+      ],
+      "largestWalkableComponents": [
+        {
+          "cells": 49436,
+          "bounds": [
+            3,
+            10,
+            396,
+            392
+          ],
+          "centroid": [
+            200,
+            203
+          ]
+        },
+        {
+          "cells": 14,
+          "bounds": [
+            263,
+            219,
+            267,
+            224
+          ],
+          "centroid": [
+            265,
+            222
+          ]
+        },
+        {
+          "cells": 7,
+          "bounds": [
+            379,
+            71,
+            381,
+            73
+          ],
+          "centroid": [
+            380,
+            72
+          ]
+        },
+        {
+          "cells": 5,
+          "bounds": [
+            391,
+            67,
+            393,
+            69
+          ],
+          "centroid": [
+            392,
+            68
+          ]
+        },
+        {
+          "cells": 1,
+          "bounds": [
+            372,
+            316,
+            372,
+            316
+          ],
+          "centroid": [
+            372,
+            316
+          ]
+        }
+      ],
+      "topTileImageIds": [
+        45,
+        1901,
+        1903,
+        1905,
+        1904,
+        1902,
+        1953,
+        1954,
+        1951,
+        1952,
+        1955,
+        50
+      ],
+      "topObjectImageIds": [
+        "Objects1:4471",
+        "Objects1:4470",
+        "Objects1:4480",
+        "Objects1:4475",
+        "Objects1:4474",
+        "Objects1:4473",
+        "Objects1:4481",
+        "Objects1:4478",
+        "Objects1:4477",
+        "Objects1:4476",
+        "Objects1:4479",
+        "Objects1:4472",
+        "Objects1:4519",
+        "Objects1:4520",
+        "Objects1:4521",
+        "Objects1:4440",
+        "Objects1:4433",
+        "Objects1:4432",
+        "Objects1:4431",
+        "Objects1:4436",
+        "Objects1:4435",
+        "Objects1:4434",
+        "Objects1:4442",
+        "Objects1:4439"
+      ],
+      "areaCounts": {
+        "0": 158918,
+        "1": 1082
+      }
+    },
+    "218": {
+      "name": "兽人古墓二层",
+      "sourceMapCode": "D002",
+      "sourceMapPath": "research/mir2_client_raw/Map/D002.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 400,
+      "height": 400,
+      "byteLength": 1920052,
+      "sha256": "ab03734fdc35327cee0f663eb5a020ff69d453e4d3e565483be81521cc7fbe3f",
+      "blockedRatio": 0.8241,
+      "walkableCells": 28144,
+      "lightCells": 19,
+      "doorCells": 12,
+      "doorRecords": [
+        [
+          190,
+          230,
+          1,
+          25
+        ],
+        [
+          190,
+          231,
+          1,
+          25
+        ],
+        [
+          190,
+          232,
+          1,
+          25
+        ],
+        [
+          190,
+          233,
+          1,
+          25
+        ],
+        [
+          191,
+          230,
+          1,
+          25
+        ],
+        [
+          191,
+          231,
+          1,
+          25
+        ],
+        [
+          191,
+          232,
+          1,
+          25
+        ],
+        [
+          191,
+          233,
+          1,
+          25
+        ],
+        [
+          192,
+          228,
+          1,
+          25
+        ],
+        [
+          192,
+          229,
+          1,
+          25
+        ],
+        [
+          192,
+          230,
+          1,
+          25
+        ],
+        [
+          192,
+          231,
+          1,
+          25
+        ]
+      ],
+      "lightRecords": [
+        [
+          28,
+          327,
+          5
+        ],
+        [
+          42,
+          322,
+          5
+        ],
+        [
+          110,
+          122,
+          5
+        ],
+        [
+          114,
+          109,
+          5
+        ],
+        [
+          118,
+          113,
+          5
+        ],
+        [
+          182,
+          203,
+          5
+        ],
+        [
+          196,
+          228,
+          5
+        ],
+        [
+          204,
+          193,
+          5
+        ],
+        [
+          210,
+          198,
+          5
+        ],
+        [
+          219,
+          174,
+          5
+        ],
+        [
+          225,
+          181,
+          5
+        ],
+        [
+          289,
+          67,
+          5
+        ],
+        [
+          314,
+          262,
+          5
+        ],
+        [
+          318,
+          6,
+          5
+        ],
+        [
+          318,
+          267,
+          5
+        ],
+        [
+          325,
+          250,
+          5
+        ],
+        [
+          330,
+          18,
+          5
+        ],
+        [
+          331,
+          255,
+          5
+        ],
+        [
+          378,
+          347,
+          5
+        ]
+      ],
+      "largestWalkableComponents": [
+        {
+          "cells": 28134,
+          "bounds": [
+            25,
+            8,
+            381,
+            378
+          ],
+          "centroid": [
+            218,
+            191
+          ]
+        },
+        {
+          "cells": 2,
+          "bounds": [
+            135,
+            180,
+            135,
+            181
+          ],
+          "centroid": [
+            135,
+            180
+          ]
+        },
+        {
+          "cells": 2,
+          "bounds": [
+            204,
+            186,
+            204,
+            187
+          ],
+          "centroid": [
+            204,
+            186
+          ]
+        },
+        {
+          "cells": 1,
+          "bounds": [
+            46,
+            299,
+            46,
+            299
+          ],
+          "centroid": [
+            46,
+            299
+          ]
+        },
+        {
+          "cells": 1,
+          "bounds": [
+            294,
+            62,
+            294,
+            62
+          ],
+          "centroid": [
+            294,
+            62
+          ]
+        }
+      ],
+      "topTileImageIds": [
+        1953,
+        1954,
+        1952,
+        1951,
+        1955,
+        45,
+        1902,
+        1901,
+        1905,
+        1903,
+        1904,
+        50
+      ],
+      "topObjectImageIds": [
+        "Objects1:4471",
+        "Objects1:4470",
+        "Objects1:4480",
+        "Objects1:4475",
+        "Objects1:4474",
+        "Objects1:4473",
+        "Objects1:4481",
+        "Objects1:4478",
+        "Objects1:4477",
+        "Objects1:4476",
+        "Objects1:4479",
+        "Objects1:4472",
+        "Objects1:4519",
+        "Objects1:4520",
+        "Objects1:4521",
+        "Objects1:4453",
+        "Objects1:4446",
+        "Objects1:4445",
+        "Objects1:4444",
+        "Objects1:4454",
+        "Objects1:4449",
+        "Objects1:4448",
+        "Objects1:4447",
+        "Objects1:4455"
+      ],
+      "areaCounts": {
+        "0": 159309,
+        "1": 691
+      }
+    },
+    "221": {
+      "name": "兽人古墓三层",
+      "sourceMapCode": "D003",
+      "sourceMapPath": "research/mir2_client_raw/Map/D003.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 400,
+      "height": 400,
+      "byteLength": 1920052,
+      "sha256": "46f18a27b58bbf76087ddf4df679717beea06eafbe6c19de854fbc0a6cb79d81",
+      "blockedRatio": 0.6788,
+      "walkableCells": 51391,
+      "lightCells": 31,
+      "doorCells": 0,
+      "doorRecords": [],
+      "lightRecords": [
+        [
+          38,
+          133,
+          5
+        ],
+        [
+          59,
+          238,
+          5
+        ],
+        [
+          67,
+          146,
+          5
+        ],
+        [
+          73,
+          51,
+          5
+        ],
+        [
+          84,
+          64,
+          5
+        ],
+        [
+          90,
+          293,
+          5
+        ],
+        [
+          95,
+          162,
+          5
+        ],
+        [
+          117,
+          101,
+          5
+        ],
+        [
+          120,
+          53,
+          5
+        ],
+        [
+          132,
+          38,
+          5
+        ],
+        [
+          142,
+          190,
+          5
+        ],
+        [
+          159,
+          272,
+          5
+        ],
+        [
+          166,
+          97,
+          5
+        ],
+        [
+          182,
+          219,
+          5
+        ],
+        [
+          186,
+          322,
+          5
+        ],
+        [
+          199,
+          27,
+          5
+        ],
+        [
+          204,
+          309,
+          5
+        ],
+        [
+          210,
+          208,
+          5
+        ],
+        [
+          213,
+          156,
+          5
+        ],
+        [
+          220,
+          258,
+          5
+        ],
+        [
+          221,
+          319,
+          5
+        ],
+        [
+          229,
+          145,
+          5
+        ],
+        [
+          233,
+          91,
+          5
+        ],
+        [
+          246,
+          132,
+          5
+        ],
+        [
+          253,
+          186,
+          5
+        ],
+        [
+          303,
+          29,
+          5
+        ],
+        [
+          304,
+          158,
+          5
+        ],
+        [
+          321,
+          132,
+          5
+        ],
+        [
+          334,
+          247,
+          5
+        ],
+        [
+          339,
+          94,
+          5
+        ],
+        [
+          342,
+          217,
+          5
+        ]
+      ],
+      "largestWalkableComponents": [
+        {
+          "cells": 51384,
+          "bounds": [
+            32,
+            22,
+            359,
+            364
+          ],
+          "centroid": [
+            194,
+            187
+          ]
+        },
+        {
+          "cells": 1,
+          "bounds": [
+            230,
+            336,
+            230,
+            336
+          ],
+          "centroid": [
+            230,
+            336
+          ]
+        },
+        {
+          "cells": 1,
+          "bounds": [
+            58,
+            266,
+            58,
+            266
+          ],
+          "centroid": [
+            58,
+            266
+          ]
+        },
+        {
+          "cells": 1,
+          "bounds": [
+            179,
+            148,
+            179,
+            148
+          ],
+          "centroid": [
+            179,
+            148
+          ]
+        },
+        {
+          "cells": 1,
+          "bounds": [
+            255,
+            120,
+            255,
+            120
+          ],
+          "centroid": [
+            255,
+            120
+          ]
+        }
+      ],
+      "topTileImageIds": [
+        45,
+        1952,
+        1953,
+        1955,
+        1954,
+        1951,
+        2632,
+        1901,
+        1905,
+        1903,
+        1902,
+        1904
+      ],
+      "topObjectImageIds": [
+        "Objects1:4511",
+        "Objects1:4500",
+        "Objects1:4499",
+        "Objects1:4498",
+        "Objects1:4497",
+        "Objects1:4496",
+        "Objects1:4512",
+        "Objects1:4505",
+        "Objects1:4504",
+        "Objects1:4503",
+        "Objects1:4502",
+        "Objects1:4501",
+        "Objects1:4513",
+        "Objects1:4510",
+        "Objects1:4509",
+        "Objects1:4508",
+        "Objects1:4507",
+        "Objects1:4506",
+        "Objects1:4519",
+        "Objects1:4520",
+        "Objects1:4521",
+        "Objects1:4523",
+        "Objects1:4524",
+        "Objects1:4525"
+      ],
+      "areaCounts": {
+        "0": 159606,
+        "1": 394
+      }
+    }
+  },
+  "runtimeProjection": {
+    "policy": "原MAP证据保持400×400；手机垂直切片压缩最大连通区、路线与Boss战空间，运行门点不冒充服务端原坐标。",
+    "217": {
+      "sourcePortalCandidates": [
+        [
+          25,
+          374
+        ],
+        [
+          381,
+          23
+        ]
+      ]
+    },
+    "218": {
+      "sourcePortalCandidates": [
+        [
+          30,
+          357
+        ],
+        [
+          364,
+          44
+        ]
+      ],
+      "sourceBossCell": [
+        200,
+        200
+      ]
+    },
+    "221": {
+      "sourcePortalCandidates": [
+        [
+          66,
+          298
+        ]
+      ],
+      "sourceBossCell": [
+        196,
+        204
+      ]
+    },
+    "portalConfidence": "C：当前客户端包缺服务端MapInfo连接坐标，运行门点只保证单机闭环与安全落点。"
+  },
+  "assetSources": {
+    "ground": {
+      "library": "Data/Tiles.wil",
+      "indices": [
+        1901,
+        1902,
+        1903,
+        1904,
+        1905,
+        1901,
+        1903,
+        1905
+      ],
+      "confidence": "A"
+    },
+    "props": {
+      "library": "Data/Objects.wil",
+      "indices": [
+        4439,
+        4440,
+        4441,
+        4453,
+        4478,
+        4479,
+        4480,
+        4510
+      ],
+      "confidence": "A"
+    },
+    "walkabilityMasks": [
+      "assets/art/maps/orc_tomb/source_masks/217_D001_walkability.png",
+      "assets/art/maps/orc_tomb/source_masks/218_D002_walkability.png",
+      "assets/art/maps/orc_tomb/source_masks/221_D003_walkability.png"
+    ]
+  }
+}

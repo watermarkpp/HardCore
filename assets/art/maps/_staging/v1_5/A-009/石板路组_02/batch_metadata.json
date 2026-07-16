@@ -1,0 +1,138 @@
+{
+  "batch_id": "A-009",
+  "title": "石板路组_02",
+  "source_file": "a009.png",
+  "expected_count": 4,
+  "grid": [
+    2,
+    2
+  ],
+  "target_canvas_size": [
+    64,
+    32
+  ],
+  "role": "road_tile",
+  "processing": "local_hsv_border_connected_key_removal",
+  "assets": [
+    {
+      "asset_id": "staging.v1_5.a009_01",
+      "file": "a009_01.png",
+      "source_cell": {
+        "index": 1,
+        "grid": [
+          2,
+          2
+        ]
+      },
+      "canvas_size": [
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "ground_base",
+      "occlusion": false,
+      "role": "road_tile",
+      "alpha_pixels": 1032,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.a009_02",
+      "file": "a009_02.png",
+      "source_cell": {
+        "index": 2,
+        "grid": [
+          2,
+          2
+        ]
+      },
+      "canvas_size": [
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "ground_base",
+      "occlusion": false,
+      "role": "road_tile",
+      "alpha_pixels": 1032,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.a009_03",
+      "file": "a009_03.png",
+      "source_cell": {
+        "index": 3,
+        "grid": [
+          2,
+          2
+        ]
+      },
+      "canvas_size": [
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "ground_base",
+      "occlusion": false,
+      "role": "road_tile",
+      "alpha_pixels": 1032,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.a009_04",
+      "file": "a009_04.png",
+      "source_cell": {
+        "index": 4,
+        "grid": [
+          2,
+          2
+        ]
+      },
+      "canvas_size": [
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "default_layer": "ground_base",
+      "occlusion": false,
+      "role": "road_tile",
+      "alpha_pixels": 1032,
+      "status": "staging_pending_visual_qa"
+    }
+  ]
+}

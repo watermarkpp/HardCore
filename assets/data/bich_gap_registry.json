@@ -1,0 +1,221 @@
+{
+  "generatedAt": "2026-07-04",
+  "policy": "服务端/客户端正式资料优先；允许采用可追溯社区经典基准，但必须白名单过滤、保留冲突且不得整库覆盖。",
+  "closedFalseGaps": [
+    "战士刺杀/半月开关、攻杀周期与烈火蓄力状态机已经完成，不再列为待实现。",
+    "记忆组队传送和祈祷宠物叛变不适用于当前单机边界，不再列为代码缺陷。",
+    "19张比奇地图的原MAP阻挡分块已经完成，不再列为地图缺口。"
+  ],
+  "remainingCount": 17,
+  "statusCounts": {
+    "等待正式服务端数据": 10,
+    "社区基准部分接入": 1,
+    "等待里程碑验证": 1,
+    "正式数据与里程碑验证": 3,
+    "等待客户端资源": 2
+  },
+  "gaps": [
+    {
+      "name": "比奇省0.map、服务端HomeMap与0100室内图归类",
+      "category": "地图与路线",
+      "completion": 0.98,
+      "status": "等待正式服务端数据",
+      "requiredInputs": [
+        "MapInfo",
+        "MonGen"
+      ],
+      "gap": "完整服务端MapInfo仍缺失，五个地表门点坐标保持C级。",
+      "safeToGuess": false
+    },
+    {
+      "name": "兽人古墓D001—D003原图接入",
+      "category": "地图与路线",
+      "completion": 0.98,
+      "status": "等待正式服务端数据",
+      "requiredInputs": [
+        "MapInfo",
+        "MonGen"
+      ],
+      "gap": "服务端MapInfo连接坐标缺失，五个运行门点仍为C级安全闭环候选。",
+      "safeToGuess": false
+    },
+    {
+      "name": "天然洞穴D011—D012原图接入",
+      "category": "地图与路线",
+      "completion": 0.98,
+      "status": "等待正式服务端数据",
+      "requiredInputs": [
+        "MapInfo",
+        "MonGen"
+      ],
+      "gap": "服务端MapInfo连接坐标缺失，运行门点仍为C级候选。",
+      "safeToGuess": false
+    },
+    {
+      "name": "尸王殿Q004来源与Boss房",
+      "category": "地图与路线",
+      "completion": 0.98,
+      "status": "等待正式服务端数据",
+      "requiredInputs": [
+        "MapInfo",
+        "MonGen"
+      ],
+      "gap": "正式MapInfo/MonGen缺失，入口与双尸王source_coordinate仍为C级候选。",
+      "safeToGuess": false
+    },
+    {
+      "name": "属性与掉落数据库",
+      "category": "怪物与Boss",
+      "completion": 0.8,
+      "status": "社区基准部分接入",
+      "requiredInputs": [
+        "社区经典掉落交叉校准",
+        "运行经济回归"
+      ],
+      "gap": "代表怪掉落已运行接入；全区域怪物、商店与价格仍待逐区交叉。",
+      "safeToGuess": false
+    },
+    {
+      "name": "骷髅精灵与尸王Boss机制",
+      "category": "怪物与Boss",
+      "completion": 0.95,
+      "status": "等待里程碑验证",
+      "requiredInputs": [
+        "里程碑实战验证"
+      ],
+      "gap": "核心属性冲突继续保留中国1.76资料值与社区值双记录；仍需真机实战手感复验。",
+      "safeToGuess": false
+    },
+    {
+      "name": "原版伤害、范围与等级公式",
+      "category": "战士职业",
+      "completion": 0.85,
+      "status": "等待正式服务端数据",
+      "requiredInputs": [
+        "Magic.DB"
+      ],
+      "gap": "完整Magic.DB缺失，MP消耗和训练字段仍不能标为服务端精确。",
+      "safeToGuess": false
+    },
+    {
+      "name": "五项主动技能专属机制",
+      "category": "战士职业",
+      "completion": 0.9,
+      "status": "正式数据与里程碑验证",
+      "requiredInputs": [
+        "Magic.DB",
+        "里程碑实战验证"
+      ],
+      "gap": "完整Magic.DB缺失，半月和野蛮MP/训练字段仍保留候选；手机连续实战留待里程碑。",
+      "safeToGuess": false
+    },
+    {
+      "name": "客户端动作、特效与音效",
+      "category": "战士职业",
+      "completion": 0.85,
+      "status": "等待客户端资源",
+      "requiredInputs": [
+        "Wav/130.wav—137.wav",
+        "野蛮冲撞对应客户端资源"
+      ],
+      "gap": "客户端130—137号技能WAV在当前资源包缺失，已显式记录且未以无来源音效冒充；野蛮仍使用项目反馈层。",
+      "safeToGuess": false
+    },
+    {
+      "name": "穿戴要求与属性结算",
+      "category": "装备系统",
+      "completion": 0.9,
+      "status": "等待正式服务端数据",
+      "requiredInputs": [
+        "StdItems.DB"
+      ],
+      "gap": "实际StdItems.DB仍缺失；175件具体字段继续保持61条A、114条B候选，未冒充服务端精确值。",
+      "safeToGuess": false
+    },
+    {
+      "name": "耐久损耗与修理",
+      "category": "装备系统",
+      "completion": 0.9,
+      "status": "正式数据与里程碑验证",
+      "requiredInputs": [
+        "StdItems.DB.Price",
+        "里程碑实战验证"
+      ],
+      "gap": "StdItems.Price缺失，维修基准物价仍是显式项目候选；武器/衣服损耗频率留待里程碑手感复验。",
+      "safeToGuess": false
+    },
+    {
+      "name": "幸运、诅咒与祝福油",
+      "category": "装备系统",
+      "completion": 0.95,
+      "status": "正式数据与里程碑验证",
+      "requiredInputs": [
+        "StdItems.DB",
+        "里程碑存档验证"
+      ],
+      "gap": "人物PK幸运与完整StdItems武器基础幸运/诅咒值尚未接入；当前任务只完成武器实例与祝福油主链。",
+      "safeToGuess": false
+    },
+    {
+      "name": "特殊装备效果",
+      "category": "装备系统",
+      "completion": 0.95,
+      "status": "等待正式服务端数据",
+      "requiredInputs": [
+        "StdItems.DB.AniCount/Need"
+      ],
+      "gap": "StdItems缺失使魔血25/件、虹魔4/3/2仍是B级候选。",
+      "safeToGuess": false
+    },
+    {
+      "name": "客户端装备图标与穿戴外观",
+      "category": "装备系统",
+      "completion": 0.9,
+      "status": "等待客户端资源",
+      "requiredInputs": [
+        "StdItems.DB.Shape",
+        "缺失的客户端外观块"
+      ],
+      "gap": "仍有7件因候选Shape缺失或超出经典客户端容量而拒绝接入，等待实际StdItems复核。",
+      "safeToGuess": false
+    },
+    {
+      "name": "比奇NPC商店与修理",
+      "category": "任务经济存档",
+      "completion": 0.8,
+      "status": "等待正式服务端数据",
+      "requiredInputs": [
+        "Merchant",
+        "Market_Def"
+      ],
+      "gap": "用服务端Merchant/Market_Def复核货单、价格和NPC坐标。",
+      "safeToGuess": false
+    },
+    {
+      "name": "比奇任务链",
+      "category": "任务经济存档",
+      "completion": 0.95,
+      "status": "等待正式服务端数据",
+      "requiredInputs": [
+        "QuestDiary",
+        "NPC脚本"
+      ],
+      "gap": "第一段为经典任务改编B；后五段是明确标记的单机衔接C，不冒充官服QuestDiary原任务。实际QuestDiary到位后逐步覆盖。",
+      "safeToGuess": false
+    },
+    {
+      "name": "掉落与经济的服务端一致性",
+      "category": "任务经济存档",
+      "completion": 0.35,
+      "status": "等待正式服务端数据",
+      "requiredInputs": [
+        "MonItems",
+        "Merchant",
+        "Market_Def",
+        "StdItems.DB.Price"
+      ],
+      "gap": "完成服务端数据导入、差异审计和经济回归。",
+      "safeToGuess": false
+    }
+  ]
+}

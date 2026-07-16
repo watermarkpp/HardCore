@@ -1,0 +1,198 @@
+{
+  "batch_id": "B-011",
+  "title": "野外边界组",
+  "source_file": "b011.png",
+  "expected_count": 6,
+  "grid": [
+    3,
+    2
+  ],
+  "target_canvas_size": [
+    128,
+    160
+  ],
+  "role": "terrain",
+  "processing": "local_hsv_border_connected_key_removal",
+  "assets": [
+    {
+      "asset_id": "staging.v1_5.b011_01",
+      "file": "b011_01.png",
+      "source_cell": {
+        "index": 1,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        128,
+        160
+      ],
+      "anchor_px": [
+        64,
+        158
+      ],
+      "footprint_tiles": [
+        3,
+        2
+      ],
+      "collision_policy": "terrain_stamp_generated",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "terrain_base",
+      "occlusion": true,
+      "role": "terrain",
+      "alpha_pixels": 5707,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b011_02",
+      "file": "b011_02.png",
+      "source_cell": {
+        "index": 2,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        128,
+        160
+      ],
+      "anchor_px": [
+        64,
+        158
+      ],
+      "footprint_tiles": [
+        3,
+        2
+      ],
+      "collision_policy": "terrain_stamp_generated",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "terrain_base",
+      "occlusion": true,
+      "role": "terrain",
+      "alpha_pixels": 4715,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b011_03",
+      "file": "b011_03.png",
+      "source_cell": {
+        "index": 3,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        128,
+        160
+      ],
+      "anchor_px": [
+        64,
+        158
+      ],
+      "footprint_tiles": [
+        3,
+        2
+      ],
+      "collision_policy": "terrain_stamp_generated",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "terrain_base",
+      "occlusion": true,
+      "role": "terrain",
+      "alpha_pixels": 5575,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b011_04",
+      "file": "b011_04.png",
+      "source_cell": {
+        "index": 4,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        128,
+        160
+      ],
+      "anchor_px": [
+        64,
+        158
+      ],
+      "footprint_tiles": [
+        3,
+        2
+      ],
+      "collision_policy": "terrain_stamp_generated",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "terrain_base",
+      "occlusion": true,
+      "role": "terrain",
+      "alpha_pixels": 5015,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b011_05",
+      "file": "b011_05.png",
+      "source_cell": {
+        "index": 5,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        128,
+        160
+      ],
+      "anchor_px": [
+        64,
+        158
+      ],
+      "footprint_tiles": [
+        3,
+        2
+      ],
+      "collision_policy": "terrain_stamp_generated",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "terrain_base",
+      "occlusion": true,
+      "role": "terrain",
+      "alpha_pixels": 5123,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b011_06",
+      "file": "b011_06.png",
+      "source_cell": {
+        "index": 6,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        128,
+        160
+      ],
+      "anchor_px": [
+        64,
+        158
+      ],
+      "footprint_tiles": [
+        3,
+        2
+      ],
+      "collision_policy": "terrain_stamp_generated",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "terrain_base",
+      "occlusion": true,
+      "role": "terrain",
+      "alpha_pixels": 6674,
+      "status": "staging_pending_visual_qa"
+    }
+  ]
+}

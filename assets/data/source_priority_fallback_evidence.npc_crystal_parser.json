@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "lane": "server_rules",
+  "requirement": "只解析服务端主资料server.crystal.cjlaaa/Server.MirDB中的NPC记录、地图索引、坐标、外观编号和脚本入口，不引入辅助端游戏内容",
+  "candidate": "source.minipizza_mir2.server",
+  "scope": "npc_database_binary_parser",
+  "checks": [
+    {
+      "distribution": "source.original_gameofmir.server_suite",
+      "status": "incompatible",
+      "query": "在经典Pascal服务端套件中检索Server.MirDB、NPCInfo及NPC二进制读写实现",
+      "proof": [
+        "经典主源码的DBServer/DBTools.pas处理NewMir.DB人物数据库，不是当前主数据端的Server.MirDB",
+        "经典主源码没有C# Crystal Server.MirDB的NPCInfoList顺序化读写结构",
+        "待解析文件为server.crystal.cjlaaa根目录的Server.MirDB，必须使用与该格式一致的读取规则"
+      ]
+    }
+  ]
+}

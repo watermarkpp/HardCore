@@ -1,0 +1,29 @@
+{
+  "layer": "vanilla_core",
+  "displayName": "原版基准层 Vanilla Core",
+  "defaultEnabled": true,
+  "immutableSource": true,
+  "contentVersion": "2003官服1.76基准版",
+  "datasets": {
+    "maps": "res://assets/data/vanilla_176/maps.json",
+    "monsters": "res://assets/data/vanilla_176/monsters.json",
+    "bosses": "res://assets/data/vanilla_176/bosses.json",
+    "items": "res://assets/data/vanilla_176/items.json",
+    "skills": "res://assets/data/vanilla_176/skills.json",
+    "drops": "res://assets/data/vanilla_176/drops.json",
+    "tasks": "res://assets/data/vanilla_176/quests.json",
+    "experience": "res://assets/data/vanilla_176/exp_table.json",
+    "professionGrowth": "res://assets/data/vanilla_176/profession_growth.json",
+    "spawnRules": "res://assets/data/vanilla_176/spawn_rules.json",
+    "npcs": "res://assets/data/vanilla_176/npcs.json",
+    "mapConnections": "res://assets/data/vanilla_176/map_connections.json",
+	"mapContent": "res://assets/data/vanilla_176/map_content.json",
+	"regionalDrops": "res://assets/data/vanilla_176/regional_drops.json",
+	"policyOverrides": "res://assets/data/vanilla_176/policy_overrides.json",
+    "serviceReference": "res://assets/data/service_reference.json",
+    "communityCalibration": "res://assets/data/bich_community_baseline.json",
+    "questChain": "res://assets/data/bich_quest_chain.json"
+  },
+  "legacySource": "res://assets/data/legend176_data.json",
+  "policy": "基准源文件不得被扩展层原地改写；校准必须保留来源、可信度和冲突值。"
+}

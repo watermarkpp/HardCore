@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "modes": {
+    "classic_176": {"name":"经典1.76模式","enabledPackages":[],"ruleset":"vanilla_176"},
+    "enhanced_loot": {"name":"增强刷装模式","enabledPackages":["personal_expansion_001"],"ruleset":"enhanced"},
+    "modded_expansion": {"name":"魔改扩展模式","enabledPackages":["personal_expansion_001","user_equipment"],"ruleset":"modded"}
+  },
+  "defaultMode": "classic_176"
+}

@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "policyId": "MIR-SOURCE-PRIORITY-1",
+  "catalogManifest": "outputs/resource_catalog/complete_local_mir_sources/manifest.json",
+  "weights": {
+    "primary": 100,
+    "auxiliary_1": 70,
+    "auxiliary_2": 40,
+    "auxiliary_3": 20,
+    "mirror": 0,
+    "quarantine": 0
+  },
+  "rules": {
+    "singleSourceFirst": true,
+    "crossDistributionMergeByDefault": false,
+    "fallbackRequiresEvidence": true,
+    "fallbackStatuses": ["missing", "unusable", "incompatible"],
+    "fallbackMustRejectEveryHigherPrioritySource": true,
+    "sameTierMustFollowOrder": true,
+    "derivedAssetMustRecordDistributionAndOriginalPath": true,
+    "quarantineCannotEnterRuntime": true
+  },
+  "routing": {
+    "pixels_frames_maps_audio": "client_assets",
+    "client_animation_offsets_rendering_protocol": "client_rules",
+    "npc_items_monsters_spawns_shops_quests_server_config": "server_data",
+    "combat_movement_ai_timing_protocol": "server_rules"
+  },
+  "lanes": {
+    "client_assets": {
+      "description": "客户端原始像素、WIL/WIX、MAP与声音",
+      "sources": [
+        {
+          "distribution": "client.classic_raw_complete",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100,
+          "eligible": true,
+          "rootPrefix": "reference/mir2_client_raw",
+          "metrics": {"files": 1167, "bytes": 1001800303, "resourceLibraries": 42, "logicalFrames": 180135, "maps": 528, "parseErrors": 0},
+          "reason": "唯一A等级完整经典客户端；WIL/WIX、MAP和声音齐全且无解析错误。"
+        },
+        {
+          "distribution": "client.mir2opensource_2013_complete",
+          "tier": "auxiliary_1",
+          "order": 1,
+          "weight": 70,
+          "eligible": true,
+          "rootPrefix": "external/mir2opensource_full",
+          "metrics": {"files": 244, "bytes": 4037459742, "resourceLibraries": 122, "logicalFrames": 962251, "maps": 0, "parseErrors": 0},
+          "reason": "完整且有明确2013版本，但年代与内容范围晚于经典主端，只能补主端缺失资源。"
+        },
+        {
+          "distribution": "archive_extract.mirfiles_new_data.ae702e382cc5",
+          "tier": "auxiliary_2",
+          "order": 2,
+          "weight": 40,
+          "eligible": true,
+          "rootPrefix": "extracted_archives/mirfiles_new_data_ae702e382cc5",
+          "metrics": {"files": 8, "bytes": 153537421, "resourceLibraries": 8, "logicalFrames": 19956, "maps": 0, "parseErrors": 0},
+          "reason": "无解析错误的私服新增资源包，只能作为缺失资源候选。"
+        },
+        {
+          "distribution": "archive_extract.mirfiles_hum.bfae8696c79f",
+          "tier": "auxiliary_3",
+          "order": 3,
+          "weight": 20,
+          "eligible": true,
+          "rootPrefix": "extracted_archives/mirfiles_hum_bfae8696c79f",
+          "metrics": {"files": 6, "bytes": 366808664, "resourceLibraries": 3, "logicalFrames": 64248, "maps": 0, "parseErrors": 0},
+          "reason": "未知版本人物补充包，仅在前三层均无可用结果时允许候选。"
+        },
+        {
+          "distribution": "archive_extract.mirfiles_aige_mir2.847a67ac1446",
+          "tier": "mirror",
+          "order": 90,
+          "weight": 0,
+          "eligible": false,
+          "rootPrefix": "extracted_archives/mirfiles_aige_mir2_847a67ac1446",
+          "reason": "与主客户端42库、180135帧、528图完全同量的来源镜像，只用于哈希复核，不作为第二套可混用客户端。"
+        }
+      ]
+    },
+    "client_rules": {
+      "description": "客户端动作表、绘制偏移、方向、协议与表现规则",
+      "sources": [
+        {"distribution": "source.original_gameofmir.mirclient", "tier": "primary", "order": 0, "weight": 100, "eligible": true, "rootPrefix": "reference/original_gameofmir/MirClient", "metrics": {"files": 55, "textFiles": 47, "parseErrors": 0}, "reason": "A等级经典MirClient完整源码入口。"},
+        {"distribution": "source.original_gameofmir.client", "tier": "auxiliary_1", "order": 1, "weight": 70, "eligible": true, "rootPrefix": "reference/original_gameofmir/Client", "metrics": {"files": 54, "textFiles": 46, "parseErrors": 0}, "reason": "同一经典源码套件的第二客户端入口，用于主入口缺文件时复核。"},
+        {"distribution": "source.minipizza_mir2.client", "tier": "auxiliary_2", "order": 2, "weight": 40, "eligible": true, "rootPrefix": "reference/mir2_sources/minipizza_mir2/Client", "metrics": {"files": 118, "textFiles": 90, "parseErrors": 0}, "reason": "社区客户端源码，版本和实现已发生演化。"},
+        {"distribution": "working.reference.mir2opensource_2013_client", "tier": "auxiliary_3", "order": 3, "weight": 20, "eligible": true, "rootPrefix": "reference/mir2opensource_2013_client", "metrics": {"files": 4, "textFiles": 4, "parseErrors": 0}, "reason": "2013端的有限源码证据，只允许解决前三层均缺失的局部规则。"}
+      ]
+    },
+    "server_data": {
+      "description": "服务端数据库、NPC、物品、怪物、地图脚本、商店、任务与配置",
+      "sources": [
+        {
+          "distribution": "server.crystal.cjlaaa",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100,
+          "eligible": true,
+          "rootPrefix": "reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa",
+          "metrics": {"files": 2987, "bytes": 1251837951, "maps": 1817, "textAndConfigFiles": 1167, "databaseFiles": 1, "parseErrors": 0, "pollutionFiles": 0},
+          "reason": "完整度高且最干净：顶层仅Maps、Envir、Configs和Server.MirDB；无.git、BMP、EXE、DLL或压缩包污染。"
+        },
+        {
+          "distribution": "server.angelk727_full",
+          "tier": "auxiliary_1",
+          "order": 1,
+          "weight": 70,
+          "eligible": true,
+          "rootPrefix": "reference/mir2_database_candidates/angelk727_full",
+          "companions": ["server.angelk727_exports", "server_reference.angelk727"],
+          "metrics": {"files": 7698, "bytes": 1650557356, "maps": 1872, "textAndConfigFiles": 2141, "parseErrors": 0, "gitFiles": 29, "bitmapFiles": 3638, "peFiles": 13},
+          "reason": "本地内容最全，但混有版本库、位图和程序文件；适合补主端缺项，不适合作为干净主端。"
+        },
+        {
+          "distribution": "server.crystal.Jev",
+          "tier": "auxiliary_2",
+          "order": 2,
+          "weight": 40,
+          "eligible": true,
+          "rootPrefix": "reference/mir2_database_candidates/suprcode_crystal_database/Jev",
+          "metrics": {"files": 7613, "bytes": 1145583651, "maps": 1704, "textAndConfigFiles": 2621, "databaseFiles": 1, "parseErrors": 0, "bitmapFiles": 3218, "archives": 1},
+          "reason": "脚本量大但含大量BMP和压缩包，污染度高于主端。"
+        },
+        {
+          "distribution": "server.crystal.Daneo1989",
+          "tier": "auxiliary_3",
+          "order": 3,
+          "weight": 20,
+          "eligible": true,
+          "rootPrefix": "reference/mir2_database_candidates/suprcode_crystal_database/Daneo1989",
+          "metrics": {"files": 2669, "bytes": 1137571305, "maps": 1607, "textAndConfigFiles": 1058, "databaseFiles": 1, "parseErrors": 0},
+          "reason": "目录干净但内容覆盖低于主端和前两级，仅作末级交叉参考。"
+        },
+        {"distribution": "server.crystal.NightWolf", "tier": "quarantine", "order": 99, "weight": 0, "eligible": false, "rootPrefix": "reference/mir2_database_candidates/suprcode_crystal_database/NightWolf", "reason": "只有单个Server.MirDB，无法独立证明完整上下文。"}
+      ]
+    },
+    "server_rules": {
+      "description": "服务端战斗、移动、AI、硬直、时序、协议与底层规则",
+      "sources": [
+        {"distribution": "source.original_gameofmir.server_suite", "tier": "primary", "order": 0, "weight": 100, "eligible": true, "rootPrefix": "reference/original_gameofmir", "metrics": {"files": 294, "textFiles": 246, "parseErrors": 0}, "reason": "唯一A等级经典多进程服务端源码套件，规则证据优先级最高。"},
+        {"distribution": "source.minipizza_mir2.server", "tier": "auxiliary_1", "order": 1, "weight": 70, "eligible": true, "rootPrefix": "reference/mir2_sources/minipizza_mir2", "metrics": {"files": 351, "textFiles": 348, "parseErrors": 0}, "reason": "较完整社区服务端源码，但实现年代与经典端不同。"},
+        {"distribution": "source.suprcode_crystal.server", "tier": "auxiliary_2", "order": 2, "weight": 40, "eligible": true, "rootPrefix": "reference/mir2_sources/suprcode_crystal/Server", "companions": ["source.suprcode_crystal.shared"], "metrics": {"files": 278, "textFiles": 277, "parseErrors": 0}, "reason": "Crystal社区服务端源码，只能补主源码与辅1缺失规则。"},
+        {"distribution": "archive_extract.GM.51417ae3bc9f", "tier": "auxiliary_3", "order": 3, "weight": 20, "eligible": true, "allowedScopes": ["gm_commands", "script_examples"], "rootPrefix": "extracted_archives/GM_51417ae3bc9f", "metrics": {"files": 24, "textFiles": 24, "parseErrors": 0}, "reason": "未知版本GM文本，只能用于命令和脚本示例，禁止推导一般服务端规则。"}
+      ]
+    }
+  },
+  "quarantinePatterns": [
+    "client_probe.*",
+    "working.*",
+    "client_pack.*",
+    "archive_extract.mirfiles_black_*",
+    "archive_extract.mirfiles_masks_weapons_series_1.*",
+    "archive_extract.DelphiX.*"
+  ]
+}

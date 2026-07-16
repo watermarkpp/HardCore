@@ -1,0 +1,132 @@
+{
+  "baseline": "2003官服1.76基准优先",
+  "generatedFrom": "本地M2Server与经典客户端Delphi源码直接提取",
+  "sourcePriority": "服务端规则/数值优先，客户端动作/表现优先",
+  "sources": {
+    "serverCombat": "research/MIR2/GameOfMir/M2Server/ObjBase.pas",
+    "serverConfig": "research/MIR2/GameOfMir/M2Server/M2Share.pas",
+    "serverConstants": "research/MIR2/GameOfMir/Common/Grobal2.pas",
+    "clientAction": "research/MIR2/GameOfMir/Client/Actor.pas",
+    "clientInput": "research/MIR2/GameOfMir/Client/ClMain.pas",
+    "serverSetup": "research/MIR2/GameOfMir/MirServer/Mir200/!Setup.txt"
+  },
+  "global": {
+    "baseAccuracy": 5,
+    "baseAgility": 15,
+    "serverHitIntervalMs": 600,
+    "projectAttackIntervalMs": 850,
+    "projectIntervalReason": "用户明确指定850ms，覆盖该服务端包的600ms动作防刷阈值",
+    "clientAttackFrames": 6,
+    "clientFrameMs": 85,
+    "clientAttackDurationMs": 510,
+    "clientEffectFrameZeroBased": 2,
+    "clientEffectTimeMs": 170,
+    "hitRule": "若 attackerAccuracy < Random(targetAgility) 则未命中",
+    "damageRoll": "DC下限 + Random(DC上限-DC下限+1)，再应用幸运/诅咒",
+    "confidence": "A"
+  },
+  "skills": {
+    "基本剑术": {
+      "magicId": 3,
+      "mode": "passive",
+      "accuracyByLevel": [
+        0,
+        3,
+        6,
+        9
+      ],
+      "confidence": "A"
+    },
+    "攻杀剑术": {
+      "magicId": 7,
+      "mode": "automatic_proc",
+      "accuracyByLevel": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "procCycleByLevel": [
+        7,
+        6,
+        5,
+        4
+      ],
+      "flatDamageBonusByLevel": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "confidence": "A"
+    },
+    "刺杀剑术": {
+      "magicId": 12,
+      "mode": "toggle",
+      "targetCell": 2,
+      "secondaryDamageRatioByLevel": [
+        0.4,
+        0.6,
+        0.8,
+        1.0
+      ],
+      "swordLongPowerRate": 100,
+      "confidence": "A"
+    },
+    "半月弯刀": {
+      "magicId": 25,
+      "mode": "toggle",
+      "directionOffsets": [
+        7,
+        1,
+        2
+      ],
+      "secondaryDamageRatioByLevel": [
+        0.15384615384615385,
+        0.23076923076923078,
+        0.3076923076923077,
+        0.38461538461538464
+      ],
+      "confidence": "A"
+    },
+    "烈火剑法": {
+      "magicId": 26,
+      "mode": "arm_next_hit",
+      "damageMultiplierByLevel": [
+        1.4,
+        1.8,
+        2.2,
+        2.6
+      ],
+      "armCooldownMs": 10000,
+      "armedExpireMs": 20000,
+      "confidence": "A"
+    },
+    "野蛮冲撞": {
+      "magicId": 27,
+      "mode": "rush",
+      "cooldownMs": 3000,
+      "requiresHigherCharacterLevel": true,
+      "successThreshold": "skillLevel*4+6+(playerLevel-targetLevel), Random(20)低于阈值成功",
+      "maxCellsByLevel": [
+        3,
+        3,
+        4,
+        5
+      ],
+      "confidence": "A"
+    }
+  },
+  "knownMissing": [
+    "完整服务端Magic.DB尚未取得，wSpell/btDefSpell/训练点等逐技能字段不能从源码单独恢复",
+    "当前项目技能学习等级来自结构库候选数据；需完整Magic.DB到位后覆盖",
+    "逐技能原始WAV文件与Magic.wil效果编号尚未完成客户端资源映射"
+  ],
+  "runtimeIntegration": {
+    "slaying": "4—7刀周期内随机一个触发点",
+    "thrusting": "开关；主目标加正前第二格独立命中",
+    "halfMoon": "开关；主目标加方向偏移[7,1,2]三个侧向格",
+    "fireSword": "10秒可蓄力、20秒过期、下一刀或空刀消耗",
+    "wildRush": "等级差、Random(20)、阻挡、推怪、剩余步数伤害已接入"
+  }
+}

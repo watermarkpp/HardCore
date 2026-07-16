@@ -1,0 +1,5726 @@
+{
+  "baseline": "社区经典基准选择性导入",
+  "sources": {
+    "crystalDatabase": {
+      "commit": "a19f6dca8f5e238d4ed79801820777abbf0a9ca4",
+      "role": "社区数据库母库"
+    },
+    "readableExport": {
+      "commit": "16c49ad53f3bc2ff6f9f584117e61b5b9fe4970f",
+      "role": "中文可读导出"
+    }
+  },
+  "policy": "只应用怪物时序、准确和敏捷；核心数值冲突保持当前中国1.76资料值；刷新仅导入画像；掉落仅按经典白名单和移动端保守概率进入运行表。",
+  "runtimeMonsterOverrides": {
+    "稻草人": {
+      "fields": {
+        "agility": 8,
+        "accuracy": 5,
+        "attackIntervalMs": 2500,
+        "moveIntervalMs": 1500,
+        "communityConfidence": "B+",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "level": 10,
+        "defense": 0,
+        "magicDefense": 0,
+        "attackMin": 1,
+        "attackMax": 2
+      },
+      "conflicts": {
+        "exp": {
+          "current": 12,
+          "community": 15,
+          "adopted": "current"
+        },
+        "hp": {
+          "current": 15,
+          "community": 20,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "钉耙猫": {
+      "fields": {
+        "agility": 8,
+        "accuracy": 5,
+        "attackIntervalMs": 2500,
+        "moveIntervalMs": 1800,
+        "communityConfidence": "B+",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "level": 13,
+        "defense": 0,
+        "magicDefense": 0,
+        "attackMin": 2,
+        "attackMax": 4
+      },
+      "conflicts": {
+        "exp": {
+          "current": 18,
+          "community": 27,
+          "adopted": "current"
+        },
+        "hp": {
+          "current": 23,
+          "community": 32,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "多钩猫": {
+      "fields": {
+        "agility": 7,
+        "accuracy": 5,
+        "attackIntervalMs": 2500,
+        "moveIntervalMs": 1500,
+        "communityConfidence": "B+",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "level": 13,
+        "defense": 0,
+        "magicDefense": 0,
+        "attackMin": 2,
+        "attackMax": 4
+      },
+      "conflicts": {
+        "exp": {
+          "current": 17,
+          "community": 23,
+          "adopted": "current"
+        },
+        "hp": {
+          "current": 22,
+          "community": 30,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "半兽人": {
+      "fields": {
+        "agility": 7,
+        "accuracy": 6,
+        "attackIntervalMs": 2500,
+        "moveIntervalMs": 1500,
+        "communityConfidence": "B+",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "level": 15,
+        "hp": 30,
+        "defense": 1,
+        "magicDefense": 0,
+        "attackMin": 4,
+        "attackMax": 9
+      },
+      "conflicts": {
+        "exp": {
+          "current": 25,
+          "community": 30,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "半兽战士": {
+      "fields": {
+        "agility": 10,
+        "accuracy": 10,
+        "attackIntervalMs": 2000,
+        "moveIntervalMs": 1500,
+        "communityConfidence": "B+",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "level": 22,
+        "hp": 100,
+        "defense": 3,
+        "magicDefense": 1,
+        "attackMin": 5,
+        "attackMax": 12
+      },
+      "conflicts": {
+        "exp": {
+          "current": 90,
+          "community": 130,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "森林雪人": {
+      "fields": {
+        "agility": 7,
+        "accuracy": 7,
+        "attackIntervalMs": 2500,
+        "moveIntervalMs": 1500,
+        "communityConfidence": "B+",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "level": 16,
+        "hp": 36,
+        "defense": 2,
+        "magicDefense": 0,
+        "attackMin": 7,
+        "attackMax": 10
+      },
+      "conflicts": {
+        "exp": {
+          "current": 30,
+          "community": 36,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "食人花": {
+      "fields": {
+        "agility": 7,
+        "accuracy": 12,
+        "attackIntervalMs": 2500,
+        "moveIntervalMs": 1500,
+        "communityConfidence": "B+",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "level": 20,
+        "hp": 28,
+        "defense": 2,
+        "magicDefense": 0,
+        "attackMin": 6
+      },
+      "conflicts": {
+        "exp": {
+          "current": 28,
+          "community": 36,
+          "adopted": "current"
+        },
+        "attackMax": {
+          "current": 9,
+          "community": 7,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "毒蜘蛛": {
+      "fields": {
+        "agility": 8,
+        "accuracy": 8,
+        "attackIntervalMs": 2500,
+        "moveIntervalMs": 900,
+        "communityConfidence": "B+",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "level": 16,
+        "defense": 2,
+        "magicDefense": 1,
+        "attackMin": 6,
+        "attackMax": 9
+      },
+      "conflicts": {
+        "exp": {
+          "current": 42,
+          "community": 108,
+          "adopted": "current"
+        },
+        "hp": {
+          "current": 42,
+          "community": 65,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "骷髅": {
+      "fields": {
+        "agility": 13,
+        "accuracy": 11,
+        "attackIntervalMs": 2500,
+        "moveIntervalMs": 1500,
+        "communityConfidence": "B+",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "level": 18,
+        "hp": 90,
+        "defense": 0,
+        "magicDefense": 0,
+        "attackMin": 7,
+        "attackMax": 10
+      },
+      "conflicts": {
+        "exp": {
+          "current": 85,
+          "community": 140,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "掷斧骷髅": {
+      "fields": {
+        "agility": 12,
+        "accuracy": 15,
+        "attackIntervalMs": 2500,
+        "moveIntervalMs": 1500,
+        "communityConfidence": "B+",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "level": 18,
+        "hp": 100,
+        "defense": 0,
+        "magicDefense": 0,
+        "attackMin": 4,
+        "attackMax": 9
+      },
+      "conflicts": {
+        "exp": {
+          "current": 90,
+          "community": 140,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "骷髅战士": {
+      "fields": {
+        "agility": 13,
+        "accuracy": 11,
+        "attackIntervalMs": 2500,
+        "moveIntervalMs": 1500,
+        "communityConfidence": "B+",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "level": 19,
+        "hp": 105,
+        "defense": 0,
+        "magicDefense": 0,
+        "attackMin": 2,
+        "attackMax": 15
+      },
+      "conflicts": {
+        "exp": {
+          "current": 95,
+          "community": 150,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "骷髅战将": {
+      "fields": {
+        "agility": 15,
+        "accuracy": 12,
+        "attackIntervalMs": 2300,
+        "moveIntervalMs": 1200,
+        "communityConfidence": "B+",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "level": 20,
+        "hp": 110,
+        "defense": 2,
+        "magicDefense": 1,
+        "attackMin": 7,
+        "attackMax": 13
+      },
+      "conflicts": {
+        "exp": {
+          "current": 100,
+          "community": 160,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "骷髅精灵": {
+      "fields": {
+        "agility": 15,
+        "accuracy": 14,
+        "attackIntervalMs": 2000,
+        "moveIntervalMs": 1200,
+        "communityConfidence": "B+",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "hp": 500,
+        "defense": 5,
+        "magicDefense": 4,
+        "attackMin": 7,
+        "attackMax": 24
+      },
+      "conflicts": {
+        "level": {
+          "current": 40,
+          "community": 50,
+          "adopted": "current"
+        },
+        "exp": {
+          "current": 600,
+          "community": 960,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "洞蛆": {
+      "fields": {
+        "agility": 12,
+        "accuracy": 12,
+        "attackIntervalMs": 2500,
+        "moveIntervalMs": 1000,
+        "communityConfidence": "B+",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "defense": 0,
+        "magicDefense": 0,
+        "attackMin": 6,
+        "attackMax": 8
+      },
+      "conflicts": {
+        "level": {
+          "current": 21,
+          "community": 31,
+          "adopted": "current"
+        },
+        "exp": {
+          "current": 60,
+          "community": 122,
+          "adopted": "current"
+        },
+        "hp": {
+          "current": 65,
+          "community": 80,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "山洞蝙蝠": {
+      "fields": {
+        "agility": 25,
+        "accuracy": 11,
+        "attackIntervalMs": 2500,
+        "moveIntervalMs": 1200,
+        "communityConfidence": "B+",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "level": 20,
+        "hp": 25,
+        "defense": 2,
+        "magicDefense": 0,
+        "attackMin": 4,
+        "attackMax": 6
+      },
+      "conflicts": {
+        "exp": {
+          "current": 25,
+          "community": 34,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "蝎子": {
+      "fields": {
+        "agility": 15,
+        "accuracy": 10,
+        "attackIntervalMs": 2500,
+        "moveIntervalMs": 1200,
+        "communityConfidence": "B+",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "level": 18,
+        "hp": 45,
+        "defense": 2,
+        "magicDefense": 0,
+        "attackMin": 7,
+        "attackMax": 16
+      },
+      "conflicts": {
+        "exp": {
+          "current": 45,
+          "community": 85,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "僵尸1": {
+      "fields": {
+        "agility": 15,
+        "accuracy": 12,
+        "attackIntervalMs": 3000,
+        "moveIntervalMs": 1500,
+        "communityConfidence": "B",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "level": 25,
+        "hp": 155
+      },
+      "conflicts": {
+        "exp": {
+          "current": 160,
+          "community": 210,
+          "adopted": "current"
+        },
+        "defense": {
+          "current": 0,
+          "community": 2,
+          "adopted": "current"
+        },
+        "magicDefense": {
+          "current": 0,
+          "community": 1,
+          "adopted": "current"
+        },
+        "attackMin": {
+          "current": 12,
+          "community": 6,
+          "adopted": "current"
+        },
+        "attackMax": {
+          "current": 16,
+          "community": 17,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "僵尸2": {
+      "fields": {
+        "agility": 13,
+        "accuracy": 13,
+        "attackIntervalMs": 3000,
+        "moveIntervalMs": 2000,
+        "communityConfidence": "B",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "level": 25,
+        "hp": 155
+      },
+      "conflicts": {
+        "exp": {
+          "current": 160,
+          "community": 200,
+          "adopted": "current"
+        },
+        "defense": {
+          "current": 2,
+          "community": 0,
+          "adopted": "current"
+        },
+        "magicDefense": {
+          "current": 1,
+          "community": 0,
+          "adopted": "current"
+        },
+        "attackMin": {
+          "current": 8,
+          "community": 12,
+          "adopted": "current"
+        },
+        "attackMax": {
+          "current": 17,
+          "community": 16,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "僵尸3": {
+      "fields": {
+        "agility": 15,
+        "accuracy": 13,
+        "attackIntervalMs": 3000,
+        "moveIntervalMs": 2000,
+        "communityConfidence": "B+",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "hp": 155,
+        "defense": 2,
+        "magicDefense": 1,
+        "attackMax": 17
+      },
+      "conflicts": {
+        "level": {
+          "current": 25,
+          "community": 12,
+          "adopted": "current"
+        },
+        "exp": {
+          "current": 160,
+          "community": 200,
+          "adopted": "current"
+        },
+        "attackMin": {
+          "current": 6,
+          "community": 8,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "僵尸4": {
+      "fields": {
+        "agility": 15,
+        "accuracy": 12,
+        "attackIntervalMs": 3000,
+        "moveIntervalMs": 2000,
+        "communityConfidence": "B+",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "level": 25,
+        "hp": 155,
+        "defense": 2,
+        "magicDefense": 1,
+        "attackMin": 6,
+        "attackMax": 17
+      },
+      "conflicts": {
+        "exp": {
+          "current": 160,
+          "community": 200,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "僵尸5": {
+      "fields": {
+        "agility": 15,
+        "accuracy": 12,
+        "attackIntervalMs": 3000,
+        "moveIntervalMs": 2000,
+        "communityConfidence": "B+",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "level": 25,
+        "hp": 155,
+        "defense": 2,
+        "magicDefense": 1,
+        "attackMin": 6,
+        "attackMax": 17
+      },
+      "conflicts": {
+        "exp": {
+          "current": 160,
+          "community": 200,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    },
+    "尸王": {
+      "fields": {
+        "agility": 15,
+        "accuracy": 15,
+        "attackIntervalMs": 2800,
+        "moveIntervalMs": 1500,
+        "communityConfidence": "B+",
+        "communityVerification": "Crystal社区数据库与1.76资料交叉；冲突核心字段保持原值"
+      },
+      "agreements": {
+        "hp": 500,
+        "defense": 3,
+        "magicDefense": 3,
+        "attackMin": 18
+      },
+      "conflicts": {
+        "level": {
+          "current": 40,
+          "community": 50,
+          "adopted": "current"
+        },
+        "exp": {
+          "current": 800,
+          "community": 1200,
+          "adopted": "current"
+        },
+        "attackMax": {
+          "current": 36,
+          "community": 38,
+          "adopted": "current"
+        }
+      },
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Exports/3_怪物数据.csv"
+    }
+  },
+  "spawnProfiles": {
+    "217": {
+      "sourceMap": "D001",
+      "groups": [
+        {
+          "name": "蝎子",
+          "center": [
+            200,
+            200
+          ],
+          "spread": 200,
+          "sourceCount": 50,
+          "respawnMinutes": 4,
+          "direction": 0
+        },
+        {
+          "name": "骷髅",
+          "center": [
+            200,
+            200
+          ],
+          "spread": 200,
+          "sourceCount": 80,
+          "respawnMinutes": 4,
+          "direction": 0
+        },
+        {
+          "name": "骷髅战士",
+          "center": [
+            200,
+            200
+          ],
+          "spread": 200,
+          "sourceCount": 80,
+          "respawnMinutes": 4,
+          "direction": 0
+        },
+        {
+          "name": "山洞蝙蝠",
+          "center": [
+            200,
+            200
+          ],
+          "spread": 200,
+          "sourceCount": 30,
+          "respawnMinutes": 4,
+          "direction": 0
+        },
+        {
+          "name": "山洞蝙蝠",
+          "center": [
+            200,
+            200
+          ],
+          "spread": 200,
+          "sourceCount": 30,
+          "respawnMinutes": 4,
+          "direction": 0
+        },
+        {
+          "name": "蝎子",
+          "center": [
+            190,
+            125
+          ],
+          "spread": 30,
+          "sourceCount": 10,
+          "respawnMinutes": 3,
+          "direction": 0
+        },
+        {
+          "name": "骷髅",
+          "center": [
+            250,
+            260
+          ],
+          "spread": 30,
+          "sourceCount": 10,
+          "respawnMinutes": 3,
+          "direction": 0
+        },
+        {
+          "name": "山洞蝙蝠",
+          "center": [
+            250,
+            90
+          ],
+          "spread": 30,
+          "sourceCount": 10,
+          "respawnMinutes": 3,
+          "direction": 0
+        },
+        {
+          "name": "山洞蝙蝠",
+          "center": [
+            30,
+            30
+          ],
+          "spread": 50,
+          "sourceCount": 10,
+          "respawnMinutes": 3,
+          "direction": 0
+        },
+        {
+          "name": "骷髅精灵",
+          "center": [
+            200,
+            200
+          ],
+          "spread": 200,
+          "sourceCount": 5,
+          "respawnMinutes": 10,
+          "direction": 0
+        }
+      ],
+      "sourceGroupCount": 10,
+      "runtimePolicy": "画像参考；不按sourceCount全量生成，保留当前手机代表点阵容",
+      "confidence": "B"
+    },
+    "218": {
+      "sourceMap": "D002",
+      "groups": [
+        {
+          "name": "骷髅战士",
+          "center": [
+            200,
+            200
+          ],
+          "spread": 200,
+          "sourceCount": 80,
+          "respawnMinutes": 3,
+          "direction": 0
+        },
+        {
+          "name": "掷斧骷髅",
+          "center": [
+            200,
+            200
+          ],
+          "spread": 200,
+          "sourceCount": 40,
+          "respawnMinutes": 3,
+          "direction": 0
+        },
+        {
+          "name": "骷髅战将",
+          "center": [
+            200,
+            200
+          ],
+          "spread": 200,
+          "sourceCount": 50,
+          "respawnMinutes": 3,
+          "direction": 0
+        },
+        {
+          "name": "骷髅",
+          "center": [
+            200,
+            200
+          ],
+          "spread": 200,
+          "sourceCount": 40,
+          "respawnMinutes": 3,
+          "direction": 0
+        },
+        {
+          "name": "山洞蝙蝠",
+          "center": [
+            200,
+            200
+          ],
+          "spread": 200,
+          "sourceCount": 20,
+          "respawnMinutes": 3,
+          "direction": 0
+        },
+        {
+          "name": "山洞蝙蝠",
+          "center": [
+            200,
+            200
+          ],
+          "spread": 200,
+          "sourceCount": 20,
+          "respawnMinutes": 3,
+          "direction": 0
+        },
+        {
+          "name": "山洞蝙蝠",
+          "center": [
+            300,
+            230
+          ],
+          "spread": 30,
+          "sourceCount": 20,
+          "respawnMinutes": 3,
+          "direction": 0
+        },
+        {
+          "name": "骷髅精灵",
+          "center": [
+            200,
+            200
+          ],
+          "spread": 200,
+          "sourceCount": 5,
+          "respawnMinutes": 60,
+          "direction": 0
+        }
+      ],
+      "sourceGroupCount": 8,
+      "runtimePolicy": "画像参考；不按sourceCount全量生成，保留当前手机代表点阵容",
+      "confidence": "B"
+    },
+    "221": {
+      "sourceMap": "D003",
+      "groups": [
+        {
+          "name": "骷髅战士",
+          "center": [
+            200,
+            200
+          ],
+          "spread": 200,
+          "sourceCount": 60,
+          "respawnMinutes": 3,
+          "direction": 0
+        },
+        {
+          "name": "掷斧骷髅",
+          "center": [
+            200,
+            200
+          ],
+          "spread": 200,
+          "sourceCount": 40,
+          "respawnMinutes": 3,
+          "direction": 0
+        },
+        {
+          "name": "骷髅战将",
+          "center": [
+            200,
+            200
+          ],
+          "spread": 200,
+          "sourceCount": 60,
+          "respawnMinutes": 3,
+          "direction": 0
+        },
+        {
+          "name": "骷髅",
+          "center": [
+            200,
+            200
+          ],
+          "spread": 200,
+          "sourceCount": 50,
+          "respawnMinutes": 3,
+          "direction": 0
+        },
+        {
+          "name": "山洞蝙蝠",
+          "center": [
+            200,
+            200
+          ],
+          "spread": 200,
+          "sourceCount": 20,
+          "respawnMinutes": 3,
+          "direction": 0
+        },
+        {
+          "name": "山洞蝙蝠",
+          "center": [
+            200,
+            200
+          ],
+          "spread": 200,
+          "sourceCount": 20,
+          "respawnMinutes": 3,
+          "direction": 0
+        },
+        {
+          "name": "骷髅精灵",
+          "center": [
+            200,
+            200
+          ],
+          "spread": 200,
+          "sourceCount": 10,
+          "respawnMinutes": 30,
+          "direction": 0
+        }
+      ],
+      "sourceGroupCount": 7,
+      "runtimePolicy": "画像参考；不按sourceCount全量生成，保留当前手机代表点阵容",
+      "confidence": "B"
+    }
+  },
+  "dropAudit": {
+    "稻草人": {
+      "acceptedCandidates": [
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "匕首"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "乌木剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "布衣(男)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "布衣(女)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "金项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 60,
+          "item": "传统项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "古铜戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 90,
+          "item": "牛角戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "玻璃戒指"
+        }
+      ],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "Gold 50",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "木剑",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "虎牙刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 9,
+          "item": "六角戒指",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "体力恢复药",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "魔力恢复药",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "姜茶 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/稻草人.txt"
+    },
+    "钉耙猫": {
+      "acceptedCandidates": [
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "匕首"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "乌木剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "布衣(男)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "布衣(女)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "金项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 60,
+          "item": "传统项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "古铜戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 90,
+          "item": "牛角戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "玻璃戒指"
+        }
+      ],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "Gold 50",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "木剑",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "虎牙刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 9,
+          "item": "六角戒指",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "体力恢复药",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "魔力恢复药",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "姜茶 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/钉耙猫.txt"
+    },
+    "多钩猫": {
+      "acceptedCandidates": [
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "匕首"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "乌木剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "布衣(男)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "布衣(女)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "金项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 60,
+          "item": "传统项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "古铜戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 90,
+          "item": "牛角戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "玻璃戒指"
+        }
+      ],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "Gold 50",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "木剑",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "虎牙刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 9,
+          "item": "六角戒指",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "体力恢复药",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "魔力恢复药",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "姜茶 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/多钩猫.txt"
+    },
+    "半兽人": {
+      "acceptedCandidates": [],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "Gold 300",
+          "reason": "金币命名/数量需单独映射"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/半兽人.txt"
+    },
+    "半兽战士": {
+      "acceptedCandidates": [
+        {
+          "numerator": 1,
+          "denominator": 90,
+          "item": "匕首"
+        },
+        {
+          "numerator": 1,
+          "denominator": 90,
+          "item": "乌木剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "青铜剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 120,
+          "item": "铁剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 220,
+          "item": "短剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 70,
+          "item": "轻型盔甲(男)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 70,
+          "item": "轻型盔甲(女)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 70,
+          "item": "青铜头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 110,
+          "item": "魔法头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 60,
+          "item": "金项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "传统项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 160,
+          "item": "黑色水晶项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 160,
+          "item": "黑檀项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 160,
+          "item": "黄色水晶项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 700,
+          "item": "魔鬼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 700,
+          "item": "琥珀项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 700,
+          "item": "凤凰明珠"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "铁手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 300,
+          "item": "小手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 300,
+          "item": "皮制手套"
+        },
+        {
+          "numerator": 1,
+          "denominator": 400,
+          "item": "钢手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 400,
+          "item": "银手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 400,
+          "item": "大手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 60,
+          "item": "古铜戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 110,
+          "item": "牛角戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 110,
+          "item": "六角戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 110,
+          "item": "玻璃戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "蓝色水晶戒指"
+        }
+      ],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "Gold 300",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "暴虎刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 230,
+          "item": "兽皮腰带",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 120,
+          "item": "布鞋",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 40,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 40,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 600,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/半兽战士.txt"
+    },
+    "森林雪人": {
+      "acceptedCandidates": [
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "凌风"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "轻型盔甲(男)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "轻型盔甲(女)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "灯笼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 40,
+          "item": "魔法手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "坚固手套"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "蓝色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "黑色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "蛇眼戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "珍珠戒指"
+        }
+      ],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "Gold 2000",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 6,
+          "item": "青铜剑",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 6,
+          "item": "暴虎刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 9,
+          "item": "铁剑",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "短剑",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "青铜斧",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "钢铁斧",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 16,
+          "item": "八荒",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 16,
+          "item": "海魂",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 16,
+          "item": "半月",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 16,
+          "item": "音速刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "青铜头盔",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "魔法头盔",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 8,
+          "item": "黑色水晶项链",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 8,
+          "item": "黑檀项链",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 8,
+          "item": "黄色水晶项链",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "魔鬼项链",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "琥珀项链",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "凤凰明珠",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 8,
+          "item": "小手镯",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "银手镯",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "大手镯",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "钢手镯",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "古铜戒指",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 8,
+          "item": "牛角戒指",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 8,
+          "item": "六角戒指",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 8,
+          "item": "玻璃戒指",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "赤燐石(小)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "木青石(小)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 140,
+          "item": "赤燐石(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 140,
+          "item": "木青石(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/森林雪人.txt"
+    },
+    "食人花": {
+      "acceptedCandidates": [],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "Gold 100",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "食人花叶子",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 3,
+          "item": "食人花果实",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "食人花茎 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "食人花果实 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/食人花.txt"
+    },
+    "毒蜘蛛": {
+      "acceptedCandidates": [],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "Gold 100",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 3,
+          "item": "蜘蛛牙",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "蜘蛛网",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "毒药袋 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "网 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/毒蜘蛛.txt"
+    },
+    "骷髅": {
+      "acceptedCandidates": [
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "凌风"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "轻型盔甲(男)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "轻型盔甲(女)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "灯笼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 40,
+          "item": "魔法手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "坚固手套"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "蓝色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "黑色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "蛇眼戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "珍珠戒指"
+        }
+      ],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "Gold 2000",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 6,
+          "item": "青铜剑",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 6,
+          "item": "暴虎刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 9,
+          "item": "铁剑",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "短剑",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "青铜斧",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "钢铁斧",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 16,
+          "item": "八荒",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 16,
+          "item": "海魂",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 16,
+          "item": "半月",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 16,
+          "item": "音速刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "青铜头盔",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "魔法头盔",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 8,
+          "item": "黑色水晶项链",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 8,
+          "item": "黑檀项链",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 8,
+          "item": "黄色水晶项链",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "魔鬼项链",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "琥珀项链",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "凤凰明珠",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 8,
+          "item": "小手镯",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "银手镯",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "大手镯",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "钢手镯",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "古铜戒指",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 8,
+          "item": "牛角戒指",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 8,
+          "item": "六角戒指",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 8,
+          "item": "玻璃戒指",
+          "reason": "概率高于保守阈值，疑似私服放大"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "赤燐石(小)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "木青石(小)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 140,
+          "item": "赤燐石(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 140,
+          "item": "木青石(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "骨头",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "大骨头",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "骷髅骨 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "骷髅头 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/骷髅.txt"
+    },
+    "掷斧骷髅": {
+      "acceptedCandidates": [
+        {
+          "numerator": 1,
+          "denominator": 60,
+          "item": "青铜剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 90,
+          "item": "铁剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "短剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "青铜斧"
+        },
+        {
+          "numerator": 1,
+          "denominator": 160,
+          "item": "八荒"
+        },
+        {
+          "numerator": 1,
+          "denominator": 160,
+          "item": "海魂"
+        },
+        {
+          "numerator": 1,
+          "denominator": 160,
+          "item": "半月"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "凌风"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "轻型盔甲(男)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "轻型盔甲(女)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "青铜头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "魔法头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "黑色水晶项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "黑檀项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "黄色水晶项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "魔鬼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "琥珀项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "凤凰明珠"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "灯笼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "小手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "银手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "大手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 400,
+          "item": "魔法手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "坚固手套"
+        },
+        {
+          "numerator": 1,
+          "denominator": 60,
+          "item": "古铜戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "牛角戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "六角戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "玻璃戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "蓝色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 300,
+          "item": "黑色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 300,
+          "item": "蛇眼戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 300,
+          "item": "珍珠戒指"
+        }
+      ],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "Gold 200",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 60,
+          "item": "暴虎刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "钢铁斧",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 160,
+          "item": "音速刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 300,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "骨头",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "大骨头",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "骷髅骨 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "骷髅头 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/掷斧骷髅.txt"
+    },
+    "骷髅战士": {
+      "acceptedCandidates": [
+        {
+          "numerator": 1,
+          "denominator": 60,
+          "item": "青铜剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 90,
+          "item": "铁剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "短剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "青铜斧"
+        },
+        {
+          "numerator": 1,
+          "denominator": 160,
+          "item": "八荒"
+        },
+        {
+          "numerator": 1,
+          "denominator": 160,
+          "item": "海魂"
+        },
+        {
+          "numerator": 1,
+          "denominator": 160,
+          "item": "半月"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "凌风"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "轻型盔甲(男)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "轻型盔甲(女)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "青铜头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "魔法头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "黑色水晶项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "黑檀项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "黄色水晶项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 90,
+          "item": "魔鬼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 90,
+          "item": "琥珀项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 90,
+          "item": "凤凰明珠"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "灯笼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "小手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 90,
+          "item": "银手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 90,
+          "item": "大手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 400,
+          "item": "魔法手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "坚固手套"
+        },
+        {
+          "numerator": 1,
+          "denominator": 60,
+          "item": "古铜戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "牛角戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "六角戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "玻璃戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "蓝色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 300,
+          "item": "黑色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 300,
+          "item": "蛇眼戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 300,
+          "item": "珍珠戒指"
+        }
+      ],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "Gold 200",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 60,
+          "item": "暴虎刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "钢铁斧",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 160,
+          "item": "音速刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1000,
+          "item": "赤燐石(小)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1000,
+          "item": "木青石(小)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1000,
+          "item": "晴岚石(小)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1000,
+          "item": "青云石(小)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1000,
+          "item": "绿魔石(小)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 300,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "骨头",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "大骨头",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "骷髅骨 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "骷髅头 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/骷髅战士.txt"
+    },
+    "骷髅战将": {
+      "acceptedCandidates": [
+        {
+          "numerator": 1,
+          "denominator": 60,
+          "item": "青铜剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 90,
+          "item": "铁剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "短剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "青铜斧"
+        },
+        {
+          "numerator": 1,
+          "denominator": 160,
+          "item": "八荒"
+        },
+        {
+          "numerator": 1,
+          "denominator": 160,
+          "item": "海魂"
+        },
+        {
+          "numerator": 1,
+          "denominator": 160,
+          "item": "半月"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "凌风"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "轻型盔甲(男)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "轻型盔甲(女)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "青铜头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "魔法头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "黑色水晶项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "黑檀项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "黄色水晶项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 90,
+          "item": "魔鬼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 90,
+          "item": "琥珀项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 90,
+          "item": "凤凰明珠"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "灯笼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "小手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "银手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "大手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 400,
+          "item": "魔法手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "坚固手套"
+        },
+        {
+          "numerator": 1,
+          "denominator": 60,
+          "item": "古铜戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "牛角戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "六角戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 80,
+          "item": "玻璃戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "蓝色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 300,
+          "item": "黑色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 300,
+          "item": "蛇眼戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 300,
+          "item": "珍珠戒指"
+        }
+      ],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "Gold 200",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 60,
+          "item": "暴虎刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "钢铁斧",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 160,
+          "item": "音速刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1000,
+          "item": "赤燐石(小)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1000,
+          "item": "木青石(小)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1000,
+          "item": "晴岚石(小)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1000,
+          "item": "青云石(小)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1000,
+          "item": "绿魔石(小)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 300,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "骨头",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "大骨头",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "骷髅骨 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "骷髅头 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/骷髅战将.txt"
+    },
+    "骷髅精灵": {
+      "acceptedCandidates": [
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "八荒"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "海魂"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "半月"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "凌风"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "破魂"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "斩马刀"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "偃月"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "降魔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "轻型盔甲(男)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "轻型盔甲(女)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "魔法头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "黑色水晶项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "黑檀项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "黄色水晶项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "魔鬼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "琥珀项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "凤凰明珠"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "灯笼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "大手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "坚固手套"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "魔法手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 70,
+          "item": "黑檀手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 70,
+          "item": "道士手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "夏普儿手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "蓝色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 40,
+          "item": "黑色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 40,
+          "item": "蛇眼戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 40,
+          "item": "珍珠戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "金戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 45,
+          "item": "骷髅戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 55,
+          "item": "狂风戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 12,
+          "item": "攻杀剑术"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "刺杀剑术"
+        },
+        {
+          "numerator": 1,
+          "denominator": 7,
+          "item": "抗拒火环"
+        },
+        {
+          "numerator": 1,
+          "denominator": 12,
+          "item": "诱惑之光"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "地狱火"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "雷电术"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "瞬息移动"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "大火球"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "灵魂火符"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "隐身术"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "召唤骷髅"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "施毒术"
+        }
+      ],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "Gold 4500",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "音速刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "钢铁斧",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "墨铁刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "斗士项链",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 70,
+          "item": "尽力手镯",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "赤燐石(小)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "木青石(小)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "芷心石(小)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "晴岚石(小)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "青云石(小)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "绿魔石(小)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "强效太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "强效太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "强效太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "强效太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "强效太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "强效太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "体力恢复药(大)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "魔力恢复药(大)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "破坏药水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "道力药水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "道力药水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "疾风药水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "体力药水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "魔力药水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "骨头",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "骨头",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "大骨头",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "风剑术",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 60,
+          "item": "体迅风",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "骷髅头骨 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/骷髅精灵.txt"
+    },
+    "洞蛆": {
+      "acceptedCandidates": [],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "Gold 100",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "蛆卵",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "蛆卵",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "遗物 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "水晶戒指 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/洞蛆.txt"
+    },
+    "山洞蝙蝠": {
+      "acceptedCandidates": [],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "Gold 50",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "体力恢复药",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "魔力恢复药",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "回城卷",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 40,
+          "item": "回城卷",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "回城卷",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "蝙蝠牙 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "蝙蝠翅膀 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/山洞蝙蝠.txt"
+    },
+    "蝎子": {
+      "acceptedCandidates": [],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "Gold 100",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 3,
+          "item": "蝎尾",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/蝎子.txt"
+    },
+    "僵尸1": {
+      "acceptedCandidates": [
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "青铜剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "短剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "铁剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "青铜斧"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "八荒"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "海魂"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "半月"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "凌风"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "斩马刀"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "偃月"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "降魔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "轻型盔甲(男)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "轻型盔甲(女)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "青铜头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 175,
+          "item": "魔法头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "灯笼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "白色虎齿项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "魔鬼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "琥珀项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "凤凰明珠"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "魔法手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 750,
+          "item": "坚固手套"
+        },
+        {
+          "numerator": 1,
+          "denominator": 400,
+          "item": "蓝色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "黑色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "蛇眼戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "珍珠戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "基本剑术"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "火球术"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "治愈术"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "抗拒火环"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "诱惑之光"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "精神力战法"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "施毒术"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "雷电术"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "大火球"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "灵魂火符"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "召唤骷髅"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "瞬息移动"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "攻杀剑术"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "地狱火"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "隐身术"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "集体隐身术"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "爆裂火焰"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "火墙"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "幽灵盾"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "刺杀剑术"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "疾光电影"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "心灵启示"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "神圣战甲术"
+        }
+      ],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "Gold 175",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "暴虎刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "音速刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 300,
+          "item": "钢铁斧",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "墨铁刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "铂金项链",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "绝命剑法",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "风剑术",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "体迅风",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "拔刀术",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "僵尸之眼 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "稀有铜矿 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/僵尸1.txt"
+    },
+    "僵尸2": {
+      "acceptedCandidates": [
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "青铜剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "短剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "铁剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "青铜斧"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "八荒"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "海魂"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "半月"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "凌风"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "斩马刀"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "偃月"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "降魔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "轻型盔甲(男)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "轻型盔甲(女)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "青铜头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 175,
+          "item": "魔法头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "灯笼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "白色虎齿项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "魔鬼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "琥珀项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "凤凰明珠"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "魔法手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 750,
+          "item": "坚固手套"
+        },
+        {
+          "numerator": 1,
+          "denominator": 400,
+          "item": "蓝色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "黑色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "蛇眼戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "珍珠戒指"
+        }
+      ],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "Gold 175",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "暴虎刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "音速刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 300,
+          "item": "钢铁斧",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "墨铁刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "铂金项链",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "僵尸之眼 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "稀有铜矿 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/僵尸2.txt"
+    },
+    "僵尸3": {
+      "acceptedCandidates": [
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "青铜剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "短剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "铁剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "青铜斧"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "八荒"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "海魂"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "半月"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "凌风"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "斩马刀"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "偃月"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "降魔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "轻型盔甲(男)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "轻型盔甲(女)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "青铜头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 175,
+          "item": "魔法头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "灯笼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "白色虎齿项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "魔鬼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "琥珀项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "凤凰明珠"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "魔法手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 750,
+          "item": "坚固手套"
+        },
+        {
+          "numerator": 1,
+          "denominator": 400,
+          "item": "蓝色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "黑色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "蛇眼戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "珍珠戒指"
+        }
+      ],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "Gold 175",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "暴虎刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "音速刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 300,
+          "item": "钢铁斧",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "墨铁刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "铂金项链",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "僵尸之眼 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "稀有铜矿 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/僵尸3.txt"
+    },
+    "僵尸4": {
+      "acceptedCandidates": [
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "青铜剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "短剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "铁剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "青铜斧"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "八荒"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "海魂"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "半月"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "凌风"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "斩马刀"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "偃月"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "降魔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "轻型盔甲(男)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "轻型盔甲(女)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "青铜头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 175,
+          "item": "魔法头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "灯笼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "白色虎齿项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "魔鬼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "琥珀项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "凤凰明珠"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "魔法手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 750,
+          "item": "坚固手套"
+        },
+        {
+          "numerator": 1,
+          "denominator": 400,
+          "item": "蓝色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "黑色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "蛇眼戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "珍珠戒指"
+        }
+      ],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "Gold 175",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "暴虎刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "音速刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 300,
+          "item": "钢铁斧",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "墨铁刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "铂金项链",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "僵尸之眼 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "稀有铜矿 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/僵尸4.txt"
+    },
+    "僵尸5": {
+      "acceptedCandidates": [
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "青铜剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "短剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "铁剑"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "青铜斧"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "八荒"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "海魂"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "半月"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "凌风"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "斩马刀"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "偃月"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "降魔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "轻型盔甲(男)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "轻型盔甲(女)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "青铜头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 175,
+          "item": "魔法头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "灯笼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "白色虎齿项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "魔鬼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "琥珀项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "凤凰明珠"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "魔法手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 750,
+          "item": "坚固手套"
+        },
+        {
+          "numerator": 1,
+          "denominator": 400,
+          "item": "蓝色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "黑色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "蛇眼戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "珍珠戒指"
+        }
+      ],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "Gold 175",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "暴虎刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "音速刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 300,
+          "item": "钢铁斧",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 350,
+          "item": "墨铁刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 500,
+          "item": "铂金项链",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "僵尸之眼 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "稀有铜矿 Q",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/僵尸5.txt"
+    },
+    "尸王": {
+      "acceptedCandidates": [
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "八荒"
+        },
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "海魂"
+        },
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "半月"
+        },
+        {
+          "numerator": 1,
+          "denominator": 7,
+          "item": "破魂"
+        },
+        {
+          "numerator": 1,
+          "denominator": 7,
+          "item": "斩马刀"
+        },
+        {
+          "numerator": 1,
+          "denominator": 7,
+          "item": "偃月"
+        },
+        {
+          "numerator": 1,
+          "denominator": 7,
+          "item": "降魔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "凌风"
+        },
+        {
+          "numerator": 1,
+          "denominator": 55,
+          "item": "重盔甲(男)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 55,
+          "item": "重盔甲(女)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 55,
+          "item": "魔法长袍(男)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 55,
+          "item": "魔法长袍(女)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 55,
+          "item": "灵魂战衣(男)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 55,
+          "item": "灵魂战衣(女)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "重盔甲(男)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "重盔甲(女)"
+        },
+        {
+          "numerator": 1,
+          "denominator": 35,
+          "item": "道士头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 40,
+          "item": "骷髅头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2500,
+          "item": "黑铁头盔"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "蓝翡翠项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "放大镜"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "竹笛"
+        },
+        {
+          "numerator": 1,
+          "denominator": 6,
+          "item": "灯笼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 6,
+          "item": "白色虎齿项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 6,
+          "item": "白金项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "魔鬼项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "琥珀项链"
+        },
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "凤凰明珠"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "死神手套"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "金手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 6,
+          "item": "黑檀手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 6,
+          "item": "道士手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "钢手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "坚固手套"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "魔法手镯"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "金戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "魅力戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "道德戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 6,
+          "item": "黑色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 6,
+          "item": "蛇眼戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 6,
+          "item": "珍珠戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 6,
+          "item": "骷髅戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "蓝色水晶戒指"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "攻杀剑术"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "刺杀剑术"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "半月弯刀"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "野蛮冲撞"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "烈火剑法"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "雷电术"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "火墙"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "疾光电影"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "地狱雷光"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "魔法盾"
+        },
+        {
+          "numerator": 1,
+          "denominator": 200,
+          "item": "圣言术"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "冰咆哮"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "灵魂火符"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "幽灵盾"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "神圣战甲术"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "困魔咒"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "心灵启示"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "群体治疗术"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "召唤神兽"
+        }
+      ],
+      "rejected": [
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "Gold 8500",
+          "reason": "金币命名/数量需单独映射"
+        },
+        {
+          "numerator": 1,
+          "denominator": 5,
+          "item": "音速刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 7,
+          "item": "墨铁刀",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 6,
+          "item": "钢铁斧",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 55,
+          "item": "残影魔衣(男)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 55,
+          "item": "残影魔衣(女)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 6,
+          "item": "尽力手镯",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "兽皮腰带",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "铁腰带",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 35,
+          "item": "青铜腰带",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 50,
+          "item": "钢铁腰带",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 15,
+          "item": "兽皮腰带",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 20,
+          "item": "紫绸靴",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 45,
+          "item": "避魂靴",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "晴岚石(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 65,
+          "item": "晴岚石(大)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "赤燐石(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 65,
+          "item": "赤燐石(大)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "绿魔石(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 65,
+          "item": "绿魔石(大)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "强效太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "强效太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "强效太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "强效太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "强效太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "强效太阳水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "体力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "魔力恢复药(中)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "体力恢复药(大)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "魔力恢复药(大)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "体力恢复药(大)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 1,
+          "item": "魔力恢复药(大)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "体力恢复药(大)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "魔力恢复药(大)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "体力恢复药(大)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 2,
+          "item": "魔力恢复药(大)",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "破坏药水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "道力药水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "道力药水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "疾风药水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "体力药水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 30,
+          "item": "魔力药水",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 3,
+          "item": "黑色铁矿石",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 3,
+          "item": "黑色铁矿石",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 3,
+          "item": "黑色铁矿石",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "金矿",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "金矿",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "凭证",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "勇猛宝玉",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "魔性宝玉",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "仙界宝玉",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "守护宝玉",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "制魔宝玉",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 10,
+          "item": "风剑术",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 25,
+          "item": "体迅风",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "拔刀术",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 100,
+          "item": "风身术",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 150,
+          "item": "迁移剑",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        },
+        {
+          "numerator": 1,
+          "denominator": 250,
+          "item": "猛毒剑气",
+          "reason": "不在当前175件装备/经典技能书白名单"
+        }
+      ],
+      "runtimeApplied": false,
+      "source": "angelk727/Mir2ServerDatabases@16c49ad5/Envir/Drops/尸王.txt"
+    }
+  },
+  "runtimeDrops": {
+    "稻草人": [
+      {
+        "name": "金币 50",
+        "denominator": 10,
+        "source": "community",
+        "confidence": "B"
+      },
+      {
+        "name": "金创药(小量)",
+        "denominator": 20,
+        "source": "mobile_mapping",
+        "confidence": "B"
+      },
+      {
+        "name": "匕首",
+        "denominator": 40,
+        "source": "community_clamped",
+        "confidence": "B"
+      },
+      {
+        "name": "布衣(男)",
+        "denominator": 70,
+        "source": "community_clamped",
+        "confidence": "B"
+      },
+      {
+        "name": "乌木剑",
+        "denominator": 500,
+        "source": "community",
+        "confidence": "B"
+      }
+    ],
+    "钉耙猫": [
+      {
+        "name": "金币 100",
+        "denominator": 20,
+        "source": "community",
+        "confidence": "B"
+      },
+      {
+        "name": "金创药(小量)",
+        "denominator": 18,
+        "source": "mobile_mapping",
+        "confidence": "B"
+      },
+      {
+        "name": "匕首",
+        "denominator": 50,
+        "source": "community_clamped",
+        "confidence": "B"
+      },
+      {
+        "name": "布衣(男)",
+        "denominator": 80,
+        "source": "community_clamped",
+        "confidence": "B"
+      },
+      {
+        "name": "古铜戒指",
+        "denominator": 100,
+        "source": "community_clamped",
+        "confidence": "B"
+      }
+    ],
+    "多钩猫": [
+      {
+        "name": "金币 100",
+        "denominator": 20,
+        "source": "community",
+        "confidence": "B"
+      },
+      {
+        "name": "魔法药(小量)",
+        "denominator": 18,
+        "source": "mobile_mapping",
+        "confidence": "B"
+      },
+      {
+        "name": "匕首",
+        "denominator": 50,
+        "source": "community_clamped",
+        "confidence": "B"
+      },
+      {
+        "name": "布衣(女)",
+        "denominator": 80,
+        "source": "community_clamped",
+        "confidence": "B"
+      },
+      {
+        "name": "玻璃戒指",
+        "denominator": 100,
+        "source": "community_clamped",
+        "confidence": "B"
+      }
+    ],
+    "半兽人": [
+      {
+        "name": "金币 100",
+        "denominator": 20,
+        "source": "community",
+        "confidence": "B"
+      },
+      {
+        "name": "金创药(小量)",
+        "denominator": 16,
+        "source": "mobile_mapping",
+        "confidence": "B"
+      },
+      {
+        "name": "乌木剑",
+        "denominator": 180,
+        "source": "community_conservative",
+        "confidence": "B"
+      }
+    ],
+    "半兽战士": [
+      {
+        "name": "金币 300",
+        "denominator": 10,
+        "source": "community",
+        "confidence": "B"
+      },
+      {
+        "name": "金创药(小量)",
+        "denominator": 14,
+        "source": "mobile_mapping",
+        "confidence": "B"
+      },
+      {
+        "name": "青铜剑",
+        "denominator": 120,
+        "source": "community_clamped",
+        "confidence": "B"
+      },
+      {
+        "name": "铁剑",
+        "denominator": 150,
+        "source": "community_clamped",
+        "confidence": "B"
+      },
+      {
+        "name": "轻型盔甲(男)",
+        "denominator": 100,
+        "source": "community_clamped",
+        "confidence": "B"
+      }
+    ],
+    "森林雪人": [
+      {
+        "name": "金币 100",
+        "denominator": 10,
+        "source": "community",
+        "confidence": "B"
+      },
+      {
+        "name": "魔法药(小量)",
+        "denominator": 15,
+        "source": "mobile_mapping",
+        "confidence": "B"
+      },
+      {
+        "name": "凌风",
+        "denominator": 120,
+        "source": "community_clamped",
+        "confidence": "B"
+      },
+      {
+        "name": "轻型盔甲(男)",
+        "denominator": 120,
+        "source": "community_clamped",
+        "confidence": "B"
+      },
+      {
+        "name": "坚固手套",
+        "denominator": 160,
+        "source": "community_clamped",
+        "confidence": "B"
+      }
+    ],
+    "食人花": [
+      {
+        "name": "金币 100",
+        "denominator": 10,
+        "source": "community",
+        "confidence": "B"
+      },
+      {
+        "name": "金创药(小量)",
+        "denominator": 18,
+        "source": "mobile_mapping",
+        "confidence": "B"
+      }
+    ],
+    "毒蜘蛛": [
+      {
+        "name": "金币 100",
+        "denominator": 12,
+        "source": "community_conservative",
+        "confidence": "B"
+      },
+      {
+        "name": "魔法药(小量)",
+        "denominator": 20,
+        "source": "mobile_mapping",
+        "confidence": "B"
+      }
+    ],
+    "骷髅精灵": [
+      {
+        "name": "金币 1200",
+        "denominator": 1,
+        "source": "21cq_and_community",
+        "confidence": "B"
+      },
+      {
+        "name": "强效太阳水",
+        "denominator": 4,
+        "source": "21cq_conservative",
+        "confidence": "B"
+      },
+      {
+        "name": "八荒",
+        "denominator": 100,
+        "source": "community_clamped",
+        "confidence": "B"
+      },
+      {
+        "name": "海魂",
+        "denominator": 100,
+        "source": "community_clamped",
+        "confidence": "B"
+      },
+      {
+        "name": "半月",
+        "denominator": 100,
+        "source": "community_clamped",
+        "confidence": "B"
+      },
+      {
+        "name": "凌风",
+        "denominator": 120,
+        "source": "community_clamped",
+        "confidence": "B"
+      }
+    ],
+    "尸王": [
+      {
+        "name": "金币 2500",
+        "denominator": 1,
+        "source": "21cq_and_community",
+        "confidence": "B"
+      },
+      {
+        "name": "强效太阳水",
+        "denominator": 4,
+        "source": "21cq_conservative",
+        "confidence": "B"
+      },
+      {
+        "name": "攻杀剑术",
+        "denominator": 80,
+        "source": "community_clamped",
+        "confidence": "B"
+      },
+      {
+        "name": "雷电术",
+        "denominator": 80,
+        "source": "community_clamped",
+        "confidence": "B"
+      },
+      {
+        "name": "召唤骷髅",
+        "denominator": 80,
+        "source": "community_clamped",
+        "confidence": "B"
+      },
+      {
+        "name": "大火球",
+        "denominator": 100,
+        "source": "community_clamped",
+        "confidence": "B"
+      }
+    ]
+  },
+  "missingRuntimeMatches": [],
+  "summary": {
+    "monsterOverrides": 22,
+    "spawnGroups": 25,
+    "dropAcceptedCandidates": 429,
+    "dropRejected": 357,
+    "runtimeDropMonsters": 10,
+    "runtimeDropSlots": 44,
+    "conflictFields": 42,
+    "agreementFields": 112,
+    "missingNames": {}
+  }
+}

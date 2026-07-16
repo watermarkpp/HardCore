@@ -1,0 +1,198 @@
+{
+  "batch_id": "B-001",
+  "title": "普通树组_01",
+  "source_file": "b001.png",
+  "expected_count": 6,
+  "grid": [
+    3,
+    2
+  ],
+  "target_canvas_size": [
+    96,
+    128
+  ],
+  "role": "decoration",
+  "processing": "local_hsv_border_connected_key_removal",
+  "assets": [
+    {
+      "asset_id": "staging.v1_5.b001_01",
+      "file": "b001_01.png",
+      "source_cell": {
+        "index": 1,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        96,
+        128
+      ],
+      "anchor_px": [
+        48,
+        126
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": true,
+      "role": "decoration",
+      "alpha_pixels": 3665,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b001_02",
+      "file": "b001_02.png",
+      "source_cell": {
+        "index": 2,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        96,
+        128
+      ],
+      "anchor_px": [
+        48,
+        126
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": true,
+      "role": "decoration",
+      "alpha_pixels": 3768,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b001_03",
+      "file": "b001_03.png",
+      "source_cell": {
+        "index": 3,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        96,
+        128
+      ],
+      "anchor_px": [
+        48,
+        126
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": true,
+      "role": "decoration",
+      "alpha_pixels": 3059,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b001_04",
+      "file": "b001_04.png",
+      "source_cell": {
+        "index": 4,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        96,
+        128
+      ],
+      "anchor_px": [
+        48,
+        126
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": true,
+      "role": "decoration",
+      "alpha_pixels": 3125,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b001_05",
+      "file": "b001_05.png",
+      "source_cell": {
+        "index": 5,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        96,
+        128
+      ],
+      "anchor_px": [
+        48,
+        126
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": true,
+      "role": "decoration",
+      "alpha_pixels": 3262,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b001_06",
+      "file": "b001_06.png",
+      "source_cell": {
+        "index": 6,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        96,
+        128
+      ],
+      "anchor_px": [
+        48,
+        126
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": true,
+      "role": "decoration",
+      "alpha_pixels": 3547,
+      "status": "staging_pending_visual_qa"
+    }
+  ]
+}

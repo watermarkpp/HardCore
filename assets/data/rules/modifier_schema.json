@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "layer": "rule_systems",
+  "operations": ["add", "percent", "multiply", "override"],
+  "statFamilies": {
+    "base": ["attack_min", "attack_max", "magic_min", "magic_max", "tao_min", "tao_max", "defense_min", "defense_max", "magic_defense_min", "magic_defense_max", "hp_max", "mp_max"],
+    "combat": ["attack_speed", "cast_speed", "move_speed", "critical_chance", "critical_damage", "life_steal", "accuracy", "agility", "armor_pierce", "reflect_damage", "boss_damage"],
+    "skill": ["skill_level", "skill_damage", "skill_cooldown", "skill_range"],
+    "trigger": ["on_attack", "on_hit", "on_kill", "on_damaged", "on_skill"]
+  },
+  "modifierExample": {"stat": "attack_max", "op": "add", "value": 15}
+}

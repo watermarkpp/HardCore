@@ -1,0 +1,87 @@
+{
+  "asset_schema_version": 2.0,
+  "content_layer": "personal_expansion",
+  "overrides": {
+    "builtin.blank_old_grass": {
+      "anchor_px": [
+        32.0,
+        16.0
+      ],
+      "calibration_status": "placeable",
+      "collision_policy": "none",
+      "content_layer": "personal_expansion",
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "occlusion": false,
+      "placeable": true
+    },
+    "user.372fca8cba840f8a": {
+      "approved_scale": 0.75,
+      "collision_footprint_tiles": [
+        3.0,
+        5.0
+      ],
+      "content_layer": "personal_expansion",
+      "footprint_tiles": [
+        3.0,
+        5.0
+      ],
+      "logical_scale_level": -1.0,
+      "occupancy_footprint_tiles": [
+        3.0,
+        5.0
+      ],
+      "visual_footprint_tiles": [
+        3.0,
+        5.0
+      ]
+    },
+    "user.6b5ab0cd0826d0a4": {
+      "anchor_px": [
+        201.0,
+        501.0
+      ],
+      "calibration_status": "placeable",
+      "collision_policy": "preset",
+      "content_layer": "personal_expansion",
+      "footprint_tiles": [
+        4.0,
+        6.0
+      ],
+      "occlusion": true,
+      "placeable": true
+    },
+    "user.dbcf36c91f48fe8e": {
+      "anchor_px": [
+        177,
+        254
+      ],
+      "calibration_status": "placeable",
+      "collision_policy": "none",
+      "content_layer": "personal_expansion",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "occlusion": false,
+      "placeable": true
+    },
+    "user.eb62724db3f83335": {
+      "anchor_px": [
+        168.0,
+        309.0
+      ],
+      "calibration_status": "placeable",
+      "collision_policy": "solid_footprint",
+      "content_layer": "personal_expansion",
+      "footprint_tiles": [
+        6.0,
+        5.0
+      ],
+      "occlusion": true,
+      "placeable": true
+    }
+  }
+}

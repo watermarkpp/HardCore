@@ -1,0 +1,56 @@
+{
+  "blank_chunk_policy": "virtual_shared_until_dirty",
+  "chunk_grid_size": [
+    2,
+    1
+  ],
+  "chunk_size_px": [
+    1024,
+    1024
+  ],
+  "chunks": [
+    {
+      "chunk_id": "c_0_0",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        0,
+        0
+      ],
+      "materialized": false,
+      "rect_px": [
+        0,
+        0,
+        1024,
+        1024
+      ],
+      "state": "virtual"
+    },
+    {
+      "chunk_id": "c_1_0",
+      "fill_asset_id": "ground.old_grass.001",
+      "grid": [
+        1,
+        0
+      ],
+      "materialized": false,
+      "rect_px": [
+        1024,
+        0,
+        1024,
+        1024
+      ],
+      "state": "virtual"
+    }
+  ],
+  "default_fill_asset_id": "ground.old_grass.001",
+  "design_size": [
+    32,
+    32
+  ],
+  "ground_pixel_size": [
+    2048,
+    1024
+  ],
+  "map_id": "stage8_runtime",
+  "schema_version": 1
+}

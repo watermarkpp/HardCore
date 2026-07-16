@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "gothic_bich_camp_v1",
+  "mapId": 4,
+  "safeRadius": 690,
+  "monsterRelocationRadius": 940,
+  "fieldSpawnCopies": 4,
+  "fieldSpawnRadii": [940, 1180, 1460, 1740],
+  "homeLandmark": "bich_camp_center_campfire_01",
+  "npcSlots": {
+    "比奇杂货商": [-330, -150],
+    "比奇武器店": [330, -150],
+    "书店老板": [285, 235],
+    "武馆教头": [-120, 250],
+    "比奇老兵": [540, 350],
+    "仓库管理员": [-520, 115]
+  },
+  "props": [
+    {"asset":"bich_camp_center_campfire_ground_01","position":[0,-73],"layer":"ground"},
+    {"asset":"bich_camp_center_campfire_01","position":[0,-85],"collision":{"type":"circle","radius":24}},
+    {"asset":"bich_camp_center_log_bench_01","position":[-135,-30],"collision":{"type":"rect","size":[48,18]}},
+    {"asset":"bich_camp_center_log_bench_02","position":[135,-30],"collision":{"type":"rect","size":[48,18]}},
+
+    {"asset":"bich_camp_healer_tent_01","position":[-330,-245],"collision":{"type":"rect","size":[120,24]}},
+    {"asset":"bich_camp_healer_herb_rack_01","position":[-455,-155],"collision":{"type":"rect","size":[44,24]}},
+    {"asset":"bich_camp_healer_worktable_01","position":[-205,-155],"collision":{"type":"rect","size":[56,24]}},
+
+    {"asset":"bich_camp_forge_shelter_01","position":[330,-270],"collision":{"type":"rect","size":[130,28]}},
+    {"asset":"bich_camp_forge_furnace_01","position":[225,-155],"collision":{"type":"rect","size":[40,30]}},
+    {"asset":"bich_camp_forge_anvil_01","position":[425,-145],"collision":{"type":"rect","size":[32,18]}},
+    {"asset":"bich_camp_forge_weapon_rack_01","position":[500,-215],"collision":{"type":"rect","size":[40,24]}},
+
+    {"asset":"bich_camp_stash_tent_01","position":[-510,30],"collision":{"type":"rect","size":[128,24]}},
+    {"asset":"bich_camp_stash_chest_01","position":[-430,115],"collision":{"type":"rect","size":[48,26]}},
+    {"asset":"bich_camp_stash_crate_01","position":[-585,110],"collision":{"type":"rect","size":[30,22]}},
+    {"asset":"bich_camp_stash_barrel_01","position":[-620,45],"collision":{"type":"circle","radius":17}},
+
+    {"asset":"bich_camp_scroll_tent_01","position":[285,150],"collision":{"type":"rect","size":[120,24]}},
+    {"asset":"bich_camp_scroll_bookshelf_01","position":[435,225],"collision":{"type":"rect","size":[46,26]}},
+    {"asset":"bich_camp_scroll_worktable_01","position":[180,230],"collision":{"type":"rect","size":[54,24]}},
+
+    {"asset":"bich_camp_border_direction_sign_01","position":[565,-305],"collision":{"type":"rect","size":[16,24]}},
+    {"asset":"bich_camp_border_direction_sign_01","position":[-565,-305],"collision":{"type":"rect","size":[16,24]}},
+    {"asset":"bich_camp_border_direction_sign_01","position":[45,270],"collision":{"type":"rect","size":[16,24]}},
+    {"asset":"bich_camp_border_direction_sign_01","position":[565,145],"collision":{"type":"rect","size":[16,24]}},
+    {"asset":"bich_camp_border_direction_sign_01","position":[-565,145],"collision":{"type":"rect","size":[16,24]}}
+  ],
+  "lights": [
+    {"texture":"bich_camp_light_campfire_01","position":[0,-113],"energy":0.75,"scale":2.2,"color":"ff9b52"},
+    {"texture":"bich_camp_light_furnace_01","position":[225,-190],"energy":0.65,"scale":1.5,"color":"ff6c32"},
+    {"texture":"bich_camp_light_lamp_01","position":[285,110],"energy":0.35,"scale":1.2,"color":"ffd28a"}
+  ]
+}

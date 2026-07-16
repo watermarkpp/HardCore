@@ -1,0 +1,822 @@
+{
+  "confidence": "B",
+  "editable": false,
+  "layer": "vanilla_core",
+  "records": [
+    {
+      "mapId": 4,
+      "records": [
+        {
+          "kind": "shop",
+          "name": "比奇杂货商",
+          "position": {
+            "$vector2": [
+              -10848.0,
+              3008.0
+            ]
+          },
+          "source_confidence": "C",
+          "source_coordinate": {
+            "$vector2": [
+              274,
+              613
+            ]
+          },
+          "stock": "general"
+        },
+        {
+          "kind": "shop",
+          "name": "比奇武器店",
+          "position": {
+            "$vector2": [
+              -10208.0,
+              3008.0
+            ]
+          },
+          "source_confidence": "C",
+          "source_coordinate": {
+            "$vector2": [
+              284,
+              603
+            ]
+          },
+          "stock": "starter_gear"
+        },
+        {
+          "kind": "shop",
+          "name": "书店老板",
+          "position": {
+            "$vector2": [
+              -10400.0,
+              3520.0
+            ]
+          },
+          "source_confidence": "C",
+          "source_coordinate": {
+            "$vector2": [
+              297,
+              622
+            ]
+          },
+          "stock": "books"
+        },
+        {
+          "kind": "trainer",
+          "name": "武馆教头",
+          "position": {
+            "$vector2": [
+              -10656.0,
+              3520.0
+            ]
+          },
+          "source_confidence": "C",
+          "source_coordinate": {
+            "$vector2": [
+              293,
+              626
+            ]
+          }
+        },
+        {
+          "kind": "quest",
+          "name": "比奇老兵",
+          "position": {
+            "$vector2": [
+              -11040.0,
+              3296.0
+            ]
+          },
+          "source_confidence": "C",
+          "source_coordinate": {
+            "$vector2": [
+              280,
+              625
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "mapId": 268,
+      "records": []
+    },
+    {
+      "mapId": 338,
+      "records": []
+    },
+    {
+      "mapId": 478,
+      "records": [
+        {
+          "kind": "shop",
+          "name": "盟重杂货商",
+          "position": {
+            "$vector2": [
+              -300.0,
+              -250.0
+            ]
+          },
+          "stock": "general"
+        },
+        {
+          "kind": "shop",
+          "name": "盟重装备店",
+          "position": {
+            "$vector2": [
+              300.0,
+              -250.0
+            ]
+          },
+          "stock": "mid_gear"
+        },
+        {
+          "kind": "shop",
+          "name": "盟重书店",
+          "position": {
+            "$vector2": [
+              120.0,
+              280.0
+            ]
+          },
+          "stock": "books"
+        },
+        {
+          "kind": "trainer",
+          "name": "盟重武馆教头",
+          "position": {
+            "$vector2": [
+              -120.0,
+              280.0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "mapId": 1183,
+      "records": []
+    },
+    {
+      "mapId": 2863,
+      "records": [
+        {
+          "kind": "shop",
+          "name": "白日门杂货商",
+          "position": {
+            "$vector2": [
+              -300.0,
+              -250.0
+            ]
+          },
+          "stock": "general"
+        },
+        {
+          "kind": "shop",
+          "name": "白日门装备店",
+          "position": {
+            "$vector2": [
+              300.0,
+              -250.0
+            ]
+          },
+          "stock": "mid_gear"
+        },
+        {
+          "kind": "shop",
+          "name": "白日门书店",
+          "position": {
+            "$vector2": [
+              120.0,
+              280.0
+            ]
+          },
+          "stock": "books"
+        },
+        {
+          "kind": "trainer",
+          "name": "白日门武馆教头",
+          "position": {
+            "$vector2": [
+              -120.0,
+              280.0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "mapId": 2934,
+      "records": []
+    },
+    {
+      "mapId": 3013,
+      "records": []
+    },
+    {
+      "mapId": 3165,
+      "records": [
+        {
+          "kind": "shop",
+          "name": "苍月杂货商",
+          "position": {
+            "$vector2": [
+              -300.0,
+              -250.0
+            ]
+          },
+          "stock": "general"
+        },
+        {
+          "kind": "shop",
+          "name": "苍月装备店",
+          "position": {
+            "$vector2": [
+              300.0,
+              -250.0
+            ]
+          },
+          "stock": "mid_gear"
+        },
+        {
+          "kind": "shop",
+          "name": "苍月书店",
+          "position": {
+            "$vector2": [
+              120.0,
+              280.0
+            ]
+          },
+          "stock": "books"
+        },
+        {
+          "kind": "trainer",
+          "name": "苍月武馆教头",
+          "position": {
+            "$vector2": [
+              -120.0,
+              280.0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "mapId": 217,
+      "records": []
+    },
+    {
+      "mapId": 218,
+      "records": []
+    },
+    {
+      "mapId": 221,
+      "records": []
+    },
+    {
+      "mapId": 248,
+      "records": []
+    },
+    {
+      "mapId": 249,
+      "records": []
+    },
+    {
+      "mapId": 401,
+      "records": []
+    },
+    {
+      "mapId": 402,
+      "records": []
+    },
+    {
+      "mapId": 403,
+      "records": []
+    },
+    {
+      "mapId": 404,
+      "records": []
+    },
+    {
+      "mapId": 405,
+      "records": []
+    },
+    {
+      "mapId": 406,
+      "records": []
+    },
+    {
+      "mapId": 407,
+      "records": []
+    },
+    {
+      "mapId": 408,
+      "records": []
+    },
+    {
+      "mapId": 409,
+      "records": []
+    },
+    {
+      "mapId": 410,
+      "records": []
+    },
+    {
+      "mapId": 411,
+      "records": []
+    },
+    {
+      "mapId": 412,
+      "records": []
+    },
+    {
+      "mapId": 1578,
+      "records": []
+    },
+    {
+      "mapId": 1506,
+      "records": []
+    },
+    {
+      "mapId": 1507,
+      "records": []
+    },
+    {
+      "mapId": 312,
+      "records": []
+    },
+    {
+      "mapId": 313,
+      "records": []
+    },
+    {
+      "mapId": 314,
+      "records": []
+    },
+    {
+      "mapId": 315,
+      "records": []
+    },
+    {
+      "mapId": 457,
+      "records": []
+    },
+    {
+      "mapId": 458,
+      "records": []
+    },
+    {
+      "mapId": 1378,
+      "records": []
+    },
+    {
+      "mapId": 1379,
+      "records": []
+    },
+    {
+      "mapId": 1380,
+      "records": []
+    },
+    {
+      "mapId": 1381,
+      "records": []
+    },
+    {
+      "mapId": 1382,
+      "records": []
+    },
+    {
+      "mapId": 1383,
+      "records": []
+    },
+    {
+      "mapId": 1384,
+      "records": []
+    },
+    {
+      "mapId": 1385,
+      "records": []
+    },
+    {
+      "mapId": 1386,
+      "records": []
+    },
+    {
+      "mapId": 1387,
+      "records": []
+    },
+    {
+      "mapId": 1388,
+      "records": []
+    },
+    {
+      "mapId": 1445,
+      "records": []
+    },
+    {
+      "mapId": 1446,
+      "records": []
+    },
+    {
+      "mapId": 1447,
+      "records": []
+    },
+    {
+      "mapId": 1448,
+      "records": []
+    },
+    {
+      "mapId": 1449,
+      "records": []
+    },
+    {
+      "mapId": 1450,
+      "records": []
+    },
+    {
+      "mapId": 1451,
+      "records": []
+    },
+    {
+      "mapId": 1544,
+      "records": [
+        {
+          "kind": "guide",
+          "name": "暗殿老人",
+          "position": {
+            "$vector2": [
+              0.0,
+              40.0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "mapId": 1545,
+      "records": []
+    },
+    {
+      "mapId": 1546,
+      "records": []
+    },
+    {
+      "mapId": 1571,
+      "records": []
+    },
+    {
+      "mapId": 1197,
+      "records": []
+    },
+    {
+      "mapId": 1198,
+      "records": []
+    },
+    {
+      "mapId": 1199,
+      "records": []
+    },
+    {
+      "mapId": 1200,
+      "records": []
+    },
+    {
+      "mapId": 1201,
+      "records": []
+    },
+    {
+      "mapId": 1202,
+      "records": []
+    },
+    {
+      "mapId": 1203,
+      "records": []
+    },
+    {
+      "mapId": 1232,
+      "records": []
+    },
+    {
+      "mapId": 1233,
+      "records": []
+    },
+    {
+      "mapId": 1234,
+      "records": []
+    },
+    {
+      "mapId": 1488,
+      "records": []
+    },
+    {
+      "mapId": 1489,
+      "records": []
+    },
+    {
+      "mapId": 1490,
+      "records": []
+    },
+    {
+      "mapId": 659,
+      "records": []
+    },
+    {
+      "mapId": 660,
+      "records": []
+    },
+    {
+      "mapId": 661,
+      "records": []
+    },
+    {
+      "mapId": 662,
+      "records": []
+    },
+    {
+      "mapId": 663,
+      "records": []
+    },
+    {
+      "mapId": 664,
+      "records": []
+    },
+    {
+      "mapId": 665,
+      "records": []
+    },
+    {
+      "mapId": 674,
+      "records": []
+    },
+    {
+      "mapId": 675,
+      "records": []
+    },
+    {
+      "mapId": 676,
+      "records": []
+    },
+    {
+      "mapId": 677,
+      "records": []
+    },
+    {
+      "mapId": 682,
+      "records": []
+    },
+    {
+      "mapId": 2935,
+      "records": []
+    },
+    {
+      "mapId": 2936,
+      "records": []
+    },
+    {
+      "mapId": 2937,
+      "records": []
+    },
+    {
+      "mapId": 2938,
+      "records": []
+    },
+    {
+      "mapId": 2939,
+      "records": []
+    },
+    {
+      "mapId": 2940,
+      "records": []
+    },
+    {
+      "mapId": 2941,
+      "records": [
+        {
+          "kind": "shop",
+          "name": "抉择之地商人",
+          "position": {
+            "$vector2": [
+              0.0,
+              40.0
+            ]
+          },
+          "stock": "general"
+        }
+      ]
+    },
+    {
+      "mapId": 2942,
+      "records": []
+    },
+    {
+      "mapId": 2943,
+      "records": []
+    },
+    {
+      "mapId": 2944,
+      "records": []
+    },
+    {
+      "mapId": 2945,
+      "records": []
+    },
+    {
+      "mapId": 3025,
+      "records": []
+    },
+    {
+      "mapId": 3026,
+      "records": []
+    },
+    {
+      "mapId": 3027,
+      "records": []
+    },
+    {
+      "mapId": 3028,
+      "records": []
+    },
+    {
+      "mapId": 3029,
+      "records": []
+    },
+    {
+      "mapId": 3030,
+      "records": []
+    },
+    {
+      "mapId": 3031,
+      "records": []
+    },
+    {
+      "mapId": 3032,
+      "records": []
+    },
+    {
+      "mapId": 3033,
+      "records": []
+    },
+    {
+      "mapId": 3034,
+      "records": []
+    },
+    {
+      "mapId": 3035,
+      "records": []
+    },
+    {
+      "mapId": 3036,
+      "records": []
+    },
+    {
+      "mapId": 3037,
+      "records": []
+    },
+    {
+      "mapId": 3038,
+      "records": []
+    },
+    {
+      "mapId": 3195,
+      "records": []
+    },
+    {
+      "mapId": 3196,
+      "records": []
+    },
+    {
+      "mapId": 3197,
+      "records": []
+    },
+    {
+      "mapId": 3216,
+      "records": []
+    },
+    {
+      "mapId": 3217,
+      "records": []
+    },
+    {
+      "mapId": 3218,
+      "records": []
+    },
+    {
+      "mapId": 3219,
+      "records": []
+    },
+    {
+      "mapId": 3220,
+      "records": []
+    },
+    {
+      "mapId": 3245,
+      "records": []
+    },
+    {
+      "mapId": 3246,
+      "records": []
+    },
+    {
+      "mapId": 3247,
+      "records": []
+    },
+    {
+      "mapId": 3248,
+      "records": []
+    },
+    {
+      "mapId": 3249,
+      "records": []
+    },
+    {
+      "mapId": 3250,
+      "records": []
+    },
+    {
+      "mapId": 3251,
+      "records": []
+    },
+    {
+      "mapId": 3252,
+      "records": []
+    },
+    {
+      "mapId": 3288,
+      "records": []
+    },
+    {
+      "mapId": 3291,
+      "records": []
+    },
+    {
+      "mapId": 3294,
+      "records": []
+    },
+    {
+      "mapId": 3297,
+      "records": []
+    },
+    {
+      "mapId": 3300,
+      "records": []
+    },
+    {
+      "mapId": 3303,
+      "records": []
+    },
+    {
+      "mapId": 900001,
+      "records": []
+    },
+    {
+      "mapId": 900002,
+      "records": []
+    },
+    {
+      "mapId": 900003,
+      "records": []
+    },
+    {
+      "mapId": 900004,
+      "records": []
+    },
+    {
+      "mapId": 900005,
+      "records": []
+    },
+    {
+      "mapId": 900006,
+      "records": []
+    },
+    {
+      "mapId": 900007,
+      "records": []
+    },
+    {
+      "mapId": 900008,
+      "records": []
+    },
+    {
+      "mapId": 900009,
+      "records": []
+    },
+    {
+      "mapId": 900010,
+      "records": []
+    },
+    {
+      "mapId": 900011,
+      "records": []
+    },
+    {
+      "mapId": 900012,
+      "records": []
+    },
+    {
+      "mapId": 900013,
+      "records": []
+    }
+  ],
+  "schemaVersion": 1,
+  "source": "legacy_verified_adapter",
+  "table": "npcs"
+}

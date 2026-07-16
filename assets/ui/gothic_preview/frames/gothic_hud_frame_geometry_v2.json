@@ -1,0 +1,89 @@
+{
+  "taskId": "UI-GOTHIC-PREVIEW-1",
+  "engine": "OpenCV connectedComponentsWithStats + precise L2 distanceTransform",
+  "selection": {
+    "chosenPrototype": "round_frame_b",
+    "reason": "highest main-hole contour circularity and selection score among A/B/C"
+  },
+  "bottomChassis": {
+    "path": "res://assets/ui/gothic_preview/frames/bottom_hud_chassis_runtime_v1.png",
+    "size": [
+      840,
+      180
+    ],
+    "healthHole": {
+      "center": [
+        96,
+        82
+      ],
+      "radius": 42.9418
+    },
+    "manaHole": {
+      "center": [
+        743,
+        82
+      ],
+      "radius": 42.9418
+    }
+  },
+  "squareSlotFrame": {
+    "path": "res://assets/ui/gothic_preview/frames/gothic_slot_frame_runtime_v1.png",
+    "size": [
+      96,
+      96
+    ],
+    "hole": {
+      "area": 3116,
+      "bbox": [
+        20,
+        20,
+        56,
+        56
+      ],
+      "centroid": [
+        47.5,
+        47.5
+      ],
+      "inscribedCircle": {
+        "center": [
+          47,
+          47
+        ],
+        "radius": 28.0
+      },
+      "aspectScore": 1.0,
+      "contourCircularity": 0.844625,
+      "selectionScore": 47.147935
+    }
+  },
+  "roundActionFrame": {
+    "path": "res://assets/ui/gothic_preview/frames/round_action_frame_runtime_v2.png",
+    "size": [
+      128,
+      128
+    ],
+    "hole": {
+      "area": 4636,
+      "bbox": [
+        26,
+        25,
+        76,
+        77
+      ],
+      "centroid": [
+        63.6048,
+        63.0988
+      ],
+      "inscribedCircle": {
+        "center": [
+          63,
+          62
+        ],
+        "radius": 36.0
+      },
+      "aspectScore": 0.987013,
+      "contourCircularity": 0.846428,
+      "selectionScore": 56.883301
+    }
+  }
+}

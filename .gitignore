@@ -1,0 +1,32 @@
+# Godot local cache and generated import metadata
+.godot/
+*.import
+
+# Build/export output
+outputs/
+*.apk
+*.aab
+
+# Python and local tooling caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Large local source corpora. Worktrees access these through local junctions.
+dev_art_sources/
+
+# Bundled local executables/toolchains. Worktrees access these through junctions.
+tools/godot-*/
+tools/vendor/DepotDownloader/
+
+# Map-editor delivery snapshots and transient backups
+map_editor_workspace/_delivery_backups/
+map_editor_workspace/*backup*/
+map_editor_workspace/**/*backup*
+
+# Common temporary files
+*.log
+*.tmp
+*.temp
+Thumbs.db
+Desktop.ini

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "lane": "server_rules",
+  "requirement": "只解析主服务端 server.crystal.cjlaaa/Server.MirDB 的 ItemInfo 二进制结构与物品使用语义，不引入辅助端的物品内容",
+  "candidate": "source.minipizza_mir2.server",
+  "scope": "item_database_binary_parser",
+  "checks": [
+    {
+      "distribution": "source.original_gameofmir.server_suite",
+      "status": "incompatible",
+      "query": "核对经典 Pascal 服务端是否包含 Crystal Server.MirDB、ItemInfo 与 Stats 的 C# 二进制序列化结构",
+      "proof": [
+        "经典主服务端处理的是 NewMir.DB 等旧格式，不是当前主数据端的 Server.MirDB",
+        "经典主服务端没有 Crystal ItemInfoList、Stats 字典和版本105字段顺序",
+        "辅助1源码与主数据端属于同一 Crystal 数据格式，只用于读取格式和使用语义，物品记录始终来自主服务端"
+      ]
+    }
+  ]
+}

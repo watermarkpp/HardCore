@@ -1,0 +1,1340 @@
+{
+  "schemaVersion": 2,
+  "source": "downloaded classic client Data/Prguse.wil + Data/stateitem.wil",
+  "renderEvidence": "MirClient/FState.pas DStateWinDirectPaint",
+  "base": {
+    "sourceIndex": 376,
+    "pairedBackgroundIndex": 377,
+    "path": "res://assets/art/characters/warrior/paper_doll/classic/base_male_00376_anatomy.png",
+    "size": [
+      168,
+      199
+    ],
+    "rawDrawOffset": [
+      7,
+      -44
+    ],
+    "extractionRule": "largest male/female difference component plus skin-seeded head"
+  },
+  "hair": {
+    "sourceIndex": 442,
+    "path": "res://assets/art/characters/warrior/paper_doll/classic/hair_male_00442.png",
+    "drawOffset": [
+      80,
+      44
+    ],
+    "size": [
+      16,
+      14
+    ]
+  },
+  "composition": {
+    "canvasSize": [
+      168,
+      199
+    ],
+    "drawOrder": [
+      "base",
+      "footRing",
+      "hair",
+      "衣服",
+      "武器",
+      "头盔"
+    ],
+    "baseScreenOrigin": [
+      38,
+      52
+    ],
+    "equipmentScreenAnchor": [
+      31,
+      96
+    ],
+    "rule": "equipmentOffset = recordOffset - baseRecordOffset"
+  },
+  "libraries": {
+    "Prguse.wil": {
+      "image_count": 510,
+      "version": 0,
+      "wil_header_size": 56,
+      "wix_header_size": 48
+    },
+    "stateitem.wil": {
+      "image_count": 561,
+      "version": 0,
+      "wil_header_size": 56,
+      "wix_header_size": 48
+    }
+  },
+  "runtimeMappings": {
+    "木剑": {
+      "slot": "武器",
+      "sourceIndex": 30,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00030.png",
+      "drawOffset": [
+        25,
+        56
+      ],
+      "rawDrawOffset": [
+        32,
+        12
+      ],
+      "size": [
+        28,
+        57
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.15914786967418545
+      }
+    },
+    "匕首": {
+      "slot": "武器",
+      "sourceIndex": 35,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00035.png",
+      "drawOffset": [
+        33,
+        70
+      ],
+      "rawDrawOffset": [
+        40,
+        26
+      ],
+      "size": [
+        20,
+        44
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.2943181818181818
+      }
+    },
+    "乌木剑": {
+      "slot": "武器",
+      "sourceIndex": 43,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00043.png",
+      "drawOffset": [
+        23,
+        31
+      ],
+      "rawDrawOffset": [
+        30,
+        -13
+      ],
+      "size": [
+        40,
+        94
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.17872340425531916
+      }
+    },
+    "青铜剑": {
+      "slot": "武器",
+      "sourceIndex": 31,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00031.png",
+      "drawOffset": [
+        23,
+        49
+      ],
+      "rawDrawOffset": [
+        30,
+        5
+      ],
+      "size": [
+        32,
+        67
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.16977611940298507
+      }
+    },
+    "短剑": {
+      "slot": "武器",
+      "sourceIndex": 33,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00033.png",
+      "drawOffset": [
+        21,
+        33
+      ],
+      "rawDrawOffset": [
+        28,
+        -11
+      ],
+      "size": [
+        36,
+        84
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.2457010582010582
+      }
+    },
+    "铁剑": {
+      "slot": "武器",
+      "sourceIndex": 36,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00036.png",
+      "drawOffset": [
+        20,
+        42
+      ],
+      "rawDrawOffset": [
+        27,
+        -2
+      ],
+      "size": [
+        36,
+        74
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.21433933933933935
+      }
+    },
+    "鹤嘴锄": {
+      "slot": "武器",
+      "sourceIndex": 50,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00050.png",
+      "drawOffset": [
+        0,
+        49
+      ],
+      "rawDrawOffset": [
+        7,
+        5
+      ],
+      "size": [
+        76,
+        108
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.11098927875243665
+      }
+    },
+    "青铜斧": {
+      "slot": "武器",
+      "sourceIndex": 32,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00032.png",
+      "drawOffset": [
+        15,
+        55
+      ],
+      "rawDrawOffset": [
+        22,
+        11
+      ],
+      "size": [
+        44,
+        63
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.20274170274170275
+      }
+    },
+    "八荒": {
+      "slot": "武器",
+      "sourceIndex": 44,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00044.png",
+      "drawOffset": [
+        20,
+        31
+      ],
+      "rawDrawOffset": [
+        27,
+        -13
+      ],
+      "size": [
+        36,
+        88
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.2077020202020202
+      }
+    },
+    "凌风": {
+      "slot": "武器",
+      "sourceIndex": 34,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00034.png",
+      "drawOffset": [
+        9,
+        19
+      ],
+      "rawDrawOffset": [
+        16,
+        -25
+      ],
+      "size": [
+        48,
+        100
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.16041666666666668
+      }
+    },
+    "破魂": {
+      "slot": "武器",
+      "sourceIndex": 51,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00051.png",
+      "drawOffset": [
+        33,
+        69
+      ],
+      "rawDrawOffset": [
+        40,
+        25
+      ],
+      "size": [
+        20,
+        44
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.3159090909090909
+      }
+    },
+    "斩马刀": {
+      "slot": "武器",
+      "sourceIndex": 37,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00037.png",
+      "drawOffset": [
+        11,
+        18
+      ],
+      "rawDrawOffset": [
+        18,
+        -26
+      ],
+      "size": [
+        48,
+        101
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.18461221122112212
+      }
+    },
+    "修罗": {
+      "slot": "武器",
+      "sourceIndex": 40,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00040.png",
+      "drawOffset": [
+        4,
+        44
+      ],
+      "rawDrawOffset": [
+        11,
+        0
+      ],
+      "size": [
+        56,
+        77
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.21103896103896103
+      }
+    },
+    "凝霜": {
+      "slot": "武器",
+      "sourceIndex": 45,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00045.png",
+      "drawOffset": [
+        12,
+        23
+      ],
+      "rawDrawOffset": [
+        19,
+        -21
+      ],
+      "size": [
+        48,
+        93
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.19018817204301075
+      }
+    },
+    "炼狱": {
+      "slot": "武器",
+      "sourceIndex": 41,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00041.png",
+      "drawOffset": [
+        3,
+        29
+      ],
+      "rawDrawOffset": [
+        10,
+        -15
+      ],
+      "size": [
+        60,
+        101
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.22656765676567656
+      }
+    },
+    "井中月": {
+      "slot": "武器",
+      "sourceIndex": 48,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00048.png",
+      "drawOffset": [
+        10,
+        16
+      ],
+      "rawDrawOffset": [
+        17,
+        -28
+      ],
+      "size": [
+        52,
+        103
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.28005974607916356
+      }
+    },
+    "裁决之杖": {
+      "slot": "武器",
+      "sourceIndex": 55,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00055.png",
+      "drawOffset": [
+        18,
+        5
+      ],
+      "rawDrawOffset": [
+        25,
+        -39
+      ],
+      "size": [
+        44,
+        145
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.2335423197492163
+      }
+    },
+    "屠龙": {
+      "slot": "武器",
+      "sourceIndex": 57,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00057.png",
+      "drawOffset": [
+        3,
+        2
+      ],
+      "rawDrawOffset": [
+        10,
+        -42
+      ],
+      "size": [
+        52,
+        116
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.3711870026525199
+      }
+    },
+    "命运之刃": {
+      "slot": "武器",
+      "sourceIndex": 65,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00065.png",
+      "drawOffset": [
+        24,
+        8
+      ],
+      "rawDrawOffset": [
+        31,
+        -36
+      ],
+      "size": [
+        32,
+        117
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.3346688034188034
+      }
+    },
+    "赤血魔剑": {
+      "slot": "武器",
+      "sourceIndex": 66,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00066.png",
+      "drawOffset": [
+        7,
+        1
+      ],
+      "rawDrawOffset": [
+        14,
+        -43
+      ],
+      "size": [
+        52,
+        124
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.1536910669975186
+      }
+    },
+    "祈祷之刃": {
+      "slot": "武器",
+      "sourceIndex": 54,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00054.png",
+      "drawOffset": [
+        7,
+        8
+      ],
+      "rawDrawOffset": [
+        14,
+        -36
+      ],
+      "size": [
+        52,
+        115
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.16404682274247492
+      }
+    },
+    "海魂": {
+      "slot": "武器",
+      "sourceIndex": 39,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00039.png",
+      "drawOffset": [
+        6,
+        24
+      ],
+      "rawDrawOffset": [
+        13,
+        -20
+      ],
+      "size": [
+        76,
+        144
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.09018640350877193
+      }
+    },
+    "偃月": {
+      "slot": "武器",
+      "sourceIndex": 49,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00049.png",
+      "drawOffset": [
+        13,
+        14
+      ],
+      "rawDrawOffset": [
+        20,
+        -30
+      ],
+      "size": [
+        72,
+        170
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.11397058823529412
+      }
+    },
+    "魔杖": {
+      "slot": "武器",
+      "sourceIndex": 42,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00042.png",
+      "drawOffset": [
+        19,
+        43
+      ],
+      "rawDrawOffset": [
+        26,
+        -1
+      ],
+      "size": [
+        56,
+        118
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.11183414043583535
+      }
+    },
+    "血饮": {
+      "slot": "武器",
+      "sourceIndex": 53,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00053.png",
+      "drawOffset": [
+        11,
+        5
+      ],
+      "rawDrawOffset": [
+        18,
+        -39
+      ],
+      "size": [
+        44,
+        112
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.14204545454545456
+      }
+    },
+    "骨玉权杖": {
+      "slot": "武器",
+      "sourceIndex": 59,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00059.png",
+      "drawOffset": [
+        8,
+        22
+      ],
+      "rawDrawOffset": [
+        15,
+        -22
+      ],
+      "size": [
+        68,
+        168
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.09164915966386554
+      }
+    },
+    "半月": {
+      "slot": "武器",
+      "sourceIndex": 46,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00046.png",
+      "drawOffset": [
+        25,
+        28
+      ],
+      "rawDrawOffset": [
+        32,
+        -16
+      ],
+      "size": [
+        36,
+        89
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.21192259675405742
+      }
+    },
+    "降魔": {
+      "slot": "武器",
+      "sourceIndex": 47,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00047.png",
+      "drawOffset": [
+        15,
+        23
+      ],
+      "rawDrawOffset": [
+        22,
+        -21
+      ],
+      "size": [
+        44,
+        96
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.19673295454545456
+      }
+    },
+    "银蛇": {
+      "slot": "武器",
+      "sourceIndex": 38,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00038.png",
+      "drawOffset": [
+        12,
+        24
+      ],
+      "rawDrawOffset": [
+        19,
+        -20
+      ],
+      "size": [
+        44,
+        89
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.14759959141981613
+      }
+    },
+    "无极棍": {
+      "slot": "武器",
+      "sourceIndex": 52,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00052.png",
+      "drawOffset": [
+        15,
+        30
+      ],
+      "rawDrawOffset": [
+        22,
+        -14
+      ],
+      "size": [
+        64,
+        153
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.08302696078431372
+      }
+    },
+    "龙纹剑": {
+      "slot": "武器",
+      "sourceIndex": 56,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00056.png",
+      "drawOffset": [
+        26,
+        7
+      ],
+      "rawDrawOffset": [
+        33,
+        -37
+      ],
+      "size": [
+        32,
+        117
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.20833333333333334
+      }
+    },
+    "布衣(男)": {
+      "slot": "衣服",
+      "sourceIndex": 60,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00060.png",
+      "drawOffset": [
+        41,
+        65
+      ],
+      "rawDrawOffset": [
+        48,
+        21
+      ],
+      "size": [
+        80,
+        128
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.44384765625
+      }
+    },
+    "轻型盔甲(男)": {
+      "slot": "衣服",
+      "sourceIndex": 61,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00061.png",
+      "drawOffset": [
+        41,
+        63
+      ],
+      "rawDrawOffset": [
+        48,
+        19
+      ],
+      "size": [
+        84,
+        130
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.38855311355311356
+      }
+    },
+    "重盔甲(男)": {
+      "slot": "衣服",
+      "sourceIndex": 62,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00062.png",
+      "drawOffset": [
+        40,
+        58
+      ],
+      "rawDrawOffset": [
+        47,
+        14
+      ],
+      "size": [
+        84,
+        140
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.5517006802721088
+      }
+    },
+    "战神盔甲(男)": {
+      "slot": "衣服",
+      "sourceIndex": 62,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00062.png",
+      "drawOffset": [
+        40,
+        58
+      ],
+      "rawDrawOffset": [
+        47,
+        14
+      ],
+      "size": [
+        84,
+        140
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.5517006802721088
+      }
+    },
+    "魔法长袍(男)": {
+      "slot": "衣服",
+      "sourceIndex": 63,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00063.png",
+      "drawOffset": [
+        41,
+        61
+      ],
+      "rawDrawOffset": [
+        48,
+        17
+      ],
+      "size": [
+        80,
+        133
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.543233082706767
+      }
+    },
+    "恶魔长袍(男)": {
+      "slot": "衣服",
+      "sourceIndex": 63,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00063.png",
+      "drawOffset": [
+        41,
+        61
+      ],
+      "rawDrawOffset": [
+        48,
+        17
+      ],
+      "size": [
+        80,
+        133
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.543233082706767
+      }
+    },
+    "灵魂战衣(男)": {
+      "slot": "衣服",
+      "sourceIndex": 64,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00064.png",
+      "drawOffset": [
+        42,
+        65
+      ],
+      "rawDrawOffset": [
+        49,
+        21
+      ],
+      "size": [
+        80,
+        129
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.541375968992248
+      }
+    },
+    "幽灵战衣(男)": {
+      "slot": "衣服",
+      "sourceIndex": 64,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00064.png",
+      "drawOffset": [
+        42,
+        65
+      ],
+      "rawDrawOffset": [
+        49,
+        21
+      ],
+      "size": [
+        80,
+        129
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": false,
+        "opaqueCoverage": 0.541375968992248
+      }
+    },
+    "青铜头盔": {
+      "slot": "头盔",
+      "sourceIndex": 100,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00100.png",
+      "drawOffset": [
+        73,
+        27
+      ],
+      "rawDrawOffset": [
+        80,
+        -17
+      ],
+      "size": [
+        32,
+        40
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": true,
+        "opaqueCoverage": 0.7546875,
+        "borderMedianLuminance": 25,
+        "seedThreshold": 45,
+        "foregroundBounds": [
+          4,
+          0,
+          28,
+          40
+        ],
+        "recordSizePreserved": true
+      }
+    },
+    "魔法头盔": {
+      "slot": "头盔",
+      "sourceIndex": 100,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00100.png",
+      "drawOffset": [
+        73,
+        27
+      ],
+      "rawDrawOffset": [
+        80,
+        -17
+      ],
+      "size": [
+        32,
+        40
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": true,
+        "opaqueCoverage": 0.7546875,
+        "borderMedianLuminance": 25,
+        "seedThreshold": 45,
+        "foregroundBounds": [
+          4,
+          0,
+          28,
+          40
+        ],
+        "recordSizePreserved": true
+      }
+    },
+    "道士头盔": {
+      "slot": "头盔",
+      "sourceIndex": 106,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00106.png",
+      "drawOffset": [
+        72,
+        28
+      ],
+      "rawDrawOffset": [
+        79,
+        -16
+      ],
+      "size": [
+        32,
+        39
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": true,
+        "opaqueCoverage": 0.8565705128205128,
+        "borderMedianLuminance": 25,
+        "seedThreshold": 45,
+        "foregroundBounds": [
+          4,
+          0,
+          29,
+          39
+        ],
+        "recordSizePreserved": true
+      }
+    },
+    "骷髅头盔": {
+      "slot": "头盔",
+      "sourceIndex": 103,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00103.png",
+      "drawOffset": [
+        62,
+        26
+      ],
+      "rawDrawOffset": [
+        69,
+        -18
+      ],
+      "size": [
+        52,
+        36
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": true,
+        "opaqueCoverage": 0.9198717948717948,
+        "borderMedianLuminance": 25,
+        "seedThreshold": 45,
+        "foregroundBounds": [
+          1,
+          0,
+          49,
+          36
+        ],
+        "recordSizePreserved": true
+      }
+    },
+    "黑铁头盔": {
+      "slot": "头盔",
+      "sourceIndex": 344,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00344.png",
+      "drawOffset": [
+        72,
+        36
+      ],
+      "rawDrawOffset": [
+        79,
+        -8
+      ],
+      "size": [
+        28,
+        32
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": true,
+        "opaqueCoverage": 0.8604910714285714,
+        "borderMedianLuminance": 25,
+        "seedThreshold": 45,
+        "foregroundBounds": [
+          5,
+          7,
+          23,
+          32
+        ],
+        "recordSizePreserved": true
+      }
+    },
+    "神秘头盔": {
+      "slot": "头盔",
+      "sourceIndex": 111,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00111.png",
+      "drawOffset": [
+        70,
+        34
+      ],
+      "rawDrawOffset": [
+        77,
+        -10
+      ],
+      "size": [
+        32,
+        27
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": true,
+        "opaqueCoverage": 0.8252314814814815,
+        "borderMedianLuminance": 25,
+        "seedThreshold": 45,
+        "foregroundBounds": [
+          5,
+          0,
+          27,
+          27
+        ],
+        "recordSizePreserved": true
+      }
+    },
+    "祈祷头盔": {
+      "slot": "头盔",
+      "sourceIndex": 110,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00110.png",
+      "drawOffset": [
+        73,
+        28
+      ],
+      "rawDrawOffset": [
+        80,
+        -16
+      ],
+      "size": [
+        32,
+        36
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": true,
+        "opaqueCoverage": 0.7864583333333334,
+        "borderMedianLuminance": 25,
+        "seedThreshold": 45,
+        "foregroundBounds": [
+          3,
+          14,
+          24,
+          36
+        ],
+        "recordSizePreserved": true
+      }
+    },
+    "记忆头盔": {
+      "slot": "头盔",
+      "sourceIndex": 109,
+      "path": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00109.png",
+      "drawOffset": [
+        73,
+        26
+      ],
+      "rawDrawOffset": [
+        80,
+        -18
+      ],
+      "size": [
+        32,
+        37
+      ],
+      "source": "stateitem.wil",
+      "mappingSource": "同名物品 ItemImage",
+      "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
+      "foregroundPolicy": {
+        "applied": true,
+        "opaqueCoverage": 0.8217905405405406,
+        "borderMedianLuminance": 25,
+        "seedThreshold": 45,
+        "foregroundBounds": [
+          5,
+          0,
+          28,
+          37
+        ],
+        "recordSizePreserved": true
+      }
+    }
+  },
+  "rejectedMappings": [
+    {
+      "name": "罗刹",
+      "reason": "原客户端物品表无 ItemImage"
+    },
+    {
+      "name": "落魄神兵",
+      "reason": "原客户端物品表无 ItemImage"
+    },
+    {
+      "name": "怒斩",
+      "reason": "原客户端物品表无 ItemImage"
+    },
+    {
+      "name": "嗜魂法杖",
+      "reason": "原客户端物品表无 ItemImage"
+    },
+    {
+      "name": "龙牙",
+      "reason": "原客户端物品表无 ItemImage"
+    },
+    {
+      "name": "逍遥扇",
+      "reason": "原客户端物品表无 ItemImage"
+    },
+    {
+      "name": "中型盔甲(男)",
+      "reason": "原客户端物品表无 ItemImage"
+    },
+    {
+      "name": "天魔神甲",
+      "reason": "原客户端物品表无 ItemImage"
+    },
+    {
+      "name": "圣战宝甲",
+      "reason": "原客户端物品表无 ItemImage"
+    },
+    {
+      "name": "法神披风",
+      "reason": "原客户端物品表无 ItemImage"
+    },
+    {
+      "name": "霓裳羽衣",
+      "reason": "原客户端物品表无 ItemImage"
+    },
+    {
+      "name": "天尊道袍",
+      "reason": "原客户端物品表无 ItemImage"
+    },
+    {
+      "name": "天师长袍",
+      "reason": "原客户端物品表无 ItemImage"
+    },
+    {
+      "name": "精灵头盔",
+      "reason": "原客户端物品表无 ItemImage"
+    },
+    {
+      "name": "圣战头盔",
+      "reason": "原客户端物品表无 ItemImage"
+    },
+    {
+      "name": "法神头盔",
+      "reason": "原客户端物品表无 ItemImage"
+    },
+    {
+      "name": "天尊头盔",
+      "reason": "原客户端物品表无 ItemImage"
+    }
+  ]
+}

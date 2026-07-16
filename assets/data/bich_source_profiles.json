@@ -1,0 +1,186 @@
+{
+  "baseline": "2003官服1.76基准版",
+  "generatedFrom": "客户端0/0100 MAP与WIL/WIX原始资源，服务端!Setup出生点",
+  "mapProfiles": {
+    "0": {
+      "name": "比奇省",
+      "sourceMapCode": "0",
+      "sourceMapPath": "research/mir2_client_raw/Map/0.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 700,
+      "height": 700,
+      "blockedRatio": 0.3318,
+      "lightCells": 85,
+      "doorCells": 182,
+      "topTileImageIds": [
+        1454,
+        1451,
+        1452,
+        1455,
+        1453,
+        951,
+        952,
+        954,
+        955,
+        953,
+        54,
+        55
+      ],
+      "topObjectImageIds": [
+        "Objects1:1411",
+        "Objects1:1402",
+        "Objects1:1403",
+        "Objects1:1404",
+        "Objects1:1405",
+        "Objects1:1406",
+        "Objects1:1407",
+        "Objects1:1408",
+        "Objects1:1409",
+        "Objects1:1410",
+        "Objects1:1377",
+        "Objects1:1378",
+        "Objects1:1379",
+        "Objects1:1380",
+        "Objects1:1381",
+        "Objects1:1382",
+        "Objects1:1383",
+        "Objects1:1384",
+        "Objects1:1385",
+        "Objects1:1369"
+      ],
+      "areaCounts": {
+        "0": 489918,
+        "5": 60,
+        "3": 22
+      }
+    },
+    "0100": {
+      "name": "客户端小型室内图（具体功能待服务端MapInfo核定）",
+      "sourceMapCode": "0100",
+      "sourceMapPath": "research/mir2_client_raw/Map/0100.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "B",
+      "width": 15,
+      "height": 18,
+      "blockedRatio": 0.8259,
+      "lightCells": 1,
+      "doorCells": 0,
+      "topTileImageIds": [],
+      "topObjectImageIds": [
+        "Objects1:3643",
+        "Objects1:3596",
+        "Objects1:3597",
+        "Objects1:3598",
+        "Objects1:3599",
+        "Objects1:3629",
+        "Objects1:3630",
+        "Objects1:3622",
+        "Objects1:3600",
+        "Objects1:3631",
+        "Objects1:3632",
+        "Objects1:3633",
+        "Objects1:3621",
+        "Objects1:3601",
+        "Objects1:3634",
+        "Objects1:3635",
+        "Objects1:3636",
+        "Objects1:3618",
+        "Objects1:3602",
+        "Objects1:3637"
+      ],
+      "areaCounts": {
+        "0": 270
+      }
+    }
+  },
+  "serviceMapping": {
+    "serviceHomeMap": 0,
+    "serviceHomePoint": [
+      289,
+      618
+    ],
+    "runtimeMapId": 4,
+    "runtimeMapName": "比奇省",
+    "source": "research/MIR2/GameOfMir/MirServer/Mir200/!Setup.txt",
+    "confidence": "A"
+  },
+  "runtimeCoordinateMapping": {
+    "projection": "isometric_64x32_full_size",
+    "sourceSize": [
+      700,
+      700
+    ],
+    "cellHalfWidth": 32,
+    "cellHalfHeight": 16,
+    "centeredOnSourceMap": true,
+    "sourceHomePoint": [
+      289,
+      618
+    ],
+    "worldHomePoint": [
+      -10528,
+      3328
+    ],
+    "worldBounds": [
+      -22368,
+      -11184,
+      44736,
+      22368
+    ],
+    "renderPolicy": "仅绘制镜头附近57×57逻辑格；世界坐标与地图尺寸不压缩"
+  },
+  "classificationCorrection": "0.map是完整比奇省；0100.map仅15×18，证据不足以认定为整座比奇城，因此只按小型室内图保留，不与比奇城概念混同。",
+  "assetSources": {
+    "ground": {
+      "library": "Data/Tiles.wil",
+      "indices": [
+        1454,
+        1451,
+        1452,
+        1455,
+        1453,
+        951,
+        54,
+        55
+      ]
+    },
+    "props": {
+      "library": "Data/Objects.wil",
+      "indices": [
+        1376,
+        1386,
+        1402,
+        1408,
+        1412,
+        1370,
+        5885,
+        5884
+      ]
+    },
+    "interior0100": {
+      "library": "Data/Objects.wil",
+      "floor": [
+        3629,
+        3630,
+        3631,
+        3632,
+        3633,
+        3634,
+        3636,
+        3637
+      ],
+      "props": [
+        3596,
+        3597,
+        3598,
+        3599,
+        3600,
+        3601,
+        3618,
+        3621
+      ]
+    },
+    "note": "地面直接提取；0.map大型物件由原客户端分格碎片重组为手机图集，补画部分仅用于连成碰撞可读轮廓。"
+  }
+}

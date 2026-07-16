@@ -1,0 +1,138 @@
+{
+  "batch_id": "B-007",
+  "title": "大型岩石组",
+  "source_file": "b007.png",
+  "expected_count": 4,
+  "grid": [
+    2,
+    2
+  ],
+  "target_canvas_size": [
+    128,
+    160
+  ],
+  "role": "obstacle",
+  "processing": "local_hsv_border_connected_key_removal",
+  "assets": [
+    {
+      "asset_id": "staging.v1_5.b007_01",
+      "file": "b007_01.png",
+      "source_cell": {
+        "index": 1,
+        "grid": [
+          2,
+          2
+        ]
+      },
+      "canvas_size": [
+        128,
+        160
+      ],
+      "anchor_px": [
+        64,
+        158
+      ],
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": true,
+      "role": "obstacle",
+      "alpha_pixels": 5071,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b007_02",
+      "file": "b007_02.png",
+      "source_cell": {
+        "index": 2,
+        "grid": [
+          2,
+          2
+        ]
+      },
+      "canvas_size": [
+        128,
+        160
+      ],
+      "anchor_px": [
+        64,
+        158
+      ],
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": true,
+      "role": "obstacle",
+      "alpha_pixels": 5695,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b007_03",
+      "file": "b007_03.png",
+      "source_cell": {
+        "index": 3,
+        "grid": [
+          2,
+          2
+        ]
+      },
+      "canvas_size": [
+        128,
+        160
+      ],
+      "anchor_px": [
+        64,
+        158
+      ],
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": true,
+      "role": "obstacle",
+      "alpha_pixels": 5335,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b007_04",
+      "file": "b007_04.png",
+      "source_cell": {
+        "index": 4,
+        "grid": [
+          2,
+          2
+        ]
+      },
+      "canvas_size": [
+        128,
+        160
+      ],
+      "anchor_px": [
+        64,
+        158
+      ],
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": true,
+      "role": "obstacle",
+      "alpha_pixels": 5079,
+      "status": "staging_pending_visual_qa"
+    }
+  ]
+}

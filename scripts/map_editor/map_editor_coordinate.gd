@@ -1,0 +1,52 @@
+class_name MapEditorCoordinate
+extends RefCounted
+
+const HALF_TILE_W := 32.0
+const HALF_TILE_H := 16.0
+
+
+static func origin_px(design_size: Vector2i) -> Vector2:
+	return Vector2(design_size.y * HALF_TILE_W, HALF_TILE_H)
+
+
+static func ground_image_size(design_size: Vector2i) -> Vector2i:
+	return Vector2i((design_size.x + design_size.y) * int(HALF_TILE_W), (design_size.x + design_size.y) * int(HALF_TILE_H))
+
+
+static func tile_to_ground_px(tile: Vector2, design_size: Vector2i) -> Vector2:
+	var origin := origin_px(design_size)
+	return Vector2(origin.x + (tile.x - tile.y) * HALF_TILE_W, origin.y + (tile.x + tile.y) * HALF_TILE_H)
+
+
+static func ground_px_to_tile(ground_px: Vector2, design_size: Vector2i) -> Vector2:
+	var relative := ground_px - origin_px(design_size)
+	return Vector2(
+		(relative.y / HALF_TILE_H + relative.x / HALF_TILE_W) * 0.5,
+		(relative.y / HALF_TILE_H - relative.x / HALF_TILE_W) * 0.5,
+	)
+
+
+static func tile_to_world(tile: Vector2, design_size: Vector2i) -> Vector2:
+	var center := (Vector2(design_size) - Vector2.ONE) * 0.5
+	var local := tile - center
+	return Vector2((local.x - local.y) * HALF_TILE_W, (local.x + local.y) * HALF_TILE_H)
+
+
+static func world_to_tile(world: Vector2, design_size: Vector2i) -> Vector2:
+	var horizontal := world.x / HALF_TILE_W
+	var vertical := world.y / HALF_TILE_H
+	var center := (Vector2(design_size) - Vector2.ONE) * 0.5
+	return center + Vector2((horizontal + vertical) * 0.5, (vertical - horizontal) * 0.5)
+
+
+static func contains_tile(tile: Vector2, design_size: Vector2i) -> bool:
+	return tile.x >= 0.0 and tile.y >= 0.0 and tile.x < design_size.x and tile.y < design_size.y
+
+
+static func chunk_grid_for_ground_px(ground_px: Vector2, chunk_size: Vector2i) -> Vector2i:
+	return Vector2i(floori(ground_px.x / chunk_size.x), floori(ground_px.y / chunk_size.y))
+
+
+static func chunk_local_px(ground_px: Vector2, chunk_size: Vector2i) -> Vector2:
+	var chunk := chunk_grid_for_ground_px(ground_px, chunk_size)
+	return ground_px - Vector2(chunk * chunk_size)

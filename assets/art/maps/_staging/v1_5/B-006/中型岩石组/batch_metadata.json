@@ -1,0 +1,198 @@
+{
+  "batch_id": "B-006",
+  "title": "中型岩石组",
+  "source_file": "b006.png",
+  "expected_count": 6,
+  "grid": [
+    3,
+    2
+  ],
+  "target_canvas_size": [
+    96,
+    128
+  ],
+  "role": "obstacle",
+  "processing": "local_hsv_border_connected_key_removal",
+  "assets": [
+    {
+      "asset_id": "staging.v1_5.b006_01",
+      "file": "b006_01.png",
+      "source_cell": {
+        "index": 1,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        96,
+        128
+      ],
+      "anchor_px": [
+        48,
+        126
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": true,
+      "role": "obstacle",
+      "alpha_pixels": 5289,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b006_02",
+      "file": "b006_02.png",
+      "source_cell": {
+        "index": 2,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        96,
+        128
+      ],
+      "anchor_px": [
+        48,
+        126
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": true,
+      "role": "obstacle",
+      "alpha_pixels": 3551,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b006_03",
+      "file": "b006_03.png",
+      "source_cell": {
+        "index": 3,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        96,
+        128
+      ],
+      "anchor_px": [
+        48,
+        126
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": true,
+      "role": "obstacle",
+      "alpha_pixels": 3897,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b006_04",
+      "file": "b006_04.png",
+      "source_cell": {
+        "index": 4,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        96,
+        128
+      ],
+      "anchor_px": [
+        48,
+        126
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": true,
+      "role": "obstacle",
+      "alpha_pixels": 3362,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b006_05",
+      "file": "b006_05.png",
+      "source_cell": {
+        "index": 5,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        96,
+        128
+      ],
+      "anchor_px": [
+        48,
+        126
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": true,
+      "role": "obstacle",
+      "alpha_pixels": 4980,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b006_06",
+      "file": "b006_06.png",
+      "source_cell": {
+        "index": 6,
+        "grid": [
+          3,
+          2
+        ]
+      },
+      "canvas_size": [
+        96,
+        128
+      ],
+      "anchor_px": [
+        48,
+        126
+      ],
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_policy": "preset",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "object_base",
+      "occlusion": true,
+      "role": "obstacle",
+      "alpha_pixels": 4335,
+      "status": "staging_pending_visual_qa"
+    }
+  ]
+}

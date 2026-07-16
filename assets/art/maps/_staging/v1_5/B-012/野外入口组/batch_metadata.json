@@ -1,0 +1,138 @@
+{
+  "batch_id": "B-012",
+  "title": "野外入口组",
+  "source_file": "b012.png",
+  "expected_count": 4,
+  "grid": [
+    2,
+    2
+  ],
+  "target_canvas_size": [
+    192,
+    160
+  ],
+  "role": "terrain",
+  "processing": "local_hsv_border_connected_key_removal",
+  "assets": [
+    {
+      "asset_id": "staging.v1_5.b012_01",
+      "file": "b012_01.png",
+      "source_cell": {
+        "index": 1,
+        "grid": [
+          2,
+          2
+        ]
+      },
+      "canvas_size": [
+        192,
+        160
+      ],
+      "anchor_px": [
+        96,
+        158
+      ],
+      "footprint_tiles": [
+        3,
+        2
+      ],
+      "collision_policy": "terrain_stamp_generated",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "terrain_base",
+      "occlusion": true,
+      "role": "terrain",
+      "alpha_pixels": 10354,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b012_02",
+      "file": "b012_02.png",
+      "source_cell": {
+        "index": 2,
+        "grid": [
+          2,
+          2
+        ]
+      },
+      "canvas_size": [
+        192,
+        160
+      ],
+      "anchor_px": [
+        96,
+        158
+      ],
+      "footprint_tiles": [
+        3,
+        2
+      ],
+      "collision_policy": "terrain_stamp_generated",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "terrain_base",
+      "occlusion": true,
+      "role": "terrain",
+      "alpha_pixels": 10200,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b012_03",
+      "file": "b012_03.png",
+      "source_cell": {
+        "index": 3,
+        "grid": [
+          2,
+          2
+        ]
+      },
+      "canvas_size": [
+        192,
+        160
+      ],
+      "anchor_px": [
+        96,
+        158
+      ],
+      "footprint_tiles": [
+        3,
+        2
+      ],
+      "collision_policy": "terrain_stamp_generated",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "terrain_base",
+      "occlusion": true,
+      "role": "terrain",
+      "alpha_pixels": 8439,
+      "status": "staging_pending_visual_qa"
+    },
+    {
+      "asset_id": "staging.v1_5.b012_04",
+      "file": "b012_04.png",
+      "source_cell": {
+        "index": 4,
+        "grid": [
+          2,
+          2
+        ]
+      },
+      "canvas_size": [
+        192,
+        160
+      ],
+      "anchor_px": [
+        96,
+        158
+      ],
+      "footprint_tiles": [
+        3,
+        2
+      ],
+      "collision_policy": "terrain_stamp_generated",
+      "navigation_policy": "block_player_and_monster",
+      "default_layer": "terrain_base",
+      "occlusion": true,
+      "role": "terrain",
+      "alpha_pixels": 9518,
+      "status": "staging_pending_visual_qa"
+    }
+  ]
+}

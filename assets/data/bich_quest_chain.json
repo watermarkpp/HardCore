@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "baseline": "2003官服1.76基准优先",
+  "policy": "已有经典任务只按可核实内容采用；古墓—矿区—尸王连续主线是明确标注的单机流程设计，不冒充官服原任务。",
+  "sources": [
+    {"path": "assets/data/legend176_data.json tasks/初级装备任务", "role": "经典任务存在性与奖励类型", "confidence": "B"},
+    {"path": "scripts/region_content.gd", "role": "当前地图、门点、怪物、Boss与掉落运行数据", "confidence": "A"},
+    {"path": "research/MIR2/GameOfMir/M2Server", "role": "服务端任务/物品/角色执行规则源码；实际QuestDiary缺失", "confidence": "A"},
+    {"path": "angelk727/Mir2ServerDatabases Exports/5_任务数据.txt", "role": "后期任务链主题参照，不作为1.76逐步原值", "confidence": "C"}
+  ],
+  "quests": [
+    {
+      "id": "bich_beginner_gear",
+      "order": 1,
+      "name": "初级装备任务",
+      "npc": "比奇老兵",
+      "prerequisite": "",
+      "targetMapIds": [4],
+      "objectives": {"kills": {"稻草人": 3}},
+      "rewards": {"gold": 100, "items": [{"name": "布衣(男)", "count": 1}, {"name": "金创药(小量)", "count": 3}]},
+      "sourceType": "经典任务改编",
+      "confidence": "B"
+    },
+    {
+      "id": "bich_field_hunt",
+      "order": 2,
+      "name": "比奇郊外的威胁",
+      "npc": "比奇老兵",
+      "prerequisite": "bich_beginner_gear",
+      "targetMapIds": [4],
+      "objectives": {"kills": {"钉耙猫": 3, "半兽人": 3}},
+      "rewards": {"gold": 250, "items": [{"name": "青铜剑", "count": 1}, {"name": "金创药(小量)", "count": 3}]},
+      "sourceType": "单机主线衔接设计",
+      "confidence": "C"
+    },
+    {
+      "id": "bich_orc_tomb",
+      "order": 3,
+      "name": "兽人古墓清剿",
+      "npc": "比奇老兵",
+      "prerequisite": "bich_field_hunt",
+      "targetMapIds": [217, 218, 221],
+      "objectives": {"kills": {"骷髅": 6, "骷髅战士": 2}},
+      "rewards": {"gold": 500, "items": [{"name": "铁剑", "count": 1}, {"name": "魔法药(小量)", "count": 3}]},
+      "sourceType": "单机主线衔接设计",
+      "confidence": "C"
+    },
+    {
+      "id": "bich_skeleton_spirit",
+      "order": 4,
+      "name": "骷髅精灵讨伐",
+      "npc": "比奇老兵",
+      "prerequisite": "bich_orc_tomb",
+      "targetMapIds": [218, 221],
+      "objectives": {"kills": {"骷髅精灵": 1}},
+      "rewards": {"gold": 800, "items": [{"name": "基本剑术", "count": 1}, {"name": "金创药(中量)", "count": 3}]},
+      "sourceType": "单机主线衔接设计",
+      "confidence": "C"
+    },
+    {
+      "id": "bich_mine_zombies",
+      "order": 5,
+      "name": "废矿僵尸清剿",
+      "npc": "比奇老兵",
+      "prerequisite": "bich_skeleton_spirit",
+      "targetMapIds": [401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412],
+      "objectives": {"kills": {"僵尸*": 10}},
+      "rewards": {"gold": 1000, "items": [{"name": "金创药(中量)", "count": 5}, {"name": "魔法药(中量)", "count": 5}]},
+      "sourceType": "单机主线衔接设计",
+      "confidence": "C"
+    },
+    {
+      "id": "bich_corpse_king",
+      "order": 6,
+      "name": "尸王殿决战",
+      "npc": "比奇老兵",
+      "prerequisite": "bich_mine_zombies",
+      "targetMapIds": [1578],
+      "objectives": {"kills": {"尸王": 1}},
+      "rewards": {"gold": 2000, "items": [{"name": "攻杀剑术", "count": 1}, {"name": "回城卷", "count": 1}]},
+      "sourceType": "单机主线衔接设计",
+      "confidence": "C"
+    }
+  ]
+}

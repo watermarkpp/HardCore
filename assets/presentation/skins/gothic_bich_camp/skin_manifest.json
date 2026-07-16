@@ -1,0 +1,12 @@
+{
+  "id": "gothic_bich_camp",
+  "name": "哥特边境营地·比奇主城",
+  "contentLayer": "presentation_layer",
+  "source": "user_supplied_green_screen_boards",
+  "style": "Diablo II Act I inspired frontier encampment",
+  "logicMapId": 4,
+  "layout": "res://assets/presentation/skins/gothic_bich_camp/layout.json",
+  "spriteRoot": "res://assets/presentation/skins/gothic_bich_camp/sprites/",
+  "groundAtlas": "res://assets/presentation/skins/gothic_bich_camp/gothic_bich_ground_tiles.png",
+  "rules": {"anchor":"bottom_center","collision":"bottom_entity_only","safeZone":true,"maximumRuntimeLights":5}
+}

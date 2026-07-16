@@ -1,0 +1,23 @@
+extends Node
+
+
+func _ready() -> void:
+	var document := MapEditorTypes.new_map("stage5_collision_test", 991005, "Stage5 Collision Test", Vector2i(64, 64))
+	var palisade := MapEditorInstanceService.create_instance(document, "terrain.palisade_wall_01", "terrain", Vector2i(10, 10), "terrain_base")
+	assert(palisade.ok, str(palisade.get("errors", [])))
+	assert(palisade.instance.scene_intent == "terrain_boundary" and palisade.instance.collision_policy == "terrain_stamp_generated")
+	var rect := MapEditorCollisionService.add_manual_shape(document, "rect", {"rect": [20, 20, 2, 2]})
+	assert(rect.ok)
+	var ellipse := MapEditorCollisionService.add_manual_shape(document, "ellipse", {"rect": [30, 30, 3, 3]})
+	assert(ellipse.ok)
+	var polygon := MapEditorCollisionService.add_manual_shape(document, "polygon", {"points": [[40, 40], [43, 40], [41, 43]]})
+	assert(polygon.ok)
+	var walkable := MapEditorCollisionService.build_walkability(document)
+	assert(walkable.blocked_count > 10)
+	for key: String in ["10,10", "11,10", "12,10", "20,20", "21,21", "31,31", "41,41"]:
+		assert(walkable.blocked_tiles.has(key), "missing blocked tile %s" % key)
+	assert(not walkable.blocked_tiles.has("0,0"))
+	assert(walkable.sources.size() == 4)
+	assert(document.layers.collision.size() == 3)
+	print("MSE_STAGE5_COLLISION_WALKABLE_PASS")
+	get_tree().quit(0)

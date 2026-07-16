@@ -1,0 +1,40 @@
+{
+  "skinId": "classic_client",
+  "layer": "presentation_layer",
+  "displayName": "经典客户端美术包",
+  "logicIndependent": true,
+  "characterMapping": "res://assets/data/warrior_client_art_sources.json",
+  "monsterMappings": ["res://assets/data/bich_common_client_art_sources.json", "res://assets/data/bich_undead_client_art_sources.json"],
+  "equipmentMapping": "res://assets/data/equipment_client_art_sources.json"
+  ,"runtimeAssets": {
+    "player": {
+      "idle": "res://assets/art/characters/warrior/male/warrior_idle.png",
+      "walk": "res://assets/art/characters/warrior/male/warrior_walk.png",
+      "attack": "res://assets/art/characters/warrior/male/warrior_attack.png",
+      "hit": "res://assets/art/characters/warrior/male/warrior_hit.png",
+      "death": "res://assets/art/characters/warrior/male/warrior_death.png"
+    },
+    "effects": {
+      "power_hit": "res://assets/art/characters/warrior/effects/power_hit.png",
+      "long_hit": "res://assets/art/characters/warrior/effects/long_hit.png",
+      "wide_hit": "res://assets/art/characters/warrior/effects/wide_hit.png",
+      "fire_hit_d0_f0": "res://assets/art/characters/warrior/effects/fire_hit_d0_f0.png",
+      "fire_hit_d0_f1": "res://assets/art/characters/warrior/effects/fire_hit_d0_f1.png",
+      "fire_hit_d1_f0": "res://assets/art/characters/warrior/effects/fire_hit_d1_f0.png",
+      "fire_hit_d1_f1": "res://assets/art/characters/warrior/effects/fire_hit_d1_f1.png"
+    },
+    "audio": {
+      "fist": "res://assets/audio/warrior/57.wav",
+      "wood": "res://assets/audio/warrior/51.wav",
+      "sword": "res://assets/audio/warrior/52.wav"
+    },
+    "fallbackMonsters": {
+      "稻草人": {"folder":"res://assets/art/monsters/bich/strawman","prefix":"strawman","frameSize":[64,64],"footAnchor":[32,52],"directionMode":"logical_south_first"},
+      "钉耙猫": {"folder":"res://assets/art/monsters/bich/rake_cat","prefix":"rake_cat","frameSize":[64,64],"footAnchor":[32,52],"directionMode":"logical_south_first"},
+      "半兽人": {"folder":"res://assets/art/monsters/bich/half_orc","prefix":"half_orc","frameSize":[64,64],"footAnchor":[32,52],"directionMode":"logical_south_first"},
+      "森林雪人": {"folder":"res://assets/art/monsters/bich/forest_yeti","prefix":"forest_yeti","frameSize":[64,64],"footAnchor":[32,52],"directionMode":"logical_south_first","animationSource":"authored_turnaround_no_root_motion"},
+      "食人花": {"folder":"res://assets/art/monsters/bich/cannibal_flower","prefix":"cannibal_flower","frameSize":[64,64],"footAnchor":[32,52],"directionMode":"logical_south_first"},
+      "骷髅精灵": {"folder":"res://assets/art/monsters/bosses/skeleton_spirit","prefix":"skeleton_spirit","frameSize":[128,128],"footAnchor":[64,108],"directionMode":"logical_south_first"}
+    }
+  }
+}

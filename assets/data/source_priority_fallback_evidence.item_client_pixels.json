@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "lane": "client_assets",
+  "requirement": "为主服务端物品 Image 索引补齐 Items、StateItem 与 DnItems 像素；仅当主客户端对应索引越界、空帧或损坏时使用辅助1客户端同索引",
+  "candidate": "client.mir2opensource_2013_complete",
+  "scope": "item_pixels_missing_from_primary",
+  "checks": [
+    {
+      "distribution": "client.classic_raw_complete",
+      "status": "missing",
+      "query": "逐个检查主客户端 Items、StateItem、DnItems 的目标 Image 索引是否存在且能解码为非空透明图",
+      "proof": [
+        "主客户端 Items 仅571帧、StateItem仅561帧、DnItems仅566帧",
+        "主服务端物品 Image 索引包含超过上述范围的记录，因此主客户端不可能提供对应帧",
+        "构建器仍对每个索引先尝试主客户端，只有明确失败后才尝试辅助1，并逐项记录失败原因与来源"
+      ]
+    }
+  ]
+}

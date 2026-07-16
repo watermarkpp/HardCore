@@ -1,0 +1,542 @@
+{
+  "schemaVersion": 1,
+  "baseline": "2003官服1.76基准优先",
+  "generatedFrom": "客户端D011/D012 MAP与Tiles/Objects WIL/WIX原始资源",
+  "mapProfiles": {
+    "248": {
+      "name": "洞穴一层",
+      "sourceMapCode": "D011",
+      "sourceMapPath": "research/mir2_client_raw/Map/D011.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 400,
+      "height": 400,
+      "byteLength": 1920052,
+      "sha256": "cfe306b793ec8b7cace580ee1efcf67e1dcbd4b98b4541855a5e070a1b33c067",
+      "blockedRatio": 0.8026,
+      "walkableCells": 31578,
+      "lightCells": 19,
+      "doorCells": 0,
+      "doorRecords": [],
+      "lightRecords": [
+        [
+          27,
+          250,
+          5
+        ],
+        [
+          29,
+          262,
+          5
+        ],
+        [
+          45,
+          272,
+          5
+        ],
+        [
+          127,
+          312,
+          5
+        ],
+        [
+          138,
+          198,
+          5
+        ],
+        [
+          169,
+          102,
+          5
+        ],
+        [
+          196,
+          175,
+          5
+        ],
+        [
+          201,
+          199,
+          5
+        ],
+        [
+          206,
+          165,
+          5
+        ],
+        [
+          219,
+          192,
+          5
+        ],
+        [
+          280,
+          46,
+          5
+        ],
+        [
+          300,
+          38,
+          5
+        ],
+        [
+          311,
+          306,
+          5
+        ],
+        [
+          324,
+          119,
+          5
+        ],
+        [
+          328,
+          303,
+          5
+        ],
+        [
+          330,
+          143,
+          5
+        ],
+        [
+          331,
+          295,
+          5
+        ],
+        [
+          336,
+          120,
+          5
+        ],
+        [
+          353,
+          138,
+          5
+        ]
+      ],
+      "largestWalkableComponents": [
+        {
+          "cells": 31571,
+          "bounds": [
+            12,
+            17,
+            393,
+            372
+          ],
+          "centroid": [
+            194,
+            202
+          ]
+        },
+        {
+          "cells": 1,
+          "bounds": [
+            99,
+            96,
+            99,
+            96
+          ],
+          "centroid": [
+            99,
+            96
+          ]
+        },
+        {
+          "cells": 1,
+          "bounds": [
+            374,
+            139,
+            374,
+            139
+          ],
+          "centroid": [
+            374,
+            139
+          ]
+        },
+        {
+          "cells": 1,
+          "bounds": [
+            359,
+            268,
+            359,
+            268
+          ],
+          "centroid": [
+            359,
+            268
+          ]
+        },
+        {
+          "cells": 1,
+          "bounds": [
+            347,
+            106,
+            347,
+            106
+          ],
+          "centroid": [
+            347,
+            106
+          ]
+        }
+      ],
+      "topTileImageIds": [
+        1951,
+        1953,
+        1952,
+        1954,
+        1955,
+        1961,
+        1901,
+        1904,
+        1905,
+        1902,
+        1903,
+        1551
+      ],
+      "topObjectImageIds": [
+        "Objects1:4479",
+        "Objects1:4472",
+        "Objects1:4471",
+        "Objects1:4470",
+        "Objects1:4480",
+        "Objects1:4475",
+        "Objects1:4474",
+        "Objects1:4473",
+        "Objects1:4481",
+        "Objects1:4478",
+        "Objects1:4477",
+        "Objects1:4476",
+        "Objects1:4440",
+        "Objects1:4433",
+        "Objects1:4432",
+        "Objects1:4431",
+        "Objects1:4441",
+        "Objects1:4436",
+        "Objects1:4435",
+        "Objects1:4434",
+        "Objects1:4442",
+        "Objects1:4439",
+        "Objects1:4438",
+        "Objects1:4437"
+      ],
+      "areaCounts": {
+        "0": 159507,
+        "1": 493
+      }
+    },
+    "249": {
+      "name": "洞穴二层",
+      "sourceMapCode": "D012",
+      "sourceMapPath": "research/mir2_client_raw/Map/D012.map",
+      "sourceKind": "客户端原始MAP直接解析",
+      "confidence": "A",
+      "width": 400,
+      "height": 400,
+      "byteLength": 1920052,
+      "sha256": "b6d301d103b3b6e87b1de46530913ca4c6b92c27f042bd469f356c4fb06147b2",
+      "blockedRatio": 0.7258,
+      "walkableCells": 43864,
+      "lightCells": 3,
+      "doorCells": 12,
+      "doorRecords": [
+        [
+          188,
+          143,
+          1,
+          25
+        ],
+        [
+          188,
+          144,
+          1,
+          25
+        ],
+        [
+          188,
+          145,
+          1,
+          25
+        ],
+        [
+          188,
+          146,
+          1,
+          25
+        ],
+        [
+          189,
+          143,
+          1,
+          25
+        ],
+        [
+          189,
+          144,
+          1,
+          25
+        ],
+        [
+          189,
+          145,
+          1,
+          25
+        ],
+        [
+          189,
+          146,
+          1,
+          25
+        ],
+        [
+          190,
+          141,
+          1,
+          25
+        ],
+        [
+          190,
+          142,
+          1,
+          25
+        ],
+        [
+          190,
+          143,
+          1,
+          25
+        ],
+        [
+          190,
+          144,
+          1,
+          25
+        ]
+      ],
+      "lightRecords": [
+        [
+          70,
+          307,
+          5
+        ],
+        [
+          133,
+          269,
+          5
+        ],
+        [
+          137,
+          149,
+          5
+        ]
+      ],
+      "largestWalkableComponents": [
+        {
+          "cells": 43860,
+          "bounds": [
+            11,
+            14,
+            388,
+            391
+          ],
+          "centroid": [
+            197,
+            201
+          ]
+        },
+        {
+          "cells": 1,
+          "bounds": [
+            266,
+            69,
+            266,
+            69
+          ],
+          "centroid": [
+            266,
+            69
+          ]
+        },
+        {
+          "cells": 1,
+          "bounds": [
+            140,
+            272,
+            140,
+            272
+          ],
+          "centroid": [
+            140,
+            272
+          ]
+        },
+        {
+          "cells": 1,
+          "bounds": [
+            91,
+            312,
+            91,
+            312
+          ],
+          "centroid": [
+            91,
+            312
+          ]
+        },
+        {
+          "cells": 1,
+          "bounds": [
+            156,
+            206,
+            156,
+            206
+          ],
+          "centroid": [
+            156,
+            206
+          ]
+        }
+      ],
+      "topTileImageIds": [
+        45,
+        1952,
+        1955,
+        1951,
+        1953,
+        1954,
+        1901,
+        1904,
+        1903,
+        1902,
+        1905,
+        2799
+      ],
+      "topObjectImageIds": [
+        "Objects1:4480",
+        "Objects1:4475",
+        "Objects1:4474",
+        "Objects1:4473",
+        "Objects1:4481",
+        "Objects1:4478",
+        "Objects1:4477",
+        "Objects1:4476",
+        "Objects1:4479",
+        "Objects1:4472",
+        "Objects1:4471",
+        "Objects1:4470",
+        "Objects1:4531",
+        "Objects1:4532",
+        "Objects1:4533",
+        "Objects1:4440",
+        "Objects1:4433",
+        "Objects1:4432",
+        "Objects1:4441",
+        "Objects1:4436",
+        "Objects1:4435",
+        "Objects1:4434",
+        "Objects1:4442",
+        "Objects1:4439"
+      ],
+      "areaCounts": {
+        "0": 159627,
+        "1": 373
+      }
+    }
+  },
+  "runtimeProjection": {
+    "policy": "原MAP证据保持400×400；手机垂直切片仅压缩最大连通区与路线骨架，运行门点不冒充服务端原坐标。",
+    "248": {
+      "sourceSpawnCells": [
+        [
+          89,
+          75
+        ],
+        [
+          312,
+          92
+        ],
+        [
+          113,
+          327
+        ],
+        [
+          309,
+          314
+        ]
+      ],
+      "sourcePortalCandidates": [
+        [
+          28,
+          352
+        ],
+        [
+          314,
+          31
+        ]
+      ]
+    },
+    "249": {
+      "sourceSpawnCells": [
+        [
+          46,
+          80
+        ],
+        [
+          326,
+          87
+        ],
+        [
+          94,
+          332
+        ],
+        [
+          306,
+          340
+        ]
+      ],
+      "sourcePortalCandidates": [
+        [
+          38,
+          375
+        ]
+      ]
+    },
+    "portalConfidence": "C：当前客户端包缺服务端MapInfo连接坐标，运行门点只保证单机闭环与安全落点。"
+  },
+  "assetSources": {
+    "ground": {
+      "library": "Data/Tiles.wil",
+      "indices": [
+        1901,
+        1902,
+        1903,
+        1904,
+        1905,
+        1901,
+        1903,
+        1905
+      ],
+      "confidence": "A"
+    },
+    "props": {
+      "library": "Data/Objects.wil",
+      "indices": [
+        4439,
+        4440,
+        4441,
+        4478,
+        4479,
+        4480,
+        4510,
+        4531
+      ],
+      "confidence": "A"
+    },
+    "walkabilityMasks": [
+      "assets/art/maps/natural_cave/source_masks/248_D011_walkability.png",
+      "assets/art/maps/natural_cave/source_masks/249_D012_walkability.png"
+    ]
+  }
+}

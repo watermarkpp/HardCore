@@ -1,0 +1,183 @@
+{
+  "asset_schema_version": 2,
+  "assets": [
+    {
+      "asset_id": "terrain.mud_decal_01",
+      "display_name": "碎石泥地印章 01",
+      "asset_type": "terrain_stamp",
+      "category": "terrain",
+      "theme": "ancient_gothic",
+      "image": "assets/art/maps/_shared/terrain_stamps/terrain_mud_decal_01.png",
+      "thumbnail": "assets/art/maps/_shared/terrain_stamps/terrain_mud_decal_01.png",
+      "canvas_size": [
+        128,
+        92
+      ],
+      "image_size": [
+        128,
+        92
+      ],
+      "visible_bounds_px": [
+        1,
+        0,
+        127,
+        92
+      ],
+      "anchor_px": [
+        64,
+        91
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "terrain_type": "mud",
+      "default_layer": "terrain_base",
+      "default_object_role": "terrain",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "tags": [
+        "terrain",
+        "mud",
+        "stage5"
+      ],
+      "source_sha256": "cb0ae21febd1b18d2b61f2d81ce458d4787572c4a1cfaf59681a10ed5fa96cb2",
+      "output_sha256": "ff307ce99b6fd7a103d61744e26dbb9ea165c8e52883d915c8e9acbf8a95751c",
+      "thumbnail_source_sha256": "ff307ce99b6fd7a103d61744e26dbb9ea165c8e52883d915c8e9acbf8a95751c",
+      "raw_import_path": "assets/raw_import/map_assets/terrain_sources/09_ground_decals/09_ground_decals_01_r01_c01.png",
+      "processing": "green_key_remove_crop_proportional_resize"
+    },
+    {
+      "asset_id": "terrain.mud_decal_02",
+      "display_name": "碎石泥地印章 02",
+      "asset_type": "terrain_stamp",
+      "category": "terrain",
+      "theme": "ancient_gothic",
+      "image": "assets/art/maps/_shared/terrain_stamps/terrain_mud_decal_02.png",
+      "thumbnail": "assets/art/maps/_shared/terrain_stamps/terrain_mud_decal_02.png",
+      "canvas_size": [
+        128,
+        99
+      ],
+      "image_size": [
+        128,
+        99
+      ],
+      "visible_bounds_px": [
+        1,
+        0,
+        126,
+        99
+      ],
+      "anchor_px": [
+        64,
+        98
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "terrain_type": "mud",
+      "default_layer": "terrain_base",
+      "default_object_role": "terrain",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "tags": [
+        "terrain",
+        "mud",
+        "stage5"
+      ],
+      "source_sha256": "155e11997bf40c4c8914e48d02a52440b24533ed28199395fbcb5a8664e23fc4",
+      "output_sha256": "db75d3fb5bcffed16334e7dfc73de9e79b54ec3661509bc366585537d24d1ae8",
+      "thumbnail_source_sha256": "db75d3fb5bcffed16334e7dfc73de9e79b54ec3661509bc366585537d24d1ae8",
+      "raw_import_path": "assets/raw_import/map_assets/terrain_sources/09_ground_decals/09_ground_decals_02_r01_c02.png",
+      "processing": "green_key_remove_crop_proportional_resize"
+    },
+    {
+      "asset_id": "terrain.palisade_wall_01",
+      "display_name": "尖桩木栅栏地貌",
+      "asset_type": "terrain_stamp",
+      "category": "terrain",
+      "theme": "ancient_gothic",
+      "image": "assets/art/maps/_shared/terrain_stamps/terrain_palisade_wall_01.png",
+      "thumbnail": "assets/art/maps/_shared/terrain_stamps/terrain_palisade_wall_01.png",
+      "canvas_size": [
+        192,
+        111
+      ],
+      "image_size": [
+        192,
+        111
+      ],
+      "visible_bounds_px": [
+        0,
+        0,
+        192,
+        111
+      ],
+      "anchor_px": [
+        96,
+        110
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        1
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "terrain_type": "palisade",
+      "default_layer": "terrain_base",
+      "default_object_role": "terrain",
+      "collision_policy": "terrain_stamp_generated",
+      "navigation_policy": "block_player_and_monster",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "tags": [
+        "terrain",
+        "palisade",
+        "stage5"
+      ],
+      "source_sha256": "c5182b0c982548f3c8d9191d80026fdab0648a540447d7b74897062c7e63a086",
+      "output_sha256": "eb88109bd534f1eec7dfec332f7c52249feb9b8b98b2d2dbce5327019b5ff96e",
+      "thumbnail_source_sha256": "eb88109bd534f1eec7dfec332f7c52249feb9b8b98b2d2dbce5327019b5ff96e",
+      "raw_import_path": "assets/raw_import/map_assets/terrain_sources/07_fence_signs/07_fence_signs_01_r01_c01.png",
+      "processing": "green_key_remove_crop_proportional_resize"
+    }
+  ],
+  "problems": []
+}

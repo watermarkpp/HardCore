@@ -1,0 +1,448 @@
+{
+  "generatedAt": "2026-07-03T08:33:43.399032+00:00",
+  "baseline": "2003官服1.76基准优先；后期追加内容单独开关",
+  "sourcePriority": [
+    "完整服务端Envir/DB数据",
+    "服务端!Setup.txt与M2Server源码",
+    "客户端动作表与WIL/MAP资源",
+    "项目结构化数据",
+    "带来源与可信度的网络资料"
+  ],
+  "serviceSetupPath": "research\\MIR2\\GameOfMir\\MirServer\\Mir200\\!Setup.txt",
+  "serviceSetup": {
+    "HomeMap": 0,
+    "HomeX": 289,
+    "HomeY": 618,
+    "RedHomeMap": 3,
+    "RedHomeX": 845,
+    "RedHomeY": 674,
+    "MonGenRate": 20,
+    "HitIntervalTime": 600,
+    "MagicHitIntervalTime": 600,
+    "WalkIntervalTime": 400,
+    "RunIntervalTime": 400,
+    "ActionIntervalTime": 320,
+    "ControlActionInterval": 1,
+    "ControlWalkHit": 1,
+    "ControlRunLongHit": 1,
+    "ControlRunHit": 1,
+    "ControlRunMagic": 1,
+    "RunLongHitIntervalTime": 220,
+    "RunHitIntervalTime": 220,
+    "WalkHitIntervalTime": 220,
+    "RunMagicIntervalTime": 220,
+    "MagicAttackRage": 8,
+    "LevelValueOfWarrHP": 4,
+    "LevelValueOfWarrHPRate": 4.5,
+    "LevelValueOfWizardHP": 15,
+    "LevelValueOfWizardHPRate": 1.8,
+    "LevelValueOfTaosHP": 6,
+    "LevelValueOfTaosHPRate": 2.5,
+    "LevelValueOfTaosMP": 8
+  },
+  "serviceExpTableLevel1To60": {
+    "1": 1,
+    "2": 2,
+    "3": 3,
+    "4": 4,
+    "5": 6,
+    "6": 9,
+    "7": 12,
+    "8": 17,
+    "9": 25,
+    "10": 60,
+    "11": 80,
+    "12": 100,
+    "13": 150,
+    "14": 300,
+    "15": 400,
+    "16": 500,
+    "17": 700,
+    "18": 1000,
+    "19": 1200,
+    "20": 1400,
+    "21": 2500,
+    "22": 3000,
+    "23": 3500,
+    "24": 4000,
+    "25": 5000,
+    "26": 7000,
+    "27": 10000,
+    "28": 14000,
+    "29": 18000,
+    "30": 20000,
+    "31": 24000,
+    "32": 28000,
+    "33": 32000,
+    "34": 36000,
+    "35": 50000,
+    "36": 88000,
+    "37": 106000,
+    "38": 152000,
+    "39": 200000,
+    "40": 400000,
+    "41": 600000,
+    "42": 800000,
+    "43": 1200000,
+    "44": 3000000,
+    "45": 5500000,
+    "46": 7800000,
+    "47": 10000000,
+    "48": 30000000,
+    "49": 50000000,
+    "50": 80000000,
+    "51": 100000000,
+    "52": 500000000,
+    "53": 4000000000,
+    "54": 4000000000,
+    "55": 4000000000,
+    "56": 4000000000,
+    "57": 4000000000,
+    "58": 4000000000,
+    "59": 4000000000,
+    "60": 4000000000
+  },
+  "serviceRuntimeExpTableLevel1To60": {
+    "1": 100,
+    "2": 200,
+    "3": 300,
+    "4": 400,
+    "5": 600,
+    "6": 900,
+    "7": 1200,
+    "8": 1700,
+    "9": 2500,
+    "10": 6000,
+    "11": 8000,
+    "12": 10000,
+    "13": 15000,
+    "14": 30000,
+    "15": 40000,
+    "16": 50000,
+    "17": 70000,
+    "18": 100000,
+    "19": 120000,
+    "20": 140000,
+    "21": 250000,
+    "22": 300000,
+    "23": 350000,
+    "24": 400000,
+    "25": 500000,
+    "26": 700000,
+    "27": 1000000,
+    "28": 1400000,
+    "29": 1800000,
+    "30": 2000000,
+    "31": 2400000,
+    "32": 2800000,
+    "33": 3200000,
+    "34": 3600000,
+    "35": 4000000,
+    "36": 4800000,
+    "37": 5600000,
+    "38": 8200000,
+    "39": 9000000,
+    "40": 12000000,
+    "41": 16000000,
+    "42": 30000000,
+    "43": 50000000,
+    "44": 80000000,
+    "45": 120000000,
+    "46": 480000000,
+    "47": 1000000000,
+    "48": 3000000000,
+    "49": 3500000000,
+    "50": 4000000000,
+    "51": 4000000000,
+    "52": 4000000000,
+    "53": 4000000000,
+    "54": 4000000000,
+    "55": 4000000000,
+    "56": 4000000000,
+    "57": 4000000000,
+    "58": 4000000000,
+    "59": 4000000000,
+    "60": 4000000000
+  },
+  "serviceRuntimeExpSource": "research\\MIR2\\GameOfMir\\M2Server\\M2Share.pas",
+  "requiredServerTables": {
+    "map_info": {
+      "status": "missing",
+      "expected": [
+        "Envir/MapInfo.txt",
+        "Mir200/Envir/MapInfo.txt"
+      ],
+      "matches": []
+    },
+    "monster_spawns": {
+      "status": "missing",
+      "expected": [
+        "Envir/MonGen.txt",
+        "Mir200/Envir/MonGen.txt"
+      ],
+      "matches": []
+    },
+    "monster_drops": {
+      "status": "missing",
+      "expected": [
+        "Envir/MonItems",
+        "Mir200/Envir/MonItems"
+      ],
+      "matches": []
+    },
+    "npc_merchants": {
+      "status": "missing",
+      "expected": [
+        "Envir/Merchant.txt",
+        "Mir200/Envir/Merchant.txt"
+      ],
+      "matches": []
+    },
+    "npc_scripts": {
+      "status": "missing",
+      "expected": [
+        "Envir/Market_Def",
+        "Mir200/Envir/Market_Def"
+      ],
+      "matches": []
+    },
+    "monster_db": {
+      "status": "missing",
+      "expected": [
+        "Monster.DB",
+        "Monster.csv",
+        "Mir200/Monster.DB",
+        "DB/Monster.DB"
+      ],
+      "matches": []
+    },
+    "item_db": {
+      "status": "missing",
+      "expected": [
+        "StdItems.DB",
+        "StdItems.csv",
+        "Mir200/StdItems.DB",
+        "DB/StdItems.DB"
+      ],
+      "matches": []
+    },
+    "magic_db": {
+      "status": "missing",
+      "expected": [
+        "Magic.DB",
+        "Magic.csv",
+        "Mir200/Magic.DB",
+        "DB/Magic.DB"
+      ],
+      "matches": []
+    }
+  },
+  "projectDataPath": "work\\legend176_game\\assets\\data\\legend176_data.json",
+  "projectTables": {
+    "maps": {
+      "rows": 142,
+      "recordStatus": {
+        "基准候选": 124,
+        "客户端原MAP已接入·服务端门点待核": 5,
+        "后期资料占位·待核验": 13
+      },
+      "confidence": {
+        "B": 129,
+        "C": 13
+      },
+      "versionTag": {
+        "2003官服1.76基准版": 129,
+        "1.76后期追加内容": 13
+      },
+      "sourceUrlCoverage": {
+        "count": 142,
+        "total": 142,
+        "ratio": 1.0
+      },
+      "secondarySourceUrlCoverage": {
+        "count": 0,
+        "total": 142,
+        "ratio": 0.0
+      },
+      "verificationCoverage": {
+        "count": 142,
+        "total": 142,
+        "ratio": 1.0
+      }
+    },
+    "monsters": {
+      "rows": 214,
+      "recordStatus": {
+        "基准候选": 108,
+        "服务端变体·待判定": 106
+      },
+      "confidence": {
+        "B": 108,
+        "C": 106
+      },
+      "versionTag": {
+        "2003官服1.76基准版": 214
+      },
+      "sourceUrlCoverage": {
+        "count": 214,
+        "total": 214,
+        "ratio": 1.0
+      },
+      "secondarySourceUrlCoverage": {
+        "count": 0,
+        "total": 214,
+        "ratio": 0.0
+      },
+      "verificationCoverage": {
+        "count": 214,
+        "total": 214,
+        "ratio": 1.0
+      }
+    },
+    "bosses": {
+      "rows": 46,
+      "recordStatus": {
+        "服务端变体·待判定": 20,
+        "基准候选": 26
+      },
+      "confidence": {
+        "C": 20,
+        "B": 26
+      },
+      "versionTag": {
+        "2003官服1.76基准版": 46
+      },
+      "sourceUrlCoverage": {
+        "count": 46,
+        "total": 46,
+        "ratio": 1.0
+      },
+      "secondarySourceUrlCoverage": {
+        "count": 0,
+        "total": 46,
+        "ratio": 0.0
+      },
+      "verificationCoverage": {
+        "count": 46,
+        "total": 46,
+        "ratio": 1.0
+      }
+    },
+    "items": {
+      "rows": 175,
+      "recordStatus": {
+        "基准候选": 175
+      },
+      "confidence": {
+        "A": 61,
+        "B": 114
+      },
+      "versionTag": {
+        "2003官服1.76基准版": 175
+      },
+      "sourceUrlCoverage": {
+        "count": 175,
+        "total": 175,
+        "ratio": 1.0
+      },
+      "secondarySourceUrlCoverage": {
+        "count": 175,
+        "total": 175,
+        "ratio": 1.0
+      },
+      "verificationCoverage": {
+        "count": 175,
+        "total": 175,
+        "ratio": 1.0
+      }
+    },
+    "skills": {
+      "rows": 132,
+      "recordStatus": {
+        "基准候选": 132
+      },
+      "confidence": {
+        "A": 132
+      },
+      "versionTag": {
+        "2003官服1.76基准版": 132
+      },
+      "sourceUrlCoverage": {
+        "count": 132,
+        "total": 132,
+        "ratio": 1.0
+      },
+      "secondarySourceUrlCoverage": {
+        "count": 132,
+        "total": 132,
+        "ratio": 1.0
+      },
+      "verificationCoverage": {
+        "count": 132,
+        "total": 132,
+        "ratio": 1.0
+      }
+    },
+    "drops": {
+      "rows": 3424,
+      "recordStatus": {
+        "服务端掉落槽": 3424
+      },
+      "confidence": {
+        "C": 3424
+      },
+      "versionTag": {
+        "2003官服1.76基准版": 3424
+      },
+      "sourceUrlCoverage": {
+        "count": 3424,
+        "total": 3424,
+        "ratio": 1.0
+      },
+      "secondarySourceUrlCoverage": {
+        "count": 0,
+        "total": 3424,
+        "ratio": 0.0
+      },
+      "verificationCoverage": {
+        "count": 3424,
+        "total": 3424,
+        "ratio": 1.0
+      }
+    },
+    "tasks": {
+      "rows": 9,
+      "recordStatus": {
+        "任务存在已确认·步骤待结构化": 9
+      },
+      "confidence": {
+        "B": 9
+      },
+      "versionTag": {
+        "2003官服1.76基准版": 9
+      },
+      "sourceUrlCoverage": {
+        "count": 9,
+        "total": 9,
+        "ratio": 1.0
+      },
+      "secondarySourceUrlCoverage": {
+        "count": 0,
+        "total": 9,
+        "ratio": 0.0
+      },
+      "verificationCoverage": {
+        "count": 9,
+        "total": 9,
+        "ratio": 1.0
+      }
+    }
+  },
+  "policyOverrides": {
+    "normalAttackIntervalMs": {
+      "serviceReference": 600,
+      "currentMobileDesign": 850,
+      "decision": "保留用户指定的手机续刀手感；服务端值仅作参考。"
+    }
+  }
+}

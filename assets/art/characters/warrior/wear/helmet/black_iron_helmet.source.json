@@ -1,0 +1,4083 @@
+{
+  "schemaVersion": 6,
+  "item": "Black Iron Helmet / 黑铁头盔",
+  "classification": "project-generated presentation asset based on verified classic evidence",
+  "referenceIcon": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00344.png",
+  "referenceIconSha256": "24f535d351cdd18110b00ffda717a23dc2df3cf0b2890b1f7e80cf64d96b47df",
+  "referenceIconImage": 344,
+  "approvedDirectionReferences": {
+    "rearNNeNw": "res://dev_art_sources/reference/generated/black_iron_helmet/rear_n_ne_nw_transparent.png",
+    "rearNNeNwSha256": "c21c824ad91764772a1c2d00e98c42ea5acd46b36438b24b5956a902cc3f98b7",
+    "frontSideConcept": "res://dev_art_sources/reference/generated/black_iron_helmet/front_side_direction_concept.png",
+    "frontSideConceptSha256": "6f914181f66c5c6d326c11458bc6a84794675af5f125001ea040ef0160bafbe7",
+    "canonicalManifest": "res://dev_art_sources/reference/generated/black_iron_helmet/canonical_directions/manifest.json",
+    "canonicalManifestSha256": "2e7fea750d295072d89fce3380fdfb1dad92e316a919f6e418469a83859b267d",
+    "acceptedRowMapping": [
+      "N",
+      "NE",
+      "E",
+      "SE",
+      "S",
+      "SW",
+      "W",
+      "NW"
+    ]
+  },
+  "anchorLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+  "anchorLibraryImageCount": 22242,
+  "anchorAppearance": 2,
+  "anchorStride": 2224,
+  "anchorUsage": "position/motion only; no anchor-source pixels copied",
+  "completeClientScan": "res://outputs/resource_catalog/complete_client_frame_catalog/manifest.json",
+  "completeClientCoverage": {
+    "libraries": 122,
+    "indexedFrames": 962251,
+    "validFrames": 962250
+  },
+  "clientHelmetParameterBaseline": {
+    "path": "res://outputs/resource_catalog/black_iron_helmet/client_helmet_parameter_baseline.json",
+    "sha256": "30209081d1580a0c9c6dd7449390423b222ea82cec46279bbe4ecf11a5ba9f67",
+    "directionRuntimeMaxSize": {
+      "N": [
+        19,
+        19
+      ],
+      "NE": [
+        23,
+        20
+      ],
+      "E": [
+        19,
+        21
+      ],
+      "SE": [
+        19,
+        24
+      ],
+      "S": [
+        19,
+        22
+      ],
+      "SW": [
+        22,
+        23
+      ],
+      "W": [
+        19,
+        20
+      ],
+      "NW": [
+        18,
+        21
+      ]
+    },
+    "deathCanonicalRotate90Degrees": false
+  },
+  "sourceEvidence": {
+    "runtimeHeadLibrary": "res://dev_art_sources/reference/mir2opensource_2013_client/MirObjects/PlayerObject.cs",
+    "runtimeFinding": "DrawHead uses HairLibrary; no equipped-helmet mapping exists in the paired runtime.",
+    "actionFrames": "res://dev_art_sources/reference/mir2opensource_2013_client/MirObjects/Frames.cs",
+    "rejectedHairLook2": "Narrow hair strip; visually rejected and used only as a motion anchor.",
+    "rejectedHelmetWil": "Six horned/open-face families; none matches StateItem #344."
+  },
+  "generation": {
+    "equipmentIcon": "Verified StateItem #344 remains the equipment-window icon and unique identity evidence; its old derived world pixels are not used.",
+    "runtimeDirections": "All eight runtime views come from the newly generated canonical direction family assembled from the user-supplied concept images.",
+    "rearDirections": "N/NE/NW come from the user-approved magenta-background rear sheet.",
+    "frontAndSideDirections": "E/SE/S/SW/W come from visual panels 2/3/4/6/7 of the supplied nine-panel concept; incorrect labels and duplicate panels are ignored.",
+    "authorship": "Project-generated extension; not claimed as an original client world frame.",
+    "aiGenerated": true,
+    "aiPixelsLimitedTo": [
+      "N",
+      "NE",
+      "E",
+      "SE",
+      "S",
+      "SW",
+      "W",
+      "NW"
+    ],
+    "oldDerivedStateItemWorldPixelsUsed": false,
+    "scalePolicy": "Fit each direction at 72.25% of the p75 width/height envelope measured from all six real client Helmet.wil appearances: two successive 15% reductions (0.85 * 0.85).",
+    "runtimeEnvelopeScale": 0.7224999999999999,
+    "deathPosePolicy": "Follow the per-frame client head anchor; South death frames 2/3 use a foreshortened crown derived from the approved Black Iron N/back-top geometry instead of a standing front sprite or whole-sprite 90-degree rotation."
+  },
+  "directionReference": "res://outputs/visual_acceptance/black_iron_helmet_directions.png",
+  "actions": {
+    "idle": {
+      "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+      "sha256": "42e6ffba284d6141b4edca47f73a4d75f0dcfc365024e679fb67e8cd9c0cf5a5",
+      "cell": [
+        192,
+        160
+      ],
+      "directions": 8,
+      "framesPerDirection": 4,
+      "frames": [
+        {
+          "anchorSourceIndex": 4448,
+          "direction": 0,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            84,
+            31,
+            91,
+            49
+          ],
+          "paste": [
+            81,
+            28
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4449,
+          "direction": 0,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            84,
+            31,
+            91,
+            49
+          ],
+          "paste": [
+            81,
+            28
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4450,
+          "direction": 0,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            84,
+            31,
+            91,
+            49
+          ],
+          "paste": [
+            81,
+            28
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4451,
+          "direction": 0,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            84,
+            31,
+            91,
+            49
+          ],
+          "paste": [
+            81,
+            28
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4456,
+          "direction": 1,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            83,
+            30,
+            93,
+            47
+          ],
+          "paste": [
+            82,
+            27
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4457,
+          "direction": 1,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            83,
+            30,
+            93,
+            46
+          ],
+          "paste": [
+            82,
+            27
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4458,
+          "direction": 1,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            83,
+            30,
+            93,
+            46
+          ],
+          "paste": [
+            82,
+            27
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4459,
+          "direction": 1,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            83,
+            30,
+            93,
+            46
+          ],
+          "paste": [
+            82,
+            27
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4464,
+          "direction": 2,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            83,
+            30,
+            94,
+            44
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4465,
+          "direction": 2,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            84,
+            30,
+            94,
+            44
+          ],
+          "paste": [
+            82,
+            27
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4466,
+          "direction": 2,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            84,
+            30,
+            94,
+            44
+          ],
+          "paste": [
+            82,
+            27
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4467,
+          "direction": 2,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            84,
+            30,
+            94,
+            44
+          ],
+          "paste": [
+            82,
+            27
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4472,
+          "direction": 3,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            84,
+            30,
+            93,
+            47
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4473,
+          "direction": 3,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            84,
+            30,
+            93,
+            47
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4474,
+          "direction": 3,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            84,
+            30,
+            93,
+            47
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4475,
+          "direction": 3,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            84,
+            30,
+            93,
+            47
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4480,
+          "direction": 4,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            85,
+            30,
+            92,
+            46
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4481,
+          "direction": 4,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            85,
+            30,
+            91,
+            46
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4482,
+          "direction": 4,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            85,
+            30,
+            92,
+            46
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4483,
+          "direction": 4,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            85,
+            30,
+            92,
+            46
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4488,
+          "direction": 5,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            83,
+            29,
+            92,
+            45
+          ],
+          "paste": [
+            80,
+            26
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4489,
+          "direction": 5,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            83,
+            29,
+            92,
+            45
+          ],
+          "paste": [
+            80,
+            26
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4490,
+          "direction": 5,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            83,
+            29,
+            92,
+            45
+          ],
+          "paste": [
+            80,
+            26
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4491,
+          "direction": 5,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            83,
+            29,
+            92,
+            45
+          ],
+          "paste": [
+            80,
+            26
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4496,
+          "direction": 6,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            84,
+            31,
+            94,
+            44
+          ],
+          "paste": [
+            82,
+            28
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4497,
+          "direction": 6,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            84,
+            31,
+            94,
+            44
+          ],
+          "paste": [
+            82,
+            28
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4498,
+          "direction": 6,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            84,
+            30,
+            94,
+            44
+          ],
+          "paste": [
+            82,
+            27
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4499,
+          "direction": 6,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            84,
+            31,
+            94,
+            44
+          ],
+          "paste": [
+            82,
+            28
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4504,
+          "direction": 7,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            83,
+            31,
+            92,
+            47
+          ],
+          "paste": [
+            81,
+            28
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4505,
+          "direction": 7,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            83,
+            31,
+            92,
+            47
+          ],
+          "paste": [
+            81,
+            28
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4506,
+          "direction": 7,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            83,
+            31,
+            92,
+            47
+          ],
+          "paste": [
+            81,
+            28
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4507,
+          "direction": 7,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            83,
+            31,
+            92,
+            47
+          ],
+          "paste": [
+            81,
+            28
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        }
+      ],
+      "directionSignatures": [
+        "1397a1908351f9e8044a032f7498f4983a90d1882ae01d55810157b4d8225b30",
+        "f926fe10d02a1c821789a1333bc2b389a91cff27ef2e41abe71a068499d2ebf8",
+        "207f741d93163dc84d1db637733990c48190a0506de4e71ab1fa91dc7af0f143",
+        "cdcdf84b8e8c013c344f8f02b3da43228e0134763461c6625e664556c0c351ae",
+        "0d10a80f8e1c23d935169897cd23cdfd4aaf9633c0eea28d177a75d6ee186506",
+        "39c48d286678a753c7bfa0ed32a9d4b530638f91aadaf6e1359440b16fb894a6",
+        "de74124f7d7ee07b06469d632f9bf2e02cfac9181d70efe18efc69ef7d689fcd",
+        "7ffd338b174d37129c1da48f5123f4a6bc81c5deb0cc5f70262b3d5de09fbc04"
+      ]
+    },
+    "walk": {
+      "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
+      "sha256": "d6a48bc67fb5bc401ccfd87d5208529118eb7716b5d26f788fc5f4068d5dc0d2",
+      "cell": [
+        192,
+        160
+      ],
+      "directions": 8,
+      "framesPerDirection": 6,
+      "frames": [
+        {
+          "anchorSourceIndex": 4512,
+          "direction": 0,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            84,
+            31,
+            91,
+            49
+          ],
+          "paste": [
+            81,
+            28
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4513,
+          "direction": 0,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            84,
+            32,
+            91,
+            50
+          ],
+          "paste": [
+            81,
+            29
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4514,
+          "direction": 0,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            84,
+            31,
+            91,
+            49
+          ],
+          "paste": [
+            81,
+            28
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4515,
+          "direction": 0,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            84,
+            31,
+            91,
+            50
+          ],
+          "paste": [
+            81,
+            28
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4516,
+          "direction": 0,
+          "frame": 4,
+          "anchorOpaqueBox": [
+            84,
+            32,
+            91,
+            51
+          ],
+          "paste": [
+            81,
+            29
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4517,
+          "direction": 0,
+          "frame": 5,
+          "anchorOpaqueBox": [
+            85,
+            31,
+            91,
+            50
+          ],
+          "paste": [
+            82,
+            28
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4520,
+          "direction": 1,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            84,
+            30,
+            94,
+            47
+          ],
+          "paste": [
+            83,
+            27
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4521,
+          "direction": 1,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            83,
+            30,
+            93,
+            47
+          ],
+          "paste": [
+            82,
+            27
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4522,
+          "direction": 1,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            83,
+            30,
+            94,
+            46
+          ],
+          "paste": [
+            82,
+            27
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4523,
+          "direction": 1,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            83,
+            30,
+            93,
+            47
+          ],
+          "paste": [
+            82,
+            27
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4524,
+          "direction": 1,
+          "frame": 4,
+          "anchorOpaqueBox": [
+            82,
+            30,
+            93,
+            48
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4525,
+          "direction": 1,
+          "frame": 5,
+          "anchorOpaqueBox": [
+            82,
+            30,
+            93,
+            47
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4528,
+          "direction": 2,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            84,
+            30,
+            95,
+            44
+          ],
+          "paste": [
+            82,
+            27
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4529,
+          "direction": 2,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            83,
+            30,
+            94,
+            44
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4530,
+          "direction": 2,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            83,
+            30,
+            95,
+            44
+          ],
+          "paste": [
+            82,
+            27
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4531,
+          "direction": 2,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            83,
+            30,
+            95,
+            44
+          ],
+          "paste": [
+            82,
+            27
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4532,
+          "direction": 2,
+          "frame": 4,
+          "anchorOpaqueBox": [
+            82,
+            30,
+            94,
+            44
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4533,
+          "direction": 2,
+          "frame": 5,
+          "anchorOpaqueBox": [
+            81,
+            30,
+            94,
+            44
+          ],
+          "paste": [
+            80,
+            27
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4536,
+          "direction": 3,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            84,
+            31,
+            94,
+            47
+          ],
+          "paste": [
+            82,
+            28
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4537,
+          "direction": 3,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            84,
+            30,
+            93,
+            47
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4538,
+          "direction": 3,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            84,
+            30,
+            94,
+            47
+          ],
+          "paste": [
+            82,
+            27
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4539,
+          "direction": 3,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            83,
+            31,
+            94,
+            47
+          ],
+          "paste": [
+            81,
+            28
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4540,
+          "direction": 3,
+          "frame": 4,
+          "anchorOpaqueBox": [
+            83,
+            30,
+            93,
+            46
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4541,
+          "direction": 3,
+          "frame": 5,
+          "anchorOpaqueBox": [
+            82,
+            30,
+            93,
+            46
+          ],
+          "paste": [
+            80,
+            27
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4544,
+          "direction": 4,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            85,
+            30,
+            91,
+            47
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4545,
+          "direction": 4,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            85,
+            30,
+            91,
+            46
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4546,
+          "direction": 4,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            85,
+            30,
+            92,
+            46
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4547,
+          "direction": 4,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            85,
+            30,
+            92,
+            47
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4548,
+          "direction": 4,
+          "frame": 4,
+          "anchorOpaqueBox": [
+            85,
+            30,
+            92,
+            46
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4549,
+          "direction": 4,
+          "frame": 5,
+          "anchorOpaqueBox": [
+            85,
+            29,
+            91,
+            46
+          ],
+          "paste": [
+            81,
+            26
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4552,
+          "direction": 5,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            83,
+            30,
+            92,
+            46
+          ],
+          "paste": [
+            80,
+            27
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4553,
+          "direction": 5,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            83,
+            29,
+            92,
+            46
+          ],
+          "paste": [
+            80,
+            26
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4554,
+          "direction": 5,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            83,
+            29,
+            92,
+            46
+          ],
+          "paste": [
+            80,
+            26
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4555,
+          "direction": 5,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            83,
+            30,
+            92,
+            46
+          ],
+          "paste": [
+            80,
+            27
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4556,
+          "direction": 5,
+          "frame": 4,
+          "anchorOpaqueBox": [
+            83,
+            29,
+            93,
+            45
+          ],
+          "paste": [
+            81,
+            26
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4557,
+          "direction": 5,
+          "frame": 5,
+          "anchorOpaqueBox": [
+            83,
+            29,
+            93,
+            45
+          ],
+          "paste": [
+            81,
+            26
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4560,
+          "direction": 6,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            83,
+            31,
+            93,
+            44
+          ],
+          "paste": [
+            81,
+            28
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4561,
+          "direction": 6,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            84,
+            30,
+            94,
+            44
+          ],
+          "paste": [
+            82,
+            27
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4562,
+          "direction": 6,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            83,
+            30,
+            94,
+            44
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4563,
+          "direction": 6,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            83,
+            31,
+            94,
+            45
+          ],
+          "paste": [
+            81,
+            28
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4564,
+          "direction": 6,
+          "frame": 4,
+          "anchorOpaqueBox": [
+            84,
+            31,
+            95,
+            44
+          ],
+          "paste": [
+            82,
+            28
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4565,
+          "direction": 6,
+          "frame": 5,
+          "anchorOpaqueBox": [
+            84,
+            30,
+            95,
+            44
+          ],
+          "paste": [
+            82,
+            27
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4568,
+          "direction": 7,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            83,
+            31,
+            92,
+            47
+          ],
+          "paste": [
+            81,
+            28
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4569,
+          "direction": 7,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            83,
+            31,
+            93,
+            47
+          ],
+          "paste": [
+            82,
+            28
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4570,
+          "direction": 7,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            82,
+            30,
+            92,
+            47
+          ],
+          "paste": [
+            81,
+            27
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4571,
+          "direction": 7,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            82,
+            31,
+            92,
+            48
+          ],
+          "paste": [
+            81,
+            28
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4572,
+          "direction": 7,
+          "frame": 4,
+          "anchorOpaqueBox": [
+            83,
+            31,
+            93,
+            48
+          ],
+          "paste": [
+            82,
+            28
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4573,
+          "direction": 7,
+          "frame": 5,
+          "anchorOpaqueBox": [
+            83,
+            30,
+            93,
+            48
+          ],
+          "paste": [
+            82,
+            27
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        }
+      ],
+      "directionSignatures": [
+        "bf6ea6910324ab9ca3dd949be5819c3f537c0763097eb7199317e75ce24ccca5",
+        "4b9d9194b316302e1a82dfb7ed348c5334badd3e8916ecf7572b3c0435d1a81b",
+        "24e65c916f5198e706d77b3ab36d667b87f0586f09fae8b52b19682fdce243c6",
+        "c5410cc4c75705f19c7d52469e7fd7cce83c361cf1f1e3b4e6a3e84596e51a89",
+        "ee1ffe8b61ee858ed314ce44c576b655945a90418e2ce6d1429cb3d728ef36ff",
+        "cb161dbc981d6fbb6534031134dcbe52abd62cac1c693159b68827419c65a562",
+        "5f4824a1dc450659e8c361c1dc1990926a17a434f518faa02eaa229f8704bc21",
+        "804e3210829fbf3a9ae22fe4801effc59591afcd69bac2b517d70d01c037bb30"
+      ]
+    },
+    "attack": {
+      "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
+      "sha256": "e4c61b0a39ae575c631cfb87171da71b76bc46b430fc55c94ebd38e4b2b4bb4f",
+      "cell": [
+        192,
+        160
+      ],
+      "directions": 8,
+      "framesPerDirection": 6,
+      "frames": [
+        {
+          "anchorSourceIndex": 4648,
+          "direction": 0,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            90,
+            40,
+            96,
+            58
+          ],
+          "paste": [
+            87,
+            37
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4649,
+          "direction": 0,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            78,
+            54,
+            97,
+            73
+          ],
+          "paste": [
+            81,
+            51
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4650,
+          "direction": 0,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            86,
+            32,
+            99,
+            53
+          ],
+          "paste": [
+            86,
+            29
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4651,
+          "direction": 0,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            85,
+            29,
+            97,
+            48
+          ],
+          "paste": [
+            85,
+            26
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4652,
+          "direction": 0,
+          "frame": 4,
+          "anchorOpaqueBox": [
+            83,
+            30,
+            95,
+            47
+          ],
+          "paste": [
+            83,
+            27
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4653,
+          "direction": 0,
+          "frame": 5,
+          "anchorOpaqueBox": [
+            86,
+            30,
+            98,
+            50
+          ],
+          "paste": [
+            86,
+            27
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4656,
+          "direction": 1,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            84,
+            40,
+            95,
+            56
+          ],
+          "paste": [
+            83,
+            37
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4657,
+          "direction": 1,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            66,
+            48,
+            86,
+            63
+          ],
+          "paste": [
+            70,
+            45
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4658,
+          "direction": 1,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            90,
+            35,
+            108,
+            52
+          ],
+          "paste": [
+            93,
+            32
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4659,
+          "direction": 1,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            95,
+            35,
+            113,
+            52
+          ],
+          "paste": [
+            98,
+            32
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4660,
+          "direction": 1,
+          "frame": 4,
+          "anchorOpaqueBox": [
+            98,
+            36,
+            115,
+            51
+          ],
+          "paste": [
+            100,
+            33
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4661,
+          "direction": 1,
+          "frame": 5,
+          "anchorOpaqueBox": [
+            94,
+            35,
+            109,
+            53
+          ],
+          "paste": [
+            95,
+            32
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4664,
+          "direction": 2,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            78,
+            39,
+            91,
+            53
+          ],
+          "paste": [
+            77,
+            36
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4665,
+          "direction": 2,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            65,
+            37,
+            76,
+            55
+          ],
+          "paste": [
+            63,
+            34
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4666,
+          "direction": 2,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            92,
+            40,
+            105,
+            57
+          ],
+          "paste": [
+            91,
+            37
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4667,
+          "direction": 2,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            96,
+            45,
+            116,
+            61
+          ],
+          "paste": [
+            99,
+            42
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4668,
+          "direction": 2,
+          "frame": 4,
+          "anchorOpaqueBox": [
+            99,
+            49,
+            121,
+            65
+          ],
+          "paste": [
+            103,
+            46
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4669,
+          "direction": 2,
+          "frame": 5,
+          "anchorOpaqueBox": [
+            92,
+            43,
+            110,
+            58
+          ],
+          "paste": [
+            94,
+            40
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4672,
+          "direction": 3,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            77,
+            36,
+            86,
+            52
+          ],
+          "paste": [
+            74,
+            33
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4673,
+          "direction": 3,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            73,
+            30,
+            83,
+            49
+          ],
+          "paste": [
+            71,
+            27
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4674,
+          "direction": 3,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            86,
+            44,
+            97,
+            64
+          ],
+          "paste": [
+            84,
+            41
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4675,
+          "direction": 3,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            89,
+            55,
+            105,
+            74
+          ],
+          "paste": [
+            90,
+            52
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4676,
+          "direction": 3,
+          "frame": 4,
+          "anchorOpaqueBox": [
+            90,
+            59,
+            109,
+            78
+          ],
+          "paste": [
+            92,
+            56
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4677,
+          "direction": 3,
+          "frame": 5,
+          "anchorOpaqueBox": [
+            85,
+            50,
+            100,
+            64
+          ],
+          "paste": [
+            85,
+            47
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4680,
+          "direction": 4,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            79,
+            32,
+            86,
+            48
+          ],
+          "paste": [
+            75,
+            29
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4681,
+          "direction": 4,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            89,
+            29,
+            98,
+            43
+          ],
+          "paste": [
+            86,
+            26
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4682,
+          "direction": 4,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            77,
+            43,
+            90,
+            61
+          ],
+          "paste": [
+            76,
+            40
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4683,
+          "direction": 4,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            77,
+            56,
+            91,
+            74
+          ],
+          "paste": [
+            77,
+            53
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4684,
+          "direction": 4,
+          "frame": 4,
+          "anchorOpaqueBox": [
+            80,
+            59,
+            91,
+            77
+          ],
+          "paste": [
+            78,
+            56
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4685,
+          "direction": 4,
+          "frame": 5,
+          "anchorOpaqueBox": [
+            78,
+            49,
+            89,
+            60
+          ],
+          "paste": [
+            76,
+            46
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4688,
+          "direction": 5,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            83,
+            30,
+            92,
+            46
+          ],
+          "paste": [
+            80,
+            27
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4689,
+          "direction": 5,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            100,
+            35,
+            110,
+            48
+          ],
+          "paste": [
+            98,
+            32
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4690,
+          "direction": 5,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            73,
+            39,
+            84,
+            59
+          ],
+          "paste": [
+            71,
+            36
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4691,
+          "direction": 5,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            64,
+            49,
+            79,
+            67
+          ],
+          "paste": [
+            64,
+            46
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4692,
+          "direction": 5,
+          "frame": 4,
+          "anchorOpaqueBox": [
+            61,
+            53,
+            79,
+            73
+          ],
+          "paste": [
+            63,
+            50
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4693,
+          "direction": 5,
+          "frame": 5,
+          "anchorOpaqueBox": [
+            67,
+            42,
+            81,
+            58
+          ],
+          "paste": [
+            67,
+            39
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4696,
+          "direction": 6,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            87,
+            33,
+            100,
+            46
+          ],
+          "paste": [
+            86,
+            30
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4697,
+          "direction": 6,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            101,
+            43,
+            113,
+            59
+          ],
+          "paste": [
+            100,
+            40
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4698,
+          "direction": 6,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            73,
+            35,
+            87,
+            52
+          ],
+          "paste": [
+            73,
+            32
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4699,
+          "direction": 6,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            62,
+            39,
+            80,
+            58
+          ],
+          "paste": [
+            64,
+            36
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4700,
+          "direction": 6,
+          "frame": 4,
+          "anchorOpaqueBox": [
+            57,
+            43,
+            80,
+            62
+          ],
+          "paste": [
+            61,
+            40
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4701,
+          "direction": 6,
+          "frame": 5,
+          "anchorOpaqueBox": [
+            68,
+            34,
+            84,
+            53
+          ],
+          "paste": [
+            69,
+            31
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4704,
+          "direction": 7,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            89,
+            35,
+            100,
+            53
+          ],
+          "paste": [
+            88,
+            32
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4705,
+          "direction": 7,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            94,
+            51,
+            104,
+            69
+          ],
+          "paste": [
+            93,
+            48
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4706,
+          "direction": 7,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            75,
+            31,
+            91,
+            50
+          ],
+          "paste": [
+            77,
+            28
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4707,
+          "direction": 7,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            70,
+            31,
+            86,
+            48
+          ],
+          "paste": [
+            72,
+            28
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4708,
+          "direction": 7,
+          "frame": 4,
+          "anchorOpaqueBox": [
+            67,
+            33,
+            85,
+            50
+          ],
+          "paste": [
+            70,
+            30
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4709,
+          "direction": 7,
+          "frame": 5,
+          "anchorOpaqueBox": [
+            77,
+            29,
+            90,
+            46
+          ],
+          "paste": [
+            77,
+            26
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        }
+      ],
+      "directionSignatures": [
+        "981fa8611d104ae821e631c09e04a23b02a10c77708d61fc229448b0296d34f9",
+        "75106e00c89a28e3549ae4ac91ec0d469b81babe354c8e1d5a47cd9a6bde77b1",
+        "7fd58608171db1af61c8e5e329d10f9dab35028440a649b5cf6221e5995f2f8b",
+        "ebea8470f8b4363ae09d089c10a40641840fb806a8387fcc5552596de9b0d859",
+        "553259dd05b9093c5db462c0b96e58bde4bc2c69907d23569a8a43c7116a6cd3",
+        "ea51839863884015f5d9091d8513c203bad2383996a0cdff752ebe9945760c01",
+        "bf134438cc1d195b30e17e16ee4579759bc8e230a33f72f312a6106cee203578",
+        "d7edae334120475ebf66fd6594211fb9018e91ba3a7becf1c170130003dd85fd"
+      ]
+    },
+    "hit": {
+      "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
+      "sha256": "f4f45136653b4ad9c774584665ff8ce6d12cb07b30ec2345e42d69be54df3fa3",
+      "cell": [
+        192,
+        160
+      ],
+      "directions": 8,
+      "framesPerDirection": 3,
+      "frames": [
+        {
+          "anchorSourceIndex": 4920,
+          "direction": 0,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            82,
+            55,
+            91,
+            69
+          ],
+          "paste": [
+            80,
+            52
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4921,
+          "direction": 0,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            84,
+            46,
+            93,
+            60
+          ],
+          "paste": [
+            82,
+            43
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4922,
+          "direction": 0,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            86,
+            33,
+            93,
+            52
+          ],
+          "paste": [
+            83,
+            30
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4928,
+          "direction": 1,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            66,
+            50,
+            78,
+            62
+          ],
+          "paste": [
+            66,
+            47
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4929,
+          "direction": 1,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            74,
+            42,
+            88,
+            57
+          ],
+          "paste": [
+            75,
+            39
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4930,
+          "direction": 1,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            84,
+            32,
+            95,
+            50
+          ],
+          "paste": [
+            83,
+            29
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4936,
+          "direction": 2,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            60,
+            38,
+            76,
+            53
+          ],
+          "paste": [
+            61,
+            35
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4937,
+          "direction": 2,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            69,
+            35,
+            85,
+            53
+          ],
+          "paste": [
+            70,
+            32
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4938,
+          "direction": 2,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            82,
+            33,
+            93,
+            48
+          ],
+          "paste": [
+            80,
+            30
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4944,
+          "direction": 3,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            68,
+            30,
+            83,
+            44
+          ],
+          "paste": [
+            68,
+            27
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4945,
+          "direction": 3,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            73,
+            31,
+            83,
+            45
+          ],
+          "paste": [
+            71,
+            28
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4946,
+          "direction": 3,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            81,
+            32,
+            92,
+            50
+          ],
+          "paste": [
+            79,
+            29
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4952,
+          "direction": 4,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            85,
+            27,
+            94,
+            38
+          ],
+          "paste": [
+            82,
+            24
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4953,
+          "direction": 4,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            83,
+            28,
+            92,
+            43
+          ],
+          "paste": [
+            80,
+            25
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4954,
+          "direction": 4,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            82,
+            31,
+            90,
+            47
+          ],
+          "paste": [
+            79,
+            28
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4960,
+          "direction": 5,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            98,
+            31,
+            109,
+            44
+          ],
+          "paste": [
+            96,
+            28
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4961,
+          "direction": 5,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            88,
+            29,
+            102,
+            43
+          ],
+          "paste": [
+            88,
+            26
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4962,
+          "direction": 5,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            83,
+            30,
+            92,
+            45
+          ],
+          "paste": [
+            80,
+            27
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4968,
+          "direction": 6,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            103,
+            43,
+            118,
+            53
+          ],
+          "paste": [
+            103,
+            40
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4969,
+          "direction": 6,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            98,
+            37,
+            109,
+            51
+          ],
+          "paste": [
+            96,
+            34
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4970,
+          "direction": 6,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            85,
+            32,
+            95,
+            45
+          ],
+          "paste": [
+            83,
+            29
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4976,
+          "direction": 7,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            94,
+            52,
+            109,
+            63
+          ],
+          "paste": [
+            95,
+            49
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4977,
+          "direction": 7,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            92,
+            43,
+            104,
+            55
+          ],
+          "paste": [
+            92,
+            40
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4978,
+          "direction": 7,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            85,
+            32,
+            94,
+            49
+          ],
+          "paste": [
+            83,
+            29
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        }
+      ],
+      "directionSignatures": [
+        "079da1f5fb5fac692817468aa1bb9e5380145372401ae36187b34fd4dd25d1af",
+        "2eaf4b83b4542dc035302e45d563e3e5812e28f8f04572fe535fcaa24bb56360",
+        "3393b23d8da6adceeb92bf4f71c68c61582170bb779de8aa28516afa68a3d8f8",
+        "6b311032726d5e509513cbbf021b5ad11a31b2814a64cc92bd125fd8c8ea16ab",
+        "84f6dc240faf525b85ccaa19c4ebac5676d4e4340066abc6ae17f5a0a4dfa55b",
+        "e13672c0e6816c4abeb6a3ebdd4dd26379a7d12202a4ef7db7999cbcf729ffb9",
+        "9a2cc2413cb9cd90693b9f79d69f27037b32492e4690fed694e0eb1feccccc02",
+        "2352c62e18f2e55a182ad4887302ceecb1e9aae285028969f2aef716484395b8"
+      ]
+    },
+    "death": {
+      "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png",
+      "sha256": "5a4b3cf721e826206c86c1e1a7eb588abb831d3f8c82a844195b5f1970fba0a5",
+      "cell": [
+        192,
+        160
+      ],
+      "directions": 8,
+      "framesPerDirection": 4,
+      "frames": [
+        {
+          "anchorSourceIndex": 4984,
+          "direction": 0,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            85,
+            29,
+            96,
+            50
+          ],
+          "paste": [
+            84,
+            26
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4985,
+          "direction": 0,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            84,
+            40,
+            95,
+            52
+          ],
+          "paste": [
+            83,
+            37
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4986,
+          "direction": 0,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            86,
+            101,
+            97,
+            116
+          ],
+          "paste": [
+            85,
+            98
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4987,
+          "direction": 0,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            88,
+            113,
+            96,
+            131
+          ],
+          "paste": [
+            86,
+            110
+          ],
+          "generatedSize": [
+            12,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4992,
+          "direction": 1,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            89,
+            31,
+            105,
+            49
+          ],
+          "paste": [
+            91,
+            28
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4993,
+          "direction": 1,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            75,
+            37,
+            94,
+            53
+          ],
+          "paste": [
+            78,
+            34
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4994,
+          "direction": 1,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            63,
+            97,
+            76,
+            110
+          ],
+          "paste": [
+            63,
+            94
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 4995,
+          "direction": 1,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            54,
+            106,
+            66,
+            122
+          ],
+          "paste": [
+            54,
+            103
+          ],
+          "generatedSize": [
+            13,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5000,
+          "direction": 2,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            88,
+            38,
+            105,
+            53
+          ],
+          "paste": [
+            89,
+            35
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5001,
+          "direction": 2,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            75,
+            36,
+            92,
+            53
+          ],
+          "paste": [
+            76,
+            33
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5002,
+          "direction": 2,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            49,
+            79,
+            62,
+            93
+          ],
+          "paste": [
+            48,
+            76
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5003,
+          "direction": 2,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            38,
+            88,
+            50,
+            100
+          ],
+          "paste": [
+            37,
+            85
+          ],
+          "generatedSize": [
+            14,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5008,
+          "direction": 3,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            84,
+            43,
+            100,
+            60
+          ],
+          "paste": [
+            85,
+            40
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5009,
+          "direction": 3,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            78,
+            33,
+            90,
+            51
+          ],
+          "paste": [
+            77,
+            30
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5010,
+          "direction": 3,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            56,
+            67,
+            70,
+            80
+          ],
+          "paste": [
+            56,
+            64
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5011,
+          "direction": 3,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            48,
+            67,
+            64,
+            80
+          ],
+          "paste": [
+            49,
+            64
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5016,
+          "direction": 4,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            80,
+            43,
+            90,
+            58
+          ],
+          "paste": [
+            78,
+            40
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5017,
+          "direction": 4,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            79,
+            29,
+            92,
+            50
+          ],
+          "paste": [
+            78,
+            26
+          ],
+          "generatedSize": [
+            14,
+            16
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5018,
+          "direction": 4,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            79,
+            57,
+            90,
+            68
+          ],
+          "paste": [
+            77,
+            58
+          ],
+          "generatedSize": [
+            14,
+            8
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "south-death-foreshortened-crown"
+        },
+        {
+          "anchorSourceIndex": 5019,
+          "direction": 4,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            80,
+            56,
+            92,
+            67
+          ],
+          "paste": [
+            79,
+            58
+          ],
+          "generatedSize": [
+            14,
+            7
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "south-death-foreshortened-crown"
+        },
+        {
+          "anchorSourceIndex": 5024,
+          "direction": 5,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            74,
+            39,
+            88,
+            56
+          ],
+          "paste": [
+            74,
+            36
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5025,
+          "direction": 5,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            82,
+            30,
+            103,
+            49
+          ],
+          "paste": [
+            85,
+            27
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5026,
+          "direction": 5,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            101,
+            61,
+            112,
+            73
+          ],
+          "paste": [
+            99,
+            58
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5027,
+          "direction": 5,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            111,
+            63,
+            122,
+            75
+          ],
+          "paste": [
+            109,
+            60
+          ],
+          "generatedSize": [
+            15,
+            17
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5032,
+          "direction": 6,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            73,
+            35,
+            91,
+            51
+          ],
+          "paste": [
+            75,
+            32
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5033,
+          "direction": 6,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            86,
+            36,
+            104,
+            50
+          ],
+          "paste": [
+            88,
+            33
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5034,
+          "direction": 6,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            118,
+            74,
+            129,
+            87
+          ],
+          "paste": [
+            116,
+            71
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5035,
+          "direction": 6,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            129,
+            81,
+            140,
+            93
+          ],
+          "paste": [
+            127,
+            78
+          ],
+          "generatedSize": [
+            14,
+            14
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5040,
+          "direction": 7,
+          "frame": 0,
+          "anchorOpaqueBox": [
+            76,
+            30,
+            94,
+            48
+          ],
+          "paste": [
+            79,
+            27
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5041,
+          "direction": 7,
+          "frame": 1,
+          "anchorOpaqueBox": [
+            87,
+            38,
+            99,
+            52
+          ],
+          "paste": [
+            87,
+            35
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5042,
+          "direction": 7,
+          "frame": 2,
+          "anchorOpaqueBox": [
+            107,
+            96,
+            121,
+            106
+          ],
+          "paste": [
+            108,
+            93
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        },
+        {
+          "anchorSourceIndex": 5043,
+          "direction": 7,
+          "frame": 3,
+          "anchorOpaqueBox": [
+            114,
+            108,
+            129,
+            117
+          ],
+          "paste": [
+            115,
+            105
+          ],
+          "generatedSize": [
+            13,
+            15
+          ],
+          "rotatedForDeath": false,
+          "poseVariant": "standing-direction"
+        }
+      ],
+      "directionSignatures": [
+        "9ce3e7b451b10d5c179a6f98ef5dd813b964929f9f0bb8ec917785c78ca85435",
+        "1ec38861d8128e60a4566e1fd81e8bf0cad682fda4bb0bf7a43fabbacf3245eb",
+        "ea493b4c031805fa880aa80deff172ea8f48b13f2e4b8c3a4a5f2d7c982cdf98",
+        "5faad962796b17ac07a82c078d8881b92c1d2f50b7b200f81d533a9cd5ca0580",
+        "3765aa9ebd3e8e70e5b5509c6c70e6a4b0d8ebe2d82232554c1aeaad3a805244",
+        "e008e2609ec40e8c29503e7bf0861e89a756ab1028c27f47cd0b0de064d97717",
+        "711a2dd1222c67f4a286cf18c188e612ec0c986cfdd72e5cd4b46dd3dc71d46e",
+        "38aceb6cea42bdc34b379979a1a3fcd59cf6e3c013b731af3302bb2820483665"
+      ]
+    }
+  },
+  "policy": "Complete-client evidence first; generated art is explicitly separated from original client assets."
+}

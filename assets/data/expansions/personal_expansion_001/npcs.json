@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "layer": "personal_expansion",
+  "table": "npcs",
+  "records": [
+    {"npcId":"npc.expansion.bich_warehouse","name":"比奇仓库管理员","mapId":4,"kind":"warehouse","source":"personal_expansion_001","editable":true},
+    {"npcId":"npc.expansion.bich_pharmacist","name":"比奇药剂商","mapId":4,"kind":"shop","stock":"medicine","source":"personal_expansion_001","editable":true},
+    {"npcId":"npc.expansion.bich_blacksmith","name":"比奇铁匠","mapId":4,"kind":"repair","source":"personal_expansion_001","editable":true}
+  ]
+}

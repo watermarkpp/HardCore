@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "requirement": "示例：查找主客户端确实不存在的特定人物补充层",
+  "scope": "pixels_frames_maps_audio",
+  "candidate": "archive_extract.mirfiles_hum.bfae8696c79f",
+  "checks": [
+    {"distribution": "client.classic_raw_complete", "status": "missing", "query": "完整库名与全帧像素查询", "proof": ["示例证据路径/primary_query.json"]},
+    {"distribution": "client.mir2opensource_2013_complete", "status": "missing", "query": "相同身份与动作查询", "proof": ["示例证据路径/aux1_query.json"]},
+    {"distribution": "archive_extract.mirfiles_new_data.ae702e382cc5", "status": "incompatible", "query": "相同身份与动作查询", "proof": ["示例证据路径/aux2_query.json"]}
+  ],
+  "note": "这是格式示例，不代表已经授权任何正式素材。"
+}

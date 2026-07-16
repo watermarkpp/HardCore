@@ -1,0 +1,55 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource path="res://scripts/brand_intro.gd" type="Script" id="1_script"]
+[ext_resource path="res://assets/branding/game_icon.png" type="Texture2D" id="2_logo"]
+
+[node name="BrandIntro" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="GlowLogo" type="TextureRect" parent="."]
+mouse_filter = 2
+texture = ExtResource("2_logo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BrandLogo" type="TextureRect" parent="."]
+mouse_filter = 2
+texture = ExtResource("2_logo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Slogan" type="Label" parent="."]
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.91, 0.84, 0.75, 1)
+theme_override_colors/font_outline_color = Color(0.12, 0.015, 0.008, 1)
+theme_override_constants/outline_size = 5
+text = "刷是一种状态，刷没有目的没有终点"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FadeOverlay" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)

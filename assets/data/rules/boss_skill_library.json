@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "layer": "rule_systems",
+  "skills": {
+    "cone_warning_slam": {"shape":"cone","warningSeconds":0.8,"effect":"physical_damage"},
+    "line_charge": {"shape":"line","warningSeconds":0.65,"effect":"charge_damage"},
+    "ground_smash": {"shape":"circle","warningSeconds":0.9,"effect":"area_damage"},
+    "summon_minions": {"shape":"self","effect":"spawn_group"},
+    "half_hp_enrage": {"trigger":"hp_below","threshold":0.5,"effect":"enrage"},
+    "ground_fire": {"shape":"circle","effect":"ground_dot"},
+    "random_mark": {"shape":"target","effect":"delayed_damage"},
+    "healing_phase": {"trigger":"phase","effect":"heal"},
+    "shield_phase": {"trigger":"phase","effect":"shield"},
+    "split_phase": {"trigger":"phase","effect":"split"}
+  },
+  "bossProfiles": {
+    "骷髅精灵": {"skills":["cone_warning_slam","half_hp_enrage"]},
+    "尸王": {"skills":["ground_smash","half_hp_enrage"]}
+  }
+}

@@ -1,0 +1,193 @@
+{
+  "generatedAt": "2026-07-03T08:37:44.314901+00:00",
+  "sourceRoot": "C:\\Users\\Administrator\\Documents\\Codex\\2026-06-28\\xian\\work\\legend176_game\\tests\\fixtures\\mir2_server",
+  "detectedDataRoot": ".",
+  "sourceDiscovery": [
+    {
+      "path": ".",
+      "score": 8,
+      "signals": {
+        "mapInfo": true,
+        "monGen": true,
+        "monItems": true,
+        "merchant": true,
+        "marketDef": true,
+        "monsterTable": true,
+        "itemTable": true,
+        "magicTable": true
+      }
+    }
+  ],
+  "manifestProvided": true,
+  "mode": "dry-run",
+  "missing": [],
+  "errors": {},
+  "parsed": {
+    "maps": 2,
+    "monsters": 1,
+    "bosses": 1,
+    "items": 1,
+    "skills": 4,
+    "drops": 3,
+    "tasks": 1,
+    "serverPortals": 1,
+    "serverSpawns": 2,
+    "serverMerchants": 1
+  },
+  "diff": {
+    "maps": {
+      "projectRows": 142,
+      "importRows": 2,
+      "matched": 2,
+      "newCandidates": 0,
+      "conflicts": 2,
+      "conflictExamples": [
+        {
+          "key": "比奇省",
+          "fields": [
+            "confidence"
+          ]
+        },
+        {
+          "key": "兽人古墓三层",
+          "fields": [
+            "confidence",
+            "doorCount"
+          ]
+        }
+      ]
+    },
+    "monsters": {
+      "projectRows": 214,
+      "importRows": 1,
+      "matched": 1,
+      "newCandidates": 0,
+      "conflicts": 1,
+      "conflictExamples": [
+        {
+          "key": "稻草人",
+          "fields": [
+            "monsterId",
+            "level",
+            "hp",
+            "confidence"
+          ]
+        }
+      ]
+    },
+    "bosses": {
+      "projectRows": 46,
+      "importRows": 1,
+      "matched": 1,
+      "newCandidates": 0,
+      "conflicts": 1,
+      "conflictExamples": [
+        {
+          "key": "骷髅精灵",
+          "fields": [
+            "monsterId",
+            "level",
+            "exp",
+            "defense",
+            "magicDefense",
+            "attackMin",
+            "attackMax",
+            "confidence"
+          ]
+        }
+      ]
+    },
+    "items": {
+      "projectRows": 175,
+      "importRows": 1,
+      "matched": 1,
+      "newCandidates": 0,
+      "conflicts": 1,
+      "conflictExamples": [
+        {
+          "key": "木剑",
+          "fields": [
+            "durability"
+          ]
+        }
+      ]
+    },
+    "skills": {
+      "projectRows": 132,
+      "importRows": 4,
+      "matched": 4,
+      "newCandidates": 0,
+      "conflicts": 3,
+      "conflictExamples": [
+        {
+          "key": "基本剑术:1",
+          "fields": [
+            "trainingPoints"
+          ]
+        },
+        {
+          "key": "基本剑术:2",
+          "fields": [
+            "trainingPoints"
+          ]
+        },
+        {
+          "key": "基本剑术:3",
+          "fields": [
+            "trainingPoints"
+          ]
+        }
+      ]
+    },
+    "drops": {
+      "projectRows": 3424,
+      "importRows": 3,
+      "matched": 3,
+      "newCandidates": 0,
+      "conflicts": 3,
+      "conflictExamples": [
+        {
+          "key": "骷髅精灵:1",
+          "fields": [
+            "dropId",
+            "itemName",
+            "confidence"
+          ]
+        },
+        {
+          "key": "骷髅精灵:2",
+          "fields": [
+            "dropId",
+            "itemName",
+            "denominator",
+            "probability",
+            "confidence"
+          ]
+        },
+        {
+          "key": "骷髅精灵:3",
+          "fields": [
+            "dropId",
+            "itemName",
+            "denominator",
+            "probability",
+            "confidence"
+          ]
+        }
+      ]
+    },
+    "tasks": {
+      "projectRows": 9,
+      "importRows": 1,
+      "matched": 0,
+      "newCandidates": 1,
+      "conflicts": 0,
+      "conflictExamples": []
+    }
+  },
+  "mergePolicy": {
+    "identity": "地图/怪物/装备按规范化名称；技能按名称+技能等级；掉落按怪物名+槽位",
+    "precedence": "服务端非空字段优先；现有网络来源 URL 保留；新增记录追加",
+    "safety": "默认 dry-run；仅 --apply 写入运行数据，写入前备份"
+  }
+}

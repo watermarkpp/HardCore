@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/build_bich_v15_sample.gd" type="Script" id="1"]
+
+[node name="BuildBichV15Sample" type="Node"]
+script = ExtResource("1")

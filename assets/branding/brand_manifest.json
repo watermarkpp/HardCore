@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "brandId": "MY-BRUSH-GAME-ICON-1",
+  "generatedAt": "2026-07-15T07:26:04.881657+00:00",
+  "policy": {
+    "userApprovedMaster": true,
+    "generativeModification": false,
+    "deterministicResizeOnly": true,
+    "introText": "刷是一种状态，刷没有目的没有终点"
+  },
+  "source": {
+    "path": "dev_art_sources/user_provided/branding/game_icon_master_20260715.png",
+    "originalInput": "C:\\Users\\Administrator\\Downloads\\ChatGPT Image 2026年7月15日 15_00_55.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "sha256": "079c9afa23139a73b79ca6cb5910c46678ac3910d191803d1e0c6f78c1904664"
+  },
+  "outputs": [
+    {
+      "path": "assets/branding/game_icon.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "sha256": "054b984821d09b40b3a07bf5686bdf1d9d09806b5c239f529bad7ffc127e1a42"
+    },
+    {
+      "path": "assets/branding/android_icon_192.png",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "a78a71ab43d603e0b9f4229a967b154fab375df18ccc32e49e178682ee199aba"
+    },
+    {
+      "path": "assets/branding/boot_splash.png",
+      "size": [
+        1280,
+        720
+      ],
+      "sha256": "a84031236e18fc93c2ac1fb6169286d15861c91a2be9e005bf9af8a6cd21e806"
+    }
+  ]
+}

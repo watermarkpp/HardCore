@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>玛法通用地图编辑器 v1.0</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="asset-library.css">
+</head>
+<body>
+  <aside>
+    <h1>玛法通用地图编辑器 v1.0</h1>
+    <p class="hint">素材库驱动、十图层、地图逻辑与游戏导出。</p>
+    <details open><summary>地图工程</summary>
+      <label>ID <input id="mapId" value="bicheng_main"></label>
+      <label>名称 <input id="mapName" value="比奇省"></label>
+      <label>宽 <input id="mapWidth" type="number" value="700" min="32" max="1000"> 高 <input id="mapHeight" type="number" value="700" min="32" max="1000"></label>
+      <label>默认地面 <select id="defaultTerrain"><option value="0">草地</option><option value="3">泥地</option><option value="4">石地</option></select></label>
+      <button id="newMap">新建/重置地图</button>
+    </details>
+    <label>当前图层 <select id="layerSelect"></select></label>
+    <label><input id="snapEnabled" type="checkbox" checked> 自动吸附网格　间距
+      <select id="snapSize"><option value="1" selected>整格</option><option value="0.5">半格</option><option value="0.25">四分之一格</option></select>
+    </label>
+    <details open><summary>真实素材库</summary>
+      <input id="assetSearch" placeholder="搜索素材名称或分类">
+      <label>分类 <select id="assetFilter"><option value="all">全部素材</option><option value="ground">地形块</option><option value="object">装饰/建筑</option></select></label>
+      <div id="assetGrid"></div><div id="selectedAsset">尚未选择真实素材</div>
+    </details>
+    <nav id="modes">
+      <button data-mode="terrain" class="active">地形/碰撞</button>
+      <button data-mode="entity">城镇/生态</button>
+      <button data-mode="select">选择/移动</button>
+      <button data-mode="asset">素材逐块搭建</button>
+    </nav>
+    <section id="terrainPanel"><div id="palette"></div></section>
+    <section id="entityPanel" hidden>
+      <label>放置类型 <select id="entityType"><option value="npc">NPC</option><option value="monster">怪物刷新点</option><option value="decor">装饰物</option><option value="portal">地图出入口</option><option value="spawn_point">玩家出生点</option><option value="area">矩形区域</option></select></label>
+      <label>具体内容 <select id="entityName"></select></label>
+    </section>
+    <label>画笔尺寸 <input id="brush" type="range" min="1" max="40" value="8"><b id="brushValue">8</b></label>
+    <label>显示比例 <input id="zoom" type="range" min="2" max="200" value="50"><b id="zoomValue">50%</b></label>
+    <div class="buttons"><button id="panUp">画布↑</button><button id="panDown">画布↓</button><button id="panLeft">画布←</button><button id="panRight">画布→</button></div>
+    <label><input id="grid" type="checkbox" checked> 显示坐标网格</label>
+    <section id="properties" hidden>
+      <h2>选中对象</h2>
+      <label>名称 <input id="propName"></label>
+      <label>X <input id="propX" type="number"> Y <input id="propY" type="number"></label>
+      <label>旋转角度 <input id="propRotation" type="number" value="0" step="5">°</label>
+      <label>水平缩放 <input id="propScaleX" type="number" value="1" step="0.05" min="-5" max="5"></label>
+      <label>垂直缩放 <input id="propScaleY" type="number" value="1" step="0.05" min="-5" max="5"></label>
+      <div id="monsterProps">
+        <label>刷新数量 <input id="propCount" type="number" min="1" max="100"></label>
+        <label>刷新半径 <input id="propRadius" type="number" min="0"></label>
+        <label>刷新秒数 <input id="propRespawn" type="number" min="1"></label>
+      </div>
+      <label><input id="propCollision" type="checkbox"> 装饰具有碰撞</label>
+      <label id="portalTargetRow">目标地图ID <input id="propTargetMap"></label>
+      <label id="portalArrivalRow">目标落点 X <input id="propArrivalX" type="number"> Y <input id="propArrivalY" type="number"></label>
+      <button id="deleteEntity" class="danger">删除选中对象</button>
+    </section>
+    <div class="buttons">
+      <button id="undo">撤销</button><button id="redo">重做</button>
+      <button id="save">导出设计</button><button id="load">导入设计</button>
+      <button id="preview">导出预览图</button><button id="validate">地图检查</button>
+      <button id="exportGame">导出游戏数据</button><button id="clear" class="danger">清空</button>
+    </div>
+    <input id="file" type="file" accept=".json" hidden>
+    <div id="status">准备就绪</div>
+    <details>
+      <summary>使用规则</summary>
+      <ol>
+        <li>先大笔刷划分森林、草地、荒地与城郊。</li>
+        <li>再用道路连接营地、洞穴和五个地图出口。</li>
+        <li>红色禁行区只画在水域、悬崖或明确障碍上。</li>
+        <li>切换“城镇/生态”放置 NPC、怪物、出口和装饰。</li>
+        <li>切换“选择/移动”，拖动对象或修改精确坐标。</li>
+        <li>导出 JSON 后交给 Codex 即可应用到游戏。</li>
+      </ol>
+    </details>
+  </aside>
+  <main><div id="stage"><canvas id="map" width="700" height="700"></canvas></div></main>
+  <script src="editor.js"></script>
+</body>
+</html>

@@ -1,0 +1,872 @@
+{
+  "generatedAt": "2026-07-03T08:37:16.058988+00:00",
+  "repository": "https://github.com/angelk727/Mir2ServerDatabases",
+  "commit": "16c49ad53f3bc2ff6f9f584117e61b5b9fe4970f",
+  "sourceFiles": {
+    "maps": {
+      "url": "https://raw.githubusercontent.com/angelk727/Mir2ServerDatabases/main/Exports/1_%E5%9C%B0%E5%9B%BE%E6%95%B0%E6%8D%AE.txt",
+      "sha256": "d2ed042f85f4f83cfa10ce6fea600614dd808b8dd0b9dd5b2f174fea3311f7ce",
+      "bytes": 161188
+    },
+    "monsters": {
+      "url": "https://raw.githubusercontent.com/angelk727/Mir2ServerDatabases/main/Exports/3_%E6%80%AA%E7%89%A9%E6%95%B0%E6%8D%AE.csv",
+      "sha256": "939f63ce69a3f833c535e7fe0075942dea9abda8d90b71e54e444a7d088fc77f",
+      "bytes": 232876
+    },
+    "spawns": {
+      "url": "https://raw.githubusercontent.com/angelk727/Mir2ServerDatabases/main/Exports/6_%E5%88%B7%E6%80%AA%E6%95%B0%E6%8D%AE.txt",
+      "sha256": "e5a6443f7077cde6c04b6c7d26199b36f7ad13babd34936f38faecb0ab8e309e",
+      "bytes": 148269
+    }
+  },
+  "classification": {
+    "versionTag": "1.76后期追加内容",
+    "availabilityDefault": false,
+    "confidence": "B",
+    "baselineDecision": "拒绝覆盖2003基准",
+    "reason": "数据含刺客、坐骑、暴击、现代Crystal字段，且地图0名为飞天县；仅同名怪物攻击/移动间隔可作交叉验证。"
+  },
+  "summary": {
+    "monsterMatches": 15,
+    "mapMatches": 4,
+    "spawnMatches": 54
+  },
+  "maps": [
+    {
+      "mapCode": "0",
+      "name": "飞天县"
+    },
+    {
+      "mapCode": "D001",
+      "name": "半兽古墓一层"
+    },
+    {
+      "mapCode": "D002",
+      "name": "半兽古墓二层"
+    },
+    {
+      "mapCode": "D003",
+      "name": "半兽古墓三层"
+    }
+  ],
+  "monsters": [
+    {
+      "name": "僵尸1",
+      "image": "ShamanZombie",
+      "ai": 40,
+      "level": 25,
+      "attackIntervalMs": 3000,
+      "moveIntervalMs": 1500,
+      "experience": 210,
+      "hp": 155,
+      "defense": [
+        2,
+        2
+      ],
+      "magicDefense": [
+        1,
+        1
+      ],
+      "attack": [
+        6,
+        17
+      ]
+    },
+    {
+      "name": "半兽人",
+      "image": "Oma",
+      "ai": 0,
+      "level": 15,
+      "attackIntervalMs": 2500,
+      "moveIntervalMs": 1500,
+      "experience": 30,
+      "hp": 30,
+      "defense": [
+        0,
+        1
+      ],
+      "magicDefense": [
+        0,
+        0
+      ],
+      "attack": [
+        4,
+        9
+      ]
+    },
+    {
+      "name": "尸王",
+      "image": "Ghoul",
+      "ai": 0,
+      "level": 50,
+      "attackIntervalMs": 2800,
+      "moveIntervalMs": 1500,
+      "experience": 1200,
+      "hp": 500,
+      "defense": [
+        3,
+        3
+      ],
+      "magicDefense": [
+        3,
+        3
+      ],
+      "attack": [
+        18,
+        38
+      ]
+    },
+    {
+      "name": "山洞蝙蝠",
+      "image": "CaveBat",
+      "ai": 0,
+      "level": 20,
+      "attackIntervalMs": 2500,
+      "moveIntervalMs": 1200,
+      "experience": 34,
+      "hp": 25,
+      "defense": [
+        0,
+        2
+      ],
+      "magicDefense": [
+        0,
+        0
+      ],
+      "attack": [
+        4,
+        6
+      ]
+    },
+    {
+      "name": "掷斧骷髅",
+      "image": "AxeSkeleton",
+      "ai": 21,
+      "level": 18,
+      "attackIntervalMs": 2500,
+      "moveIntervalMs": 1500,
+      "experience": 140,
+      "hp": 100,
+      "defense": [
+        0,
+        0
+      ],
+      "magicDefense": [
+        0,
+        0
+      ],
+      "attack": [
+        4,
+        9
+      ]
+    },
+    {
+      "name": "森林雪人",
+      "image": "ForestYeti",
+      "ai": 0,
+      "level": 16,
+      "attackIntervalMs": 2500,
+      "moveIntervalMs": 1500,
+      "experience": 36,
+      "hp": 36,
+      "defense": [
+        0,
+        2
+      ],
+      "magicDefense": [
+        0,
+        0
+      ],
+      "attack": [
+        7,
+        10
+      ]
+    },
+    {
+      "name": "洞蛆",
+      "image": "CaveMaggot",
+      "ai": 24,
+      "level": 31,
+      "attackIntervalMs": 2500,
+      "moveIntervalMs": 1000,
+      "experience": 122,
+      "hp": 80,
+      "defense": [
+        0,
+        0
+      ],
+      "magicDefense": [
+        0,
+        0
+      ],
+      "attack": [
+        6,
+        8
+      ]
+    },
+    {
+      "name": "稻草人",
+      "image": "Scarecrow",
+      "ai": 0,
+      "level": 10,
+      "attackIntervalMs": 2500,
+      "moveIntervalMs": 1500,
+      "experience": 15,
+      "hp": 20,
+      "defense": [
+        0,
+        0
+      ],
+      "magicDefense": [
+        0,
+        0
+      ],
+      "attack": [
+        1,
+        2
+      ]
+    },
+    {
+      "name": "蝎子",
+      "image": "Scorpion",
+      "ai": 83,
+      "level": 18,
+      "attackIntervalMs": 2500,
+      "moveIntervalMs": 1200,
+      "experience": 85,
+      "hp": 45,
+      "defense": [
+        0,
+        2
+      ],
+      "magicDefense": [
+        0,
+        0
+      ],
+      "attack": [
+        7,
+        16
+      ]
+    },
+    {
+      "name": "钉耙猫",
+      "image": "RakingCat",
+      "ai": 0,
+      "level": 13,
+      "attackIntervalMs": 2500,
+      "moveIntervalMs": 1800,
+      "experience": 27,
+      "hp": 32,
+      "defense": [
+        0,
+        0
+      ],
+      "magicDefense": [
+        0,
+        0
+      ],
+      "attack": [
+        2,
+        4
+      ]
+    },
+    {
+      "name": "食人花",
+      "image": "CannibalPlant",
+      "ai": 10,
+      "level": 20,
+      "attackIntervalMs": 2500,
+      "moveIntervalMs": 1500,
+      "experience": 36,
+      "hp": 28,
+      "defense": [
+        0,
+        2
+      ],
+      "magicDefense": [
+        0,
+        0
+      ],
+      "attack": [
+        6,
+        7
+      ]
+    },
+    {
+      "name": "骷髅",
+      "image": "Skeleton",
+      "ai": 0,
+      "level": 18,
+      "attackIntervalMs": 2500,
+      "moveIntervalMs": 1500,
+      "experience": 140,
+      "hp": 90,
+      "defense": [
+        0,
+        0
+      ],
+      "magicDefense": [
+        0,
+        0
+      ],
+      "attack": [
+        7,
+        10
+      ]
+    },
+    {
+      "name": "骷髅战士",
+      "image": "BoneFighter",
+      "ai": 0,
+      "level": 19,
+      "attackIntervalMs": 2500,
+      "moveIntervalMs": 1500,
+      "experience": 150,
+      "hp": 105,
+      "defense": [
+        0,
+        0
+      ],
+      "magicDefense": [
+        0,
+        0
+      ],
+      "attack": [
+        2,
+        15
+      ]
+    },
+    {
+      "name": "骷髅战将",
+      "image": "BoneWarrior",
+      "ai": 0,
+      "level": 20,
+      "attackIntervalMs": 2300,
+      "moveIntervalMs": 1200,
+      "experience": 160,
+      "hp": 110,
+      "defense": [
+        0,
+        2
+      ],
+      "magicDefense": [
+        0,
+        1
+      ],
+      "attack": [
+        7,
+        13
+      ]
+    },
+    {
+      "name": "骷髅精灵",
+      "image": "BoneElite",
+      "ai": 0,
+      "level": 50,
+      "attackIntervalMs": 2000,
+      "moveIntervalMs": 1200,
+      "experience": 960,
+      "hp": 500,
+      "defense": [
+        0,
+        5
+      ],
+      "magicDefense": [
+        0,
+        4
+      ],
+      "attack": [
+        7,
+        24
+      ]
+    }
+  ],
+  "spawns": [
+    {
+      "mapCode": "0",
+      "x": 110,
+      "y": 60,
+      "monsterName": "稻草人",
+      "range": 70,
+      "count": 10,
+      "respawnMinutes": 4
+    },
+    {
+      "mapCode": "0",
+      "x": 220,
+      "y": 60,
+      "monsterName": "稻草人",
+      "range": 60,
+      "count": 10,
+      "respawnMinutes": 4
+    },
+    {
+      "mapCode": "0",
+      "x": 140,
+      "y": 100,
+      "monsterName": "钉耙猫",
+      "range": 50,
+      "count": 20,
+      "respawnMinutes": 4
+    },
+    {
+      "mapCode": "0",
+      "x": 90,
+      "y": 240,
+      "monsterName": "半兽人",
+      "range": 60,
+      "count": 20,
+      "respawnMinutes": 4
+    },
+    {
+      "mapCode": "0",
+      "x": 150,
+      "y": 150,
+      "monsterName": "食人花",
+      "range": 100,
+      "count": 120,
+      "respawnMinutes": 4
+    },
+    {
+      "mapCode": "0",
+      "x": 420,
+      "y": 95,
+      "monsterName": "半兽人",
+      "range": 50,
+      "count": 20,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "0",
+      "x": 560,
+      "y": 200,
+      "monsterName": "半兽人",
+      "range": 90,
+      "count": 30,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "0",
+      "x": 520,
+      "y": 480,
+      "monsterName": "食人花",
+      "range": 120,
+      "count": 120,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "0",
+      "x": 500,
+      "y": 400,
+      "monsterName": "稻草人",
+      "range": 50,
+      "count": 10,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "0",
+      "x": 510,
+      "y": 410,
+      "monsterName": "钉耙猫",
+      "range": 50,
+      "count": 10,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "0",
+      "x": 560,
+      "y": 320,
+      "monsterName": "半兽人",
+      "range": 90,
+      "count": 10,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "0",
+      "x": 480,
+      "y": 450,
+      "monsterName": "半兽人",
+      "range": 60,
+      "count": 10,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "0",
+      "x": 500,
+      "y": 500,
+      "monsterName": "森林雪人",
+      "range": 120,
+      "count": 50,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "0",
+      "x": 600,
+      "y": 400,
+      "monsterName": "半兽人",
+      "range": 80,
+      "count": 10,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "0",
+      "x": 550,
+      "y": 250,
+      "monsterName": "食人花",
+      "range": 80,
+      "count": 60,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "0",
+      "x": 540,
+      "y": 530,
+      "monsterName": "稻草人",
+      "range": 70,
+      "count": 20,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "0",
+      "x": 640,
+      "y": 520,
+      "monsterName": "钉耙猫",
+      "range": 50,
+      "count": 20,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "0",
+      "x": 640,
+      "y": 530,
+      "monsterName": "稻草人",
+      "range": 50,
+      "count": 20,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "0",
+      "x": 200,
+      "y": 400,
+      "monsterName": "稻草人",
+      "range": 50,
+      "count": 20,
+      "respawnMinutes": 6
+    },
+    {
+      "mapCode": "0",
+      "x": 180,
+      "y": 420,
+      "monsterName": "钉耙猫",
+      "range": 50,
+      "count": 20,
+      "respawnMinutes": 6
+    },
+    {
+      "mapCode": "0",
+      "x": 150,
+      "y": 425,
+      "monsterName": "森林雪人",
+      "range": 120,
+      "count": 60,
+      "respawnMinutes": 7
+    },
+    {
+      "mapCode": "0",
+      "x": 110,
+      "y": 440,
+      "monsterName": "半兽人",
+      "range": 70,
+      "count": 40,
+      "respawnMinutes": 7
+    },
+    {
+      "mapCode": "0",
+      "x": 220,
+      "y": 470,
+      "monsterName": "半兽人",
+      "range": 70,
+      "count": 40,
+      "respawnMinutes": 7
+    },
+    {
+      "mapCode": "0",
+      "x": 140,
+      "y": 500,
+      "monsterName": "半兽人",
+      "range": 50,
+      "count": 30,
+      "respawnMinutes": 7
+    },
+    {
+      "mapCode": "0",
+      "x": 150,
+      "y": 430,
+      "monsterName": "食人花",
+      "range": 120,
+      "count": 80,
+      "respawnMinutes": 9
+    },
+    {
+      "mapCode": "0",
+      "x": 150,
+      "y": 150,
+      "monsterName": "森林雪人",
+      "range": 100,
+      "count": 60,
+      "respawnMinutes": 7
+    },
+    {
+      "mapCode": "0",
+      "x": 340,
+      "y": 550,
+      "monsterName": "钉耙猫",
+      "range": 50,
+      "count": 40,
+      "respawnMinutes": 6
+    },
+    {
+      "mapCode": "0",
+      "x": 330,
+      "y": 530,
+      "monsterName": "半兽人",
+      "range": 40,
+      "count": 50,
+      "respawnMinutes": 6
+    },
+    {
+      "mapCode": "0",
+      "x": 270,
+      "y": 625,
+      "monsterName": "稻草人",
+      "range": 60,
+      "count": 50,
+      "respawnMinutes": 5
+    },
+    {
+      "mapCode": "D001",
+      "x": 200,
+      "y": 200,
+      "monsterName": "蝎子",
+      "range": 200,
+      "count": 50,
+      "respawnMinutes": 4
+    },
+    {
+      "mapCode": "D001",
+      "x": 200,
+      "y": 200,
+      "monsterName": "骷髅",
+      "range": 200,
+      "count": 80,
+      "respawnMinutes": 4
+    },
+    {
+      "mapCode": "D001",
+      "x": 200,
+      "y": 200,
+      "monsterName": "骷髅战士",
+      "range": 200,
+      "count": 80,
+      "respawnMinutes": 4
+    },
+    {
+      "mapCode": "D001",
+      "x": 200,
+      "y": 200,
+      "monsterName": "山洞蝙蝠",
+      "range": 200,
+      "count": 30,
+      "respawnMinutes": 4
+    },
+    {
+      "mapCode": "D001",
+      "x": 200,
+      "y": 200,
+      "monsterName": "山洞蝙蝠",
+      "range": 200,
+      "count": 30,
+      "respawnMinutes": 4
+    },
+    {
+      "mapCode": "D001",
+      "x": 190,
+      "y": 125,
+      "monsterName": "蝎子",
+      "range": 30,
+      "count": 10,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "D001",
+      "x": 250,
+      "y": 260,
+      "monsterName": "骷髅",
+      "range": 30,
+      "count": 10,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "D001",
+      "x": 250,
+      "y": 90,
+      "monsterName": "山洞蝙蝠",
+      "range": 30,
+      "count": 10,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "D001",
+      "x": 30,
+      "y": 30,
+      "monsterName": "山洞蝙蝠",
+      "range": 50,
+      "count": 10,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "D001",
+      "x": 200,
+      "y": 200,
+      "monsterName": "骷髅精灵",
+      "range": 200,
+      "count": 5,
+      "respawnMinutes": 10
+    },
+    {
+      "mapCode": "D002",
+      "x": 200,
+      "y": 200,
+      "monsterName": "骷髅战士",
+      "range": 200,
+      "count": 80,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "D002",
+      "x": 200,
+      "y": 200,
+      "monsterName": "掷斧骷髅",
+      "range": 200,
+      "count": 40,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "D002",
+      "x": 200,
+      "y": 200,
+      "monsterName": "骷髅战将",
+      "range": 200,
+      "count": 50,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "D002",
+      "x": 200,
+      "y": 200,
+      "monsterName": "骷髅",
+      "range": 200,
+      "count": 40,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "D002",
+      "x": 200,
+      "y": 200,
+      "monsterName": "山洞蝙蝠",
+      "range": 200,
+      "count": 20,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "D002",
+      "x": 200,
+      "y": 200,
+      "monsterName": "山洞蝙蝠",
+      "range": 200,
+      "count": 20,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "D002",
+      "x": 300,
+      "y": 230,
+      "monsterName": "山洞蝙蝠",
+      "range": 30,
+      "count": 20,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "D002",
+      "x": 200,
+      "y": 200,
+      "monsterName": "骷髅精灵",
+      "range": 200,
+      "count": 5,
+      "respawnMinutes": 60
+    },
+    {
+      "mapCode": "D003",
+      "x": 200,
+      "y": 200,
+      "monsterName": "骷髅战士",
+      "range": 200,
+      "count": 60,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "D003",
+      "x": 200,
+      "y": 200,
+      "monsterName": "掷斧骷髅",
+      "range": 200,
+      "count": 40,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "D003",
+      "x": 200,
+      "y": 200,
+      "monsterName": "骷髅战将",
+      "range": 200,
+      "count": 60,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "D003",
+      "x": 200,
+      "y": 200,
+      "monsterName": "骷髅",
+      "range": 200,
+      "count": 50,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "D003",
+      "x": 200,
+      "y": 200,
+      "monsterName": "山洞蝙蝠",
+      "range": 200,
+      "count": 20,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "D003",
+      "x": 200,
+      "y": 200,
+      "monsterName": "山洞蝙蝠",
+      "range": 200,
+      "count": 20,
+      "respawnMinutes": 3
+    },
+    {
+      "mapCode": "D003",
+      "x": 200,
+      "y": 200,
+      "monsterName": "骷髅精灵",
+      "range": 200,
+      "count": 10,
+      "respawnMinutes": 30
+    }
+  ]
+}

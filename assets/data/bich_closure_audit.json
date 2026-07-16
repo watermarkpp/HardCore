@@ -1,0 +1,511 @@
+{
+  "auditId": "BICH-CLOSE-1",
+  "generatedAt": "2026-07-04",
+  "sourcePolicy": [
+    "服务端优先提供规则与数值",
+    "客户端优先提供MAP/WIL/WIX、动作、外观、特效和音效",
+    "两端冲突保留双值、采用值、路径、版本与可信度",
+    "两端均缺失才允许项目推导，且不得冒充官服基准"
+  ],
+  "overallPlanProgress": 82.4,
+  "bichPlayableCompletion": 93.7,
+  "observed": {
+    "runtimeBichMaps": [
+      4,
+      217,
+      218,
+      221,
+      248,
+      249,
+      401,
+      402,
+      403,
+      404,
+      405,
+      406,
+      407,
+      408,
+      409,
+      410,
+      411,
+      412,
+      1578
+    ],
+    "catalogBichMaps": [
+      4,
+      217,
+      218,
+      221,
+      248,
+      249,
+      401,
+      402,
+      403,
+      404,
+      405,
+      406,
+      407,
+      408,
+      409,
+      410,
+      411,
+      412,
+      1578
+    ],
+    "mineSourceMaps": [
+      "D401",
+      "D411",
+      "D413",
+      "D402",
+      "D414",
+      "D403",
+      "D412",
+      "D404",
+      "D415",
+      "D405",
+      "D416",
+      "D406"
+    ],
+    "warriorSkillLevels": {
+      "基本剑术": 4,
+      "攻杀剑术": 4,
+      "刺杀剑术": 4,
+      "半月弯刀": 4,
+      "野蛮冲撞": 4,
+      "烈火剑法": 4
+    },
+    "finalMonsterArt": [
+      "bich/strawman",
+      "bich/rake_cat",
+      "bich/half_orc",
+      "bich/forest_yeti",
+      "bich/cannibal_flower",
+      "bosses/skeleton_spirit"
+    ],
+    "finalFiveActionSets": [
+      "bich/strawman",
+      "bich/rake_cat",
+      "bich/half_orc",
+      "bich/forest_yeti",
+      "bich/cannibal_flower",
+      "bosses/skeleton_spirit"
+    ],
+    "itemCount": 175,
+    "equipmentSlots": [
+      "武器",
+      "衣服",
+      "头盔",
+      "项链",
+      "左手镯",
+      "右手镯",
+      "左戒指",
+      "右戒指"
+    ]
+  },
+  "categoryScores": {
+    "地图与路线": {
+      "score": 19.78,
+      "weight": 20.0
+    },
+    "怪物与Boss": {
+      "score": 19.05,
+      "weight": 20.0
+    },
+    "战士职业": {
+      "score": 23.45,
+      "weight": 25.0
+    },
+    "装备系统": {
+      "score": 18.95,
+      "weight": 20.0
+    },
+    "任务经济存档": {
+      "score": 7.5,
+      "weight": 10.0
+    },
+    "手机验收": {
+      "score": 5.0,
+      "weight": 5.0
+    }
+  },
+  "checks": [
+    {
+      "category": "地图与路线",
+      "name": "19张比奇运行地图与往返链",
+      "weight": 5,
+      "credit": 1.0,
+      "status": "完成",
+      "evidence": "RegionContent发现19/19张：[4, 217, 218, 221, 248, 249, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 1578]",
+      "gap": "缺图或路由时无法形成完整区域闭环。",
+      "next_task": "BICH-CONTENT-CLOSE",
+      "score": 5.0
+    },
+    {
+      "category": "地图与路线",
+      "name": "401—412矿区原MAP映射",
+      "weight": 4,
+      "credit": 1.0,
+      "status": "完成",
+      "evidence": "EnvironmentCatalog发现12/12个D4xx来源代码；6张200×200与6张100×100地图均按原尺寸分块绘制，刷新和门点由C级source_coordinate统一投影。",
+      "gap": "正式MapInfo缺失，坐标、数量和刷新周期仍需服务端数据覆盖。",
+      "next_task": "BICH-DATA-1-IMPORT",
+      "score": 4.0
+    },
+    {
+      "category": "地图与路线",
+      "name": "比奇省0.map、服务端HomeMap与0100室内图归类",
+      "weight": 4,
+      "credit": 0.98,
+      "status": "部分完成",
+      "evidence": "客户端0.map以700×700原逻辑尺寸映射到运行地图4；HomeMap=0与(289,618)直接映射为(-10528,3328)；700×700原阻挡掩码已进入镜头局部合并碰撞。0100按15×18小型室内图保留。",
+      "gap": "完整服务端MapInfo仍缺失，五个地表门点坐标保持C级。",
+      "next_task": "BICH-DATA-1-IMPORT",
+      "score": 3.92
+    },
+    {
+      "category": "地图与路线",
+      "name": "兽人古墓D001—D003原图接入",
+      "weight": 3,
+      "credit": 0.98,
+      "status": "部分完成",
+      "evidence": "D001/D002/D003以400×400原逻辑尺寸接入217/218/221；怪物、Boss和门点由source_coordinate统一双向投影，原MAP阻挡以镜头分块物理碰撞接入，并保留原MAP哈希、资源与安全空间。",
+      "gap": "服务端MapInfo连接坐标缺失，五个运行门点仍为C级安全闭环候选。",
+      "next_task": "BICH-DATA-1-IMPORT",
+      "score": 2.94
+    },
+    {
+      "category": "地图与路线",
+      "name": "天然洞穴D011—D012原图接入",
+      "weight": 2,
+      "credit": 0.98,
+      "status": "部分完成",
+      "evidence": "D011/D012以400×400原逻辑尺寸接入248/249；刷新和门点使用同一source_coordinate等距投影，原MAP阻挡以镜头分块物理碰撞接入，并保留原MAP哈希和专用资源。",
+      "gap": "服务端MapInfo连接坐标缺失，运行门点仍为C级候选。",
+      "next_task": "BICH-DATA-1-IMPORT",
+      "score": 1.96
+    },
+    {
+      "category": "地图与路线",
+      "name": "尸王殿Q004来源与Boss房",
+      "weight": 2,
+      "credit": 0.98,
+      "status": "部分完成",
+      "evidence": "Q004按客户端原图30×30尺寸接入，双尸王、入口、原MAP阻挡、边界碰撞和Boss安全区使用统一坐标；原图0灯光保持不伪造。",
+      "gap": "正式MapInfo/MonGen缺失，入口与双尸王source_coordinate仍为C级候选。",
+      "next_task": "BICH-DATA-1-IMPORT",
+      "score": 1.96
+    },
+    {
+      "category": "怪物与Boss",
+      "name": "比奇怪物刷新阵容",
+      "weight": 4,
+      "credit": 1.0,
+      "status": "完成",
+      "evidence": "地表、古墓、洞穴、矿区和两类Boss均有运行时刷新定义。",
+      "gap": "后续按服务端MonGen核对坐标、数量和刷新间隔。",
+      "next_task": "BICH-CONTENT-CLOSE",
+      "score": 4.0
+    },
+    {
+      "category": "怪物与Boss",
+      "name": "属性与掉落数据库",
+      "weight": 4,
+      "credit": 0.8,
+      "status": "部分完成",
+      "evidence": "结构库含怪物214、Boss46、掉落3424条；社区经典基准已匹配22类比奇怪物，并为10类代表怪物接入44个保守运行掉落槽。",
+      "gap": "代表怪掉落已运行接入；全区域怪物、商店与价格仍待逐区交叉。",
+      "next_task": "BICH-MILESTONE-1",
+      "score": 3.2
+    },
+    {
+      "category": "怪物与Boss",
+      "name": "比奇怪物最终造型覆盖",
+      "weight": 6,
+      "credit": 1.0,
+      "status": "完成",
+      "evidence": "正式阵容最终资源确认20/20组；亡灵客户端映射11组、常见怪物映射4组，合计拒绝0组。鸡、鹿不属于当前项目阵容。",
+      "gap": "比奇当前正式刷新阵容已覆盖；后续新增怪物必须同时提供来源和五动作。",
+      "next_task": "BICH-ART-CLOSE",
+      "score": 6.0
+    },
+    {
+      "category": "怪物与Boss",
+      "name": "待机/移动/攻击/受击/死亡动作",
+      "weight": 3,
+      "credit": 1.0,
+      "status": "完成",
+      "evidence": "五动作齐全的正式资源组为20/20；常见怪物客户端资源4/4组完整。",
+      "gap": "里程碑复验攻击命中帧与小型怪物脚底位置。",
+      "next_task": "BICH-MILESTONE",
+      "score": 3.0
+    },
+    {
+      "category": "怪物与Boss",
+      "name": "骷髅精灵与尸王Boss机制",
+      "weight": 3,
+      "credit": 0.95,
+      "status": "部分完成",
+      "evidence": "已按M2Server Race 89/81映射TATMonster；社区库再次确认骷髅精灵2000/1200ms、尸王2800/1500ms攻击/移动时序，并接入客户端命中帧、持续朝向和脚底选中圈；无来源伪技能保持关闭。",
+      "gap": "核心属性冲突继续保留中国1.76资料值与社区值双记录；仍需真机实战手感复验。",
+      "next_task": "BICH-MILESTONE",
+      "score": 2.85
+    },
+    {
+      "category": "战士职业",
+      "name": "六项技能数据与运行时入口",
+      "weight": 4,
+      "credit": 1.0,
+      "status": "完成",
+      "evidence": "技能配置6/6，等级记录：{'基本剑术': 4, '攻杀剑术': 4, '刺杀剑术': 4, '半月弯刀': 4, '野蛮冲撞': 4, '烈火剑法': 4}。",
+      "gap": "保持服务端Magic数据优先并记录字段映射。",
+      "next_task": "WARRIOR-CLOSE",
+      "score": 4.0
+    },
+    {
+      "category": "战士职业",
+      "name": "普攻按住续刀、850ms间隔、510ms动作锁",
+      "weight": 4,
+      "credit": 1.0,
+      "status": "完成",
+      "evidence": "Player与GameRoot已实现按下/松开、独立攻击间隔及完整收招前禁移。",
+      "gap": "真机里程碑复验触控丢失和帧率波动。",
+      "next_task": "BICH-MILESTONE",
+      "score": 4.0
+    },
+    {
+      "category": "战士职业",
+      "name": "手机自动选怪与手动换敌",
+      "weight": 3,
+      "credit": 1.0,
+      "status": "完成",
+      "evidence": "已具备正面权重自动重选、移动后判定、关闭自动后的正面换敌和攻击强制朝向入口。",
+      "gap": "用密集怪群与Boss场景做一次里程碑复验。",
+      "next_task": "BICH-MILESTONE",
+      "score": 3.0
+    },
+    {
+      "category": "战士职业",
+      "name": "原版伤害、范围与等级公式",
+      "weight": 4,
+      "credit": 0.85,
+      "status": "部分完成",
+      "evidence": "已从M2Server源码接入基础命中、DC/幸运、攻杀加值、刺杀第二格、半月侧向、烈火逐级倍率和野蛮成功率；刺杀/半月开关、攻杀周期与烈火蓄力状态机均已接入。",
+      "gap": "完整Magic.DB缺失，MP消耗和训练字段仍不能标为服务端精确。",
+      "next_task": "BICH-DATA-1-IMPORT",
+      "score": 3.4
+    },
+    {
+      "category": "战士职业",
+      "name": "基本剑术被动命中",
+      "weight": 2,
+      "credit": 1.0,
+      "status": "完成",
+      "evidence": "基础准确5、基本剑术每级+3、攻杀每级+1已进入属性结算，普攻和战士技能按目标敏捷执行命中判定。",
+      "gap": "完整怪物HIT/SpeedPoint表到位后覆盖当前默认敏捷15。",
+      "next_task": "BICH-DATA-1",
+      "score": 2.0
+    },
+    {
+      "category": "战士职业",
+      "name": "五项主动技能专属机制",
+      "weight": 5,
+      "credit": 0.9,
+      "status": "部分完成",
+      "evidence": "攻杀周期自动触发、刺杀/半月开关与格位、烈火10秒蓄力/20秒过期、野蛮等级差/阻挡/推怪/碰撞伤害已接入。",
+      "gap": "完整Magic.DB缺失，半月和野蛮MP/训练字段仍保留候选；手机连续实战留待里程碑。",
+      "next_task": "BICH-MILESTONE",
+      "score": 4.5
+    },
+    {
+      "category": "战士职业",
+      "name": "客户端动作、特效与音效",
+      "weight": 3,
+      "credit": 0.85,
+      "status": "部分完成",
+      "evidence": "已建立客户端逐技能来源表，接入Magic.wil四套八方向效果、现存51/52/57号武器声及HUD技能状态提示。",
+      "gap": "客户端130—137号技能WAV在当前资源包缺失，已显式记录且未以无来源音效冒充；野蛮仍使用项目反馈层。",
+      "next_task": "BICH-MILESTONE",
+      "score": 2.55
+    },
+    {
+      "category": "装备系统",
+      "name": "175件装备目录与实例化",
+      "weight": 3,
+      "credit": 1.0,
+      "status": "完成",
+      "evidence": "结构库装备175件，背包使用独立耐久实例。",
+      "gap": "逐项以服务端StdItems覆盖网页候选数据。",
+      "next_task": "EQUIPMENT-DATA-1",
+      "score": 3.0
+    },
+    {
+      "category": "装备系统",
+      "name": "穿戴要求与属性结算",
+      "weight": 3,
+      "credit": 0.9,
+      "status": "部分完成",
+      "evidence": "已按服务端源码接入Need 0—3、职业重量公式、武器/穿戴重量、衣服性别与双槽属性结算，并向HUD暴露重量上限。",
+      "gap": "实际StdItems.DB仍缺失；175件具体字段继续保持61条A、114条B候选，未冒充服务端精确值。",
+      "next_task": "BICH-DATA-1",
+      "score": 2.7
+    },
+    {
+      "category": "装备系统",
+      "name": "1.76装备槽结构",
+      "weight": 2,
+      "credit": 1.0,
+      "status": "完成",
+      "evidence": "当前槽位：['武器', '衣服', '头盔', '项链', '左手镯', '右手镯', '左戒指', '右戒指']；手镯和戒指均已拆分左右槽。",
+      "gap": "后续用客户端装备面板资源替换当前文字选择器。",
+      "next_task": "EQUIPMENT-ART-1",
+      "score": 2.0
+    },
+    {
+      "category": "装备系统",
+      "name": "耐久损耗与修理",
+      "weight": 3,
+      "credit": 0.9,
+      "status": "部分完成",
+      "evidence": "耐久归零保留原槽实例但属性失效；唯一维修按服务端缺损比例公式恢复原最大耐久，不提供特殊修理。",
+      "gap": "StdItems.Price缺失，维修基准物价仍是显式项目候选；武器/衣服损耗频率留待里程碑手感复验。",
+      "next_task": "BICH-MILESTONE",
+      "score": 2.7
+    },
+    {
+      "category": "装备系统",
+      "name": "幸运、诅咒与祝福油",
+      "weight": 3,
+      "credit": 0.95,
+      "status": "部分完成",
+      "evidence": "已按服务端接入1/20失败、1/3/7幸运阶段、诅咒至10、实例存储及幸运/诅咒攻击上下限分布；祝福油不再错误回血。",
+      "gap": "人物PK幸运与完整StdItems武器基础幸运/诅咒值尚未接入；当前任务只完成武器实例与祝福油主链。",
+      "next_task": "BICH-MILESTONE",
+      "score": 2.85
+    },
+    {
+      "category": "装备系统",
+      "name": "特殊装备效果",
+      "weight": 2,
+      "credit": 0.95,
+      "status": "部分完成",
+      "evidence": "八项戒指效果、手机主动按钮、魔血MP转HP、虹魔近战吸血和三件套奖励均已接入；装备配置支持覆盖、新增及暴击/速度/技能等级扩展。记忆组队传送与祈祷宠物叛变属于已确认的单机边界，不再列为实现缺陷。",
+      "gap": "StdItems缺失使魔血25/件、虹魔4/3/2仍是B级候选。",
+      "next_task": "BICH-DATA-1-IMPORT",
+      "score": 1.9
+    },
+    {
+      "category": "装备系统",
+      "name": "客户端装备图标与穿戴外观",
+      "weight": 2,
+      "credit": 0.9,
+      "status": "部分完成",
+      "evidence": "175件装备已接入三类客户端物品图；当前男性战士24件武器/衣服接入Weapon/Hum五动作八方向动态图层，并保持零耐久外观。",
+      "gap": "仍有7件因候选Shape缺失或超出经典客户端容量而拒绝接入，等待实际StdItems复核。",
+      "next_task": "EQUIPMENT-DATA-1",
+      "score": 1.8
+    },
+    {
+      "category": "装备系统",
+      "name": "装备与背包存档",
+      "weight": 2,
+      "credit": 1.0,
+      "status": "完成",
+      "evidence": "装备实例、背包、耐久和v02到v03双槽迁移均已进入存读档路径。",
+      "gap": "里程碑真机复验应用升级后旧存档自动迁移。",
+      "next_task": "BICH-MILESTONE",
+      "score": 2.0
+    },
+    {
+      "category": "任务经济存档",
+      "name": "比奇NPC商店与修理",
+      "weight": 2,
+      "credit": 0.8,
+      "status": "部分完成",
+      "evidence": "已有商店、药店和修理交互闭环。",
+      "gap": "用服务端Merchant/Market_Def复核货单、价格和NPC坐标。",
+      "next_task": "BICH-DATA-1",
+      "score": 1.6
+    },
+    {
+      "category": "任务经济存档",
+      "name": "比奇任务链",
+      "weight": 3,
+      "credit": 0.95,
+      "status": "部分完成",
+      "evidence": "已建立6段新手—野外—古墓—骷髅精灵—矿区—尸王连续主线，支持复合击杀、前置、原子奖励、防重复、旧存档迁移和移动追踪。",
+      "gap": "第一段为经典任务改编B；后五段是明确标记的单机衔接C，不冒充官服QuestDiary原任务。实际QuestDiary到位后逐步覆盖。",
+      "next_task": "BICH-DATA-1",
+      "score": 2.85
+    },
+    {
+      "category": "任务经济存档",
+      "name": "掉落与经济的服务端一致性",
+      "weight": 3,
+      "credit": 0.35,
+      "status": "部分完成",
+      "evidence": "掉落可运行，但完整MonItems/Merchant/价格数据包尚未导入正式运行库。",
+      "gap": "完成服务端数据导入、差异审计和经济回归。",
+      "next_task": "BICH-DATA-1",
+      "score": 1.05
+    },
+    {
+      "category": "任务经济存档",
+      "name": "死亡、回城、保存与继续",
+      "weight": 2,
+      "credit": 1.0,
+      "status": "完成",
+      "evidence": "已有死亡重生、金币损失、多角色原子存档、旧档迁移、系统菜单与强杀后重登回城。",
+      "gap": "荣耀90已完成里程碑启动验证。",
+      "next_task": "DONE",
+      "score": 2.0
+    },
+    {
+      "category": "手机验收",
+      "name": "触控移动、攻击与选怪",
+      "weight": 2,
+      "credit": 1.0,
+      "status": "完成",
+      "evidence": "触控摇杆、按住攻击、自动/手动选怪已接入。",
+      "gap": "只在里程碑做适量回归。",
+      "next_task": "BICH-MILESTONE",
+      "score": 2.0
+    },
+    {
+      "category": "手机验收",
+      "name": "荣耀90阶段性实机验证",
+      "weight": 1,
+      "credit": 1.0,
+      "status": "完成",
+      "evidence": "前序阶段已完成荣耀90连接、安装与碰撞/悬空/战斗反馈修正。",
+      "gap": "保留里程碑复验即可。",
+      "next_task": "BICH-MILESTONE",
+      "score": 1.0
+    },
+    {
+      "category": "手机验收",
+      "name": "比奇闭环里程碑APK",
+      "weight": 2,
+      "credit": 1.0,
+      "status": "完成",
+      "evidence": "版本25 / 1.14-bich-m1已完成签名、清单、荣耀90覆盖安装和启动页截图验证。",
+      "gap": "后续新增内容继续沿用阶段构建规则。",
+      "next_task": "DONE",
+      "score": 2.0
+    }
+  ],
+  "criticalBlockers": [
+    {
+      "category": "任务经济存档",
+      "name": "掉落与经济的服务端一致性",
+      "weight": 3,
+      "credit": 0.35,
+      "status": "部分完成",
+      "evidence": "掉落可运行，但完整MonItems/Merchant/价格数据包尚未导入正式运行库。",
+      "gap": "完成服务端数据导入、差异审计和经济回归。",
+      "next_task": "BICH-DATA-1"
+    }
+  ],
+  "recommendedOrder": [
+    "BICH-DATA-1"
+  ]
+}

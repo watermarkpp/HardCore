@@ -1,0 +1,73 @@
+{
+  "version": 2,
+  "policy": "source_pixels_cover_frame_aperture_no_matting",
+  "outputSize": [
+    128,
+    128
+  ],
+  "contentSize": 116,
+  "icons": [
+    {
+      "id": "function_attack",
+      "source": "assets/ui/gothic_preview/icons/hud_function_icon_atlas_v1.png",
+      "atlasIndex": 0,
+      "output": "assets/ui/gothic_preview/icons/runtime_v2/function_attack.png",
+      "sha256": "59910dcfcd5dff65c7024b3cf7d94c20de66874e4c4ac21c03017bfa49310db3"
+    },
+    {
+      "id": "function_empty_skill",
+      "source": "assets/ui/gothic_preview/icons/hud_function_icon_atlas_v1.png",
+      "atlasIndex": 8,
+      "output": "assets/ui/gothic_preview/icons/runtime_v2/function_empty_skill.png",
+      "sha256": "3bc784340722b07ad99ae24f1abd72d2b86a9f9d8e0baacab4739a2a183323d1"
+    },
+    {
+      "id": "skill_long_hit",
+      "source": "assets/art/characters/warrior/effects/long_hit.png",
+      "region": [
+        1260,
+        496,
+        160,
+        160
+      ],
+      "output": "assets/ui/gothic_preview/icons/runtime_v2/skill_long_hit.png",
+      "sha256": "8e71aaf5e4ccfa7b729ed49a39f3213cb8bcd4bac6a328bcb95787a58a62f16d"
+    },
+    {
+      "id": "skill_wide_hit",
+      "source": "assets/art/characters/warrior/effects/wide_hit.png",
+      "region": [
+        988,
+        500,
+        208,
+        144
+      ],
+      "output": "assets/ui/gothic_preview/icons/runtime_v2/skill_wide_hit.png",
+      "sha256": "9e09c472fab610536785562b8bb589467fbae0036c6e01c95193f0a92ce7b010"
+    },
+    {
+      "id": "skill_fire_hit",
+      "source": "assets/ui/gothic_preview/icons/source_skill_frames/fire_hit_audit.png",
+      "region": [
+        920,
+        220,
+        200,
+        210
+      ],
+      "output": "assets/ui/gothic_preview/icons/runtime_v2/skill_fire_hit.png",
+      "sha256": "66684aec34d22b63e2d966611e9ce64b5bbfdc82aef72d9509c616d3c1ea5b20"
+    },
+    {
+      "id": "skill_wild_rush",
+      "source": "assets/ui/gothic_preview/icons/source_skill_frames/wild_rush_audit.png",
+      "region": [
+        344,
+        300,
+        136,
+        100
+      ],
+      "output": "assets/ui/gothic_preview/icons/runtime_v2/skill_wild_rush.png",
+      "sha256": "97a8b5f3205d6e1ca2f3be32347c9535b984201dceef4e6ac50f76b6bc15993e"
+    }
+  ]
+}
