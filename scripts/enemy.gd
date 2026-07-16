@@ -47,6 +47,8 @@ var environment_blocker: Node
 var _dying := false
 var boss_rule: Dictionary = {}
 var behavior_profile: Dictionary = {}
+var service_ai_code := -1
+var service_move_interval_ms := 0
 
 var _attack_timer := 0.0
 var _attack_interval := 1.55
@@ -105,6 +107,11 @@ func _apply_behavior_profile() -> void:
 	move_speed = float(projection.get("moveSpeed", move_speed))
 	attack_range = float(projection.get("attackRange", attack_range))
 	aggro_radius = float(projection.get("aggroRadius", aggro_radius))
+	var timing: Dictionary = behavior_profile.get("timing", {})
+	if int(timing.get("attackIntervalMs", 0)) > 0:
+		_attack_interval = float(timing.get("attackIntervalMs")) / 1000.0
+	service_move_interval_ms = int(timing.get("moveIntervalMs", 0))
+	service_ai_code = int(behavior_profile.get("serviceBehavior", {}).get("aiCode", -1))
 	life_steal_ratio = float(behavior_profile.get("lifeStealRatio", life_steal_ratio))
 	dormant = bool(behavior_profile.get("dormant", dormant))
 	var on_hit: Dictionary = behavior_profile.get("onHit", {})

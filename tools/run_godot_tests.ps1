@@ -17,6 +17,7 @@ $Suites = @{
 		'tests/monster_threat_animation_test.tscn',
 		'tests/bich_monster_visual_test.tscn',
 		'tests/bich_common_client_art_test.tscn',
+		'tests/bich_route_monster_test.tscn',
 		'tests/bich_undead_client_art_test.tscn',
 		'tests/skeleton_spirit_boss_test.tscn',
 		'tests/corpse_king_boss_test.tscn',

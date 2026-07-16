@@ -12,7 +12,11 @@ SKIN = json.loads((ROOT / "assets/presentation/skins/classic_client/skin_manifes
 OUT = ROOT / "assets/data/runtime/monster_animation_catalog.json"
 
 client = {**COMMON.get("runtimeMappings", {}), **UNDEAD.get("runtimeMappings", {}), **BOSSES.get("runtimeMappings", {})}
-client_by_id = BOSSES.get("runtimeMappingsByMonsterId", {})
+client_by_id = {
+    **COMMON.get("runtimeMappingsByMonsterId", {}),
+    **UNDEAD.get("runtimeMappingsByMonsterId", {}),
+    **BOSSES.get("runtimeMappingsByMonsterId", {}),
+}
 authored = SKIN.get("runtimeAssets", {}).get("fallbackMonsters", {})
 rows = []
 for monster in DATA.get("monsters", []):
@@ -26,8 +30,12 @@ for monster in DATA.get("monsters", []):
         if candidate and candidate not in candidates:
             candidates.append(candidate)
     stable_id = str(int(monster.get("monsterId", -1)))
-    id_profile = client_by_id.get(stable_id, {})
-    lookup = str(id_profile.get("name", "")) if id_profile else next((candidate for candidate in candidates if candidate in client), "")
+    id_mapping = client_by_id.get(stable_id, {})
+    if isinstance(id_mapping, str):
+        lookup, id_profile = id_mapping, client.get(id_mapping, {})
+    else:
+        id_profile = id_mapping
+        lookup = str(id_profile.get("name", "")) if id_profile else next((candidate for candidate in candidates if candidate in client), "")
     authored_lookup = next((candidate for candidate in candidates if candidate in authored), "")
     row = {"monster_id": int(monster.get("monsterId", -1)), "name": name, "base_name": base}
     if lookup:
