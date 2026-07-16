@@ -89,12 +89,16 @@ New-Item -ItemType Directory -Path $LogRoot -Force | Out-Null
 $BaselineGodotIds = @(Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -like 'Godot*' } | Select-Object -ExpandProperty Id)
 
 function Stop-NewGodotProcesses {
-    $newProcesses = @(Get-Process -ErrorAction SilentlyContinue | Where-Object {
-        $_.ProcessName -like 'Godot*' -and $_.Id -notin $BaselineGodotIds
-    })
+    $newProcesses = @(Get-NewGodotProcesses)
     foreach ($newProcess in $newProcesses) {
         Stop-TestProcessTree -ProcessId $newProcess.Id
     }
+}
+
+function Get-NewGodotProcesses {
+    return @(Get-Process -ErrorAction SilentlyContinue | Where-Object {
+        $_.ProcessName -like 'Godot*' -and $_.Id -notin $BaselineGodotIds
+    })
 }
 
 $SelectedTests = if ($TestPaths.Count -gt 0) { $TestPaths } else { $Suites[$Suite] }
@@ -111,16 +115,28 @@ foreach ($testPath in $SelectedTests) {
         -RedirectStandardOutput $stdout -RedirectStandardError $stderr -PassThru
     $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
     $earlyFailure = $false
-    while (-not $process.HasExited -and [DateTime]::UtcNow -lt $deadline) {
+    $hasPassMarker = $false
+    while ([DateTime]::UtcNow -lt $deadline) {
         Start-Sleep -Milliseconds 150
+        $currentOutput = if (Test-Path -LiteralPath $stdout) { Get-Content -LiteralPath $stdout -Raw -ErrorAction SilentlyContinue } else { '' }
         $currentError = if (Test-Path -LiteralPath $stderr) { Get-Content -LiteralPath $stderr -Raw -ErrorAction SilentlyContinue } else { '' }
         if ($currentError -match 'SCRIPT ERROR:|Parse Error:|Assertion failed:') {
             $earlyFailure = $true
             Stop-TestProcessTree -ProcessId $process.Id
             break
         }
+        if ($currentOutput -match '[A-Z0-9_]+_PASS') {
+            $hasPassMarker = $true
+            break
+        }
+        # On Windows the console executable can exit after spawning the real
+        # Godot process. Keep waiting while that child is still running instead
+        # of treating the wrapper exit as the end of the test.
+        if ($process.HasExited -and @(Get-NewGodotProcesses).Count -eq 0) {
+            break
+        }
     }
-    $timedOut = -not $process.HasExited -and -not $earlyFailure
+    $timedOut = -not $earlyFailure -and -not $hasPassMarker -and [DateTime]::UtcNow -ge $deadline
     if ($timedOut) {
         Stop-TestProcessTree -ProcessId $process.Id
     }
