@@ -1,6 +1,6 @@
 # 项目协作与工作树规则
 
-本项目使用一个集成分支和四个专业工作树。开始工作前必须运行 `git branch --show-current`，根据当前分支遵守下面的文件所有权。
+本项目使用一个集成分支和五个专业工作树。开始工作前必须运行 `git branch --show-current`，根据当前分支遵守下面的文件所有权。
 
 ## 分支职责
 
@@ -31,6 +31,15 @@
 - 负责 `assets/art/items/**`、物品/装备专属数据、`scripts/equipment_rules.gd`、装备美术构建工具和装备相关测试。
 - 使用稳定的 `item_id` 输出图像、属性、穿戴和耐久规则；不得修改背包布局、地图内容或怪物刷新。
 
+### `codex/professions-skills`
+
+- 负责职业成长、玩家技能、技能投射物、召唤物、职业战斗公式、技能状态机、技能特效，以及对应数据、构建工具和测试。
+- 主要所有权包括 `scripts/profession_rules.gd`、`scripts/skill_projectile.gd`、`scripts/summon_actor.gd`、`scripts/warrior_combat_math.gd`、`assets/data/vanilla_176/skills.json`、`assets/data/vanilla_176/profession_growth.json` 和职业/技能专项测试。
+- 玩家职业技能特效可写入 `assets/art/characters/**/effects/**`；`paper_doll`、`wear` 和装备图像仍归装备分支。
+- `scripts/skill_panel.gd` 和 `scripts/profession_panel.gd` 的视觉布局仍归 UI 分支；本分支只提供稳定数据与行为接口。
+- `scripts/layers/runtime/combat_runtime_service.gd` 属于跨怪物/职业共享运行时，最终修改由集成分支接入。
+- 不得修改怪物 AI、地图刷新、装备定义、UI 布局或全局存档格式。
+
 ## 跨工作树协作
 
 - 需要修改其他分支所有权内的文件时，不得直接修改；在交付说明中记录所需接口、字段/ID、原因和验收方式。
@@ -49,4 +58,3 @@
 3. 新增或变更的稳定 ID。
 4. 需要集成分支处理的跨系统接入事项。
 5. 当前提交哈希。
-
