@@ -26,6 +26,9 @@ func _run() -> void:
 		assert(item_slot != null and item_slot.get_meta("stable_id") == "hud.item_slot.%d" % (index + 1))
 
 	assert(hud.quick_buttons.size() == 4)
+	PlayerState.quick_slots = ["攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"]
+	hud.update_quick_slots()
+	assert(hud.quick_slot_icons.size() == 4 and hud.attack_ring_skill_icons.size() == 3)
 	for index in range(4):
 		var skill_button := hud.quick_buttons[index]
 		assert(skill_button.size.x >= 100 and skill_button.size.y >= 56)
@@ -34,9 +37,16 @@ func _run() -> void:
 		assert(skill_button.get_meta("activation_mode_source") == "skill.activation_mode")
 		assert(skill_button.get_meta("warrior_policy") == "toggle")
 		assert(skill_button.get_meta("mage_tao_policy") == "instant_or_toggle")
+		var icon := skill_button.get_node("SkillDisc/SkillIcon") as TextureRect
+		assert(icon != null and icon.texture != null and icon.visible, "四个职业槽必须显示当前快捷技能素材")
+		assert(str(icon.get_meta("skill_icon_id", "")).begins_with("ui.hud.skill_icon.warrior."))
 	assert((root.get_node("SkillButton1") as Control).position.y >= 450, "职业技能槽仍然过度侵入战斗区域")
 	for index in range(3):
-		assert(root.get_node("AttackRingSkill%d" % (index + 1)) != null)
+		var ring_skill := root.get_node("AttackRingSkill%d" % (index + 1)) as Button
+		assert(ring_skill != null)
+		var ring_icon := ring_skill.get_node("SkillIcon") as TextureRect
+		assert(ring_icon != null and ring_icon.texture == hud.quick_slot_icons[index].texture)
+		assert(ring_icon.position == Vector2(8, 8) and ring_icon.size == Vector2(56, 56), "环绕技能图必须完整覆盖槽内开口")
 	var attack := root.get_node("AttackButton") as Button
 	assert(attack.size == Vector2(120, 120), "攻击按钮视觉直径应保持缩小后的120px")
 	var joystick := root.get_node("TouchJoystick") as TouchJoystick
@@ -44,6 +54,12 @@ func _run() -> void:
 	assert((root.get_node("InventoryButton") as Control).position.y > (root.get_node("MapButton") as Control).position.y)
 	assert((root.get_node("SkillBookButton") as Control).position.y > (root.get_node("MenuButton") as Control).position.y)
 	assert((root.get_node("SwitchTargetButton") as Control).position.y > (root.get_node("InteractButton") as Control).position.y)
+	var interact := root.get_node("InteractButton") as Control
+	var switch_target := root.get_node("SwitchTargetButton") as Control
+	var interact_fill := root.get_node("InteractFill") as Control
+	var switch_target_fill := root.get_node("SwitchTargetFill") as Control
+	assert(interact.size == Vector2(110, 90) and interact.position + interact.size * 0.5 == interact_fill.position + interact_fill.size * 0.5, "交互按钮未对准美术圆心")
+	assert(switch_target.size == Vector2(110, 90) and switch_target.position + switch_target.size * 0.5 == switch_target_fill.position + switch_target_fill.size * 0.5, "换敌按钮未对准美术圆心")
 
 	var image := Image.load_from_file(ProjectSettings.globalize_path(CHASSIS_PATH))
 	assert(not image.is_empty() and image.get_format() in [Image.FORMAT_RGBA8, Image.FORMAT_RGBAF, Image.FORMAT_RGBAH])

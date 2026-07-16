@@ -5,6 +5,7 @@ const MobileLayoutRules := preload("res://scripts/mobile_layout.gd")
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const HUDResourceOrbScript := preload("res://scripts/hud_resource_orb.gd")
+const HUDSkillIconCatalogScript := preload("res://scripts/hud_skill_icon_catalog.gd")
 const HUDTargetBarTexture := preload("res://assets/ui/gothic_hud/v2/runtime/target_bar_v2.png")
 const HUDUtilityStackTexture := preload("res://assets/ui/gothic_hud/v2/runtime/utility_stack_v2.png")
 const HUDJoystickTexture := preload("res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png")
@@ -43,6 +44,9 @@ var health_orb: Control
 var mana_orb: Control
 var hud_item_buttons: Array[Button] = []
 var quick_slot_labels: Array[Label] = []
+var quick_slot_icons: Array[TextureRect] = []
+var attack_ring_skill_icons: Array[TextureRect] = []
+var attack_ring_skill_labels: Array[Label] = []
 var current_zone_name := "比奇郊外"
 var _last_hp := 120
 var _last_max_hp := 120
@@ -319,6 +323,16 @@ func _build_combat_controls(root: Control) -> void:
 		disc.size = Vector2(72, 72)
 		disc.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		skill_button.add_child(disc)
+		var skill_icon := TextureRect.new()
+		skill_icon.name = "SkillIcon"
+		skill_icon.position = Vector2(6, 6)
+		skill_icon.size = Vector2(60, 60)
+		skill_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		skill_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		skill_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		skill_icon.set_meta("icon_source", "quick_slot")
+		disc.add_child(skill_icon)
+		quick_slot_icons.append(skill_icon)
 		var skill_label := Label.new()
 		skill_label.name = "SkillLabel"
 		skill_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 5)
@@ -341,11 +355,8 @@ func _build_combat_controls(root: Control) -> void:
 	warrior_state_label.add_theme_color_override("font_color", Color("efbd70"))
 	root.add_child(warrior_state_label)
 
-	_add_bottom_right_fill(root, "InteractFill", Rect2(-100, -382, 52, 52), "GothicArtCircleFill")
-	_add_bottom_right_fill(root, "SwitchTargetFill", Rect2(-100, -304, 52, 52), "GothicArtCircleFill")
-	_add_bottom_right_fill(root, "AttackRingSkill1Fill", Rect2(-250, -85, 48, 48), "GothicArtCircleFill")
-	_add_bottom_right_fill(root, "AttackRingSkill2Fill", Rect2(-232, -189, 48, 48), "GothicArtCircleFill")
-	_add_bottom_right_fill(root, "AttackRingSkill3Fill", Rect2(-161, -240, 48, 48), "GothicArtCircleFill")
+	_add_bottom_right_fill(root, "InteractFill", Rect2(-100, -385, 52, 52), "GothicArtCircleFill")
+	_add_bottom_right_fill(root, "SwitchTargetFill", Rect2(-100, -307, 52, 52), "GothicArtCircleFill")
 	_add_bottom_right_fill(root, "AttackFill", Rect2(-181, -161, 120, 120), "GothicArtAttackFill")
 	var right_controls_art := TextureRect.new()
 	right_controls_art.name = "RightControlsArt"
@@ -366,10 +377,10 @@ func _build_combat_controls(root: Control) -> void:
 	interact_button.theme_type_variation = "GothicTransparentButton"
 	interact_button.text = "交互"
 	interact_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	interact_button.offset_left = -131
-	interact_button.offset_top = -400
-	interact_button.offset_right = -21
-	interact_button.offset_bottom = -310
+	interact_button.offset_left = -129
+	interact_button.offset_top = -404
+	interact_button.offset_right = -19
+	interact_button.offset_bottom = -314
 	interact_button.add_theme_font_size_override("font_size", 17)
 	interact_button.button_down.connect(func() -> void: interact_pressed.emit())
 	root.add_child(interact_button)
@@ -379,10 +390,10 @@ func _build_combat_controls(root: Control) -> void:
 	switch_target_button.theme_type_variation = "GothicTransparentButton"
 	switch_target_button.text = "换敌"
 	switch_target_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	switch_target_button.offset_left = -131
-	switch_target_button.offset_top = -325
-	switch_target_button.offset_right = -21
-	switch_target_button.offset_bottom = -235
+	switch_target_button.offset_left = -129
+	switch_target_button.offset_top = -326
+	switch_target_button.offset_right = -19
+	switch_target_button.offset_bottom = -236
 	switch_target_button.add_theme_font_size_override("font_size", 16)
 	switch_target_button.pressed.connect(func() -> void: target_switch_pressed.emit())
 	root.add_child(switch_target_button)
@@ -406,17 +417,43 @@ func _build_combat_controls(root: Control) -> void:
 		var ring_skill := Button.new()
 		ring_skill.name = "AttackRingSkill%d" % (index + 1)
 		ring_skill.theme_type_variation = "GothicTransparentButton"
-		ring_skill.text = "技%d" % (index + 1)
+		ring_skill.text = ""
 		ring_skill.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
 		var rect: Rect2 = ring_positions[index]
 		ring_skill.offset_left = rect.position.x
 		ring_skill.offset_top = rect.position.y
 		ring_skill.offset_right = rect.end.x
 		ring_skill.offset_bottom = rect.end.y
-		ring_skill.add_theme_font_size_override("font_size", 15)
 		ring_skill.pressed.connect(_on_skill_button.bind(index))
 		ring_skill.set_meta("stable_id", "hud.attack_ring_skill.%d" % (index + 1))
 		root.add_child(ring_skill)
+		var ring_backdrop := Panel.new()
+		ring_backdrop.name = "SkillBackdrop"
+		ring_backdrop.theme_type_variation = "GothicArtCircleFill"
+		ring_backdrop.position = Vector2(10, 10)
+		ring_backdrop.size = Vector2(52, 52)
+		ring_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ring_skill.add_child(ring_backdrop)
+		var ring_icon := TextureRect.new()
+		ring_icon.name = "SkillIcon"
+		ring_icon.position = Vector2(8, 8)
+		ring_icon.size = Vector2(56, 56)
+		ring_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		ring_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		ring_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ring_icon.set_meta("icon_source", "quick_slot")
+		ring_skill.add_child(ring_icon)
+		attack_ring_skill_icons.append(ring_icon)
+		var ring_label := Label.new()
+		ring_label.name = "SkillLabel"
+		ring_label.position = Vector2(4, 4)
+		ring_label.size = Vector2(64, 64)
+		ring_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		ring_label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
+		ring_label.add_theme_font_size_override("font_size", 13)
+		ring_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ring_skill.add_child(ring_label)
+		attack_ring_skill_labels.append(ring_label)
 
 	special_action_button = Button.new()
 	special_action_button.name = "SpecialActionButton"
@@ -695,15 +732,32 @@ func update_quick_slots() -> void:
 	for index in range(quick_buttons.size()):
 		var skill_name := PlayerState.quick_slots[index]
 		var marker := _warrior_skill_marker(skill_name)
+		var skill_texture := HUDSkillIconCatalogScript.texture_for(skill_name)
 		var display_text := "%d\n%s%s" % [index + 1, skill_name if not skill_name.is_empty() else "空", marker]
 		quick_buttons[index].text = display_text
+		quick_buttons[index].tooltip_text = skill_name if not skill_name.is_empty() else "空技能槽"
+		if index < quick_slot_icons.size():
+			quick_slot_icons[index].texture = skill_texture
+			quick_slot_icons[index].visible = skill_texture != null
+			quick_slot_icons[index].set_meta("skill_name", skill_name)
+			quick_slot_icons[index].set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
 		if index < quick_slot_labels.size():
-			quick_slot_labels[index].text = _compact_skill_label(index, skill_name, marker)
+			quick_slot_labels[index].text = _compact_skill_label(index, skill_name, marker, skill_texture != null)
+		if index < attack_ring_skill_icons.size():
+			attack_ring_skill_icons[index].texture = skill_texture
+			attack_ring_skill_icons[index].visible = skill_texture != null
+			attack_ring_skill_icons[index].set_meta("skill_name", skill_name)
+			attack_ring_skill_icons[index].set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
+		if index < attack_ring_skill_labels.size():
+			attack_ring_skill_labels[index].text = str(index + 1) if skill_texture != null else "技%d" % (index + 1)
+			attack_ring_skill_labels[index].tooltip_text = skill_name
 
 
-func _compact_skill_label(index: int, skill_name: String, marker: String) -> String:
+func _compact_skill_label(index: int, skill_name: String, marker: String, has_icon: bool) -> String:
 	var compact_name := "空" if skill_name.is_empty() else skill_name.left(2)
 	var compact_marker := marker.trim_prefix("[").trim_suffix("]")
+	if has_icon:
+		return "%d%s" % [index + 1, "\n%s" % compact_marker if not compact_marker.is_empty() else ""]
 	return "%d\n%s%s" % [index + 1, compact_name, "\n%s" % compact_marker if not compact_marker.is_empty() else ""]
 
 

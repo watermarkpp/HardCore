@@ -61,5 +61,11 @@
     "activationModeSource": "skill.activation_mode",
     "warriorPolicy": "toggle",
     "mageTaoPolicy": "instant_or_toggle"
+  },
+  "skillIconCatalog": {
+    "id": "ui.hud.skill_icon.warrior.v1",
+    "manifest": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/skill_icon_manifest.json",
+    "binding": "PlayerState.quick_slots",
+    "presentation": "source effect pixels only; gothic framing supplied by HUD V2"
   }
 }

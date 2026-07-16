@@ -1,0 +1,40 @@
+{
+  "catalogId": "ui.hud.skill_icon.warrior.v1",
+  "policy": "source_effect_pixels_alpha_crop_only",
+  "outputSize": [128, 128],
+  "contentSize": 116,
+  "icons": [
+    {
+      "id": "ui.hud.skill_icon.warrior.power_hit",
+      "skillName": "攻杀剑术",
+      "source": "res://assets/art/characters/warrior/effects/power_hit.png",
+      "sourceRegion": [672, 1120, 224, 224],
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/skill_power_hit.png",
+      "sha256": "afdfe587e8c50256bb80ae1e30f968d323bf2dac23ece2d2f6a240b627b7bc5a"
+    },
+    {
+      "id": "ui.hud.skill_icon.warrior.long_hit",
+      "skillName": "刺杀剑术",
+      "source": "res://assets/art/characters/warrior/effects/long_hit.png",
+      "sourceRegion": [1260, 496, 160, 160],
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/skill_long_hit.png",
+      "sha256": "06943a0492662d7d640078cdf727365165392750dc03a718ae2a4017d8f1d711"
+    },
+    {
+      "id": "ui.hud.skill_icon.warrior.wide_hit",
+      "skillName": "半月弯刀",
+      "source": "res://assets/art/characters/warrior/effects/wide_hit.png",
+      "sourceRegion": [988, 500, 208, 144],
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/skill_wide_hit.png",
+      "sha256": "41a20f9b9939d0425231b1d1be955f371adc4f7f05fcd0fd2d25dbf5dcd7b9e3"
+    },
+    {
+      "id": "ui.hud.skill_icon.warrior.fire_hit",
+      "skillName": "烈火剑法",
+      "source": "res://assets/art/characters/warrior/effects/fire_hit_d0_f1.png",
+      "sourceRegion": [640, 480, 640, 480],
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/skill_fire_hit.png",
+      "sha256": "43470bd09d4d9913d9d10feee820509a6fd0e57195fb9123f1356a6c94a75fd6"
+    }
+  ]
+}
