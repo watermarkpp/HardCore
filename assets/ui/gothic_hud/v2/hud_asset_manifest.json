@@ -1,0 +1,65 @@
+{
+  "assetSetId": "ui.hud.gothic.v2",
+  "status": "runtime",
+  "visualReference": "user-approved unified dark gothic HUD mockup",
+  "generation": {
+    "mode": "built-in-imagegen",
+    "background": "#00FF00 chroma key",
+    "alphaRemoval": {
+      "autoKey": "border",
+      "softMatte": true,
+      "transparentThreshold": 12,
+      "opaqueThreshold": 220,
+      "despill": true
+    }
+  },
+  "components": [
+    {
+      "id": "ui.hud.gothic.v2.target_bar",
+      "path": "res://assets/ui/gothic_hud/v2/runtime/target_bar_v2.png",
+      "pixelSize": [660, 109]
+    },
+    {
+      "id": "ui.hud.gothic.v2.utility_stack",
+      "path": "res://assets/ui/gothic_hud/v2/runtime/utility_stack_v2.png",
+      "pixelSize": [352, 392]
+    },
+    {
+      "id": "ui.hud.gothic.v2.joystick",
+      "path": "res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png",
+      "pixelSize": [220, 222]
+    },
+    {
+      "id": "ui.hud.gothic.v2.bottom_chassis",
+      "path": "res://assets/ui/gothic_hud/v2/runtime/bottom_chassis_v2.png",
+      "pixelSize": [1009, 336]
+    },
+    {
+      "id": "ui.hud.gothic.v2.right_controls",
+      "path": "res://assets/ui/gothic_hud/v2/runtime/right_controls_v2.png",
+      "pixelSize": [347, 540]
+    }
+  ],
+  "interactionContracts": {
+    "professionSkillSlots": [
+      "hud.profession_skill.1",
+      "hud.profession_skill.2",
+      "hud.profession_skill.3",
+      "hud.profession_skill.4"
+    ],
+    "itemSlots": [
+      "hud.item_slot.1",
+      "hud.item_slot.2",
+      "hud.item_slot.3",
+      "hud.item_slot.4"
+    ],
+    "attackRingSkills": [
+      "hud.attack_ring_skill.1",
+      "hud.attack_ring_skill.2",
+      "hud.attack_ring_skill.3"
+    ],
+    "activationModeSource": "skill.activation_mode",
+    "warriorPolicy": "toggle",
+    "mageTaoPolicy": "instant_or_toggle"
+  }
+}

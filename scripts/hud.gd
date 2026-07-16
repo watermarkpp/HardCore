@@ -3,6 +3,13 @@ extends CanvasLayer
 
 const MobileLayoutRules := preload("res://scripts/mobile_layout.gd")
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
+const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const HUDResourceOrbScript := preload("res://scripts/hud_resource_orb.gd")
+const HUDTargetBarTexture := preload("res://assets/ui/gothic_hud/v2/runtime/target_bar_v2.png")
+const HUDUtilityStackTexture := preload("res://assets/ui/gothic_hud/v2/runtime/utility_stack_v2.png")
+const HUDJoystickTexture := preload("res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png")
+const HUDChassisTexture := preload("res://assets/ui/gothic_hud/v2/runtime/bottom_chassis_v2.png")
+const HUDRightControlsTexture := preload("res://assets/ui/gothic_hud/v2/runtime/right_controls_v2.png")
 
 signal movement_changed(value: Vector2)
 signal attack_pressed
@@ -20,6 +27,7 @@ var profile_label: Label
 var quest_tracker_label: Label
 var loot_label: Label
 var target_label: Label
+var target_health_fill: ColorRect
 var auto_target_button: Button
 var special_action_button: Button
 var warrior_state_label: Label
@@ -31,6 +39,10 @@ var profession_panel: ProfessionPanel
 var map_panel: MapPanel
 var warehouse_panel: WarehousePanel
 var quick_buttons: Array[Button] = []
+var health_orb: Control
+var mana_orb: Control
+var hud_item_buttons: Array[Button] = []
+var quick_slot_labels: Array[Label] = []
 var current_zone_name := "比奇郊外"
 var _last_hp := 120
 var _last_max_hp := 120
@@ -44,230 +56,382 @@ var _last_target_text := ""
 
 
 func _ready() -> void:
+	_build_approved_hud()
+
+
+func _build_approved_hud() -> void:
 	var root := Control.new()
 	root.name = "MobileSafeRoot"
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.theme = GothicUIThemeScript.build()
 	add_child(root)
 	MobileLayoutRules.apply_display_safe_area(root, get_viewport())
 	get_viewport().size_changed.connect(MobileLayoutRules.apply_display_safe_area.bind(root, get_viewport()))
 
-	var top_panel := ColorRect.new()
+	_build_hidden_compatibility_info(root)
+	_build_target_bar(root)
+	_build_right_utility_stack(root)
+	_build_bottom_chassis(root)
+	_build_combat_controls(root)
+	_build_modal_panels(root)
+
+	PlayerState.profile_changed.connect(update_profile)
+	PlayerState.quests_changed.connect(update_quest_tracker)
+	PlayerState.profile_changed.connect(update_special_actions)
+	PlayerState.skills_changed.connect(update_quick_slots)
+	update_profile()
+	update_quest_tracker()
+	update_special_actions()
+	update_quick_slots()
+	update_resources(_last_hp, _last_max_hp, _last_mp, _last_max_mp)
+
+
+func _build_hidden_compatibility_info(root: Control) -> void:
+	var top_panel := Panel.new()
 	top_panel.name = "TopInfoPanel"
-	top_panel.color = Color(0.08, 0.035, 0.025, 0.82)
-	top_panel.position = Vector2(20, 18)
-	top_panel.size = Vector2(770, 158)
-	# Map/player summary is intentionally removed from the gameplay HUD. Player
-	# health remains attached to the actor in world space, while detailed stats
-	# live in the dedicated character panel.
 	top_panel.visible = false
 	root.add_child(top_panel)
 
 	hp_label = Label.new()
-	hp_label.text = "比奇郊外｜生命 120 / 120"
-	hp_label.position = Vector2(18, 10)
-	hp_label.add_theme_font_size_override("font_size", 22)
-	hp_label.add_theme_color_override("font_color", Color(0.98, 0.76, 0.53))
 	top_panel.add_child(hp_label)
-
 	data_label = Label.new()
 	data_label.text = GameData.summary_text()
-	data_label.position = Vector2(18, 44)
-	data_label.add_theme_font_size_override("font_size", 14)
-	data_label.add_theme_color_override("font_color", Color(0.84, 0.77, 0.67))
 	top_panel.add_child(data_label)
-
 	profile_label = Label.new()
-	profile_label.position = Vector2(18, 70)
-	profile_label.add_theme_font_size_override("font_size", 15)
-	profile_label.add_theme_color_override("font_color", Color(0.82, 0.73, 0.60))
 	top_panel.add_child(profile_label)
-
 	quest_tracker_label = Label.new()
 	quest_tracker_label.name = "QuestTracker"
-	quest_tracker_label.position = Vector2(18, 96)
-	quest_tracker_label.size = Vector2(734, 54)
-	quest_tracker_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	quest_tracker_label.add_theme_font_size_override("font_size", 14)
-	quest_tracker_label.add_theme_color_override("font_color", Color(0.96, 0.83, 0.46))
 	top_panel.add_child(quest_tracker_label)
 
 	loot_label = Label.new()
-	loot_label.position = Vector2(0, 164)
-	loot_label.size = Vector2(1280, 40)
+	loot_label.name = "LootNotice"
+	loot_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	loot_label.offset_left = 360
+	loot_label.offset_top = 132
+	loot_label.offset_right = -360
+	loot_label.offset_bottom = 172
 	loot_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	loot_label.add_theme_font_size_override("font_size", 24)
-	loot_label.add_theme_color_override("font_color", Color(1.0, 0.83, 0.30))
+	loot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	loot_label.add_theme_font_size_override("font_size", 22)
+	loot_label.add_theme_color_override("font_color", Color("ffd06f"))
 	root.add_child(loot_label)
+
+
+func _build_target_bar(root: Control) -> void:
+	var target_panel := Control.new()
+	target_panel.name = "TargetPanel"
+	target_panel.anchor_left = 0.5
+	target_panel.anchor_right = 0.5
+	target_panel.offset_left = -220
+	target_panel.offset_top = 20
+	target_panel.offset_right = 220
+	target_panel.offset_bottom = 93
+	target_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(target_panel)
+	target_health_fill = ColorRect.new()
+	target_health_fill.name = "TargetHealthFill"
+	target_health_fill.position = Vector2(60, 24)
+	target_health_fill.size = Vector2(320, 27)
+	target_health_fill.color = Color(0.42, 0.035, 0.035, 0.88)
+	target_health_fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	target_panel.add_child(target_health_fill)
+	var target_art := _add_full_texture(target_panel, "TargetFrameArt", HUDTargetBarTexture)
+	target_art.set_meta("stable_id", "ui.hud.gothic.v2.target_bar")
+
+	target_label = Label.new()
+	target_label.name = "TargetLabel"
+	target_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 8)
+	target_label.text = "目标：自动锁定待命"
+	target_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	target_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	target_label.add_theme_font_size_override("font_size", 18)
+	target_label.add_theme_color_override("font_color", Color("e7c38c"))
+	target_panel.add_child(target_label)
+
+
+func _build_right_utility_stack(root: Control) -> void:
+	_add_top_right_fill(root, "ZoneFill", Rect2(-270, 34, 236, 86), "GothicArtPanelFill")
+	_add_top_right_fill(root, "AutoFill", Rect2(-270, 142, 236, 40), "GothicArtToggleFill")
+	_add_top_right_fill(root, "MapFill", Rect2(-270, 200, 106, 42), "GothicArtNavFill")
+	_add_top_right_fill(root, "MenuFill", Rect2(-140, 200, 106, 42), "GothicArtToggleFill")
+	_add_top_right_fill(root, "BagFill", Rect2(-270, 256, 106, 42), "GothicArtBagFill")
+	_add_top_right_fill(root, "SkillFill", Rect2(-140, 256, 106, 42), "GothicArtBagFill")
+	var stack_art := TextureRect.new()
+	stack_art.name = "UtilityStackArt"
+	stack_art.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	stack_art.offset_left = -284
+	stack_art.offset_top = 18
+	stack_art.offset_right = -20
+	stack_art.offset_bottom = 312
+	stack_art.texture = HUDUtilityStackTexture
+	stack_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	stack_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	stack_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack_art.set_meta("stable_id", "ui.hud.gothic.v2.utility_stack")
+	root.add_child(stack_art)
+
+	var zone_panel := Control.new()
+	zone_panel.name = "ZonePanel"
+	zone_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	zone_panel.offset_left = -274
+	zone_panel.offset_top = 26
+	zone_panel.offset_right = -30
+	zone_panel.offset_bottom = 128
+	root.add_child(zone_panel)
+	var zone_label := Label.new()
+	zone_label.name = "ZoneLabel"
+	zone_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 8)
+	zone_label.text = current_zone_name
+	zone_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	zone_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	zone_label.add_theme_font_size_override("font_size", 16)
+	zone_panel.add_child(zone_label)
+
+	auto_target_button = _add_utility_button(root, "AutoTargetButton", "自动锁定：开", Rect2(-274, 136, 244, 52))
+	auto_target_button.toggle_mode = true
+	auto_target_button.button_pressed = true
+	auto_target_button.toggled.connect(func(enabled: bool) -> void:
+		auto_target_button.text = "自动锁定：开" if enabled else "自动锁定：关"
+		auto_target_changed.emit(enabled)
+	)
+
+	var map_button := _add_utility_button(root, "MapButton", "地图", Rect2(-274, 193, 116, 56))
+	map_button.pressed.connect(_toggle_map_panel)
+	var menu_button := _add_utility_button(root, "MenuButton", "菜单", Rect2(-146, 193, 116, 56))
+	menu_button.pressed.connect(_request_system_menu)
+	var inventory_button := _add_utility_button(root, "InventoryButton", "背包", Rect2(-274, 249, 116, 56))
+	inventory_button.pressed.connect(_toggle_inventory)
+	var skill_book_button := _add_utility_button(root, "SkillBookButton", "技能", Rect2(-146, 249, 116, 56))
+	skill_book_button.pressed.connect(_toggle_skill_book)
+
+
+func _build_bottom_chassis(root: Control) -> void:
+	var chassis_root := Control.new()
+	chassis_root.name = "IntegratedHUDChassis"
+	chassis_root.anchor_left = 0.5
+	chassis_root.anchor_top = 1.0
+	chassis_root.anchor_right = 0.5
+	chassis_root.anchor_bottom = 1.0
+	chassis_root.offset_left = -410
+	chassis_root.offset_top = -273
+	chassis_root.offset_right = 410
+	chassis_root.offset_bottom = 0
+	chassis_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chassis_root.set_meta("contents", ["health_orb", "four_item_slots", "mana_orb"])
+	root.add_child(chassis_root)
+
+	health_orb = HUDResourceOrbScript.new()
+	health_orb.name = "HealthOrb"
+	health_orb.position = Vector2(132, 138)
+	health_orb.size = Vector2(100, 100)
+	health_orb.resource_name = "生命"
+	health_orb.liquid_color = Color("a51422")
+	chassis_root.add_child(health_orb)
+
+	mana_orb = HUDResourceOrbScript.new()
+	mana_orb.name = "ManaOrb"
+	mana_orb.position = Vector2(589, 138)
+	mana_orb.size = Vector2(100, 100)
+	mana_orb.resource_name = "魔法"
+	mana_orb.liquid_color = Color("174eaa")
+	chassis_root.add_child(mana_orb)
+
+	var chassis := TextureRect.new()
+	chassis.name = "DemonChassisArt"
+	chassis.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	chassis.texture = HUDChassisTexture
+	chassis.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	chassis.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	chassis.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chassis.set_meta("stable_id", "ui.hud.gothic.v2.bottom_chassis")
+	chassis_root.add_child(chassis)
+
+	var item_x := [255.0, 337.0, 424.0, 508.0]
+	for index in range(4):
+		var item_button := Button.new()
+		item_button.name = "ItemSlot%d" % (index + 1)
+		item_button.theme_type_variation = "GothicItemButton"
+		item_button.position = Vector2(item_x[index], 162)
+		item_button.size = Vector2(62, 62)
+		item_button.text = str(index + 1)
+		item_button.tooltip_text = "快捷物品 %d" % (index + 1)
+		item_button.add_theme_font_size_override("font_size", 15)
+		item_button.set_meta("stable_id", "hud.item_slot.%d" % (index + 1))
+		chassis_root.add_child(item_button)
+		hud_item_buttons.append(item_button)
+
+
+func _build_combat_controls(root: Control) -> void:
+	var joystick_art := TextureRect.new()
+	joystick_art.name = "JoystickArt"
+	joystick_art.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
+	joystick_art.offset_left = 34
+	joystick_art.offset_top = -186
+	joystick_art.offset_right = 186
+	joystick_art.offset_bottom = -34
+	joystick_art.texture = HUDJoystickTexture
+	joystick_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	joystick_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	joystick_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	joystick_art.set_meta("stable_id", "ui.hud.gothic.v2.joystick")
+	root.add_child(joystick_art)
 
 	var joystick := TouchJoystick.new()
 	joystick.name = "TouchJoystick"
+	joystick.radius = 58.0
+	joystick.knob_radius = 24.0
+	joystick.external_frame = true
 	joystick.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
 	joystick.offset_left = 34
-	joystick.offset_top = -194
-	joystick.offset_right = 194
+	joystick.offset_top = -186
+	joystick.offset_right = 186
 	joystick.offset_bottom = -34
 	joystick.vector_changed.connect(func(value: Vector2) -> void: movement_changed.emit(value))
 	root.add_child(joystick)
 
-	var attack_button := Button.new()
-	attack_button.name = "AttackButton"
-	attack_button.text = "攻击"
-	attack_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	attack_button.offset_left = -186
-	attack_button.offset_top = -174
-	attack_button.offset_right = -42
-	attack_button.offset_bottom = -30
-	attack_button.add_theme_font_size_override("font_size", 28)
-	attack_button.add_theme_color_override("font_color", Color(1.0, 0.86, 0.60))
-	attack_button.modulate = Color(0.92, 0.78, 0.64, 0.92)
-	attack_button.mouse_filter = Control.MOUSE_FILTER_STOP
-	attack_button.button_down.connect(func() -> void: attack_pressed.emit())
-	attack_button.button_up.connect(func() -> void: attack_released.emit())
-	root.add_child(attack_button)
-
-	var interact_button := Button.new()
-	interact_button.name = "InteractButton"
-	interact_button.text = "交互"
-	interact_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	interact_button.offset_left = -340
-	interact_button.offset_top = -142
-	interact_button.offset_right = -216
-	interact_button.offset_bottom = -30
-	interact_button.add_theme_font_size_override("font_size", 23)
-	interact_button.button_down.connect(func() -> void: interact_pressed.emit())
-	root.add_child(interact_button)
-
-	var hint := Label.new()
-	hint.name = "DesktopHint"
-	hint.text = "电脑：WASD移动，E交互，空格攻击，1-4技能"
-	hint.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	hint.offset_left = -370
-	hint.offset_top = 24
-	hint.offset_right = -20
-	hint.offset_bottom = 56
-	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	hint.add_theme_color_override("font_color", Color(0.76, 0.70, 0.61))
-	hint.visible = not OS.has_feature("mobile")
-	root.add_child(hint)
-
-	target_label = Label.new()
-	target_label.text = "目标：自动选敌待命"
-	target_label.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	target_label.offset_left = -420
-	target_label.offset_top = 62
-	target_label.offset_right = -20
-	target_label.offset_bottom = 98
-	target_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	target_label.add_theme_font_size_override("font_size", 18)
-	target_label.add_theme_color_override("font_color", Color(1.0, 0.79, 0.28))
-	root.add_child(target_label)
-
-	var switch_target_button := Button.new()
-	switch_target_button.name = "SwitchTargetButton"
-	switch_target_button.text = "换敌"
-	switch_target_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	switch_target_button.offset_left = -340
-	switch_target_button.offset_top = -210
-	switch_target_button.offset_right = -216
-	switch_target_button.offset_bottom = -150
-	switch_target_button.add_theme_font_size_override("font_size", 20)
-	switch_target_button.pressed.connect(func() -> void: target_switch_pressed.emit())
-	root.add_child(switch_target_button)
-
-	auto_target_button = Button.new()
-	auto_target_button.name = "AutoTargetButton"
-	auto_target_button.text = "自动：开"
-	auto_target_button.toggle_mode = true
-	auto_target_button.button_pressed = true
-	auto_target_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	auto_target_button.offset_left = -186
-	auto_target_button.offset_top = -236
-	auto_target_button.offset_right = -42
-	auto_target_button.offset_bottom = -182
-	auto_target_button.add_theme_font_size_override("font_size", 18)
-	auto_target_button.toggled.connect(func(enabled: bool) -> void:
-		auto_target_button.text = "自动：开" if enabled else "自动：关"
-		auto_target_changed.emit(enabled)
-	)
-	root.add_child(auto_target_button)
-
-	special_action_button = Button.new()
-	special_action_button.name = "SpecialActionButton"
-	special_action_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	special_action_button.offset_left = -340
-	special_action_button.offset_top = -280
-	special_action_button.offset_right = -216
-	special_action_button.offset_bottom = -218
-	special_action_button.add_theme_font_size_override("font_size", 18)
-	special_action_button.visible = false
-	special_action_button.pressed.connect(_on_special_action_button)
-	root.add_child(special_action_button)
-
 	for index in range(4):
 		var skill_button := Button.new()
 		skill_button.name = "SkillButton%d" % (index + 1)
+		skill_button.theme_type_variation = "GothicTransparentButton"
 		skill_button.anchor_left = 0.5
 		skill_button.anchor_top = 1.0
 		skill_button.anchor_right = 0.5
 		skill_button.anchor_bottom = 1.0
-		skill_button.offset_left = -246 + index * 122
-		skill_button.offset_top = -86
-		skill_button.offset_right = -136 + index * 122
-		skill_button.offset_bottom = -22
-		skill_button.add_theme_font_size_override("font_size", 15)
+		skill_button.offset_left = -209 + index * 108
+		skill_button.offset_top = -252
+		skill_button.offset_right = -109 + index * 108
+		skill_button.offset_bottom = -180
+		skill_button.add_theme_color_override("font_color", Color.TRANSPARENT)
+		skill_button.add_theme_color_override("font_hover_color", Color.TRANSPARENT)
+		skill_button.add_theme_color_override("font_pressed_color", Color.TRANSPARENT)
 		skill_button.pressed.connect(_on_skill_button.bind(index))
+		skill_button.set_meta("stable_id", "hud.profession_skill.%d" % (index + 1))
+		skill_button.set_meta("activation_mode_source", "skill.activation_mode")
+		skill_button.set_meta("warrior_policy", "toggle")
+		skill_button.set_meta("mage_tao_policy", "instant_or_toggle")
 		root.add_child(skill_button)
 		quick_buttons.append(skill_button)
+		var disc := Panel.new()
+		disc.name = "SkillDisc"
+		disc.theme_type_variation = "GothicSkillDisc"
+		disc.position = Vector2(14, 0)
+		disc.size = Vector2(72, 72)
+		disc.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		skill_button.add_child(disc)
+		var skill_label := Label.new()
+		skill_label.name = "SkillLabel"
+		skill_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 5)
+		skill_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		skill_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		skill_label.add_theme_font_size_override("font_size", 12)
+		skill_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		disc.add_child(skill_label)
+		quick_slot_labels.append(skill_label)
 
 	warrior_state_label = Label.new()
 	warrior_state_label.name = "WarriorStateLabel"
 	warrior_state_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	warrior_state_label.offset_left = 330
-	warrior_state_label.offset_top = -132
-	warrior_state_label.offset_right = -330
-	warrior_state_label.offset_bottom = -96
+	warrior_state_label.offset_left = 350
+	warrior_state_label.offset_top = -294
+	warrior_state_label.offset_right = -350
+	warrior_state_label.offset_bottom = -266
 	warrior_state_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	warrior_state_label.add_theme_font_size_override("font_size", 17)
-	warrior_state_label.add_theme_color_override("font_color", Color(1.0, 0.76, 0.30))
-	warrior_state_label.add_theme_color_override("font_shadow_color", Color(0.08, 0.03, 0.01, 0.95))
-	warrior_state_label.add_theme_constant_override("shadow_offset_x", 2)
-	warrior_state_label.add_theme_constant_override("shadow_offset_y", 2)
+	warrior_state_label.add_theme_font_size_override("font_size", 15)
+	warrior_state_label.add_theme_color_override("font_color", Color("efbd70"))
 	root.add_child(warrior_state_label)
 
-	var inventory_button := Button.new()
-	inventory_button.text = "背包"
-	inventory_button.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	inventory_button.offset_left = -158
-	inventory_button.offset_top = 68
-	inventory_button.offset_right = -24
-	inventory_button.offset_bottom = 118
-	inventory_button.add_theme_font_size_override("font_size", 20)
-	inventory_button.pressed.connect(_toggle_inventory)
-	root.add_child(inventory_button)
+	_add_bottom_right_fill(root, "InteractFill", Rect2(-100, -382, 52, 52), "GothicArtCircleFill")
+	_add_bottom_right_fill(root, "SwitchTargetFill", Rect2(-100, -304, 52, 52), "GothicArtCircleFill")
+	_add_bottom_right_fill(root, "AttackRingSkill1Fill", Rect2(-250, -85, 48, 48), "GothicArtCircleFill")
+	_add_bottom_right_fill(root, "AttackRingSkill2Fill", Rect2(-232, -189, 48, 48), "GothicArtCircleFill")
+	_add_bottom_right_fill(root, "AttackRingSkill3Fill", Rect2(-161, -240, 48, 48), "GothicArtCircleFill")
+	_add_bottom_right_fill(root, "AttackFill", Rect2(-181, -161, 120, 120), "GothicArtAttackFill")
+	var right_controls_art := TextureRect.new()
+	right_controls_art.name = "RightControlsArt"
+	right_controls_art.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	right_controls_art.offset_left = -277
+	right_controls_art.offset_top = -400
+	right_controls_art.offset_right = -20
+	right_controls_art.offset_bottom = 0
+	right_controls_art.texture = HUDRightControlsTexture
+	right_controls_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	right_controls_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	right_controls_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	right_controls_art.set_meta("stable_id", "ui.hud.gothic.v2.right_controls")
+	root.add_child(right_controls_art)
 
-	var profession_button := Button.new()
-	profession_button.text = "职业"
-	profession_button.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	profession_button.offset_left = -300
-	profession_button.offset_top = 68
-	profession_button.offset_right = -166
-	profession_button.offset_bottom = 118
-	profession_button.add_theme_font_size_override("font_size", 20)
-	profession_button.pressed.connect(_toggle_profession)
-	root.add_child(profession_button)
+	var interact_button := Button.new()
+	interact_button.name = "InteractButton"
+	interact_button.theme_type_variation = "GothicTransparentButton"
+	interact_button.text = "交互"
+	interact_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	interact_button.offset_left = -131
+	interact_button.offset_top = -400
+	interact_button.offset_right = -21
+	interact_button.offset_bottom = -310
+	interact_button.add_theme_font_size_override("font_size", 17)
+	interact_button.button_down.connect(func() -> void: interact_pressed.emit())
+	root.add_child(interact_button)
 
-	var map_button := Button.new()
-	map_button.text = "地图"
-	map_button.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	map_button.offset_left = -442
-	map_button.offset_top = 68
-	map_button.offset_right = -308
-	map_button.offset_bottom = 118
-	map_button.add_theme_font_size_override("font_size", 20)
-	map_button.pressed.connect(_toggle_map_panel)
-	root.add_child(map_button)
+	var switch_target_button := Button.new()
+	switch_target_button.name = "SwitchTargetButton"
+	switch_target_button.theme_type_variation = "GothicTransparentButton"
+	switch_target_button.text = "换敌"
+	switch_target_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	switch_target_button.offset_left = -131
+	switch_target_button.offset_top = -325
+	switch_target_button.offset_right = -21
+	switch_target_button.offset_bottom = -235
+	switch_target_button.add_theme_font_size_override("font_size", 16)
+	switch_target_button.pressed.connect(func() -> void: target_switch_pressed.emit())
+	root.add_child(switch_target_button)
 
+	var attack_button := Button.new()
+	attack_button.name = "AttackButton"
+	attack_button.theme_type_variation = "GothicTransparentButton"
+	attack_button.text = "攻击"
+	attack_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	attack_button.offset_left = -181
+	attack_button.offset_top = -161
+	attack_button.offset_right = -61
+	attack_button.offset_bottom = -41
+	attack_button.add_theme_font_size_override("font_size", 24)
+	attack_button.button_down.connect(func() -> void: attack_pressed.emit())
+	attack_button.button_up.connect(func() -> void: attack_released.emit())
+	root.add_child(attack_button)
+
+	var ring_positions := [Rect2(-262, -97, 72, 72), Rect2(-244, -201, 72, 72), Rect2(-173, -252, 72, 72)]
+	for index in range(3):
+		var ring_skill := Button.new()
+		ring_skill.name = "AttackRingSkill%d" % (index + 1)
+		ring_skill.theme_type_variation = "GothicTransparentButton"
+		ring_skill.text = "技%d" % (index + 1)
+		ring_skill.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+		var rect: Rect2 = ring_positions[index]
+		ring_skill.offset_left = rect.position.x
+		ring_skill.offset_top = rect.position.y
+		ring_skill.offset_right = rect.end.x
+		ring_skill.offset_bottom = rect.end.y
+		ring_skill.add_theme_font_size_override("font_size", 15)
+		ring_skill.pressed.connect(_on_skill_button.bind(index))
+		ring_skill.set_meta("stable_id", "hud.attack_ring_skill.%d" % (index + 1))
+		root.add_child(ring_skill)
+
+	special_action_button = Button.new()
+	special_action_button.name = "SpecialActionButton"
+	special_action_button.theme_type_variation = "GothicUtilityButton"
+	special_action_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	special_action_button.offset_left = -354
+	special_action_button.offset_top = -342
+	special_action_button.offset_right = -236
+	special_action_button.offset_bottom = -278
+	special_action_button.visible = false
+	special_action_button.pressed.connect(_on_special_action_button)
+	root.add_child(special_action_button)
+
+
+func _build_modal_panels(root: Control) -> void:
 	inventory_panel = InventoryPanel.new()
 	inventory_panel.hide()
 	root.add_child(inventory_panel)
@@ -290,14 +454,76 @@ func _ready() -> void:
 	warehouse_panel = WarehousePanel.new()
 	warehouse_panel.hide()
 	root.add_child(warehouse_panel)
-	PlayerState.profile_changed.connect(update_profile)
-	PlayerState.quests_changed.connect(update_quest_tracker)
-	PlayerState.profile_changed.connect(update_special_actions)
-	PlayerState.skills_changed.connect(update_quick_slots)
-	update_profile()
-	update_quest_tracker()
-	update_special_actions()
-	update_quick_slots()
+
+
+func _add_utility_button(root: Control, node_name: String, label_text: String, rect: Rect2) -> Button:
+	var button := Button.new()
+	button.name = node_name
+	button.text = label_text
+	button.theme_type_variation = "GothicTransparentButton"
+	button.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	button.offset_left = rect.position.x
+	button.offset_top = rect.position.y
+	button.offset_right = rect.end.x
+	button.offset_bottom = rect.end.y
+	button.add_theme_font_size_override("font_size", 16)
+	root.add_child(button)
+	return button
+
+
+func _add_full_texture(parent: Control, node_name: String, texture: Texture2D) -> TextureRect:
+	var art := TextureRect.new()
+	art.name = node_name
+	art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	art.texture = texture
+	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(art)
+	return art
+
+
+func _add_top_right_fill(root: Control, node_name: String, rect: Rect2, variation: StringName) -> Panel:
+	var fill := Panel.new()
+	fill.name = node_name
+	fill.theme_type_variation = variation
+	fill.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	fill.offset_left = rect.position.x
+	fill.offset_top = rect.position.y
+	fill.offset_right = rect.end.x
+	fill.offset_bottom = rect.end.y
+	fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(fill)
+	return fill
+
+
+func _add_bottom_right_fill(root: Control, node_name: String, rect: Rect2, variation: StringName) -> Panel:
+	var fill := Panel.new()
+	fill.name = node_name
+	fill.theme_type_variation = variation
+	fill.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	fill.offset_left = rect.position.x
+	fill.offset_top = rect.position.y
+	fill.offset_right = rect.end.x
+	fill.offset_bottom = rect.end.y
+	fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(fill)
+	return fill
+
+
+func _request_system_menu() -> void:
+	var event := InputEventAction.new()
+	event.action = "ui_cancel"
+	event.pressed = true
+	Input.parse_input_event(event)
+
+
+func _toggle_skill_book() -> void:
+	if skill_panel.visible:
+		skill_panel.hide()
+	else:
+		_close_modal_panels()
+		skill_panel.open_for("技能导师")
 
 
 func _process(delta: float) -> void:
@@ -319,11 +545,18 @@ func update_resources(current_hp: int, max_hp: int, current_mp: int, max_mp: int
 	_last_max_mp = max_mp
 	if hp_label != null:
 		hp_label.text = "%s｜生命 %d/%d　魔法 %d/%d" % [current_zone_name, current_hp, max_hp, current_mp, max_mp]
+	if health_orb != null:
+		health_orb.call("set_values", current_hp, max_hp)
+	if mana_orb != null:
+		mana_orb.call("set_values", current_mp, max_mp)
 
 
 func update_target(target_name := "", current_hp := 0, max_hp := 0, manual_lock := false, auto_enabled := true) -> void:
 	if target_label == null:
 		return
+	if target_health_fill != null:
+		target_health_fill.visible = not target_name.is_empty() and max_hp > 0
+		target_health_fill.size.x = 320.0 * clampf(float(current_hp) / float(maxi(1, max_hp)), 0.0, 1.0)
 	var next_text := "目标：自动选敌待命" if auto_enabled else "目标：手动模式待选择"
 	if not target_name.is_empty():
 		next_text = "目标［%s］：%s　%d/%d" % ["自动" if auto_enabled else "手动", target_name, current_hp, max_hp]
@@ -337,7 +570,7 @@ func set_auto_target_enabled(enabled: bool) -> void:
 	if auto_target_button == null:
 		return
 	auto_target_button.set_pressed_no_signal(enabled)
-	auto_target_button.text = "自动：开" if enabled else "自动：关"
+	auto_target_button.text = "自动锁定：开" if enabled else "自动锁定：关"
 
 
 func show_loot(item_name: String) -> void:
@@ -425,6 +658,11 @@ func set_zone_name(zone_name: String) -> void:
 	current_zone_name = zone_name
 	if hp_label != null:
 		hp_label.text = "%s｜生命" % current_zone_name
+	var safe_root := get_node_or_null("MobileSafeRoot")
+	if safe_root != null:
+		var zone_label := safe_root.get_node_or_null("ZonePanel/ZoneLabel") as Label
+		if zone_label != null:
+			zone_label.text = current_zone_name
 
 
 func open_shop(display_name: String, stock: Array) -> void:
@@ -457,7 +695,16 @@ func update_quick_slots() -> void:
 	for index in range(quick_buttons.size()):
 		var skill_name := PlayerState.quick_slots[index]
 		var marker := _warrior_skill_marker(skill_name)
-		quick_buttons[index].text = "%d\n%s%s" % [index + 1, skill_name if not skill_name.is_empty() else "空", marker]
+		var display_text := "%d\n%s%s" % [index + 1, skill_name if not skill_name.is_empty() else "空", marker]
+		quick_buttons[index].text = display_text
+		if index < quick_slot_labels.size():
+			quick_slot_labels[index].text = _compact_skill_label(index, skill_name, marker)
+
+
+func _compact_skill_label(index: int, skill_name: String, marker: String) -> String:
+	var compact_name := "空" if skill_name.is_empty() else skill_name.left(2)
+	var compact_marker := marker.trim_prefix("[").trim_suffix("]")
+	return "%d\n%s%s" % [index + 1, compact_name, "\n%s" % compact_marker if not compact_marker.is_empty() else ""]
 
 
 func update_warrior_states(snapshot: Dictionary) -> void:
