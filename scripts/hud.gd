@@ -412,7 +412,9 @@ func _build_combat_controls(root: Control) -> void:
 	attack_button.button_up.connect(func() -> void: attack_released.emit())
 	root.add_child(attack_button)
 
-	var ring_positions := [Rect2(-262, -97, 72, 72), Rect2(-244, -201, 72, 72), Rect2(-173, -252, 72, 72)]
+	# The three generated apertures share a consistent -11/-10 correction
+	# relative to the original touch mockup. Keep the 72px hit areas intact.
+	var ring_positions := [Rect2(-273, -107, 72, 72), Rect2(-255, -211, 72, 72), Rect2(-184, -262, 72, 72)]
 	for index in range(3):
 		var ring_skill := Button.new()
 		ring_skill.name = "AttackRingSkill%d" % (index + 1)

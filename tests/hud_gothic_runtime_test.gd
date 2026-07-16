@@ -41,12 +41,18 @@ func _run() -> void:
 		assert(icon != null and icon.texture != null and icon.visible, "四个职业槽必须显示当前快捷技能素材")
 		assert(str(icon.get_meta("skill_icon_id", "")).begins_with("ui.hud.skill_icon.warrior."))
 	assert((root.get_node("SkillButton1") as Control).position.y >= 450, "职业技能槽仍然过度侵入战斗区域")
+	var right_controls_art := root.get_node("RightControlsArt") as TextureRect
+	var ring_source_centers: Array[Vector2] = [Vector2(54.5, 445.0), Vector2(79.2, 303.8), Vector2(173.9, 234.9)]
 	for index in range(3):
 		var ring_skill := root.get_node("AttackRingSkill%d" % (index + 1)) as Button
 		assert(ring_skill != null)
 		var ring_icon := ring_skill.get_node("SkillIcon") as TextureRect
 		assert(ring_icon != null and ring_icon.texture == hud.quick_slot_icons[index].texture)
 		assert(ring_icon.position == Vector2(8, 8) and ring_icon.size == Vector2(56, 56), "环绕技能图必须完整覆盖槽内开口")
+		var art_scale := right_controls_art.size / Vector2(347, 540)
+		var expected_center: Vector2 = right_controls_art.position + ring_source_centers[index] * art_scale
+		var actual_center: Vector2 = ring_skill.position + ring_skill.size * 0.5
+		assert(actual_center.distance_to(expected_center) < 1.5, "环绕技能图没有对准V2美术框圆心")
 	var attack := root.get_node("AttackButton") as Button
 	assert(attack.size == Vector2(120, 120), "攻击按钮视觉直径应保持缩小后的120px")
 	var joystick := root.get_node("TouchJoystick") as TouchJoystick
