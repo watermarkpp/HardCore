@@ -1,498 +1,758 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "layer": "vanilla_core",
-  "sourcePolicy": {
-    "baseline": "2003 official 1.76 behavior where local source is available",
-    "server_source": "dev_art_sources/reference/original_gameofmir/MirServer",
-    "client_source": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
-    "missing_database": "Magic.DB wSpell/btDefSpell is not present",
-    "candidate_notice": "B/C values are replaceable runtime candidates, not claimed as exact official values"
+  "sourcePolicy": "classic M2Server rule source first; Crystal MagicInfo values remain B/C candidates",
+  "classicRuleSource": {
+    "distribution_id": "source.original_gameofmir.server_suite",
+    "source_priority": {
+      "lane": "server_rules",
+      "tier": "primary",
+      "order": 0,
+      "weight": 100
+    },
+    "original_path": "M2Server/Magic.pas",
+    "workspace_path": "dev_art_sources/reference/original_gameofmir/M2Server/Magic.pas",
+    "sha256": "bc8981dd4283b34ce35e21faa2a69520231b475c4300303181e0c66cc2c453bf",
+    "confidence": "A-source-code-reconstruction"
+  },
+  "classicConfigSource": {
+    "distribution_id": "source.original_gameofmir.server_suite",
+    "source_priority": {
+      "lane": "server_rules",
+      "tier": "primary",
+      "order": 0,
+      "weight": 100
+    },
+    "original_path": "MirServer/Mir200/!Setup.txt",
+    "workspace_path": "dev_art_sources/reference/original_gameofmir/MirServer/Mir200/!Setup.txt",
+    "sha256": "c1dd4a6de2a53be3f2bc520b8d42571a0112c4fa58f05292c869942fbd8e146b"
+  },
+  "formulaContracts": {
+    "get_power": "round(power_roll/(train_level+1)*(skill_level+1)) + def_power_roll",
+    "get_power13": "round((input-input/3)/(train_level+1)*(skill_level+1) + input/3 + def_power_roll)",
+    "magic_damage": "stat_roll + get_power(magic_power_roll)",
+    "healing": "get_power(magic_power_roll) + sc_roll*2",
+    "train_level": 3
   },
   "wizard": {
-    "profession_id": "wizard",
-    "formula_source": "WizardCombatMath",
     "skills": {
-      "wizard.fireball": {
+      "wizard.exploding_flame": {
+        "formula_group": "classic_magic_damage",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_FIREBOOM",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 8,
+        "power_bonus": 0,
+        "magic_power_base": 8,
+        "magic_power_bonus": 0,
         "multiplier_by_level": [
-          0.85,
-          1.0,
-          1.15,
-          1.3
-        ],
-        "cooldown_by_level": [
-          0.72,
-          0.72,
-          0.72,
-          0.72
-        ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile"
-      },
-      "wizard.repulsion_ring": {
-        "knockback_distance_by_level": [
-          50,
-          65,
-          80,
-          95
-        ],
-        "cooldown_by_level": [
-          0.8,
-          0.8,
-          0.8,
-          0.8
-        ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile"
-      },
-      "wizard.temptation_light": {
-        "status_duration_by_level": [
-          3,
-          4,
-          5,
-          6
-        ],
-        "cooldown_by_level": [
-          0.9,
-          0.9,
-          0.9,
-          0.9
-        ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile"
-      },
-      "wizard.hellfire": {
-        "multiplier_by_level": [
-          1.0,
-          1.15,
-          1.3,
-          1.45
-        ],
-        "cooldown_by_level": [
-          0.62,
-          0.62,
-          0.62,
-          0.62
-        ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile"
-      },
-      "wizard.lightning": {
-        "multiplier_by_level": [
-          1.15,
-          1.35,
-          1.55,
-          1.75
-        ],
-        "cooldown_by_level": [
-          0.72,
-          0.72,
-          0.72,
-          0.72
-        ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile"
-      },
-      "wizard.teleport": {
-        "travel_range_by_level": [
-          160,
-          180,
-          200,
-          220
-        ],
-        "cooldown_by_level": [
           1.0,
           1.0,
           1.0,
           1.0
         ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile"
-      },
-      "wizard.great_fireball": {
-        "multiplier_by_level": [
-          1.2,
-          1.45,
-          1.7,
-          1.95
-        ],
         "cooldown_by_level": [
-          0.78,
-          0.78,
-          0.78,
-          0.78
+          1.5,
+          1.5,
+          1.5,
+          1.5
         ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile"
-      },
-      "wizard.exploding_flame": {
-        "multiplier_by_level": [
-          1.05,
-          1.25,
-          1.45,
-          1.65
-        ],
-        "cooldown_by_level": [
-          0.78,
-          0.78,
-          0.78,
-          0.78
-        ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile"
+        "service_spell_id": 38
       },
       "wizard.fire_wall": {
+        "formula_group": "classic_magic_damage",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_EARTHFIRE + MagMakeFireCross",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 3,
+        "power_bonus": 0,
+        "magic_power_base": 3,
+        "magic_power_bonus": 0,
         "multiplier_by_level": [
-          0.45,
-          0.55,
-          0.65,
-          0.75
+          1.0,
+          1.0,
+          1.0,
+          1.0
         ],
         "cooldown_by_level": [
-          0.85,
-          0.85,
-          0.85,
-          0.85
+          1.5,
+          1.5,
+          1.5,
+          1.5
         ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile",
-        "status_duration_by_level": [
-          4,
-          5,
-          6,
-          7
-        ],
-        "tick_interval": 0.8
+        "service_spell_id": 39,
+        "shape": "five_cell_cross",
+        "duration_formula": "get_power(10) + floor(mc_roll / 2)"
       },
-      "wizard.laser": {
+      "wizard.fireball": {
+        "formula_group": "classic_magic_damage",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_FIREBALL",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 2,
+        "power_bonus": 0,
+        "magic_power_base": 8,
+        "magic_power_bonus": 0,
         "multiplier_by_level": [
-          1.35,
-          1.55,
-          1.75,
-          1.95
+          1.0,
+          1.0,
+          1.0,
+          1.0
         ],
         "cooldown_by_level": [
-          0.82,
-          0.82,
-          0.82,
-          0.82
+          1.5,
+          1.5,
+          1.5,
+          1.5
         ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile"
+        "service_spell_id": 31
+      },
+      "wizard.great_fireball": {
+        "formula_group": "classic_magic_damage",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_FIREBALL2",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 10,
+        "power_bonus": 0,
+        "magic_power_base": 6,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 34
       },
       "wizard.hell_lightning": {
+        "formula_group": "classic_magic_damage",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_LIGHTFLOWER",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 10,
+        "power_bonus": 20,
+        "magic_power_base": 10,
+        "magic_power_bonus": 20,
         "multiplier_by_level": [
-          0.95,
-          1.1,
-          1.25,
-          1.4
+          1.0,
+          1.0,
+          1.0,
+          1.0
         ],
         "cooldown_by_level": [
-          0.78,
-          0.78,
-          0.78,
-          0.78
+          1.5,
+          1.5,
+          1.5,
+          1.5
         ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile"
+        "service_spell_id": 42,
+        "undead_damage_divisor": 1,
+        "living_damage_divisor": 10
       },
-      "wizard.magic_shield": {
-        "status_duration_by_level": [
-          8,
-          10,
-          12,
-          14
+      "wizard.hellfire": {
+        "formula_group": "classic_magic_damage",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_FIRE",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 6,
+        "power_bonus": 0,
+        "magic_power_base": 14,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
         ],
         "cooldown_by_level": [
-          0.9,
-          0.9,
-          0.9,
-          0.9
+          1.5,
+          1.5,
+          1.5,
+          1.5
         ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile",
-        "damage_reduction_by_level": [
-          0.25,
-          0.3,
-          0.35,
-          0.4
-        ]
+        "service_spell_id": 35
       },
       "wizard.holy_word": {
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_KILLUNDEAD",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
         "multiplier_by_level": [
-          0.8,
-          0.9,
           1.0,
-          1.1
+          1.0,
+          1.0,
+          1.0
         ],
         "cooldown_by_level": [
-          0.9,
-          0.9,
-          0.9,
-          0.9
+          1.8,
+          1.8,
+          1.8,
+          1.8
         ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile",
-        "execute_level_margin_by_level": [
-          4,
-          5,
-          6,
-          7
-        ]
+        "service_spell_id": 44,
+        "undead_only": true,
+        "success_formula": "random(100) < skill_level*7 + 15 + caster_level-target_level"
       },
       "wizard.ice_storm": {
+        "formula_group": "classic_magic_damage",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_SNOWWIND",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 14,
+        "power_bonus": 0,
+        "magic_power_base": 12,
+        "magic_power_bonus": 0,
         "multiplier_by_level": [
-          1.5,
-          1.7,
-          1.9,
-          2.1
+          1.0,
+          1.0,
+          1.0,
+          1.0
         ],
         "cooldown_by_level": [
-          0.95,
-          0.95,
-          0.95,
-          0.95
+          1.5,
+          1.5,
+          1.5,
+          1.5
         ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile"
+        "service_spell_id": 46
+      },
+      "wizard.laser": {
+        "formula_group": "classic_magic_damage",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_SHOOTLIGHTEN",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 12,
+        "power_bonus": 0,
+        "magic_power_base": 12,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 40
+      },
+      "wizard.lightning": {
+        "formula_group": "classic_magic_damage",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_LIGHTENING",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 11,
+        "power_bonus": 0,
+        "magic_power_base": 14,
+        "magic_power_bonus": 28,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 36,
+        "undead_damage_multiplier": 1.5
+      },
+      "wizard.magic_shield": {
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_SHIELD + MagBubbleDefenceUp",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.8,
+          1.8,
+          1.8,
+          1.8
+        ],
+        "service_spell_id": 43,
+        "shield_power_formula": "get_power(mc_roll + 15)"
+      },
+      "wizard.repulsion_ring": {
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_FIREWIND",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 4,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 32,
+        "push_cells_formula": "1 + max(0, skill_level - 1) + random(2)",
+        "success_random_bound": 20
+      },
+      "wizard.teleport": {
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_SPACEMOVE",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 37,
+        "success_formula": "random(11) < skill_level * 2 + 4"
+      },
+      "wizard.temptation_light": {
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.MagTamming",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 33
       }
     }
   },
   "taoist": {
-    "profession_id": "taoist",
-    "formula_source": "TaoistCombatMath",
     "skills": {
-      "taoist.healing": {
+      "taoist.defense": {
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_DEJIWONHO",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
         "multiplier_by_level": [
-          0.9,
-          1.0,
-          1.1,
-          1.2
-        ],
-        "cooldown_by_level": [
-          0.75,
-          0.75,
-          0.75,
-          0.75
-        ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile",
-        "flat_power_by_level": [
-          6,
-          8,
-          10,
-          12
-        ]
-      },
-      "taoist.spiritual_warfare": {
-        "accuracy_bonus_by_level": [
-          0,
-          1,
-          2,
-          3
-        ],
-        "cooldown_by_level": [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile"
-      },
-      "taoist.poison": {
-        "multiplier_by_level": [
-          0.3,
-          0.35,
-          0.4,
-          0.45
-        ],
-        "cooldown_by_level": [
-          0.72,
-          0.72,
-          0.72,
-          0.72
-        ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile",
-        "status_duration_by_level": [
-          6,
-          7,
-          8,
-          9
-        ],
-        "tick_interval": 1.0
-      },
-      "taoist.soul_fire_talisman": {
-        "multiplier_by_level": [
-          1.05,
-          1.15,
-          1.25,
-          1.35
-        ],
-        "cooldown_by_level": [
-          0.72,
-          0.72,
-          0.72,
-          0.72
-        ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile"
-      },
-      "taoist.summon_skeleton": {
-        "attack_type": "physical",
-        "lifetime_seconds_by_level": [
-          180,
-          240,
-          300,
-          360
-        ],
-        "leash_range": 560,
-        "teleport_range": 900,
-        "confidence": "C",
-        "source_status": "project_state_machine_candidate"
-      },
-      "taoist.invisibility": {
-        "status_duration_by_level": [
-          7,
-          8,
-          9,
-          10
-        ],
-        "cooldown_by_level": [
-          0.9,
-          0.9,
-          0.9,
-          0.9
-        ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile"
-      },
-      "taoist.mass_invisibility": {
-        "status_duration_by_level": [
-          6,
-          7,
-          8,
-          9
-        ],
-        "cooldown_by_level": [
           1.0,
           1.0,
           1.0,
           1.0
         ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile"
-      },
-      "taoist.magic_defense": {
-        "status_duration_by_level": [
-          12,
-          13,
-          14,
-          15
-        ],
         "cooldown_by_level": [
-          0.9,
-          0.9,
-          0.9,
-          0.9
+          1.5,
+          1.5,
+          1.5,
+          1.5
         ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile",
-        "buff_power_by_level": [
-          1,
-          2,
-          3,
-          4
-        ]
-      },
-      "taoist.defense": {
-        "status_duration_by_level": [
-          12,
-          13,
-          14,
-          15
-        ],
-        "cooldown_by_level": [
-          0.9,
-          0.9,
-          0.9,
-          0.9
-        ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile",
-        "buff_power_by_level": [
-          1,
-          2,
-          3,
-          4
-        ]
-      },
-      "taoist.revelation": {
-        "status_duration_by_level": [
-          3,
-          4,
-          5,
-          6
-        ],
-        "cooldown_by_level": [
-          0.55,
-          0.55,
-          0.55,
-          0.55
-        ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile"
+        "service_spell_id": 71,
+        "buff_power_formula": "get_power13(60) + sc_roll*10",
+        "area_radius_cells": 3,
+        "amulet_cost": 1
       },
       "taoist.entrapment": {
-        "status_duration_by_level": [
-          3,
-          4,
-          5,
-          6
-        ],
-        "cooldown_by_level": [
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.MagMakeHolyCurtain",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
           1.0,
           1.0,
           1.0,
           1.0
         ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile"
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 73,
+        "duration_formula": "get_power13(40) + sc_roll*3",
+        "ring_event_count": 8,
+        "amulet_cost": 1
+      },
+      "taoist.healing": {
+        "formula_group": "classic_healing",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_HEALLING",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 14,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 61
+      },
+      "taoist.invisibility": {
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.MagMakePrivateTransparent",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 67,
+        "duration_formula": "get_power13(30) + sc_roll*3",
+        "area_radius_cells": 0,
+        "amulet_cost": 1
+      },
+      "taoist.magic_defense": {
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_HANGMAJINBUB",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 69,
+        "buff_power_formula": "get_power13(60) + sc_roll*10",
+        "area_radius_cells": 3,
+        "amulet_cost": 1
       },
       "taoist.mass_healing": {
+        "formula_group": "classic_healing",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_BIGHEALLING",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 4,
+        "power_bonus": 0,
+        "magic_power_base": 10,
+        "magic_power_bonus": 0,
         "multiplier_by_level": [
-          0.75,
-          0.85,
-          0.95,
-          1.05
-        ],
-        "cooldown_by_level": [
           1.0,
           1.0,
           1.0,
           1.0
         ],
-        "confidence": "B",
-        "source_status": "runtime_candidate_from_legacy_profile",
-        "flat_power_by_level": [
-          4,
-          6,
-          8,
-          10
-        ]
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 75
+      },
+      "taoist.mass_invisibility": {
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.MagMakeGroupTransparent",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 68,
+        "duration_formula": "get_power13(30) + sc_roll*3",
+        "area_radius_cells": 1,
+        "amulet_cost": 1
+      },
+      "taoist.poison": {
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_AMYOUNSUL",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 63,
+        "green_power_formula": "get_power13(40) + sc_roll*2",
+        "red_power_formula": "get_power13(30) + sc_roll*2",
+        "duration_formula": "round(skill_level/3 * power/20)",
+        "poison_interval_ms": 1000,
+        "amy_ounsul_point": 20
+      },
+      "taoist.revelation": {
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_SHOWHP",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 70,
+        "duration_formula": "get_power13(sc_roll*2 + 30)",
+        "success_formula": "random(6) <= skill_level + 3"
+      },
+      "taoist.soul_fire_talisman": {
+        "formula_group": "classic_magic_damage",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_FIRECHARM",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 7,
+        "power_bonus": 0,
+        "magic_power_base": 13,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 64,
+        "amulet_cost": 1
+      },
+      "taoist.spiritual_warfare": {
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_SPIRIT",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.8,
+          1.8,
+          1.8,
+          1.8
+        ],
+        "service_spell_id": 62
       },
       "taoist.summon_divine_beast": {
+        "formula_group": "classic_summon",
+        "source_anchor": "TMagicManager.MagMakeSinSuSlave",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 78,
         "attack_type": "fire",
         "lifetime_seconds_by_level": [
-          300,
-          360,
-          420,
-          480
+          864000,
+          864000,
+          864000,
+          864000
         ],
+        "summon_level_equals_skill_level": true,
+        "summon_exp_level_equals_skill_level": true,
+        "default_count": 1,
+        "reject_when_owner_has_slave": true,
+        "recall_existing_on_create_failure": true,
         "leash_range": 560,
         "teleport_range": 900,
-        "confidence": "C",
-        "source_status": "project_state_machine_candidate"
+        "spatial_state_machine_status": "project_adapter_C_candidate",
+        "amulet_cost": 5
+      },
+      "taoist.summon_skeleton": {
+        "formula_group": "classic_summon",
+        "source_anchor": "TMagicManager.MagMakeSlave",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 65,
+        "attack_type": "physical",
+        "lifetime_seconds_by_level": [
+          864000,
+          864000,
+          864000,
+          864000
+        ],
+        "summon_level_equals_skill_level": true,
+        "summon_exp_level_equals_skill_level": true,
+        "default_count": 1,
+        "reject_when_owner_has_slave": true,
+        "recall_existing_on_create_failure": false,
+        "leash_range": 560,
+        "teleport_range": 900,
+        "spatial_state_machine_status": "project_adapter_C_candidate",
+        "amulet_cost": 1
       }
     }
   }

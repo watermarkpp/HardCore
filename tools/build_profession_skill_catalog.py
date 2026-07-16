@@ -261,7 +261,13 @@ def summon_rule(attack_type: str, lifetime: list[int]) -> dict:
 def main() -> None:
     build_skill_rows()
     build_growth()
-    build_combat_rules()
+    # Rebuild traceable service candidates and source-backed Magic.pas rules.
+    # The legacy multiplier builder above remains only for migration history.
+    from extract_profession_magic_info import main as extract_magic_info
+    from build_profession_combat_rules import main as build_classic_rules
+
+    extract_magic_info()
+    build_classic_rules()
     print(f"PROFESSION_SKILL_CATALOG_PASS professions={len(PROFESSIONS)} skills={len(SKILLS)}")
 
 

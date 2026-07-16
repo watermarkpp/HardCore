@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "ownerBranch": "codex/integration",
+  "status": "pending_cross_system_integration",
+  "reason": "scripts/game_root.gd and scripts/layers/runtime/combat_runtime_service.gd are integration-owned",
+  "requirements": [
+    {
+      "id": "profession.formula_dispatch.v2",
+      "files": [
+        "scripts/game_root.gd",
+        "scripts/layers/runtime/combat_runtime_service.gd"
+      ],
+      "change": "Resolve ProfessionRules.skill_id(skill_name), roll candidate power fields inside their recorded bounds, then dispatch wizard damage to WizardCombatMath.damage_with_rolls and taoist damage/healing to TaoistCombatMath.damage_with_rolls or TaoistCombatMath.healing_with_rolls. Do not multiply caster damage by the legacy generic multiplier.",
+      "acceptance": "caster_combat_math_test formula vectors also pass through the integrated runtime path"
+    },
+    {
+      "id": "profession.visual_source_skill_id.v1",
+      "files": [
+        "scripts/game_root.gd"
+      ],
+      "change": "Pass stable source_skill_id into SkillProjectile.setup and GroundSkillEffect.setup; pass learned_level, source_skill_id and owner level into SummonActor.setup.",
+      "acceptance": "great fireball, lightning, fire wall, exploding flame and ice storm each load their own primary-client frame instead of profession-wide inference"
+    },
+    {
+      "id": "profession.status_formula_dispatch.v1",
+      "files": [
+        "scripts/game_root.gd",
+        "scripts/layers/runtime/combat_runtime_service.gd"
+      ],
+      "change": "Replace hard-coded poison, fire-wall, shield, stealth, defense and entrapment durations with WizardCombatMath/TaoistCombatMath formula calls and explicit stat rolls.",
+      "acceptance": "status durations match Magic.pas vectors and are not fixed 5/8/10/12/15 second constants"
+    },
+    {
+      "id": "profession.summon_owner_registry.v1",
+      "files": [
+        "scripts/game_root.gd",
+        "scripts/layers/runtime/combat_runtime_service.gd"
+      ],
+      "change": "Enforce one active owner slave before spawn, and invoke the divine-beast recall path when creation fails. Keep SummonActor's follow/chase/attack/return/expired/dead spatial state machine.",
+      "acceptance": "skeleton rejects duplicate owner slave; divine beast recalls an existing matching slave; owner death expires the summon"
+    }
+  ]
+}

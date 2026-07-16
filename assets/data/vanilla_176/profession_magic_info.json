@@ -1,0 +1,1435 @@
+{
+  "schema_version": 1,
+  "record_type": "MagicInfo extraction candidate",
+  "classification": "B/C-candidate",
+  "selection_policy": "main full-scan source priority",
+  "warning": "Crystal Server.MirDB is the primary available service database, not proof of official 1.76 values.",
+  "source": {
+    "distribution_id": "server.crystal.cjlaaa",
+    "source_priority": {
+      "lane": "server_data",
+      "tier": "primary",
+      "order": 0,
+      "weight": 100
+    },
+    "original_path": "Server.MirDB",
+    "workspace_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Server.MirDB",
+    "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+    "database_version": 105,
+    "magic_info_block_offset": 443174,
+    "magic_info_block_end": 448441,
+    "magic_info_record_count": 107
+  },
+  "reader_contract": {
+    "distribution_id": "source.minipizza_mir2.server",
+    "source_priority": {
+      "lane": "server_rules",
+      "tier": "auxiliary_1",
+      "order": 1,
+      "weight": 70
+    },
+    "original_path": "Server/MirDatabase/MagicInfo.cs",
+    "workspace_path": "dev_art_sources/reference/mir2_sources/minipizza_mir2/Server/MirDatabase/MagicInfo.cs",
+    "sha256": "dcdca8b2b242698ddbf98b312ea5951768da95bfedc3cf50e998babf77ca4bc4",
+    "binary_layout": "BinaryReader.ReadString + 7B + 3H + 2I + 4H + B + 2f (version > 70)"
+  },
+  "primary_missing_evidence": [
+    {
+      "lane": "server_rules",
+      "distribution_id": "source.original_gameofmir.server_suite",
+      "status": "incompatible",
+      "original_path": "M2Server/LocalDB.pas",
+      "workspace_path": "dev_art_sources/reference/original_gameofmir/M2Server/LocalDB.pas",
+      "sha256": "09210446ab8e2d55d98968015846a34f6786eaf42826b54fb30c4c8426f100ae",
+      "reason": "The primary classic reader loads BDE/DBF Magic.DB fields; it does not define Crystal Server.MirDB BinaryReader framing."
+    }
+  ],
+  "records": [
+    {
+      "skill_id": "taoist.defense",
+      "profession_id": "taoist",
+      "display_name": "神圣战甲术",
+      "server_name": "神圣战甲术",
+      "service_spell_id": 71,
+      "base_mana_cost": 2,
+      "level_mana_cost": 2,
+      "icon": 14,
+      "required_character_levels": [
+        25,
+        27,
+        29
+      ],
+      "training_points": [
+        400,
+        600,
+        1000
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 0,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        2,
+        4,
+        6,
+        8
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "taoist.entrapment",
+      "profession_id": "taoist",
+      "display_name": "困魔咒",
+      "server_name": "困魔咒",
+      "service_spell_id": 73,
+      "base_mana_cost": 7,
+      "level_mana_cost": 3,
+      "icon": 15,
+      "required_character_levels": [
+        28,
+        30,
+        32
+      ],
+      "training_points": [
+        250,
+        500,
+        1000
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 0,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        7,
+        10,
+        13,
+        16
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "taoist.healing",
+      "profession_id": "taoist",
+      "display_name": "治愈术",
+      "server_name": "治愈术",
+      "service_spell_id": 61,
+      "base_mana_cost": 3,
+      "level_mana_cost": 2,
+      "icon": 1,
+      "required_character_levels": [
+        7,
+        11,
+        14
+      ],
+      "training_points": [
+        15,
+        35,
+        70
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 14,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        3,
+        5,
+        7,
+        9
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "taoist.invisibility",
+      "profession_id": "taoist",
+      "display_name": "隐身术",
+      "server_name": "隐身术",
+      "service_spell_id": 67,
+      "base_mana_cost": 1,
+      "level_mana_cost": 1,
+      "icon": 17,
+      "required_character_levels": [
+        20,
+        23,
+        26
+      ],
+      "training_points": [
+        130,
+        270,
+        530
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 0,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "taoist.magic_defense",
+      "profession_id": "taoist",
+      "display_name": "幽灵盾",
+      "server_name": "幽灵盾",
+      "service_spell_id": 69,
+      "base_mana_cost": 2,
+      "level_mana_cost": 2,
+      "icon": 13,
+      "required_character_levels": [
+        22,
+        24,
+        26
+      ],
+      "training_points": [
+        200,
+        350,
+        700
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 0,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        2,
+        4,
+        6,
+        8
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "taoist.mass_healing",
+      "profession_id": "taoist",
+      "display_name": "群体治疗术",
+      "server_name": "群体治疗术",
+      "service_spell_id": 75,
+      "base_mana_cost": 28,
+      "level_mana_cost": 3,
+      "icon": 28,
+      "required_character_levels": [
+        31,
+        33,
+        36
+      ],
+      "training_points": [
+        200,
+        400,
+        800
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 4,
+      "power_bonus": 0,
+      "magic_power_base": 10,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        28,
+        31,
+        34,
+        37
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "taoist.mass_invisibility",
+      "profession_id": "taoist",
+      "display_name": "集体隐身术",
+      "server_name": "集体隐身术",
+      "service_spell_id": 68,
+      "base_mana_cost": 2,
+      "level_mana_cost": 2,
+      "icon": 18,
+      "required_character_levels": [
+        21,
+        25,
+        29
+      ],
+      "training_points": [
+        130,
+        270,
+        530
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 0,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        2,
+        4,
+        6,
+        8
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "taoist.poison",
+      "profession_id": "taoist",
+      "display_name": "施毒术",
+      "server_name": "施毒术",
+      "service_spell_id": 63,
+      "base_mana_cost": 2,
+      "level_mana_cost": 1,
+      "icon": 5,
+      "required_character_levels": [
+        14,
+        17,
+        20
+      ],
+      "training_points": [
+        70,
+        130,
+        270
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 0,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "taoist.revelation",
+      "profession_id": "taoist",
+      "display_name": "心灵启示",
+      "server_name": "心灵启示",
+      "service_spell_id": 70,
+      "base_mana_cost": 4,
+      "level_mana_cost": 4,
+      "icon": 27,
+      "required_character_levels": [
+        23,
+        25,
+        28
+      ],
+      "training_points": [
+        150,
+        250,
+        400
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 0,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        4,
+        8,
+        12,
+        16
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "taoist.soul_fire_talisman",
+      "profession_id": "taoist",
+      "display_name": "灵魂火符",
+      "server_name": "灵魂火符",
+      "service_spell_id": 64,
+      "base_mana_cost": 3,
+      "level_mana_cost": 1,
+      "icon": 12,
+      "required_character_levels": [
+        18,
+        21,
+        24
+      ],
+      "training_points": [
+        130,
+        270,
+        400
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 7,
+      "power_bonus": 0,
+      "magic_power_base": 13,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "taoist.spiritual_warfare",
+      "profession_id": "taoist",
+      "display_name": "精神力战法",
+      "server_name": "精神力战法",
+      "service_spell_id": 62,
+      "base_mana_cost": 0,
+      "level_mana_cost": 0,
+      "icon": 3,
+      "required_character_levels": [
+        9,
+        12,
+        15
+      ],
+      "training_points": [
+        35,
+        130,
+        270
+      ],
+      "cooldown_base_ms": 1800,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 0,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cooldown_ms_by_level": [
+        1800,
+        1800,
+        1800,
+        1800
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "taoist.summon_divine_beast",
+      "profession_id": "taoist",
+      "display_name": "召唤神兽",
+      "server_name": "召唤神兽",
+      "service_spell_id": 78,
+      "base_mana_cost": 28,
+      "level_mana_cost": 4,
+      "icon": 29,
+      "required_character_levels": [
+        35,
+        37,
+        40
+      ],
+      "training_points": [
+        200,
+        400,
+        600
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 0,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        28,
+        32,
+        36,
+        40
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "taoist.summon_skeleton",
+      "profession_id": "taoist",
+      "display_name": "召唤骷髅",
+      "server_name": "召唤骷髅",
+      "service_spell_id": 65,
+      "base_mana_cost": 12,
+      "level_mana_cost": 4,
+      "icon": 16,
+      "required_character_levels": [
+        19,
+        22,
+        26
+      ],
+      "training_points": [
+        100,
+        200,
+        350
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 0,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        12,
+        16,
+        20,
+        24
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "warrior.basic_swordsmanship",
+      "profession_id": "warrior",
+      "display_name": "基本剑术",
+      "server_name": "基本剑术",
+      "service_spell_id": 1,
+      "base_mana_cost": 0,
+      "level_mana_cost": 0,
+      "icon": 2,
+      "required_character_levels": [
+        7,
+        9,
+        12
+      ],
+      "training_points": [
+        27,
+        60,
+        130
+      ],
+      "cooldown_base_ms": 1800,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 0,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cooldown_ms_by_level": [
+        1800,
+        1800,
+        1800,
+        1800
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "warrior.fire_sword",
+      "profession_id": "warrior",
+      "display_name": "烈火剑法",
+      "server_name": "烈火剑法",
+      "service_spell_id": 8,
+      "base_mana_cost": 7,
+      "level_mana_cost": 0,
+      "icon": 25,
+      "required_character_levels": [
+        35,
+        37,
+        40
+      ],
+      "training_points": [
+        200,
+        400,
+        600
+      ],
+      "cooldown_base_ms": 1800,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 0,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.399999976158142,
+      "multiplier_bonus": 0.4000000059604645,
+      "mana_cost_by_level": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "cooldown_ms_by_level": [
+        1800,
+        1800,
+        1800,
+        1800
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "warrior.half_moon",
+      "profession_id": "warrior",
+      "display_name": "半月弯刀",
+      "server_name": "半月弯刀",
+      "service_spell_id": 4,
+      "base_mana_cost": 3,
+      "level_mana_cost": 0,
+      "icon": 24,
+      "required_character_levels": [
+        26,
+        28,
+        31
+      ],
+      "training_points": [
+        500,
+        800,
+        1400
+      ],
+      "cooldown_base_ms": 1800,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 0,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 0.30000001192092896,
+      "multiplier_bonus": 0.10000000149011612,
+      "mana_cost_by_level": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "cooldown_ms_by_level": [
+        1800,
+        1800,
+        1800,
+        1800
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "warrior.slaying_swordsmanship",
+      "profession_id": "warrior",
+      "display_name": "攻杀剑术",
+      "server_name": "攻杀剑术",
+      "service_spell_id": 2,
+      "base_mana_cost": 0,
+      "level_mana_cost": 0,
+      "icon": 6,
+      "required_character_levels": [
+        15,
+        17,
+        20
+      ],
+      "training_points": [
+        50,
+        110,
+        180
+      ],
+      "cooldown_base_ms": 1800,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 0,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cooldown_ms_by_level": [
+        1800,
+        1800,
+        1800,
+        1800
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "warrior.thrusting",
+      "profession_id": "warrior",
+      "display_name": "刺杀剑术",
+      "server_name": "刺杀剑术",
+      "service_spell_id": 3,
+      "base_mana_cost": 0,
+      "level_mana_cost": 0,
+      "icon": 11,
+      "required_character_levels": [
+        22,
+        24,
+        27
+      ],
+      "training_points": [
+        200,
+        350,
+        600
+      ],
+      "cooldown_base_ms": 1800,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 0,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 0.25,
+      "multiplier_bonus": 0.25,
+      "mana_cost_by_level": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "cooldown_ms_by_level": [
+        1800,
+        1800,
+        1800,
+        1800
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "warrior.wild_rush",
+      "profession_id": "warrior",
+      "display_name": "野蛮冲撞",
+      "server_name": "野蛮冲撞",
+      "service_spell_id": 5,
+      "base_mana_cost": 4,
+      "level_mana_cost": 4,
+      "icon": 26,
+      "required_character_levels": [
+        30,
+        32,
+        34
+      ],
+      "training_points": [
+        300,
+        400,
+        600
+      ],
+      "cooldown_base_ms": 2500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 4,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        4,
+        8,
+        12,
+        16
+      ],
+      "cooldown_ms_by_level": [
+        2500,
+        2500,
+        2500,
+        2500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "wizard.exploding_flame",
+      "profession_id": "wizard",
+      "display_name": "爆裂火焰",
+      "server_name": "爆裂火焰",
+      "service_spell_id": 38,
+      "base_mana_cost": 14,
+      "level_mana_cost": 4,
+      "icon": 22,
+      "required_character_levels": [
+        22,
+        25,
+        28
+      ],
+      "training_points": [
+        300,
+        500,
+        1000
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 8,
+      "power_bonus": 0,
+      "magic_power_base": 8,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        14,
+        18,
+        22,
+        26
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "wizard.fire_wall",
+      "profession_id": "wizard",
+      "display_name": "火墙",
+      "server_name": "火墙",
+      "service_spell_id": 39,
+      "base_mana_cost": 30,
+      "level_mana_cost": 5,
+      "icon": 21,
+      "required_character_levels": [
+        24,
+        28,
+        33
+      ],
+      "training_points": [
+        400,
+        1000,
+        2000
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 3,
+      "power_bonus": 0,
+      "magic_power_base": 3,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        30,
+        35,
+        40,
+        45
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "wizard.fireball",
+      "profession_id": "wizard",
+      "display_name": "火球术",
+      "server_name": "火球术",
+      "service_spell_id": 31,
+      "base_mana_cost": 3,
+      "level_mana_cost": 2,
+      "icon": 0,
+      "required_character_levels": [
+        7,
+        9,
+        11
+      ],
+      "training_points": [
+        20,
+        35,
+        70
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 2,
+      "power_bonus": 0,
+      "magic_power_base": 8,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        3,
+        5,
+        7,
+        9
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "wizard.great_fireball",
+      "profession_id": "wizard",
+      "display_name": "大火球",
+      "server_name": "大火球",
+      "service_spell_id": 34,
+      "base_mana_cost": 5,
+      "level_mana_cost": 1,
+      "icon": 4,
+      "required_character_levels": [
+        15,
+        18,
+        21
+      ],
+      "training_points": [
+        200,
+        270,
+        350
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 10,
+      "power_bonus": 0,
+      "magic_power_base": 6,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "wizard.hell_lightning",
+      "profession_id": "wizard",
+      "display_name": "地狱雷光",
+      "server_name": "地狱雷光",
+      "service_spell_id": 42,
+      "base_mana_cost": 29,
+      "level_mana_cost": 9,
+      "icon": 23,
+      "required_character_levels": [
+        30,
+        32,
+        34
+      ],
+      "training_points": [
+        400,
+        800,
+        1200
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 10,
+      "power_bonus": 20,
+      "magic_power_base": 10,
+      "magic_power_bonus": 20,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        29,
+        38,
+        47,
+        56
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "wizard.hellfire",
+      "profession_id": "wizard",
+      "display_name": "地狱火",
+      "server_name": "地狱火",
+      "service_spell_id": 35,
+      "base_mana_cost": 10,
+      "level_mana_cost": 3,
+      "icon": 8,
+      "required_character_levels": [
+        16,
+        20,
+        24
+      ],
+      "training_points": [
+        70,
+        270,
+        350
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 6,
+      "power_bonus": 0,
+      "magic_power_base": 14,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        10,
+        13,
+        16,
+        19
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "wizard.holy_word",
+      "profession_id": "wizard",
+      "display_name": "圣言术",
+      "server_name": "圣言术",
+      "service_spell_id": 44,
+      "base_mana_cost": 52,
+      "level_mana_cost": 13,
+      "icon": 31,
+      "required_character_levels": [
+        32,
+        35,
+        39
+      ],
+      "training_points": [
+        300,
+        700,
+        1000
+      ],
+      "cooldown_base_ms": 1800,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 0,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        52,
+        65,
+        78,
+        91
+      ],
+      "cooldown_ms_by_level": [
+        1800,
+        1800,
+        1800,
+        1800
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "wizard.ice_storm",
+      "profession_id": "wizard",
+      "display_name": "冰咆哮",
+      "server_name": "冰咆哮",
+      "service_spell_id": 46,
+      "base_mana_cost": 33,
+      "level_mana_cost": 3,
+      "icon": 32,
+      "required_character_levels": [
+        35,
+        37,
+        40
+      ],
+      "training_points": [
+        400,
+        800,
+        1200
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 14,
+      "power_bonus": 0,
+      "magic_power_base": 12,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        33,
+        36,
+        39,
+        42
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "wizard.laser",
+      "profession_id": "wizard",
+      "display_name": "疾光电影",
+      "server_name": "疾光电影",
+      "service_spell_id": 40,
+      "base_mana_cost": 38,
+      "level_mana_cost": 7,
+      "icon": 9,
+      "required_character_levels": [
+        26,
+        29,
+        32
+      ],
+      "training_points": [
+        300,
+        600,
+        1200
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 12,
+      "power_bonus": 0,
+      "magic_power_base": 12,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        38,
+        45,
+        52,
+        59
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "wizard.lightning",
+      "profession_id": "wizard",
+      "display_name": "雷电术",
+      "server_name": "雷电术",
+      "service_spell_id": 36,
+      "base_mana_cost": 9,
+      "level_mana_cost": 2,
+      "icon": 10,
+      "required_character_levels": [
+        17,
+        20,
+        23
+      ],
+      "training_points": [
+        50,
+        200,
+        350
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 11,
+      "power_bonus": 0,
+      "magic_power_base": 14,
+      "magic_power_bonus": 28,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        9,
+        11,
+        13,
+        15
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "wizard.magic_shield",
+      "profession_id": "wizard",
+      "display_name": "魔法盾",
+      "server_name": "魔法盾",
+      "service_spell_id": 43,
+      "base_mana_cost": 35,
+      "level_mana_cost": 5,
+      "icon": 30,
+      "required_character_levels": [
+        31,
+        34,
+        38
+      ],
+      "training_points": [
+        300,
+        700,
+        1000
+      ],
+      "cooldown_base_ms": 1800,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 0,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        35,
+        40,
+        45,
+        50
+      ],
+      "cooldown_ms_by_level": [
+        1800,
+        1800,
+        1800,
+        1800
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "wizard.repulsion_ring",
+      "profession_id": "wizard",
+      "display_name": "抗拒火环",
+      "server_name": "抗拒火环",
+      "service_spell_id": 32,
+      "base_mana_cost": 2,
+      "level_mana_cost": 2,
+      "icon": 7,
+      "required_character_levels": [
+        12,
+        15,
+        19
+      ],
+      "training_points": [
+        50,
+        130,
+        220
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 4,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        2,
+        4,
+        6,
+        8
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "wizard.teleport",
+      "profession_id": "wizard",
+      "display_name": "瞬息移动",
+      "server_name": "瞬息移动",
+      "service_spell_id": 37,
+      "base_mana_cost": 10,
+      "level_mana_cost": 3,
+      "icon": 20,
+      "required_character_levels": [
+        19,
+        22,
+        25
+      ],
+      "training_points": [
+        35,
+        100,
+        200
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 0,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        10,
+        13,
+        16,
+        19
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    },
+    {
+      "skill_id": "wizard.temptation_light",
+      "profession_id": "wizard",
+      "display_name": "诱惑之光",
+      "server_name": "诱惑之光",
+      "service_spell_id": 33,
+      "base_mana_cost": 3,
+      "level_mana_cost": 1,
+      "icon": 19,
+      "required_character_levels": [
+        13,
+        18,
+        24
+      ],
+      "training_points": [
+        53,
+        110,
+        220
+      ],
+      "cooldown_base_ms": 1500,
+      "cooldown_reduction_ms": 0,
+      "power_base": 0,
+      "power_bonus": 0,
+      "magic_power_base": 0,
+      "magic_power_bonus": 0,
+      "range_cells": 9,
+      "multiplier_base": 1.0,
+      "multiplier_bonus": 0.0,
+      "mana_cost_by_level": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "cooldown_ms_by_level": [
+        1500,
+        1500,
+        1500,
+        1500
+      ],
+      "classification": "B/C-candidate"
+    }
+  ]
+}

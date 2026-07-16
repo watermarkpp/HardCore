@@ -2,9 +2,9 @@ class_name GroundSkillEffect
 extends Node2D
 
 const VISUAL_PATHS := {
-	"wizard.fire_wall": "res://assets/art/characters/wizard/effects/area_burst.png",
+	"wizard.fire_wall": "res://assets/art/characters/wizard/effects/fire_wall.png",
 	"wizard.exploding_flame": "res://assets/art/characters/wizard/effects/area_burst.png",
-	"wizard.ice_storm": "res://assets/art/characters/wizard/effects/area_burst.png",
+	"wizard.ice_storm": "res://assets/art/characters/wizard/effects/ice_storm.png",
 	"taoist.entrapment": "res://assets/art/characters/taoist/effects/binding_circle.png",
 }
 

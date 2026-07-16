@@ -3,8 +3,8 @@ extends Node2D
 
 const VISUAL_PATHS := {
 	"wizard.fireball": "res://assets/art/characters/wizard/effects/arcane_projectile.png",
-	"wizard.great_fireball": "res://assets/art/characters/wizard/effects/arcane_projectile.png",
-	"wizard.lightning": "res://assets/art/characters/wizard/effects/arcane_projectile.png",
+	"wizard.great_fireball": "res://assets/art/characters/wizard/effects/great_fireball.png",
+	"wizard.lightning": "res://assets/art/characters/wizard/effects/lightning.png",
 	"taoist.soul_fire_talisman": "res://assets/art/characters/taoist/effects/soul_fire_talisman.png",
 }
 
