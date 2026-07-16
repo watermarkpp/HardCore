@@ -393,7 +393,7 @@ def main() -> None:
         check("装备系统", "特殊装备效果", 2, 0.95 if equipment_special_connected else 0.0,
               "八项戒指效果、手机主动按钮、魔血MP转HP、虹魔近战吸血和三件套奖励均已接入；装备配置支持覆盖、新增及暴击/速度/技能等级扩展。记忆组队传送与祈祷宠物叛变属于已确认的单机边界，不再列为实现缺陷。", "StdItems缺失使魔血25/件、虹魔4/3/2仍是B级候选。", "BICH-DATA-1-IMPORT"),
         check("装备系统", "客户端装备图标与穿戴外观", 2, 0.90 if equipment_art_connected and warrior_wear_connected else (0.72 if equipment_art_connected else 0.15),
-              f"175件装备已接入三类客户端物品图；男女三职业{len(warrior_wear_mappings)}件武器/衣服接入Weapon/Hum五动作八方向动态图层，并保持零耐久外观。", f"仍有{len(warrior_wear.get('rejectedMappings', []))}件因锁定StdItems缺名而拒绝接入，不猜测替换。", "EQUIPMENT-DATA-1"),
+              f"175件装备已接入三类客户端物品图；男性三职业{len(warrior_wear_mappings)}件武器/衣服接入Weapon/Hum五动作八方向动态图层，并保持零耐久外观。", f"仍有{len(warrior_wear.get('rejectedMappings', []))}件因锁定StdItems缺名或女性角色不在范围而拒绝接入。", "EQUIPMENT-DATA-1"),
         check("装备系统", "装备与背包存档", 2, 1.0 if '"equipment": equipment' in state and "migrate_equipment_slots" in state and "LEGACY_SAVE_PATH" in state else 0.0,
               "装备实例、背包、耐久和v02到v03双槽迁移均已进入存读档路径。", "里程碑真机复验应用升级后旧存档自动迁移。", "BICH-MILESTONE"),
 

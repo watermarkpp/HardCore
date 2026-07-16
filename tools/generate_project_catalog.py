@@ -74,7 +74,7 @@ DATA_PURPOSES = {
     "equipment_special_rules.json": "特殊戒指、套装及单机边界",
     "warrior_service_rules.json": "战士技能服务端公式与候选字段",
     "warrior_client_art_sources.json": "战士技能特效和音效客户端来源",
-    "warrior_wear_sources.json": "男女三职业Weapon/Hum Shape、五动作图集和拒绝映射",
+    "warrior_wear_sources.json": "男性三职业Weapon/Hum Shape、五动作图集和拒绝映射",
     "mine_source_profiles.json": "比奇矿区客户端地图来源",
     "natural_cave_source_profiles.json": "天然洞穴D011/D012哈希、结构、阻挡、资源与运行投影证据",
     "orc_tomb_source_profiles.json": "兽人古墓D001/D002/D003哈希、结构、阻挡、资源与运行投影证据",

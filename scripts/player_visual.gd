@@ -231,7 +231,7 @@ func refresh_profession() -> void:
 
 
 func _update_visibility() -> void:
-	visible = PlayerState.profession in ["战士", "法师", "道士"]
+	visible = PlayerState.gender == "男" and PlayerState.profession in ["战士", "法师", "道士"]
 
 
 func _marker(marker_name: String) -> Marker2D:

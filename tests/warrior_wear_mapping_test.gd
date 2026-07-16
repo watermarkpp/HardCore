@@ -13,23 +13,27 @@ func _run() -> void:
 	assert(manifest.get("formulaEvidence", {}).get("confidence", "") == "A", "Shape×2+性别及600帧公式必须保留A源")
 	assert(manifest.get("shapeSource", {}).get("commit", "").begins_with("3952c536"), "Shape必须来自锁定的1.76 StdItems提交")
 	assert(manifest.get("coverage", {}).get("professions", []).size() == 3, "动态穿戴必须覆盖三个职业")
+	assert(manifest.get("coverage", {}).get("genders", []) == ["男"], "当前范围不得生成女性角色穿戴")
 	var mappings: Dictionary = manifest.get("runtimeMappings", {})
-	assert(mappings.size() == 60, "全职业武器/衣服映射数量错误")
-	assert(manifest.get("rejectedMappings", []).size() == 1, "缺失StdItems的装备必须显式保留")
+	assert(mappings.size() == 48, "男性三职业武器/衣服映射数量错误")
+	assert(manifest.get("rejectedMappings", []).size() == 13, "缺失StdItems和女性衣服必须显式隔离")
 	var lost_weapon_rejected := false
+	var female_armor_rejected := false
 	for value: Variant in manifest.get("rejectedMappings", []):
 		if value is Dictionary and value.get("name", "") == "落魄神兵" and "无同名" in str(value.get("reason", "")):
 			lost_weapon_rejected = true
+		if value is Dictionary and value.get("name", "") == "圣战宝甲" and "女性角色不在" in str(value.get("reason", "")):
+			female_armor_rejected = true
 	assert(lost_weapon_rejected, "落魄神兵在可靠StdItems缺失时必须继续隔离")
+	assert(female_armor_rejected and not mappings.has("圣战宝甲"), "女性衣服不得生成运行映射")
 	assert(int(mappings.get("鹤嘴锄", {}).get("weaponAppearance", {}).get("genderVariants", {}).get("男", {}).get("feature", -1)) == 38, "鹤嘴锄可靠Shape没有补齐")
 	assert(int(mappings.get("罗刹", {}).get("weaponAppearance", {}).get("genderVariants", {}).get("男", {}).get("feature", -1)) == 14, "罗刹可靠Shape没有补齐")
 	assert(int(mappings.get("怒斩", {}).get("weaponAppearance", {}).get("genderVariants", {}).get("男", {}).get("feature", -1)) == 64, "怒斩可靠Shape没有补齐")
 	assert(int(mappings.get("中型盔甲(男)", {}).get("dressAppearance", {}).get("genderVariants", {}).get("男", {}).get("feature", -1)) == 4, "中型男甲可靠Shape没有补齐")
 	assert(int(mappings.get("天魔神甲", {}).get("dressAppearance", {}).get("genderVariants", {}).get("男", {}).get("feature", -1)) == 12, "天魔神甲可靠Shape没有补齐")
-	assert(int(mappings.get("圣战宝甲", {}).get("dressAppearance", {}).get("genderVariants", {}).get("女", {}).get("feature", -1)) == 13, "圣战宝甲必须按StdMode=11接到女性资源")
 
-	var dagger: Dictionary = mappings.get("匕首", {}).get("weaponAppearance", {}).get("genderVariants", {}).get("女", {})
-	assert(int(dagger.get("feature", -1)) == 13, "女性武器Shape到feature转换错误")
+	var dagger: Dictionary = mappings.get("匕首", {}).get("weaponAppearance", {}).get("genderVariants", {}).get("男", {})
+	assert(int(dagger.get("feature", -1)) == 12, "男性武器Shape到feature转换错误")
 	for action_name: String in ["idle", "walk", "attack", "hit", "death"]:
 		var action: Dictionary = dagger.get("actions", {}).get(action_name, {})
 		assert(action.get("confidence", "") == "A" and action.get("missingFrames", []).is_empty(), "匕首%s客户端帧不完整" % action_name)
@@ -71,16 +75,16 @@ func _run() -> void:
 	assert(body_actor_origin == weapon_actor_origin, "武器与人物必须共享经典角色原点")
 	assert(int(PlayerState.computed_stats.get("attack_max", 0)) < 25, "零耐久装备不得恢复属性")
 
-	PlayerState.gender = "女"
+	PlayerState.gender = "男"
 	PlayerState.select_profession("法师")
 	PlayerState.equipment["武器"] = {"name": "魔杖", "durability": 15, "max_durability": 15}
-	PlayerState.equipment["衣服"] = {"name": "魔法长袍(女)", "durability": 12, "max_durability": 12}
+	PlayerState.equipment["衣服"] = {"name": "魔法长袍(男)", "durability": 12, "max_durability": 12}
 	PlayerState.equipment_changed.emit()
 	visual.refresh_profession()
 	visual._process(0.01)
-	assert(visual.visible, "女性法师穿戴动态图层没有启用")
-	assert(body.texture.resource_path.ends_with("dress_009_idle.png"), "女性法师衣服没有选择女性feature")
-	assert(weapon.texture.resource_path.ends_with("weapon_025_idle.png"), "女性法师武器没有选择女性feature")
+	assert(visual.visible, "男性法师穿戴动态图层没有启用")
+	assert(body.texture.resource_path.ends_with("dress_008_idle.png"), "男性法师衣服动态资源错误")
+	assert(weapon.texture.resource_path.ends_with("weapon_024_idle.png"), "男性法师武器动态资源错误")
 
 	PlayerState.gender = "男"
 	PlayerState.select_profession("道士")
@@ -92,6 +96,9 @@ func _run() -> void:
 	assert(visual.visible, "男性道士穿戴动态图层没有启用")
 	assert(body.texture.resource_path.ends_with("dress_010_idle.png"), "男性道士衣服动态资源错误")
 	assert(weapon.texture.resource_path.ends_with("weapon_018_idle.png"), "男性道士武器动态资源错误")
+	PlayerState.gender = "女"
+	visual.refresh_profession()
+	assert(not visual.visible, "未开发的女性角色不得启用穿戴动态图层")
 
-	print("WARRIOR_WEAR_MAPPING_PASS：StdItems校准、男女三职业五动作图集、拒绝隔离与零耐久边界正确")
+	print("WARRIOR_WEAR_MAPPING_PASS：StdItems校准、男性三职业五动作图集、女性范围隔离与零耐久边界正确")
 	get_tree().quit(0)

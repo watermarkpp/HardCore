@@ -40,7 +40,17 @@ ACTIONS = {
     "hit": {"start": 472, "frames": 3},
     "death": {"start": 536, "frames": 4},
 }
-GENDER_BITS = {"男": 0, "女": 1}
+GENDER_BITS = {"男": 0}
+
+
+def clear_generated_atlases() -> None:
+    """Remove stale variants before rebuilding the scoped male asset set."""
+    for folder_name in ("weapon", "dress"):
+        folder = OUTPUT / folder_name
+        if not folder.exists():
+            continue
+        for target in folder.glob("*.png"):
+            target.unlink()
 
 
 def weapon_tip_offset(image: Image.Image, meta: dict) -> list[int]:
@@ -132,6 +142,7 @@ def main() -> None:
     decoded = {key: read_library(path) for key, path in libraries.items()}
     max_features = {key: len(value[2]) // 600 for key, value in decoded.items()}
     del decoded
+    clear_generated_atlases()
 
     mappings, rejected = {}, []
     atlas_cache = {}
@@ -145,11 +156,12 @@ def main() -> None:
         mapping_source = "community.mylgd.mir2server.176 StdItems.DB@3952c536"
         appearance_type = "weaponAppearance" if item.get("category") == "武器" else "dressAppearance"
         if appearance_type == "weaponAppearance":
-            genders = ["男", "女"]
+            genders = ["男"]
         elif std_mode == 10:
             genders = ["男"]
         elif std_mode == 11:
-            genders = ["女"]
+            rejected.append({"name": name, "stdMode": std_mode, "shape": shape, "reason": "女性角色不在当前开发范围"})
+            continue
         else:
             rejected.append({"name": name, "stdMode": std_mode, "shape": shape, "reason": "盔甲StdMode不是10/11，拒绝猜测性别"})
             continue
@@ -208,7 +220,7 @@ def main() -> None:
 
     payload = {
         "schemaVersion": 3,
-        "target": "战士/法师/道士男女经典动态穿戴",
+        "target": "男性战士/法师/道士经典动态穿戴",
         "formulaEvidence": {
             "server": "M2Server/ObjBase.pas GetFeature: Shape*2+gender",
             "client": "Client/Actor.pas HUMANFRAME=600 and HA action table",
@@ -242,8 +254,8 @@ def main() -> None:
         },
         "rejectedMappings": rejected,
         "generatedAtlases": len(atlas_cache) * len(ACTIONS),
-        "coverage": {"professions": ["战士", "法师", "道士"], "genders": ["男", "女"]},
-        "policy": "帧公式、客户端像素及锁定发行版逐件Shape为A；对官服等价性保持B。越界、缺名或不兼容值拒绝运行，不猜测替换。",
+        "coverage": {"professions": ["战士", "法师", "道士"], "genders": ["男"]},
+        "policy": "当前产品只建设男性角色穿戴。帧公式、客户端像素及锁定发行版逐件Shape为A；女性StdMode=11、越界、缺名或不兼容值均拒绝运行。",
     }
     MANIFEST.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"WARRIOR_WEAR_MAPPINGS={len(mappings)} REJECTED={len(rejected)} ATLASES={payload['generatedAtlases']}")
