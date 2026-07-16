@@ -13,8 +13,6 @@ func _init() -> void:
 	document.editor_meta.authority = "human_layout_required"
 	document.editor_meta.runtime_approved = false
 	document.ground.blank_fill_asset_id = "ground.dark_grass.001"
-	document.design["city_rect"] = [96,96,64,64]
-	document.design["safe_area_rect"] = [112,112,32,32]
 	document.design["functional_zones"] = []
 	for layer: String in MapEditorTypes.LAYER_NAMES:
 		document.layers[layer] = []
@@ -22,5 +20,5 @@ func _init() -> void:
 	assert(initialized.ok, str(initialized.get("errors", [])))
 	var saved := MapEditorSaveService.save_document(document)
 	assert(saved.ok, str(saved.get("errors", [])))
-	print("BICH_BLANK_MANUAL_TEMPLATE_PASS size=256x256 layers_empty=true path=%s" % saved.path)
+	print("BICH_BLANK_MANUAL_TEMPLATE_PASS size=64x64 layers_empty=true path=%s" % saved.path)
 	quit()

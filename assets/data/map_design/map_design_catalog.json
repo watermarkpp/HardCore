@@ -8,23 +8,14 @@
       "name": "比奇省",
       "map_type": "outdoor_province",
       "design_size": [
-        256,
-        256
-      ],
-      "strategy": "remake_compact",
-      "source_map_path": "research/mir2_client_raw/Map/0.map",
-      "city_rect": [
-        96,
-        96,
         64,
         64
       ],
-      "safe_area": [
-        104,
-        104,
-        48,
-        48
-      ],
+      "strategy": "preserve_function",
+      "source_map_path": "research/mir2_client_raw/Map/0.map",
+      "source_usage": "structure_reference_only",
+      "size_status": "user_confirmed_final",
+      "size_decision_source": "user_2026-07-17",
       "template_default_size": [
         256,
         256

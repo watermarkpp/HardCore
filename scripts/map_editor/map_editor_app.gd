@@ -48,7 +48,7 @@ var active_tool_mode := "select"
 
 
 func _notification(what:int)->void:
-	if what==NOTIFICATION_WM_CLOSE_REQUEST:
+	if what==NOTIFICATION_WM_CLOSE_REQUEST and get_tree()!=null and get_tree().current_scene==self:
 		if not current_document.is_empty(): MapEditorSaveService.save_document(current_document)
 		get_tree().quit()
 
@@ -268,6 +268,10 @@ func _open_document_path(path: String) -> void:
 		_ensure_map_portal_semantics()
 		MapEditorSaveService.save_document(current_document,path)
 		map_id_edit.text = str(current_document.get("map_id", "")); display_name_edit.text = str(current_document.get("display_name", "")); runtime_id_edit.value = int(current_document.get("runtime_map_id", 0))
+		map_type_option.select(_find_type_index(str(current_document.design.get("map_type", ""))))
+		var design_size: Array = current_document.design.get("design_size", [0, 0])
+		size_label.text = "设计尺寸：%d × %d（64×32 等距格）" % [int(design_size[0]), int(design_size[1])]
+		path_label.text = "工作文件：%s" % ProjectSettings.globalize_path(path)
 		preview.set_document(current_document)
 		var initialized := MapEditorGroundService.initialize(current_document)
 		if initialized.ok: preview.set_ground_state(initialized.state)

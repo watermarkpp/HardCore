@@ -23,12 +23,13 @@ def main():
         if m.get("map_type")=="maze_room" and max(size)>80: warnings.append(f"{mid}: maze above 80")
         if m.get("source_size_is_design_size") is not False: errors.append(f"{mid}: source/design separation missing")
         if m.get("source_audit_status") in ("unresolved","missing"): warnings.append(f"{mid}: source {m['source_audit_status']}")
-    expected={"bich_province":[256,256],"mengzhong_province":[280,280],"corpse_king_hall":[96,96],"stone_tomb_array":[56,56]}
+    expected={"bich_province":[64,64],"mengzhong_province":[280,280],"corpse_king_hall":[96,96],"stone_tomb_array":[56,56]}
     lookup={m["map_id"]:m for m in maps}
     for mid,size in expected.items():
         if lookup.get(mid,{}).get("design_size")!=size: errors.append(f"acceptance: {mid} != {size}")
     if lookup.get("corpse_king_hall",{}).get("map_type")!="boss_room": errors.append("acceptance: corpse king type")
     if lookup.get("stone_tomb_array",{}).get("strategy")!="reduce_duplicates": errors.append("acceptance: stone tomb strategy")
+    if lookup.get("bich_province",{}).get("size_status")!="user_confirmed_final": errors.append("acceptance: bich final size status")
     print(f"maps={len(maps)} errors={len(errors)} warnings={len(warnings)}")
     for x in errors: print("ERROR",x)
     for x in warnings: print("WARN",x)

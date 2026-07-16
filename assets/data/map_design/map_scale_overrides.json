@@ -3,7 +3,7 @@
   "policy": "single_player_design_size_never_inherits_source_size",
   "coordinate_systems": ["mir2_48x32", "godot_iso_64x32"],
   "overrides": [
-    {"map_id":"bich_province","runtime_map_id":4,"name":"比奇省","map_type":"outdoor_province","design_size":[256,256],"strategy":"remake_compact","source_map_path":"research/mir2_client_raw/Map/0.map","city_rect":[96,96,64,64],"safe_area":[104,104,48,48]},
+    {"map_id":"bich_province","runtime_map_id":4,"name":"比奇省","map_type":"outdoor_province","design_size":[64,64],"strategy":"preserve_function","source_map_path":"research/mir2_client_raw/Map/0.map","source_usage":"structure_reference_only","size_status":"user_confirmed_final","size_decision_source":"user_2026-07-17"},
     {"map_id":"mengzhong_province","runtime_map_id":478,"name":"盟重省","map_type":"outdoor_province","design_size":[280,280],"strategy":"remake_compact","source_map_path":"research/mir2_client_raw/Map/3.map"},
     {"map_id":"wooma_forest","runtime_map_id":268,"name":"沃玛森林","map_type":"outdoor_field","design_size":[180,180],"strategy":"shrink_and_recompose","source_map_path":"research/mir2_client_raw/Map/1.map"},
     {"map_id":"snake_valley","runtime_map_id":338,"name":"毒蛇山谷","map_type":"outdoor_field","design_size":[160,160],"strategy":"shrink_and_recompose","source_map_path":"research/mir2_client_raw/Map/2.map"},

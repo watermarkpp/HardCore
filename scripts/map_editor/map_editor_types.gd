@@ -70,6 +70,9 @@ static func new_map_from_catalog(map_id: String, map_type := "dungeon_floor", ru
 	document.design["strategy"] = str(catalog_entry.get("strategy", MapDesignCatalogService.get_template(map_type).get("strategy", "shrink_and_recompose")))
 	document.design["source_size"] = catalog_entry.get("source_size", [null, null])
 	document.design["source_size_is_design_size"] = false
+	for key: String in ["size_status", "size_decision_source", "source_usage"]:
+		if catalog_entry.has(key):
+			document.design[key] = catalog_entry[key]
 	document["source_reference"] = {
 		"source_map_path": catalog_entry.get("source_map_path", null),
 		"audit_status": catalog_entry.get("source_audit_status", "not_audited"),
