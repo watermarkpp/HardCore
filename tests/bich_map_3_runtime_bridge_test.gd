@@ -20,7 +20,7 @@ func _ready() -> void:
 		if child is Sprite2D and bool(child.get_meta("editor_runtime_chunk", false)): chunk_sprites += 1
 	var visual_file := FileAccess.open("res://assets/data/runtime/map_editor/bich_province.visual.json", FileAccess.READ)
 	var visual_manifest: Variant = JSON.parse_string(visual_file.get_as_text()) if visual_file != null else null
-	assert(visual_manifest is Dictionary and chunk_sprites == visual_manifest.get("chunks", []).size())
+	assert(visual_manifest is Dictionary and chunk_sprites == visual_manifest.get("chunks", []).size(), "runtime chunk sprites=%d manifest chunks=%d" % [chunk_sprites, visual_manifest.get("chunks", []).size() if visual_manifest is Dictionary else -1])
 	var boundary_shapes := 0
 	for body: Node in background.get_children():
 		if body is StaticBody2D:

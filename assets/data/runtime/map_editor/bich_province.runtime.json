@@ -1,5 +1,5 @@
 {
-  "build_sha256": "080e3b147563bf7f8c5229d70c8135f448b39cca69cc2aa8863a40c6ff86576d",
+  "build_sha256": "fc4be86ce407204acdd920e01da9217484f50daf33684f913de5868f618229ac",
   "collision": {
     "blocked_count": 398.0,
     "blocked_tiles": [
@@ -981,7 +981,7 @@
       "16,47": "user.70555d97ec3f69cc",
       "16,48": "user.9ab574f121f8b541",
       "16,49": "user.c5c2e2da52a39748",
-      "16,5": "user.eb8baf03766aa994",
+      "16,5": "user.54625b138c2ae601",
       "16,50": "user.9ab574f121f8b541",
       "16,51": "user.c5c2e2da52a39748",
       "16,52": "user.c5c2e2da52a39748",
@@ -1045,7 +1045,7 @@
       "17,47": "user.b2ebe9a1dcec7de5",
       "17,48": "user.9ab574f121f8b541",
       "17,49": "user.b2ebe9a1dcec7de5",
-      "17,5": "user.a0431db99cc74163",
+      "17,5": "user.54625b138c2ae601",
       "17,50": "user.70555d97ec3f69cc",
       "17,51": "user.177d04adae934b94",
       "17,52": "user.cd0c8d4e3d1fd132",
@@ -2110,7 +2110,7 @@
       "32,3": "user.eb8baf03766aa994",
       "32,30": "user.bb4be652358c5bc2",
       "32,31": "user.b2ebe9a1dcec7de5",
-      "32,32": "user.bb4be652358c5bc2",
+      "32,32": "ground.dark_grass.001",
       "32,33": "user.9ab574f121f8b541",
       "32,34": "user.9ab574f121f8b541",
       "32,35": "user.177d04adae934b94",
@@ -4569,8 +4569,8 @@
       "selectable": true,
       "selection_locked": false,
       "tile": [
-        4.0,
-        6.0
+        2.0,
+        3.0
       ],
       "tile_anchor": [
         0.0,
@@ -4628,8 +4628,8 @@
       "selectable": true,
       "selection_locked": false,
       "tile": [
-        56.0,
-        6.0
+        58.0,
+        5.0
       ],
       "tile_anchor": [
         56.0,
@@ -4687,8 +4687,8 @@
       "selectable": true,
       "selection_locked": false,
       "tile": [
-        56.0,
-        58.0
+        59.0,
+        60.0
       ],
       "tile_anchor": [
         56.0,
@@ -5278,7 +5278,7 @@
       "selection_locked": false,
       "tile": [
         2.0,
-        58.0
+        60.0
       ],
       "tile_anchor": [
         0.0,
@@ -6194,8 +6194,8 @@
           0.0
         ],
         "tile": [
-          4.0,
-          6.0
+          2.0,
+          3.0
         ],
         "trigger_on_enter": true
       },
@@ -6218,8 +6218,8 @@
           0.0
         ],
         "tile": [
-          56.0,
-          6.0
+          58.0,
+          5.0
         ],
         "trigger_on_enter": true
       },
@@ -6242,8 +6242,8 @@
           0.0
         ],
         "tile": [
-          56.0,
-          58.0
+          59.0,
+          60.0
         ],
         "trigger_on_enter": true
       },
@@ -6267,7 +6267,7 @@
         ],
         "tile": [
           2.0,
-          58.0
+          60.0
         ],
         "trigger_on_enter": true
       }
@@ -6527,24 +6527,6 @@
         ]
       },
       {
-        "content_id": "monster.25",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "多钩猫0",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.25",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000017",
-        "spawn_rule": "ambient",
-        "tile": [
-          3.0,
-          12.0
-        ]
-      },
-      {
         "content_id": "monster.18",
         "content_layer": "personal_expansion",
         "count": 1.0,
@@ -6725,24 +6707,6 @@
         ]
       },
       {
-        "content_id": "monster.25",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "多钩猫0",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.25",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000027",
-        "spawn_rule": "ambient",
-        "tile": [
-          9.0,
-          59.0
-        ]
-      },
-      {
         "content_id": "monster.27",
         "content_layer": "personal_expansion",
         "count": 1.0,
@@ -6774,8 +6738,8 @@
         "semantic_id": "monster_spawn_000029",
         "spawn_rule": "ambient",
         "tile": [
-          39.0,
-          4.0
+          44.0,
+          6.0
         ]
       },
       {
@@ -6792,8 +6756,8 @@
         "semantic_id": "monster_spawn_000030",
         "spawn_rule": "ambient",
         "tile": [
-          33.0,
-          5.0
+          36.0,
+          3.0
         ]
       },
       {
@@ -6811,7 +6775,7 @@
         "spawn_rule": "ambient",
         "tile": [
           30.0,
-          7.0
+          4.0
         ]
       },
       {
@@ -6828,7 +6792,7 @@
         "semantic_id": "monster_spawn_000032",
         "spawn_rule": "ambient",
         "tile": [
-          20.0,
+          23.0,
           3.0
         ]
       },
@@ -6847,7 +6811,7 @@
         "spawn_rule": "ambient",
         "tile": [
           21.0,
-          8.0
+          9.0
         ]
       },
       {
@@ -6866,6 +6830,258 @@
         "tile": [
           10.0,
           3.0
+        ]
+      },
+      {
+        "content_id": "monster.24",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多钩猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": "monster.24",
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000035",
+        "spawn_rule": "ambient",
+        "tile": [
+          9.0,
+          57.0
+        ]
+      },
+      {
+        "content_id": "monster.24",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多钩猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": "monster.24",
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000036",
+        "spawn_rule": "ambient",
+        "tile": [
+          8.0,
+          62.0
+        ]
+      },
+      {
+        "content_id": "monster.26",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": "monster.26",
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000037",
+        "spawn_rule": "ambient",
+        "tile": [
+          4.0,
+          15.0
+        ]
+      },
+      {
+        "content_id": "monster.26",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": "monster.26",
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000038",
+        "spawn_rule": "ambient",
+        "tile": [
+          2.0,
+          9.0
+        ]
+      },
+      {
+        "content_id": "monster.26",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": "monster.26",
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000039",
+        "spawn_rule": "ambient",
+        "tile": [
+          9.0,
+          10.0
+        ]
+      },
+      {
+        "content_id": "monster.26",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": "monster.26",
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000040",
+        "spawn_rule": "ambient",
+        "tile": [
+          13.0,
+          14.0
+        ]
+      },
+      {
+        "content_id": "monster.28",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": "monster.28",
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000041",
+        "spawn_rule": "ambient",
+        "tile": [
+          41.0,
+          11.0
+        ]
+      },
+      {
+        "content_id": "monster.28",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": "monster.28",
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000042",
+        "spawn_rule": "ambient",
+        "tile": [
+          34.0,
+          10.0
+        ]
+      },
+      {
+        "content_id": "monster.28",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": "monster.28",
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000043",
+        "spawn_rule": "ambient",
+        "tile": [
+          16.0,
+          4.0
+        ]
+      },
+      {
+        "content_id": "monster.19",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蛤蟆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": "monster.19",
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000044",
+        "spawn_rule": "ambient",
+        "tile": [
+          44.0,
+          20.0
+        ]
+      },
+      {
+        "content_id": "monster.19",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蛤蟆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": "monster.19",
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000045",
+        "spawn_rule": "ambient",
+        "tile": [
+          51.0,
+          12.0
+        ]
+      },
+      {
+        "content_id": "monster.19",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蛤蟆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": "monster.19",
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000046",
+        "spawn_rule": "ambient",
+        "tile": [
+          51.0,
+          5.0
+        ]
+      },
+      {
+        "content_id": "monster.18",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "毒蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": "monster.18",
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000047",
+        "spawn_rule": "ambient",
+        "tile": [
+          51.0,
+          54.0
+        ]
+      },
+      {
+        "content_id": "monster.18",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "毒蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": "monster.18",
+        "radius_tiles": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000048",
+        "spawn_rule": "ambient",
+        "tile": [
+          60.0,
+          40.0
         ]
       }
     ],

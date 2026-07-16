@@ -9,7 +9,7 @@ func _ready()->void:
 	var environment_sprites:=0
 	for node:Node in game.background._environment_nodes:
 		if node is Sprite2D:environment_sprites+=1
-	assert(environment_sprites==8+runtime.instances.size())
+	assert(environment_sprites==8+runtime.instances.size(), "environment sprites=%d expected=%d" % [environment_sprites, 8+runtime.instances.size()])
 	var expected_npcs:={}
 	for entry:Dictionary in runtime.semantics.npc_points:expected_npcs[str(entry.display_name)]=MapEditorRuntimeBridge.tile_to_world(runtime,entry.tile)
 	var actual_npcs:=0

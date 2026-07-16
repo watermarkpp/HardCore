@@ -80,6 +80,35 @@ static func delete_entry(document:Dictionary,semantic_id:String)->Dictionary:
 	return {"ok":false,"errors":["未找到功能点"]}
 
 
+static func sync_linked_instance_tile(document: Dictionary, instance_id: String, tile: Vector2i) -> Dictionary:
+	var size: Array = document.get("design", {}).get("design_size", [0, 0])
+	if tile.x < 0 or tile.y < 0 or tile.x >= int(size[0]) or tile.y >= int(size[1]):
+		return {"ok": false, "errors": ["semantic_tile_out_of_bounds"], "updated": 0}
+	var updated := 0
+	for layer: String in KIND_TO_LAYER.values():
+		var entries: Array = document.layers.get(layer, [])
+		for index in entries.size():
+			if str(entries[index].get("linked_visual_instance_id", "")) != instance_id:
+				continue
+			entries[index]["tile"] = [tile.x, tile.y]
+			updated += 1
+		document.layers[layer] = entries
+	return {"ok": true, "updated": updated}
+
+
+static func delete_linked_instance_entries(document: Dictionary, instance_id: String) -> int:
+	var deleted := 0
+	for layer: String in KIND_TO_LAYER.values():
+		var entries: Array = document.layers.get(layer, [])
+		for index in range(entries.size() - 1, -1, -1):
+			if str(entries[index].get("linked_visual_instance_id", "")) != instance_id:
+				continue
+			entries.remove_at(index)
+			deleted += 1
+		document.layers[layer] = entries
+	return deleted
+
+
 static func _defaults(kind: String, tile: Vector2i, properties: Dictionary) -> Dictionary:
 	var entry := {"kind": kind, "tile": [tile.x, tile.y], "content_layer": "personal_expansion", "runtime_export": true}
 	match kind:
