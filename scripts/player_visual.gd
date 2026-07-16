@@ -231,7 +231,7 @@ func refresh_profession() -> void:
 
 
 func _update_visibility() -> void:
-	visible = PlayerState.profession == "战士"
+	visible = PlayerState.profession in ["战士", "法师", "道士"]
 
 
 func _marker(marker_name: String) -> Marker2D:
@@ -351,6 +351,18 @@ func _load_appearance_actions(source: Variant) -> Dictionary:
 	return result
 
 
+func _gender_appearance(source: Variant) -> Dictionary:
+	if not source is Dictionary:
+		return {}
+	var variants: Variant = source.get("genderVariants", {})
+	if variants is Dictionary:
+		var selected: Variant = variants.get(PlayerState.gender, {})
+		return selected if selected is Dictionary else {}
+	# Schema 2 compatibility for branches that have not regenerated the wear
+	# manifest yet.
+	return source
+
+
 func _appearance_layout(source: Variant) -> Dictionary:
 	var fallback := {
 		"cell": ArtSpec.WARRIOR_FRAME,
@@ -388,17 +400,19 @@ func _refresh_equipment_visuals() -> void:
 	var armor_art: Dictionary = armor_item.get("art", {}) if armor_item is Dictionary else {}
 	var helmet_art: Dictionary = helmet_item.get("art", {}) if helmet_item is Dictionary else {}
 	_weapon_mapping_known = weapon_art.has("weaponAppearance")
-	var weapon_appearance: Variant = weapon_art.get("weaponAppearance", {})
+	var weapon_appearance: Dictionary = _gender_appearance(weapon_art.get("weaponAppearance", {}))
 	_weapon_action_textures = _load_appearance_actions(weapon_appearance)
 	var weapon_layout := _appearance_layout(weapon_appearance)
 	_weapon_frame_size = weapon_layout.get("cell", ArtSpec.WARRIOR_FRAME)
 	_weapon_source_anchor = weapon_layout.get("foot_anchor", ArtSpec.WARRIOR_SOURCE_FOOT_ANCHOR)
 	_weapon_attack_source_frames = []
-	if weapon_appearance is Dictionary:
-		var attack_action: Variant = weapon_appearance.get("actions", {}).get("attack", {})
-		if attack_action is Dictionary:
-			_weapon_attack_source_frames = attack_action.get("sourceFrames", [])
-	_dress_action_textures = _load_appearance_actions(armor_art.get("dressAppearance", {}))
+	var attack_action: Variant = weapon_appearance.get("actions", {}).get("attack", {})
+	if attack_action is Dictionary:
+		_weapon_attack_source_frames = attack_action.get("sourceFrames", [])
+	var dress_appearance := _gender_appearance(armor_art.get("dressAppearance", {}))
+	if dress_appearance.is_empty():
+		dress_appearance = _gender_appearance(GameData.warrior_wear_art.get("defaultHumanAppearance", {}))
+	_dress_action_textures = _load_appearance_actions(dress_appearance)
 	# Never draw the old geometric weapon placeholder.  Together with the body
 	# attack frame it formed the unwanted V-shaped default attack artifact.
 	weapon_accent.visible = false

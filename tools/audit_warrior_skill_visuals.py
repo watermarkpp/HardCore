@@ -40,32 +40,36 @@ def audit_wear(manifest: dict) -> dict:
     for item_name, mapping in manifest["runtimeMappings"].items():
         for appearance_type in ("weaponAppearance", "dressAppearance"):
             appearance = mapping.get(appearance_type)
-            if not appearance or not appearance.get("visible"):
+            if not appearance:
                 continue
-            for action_name, action in appearance.get("actions", {}).items():
-                path = str(action["path"])
-                if path in seen:
+            variants = appearance.get("genderVariants", {"legacy": appearance})
+            for gender, variant in variants.items():
+                if not variant.get("visible"):
                     continue
-                seen.add(path)
-                cell = tuple(map(int, action["cell"]))
-                anchor = tuple(map(int, action["footAnchor"]))
-                expected_size = (cell[0] * int(action["framesPerDirection"]), cell[1] * 8)
-                actual_size = Image.open(runtime_path(path)).size
-                if actual_size != expected_size:
-                    atlas_errors.append(f"{path}: expected={expected_size} actual={actual_size}")
-                for frame in action["sourceFrames"]:
-                    checked_frames += 1
-                    if appearance_type == "weaponAppearance" and action_name == "attack":
-                        weapon_attack_frames += 1
-                        if len(frame.get("weaponTipOffset", [])) == 2:
-                            weapon_tip_frames += 1
-                    if not fits(frame, cell, anchor):
-                        overflows.append({"path": path, "action": action_name, **frame})
-                    if appearance_type == "weaponAppearance" and int(appearance["feature"]) == 48 and action_name == "attack":
-                        if not fits(frame, (192, 160), (64, 80)):
-                            judgement_old_overflows.append({
-                                "direction": frame["direction"], "frame": frame["frame"], "index": frame["index"]
-                            })
+                for action_name, action in variant.get("actions", {}).items():
+                    path = str(action["path"])
+                    if path in seen:
+                        continue
+                    seen.add(path)
+                    cell = tuple(map(int, action["cell"]))
+                    anchor = tuple(map(int, action["footAnchor"]))
+                    expected_size = (cell[0] * int(action["framesPerDirection"]), cell[1] * 8)
+                    actual_size = Image.open(runtime_path(path)).size
+                    if actual_size != expected_size:
+                        atlas_errors.append(f"{path}: expected={expected_size} actual={actual_size}")
+                    for frame in action["sourceFrames"]:
+                        checked_frames += 1
+                        if appearance_type == "weaponAppearance" and action_name == "attack":
+                            weapon_attack_frames += 1
+                            if len(frame.get("weaponTipOffset", [])) == 2:
+                                weapon_tip_frames += 1
+                        if not fits(frame, cell, anchor):
+                            overflows.append({"path": path, "gender": gender, "action": action_name, **frame})
+                        if appearance_type == "weaponAppearance" and int(variant["feature"]) == 48 and action_name == "attack":
+                            if not fits(frame, (192, 160), (64, 80)):
+                                judgement_old_overflows.append({
+                                    "direction": frame["direction"], "frame": frame["frame"], "index": frame["index"]
+                                })
     return {
         "uniqueAtlases": len(seen),
         "checkedFrames": checked_frames,

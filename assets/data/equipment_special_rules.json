@@ -1,49 +1,58 @@
 {
   "baseline": "2003官服1.76基准优先",
   "source": {
-    "path": "research/MIR2/GameOfMir/M2Server/ObjBase.pas",
+    "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
     "role": "AniCount/Shape效果与运行公式",
     "confidence": "A"
   },
+  "stdItemsSource": "res://assets/data/equipment_stditems_176.json",
   "runtimeEffects": {
     "隐身戒指": {
       "sourceCode": 111,
       "effect": "stealth",
+      "stdItemsAniCount": 0,
       "mappingConfidence": "B"
     },
     "麻痹戒指": {
       "sourceCode": 113,
       "effect": "paralysis",
+      "stdItemsAniCount": 0,
       "mappingConfidence": "B"
     },
     "复活戒指": {
       "sourceCode": 114,
       "effect": "revival",
+      "stdItemsAniCount": 0,
       "mappingConfidence": "B"
     },
     "护身戒指": {
       "sourceCode": 118,
       "effect": "magic_shield",
+      "stdItemsAniCount": 0,
       "mappingConfidence": "B"
     },
     "超负载戒指": {
       "sourceCode": 119,
       "effect": "double_weight",
+      "stdItemsAniCount": 0,
       "mappingConfidence": "B"
     },
     "传送戒指": {
       "sourceCode": 112,
       "effect": "teleport",
+      "stdItemsAniCount": 0,
       "mappingConfidence": "B"
     },
     "火焰戒指": {
       "sourceCode": 115,
       "effect": "flame_skill",
+      "stdItemsAniCount": 0,
       "mappingConfidence": "B"
     },
     "防御戒指": {
       "sourceCode": 116,
       "effect": "recovery_skill",
+      "stdItemsAniCount": 0,
       "mappingConfidence": "B"
     }
   },
@@ -68,17 +77,19 @@
       },
       "fullSetBonus": 50,
       "effect": "MP转HP",
-      "confidence": "B"
+      "confidence": "A",
+      "valueSource": "StdItems.AniCount"
     },
     "rainbowDemon": {
       "pieces": {
-        "项链": 4,
-        "手镯": 3,
-        "戒指": 2
+        "项链": 5,
+        "手镯": 5,
+        "戒指": 5
       },
       "fullSetBonus": "accuracy+2",
       "effect": "近战吸血百分比",
-      "confidence": "B"
+      "confidence": "A",
+      "valueSource": "StdItems.AniCount"
     }
   },
   "activeActionCandidates": {
@@ -99,7 +110,7 @@
     }
   },
   "catalogCorrections": [
-    "魔血/虹魔三件被现有候选目录错误拆成三个职业；运行时按通用套装处理，待StdItems.Need复核"
+    "魔血/虹魔三件按套装规则作为通用组件；逐件Need与AniCount已由锁定StdItems复核"
   ],
   "rules": {
     "zeroDurability": "所有特殊效果立即失效",
@@ -108,5 +119,5 @@
     "magicShieldMpPerDamage": 1.5,
     "doubleWeight": 2
   },
-  "mappingPolicy": "运行公式来自服务端源码(A)；实际StdItems缺失时，名称到AniCount及套装逐件power保持B，不冒充逐件数据库原值。"
+  "mappingPolicy": "运行公式来自服务端源码(A)；名称到AniCount及套装逐件power对锁定社区1.76 StdItems为A，对官服等价性保持B。"
 }

@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "referenceCatalog": "res://assets/data/service_item_catalog.json",
+  "referenceRecordCount": 808,
+  "policy": "每批必须同时锁定版本、数据库记录、客户端资源和自动化测试；未列入enabled批次的参考装备不得进入运行目录。",
+  "enabledRecordCount": 3,
+  "remainingQuarantinedCount": 805,
+  "batches": [
+    {
+      "batchId": "equipment-reference-001-stditems-wear",
+      "status": "enabled",
+      "version": "community.mylgd.mir2server.176@3952c536",
+      "sourceSnapshot": "res://assets/data/equipment_stditems_176.json",
+      "resourceManifest": "res://assets/data/warrior_wear_sources.json",
+      "testScene": "res://tests/equipment_reference_batch_test.gd",
+      "activation": "校准既有Vanilla记录并启用精确客户端穿戴；不新增同名装备，不批量导入808条参考目录。",
+      "records": [
+        {
+          "name": "鹤嘴锄",
+          "serviceReferenceIndex": 836,
+          "stdItemsIndex": 78,
+          "looks": 50,
+          "shape": 19,
+          "wearFeatures": {"男": 38, "女": 39},
+          "resourceExact": true
+        },
+        {
+          "name": "怒斩",
+          "serviceReferenceIndex": 261,
+          "stdItemsIndex": 106,
+          "looks": 70,
+          "shape": 32,
+          "wearFeatures": {"男": 64, "女": 65},
+          "resourceExact": true
+        },
+        {
+          "name": "中型盔甲(男)",
+          "serviceReferenceIndex": 321,
+          "stdItemsIndex": 115,
+          "looks": 61,
+          "shape": 2,
+          "wearFeatures": {"男": 4},
+          "resourceExact": true
+        }
+      ]
+    }
+  ],
+  "quarantine": {
+    "recordCount": 805,
+    "reasons": [
+      "版本不属于锁定1.76发行版",
+      "无同名StdItems记录",
+      "客户端资源不精确或穿戴帧未验证",
+      "尚无逐件自动化测试"
+    ]
+  }
+}

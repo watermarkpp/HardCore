@@ -43,7 +43,7 @@ func _run() -> void:
 	var base_accuracy := int(PlayerState.computed_stats.get("accuracy", 0))
 	for item_name: String in ["虹魔项链", "虹魔手镯", "虹魔戒指"]:
 		_equip(item_name)
-	assert(int(PlayerState.computed_stats.get("life_steal_percent", 0)) == 9, "虹魔4+3+2吸血候选没有累计")
+	assert(int(PlayerState.computed_stats.get("life_steal_percent", 0)) == 15, "虹魔三件StdItems.AniCount=5没有累计")
 	assert(int(PlayerState.computed_stats.get("accuracy", 0)) == base_accuracy + 2, "虹魔三件套服务端准确+2没有接入")
 
 	var game: Node = load("res://scenes/main.tscn").instantiate()
@@ -55,10 +55,10 @@ func _run() -> void:
 	game.player.current_hp = game.player.max_hp - 30
 	var hp_before: int = int(game.player.current_hp)
 	assert(game._apply_physical_hit(enemies[0], 100), "虹魔近战测试攻击失败")
-	assert(game.player.current_hp == hp_before + 9, "虹魔近战吸血没有按9%恢复")
+	assert(game.player.current_hp == hp_before + 15, "虹魔近战吸血没有按15%恢复")
 	var rainbow_necklace: Dictionary = PlayerState.equipment["项链"]
 	PlayerState.damage_equipment_durability("项链", int(rainbow_necklace.get("max_durability", 1)))
-	assert(int(PlayerState.computed_stats.get("life_steal_percent", 0)) == 5, "零耐久虹魔项链没有撤销4%吸血")
+	assert(int(PlayerState.computed_stats.get("life_steal_percent", 0)) == 10, "零耐久虹魔项链没有撤销5%吸血")
 	assert(int(PlayerState.computed_stats.get("accuracy", 0)) == base_accuracy, "虹魔组件破损后仍保留全套准确奖励")
 
 	_reset_level_50()
@@ -87,5 +87,5 @@ func _run() -> void:
 	assert(PlayerState.available_special_actions().is_empty() and not game.hud.special_action_button.visible, "主动戒指零耐久后手机入口仍然存在")
 
 	assert(not PlayerState.has_special_effect("memory") and not PlayerState.has_special_effect("prayer"), "记忆/祈祷多人效果被擅自启用")
-	print("EQUIPMENT_SPECIAL_PHASE2_PASS：主动戒指、魔血125候选、虹魔9%候选、零耐久与单机边界正常")
+	print("EQUIPMENT_SPECIAL_PHASE2_PASS：主动戒指、魔血125、虹魔StdItems 15%、零耐久与单机边界正常")
 	get_tree().quit(0)

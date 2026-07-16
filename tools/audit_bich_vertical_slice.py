@@ -383,7 +383,7 @@ def main() -> None:
         check("装备系统", "175件装备目录与实例化", 3, 1.0 if item_count == 175 else min(1.0, item_count / 175),
               f"结构库装备{item_count}件，背包使用独立耐久实例。", "逐项以服务端StdItems覆盖网页候选数据。", "EQUIPMENT-DATA-1"),
         check("装备系统", "穿戴要求与属性结算", 3, 0.90 if equipment_rules_connected else 0.65,
-              "已按服务端源码接入Need 0—3、职业重量公式、武器/穿戴重量、衣服性别与双槽属性结算，并向HUD暴露重量上限。", "实际StdItems.DB仍缺失；175件具体字段继续保持61条A、114条B候选，未冒充服务端精确值。", "BICH-DATA-1"),
+              "已按服务端源码接入Need 0—3、职业重量公式、武器/穿戴重量、衣服性别与双槽属性结算；锁定社区1.76 StdItems逐件校准172件。", "落魄神兵、辟邪手镯、黑铁手套仍无同名数据库记录；社区发行版不冒充2003官服原库。", "BICH-DATA-1"),
         check("装备系统", "1.76装备槽结构", 2, 1.0 if len(equipment_slots) == 8 else 0.25,
               f"当前槽位：{equipment_slots}；手镯和戒指均已拆分左右槽。", "后续用客户端装备面板资源替换当前文字选择器。", "EQUIPMENT-ART-1"),
         check("装备系统", "耐久损耗与修理", 3, 0.90 if equipment_durability_connected else 0.0,
@@ -393,7 +393,7 @@ def main() -> None:
         check("装备系统", "特殊装备效果", 2, 0.95 if equipment_special_connected else 0.0,
               "八项戒指效果、手机主动按钮、魔血MP转HP、虹魔近战吸血和三件套奖励均已接入；装备配置支持覆盖、新增及暴击/速度/技能等级扩展。记忆组队传送与祈祷宠物叛变属于已确认的单机边界，不再列为实现缺陷。", "StdItems缺失使魔血25/件、虹魔4/3/2仍是B级候选。", "BICH-DATA-1-IMPORT"),
         check("装备系统", "客户端装备图标与穿戴外观", 2, 0.90 if equipment_art_connected and warrior_wear_connected else (0.72 if equipment_art_connected else 0.15),
-              f"175件装备已接入三类客户端物品图；当前男性战士{len(warrior_wear_mappings)}件武器/衣服接入Weapon/Hum五动作八方向动态图层，并保持零耐久外观。", f"仍有{len(warrior_wear.get('rejectedMappings', []))}件因候选Shape缺失或超出经典客户端容量而拒绝接入，等待实际StdItems复核。", "EQUIPMENT-DATA-1"),
+              f"175件装备已接入三类客户端物品图；男女三职业{len(warrior_wear_mappings)}件武器/衣服接入Weapon/Hum五动作八方向动态图层，并保持零耐久外观。", f"仍有{len(warrior_wear.get('rejectedMappings', []))}件因锁定StdItems缺名而拒绝接入，不猜测替换。", "EQUIPMENT-DATA-1"),
         check("装备系统", "装备与背包存档", 2, 1.0 if '"equipment": equipment' in state and "migrate_equipment_slots" in state and "LEGACY_SAVE_PATH" in state else 0.0,
               "装备实例、背包、耐久和v02到v03双槽迁移均已进入存读档路径。", "里程碑真机复验应用升级后旧存档自动迁移。", "BICH-MILESTONE"),
 
