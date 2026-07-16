@@ -2,10 +2,23 @@
   "content_layer": "personal_expansion",
   "design": {
     "design_size": [
+      80.0,
+      80.0
+    ],
+    "map_type": "outdoor_province",
+    "pre_resize_design_size": [
       64.0,
       64.0
     ],
-    "map_type": "outdoor_province",
+    "pre_scale_design_size": [
+      256.0,
+      256.0
+    ],
+    "resize_policy": "center_with_equal_8_tile_border",
+    "scale_factor": 0.3125,
+    "scale_rounding": "nearest_integer_half_up",
+    "size_decision_source": "user_2026-07-17_80x80",
+    "size_status": "user_confirmed_final",
     "source_size": [
       null,
       null
@@ -24,6 +37,7 @@
     "milestone": "BICH-USER-MAP-READY",
     "revision": 1.0,
     "runtime_approved": false,
+    "size_migration": "bich_64_to_80_centered",
     "workspace": "res://map_editor_workspace/bich_province"
   },
   "ground": {
@@ -41,7 +55,7 @@
     "mask_storage": "chunked_l8",
     "master_image": null,
     "origin_px": [
-      2048.0,
+      2560.0,
       16.0
     ],
     "paint_manifest": "res://assets/data/maps/ground_paint/sandbox_64.ground_paint_ops.json",
@@ -75,8 +89,8 @@
           0.0
         ],
         "tile": [
-          2.0,
-          3.0
+          10.0,
+          11.0
         ],
         "trigger_on_enter": true
       },
@@ -99,8 +113,8 @@
           0.0
         ],
         "tile": [
-          58.0,
-          5.0
+          66.0,
+          13.0
         ],
         "trigger_on_enter": true
       },
@@ -123,8 +137,8 @@
           0.0
         ],
         "tile": [
-          59.0,
-          60.0
+          67.0,
+          68.0
         ],
         "trigger_on_enter": true
       },
@@ -147,8 +161,8 @@
           0.0
         ],
         "tile": [
-          2.0,
-          60.0
+          10.0,
+          68.0
         ],
         "trigger_on_enter": true
       }
@@ -173,8 +187,8 @@
         "semantic_id": "monster_spawn_000001",
         "spawn_rule": "ambient",
         "tile": [
-          30.0,
-          54.0
+          38.0,
+          62.0
         ]
       },
       {
@@ -191,8 +205,8 @@
         "semantic_id": "monster_spawn_000002",
         "spawn_rule": "ambient",
         "tile": [
-          24.0,
-          53.0
+          32.0,
+          61.0
         ]
       },
       {
@@ -209,8 +223,8 @@
         "semantic_id": "monster_spawn_000003",
         "spawn_rule": "ambient",
         "tile": [
-          24.0,
-          58.0
+          32.0,
+          66.0
         ]
       },
       {
@@ -227,8 +241,8 @@
         "semantic_id": "monster_spawn_000004",
         "spawn_rule": "ambient",
         "tile": [
-          32.0,
-          60.0
+          40.0,
+          68.0
         ]
       },
       {
@@ -245,8 +259,8 @@
         "semantic_id": "monster_spawn_000005",
         "spawn_rule": "ambient",
         "tile": [
-          38.0,
-          53.0
+          46.0,
+          61.0
         ]
       },
       {
@@ -263,8 +277,8 @@
         "semantic_id": "monster_spawn_000006",
         "spawn_rule": "ambient",
         "tile": [
-          13.0,
-          52.0
+          21.0,
+          60.0
         ]
       },
       {
@@ -281,8 +295,8 @@
         "semantic_id": "monster_spawn_000007",
         "spawn_rule": "ambient",
         "tile": [
-          16.0,
-          47.0
+          24.0,
+          55.0
         ]
       },
       {
@@ -299,8 +313,8 @@
         "semantic_id": "monster_spawn_000008",
         "spawn_rule": "ambient",
         "tile": [
-          16.0,
-          59.0
+          24.0,
+          67.0
         ]
       },
       {
@@ -317,8 +331,8 @@
         "semantic_id": "monster_spawn_000010",
         "spawn_rule": "ambient",
         "tile": [
-          4.0,
-          51.0
+          12.0,
+          59.0
         ]
       },
       {
@@ -335,8 +349,8 @@
         "semantic_id": "monster_spawn_000011",
         "spawn_rule": "ambient",
         "tile": [
-          11.0,
-          39.0
+          19.0,
+          47.0
         ]
       },
       {
@@ -353,8 +367,8 @@
         "semantic_id": "monster_spawn_000012",
         "spawn_rule": "ambient",
         "tile": [
-          3.0,
-          28.0
+          11.0,
+          36.0
         ]
       },
       {
@@ -371,8 +385,8 @@
         "semantic_id": "monster_spawn_000013",
         "spawn_rule": "ambient",
         "tile": [
-          5.0,
-          21.0
+          13.0,
+          29.0
         ]
       },
       {
@@ -389,8 +403,8 @@
         "semantic_id": "monster_spawn_000014",
         "spawn_rule": "ambient",
         "tile": [
-          2.0,
-          35.0
+          10.0,
+          43.0
         ]
       },
       {
@@ -407,8 +421,8 @@
         "semantic_id": "monster_spawn_000015",
         "spawn_rule": "ambient",
         "tile": [
-          2.0,
-          40.0
+          10.0,
+          48.0
         ]
       },
       {
@@ -425,8 +439,8 @@
         "semantic_id": "monster_spawn_000009",
         "spawn_rule": "ambient",
         "tile": [
-          47.0,
-          59.0
+          55.0,
+          67.0
         ]
       },
       {
@@ -443,8 +457,8 @@
         "semantic_id": "monster_spawn_000018",
         "spawn_rule": "ambient",
         "tile": [
-          60.0,
-          50.0
+          68.0,
+          58.0
         ]
       },
       {
@@ -461,8 +475,8 @@
         "semantic_id": "monster_spawn_000019",
         "spawn_rule": "ambient",
         "tile": [
-          54.0,
-          42.0
+          62.0,
+          50.0
         ]
       },
       {
@@ -479,8 +493,8 @@
         "semantic_id": "monster_spawn_000020",
         "spawn_rule": "ambient",
         "tile": [
-          46.0,
-          40.0
+          54.0,
+          48.0
         ]
       },
       {
@@ -497,8 +511,8 @@
         "semantic_id": "monster_spawn_000021",
         "spawn_rule": "ambient",
         "tile": [
-          44.0,
-          50.0
+          52.0,
+          58.0
         ]
       },
       {
@@ -515,8 +529,8 @@
         "semantic_id": "monster_spawn_000022",
         "spawn_rule": "ambient",
         "tile": [
-          51.0,
-          33.0
+          59.0,
+          41.0
         ]
       },
       {
@@ -533,8 +547,8 @@
         "semantic_id": "monster_spawn_000023",
         "spawn_rule": "ambient",
         "tile": [
-          58.0,
-          32.0
+          66.0,
+          40.0
         ]
       },
       {
@@ -551,8 +565,8 @@
         "semantic_id": "monster_spawn_000024",
         "spawn_rule": "ambient",
         "tile": [
-          60.0,
-          24.0
+          68.0,
+          32.0
         ]
       },
       {
@@ -569,8 +583,8 @@
         "semantic_id": "monster_spawn_000025",
         "spawn_rule": "ambient",
         "tile": [
-          52.0,
-          25.0
+          60.0,
+          33.0
         ]
       },
       {
@@ -587,8 +601,8 @@
         "semantic_id": "monster_spawn_000026",
         "spawn_rule": "ambient",
         "tile": [
-          58.0,
-          15.0
+          66.0,
+          23.0
         ]
       },
       {
@@ -605,8 +619,8 @@
         "semantic_id": "monster_spawn_000028",
         "spawn_rule": "ambient",
         "tile": [
-          41.0,
-          60.0
+          49.0,
+          68.0
         ]
       },
       {
@@ -623,8 +637,8 @@
         "semantic_id": "monster_spawn_000029",
         "spawn_rule": "ambient",
         "tile": [
-          44.0,
-          6.0
+          52.0,
+          14.0
         ]
       },
       {
@@ -641,8 +655,8 @@
         "semantic_id": "monster_spawn_000030",
         "spawn_rule": "ambient",
         "tile": [
-          36.0,
-          3.0
+          44.0,
+          11.0
         ]
       },
       {
@@ -659,8 +673,8 @@
         "semantic_id": "monster_spawn_000031",
         "spawn_rule": "ambient",
         "tile": [
-          30.0,
-          4.0
+          38.0,
+          12.0
         ]
       },
       {
@@ -677,8 +691,8 @@
         "semantic_id": "monster_spawn_000032",
         "spawn_rule": "ambient",
         "tile": [
-          23.0,
-          3.0
+          31.0,
+          11.0
         ]
       },
       {
@@ -695,8 +709,8 @@
         "semantic_id": "monster_spawn_000033",
         "spawn_rule": "ambient",
         "tile": [
-          21.0,
-          9.0
+          29.0,
+          17.0
         ]
       },
       {
@@ -713,8 +727,8 @@
         "semantic_id": "monster_spawn_000034",
         "spawn_rule": "ambient",
         "tile": [
-          10.0,
-          3.0
+          18.0,
+          11.0
         ]
       },
       {
@@ -731,8 +745,8 @@
         "semantic_id": "monster_spawn_000035",
         "spawn_rule": "ambient",
         "tile": [
-          9.0,
-          57.0
+          17.0,
+          65.0
         ]
       },
       {
@@ -749,8 +763,8 @@
         "semantic_id": "monster_spawn_000036",
         "spawn_rule": "ambient",
         "tile": [
-          8.0,
-          62.0
+          16.0,
+          70.0
         ]
       },
       {
@@ -767,8 +781,8 @@
         "semantic_id": "monster_spawn_000037",
         "spawn_rule": "ambient",
         "tile": [
-          4.0,
-          15.0
+          12.0,
+          23.0
         ]
       },
       {
@@ -785,8 +799,8 @@
         "semantic_id": "monster_spawn_000038",
         "spawn_rule": "ambient",
         "tile": [
-          2.0,
-          9.0
+          10.0,
+          17.0
         ]
       },
       {
@@ -803,8 +817,8 @@
         "semantic_id": "monster_spawn_000039",
         "spawn_rule": "ambient",
         "tile": [
-          9.0,
-          10.0
+          17.0,
+          18.0
         ]
       },
       {
@@ -821,8 +835,8 @@
         "semantic_id": "monster_spawn_000040",
         "spawn_rule": "ambient",
         "tile": [
-          13.0,
-          14.0
+          21.0,
+          22.0
         ]
       },
       {
@@ -839,8 +853,8 @@
         "semantic_id": "monster_spawn_000041",
         "spawn_rule": "ambient",
         "tile": [
-          41.0,
-          11.0
+          49.0,
+          19.0
         ]
       },
       {
@@ -857,8 +871,8 @@
         "semantic_id": "monster_spawn_000042",
         "spawn_rule": "ambient",
         "tile": [
-          34.0,
-          10.0
+          42.0,
+          18.0
         ]
       },
       {
@@ -875,8 +889,8 @@
         "semantic_id": "monster_spawn_000043",
         "spawn_rule": "ambient",
         "tile": [
-          16.0,
-          4.0
+          24.0,
+          12.0
         ]
       },
       {
@@ -893,8 +907,8 @@
         "semantic_id": "monster_spawn_000044",
         "spawn_rule": "ambient",
         "tile": [
-          44.0,
-          20.0
+          52.0,
+          28.0
         ]
       },
       {
@@ -911,8 +925,8 @@
         "semantic_id": "monster_spawn_000045",
         "spawn_rule": "ambient",
         "tile": [
-          51.0,
-          12.0
+          59.0,
+          20.0
         ]
       },
       {
@@ -929,8 +943,8 @@
         "semantic_id": "monster_spawn_000046",
         "spawn_rule": "ambient",
         "tile": [
-          51.0,
-          5.0
+          59.0,
+          13.0
         ]
       },
       {
@@ -947,8 +961,8 @@
         "semantic_id": "monster_spawn_000047",
         "spawn_rule": "ambient",
         "tile": [
-          51.0,
-          54.0
+          59.0,
+          62.0
         ]
       },
       {
@@ -965,8 +979,8 @@
         "semantic_id": "monster_spawn_000048",
         "spawn_rule": "ambient",
         "tile": [
-          60.0,
-          40.0
+          68.0,
+          48.0
         ]
       }
     ],
@@ -1009,12 +1023,12 @@
         "semantic_id": "npc_000001",
         "service_role": "shop",
         "tile": [
-          31.0,
-          20.0
+          39.0,
+          28.0
         ],
         "tile_anchor": [
-          23.0,
-          32.0
+          31.0,
+          40.0
         ]
       },
       {
@@ -1055,12 +1069,12 @@
         "semantic_id": "npc_000002",
         "service_role": "shop",
         "tile": [
-          18.0,
-          21.0
+          26.0,
+          29.0
         ],
         "tile_anchor": [
-          23.0,
-          33.0
+          31.0,
+          41.0
         ]
       },
       {
@@ -1101,12 +1115,12 @@
         "semantic_id": "npc_000003",
         "service_role": "shop",
         "tile": [
-          32.0,
-          38.0
+          40.0,
+          46.0
         ],
         "tile_anchor": [
-          33.0,
-          41.0
+          41.0,
+          49.0
         ]
       },
       {
@@ -1147,12 +1161,12 @@
         "semantic_id": "npc_000004",
         "service_role": "trainer",
         "tile": [
-          24.0,
-          39.0
+          32.0,
+          47.0
         ],
         "tile_anchor": [
-          23.0,
-          38.0
+          31.0,
+          46.0
         ]
       },
       {
@@ -1193,12 +1207,12 @@
         "semantic_id": "npc_000005",
         "service_role": "quest",
         "tile": [
-          16.0,
-          31.0
+          24.0,
+          39.0
         ],
         "tile_anchor": [
-          26.0,
-          29.0
+          34.0,
+          37.0
         ]
       }
     ],
@@ -1254,12 +1268,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          2.0,
-          3.0
+          10.0,
+          11.0
         ],
         "tile_anchor": [
-          0.0,
-          0.0
+          8.0,
+          8.0
         ]
       },
       {
@@ -1313,12 +1327,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          58.0,
-          5.0
+          66.0,
+          13.0
         ],
         "tile_anchor": [
-          56.0,
-          0.0
+          64.0,
+          8.0
         ]
       },
       {
@@ -1372,12 +1386,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          59.0,
-          60.0
+          67.0,
+          68.0
         ],
         "tile_anchor": [
-          56.0,
-          58.0
+          64.0,
+          66.0
         ]
       },
       {
@@ -1431,12 +1445,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          15.0,
-          23.0
+          23.0,
+          31.0
         ],
         "tile_anchor": [
-          13.0,
-          24.0
+          21.0,
+          32.0
         ]
       },
       {
@@ -1490,12 +1504,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          35.0,
-          17.0
+          43.0,
+          25.0
         ],
         "tile_anchor": [
-          32.0,
-          17.0
+          40.0,
+          25.0
         ]
       },
       {
@@ -1549,12 +1563,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          22.0,
-          43.0
+          30.0,
+          51.0
         ],
         "tile_anchor": [
-          22.0,
-          36.0
+          30.0,
+          44.0
         ]
       },
       {
@@ -1608,12 +1622,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          38.0,
-          37.0
+          46.0,
+          45.0
         ],
         "tile_anchor": [
-          34.0,
-          28.0
+          42.0,
+          36.0
         ]
       },
       {
@@ -1667,12 +1681,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          26.0,
-          17.0
+          34.0,
+          25.0
         ],
         "tile_anchor": [
-          23.0,
-          12.0
+          31.0,
+          20.0
         ]
       },
       {
@@ -1726,12 +1740,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          31.0,
-          47.0
+          39.0,
+          55.0
         ],
         "tile_anchor": [
-          26.0,
-          37.0
+          34.0,
+          45.0
         ]
       },
       {
@@ -1785,12 +1799,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          13.0,
-          31.0
+          21.0,
+          39.0
         ],
         "tile_anchor": [
-          10.0,
-          28.0
+          18.0,
+          36.0
         ]
       },
       {
@@ -1844,12 +1858,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          43.0,
-          29.0
+          51.0,
+          37.0
         ],
         "tile_anchor": [
-          40.0,
-          26.0
+          48.0,
+          34.0
         ]
       },
       {
@@ -1903,12 +1917,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          55.0,
-          52.0
+          63.0,
+          60.0
         ],
         "tile_anchor": [
-          51.0,
-          47.0
+          59.0,
+          55.0
         ]
       },
       {
@@ -1962,12 +1976,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          2.0,
-          60.0
+          10.0,
+          68.0
         ],
         "tile_anchor": [
-          0.0,
-          58.0
+          8.0,
+          66.0
         ]
       },
       {
@@ -2021,12 +2035,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          10.0,
-          46.0
+          18.0,
+          54.0
         ],
         "tile_anchor": [
-          8.0,
-          44.0
+          16.0,
+          52.0
         ]
       },
       {
@@ -2080,12 +2094,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          15.0,
-          9.0
+          23.0,
+          17.0
         ],
         "tile_anchor": [
-          13.0,
-          7.0
+          21.0,
+          15.0
         ]
       },
       {
@@ -2139,12 +2153,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          52.0,
-          18.0
+          60.0,
+          26.0
         ],
         "tile_anchor": [
-          48.0,
-          16.0
+          56.0,
+          24.0
         ]
       },
       {
@@ -2198,12 +2212,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          34.0,
-          55.0
+          42.0,
+          63.0
         ],
         "tile_anchor": [
-          34.0,
-          55.0
+          42.0,
+          63.0
         ]
       },
       {
@@ -2257,12 +2271,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          17.0,
-          53.0
+          25.0,
+          61.0
         ],
         "tile_anchor": [
-          17.0,
-          53.0
+          25.0,
+          61.0
         ]
       },
       {
@@ -2316,12 +2330,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6.0,
-          32.0
+          14.0,
+          40.0
         ],
         "tile_anchor": [
-          6.0,
-          32.0
+          14.0,
+          40.0
         ]
       },
       {
@@ -2375,12 +2389,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          21.0
+          9.0,
+          29.0
         ],
         "tile_anchor": [
-          1.0,
-          21.0
+          9.0,
+          29.0
         ]
       },
       {
@@ -2434,12 +2448,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          25.0,
-          7.0
+          33.0,
+          15.0
         ],
         "tile_anchor": [
-          25.0,
-          7.0
+          33.0,
+          15.0
         ]
       },
       {
@@ -2493,12 +2507,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          27.0,
-          1.0
+          35.0,
+          9.0
         ],
         "tile_anchor": [
-          27.0,
-          1.0
+          35.0,
+          9.0
         ]
       },
       {
@@ -2552,12 +2566,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          51.0,
-          12.0
+          59.0,
+          20.0
         ],
         "tile_anchor": [
-          51.0,
-          12.0
+          59.0,
+          20.0
         ]
       },
       {
@@ -2611,12 +2625,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          44.0,
-          3.0
+          52.0,
+          11.0
         ],
         "tile_anchor": [
-          44.0,
-          3.0
+          52.0,
+          11.0
         ]
       },
       {
@@ -2670,12 +2684,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          42.0,
-          15.0
+          50.0,
+          23.0
         ],
         "tile_anchor": [
-          42.0,
-          15.0
+          50.0,
+          23.0
         ]
       },
       {
@@ -2729,12 +2743,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          58.0,
-          40.0
+          66.0,
+          48.0
         ],
         "tile_anchor": [
-          58.0,
-          40.0
+          66.0,
+          48.0
         ]
       },
       {
@@ -2788,12 +2802,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          47.0,
-          35.0
+          55.0,
+          43.0
         ],
         "tile_anchor": [
-          47.0,
-          35.0
+          55.0,
+          43.0
         ]
       },
       {
@@ -2847,12 +2861,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          46.0,
-          24.0
+          54.0,
+          32.0
         ],
         "tile_anchor": [
-          46.0,
-          24.0
+          54.0,
+          32.0
         ]
       }
     ],
@@ -2875,60 +2889,60 @@
         "minimum_monster_clearance_tiles": 3.0,
         "npc_hull_tiles": [
           [
-            16.0,
-            31.0
+            24.0,
+            39.0
           ],
           [
-            18.0,
-            21.0
+            26.0,
+            29.0
           ],
           [
-            31.0,
-            20.0
+            39.0,
+            28.0
+          ],
+          [
+            40.0,
+            46.0
           ],
           [
             32.0,
-            38.0
-          ],
-          [
-            24.0,
-            39.0
+            47.0
           ]
         ],
         "polygon_tiles": [
           [
-            11.0,
-            32.0
+            19.0,
+            40.0
           ],
           [
-            15.0,
-            17.0
+            23.0,
+            25.0
           ],
           [
-            34.0,
-            16.0
+            42.0,
+            24.0
           ],
           [
-            35.0,
-            42.0
+            43.0,
+            50.0
           ],
           [
-            24.0,
-            44.0
+            32.0,
+            52.0
           ]
         ],
         "radius_tiles": 5.0,
         "return_anchor": true,
         "return_tile": [
-          25.0,
-          29.0
+          33.0,
+          37.0
         ],
         "runtime_export": true,
         "semantic_id": "safe_area_000001",
         "shape": "polygon",
         "tile": [
-          32.0,
-          32.0
+          40.0,
+          40.0
         ]
       }
     ],

@@ -20,5 +20,5 @@ func _init() -> void:
 	assert(initialized.ok, str(initialized.get("errors", [])))
 	var saved := MapEditorSaveService.save_document(document)
 	assert(saved.ok, str(saved.get("errors", [])))
-	print("BICH_BLANK_MANUAL_TEMPLATE_PASS size=64x64 layers_empty=true path=%s" % saved.path)
+	print("BICH_BLANK_MANUAL_TEMPLATE_PASS size=80x80 layers_empty=true path=%s" % saved.path)
 	quit()

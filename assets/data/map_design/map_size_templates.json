@@ -5,7 +5,7 @@
     "editor": "godot_iso_64x32"
   },
   "templates": [
-	{"id":"bich_city_outdoor","default_size":[64,64],"max_size":[64,64],"strategy":"preserve_function"},
+	{"id":"bich_city_outdoor","default_size":[80,80],"max_size":[80,80],"strategy":"preserve_function"},
     {"id":"outdoor_province","default_size":[256,256],"max_size":[320,320],"strategy":"remake_compact"},
     {"id":"outdoor_field","default_size":[180,180],"max_size":[240,240],"strategy":"shrink_and_recompose"},
     {"id":"city_embedded","default_size":[80,80],"max_size":[120,120],"strategy":"remake_compact"},

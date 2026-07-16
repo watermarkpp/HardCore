@@ -5,11 +5,12 @@ func _ready()->void:
 	var game:Node=load("res://scenes/main.tscn").instantiate();add_child(game)
 	await get_tree().process_frame;await get_tree().process_frame;await get_tree().process_frame
 	var runtime:=MapEditorRuntimeBridge.load_bich();assert(not runtime.is_empty())
-	assert(game.background._editor_runtime_visual.get("design_size",[])==[64.0,64.0] or game.background._editor_runtime_visual.get("design_size",[])==[64,64])
+	assert(game.background._editor_runtime_visual.get("design_size",[])==[80.0,80.0] or game.background._editor_runtime_visual.get("design_size",[])==[80,80])
 	var environment_sprites:=0
 	for node:Node in game.background._environment_nodes:
 		if node is Sprite2D:environment_sprites+=1
-	assert(environment_sprites==8+runtime.instances.size(), "environment sprites=%d expected=%d" % [environment_sprites, 8+runtime.instances.size()])
+	var visual_chunk_count := (game.background._editor_runtime_visual.get("chunks", []) as Array).size()
+	assert(environment_sprites==visual_chunk_count+runtime.instances.size(), "environment sprites=%d expected=%d" % [environment_sprites, visual_chunk_count+runtime.instances.size()])
 	var expected_npcs:={}
 	for entry:Dictionary in runtime.semantics.npc_points:expected_npcs[str(entry.display_name)]=MapEditorRuntimeBridge.tile_to_world(runtime,entry.tile)
 	var actual_npcs:=0
@@ -28,7 +29,7 @@ func _ready()->void:
 			assert(node.visual.uses_final_art(), "比奇怪物仍在使用占位外观：%s" % node.display_name)
 			node.visual.play_attack(0.62);node.visual._process(0.05)
 			assert(node.visual.current_state=="attack", "怪物攻击动作未进入播放状态：%s" % node.display_name)
-	assert(MapEditorRuntimeBridge.home_position().is_equal_approx(MapEditorRuntimeBridge.tile_to_world(runtime,[25,29])))
+	assert(MapEditorRuntimeBridge.home_position().is_equal_approx(MapEditorRuntimeBridge.tile_to_world(runtime,[33,37])))
 	var sample:EnemyActor=get_tree().get_nodes_in_group("enemies")[0];sample.facing=Vector2.RIGHT;sample.visual._process(0.01)
 	var expected_row:=ArtSpec.mir2_client_direction_row(Vector2.RIGHT) if str(sample.visual.active_resources.get("direction_mode",""))=="mir2_north_first" else ArtSpec.direction_index(Vector2.RIGHT)
 	assert(sample.visual.current_direction==expected_row)

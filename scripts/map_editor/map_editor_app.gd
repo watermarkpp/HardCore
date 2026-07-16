@@ -6,6 +6,7 @@ var map_id_edit: LineEdit
 var runtime_id_edit: SpinBox
 var display_name_edit: LineEdit
 var map_type_option: OptionButton
+var map_template_option: OptionButton
 var size_label: Label
 var path_label: Label
 var status_label: Label
@@ -82,6 +83,13 @@ func _build_ui() -> void:
 	sidebar_scroll.add_child(sidebar)
 	var title := Label.new(); title.text = "MSE-V3.5.1 场景编辑器"; title.add_theme_font_size_override("font_size", 15); sidebar.add_child(title)
 	var subtitle := Label.new(); subtitle.text = "人类与 Codex 共用 Schema v4"; subtitle.modulate = Color("95a4b6"); sidebar.add_child(subtitle)
+	var template_label := Label.new(); template_label.text = "后续地图空模板"; sidebar.add_child(template_label)
+	map_template_option = OptionButton.new(); map_template_option.fit_to_longest_item = false
+	for template: Dictionary in MapDesignCatalogService.blank_templates():
+		var template_size: Array = template.get("design_size", [0, 0])
+		map_template_option.add_item("%s · %d×%d" % [str(template.get("display_name", template.get("map_id", ""))), int(template_size[0]), int(template_size[1])])
+		map_template_option.set_item_metadata(map_template_option.item_count - 1, str(template.get("template_id", "")))
+	sidebar.add_child(map_template_option)
 	map_id_edit = _field(sidebar, "地图 ID", "sandbox_64")
 	display_name_edit = _field(sidebar, "显示名称", "64格沙盒")
 	var runtime_label := Label.new(); runtime_label.text = "运行地图 ID"; sidebar.add_child(runtime_label)
@@ -91,10 +99,12 @@ func _build_ui() -> void:
 	for entry: Dictionary in MapDesignCatalogService._read_json(MapDesignCatalogService.TEMPLATE_PATH).get("templates", []):
 		map_type_option.add_item(_map_type_chinese(str(entry.id))); map_type_option.set_item_metadata(map_type_option.item_count - 1, str(entry.id))
 	map_type_option.select(_find_type_index("quest_room")); sidebar.add_child(map_type_option)
-	var create_button := Button.new(); create_button.text = "按单机目录新建"; create_button.pressed.connect(_on_create_pressed); sidebar.add_child(create_button)
+	var template_create_button := Button.new(); template_create_button.text = "从所选空模板新建"; template_create_button.pressed.connect(_on_blank_template_create_pressed); sidebar.add_child(template_create_button)
+	var create_button := Button.new(); create_button.text = "按当前字段新建"; create_button.pressed.connect(_on_create_pressed); sidebar.add_child(create_button)
 	var bich_button := Button.new(); bich_button.text = "打开 BICH-MAP-1 比奇正式地图"; bich_button.pressed.connect(func(): _open_document_path(MapEditorSaveService.default_path("bich_province"))); sidebar.add_child(bich_button)
 	size_label = Label.new(); size_label.text = "设计尺寸：-"; sidebar.add_child(size_label)
 	path_label = Label.new(); path_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; path_label.modulate = Color("8fb9c7"); sidebar.add_child(path_label)
+	map_template_option.item_selected.connect(_on_map_template_selected)
 	var ground_button := Button.new(); ground_button.text = "初始化虚拟地面 Chunk"; ground_button.pressed.connect(_on_initialize_ground_pressed); sidebar.add_child(ground_button)
 	var paint_button := Button.new(); paint_button.text = "中心格模拟首次地面编辑"; paint_button.pressed.connect(_on_demo_ground_edit_pressed); sidebar.add_child(paint_button)
 	var save_button := Button.new(); save_button.text = "保存工作文件"; save_button.pressed.connect(_on_save_pressed); sidebar.add_child(save_button)
@@ -194,19 +204,51 @@ func _on_create_pressed() -> void:
 	_create_map(map_id_edit.text.strip_edges(), map_type, int(runtime_id_edit.value), display_name_edit.text.strip_edges())
 
 
+func _on_map_template_selected(index: int) -> void:
+	var template_id := str(map_template_option.get_item_metadata(index))
+	var template := MapDesignCatalogService.find_blank_template(template_id)
+	if template.is_empty(): return
+	map_id_edit.text = str(template.get("map_id", ""))
+	display_name_edit.text = str(template.get("display_name", ""))
+	runtime_id_edit.value = int(template.get("runtime_map_id", 0))
+	map_type_option.select(_find_type_index(str(template.get("map_type", ""))))
+	var design_size: Array = template.get("design_size", [0, 0])
+	size_label.text = "模板尺寸：%d × %d（空地图）" % [int(design_size[0]), int(design_size[1])]
+	path_label.text = "新工作文件：%s" % ProjectSettings.globalize_path(MapEditorSaveService.default_path(str(template.get("map_id", ""))))
+
+
+func _on_blank_template_create_pressed() -> void:
+	if map_template_option.selected < 0: return
+	var template_id := str(map_template_option.get_item_metadata(map_template_option.selected))
+	var document := MapEditorTypes.new_map_from_blank_template(template_id)
+	if document.is_empty():
+		status_label.text = "空模板不存在：%s" % template_id
+		return
+	var document_path := MapEditorSaveService.default_path(str(document.map_id))
+	var manifest_path := str(document.ground.get("workspace_manifest", ""))
+	if FileAccess.file_exists(document_path) or (not manifest_path.is_empty() and FileAccess.file_exists(manifest_path)):
+		status_label.text = "该地图工作区已经存在，请使用“重新打开工作文件”，空模板不会覆盖已有内容"
+		return
+	_adopt_new_document(document, "已从空模板新建")
+
+
 func _create_map(map_id: String, map_type: String, runtime_map_id: int, display_name: String) -> void:
 	if map_id.is_empty(): status_label.text = "地图 ID 不能为空"; return
-	current_document = MapEditorTypes.new_map_from_catalog(map_id, map_type, runtime_map_id, display_name)
+	_adopt_new_document(MapEditorTypes.new_map_from_catalog(map_id, map_type, runtime_map_id, display_name), "已新建")
+
+
+func _adopt_new_document(document: Dictionary, status_prefix: String) -> void:
+	current_document = document
 	map_id_edit.text = str(current_document.map_id); display_name_edit.text = str(current_document.display_name); runtime_id_edit.value = int(current_document.runtime_map_id)
 	map_type_option.select(_find_type_index(str(current_document.design.map_type)))
 	var design_size: Array = current_document.design.design_size
 	size_label.text = "设计尺寸：%d × %d（64×32 等距格）" % [int(design_size[0]), int(design_size[1])]
-	path_label.text = "工作文件：%s" % ProjectSettings.globalize_path(MapEditorSaveService.default_path(map_id))
-	status_label.text = "已新建；source_size 不会覆盖 design_size"
+	path_label.text = "工作文件：%s" % ProjectSettings.globalize_path(MapEditorSaveService.default_path(str(current_document.map_id)))
+	status_label.text = "%s；source_size 不会覆盖 design_size" % status_prefix
 	preview.set_document(current_document)
 	var initialized := MapEditorGroundService.initialize(current_document)
 	if initialized.ok:
-		status_label.text = "已新建：%d 个虚拟空白 Chunk，尚未落盘地面图" % (initialized.manifest.chunks as Array).size()
+		status_label.text = "%s：%d 个虚拟空白 Chunk，尚未落盘地面图" % [status_prefix, (initialized.manifest.chunks as Array).size()]
 		preview.set_ground_state(initialized.state)
 
 

@@ -3,16 +3,24 @@
   "map_id": "bich_province",
   "runtime_map_id": 4,
   "source_workspace": "map_editor_workspace/bich_province",
-  "status": "user_confirmed_ready",
+  "status": "user_confirmed_ready_80x80",
   "content": {
     "design_size": [
-      64.0,
-      64.0
+      80,
+      80
     ],
     "instances": 28,
     "monster_spawns": 45,
     "npcs": 5,
     "doors": 4,
-    "doors_pending_target_configuration": 4
+    "doors_pending_target_configuration": 4,
+    "centered_from_size": [
+      64,
+      64
+    ],
+    "tile_shift": [
+      8,
+      8
+    ]
   }
 }
