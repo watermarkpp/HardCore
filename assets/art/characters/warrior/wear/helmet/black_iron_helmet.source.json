@@ -1,17 +1,39 @@
 {
-  "schemaVersion": 6,
+  "schemaVersion": 15,
   "item": "Black Iron Helmet / 黑铁头盔",
   "classification": "project-generated presentation asset based on verified classic evidence",
   "referenceIcon": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00344.png",
   "referenceIconSha256": "24f535d351cdd18110b00ffda717a23dc2df3cf0b2890b1f7e80cf64d96b47df",
   "referenceIconImage": 344,
   "approvedDirectionReferences": {
-    "rearNNeNw": "res://dev_art_sources/reference/generated/black_iron_helmet/rear_n_ne_nw_transparent.png",
-    "rearNNeNwSha256": "c21c824ad91764772a1c2d00e98c42ea5acd46b36438b24b5956a902cc3f98b7",
-    "frontSideConcept": "res://dev_art_sources/reference/generated/black_iron_helmet/front_side_direction_concept.png",
-    "frontSideConceptSha256": "6f914181f66c5c6d326c11458bc6a84794675af5f125001ea040ef0160bafbe7",
-    "canonicalManifest": "res://dev_art_sources/reference/generated/black_iron_helmet/canonical_directions/manifest.json",
-    "canonicalManifestSha256": "2e7fea750d295072d89fce3380fdfb1dad92e316a919f6e418469a83859b267d",
+    "approvedConcept": "res://assets/art/characters/warrior/wear/helmet/source/black_iron_helmet_approved_meteoric_narrow_jaw_20260717.png",
+    "approvedConceptSha256": "520a37d6b8ca40544ffbfbdb41de13009485d6799d96d434098028d305e8a70c",
+    "directDirectionCutouts": "res://outputs/visual_acceptance/black_iron_helmet_direct_design",
+    "directUsePolicy": "The eight approved views are used directly; processing is limited to grey-background removal and aspect-preserving resize.",
+    "sourceSlotDirectionOrder": [
+      "N",
+      "E",
+      "W",
+      "SW",
+      "S",
+      "SE",
+      "NW",
+      "NE"
+    ],
+    "canonicalRowSourceSlots": [
+      0,
+      7,
+      1,
+      5,
+      4,
+      3,
+      2,
+      6
+    ],
+    "godotRenderer": "res://tools/render_black_iron_helmet_3d.gd",
+    "godotRendererSha256": "1702bcb21c3a0ab8e273d2c32cecd4bfc4e155203ecebebe010727aaaedcc277",
+    "godotRenderManifest": "res://outputs/visual_acceptance/black_iron_helmet_3d/manifest.json",
+    "godotRenderManifestSha256": "40a4ea55b4fdcdfd9e0b15d042d3c23be5f5d06206eda2ed02b4d3a2a91b2f14",
     "acceptedRowMapping": [
       "N",
       "NE",
@@ -27,7 +49,7 @@
   "anchorLibraryImageCount": 22242,
   "anchorAppearance": 2,
   "anchorStride": 2224,
-  "anchorUsage": "position/motion only; no anchor-source pixels copied",
+  "anchorUsage": "same-cell position/motion and death-facing calibration only; no anchor-source pixels copied",
   "completeClientScan": "res://outputs/resource_catalog/complete_client_frame_catalog/manifest.json",
   "completeClientCoverage": {
     "libraries": 122,
@@ -36,7 +58,7 @@
   },
   "clientHelmetParameterBaseline": {
     "path": "res://outputs/resource_catalog/black_iron_helmet/client_helmet_parameter_baseline.json",
-    "sha256": "30209081d1580a0c9c6dd7449390423b222ea82cec46279bbe4ecf11a5ba9f67",
+    "sha256": "c5180e7694594c485e64a014dba80a9ee196ebb7943d6147e13d7f66c6c513dd",
     "directionRuntimeMaxSize": {
       "N": [
         19,
@@ -71,7 +93,61 @@
         21
       ]
     },
+    "directionRuntimeTargetSize": {
+      "N": [
+        13,
+        16
+      ],
+      "NE": [
+        18,
+        18
+      ],
+      "E": [
+        15,
+        20
+      ],
+      "SE": [
+        16,
+        23
+      ],
+      "S": [
+        14,
+        21
+      ],
+      "SW": [
+        16,
+        23
+      ],
+      "W": [
+        16,
+        20
+      ],
+      "NW": [
+        16,
+        17
+      ]
+    },
+    "directionRuntimeOpaquePixels": {
+      "N": 141,
+      "NE": 158,
+      "E": 148,
+      "SE": 136,
+      "S": 113,
+      "SW": 142,
+      "W": 150,
+      "NW": 156
+    },
+    "poseAnchorRule": "For every action/direction/frame, use the same-cell Hair.wil male-warrior head centroid to reject a separated non-head Helmet.wil cluster, then place the generated helmet at the median centroid of the remaining head-proximal samples.",
+    "poseAnchorRecords": 184,
+    "outlierFilteredPoseRecords": 20,
     "deathCanonicalRotate90Degrees": false
+  },
+  "deathPoseBaseline": {
+    "path": "res://outputs/resource_catalog/black_iron_helmet/death_pose_baseline.json",
+    "sha256": "ccec734996b10eb55f4c8fdb254970f05e961f1f710990d375489299d9053185",
+    "records": 32,
+    "mappingRule": "Every record is the same direction row and death-frame column in warrior_death.png, Helmet.wil and Hair.wil.",
+    "rendererPolicy": "A renderer must consume all 32 records independently; it may not copy one direction's death pose into another direction."
   },
   "sourceEvidence": {
     "runtimeHeadLibrary": "res://dev_art_sources/reference/mir2opensource_2013_client/MirObjects/PlayerObject.cs",
@@ -82,31 +158,30 @@
   },
   "generation": {
     "equipmentIcon": "Verified StateItem #344 remains the equipment-window icon and unique identity evidence; its old derived world pixels are not used.",
-    "runtimeDirections": "All eight runtime views come from the newly generated canonical direction family assembled from the user-supplied concept images.",
-    "rearDirections": "N/NE/NW come from the user-approved magenta-background rear sheet.",
-    "frontAndSideDirections": "E/SE/S/SW/W come from visual panels 2/3/4/6/7 of the supplied nine-panel concept; incorrect labels and duplicate panels are ignored.",
+    "runtimeDirections": "The approved source slots are visually classified as N/E/W/SW/S/SE/NW/NE, then reordered through source slots 0/7/1/5/4/3/2/6 into canonical game rows N/NE/E/SE/S/SW/W/NW; only the grey backdrop is removed and each crop is resized with its aspect ratio preserved.",
+    "deathDirections": "Every N/NE/E/SE/S/SW/W/NW x F0/F1/F2/F3 cell is independently rendered from the same-row same-frame evidence record.",
     "authorship": "Project-generated extension; not claimed as an original client world frame.",
     "aiGenerated": true,
+    "aiConceptUsed": true,
     "aiPixelsLimitedTo": [
-      "N",
-      "NE",
-      "E",
-      "SE",
-      "S",
-      "SW",
-      "W",
-      "NW"
+      "idle",
+      "walk",
+      "attack",
+      "hit"
     ],
+    "runtimePixelGenerator": "Direct approved-design crops with background removal and aspect-preserving resize for standing/action directions; Godot 4.7 orthographic complete-geometry renderer for death poses.",
     "oldDerivedStateItemWorldPixelsUsed": false,
-    "scalePolicy": "Fit each direction at 72.25% of the p75 width/height envelope measured from all six real client Helmet.wil appearances: two successive 15% reductions (0.85 * 0.85).",
-    "runtimeEnvelopeScale": 0.7224999999999999,
-    "deathPosePolicy": "Follow the per-frame client head anchor; South death frames 2/3 use a foreshortened crown derived from the approved Black Iron N/back-top geometry instead of a standing front sprite or whole-sprite 90-degree rotation."
+    "scalePolicy": "Choose the aspect-preserving size that stays inside the same-direction client median envelope and most closely matches 1.15x its alpha-weighted visible-area median; no redraw, recolour or quantization.",
+    "visualMassTargetMultiplier": 1.15,
+    "runtimeEnvelopeScale": 1.0,
+    "positionPolicy": "For every action/direction/frame, reject any separated Helmet.wil centroid cluster that is far from the same-cell male-warrior Hair.wil head, then centre the generated sprite on the median of the remaining head-proximal samples.",
+    "deathPosePolicy": "Use the exact same direction row and frame column in warrior_death.png, Helmet.wil and Hair.wil; render the complete helmet geometry, then centre it on the same-cell head-proximal Helmet.wil cluster."
   },
   "directionReference": "res://outputs/visual_acceptance/black_iron_helmet_directions.png",
   "actions": {
     "idle": {
       "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
-      "sha256": "42e6ffba284d6141b4edca47f73a4d75f0dcfc365024e679fb67e8cd9c0cf5a5",
+      "sha256": "8a78c841d88b47946ef6f559f731cbbe9c08313e11c7ef48e5457d12d839e052",
       "cell": [
         192,
         160
@@ -124,16 +199,34 @@
             91,
             49
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.3627,
+            39.9118
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            28
+            82,
+            29
           ],
           "generatedSize": [
             12,
-            14
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4449,
@@ -145,16 +238,34 @@
             91,
             49
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.375,
+            39.7788
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            28
+            82,
+            29
           ],
           "generatedSize": [
             12,
-            14
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4450,
@@ -166,16 +277,34 @@
             91,
             49
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.3429,
+            39.8476
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            28
+            82,
+            29
           ],
           "generatedSize": [
             12,
-            14
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4451,
@@ -187,16 +316,34 @@
             91,
             49
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.375,
+            39.7788
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            28
+            82,
+            29
           ],
           "generatedSize": [
             12,
-            14
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4456,
@@ -208,16 +355,34 @@
             93,
             47
           ],
+          "helmetAnchorCentroid": [
+            87,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.4312,
+            36.8532
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            82,
-            27
+            80,
+            28
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4457,
@@ -229,16 +394,34 @@
             93,
             46
           ],
+          "helmetAnchorCentroid": [
+            87,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.5833,
+            36.787
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            82,
-            27
+            80,
+            28
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4458,
@@ -250,16 +433,34 @@
             93,
             46
           ],
+          "helmetAnchorCentroid": [
+            87,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.5556,
+            36.9352
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            82,
-            27
+            80,
+            28
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4459,
@@ -271,16 +472,34 @@
             93,
             46
           ],
+          "helmetAnchorCentroid": [
+            87,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.5234,
+            36.8037
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            82,
-            27
+            80,
+            28
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4464,
@@ -292,16 +511,34 @@
             94,
             44
           ],
+          "helmetAnchorCentroid": [
+            87,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.8617,
+            35.4681
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            27
+            80,
+            28
           ],
           "generatedSize": [
             14,
-            15
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4465,
@@ -313,16 +550,34 @@
             94,
             44
           ],
+          "helmetAnchorCentroid": [
+            87,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.1489,
+            35.4043
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            82,
-            27
+            80,
+            28
           ],
           "generatedSize": [
             14,
-            15
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4466,
@@ -334,16 +589,34 @@
             94,
             44
           ],
+          "helmetAnchorCentroid": [
+            87,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.1383,
+            35.383
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            82,
-            27
+            80,
+            28
           ],
           "generatedSize": [
             14,
-            15
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4467,
@@ -355,16 +628,34 @@
             94,
             44
           ],
+          "helmetAnchorCentroid": [
+            87,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.1489,
+            35.4043
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            82,
-            27
+            80,
+            28
           ],
           "generatedSize": [
             14,
-            15
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4472,
@@ -376,16 +667,34 @@
             93,
             47
           ],
+          "helmetAnchorCentroid": [
+            87,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.9714,
+            35.8429
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             81,
-            27
+            28
           ],
           "generatedSize": [
-            14,
+            13,
             16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4473,
@@ -397,16 +706,34 @@
             93,
             47
           ],
+          "helmetAnchorCentroid": [
+            87,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.0704,
+            36.338
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             81,
-            27
+            28
           ],
           "generatedSize": [
-            14,
+            13,
             16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4474,
@@ -418,16 +745,34 @@
             93,
             47
           ],
+          "helmetAnchorCentroid": [
+            87,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.0571,
+            36.4286
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             81,
-            27
+            28
           ],
           "generatedSize": [
-            14,
+            13,
             16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4475,
@@ -439,16 +784,34 @@
             93,
             47
           ],
+          "helmetAnchorCentroid": [
+            87,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.0704,
+            36.338
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             81,
-            27
+            28
           ],
           "generatedSize": [
-            14,
+            13,
             16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4480,
@@ -460,16 +823,34 @@
             92,
             46
           ],
+          "helmetAnchorCentroid": [
+            88,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.2807,
+            35.4561
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            27
+            83,
+            29
           ],
           "generatedSize": [
-            14,
-            16
+            11,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4481,
@@ -481,16 +862,34 @@
             91,
             46
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.6042,
+            34.7083
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            27
+            83,
+            30
           ],
           "generatedSize": [
-            14,
-            16
+            11,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4482,
@@ -502,16 +901,34 @@
             92,
             46
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.1379,
+            35.6379
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            27
+            83,
+            30
           ],
           "generatedSize": [
-            14,
-            16
+            11,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4483,
@@ -523,16 +940,34 @@
             92,
             46
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.0877,
+            35.5263
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            27
+            83,
+            30
           ],
           "generatedSize": [
-            14,
-            16
+            11,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4488,
@@ -544,16 +979,34 @@
             92,
             45
           ],
+          "helmetAnchorCentroid": [
+            89,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.1791,
+            34.7015
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            80,
-            26
+            83,
+            28
           ],
           "generatedSize": [
-            15,
+            13,
             17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4489,
@@ -565,16 +1018,34 @@
             92,
             45
           ],
+          "helmetAnchorCentroid": [
+            89,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.9565,
+            34.7246
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            80,
-            26
+            83,
+            28
           ],
           "generatedSize": [
-            15,
+            13,
             17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4490,
@@ -586,16 +1057,34 @@
             92,
             45
           ],
+          "helmetAnchorCentroid": [
+            89,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.0145,
+            34.7391
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            80,
-            26
+            83,
+            28
           ],
           "generatedSize": [
-            15,
+            13,
             17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4491,
@@ -607,16 +1096,34 @@
             92,
             45
           ],
+          "helmetAnchorCentroid": [
+            89,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.9857,
+            34.8714
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            80,
-            26
+            83,
+            28
           ],
           "generatedSize": [
-            15,
+            13,
             17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4496,
@@ -628,16 +1135,34 @@
             94,
             44
           ],
+          "helmetAnchorCentroid": [
+            89,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            89.2386,
+            35.9886
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             82,
             28
           ],
           "generatedSize": [
             14,
-            14
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4497,
@@ -649,16 +1174,34 @@
             94,
             44
           ],
+          "helmetAnchorCentroid": [
+            89,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            89.0353,
+            35.7059
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             82,
             28
           ],
           "generatedSize": [
             14,
-            14
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4498,
@@ -670,16 +1213,34 @@
             94,
             44
           ],
+          "helmetAnchorCentroid": [
+            89,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            89.1034,
+            35.6552
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             82,
-            27
+            28
           ],
           "generatedSize": [
             14,
-            14
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4499,
@@ -691,16 +1252,34 @@
             94,
             44
           ],
+          "helmetAnchorCentroid": [
+            89,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            89.092,
+            35.7931
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             82,
             28
           ],
           "generatedSize": [
             14,
-            14
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4504,
@@ -712,16 +1291,34 @@
             92,
             47
           ],
+          "helmetAnchorCentroid": [
+            89,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.9375,
+            37.7083
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            28
+            82,
+            29
           ],
           "generatedSize": [
-            13,
-            15
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4505,
@@ -733,16 +1330,34 @@
             92,
             47
           ],
+          "helmetAnchorCentroid": [
+            89,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.8969,
+            37.4948
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            28
+            82,
+            29
           ],
           "generatedSize": [
-            13,
-            15
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4506,
@@ -754,16 +1369,34 @@
             92,
             47
           ],
+          "helmetAnchorCentroid": [
+            89,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.875,
+            37.3646
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            28
+            82,
+            29
           ],
           "generatedSize": [
-            13,
-            15
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4507,
@@ -775,32 +1408,50 @@
             92,
             47
           ],
+          "helmetAnchorCentroid": [
+            89,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.8571,
+            37.4898
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            28
+            82,
+            29
           ],
           "generatedSize": [
-            13,
-            15
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         }
       ],
       "directionSignatures": [
-        "1397a1908351f9e8044a032f7498f4983a90d1882ae01d55810157b4d8225b30",
-        "f926fe10d02a1c821789a1333bc2b389a91cff27ef2e41abe71a068499d2ebf8",
-        "207f741d93163dc84d1db637733990c48190a0506de4e71ab1fa91dc7af0f143",
-        "cdcdf84b8e8c013c344f8f02b3da43228e0134763461c6625e664556c0c351ae",
-        "0d10a80f8e1c23d935169897cd23cdfd4aaf9633c0eea28d177a75d6ee186506",
-        "39c48d286678a753c7bfa0ed32a9d4b530638f91aadaf6e1359440b16fb894a6",
-        "de74124f7d7ee07b06469d632f9bf2e02cfac9181d70efe18efc69ef7d689fcd",
-        "7ffd338b174d37129c1da48f5123f4a6bc81c5deb0cc5f70262b3d5de09fbc04"
+        "c50b0efe5df4db505c72862f7964a4c86bd9dc0a5f2e8a780dda2d9075401436",
+        "6c86406769b63f7764e5056c67533c1933eeb248d90181dcb198ebfca636f4aa",
+        "92218d97f234aa5561ef1fd4922fc6feb5907df14959caeee22048ddf8846c67",
+        "bbd9ee1e2c697b8956b1de710fecd865d7ff8bdffb103eba446c5d56a1ace66e",
+        "9e7165ad592dfc0dd0d9ddb9441ee0d4e700ca550bdeff50b089d758c75ee5b3",
+        "07e9bacff6b683cb586546baa8f84bdd3f2d452e48db98a1c9e7f55cba613feb",
+        "2f7eead8aa49be25b4e1184cedef129131dc34285208c60498f3df474e58077f",
+        "4ba0b00b309f9c65043a9fc45cb644bd5727d7e387930cb89a2ce2feb61c57bf"
       ]
     },
     "walk": {
       "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
-      "sha256": "d6a48bc67fb5bc401ccfd87d5208529118eb7716b5d26f788fc5f4068d5dc0d2",
+      "sha256": "8b32472b1dd8ebe2723b34cb1fd2d5d73d151891c7372dfc4f93a4f5d3ceb4a6",
       "cell": [
         192,
         160
@@ -818,16 +1469,34 @@
             91,
             49
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.4554,
+            39.7129
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            28
+            82,
+            29
           ],
           "generatedSize": [
             12,
-            14
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4513,
@@ -839,16 +1508,34 @@
             91,
             50
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.4078,
+            40.534
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
+            82,
             29
           ],
           "generatedSize": [
             12,
-            14
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4514,
@@ -860,16 +1547,34 @@
             91,
             49
           ],
+          "helmetAnchorCentroid": [
+            88,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.3846,
+            39.6154
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
+            82,
             28
           ],
           "generatedSize": [
             12,
-            14
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4515,
@@ -881,16 +1586,34 @@
             91,
             50
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.2661,
+            40.1651
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            28
+            82,
+            29
           ],
           "generatedSize": [
             12,
-            14
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4516,
@@ -902,16 +1625,34 @@
             91,
             51
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.3028,
+            40.6606
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
+            82,
             29
           ],
           "generatedSize": [
             12,
-            14
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4517,
@@ -923,16 +1664,34 @@
             91,
             50
           ],
+          "helmetAnchorCentroid": [
+            88,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.5234,
+            40.0748
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             82,
             28
           ],
           "generatedSize": [
             12,
-            14
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4520,
@@ -944,16 +1703,34 @@
             94,
             47
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.2389,
+            37.177
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            83,
-            27
+            81,
+            29
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4521,
@@ -965,16 +1742,34 @@
             93,
             47
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.3784,
+            37.4324
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            82,
-            27
+            81,
+            29
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4522,
@@ -986,16 +1781,34 @@
             94,
             46
           ],
+          "helmetAnchorCentroid": [
+            87,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.8673,
+            36.4867
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            82,
-            27
+            80,
+            28
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4523,
@@ -1007,16 +1820,34 @@
             93,
             47
           ],
+          "helmetAnchorCentroid": [
+            87,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.4091,
+            37.1182
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            82,
-            27
+            80,
+            29
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4524,
@@ -1028,16 +1859,34 @@
             93,
             48
           ],
+          "helmetAnchorCentroid": [
+            87,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            86.877,
+            37.6967
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            27
+            80,
+            28
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4525,
@@ -1049,16 +1898,34 @@
             93,
             47
           ],
+          "helmetAnchorCentroid": [
+            88,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            86.839,
+            37.3814
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             81,
-            27
+            28
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4528,
@@ -1070,16 +1937,34 @@
             95,
             44
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.98,
+            35.99
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            82,
-            27
+            81,
+            29
           ],
           "generatedSize": [
             14,
-            15
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4529,
@@ -1091,16 +1976,34 @@
             94,
             44
           ],
+          "helmetAnchorCentroid": [
+            88,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.9216,
+            35.8431
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             81,
-            27
+            28
           ],
           "generatedSize": [
             14,
-            15
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4530,
@@ -1112,16 +2015,34 @@
             95,
             44
           ],
+          "helmetAnchorCentroid": [
+            88,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.7396,
+            35.4583
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            82,
-            27
+            81,
+            28
           ],
           "generatedSize": [
             14,
-            15
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4531,
@@ -1133,16 +2054,34 @@
             95,
             44
           ],
+          "helmetAnchorCentroid": [
+            88,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.4476,
+            35.7143
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            82,
-            27
+            81,
+            28
           ],
           "generatedSize": [
             14,
-            15
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4532,
@@ -1154,16 +2093,34 @@
             94,
             44
           ],
+          "helmetAnchorCentroid": [
+            87,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.4175,
+            35.5825
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            27
+            80,
+            28
           ],
           "generatedSize": [
             14,
-            15
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4533,
@@ -1175,16 +2132,34 @@
             94,
             44
           ],
+          "helmetAnchorCentroid": [
+            88,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.3564,
+            35.495
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            80,
-            27
+            81,
+            28
           ],
           "generatedSize": [
             14,
-            15
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4536,
@@ -1196,16 +2171,34 @@
             94,
             47
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.5915,
+            36.831
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             82,
-            28
+            29
           ],
           "generatedSize": [
-            14,
+            13,
             16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4537,
@@ -1217,16 +2210,34 @@
             93,
             47
           ],
+          "helmetAnchorCentroid": [
+            87,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.9718,
+            36.4789
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             81,
-            27
+            28
           ],
           "generatedSize": [
-            14,
+            13,
             16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4538,
@@ -1238,16 +2249,34 @@
             94,
             47
           ],
+          "helmetAnchorCentroid": [
+            88,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.4533,
+            36.4
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             82,
-            27
+            28
           ],
           "generatedSize": [
-            14,
+            13,
             16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4539,
@@ -1259,16 +2288,34 @@
             94,
             47
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.4026,
+            36.8312
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            28
+            82,
+            29
           ],
           "generatedSize": [
-            14,
+            13,
             16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4540,
@@ -1280,16 +2327,34 @@
             93,
             46
           ],
+          "helmetAnchorCentroid": [
+            88,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.7632,
+            36.1053
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            27
+            82,
+            28
           ],
           "generatedSize": [
-            14,
+            13,
             16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4541,
@@ -1301,16 +2366,34 @@
             93,
             46
           ],
+          "helmetAnchorCentroid": [
+            88,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.4756,
+            35.9634
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            80,
-            27
+            82,
+            28
           ],
           "generatedSize": [
-            14,
+            13,
             16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4544,
@@ -1322,16 +2405,34 @@
             91,
             47
           ],
+          "helmetAnchorCentroid": [
+            88,
+            38
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.5294,
+            35.4706
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            27
+            83,
+            31
           ],
           "generatedSize": [
-            14,
-            16
+            11,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4545,
@@ -1343,16 +2444,34 @@
             91,
             46
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.5769,
+            35.1154
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            27
+            83,
+            30
           ],
           "generatedSize": [
-            14,
-            16
+            11,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4546,
@@ -1364,16 +2483,34 @@
             92,
             46
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.0333,
+            35.7333
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            27
+            83,
+            30
           ],
           "generatedSize": [
-            14,
-            16
+            11,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4547,
@@ -1385,16 +2522,34 @@
             92,
             47
           ],
+          "helmetAnchorCentroid": [
+            89,
+            38
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.069,
+            36.3448
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            27
+            84,
+            31
           ],
           "generatedSize": [
-            14,
-            16
+            11,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4548,
@@ -1406,16 +2561,34 @@
             92,
             46
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.0517,
+            35.7069
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            27
+            83,
+            30
           ],
           "generatedSize": [
-            14,
-            16
+            11,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4549,
@@ -1427,16 +2600,34 @@
             91,
             46
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.5686,
+            34.6863
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            26
+            83,
+            30
           ],
           "generatedSize": [
-            14,
-            16
+            11,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4552,
@@ -1448,16 +2639,34 @@
             92,
             46
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.5942,
+            35.3913
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            80,
-            27
+            82,
+            29
           ],
           "generatedSize": [
-            15,
+            13,
             17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4553,
@@ -1469,16 +2678,34 @@
             92,
             46
           ],
+          "helmetAnchorCentroid": [
+            89,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.9718,
+            34.9155
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            80,
-            26
+            83,
+            29
           ],
           "generatedSize": [
-            15,
+            13,
             17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4554,
@@ -1490,16 +2717,34 @@
             92,
             46
           ],
+          "helmetAnchorCentroid": [
+            89,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.6571,
+            35.1143
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            80,
-            26
+            83,
+            29
           ],
           "generatedSize": [
-            15,
+            13,
             17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4555,
@@ -1511,16 +2756,34 @@
             92,
             46
           ],
+          "helmetAnchorCentroid": [
+            89,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.7826,
+            35.6812
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            80,
-            27
+            83,
+            29
           ],
           "generatedSize": [
-            15,
+            13,
             17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4556,
@@ -1532,16 +2795,34 @@
             93,
             45
           ],
+          "helmetAnchorCentroid": [
+            89,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.4571,
+            34.8571
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            26
+            83,
+            29
           ],
           "generatedSize": [
-            15,
+            13,
             17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4557,
@@ -1553,16 +2834,34 @@
             93,
             45
           ],
+          "helmetAnchorCentroid": [
+            88,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.2821,
+            34.5385
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            26
+            82,
+            28
           ],
           "generatedSize": [
-            15,
+            13,
             17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4560,
@@ -1574,16 +2873,34 @@
             93,
             44
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.2791,
+            35.9302
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             81,
-            28
+            29
           ],
           "generatedSize": [
             14,
-            14
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4561,
@@ -1595,16 +2912,34 @@
             94,
             44
           ],
+          "helmetAnchorCentroid": [
+            89,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            89.2619,
+            35.6429
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             82,
-            27
+            29
           ],
           "generatedSize": [
             14,
-            14
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4562,
@@ -1616,16 +2951,34 @@
             94,
             44
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.7097,
+            35.5269
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             81,
-            27
+            29
           ],
           "generatedSize": [
             14,
-            14
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4563,
@@ -1637,16 +2990,34 @@
             94,
             45
           ],
+          "helmetAnchorCentroid": [
+            88,
+            38
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.7143,
+            36.1538
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             81,
-            28
+            30
           ],
           "generatedSize": [
             14,
-            14
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4564,
@@ -1658,16 +3029,34 @@
             95,
             44
           ],
+          "helmetAnchorCentroid": [
+            89,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            89.6136,
+            35.7273
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             82,
-            28
+            29
           ],
           "generatedSize": [
             14,
-            14
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4565,
@@ -1679,16 +3068,34 @@
             95,
             44
           ],
+          "helmetAnchorCentroid": [
+            89,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            89.4086,
+            35.3118
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             82,
-            27
+            29
           ],
           "generatedSize": [
             14,
-            14
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4568,
@@ -1700,16 +3107,34 @@
             92,
             47
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.7629,
+            37.0619
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             81,
-            28
+            29
           ],
           "generatedSize": [
-            13,
-            15
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4569,
@@ -1721,16 +3146,34 @@
             93,
             47
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.5,
+            37.5377
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            82,
-            28
+            81,
+            29
           ],
           "generatedSize": [
-            13,
-            15
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4570,
@@ -1742,16 +3185,34 @@
             92,
             47
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.6535,
+            36.8713
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             81,
-            27
+            29
           ],
           "generatedSize": [
-            13,
-            15
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4571,
@@ -1763,16 +3224,34 @@
             92,
             48
           ],
+          "helmetAnchorCentroid": [
+            88,
+            38
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.6275,
+            37.5098
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             81,
-            28
+            30
           ],
           "generatedSize": [
-            13,
-            15
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4572,
@@ -1784,16 +3263,34 @@
             93,
             48
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.5619,
+            37.6
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            82,
-            28
+            81,
+            29
           ],
           "generatedSize": [
-            13,
-            15
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4573,
@@ -1805,32 +3302,50 @@
             93,
             48
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.598,
+            37.1569
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            82,
-            27
+            81,
+            29
           ],
           "generatedSize": [
-            13,
-            15
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         }
       ],
       "directionSignatures": [
-        "bf6ea6910324ab9ca3dd949be5819c3f537c0763097eb7199317e75ce24ccca5",
-        "4b9d9194b316302e1a82dfb7ed348c5334badd3e8916ecf7572b3c0435d1a81b",
-        "24e65c916f5198e706d77b3ab36d667b87f0586f09fae8b52b19682fdce243c6",
-        "c5410cc4c75705f19c7d52469e7fd7cce83c361cf1f1e3b4e6a3e84596e51a89",
-        "ee1ffe8b61ee858ed314ce44c576b655945a90418e2ce6d1429cb3d728ef36ff",
-        "cb161dbc981d6fbb6534031134dcbe52abd62cac1c693159b68827419c65a562",
-        "5f4824a1dc450659e8c361c1dc1990926a17a434f518faa02eaa229f8704bc21",
-        "804e3210829fbf3a9ae22fe4801effc59591afcd69bac2b517d70d01c037bb30"
+        "f9edfa1cb25d5f4c301f428cafce745bd35f9169f9484f071f63fcd5b344bcb5",
+        "487e47974fb8678c356f61592f6b7c681dd487209ce276de55130f8745072718",
+        "1f504ee6dff4ad9f95b5c8ec74d93f5baa04099ed5bfd222580a378af0dcd2fd",
+        "ec585387b82998c532ee19c9e2cc61e73d270516b052463ad1ed20819dce8638",
+        "f7b1d67a08583c24253feed4776147a61d2df0182882130fc4663f3a84cc6dab",
+        "722a50da2ea47240cd1633aae1d8e6361d5b0e926a4a297b2ab785760183a72f",
+        "c9f6c8454dac78f195f472ed77f8cbeaa8dd97732eb6b595f08d951b4a0e3192",
+        "5ca291f1f89f1458cc0b881d393da2b5da92f837ebca4116dafc2ebb978d6b71"
       ]
     },
     "attack": {
       "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
-      "sha256": "e4c61b0a39ae575c631cfb87171da71b76bc46b430fc55c94ebd38e4b2b4bb4f",
+      "sha256": "427855f0a799fd8cc442071255861e6a22456532facb3801e9774c4236f069ca",
       "cell": [
         192,
         160
@@ -1848,16 +3363,34 @@
             96,
             58
           ],
+          "helmetAnchorCentroid": [
+            91,
+            44
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            92.5591,
+            48.043
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            87,
-            37
+            85,
+            36
           ],
           "generatedSize": [
             12,
-            14
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4649,
@@ -1869,16 +3402,34 @@
             97,
             73
           ],
+          "helmetAnchorCentroid": [
+            85,
+            57
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            83.3109,
+            61.3445
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            81,
-            51
+            79,
+            49
           ],
           "generatedSize": [
             12,
-            14
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4650,
@@ -1890,16 +3441,34 @@
             99,
             53
           ],
+          "helmetAnchorCentroid": [
+            89,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            92.1345,
+            41.0924
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            86,
+            83,
             29
           ],
           "generatedSize": [
             12,
-            14
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4651,
@@ -1911,16 +3480,34 @@
             97,
             48
           ],
+          "helmetAnchorCentroid": [
+            89,
+            33
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            92.424,
+            38.568
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            85,
-            26
+            83,
+            25
           ],
           "generatedSize": [
             12,
-            14
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4652,
@@ -1932,16 +3519,34 @@
             95,
             47
           ],
+          "helmetAnchorCentroid": [
+            89,
+            33
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            91.4706,
+            38.1059
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             83,
-            27
+            25
           ],
           "generatedSize": [
             12,
-            14
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4653,
@@ -1953,16 +3558,34 @@
             98,
             50
           ],
+          "helmetAnchorCentroid": [
+            91,
+            35
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            93.9262,
+            39.7377
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            86,
+            85,
             27
           ],
           "generatedSize": [
             12,
-            14
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4656,
@@ -1974,16 +3597,34 @@
             95,
             56
           ],
+          "helmetAnchorCentroid": [
+            86,
+            45
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.0654,
+            46.4953
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            83,
+            79,
             37
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4657,
@@ -1995,16 +3636,34 @@
             86,
             63
           ],
+          "helmetAnchorCentroid": [
+            74,
+            53
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            71.8559,
+            53.3964
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            70,
+            67,
             45
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4658,
@@ -2016,16 +3675,34 @@
             108,
             52
           ],
+          "helmetAnchorCentroid": [
+            96,
+            38
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            97.2527,
+            41.978
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            93,
-            32
+            89,
+            30
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4659,
@@ -2037,16 +3714,34 @@
             113,
             52
           ],
+          "helmetAnchorCentroid": [
+            104,
+            38
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            104.3897,
+            42.0662
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            98,
-            32
+            97,
+            30
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4660,
@@ -2058,16 +3753,34 @@
             115,
             51
           ],
+          "helmetAnchorCentroid": [
+            108,
+            39
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            107.0254,
+            42.5678
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            100,
-            33
+            101,
+            31
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4661,
@@ -2079,16 +3792,34 @@
             109,
             53
           ],
+          "helmetAnchorCentroid": [
+            101,
+            39
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            100.9927,
+            42.854
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            95,
-            32
+            94,
+            31
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4664,
@@ -2100,16 +3831,34 @@
             91,
             53
           ],
+          "helmetAnchorCentroid": [
+            83,
+            43
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            83.0851,
+            44.1702
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            77,
-            36
+            76,
+            35
           ],
           "generatedSize": [
             14,
-            15
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4665,
@@ -2121,16 +3870,34 @@
             76,
             55
           ],
+          "helmetAnchorCentroid": [
+            71,
+            44
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            69.2532,
+            42.6203
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            63,
-            34
+            64,
+            36
           ],
           "generatedSize": [
             14,
-            15
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4666,
@@ -2142,16 +3909,34 @@
             105,
             57
           ],
+          "helmetAnchorCentroid": [
+            98,
+            44
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            98.3895,
+            45.4316
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             91,
-            37
+            36
           ],
           "generatedSize": [
             14,
-            15
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4667,
@@ -2163,16 +3948,34 @@
             116,
             61
           ],
+          "helmetAnchorCentroid": [
+            111,
+            48
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            106.5397,
+            51.0159
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            99,
-            42
+            104,
+            40
           ],
           "generatedSize": [
             14,
-            15
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4668,
@@ -2184,16 +3987,34 @@
             121,
             65
           ],
+          "helmetAnchorCentroid": [
+            116,
+            52
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            110.9701,
+            53.8358
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            103,
-            46
+            109,
+            44
           ],
           "generatedSize": [
             14,
-            15
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4669,
@@ -2205,16 +4026,34 @@
             110,
             58
           ],
+          "helmetAnchorCentroid": [
+            105,
+            47
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            101.4706,
+            48.8235
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            94,
-            40
+            98,
+            39
           ],
           "generatedSize": [
             14,
-            15
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4672,
@@ -2226,16 +4065,34 @@
             86,
             52
           ],
+          "helmetAnchorCentroid": [
+            82,
+            40
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            80.4051,
+            41.6203
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            74,
-            33
+            76,
+            32
           ],
           "generatedSize": [
-            14,
+            13,
             16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4673,
@@ -2247,16 +4104,34 @@
             83,
             49
           ],
+          "helmetAnchorCentroid": [
+            78,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            78.1481,
+            35.537
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            71,
-            27
+            72,
+            29
           ],
           "generatedSize": [
-            14,
+            13,
             16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4674,
@@ -2268,16 +4143,34 @@
             97,
             64
           ],
+          "helmetAnchorCentroid": [
+            94,
+            49
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            91.1481,
+            50.5432
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            84,
+            88,
             41
           ],
           "generatedSize": [
-            14,
+            13,
             16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4675,
@@ -2289,16 +4182,34 @@
             105,
             74
           ],
+          "helmetAnchorCentroid": [
+            103,
+            60
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            98.2889,
+            60.3667
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            90,
+            97,
             52
           ],
           "generatedSize": [
-            14,
+            13,
             16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4676,
@@ -2310,16 +4221,34 @@
             109,
             78
           ],
+          "helmetAnchorCentroid": [
+            108,
+            66
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            100.4174,
+            64.7826
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            92,
-            56
+            102,
+            58
           ],
           "generatedSize": [
-            14,
+            13,
             16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4677,
@@ -2331,16 +4260,34 @@
             100,
             64
           ],
+          "helmetAnchorCentroid": [
+            97,
+            55
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            93.3375,
+            55.075
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            85,
+            91,
             47
           ],
           "generatedSize": [
-            14,
+            13,
             16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4680,
@@ -2352,16 +4299,34 @@
             86,
             48
           ],
+          "helmetAnchorCentroid": [
+            85,
+            39
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            82.3696,
+            36.5
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            75,
-            29
+            80,
+            32
           ],
           "generatedSize": [
-            14,
-            16
+            11,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4681,
@@ -2373,16 +4338,34 @@
             98,
             43
           ],
+          "helmetAnchorCentroid": [
+            92,
+            36
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            94.2903,
+            34.0645
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            86,
-            26
+            87,
+            29
           ],
           "generatedSize": [
-            14,
-            16
+            11,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4682,
@@ -2394,16 +4377,34 @@
             90,
             61
           ],
+          "helmetAnchorCentroid": [
+            87,
+            51
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            83.1967,
+            49.2295
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            76,
-            40
+            82,
+            44
           ],
           "generatedSize": [
-            14,
-            16
+            11,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4683,
@@ -2415,16 +4416,34 @@
             91,
             74
           ],
+          "helmetAnchorCentroid": [
+            87,
+            65
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            82.8824,
+            62.1029
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            77,
-            53
+            82,
+            58
           ],
           "generatedSize": [
-            14,
-            16
+            11,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4684,
@@ -2436,16 +4455,34 @@
             91,
             77
           ],
+          "helmetAnchorCentroid": [
+            88,
+            73
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            83.5488,
+            66.5122
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            78,
-            56
+            83,
+            66
           ],
           "generatedSize": [
-            14,
-            16
+            11,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4685,
@@ -2457,16 +4494,34 @@
             89,
             60
           ],
+          "helmetAnchorCentroid": [
+            85,
+            58
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            81.4615,
+            54.0462
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            76,
-            46
+            80,
+            51
           ],
           "generatedSize": [
-            14,
-            16
+            11,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4688,
@@ -2478,16 +4533,34 @@
             92,
             46
           ],
+          "helmetAnchorCentroid": [
+            90,
+            38
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.0,
+            35.3333
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            80,
-            27
+            84,
+            30
           ],
           "generatedSize": [
-            15,
+            13,
             17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4689,
@@ -2499,16 +4572,34 @@
             110,
             48
           ],
+          "helmetAnchorCentroid": [
+            102,
+            41
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            104.8929,
+            39.6786
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            98,
-            32
+            96,
+            33
           ],
           "generatedSize": [
-            15,
+            13,
             17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4690,
@@ -2520,16 +4611,34 @@
             84,
             59
           ],
+          "helmetAnchorCentroid": [
+            80,
+            48
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            78.2048,
+            44.7349
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            71,
-            36
+            74,
+            40
           ],
           "generatedSize": [
-            15,
+            13,
             17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4691,
@@ -2541,16 +4650,34 @@
             79,
             67
           ],
+          "helmetAnchorCentroid": [
+            72,
+            59
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            70.6023,
+            54.3977
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            64,
-            46
+            66,
+            51
           ],
           "generatedSize": [
-            15,
+            13,
             17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4692,
@@ -2562,16 +4689,34 @@
             79,
             73
           ],
+          "helmetAnchorCentroid": [
+            68,
+            66
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            68.5521,
+            59.8646
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            63,
-            50
+            62,
+            58
           ],
           "generatedSize": [
-            15,
+            13,
             17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4693,
@@ -2583,16 +4728,34 @@
             81,
             58
           ],
+          "helmetAnchorCentroid": [
+            74,
+            52
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            73.3103,
+            47.3793
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            67,
-            39
+            68,
+            44
           ],
           "generatedSize": [
-            15,
+            13,
             17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4696,
@@ -2604,16 +4767,34 @@
             100,
             46
           ],
+          "helmetAnchorCentroid": [
+            93,
+            40
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            94.337,
+            37.6413
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             86,
-            30
+            32
           ],
           "generatedSize": [
             14,
-            14
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4697,
@@ -2625,16 +4806,34 @@
             113,
             59
           ],
+          "helmetAnchorCentroid": [
+            105,
+            49
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            107.7745,
+            50.2941
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            100,
-            40
+            98,
+            41
           ],
           "generatedSize": [
             14,
-            14
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4698,
@@ -2646,16 +4845,34 @@
             87,
             52
           ],
+          "helmetAnchorCentroid": [
+            78,
+            43
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            79.7333,
+            40.2762
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            73,
-            32
+            71,
+            35
           ],
           "generatedSize": [
             14,
-            14
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4699,
@@ -2667,16 +4884,34 @@
             80,
             58
           ],
+          "helmetAnchorCentroid": [
+            65,
+            48
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            69.9426,
+            44.7377
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            64,
-            36
+            58,
+            40
           ],
           "generatedSize": [
             14,
-            14
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4700,
@@ -2688,16 +4923,34 @@
             80,
             62
           ],
+          "helmetAnchorCentroid": [
+            60,
+            53
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            65.2124,
+            48.3009
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            61,
-            40
+            53,
+            45
           ],
           "generatedSize": [
             14,
-            14
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4701,
@@ -2709,16 +4962,34 @@
             84,
             53
           ],
+          "helmetAnchorCentroid": [
+            71,
+            44
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            75.3119,
+            39.9083
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            69,
-            31
+            64,
+            36
           ],
           "generatedSize": [
             14,
-            14
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4704,
@@ -2730,16 +5001,34 @@
             100,
             53
           ],
+          "helmetAnchorCentroid": [
+            93,
+            43
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            95.3462,
+            42.5481
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            88,
-            32
+            86,
+            35
           ],
           "generatedSize": [
-            13,
-            15
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4705,
@@ -2751,16 +5040,34 @@
             104,
             69
           ],
+          "helmetAnchorCentroid": [
+            98,
+            58
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            98.3036,
+            59.2054
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            93,
-            48
+            91,
+            50
           ],
           "generatedSize": [
-            13,
-            15
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4706,
@@ -2772,16 +5079,34 @@
             91,
             50
           ],
+          "helmetAnchorCentroid": [
+            82,
+            39
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            85.3968,
+            38.3651
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            77,
-            28
+            75,
+            31
           ],
           "generatedSize": [
-            13,
-            15
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4707,
@@ -2793,16 +5118,34 @@
             86,
             48
           ],
+          "helmetAnchorCentroid": [
+            73,
+            38
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            78.5076,
+            37.3788
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            72,
-            28
+            66,
+            30
           ],
           "generatedSize": [
-            13,
-            15
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4708,
@@ -2814,16 +5157,34 @@
             85,
             50
           ],
+          "helmetAnchorCentroid": [
+            68,
+            40
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            74.5897,
+            38.6923
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            70,
-            30
+            61,
+            32
           ],
           "generatedSize": [
-            13,
-            15
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4709,
@@ -2835,32 +5196,50 @@
             90,
             46
           ],
+          "helmetAnchorCentroid": [
+            79,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            83.5606,
+            36.2121
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            77,
-            26
+            72,
+            29
           ],
           "generatedSize": [
-            13,
-            15
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         }
       ],
       "directionSignatures": [
-        "981fa8611d104ae821e631c09e04a23b02a10c77708d61fc229448b0296d34f9",
-        "75106e00c89a28e3549ae4ac91ec0d469b81babe354c8e1d5a47cd9a6bde77b1",
-        "7fd58608171db1af61c8e5e329d10f9dab35028440a649b5cf6221e5995f2f8b",
-        "ebea8470f8b4363ae09d089c10a40641840fb806a8387fcc5552596de9b0d859",
-        "553259dd05b9093c5db462c0b96e58bde4bc2c69907d23569a8a43c7116a6cd3",
-        "ea51839863884015f5d9091d8513c203bad2383996a0cdff752ebe9945760c01",
-        "bf134438cc1d195b30e17e16ee4579759bc8e230a33f72f312a6106cee203578",
-        "d7edae334120475ebf66fd6594211fb9018e91ba3a7becf1c170130003dd85fd"
+        "09fd8c7bc2bc675beea276a257090524f299afead88348274c2d8242ded4bbfb",
+        "e15883455d68df0a4be8cf18b3365954c7274a91fd096416ebcc8cd4043fac5a",
+        "b2ccd3d4343ebaae354627da09292e06f46d51de5d3b44667d1c8b6732b85733",
+        "dbfc959800d8d4558ae407622e79254192bae8ca5068c01944818aced531f620",
+        "03d02d4b19f86a6a404f5e74a5dc959182f9e47fc92d81d7a1df774b5cbe449b",
+        "d68a228dcce3004ad80bf33b85a84802771a6773ed49868b523809ae8da4fe1e",
+        "1c8f10525b2bb26128cc1ce4e8a6d1eb6711415d13f4c865c8b4771804968dc4",
+        "01f0c3c97d4e78fd5169b81fe7900da60ac225fc10d56494a7611ed095206f95"
       ]
     },
     "hit": {
       "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
-      "sha256": "f4f45136653b4ad9c774584665ff8ce6d12cb07b30ec2345e42d69be54df3fa3",
+      "sha256": "605d12ebd303bbc9be5ee3da645145ad53f9077d28e0fff83ac5d95970575cf7",
       "cell": [
         192,
         160
@@ -2878,16 +5257,34 @@
             91,
             69
           ],
+          "helmetAnchorCentroid": [
+            86,
+            60
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            85.8529,
+            61.9706
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             80,
             52
           ],
           "generatedSize": [
             12,
-            14
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4921,
@@ -2899,16 +5296,34 @@
             93,
             60
           ],
+          "helmetAnchorCentroid": [
+            89,
+            50
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.5059,
+            52.5412
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            82,
-            43
+            83,
+            42
           ],
           "generatedSize": [
             12,
-            14
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4922,
@@ -2920,16 +5335,34 @@
             93,
             52
           ],
+          "helmetAnchorCentroid": [
+            89,
+            39
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            89.1565,
+            42.0
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             83,
-            30
+            31
           ],
           "generatedSize": [
             12,
-            14
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4928,
@@ -2941,16 +5374,34 @@
             78,
             62
           ],
+          "helmetAnchorCentroid": [
+            70,
+            55
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            71.1075,
+            55.9892
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            66,
+            63,
             47
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4929,
@@ -2962,16 +5413,34 @@
             88,
             57
           ],
+          "helmetAnchorCentroid": [
+            79,
+            48
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            79.5049,
+            48.6408
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            75,
-            39
+            72,
+            40
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4930,
@@ -2983,16 +5452,34 @@
             95,
             50
           ],
+          "helmetAnchorCentroid": [
+            88,
+            39
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.9746,
+            39.7797
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            83,
-            29
+            81,
+            31
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4936,
@@ -3004,16 +5491,34 @@
             76,
             53
           ],
+          "helmetAnchorCentroid": [
+            65,
+            44
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            65.875,
+            44.6771
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            61,
-            35
+            58,
+            36
           ],
           "generatedSize": [
             14,
-            15
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4937,
@@ -3025,16 +5530,34 @@
             85,
             53
           ],
+          "helmetAnchorCentroid": [
+            75,
+            41
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            74.91,
+            42.01
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            70,
-            32
+            68,
+            33
           ],
           "generatedSize": [
             14,
-            15
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4938,
@@ -3046,16 +5569,34 @@
             93,
             48
           ],
+          "helmetAnchorCentroid": [
+            87,
+            38
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.051,
+            38.3469
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             80,
             30
           ],
           "generatedSize": [
             14,
-            15
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4944,
@@ -3067,16 +5608,34 @@
             83,
             44
           ],
+          "helmetAnchorCentroid": [
+            73,
+            33
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            73.0988,
+            36.0864
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            68,
-            27
+            67,
+            25
           ],
           "generatedSize": [
-            14,
+            13,
             16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4945,
@@ -3088,16 +5647,34 @@
             83,
             45
           ],
+          "helmetAnchorCentroid": [
+            78,
+            35
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            77.3875,
+            36.725
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            71,
-            28
+            72,
+            27
           ],
           "generatedSize": [
-            14,
+            13,
             16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4946,
@@ -3109,16 +5686,34 @@
             92,
             50
           ],
+          "helmetAnchorCentroid": [
+            86,
+            38
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            86.0,
+            38.5375
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            79,
-            29
+            80,
+            30
           ],
           "generatedSize": [
-            14,
+            13,
             16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4952,
@@ -3130,16 +5725,34 @@
             94,
             38
           ],
+          "helmetAnchorCentroid": [
+            89,
+            30
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            87.7143,
+            31.7381
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            82,
-            24
+            84,
+            23
           ],
           "generatedSize": [
-            14,
-            16
+            11,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4953,
@@ -3151,16 +5764,34 @@
             92,
             43
           ],
+          "helmetAnchorCentroid": [
+            87,
+            33
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            85.8095,
+            32.9048
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            80,
-            25
+            82,
+            26
           ],
           "generatedSize": [
-            14,
-            16
+            11,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4954,
@@ -3172,16 +5803,34 @@
             90,
             47
           ],
+          "helmetAnchorCentroid": [
+            87,
+            38
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            86.0204,
+            36.0612
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            79,
-            28
+            82,
+            31
           ],
           "generatedSize": [
-            14,
-            16
+            11,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4960,
@@ -3193,16 +5842,34 @@
             109,
             44
           ],
+          "helmetAnchorCentroid": [
+            106,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            104.5385,
+            36.0769
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            96,
-            28
+            100,
+            29
           ],
           "generatedSize": [
-            15,
+            13,
             17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4961,
@@ -3214,16 +5881,34 @@
             102,
             43
           ],
+          "helmetAnchorCentroid": [
+            98,
+            35
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            98.2143,
+            34.0
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            88,
-            26
+            92,
+            27
           ],
           "generatedSize": [
-            15,
+            13,
             17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4962,
@@ -3235,16 +5920,34 @@
             92,
             45
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.0615,
+            35.1077
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            80,
-            27
+            82,
+            29
           ],
           "generatedSize": [
-            15,
+            13,
             17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4968,
@@ -3256,16 +5959,34 @@
             118,
             53
           ],
+          "helmetAnchorCentroid": [
+            111,
+            48
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            112.0364,
+            47.8364
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            103,
+            104,
             40
           ],
           "generatedSize": [
             14,
-            14
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4969,
@@ -3277,16 +5998,34 @@
             109,
             51
           ],
+          "helmetAnchorCentroid": [
+            102,
+            42
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            103.7761,
+            41.6716
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            96,
+            95,
             34
           ],
           "generatedSize": [
             14,
-            14
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4970,
@@ -3298,16 +6037,34 @@
             95,
             45
           ],
+          "helmetAnchorCentroid": [
+            89,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            90.1325,
+            36.2771
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            83,
+            82,
             29
           ],
           "generatedSize": [
             14,
-            14
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4976,
@@ -3319,16 +6076,34 @@
             109,
             63
           ],
+          "helmetAnchorCentroid": [
+            102,
+            59
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            103.0606,
+            57.9697
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             95,
-            49
+            51
           ],
           "generatedSize": [
-            13,
-            15
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4977,
@@ -3340,16 +6115,34 @@
             104,
             55
           ],
+          "helmetAnchorCentroid": [
+            97,
+            49
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            98.3836,
+            48.1918
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            92,
-            40
+            90,
+            41
           ],
           "generatedSize": [
-            13,
-            15
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         },
         {
           "anchorSourceIndex": 4978,
@@ -3361,32 +6154,50 @@
             94,
             49
           ],
+          "helmetAnchorCentroid": [
+            90,
+            38
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            89.6634,
+            38.6139
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             83,
-            29
+            30
           ],
           "generatedSize": [
-            13,
-            15
+            14,
+            17
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "approved-design-direct-resize"
         }
       ],
       "directionSignatures": [
-        "079da1f5fb5fac692817468aa1bb9e5380145372401ae36187b34fd4dd25d1af",
-        "2eaf4b83b4542dc035302e45d563e3e5812e28f8f04572fe535fcaa24bb56360",
-        "3393b23d8da6adceeb92bf4f71c68c61582170bb779de8aa28516afa68a3d8f8",
-        "6b311032726d5e509513cbbf021b5ad11a31b2814a64cc92bd125fd8c8ea16ab",
-        "84f6dc240faf525b85ccaa19c4ebac5676d4e4340066abc6ae17f5a0a4dfa55b",
-        "e13672c0e6816c4abeb6a3ebdd4dd26379a7d12202a4ef7db7999cbcf729ffb9",
-        "9a2cc2413cb9cd90693b9f79d69f27037b32492e4690fed694e0eb1feccccc02",
-        "2352c62e18f2e55a182ad4887302ceecb1e9aae285028969f2aef716484395b8"
+        "1d27989855cfdb89421dedf4dd7b2e9c433fd6e10c12e9c81bff33ecd3d81574",
+        "f0cbf43ca62a2be04b78262c59b3fa6e9c2ece59af8276c52c1c3a155a342e3f",
+        "034e57a282a0eccdf421bcc4119364253690571756a8a543d61532caed1057a4",
+        "e87e1d77455cf43bb2b3f03ea630a619b0bfcee2a8b9b45723362dec09ddd213",
+        "e8b2f5b1b18a9babc2d8dd0d81df4e83b73e0bfec618d75aceeaed47147b6181",
+        "0ce7c7f732ea14f567cb2b0144858694e3ffebb86275db5eaa368e7f55c31e77",
+        "9f7f6268a7a9b17ba3b007a9122447b59de5dde2254ea267c93afac2284ab174",
+        "fe70296e7a2ffdaaae6c70c3dfabfefa1c74d452f943c5aa0e9ce1222485c9bf"
       ]
     },
     "death": {
       "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png",
-      "sha256": "5a4b3cf721e826206c86c1e1a7eb588abb831d3f8c82a844195b5f1970fba0a5",
+      "sha256": "f99492398eadb01b1b7e50f1f7c5bb347b42994054a165e3318922fd5599beec",
       "cell": [
         192,
         160
@@ -3404,16 +6215,34 @@
             96,
             50
           ],
+          "helmetAnchorCentroid": [
+            88,
+            37
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            90.6148,
+            38.8279
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            84,
-            26
+            82,
+            30
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 4985,
@@ -3425,16 +6254,34 @@
             95,
             52
           ],
+          "helmetAnchorCentroid": [
+            85,
+            49
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            88.7024,
+            45.0357
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            83,
-            37
+            79,
+            42
           ],
           "generatedSize": [
             12,
-            14
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 4986,
@@ -3446,16 +6293,35 @@
             97,
             116
           ],
+          "helmetAnchorCentroid": [
+            92,
+            108
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            92.5538,
+            109.6615
+          ],
+          "selectedAnchorAppearances": [
+            4,
+            0,
+            2
+          ],
+          "rejectedAnchorAppearances": [
+            3,
+            1,
+            5
+          ],
           "paste": [
-            85,
-            98
+            87,
+            101
           ],
           "generatedSize": [
-            12,
-            14
+            11,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 4987,
@@ -3467,16 +6333,35 @@
             96,
             131
           ],
+          "helmetAnchorCentroid": [
+            92,
+            122
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            92.6923,
+            123.5231
+          ],
+          "selectedAnchorAppearances": [
+            4,
+            2,
+            0
+          ],
+          "rejectedAnchorAppearances": [
+            5,
+            3,
+            1
+          ],
           "paste": [
-            86,
-            110
+            87,
+            116
           ],
           "generatedSize": [
-            12,
-            14
+            10,
+            13
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 4992,
@@ -3488,16 +6373,34 @@
             105,
             49
           ],
+          "helmetAnchorCentroid": [
+            92,
+            38
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            96.3359,
+            39.0078
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            91,
-            28
+            85,
+            31
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 4993,
@@ -3509,16 +6412,34 @@
             94,
             53
           ],
+          "helmetAnchorCentroid": [
+            85,
+            48
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            86.3874,
+            42.8649
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             78,
-            34
+            41
           ],
           "generatedSize": [
-            13,
+            15,
             14
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 4994,
@@ -3530,16 +6451,35 @@
             76,
             110
           ],
+          "helmetAnchorCentroid": [
+            66,
+            103
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            67.7368,
+            103.8026
+          ],
+          "selectedAnchorAppearances": [
+            4,
+            0,
+            2
+          ],
+          "rejectedAnchorAppearances": [
+            1,
+            5,
+            3
+          ],
           "paste": [
-            63,
-            94
+            59,
+            96
           ],
           "generatedSize": [
-            13,
-            14
+            14,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 4995,
@@ -3551,16 +6491,35 @@
             66,
             122
           ],
+          "helmetAnchorCentroid": [
+            57,
+            115
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            59.2706,
+            115.0824
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            4,
+            2
+          ],
+          "rejectedAnchorAppearances": [
+            5,
+            1,
+            3
+          ],
           "paste": [
-            54,
-            103
+            51,
+            109
           ],
           "generatedSize": [
-            13,
-            14
+            12,
+            12
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5000,
@@ -3572,16 +6531,34 @@
             105,
             53
           ],
+          "helmetAnchorCentroid": [
+            93,
+            40
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            97.6071,
+            43.1786
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            89,
-            35
+            87,
+            32
           ],
           "generatedSize": [
-            14,
-            15
+            12,
+            16
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5001,
@@ -3593,16 +6570,34 @@
             92,
             53
           ],
+          "helmetAnchorCentroid": [
+            87,
+            47
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            84.8283,
+            41.3535
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            76,
-            33
+            81,
+            40
           ],
           "generatedSize": [
-            14,
+            13,
             15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5002,
@@ -3614,16 +6609,35 @@
             62,
             93
           ],
+          "helmetAnchorCentroid": [
+            51,
+            87
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            54.622,
+            88.4878
+          ],
+          "selectedAnchorAppearances": [
+            4,
+            2,
+            0
+          ],
+          "rejectedAnchorAppearances": [
+            1,
+            3,
+            5
+          ],
           "paste": [
-            48,
-            76
+            44,
+            81
           ],
           "generatedSize": [
             14,
-            15
+            13
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5003,
@@ -3635,16 +6649,35 @@
             50,
             100
           ],
+          "helmetAnchorCentroid": [
+            39,
+            94
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            42.9012,
+            94.4938
+          ],
+          "selectedAnchorAppearances": [
+            4,
+            0,
+            2
+          ],
+          "rejectedAnchorAppearances": [
+            5,
+            3,
+            1
+          ],
           "paste": [
-            37,
-            85
+            33,
+            89
           ],
           "generatedSize": [
-            14,
-            15
+            13,
+            11
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5008,
@@ -3656,16 +6689,34 @@
             100,
             60
           ],
+          "helmetAnchorCentroid": [
+            91,
+            43
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            92.7065,
+            48.2609
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
             85,
-            40
+            36
           ],
           "generatedSize": [
-            14,
-            16
+            12,
+            14
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5009,
@@ -3677,16 +6728,34 @@
             90,
             51
           ],
+          "helmetAnchorCentroid": [
+            89,
+            48
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            84.43,
+            40.41
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            77,
-            30
+            83,
+            42
           ],
           "generatedSize": [
-            14,
-            16
+            12,
+            13
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5010,
@@ -3698,16 +6767,35 @@
             70,
             80
           ],
+          "helmetAnchorCentroid": [
+            59,
+            70
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            60.66,
+            73.08
+          ],
+          "selectedAnchorAppearances": [
+            4,
+            2,
+            0
+          ],
+          "rejectedAnchorAppearances": [
+            1,
+            3,
+            5
+          ],
           "paste": [
-            56,
-            64
+            53,
+            65
           ],
           "generatedSize": [
-            14,
-            16
+            13,
+            11
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5011,
@@ -3719,16 +6807,35 @@
             64,
             80
           ],
+          "helmetAnchorCentroid": [
+            51,
+            71
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            52.5714,
+            73.7143
+          ],
+          "selectedAnchorAppearances": [
+            2,
+            0,
+            4
+          ],
+          "rejectedAnchorAppearances": [
+            3,
+            5,
+            1
+          ],
           "paste": [
-            49,
-            64
+            44,
+            65
           ],
           "generatedSize": [
             14,
-            16
+            12
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5016,
@@ -3740,16 +6847,34 @@
             90,
             58
           ],
+          "helmetAnchorCentroid": [
+            88,
+            44
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            85.2414,
+            47.8793
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            78,
-            40
+            84,
+            37
           ],
           "generatedSize": [
-            14,
-            16
+            9,
+            14
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5017,
@@ -3761,16 +6886,35 @@
             92,
             50
           ],
+          "helmetAnchorCentroid": [
+            86,
+            41
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            86.9074,
+            38.6481
+          ],
+          "selectedAnchorAppearances": [
+            2,
+            0,
+            4
+          ],
+          "rejectedAnchorAppearances": [
+            3,
+            5,
+            1
+          ],
           "paste": [
-            78,
-            26
+            81,
+            34
           ],
           "generatedSize": [
-            14,
-            16
+            10,
+            14
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5018,
@@ -3782,16 +6926,35 @@
             90,
             68
           ],
+          "helmetAnchorCentroid": [
+            83,
+            61
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            83.3182,
+            61.7727
+          ],
+          "selectedAnchorAppearances": [
+            4,
+            0,
+            2
+          ],
+          "rejectedAnchorAppearances": [
+            3,
+            5,
+            1
+          ],
           "paste": [
-            77,
-            58
+            79,
+            56
           ],
           "generatedSize": [
-            14,
-            8
+            9,
+            10
           ],
           "rotatedForDeath": false,
-          "poseVariant": "south-death-foreshortened-crown"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5019,
@@ -3803,16 +6966,35 @@
             92,
             67
           ],
+          "helmetAnchorCentroid": [
+            83,
+            59
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            82.7857,
+            61.8571
+          ],
+          "selectedAnchorAppearances": [
+            4,
+            0,
+            2
+          ],
+          "rejectedAnchorAppearances": [
+            3,
+            5,
+            1
+          ],
           "paste": [
-            79,
-            58
+            78,
+            54
           ],
           "generatedSize": [
-            14,
-            7
+            10,
+            11
           ],
           "rotatedForDeath": false,
-          "poseVariant": "south-death-foreshortened-crown"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5024,
@@ -3824,16 +7006,34 @@
             88,
             56
           ],
+          "helmetAnchorCentroid": [
+            85,
+            43
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            80.0833,
+            44.381
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            74,
+            79,
             36
           ],
           "generatedSize": [
-            15,
-            17
+            12,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5025,
@@ -3845,16 +7045,35 @@
             103,
             49
           ],
+          "helmetAnchorCentroid": [
+            88,
+            40
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            91.965,
+            37.4825
+          ],
+          "selectedAnchorAppearances": [
+            2,
+            4,
+            0
+          ],
+          "rejectedAnchorAppearances": [
+            5,
+            3,
+            1
+          ],
           "paste": [
-            85,
-            27
+            82,
+            33
           ],
           "generatedSize": [
-            15,
-            17
+            12,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5026,
@@ -3866,16 +7085,35 @@
             112,
             73
           ],
+          "helmetAnchorCentroid": [
+            110,
+            65
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            107.8889,
+            66.6667
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            2,
+            4
+          ],
+          "rejectedAnchorAppearances": [
+            1,
+            3,
+            5
+          ],
           "paste": [
-            99,
-            58
+            104,
+            60
           ],
           "generatedSize": [
-            15,
-            17
+            12,
+            10
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5027,
@@ -3887,16 +7125,35 @@
             122,
             75
           ],
+          "helmetAnchorCentroid": [
+            118,
+            67
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            116.2941,
+            67.4706
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            2,
+            4
+          ],
+          "rejectedAnchorAppearances": [
+            3,
+            5,
+            1
+          ],
           "paste": [
-            109,
-            60
+            112,
+            62
           ],
           "generatedSize": [
-            15,
-            17
+            13,
+            11
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5032,
@@ -3908,16 +7165,34 @@
             91,
             51
           ],
+          "helmetAnchorCentroid": [
+            82,
+            41
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            81.1901,
+            40.6777
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            75,
-            32
+            76,
+            34
           ],
           "generatedSize": [
-            14,
-            14
+            12,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5033,
@@ -3929,16 +7204,35 @@
             104,
             50
           ],
+          "helmetAnchorCentroid": [
+            91,
+            41
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            94.2213,
+            40.6311
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            2,
+            4
+          ],
+          "rejectedAnchorAppearances": [
+            1,
+            5,
+            3
+          ],
           "paste": [
-            88,
-            33
+            85,
+            34
           ],
           "generatedSize": [
-            14,
-            14
+            12,
+            15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5034,
@@ -3950,16 +7244,35 @@
             129,
             87
           ],
+          "helmetAnchorCentroid": [
+            125,
+            83
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            124.3333,
+            82.463
+          ],
+          "selectedAnchorAppearances": [
+            4,
+            2,
+            0
+          ],
+          "rejectedAnchorAppearances": [
+            1,
+            3,
+            5
+          ],
           "paste": [
-            116,
-            71
+            119,
+            77
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            12
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5035,
@@ -3971,16 +7284,35 @@
             140,
             93
           ],
+          "helmetAnchorCentroid": [
+            136,
+            90
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            135.6667,
+            89.8182
+          ],
+          "selectedAnchorAppearances": [
+            4,
+            2,
+            0
+          ],
+          "rejectedAnchorAppearances": [
+            3,
+            5,
+            1
+          ],
           "paste": [
-            127,
-            78
+            130,
+            84
           ],
           "generatedSize": [
-            14,
-            14
+            13,
+            12
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5040,
@@ -3992,16 +7324,34 @@
             94,
             48
           ],
+          "helmetAnchorCentroid": [
+            85,
+            38
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            84.6972,
+            38.0282
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejectedAnchorAppearances": [],
           "paste": [
-            79,
-            27
+            78,
+            31
           ],
           "generatedSize": [
-            13,
+            14,
             15
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5041,
@@ -4013,16 +7363,35 @@
             99,
             52
           ],
+          "helmetAnchorCentroid": [
+            91,
+            44
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            92.375,
+            43.7727
+          ],
+          "selectedAnchorAppearances": [
+            0,
+            2,
+            4
+          ],
+          "rejectedAnchorAppearances": [
+            5,
+            3,
+            1
+          ],
           "paste": [
-            87,
-            35
+            85,
+            37
           ],
           "generatedSize": [
             13,
-            15
+            14
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5042,
@@ -4034,16 +7403,35 @@
             121,
             106
           ],
+          "helmetAnchorCentroid": [
+            116,
+            101
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            115.2941,
+            100.2353
+          ],
+          "selectedAnchorAppearances": [
+            4,
+            2,
+            0
+          ],
+          "rejectedAnchorAppearances": [
+            1,
+            3,
+            5
+          ],
           "paste": [
-            108,
-            93
+            110,
+            94
           ],
           "generatedSize": [
             13,
-            15
+            14
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         },
         {
           "anchorSourceIndex": 5043,
@@ -4055,27 +7443,46 @@
             129,
             117
           ],
+          "helmetAnchorCentroid": [
+            124,
+            113
+          ],
+          "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+          "hairAnchorCentroid": [
+            124.3182,
+            112.5455
+          ],
+          "selectedAnchorAppearances": [
+            2,
+            0,
+            4
+          ],
+          "rejectedAnchorAppearances": [
+            5,
+            1,
+            3
+          ],
           "paste": [
-            115,
-            105
+            118,
+            107
           ],
           "generatedSize": [
             13,
-            15
+            13
           ],
           "rotatedForDeath": false,
-          "poseVariant": "standing-direction"
+          "poseVariant": "godot-orthographic-complete-helmet"
         }
       ],
       "directionSignatures": [
-        "9ce3e7b451b10d5c179a6f98ef5dd813b964929f9f0bb8ec917785c78ca85435",
-        "1ec38861d8128e60a4566e1fd81e8bf0cad682fda4bb0bf7a43fabbacf3245eb",
-        "ea493b4c031805fa880aa80deff172ea8f48b13f2e4b8c3a4a5f2d7c982cdf98",
-        "5faad962796b17ac07a82c078d8881b92c1d2f50b7b200f81d533a9cd5ca0580",
-        "3765aa9ebd3e8e70e5b5509c6c70e6a4b0d8ebe2d82232554c1aeaad3a805244",
-        "e008e2609ec40e8c29503e7bf0861e89a756ab1028c27f47cd0b0de064d97717",
-        "711a2dd1222c67f4a286cf18c188e612ec0c986cfdd72e5cd4b46dd3dc71d46e",
-        "38aceb6cea42bdc34b379979a1a3fcd59cf6e3c013b731af3302bb2820483665"
+        "b649da0bc165f2fa8d4edcc44865231a53e0489ecb9c45208c1abb2fc0b4cf6d",
+        "b8704bcce2593982d87965d8626448d4b0dcb5e148eef49029268e442d75021d",
+        "111cfca554258ae5c10f82f26f4d35400f7f5c827041d3fbb7b21e69843092a7",
+        "1386a18ab310429623b50298132c680560bef63c9c0abbfab95328d70c48ed79",
+        "276bad2240e7533d77746f70921c73beba232f7c501e75c131038ac18a6dbed7",
+        "45a0193016ec0617e9d687c5eafd714e29b5618f655ac4032a1c459051678661",
+        "a4f60bb2b2c8adbc56c89f7b48b8242873e0696e962682ce273217cce2c2c0ab",
+        "3c0fdf1c7950830066e80e11db80259c7fc3de8a205ec1d79a6d9757024438b3"
       ]
     }
   },
