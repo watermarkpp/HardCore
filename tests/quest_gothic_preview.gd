@@ -1,6 +1,7 @@
 extends Control
 
-const OUTPUT_PATH := "res://outputs/visual_acceptance/quest/quest_gothic_sample_v1.png"
+const ACTIVE_OUTPUT_PATH := "res://outputs/visual_acceptance/quest/quest_gothic_active_v2.png"
+const AVAILABLE_OUTPUT_PATH := "res://outputs/visual_acceptance/quest/quest_gothic_available_v2.png"
 const WORLD_TEXTURE := preload("res://assets/ui/gothic_preview/world_scene_clean.png")
 
 
@@ -25,12 +26,21 @@ func _ready() -> void:
 	panel.open_for("比奇老兵")
 	await get_tree().process_frame
 	await get_tree().process_frame
-	var output_dir := ProjectSettings.globalize_path(OUTPUT_PATH.get_base_dir())
+	var output_dir := ProjectSettings.globalize_path(ACTIVE_OUTPUT_PATH.get_base_dir())
 	DirAccess.make_dir_recursive_absolute(output_dir)
-	var error := get_viewport().get_texture().get_image().save_png(ProjectSettings.globalize_path(OUTPUT_PATH))
-	assert(error == OK, "无法保存任务面板哥特样板")
-	print("QUEST_GOTHIC_PREVIEW_CAPTURE_PASS output=%s" % OUTPUT_PATH)
+	_capture(ACTIVE_OUTPUT_PATH)
+	PlayerState.quest_states = {}
+	panel.open_for("比奇老兵")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_capture(AVAILABLE_OUTPUT_PATH)
+	print("QUEST_GOTHIC_PREVIEW_CAPTURE_PASS active=%s available=%s" % [ACTIVE_OUTPUT_PATH, AVAILABLE_OUTPUT_PATH])
 	get_tree().quit(0)
+
+
+func _capture(output_path: String) -> void:
+	var error := get_viewport().get_texture().get_image().save_png(ProjectSettings.globalize_path(output_path))
+	assert(error == OK, "无法保存任务面板哥特样板")
 
 
 func _build_background() -> void:

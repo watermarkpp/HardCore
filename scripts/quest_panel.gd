@@ -4,6 +4,7 @@ extends Panel
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 
 signal closed
+signal abandon_requested(quest_id: String)
 
 const PANEL_SIZE := Vector2(1020, 636)
 const QUEST_CARD_SIZE := Vector2(286, 62)
@@ -18,9 +19,12 @@ var quest_name_label: Label
 var quest_meta_label: Label
 var objective_label: RichTextLabel
 var reward_label: RichTextLabel
+var abandon_button: Button
+var abandon_confirmation: ConfirmationDialog
 var current_quest_id := ""
 var npc_display_name := "比奇老兵"
 var _selected_quest_id := ""
+var _pending_abandon_quest_id := ""
 
 
 func _ready() -> void:
@@ -169,9 +173,9 @@ func _build_quest_detail() -> void:
 	panel.add_child(rewards_panel)
 	var rewards_title := Label.new()
 	rewards_title.name = "RewardsTitle"
-	rewards_title.text = "任务奖励"
-	rewards_title.position = Vector2(18, 12)
-	rewards_title.size = Vector2(116, 48)
+	rewards_title.text = "任务奖励："
+	rewards_title.position = Vector2(18, 2)
+	rewards_title.size = Vector2(122, 40)
 	rewards_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	rewards_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	rewards_title.add_theme_font_size_override("font_size", 17)
@@ -189,21 +193,38 @@ func _build_quest_detail() -> void:
 	status_label = Label.new()
 	status_label.name = "StatusLabel"
 	status_label.position = Vector2(28, 436)
-	status_label.size = Vector2(268, 52)
+	status_label.size = Vector2(164, 52)
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	status_label.theme_type_variation = "GothicMutedLabel"
 	status_label.add_theme_font_size_override("font_size", 16)
 	status_label.add_theme_color_override("font_color", Color("d7b56f"))
 	panel.add_child(status_label)
+	abandon_button = Button.new()
+	abandon_button.name = "AbandonButton"
+	abandon_button.text = "放弃任务"
+	abandon_button.position = Vector2(204, 436)
+	abandon_button.size = Vector2(128, 52)
+	abandon_button.theme_type_variation = "GothicComponentButton"
+	abandon_button.add_theme_font_size_override("font_size", 16)
+	abandon_button.visible = false
+	abandon_button.pressed.connect(_request_abandon)
+	panel.add_child(abandon_button)
 	action_button = Button.new()
 	action_button.name = "ActionButton"
-	action_button.position = Vector2(312, 436)
-	action_button.size = Vector2(292, 52)
+	action_button.position = Vector2(204, 436)
+	action_button.size = Vector2(400, 52)
 	action_button.theme_type_variation = "GothicComponentSelectedButton"
 	action_button.add_theme_font_size_override("font_size", 18)
 	action_button.pressed.connect(_act)
 	panel.add_child(action_button)
+	abandon_confirmation = ConfirmationDialog.new()
+	abandon_confirmation.name = "AbandonConfirmation"
+	abandon_confirmation.title = "确认放弃任务"
+	abandon_confirmation.ok_button_text = "确认放弃"
+	abandon_confirmation.cancel_button_text = "取消"
+	abandon_confirmation.confirmed.connect(_confirm_abandon)
+	add_child(abandon_confirmation)
 
 
 func open_for(display_name: String) -> void:
@@ -245,20 +266,49 @@ func _rebuild_quest_cards(active_quest_id: String) -> void:
 		button.custom_minimum_size = QUEST_CARD_SIZE
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.toggle_mode = true
-		button.text = "%02d　%s\n　　%s" % [index + 1, quest.get("name", "任务"), state_text]
-		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.add_theme_font_size_override("font_size", 15)
+		button.text = ""
 		button.set_pressed_no_signal(quest_id == _selected_quest_id)
 		button.theme_type_variation = "GothicComponentSelectedButton" if quest_id == _selected_quest_id else "GothicComponentButton"
 		button.pressed.connect(_select_quest.bind(quest_id))
 		button.set_meta("quest_id", quest_id)
 		button.set_meta("quest_state", state_text)
+		var number_label := Label.new()
+		number_label.name = "QuestNumber"
+		number_label.text = "%02d" % (index + 1)
+		number_label.position = Vector2(12, 0)
+		number_label.size = Vector2(34, QUEST_CARD_SIZE.y)
+		number_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		number_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		number_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		number_label.add_theme_font_size_override("font_size", 15)
+		number_label.add_theme_color_override("font_color", Color("e2c18b"))
+		button.add_child(number_label)
+		var name_label := Label.new()
+		name_label.name = "QuestName"
+		name_label.text = str(quest.get("name", "任务"))
+		name_label.position = Vector2(54, 7)
+		name_label.size = Vector2(212, 25)
+		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		name_label.add_theme_font_size_override("font_size", 16)
+		button.add_child(name_label)
+		var state_label := Label.new()
+		state_label.name = "QuestState"
+		state_label.text = state_text
+		state_label.position = Vector2(54, 32)
+		state_label.size = Vector2(212, 22)
+		state_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		state_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		state_label.add_theme_font_size_override("font_size", 14)
+		state_label.add_theme_color_override("font_color", Color("d2b078"))
+		button.add_child(state_label)
 		quest_list.add_child(button)
 		quest_buttons.append(button)
 
 
 func _refresh_selected_quest(active_quest_id: String) -> void:
 	action_button.disabled = false
+	_set_abandon_available(false)
 	var quest := GameData.get_bich_quest(_selected_quest_id)
 	if quest.is_empty():
 		title_label.text = "%s｜比奇任务" % npc_display_name
@@ -296,12 +346,14 @@ func _refresh_selected_quest(active_quest_id: String) -> void:
 		action_button.text = "奖励已领取"
 		action_button.disabled = true
 	elif state == "ready":
-		status_label.text = "目标完成，可以领取奖励"
+		status_label.text = "目标完成"
 		action_button.text = "领取奖励"
+		_set_abandon_available(true)
 	elif state == "active":
 		status_label.text = "任务进行中"
 		action_button.text = "任务进行中"
 		action_button.disabled = true
+		_set_abandon_available(true)
 	elif quest_id == active_quest_id:
 		status_label.text = "尚未接受"
 		action_button.text = "接受任务"
@@ -339,6 +391,51 @@ func _act() -> void:
 		status_label.text = PlayerState.claim_quest(current_quest_id)
 	_selected_quest_id = PlayerState.current_bich_quest_id()
 	refresh.call_deferred()
+
+
+func _set_abandon_available(enabled: bool) -> void:
+	abandon_button.visible = enabled
+	abandon_button.disabled = not enabled
+	if enabled:
+		action_button.position = Vector2(344, 436)
+		action_button.size = Vector2(260, 52)
+	else:
+		action_button.position = Vector2(204, 436)
+		action_button.size = Vector2(400, 52)
+
+
+func _request_abandon() -> void:
+	if current_quest_id.is_empty():
+		return
+	var state := str(PlayerState.quest_states.get(current_quest_id, {}).get("status", ""))
+	if state not in ["active", "ready"]:
+		return
+	_pending_abandon_quest_id = current_quest_id
+	var quest := GameData.get_bich_quest(current_quest_id)
+	abandon_confirmation.dialog_text = "确认放弃“%s”？\n当前任务进度将由玩法规则决定是否保留。" % quest.get("name", "当前任务")
+	abandon_confirmation.popup_centered(Vector2i(460, 190))
+
+
+func _confirm_abandon() -> void:
+	if _pending_abandon_quest_id.is_empty():
+		return
+	var quest_id := _pending_abandon_quest_id
+	_pending_abandon_quest_id = ""
+	abandon_button.disabled = true
+	status_label.text = "等待放弃结果"
+	abandon_requested.emit(quest_id)
+
+
+func apply_abandon_result(result: Dictionary) -> void:
+	var quest_id := str(result.get("quest_id", ""))
+	if not quest_id.is_empty() and quest_id != current_quest_id:
+		return
+	status_label.text = str(result.get("message", "放弃任务请求已处理"))
+	if bool(result.get("success", false)):
+		_selected_quest_id = PlayerState.current_bich_quest_id()
+		refresh.call_deferred()
+	else:
+		abandon_button.disabled = false
 
 
 func _framed_section(node_name: String, rect: Rect2) -> Panel:
