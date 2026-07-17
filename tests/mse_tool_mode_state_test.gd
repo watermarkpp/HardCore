@@ -3,8 +3,8 @@ extends Node
 
 func _ready() -> void:
 	var editor := MapEditorApp.new()
+	editor.load_default_workspace_on_ready = false
 	add_child(editor)
-	editor._build_ui()
 	editor.current_document = MapEditorTypes.new_map("tool_mode_state", 990012, "Tool Mode State", Vector2i(32, 32))
 	editor.preview.set_document(editor.current_document)
 	var monster_index := -1
@@ -39,6 +39,19 @@ func _ready() -> void:
 	editor.collision_draw_toggle.set_pressed_no_signal(true)
 	editor._on_collision_draw_toggled(true)
 	assert(editor.active_tool_mode == "manual_collision" and editor.preview.interaction_mode == "manual_collision")
+	editor.manual_collision_start = Vector2i(3, 4)
+	editor.manual_polygon_points = [Vector2i(3, 4), Vector2i(4, 5)]
+	var cancel_collision := InputEventMouseButton.new()
+	cancel_collision.button_index = MOUSE_BUTTON_RIGHT
+	cancel_collision.pressed = true
+	cancel_collision.position = Vector2(100, 100)
+	editor.preview._gui_input(cancel_collision)
+	assert(editor.manual_collision_start == Vector2i(-1, -1))
+	assert(editor.manual_polygon_points.is_empty())
+	assert(editor.active_tool_mode == "place" and editor.preview.interaction_mode == "place")
+	assert(not editor.collision_draw_toggle.button_pressed)
+	editor.collision_draw_toggle.set_pressed_no_signal(true)
+	editor._on_collision_draw_toggled(true)
 	editor.semantic_content_option.pressed.emit()
 	assert(editor.active_tool_mode == "semantic" and not editor.collision_draw_toggle.button_pressed)
 	editor._activate_normal_placement()

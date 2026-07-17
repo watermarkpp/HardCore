@@ -401,6 +401,7 @@ def wall_assets() -> list[dict]:
                 "occupancy_footprint_tiles": footprint,
                 "base_footprint_tiles": footprint,
                 "collision_footprint_tiles": collision,
+                "tile_size": [64, 32],
                 "approved_scale": 1.0,
                 "logical_scale_level": 0,
                 "scale_approved": True,

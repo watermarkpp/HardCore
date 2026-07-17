@@ -55,6 +55,7 @@ var instance_size_menu: PopupMenu
 var instance_size_menu_instance_id := ""
 var pending_fill_tiles: Array[Vector2i] = []
 var active_tool_mode := "select"
+var load_default_workspace_on_ready := true
 
 
 func _notification(what:int)->void:
@@ -65,6 +66,8 @@ func _notification(what:int)->void:
 
 func _ready() -> void:
 	_build_ui()
+	if not load_default_workspace_on_ready:
+		return
 	var recent_path := MapEditorSaveService.default_path("sandbox_64")
 	if FileAccess.file_exists(recent_path):
 		_open_document_path(recent_path)
@@ -108,9 +111,7 @@ func _build_ui() -> void:
 	map_actions.add_child(map_template_option)
 	template_info_label = Label.new(); template_info_label.modulate = Color("9da7b3"); map_actions.add_child(template_info_label)
 	open_template_button = Button.new(); open_template_button.text = "打开地图模板"; open_template_button.pressed.connect(_on_open_template_pressed); map_actions.add_child(open_template_button)
-	var template_create_button := Button.new(); template_create_button.text = "从所选模板创建地图"; template_create_button.pressed.connect(_on_blank_template_create_pressed); map_actions.add_child(template_create_button)
-	create_map_button = Button.new(); create_map_button.text = "创建地图"; create_map_button.pressed.connect(_on_create_map_dialog_requested); map_actions.add_child(create_map_button)
-	var bich_button := Button.new(); bich_button.text = "打开比奇地图"; bich_button.pressed.connect(func(): _open_document_path(MapEditorSaveService.default_path("bich_province"))); map_actions.add_child(bich_button)
+	create_map_button = Button.new(); create_map_button.text = "创建地图模板"; create_map_button.pressed.connect(_on_create_map_dialog_requested); map_actions.add_child(create_map_button)
 	var reload_button := Button.new(); reload_button.text = "重新载入当前地图"; reload_button.pressed.connect(_on_open_pressed); map_actions.add_child(reload_button)
 	size_label = Label.new(); size_label.text = "设计尺寸：-"; map_actions.add_child(size_label)
 	path_label = Label.new(); path_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; path_label.modulate = Color("8fb9c7"); map_actions.add_child(path_label)
@@ -203,8 +204,8 @@ func _spin_field(parent: Control, label_text: String, minimum: float, maximum: f
 
 func _build_create_map_dialog() -> void:
 	create_map_dialog = ConfirmationDialog.new()
-	create_map_dialog.title = "创建地图"
-	create_map_dialog.dialog_text = "填写地图名称、地图 ID，并选择地图占用多少个布局 Chunk。"
+	create_map_dialog.title = "创建地图模板"
+	create_map_dialog.dialog_text = "填写地图模板名称、地图 ID，并选择地图占用多少个布局 Chunk。"
 	create_map_dialog.get_ok_button().hide()
 	create_map_dialog.get_cancel_button().hide()
 	add_child(create_map_dialog)
@@ -212,7 +213,7 @@ func _build_create_map_dialog() -> void:
 	form.custom_minimum_size = Vector2(480, 0)
 	create_map_dialog.add_child(form)
 	var chunk_note := Label.new()
-	chunk_note.text = "每个布局 Chunk = 16×16 个逻辑格；例如 5×5 Chunk = 80×80 格。"
+	chunk_note.text = "每个布局 Chunk（不是贴图像素 Chunk）= 16×16 个逻辑格；例如 5×5 = 80×80 格，10×10 = 160×160 格。"
 	chunk_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	chunk_note.modulate = Color("9da7b3")
 	form.add_child(chunk_note)
@@ -221,7 +222,7 @@ func _build_create_map_dialog() -> void:
 	fields.add_theme_constant_override("h_separation", 12)
 	fields.add_theme_constant_override("v_separation", 4)
 	form.add_child(fields)
-	display_name_edit = _field(fields, "地图名称", "新地图")
+	display_name_edit = _field(fields, "地图模板名称", "新地图模板")
 	map_id_edit = _field(fields, "地图 ID", "new_map")
 	var runtime_label := Label.new(); runtime_label.text = "运行地图 ID"; fields.add_child(runtime_label)
 	runtime_id_edit = SpinBox.new(); runtime_id_edit.min_value = 1; runtime_id_edit.max_value = 9999999; runtime_id_edit.value = 990100; fields.add_child(runtime_id_edit)
@@ -243,7 +244,7 @@ func _build_create_map_dialog() -> void:
 	actions.alignment = BoxContainer.ALIGNMENT_END
 	form.add_child(actions)
 	var cancel_button := Button.new(); cancel_button.text = "取消"; cancel_button.pressed.connect(create_map_dialog.hide); actions.add_child(cancel_button)
-	create_dialog_submit_button = Button.new(); create_dialog_submit_button.text = "创建地图"; create_dialog_submit_button.pressed.connect(_on_create_pressed); actions.add_child(create_dialog_submit_button)
+	create_dialog_submit_button = Button.new(); create_dialog_submit_button.text = "创建地图模板"; create_dialog_submit_button.pressed.connect(_on_create_pressed); actions.add_child(create_dialog_submit_button)
 	_refresh_create_size_preview()
 
 
@@ -255,7 +256,7 @@ func _refresh_create_size_preview() -> void:
 		chunks.x * MapEditorTypes.AUTHORING_CHUNK_SIZE_TILES.x,
 		chunks.y * MapEditorTypes.AUTHORING_CHUNK_SIZE_TILES.y
 	)
-	create_size_preview.text = "将创建：%d×%d Chunk，地图尺寸 %d×%d 格" % [chunks.x, chunks.y, design_size.x, design_size.y]
+	create_size_preview.text = "将创建地图模板：%d×%d Chunk，地图尺寸 %d×%d 格" % [chunks.x, chunks.y, design_size.x, design_size.y]
 
 
 func _find_type_index(map_type: String) -> int:
@@ -272,32 +273,32 @@ func _on_create_pressed() -> void:
 	var map_id := map_id_edit.text.strip_edges()
 	var display_name := display_name_edit.text.strip_edges()
 	if display_name.is_empty():
-		status_label.text = "创建地图失败：地图名称不能为空"
+		status_label.text = "创建地图模板失败：模板名称不能为空"
 		return
 	var id_pattern := RegEx.new()
 	id_pattern.compile("^[A-Za-z0-9][A-Za-z0-9_-]*$")
 	if map_id.is_empty() or id_pattern.search(map_id) == null:
-		status_label.text = "创建地图失败：地图 ID 只能使用英文、数字、下划线或短横线"
+		status_label.text = "创建地图模板失败：地图 ID 只能使用英文、数字、下划线或短横线"
 		return
 	var target_path := MapEditorSaveService.default_path(map_id)
 	var ground_manifest_path := "res://map_editor_workspace/%s/ground/ground_manifest.json" % map_id
 	if FileAccess.file_exists(target_path) or FileAccess.file_exists(ground_manifest_path):
-		status_label.text = "创建地图失败：地图 %s 已存在，请先打开该地图" % map_id
+		status_label.text = "创建地图模板失败：地图工作区 %s 已存在，请勿重复创建" % map_id
 		return
 	var map_type := str(map_type_option.get_item_metadata(map_type_option.selected))
 	var chunk_grid := Vector2i(int(create_chunk_x.value), int(create_chunk_y.value))
 	var document := MapEditorTypes.new_custom_map(map_id, int(runtime_id_edit.value), display_name, map_type, chunk_grid)
-	_adopt_new_document(document, "已创建地图")
+	_adopt_new_document(document, "已创建地图模板")
 	var saved := MapEditorSaveService.save_document(current_document)
 	if saved.get("ok", false):
-		status_label.text = "地图已创建并保存：%s（%d×%d Chunk）" % [display_name, chunk_grid.x, chunk_grid.y]
+		status_label.text = "地图模板已创建、打开并保存：%s（%d×%d Chunk）" % [display_name, chunk_grid.x, chunk_grid.y]
 		create_map_dialog.hide()
 	else:
-		status_label.text = "地图已创建但保存失败：%s" % saved.get("errors", [])
+		status_label.text = "地图模板已创建但保存失败：%s" % saved.get("errors", [])
 
 
 func _on_create_map_dialog_requested() -> void:
-	display_name_edit.text = "新地图"
+	display_name_edit.text = "新地图模板"
 	map_id_edit.text = "new_map"
 	runtime_id_edit.value = 990100
 	map_type_option.select(_find_type_index("quest_room"))
@@ -314,15 +315,31 @@ func _on_open_template_pressed() -> void:
 		status_label.text = "请选择要打开的地图模板"
 		return
 	var template_id := str(map_template_option.get_item_metadata(map_template_option.selected))
+	_open_template_by_id(template_id)
+
+
+func _open_template_by_id(template_id: String, document_path := "", workspace_override := "") -> bool:
 	var template := MapDesignCatalogService.find_blank_template(template_id)
 	if template.is_empty():
 		status_label.text = "地图模板不存在：%s" % template_id
-		return
-	var path := MapEditorSaveService.default_path(str(template.get("map_id", "")))
-	if not FileAccess.file_exists(path):
-		status_label.text = "该模板还没有地图工作区；请点击“从所选模板创建地图”"
-		return
-	_open_document_path(path)
+		return false
+	var path := document_path if not document_path.is_empty() else MapEditorSaveService.default_path(str(template.get("map_id", "")))
+	if FileAccess.file_exists(path):
+		return _open_document_path(path)
+	var document := MapEditorTypes.new_map_from_blank_template(template_id)
+	if document.is_empty():
+		status_label.text = "无法创建地图模板：%s" % template_id
+		return false
+	if not workspace_override.is_empty():
+		document.editor_meta["workspace"] = workspace_override
+	_adopt_new_document(document, "已从所选模板新建并打开", path)
+	var saved := MapEditorSaveService.save_document(current_document, path)
+	if saved.get("ok", false):
+		status_label.text = "地图模板已创建、打开并保存：%s" % str(document.get("display_name", document.get("map_id", "")))
+		return true
+	else:
+		status_label.text = "地图模板已打开，但保存失败：%s" % saved.get("errors", [])
+		return false
 
 
 func _on_map_template_selected(index: int) -> void:
@@ -330,27 +347,7 @@ func _on_map_template_selected(index: int) -> void:
 	var template := MapDesignCatalogService.find_blank_template(template_id)
 	if template.is_empty(): return
 	var design_size: Array = template.get("design_size", [0, 0])
-	template_info_label.text = "所选模板：%d×%d 格" % [int(design_size[0]), int(design_size[1])]
-
-
-func _on_blank_template_create_pressed() -> void:
-	if map_template_option.selected < 0: return
-	var template_id := str(map_template_option.get_item_metadata(map_template_option.selected))
-	var document := MapEditorTypes.new_map_from_blank_template(template_id)
-	if document.is_empty():
-		status_label.text = "空模板不存在：%s" % template_id
-		return
-	var document_path := MapEditorSaveService.default_path(str(document.map_id))
-	var manifest_path := str(document.ground.get("workspace_manifest", ""))
-	if FileAccess.file_exists(document_path) or (not manifest_path.is_empty() and FileAccess.file_exists(manifest_path)):
-		status_label.text = "该地图工作区已经存在，请点击“打开地图模板”"
-		return
-	_adopt_new_document(document, "已从空模板新建")
-	var saved := MapEditorSaveService.save_document(current_document)
-	if saved.get("ok", false):
-		status_label.text = "已从所选模板创建并保存地图：%s" % str(document.get("display_name", document.get("map_id", "")))
-	else:
-		status_label.text = "地图已创建但保存失败：%s" % saved.get("errors", [])
+	template_info_label.text = "所选模板：%d×%d 格；尚未创建时会自动新建并打开" % [int(design_size[0]), int(design_size[1])]
 
 
 func _create_map(map_id: String, map_type: String, runtime_map_id: int, display_name: String) -> void:
@@ -358,13 +355,14 @@ func _create_map(map_id: String, map_type: String, runtime_map_id: int, display_
 	_adopt_new_document(MapEditorTypes.new_map_from_catalog(map_id, map_type, runtime_map_id, display_name), "已新建")
 
 
-func _adopt_new_document(document: Dictionary, status_prefix: String) -> void:
+func _adopt_new_document(document: Dictionary, status_prefix: String, document_path := "") -> void:
 	current_document = document
 	map_id_edit.text = str(current_document.map_id); display_name_edit.text = str(current_document.display_name); runtime_id_edit.value = int(current_document.runtime_map_id)
 	map_type_option.select(_find_type_index(str(current_document.design.map_type)))
 	var design_size: Array = current_document.design.design_size
 	size_label.text = "设计尺寸：%d × %d（64×32 等距格）" % [int(design_size[0]), int(design_size[1])]
-	path_label.text = "工作文件：%s" % ProjectSettings.globalize_path(MapEditorSaveService.default_path(str(current_document.map_id)))
+	var resolved_document_path := document_path if not document_path.is_empty() else MapEditorSaveService.default_path(str(current_document.map_id))
+	path_label.text = "工作文件：%s" % ProjectSettings.globalize_path(resolved_document_path)
 	status_label.text = "%s；source_size 不会覆盖 design_size" % status_prefix
 	preview.set_document(current_document)
 	var initialized := MapEditorGroundService.initialize(current_document)
@@ -428,7 +426,7 @@ func _on_open_pressed() -> void:
 	_open_document_path(MapEditorSaveService.default_path(str(current_document.get("map_id", ""))))
 
 
-func _open_document_path(path: String) -> void:
+func _open_document_path(path: String) -> bool:
 	var result := MapEditorLoadService.load_document(path)
 	if result.get("ok", false):
 		current_document = result.document
@@ -445,7 +443,9 @@ func _open_document_path(path: String) -> void:
 		var initialized := MapEditorGroundService.initialize(current_document)
 		if initialized.ok: preview.set_ground_state(initialized.state)
 		status_label.text = "地图打开成功：%s" % path
-	else: status_label.text = "打开失败：%s" % result.get("errors", [])
+		return true
+	status_label.text = "打开失败：%s" % result.get("errors", [])
+	return false
 
 
 func _ensure_map_portal_semantics() -> void:
@@ -1043,7 +1043,8 @@ func _on_manual_collision_tile_clicked(tile: Vector2i) -> void:
 func _on_manual_collision_cancelled() -> void:
 	manual_collision_start = Vector2i(-1, -1)
 	manual_polygon_points.clear()
-	status_label.text = "已取消手工碰撞绘制"
+	_set_active_tool("place")
+	status_label.text = "已取消手工碰撞绘制，并返回素材放置"
 
 
 func _commit_manual_collision(shape: String, data: Dictionary) -> void:
