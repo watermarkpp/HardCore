@@ -661,12 +661,13 @@ func _return_to_spawn()->void:
 
 func _draw() -> void:
 	var radius := 27.0 if is_boss else 16.0
-	draw_ellipse_shadow(radius)
+	var ground_center := ground_indicator_center()
+	draw_ellipse_shadow(radius, ground_center)
 	if _dying:
 		return
 	if is_targeted:
 		# 细线选中圈与脚底接触阴影共面，避免形成托起Boss的发光平台。
-		draw_set_transform(Vector2(0, radius * 0.28), 0.0, Vector2(1.0, 0.30))
+		draw_set_transform(ground_center, 0.0, Vector2(1.0, 0.30))
 		draw_circle(Vector2.ZERO, radius + 6.0, Color(1.0, 0.78, 0.18, 0.78), false, 2.0)
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	var uses_final_art := visual != null and visual.uses_final_art()
@@ -715,8 +716,14 @@ func _draw() -> void:
 	draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width * float(current_hp) / float(max_hp), 5), Color(0.85, 0.12, 0.08))
 
 
-func draw_ellipse_shadow(radius: float) -> void:
-	draw_set_transform(Vector2(0, radius * 0.28), 0.0, Vector2(1.0, 0.36))
+func ground_indicator_center() -> Vector2:
+	var radius := 27.0 if is_boss else 16.0
+	var fallback := Vector2(0, radius * 0.28)
+	return visual.ground_contact_position(fallback) if visual != null else fallback
+
+
+func draw_ellipse_shadow(radius: float, center := Vector2.ZERO) -> void:
+	draw_set_transform(center, 0.0, Vector2(1.0, 0.36))
 	draw_circle(Vector2.ZERO, radius, Color(0, 0, 0, 0.30))
 	draw_circle(Vector2(0, -radius * 0.08), radius * 0.56, Color(0, 0, 0, 0.58))
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)

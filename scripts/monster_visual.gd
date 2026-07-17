@@ -4,9 +4,11 @@ extends Node2D
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const BOSS_ART_PATH := "res://assets/data/classic_boss_client_art_sources.json"
 const COMPLETE_ART_PATH := "res://assets/data/complete_monster_client_art_sources.json"
+const GROUND_CONTACTS_PATH := "res://assets/data/monster_ground_contacts.json"
 
 static var _boss_art: Dictionary = {}
 static var _complete_art: Dictionary = {}
+static var _ground_contacts: Dictionary = {}
 
 var actor: EnemyActor
 var sprite: Sprite2D
@@ -16,6 +18,7 @@ var current_direction := 0
 var current_frame := 0
 var frame_size := ArtSpec.MONSTER_FRAME
 var foot_anchor := ArtSpec.MONSTER_FOOT_ANCHOR
+var ground_contact_offsets: Dictionary = {}
 var _elapsed := 0.0
 var _last_state := ""
 var _attack_remaining := 0.0
@@ -37,6 +40,7 @@ func _ready() -> void:
 		var resources: Dictionary = active_resources
 		frame_size = resources.get("frame_size", ArtSpec.MONSTER_FRAME)
 		foot_anchor = resources.get("foot_anchor", ArtSpec.MONSTER_FOOT_ANCHOR)
+		ground_contact_offsets = _ground_contact_offsets_for(actor.monster_data)
 	sprite = Sprite2D.new()
 	sprite.name = "BodySprite"
 	sprite.region_enabled = true
@@ -139,6 +143,59 @@ func _complete_art_manifest() -> Dictionary:
 		var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
 		_complete_art = parsed if parsed is Dictionary else {}
 	return _complete_art
+
+
+func _ground_contact_catalog() -> Dictionary:
+	if _ground_contacts.is_empty() and FileAccess.file_exists(GROUND_CONTACTS_PATH):
+		var file := FileAccess.open(GROUND_CONTACTS_PATH, FileAccess.READ)
+		var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
+		_ground_contacts = parsed if parsed is Dictionary else {}
+	return _ground_contacts
+
+
+func _ground_contact_offsets_for(monster_data: Dictionary) -> Dictionary:
+	var catalog := _ground_contact_catalog()
+	var profile_by_id: Variant = catalog.get("groundContactProfileByMonsterId", {})
+	var profiles: Variant = catalog.get("groundContactProfiles", {})
+	var monster_key := MonsterIdentityScript.stable_key(monster_data)
+	if not monster_key.is_empty() and profile_by_id is Dictionary and profiles is Dictionary:
+		var direct_profile: Variant = profiles.get(str(profile_by_id.get(monster_key, "")), {})
+		if direct_profile is Dictionary and not direct_profile.is_empty():
+			var direct_offsets: Variant = direct_profile.get("offsetsByActionDirection", {})
+			return direct_offsets if direct_offsets is Dictionary else {}
+	var legacy_ids: Variant = catalog.get("legacyNameToMonsterId", {})
+	if legacy_ids is Dictionary and profile_by_id is Dictionary and profiles is Dictionary:
+		for legacy_name: String in [
+			str(monster_data.get("name", "")),
+			str(monster_data.get("baseName", "")),
+		]:
+			if legacy_name.is_empty() or not legacy_ids.has(legacy_name):
+				continue
+			var legacy_monster_key := str(int(legacy_ids[legacy_name]))
+			var legacy_profile: Variant = profiles.get(str(profile_by_id.get(legacy_monster_key, "")), {})
+			if legacy_profile is Dictionary and not legacy_profile.is_empty():
+				var legacy_offsets: Variant = legacy_profile.get("offsetsByActionDirection", {})
+				return legacy_offsets if legacy_offsets is Dictionary else {}
+	return {}
+
+
+func ground_contact_offset() -> Vector2:
+	var action_offsets: Variant = ground_contact_offsets.get(current_state, [])
+	if not action_offsets is Array or action_offsets.is_empty():
+		action_offsets = ground_contact_offsets.get("idle", [])
+	if not action_offsets is Array or action_offsets.is_empty():
+		return Vector2.ZERO
+	var direction := clampi(current_direction, 0, action_offsets.size() - 1)
+	var values: Variant = action_offsets[direction]
+	if not values is Array or values.size() < 2:
+		return Vector2.ZERO
+	return Vector2(float(values[0]), float(values[1]))
+
+
+func ground_contact_position(fallback: Vector2) -> Vector2:
+	if not uses_final_art() or ground_contact_offsets.is_empty():
+		return fallback
+	return position + ground_contact_offset()
 
 
 func _direction_row(direction: Vector2) -> int:
