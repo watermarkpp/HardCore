@@ -191,9 +191,10 @@ func _build_bag_panel() -> void:
 	panel.add_child(_section_title("综合背包", 492))
 	bag_summary_label = Label.new()
 	bag_summary_label.name = "BagSummary"
-	bag_summary_label.position = Vector2(246, 13)
-	bag_summary_label.size = Vector2(226, 30)
+	bag_summary_label.position = Vector2(246, 19)
+	bag_summary_label.size = Vector2(218, 26)
 	bag_summary_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	bag_summary_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	bag_summary_label.theme_type_variation = "GothicMutedLabel"
 	panel.add_child(bag_summary_label)
 	var scroll := ScrollContainer.new()

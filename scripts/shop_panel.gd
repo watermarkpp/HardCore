@@ -115,9 +115,10 @@ func _build_goods_section() -> void:
 	panel.add_child(sell_tab_button)
 	gold_label = Label.new()
 	gold_label.name = "GoldLabel"
-	gold_label.position = Vector2(372, 14)
-	gold_label.size = Vector2(254, 30)
+	gold_label.position = Vector2(372, 20)
+	gold_label.size = Vector2(246, 28)
 	gold_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	gold_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	gold_label.theme_type_variation = "GothicMutedLabel"
 	gold_label.add_theme_color_override("font_color", Color("d6b16f"))
 	panel.add_child(gold_label)
@@ -142,8 +143,8 @@ func _build_detail_section() -> void:
 	panel.add_child(_section_title("商品详情", 366))
 	detail_label = RichTextLabel.new()
 	detail_label.name = "DetailLabel"
-	detail_label.position = Vector2(18, 56)
-	detail_label.size = Vector2(330, 286)
+	detail_label.position = Vector2(26, 62)
+	detail_label.size = Vector2(314, 280)
 	detail_label.bbcode_enabled = true
 	detail_label.fit_content = false
 	detail_label.scroll_active = true
@@ -254,9 +255,10 @@ func _framed_section(node_name: String, rect: Rect2) -> Panel:
 func _section_title(text_value: String, section_width: float) -> Label:
 	var label := Label.new()
 	label.text = text_value
-	label.position = Vector2(18, 12)
-	label.size = Vector2(section_width - 36.0, 30)
+	label.position = Vector2(24, 18)
+	label.size = Vector2(section_width - 48.0, 28)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.theme_type_variation = "GothicSectionTitle"
 	return label
 

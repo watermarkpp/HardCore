@@ -36,6 +36,8 @@ func _run() -> void:
 	await get_tree().process_frame
 	assert(panel.size == Vector2(1080, 620), "商店没有使用横屏安全尺寸")
 	assert(panel.theme_type_variation == "GothicModalFrame", "商店没有复用公共哥特外框")
+	assert(panel.gold_label.position.y >= 20.0 and panel.gold_label.vertical_alignment == VERTICAL_ALIGNMENT_CENTER, "商店金币文字仍然贴近装饰框上沿")
+	assert(panel.detail_label.position.x >= 24.0 and panel.detail_label.position.y >= 60.0, "商品详情文字没有避开装饰框安全内边距")
 	assert(panel.goods_grid.columns == 2 and panel.goods_buttons.size() == STOCK.size(), "商品没有使用两列双格卡布局")
 	assert(not panel.item_list.visible and panel.item_list.item_count == STOCK.size(), "商店兼容选择列表异常")
 	for card: Button in panel.goods_buttons:
