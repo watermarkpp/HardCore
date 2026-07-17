@@ -1,0 +1,24 @@
+{
+  "contractId": "ui.map.teleport.v1",
+  "policy": "UI never decides teleport availability, destination maps, or arrival anchors. Gameplay/map integration supplies all teleport rules.",
+  "worldTreeInput": {
+    "method": "set_world_tree(nodes)",
+    "nodeFields": ["node_id", "label", "depth", "map_ids", "map_groups", "regions", "name_terms"]
+  },
+  "availabilityRequest": {
+    "signal": "teleport_availability_requested(map_ids)",
+    "hudForwardSignal": "GameHUD.map_teleport_availability_requested(map_ids)",
+    "description": "Visible child map runtime IDs requiring availability rules."
+  },
+  "availabilityResponse": {
+    "method": "set_teleport_availability(rules)",
+    "hudForwardMethod": "GameHUD.set_map_teleport_availability(rules)",
+    "key": "runtime map ID as integer or string",
+    "ruleFields": ["enabled", "destination_map_id", "arrival_anchor_id", "destination_label", "reason", "rule_id"]
+  },
+  "teleportRequest": {
+    "signal": "teleport_requested(request)",
+    "hudForwardSignal": "GameHUD.map_teleport_requested(request)",
+    "requestFields": ["contract_id", "selected_map_id", "destination_map_id", "arrival_anchor_id", "rule_id"]
+  }
+}

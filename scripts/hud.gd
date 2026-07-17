@@ -18,6 +18,8 @@ signal attack_released
 signal interact_pressed
 signal skill_pressed(slot_index: int)
 signal map_travel_requested(map_id: int)
+signal map_teleport_requested(request: Dictionary)
+signal map_teleport_availability_requested(map_ids: Array)
 signal target_switch_pressed
 signal auto_target_changed(enabled: bool)
 signal special_action_pressed(effect_id: String)
@@ -489,6 +491,10 @@ func _build_modal_panels(root: Control) -> void:
 	map_panel = MapPanel.new()
 	map_panel.hide()
 	map_panel.map_selected.connect(func(map_id: int) -> void: map_travel_requested.emit(map_id))
+	map_panel.teleport_requested.connect(func(request: Dictionary) -> void: map_teleport_requested.emit(request))
+	map_panel.teleport_availability_requested.connect(
+		func(map_ids: Array) -> void: map_teleport_availability_requested.emit(map_ids)
+	)
 	root.add_child(map_panel)
 	warehouse_panel = WarehousePanel.new()
 	warehouse_panel.hide()
@@ -691,6 +697,11 @@ func _toggle_map_panel() -> void:
 	else:
 		_close_modal_panels()
 		map_panel.open_panel()
+
+
+func set_map_teleport_availability(rules: Dictionary) -> void:
+	if map_panel != null:
+		map_panel.set_teleport_availability(rules)
 
 
 func set_zone_name(zone_name: String) -> void:
