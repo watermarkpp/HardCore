@@ -1,0 +1,5107 @@
+{
+  "schemaVersion": 1,
+  "package_id": "profession.package.taoist.v1",
+  "profession_id": "taoist",
+  "display_name": "道士",
+  "gender_policy": "male_only",
+  "character_creation": {
+    "allowed_genders": [
+      "male"
+    ],
+    "initial_skill_ids": [],
+    "learning_mode": "skill_book_then_usage_training"
+  },
+  "growth": {
+    "runtime_formula": {
+      "formula_id": "taoist.server_setup.hp_mp.v1",
+      "max_hp": "14 + round(((level / hp_divisor + hp_rate) * level))",
+      "max_mp": "13 + round(((level / mp_divisor) * 2.2 * level))",
+      "hp_divisor": 6.0,
+      "hp_rate": 2.5,
+      "mp_divisor": 8.0,
+      "attack_min": 1,
+      "attack_max": 4,
+      "source": "Server.MirDB/Setup/LevelValueOfTaosHP+LevelValueOfTaosHPRate+LevelValueOfTaosMP"
+    },
+    "legacy_candidate": {
+      "attack_max": 4,
+      "attack_min": 1,
+      "hp_base": 75,
+      "hp_per_level": 12,
+      "mp_base": 40,
+      "mp_per_level": 12
+    },
+    "source_priority": {
+      "lane": "server_rules",
+      "tier": "primary",
+      "order": 0,
+      "weight": 100
+    }
+  },
+  "runtime": {
+    "package_contract": "caster_profession_package.v1",
+    "state_contract": "caster_profession_state.v1",
+    "cast_contract": "caster_skill_execution.v1",
+    "cooldown_policy": "client_action_profile_selected; server candidate retained per level",
+    "resource_policy": "mana plus explicit taoist material costs",
+    "training_policy": {
+      "points_per_accepted_cast": 1,
+      "status": "project_adapter_C_candidate",
+      "reason": "MagicInfo supplies level thresholds but the recovered source set does not expose a separate per-cast increment"
+    }
+  },
+  "skills": {
+    "taoist.defense": {
+      "skill_id": "taoist.defense",
+      "profession_id": "taoist",
+      "display_name": "神圣战甲术",
+      "levels": [
+        {
+          "skillLevel": 0,
+          "requiredCharacterLevel": 25,
+          "trainingPoints": null,
+          "manaCost": 2,
+          "delay": 40,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 25,
+              "service_candidate_value": 25,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": null,
+              "service_candidate_value": null,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 2,
+              "service_candidate_value": 2,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 71,
+            "required_character_level": 25,
+            "training_points": null,
+            "mana_cost": 2,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 1,
+          "requiredCharacterLevel": 25,
+          "trainingPoints": 5000,
+          "manaCost": 4,
+          "delay": 40,
+          "effect": "+ 持续时间",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 25,
+              "service_candidate_value": 25,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 5000,
+              "service_candidate_value": 400,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 4,
+              "service_candidate_value": 4,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 71,
+            "required_character_level": 25,
+            "training_points": 400,
+            "mana_cost": 4,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 2,
+          "requiredCharacterLevel": 27,
+          "trainingPoints": 10000,
+          "manaCost": 6,
+          "delay": 40,
+          "effect": "+ 持续时间",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 27,
+              "service_candidate_value": 27,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 10000,
+              "service_candidate_value": 600,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 6,
+              "service_candidate_value": 6,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 71,
+            "required_character_level": 27,
+            "training_points": 600,
+            "mana_cost": 6,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 3,
+          "requiredCharacterLevel": 29,
+          "trainingPoints": 15000,
+          "manaCost": 8,
+          "delay": 40,
+          "effect": "+ 持续时间",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 29,
+              "service_candidate_value": 29,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 15000,
+              "service_candidate_value": 1000,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 8,
+              "service_candidate_value": 8,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 71,
+            "required_character_level": 29,
+            "training_points": 1000,
+            "mana_cost": 8,
+            "cooldown_ms": 1500
+          }
+        }
+      ],
+      "combat_profile": {
+        "cast_type": "defense_buff",
+        "multiplier": 0.0,
+        "profession": "道士",
+        "range": 170.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.defense",
+        "display_name": "神圣战甲术",
+        "formula_id": "taoist.defense.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "action_profile": {
+        "area_radius": 170.0,
+        "cooldown": 0.9,
+        "hit_frame": 4,
+        "target_mode": "self_area",
+        "windup": 0.4,
+        "cast_type": "defense_buff",
+        "multiplier": 0.0,
+        "profession": "道士",
+        "range": 170.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.defense",
+        "display_name": "神圣战甲术",
+        "formula_id": "taoist.defense.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "combat_rule": {
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_DEJIWONHO",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 71,
+        "buff_power_formula": "get_power13(60) + sc_roll*10",
+        "area_radius_cells": 3,
+        "amulet_cost": 1
+      },
+      "visual_profile": {
+        "status": "formal_primary_client_pixel",
+        "asset_id": "defense",
+        "role": "area_effect",
+        "path": "assets/art/characters/taoist/effects/defense.png",
+        "skill_ids": [
+          "taoist.defense"
+        ],
+        "distribution_id": "client.classic_raw_complete",
+        "source_priority": {
+          "lane": "client_assets",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100
+        },
+        "original_path": "Data/Magic.wil",
+        "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+        "source_index": 1340,
+        "source_offset": 14689672,
+        "source_draw_offset": [
+          -10,
+          -119
+        ],
+        "pixel_size": [
+          68,
+          71
+        ],
+        "library_image_count": 4010,
+        "mapping_rule": "TBujaukGroundEffect magic number 12 uses base 1160 + 18*10",
+        "mapping_confidence": "A",
+        "pixel_confidence": "A"
+      }
+    },
+    "taoist.entrapment": {
+      "skill_id": "taoist.entrapment",
+      "profession_id": "taoist",
+      "display_name": "困魔咒",
+      "levels": [
+        {
+          "skillLevel": 0,
+          "requiredCharacterLevel": 28,
+          "trainingPoints": null,
+          "manaCost": 7,
+          "delay": 50,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 28,
+              "service_candidate_value": 28,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": null,
+              "service_candidate_value": null,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 7,
+              "service_candidate_value": 7,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 73,
+            "required_character_level": 28,
+            "training_points": null,
+            "mana_cost": 7,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 1,
+          "requiredCharacterLevel": 28,
+          "trainingPoints": 3000,
+          "manaCost": 10,
+          "delay": 50,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 28,
+              "service_candidate_value": 28,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 3000,
+              "service_candidate_value": 250,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 10,
+              "service_candidate_value": 10,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 73,
+            "required_character_level": 28,
+            "training_points": 250,
+            "mana_cost": 10,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 2,
+          "requiredCharacterLevel": 30,
+          "trainingPoints": 6000,
+          "manaCost": 13,
+          "delay": 50,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 30,
+              "service_candidate_value": 30,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 6000,
+              "service_candidate_value": 500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 13,
+              "service_candidate_value": 13,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 73,
+            "required_character_level": 30,
+            "training_points": 500,
+            "mana_cost": 13,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 3,
+          "requiredCharacterLevel": 32,
+          "trainingPoints": 12000,
+          "manaCost": 16,
+          "delay": 50,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 32,
+              "service_candidate_value": 32,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 12000,
+              "service_candidate_value": 1000,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 16,
+              "service_candidate_value": 16,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 73,
+            "required_character_level": 32,
+            "training_points": 1000,
+            "mana_cost": 16,
+            "cooldown_ms": 1500
+          }
+        }
+      ],
+      "combat_profile": {
+        "cast_type": "root_area",
+        "multiplier": 0.0,
+        "profession": "道士",
+        "range": 260.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.entrapment",
+        "display_name": "困魔咒",
+        "formula_id": "taoist.entrapment.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "action_profile": {
+        "area_radius": 115.0,
+        "cooldown": 1.0,
+        "hit_frame": 5,
+        "target_mode": "target_area",
+        "windup": 0.45,
+        "cast_type": "root_area",
+        "multiplier": 0.0,
+        "profession": "道士",
+        "range": 260.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.entrapment",
+        "display_name": "困魔咒",
+        "formula_id": "taoist.entrapment.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "combat_rule": {
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.MagMakeHolyCurtain",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 73,
+        "duration_formula": "get_power13(40) + sc_roll*3",
+        "ring_event_count": 8,
+        "amulet_cost": 1
+      },
+      "visual_profile": {
+        "status": "formal_primary_client_pixel",
+        "asset_id": "binding_circle",
+        "role": "area_effect",
+        "path": "assets/art/characters/taoist/effects/binding_circle.png",
+        "skill_ids": [
+          "taoist.entrapment"
+        ],
+        "distribution_id": "client.classic_raw_complete",
+        "source_priority": {
+          "lane": "client_assets",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100
+        },
+        "original_path": "Data/Magic.wil",
+        "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+        "source_index": 1380,
+        "source_offset": 15846796,
+        "source_draw_offset": [
+          -13,
+          -9
+        ],
+        "pixel_size": [
+          72,
+          29
+        ],
+        "library_image_count": 4010,
+        "mapping_rule": "EffectBase effect 14 explicitly labels ground nail/entrapment at 1380",
+        "mapping_confidence": "A",
+        "pixel_confidence": "A"
+      }
+    },
+    "taoist.healing": {
+      "skill_id": "taoist.healing",
+      "profession_id": "taoist",
+      "display_name": "治愈术",
+      "levels": [
+        {
+          "skillLevel": 0,
+          "requiredCharacterLevel": 7,
+          "trainingPoints": null,
+          "manaCost": 3,
+          "delay": 40,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 7,
+              "service_candidate_value": 7,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": null,
+              "service_candidate_value": null,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 3,
+              "service_candidate_value": 3,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 61,
+            "required_character_level": 7,
+            "training_points": null,
+            "mana_cost": 3,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 1,
+          "requiredCharacterLevel": 7,
+          "trainingPoints": 500,
+          "manaCost": 5,
+          "delay": 40,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 7,
+              "service_candidate_value": 7,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 500,
+              "service_candidate_value": 15,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 5,
+              "service_candidate_value": 5,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 61,
+            "required_character_level": 7,
+            "training_points": 15,
+            "mana_cost": 5,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 2,
+          "requiredCharacterLevel": 11,
+          "trainingPoints": 1500,
+          "manaCost": 7,
+          "delay": 40,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 11,
+              "service_candidate_value": 11,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 1500,
+              "service_candidate_value": 35,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 7,
+              "service_candidate_value": 7,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 61,
+            "required_character_level": 11,
+            "training_points": 35,
+            "mana_cost": 7,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 3,
+          "requiredCharacterLevel": 16,
+          "trainingPoints": 3000,
+          "manaCost": 9,
+          "delay": 40,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 16,
+              "service_candidate_value": 14,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 3000,
+              "service_candidate_value": 70,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 9,
+              "service_candidate_value": 9,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 61,
+            "required_character_level": 14,
+            "training_points": 70,
+            "mana_cost": 9,
+            "cooldown_ms": 1500
+          }
+        }
+      ],
+      "combat_profile": {
+        "cast_type": "heal",
+        "multiplier": 1.2,
+        "profession": "道士",
+        "range": 280.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.healing",
+        "display_name": "治愈术",
+        "formula_id": "taoist.healing.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "action_profile": {
+        "area_radius": 0.0,
+        "cooldown": 0.75,
+        "hit_frame": 4,
+        "target_mode": "self",
+        "windup": 0.35,
+        "cast_type": "heal",
+        "multiplier": 1.2,
+        "profession": "道士",
+        "range": 280.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.healing",
+        "display_name": "治愈术",
+        "formula_id": "taoist.healing.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "combat_rule": {
+        "formula_group": "classic_healing",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_HEALLING",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 14,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 61,
+        "apply_delay_ms": 800
+      },
+      "visual_profile": {
+        "status": "formal_primary_client_pixel",
+        "asset_id": "healing",
+        "role": "target_effect",
+        "path": "assets/art/characters/taoist/effects/healing.png",
+        "skill_ids": [
+          "taoist.healing"
+        ],
+        "distribution_id": "client.classic_raw_complete",
+        "source_priority": {
+          "lane": "client_assets",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100
+        },
+        "original_path": "Data/Magic.wil",
+        "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+        "source_index": 200,
+        "source_offset": 1483760,
+        "source_draw_offset": [
+          -13,
+          -19
+        ],
+        "pixel_size": [
+          76,
+          75
+        ],
+        "library_image_count": 4010,
+        "mapping_rule": "EffectBase effect 2 explicitly labels healing at 200",
+        "mapping_confidence": "A",
+        "pixel_confidence": "A"
+      }
+    },
+    "taoist.invisibility": {
+      "skill_id": "taoist.invisibility",
+      "profession_id": "taoist",
+      "display_name": "隐身术",
+      "levels": [
+        {
+          "skillLevel": 0,
+          "requiredCharacterLevel": 20,
+          "trainingPoints": null,
+          "manaCost": 1,
+          "delay": 50,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 20,
+              "service_candidate_value": 20,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": null,
+              "service_candidate_value": null,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 1,
+              "service_candidate_value": 1,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 67,
+            "required_character_level": 20,
+            "training_points": null,
+            "mana_cost": 1,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 1,
+          "requiredCharacterLevel": 20,
+          "trainingPoints": 3000,
+          "manaCost": 2,
+          "delay": 50,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 20,
+              "service_candidate_value": 20,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 3000,
+              "service_candidate_value": 130,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 2,
+              "service_candidate_value": 2,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 67,
+            "required_character_level": 20,
+            "training_points": 130,
+            "mana_cost": 2,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 2,
+          "requiredCharacterLevel": 23,
+          "trainingPoints": 6000,
+          "manaCost": 3,
+          "delay": 50,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 23,
+              "service_candidate_value": 23,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 6000,
+              "service_candidate_value": 270,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 3,
+              "service_candidate_value": 3,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 67,
+            "required_character_level": 23,
+            "training_points": 270,
+            "mana_cost": 3,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 3,
+          "requiredCharacterLevel": 26,
+          "trainingPoints": 9000,
+          "manaCost": 4,
+          "delay": 50,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 26,
+              "service_candidate_value": 26,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 9000,
+              "service_candidate_value": 530,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 4,
+              "service_candidate_value": 4,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 67,
+            "required_character_level": 26,
+            "training_points": 530,
+            "mana_cost": 4,
+            "cooldown_ms": 1500
+          }
+        }
+      ],
+      "combat_profile": {
+        "cast_type": "stealth",
+        "multiplier": 0.0,
+        "profession": "道士",
+        "range": 0.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.invisibility",
+        "display_name": "隐身术",
+        "formula_id": "taoist.invisibility.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "action_profile": {
+        "area_radius": 0.0,
+        "cooldown": 0.9,
+        "hit_frame": 4,
+        "target_mode": "self",
+        "windup": 0.35,
+        "cast_type": "stealth",
+        "multiplier": 0.0,
+        "profession": "道士",
+        "range": 0.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.invisibility",
+        "display_name": "隐身术",
+        "formula_id": "taoist.invisibility.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "combat_rule": {
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.MagMakePrivateTransparent",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 67,
+        "duration_formula": "get_power13(30) + sc_roll*3",
+        "area_radius_cells": 0,
+        "amulet_cost": 1
+      },
+      "visual_profile": {
+        "status": "formal_primary_client_pixel",
+        "asset_id": "invisibility",
+        "role": "self_area",
+        "path": "assets/art/characters/taoist/effects/invisibility.png",
+        "skill_ids": [
+          "taoist.invisibility",
+          "taoist.mass_invisibility"
+        ],
+        "distribution_id": "client.classic_raw_complete",
+        "source_priority": {
+          "lane": "client_assets",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100
+        },
+        "original_path": "Data/Magic.wil",
+        "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+        "source_index": 1520,
+        "source_offset": 16969936,
+        "source_draw_offset": [
+          -8,
+          -39
+        ],
+        "pixel_size": [
+          56,
+          57
+        ],
+        "library_image_count": 4010,
+        "mapping_rule": "EffectBase effect 16 explicitly labels invisibility; group variant reuses the same primary family",
+        "mapping_confidence": "B",
+        "pixel_confidence": "A"
+      }
+    },
+    "taoist.magic_defense": {
+      "skill_id": "taoist.magic_defense",
+      "profession_id": "taoist",
+      "display_name": "幽灵盾",
+      "levels": [
+        {
+          "skillLevel": 0,
+          "requiredCharacterLevel": 22,
+          "trainingPoints": null,
+          "manaCost": 2,
+          "delay": 40,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 22,
+              "service_candidate_value": 22,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": null,
+              "service_candidate_value": null,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 2,
+              "service_candidate_value": 2,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 69,
+            "required_character_level": 22,
+            "training_points": null,
+            "mana_cost": 2,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 1,
+          "requiredCharacterLevel": 22,
+          "trainingPoints": 5000,
+          "manaCost": 4,
+          "delay": 40,
+          "effect": "+ 持续时间",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 22,
+              "service_candidate_value": 22,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 5000,
+              "service_candidate_value": 200,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 4,
+              "service_candidate_value": 4,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 69,
+            "required_character_level": 22,
+            "training_points": 200,
+            "mana_cost": 4,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 2,
+          "requiredCharacterLevel": 24,
+          "trainingPoints": 10000,
+          "manaCost": 6,
+          "delay": 40,
+          "effect": "+ 持续时间",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 24,
+              "service_candidate_value": 24,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 10000,
+              "service_candidate_value": 350,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 6,
+              "service_candidate_value": 6,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 69,
+            "required_character_level": 24,
+            "training_points": 350,
+            "mana_cost": 6,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 3,
+          "requiredCharacterLevel": 26,
+          "trainingPoints": 15000,
+          "manaCost": 8,
+          "delay": 40,
+          "effect": "+ 持续时间",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 26,
+              "service_candidate_value": 26,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 15000,
+              "service_candidate_value": 700,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 8,
+              "service_candidate_value": 8,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 69,
+            "required_character_level": 26,
+            "training_points": 700,
+            "mana_cost": 8,
+            "cooldown_ms": 1500
+          }
+        }
+      ],
+      "combat_profile": {
+        "cast_type": "magic_defense_buff",
+        "multiplier": 0.0,
+        "profession": "道士",
+        "range": 170.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.magic_defense",
+        "display_name": "幽灵盾",
+        "formula_id": "taoist.magic_defense.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "action_profile": {
+        "area_radius": 170.0,
+        "cooldown": 0.9,
+        "hit_frame": 4,
+        "target_mode": "self_area",
+        "windup": 0.4,
+        "cast_type": "magic_defense_buff",
+        "multiplier": 0.0,
+        "profession": "道士",
+        "range": 170.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.magic_defense",
+        "display_name": "幽灵盾",
+        "formula_id": "taoist.magic_defense.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "combat_rule": {
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_HANGMAJINBUB",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 69,
+        "buff_power_formula": "get_power13(60) + sc_roll*10",
+        "area_radius_cells": 3,
+        "amulet_cost": 1
+      },
+      "visual_profile": {
+        "status": "formal_primary_client_pixel",
+        "asset_id": "magic_defense",
+        "role": "area_effect",
+        "path": "assets/art/characters/taoist/effects/magic_defense.png",
+        "skill_ids": [
+          "taoist.magic_defense"
+        ],
+        "distribution_id": "client.classic_raw_complete",
+        "source_priority": {
+          "lane": "client_assets",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100
+        },
+        "original_path": "Data/Magic.wil",
+        "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+        "source_index": 1320,
+        "source_offset": 13622984,
+        "source_draw_offset": [
+          -13,
+          -117
+        ],
+        "pixel_size": [
+          68,
+          69
+        ],
+        "library_image_count": 4010,
+        "mapping_rule": "TBujaukGroundEffect magic number 11 uses base 1160 + 16*10",
+        "mapping_confidence": "A",
+        "pixel_confidence": "A"
+      }
+    },
+    "taoist.mass_healing": {
+      "skill_id": "taoist.mass_healing",
+      "profession_id": "taoist",
+      "display_name": "群体治疗术",
+      "levels": [
+        {
+          "skillLevel": 0,
+          "requiredCharacterLevel": 33,
+          "trainingPoints": null,
+          "manaCost": 28,
+          "delay": 40,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 33,
+              "service_candidate_value": 31,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": null,
+              "service_candidate_value": null,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 28,
+              "service_candidate_value": 28,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 75,
+            "required_character_level": 31,
+            "training_points": null,
+            "mana_cost": 28,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 1,
+          "requiredCharacterLevel": 33,
+          "trainingPoints": 4000,
+          "manaCost": 31,
+          "delay": 40,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 33,
+              "service_candidate_value": 31,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 4000,
+              "service_candidate_value": 200,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 31,
+              "service_candidate_value": 31,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 75,
+            "required_character_level": 31,
+            "training_points": 200,
+            "mana_cost": 31,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 2,
+          "requiredCharacterLevel": 35,
+          "trainingPoints": 8000,
+          "manaCost": 34,
+          "delay": 40,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 35,
+              "service_candidate_value": 33,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 8000,
+              "service_candidate_value": 400,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 34,
+              "service_candidate_value": 34,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 75,
+            "required_character_level": 33,
+            "training_points": 400,
+            "mana_cost": 34,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 3,
+          "requiredCharacterLevel": 38,
+          "trainingPoints": 12000,
+          "manaCost": 37,
+          "delay": 40,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 38,
+              "service_candidate_value": 36,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 12000,
+              "service_candidate_value": 800,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 37,
+              "service_candidate_value": 37,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 75,
+            "required_character_level": 36,
+            "training_points": 800,
+            "mana_cost": 37,
+            "cooldown_ms": 1500
+          }
+        }
+      ],
+      "combat_profile": {
+        "cast_type": "heal_area",
+        "multiplier": 1.0,
+        "profession": "道士",
+        "range": 190.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.mass_healing",
+        "display_name": "群体治疗术",
+        "formula_id": "taoist.mass_healing.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "action_profile": {
+        "area_radius": 190.0,
+        "cooldown": 1.0,
+        "hit_frame": 4,
+        "target_mode": "self_area",
+        "windup": 0.42,
+        "cast_type": "heal_area",
+        "multiplier": 1.0,
+        "profession": "道士",
+        "range": 190.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.mass_healing",
+        "display_name": "群体治疗术",
+        "formula_id": "taoist.mass_healing.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "combat_rule": {
+        "formula_group": "classic_healing",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_BIGHEALLING",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 4,
+        "power_bonus": 0,
+        "magic_power_base": 10,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 75,
+        "apply_delay_ms": 800,
+        "area_radius_cells": 1
+      },
+      "visual_profile": {
+        "status": "formal_primary_client_pixel",
+        "asset_id": "mass_healing",
+        "role": "area_effect",
+        "path": "assets/art/characters/taoist/effects/mass_healing.png",
+        "skill_ids": [
+          "taoist.mass_healing"
+        ],
+        "distribution_id": "client.classic_raw_complete",
+        "source_priority": {
+          "lane": "client_assets",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100
+        },
+        "original_path": "Data/Magic.wil",
+        "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+        "source_index": 1800,
+        "source_offset": 20218100,
+        "source_draw_offset": [
+          -63,
+          -60
+        ],
+        "pixel_size": [
+          168,
+          116
+        ],
+        "library_image_count": 4010,
+        "mapping_rule": "PlayScn.NewMagic effect 27 explosion base 1800",
+        "mapping_confidence": "A",
+        "pixel_confidence": "A"
+      }
+    },
+    "taoist.mass_invisibility": {
+      "skill_id": "taoist.mass_invisibility",
+      "profession_id": "taoist",
+      "display_name": "集体隐身术",
+      "levels": [
+        {
+          "skillLevel": 0,
+          "requiredCharacterLevel": 21,
+          "trainingPoints": null,
+          "manaCost": 2,
+          "delay": 50,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 21,
+              "service_candidate_value": 21,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": null,
+              "service_candidate_value": null,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 2,
+              "service_candidate_value": 2,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 68,
+            "required_character_level": 21,
+            "training_points": null,
+            "mana_cost": 2,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 1,
+          "requiredCharacterLevel": 21,
+          "trainingPoints": 2000,
+          "manaCost": 4,
+          "delay": 50,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 21,
+              "service_candidate_value": 21,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 2000,
+              "service_candidate_value": 130,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 4,
+              "service_candidate_value": 4,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 68,
+            "required_character_level": 21,
+            "training_points": 130,
+            "mana_cost": 4,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 2,
+          "requiredCharacterLevel": 25,
+          "trainingPoints": 4000,
+          "manaCost": 6,
+          "delay": 50,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 25,
+              "service_candidate_value": 25,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 4000,
+              "service_candidate_value": 270,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 6,
+              "service_candidate_value": 6,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 68,
+            "required_character_level": 25,
+            "training_points": 270,
+            "mana_cost": 6,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 3,
+          "requiredCharacterLevel": 29,
+          "trainingPoints": 8000,
+          "manaCost": 8,
+          "delay": 50,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 29,
+              "service_candidate_value": 29,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 8000,
+              "service_candidate_value": 530,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 8,
+              "service_candidate_value": 8,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 68,
+            "required_character_level": 29,
+            "training_points": 530,
+            "mana_cost": 8,
+            "cooldown_ms": 1500
+          }
+        }
+      ],
+      "combat_profile": {
+        "cast_type": "stealth_area",
+        "multiplier": 0.0,
+        "profession": "道士",
+        "range": 170.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.mass_invisibility",
+        "display_name": "集体隐身术",
+        "formula_id": "taoist.mass_invisibility.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "action_profile": {
+        "area_radius": 170.0,
+        "cooldown": 1.0,
+        "hit_frame": 4,
+        "target_mode": "self_area",
+        "windup": 0.42,
+        "cast_type": "stealth_area",
+        "multiplier": 0.0,
+        "profession": "道士",
+        "range": 170.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.mass_invisibility",
+        "display_name": "集体隐身术",
+        "formula_id": "taoist.mass_invisibility.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "combat_rule": {
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.MagMakeGroupTransparent",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 68,
+        "duration_formula": "get_power13(30) + sc_roll*3",
+        "area_radius_cells": 1,
+        "amulet_cost": 1
+      },
+      "visual_profile": {
+        "status": "formal_primary_client_pixel",
+        "asset_id": "invisibility",
+        "role": "self_area",
+        "path": "assets/art/characters/taoist/effects/invisibility.png",
+        "skill_ids": [
+          "taoist.invisibility",
+          "taoist.mass_invisibility"
+        ],
+        "distribution_id": "client.classic_raw_complete",
+        "source_priority": {
+          "lane": "client_assets",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100
+        },
+        "original_path": "Data/Magic.wil",
+        "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+        "source_index": 1520,
+        "source_offset": 16969936,
+        "source_draw_offset": [
+          -8,
+          -39
+        ],
+        "pixel_size": [
+          56,
+          57
+        ],
+        "library_image_count": 4010,
+        "mapping_rule": "EffectBase effect 16 explicitly labels invisibility; group variant reuses the same primary family",
+        "mapping_confidence": "B",
+        "pixel_confidence": "A"
+      }
+    },
+    "taoist.poison": {
+      "skill_id": "taoist.poison",
+      "profession_id": "taoist",
+      "display_name": "施毒术",
+      "levels": [
+        {
+          "skillLevel": 0,
+          "requiredCharacterLevel": 14,
+          "trainingPoints": null,
+          "manaCost": 2,
+          "delay": 40,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 14,
+              "service_candidate_value": 14,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": null,
+              "service_candidate_value": null,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 2,
+              "service_candidate_value": 2,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 63,
+            "required_character_level": 14,
+            "training_points": null,
+            "mana_cost": 2,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 1,
+          "requiredCharacterLevel": 14,
+          "trainingPoints": 1000,
+          "manaCost": 3,
+          "delay": 40,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 14,
+              "service_candidate_value": 14,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 1000,
+              "service_candidate_value": 70,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 3,
+              "service_candidate_value": 3,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 63,
+            "required_character_level": 14,
+            "training_points": 70,
+            "mana_cost": 3,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 2,
+          "requiredCharacterLevel": 17,
+          "trainingPoints": 2000,
+          "manaCost": 4,
+          "delay": 40,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 17,
+              "service_candidate_value": 17,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 2000,
+              "service_candidate_value": 130,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 4,
+              "service_candidate_value": 4,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 63,
+            "required_character_level": 17,
+            "training_points": 130,
+            "mana_cost": 4,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 3,
+          "requiredCharacterLevel": 20,
+          "trainingPoints": 4000,
+          "manaCost": 5,
+          "delay": 40,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 20,
+              "service_candidate_value": 20,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 4000,
+              "service_candidate_value": 270,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 5,
+              "service_candidate_value": 5,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 63,
+            "required_character_level": 20,
+            "training_points": 270,
+            "mana_cost": 5,
+            "cooldown_ms": 1500
+          }
+        }
+      ],
+      "combat_profile": {
+        "cast_type": "poison",
+        "multiplier": 0.45,
+        "profession": "道士",
+        "range": 330.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.poison",
+        "display_name": "施毒术",
+        "formula_id": "taoist.poison.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "action_profile": {
+        "area_radius": 24.0,
+        "cooldown": 0.72,
+        "hit_frame": 4,
+        "target_mode": "single",
+        "windup": 0.32,
+        "cast_type": "poison",
+        "multiplier": 0.45,
+        "profession": "道士",
+        "range": 330.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.poison",
+        "display_name": "施毒术",
+        "formula_id": "taoist.poison.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "combat_rule": {
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_AMYOUNSUL",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 63,
+        "green_power_formula": "get_power13(40) + sc_roll*2",
+        "red_power_formula": "get_power13(30) + sc_roll*2",
+        "duration_formula": "delphi_round(skill_level/3 * power/20)",
+        "apply_delay_ms": 1000,
+        "green_damage_interval_ms": 2500,
+        "red_armor_rate_tenths": 12,
+        "anti_poison_formula": "random(target_anti_poison+7) <= 6",
+        "amy_ounsul_point": 20
+      },
+      "visual_profile": {
+        "status": "formal_primary_client_pixel",
+        "asset_id": "poison",
+        "role": "target_effect",
+        "path": "assets/art/characters/taoist/effects/poison.png",
+        "skill_ids": [
+          "taoist.poison"
+        ],
+        "distribution_id": "client.classic_raw_complete",
+        "source_priority": {
+          "lane": "client_assets",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100
+        },
+        "original_path": "Data/Magic.wil",
+        "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+        "source_index": 600,
+        "source_offset": 2778944,
+        "source_draw_offset": [
+          20,
+          4
+        ],
+        "pixel_size": [
+          12,
+          10
+        ],
+        "library_image_count": 4010,
+        "mapping_rule": "EffectBase effect 4 explicitly labels poison at 600",
+        "mapping_confidence": "A",
+        "pixel_confidence": "A"
+      }
+    },
+    "taoist.revelation": {
+      "skill_id": "taoist.revelation",
+      "profession_id": "taoist",
+      "display_name": "心灵启示",
+      "levels": [
+        {
+          "skillLevel": 0,
+          "requiredCharacterLevel": 26,
+          "trainingPoints": null,
+          "manaCost": 4,
+          "delay": 40,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 26,
+              "service_candidate_value": 23,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": null,
+              "service_candidate_value": null,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 4,
+              "service_candidate_value": 4,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 70,
+            "required_character_level": 23,
+            "training_points": null,
+            "mana_cost": 4,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 1,
+          "requiredCharacterLevel": 26,
+          "trainingPoints": 4000,
+          "manaCost": 8,
+          "delay": 40,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 26,
+              "service_candidate_value": 23,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 4000,
+              "service_candidate_value": 150,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 8,
+              "service_candidate_value": 8,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 70,
+            "required_character_level": 23,
+            "training_points": 150,
+            "mana_cost": 8,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 2,
+          "requiredCharacterLevel": 30,
+          "trainingPoints": 8000,
+          "manaCost": 12,
+          "delay": 40,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 30,
+              "service_candidate_value": 25,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 8000,
+              "service_candidate_value": 250,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 12,
+              "service_candidate_value": 12,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 70,
+            "required_character_level": 25,
+            "training_points": 250,
+            "mana_cost": 12,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 3,
+          "requiredCharacterLevel": 35,
+          "trainingPoints": 12000,
+          "manaCost": 16,
+          "delay": 40,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 35,
+              "service_candidate_value": 28,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 12000,
+              "service_candidate_value": 400,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 16,
+              "service_candidate_value": 16,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 70,
+            "required_character_level": 28,
+            "training_points": 400,
+            "mana_cost": 16,
+            "cooldown_ms": 1500
+          }
+        }
+      ],
+      "combat_profile": {
+        "cast_type": "inspect",
+        "multiplier": 0.0,
+        "profession": "道士",
+        "range": 300.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.revelation",
+        "display_name": "心灵启示",
+        "formula_id": "taoist.revelation.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "action_profile": {
+        "area_radius": 0.0,
+        "cooldown": 0.55,
+        "hit_frame": 3,
+        "target_mode": "single",
+        "windup": 0.22,
+        "cast_type": "inspect",
+        "multiplier": 0.0,
+        "profession": "道士",
+        "range": 300.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.revelation",
+        "display_name": "心灵启示",
+        "formula_id": "taoist.revelation.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "combat_rule": {
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_SHOWHP",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 70,
+        "duration_formula": "get_power13(sc_roll*2 + 30)",
+        "success_formula": "random(6) <= skill_level + 3"
+      },
+      "visual_profile": {
+        "status": "formal_primary_client_pixel",
+        "asset_id": "revelation",
+        "role": "target_effect",
+        "path": "assets/art/characters/taoist/effects/revelation.png",
+        "skill_ids": [
+          "taoist.revelation"
+        ],
+        "distribution_id": "client.classic_raw_complete",
+        "source_priority": {
+          "lane": "client_assets",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100
+        },
+        "original_path": "Data/Magic.wil",
+        "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+        "source_index": 3990,
+        "source_offset": 34069240,
+        "source_draw_offset": [
+          0,
+          -89
+        ],
+        "pixel_size": [
+          44,
+          62
+        ],
+        "library_image_count": 4010,
+        "mapping_rule": "PlayScn.NewMagic effect 26 explosion base 3990",
+        "mapping_confidence": "A",
+        "pixel_confidence": "A"
+      }
+    },
+    "taoist.soul_fire_talisman": {
+      "skill_id": "taoist.soul_fire_talisman",
+      "profession_id": "taoist",
+      "display_name": "灵魂火符",
+      "levels": [
+        {
+          "skillLevel": 0,
+          "requiredCharacterLevel": 18,
+          "trainingPoints": null,
+          "manaCost": 3,
+          "delay": 60,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 18,
+              "service_candidate_value": 18,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": null,
+              "service_candidate_value": null,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 3,
+              "service_candidate_value": 3,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 64,
+            "required_character_level": 18,
+            "training_points": null,
+            "mana_cost": 3,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 1,
+          "requiredCharacterLevel": 18,
+          "trainingPoints": 2000,
+          "manaCost": 4,
+          "delay": 60,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 18,
+              "service_candidate_value": 18,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 2000,
+              "service_candidate_value": 130,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 4,
+              "service_candidate_value": 4,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 64,
+            "required_character_level": 18,
+            "training_points": 130,
+            "mana_cost": 4,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 2,
+          "requiredCharacterLevel": 21,
+          "trainingPoints": 4000,
+          "manaCost": 5,
+          "delay": 60,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 21,
+              "service_candidate_value": 21,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 4000,
+              "service_candidate_value": 270,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 5,
+              "service_candidate_value": 5,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 64,
+            "required_character_level": 21,
+            "training_points": 270,
+            "mana_cost": 5,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 3,
+          "requiredCharacterLevel": 24,
+          "trainingPoints": 6000,
+          "manaCost": 6,
+          "delay": 60,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 24,
+              "service_candidate_value": 24,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 6000,
+              "service_candidate_value": 400,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 6,
+              "service_candidate_value": 6,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 64,
+            "required_character_level": 24,
+            "training_points": 400,
+            "mana_cost": 6,
+            "cooldown_ms": 1500
+          }
+        }
+      ],
+      "combat_profile": {
+        "cast_type": "projectile",
+        "multiplier": 1.35,
+        "profession": "道士",
+        "range": 370.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.soul_fire_talisman",
+        "display_name": "灵魂火符",
+        "formula_id": "taoist.soul_fire_talisman.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "action_profile": {
+        "area_radius": 24.0,
+        "cooldown": 0.72,
+        "hit_frame": 4,
+        "target_mode": "single",
+        "windup": 0.32,
+        "cast_type": "projectile",
+        "multiplier": 1.35,
+        "profession": "道士",
+        "range": 370.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.soul_fire_talisman",
+        "display_name": "灵魂火符",
+        "formula_id": "taoist.soul_fire_talisman.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "combat_rule": {
+        "formula_group": "classic_magic_damage",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_FIRECHARM",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 7,
+        "power_bonus": 0,
+        "magic_power_base": 13,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 64,
+        "amulet_cost": 1
+      },
+      "visual_profile": {
+        "status": "formal_primary_client_pixel",
+        "asset_id": "soul_fire_talisman",
+        "role": "projectile",
+        "path": "assets/art/characters/taoist/effects/soul_fire_talisman.png",
+        "skill_ids": [
+          "taoist.soul_fire_talisman"
+        ],
+        "distribution_id": "client.classic_raw_complete",
+        "source_priority": {
+          "lane": "client_assets",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100
+        },
+        "original_path": "Data/Magic.wil",
+        "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+        "source_index": 1160,
+        "source_offset": 13599396,
+        "source_draw_offset": [
+          18,
+          -56
+        ],
+        "pixel_size": [
+          12,
+          20
+        ],
+        "library_image_count": 4010,
+        "mapping_rule": "PlayScn.NewMagic mtExploBujauk constructor base 1160",
+        "mapping_confidence": "A",
+        "pixel_confidence": "A"
+      }
+    },
+    "taoist.spiritual_warfare": {
+      "skill_id": "taoist.spiritual_warfare",
+      "profession_id": "taoist",
+      "display_name": "精神力战法",
+      "levels": [
+        {
+          "skillLevel": 0,
+          "requiredCharacterLevel": 9,
+          "trainingPoints": null,
+          "manaCost": 0,
+          "delay": 0,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 9,
+              "service_candidate_value": 9,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": null,
+              "service_candidate_value": null,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 0,
+              "service_candidate_value": 0,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1800,
+              "service_candidate_value": 1800,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 62,
+            "required_character_level": 9,
+            "training_points": null,
+            "mana_cost": 0,
+            "cooldown_ms": 1800
+          }
+        },
+        {
+          "skillLevel": 1,
+          "requiredCharacterLevel": 9,
+          "trainingPoints": 1000,
+          "manaCost": 0,
+          "delay": 0,
+          "effect": "准确 + 3",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 9,
+              "service_candidate_value": 9,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 1000,
+              "service_candidate_value": 35,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 0,
+              "service_candidate_value": 0,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1800,
+              "service_candidate_value": 1800,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 62,
+            "required_character_level": 9,
+            "training_points": 35,
+            "mana_cost": 0,
+            "cooldown_ms": 1800
+          }
+        },
+        {
+          "skillLevel": 2,
+          "requiredCharacterLevel": 13,
+          "trainingPoints": 4000,
+          "manaCost": 0,
+          "delay": 0,
+          "effect": "准确 + 5",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 13,
+              "service_candidate_value": 12,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 4000,
+              "service_candidate_value": 130,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 0,
+              "service_candidate_value": 0,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1800,
+              "service_candidate_value": 1800,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 62,
+            "required_character_level": 12,
+            "training_points": 130,
+            "mana_cost": 0,
+            "cooldown_ms": 1800
+          }
+        },
+        {
+          "skillLevel": 3,
+          "requiredCharacterLevel": 19,
+          "trainingPoints": 8000,
+          "manaCost": 0,
+          "delay": 0,
+          "effect": "准确 + 8",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 19,
+              "service_candidate_value": 15,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 8000,
+              "service_candidate_value": 270,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 0,
+              "service_candidate_value": 0,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1800,
+              "service_candidate_value": 1800,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 62,
+            "required_character_level": 15,
+            "training_points": 270,
+            "mana_cost": 0,
+            "cooldown_ms": 1800
+          }
+        }
+      ],
+      "combat_profile": {
+        "cast_type": "passive",
+        "multiplier": 1.0,
+        "profession": "道士",
+        "range": 0.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.spiritual_warfare",
+        "display_name": "精神力战法",
+        "formula_id": "taoist.spiritual_warfare.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "action_profile": {
+        "area_radius": 0.0,
+        "cooldown": 0.0,
+        "hit_frame": 0,
+        "target_mode": "self",
+        "windup": 0.0,
+        "cast_type": "passive",
+        "multiplier": 1.0,
+        "profession": "道士",
+        "range": 0.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.spiritual_warfare",
+        "display_name": "精神力战法",
+        "formula_id": "taoist.spiritual_warfare.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "combat_rule": {
+        "formula_group": "classic_special",
+        "source_anchor": "TMagicManager.DoSpell/SKILL_SPIRIT",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.8,
+          1.8,
+          1.8,
+          1.8
+        ],
+        "service_spell_id": 62
+      },
+      "visual_profile": {
+        "status": "no_runtime_visual",
+        "reason": "Passive accuracy skill; no cast event is emitted by the classic runtime.",
+        "source_original_path": "M2Server/Magic.pas"
+      }
+    },
+    "taoist.summon_divine_beast": {
+      "skill_id": "taoist.summon_divine_beast",
+      "profession_id": "taoist",
+      "display_name": "召唤神兽",
+      "levels": [
+        {
+          "skillLevel": 0,
+          "requiredCharacterLevel": 35,
+          "trainingPoints": null,
+          "manaCost": 28,
+          "delay": 120,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 35,
+              "service_candidate_value": 35,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": null,
+              "service_candidate_value": null,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 28,
+              "service_candidate_value": 28,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 78,
+            "required_character_level": 35,
+            "training_points": null,
+            "mana_cost": 28,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 1,
+          "requiredCharacterLevel": 35,
+          "trainingPoints": 2000,
+          "manaCost": 32,
+          "delay": 120,
+          "effect": "1级神兽",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 35,
+              "service_candidate_value": 35,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 2000,
+              "service_candidate_value": 200,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 32,
+              "service_candidate_value": 32,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 78,
+            "required_character_level": 35,
+            "training_points": 200,
+            "mana_cost": 32,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 2,
+          "requiredCharacterLevel": 37,
+          "trainingPoints": 4000,
+          "manaCost": 36,
+          "delay": 120,
+          "effect": "2级神兽",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 37,
+              "service_candidate_value": 37,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 4000,
+              "service_candidate_value": 400,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 36,
+              "service_candidate_value": 36,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 78,
+            "required_character_level": 37,
+            "training_points": 400,
+            "mana_cost": 36,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 3,
+          "requiredCharacterLevel": 40,
+          "trainingPoints": 8000,
+          "manaCost": 40,
+          "delay": 120,
+          "effect": "3级神兽",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 40,
+              "service_candidate_value": 40,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 8000,
+              "service_candidate_value": 600,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 40,
+              "service_candidate_value": 40,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 78,
+            "required_character_level": 40,
+            "training_points": 600,
+            "mana_cost": 40,
+            "cooldown_ms": 1500
+          }
+        }
+      ],
+      "combat_profile": {
+        "cast_type": "summon",
+        "multiplier": 1.5,
+        "profession": "道士",
+        "range": 0.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.summon_divine_beast",
+        "display_name": "召唤神兽",
+        "formula_id": "taoist.summon_divine_beast.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "action_profile": {
+        "area_radius": 0.0,
+        "cooldown": 1.2,
+        "hit_frame": 5,
+        "target_mode": "self",
+        "windup": 0.55,
+        "cast_type": "summon",
+        "multiplier": 1.5,
+        "profession": "道士",
+        "range": 0.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.summon_divine_beast",
+        "display_name": "召唤神兽",
+        "formula_id": "taoist.summon_divine_beast.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "combat_rule": {
+        "formula_group": "classic_summon",
+        "source_anchor": "TMagicManager.MagMakeSinSuSlave",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 78,
+        "attack_type": "fire",
+        "lifetime_seconds_by_level": [
+          864000,
+          864000,
+          864000,
+          864000
+        ],
+        "summon_level_equals_skill_level": true,
+        "summon_exp_level_equals_skill_level": true,
+        "default_count": 1,
+        "reject_when_owner_has_slave": true,
+        "recall_existing_on_create_failure": true,
+        "leash_range": 560,
+        "teleport_range": 900,
+        "spatial_state_machine_status": "project_adapter_C_candidate",
+        "amulet_cost": 5
+      },
+      "visual_profile": {
+        "status": "formal_primary_client_pixel",
+        "asset_id": "summon_divine_beast",
+        "role": "summon",
+        "path": "assets/art/characters/taoist/effects/summon_divine_beast.png",
+        "skill_ids": [
+          "taoist.summon_divine_beast"
+        ],
+        "distribution_id": "client.classic_raw_complete",
+        "source_priority": {
+          "lane": "client_assets",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100
+        },
+        "original_path": "Data/Mon18.wil",
+        "source_sha256": "eab9850feaecd7a3bf89d3e6274317e3543f5c07ec3e771627e1aa11c4c74bbd",
+        "source_index": 350,
+        "source_offset": 2244624,
+        "source_draw_offset": [
+          5,
+          -45
+        ],
+        "pixel_size": [
+          52,
+          86
+        ],
+        "library_image_count": 3707,
+        "mapping_rule": "PlayScn race 54/55 + Actor/AxeMon divine beast classes select Mon18; standing block 350",
+        "mapping_confidence": "B",
+        "pixel_confidence": "A"
+      }
+    },
+    "taoist.summon_skeleton": {
+      "skill_id": "taoist.summon_skeleton",
+      "profession_id": "taoist",
+      "display_name": "召唤骷髅",
+      "levels": [
+        {
+          "skillLevel": 0,
+          "requiredCharacterLevel": 19,
+          "trainingPoints": null,
+          "manaCost": 12,
+          "delay": 50,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 19,
+              "service_candidate_value": 19,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": null,
+              "service_candidate_value": null,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 12,
+              "service_candidate_value": 12,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 65,
+            "required_character_level": 19,
+            "training_points": null,
+            "mana_cost": 12,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 1,
+          "requiredCharacterLevel": 19,
+          "trainingPoints": 2000,
+          "manaCost": 16,
+          "delay": 50,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 19,
+              "service_candidate_value": 19,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 2000,
+              "service_candidate_value": 100,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 16,
+              "service_candidate_value": 16,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 65,
+            "required_character_level": 19,
+            "training_points": 100,
+            "mana_cost": 16,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 2,
+          "requiredCharacterLevel": 23,
+          "trainingPoints": 4000,
+          "manaCost": 20,
+          "delay": 50,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 23,
+              "service_candidate_value": 22,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 4000,
+              "service_candidate_value": 200,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 20,
+              "service_candidate_value": 20,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 65,
+            "required_character_level": 22,
+            "training_points": 200,
+            "mana_cost": 20,
+            "cooldown_ms": 1500
+          }
+        },
+        {
+          "skillLevel": 3,
+          "requiredCharacterLevel": 26,
+          "trainingPoints": 8000,
+          "manaCost": 24,
+          "delay": 50,
+          "effect": "",
+          "source_trace": {
+            "required_character_level": {
+              "field": "requiredCharacterLevel",
+              "selected_value": 26,
+              "service_candidate_value": 26,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "training_points": {
+              "field": "trainingPoints",
+              "selected_value": 8000,
+              "service_candidate_value": 350,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "mana_cost": {
+              "field": "manaCost",
+              "selected_value": 24,
+              "service_candidate_value": 24,
+              "status": "selected_service_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            },
+            "server_delay": {
+              "field": "delay",
+              "status": "sourced_candidate",
+              "source_url": "https://www.21cq.com/mir/Magic.aspx?u=2",
+              "secondary_source_url": "https://mir.17173.com/skill/skill2.htm",
+              "source_date": "2026-06-28",
+              "confidence": "A",
+              "verification": "双源核对学习等级；效果数值以21CQ为主"
+            },
+            "server_cooldown": {
+              "field": "service_candidate.cooldown_ms",
+              "selected_value": 1500,
+              "service_candidate_value": 1500,
+              "status": "comparison_candidate",
+              "classification": "B/C-candidate",
+              "distribution_id": "server.crystal.cjlaaa",
+              "original_path": "Server.MirDB",
+              "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0"
+            }
+          },
+          "service_candidate": {
+            "classification": "B/C-candidate",
+            "service_spell_id": 65,
+            "required_character_level": 26,
+            "training_points": 350,
+            "mana_cost": 24,
+            "cooldown_ms": 1500
+          }
+        }
+      ],
+      "combat_profile": {
+        "cast_type": "summon",
+        "multiplier": 1.0,
+        "profession": "道士",
+        "range": 0.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.summon_skeleton",
+        "display_name": "召唤骷髅",
+        "formula_id": "taoist.summon_skeleton.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "action_profile": {
+        "area_radius": 0.0,
+        "cooldown": 1.2,
+        "hit_frame": 5,
+        "target_mode": "self",
+        "windup": 0.55,
+        "cast_type": "summon",
+        "multiplier": 1.0,
+        "profession": "道士",
+        "range": 0.0,
+        "profession_id": "taoist",
+        "skill_id": "taoist.summon_skeleton",
+        "display_name": "召唤骷髅",
+        "formula_id": "taoist.summon_skeleton.v1",
+        "source_trace": {
+          "runtime_profile": {
+            "source": "legacy_verified_adapter",
+            "confidence": "B"
+          },
+          "cooldown": {
+            "source": "mobile_runtime_candidate",
+            "confidence": "B"
+          },
+          "status_duration": {
+            "source": "profession_combat_rules.json",
+            "confidence": "B"
+          }
+        }
+      },
+      "combat_rule": {
+        "formula_group": "classic_summon",
+        "source_anchor": "TMagicManager.MagMakeSlave",
+        "source_status": "classic_rule_with_crystal_value_candidate",
+        "confidence": "B/C",
+        "train_level": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_by_level": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "cooldown_by_level": [
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ],
+        "service_spell_id": 65,
+        "attack_type": "physical",
+        "lifetime_seconds_by_level": [
+          864000,
+          864000,
+          864000,
+          864000
+        ],
+        "summon_level_equals_skill_level": true,
+        "summon_exp_level_equals_skill_level": true,
+        "default_count": 1,
+        "reject_when_owner_has_slave": true,
+        "recall_existing_on_create_failure": false,
+        "leash_range": 560,
+        "teleport_range": 900,
+        "spatial_state_machine_status": "project_adapter_C_candidate",
+        "amulet_cost": 1
+      },
+      "visual_profile": {
+        "status": "formal_primary_client_pixel",
+        "asset_id": "summon_skeleton",
+        "role": "summon",
+        "path": "assets/art/characters/taoist/effects/summon_skeleton.png",
+        "skill_ids": [
+          "taoist.summon_skeleton"
+        ],
+        "distribution_id": "client.classic_raw_complete",
+        "source_priority": {
+          "lane": "client_assets",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100
+        },
+        "original_path": "Data/Mon3.wil",
+        "source_sha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
+        "source_index": 0,
+        "source_offset": 1080,
+        "source_draw_offset": [
+          -1,
+          -59
+        ],
+        "pixel_size": [
+          80,
+          76
+        ],
+        "library_image_count": 3690,
+        "mapping_rule": "Actor.aGetMonImg appearance 20 selects Mon3; skeleton manifest block base 0",
+        "mapping_confidence": "B",
+        "pixel_confidence": "A"
+      }
+    }
+  },
+  "source_files": {
+    "skills": {
+      "path": "assets/data/vanilla_176/skills.json",
+      "sha256": "25010ff07f560c2786b7c6be24ce3106c087eb129eff19b8c9d753377803d727"
+    },
+    "growth": {
+      "path": "assets/data/vanilla_176/profession_growth.json",
+      "sha256": "ff5b2e2cfcf03a441b33a04d488aa39c36c753a543954087ef32041992d8a756"
+    },
+    "combat_rules": {
+      "path": "assets/data/vanilla_176/profession_combat_rules.json",
+      "sha256": "66914794ece6d42edc0e0ba2df016f501a56bbebb0f074c986f812244a7d262f"
+    },
+    "visuals": {
+      "path": "assets/data/caster_skill_visuals.json",
+      "sha256": "a0712488af504bf2e08c0a9a236e102ab6990e91f6115639e804275aac820f25"
+    }
+  },
+  "source_policy": {
+    "stable_ids": "authoritative",
+    "display_names": "Chinese display aliases only",
+    "magic_info": "server.crystal.cjlaaa B/C candidate retained per level",
+    "visuals": "primary client pixels only; generated fallback forbidden"
+  }
+}

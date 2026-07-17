@@ -2,6 +2,46 @@ class_name ProfessionRules
 extends RefCounted
 
 const PROFESSIONS: Array[String] = ["战士", "法师", "道士"]
+const PROFESSION_CATALOG := {
+	"warrior": "战士",
+	"wizard": "法师",
+	"taoist": "道士",
+}
+const SKILL_CATALOG := {
+	"warrior.basic_swordsmanship": "基本剑术",
+	"warrior.slaying_swordsmanship": "攻杀剑术",
+	"warrior.thrusting": "刺杀剑术",
+	"warrior.half_moon": "半月弯刀",
+	"warrior.wild_rush": "野蛮冲撞",
+	"warrior.fire_sword": "烈火剑法",
+	"wizard.fireball": "火球术",
+	"wizard.repulsion_ring": "抗拒火环",
+	"wizard.temptation_light": "诱惑之光",
+	"wizard.hellfire": "地狱火",
+	"wizard.lightning": "雷电术",
+	"wizard.teleport": "瞬息移动",
+	"wizard.great_fireball": "大火球",
+	"wizard.exploding_flame": "爆裂火焰",
+	"wizard.fire_wall": "火墙",
+	"wizard.laser": "疾光电影",
+	"wizard.hell_lightning": "地狱雷光",
+	"wizard.magic_shield": "魔法盾",
+	"wizard.holy_word": "圣言术",
+	"wizard.ice_storm": "冰咆哮",
+	"taoist.healing": "治愈术",
+	"taoist.spiritual_warfare": "精神力战法",
+	"taoist.poison": "施毒术",
+	"taoist.soul_fire_talisman": "灵魂火符",
+	"taoist.summon_skeleton": "召唤骷髅",
+	"taoist.invisibility": "隐身术",
+	"taoist.mass_invisibility": "集体隐身术",
+	"taoist.magic_defense": "幽灵盾",
+	"taoist.defense": "神圣战甲术",
+	"taoist.revelation": "心灵启示",
+	"taoist.entrapment": "困魔咒",
+	"taoist.mass_healing": "群体治疗术",
+	"taoist.summon_divine_beast": "召唤神兽",
+}
 
 # 运行时成长入口。精确逐级官服数值将在等级经验/属性表完成考据后替换，
 # 所有调用方只依赖此处，避免把职业公式散落到角色、HUD和技能代码中。
@@ -83,6 +123,7 @@ const SKILL_TIMING_OVERRIDES := {
 }
 
 static var _runtime_data: Dictionary = {}
+static var _skill_ids_by_name: Dictionary = {}
 
 
 static func _data() -> Dictionary:
@@ -102,8 +143,39 @@ static func is_valid_profession(value: String) -> bool:
 	return value in PROFESSIONS
 
 
+static func is_valid_profession_id(value: String) -> bool:
+	return PROFESSION_CATALOG.has(value)
+
+
+static func profession_id(value: String) -> String:
+	if PROFESSION_CATALOG.has(value):
+		return value
+	for stable_id: String in PROFESSION_CATALOG:
+		if PROFESSION_CATALOG[stable_id] == value:
+			return stable_id
+	return ""
+
+
+static func profession_display_name(value: String) -> String:
+	return str(PROFESSION_CATALOG.get(value, value if value in PROFESSIONS else ""))
+
+
+static func skill_id(value: String) -> String:
+	if SKILL_CATALOG.has(value):
+		return value
+	if _skill_ids_by_name.is_empty():
+		for stable_id: String in SKILL_CATALOG:
+			_skill_ids_by_name[SKILL_CATALOG[stable_id]] = stable_id
+	return str(_skill_ids_by_name.get(value, ""))
+
+
+static func skill_display_name(value: String) -> String:
+	return str(SKILL_CATALOG.get(value, value if skill_id(value) != "" else ""))
+
+
 static func stats_for_level(profession: String, level: int) -> Dictionary:
-	var selected := profession if is_valid_profession(profession) else "战士"
+	var resolved_profession := profession_display_name(profession)
+	var selected := resolved_profession if is_valid_profession(resolved_profession) else "战士"
 	if GameData != null and not GameData.service_reference.is_empty():
 		var service_stats := GameData.service_profession_stats(selected, level)
 		if not service_stats.is_empty():
@@ -118,33 +190,50 @@ static func stats_for_level(profession: String, level: int) -> Dictionary:
 	}
 
 
-static func skill_profile(skill_name: String) -> Dictionary:
-	return _data().get("skillProfiles", SKILL_PROFILES).get(skill_name, {})
+static func skill_profile(skill_name_or_id: String) -> Dictionary:
+	var display_name := skill_display_name(skill_name_or_id)
+	var profile: Dictionary = _data().get("skillProfiles", SKILL_PROFILES).get(display_name, {}).duplicate(true)
+	if profile.is_empty():
+		return profile
+	var stable_id := skill_id(display_name)
+	profile["skill_id"] = stable_id
+	profile["display_name"] = display_name
+	profile["profession_id"] = profession_id(str(profile.get("profession", "")))
+	return profile
 
 
 static func skill_combat_profile(skill_name: String, learned_level := -1) -> Dictionary:
 	var profile: Dictionary = skill_profile(skill_name).duplicate(true)
 	if profile.is_empty():
 		return profile
+	var display_name := str(profile.get("display_name", skill_name))
+	var stable_id := str(profile.get("skill_id", skill_id(display_name)))
 	var cast_type := str(profile.get("cast_type", "melee"))
 	var cast_defaults: Dictionary = _data().get("castDefaults", CAST_DEFAULTS)
 	var timing_overrides: Dictionary = _data().get("skillTimingOverrides", SKILL_TIMING_OVERRIDES)
 	profile.merge(cast_defaults.get(cast_type, cast_defaults["melee"]), false)
-	profile.merge(timing_overrides.get(skill_name, {}), true)
+	profile.merge(timing_overrides.get(display_name, {}), true)
 	profile["search_range"] = maxf(280.0, float(profile.get("range", 0.0)) + 110.0) if str(profile.get("target_mode", "self")) not in ["self", "self_area"] else 0.0
-	if str(profile.get("profession", "")) == "战士":
+	var stable_profession_id := str(profile.get("profession_id", profession_id(str(profile.get("profession", "")))))
+	if stable_profession_id == "warrior":
 		var level := WarriorCombatMath.clamp_skill_level(maxi(0, learned_level))
 		profile["skill_level"] = level
 		profile["source"] = "M2Server/ObjBase.pas + Client/Actor.pas"
 		profile["confidence"] = "A"
 		profile["verification"] = "服务端公式、开关/蓄力状态机与客户端6帧×85ms动作已核对"
+	elif stable_profession_id == "wizard":
+		profile.merge(WizardCombatMath.profile_overrides(stable_id, maxi(0, learned_level)), true)
+		profile["verification"] = "法师专属公式层候选；字段来源见profession_combat_rules.json"
+	elif stable_profession_id == "taoist":
+		profile.merge(TaoistCombatMath.profile_overrides(stable_id, maxi(0, learned_level)), true)
+		profile["verification"] = "道士专属公式层候选；字段来源见profession_combat_rules.json"
 	else:
-		profile["verification"] = "运行时候选；动画与手机操作基线"
+		profile["verification"] = "未识别职业的兼容档案"
 	return profile
 
 
 static func primary_damage_range(profession: String, stats: Dictionary) -> Vector2i:
-	match profession:
+	match profession_display_name(profession):
 		"法师": return Vector2i(int(stats.get("magic_min", 0)), int(stats.get("magic_max", 0)))
 		"道士": return Vector2i(int(stats.get("tao_min", 0)), int(stats.get("tao_max", 0)))
 		_: return Vector2i(int(stats.get("attack_min", 1)), int(stats.get("attack_max", 1)))
@@ -156,6 +245,7 @@ static func missing_runtime_skills(skill_rows: Array) -> PackedStringArray:
 		if not row is Dictionary or int(row.get("skillLevel", -1)) != 0:
 			continue
 		var skill_name := str(row.get("skillName", ""))
-		if not skill_name.is_empty() and not _data().get("skillProfiles", SKILL_PROFILES).has(skill_name) and not missing.has(skill_name):
+		var stable_id := str(row.get("skill_id", skill_id(skill_name)))
+		if not skill_name.is_empty() and skill_profile(stable_id if not stable_id.is_empty() else skill_name).is_empty() and not missing.has(skill_name):
 			missing.append(skill_name)
 	return missing
