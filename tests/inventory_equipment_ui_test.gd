@@ -19,6 +19,10 @@ func _run() -> void:
 	add_child(panel)
 	await get_tree().process_frame
 	assert(panel.size == Vector2(1220, 660), "人物物品栏没有使用横屏手机安全尺寸")
+	assert(panel.theme_type_variation == "GothicModalFrame", "人物与背包没有使用公共哥特外框")
+	assert(panel.get_node("AttributePanel").theme_type_variation == "GothicInsetFrame", "人物属性栏没有复用公共哥特内框")
+	assert(panel.get_node("EquipmentPanel").theme_type_variation == "GothicInsetFrame", "人物装备栏没有复用公共哥特内框")
+	assert(panel.get_node("BagPanel").theme_type_variation == "GothicInsetFrame", "综合背包没有复用公共哥特内框")
 	assert(panel.get_node("AttributePanel").position.x < panel.get_node("EquipmentPanel").position.x, "人物属性面板必须位于装备栏左侧")
 	assert(panel.get_node("EquipmentPanel").position.x < panel.get_node("BagPanel").position.x, "综合背包必须位于装备栏右侧")
 	assert(panel.equipment_buttons.size() == 8, "人物装备栏必须显示八个直接装备槽")
@@ -47,6 +51,7 @@ func _run() -> void:
 	assert("/inventory/" in weapon_slot_icon.texture.resource_path, "装备格错误使用了穿戴人物缩略图")
 	assert(weapon_slot_icon.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST, "装备格图标没有使用清晰像素过滤")
 	assert(weapon_slot_icon.position == (panel.equipment_buttons["武器"].size - weapon_slot_icon.size) * 0.5, "装备图标没有处于格子正中")
+	assert(weapon_slot_icon.size.x <= panel.equipment_buttons["武器"].size.x - 24.0 and weapon_slot_icon.size.y <= panel.equipment_buttons["武器"].size.y - 26.0, "装备图标侵入哥特插槽边框")
 
 	var armor_index := -1
 	for index in range(PlayerState.inventory.size()):

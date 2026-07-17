@@ -3,6 +3,7 @@ extends Panel
 
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const PreviewScript = preload("res://scripts/equipment_character_preview.gd")
+const GothicUIThemeScript = preload("res://scripts/gothic_ui_theme.gd")
 
 signal closed
 
@@ -46,7 +47,9 @@ func _ready() -> void:
 	offset_bottom = PANEL_SIZE.y * 0.5
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	z_index = 50
-	add_theme_stylebox_override("panel", _panel_style(Color(0.052, 0.030, 0.022, 0.99), Color(0.56, 0.39, 0.20), 3, 10))
+	theme = GothicUIThemeScript.build()
+	theme_type_variation = "GothicModalFrame"
+	_build_modal_surface()
 	_build_header()
 	_build_attribute_panel()
 	_build_equipment_panel()
@@ -58,96 +61,108 @@ func _ready() -> void:
 	refresh()
 
 
+func _build_modal_surface() -> void:
+	var surface := Panel.new()
+	surface.name = "ModalSurface"
+	surface.position = Vector2(18, 24)
+	surface.size = Vector2(1184, 616)
+	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	surface.theme_type_variation = "GothicModalSurface"
+	add_child(surface)
+
+
 func _build_header() -> void:
+	var title_frame := Panel.new()
+	title_frame.name = "TitleFrame"
+	title_frame.position = Vector2(380, 4)
+	title_frame.size = Vector2(460, 64)
+	title_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title_frame.theme_type_variation = "GothicTitleBar"
+	add_child(title_frame)
 	var title := Label.new()
 	title.name = "Title"
-	title.text = "人物装备与物品栏"
-	title.position = Vector2(22, 12)
-	title.add_theme_font_size_override("font_size", 26)
-	title.add_theme_color_override("font_color", Color(0.98, 0.78, 0.43))
-	add_child(title)
-	var hint := Label.new()
-	hint.text = "点击查看属性　·　按住物品打开操作菜单"
-	hint.position = Vector2(410, 19)
-	hint.size = Vector2(580, 28)
-	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	hint.add_theme_font_size_override("font_size", 16)
-	hint.add_theme_color_override("font_color", Color(0.78, 0.70, 0.59))
-	add_child(hint)
+	title.text = "人物与背包"
+	title.position = Vector2(30, 15)
+	title.size = Vector2(400, 32)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 24)
+	title.add_theme_color_override("font_color", Color("f1cc88"))
+	title_frame.add_child(title)
 	var close_button := Button.new()
 	close_button.name = "CloseButton"
-	close_button.text = "关闭"
-	close_button.position = Vector2(1092, 9)
-	close_button.size = Vector2(104, 42)
-	close_button.add_theme_font_size_override("font_size", 18)
+	close_button.text = "×"
+	close_button.position = Vector2(1138, 8)
+	close_button.size = Vector2(56, 56)
+	close_button.theme_type_variation = "GothicComponentCloseButton"
+	close_button.add_theme_font_size_override("font_size", 24)
+	close_button.tooltip_text = "关闭"
 	close_button.pressed.connect(_close)
 	add_child(close_button)
 
 
 func _build_attribute_panel() -> void:
-	var panel := _section_panel("AttributePanel", Vector2(18, 58), Vector2(278, 582))
+	var panel := _section_panel("AttributePanel", Vector2(32, 72), Vector2(250, 566))
 	add_child(panel)
-	var title := _section_title("人物属性")
+	var title := _section_title("人物属性", 250)
 	panel.add_child(title)
 	equipment_stats_label = Label.new()
 	equipment_stats_label.name = "CharacterStats"
-	equipment_stats_label.position = Vector2(14, 48)
-	equipment_stats_label.size = Vector2(250, 205)
+	equipment_stats_label.position = Vector2(16, 50)
+	equipment_stats_label.size = Vector2(218, 194)
 	equipment_stats_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	equipment_stats_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	equipment_stats_label.add_theme_font_size_override("font_size", 16)
-	equipment_stats_label.add_theme_color_override("font_color", Color(0.91, 0.83, 0.70))
+	equipment_stats_label.add_theme_color_override("font_color", Color("ddc9a9"))
 	panel.add_child(equipment_stats_label)
 	var divider := HSeparator.new()
-	divider.position = Vector2(12, 253)
-	divider.size = Vector2(254, 8)
+	divider.position = Vector2(16, 246)
+	divider.size = Vector2(218, 8)
 	panel.add_child(divider)
 	var item_title := Label.new()
 	item_title.text = "物品属性"
-	item_title.position = Vector2(14, 266)
-	item_title.add_theme_font_size_override("font_size", 19)
-	item_title.add_theme_color_override("font_color", Color(0.95, 0.79, 0.53))
+	item_title.position = Vector2(16, 258)
+	item_title.size = Vector2(218, 30)
+	item_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	item_title.theme_type_variation = "GothicSectionTitle"
 	panel.add_child(item_title)
 	detail_label = RichTextLabel.new()
 	detail_label.name = "ItemDetail"
-	detail_label.position = Vector2(14, 301)
-	detail_label.size = Vector2(250, 265)
+	detail_label.position = Vector2(16, 294)
+	detail_label.size = Vector2(218, 252)
 	detail_label.bbcode_enabled = true
 	detail_label.fit_content = false
 	detail_label.scroll_active = true
-	detail_label.add_theme_font_size_override("normal_font_size", 15)
-	detail_label.add_theme_color_override("default_color", Color(0.87, 0.81, 0.71))
+	detail_label.theme_type_variation = "GothicDetailText"
 	panel.add_child(detail_label)
 
 
 func _build_equipment_panel() -> void:
-	var panel := _section_panel("EquipmentPanel", Vector2(306, 58), Vector2(400, 582))
+	var panel := _section_panel("EquipmentPanel", Vector2(294, 72), Vector2(390, 566))
 	add_child(panel)
-	panel.add_child(_section_title("人物装备"))
+	panel.add_child(_section_title("人物装备", 390))
 	character_preview = PreviewScript.new()
 	character_preview.name = "CharacterPreview"
 	# Reserve the lower half of the equipment panel for the client paper-doll;
 	# the previous top placement left a visibly unused block under the figure.
-	character_preview.position = Vector2(85, 145)
+	character_preview.position = Vector2(80, 139)
 	character_preview.size = Vector2(230, 286)
 	panel.add_child(character_preview)
 
 	var positions := {
-		"头盔": Vector2(157, 55), "项链": Vector2(301, 75),
-		"武器": Vector2(14, 135), "衣服": Vector2(301, 179),
-		"左手镯": Vector2(14, 267), "右手镯": Vector2(301, 303),
-		"左戒指": Vector2(14, 414), "右戒指": Vector2(301, 435),
+		"头盔": Vector2(153, 48), "项链": Vector2(296, 70),
+		"武器": Vector2(10, 128), "衣服": Vector2(296, 128),
+		"左手镯": Vector2(10, 260), "右手镯": Vector2(296, 260),
+		"左戒指": Vector2(10, 392), "右戒指": Vector2(296, 392),
 	}
 	for slot: String in PlayerState.EQUIPMENT_SLOTS:
 		_create_equipment_slot(panel, slot, positions.get(slot, Vector2.ZERO))
 	var instruction := Label.new()
 	instruction.text = "点击装备查看属性\n按住装备可卸下"
-	instruction.position = Vector2(111, 490)
-	instruction.size = Vector2(178, 62)
+	instruction.position = Vector2(106, 488)
+	instruction.size = Vector2(178, 58)
 	instruction.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	instruction.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	instruction.add_theme_font_size_override("font_size", 15)
-	instruction.add_theme_color_override("font_color", Color(0.76, 0.68, 0.57))
+	instruction.theme_type_variation = "GothicMutedLabel"
 	panel.add_child(instruction)
 
 	equipment_label = Label.new()
@@ -167,30 +182,28 @@ func _build_equipment_panel() -> void:
 
 
 func _build_bag_panel() -> void:
-	var panel := _section_panel("BagPanel", Vector2(716, 58), Vector2(486, 582))
+	var panel := _section_panel("BagPanel", Vector2(696, 72), Vector2(492, 566))
 	add_child(panel)
-	panel.add_child(_section_title("综合背包"))
+	panel.add_child(_section_title("综合背包", 492))
 	bag_summary_label = Label.new()
 	bag_summary_label.name = "BagSummary"
-	bag_summary_label.position = Vector2(145, 13)
-	bag_summary_label.size = Vector2(325, 30)
+	bag_summary_label.position = Vector2(246, 13)
+	bag_summary_label.size = Vector2(226, 30)
 	bag_summary_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	bag_summary_label.add_theme_font_size_override("font_size", 15)
-	bag_summary_label.add_theme_color_override("font_color", Color(0.82, 0.74, 0.62))
+	bag_summary_label.theme_type_variation = "GothicMutedLabel"
 	panel.add_child(bag_summary_label)
 	var scroll := ScrollContainer.new()
 	scroll.name = "InventoryScroll"
-	scroll.position = Vector2(13, 48)
-	scroll.size = Vector2(460, 520)
+	scroll.position = Vector2(14, 50)
+	scroll.size = Vector2(464, 496)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll.add_theme_stylebox_override("panel", _panel_style(Color(0.023, 0.016, 0.013, 0.80), Color(0.23, 0.16, 0.10), 1, 3))
 	panel.add_child(scroll)
 	item_grid = GridContainer.new()
 	item_grid.name = "ItemGrid"
 	item_grid.columns = BAG_COLUMNS
 	item_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	item_grid.add_theme_constant_override("h_separation", 4)
-	item_grid.add_theme_constant_override("v_separation", 4)
+	item_grid.add_theme_constant_override("h_separation", 6)
+	item_grid.add_theme_constant_override("v_separation", 5)
 	scroll.add_child(item_grid)
 
 
@@ -219,8 +232,8 @@ func _create_equipment_slot(parent: Control, slot: String, position_value: Vecto
 	slot_label.position = Vector2(-6, 0)
 	slot_label.size = Vector2(96, 23)
 	slot_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	slot_label.add_theme_font_size_override("font_size", 14)
-	slot_label.add_theme_color_override("font_color", Color(0.91, 0.76, 0.51))
+	slot_label.theme_type_variation = "GothicMutedLabel"
+	slot_label.add_theme_color_override("font_color", Color("d9b77b"))
 	holder.add_child(slot_label)
 	var button := Button.new()
 	button.name = "EquipmentSlot_%s" % slot
@@ -229,7 +242,7 @@ func _create_equipment_slot(parent: Control, slot: String, position_value: Vecto
 	button.expand_icon = true
 	button.toggle_mode = true
 	button.tooltip_text = "%s：空" % slot
-	button.add_theme_stylebox_override("normal", _slot_style(false))
+	button.theme_type_variation = "GothicComponentSlotButton"
 	button.pressed.connect(_select_equipment_slot.bind(slot))
 	button.gui_input.connect(_equipment_input.bind(slot, button))
 	holder.add_child(button)
@@ -262,7 +275,7 @@ func _refresh_equipment_slots() -> void:
 		else:
 			_set_button_texture(button, null)
 		button.set_pressed_no_signal(slot == selected_equipment_slot)
-		button.add_theme_stylebox_override("normal", _slot_style(slot == selected_equipment_slot))
+		button.theme_type_variation = "GothicComponentSelectedSlotButton" if slot == selected_equipment_slot else "GothicComponentSlotButton"
 		compatibility_lines.append(_compatibility_equipment_text(slot, record))
 	equipment_label.text = "　".join(compatibility_lines)
 
@@ -312,7 +325,7 @@ func _create_bag_cell(index: int, stack: Dictionary) -> Control:
 	button.position = Vector2.ZERO
 	button.size = BAG_CELL_SIZE
 	button.tooltip_text = str(stack.get("name", "未知物品"))
-	button.add_theme_stylebox_override("normal", _bag_slot_style(index == selected_inventory_index))
+	button.theme_type_variation = "GothicComponentSelectedSlotButton" if index == selected_inventory_index else "GothicComponentSlotButton"
 	button.pressed.connect(_select_inventory_item.bind(index))
 	button.gui_input.connect(_inventory_input.bind(index, button))
 	cell.add_child(button)
@@ -349,12 +362,13 @@ func _create_empty_bag_cell(index: int) -> Control:
 	var cell := Control.new()
 	cell.name = "EmptyCell_%d" % index
 	cell.custom_minimum_size = BAG_CELL_SIZE
-	var background := Panel.new()
+	var background := Button.new()
 	background.name = "EmptySlotBackground"
 	background.position = Vector2.ZERO
 	background.size = BAG_CELL_SIZE
 	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	background.add_theme_stylebox_override("panel", _bag_slot_style(false))
+	background.theme_type_variation = "GothicComponentSlotButton"
+	background.disabled = true
 	cell.add_child(background)
 	return cell
 
@@ -664,8 +678,11 @@ func _set_button_texture(button: Button, texture: Texture2D) -> void:
 	var source_size := texture.get_size()
 	if source_size.x <= 0.0 or source_size.y <= 0.0:
 		return
-	var integer_scale := maxi(1, int(floor(minf(button.size.x / source_size.x, button.size.y / source_size.y))))
-	var display_size := source_size * integer_scale
+	# Keep inventory art inside the frame's uninterrupted center. Item artwork
+	# must never touch the gothic ornament or slot edge.
+	var safe_size := Vector2(maxf(1.0, button.size.x - 24.0), maxf(1.0, button.size.y - 26.0))
+	var fit_scale := minf(safe_size.x / source_size.x, safe_size.y / source_size.y)
+	var display_size := source_size * fit_scale
 	var icon_rect := TextureRect.new()
 	icon_rect.name = "CenteredPixelIcon"
 	icon_rect.texture = texture
@@ -687,37 +704,25 @@ func _section_panel(node_name: String, at: Vector2, panel_size: Vector2) -> Pane
 	panel.name = node_name
 	panel.position = at
 	panel.size = panel_size
-	panel.add_theme_stylebox_override("panel", _panel_style(Color(0.078, 0.047, 0.034, 0.94), Color(0.34, 0.25, 0.16), 2, 7))
+	panel.theme_type_variation = "GothicInsetFrame"
+	var surface := Panel.new()
+	surface.name = "SectionSurface"
+	surface.position = Vector2(12, 14)
+	surface.size = panel_size - Vector2(24, 28)
+	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	surface.theme_type_variation = "GothicModalSurface"
+	panel.add_child(surface)
 	return panel
 
 
-func _section_title(text_value: String) -> Label:
+func _section_title(text_value: String, section_width: float) -> Label:
 	var label := Label.new()
 	label.text = text_value
 	label.position = Vector2(14, 10)
-	label.add_theme_font_size_override("font_size", 21)
-	label.add_theme_color_override("font_color", Color(0.95, 0.80, 0.55))
+	label.size = Vector2(section_width - 28.0, 30)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.theme_type_variation = "GothicSectionTitle"
 	return label
-
-
-func _slot_style(selected: bool) -> StyleBoxFlat:
-	return _panel_style(Color(0.19, 0.12, 0.05, 1.0) if selected else Color(0.035, 0.024, 0.020, 0.98), Color(0.96, 0.67, 0.22) if selected else Color(0.40, 0.29, 0.17), 3 if selected else 2, 4)
-
-
-func _bag_slot_style(selected: bool) -> StyleBoxFlat:
-	return _panel_style(Color(0.22, 0.16, 0.105, 1.0) if selected else Color(0.135, 0.105, 0.078, 1.0), Color(0.96, 0.67, 0.22) if selected else Color(0.42, 0.33, 0.23, 1.0), 3 if selected else 2, 3)
-
-
-func _panel_style(background: Color, border: Color, width: int, radius: int) -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	style.bg_color = background
-	style.border_color = border
-	style.set_border_width_all(width)
-	style.corner_radius_top_left = radius
-	style.corner_radius_top_right = radius
-	style.corner_radius_bottom_left = radius
-	style.corner_radius_bottom_right = radius
-	return style
 
 
 func _close() -> void:

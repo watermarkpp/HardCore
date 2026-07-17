@@ -31,6 +31,22 @@ static func build() -> Theme:
 	result.set_color("font_shadow_color", "Label", Color(0.02, 0.01, 0.01, 0.95))
 	result.set_constant("shadow_offset_x", "Label", 2)
 	result.set_constant("shadow_offset_y", "Label", 2)
+	result.set_color("default_color", "RichTextLabel", PARCHMENT)
+	result.set_color("font_color", "PopupMenu", PARCHMENT)
+	result.set_color("font_hover_color", "PopupMenu", Color.WHITE)
+	result.set_stylebox("panel", "ScrollContainer", _flat(Color(0.008, 0.007, 0.006, 0.72), Color(0.28, 0.20, 0.13, 0.62), 1, 8))
+	result.set_stylebox("panel", "PopupMenu", _flat(Color(0.025, 0.018, 0.014, 0.98), BRONZE, 2, 8))
+	result.set_stylebox("hover", "PopupMenu", _flat(Color(0.22, 0.08, 0.035, 0.96), BRONZE_BRIGHT, 1, 5))
+	result.set_stylebox("separator", "PopupMenu", _flat(Color(0.18, 0.09, 0.04, 0.78), Color.TRANSPARENT, 0, 0))
+	result.set_type_variation("GothicSectionTitle", "Label")
+	result.set_color("font_color", "GothicSectionTitle", Color("f0c77f"))
+	result.set_font_size("font_size", "GothicSectionTitle", 20)
+	result.set_type_variation("GothicMutedLabel", "Label")
+	result.set_color("font_color", "GothicMutedLabel", MUTED)
+	result.set_font_size("font_size", "GothicMutedLabel", 14)
+	result.set_type_variation("GothicDetailText", "RichTextLabel")
+	result.set_color("default_color", "GothicDetailText", Color("d8c8ae"))
+	result.set_font_size("normal_font_size", "GothicDetailText", 15)
 	result.set_type_variation("GothicInfoPanel", "Panel")
 	result.set_stylebox("panel", "GothicInfoPanel", _flat(Color(0.025, 0.02, 0.018, 0.88), Color(0.42, 0.31, 0.20, 0.92), 2, 16))
 	result.set_type_variation("GothicTargetPanel", "Panel")
@@ -67,7 +83,8 @@ static func build() -> Theme:
 	_apply_texture_button_variation(result, "GothicComponentButton", COMPONENT_BUTTON_NORMAL, COMPONENT_BUTTON_PRESSED, COMPONENT_BUTTON_DISABLED, Vector4(48, 34, 48, 34), 18)
 	_apply_texture_button_variation(result, "GothicComponentSelectedButton", COMPONENT_BUTTON_PRESSED, COMPONENT_BUTTON_PRESSED, COMPONENT_BUTTON_DISABLED, Vector4(48, 34, 48, 34), 18)
 	_apply_texture_button_variation(result, "GothicComponentTabButton", COMPONENT_TAB_FRAME, COMPONENT_BUTTON_PRESSED, COMPONENT_BUTTON_DISABLED, Vector4(82, 44, 82, 44), 18)
-	_apply_texture_button_variation(result, "GothicComponentSlotButton", COMPONENT_ITEM_SLOT, COMPONENT_ITEM_SLOT, COMPONENT_BUTTON_DISABLED, Vector4(48, 54, 48, 46), 12)
+	_apply_slot_button_variation(result, "GothicComponentSlotButton", false)
+	_apply_slot_button_variation(result, "GothicComponentSelectedSlotButton", true)
 	# Shop cards have a fixed icon/text split and scale as one cohesive asset.
 	_apply_texture_button_variation(result, "GothicComponentShopCard", COMPONENT_SHOP_CARD, COMPONENT_SHOP_CARD, COMPONENT_BUTTON_DISABLED, Vector4.ZERO, 12)
 	# Circular controls keep their source aspect and are never nine-slice stretched.
@@ -103,6 +120,23 @@ static func _apply_texture_button_variation(theme: Theme, variation: StringName,
 	theme.set_constant("outline_size", variation, 3)
 
 
+static func _apply_slot_button_variation(theme: Theme, variation: StringName, selected: bool) -> void:
+	var base_tint := Color("ffd18a") if selected else Color.WHITE
+	var hover_tint := Color("ffe0ae") if selected else Color("fff0d4")
+	var pressed_tint := Color("ffb75e")
+	theme.set_type_variation(variation, "Button")
+	theme.set_stylebox("normal", variation, _texture(COMPONENT_ITEM_SLOT, Vector4(48, 54, 48, 46), 10, base_tint))
+	theme.set_stylebox("hover", variation, _texture(COMPONENT_ITEM_SLOT, Vector4(48, 54, 48, 46), 10, hover_tint))
+	theme.set_stylebox("pressed", variation, _texture(COMPONENT_ITEM_SLOT, Vector4(48, 54, 48, 46), 10, pressed_tint))
+	theme.set_stylebox("focus", variation, _texture(COMPONENT_ITEM_SLOT, Vector4(48, 54, 48, 46), 10, hover_tint))
+	theme.set_stylebox("disabled", variation, _texture(COMPONENT_ITEM_SLOT, Vector4(48, 54, 48, 46), 10, Color(0.56, 0.50, 0.44, 0.74)))
+	theme.set_color("font_color", variation, PARCHMENT)
+	theme.set_color("font_hover_color", variation, Color.WHITE)
+	theme.set_color("font_pressed_color", variation, Color("ffe2ad"))
+	theme.set_color("font_outline_color", variation, Color(0.025, 0.012, 0.008, 1.0))
+	theme.set_constant("outline_size", variation, 3)
+
+
 static func _flat(background: Color, border: Color, width: int, radius: int) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	style.bg_color = background
@@ -116,9 +150,10 @@ static func _flat(background: Color, border: Color, width: int, radius: int) -> 
 	return style
 
 
-static func _texture(texture: Texture2D, margins: Vector4, content_margin: float) -> StyleBoxTexture:
+static func _texture(texture: Texture2D, margins: Vector4, content_margin: float, modulate := Color.WHITE) -> StyleBoxTexture:
 	var style := StyleBoxTexture.new()
 	style.texture = texture
+	style.modulate_color = modulate
 	style.draw_center = true
 	style.set_texture_margin(SIDE_LEFT, margins.x)
 	style.set_texture_margin(SIDE_TOP, margins.y)
