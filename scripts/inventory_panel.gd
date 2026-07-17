@@ -16,7 +16,7 @@ const LONG_PRESS_SECONDS := 0.48
 
 var item_grid: GridContainer
 var detail_label: RichTextLabel
-var equipment_stats_label: Label
+var equipment_stats_label: RichTextLabel
 var bag_summary_label: Label
 var character_preview: Control
 var equipment_buttons: Dictionary = {}
@@ -106,30 +106,32 @@ func _build_attribute_panel() -> void:
 	add_child(panel)
 	var title := _section_title("人物属性", 250)
 	panel.add_child(title)
-	equipment_stats_label = Label.new()
+	equipment_stats_label = RichTextLabel.new()
 	equipment_stats_label.name = "CharacterStats"
-	equipment_stats_label.position = Vector2(16, 50)
-	equipment_stats_label.size = Vector2(218, 194)
-	equipment_stats_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	equipment_stats_label.position = Vector2(16, 44)
+	equipment_stats_label.size = Vector2(218, 220)
+	equipment_stats_label.fit_content = false
+	equipment_stats_label.scroll_active = true
 	equipment_stats_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	equipment_stats_label.add_theme_font_size_override("font_size", 16)
+	equipment_stats_label.theme_type_variation = "GothicDetailText"
+	equipment_stats_label.add_theme_font_size_override("normal_font_size", 16)
 	equipment_stats_label.add_theme_color_override("font_color", Color("ddc9a9"))
 	panel.add_child(equipment_stats_label)
 	var divider := HSeparator.new()
-	divider.position = Vector2(16, 246)
+	divider.position = Vector2(16, 270)
 	divider.size = Vector2(218, 8)
 	panel.add_child(divider)
 	var item_title := Label.new()
 	item_title.text = "物品属性"
-	item_title.position = Vector2(16, 258)
+	item_title.position = Vector2(16, 278)
 	item_title.size = Vector2(218, 30)
 	item_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	item_title.theme_type_variation = "GothicSectionTitle"
 	panel.add_child(item_title)
 	detail_label = RichTextLabel.new()
 	detail_label.name = "ItemDetail"
-	detail_label.position = Vector2(16, 294)
-	detail_label.size = Vector2(218, 252)
+	detail_label.position = Vector2(16, 312)
+	detail_label.size = Vector2(218, 220)
 	detail_label.bbcode_enabled = true
 	detail_label.fit_content = false
 	detail_label.scroll_active = true
@@ -150,10 +152,10 @@ func _build_equipment_panel() -> void:
 	panel.add_child(character_preview)
 
 	var positions := {
-		"头盔": Vector2(153, 48), "项链": Vector2(296, 55),
-		"武器": Vector2(10, 104), "衣服": Vector2(296, 158),
-		"左手镯": Vector2(10, 238), "右手镯": Vector2(296, 238),
-		"左戒指": Vector2(10, 324), "右戒指": Vector2(296, 324),
+		"头盔": Vector2(153, 44), "项链": Vector2(296, 44),
+		"武器": Vector2(10, 144), "衣服": Vector2(296, 144),
+		"左手镯": Vector2(10, 244), "右手镯": Vector2(296, 244),
+		"左戒指": Vector2(10, 344), "右戒指": Vector2(296, 344),
 	}
 	for slot: String in PlayerState.EQUIPMENT_SLOTS:
 		_create_equipment_slot(panel, slot, positions.get(slot, Vector2.ZERO))
@@ -161,8 +163,8 @@ func _build_equipment_panel() -> void:
 	# avoids another paper-doll re-layout when those stable equipment slots land.
 	var future_row := Control.new()
 	future_row.name = "FutureEquipmentRow"
-	future_row.position = Vector2(12, 440)
-	future_row.size = Vector2(366, 106)
+	future_row.position = Vector2(12, 444)
+	future_row.size = Vector2(366, 102)
 	future_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	future_row.set_meta("reserved_slots", ["勋章", "腰带", "鞋子"])
 	panel.add_child(future_row)
@@ -235,28 +237,36 @@ func _create_equipment_slot(parent: Control, slot: String, position_value: Vecto
 	var holder := Control.new()
 	holder.name = "EquipmentHolder_%s" % slot
 	holder.position = position_value
-	holder.size = Vector2(84, 94)
+	holder.size = Vector2(84, 98)
 	parent.add_child(holder)
-	var slot_label := Label.new()
-	slot_label.name = "SlotLabel"
-	slot_label.text = slot
-	slot_label.position = Vector2(-6, 0)
-	slot_label.size = Vector2(96, 23)
-	slot_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	slot_label.theme_type_variation = "GothicMutedLabel"
-	slot_label.add_theme_color_override("font_color", Color("d9b77b"))
-	holder.add_child(slot_label)
 	var button := Button.new()
 	button.name = "EquipmentSlot_%s" % slot
-	button.position = Vector2(4, 24)
-	button.size = Vector2(76, 68)
+	button.position = Vector2(5, 0)
+	button.size = Vector2(74, 84)
 	button.expand_icon = true
 	button.toggle_mode = true
 	button.tooltip_text = "%s：空" % slot
-	button.theme_type_variation = "GothicComponentSlotButton"
+	button.theme_type_variation = "GothicEquipmentSlotButton"
 	button.pressed.connect(_select_equipment_slot.bind(slot))
 	button.gui_input.connect(_equipment_input.bind(slot, button))
 	holder.add_child(button)
+	var caption_plate := Panel.new()
+	caption_plate.name = "SlotCaptionPlate"
+	caption_plate.position = Vector2(10, 72)
+	caption_plate.size = Vector2(64, 24)
+	caption_plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	caption_plate.theme_type_variation = "GothicEquipmentSlotCaption"
+	holder.add_child(caption_plate)
+	var slot_label := Label.new()
+	slot_label.name = "SlotLabel"
+	slot_label.text = slot
+	slot_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	slot_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	slot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	slot_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	slot_label.add_theme_font_size_override("font_size", 13)
+	slot_label.add_theme_color_override("font_color", Color("e1bd7d"))
+	caption_plate.add_child(slot_label)
 	equipment_buttons[slot] = button
 	equipment_slot_labels[slot] = slot_label
 
@@ -286,7 +296,7 @@ func _refresh_equipment_slots() -> void:
 		else:
 			_set_button_texture(button, null)
 		button.set_pressed_no_signal(slot == selected_equipment_slot)
-		button.theme_type_variation = "GothicComponentSelectedSlotButton" if slot == selected_equipment_slot else "GothicComponentSlotButton"
+		button.theme_type_variation = "GothicSelectedEquipmentSlotButton" if slot == selected_equipment_slot else "GothicEquipmentSlotButton"
 		compatibility_lines.append(_compatibility_equipment_text(slot, record))
 	equipment_label.text = "　".join(compatibility_lines)
 

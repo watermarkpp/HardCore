@@ -75,6 +75,8 @@ static func build() -> Theme:
 	result.set_stylebox("panel", "GothicInsetFrame", _texture(COMPONENT_INSET_FRAME, Vector4(48, 48, 48, 48), 28))
 	result.set_type_variation("GothicTabFrame", "Panel")
 	result.set_stylebox("panel", "GothicTabFrame", _texture(COMPONENT_TAB_FRAME, Vector4(76, 48, 76, 48), 26))
+	result.set_type_variation("GothicEquipmentSlotCaption", "Panel")
+	result.set_stylebox("panel", "GothicEquipmentSlotCaption", _flat(Color(0.035, 0.024, 0.018, 0.98), Color(0.52, 0.37, 0.21, 0.96), 1, 3))
 	_apply_button_variation(result, "GothicUtilityButton", _flat(IRON, BRONZE, 2, 13), _flat(IRON_HOVER, BRONZE_BRIGHT, 2, 13), _flat(IRON_PRESSED, BRONZE_BRIGHT, 3, 13))
 	_apply_button_variation(result, "GothicSkillButton", _flat(Color(0.08, 0.055, 0.045, 0.96), BRONZE, 3, 36), _flat(Color(0.18, 0.09, 0.05, 0.98), BRONZE_BRIGHT, 3, 36), _flat(Color(0.28, 0.07, 0.04, 1.0), Color("f0bd70"), 4, 36))
 	_apply_button_variation(result, "GothicAttackButton", _flat(Color(0.24, 0.035, 0.035, 0.96), BRONZE, 4, 60), _flat(Color(0.38, 0.055, 0.04, 1.0), BRONZE_BRIGHT, 4, 60), _flat(Color(0.52, 0.08, 0.035, 1.0), Color("ffd08a"), 5, 60))
@@ -85,6 +87,8 @@ static func build() -> Theme:
 	_apply_texture_button_variation(result, "GothicComponentTabButton", COMPONENT_TAB_FRAME, COMPONENT_BUTTON_PRESSED, COMPONENT_BUTTON_DISABLED, Vector4(82, 44, 82, 44), 18)
 	_apply_slot_button_variation(result, "GothicComponentSlotButton", false)
 	_apply_slot_button_variation(result, "GothicComponentSelectedSlotButton", true)
+	_apply_equipment_slot_button_variation(result, "GothicEquipmentSlotButton", false)
+	_apply_equipment_slot_button_variation(result, "GothicSelectedEquipmentSlotButton", true)
 	# Shop cards have a fixed icon/text split and scale as one cohesive asset.
 	_apply_texture_button_variation(result, "GothicComponentShopCard", COMPONENT_SHOP_CARD, COMPONENT_SHOP_CARD, COMPONENT_BUTTON_DISABLED, Vector4.ZERO, 12)
 	# Circular controls keep their source aspect and are never nine-slice stretched.
@@ -133,6 +137,21 @@ static func _apply_slot_button_variation(theme: Theme, variation: StringName, se
 	theme.set_color("font_color", variation, PARCHMENT)
 	theme.set_color("font_hover_color", variation, Color.WHITE)
 	theme.set_color("font_pressed_color", variation, Color("ffe2ad"))
+	theme.set_color("font_outline_color", variation, Color(0.025, 0.012, 0.008, 1.0))
+	theme.set_constant("outline_size", variation, 3)
+
+
+static func _apply_equipment_slot_button_variation(theme: Theme, variation: StringName, selected: bool) -> void:
+	var normal_tint := Color("ffd399") if selected else Color.WHITE
+	var hover_tint := Color("ffe2b0")
+	var pressed_tint := Color("ffbb68")
+	theme.set_type_variation(variation, "Button")
+	theme.set_stylebox("normal", variation, _texture(COMPONENT_ITEM_SLOT, Vector4(48, 54, 48, 46), 10, normal_tint))
+	theme.set_stylebox("hover", variation, _texture(COMPONENT_ITEM_SLOT, Vector4(48, 54, 48, 46), 10, hover_tint))
+	theme.set_stylebox("pressed", variation, _texture(COMPONENT_ITEM_SLOT, Vector4(48, 54, 48, 46), 10, pressed_tint))
+	theme.set_stylebox("focus", variation, _texture(COMPONENT_ITEM_SLOT, Vector4(48, 54, 48, 46), 10, hover_tint))
+	theme.set_stylebox("disabled", variation, _texture(COMPONENT_ITEM_SLOT, Vector4(48, 54, 48, 46), 10, Color(0.52, 0.48, 0.44, 0.76)))
+	theme.set_color("font_color", variation, PARCHMENT)
 	theme.set_color("font_outline_color", variation, Color(0.025, 0.012, 0.008, 1.0))
 	theme.set_constant("outline_size", variation, 3)
 
