@@ -39,6 +39,7 @@ func _run() -> void:
 	assert("250金币" in panel.reward_label.text and "青铜剑" in panel.reward_label.text, "任务奖励没有读取玩法数据")
 	assert("单机主线衔接设计" in panel.description_label.text and "C" in panel.description_label.text, "任务来源与可信度没有显示")
 	assert(panel.action_button.disabled and panel.action_button.text == "任务进行中", "进行中任务不应重复接取或提交")
+	assert(panel.status_label.text.is_empty(), "进行中状态不应在按钮左侧重复显示文字")
 	assert(panel.abandon_button.visible and panel.abandon_button.position.x < panel.action_button.position.x, "进行中任务左侧没有放弃任务按钮")
 	var abandon_requests: Array[String] = []
 	panel.abandon_requested.connect(func(quest_id: String) -> void: abandon_requests.append(quest_id))
@@ -58,6 +59,7 @@ func _run() -> void:
 	panel.open_for("比奇老兵")
 	assert(panel.current_quest_id == "bich_beginner_gear", "未接任务没有默认选中当前可接任务")
 	assert(not panel.action_button.disabled and panel.action_button.text == "接受任务", "点击未接受任务没有切换为接受任务按钮")
+	assert(panel.status_label.text.is_empty(), "可接任务不应在接受按钮左侧重复显示尚未接受")
 	assert(not panel.abandon_button.visible, "未接受任务不应显示放弃任务按钮")
 	panel._act()
 	await get_tree().process_frame

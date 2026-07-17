@@ -350,12 +350,12 @@ func _refresh_selected_quest(active_quest_id: String) -> void:
 		action_button.text = "领取奖励"
 		_set_abandon_available(true)
 	elif state == "active":
-		status_label.text = "任务进行中"
+		status_label.text = ""
 		action_button.text = "任务进行中"
 		action_button.disabled = true
 		_set_abandon_available(true)
 	elif quest_id == active_quest_id:
-		status_label.text = "尚未接受"
+		status_label.text = ""
 		action_button.text = "接受任务"
 	else:
 		status_label.text = "完成前置任务后解锁"
