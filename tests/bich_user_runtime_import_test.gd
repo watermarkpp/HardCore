@@ -4,15 +4,15 @@ func _ready()->void:
 	var runtime:=MapEditorRuntimeBridge.load_bich()
 	assert(not runtime.is_empty())
 	assert(runtime.design.design_size==[80.0,80.0] or runtime.design.design_size==[80,80])
-	assert(runtime.instances.size()==28)
-	assert(runtime.semantics.monster_spawn.size()==45)
+	assert(runtime.instances.size()==56)
+	assert(runtime.semantics.monster_spawn.size()==44)
 	assert(runtime.semantics.npc_points.size()==5)
 	assert(runtime.semantics.door_points.size()==4)
 	var expected_doors := {
-		"door_000001": [10, 11],
-		"door_000002": [66, 13],
-		"door_000003": [67, 68],
-		"door_000004": [10, 68],
+		"door_000001": [4, 4],
+		"door_000002": [75, 5],
+		"door_000003": [75, 75],
+		"door_000004": [3, 76],
 	}
 	var instances_by_id := {}
 	for instance: Dictionary in runtime.instances:

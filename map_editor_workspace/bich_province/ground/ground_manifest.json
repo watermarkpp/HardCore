@@ -10,23 +10,26 @@
   ],
   "chunks": [
     {
+      "baked_operation_count": 115,
       "chunk_id": "c_0_0",
       "fill_asset_id": "ground.old_grass.001",
       "grid": [
         0.0,
         0.0
       ],
-      "materialized": false,
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_0_0.png",
       "rect_px": [
         0.0,
         0.0,
         1024.0,
         1024.0
       ],
-      "state": "virtual"
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_0_0.json"
     },
     {
-      "baked_operation_count": 796,
+      "baked_operation_count": 1169,
       "chunk_id": "c_1_0",
       "fill_asset_id": "ground.old_grass.001",
       "grid": [
@@ -45,7 +48,7 @@
       "workspace_chunk": "ground/chunks/c_1_0.json"
     },
     {
-      "baked_operation_count": 1810,
+      "baked_operation_count": 2237,
       "chunk_id": "c_2_0",
       "fill_asset_id": "ground.old_grass.001",
       "grid": [
@@ -64,7 +67,7 @@
       "workspace_chunk": "ground/chunks/c_2_0.json"
     },
     {
-      "baked_operation_count": 968,
+      "baked_operation_count": 1395,
       "chunk_id": "c_3_0",
       "fill_asset_id": "ground.old_grass.001",
       "grid": [
@@ -83,23 +86,26 @@
       "workspace_chunk": "ground/chunks/c_3_0.json"
     },
     {
+      "baked_operation_count": 192,
       "chunk_id": "c_4_0",
       "fill_asset_id": "ground.old_grass.001",
       "grid": [
         4.0,
         0.0
       ],
-      "materialized": false,
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_4_0.png",
       "rect_px": [
         4096.0,
         0.0,
         1024.0,
         1024.0
       ],
-      "state": "virtual"
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_4_0.json"
     },
     {
-      "baked_operation_count": 312,
+      "baked_operation_count": 905,
       "chunk_id": "c_0_1",
       "fill_asset_id": "ground.old_grass.001",
       "grid": [
@@ -118,7 +124,7 @@
       "workspace_chunk": "ground/chunks/c_0_1.json"
     },
     {
-      "baked_operation_count": 3332,
+      "baked_operation_count": 3791,
       "chunk_id": "c_1_1",
       "fill_asset_id": "ground.old_grass.001",
       "grid": [
@@ -137,7 +143,7 @@
       "workspace_chunk": "ground/chunks/c_1_1.json"
     },
     {
-      "baked_operation_count": 3938,
+      "baked_operation_count": 3956,
       "chunk_id": "c_2_1",
       "fill_asset_id": "ground.old_grass.001",
       "grid": [
@@ -156,7 +162,7 @@
       "workspace_chunk": "ground/chunks/c_2_1.json"
     },
     {
-      "baked_operation_count": 2386,
+      "baked_operation_count": 2683,
       "chunk_id": "c_3_1",
       "fill_asset_id": "ground.old_grass.001",
       "grid": [
@@ -175,7 +181,7 @@
       "workspace_chunk": "ground/chunks/c_3_1.json"
     },
     {
-      "baked_operation_count": 402,
+      "baked_operation_count": 1184,
       "chunk_id": "c_4_1",
       "fill_asset_id": "ground.old_grass.001",
       "grid": [
@@ -210,23 +216,26 @@
       "state": "virtual"
     },
     {
+      "baked_operation_count": 133,
       "chunk_id": "c_1_2",
       "fill_asset_id": "ground.old_grass.001",
       "grid": [
         1.0,
         2.0
       ],
-      "materialized": false,
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_1_2.png",
       "rect_px": [
         1024.0,
         2048.0,
         1024.0,
         512.0
       ],
-      "state": "virtual"
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_1_2.json"
     },
     {
-      "baked_operation_count": 390,
+      "baked_operation_count": 729,
       "chunk_id": "c_2_2",
       "fill_asset_id": "ground.old_grass.001",
       "grid": [
@@ -245,20 +254,23 @@
       "workspace_chunk": "ground/chunks/c_2_2.json"
     },
     {
+      "baked_operation_count": 144,
       "chunk_id": "c_3_2",
       "fill_asset_id": "ground.old_grass.001",
       "grid": [
         3.0,
         2.0
       ],
-      "materialized": false,
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_3_2.png",
       "rect_px": [
         3072.0,
         2048.0,
         1024.0,
         512.0
       ],
-      "state": "virtual"
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_3_2.json"
     },
     {
       "chunk_id": "c_4_2",

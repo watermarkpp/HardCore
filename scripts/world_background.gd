@@ -60,10 +60,12 @@ var _editor_runtime_visual: Dictionary = {}
 var _editor_runtime_size := Vector2i.ZERO
 var _editor_runtime_blocked_tiles: Dictionary = {}
 var _editor_runtime_manual_rects: Array[Rect2] = []
+var _editor_runtime_chunk_draws: Array[Dictionary] = []
 
 
 func _ready() -> void:
 	z_index = -20
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_rebuild_environment()
 	queue_redraw()
 
@@ -364,6 +366,14 @@ func _draw() -> void:
 			EditorCoordinateScript.tile_to_world(Vector2(0,0),size), EditorCoordinateScript.tile_to_world(Vector2(size.x,0),size),
 			EditorCoordinateScript.tile_to_world(Vector2(size.x,size.y),size), EditorCoordinateScript.tile_to_world(Vector2(0,size.y),size)])
 		draw_colored_polygon(corners, Color(str(_editor_runtime_visual.get("base_color", "#465827"))))
+		# Keep all authored chunk textures on one CanvasItem. Godot otherwise
+		# culls distant Sprite2D chunks and can defer their GPU upload until the
+		# player approaches an edge, producing a visible hitch on mobile.
+		for chunk_draw: Dictionary in _editor_runtime_chunk_draws:
+			var texture: Texture2D = chunk_draw.get("texture")
+			var rect: Rect2 = chunk_draw.get("rect", Rect2())
+			if texture != null and rect.size.x > 0.0 and rect.size.y > 0.0:
+				draw_texture_rect(texture, rect, false)
 		return
 	if _full_ground_ready:
 		return
@@ -465,6 +475,7 @@ func _rebuild_environment() -> void:
 	_editor_runtime_size = Vector2i.ZERO
 	_editor_runtime_blocked_tiles.clear()
 	_editor_runtime_manual_rects.clear()
+	_editor_runtime_chunk_draws.clear()
 	for node: Node in _environment_nodes:
 		if is_instance_valid(node):
 			node.queue_free()
@@ -506,15 +517,86 @@ func _build_editor_runtime_environment() -> bool:
 		if not ResourceLoader.exists(image_path): continue
 		var rect: Array = chunk.get("rect_px", [])
 		if rect.size() != 4: continue
-		var sprite := Sprite2D.new(); sprite.name = "EditorGroundChunk"; sprite.set_meta("editor_runtime_chunk", true); sprite.texture = load(image_path); sprite.z_as_relative=false; sprite.z_index=-20
-		sprite.position = Vector2(float(rect[0])+float(rect[2])*.5-float(center[0]), float(rect[1])+float(rect[3])*.5-float(center[1]))
-		add_child(sprite); _environment_nodes.append(sprite)
+		var texture := load(image_path) as Texture2D
+		if texture == null: continue
+		_editor_runtime_chunk_draws.append({
+			"chunk_id": str(chunk.get("chunk_id", "")),
+			"texture": texture,
+			"rect": Rect2(
+				float(rect[0]) - float(center[0]),
+				float(rect[1]) - float(center[1]),
+				float(rect[2]),
+				float(rect[3])
+			),
+		})
+	_build_editor_runtime_guard_band(parsed)
 	var loaded := MapEditorRuntimeMapService.load_runtime(runtime_path)
 	if loaded.ok:
 		_build_editor_runtime_instances(loaded.runtime)
 		_build_editor_runtime_collisions(loaded.runtime)
 	_full_ground_ready = false
 	return true
+
+
+func _build_editor_runtime_guard_band(visual: Dictionary) -> void:
+	var raw_size: Array = visual.get("design_size", [64, 64])
+	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
+	var corners := [
+		EditorCoordinateScript.tile_to_world(Vector2(-0.5, -0.5), size),
+		EditorCoordinateScript.tile_to_world(Vector2(float(size.x) - 0.5, -0.5), size),
+		EditorCoordinateScript.tile_to_world(Vector2(float(size.x) - 0.5, float(size.y) - 0.5), size),
+		EditorCoordinateScript.tile_to_world(Vector2(-0.5, float(size.y) - 0.5), size),
+	]
+	var authored_bounds := Rect2(corners[0], Vector2.ZERO)
+	for point: Vector2 in corners:
+		authored_bounds = authored_bounds.expand(point)
+	var guard_bounds := authored_bounds.grow(float(visual.get("guard_band_px", 1536.0)))
+	var guard := Polygon2D.new()
+	guard.name = "EditorRuntimeGuardBand"
+	guard.set_meta("editor_runtime_guard_band", true)
+	guard.z_as_relative = false
+	guard.z_index = -30
+	guard.polygon = PackedVector2Array([
+		guard_bounds.position,
+		Vector2(guard_bounds.end.x, guard_bounds.position.y),
+		guard_bounds.end,
+		Vector2(guard_bounds.position.x, guard_bounds.end.y),
+	])
+	var shader := Shader.new()
+	shader.code = """
+shader_type canvas_item;
+render_mode unshaded;
+varying vec2 map_position;
+void vertex() {
+	map_position = VERTEX;
+}
+float terrain_hash(vec2 p) {
+	return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+}
+void fragment() {
+	float coarse = terrain_hash(floor(map_position / 64.0));
+	float fine = terrain_hash(floor(map_position / 12.0));
+	vec3 dark_grass = vec3(0.055, 0.085, 0.040);
+	vec3 old_grass = vec3(0.120, 0.155, 0.070);
+	vec3 color = mix(dark_grass, old_grass, 0.30 + coarse * 0.34 + fine * 0.10);
+	vec2 iso = vec2(
+		(map_position.x / 32.0 + map_position.y / 16.0) * 0.5,
+		(map_position.y / 16.0 - map_position.x / 32.0) * 0.5
+	);
+	vec2 cell_edge = abs(fract(iso) - vec2(0.5));
+	float seam = smoothstep(0.475, 0.5, max(cell_edge.x, cell_edge.y));
+	COLOR = vec4(color - vec3(seam * 0.018), 1.0);
+}
+"""
+	var material := ShaderMaterial.new()
+	material.shader = shader
+	guard.material = material
+	add_child(guard)
+	_environment_nodes.append(guard)
+
+
+func editor_runtime_chunk_texture_count() -> int:
+	return _editor_runtime_chunk_draws.size()
 
 
 func _build_editor_runtime_instances(runtime:Dictionary)->void:

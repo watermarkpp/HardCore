@@ -17,6 +17,21 @@
       "occlusion": false,
       "placeable": true
     },
+    "user.318437414b539ad5": {
+      "anchor_px": [
+        128.0,
+        83.0
+      ],
+      "calibration_status": "placeable",
+      "collision_policy": "none",
+      "content_layer": "personal_expansion",
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "occlusion": false,
+      "placeable": true
+    },
     "user.372fca8cba840f8a": {
       "approved_scale": 0.75,
       "collision_footprint_tiles": [
@@ -38,17 +53,32 @@
         5.0
       ]
     },
-    "user.54625b138c2ae601": {
+    "user.418f2f34120721f0": {
       "anchor_px": [
-        120,
-        78
+        194,
+        204
       ],
       "calibration_status": "placeable",
       "collision_policy": "none",
       "content_layer": "personal_expansion",
       "footprint_tiles": [
-        1,
-        1
+        4,
+        4
+      ],
+      "occlusion": false,
+      "placeable": true
+    },
+    "user.54625b138c2ae601": {
+      "anchor_px": [
+        120.0,
+        78.0
+      ],
+      "calibration_status": "placeable",
+      "collision_policy": "none",
+      "content_layer": "personal_expansion",
+      "footprint_tiles": [
+        1.0,
+        1.0
       ],
       "occlusion": false,
       "placeable": true

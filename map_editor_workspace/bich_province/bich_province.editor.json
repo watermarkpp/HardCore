@@ -36,7 +36,8 @@
     "created_by": "human_codex_shared_tool",
     "milestone": "BICH-USER-MAP-READY",
     "revision": 1.0,
-    "runtime_approved": false,
+    "runtime_approved": true,
+    "runtime_approved_revision": 1,
     "size_migration": "bich_64_to_80_centered",
     "workspace": "res://map_editor_workspace/bich_province"
   },
@@ -89,8 +90,8 @@
           0.0
         ],
         "tile": [
-          10.0,
-          11.0
+          4,
+          4
         ],
         "trigger_on_enter": true
       },
@@ -113,8 +114,8 @@
           0.0
         ],
         "tile": [
-          66.0,
-          13.0
+          75,
+          5
         ],
         "trigger_on_enter": true
       },
@@ -137,8 +138,8 @@
           0.0
         ],
         "tile": [
-          67.0,
-          68.0
+          75,
+          75
         ],
         "trigger_on_enter": true
       },
@@ -161,8 +162,8 @@
           0.0
         ],
         "tile": [
-          10.0,
-          68.0
+          3,
+          76
         ],
         "trigger_on_enter": true
       }
@@ -187,8 +188,8 @@
         "semantic_id": "monster_spawn_000001",
         "spawn_rule": "ambient",
         "tile": [
-          38.0,
-          62.0
+          35,
+          60
         ]
       },
       {
@@ -205,8 +206,8 @@
         "semantic_id": "monster_spawn_000002",
         "spawn_rule": "ambient",
         "tile": [
-          32.0,
-          61.0
+          34,
+          69
         ]
       },
       {
@@ -223,8 +224,8 @@
         "semantic_id": "monster_spawn_000003",
         "spawn_rule": "ambient",
         "tile": [
-          32.0,
-          66.0
+          45,
+          72
         ]
       },
       {
@@ -241,8 +242,8 @@
         "semantic_id": "monster_spawn_000004",
         "spawn_rule": "ambient",
         "tile": [
-          40.0,
-          68.0
+          55,
+          72
         ]
       },
       {
@@ -259,8 +260,8 @@
         "semantic_id": "monster_spawn_000005",
         "spawn_rule": "ambient",
         "tile": [
-          46.0,
-          61.0
+          46,
+          60
         ]
       },
       {
@@ -277,8 +278,8 @@
         "semantic_id": "monster_spawn_000006",
         "spawn_rule": "ambient",
         "tile": [
-          21.0,
-          60.0
+          18,
+          61
         ]
       },
       {
@@ -313,8 +314,8 @@
         "semantic_id": "monster_spawn_000008",
         "spawn_rule": "ambient",
         "tile": [
-          24.0,
-          67.0
+          24,
+          72
         ]
       },
       {
@@ -331,8 +332,8 @@
         "semantic_id": "monster_spawn_000010",
         "spawn_rule": "ambient",
         "tile": [
-          12.0,
-          59.0
+          5,
+          59
         ]
       },
       {
@@ -349,8 +350,8 @@
         "semantic_id": "monster_spawn_000011",
         "spawn_rule": "ambient",
         "tile": [
-          19.0,
-          47.0
+          17,
+          44
         ]
       },
       {
@@ -367,8 +368,8 @@
         "semantic_id": "monster_spawn_000012",
         "spawn_rule": "ambient",
         "tile": [
-          11.0,
-          36.0
+          4,
+          35
         ]
       },
       {
@@ -385,8 +386,8 @@
         "semantic_id": "monster_spawn_000013",
         "spawn_rule": "ambient",
         "tile": [
-          13.0,
-          29.0
+          6,
+          25
         ]
       },
       {
@@ -403,8 +404,8 @@
         "semantic_id": "monster_spawn_000014",
         "spawn_rule": "ambient",
         "tile": [
-          10.0,
-          43.0
+          10,
+          46
         ]
       },
       {
@@ -421,8 +422,8 @@
         "semantic_id": "monster_spawn_000015",
         "spawn_rule": "ambient",
         "tile": [
-          10.0,
-          48.0
+          4,
+          48
         ]
       },
       {
@@ -439,8 +440,8 @@
         "semantic_id": "monster_spawn_000009",
         "spawn_rule": "ambient",
         "tile": [
-          55.0,
-          67.0
+          65,
+          73
         ]
       },
       {
@@ -457,8 +458,8 @@
         "semantic_id": "monster_spawn_000018",
         "spawn_rule": "ambient",
         "tile": [
-          68.0,
-          58.0
+          74,
+          68
         ]
       },
       {
@@ -475,8 +476,8 @@
         "semantic_id": "monster_spawn_000019",
         "spawn_rule": "ambient",
         "tile": [
-          62.0,
-          50.0
+          68,
+          57
         ]
       },
       {
@@ -529,8 +530,8 @@
         "semantic_id": "monster_spawn_000022",
         "spawn_rule": "ambient",
         "tile": [
-          59.0,
-          41.0
+          63,
+          39
         ]
       },
       {
@@ -547,8 +548,8 @@
         "semantic_id": "monster_spawn_000023",
         "spawn_rule": "ambient",
         "tile": [
-          66.0,
-          40.0
+          73,
+          40
         ]
       },
       {
@@ -565,8 +566,8 @@
         "semantic_id": "monster_spawn_000024",
         "spawn_rule": "ambient",
         "tile": [
-          68.0,
-          32.0
+          72,
+          27
         ]
       },
       {
@@ -583,8 +584,8 @@
         "semantic_id": "monster_spawn_000025",
         "spawn_rule": "ambient",
         "tile": [
-          60.0,
-          33.0
+          64,
+          27
         ]
       },
       {
@@ -601,26 +602,8 @@
         "semantic_id": "monster_spawn_000026",
         "spawn_rule": "ambient",
         "tile": [
-          66.0,
-          23.0
-        ]
-      },
-      {
-        "content_id": "monster.27",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "钉耙猫0",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.27",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000028",
-        "spawn_rule": "ambient",
-        "tile": [
-          49.0,
-          68.0
+          72,
+          17
         ]
       },
       {
@@ -637,8 +620,8 @@
         "semantic_id": "monster_spawn_000029",
         "spawn_rule": "ambient",
         "tile": [
-          52.0,
-          14.0
+          52,
+          8
         ]
       },
       {
@@ -655,8 +638,8 @@
         "semantic_id": "monster_spawn_000030",
         "spawn_rule": "ambient",
         "tile": [
-          44.0,
-          11.0
+          42,
+          5
         ]
       },
       {
@@ -673,8 +656,8 @@
         "semantic_id": "monster_spawn_000031",
         "spawn_rule": "ambient",
         "tile": [
-          38.0,
-          12.0
+          32,
+          6
         ]
       },
       {
@@ -691,8 +674,8 @@
         "semantic_id": "monster_spawn_000032",
         "spawn_rule": "ambient",
         "tile": [
-          31.0,
-          11.0
+          32,
+          16
         ]
       },
       {
@@ -709,8 +692,8 @@
         "semantic_id": "monster_spawn_000033",
         "spawn_rule": "ambient",
         "tile": [
-          29.0,
-          17.0
+          24,
+          16
         ]
       },
       {
@@ -727,8 +710,8 @@
         "semantic_id": "monster_spawn_000034",
         "spawn_rule": "ambient",
         "tile": [
-          18.0,
-          11.0
+          14,
+          4
         ]
       },
       {
@@ -745,8 +728,8 @@
         "semantic_id": "monster_spawn_000035",
         "spawn_rule": "ambient",
         "tile": [
-          17.0,
-          65.0
+          13,
+          65
         ]
       },
       {
@@ -763,8 +746,8 @@
         "semantic_id": "monster_spawn_000036",
         "spawn_rule": "ambient",
         "tile": [
-          16.0,
-          70.0
+          14,
+          74
         ]
       },
       {
@@ -781,8 +764,8 @@
         "semantic_id": "monster_spawn_000037",
         "spawn_rule": "ambient",
         "tile": [
-          12.0,
-          23.0
+          11,
+          20
         ]
       },
       {
@@ -799,8 +782,8 @@
         "semantic_id": "monster_spawn_000038",
         "spawn_rule": "ambient",
         "tile": [
-          10.0,
-          17.0
+          5,
+          12
         ]
       },
       {
@@ -817,8 +800,8 @@
         "semantic_id": "monster_spawn_000039",
         "spawn_rule": "ambient",
         "tile": [
-          17.0,
-          18.0
+          10,
+          10
         ]
       },
       {
@@ -853,8 +836,8 @@
         "semantic_id": "monster_spawn_000041",
         "spawn_rule": "ambient",
         "tile": [
-          49.0,
-          19.0
+          52,
+          19
         ]
       },
       {
@@ -871,8 +854,8 @@
         "semantic_id": "monster_spawn_000042",
         "spawn_rule": "ambient",
         "tile": [
-          42.0,
-          18.0
+          41,
+          14
         ]
       },
       {
@@ -889,8 +872,8 @@
         "semantic_id": "monster_spawn_000043",
         "spawn_rule": "ambient",
         "tile": [
-          24.0,
-          12.0
+          22,
+          6
         ]
       },
       {
@@ -907,8 +890,8 @@
         "semantic_id": "monster_spawn_000044",
         "spawn_rule": "ambient",
         "tile": [
-          52.0,
-          28.0
+          56,
+          30
         ]
       },
       {
@@ -925,8 +908,8 @@
         "semantic_id": "monster_spawn_000045",
         "spawn_rule": "ambient",
         "tile": [
-          59.0,
-          20.0
+          61,
+          12
         ]
       },
       {
@@ -943,8 +926,8 @@
         "semantic_id": "monster_spawn_000046",
         "spawn_rule": "ambient",
         "tile": [
-          59.0,
-          13.0
+          65,
+          4
         ]
       },
       {
@@ -979,8 +962,8 @@
         "semantic_id": "monster_spawn_000048",
         "spawn_rule": "ambient",
         "tile": [
-          68.0,
-          48.0
+          73,
+          51
         ]
       }
     ],
@@ -1268,8 +1251,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          10.0,
-          11.0
+          4,
+          4
         ],
         "tile_anchor": [
           8.0,
@@ -1327,8 +1310,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          66.0,
-          13.0
+          75,
+          5
         ],
         "tile_anchor": [
           64.0,
@@ -1386,8 +1369,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          67.0,
-          68.0
+          75,
+          75
         ],
         "tile_anchor": [
           64.0,
@@ -1976,8 +1959,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          10.0,
-          68.0
+          3,
+          76
         ],
         "tile_anchor": [
           8.0,
@@ -2035,8 +2018,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          18.0,
-          54.0
+          17,
+          54
         ],
         "tile_anchor": [
           16.0,
@@ -2094,8 +2077,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          23.0,
-          17.0
+          23,
+          21
         ],
         "tile_anchor": [
           21.0,
@@ -2153,71 +2136,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          60.0,
-          26.0
+          60,
+          26
         ],
         "tile_anchor": [
           56.0,
           24.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
-          170.0,
-          249.0
-        ],
-        "asset_id": "user.33ff89346abf48a1",
-        "collision_footprint_tiles": [
-          0.0,
-          0.0
-        ],
-        "collision_policy": "none",
-        "collision_profile_id": "none_visual",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "gameplay_role": "none",
-        "instance_id": "inst_000021",
-        "layer": "object_base",
-        "movable": true,
-        "navigation_policy": "ignore",
-        "object_role": "decoration",
-        "occlusion": false,
-        "occupancy_footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_px": [
-          170.0,
-          249.0
-        ],
-        "placement_rule": "inside_map",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          0.384,
-          0.384
-        ],
-        "scene_intent": "visual_detail",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          42.0,
-          63.0
-        ],
-        "tile_anchor": [
-          42.0,
-          63.0
         ]
       },
       {
@@ -2271,8 +2195,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          25.0,
-          61.0
+          28,
+          63
         ],
         "tile_anchor": [
           25.0,
@@ -2459,65 +2383,6 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          161.0,
-          244.0
-        ],
-        "asset_id": "user.f40da4572b2f787b",
-        "collision_footprint_tiles": [
-          0.0,
-          0.0
-        ],
-        "collision_policy": "none",
-        "collision_profile_id": "none_visual",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "gameplay_role": "none",
-        "instance_id": "inst_000026",
-        "layer": "object_base",
-        "movable": true,
-        "navigation_policy": "ignore",
-        "object_role": "decoration",
-        "occlusion": false,
-        "occupancy_footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_px": [
-          161.0,
-          244.0
-        ],
-        "placement_rule": "inside_map",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          0.39183673469387753,
-          0.39183673469387753
-        ],
-        "scene_intent": "visual_detail",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          35.0,
-          9.0
-        ],
-        "tile_anchor": [
-          35.0,
-          9.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
           162.0,
           285.0
         ],
@@ -2566,8 +2431,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          59.0,
-          20.0
+          63,
+          8
         ],
         "tile_anchor": [
           59.0,
@@ -2650,23 +2515,25 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4.0,
-          4.0
+          1,
+          1
         ],
         "gameplay_role": "none",
+        "instance_custom_scale": true,
         "instance_id": "inst_000029",
+        "instance_scale_level": -3,
         "layer": "object_base",
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          4.0,
-          4.0
+          1,
+          1
         ],
         "offset_px": [
-          0.0,
-          0.0
+          0,
+          -48
         ],
         "placement_anchor_px": [
           197.0,
@@ -2677,19 +2544,23 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.5311203319502075,
-          0.5311203319502075
+          0.25,
+          0.25
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          50.0,
-          23.0
+          53,
+          26
         ],
         "tile_anchor": [
-          50.0,
-          23.0
+          53,
+          26
+        ],
+        "visual_footprint_tiles": [
+          1,
+          1
         ]
       },
       {
@@ -2743,8 +2614,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          66.0,
-          48.0
+          64,
+          57
         ],
         "tile_anchor": [
           66.0,
@@ -2802,8 +2673,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          55.0,
-          43.0
+          53,
+          39
         ],
         "tile_anchor": [
           55.0,
@@ -2867,6 +2738,2061 @@
         "tile_anchor": [
           54.0,
           32.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          180.0,
+          320.0
+        ],
+        "asset_id": "user.3ac825da5c85207a",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          4.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000033",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          180.0,
+          320.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3987538940809969,
+          0.3987538940809969
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          31,
+          35
+        ],
+        "tile_anchor": [
+          31,
+          35
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          92.0,
+          187.0
+        ],
+        "asset_id": "user.60445cb9a05efe9c",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000034",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          92.0,
+          187.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3404255319148936,
+          0.3404255319148936
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          38,
+          49
+        ],
+        "tile_anchor": [
+          38,
+          49
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          163.0,
+          280.0
+        ],
+        "asset_id": "user.cb79196c20dbe85a",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000035",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          163.0,
+          280.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3416370106761566,
+          0.3416370106761566
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          35,
+          29
+        ],
+        "tile_anchor": [
+          35,
+          29
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          162.0,
+          296.0
+        ],
+        "asset_id": "user.d1a0eee0a2dfde63",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          4.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000036",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          162.0,
+          296.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.43097643097643096,
+          0.43097643097643096
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          30,
+          40
+        ],
+        "tile_anchor": [
+          30,
+          40
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          164.0,
+          347.0
+        ],
+        "asset_id": "user.6d0e32d4193076fb",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          4.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000037",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          164.0,
+          347.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.367816091954023,
+          0.367816091954023
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          35,
+          34
+        ],
+        "tile_anchor": [
+          35,
+          34
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          92.0,
+          187.0
+        ],
+        "asset_id": "user.60445cb9a05efe9c",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000038",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          92.0,
+          187.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3404255319148936,
+          0.3404255319148936
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          25,
+          41
+        ],
+        "tile_anchor": [
+          25,
+          41
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          92.0,
+          187.0
+        ],
+        "asset_id": "user.60445cb9a05efe9c",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000039",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          92.0,
+          187.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3404255319148936,
+          0.3404255319148936
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          35,
+          39
+        ],
+        "tile_anchor": [
+          35,
+          39
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          148.0,
+          287.0
+        ],
+        "asset_id": "user.c1aee4a2554a549c",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000040",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          148.0,
+          287.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3333333333333333,
+          0.3333333333333333
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          39,
+          31
+        ],
+        "tile_anchor": [
+          39,
+          31
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          150.0,
+          293.0
+        ],
+        "asset_id": "user.c3239594a8b7b6d3",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          4.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000041",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          150.0,
+          293.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.43537414965986393,
+          0.43537414965986393
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          42,
+          63
+        ],
+        "tile_anchor": [
+          42,
+          63
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          163.0,
+          280.0
+        ],
+        "asset_id": "user.cb79196c20dbe85a",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000042",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          163.0,
+          280.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3416370106761566,
+          0.3416370106761566
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          31,
+          73
+        ],
+        "tile_anchor": [
+          31,
+          73
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          150.0,
+          293.0
+        ],
+        "asset_id": "user.c3239594a8b7b6d3",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          4.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000043",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          150.0,
+          293.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.43537414965986393,
+          0.43537414965986393
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          7,
+          32
+        ],
+        "tile_anchor": [
+          7,
+          32
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          162.0,
+          296.0
+        ],
+        "asset_id": "user.d1a0eee0a2dfde63",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          4.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000044",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          162.0,
+          296.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.43097643097643096,
+          0.43097643097643096
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          65,
+          45
+        ],
+        "tile_anchor": [
+          65,
+          45
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          162.0,
+          296.0
+        ],
+        "asset_id": "user.d1a0eee0a2dfde63",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          4.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000045",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          162.0,
+          296.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.43097643097643096,
+          0.43097643097643096
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          28,
+          8
+        ],
+        "tile_anchor": [
+          28,
+          8
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          101.0,
+          276.0
+        ],
+        "asset_id": "user.4b578a2e393aee5f",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000046",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          101.0,
+          276.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.34657039711191334,
+          0.34657039711191334
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          36,
+          43
+        ],
+        "tile_anchor": [
+          36,
+          43
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          113.0,
+          224.0
+        ],
+        "asset_id": "user.3a22e204b6dbc32d",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000047",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          113.0,
+          224.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.4266666666666667,
+          0.4266666666666667
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          9,
+          56
+        ],
+        "tile_anchor": [
+          9,
+          56
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          113.0,
+          224.0
+        ],
+        "asset_id": "user.3a22e204b6dbc32d",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000048",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          113.0,
+          224.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.4266666666666667,
+          0.4266666666666667
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          65,
+          59
+        ],
+        "tile_anchor": [
+          65,
+          62
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          104.0,
+          270.0
+        ],
+        "asset_id": "user.0e71a29ed6eeff31",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000049",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          104.0,
+          270.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.35424354243542433,
+          0.35424354243542433
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          25,
+          23
+        ],
+        "tile_anchor": [
+          25,
+          23
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          108.0,
+          274.0
+        ],
+        "asset_id": "user.b47f67e1f5cedf56",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000050",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          108.0,
+          274.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3490909090909091,
+          0.3490909090909091
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          21,
+          46
+        ],
+        "tile_anchor": [
+          21,
+          46
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          108.0,
+          274.0
+        ],
+        "asset_id": "user.b47f67e1f5cedf56",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000051",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          108.0,
+          274.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3490909090909091,
+          0.3490909090909091
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          50,
+          27
+        ],
+        "tile_anchor": [
+          50,
+          27
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          106.0,
+          206.0
+        ],
+        "asset_id": "user.cb5ec321760a2f62",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000052",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          106.0,
+          206.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.463768115942029,
+          0.463768115942029
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          28,
+          28
+        ],
+        "tile_anchor": [
+          28,
+          28
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          92.0,
+          210.0
+        ],
+        "asset_id": "user.fb5fcf8cc43c684e",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000053",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          92.0,
+          210.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.4549763033175355,
+          0.4549763033175355
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          33,
+          44
+        ],
+        "tile_anchor": [
+          33,
+          44
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          107.0,
+          208.0
+        ],
+        "asset_id": "user.83ef012d55284f48",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000054",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          107.0,
+          208.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.45933014354066987,
+          0.45933014354066987
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          22,
+          35
+        ],
+        "tile_anchor": [
+          22,
+          35
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          108.0,
+          210.0
+        ],
+        "asset_id": "user.f4efc016a43e4ce0",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000055",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          108.0,
+          210.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.4549763033175355,
+          0.4549763033175355
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          43,
+          30
+        ],
+        "tile_anchor": [
+          43,
+          30
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          115.0,
+          233.0
+        ],
+        "asset_id": "user.432c5bad20dae8de",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000056",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          115.0,
+          233.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.41025641025641024,
+          0.41025641025641024
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          30,
+          29
+        ],
+        "tile_anchor": [
+          30,
+          29
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          115.0,
+          245.0
+        ],
+        "asset_id": "user.ce9bec6d5f1b337e",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000057",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          115.0,
+          245.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3902439024390244,
+          0.3902439024390244
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          26,
+          34
+        ],
+        "tile_anchor": [
+          26,
+          34
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          110.0,
+          212.0
+        ],
+        "asset_id": "user.6a614546bd760256",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000058",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          110.0,
+          212.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.4507042253521127,
+          0.4507042253521127
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          51,
+          64
+        ],
+        "tile_anchor": [
+          51,
+          64
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          98.0,
+          284.0
+        ],
+        "asset_id": "user.5f3275a65a03a303",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000059",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          98.0,
+          284.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3368421052631579,
+          0.3368421052631579
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          71,
+          75
+        ],
+        "tile_anchor": [
+          70,
+          74
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          98.0,
+          284.0
+        ],
+        "asset_id": "user.5f3275a65a03a303",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000060",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          98.0,
+          284.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3368421052631579,
+          0.3368421052631579
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          1,
+          69
+        ],
+        "tile_anchor": [
+          1,
+          69
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          98.0,
+          284.0
+        ],
+        "asset_id": "user.5f3275a65a03a303",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000061",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          98.0,
+          284.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3368421052631579,
+          0.3368421052631579
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          0,
+          6
+        ],
+        "tile_anchor": [
+          0,
+          6
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          98.0,
+          284.0
+        ],
+        "asset_id": "user.5f3275a65a03a303",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000062",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          98.0,
+          284.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3368421052631579,
+          0.3368421052631579
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          76,
+          8
+        ],
+        "tile_anchor": [
+          76,
+          8
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          172.0,
+          254.0
+        ],
+        "asset_id": "user.03958ff6409f2772",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000063",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          172.0,
+          254.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3764705882352941,
+          0.3764705882352941
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          36,
+          7
+        ],
+        "tile_anchor": [
+          36,
+          7
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          171.0,
+          247.0
+        ],
+        "asset_id": "user.adde7a65453c0cbc",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000064",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          171.0,
+          247.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3870967741935484,
+          0.3870967741935484
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          20,
+          73
+        ],
+        "tile_anchor": [
+          20,
+          73
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          168.0,
+          249.0
+        ],
+        "asset_id": "user.7f6c3a92d4eb22eb",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000065",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          168.0,
+          249.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.384,
+          0.384
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          4,
+          65
+        ],
+        "tile_anchor": [
+          4,
+          65
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          171.0,
+          255.0
+        ],
+        "asset_id": "user.e4d917467d61c4e7",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000066",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          171.0,
+          255.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.375,
+          0.375
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          17,
+          51
+        ],
+        "tile_anchor": [
+          17,
+          51
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          154.0,
+          211.0
+        ],
+        "asset_id": "user.a8322e37209343be",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000067",
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_px": [
+          154.0,
+          211.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.4528301886792453,
+          0.4528301886792453
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          51,
+          75
+        ],
+        "tile_anchor": [
+          51,
+          75
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          197.0,
+          240.0
+        ],
+        "asset_id": "user.6f2ae9e2a8cf8930",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1,
+          1
+        ],
+        "gameplay_role": "none",
+        "instance_custom_scale": true,
+        "instance_id": "inst_000068",
+        "instance_scale_level": -3,
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "offset_px": [
+          0,
+          -112
+        ],
+        "placement_anchor_px": [
+          197.0,
+          240.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.25,
+          0.25
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          79,
+          49
+        ],
+        "tile_anchor": [
+          79,
+          49
+        ],
+        "visual_footprint_tiles": [
+          1,
+          1
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          172.0,
+          225.0
+        ],
+        "asset_id": "user.ccd90b0060ecebbc",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1,
+          1
+        ],
+        "gameplay_role": "none",
+        "instance_custom_scale": true,
+        "instance_id": "inst_000069",
+        "instance_scale_level": -2,
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "offset_px": [
+          0,
+          -32
+        ],
+        "placement_anchor_px": [
+          172.0,
+          225.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3333333333333333,
+          0.3333333333333333
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          68,
+          35
+        ],
+        "tile_anchor": [
+          68,
+          35
+        ],
+        "visual_footprint_tiles": [
+          1,
+          1
         ]
       }
     ],

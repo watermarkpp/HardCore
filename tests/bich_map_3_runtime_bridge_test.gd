@@ -20,7 +20,10 @@ func _ready() -> void:
 		if child is Sprite2D and bool(child.get_meta("editor_runtime_chunk", false)): chunk_sprites += 1
 	var visual_file := FileAccess.open("res://assets/data/runtime/map_editor/bich_province.visual.json", FileAccess.READ)
 	var visual_manifest: Variant = JSON.parse_string(visual_file.get_as_text()) if visual_file != null else null
-	assert(visual_manifest is Dictionary and chunk_sprites == visual_manifest.get("chunks", []).size(), "runtime chunk sprites=%d manifest chunks=%d" % [chunk_sprites, visual_manifest.get("chunks", []).size() if visual_manifest is Dictionary else -1])
+	assert(visual_manifest is Dictionary)
+	assert(chunk_sprites == 0, "地表分块不应继续以按视野裁剪的 Sprite2D 形式加载")
+	assert(background.editor_runtime_chunk_texture_count() == visual_manifest.get("chunks", []).size(), "runtime chunk textures=%d manifest chunks=%d" % [background.editor_runtime_chunk_texture_count(), visual_manifest.get("chunks", []).size()])
+	assert(bool(visual_manifest.get("coverage", {}).get("complete", false)), "运行时地表分块覆盖不完整")
 	var boundary_shapes := 0
 	for body: Node in background.get_children():
 		if body is StaticBody2D:
@@ -28,5 +31,5 @@ func _ready() -> void:
 				if shape is CollisionShape2D and shape.name.begins_with("MapBoundary"):
 					boundary_shapes += 1
 	assert(boundary_shapes == 4, "地图四边实体碰撞未完整生成")
-	print("BICH_MAP_3_RUNTIME_BRIDGE_PASS chunks=%d collision_shapes=%d" % [chunk_sprites, background.source_collision_shape_count()])
+	print("BICH_MAP_3_RUNTIME_BRIDGE_PASS chunks=%d collision_shapes=%d" % [background.editor_runtime_chunk_texture_count(), background.source_collision_shape_count()])
 	get_tree().quit()

@@ -10,7 +10,8 @@ func _ready()->void:
 	for node:Node in game.background._environment_nodes:
 		if node is Sprite2D:environment_sprites+=1
 	var visual_chunk_count := (game.background._editor_runtime_visual.get("chunks", []) as Array).size()
-	assert(environment_sprites==visual_chunk_count+runtime.instances.size(), "environment sprites=%d expected=%d" % [environment_sprites, visual_chunk_count+runtime.instances.size()])
+	assert(game.background.editor_runtime_chunk_texture_count()==visual_chunk_count)
+	assert(environment_sprites==runtime.instances.size(), "environment sprites=%d expected=%d" % [environment_sprites, runtime.instances.size()])
 	var expected_npcs:={}
 	for entry:Dictionary in runtime.semantics.npc_points:expected_npcs[str(entry.display_name)]=MapEditorRuntimeBridge.tile_to_world(runtime,entry.tile)
 	var actual_npcs:=0
