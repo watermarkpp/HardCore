@@ -1,6 +1,11 @@
 class_name MonsterVisual
 extends Node2D
 
+const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
+const BOSS_ART_PATH := "res://assets/data/classic_boss_client_art_sources.json"
+
+static var _boss_art: Dictionary = {}
+
 var actor: EnemyActor
 var sprite: Sprite2D
 var active_resources: Dictionary = {}
@@ -24,7 +29,7 @@ func setup(owner_actor: EnemyActor) -> void:
 func _ready() -> void:
 	# 普通怪下沉4px，Boss下沉6px，使脚底与阴影中心实际重叠。
 	position = Vector2(0, 6 if actor.is_boss else 4)
-	active_resources = _resources_for(actor.display_name)
+	active_resources = _resources_for(actor.monster_data)
 	visible = not active_resources.is_empty()
 	if visible:
 		var resources: Dictionary = active_resources
@@ -77,19 +82,48 @@ func _process(delta: float) -> void:
 	sprite.region_rect = Rect2(current_frame * frame_size.x, current_direction * frame_size.y, frame_size.x, frame_size.y)
 
 
-func _resources_for(monster_name: String) -> Dictionary:
-	var lookup_names := [monster_name]
+func _resources_for(monster_data: Dictionary) -> Dictionary:
+	var monster_name := str(monster_data.get("name", actor.display_name if is_instance_valid(actor) else ""))
+	var stable_lookup := MonsterIdentityScript.animation_lookup_name(monster_data)
+	var lookup_names := [stable_lookup] if not stable_lookup.is_empty() else []
+	if not monster_name.is_empty() and not lookup_names.has(monster_name):
+		lookup_names.append(monster_name)
 	if monster_name.ends_with("0"):
 		lookup_names.append(monster_name.trim_suffix("0"))
+	var monster_key := MonsterIdentityScript.stable_key(monster_data)
+	var boss_manifest := _boss_art_manifest()
+	if not monster_key.is_empty():
+		var boss_mapping: Variant = boss_manifest.get("runtimeMappingsByMonsterId", {}).get(monster_key, {})
+		if boss_mapping is Dictionary and not boss_mapping.is_empty():
+			return _client_resources(boss_mapping)
+	for lookup_name: String in lookup_names:
+		var legacy_boss_mapping: Variant = boss_manifest.get("runtimeMappings", {}).get(lookup_name, {})
+		if legacy_boss_mapping is Dictionary and not legacy_boss_mapping.is_empty():
+			return _client_resources(legacy_boss_mapping)
 	for manifest: Dictionary in [GameData.bich_common_art, GameData.bich_undead_art]:
+		if not monster_key.is_empty():
+			var id_mapping: Variant = manifest.get("runtimeMappingsByMonsterId", {}).get(monster_key, {})
+			if id_mapping is String:
+				id_mapping = manifest.get("runtimeMappings", {}).get(id_mapping, {})
+			if id_mapping is Dictionary and not id_mapping.is_empty():
+				return _client_resources(id_mapping)
 		for lookup_name:String in lookup_names:
-			var client_mapping: Variant = manifest.get("runtimeMappings", {}).get(lookup_name, {})
+			var canonical_name := str(manifest.get("legacyAliases", {}).get(lookup_name, lookup_name))
+			var client_mapping: Variant = manifest.get("runtimeMappings", {}).get(canonical_name, {})
 			if client_mapping is Dictionary and not client_mapping.is_empty():
 				return _client_resources(client_mapping)
 	for lookup_name:String in lookup_names:
 		var resources:=PresentationAssets.monster_resources(lookup_name)
 		if not resources.is_empty():return resources
 	return {}
+
+
+func _boss_art_manifest() -> Dictionary:
+	if _boss_art.is_empty() and FileAccess.file_exists(BOSS_ART_PATH):
+		var file := FileAccess.open(BOSS_ART_PATH, FileAccess.READ)
+		var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
+		_boss_art = parsed if parsed is Dictionary else {}
+	return _boss_art
 
 
 func _direction_row(direction: Vector2) -> int:
@@ -111,11 +145,27 @@ func _client_resources(client_mapping: Dictionary) -> Dictionary:
 	for action_name: String in ["idle", "walk", "attack", "hit", "death"]:
 		var action: Variant = actions.get(action_name, {}) if actions is Dictionary else {}
 		var path := str(action.get("path", "")) if action is Dictionary else ""
-		if path.is_empty() or not ResourceLoader.exists(path):
+		if path.is_empty():
 			return {}
-		result[action_name] = load(path) as Texture2D
-		result["frame_counts"][action_name] = int(action.get("framesPerDirection", 1))
+		var frame_count := int(action.get("framesPerDirection", 1))
+		var texture := _load_client_texture(path, Vector2i(result.frame_size.x * frame_count, result.frame_size.y * 8))
+		if texture == null:
+			return {}
+		result[action_name] = texture
+		result["frame_counts"][action_name] = frame_count
 	return result if MonsterAnimationPolicy.validate(result).is_empty() else {}
+
+
+func _load_client_texture(path: String, expected_size: Vector2i) -> Texture2D:
+	if ResourceLoader.exists(path):
+		var imported := load(path) as Texture2D
+		if imported != null and Vector2i(imported.get_size()) == expected_size:
+			return imported
+	# Headless test runs can see a freshly generated PNG before Godot has made
+	# its import cache. Loading the source image keeps the data-driven manifest
+	# testable without sharing .godot between worktrees.
+	var image := Image.load_from_file(ProjectSettings.globalize_path(path))
+	return ImageTexture.create_from_image(image) if image != null and not image.is_empty() else null
 
 
 func play_attack(duration := 0.46) -> void:

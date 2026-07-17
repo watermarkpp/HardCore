@@ -77,20 +77,33 @@ TABLES = {
 }
 
 # Appearance blocks were verified against the bundled WIL pixels, not inferred
-# from filenames.  In particular, the five formerly provisional monsters are
-# Mon1 position 1, Mon2 position 0, Mon3 positions 6/7, and Mon4 position 0.
+# from filenames.  A-grade rows have a version-bound RaceImg binding.  B-grade
+# rows use the archived 21cq appearance path plus a complete local WIL block;
+# they remain explicitly graded until the matching Paradox Monster.DB is
+# exported and its RaceImg field can be reconciled.
 MONSTERS = {
-    "森林雪人": {"slug": "forest_yeti", "appearance": 1, "raceImg": 12, "actionTable": "MA12"},
-    "食人花": {"slug": "cannibal_flower", "appearance": 10, "raceImg": 13, "actionTable": "MA13"},
-    "洞蛆": {"slug": "cave_maggot", "appearance": 24, "raceImg": 16, "actionTable": "MA16"},
-    "多钩猫": {"slug": "hook_cat", "appearance": 25, "raceImg": 17, "actionTable": "MA14"},
-    "钉耙猫": {"slug": "rake_cat", "appearance": 26, "raceImg": 17, "actionTable": "MA14"},
-    "稻草人": {"slug": "strawman", "appearance": 27, "raceImg": 18, "actionTable": "MA14"},
-    "半兽人": {"slug": "half_orc", "appearance": 30, "raceImg": 19, "actionTable": "MA19"},
-    "山洞蝙蝠": {"slug": "cave_bat", "appearance": 80, "raceImg": 31, "actionTable": "MA17"},
-    "蝎子": {"slug": "scorpion", "appearance": 83, "raceImg": 32, "actionTable": "MA24"},
-    "毒蜘蛛": {"slug": "spitting_spider", "appearance": 114, "raceImg": 19, "actionTable": "MA14"},
-    "蛤蟆": {"slug": "yob", "appearance": 162, "raceImg": 19, "actionTable": "MA14"},
+    "森林雪人": {"slug": "forest_yeti", "appearance": 1, "raceImg": 12, "actionTable": "MA12", "monsterIds": [28, 29]},
+    "食人花": {"slug": "cannibal_flower", "appearance": 10, "raceImg": 13, "actionTable": "MA13", "monsterIds": [30]},
+    "洞蛆": {"slug": "cave_maggot", "appearance": 24, "raceImg": 16, "actionTable": "MA16", "monsterIds": [46]},
+    "多钩猫": {"slug": "hook_cat", "appearance": 25, "raceImg": 17, "actionTable": "MA14", "monsterIds": [24, 25]},
+    "钉耙猫": {"slug": "rake_cat", "appearance": 26, "raceImg": 17, "actionTable": "MA14", "monsterIds": [26, 27]},
+    "稻草人": {"slug": "strawman", "appearance": 27, "raceImg": 18, "actionTable": "MA14", "monsterIds": [21, 23]},
+    "半兽人": {"slug": "half_orc", "appearance": 100, "raceImg": 19, "actionTable": "MA19", "monsterIds": [34, 35], "mappingConfidence": "B"},
+    "山洞蝙蝠": {"slug": "cave_bat", "appearance": 80, "raceImg": 31, "actionTable": "MA17", "monsterIds": [43, 44]},
+    "蝎子": {"slug": "scorpion", "appearance": 83, "raceImg": 32, "actionTable": "MA24", "monsterIds": [45]},
+    "毒蜘蛛": {"slug": "spitting_spider", "appearance": 163, "raceImg": 19, "actionTable": "MA14", "monsterIds": [18], "mappingConfidence": "B"},
+    "蛤蟆": {"slug": "yob", "appearance": 162, "raceImg": 19, "actionTable": "MA14", "monsterIds": [19]},
+    "半兽战士": {"slug": "oma_fighter", "appearance": 101, "raceImg": 17, "actionTable": "MA14", "monsterIds": [36, 37], "mappingConfidence": "B"},
+    "半兽勇士": {"slug": "oma_warrior", "appearance": 102, "raceImg": 18, "actionTable": "MA14", "monsterIds": [38, 39, 41], "mappingConfidence": "B"},
+    "粪虫": {"slug": "dung", "appearance": 29, "raceImg": 19, "actionTable": "MA19", "monsterIds": [60], "mappingConfidence": "B"},
+    "暗黑战士": {"slug": "dark_warrior", "appearance": 28, "raceImg": 19, "actionTable": "MA19", "monsterIds": [62, 63], "mappingConfidence": "B"},
+    "沃玛战士": {"slug": "wooma_soldier", "appearance": 30, "raceImg": 19, "actionTable": "MA19", "monsterIds": [64, 65], "mappingConfidence": "B"},
+    "沃玛勇士": {"slug": "wooma_fighter", "appearance": 32, "raceImg": 19, "actionTable": "MA19", "monsterIds": [66, 67], "mappingConfidence": "B"},
+    "沃玛战将": {"slug": "wooma_warrior", "appearance": 33, "raceImg": 19, "actionTable": "MA19", "monsterIds": [68, 69], "mappingConfidence": "B"},
+    "火焰沃玛": {"slug": "flaming_wooma", "appearance": 31, "raceImg": 19, "actionTable": "MA19", "monsterIds": [70, 71], "mappingConfidence": "B"},
+    "沃玛卫士": {"slug": "wooma_guardian", "appearance": 151, "raceImg": 19, "actionTable": "MA19", "monsterIds": [73, 74, 75], "mappingConfidence": "B", "legacyAliases": ["沃玛护卫"]},
+    "红蛇": {"slug": "red_snake", "appearance": 36, "raceImg": 19, "actionTable": "MA19", "monsterIds": [92, 93], "mappingConfidence": "B"},
+    "虎蛇": {"slug": "tiger_snake", "appearance": 38, "raceImg": 19, "actionTable": "MA19", "monsterIds": [94, 95], "mappingConfidence": "B"},
 }
 
 
@@ -199,13 +212,22 @@ def build_monster(name: str, spec: dict) -> dict:
             "confidence": "A",
         }
 
+    mapping_confidence = str(spec.get("mappingConfidence", "A"))
     return {
         "name": name,
+        "monsterIds": spec["monsterIds"],
         "appearance": spec["appearance"],
         "raceImg": spec["raceImg"],
         "actionTable": spec["actionTable"],
-        "mappingConfidence": "A",
-        "mappingSource": "bundled client WIL pixels + Client/Actor.pas aGetMonImg/GetOffset/TMonsterAction",
+        "mappingConfidence": mapping_confidence,
+        "mappingSource": (
+            "bundled client WIL pixels + Client/Actor.pas aGetMonImg/GetOffset/TMonsterAction"
+            if mapping_confidence == "A"
+            else "21cq monster-page appearance path + bundled client WIL pixels + Client/Actor.pas standard action layout"
+        ),
+        "appearanceSource": f"https://www.21cq.com/files/monsters/{spec['appearance']}.gif" if mapping_confidence == "B" else "version-bound client/server evidence",
+        "bindingNote": "RaceImg/action table remains B until the matching Paradox Monster.DB is exported" if mapping_confidence == "B" else "version-bound RaceImg/action table",
+        "legacyAliases": spec.get("legacyAliases", []),
         "clientLibrary": f"dev_art_sources/reference/mir2_client_raw/Data/{library_name}",
         "clientLibraryImageCount": info["image_count"],
         "blockBase": base,
@@ -232,6 +254,16 @@ def main() -> None:
             continue
         mappings[name] = record
 
+    by_id = {
+        str(monster_id): record["name"]
+        for record in mappings.values()
+        for monster_id in record["monsterIds"]
+    }
+    aliases = {
+        alias: name
+        for name, record in mappings.items()
+        for alias in record.get("legacyAliases", [])
+    }
     payload = {
         "schemaVersion": 2,
         "baseline": "2003 official 1.76 client, bundled local copy",
@@ -243,7 +275,11 @@ def main() -> None:
             "confidence": "A",
         },
         "mappingPolicy": "Every mapping is verified against local WIL pixels and the version-bound client frame table; missing frames reject the mapping.",
+        "identityKey": "monsterId",
+        "compatibilityKey": "runtimeMappings/legacyAliases",
+        "runtimeMappingsByMonsterId": by_id,
         "runtimeMappings": mappings,
+        "legacyAliases": aliases,
         "rejectedMappings": rejected,
         "generatedAtlases": len(mappings) * 5,
     }

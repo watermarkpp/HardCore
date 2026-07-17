@@ -7,10 +7,16 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA = json.loads((ROOT / "assets/data/legend176_data.json").read_text(encoding="utf-8"))
 COMMON = json.loads((ROOT / "assets/data/bich_common_client_art_sources.json").read_text(encoding="utf-8"))
 UNDEAD = json.loads((ROOT / "assets/data/bich_undead_client_art_sources.json").read_text(encoding="utf-8"))
+BOSSES = json.loads((ROOT / "assets/data/classic_boss_client_art_sources.json").read_text(encoding="utf-8"))
 SKIN = json.loads((ROOT / "assets/presentation/skins/classic_client/skin_manifest.json").read_text(encoding="utf-8"))
 OUT = ROOT / "assets/data/runtime/monster_animation_catalog.json"
 
-client = {**COMMON.get("runtimeMappings", {}), **UNDEAD.get("runtimeMappings", {})}
+client = {**COMMON.get("runtimeMappings", {}), **UNDEAD.get("runtimeMappings", {}), **BOSSES.get("runtimeMappings", {})}
+client_by_id = {
+    **COMMON.get("runtimeMappingsByMonsterId", {}),
+    **UNDEAD.get("runtimeMappingsByMonsterId", {}),
+    **BOSSES.get("runtimeMappingsByMonsterId", {}),
+}
 authored = SKIN.get("runtimeAssets", {}).get("fallbackMonsters", {})
 rows = []
 for monster in DATA.get("monsters", []):
@@ -23,13 +29,20 @@ for monster in DATA.get("monsters", []):
     for candidate in [name, base, name.rstrip("0"), base.rstrip("0")]:
         if candidate and candidate not in candidates:
             candidates.append(candidate)
-    lookup = next((candidate for candidate in candidates if candidate in client), "")
+    stable_id = str(int(monster.get("monsterId", -1)))
+    id_mapping = client_by_id.get(stable_id, {})
+    if isinstance(id_mapping, str):
+        lookup, id_profile = id_mapping, client.get(id_mapping, {})
+    else:
+        id_profile = id_mapping
+        lookup = str(id_profile.get("name", "")) if id_profile else next((candidate for candidate in candidates if candidate in client), "")
     authored_lookup = next((candidate for candidate in candidates if candidate in authored), "")
     row = {"monster_id": int(monster.get("monsterId", -1)), "name": name, "base_name": base}
     if lookup:
-        profile = client[lookup]
+        profile = id_profile or client[lookup]
         row.update({
-            "status": "formal", "source_type": "classic_client_wil", "source_confidence": "A",
+            "status": "formal", "source_type": "classic_client_wil", "source_confidence": profile.get("mappingConfidence", "A"),
+            "resource_lookup": lookup,
             "direction_mode": "mir2_north_first", "frame_size": profile["frameSize"],
             "foot_anchor": profile["footAnchor"], "actions": {k: v["framesPerDirection"] for k, v in profile["actions"].items()},
             "runtime_allowed": True,
@@ -49,7 +62,9 @@ for monster in DATA.get("monsters", []):
     rows.append(row)
 
 payload = {
-    "schema_version": 1,
+    "schema_version": 2,
+    "identity_key": "monsterId",
+    "compatibility_key": "name/baseName",
     "policy": {
         "required_actions": ["idle", "walk", "attack", "hit", "death"],
         "required_directions": 8,

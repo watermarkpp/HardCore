@@ -1,47 +1,113 @@
 {
-  "schemaVersion": 1,
-  "baseline": "2003官服1.76基准优先",
+  "schemaVersion": 3,
+  "identityKey": "monsterId",
+  "compatibilityKey": "legacyNameToMonsterId/runtimeRules",
+  "baseline": "2003官服1.76代码与客户端优先；后期实现仅作带等级的补充证据",
+  "mapActivationOrder": [76, 124, 160],
   "serviceEvidence": {
-    "classFactory": "M2Server/UsrEngn.pas AddBaseObject: Race 89 and MONSTER_OMAKNIGHT(81) create TATMonster",
-    "activeTargeting": "M2Server/ObjMon.pas TATMonster.Run: no target search after 1000ms, periodic search after 8000ms",
-    "meleeAttack": "M2Server/ObjMon.pas TMonster.AttackTarget: GetAttackDir then m_nNextHitTime then Attack",
+    "classFactory": "original_gameofmir/M2Server/UsrEngn.pas AddBaseObject",
+    "behaviorClasses": "original_gameofmir/M2Server/ObjMon.pas and ObjMon2.pas",
     "databaseTiming": "M2Server/LocalDB.pas reads WALK_SPD and ATTACK_SPD; minimum 200ms",
     "confidence": "A"
   },
-  "mappingPolicy": "服务端类与状态机为A；名称到Race、2003属性和速度为B候选；攻击命中帧是客户端动作节奏映射B。原服务端类没有半血狂暴、扇形重击或范围震地。公开后期数据库只用于交叉验证时序，不覆盖2003属性。",
-  "timingCrosscheck": {
-    "path": "assets/data/bich_public_database_crosscheck.json",
-    "repositoryCommit": "16c49ad53f3bc2ff6f9f584117e61b5b9fe4970f",
-    "result": "骷髅精灵2000/1200ms、尸王2800/1500ms均一致",
-    "confidence": "B",
-    "baselineDecision": "仅交叉验证，不整表覆盖"
+  "legacyNameToMonsterId": {
+    "骷髅精灵": 56,
+    "尸王": 89,
+    "沃玛教主": 76,
+    "触龙神": 124,
+    "祖玛教主": 160
   },
-  "runtimeRules": {
-    "骷髅精灵": {
+  "runtimeRulesByMonsterId": {
+    "56": {
+      "monsterId": 56,
       "serviceRace": 89,
       "serviceClass": "TATMonster",
       "mappingConfidence": "B",
-      "stats": {"level": 40, "hp": 500, "exp": 600, "defense": 5, "magicDefense": 4, "attackMin": 7, "attackMax": 24, "confidence": "B"},
       "timing": {"walkIntervalMs": 1200, "attackIntervalMs": 2000, "attackAnimationMs": 600, "hitDelayMs": 300, "confidence": "B"},
       "targetSearch": {"withoutTargetMs": 1000, "withTargetMs": 8000, "confidence": "A"},
       "runtimeProjection": {"moveSpeed": 48.0, "attackRange": 60.0, "aggroRadius": 380.0},
-      "specialSkill": {"enabled": false, "reason": "Race 89使用标准TATMonster，源码未发现专属技能"},
+      "specialSkill": {"enabled": false, "reason": "Race 89使用标准TATMonster，源代码未发现专属技能"},
       "phaseTwo": {"enabled": false},
-      "knockbackImmune": true,
-      "sourceUrl": "https://www.21cq.com/mir/Mob.aspx?id=56"
+      "knockbackImmune": true
     },
-    "尸王": {
+    "89": {
+      "monsterId": 89,
       "serviceRace": 81,
       "serviceClass": "TATMonster",
       "mappingConfidence": "B",
-      "stats": {"level": 40, "hp": 500, "exp": 800, "defense": 3, "magicDefense": 3, "attackMin": 18, "attackMax": 36, "confidence": "B"},
       "timing": {"walkIntervalMs": 1500, "attackIntervalMs": 2800, "attackAnimationMs": 720, "hitDelayMs": 360, "confidence": "B"},
       "targetSearch": {"withoutTargetMs": 1000, "withTargetMs": 8000, "confidence": "A"},
       "runtimeProjection": {"moveSpeed": 40.0, "attackRange": 60.0, "aggroRadius": 380.0},
-      "specialSkill": {"enabled": false, "reason": "Race 81使用标准TATMonster，源码未发现专属技能"},
+      "specialSkill": {"enabled": false, "reason": "Race 81使用标准TATMonster，源代码未发现专属技能"},
       "phaseTwo": {"enabled": false},
-      "knockbackImmune": true,
-      "sourceUrl": "https://www.21cq.com/mir/Mob.aspx?id=89"
+      "knockbackImmune": true
+    },
+    "76": {
+      "monsterId": 76,
+      "serviceClass": "WoomaTaurus",
+      "mappingConfidence": "C",
+      "timing": {"walkIntervalMs": 1800, "attackIntervalMs": 2500, "attackAnimationMs": 600, "hitDelayMs": 300, "confidence": "C"},
+      "targetSearch": {"withoutTargetMs": 1000, "withTargetMs": 8000, "confidence": "B"},
+      "runtimeProjection": {"moveSpeed": 44.0, "attackRange": 64.0, "aggroRadius": 400.0},
+      "specialSkill": {"enabled": false, "reason": "狂暴和受困传送由mechanics状态机处理，不作为范围技能"},
+      "phaseTwo": {"enabled": false},
+      "mechanics": {
+        "healthStageRage": {"enabled": true, "stages": 7, "durationSeconds": 8.0, "moveSpeedMultiplier": 1.8, "attackIntervalSeconds": 0.5, "confidence": "C", "source": "suprcode_crystal WoomaTaurus.cs"},
+        "surroundedRelocation": {"enabled": true, "checkSeconds": 10.0, "blockingNeighbors": 5, "radiusCells": 4, "confidence": "C", "source": "suprcode_crystal WoomaTaurus.cs", "integration": "通过relocation_requested信号交给地图运行时落点服务"}
+      },
+      "knockbackImmune": true
+    },
+    "124": {
+      "monsterId": 124,
+      "serviceRace": 107,
+      "serviceClass": "TCentipedeKingMonster",
+      "mappingConfidence": "A",
+      "timing": {"walkIntervalMs": 1800, "attackIntervalMs": 5000, "attackAnimationMs": 900, "hitDelayMs": 0, "confidence": "B", "compatibilityNote": "旧单目标投影保持即时命中；原服600ms延迟由范围技能warningSeconds承载"},
+      "targetSearch": {"withoutTargetMs": 1000, "withTargetMs": 1000, "confidence": "A"},
+      "runtimeProjection": {"moveSpeed": 0.0, "attackRange": 205.0, "aggroRadius": 430.0},
+      "specialSkill": {
+        "enabled": true,
+        "shape": "circle",
+        "targetMode": "all_combat_targets",
+        "radius": 192.0,
+        "triggerRange": 192.0,
+        "initialCooldownSeconds": 0.0,
+        "cooldownSeconds": 5.0,
+        "warningSeconds": 0.6,
+        "animationSeconds": 0.9,
+        "damageMultiplier": 1,
+        "statusChance": 0.25,
+        "poisonWeight": 2,
+        "controlWeight": 1,
+        "poisonDamage": 4,
+        "poisonSeconds": 8.0,
+        "controlSeconds": 1.2,
+        "confidence": "A"
+      },
+      "phaseTwo": {"enabled": false},
+      "mechanics": {
+        "burrowAmbush": {"enabled": true, "emergeRange": 128.0, "healToFullOnEmerge": true, "stationary": true, "confidence": "A", "source": "ObjMon2.pas TCentipedeKingMonster"}
+      },
+      "knockbackImmune": true
+    },
+    "160": {
+      "monsterId": 160,
+      "serviceClass": "TScultureKingMonster",
+      "mappingConfidence": "A",
+      "timing": {"walkIntervalMs": 800, "attackIntervalMs": 1200, "attackAnimationMs": 720, "hitDelayMs": 360, "confidence": "B"},
+      "targetSearch": {"withoutTargetMs": 1000, "withTargetMs": 8000, "confidence": "A"},
+      "runtimeProjection": {"moveSpeed": 38.0, "attackRange": 72.0, "aggroRadius": 420.0},
+      "specialSkill": {"enabled": false, "reason": "原服务端以普通魔法攻击并由血量阶段触发召唤"},
+      "phaseTwo": {"enabled": false},
+      "mechanics": {
+        "stoneWake": {"enabled": true, "wakeRange": 64.0, "confidence": "A", "source": "ObjMon.pas TScultureKingMonster"},
+        "healthStageSummon": {"enabled": true, "stages": 5, "minCount": 6, "maxCount": 11, "maxActive": 30, "monsterIds": [153, 156, 150, 159], "confidence": "A", "source": "ObjMon.pas TScultureKingMonster.CallSlave", "integration": "通过summon_requested信号交给刷新服务"}
+      },
+      "knockbackImmune": true
     }
+  },
+  "runtimeRules": {
+    "骷髅精灵": {"monsterId": 56, "serviceRace": 89, "serviceClass": "TATMonster", "timing": {"walkIntervalMs": 1200, "attackIntervalMs": 2000, "attackAnimationMs": 600, "hitDelayMs": 300}, "targetSearch": {"withoutTargetMs": 1000, "withTargetMs": 8000}, "runtimeProjection": {"moveSpeed": 48.0, "attackRange": 60.0, "aggroRadius": 380.0}, "specialSkill": {"enabled": false}, "phaseTwo": {"enabled": false}},
+    "尸王": {"monsterId": 89, "serviceRace": 81, "serviceClass": "TATMonster", "timing": {"walkIntervalMs": 1500, "attackIntervalMs": 2800, "attackAnimationMs": 720, "hitDelayMs": 360}, "targetSearch": {"withoutTargetMs": 1000, "withTargetMs": 8000}, "runtimeProjection": {"moveSpeed": 40.0, "attackRange": 60.0, "aggroRadius": 380.0}, "specialSkill": {"enabled": false}, "phaseTwo": {"enabled": false}}
   }
 }
