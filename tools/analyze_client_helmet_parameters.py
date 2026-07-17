@@ -43,7 +43,12 @@ def percentile(values: list[int], fraction: float) -> float:
     return ordered[low] * (high - position) + ordered[high] * (position - low)
 
 
-def frame_metrics(data: bytes, palette: list, offsets: list[int], index: int) -> tuple[tuple[int, int, int, int], int] | None:
+def frame_metrics(
+    data: bytes,
+    palette: list,
+    offsets: list[int],
+    index: int,
+) -> tuple[tuple[int, int, int, int], int, tuple[float, float]] | None:
     image, meta = decode_sprite(data, offsets[index], palette)
     cell = Image.new("RGBA", CELL, (0, 0, 0, 0))
     cell.alpha_composite(
@@ -55,7 +60,20 @@ def frame_metrics(data: bytes, palette: list, offsets: list[int], index: int) ->
     if box is None:
         return None
     opaque_pixels = sum(alpha.histogram()[1:])
-    return box, opaque_pixels
+    weighted_x = 0.0
+    weighted_y = 0.0
+    total_alpha = 0.0
+    for y in range(box[1], box[3]):
+        for x in range(box[0], box[2]):
+            weight = alpha.getpixel((x, y)) / 255.0
+            if weight <= 0.0:
+                continue
+            weighted_x += x * weight
+            weighted_y += y * weight
+            total_alpha += weight
+    if total_alpha <= 0.0:
+        return None
+    return box, opaque_pixels, (weighted_x / total_alpha, weighted_y / total_alpha)
 
 
 def size(box: tuple[int, int, int, int]) -> tuple[int, int]:
@@ -92,6 +110,7 @@ def main() -> None:
     action_opaque: dict[str, list[int]] = {name: [] for name in ACTIONS}
     idle_by_direction: dict[str, list[tuple[int, int]]] = {direction: [] for direction in DIRECTIONS}
     idle_opaque_by_direction: dict[str, list[int]] = {direction: [] for direction in DIRECTIONS}
+    pose_samples: dict[tuple[str, int, int], list[dict]] = {}
     death_final: list[tuple[int, int]] = []
     death_final_opaque: list[int] = []
     for appearance in range(APPEARANCES):
@@ -102,13 +121,21 @@ def main() -> None:
                     measured = frame_metrics(data, palette, offsets, index)
                     if measured is None:
                         continue
-                    box, opaque_pixels = measured
+                    box, opaque_pixels, centroid = measured
                     frame_size = size(box)
                     action_values[action_name].append(frame_size)
                     action_opaque[action_name].append(opaque_pixels)
                     if action_name == "idle":
                         idle_by_direction[direction].append(frame_size)
                         idle_opaque_by_direction[direction].append(opaque_pixels)
+                    pose_samples.setdefault((action_name, direction_index, frame), []).append(
+                        {
+                            "appearance": appearance,
+                            "sourceIndex": index,
+                            "bbox": list(box),
+                            "centroid": [round(centroid[0], 4), round(centroid[1], 4)],
+                        }
+                    )
                     if action_name == "death" and frame == int(action["frames"]) - 1:
                         death_final.append(frame_size)
                         death_final_opaque.append(opaque_pixels)
@@ -116,12 +143,39 @@ def main() -> None:
         direction: {**stats(values), "opaquePixels": scalar_stats(idle_opaque_by_direction[direction])}
         for direction, values in idle_by_direction.items()
     }
-    runtime_envelopes = {
+    runtime_max_envelopes = {
         direction: [max(1, round(value["p75"][0])), max(1, round(value["p75"][1]))]
         for direction, value in direction_stats.items()
     }
+    runtime_target_sizes = {
+        direction: [max(1, round(value["median"][0])), max(1, round(value["median"][1]))]
+        for direction, value in direction_stats.items()
+    }
+    pose_anchors: dict[str, list[dict]] = {name: [] for name in ACTIONS}
+    for (action_name, direction_index, frame), samples in sorted(
+        pose_samples.items(), key=lambda item: (list(ACTIONS).index(item[0][0]), item[0][1], item[0][2])
+    ):
+        pose_anchors[action_name].append(
+            {
+                "direction": DIRECTIONS[direction_index],
+                "directionRow": direction_index,
+                "frame": frame,
+                "clientAppearanceCount": len(samples),
+                "centroidMedian": [
+                    round(statistics.median(sample["centroid"][0] for sample in samples), 4),
+                    round(statistics.median(sample["centroid"][1] for sample in samples), 4),
+                ],
+                "bboxMedian": [
+                    round(statistics.median(sample["bbox"][0] for sample in samples), 4),
+                    round(statistics.median(sample["bbox"][1] for sample in samples), 4),
+                    round(statistics.median(sample["bbox"][2] for sample in samples), 4),
+                    round(statistics.median(sample["bbox"][3] for sample in samples), 4),
+                ],
+                "samples": samples,
+            }
+        )
     payload = {
-        "schemaVersion": 2,
+        "schemaVersion": 3,
         "source": LIBRARY.relative_to(ROOT).as_posix(),
         "sourceSha256": hashlib.sha256(LIBRARY.read_bytes()).hexdigest(),
         "imageCount": int(info["image_count"]),
@@ -133,11 +187,14 @@ def main() -> None:
             for name, values in action_values.items()
         },
         "idleDirections": direction_stats,
-        "directionRuntimeMaxSize": runtime_envelopes,
+        "directionRuntimeMaxSize": runtime_max_envelopes,
+        "directionRuntimeTargetSize": runtime_target_sizes,
         "directionRuntimeOpaquePixels": {
             direction: round(value["opaquePixels"]["median"])
             for direction, value in direction_stats.items()
         },
+        "poseAnchorRule": "For every action/direction/frame, place the generated helmet at the median opaque centroid of the six authored Helmet.wil appearances for that exact cell.",
+        "poseAnchors": pose_anchors,
         "deathFinal": {
             **stats(death_final),
             "opaquePixels": scalar_stats(death_final_opaque),

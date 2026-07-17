@@ -2,7 +2,7 @@ extends Node
 
 const CROP := Rect2i(535, 205, 210, 220)
 const DIRECTION_NAMES := ["n", "ne", "e", "se", "s", "sw", "w", "nw"]
-const ACCEPTANCE_VERSION := "v100_godot3d_20260717"
+const ACCEPTANCE_VERSION := "v105_narrowjaw_20260717"
 const DIRECTION_VECTORS := [
 	Vector2.UP,
 	Vector2(0.70710678, -0.70710678),

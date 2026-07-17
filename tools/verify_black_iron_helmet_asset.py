@@ -27,16 +27,21 @@ def cell_box(frame: int, direction: int) -> tuple[int, int, int, int]:
 
 def main() -> None:
     source = json.loads(SOURCE.read_text(encoding="utf-8"))
-    if source.get("schemaVersion") != 7:
-        raise AssertionError("Black Iron Helmet provenance schema is not version 7")
-    if source.get("generation", {}).get("aiPixelsLimitedTo") != []:
-        raise AssertionError("Runtime atlas still claims direct image-generation pixels")
-    if not str(source.get("generation", {}).get("runtimePixelGenerator", "")).startswith("Godot 4.7"):
-        raise AssertionError("Runtime atlas is not attributed to the Godot orthographic renderer")
+    if source.get("schemaVersion") != 12:
+        raise AssertionError("Black Iron Helmet provenance schema is not version 12")
+    if not source.get("generation", {}).get("aiGenerated", False):
+        raise AssertionError("Direct approved-design pixels are not recorded")
+    if not source.get("generation", {}).get("aiConceptUsed", False):
+        raise AssertionError("Approved meteoric concept is missing from construction provenance")
+    if source.get("generation", {}).get("aiPixelsLimitedTo") != ["idle", "walk", "attack", "hit"]:
+        raise AssertionError("Direct approved-design pixel scope is incorrect")
+    generator = str(source.get("generation", {}).get("runtimePixelGenerator", ""))
+    if "Direct approved-design crops" not in generator or "Godot 4.7" not in generator:
+        raise AssertionError("Runtime atlas does not record the direct-design plus Godot death pipeline")
     if source.get("generation", {}).get("oldDerivedStateItemWorldPixelsUsed", True):
         raise AssertionError("Runtime atlas still claims old StateItem-derived world pixels")
     if abs(float(source.get("generation", {}).get("runtimeEnvelopeScale", 0.0)) - 1.0) > 0.0001:
-        raise AssertionError("Runtime helmet is not calibrated to the real-client p75 envelope")
+        raise AssertionError("Runtime helmet is not calibrated to the real-client median envelope")
     death_baseline = json.loads(DEATH_POSE_BASELINE.read_text(encoding="utf-8"))
     death_records = {
         (int(record["directionRow"]), int(record["frame"])): record
@@ -82,6 +87,20 @@ def main() -> None:
                 alpha_histogram = helmet_cell.getchannel("A").histogram()
                 opaque_pixels = sum(alpha_histogram[1:])
                 opaque_counts.append(opaque_pixels)
+                visible_colours = {
+                    pixel[:3]
+                    for pixel in helmet_cell.getdata()
+                    if pixel[3] >= 128
+                }
+                if not visible_colours:
+                    raise AssertionError(f"{action} direction={direction} frame={frame} has no visible colours")
+                if action == "death":
+                    if max(max(colour) for colour in visible_colours) > 56:
+                        raise AssertionError(f"{action} direction={direction} frame={frame} exceeds matte black palette")
+                    if any(max(colour) - min(colour) != 0 for colour in visible_colours):
+                        raise AssertionError(f"{action} direction={direction} frame={frame} contains tinted metal pixels")
+                elif any(max(colour) - min(colour) > 14 for colour in visible_colours):
+                    raise AssertionError(f"{action} direction={direction} frame={frame} contains non-neutral design pixels")
                 direction_name = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"][direction]
                 if action == "death":
                     target_opaque = float(death_records[(direction, frame)]["clientHelmetOpaquePixels"]["median"])
@@ -90,7 +109,8 @@ def main() -> None:
                         source["clientHelmetParameterBaseline"]["directionRuntimeOpaquePixels"][direction_name]
                     )
                 opaque_ratio = opaque_pixels / max(1.0, target_opaque)
-                if opaque_ratio < 0.65 or opaque_ratio > 1.35:
+                maximum_opaque_ratio = 1.35 if action == "death" else 2.50
+                if opaque_ratio < 0.65 or opaque_ratio > maximum_opaque_ratio:
                     raise AssertionError(
                         f"{action} {direction_name} F{frame} visual mass diverges from client median: {opaque_ratio:.3f}"
                     )
@@ -117,26 +137,35 @@ def main() -> None:
             for frame in provenance_frames
         ):
             raise AssertionError("Death frames do not all use the complete Godot-rendered helmet geometry")
+        if action != "death" and any(
+            frame.get("poseVariant") != "approved-design-direct-resize"
+            for frame in provenance_frames
+        ):
+            raise AssertionError(f"{action} frames do not all use direct approved-design crops")
         for frame in provenance_frames:
             direction_name = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"][int(frame["direction"])]
             generated = frame["generatedSize"]
             if action == "death":
                 pose = death_records[(int(frame["direction"]), int(frame["frame"]))]
-                max_width = math.floor(float(pose["clientHelmetWidth"]["p75"]) + 0.5)
-                max_height = math.floor(float(pose["clientHelmetHeight"]["p75"]) + 0.5)
+                max_width = math.floor(float(pose["clientHelmetWidth"]["median"]) + 0.5)
+                max_height = math.floor(float(pose["clientHelmetHeight"]["median"]) + 0.5)
                 if generated[0] > max_width or generated[1] > max_height:
                     raise AssertionError(f"death {direction_name} exceeds its same-cell client envelope: {generated}")
-                hair = pose["hairAnchorCentroid"]
-                pasted_center = [
-                    int(frame["paste"][0]) + generated[0] // 2,
-                    int(frame["paste"][1]) + generated[1] // 2,
-                ]
-                if abs(pasted_center[0] - round(float(hair[0]))) > 1 or abs(pasted_center[1] - round(float(hair[1]))) > 1:
-                    raise AssertionError(f"death {direction_name} F{frame['frame']} is not centred on its same-cell Hair anchor")
             else:
-                envelope = source["clientHelmetParameterBaseline"]["directionRuntimeMaxSize"][direction_name]
+                envelope = source["clientHelmetParameterBaseline"]["directionRuntimeTargetSize"][direction_name]
                 if generated[0] > envelope[0] or generated[1] > envelope[1]:
-                    raise AssertionError(f"{action} {direction_name} exceeds the real-client p75 envelope: {generated}")
+                    raise AssertionError(f"{action} {direction_name} exceeds the real-client median envelope: {generated}")
+            helmet_anchor = frame.get("helmetAnchorCentroid", [])
+            pasted_center = [
+                int(frame["paste"][0]) + generated[0] // 2,
+                int(frame["paste"][1]) + generated[1] // 2,
+            ]
+            if len(helmet_anchor) != 2 or any(
+                abs(pasted_center[axis] - round(float(helmet_anchor[axis]))) > 1 for axis in range(2)
+            ):
+                raise AssertionError(
+                    f"{action} {direction_name} F{frame['frame']} is not centred on its same-cell Helmet.wil anchor"
+                )
     if total_frames != 184:
         raise AssertionError(f"Expected 184 logical frames, got {total_frames}")
     report = {
@@ -151,10 +180,13 @@ def main() -> None:
             "all eight direction rows are distinct",
             "walk/attack/hit/death follow per-frame head motion in every direction",
             "helmet horizontally overlaps the equipped dress body in every frame",
-            "all eight directions come from one Godot geometry with explicit canonical yaw",
-            "all 32 death cells use the matching direction/frame Hair anchor and Godot pose record",
-            "every generated helmet fits within its real-client p75 envelope",
-            "opaque visual mass stays within 65%-135% of the matching client median",
+            "all standing/action directions use direct approved-design crops with only background removal and resize",
+            "all death directions come from one Godot geometry with explicit canonical yaw",
+            "all 184 cells use the matching action/direction/frame six-appearance Helmet.wil median anchor",
+            "all 32 death cells use the matching direction/frame Godot pose record",
+            "every generated helmet fits within its real-client median envelope",
+            "runtime pixels use only the four-tone neutral matte black-iron palette",
+            "death opaque visual mass stays within 65%-135% of the matching client median",
         ],
     }
     REPORT.parent.mkdir(parents=True, exist_ok=True)

@@ -15,8 +15,8 @@ ROOT = Path(__file__).resolve().parents[1]
 ATLAS = ROOT / "assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png"
 SOURCE = ROOT / "assets/art/characters/warrior/wear/helmet/black_iron_helmet.source.json"
 CAPTURE_ROOT = ROOT / "outputs/visual_acceptance/player_states"
-REPORT = ROOT / "outputs/validation/black_iron_runtime_directions_v100_godot3d.json"
-VERSION = "v100_godot3d_20260717"
+REPORT = ROOT / "outputs/validation/black_iron_runtime_directions_v105_narrowjaw.json"
+VERSION = "v105_narrowjaw_20260717"
 DIRECTIONS = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
 CELL = (192, 160)
 

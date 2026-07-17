@@ -50,14 +50,20 @@ func _run() -> void:
 		var width_summary: Dictionary = record.get("clientHelmetWidth", {})
 		var height_summary: Dictionary = record.get("clientHelmetHeight", {})
 		var target_size := Vector2i(
-			maxi(1, roundi(float(width_summary.get("p75", width_summary.get("median", 18.0))))),
-			maxi(1, roundi(float(height_summary.get("p75", height_summary.get("median", 19.0)))))
+			maxi(1, roundi(float(width_summary.get("median", 18.0)))),
+			maxi(1, roundi(float(height_summary.get("median", 19.0))))
 		)
 		var opaque_summary: Dictionary = record.get("clientHelmetOpaquePixels", {})
 		var target_opaque_pixels := float(opaque_summary.get("median", target_size.x * target_size.y * 0.5))
 		var fitted := _fit_image(crop, target_size, target_opaque_pixels)
+		var client_centroid: Dictionary = record.get("clientHelmetCentroid", {})
+		var client_x: Dictionary = client_centroid.get("x", {})
+		var client_y: Dictionary = client_centroid.get("y", {})
 		var hair_centroid: Array = record.get("hairAnchorCentroid", [96.0, 80.0])
-		var centre := Vector2(float(hair_centroid[0]), float(hair_centroid[1]))
+		var centre := Vector2(
+			float(client_x.get("median", hair_centroid[0])),
+			float(client_y.get("median", hair_centroid[1]))
+		)
 		var paste := Vector2i(
 			roundi(centre.x - fitted.get_width() * 0.5),
 			roundi(centre.y - fitted.get_height() * 0.5)
@@ -78,7 +84,7 @@ func _run() -> void:
 			"targetScreenDegrees": pose.get("targetScreenDegrees"),
 			"projectedScreenDegrees": pose.get("projectedScreenDegrees"),
 			"fitErrorDegrees": pose.get("fitErrorDegrees"),
-			"hairAnchorCentroid": hair_centroid,
+			"helmetAnchorCentroid": [centre.x, centre.y],
 			"targetEnvelope": [target_size.x, target_size.y],
 			"targetOpaquePixels": target_opaque_pixels,
 			"renderedOpaquePixels": _opaque_pixel_count(fitted),
@@ -106,7 +112,7 @@ func _run() -> void:
 	var report := {
 		"schemaVersion": 1,
 		"renderer": "Godot 4.7 orthographic 3D",
-		"geometry": "single complete procedural helmet mesh reused by all views",
+		"geometry": "single complete faceted close-helm mesh with a narrow neck closure reused by all views",
 		"poseSource": BASELINE_PATH,
 		"bodyAtlas": BODY_PATH,
 		"deathAtlas": death_path,
@@ -148,8 +154,8 @@ func _setup_renderer() -> void:
 	environment.background_mode = Environment.BG_COLOR
 	environment.background_color = Color(0, 0, 0, 0)
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	environment.ambient_light_color = Color("a3a6aa")
-	environment.ambient_light_energy = 1.7
+	environment.ambient_light_color = Color("74787c")
+	environment.ambient_light_energy = 1.15
 	environment.reflected_light_source = Environment.REFLECTION_SOURCE_DISABLED
 	var world_environment := WorldEnvironment.new()
 	world_environment.environment = environment
@@ -164,15 +170,15 @@ func _setup_renderer() -> void:
 	camera.look_at(Vector3(0.0, 0.0, 0.0), Vector3.UP)
 
 	var key := DirectionalLight3D.new()
-	key.light_color = Color("8b8e92")
-	key.light_energy = 0.62
+	key.light_color = Color("767a7e")
+	key.light_energy = 0.38
 	key.shadow_enabled = false
 	key.rotation_degrees = Vector3(-52.0, -32.0, 0.0)
 	viewport.add_child(key)
 
 	var fill := DirectionalLight3D.new()
-	fill.light_color = Color("5a5d61")
-	fill.light_energy = 0.42
+	fill.light_color = Color("4b4f53")
+	fill.light_energy = 0.22
 	fill.shadow_enabled = false
 	fill.rotation_degrees = Vector3(35.0, 145.0, 0.0)
 	viewport.add_child(fill)
@@ -185,12 +191,32 @@ func _setup_renderer() -> void:
 
 func _material(colour: Color) -> StandardMaterial3D:
 	var material := StandardMaterial3D.new()
-	material.albedo_color = colour
+	material.albedo_color = Color.WHITE
+	material.albedo_texture = _forged_iron_texture(colour)
+	material.uv1_triplanar = true
+	material.uv1_world_triplanar = false
+	material.uv1_scale = Vector3(3.2, 3.2, 3.2)
 	material.metallic = 0.0
 	material.roughness = 1.0
 	material.metallic_specular = 0.0
 	material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	return material
+
+
+func _forged_iron_texture(base_colour: Color) -> ImageTexture:
+	var size := 64
+	var image := Image.create(size, size, false, Image.FORMAT_RGB8)
+	var base_value := (base_colour.r + base_colour.g + base_colour.b) / 3.0
+	for y in range(size):
+		for x in range(size):
+			# Deterministic broad strata plus sparse blunt hammer pits.
+			var coarse := sin(float(x) * 0.43 + sin(float(y) * 0.17) * 1.9)
+			var cross := sin(float(y) * 0.71 + float(x) * 0.11)
+			var hashed := float((x * 37 + y * 61 + x * y * 7) % 23) / 22.0
+			var pit := -0.075 if ((x * 17 + y * 29) % 47) == 0 else 0.0
+			var value := clampf(base_value + coarse * 0.026 + cross * 0.018 + (hashed - 0.5) * 0.025 + pit, 0.025, 0.29)
+			image.set_pixel(x, y, Color(value, value, value, 1.0))
+	return ImageTexture.create_from_image(image)
 
 
 func _mesh_instance(mesh: Mesh, material: Material, position: Vector3 = Vector3.ZERO) -> MeshInstance3D:
@@ -211,48 +237,43 @@ func _box(size: Vector3, position: Vector3, material: Material, rotation_degrees
 
 
 func _build_helmet_geometry() -> void:
-	var shell_material := _material(Color("4b4f54"))
-	var plate_material := _material(Color("34383c"))
-	var edge_material := _material(Color("60656a"))
+	var shell_material := _material(Color("292929"))
+	var plate_material := _material(Color("1d1d1d"))
+	var edge_material := _material(Color("363636"))
 	var cavity_material := _material(Color("050607"))
 
 	_mesh_instance(_radial_shell(), shell_material)
 
-	_box(Vector3(1.04, 0.13, 0.12), Vector3(0.0, 0.08, 0.56), edge_material)
-	_box(Vector3(0.14, 0.68, 0.13), Vector3(0.0, -0.20, 0.59), plate_material)
+	# Broad brow and centre bar match the approved meteoric close-helm silhouette.
+	_box(Vector3(1.00, 0.14, 0.14), Vector3(0.0, 0.10, 0.535), edge_material)
+	_box(Vector3(0.13, 0.74, 0.15), Vector3(0.0, -0.22, 0.60), plate_material)
 	_add_cheek_plate(-1.0, plate_material)
 	_add_cheek_plate(1.0, plate_material)
 	_add_side_plate(-1.0, plate_material)
 	_add_side_plate(1.0, plate_material)
-	_box(Vector3(0.31, 0.105, 0.055), Vector3(-0.25, -0.015, 0.665), cavity_material)
-	_box(Vector3(0.31, 0.105, 0.055), Vector3(0.25, -0.015, 0.665), cavity_material)
-
-	_box(Vector3(0.105, 0.43, 0.07), Vector3(0.0, 0.55, 0.28), edge_material, Vector3(-23.0, 0.0, 0.0))
-	_box(Vector3(0.105, 0.40, 0.07), Vector3(0.0, 0.58, -0.12), edge_material, Vector3(18.0, 0.0, 0.0))
-	_box(Vector3(0.105, 0.28, 0.07), Vector3(0.0, 0.38, -0.43), edge_material, Vector3(40.0, 0.0, 0.0))
-
-	var rim := TorusMesh.new()
-	rim.inner_radius = 0.42
-	rim.outer_radius = 0.48
-	rim.rings = 20
-	rim.ring_segments = 6
-	var rim_instance := _mesh_instance(rim, edge_material, Vector3(0.0, -0.56, 0.0))
-	rim_instance.scale = Vector3(1.0, 0.42, 0.88)
+	_box(Vector3(0.34, 0.095, 0.06), Vector3(-0.25, 0.01, 0.675), cavity_material)
+	_box(Vector3(0.34, 0.095, 0.06), Vector3(0.25, 0.01, 0.675), cavity_material)
+	# Closed chin and inward neck lip; no bell-shaped lower rim.
+	_box(Vector3(0.76, 0.15, 0.17), Vector3(0.0, -0.57, 0.51), plate_material)
+	_box(Vector3(0.49, 0.11, 0.14), Vector3(0.0, -0.69, 0.38), shell_material)
+	_box(Vector3(0.72, 0.065, 0.07), Vector3(0.0, -0.46, 0.665), edge_material)
+	# Low-contrast centre ridge breaks the silhouette without adding shine.
+	_box(Vector3(0.075, 0.48, 0.055), Vector3(0.0, 0.47, 0.24), edge_material, Vector3(-19.0, 0.0, 0.0))
+	_box(Vector3(0.075, 0.34, 0.055), Vector3(0.0, 0.53, -0.16), edge_material, Vector3(24.0, 0.0, 0.0))
 
 
 func _radial_shell() -> ArrayMesh:
-	# Height/radius profile: compact crown, broad temple, inward neck closure.
+	# Eight broad crown facets, a low flat top and a visibly inward neck.
 	var profile := PackedVector2Array([
-		Vector2(-0.56, 0.40),
-		Vector2(-0.45, 0.48),
-		Vector2(-0.18, 0.59),
-		Vector2(0.16, 0.61),
-		Vector2(0.43, 0.53),
-		Vector2(0.63, 0.34),
-		Vector2(0.72, 0.10),
-		Vector2(0.74, 0.0),
+		Vector2(-0.68, 0.30),
+		Vector2(-0.54, 0.40),
+		Vector2(-0.16, 0.52),
+		Vector2(0.18, 0.54),
+		Vector2(0.43, 0.47),
+		Vector2(0.62, 0.33),
+		Vector2(0.72, 0.18),
 	])
-	var segments := 20
+	var segments := 8
 	var surface := SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for ring in range(profile.size() - 1):
@@ -273,6 +294,15 @@ func _radial_shell() -> ArrayMesh:
 			_shell_vertex(profile[0], next_segment, segments),
 			_shell_vertex(profile[0], segment, segments)
 		)
+	var top_centre := Vector3(0.0, profile[profile.size() - 1].x, 0.0)
+	for segment in range(segments):
+		var next_segment := (segment + 1) % segments
+		_add_triangle(
+			surface,
+			top_centre,
+			_shell_vertex(profile[profile.size() - 1], segment, segments),
+			_shell_vertex(profile[profile.size() - 1], next_segment, segments)
+		)
 	surface.generate_normals()
 	return surface.commit()
 
@@ -282,32 +312,32 @@ func _shell_vertex(profile_point: Vector2, segment: int, segments: int) -> Vecto
 	return Vector3(
 		cos(angle) * profile_point.y,
 		profile_point.x,
-		sin(angle) * profile_point.y * 0.92
+		sin(angle) * profile_point.y * 0.84
 	)
 
 
 func _add_cheek_plate(side: float, material: Material) -> void:
 	var polygon := PackedVector2Array([
-		Vector2(0.18 * side, -0.03),
-		Vector2(0.53 * side, 0.02),
-		Vector2(0.39 * side, -0.56),
-		Vector2(0.16 * side, -0.56),
+		Vector2(0.14 * side, 0.06),
+		Vector2(0.49 * side, 0.02),
+		Vector2(0.38 * side, -0.58),
+		Vector2(0.11 * side, -0.68),
 	])
-	var mesh := _extruded_polygon(polygon, 0.535, 0.655)
+	var mesh := _extruded_polygon(polygon, 0.525, 0.665)
 	_mesh_instance(mesh, material)
 
 
 func _add_side_plate(side: float, material: Material) -> void:
 	# Wrap the face guard around the temple so E/W are full profiles, not lines.
 	var polygon := PackedVector2Array([
-		Vector2(0.60, 0.04),
-		Vector2(0.03, 0.02),
-		Vector2(-0.16, -0.28),
-		Vector2(0.05, -0.52),
-		Vector2(0.43, -0.50),
+		Vector2(0.58, 0.05),
+		Vector2(0.02, 0.03),
+		Vector2(-0.12, -0.30),
+		Vector2(0.04, -0.60),
+		Vector2(0.34, -0.62),
 	])
-	var inner_x := 0.47 * side
-	var outer_x := 0.59 * side
+	var inner_x := 0.44 * side
+	var outer_x := 0.55 * side
 	var surface := SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for index in range(1, polygon.size() - 1):
@@ -386,7 +416,7 @@ func _fit_image(source: Image, envelope: Vector2i, target_opaque_pixels: float) 
 		maxi(1, roundi(source.get_height() * scale))
 	)
 	var result := source.duplicate()
-	result.resize(size.x, size.y, Image.INTERPOLATE_NEAREST)
+	result.resize(size.x, size.y, Image.INTERPOLATE_LANCZOS)
 	return result
 
 
@@ -407,8 +437,14 @@ func _build_zoom_sheet(overlay: Image, records: Array, target: String) -> void:
 		var record: Dictionary = untyped_record
 		var direction := int(record.get("directionRow", 0))
 		var frame := int(record.get("frame", 0))
+		var client_centroid: Dictionary = record.get("clientHelmetCentroid", {})
+		var client_x: Dictionary = client_centroid.get("x", {})
+		var client_y: Dictionary = client_centroid.get("y", {})
 		var hair_centroid: Array = record.get("hairAnchorCentroid", [96.0, 80.0])
-		var centre := Vector2i(roundi(float(hair_centroid[0])), roundi(float(hair_centroid[1])))
+		var centre := Vector2i(
+			roundi(float(client_x.get("median", hair_centroid[0]))),
+			roundi(float(client_y.get("median", hair_centroid[1])))
+		)
 		var cell_origin := Vector2i(frame * CELL.x, direction * CELL.y)
 		var source_rect := Rect2i(cell_origin + centre - Vector2i(32, 26), Vector2i(64, 52))
 		var crop := overlay.get_region(source_rect)
