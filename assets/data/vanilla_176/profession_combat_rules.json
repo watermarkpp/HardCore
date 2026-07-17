@@ -27,9 +27,22 @@
     "workspace_path": "dev_art_sources/reference/original_gameofmir/MirServer/Mir200/!Setup.txt",
     "sha256": "c1dd4a6de2a53be3f2bc520b8d42571a0112c4fa58f05292c869942fbd8e146b"
   },
+  "classicRuntimeSource": {
+    "distribution_id": "source.original_gameofmir.server_suite",
+    "source_priority": {
+      "lane": "server_rules",
+      "tier": "primary",
+      "order": 0,
+      "weight": 100
+    },
+    "original_path": "M2Server/ObjBase.pas",
+    "workspace_path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+    "sha256": "65d59610b8a1f7f4dcf76058a753651d1a97997ad273fc4df8e468e65a989262"
+  },
   "formulaContracts": {
-    "get_power": "round(power_roll/(train_level+1)*(skill_level+1)) + def_power_roll",
-    "get_power13": "round((input-input/3)/(train_level+1)*(skill_level+1) + input/3 + def_power_roll)",
+    "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+    "get_power": "delphi_round(power_roll/(train_level+1)*(skill_level+1)) + def_power_roll",
+    "get_power13": "delphi_round((input-input/3)/(train_level+1)*(skill_level+1) + input/3 + def_power_roll)",
     "magic_damage": "stat_roll + get_power(magic_power_roll)",
     "healing": "get_power(magic_power_roll) + sc_roll*2",
     "train_level": 3
@@ -306,7 +319,9 @@
           1.8
         ],
         "service_spell_id": 43,
-        "shield_power_formula": "get_power(mc_roll + 15)"
+        "shield_power_formula": "get_power(mc_roll + 15)",
+        "duration_formula": "shield_power seconds",
+        "damage_remaining_ratio_formula": "(skill_level+2)*0.08"
       },
       "wizard.repulsion_ring": {
         "formula_group": "classic_special",
@@ -381,7 +396,13 @@
           1.5,
           1.5
         ],
-        "service_spell_id": 33
+        "service_spell_id": 33,
+        "target_level_margin": 2,
+        "max_target_level": 60,
+        "target_level_difficulty": 10,
+        "target_hp_rate": 1000,
+        "max_slave_count": 5,
+        "mutiny_minutes_formula": "random_range(0,caster_level) + 60*floor(caster_level/10) + (skill_level<<2)*5"
       }
     }
   },
@@ -595,8 +616,11 @@
         "service_spell_id": 63,
         "green_power_formula": "get_power13(40) + sc_roll*2",
         "red_power_formula": "get_power13(30) + sc_roll*2",
-        "duration_formula": "round(skill_level/3 * power/20)",
-        "poison_interval_ms": 1000,
+        "duration_formula": "delphi_round(skill_level/3 * power/20)",
+        "apply_delay_ms": 1000,
+        "green_damage_interval_ms": 2500,
+        "red_armor_rate_tenths": 12,
+        "anti_poison_formula": "random(target_anti_poison+7) <= 6",
         "amy_ounsul_point": 20
       },
       "taoist.revelation": {

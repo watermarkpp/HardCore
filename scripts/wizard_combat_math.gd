@@ -11,22 +11,30 @@ static func clamp_skill_level(level_value: int) -> int:
 	return clampi(level_value, 0, MAX_SKILL_LEVEL)
 
 
+static func classic_round(value: float) -> int:
+	var lower := floori(value)
+	var fraction := value - float(lower)
+	if not is_equal_approx(fraction, 0.5):
+		return lower if fraction < 0.5 else lower + 1
+	return lower if lower % 2 == 0 else lower + 1
+
+
 static func classic_get_power(power_roll: int, def_power_roll: int, level_value: int, train_level := 3) -> int:
 	var divisor := maxi(1, train_level + 1)
-	return roundi(float(power_roll) / float(divisor) * float(clamp_skill_level(level_value) + 1)) + def_power_roll
+	return classic_round(float(power_roll) / float(divisor) * float(clamp_skill_level(level_value) + 1)) + def_power_roll
 
 
 static func classic_get_power13(input_power: int, def_power_roll: int, level_value: int, train_level := 3) -> int:
 	var divisor := maxi(1, train_level + 1)
 	var fixed_third := float(input_power) / 3.0
 	var scaled_part := float(input_power) - fixed_third
-	return roundi(scaled_part / float(divisor) * float(clamp_skill_level(level_value) + 1) + fixed_third + float(def_power_roll))
+	return classic_round(scaled_part / float(divisor) * float(clamp_skill_level(level_value) + 1) + fixed_third + float(def_power_roll))
 
 
 static func damage_with_rolls(skill_id: String, stat_roll: int, level_value: int, magic_power_roll: int, def_power_roll: int, target_is_undead := false) -> int:
 	var result := maxi(1, stat_roll + classic_get_power(magic_power_roll, def_power_roll, level_value, int(_skill_rule(skill_id).get("train_level", 3))))
 	if skill_id == "wizard.lightning" and target_is_undead:
-		result = roundi(float(result) * 1.5)
+		result = classic_round(float(result) * 1.5)
 	elif skill_id == "wizard.hell_lightning" and not target_is_undead:
 		result = maxi(1, int(result / 10))
 	return result

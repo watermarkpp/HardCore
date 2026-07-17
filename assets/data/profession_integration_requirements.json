@@ -5,6 +5,15 @@
   "reason": "scripts/game_root.gd and scripts/layers/runtime/combat_runtime_service.gd are integration-owned",
   "requirements": [
     {
+      "id": "profession.special_behavior_dispatch.v1",
+      "files": [
+        "scripts/game_root.gd",
+        "scripts/layers/runtime/combat_runtime_service.gd"
+      ],
+      "change": "Resolve the stable skill ID and call CasterSkillBehavior.resolve with explicit caster/target stats and injected random rolls for control, status, execute, teleport, poison, buff and summon operations.",
+      "acceptance": "caster_skill_behavior_test vectors pass through the integrated runtime without fixed status constants"
+    },
+    {
       "id": "profession.formula_dispatch.v2",
       "files": [
         "scripts/game_root.gd",

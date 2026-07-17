@@ -46,7 +46,7 @@ static func poison_power(level_value: int, spiritual_stat_roll: int, green_poiso
 
 
 static func poison_duration(level_value: int, power: int) -> int:
-	return roundi(float(clamp_skill_level(level_value)) / 3.0 * (float(power) / 20.0))
+	return WizardCombatMath.classic_round(float(clamp_skill_level(level_value)) / 3.0 * (float(power) / 20.0))
 
 
 static func status_duration(skill_id: String, level_value: int, spiritual_stat_roll: int) -> int:

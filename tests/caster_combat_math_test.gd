@@ -2,6 +2,9 @@ extends Node
 
 
 func _ready() -> void:
+	assert(WizardCombatMath.classic_round(2.5) == 2)
+	assert(WizardCombatMath.classic_round(3.5) == 4)
+	assert(WizardCombatMath.classic_round(-2.5) == -2)
 	assert(WizardCombatMath.classic_get_power(8, 2, 0) == 4)
 	assert(WizardCombatMath.classic_get_power(8, 2, 3) == 10)
 	assert(WizardCombatMath.damage("wizard.fireball", 100, 0) == 104)
@@ -21,6 +24,7 @@ func _ready() -> void:
 	assert(TaoistCombatMath.damage("taoist.soul_fire_talisman", 100, 3) == 120)
 	var green_poison := TaoistCombatMath.poison_power(3, 30, true)
 	assert(green_poison == 100 and TaoistCombatMath.poison_duration(3, green_poison) == 5)
+	assert(TaoistCombatMath.poison_duration(3, 90) == 4)
 	assert(TaoistCombatMath.status_duration("taoist.invisibility", 3, 20) == 90)
 	assert(TaoistCombatMath.buff_power("taoist.defense", 3, 20) == 260)
 	assert(TaoistCombatMath.revelation_duration(3, 20) == 70)
