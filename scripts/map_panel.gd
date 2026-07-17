@@ -178,7 +178,7 @@ func _build_world_tree_section() -> void:
 	world_tree_container.name = "WorldTree"
 	world_tree_container.custom_minimum_size = Vector2(454, 0)
 	world_tree_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	world_tree_container.add_theme_constant_override("separation", 5)
+	world_tree_container.add_theme_constant_override("separation", 7)
 	world_tree_scroll.add_child(world_tree_container)
 
 
@@ -290,16 +290,17 @@ func _rebuild_world_tree() -> void:
 		world_tree_container.add_child(holder)
 		var button := Button.new()
 		button.name = "WorldNode_%s" % node_id
-		button.position = Vector2(depth * 22.0, 0)
-		button.size = Vector2(WORLD_NODE_SIZE.x - depth * 22.0, WORLD_NODE_SIZE.y)
+		button.position = Vector2(12, 0)
+		button.size = WORLD_NODE_SIZE
 		button.toggle_mode = true
-		button.text = "%s　%s" % ["◆" if depth <= 1 else "◇", node.get("label", "地图节点")]
-		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.add_theme_font_size_override("font_size", 17 if depth == 0 else 15)
+		button.text = str(node.get("label", "地图节点"))
+		button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+		button.add_theme_font_size_override("font_size", 15)
 		button.set_pressed_no_signal(node_id == _selected_world_node_id)
 		button.theme_type_variation = "GothicComponentSelectedButton" if node_id == _selected_world_node_id else "GothicComponentButton"
 		button.pressed.connect(_select_world_node.bind(node_id))
 		button.set_meta("world_node_id", node_id)
+		button.set_meta("world_node_depth", depth)
 		holder.add_child(button)
 		world_node_buttons[node_id] = button
 

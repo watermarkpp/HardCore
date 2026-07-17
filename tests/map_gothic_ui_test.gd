@@ -33,6 +33,14 @@ func _run() -> void:
 	assert(panel.later_toggle.theme_type_variation == "GothicContentToggle", "后期内容开关没有使用公共哥特样式")
 	assert(panel.map_entries.size() == 129 and panel.map_buttons.size() == 129, "世界根节点默认地图数量错误")
 	assert(not panel.map_list.visible and panel.map_list.item_count == 129, "地图兼容选择列表异常")
+	assert(panel.world_tree_container.get_theme_constant("separation") == 7, "世界地图节点间距没有与左侧地图卡保持一致")
+	var reference_world_button := panel.world_node_buttons["mafa_world"] as Button
+	for world_button_value: Variant in panel.world_node_buttons.values():
+		var world_button := world_button_value as Button
+		assert(world_button.position == reference_world_button.position, "世界地图节点装饰框左边缘不一致")
+		assert(world_button.size == reference_world_button.size, "世界地图节点装饰框尺寸不一致")
+		assert(world_button.alignment == HORIZONTAL_ALIGNMENT_CENTER, "世界地图名称没有相对装饰框水平居中")
+	assert((panel.world_node_buttons["cangyue_island"] as Button).position.x == 12.0, "苍月岛装饰框左侧出现异常突出")
 
 	var requested_batches: Array = []
 	panel.teleport_availability_requested.connect(
