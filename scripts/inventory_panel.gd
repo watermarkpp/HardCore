@@ -678,11 +678,11 @@ func _set_button_texture(button: Button, texture: Texture2D) -> void:
 	var source_size := texture.get_size()
 	if source_size.x <= 0.0 or source_size.y <= 0.0:
 		return
-	# Keep inventory art inside the frame's uninterrupted center. Item artwork
-	# must never touch the gothic ornament or slot edge.
-	var safe_size := Vector2(maxf(1.0, button.size.x - 24.0), maxf(1.0, button.size.y - 26.0))
-	var fit_scale := minf(safe_size.x / source_size.x, safe_size.y / source_size.y)
-	var display_size := source_size * fit_scale
+	# The original client inventory art is pixel-based. Keep it at an integer
+	# scale and center it against the slot's actual visible rectangle.
+	var safe_size := Vector2(maxf(1.0, button.size.x - 4.0), maxf(1.0, button.size.y - 4.0))
+	var integer_scale := maxi(1, int(floor(minf(safe_size.x / source_size.x, safe_size.y / source_size.y))))
+	var display_size := source_size * integer_scale
 	var icon_rect := TextureRect.new()
 	icon_rect.name = "CenteredPixelIcon"
 	icon_rect.texture = texture

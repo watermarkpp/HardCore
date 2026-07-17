@@ -121,20 +121,30 @@ static func _apply_texture_button_variation(theme: Theme, variation: StringName,
 
 
 static func _apply_slot_button_variation(theme: Theme, variation: StringName, selected: bool) -> void:
-	var base_tint := Color("ffd18a") if selected else Color.WHITE
-	var hover_tint := Color("ffe0ae") if selected else Color("fff0d4")
-	var pressed_tint := Color("ffb75e")
 	theme.set_type_variation(variation, "Button")
-	theme.set_stylebox("normal", variation, _texture(COMPONENT_ITEM_SLOT, Vector4(48, 54, 48, 46), 10, base_tint))
-	theme.set_stylebox("hover", variation, _texture(COMPONENT_ITEM_SLOT, Vector4(48, 54, 48, 46), 10, hover_tint))
-	theme.set_stylebox("pressed", variation, _texture(COMPONENT_ITEM_SLOT, Vector4(48, 54, 48, 46), 10, pressed_tint))
-	theme.set_stylebox("focus", variation, _texture(COMPONENT_ITEM_SLOT, Vector4(48, 54, 48, 46), 10, hover_tint))
-	theme.set_stylebox("disabled", variation, _texture(COMPONENT_ITEM_SLOT, Vector4(48, 54, 48, 46), 10, Color(0.56, 0.50, 0.44, 0.74)))
+	var normal := _slot_box(Color("21150d"), Color("bd8644"), 2) if selected else _slot_box(Color("0c0a09"), Color("594532"), 2)
+	var hover := _slot_box(Color("18110c"), Color("9a7044"), 2)
+	var pressed := _slot_box(Color("26160c"), Color("d3a15e"), 2)
+	theme.set_stylebox("normal", variation, normal)
+	theme.set_stylebox("hover", variation, hover)
+	theme.set_stylebox("pressed", variation, pressed)
+	theme.set_stylebox("focus", variation, hover)
+	theme.set_stylebox("disabled", variation, _slot_box(Color("090807"), Color("332a22"), 1))
 	theme.set_color("font_color", variation, PARCHMENT)
 	theme.set_color("font_hover_color", variation, Color.WHITE)
 	theme.set_color("font_pressed_color", variation, Color("ffe2ad"))
 	theme.set_color("font_outline_color", variation, Color(0.025, 0.012, 0.008, 1.0))
 	theme.set_constant("outline_size", variation, 3)
+
+
+static func _slot_box(background: Color, border: Color, width: int) -> StyleBoxFlat:
+	var style := _flat(background, border, width, 2)
+	style.anti_aliasing = false
+	style.content_margin_left = 4
+	style.content_margin_right = 4
+	style.content_margin_top = 4
+	style.content_margin_bottom = 4
+	return style
 
 
 static func _flat(background: Color, border: Color, width: int, radius: int) -> StyleBoxFlat:
