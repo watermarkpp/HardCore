@@ -8,7 +8,7 @@ func _ready() -> void:
 	var theme := GothicUIThemeScript.build()
 	for variation in ["GothicModalFrame", "GothicTitleBar", "GothicInsetFrame", "GothicTabFrame"]:
 		assert(theme.has_stylebox("panel", variation), "%s 缺少公共Panel样式" % variation)
-	for variation in ["GothicComponentButton", "GothicComponentSelectedButton", "GothicComponentTabButton", "GothicComponentSlotButton", "GothicComponentSelectedSlotButton", "GothicEquipmentSlotButton", "GothicSelectedEquipmentSlotButton", "GothicComponentShopCard", "GothicComponentCloseButton"]:
+	for variation in ["GothicComponentButton", "GothicComponentSelectedButton", "GothicComponentTabButton", "GothicComponentSlotButton", "GothicComponentSelectedSlotButton", "GothicEquipmentSlotButton", "GothicSelectedEquipmentSlotButton", "GothicComponentShopCard", "GothicComponentSelectedShopCard", "GothicComponentCloseButton"]:
 		assert(theme.has_stylebox("normal", variation), "%s 缺少normal样式" % variation)
 		assert(theme.has_stylebox("pressed", variation), "%s 缺少pressed样式" % variation)
 		assert(theme.has_stylebox("disabled", variation), "%s 缺少disabled样式" % variation)
