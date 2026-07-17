@@ -52,6 +52,12 @@ func _run() -> void:
 			assert(int(action.get("framesPerDirection", 0)) == frame_count, "%s %s 帧数错误" % [monster_name, action_name])
 			assert(action.get("missingFrames", []).is_empty(), "%s %s 存在缺帧" % [monster_name, action_name])
 			assert(ResourceLoader.exists(str(action.get("path", ""))), "%s %s 图集不存在" % [monster_name, action_name])
+			if monster_name == "食人花":
+				assert(int(action.get("sourceDirectionStride", -1)) == 0, "食人花 %s 仍把相邻状态段误当成方向" % action_name)
+				assert(int(action.get("fixedSourceDirection", -1)) == 0, "食人花 %s 未固定到唯一有效源方向" % action_name)
+				_assert_direction_rows_identical(str(action.get("path", "")), frame_size, frame_count, action_name)
+		if monster_name == "食人花":
+			assert(mapping.get("directionPolicy", "") == "fixed_source_direction", "食人花未声明固定体视觉方向策略")
 		if monster_name not in RUNTIME_SAMPLES:
 			continue
 
@@ -79,3 +85,13 @@ func _run() -> void:
 
 	print("BICH_COMMON_CLIENT_ART_PASS：既有比奇常见怪客户端五动作、八方向、源帧、锚点与证据等级完整")
 	get_tree().quit(0)
+
+
+func _assert_direction_rows_identical(path: String, frame_size: Vector2i, frame_count: int, action_name: String) -> void:
+	var image := Image.load_from_file(ProjectSettings.globalize_path(path))
+	assert(image != null and not image.is_empty(), "食人花 %s 图集无法读取" % action_name)
+	var row_size := Vector2i(frame_size.x * frame_count, frame_size.y)
+	var reference := image.get_region(Rect2i(Vector2i.ZERO, row_size)).get_data()
+	for direction in range(1, 8):
+		var row := image.get_region(Rect2i(Vector2i(0, frame_size.y * direction), row_size)).get_data()
+		assert(row == reference, "食人花 %s 第%d方向没有复用固定体源帧" % [action_name, direction])

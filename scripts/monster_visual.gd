@@ -156,6 +156,8 @@ func ground_contact_position(fallback: Vector2) -> Vector2:
 
 
 func _direction_row(direction: Vector2) -> int:
+	if str(active_resources.get("direction_policy", "mir2_directional")) == "fixed_source_direction":
+		return 0
 	# Raw Mon*.wil atlases are north-first. Project-authored turnaround atlases
 	# are south-first. Every resource declares its convention here instead of
 	# forcing one global mapping and breaking half the monster roster.
@@ -170,6 +172,7 @@ func _client_resources(client_mapping: Dictionary) -> Dictionary:
 		"actor_ground_offset": CLIENT_ACTOR_GROUND_OFFSET,
 		"frame_counts": {},
 		"direction_mode": "mir2_north_first",
+		"direction_policy": str(client_mapping.get("directionPolicy", "mir2_directional")),
 		"animation_source": "classic_client_wil",
 	}
 	for action_name: String in ["idle", "walk", "attack", "hit", "death"]:

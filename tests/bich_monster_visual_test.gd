@@ -41,7 +41,8 @@ func _run() -> void:
 		if monster_name == "食人花":
 			assert(enemy.move_speed == 0.0 and enemy.attack_range == 78.0, "食人花固定怪参数错误")
 			visual._process(0.12)
-			assert(visual.current_state == "idle" and visual.current_direction == 2, "食人花待机方向错误")
+			assert(visual.active_resources.get("direction_policy", "") == "fixed_source_direction", "食人花未加载固定源方向策略")
+			assert(visual.current_state == "idle" and visual.current_direction == 0, "食人花仍被玩家方向带偏到相邻状态帧")
 		else:
 			enemy.velocity = Vector2.RIGHT * 50.0
 			visual._process(0.12)
