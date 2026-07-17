@@ -32,6 +32,9 @@ func _run() -> void:
 		var sprite: Sprite2D = visual.get_node("BodySprite")
 		assert(visual.uses_final_art(), "%s 未启用原客户端逐帧资源" % monster_name)
 		assert(visual.active_resources.get("animation_source", "") == "classic_client_wil", "%s 仍在使用程序变形动画" % monster_name)
+		assert(not visual.ground_contact_offsets.is_empty(), "%s 旧名称入口未解析到脚底接触点" % monster_name)
+		enemy.set_targeted(true)
+		assert(enemy.ground_indicator_center().is_equal_approx(visual.position + visual.ground_contact_offset()), "%s 旧名称入口的锁定光圈未对齐脚底" % monster_name)
 		assert(sprite.texture.get_size() == Vector2(frame_size.x * 4, frame_size.y * 8), "%s 待机图集尺寸错误" % monster_name)
 		enemy.facing = Vector2.RIGHT
 		enemy.movement_facing = Vector2.RIGHT

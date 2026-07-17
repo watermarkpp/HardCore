@@ -2,6 +2,7 @@ extends Node
 
 const MANIFEST_PATH := "res://assets/data/complete_monster_client_art_sources.json"
 const CATALOG_PATH := "res://assets/data/runtime/monster_animation_catalog.json"
+const GROUND_CONTACTS_PATH := "res://assets/data/monster_ground_contacts.json"
 const REQUIRED_ACTIONS := ["idle", "walk", "attack", "hit", "death"]
 
 
@@ -14,6 +15,7 @@ func _run() -> void:
 	PlayerState.reset_progress()
 	var manifest := _load_json(MANIFEST_PATH)
 	var catalog := _load_json(CATALOG_PATH)
+	var ground_contacts := _load_json(GROUND_CONTACTS_PATH)
 	var mappings: Dictionary = manifest.get("runtimeMappingsByMonsterId", {})
 	var summary: Dictionary = manifest.get("summary", {})
 
@@ -48,6 +50,24 @@ func _run() -> void:
 	assert(int(catalog_summary.get("formal", -1)) == 214, "正式五动作绑定未达到214")
 	assert(int(catalog_summary.get("missing", -1)) == 0, "动画总目录仍登记缺失")
 
+	var profiles_by_id: Dictionary = ground_contacts.get("groundContactProfileByMonsterId", {})
+	var contact_profiles: Dictionary = ground_contacts.get("groundContactProfiles", {})
+	assert(ground_contacts.get("identityKey", "") == "monsterId", "脚底接触点未使用稳定 monsterId 主键")
+	assert(int(ground_contacts.get("summary", {}).get("monsterCount", -1)) == 214, "脚底接触点没有覆盖214个正式怪物")
+	assert(profiles_by_id.size() == 214, "脚底接触点 stable ID 条目数量错误")
+	assert(contact_profiles.size() == int(ground_contacts.get("summary", {}).get("uniqueVisualProfileCount", -1)), "脚底接触点模型配置数量错误")
+	for monster_key: String in profiles_by_id:
+		var profile_key := str(profiles_by_id[monster_key])
+		assert(contact_profiles.has(profile_key), "monsterId=%s 脚底接触点模型配置不存在" % monster_key)
+	for profile_key: String in contact_profiles:
+		var action_offsets: Dictionary = contact_profiles[profile_key].get("offsetsByActionDirection", {})
+		for action_name: String in REQUIRED_ACTIONS:
+			var direction_offsets: Array = action_offsets.get(action_name, [])
+			assert(direction_offsets.size() == 8, "%s %s 接触点不是八方向" % [profile_key, action_name])
+			for offset: Variant in direction_offsets:
+				assert(offset is Array and offset.size() == 2, "%s %s 接触点格式错误" % [profile_key, action_name])
+				assert(absf(float(offset[0])) <= 512.0 and absf(float(offset[1])) <= 512.0, "%s %s 接触点越界" % [profile_key, action_name])
+
 	var player := PlayerCharacter.new()
 	player.global_position = Vector2(900, 0)
 	add_child(player)
@@ -62,6 +82,11 @@ func _run() -> void:
 		await get_tree().process_frame
 		assert(enemy.visual.uses_final_art(), "monsterId=%d 未在运行时启用完整客户端动画" % monster_id)
 		assert(enemy.visual.active_resources.get("animation_source", "") == "classic_client_wil", "monsterId=%d 动画来源错误" % monster_id)
+		enemy.set_targeted(true)
+		var old_center := Vector2(0, (27.0 if enemy.is_boss else 16.0) * 0.28)
+		var expected_center := enemy.visual.position + enemy.visual.ground_contact_offset()
+		assert(enemy.ground_indicator_center().is_equal_approx(expected_center), "monsterId=%d 锁定光圈未跟随真实脚底接触点" % monster_id)
+		assert(enemy.ground_indicator_center().distance_to(old_center) > 15.0, "monsterId=%d 仍错误使用 Enemy 逻辑原点绘制光圈" % monster_id)
 		enemy.queue_free()
 
 	player.queue_free()
