@@ -49,7 +49,8 @@ func _run() -> void:
 	var necklace_rect := Rect2(necklace_button.get_parent().position + necklace_button.position, necklace_button.size)
 	var armor_rect := Rect2(armor_button.get_parent().position + armor_button.position, armor_button.size)
 	assert(not necklace_rect.intersects(armor_rect), "项链与衣服装备格发生连接或重叠")
-	assert(panel.theme.get_stylebox("normal", "GothicEquipmentSlotButton") is StyleBoxTexture, "装备格没有使用公共哥特美术框")
+	assert(panel.theme.get_stylebox("normal", "GothicEquipmentSlotButton") is StyleBoxFlat, "装备格没有使用简洁正方形公共样式")
+	assert((panel.equipment_buttons["武器"] as Button).size.x == (panel.equipment_buttons["武器"] as Button).size.y, "装备格不是严格正方形")
 	var weapon_caption := panel.equipment_buttons["武器"].get_parent().get_node("SlotCaptionPlate") as Control
 	var weapon_button := panel.equipment_buttons["武器"] as Button
 	assert(weapon_caption.position.y < weapon_button.position.y + weapon_button.size.y and weapon_caption.position.y + weapon_caption.size.y > weapon_button.position.y + weapon_button.size.y, "装备名称铭牌没有压住对应装备格底边")

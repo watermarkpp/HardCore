@@ -142,18 +142,31 @@ static func _apply_slot_button_variation(theme: Theme, variation: StringName, se
 
 
 static func _apply_equipment_slot_button_variation(theme: Theme, variation: StringName, selected: bool) -> void:
-	var normal_tint := Color("ffd399") if selected else Color.WHITE
-	var hover_tint := Color("ffe2b0")
-	var pressed_tint := Color("ffbb68")
 	theme.set_type_variation(variation, "Button")
-	theme.set_stylebox("normal", variation, _texture(COMPONENT_ITEM_SLOT, Vector4(48, 54, 48, 46), 10, normal_tint))
-	theme.set_stylebox("hover", variation, _texture(COMPONENT_ITEM_SLOT, Vector4(48, 54, 48, 46), 10, hover_tint))
-	theme.set_stylebox("pressed", variation, _texture(COMPONENT_ITEM_SLOT, Vector4(48, 54, 48, 46), 10, pressed_tint))
-	theme.set_stylebox("focus", variation, _texture(COMPONENT_ITEM_SLOT, Vector4(48, 54, 48, 46), 10, hover_tint))
-	theme.set_stylebox("disabled", variation, _texture(COMPONENT_ITEM_SLOT, Vector4(48, 54, 48, 46), 10, Color(0.52, 0.48, 0.44, 0.76)))
+	var normal := _equipment_slot_box(Color("21150d"), Color("c18a49"), 2) if selected else _equipment_slot_box(Color("0b0a09"), Color("72583b"), 2)
+	var hover := _equipment_slot_box(Color("15100c"), Color("a77a46"), 2)
+	var pressed := _equipment_slot_box(Color("25150b"), Color("d8a25b"), 2)
+	theme.set_stylebox("normal", variation, normal)
+	theme.set_stylebox("hover", variation, hover)
+	theme.set_stylebox("pressed", variation, pressed)
+	theme.set_stylebox("focus", variation, hover)
+	theme.set_stylebox("disabled", variation, _equipment_slot_box(Color("080706"), Color("352b22"), 1))
 	theme.set_color("font_color", variation, PARCHMENT)
 	theme.set_color("font_outline_color", variation, Color(0.025, 0.012, 0.008, 1.0))
 	theme.set_constant("outline_size", variation, 3)
+
+
+static func _equipment_slot_box(background: Color, border: Color, width: int) -> StyleBoxFlat:
+	var style := _flat(background, border, width, 1)
+	style.anti_aliasing = false
+	style.shadow_color = Color(0.0, 0.0, 0.0, 0.78)
+	style.shadow_size = 2
+	style.shadow_offset = Vector2(0, 2)
+	style.content_margin_left = 4
+	style.content_margin_right = 4
+	style.content_margin_top = 4
+	style.content_margin_bottom = 4
+	return style
 
 
 static func _slot_box(background: Color, border: Color, width: int) -> StyleBoxFlat:

@@ -241,8 +241,8 @@ func _create_equipment_slot(parent: Control, slot: String, position_value: Vecto
 	parent.add_child(holder)
 	var button := Button.new()
 	button.name = "EquipmentSlot_%s" % slot
-	button.position = Vector2(5, 0)
-	button.size = Vector2(74, 84)
+	button.position = Vector2(2, 0)
+	button.size = Vector2(80, 80)
 	button.expand_icon = true
 	button.toggle_mode = true
 	button.tooltip_text = "%s：空" % slot
@@ -252,8 +252,8 @@ func _create_equipment_slot(parent: Control, slot: String, position_value: Vecto
 	holder.add_child(button)
 	var caption_plate := Panel.new()
 	caption_plate.name = "SlotCaptionPlate"
-	caption_plate.position = Vector2(10, 72)
-	caption_plate.size = Vector2(64, 24)
+	caption_plate.position = Vector2(8, 68)
+	caption_plate.size = Vector2(68, 24)
 	caption_plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	caption_plate.theme_type_variation = "GothicEquipmentSlotCaption"
 	holder.add_child(caption_plate)
