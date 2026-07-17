@@ -49,11 +49,17 @@ static func resolve(skill_name_or_id: String, context: Dictionary) -> Dictionary
 		"target_mode": str(combat_profile.get("target_mode", "single")),
 		"range": float(combat_profile.get("range", 0.0)),
 		"area_radius": float(combat_profile.get("area_radius", 0.0)),
+		"windup_seconds": float(combat_profile.get("windup", 0.0)),
+		"hit_frame": int(combat_profile.get("hit_frame", 0)),
+		"cooldown_seconds": float(combat_profile.get("cooldown", 0.0)),
 		"runtime_contract": "caster_skill_runtime.v1",
 		"formula_source": "source.original_gameofmir.server_suite",
 		"source_priority": {"lane": "server_rules", "tier": "primary", "order": 0, "weight": 100},
 		"visual": visual_profile,
 	}
+	for resource_field: String in ["amulet_cost", "apply_delay_ms"]:
+		if combat_profile.has(resource_field):
+			result[resource_field] = combat_profile[resource_field]
 	if SPECIAL_SKILLS.has(skill_id):
 		result.merge(CasterSkillBehavior.resolve(skill_id, context), true)
 		result["execution_shape"] = _shape_for_operation(str(result.get("operation", "")))

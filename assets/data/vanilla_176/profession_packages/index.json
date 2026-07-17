@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "registration_contract": "caster_profession_registration.v1",
+  "packages": [
+    {
+      "package_id": "profession.package.wizard.v1",
+      "profession_id": "wizard",
+      "display_name": "法师",
+      "gender_policy": "male_only",
+      "resource_path": "res://assets/data/vanilla_176/profession_packages/wizard.json",
+      "skill_count": 14
+    },
+    {
+      "package_id": "profession.package.taoist.v1",
+      "profession_id": "taoist",
+      "display_name": "道士",
+      "gender_policy": "male_only",
+      "resource_path": "res://assets/data/vanilla_176/profession_packages/taoist.json",
+      "skill_count": 13
+    }
+  ]
+}

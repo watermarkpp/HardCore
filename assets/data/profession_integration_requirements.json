@@ -1,9 +1,20 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "ownerBranch": "codex/integration",
-  "status": "pending_cross_system_integration",
+  "status": "caster_packages_ready_for_single_integration",
   "reason": "scripts/game_root.gd and scripts/layers/runtime/combat_runtime_service.gd are integration-owned",
   "requirements": [
+    {
+      "id": "profession.caster_packages_registration.v1",
+      "files": [
+        "scripts/player_state.gd",
+        "scripts/character_select.gd",
+        "scripts/game_root.gd",
+        "scripts/layers/runtime/combat_runtime_service.gd"
+      ],
+      "change": "Register profession.package.wizard.v1 and profession.package.taoist.v1 through CasterProfessionRegistry.create. Enable male wizard/taoist character creation, hydrate learned levels/training/resources into the selected package, call package.cast for every caster skill request, tick package cooldowns, and persist package.snapshot fields through the integration-owned save migration. Do not add per-skill Chinese-name branches.",
+      "acceptance": "wizard_profession_package_test and taoist_profession_package_test pass through the integrated player path; female caster creation remains disabled; the main scene consumes caster_profession_registration.v1 as one registry"
+    },
     {
       "id": "profession.caster_runtime_dispatch.v1",
       "files": [
