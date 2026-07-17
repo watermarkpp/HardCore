@@ -661,8 +661,12 @@ func _return_to_spawn()->void:
 
 func _draw() -> void:
 	var radius := 27.0 if is_boss else 16.0
+	var uses_final_art := visual != null and visual.uses_final_art()
 	var ground_center := ground_indicator_center()
-	draw_ellipse_shadow(radius, ground_center)
+	# Final WIL frames already contain their direction-aware source shadow.
+	# A second ellipse creates a detached double shadow below the actor.
+	if not uses_final_art:
+		draw_ellipse_shadow(radius, ground_center)
 	if _dying:
 		return
 	if is_targeted:
@@ -670,7 +674,6 @@ func _draw() -> void:
 		draw_set_transform(ground_center, 0.0, Vector2(1.0, 0.30))
 		draw_circle(Vector2.ZERO, radius + 6.0, Color(1.0, 0.78, 0.18, 0.78), false, 2.0)
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
-	var uses_final_art := visual != null and visual.uses_final_art()
 	var fallback_attacking := visual != null and visual.is_fallback_attacking()
 	var body_center := Vector2(0, -5) + (visual.fallback_lunge_offset(facing) if fallback_attacking else Vector2.ZERO)
 	if not uses_final_art:

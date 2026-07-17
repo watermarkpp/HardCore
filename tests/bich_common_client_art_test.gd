@@ -64,7 +64,8 @@ func _run() -> void:
 		var sprite: Sprite2D = visual.get_node("BodySprite")
 		assert(visual.uses_final_art(), "%s 未启用客户端正式资源" % monster_name)
 		assert(visual.frame_size == frame_size, "%s 运行帧尺寸与清单不一致" % monster_name)
-		assert(sprite.position == -Vector2(foot_anchor), "%s 脚底锚点与清单不一致" % monster_name)
+		assert(visual.actor_ground_offset == Vector2i(32, 28), "%s 未采用经典客户端角色原点迁移量" % monster_name)
+		assert(sprite.position == -Vector2(foot_anchor + visual.actor_ground_offset), "%s 绘制原点未迁移到统一地面原点" % monster_name)
 		enemy.facing = Vector2.RIGHT
 		enemy.movement_facing = Vector2.RIGHT
 		enemy.velocity = Vector2.RIGHT * 50.0
