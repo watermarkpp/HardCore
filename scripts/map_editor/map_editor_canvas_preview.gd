@@ -356,15 +356,9 @@ func _draw_instances(design_size: Vector2i, offset: Vector2, scale_factor: float
 			var texture := _texture_for_asset(str(instance.asset_id))
 			if texture == null:
 				continue
-			var tile: Array = instance.get("tile", [0, 0])
-			var offset_px: Array = instance.get("offset_px", [0, 0])
-			var anchor: Array = instance.get("anchor_px", asset.get("anchor_px", [0, 0]))
-			var footprint: Array = instance.get("footprint_tiles", [1, 1])
-			var foot_tile := Vector2(float(tile[0]) + float(footprint[0]) * 0.5, float(tile[1]) + float(footprint[1]) * 0.5)
-			var center := MapEditorCoordinate.tile_to_ground_px(foot_tile, design_size) + Vector2(int(offset_px[0]), int(offset_px[1]))
-			var instance_scale: Array = instance.get("scale", [1.0, 1.0])
-			draw_set_transform(offset + center * scale_factor, deg_to_rad(float(instance.get("rotation_deg", 0.0))), Vector2(float(instance_scale[0]), float(instance_scale[1])) * scale_factor)
-			draw_texture(texture, -Vector2(int(anchor[0]), int(anchor[1])))
+			var geometry := instance_visual_geometry(instance, design_size, offset, scale_factor, texture.get_size(), asset)
+			draw_set_transform(geometry.center, geometry.rotation, geometry.visual_scale)
+			draw_texture(texture, -geometry.anchor)
 			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
@@ -373,14 +367,11 @@ func _hit_selectable(screen_position: Vector2) -> String:
 	var all:=MapEditorInstanceService.all_instances(document); all.reverse()
 	for instance: Dictionary in all:
 		if bool(instance.get("selection_locked",false)): continue
+		var asset := MapAssetCatalogService.find_asset(str(instance.get("asset_id", "")))
 		var texture:=_texture_for_asset(str(instance.get("asset_id",""))); if texture==null: continue
-		var tile:Array=instance.get("tile",[0,0]); var footprint:Array=instance.get("footprint_tiles",[1,1]); var anchor:Array=instance.get("placement_anchor_px",instance.get("anchor_px",[0,0])); var instance_scale:Array=instance.get("scale",[1.0,1.0])
-		var foot:=Vector2(float(tile[0])+float(footprint[0])*.5,float(tile[1])+float(footprint[1])*.5)
-		var center:=_draw_offset+MapEditorCoordinate.tile_to_ground_px(foot,design_size)*_draw_scale
-		var visual_scale:=Vector2(float(instance_scale[0]),float(instance_scale[1]))*_draw_scale
-		var top_left:=center-Vector2(float(anchor[0]),float(anchor[1]))*visual_scale
-		var rect:=Rect2(top_left-Vector2(4,4),Vector2(texture.get_size())*visual_scale+Vector2(8,8))
-		if rect.has_point(screen_position): return str(instance.instance_id)
+		var geometry := instance_visual_geometry(instance, design_size, _draw_offset, _draw_scale, texture.get_size(), asset)
+		var hit_rect: Rect2 = geometry.rect.grow(4.0)
+		if hit_rect.has_point(screen_position): return str(instance.instance_id)
 	for entry: Dictionary in MapEditorGameplaySemanticService.all_entries(document):
 		var raw:Array=entry.get("tile",[0,0]); var center:=_draw_offset+MapEditorCoordinate.tile_to_ground_px(Vector2(raw[0],raw[1]),design_size)*_draw_scale
 		if center.distance_to(screen_position)<=14.0:return str(entry.get("semantic_id",""))
@@ -390,19 +381,37 @@ func _hit_selectable(screen_position: Vector2) -> String:
 func _draw_selection_overlays(design_size: Vector2i, offset: Vector2, scale_factor: float) -> void:
 	for instance: Dictionary in MapEditorInstanceService.all_instances(document):
 		var iid:=str(instance.get("instance_id","")); if iid!=hovered_selectable_id and iid!=selected_selectable_id:continue
+		var asset := MapAssetCatalogService.find_asset(str(instance.get("asset_id", "")))
 		var texture:=_texture_for_asset(str(instance.get("asset_id",""))); if texture==null:continue
-		var tile:Array=instance.get("tile",[0,0]); var footprint:Array=instance.get("footprint_tiles",[1,1]); var anchor:Array=instance.get("placement_anchor_px",instance.get("anchor_px",[0,0])); var instance_scale:Array=instance.get("scale",[1.0,1.0])
-		var foot:=Vector2(float(tile[0])+float(footprint[0])*.5,float(tile[1])+float(footprint[1])*.5)
-		var placement_center:=offset+MapEditorCoordinate.tile_to_ground_px(foot,design_size)*scale_factor
-		var visual_scale:=Vector2(float(instance_scale[0]),float(instance_scale[1]))*scale_factor
-		var top_left:=placement_center-Vector2(float(anchor[0]),float(anchor[1]))*visual_scale
-		var visual_rect:=Rect2(top_left,Vector2(texture.get_size())*visual_scale)
+		var geometry := instance_visual_geometry(instance, design_size, offset, scale_factor, texture.get_size(), asset)
+		var visual_rect: Rect2 = geometry.rect
 		var color:=Color("ffe16b") if iid==selected_selectable_id else Color("65d8ff")
 		draw_rect(visual_rect,color,false,3.0)
 		# Pixel centre is explicit so the selected image and its box cannot drift.
 		var pixel_center:=visual_rect.get_center()
 		draw_line(pixel_center-Vector2(6,0),pixel_center+Vector2(6,0),color,2.0)
 		draw_line(pixel_center-Vector2(0,6),pixel_center+Vector2(0,6),color,2.0)
+
+
+static func instance_visual_geometry(instance: Dictionary, design_size: Vector2i, draw_offset: Vector2, draw_scale: float, texture_size: Vector2, asset := {}) -> Dictionary:
+	var tile: Array = instance.get("tile", [0, 0])
+	var footprint: Array = instance.get("footprint_tiles", [1, 1])
+	var offset_px: Array = instance.get("offset_px", [0, 0])
+	var anchor: Array = instance.get("anchor_px", instance.get("placement_anchor_px", asset.get("anchor_px", [0, 0])))
+	var instance_scale: Array = instance.get("scale", [1.0, 1.0])
+	var foot := Vector2(float(tile[0]) + float(footprint[0]) * 0.5, float(tile[1]) + float(footprint[1]) * 0.5)
+	var ground_center := MapEditorCoordinate.tile_to_ground_px(foot, design_size) + Vector2(float(offset_px[0]), float(offset_px[1]))
+	var center := draw_offset + ground_center * draw_scale
+	var visual_scale := Vector2(float(instance_scale[0]), float(instance_scale[1])) * draw_scale
+	var anchor_vector := Vector2(float(anchor[0]), float(anchor[1]))
+	var top_left := center - anchor_vector * visual_scale
+	return {
+		"center": center,
+		"anchor": anchor_vector,
+		"visual_scale": visual_scale,
+		"rotation": deg_to_rad(float(instance.get("rotation_deg", 0.0))),
+		"rect": Rect2(top_left, texture_size * visual_scale),
+	}
 
 
 func _draw_blocked_tiles(design_size: Vector2i, offset: Vector2, scale_factor: float) -> void:

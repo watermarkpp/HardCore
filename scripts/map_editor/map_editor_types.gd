@@ -4,6 +4,7 @@ extends RefCounted
 const SCHEMA_VERSION := 4
 const TILE_SIZE := Vector2i(64, 32)
 const DEFAULT_CHUNK_SIZE := Vector2i(1024, 1024)
+const AUTHORING_CHUNK_SIZE_TILES := Vector2i(16, 16)
 const DEFAULT_GROUND_MODE := "generated_painted_chunks"
 const DEFAULT_CONTENT_LAYER := "personal_expansion"
 
@@ -92,6 +93,24 @@ static func new_map_from_blank_template(template_id: String) -> Dictionary:
 	document.editor_meta["blank_template_id"] = template_id
 	document.editor_meta["template_kind"] = "empty_map"
 	document.editor_meta["content_policy"] = "empty_layers"
+	return document
+
+
+static func new_custom_map(map_id: String, runtime_map_id: int, display_name: String, map_type: String, authoring_chunk_grid: Vector2i) -> Dictionary:
+	var safe_grid := Vector2i(maxi(1, authoring_chunk_grid.x), maxi(1, authoring_chunk_grid.y))
+	var design_size := Vector2i(
+		safe_grid.x * AUTHORING_CHUNK_SIZE_TILES.x,
+		safe_grid.y * AUTHORING_CHUNK_SIZE_TILES.y
+	)
+	var document := new_map(map_id, runtime_map_id, display_name, design_size)
+	document.design["map_type"] = map_type
+	document.design["strategy"] = "custom_blank_layout"
+	document.design["source_size"] = [null, null]
+	document.design["source_size_is_design_size"] = false
+	document.editor_meta["template_kind"] = "custom_empty_map"
+	document.editor_meta["content_policy"] = "empty_layers"
+	document.editor_meta["authoring_chunk_grid"] = [safe_grid.x, safe_grid.y]
+	document.editor_meta["authoring_chunk_size_tiles"] = [AUTHORING_CHUNK_SIZE_TILES.x, AUTHORING_CHUNK_SIZE_TILES.y]
 	return document
 
 

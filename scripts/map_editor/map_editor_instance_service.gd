@@ -29,6 +29,8 @@ static func create_instance(document: Dictionary, asset_id: String, object_role:
 		"navigation_policy": asset.get("navigation_policy", defaults.navigation_policy),
 		"occlusion": bool(asset.get("occlusion", false)), "runtime_export": true,
 		"content_layer": "personal_expansion", "rotation_deg": 0.0, "scale": [float(asset.get("approved_scale",1.0)),float(asset.get("approved_scale",1.0))], "flip_x": false, "flip_y": false,
+		"instance_base_scale": float(asset.get("approved_scale", 1.0)),
+		"instance_base_footprint_tiles": asset.get("footprint_tiles", [1, 1]).duplicate(),
 		"selectable":true,"movable":true,"selection_locked":false,
 	}
 	var layers: Dictionary = document.layers
@@ -101,7 +103,12 @@ static func resize_instance(document: Dictionary, instance_id: String, direction
 	var map_size: Array = document.design.design_size
 	if new_tile.x < 0 or new_tile.y < 0 or new_tile.x + int(new_fp[0]) > int(map_size[0]) or new_tile.y + int(new_fp[1]) > int(map_size[1]):
 		return {"ok": false, "errors": ["缩放后超出地图边界"]}
-	var ratio := minf(float(new_fp[0]) / float(base_fp[0]), float(new_fp[1]) / float(base_fp[1]))
+	# Resize relative to the instance's current visual scale. The approved asset
+	# scale is independent from its logical footprint (for example a 4×4 tree
+	# may start at 0.40). Recomputing from footprint/base_footprint would reset
+	# 0.40 to 0.75 on the first shrink and make the sprite grow instead.
+	var old_scale: Array = instance.get("scale", [float(asset.get("approved_scale", 1.0)), float(asset.get("approved_scale", 1.0))])
+	var next_scale := resized_visual_scale(Vector2(float(old_scale[0]), float(old_scale[1])), old_fp, new_fp)
 	var raw_size: Array = document.design.design_size
 	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var old_center := MapEditorCoordinate.tile_to_ground_px(Vector2(old_tile_v) + Vector2(float(old_fp[0]),float(old_fp[1])) * 0.5, design_size)
@@ -113,16 +120,41 @@ static func resize_instance(document: Dictionary, instance_id: String, direction
 	instance["footprint_tiles"] = new_fp
 	instance["occupancy_footprint_tiles"] = new_fp
 	instance["visual_footprint_tiles"] = new_fp
-	instance["scale"] = [ratio, ratio]
+	instance["scale"] = [next_scale.x, next_scale.y]
 	instance["offset_px"] = [roundi(compensated_offset.x),roundi(compensated_offset.y)]
 	instance["instance_scale_level"] = int(instance.get("instance_scale_level", 0)) + (1 if direction > 0 else -1)
 	instance["instance_custom_scale"] = true
-	var collision: Array = instance.get("collision_footprint_tiles", [0, 0])
-	if int(collision[0]) > 0 and int(collision[1]) > 0:
-		var base_collision: Array = asset.get("collision_footprint_tiles", collision)
-		instance["collision_footprint_tiles"] = [maxi(1, roundi(float(base_collision[0]) * ratio)), maxi(1, roundi(float(base_collision[1]) * ratio))]
+	instance["instance_base_scale"] = float(instance.get("instance_base_scale", asset.get("approved_scale", 1.0)))
+	instance["instance_base_footprint_tiles"] = instance.get("instance_base_footprint_tiles", old_fp).duplicate()
+	_resize_instance_collision(instance, old_fp, new_fp)
 	_located_replace(document, located, instance)
 	return {"ok": true, "instance": instance}
+
+
+static func resized_visual_scale(current_scale: Vector2, old_fp: Array, new_fp: Array) -> Vector2:
+	var old_primary := maxf(1.0, maxf(float(old_fp[0]), float(old_fp[1])))
+	var new_primary := maxf(1.0, maxf(float(new_fp[0]), float(new_fp[1])))
+	return current_scale * (new_primary / old_primary)
+
+
+static func _resize_instance_collision(instance: Dictionary, old_fp: Array, new_fp: Array) -> void:
+	var policy := str(instance.get("collision_policy", "none"))
+	if policy in ["none", "manual"]:
+		instance["collision_footprint_tiles"] = [0, 0]
+		return
+	if policy in ["solid_footprint", "terrain_stamp_generated"]:
+		instance["collision_footprint_tiles"] = new_fp.duplicate()
+		return
+	var collision: Array = instance.get("collision_footprint_tiles", [0, 0])
+	if collision.size() != 2 or int(collision[0]) <= 0 or int(collision[1]) <= 0:
+		instance["collision_footprint_tiles"] = new_fp.duplicate()
+		return
+	var width_ratio := float(new_fp[0]) / maxf(1.0, float(old_fp[0]))
+	var height_ratio := float(new_fp[1]) / maxf(1.0, float(old_fp[1]))
+	instance["collision_footprint_tiles"] = [
+		maxi(1, roundi(float(collision[0]) * width_ratio)),
+		maxi(1, roundi(float(collision[1]) * height_ratio)),
+	]
 
 
 static func all_instances(document: Dictionary) -> Array[Dictionary]:

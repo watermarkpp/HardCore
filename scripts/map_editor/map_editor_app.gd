@@ -7,6 +7,15 @@ var runtime_id_edit: SpinBox
 var display_name_edit: LineEdit
 var map_type_option: OptionButton
 var map_template_option: OptionButton
+var template_info_label: Label
+var save_map_button: Button
+var open_template_button: Button
+var create_map_button: Button
+var create_map_dialog: ConfirmationDialog
+var create_dialog_submit_button: Button
+var create_chunk_x: SpinBox
+var create_chunk_y: SpinBox
+var create_size_preview: Label
 var size_label: Label
 var path_label: Label
 var status_label: Label
@@ -83,32 +92,35 @@ func _build_ui() -> void:
 	sidebar_scroll.add_child(sidebar)
 	var title := Label.new(); title.text = "MSE-V3.5.1 场景编辑器"; title.add_theme_font_size_override("font_size", 15); sidebar.add_child(title)
 	var subtitle := Label.new(); subtitle.text = "人类与 Codex 共用 Schema v4"; subtitle.modulate = Color("95a4b6"); sidebar.add_child(subtitle)
-	var template_label := Label.new(); template_label.text = "后续地图空模板"; sidebar.add_child(template_label)
+	var map_panel := PanelContainer.new()
+	sidebar.add_child(map_panel)
+	var map_actions := VBoxContainer.new()
+	map_actions.add_theme_constant_override("separation", 6)
+	map_panel.add_child(map_actions)
+	var map_actions_title := Label.new(); map_actions_title.text = "地图"; map_actions_title.add_theme_font_size_override("font_size", 14); map_actions.add_child(map_actions_title)
+	save_map_button = Button.new(); save_map_button.text = "保存地图"; save_map_button.pressed.connect(_on_save_pressed); map_actions.add_child(save_map_button)
+	var template_label := Label.new(); template_label.text = "地图模板"; map_actions.add_child(template_label)
 	map_template_option = OptionButton.new(); map_template_option.fit_to_longest_item = false
 	for template: Dictionary in MapDesignCatalogService.blank_templates():
 		var template_size: Array = template.get("design_size", [0, 0])
 		map_template_option.add_item("%s · %d×%d" % [str(template.get("display_name", template.get("map_id", ""))), int(template_size[0]), int(template_size[1])])
 		map_template_option.set_item_metadata(map_template_option.item_count - 1, str(template.get("template_id", "")))
-	sidebar.add_child(map_template_option)
-	map_id_edit = _field(sidebar, "地图 ID", "sandbox_64")
-	display_name_edit = _field(sidebar, "显示名称", "64格沙盒")
-	var runtime_label := Label.new(); runtime_label.text = "运行地图 ID"; sidebar.add_child(runtime_label)
-	runtime_id_edit = SpinBox.new(); runtime_id_edit.min_value = 1; runtime_id_edit.max_value = 9999999; runtime_id_edit.value = 990001; sidebar.add_child(runtime_id_edit)
-	var type_label := Label.new(); type_label.text = "地图类型"; sidebar.add_child(type_label)
-	map_type_option = OptionButton.new()
-	for entry: Dictionary in MapDesignCatalogService._read_json(MapDesignCatalogService.TEMPLATE_PATH).get("templates", []):
-		map_type_option.add_item(_map_type_chinese(str(entry.id))); map_type_option.set_item_metadata(map_type_option.item_count - 1, str(entry.id))
-	map_type_option.select(_find_type_index("quest_room")); sidebar.add_child(map_type_option)
-	var template_create_button := Button.new(); template_create_button.text = "从所选空模板新建"; template_create_button.pressed.connect(_on_blank_template_create_pressed); sidebar.add_child(template_create_button)
-	var create_button := Button.new(); create_button.text = "按当前字段新建"; create_button.pressed.connect(_on_create_pressed); sidebar.add_child(create_button)
-	var bich_button := Button.new(); bich_button.text = "打开 BICH-MAP-1 比奇正式地图"; bich_button.pressed.connect(func(): _open_document_path(MapEditorSaveService.default_path("bich_province"))); sidebar.add_child(bich_button)
-	size_label = Label.new(); size_label.text = "设计尺寸：-"; sidebar.add_child(size_label)
-	path_label = Label.new(); path_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; path_label.modulate = Color("8fb9c7"); sidebar.add_child(path_label)
+	map_actions.add_child(map_template_option)
+	template_info_label = Label.new(); template_info_label.modulate = Color("9da7b3"); map_actions.add_child(template_info_label)
+	open_template_button = Button.new(); open_template_button.text = "打开地图模板"; open_template_button.pressed.connect(_on_open_template_pressed); map_actions.add_child(open_template_button)
+	var template_create_button := Button.new(); template_create_button.text = "从所选模板创建地图"; template_create_button.pressed.connect(_on_blank_template_create_pressed); map_actions.add_child(template_create_button)
+	create_map_button = Button.new(); create_map_button.text = "创建地图"; create_map_button.pressed.connect(_on_create_map_dialog_requested); map_actions.add_child(create_map_button)
+	var bich_button := Button.new(); bich_button.text = "打开比奇地图"; bich_button.pressed.connect(func(): _open_document_path(MapEditorSaveService.default_path("bich_province"))); map_actions.add_child(bich_button)
+	var reload_button := Button.new(); reload_button.text = "重新载入当前地图"; reload_button.pressed.connect(_on_open_pressed); map_actions.add_child(reload_button)
+	size_label = Label.new(); size_label.text = "设计尺寸：-"; map_actions.add_child(size_label)
+	path_label = Label.new(); path_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; path_label.modulate = Color("8fb9c7"); map_actions.add_child(path_label)
+	_build_create_map_dialog()
 	map_template_option.item_selected.connect(_on_map_template_selected)
+	if map_template_option.item_count > 0:
+		_on_map_template_selected(map_template_option.selected)
+	var ground_title := Label.new(); ground_title.text = "地面与运行时"; ground_title.add_theme_font_size_override("font_size", 13); sidebar.add_child(ground_title)
 	var ground_button := Button.new(); ground_button.text = "初始化虚拟地面 Chunk"; ground_button.pressed.connect(_on_initialize_ground_pressed); sidebar.add_child(ground_button)
 	var paint_button := Button.new(); paint_button.text = "中心格模拟首次地面编辑"; paint_button.pressed.connect(_on_demo_ground_edit_pressed); sidebar.add_child(paint_button)
-	var save_button := Button.new(); save_button.text = "保存工作文件"; save_button.pressed.connect(_on_save_pressed); sidebar.add_child(save_button)
-	var open_button := Button.new(); open_button.text = "重新打开工作文件"; open_button.pressed.connect(_on_open_pressed); sidebar.add_child(open_button)
 	var note := Label.new(); note.text = "原图尺寸只用于审计。\n地面仅视觉；碰撞由对象和手工区域生成。\n工作文件位于 map_editor_workspace/。"; note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; note.modulate = Color("9da7b3"); sidebar.add_child(note)
 	var asset_title := Label.new(); asset_title.text = "素材目录"; asset_title.add_theme_font_size_override("font_size", 13); sidebar.add_child(asset_title)
 	asset_tree = Tree.new(); asset_tree.custom_minimum_size.y = 260; asset_tree.hide_root = true; asset_tree.select_mode = Tree.SELECT_MULTI; asset_tree.item_selected.connect(_on_asset_tree_selected); asset_tree.multi_selected.connect(_on_asset_tree_multi_selected); asset_tree.gui_input.connect(_on_asset_tree_gui_input); sidebar.add_child(asset_tree); _refresh_asset_tree()
@@ -189,6 +201,63 @@ func _spin_field(parent: Control, label_text: String, minimum: float, maximum: f
 	var spin := SpinBox.new(); spin.min_value = minimum; spin.max_value = maximum; spin.step = 1.0; parent.add_child(spin); return spin
 
 
+func _build_create_map_dialog() -> void:
+	create_map_dialog = ConfirmationDialog.new()
+	create_map_dialog.title = "创建地图"
+	create_map_dialog.dialog_text = "填写地图名称、地图 ID，并选择地图占用多少个布局 Chunk。"
+	create_map_dialog.get_ok_button().hide()
+	create_map_dialog.get_cancel_button().hide()
+	add_child(create_map_dialog)
+	var form := VBoxContainer.new()
+	form.custom_minimum_size = Vector2(480, 0)
+	create_map_dialog.add_child(form)
+	var chunk_note := Label.new()
+	chunk_note.text = "每个布局 Chunk = 16×16 个逻辑格；例如 5×5 Chunk = 80×80 格。"
+	chunk_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	chunk_note.modulate = Color("9da7b3")
+	form.add_child(chunk_note)
+	var fields := GridContainer.new()
+	fields.columns = 2
+	fields.add_theme_constant_override("h_separation", 12)
+	fields.add_theme_constant_override("v_separation", 4)
+	form.add_child(fields)
+	display_name_edit = _field(fields, "地图名称", "新地图")
+	map_id_edit = _field(fields, "地图 ID", "new_map")
+	var runtime_label := Label.new(); runtime_label.text = "运行地图 ID"; fields.add_child(runtime_label)
+	runtime_id_edit = SpinBox.new(); runtime_id_edit.min_value = 1; runtime_id_edit.max_value = 9999999; runtime_id_edit.value = 990100; fields.add_child(runtime_id_edit)
+	var type_label := Label.new(); type_label.text = "地图类型"; fields.add_child(type_label)
+	map_type_option = OptionButton.new()
+	for entry: Dictionary in MapDesignCatalogService._read_json(MapDesignCatalogService.TEMPLATE_PATH).get("templates", []):
+		map_type_option.add_item(_map_type_chinese(str(entry.id)))
+		map_type_option.set_item_metadata(map_type_option.item_count - 1, str(entry.id))
+	fields.add_child(map_type_option)
+	map_type_option.select(_find_type_index("quest_room"))
+	create_chunk_x = _spin_field(fields, "横向布局 Chunk 数", 1, 32); create_chunk_x.value = 5
+	create_chunk_y = _spin_field(fields, "纵向布局 Chunk 数", 1, 32); create_chunk_y.value = 5
+	create_chunk_x.value_changed.connect(func(_value: float): _refresh_create_size_preview())
+	create_chunk_y.value_changed.connect(func(_value: float): _refresh_create_size_preview())
+	create_size_preview = Label.new()
+	create_size_preview.modulate = Color("d7aa62")
+	form.add_child(create_size_preview)
+	var actions := HBoxContainer.new()
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	form.add_child(actions)
+	var cancel_button := Button.new(); cancel_button.text = "取消"; cancel_button.pressed.connect(create_map_dialog.hide); actions.add_child(cancel_button)
+	create_dialog_submit_button = Button.new(); create_dialog_submit_button.text = "创建地图"; create_dialog_submit_button.pressed.connect(_on_create_pressed); actions.add_child(create_dialog_submit_button)
+	_refresh_create_size_preview()
+
+
+func _refresh_create_size_preview() -> void:
+	if create_chunk_x == null or create_chunk_y == null or create_size_preview == null:
+		return
+	var chunks := Vector2i(int(create_chunk_x.value), int(create_chunk_y.value))
+	var design_size := Vector2i(
+		chunks.x * MapEditorTypes.AUTHORING_CHUNK_SIZE_TILES.x,
+		chunks.y * MapEditorTypes.AUTHORING_CHUNK_SIZE_TILES.y
+	)
+	create_size_preview.text = "将创建：%d×%d Chunk，地图尺寸 %d×%d 格" % [chunks.x, chunks.y, design_size.x, design_size.y]
+
+
 func _find_type_index(map_type: String) -> int:
 	for i in map_type_option.item_count:
 		if str(map_type_option.get_item_metadata(i)) == map_type: return i
@@ -200,21 +269,68 @@ func _map_type_chinese(map_type: String) -> String:
 
 
 func _on_create_pressed() -> void:
+	var map_id := map_id_edit.text.strip_edges()
+	var display_name := display_name_edit.text.strip_edges()
+	if display_name.is_empty():
+		status_label.text = "创建地图失败：地图名称不能为空"
+		return
+	var id_pattern := RegEx.new()
+	id_pattern.compile("^[A-Za-z0-9][A-Za-z0-9_-]*$")
+	if map_id.is_empty() or id_pattern.search(map_id) == null:
+		status_label.text = "创建地图失败：地图 ID 只能使用英文、数字、下划线或短横线"
+		return
+	var target_path := MapEditorSaveService.default_path(map_id)
+	var ground_manifest_path := "res://map_editor_workspace/%s/ground/ground_manifest.json" % map_id
+	if FileAccess.file_exists(target_path) or FileAccess.file_exists(ground_manifest_path):
+		status_label.text = "创建地图失败：地图 %s 已存在，请先打开该地图" % map_id
+		return
 	var map_type := str(map_type_option.get_item_metadata(map_type_option.selected))
-	_create_map(map_id_edit.text.strip_edges(), map_type, int(runtime_id_edit.value), display_name_edit.text.strip_edges())
+	var chunk_grid := Vector2i(int(create_chunk_x.value), int(create_chunk_y.value))
+	var document := MapEditorTypes.new_custom_map(map_id, int(runtime_id_edit.value), display_name, map_type, chunk_grid)
+	_adopt_new_document(document, "已创建地图")
+	var saved := MapEditorSaveService.save_document(current_document)
+	if saved.get("ok", false):
+		status_label.text = "地图已创建并保存：%s（%d×%d Chunk）" % [display_name, chunk_grid.x, chunk_grid.y]
+		create_map_dialog.hide()
+	else:
+		status_label.text = "地图已创建但保存失败：%s" % saved.get("errors", [])
+
+
+func _on_create_map_dialog_requested() -> void:
+	display_name_edit.text = "新地图"
+	map_id_edit.text = "new_map"
+	runtime_id_edit.value = 990100
+	map_type_option.select(_find_type_index("quest_room"))
+	create_chunk_x.value = 5
+	create_chunk_y.value = 5
+	_refresh_create_size_preview()
+	create_map_dialog.popup_centered(Vector2i(520, 330))
+	display_name_edit.grab_focus()
+	display_name_edit.select_all()
+
+
+func _on_open_template_pressed() -> void:
+	if map_template_option.selected < 0:
+		status_label.text = "请选择要打开的地图模板"
+		return
+	var template_id := str(map_template_option.get_item_metadata(map_template_option.selected))
+	var template := MapDesignCatalogService.find_blank_template(template_id)
+	if template.is_empty():
+		status_label.text = "地图模板不存在：%s" % template_id
+		return
+	var path := MapEditorSaveService.default_path(str(template.get("map_id", "")))
+	if not FileAccess.file_exists(path):
+		status_label.text = "该模板还没有地图工作区；请点击“从所选模板创建地图”"
+		return
+	_open_document_path(path)
 
 
 func _on_map_template_selected(index: int) -> void:
 	var template_id := str(map_template_option.get_item_metadata(index))
 	var template := MapDesignCatalogService.find_blank_template(template_id)
 	if template.is_empty(): return
-	map_id_edit.text = str(template.get("map_id", ""))
-	display_name_edit.text = str(template.get("display_name", ""))
-	runtime_id_edit.value = int(template.get("runtime_map_id", 0))
-	map_type_option.select(_find_type_index(str(template.get("map_type", ""))))
 	var design_size: Array = template.get("design_size", [0, 0])
-	size_label.text = "模板尺寸：%d × %d（空地图）" % [int(design_size[0]), int(design_size[1])]
-	path_label.text = "新工作文件：%s" % ProjectSettings.globalize_path(MapEditorSaveService.default_path(str(template.get("map_id", ""))))
+	template_info_label.text = "所选模板：%d×%d 格" % [int(design_size[0]), int(design_size[1])]
 
 
 func _on_blank_template_create_pressed() -> void:
@@ -227,9 +343,14 @@ func _on_blank_template_create_pressed() -> void:
 	var document_path := MapEditorSaveService.default_path(str(document.map_id))
 	var manifest_path := str(document.ground.get("workspace_manifest", ""))
 	if FileAccess.file_exists(document_path) or (not manifest_path.is_empty() and FileAccess.file_exists(manifest_path)):
-		status_label.text = "该地图工作区已经存在，请使用“重新打开工作文件”，空模板不会覆盖已有内容"
+		status_label.text = "该地图工作区已经存在，请点击“打开地图模板”"
 		return
 	_adopt_new_document(document, "已从空模板新建")
+	var saved := MapEditorSaveService.save_document(current_document)
+	if saved.get("ok", false):
+		status_label.text = "已从所选模板创建并保存地图：%s" % str(document.get("display_name", document.get("map_id", "")))
+	else:
+		status_label.text = "地图已创建但保存失败：%s" % saved.get("errors", [])
 
 
 func _create_map(map_id: String, map_type: String, runtime_map_id: int, display_name: String) -> void:
@@ -293,12 +414,18 @@ func _first_asset_tree_item() -> TreeItem:
 
 
 func _on_save_pressed() -> void:
+	if current_document.is_empty():
+		status_label.text = "保存失败：当前没有打开地图"
+		return
 	var result := MapEditorSaveService.save_document(current_document)
-	status_label.text = "保存成功：%s" % result.get("path", "") if result.get("ok", false) else "保存失败：%s" % result.get("errors", [])
+	status_label.text = "地图已保存：%s" % result.get("path", "") if result.get("ok", false) else "保存地图失败：%s" % result.get("errors", [])
 
 
 func _on_open_pressed() -> void:
-	_open_document_path(MapEditorSaveService.default_path(map_id_edit.text.strip_edges()))
+	if current_document.is_empty():
+		status_label.text = "当前没有可重新载入的地图"
+		return
+	_open_document_path(MapEditorSaveService.default_path(str(current_document.get("map_id", ""))))
 
 
 func _open_document_path(path: String) -> void:
@@ -317,7 +444,7 @@ func _open_document_path(path: String) -> void:
 		preview.set_document(current_document)
 		var initialized := MapEditorGroundService.initialize(current_document)
 		if initialized.ok: preview.set_ground_state(initialized.state)
-		status_label.text = "正式地图打开成功：%s" % path
+		status_label.text = "地图打开成功：%s" % path
 	else: status_label.text = "打开失败：%s" % result.get("errors", [])
 
 
@@ -426,25 +553,8 @@ func _on_asset_size_menu_pressed(action_id: int) -> void:
 	if str(asset.get("asset_type", "")) == "ground_brush":
 		status_label.text = "地面素材固定为 1×1 格，不能缩放"
 		return
-	var base_fp: Array = base.get("base_footprint_tiles", base.get("footprint_tiles", [1, 1]))
-	var current_fp: Array = asset.get("footprint_tiles", base_fp)
-	var level := int(asset.get("logical_scale_level", 0))
-	if action_id == 1: level += 1
-	elif action_id == 2: level -= 1
-	else: level = 0
-	var new_fp := [maxi(1, int(base_fp[0]) + level), maxi(1, int(base_fp[1]) + level)]
-	# Once both dimensions have reached one tile, further shrinking is a no-op.
-	level = maxi(level, 1 - mini(int(base_fp[0]), int(base_fp[1])))
-	new_fp = [maxi(1, int(base_fp[0]) + level), maxi(1, int(base_fp[1]) + level)]
-	var scale_ratio := minf(float(new_fp[0]) / float(base_fp[0]), float(new_fp[1]) / float(base_fp[1]))
-	var collision_fp: Array = asset.get("collision_footprint_tiles", [0, 0])
-	if int(collision_fp[0]) > 0 or int(collision_fp[1]) > 0:
-		collision_fp = new_fp.duplicate()
-	var draft := {
-		"footprint_tiles": new_fp, "visual_footprint_tiles": new_fp,
-		"occupancy_footprint_tiles": new_fp, "collision_footprint_tiles": collision_fp,
-		"approved_scale": scale_ratio, "logical_scale_level": level,
-	}
+	var draft := build_asset_resize_draft(asset, base, action_id)
+	var new_fp: Array = draft.get("footprint_tiles", [1, 1])
 	var result := MapAssetCalibrationService.save_override(asset_size_menu_asset_id, draft)
 	if result.get("ok", false):
 		MapAssetCatalogService.invalidate_cache()
@@ -454,6 +564,37 @@ func _on_asset_size_menu_pressed(action_id: int) -> void:
 		status_label.text = "素材占位已调整为 %d×%d 格" % [new_fp[0], new_fp[1]]
 	else:
 		status_label.text = "素材尺寸调整失败：%s" % result.get("errors", [])
+
+
+static func build_asset_resize_draft(asset: Dictionary, base: Dictionary, action_id: int) -> Dictionary:
+	var base_fp: Array = base.get("base_footprint_tiles", base.get("footprint_tiles", [1, 1]))
+	var current_fp: Array = asset.get("footprint_tiles", base_fp)
+	var inferred_level := int(current_fp[0]) - int(base_fp[0])
+	var level := int(asset.get("logical_scale_level", inferred_level))
+	if action_id == 1: level += 1
+	elif action_id == 2: level -= 1
+	else: level = 0
+	var new_fp := [maxi(1, int(base_fp[0]) + level), maxi(1, int(base_fp[1]) + level)]
+	# Once both dimensions have reached one tile, further shrinking is a no-op.
+	level = maxi(level, 1 - mini(int(base_fp[0]), int(base_fp[1])))
+	new_fp = [maxi(1, int(base_fp[0]) + level), maxi(1, int(base_fp[1]) + level)]
+	var current_scale := Vector2(float(asset.get("approved_scale", 1.0)), float(asset.get("approved_scale", 1.0)))
+	var next_scale := Vector2(float(base.get("approved_scale", 1.0)), float(base.get("approved_scale", 1.0))) if action_id == 3 \
+		else MapEditorInstanceService.resized_visual_scale(current_scale, current_fp, new_fp)
+	var collision_probe := {
+		"collision_policy": str(asset.get("collision_policy", "none")),
+		"collision_footprint_tiles": asset.get("collision_footprint_tiles", [0, 0]).duplicate(),
+	}
+	if action_id == 3:
+		collision_probe["collision_footprint_tiles"] = base.get("collision_footprint_tiles", [0, 0]).duplicate()
+	else:
+		MapEditorInstanceService._resize_instance_collision(collision_probe, current_fp, new_fp)
+	var collision_fp: Array = collision_probe.get("collision_footprint_tiles", [0, 0])
+	return {
+		"footprint_tiles": new_fp, "visual_footprint_tiles": new_fp,
+		"occupancy_footprint_tiles": new_fp, "collision_footprint_tiles": collision_fp,
+		"approved_scale": next_scale.x, "logical_scale_level": level,
+	}
 
 
 func _activate_asset_tree_item(item: TreeItem) -> void:
