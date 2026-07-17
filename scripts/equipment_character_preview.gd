@@ -5,8 +5,8 @@ const PAPER_DOLL_MANIFEST := "res://assets/data/warrior_paper_doll_sources.json"
 const PAPER_LAYER_SLOTS := ["衣服", "武器", "头盔"]
 const ORIGINAL_CANVAS_SIZE := Vector2(168.0, 199.0)
 const PREVIEW_SCALE := 1.22
-const FOOT_RING_CENTER := Vector2(84.0, 174.0)
-const FOOT_RING_RADIUS := 31.0
+const FOOT_STAGE_CENTER := Vector2(84.0, 186.0)
+const FOOT_STAGE_RADII := Vector2(52.0, 16.0)
 
 var _direction_row := 4
 var _paper_mappings: Dictionary = {}
@@ -73,11 +73,17 @@ func _draw() -> void:
 	# preview.  This uses the space below the character while preserving every
 	# original layer coordinate.
 	var origin := Vector2((size.x - scaled_canvas.x) * 0.5, size.y - scaled_canvas.y - 6.0)
-	# Draw the full ring first.  The decoded client anatomy and every equipment
-	# record then pass over it, so both feet naturally occlude its back edge.
-	var ring_center := origin + FOOT_RING_CENTER * PREVIEW_SCALE
-	draw_circle(ring_center, FOOT_RING_RADIUS * PREVIEW_SCALE, Color(0.035, 0.02, 0.012, 0.88))
-	draw_arc(ring_center, FOOT_RING_RADIUS * PREVIEW_SCALE, 0.0, TAU, 72, Color(0.58, 0.38, 0.18, 0.92), 2.0)
+	# A flattened stage sits under the character's feet. The previous circle
+	# read as a misplaced halo and did not match the paper-doll perspective.
+	var stage_center := origin + FOOT_STAGE_CENTER * PREVIEW_SCALE
+	var stage_radii := FOOT_STAGE_RADII * PREVIEW_SCALE
+	var shadow_points := _ellipse_points(stage_center + Vector2(0, 4), stage_radii + Vector2(5, 3))
+	draw_colored_polygon(shadow_points, Color(0.008, 0.005, 0.004, 0.72))
+	var stage_points := _ellipse_points(stage_center, stage_radii)
+	draw_colored_polygon(stage_points, Color(0.055, 0.032, 0.018, 0.92))
+	var back_rim := _ellipse_arc_points(stage_center, stage_radii, PI, TAU)
+	draw_polyline(back_rim, Color(0.13, 0.075, 0.035, 0.82), 3.0, true)
+	draw_polyline(back_rim, Color(0.50, 0.31, 0.14, 0.86), 1.0, true)
 
 	draw_texture_rect(_base_texture, Rect2(origin, scaled_canvas), false)
 	# Helmet records now have a clean alpha edge, so suppress the underlying
@@ -86,6 +92,30 @@ func _draw() -> void:
 		_draw_layer(_hair_layer, origin)
 	for layer: Dictionary in _paper_layers:
 		_draw_layer(layer, origin)
+	# The front rim is drawn after the paper doll so the figure stands inside
+	# the stage instead of placing both feet directly on a complete outline.
+	var front_rim := _ellipse_arc_points(stage_center, stage_radii, 0.0, PI)
+	draw_polyline(front_rim, Color(0.025, 0.012, 0.006, 0.98), 5.0, true)
+	draw_polyline(front_rim, Color(0.70, 0.43, 0.19, 0.96), 2.0, true)
+	var inner_front := _ellipse_arc_points(stage_center, stage_radii - Vector2(8, 4), 0.0, PI)
+	draw_polyline(inner_front, Color(0.24, 0.13, 0.055, 0.78), 1.0, true)
+
+
+func _ellipse_points(center: Vector2, radii: Vector2, segments := 64) -> PackedVector2Array:
+	var points := PackedVector2Array()
+	for index in range(segments):
+		var angle := TAU * float(index) / float(segments)
+		points.append(center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y))
+	return points
+
+
+func _ellipse_arc_points(center: Vector2, radii: Vector2, start_angle: float, end_angle: float, segments := 32) -> PackedVector2Array:
+	var points := PackedVector2Array()
+	for index in range(segments + 1):
+		var progress := float(index) / float(segments)
+		var angle := lerpf(start_angle, end_angle, progress)
+		points.append(center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y))
+	return points
 
 
 func _draw_layer(layer: Dictionary, origin: Vector2) -> void:

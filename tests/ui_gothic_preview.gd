@@ -285,6 +285,11 @@ func _round_action_frame_layer(parent: Control, rect: Rect2, layer_name := "Roun
 
 
 func _square_slot_frame_layer(parent: Control, rect: Rect2) -> TextureRect:
+	var fill_rect := _square_frame_content_rect(rect, 1.04)
+	var fill := _panel(parent, fill_rect, Color("0b0808f2"), Color.TRANSPARENT, 3, 0)
+	fill.name = "GothicSquareFrameFill"
+	fill.z_index = -1
+	fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return _texture_frame_layer(parent, GOTHIC_SLOT_FRAME, rect, "GothicSquareFrame")
 
 
@@ -490,7 +495,7 @@ func _apply_warrior_skill_toggle_style(button: Button, skill_name: String, enabl
 	button.add_theme_stylebox_override("hover", _style(Color("681d1738"), Color.TRANSPARENT, 0, 0))
 	button.add_theme_stylebox_override("pressed", _style(Color("8a201a50"), Color.TRANSPARENT, 0, 0))
 	button.add_theme_stylebox_override("hover_pressed", _style(Color("8a201a62"), Color.TRANSPARENT, 0, 0))
-	var frame := button.get_node_or_null("GothicSlotFrame") as NinePatchRect
+	var frame := button.get_node_or_null("GothicSquareFrame") as TextureRect
 	if frame != null:
 		frame.modulate = Color("fff3d7") if enabled else Color("9f9a92")
 	var name_label := button.get_node_or_null("SkillName") as Label
@@ -499,8 +504,11 @@ func _apply_warrior_skill_toggle_style(button: Button, skill_name: String, enabl
 		name_label.add_theme_color_override("font_color", GOLD_BRIGHT if enabled else Color("b5aa9a"))
 	var state_label := button.get_node_or_null("SkillState") as Label
 	if state_label != null:
-		state_label.text = "自动：%s" % ("开" if enabled else "关")
+		state_label.text = "开" if enabled else "关"
 		state_label.add_theme_color_override("font_color", RED_BRIGHT if enabled else MUTED)
+	var state_badge := button.get_node_or_null("SkillStateBadge") as ColorRect
+	if state_badge != null:
+		state_badge.color = Color("721a16e8") if enabled else Color("171312e8")
 
 
 func _on_warrior_skill_toggled(enabled: bool, button: Button, skill_name: String) -> void:
@@ -520,20 +528,29 @@ func _warrior_skill_toggle(parent: Node, skill_name: String, rect: Rect2, enable
 	button.set_meta("skill_name", skill_name)
 	button.set_meta("control_mode", "toggle_auto_use")
 	button.set_meta("opaque_cell", true)
-	button.set_meta("icon_frame_policy", "generated_frame_with_runtime_skill_texture")
+	button.set_meta("icon_frame_policy", "square_frame_with_runtime_skill_texture")
+	button.set_meta("frame_role", "square_skill_toggle")
 	parent.add_child(button)
-	_gothic_slot_frame_layer(button, Rect2(Vector2.ZERO, rect.size))
-	var icon_frame_size := minf(rect.size.y, 58.0)
-	var icon_frame_rect := Rect2(1, (rect.size.y - icon_frame_size) * 0.5, icon_frame_size, icon_frame_size)
-	_round_action_frame_layer(button, icon_frame_rect, "SkillIconFrame")
-	var icon_rect := _round_frame_content_rect(icon_frame_rect, 0.94)
+	var frame_size := minf(rect.size.y, 72.0)
+	var frame_rect := Rect2((rect.size.x - frame_size) * 0.5, 0, frame_size, frame_size)
+	_square_slot_frame_layer(button, frame_rect)
+	button.set_meta("frame_rect", frame_rect)
+	var icon_rect := _square_frame_content_rect(frame_rect, 0.96)
 	_button_icon_layer(button, _skill_icon_texture(skill_name), icon_rect)
 	button.set_meta("icon_content_rect", icon_rect)
-	var text_x := icon_frame_size + 1.0
-	var name_label := _label(button, skill_name, Rect2(text_x, 5, rect.size.x - text_x - 4, 24), 12, GOLD_BRIGHT, HORIZONTAL_ALIGNMENT_CENTER)
+	var name_label := _label(button, skill_name, Rect2(0, frame_size - 21, rect.size.x, 20), 10, GOLD_BRIGHT, HORIZONTAL_ALIGNMENT_CENTER)
 	name_label.name = "SkillName"
-	var state_label := _label(button, "自动：%s" % ("开" if enabled else "关"), Rect2(text_x, 29, rect.size.x - text_x - 4, 20), 10, RED_BRIGHT if enabled else MUTED, HORIZONTAL_ALIGNMENT_CENTER)
+	name_label.z_index = 10
+	var state_badge := ColorRect.new()
+	state_badge.name = "SkillStateBadge"
+	state_badge.position = Vector2(rect.size.x - 28, 4)
+	state_badge.size = Vector2(22, 18)
+	state_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	state_badge.z_index = 8
+	button.add_child(state_badge)
+	var state_label := _label(button, "开" if enabled else "关", Rect2(rect.size.x - 28, 3, 22, 18), 10, RED_BRIGHT if enabled else MUTED, HORIZONTAL_ALIGNMENT_CENTER)
 	state_label.name = "SkillState"
+	state_label.z_index = 10
 	_apply_warrior_skill_toggle_style(button, skill_name, enabled)
 	button.toggled.connect(_on_warrior_skill_toggled.bind(button, skill_name))
 	return button
@@ -596,10 +613,10 @@ func _build_profession_skill_deck(parent: Node, profession: String) -> void:
 	selection_group.allow_unpress = false
 	var deck_control := parent as Control
 	var compact := deck_control.size.y <= 84.0
-	var button_width := 128.0 if compact else 138.0
-	var button_height := 52.0 if compact else 58.0
+	var button_width := 92.0 if profession == "战士" else (128.0 if compact else 138.0)
+	var button_height := 72.0 if profession == "战士" else (52.0 if compact else 58.0)
 	var column_stride := button_width + 8.0
-	var first_row_y := 26.0 if compact else 30.0
+	var first_row_y := 18.0 if profession == "战士" else (26.0 if compact else 30.0)
 	for index in range(entries.size()):
 		var row := int(index / 4)
 		var column := index % 4
@@ -663,8 +680,10 @@ func _combat_action_button(parent: Node, profession: String, rect: Rect2) -> But
 	button.add_theme_stylebox_override("pressed", _style(Color("a0261e58"), Color.TRANSPARENT, 0, 0))
 	button.set_meta("combat_action", "basic_attack" if profession == "战士" else "cast_selected_skill")
 	button.set_meta("caption", caption)
+	button.set_meta("frame_role", "round_combat_action")
 	parent.add_child(button)
 	var frame_rect := Rect2(Vector2.ZERO, rect.size)
+	button.set_meta("frame_rect", frame_rect)
 	_round_action_frame_layer(button, frame_rect)
 	var icon_rect := _round_frame_content_rect(frame_rect, 0.88)
 	_button_icon_layer(button, load("%s/function_attack.png" % HUD_RUNTIME_ICON_ROOT), icon_rect)
@@ -725,8 +744,11 @@ func _quick_skill_button(parent: Node, slot_index: int, skill_name: String, rect
 	button.set_meta("long_press_seconds", 0.55)
 	button.set_meta("opaque_cell", true)
 	button.set_meta("icon_frame_policy", "generated_frame_with_replaceable_runtime_icon")
+	button.set_meta("frame_role", "round_quick_skill")
 	parent.add_child(button)
-	_round_action_frame_layer(button, Rect2(Vector2.ZERO, rect.size))
+	var frame_rect := Rect2(Vector2.ZERO, rect.size)
+	button.set_meta("frame_rect", frame_rect)
+	_round_action_frame_layer(button, frame_rect)
 	_set_quick_skill_content(button, skill_name)
 	var slot_label := _label(button, str(slot_index + 1), Rect2(5, 1, 15, 14), 8, GOLD, HORIZONTAL_ALIGNMENT_LEFT)
 	slot_label.z_index = 10
@@ -781,8 +803,10 @@ func _combat_item_slot(parent: Node, rect: Rect2, slot_index: int, item_name: St
 	slot.set_meta("long_press_seconds", 0.55)
 	slot.set_meta("opaque_cell", true)
 	slot.set_meta("slot_frame_source", GOTHIC_SLOT_FRAME)
+	slot.set_meta("frame_role", "square_item_slot")
 	parent.add_child(slot)
 	var frame_rect := Rect2(Vector2.ZERO, rect.size)
+	slot.set_meta("frame_rect", frame_rect)
 	_square_slot_frame_layer(slot, frame_rect)
 	var content_rect := _square_frame_content_rect(frame_rect, 0.90)
 	slot.set_meta("icon_content_rect", content_rect)
@@ -886,7 +910,7 @@ func _build_hud_preview() -> void:
 	_resource_orb(self, _chassis_orb_rect(chassis_rect, "healthHole"), true, 936, 1200)
 	_resource_orb(self, _chassis_orb_rect(chassis_rect, "manaHole"), false, 248, 400)
 	if _profession_uses_skill_toggles("战士"):
-		var skill_deck := _transparent_panel(self, Rect2(356, 510, 488, 90), Color.TRANSPARENT, 0, 0)
+		var skill_deck := _transparent_panel(self, Rect2(356, 506, 488, 94), Color.TRANSPARENT, 0, 0)
 		skill_deck.set_meta("control_mode", "profession_skill_deck")
 		skill_deck.set_meta("container_policy", "fully_transparent")
 		_label(skill_deck, "◆  战士技能 · 自动开关  ◆", Rect2(12, 1, 464, 22), 11, MUTED, HORIZONTAL_ALIGNMENT_CENTER)
@@ -909,14 +933,14 @@ func _build_hud_preview() -> void:
 	var item_start_x := (item_deck.size.x - items_width) * 0.5
 	for index in range(4):
 		_combat_item_slot(item_deck, Rect2(item_start_x + index * (item_size + item_gap), 20, item_size, item_size), index, item_names[index], item_paths[index], item_amounts[index])
-	_quick_skill_button(self, 0, "野蛮", Rect2(1068, 492, 72, 72), true, "战士")
-	_quick_skill_button(self, 1, "", Rect2(1014, 574, 72, 72), false, "战士")
-	_quick_skill_button(self, 2, "", Rect2(1068, 648, 72, 72), false, "战士")
+	_quick_skill_button(self, 0, "野蛮", Rect2(1068, 488, 76, 76), true, "战士")
+	_quick_skill_button(self, 1, "", Rect2(1008, 568, 76, 76), false, "战士")
+	_quick_skill_button(self, 2, "", Rect2(1068, 636, 76, 76), false, "战士")
 	var switch_target_button := _button(self, "切换敌人", Rect2(1162, 532, 98, 46), false)
 	switch_target_button.add_theme_font_size_override("font_size", 12)
 	switch_target_button.set_meta("combat_control", "switch_target")
 	_assign_button_icon(switch_target_button, _function_icon_texture(6), 24)
-	_combat_action_button(self, "战士", Rect2(1162, 594, 98, 98))
+	_combat_action_button(self, "战士", Rect2(1160, 590, 100, 100))
 	_interaction_button(self, Rect2(1180, 466, 80, 54))
 
 

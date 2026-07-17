@@ -80,8 +80,9 @@ func _ready() -> void:
 	for node: Node in warrior_toggles:
 		assert(node is Button and str(node.get_meta("control_mode", "")) == "toggle_auto_use", "战士技能不是可交互自动开关")
 		assert(bool(node.get_meta("opaque_cell", false)), "技能格没有保持不透明")
-		assert(str(node.get_meta("icon_frame_policy", "")) == "generated_frame_with_runtime_skill_texture", "技能开关没有使用独立哥特图标框")
-		assert(node.get_node_or_null("GothicSlotFrame") != null and node.get_node_or_null("SkillIconFrame") != null and node.get_node_or_null("Icon") != null, "技能开关的外框、图标框或动态图标层缺失")
+		assert(str(node.get_meta("icon_frame_policy", "")) == "square_frame_with_runtime_skill_texture", "技能开关没有使用独立方形哥特图标框")
+		assert(str(node.get_meta("frame_role", "")) == "square_skill_toggle", "技能开关没有声明方形技能框角色")
+		assert(node.get_node_or_null("GothicSquareFrame") != null and node.get_node_or_null("GothicSquareFrameFill") != null and node.get_node_or_null("Icon") != null, "技能开关的方形外框、底色或动态图标层缺失")
 		assert(_named_child_count(node, "Icon") == 1, "技能开关出现重复图标层")
 		var toggle_icon := node.get_node("Icon") as Control
 		assert(toggle_icon.size.x >= 24.0 and toggle_icon.size.y >= 24.0, "技能开关图标过小不可辨认")
@@ -128,7 +129,7 @@ func _ready() -> void:
 	var old_toggle_state := first_toggle.button_pressed
 	first_toggle.button_pressed = not old_toggle_state
 	var first_toggle_state := first_toggle.get_node_or_null("SkillState") as Label
-	assert(first_toggle.button_pressed != old_toggle_state and first_toggle_state != null and ("自动：开" in first_toggle_state.text or "自动：关" in first_toggle_state.text), "战士技能无法点击切换开关")
+	assert(first_toggle.button_pressed != old_toggle_state and first_toggle_state != null and first_toggle_state.text in ["开", "关"], "战士技能无法点击切换开关")
 	var found_attack := false
 	var found_auto_lock := false
 	var found_switch_target := false

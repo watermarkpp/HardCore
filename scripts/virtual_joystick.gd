@@ -5,6 +5,7 @@ signal vector_changed(value: Vector2)
 
 var radius := 72.0
 var knob_radius := 30.0
+var external_frame := false
 var _pointer_id := -1
 var _value := Vector2.ZERO
 
@@ -50,6 +51,16 @@ func _update_value(local_position: Vector2) -> void:
 
 func _draw() -> void:
 	var center := size * 0.5
-	draw_circle(center, radius, Color(0.08, 0.06, 0.05, 0.46))
-	draw_circle(center, radius - 4.0, Color(0.55, 0.45, 0.32, 0.18), false, 3.0)
-	draw_circle(center + _value * radius * 0.72, knob_radius, Color(0.72, 0.57, 0.34, 0.65))
+	if not external_frame:
+		draw_circle(center, radius, Color(0.025, 0.018, 0.016, 0.62))
+		draw_circle(center, radius - 3.0, Color(0.38, 0.27, 0.17, 0.36), false, 3.0)
+		draw_circle(center, radius - 10.0, Color(0.72, 0.54, 0.31, 0.25), false, 2.0)
+		for direction: Vector2 in [Vector2.UP, Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT]:
+			var tip: Vector2 = center + direction * (radius - 7.0)
+			var side: Vector2 = direction.orthogonal() * 6.0
+			draw_colored_polygon(PackedVector2Array([tip, center + direction * (radius - 18.0) + side, center + direction * (radius - 18.0) - side]), Color(0.72, 0.53, 0.30, 0.74))
+	var knob_center := center + _value * radius * 0.72
+	draw_circle(knob_center, knob_radius + 3.0, Color(0.06, 0.035, 0.025, 0.92))
+	draw_circle(knob_center, knob_radius, Color(0.59, 0.40, 0.21, 0.84))
+	draw_circle(knob_center, knob_radius - 6.0, Color(0.20, 0.11, 0.065, 0.92))
+	draw_arc(knob_center, knob_radius - 2.0, 0.0, TAU, 32, Color(0.88, 0.68, 0.40, 0.72), 2.0, true)

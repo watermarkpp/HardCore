@@ -1,0 +1,34 @@
+{
+  "contractId": "ui.shop.sell.v1",
+  "status": "awaiting_integration",
+  "owner": "ui-art",
+  "pricingPolicy": "UI never calculates sell prices; gameplay returns quotes",
+  "quoteRequestSignal": {
+    "name": "sell_quotes_requested",
+    "itemFields": ["quote_key", "inventory_index", "instance_id", "item_name", "count"]
+  },
+  "quoteResponseMethod": {
+    "name": "set_sell_quotes",
+    "keyPolicy": "instance:<instance_id> for instances; inventory:<index> for stacks",
+    "quoteFields": [
+      "quote_id",
+      "sellable",
+      "unit_price",
+      "max_quantity",
+      "reason",
+      "requires_confirmation",
+      "risk_flags",
+      "warning"
+    ]
+  },
+  "sellRequestSignal": {
+    "name": "sell_requested",
+    "fields": ["quote_key", "quote_id", "inventory_index", "instance_id", "item_name", "amount"]
+  },
+  "sellResultMethod": {
+    "name": "apply_sell_result",
+    "fields": ["success", "message", "quotes"]
+  },
+  "riskFlags": ["high_value", "enhanced", "lucky", "special"],
+  "equipmentPolicy": "equipped items are excluded because the sell page reads inventory only"
+}
