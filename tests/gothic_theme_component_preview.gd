@@ -76,23 +76,23 @@ func _build_shop_sample() -> void:
 	_add_panel("ShopSampleFrame", Rect2(786, 210, 420, 444), "GothicInsetFrame")
 	_add_label("双格商品卡 / 列表", Rect2(816, 230, 360, 34), 20, Color("e8c88f"), HORIZONTAL_ALIGNMENT_CENTER)
 	for index in range(3):
-		var card := _add_button("", Rect2(816, 278 + index * 98, 360, 86), "GothicComponentShopCard")
+		var card := _add_button("", Rect2(816, 278 + index * 100, 360, 91), "GothicComponentShopCard")
 		var icon := ColorRect.new()
-		icon.position = Vector2(66, 16)
+		icon.position = Vector2(28, 21)
 		icon.size = Vector2(48, 48)
 		icon.color = [Color("7e2730"), Color("264d78"), Color("80632d")][index]
 		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		card.add_child(icon)
 		var name_label := Label.new()
-		name_label.position = Vector2(194, 13)
-		name_label.size = Vector2(145, 30)
+		name_label.position = Vector2(118, 17)
+		name_label.size = Vector2(218, 30)
 		name_label.text = ["金创药（中量）", "魔法药（中量）", "回城卷"][index]
 		name_label.add_theme_font_size_override("font_size", 16)
 		name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		card.add_child(name_label)
 		var price_label := Label.new()
-		price_label.position = Vector2(194, 43)
-		price_label.size = Vector2(145, 25)
+		price_label.position = Vector2(118, 49)
+		price_label.size = Vector2(218, 25)
 		price_label.text = ["300 金币", "350 金币", "1000 金币"][index]
 		price_label.add_theme_font_size_override("font_size", 13)
 		price_label.add_theme_color_override("font_color", Color("b99a67"))

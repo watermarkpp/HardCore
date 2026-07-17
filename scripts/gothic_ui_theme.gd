@@ -68,7 +68,8 @@ static func build() -> Theme:
 	_apply_texture_button_variation(result, "GothicComponentSelectedButton", COMPONENT_BUTTON_PRESSED, COMPONENT_BUTTON_PRESSED, COMPONENT_BUTTON_DISABLED, Vector4(48, 34, 48, 34), 18)
 	_apply_texture_button_variation(result, "GothicComponentTabButton", COMPONENT_TAB_FRAME, COMPONENT_BUTTON_PRESSED, COMPONENT_BUTTON_DISABLED, Vector4(82, 44, 82, 44), 18)
 	_apply_texture_button_variation(result, "GothicComponentSlotButton", COMPONENT_ITEM_SLOT, COMPONENT_ITEM_SLOT, COMPONENT_BUTTON_DISABLED, Vector4(48, 54, 48, 46), 12)
-	_apply_texture_button_variation(result, "GothicComponentShopCard", COMPONENT_SHOP_CARD, COMPONENT_SHOP_CARD, COMPONENT_BUTTON_DISABLED, Vector4(58, 54, 58, 50), 16)
+	# Shop cards have a fixed icon/text split and scale as one cohesive asset.
+	_apply_texture_button_variation(result, "GothicComponentShopCard", COMPONENT_SHOP_CARD, COMPONENT_SHOP_CARD, COMPONENT_BUTTON_DISABLED, Vector4.ZERO, 12)
 	# Circular controls keep their source aspect and are never nine-slice stretched.
 	_apply_texture_button_variation(result, "GothicComponentCloseButton", COMPONENT_CLOSE_RING, COMPONENT_CLOSE_RING, COMPONENT_BUTTON_DISABLED, Vector4.ZERO, 8)
 	return result

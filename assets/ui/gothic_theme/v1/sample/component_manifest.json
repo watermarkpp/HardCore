@@ -19,7 +19,16 @@
     {"id": "ui.theme.gothic.v1.button.pressed", "file": "button_pressed.png", "size": [273, 102], "patchMargins": [48, 34, 48, 34]},
     {"id": "ui.theme.gothic.v1.button.disabled", "file": "button_disabled.png", "size": [271, 101], "patchMargins": [48, 34, 48, 34]},
     {"id": "ui.theme.gothic.v1.item_slot", "file": "item_slot.png", "size": [165, 192], "patchMargins": [48, 54, 48, 46]},
-    {"id": "ui.theme.gothic.v1.shop_card", "file": "shop_card.png", "size": [281, 190], "patchMargins": [58, 54, 58, 50]},
+    {
+      "id": "ui.theme.gothic.v1.shop_card",
+      "file": "shop_card.png",
+      "size": [640, 161],
+      "patchMargins": [0, 0, 0, 0],
+      "stretchPolicy": "fixed-aspect",
+      "layout": "single cohesive card; left icon well 26%; right information field 74%",
+      "iconSafeRectNormalized": [0.025, 0.16, 0.22, 0.68],
+      "informationSafeRectNormalized": [0.29, 0.16, 0.66, 0.68]
+    },
     {"id": "ui.theme.gothic.v1.close_ring", "file": "close_ring.png", "size": [201, 209], "patchMargins": [0, 0, 0, 0], "stretchPolicy": "fixed-aspect"}
   ]
 }
