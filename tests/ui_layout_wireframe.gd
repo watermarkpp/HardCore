@@ -124,7 +124,7 @@ func _build_inventory() -> void:
 	var panel := _modal_shell("InventoryPanel", "人物与背包", "属性、装备与物品在一个横屏页面完成", Rect2(30, 40, 1220, 650))
 	_add_panel(panel, "AttributeSection", Rect2(20, 78, 280, 548), "人物属性", COLOR_SECTION)
 	_add_panel(panel, "CharacterSection", Rect2(312, 78, 356, 548), "人物穿戴预览", COLOR_SECTION)
-	_add_panel(panel, "BagSection", Rect2(680, 78, 520, 548), "综合背包 40 格", COLOR_SECTION)
+	_add_panel(panel, "BagSection", Rect2(680, 78, 520, 548), "综合背包 100 格 / 首屏 40 格", COLOR_SECTION)
 	_add_panel(panel, "Stats", Rect2(38, 138, 244, 210), "生命 / 魔法\n攻击 / 防御\n准确 / 敏捷\n负重 / 幸运", Color("414b58"))
 	_add_panel(panel, "ItemDetail", Rect2(38, 366, 244, 238), "选中物品详情\n属性比较\n穿戴要求", Color("414b58"))
 	_add_panel(panel, "PaperDoll", Rect2(386, 142, 208, 304), "人物纸娃娃", Color("414b58"))

@@ -8,9 +8,10 @@ const GothicUIThemeScript = preload("res://scripts/gothic_ui_theme.gd")
 signal closed
 
 const PANEL_SIZE := Vector2(1220, 660)
-const BAG_COLUMNS := 5
-const BAG_CAPACITY := 40
-const BAG_CELL_SIZE := Vector2(86, 86)
+const BAG_COLUMNS := 8
+const BAG_VISIBLE_CAPACITY := 40
+const BAG_CAPACITY := 100
+const BAG_CELL_SIZE := Vector2(56, 64)
 const LONG_PRESS_SECONDS := 0.48
 
 var item_grid: GridContainer
@@ -149,21 +150,22 @@ func _build_equipment_panel() -> void:
 	panel.add_child(character_preview)
 
 	var positions := {
-		"头盔": Vector2(153, 48), "项链": Vector2(296, 70),
-		"武器": Vector2(10, 128), "衣服": Vector2(296, 128),
-		"左手镯": Vector2(10, 260), "右手镯": Vector2(296, 260),
-		"左戒指": Vector2(10, 392), "右戒指": Vector2(296, 392),
+		"头盔": Vector2(153, 48), "项链": Vector2(296, 55),
+		"武器": Vector2(10, 104), "衣服": Vector2(296, 158),
+		"左手镯": Vector2(10, 238), "右手镯": Vector2(296, 238),
+		"左戒指": Vector2(10, 324), "右戒指": Vector2(296, 324),
 	}
 	for slot: String in PlayerState.EQUIPMENT_SLOTS:
 		_create_equipment_slot(panel, slot, positions.get(slot, Vector2.ZERO))
-	var instruction := Label.new()
-	instruction.text = "点击装备查看属性\n按住装备可卸下"
-	instruction.position = Vector2(106, 488)
-	instruction.size = Vector2(178, 58)
-	instruction.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	instruction.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	instruction.theme_type_variation = "GothicMutedLabel"
-	panel.add_child(instruction)
+	# Reserved for a future medal / belt / boots row. Keeping this anchor empty
+	# avoids another paper-doll re-layout when those stable equipment slots land.
+	var future_row := Control.new()
+	future_row.name = "FutureEquipmentRow"
+	future_row.position = Vector2(12, 440)
+	future_row.size = Vector2(366, 106)
+	future_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	future_row.set_meta("reserved_slots", ["勋章", "腰带", "鞋子"])
+	panel.add_child(future_row)
 
 	equipment_label = Label.new()
 	equipment_label.visible = false
@@ -194,17 +196,26 @@ func _build_bag_panel() -> void:
 	panel.add_child(bag_summary_label)
 	var scroll := ScrollContainer.new()
 	scroll.name = "InventoryScroll"
-	scroll.position = Vector2(14, 50)
-	scroll.size = Vector2(464, 496)
+	scroll.position = Vector2(10, 50)
+	scroll.size = Vector2(472, 340)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	panel.add_child(scroll)
 	item_grid = GridContainer.new()
 	item_grid.name = "ItemGrid"
 	item_grid.columns = BAG_COLUMNS
 	item_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	item_grid.add_theme_constant_override("h_separation", 6)
-	item_grid.add_theme_constant_override("v_separation", 5)
+	item_grid.add_theme_constant_override("h_separation", 1)
+	item_grid.add_theme_constant_override("v_separation", 4)
 	scroll.add_child(item_grid)
+	var paging_hint := Label.new()
+	paging_hint.name = "BagPagingHint"
+	paging_hint.text = "首屏 1–%d 格　·　拖动右侧滚条查看 %d–%d 格" % [BAG_VISIBLE_CAPACITY, BAG_VISIBLE_CAPACITY + 1, BAG_CAPACITY]
+	paging_hint.position = Vector2(18, 402)
+	paging_hint.size = Vector2(456, 28)
+	paging_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	paging_hint.theme_type_variation = "GothicMutedLabel"
+	panel.add_child(paging_hint)
 
 
 func _build_context_menu() -> void:
@@ -335,11 +346,11 @@ func _create_bag_cell(index: int, stack: Dictionary) -> Control:
 		var count_label := Label.new()
 		count_label.name = "StackCount"
 		count_label.text = str(count)
-		count_label.position = Vector2(48, 57)
-		count_label.size = Vector2(32, 23)
+		count_label.position = Vector2(BAG_CELL_SIZE.x - 34, BAG_CELL_SIZE.y - 23)
+		count_label.size = Vector2(30, 20)
 		count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		count_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		count_label.add_theme_font_size_override("font_size", 16)
+		count_label.add_theme_font_size_override("font_size", 14)
 		count_label.add_theme_color_override("font_color", Color.WHITE)
 		count_label.add_theme_color_override("font_shadow_color", Color.BLACK)
 		count_label.add_theme_constant_override("shadow_offset_x", 2)
@@ -349,10 +360,10 @@ func _create_bag_cell(index: int, stack: Dictionary) -> Control:
 		var durability_label := Label.new()
 		durability_label.name = "Durability"
 		durability_label.text = "%d/%d" % [int(stack.get("durability", 0)), int(stack.get("max_durability", 1))]
-		durability_label.position = Vector2(3, 62)
-		durability_label.size = Vector2(55, 20)
+		durability_label.position = Vector2(3, BAG_CELL_SIZE.y - 19)
+		durability_label.size = Vector2(BAG_CELL_SIZE.x - 6, 16)
 		durability_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		durability_label.add_theme_font_size_override("font_size", 11)
+		durability_label.add_theme_font_size_override("font_size", 10)
 		durability_label.add_theme_color_override("font_color", Color(0.96, 0.83, 0.52))
 		cell.add_child(durability_label)
 	return cell
@@ -678,11 +689,9 @@ func _set_button_texture(button: Button, texture: Texture2D) -> void:
 	var source_size := texture.get_size()
 	if source_size.x <= 0.0 or source_size.y <= 0.0:
 		return
-	# The original client inventory art is pixel-based. Keep it at an integer
-	# scale and center it against the slot's actual visible rectangle.
-	var safe_size := Vector2(maxf(1.0, button.size.x - 4.0), maxf(1.0, button.size.y - 4.0))
-	var integer_scale := maxi(1, int(floor(minf(safe_size.x / source_size.x, safe_size.y / source_size.y))))
-	var display_size := source_size * integer_scale
+	# The original client inventory art stays at its native 1:1 pixel size.
+	# Only its position changes; scaling it to fill the slot makes it look soft.
+	var display_size := source_size
 	var icon_rect := TextureRect.new()
 	icon_rect.name = "CenteredPixelIcon"
 	icon_rect.texture = texture
