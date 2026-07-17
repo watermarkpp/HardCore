@@ -6,6 +6,8 @@ const MapCoordinateMapperScript := preload("res://scripts/map_coordinate_mapper.
 const GothicBichCampBuilderScript := preload("res://scripts/layers/presentation/gothic_bich_camp_builder.gd")
 const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const DEFAULT_NORMAL_RESPAWN_SECONDS := 180.0
+const DEFAULT_BOSS_RESPAWN_SECONDS := 3600.0
 
 var player: PlayerCharacter
 var hud: GameHUD
@@ -25,6 +27,7 @@ var _system_menu_panel: Control
 var _movement_target_refresh_remaining := 0.0
 var _bich_camp_layout: Dictionary = {}
 var _active_safe_zones: Array = []
+var _runtime_spawn_serial := 0
 
 
 func _ready() -> void:
@@ -94,6 +97,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _process(delta: float) -> void:
 	background.set_focus_position(player.global_position)
 	_enforce_bich_safe_zone()
+	_update_boss_world_mechanics(delta)
 	PlayerState.update_world_location(current_map_id, player.global_position)
 	_validate_locked_target()
 	_update_target_hud()
@@ -400,7 +404,23 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 			var center:Vector2=spawn.get("position",Vector2.ZERO);var radius:=float(spawn.get("radius_tiles",0))*20.0
 			for copy_index in maxi(1,count):
 				var offset:=Vector2.ZERO if count<=1 else Vector2.from_angle(float(copy_index)*TAU/float(count))*minf(radius,32.0+float(copy_index)*12.0)
-				_spawn_enemy(monster, center+offset, false, float(spawn.get("respawn_seconds", 60)))
+				var raw_group: Dictionary = spawn.get("spawn_group", {})
+				var group_id := str(spawn.get(
+					"spawnGroupId",
+					raw_group.get("id", "editor:%d:%d" % [current_map_id, int(content.get("spawns", []).find(spawn))])
+				))
+				_spawn_enemy(
+					monster,
+					center + offset,
+					false,
+					float(spawn.get("respawn_seconds", 60)),
+					{
+						"spawn_group_id": group_id,
+						"spawn_slot_id": "%s:%d" % [group_id, copy_index],
+						"respawn_evidence": spawn.get("respawnEvidence", {"status": "map_editor_authored"}),
+						"respawn_random_seconds": float(spawn.get("respawn_random_seconds", 0.0)),
+					}
+				)
 	for npc_data: Dictionary in content.get("npcs", []):
 		var role := str(npc_data.get("kind", "dialogue"))
 		var name := str(npc_data.get("name", "NPC"))
@@ -421,7 +441,9 @@ func _spawn_authored_map_content(content: Dictionary) -> void:
 	for spawn: Variant in content.get("spawns", []):
 		if not spawn is Dictionary:
 			continue
-		var monster := GameData.get_monster(str(spawn.get("name", "")))
+		var monster := GameData.get_monster_by_id(int(spawn.get("monsterId", -1)))
+		if monster.is_empty():
+			monster = GameData.get_monster(str(spawn.get("name", "")))
 		if not monster.is_empty():
 			if spawn.has("display_name"):
 				monster = monster.duplicate(true)
@@ -434,15 +456,49 @@ func _spawn_authored_map_content(content: Dictionary) -> void:
 				for copy_index in range(copies):
 					var angle := float(spawn_index * copies + copy_index) * TAU / float(maxi(1, content.get("spawns", []).size() * copies))
 					var radius := float(radii[copy_index % radii.size()])
-					_spawn_enemy(monster, camp_home + Vector2.RIGHT.rotated(angle) * radius, false)
+					var group_id := str(spawn.get("spawnGroupId", "map:%d:spawn:%d" % [current_map_id, spawn_index]))
+					_spawn_enemy(
+						monster,
+						camp_home + Vector2.RIGHT.rotated(angle) * radius,
+						false,
+						float(spawn.get("respawn_seconds", DEFAULT_NORMAL_RESPAWN_SECONDS)),
+						{
+							"spawn_group_id": group_id,
+							"spawn_slot_id": "%s:%d" % [group_id, copy_index],
+							"respawn_evidence": spawn.get("respawnEvidence", {}),
+							"respawn_random_seconds": float(spawn.get("respawn_random_seconds", 0.0)),
+						}
+					)
 				continue
-			_spawn_enemy(monster, spawn_position, false)
+			_spawn_enemy(
+				monster,
+				spawn_position,
+				false,
+				float(spawn.get("respawn_seconds", DEFAULT_NORMAL_RESPAWN_SECONDS)),
+				{
+					"spawn_group_id": str(spawn.get("spawnGroupId", "")),
+					"respawn_evidence": spawn.get("respawnEvidence", {}),
+					"respawn_random_seconds": float(spawn.get("respawn_random_seconds", 0.0)),
+				}
+			)
 	for boss_spawn: Variant in content.get("bosses", []):
 		if not boss_spawn is Dictionary:
 			continue
-		var boss := GameData.get_monster(str(boss_spawn.get("name", "")))
+		var boss := GameData.get_monster_by_id(int(boss_spawn.get("monsterId", -1)))
+		if boss.is_empty():
+			boss = GameData.get_monster(str(boss_spawn.get("name", "")))
 		if not boss.is_empty():
-			_spawn_enemy(boss, boss_spawn.get("position", Vector2(560, 230)), true, float(boss_spawn.get("respawn_seconds", 3600.0)))
+			_spawn_enemy(
+				boss,
+				boss_spawn.get("position", Vector2(560, 230)),
+				true,
+				float(boss_spawn.get("respawn_seconds", DEFAULT_BOSS_RESPAWN_SECONDS)),
+				{
+					"spawn_group_id": str(boss_spawn.get("spawnGroupId", "")),
+					"respawn_evidence": boss_spawn.get("respawnEvidence", {}),
+					"respawn_random_seconds": float(boss_spawn.get("respawn_random_seconds", 0.0)),
+				}
+			)
 	for npc_data: Variant in content.get("npcs", []):
 		if not npc_data is Dictionary:
 			continue
@@ -584,20 +640,46 @@ func _spawn_map_portal(position: Vector2, target_map_id: int, label_text: String
 	add_child(portal)
 
 
-func _spawn_enemy(monster_data: Dictionary, spawn_position: Vector2, is_boss: bool, respawn_seconds := -1.0) -> void:
+func _spawn_enemy(
+	monster_data: Dictionary,
+	spawn_position: Vector2,
+	is_boss: bool,
+	respawn_seconds := -1.0,
+	spawn_context: Dictionary = {}
+) -> EnemyActor:
+	_runtime_spawn_serial += 1
+	var context := spawn_context.duplicate(true)
+	var slot_id := str(context.get("spawn_slot_id", context.get("spawn_group_id", "")))
+	if slot_id.is_empty():
+		slot_id = "runtime:%d:%d" % [_zone_generation, _runtime_spawn_serial]
+	context["spawn_slot_id"] = slot_id
+	var effective_respawn := float(respawn_seconds)
+	if effective_respawn <= 0.0:
+		effective_respawn = DEFAULT_BOSS_RESPAWN_SECONDS if is_boss else DEFAULT_NORMAL_RESPAWN_SECONDS
+	context["respawn_base_seconds"] = effective_respawn
+	context["respawn_random_seconds"] = maxf(0.0, float(context.get("respawn_random_seconds", 0.0)))
 	var enemy := EnemyActor.new()
 	enemy.setup(monster_data, player, is_boss)
 	enemy.global_position = spawn_position
 	enemy.set_meta("spawn_position", spawn_position)
 	enemy.set_meta("spawn_is_boss", is_boss)
-	enemy.set_meta("respawn_seconds", respawn_seconds)
+	enemy.set_meta("respawn_seconds", effective_respawn)
+	enemy.set_meta("respawn_random_seconds", float(context["respawn_random_seconds"]))
+	enemy.set_meta("respawn_enabled", bool(context.get("respawn_enabled", true)))
+	enemy.set_meta("spawn_slot_id", slot_id)
+	enemy.set_meta("spawn_group_id", str(context.get("spawn_group_id", slot_id)))
+	enemy.set_meta("spawn_context", context)
+	enemy.set_meta("summoner_spawn_slot", str(context.get("summoner_spawn_slot", "")))
 	enemy.set_meta("zone_generation", _zone_generation)
 	enemy.set_meta("safe_zones", _active_safe_zones.duplicate(true))
 	enemy.environment_blocker = background
 	enemy.add_to_group("zone_content")
 	enemy.died.connect(_on_enemy_died)
 	enemy.target_requested.connect(_on_enemy_target_requested)
+	enemy.summon_requested.connect(_on_boss_summon_requested)
+	enemy.relocation_requested.connect(_on_boss_relocation_requested)
 	add_child(enemy)
+	return enemy
 
 
 func _request_mobile_attack() -> void:
@@ -647,6 +729,128 @@ func _on_enemy_target_requested(enemy: EnemyActor) -> void:
 	if TargetingSystem.is_valid_target(enemy, player.global_position):
 		_set_locked_target(enemy, not auto_target_enabled)
 		_face_locked_target()
+
+
+func _update_boss_world_mechanics(delta: float) -> void:
+	for value: Variant in get_tree().get_nodes_in_group("enemies"):
+		if not value is EnemyActor:
+			continue
+		var enemy := value as EnemyActor
+		if not enemy.is_boss or enemy.is_queued_for_deletion():
+			continue
+		var relocation: Dictionary = enemy.boss_rule.get("mechanics", {}).get("surroundedRelocation", {})
+		if not bool(relocation.get("enabled", false)):
+			continue
+		var remaining := float(enemy.get_meta("relocation_check_remaining", 0.0)) - delta
+		if remaining > 0.0:
+			enemy.set_meta("relocation_check_remaining", remaining)
+			continue
+		enemy.set_meta("relocation_check_remaining", maxf(0.25, float(relocation.get("checkSeconds", 10.0))))
+		enemy.request_surrounded_relocation(_blocking_neighbor_count(enemy))
+
+
+func _blocking_neighbor_count(enemy: EnemyActor) -> int:
+	var seen: Dictionary = {}
+	var count := 0
+	var blocking_radius := maxf(ArtSpec.TILE_SIZE * 1.65, enemy.collision_radius * 2.5)
+	var candidates: Array = get_tree().get_nodes_in_group("enemies") + get_tree().get_nodes_in_group("combat_targets")
+	candidates.append(player)
+	for value: Variant in candidates:
+		if not value is Node2D or value == enemy or not is_instance_valid(value):
+			continue
+		var node := value as Node2D
+		var instance_key := str(node.get_instance_id())
+		if seen.has(instance_key) or node.global_position.distance_to(enemy.global_position) > blocking_radius:
+			continue
+		seen[instance_key] = true
+		count += 1
+	return count
+
+
+func _on_boss_summon_requested(enemy: EnemyActor, monster_ids: Array, count: int, max_active: int) -> void:
+	if not is_instance_valid(enemy) or enemy.is_queued_for_deletion() or monster_ids.is_empty():
+		return
+	if int(enemy.get_meta("zone_generation", -1)) != _zone_generation:
+		return
+	var owner_slot := str(enemy.get_meta("spawn_slot_id", ""))
+	var active := 0
+	for value: Variant in get_tree().get_nodes_in_group("enemies"):
+		if value is EnemyActor and not value.is_queued_for_deletion():
+			if str(value.get_meta("summoner_spawn_slot", "")) == owner_slot:
+				active += 1
+	var allowed := mini(maxi(0, count), maxi(0, max_active - active))
+	for index in range(allowed):
+		var monster_id := int(monster_ids[index % monster_ids.size()])
+		var monster := GameData.get_monster_by_id(monster_id)
+		if monster.is_empty():
+			continue
+		var landing := _find_valid_enemy_landing(
+			enemy.global_position,
+			ArtSpec.TILE_SIZE * 1.5,
+			ArtSpec.TILE_SIZE * 6.0,
+			ArtSpec.MONSTER_COLLISION_RADIUS,
+			null
+		)
+		if landing == enemy.global_position:
+			continue
+		_spawn_enemy(
+			monster,
+			landing,
+			false,
+			DEFAULT_NORMAL_RESPAWN_SECONDS,
+			{
+				"spawn_group_id": "%s:summons" % owner_slot,
+				"respawn_enabled": false,
+				"summoner_spawn_slot": owner_slot,
+				"summon_monster_id": monster_id,
+			}
+		)
+
+
+func _on_boss_relocation_requested(enemy: EnemyActor, radius_cells: int) -> void:
+	if not is_instance_valid(enemy) or enemy.is_queued_for_deletion():
+		return
+	if int(enemy.get_meta("zone_generation", -1)) != _zone_generation:
+		return
+	var destination := _find_valid_enemy_landing(
+		enemy.global_position,
+		ArtSpec.TILE_SIZE * 1.5,
+		maxf(ArtSpec.TILE_SIZE * 1.5, float(radius_cells) * ArtSpec.TILE_SIZE),
+		enemy.collision_radius,
+		enemy
+	)
+	if destination == enemy.global_position:
+		return
+	enemy.global_position = destination
+	enemy.velocity = Vector2.ZERO
+
+
+func _find_valid_enemy_landing(
+	origin: Vector2,
+	minimum_distance: float,
+	maximum_distance: float,
+	radius: float,
+	ignored_enemy: EnemyActor
+) -> Vector2:
+	for _attempt in range(96):
+		var candidate := origin + Vector2.from_angle(_rng.randf_range(0.0, TAU)) * _rng.randf_range(minimum_distance, maximum_distance)
+		if WorldSpatialRulesScript.point_inside_safe_zones(candidate, _active_safe_zones):
+			continue
+		if WorldSpatialRulesScript.environment_blocks_actor(background, candidate, radius):
+			continue
+		if is_instance_valid(player) and player.global_position.distance_to(candidate) < radius + ArtSpec.PLAYER_COLLISION_RADIUS + 12.0:
+			continue
+		var occupied := false
+		for value: Variant in get_tree().get_nodes_in_group("enemies"):
+			if not value is EnemyActor or value == ignored_enemy or value.is_queued_for_deletion():
+				continue
+			var other := value as EnemyActor
+			if other.global_position.distance_to(candidate) < radius + other.collision_radius + 6.0:
+				occupied = true
+				break
+		if not occupied:
+			return candidate
+	return origin
 
 
 func _cycle_target() -> void:
@@ -1085,6 +1289,9 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 	var was_boss: bool = enemy.get_meta("spawn_is_boss", false)
 	var generation: int = enemy.get_meta("zone_generation", _zone_generation)
 	var configured_respawn := float(enemy.get_meta("respawn_seconds", -1.0))
+	var configured_random_respawn := float(enemy.get_meta("respawn_random_seconds", 0.0))
+	var respawn_enabled := bool(enemy.get_meta("respawn_enabled", true))
+	var spawn_context: Dictionary = enemy.get_meta("spawn_context", {}).duplicate(true)
 	var monster_id := int(monster_data.get("monsterId", 0))
 	PlayerState.record_kill(str(monster_data.get("name", "")))
 	PlayerState.add_experience(int(monster_data.get("exp", 0)))
@@ -1094,8 +1301,16 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 	if not bool(drop_roll.get("configured", false)) and _rng.randf() < 0.55:
 		var common_loot := ["金币", "金创药(小量)", "魔法药(小量)", "木剑"]
 		_spawn_loot(common_loot[_rng.randi_range(0, common_loot.size() - 1)], death_position)
-	var respawn_seconds := configured_respawn if configured_respawn > 0.0 else (18.0 if was_boss else 7.0)
-	_respawn_later(monster_data.duplicate(true), spawn_position, was_boss, respawn_seconds, generation)
+	if not respawn_enabled:
+		return
+	var respawn_seconds := configured_respawn if configured_respawn > 0.0 else (DEFAULT_BOSS_RESPAWN_SECONDS if was_boss else DEFAULT_NORMAL_RESPAWN_SECONDS)
+	var respawn_wait_seconds := respawn_seconds
+	if configured_random_respawn > 0.0:
+		respawn_wait_seconds = maxf(
+			60.0,
+			respawn_seconds - configured_random_respawn + _rng.randf_range(0.0, configured_random_respawn * 2.0)
+		)
+	_respawn_later(monster_data.duplicate(true), spawn_position, was_boss, respawn_wait_seconds, generation, spawn_context)
 
 
 func _spawn_loot(item_name: String, position: Vector2) -> void:
@@ -1196,7 +1411,32 @@ func _find_valid_random_teleport_position(origin: Vector2) -> Vector2:
 	return origin
 
 
-func _respawn_later(monster_data: Dictionary, spawn_position: Vector2, is_boss: bool, seconds: float, generation: int) -> void:
+func _respawn_later(
+	monster_data: Dictionary,
+	spawn_position: Vector2,
+	is_boss: bool,
+	seconds: float,
+	generation: int,
+	spawn_context: Dictionary = {}
+) -> void:
 	await get_tree().create_timer(seconds).timeout
-	if is_inside_tree() and generation == _zone_generation:
-		_spawn_enemy(monster_data, spawn_position, is_boss, seconds)
+	if not is_inside_tree() or generation != _zone_generation:
+		return
+	var slot_id := str(spawn_context.get("spawn_slot_id", ""))
+	if not slot_id.is_empty() and _spawn_slot_is_alive(slot_id, generation):
+		return
+	_spawn_enemy(
+		monster_data,
+		spawn_position,
+		is_boss,
+		float(spawn_context.get("respawn_base_seconds", seconds)),
+		spawn_context
+	)
+
+
+func _spawn_slot_is_alive(slot_id: String, generation: int) -> bool:
+	for value: Variant in get_tree().get_nodes_in_group("enemies"):
+		if value is EnemyActor and not value.is_queued_for_deletion():
+			if str(value.get_meta("spawn_slot_id", "")) == slot_id and int(value.get_meta("zone_generation", -1)) == generation:
+				return true
+	return false

@@ -2,7 +2,7 @@ extends Node
 
 const PATHS := {
 	"map": "res://assets/data/vanilla_176/map_content.json",
-	"spawn": "res://assets/data/vanilla_176/spawn_rules.json",
+	"spawn": "res://assets/data/runtime/region_spawn_runtime_catalog.json",
 	"npc": "res://assets/data/vanilla_176/npcs.json",
 	"connection": "res://assets/data/vanilla_176/map_connections.json",
 	"drops": "res://assets/data/vanilla_176/regional_drops.json",
