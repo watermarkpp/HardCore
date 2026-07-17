@@ -32,28 +32,44 @@ func _run() -> void:
 	assert(panel.get_node("BagSection/BagScroll").size.y == 340.0, "人物背包首屏没有显示 40 格")
 	assert(panel.get_node("StashSection/StashScroll").size.y == 340.0, "仓库首屏没有显示当前页前 40 格")
 	assert(panel.warehouse_page_label.text == "第 1/5 页", "仓库底部页码错误")
+	assert(panel.previous_page_button.position.y == panel.warehouse_page_label.position.y, "上一页按钮与页码没有在同一水平线上")
+	assert(panel.next_page_button.position.y == panel.warehouse_page_label.position.y, "下一页按钮与页码没有在同一水平线上")
+	assert(
+		panel.previous_page_button.size.y == panel.warehouse_page_label.size.y,
+		"上一页按钮与页码高度不一致：%s/%s" % [panel.previous_page_button.size.y, panel.warehouse_page_label.size.y]
+	)
+	assert(
+		panel.next_page_button.size.y == panel.warehouse_page_label.size.y,
+		"下一页按钮与页码高度不一致：%s/%s" % [panel.next_page_button.size.y, panel.warehouse_page_label.size.y]
+	)
+	assert(panel.previous_page_button.size.x >= 96.0 and panel.next_page_button.size.x >= 96.0, "翻页按钮宽度不足，九宫格图框会被裁切")
+	var page_group_center := (panel.previous_page_button.position.x + panel.next_page_button.position.x + panel.next_page_button.size.x) * 0.5
+	assert(is_equal_approx(page_group_center, 246.0), "翻页按钮和页码没有作为整体居中")
 	assert(panel.previous_page_button.disabled and not panel.next_page_button.disabled, "仓库第一页翻页按钮状态错误")
 	panel._change_warehouse_page(1)
 	assert(panel.warehouse_page == 1 and panel.warehouse_page_label.text == "第 2/5 页", "仓库无法切换到第二页")
 	assert(panel.stash_grid.get_child_count() == 100, "仓库第二页没有保持 100 格")
-	panel._change_warehouse_page(-1)
-	assert(panel.warehouse_page == 0 and panel.warehouse_page_label.text == "第 1/5 页", "仓库无法返回第一页")
 	assert(panel.deposit_button.disabled and panel.withdraw_button.disabled, "未选择物品时转移按钮不应启用")
 
 	var bag_count := PlayerState.inventory.size()
-	var stash_count := PlayerState.warehouse_inventory.size()
+	var stash_count := panel._warehouse_occupied_count()
+	var deposited_name := str(PlayerState.inventory[0].get("name", ""))
 	panel._select_item("bag", 0)
 	assert(not panel.deposit_button.disabled and panel.withdraw_button.disabled, "选择人物背包物品后存入按钮状态错误")
 	assert(panel.transfer_detail_label.text == str(PlayerState.inventory[0].get("name", "")), "中间转移栏没有显示选中物品")
 	panel._deposit()
 	assert(PlayerState.inventory.size() == bag_count - 1, "存入后人物背包数量错误")
-	assert(PlayerState.warehouse_inventory.size() == stash_count + 1, "存入后个人仓库数量错误")
+	assert(panel._warehouse_occupied_count() == stash_count + 1, "存入后个人仓库数量错误")
+	assert(panel.warehouse_page == 1, "存入物品后不应跳离当前选择的仓库页")
+	assert(str(panel._warehouse_record(100).get("name", "")) == deposited_name, "物品没有存入当前选择的仓库第二页")
+	assert(panel._warehouse_record(2).is_empty(), "存入第二页时不应占用第一页空格")
 
-	panel._select_item("stash", 0)
+	panel._select_item("stash", 100)
 	assert(panel.deposit_button.disabled and not panel.withdraw_button.disabled, "选择仓库物品后取出按钮状态错误")
 	panel._withdraw()
 	assert(PlayerState.inventory.size() == bag_count, "取出后人物背包数量错误")
-	assert(PlayerState.warehouse_inventory.size() == stash_count, "取出后个人仓库数量错误")
+	assert(panel._warehouse_occupied_count() == stash_count, "取出后个人仓库数量错误")
+	assert(panel._warehouse_record(100).is_empty(), "取出后当前页物品格没有清空")
 
 	var sort_requests := [0]
 	panel.warehouse_sort_requested.connect(func() -> void: sort_requests[0] += 1)

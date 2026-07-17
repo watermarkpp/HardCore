@@ -169,16 +169,16 @@ func _build_page_controls(parent: Panel) -> void:
 	previous_page_button = Button.new()
 	previous_page_button.name = "PreviousPageButton"
 	previous_page_button.text = "‹"
-	previous_page_button.position = Vector2(132, 438)
-	previous_page_button.size = Vector2(58, 46)
+	previous_page_button.position = Vector2(70, 430)
+	previous_page_button.size = Vector2(96, 70)
 	previous_page_button.theme_type_variation = "GothicComponentButton"
 	previous_page_button.add_theme_font_size_override("font_size", 24)
 	previous_page_button.pressed.connect(_change_warehouse_page.bind(-1))
 	parent.add_child(previous_page_button)
 	warehouse_page_label = Label.new()
 	warehouse_page_label.name = "WarehousePageLabel"
-	warehouse_page_label.position = Vector2(194, 438)
-	warehouse_page_label.size = Vector2(104, 46)
+	warehouse_page_label.position = Vector2(176, 430)
+	warehouse_page_label.size = Vector2(140, 70)
 	warehouse_page_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	warehouse_page_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	warehouse_page_label.theme_type_variation = "GothicSectionTitle"
@@ -186,8 +186,8 @@ func _build_page_controls(parent: Panel) -> void:
 	next_page_button = Button.new()
 	next_page_button.name = "NextPageButton"
 	next_page_button.text = "›"
-	next_page_button.position = Vector2(302, 438)
-	next_page_button.size = Vector2(58, 46)
+	next_page_button.position = Vector2(326, 430)
+	next_page_button.size = Vector2(96, 70)
 	next_page_button.theme_type_variation = "GothicComponentButton"
 	next_page_button.add_theme_font_size_override("font_size", 24)
 	next_page_button.pressed.connect(_change_warehouse_page.bind(1))
@@ -237,7 +237,7 @@ func refresh() -> void:
 		return
 	if selected_bag_index >= PlayerState.inventory.size():
 		selected_bag_index = -1
-	if selected_stash_index >= PlayerState.warehouse_inventory.size():
+	if _warehouse_record(selected_stash_index).is_empty():
 		selected_stash_index = -1
 	_fill_compatibility_list(bag_list, PlayerState.inventory, selected_bag_index)
 	_fill_compatibility_list(stash_list, PlayerState.warehouse_inventory, selected_stash_index)
@@ -252,11 +252,11 @@ func refresh() -> void:
 		selected_stash_index
 	)
 	bag_summary_label.text = "背包占用　%d/%d 格" % [PlayerState.inventory.size(), BAG_CAPACITY]
-	stash_summary_label.text = "仓库占用　%d/%d 格" % [PlayerState.warehouse_inventory.size(), WAREHOUSE_DISPLAY_CAPACITY]
+	stash_summary_label.text = "仓库占用　%d/%d 格" % [_warehouse_occupied_count(), WAREHOUSE_DISPLAY_CAPACITY]
 	warehouse_page_label.text = "第 %d/%d 页" % [warehouse_page + 1, WAREHOUSE_PAGE_COUNT]
 	previous_page_button.disabled = warehouse_page <= 0
 	next_page_button.disabled = warehouse_page >= WAREHOUSE_PAGE_COUNT - 1
-	deposit_button.disabled = selected_bag_index < 0 or PlayerState.warehouse_inventory.size() >= WAREHOUSE_DISPLAY_CAPACITY
+	deposit_button.disabled = selected_bag_index < 0 or _first_free_slot_on_current_page() < 0
 	withdraw_button.disabled = selected_stash_index < 0
 	_refresh_transfer_detail()
 
@@ -338,9 +338,9 @@ func _refresh_transfer_detail() -> void:
 	if selected_bag_index >= 0:
 		transfer_detail_label.text = str(PlayerState.inventory[selected_bag_index].get("name", "未知物品"))
 	elif selected_stash_index >= 0:
-		transfer_detail_label.text = str(PlayerState.warehouse_inventory[selected_stash_index].get("name", "未知物品"))
-	elif PlayerState.warehouse_inventory.size() >= WAREHOUSE_DISPLAY_CAPACITY:
-		transfer_detail_label.text = "仓库已满"
+		transfer_detail_label.text = str(_warehouse_record(selected_stash_index).get("name", "未知物品"))
+	elif _first_free_slot_on_current_page() < 0:
+		transfer_detail_label.text = "当前页已满"
 	else:
 		transfer_detail_label.text = "选择两侧物品"
 
@@ -354,18 +354,11 @@ func _fill_compatibility_list(list: ItemList, records: Array, selected_index: in
 
 
 func _deposit() -> void:
-	if (
-		selected_bag_index < 0
-		or selected_bag_index >= PlayerState.inventory.size()
-		or PlayerState.warehouse_inventory.size() >= WAREHOUSE_DISPLAY_CAPACITY
-	):
+	var target_slot := _first_free_slot_on_current_page()
+	if selected_bag_index < 0 or selected_bag_index >= PlayerState.inventory.size() or target_slot < 0:
 		return
-	PlayerState.warehouse_inventory.append(PlayerState.inventory.pop_at(selected_bag_index))
-	var last_visible_index := mini(
-		PlayerState.warehouse_inventory.size() - 1,
-		WAREHOUSE_DISPLAY_CAPACITY - 1
-	)
-	warehouse_page = floori(float(last_visible_index) / float(WAREHOUSE_PAGE_CAPACITY))
+	_ensure_warehouse_slot(target_slot)
+	PlayerState.warehouse_inventory[target_slot] = PlayerState.inventory.pop_at(selected_bag_index)
 	selected_bag_index = -1
 	PlayerState.inventory_changed.emit()
 	PlayerState.save_game()
@@ -373,13 +366,60 @@ func _deposit() -> void:
 
 
 func _withdraw() -> void:
-	if selected_stash_index < 0 or selected_stash_index >= PlayerState.warehouse_inventory.size():
+	if not _warehouse_slot_has_item(selected_stash_index):
 		return
-	PlayerState.inventory.append(PlayerState.warehouse_inventory.pop_at(selected_stash_index))
+	PlayerState.inventory.append(PlayerState.warehouse_inventory[selected_stash_index])
+	PlayerState.warehouse_inventory[selected_stash_index] = {}
+	_trim_empty_warehouse_tail()
 	selected_stash_index = -1
 	PlayerState.inventory_changed.emit()
 	PlayerState.save_game()
 	refresh()
+
+
+func _warehouse_record(slot_index: int) -> Dictionary:
+	if not _warehouse_slot_has_item(slot_index):
+		return {}
+	var value: Variant = PlayerState.warehouse_inventory[slot_index]
+	return value if value is Dictionary else {"name": str(value)}
+
+
+func _warehouse_slot_has_item(slot_index: int) -> bool:
+	if slot_index < 0 or slot_index >= PlayerState.warehouse_inventory.size():
+		return false
+	var value: Variant = PlayerState.warehouse_inventory[slot_index]
+	if value is Dictionary:
+		return not value.is_empty()
+	return value != null and not str(value).is_empty()
+
+
+func _warehouse_occupied_count() -> int:
+	var count := 0
+	for slot_index in range(PlayerState.warehouse_inventory.size()):
+		if _warehouse_slot_has_item(slot_index):
+			count += 1
+	return count
+
+
+func _first_free_slot_on_current_page() -> int:
+	var page_start := warehouse_page * WAREHOUSE_PAGE_CAPACITY
+	for slot_index in range(page_start, page_start + WAREHOUSE_PAGE_CAPACITY):
+		if not _warehouse_slot_has_item(slot_index):
+			return slot_index
+	return -1
+
+
+func _ensure_warehouse_slot(slot_index: int) -> void:
+	while PlayerState.warehouse_inventory.size() <= slot_index:
+		PlayerState.warehouse_inventory.append({})
+
+
+func _trim_empty_warehouse_tail() -> void:
+	while (
+		not PlayerState.warehouse_inventory.is_empty()
+		and not _warehouse_slot_has_item(PlayerState.warehouse_inventory.size() - 1)
+	):
+		PlayerState.warehouse_inventory.pop_back()
 
 
 func _item_texture(record: Dictionary) -> Texture2D:
