@@ -1,6 +1,7 @@
 extends Control
 
-const OUTPUT_PATH := "res://outputs/visual_acceptance/shop/shop_gothic_sample_v1.png"
+const BUY_OUTPUT_PATH := "res://outputs/visual_acceptance/shop/shop_gothic_sample_v1.png"
+const SELL_OUTPUT_PATH := "res://outputs/visual_acceptance/shop/shop_gothic_sell_v1.png"
 const WORLD_TEXTURE := preload("res://assets/ui/gothic_preview/world_scene_clean.png")
 
 const SAMPLE_STOCK := [
@@ -22,6 +23,10 @@ func _ready() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
 	PlayerState.gold = 100000
+	PlayerState.add_item("太阳水", 5)
+	PlayerState.add_item("匕首")
+	PlayerState.add_item("古铜戒指")
+	PlayerState.add_item("裁决之杖")
 	var panel := ShopPanel.new()
 	panel.name = "ShopPanel"
 	add_child(panel)
@@ -30,11 +35,35 @@ func _ready() -> void:
 	panel._select_shop_item(0)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUTPUT_PATH.get_base_dir()))
-	var error := get_viewport().get_texture().get_image().save_png(ProjectSettings.globalize_path(OUTPUT_PATH))
-	assert(error == OK, "无法保存哥特商店样板")
-	print("SHOP_GOTHIC_PREVIEW_CAPTURE_PASS output=%s" % OUTPUT_PATH)
+	_capture(BUY_OUTPUT_PATH)
+	panel._set_trade_mode("sell")
+	var quotes := {}
+	for inventory_index in range(PlayerState.inventory.size()):
+		var record: Dictionary = PlayerState.inventory[inventory_index]
+		var quote_key := panel.sell_quote_key(inventory_index, record)
+		var risky := str(record.get("name", "")) == "裁决之杖"
+		quotes[quote_key] = {
+			"quote_id": "preview-%d" % inventory_index,
+			"sellable": true,
+			"unit_price": [80, 120, 180, 12000][inventory_index],
+			"max_quantity": int(record.get("count", 1)),
+			"requires_confirmation": risky,
+			"risk_flags": ["high_value", "special"] if risky else [],
+			"warning": "高价值特殊装备，出售后无法恢复。" if risky else "",
+		}
+	panel.set_sell_quotes(quotes)
+	panel._select_sell_item(PlayerState.inventory.size() - 1)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_capture(SELL_OUTPUT_PATH)
+	print("SHOP_GOTHIC_PREVIEW_CAPTURE_PASS buy=%s sell=%s" % [BUY_OUTPUT_PATH, SELL_OUTPUT_PATH])
 	get_tree().quit(0)
+
+
+func _capture(output_path: String) -> void:
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output_path.get_base_dir()))
+	var error := get_viewport().get_texture().get_image().save_png(ProjectSettings.globalize_path(output_path))
+	assert(error == OK, "无法保存哥特商店样板")
 
 
 func _build_background() -> void:
