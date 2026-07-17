@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 2,
+  "referenceCatalog": "res://assets/data/service_item_catalog.json",
+  "referenceRecordCount": 808,
+  "runtimeEquipmentCount": 175,
+  "policy": "参考装备必须按版本、来源、资源和测试逐批启用；未列入enabled批次的记录不得进入运行装备目录。",
+  "enabledReferenceCalibrationCount": 2,
+  "newRuntimeEquipmentCount": 0,
+  "remainingQuarantinedReferenceCount": 806,
+  "batches": [
+    {
+      "batchId": "equipment-reference-primary-gap-001",
+      "status": "enabled_existing_record_calibration",
+      "scope": "当前男性战士",
+      "activation": "只用主服务端记录补齐两件既有vanilla_176装备的动态穿戴Shape；不新增装备，不覆盖既有24条已验收映射。",
+      "serverSource": {
+        "distribution": "server.crystal.cjlaaa",
+        "databaseVersion": 105,
+        "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Server.MirDB",
+        "priorityPolicy": "res://assets/data/source_priority_policy.json",
+        "lane": "server_data",
+        "tier": "primary",
+        "confidence": "B"
+      },
+      "clientSource": {
+        "distribution": "client.classic_raw_complete",
+        "priorityPolicy": "res://assets/data/source_priority_policy.json",
+        "lane": "client_assets",
+        "tier": "primary",
+        "confidence": "A"
+      },
+      "resourceManifest": "res://assets/data/warrior_wear_sources.json",
+      "testScene": "res://tests/equipment_reference_batch_test.tscn",
+      "records": [
+        {
+          "name": "怒斩",
+          "stableItemId": 113,
+          "serviceReferenceIndex": 261,
+          "serviceType": 1,
+          "serviceShape": 27,
+          "serviceImage": 70,
+          "appearanceKind": "weaponAppearance",
+          "runtimeFeature": 54,
+          "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Weapon.wil",
+          "actions": ["idle", "walk", "attack", "hit", "death"],
+          "resourceExact": true
+        },
+        {
+          "name": "中型盔甲(男)",
+          "stableItemId": 120,
+          "serviceReferenceIndex": 321,
+          "serviceType": 2,
+          "serviceShape": 2,
+          "serviceImage": 61,
+          "appearanceKind": "dressAppearance",
+          "runtimeFeature": 4,
+          "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Hum.wil",
+          "actions": ["idle", "walk", "attack", "hit", "death"],
+          "resourceExact": true
+        }
+      ]
+    }
+  ],
+  "explicitRejections": [
+    {
+      "name": "鹤嘴锄",
+      "serviceReferenceIndex": 836,
+      "serviceShape": 42,
+      "runtimeFeature": 84,
+      "reason": "候选Shape超出当前经典Weapon.wil容量"
+    },
+    {
+      "name": "罗刹",
+      "reason": "主服务端参考目录无同名Shape"
+    },
+    {
+      "name": "落魄神兵",
+      "reason": "主服务端参考目录无同名Shape"
+    },
+    {
+      "name": "天魔神甲",
+      "reason": "主服务端参考目录无同名Shape"
+    },
+    {
+      "name": "圣战宝甲",
+      "reason": "女性角色不在当前开发范围"
+    }
+  ],
+  "quarantine": {
+    "recordCount": 806,
+    "runtimeKind": "equipment_reference",
+    "reasons": [
+      "没有锁定到当前内容版本",
+      "不是现有175件已验收装备的安全校准记录",
+      "客户端动态穿戴资源未完成逐件验证",
+      "尚无逐件自动化测试"
+    ]
+  }
+}
