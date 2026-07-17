@@ -18,9 +18,9 @@
   },
   "summary": {
     "total": 214,
-    "formal": 71,
+    "formal": 214,
     "provisional": 0,
-    "missing": 143
+    "missing": 0
   },
   "monsters": [
     {
@@ -313,28 +313,79 @@
       "monster_id": 31,
       "name": "多钩猫王",
       "base_name": "多钩猫王",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "多钩猫王",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        176,
+        160
+      ],
+      "foot_anchor": [
+        41,
+        91
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 32,
       "name": "钉耙猫王",
       "base_name": "钉耙猫王",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "钉耙猫王",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        208,
+        176
+      ],
+      "foot_anchor": [
+        58,
+        91
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 33,
       "name": "雪人王",
       "base_name": "雪人王",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "雪人王",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        240,
+        192
+      ],
+      "foot_anchor": [
+        61,
+        112
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 4,
+        "hit": 2,
+        "death": 4
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 34,
@@ -522,10 +573,27 @@
       "monster_id": 42,
       "name": "半兽统领",
       "base_name": "半兽统领",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "半兽统领",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        272,
+        224
+      ],
+      "foot_anchor": [
+        84,
+        113
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 43,
@@ -1831,235 +1899,677 @@
       "monster_id": 96,
       "name": "羊",
       "base_name": "羊",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "羊",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        144,
+        112
+      ],
+      "foot_anchor": [
+        32,
+        54
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 97,
       "name": "猎鹰",
       "base_name": "猎鹰",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "猎鹰",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        304,
+        400
+      ],
+      "foot_anchor": [
+        107,
+        282
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 98,
       "name": "猎鹰0",
       "base_name": "猎鹰",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "猎鹰0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        304,
+        400
+      ],
+      "foot_anchor": [
+        107,
+        282
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 100,
       "name": "狼",
       "base_name": "狼",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "狼",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        160,
+        128
+      ],
+      "foot_anchor": [
+        40,
+        73
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 101,
       "name": "盔甲虫",
       "base_name": "盔甲虫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "盔甲虫",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        160,
+        128
+      ],
+      "foot_anchor": [
+        38,
+        70
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 102,
       "name": "盔甲虫0",
       "base_name": "盔甲虫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "盔甲虫0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        160,
+        128
+      ],
+      "foot_anchor": [
+        38,
+        70
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 103,
       "name": "威思而小虫",
       "base_name": "威思而小虫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "威思而小虫",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        208,
+        160
+      ],
+      "foot_anchor": [
+        76,
+        72
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 104,
       "name": "沙虫",
       "base_name": "沙虫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "沙虫",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        208,
+        160
+      ],
+      "foot_anchor": [
+        76,
+        72
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 105,
       "name": "多角虫",
       "base_name": "多角虫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "多角虫",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        192,
+        160
+      ],
+      "foot_anchor": [
+        49,
+        82
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 106,
       "name": "多角虫0",
       "base_name": "多角虫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "多角虫0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        192,
+        160
+      ],
+      "foot_anchor": [
+        49,
+        82
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 107,
       "name": "巨型多角虫",
       "base_name": "巨型多角虫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "巨型多角虫",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        224,
+        176
+      ],
+      "foot_anchor": [
+        54,
+        92
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 108,
       "name": "巨型多角虫1",
       "base_name": "巨型多角虫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "巨型多角虫1",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        224,
+        176
+      ],
+      "foot_anchor": [
+        54,
+        92
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 110,
       "name": "蜈蚣",
       "base_name": "蜈蚣",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "蜈蚣",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        224,
+        208
+      ],
+      "foot_anchor": [
+        87,
+        115
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 111,
       "name": "蜈蚣0",
       "base_name": "蜈蚣",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "蜈蚣0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        224,
+        208
+      ],
+      "foot_anchor": [
+        87,
+        115
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 112,
       "name": "黑色恶蛆",
       "base_name": "黑色恶蛆",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "黑色恶蛆",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        160,
+        144
+      ],
+      "foot_anchor": [
+        44,
+        75
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 113,
       "name": "黑色恶蛆0",
       "base_name": "黑色恶蛆",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "黑色恶蛆0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        160,
+        144
+      ],
+      "foot_anchor": [
+        44,
+        75
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 114,
       "name": "跳跳蜂",
       "base_name": "跳跳蜂",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "跳跳蜂",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        192,
+        160
+      ],
+      "foot_anchor": [
+        49,
+        85
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 115,
       "name": "跳跳蜂0",
       "base_name": "跳跳蜂",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "跳跳蜂0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        192,
+        160
+      ],
+      "foot_anchor": [
+        49,
+        85
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 116,
       "name": "巨型蠕虫",
       "base_name": "巨型蠕虫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "巨型蠕虫",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        208,
+        160
+      ],
+      "foot_anchor": [
+        55,
+        81
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 117,
       "name": "巨型蠕虫0",
       "base_name": "巨型蠕虫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "巨型蠕虫0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        208,
+        160
+      ],
+      "foot_anchor": [
+        55,
+        81
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 118,
       "name": "钳虫",
       "base_name": "钳虫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "钳虫",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        208,
+        176
+      ],
+      "foot_anchor": [
+        75,
+        85
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 119,
       "name": "钳虫0",
       "base_name": "钳虫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "钳虫0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        208,
+        176
+      ],
+      "foot_anchor": [
+        75,
+        85
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 120,
       "name": "邪恶钳虫",
       "base_name": "邪恶钳虫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "邪恶钳虫",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        272,
+        224
+      ],
+      "foot_anchor": [
+        108,
+        128
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 121,
       "name": "邪恶钳虫1",
       "base_name": "邪恶钳虫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "邪恶钳虫1",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        272,
+        224
+      ],
+      "foot_anchor": [
+        108,
+        128
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 122,
       "name": "邪恶钳虫2",
       "base_name": "邪恶钳虫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "邪恶钳虫2",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        272,
+        224
+      ],
+      "foot_anchor": [
+        108,
+        128
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 123,
       "name": "邪恶钳虫9",
       "base_name": "邪恶钳虫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "邪恶钳虫9",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        272,
+        224
+      ],
+      "foot_anchor": [
+        108,
+        128
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 124,
@@ -2091,307 +2601,885 @@
       "monster_id": 126,
       "name": "角蝇",
       "base_name": "角蝇",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "角蝇",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        128,
+        144
+      ],
+      "foot_anchor": [
+        24,
+        96
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 4,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 127,
       "name": "蝙蝠",
       "base_name": "蝙蝠",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "蝙蝠",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        128,
+        144
+      ],
+      "foot_anchor": [
+        24,
+        86
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 128,
       "name": "楔蛾",
       "base_name": "楔蛾",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "楔蛾",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        224,
+        192
+      ],
+      "foot_anchor": [
+        47,
+        128
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 129,
       "name": "红野猪",
       "base_name": "红野猪",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "红野猪",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        224,
+        192
+      ],
+      "foot_anchor": [
+        64,
+        101
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 130,
       "name": "红野猪0",
       "base_name": "红野猪",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "红野猪0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        224,
+        192
+      ],
+      "foot_anchor": [
+        64,
+        101
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 131,
       "name": "红野猪3",
       "base_name": "红野猪",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "红野猪3",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        224,
+        192
+      ],
+      "foot_anchor": [
+        64,
+        101
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 132,
       "name": "黑野猪",
       "base_name": "黑野猪",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "黑野猪",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        240,
+        208
+      ],
+      "foot_anchor": [
+        72,
+        111
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 133,
       "name": "黑野猪0",
       "base_name": "黑野猪",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "黑野猪0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        240,
+        208
+      ],
+      "foot_anchor": [
+        72,
+        111
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 134,
       "name": "黑野猪3",
       "base_name": "黑野猪",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "黑野猪3",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        240,
+        208
+      ],
+      "foot_anchor": [
+        72,
+        111
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 135,
       "name": "白野猪",
       "base_name": "白野猪",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "白野猪",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        272,
+        240
+      ],
+      "foot_anchor": [
+        107,
+        115
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 136,
       "name": "白野猪0",
       "base_name": "白野猪",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "白野猪0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        272,
+        240
+      ],
+      "foot_anchor": [
+        107,
+        115
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 137,
       "name": "白野猪1",
       "base_name": "白野猪",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "白野猪1",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        272,
+        240
+      ],
+      "foot_anchor": [
+        107,
+        115
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 138,
       "name": "蝎蛇",
       "base_name": "蝎蛇",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "蝎蛇",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        256,
+        192
+      ],
+      "foot_anchor": [
+        95,
+        88
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 139,
       "name": "蝎蛇0",
       "base_name": "蝎蛇",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "蝎蛇0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        256,
+        192
+      ],
+      "foot_anchor": [
+        95,
+        88
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 140,
       "name": "蝎蛇3",
       "base_name": "蝎蛇",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "蝎蛇3",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        256,
+        192
+      ],
+      "foot_anchor": [
+        95,
+        88
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 141,
       "name": "邪恶毒蛇",
       "base_name": "邪恶毒蛇",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "邪恶毒蛇",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        368,
+        272
+      ],
+      "foot_anchor": [
+        158,
+        121
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 142,
       "name": "邪恶毒蛇1",
       "base_name": "邪恶毒蛇",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "邪恶毒蛇1",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        368,
+        272
+      ],
+      "foot_anchor": [
+        158,
+        121
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 143,
       "name": "石墓尸王",
       "base_name": "石墓尸王",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "石墓尸王",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        224,
+        176
+      ],
+      "foot_anchor": [
+        82,
+        74
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 144,
       "name": "蜜蜂",
       "base_name": "蜜蜂",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "蜜蜂",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        128,
+        144
+      ],
+      "foot_anchor": [
+        24,
+        86
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 145,
       "name": "变异骷髅0",
       "base_name": "变异骷髅",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "变异骷髅0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        176,
+        160
+      ],
+      "foot_anchor": [
+        43,
+        87
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 146,
       "name": "神兽0",
       "base_name": "神兽",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "神兽0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        240,
+        208
+      ],
+      "foot_anchor": [
+        80,
+        123
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 147,
       "name": "神兽2",
       "base_name": "神兽",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "神兽2",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        240,
+        208
+      ],
+      "foot_anchor": [
+        80,
+        123
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 148,
       "name": "大老鼠",
       "base_name": "大老鼠",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "大老鼠",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        240,
+        192
+      ],
+      "foot_anchor": [
+        75,
+        94
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 149,
       "name": "大老鼠0",
       "base_name": "大老鼠",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "大老鼠0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        240,
+        192
+      ],
+      "foot_anchor": [
+        75,
+        94
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 150,
       "name": "祖玛弓箭手",
       "base_name": "祖玛弓箭手",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "祖玛弓箭手",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        272,
+        240
+      ],
+      "foot_anchor": [
+        85,
+        136
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 151,
       "name": "祖玛弓箭手0",
       "base_name": "祖玛弓箭手",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "祖玛弓箭手0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        272,
+        240
+      ],
+      "foot_anchor": [
+        85,
+        136
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 152,
       "name": "祖玛弓箭手3",
       "base_name": "祖玛弓箭手",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "祖玛弓箭手3",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        272,
+        240
+      ],
+      "foot_anchor": [
+        85,
+        136
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 153,
       "name": "祖玛雕像",
       "base_name": "祖玛雕像",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "祖玛雕像",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        320,
+        256
+      ],
+      "foot_anchor": [
+        113,
+        134
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 154,
       "name": "祖玛雕像0",
       "base_name": "祖玛雕像",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "祖玛雕像0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        320,
+        256
+      ],
+      "foot_anchor": [
+        113,
+        134
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 155,
       "name": "祖玛雕像3",
       "base_name": "祖玛雕像",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "祖玛雕像3",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        320,
+        256
+      ],
+      "foot_anchor": [
+        113,
+        134
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 156,
       "name": "祖玛卫士",
       "base_name": "祖玛卫士",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "祖玛卫士",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        240,
+        224
+      ],
+      "foot_anchor": [
+        69,
+        146
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 157,
       "name": "祖玛卫士0",
       "base_name": "祖玛卫士",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "祖玛卫士0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        240,
+        224
+      ],
+      "foot_anchor": [
+        69,
+        146
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 158,
       "name": "祖玛卫士3",
       "base_name": "祖玛卫士",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "祖玛卫士3",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        240,
+        224
+      ],
+      "foot_anchor": [
+        69,
+        146
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 159,
       "name": "祖玛卫士00",
       "base_name": "祖玛卫士",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "祖玛卫士00",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        240,
+        224
+      ],
+      "foot_anchor": [
+        69,
+        146
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 160,
@@ -2449,712 +3537,2055 @@
       "monster_id": 162,
       "name": "双头血魔",
       "base_name": "双头血魔",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "双头血魔",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        288,
+        304
+      ],
+      "foot_anchor": [
+        97,
+        200
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 163,
       "name": "双头金刚",
       "base_name": "双头金刚",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "双头金刚",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        288,
+        304
+      ],
+      "foot_anchor": [
+        98,
+        201
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 164,
       "name": "血巨人",
       "base_name": "血巨人",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "血巨人",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        272,
+        288
+      ],
+      "foot_anchor": [
+        100,
+        176
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 165,
       "name": "血巨人0",
       "base_name": "血巨人",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "血巨人0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        272,
+        288
+      ],
+      "foot_anchor": [
+        100,
+        176
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 166,
       "name": "血僵尸",
       "base_name": "血僵尸",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "血僵尸",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        272,
+        288
+      ],
+      "foot_anchor": [
+        100,
+        176
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 167,
       "name": "血僵尸0",
       "base_name": "血僵尸",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "血僵尸0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        272,
+        288
+      ],
+      "foot_anchor": [
+        100,
+        176
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 168,
       "name": "月魔蜘蛛",
       "base_name": "月魔蜘蛛",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "月魔蜘蛛",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        256,
+        208
+      ],
+      "foot_anchor": [
+        76,
+        112
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 169,
       "name": "月魔蜘蛛0",
       "base_name": "月魔蜘蛛",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "月魔蜘蛛0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        256,
+        208
+      ],
+      "foot_anchor": [
+        76,
+        112
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 170,
       "name": "黑锷蜘蛛",
       "base_name": "黑锷蜘蛛",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "黑锷蜘蛛",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        208,
+        176
+      ],
+      "foot_anchor": [
+        64,
+        92
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 171,
       "name": "黑锷蜘蛛0",
       "base_name": "黑锷蜘蛛",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "黑锷蜘蛛0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        208,
+        176
+      ],
+      "foot_anchor": [
+        64,
+        92
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 172,
       "name": "钢牙蜘蛛",
       "base_name": "钢牙蜘蛛",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "钢牙蜘蛛",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        336,
+        224
+      ],
+      "foot_anchor": [
+        111,
+        135
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 173,
       "name": "钢牙蜘蛛0",
       "base_name": "钢牙蜘蛛",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "钢牙蜘蛛0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        336,
+        224
+      ],
+      "foot_anchor": [
+        111,
+        135
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 174,
       "name": "暴牙蜘蛛",
       "base_name": "暴牙蜘蛛",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "暴牙蜘蛛",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        336,
+        224
+      ],
+      "foot_anchor": [
+        111,
+        135
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 175,
       "name": "暴牙蜘蛛0",
       "base_name": "暴牙蜘蛛",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "暴牙蜘蛛0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        336,
+        224
+      ],
+      "foot_anchor": [
+        111,
+        135
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 176,
       "name": "天狼蜘蛛",
       "base_name": "天狼蜘蛛",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "天狼蜘蛛",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        528,
+        208
+      ],
+      "foot_anchor": [
+        293,
+        116
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 177,
       "name": "天狼蜘蛛0",
       "base_name": "天狼蜘蛛",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "天狼蜘蛛0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        528,
+        208
+      ],
+      "foot_anchor": [
+        293,
+        116
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 178,
       "name": "花吻蜘蛛",
       "base_name": "花吻蜘蛛",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "花吻蜘蛛",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        320,
+        240
+      ],
+      "foot_anchor": [
+        114,
+        113
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 179,
       "name": "花吻蜘蛛0",
       "base_name": "花吻蜘蛛",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "花吻蜘蛛0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        320,
+        240
+      ],
+      "foot_anchor": [
+        114,
+        113
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 180,
       "name": "赤月恶魔",
       "base_name": "赤月恶魔",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "赤月恶魔",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        288,
+        208
+      ],
+      "foot_anchor": [
+        85,
+        142
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 4,
+        "attack": 6,
+        "hit": 2,
+        "death": 20
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 182,
       "name": "幻影蜘蛛",
       "base_name": "幻影蜘蛛",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "幻影蜘蛛",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        256,
+        176
+      ],
+      "foot_anchor": [
+        99,
+        105
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 4,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 183,
       "name": "爆裂蜘蛛",
       "base_name": "爆裂蜘蛛",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "爆裂蜘蛛",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        192,
+        144
+      ],
+      "foot_anchor": [
+        67,
+        57
+      ],
+      "actions": {
+        "idle": 1,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 184,
       "name": "爆裂蜘蛛0",
       "base_name": "爆裂蜘蛛",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "爆裂蜘蛛0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        192,
+        144
+      ],
+      "foot_anchor": [
+        67,
+        57
+      ],
+      "actions": {
+        "idle": 1,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 185,
       "name": "剧毒蜘蛛",
       "base_name": "剧毒蜘蛛",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "剧毒蜘蛛",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        336,
+        240
+      ],
+      "foot_anchor": [
+        136,
+        111
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 186,
       "name": "鹰卫",
       "base_name": "鹰卫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "鹰卫",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        208,
+        176
+      ],
+      "foot_anchor": [
+        59,
+        93
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 187,
       "name": "虎卫",
       "base_name": "虎卫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "虎卫",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        208,
+        176
+      ],
+      "foot_anchor": [
+        53,
+        94
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 188,
       "name": "虹魔猪卫",
       "base_name": "虹魔猪卫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "虹魔猪卫",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        320,
+        240
+      ],
+      "foot_anchor": [
+        74,
+        145
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 189,
       "name": "虹魔猪卫0",
       "base_name": "虹魔猪卫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "虹魔猪卫0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        320,
+        240
+      ],
+      "foot_anchor": [
+        74,
+        145
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 190,
       "name": "虹魔猪卫9",
       "base_name": "虹魔猪卫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "虹魔猪卫9",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        320,
+        240
+      ],
+      "foot_anchor": [
+        74,
+        145
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 191,
       "name": "虹魔蝎卫",
       "base_name": "虹魔蝎卫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "虹魔蝎卫",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        448,
+        336
+      ],
+      "foot_anchor": [
+        101,
+        215
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 192,
       "name": "虹魔蝎卫0",
       "base_name": "虹魔蝎卫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "虹魔蝎卫0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        448,
+        336
+      ],
+      "foot_anchor": [
+        101,
+        215
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 193,
       "name": "虹魔教主",
       "base_name": "虹魔教主",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "虹魔教主",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        288,
+        240
+      ],
+      "foot_anchor": [
+        73,
+        152
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 194,
       "name": "恶魔弓箭手",
       "base_name": "恶魔弓箭手",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "恶魔弓箭手",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        272,
+        240
+      ],
+      "foot_anchor": [
+        85,
+        136
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 195,
       "name": "千年树妖",
       "base_name": "千年树妖",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "千年树妖",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        368,
+        320
+      ],
+      "foot_anchor": [
+        130,
+        233
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 4,
+        "attack": 6,
+        "hit": 2,
+        "death": 20
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 196,
       "name": "恶灵僵尸",
       "base_name": "恶灵僵尸",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "恶灵僵尸",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        192,
+        224
+      ],
+      "foot_anchor": [
+        47,
+        147
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 197,
       "name": "恶灵僵尸0",
       "base_name": "恶灵僵尸",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "恶灵僵尸0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        192,
+        224
+      ],
+      "foot_anchor": [
+        47,
+        147
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 198,
       "name": "恶灵尸王",
       "base_name": "恶灵尸王",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "恶灵尸王",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        192,
+        160
+      ],
+      "foot_anchor": [
+        48,
+        76
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 199,
       "name": "恶灵尸王0",
       "base_name": "恶灵尸王",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "恶灵尸王0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        192,
+        160
+      ],
+      "foot_anchor": [
+        48,
+        76
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 200,
       "name": "骷髅锤兵",
       "base_name": "骷髅锤兵",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "骷髅锤兵",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        304,
+        240
+      ],
+      "foot_anchor": [
+        113,
+        116
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 201,
       "name": "骷髅锤兵0",
       "base_name": "骷髅锤兵",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "骷髅锤兵0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        304,
+        240
+      ],
+      "foot_anchor": [
+        113,
+        116
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 202,
       "name": "骷髅长枪兵",
       "base_name": "骷髅长枪兵",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "骷髅长枪兵",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        304,
+        224
+      ],
+      "foot_anchor": [
+        106,
+        117
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 203,
       "name": "骷髅长枪兵0",
       "base_name": "骷髅长枪兵",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "骷髅长枪兵0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        304,
+        224
+      ],
+      "foot_anchor": [
+        106,
+        117
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 204,
       "name": "骷髅刀斧手",
       "base_name": "骷髅刀斧手",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "骷髅刀斧手",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        224,
+        192
+      ],
+      "foot_anchor": [
+        64,
+        107
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 205,
       "name": "骷髅刀斧手0",
       "base_name": "骷髅刀斧手",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "骷髅刀斧手0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        224,
+        192
+      ],
+      "foot_anchor": [
+        64,
+        107
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 206,
       "name": "骷髅弓箭手",
       "base_name": "骷髅弓箭手",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "骷髅弓箭手",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        192,
+        160
+      ],
+      "foot_anchor": [
+        48,
+        94
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 207,
       "name": "骷髅弓箭手0",
       "base_name": "骷髅弓箭手",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "骷髅弓箭手0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        192,
+        160
+      ],
+      "foot_anchor": [
+        48,
+        94
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 208,
       "name": "黄泉教主",
       "base_name": "黄泉教主",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "黄泉教主",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        352,
+        288
+      ],
+      "foot_anchor": [
+        102,
+        179
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 20
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 209,
       "name": "黄泉教主0",
       "base_name": "黄泉教主",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "黄泉教主0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        352,
+        288
+      ],
+      "foot_anchor": [
+        102,
+        179
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 20
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 210,
       "name": "牛头魔",
       "base_name": "牛头魔",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "牛头魔",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        368,
+        272
+      ],
+      "foot_anchor": [
+        151,
+        131
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 211,
       "name": "牛头魔0",
       "base_name": "牛头魔",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "牛头魔0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        368,
+        272
+      ],
+      "foot_anchor": [
+        151,
+        131
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 212,
       "name": "牛魔战士",
       "base_name": "牛魔战士",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "牛魔战士",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        240,
+        240
+      ],
+      "foot_anchor": [
+        78,
+        112
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 213,
       "name": "牛魔战士0",
       "base_name": "牛魔战士",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "牛魔战士0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        240,
+        240
+      ],
+      "foot_anchor": [
+        78,
+        112
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 214,
       "name": "牛魔斗士",
       "base_name": "牛魔斗士",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "牛魔斗士",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        224,
+        240
+      ],
+      "foot_anchor": [
+        78,
+        109
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 215,
       "name": "牛魔斗士0",
       "base_name": "牛魔斗士",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "牛魔斗士0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        224,
+        240
+      ],
+      "foot_anchor": [
+        78,
+        109
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 216,
       "name": "牛魔侍卫",
       "base_name": "牛魔侍卫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "牛魔侍卫",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        288,
+        288
+      ],
+      "foot_anchor": [
+        83,
+        149
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 217,
       "name": "牛魔侍卫0",
       "base_name": "牛魔侍卫",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "牛魔侍卫0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        288,
+        288
+      ],
+      "foot_anchor": [
+        83,
+        149
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 218,
       "name": "牛魔将军",
       "base_name": "牛魔将军",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "牛魔将军",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        272,
+        272
+      ],
+      "foot_anchor": [
+        84,
+        143
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 219,
       "name": "牛魔将军0",
       "base_name": "牛魔将军",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "牛魔将军0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        272,
+        272
+      ],
+      "foot_anchor": [
+        84,
+        143
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 220,
       "name": "牛魔法师",
       "base_name": "牛魔法师",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "牛魔法师",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        272,
+        224
+      ],
+      "foot_anchor": [
+        93,
+        113
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 221,
       "name": "牛魔法师0",
       "base_name": "牛魔法师",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "牛魔法师0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        272,
+        224
+      ],
+      "foot_anchor": [
+        93,
+        113
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 222,
       "name": "牛魔祭司",
       "base_name": "牛魔祭司",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "牛魔祭司",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        240,
+        208
+      ],
+      "foot_anchor": [
+        69,
+        116
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 223,
       "name": "牛魔祭司0",
       "base_name": "牛魔祭司",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "牛魔祭司0",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        240,
+        208
+      ],
+      "foot_anchor": [
+        69,
+        116
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 224,
       "name": "牛魔王",
       "base_name": "牛魔王",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "牛魔王",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        336,
+        288
+      ],
+      "foot_anchor": [
+        117,
+        154
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 225,
       "name": "暗之牛魔王",
       "base_name": "暗之牛魔王",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "暗之牛魔王",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        336,
+        288
+      ],
+      "foot_anchor": [
+        117,
+        154
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 226,
       "name": "宝箱",
       "base_name": "宝箱",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "宝箱",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        48,
+        48
+      ],
+      "foot_anchor": [
+        8,
+        8
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 227,
       "name": "宝箱1",
       "base_name": "宝箱",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "宝箱1",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        48,
+        48
+      ],
+      "foot_anchor": [
+        8,
+        8
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 228,
       "name": "宝箱2",
       "base_name": "宝箱",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "宝箱2",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        48,
+        48
+      ],
+      "foot_anchor": [
+        8,
+        8
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 229,
       "name": "宝箱3",
       "base_name": "宝箱",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "宝箱3",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        48,
+        48
+      ],
+      "foot_anchor": [
+        8,
+        8
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 230,
       "name": "宝箱4",
       "base_name": "宝箱",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "宝箱4",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        48,
+        48
+      ],
+      "foot_anchor": [
+        8,
+        8
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 231,
       "name": "宝箱5",
       "base_name": "宝箱",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "宝箱5",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        48,
+        48
+      ],
+      "foot_anchor": [
+        8,
+        8
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 232,
       "name": "宝箱6",
       "base_name": "宝箱",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "宝箱6",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        48,
+        48
+      ],
+      "foot_anchor": [
+        8,
+        8
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 233,
       "name": "宝箱7",
       "base_name": "宝箱",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "宝箱7",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        48,
+        48
+      ],
+      "foot_anchor": [
+        8,
+        8
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 234,
       "name": "宝箱8",
       "base_name": "宝箱",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "宝箱8",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        48,
+        48
+      ],
+      "foot_anchor": [
+        8,
+        8
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 235,
       "name": "暗之双头血魔",
       "base_name": "暗之双头血魔",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "暗之双头血魔",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        288,
+        304
+      ],
+      "foot_anchor": [
+        97,
+        200
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 236,
       "name": "暗之双头金刚",
       "base_name": "暗之双头金刚",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "暗之双头金刚",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        288,
+        304
+      ],
+      "foot_anchor": [
+        98,
+        201
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 237,
       "name": "暗之黄泉教主",
       "base_name": "暗之黄泉教主",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "暗之黄泉教主",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        352,
+        288
+      ],
+      "foot_anchor": [
+        102,
+        179
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 20
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 238,
       "name": "暗之骷髅精灵",
       "base_name": "暗之骷髅精灵",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "暗之骷髅精灵",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        336,
+        256
+      ],
+      "foot_anchor": [
+        98,
+        137
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 239,
       "name": "暗之沃玛教主",
       "base_name": "暗之沃玛教主",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "暗之沃玛教主",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        336,
+        288
+      ],
+      "foot_anchor": [
+        144,
+        137
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 240,
       "name": "暗之虹魔教主",
       "base_name": "暗之虹魔教主",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "暗之虹魔教主",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        288,
+        240
+      ],
+      "foot_anchor": [
+        73,
+        152
+      ],
+      "actions": {
+        "idle": 4,
+        "walk": 6,
+        "attack": 6,
+        "hit": 2,
+        "death": 10
+      },
+      "runtime_allowed": true
     },
     {
       "monster_id": 241,
       "name": "飞火流星",
       "base_name": "飞火流星",
-      "status": "missing",
-      "runtime_allowed": false,
-      "formal_release_allowed": false,
-      "reason": "five-action visual profile missing"
+      "status": "formal",
+      "source_type": "classic_client_wil",
+      "source_confidence": "B",
+      "resource_lookup": "飞火流星",
+      "direction_mode": "mir2_north_first",
+      "frame_size": [
+        64,
+        64
+      ],
+      "foot_anchor": [
+        8,
+        15
+      ],
+      "actions": {
+        "idle": 1,
+        "walk": 6,
+        "attack": 6,
+        "hit": 6,
+        "death": 1
+      },
+      "runtime_allowed": true
     }
   ]
 }

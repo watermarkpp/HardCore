@@ -62,6 +62,11 @@ func _run() -> void:
 	assert(int(touch_dragon.get("serviceBehavior", {}).get("aiCode", -1)) == 14, "触龙神没有按 monsterId 加载服务端 AI=14")
 	assert(is_equal_approx(float(touch_dragon.get("runtimeProjection", {}).get("moveSpeed", -1.0)), 0.0), "显式触龙神机制没有覆盖通用目录")
 
+	for fixed_area_id: int in [180, 195]:
+		var fixed_area: Dictionary = MonsterIdentityScript.behavior_profile({"monsterId": fixed_area_id, "name": "冲突旧名称"})
+		assert(bool(fixed_area.get("movement", {}).get("stationary", false)), "固定单位没有按monsterId禁用移动")
+		assert(int(fixed_area.get("areaAttack", {}).get("rangeTiles", 0)) == 16, "固定单位没有按monsterId加载全屏攻击")
+
 	var unresolved: Dictionary = MonsterIdentityScript.service_runtime_entry({"monsterId": 31})
 	assert(unresolved.get("resolutionStatus", "") == "unresolved_project_fallback", "未对齐怪物没有保持显式回退状态")
 	assert(unresolved.get("behaviorProfile", {}).get("serviceBehavior", {}).get("confidence", "") == "C", "未对齐怪物回退证据等级错误")
@@ -99,6 +104,8 @@ func _run() -> void:
 		== records.size(),
 		"动画完成度分级没有覆盖全部怪物"
 	)
+	assert(int(animation_summary.get("formal", 0)) == records.size(), "214个怪物尚未全部完成正式五动作绑定")
+	assert(int(animation_summary.get("missing", -1)) == 0, "动画目录仍有缺失登记")
 
 	print(
 		(

@@ -3,8 +3,10 @@ extends Node2D
 
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const BOSS_ART_PATH := "res://assets/data/classic_boss_client_art_sources.json"
+const COMPLETE_ART_PATH := "res://assets/data/complete_monster_client_art_sources.json"
 
 static var _boss_art: Dictionary = {}
+static var _complete_art: Dictionary = {}
 
 var actor: EnemyActor
 var sprite: Sprite2D
@@ -91,6 +93,11 @@ func _resources_for(monster_data: Dictionary) -> Dictionary:
 	if monster_name.ends_with("0"):
 		lookup_names.append(monster_name.trim_suffix("0"))
 	var monster_key := MonsterIdentityScript.stable_key(monster_data)
+	var complete_manifest := _complete_art_manifest()
+	if not monster_key.is_empty():
+		var complete_mapping: Variant = complete_manifest.get("runtimeMappingsByMonsterId", {}).get(monster_key, {})
+		if complete_mapping is Dictionary and not complete_mapping.is_empty():
+			return _client_resources(complete_mapping)
 	var boss_manifest := _boss_art_manifest()
 	if not monster_key.is_empty():
 		var boss_mapping: Variant = boss_manifest.get("runtimeMappingsByMonsterId", {}).get(monster_key, {})
@@ -124,6 +131,14 @@ func _boss_art_manifest() -> Dictionary:
 		var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
 		_boss_art = parsed if parsed is Dictionary else {}
 	return _boss_art
+
+
+func _complete_art_manifest() -> Dictionary:
+	if _complete_art.is_empty() and FileAccess.file_exists(COMPLETE_ART_PATH):
+		var file := FileAccess.open(COMPLETE_ART_PATH, FileAccess.READ)
+		var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
+		_complete_art = parsed if parsed is Dictionary else {}
+	return _complete_art
 
 
 func _direction_row(direction: Vector2) -> int:

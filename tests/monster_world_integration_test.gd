@@ -106,10 +106,12 @@ func _run() -> void:
 	assert(respawn_actor != null and respawn_actor.monster_id == 18, "复活槽位没有保留 monsterId")
 
 	var animation := _load_json(ANIMATION_PATH)
-	assert(int(animation.get("summary", {}).get("formal", -1)) == 71, "接入过程错误提升了正式动画数量")
-	assert(int(animation.get("summary", {}).get("missing", -1)) == 143, "接入过程错误隐藏了缺失动画")
+	var animation_summary: Dictionary = animation.get("summary", {})
+	assert(int(animation_summary.get("total", -1)) == 214, "怪物动画目录没有覆盖全部214个稳定 monsterId")
+	assert(int(animation_summary.get("formal", -1)) == 214, "完整客户端美术接入后仍有怪物缺少正式动画")
+	assert(int(animation_summary.get("missing", -1)) == 0, "完整客户端美术接入后动画目录仍登记缺失")
 
-	print("MONSTER_WORLD_INTEGRATION_PASS: 743个刷新条目已monsterId化，分钟级复活、Boss召唤与瞬移落点接通，动画仍为71/143分级")
+	print("MONSTER_WORLD_INTEGRATION_PASS: 743个刷新条目已monsterId化，分钟级复活、Boss召唤与瞬移落点接通，214个怪物均为正式动画")
 	get_tree().quit(0)
 
 
