@@ -123,7 +123,7 @@ static func profile_overrides(skill_id: String, level_value: int) -> Dictionary:
 	for key: String in rule.keys():
 		if key.ends_with("_by_level") and rule[key] is Array:
 			result[key.trim_suffix("_by_level")] = _level_value(rule[key], level)
-	for key: String in ["source_anchor", "service_spell_id", "attack_type", "duration_formula", "buff_power_formula", "area_radius_cells", "leash_range", "teleport_range", "amulet_cost"]:
+	for key: String in ["source_anchor", "service_spell_id", "attack_type", "duration_formula", "apply_delay_ms", "buff_power_formula", "area_radius_cells", "leash_range", "teleport_range", "amulet_cost"]:
 		if rule.has(key):
 			result[key] = rule[key]
 	return result

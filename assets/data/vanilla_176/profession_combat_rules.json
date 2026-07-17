@@ -39,6 +39,18 @@
     "workspace_path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
     "sha256": "65d59610b8a1f7f4dcf76058a753651d1a97997ad273fc4df8e468e65a989262"
   },
+  "classicEventSource": {
+    "distribution_id": "source.original_gameofmir.server_suite",
+    "source_priority": {
+      "lane": "server_rules",
+      "tier": "primary",
+      "order": 0,
+      "weight": 100
+    },
+    "original_path": "M2Server/Event.pas",
+    "workspace_path": "dev_art_sources/reference/original_gameofmir/M2Server/Event.pas",
+    "sha256": "d1510fe7be56b8463f8080e6016a8df6e75b0a1a191bd83c5c1f639072e115a0"
+  },
   "formulaContracts": {
     "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
     "get_power": "delphi_round(power_roll/(train_level+1)*(skill_level+1)) + def_power_roll",
@@ -71,7 +83,8 @@
           1.5,
           1.5
         ],
-        "service_spell_id": 38
+        "service_spell_id": 38,
+        "area_radius_cells": 1
       },
       "wizard.fire_wall": {
         "formula_group": "classic_magic_damage",
@@ -97,7 +110,8 @@
         ],
         "service_spell_id": 39,
         "shape": "five_cell_cross",
-        "duration_formula": "get_power(10) + floor(mc_roll / 2)"
+        "duration_formula": "get_power(10) + floor(mc_roll / 2)",
+        "tick_interval_ms": 3000
       },
       "wizard.fireball": {
         "formula_group": "classic_magic_damage",
@@ -171,7 +185,8 @@
         ],
         "service_spell_id": 42,
         "undead_damage_divisor": 1,
-        "living_damage_divisor": 10
+        "living_damage_divisor": 10,
+        "area_radius_cells": 2
       },
       "wizard.hellfire": {
         "formula_group": "classic_magic_damage",
@@ -245,7 +260,8 @@
           1.5,
           1.5
         ],
-        "service_spell_id": 46
+        "service_spell_id": 46,
+        "area_radius_cells": 1
       },
       "wizard.laser": {
         "formula_group": "classic_magic_damage",
@@ -484,7 +500,8 @@
           1.5,
           1.5
         ],
-        "service_spell_id": 61
+        "service_spell_id": 61,
+        "apply_delay_ms": 800
       },
       "taoist.invisibility": {
         "formula_group": "classic_special",
@@ -562,7 +579,9 @@
           1.5,
           1.5
         ],
-        "service_spell_id": 75
+        "service_spell_id": 75,
+        "apply_delay_ms": 800,
+        "area_radius_cells": 1
       },
       "taoist.mass_invisibility": {
         "formula_group": "classic_special",

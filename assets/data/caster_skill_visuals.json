@@ -65,6 +65,169 @@
   ],
   "primary_missing_evidence": [],
   "generated_candidates_retained": [],
+  "skillCoverage": {
+    "taoist.defense": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "defense",
+      "role": "area_effect",
+      "path": "assets/art/characters/taoist/effects/defense.png"
+    },
+    "taoist.entrapment": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "binding_circle",
+      "role": "area_effect",
+      "path": "assets/art/characters/taoist/effects/binding_circle.png"
+    },
+    "taoist.healing": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "healing",
+      "role": "target_effect",
+      "path": "assets/art/characters/taoist/effects/healing.png"
+    },
+    "taoist.invisibility": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "invisibility",
+      "role": "self_area",
+      "path": "assets/art/characters/taoist/effects/invisibility.png"
+    },
+    "taoist.magic_defense": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "magic_defense",
+      "role": "area_effect",
+      "path": "assets/art/characters/taoist/effects/magic_defense.png"
+    },
+    "taoist.mass_healing": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "mass_healing",
+      "role": "area_effect",
+      "path": "assets/art/characters/taoist/effects/mass_healing.png"
+    },
+    "taoist.mass_invisibility": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "invisibility",
+      "role": "self_area",
+      "path": "assets/art/characters/taoist/effects/invisibility.png"
+    },
+    "taoist.poison": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "poison",
+      "role": "target_effect",
+      "path": "assets/art/characters/taoist/effects/poison.png"
+    },
+    "taoist.revelation": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "revelation",
+      "role": "target_effect",
+      "path": "assets/art/characters/taoist/effects/revelation.png"
+    },
+    "taoist.soul_fire_talisman": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "soul_fire_talisman",
+      "role": "projectile",
+      "path": "assets/art/characters/taoist/effects/soul_fire_talisman.png"
+    },
+    "taoist.spiritual_warfare": {
+      "status": "no_runtime_visual",
+      "reason": "Passive accuracy skill; no cast event is emitted by the classic runtime.",
+      "source_original_path": "M2Server/Magic.pas"
+    },
+    "taoist.summon_divine_beast": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "summon_divine_beast",
+      "role": "summon",
+      "path": "assets/art/characters/taoist/effects/summon_divine_beast.png"
+    },
+    "taoist.summon_skeleton": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "summon_skeleton",
+      "role": "summon",
+      "path": "assets/art/characters/taoist/effects/summon_skeleton.png"
+    },
+    "wizard.exploding_flame": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "exploding_flame",
+      "role": "area_effect",
+      "path": "assets/art/characters/wizard/effects/area_burst.png"
+    },
+    "wizard.fire_wall": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "fire_wall",
+      "role": "ground_effect",
+      "path": "assets/art/characters/wizard/effects/fire_wall.png"
+    },
+    "wizard.fireball": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "fireball",
+      "role": "projectile",
+      "path": "assets/art/characters/wizard/effects/arcane_projectile.png"
+    },
+    "wizard.great_fireball": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "great_fireball",
+      "role": "projectile",
+      "path": "assets/art/characters/wizard/effects/great_fireball.png"
+    },
+    "wizard.hell_lightning": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "hell_lightning",
+      "role": "self_area",
+      "path": "assets/art/characters/wizard/effects/hell_lightning.png"
+    },
+    "wizard.hellfire": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "hellfire",
+      "role": "line_effect",
+      "path": "assets/art/characters/wizard/effects/hellfire.png"
+    },
+    "wizard.holy_word": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "holy_word",
+      "role": "target_effect",
+      "path": "assets/art/characters/wizard/effects/holy_word.png"
+    },
+    "wizard.ice_storm": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "ice_storm",
+      "role": "area_effect",
+      "path": "assets/art/characters/wizard/effects/ice_storm.png"
+    },
+    "wizard.laser": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "laser",
+      "role": "line_effect",
+      "path": "assets/art/characters/wizard/effects/laser.png"
+    },
+    "wizard.lightning": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "lightning",
+      "role": "target_effect",
+      "path": "assets/art/characters/wizard/effects/lightning.png"
+    },
+    "wizard.magic_shield": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "magic_shield",
+      "role": "self_effect",
+      "path": "assets/art/characters/wizard/effects/magic_shield.png"
+    },
+    "wizard.repulsion_ring": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "repulsion_ring",
+      "role": "self_area",
+      "path": "assets/art/characters/wizard/effects/repulsion_ring.png"
+    },
+    "wizard.teleport": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "teleport",
+      "role": "self_effect",
+      "path": "assets/art/characters/wizard/effects/teleport.png"
+    },
+    "wizard.temptation_light": {
+      "status": "formal_primary_client_pixel",
+      "asset_id": "temptation_light",
+      "role": "target_effect",
+      "path": "assets/art/characters/wizard/effects/temptation_light.png"
+    }
+  },
   "assets": {
     "fireball": {
       "skill_ids": [
@@ -92,7 +255,157 @@
         117
       ],
       "library_image_count": 4010,
-      "mapping_rule": "EffectBase[1]=0; fly frame base+10",
+      "mapping_rule": "EffectBase effect 1 base 0 + FLYBASE 10",
+      "mapping_confidence": "A",
+      "pixel_confidence": "A"
+    },
+    "repulsion_ring": {
+      "skill_ids": [
+        "wizard.repulsion_ring"
+      ],
+      "role": "self_area",
+      "path": "assets/art/characters/wizard/effects/repulsion_ring.png",
+      "distribution_id": "client.classic_raw_complete",
+      "source_priority": {
+        "lane": "client_assets",
+        "tier": "primary",
+        "order": 0,
+        "weight": 100
+      },
+      "original_path": "Data/Magic.wil",
+      "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+      "source_index": 900,
+      "source_offset": 3338388,
+      "source_draw_offset": [
+        -18,
+        -58
+      ],
+      "pixel_size": [
+        80,
+        58
+      ],
+      "library_image_count": 4010,
+      "mapping_rule": "EffectBase effect 6 explicitly labels repulsion ring at 900",
+      "mapping_confidence": "A",
+      "pixel_confidence": "A"
+    },
+    "temptation_light": {
+      "skill_ids": [
+        "wizard.temptation_light"
+      ],
+      "role": "target_effect",
+      "path": "assets/art/characters/wizard/effects/temptation_light.png",
+      "distribution_id": "client.classic_raw_complete",
+      "source_priority": {
+        "lane": "client_assets",
+        "tier": "primary",
+        "order": 0,
+        "weight": 100
+      },
+      "original_path": "Data/Magic.wil",
+      "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+      "source_index": 1564,
+      "source_offset": 18041036,
+      "source_draw_offset": [
+        -7,
+        -72
+      ],
+      "pixel_size": [
+        60,
+        60
+      ],
+      "library_image_count": 4010,
+      "mapping_rule": "PlayScn.NewMagic effect 18 overrides explosion base to 1564",
+      "mapping_confidence": "A",
+      "pixel_confidence": "A"
+    },
+    "hellfire": {
+      "skill_ids": [
+        "wizard.hellfire"
+      ],
+      "role": "line_effect",
+      "path": "assets/art/characters/wizard/effects/hellfire.png",
+      "distribution_id": "client.classic_raw_complete",
+      "source_priority": {
+        "lane": "client_assets",
+        "tier": "primary",
+        "order": 0,
+        "weight": 100
+      },
+      "original_path": "Data/Magic.wil",
+      "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+      "source_index": 930,
+      "source_offset": 3487064,
+      "source_draw_offset": [
+        -13,
+        -67
+      ],
+      "pixel_size": [
+        88,
+        86
+      ],
+      "library_image_count": 4010,
+      "mapping_rule": "PlayScn.NewMagic mtFireGun constructs TFireGunEffect at base 930",
+      "mapping_confidence": "A",
+      "pixel_confidence": "A"
+    },
+    "lightning": {
+      "skill_ids": [
+        "wizard.lightning"
+      ],
+      "role": "target_effect",
+      "path": "assets/art/characters/wizard/effects/lightning.png",
+      "distribution_id": "client.classic_raw_complete",
+      "source_priority": {
+        "lane": "client_assets",
+        "tier": "primary",
+        "order": 0,
+        "weight": 100
+      },
+      "original_path": "Data/Magic2.wil",
+      "source_sha256": "398e5376f19638df063cd6299199bf5c2365fa8525fe0c9e639eb3bb6c955d07",
+      "source_index": 10,
+      "source_offset": 126840,
+      "source_draw_offset": [
+        -61,
+        -920
+      ],
+      "pixel_size": [
+        148,
+        958
+      ],
+      "library_image_count": 33,
+      "mapping_rule": "PlayScn.NewMagic mtThunder explicitly constructs Magic2 TThuderEffect at 10",
+      "mapping_confidence": "A",
+      "pixel_confidence": "A"
+    },
+    "teleport": {
+      "skill_ids": [
+        "wizard.teleport"
+      ],
+      "role": "self_effect",
+      "path": "assets/art/characters/wizard/effects/teleport.png",
+      "distribution_id": "client.classic_raw_complete",
+      "source_priority": {
+        "lane": "client_assets",
+        "tier": "primary",
+        "order": 0,
+        "weight": 100
+      },
+      "original_path": "Data/Magic.wil",
+      "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+      "source_index": 1590,
+      "source_offset": 18132800,
+      "source_draw_offset": [
+        -9,
+        -19
+      ],
+      "pixel_size": [
+        64,
+        55
+      ],
+      "library_image_count": 4010,
+      "mapping_rule": "EffectBase effect 19 explicitly labels teleport at 1590",
       "mapping_confidence": "A",
       "pixel_confidence": "A"
     },
@@ -122,37 +435,7 @@
         82
       ],
       "library_image_count": 4010,
-      "mapping_rule": "EffectBase[3]=400; fly frame base+10",
-      "mapping_confidence": "A",
-      "pixel_confidence": "A"
-    },
-    "lightning": {
-      "skill_ids": [
-        "wizard.lightning"
-      ],
-      "role": "projectile",
-      "path": "assets/art/characters/wizard/effects/lightning.png",
-      "distribution_id": "client.classic_raw_complete",
-      "source_priority": {
-        "lane": "client_assets",
-        "tier": "primary",
-        "order": 0,
-        "weight": 100
-      },
-      "original_path": "Data/Magic2.wil",
-      "source_sha256": "398e5376f19638df063cd6299199bf5c2365fa8525fe0c9e639eb3bb6c955d07",
-      "source_index": 20,
-      "source_offset": 1036176,
-      "source_draw_offset": [
-        7,
-        -110
-      ],
-      "pixel_size": [
-        40,
-        54
-      ],
-      "library_image_count": 33,
-      "mapping_rule": "GetEffectBase effect 9 selects Magic2; EffectBase[9]=20",
+      "mapping_rule": "EffectBase effect 3 base 400 + FLYBASE 10",
       "mapping_confidence": "A",
       "pixel_confidence": "A"
     },
@@ -212,7 +495,127 @@
         76
       ],
       "library_image_count": 4010,
-      "mapping_rule": "EffectBase[20]=1620",
+      "mapping_rule": "EffectBase effect 20 explicitly labels fire wall at 1620",
+      "mapping_confidence": "A",
+      "pixel_confidence": "A"
+    },
+    "laser": {
+      "skill_ids": [
+        "wizard.laser"
+      ],
+      "role": "line_effect",
+      "path": "assets/art/characters/wizard/effects/laser.png",
+      "distribution_id": "client.classic_raw_complete",
+      "source_priority": {
+        "lane": "client_assets",
+        "tier": "primary",
+        "order": 0,
+        "weight": 100
+      },
+      "original_path": "Data/Magic.wil",
+      "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+      "source_index": 970,
+      "source_offset": 3954556,
+      "source_draw_offset": [
+        -36,
+        -368
+      ],
+      "pixel_size": [
+        124,
+        386
+      ],
+      "library_image_count": 4010,
+      "mapping_rule": "PlayScn.NewMagic mtLightingThunder explicitly constructs TLightingThunder at 970",
+      "mapping_confidence": "A",
+      "pixel_confidence": "A"
+    },
+    "hell_lightning": {
+      "skill_ids": [
+        "wizard.hell_lightning"
+      ],
+      "role": "self_area",
+      "path": "assets/art/characters/wizard/effects/hell_lightning.png",
+      "distribution_id": "client.classic_raw_complete",
+      "source_priority": {
+        "lane": "client_assets",
+        "tier": "primary",
+        "order": 0,
+        "weight": 100
+      },
+      "original_path": "Data/Magic.wil",
+      "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+      "source_index": 1680,
+      "source_offset": 19171912,
+      "source_draw_offset": [
+        -27,
+        -64
+      ],
+      "pixel_size": [
+        100,
+        89
+      ],
+      "library_image_count": 4010,
+      "mapping_rule": "EffectBase effect 22 explicitly labels hell lightning at 1680",
+      "mapping_confidence": "A",
+      "pixel_confidence": "A"
+    },
+    "magic_shield": {
+      "skill_ids": [
+        "wizard.magic_shield"
+      ],
+      "role": "self_effect",
+      "path": "assets/art/characters/wizard/effects/magic_shield.png",
+      "distribution_id": "client.classic_raw_complete",
+      "source_priority": {
+        "lane": "client_assets",
+        "tier": "primary",
+        "order": 0,
+        "weight": 100
+      },
+      "original_path": "Data/Magic.wil",
+      "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+      "source_index": 3880,
+      "source_offset": 33354792,
+      "source_draw_offset": [
+        9,
+        -57
+      ],
+      "pixel_size": [
+        32,
+        14
+      ],
+      "library_image_count": 4010,
+      "mapping_rule": "EffectBase effect 29 explicitly labels magic shield at 3880",
+      "mapping_confidence": "A",
+      "pixel_confidence": "A"
+    },
+    "holy_word": {
+      "skill_ids": [
+        "wizard.holy_word"
+      ],
+      "role": "target_effect",
+      "path": "assets/art/characters/wizard/effects/holy_word.png",
+      "distribution_id": "client.classic_raw_complete",
+      "source_priority": {
+        "lane": "client_assets",
+        "tier": "primary",
+        "order": 0,
+        "weight": 100
+      },
+      "original_path": "Data/Magic.wil",
+      "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+      "source_index": 3930,
+      "source_offset": 33624256,
+      "source_draw_offset": [
+        -79,
+        -62
+      ],
+      "pixel_size": [
+        208,
+        137
+      ],
+      "library_image_count": 4010,
+      "mapping_rule": "PlayScn.NewMagic effect 30 explosion base 3930",
       "mapping_confidence": "A",
       "pixel_confidence": "A"
     },
@@ -246,6 +649,66 @@
       "mapping_confidence": "A",
       "pixel_confidence": "A"
     },
+    "healing": {
+      "skill_ids": [
+        "taoist.healing"
+      ],
+      "role": "target_effect",
+      "path": "assets/art/characters/taoist/effects/healing.png",
+      "distribution_id": "client.classic_raw_complete",
+      "source_priority": {
+        "lane": "client_assets",
+        "tier": "primary",
+        "order": 0,
+        "weight": 100
+      },
+      "original_path": "Data/Magic.wil",
+      "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+      "source_index": 200,
+      "source_offset": 1483760,
+      "source_draw_offset": [
+        -13,
+        -19
+      ],
+      "pixel_size": [
+        76,
+        75
+      ],
+      "library_image_count": 4010,
+      "mapping_rule": "EffectBase effect 2 explicitly labels healing at 200",
+      "mapping_confidence": "A",
+      "pixel_confidence": "A"
+    },
+    "poison": {
+      "skill_ids": [
+        "taoist.poison"
+      ],
+      "role": "target_effect",
+      "path": "assets/art/characters/taoist/effects/poison.png",
+      "distribution_id": "client.classic_raw_complete",
+      "source_priority": {
+        "lane": "client_assets",
+        "tier": "primary",
+        "order": 0,
+        "weight": 100
+      },
+      "original_path": "Data/Magic.wil",
+      "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+      "source_index": 600,
+      "source_offset": 2778944,
+      "source_draw_offset": [
+        20,
+        4
+      ],
+      "pixel_size": [
+        12,
+        10
+      ],
+      "library_image_count": 4010,
+      "mapping_rule": "EffectBase effect 4 explicitly labels poison at 600",
+      "mapping_confidence": "A",
+      "pixel_confidence": "A"
+    },
     "soul_fire_talisman": {
       "skill_ids": [
         "taoist.soul_fire_talisman"
@@ -273,36 +736,6 @@
       ],
       "library_image_count": 4010,
       "mapping_rule": "PlayScn.NewMagic mtExploBujauk constructor base 1160",
-      "mapping_confidence": "A",
-      "pixel_confidence": "A"
-    },
-    "binding_circle": {
-      "skill_ids": [
-        "taoist.entrapment"
-      ],
-      "role": "area_effect",
-      "path": "assets/art/characters/taoist/effects/binding_circle.png",
-      "distribution_id": "client.classic_raw_complete",
-      "source_priority": {
-        "lane": "client_assets",
-        "tier": "primary",
-        "order": 0,
-        "weight": 100
-      },
-      "original_path": "Data/Magic.wil",
-      "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-      "source_index": 1380,
-      "source_offset": 15846796,
-      "source_draw_offset": [
-        -13,
-        -9
-      ],
-      "pixel_size": [
-        72,
-        29
-      ],
-      "library_image_count": 4010,
-      "mapping_rule": "EffectBase[14]=1380, ground nail/entrapment family",
       "mapping_confidence": "A",
       "pixel_confidence": "A"
     },
@@ -334,6 +767,187 @@
       "library_image_count": 3690,
       "mapping_rule": "Actor.aGetMonImg appearance 20 selects Mon3; skeleton manifest block base 0",
       "mapping_confidence": "B",
+      "pixel_confidence": "A"
+    },
+    "invisibility": {
+      "skill_ids": [
+        "taoist.invisibility",
+        "taoist.mass_invisibility"
+      ],
+      "role": "self_area",
+      "path": "assets/art/characters/taoist/effects/invisibility.png",
+      "distribution_id": "client.classic_raw_complete",
+      "source_priority": {
+        "lane": "client_assets",
+        "tier": "primary",
+        "order": 0,
+        "weight": 100
+      },
+      "original_path": "Data/Magic.wil",
+      "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+      "source_index": 1520,
+      "source_offset": 16969936,
+      "source_draw_offset": [
+        -8,
+        -39
+      ],
+      "pixel_size": [
+        56,
+        57
+      ],
+      "library_image_count": 4010,
+      "mapping_rule": "EffectBase effect 16 explicitly labels invisibility; group variant reuses the same primary family",
+      "mapping_confidence": "B",
+      "pixel_confidence": "A"
+    },
+    "magic_defense": {
+      "skill_ids": [
+        "taoist.magic_defense"
+      ],
+      "role": "area_effect",
+      "path": "assets/art/characters/taoist/effects/magic_defense.png",
+      "distribution_id": "client.classic_raw_complete",
+      "source_priority": {
+        "lane": "client_assets",
+        "tier": "primary",
+        "order": 0,
+        "weight": 100
+      },
+      "original_path": "Data/Magic.wil",
+      "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+      "source_index": 1320,
+      "source_offset": 13622984,
+      "source_draw_offset": [
+        -13,
+        -117
+      ],
+      "pixel_size": [
+        68,
+        69
+      ],
+      "library_image_count": 4010,
+      "mapping_rule": "TBujaukGroundEffect magic number 11 uses base 1160 + 16*10",
+      "mapping_confidence": "A",
+      "pixel_confidence": "A"
+    },
+    "defense": {
+      "skill_ids": [
+        "taoist.defense"
+      ],
+      "role": "area_effect",
+      "path": "assets/art/characters/taoist/effects/defense.png",
+      "distribution_id": "client.classic_raw_complete",
+      "source_priority": {
+        "lane": "client_assets",
+        "tier": "primary",
+        "order": 0,
+        "weight": 100
+      },
+      "original_path": "Data/Magic.wil",
+      "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+      "source_index": 1340,
+      "source_offset": 14689672,
+      "source_draw_offset": [
+        -10,
+        -119
+      ],
+      "pixel_size": [
+        68,
+        71
+      ],
+      "library_image_count": 4010,
+      "mapping_rule": "TBujaukGroundEffect magic number 12 uses base 1160 + 18*10",
+      "mapping_confidence": "A",
+      "pixel_confidence": "A"
+    },
+    "revelation": {
+      "skill_ids": [
+        "taoist.revelation"
+      ],
+      "role": "target_effect",
+      "path": "assets/art/characters/taoist/effects/revelation.png",
+      "distribution_id": "client.classic_raw_complete",
+      "source_priority": {
+        "lane": "client_assets",
+        "tier": "primary",
+        "order": 0,
+        "weight": 100
+      },
+      "original_path": "Data/Magic.wil",
+      "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+      "source_index": 3990,
+      "source_offset": 34069240,
+      "source_draw_offset": [
+        0,
+        -89
+      ],
+      "pixel_size": [
+        44,
+        62
+      ],
+      "library_image_count": 4010,
+      "mapping_rule": "PlayScn.NewMagic effect 26 explosion base 3990",
+      "mapping_confidence": "A",
+      "pixel_confidence": "A"
+    },
+    "binding_circle": {
+      "skill_ids": [
+        "taoist.entrapment"
+      ],
+      "role": "area_effect",
+      "path": "assets/art/characters/taoist/effects/binding_circle.png",
+      "distribution_id": "client.classic_raw_complete",
+      "source_priority": {
+        "lane": "client_assets",
+        "tier": "primary",
+        "order": 0,
+        "weight": 100
+      },
+      "original_path": "Data/Magic.wil",
+      "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+      "source_index": 1380,
+      "source_offset": 15846796,
+      "source_draw_offset": [
+        -13,
+        -9
+      ],
+      "pixel_size": [
+        72,
+        29
+      ],
+      "library_image_count": 4010,
+      "mapping_rule": "EffectBase effect 14 explicitly labels ground nail/entrapment at 1380",
+      "mapping_confidence": "A",
+      "pixel_confidence": "A"
+    },
+    "mass_healing": {
+      "skill_ids": [
+        "taoist.mass_healing"
+      ],
+      "role": "area_effect",
+      "path": "assets/art/characters/taoist/effects/mass_healing.png",
+      "distribution_id": "client.classic_raw_complete",
+      "source_priority": {
+        "lane": "client_assets",
+        "tier": "primary",
+        "order": 0,
+        "weight": 100
+      },
+      "original_path": "Data/Magic.wil",
+      "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
+      "source_index": 1800,
+      "source_offset": 20218100,
+      "source_draw_offset": [
+        -63,
+        -60
+      ],
+      "pixel_size": [
+        168,
+        116
+      ],
+      "library_image_count": 4010,
+      "mapping_rule": "PlayScn.NewMagic effect 27 explosion base 1800",
+      "mapping_confidence": "A",
       "pixel_confidence": "A"
     },
     "summon_divine_beast": {

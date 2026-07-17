@@ -11,6 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MAGIC = ROOT / "dev_art_sources/reference/original_gameofmir/M2Server/Magic.pas"
 OBJ_BASE = ROOT / "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas"
+EVENT = ROOT / "dev_art_sources/reference/original_gameofmir/M2Server/Event.pas"
 SETUP = ROOT / "dev_art_sources/reference/original_gameofmir/MirServer/Mir200/!Setup.txt"
 CATALOG = ROOT / "assets/data/vanilla_176/profession_magic_info.json"
 OUTPUT = ROOT / "assets/data/vanilla_176/profession_combat_rules.json"
@@ -79,7 +80,7 @@ def special_fields(skill_id: str) -> dict:
     if skill_id == "wizard.lightning":
         fields["undead_damage_multiplier"] = 1.5
     elif skill_id == "wizard.hell_lightning":
-        fields.update({"undead_damage_divisor": 1, "living_damage_divisor": 10})
+        fields.update({"undead_damage_divisor": 1, "living_damage_divisor": 10, "area_radius_cells": 2})
     elif skill_id == "wizard.repulsion_ring":
         fields.update({"push_cells_formula": "1 + max(0, skill_level - 1) + random(2)", "success_random_bound": 20})
     elif skill_id == "wizard.teleport":
@@ -94,7 +95,15 @@ def special_fields(skill_id: str) -> dict:
             "mutiny_minutes_formula": "random_range(0,caster_level) + 60*floor(caster_level/10) + (skill_level<<2)*5",
         })
     elif skill_id == "wizard.fire_wall":
-        fields.update({"shape": "five_cell_cross", "duration_formula": "get_power(10) + floor(mc_roll / 2)"})
+        fields.update({
+            "shape": "five_cell_cross",
+            "duration_formula": "get_power(10) + floor(mc_roll / 2)",
+            "tick_interval_ms": 3000,
+        })
+    elif skill_id == "wizard.exploding_flame":
+        fields["area_radius_cells"] = 1
+    elif skill_id == "wizard.ice_storm":
+        fields["area_radius_cells"] = 1
     elif skill_id == "wizard.magic_shield":
         fields.update({
             "shield_power_formula": "get_power(mc_roll + 15)",
@@ -114,6 +123,10 @@ def special_fields(skill_id: str) -> dict:
             "anti_poison_formula": "random(target_anti_poison+7) <= 6",
             "amy_ounsul_point": 20,
         })
+    elif skill_id == "taoist.healing":
+        fields["apply_delay_ms"] = 800
+    elif skill_id == "taoist.mass_healing":
+        fields.update({"apply_delay_ms": 800, "area_radius_cells": 1})
     elif skill_id in {"taoist.invisibility", "taoist.mass_invisibility"}:
         fields.update({"duration_formula": "get_power13(30) + sc_roll*3", "area_radius_cells": 1 if skill_id.endswith("mass_invisibility") else 0})
     elif skill_id == "taoist.entrapment":
@@ -148,6 +161,7 @@ def special_fields(skill_id: str) -> dict:
 def main() -> None:
     magic_text = MAGIC.read_text(encoding="gbk", errors="replace")
     obj_text = OBJ_BASE.read_text(encoding="gbk", errors="replace")
+    event_text = EVENT.read_text(encoding="gbk", errors="replace")
     setup_text = SETUP.read_text(encoding="gbk", errors="replace")
     required_evidence = [
         "function GetPower(nPower:Integer;UserMagic:pTUserMagic):Integer;",
@@ -164,7 +178,7 @@ def main() -> None:
         "MagTammingTargetHPRate=1000",
         "MagTammingCount=5",
     ]
-    if any(item not in magic_text for item in required_evidence) or any(item not in setup_text for item in required_setup_evidence) or "(m_btMagBubbleDefenceLevel + 2) * 8.0" not in obj_text:
+    if any(item not in magic_text for item in required_evidence) or any(item not in setup_text for item in required_setup_evidence) or "(m_btMagBubbleDefenceLevel + 2) * 8.0" not in obj_text or "m_dwRunTick) > 3000" not in event_text:
         raise RuntimeError("classic Magic.pas/!Setup.txt evidence changed or is incomplete")
     catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
     output = {
@@ -192,6 +206,13 @@ def main() -> None:
             "original_path": "M2Server/ObjBase.pas",
             "workspace_path": str(OBJ_BASE.relative_to(ROOT)).replace("\\", "/"),
             "sha256": digest(OBJ_BASE),
+        },
+        "classicEventSource": {
+            "distribution_id": "source.original_gameofmir.server_suite",
+            "source_priority": {"lane": "server_rules", "tier": "primary", "order": 0, "weight": 100},
+            "original_path": "M2Server/Event.pas",
+            "workspace_path": str(EVENT.relative_to(ROOT)).replace("\\", "/"),
+            "sha256": digest(EVENT),
         },
         "formulaContracts": {
             "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",

@@ -201,10 +201,7 @@ func state_name() -> String:
 
 
 func _install_visual() -> void:
-	var path := str(VISUAL_PATHS.get(skill_id, ""))
-	if path.is_empty() or not ResourceLoader.exists(path):
-		return
-	var texture := load(path) as Texture2D
+	var texture := CasterSkillVisualRegistry.texture(skill_id)
 	if texture == null:
 		return
 	_sprite = Sprite2D.new()

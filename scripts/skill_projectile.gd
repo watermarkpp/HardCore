@@ -4,7 +4,6 @@ extends Node2D
 const VISUAL_PATHS := {
 	"wizard.fireball": "res://assets/art/characters/wizard/effects/arcane_projectile.png",
 	"wizard.great_fireball": "res://assets/art/characters/wizard/effects/great_fireball.png",
-	"wizard.lightning": "res://assets/art/characters/wizard/effects/lightning.png",
 	"taoist.soul_fire_talisman": "res://assets/art/characters/taoist/effects/soul_fire_talisman.png",
 }
 
@@ -45,10 +44,7 @@ func _ready() -> void:
 
 
 func _install_visual() -> void:
-	var path := str(VISUAL_PATHS.get(skill_id, ""))
-	if path.is_empty() or not ResourceLoader.exists(path):
-		return
-	var texture := load(path) as Texture2D
+	var texture := CasterSkillVisualRegistry.texture(skill_id)
 	if texture == null:
 		return
 	_sprite = Sprite2D.new()
@@ -86,6 +82,8 @@ func _apply_hit(enemy: EnemyActor) -> void:
 
 
 func _draw() -> void:
+	if not skill_id.is_empty():
+		return
 	draw_line(-direction * 30.0, Vector2.ZERO, Color(projectile_color, 0.25), 10.0)
 	if _sprite == null:
 		draw_circle(Vector2.ZERO, 9.0, projectile_color)

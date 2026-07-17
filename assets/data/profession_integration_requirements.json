@@ -1,9 +1,18 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "ownerBranch": "codex/integration",
   "status": "pending_cross_system_integration",
   "reason": "scripts/game_root.gd and scripts/layers/runtime/combat_runtime_service.gd are integration-owned",
   "requirements": [
+    {
+      "id": "profession.caster_runtime_dispatch.v1",
+      "files": [
+        "scripts/game_root.gd",
+        "scripts/layers/runtime/combat_runtime_service.gd"
+      ],
+      "change": "Replace the Chinese-name caster switch and direct node construction with CasterSkillRuntime.resolve(stable_skill_id, explicit_context), followed by CasterSkillRuntime.execute_cast(plan, runtime_context). The executor applies direct damage, healing and supported statuses and attaches the exact visual/projectile/ground/summon nodes. Supply validated_home_map_destination and target_armor_poison adapters where the executor explicitly requests them.",
+      "acceptance": "all 27 caster IDs pass caster_skill_runtime_test through the integrated runtime; 26 active skills instantiate formal primary-client pixels, direct lightning damage and healing are applied by caster_skill_execution.v1, fire wall creates the exact five-cell cross, and spiritual warfare remains an explicit passive with no runtime visual"
+    },
     {
       "id": "profession.special_behavior_dispatch.v1",
       "files": [
@@ -27,8 +36,8 @@
       "files": [
         "scripts/game_root.gd"
       ],
-      "change": "Pass stable source_skill_id into SkillProjectile.setup and GroundSkillEffect.setup; pass learned_level, source_skill_id and owner level into SummonActor.setup.",
-      "acceptance": "great fireball, lightning, fire wall, exploding flame and ice storm each load their own primary-client frame instead of profession-wide inference"
+      "change": "Prefer CasterSkillRuntime.create_cast_nodes. If the legacy construction path must temporarily remain, pass stable source_skill_id into SkillProjectile.setup and GroundSkillEffect.setup and pass learned_level, source_skill_id and owner level into SummonActor.setup.",
+      "acceptance": "all 26 active caster skills load the per-ID formal primary-client frame recorded in caster_skill_visuals.json instead of profession-wide inference or generated fallback"
     },
     {
       "id": "profession.status_formula_dispatch.v1",
