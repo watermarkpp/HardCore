@@ -3,9 +3,11 @@ extends RefCounted
 
 const BEHAVIOR_PATH := "res://assets/data/monster_behavior_profiles.json"
 const ANIMATION_PATH := "res://assets/data/runtime/monster_animation_catalog.json"
+const SERVICE_RUNTIME_PATH := "res://assets/data/service_monster_runtime_catalog.json"
 
 static var _behavior_catalog: Dictionary = {}
 static var _animation_by_id: Dictionary = {}
+static var _service_runtime_catalog: Dictionary = {}
 
 
 static func monster_id(monster_data: Dictionary) -> int:
@@ -18,6 +20,9 @@ static func stable_key(monster_data: Dictionary) -> String:
 
 
 static func behavior_profile(monster_data: Dictionary) -> Dictionary:
+	var runtime_entry := service_runtime_entry(monster_data)
+	var runtime_profile: Variant = runtime_entry.get("behaviorProfile", {})
+	var profile: Dictionary = runtime_profile.duplicate(true) if runtime_profile is Dictionary else {}
 	var catalog := _behavior()
 	var profile_id := ""
 	var key := stable_key(monster_data)
@@ -28,8 +33,30 @@ static func behavior_profile(monster_data: Dictionary) -> Dictionary:
 			profile_id = str(catalog.get("legacyNameToProfile", {}).get(legacy_name, ""))
 			if not profile_id.is_empty():
 				break
-	var profile: Variant = catalog.get("profiles", {}).get(profile_id, {})
-	return profile.duplicate(true) if profile is Dictionary else {}
+	var authored: Variant = catalog.get("profiles", {}).get(profile_id, {})
+	if authored is Dictionary:
+		_merge_recursive(profile, authored)
+	return profile
+
+
+static func service_runtime_entry(monster_data: Dictionary) -> Dictionary:
+	var catalog := _service_runtime()
+	var key := stable_key(monster_data)
+	var by_id: Variant = catalog.get("runtimeByMonsterId", {})
+	if not key.is_empty() and by_id is Dictionary:
+		var direct: Variant = by_id.get(key, {})
+		if direct is Dictionary and not direct.is_empty():
+			return direct.duplicate(true)
+	var legacy_ids: Variant = catalog.get("legacyNameToMonsterId", {})
+	if legacy_ids is Dictionary and by_id is Dictionary:
+		for legacy_name: String in _legacy_names(monster_data):
+			if not legacy_ids.has(legacy_name):
+				continue
+			var legacy_key := str(int(legacy_ids.get(legacy_name, -1)))
+			var legacy: Variant = by_id.get(legacy_key, {})
+			if legacy is Dictionary and not legacy.is_empty():
+				return legacy.duplicate(true)
+	return {}
 
 
 static func boss_rule(monster_data: Dictionary, rules: Dictionary) -> Dictionary:
@@ -71,6 +98,7 @@ static func animation_lookup_name(monster_data: Dictionary) -> String:
 static func reset_caches_for_test() -> void:
 	_behavior_catalog.clear()
 	_animation_by_id.clear()
+	_service_runtime_catalog.clear()
 
 
 static func _legacy_names(monster_data: Dictionary) -> Array[String]:
@@ -85,6 +113,12 @@ static func _behavior() -> Dictionary:
 	if _behavior_catalog.is_empty():
 		_behavior_catalog = _load_json(BEHAVIOR_PATH)
 	return _behavior_catalog
+
+
+static func _service_runtime() -> Dictionary:
+	if _service_runtime_catalog.is_empty():
+		_service_runtime_catalog = _load_json(SERVICE_RUNTIME_PATH)
+	return _service_runtime_catalog
 
 
 static func _ensure_animation_index() -> void:
@@ -104,3 +138,14 @@ static func _load_json(path: String) -> Dictionary:
 	var file := FileAccess.open(path, FileAccess.READ)
 	var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
 	return parsed if parsed is Dictionary else {}
+
+
+static func _merge_recursive(target: Dictionary, overlay: Dictionary) -> void:
+	for key: Variant in overlay:
+		var value: Variant = overlay[key]
+		if value is Dictionary and target.get(key, null) is Dictionary:
+			var nested: Dictionary = target[key]
+			_merge_recursive(nested, value)
+			target[key] = nested
+		else:
+			target[key] = value.duplicate(true) if value is Dictionary or value is Array else value
