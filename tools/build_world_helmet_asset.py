@@ -51,6 +51,16 @@ ANCHOR_STRIDE = 2224
 CELL = (192, 160)
 SOURCE_DRAW_ORIGIN = (64, 80)
 RUNTIME_ENVELOPE_SCALE = 1.0
+VISUAL_MASS_TARGET_MULTIPLIER = 1.15
+CANONICAL_DIRECTIONS = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+# The approved sheet is not laid out in canonical game-row order. These labels
+# were assigned from visible front aperture, jaw projection and rear shell for
+# every source slot; game rows must select by label instead of zip order.
+APPROVED_SOURCE_SLOT_DIRECTIONS = ["N", "E", "W", "SW", "S", "SE", "NW", "NE"]
+CANONICAL_ROW_SOURCE_SLOTS = [
+    APPROVED_SOURCE_SLOT_DIRECTIONS.index(direction)
+    for direction in CANONICAL_DIRECTIONS
+]
 ACTIONS = {
     "idle": {"start": 0, "frames": 4},
     "walk": {"start": 64, "frames": 6},
@@ -278,16 +288,15 @@ def quantize_matte_black_iron(image: Image.Image) -> Image.Image:
     return result
 
 
-def _direct_design_cutouts() -> list[Image.Image]:
-    """Remove only the flat grey backdrop and return the eight approved views."""
+def _direct_design_cutouts() -> dict[str, Image.Image]:
+    """Remove the grey backdrop and key every source slot by its visible facing."""
     concept = Image.open(APPROVED_CONCEPT).convert("RGB")
     concept_width, concept_height = concept.size
-    cutouts: list[Image.Image] = []
+    cutouts: dict[str, Image.Image] = {}
     DIRECT_DESIGN_ROOT.mkdir(parents=True, exist_ok=True)
-    labels = ["n", "ne", "e", "se", "s", "sw", "w", "nw"]
-    for direction, label in enumerate(labels):
-        left = round(direction * concept_width / 8)
-        right = round((direction + 1) * concept_width / 8)
+    for source_slot, direction in enumerate(APPROVED_SOURCE_SLOT_DIRECTIONS):
+        left = round(source_slot * concept_width / 8)
+        right = round((source_slot + 1) * concept_width / 8)
         slot = concept.crop((left, 0, right, concept_height))
         border_pixels = []
         for y in range(slot.height):
@@ -305,33 +314,61 @@ def _direct_design_cutouts() -> list[Image.Image]:
                     mask_pixels[x, y] = 255
         box = mask.getbbox()
         if box is None:
-            raise ValueError(f"Approved concept direction is empty after background removal: {label}")
+            raise ValueError(
+                f"Approved concept source slot is empty after background removal: "
+                f"slot={source_slot} direction={direction}"
+            )
         rgb_crop = slot.crop(box)
         alpha_crop = mask.crop(box)
         cutout = rgb_crop.convert("RGBA")
         cutout.putalpha(alpha_crop)
-        cutout.save(DIRECT_DESIGN_ROOT / f"approved_direct_{label}.png")
-        cutouts.append(cutout)
+        cutout.save(DIRECT_DESIGN_ROOT / f"approved_direct_{direction.lower()}.png")
+        cutouts[direction] = cutout
     return cutouts
 
 
+def effective_opaque_pixels(image: Image.Image) -> float:
+    """Return alpha-weighted visible area in fully opaque pixel equivalents."""
+    histogram = image.getchannel("A").histogram()
+    return sum(alpha * count for alpha, count in enumerate(histogram)) / 255.0
+
+
 def build_direction_variants(client_baseline: dict) -> list[Image.Image]:
-    """Use the approved eight views directly, changing only backdrop and size."""
-    labels = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+    """Use the approved views directly and calibrate both envelope and visual mass."""
     runtime_envelopes: dict = client_baseline.get("directionRuntimeTargetSize", {})
+    runtime_opaque_pixels: dict = client_baseline.get("directionRuntimeOpaquePixels", {})
     cutouts = _direct_design_cutouts()
     variants: list[Image.Image] = []
-    for direction, cutout in zip(labels, cutouts, strict=True):
+    for direction in CANONICAL_DIRECTIONS:
+        cutout = cutouts[direction]
         envelope = runtime_envelopes.get(direction)
         if not isinstance(envelope, list) or len(envelope) != 2:
             raise ValueError(f"Missing real-client helmet envelope for {direction}")
+        median_opaque_pixels = runtime_opaque_pixels.get(direction)
+        if not isinstance(median_opaque_pixels, (int, float)) or median_opaque_pixels <= 0:
+            raise ValueError(f"Missing real-client helmet visual mass for {direction}")
         maximum_width, maximum_height = int(envelope[0]), int(envelope[1])
-        scale = min(maximum_width / cutout.width, maximum_height / cutout.height)
-        target_size = (
-            max(1, round(cutout.width * scale)),
-            max(1, round(cutout.height * scale)),
+        maximum_scale = min(maximum_width / cutout.width, maximum_height / cutout.height)
+        target_visual_mass = float(median_opaque_pixels) * VISUAL_MASS_TARGET_MULTIPLIER
+        candidates: dict[tuple[int, int], tuple[Image.Image, float]] = {}
+        for step in range(1, 2001):
+            scale = maximum_scale * step / 2000.0
+            target_size = (
+                max(1, round(cutout.width * scale)),
+                max(1, round(cutout.height * scale)),
+            )
+            if target_size in candidates:
+                continue
+            candidate = cutout.resize(target_size, Image.Resampling.LANCZOS)
+            candidates[target_size] = (candidate, effective_opaque_pixels(candidate))
+        variant, _mass = min(
+            candidates.values(),
+            key=lambda record: (
+                abs(math.log(max(record[1], 0.001) / target_visual_mass)),
+                -record[1],
+            ),
         )
-        variants.append(cutout.resize(target_size, Image.Resampling.LANCZOS))
+        variants.append(variant)
     if any(image.getchannel("A").getbbox() is None for image in variants):
         raise AssertionError("Direct approved Black Iron Helmet direction is empty")
     return variants
@@ -424,7 +461,10 @@ def build_action(
                     "frame": frame,
                     "anchorOpaqueBox": list(box),
                     "helmetAnchorCentroid": [anchor_center_x, anchor_center_y],
-                    "helmetAnchorRule": "same-cell six-appearance Helmet.wil median centroid",
+                    "helmetAnchorRule": "same-cell Hair.wil head-proximal Helmet.wil centroid cluster",
+                    "hairAnchorCentroid": anchor_record["hairAnchorCentroid"],
+                    "selectedAnchorAppearances": anchor_record["selectedAppearances"],
+                    "rejectedAnchorAppearances": anchor_record["outlierAppearances"],
                     "paste": [paste_x - frame * CELL[0], paste_y - direction * CELL[1]],
                     "generatedSize": [helmet.width, helmet.height],
                     "rotatedForDeath": rotated,
@@ -507,7 +547,7 @@ def main() -> None:
         for name in ACTIONS
     }
     payload = {
-        "schemaVersion": 12,
+        "schemaVersion": 15,
         "item": "Black Iron Helmet / 黑铁头盔",
         "classification": "project-generated presentation asset based on verified classic evidence",
         "referenceIcon": f"res://{REFERENCE_ICON.relative_to(ROOT).as_posix()}",
@@ -518,6 +558,8 @@ def main() -> None:
             "approvedConceptSha256": sha256(APPROVED_CONCEPT),
             "directDirectionCutouts": f"res://{DIRECT_DESIGN_ROOT.relative_to(ROOT).as_posix()}",
             "directUsePolicy": "The eight approved views are used directly; processing is limited to grey-background removal and aspect-preserving resize.",
+            "sourceSlotDirectionOrder": APPROVED_SOURCE_SLOT_DIRECTIONS,
+            "canonicalRowSourceSlots": CANONICAL_ROW_SOURCE_SLOTS,
             "godotRenderer": "res://tools/render_black_iron_helmet_3d.gd",
             "godotRendererSha256": sha256(ROOT / "tools/render_black_iron_helmet_3d.gd"),
             "godotRenderManifest": f"res://{GODOT_RENDER_MANIFEST.relative_to(ROOT).as_posix()}",
@@ -543,6 +585,7 @@ def main() -> None:
             "directionRuntimeOpaquePixels": client_helmet_baseline["directionRuntimeOpaquePixels"],
             "poseAnchorRule": client_helmet_baseline["poseAnchorRule"],
             "poseAnchorRecords": len(pose_anchor_records),
+            "outlierFilteredPoseRecords": client_helmet_baseline["outlierFilteredPoseRecords"],
             "deathCanonicalRotate90Degrees": client_helmet_baseline["deathFinal"]["canonicalSpriteRotate90Degrees"],
         },
         "deathPoseBaseline": {
@@ -561,7 +604,7 @@ def main() -> None:
         },
         "generation": {
             "equipmentIcon": "Verified StateItem #344 remains the equipment-window icon and unique identity evidence; its old derived world pixels are not used.",
-            "runtimeDirections": "All eight standing/action views are direct crops of the approved narrow-jaw meteoric concept in its prompted N/NE/E/SE/S/SW/W/NW order; only the grey backdrop is removed and each crop is resized with its aspect ratio preserved.",
+            "runtimeDirections": "The approved source slots are visually classified as N/E/W/SW/S/SE/NW/NE, then reordered through source slots 0/7/1/5/4/3/2/6 into canonical game rows N/NE/E/SE/S/SW/W/NW; only the grey backdrop is removed and each crop is resized with its aspect ratio preserved.",
             "deathDirections": "Every N/NE/E/SE/S/SW/W/NW x F0/F1/F2/F3 cell is independently rendered from the same-row same-frame evidence record.",
             "authorship": "Project-generated extension; not claimed as an original client world frame.",
             "aiGenerated": True,
@@ -569,10 +612,11 @@ def main() -> None:
             "aiPixelsLimitedTo": ["idle", "walk", "attack", "hit"],
             "runtimePixelGenerator": "Direct approved-design crops with background removal and aspect-preserving resize for standing/action directions; Godot 4.7 orthographic complete-geometry renderer for death poses.",
             "oldDerivedStateItemWorldPixelsUsed": False,
-            "scalePolicy": "Fit each approved direction crop within the same-direction client median width/height while preserving its aspect ratio; no redraw, recolour, quantization or opaque-mass rescale.",
+            "scalePolicy": "Choose the aspect-preserving size that stays inside the same-direction client median envelope and most closely matches 1.15x its alpha-weighted visible-area median; no redraw, recolour or quantization.",
+            "visualMassTargetMultiplier": VISUAL_MASS_TARGET_MULTIPLIER,
             "runtimeEnvelopeScale": RUNTIME_ENVELOPE_SCALE,
-            "positionPolicy": "For every action/direction/frame, centre the generated sprite on the median opaque centroid of all six Helmet.wil appearances for that exact cell; Hair.wil is no longer the placement authority.",
-            "deathPosePolicy": "Use the exact same direction row and frame column in warrior_death.png, Helmet.wil and Hair.wil; render the complete helmet geometry, then centre it on the same-cell six-appearance Helmet.wil median centroid.",
+            "positionPolicy": "For every action/direction/frame, reject any separated Helmet.wil centroid cluster that is far from the same-cell male-warrior Hair.wil head, then centre the generated sprite on the median of the remaining head-proximal samples.",
+            "deathPosePolicy": "Use the exact same direction row and frame column in warrior_death.png, Helmet.wil and Hair.wil; render the complete helmet geometry, then centre it on the same-cell head-proximal Helmet.wil cluster.",
         },
         "directionReference": f"res://{direction_reference.relative_to(ROOT).as_posix()}",
         "actions": actions,

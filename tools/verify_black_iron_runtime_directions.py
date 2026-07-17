@@ -15,8 +15,8 @@ ROOT = Path(__file__).resolve().parents[1]
 ATLAS = ROOT / "assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png"
 SOURCE = ROOT / "assets/art/characters/warrior/wear/helmet/black_iron_helmet.source.json"
 CAPTURE_ROOT = ROOT / "outputs/visual_acceptance/player_states"
-REPORT = ROOT / "outputs/validation/black_iron_runtime_directions_v105_narrowjaw.json"
-VERSION = "v105_narrowjaw_20260717"
+REPORT = ROOT / "outputs/validation/black_iron_runtime_directions_v108_death_anchor.json"
+VERSION = "v108_death_anchor_20260717"
 DIRECTIONS = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
 CELL = (192, 160)
 
@@ -27,6 +27,13 @@ def main() -> None:
     accepted_rows = source.get("approvedDirectionReferences", {}).get("acceptedRowMapping", [])
     if accepted_rows != DIRECTIONS:
         raise AssertionError("Godot direction rows are not canonical N..NW order")
+    direction_references = source.get("approvedDirectionReferences", {})
+    if direction_references.get("sourceSlotDirectionOrder") != [
+        "N", "E", "W", "SW", "S", "SE", "NW", "NE"
+    ]:
+        raise AssertionError("Approved source-slot facing classification changed")
+    if direction_references.get("canonicalRowSourceSlots") != [0, 7, 1, 5, 4, 3, 2, 6]:
+        raise AssertionError("Runtime rows do not select the visually matching approved source slots")
 
     source_frames = source["actions"]["idle"]["frames"]
     results = []
@@ -58,6 +65,7 @@ def main() -> None:
                 "pixelTemplateScore": round(float(score), 6),
                 "pixelTemplateLocation": list(location),
                 "canonicalYawExplicit": True,
+                "approvedSourceSlot": direction_references["canonicalRowSourceSlots"][direction_index],
             }
         )
 

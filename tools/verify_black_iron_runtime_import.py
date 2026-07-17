@@ -22,8 +22,9 @@ def main() -> None:
     if len(imported) != 1:
         raise AssertionError(f"Expected one imported idle CTEX, got {len(imported)}")
     cache_fresh = imported[0].stat().st_mtime_ns >= ATLAS.stat().st_mtime_ns
-    if not cache_fresh:
-        raise AssertionError("Godot CTEX is older than the current helmet PNG; run Godot --headless --import")
+    # Godot deliberately skips rewriting CTEX when a generated PNG has a new
+    # mtime but byte-identical content. Runtime pixel matching below is the
+    # authoritative stale-cache check; mtime remains useful diagnostics only.
 
     atlas = Image.open(ATLAS).convert("RGBA")
     screenshot = Image.open(SCREENSHOT).convert("RGB")
@@ -49,7 +50,8 @@ def main() -> None:
 
     payload = {
         "status": "pass",
-        "cacheFresh": True,
+        "cacheMtimeFresh": cache_fresh,
+        "runtimeContentVerified": True,
         "pixelTemplateScore": round(float(score), 6),
         "pixelTemplateLocation": list(location),
         "visibleMeanRgb": [round(value, 1) for value in mean_rgb],
@@ -61,7 +63,8 @@ def main() -> None:
     REPORT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(
         "BLACK_IRON_RUNTIME_IMPORT_PASS "
-        f"cache_fresh=1 pixel_score={score:.6f} mean_rgb={payload['visibleMeanRgb']}"
+        f"cache_mtime_fresh={int(cache_fresh)} runtime_content_verified=1 "
+        f"pixel_score={score:.6f} mean_rgb={payload['visibleMeanRgb']}"
     )
 
 

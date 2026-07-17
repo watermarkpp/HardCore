@@ -27,8 +27,15 @@ def cell_box(frame: int, direction: int) -> tuple[int, int, int, int]:
 
 def main() -> None:
     source = json.loads(SOURCE.read_text(encoding="utf-8"))
-    if source.get("schemaVersion") != 12:
-        raise AssertionError("Black Iron Helmet provenance schema is not version 12")
+    if source.get("schemaVersion") != 15:
+        raise AssertionError("Black Iron Helmet provenance schema is not version 15")
+    direction_references = source.get("approvedDirectionReferences", {})
+    if direction_references.get("sourceSlotDirectionOrder") != [
+        "N", "E", "W", "SW", "S", "SE", "NW", "NE"
+    ]:
+        raise AssertionError("Approved source-slot facing classification changed")
+    if direction_references.get("canonicalRowSourceSlots") != [0, 7, 1, 5, 4, 3, 2, 6]:
+        raise AssertionError("Approved source slots are not reordered into canonical game rows")
     if not source.get("generation", {}).get("aiGenerated", False):
         raise AssertionError("Direct approved-design pixels are not recorded")
     if not source.get("generation", {}).get("aiConceptUsed", False):
@@ -51,6 +58,8 @@ def main() -> None:
     if len(death_records) != 32 or len(godot_manifest.get("records", [])) != 32:
         raise AssertionError("Godot death mapping is not the complete 8x4 table")
     baseline = source.get("clientHelmetParameterBaseline", {})
+    if int(baseline.get("outlierFilteredPoseRecords", 0)) <= 0:
+        raise AssertionError("Head-proximal pose-anchor outlier filtering was not recorded")
     if baseline.get("deathCanonicalRotate90Degrees", True):
         raise AssertionError("Death frames still apply the invalid whole-helmet 90-degree rotation")
     total_frames = 0
@@ -85,8 +94,10 @@ def main() -> None:
                     raise AssertionError(f"{action} direction={direction} frame={frame} misses the body head")
                 frame_boxes.append(helmet_bbox)
                 alpha_histogram = helmet_cell.getchannel("A").histogram()
-                opaque_pixels = sum(alpha_histogram[1:])
-                opaque_counts.append(opaque_pixels)
+                effective_opaque_pixels = sum(
+                    alpha * count for alpha, count in enumerate(alpha_histogram)
+                ) / 255.0
+                opaque_counts.append(round(effective_opaque_pixels, 3))
                 visible_colours = {
                     pixel[:3]
                     for pixel in helmet_cell.getdata()
@@ -108,9 +119,10 @@ def main() -> None:
                     target_opaque = float(
                         source["clientHelmetParameterBaseline"]["directionRuntimeOpaquePixels"][direction_name]
                     )
-                opaque_ratio = opaque_pixels / max(1.0, target_opaque)
-                maximum_opaque_ratio = 1.35 if action == "death" else 2.50
-                if opaque_ratio < 0.65 or opaque_ratio > maximum_opaque_ratio:
+                opaque_ratio = effective_opaque_pixels / max(1.0, target_opaque)
+                minimum_opaque_ratio = 0.65 if action == "death" else 0.90
+                maximum_opaque_ratio = 1.35 if action == "death" else 1.25
+                if opaque_ratio < minimum_opaque_ratio or opaque_ratio > maximum_opaque_ratio:
                     raise AssertionError(
                         f"{action} {direction_name} F{frame} visual mass diverges from client median: {opaque_ratio:.3f}"
                     )
@@ -156,6 +168,7 @@ def main() -> None:
                 if generated[0] > envelope[0] or generated[1] > envelope[1]:
                     raise AssertionError(f"{action} {direction_name} exceeds the real-client median envelope: {generated}")
             helmet_anchor = frame.get("helmetAnchorCentroid", [])
+            hair_anchor = frame.get("hairAnchorCentroid", [])
             pasted_center = [
                 int(frame["paste"][0]) + generated[0] // 2,
                 int(frame["paste"][1]) + generated[1] // 2,
@@ -166,6 +179,18 @@ def main() -> None:
                 raise AssertionError(
                     f"{action} {direction_name} F{frame['frame']} is not centred on its same-cell Helmet.wil anchor"
                 )
+            if action == "death":
+                if len(hair_anchor) != 2:
+                    raise AssertionError(f"death {direction_name} F{frame['frame']} has no Hair.wil head anchor")
+                head_distance = math.dist(
+                    [float(value) for value in helmet_anchor],
+                    [float(value) for value in hair_anchor],
+                )
+                if head_distance > 10.0:
+                    raise AssertionError(
+                        f"death {direction_name} F{frame['frame']} helmet is not on the actor head: "
+                        f"distance={head_distance:.3f}"
+                    )
     if total_frames != 184:
         raise AssertionError(f"Expected 184 logical frames, got {total_frames}")
     report = {
@@ -181,9 +206,11 @@ def main() -> None:
             "walk/attack/hit/death follow per-frame head motion in every direction",
             "helmet horizontally overlaps the equipped dress body in every frame",
             "all standing/action directions use direct approved-design crops with only background removal and resize",
+            "standing/action alpha-weighted visual mass stays within 90%-125% of the same-direction client median",
             "all death directions come from one Godot geometry with explicit canonical yaw",
             "all 184 cells use the matching action/direction/frame six-appearance Helmet.wil median anchor",
             "all 32 death cells use the matching direction/frame Godot pose record",
+            "every death helmet anchor remains within 10 pixels of the same-cell male-warrior Hair.wil head",
             "every generated helmet fits within its real-client median envelope",
             "runtime pixels use only the four-tone neutral matte black-iron palette",
             "death opaque visual mass stays within 65%-135% of the matching client median",

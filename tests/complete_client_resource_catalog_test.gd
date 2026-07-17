@@ -13,7 +13,7 @@ func _ready() -> void:
 	assert(str(catalog.get("database", "")).ends_with("frame_catalog.sqlite"), "frame catalog SQLite path is missing")
 
 	var helmet := _read_json(HELMET_SOURCE_PATH)
-	assert(int(helmet.get("schemaVersion", 0)) == 12, "black iron helmet provenance schema must be v12")
+	assert(int(helmet.get("schemaVersion", 0)) == 15, "black iron helmet provenance schema must be v15")
 	assert(str(helmet.get("classification", "")).begins_with("project-generated"), "generated helmet must remain separated from original client resources")
 	assert(int(helmet.get("referenceIconImage", -1)) == 344, "black iron helmet identity must remain StateItem #344")
 	assert(bool(helmet.get("generation", {}).get("aiGenerated", false)), "direct approved-design pixels must be recorded")
@@ -25,9 +25,17 @@ func _ready() -> void:
 	assert(not bool(helmet.get("generation", {}).get("oldDerivedStateItemWorldPixelsUsed", true)), "runtime atlas must not mix old StateItem-derived world pixels")
 	var direction_references: Dictionary = helmet.get("approvedDirectionReferences", {})
 	assert(str(direction_references.get("approvedConcept", "")).ends_with("black_iron_helmet_approved_meteoric_narrow_jaw_20260717.png"), "approved narrow-jaw meteoric concept is missing from provenance")
+	assert((direction_references.get("sourceSlotDirectionOrder", []) as Array) == ["N", "E", "W", "SW", "S", "SE", "NW", "NE"], "approved source-slot facing classification changed")
+	var source_slots: Array = direction_references.get("canonicalRowSourceSlots", [])
+	var expected_source_slots := [0, 7, 1, 5, 4, 3, 2, 6]
+	assert(source_slots.size() == expected_source_slots.size(), "approved source-slot mapping length changed")
+	for direction_index in range(expected_source_slots.size()):
+		assert(int(source_slots[direction_index]) == expected_source_slots[direction_index], "approved source slot is not mapped to canonical game row %d" % direction_index)
 	assert(str(direction_references.get("godotRenderer", "")).ends_with("render_black_iron_helmet_3d.gd"), "Godot helmet renderer is missing from provenance")
 	assert(is_equal_approx(float(helmet.get("generation", {}).get("runtimeEnvelopeScale", 0.0)), 1.0), "black iron helmet must use the client median size without arbitrary scale")
+	assert(is_equal_approx(float(helmet.get("generation", {}).get("visualMassTargetMultiplier", 0.0)), 1.15), "black iron helmet visual mass must be calibrated to 1.15x the client median")
 	assert(int(helmet.get("clientHelmetParameterBaseline", {}).get("poseAnchorRecords", 0)) == 184, "Helmet.wil same-cell anchor table must cover all 184 frames")
+	assert(int(helmet.get("clientHelmetParameterBaseline", {}).get("outlierFilteredPoseRecords", 0)) > 0, "non-head Helmet.wil pose clusters must be filtered")
 	assert(int(helmet.get("deathPoseBaseline", {}).get("records", 0)) == 32, "death helmet mapping must cover 8 directions x 4 frames")
 	assert(int(helmet.get("completeClientCoverage", {}).get("indexedFrames", 0)) == 962251, "helmet provenance must bind the complete client scan")
 	for action_name in ["idle", "walk", "attack", "hit", "death"]:

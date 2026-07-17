@@ -15,9 +15,12 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 LIBRARY = ROOT / "dev_art_sources/external/mir2opensource_full/Data/Helmet.wil"
+HAIR_LIBRARY = ROOT / "dev_art_sources/external/mir2opensource_full/Data/Hair.wil"
 OUTPUT = ROOT / "outputs/resource_catalog/black_iron_helmet/client_helmet_parameter_baseline.json"
 STRIDE = 600
 APPEARANCES = 6
+HAIR_STRIDE = 2224
+HAIR_APPEARANCE = 2
 CELL = (192, 160)
 DRAW_ORIGIN = (64, 80)
 DIRECTIONS = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
@@ -102,10 +105,31 @@ def scalar_stats(values: list[int]) -> dict:
     }
 
 
+def head_proximal_samples(
+    samples: list[dict],
+    hair_centroid: tuple[float, float],
+) -> tuple[list[dict], list[dict]]:
+    """Reject a separated Helmet.wil pose cluster that is not at the actor head."""
+    ranked = sorted(
+        samples,
+        key=lambda sample: math.dist(sample["centroid"], hair_centroid),
+    )
+    half = len(ranked) // 2
+    if len(ranked) >= 6 and half >= 3:
+        near_distance = math.dist(ranked[half - 1]["centroid"], hair_centroid)
+        far_distance = math.dist(ranked[half]["centroid"], hair_centroid)
+        if far_distance - near_distance >= 16.0 and far_distance >= near_distance * 2.5:
+            return ranked[:half], ranked[half:]
+    return samples, []
+
+
 def main() -> None:
     data, palette, offsets, info = read_library(LIBRARY)
+    hair_data, hair_palette, hair_offsets, hair_info = read_library(HAIR_LIBRARY)
     if int(info["image_count"]) != STRIDE * APPEARANCES:
         raise AssertionError("Helmet.wil no longer matches six 600-frame appearances")
+    if int(hair_info["image_count"]) <= HAIR_APPEARANCE * HAIR_STRIDE + 599:
+        raise AssertionError("Hair.wil does not contain the selected male-warrior anchor appearance")
     action_values: dict[str, list[tuple[int, int]]] = {name: [] for name in ACTIONS}
     action_opaque: dict[str, list[int]] = {name: [] for name in ACTIONS}
     idle_by_direction: dict[str, list[tuple[int, int]]] = {direction: [] for direction in DIRECTIONS}
@@ -152,32 +176,61 @@ def main() -> None:
         for direction, value in direction_stats.items()
     }
     pose_anchors: dict[str, list[dict]] = {name: [] for name in ACTIONS}
+    outlier_filtered_records = 0
     for (action_name, direction_index, frame), samples in sorted(
         pose_samples.items(), key=lambda item: (list(ACTIONS).index(item[0][0]), item[0][1], item[0][2])
     ):
+        hair_index = (
+            HAIR_APPEARANCE * HAIR_STRIDE
+            + int(ACTIONS[action_name]["start"])
+            + direction_index * 8
+            + frame
+        )
+        hair_measured = frame_metrics(hair_data, hair_palette, hair_offsets, hair_index)
+        if hair_measured is None:
+            raise AssertionError(
+                f"Hair anchor is empty: action={action_name} direction={direction_index} frame={frame}"
+            )
+        hair_box, _hair_opaque, hair_centroid = hair_measured
+        selected_samples, outlier_samples = head_proximal_samples(samples, hair_centroid)
+        if outlier_samples:
+            outlier_filtered_records += 1
         pose_anchors[action_name].append(
             {
                 "direction": DIRECTIONS[direction_index],
                 "directionRow": direction_index,
                 "frame": frame,
                 "clientAppearanceCount": len(samples),
+                "selectedAppearanceCount": len(selected_samples),
+                "selectedAppearances": [sample["appearance"] for sample in selected_samples],
+                "outlierAppearances": [sample["appearance"] for sample in outlier_samples],
+                "hairAnchorSourceIndex": hair_index,
+                "hairAnchorOpaqueBox": list(hair_box),
+                "hairAnchorCentroid": [
+                    round(hair_centroid[0], 4),
+                    round(hair_centroid[1], 4),
+                ],
                 "centroidMedian": [
-                    round(statistics.median(sample["centroid"][0] for sample in samples), 4),
-                    round(statistics.median(sample["centroid"][1] for sample in samples), 4),
+                    round(statistics.median(sample["centroid"][0] for sample in selected_samples), 4),
+                    round(statistics.median(sample["centroid"][1] for sample in selected_samples), 4),
                 ],
                 "bboxMedian": [
-                    round(statistics.median(sample["bbox"][0] for sample in samples), 4),
-                    round(statistics.median(sample["bbox"][1] for sample in samples), 4),
-                    round(statistics.median(sample["bbox"][2] for sample in samples), 4),
-                    round(statistics.median(sample["bbox"][3] for sample in samples), 4),
+                    round(statistics.median(sample["bbox"][0] for sample in selected_samples), 4),
+                    round(statistics.median(sample["bbox"][1] for sample in selected_samples), 4),
+                    round(statistics.median(sample["bbox"][2] for sample in selected_samples), 4),
+                    round(statistics.median(sample["bbox"][3] for sample in selected_samples), 4),
                 ],
                 "samples": samples,
             }
         )
     payload = {
-        "schemaVersion": 3,
+        "schemaVersion": 4,
         "source": LIBRARY.relative_to(ROOT).as_posix(),
         "sourceSha256": hashlib.sha256(LIBRARY.read_bytes()).hexdigest(),
+        "hairAnchorSource": HAIR_LIBRARY.relative_to(ROOT).as_posix(),
+        "hairAnchorSourceSha256": hashlib.sha256(HAIR_LIBRARY.read_bytes()).hexdigest(),
+        "hairAnchorAppearance": HAIR_APPEARANCE,
+        "hairAnchorStride": HAIR_STRIDE,
         "imageCount": int(info["image_count"]),
         "appearanceStride": STRIDE,
         "appearanceCount": APPEARANCES,
@@ -193,7 +246,8 @@ def main() -> None:
             direction: round(value["opaquePixels"]["median"])
             for direction, value in direction_stats.items()
         },
-        "poseAnchorRule": "For every action/direction/frame, place the generated helmet at the median opaque centroid of the six authored Helmet.wil appearances for that exact cell.",
+        "poseAnchorRule": "For every action/direction/frame, use the same-cell Hair.wil male-warrior head centroid to reject a separated non-head Helmet.wil cluster, then place the generated helmet at the median centroid of the remaining head-proximal samples.",
+        "outlierFilteredPoseRecords": outlier_filtered_records,
         "poseAnchors": pose_anchors,
         "deathFinal": {
             **stats(death_final),

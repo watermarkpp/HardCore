@@ -2,7 +2,7 @@ extends Node
 
 const CROP := Rect2i(535, 205, 210, 220)
 const DIRECTION_NAMES := ["n", "ne", "e", "se", "s", "sw", "w", "nw"]
-const ACCEPTANCE_VERSION := "v105_narrowjaw_20260717"
+const ACCEPTANCE_VERSION := "v108_death_anchor_20260717"
 const DIRECTION_VECTORS := [
 	Vector2.UP,
 	Vector2(0.70710678, -0.70710678),
@@ -81,8 +81,11 @@ func _ready() -> void:
 	# Death is a 32-cell authored mapping. Capture every direction and every
 	# frame so a correct south sample cannot hide a mismatched east/west row.
 	for direction_index in range(DIRECTION_NAMES.size()):
-		player.facing = DIRECTION_VECTORS[direction_index]
 		for death_frame in range(4):
+			# The live player loop can refresh facing between awaited frames.
+			# Pin it for every captured death cell so the test itself cannot
+			# contaminate the direction-row assertion.
+			player.facing = DIRECTION_VECTORS[direction_index]
 			visual.play_death(0.8)
 			visual._process((float(death_frame) + 0.1) * 0.2)
 			await get_tree().process_frame
