@@ -14,6 +14,8 @@ $Suites = @{
     monster = @(
 		'tests/monster_id_contract_test.tscn',
 		'tests/all_monster_loading_test.tscn',
+		'tests/complete_monster_client_art_test.tscn',
+		'tests/fixed_area_monster_test.tscn',
 		'tests/classic_boss_order_test.tscn',
 		'tests/monster_threat_animation_test.tscn',
 		'tests/bich_monster_visual_test.tscn',

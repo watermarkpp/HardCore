@@ -8,14 +8,21 @@ DATA = json.loads((ROOT / "assets/data/legend176_data.json").read_text(encoding=
 COMMON = json.loads((ROOT / "assets/data/bich_common_client_art_sources.json").read_text(encoding="utf-8"))
 UNDEAD = json.loads((ROOT / "assets/data/bich_undead_client_art_sources.json").read_text(encoding="utf-8"))
 BOSSES = json.loads((ROOT / "assets/data/classic_boss_client_art_sources.json").read_text(encoding="utf-8"))
+COMPLETE = json.loads((ROOT / "assets/data/complete_monster_client_art_sources.json").read_text(encoding="utf-8"))
 SKIN = json.loads((ROOT / "assets/presentation/skins/classic_client/skin_manifest.json").read_text(encoding="utf-8"))
 OUT = ROOT / "assets/data/runtime/monster_animation_catalog.json"
 
-client = {**COMMON.get("runtimeMappings", {}), **UNDEAD.get("runtimeMappings", {}), **BOSSES.get("runtimeMappings", {})}
+client = {
+    **COMMON.get("runtimeMappings", {}),
+    **UNDEAD.get("runtimeMappings", {}),
+    **BOSSES.get("runtimeMappings", {}),
+    **COMPLETE.get("runtimeMappings", {}),
+}
 client_by_id = {
     **COMMON.get("runtimeMappingsByMonsterId", {}),
     **UNDEAD.get("runtimeMappingsByMonsterId", {}),
     **BOSSES.get("runtimeMappingsByMonsterId", {}),
+    **COMPLETE.get("runtimeMappingsByMonsterId", {}),
 }
 authored = SKIN.get("runtimeAssets", {}).get("fallbackMonsters", {})
 rows = []

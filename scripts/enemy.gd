@@ -49,6 +49,9 @@ var boss_rule: Dictionary = {}
 var behavior_profile: Dictionary = {}
 var service_ai_code := -1
 var service_move_interval_ms := 0
+var stationary := false
+var area_attack_rule: Dictionary = {}
+var summon_rule: Dictionary = {}
 
 var _attack_timer := 0.0
 var _attack_interval := 1.55
@@ -75,6 +78,10 @@ var _threat_table := {}
 var _threat_decay_per_second := 4.0
 var _leash_multiplier := 1.5
 var _control_anchor := Vector2.INF
+var _area_attack_cooldown := 0.0
+var _area_attack_warning := 0.0
+var _summon_cooldown := 0.0
+var _summon_warning := 0.0
 
 
 func setup(data: Dictionary, player_target: PlayerCharacter, boss := false) -> void:
@@ -100,6 +107,8 @@ func setup(data: Dictionary, player_target: PlayerCharacter, boss := false) -> v
 		boss_rule = MonsterIdentityScript.boss_rule(data, GameData.boss_service_rules)
 		if not boss_rule.is_empty():
 			_apply_boss_rule()
+	if stationary:
+		move_speed = 0.0
 
 
 func _apply_behavior_profile() -> void:
@@ -112,6 +121,13 @@ func _apply_behavior_profile() -> void:
 		_attack_interval = float(timing.get("attackIntervalMs")) / 1000.0
 	service_move_interval_ms = int(timing.get("moveIntervalMs", 0))
 	service_ai_code = int(behavior_profile.get("serviceBehavior", {}).get("aiCode", -1))
+	stationary = bool(behavior_profile.get("movement", {}).get("stationary", false))
+	area_attack_rule = behavior_profile.get("areaAttack", {}).duplicate(true)
+	_area_attack_cooldown = float(area_attack_rule.get("initialCooldownSeconds", 0.0))
+	summon_rule = behavior_profile.get("summonRule", {}).duplicate(true)
+	_summon_cooldown = float(summon_rule.get("initialCooldownSeconds", 0.0))
+	if stationary:
+		move_speed = 0.0
 	life_steal_ratio = float(behavior_profile.get("lifeStealRatio", life_steal_ratio))
 	dormant = bool(behavior_profile.get("dormant", dormant))
 	var on_hit: Dictionary = behavior_profile.get("onHit", {})
@@ -214,6 +230,14 @@ func _physics_process(delta: float) -> void:
 	_update_status_effects(delta)
 	_update_pending_attack(delta)
 	_retarget(delta)
+	if _update_area_attack(delta):
+		velocity = Vector2.ZERO
+		queue_redraw()
+		return
+	if _update_behavior_summon(delta):
+		velocity = Vector2.ZERO
+		queue_redraw()
+		return
 	if not is_instance_valid(target):
 		_return_to_spawn()
 		return
@@ -366,6 +390,68 @@ func _deal_melee_hit(hit_target: Node2D, dealt_damage: int) -> void:
 	var poison_damage_value := int(on_hit.get("poisonDamage", 0))
 	if poison_damage_value > 0 and hit_target.has_method("apply_poison"):
 		hit_target.apply_poison(poison_damage_value, float(on_hit.get("poisonSeconds", 0.0)))
+
+
+func _update_area_attack(delta: float) -> bool:
+	if not bool(area_attack_rule.get("enabled", false)):
+		return false
+	if _area_attack_warning > 0.0:
+		_area_attack_warning -= delta
+		if _area_attack_warning <= 0.0:
+			for victim: Node2D in _area_attack_targets():
+				_deal_melee_hit(victim, _rng.randi_range(attack_min, attack_max))
+			_area_attack_cooldown = _attack_interval
+	elif _area_attack_cooldown > 0.0:
+		_area_attack_cooldown = maxf(0.0, _area_attack_cooldown - delta)
+	elif not _area_attack_targets().is_empty():
+		_area_attack_warning = maxf(0.001, float(area_attack_rule.get("hitDelaySeconds", 0.2)))
+		if visual != null:
+			visual.play_attack(maxf(_attack_animation_duration, _area_attack_warning))
+	return true
+
+
+func _area_attack_targets() -> Array[Node2D]:
+	var result: Array[Node2D] = []
+	var candidates: Array[Node] = []
+	if is_instance_valid(primary_target):
+		candidates.append(primary_target)
+	for node: Node in get_tree().get_nodes_in_group("combat_targets"):
+		if not candidates.has(node):
+			candidates.append(node)
+	var range_pixels := float(area_attack_rule.get("rangePixels", attack_range))
+	for node: Node in candidates:
+		if (
+			node is Node2D
+			and node.has_method("take_damage")
+			and not _point_inside_safe_zone(node.global_position)
+			and global_position.distance_to(node.global_position) <= range_pixels
+		):
+			result.append(node)
+	return result
+
+
+func _update_behavior_summon(delta: float) -> bool:
+	if not bool(summon_rule.get("enabled", false)):
+		return false
+	if _summon_warning > 0.0:
+		_summon_warning -= delta
+		if _summon_warning <= 0.0:
+			var ids: Array = summon_rule.get("monsterIds", []).duplicate()
+			if not ids.is_empty():
+				summon_requested.emit(
+					self,
+					ids,
+					maxi(1, int(summon_rule.get("count", 1))),
+					maxi(1, int(summon_rule.get("maxActive", 15)))
+				)
+			_summon_cooldown = _attack_interval
+	elif _summon_cooldown > 0.0:
+		_summon_cooldown = maxf(0.0, _summon_cooldown - delta)
+	elif is_instance_valid(target):
+		_summon_warning = maxf(0.001, float(summon_rule.get("delaySeconds", 0.5)))
+		if visual != null:
+			visual.play_attack(maxf(_attack_animation_duration, _summon_warning))
+	return true
 
 
 func _target_collision_radius(target_node: Node2D) -> float:
