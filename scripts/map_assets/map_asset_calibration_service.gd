@@ -32,7 +32,7 @@ static func validate_draft(base_asset: Dictionary, draft: Dictionary) -> Array[S
 	if anchor.size() != 2 or int(anchor[0]) < 0 or int(anchor[1]) < 0:
 		errors.append("invalid_anchor")
 	var collision_policy := str(draft.get("collision_policy", base_asset.get("collision_policy", "")))
-	if collision_policy not in ["none", "preset", "manual", "terrain_stamp_generated", "solid_footprint", "custom_polygon"]:
+	if collision_policy not in ["none", "preset", "manual", "terrain_stamp_generated", "wall_cells_generated", "solid_footprint", "custom_polygon"]:
 		errors.append("invalid_collision_policy")
 	if str(base_asset.get("asset_type", "")) == "ground_brush" and (int(footprint[0]) != 1 or int(footprint[1]) != 1):
 		errors.append("ground_footprint_requires_new_normalized_image")

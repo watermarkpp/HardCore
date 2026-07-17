@@ -21,6 +21,10 @@ static func build_walkability(document: Dictionary) -> Dictionary:
 	for instance: Dictionary in MapEditorInstanceService.all_instances(document):
 		var policy := str(instance.get("collision_policy", "none"))
 		if policy == "none": continue
+		if policy == "wall_cells_generated" and not (instance.get("collision_cells", []) as Array).is_empty():
+			_mark_scaled_collision_cells(blocked, instance, map_size)
+			sources.append({"source":"instance","id":instance.instance_id,"policy":policy,"shape":"explicit_cells"})
+			continue
 		var collision_size:=_collision_footprint(instance)
 		if collision_size.x<=0 or collision_size.y<=0:continue
 		var collision_origin := _collision_origin(instance)
@@ -30,6 +34,25 @@ static func build_walkability(document: Dictionary) -> Dictionary:
 		_mark_manual(blocked, manual, map_size)
 		sources.append({"source":"manual","id":manual.collision_id,"shape":manual.shape})
 	return {"map_size":[map_size.x,map_size.y],"blocked_tiles":blocked,"blocked_count":blocked.size(),"walkable_count":map_size.x*map_size.y-blocked.size(),"sources":sources}
+
+
+static func _mark_scaled_collision_cells(blocked: Dictionary, instance: Dictionary, map_size: Vector2i) -> void:
+	var origin := _tile(instance)
+	var current := _footprint(instance)
+	var raw_base: Array = instance.get("instance_base_footprint_tiles", instance.get("base_footprint_tiles", instance.get("footprint_tiles", [1, 1])))
+	var base := Vector2i(maxi(1, int(raw_base[0])), maxi(1, int(raw_base[1])))
+	var source_cells := {}
+	for raw_cell: Variant in instance.get("collision_cells", []):
+		if raw_cell is Array and raw_cell.size() == 2:
+			source_cells["%d,%d" % [int(raw_cell[0]), int(raw_cell[1])]] = true
+	for y in current.y:
+		for x in current.x:
+			var source_x := clampi(floori((float(x) + 0.5) * float(base.x) / float(current.x)), 0, base.x - 1)
+			var source_y := clampi(floori((float(y) + 0.5) * float(base.y) / float(current.y)), 0, base.y - 1)
+			if source_cells.has("%d,%d" % [source_x, source_y]):
+				var tile := origin + Vector2i(x, y)
+				if tile.x >= 0 and tile.y >= 0 and tile.x < map_size.x and tile.y < map_size.y:
+					blocked["%d,%d" % [tile.x, tile.y]] = true
 
 
 static func _validate_shape(shape_type: String, data: Dictionary) -> Array[String]:

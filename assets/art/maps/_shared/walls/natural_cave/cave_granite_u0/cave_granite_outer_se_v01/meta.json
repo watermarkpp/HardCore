@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "asset_id": "cave_granite_outer_se_v01",
+  "display_name": "cave_granite_outer_se_v01",
+  "asset_type": "wall_module",
+  "category": "cave_wall",
+  "theme": "natural_cave",
+  "wall_family_id": "cave_granite_u0",
+  "socket_profile_id": "cave_granite_socket_u0",
+  "topology": "outer_corner",
+  "axis": null,
+  "length_tiles": 1,
+  "thickness_tiles": 1,
+  "footprint_tiles": [
+    1,
+    1
+  ],
+  "canvas_size": [
+    192,
+    224
+  ],
+  "anchor": [
+    96,
+    160
+  ],
+  "next_start_tile_offset": [
+    0,
+    0
+  ],
+  "start_seam_px": [
+    96,
+    160
+  ],
+  "end_seam_px": [
+    96,
+    160
+  ],
+  "connectors": [
+    {
+      "name": "c0",
+      "direction": "iso_x_pos",
+      "socket_profile_id": "cave_granite_socket_u0"
+    },
+    {
+      "name": "c1",
+      "direction": "iso_y_pos",
+      "socket_profile_id": "cave_granite_socket_u0"
+    }
+  ],
+  "collision_cells": [
+    [
+      0,
+      0
+    ]
+  ],
+  "placement_clearance_cells": [
+    [
+      0,
+      0
+    ]
+  ],
+  "render_mode": "single_part",
+  "render_parts": [
+    {
+      "part_id": "p00",
+      "tile_offset": [
+        0,
+        0
+      ],
+      "base_image": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_outer_se_v01/part_00_base.png",
+      "front_image": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_outer_se_v01/part_00_front.png",
+      "shadow_image": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_outer_se_v01/part_00_shadow.png",
+      "anchor": [
+        96,
+        160
+      ],
+      "sort_tile_offset": [
+        0,
+        0
+      ],
+      "draw_order_index": 0
+    }
+  ],
+  "default_layer": "terrain_base",
+  "front_layer": "terrain_front",
+  "shadow_layer": "shadow",
+  "object_role": "terrain",
+  "scene_intent": "cave_wall",
+  "collision_policy": "wall_cells_generated",
+  "navigation_policy": "block_player_and_monster",
+  "occlusion": true,
+  "seam_guard_px": 16,
+  "seam_overlap_px": 2,
+  "variant_weight": 100,
+  "offset_px": [
+    0,
+    0
+  ],
+  "scale": [
+    1,
+    1
+  ],
+  "rotation_degrees": 0,
+  "allow_flip": false,
+  "runtime_export": true,
+  "content_layer": "vanilla",
+  "calibration_status": "calibrated",
+  "seam_test_status": "passed",
+  "placeable": true,
+  "corner_orientation": "se",
+  "blocked_side": "outside"
+}

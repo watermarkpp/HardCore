@@ -2,25 +2,25 @@ class_name MapAssetCatalogService
 extends RefCounted
 
 const CATALOG_PATH := "res://assets/data/assets/map_asset_catalog.json"
+const EXTENSION_CATALOG_PATHS := [
+	"res://assets/data/assets/map_object_asset_catalog.json",
+	"res://assets/data/assets/map_terrain_asset_catalog.json",
+	"res://assets/data/assets/map_cave_dungeon_asset_catalog.json",
+]
 static var _catalog_cache: Dictionary = {}
 
 
 static func load_catalog() -> Dictionary:
 	if not _catalog_cache.is_empty():
 		return _catalog_cache.duplicate(true)
-	if not FileAccess.file_exists(CATALOG_PATH):
+	var catalog := _read_catalog(CATALOG_PATH)
+	if catalog.is_empty():
 		return {}
-	var file := FileAccess.open(CATALOG_PATH, FileAccess.READ)
-	if file == null:
-		return {}
-	var parsed: Variant = JSON.parse_string(file.get_as_text())
-	if not parsed is Dictionary:
-		return {}
-	var catalog: Dictionary = parsed
 	var effective_assets: Array = []
-	for asset: Dictionary in catalog.get("assets", []):
+	for asset: Dictionary in _raw_assets():
 		effective_assets.append(MapAssetCalibrationService.effective_asset(asset))
 	catalog["assets"] = effective_assets
+	catalog["extension_catalogs"] = EXTENSION_CATALOG_PATHS.duplicate()
 	_catalog_cache = catalog.duplicate(true)
 	return catalog
 
@@ -41,18 +41,29 @@ static func find_asset(asset_id: String) -> Dictionary:
 
 
 static func find_base_asset(asset_id: String) -> Dictionary:
-	if not FileAccess.file_exists(CATALOG_PATH):
-		return {}
-	var file := FileAccess.open(CATALOG_PATH, FileAccess.READ)
-	if file == null:
-		return {}
-	var parsed: Variant = JSON.parse_string(file.get_as_text())
-	if not parsed is Dictionary:
-		return {}
-	for asset: Dictionary in parsed.get("assets", []):
+	for asset: Dictionary in _raw_assets():
 		if str(asset.get("asset_id", "")) == asset_id:
 			return asset.duplicate(true)
 	return {}
+
+
+static func _raw_assets() -> Array:
+	var assets: Array = []
+	for path: String in [CATALOG_PATH] + EXTENSION_CATALOG_PATHS:
+		var catalog := _read_catalog(path)
+		for asset: Dictionary in catalog.get("assets", []):
+			assets.append(asset)
+	return assets
+
+
+static func _read_catalog(path: String) -> Dictionary:
+	if not FileAccess.file_exists(path):
+		return {}
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return {}
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	return parsed if parsed is Dictionary else {}
 
 
 static func palette_assets(region := "") -> Array[Dictionary]:

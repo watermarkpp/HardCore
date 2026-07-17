@@ -173,7 +173,7 @@ func _build_ui() -> void:
 	calibration_footprint_y = _spin_field(sidebar, "占地高度（格）", 1, 16)
 	var collision_label := Label.new(); collision_label.text = "碰撞策略"; sidebar.add_child(collision_label)
 	calibration_collision = OptionButton.new()
-	for policy: Array in [["无碰撞","none"],["素材预设碰撞","preset"],["手工碰撞","manual"],["按地形印章生成","terrain_stamp_generated"],["整个占地阻挡","solid_footprint"],["自定义多边形","custom_polygon"]]:
+	for policy: Array in [["无碰撞","none"],["素材预设碰撞","preset"],["手工碰撞","manual"],["按地形印章生成","terrain_stamp_generated"],["按墙体单元生成","wall_cells_generated"],["整个占地阻挡","solid_footprint"],["自定义多边形","custom_polygon"]]:
 		calibration_collision.add_item(policy[0]); calibration_collision.set_item_metadata(calibration_collision.item_count-1,policy[1])
 	sidebar.add_child(calibration_collision)
 	calibration_occlusion = CheckBox.new(); calibration_occlusion.text = "遮挡玩家"; sidebar.add_child(calibration_occlusion)

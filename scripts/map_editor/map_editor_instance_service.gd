@@ -18,14 +18,19 @@ static func create_instance(document: Dictionary, asset_id: String, object_role:
 	var asset: Dictionary = validation.asset
 	var placement := MapEditorPlacementResolver.resolve(document,asset_id,tile,layer,role)
 	var defaults: Dictionary = ROLE_DEFAULTS[role]
+	var collision_policy := str(asset.get("collision_policy", defaults.collision_policy))
+	var collision_footprint: Array = asset.get("collision_footprint_tiles", [])
+	if collision_footprint.size() != 2:
+		collision_footprint = [0, 0] if collision_policy in ["none", "manual"] else asset.get("footprint_tiles", [1, 1]).duplicate()
 	var instance := {
 		"instance_id": _next_id(document), "asset_id": asset_id, "object_role": role,
 		"scene_intent": defaults.scene_intent, "gameplay_role": defaults.gameplay_role, "placement_rule": defaults.placement_rule,
 		"tile": [tile.x, tile.y], "tile_anchor":[tile.x,tile.y], "offset_px": [0, 0], "position_mode":"tile_anchor", "layer": layer,
 		"anchor_px": [placement.placement_anchor_px.x,placement.placement_anchor_px.y], "placement_anchor_px":[placement.placement_anchor_px.x,placement.placement_anchor_px.y], "anchor_mode": asset.get("anchor_mode", "foot_tile"),
 		"footprint_tiles": asset.get("footprint_tiles", [1, 1]),
-		"collision_policy": asset.get("collision_policy", defaults.collision_policy),
-		"collision_profile_id":asset.get("collision_profile_id","none_visual"), "collision_footprint_tiles":asset.get("collision_footprint_tiles",[0,0]),
+		"collision_policy": collision_policy,
+		"collision_profile_id":asset.get("collision_profile_id","none_visual"), "collision_footprint_tiles":collision_footprint,
+		"collision_cells": asset.get("collision_cells", []).duplicate(true),
 		"navigation_policy": asset.get("navigation_policy", defaults.navigation_policy),
 		"occlusion": bool(asset.get("occlusion", false)), "runtime_export": true,
 		"content_layer": "personal_expansion", "rotation_deg": 0.0, "scale": [float(asset.get("approved_scale",1.0)),float(asset.get("approved_scale",1.0))], "flip_x": false, "flip_y": false,
