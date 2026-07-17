@@ -47,6 +47,10 @@ func _run() -> void:
 	assert(int(catalog_summary.get("total", -1)) == 214, "动画总目录未覆盖214个怪物")
 	assert(int(catalog_summary.get("formal", -1)) == 214, "正式五动作绑定未达到214")
 	assert(int(catalog_summary.get("missing", -1)) == 0, "动画总目录仍登记缺失")
+	for row: Variant in catalog.get("monsters", []):
+		assert(row is Dictionary and not str(row.get("direction_policy", "")).is_empty(), "正式怪物目录缺少视觉方向策略")
+		if int(row.get("monster_id", -1)) == 30:
+			assert(row.get("direction_policy", "") == "fixed_source_direction", "食人花目录未登记固定源方向")
 
 	var player := PlayerCharacter.new()
 	player.global_position = Vector2(900, 0)

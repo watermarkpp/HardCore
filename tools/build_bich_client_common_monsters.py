@@ -83,7 +83,17 @@ TABLES = {
 # exported and its RaceImg field can be reconciled.
 MONSTERS = {
     "森林雪人": {"slug": "forest_yeti", "appearance": 1, "raceImg": 12, "actionTable": "MA12", "monsterIds": [28, 29]},
-    "食人花": {"slug": "cannibal_flower", "appearance": 10, "raceImg": 13, "actionTable": "MA13", "monsterIds": [30]},
+    # The service actor cannot turn or walk. MA13 reuses the adjacent slots for
+    # emerge/hide sequences, so interpreting those slots as eight directions
+    # produces buried/death poses when the Godot actor faces northeast.
+    "食人花": {
+        "slug": "cannibal_flower",
+        "appearance": 10,
+        "raceImg": 13,
+        "actionTable": "MA13",
+        "monsterIds": [30],
+        "fixedSourceDirection": 0,
+    },
     "洞蛆": {"slug": "cave_maggot", "appearance": 24, "raceImg": 16, "actionTable": "MA16", "monsterIds": [46]},
     "多钩猫": {"slug": "hook_cat", "appearance": 25, "raceImg": 17, "actionTable": "MA14", "monsterIds": [24, 25]},
     "钉耙猫": {"slug": "rake_cat", "appearance": 26, "raceImg": 17, "actionTable": "MA14", "monsterIds": [26, 27]},
@@ -146,9 +156,11 @@ def build_monster(name: str, spec: dict) -> dict:
             "missing": [],
         }
         decoded[action_name] = action
+        fixed_source_direction = spec.get("fixedSourceDirection")
         for direction in range(8):
+            source_direction = int(fixed_source_direction) if fixed_source_direction is not None else direction
             for frame in range(frame_count):
-                index = base + start + direction * direction_stride + frame
+                index = base + start + source_direction * direction_stride + frame
                 if index >= len(offsets):
                     action["missing"].append(index)
                     continue
@@ -201,19 +213,22 @@ def build_monster(name: str, spec: dict) -> dict:
             )
         target = output_dir / f"{spec['slug']}_{action_name}.png"
         atlas.save(target)
-        actions[action_name] = {
+        action_record = {
             "path": f"res://{target.relative_to(ROOT).as_posix()}",
             "framesPerDirection": frame_count,
             "frameMs": int(action["frame_ms"]),
             "sourceStart": base + int(action["start"]),
-            "sourceDirectionStride": int(action["direction_stride"]),
+            "sourceDirectionStride": 0 if spec.get("fixedSourceDirection") is not None else int(action["direction_stride"]),
             "sourceFrames": sorted(frames, key=lambda row: (row["direction"], row["frame"])),
             "missingFrames": action["missing"],
             "confidence": "A",
         }
+        if spec.get("fixedSourceDirection") is not None:
+            action_record["fixedSourceDirection"] = int(spec["fixedSourceDirection"])
+        actions[action_name] = action_record
 
     mapping_confidence = str(spec.get("mappingConfidence", "A"))
-    return {
+    record = {
         "name": name,
         "monsterIds": spec["monsterIds"],
         "appearance": spec["appearance"],
@@ -236,6 +251,9 @@ def build_monster(name: str, spec: dict) -> dict:
         "directions": 8,
         "actions": actions,
     }
+    if spec.get("fixedSourceDirection") is not None:
+        record["directionPolicy"] = "fixed_source_direction"
+    return record
 
 
 def main() -> None:
