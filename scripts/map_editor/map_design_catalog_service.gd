@@ -3,6 +3,7 @@ extends RefCounted
 
 const CATALOG_PATH := "res://assets/data/map_design/map_design_catalog.json"
 const TEMPLATE_PATH := "res://assets/data/map_design/map_size_templates.json"
+const BLANK_TEMPLATE_PATH := "res://assets/data/map_design/map_blank_templates.json"
 
 
 static func load_catalog() -> Dictionary:
@@ -19,6 +20,17 @@ static func find_map(map_id: String) -> Dictionary:
 static func get_template(map_type: String) -> Dictionary:
 	for entry: Dictionary in _read_json(TEMPLATE_PATH).get("templates", []):
 		if str(entry.get("id", "")) == map_type:
+			return entry.duplicate(true)
+	return {}
+
+
+static func blank_templates() -> Array:
+	return _read_json(BLANK_TEMPLATE_PATH).get("templates", [])
+
+
+static func find_blank_template(template_id: String) -> Dictionary:
+	for entry: Dictionary in blank_templates():
+		if str(entry.get("template_id", "")) == template_id:
 			return entry.duplicate(true)
 	return {}
 

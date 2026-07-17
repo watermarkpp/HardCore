@@ -31,9 +31,9 @@ func _ready() -> void:
 	bich.editor_meta.workspace = "user://mse_stage1_bich_test_%s" % run_id
 	var bich_ground := MapEditorGroundService.initialize(bich)
 	assert(bich_ground.ok)
-	assert(bich_ground.manifest.ground_pixel_size == [16384, 8192])
-	assert(bich_ground.manifest.chunk_grid_size == [16, 8])
-	assert(bich_ground.manifest.chunks.size() == 128)
+	assert(bich_ground.manifest.ground_pixel_size == [5120, 2560])
+	assert(bich_ground.manifest.chunk_grid_size == [5, 3])
+	assert(bich_ground.manifest.chunks.size() == 15)
 	assert(bich_ground.state.dirty_chunks.is_empty())
 	print("MSE_STAGE1_GROUND_PASS")
 	get_tree().quit(0)

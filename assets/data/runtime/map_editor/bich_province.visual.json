@@ -3,25 +3,15 @@
   "map_id": "bich_province",
   "runtime_map_id": 4,
   "design_size": [
-    64.0,
-    64.0
+    80.0,
+    80.0
   ],
   "ground_pixel_center": [
-    2048.0,
-    1024.0
+    2560.0,
+    1280.0
   ],
   "base_color": "#465827",
   "chunks": [
-    {
-      "chunk_id": "c_0_0",
-      "rect_px": [
-        0.0,
-        0.0,
-        1024.0,
-        1024.0
-      ],
-      "image": "assets/art/maps/bich/editor_runtime_chunks/c_0_0.png"
-    },
     {
       "chunk_id": "c_1_0",
       "rect_px": [
@@ -91,6 +81,26 @@
         1024.0
       ],
       "image": "assets/art/maps/bich/editor_runtime_chunks/c_3_1.png"
+    },
+    {
+      "chunk_id": "c_4_1",
+      "rect_px": [
+        4096.0,
+        1024.0,
+        1024.0,
+        1024.0
+      ],
+      "image": "assets/art/maps/bich/editor_runtime_chunks/c_4_1.png"
+    },
+    {
+      "chunk_id": "c_2_2",
+      "rect_px": [
+        2048.0,
+        2048.0,
+        1024.0,
+        512.0
+      ],
+      "image": "assets/art/maps/bich/editor_runtime_chunks/c_2_2.png"
     }
   ]
 }

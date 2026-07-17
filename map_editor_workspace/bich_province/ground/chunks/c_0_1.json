@@ -1,5944 +1,2485 @@
 {
+  "schema_version": 1,
   "chunk_id": "c_0_1",
   "operations": [
     {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        49.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        53.0
-      ]
-    },
-    {
-      "op": "erase_tile",
-      "tile": [
-        18.0,
-        57.0
-      ]
-    },
-    {
-      "op": "erase_tile",
-      "tile": [
-        19.0,
-        57.0
-      ]
-    },
-    {
-      "op": "erase_tile",
-      "tile": [
-        16.0,
-        49.0
-      ]
-    },
-    {
-      "asset_id": "ground.stone.002",
-      "op": "paint_tile",
-      "tile": [
-        30.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        30.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        29.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        29.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        30.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        48.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        49.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        49.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        49.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        51.0
-      ]
-    },
-    {
       "asset_id": "v1_5.a001_05",
       "op": "paint_tile",
       "tile": [
-        15.0,
-        51.0
+        8,
+        57
       ]
     },
     {
-      "asset_id": "v1_5.a001_02",
+      "asset_id": "v1_5.a001_08",
       "op": "paint_tile",
       "tile": [
-        16.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        51.0
+        8,
+        58
       ]
     },
     {
       "asset_id": "v1_5.a001_03",
       "op": "paint_tile",
       "tile": [
-        11.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        52.0
+        9,
+        58
       ]
     },
     {
       "asset_id": "v1_5.a001_07",
       "op": "paint_tile",
       "tile": [
-        14.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        52.0
+        8,
+        59
       ]
     },
     {
       "asset_id": "v1_5.a001_08",
       "op": "paint_tile",
       "tile": [
-        11.0,
-        53.0
+        9,
+        59
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        59
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        60
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_01",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        60
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_02",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        60
       ]
     },
     {
       "asset_id": "v1_5.a001_03",
       "op": "paint_tile",
       "tile": [
-        12.0,
-        53.0
+        11,
+        60
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        61
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_04",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        61
       ]
     },
     {
       "asset_id": "v1_5.a001_05",
       "op": "paint_tile",
       "tile": [
-        13.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        53.0
+        10,
+        61
       ]
     },
     {
       "asset_id": "v1_5.a001_08",
       "op": "paint_tile",
       "tile": [
-        15.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        54.0
+        11,
+        61
       ]
     },
     {
       "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        22.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        22.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        23.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        22.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        23.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        24.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        22.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        23.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        24.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        25.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        22.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        23.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        24.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        25.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        26.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        22.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        23.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        24.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        25.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        26.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        27.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        22.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        23.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        24.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        25.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        26.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        27.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        28.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        22.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        23.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        24.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        25.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        26.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        27.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        28.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        29.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        22.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        23.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        24.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        25.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        26.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        27.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        28.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        29.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        30.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        7.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        6.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        7.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        5.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        6.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        7.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        4.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        5.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        6.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        7.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        3.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        4.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        5.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        6.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        7.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        2.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        3.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        4.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        5.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        6.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        7.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        1.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        2.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        3.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        4.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        5.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        6.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        7.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_06",
-      "op": "paint_tile",
-      "tile": [
-        0.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        1.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        2.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        3.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        4.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        5.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        6.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_04",
-      "op": "paint_tile",
-      "tile": [
-        7.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_02",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_05",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_03",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_01",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_08",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a001_07",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a009_02",
-      "op": "paint_tile",
-      "tile": [
-        27.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a009_01",
-      "op": "paint_tile",
-      "tile": [
-        28.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a009_04",
-      "op": "paint_tile",
-      "tile": [
-        27.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a009_02",
-      "op": "paint_tile",
-      "tile": [
-        28.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a009_04",
-      "op": "paint_tile",
-      "tile": [
-        29.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a009_04",
-      "op": "paint_tile",
-      "tile": [
-        28.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a009_04",
-      "op": "paint_tile",
-      "tile": [
-        29.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "v1_5.a009_02",
-      "op": "paint_tile",
-      "tile": [
-        30.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        48.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        49.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        49.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        49.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        22.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        7.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        22.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        23.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        6.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        7.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        22.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        23.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        24.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        5.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        6.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        7.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        22.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        23.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        24.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        25.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        4.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        5.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        6.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        7.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        22.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        23.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        24.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        25.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        26.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        3.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        4.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        5.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        6.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        7.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        22.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        23.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        24.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        25.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        26.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        27.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        2.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        3.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        4.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        5.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        6.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        7.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        22.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        23.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        24.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        25.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        26.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        27.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        28.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        1.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        2.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        3.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        4.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        5.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        6.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        7.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        22.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        23.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        24.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        25.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        26.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        27.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        28.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        29.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        0.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        1.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        2.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        3.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        4.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        5.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        6.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        7.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.a0431db99cc74163",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        22.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        23.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.8a3cb239ed48f253",
-      "op": "paint_tile",
-      "tile": [
-        24.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        25.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.7dbfa66c0187f3b0",
-      "op": "paint_tile",
-      "tile": [
-        26.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        27.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        28.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        29.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.3f81d2aa9e5aed1a",
-      "op": "paint_tile",
-      "tile": [
-        30.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.08fc9ebe6b50a5ab",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        48.0
-      ]
-    },
-    {
-      "asset_id": "user.67db5148d9bdd7ea",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        49.0
-      ]
-    },
-    {
-      "asset_id": "user.2ddbb1ac8660ba40",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        49.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "user.08fc9ebe6b50a5ab",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "user.f392a5d742e50ff6",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "user.2ddbb1ac8660ba40",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.f12b433b205b2164",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.f392a5d742e50ff6",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.f12b433b205b2164",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.08fc9ebe6b50a5ab",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.08fc9ebe6b50a5ab",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.f12b433b205b2164",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.2ddbb1ac8660ba40",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.f12b433b205b2164",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.f12b433b205b2164",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.67db5148d9bdd7ea",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.2ddbb1ac8660ba40",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.eb8baf03766aa994",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.2ddbb1ac8660ba40",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.f12b433b205b2164",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.08fc9ebe6b50a5ab",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.f392a5d742e50ff6",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.67db5148d9bdd7ea",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.2ddbb1ac8660ba40",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.f12b433b205b2164",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.f12b433b205b2164",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.08fc9ebe6b50a5ab",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.f392a5d742e50ff6",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.67db5148d9bdd7ea",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.f12b433b205b2164",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.fe77ac62883da4ef",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        48.0
-      ]
-    },
-    {
-      "asset_id": "user.b742f1983b000c18",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        49.0
-      ]
-    },
-    {
-      "asset_id": "user.cd0c8d4e3d1fd132",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        49.0
-      ]
-    },
-    {
-      "asset_id": "user.4872a449ca0bc74c",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        49.0
-      ]
-    },
-    {
-      "asset_id": "user.4872a449ca0bc74c",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "user.b742f1983b000c18",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "user.fe77ac62883da4ef",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "user.4872a449ca0bc74c",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "user.b742f1983b000c18",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "user.fe77ac62883da4ef",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.fe77ac62883da4ef",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.fe77ac62883da4ef",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.fe77ac62883da4ef",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.b742f1983b000c18",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.fe77ac62883da4ef",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.cd0c8d4e3d1fd132",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.fe77ac62883da4ef",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.4872a449ca0bc74c",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.fe77ac62883da4ef",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.fe77ac62883da4ef",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.4872a449ca0bc74c",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.b742f1983b000c18",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.cd0c8d4e3d1fd132",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.cd0c8d4e3d1fd132",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.cd0c8d4e3d1fd132",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.b742f1983b000c18",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.fe77ac62883da4ef",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.cd0c8d4e3d1fd132",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.b742f1983b000c18",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.fe77ac62883da4ef",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.b742f1983b000c18",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.cd0c8d4e3d1fd132",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.b742f1983b000c18",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.b742f1983b000c18",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.cd0c8d4e3d1fd132",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.cd0c8d4e3d1fd132",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.fe77ac62883da4ef",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.4872a449ca0bc74c",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.b742f1983b000c18",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.cd0c8d4e3d1fd132",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.cd0c8d4e3d1fd132",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.fe77ac62883da4ef",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.cd0c8d4e3d1fd132",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.cd0c8d4e3d1fd132",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.fe77ac62883da4ef",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.b742f1983b000c18",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.fe77ac62883da4ef",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.4872a449ca0bc74c",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.fe77ac62883da4ef",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.fe77ac62883da4ef",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.cd0c8d4e3d1fd132",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.cd0c8d4e3d1fd132",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.4872a449ca0bc74c",
-      "op": "paint_tile",
-      "tile": [
-        20.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.cd0c8d4e3d1fd132",
-      "op": "paint_tile",
-      "tile": [
-        21.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.b742f1983b000c18",
-      "op": "paint_tile",
-      "tile": [
-        22.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.b742f1983b000c18",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.fe77ac62883da4ef",
-      "op": "paint_tile",
-      "tile": [
-        18.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.c5c2e2da52a39748",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        48.0
-      ]
-    },
-    {
-      "asset_id": "user.c5c2e2da52a39748",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        49.0
-      ]
-    },
-    {
-      "asset_id": "user.b2ebe9a1dcec7de5",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        49.0
-      ]
-    },
-    {
-      "asset_id": "user.177d04adae934b94",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        49.0
-      ]
-    },
-    {
-      "asset_id": "user.bb4be652358c5bc2",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "user.b2ebe9a1dcec7de5",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "user.70555d97ec3f69cc",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "user.9ab574f121f8b541",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "user.70555d97ec3f69cc",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        50.0
-      ]
-    },
-    {
-      "asset_id": "user.bb4be652358c5bc2",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.177d04adae934b94",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.b2ebe9a1dcec7de5",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.70555d97ec3f69cc",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.c5c2e2da52a39748",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.177d04adae934b94",
-      "op": "paint_tile",
-      "tile": [
-        17.0,
-        51.0
-      ]
-    },
-    {
-      "asset_id": "user.b2ebe9a1dcec7de5",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.b2ebe9a1dcec7de5",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.9ab574f121f8b541",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.9ab574f121f8b541",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.9ab574f121f8b541",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.c5c2e2da52a39748",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        52.0
-      ]
-    },
-    {
-      "asset_id": "user.b2ebe9a1dcec7de5",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.c5c2e2da52a39748",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.c5c2e2da52a39748",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.c5c2e2da52a39748",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.bb4be652358c5bc2",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.c5c2e2da52a39748",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        53.0
-      ]
-    },
-    {
-      "asset_id": "user.c5c2e2da52a39748",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.c5c2e2da52a39748",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.70555d97ec3f69cc",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.70555d97ec3f69cc",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.c5c2e2da52a39748",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        54.0
-      ]
-    },
-    {
-      "asset_id": "user.177d04adae934b94",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.bb4be652358c5bc2",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.177d04adae934b94",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.c5c2e2da52a39748",
-      "op": "paint_tile",
-      "tile": [
-        11.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.c5c2e2da52a39748",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.bb4be652358c5bc2",
-      "op": "paint_tile",
-      "tile": [
-        7.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.70555d97ec3f69cc",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.bb4be652358c5bc2",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.70555d97ec3f69cc",
-      "op": "paint_tile",
-      "tile": [
-        10.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.177d04adae934b94",
-      "op": "paint_tile",
-      "tile": [
-        6.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.9ab574f121f8b541",
-      "op": "paint_tile",
-      "tile": [
-        7.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.9ab574f121f8b541",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.177d04adae934b94",
-      "op": "paint_tile",
-      "tile": [
-        9.0,
-        57.0
-      ]
-    },
-    {
-      "asset_id": "user.bb4be652358c5bc2",
-      "op": "paint_tile",
-      "tile": [
-        5.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.9ab574f121f8b541",
-      "op": "paint_tile",
-      "tile": [
-        6.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.bb4be652358c5bc2",
-      "op": "paint_tile",
-      "tile": [
-        7.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.9ab574f121f8b541",
-      "op": "paint_tile",
-      "tile": [
-        8.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.c5c2e2da52a39748",
-      "op": "paint_tile",
-      "tile": [
-        4.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.c5c2e2da52a39748",
-      "op": "paint_tile",
-      "tile": [
-        5.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.177d04adae934b94",
-      "op": "paint_tile",
-      "tile": [
-        6.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.bb4be652358c5bc2",
-      "op": "paint_tile",
-      "tile": [
-        7.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.bb4be652358c5bc2",
-      "op": "paint_tile",
-      "tile": [
-        3.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.bb4be652358c5bc2",
-      "op": "paint_tile",
-      "tile": [
-        4.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.70555d97ec3f69cc",
-      "op": "paint_tile",
-      "tile": [
-        5.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.177d04adae934b94",
-      "op": "paint_tile",
-      "tile": [
-        6.0,
-        60.0
-      ]
-    },
-    {
-      "asset_id": "user.b2ebe9a1dcec7de5",
-      "op": "paint_tile",
-      "tile": [
-        2.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.177d04adae934b94",
-      "op": "paint_tile",
-      "tile": [
-        3.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.177d04adae934b94",
-      "op": "paint_tile",
-      "tile": [
-        4.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.177d04adae934b94",
-      "op": "paint_tile",
-      "tile": [
-        5.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.9ab574f121f8b541",
-      "op": "paint_tile",
-      "tile": [
-        1.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.c5c2e2da52a39748",
-      "op": "paint_tile",
-      "tile": [
-        2.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.c5c2e2da52a39748",
-      "op": "paint_tile",
-      "tile": [
-        3.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.bb4be652358c5bc2",
-      "op": "paint_tile",
-      "tile": [
-        4.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.bb4be652358c5bc2",
-      "op": "paint_tile",
-      "tile": [
-        0.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.70555d97ec3f69cc",
-      "op": "paint_tile",
-      "tile": [
-        1.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.9ab574f121f8b541",
-      "op": "paint_tile",
-      "tile": [
-        2.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.b2ebe9a1dcec7de5",
-      "op": "paint_tile",
-      "tile": [
-        3.0,
-        63.0
-      ]
-    },
-    {
-      "asset_id": "user.70555d97ec3f69cc",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        48.0
-      ]
-    },
-    {
-      "asset_id": "user.c5c2e2da52a39748",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        49.0
-      ]
-    },
-    {
-      "asset_id": "user.578f2cee1aadbf18",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.578f2cee1aadbf18",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        58.0
-      ]
-    },
-    {
-      "asset_id": "user.d8eccee04afe23d9",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.d8eccee04afe23d9",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.d8eccee04afe23d9",
-      "op": "paint_tile",
-      "tile": [
-        13.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.d8eccee04afe23d9",
-      "op": "paint_tile",
-      "tile": [
-        14.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.d8eccee04afe23d9",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.d8eccee04afe23d9",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.d8eccee04afe23d9",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.d8eccee04afe23d9",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.d8eccee04afe23d9",
-      "op": "paint_tile",
-      "tile": [
-        15.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.d8eccee04afe23d9",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        56.0
-      ]
-    },
-    {
-      "asset_id": "user.d8eccee04afe23d9",
-      "op": "paint_tile",
-      "tile": [
-        16.0,
-        55.0
-      ]
-    },
-    {
-      "asset_id": "user.d8eccee04afe23d9",
-      "op": "paint_tile",
-      "tile": [
-        19.0,
-        55.0
-      ]
-    },
-    {
-      "op": "erase_tile",
-      "tile": [
-        4.0,
-        59.0
-      ]
-    },
-    {
-      "op": "erase_tile",
-      "tile": [
-        4.0,
-        59.0
-      ]
-    },
-    {
-      "op": "erase_tile",
-      "tile": [
-        4.0,
-        59.0
-      ]
-    },
-    {
-      "asset_id": "user.54625b138c2ae601",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        62.0
-      ]
-    },
-    {
-      "asset_id": "user.54625b138c2ae601",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.54625b138c2ae601",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.54625b138c2ae601",
-      "op": "paint_tile",
-      "tile": [
-        12.0,
-        61.0
-      ]
-    },
-    {
-      "asset_id": "user.54625b138c2ae601",
       "op": "paint_tile",
       "tile": [
         12,
         61
       ]
+    },
+    {
+      "asset_id": "v1_5.a001_01",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        62
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_01",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        62
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_05",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        62
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        62
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_02",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        62
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        62
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        63
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_07",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        63
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        63
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_02",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        63
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_05",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        63
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        63
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_07",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        63
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_01",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        64
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_07",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        64
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_07",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        64
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_01",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        64
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        64
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_04",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        64
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        64
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        65
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_04",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        65
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_05",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        65
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_04",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        65
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        65
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        65
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        66
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_01",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        66
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_04",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        66
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        66
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_02",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        66
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        67
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        67
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_04",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        67
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_07",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        67
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_07",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        68
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_05",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        68
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_04",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        68
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        69
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_01",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        69
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        70
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        57
+      ]
+    },
+    {
+      "asset_id": "user.7dbfa66c0187f3b0",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        58
+      ]
+    },
+    {
+      "asset_id": "user.7dbfa66c0187f3b0",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        58
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        59
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        59
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        59
+      ]
+    },
+    {
+      "asset_id": "user.7dbfa66c0187f3b0",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        60
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        60
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        60
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        60
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        61
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        61
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        61
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        61
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        61
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        62
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        62
+      ]
+    },
+    {
+      "asset_id": "user.7dbfa66c0187f3b0",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        62
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        62
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        62
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        62
+      ]
+    },
+    {
+      "asset_id": "user.7dbfa66c0187f3b0",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        63
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        63
+      ]
+    },
+    {
+      "asset_id": "user.7dbfa66c0187f3b0",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        63
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        63
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        63
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        63
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        63
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        64
+      ]
+    },
+    {
+      "asset_id": "user.7dbfa66c0187f3b0",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        64
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        64
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        64
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        64
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        64
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        64
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        65
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        65
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        65
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        65
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        65
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        65
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        66
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        66
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        66
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        66
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        66
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        67
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        67
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        67
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        67
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        68
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        68
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        68
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        70
+      ]
+    },
+    {
+      "asset_id": "user.b2ebe9a1dcec7de5",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        64
+      ]
+    },
+    {
+      "asset_id": "user.bb4be652358c5bc2",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        65
+      ]
+    },
+    {
+      "asset_id": "user.c5c2e2da52a39748",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        65
+      ]
+    },
+    {
+      "asset_id": "user.9ab574f121f8b541",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        66
+      ]
+    },
+    {
+      "asset_id": "user.177d04adae934b94",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        66
+      ]
+    },
+    {
+      "asset_id": "user.177d04adae934b94",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        67
+      ]
+    },
+    {
+      "asset_id": "user.bb4be652358c5bc2",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        67
+      ]
+    },
+    {
+      "asset_id": "user.bb4be652358c5bc2",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        67
+      ]
+    },
+    {
+      "asset_id": "user.177d04adae934b94",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        68
+      ]
+    },
+    {
+      "asset_id": "user.b2ebe9a1dcec7de5",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        68
+      ]
+    },
+    {
+      "asset_id": "user.70555d97ec3f69cc",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        68
+      ]
+    },
+    {
+      "asset_id": "user.bb4be652358c5bc2",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.bb4be652358c5bc2",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.70555d97ec3f69cc",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        70
+      ]
+    },
+    {
+      "op": "erase_tile",
+      "tile": [
+        9,
+        65
+      ]
+    },
+    {
+      "op": "erase_tile",
+      "tile": [
+        10,
+        66
+      ]
+    },
+    {
+      "op": "erase_tile",
+      "tile": [
+        11,
+        66
+      ]
+    },
+    {
+      "op": "erase_tile",
+      "tile": [
+        11,
+        67
+      ]
+    },
+    {
+      "op": "erase_tile",
+      "tile": [
+        11,
+        66
+      ]
+    },
+    {
+      "op": "erase_tile",
+      "tile": [
+        10,
+        67
+      ]
+    },
+    {
+      "op": "erase_tile",
+      "tile": [
+        10,
+        67
+      ]
+    },
+    {
+      "op": "erase_tile",
+      "tile": [
+        11,
+        67
+      ]
+    },
+    {
+      "op": "erase_tile",
+      "tile": [
+        11,
+        67
+      ]
+    },
+    {
+      "op": "erase_tile",
+      "tile": [
+        10,
+        67
+      ]
+    },
+    {
+      "op": "erase_tile",
+      "tile": [
+        11,
+        67
+      ]
+    },
+    {
+      "op": "erase_tile",
+      "tile": [
+        11,
+        67
+      ]
+    },
+    {
+      "op": "erase_tile",
+      "tile": [
+        10,
+        67
+      ]
+    },
+    {
+      "op": "erase_tile",
+      "tile": [
+        9,
+        64
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_05",
+      "op": "paint_tile",
+      "tile": [
+        19,
+        68
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_04",
+      "op": "paint_tile",
+      "tile": [
+        19,
+        69
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_04",
+      "op": "paint_tile",
+      "tile": [
+        20,
+        69
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_05",
+      "op": "paint_tile",
+      "tile": [
+        19,
+        70
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        20,
+        70
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_04",
+      "op": "paint_tile",
+      "tile": [
+        21,
+        70
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        19,
+        71
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_04",
+      "op": "paint_tile",
+      "tile": [
+        20,
+        71
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        21,
+        71
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        22,
+        71
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_07",
+      "op": "paint_tile",
+      "tile": [
+        15,
+        64
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        65
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        15,
+        65
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_03",
+      "op": "paint_tile",
+      "tile": [
+        16,
+        65
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_04",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        66
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_03",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        66
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_05",
+      "op": "paint_tile",
+      "tile": [
+        15,
+        66
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_02",
+      "op": "paint_tile",
+      "tile": [
+        16,
+        66
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        17,
+        66
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        67
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        67
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_03",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        67
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_01",
+      "op": "paint_tile",
+      "tile": [
+        15,
+        67
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        16,
+        67
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_05",
+      "op": "paint_tile",
+      "tile": [
+        17,
+        67
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        18,
+        67
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        68
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_02",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        68
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_01",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        68
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_03",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        68
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_02",
+      "op": "paint_tile",
+      "tile": [
+        15,
+        68
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_04",
+      "op": "paint_tile",
+      "tile": [
+        16,
+        68
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_05",
+      "op": "paint_tile",
+      "tile": [
+        17,
+        68
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        18,
+        68
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_05",
+      "op": "paint_tile",
+      "tile": [
+        19,
+        68
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        69
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        69
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        69
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        69
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        69
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        15,
+        69
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_07",
+      "op": "paint_tile",
+      "tile": [
+        16,
+        69
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_03",
+      "op": "paint_tile",
+      "tile": [
+        17,
+        69
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        18,
+        69
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        19,
+        69
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_04",
+      "op": "paint_tile",
+      "tile": [
+        20,
+        69
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_01",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        70
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_01",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        70
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_05",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        70
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_01",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        70
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_03",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        70
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_03",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        70
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        15,
+        70
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        16,
+        70
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_07",
+      "op": "paint_tile",
+      "tile": [
+        17,
+        70
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_04",
+      "op": "paint_tile",
+      "tile": [
+        18,
+        70
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_01",
+      "op": "paint_tile",
+      "tile": [
+        19,
+        70
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_02",
+      "op": "paint_tile",
+      "tile": [
+        20,
+        70
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_04",
+      "op": "paint_tile",
+      "tile": [
+        21,
+        70
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_06",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        71
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_02",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        71
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_04",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        71
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_07",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        71
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        71
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_05",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        71
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_03",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        71
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_04",
+      "op": "paint_tile",
+      "tile": [
+        15,
+        71
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_05",
+      "op": "paint_tile",
+      "tile": [
+        16,
+        71
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_01",
+      "op": "paint_tile",
+      "tile": [
+        17,
+        71
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        18,
+        71
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_08",
+      "op": "paint_tile",
+      "tile": [
+        19,
+        71
+      ]
+    },
+    {
+      "asset_id": "v1_5.a001_02",
+      "op": "paint_tile",
+      "tile": [
+        20,
+        71
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        15,
+        64
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        65
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        15,
+        65
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        16,
+        65
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        66
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        66
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        15,
+        66
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        16,
+        66
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        17,
+        66
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        67
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        67
+      ]
+    },
+    {
+      "asset_id": "user.7dbfa66c0187f3b0",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        67
+      ]
+    },
+    {
+      "asset_id": "user.7dbfa66c0187f3b0",
+      "op": "paint_tile",
+      "tile": [
+        15,
+        67
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        16,
+        67
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        17,
+        67
+      ]
+    },
+    {
+      "asset_id": "user.7dbfa66c0187f3b0",
+      "op": "paint_tile",
+      "tile": [
+        18,
+        67
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        68
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        68
+      ]
+    },
+    {
+      "asset_id": "user.7dbfa66c0187f3b0",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        68
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        68
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        15,
+        68
+      ]
+    },
+    {
+      "asset_id": "user.7dbfa66c0187f3b0",
+      "op": "paint_tile",
+      "tile": [
+        16,
+        68
+      ]
+    },
+    {
+      "asset_id": "user.7dbfa66c0187f3b0",
+      "op": "paint_tile",
+      "tile": [
+        17,
+        68
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        18,
+        68
+      ]
+    },
+    {
+      "asset_id": "user.7dbfa66c0187f3b0",
+      "op": "paint_tile",
+      "tile": [
+        19,
+        68
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.7dbfa66c0187f3b0",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.7dbfa66c0187f3b0",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.7dbfa66c0187f3b0",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        15,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        16,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        17,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        18,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        19,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        20,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        70
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        70
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        70
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        70
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        70
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        70
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        15,
+        70
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        16,
+        70
+      ]
+    },
+    {
+      "asset_id": "user.7dbfa66c0187f3b0",
+      "op": "paint_tile",
+      "tile": [
+        17,
+        70
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        18,
+        70
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        19,
+        70
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        20,
+        70
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        21,
+        70
+      ]
+    },
+    {
+      "asset_id": "user.7dbfa66c0187f3b0",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        71
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        71
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        71
+      ]
+    },
+    {
+      "asset_id": "user.7dbfa66c0187f3b0",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        71
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        71
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        71
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        71
+      ]
+    },
+    {
+      "asset_id": "user.3f81d2aa9e5aed1a",
+      "op": "paint_tile",
+      "tile": [
+        15,
+        71
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        16,
+        71
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        17,
+        71
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        18,
+        71
+      ]
+    },
+    {
+      "asset_id": "user.eb8baf03766aa994",
+      "op": "paint_tile",
+      "tile": [
+        19,
+        71
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        20,
+        71
+      ]
+    },
+    {
+      "asset_id": "user.8a3cb239ed48f253",
+      "op": "paint_tile",
+      "tile": [
+        21,
+        71
+      ]
+    },
+    {
+      "asset_id": "user.a0431db99cc74163",
+      "op": "paint_tile",
+      "tile": [
+        22,
+        71
+      ]
+    },
+    {
+      "asset_id": "user.bb4be652358c5bc2",
+      "op": "paint_tile",
+      "tile": [
+        15,
+        64
+      ]
+    },
+    {
+      "asset_id": "user.177d04adae934b94",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        65
+      ]
+    },
+    {
+      "asset_id": "user.9ab574f121f8b541",
+      "op": "paint_tile",
+      "tile": [
+        15,
+        65
+      ]
+    },
+    {
+      "asset_id": "user.9ab574f121f8b541",
+      "op": "paint_tile",
+      "tile": [
+        16,
+        65
+      ]
+    },
+    {
+      "asset_id": "user.bb4be652358c5bc2",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        66
+      ]
+    },
+    {
+      "asset_id": "user.9ab574f121f8b541",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        66
+      ]
+    },
+    {
+      "asset_id": "user.bb4be652358c5bc2",
+      "op": "paint_tile",
+      "tile": [
+        15,
+        66
+      ]
+    },
+    {
+      "asset_id": "user.9ab574f121f8b541",
+      "op": "paint_tile",
+      "tile": [
+        16,
+        66
+      ]
+    },
+    {
+      "asset_id": "user.c5c2e2da52a39748",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        67
+      ]
+    },
+    {
+      "asset_id": "user.c5c2e2da52a39748",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        67
+      ]
+    },
+    {
+      "asset_id": "user.177d04adae934b94",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        67
+      ]
+    },
+    {
+      "asset_id": "user.bb4be652358c5bc2",
+      "op": "paint_tile",
+      "tile": [
+        15,
+        67
+      ]
+    },
+    {
+      "asset_id": "user.bb4be652358c5bc2",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        68
+      ]
+    },
+    {
+      "asset_id": "user.bb4be652358c5bc2",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        68
+      ]
+    },
+    {
+      "asset_id": "user.70555d97ec3f69cc",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        68
+      ]
+    },
+    {
+      "asset_id": "user.177d04adae934b94",
+      "op": "paint_tile",
+      "tile": [
+        14,
+        68
+      ]
+    },
+    {
+      "asset_id": "user.b2ebe9a1dcec7de5",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.177d04adae934b94",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.177d04adae934b94",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.177d04adae934b94",
+      "op": "paint_tile",
+      "tile": [
+        13,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.9ab574f121f8b541",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        70
+      ]
+    },
+    {
+      "asset_id": "user.c5c2e2da52a39748",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        70
+      ]
+    },
+    {
+      "asset_id": "user.c5c2e2da52a39748",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        70
+      ]
+    },
+    {
+      "asset_id": "user.bb4be652358c5bc2",
+      "op": "paint_tile",
+      "tile": [
+        12,
+        70
+      ]
+    },
+    {
+      "asset_id": "user.bb4be652358c5bc2",
+      "op": "paint_tile",
+      "tile": [
+        8,
+        71
+      ]
+    },
+    {
+      "asset_id": "user.70555d97ec3f69cc",
+      "op": "paint_tile",
+      "tile": [
+        9,
+        71
+      ]
+    },
+    {
+      "asset_id": "user.9ab574f121f8b541",
+      "op": "paint_tile",
+      "tile": [
+        10,
+        71
+      ]
+    },
+    {
+      "asset_id": "user.b2ebe9a1dcec7de5",
+      "op": "paint_tile",
+      "tile": [
+        11,
+        71
+      ]
+    },
+    {
+      "op": "erase_tile",
+      "tile": [
+        12,
+        67
+      ]
+    },
+    {
+      "op": "erase_tile",
+      "tile": [
+        12,
+        67
+      ]
+    },
+    {
+      "op": "erase_tile",
+      "tile": [
+        12,
+        67
+      ]
+    },
+    {
+      "asset_id": "user.54625b138c2ae601",
+      "op": "paint_tile",
+      "tile": [
+        20,
+        70
+      ]
+    },
+    {
+      "asset_id": "user.54625b138c2ae601",
+      "op": "paint_tile",
+      "tile": [
+        20,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.54625b138c2ae601",
+      "op": "paint_tile",
+      "tile": [
+        20,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.54625b138c2ae601",
+      "op": "paint_tile",
+      "tile": [
+        20,
+        69
+      ]
+    },
+    {
+      "asset_id": "user.54625b138c2ae601",
+      "op": "paint_tile",
+      "tile": [
+        20,
+        69
+      ]
     }
-  ],
-  "schema_version": 1
+  ]
 }

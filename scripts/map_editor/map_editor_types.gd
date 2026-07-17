@@ -70,11 +70,28 @@ static func new_map_from_catalog(map_id: String, map_type := "dungeon_floor", ru
 	document.design["strategy"] = str(catalog_entry.get("strategy", MapDesignCatalogService.get_template(map_type).get("strategy", "shrink_and_recompose")))
 	document.design["source_size"] = catalog_entry.get("source_size", [null, null])
 	document.design["source_size_is_design_size"] = false
+	for key: String in ["size_status", "size_decision_source", "source_usage", "pre_scale_design_size", "scale_factor", "scale_rounding"]:
+		if catalog_entry.has(key):
+			document.design[key] = catalog_entry[key]
 	document["source_reference"] = {
 		"source_map_path": catalog_entry.get("source_map_path", null),
 		"audit_status": catalog_entry.get("source_audit_status", "not_audited"),
 		"coordinate_system": "mir2_48x32",
 	}
+	return document
+
+
+static func new_map_from_blank_template(template_id: String) -> Dictionary:
+	var template := MapDesignCatalogService.find_blank_template(template_id)
+	if template.is_empty():
+		return {}
+	var document := new_map_from_catalog(
+		str(template.get("map_id", "")), str(template.get("map_type", "dungeon_floor")),
+		int(template.get("runtime_map_id", 0)), str(template.get("display_name", ""))
+	)
+	document.editor_meta["blank_template_id"] = template_id
+	document.editor_meta["template_kind"] = "empty_map"
+	document.editor_meta["content_policy"] = "empty_layers"
 	return document
 
 

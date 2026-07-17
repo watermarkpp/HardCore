@@ -8,7 +8,7 @@ func _ready()->void:
 	var expected_home:=MapEditorRuntimeBridge.tile_to_world(runtime,safe.get("return_tile",safe.get("tile",[32,32])))
 	assert(MapEditorRuntimeBridge.home_position().is_equal_approx(expected_home))
 	var content:=MapEditorRuntimeBridge.game_content()
-	assert(content.safe_areas.size()==1 and content.spawns.size()==33 and content.npcs.size()==5)
+	assert(content.safe_areas.size()==1 and content.spawns.size()==runtime.semantics.monster_spawn.size() and content.npcs.size()==5)
 	var roles:=[]
 	for npc:Dictionary in content.npcs:roles.append(str(npc.kind))
 	assert(roles.count("shop")==3 and roles.has("trainer") and roles.has("quest"))
