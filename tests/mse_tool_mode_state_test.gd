@@ -149,6 +149,16 @@ func _ready() -> void:
 	_click_preview_tile(editor, Vector2i(18, 18), MOUSE_BUTTON_LEFT)
 	assert(editor.current_document.layers.map_entrance_points.size() == 1)
 	assert(str(editor.current_document.layers.map_entrance_points[0].display_name) == "古墓入口")
+	var delete_selected := InputEventKey.new()
+	delete_selected.keycode = KEY_DELETE
+	delete_selected.pressed = true
+	assert(editor.preview.selected_selectable_id == str(editor.current_document.layers.map_entrance_points[0].semantic_id))
+	assert(editor.active_tool_mode == "semantic")
+	editor.preview._gui_input(delete_selected)
+	assert(editor.current_document.layers.map_entrance_points.is_empty())
+	assert(editor.preview.selected_selectable_id.is_empty())
+	_click_preview_tile(editor, Vector2i(18, 18), MOUSE_BUTTON_LEFT)
+	assert(editor.current_document.layers.map_entrance_points.size() == 1)
 	editor.semantic_kind_option.select(exit_index)
 	editor._on_semantic_kind_selected(exit_index)
 	editor.semantic_display_name.text = "古墓墙门出口"
@@ -162,6 +172,9 @@ func _ready() -> void:
 	editor.semantic_target_entrance.text = "map_entrance_000001"
 	editor._on_update_selected_semantic_pressed()
 	assert(str(editor.current_document.layers.map_exit_points[0].target_map_id) == "wooma_forest")
+	editor._unhandled_key_input(delete_selected)
+	assert(editor.current_document.layers.map_exit_points.is_empty())
+	assert(editor.preview.selected_selectable_id.is_empty())
 	editor.semantic_kind_option.select(respawn_index)
 	editor._on_semantic_kind_selected(respawn_index)
 	_click_preview_tile(editor, Vector2i(20, 20), MOUSE_BUTTON_LEFT)
@@ -180,6 +193,9 @@ func _ready() -> void:
 	assert(editor.current_document.layers.safe_area.size() == 1)
 	assert(str(editor.current_document.layers.safe_area[0].shape) == "polygon")
 	assert(editor.current_document.layers.safe_area[0].polygon_tiles.size() == 4)
+	assert(editor.preview.selected_selectable_id == str(editor.current_document.layers.safe_area[0].semantic_id))
+	editor.preview._gui_input(delete_selected)
+	assert(editor.current_document.layers.safe_area.is_empty())
 	_click_preview_tile(editor, Vector2i(24, 24), MOUSE_BUTTON_LEFT)
 	assert(editor.safe_polygon_points.size() == 1)
 	editor.preview._gui_input(cancel_collision)

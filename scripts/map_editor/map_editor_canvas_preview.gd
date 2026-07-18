@@ -312,10 +312,18 @@ func _gui_input(event: InputEvent) -> void:
 		elif interaction_mode in ["manual_collision_erase", "manual_collision_erase_whole"] and event.button_mask & MOUSE_BUTTON_MASK_LEFT and tile.x >= 0 and tile != _last_drag_tile:
 			_last_drag_tile = tile
 			manual_collision_erase_requested.emit(tile)
-	if event is InputEventKey and event.pressed and not event.echo and interaction_mode=="select" and not selected_selectable_id.is_empty():
-		var delta:Vector2i = {KEY_UP:Vector2i(0,-1),KEY_DOWN:Vector2i(0,1),KEY_LEFT:Vector2i(-1,0),KEY_RIGHT:Vector2i(1,0)}.get(event.keycode,Vector2i.ZERO)
-		if delta!=Vector2i.ZERO: selectable_move_requested.emit(selected_selectable_id,delta); accept_event()
-		elif event.keycode==KEY_DELETE: selectable_delete_requested.emit(selected_selectable_id); accept_event()
+	if event is InputEventKey and event.pressed and not event.echo and not selected_selectable_id.is_empty():
+		# Deletion is valid in every tool mode. Semantic placement deliberately
+		# remains active after adding an entrance/exit, so restricting this key
+		# to selection mode made newly placed markers impossible to remove.
+		if event.keycode in [KEY_DELETE, KEY_BACKSPACE]:
+			selectable_delete_requested.emit(selected_selectable_id)
+			accept_event()
+		elif interaction_mode == "select":
+			var delta:Vector2i = {KEY_UP:Vector2i(0,-1),KEY_DOWN:Vector2i(0,1),KEY_LEFT:Vector2i(-1,0),KEY_RIGHT:Vector2i(1,0)}.get(event.keycode,Vector2i.ZERO)
+			if delta!=Vector2i.ZERO:
+				selectable_move_requested.emit(selected_selectable_id,delta)
+				accept_event()
 
 
 func _tiles_inside_lasso(points: PackedVector2Array) -> Array[Vector2i]:

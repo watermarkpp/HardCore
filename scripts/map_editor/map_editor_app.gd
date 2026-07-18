@@ -953,8 +953,17 @@ func _on_selectable_delete_requested(selectable_id:String)->void:
 	var result:=_delete_instance_with_linked_semantics(selectable_id) if selectable_id.begins_with("inst_") else MapEditorGameplaySemanticService.delete_entry(current_document,selectable_id)
 	if result.ok:
 		preview.selected_selectable_id=""
+		preview.hovered_selectable_id=""
 		preview.set_document(current_document)
-	status_label.text="删除成功" if result.ok else "删除失败：%s"%result.get("errors",[])
+	status_label.text="删除成功；点击“保存地图”写入工作文件" if result.ok else "删除失败：%s"%result.get("errors",[])
+
+
+func _select_new_semantic_marker(semantic_id: String) -> void:
+	if preview == null:
+		return
+	preview.selected_selectable_id = semantic_id
+	preview.hovered_selectable_id = ""
+	preview.queue_redraw()
 
 
 func _on_point_erase_toggled(enabled: bool) -> void:
@@ -1206,6 +1215,7 @@ func _on_semantic_tile_clicked(tile: Vector2i) -> void:
 	var result := MapEditorGameplaySemanticService.add_entry(current_document, kind, tile, properties)
 	if result.ok:
 		if kind=="npc": MapEditorNpcPlaceholderService.ensure_entry(current_document,str(result.entry.semantic_id))
+		_select_new_semantic_marker(str(result.entry.semantic_id))
 		preview.queue_redraw()
 		if kind == "map_exit" and str(result.entry.get("target_map_id", "")).is_empty():
 			status_label.text = "地图出口已标注：%s；目标地图可以稍后填写，保存地图即可保留" % result.entry.semantic_id
@@ -1245,6 +1255,7 @@ func _commit_safe_area_polygon() -> void:
 	if result.get("ok", false):
 		safe_polygon_points.clear()
 		preview.set_semantic_polygon_draft(safe_polygon_points)
+		_select_new_semantic_marker(str(result.entry.semantic_id))
 		preview.queue_redraw()
 		status_label.text = "多边形安全区已完成：%s；点击“保存地图”写入工作文件" % result.entry.semantic_id
 	else:
@@ -1418,6 +1429,15 @@ func _on_save_calibration_pressed() -> void:
 func _unhandled_key_input(event: InputEvent) -> void:
 	if not (event is InputEventKey) or not event.pressed or event.echo:
 		return
+	# Keep deletion available when focus has moved from the canvas to another
+	# non-editing control. LineEdit consumes its own Delete/Backspace first, so
+	# editing marker names cannot accidentally delete the selected marker.
+	if event.keycode in [KEY_DELETE, KEY_BACKSPACE] and preview != null:
+		var selected_id := preview.selected_selectable_id
+		if not selected_id.is_empty():
+			_on_selectable_delete_requested(selected_id)
+			get_viewport().set_input_as_handled()
+			return
 	if event.ctrl_pressed and event.keycode==KEY_Z:
 		if command_stack.undo():preview.set_document(current_document);status_label.text="已撤销"
 		return
