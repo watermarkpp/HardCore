@@ -17,6 +17,7 @@ signal attack_pressed
 signal attack_released
 signal interact_pressed
 signal skill_pressed(slot_index: int)
+signal skill_quick_slot_assignment_requested(request: Dictionary)
 signal map_travel_requested(map_id: int)
 signal map_teleport_requested(request: Dictionary)
 signal map_teleport_availability_requested(map_ids: Array)
@@ -481,6 +482,9 @@ func _build_modal_panels(root: Control) -> void:
 	root.add_child(shop_panel)
 	skill_panel = SkillPanel.new()
 	skill_panel.hide()
+	skill_panel.quick_slot_assignment_requested.connect(
+		func(request: Dictionary) -> void: skill_quick_slot_assignment_requested.emit(request)
+	)
 	root.add_child(skill_panel)
 	quest_panel = QuestPanel.new()
 	quest_panel.hide()
