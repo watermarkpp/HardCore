@@ -1,6 +1,7 @@
 class_name MapEditorInstanceService
 extends RefCounted
 
+const PlacementAnchorPolicy := preload("res://scripts/map_assets/map_asset_placement_anchor_policy.gd")
 const ROLE_DEFAULTS := {
 	"decoration": {"scene_intent": "visual_detail", "gameplay_role": "none", "placement_rule": "inside_map", "collision_policy": "none", "navigation_policy": "ignore"},
 	"obstacle": {"scene_intent": "block_path", "gameplay_role": "navigation_blocker", "placement_rule": "non_overlapping", "collision_policy": "preset", "navigation_policy": "block_player_and_monster"},
@@ -27,6 +28,7 @@ static func create_instance(document: Dictionary, asset_id: String, object_role:
 		"scene_intent": defaults.scene_intent, "gameplay_role": defaults.gameplay_role, "placement_rule": defaults.placement_rule,
 		"tile": [tile.x, tile.y], "tile_anchor":[tile.x,tile.y], "offset_px": [0, 0], "position_mode":"tile_anchor", "layer": layer,
 		"anchor_px": [placement.placement_anchor_px.x,placement.placement_anchor_px.y], "placement_anchor_px":[placement.placement_anchor_px.x,placement.placement_anchor_px.y], "anchor_mode": asset.get("anchor_mode", "foot_tile"),
+		"placement_anchor_policy_id": str(asset.get("placement_anchor_policy_id", "")),
 		"footprint_tiles": asset.get("footprint_tiles", [1, 1]),
 		"collision_policy": collision_policy,
 		"collision_profile_id":asset.get("collision_profile_id","none_visual"), "collision_footprint_tiles":collision_footprint,
@@ -135,6 +137,7 @@ static func resize_instance(document: Dictionary, instance_id: String, direction
 	instance["instance_custom_scale"] = true
 	instance["instance_base_scale"] = float(instance.get("instance_base_scale", asset.get("approved_scale", 1.0)))
 	instance["instance_base_footprint_tiles"] = instance.get("instance_base_footprint_tiles", old_fp).duplicate()
+	PlacementAnchorPolicy.refresh_custom_instance(instance, asset)
 	_resize_instance_collision(instance, old_fp, new_fp)
 	_located_replace(document, located, instance)
 	return {"ok": true, "instance": instance}

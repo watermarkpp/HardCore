@@ -9,6 +9,7 @@ const EXTENSION_CATALOG_PATHS := [
 	"res://assets/data/assets/map_cave_dungeon_asset_catalog.json",
 ]
 const ManualCollisionPolicy := preload("res://scripts/map_assets/map_asset_manual_collision_policy.gd")
+const PlacementAnchorPolicy := preload("res://scripts/map_assets/map_asset_placement_anchor_policy.gd")
 static var _catalog_cache: Dictionary = {}
 static var _asset_index: Dictionary = {}
 static var _normalized_ground_by_source_sha: Dictionary = {}
@@ -30,6 +31,11 @@ static func load_catalog() -> Dictionary:
 		# user-saved wall calibration is allowed to replace the visual-only
 		# family default.
 		effective = _canonical_ground_asset(effective)
+		# Imported foot-tile props store the visible bottom point as anchor_px.
+		# The editor positions instances from the centre of their logical
+		# footprint, so convert only the placement anchor to that coordinate
+		# system. Keep anchor_px untouched as the user's calibration source.
+		effective = PlacementAnchorPolicy.apply_to_asset(effective)
 		effective_assets.append(effective)
 		_asset_index[str(effective.get("asset_id", ""))] = effective
 	catalog["assets"] = effective_assets
