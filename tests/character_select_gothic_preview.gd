@@ -30,7 +30,7 @@ func _prepare_profiles() -> void:
 	PlayerState.test_mode = false
 	var profiles := [
 		{"id": "warrior_preview", "name": "北辰", "profession": "战士", "gender": "男", "level": 26, "updated_at": 300},
-		{"id": "wizard_preview", "name": "星火", "profession": "法师", "gender": "女", "level": 22, "updated_at": 200},
+		{"id": "wizard_preview", "name": "星火", "profession": "法师", "gender": "男", "level": 22, "updated_at": 200},
 		{"id": "taoist_preview", "name": "青灯", "profession": "道士", "gender": "男", "level": 18, "updated_at": 100},
 	]
 	for profile: Dictionary in profiles:

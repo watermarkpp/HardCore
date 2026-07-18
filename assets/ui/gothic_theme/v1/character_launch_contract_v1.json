@@ -6,6 +6,7 @@
     "wizard",
     "taoist"
   ],
+  "fixedCharacterGender": "男",
   "launchFields": {
     "main_profile_id": "Required profile selected as the player-controlled character.",
     "ai_teammate_enabled": "True only when a distinct teammate profile is selected and the feature is enabled.",
@@ -19,7 +20,7 @@
     "The launch request is transient and must not change the save schema.",
     "Runtime integration must load the teammate as a read-only companion snapshot without replacing PlayerState.active_profile_id.",
     "AI movement, combat, inventory ownership, death and persistence are gameplay-owned rules.",
-    "Character creation UI exposes warrior, wizard and taoist. PlayerState creation must validate and create all three professions."
+    "Character creation UI exposes warrior, wizard and taoist and always requests the fixed male character model. PlayerState creation must validate and create all three professions."
   ],
   "rootMetaKey": "pending_character_launch_context"
 }

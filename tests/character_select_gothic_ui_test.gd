@@ -35,7 +35,9 @@ func _run() -> void:
 	assert(not launcher.profession_buttons["法师"].disabled, "法师创建按钮仍处于旧版锁定状态")
 	assert(not launcher.profession_buttons["道士"].disabled, "道士创建按钮仍处于旧版锁定状态")
 	assert(launcher.profession_buttons["法师"].get_meta("profession_id", "") == "wizard", "法师职业稳定 ID 错误")
-	assert(launcher.gender_buttons.size() == 2, "创建人物缺少男女选择")
+	assert(not launcher.get_node("CreationPanel").has_node("MaleGender"), "创建人物不应继续显示男性选择按钮")
+	assert(not launcher.get_node("CreationPanel").has_node("FemaleGender"), "创建人物不应继续显示女性选择按钮")
+	assert(not launcher.get_node("CharacterPreviewPanel/PreviewStage") is Panel, "人物纸娃娃外层不应继续使用第一道装饰图框")
 
 	launcher._select_main_profile("wizard_01")
 	assert(launcher.selected_main_profile_id == "wizard_01", "任意角色没有成功切换为主角色")
@@ -68,11 +70,15 @@ func _run() -> void:
 
 	launcher.name_input.text = "星火"
 	launcher._select_creation_profession("法师")
-	launcher._select_creation_gender("女")
 	var creation_request: Dictionary = launcher.build_creation_request()
 	assert(creation_request.contract_id == "ui.character.creation.v1", "人物创建请求契约 ID 错误")
-	assert(creation_request.profession_id == "wizard" and creation_request.gender == "女", "人物创建请求没有保留法师/女性选择")
+	assert(creation_request.profession_id == "wizard" and creation_request.gender == "男", "人物创建请求没有固定为男性角色")
 	assert(creation_request.character_name == "星火", "人物创建请求没有保留角色名")
+	launcher._select_main_profile("warrior_01")
+	await get_tree().process_frame
+	var paper_doll: Control = launcher.get_node("CharacterPreviewPanel/PreviewStage/PreviewVisualRoot/RuntimePaperDoll")
+	assert(paper_doll.preview_scale >= 1.5, "人物大厅纸娃娃没有按要求放大")
+	assert(launcher.profile_cards["warrior_01"].main_button.alignment == HORIZONTAL_ALIGNMENT_CENTER, "角色名称、等级和职业没有在信息框中居中")
 
 	launcher.queue_free()
 	_restore_profiles()
@@ -91,7 +97,7 @@ func _prepare_profiles() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(TEST_DIRECTORY))
 	var profiles := [
 		{"id": "warrior_01", "name": "北辰", "profession": "战士", "gender": "男", "level": 26, "updated_at": 300},
-		{"id": "wizard_01", "name": "星火", "profession": "法师", "gender": "女", "level": 22, "updated_at": 200},
+		{"id": "wizard_01", "name": "星火", "profession": "法师", "gender": "男", "level": 22, "updated_at": 200},
 		{"id": "taoist_01", "name": "青灯", "profession": "道士", "gender": "男", "level": 18, "updated_at": 100},
 	]
 	for profile: Dictionary in profiles:

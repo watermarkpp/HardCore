@@ -9,6 +9,7 @@ signal character_launch_requested(request: Dictionary)
 const LAUNCH_CONTRACT_ID := "ui.character.launch.v1"
 const CREATION_CONTRACT_ID := "ui.character.creation.v1"
 const LAUNCH_CONTEXT_META := &"pending_character_launch_context"
+const FIXED_CHARACTER_GENDER := "男"
 const HALL_TEXTURE := preload("res://assets/ui/gothic_preview/character_hall.png")
 const PROFESSION_PRESENTATION := {
 	"战士": {
@@ -33,10 +34,8 @@ const PROFESSION_PRESENTATION := {
 
 var list_box: VBoxContainer
 var name_input: LineEdit
-var gender_select: OptionButton
 var message_label: Label
 var profession_buttons: Dictionary = {}
-var gender_buttons: Dictionary = {}
 var profile_cards: Dictionary = {}
 var profile_scroll: ScrollContainer
 var ai_teammate_toggle: CheckButton
@@ -49,7 +48,6 @@ var roster_count_label: Label
 var selected_main_profile_id := ""
 var selected_ai_profile_id := ""
 var selected_creation_profession := "战士"
-var selected_creation_gender := "男"
 var ai_teammate_enabled := false
 var _profiles: Array[Dictionary] = []
 var suppress_scene_change_for_test := false
@@ -165,22 +163,22 @@ func _build_roster_panel() -> void:
 func _build_preview_panel() -> void:
 	var panel := _section_panel("CharacterPreviewPanel", Rect2(380, 108, 484, 574))
 	panel.add_child(_section_title("人物预览", 484))
-	var stage := Panel.new()
+	var stage := Control.new()
 	stage.name = "PreviewStage"
-	stage.position = Vector2(34, 54)
-	stage.size = Vector2(416, 374)
-	stage.theme_type_variation = "GothicInsetFrame"
+	stage.position = Vector2.ZERO
+	stage.size = panel.size
+	stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel.add_child(stage)
 	preview_visual_root = Control.new()
 	preview_visual_root.name = "PreviewVisualRoot"
-	preview_visual_root.position = Vector2(58, 22)
-	preview_visual_root.size = Vector2(300, 292)
+	preview_visual_root.position = Vector2(42, 44)
+	preview_visual_root.size = Vector2(400, 350)
 	preview_visual_root.clip_contents = true
 	stage.add_child(preview_visual_root)
 	preview_name_label = Label.new()
 	preview_name_label.name = "PreviewName"
-	preview_name_label.position = Vector2(30, 310)
-	preview_name_label.size = Vector2(356, 32)
+	preview_name_label.position = Vector2(54, 392)
+	preview_name_label.size = Vector2(376, 32)
 	preview_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	preview_name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	preview_name_label.add_theme_font_size_override("font_size", 23)
@@ -188,8 +186,8 @@ func _build_preview_panel() -> void:
 	stage.add_child(preview_name_label)
 	preview_detail_label = Label.new()
 	preview_detail_label.name = "PreviewDetail"
-	preview_detail_label.position = Vector2(30, 340)
-	preview_detail_label.size = Vector2(356, 22)
+	preview_detail_label.position = Vector2(54, 424)
+	preview_detail_label.size = Vector2(376, 22)
 	preview_detail_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	preview_detail_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	preview_detail_label.theme_type_variation = "GothicMutedLabel"
@@ -197,7 +195,7 @@ func _build_preview_panel() -> void:
 	enter_button = Button.new()
 	enter_button.name = "EnterGame"
 	enter_button.text = "进入玛法"
-	enter_button.position = Vector2(94, 448)
+	enter_button.position = Vector2(94, 458)
 	enter_button.size = Vector2(296, 62)
 	enter_button.theme_type_variation = "GothicComponentSelectedButton"
 	enter_button.add_theme_font_size_override("font_size", 20)
@@ -207,7 +205,7 @@ func _build_preview_panel() -> void:
 	var launch_hint := Label.new()
 	launch_hint.name = "LaunchHint"
 	launch_hint.text = "主角色决定世界进度；AI 队友使用自己的角色档案"
-	launch_hint.position = Vector2(38, 518)
+	launch_hint.position = Vector2(38, 524)
 	launch_hint.size = Vector2(408, 30)
 	launch_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	launch_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -234,27 +232,9 @@ func _build_creation_panel() -> void:
 	name_input.theme_type_variation = "GothicSearchField"
 	name_input.text_submitted.connect(func(_text: String) -> void: _create_character())
 	panel.add_child(name_input)
-	var gender_caption := Label.new()
-	gender_caption.text = "性别"
-	gender_caption.position = Vector2(26, 148)
-	gender_caption.size = Vector2(310, 24)
-	gender_caption.theme_type_variation = "GothicMutedLabel"
-	panel.add_child(gender_caption)
-	for index in range(2):
-		var gender_name: String = ["男", "女"][index]
-		var button := Button.new()
-		button.name = "%sGender" % ("Male" if gender_name == "男" else "Female")
-		button.text = gender_name
-		button.position = Vector2(26 + index * 160, 178)
-		button.size = Vector2(150, 48)
-		button.add_theme_font_size_override("font_size", 17)
-		button.set_meta("stable_id", "character.gender.%s" % ("male" if gender_name == "男" else "female"))
-		button.pressed.connect(_select_creation_gender.bind(gender_name))
-		panel.add_child(button)
-		gender_buttons[gender_name] = button
 	var profession_caption := Label.new()
 	profession_caption.text = "选择职业"
-	profession_caption.position = Vector2(26, 240)
+	profession_caption.position = Vector2(26, 158)
 	profession_caption.size = Vector2(310, 24)
 	profession_caption.theme_type_variation = "GothicMutedLabel"
 	panel.add_child(profession_caption)
@@ -264,8 +244,8 @@ func _build_creation_panel() -> void:
 		var button := Button.new()
 		button.name = "%sProfession" % str(presentation.id).capitalize()
 		button.text = "%s\n%s\n%s" % [presentation.glyph, profession_name, presentation.role]
-		button.position = Vector2(26 + index * 104, 270)
-		button.size = Vector2(98, 116)
+		button.position = Vector2(26 + index * 104, 190)
+		button.size = Vector2(98, 132)
 		button.add_theme_font_size_override("font_size", 14)
 		button.set_meta("stable_id", "character.profession.%s" % presentation.id)
 		button.set_meta("profession_id", presentation.id)
@@ -275,7 +255,7 @@ func _build_creation_panel() -> void:
 	var create_hint := Label.new()
 	create_hint.name = "CreationHint"
 	create_hint.text = "职业决定初始技能、属性与成长路线"
-	create_hint.position = Vector2(26, 394)
+	create_hint.position = Vector2(26, 338)
 	create_hint.size = Vector2(310, 24)
 	create_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	create_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -285,7 +265,7 @@ func _build_creation_panel() -> void:
 	var create_button := Button.new()
 	create_button.name = "CreateCharacter"
 	create_button.text = "创建角色"
-	create_button.position = Vector2(26, 426)
+	create_button.position = Vector2(26, 374)
 	create_button.size = Vector2(310, 58)
 	create_button.theme_type_variation = "GothicComponentButton"
 	create_button.add_theme_font_size_override("font_size", 18)
@@ -294,19 +274,13 @@ func _build_creation_panel() -> void:
 	panel.add_child(create_button)
 	message_label = Label.new()
 	message_label.name = "Message"
-	message_label.position = Vector2(28, 492)
-	message_label.size = Vector2(306, 56)
+	message_label.position = Vector2(28, 446)
+	message_label.size = Vector2(306, 82)
 	message_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	message_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	message_label.theme_type_variation = "GothicMutedLabel"
 	panel.add_child(message_label)
-	gender_select = OptionButton.new()
-	gender_select.name = "CompatibilityGenderSelect"
-	gender_select.add_item("男")
-	gender_select.add_item("女")
-	gender_select.visible = false
-	panel.add_child(gender_select)
 	_refresh_creation_controls()
 
 
@@ -352,16 +326,15 @@ func _add_profile_card(profile: Dictionary) -> void:
 	list_box.add_child(card)
 	var main_button := Button.new()
 	main_button.name = "Main"
-	main_button.text = "%s\nLv.%d  %s%s" % [
+	main_button.text = "%s\nLv.%d  ·  %s" % [
 		str(profile.get("name", "未命名")),
 		int(profile.get("level", 1)),
-		str(profile.get("gender", "男")),
 		str(profile.get("profession", "战士")),
 	]
-	main_button.position = Vector2(8, 8)
-	main_button.size = Vector2(174, 86)
-	main_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	main_button.add_theme_font_size_override("font_size", 15)
+	main_button.position = Vector2(8, 12)
+	main_button.size = Vector2(174, 78)
+	main_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	main_button.add_theme_font_size_override("font_size", 16)
 	main_button.set_meta("stable_id", "character.profile.%s.main" % profile_id)
 	main_button.pressed.connect(_select_main_profile.bind(profile_id))
 	card.add_child(main_button)
@@ -422,16 +395,16 @@ func _refresh_character_preview() -> void:
 		return
 	var profession_name := str(profile.get("profession", "战士"))
 	preview_name_label.text = str(profile.get("name", "未命名"))
-	preview_detail_label.text = "%s%s · 等级 %d · 主角色" % [
-		str(profile.get("gender", "男")),
+	preview_detail_label.text = "%s · 等级 %d · 主角色" % [
 		profession_name,
 		int(profile.get("level", 1)),
 	]
 	if profession_name == "战士" and str(PlayerState.active_profile_id) == selected_main_profile_id:
 		var paper_doll := EquipmentCharacterPreviewScript.new()
 		paper_doll.name = "RuntimePaperDoll"
-		paper_doll.position = Vector2(35, 0)
-		paper_doll.size = Vector2(230, 286)
+		paper_doll.preview_scale = 1.52
+		paper_doll.position = Vector2(40, 0)
+		paper_doll.size = Vector2(320, 350)
 		paper_doll.set_meta("preview_source", "selected_profile_runtime_equipment")
 		preview_visual_root.add_child(paper_doll)
 		return
@@ -439,7 +412,7 @@ func _refresh_character_preview() -> void:
 	var icon_path := str(presentation.get("icon", ""))
 	var icon := TextureRect.new()
 	icon.name = "ProfessionEmblem"
-	icon.position = Vector2(75, 44)
+	icon.position = Vector2(125, 54)
 	icon.size = Vector2(150, 150)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -450,7 +423,7 @@ func _refresh_character_preview() -> void:
 	var glyph := Label.new()
 	glyph.name = "ProfessionGlyph"
 	glyph.text = str(presentation.get("glyph", ""))
-	glyph.position = Vector2(70, 194)
+	glyph.position = Vector2(120, 204)
 	glyph.size = Vector2(160, 46)
 	glyph.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	glyph.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -460,7 +433,7 @@ func _refresh_character_preview() -> void:
 	var note := Label.new()
 	note.name = "ProfessionPreviewNote"
 	note.text = "%s职业形象" % profession_name
-	note.position = Vector2(50, 242)
+	note.position = Vector2(100, 252)
 	note.size = Vector2(200, 30)
 	note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	note.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -505,28 +478,12 @@ func _select_creation_profession(profession_name: String) -> void:
 	_refresh_creation_controls()
 
 
-func _select_creation_gender(gender_name: String) -> void:
-	if gender_name not in ["男", "女"]:
-		return
-	selected_creation_gender = gender_name
-	gender_select.select(0 if gender_name == "男" else 1)
-	message_label.text = ""
-	_refresh_creation_controls()
-
-
 func _refresh_creation_controls() -> void:
 	for profession_name: String in profession_buttons:
 		var button: Button = profession_buttons[profession_name]
 		button.theme_type_variation = (
 			"GothicComponentSelectedButton"
 			if profession_name == selected_creation_profession
-			else "GothicComponentButton"
-		)
-	for gender_name: String in gender_buttons:
-		var button: Button = gender_buttons[gender_name]
-		button.theme_type_variation = (
-			"GothicComponentSelectedButton"
-			if gender_name == selected_creation_gender
 			else "GothicComponentButton"
 		)
 
@@ -537,7 +494,7 @@ func _create_character() -> void:
 	var error := PlayerState.create_character(
 		str(last_creation_request.character_name),
 		selected_creation_profession,
-		selected_creation_gender
+		FIXED_CHARACTER_GENDER
 	)
 	if not error.is_empty():
 		message_label.add_theme_color_override("font_color", Color("d47868"))
@@ -557,7 +514,7 @@ func build_creation_request() -> Dictionary:
 		"character_name": name_input.text.strip_edges().substr(0, 12),
 		"profession_id": ProfessionRules.profession_id(selected_creation_profession),
 		"profession_name": selected_creation_profession,
-		"gender": selected_creation_gender,
+		"gender": FIXED_CHARACTER_GENDER,
 	}
 
 
