@@ -271,7 +271,7 @@ func _gui_input(event: InputEvent) -> void:
 				accept_event()
 				return
 			if interaction_mode == "manual_collision":
-				var manual_tile := screen_to_tile(event.position)
+				var manual_tile := _manual_collision_pointer(event.position)
 				if manual_tile.x >= 0:
 					_hover_tile = manual_tile
 					if _manual_collision_shape == "cell":
@@ -315,7 +315,7 @@ func _gui_input(event: InputEvent) -> void:
 				queue_redraw()
 			accept_event()
 			return
-		var tile := screen_to_tile(event.position)
+		var tile := _manual_collision_pointer(event.position) if interaction_mode == "manual_collision" else screen_to_tile(event.position)
 		var hover_changed := tile != _hover_tile
 		_hover_tile = tile
 		if interaction_mode == "select":
@@ -386,6 +386,20 @@ func screen_to_tile(screen_position: Vector2) -> Vector2i:
 	return result if MapEditorCoordinate.contains_tile(result, design_size) else Vector2i(-1, -1)
 
 
+func screen_to_grid_vertex(screen_position: Vector2) -> Vector2i:
+	if document.is_empty() or _draw_scale <= 0.0:
+		return Vector2i(-1, -1)
+	var raw_size: Array = document.design.design_size
+	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
+	var ground_px := (screen_position - _draw_offset) / _draw_scale
+	var result := MapEditorCoordinate.ground_px_to_grid_vertex(ground_px, design_size)
+	return result if MapEditorCoordinate.contains_grid_vertex(result, design_size) else Vector2i(-1, -1)
+
+
+func _manual_collision_pointer(screen_position: Vector2) -> Vector2i:
+	return screen_to_grid_vertex(screen_position) if _manual_collision_shape == "polygon" else screen_to_tile(screen_position)
+
+
 func _request_paint(screen_position: Vector2) -> void:
 	var tile := screen_to_tile(screen_position)
 	if tile.x < 0 or tile == _last_drag_tile:
@@ -445,9 +459,9 @@ func _draw_manual_collision_draft(design_size: Vector2i, offset: Vector2, scale_
 		var erase_label := "单格擦除碰撞" if interaction_mode == "manual_collision_erase" else "整块擦除碰撞"
 		draw_string(ThemeDB.fallback_font, Vector2(18, 28), erase_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, erase_color)
 		if _hover_tile.x >= 0:
-			var tile_outline := PackedVector2Array()
-			for tile_point: Vector2 in [Vector2(_hover_tile), Vector2(_hover_tile.x + 1, _hover_tile.y), Vector2(_hover_tile) + Vector2.ONE, Vector2(_hover_tile.x, _hover_tile.y + 1), Vector2(_hover_tile)]:
-				tile_outline.append(offset + MapEditorCoordinate.tile_to_ground_px(tile_point, design_size) * scale_factor)
+			var tile_outline := _closed_polygon(
+				_cell_polygon_screen(_hover_tile, design_size, offset, scale_factor)
+			)
 			draw_colored_polygon(tile_outline, Color(erase_color, 0.24))
 			draw_polyline(tile_outline, erase_color, 3.0)
 		return
@@ -457,9 +471,9 @@ func _draw_manual_collision_draft(design_size: Vector2i, offset: Vector2, scale_
 	draw_string(ThemeDB.fallback_font, Vector2(18, 28), "手工碰撞：%s" % {"cell":"单格", "rect":"矩形", "ellipse":"椭圆", "polygon":"多边形"}.get(_manual_collision_shape, _manual_collision_shape), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, color)
 	if _manual_collision_shape == "cell":
 		if _hover_tile.x >= 0:
-			var cell_outline := PackedVector2Array()
-			for tile_point: Vector2 in [Vector2(_hover_tile), Vector2(_hover_tile.x + 1, _hover_tile.y), Vector2(_hover_tile) + Vector2.ONE, Vector2(_hover_tile.x, _hover_tile.y + 1), Vector2(_hover_tile)]:
-				cell_outline.append(offset + MapEditorCoordinate.tile_to_ground_px(tile_point, design_size) * scale_factor)
+			var cell_outline := _closed_polygon(
+				_cell_polygon_screen(_hover_tile, design_size, offset, scale_factor)
+			)
 			draw_colored_polygon(cell_outline, Color(color, 0.24))
 			draw_polyline(cell_outline, color, 3.0)
 		return
@@ -493,6 +507,25 @@ func _draw_manual_collision_draft(design_size: Vector2i, offset: Vector2, scale_
 	if outline.size() >= 3:
 		draw_colored_polygon(outline, Color(color, 0.18))
 		draw_polyline(outline, color, 3.0)
+
+
+static func _cell_polygon_screen(
+	tile: Vector2i,
+	design_size: Vector2i,
+	offset: Vector2,
+	scale_factor: float
+) -> PackedVector2Array:
+	var result := PackedVector2Array()
+	for point: Vector2 in MapEditorCoordinate.cell_polygon_ground_px(tile, design_size):
+		result.append(offset + point * scale_factor)
+	return result
+
+
+static func _closed_polygon(points: PackedVector2Array) -> PackedVector2Array:
+	var result := points.duplicate()
+	if not result.is_empty():
+		result.append(result[0])
+	return result
 
 
 func _draw_lasso_selection(design_size: Vector2i, offset: Vector2, scale_factor: float) -> void:
@@ -600,13 +633,7 @@ func _draw_blocked_tiles(design_size: Vector2i, offset: Vector2, scale_factor: f
 		if parts.size() != 2:
 			continue
 		var tile := Vector2i(int(parts[0]), int(parts[1]))
-		var center := MapEditorCoordinate.cell_center_to_ground_px(tile, design_size)
-		var polygon := PackedVector2Array([
-			offset + (center + Vector2(0, -16)) * scale_factor,
-			offset + (center + Vector2(32, 0)) * scale_factor,
-			offset + (center + Vector2(0, 16)) * scale_factor,
-			offset + (center + Vector2(-32, 0)) * scale_factor,
-		])
+		var polygon := _cell_polygon_screen(tile, design_size, offset, scale_factor)
 		draw_colored_polygon(polygon, Color(0.85, 0.15, 0.12, 0.42))
 
 

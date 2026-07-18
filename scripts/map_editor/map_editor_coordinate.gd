@@ -22,6 +22,15 @@ static func cell_center_to_ground_px(cell: Vector2, design_size: Vector2i) -> Ve
 	return tile_to_ground_px(cell + Vector2(0.5, 0.5), design_size)
 
 
+static func cell_polygon_ground_px(cell: Vector2i, design_size: Vector2i) -> PackedVector2Array:
+	return PackedVector2Array([
+		tile_to_ground_px(Vector2(cell), design_size),
+		tile_to_ground_px(Vector2(cell + Vector2i(1, 0)), design_size),
+		tile_to_ground_px(Vector2(cell + Vector2i(1, 1)), design_size),
+		tile_to_ground_px(Vector2(cell + Vector2i(0, 1)), design_size),
+	])
+
+
 static func ground_px_to_tile(ground_px: Vector2, design_size: Vector2i) -> Vector2:
 	var relative := ground_px - origin_px(design_size)
 	return Vector2(
@@ -33,6 +42,15 @@ static func ground_px_to_tile(ground_px: Vector2, design_size: Vector2i) -> Vect
 static func ground_px_to_cell(ground_px: Vector2, design_size: Vector2i) -> Vector2i:
 	var lattice := ground_px_to_tile(ground_px, design_size)
 	return Vector2i(floori(lattice.x), floori(lattice.y))
+
+
+static func ground_px_to_grid_vertex(ground_px: Vector2, design_size: Vector2i) -> Vector2i:
+	var lattice := ground_px_to_tile(ground_px, design_size)
+	return Vector2i(roundi(lattice.x), roundi(lattice.y))
+
+
+static func contains_grid_vertex(vertex: Vector2i, design_size: Vector2i) -> bool:
+	return vertex.x >= 0 and vertex.y >= 0 and vertex.x <= design_size.x and vertex.y <= design_size.y
 
 
 static func tile_to_world(tile: Vector2, design_size: Vector2i) -> Vector2:

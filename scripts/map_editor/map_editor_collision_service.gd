@@ -241,17 +241,14 @@ static func _collision_footprint(instance:Dictionary)->Vector2i:
 static func _collision_origin(instance: Dictionary) -> Vector2i:
 	var visual_size := _footprint(instance)
 	var collision_size := _collision_footprint(instance)
-	# First centre a smaller collider inside its logical visual footprint.
-	var centred := _tile(instance) + Vector2i(
+	# Instance tile identifies the top-left logical cell of its footprint.
+	# The shared foot-tile anchor now aligns the visible base to the bottom
+	# vertex, so the collider belongs directly inside that footprint. The
+	# legacy -X/-Y lift would shift it away from the editor grid.
+	return _tile(instance) + Vector2i(
 		maxi(0, (visual_size.x - collision_size.x) / 2),
 		maxi(0, (visual_size.y - collision_size.y) / 2)
 	)
-	# In an isometric grid the placement anchor is the sprite's ground-contact
-	# point. A diamond centred on that point extends half of itself below the
-	# sprite, which is the ~50% downward error visible in Walkable Preview.
-	# Moving equally in -X/-Y raises it on screen without changing its shape.
-	var lift_tiles := maxi(1, roundi(float(collision_size.x + collision_size.y) / 4.0))
-	return centred - Vector2i(lift_tiles, lift_tiles)
 
 
 static func _mark_rect(blocked: Dictionary, position: Vector2i, extent: Vector2i, map_size: Vector2i) -> void:
