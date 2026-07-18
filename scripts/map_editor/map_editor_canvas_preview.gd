@@ -528,7 +528,9 @@ static func instance_visual_geometry(instance: Dictionary, design_size: Vector2i
 	var offset_px: Array = instance.get("offset_px", [0, 0])
 	var anchor: Array = instance.get("anchor_px", instance.get("placement_anchor_px", asset.get("anchor_px", [0, 0])))
 	var instance_scale: Array = instance.get("scale", [1.0, 1.0])
-	var foot := Vector2(float(tile[0]) + float(footprint[0]) * 0.5, float(tile[1]) + float(footprint[1]) * 0.5)
+	var foot := Vector2(float(tile[0]) + 0.5, float(tile[1]) + 0.5)
+	if str(asset.get("asset_type", "")) != "wall_module":
+		foot = Vector2(float(tile[0]) + float(footprint[0]) * 0.5, float(tile[1]) + float(footprint[1]) * 0.5)
 	var ground_center := MapEditorCoordinate.tile_to_ground_px(foot, design_size) + Vector2(float(offset_px[0]), float(offset_px[1]))
 	var center := draw_offset + ground_center * draw_scale
 	var visual_scale := Vector2(float(instance_scale[0]), float(instance_scale[1])) * draw_scale

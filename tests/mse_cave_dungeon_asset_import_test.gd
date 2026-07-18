@@ -42,6 +42,19 @@ func _ready() -> void:
 	assert(placed.ok, str(placed.get("errors", [])))
 	assert(str(placed.instance.collision_policy) == "wall_cells_generated")
 	assert(not (placed.instance.collision_cells as Array).is_empty())
+	var wall_asset := MapAssetCatalogService.find_asset(str(placed.instance.asset_id))
+	var wall_geometry := MapEditorCanvasPreview.instance_visual_geometry(
+		placed.instance,
+		Vector2i(64, 64),
+		Vector2.ZERO,
+		1.0,
+		Vector2(wall_asset.image_size[0], wall_asset.image_size[1]),
+		wall_asset
+	)
+	var expected_wall_anchor := MapEditorCoordinate.cell_center_to_ground_px(Vector2i(20, 20), Vector2i(64, 64))
+	assert((wall_geometry.center as Vector2).is_equal_approx(expected_wall_anchor))
+	var resolved_wall := MapEditorPlacementResolver.resolve(document, str(placed.instance.asset_id), Vector2i(20, 20), "terrain_base", "terrain")
+	assert((resolved_wall.anchor_ground_px as Vector2).is_equal_approx(expected_wall_anchor))
 	var before := MapEditorCollisionService.build_walkability(document)
 	assert(before.blocked_count == (placed.instance.collision_cells as Array).size())
 	var resized := MapEditorInstanceService.resize_instance(document, str(placed.instance.instance_id), -1)
