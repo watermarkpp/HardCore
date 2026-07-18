@@ -28,7 +28,7 @@ func _ready() -> void:
 	shade = ColorRect.new()
 	shade.name = "LoadingShade"
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	shade.color = Color(0.105, 0.108, 0.108, 0.992)
+	shade.color = Color(0.018, 0.025, 0.035, 0.90)
 	shade.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(shade)
 	_build_atmosphere()
@@ -54,7 +54,7 @@ func _process(delta: float) -> void:
 	var breathing := sin(_pulse_time * 2.2)
 	loading_label.modulate.a = 0.875 + breathing * 0.125
 	var watermark_material := game_icon_watermark.material as ShaderMaterial
-	watermark_material.set_shader_parameter("opacity", 0.10 + breathing * 0.02)
+	watermark_material.set_shader_parameter("opacity", 0.55 + breathing * 0.07)
 	var glow_material := red_glow.material as ShaderMaterial
 	glow_material.set_shader_parameter("strength", 0.14 + breathing * 0.045)
 	for ember: ColorRect in embers:
@@ -69,8 +69,8 @@ func _process(delta: float) -> void:
 func _build_atmosphere() -> void:
 	game_icon_watermark = TextureRect.new()
 	game_icon_watermark.name = "GameIconWatermark"
-	game_icon_watermark.position = Vector2(470, 164)
-	game_icon_watermark.size = Vector2(340, 340)
+	game_icon_watermark.position = Vector2(490, 184)
+	game_icon_watermark.size = Vector2(300, 300)
 	game_icon_watermark.texture = GAME_ICON
 	game_icon_watermark.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	game_icon_watermark.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -80,7 +80,7 @@ func _build_atmosphere() -> void:
 	var watermark_shader := Shader.new()
 	watermark_shader.code = """
 shader_type canvas_item;
-uniform float opacity : hint_range(0.0, 0.2) = 0.1;
+uniform float opacity : hint_range(0.0, 0.8) = 0.55;
 void fragment() {
 	vec4 source = texture(TEXTURE, UV);
 	float brightness = max(source.r, max(source.g, source.b));

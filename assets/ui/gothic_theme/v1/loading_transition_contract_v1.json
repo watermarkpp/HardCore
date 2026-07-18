@@ -11,15 +11,15 @@
   "atmosphere": {
     "gameIconPath": "res://assets/branding/game_icon.png",
     "watermarkOpacityRange": [
-      0.08,
-      0.12
+      0.48,
+      0.62
     ],
     "loadingTextOpacityRange": [
       0.75,
       1.0
     ],
     "maximumEmberCount": 16,
-    "background": "clean neutral dark gray at approximately 99.2 percent coverage",
+    "background": "cool near-black charcoal blue at approximately 90 percent coverage and 10 percent scene visibility",
     "blackBackgroundRemoval": "brightness mask plus elliptical edge feathering in the watermark shader"
   },
   "forbiddenContent": [
