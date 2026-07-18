@@ -318,10 +318,9 @@ func _refresh_profiles() -> void:
 
 func _add_profile_card(profile: Dictionary) -> void:
 	var profile_id := str(profile.get("id", ""))
-	var card := Panel.new()
+	var card := Control.new()
 	card.name = "Profile_%s" % _safe_node_name(profile_id)
-	card.custom_minimum_size = Vector2(270, 102)
-	card.theme_type_variation = "GothicTabFrame"
+	card.custom_minimum_size = Vector2(270, 96)
 	card.set_meta("profile_id", profile_id)
 	list_box.add_child(card)
 	var main_button := Button.new()
@@ -331,8 +330,8 @@ func _add_profile_card(profile: Dictionary) -> void:
 		int(profile.get("level", 1)),
 		str(profile.get("profession", "战士")),
 	]
-	main_button.position = Vector2(8, 12)
-	main_button.size = Vector2(174, 78)
+	main_button.position = Vector2(0, 7)
+	main_button.size = Vector2(184, 81)
 	main_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	main_button.add_theme_font_size_override("font_size", 16)
 	main_button.set_meta("stable_id", "character.profile.%s.main" % profile_id)
@@ -340,8 +339,8 @@ func _add_profile_card(profile: Dictionary) -> void:
 	card.add_child(main_button)
 	var ai_button := Button.new()
 	ai_button.name = "AITeammate"
-	ai_button.position = Vector2(186, 12)
-	ai_button.size = Vector2(76, 78)
+	ai_button.position = Vector2(190, 7)
+	ai_button.size = Vector2(80, 81)
 	ai_button.add_theme_font_size_override("font_size", 12)
 	ai_button.set_meta("stable_id", "character.profile.%s.ai_teammate" % profile_id)
 	ai_button.pressed.connect(_select_ai_profile.bind(profile_id))
@@ -362,7 +361,7 @@ func _refresh_selection_state() -> void:
 		main_button.theme_type_variation = (
 			"GothicComponentSelectedButton"
 			if profile_id == selected_main_profile_id
-			else "GothicTransparentButton"
+			else "GothicComponentButton"
 		)
 		var is_ai := profile_id == selected_ai_profile_id
 		ai_button.disabled = not ai_teammate_enabled or profile_id == selected_main_profile_id

@@ -30,6 +30,13 @@ func _run() -> void:
 	assert(launcher.get_node("CreationPanel").theme_type_variation == "GothicInsetFrame", "创建人物没有使用公共内框")
 	assert(launcher.list_box != null and launcher.name_input != null, "旧版人物选择兼容入口丢失")
 	assert(launcher.profile_cards.size() == 3, "人物列表没有显示三个独立档案")
+	assert(not launcher.profile_cards["wizard_01"].panel is Panel, "人物信息卡不应继续叠加被裁掉的分页装饰框")
+	assert(launcher.profile_cards["wizard_01"].main_button.theme_type_variation == "GothicComponentButton", "未选中人物缺少完整信息背景框")
+	assert(launcher.profile_cards["wizard_01"].main_button.position == Vector2(0, 7), "人物信息背景框没有与角色卡对齐")
+	assert(
+		launcher.profile_cards["wizard_01"].main_button.size == Vector2(184, 81),
+		"人物信息背景框尺寸不完整：%s" % launcher.profile_cards["wizard_01"].main_button.size
+	)
 	assert(launcher.profession_buttons.size() == 3, "创建人物没有显示三职业")
 	assert(not launcher.profession_buttons["战士"].disabled, "战士创建按钮被错误禁用")
 	assert(not launcher.profession_buttons["法师"].disabled, "法师创建按钮仍处于旧版锁定状态")
