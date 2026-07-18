@@ -23,6 +23,10 @@ func _ready() -> void:
 	add_child(panel)
 	await get_tree().process_frame
 	panel.open_for("技能导师")
+	panel.set_skill_button_assignments({
+		"center": ["刺杀剑术", "半月弯刀", "烈火剑法", "野蛮冲撞"],
+		"attack_ring": ["野蛮冲撞", "烈火剑法", "刺杀剑术"],
+	})
 	for index in range(panel.skill_entries.size()):
 		if str(panel.skill_entries[index].get("skillName", "")) == "刺杀剑术":
 			panel._on_skill_selected(index)

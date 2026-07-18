@@ -18,6 +18,7 @@ signal attack_released
 signal interact_pressed
 signal skill_pressed(slot_index: int)
 signal skill_quick_slot_assignment_requested(request: Dictionary)
+signal skill_button_assignment_requested(request: Dictionary)
 signal map_travel_requested(map_id: int)
 signal map_teleport_requested(request: Dictionary)
 signal map_teleport_availability_requested(map_ids: Array)
@@ -485,6 +486,9 @@ func _build_modal_panels(root: Control) -> void:
 	skill_panel.quick_slot_assignment_requested.connect(
 		func(request: Dictionary) -> void: skill_quick_slot_assignment_requested.emit(request)
 	)
+	skill_panel.skill_button_assignment_requested.connect(
+		func(request: Dictionary) -> void: skill_button_assignment_requested.emit(request)
+	)
 	root.add_child(skill_panel)
 	quest_panel = QuestPanel.new()
 	quest_panel.hide()
@@ -727,6 +731,11 @@ func open_shop(display_name: String, stock: Array) -> void:
 func open_skill_trainer(display_name: String) -> void:
 	_close_modal_panels()
 	skill_panel.open_for(display_name)
+
+
+func set_skill_button_assignments(assignments: Dictionary, interaction_modes := {}) -> void:
+	if skill_panel != null:
+		skill_panel.set_skill_button_assignments(assignments, interaction_modes)
 
 
 func open_quest(display_name: String) -> void:

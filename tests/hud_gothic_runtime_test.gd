@@ -16,6 +16,8 @@ func _run() -> void:
 	var root := hud.get_node("MobileSafeRoot") as Control
 	assert(root != null)
 	assert(not (root.get_node("TopInfoPanel") as Control).visible)
+	assert(hud.has_signal("skill_button_assignment_requested"), "HUD 没有转发七槽技能分配请求")
+	assert(hud.has_method("set_skill_button_assignments"), "HUD 缺少七槽技能配置注入方法")
 
 	var chassis := root.get_node("IntegratedHUDChassis") as Control
 	assert(chassis != null and chassis.size == Vector2(820, 273))
