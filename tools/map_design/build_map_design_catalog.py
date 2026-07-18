@@ -28,6 +28,9 @@ def main():
             "strategy":row["strategy"],"content_policy":"empty_layers","ground_policy":"virtual_blank_until_dirty",
             "editable_layer":"expansion",
         }
+        for key in ("size_status", "size_decision_source", "clone_source_map_id"):
+            if key in row:
+                blank_template[key] = row[key]
         if row["map_id"] == "bich_province":
             blank_template.update({
                 "template_kind":"existing_map_or_empty_template",

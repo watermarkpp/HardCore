@@ -6,6 +6,7 @@
       38.0
     ],
     "dungeon_structure": {
+      "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
       "collision_authority": "manual_by_user",
       "inner_bounds": [
         12.0,
@@ -32,7 +33,7 @@
         3.0,
         1.0
       ],
-      "structure_id": "orc_tomb_1.hui_ring.v1",
+      "structure_id": "orc_tomb_3.hui_ring.v1",
       "wall_family_id": "orc_tomb_rough_stone_u0"
     },
     "map_type": "dungeon_floor",
@@ -54,24 +55,26 @@
     ],
     "view_type": "isometric_2_to_1"
   },
-  "display_name": "兽人古墓一层",
+  "display_name": "兽人古墓三层",
   "editor_meta": {
-    "blank_template_id": "blank.orc_tomb_1",
-    "connection_milestone": "ORC-TOMB-1-TO-2-V1",
-    "content_policy": "empty_layers",
+    "blank_template_id": "blank.orc_tomb_3",
+    "clone_size_policy": "exact_source_copy_38x38",
+    "clone_source_map_id": "orc_tomb_1",
+    "clone_source_revision": 2,
+    "content_policy": "full_copy_from_orc_tomb_1",
     "created_by": "human_codex_shared_tool",
-    "milestone": "ORC-TOMB-1-HUI-RING-V1",
-    "revision": 3,
-    "structure_id": "orc_tomb_1.hui_ring.v1",
+    "milestone": "ORC_TOMB_3-CLONE-FROM-1-V1",
+    "revision": 1,
+    "structure_id": "orc_tomb_3.hui_ring.v1",
     "structure_policy": "visual_walls_only_manual_collision_and_decoration",
-    "template_kind": "empty_map",
-    "workspace": "res://map_editor_workspace/orc_tomb_1"
+    "template_kind": "cloned_map",
+    "workspace": "res://map_editor_workspace/orc_tomb_3"
   },
   "ground": {
     "blank_chunk_policy": "transparent_until_painted",
     "blank_fill_asset_id": "",
     "blank_generated": false,
-    "chunk_manifest": "res://assets/data/maps/ground/orc_tomb_1.ground_chunks.json",
+    "chunk_manifest": "res://assets/data/maps/ground/orc_tomb_3.ground_chunks.json",
     "chunk_size": [
       1024.0,
       1024.0
@@ -85,13 +88,13 @@
       1216.0,
       16.0
     ],
-    "paint_manifest": "res://assets/data/maps/ground_paint/orc_tomb_1.ground_paint_ops.json",
-    "paint_state": "res://assets/data/maps/ground_paint/orc_tomb_1.ground_paint_state.json",
-    "source_manifest": "res://assets/data/maps/ground_paint/orc_tomb_1.ground_source_manifest.json",
+    "paint_manifest": "res://assets/data/maps/ground_paint/orc_tomb_3.ground_paint_ops.json",
+    "paint_state": "res://assets/data/maps/ground_paint/orc_tomb_3.ground_paint_state.json",
+    "source_manifest": "res://assets/data/maps/ground_paint/orc_tomb_3.ground_source_manifest.json",
     "tile_anchor_mode": "center",
     "visual_only": true,
-    "workspace_manifest": "res://map_editor_workspace/orc_tomb_1/ground/ground_manifest.json",
-    "workspace_state": "res://map_editor_workspace/orc_tomb_1/ground/ground_state.json"
+    "workspace_manifest": "res://map_editor_workspace/orc_tomb_3/ground/ground_manifest.json",
+    "workspace_state": "res://map_editor_workspace/orc_tomb_3/ground/ground_state.json"
   },
   "layers": {
     "boss_spawn": [],
@@ -758,8 +761,8 @@
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_exit_trigger",
-        "target_entrance_id": "map_entrance_000001",
-        "target_map_id": "orc_tomb_2",
+        "target_entrance_id": "",
+        "target_map_id": "",
         "tile": [
           32.0,
           2.0
@@ -3255,6 +3258,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l4_v02",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -3309,7 +3313,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           0.0,
@@ -3327,6 +3331,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_x_l4_v01",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -3381,7 +3386,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           1.0,
@@ -3399,6 +3404,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l4_v03",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -3453,7 +3459,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           0.0,
@@ -3471,6 +3477,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_x_l4_v02",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -3525,7 +3532,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           8.0,
@@ -3543,6 +3550,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l4_v01",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -3597,7 +3605,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           0.0,
@@ -3615,6 +3623,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -3669,7 +3678,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           12.0,
@@ -3687,6 +3696,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l4_v02",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -3741,7 +3751,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           0.0,
@@ -3759,6 +3769,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_x_l4_v01",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -3813,7 +3824,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           16.0,
@@ -3831,6 +3842,7 @@
           144.0
         ],
         "asset_id": "orc_tomb_wall_inner_nw_v01",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -3885,7 +3897,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "inner_ring",
         "tile": [
           12.0,
@@ -3903,6 +3915,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l4_v03",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -3957,7 +3970,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           0.0,
@@ -3975,6 +3988,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_x_l4_v02",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -4031,7 +4045,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           21.0,
@@ -4053,6 +4067,7 @@
           128.0
         ],
         "asset_id": "orc_tomb_wall_straight_x_l3_v03",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -4107,7 +4122,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "inner_ring",
         "tile": [
           16.0,
@@ -4125,6 +4140,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l4_v02",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -4179,7 +4195,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "inner_ring",
         "tile": [
           12.0,
@@ -4197,6 +4213,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_x_l2_v01",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -4251,7 +4268,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "inner_ring",
         "tile": [
           19.0,
@@ -4269,6 +4286,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l4_v01",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -4323,7 +4341,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           0.0,
@@ -4341,6 +4359,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -4395,7 +4414,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           24.0,
@@ -4413,6 +4432,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l4_v03",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -4467,7 +4487,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "inner_ring",
         "tile": [
           12.0,
@@ -4485,6 +4505,7 @@
           128.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l3_v02",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -4539,7 +4560,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           0.0,
@@ -4557,6 +4578,7 @@
           128.0
         ],
         "asset_id": "orc_tomb_wall_straight_x_l3_v01",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -4611,7 +4633,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           18.0,
@@ -4629,6 +4651,7 @@
           128.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l3_v03",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -4683,7 +4706,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           0.0,
@@ -4701,6 +4724,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l4_v01",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -4755,7 +4779,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "inner_ring",
         "tile": [
           12.0,
@@ -4773,6 +4797,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -4827,7 +4852,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           7.0,
@@ -4845,6 +4870,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l4_v02",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -4899,7 +4925,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "inner_ring",
         "tile": [
           25.0,
@@ -4917,6 +4943,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l4_v01",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -4971,7 +4998,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           37.0,
@@ -4989,6 +5016,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_x_l4_v01",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -5043,7 +5071,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           9.0,
@@ -5061,6 +5089,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -5115,7 +5144,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "inner_ring",
         "tile": [
           17.0,
@@ -5133,6 +5162,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l4_v03",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -5187,7 +5217,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "inner_ring",
         "tile": [
           25.0,
@@ -5205,6 +5235,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l4_v02",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -5259,7 +5290,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           37.0,
@@ -5277,6 +5308,7 @@
           128.0
         ],
         "asset_id": "orc_tomb_wall_straight_x_l3_v02",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -5331,7 +5363,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           13.0,
@@ -5349,6 +5381,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_x_l4_v01",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -5403,7 +5436,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "inner_ring",
         "tile": [
           21.0,
@@ -5421,6 +5454,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l4_v01",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -5475,7 +5509,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "inner_ring",
         "tile": [
           25.0,
@@ -5493,6 +5527,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l4_v03",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -5547,7 +5582,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           37.0,
@@ -5565,6 +5600,7 @@
           128.0
         ],
         "asset_id": "orc_tomb_wall_straight_x_l3_v03",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -5619,7 +5655,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           16.0,
@@ -5637,6 +5673,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l4_v01",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -5691,7 +5728,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           37.0,
@@ -5709,6 +5746,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l4_v02",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -5763,7 +5801,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           37.0,
@@ -5781,6 +5819,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_x_l4_v01",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -5835,7 +5874,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           21.0,
@@ -5853,6 +5892,7 @@
           128.0
         ],
         "asset_id": "orc_tomb_wall_straight_x_l3_v02",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -5907,7 +5947,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           25.0,
@@ -5925,6 +5965,7 @@
           112.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l4_v03",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -5979,7 +6020,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           37.0,
@@ -5997,6 +6038,7 @@
           128.0
         ],
         "asset_id": "orc_tomb_wall_straight_x_l3_v03",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -6051,7 +6093,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           31.0,
@@ -6069,6 +6111,7 @@
           128.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l3_v01",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -6123,7 +6166,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           37.0,
@@ -6141,6 +6184,7 @@
           128.0
         ],
         "asset_id": "orc_tomb_wall_straight_x_l3_v01",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -6195,7 +6239,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           28.0,
@@ -6213,6 +6257,7 @@
           128.0
         ],
         "asset_id": "orc_tomb_wall_straight_y_l3_v02",
+        "cloned_from_structure_id": "orc_tomb_1.hui_ring.v1",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
@@ -6267,7 +6312,7 @@
         "scene_intent": "dungeon_wall_visual_structure",
         "selectable": true,
         "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
+        "structure_id": "orc_tomb_3.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
           37.0,
@@ -6281,12 +6326,14 @@
     ],
     "terrain_front": []
   },
-  "map_id": "orc_tomb_1",
-  "runtime_map_id": 217.0,
+  "map_id": "orc_tomb_3",
+  "runtime_map_id": 221,
   "schema_version": 4.0,
   "source_policy": "expansion_editable",
   "source_reference": {
-    "audit_status": "ok",
+    "audit_status": "derived_editor_clone",
+    "clone_source_document": "res://map_editor_workspace/orc_tomb_1/orc_tomb_1.editor.json",
+    "clone_source_map_id": "orc_tomb_1",
     "coordinate_system": "mir2_48x32",
     "source_map_path": "research/mir2_client_raw/Map/D001.map"
   }

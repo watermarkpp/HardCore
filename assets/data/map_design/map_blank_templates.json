@@ -33,7 +33,9 @@
       "strategy": "preserve_function",
       "content_policy": "open_existing_workspace_first",
       "ground_policy": "virtual_blank_until_dirty",
-      "editable_layer": "expansion"
+      "editable_layer": "expansion",
+      "size_status": "user_confirmed_final",
+      "size_decision_source": "user_2026-07-17_80x80"
     },
     {
       "template_id": "blank.mengzhong_province",
@@ -123,17 +125,20 @@
       "display_name": "兽人古墓二层",
       "map_type": "dungeon_floor",
       "design_size": [
-        35,
-        35
+        38,
+        38
       ],
       "pre_scale_design_size": [
         112,
         112
       ],
-      "strategy": "shrink_and_recompose",
+      "strategy": "exact_clone_of_orc_tomb_1",
       "content_policy": "empty_layers",
       "ground_policy": "virtual_blank_until_dirty",
-      "editable_layer": "expansion"
+      "editable_layer": "expansion",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-07-18",
+      "clone_source_map_id": "orc_tomb_1"
     },
     {
       "template_id": "blank.orc_tomb_3",
@@ -143,17 +148,20 @@
       "display_name": "兽人古墓三层",
       "map_type": "dungeon_floor",
       "design_size": [
-        30,
-        30
+        38,
+        38
       ],
       "pre_scale_design_size": [
         96,
         96
       ],
-      "strategy": "shrink_and_recompose",
+      "strategy": "exact_clone_of_orc_tomb_1",
       "content_policy": "empty_layers",
       "ground_policy": "virtual_blank_until_dirty",
-      "editable_layer": "expansion"
+      "editable_layer": "expansion",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-07-18",
+      "clone_source_map_id": "orc_tomb_1"
     },
     {
       "template_id": "blank.wooma_temple_entrance",

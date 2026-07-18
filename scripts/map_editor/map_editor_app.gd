@@ -127,10 +127,8 @@ func _build_ui() -> void:
 	var save_map_note := Label.new(); save_map_note.text = "装饰物、地面、碰撞、NPC、刷新点、入口、出口、出生/复活点和安全区都用“保存地图”"; save_map_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; save_map_note.modulate = Color("8fb9c7"); map_actions.add_child(save_map_note)
 	var template_label := Label.new(); template_label.text = "地图模板"; map_actions.add_child(template_label)
 	map_template_option = OptionButton.new(); map_template_option.fit_to_longest_item = false
-	for template: Dictionary in MapDesignCatalogService.blank_templates():
-		var template_size: Array = template.get("design_size", [0, 0])
-		map_template_option.add_item("%s · %d×%d" % [str(template.get("display_name", template.get("map_id", ""))), int(template_size[0]), int(template_size[1])])
-		map_template_option.set_item_metadata(map_template_option.item_count - 1, str(template.get("template_id", "")))
+	_refresh_map_template_options()
+	map_template_option.get_popup().about_to_popup.connect(_refresh_map_template_options)
 	map_actions.add_child(map_template_option)
 	template_info_label = Label.new(); template_info_label.modulate = Color("9da7b3"); map_actions.add_child(template_info_label)
 	open_template_button = Button.new(); open_template_button.text = "打开地图模板"; open_template_button.pressed.connect(_on_open_template_pressed); map_actions.add_child(open_template_button)
@@ -353,6 +351,35 @@ func _on_open_template_pressed() -> void:
 		return
 	var template_id := str(map_template_option.get_item_metadata(map_template_option.selected))
 	_open_template_by_id(template_id)
+
+
+func _refresh_map_template_options(preferred_template_id := "") -> void:
+	if map_template_option == null:
+		return
+	var selected_template_id := preferred_template_id
+	if selected_template_id.is_empty() and map_template_option.selected >= 0:
+		selected_template_id = str(map_template_option.get_item_metadata(map_template_option.selected))
+	map_template_option.clear()
+	var selected_index := 0
+	for template: Dictionary in MapDesignCatalogService.blank_templates():
+		var template_size: Array = template.get("design_size", [0, 0])
+		map_template_option.add_item(
+			"%s · %d×%d"
+			% [
+				str(template.get("display_name", template.get("map_id", ""))),
+				int(template_size[0]),
+				int(template_size[1]),
+			]
+		)
+		var index := map_template_option.item_count - 1
+		var template_id := str(template.get("template_id", ""))
+		map_template_option.set_item_metadata(index, template_id)
+		if template_id == selected_template_id:
+			selected_index = index
+	if map_template_option.item_count > 0:
+		map_template_option.select(selected_index)
+		if template_info_label != null:
+			_on_map_template_selected(selected_index)
 
 
 func _open_template_by_id(template_id: String, document_path := "", workspace_override := "") -> bool:

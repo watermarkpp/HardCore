@@ -5,7 +5,7 @@ from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[2]; DATA=ROOT/"assets/data/map_design"
-ALLOWED={"remake_compact","shrink_and_recompose","preserve_function","preserve_route","reduce_duplicates","preserve_arena"}
+ALLOWED={"remake_compact","shrink_and_recompose","preserve_function","preserve_route","reduce_duplicates","preserve_arena","exact_clone_of_orc_tomb_1"}
 def main():
     catalog=json.loads((DATA/"map_design_catalog.json").read_text(encoding="utf-8")); errors=[]; warnings=[]
     blank=json.loads((DATA/"map_blank_templates.json").read_text(encoding="utf-8"))
@@ -30,13 +30,18 @@ def main():
         if len(original)!=2: errors.append(f"{mid}: missing pre-scale size")
         else:
             scaled=[int((Decimal(int(value))*factor).quantize(Decimal("1"),rounding=ROUND_HALF_UP)) for value in original]
-            if size!=scaled: errors.append(f"{mid}: scale mismatch {size} != {scaled}")
-    expected={"bich_province":[80,80],"mengzhong_province":[88,88],"corpse_king_hall":[30,30],"stone_tomb_array":[18,18]}
+            if m.get("strategy")!="exact_clone_of_orc_tomb_1" and size!=scaled: errors.append(f"{mid}: scale mismatch {size} != {scaled}")
+    expected={"bich_province":[80,80],"mengzhong_province":[88,88],"orc_tomb_2":[38,38],"orc_tomb_3":[38,38],"corpse_king_hall":[30,30],"stone_tomb_array":[18,18]}
     lookup={m["map_id"]:m for m in maps}
     for mid,size in expected.items():
         if lookup.get(mid,{}).get("design_size")!=size: errors.append(f"acceptance: {mid} != {size}")
     if lookup.get("corpse_king_hall",{}).get("map_type")!="boss_room": errors.append("acceptance: corpse king type")
     if lookup.get("stone_tomb_array",{}).get("strategy")!="reduce_duplicates": errors.append("acceptance: stone tomb strategy")
+    for mid in ("orc_tomb_2", "orc_tomb_3"):
+        clone=lookup.get(mid,{})
+        if clone.get("clone_source_map_id")!="orc_tomb_1": errors.append(f"acceptance: {mid} clone source")
+        if clone.get("size_status")!="user_confirmed_exact_clone": errors.append(f"acceptance: {mid} clone size status")
+        if clone.get("design_size")!=lookup.get("orc_tomb_1",{}).get("design_size"): errors.append(f"acceptance: {mid} clone size differs from floor 1")
     if lookup.get("bich_province",{}).get("size_status")!="user_confirmed_final": errors.append("acceptance: bich final size status")
     if factor!=Decimal("0.3125"): errors.append("acceptance: global scale factor")
     if len(blank_templates)!=len(maps): errors.append("acceptance: template count")
