@@ -138,6 +138,28 @@
         "Teleport only to a declared safe arrival_anchor_id.",
         "Initially enable only main cities and designated cave entrances."
       ]
+    },
+    {
+      "id": "ui-handoff.death-revival-runtime",
+      "priority": "P0",
+      "status": "RULE_DECISION_REQUIRED",
+      "contractId": "ui.death.revival.v1",
+      "stableOptionSlots": [
+        "town",
+        "special"
+      ],
+      "integrationOwnedFiles": [
+        "res://scripts/player.gd",
+        "res://scripts/game_root.gd",
+        "death and revival rules"
+      ],
+      "requiredActions": [
+        "Replace the current automatic 0.8-second town revival with a validated death waiting state.",
+        "Generate a stable death_id and inject gameplay-owned revival options into GameHUD.",
+        "Consume GameHUD.revival_requested and revalidate cooldowns, items, loss, destinations, and arrival anchors.",
+        "Apply each revival exactly once and return the result through GameHUD.apply_revival_result.",
+        "Prevent Android back actions from bypassing the required death choice."
+      ]
     }
   ],
   "userVisibleWarningsUntilIntegrated": [
@@ -147,6 +169,7 @@
     "Selecting an AI teammate does not yet spawn a companion.",
     "The shop sell page has no gameplay quote or transaction consumer.",
     "Seven skill-button assignments are not fully persisted or executed.",
-    "World-map teleport availability and arrival anchors are not supplied by runtime."
+    "World-map teleport availability and arrival anchors are not supplied by runtime.",
+    "The formal death flow still auto-revives in town and does not wait for the new revival UI."
   ]
 }

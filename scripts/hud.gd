@@ -6,6 +6,7 @@ const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const HUDResourceOrbScript := preload("res://scripts/hud_resource_orb.gd")
 const HUDSkillIconCatalogScript := preload("res://scripts/hud_skill_icon_catalog.gd")
+const DeathRevivalPanelScript := preload("res://scripts/death_revival_panel.gd")
 const HUDTargetBarTexture := preload("res://assets/ui/gothic_hud/v2/runtime/target_bar_v2.png")
 const HUDUtilityStackTexture := preload("res://assets/ui/gothic_hud/v2/runtime/utility_stack_v2.png")
 const HUDJoystickTexture := preload("res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png")
@@ -22,6 +23,7 @@ signal skill_button_assignment_requested(request: Dictionary)
 signal map_travel_requested(map_id: int)
 signal map_teleport_requested(request: Dictionary)
 signal map_teleport_availability_requested(map_ids: Array)
+signal revival_requested(request: Dictionary)
 signal target_switch_pressed
 signal auto_target_changed(enabled: bool)
 signal special_action_pressed(effect_id: String)
@@ -43,6 +45,7 @@ var quest_panel: QuestPanel
 var profession_panel: ProfessionPanel
 var map_panel: MapPanel
 var warehouse_panel: WarehousePanel
+var death_revival_panel
 var quick_buttons: Array[Button] = []
 var health_orb: Control
 var mana_orb: Control
@@ -507,6 +510,12 @@ func _build_modal_panels(root: Control) -> void:
 	warehouse_panel = WarehousePanel.new()
 	warehouse_panel.hide()
 	root.add_child(warehouse_panel)
+	death_revival_panel = DeathRevivalPanelScript.new()
+	death_revival_panel.hide()
+	death_revival_panel.revival_requested.connect(
+		func(request: Dictionary) -> void: revival_requested.emit(request)
+	)
+	root.add_child(death_revival_panel)
 
 
 func _add_utility_button(root: Control, node_name: String, label_text: String, rect: Rect2) -> Button:
@@ -736,6 +745,32 @@ func open_skill_trainer(display_name: String) -> void:
 func set_skill_button_assignments(assignments: Dictionary, interaction_modes := {}) -> void:
 	if skill_panel != null:
 		skill_panel.set_skill_button_assignments(assignments, interaction_modes)
+
+
+func show_death_screen(context := {}) -> void:
+	_close_modal_panels()
+	if death_revival_panel != null:
+		death_revival_panel.open_death_screen(context)
+
+
+func set_revival_options(options: Array) -> void:
+	if death_revival_panel != null:
+		death_revival_panel.set_revival_options(options)
+
+
+func update_revival_option(option_slot: String, state: Dictionary) -> void:
+	if death_revival_panel != null:
+		death_revival_panel.update_revival_option(option_slot, state)
+
+
+func apply_revival_result(result: Dictionary) -> void:
+	if death_revival_panel != null:
+		death_revival_panel.apply_revival_result(result)
+
+
+func close_death_screen() -> void:
+	if death_revival_panel != null:
+		death_revival_panel.close_death_screen()
 
 
 func open_quest(display_name: String) -> void:

@@ -272,6 +272,48 @@ UI 已完成：
 - 牛魔寺庙等洞穴按规则传送到一层指定出口，不传送到任意层或错误坐标。
 - 伪造请求、过期规则和缺失门点均被运行时拒绝。
 
+### 8. 死亡与复活选择尚未接入正式死亡流程
+
+状态：`UI_READY_RUNTIME_MISSING`、`RULE_DECISION_REQUIRED`、`INTEGRATION_OWNED_FILE`
+
+UI 已完成：
+
+- 简洁死亡遮罩、死亡状态和损失信息。
+- 最近城镇复活、特殊复活两个稳定入口。
+- 倒计时、可用状态和不可用原因显示。
+- 契约：`assets/ui/gothic_theme/v1/death_revival_contract_v1.json`。
+- HUD 转发接口：
+  - `GameHUD.show_death_screen(context)`
+  - `GameHUD.set_revival_options(options)`
+  - `GameHUD.update_revival_option(option_slot, state)`
+  - `GameHUD.apply_revival_result(result)`
+  - `GameHUD.close_death_screen()`
+  - `GameHUD.revival_requested(request)`
+
+当前缺口：
+
+- `scripts/player.gd` 当前在死亡动画约 0.8 秒后恢复满血并发出死亡信号。
+- `scripts/game_root.gd::_on_player_death_requested()` 随后立即把人物送回比奇省并保存。
+- 正式运行时不会等待玩家选择复活方式。
+- 特殊复活的道具消耗、冷却、原地/安全点规则和失败处理都属于玩法层。
+
+主树接入：
+
+1. 将当前立即回城流程改成明确的死亡等待状态，并显示死亡面板。
+2. 生成稳定 `death_id`，向 UI 注入城镇与特殊复活选项。
+3. 城镇复活倒计时、金币损失、目的地图和安全落点由玩法层决定。
+4. 特殊复活必须重新校验装备、道具、冷却和死亡事件是否仍有效。
+5. 消费 `ui.death.revival.v1` 请求后原子执行规则，再通过 `apply_revival_result` 回传结果。
+6. 阻止重复点击、过期 `death_id`、多次扣道具或多次复活。
+7. Android 返回键不能绕过死亡状态或关闭必须选择的死亡面板。
+
+验收：
+
+- 普通死亡在倒计时结束后允许最近城镇复活。
+- 特殊复活按真实资源和冷却显示亮起或禁用，并显示准确原因。
+- 成功复活只执行一次；失败时保留界面并刷新原因。
+- 复活位置、金币损失和物品消耗符合玩法数据。
+
 ## 已完成且不应由主树重新设计的 UI 内容
 
 以下内容属于 UI 分支成果，主树接入时应复用，不要重新建立不配套的样式：
@@ -304,5 +346,6 @@ UI 已完成：
 - 商店出售不会获得真实报价，也不会完成交易。
 - 七槽技能分配不会完整保存和驱动战斗。
 - 世界地图传送按钮不会获得正式开放规则与指定落点。
+- 死亡后仍会沿用旧的自动回城流程，不会等待新复活界面选择。
 
 这些不是美术遗漏，而是 UI 分支权限边界内无法完成的主树/玩法接入工作。

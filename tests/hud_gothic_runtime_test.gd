@@ -18,6 +18,10 @@ func _run() -> void:
 	assert(not (root.get_node("TopInfoPanel") as Control).visible)
 	assert(hud.has_signal("skill_button_assignment_requested"), "HUD 没有转发七槽技能分配请求")
 	assert(hud.has_method("set_skill_button_assignments"), "HUD 缺少七槽技能配置注入方法")
+	assert(hud.has_signal("revival_requested"), "HUD 没有转发复活请求")
+	assert(hud.has_method("show_death_screen"), "HUD 缺少死亡界面入口")
+	var death_panel: Control = hud.get("death_revival_panel") as Control
+	assert(death_panel != null and not death_panel.visible, "死亡界面没有以隐藏状态接入 HUD")
 
 	var chassis := root.get_node("IntegratedHUDChassis") as Control
 	assert(chassis != null and chassis.size == Vector2(820, 273))

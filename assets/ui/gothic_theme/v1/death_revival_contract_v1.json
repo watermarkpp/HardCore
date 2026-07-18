@@ -1,0 +1,46 @@
+{
+  "contractId": "ui.death.revival.v1",
+  "policy": "UI displays gameplay-owned revival choices and submits a selected method. UI never decides gold loss, cooldowns, item consumption, destination maps, arrival anchors, or revival eligibility.",
+  "openMethod": {
+    "name": "GameHUD.show_death_screen(context)",
+    "contextFields": [
+      "death_id",
+      "message",
+      "loss_text",
+      "revival_options"
+    ]
+  },
+  "optionFields": [
+    "option_slot",
+    "method_id",
+    "label",
+    "enabled",
+    "countdown_seconds",
+    "hint",
+    "reason"
+  ],
+  "stableOptionSlots": [
+    "town",
+    "special"
+  ],
+  "stableButtonIds": [
+    "death.revival.town",
+    "death.revival.special"
+  ],
+  "requestSignal": {
+    "panelSignal": "DeathRevivalPanel.revival_requested(request)",
+    "hudForwardSignal": "GameHUD.revival_requested(request)",
+    "requestFields": [
+      "contract_id",
+      "death_id",
+      "option_slot",
+      "method_id"
+    ]
+  },
+  "responseMethods": [
+    "GameHUD.set_revival_options(options)",
+    "GameHUD.update_revival_option(option_slot, state)",
+    "GameHUD.apply_revival_result(result)",
+    "GameHUD.close_death_screen()"
+  ]
+}
