@@ -144,6 +144,11 @@
       "priority": "P0",
       "status": "RULE_DECISION_REQUIRED",
       "contractId": "ui.death.revival.v1",
+      "confirmedDeathPenalty": {
+        "experiencePercent": 10,
+        "goldPercent": 0,
+        "loseItems": false
+      },
       "stableOptionSlots": [
         "town",
         "special"
@@ -156,7 +161,9 @@
       "requiredActions": [
         "Replace the current automatic 0.8-second town revival with a validated death waiting state.",
         "Generate a stable death_id and inject gameplay-owned revival options into GameHUD.",
-        "Consume GameHUD.revival_requested and revalidate cooldowns, items, loss, destinations, and arrival anchors.",
+        "Remove the current five-percent gold loss from scripts/player.gd.",
+        "Apply a ten-percent experience loss with no gold or item loss; gameplay owns consistent rounding.",
+        "Consume GameHUD.revival_requested and revalidate cooldowns, special-revival items, destinations, and arrival anchors.",
         "Apply each revival exactly once and return the result through GameHUD.apply_revival_result.",
         "Prevent Android back actions from bypassing the required death choice."
       ]

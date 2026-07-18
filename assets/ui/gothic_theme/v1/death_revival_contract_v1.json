@@ -1,6 +1,20 @@
 {
   "contractId": "ui.death.revival.v1",
-  "policy": "UI displays gameplay-owned revival choices and submits a selected method. UI never decides gold loss, cooldowns, item consumption, destination maps, arrival anchors, or revival eligibility.",
+  "policy": "UI displays gameplay-owned revival choices and submits a selected method. The confirmed death penalty is 10 percent experience with no gold or item loss. Gameplay owns the deduction, rounding, cooldowns, item consumption, destination maps, arrival anchors, and revival eligibility.",
+  "deathPenalty": {
+    "experiencePercent": 10,
+    "goldPercent": 0,
+    "loseItems": false,
+    "uiText": "死亡损失：经验 10%"
+  },
+  "visual": {
+    "iconPath": "res://assets/branding/game_icon.png",
+    "stableId": "ui.death.game_icon",
+    "forbiddenLegacyDecoration": [
+      "DeathMark circle",
+      "亡 label"
+    ]
+  },
   "openMethod": {
     "name": "GameHUD.show_death_screen(context)",
     "contextFields": [

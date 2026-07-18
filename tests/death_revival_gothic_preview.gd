@@ -21,7 +21,7 @@ func _ready() -> void:
 	panel.open_death_screen({
 		"death_id": "death:preview:001",
 		"message": "你倒在了兽人古墓",
-		"loss_text": "死亡损失：金币 5%",
+		"loss_text": "死亡损失：经验 10%",
 		"revival_options": [
 			{
 				"option_slot": "town",

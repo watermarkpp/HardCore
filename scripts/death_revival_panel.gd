@@ -2,6 +2,7 @@ class_name DeathRevivalPanel
 extends Control
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const GAME_ICON := preload("res://assets/branding/game_icon.png")
 
 signal revival_requested(request: Dictionary)
 
@@ -12,6 +13,7 @@ const SPECIAL_SLOT := "special"
 
 var modal: Panel
 var title_label: Label
+var death_icon: TextureRect
 var message_label: Label
 var loss_label: Label
 var town_button: Button
@@ -90,27 +92,22 @@ func _build_modal() -> void:
 	subtitle.add_theme_font_size_override("font_size", 12)
 	title_frame.add_child(subtitle)
 
-	var death_mark := Panel.new()
-	death_mark.name = "DeathMark"
-	death_mark.position = Vector2(254, 104)
-	death_mark.size = Vector2(72, 72)
-	death_mark.theme_type_variation = "GothicSkillDisc"
-	death_mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	modal.add_child(death_mark)
-	var death_mark_label := Label.new()
-	death_mark_label.name = "DeathMarkLabel"
-	death_mark_label.text = "亡"
-	death_mark_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	death_mark_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	death_mark_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	death_mark_label.add_theme_font_size_override("font_size", 31)
-	death_mark_label.add_theme_color_override("font_color", Color("bb634e"))
-	death_mark.add_child(death_mark_label)
+	death_icon = TextureRect.new()
+	death_icon.name = "GameIcon"
+	death_icon.position = Vector2(234, 98)
+	death_icon.size = Vector2(112, 112)
+	death_icon.texture = GAME_ICON
+	death_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	death_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	death_icon.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	death_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	death_icon.set_meta("stable_id", "ui.death.game_icon")
+	modal.add_child(death_icon)
 
 	message_label = Label.new()
 	message_label.name = "DeathMessage"
 	message_label.text = "你的灵魂正在等待归来"
-	message_label.position = Vector2(70, 180)
+	message_label.position = Vector2(70, 210)
 	message_label.size = Vector2(440, 30)
 	message_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	message_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -119,7 +116,7 @@ func _build_modal() -> void:
 	loss_label = Label.new()
 	loss_label.name = "LossLabel"
 	loss_label.text = ""
-	loss_label.position = Vector2(70, 210)
+	loss_label.position = Vector2(70, 238)
 	loss_label.size = Vector2(440, 24)
 	loss_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	loss_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -127,17 +124,17 @@ func _build_modal() -> void:
 	loss_label.add_theme_font_size_override("font_size", 13)
 	modal.add_child(loss_label)
 
-	town_button = _revival_button("TownRevivalButton", "最近城镇复活", 250, "death.revival.town")
+	town_button = _revival_button("TownRevivalButton", "最近城镇复活", 270, "death.revival.town")
 	town_button.theme_type_variation = "GothicComponentSelectedButton"
 	town_button.pressed.connect(_request_revival.bind(TOWN_SLOT))
-	town_status_label = _status_label("TownStatus", 316)
-	special_button = _revival_button("SpecialRevivalButton", "特殊复活", 356, "death.revival.special")
+	town_status_label = _status_label("TownStatus", 336)
+	special_button = _revival_button("SpecialRevivalButton", "特殊复活", 370, "death.revival.special")
 	special_button.pressed.connect(_request_revival.bind(SPECIAL_SLOT))
-	special_status_label = _status_label("SpecialStatus", 422)
+	special_status_label = _status_label("SpecialStatus", 436)
 
 	result_label = Label.new()
 	result_label.name = "ResultLabel"
-	result_label.position = Vector2(70, 464)
+	result_label.position = Vector2(70, 470)
 	result_label.size = Vector2(440, 30)
 	result_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	result_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -147,7 +144,7 @@ func _build_modal() -> void:
 	var footer := Label.new()
 	footer.name = "Footer"
 	footer.text = "复活规则与可用状态由游戏系统提供"
-	footer.position = Vector2(70, 506)
+	footer.position = Vector2(70, 514)
 	footer.size = Vector2(440, 22)
 	footer.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	footer.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
