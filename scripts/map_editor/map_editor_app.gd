@@ -1,7 +1,10 @@
 class_name MapEditorApp
 extends Control
 
+const LAST_DOCUMENT_PATH_FILE := "user://mse_last_document_path.txt"
+
 var current_document: Dictionary = {}
+var current_document_path := ""
 var map_id_edit: LineEdit
 var runtime_id_edit: SpinBox
 var display_name_edit: LineEdit
@@ -59,11 +62,12 @@ var instance_size_menu_instance_id := ""
 var pending_fill_tiles: Array[Vector2i] = []
 var active_tool_mode := "select"
 var load_default_workspace_on_ready := true
+var persist_last_document_path := true
 
 
 func _notification(what:int)->void:
 	if what==NOTIFICATION_WM_CLOSE_REQUEST and get_tree()!=null and get_tree().current_scene==self:
-		if not current_document.is_empty(): MapEditorSaveService.save_document(current_document)
+		if not current_document.is_empty(): _save_current_document()
 		get_tree().quit()
 
 
@@ -71,11 +75,21 @@ func _ready() -> void:
 	_build_ui()
 	if not load_default_workspace_on_ready:
 		return
-	var recent_path := MapEditorSaveService.default_path("sandbox_64")
+	var recent_path := _startup_document_path()
 	if FileAccess.file_exists(recent_path):
 		_open_document_path(recent_path)
 	else:
 		_create_map("sandbox_64", "quest_room", 990001, "64格沙盒")
+
+
+func _startup_document_path() -> String:
+	var recent_path := _load_last_document_path()
+	if not recent_path.is_empty() and FileAccess.file_exists(recent_path):
+		return recent_path
+	var bich_path := MapEditorSaveService.default_path("bich_province")
+	if FileAccess.file_exists(bich_path):
+		return bich_path
+	return MapEditorSaveService.default_path("sandbox_64")
 
 
 func _build_ui() -> void:
@@ -297,7 +311,7 @@ func _on_create_pressed() -> void:
 	var chunk_grid := Vector2i(int(create_chunk_x.value), int(create_chunk_y.value))
 	var document := MapEditorTypes.new_custom_map(map_id, int(runtime_id_edit.value), display_name, map_type, chunk_grid)
 	_adopt_new_document(document, "已创建地图模板")
-	var saved := MapEditorSaveService.save_document(current_document)
+	var saved := _save_current_document()
 	if saved.get("ok", false):
 		status_label.text = "地图模板已创建、打开并保存：%s（%d×%d Chunk）" % [display_name, chunk_grid.x, chunk_grid.y]
 		create_map_dialog.hide()
@@ -341,7 +355,7 @@ func _open_template_by_id(template_id: String, document_path := "", workspace_ov
 	if not workspace_override.is_empty():
 		document.editor_meta["workspace"] = workspace_override
 	_adopt_new_document(document, "已从所选模板新建并打开", path)
-	var saved := MapEditorSaveService.save_document(current_document, path)
+	var saved := _save_current_document()
 	if saved.get("ok", false):
 		status_label.text = "地图模板已创建、打开并保存：%s" % str(document.get("display_name", document.get("map_id", "")))
 		return true
@@ -383,6 +397,7 @@ func _adopt_new_document(document: Dictionary, status_prefix: String, document_p
 	var design_size: Array = current_document.design.design_size
 	size_label.text = "设计尺寸：%d × %d（64×32 等距格）" % [int(design_size[0]), int(design_size[1])]
 	var resolved_document_path := document_path if not document_path.is_empty() else MapEditorSaveService.default_path(str(current_document.map_id))
+	current_document_path = resolved_document_path
 	path_label.text = "工作文件：%s" % ProjectSettings.globalize_path(resolved_document_path)
 	status_label.text = "%s；source_size 不会覆盖 design_size" % status_prefix
 	preview.set_document(current_document)
@@ -436,25 +451,58 @@ func _on_save_pressed() -> void:
 	if current_document.is_empty():
 		status_label.text = "保存失败：当前没有打开地图"
 		return
-	var result := MapEditorSaveService.save_document(current_document)
-	status_label.text = "地图已保存：%s" % result.get("path", "") if result.get("ok", false) else "保存地图失败：%s" % result.get("errors", [])
+	var result := _save_current_document()
+	status_label.text = "地图已保存：%s → %s" % [str(current_document.get("map_id", "")), result.get("path", "")] if result.get("ok", false) else "保存地图失败：%s" % result.get("errors", [])
 
 
 func _on_open_pressed() -> void:
 	if current_document.is_empty():
 		status_label.text = "当前没有可重新载入的地图"
 		return
-	_open_document_path(MapEditorSaveService.default_path(str(current_document.get("map_id", ""))))
+	_open_document_path(_resolved_current_document_path())
+
+
+func _resolved_current_document_path() -> String:
+	var map_id := str(current_document.get("map_id", ""))
+	var expected_file := "%s.editor.json" % map_id
+	if current_document_path.is_empty() or current_document_path.get_file() != expected_file:
+		return MapEditorSaveService.default_path(map_id)
+	return current_document_path
+
+
+func _save_current_document() -> Dictionary:
+	var path := _resolved_current_document_path()
+	var result := MapEditorSaveService.save_document(current_document, path)
+	if result.get("ok", false):
+		current_document_path = path
+		path_label.text = "工作文件：%s" % ProjectSettings.globalize_path(path)
+		_remember_current_document_path(path)
+	return result
+
+
+func _load_last_document_path() -> String:
+	if not persist_last_document_path or not FileAccess.file_exists(LAST_DOCUMENT_PATH_FILE):
+		return ""
+	var file := FileAccess.open(LAST_DOCUMENT_PATH_FILE, FileAccess.READ)
+	return file.get_as_text().strip_edges() if file != null else ""
+
+
+func _remember_current_document_path(path: String) -> void:
+	if not persist_last_document_path:
+		return
+	var file := FileAccess.open(LAST_DOCUMENT_PATH_FILE, FileAccess.WRITE)
+	if file != null:
+		file.store_string(path)
 
 
 func _open_document_path(path: String) -> bool:
 	var result := MapEditorLoadService.load_document(path)
 	if result.get("ok", false):
 		current_document = result.document
+		current_document_path = path
 		_migrate_loaded_instances_to_class_profiles()
 		MapEditorGameplaySemanticService.repair_duplicate_ids(current_document)
 		_ensure_map_portal_semantics()
-		MapEditorSaveService.save_document(current_document,path)
 		map_id_edit.text = str(current_document.get("map_id", "")); display_name_edit.text = str(current_document.get("display_name", "")); runtime_id_edit.value = int(current_document.get("runtime_map_id", 0))
 		map_type_option.select(_find_type_index(str(current_document.design.get("map_type", ""))))
 		_select_template_for_map_id(str(current_document.get("map_id", "")))
@@ -465,6 +513,7 @@ func _open_document_path(path: String) -> bool:
 		var initialized := MapEditorGroundService.initialize(current_document)
 		if initialized.ok: preview.set_ground_state(initialized.state)
 		status_label.text = "地图打开成功：%s" % path
+		_remember_current_document_path(path)
 		return true
 	status_label.text = "打开失败：%s" % result.get("errors", [])
 	return false
@@ -771,7 +820,7 @@ func _on_instance_size_menu_pressed(action_id:int)->void:
 	if result.get("ok",false):
 		preview.set_document(current_document)
 		if preview.show_walkable_preview: preview.set_walkability_preview(MapEditorCollisionService.build_walkability(current_document),true)
-		MapEditorSaveService.save_document(current_document)
+		_save_current_document()
 		status_label.text="当前地图素材已%s，中心点、占地和碰撞已同步"%("放大" if action_id==1 else "缩小")
 	else:status_label.text="缩放失败：%s"%result.get("errors",[])
 

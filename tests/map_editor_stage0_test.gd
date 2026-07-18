@@ -57,9 +57,12 @@ func _ready() -> void:
 	var editor_scene := load("res://scenes/tools/mafa_scene_editor.tscn") as PackedScene
 	var editor := editor_scene.instantiate() as MapEditorApp
 	editor.load_default_workspace_on_ready = false
+	editor.persist_last_document_path = false
 	add_child(editor)
+	assert(editor._startup_document_path() == MapEditorSaveService.default_path("bich_province"))
 	editor._create_map("sandbox_64", "quest_room", 990001, "64格沙盒")
 	assert(editor.current_document.map_id == "sandbox_64")
+	assert(editor.current_document_path == MapEditorSaveService.default_path("sandbox_64"))
 	var editor_size: Array = editor.current_document.design.design_size
 	assert(Vector2i(int(editor_size[0]), int(editor_size[1])) == Vector2i(64, 64))
 	assert(editor.asset_tree != null)
@@ -91,6 +94,11 @@ func _ready() -> void:
 	assert(editor.current_document.map_id == "orc_tomb_1")
 	assert(editor.current_document.design.design_size == [38, 38])
 	assert(FileAccess.file_exists(template_test_document))
+	assert(MapEditorCollisionService.add_manual_shape(editor.current_document, "rect", {"rect": [4, 5, 1, 1]}).ok)
+	assert(editor._save_current_document().ok)
+	var saved_template := MapEditorLoadService.load_document(ProjectSettings.globalize_path(template_test_document), false)
+	assert(saved_template.ok and saved_template.document.map_id == "orc_tomb_1")
+	assert(saved_template.document.layers.collision.size() == 1)
 	assert(editor._open_template_by_id("blank.orc_tomb_1", template_test_document, template_test_workspace))
 	assert("地图打开成功" in editor.status_label.text)
 	_cleanup_template_test_files(template_test_root, template_test_document, template_test_workspace)
