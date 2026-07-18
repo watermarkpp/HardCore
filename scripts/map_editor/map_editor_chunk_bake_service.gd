@@ -2,9 +2,6 @@ class_name MapEditorChunkBakeService
 extends RefCounted
 
 const BAKE_SCHEMA_VERSION := 1
-const DEFAULT_FILL_ASSET := "ground.old_grass.001"
-
-
 static func bake_dirty_chunks(document: Dictionary) -> Dictionary:
 	var initialized := MapEditorGroundService.initialize(document)
 	if not initialized.ok:
@@ -15,6 +12,7 @@ static func bake_dirty_chunks(document: Dictionary) -> Dictionary:
 	if dirty_chunks.is_empty():
 		return {"ok": true, "baked_chunks": [], "message": "no_dirty_chunks"}
 	var overrides := MapEditorGroundService.tile_overrides(state)
+	var default_fill_asset_id := str(document.get("ground", {}).get("blank_fill_asset_id", ""))
 	var design_size := _design_size(document)
 	var root := MapEditorGroundService.workspace_root(document)
 	var chunks: Array = manifest.chunks
@@ -26,13 +24,14 @@ static func bake_dirty_chunks(document: Dictionary) -> Dictionary:
 			return {"ok": false, "errors": ["dirty_chunk_missing:%s" % chunk_id]}
 		var chunk: Dictionary = chunks[chunk_index]
 		var output_path := root.path_join("ground/baked_preview/%s.png" % chunk_id)
-		var bake := _bake_chunk_png(chunk, design_size, overrides, output_path)
+		var bake := _bake_chunk_png(chunk, design_size, overrides, default_fill_asset_id, output_path)
 		if not bake.ok:
 			return bake
 		chunk.state = "materialized"
 		chunk.materialized = true
 		chunk.preview_png = "ground/baked_preview/%s.png" % chunk_id
 		chunk.baked_operation_count = state.operations_by_chunk.get(chunk_id, []).size()
+		chunk.baked_default_fill_asset_id = default_fill_asset_id
 		chunks[chunk_index] = chunk
 		baked.append(chunk_id)
 		preview_entries.append({"chunk_id": chunk_id, "preview_png": chunk.preview_png, "operation_count": chunk.baked_operation_count})
@@ -49,7 +48,7 @@ static func bake_dirty_chunks(document: Dictionary) -> Dictionary:
 	return {"ok": true, "baked_chunks": baked, "preview_manifest": preview_manifest_path}
 
 
-static func _bake_chunk_png(chunk: Dictionary, design_size: Vector2i, overrides: Dictionary, output_path: String) -> Dictionary:
+static func _bake_chunk_png(chunk: Dictionary, design_size: Vector2i, overrides: Dictionary, default_fill_asset_id: String, output_path: String) -> Dictionary:
 	var rect: Array = chunk.rect_px
 	if rect.size() != 4:
 		return {"ok": false, "errors": ["invalid_chunk_rect"]}
@@ -63,7 +62,9 @@ static func _bake_chunk_png(chunk: Dictionary, design_size: Vector2i, overrides:
 		for x in range(candidate.position.x, candidate.end.x + 1):
 			if x < 0 or y < 0 or x >= design_size.x or y >= design_size.y:
 				continue
-			var asset_id := str(overrides.get("%d,%d" % [x, y], DEFAULT_FILL_ASSET))
+			var asset_id := str(overrides.get("%d,%d" % [x, y], default_fill_asset_id))
+			if asset_id.is_empty():
+				continue
 			var tile_image: Image = _asset_image(asset_id, cache)
 			if tile_image == null:
 				return {"ok": false, "errors": ["tile_image_missing:%s" % asset_id]}
@@ -120,9 +121,6 @@ static func _asset_image(asset_id: String, cache: Dictionary) -> Image:
 		return cache[asset_id]
 	var asset := MapAssetCatalogService.find_asset(asset_id)
 	var image_path := str(asset.get("image", ""))
-	if image_path.is_empty():
-		asset = MapAssetCatalogService.find_asset(DEFAULT_FILL_ASSET)
-		image_path = str(asset.get("image", ""))
 	if image_path.is_empty():
 		for candidate: Dictionary in MapAssetCatalogService.all_assets():
 			if str(candidate.get("asset_type", "")) == "ground_brush":

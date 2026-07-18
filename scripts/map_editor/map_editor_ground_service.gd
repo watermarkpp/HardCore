@@ -2,7 +2,6 @@ class_name MapEditorGroundService
 extends RefCounted
 
 const GROUND_SCHEMA_VERSION := 1
-const DEFAULT_FILL_ASSET := "ground.old_grass.001"
 const MANIFEST_FILE := "ground_manifest.json"
 const STATE_FILE := "ground_state.json"
 
@@ -20,6 +19,10 @@ static func initialize(document: Dictionary) -> Dictionary:
 		var write_manifest := _write_json_atomic(manifest_path, manifest)
 		if not write_manifest.ok:
 			return write_manifest
+	elif _sync_blank_policy(document, manifest):
+		var sync_manifest := _write_json_atomic(manifest_path, manifest)
+		if not sync_manifest.ok:
+			return sync_manifest
 	var state := _read_json(state_path)
 	if state.is_empty():
 		state = {"schema_version": GROUND_SCHEMA_VERSION, "map_id": document.map_id, "dirty_chunks": [], "operations_by_chunk": {}}
@@ -189,6 +192,8 @@ static func _new_manifest(document: Dictionary) -> Dictionary:
 	var chunk_size := Vector2i(int(ground.chunk_size[0]), int(ground.chunk_size[1]))
 	var columns := ceili(float(pixel_size.x) / float(chunk_size.x))
 	var rows := ceili(float(pixel_size.y) / float(chunk_size.y))
+	var default_fill_asset_id := str(ground.get("blank_fill_asset_id", ""))
+	var blank_chunk_policy := str(ground.get("blank_chunk_policy", "transparent_until_painted"))
 	var chunks: Array = []
 	for y in rows:
 		for x in columns:
@@ -196,14 +201,32 @@ static func _new_manifest(document: Dictionary) -> Dictionary:
 			var extent := Vector2i(mini(chunk_size.x, pixel_size.x - position.x), mini(chunk_size.y, pixel_size.y - position.y))
 			chunks.append({
 				"chunk_id": chunk_id_for_grid(Vector2i(x, y)), "grid": [x, y], "rect_px": [position.x, position.y, extent.x, extent.y],
-				"state": "virtual", "materialized": false, "fill_asset_id": DEFAULT_FILL_ASSET,
+				"state": "virtual", "materialized": false, "fill_asset_id": default_fill_asset_id,
 			})
 	return {
 		"schema_version": GROUND_SCHEMA_VERSION, "map_id": document.map_id, "design_size": [design_size.x, design_size.y],
 		"ground_pixel_size": [pixel_size.x, pixel_size.y], "chunk_size_px": [chunk_size.x, chunk_size.y],
-		"chunk_grid_size": [columns, rows], "blank_chunk_policy": "virtual_shared_until_dirty",
-		"default_fill_asset_id": DEFAULT_FILL_ASSET, "chunks": chunks,
+		"chunk_grid_size": [columns, rows], "blank_chunk_policy": blank_chunk_policy,
+		"default_fill_asset_id": default_fill_asset_id, "chunks": chunks,
 	}
+
+
+static func _sync_blank_policy(document: Dictionary, manifest: Dictionary) -> bool:
+	var ground: Dictionary = document.get("ground", {})
+	var expected_fill := str(ground.get("blank_fill_asset_id", ""))
+	var expected_policy := str(ground.get("blank_chunk_policy", "transparent_until_painted"))
+	var changed := str(manifest.get("default_fill_asset_id", "")) != expected_fill or str(manifest.get("blank_chunk_policy", "")) != expected_policy
+	manifest["default_fill_asset_id"] = expected_fill
+	manifest["blank_chunk_policy"] = expected_policy
+	var chunks: Array = manifest.get("chunks", [])
+	for index in chunks.size():
+		var chunk: Dictionary = chunks[index]
+		if not bool(chunk.get("materialized", false)) and str(chunk.get("fill_asset_id", "")) != expected_fill:
+			chunk["fill_asset_id"] = expected_fill
+			chunks[index] = chunk
+			changed = true
+	manifest["chunks"] = chunks
+	return changed
 
 
 static func _design_size(document: Dictionary) -> Vector2i:

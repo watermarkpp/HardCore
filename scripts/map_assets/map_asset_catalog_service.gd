@@ -8,25 +8,30 @@ const EXTENSION_CATALOG_PATHS := [
 	"res://assets/data/assets/map_cave_dungeon_asset_catalog.json",
 ]
 static var _catalog_cache: Dictionary = {}
+static var _asset_index: Dictionary = {}
 
 
 static func load_catalog() -> Dictionary:
 	if not _catalog_cache.is_empty():
-		return _catalog_cache.duplicate(true)
+		return _catalog_cache
 	var catalog := _read_catalog(CATALOG_PATH)
 	if catalog.is_empty():
 		return {}
 	var effective_assets: Array = []
+	_asset_index.clear()
 	for asset: Dictionary in _raw_assets():
-		effective_assets.append(MapAssetCalibrationService.effective_asset(asset))
+		var effective := MapAssetCalibrationService.effective_asset(asset)
+		effective_assets.append(effective)
+		_asset_index[str(effective.get("asset_id", ""))] = effective
 	catalog["assets"] = effective_assets
 	catalog["extension_catalogs"] = EXTENSION_CATALOG_PATHS.duplicate()
-	_catalog_cache = catalog.duplicate(true)
+	_catalog_cache = catalog
 	return catalog
 
 
 static func invalidate_cache() -> void:
 	_catalog_cache.clear()
+	_asset_index.clear()
 
 
 static func all_assets() -> Array:
@@ -34,10 +39,9 @@ static func all_assets() -> Array:
 
 
 static func find_asset(asset_id: String) -> Dictionary:
-	for asset: Dictionary in all_assets():
-		if str(asset.get("asset_id", "")) == asset_id:
-			return asset.duplicate(true)
-	return {}
+	load_catalog()
+	var asset: Dictionary = _asset_index.get(asset_id, {})
+	return asset.duplicate(true) if not asset.is_empty() else {}
 
 
 static func find_base_asset(asset_id: String) -> Dictionary:

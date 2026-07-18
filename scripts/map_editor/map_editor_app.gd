@@ -430,13 +430,29 @@ func _refresh_asset_tree() -> void:
 			parent = folders[accumulated]
 		var raw_image: Variant = asset.get("thumbnail", asset.get("image", ""))
 		var image_path := "" if raw_image == null else str(raw_image)
-		var thumbnail := load("res://" + image_path) as Texture2D if not image_path.is_empty() else null
 		var item := asset_tree.create_item(parent)
 		item.set_text(0, str(asset.get("display_name", asset.get("asset_id", ""))))
-		item.set_metadata(0, {"asset_id": str(asset.get("asset_id", ""))})
-		if thumbnail != null:
-			item.set_icon(0, thumbnail)
-			item.set_icon_max_width(0, 64)
+		item.set_metadata(0, {"asset_id": str(asset.get("asset_id", "")), "thumbnail": image_path})
+
+
+func _ensure_asset_tree_item_icon(item: TreeItem) -> void:
+	if item == null or item.get_icon(0) != null:
+		return
+	var metadata: Variant = item.get_metadata(0)
+	if not metadata is Dictionary:
+		return
+	var image_path := str(metadata.get("thumbnail", ""))
+	if image_path.is_empty():
+		return
+	var image := Image.load_from_file(ProjectSettings.globalize_path("res://" + image_path))
+	if image == null or image.is_empty():
+		return
+	var maximum_dimension := maxi(image.get_width(), image.get_height())
+	if maximum_dimension > 64:
+		var ratio := 64.0 / float(maximum_dimension)
+		image.resize(maxi(1, roundi(image.get_width() * ratio)), maxi(1, roundi(image.get_height() * ratio)), Image.INTERPOLATE_BILINEAR)
+	item.set_icon(0, ImageTexture.create_from_image(image))
+	item.set_icon_max_width(0, 64)
 
 
 func _first_asset_tree_item() -> TreeItem:
@@ -503,6 +519,7 @@ func _open_document_path(path: String) -> bool:
 		_reset_document_session_state()
 		current_document = result.document
 		current_document_path = path
+		_migrate_loaded_blank_ground_policy()
 		_migrate_loaded_instances_to_class_profiles()
 		MapEditorGameplaySemanticService.repair_duplicate_ids(current_document)
 		_ensure_map_portal_semantics()
@@ -532,6 +549,17 @@ func _reset_document_session_state() -> void:
 	instance_size_menu_instance_id = ""
 	if preview != null:
 		preview.reset_for_document_open()
+
+
+func _migrate_loaded_blank_ground_policy() -> void:
+	var template_kind := str(current_document.get("editor_meta", {}).get("template_kind", ""))
+	if template_kind not in ["empty_map", "custom_empty_map"]:
+		return
+	var ground: Dictionary = current_document.get("ground", {})
+	ground["blank_generated"] = false
+	ground["blank_fill_asset_id"] = ""
+	ground["blank_chunk_policy"] = "transparent_until_painted"
+	current_document["ground"] = ground
 
 
 func _ensure_map_portal_semantics() -> void:
@@ -615,6 +643,9 @@ func _on_asset_tree_multi_selected(item: TreeItem, _column: int, selected: bool)
 
 
 func _on_asset_tree_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		_ensure_asset_tree_item_icon(asset_tree.get_item_at_position(event.position))
+		return
 	if not event is InputEventMouseButton or event.button_index != MOUSE_BUTTON_RIGHT or not event.pressed:
 		return
 	var item := asset_tree.get_item_at_position(event.position)
@@ -690,6 +721,7 @@ func _activate_asset_tree_item(item: TreeItem) -> void:
 	var asset_id := str(metadata.get("asset_id", ""))
 	if asset_id.is_empty():
 		return
+	_ensure_asset_tree_item_icon(item)
 	selected_asset_id = asset_id
 	preview.set_selected_brush(asset_id)
 	var asset := MapAssetCatalogService.find_asset(asset_id)
@@ -977,6 +1009,9 @@ func _on_approve_and_build_runtime_pressed() -> void:
 func _on_bake_dirty_pressed() -> void:
 	var result := MapEditorChunkBakeService.bake_dirty_chunks(current_document)
 	if result.ok:
+		var initialized := MapEditorGroundService.initialize(current_document)
+		if initialized.ok:
+			preview.reload_ground_state(initialized.state)
 		status_label.text = "已烘焙 %d 个Chunk预览，运行时目录未写入" % (result.get("baked_chunks", []) as Array).size()
 	else:
 		status_label.text = "烘焙失败：%s" % result.get("errors", [])

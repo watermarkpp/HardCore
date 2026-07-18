@@ -110,21 +110,32 @@ func set_ground_state(state: Dictionary) -> void:
 func _rebuild_baked_ground_cache() -> void:
 	if document.is_empty():
 		return
-	MapEditorChunkBakeService.bake_dirty_chunks(document)
 	var initialized := MapEditorGroundService.initialize(document)
 	if not initialized.get("ok", false):
 		return
 	var root := MapEditorGroundService.workspace_root(document)
+	var expected_fill_asset_id := str(document.get("ground", {}).get("blank_fill_asset_id", ""))
 	for chunk: Dictionary in initialized.manifest.get("chunks", []):
 		var relative := str(chunk.get("preview_png", ""))
 		var rect: Array = chunk.get("rect_px", [])
 		if relative.is_empty() or rect.size() != 4:
+			continue
+		if expected_fill_asset_id.is_empty() and not chunk.has("baked_default_fill_asset_id"):
+			continue
+		if chunk.has("baked_default_fill_asset_id") and str(chunk.get("baked_default_fill_asset_id", "")) != expected_fill_asset_id:
 			continue
 		var absolute := root.path_join(relative)
 		var image := Image.load_from_file(ProjectSettings.globalize_path(absolute))
 		if image == null:
 			continue
 		_baked_ground_chunks.append({"rect": Rect2(float(rect[0]), float(rect[1]), float(rect[2]), float(rect[3])), "texture": ImageTexture.create_from_image(image)})
+
+
+func reload_ground_state(state: Dictionary) -> void:
+	_baked_ground_chunks.clear()
+	_ground_overlay_keys.clear()
+	_paint_overrides.clear()
+	set_ground_state(state)
 
 
 func set_selected_brush(asset_id: String) -> void:
@@ -598,10 +609,11 @@ func _draw_virtual_ground(design_size: Vector2i, offset: Vector2, scale_factor: 
 		MapEditorCoordinate.tile_to_ground_px(Vector2(0, design_size.y), design_size),
 	])
 	if not _baked_ground_chunks.is_empty():
-		var polygon := PackedVector2Array()
-		for point in corners:
-			polygon.append(offset + point * scale_factor)
-		draw_colored_polygon(polygon, Color("4d5a35"))
+		if not str(document.get("ground", {}).get("blank_fill_asset_id", "")).is_empty():
+			var filled_polygon := PackedVector2Array()
+			for point in corners:
+				filled_polygon.append(offset + point * scale_factor)
+			draw_colored_polygon(filled_polygon, Color("4d5a35"))
 		draw_set_transform(offset, 0.0, Vector2(scale_factor, scale_factor))
 		for chunk: Dictionary in _baked_ground_chunks:
 			var rect: Rect2 = chunk.rect
@@ -623,37 +635,27 @@ func _draw_virtual_ground(design_size: Vector2i, offset: Vector2, scale_factor: 
 				draw_texture_rect(texture, Rect2(center - Vector2(32, 16), Vector2(64, 32)), false)
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 		return
-	if design_size.x * design_size.y > VIRTUAL_TILE_DRAW_LIMIT or _ground_texture == null:
-		var polygon := PackedVector2Array()
+	if not str(document.get("ground", {}).get("blank_fill_asset_id", "")).is_empty():
+		var virtual_fill_polygon := PackedVector2Array()
 		for point in corners:
-			polygon.append(offset + point * scale_factor)
-		draw_colored_polygon(polygon, Color("4d5a35"))
-		# Large maps intentionally do not redraw every base tile.  Paint overrides
-		# are sparse and must still be drawn, otherwise the editor appears to ignore
-		# the ground brush on a 256x256 Bich map.
-		draw_set_transform(offset, 0.0, Vector2(scale_factor, scale_factor))
-		for key: String in _paint_overrides:
-			var parts := key.split(",")
-			if parts.size() != 2:
-				continue
-			var tile := Vector2i(int(parts[0]), int(parts[1]))
-			var center := MapEditorCoordinate.tile_to_ground_px(Vector2(tile.x, tile.y), design_size)
-			if not _ground_tile_is_visible(center, offset, scale_factor):
-				continue
-			var texture := _texture_for_asset(str(_paint_overrides[key]))
-			if texture != null:
-				draw_texture_rect(texture, Rect2(center - Vector2(32, 16), Vector2(64, 32)), false)
-		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
-		return
+			virtual_fill_polygon.append(offset + point * scale_factor)
+		draw_colored_polygon(virtual_fill_polygon, Color("4d5a35"))
+	# A virtual blank map is one flat base surface. Drawing one default texture
+	# per logical tile made a 38x38 template issue 1,444 draw calls on every
+	# mouse-wheel or hover redraw. Only sparse user paint operations are drawn
+	# until the user explicitly bakes dirty chunks.
 	draw_set_transform(offset, 0.0, Vector2(scale_factor, scale_factor))
-	for y in design_size.y:
-		for x in design_size.x:
-			var center := MapEditorCoordinate.tile_to_ground_px(Vector2(x, y), design_size)
-			if not _ground_tile_is_visible(center, offset, scale_factor):
-				continue
-			var asset_id := str(_paint_overrides.get("%d,%d" % [x, y], "ground.old_grass.001"))
-			var texture := _texture_for_asset(asset_id)
-			draw_texture_rect(texture if texture != null else _ground_texture, Rect2(center - Vector2(32, 16), Vector2(64, 32)), false)
+	for key: String in _paint_overrides:
+		var parts := key.split(",")
+		if parts.size() != 2:
+			continue
+		var tile := Vector2i(int(parts[0]), int(parts[1]))
+		var center := MapEditorCoordinate.tile_to_ground_px(Vector2(tile.x, tile.y), design_size)
+		if not _ground_tile_is_visible(center, offset, scale_factor):
+			continue
+		var texture := _texture_for_asset(str(_paint_overrides[key]))
+		if texture != null:
+			draw_texture_rect(texture, Rect2(center - Vector2(32, 16), Vector2(64, 32)), false)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
