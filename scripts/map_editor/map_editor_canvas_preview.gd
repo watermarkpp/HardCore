@@ -56,10 +56,38 @@ func set_document(value: Dictionary) -> void:
 		_baked_ground_chunks.clear()
 		_ground_overlay_keys.clear()
 		_paint_overrides.clear()
+		_reset_transient_document_state()
 	document = value
+	if show_walkable_preview:
+		_blocked_tiles = MapEditorCollisionService.build_walkability(document).get("blocked_tiles", {}) if not document.is_empty() else {}
 	if _ground_texture == null:
 		_ground_texture = load("res://assets/art/maps/_shared/terrain/old_grass/ground_old_grass_001.png") as Texture2D
 	queue_redraw()
+
+
+func reset_for_document_open() -> void:
+	_baked_ground_chunks.clear()
+	_ground_overlay_keys.clear()
+	_paint_overrides.clear()
+	_reset_transient_document_state()
+
+
+func _reset_transient_document_state() -> void:
+	_blocked_tiles.clear()
+	_last_drag_tile = Vector2i(-1, -1)
+	_hover_tile = Vector2i(-1, -1)
+	_view_pan = Vector2.ZERO
+	_zoom_multiplier = 1.0
+	_panning = false
+	_region_paint_mode = false
+	_lasso_drawing = false
+	_lasso_points.clear()
+	_selected_lasso_points.clear()
+	_selected_lasso_tiles.clear()
+	_manual_collision_start = Vector2i(-1, -1)
+	_manual_collision_points.clear()
+	hovered_selectable_id = ""
+	selected_selectable_id = ""
 
 
 func set_ground_state(state: Dictionary) -> void:

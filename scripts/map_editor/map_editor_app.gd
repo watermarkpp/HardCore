@@ -390,6 +390,7 @@ func _create_map(map_id: String, map_type: String, runtime_map_id: int, display_
 
 
 func _adopt_new_document(document: Dictionary, status_prefix: String, document_path := "") -> void:
+	_reset_document_session_state()
 	current_document = document
 	map_id_edit.text = str(current_document.map_id); display_name_edit.text = str(current_document.display_name); runtime_id_edit.value = int(current_document.runtime_map_id)
 	map_type_option.select(_find_type_index(str(current_document.design.map_type)))
@@ -401,6 +402,7 @@ func _adopt_new_document(document: Dictionary, status_prefix: String, document_p
 	path_label.text = "工作文件：%s" % ProjectSettings.globalize_path(resolved_document_path)
 	status_label.text = "%s；source_size 不会覆盖 design_size" % status_prefix
 	preview.set_document(current_document)
+	_set_active_tool("select")
 	var initialized := MapEditorGroundService.initialize(current_document)
 	if initialized.ok:
 		status_label.text = "%s：%d 个虚拟空白 Chunk，尚未落盘地面图" % [status_prefix, (initialized.manifest.chunks as Array).size()]
@@ -498,6 +500,7 @@ func _remember_current_document_path(path: String) -> void:
 func _open_document_path(path: String) -> bool:
 	var result := MapEditorLoadService.load_document(path)
 	if result.get("ok", false):
+		_reset_document_session_state()
 		current_document = result.document
 		current_document_path = path
 		_migrate_loaded_instances_to_class_profiles()
@@ -510,6 +513,7 @@ func _open_document_path(path: String) -> bool:
 		size_label.text = "设计尺寸：%d × %d（64×32 等距格）" % [int(design_size[0]), int(design_size[1])]
 		path_label.text = "工作文件：%s" % ProjectSettings.globalize_path(path)
 		preview.set_document(current_document)
+		_set_active_tool("select")
 		var initialized := MapEditorGroundService.initialize(current_document)
 		if initialized.ok: preview.set_ground_state(initialized.state)
 		status_label.text = "地图打开成功：%s" % path
@@ -517,6 +521,17 @@ func _open_document_path(path: String) -> bool:
 		return true
 	status_label.text = "打开失败：%s" % result.get("errors", [])
 	return false
+
+
+func _reset_document_session_state() -> void:
+	command_stack.clear()
+	manual_collision_start = Vector2i(-1, -1)
+	manual_polygon_points.clear()
+	pending_fill_tiles.clear()
+	asset_size_menu_asset_id = ""
+	instance_size_menu_instance_id = ""
+	if preview != null:
+		preview.reset_for_document_open()
 
 
 func _ensure_map_portal_semantics() -> void:

@@ -90,9 +90,20 @@ func _ready() -> void:
 	var template_test_document := template_test_root.path_join("orc_tomb_1.editor.json")
 	var template_test_workspace := template_test_root.path_join("ground_workspace")
 	_cleanup_template_test_files(template_test_root, template_test_document, template_test_workspace)
+	editor.preview.set_walkability_preview({"blocked_tiles": {"1,1": true, "2,2": true}}, true)
+	editor.preview.selected_selectable_id = "old_bich_selection"
+	editor.preview.hovered_selectable_id = "old_bich_hover"
+	editor.preview._view_pan = Vector2(50, 25)
+	var old_command_counter := [0]
+	assert(editor.command_stack.execute({"do": func(): old_command_counter[0] += 1, "undo": func(): old_command_counter[0] -= 1}))
 	assert(editor._open_template_by_id("blank.orc_tomb_1", template_test_document, template_test_workspace))
 	assert(editor.current_document.map_id == "orc_tomb_1")
 	assert(editor.current_document.design.design_size == [38, 38])
+	assert(editor.preview.document.map_id == "orc_tomb_1")
+	assert(editor.preview._blocked_tiles.is_empty())
+	assert(editor.preview.selected_selectable_id.is_empty() and editor.preview.hovered_selectable_id.is_empty())
+	assert(editor.preview._view_pan == Vector2.ZERO and is_equal_approx(editor.preview._zoom_multiplier, 1.0))
+	assert(not editor.command_stack.can_undo() and editor.active_tool_mode == "select")
 	assert(FileAccess.file_exists(template_test_document))
 	assert(MapEditorCollisionService.add_manual_shape(editor.current_document, "rect", {"rect": [4, 5, 1, 1]}).ok)
 	assert(editor._save_current_document().ok)
