@@ -22,7 +22,7 @@ func _run() -> void:
 	assert(not overlay.visible, "Loading过渡层默认没有隐藏")
 	assert(overlay.loading_label.text == "Loading......", "Loading文字不是指定内容")
 	assert(_all_visible_text(overlay) == ["Loading......"], "Loading界面出现了额外文字")
-	assert(overlay.shade.color.a > 0.95 and overlay.shade.color.a < 1.0, "Loading背景覆盖度不足或变成纯色")
+	assert(overlay.shade.color.a >= 0.99 and overlay.shade.color.a < 1.0, "Loading背景覆盖度不足或变成纯色")
 	assert(absf(overlay.shade.color.r - overlay.shade.color.g) < 0.01, "Loading背景不是干净中性灰")
 	assert(overlay.game_icon_watermark.texture.resource_path == GAME_ICON_PATH, "Loading没有使用正式游戏图标暗纹")
 	assert(overlay.game_icon_watermark.get_meta("stable_id", "") == "ui.loading.game_icon_watermark", "Loading图标暗纹稳定ID错误")

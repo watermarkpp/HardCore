@@ -28,7 +28,7 @@ func _ready() -> void:
 	shade = ColorRect.new()
 	shade.name = "LoadingShade"
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	shade.color = Color(0.105, 0.108, 0.108, 0.968)
+	shade.color = Color(0.105, 0.108, 0.108, 0.992)
 	shade.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(shade)
 	_build_atmosphere()
