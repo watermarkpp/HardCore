@@ -8,6 +8,7 @@ const EXTENSION_CATALOG_PATHS := [
 	"res://assets/data/assets/map_terrain_asset_catalog.json",
 	"res://assets/data/assets/map_cave_dungeon_asset_catalog.json",
 ]
+const ManualCollisionPolicy := preload("res://scripts/map_assets/map_asset_manual_collision_policy.gd")
 static var _catalog_cache: Dictionary = {}
 static var _asset_index: Dictionary = {}
 static var _normalized_ground_by_source_sha: Dictionary = {}
@@ -24,7 +25,10 @@ static func load_catalog() -> Dictionary:
 	var effective_assets: Array = []
 	_asset_index.clear()
 	for asset: Dictionary in _raw_assets():
-		var effective := MapAssetCalibrationService.effective_asset(_canonical_ground_asset(asset))
+		var effective := MapAssetCalibrationService.effective_asset(_canonical_editor_asset(asset))
+		# Ground geometry remains canonical after calibration, while an explicit
+		# user-saved wall calibration is allowed to replace the visual-only
+		# family default.
 		effective = _canonical_ground_asset(effective)
 		effective_assets.append(effective)
 		_asset_index[str(effective.get("asset_id", ""))] = effective
@@ -54,7 +58,7 @@ static func find_asset(asset_id: String) -> Dictionary:
 static func find_base_asset(asset_id: String) -> Dictionary:
 	for asset: Dictionary in _raw_assets():
 		if str(asset.get("asset_id", "")) == asset_id:
-			return _canonical_ground_asset(asset).duplicate(true)
+			return _canonical_editor_asset(asset).duplicate(true)
 	_ensure_normalized_ground_index()
 	var legacy: Dictionary = _legacy_ground_index.get(asset_id, {})
 	return legacy.duplicate(true) if not legacy.is_empty() else {}
@@ -152,6 +156,10 @@ static func _canonical_ground_asset(asset: Dictionary) -> Dictionary:
 		result[key] = normalized[key]
 	result["normalized_ground_asset_id"] = str(normalized.get("asset_id", ""))
 	return result
+
+
+static func _canonical_editor_asset(asset: Dictionary) -> Dictionary:
+	return ManualCollisionPolicy.apply_to_asset(_canonical_ground_asset(asset))
 
 
 static func _raw_assets() -> Array:

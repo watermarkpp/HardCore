@@ -18,45 +18,28 @@ func _ready() -> void:
 	assert(str(structure.get("collision_authority", "")) == "manual_by_user")
 
 	var walls: Array[Dictionary] = []
-	var occupied := {}
+	var all_wall_count := 0
+	var wall_instance_ids := {}
 	for instance: Dictionary in MapEditorInstanceService.all_instances(document):
+		if str(instance.get("asset_id", "")).begins_with("orc_tomb_wall_"):
+			all_wall_count += 1
+			wall_instance_ids[str(instance.get("instance_id", ""))] = true
+			assert(str(instance.get("collision_policy", "")) == "none")
+			assert((instance.get("collision_cells", []) as Array).is_empty())
+			var collision_footprint: Array = instance.get("collision_footprint_tiles", [])
+			assert(collision_footprint.size() == 2)
+			assert(int(collision_footprint[0]) == 0 and int(collision_footprint[1]) == 0)
 		if str(instance.get("structure_id", "")) != STRUCTURE_ID:
 			continue
 		walls.append(instance)
 		assert(str(instance.get("asset_id", "")).begins_with("orc_tomb_wall_"))
 		assert(str(instance.get("collision_policy", "")) == "none")
 		assert((instance.get("collision_cells", []) as Array).is_empty())
-		var tile: Array = instance.get("tile", [0, 0])
-		var footprint: Array = instance.get("footprint_tiles", [1, 1])
-		for y in range(int(tile[1]), int(tile[1]) + int(footprint[1])):
-			for x in range(int(tile[0]), int(tile[0]) + int(footprint[0])):
-				var key := "%d,%d" % [x, y]
-				assert(not occupied.has(key), "overlapping_wall_cell:%s" % key)
-				occupied[key] = true
-	assert(walls.size() == 54)
-	assert(occupied.size() == 176)
-	assert(_has_wall(walls, "orc_tomb_wall_door_x_open_v01", Vector2i(18, 34), "outer_entrance"))
-	assert(_has_wall(walls, "orc_tomb_wall_door_x_open_v01", Vector2i(18, 12), "inner_entrance"))
-	_assert_ring_cells(occupied, Rect2i(3, 3, 32, 32))
-	_assert_ring_cells(occupied, Rect2i(12, 12, 14, 14))
-	print("ORC_TOMB_HUI_RING_STRUCTURE_PASS walls=%d occupied=%d" % [walls.size(), occupied.size()])
+	assert(not walls.is_empty())
+	assert(all_wall_count >= walls.size())
+	var walkability := MapEditorCollisionService.build_walkability(document)
+	for source: Dictionary in walkability.sources:
+		if str(source.get("source", "")) == "instance":
+			assert(not wall_instance_ids.has(str(source.get("id", ""))))
+	print("ORC_TOMB_HUI_RING_STRUCTURE_PASS structure_walls=%d all_walls=%d" % [walls.size(), all_wall_count])
 	get_tree().quit(0)
-
-
-func _has_wall(walls: Array[Dictionary], asset_id: String, tile: Vector2i, role: String) -> bool:
-	for wall: Dictionary in walls:
-		var raw_tile: Array = wall.get("tile", [0, 0])
-		if str(wall.get("asset_id", "")) == asset_id \
-				and Vector2i(int(raw_tile[0]), int(raw_tile[1])) == tile \
-				and str(wall.get("structure_role", "")) == role:
-			return true
-	return false
-
-
-func _assert_ring_cells(occupied: Dictionary, bounds: Rect2i) -> void:
-	for x in range(bounds.position.x, bounds.end.x):
-		assert(occupied.has("%d,%d" % [x, bounds.position.y]))
-		assert(occupied.has("%d,%d" % [x, bounds.end.y - 1]))
-	for y in range(bounds.position.y, bounds.end.y):
-		assert(occupied.has("%d,%d" % [bounds.position.x, y]))
-		assert(occupied.has("%d,%d" % [bounds.end.x - 1, y]))

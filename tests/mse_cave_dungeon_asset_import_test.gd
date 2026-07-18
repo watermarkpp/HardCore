@@ -1,5 +1,6 @@
 extends Node
 
+const ManualCollisionPolicy := preload("res://scripts/map_assets/map_asset_manual_collision_policy.gd")
 
 func _ready() -> void:
 	var catalog_path := "res://assets/data/assets/map_cave_dungeon_asset_catalog.json"
@@ -34,14 +35,51 @@ func _ready() -> void:
 	assert(wall_count == 84)
 	assert(sheet_count == 81)
 	assert(not first_straight_wall.is_empty())
+	assert(str(first_straight_wall.get("collision_policy", "")) == "wall_cells_generated")
+	assert(not (first_straight_wall.get("collision_cells", []) as Array).is_empty())
 	assert(MapAssetCatalogService.find_asset(str(first_straight_wall.asset_id)).asset_id == first_straight_wall.asset_id)
 	assert(MapAssetCatalogService.find_base_asset(str(first_straight_wall.asset_id)).asset_id == first_straight_wall.asset_id)
+	for wall_id: String in [
+		"cave_granite_straight_x_l4_v01",
+		"orc_tomb_wall_straight_x_l4_v01",
+	]:
+		var effective_wall := MapAssetCatalogService.find_asset(wall_id)
+		assert(ManualCollisionPolicy.is_visual_only_wall(effective_wall))
+		assert(str(effective_wall.get("collision_policy", "")) == "none")
+		assert((effective_wall.get("collision_cells", []) as Array).is_empty())
+		assert(effective_wall.get("collision_footprint_tiles", []) == [0, 0])
+		assert(str(effective_wall.get("navigation_policy", "")) == "ignore")
+		assert(str(effective_wall.get("collision_policy_id", "")) == ManualCollisionPolicy.POLICY_ID)
+	var calibration_path := "user://mse_wall_collision_default_override.json"
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(calibration_path))
+	var calibration_save := MapAssetCalibrationService.save_override(
+		"orc_tomb_wall_straight_x_l4_v01",
+		{
+			"collision_policy": "wall_cells_generated",
+			"collision_footprint_tiles": [4, 1],
+			"navigation_policy": "block_player_and_monster",
+		},
+		calibration_path
+	)
+	assert(calibration_save.ok, str(calibration_save.get("errors", [])))
+	var calibrated_wall := MapAssetCalibrationService.effective_asset(
+		MapAssetCatalogService.find_base_asset("orc_tomb_wall_straight_x_l4_v01"),
+		calibration_path
+	)
+	assert(str(calibrated_wall.get("collision_policy", "")) == "wall_cells_generated")
+	assert(calibrated_wall.get("collision_footprint_tiles", []) == [4.0, 1.0])
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(calibration_path))
 
 	var document := MapEditorTypes.new_map("cave_dungeon_import_test", 990160, "Cave Dungeon Import", Vector2i(64, 64))
 	var placed := MapEditorInstanceService.create_instance(document, str(first_straight_wall.asset_id), "terrain", Vector2i(20, 20), "terrain_base")
 	assert(placed.ok, str(placed.get("errors", [])))
-	assert(str(placed.instance.collision_policy) == "wall_cells_generated")
-	assert(not (placed.instance.collision_cells as Array).is_empty())
+	assert(str(placed.instance.collision_policy) == "none")
+	assert((placed.instance.collision_cells as Array).is_empty())
+	assert(placed.instance.collision_footprint_tiles == [0, 0])
+	assert(bool(placed.instance.manual_collision_expected))
+	assert(str(placed.instance.map_collision_override) == "default")
+	var overlapping := MapEditorInstanceService.create_instance(document, str(first_straight_wall.asset_id), "terrain", Vector2i(20, 20), "terrain_base")
+	assert(overlapping.ok, str(overlapping.get("errors", [])))
 	var wall_asset := MapAssetCatalogService.find_asset(str(placed.instance.asset_id))
 	var wall_geometry := MapEditorCanvasPreview.instance_visual_geometry(
 		placed.instance,
@@ -56,15 +94,16 @@ func _ready() -> void:
 	var resolved_wall := MapEditorPlacementResolver.resolve(document, str(placed.instance.asset_id), Vector2i(20, 20), "terrain_base", "terrain")
 	assert((resolved_wall.anchor_ground_px as Vector2).is_equal_approx(expected_wall_anchor))
 	var before := MapEditorCollisionService.build_walkability(document)
-	assert(before.blocked_count == (placed.instance.collision_cells as Array).size())
+	assert(before.blocked_count == 0)
 	var resized := MapEditorInstanceService.resize_instance(document, str(placed.instance.instance_id), -1)
 	assert(resized.ok, str(resized.get("errors", [])))
 	var after := MapEditorCollisionService.build_walkability(document)
-	assert(after.blocked_count < before.blocked_count)
-	assert(resized.instance.footprint_tiles == resized.instance.collision_footprint_tiles)
+	assert(after.blocked_count == 0)
+	assert(resized.instance.collision_footprint_tiles == [0, 0])
 
 	var pillar_asset := MapAssetCatalogService.find_asset("cave_dungeon.rock_pillar_01")
 	assert(not pillar_asset.is_empty())
+	assert(str(pillar_asset.get("collision_policy", "none")) != "none")
 	var pillar_document := MapEditorTypes.new_map("cave_prop_resize_test", 990161, "Cave Prop Resize", Vector2i(64, 64))
 	var pillar := MapEditorInstanceService.create_instance(pillar_document, str(pillar_asset.asset_id), "terrain", Vector2i(24, 24))
 	assert(pillar.ok, str(pillar.get("errors", [])))

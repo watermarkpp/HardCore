@@ -9,6 +9,7 @@ signal manual_collision_tile_clicked(tile: Vector2i)
 signal manual_collision_erase_requested(tile: Vector2i)
 signal manual_collision_cancelled
 signal semantic_tile_clicked(tile: Vector2i)
+signal semantic_cancelled
 signal lasso_context_requested(tiles: Array, screen_position: Vector2)
 signal erase_tile_requested(tile: Vector2i)
 signal selectable_selected(selectable_id: String, additive: bool)
@@ -46,6 +47,7 @@ var _selected_lasso_tiles: Array[Vector2i] = []
 var _manual_collision_shape := "rect"
 var _manual_collision_start := Vector2i(-1, -1)
 var _manual_collision_points: Array[Vector2i] = []
+var _semantic_polygon_points: Array[Vector2i] = []
 var hovered_selectable_id := ""
 var selected_selectable_id := ""
 
@@ -87,6 +89,7 @@ func _reset_transient_document_state() -> void:
 	_selected_lasso_tiles.clear()
 	_manual_collision_start = Vector2i(-1, -1)
 	_manual_collision_points.clear()
+	_semantic_polygon_points.clear()
 	hovered_selectable_id = ""
 	selected_selectable_id = ""
 
@@ -165,6 +168,11 @@ func set_manual_collision_draft(shape: String, start: Vector2i, points: Array[Ve
 	queue_redraw()
 
 
+func set_semantic_polygon_draft(points: Array[Vector2i]) -> void:
+	_semantic_polygon_points = points.duplicate()
+	queue_redraw()
+
+
 func set_region_paint_mode(enabled: bool) -> void:
 	_region_paint_mode = enabled
 	_lasso_drawing = false
@@ -206,6 +214,8 @@ func _gui_input(event: InputEvent) -> void:
 				queue_redraw()
 		elif interaction_mode in ["manual_collision", "manual_collision_erase", "manual_collision_erase_whole"]:
 			manual_collision_cancelled.emit()
+		elif interaction_mode == "semantic":
+			semantic_cancelled.emit()
 		elif interaction_mode == "place" and _region_paint_mode and not _selected_lasso_tiles.is_empty() and Geometry2D.is_point_in_polygon(event.position, _selected_lasso_points):
 			lasso_context_requested.emit(_selected_lasso_tiles.duplicate(), event.global_position)
 		accept_event()
@@ -388,6 +398,7 @@ func _draw() -> void:
 	_draw_blocked_tiles(design_size, offset, scale_factor)
 	_draw_ghost(design_size, offset, scale_factor)
 	_draw_semantics(design_size, offset, scale_factor)
+	_draw_semantic_polygon_draft(design_size, offset, scale_factor)
 	_draw_lasso_selection(design_size, offset, scale_factor)
 	_draw_manual_collision_draft(design_size, offset, scale_factor)
 
@@ -568,7 +579,12 @@ func _draw_semantics(design_size: Vector2i, offset: Vector2, scale_factor: float
 		var raw_tile: Array = entry.get("tile", [0, 0])
 		var center := offset + MapEditorCoordinate.cell_center_to_ground_px(Vector2(int(raw_tile[0]), int(raw_tile[1])), design_size) * scale_factor
 		var kind := str(entry.get("kind", ""))
-		var colors := {"npc": Color("7fc8ff"), "monster_spawn": Color("d96868"), "boss_spawn": Color("f29c38"), "door": Color("bd8eff"), "safe_area": Color("61d69b"), "light": Color("ffe08a"), "region_trigger": Color("6ee7df")}
+		var colors := {
+			"npc": Color("7fc8ff"), "monster_spawn": Color("d96868"), "boss_spawn": Color("f29c38"),
+			"door": Color("bd8eff"), "map_entrance": Color("5bc0ff"), "map_exit": Color("d18cff"),
+			"respawn_point": Color("fff176"), "safe_area": Color("61d69b"),
+			"light": Color("ffe08a"), "region_trigger": Color("6ee7df"),
+		}
 		var color: Color = colors.get(kind, Color.WHITE)
 		var radius := maxf(8.0, 11.0 * scale_factor)
 		if kind=="safe_area" and str(entry.get("shape","circle"))=="polygon":
@@ -587,20 +603,66 @@ func _draw_semantics(design_size: Vector2i, offset: Vector2, scale_factor: float
 		elif kind in ["monster_spawn","boss_spawn"]:
 			var diamond := PackedVector2Array([center+Vector2(0,-radius),center+Vector2(radius,0),center+Vector2(0,radius),center+Vector2(-radius,0)])
 			draw_colored_polygon(diamond,Color(color,0.9)); draw_polyline(PackedVector2Array([diamond[0],diamond[1],diamond[2],diamond[3],diamond[0]]),Color("101216"),2.0)
-		elif kind == "door":
+		elif kind in ["door", "map_exit"]:
 			draw_rect(Rect2(center-Vector2(radius*.8,radius),Vector2(radius*1.6,radius*2)),Color(color,0.25),true)
 			draw_arc(center,radius,PI,TAU,16,Color(color,1.0),3.0)
+		elif kind == "map_entrance":
+			var arrow := PackedVector2Array([
+				center + Vector2(0, -radius),
+				center + Vector2(radius, 0),
+				center + Vector2(radius * 0.35, 0),
+				center + Vector2(radius * 0.35, radius),
+				center + Vector2(-radius * 0.35, radius),
+				center + Vector2(-radius * 0.35, 0),
+				center + Vector2(-radius, 0),
+			])
+			draw_colored_polygon(arrow, Color(color, 0.9))
+			draw_polyline(PackedVector2Array(Array(arrow) + [arrow[0]]), Color("101216"), 2.0)
+		elif kind == "respawn_point":
+			draw_circle(center, radius, Color(color, 0.25))
+			draw_line(center + Vector2(-radius, 0), center + Vector2(radius, 0), color, 4.0)
+			draw_line(center + Vector2(0, -radius), center + Vector2(0, radius), color, 4.0)
 		else:
 			draw_circle(center, radius, Color(color, 0.85)); draw_arc(center, radius, 0.0, TAU, 12, Color("101216"), 1.25)
 		var display_name := str(entry.get("display_name", ""))
 		if display_name.is_empty():
-			display_name = {"npc":"NPC","monster_spawn":"怪物刷新","boss_spawn":"Boss刷新","door":"地图出口","safe_area":"安全区","light":"光效","region_trigger":"触发区域"}.get(kind,"功能点")
+			display_name = {
+				"npc":"NPC","monster_spawn":"怪物刷新","boss_spawn":"Boss刷新","door":"旧地图出口",
+				"map_entrance":"地图入口","map_exit":"地图出口","respawn_point":"出生/复活点",
+				"safe_area":"安全区","light":"光效","region_trigger":"触发区域",
+			}.get(kind,"功能点")
 		draw_string(ThemeDB.fallback_font, center+Vector2(radius+3,4), display_name, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color.WHITE)
 		var sid:=str(entry.get("semantic_id",""))
 		if sid==hovered_selectable_id or sid==selected_selectable_id:
 			var highlight:=Color("ffe16b") if sid==selected_selectable_id else Color("65d8ff")
 			draw_rect(Rect2(center-Vector2(15,20),Vector2(30,40)),highlight,false,3.0)
 			draw_line(center+Vector2(-6,0),center+Vector2(6,0),highlight,2.0); draw_line(center+Vector2(0,-6),center+Vector2(0,6),highlight,2.0)
+
+
+func _draw_semantic_polygon_draft(design_size: Vector2i, offset: Vector2, scale_factor: float) -> void:
+	if interaction_mode != "semantic" or _semantic_polygon_points.is_empty():
+		return
+	var color := Color("61d69b")
+	var screen_points := PackedVector2Array()
+	for tile: Vector2i in _semantic_polygon_points:
+		screen_points.append(offset + MapEditorCoordinate.tile_to_ground_px(Vector2(tile), design_size) * scale_factor)
+	if _hover_tile.x >= 0:
+		screen_points.append(offset + MapEditorCoordinate.tile_to_ground_px(Vector2(_hover_tile), design_size) * scale_factor)
+	if screen_points.size() >= 3:
+		draw_colored_polygon(screen_points, Color(color, 0.14))
+	if screen_points.size() >= 2:
+		draw_polyline(screen_points, color, 3.0)
+	for point: Vector2 in screen_points:
+		draw_circle(point, 5.0, color)
+	draw_string(
+		ThemeDB.fallback_font,
+		Vector2(18, 28),
+		"安全区多边形：左键逐点，Enter 完成，右键取消",
+		HORIZONTAL_ALIGNMENT_LEFT,
+		-1,
+		16,
+		color
+	)
 
 
 func _draw_virtual_ground(design_size: Vector2i, offset: Vector2, scale_factor: float) -> void:

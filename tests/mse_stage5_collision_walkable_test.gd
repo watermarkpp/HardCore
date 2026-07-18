@@ -1,5 +1,6 @@
 extends Node
 
+const InstanceProfileService := preload("res://scripts/map_editor/map_editor_instance_profile_service.gd")
 
 func _ready() -> void:
 	var document := MapEditorTypes.new_map("stage5_collision_test", 991005, "Stage5 Collision Test", Vector2i(64, 64))
@@ -44,6 +45,20 @@ func _ready() -> void:
 	var overlap_erase := MapEditorCollisionService.erase_collision_at_tile(document, palisade_collision_origin)
 	assert(overlap_erase.ok and overlap_erase.manual_count == 1 and overlap_erase.instance_count == 1)
 	assert(MapEditorInstanceService.all_instances(document)[0].collision_policy == "none")
+	var disabled_instance: Dictionary = MapEditorInstanceService.all_instances(document)[0]
+	assert(str(disabled_instance.get("map_collision_override", "")) == "disabled")
+	InstanceProfileService.refresh_from_asset(disabled_instance, MapAssetCatalogService.find_asset("terrain.palisade_wall_01"))
+	assert(str(disabled_instance.get("collision_policy", "")) == "none")
+	assert(str(disabled_instance.get("map_collision_override", "")) == "disabled")
+	var default_instance := {
+		"instance_custom_scale": false,
+		"map_collision_override": "default",
+		"collision_policy": "none",
+		"collision_cells": [],
+		"collision_footprint_tiles": [0, 0],
+	}
+	InstanceProfileService.refresh_from_asset(default_instance, MapAssetCatalogService.find_asset("terrain.palisade_wall_01"))
+	assert(str(default_instance.get("collision_policy", "")) == "terrain_stamp_generated")
 	var manual_on_disabled_asset := MapEditorCollisionService.add_manual_shape(document, "rect", {"rect": [palisade_collision_origin.x, palisade_collision_origin.y, 1, 1]})
 	assert(manual_on_disabled_asset.ok)
 	var disabled_asset_erase := MapEditorCollisionService.erase_collision_at_tile(document, palisade_collision_origin)

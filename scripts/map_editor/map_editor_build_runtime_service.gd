@@ -38,6 +38,8 @@ static func validate_for_runtime(document: Dictionary) -> Dictionary:
 			errors.append("semantic_tile_missing:%s" % semantic_id)
 		if str(entry.get("kind", "")) == "door" and str(entry.get("target_map_id", "")).strip_edges().is_empty():
 			errors.append("door_target_map_required:%s" % semantic_id)
+		if str(entry.get("kind", "")) == "map_exit" and str(entry.get("target_map_id", "")).strip_edges().is_empty():
+			errors.append("map_exit_target_map_required:%s" % semantic_id)
 	var walkability := MapEditorCollisionService.build_walkability(document)
 	if int(walkability.get("walkable_count", 0)) <= 0:
 		errors.append("map_has_no_walkable_tile")
@@ -73,7 +75,11 @@ static func _compile(document: Dictionary, walkability: Dictionary) -> Dictionar
 	var initialized := MapEditorGroundService.initialize(document)
 	var state: Dictionary = initialized.state
 	var semantic_layers := {}
-	for layer: String in ["npc_points", "monster_spawn", "boss_spawn", "door_points", "safe_area", "light", "region_trigger"]:
+	for layer: String in [
+		"npc_points", "monster_spawn", "boss_spawn", "door_points",
+		"map_entrance_points", "map_exit_points", "respawn_points",
+		"safe_area", "light", "region_trigger",
+	]:
 		var runtime_entries:Array=[]
 		for source_entry:Dictionary in document.layers.get(layer,[]):
 			var entry:=source_entry.duplicate(true)

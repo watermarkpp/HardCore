@@ -42,6 +42,9 @@ static func validate_runtime(runtime: Dictionary, raw_text := "") -> Array[Strin
 	for door: Dictionary in runtime.get("semantics", {}).get("door_points", []):
 		if str(door.get("target_map_id", "")).strip_edges().is_empty():
 			errors.append("runtime_door_target_missing")
+	for map_exit: Dictionary in runtime.get("semantics", {}).get("map_exit_points", []):
+		if str(map_exit.get("target_map_id", "")).strip_edges().is_empty():
+			errors.append("runtime_map_exit_target_missing")
 	return errors
 
 
