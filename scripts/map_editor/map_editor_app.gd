@@ -146,7 +146,7 @@ func _build_ui() -> void:
 	collision_shape_option.item_selected.connect(_on_collision_shape_selected)
 	sidebar.add_child(collision_shape_option)
 	collision_draw_toggle = CheckBox.new(); collision_draw_toggle.text = "在画布绘制碰撞（右键取消）"; collision_draw_toggle.toggled.connect(_on_collision_draw_toggled); sidebar.add_child(collision_draw_toggle)
-	collision_erase_toggle = CheckBox.new(); collision_erase_toggle.text = "擦除手工碰撞（左键点击或拖动，右键退出）"; collision_erase_toggle.toggled.connect(_on_collision_erase_toggled); sidebar.add_child(collision_erase_toggle)
+	collision_erase_toggle = CheckBox.new(); collision_erase_toggle.text = "擦除碰撞（手工和素材自带；左键点击或拖动，右键退出）"; collision_erase_toggle.toggled.connect(_on_collision_erase_toggled); sidebar.add_child(collision_erase_toggle)
 	collision_instruction_label = Label.new(); collision_instruction_label.text = "选择形状后将自动进入碰撞绘制"; collision_instruction_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; collision_instruction_label.modulate = Color("d7aa62"); sidebar.add_child(collision_instruction_label)
 	var semantic_title := Label.new(); semantic_title.text = "NPC、怪物与地图功能点"; semantic_title.add_theme_font_size_override("font_size", 13); sidebar.add_child(semantic_title)
 	semantic_kind_option = OptionButton.new()
@@ -1055,8 +1055,8 @@ func _on_collision_erase_toggled(enabled: bool) -> void:
 	if enabled:
 		_set_active_tool("manual_collision_erase")
 		preview.set_walkability_preview(MapEditorCollisionService.build_walkability(current_document), true)
-		collision_instruction_label.text = "擦除模式：左键点击或拖过手工碰撞区域；右键退出"
-		status_label.text = "已开启手工碰撞擦除；素材自带碰撞不会被删除"
+		collision_instruction_label.text = "擦除模式：左键点击或拖过碰撞区域；同时清除手工碰撞和当前地图中的素材碰撞"
+		status_label.text = "已开启碰撞擦除；右键退出"
 	elif active_tool_mode == "manual_collision_erase":
 		_set_active_tool("place")
 		collision_instruction_label.text = "选择形状后将自动进入碰撞绘制"
@@ -1129,13 +1129,13 @@ func _on_manual_collision_cancelled() -> void:
 
 
 func _on_manual_collision_erase_requested(tile: Vector2i) -> void:
-	var result := MapEditorCollisionService.remove_manual_shape_at_tile(current_document, tile)
+	var result := MapEditorCollisionService.erase_collision_at_tile(current_document, tile)
 	if result.ok:
 		preview.set_walkability_preview(MapEditorCollisionService.build_walkability(current_document), true)
 		preview.queue_redraw()
-		status_label.text = "已擦除手工碰撞：%s；点击“保存地图”写入工作文件" % result.collision.collision_id
+		status_label.text = "已擦除碰撞：手工形状 %d 个，素材实例 %d 个；点击“保存地图”写入工作文件" % [int(result.manual_count), int(result.instance_count)]
 	else:
-		status_label.text = "该格没有可擦除的手工碰撞；素材自带碰撞需修改素材校准或删除素材"
+		status_label.text = "该格没有可擦除的碰撞"
 
 
 func _commit_manual_collision(shape: String, data: Dictionary) -> void:

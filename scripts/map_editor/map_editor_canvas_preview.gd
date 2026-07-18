@@ -351,7 +351,7 @@ func _draw() -> void:
 func _draw_manual_collision_draft(design_size: Vector2i, offset: Vector2, scale_factor: float) -> void:
 	if interaction_mode == "manual_collision_erase":
 		var erase_color := Color("ff6b5f")
-		draw_string(ThemeDB.fallback_font, Vector2(18, 28), "擦除手工碰撞：左键点击或拖动", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, erase_color)
+		draw_string(ThemeDB.fallback_font, Vector2(18, 28), "擦除碰撞：手工和素材自带碰撞", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, erase_color)
 		if _hover_tile.x >= 0:
 			var tile_outline := PackedVector2Array()
 			for tile_point: Vector2 in [Vector2(_hover_tile), Vector2(_hover_tile.x + 1, _hover_tile.y), Vector2(_hover_tile) + Vector2.ONE, Vector2(_hover_tile.x, _hover_tile.y + 1), Vector2(_hover_tile)]:

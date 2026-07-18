@@ -24,6 +24,63 @@ static func remove_manual_shape_at_tile(document: Dictionary, tile: Vector2i) ->
 	return {"ok": false, "errors": ["manual_collision_not_found_at_tile"]}
 
 
+static func erase_collision_at_tile(document: Dictionary, tile: Vector2i) -> Dictionary:
+	var removed_manual: Array[Dictionary] = []
+	var manual_entries: Array = document.layers.collision
+	for index in range(manual_entries.size() - 1, -1, -1):
+		var manual: Dictionary = manual_entries[index]
+		if _manual_contains_tile(manual, tile):
+			removed_manual.append(manual)
+			manual_entries.remove_at(index)
+	document.layers.collision = manual_entries
+
+	var disabled_instances: Array[String] = []
+	var size: Array = document.design.design_size
+	var map_size := Vector2i(int(size[0]), int(size[1]))
+	var layers: Dictionary = document.layers
+	for layer_name: String in layers:
+		var entries: Array = layers[layer_name]
+		for index in entries.size():
+			var instance: Dictionary = entries[index]
+			if not instance.has("instance_id") or not _instance_collision_contains_tile(instance, tile, map_size):
+				continue
+			disabled_instances.append(str(instance.instance_id))
+			instance["collision_policy"] = "none"
+			instance["collision_profile_id"] = "none_visual"
+			instance["collision_footprint_tiles"] = [0, 0]
+			instance["collision_cells"] = []
+			instance["navigation_policy"] = "ignore"
+			instance["map_collision_override"] = "disabled"
+			entries[index] = instance
+		layers[layer_name] = entries
+	document.layers = layers
+
+	if removed_manual.is_empty() and disabled_instances.is_empty():
+		return {"ok": false, "errors": ["collision_not_found_at_tile"], "manual_count": 0, "instance_count": 0}
+	return {
+		"ok": true,
+		"manual_collisions": removed_manual,
+		"disabled_instance_ids": disabled_instances,
+		"manual_count": removed_manual.size(),
+		"instance_count": disabled_instances.size(),
+	}
+
+
+static func _instance_collision_contains_tile(instance: Dictionary, tile: Vector2i, map_size: Vector2i) -> bool:
+	var policy := str(instance.get("collision_policy", "none"))
+	if policy == "none":
+		return false
+	if policy == "wall_cells_generated" and not (instance.get("collision_cells", []) as Array).is_empty():
+		var blocked := {}
+		_mark_scaled_collision_cells(blocked, instance, map_size)
+		return blocked.has("%d,%d" % [tile.x, tile.y])
+	var collision_size := _collision_footprint(instance)
+	if collision_size.x <= 0 or collision_size.y <= 0:
+		return false
+	var origin := _collision_origin(instance)
+	return tile.x >= origin.x and tile.y >= origin.y and tile.x < origin.x + collision_size.x and tile.y < origin.y + collision_size.y
+
+
 static func _next_manual_collision_id(entries: Array) -> String:
 	var maximum := 0
 	for entry: Dictionary in entries:

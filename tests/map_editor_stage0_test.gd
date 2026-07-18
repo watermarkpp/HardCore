@@ -65,7 +65,7 @@ func _ready() -> void:
 	assert(editor.asset_tree != null)
 	assert(editor.map_template_option.item_count == 21)
 	assert(editor.save_map_button.text == "保存地图")
-	assert(editor.collision_erase_toggle.text.begins_with("擦除手工碰撞"))
+	assert(editor.collision_erase_toggle.text.begins_with("擦除碰撞"))
 	assert(editor.open_template_button.text == "打开地图模板")
 	assert(editor.create_map_button.text == "创建地图模板")
 	assert(editor.create_map_dialog.title == "创建地图模板")
