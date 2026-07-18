@@ -874,7 +874,8 @@ func _on_selectable_selected(selectable_id:String,_additive:bool)->void:
 		return
 	var semantic := MapEditorGameplaySemanticService.find_entry(current_document, selectable_id)
 	if not semantic.is_empty():
-		_select_semantic_kind(str(semantic.get("kind", "")))
+		_select_semantic_kind(str(semantic.get("kind", "")), false)
+		_sync_semantic_editor_fields(semantic)
 		semantic_display_name.text = str(semantic.get("display_name", ""))
 		semantic_target_map.text = str(semantic.get("target_map_id", ""))
 		semantic_target_entrance.text = str(semantic.get("target_entrance_id", ""))
@@ -883,12 +884,37 @@ func _on_selectable_selected(selectable_id:String,_additive:bool)->void:
 	status_label.text="已选中：%s" % selectable_id
 
 
-func _select_semantic_kind(kind: String) -> void:
+func _select_semantic_kind(kind: String, activate_placement := true) -> void:
 	for index in semantic_kind_option.item_count:
 		if str(semantic_kind_option.get_item_metadata(index)) == kind:
 			semantic_kind_option.select(index)
-			_on_semantic_kind_selected(index)
+			_on_semantic_kind_selected(index, activate_placement)
 			return
+
+
+func _sync_semantic_editor_fields(entry: Dictionary) -> void:
+	var kind := str(entry.get("kind", ""))
+	var content_field := str({
+		"npc": "npc_id",
+		"monster_spawn": "monster_id",
+		"boss_spawn": "boss_id",
+	}.get(kind, "content_id"))
+	var content_id := str(entry.get("content_id", entry.get(content_field, "")))
+	semantic_content_id.text = content_id
+	for index in semantic_content_option.item_count:
+		var metadata: Variant = semantic_content_option.get_item_metadata(index)
+		if metadata is Dictionary and str(metadata.get("content_id", "")) == content_id:
+			semantic_content_option.select(index)
+			break
+	semantic_radius.value = int(entry.get("radius_tiles", semantic_radius.value))
+	semantic_count.value = int(entry.get("count", semantic_count.value))
+	semantic_respawn.value = int(entry.get("respawn_seconds", semantic_respawn.value))
+	semantic_max_alive.value = int(entry.get("max_alive", semantic_max_alive.value))
+	var facing := str(entry.get("facing", "south"))
+	for index in semantic_facing.item_count:
+		if str(semantic_facing.get_item_metadata(index)) == facing:
+			semantic_facing.select(index)
+			break
 
 
 func _on_update_selected_semantic_pressed() -> void:
@@ -1180,7 +1206,7 @@ func _on_semantic_place_toggled(enabled: bool) -> void:
 	status_label.text = "Click canvas to place gameplay semantics; doors require a target map ID." if enabled else "Returned to asset placement."
 
 
-func _on_semantic_kind_selected(index: int) -> void:
+func _on_semantic_kind_selected(index: int, activate_placement := true) -> void:
 	var kind := str(semantic_kind_option.get_item_metadata(index))
 	if kind != "safe_area" and not safe_polygon_points.is_empty():
 		safe_polygon_points.clear()
@@ -1208,8 +1234,10 @@ func _on_semantic_kind_selected(index: int) -> void:
 	elif kind == "monster_spawn" and semantic_radius.value <= 0: semantic_radius.value = 3
 	if semantic_content_option.item_count > 0:
 		semantic_content_option.select(0)
-		_on_semantic_content_selected(0)
-	if preview != null:
+		var first_entry: Variant = semantic_content_option.get_item_metadata(0)
+		if first_entry is Dictionary:
+			semantic_content_id.text = str(first_entry.get("content_id", ""))
+	if preview != null and activate_placement:
 		_activate_semantic_placement()
 
 

@@ -179,6 +179,20 @@ func _ready() -> void:
 	editor.preview._gui_input(cancel_paste)
 	assert(not editor.preview.is_clipboard_paste_active())
 	assert(editor.current_document.layers.monster_spawn.size() == 2)
+	editor._activate_select_tool()
+	_click_preview_tile(editor, Vector2i(6, 5), MOUSE_BUTTON_LEFT)
+	assert(editor.preview.selected_selectable_id == monster_semantic_id)
+	assert(editor.active_tool_mode == "select" and editor.preview.interaction_mode == "select")
+	assert(editor.semantic_content_id.text == original_monster_id)
+	var move_down := InputEventKey.new()
+	move_down.keycode = KEY_DOWN
+	move_down.pressed = true
+	editor.preview._gui_input(move_down)
+	assert(editor.current_document.layers.monster_spawn[0].tile == [6, 6])
+	assert(editor.active_tool_mode == "select" and editor.preview.interaction_mode == "select")
+	_click_preview_tile(editor, Vector2i(10, 8), MOUSE_BUTTON_LEFT)
+	assert(editor.preview.selected_selectable_id == str(editor.current_document.layers.monster_spawn[1].semantic_id))
+	assert(editor.active_tool_mode == "select" and editor.preview.interaction_mode == "select")
 	var entrance_index := _option_index(editor.semantic_kind_option, "map_entrance")
 	var exit_index := _option_index(editor.semantic_kind_option, "map_exit")
 	var respawn_index := _option_index(editor.semantic_kind_option, "respawn_point")
@@ -200,6 +214,12 @@ func _ready() -> void:
 	assert(editor.preview.selected_selectable_id.is_empty())
 	_click_preview_tile(editor, Vector2i(18, 18), MOUSE_BUTTON_LEFT)
 	assert(editor.current_document.layers.map_entrance_points.size() == 1)
+	editor._activate_select_tool()
+	var entrance_semantic_id := str(editor.current_document.layers.map_entrance_points[0].semantic_id)
+	editor.preview.selected_selectable_id = entrance_semantic_id
+	editor._on_selectable_selected(entrance_semantic_id, false)
+	assert(editor.preview.selected_selectable_id == entrance_semantic_id)
+	assert(editor.active_tool_mode == "select" and editor.preview.interaction_mode == "select")
 	editor.semantic_kind_option.select(exit_index)
 	editor._on_semantic_kind_selected(exit_index)
 	editor.semantic_display_name.text = "古墓墙门出口"
