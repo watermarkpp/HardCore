@@ -138,6 +138,47 @@ func _ready() -> void:
 	assert(editor.active_tool_mode == "select" and editor.preview.interaction_mode == "select")
 	editor.semantic_kind_option.pressed.emit()
 	assert(editor.active_tool_mode == "semantic" and editor.preview.interaction_mode == "semantic")
+	editor.semantic_kind_option.select(monster_index)
+	editor._on_semantic_kind_selected(monster_index)
+	_click_preview_tile(editor, Vector2i(5, 5), MOUSE_BUTTON_LEFT)
+	assert(editor.current_document.layers.monster_spawn.size() == 1)
+	var monster_semantic_id := str(editor.current_document.layers.monster_spawn[0].semantic_id)
+	assert(editor.preview.selected_selectable_id == monster_semantic_id)
+	var move_right := InputEventKey.new()
+	move_right.keycode = KEY_RIGHT
+	move_right.pressed = true
+	editor.preview._gui_input(move_right)
+	assert(editor.current_document.layers.monster_spawn[0].tile == [6, 5])
+	assert(editor.active_tool_mode == "semantic")
+	var copy_shortcut := InputEventKey.new()
+	copy_shortcut.keycode = KEY_C
+	copy_shortcut.ctrl_pressed = true
+	copy_shortcut.pressed = true
+	editor._unhandled_key_input(copy_shortcut)
+	assert(str(editor.element_clipboard.get("element_type", "")) == "semantic")
+	var paste_shortcut := InputEventKey.new()
+	paste_shortcut.keycode = KEY_V
+	paste_shortcut.ctrl_pressed = true
+	paste_shortcut.pressed = true
+	editor._unhandled_key_input(paste_shortcut)
+	assert(editor.preview.is_clipboard_paste_active())
+	_move_preview_mouse_to_tile(editor, Vector2i(10, 8))
+	assert(editor.preview._hover_tile == Vector2i(10, 8))
+	await get_tree().process_frame
+	_click_preview_tile(editor, Vector2i(10, 8), MOUSE_BUTTON_LEFT)
+	assert(editor.current_document.layers.monster_spawn.size() == 2)
+	assert(editor.current_document.layers.monster_spawn[1].tile == [10, 8])
+	assert(str(editor.current_document.layers.monster_spawn[1].semantic_id) != monster_semantic_id)
+	assert(editor.preview.selected_selectable_id == str(editor.current_document.layers.monster_spawn[1].semantic_id))
+	assert(not editor.preview.is_clipboard_paste_active())
+	editor._unhandled_key_input(paste_shortcut)
+	assert(editor.preview.is_clipboard_paste_active())
+	var cancel_paste := InputEventMouseButton.new()
+	cancel_paste.button_index = MOUSE_BUTTON_RIGHT
+	cancel_paste.pressed = true
+	editor.preview._gui_input(cancel_paste)
+	assert(not editor.preview.is_clipboard_paste_active())
+	assert(editor.current_document.layers.monster_spawn.size() == 2)
 	var entrance_index := _option_index(editor.semantic_kind_option, "map_entrance")
 	var exit_index := _option_index(editor.semantic_kind_option, "map_exit")
 	var respawn_index := _option_index(editor.semantic_kind_option, "respawn_point")
@@ -203,6 +244,28 @@ func _ready() -> void:
 	assert(editor.active_tool_mode == "semantic")
 	editor.preview._gui_input(cancel_collision)
 	assert(editor.active_tool_mode == "place")
+	var brazier := MapEditorInstanceService.create_instance(
+		editor.current_document,
+		"cave_dungeon.brazier_01",
+		"decoration",
+		Vector2i(2, 28)
+	)
+	assert(brazier.ok, str(brazier.get("errors", [])))
+	editor.preview.selected_selectable_id = str(brazier.instance.instance_id)
+	editor._unhandled_key_input(copy_shortcut)
+	assert(str(editor.element_clipboard.get("element_type", "")) == "instance")
+	editor._unhandled_key_input(paste_shortcut)
+	assert(editor.preview.is_clipboard_paste_active())
+	_move_preview_mouse_to_tile(editor, Vector2i(4, 28))
+	await get_tree().process_frame
+	_click_preview_tile(editor, Vector2i(4, 28), MOUSE_BUTTON_LEFT)
+	var pasted_brazier := MapEditorInstanceService._locate(
+		editor.current_document,
+		editor.preview.selected_selectable_id
+	)
+	assert(pasted_brazier.ok)
+	assert(str(pasted_brazier.instance.asset_id) == "cave_dungeon.brazier_01")
+	assert(pasted_brazier.instance.tile == [4, 28])
 	var linked_document := MapEditorTypes.new_map("linked_semantic", 990013, "Linked Semantic", Vector2i(32, 32))
 	linked_document["layers"]["door_points"] = [{
 		"semantic_id": "door_000001",
@@ -242,4 +305,15 @@ func _drag_preview_tile(editor: MapEditorApp, tile: Vector2i) -> void:
 	var event := InputEventMouseMotion.new()
 	event.button_mask = MOUSE_BUTTON_MASK_LEFT
 	event.position = editor.preview._draw_offset + MapEditorCoordinate.cell_center_to_ground_px(Vector2(tile), design_size) * editor.preview._draw_scale
+	editor.preview._gui_input(event)
+
+
+func _move_preview_mouse_to_tile(editor: MapEditorApp, tile: Vector2i) -> void:
+	var design_size_raw: Array = editor.current_document.design.design_size
+	var design_size := Vector2i(int(design_size_raw[0]), int(design_size_raw[1]))
+	var event := InputEventMouseMotion.new()
+	event.position = editor.preview._draw_offset + MapEditorCoordinate.cell_center_to_ground_px(
+		Vector2(tile),
+		design_size
+	) * editor.preview._draw_scale
 	editor.preview._gui_input(event)

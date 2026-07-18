@@ -107,6 +107,39 @@ static func delete_entry(document:Dictionary,semantic_id:String)->Dictionary:
 	return {"ok":false,"errors":["未找到功能点"]}
 
 
+static func duplicate_entry_snapshot(
+	document: Dictionary,
+	source_entry: Dictionary,
+	tile: Vector2i
+) -> Dictionary:
+	var kind := str(source_entry.get("kind", ""))
+	if not KIND_TO_LAYER.has(kind):
+		return {"ok": false, "errors": ["invalid_semantic_kind"]}
+	var source_tile_raw: Array = source_entry.get("tile", [0, 0])
+	var source_tile := Vector2i(int(source_tile_raw[0]), int(source_tile_raw[1]))
+	var delta := tile - source_tile
+	var properties := source_entry.duplicate(true)
+	for identity_key: String in [
+		"semantic_id", "door_id", "entrance_id", "exit_id", "respawn_id",
+		"area_id", "light_id", "trigger_id", "placeholder_instance_id",
+		"linked_visual_instance_id",
+	]:
+		properties.erase(identity_key)
+	properties.erase("tile")
+	properties.erase("kind")
+	if kind == "safe_area" and str(source_entry.get("shape", "circle")) == "polygon":
+		var translated_polygon: Array = []
+		for raw_point: Variant in source_entry.get("polygon_tiles", []):
+			if not raw_point is Array or raw_point.size() != 2:
+				return {"ok": false, "errors": ["safe_area_polygon_point_invalid"]}
+			translated_polygon.append([
+				int(raw_point[0]) + delta.x,
+				int(raw_point[1]) + delta.y,
+			])
+		properties["polygon_tiles"] = translated_polygon
+	return add_entry(document, kind, tile, properties)
+
+
 static func find_entry(document: Dictionary, semantic_id: String) -> Dictionary:
 	for layer: String in KIND_TO_LAYER.values():
 		for entry: Dictionary in document.layers.get(layer, []):

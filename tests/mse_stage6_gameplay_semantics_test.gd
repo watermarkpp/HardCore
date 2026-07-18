@@ -42,7 +42,16 @@ func _ready() -> void:
 	var moved_polygon := MapEditorGameplaySemanticService.move_entry(document, str(safe_polygon.entry.semantic_id), Vector2i(1, 2))
 	assert(moved_polygon.ok)
 	assert(moved_polygon.entry.polygon_tiles[0] == [14, 15])
-	assert(MapEditorGameplaySemanticService.all_entries(document).size() == 12)
+	var copied_polygon := MapEditorGameplaySemanticService.duplicate_entry_snapshot(
+		document,
+		moved_polygon.entry,
+		Vector2i(25, 25)
+	)
+	assert(copied_polygon.ok, str(copied_polygon.get("errors", [])))
+	assert(str(copied_polygon.entry.semantic_id) != str(moved_polygon.entry.semantic_id))
+	assert(copied_polygon.entry.tile == [25, 25])
+	assert(copied_polygon.entry.polygon_tiles[0] == [23, 23])
+	assert(MapEditorGameplaySemanticService.all_entries(document).size() == 13)
 	var disconnected_validation := MapEditorBuildRuntimeService.validate_for_runtime(document)
 	assert("map_exit_target_map_required:%s" % exit.entry.semantic_id in disconnected_validation.errors)
 	assert(MapEditorGameplaySemanticService.update_entry(document, str(exit.entry.semantic_id), {
@@ -54,10 +63,11 @@ func _ready() -> void:
 	assert(saved.ok, str(saved.get("errors", [])))
 	var loaded := MapEditorLoadService.load_document(path)
 	assert(loaded.ok, str(loaded.get("errors", [])))
-	assert(MapEditorGameplaySemanticService.all_entries(loaded.document).size() == 12)
+	assert(MapEditorGameplaySemanticService.all_entries(loaded.document).size() == 13)
 	assert(loaded.document.layers.map_entrance_points.size() == 1)
 	assert(loaded.document.layers.map_exit_points.size() == 1)
 	assert(loaded.document.layers.respawn_points.size() == 2)
 	assert(str(loaded.document.layers.safe_area[1].shape) == "polygon")
+	assert(str(loaded.document.layers.safe_area[2].shape) == "polygon")
 	print("MSE_STAGE6_GAMEPLAY_SEMANTICS_PASS")
 	get_tree().quit()

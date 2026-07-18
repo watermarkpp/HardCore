@@ -64,6 +64,7 @@ var asset_size_menu_asset_id := ""
 var instance_size_menu: PopupMenu
 var instance_size_menu_instance_id := ""
 var pending_fill_tiles: Array[Vector2i] = []
+var element_clipboard: Dictionary = {}
 var active_tool_mode := "select"
 var load_default_workspace_on_ready := true
 var persist_last_document_path := true
@@ -215,6 +216,8 @@ func _build_ui() -> void:
 	var save_calibration := Button.new(); save_calibration.text = "保存素材校准覆盖（不保存地图）"; save_calibration.pressed.connect(_on_save_calibration_pressed); sidebar.add_child(save_calibration)
 	status_label = Label.new(); status_label.text = "就绪"; status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; sidebar.add_child(status_label)
 	preview = MapEditorCanvasPreview.new(); preview.paint_requested.connect(_on_ground_paint_requested); preview.erase_tile_requested.connect(_on_erase_tile_requested); preview.lasso_context_requested.connect(_on_lasso_context_requested); preview.tile_hovered.connect(_on_tile_hovered); preview.manual_collision_tile_clicked.connect(_on_manual_collision_tile_clicked); preview.manual_collision_erase_requested.connect(_on_manual_collision_erase_requested); preview.manual_collision_cancelled.connect(_on_manual_collision_cancelled); preview.semantic_tile_clicked.connect(_on_semantic_tile_clicked); preview.semantic_cancelled.connect(_on_semantic_cancelled); preview.selectable_selected.connect(_on_selectable_selected); preview.selectable_move_requested.connect(_on_selectable_move_requested); preview.selectable_delete_requested.connect(_on_selectable_delete_requested); preview.selectable_context_requested.connect(_on_selectable_context_requested); preview.size_flags_horizontal = Control.SIZE_EXPAND_FILL; preview.size_flags_vertical = Control.SIZE_EXPAND_FILL; preview.custom_minimum_size = Vector2(640, 480); preview.focus_mode=Control.FOCUS_ALL; layout.add_child(preview)
+	preview.clipboard_paste_requested.connect(_on_clipboard_paste_requested)
+	preview.clipboard_paste_cancelled.connect(_on_clipboard_paste_cancelled)
 	region_fill_menu = PopupMenu.new(); region_fill_menu.add_item("用素材列表已选地面随机填充", 1); region_fill_menu.add_item("删除套索内地面和对象", 3); region_fill_menu.add_separator(); region_fill_menu.add_item("取消", 2); region_fill_menu.id_pressed.connect(_on_region_fill_menu_pressed); add_child(region_fill_menu)
 	asset_size_menu = PopupMenu.new(); asset_size_menu.add_item("放大一格", 1); asset_size_menu.add_item("缩小一格", 2); asset_size_menu.add_separator(); asset_size_menu.add_item("恢复初始占位", 3); asset_size_menu.id_pressed.connect(_on_asset_size_menu_pressed); add_child(asset_size_menu)
 	instance_size_menu = PopupMenu.new(); instance_size_menu.add_item("放大当前地图素材", 1); instance_size_menu.add_item("缩小当前地图素材", 2); instance_size_menu.id_pressed.connect(_on_instance_size_menu_pressed); add_child(instance_size_menu)
@@ -827,7 +830,7 @@ func _activate_normal_placement() -> void:
 
 func _activate_select_tool()->void:
 	_set_active_tool("select")
-	status_label.text="选择工具：悬停高亮，左键选取，方向键移动一格，Delete删除"
+	status_label.text="选择工具：左键选取，方向键移动，Delete删除，Ctrl+C复制，Ctrl+V后随鼠标左键放置"
 
 
 func _set_active_tool(mode: String) -> void:
@@ -929,7 +932,7 @@ func _on_instance_size_menu_pressed(action_id:int)->void:
 
 
 func _on_selectable_move_requested(selectable_id:String,delta:Vector2i)->void:
-	var result:Dictionary
+	var result_holder := {"value": {"ok": false, "errors": ["move_not_executed"]}}
 	if selectable_id.begins_with("inst_"):
 		var located:=MapEditorInstanceService._locate(current_document,selectable_id)
 		if not located.ok:return
@@ -937,16 +940,20 @@ func _on_selectable_move_requested(selectable_id:String,delta:Vector2i)->void:
 		var old_tile:=Vector2i(int(tile[0]),int(tile[1])); var new_tile:=old_tile+delta
 		command_stack.execute({
 			"do": func():
-				result = MapEditorInstanceService.move_instance(current_document, selectable_id, new_tile)
-				if result.get("ok", false): MapEditorGameplaySemanticService.sync_linked_instance_tile(current_document, selectable_id, new_tile),
+				result_holder["value"] = MapEditorInstanceService.move_instance(current_document, selectable_id, new_tile)
+				if result_holder["value"].get("ok", false): MapEditorGameplaySemanticService.sync_linked_instance_tile(current_document, selectable_id, new_tile),
 			"undo": func():
 				MapEditorInstanceService.move_instance(current_document, selectable_id, old_tile)
 				MapEditorGameplaySemanticService.sync_linked_instance_tile(current_document, selectable_id, old_tile),
 		})
 	else:
-		command_stack.execute({"do":func():result=MapEditorGameplaySemanticService.move_entry(current_document,selectable_id,delta),"undo":func():MapEditorGameplaySemanticService.move_entry(current_document,selectable_id,-delta)})
+		command_stack.execute({
+			"do": func(): result_holder["value"] = MapEditorGameplaySemanticService.move_entry(current_document, selectable_id, delta),
+			"undo": func(): MapEditorGameplaySemanticService.move_entry(current_document, selectable_id, -delta),
+		})
+	var result: Dictionary = result_holder["value"]
 	preview.set_document(current_document)
-	status_label.text="移动成功" if result.ok else "移动失败：%s"%result.get("errors",[])
+	status_label.text="移动成功" if result.get("ok", false) else "移动失败：%s"%result.get("errors",[])
 
 
 func _on_selectable_delete_requested(selectable_id:String)->void:
@@ -964,6 +971,84 @@ func _select_new_semantic_marker(semantic_id: String) -> void:
 	preview.selected_selectable_id = semantic_id
 	preview.hovered_selectable_id = ""
 	preview.queue_redraw()
+
+
+func _copy_selected_element() -> void:
+	if preview == null or preview.selected_selectable_id.is_empty():
+		status_label.text = "请先选中一个素材、刷新点、NPC或地图功能标注"
+		return
+	var selectable_id := preview.selected_selectable_id
+	if selectable_id.begins_with("inst_"):
+		var located := MapEditorInstanceService._locate(current_document, selectable_id)
+		if not located.ok:
+			status_label.text = "复制失败：未找到选中的地图素材"
+			return
+		element_clipboard = {
+			"element_type": "instance",
+			"snapshot": located.instance.duplicate(true),
+		}
+	else:
+		var semantic := MapEditorGameplaySemanticService.find_entry(
+			current_document,
+			selectable_id
+		)
+		if semantic.is_empty():
+			status_label.text = "复制失败：未找到选中的地图标注"
+			return
+		element_clipboard = {
+			"element_type": "semantic",
+			"snapshot": semantic.duplicate(true),
+		}
+	status_label.text = "已复制当前元素；按 Ctrl+V 后移动鼠标并左键放置"
+
+
+func _begin_clipboard_paste() -> void:
+	if element_clipboard.is_empty():
+		status_label.text = "剪贴板为空；请先选中元素并按 Ctrl+C"
+		return
+	preview.begin_clipboard_paste(element_clipboard)
+	preview.grab_focus()
+	status_label.text = "粘贴预览已固定到鼠标：左键放置，右键取消"
+
+
+func _on_clipboard_paste_requested(tile: Vector2i) -> void:
+	var element_type := str(element_clipboard.get("element_type", ""))
+	var snapshot: Dictionary = element_clipboard.get("snapshot", {})
+	var result: Dictionary
+	if element_type == "instance":
+		result = MapEditorInstanceService.duplicate_instance_snapshot(
+			current_document,
+			snapshot,
+			tile
+		)
+	elif element_type == "semantic":
+		result = MapEditorGameplaySemanticService.duplicate_entry_snapshot(
+			current_document,
+			snapshot,
+			tile
+		)
+	else:
+		result = {"ok": false, "errors": ["invalid_clipboard_element"]}
+	if not result.get("ok", false):
+		status_label.text = "粘贴位置无效：%s；移动鼠标后重新左键放置" % result.get("errors", [])
+		return
+	preview.end_clipboard_paste()
+	var pasted_id := ""
+	if element_type == "instance":
+		pasted_id = str(result.instance.instance_id)
+	else:
+		pasted_id = str(result.entry.semantic_id)
+		if str(result.entry.get("kind", "")) == "npc":
+			MapEditorNpcPlaceholderService.ensure_entry(current_document, pasted_id)
+	preview.selected_selectable_id = pasted_id
+	preview.hovered_selectable_id = ""
+	preview.set_document(current_document)
+	preview.grab_focus()
+	status_label.text = "副本已放置并选中；点击“保存地图”写入工作文件"
+
+
+func _on_clipboard_paste_cancelled() -> void:
+	status_label.text = "已取消本次粘贴；原复制内容仍可再次按 Ctrl+V 使用"
 
 
 func _on_point_erase_toggled(enabled: bool) -> void:
@@ -1429,6 +1514,15 @@ func _on_save_calibration_pressed() -> void:
 func _unhandled_key_input(event: InputEvent) -> void:
 	if not (event is InputEventKey) or not event.pressed or event.echo:
 		return
+	var shortcut_pressed: bool = event.ctrl_pressed or event.meta_pressed
+	if shortcut_pressed and event.keycode == KEY_C:
+		_copy_selected_element()
+		get_viewport().set_input_as_handled()
+		return
+	if shortcut_pressed and event.keycode == KEY_V:
+		_begin_clipboard_paste()
+		get_viewport().set_input_as_handled()
+		return
 	# Keep deletion available when focus has moved from the canvas to another
 	# non-editing control. LineEdit consumes its own Delete/Backspace first, so
 	# editing marker names cannot accidentally delete the selected marker.
@@ -1438,10 +1532,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			_on_selectable_delete_requested(selected_id)
 			get_viewport().set_input_as_handled()
 			return
-	if event.ctrl_pressed and event.keycode==KEY_Z:
+	if shortcut_pressed and event.keycode==KEY_Z:
 		if command_stack.undo():preview.set_document(current_document);status_label.text="已撤销"
 		return
-	if event.ctrl_pressed and event.keycode==KEY_Y:
+	if shortcut_pressed and event.keycode==KEY_Y:
 		if command_stack.redo():preview.set_document(current_document);status_label.text="已重做"
 		return
 	if event.keycode == KEY_ENTER and active_tool_mode == "semantic" \
@@ -1459,7 +1553,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		else: status_label.text = "多边形至少需要3个点"
 		get_viewport().set_input_as_handled()
 		return
-	if not event.ctrl_pressed:
+	if not shortcut_pressed:
 		return
 	if event.keycode == KEY_Z and command_stack.undo():
 		_refresh_ground_preview()

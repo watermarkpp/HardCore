@@ -16,6 +16,8 @@ signal selectable_selected(selectable_id: String, additive: bool)
 signal selectable_move_requested(selectable_id: String, delta_tile: Vector2i)
 signal selectable_delete_requested(selectable_id: String)
 signal selectable_context_requested(selectable_id: String, screen_position: Vector2)
+signal clipboard_paste_requested(tile: Vector2i)
+signal clipboard_paste_cancelled
 
 var document: Dictionary = {}
 var show_grid := true
@@ -48,6 +50,7 @@ var _manual_collision_shape := "rect"
 var _manual_collision_start := Vector2i(-1, -1)
 var _manual_collision_points: Array[Vector2i] = []
 var _semantic_polygon_points: Array[Vector2i] = []
+var _clipboard_preview_payload: Dictionary = {}
 var hovered_selectable_id := ""
 var selected_selectable_id := ""
 
@@ -90,6 +93,7 @@ func _reset_transient_document_state() -> void:
 	_manual_collision_start = Vector2i(-1, -1)
 	_manual_collision_points.clear()
 	_semantic_polygon_points.clear()
+	_clipboard_preview_payload.clear()
 	hovered_selectable_id = ""
 	selected_selectable_id = ""
 
@@ -173,6 +177,20 @@ func set_semantic_polygon_draft(points: Array[Vector2i]) -> void:
 	queue_redraw()
 
 
+func begin_clipboard_paste(payload: Dictionary) -> void:
+	_clipboard_preview_payload = payload.duplicate(true)
+	queue_redraw()
+
+
+func end_clipboard_paste() -> void:
+	_clipboard_preview_payload.clear()
+	queue_redraw()
+
+
+func is_clipboard_paste_active() -> bool:
+	return not _clipboard_preview_payload.is_empty()
+
+
 func set_region_paint_mode(enabled: bool) -> void:
 	_region_paint_mode = enabled
 	_lasso_drawing = false
@@ -205,7 +223,10 @@ func _gui_input(event: InputEvent) -> void:
 	if document.is_empty():
 		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-		if interaction_mode == "select":
+		if is_clipboard_paste_active():
+			end_clipboard_paste()
+			clipboard_paste_cancelled.emit()
+		elif interaction_mode == "select":
 			var context_id := _hit_selectable(event.position)
 			if not context_id.is_empty():
 				selected_selectable_id = context_id
@@ -231,6 +252,12 @@ func _gui_input(event: InputEvent) -> void:
 		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
+			if is_clipboard_paste_active():
+				var paste_tile := screen_to_tile(event.position)
+				if paste_tile.x >= 0:
+					clipboard_paste_requested.emit(paste_tile)
+				accept_event()
+				return
 			if interaction_mode == "select":
 				selected_selectable_id = _hit_selectable(event.position)
 				selectable_selected.emit(selected_selectable_id,event.ctrl_pressed)
@@ -312,14 +339,14 @@ func _gui_input(event: InputEvent) -> void:
 		elif interaction_mode in ["manual_collision_erase", "manual_collision_erase_whole"] and event.button_mask & MOUSE_BUTTON_MASK_LEFT and tile.x >= 0 and tile != _last_drag_tile:
 			_last_drag_tile = tile
 			manual_collision_erase_requested.emit(tile)
-	if event is InputEventKey and event.pressed and not event.echo and not selected_selectable_id.is_empty():
+	if event is InputEventKey and event.pressed and not event.echo and not selected_selectable_id.is_empty() and not is_clipboard_paste_active():
 		# Deletion is valid in every tool mode. Semantic placement deliberately
 		# remains active after adding an entrance/exit, so restricting this key
 		# to selection mode made newly placed markers impossible to remove.
 		if event.keycode in [KEY_DELETE, KEY_BACKSPACE]:
 			selectable_delete_requested.emit(selected_selectable_id)
 			accept_event()
-		elif interaction_mode == "select":
+		else:
 			var delta:Vector2i = {KEY_UP:Vector2i(0,-1),KEY_DOWN:Vector2i(0,1),KEY_LEFT:Vector2i(-1,0),KEY_RIGHT:Vector2i(1,0)}.get(event.keycode,Vector2i.ZERO)
 			if delta!=Vector2i.ZERO:
 				selectable_move_requested.emit(selected_selectable_id,delta)
@@ -406,6 +433,7 @@ func _draw() -> void:
 	_draw_blocked_tiles(design_size, offset, scale_factor)
 	_draw_ghost(design_size, offset, scale_factor)
 	_draw_semantics(design_size, offset, scale_factor)
+	_draw_clipboard_paste_preview(design_size, offset, scale_factor)
 	_draw_semantic_polygon_draft(design_size, offset, scale_factor)
 	_draw_lasso_selection(design_size, offset, scale_factor)
 	_draw_manual_collision_draft(design_size, offset, scale_factor)
@@ -645,6 +673,86 @@ func _draw_semantics(design_size: Vector2i, offset: Vector2, scale_factor: float
 			var highlight:=Color("ffe16b") if sid==selected_selectable_id else Color("65d8ff")
 			draw_rect(Rect2(center-Vector2(15,20),Vector2(30,40)),highlight,false,3.0)
 			draw_line(center+Vector2(-6,0),center+Vector2(6,0),highlight,2.0); draw_line(center+Vector2(0,-6),center+Vector2(0,6),highlight,2.0)
+
+
+func _draw_clipboard_paste_preview(
+	design_size: Vector2i,
+	offset: Vector2,
+	scale_factor: float
+) -> void:
+	if not is_clipboard_paste_active() or _hover_tile.x < 0:
+		return
+	var preview_color := Color("77e6a1")
+	var element_type := str(_clipboard_preview_payload.get("element_type", ""))
+	var snapshot: Dictionary = _clipboard_preview_payload.get("snapshot", {})
+	if element_type == "instance":
+		var preview_instance := snapshot.duplicate(true)
+		preview_instance["tile"] = [_hover_tile.x, _hover_tile.y]
+		preview_instance["tile_anchor"] = [_hover_tile.x, _hover_tile.y]
+		var asset_id := str(preview_instance.get("asset_id", ""))
+		var asset := MapAssetCatalogService.find_asset(asset_id)
+		var texture := _texture_for_asset(asset_id)
+		if texture != null:
+			var geometry := instance_visual_geometry(
+				preview_instance,
+				design_size,
+				offset,
+				scale_factor,
+				texture.get_size(),
+				asset
+			)
+			draw_set_transform(geometry.center, geometry.rotation, geometry.visual_scale)
+			draw_texture(texture, -geometry.anchor, Color(1.0, 1.0, 1.0, 0.62))
+			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+			draw_rect(geometry.rect, preview_color, false, 3.0)
+	elif element_type == "semantic":
+		var source_tile_raw: Array = snapshot.get("tile", [0, 0])
+		var source_tile := Vector2i(int(source_tile_raw[0]), int(source_tile_raw[1]))
+		var delta := _hover_tile - source_tile
+		var kind := str(snapshot.get("kind", ""))
+		if kind == "safe_area" and str(snapshot.get("shape", "circle")) == "polygon":
+			var translated_polygon := PackedVector2Array()
+			for raw_point: Variant in snapshot.get("polygon_tiles", []):
+				if raw_point is Array and raw_point.size() == 2:
+					translated_polygon.append(
+						offset + MapEditorCoordinate.tile_to_ground_px(
+							Vector2(int(raw_point[0]) + delta.x, int(raw_point[1]) + delta.y),
+							design_size
+						) * scale_factor
+					)
+			if translated_polygon.size() >= 3:
+				draw_colored_polygon(translated_polygon, Color(preview_color, 0.18))
+				draw_polyline(
+					PackedVector2Array(Array(translated_polygon) + [translated_polygon[0]]),
+					preview_color,
+					3.0
+				)
+		var center := offset + MapEditorCoordinate.cell_center_to_ground_px(
+			Vector2(_hover_tile),
+			design_size
+		) * scale_factor
+		var radius := maxf(10.0, 13.0 * scale_factor)
+		var diamond := PackedVector2Array([
+			center + Vector2(0, -radius),
+			center + Vector2(radius, 0),
+			center + Vector2(0, radius),
+			center + Vector2(-radius, 0),
+			center + Vector2(0, -radius),
+		])
+		draw_colored_polygon(
+			PackedVector2Array([diamond[0], diamond[1], diamond[2], diamond[3]]),
+			Color(preview_color, 0.42)
+		)
+		draw_polyline(diamond, preview_color, 3.0)
+	draw_string(
+		ThemeDB.fallback_font,
+		Vector2(18, 28),
+		"粘贴预览：移动鼠标定位，左键放置，右键取消",
+		HORIZONTAL_ALIGNMENT_LEFT,
+		-1,
+		16,
+		preview_color
+	)
 
 
 func _draw_semantic_polygon_draft(design_size: Vector2i, offset: Vector2, scale_factor: float) -> void:

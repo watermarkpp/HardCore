@@ -79,7 +79,40 @@ static func duplicate_instance(document: Dictionary, instance_id: String, tile: 
 	var located := _locate(document, instance_id)
 	if not located.ok:
 		return located
-	return create_instance(document, located.instance.asset_id, located.instance.object_role, tile, located.layer)
+	return duplicate_instance_snapshot(document, located.instance, tile)
+
+
+static func duplicate_instance_snapshot(
+	document: Dictionary,
+	source_instance: Dictionary,
+	tile: Vector2i
+) -> Dictionary:
+	var asset_id := str(source_instance.get("asset_id", ""))
+	var layer := str(source_instance.get("layer", "object_base"))
+	var role := str(source_instance.get("object_role", "decoration"))
+	var validation := MapEditorPlacementValidator.validate(
+		document,
+		asset_id,
+		tile,
+		layer,
+		role
+	)
+	if not validation.ok:
+		return {"ok": false, "errors": validation.errors, "warnings": validation.warnings}
+	var duplicate := source_instance.duplicate(true)
+	duplicate["instance_id"] = _next_id(document)
+	duplicate["tile"] = [tile.x, tile.y]
+	duplicate["tile_anchor"] = [tile.x, tile.y]
+	duplicate["layer"] = layer
+	# A manual copy is independent from generated dungeon structure metadata.
+	for generated_key: String in ["generated_by", "structure_id", "structure_role"]:
+		duplicate.erase(generated_key)
+	var layers: Dictionary = document.layers
+	var entries: Array = layers.get(layer, [])
+	entries.append(duplicate)
+	layers[layer] = entries
+	document.layers = layers
+	return {"ok": true, "instance": duplicate, "warnings": validation.warnings}
 
 
 static func resize_instance(document: Dictionary, instance_id: String, direction: int) -> Dictionary:
