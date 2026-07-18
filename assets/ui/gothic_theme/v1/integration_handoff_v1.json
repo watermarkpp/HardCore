@@ -1,0 +1,152 @@
+{
+  "handoffId": "ui.integration.handoff.v1",
+  "sourceBranch": "codex/ui-art",
+  "targetBranch": "codex/integration",
+  "generatedAt": "2026-07-18",
+  "mustReadBeforeMerge": true,
+  "humanReadableRecord": "res://UI_ART_INTEGRATION_REQUIRED.md",
+  "items": [
+    {
+      "id": "ui-handoff.system-menu-runtime",
+      "priority": "P0",
+      "status": "UI_READY_RUNTIME_MISSING",
+      "uiScript": "res://scripts/system_menu_panel.gd",
+      "contractId": "ui.system_menu.action.v1",
+      "integrationOwnedFiles": [
+        "res://scripts/game_root.gd"
+      ],
+      "requiredActions": [
+        "Replace the legacy runtime-built pause menu with SystemMenuPanel.",
+        "Connect continue, return-to-character-select, and save-and-exit requests.",
+        "Preserve PROCESS_MODE_WHEN_PAUSED and existing safe-save behavior."
+      ]
+    },
+    {
+      "id": "ui-handoff.audio-settings-runtime",
+      "priority": "P0",
+      "status": "UI_READY_RUNTIME_MISSING",
+      "contractId": "ui.audio.setting.v1",
+      "stableSettingIds": [
+        "audio.music.enabled",
+        "audio.sfx.enabled"
+      ],
+      "integrationOwnedFiles": [
+        "res://project.godot",
+        "global service registration",
+        "global settings persistence"
+      ],
+      "requiredActions": [
+        "Provide Music and SFX buses and route audio players.",
+        "Apply boolean setting requests to the correct buses.",
+        "Persist settings outside per-character saves and inject current values into the UI."
+      ]
+    },
+    {
+      "id": "ui-handoff.character-creation-rules",
+      "priority": "P0",
+      "status": "UI_READY_RUNTIME_MISSING",
+      "contractId": "ui.character.creation.v1",
+      "stableProfessionIds": [
+        "warrior",
+        "wizard",
+        "taoist"
+      ],
+      "fixedGender": "男",
+      "integrationOwnedFiles": [
+        "res://scripts/player_state.gd"
+      ],
+      "requiredActions": [
+        "Allow creation of all three professions through gameplay validation.",
+        "Restrict newly created characters to the male model.",
+        "Define a non-destructive compatibility policy for legacy female saves."
+      ]
+    },
+    {
+      "id": "ui-handoff.ai-teammate-runtime",
+      "priority": "P0",
+      "status": "RULE_DECISION_REQUIRED",
+      "contractId": "ui.character.launch.v1",
+      "rootMetaKey": "pending_character_launch_context",
+      "integrationOwnedFiles": [
+        "res://scripts/game_root.gd",
+        "runtime companion service",
+        "save and scene-transition integration"
+      ],
+      "requiredActions": [
+        "Consume and clear the transient launch context.",
+        "Keep the main profile in PlayerState.active_profile_id.",
+        "Load the teammate as a separate snapshot and spawn a companion actor.",
+        "Define AI, inventory, death, teleport, reward, quest, and persistence rules.",
+        "Safely downgrade to no teammate when validation fails."
+      ]
+    },
+    {
+      "id": "ui-handoff.shop-selling-runtime",
+      "priority": "P0",
+      "status": "UI_READY_RUNTIME_MISSING",
+      "contractId": "ui.shop.sell.v1",
+      "uiScript": "res://scripts/shop_panel.gd",
+      "requiredActions": [
+        "Consume sell_quotes_requested and return gameplay-owned quotes.",
+        "Consume sell_requested and revalidate quote, item instance, inventory index, and quantity.",
+        "Atomically update inventory and gold, then call apply_sell_result.",
+        "Expose explicit GameHUD forwarding signals and response methods during integration."
+      ]
+    },
+    {
+      "id": "ui-handoff.seven-skill-slots-runtime",
+      "priority": "P0",
+      "status": "RULE_DECISION_REQUIRED",
+      "contractId": "ui.skill.button_assignment.v2",
+      "legacyContractId": "ui.skill.quick_slot_assignment.v1",
+      "stableSlotIds": [
+        "hud.profession_skill.1",
+        "hud.profession_skill.2",
+        "hud.profession_skill.3",
+        "hud.profession_skill.4",
+        "hud.attack_ring_skill.1",
+        "hud.attack_ring_skill.2",
+        "hud.attack_ring_skill.3"
+      ],
+      "integrationOwnedFiles": [
+        "res://scripts/game_root.gd",
+        "save schema",
+        "profession and skill runtime"
+      ],
+      "requiredActions": [
+        "Provide interaction_mode from skill data rather than UI position.",
+        "Validate and persist all seven assignments.",
+        "Inject assignments and modes through GameHUD.set_skill_button_assignments.",
+        "Execute toggle, click, and passive behavior through the skill runtime.",
+        "Preserve legacy four-slot save compatibility during migration."
+      ]
+    },
+    {
+      "id": "ui-handoff.world-map-teleport-runtime",
+      "priority": "P0",
+      "status": "RULE_DECISION_REQUIRED",
+      "contractId": "ui.map.teleport.v1",
+      "integrationOwnedFiles": [
+        "res://scripts/game_root.gd",
+        "map teleport rules",
+        "map arrival anchors"
+      ],
+      "requiredActions": [
+        "Answer map_teleport_availability_requested with gameplay-owned rules.",
+        "Inject rules through GameHUD.set_map_teleport_availability.",
+        "Revalidate map_teleport_requested at runtime.",
+        "Teleport only to a declared safe arrival_anchor_id.",
+        "Initially enable only main cities and designated cave entrances."
+      ]
+    }
+  ],
+  "userVisibleWarningsUntilIntegrated": [
+    "The gothic system menu is not yet used by the formal game scene.",
+    "Music and SFX switches do not yet change or persist real audio.",
+    "Wizard and Taoist creation is still rejected by PlayerState.",
+    "Selecting an AI teammate does not yet spawn a companion.",
+    "The shop sell page has no gameplay quote or transaction consumer.",
+    "Seven skill-button assignments are not fully persisted or executed.",
+    "World-map teleport availability and arrival anchors are not supplied by runtime."
+  ]
+}
