@@ -49,6 +49,7 @@ var selected_main_profile_id := ""
 var selected_ai_profile_id := ""
 var selected_creation_profession := "战士"
 var ai_teammate_enabled := false
+var content_root: Control
 var _profiles: Array[Dictionary] = []
 var suppress_scene_change_for_test := false
 var last_launch_request: Dictionary = {}
@@ -59,11 +60,22 @@ func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	theme = GothicUIThemeScript.build()
 	_build_background()
+	_build_content_root()
 	_build_header()
 	_build_roster_panel()
 	_build_preview_panel()
 	_build_creation_panel()
 	_refresh_profiles()
+
+
+func _build_content_root() -> void:
+	content_root = Control.new()
+	content_root.name = "CenteredContent"
+	content_root.set_anchors_preset(Control.PRESET_CENTER)
+	content_root.position = Vector2(-640, -360)
+	content_root.size = Vector2(1280, 720)
+	content_root.mouse_filter = Control.MOUSE_FILTER_PASS
+	add_child(content_root)
 
 
 func _build_background() -> void:
@@ -90,7 +102,7 @@ func _build_header() -> void:
 	top_shade.size = Vector2(1280, 92)
 	top_shade.color = Color("080606b8")
 	top_shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(top_shade)
+	content_root.add_child(top_shade)
 	var title := Label.new()
 	title.name = "HallTitle"
 	title.text = "人物殿堂"
@@ -99,14 +111,14 @@ func _build_header() -> void:
 	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 34)
 	title.add_theme_color_override("font_color", Color("e7bd76"))
-	add_child(title)
+	content_root.add_child(title)
 	var subtitle := Label.new()
 	subtitle.name = "HallSubtitle"
 	subtitle.text = "选择主角色，并决定是否携带一名 AI 队友"
 	subtitle.position = Vector2(50, 56)
 	subtitle.size = Vector2(520, 24)
 	subtitle.theme_type_variation = "GothicMutedLabel"
-	add_child(subtitle)
+	content_root.add_child(subtitle)
 	var archive := Label.new()
 	archive.name = "ArchiveLabel"
 	archive.text = "玛法纪元 · 本地独立档案"
@@ -115,7 +127,7 @@ func _build_header() -> void:
 	archive.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	archive.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	archive.theme_type_variation = "GothicMutedLabel"
-	add_child(archive)
+	content_root.add_child(archive)
 
 
 func _build_roster_panel() -> void:
@@ -568,13 +580,13 @@ func _section_panel(node_name: String, rect: Rect2) -> Panel:
 	surface.size = rect.size
 	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	surface.theme_type_variation = "GothicModalSurface"
-	add_child(surface)
+	content_root.add_child(surface)
 	var panel := Panel.new()
 	panel.name = node_name
 	panel.position = rect.position
 	panel.size = rect.size
 	panel.theme_type_variation = "GothicInsetFrame"
-	add_child(panel)
+	content_root.add_child(panel)
 	return panel
 
 

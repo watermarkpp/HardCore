@@ -1,6 +1,7 @@
 extends Node
 
 const OUTPUT_PATH := "res://outputs/visual_acceptance/character_select/character_select_ai_teammate_v1.png"
+const WIDE_OUTPUT_PATH := "res://outputs/visual_acceptance/final_consistency/character_select_2400x1080.png"
 const TEST_DIRECTORY := "user://character_select_gothic_preview_profiles"
 const TEST_INDEX := "user://character_select_gothic_preview_index.json"
 
@@ -14,11 +15,12 @@ func _ready() -> void:
 	launcher._select_ai_profile("taoist_preview")
 	await get_tree().process_frame
 	await get_tree().process_frame
-	var output_dir := ProjectSettings.globalize_path(OUTPUT_PATH.get_base_dir())
+	var output_path := WIDE_OUTPUT_PATH if OS.get_environment("UI_WIDE_CAPTURE") == "1" else OUTPUT_PATH
+	var output_dir := ProjectSettings.globalize_path(output_path.get_base_dir())
 	DirAccess.make_dir_recursive_absolute(output_dir)
-	var error := get_viewport().get_texture().get_image().save_png(ProjectSettings.globalize_path(OUTPUT_PATH))
+	var error := get_viewport().get_texture().get_image().save_png(ProjectSettings.globalize_path(output_path))
 	assert(error == OK, "无法保存人物选择与 AI 队友哥特样板")
-	print("CHARACTER_SELECT_GOTHIC_PREVIEW_CAPTURE_PASS output=%s" % OUTPUT_PATH)
+	print("CHARACTER_SELECT_GOTHIC_PREVIEW_CAPTURE_PASS output=%s" % output_path)
 	get_tree().quit(0)
 
 

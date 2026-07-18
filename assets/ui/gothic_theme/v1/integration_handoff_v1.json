@@ -4,6 +4,20 @@
   "targetBranch": "codex/integration",
   "generatedAt": "2026-07-18",
   "mustReadBeforeMerge": true,
+  "uiValidation": {
+    "sharedConfirmationContractId": "ui.confirmation.dialog.v1",
+    "migratedConfirmationPanels": [
+      "shop.sell",
+      "quest.abandon",
+      "profession.change"
+    ],
+    "viewportCases": [
+      "1280x720",
+      "1920x1080",
+      "2400x1080_android_cutout"
+    ],
+    "testScene": "res://tests/ui_final_consistency_test.tscn"
+  },
   "humanReadableRecord": "res://UI_ART_INTEGRATION_REQUIRED.md",
   "items": [
     {

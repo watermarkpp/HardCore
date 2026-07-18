@@ -1,6 +1,7 @@
 extends Control
 
 const OUTPUT_PATH := "res://outputs/visual_acceptance/profession/profession_gothic_sample_v1.png"
+const CONFIRM_OUTPUT_PATH := "res://outputs/visual_acceptance/profession/profession_confirmation_v1.png"
 const WORLD_TEXTURE := preload("res://assets/ui/gothic_preview/world_scene_clean.png")
 
 
@@ -21,7 +22,12 @@ func _ready() -> void:
 	DirAccess.make_dir_recursive_absolute(output_dir)
 	var error := get_viewport().get_texture().get_image().save_png(ProjectSettings.globalize_path(OUTPUT_PATH))
 	assert(error == OK, "无法保存职业成长哥特样板")
-	print("PROFESSION_GOTHIC_PREVIEW_CAPTURE_PASS output=%s" % OUTPUT_PATH)
+	panel._request_confirmation()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	error = get_viewport().get_texture().get_image().save_png(ProjectSettings.globalize_path(CONFIRM_OUTPUT_PATH))
+	assert(error == OK, "无法保存职业确认样板")
+	print("PROFESSION_GOTHIC_PREVIEW_CAPTURE_PASS output=%s confirmation=%s" % [OUTPUT_PATH, CONFIRM_OUTPUT_PATH])
 	get_tree().quit(0)
 
 

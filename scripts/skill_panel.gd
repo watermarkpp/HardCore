@@ -266,12 +266,12 @@ func _build_assignment_section() -> void:
 		assignment_buttons.append(button)
 	var hint := Label.new()
 	hint.name = "AssignmentHint"
-	hint.text = "长按左侧已学技能，再选择中央或攻击环槽位"
+	hint.text = "长按左侧已学技能\n再选择中央或攻击环槽位"
 	hint.position = Vector2(24, 448)
 	hint.size = Vector2(286, 66)
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint.autowrap_mode = TextServer.AUTOWRAP_OFF
 	hint.theme_type_variation = "GothicMutedLabel"
 	panel.add_child(hint)
 

@@ -2,6 +2,7 @@ class_name QuestPanel
 extends Panel
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const GothicConfirmationPanelScript := preload("res://scripts/gothic_confirmation_panel.gd")
 
 signal closed
 signal abandon_requested(quest_id: String)
@@ -20,7 +21,7 @@ var quest_meta_label: Label
 var objective_label: RichTextLabel
 var reward_label: RichTextLabel
 var abandon_button: Button
-var abandon_confirmation: ConfirmationDialog
+var abandon_confirmation: Control
 var current_quest_id := ""
 var npc_display_name := "比奇老兵"
 var _selected_quest_id := ""
@@ -218,12 +219,10 @@ func _build_quest_detail() -> void:
 	action_button.add_theme_font_size_override("font_size", 18)
 	action_button.pressed.connect(_act)
 	panel.add_child(action_button)
-	abandon_confirmation = ConfirmationDialog.new()
+	abandon_confirmation = GothicConfirmationPanelScript.new()
 	abandon_confirmation.name = "AbandonConfirmation"
-	abandon_confirmation.title = "确认放弃任务"
-	abandon_confirmation.ok_button_text = "确认放弃"
-	abandon_confirmation.cancel_button_text = "取消"
-	abandon_confirmation.confirmed.connect(_confirm_abandon)
+	abandon_confirmation.confirmed.connect(_on_abandon_confirmation_confirmed)
+	abandon_confirmation.cancelled.connect(_cancel_pending_abandon)
 	add_child(abandon_confirmation)
 
 
@@ -412,8 +411,26 @@ func _request_abandon() -> void:
 		return
 	_pending_abandon_quest_id = current_quest_id
 	var quest := GameData.get_bich_quest(current_quest_id)
-	abandon_confirmation.dialog_text = "确认放弃“%s”？\n当前任务进度将由玩法规则决定是否保留。" % quest.get("name", "当前任务")
-	abandon_confirmation.popup_centered(Vector2i(460, 190))
+	abandon_confirmation.open_confirmation({
+		"action_id": "quest.abandon",
+		"title": "确认放弃任务",
+		"message": "确认放弃“%s”？\n当前任务进度将由玩法规则决定是否保留。" % quest.get("name", "当前任务"),
+		"confirm_label": "确认放弃",
+		"cancel_label": "取消",
+		"tone": "danger",
+		"context": {"quest_id": current_quest_id},
+	})
+
+
+func _on_abandon_confirmation_confirmed(confirmation: Dictionary) -> void:
+	if str(confirmation.get("context", {}).get("quest_id", "")) != _pending_abandon_quest_id:
+		_pending_abandon_quest_id = ""
+		return
+	_confirm_abandon()
+
+
+func _cancel_pending_abandon(_confirmation: Dictionary) -> void:
+	_pending_abandon_quest_id = ""
 
 
 func _confirm_abandon() -> void:
@@ -467,5 +484,7 @@ func _section_title(text_value: String, section_width: float) -> Label:
 
 
 func _close() -> void:
+	abandon_confirmation.close_confirmation()
+	_pending_abandon_quest_id = ""
 	hide()
 	closed.emit()

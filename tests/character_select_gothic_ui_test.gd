@@ -25,9 +25,10 @@ func _run() -> void:
 	await get_tree().process_frame
 
 	assert(launcher.theme != null, "正式人物大厅没有使用公共哥特 Theme")
-	assert(launcher.get_node("RosterPanel").theme_type_variation == "GothicInsetFrame", "人物列表没有使用公共内框")
-	assert(launcher.get_node("CharacterPreviewPanel").theme_type_variation == "GothicInsetFrame", "人物预览没有使用公共内框")
-	assert(launcher.get_node("CreationPanel").theme_type_variation == "GothicInsetFrame", "创建人物没有使用公共内框")
+	assert(launcher.content_root.anchor_left == 0.5 and launcher.content_root.anchor_top == 0.5, "人物大厅没有使用宽屏居中内容画布")
+	assert(launcher.get_node("CenteredContent/RosterPanel").theme_type_variation == "GothicInsetFrame", "人物列表没有使用公共内框")
+	assert(launcher.get_node("CenteredContent/CharacterPreviewPanel").theme_type_variation == "GothicInsetFrame", "人物预览没有使用公共内框")
+	assert(launcher.get_node("CenteredContent/CreationPanel").theme_type_variation == "GothicInsetFrame", "创建人物没有使用公共内框")
 	assert(launcher.list_box != null and launcher.name_input != null, "旧版人物选择兼容入口丢失")
 	assert(launcher.profile_cards.size() == 3, "人物列表没有显示三个独立档案")
 	assert(not launcher.profile_cards["wizard_01"].panel is Panel, "人物信息卡不应继续叠加被裁掉的分页装饰框")
@@ -42,9 +43,9 @@ func _run() -> void:
 	assert(not launcher.profession_buttons["法师"].disabled, "法师创建按钮仍处于旧版锁定状态")
 	assert(not launcher.profession_buttons["道士"].disabled, "道士创建按钮仍处于旧版锁定状态")
 	assert(launcher.profession_buttons["法师"].get_meta("profession_id", "") == "wizard", "法师职业稳定 ID 错误")
-	assert(not launcher.get_node("CreationPanel").has_node("MaleGender"), "创建人物不应继续显示男性选择按钮")
-	assert(not launcher.get_node("CreationPanel").has_node("FemaleGender"), "创建人物不应继续显示女性选择按钮")
-	assert(not launcher.get_node("CharacterPreviewPanel/PreviewStage") is Panel, "人物纸娃娃外层不应继续使用第一道装饰图框")
+	assert(not launcher.get_node("CenteredContent/CreationPanel").has_node("MaleGender"), "创建人物不应继续显示男性选择按钮")
+	assert(not launcher.get_node("CenteredContent/CreationPanel").has_node("FemaleGender"), "创建人物不应继续显示女性选择按钮")
+	assert(not launcher.get_node("CenteredContent/CharacterPreviewPanel/PreviewStage") is Panel, "人物纸娃娃外层不应继续使用第一道装饰图框")
 
 	launcher._select_main_profile("wizard_01")
 	assert(launcher.selected_main_profile_id == "wizard_01", "任意角色没有成功切换为主角色")
@@ -83,7 +84,7 @@ func _run() -> void:
 	assert(creation_request.character_name == "星火", "人物创建请求没有保留角色名")
 	launcher._select_main_profile("warrior_01")
 	await get_tree().process_frame
-	var paper_doll: Control = launcher.get_node("CharacterPreviewPanel/PreviewStage/PreviewVisualRoot/RuntimePaperDoll")
+	var paper_doll: Control = launcher.get_node("CenteredContent/CharacterPreviewPanel/PreviewStage/PreviewVisualRoot/RuntimePaperDoll")
 	assert(paper_doll.preview_scale >= 1.5, "人物大厅纸娃娃没有按要求放大")
 	assert(launcher.profile_cards["warrior_01"].main_button.alignment == HORIZONTAL_ALIGNMENT_CENTER, "角色名称、等级和职业没有在信息框中居中")
 

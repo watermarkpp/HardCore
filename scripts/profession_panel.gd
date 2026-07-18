@@ -2,6 +2,7 @@ class_name ProfessionPanel
 extends Panel
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const GothicConfirmationPanelScript := preload("res://scripts/gothic_confirmation_panel.gd")
 
 signal closed
 
@@ -41,10 +42,7 @@ var growth_cards: Array[Button] = []
 var unlock_count_label: Label
 var unlock_list: VBoxContainer
 var confirm_button: Button
-var confirmation_popup: Panel
-var confirmation_title: Label
-var confirmation_detail: RichTextLabel
-var confirmation_apply_button: Button
+var confirmation_popup: Control
 var last_result := ""
 
 
@@ -261,63 +259,10 @@ func _build_unlock_section() -> void:
 
 
 func _build_confirmation_popup() -> void:
-	var blocker := ColorRect.new()
-	blocker.name = "ConfirmationBlocker"
-	blocker.position = Vector2(18, 24)
-	blocker.size = Vector2(1064, 588)
-	blocker.color = Color(0.005, 0.004, 0.003, 0.78)
-	blocker.mouse_filter = Control.MOUSE_FILTER_STOP
-	blocker.hide()
-	add_child(blocker)
-	confirmation_popup = Panel.new()
+	confirmation_popup = GothicConfirmationPanelScript.new()
 	confirmation_popup.name = "ProfessionConfirmation"
-	confirmation_popup.position = Vector2(310, 182)
-	confirmation_popup.size = Vector2(480, 274)
-	confirmation_popup.theme_type_variation = "GothicModalFrame"
-	confirmation_popup.hide()
+	confirmation_popup.confirmed.connect(_on_profession_confirmation_confirmed)
 	add_child(confirmation_popup)
-	confirmation_popup.set_meta("blocker", blocker)
-	var surface := Panel.new()
-	surface.name = "PopupSurface"
-	surface.position = Vector2(18, 24)
-	surface.size = Vector2(444, 226)
-	surface.theme_type_variation = "GothicModalSurface"
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	confirmation_popup.add_child(surface)
-	confirmation_title = Label.new()
-	confirmation_title.name = "ConfirmationTitle"
-	confirmation_title.position = Vector2(34, 32)
-	confirmation_title.size = Vector2(412, 34)
-	confirmation_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	confirmation_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	confirmation_title.add_theme_font_size_override("font_size", 22)
-	confirmation_title.add_theme_color_override("font_color", Color("f0c77f"))
-	confirmation_popup.add_child(confirmation_title)
-	confirmation_detail = RichTextLabel.new()
-	confirmation_detail.name = "ConfirmationDetail"
-	confirmation_detail.position = Vector2(52, 78)
-	confirmation_detail.size = Vector2(376, 74)
-	confirmation_detail.bbcode_enabled = true
-	confirmation_detail.fit_content = false
-	confirmation_detail.scroll_active = false
-	confirmation_detail.theme_type_variation = "GothicDetailText"
-	confirmation_popup.add_child(confirmation_detail)
-	var cancel_button := Button.new()
-	cancel_button.name = "Cancel"
-	cancel_button.text = "返回预览"
-	cancel_button.position = Vector2(52, 174)
-	cancel_button.size = Vector2(174, 56)
-	cancel_button.theme_type_variation = "GothicComponentButton"
-	cancel_button.pressed.connect(_hide_confirmation)
-	confirmation_popup.add_child(cancel_button)
-	confirmation_apply_button = Button.new()
-	confirmation_apply_button.name = "Apply"
-	confirmation_apply_button.text = "确认切换"
-	confirmation_apply_button.position = Vector2(254, 174)
-	confirmation_apply_button.size = Vector2(174, 56)
-	confirmation_apply_button.theme_type_variation = "GothicComponentSelectedButton"
-	confirmation_apply_button.pressed.connect(_apply_selected_profession)
-	confirmation_popup.add_child(confirmation_apply_button)
 
 
 func refresh() -> void:
@@ -451,16 +396,21 @@ func _request_confirmation() -> void:
 		last_result = "当前职业已经是%s" % selected_profession
 		refresh()
 		return
-	confirmation_title.text = "确认切换为%s？" % selected_profession
-	confirmation_detail.text = (
-		"[center][color=#d6c3a5]切换职业会卸下不适用装备，"
-		+ "并清除其他职业技能。\n此操作只在确认后交给角色数据接口执行。[/color][/center]"
-	)
-	confirmation_apply_button.set_meta("profession_id", ProfessionRules.profession_id(selected_profession))
-	var blocker: ColorRect = confirmation_popup.get_meta("blocker")
-	blocker.show()
-	confirmation_popup.show()
-	confirmation_popup.move_to_front()
+	confirmation_popup.open_confirmation({
+		"action_id": "profession.change",
+		"title": "确认切换为%s？" % selected_profession,
+		"message": "切换职业会卸下不适用装备，并清除其他职业技能。\n确认后才会交给角色数据接口执行。",
+		"confirm_label": "确认切换",
+		"cancel_label": "返回预览",
+		"tone": "danger",
+		"context": {"profession_id": ProfessionRules.profession_id(selected_profession)},
+	})
+
+
+func _on_profession_confirmation_confirmed(confirmation: Dictionary) -> void:
+	if str(confirmation.get("context", {}).get("profession_id", "")) != ProfessionRules.profession_id(selected_profession):
+		return
+	_apply_selected_profession()
 
 
 func _apply_selected_profession() -> void:
@@ -473,9 +423,7 @@ func _apply_selected_profession() -> void:
 
 
 func _hide_confirmation() -> void:
-	var blocker: ColorRect = confirmation_popup.get_meta("blocker")
-	blocker.hide()
-	confirmation_popup.hide()
+	confirmation_popup.close_confirmation()
 
 
 func _on_profession_changed(value: String) -> void:

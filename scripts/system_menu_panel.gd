@@ -59,14 +59,16 @@ func _build_background() -> void:
 func _build_modal() -> void:
 	var surface := Panel.new()
 	surface.name = "ModalSurface"
-	surface.position = PANEL_RECT.position + Vector2(18, 24)
+	surface.set_anchors_preset(Control.PRESET_CENTER)
+	surface.position = -PANEL_RECT.size * 0.5 + Vector2(18, 24)
 	surface.size = PANEL_RECT.size - Vector2(36, 48)
 	surface.theme_type_variation = "GothicModalSurface"
 	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(surface)
 	modal = Panel.new()
 	modal.name = "SystemMenuModal"
-	modal.position = PANEL_RECT.position
+	modal.set_anchors_preset(Control.PRESET_CENTER)
+	modal.position = -PANEL_RECT.size * 0.5
 	modal.size = PANEL_RECT.size
 	modal.theme_type_variation = "GothicModalFrame"
 	add_child(modal)

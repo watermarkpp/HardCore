@@ -4,6 +4,8 @@ const WORLD_TEXTURE := preload("res://assets/ui/gothic_preview/world_scene_refer
 const SystemMenuPanelScript := preload("res://scripts/system_menu_panel.gd")
 const MAIN_OUTPUT := "res://outputs/visual_acceptance/system_menu/system_menu_gothic_v1.png"
 const SETTINGS_OUTPUT := "res://outputs/visual_acceptance/system_menu/system_settings_audio_v1.png"
+const WIDE_MAIN_OUTPUT := "res://outputs/visual_acceptance/final_consistency/system_menu_2400x1080.png"
+const WIDE_SETTINGS_OUTPUT := "res://outputs/visual_acceptance/final_consistency/system_settings_2400x1080.png"
 
 
 func _ready() -> void:
@@ -20,12 +22,15 @@ func _ready() -> void:
 	add_child(menu)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	_save_viewport(MAIN_OUTPUT)
+	var wide_capture := OS.get_environment("UI_WIDE_CAPTURE") == "1"
+	var main_output := WIDE_MAIN_OUTPUT if wide_capture else MAIN_OUTPUT
+	var settings_output := WIDE_SETTINGS_OUTPUT if wide_capture else SETTINGS_OUTPUT
+	_save_viewport(main_output)
 	menu.show_settings_page()
 	menu.set_audio_settings(true, false)
 	await get_tree().process_frame
-	_save_viewport(SETTINGS_OUTPUT)
-	print("SYSTEM_MENU_GOTHIC_PREVIEW_CAPTURE_PASS main=%s settings=%s" % [MAIN_OUTPUT, SETTINGS_OUTPUT])
+	_save_viewport(settings_output)
+	print("SYSTEM_MENU_GOTHIC_PREVIEW_CAPTURE_PASS main=%s settings=%s" % [main_output, settings_output])
 	get_tree().quit(0)
 
 
