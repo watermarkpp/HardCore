@@ -8,6 +8,7 @@ const HUDResourceOrbScript := preload("res://scripts/hud_resource_orb.gd")
 const HUDSkillIconCatalogScript := preload("res://scripts/hud_skill_icon_catalog.gd")
 const DeathRevivalPanelScript := preload("res://scripts/death_revival_panel.gd")
 const LootFeedbackLayerScript := preload("res://scripts/loot_feedback_layer.gd")
+const LoadingTransitionOverlayScript := preload("res://scripts/loading_transition_overlay.gd")
 const HUDTargetBarTexture := preload("res://assets/ui/gothic_hud/v2/runtime/target_bar_v2.png")
 const HUDUtilityStackTexture := preload("res://assets/ui/gothic_hud/v2/runtime/utility_stack_v2.png")
 const HUDJoystickTexture := preload("res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png")
@@ -25,6 +26,8 @@ signal map_travel_requested(map_id: int)
 signal map_teleport_requested(request: Dictionary)
 signal map_teleport_availability_requested(map_ids: Array)
 signal revival_requested(request: Dictionary)
+signal loading_transition_covered(request: Dictionary)
+signal loading_transition_finished(request: Dictionary)
 signal target_switch_pressed
 signal auto_target_changed(enabled: bool)
 signal special_action_pressed(effect_id: String)
@@ -48,6 +51,7 @@ var map_panel: MapPanel
 var warehouse_panel: WarehousePanel
 var death_revival_panel
 var loot_feedback_layer
+var loading_transition_overlay
 var quick_buttons: Array[Button] = []
 var health_orb: Control
 var mana_orb: Control
@@ -89,6 +93,7 @@ func _build_approved_hud() -> void:
 	_build_bottom_chassis(root)
 	_build_combat_controls(root)
 	_build_modal_panels(root)
+	_build_loading_transition(root)
 
 	PlayerState.profile_changed.connect(update_profile)
 	PlayerState.quests_changed.connect(update_quest_tracker)
@@ -168,6 +173,18 @@ func _build_loot_feedback(root: Control) -> void:
 	loot_feedback_layer = LootFeedbackLayerScript.new()
 	loot_feedback_layer.name = "LootFeedbackLayer"
 	root.add_child(loot_feedback_layer)
+
+
+func _build_loading_transition(root: Control) -> void:
+	loading_transition_overlay = LoadingTransitionOverlayScript.new()
+	loading_transition_overlay.name = "LoadingTransitionOverlay"
+	loading_transition_overlay.transition_covered.connect(
+		func(request: Dictionary) -> void: loading_transition_covered.emit(request)
+	)
+	loading_transition_overlay.transition_finished.connect(
+		func(request: Dictionary) -> void: loading_transition_finished.emit(request)
+	)
+	root.add_child(loading_transition_overlay)
 
 
 func _build_right_utility_stack(root: Control) -> void:
@@ -657,6 +674,16 @@ func show_loot(item_name: String) -> void:
 func show_loot_feedback(event: Dictionary) -> void:
 	if loot_feedback_layer != null:
 		loot_feedback_layer.show_feedback(event)
+
+
+func begin_loading_transition(transition_id := "") -> void:
+	if loading_transition_overlay != null:
+		loading_transition_overlay.begin_loading(transition_id)
+
+
+func finish_loading_transition() -> void:
+	if loading_transition_overlay != null:
+		loading_transition_overlay.finish_loading()
 
 
 func update_profile() -> void:

@@ -1,0 +1,25 @@
+{
+  "contractId": "ui.loading.transition.v1",
+  "policy": "The overlay only displays the exact text Loading...... on a translucent dark-gray shade. It never displays a map name, region description, tip, progress bar, or gameplay status.",
+  "stableVisualId": "ui.loading.overlay",
+  "exactVisibleText": "Loading......",
+  "forbiddenContent": [
+    "map name",
+    "region description",
+    "gameplay tip",
+    "progress bar",
+    "decorative frame"
+  ],
+  "hudMethods": {
+    "begin": "GameHUD.begin_loading_transition(transition_id)",
+    "finish": "GameHUD.finish_loading_transition()"
+  },
+  "hudSignals": [
+    "GameHUD.loading_transition_covered(request)",
+    "GameHUD.loading_transition_finished(request)"
+  ],
+  "requestFields": [
+    "contract_id",
+    "transition_id"
+  ]
+}

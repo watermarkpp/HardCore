@@ -362,6 +362,53 @@ UI 已完成：
 - Boss/高价值掉落显示强化横幅，普通掉落不会滥用横幅。
 - 物品只增加一次，失败拾取不增加背包也不删除地面掉落。
 
+### 10. 地图切换尚未接入 Loading 过渡
+
+状态：`UI_READY_RUNTIME_MISSING`、`INTEGRATION_OWNED_FILE`
+
+UI 已完成：
+
+- 全屏半透明深灰遮罩。
+- 唯一可见文字固定为 `Loading......`。
+- 淡入覆盖和淡出完成信号。
+- 契约：`assets/ui/gothic_theme/v1/loading_transition_contract_v1.json`。
+- HUD 接口：
+  - `GameHUD.begin_loading_transition(transition_id)`
+  - `GameHUD.finish_loading_transition()`
+  - `GameHUD.loading_transition_covered(request)`
+  - `GameHUD.loading_transition_finished(request)`
+
+明确禁止：
+
+- 地图名称。
+- 区域说明。
+- 游戏提示。
+- 进度条。
+- 装饰框或其他文字。
+
+当前缺口：
+
+- `scripts/game_root.gd::travel_to_map()` 和 `travel_to_service_home()` 会直接同步调用 `_load_zone()`。
+- 正式地图切换没有调用 Loading 过渡层，也不会等待遮罩覆盖后再替换地图内容。
+
+主树接入：
+
+1. 每次地图切换生成唯一 `transition_id`。
+2. 先调用 `begin_loading_transition(transition_id)`。
+3. 等待同一 `transition_id` 的 `loading_transition_covered`，再执行 `_load_zone()`、设置人物落点和生成地图内容。
+4. 地图内容与首帧准备完成后调用 `finish_loading_transition()`。
+5. 传送、门点切图、死亡回城和特殊回城统一使用同一流程。
+6. 同一时间只允许一个地图过渡，拒绝重复传送或过期完成回调。
+7. Loading 期间阻止人物移动、攻击、拾取和面板操作。
+8. 不得向过渡层注入地图名或其他说明文字。
+
+验收：
+
+- 旧地图先被遮罩覆盖，新地图准备完成后才淡出。
+- 全程唯一可见文字为 `Loading......`。
+- 人物不会在切图中移动、攻击或重复触发传送。
+- Android 宽屏与安全区均完整覆盖，不露出可点击边缘。
+
 ## 已完成且不应由主树重新设计的 UI 内容
 
 以下内容属于 UI 分支成果，主树接入时应复用，不要重新建立不配套的样式：
@@ -396,5 +443,6 @@ UI 已完成：
 - 世界地图传送按钮不会获得正式开放规则与指定落点。
 - 死亡后仍会沿用旧的自动回城流程，不会等待新复活界面选择。
 - 满包失败、Boss 来源和高价值掉落尚未进入正式拾取流程。
+- 地图切换仍会直接同步替换内容，尚未使用新的 Loading 遮罩时序。
 
 这些不是美术遗漏，而是 UI 分支权限边界内无法完成的主树/玩法接入工作。

@@ -22,6 +22,9 @@ func _run() -> void:
 	assert(hud.has_method("show_death_screen"), "HUD 缺少死亡界面入口")
 	assert(hud.has_method("show_loot_feedback"), "HUD 缺少结构化拾取反馈入口")
 	assert(hud.get("loot_feedback_layer") != null, "HUD 没有接入战利品反馈层")
+	assert(hud.has_method("begin_loading_transition") and hud.has_method("finish_loading_transition"), "HUD 缺少地图Loading过渡入口")
+	var loading_overlay: Control = hud.get("loading_transition_overlay") as Control
+	assert(loading_overlay != null and not loading_overlay.visible, "Loading过渡层没有以隐藏状态接入HUD")
 	var death_panel: Control = hud.get("death_revival_panel") as Control
 	assert(death_panel != null and not death_panel.visible, "死亡界面没有以隐藏状态接入 HUD")
 

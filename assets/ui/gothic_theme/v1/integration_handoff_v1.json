@@ -194,6 +194,26 @@
         "Use the shared LootGroundLabel component instead of constructing a bare Label in loot_pickup.gd.",
         "Prevent duplicate collection of the same drop_id."
       ]
+    },
+    {
+      "id": "ui-handoff.loading-transition-runtime",
+      "priority": "P0",
+      "status": "UI_READY_RUNTIME_MISSING",
+      "contractId": "ui.loading.transition.v1",
+      "stableVisualId": "ui.loading.overlay",
+      "exactVisibleText": "Loading......",
+      "integrationOwnedFiles": [
+        "res://scripts/game_root.gd",
+        "map travel orchestration"
+      ],
+      "requiredActions": [
+        "Generate a unique transition_id for every map travel.",
+        "Begin the Loading overlay and wait for the matching covered signal before calling _load_zone.",
+        "Finish the overlay only after map content, player arrival, and the first renderable frame are ready.",
+        "Route portal travel, teleport, death return, and special return through the same transition flow.",
+        "Block movement, combat, pickup, panels, and duplicate travel while transitioning.",
+        "Never add map names, descriptions, tips, progress bars, or decorative frames to the overlay."
+      ]
     }
   ],
   "userVisibleWarningsUntilIntegrated": [
@@ -205,6 +225,7 @@
     "Seven skill-button assignments are not fully persisted or executed.",
     "World-map teleport availability and arrival anchors are not supplied by runtime.",
     "The formal death flow still auto-revives in town and does not wait for the new revival UI.",
-    "Inventory-full failures, boss provenance, and high-value classification are not yet connected to the formal pickup flow."
+    "Inventory-full failures, boss provenance, and high-value classification are not yet connected to the formal pickup flow.",
+    "Formal map travel still replaces content synchronously and does not use the Loading overlay timing contract."
   ]
 }
