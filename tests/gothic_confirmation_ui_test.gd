@@ -26,7 +26,7 @@ func _run() -> void:
 	assert(dialog.cancel_button.theme_type_variation == "GothicComponentButton", "取消按钮未复用公共 Theme")
 	assert(dialog.confirm_button.theme_type_variation == "GothicComponentSelectedButton", "确认按钮未复用公共 Theme")
 	var safe_rect := Rect2(32, 20, 496, 256)
-	for control: Control in [dialog.title_label, dialog.message_label, dialog.tone_accent, dialog.cancel_button, dialog.confirm_button]:
+	for control: Control in [dialog.title_label, dialog.message_label, dialog.cancel_button, dialog.confirm_button]:
 		assert(safe_rect.encloses(Rect2(control.position, control.size)), "%s 超出确认框安全内容区" % control.name)
 
 	var cancelled_requests: Array[Dictionary] = []

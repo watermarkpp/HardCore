@@ -12,7 +12,6 @@ var modal_frame: Panel
 var inner_fill: Panel
 var title_label: Label
 var message_label: Label
-var tone_accent: ColorRect
 var cancel_button: Button
 var confirm_button: Button
 var current_request: Dictionary = {}
@@ -73,14 +72,6 @@ func _build_interface() -> void:
 	title_label.add_theme_color_override("font_color", GothicUIThemeScript.BRONZE_BRIGHT)
 	title_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	modal_frame.add_child(title_label)
-
-	tone_accent = ColorRect.new()
-	tone_accent.name = "ToneAccent"
-	tone_accent.position = Vector2(104, 88)
-	tone_accent.size = Vector2(352, 1)
-	tone_accent.color = Color(GothicUIThemeScript.BRONZE_BRIGHT, 0.46)
-	tone_accent.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	modal_frame.add_child(tone_accent)
 
 	message_label = Label.new()
 	message_label.name = "Message"
@@ -148,7 +139,6 @@ func _apply_tone(tone: String) -> void:
 		"font_color",
 		Color("e6a293") if danger else GothicUIThemeScript.BRONZE_BRIGHT
 	)
-	tone_accent.color = Color("8f3028") if danger else Color(GothicUIThemeScript.BRONZE_BRIGHT, 0.46)
 	confirm_button.add_theme_color_override(
 		"font_color",
 		Color("ffd1c5") if danger else GothicUIThemeScript.PARCHMENT
