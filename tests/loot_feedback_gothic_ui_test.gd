@@ -27,6 +27,8 @@ func _run() -> void:
 	assert(layer.toast_container.get_child_count() == 3, "普通拾取提示没有限制为最近三条")
 	assert(layer.toast_container.get_child(0).get_meta("stable_id", "") == "loot.feedback.normal", "普通提示稳定 ID 错误")
 	assert("多余物品" in layer.toast_container.get_child(0).get_node("Text").text, "最新拾取提示没有置顶")
+	assert(layer.toast_container.get_child(0).size.y == 30, "普通拾取提示仍然过高")
+	assert(layer.toast_container.get_child(0).size.x < layer.toast_container.size.x, "普通拾取提示没有按文字裁切")
 
 	layer.show_feedback({
 		"event_type": "rare_drop",
@@ -37,6 +39,7 @@ func _run() -> void:
 	assert(layer.rare_banner.visible, "Boss 高价值掉落横幅没有显示")
 	assert(layer.rare_banner.get_meta("stable_id", "") == "loot.feedback.rare_drop", "高价值横幅稳定 ID 错误")
 	assert(layer.rare_title.text == "Boss 掉落 · 裁决之杖", "Boss 掉落标题错误")
+	assert(layer.rare_banner.size.y == 56 and layer.rare_banner.size.x <= 420, "Boss 横幅仍然占用过多空间")
 	layer.show_feedback({
 		"event_type": "pickup_failed",
 		"item_name": "裁决之杖",
@@ -44,6 +47,7 @@ func _run() -> void:
 	})
 	assert(layer.failure_panel.visible, "背包已满提示没有显示")
 	assert(layer.failure_label.text == "背包已满 · 裁决之杖", "拾取失败原因错误")
+	assert(layer.failure_panel.size.y == 36 and layer.failure_panel.size.x < 300, "背包已满提示没有裁切多余空间")
 
 	var currency_label: Control = LootGroundLabelScript.new()
 	currency_label.setup({"item_name": "金币", "count": 120, "item_kind": "currency", "emphasis": "normal"})
@@ -55,6 +59,12 @@ func _run() -> void:
 	assert(currency_label.frame.theme_type_variation == "GothicLootGroundPanel", "普通地面名称样式错误")
 	assert(rare_label.frame.theme_type_variation == "GothicLootRareGroundPanel", "高价值地面名称没有强化")
 	assert(rare_label.frame.get_meta("stable_id", "") == "loot.ground_label", "地面名称稳定 ID 错误")
-	assert(currency_label.size.y == 32 and rare_label.size.y == 32, "地面名称高度应保持轻量")
+	assert(currency_label.size.y == 24 and rare_label.size.y == 24, "地面名称高度应保持轻量")
+	var normal_style := layer.theme.get_stylebox("panel", "GothicLootToastPanel") as StyleBoxFlat
+	var rare_style := layer.theme.get_stylebox("panel", "GothicLootRareBanner") as StyleBoxFlat
+	var error_style := layer.theme.get_stylebox("panel", "GothicLootErrorPanel") as StyleBoxFlat
+	for style: StyleBoxFlat in [normal_style, rare_style, error_style]:
+		assert(style.bg_color.a < 0.80, "战利品反馈背景不是半透明灰色")
+		assert(style.border_width_left == 1 and style.border_width_top == 1, "战利品反馈轮廓不是最细1像素")
 	print("LOOT_FEEDBACK_GOTHIC_UI_PASS：地面名称、分类颜色、三条拾取提示、满包失败和Boss高价值横幅均正常")
 	get_tree().quit(0)
