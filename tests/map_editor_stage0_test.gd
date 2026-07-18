@@ -63,9 +63,15 @@ func _ready() -> void:
 	editor.persist_last_document_path = false
 	add_child(editor)
 	assert(editor._startup_document_path() == MapEditorSaveService.default_path("bich_province"))
-	editor._create_map("sandbox_64", "quest_room", 990001, "64格沙盒")
+	var sandbox_test_root := "user://mse_stage0_sandbox"
+	var sandbox_test_document := sandbox_test_root.path_join("sandbox_64.editor.json")
+	var sandbox_test_workspace := sandbox_test_root.path_join("ground_workspace")
+	_cleanup_template_test_files(sandbox_test_root, sandbox_test_document, sandbox_test_workspace)
+	var sandbox_document := MapEditorTypes.new_map_from_catalog("sandbox_64", "quest_room", 990001, "64格沙盒")
+	sandbox_document.editor_meta["workspace"] = sandbox_test_workspace
+	editor._adopt_new_document(sandbox_document, "测试沙盒", sandbox_test_document)
 	assert(editor.current_document.map_id == "sandbox_64")
-	assert(editor.current_document_path == MapEditorSaveService.default_path("sandbox_64"))
+	assert(editor.current_document_path == sandbox_test_document)
 	var editor_size: Array = editor.current_document.design.design_size
 	assert(Vector2i(int(editor_size[0]), int(editor_size[1])) == Vector2i(64, 64))
 	assert(editor.asset_tree != null)
@@ -138,9 +144,17 @@ func _ready() -> void:
 	assert(str(editor.map_template_option.get_item_metadata(editor.map_template_option.selected)) == "blank.wooma_forest")
 	assert(MapEditorCanvasPreview.VIRTUAL_TILE_DRAW_LIMIT < 56 * 56)
 	_cleanup_template_test_files(wooma_test_root, wooma_test_document, wooma_test_workspace)
-	editor._create_map("bich_province", "outdoor_province", 4, "比奇省")
+	var bich_test_root := "user://mse_stage0_bich"
+	var bich_test_document := bich_test_root.path_join("bich_province.editor.json")
+	var bich_test_workspace := bich_test_root.path_join("ground_workspace")
+	_cleanup_template_test_files(bich_test_root, bich_test_document, bich_test_workspace)
+	var editor_bich_document := MapEditorTypes.new_map_from_catalog("bich_province", "outdoor_province", 4, "比奇省")
+	editor_bich_document.editor_meta["workspace"] = bich_test_workspace
+	editor._adopt_new_document(editor_bich_document, "测试比奇", bich_test_document)
 	assert(editor.current_document.design.design_size == [80, 80])
 	assert(str(editor.map_template_option.get_item_metadata(editor.map_template_option.selected)) == "blank.bich_province")
+	_cleanup_template_test_files(sandbox_test_root, sandbox_test_document, sandbox_test_workspace)
+	_cleanup_template_test_files(bich_test_root, bich_test_document, bich_test_workspace)
 	editor.queue_free()
 	print("MAP_EDITOR_STAGE0_PASS")
 	get_tree().quit(0)
