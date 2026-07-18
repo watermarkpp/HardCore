@@ -18,10 +18,16 @@ func _run() -> void:
 	assert(dialog.get_meta("stable_id", "") == "ui.confirmation.dialog", "公共确认组件稳定 ID 错误")
 	assert(dialog.process_mode == Node.PROCESS_MODE_ALWAYS, "暂停状态下确认组件必须可操作")
 	assert(not dialog.visible, "确认组件默认必须隐藏")
-	assert(dialog.modal_frame.size == Vector2(464, 260), "确认组件尺寸不符合紧凑样板")
+	assert(dialog.modal_frame.size == Vector2(560, 304), "确认组件尺寸不符合公共内嵌框原始比例")
+	assert(dialog.modal_frame.theme_type_variation == "GothicInsetFrame", "紧凑确认组件没有使用比例匹配的公共内嵌框")
+	assert(dialog.modal_frame.clip_contents, "确认框没有启用子内容裁切")
+	assert(Rect2(Vector2.ZERO, dialog.modal_frame.size).encloses(Rect2(dialog.inner_fill.position, dialog.inner_fill.size)), "内部底板超出装饰框")
 	assert(dialog.cancel_button.size.y >= 56 and dialog.confirm_button.size.y >= 56, "确认按钮触控高度不足")
 	assert(dialog.cancel_button.theme_type_variation == "GothicComponentButton", "取消按钮未复用公共 Theme")
 	assert(dialog.confirm_button.theme_type_variation == "GothicComponentSelectedButton", "确认按钮未复用公共 Theme")
+	var safe_rect := Rect2(32, 20, 496, 256)
+	for control: Control in [dialog.title_label, dialog.message_label, dialog.tone_accent, dialog.cancel_button, dialog.confirm_button]:
+		assert(safe_rect.encloses(Rect2(control.position, control.size)), "%s 超出确认框安全内容区" % control.name)
 
 	var cancelled_requests: Array[Dictionary] = []
 	dialog.cancelled.connect(func(request: Dictionary) -> void: cancelled_requests.append(request.duplicate(true)))

@@ -35,8 +35,14 @@
       720
     ],
     "modalSize": [
-      464,
-      260
+      560,
+      304
+    ],
+    "contentSafeRect": [
+      32,
+      20,
+      496,
+      256
     ],
     "minimumTouchHeight": 56,
     "safeAreaBehavior": "Centered inside the current viewport."
@@ -45,6 +51,8 @@
     "The component renders only supplied UI copy and never decides gameplay outcomes.",
     "The caller validates the action again after confirmation.",
     "Danger tone is visual emphasis only and does not bypass gameplay checks.",
-    "Panels must reuse this component instead of creating system-native or duplicated confirmation styles."
+    "Panels must reuse this component instead of creating system-native or duplicated confirmation styles.",
+    "The dark inner fill must remain inside the compact inset frame and the frame clips all child drawing.",
+    "Titles, messages, and buttons must remain inside the declared content safe rectangle."
   ]
 }

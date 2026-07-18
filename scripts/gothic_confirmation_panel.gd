@@ -9,6 +9,7 @@ const STABLE_ID := "ui.confirmation.dialog"
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 
 var modal_frame: Panel
+var inner_fill: Panel
 var title_label: Label
 var message_label: Label
 var tone_accent: ColorRect
@@ -39,24 +40,33 @@ func _build_interface() -> void:
 	modal_frame = Panel.new()
 	modal_frame.name = "ModalFrame"
 	modal_frame.set_anchors_preset(Control.PRESET_CENTER)
-	modal_frame.position = Vector2(-232, -130)
-	modal_frame.size = Vector2(464, 260)
-	modal_frame.theme_type_variation = "GothicModalFrame"
+	modal_frame.position = Vector2(-280, -152)
+	modal_frame.size = Vector2(560, 304)
+	modal_frame.theme_type_variation = "GothicInsetFrame"
 	modal_frame.mouse_filter = Control.MOUSE_FILTER_STOP
+	modal_frame.clip_contents = true
 	add_child(modal_frame)
 
-	var surface := Panel.new()
-	surface.name = "ModalSurface"
-	surface.position = Vector2(18, 22)
-	surface.size = Vector2(428, 216)
-	surface.theme_type_variation = "GothicModalSurface"
-	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	modal_frame.add_child(surface)
+	inner_fill = Panel.new()
+	inner_fill.name = "InnerFill"
+	inner_fill.position = Vector2(20, 20)
+	inner_fill.size = Vector2(520, 264)
+	inner_fill.theme_type_variation = "GothicModalSurface"
+	inner_fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	modal_frame.add_child(inner_fill)
+
+	var title_bar := Panel.new()
+	title_bar.name = "TitleBar"
+	title_bar.position = Vector2(70, 20)
+	title_bar.size = Vector2(420, 58)
+	title_bar.theme_type_variation = "GothicTitleBar"
+	title_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	modal_frame.add_child(title_bar)
 
 	title_label = Label.new()
 	title_label.name = "Title"
-	title_label.position = Vector2(38, 30)
-	title_label.size = Vector2(388, 34)
+	title_label.position = Vector2(92, 29)
+	title_label.size = Vector2(376, 34)
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	title_label.add_theme_font_size_override("font_size", 22)
@@ -66,16 +76,16 @@ func _build_interface() -> void:
 
 	tone_accent = ColorRect.new()
 	tone_accent.name = "ToneAccent"
-	tone_accent.position = Vector2(68, 72)
-	tone_accent.size = Vector2(328, 1)
+	tone_accent.position = Vector2(104, 88)
+	tone_accent.size = Vector2(352, 1)
 	tone_accent.color = Color(GothicUIThemeScript.BRONZE_BRIGHT, 0.46)
 	tone_accent.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	modal_frame.add_child(tone_accent)
 
 	message_label = Label.new()
 	message_label.name = "Message"
-	message_label.position = Vector2(44, 82)
-	message_label.size = Vector2(376, 72)
+	message_label.position = Vector2(62, 101)
+	message_label.size = Vector2(436, 78)
 	message_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	message_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -86,8 +96,8 @@ func _build_interface() -> void:
 
 	cancel_button = Button.new()
 	cancel_button.name = "Cancel"
-	cancel_button.position = Vector2(44, 174)
-	cancel_button.size = Vector2(174, 56)
+	cancel_button.position = Vector2(58, 207)
+	cancel_button.size = Vector2(202, 58)
 	cancel_button.theme_type_variation = "GothicComponentButton"
 	cancel_button.add_theme_font_size_override("font_size", 17)
 	cancel_button.set_meta("stable_id", "confirmation.cancel")
@@ -96,8 +106,8 @@ func _build_interface() -> void:
 
 	confirm_button = Button.new()
 	confirm_button.name = "Confirm"
-	confirm_button.position = Vector2(246, 174)
-	confirm_button.size = Vector2(174, 56)
+	confirm_button.position = Vector2(300, 207)
+	confirm_button.size = Vector2(202, 58)
 	confirm_button.theme_type_variation = "GothicComponentSelectedButton"
 	confirm_button.add_theme_font_size_override("font_size", 17)
 	confirm_button.set_meta("stable_id", "confirmation.confirm")
