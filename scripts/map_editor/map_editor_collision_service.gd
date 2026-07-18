@@ -8,9 +8,52 @@ static func add_manual_shape(document: Dictionary, shape_type: String, data: Dic
 	var errors := _validate_shape(shape_type, data)
 	if not errors.is_empty(): return {"ok": false, "errors": errors}
 	var entries: Array = document.layers.collision
-	entries.append({"collision_id": "manual_%06d" % (entries.size() + 1), "shape": shape_type, "data": data.duplicate(true), "source": "manual", "blocks_player": true, "blocks_monster": true, "content_layer": "personal_expansion"})
+	entries.append({"collision_id": _next_manual_collision_id(entries), "shape": shape_type, "data": data.duplicate(true), "source": "manual", "blocks_player": true, "blocks_monster": true, "content_layer": "personal_expansion"})
 	document.layers.collision = entries
 	return {"ok": true, "collision": entries.back()}
+
+
+static func remove_manual_shape_at_tile(document: Dictionary, tile: Vector2i) -> Dictionary:
+	var entries: Array = document.layers.collision
+	for index in range(entries.size() - 1, -1, -1):
+		var collision: Dictionary = entries[index]
+		if _manual_contains_tile(collision, tile):
+			entries.remove_at(index)
+			document.layers.collision = entries
+			return {"ok": true, "collision": collision}
+	return {"ok": false, "errors": ["manual_collision_not_found_at_tile"]}
+
+
+static func _next_manual_collision_id(entries: Array) -> String:
+	var maximum := 0
+	for entry: Dictionary in entries:
+		maximum = maxi(maximum, str(entry.get("collision_id", "")).trim_prefix("manual_").to_int())
+	return "manual_%06d" % (maximum + 1)
+
+
+static func _manual_contains_tile(manual: Dictionary, tile: Vector2i) -> bool:
+	var shape := str(manual.get("shape", ""))
+	var data: Dictionary = manual.get("data", {})
+	if shape in ["rect", "ellipse"]:
+		var rect: Array = data.get("rect", [])
+		if rect.size() != 4:
+			return false
+		if shape == "rect":
+			return tile.x >= int(rect[0]) and tile.y >= int(rect[1]) and tile.x < int(rect[0]) + int(rect[2]) and tile.y < int(rect[1]) + int(rect[3])
+		var center := Vector2(float(rect[0]) + float(rect[2]) * 0.5, float(rect[1]) + float(rect[3]) * 0.5)
+		var point := Vector2(tile) + Vector2(0.5, 0.5)
+		var normalized := Vector2(
+			(point.x - center.x) / (float(rect[2]) * 0.5),
+			(point.y - center.y) / (float(rect[3]) * 0.5)
+		)
+		return normalized.length_squared() <= 1.0
+	if shape == "polygon":
+		var points := PackedVector2Array()
+		for raw_point: Array in data.get("points", []):
+			if raw_point.size() == 2:
+				points.append(Vector2(int(raw_point[0]), int(raw_point[1])))
+		return points.size() >= 3 and Geometry2D.is_point_in_polygon(Vector2(tile) + Vector2(0.5, 0.5), points)
+	return false
 
 
 static func build_walkability(document: Dictionary) -> Dictionary:

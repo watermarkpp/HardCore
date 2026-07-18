@@ -65,6 +65,7 @@ func _ready() -> void:
 	assert(editor.asset_tree != null)
 	assert(editor.map_template_option.item_count == 21)
 	assert(editor.save_map_button.text == "保存地图")
+	assert(editor.collision_erase_toggle.text.begins_with("擦除手工碰撞"))
 	assert(editor.open_template_button.text == "打开地图模板")
 	assert(editor.create_map_button.text == "创建地图模板")
 	assert(editor.create_map_dialog.title == "创建地图模板")
@@ -72,6 +73,7 @@ func _ready() -> void:
 	var sidebar_button_texts: Array[String] = []
 	for candidate: Node in editor.find_children("*", "Button", true, false):
 		sidebar_button_texts.append((candidate as Button).text)
+	assert("保存素材校准覆盖（不保存地图）" in sidebar_button_texts)
 	assert("打开比奇地图" not in sidebar_button_texts)
 	assert("从所选模板创建地图" not in sidebar_button_texts)
 	assert("sandbox_64.editor.json" in editor.path_label.text)

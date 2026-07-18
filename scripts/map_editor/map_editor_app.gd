@@ -33,6 +33,7 @@ var calibration_occlusion: CheckBox
 var object_role_option: OptionButton
 var collision_shape_option: OptionButton
 var collision_draw_toggle: CheckBox
+var collision_erase_toggle: CheckBox
 var collision_instruction_label: Label
 var manual_collision_start := Vector2i(-1, -1)
 var manual_polygon_points: Array[Vector2i] = []
@@ -103,6 +104,7 @@ func _build_ui() -> void:
 	map_panel.add_child(map_actions)
 	var map_actions_title := Label.new(); map_actions_title.text = "地图"; map_actions_title.add_theme_font_size_override("font_size", 14); map_actions.add_child(map_actions_title)
 	save_map_button = Button.new(); save_map_button.text = "保存地图"; save_map_button.pressed.connect(_on_save_pressed); map_actions.add_child(save_map_button)
+	var save_map_note := Label.new(); save_map_note.text = "装饰物、地面、碰撞、NPC、刷新点和出入口都用“保存地图”"; save_map_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; save_map_note.modulate = Color("8fb9c7"); map_actions.add_child(save_map_note)
 	var template_label := Label.new(); template_label.text = "地图模板"; map_actions.add_child(template_label)
 	map_template_option = OptionButton.new(); map_template_option.fit_to_longest_item = false
 	for template: Dictionary in MapDesignCatalogService.blank_templates():
@@ -144,6 +146,7 @@ func _build_ui() -> void:
 	collision_shape_option.item_selected.connect(_on_collision_shape_selected)
 	sidebar.add_child(collision_shape_option)
 	collision_draw_toggle = CheckBox.new(); collision_draw_toggle.text = "在画布绘制碰撞（右键取消）"; collision_draw_toggle.toggled.connect(_on_collision_draw_toggled); sidebar.add_child(collision_draw_toggle)
+	collision_erase_toggle = CheckBox.new(); collision_erase_toggle.text = "擦除手工碰撞（左键点击或拖动，右键退出）"; collision_erase_toggle.toggled.connect(_on_collision_erase_toggled); sidebar.add_child(collision_erase_toggle)
 	collision_instruction_label = Label.new(); collision_instruction_label.text = "选择形状后将自动进入碰撞绘制"; collision_instruction_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; collision_instruction_label.modulate = Color("d7aa62"); sidebar.add_child(collision_instruction_label)
 	var semantic_title := Label.new(); semantic_title.text = "NPC、怪物与地图功能点"; semantic_title.add_theme_font_size_override("font_size", 13); sidebar.add_child(semantic_title)
 	semantic_kind_option = OptionButton.new()
@@ -181,9 +184,9 @@ func _build_ui() -> void:
 		calibration_collision.add_item(policy[0]); calibration_collision.set_item_metadata(calibration_collision.item_count-1,policy[1])
 	sidebar.add_child(calibration_collision)
 	calibration_occlusion = CheckBox.new(); calibration_occlusion.text = "遮挡玩家"; sidebar.add_child(calibration_occlusion)
-	var save_calibration := Button.new(); save_calibration.text = "保存当前素材校准覆盖"; save_calibration.pressed.connect(_on_save_calibration_pressed); sidebar.add_child(save_calibration)
+	var save_calibration := Button.new(); save_calibration.text = "保存素材校准覆盖（不保存地图）"; save_calibration.pressed.connect(_on_save_calibration_pressed); sidebar.add_child(save_calibration)
 	status_label = Label.new(); status_label.text = "就绪"; status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; sidebar.add_child(status_label)
-	preview = MapEditorCanvasPreview.new(); preview.paint_requested.connect(_on_ground_paint_requested); preview.erase_tile_requested.connect(_on_erase_tile_requested); preview.lasso_context_requested.connect(_on_lasso_context_requested); preview.tile_hovered.connect(_on_tile_hovered); preview.manual_collision_tile_clicked.connect(_on_manual_collision_tile_clicked); preview.manual_collision_cancelled.connect(_on_manual_collision_cancelled); preview.semantic_tile_clicked.connect(_on_semantic_tile_clicked); preview.selectable_selected.connect(_on_selectable_selected); preview.selectable_move_requested.connect(_on_selectable_move_requested); preview.selectable_delete_requested.connect(_on_selectable_delete_requested); preview.selectable_context_requested.connect(_on_selectable_context_requested); preview.size_flags_horizontal = Control.SIZE_EXPAND_FILL; preview.size_flags_vertical = Control.SIZE_EXPAND_FILL; preview.custom_minimum_size = Vector2(640, 480); preview.focus_mode=Control.FOCUS_ALL; layout.add_child(preview)
+	preview = MapEditorCanvasPreview.new(); preview.paint_requested.connect(_on_ground_paint_requested); preview.erase_tile_requested.connect(_on_erase_tile_requested); preview.lasso_context_requested.connect(_on_lasso_context_requested); preview.tile_hovered.connect(_on_tile_hovered); preview.manual_collision_tile_clicked.connect(_on_manual_collision_tile_clicked); preview.manual_collision_erase_requested.connect(_on_manual_collision_erase_requested); preview.manual_collision_cancelled.connect(_on_manual_collision_cancelled); preview.semantic_tile_clicked.connect(_on_semantic_tile_clicked); preview.selectable_selected.connect(_on_selectable_selected); preview.selectable_move_requested.connect(_on_selectable_move_requested); preview.selectable_delete_requested.connect(_on_selectable_delete_requested); preview.selectable_context_requested.connect(_on_selectable_context_requested); preview.size_flags_horizontal = Control.SIZE_EXPAND_FILL; preview.size_flags_vertical = Control.SIZE_EXPAND_FILL; preview.custom_minimum_size = Vector2(640, 480); preview.focus_mode=Control.FOCUS_ALL; layout.add_child(preview)
 	region_fill_menu = PopupMenu.new(); region_fill_menu.add_item("用素材列表已选地面随机填充", 1); region_fill_menu.add_item("删除套索内地面和对象", 3); region_fill_menu.add_separator(); region_fill_menu.add_item("取消", 2); region_fill_menu.id_pressed.connect(_on_region_fill_menu_pressed); add_child(region_fill_menu)
 	asset_size_menu = PopupMenu.new(); asset_size_menu.add_item("放大一格", 1); asset_size_menu.add_item("缩小一格", 2); asset_size_menu.add_separator(); asset_size_menu.add_item("恢复初始占位", 3); asset_size_menu.id_pressed.connect(_on_asset_size_menu_pressed); add_child(asset_size_menu)
 	instance_size_menu = PopupMenu.new(); instance_size_menu.add_item("放大当前地图素材", 1); instance_size_menu.add_item("缩小当前地图素材", 2); instance_size_menu.id_pressed.connect(_on_instance_size_menu_pressed); add_child(instance_size_menu)
@@ -724,12 +727,13 @@ func _activate_select_tool()->void:
 
 
 func _set_active_tool(mode: String) -> void:
-	if mode not in ["place", "select", "lasso", "erase", "manual_collision", "semantic"]:
+	if mode not in ["place", "select", "lasso", "erase", "manual_collision", "manual_collision_erase", "semantic"]:
 		return
 	active_tool_mode = mode
 	if random_region_fill_toggle != null: random_region_fill_toggle.set_pressed_no_signal(mode == "lasso")
 	if point_erase_toggle != null: point_erase_toggle.set_pressed_no_signal(mode == "erase")
 	if collision_draw_toggle != null: collision_draw_toggle.set_pressed_no_signal(mode == "manual_collision")
+	if collision_erase_toggle != null: collision_erase_toggle.set_pressed_no_signal(mode == "manual_collision_erase")
 	if semantic_place_toggle != null: semantic_place_toggle.set_pressed_no_signal(mode == "semantic")
 	if preview == null:
 		return
@@ -737,7 +741,7 @@ func _set_active_tool(mode: String) -> void:
 		preview.activate_normal_placement(selected_asset_id)
 	else:
 		preview.set_region_paint_mode(mode == "lasso")
-		preview.set_interaction_mode({"select":"select", "lasso":"place", "erase":"erase", "manual_collision":"manual_collision", "semantic":"semantic"}.get(mode, "place"))
+		preview.set_interaction_mode({"select":"select", "lasso":"place", "erase":"erase", "manual_collision":"manual_collision", "manual_collision_erase":"manual_collision_erase", "semantic":"semantic"}.get(mode, "place"))
 	preview.grab_focus()
 
 
@@ -1044,6 +1048,21 @@ func _on_collision_draw_toggled(enabled: bool) -> void:
 	status_label.text = collision_instruction_label.text if enabled else "已返回素材放置"
 
 
+func _on_collision_erase_toggled(enabled: bool) -> void:
+	manual_collision_start = Vector2i(-1, -1)
+	manual_polygon_points.clear()
+	_sync_manual_collision_draft()
+	if enabled:
+		_set_active_tool("manual_collision_erase")
+		preview.set_walkability_preview(MapEditorCollisionService.build_walkability(current_document), true)
+		collision_instruction_label.text = "擦除模式：左键点击或拖过手工碰撞区域；右键退出"
+		status_label.text = "已开启手工碰撞擦除；素材自带碰撞不会被删除"
+	elif active_tool_mode == "manual_collision_erase":
+		_set_active_tool("place")
+		collision_instruction_label.text = "选择形状后将自动进入碰撞绘制"
+		status_label.text = "已退出手工碰撞擦除，并返回素材放置"
+
+
 func _on_collision_shape_selected(_index: int) -> void:
 	manual_collision_start = Vector2i(-1, -1)
 	manual_polygon_points.clear()
@@ -1091,6 +1110,11 @@ func _on_manual_collision_tile_clicked(tile: Vector2i) -> void:
 
 
 func _on_manual_collision_cancelled() -> void:
+	if active_tool_mode == "manual_collision_erase":
+		_set_active_tool("place")
+		collision_instruction_label.text = "选择形状后将自动进入碰撞绘制"
+		status_label.text = "已退出手工碰撞擦除，并返回素材放置"
+		return
 	var had_unfinished_shape := manual_collision_start.x >= 0 or not manual_polygon_points.is_empty()
 	manual_collision_start = Vector2i(-1, -1)
 	manual_polygon_points.clear()
@@ -1102,6 +1126,16 @@ func _on_manual_collision_cancelled() -> void:
 		_set_active_tool("place")
 		collision_instruction_label.text = "选择形状后将自动进入碰撞绘制"
 		status_label.text = "已退出手工碰撞绘制，并返回素材放置"
+
+
+func _on_manual_collision_erase_requested(tile: Vector2i) -> void:
+	var result := MapEditorCollisionService.remove_manual_shape_at_tile(current_document, tile)
+	if result.ok:
+		preview.set_walkability_preview(MapEditorCollisionService.build_walkability(current_document), true)
+		preview.queue_redraw()
+		status_label.text = "已擦除手工碰撞：%s；点击“保存地图”写入工作文件" % result.collision.collision_id
+	else:
+		status_label.text = "该格没有可擦除的手工碰撞；素材自带碰撞需修改素材校准或删除素材"
 
 
 func _commit_manual_collision(shape: String, data: Dictionary) -> void:
