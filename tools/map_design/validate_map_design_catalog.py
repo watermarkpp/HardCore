@@ -39,10 +39,13 @@ def main():
     if lookup.get("stone_tomb_array",{}).get("strategy")!="reduce_duplicates": errors.append("acceptance: stone tomb strategy")
     if lookup.get("bich_province",{}).get("size_status")!="user_confirmed_final": errors.append("acceptance: bich final size status")
     if factor!=Decimal("0.3125"): errors.append("acceptance: global scale factor")
-    if len(blank_templates)!=len(maps)-1: errors.append("acceptance: blank template count")
+    if len(blank_templates)!=len(maps): errors.append("acceptance: template count")
     blank_ids={str(t.get("template_id","")) for t in blank_templates}
     for mid in seen:
-        if mid!="bich_province" and f"blank.{mid}" not in blank_ids: errors.append(f"{mid}: blank template missing")
+        if f"blank.{mid}" not in blank_ids: errors.append(f"{mid}: template missing")
+    bich_template=next((t for t in blank_templates if t.get("template_id")=="blank.bich_province"),{})
+    if bich_template.get("template_kind")!="existing_map_or_empty_template": errors.append("acceptance: bich template kind")
+    if bich_template.get("content_policy")!="open_existing_workspace_first": errors.append("acceptance: bich open policy")
     print(f"maps={len(maps)} blank_templates={len(blank_templates)} errors={len(errors)} warnings={len(warnings)}")
     for x in errors: print("ERROR",x)
     for x in warnings: print("WARN",x)

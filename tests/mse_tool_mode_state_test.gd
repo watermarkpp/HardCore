@@ -7,6 +7,7 @@ func _ready() -> void:
 	add_child(editor)
 	editor.current_document = MapEditorTypes.new_map("tool_mode_state", 990012, "Tool Mode State", Vector2i(32, 32))
 	editor.preview.set_document(editor.current_document)
+	await get_tree().process_frame
 	var monster_index := -1
 	for index in editor.semantic_kind_option.item_count:
 		if str(editor.semantic_kind_option.get_item_metadata(index)) == "monster_spawn":
@@ -36,11 +37,25 @@ func _ready() -> void:
 	assert(editor.active_tool_mode == "erase" and editor.preview.interaction_mode == "erase")
 	editor.semantic_content_option.pressed.emit()
 	assert(editor.active_tool_mode == "semantic" and not editor.point_erase_toggle.button_pressed)
-	editor.collision_draw_toggle.set_pressed_no_signal(true)
-	editor._on_collision_draw_toggled(true)
+	var ellipse_index := _option_index(editor.collision_shape_option, "ellipse")
+	assert(ellipse_index >= 0)
+	editor.collision_shape_option.select(ellipse_index)
+	editor._on_collision_shape_selected(ellipse_index)
 	assert(editor.active_tool_mode == "manual_collision" and editor.preview.interaction_mode == "manual_collision")
-	editor.manual_collision_start = Vector2i(3, 4)
-	editor.manual_polygon_points = [Vector2i(3, 4), Vector2i(4, 5)]
+	assert(editor.collision_draw_toggle.button_pressed)
+	assert("椭圆" in editor.collision_instruction_label.text)
+	_click_preview_tile(editor, Vector2i(3, 4), MOUSE_BUTTON_LEFT)
+	assert(editor.manual_collision_start == Vector2i(3, 4))
+	assert(editor.preview._manual_collision_start == Vector2i(3, 4))
+	_click_preview_tile(editor, Vector2i(5, 6), MOUSE_BUTTON_LEFT)
+	assert(editor.current_document.layers.collision.size() == 1)
+	assert(editor.current_document.layers.collision[0].shape == "ellipse")
+	assert(editor.manual_collision_start == Vector2i(-1, -1))
+	var rect_index := _option_index(editor.collision_shape_option, "rect")
+	editor.collision_shape_option.select(rect_index)
+	editor._on_collision_shape_selected(rect_index)
+	_click_preview_tile(editor, Vector2i(7, 8), MOUSE_BUTTON_LEFT)
+	assert(editor.manual_collision_start == Vector2i(7, 8))
 	var cancel_collision := InputEventMouseButton.new()
 	cancel_collision.button_index = MOUSE_BUTTON_RIGHT
 	cancel_collision.pressed = true
@@ -48,10 +63,31 @@ func _ready() -> void:
 	editor.preview._gui_input(cancel_collision)
 	assert(editor.manual_collision_start == Vector2i(-1, -1))
 	assert(editor.manual_polygon_points.is_empty())
+	assert(editor.active_tool_mode == "manual_collision" and editor.preview.interaction_mode == "manual_collision")
+	assert(editor.collision_draw_toggle.button_pressed)
+	_click_preview_tile(editor, Vector2i(7, 8), MOUSE_BUTTON_LEFT)
+	_click_preview_tile(editor, Vector2i(9, 10), MOUSE_BUTTON_LEFT)
+	assert(editor.current_document.layers.collision.size() == 2)
+	assert(editor.current_document.layers.collision[1].shape == "rect")
+	editor.preview._gui_input(cancel_collision)
 	assert(editor.active_tool_mode == "place" and editor.preview.interaction_mode == "place")
 	assert(not editor.collision_draw_toggle.button_pressed)
-	editor.collision_draw_toggle.set_pressed_no_signal(true)
-	editor._on_collision_draw_toggled(true)
+	var polygon_index := _option_index(editor.collision_shape_option, "polygon")
+	editor.collision_shape_option.select(polygon_index)
+	editor._on_collision_shape_selected(polygon_index)
+	assert(editor.active_tool_mode == "manual_collision")
+	assert("多边形" in editor.collision_instruction_label.text)
+	_click_preview_tile(editor, Vector2i(10, 10), MOUSE_BUTTON_LEFT)
+	_click_preview_tile(editor, Vector2i(13, 10), MOUSE_BUTTON_LEFT)
+	_click_preview_tile(editor, Vector2i(11, 13), MOUSE_BUTTON_LEFT)
+	assert(editor.manual_polygon_points.size() == 3)
+	var finish_polygon := InputEventKey.new()
+	finish_polygon.keycode = KEY_ENTER
+	finish_polygon.pressed = true
+	editor._unhandled_key_input(finish_polygon)
+	assert(editor.current_document.layers.collision.size() == 3)
+	assert(editor.current_document.layers.collision[2].shape == "polygon")
+	assert(editor.manual_polygon_points.is_empty())
 	editor.semantic_content_option.pressed.emit()
 	assert(editor.active_tool_mode == "semantic" and not editor.collision_draw_toggle.button_pressed)
 	editor._activate_normal_placement()
@@ -76,3 +112,20 @@ func _ready() -> void:
 	editor.queue_free()
 	print("MSE_TOOL_MODE_STATE_PASS")
 	get_tree().quit()
+
+
+func _option_index(option: OptionButton, metadata: String) -> int:
+	for index in option.item_count:
+		if str(option.get_item_metadata(index)) == metadata:
+			return index
+	return -1
+
+
+func _click_preview_tile(editor: MapEditorApp, tile: Vector2i, button: MouseButton) -> void:
+	var design_size_raw: Array = editor.current_document.design.design_size
+	var design_size := Vector2i(int(design_size_raw[0]), int(design_size_raw[1]))
+	var event := InputEventMouseButton.new()
+	event.button_index = button
+	event.pressed = true
+	event.position = editor.preview._draw_offset + MapEditorCoordinate.tile_to_ground_px(Vector2(tile), design_size) * editor.preview._draw_scale
+	editor.preview._gui_input(event)

@@ -1,6 +1,8 @@
 class_name MapEditorCanvasPreview
 extends Control
 
+const VIRTUAL_TILE_DRAW_LIMIT := 2048
+
 signal paint_requested(tile: Vector2i, asset_id: String)
 signal tile_hovered(tile: Vector2i)
 signal manual_collision_tile_clicked(tile: Vector2i)
@@ -39,6 +41,9 @@ var _lasso_drawing := false
 var _lasso_points := PackedVector2Array()
 var _selected_lasso_points := PackedVector2Array()
 var _selected_lasso_tiles: Array[Vector2i] = []
+var _manual_collision_shape := "rect"
+var _manual_collision_start := Vector2i(-1, -1)
+var _manual_collision_points: Array[Vector2i] = []
 var hovered_selectable_id := ""
 var selected_selectable_id := ""
 
@@ -106,6 +111,16 @@ func set_placement_layer(layer: String) -> void:
 func set_interaction_mode(mode: String) -> void:
 	interaction_mode = mode
 	_last_drag_tile = Vector2i(-1, -1)
+	if mode != "manual_collision":
+		_manual_collision_start = Vector2i(-1, -1)
+		_manual_collision_points.clear()
+	queue_redraw()
+
+
+func set_manual_collision_draft(shape: String, start: Vector2i, points: Array[Vector2i]) -> void:
+	_manual_collision_shape = shape
+	_manual_collision_start = start
+	_manual_collision_points = points.duplicate()
 	queue_redraw()
 
 
@@ -179,7 +194,10 @@ func _gui_input(event: InputEvent) -> void:
 				return
 			if interaction_mode == "manual_collision":
 				var manual_tile := screen_to_tile(event.position)
-				if manual_tile.x >= 0: manual_collision_tile_clicked.emit(manual_tile)
+				if manual_tile.x >= 0:
+					_hover_tile = manual_tile
+					manual_collision_tile_clicked.emit(manual_tile)
+					queue_redraw()
 			elif interaction_mode == "semantic":
 				var semantic_tile := screen_to_tile(event.position)
 				if semantic_tile.x >= 0: semantic_tile_clicked.emit(semantic_tile)
@@ -302,21 +320,58 @@ func _draw() -> void:
 	])
 	for i in range(corners.size() - 1):
 		draw_line(offset + corners[i] * scale_factor, offset + corners[i + 1] * scale_factor, Color("d7aa62"), 2.0)
-	if not show_grid:
-		return
-	var interval := maxi(grid_interval, 1)
-	if max(design_size.x, design_size.y) > 160:
-		interval = maxi(interval, 4)
-	elif max(design_size.x, design_size.y) > 80:
-		interval = maxi(interval, 2)
-	for line: PackedVector2Array in MapEditorGridService.visible_grid_lines(design_size, interval):
-		draw_line(offset + line[0] * scale_factor, offset + line[1] * scale_factor, Color(0.32, 0.43, 0.47, 0.42), 1.0)
+	if show_grid:
+		var interval := maxi(grid_interval, 1)
+		if max(design_size.x, design_size.y) > 160:
+			interval = maxi(interval, 4)
+		elif max(design_size.x, design_size.y) > 80:
+			interval = maxi(interval, 2)
+		for line: PackedVector2Array in MapEditorGridService.visible_grid_lines(design_size, interval):
+			draw_line(offset + line[0] * scale_factor, offset + line[1] * scale_factor, Color(0.32, 0.43, 0.47, 0.42), 1.0)
 	_draw_instances(design_size, offset, scale_factor)
 	_draw_selection_overlays(design_size,offset,scale_factor)
 	_draw_blocked_tiles(design_size, offset, scale_factor)
 	_draw_ghost(design_size, offset, scale_factor)
 	_draw_semantics(design_size, offset, scale_factor)
 	_draw_lasso_selection(design_size, offset, scale_factor)
+	_draw_manual_collision_draft(design_size, offset, scale_factor)
+
+
+func _draw_manual_collision_draft(design_size: Vector2i, offset: Vector2, scale_factor: float) -> void:
+	if interaction_mode != "manual_collision":
+		return
+	var color := Color("ffb84d")
+	draw_string(ThemeDB.fallback_font, Vector2(18, 28), "手工碰撞：%s" % {"rect":"矩形", "ellipse":"椭圆", "polygon":"多边形"}.get(_manual_collision_shape, _manual_collision_shape), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, color)
+	if _manual_collision_shape == "polygon":
+		var screen_points := PackedVector2Array()
+		for tile: Vector2i in _manual_collision_points:
+			screen_points.append(offset + MapEditorCoordinate.tile_to_ground_px(Vector2(tile), design_size) * scale_factor)
+		if _hover_tile.x >= 0 and not screen_points.is_empty():
+			screen_points.append(offset + MapEditorCoordinate.tile_to_ground_px(Vector2(_hover_tile), design_size) * scale_factor)
+		for point: Vector2 in screen_points:
+			draw_circle(point, 5.0, color)
+		if screen_points.size() >= 2:
+			draw_polyline(screen_points, color, 3.0)
+		return
+	if _manual_collision_start.x < 0:
+		return
+	var end := _hover_tile if _hover_tile.x >= 0 else _manual_collision_start
+	var minimum := Vector2i(mini(_manual_collision_start.x, end.x), mini(_manual_collision_start.y, end.y))
+	var maximum := Vector2i(maxi(_manual_collision_start.x, end.x) + 1, maxi(_manual_collision_start.y, end.y) + 1)
+	var outline := PackedVector2Array()
+	if _manual_collision_shape == "ellipse":
+		var center := (Vector2(minimum) + Vector2(maximum)) * 0.5
+		var radius := (Vector2(maximum) - Vector2(minimum)) * 0.5
+		for step in 33:
+			var angle := TAU * float(step) / 32.0
+			var tile_point := center + Vector2(cos(angle) * radius.x, sin(angle) * radius.y)
+			outline.append(offset + MapEditorCoordinate.tile_to_ground_px(tile_point, design_size) * scale_factor)
+	else:
+		for tile_point: Vector2 in [Vector2(minimum), Vector2(maximum.x, minimum.y), Vector2(maximum), Vector2(minimum.x, maximum.y), Vector2(minimum)]:
+			outline.append(offset + MapEditorCoordinate.tile_to_ground_px(tile_point, design_size) * scale_factor)
+	if outline.size() >= 3:
+		draw_colored_polygon(outline, Color(color, 0.18))
+		draw_polyline(outline, color, 3.0)
 
 
 func _draw_lasso_selection(design_size: Vector2i, offset: Vector2, scale_factor: float) -> void:
@@ -505,7 +560,7 @@ func _draw_virtual_ground(design_size: Vector2i, offset: Vector2, scale_factor: 
 				draw_texture_rect(texture, Rect2(center - Vector2(32, 16), Vector2(64, 32)), false)
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 		return
-	if design_size.x * design_size.y > 4096 or _ground_texture == null:
+	if design_size.x * design_size.y > VIRTUAL_TILE_DRAW_LIMIT or _ground_texture == null:
 		var polygon := PackedVector2Array()
 		for point in corners:
 			polygon.append(offset + point * scale_factor)

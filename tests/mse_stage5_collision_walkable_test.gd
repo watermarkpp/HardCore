@@ -14,7 +14,9 @@ func _ready() -> void:
 	assert(polygon.ok)
 	var walkable := MapEditorCollisionService.build_walkability(document)
 	assert(walkable.blocked_count > 10)
-	for key: String in ["10,10", "11,10", "12,10", "20,20", "21,21", "31,31", "41,41"]:
+	var palisade_collision_origin := MapEditorCollisionService._collision_origin(palisade.instance)
+	assert(walkable.blocked_tiles.has("%d,%d" % [palisade_collision_origin.x, palisade_collision_origin.y]))
+	for key: String in ["20,20", "21,21", "31,31", "41,41"]:
 		assert(walkable.blocked_tiles.has(key), "missing blocked tile %s" % key)
 	assert(not walkable.blocked_tiles.has("0,0"))
 	assert(walkable.sources.size() == 4)

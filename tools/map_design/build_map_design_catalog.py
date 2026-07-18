@@ -21,14 +21,20 @@ def main():
                     "editable_layer":"expansion","scale_factor":scale_policy.get("factor"),
                     "scale_rounding":scale_policy.get("rounding")})
         maps.append(row)
-        if row["map_id"] != "bich_province":
-            blank_templates.append({
-                "template_id":f"blank.{row['map_id']}","template_kind":"empty_map","map_id":row["map_id"],
-                "runtime_map_id":row["runtime_map_id"],"display_name":row["name"],"map_type":row["map_type"],
-                "design_size":row["design_size"],"pre_scale_design_size":row.get("pre_scale_design_size"),
-                "strategy":row["strategy"],"content_policy":"empty_layers","ground_policy":"virtual_blank_until_dirty",
-                "editable_layer":"expansion",
+        blank_template={
+            "template_id":f"blank.{row['map_id']}","template_kind":"empty_map","map_id":row["map_id"],
+            "runtime_map_id":row["runtime_map_id"],"display_name":row["name"],"map_type":row["map_type"],
+            "design_size":row["design_size"],"pre_scale_design_size":row.get("pre_scale_design_size"),
+            "strategy":row["strategy"],"content_policy":"empty_layers","ground_policy":"virtual_blank_until_dirty",
+            "editable_layer":"expansion",
+        }
+        if row["map_id"] == "bich_province":
+            blank_template.update({
+                "template_kind":"existing_map_or_empty_template",
+                "display_name":f"{row['name']}（当前地图）",
+                "content_policy":"open_existing_workspace_first",
             })
+        blank_templates.append(blank_template)
     payload={"schema_version":1,"policy":"single_player_compact_design","scale_policy":scale_policy,"maps":maps}
     (DATA/"map_design_catalog.json").write_text(json.dumps(payload,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     blank_payload={"schema_version":1,"scale_policy":scale_policy,"templates":blank_templates}

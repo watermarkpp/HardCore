@@ -33,6 +33,7 @@ var calibration_occlusion: CheckBox
 var object_role_option: OptionButton
 var collision_shape_option: OptionButton
 var collision_draw_toggle: CheckBox
+var collision_instruction_label: Label
 var manual_collision_start := Vector2i(-1, -1)
 var manual_polygon_points: Array[Vector2i] = []
 var semantic_kind_option: OptionButton
@@ -138,10 +139,12 @@ func _build_ui() -> void:
 	var walkable_button := CheckBox.new(); walkable_button.text = "显示不可走区域"; walkable_button.toggled.connect(_on_walkable_preview_toggled); sidebar.add_child(walkable_button)
 	var collision_title := Label.new(); collision_title.text = "手工碰撞"; collision_title.add_theme_font_size_override("font_size", 13); sidebar.add_child(collision_title)
 	collision_shape_option = OptionButton.new()
-	for shape: Array in [["矩形","rect"],["椭圆","ellipse"],["多边形","polygon"]]:
+	for shape: Array in [["矩形（两点）","rect"],["椭圆（两点）","ellipse"],["多边形（逐点，Enter完成）","polygon"]]:
 		collision_shape_option.add_item(shape[0]); collision_shape_option.set_item_metadata(collision_shape_option.item_count-1,shape[1])
+	collision_shape_option.item_selected.connect(_on_collision_shape_selected)
 	sidebar.add_child(collision_shape_option)
 	collision_draw_toggle = CheckBox.new(); collision_draw_toggle.text = "在画布绘制碰撞（右键取消）"; collision_draw_toggle.toggled.connect(_on_collision_draw_toggled); sidebar.add_child(collision_draw_toggle)
+	collision_instruction_label = Label.new(); collision_instruction_label.text = "选择形状后将自动进入碰撞绘制"; collision_instruction_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; collision_instruction_label.modulate = Color("d7aa62"); sidebar.add_child(collision_instruction_label)
 	var semantic_title := Label.new(); semantic_title.text = "NPC、怪物与地图功能点"; semantic_title.add_theme_font_size_override("font_size", 13); sidebar.add_child(semantic_title)
 	semantic_kind_option = OptionButton.new()
 	for kind: Array in [["NPC","npc"],["普通怪物刷新点","monster_spawn"],["Boss刷新点","boss_spawn"],["地图出入口","door"],["安全区与回城点","safe_area"],["光效点","light"],["区域触发器","region_trigger"]]:
@@ -343,11 +346,23 @@ func _open_template_by_id(template_id: String, document_path := "", workspace_ov
 
 
 func _on_map_template_selected(index: int) -> void:
+	if index < 0 or index >= map_template_option.item_count:
+		return
 	var template_id := str(map_template_option.get_item_metadata(index))
 	var template := MapDesignCatalogService.find_blank_template(template_id)
 	if template.is_empty(): return
 	var design_size: Array = template.get("design_size", [0, 0])
 	template_info_label.text = "所选模板：%d×%d 格；尚未创建时会自动新建并打开" % [int(design_size[0]), int(design_size[1])]
+
+
+func _select_template_for_map_id(map_id: String) -> void:
+	for index in map_template_option.item_count:
+		var template_id := str(map_template_option.get_item_metadata(index))
+		var template := MapDesignCatalogService.find_blank_template(template_id)
+		if str(template.get("map_id", "")) == map_id:
+			map_template_option.select(index)
+			_on_map_template_selected(index)
+			return
 
 
 func _create_map(map_id: String, map_type: String, runtime_map_id: int, display_name: String) -> void:
@@ -359,6 +374,7 @@ func _adopt_new_document(document: Dictionary, status_prefix: String, document_p
 	current_document = document
 	map_id_edit.text = str(current_document.map_id); display_name_edit.text = str(current_document.display_name); runtime_id_edit.value = int(current_document.runtime_map_id)
 	map_type_option.select(_find_type_index(str(current_document.design.map_type)))
+	_select_template_for_map_id(str(current_document.map_id))
 	var design_size: Array = current_document.design.design_size
 	size_label.text = "设计尺寸：%d × %d（64×32 等距格）" % [int(design_size[0]), int(design_size[1])]
 	var resolved_document_path := document_path if not document_path.is_empty() else MapEditorSaveService.default_path(str(current_document.map_id))
@@ -436,6 +452,7 @@ func _open_document_path(path: String) -> bool:
 		MapEditorSaveService.save_document(current_document,path)
 		map_id_edit.text = str(current_document.get("map_id", "")); display_name_edit.text = str(current_document.get("display_name", "")); runtime_id_edit.value = int(current_document.get("runtime_map_id", 0))
 		map_type_option.select(_find_type_index(str(current_document.design.get("map_type", ""))))
+		_select_template_for_map_id(str(current_document.get("map_id", "")))
 		var design_size: Array = current_document.design.get("design_size", [0, 0])
 		size_label.text = "设计尺寸：%d × %d（64×32 等距格）" % [int(design_size[0]), int(design_size[1])]
 		path_label.text = "工作文件：%s" % ProjectSettings.globalize_path(path)
@@ -1017,41 +1034,82 @@ func _on_semantic_tile_clicked(tile: Vector2i) -> void:
 func _on_collision_draw_toggled(enabled: bool) -> void:
 	manual_collision_start = Vector2i(-1, -1)
 	manual_polygon_points.clear()
+	_sync_manual_collision_draft()
 	if enabled:
 		_set_active_tool("manual_collision")
 	elif active_tool_mode == "manual_collision":
 		_set_active_tool("place")
-	status_label.text = "碰撞绘制：左键设置点，右键取消；多边形按 Enter 完成" if enabled else "已返回素材放置"
+	var shape := _selected_collision_shape()
+	collision_instruction_label.text = _collision_shape_help(shape) if enabled else "选择形状后将自动进入碰撞绘制"
+	status_label.text = collision_instruction_label.text if enabled else "已返回素材放置"
+
+
+func _on_collision_shape_selected(_index: int) -> void:
+	manual_collision_start = Vector2i(-1, -1)
+	manual_polygon_points.clear()
+	_set_active_tool("manual_collision")
+	var shape := _selected_collision_shape()
+	collision_instruction_label.text = _collision_shape_help(shape)
+	status_label.text = "已选择%s；%s" % [collision_shape_option.get_item_text(collision_shape_option.selected), collision_instruction_label.text]
+	_sync_manual_collision_draft()
+
+
+func _selected_collision_shape() -> String:
+	if collision_shape_option == null or collision_shape_option.selected < 0:
+		return "rect"
+	return str(collision_shape_option.get_item_metadata(collision_shape_option.selected))
+
+
+func _collision_shape_help(shape: String) -> String:
+	if shape == "polygon":
+		return "多边形：左键逐点，Enter完成；右键取消本次绘制"
+	return "%s：左键点起点和终点；右键取消本次绘制" % ("椭圆" if shape == "ellipse" else "矩形")
+
+
+func _sync_manual_collision_draft() -> void:
+	if preview != null:
+		preview.set_manual_collision_draft(_selected_collision_shape(), manual_collision_start, manual_polygon_points)
 
 
 func _on_manual_collision_tile_clicked(tile: Vector2i) -> void:
-	var shape := str(collision_shape_option.get_item_metadata(collision_shape_option.selected))
+	var shape := _selected_collision_shape()
 	if shape == "polygon":
 		manual_polygon_points.append(tile)
-		status_label.text = "多边形点 %d：(%d,%d)，按 Enter 完成" % [manual_polygon_points.size(), tile.x, tile.y]
+		_sync_manual_collision_draft()
+		status_label.text = "多边形已记录第 %d 点：(%d,%d)，继续左键加点，Enter完成，右键取消" % [manual_polygon_points.size(), tile.x, tile.y]
 		return
 	if manual_collision_start.x < 0:
 		manual_collision_start = tile
-		status_label.text = "碰撞起点：(%d,%d)，请点击终点" % [tile.x, tile.y]
+		_sync_manual_collision_draft()
+		status_label.text = "%s起点：(%d,%d)，请左键点击终点，右键取消" % ["椭圆" if shape == "ellipse" else "矩形", tile.x, tile.y]
 		return
 	var start := manual_collision_start
 	manual_collision_start = Vector2i(-1, -1)
 	var rect := [mini(start.x, tile.x), mini(start.y, tile.y), absi(tile.x - start.x) + 1, absi(tile.y - start.y) + 1]
+	_sync_manual_collision_draft()
 	_commit_manual_collision(shape, {"rect": rect})
 
 
 func _on_manual_collision_cancelled() -> void:
+	var had_unfinished_shape := manual_collision_start.x >= 0 or not manual_polygon_points.is_empty()
 	manual_collision_start = Vector2i(-1, -1)
 	manual_polygon_points.clear()
-	_set_active_tool("place")
-	status_label.text = "已取消手工碰撞绘制，并返回素材放置"
+	_sync_manual_collision_draft()
+	if had_unfinished_shape:
+		status_label.text = "已取消本次碰撞形状；碰撞绘制仍然开启，再次右键可退出"
+		collision_instruction_label.text = _collision_shape_help(_selected_collision_shape())
+	else:
+		_set_active_tool("place")
+		collision_instruction_label.text = "选择形状后将自动进入碰撞绘制"
+		status_label.text = "已退出手工碰撞绘制，并返回素材放置"
 
 
 func _commit_manual_collision(shape: String, data: Dictionary) -> void:
 	var result := MapEditorCollisionService.add_manual_shape(current_document, shape, data)
 	if result.ok:
 		preview.set_walkability_preview(MapEditorCollisionService.build_walkability(current_document), true)
-		status_label.text = "已添加%s碰撞：%s" % [shape, result.collision.collision_id]
+		_sync_manual_collision_draft()
+		status_label.text = "已添加%s碰撞：%s；可以继续绘制，右键退出" % [shape, result.collision.collision_id]
 	else:
 		status_label.text = "碰撞添加失败：%s" % result.get("errors", [])
 
@@ -1086,6 +1144,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			for point: Vector2i in manual_polygon_points: points.append([point.x, point.y])
 			_commit_manual_collision("polygon", {"points": points})
 			manual_polygon_points.clear()
+			_sync_manual_collision_draft()
 		else: status_label.text = "多边形至少需要3个点"
 		get_viewport().set_input_as_handled()
 		return
