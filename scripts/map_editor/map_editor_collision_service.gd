@@ -24,6 +24,46 @@ static func remove_manual_shape_at_tile(document: Dictionary, tile: Vector2i) ->
 	return {"ok": false, "errors": ["manual_collision_not_found_at_tile"]}
 
 
+static func paint_collision_cell(document: Dictionary, tile: Vector2i) -> Dictionary:
+	if not _tile_inside_map(document, tile):
+		return {"ok": false, "errors": ["collision_tile_out_of_bounds"]}
+	var erased_cells: Array = document.layers.get("collision_erase", [])
+	var restored := false
+	for index in range(erased_cells.size() - 1, -1, -1):
+		var entry: Dictionary = erased_cells[index]
+		if _entry_tile(entry) == tile:
+			erased_cells.remove_at(index)
+			restored = true
+	document.layers["collision_erase"] = erased_cells
+	var key := "%d,%d" % [tile.x, tile.y]
+	if build_walkability(document).blocked_tiles.has(key):
+		return {"ok": true, "created": false, "restored": restored, "tile": [tile.x, tile.y]}
+	var added := add_manual_shape(document, "rect", {"rect": [tile.x, tile.y, 1, 1]})
+	added["created"] = bool(added.get("ok", false))
+	added["restored"] = restored
+	added["tile"] = [tile.x, tile.y]
+	return added
+
+
+static func erase_collision_cell(document: Dictionary, tile: Vector2i) -> Dictionary:
+	if not _tile_inside_map(document, tile):
+		return {"ok": false, "errors": ["collision_tile_out_of_bounds"]}
+	var key := "%d,%d" % [tile.x, tile.y]
+	if not build_walkability(document).blocked_tiles.has(key):
+		return {"ok": false, "errors": ["collision_not_found_at_tile"], "tile": [tile.x, tile.y]}
+	var erased_cells: Array = document.layers.get("collision_erase", [])
+	for entry: Dictionary in erased_cells:
+		if _entry_tile(entry) == tile:
+			return {"ok": true, "created": false, "tile": [tile.x, tile.y]}
+	erased_cells.append({
+		"tile": [tile.x, tile.y],
+		"source": "single_cell_erase",
+		"content_layer": "personal_expansion",
+	})
+	document.layers["collision_erase"] = erased_cells
+	return {"ok": true, "created": true, "tile": [tile.x, tile.y]}
+
+
 static func erase_collision_at_tile(document: Dictionary, tile: Vector2i) -> Dictionary:
 	var removed_manual: Array[Dictionary] = []
 	var manual_entries: Array = document.layers.collision
@@ -133,7 +173,27 @@ static func build_walkability(document: Dictionary) -> Dictionary:
 	for manual: Dictionary in document.layers.collision:
 		_mark_manual(blocked, manual, map_size)
 		sources.append({"source":"manual","id":manual.collision_id,"shape":manual.shape})
-	return {"map_size":[map_size.x,map_size.y],"blocked_tiles":blocked,"blocked_count":blocked.size(),"walkable_count":map_size.x*map_size.y-blocked.size(),"sources":sources}
+	var erased_tiles: Array[String] = []
+	for entry: Dictionary in document.layers.get("collision_erase", []):
+		var erased_tile := _entry_tile(entry)
+		if erased_tile.x < 0 or erased_tile.y < 0 or erased_tile.x >= map_size.x or erased_tile.y >= map_size.y:
+			continue
+		var key := "%d,%d" % [erased_tile.x, erased_tile.y]
+		blocked.erase(key)
+		erased_tiles.append(key)
+	return {"map_size":[map_size.x,map_size.y],"blocked_tiles":blocked,"blocked_count":blocked.size(),"walkable_count":map_size.x*map_size.y-blocked.size(),"sources":sources,"erased_tiles":erased_tiles}
+
+
+static func _entry_tile(entry: Dictionary) -> Vector2i:
+	var raw: Array = entry.get("tile", [-1, -1])
+	if raw.size() != 2:
+		return Vector2i(-1, -1)
+	return Vector2i(int(raw[0]), int(raw[1]))
+
+
+static func _tile_inside_map(document: Dictionary, tile: Vector2i) -> bool:
+	var raw_size: Array = document.design.design_size
+	return tile.x >= 0 and tile.y >= 0 and tile.x < int(raw_size[0]) and tile.y < int(raw_size[1])
 
 
 static func _mark_scaled_collision_cells(blocked: Dictionary, instance: Dictionary, map_size: Vector2i) -> void:

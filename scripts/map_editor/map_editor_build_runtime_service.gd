@@ -92,7 +92,12 @@ static func _compile(document: Dictionary, walkability: Dictionary) -> Dictionar
 		"design": document.design.duplicate(true),
 		"ground": {"ground_mode": document.ground.ground_mode, "default_fill_asset_id": document.ground.blank_fill_asset_id, "tile_overrides": MapEditorGroundService.tile_overrides(state)},
 		"instances": instances,
-		"collision": {"blocked_tiles": blocked, "blocked_count": blocked.size(), "manual_shapes": document.layers.get("collision", []).duplicate(true)},
+		"collision": {
+			"blocked_tiles": blocked,
+			"blocked_count": blocked.size(),
+			"manual_shapes": document.layers.get("collision", []).duplicate(true),
+			"erased_cells": document.layers.get("collision_erase", []).duplicate(true),
+		},
 		"semantics": semantic_layers,
 	}
 	output["build_sha256"] = ""

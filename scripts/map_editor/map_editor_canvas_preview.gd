@@ -164,7 +164,7 @@ func _gui_input(event: InputEvent) -> void:
 				selectable_selected.emit(context_id, false)
 				selectable_context_requested.emit(context_id, event.global_position)
 				queue_redraw()
-		elif interaction_mode in ["manual_collision", "manual_collision_erase"]:
+		elif interaction_mode in ["manual_collision", "manual_collision_erase", "manual_collision_erase_whole"]:
 			manual_collision_cancelled.emit()
 		elif interaction_mode == "place" and _region_paint_mode and not _selected_lasso_tiles.is_empty() and Geometry2D.is_point_in_polygon(event.position, _selected_lasso_points):
 			lasso_context_requested.emit(_selected_lasso_tiles.duplicate(), event.global_position)
@@ -197,9 +197,11 @@ func _gui_input(event: InputEvent) -> void:
 				var manual_tile := screen_to_tile(event.position)
 				if manual_tile.x >= 0:
 					_hover_tile = manual_tile
+					if _manual_collision_shape == "cell":
+						_last_drag_tile = manual_tile
 					manual_collision_tile_clicked.emit(manual_tile)
 					queue_redraw()
-			elif interaction_mode == "manual_collision_erase":
+			elif interaction_mode in ["manual_collision_erase", "manual_collision_erase_whole"]:
 				var erase_collision_tile := screen_to_tile(event.position)
 				if erase_collision_tile.x >= 0:
 					_hover_tile = erase_collision_tile
@@ -254,7 +256,10 @@ func _gui_input(event: InputEvent) -> void:
 		elif interaction_mode == "erase" and event.button_mask & MOUSE_BUTTON_MASK_LEFT and tile.x >= 0 and tile != _last_drag_tile:
 			_last_drag_tile = tile
 			erase_tile_requested.emit(tile)
-		elif interaction_mode == "manual_collision_erase" and event.button_mask & MOUSE_BUTTON_MASK_LEFT and tile.x >= 0 and tile != _last_drag_tile:
+		elif interaction_mode == "manual_collision" and _manual_collision_shape == "cell" and event.button_mask & MOUSE_BUTTON_MASK_LEFT and tile.x >= 0 and tile != _last_drag_tile:
+			_last_drag_tile = tile
+			manual_collision_tile_clicked.emit(tile)
+		elif interaction_mode in ["manual_collision_erase", "manual_collision_erase_whole"] and event.button_mask & MOUSE_BUTTON_MASK_LEFT and tile.x >= 0 and tile != _last_drag_tile:
 			_last_drag_tile = tile
 			manual_collision_erase_requested.emit(tile)
 	if event is InputEventKey and event.pressed and not event.echo and interaction_mode=="select" and not selected_selectable_id.is_empty():
@@ -349,9 +354,10 @@ func _draw() -> void:
 
 
 func _draw_manual_collision_draft(design_size: Vector2i, offset: Vector2, scale_factor: float) -> void:
-	if interaction_mode == "manual_collision_erase":
+	if interaction_mode in ["manual_collision_erase", "manual_collision_erase_whole"]:
 		var erase_color := Color("ff6b5f")
-		draw_string(ThemeDB.fallback_font, Vector2(18, 28), "擦除碰撞：手工和素材自带碰撞", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, erase_color)
+		var erase_label := "单格擦除碰撞" if interaction_mode == "manual_collision_erase" else "整块擦除碰撞"
+		draw_string(ThemeDB.fallback_font, Vector2(18, 28), erase_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, erase_color)
 		if _hover_tile.x >= 0:
 			var tile_outline := PackedVector2Array()
 			for tile_point: Vector2 in [Vector2(_hover_tile), Vector2(_hover_tile.x + 1, _hover_tile.y), Vector2(_hover_tile) + Vector2.ONE, Vector2(_hover_tile.x, _hover_tile.y + 1), Vector2(_hover_tile)]:
@@ -362,7 +368,15 @@ func _draw_manual_collision_draft(design_size: Vector2i, offset: Vector2, scale_
 	if interaction_mode != "manual_collision":
 		return
 	var color := Color("ffb84d")
-	draw_string(ThemeDB.fallback_font, Vector2(18, 28), "手工碰撞：%s" % {"rect":"矩形", "ellipse":"椭圆", "polygon":"多边形"}.get(_manual_collision_shape, _manual_collision_shape), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, color)
+	draw_string(ThemeDB.fallback_font, Vector2(18, 28), "手工碰撞：%s" % {"cell":"单格", "rect":"矩形", "ellipse":"椭圆", "polygon":"多边形"}.get(_manual_collision_shape, _manual_collision_shape), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, color)
+	if _manual_collision_shape == "cell":
+		if _hover_tile.x >= 0:
+			var cell_outline := PackedVector2Array()
+			for tile_point: Vector2 in [Vector2(_hover_tile), Vector2(_hover_tile.x + 1, _hover_tile.y), Vector2(_hover_tile) + Vector2.ONE, Vector2(_hover_tile.x, _hover_tile.y + 1), Vector2(_hover_tile)]:
+				cell_outline.append(offset + MapEditorCoordinate.tile_to_ground_px(tile_point, design_size) * scale_factor)
+			draw_colored_polygon(cell_outline, Color(color, 0.24))
+			draw_polyline(cell_outline, color, 3.0)
+		return
 	if _manual_collision_shape == "polygon":
 		var screen_points := PackedVector2Array()
 		for tile: Vector2i in _manual_collision_points:

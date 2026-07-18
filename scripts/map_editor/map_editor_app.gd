@@ -34,6 +34,7 @@ var object_role_option: OptionButton
 var collision_shape_option: OptionButton
 var collision_draw_toggle: CheckBox
 var collision_erase_toggle: CheckBox
+var collision_erase_whole_toggle: CheckBox
 var collision_instruction_label: Label
 var manual_collision_start := Vector2i(-1, -1)
 var manual_polygon_points: Array[Vector2i] = []
@@ -141,12 +142,13 @@ func _build_ui() -> void:
 	var walkable_button := CheckBox.new(); walkable_button.text = "显示不可走区域"; walkable_button.toggled.connect(_on_walkable_preview_toggled); sidebar.add_child(walkable_button)
 	var collision_title := Label.new(); collision_title.text = "手工碰撞"; collision_title.add_theme_font_size_override("font_size", 13); sidebar.add_child(collision_title)
 	collision_shape_option = OptionButton.new()
-	for shape: Array in [["矩形（两点）","rect"],["椭圆（两点）","ellipse"],["多边形（逐点，Enter完成）","polygon"]]:
+	for shape: Array in [["单格（左键点击或拖动）","cell"],["矩形（两点）","rect"],["椭圆（两点）","ellipse"],["多边形（逐点，Enter完成）","polygon"]]:
 		collision_shape_option.add_item(shape[0]); collision_shape_option.set_item_metadata(collision_shape_option.item_count-1,shape[1])
 	collision_shape_option.item_selected.connect(_on_collision_shape_selected)
 	sidebar.add_child(collision_shape_option)
 	collision_draw_toggle = CheckBox.new(); collision_draw_toggle.text = "在画布绘制碰撞（右键取消）"; collision_draw_toggle.toggled.connect(_on_collision_draw_toggled); sidebar.add_child(collision_draw_toggle)
-	collision_erase_toggle = CheckBox.new(); collision_erase_toggle.text = "擦除碰撞（手工和素材自带；左键点击或拖动，右键退出）"; collision_erase_toggle.toggled.connect(_on_collision_erase_toggled); sidebar.add_child(collision_erase_toggle)
+	collision_erase_toggle = CheckBox.new(); collision_erase_toggle.text = "单格擦除碰撞（左键点击或拖动，右键退出）"; collision_erase_toggle.toggled.connect(_on_collision_erase_toggled); sidebar.add_child(collision_erase_toggle)
+	collision_erase_whole_toggle = CheckBox.new(); collision_erase_whole_toggle.text = "整块擦除碰撞（删除形状或禁用素材碰撞）"; collision_erase_whole_toggle.toggled.connect(_on_collision_erase_whole_toggled); sidebar.add_child(collision_erase_whole_toggle)
 	collision_instruction_label = Label.new(); collision_instruction_label.text = "选择形状后将自动进入碰撞绘制"; collision_instruction_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; collision_instruction_label.modulate = Color("d7aa62"); sidebar.add_child(collision_instruction_label)
 	var semantic_title := Label.new(); semantic_title.text = "NPC、怪物与地图功能点"; semantic_title.add_theme_font_size_override("font_size", 13); sidebar.add_child(semantic_title)
 	semantic_kind_option = OptionButton.new()
@@ -727,13 +729,14 @@ func _activate_select_tool()->void:
 
 
 func _set_active_tool(mode: String) -> void:
-	if mode not in ["place", "select", "lasso", "erase", "manual_collision", "manual_collision_erase", "semantic"]:
+	if mode not in ["place", "select", "lasso", "erase", "manual_collision", "manual_collision_erase", "manual_collision_erase_whole", "semantic"]:
 		return
 	active_tool_mode = mode
 	if random_region_fill_toggle != null: random_region_fill_toggle.set_pressed_no_signal(mode == "lasso")
 	if point_erase_toggle != null: point_erase_toggle.set_pressed_no_signal(mode == "erase")
 	if collision_draw_toggle != null: collision_draw_toggle.set_pressed_no_signal(mode == "manual_collision")
 	if collision_erase_toggle != null: collision_erase_toggle.set_pressed_no_signal(mode == "manual_collision_erase")
+	if collision_erase_whole_toggle != null: collision_erase_whole_toggle.set_pressed_no_signal(mode == "manual_collision_erase_whole")
 	if semantic_place_toggle != null: semantic_place_toggle.set_pressed_no_signal(mode == "semantic")
 	if preview == null:
 		return
@@ -741,7 +744,7 @@ func _set_active_tool(mode: String) -> void:
 		preview.activate_normal_placement(selected_asset_id)
 	else:
 		preview.set_region_paint_mode(mode == "lasso")
-		preview.set_interaction_mode({"select":"select", "lasso":"place", "erase":"erase", "manual_collision":"manual_collision", "manual_collision_erase":"manual_collision_erase", "semantic":"semantic"}.get(mode, "place"))
+		preview.set_interaction_mode({"select":"select", "lasso":"place", "erase":"erase", "manual_collision":"manual_collision", "manual_collision_erase":"manual_collision_erase", "manual_collision_erase_whole":"manual_collision_erase_whole", "semantic":"semantic"}.get(mode, "place"))
 	preview.grab_focus()
 
 
@@ -1055,12 +1058,27 @@ func _on_collision_erase_toggled(enabled: bool) -> void:
 	if enabled:
 		_set_active_tool("manual_collision_erase")
 		preview.set_walkability_preview(MapEditorCollisionService.build_walkability(current_document), true)
-		collision_instruction_label.text = "擦除模式：左键点击或拖过碰撞区域；同时清除手工碰撞和当前地图中的素材碰撞"
-		status_label.text = "已开启碰撞擦除；右键退出"
+		collision_instruction_label.text = "单格擦除：左键点击或拖动；每次只把鼠标所在的一格改为可走"
+		status_label.text = "已开启单格碰撞擦除；右键退出"
 	elif active_tool_mode == "manual_collision_erase":
 		_set_active_tool("place")
 		collision_instruction_label.text = "选择形状后将自动进入碰撞绘制"
-		status_label.text = "已退出手工碰撞擦除，并返回素材放置"
+		status_label.text = "已退出单格碰撞擦除，并返回素材放置"
+
+
+func _on_collision_erase_whole_toggled(enabled: bool) -> void:
+	manual_collision_start = Vector2i(-1, -1)
+	manual_polygon_points.clear()
+	_sync_manual_collision_draft()
+	if enabled:
+		_set_active_tool("manual_collision_erase_whole")
+		preview.set_walkability_preview(MapEditorCollisionService.build_walkability(current_document), true)
+		collision_instruction_label.text = "整块擦除：删除命中的完整手工形状，并禁用命中素材的当前地图碰撞"
+		status_label.text = "已开启整块碰撞擦除；右键退出"
+	elif active_tool_mode == "manual_collision_erase_whole":
+		_set_active_tool("place")
+		collision_instruction_label.text = "选择形状后将自动进入碰撞绘制"
+		status_label.text = "已退出整块碰撞擦除，并返回素材放置"
 
 
 func _on_collision_shape_selected(_index: int) -> void:
@@ -1080,6 +1098,8 @@ func _selected_collision_shape() -> String:
 
 
 func _collision_shape_help(shape: String) -> String:
+	if shape == "cell":
+		return "单格：左键点击或拖动，每次只增加一格碰撞；右键退出"
 	if shape == "polygon":
 		return "多边形：左键逐点，Enter完成；右键取消本次绘制"
 	return "%s：左键点起点和终点；右键取消本次绘制" % ("椭圆" if shape == "ellipse" else "矩形")
@@ -1092,6 +1112,14 @@ func _sync_manual_collision_draft() -> void:
 
 func _on_manual_collision_tile_clicked(tile: Vector2i) -> void:
 	var shape := _selected_collision_shape()
+	if shape == "cell":
+		var cell_result := MapEditorCollisionService.paint_collision_cell(current_document, tile)
+		if cell_result.ok:
+			preview.set_walkability_preview(MapEditorCollisionService.build_walkability(current_document), true)
+			status_label.text = "已绘制单格碰撞：(%d,%d)；点击“保存地图”写入工作文件" % [tile.x, tile.y]
+		else:
+			status_label.text = "单格碰撞绘制失败：%s" % cell_result.get("errors", [])
+		return
 	if shape == "polygon":
 		manual_polygon_points.append(tile)
 		_sync_manual_collision_draft()
@@ -1110,10 +1138,10 @@ func _on_manual_collision_tile_clicked(tile: Vector2i) -> void:
 
 
 func _on_manual_collision_cancelled() -> void:
-	if active_tool_mode == "manual_collision_erase":
+	if active_tool_mode in ["manual_collision_erase", "manual_collision_erase_whole"]:
 		_set_active_tool("place")
 		collision_instruction_label.text = "选择形状后将自动进入碰撞绘制"
-		status_label.text = "已退出手工碰撞擦除，并返回素材放置"
+		status_label.text = "已退出碰撞擦除，并返回素材放置"
 		return
 	var had_unfinished_shape := manual_collision_start.x >= 0 or not manual_polygon_points.is_empty()
 	manual_collision_start = Vector2i(-1, -1)
@@ -1129,11 +1157,15 @@ func _on_manual_collision_cancelled() -> void:
 
 
 func _on_manual_collision_erase_requested(tile: Vector2i) -> void:
-	var result := MapEditorCollisionService.erase_collision_at_tile(current_document, tile)
+	var whole_shape := active_tool_mode == "manual_collision_erase_whole"
+	var result := MapEditorCollisionService.erase_collision_at_tile(current_document, tile) if whole_shape else MapEditorCollisionService.erase_collision_cell(current_document, tile)
 	if result.ok:
 		preview.set_walkability_preview(MapEditorCollisionService.build_walkability(current_document), true)
 		preview.queue_redraw()
-		status_label.text = "已擦除碰撞：手工形状 %d 个，素材实例 %d 个；点击“保存地图”写入工作文件" % [int(result.manual_count), int(result.instance_count)]
+		if whole_shape:
+			status_label.text = "已整块擦除：手工形状 %d 个，素材实例 %d 个；点击“保存地图”" % [int(result.manual_count), int(result.instance_count)]
+		else:
+			status_label.text = "已单格擦除碰撞：(%d,%d)；点击“保存地图”写入工作文件" % [tile.x, tile.y]
 	else:
 		status_label.text = "该格没有可擦除的碰撞"
 

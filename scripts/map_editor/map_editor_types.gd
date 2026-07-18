@@ -10,7 +10,7 @@ const DEFAULT_CONTENT_LAYER := "personal_expansion"
 
 const LAYER_NAMES: Array[String] = [
 	"ground_base", "ground_overlay", "terrain_base", "terrain_front", "object_base", "object_front",
-	"shadow", "collision", "npc_points", "monster_spawn", "boss_spawn", "door_points",
+	"shadow", "collision", "collision_erase", "npc_points", "monster_spawn", "boss_spawn", "door_points",
 	"safe_area", "interactables", "region_semantics", "light", "region_trigger", "editor_guides",
 ]
 
