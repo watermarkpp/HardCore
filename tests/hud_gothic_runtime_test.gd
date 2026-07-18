@@ -20,6 +20,8 @@ func _run() -> void:
 	assert(hud.has_method("set_skill_button_assignments"), "HUD 缺少七槽技能配置注入方法")
 	assert(hud.has_signal("revival_requested"), "HUD 没有转发复活请求")
 	assert(hud.has_method("show_death_screen"), "HUD 缺少死亡界面入口")
+	assert(hud.has_method("show_loot_feedback"), "HUD 缺少结构化拾取反馈入口")
+	assert(hud.get("loot_feedback_layer") != null, "HUD 没有接入战利品反馈层")
 	var death_panel: Control = hud.get("death_revival_panel") as Control
 	assert(death_panel != null and not death_panel.visible, "死亡界面没有以隐藏状态接入 HUD")
 

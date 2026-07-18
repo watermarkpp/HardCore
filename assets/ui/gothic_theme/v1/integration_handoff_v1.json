@@ -167,6 +167,33 @@
         "Apply each revival exactly once and return the result through GameHUD.apply_revival_result.",
         "Prevent Android back actions from bypassing the required death choice."
       ]
+    },
+    {
+      "id": "ui-handoff.loot-feedback-runtime",
+      "priority": "P0",
+      "status": "RULE_DECISION_REQUIRED",
+      "contractId": "ui.loot.feedback.v1",
+      "confirmedInventoryCapacitySlots": 100,
+      "stableVisualIds": [
+        "loot.ground_label",
+        "loot.feedback.normal",
+        "loot.feedback.inventory_full",
+        "loot.feedback.rare_drop"
+      ],
+      "integrationOwnedFiles": [
+        "res://scripts/game_root.gd",
+        "res://scripts/player_state.gd",
+        "loot transaction and classification runtime"
+      ],
+      "requiredActions": [
+        "Give every ground drop a stable drop_id and retain item, count, source, and boss provenance.",
+        "Enforce the confirmed 100-slot inventory capacity while allowing valid stack merges.",
+        "Return an explicit pickup transaction result and remove the ground drop only after success.",
+        "Keep failed pickups on the ground and emit pickup_failed with an accurate reason.",
+        "Supply normal, rare, high_value, or boss emphasis from gameplay data.",
+        "Use the shared LootGroundLabel component instead of constructing a bare Label in loot_pickup.gd.",
+        "Prevent duplicate collection of the same drop_id."
+      ]
     }
   ],
   "userVisibleWarningsUntilIntegrated": [
@@ -177,6 +204,7 @@
     "The shop sell page has no gameplay quote or transaction consumer.",
     "Seven skill-button assignments are not fully persisted or executed.",
     "World-map teleport availability and arrival anchors are not supplied by runtime.",
-    "The formal death flow still auto-revives in town and does not wait for the new revival UI."
+    "The formal death flow still auto-revives in town and does not wait for the new revival UI.",
+    "Inventory-full failures, boss provenance, and high-value classification are not yet connected to the formal pickup flow."
   ]
 }

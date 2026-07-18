@@ -7,6 +7,7 @@ const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const HUDResourceOrbScript := preload("res://scripts/hud_resource_orb.gd")
 const HUDSkillIconCatalogScript := preload("res://scripts/hud_skill_icon_catalog.gd")
 const DeathRevivalPanelScript := preload("res://scripts/death_revival_panel.gd")
+const LootFeedbackLayerScript := preload("res://scripts/loot_feedback_layer.gd")
 const HUDTargetBarTexture := preload("res://assets/ui/gothic_hud/v2/runtime/target_bar_v2.png")
 const HUDUtilityStackTexture := preload("res://assets/ui/gothic_hud/v2/runtime/utility_stack_v2.png")
 const HUDJoystickTexture := preload("res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png")
@@ -46,6 +47,7 @@ var profession_panel: ProfessionPanel
 var map_panel: MapPanel
 var warehouse_panel: WarehousePanel
 var death_revival_panel
+var loot_feedback_layer
 var quick_buttons: Array[Button] = []
 var health_orb: Control
 var mana_orb: Control
@@ -82,6 +84,7 @@ func _build_approved_hud() -> void:
 
 	_build_hidden_compatibility_info(root)
 	_build_target_bar(root)
+	_build_loot_feedback(root)
 	_build_right_utility_stack(root)
 	_build_bottom_chassis(root)
 	_build_combat_controls(root)
@@ -159,6 +162,12 @@ func _build_target_bar(root: Control) -> void:
 	target_label.add_theme_font_size_override("font_size", 18)
 	target_label.add_theme_color_override("font_color", Color("e7c38c"))
 	target_panel.add_child(target_label)
+
+
+func _build_loot_feedback(root: Control) -> void:
+	loot_feedback_layer = LootFeedbackLayerScript.new()
+	loot_feedback_layer.name = "LootFeedbackLayer"
+	root.add_child(loot_feedback_layer)
 
 
 func _build_right_utility_stack(root: Control) -> void:
@@ -636,9 +645,18 @@ func set_auto_target_enabled(enabled: bool) -> void:
 
 
 func show_loot(item_name: String) -> void:
-	if loot_label != null:
-		loot_label.text = "获得：%s" % item_name
-		_loot_message_timer = 2.0
+	show_loot_feedback({
+		"event_type": "pickup_success",
+		"item_name": item_name,
+		"count": 1,
+		"item_kind": GameData.get_item_kind(item_name),
+		"emphasis": "normal",
+	})
+
+
+func show_loot_feedback(event: Dictionary) -> void:
+	if loot_feedback_layer != null:
+		loot_feedback_layer.show_feedback(event)
 
 
 func update_profile() -> void:
