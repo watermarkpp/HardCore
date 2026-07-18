@@ -47,6 +47,24 @@ func _ready() -> void:
 	var tile := Vector2(73, 81)
 	var px := MapEditorCoordinate.tile_to_ground_px(tile, Vector2i(256, 256))
 	assert(MapEditorCoordinate.ground_px_to_tile(px, Vector2i(256, 256)).is_equal_approx(tile))
+	var cell := Vector2i(17, 23)
+	var cell_center := MapEditorCoordinate.cell_center_to_ground_px(cell, Vector2i(80, 80))
+	var cell_corners := [
+		MapEditorCoordinate.tile_to_ground_px(cell, Vector2i(80, 80)),
+		MapEditorCoordinate.tile_to_ground_px(cell + Vector2i(1, 0), Vector2i(80, 80)),
+		MapEditorCoordinate.tile_to_ground_px(cell + Vector2i(1, 1), Vector2i(80, 80)),
+		MapEditorCoordinate.tile_to_ground_px(cell + Vector2i(0, 1), Vector2i(80, 80)),
+	]
+	assert(cell_center.is_equal_approx((cell_corners[0] + cell_corners[1] + cell_corners[2] + cell_corners[3]) / 4.0))
+	assert(MapEditorCoordinate.ground_px_to_cell(cell_center, Vector2i(80, 80)) == cell)
+	var normalized_stone_asset := MapAssetCatalogService.find_asset("user.184ef6b47ee6739e")
+	assert(str(normalized_stone_asset.get("normalized_ground_asset_id", "")) == "ground.stone.007")
+	assert(str(normalized_stone_asset.get("image", "")).ends_with("ground_stone_007.png"))
+	assert(normalized_stone_asset.get("canvas_size", []) == [64, 32])
+	assert(normalized_stone_asset.get("anchor_px", []) == [32, 16])
+	assert(is_equal_approx(float(normalized_stone_asset.get("approved_scale", 0.0)), 1.0))
+	var normalized_stone := MapEditorGroundService.normalized_ground_image("user.184ef6b47ee6739e")
+	assert(normalized_stone != null and normalized_stone.get_size() == Vector2i(64, 32))
 	var counter := [0]
 	var stack := MapEditorCommandStack.new()
 	assert(stack.execute({"do": func(): counter[0] += 1, "undo": func(): counter[0] -= 1}))

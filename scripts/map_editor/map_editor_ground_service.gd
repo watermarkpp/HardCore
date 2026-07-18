@@ -4,6 +4,7 @@ extends RefCounted
 const GROUND_SCHEMA_VERSION := 1
 const MANIFEST_FILE := "ground_manifest.json"
 const STATE_FILE := "ground_state.json"
+static var _normalized_ground_image_cache: Dictionary = {}
 
 
 static func initialize(document: Dictionary) -> Dictionary:
@@ -71,7 +72,7 @@ static func _record_tile_batch(document: Dictionary, paints: Array[Dictionary]) 
 		var tile := Vector2i(int(raw_tile[0]), int(raw_tile[1]))
 		if not MapEditorCoordinate.contains_tile(tile, design_size):
 			return {"ok": false, "errors": ["tile_out_of_bounds"]}
-		var ground_px := MapEditorCoordinate.tile_to_ground_px(tile, design_size)
+		var ground_px := MapEditorCoordinate.cell_center_to_ground_px(tile, design_size)
 		var chunk_id := chunk_id_for_grid(MapEditorCoordinate.chunk_grid_for_ground_px(ground_px, chunk_size))
 		var chunk_index := -1
 		for index in chunks.size():
@@ -118,6 +119,34 @@ static func tile_overrides(state: Dictionary) -> Dictionary:
 	return overrides
 
 
+static func normalized_ground_image(asset_id: String) -> Image:
+	if _normalized_ground_image_cache.has(asset_id):
+		return _normalized_ground_image_cache[asset_id]
+	var asset := MapAssetCatalogService.find_asset(asset_id)
+	var image_path := str(asset.get("image", ""))
+	if image_path.is_empty():
+		return null
+	var image := Image.load_from_file(ProjectSettings.globalize_path("res://" + image_path))
+	if image == null or image.is_empty():
+		return null
+	var visible_rect := image.get_used_rect()
+	if visible_rect.size.x > 0 and visible_rect.size.y > 0 and visible_rect != Rect2i(Vector2i.ZERO, image.get_size()):
+		image = image.get_region(visible_rect)
+	if image.get_size() != Vector2i(64, 32):
+		image.resize(64, 32, Image.INTERPOLATE_BILINEAR)
+	if image.get_format() != Image.FORMAT_RGBA8:
+		image.convert(Image.FORMAT_RGBA8)
+	for y in 32:
+		for x in 64:
+			var diamond_distance := absf((float(x) + 0.5 - 32.0) / 32.0) + absf((float(y) + 0.5 - 16.0) / 16.0)
+			if diamond_distance > 1.0:
+				var pixel := image.get_pixel(x, y)
+				pixel.a = 0.0
+				image.set_pixel(x, y, pixel)
+	_normalized_ground_image_cache[asset_id] = image
+	return image
+
+
 static func save_manifest_and_state(manifest_path: String, manifest: Dictionary, state_path: String, state: Dictionary) -> Dictionary:
 	var write_manifest := _write_json_atomic(manifest_path, manifest)
 	if not write_manifest.ok:
@@ -137,7 +166,7 @@ static func _record_operation(document: Dictionary, tile: Vector2i, operation_da
 	var manifest: Dictionary = initialized.manifest
 	var state: Dictionary = initialized.state
 	var chunk_size := Vector2i(int(manifest.chunk_size_px[0]), int(manifest.chunk_size_px[1]))
-	var ground_px := MapEditorCoordinate.tile_to_ground_px(tile, design_size)
+	var ground_px := MapEditorCoordinate.cell_center_to_ground_px(tile, design_size)
 	var grid := MapEditorCoordinate.chunk_grid_for_ground_px(ground_px, chunk_size)
 	var chunk_id := chunk_id_for_grid(grid)
 	var chunks: Array = manifest.chunks

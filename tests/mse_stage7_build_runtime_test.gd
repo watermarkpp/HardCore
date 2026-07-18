@@ -3,6 +3,7 @@ extends Node
 
 func _ready() -> void:
 	var document := MapEditorTypes.new_map("stage7_runtime", 990007, "Stage 7", Vector2i(32, 32))
+	document.editor_meta.workspace = "user://mse_stage7_runtime_%s" % str(Time.get_ticks_usec())
 	var ground := MapEditorGroundService.initialize(document)
 	assert(ground.ok)
 	var npc := MapEditorGameplaySemanticService.add_entry(document, "npc", Vector2i(3, 3), {"content_id": "npc.bich_guard", "npc_id": "npc.bich_guard"})

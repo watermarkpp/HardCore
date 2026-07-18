@@ -21,6 +21,7 @@ var show_grid := true
 var grid_interval := 1
 var _ground_texture: Texture2D
 var _texture_cache := {}
+var _ground_tile_texture_cache := {}
 var _paint_overrides := {}
 var _baked_ground_chunks: Array[Dictionary] = []
 var _ground_overlay_keys := {}
@@ -324,7 +325,7 @@ func _tiles_inside_lasso(points: PackedVector2Array) -> Array[Vector2i]:
 	max_tile = Vector2i(mini(design_size.x - 1, max_tile.x + 2), mini(design_size.y - 1, max_tile.y + 2))
 	for y in range(min_tile.y, max_tile.y + 1):
 		for x in range(min_tile.x, max_tile.x + 1):
-			var center := _draw_offset + MapEditorCoordinate.tile_to_ground_px(Vector2(x, y), design_size) * _draw_scale
+			var center := _draw_offset + MapEditorCoordinate.cell_center_to_ground_px(Vector2(x, y), design_size) * _draw_scale
 			if Geometry2D.is_point_in_polygon(center, points):
 				result.append(Vector2i(x, y))
 	return result
@@ -336,8 +337,7 @@ func screen_to_tile(screen_position: Vector2) -> Vector2i:
 	var raw_size: Array = document.design.design_size
 	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var ground_px := (screen_position - _draw_offset) / _draw_scale
-	var tile := MapEditorCoordinate.ground_px_to_tile(ground_px, design_size).round()
-	var result := Vector2i(int(tile.x), int(tile.y))
+	var result := MapEditorCoordinate.ground_px_to_cell(ground_px, design_size)
 	return result if MapEditorCoordinate.contains_tile(result, design_size) else Vector2i(-1, -1)
 
 
@@ -458,7 +458,7 @@ func _draw_lasso_selection(design_size: Vector2i, offset: Vector2, scale_factor:
 			draw_colored_polygon(points, Color(0.22, 0.68, 0.92, 0.14))
 	if not _selected_lasso_tiles.is_empty():
 		for tile: Vector2i in _selected_lasso_tiles:
-			var center := offset + MapEditorCoordinate.tile_to_ground_px(Vector2(tile.x, tile.y), design_size) * scale_factor
+			var center := offset + MapEditorCoordinate.cell_center_to_ground_px(Vector2(tile.x, tile.y), design_size) * scale_factor
 			draw_circle(center, maxf(1.5, 2.5 * scale_factor), Color(0.35, 0.9, 1.0, 0.8))
 
 
@@ -502,7 +502,7 @@ func _hit_selectable(screen_position: Vector2) -> String:
 		var hit_rect: Rect2 = geometry.rect.grow(4.0)
 		if hit_rect.has_point(screen_position): return str(instance.instance_id)
 	for entry: Dictionary in MapEditorGameplaySemanticService.all_entries(document):
-		var raw:Array=entry.get("tile",[0,0]); var center:=_draw_offset+MapEditorCoordinate.tile_to_ground_px(Vector2(raw[0],raw[1]),design_size)*_draw_scale
+		var raw:Array=entry.get("tile",[0,0]); var center:=_draw_offset+MapEditorCoordinate.cell_center_to_ground_px(Vector2(raw[0],raw[1]),design_size)*_draw_scale
 		if center.distance_to(screen_position)<=14.0:return str(entry.get("semantic_id",""))
 	return ""
 
@@ -551,7 +551,7 @@ func _draw_blocked_tiles(design_size: Vector2i, offset: Vector2, scale_factor: f
 		if parts.size() != 2:
 			continue
 		var tile := Vector2i(int(parts[0]), int(parts[1]))
-		var center := MapEditorCoordinate.tile_to_ground_px(tile, design_size)
+		var center := MapEditorCoordinate.cell_center_to_ground_px(tile, design_size)
 		var polygon := PackedVector2Array([
 			offset + (center + Vector2(0, -16)) * scale_factor,
 			offset + (center + Vector2(32, 0)) * scale_factor,
@@ -564,7 +564,7 @@ func _draw_blocked_tiles(design_size: Vector2i, offset: Vector2, scale_factor: f
 func _draw_semantics(design_size: Vector2i, offset: Vector2, scale_factor: float) -> void:
 	for entry: Dictionary in MapEditorGameplaySemanticService.all_entries(document):
 		var raw_tile: Array = entry.get("tile", [0, 0])
-		var center := offset + MapEditorCoordinate.tile_to_ground_px(Vector2(int(raw_tile[0]), int(raw_tile[1])), design_size) * scale_factor
+		var center := offset + MapEditorCoordinate.cell_center_to_ground_px(Vector2(int(raw_tile[0]), int(raw_tile[1])), design_size) * scale_factor
 		var kind := str(entry.get("kind", ""))
 		var colors := {"npc": Color("7fc8ff"), "monster_spawn": Color("d96868"), "boss_spawn": Color("f29c38"), "door": Color("bd8eff"), "safe_area": Color("61d69b"), "light": Color("ffe08a"), "region_trigger": Color("6ee7df")}
 		var color: Color = colors.get(kind, Color.WHITE)
@@ -627,10 +627,10 @@ func _draw_virtual_ground(design_size: Vector2i, offset: Vector2, scale_factor: 
 			if parts.size() != 2:
 				continue
 			var tile := Vector2i(int(parts[0]), int(parts[1]))
-			var center := MapEditorCoordinate.tile_to_ground_px(Vector2(tile.x, tile.y), design_size)
+			var center := MapEditorCoordinate.cell_center_to_ground_px(Vector2(tile.x, tile.y), design_size)
 			if not _ground_tile_is_visible(center, offset, scale_factor):
 				continue
-			var texture := _texture_for_asset(str(_paint_overrides[key]))
+			var texture := _ground_tile_texture_for_asset(str(_paint_overrides[key]))
 			if texture != null:
 				draw_texture_rect(texture, Rect2(center - Vector2(32, 16), Vector2(64, 32)), false)
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
@@ -650,10 +650,10 @@ func _draw_virtual_ground(design_size: Vector2i, offset: Vector2, scale_factor: 
 		if parts.size() != 2:
 			continue
 		var tile := Vector2i(int(parts[0]), int(parts[1]))
-		var center := MapEditorCoordinate.tile_to_ground_px(Vector2(tile.x, tile.y), design_size)
+		var center := MapEditorCoordinate.cell_center_to_ground_px(Vector2(tile.x, tile.y), design_size)
 		if not _ground_tile_is_visible(center, offset, scale_factor):
 			continue
-		var texture := _texture_for_asset(str(_paint_overrides[key]))
+		var texture := _ground_tile_texture_for_asset(str(_paint_overrides[key]))
 		if texture != null:
 			draw_texture_rect(texture, Rect2(center - Vector2(32, 16), Vector2(64, 32)), false)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
@@ -676,6 +676,17 @@ func _texture_for_asset(asset_id: String) -> Texture2D:
 		return _ground_texture
 	var texture := load("res://" + image_path) as Texture2D
 	_texture_cache[asset_id] = texture
+	return texture
+
+
+func _ground_tile_texture_for_asset(asset_id: String) -> Texture2D:
+	if _ground_tile_texture_cache.has(asset_id):
+		return _ground_tile_texture_cache[asset_id]
+	var image := MapEditorGroundService.normalized_ground_image(asset_id)
+	if image == null:
+		return null
+	var texture := ImageTexture.create_from_image(image)
+	_ground_tile_texture_cache[asset_id] = texture
 	return texture
 
 

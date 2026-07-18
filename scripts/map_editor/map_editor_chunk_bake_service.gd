@@ -68,7 +68,7 @@ static func _bake_chunk_png(chunk: Dictionary, design_size: Vector2i, overrides:
 			var tile_image: Image = _asset_image(asset_id, cache)
 			if tile_image == null:
 				return {"ok": false, "errors": ["tile_image_missing:%s" % asset_id]}
-			var center := MapEditorCoordinate.tile_to_ground_px(Vector2(x, y), design_size)
+			var center := MapEditorCoordinate.cell_center_to_ground_px(Vector2(x, y), design_size)
 			var destination := Vector2i(roundi(center.x) - 32 - rect_position.x, roundi(center.y) - 16 - rect_position.y)
 			var destination_rect := Rect2i(destination, tile_image.get_size())
 			var intersection := destination_rect.intersection(Rect2i(Vector2i.ZERO, rect_size))
@@ -119,18 +119,7 @@ static func _candidate_tile_rect(rect_position: Vector2i, rect_size: Vector2i, d
 static func _asset_image(asset_id: String, cache: Dictionary) -> Image:
 	if cache.has(asset_id):
 		return cache[asset_id]
-	var asset := MapAssetCatalogService.find_asset(asset_id)
-	var image_path := str(asset.get("image", ""))
-	if image_path.is_empty():
-		for candidate: Dictionary in MapAssetCatalogService.all_assets():
-			if str(candidate.get("asset_type", "")) == "ground_brush":
-				image_path = str(candidate.get("image", ""))
-				break
-	if image_path.is_empty():
-		return null
-	var image := Image.load_from_file(ProjectSettings.globalize_path("res://" + image_path))
-	if image != null and image.get_size() != Vector2i(64, 32):
-		image.resize(64, 32, Image.INTERPOLATE_BILINEAR)
+	var image := MapEditorGroundService.normalized_ground_image(asset_id)
 	cache[asset_id] = image
 	return image
 

@@ -18,12 +18,21 @@ static func tile_to_ground_px(tile: Vector2, design_size: Vector2i) -> Vector2:
 	return Vector2(origin.x + (tile.x - tile.y) * HALF_TILE_W, origin.y + (tile.x + tile.y) * HALF_TILE_H)
 
 
+static func cell_center_to_ground_px(cell: Vector2, design_size: Vector2i) -> Vector2:
+	return tile_to_ground_px(cell + Vector2(0.5, 0.5), design_size)
+
+
 static func ground_px_to_tile(ground_px: Vector2, design_size: Vector2i) -> Vector2:
 	var relative := ground_px - origin_px(design_size)
 	return Vector2(
 		(relative.y / HALF_TILE_H + relative.x / HALF_TILE_W) * 0.5,
 		(relative.y / HALF_TILE_H - relative.x / HALF_TILE_W) * 0.5,
 	)
+
+
+static func ground_px_to_cell(ground_px: Vector2, design_size: Vector2i) -> Vector2i:
+	var lattice := ground_px_to_tile(ground_px, design_size)
+	return Vector2i(floori(lattice.x), floori(lattice.y))
 
 
 static func tile_to_world(tile: Vector2, design_size: Vector2i) -> Vector2:

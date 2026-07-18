@@ -2,6 +2,7 @@ class_name MapAssetCatalogService
 extends RefCounted
 
 const CATALOG_PATH := "res://assets/data/assets/map_asset_catalog.json"
+const IMPORT_CATALOG_PATH := "res://assets/data/assets/map_asset_import_catalog.json"
 const EXTENSION_CATALOG_PATHS := [
 	"res://assets/data/assets/map_object_asset_catalog.json",
 	"res://assets/data/assets/map_terrain_asset_catalog.json",
@@ -9,6 +10,8 @@ const EXTENSION_CATALOG_PATHS := [
 ]
 static var _catalog_cache: Dictionary = {}
 static var _asset_index: Dictionary = {}
+static var _normalized_ground_by_source_sha: Dictionary = {}
+static var _legacy_ground_index: Dictionary = {}
 
 
 static func load_catalog() -> Dictionary:
@@ -17,10 +20,12 @@ static func load_catalog() -> Dictionary:
 	var catalog := _read_catalog(CATALOG_PATH)
 	if catalog.is_empty():
 		return {}
+	_ensure_normalized_ground_index()
 	var effective_assets: Array = []
 	_asset_index.clear()
 	for asset: Dictionary in _raw_assets():
-		var effective := MapAssetCalibrationService.effective_asset(asset)
+		var effective := MapAssetCalibrationService.effective_asset(_canonical_ground_asset(asset))
+		effective = _canonical_ground_asset(effective)
 		effective_assets.append(effective)
 		_asset_index[str(effective.get("asset_id", ""))] = effective
 	catalog["assets"] = effective_assets
@@ -32,6 +37,8 @@ static func load_catalog() -> Dictionary:
 static func invalidate_cache() -> void:
 	_catalog_cache.clear()
 	_asset_index.clear()
+	_normalized_ground_by_source_sha.clear()
+	_legacy_ground_index.clear()
 
 
 static func all_assets() -> Array:
@@ -40,15 +47,111 @@ static func all_assets() -> Array:
 
 static func find_asset(asset_id: String) -> Dictionary:
 	load_catalog()
-	var asset: Dictionary = _asset_index.get(asset_id, {})
+	var asset: Dictionary = _asset_index.get(asset_id, _legacy_ground_index.get(asset_id, {}))
 	return asset.duplicate(true) if not asset.is_empty() else {}
 
 
 static func find_base_asset(asset_id: String) -> Dictionary:
 	for asset: Dictionary in _raw_assets():
 		if str(asset.get("asset_id", "")) == asset_id:
-			return asset.duplicate(true)
-	return {}
+			return _canonical_ground_asset(asset).duplicate(true)
+	_ensure_normalized_ground_index()
+	var legacy: Dictionary = _legacy_ground_index.get(asset_id, {})
+	return legacy.duplicate(true) if not legacy.is_empty() else {}
+
+
+static func _ensure_normalized_ground_index() -> void:
+	if not _legacy_ground_index.is_empty():
+		return
+	var catalog := _read_catalog(IMPORT_CATALOG_PATH)
+	for imported: Dictionary in catalog.get("imports", []):
+		if str(imported.get("status", "")) != "calibrated":
+			continue
+		var asset_id := str(imported.get("asset_id", ""))
+		var output_path := str(imported.get("output_path", ""))
+		var source_sha := str(imported.get("source_sha256", ""))
+		if asset_id.is_empty() or output_path.is_empty() or source_sha.is_empty():
+			continue
+		var normalized := {
+			"asset_id": asset_id,
+			"display_name": asset_id,
+			"asset_type": "ground_brush",
+			"category": "ground",
+			"object_class": "ground",
+			"theme": "ancient_gothic",
+			"image": output_path,
+			"thumbnail": output_path,
+			"canvas_size": [64, 32],
+			"image_size": [64, 32],
+			"logical_bounds_px": [0, 0, 64, 32],
+			"visible_bounds_px": [0, 0, 64, 32],
+			"anchor_px": [32, 16],
+			"placement_anchor_px": [32, 16],
+			"anchor_tile": [0, 0],
+			"anchor_mode": "tile_center",
+			"footprint_tiles": [1, 1],
+			"visual_footprint_tiles": [1, 1],
+			"occupancy_footprint_tiles": [1, 1],
+			"base_footprint_tiles": [1, 1],
+			"collision_footprint_tiles": [0, 0],
+			"tile_size": [64, 32],
+			"approved_scale": 1.0,
+			"logical_scale_level": 0,
+			"collision_policy": "none",
+			"collision_profile_id": "none_visual",
+			"navigation_policy": "ignore",
+			"occlusion": false,
+			"content_layer": "personal_expansion",
+			"placeable": true,
+			"calibration_status": "placeable",
+			"normalization": str(imported.get("normalization", "alpha_tip_perspective_to_64x32")),
+			"diamond_inner_coverage": float(imported.get("diamond_inner_coverage", 1.0)),
+			"source_sha256": source_sha,
+		}
+		_legacy_ground_index[asset_id] = normalized
+		_normalized_ground_by_source_sha[source_sha] = normalized
+
+
+static func _canonical_ground_asset(asset: Dictionary) -> Dictionary:
+	if str(asset.get("asset_type", "")) != "ground_brush":
+		return asset
+	_ensure_normalized_ground_index()
+	var normalized: Dictionary = _normalized_ground_by_source_sha.get(str(asset.get("source_sha256", "")), {})
+	var result := asset.duplicate(true)
+	var canonical_geometry := {
+		"canvas_size": [64, 32],
+		"image_size": [64, 32],
+		"logical_bounds_px": [0, 0, 64, 32],
+		"visible_bounds_px": [0, 0, 64, 32],
+		"anchor_px": [32, 16],
+		"placement_anchor_px": [32, 16],
+		"anchor_tile": [0, 0],
+		"anchor_mode": "tile_center",
+		"footprint_tiles": [1, 1],
+		"visual_footprint_tiles": [1, 1],
+		"occupancy_footprint_tiles": [1, 1],
+		"base_footprint_tiles": [1, 1],
+		"collision_footprint_tiles": [0, 0],
+		"tile_size": [64, 32],
+		"approved_scale": 1.0,
+		"logical_scale_level": 0,
+		"collision_policy": "none",
+		"collision_profile_id": "none_visual",
+		"navigation_policy": "ignore",
+		"occlusion": false,
+	}
+	for key: String in canonical_geometry:
+		result[key] = canonical_geometry[key]
+	if normalized.is_empty():
+		result["normalization"] = "runtime_alpha_bounds_to_64x32_diamond_mask"
+		result["diamond_inner_coverage"] = 1.0
+		return result
+	for key: String in [
+		"image", "thumbnail", "normalization", "diamond_inner_coverage",
+	]:
+		result[key] = normalized[key]
+	result["normalized_ground_asset_id"] = str(normalized.get("asset_id", ""))
+	return result
 
 
 static func _raw_assets() -> Array:

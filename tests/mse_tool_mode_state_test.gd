@@ -167,7 +167,7 @@ func _click_preview_tile(editor: MapEditorApp, tile: Vector2i, button: MouseButt
 	var event := InputEventMouseButton.new()
 	event.button_index = button
 	event.pressed = true
-	event.position = editor.preview._draw_offset + MapEditorCoordinate.tile_to_ground_px(Vector2(tile), design_size) * editor.preview._draw_scale
+	event.position = editor.preview._draw_offset + MapEditorCoordinate.cell_center_to_ground_px(Vector2(tile), design_size) * editor.preview._draw_scale
 	editor.preview._gui_input(event)
 
 
@@ -176,5 +176,5 @@ func _drag_preview_tile(editor: MapEditorApp, tile: Vector2i) -> void:
 	var design_size := Vector2i(int(design_size_raw[0]), int(design_size_raw[1]))
 	var event := InputEventMouseMotion.new()
 	event.button_mask = MOUSE_BUTTON_MASK_LEFT
-	event.position = editor.preview._draw_offset + MapEditorCoordinate.tile_to_ground_px(Vector2(tile), design_size) * editor.preview._draw_scale
+	event.position = editor.preview._draw_offset + MapEditorCoordinate.cell_center_to_ground_px(Vector2(tile), design_size) * editor.preview._draw_scale
 	editor.preview._gui_input(event)

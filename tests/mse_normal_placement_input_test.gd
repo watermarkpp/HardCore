@@ -12,7 +12,7 @@ func _ready() -> void:
 	var received: Array = []
 	preview.paint_requested.connect(func(tile: Vector2i, asset_id: String): received.append([tile, asset_id]))
 	var design_size := Vector2i(32, 32)
-	var position := preview._draw_offset + MapEditorCoordinate.tile_to_ground_px(Vector2(8, 8), design_size) * preview._draw_scale
+	var position := preview._draw_offset + MapEditorCoordinate.cell_center_to_ground_px(Vector2(8, 8), design_size) * preview._draw_scale
 	var event := InputEventMouseButton.new()
 	event.button_index = MOUSE_BUTTON_LEFT
 	event.position = position
