@@ -1062,8 +1062,9 @@ func _texture_for_asset(asset_id: String) -> Texture2D:
 	var image_path := "" if raw_image==null else str(raw_image)
 	if image_path.is_empty():
 		return _ground_texture
-	var texture := load("res://" + image_path) as Texture2D
-	_texture_cache[asset_id] = texture
+	var texture := _load_editor_texture(image_path)
+	if texture != null:
+		_texture_cache[asset_id] = texture
 	return texture
 
 
@@ -1073,10 +1074,25 @@ func _texture_for_path(image_path: String) -> Texture2D:
 	var cache_key := "path:" + image_path
 	if _texture_cache.has(cache_key):
 		return _texture_cache[cache_key]
-	var resolved := image_path if image_path.begins_with("res://") else "res://" + image_path
-	var texture := load(resolved) as Texture2D
-	_texture_cache[cache_key] = texture
+	var texture := _load_editor_texture(image_path)
+	if texture != null:
+		_texture_cache[cache_key] = texture
 	return texture
+
+
+func _load_editor_texture(image_path: String) -> Texture2D:
+	var resolved := image_path if image_path.begins_with("res://") else "res://" + image_path
+	if ResourceLoader.exists(resolved, "Texture2D"):
+		var imported_texture := ResourceLoader.load(resolved, "Texture2D") as Texture2D
+		if imported_texture != null:
+			return imported_texture
+	# Newly added palette PNGs can be used before Godot has generated their
+	# .godot/imported entries. The editor must still render the placement ghost
+	# and the placed instance instead of silently storing an invisible object.
+	var image := Image.load_from_file(ProjectSettings.globalize_path(resolved))
+	if image == null or image.is_empty():
+		return null
+	return ImageTexture.create_from_image(image)
 
 
 func _ground_tile_texture_for_asset(asset_id: String) -> Texture2D:

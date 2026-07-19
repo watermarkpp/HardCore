@@ -84,6 +84,15 @@ func _ready() -> void:
 		"Deep Forest Asset Pack Test",
 		Vector2i(64, 64)
 	)
+	var canvas := MapEditorCanvasPreview.new()
+	add_child(canvas)
+	for asset: Dictionary in assets:
+		var asset_id := str(asset.asset_id)
+		assert(canvas._texture_for_asset(asset_id) != null, asset_id)
+		assert(
+			canvas._texture_for_path(str(asset.image)) != null,
+			asset_id
+		)
 	# Reproduce the real editor case: the user may place a visual tree over an
 	# existing colliding prop. The tree's menu-selected default role must stay
 	# decoration so its intentionally empty collision never becomes an
@@ -134,7 +143,7 @@ func _ready() -> void:
 
 	print(
 		"MSE_DEEP_FOREST_ASSET_PACK_PASS "
-		+ "assets=44 categories=4 alpha=44 collision=none role=decoration "
+		+ "assets=44 categories=4 alpha=44 textures=44 collision=none role=decoration "
 		+ "forest_clusters=excluded"
 	)
 	get_tree().quit(0)
