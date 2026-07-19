@@ -8,9 +8,12 @@ func _ready() -> void:
 	var content := MapEditorRuntimeBridge.game_content()
 	assert(content.spawns.size() == runtime.semantics.get("monster_spawn", []).size())
 	assert(content.npcs.size() == runtime.semantics.get("npc_points", []).size())
-	assert(content.portals.size() == 0, "未配置目标的门点不得进入运行时")
+	assert(content.portals.size() == 1, "仅最东侧已配置门点应进入运行时")
+	assert(int(content.portals[0].target_map_id) == 217)
+	assert(str(content.portals[0].label) == "进入兽人古墓一层")
 	var safe: Dictionary = runtime.semantics.safe_area[0]
-	assert(MapEditorRuntimeBridge.home_position() == MapEditorRuntimeBridge.tile_to_world(runtime, safe.return_tile))
+	assert(not bool(safe.get("return_anchor", false)))
+	assert(MapEditorRuntimeBridge.home_position() == Vector2.ZERO)
 	var background := WorldBackground.new(); add_child(background)
 	background.set_zone_data("比奇省", {"mapId":4,"name":"比奇省"})
 	await get_tree().process_frame

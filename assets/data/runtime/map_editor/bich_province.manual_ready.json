@@ -9,11 +9,27 @@
       80,
       80
     ],
-    "instances": 28,
-    "monster_spawns": 45,
-    "npcs": 5,
+    "instances": 56,
+    "monster_spawns": 44,
+    "npcs": 7,
     "doors": 4,
-    "doors_pending_target_configuration": 4,
+    "doors_pending_target_configuration": 3,
+    "configured_connections": [
+      {
+        "door_id": "door_000002",
+        "tile": [
+          71,
+          2
+        ],
+        "target_map_id": 217,
+        "target_map_key": "orc_tomb_1",
+        "target_entrance_id": "map_entrance_000001",
+        "target_tile": [
+          3,
+          35
+        ]
+      }
+    ],
     "centered_from_size": [
       64,
       64
