@@ -57,7 +57,15 @@ static func move_instance(document: Dictionary, instance_id: String, tile: Vecto
 	if not located.ok:
 		return located
 	var instance: Dictionary = located.instance
-	var validation := MapEditorPlacementValidator.validate(document, instance.asset_id, tile, instance.layer, instance.object_role, instance_id)
+	var validation := MapEditorPlacementValidator.validate(
+		document,
+		instance.asset_id,
+		tile,
+		instance.layer,
+		instance.object_role,
+		instance_id,
+		instance.get("footprint_tiles", [])
+	)
 	if not validation.ok:
 		return {"ok": false, "errors": validation.errors}
 	instance.tile = [tile.x, tile.y]
@@ -95,7 +103,9 @@ static func duplicate_instance_snapshot(
 		asset_id,
 		tile,
 		layer,
-		role
+		role,
+		"",
+		source_instance.get("footprint_tiles", [])
 	)
 	if not validation.ok:
 		return {"ok": false, "errors": validation.errors, "warnings": validation.warnings}
