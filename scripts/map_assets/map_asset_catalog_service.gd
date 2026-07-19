@@ -3,6 +3,7 @@ extends RefCounted
 
 const CATALOG_PATH := "res://assets/data/assets/map_asset_catalog.json"
 const IMPORT_CATALOG_PATH := "res://assets/data/assets/map_asset_import_catalog.json"
+const V15_CATALOG_PATH := "res://assets/data/assets/map_v15_batch_asset_catalog.json"
 const EXTENSION_CATALOG_PATHS := [
 	"res://assets/data/assets/map_object_asset_catalog.json",
 	"res://assets/data/assets/map_terrain_asset_catalog.json",
@@ -14,6 +15,7 @@ static var _catalog_cache: Dictionary = {}
 static var _asset_index: Dictionary = {}
 static var _normalized_ground_by_source_sha: Dictionary = {}
 static var _legacy_ground_index: Dictionary = {}
+static var _v15_asset_index: Dictionary = {}
 
 
 static func load_catalog() -> Dictionary:
@@ -23,6 +25,7 @@ static func load_catalog() -> Dictionary:
 	if catalog.is_empty():
 		return {}
 	_ensure_normalized_ground_index()
+	_ensure_v15_asset_index()
 	var effective_assets: Array = []
 	_asset_index.clear()
 	for asset: Dictionary in _raw_assets():
@@ -49,6 +52,7 @@ static func invalidate_cache() -> void:
 	_asset_index.clear()
 	_normalized_ground_by_source_sha.clear()
 	_legacy_ground_index.clear()
+	_v15_asset_index.clear()
 
 
 static func all_assets() -> Array:
@@ -57,7 +61,10 @@ static func all_assets() -> Array:
 
 static func find_asset(asset_id: String) -> Dictionary:
 	load_catalog()
-	var asset: Dictionary = _asset_index.get(asset_id, _legacy_ground_index.get(asset_id, {}))
+	var asset: Dictionary = _asset_index.get(
+		asset_id,
+		_v15_asset_index.get(asset_id, _legacy_ground_index.get(asset_id, {}))
+	)
 	return asset.duplicate(true) if not asset.is_empty() else {}
 
 
@@ -65,6 +72,10 @@ static func find_base_asset(asset_id: String) -> Dictionary:
 	for asset: Dictionary in _raw_assets():
 		if str(asset.get("asset_id", "")) == asset_id:
 			return _canonical_editor_asset(asset).duplicate(true)
+	_ensure_v15_asset_index()
+	var v15: Dictionary = _v15_asset_index.get(asset_id, {})
+	if not v15.is_empty():
+		return v15.duplicate(true)
 	_ensure_normalized_ground_index()
 	var legacy: Dictionary = _legacy_ground_index.get(asset_id, {})
 	return legacy.duplicate(true) if not legacy.is_empty() else {}
@@ -122,6 +133,17 @@ static func _ensure_normalized_ground_index() -> void:
 		_normalized_ground_by_source_sha[source_sha] = normalized
 
 
+static func _ensure_v15_asset_index() -> void:
+	if not _v15_asset_index.is_empty():
+		return
+	var catalog := _read_catalog(V15_CATALOG_PATH)
+	for asset: Dictionary in catalog.get("assets", []):
+		var asset_id := str(asset.get("asset_id", ""))
+		if asset_id.is_empty():
+			continue
+		_v15_asset_index[asset_id] = _canonical_editor_asset(asset)
+
+
 static func _canonical_ground_asset(asset: Dictionary) -> Dictionary:
 	if str(asset.get("asset_type", "")) != "ground_brush":
 		return asset
@@ -165,7 +187,31 @@ static func _canonical_ground_asset(asset: Dictionary) -> Dictionary:
 
 
 static func _canonical_editor_asset(asset: Dictionary) -> Dictionary:
-	return ManualCollisionPolicy.apply_to_asset(_canonical_ground_asset(asset))
+	return ManualCollisionPolicy.apply_to_asset(_canonical_ground_asset(_resolve_tracked_staging_image(asset)))
+
+
+static func _resolve_tracked_staging_image(asset: Dictionary) -> Dictionary:
+	var image_path := str(asset.get("image", ""))
+	if image_path.is_empty() or FileAccess.file_exists("res://" + image_path):
+		return asset
+	var raw_import_path := str(asset.get("raw_import_path", ""))
+	var raw_prefix := "assets/raw_import/map_editor_batches_v1_5/"
+	if not raw_import_path.begins_with(raw_prefix):
+		return asset
+	var relative_batch_directory := raw_import_path.trim_prefix(raw_prefix).get_base_dir()
+	var candidate := (
+		"assets/art/maps/_staging/v1_5/"
+		+ relative_batch_directory
+		+ "/editor_canvas/"
+		+ image_path.get_file()
+	)
+	if not FileAccess.file_exists("res://" + candidate):
+		return asset
+	var resolved := asset.duplicate(true)
+	resolved["image"] = candidate
+	resolved["thumbnail"] = candidate
+	resolved["resolved_from_tracked_staging"] = true
+	return resolved
 
 
 static func _raw_assets() -> Array:

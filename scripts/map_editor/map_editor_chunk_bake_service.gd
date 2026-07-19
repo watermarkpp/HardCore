@@ -18,6 +18,9 @@ static func bake_dirty_chunks(document: Dictionary) -> Dictionary:
 	var chunks: Array = manifest.chunks
 	var baked: Array = []
 	var preview_entries: Array = []
+	var asset_preflight := _preflight_asset_images(overrides, default_fill_asset_id)
+	if not asset_preflight.ok:
+		return asset_preflight
 	for chunk_id: String in dirty_chunks:
 		var chunk_index := _find_chunk_index(chunks, chunk_id)
 		if chunk_index < 0:
@@ -32,13 +35,30 @@ static func bake_dirty_chunks(document: Dictionary) -> Dictionary:
 		chunk.preview_png = "ground/baked_preview/%s.png" % chunk_id
 		chunk.baked_operation_count = state.operations_by_chunk.get(chunk_id, []).size()
 		chunk.baked_default_fill_asset_id = default_fill_asset_id
+		chunk.baked_coordinate_contract_id = MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID
 		chunks[chunk_index] = chunk
 		baked.append(chunk_id)
-		preview_entries.append({"chunk_id": chunk_id, "preview_png": chunk.preview_png, "operation_count": chunk.baked_operation_count})
 	manifest.chunks = chunks
 	state.dirty_chunks = []
+	for chunk: Dictionary in chunks:
+		if (
+			bool(chunk.get("materialized", false))
+			and not str(chunk.get("preview_png", "")).is_empty()
+			and str(chunk.get("baked_coordinate_contract_id", "")) == MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID
+		):
+			preview_entries.append({
+				"chunk_id": str(chunk.get("chunk_id", "")),
+				"preview_png": str(chunk.get("preview_png", "")),
+				"operation_count": int(chunk.get("baked_operation_count", 0)),
+				"coordinate_contract_id": MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID,
+			})
 	var preview_manifest_path := root.path_join("ground/baked_preview/bake_manifest.json")
-	var preview_manifest := {"schema_version": BAKE_SCHEMA_VERSION, "map_id": document.map_id, "chunks": preview_entries}
+	var preview_manifest := {
+		"schema_version": BAKE_SCHEMA_VERSION,
+		"map_id": document.map_id,
+		"coordinate_contract_id": MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID,
+		"chunks": preview_entries,
+	}
 	var preview_write := MapEditorGroundService._write_json_atomic(preview_manifest_path, preview_manifest)
 	if not preview_write.ok:
 		return preview_write
@@ -68,8 +88,8 @@ static func _bake_chunk_png(chunk: Dictionary, design_size: Vector2i, overrides:
 			var tile_image: Image = _asset_image(asset_id, cache)
 			if tile_image == null:
 				return {"ok": false, "errors": ["tile_image_missing:%s" % asset_id]}
-			var center := MapEditorCoordinate.cell_center_to_ground_px(Vector2(x, y), design_size)
-			var destination := Vector2i(roundi(center.x) - 32 - rect_position.x, roundi(center.y) - 16 - rect_position.y)
+			var tile_rect := MapEditorCoordinate.cell_texture_rect_ground_px(Vector2(x, y), design_size)
+			var destination := Vector2i(roundi(tile_rect.position.x), roundi(tile_rect.position.y)) - rect_position
 			var destination_rect := Rect2i(destination, tile_image.get_size())
 			var intersection := destination_rect.intersection(Rect2i(Vector2i.ZERO, rect_size))
 			if intersection.size.x <= 0 or intersection.size.y <= 0:
@@ -100,6 +120,25 @@ static func _bake_chunk_png(chunk: Dictionary, design_size: Vector2i, overrides:
 	if FileAccess.file_exists(backup):
 		DirAccess.remove_absolute(backup)
 	return {"ok": true, "path": output_path}
+
+
+static func _preflight_asset_images(overrides: Dictionary, default_fill_asset_id: String) -> Dictionary:
+	var asset_ids := {}
+	if not default_fill_asset_id.is_empty():
+		asset_ids[default_fill_asset_id] = true
+	for asset_id: String in overrides.values():
+		if not asset_id.is_empty():
+			asset_ids[asset_id] = true
+	var missing: Array[String] = []
+	for asset_id: String in asset_ids:
+		if MapEditorGroundService.normalized_ground_image(asset_id) == null:
+			missing.append(asset_id)
+	missing.sort()
+	return (
+		{"ok": true, "asset_count": asset_ids.size()}
+		if missing.is_empty()
+		else {"ok": false, "errors": ["tile_images_missing:%s" % ",".join(missing)]}
+	)
 
 
 static func _candidate_tile_rect(rect_position: Vector2i, rect_size: Vector2i, design_size: Vector2i) -> Rect2i:

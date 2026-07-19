@@ -447,7 +447,9 @@ func _adopt_new_document(document: Dictionary, status_prefix: String, document_p
 	_set_active_tool("select")
 	var initialized := MapEditorGroundService.initialize(current_document)
 	if initialized.ok:
-		status_label.text = "%s：%d 个虚拟空白 Chunk，尚未落盘地面图" % [status_prefix, (initialized.manifest.chunks as Array).size()]
+		initialized = _ensure_ground_coordinate_contract(initialized)
+	if initialized.ok:
+		status_label.text = "%s：%d 个地面 Chunk 使用统一格子中心坐标" % [status_prefix, (initialized.manifest.chunks as Array).size()]
 		preview.set_ground_state(initialized.state)
 
 
@@ -532,8 +534,15 @@ func _resolved_current_document_path() -> String:
 
 func _save_current_document() -> Dictionary:
 	var path := _resolved_current_document_path()
+	var initialized := MapEditorGroundService.initialize(current_document)
+	if not initialized.get("ok", false):
+		return initialized
+	initialized = _ensure_ground_coordinate_contract(initialized)
+	if not initialized.get("ok", false):
+		return initialized
 	var result := MapEditorSaveService.save_document(current_document, path)
 	if result.get("ok", false):
+		preview.reload_ground_state(initialized.state)
 		current_document_path = path
 		path_label.text = "工作文件：%s" % ProjectSettings.globalize_path(path)
 		_remember_current_document_path(path)
@@ -574,12 +583,28 @@ func _open_document_path(path: String) -> bool:
 		preview.set_document(current_document)
 		_set_active_tool("select")
 		var initialized := MapEditorGroundService.initialize(current_document)
-		if initialized.ok: preview.set_ground_state(initialized.state)
+		if initialized.ok:
+			initialized = _ensure_ground_coordinate_contract(initialized)
+		if not initialized.ok:
+			status_label.text = "地面坐标迁移失败：%s" % initialized.get("errors", [])
+			return false
+		preview.set_ground_state(initialized.state)
 		status_label.text = "地图打开成功：%s" % path
 		_remember_current_document_path(path)
 		return true
 	status_label.text = "打开失败：%s" % result.get("errors", [])
 	return false
+
+
+func _ensure_ground_coordinate_contract(initialized: Dictionary) -> Dictionary:
+	if not initialized.get("ok", false):
+		return initialized
+	if (initialized.get("state", {}).get("dirty_chunks", []) as Array).is_empty():
+		return initialized
+	var bake := MapEditorChunkBakeService.bake_dirty_chunks(current_document)
+	if not bake.get("ok", false):
+		return bake
+	return MapEditorGroundService.initialize(current_document)
 
 
 func _reset_document_session_state() -> void:

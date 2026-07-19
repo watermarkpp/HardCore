@@ -12,21 +12,29 @@ static func initialize(document: Dictionary) -> Dictionary:
 	if not errors.is_empty():
 		return {"ok": false, "errors": errors}
 	var root := workspace_root(document)
+	_sync_document_ground_contract(document, root)
 	var manifest_path := root.path_join("ground").path_join(MANIFEST_FILE)
 	var state_path := root.path_join("ground").path_join(STATE_FILE)
 	var manifest := _read_json(manifest_path)
+	var manifest_changed := false
 	if manifest.is_empty():
 		manifest = _new_manifest(document)
+		manifest_changed = true
+	elif _sync_blank_policy(document, manifest):
+		manifest_changed = true
+	var state := _read_json(state_path)
+	var state_changed := false
+	if state.is_empty():
+		state = {"schema_version": GROUND_SCHEMA_VERSION, "map_id": document.map_id, "dirty_chunks": [], "operations_by_chunk": {}}
+		state_changed = true
+	var contract_sync := _sync_coordinate_contract(manifest, state)
+	manifest_changed = manifest_changed or bool(contract_sync.manifest_changed)
+	state_changed = state_changed or bool(contract_sync.state_changed)
+	if manifest_changed:
 		var write_manifest := _write_json_atomic(manifest_path, manifest)
 		if not write_manifest.ok:
 			return write_manifest
-	elif _sync_blank_policy(document, manifest):
-		var sync_manifest := _write_json_atomic(manifest_path, manifest)
-		if not sync_manifest.ok:
-			return sync_manifest
-	var state := _read_json(state_path)
-	if state.is_empty():
-		state = {"schema_version": GROUND_SCHEMA_VERSION, "map_id": document.map_id, "dirty_chunks": [], "operations_by_chunk": {}}
+	if state_changed:
 		var write_state := _write_json_atomic(state_path, state)
 		if not write_state.ok:
 			return write_state
@@ -236,8 +244,50 @@ static func _new_manifest(document: Dictionary) -> Dictionary:
 		"schema_version": GROUND_SCHEMA_VERSION, "map_id": document.map_id, "design_size": [design_size.x, design_size.y],
 		"ground_pixel_size": [pixel_size.x, pixel_size.y], "chunk_size_px": [chunk_size.x, chunk_size.y],
 		"chunk_grid_size": [columns, rows], "blank_chunk_policy": blank_chunk_policy,
-		"default_fill_asset_id": default_fill_asset_id, "chunks": chunks,
+		"default_fill_asset_id": default_fill_asset_id,
+		"coordinate_contract_id": MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID,
+		"chunks": chunks,
 	}
+
+
+static func _sync_document_ground_contract(document: Dictionary, root: String) -> void:
+	var design_size := _design_size(document)
+	var ground: Dictionary = document.get("ground", {})
+	var origin := MapEditorCoordinate.origin_px(design_size)
+	ground["origin_px"] = [origin.x, origin.y]
+	ground["tile_anchor_mode"] = "cell_center"
+	ground["coordinate_contract_id"] = MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID
+	ground["workspace_manifest"] = root.path_join("ground").path_join(MANIFEST_FILE)
+	ground["workspace_state"] = root.path_join("ground").path_join(STATE_FILE)
+	document["ground"] = ground
+
+
+static func _sync_coordinate_contract(manifest: Dictionary, state: Dictionary) -> Dictionary:
+	var manifest_changed := str(manifest.get("coordinate_contract_id", "")) != MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID
+	var state_changed := str(state.get("coordinate_contract_id", "")) != MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID
+	manifest["coordinate_contract_id"] = MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID
+	state["coordinate_contract_id"] = MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID
+	var dirty_chunks: Array = state.get("dirty_chunks", [])
+	var chunks: Array = manifest.get("chunks", [])
+	for index in chunks.size():
+		var chunk: Dictionary = chunks[index]
+		if (
+			bool(chunk.get("materialized", false))
+			and not str(chunk.get("preview_png", "")).is_empty()
+			and str(chunk.get("baked_coordinate_contract_id", "")) != MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID
+		):
+			var chunk_id := str(chunk.get("chunk_id", ""))
+			if not chunk_id.is_empty() and not dirty_chunks.has(chunk_id):
+				dirty_chunks.append(chunk_id)
+				state_changed = true
+			if str(chunk.get("state", "")) != "dirty":
+				chunk["state"] = "dirty"
+				chunks[index] = chunk
+				manifest_changed = true
+	dirty_chunks.sort()
+	state["dirty_chunks"] = dirty_chunks
+	manifest["chunks"] = chunks
+	return {"manifest_changed": manifest_changed, "state_changed": state_changed}
 
 
 static func _sync_blank_policy(document: Dictionary, manifest: Dictionary) -> bool:

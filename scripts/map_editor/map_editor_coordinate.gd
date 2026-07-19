@@ -3,6 +3,8 @@ extends RefCounted
 
 const HALF_TILE_W := 32.0
 const HALF_TILE_H := 16.0
+const GROUND_COORDINATE_CONTRACT_ID := "isometric_cell_center_64x32_v1"
+const GROUND_TILE_SIZE_PX := Vector2(64.0, 32.0)
 
 
 static func origin_px(design_size: Vector2i) -> Vector2:
@@ -20,6 +22,13 @@ static func tile_to_ground_px(tile: Vector2, design_size: Vector2i) -> Vector2:
 
 static func cell_center_to_ground_px(cell: Vector2, design_size: Vector2i) -> Vector2:
 	return tile_to_ground_px(cell + Vector2(0.5, 0.5), design_size)
+
+
+static func cell_texture_rect_ground_px(cell: Vector2, design_size: Vector2i) -> Rect2:
+	return Rect2(
+		cell_center_to_ground_px(cell, design_size) - GROUND_TILE_SIZE_PX * 0.5,
+		GROUND_TILE_SIZE_PX
+	)
 
 
 static func cell_polygon_ground_px(cell: Vector2i, design_size: Vector2i) -> PackedVector2Array:

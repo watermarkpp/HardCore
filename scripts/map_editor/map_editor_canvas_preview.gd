@@ -128,6 +128,8 @@ func _rebuild_baked_ground_cache() -> void:
 		var rect: Array = chunk.get("rect_px", [])
 		if relative.is_empty() or rect.size() != 4:
 			continue
+		if str(chunk.get("baked_coordinate_contract_id", "")) != MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID:
+			continue
 		if expected_fill_asset_id.is_empty() and not chunk.has("baked_default_fill_asset_id"):
 			continue
 		if chunk.has("baked_default_fill_asset_id") and str(chunk.get("baked_default_fill_asset_id", "")) != expected_fill_asset_id:
@@ -839,7 +841,7 @@ func _draw_virtual_ground(design_size: Vector2i, offset: Vector2, scale_factor: 
 				continue
 			var texture := _ground_tile_texture_for_asset(str(_paint_overrides[key]))
 			if texture != null:
-				draw_texture_rect(texture, Rect2(center - Vector2(32, 16), Vector2(64, 32)), false)
+				draw_texture_rect(texture, MapEditorCoordinate.cell_texture_rect_ground_px(Vector2(tile), design_size), false)
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 		return
 	if not str(document.get("ground", {}).get("blank_fill_asset_id", "")).is_empty():
@@ -862,7 +864,7 @@ func _draw_virtual_ground(design_size: Vector2i, offset: Vector2, scale_factor: 
 			continue
 		var texture := _ground_tile_texture_for_asset(str(_paint_overrides[key]))
 		if texture != null:
-			draw_texture_rect(texture, Rect2(center - Vector2(32, 16), Vector2(64, 32)), false)
+			draw_texture_rect(texture, MapEditorCoordinate.cell_texture_rect_ground_px(Vector2(tile), design_size), false)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
