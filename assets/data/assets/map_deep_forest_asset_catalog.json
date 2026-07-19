@@ -1,0 +1,4771 @@
+{
+  "asset_schema_version": 2,
+  "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+  "package_version": 3,
+  "source_archive": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip",
+  "source_archive_sha256": "3d9faa689745e5b1fbab72da95e3f34fb80873e494e56aae3da6f2263587cdfb",
+  "asset_count": 44,
+  "category_counts": {
+    "single_trees": 10,
+    "fallen_trees": 12,
+    "grass_groundcover": 10,
+    "stumps": 12
+  },
+  "classification": "装饰物1/树木/MSE深林44",
+  "default_collision_policy": "none",
+  "collision_authority": "manual_by_user",
+  "assets": [
+    {
+      "asset_id": "mse.deep_forest.df_st_01",
+      "display_name": "巨大古老阔叶橡树",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "single_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/独立树木/DF_ST_01.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/独立树木/DF_ST_01.png",
+      "canvas_size": [
+        192,
+        256
+      ],
+      "image_size": [
+        192,
+        256
+      ],
+      "visible_bounds_px": [
+        8,
+        49,
+        184,
+        224
+      ],
+      "anchor_px": [
+        96,
+        224
+      ],
+      "placement_anchor_px": [
+        96,
+        224
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/独立树木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/single_trees/DF_ST_01.png",
+      "source_sha256": "de5353e6e2f120a741afce264b8d356cf7f0cc2b6126cf984066f32773968fa1",
+      "output_sha256": "de5353e6e2f120a741afce264b8d356cf7f0cc2b6126cf984066f32773968fa1",
+      "thumbnail_source_sha256": "de5353e6e2f120a741afce264b8d356cf7f0cc2b6126cf984066f32773968fa1",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "single_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "single_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_ST_01",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-ST-A",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "tree_trunk_large",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_st_02",
+      "display_name": "高大幽暗松树",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "single_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/独立树木/DF_ST_02.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/独立树木/DF_ST_02.png",
+      "canvas_size": [
+        192,
+        256
+      ],
+      "image_size": [
+        192,
+        256
+      ],
+      "visible_bounds_px": [
+        44,
+        8,
+        148,
+        224
+      ],
+      "anchor_px": [
+        96,
+        224
+      ],
+      "placement_anchor_px": [
+        96,
+        224
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "visual_footprint_tiles": [
+        2,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        2
+      ],
+      "base_footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/独立树木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/single_trees/DF_ST_02.png",
+      "source_sha256": "6ececb7724db3df7a1abbd89aa7ea56a7b6bee676421d6dcf2445bd68caa8e73",
+      "output_sha256": "6ececb7724db3df7a1abbd89aa7ea56a7b6bee676421d6dcf2445bd68caa8e73",
+      "thumbnail_source_sha256": "6ececb7724db3df7a1abbd89aa7ea56a7b6bee676421d6dcf2445bd68caa8e73",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "single_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "single_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_ST_02",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-ST-A",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "tree_trunk_large",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_st_03",
+      "display_name": "扭曲无叶枯树",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "single_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/独立树木/DF_ST_03.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/独立树木/DF_ST_03.png",
+      "canvas_size": [
+        192,
+        256
+      ],
+      "image_size": [
+        192,
+        256
+      ],
+      "visible_bounds_px": [
+        40,
+        8,
+        153,
+        224
+      ],
+      "anchor_px": [
+        96,
+        224
+      ],
+      "placement_anchor_px": [
+        96,
+        224
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "visual_footprint_tiles": [
+        2,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        2
+      ],
+      "base_footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/独立树木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/single_trees/DF_ST_03.png",
+      "source_sha256": "f142376cf7e932246017b506c44c28b72d641b7ab68a5cdf9649c009487ce980",
+      "output_sha256": "f142376cf7e932246017b506c44c28b72d641b7ab68a5cdf9649c009487ce980",
+      "thumbnail_source_sha256": "f142376cf7e932246017b506c44c28b72d641b7ab68a5cdf9649c009487ce980",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "single_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "single_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_ST_03",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-ST-A",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "tree_trunk_large",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_st_04",
+      "display_name": "宽冠苔藓老树",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "single_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/独立树木/DF_ST_04.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/独立树木/DF_ST_04.png",
+      "canvas_size": [
+        192,
+        256
+      ],
+      "image_size": [
+        192,
+        256
+      ],
+      "visible_bounds_px": [
+        8,
+        56,
+        184,
+        224
+      ],
+      "anchor_px": [
+        96,
+        224
+      ],
+      "placement_anchor_px": [
+        96,
+        224
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/独立树木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/single_trees/DF_ST_04.png",
+      "source_sha256": "f043d2d334689d60209435c03d94ac1c1dbcd584142653e35d8be0b46d6fb97a",
+      "output_sha256": "f043d2d334689d60209435c03d94ac1c1dbcd584142653e35d8be0b46d6fb97a",
+      "thumbnail_source_sha256": "f043d2d334689d60209435c03d94ac1c1dbcd584142653e35d8be0b46d6fb97a",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "single_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "single_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_ST_04",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-ST-A",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "tree_trunk_large",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_st_05",
+      "display_name": "细高白桦树",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "single_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/独立树木/DF_ST_05.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/独立树木/DF_ST_05.png",
+      "canvas_size": [
+        192,
+        256
+      ],
+      "image_size": [
+        192,
+        256
+      ],
+      "visible_bounds_px": [
+        48,
+        8,
+        143,
+        224
+      ],
+      "anchor_px": [
+        96,
+        224
+      ],
+      "placement_anchor_px": [
+        96,
+        224
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/独立树木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/single_trees/DF_ST_05.png",
+      "source_sha256": "3563306efeaa7c2516eb92cfaccb846d3e965f0221a8dbbb09e713ec0aed5089",
+      "output_sha256": "3563306efeaa7c2516eb92cfaccb846d3e965f0221a8dbbb09e713ec0aed5089",
+      "thumbnail_source_sha256": "3563306efeaa7c2516eb92cfaccb846d3e965f0221a8dbbb09e713ec0aed5089",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "single_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "single_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_ST_05",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-ST-A",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "tree_trunk_small",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_st_06",
+      "display_name": "中空树洞古树",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "single_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/独立树木/DF_ST_06.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/独立树木/DF_ST_06.png",
+      "canvas_size": [
+        192,
+        256
+      ],
+      "image_size": [
+        192,
+        256
+      ],
+      "visible_bounds_px": [
+        16,
+        8,
+        176,
+        224
+      ],
+      "anchor_px": [
+        96,
+        224
+      ],
+      "placement_anchor_px": [
+        96,
+        224
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "visual_footprint_tiles": [
+        2,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        2
+      ],
+      "base_footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/独立树木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/single_trees/DF_ST_06.png",
+      "source_sha256": "3f32bacb00bdc1a2693eca14d49de7f1003079ef8fa45220648a2cd9eaf2ac71",
+      "output_sha256": "3f32bacb00bdc1a2693eca14d49de7f1003079ef8fa45220648a2cd9eaf2ac71",
+      "thumbnail_source_sha256": "3f32bacb00bdc1a2693eca14d49de7f1003079ef8fa45220648a2cd9eaf2ac71",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "single_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "single_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_ST_06",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-ST-A",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "tree_trunk_large",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_st_07",
+      "display_name": "垂挂苔藓湿地树",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "single_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/独立树木/DF_ST_07.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/独立树木/DF_ST_07.png",
+      "canvas_size": [
+        192,
+        256
+      ],
+      "image_size": [
+        192,
+        256
+      ],
+      "visible_bounds_px": [
+        14,
+        8,
+        179,
+        224
+      ],
+      "anchor_px": [
+        96,
+        224
+      ],
+      "placement_anchor_px": [
+        96,
+        224
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "visual_footprint_tiles": [
+        2,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        2
+      ],
+      "base_footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/独立树木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/single_trees/DF_ST_07.png",
+      "source_sha256": "b6f37052290db885ea1fe86d826d9ade16e425c7afe46c7fd2c39de4dbf0e8ff",
+      "output_sha256": "b6f37052290db885ea1fe86d826d9ade16e425c7afe46c7fd2c39de4dbf0e8ff",
+      "thumbnail_source_sha256": "b6f37052290db885ea1fe86d826d9ade16e425c7afe46c7fd2c39de4dbf0e8ff",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "single_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "single_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_ST_07",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-ST-B",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "tree_trunk_large",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_st_08",
+      "display_name": "年轻冷杉树",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "single_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/独立树木/DF_ST_08.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/独立树木/DF_ST_08.png",
+      "canvas_size": [
+        192,
+        256
+      ],
+      "image_size": [
+        192,
+        256
+      ],
+      "visible_bounds_px": [
+        38,
+        8,
+        154,
+        224
+      ],
+      "anchor_px": [
+        96,
+        224
+      ],
+      "placement_anchor_px": [
+        96,
+        224
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/独立树木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/single_trees/DF_ST_08.png",
+      "source_sha256": "d879414892ed3d5b845a2f2983969989fc1e89706538fe883bb5967c732919cf",
+      "output_sha256": "d879414892ed3d5b845a2f2983969989fc1e89706538fe883bb5967c732919cf",
+      "thumbnail_source_sha256": "d879414892ed3d5b845a2f2983969989fc1e89706538fe883bb5967c732919cf",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "single_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "single_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_ST_08",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-ST-B",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "tree_trunk_small",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_st_09",
+      "display_name": "折断顶部的残存大树",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "single_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/独立树木/DF_ST_09.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/独立树木/DF_ST_09.png",
+      "canvas_size": [
+        192,
+        256
+      ],
+      "image_size": [
+        192,
+        256
+      ],
+      "visible_bounds_px": [
+        8,
+        14,
+        184,
+        224
+      ],
+      "anchor_px": [
+        96,
+        224
+      ],
+      "placement_anchor_px": [
+        96,
+        224
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "visual_footprint_tiles": [
+        2,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        2
+      ],
+      "base_footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/独立树木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/single_trees/DF_ST_09.png",
+      "source_sha256": "a7609077a2e280fe0d39cf198aa44be8d1eec18090dae78675fdab477c6dc81a",
+      "output_sha256": "a7609077a2e280fe0d39cf198aa44be8d1eec18090dae78675fdab477c6dc81a",
+      "thumbnail_source_sha256": "a7609077a2e280fe0d39cf198aa44be8d1eec18090dae78675fdab477c6dc81a",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "single_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "single_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_ST_09",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-ST-B",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "tree_trunk_large",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_st_10",
+      "display_name": "巨大守望古树",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "single_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/独立树木/DF_ST_10.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/独立树木/DF_ST_10.png",
+      "canvas_size": [
+        192,
+        256
+      ],
+      "image_size": [
+        192,
+        256
+      ],
+      "visible_bounds_px": [
+        8,
+        36,
+        184,
+        224
+      ],
+      "anchor_px": [
+        96,
+        224
+      ],
+      "placement_anchor_px": [
+        96,
+        224
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/独立树木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/single_trees/DF_ST_10.png",
+      "source_sha256": "cf5881cd02f85f4823f9045d65aa2b5d8abf152d93795a3d59dc5d2325097189",
+      "output_sha256": "cf5881cd02f85f4823f9045d65aa2b5d8abf152d93795a3d59dc5d2325097189",
+      "thumbnail_source_sha256": "cf5881cd02f85f4823f9045d65aa2b5d8abf152d93795a3d59dc5d2325097189",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "single_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "single_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_ST_10",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-ST-B",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "tree_trunk_large",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_fl_01",
+      "display_name": "新近倒塌松树，iso_x",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "fallen_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_01.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_01.png",
+      "canvas_size": [
+        320,
+        192
+      ],
+      "image_size": [
+        320,
+        192
+      ],
+      "visible_bounds_px": [
+        24,
+        8,
+        295,
+        160
+      ],
+      "anchor_px": [
+        160,
+        160
+      ],
+      "placement_anchor_px": [
+        160,
+        160
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        4,
+        2
+      ],
+      "visual_footprint_tiles": [
+        4,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        2
+      ],
+      "base_footprint_tiles": [
+        4,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/倒木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/fallen_trees/DF_FL_01.png",
+      "source_sha256": "d4167c1ba046e785ed7f6a5db391f36d7bba32373825571d79fd4f3b7ac596c3",
+      "output_sha256": "d4167c1ba046e785ed7f6a5db391f36d7bba32373825571d79fd4f3b7ac596c3",
+      "thumbnail_source_sha256": "d4167c1ba046e785ed7f6a5db391f36d7bba32373825571d79fd4f3b7ac596c3",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "fallen_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "fallen_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_FL_01",
+      "axis": "iso_x",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-FL-A",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "fallen_log",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_fl_02",
+      "display_name": "新近倒塌松树，iso_y",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "fallen_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_02.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_02.png",
+      "canvas_size": [
+        320,
+        192
+      ],
+      "image_size": [
+        320,
+        192
+      ],
+      "visible_bounds_px": [
+        104,
+        8,
+        217,
+        160
+      ],
+      "anchor_px": [
+        160,
+        160
+      ],
+      "placement_anchor_px": [
+        160,
+        160
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        4
+      ],
+      "visual_footprint_tiles": [
+        2,
+        4
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        4
+      ],
+      "base_footprint_tiles": [
+        2,
+        4
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/倒木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/fallen_trees/DF_FL_02.png",
+      "source_sha256": "db973bde5149d51c84675be764407fd71e63e88588465a3ebb1333840c54b523",
+      "output_sha256": "db973bde5149d51c84675be764407fd71e63e88588465a3ebb1333840c54b523",
+      "thumbnail_source_sha256": "db973bde5149d51c84675be764407fd71e63e88588465a3ebb1333840c54b523",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "fallen_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "fallen_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_FL_02",
+      "axis": "iso_y",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-FL-A",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "fallen_log",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_fl_03",
+      "display_name": "中空苔藓倒木，iso_x",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "fallen_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_03.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_03.png",
+      "canvas_size": [
+        320,
+        192
+      ],
+      "image_size": [
+        320,
+        192
+      ],
+      "visible_bounds_px": [
+        30,
+        8,
+        290,
+        160
+      ],
+      "anchor_px": [
+        160,
+        160
+      ],
+      "placement_anchor_px": [
+        160,
+        160
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        4,
+        2
+      ],
+      "visual_footprint_tiles": [
+        4,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        2
+      ],
+      "base_footprint_tiles": [
+        4,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/倒木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/fallen_trees/DF_FL_03.png",
+      "source_sha256": "512edf1c886b203bb6d38ac7422019bdf7c6ffcb26c4e5041e5e3734328d002b",
+      "output_sha256": "512edf1c886b203bb6d38ac7422019bdf7c6ffcb26c4e5041e5e3734328d002b",
+      "thumbnail_source_sha256": "512edf1c886b203bb6d38ac7422019bdf7c6ffcb26c4e5041e5e3734328d002b",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "fallen_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "fallen_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_FL_03",
+      "axis": "iso_x",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-FL-A",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "fallen_log",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_fl_04",
+      "display_name": "中空苔藓倒木，iso_y",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "fallen_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_04.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_04.png",
+      "canvas_size": [
+        320,
+        192
+      ],
+      "image_size": [
+        320,
+        192
+      ],
+      "visible_bounds_px": [
+        121,
+        8,
+        199,
+        160
+      ],
+      "anchor_px": [
+        160,
+        160
+      ],
+      "placement_anchor_px": [
+        160,
+        160
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        4
+      ],
+      "visual_footprint_tiles": [
+        2,
+        4
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        4
+      ],
+      "base_footprint_tiles": [
+        2,
+        4
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/倒木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/fallen_trees/DF_FL_04.png",
+      "source_sha256": "0f0ec02ea67c7d3a2a83d0bcfe0b817ac72c2a1b6570813174b9b3b0c7d81bb5",
+      "output_sha256": "0f0ec02ea67c7d3a2a83d0bcfe0b817ac72c2a1b6570813174b9b3b0c7d81bb5",
+      "thumbnail_source_sha256": "0f0ec02ea67c7d3a2a83d0bcfe0b817ac72c2a1b6570813174b9b3b0c7d81bb5",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "fallen_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "fallen_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_FL_04",
+      "axis": "iso_y",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-FL-A",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "fallen_log",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_fl_05",
+      "display_name": "连带根盘倒塌古树，iso_x",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "fallen_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_05.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_05.png",
+      "canvas_size": [
+        320,
+        192
+      ],
+      "image_size": [
+        320,
+        192
+      ],
+      "visible_bounds_px": [
+        8,
+        8,
+        312,
+        160
+      ],
+      "anchor_px": [
+        160,
+        160
+      ],
+      "placement_anchor_px": [
+        160,
+        160
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        4,
+        2
+      ],
+      "visual_footprint_tiles": [
+        4,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        2
+      ],
+      "base_footprint_tiles": [
+        4,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/倒木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/fallen_trees/DF_FL_05.png",
+      "source_sha256": "275af03e123cb4e3c8e2c3d4aca14b9d404471e440b7c587515fdf49d0938957",
+      "output_sha256": "275af03e123cb4e3c8e2c3d4aca14b9d404471e440b7c587515fdf49d0938957",
+      "thumbnail_source_sha256": "275af03e123cb4e3c8e2c3d4aca14b9d404471e440b7c587515fdf49d0938957",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "fallen_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "fallen_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_FL_05",
+      "axis": "iso_x",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-FL-B",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "fallen_log",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_fl_06",
+      "display_name": "连带根盘倒塌古树，iso_y",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "fallen_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_06.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_06.png",
+      "canvas_size": [
+        320,
+        192
+      ],
+      "image_size": [
+        320,
+        192
+      ],
+      "visible_bounds_px": [
+        118,
+        8,
+        202,
+        160
+      ],
+      "anchor_px": [
+        160,
+        160
+      ],
+      "placement_anchor_px": [
+        160,
+        160
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        4
+      ],
+      "visual_footprint_tiles": [
+        2,
+        4
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        4
+      ],
+      "base_footprint_tiles": [
+        2,
+        4
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/倒木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/fallen_trees/DF_FL_06.png",
+      "source_sha256": "d139e24f3329da5336dde6c648728c3cc6641f0a89ef6afdd43d4dbe57376425",
+      "output_sha256": "d139e24f3329da5336dde6c648728c3cc6641f0a89ef6afdd43d4dbe57376425",
+      "thumbnail_source_sha256": "d139e24f3329da5336dde6c648728c3cc6641f0a89ef6afdd43d4dbe57376425",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "fallen_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "fallen_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_FL_06",
+      "axis": "iso_y",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-FL-B",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "fallen_log",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_fl_07",
+      "display_name": "大量枯枝倒木，iso_x",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "fallen_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_07.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_07.png",
+      "canvas_size": [
+        320,
+        192
+      ],
+      "image_size": [
+        320,
+        192
+      ],
+      "visible_bounds_px": [
+        8,
+        11,
+        312,
+        160
+      ],
+      "anchor_px": [
+        160,
+        160
+      ],
+      "placement_anchor_px": [
+        160,
+        160
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        4,
+        2
+      ],
+      "visual_footprint_tiles": [
+        4,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        2
+      ],
+      "base_footprint_tiles": [
+        4,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/倒木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/fallen_trees/DF_FL_07.png",
+      "source_sha256": "f0b84de7202e0c8ffeed3a017495ed980734ad2c338d0ef56196f9f4fd11ec65",
+      "output_sha256": "f0b84de7202e0c8ffeed3a017495ed980734ad2c338d0ef56196f9f4fd11ec65",
+      "thumbnail_source_sha256": "f0b84de7202e0c8ffeed3a017495ed980734ad2c338d0ef56196f9f4fd11ec65",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "fallen_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "fallen_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_FL_07",
+      "axis": "iso_x",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-FL-B",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "fallen_log",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_fl_08",
+      "display_name": "大量枯枝倒木，iso_y",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "fallen_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_08.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_08.png",
+      "canvas_size": [
+        320,
+        192
+      ],
+      "image_size": [
+        320,
+        192
+      ],
+      "visible_bounds_px": [
+        114,
+        8,
+        205,
+        160
+      ],
+      "anchor_px": [
+        160,
+        160
+      ],
+      "placement_anchor_px": [
+        160,
+        160
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        4
+      ],
+      "visual_footprint_tiles": [
+        2,
+        4
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        4
+      ],
+      "base_footprint_tiles": [
+        2,
+        4
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/倒木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/fallen_trees/DF_FL_08.png",
+      "source_sha256": "08c14a2b77f0d50fbebe9763cdafb41a806683b54ff0c7340afaefee49ed7799",
+      "output_sha256": "08c14a2b77f0d50fbebe9763cdafb41a806683b54ff0c7340afaefee49ed7799",
+      "thumbnail_source_sha256": "08c14a2b77f0d50fbebe9763cdafb41a806683b54ff0c7340afaefee49ed7799",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "fallen_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "fallen_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_FL_08",
+      "axis": "iso_y",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-FL-B",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "fallen_log",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_fl_09",
+      "display_name": "焦黑烧毁倒木，iso_x",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "fallen_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_09.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_09.png",
+      "canvas_size": [
+        320,
+        192
+      ],
+      "image_size": [
+        320,
+        192
+      ],
+      "visible_bounds_px": [
+        30,
+        8,
+        290,
+        160
+      ],
+      "anchor_px": [
+        160,
+        160
+      ],
+      "placement_anchor_px": [
+        160,
+        160
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        4,
+        2
+      ],
+      "visual_footprint_tiles": [
+        4,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        2
+      ],
+      "base_footprint_tiles": [
+        4,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/倒木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/fallen_trees/DF_FL_09.png",
+      "source_sha256": "4f17bfce59bb4d5042ba0e5db9e5ef59dee88a25e0af6be1517ac0b991e30e94",
+      "output_sha256": "4f17bfce59bb4d5042ba0e5db9e5ef59dee88a25e0af6be1517ac0b991e30e94",
+      "thumbnail_source_sha256": "4f17bfce59bb4d5042ba0e5db9e5ef59dee88a25e0af6be1517ac0b991e30e94",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "fallen_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "fallen_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_FL_09",
+      "axis": "iso_x",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-FL-C",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "fallen_log",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_fl_10",
+      "display_name": "焦黑烧毁倒木，iso_y",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "fallen_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_10.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_10.png",
+      "canvas_size": [
+        320,
+        192
+      ],
+      "image_size": [
+        320,
+        192
+      ],
+      "visible_bounds_px": [
+        119,
+        8,
+        201,
+        160
+      ],
+      "anchor_px": [
+        160,
+        160
+      ],
+      "placement_anchor_px": [
+        160,
+        160
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        4
+      ],
+      "visual_footprint_tiles": [
+        2,
+        4
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        4
+      ],
+      "base_footprint_tiles": [
+        2,
+        4
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/倒木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/fallen_trees/DF_FL_10.png",
+      "source_sha256": "d90172806a8aba45d57e00589f14a44fbdd01dbd1645ad1c54c467593c1cc69c",
+      "output_sha256": "d90172806a8aba45d57e00589f14a44fbdd01dbd1645ad1c54c467593c1cc69c",
+      "thumbnail_source_sha256": "d90172806a8aba45d57e00589f14a44fbdd01dbd1645ad1c54c467593c1cc69c",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "fallen_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "fallen_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_FL_10",
+      "axis": "iso_y",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-FL-C",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "fallen_log",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_fl_11",
+      "display_name": "腐烂倒木与根系组合，iso_x",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "fallen_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_11.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_11.png",
+      "canvas_size": [
+        320,
+        192
+      ],
+      "image_size": [
+        320,
+        192
+      ],
+      "visible_bounds_px": [
+        26,
+        8,
+        293,
+        160
+      ],
+      "anchor_px": [
+        160,
+        160
+      ],
+      "placement_anchor_px": [
+        160,
+        160
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        4,
+        2
+      ],
+      "visual_footprint_tiles": [
+        4,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        2
+      ],
+      "base_footprint_tiles": [
+        4,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/倒木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/fallen_trees/DF_FL_11.png",
+      "source_sha256": "6bd45e9dda34abc62a9c4ef56bfedf38a5507ebbf59d3bf1be5e99bd52bf8c23",
+      "output_sha256": "6bd45e9dda34abc62a9c4ef56bfedf38a5507ebbf59d3bf1be5e99bd52bf8c23",
+      "thumbnail_source_sha256": "6bd45e9dda34abc62a9c4ef56bfedf38a5507ebbf59d3bf1be5e99bd52bf8c23",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "fallen_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "fallen_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_FL_11",
+      "axis": "iso_x",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-FL-C",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "fallen_log",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_fl_12",
+      "display_name": "腐烂倒木与根系组合，iso_y",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "fallen_trees",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_12.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/倒木/DF_FL_12.png",
+      "canvas_size": [
+        320,
+        192
+      ],
+      "image_size": [
+        320,
+        192
+      ],
+      "visible_bounds_px": [
+        118,
+        8,
+        201,
+        160
+      ],
+      "anchor_px": [
+        160,
+        160
+      ],
+      "placement_anchor_px": [
+        160,
+        160
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        4
+      ],
+      "visual_footprint_tiles": [
+        2,
+        4
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        4
+      ],
+      "base_footprint_tiles": [
+        2,
+        4
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/倒木",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/fallen_trees/DF_FL_12.png",
+      "source_sha256": "aff2cec0e956d197fdd84fad65249a0c4ac3b4db4b233bbafe68b19b49d326ca",
+      "output_sha256": "aff2cec0e956d197fdd84fad65249a0c4ac3b4db4b233bbafe68b19b49d326ca",
+      "thumbnail_source_sha256": "aff2cec0e956d197fdd84fad65249a0c4ac3b4db4b233bbafe68b19b49d326ca",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "fallen_trees",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "fallen_trees"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_FL_12",
+      "axis": "iso_y",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-FL-C",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "fallen_log",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_gr_01",
+      "display_name": "单簇蕨类",
+      "asset_type": "decoration",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "grass_groundcover",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/草地覆盖/DF_GR_01.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/草地覆盖/DF_GR_01.png",
+      "canvas_size": [
+        96,
+        96
+      ],
+      "image_size": [
+        96,
+        96
+      ],
+      "visible_bounds_px": [
+        14,
+        8,
+        82,
+        64
+      ],
+      "anchor_px": [
+        48,
+        64
+      ],
+      "placement_anchor_px": [
+        48,
+        64
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_overlay",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/草地覆盖",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/grass_groundcover/DF_GR_01.png",
+      "source_sha256": "644a313308fff4408460329c077454de7a45942e0df7fdbac0cfb17857cbd30f",
+      "output_sha256": "644a313308fff4408460329c077454de7a45942e0df7fdbac0cfb17857cbd30f",
+      "thumbnail_source_sha256": "644a313308fff4408460329c077454de7a45942e0df7fdbac0cfb17857cbd30f",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "grass_groundcover",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "grass_groundcover"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_GR_01",
+      "axis": "none",
+      "scene_intent": "visual_detail",
+      "source_sheet": "DF-GR-A",
+      "authored_collision_policy": "none",
+      "authored_collision_preset": "none",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_gr_02",
+      "display_name": "单簇高草",
+      "asset_type": "decoration",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "grass_groundcover",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/草地覆盖/DF_GR_02.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/草地覆盖/DF_GR_02.png",
+      "canvas_size": [
+        96,
+        96
+      ],
+      "image_size": [
+        96,
+        96
+      ],
+      "visible_bounds_px": [
+        15,
+        8,
+        81,
+        64
+      ],
+      "anchor_px": [
+        48,
+        64
+      ],
+      "placement_anchor_px": [
+        48,
+        64
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_overlay",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/草地覆盖",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/grass_groundcover/DF_GR_02.png",
+      "source_sha256": "36bed80b0ead198fb4f6ee5097e348f87f27d48e1d27de594344fe696984c181",
+      "output_sha256": "36bed80b0ead198fb4f6ee5097e348f87f27d48e1d27de594344fe696984c181",
+      "thumbnail_source_sha256": "36bed80b0ead198fb4f6ee5097e348f87f27d48e1d27de594344fe696984c181",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "grass_groundcover",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "grass_groundcover"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_GR_02",
+      "axis": "none",
+      "scene_intent": "visual_detail",
+      "source_sheet": "DF-GR-A",
+      "authored_collision_policy": "none",
+      "authored_collision_preset": "none",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_gr_03",
+      "display_name": "低矮苔藓草地",
+      "asset_type": "decoration",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "grass_groundcover",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/草地覆盖/DF_GR_03.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/草地覆盖/DF_GR_03.png",
+      "canvas_size": [
+        128,
+        96
+      ],
+      "image_size": [
+        128,
+        96
+      ],
+      "visible_bounds_px": [
+        8,
+        9,
+        120,
+        64
+      ],
+      "anchor_px": [
+        64,
+        64
+      ],
+      "placement_anchor_px": [
+        64,
+        64
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "visual_footprint_tiles": [
+        2,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        2
+      ],
+      "base_footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_overlay",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/草地覆盖",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/grass_groundcover/DF_GR_03.png",
+      "source_sha256": "ae2aea161387882f1dfa31559c11eac9e0d1bdd15e4fcdf5884c81cbf3df9e95",
+      "output_sha256": "ae2aea161387882f1dfa31559c11eac9e0d1bdd15e4fcdf5884c81cbf3df9e95",
+      "thumbnail_source_sha256": "ae2aea161387882f1dfa31559c11eac9e0d1bdd15e4fcdf5884c81cbf3df9e95",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "grass_groundcover",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "grass_groundcover"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_GR_03",
+      "axis": "none",
+      "scene_intent": "visual_detail",
+      "source_sheet": "DF-GR-A",
+      "authored_collision_policy": "none",
+      "authored_collision_preset": "none",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_gr_04",
+      "display_name": "白色、淡黄色小花草丛",
+      "asset_type": "decoration",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "grass_groundcover",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/草地覆盖/DF_GR_04.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/草地覆盖/DF_GR_04.png",
+      "canvas_size": [
+        128,
+        96
+      ],
+      "image_size": [
+        128,
+        96
+      ],
+      "visible_bounds_px": [
+        15,
+        8,
+        113,
+        64
+      ],
+      "anchor_px": [
+        64,
+        64
+      ],
+      "placement_anchor_px": [
+        64,
+        64
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "visual_footprint_tiles": [
+        2,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        2
+      ],
+      "base_footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_overlay",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/草地覆盖",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/grass_groundcover/DF_GR_04.png",
+      "source_sha256": "4d0387ea516599c41dab185d9719121e2aca9757e3b139f492c4ef1a8f826b15",
+      "output_sha256": "4d0387ea516599c41dab185d9719121e2aca9757e3b139f492c4ef1a8f826b15",
+      "thumbnail_source_sha256": "4d0387ea516599c41dab185d9719121e2aca9757e3b139f492c4ef1a8f826b15",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "grass_groundcover",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "grass_groundcover"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_GR_04",
+      "axis": "none",
+      "scene_intent": "visual_detail",
+      "source_sheet": "DF-GR-A",
+      "authored_collision_policy": "none",
+      "authored_collision_preset": "none",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_gr_05",
+      "display_name": "低矮荆棘与暗叶草丛",
+      "asset_type": "decoration",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "grass_groundcover",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/草地覆盖/DF_GR_05.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/草地覆盖/DF_GR_05.png",
+      "canvas_size": [
+        128,
+        96
+      ],
+      "image_size": [
+        128,
+        96
+      ],
+      "visible_bounds_px": [
+        13,
+        8,
+        115,
+        64
+      ],
+      "anchor_px": [
+        64,
+        64
+      ],
+      "placement_anchor_px": [
+        64,
+        64
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "visual_footprint_tiles": [
+        2,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        2
+      ],
+      "base_footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_overlay",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/草地覆盖",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/grass_groundcover/DF_GR_05.png",
+      "source_sha256": "3ffbeff961e6733ff15b69825f4a4e1a1618d35e0dadf4fd158d4d54d4b33b60",
+      "output_sha256": "3ffbeff961e6733ff15b69825f4a4e1a1618d35e0dadf4fd158d4d54d4b33b60",
+      "thumbnail_source_sha256": "3ffbeff961e6733ff15b69825f4a4e1a1618d35e0dadf4fd158d4d54d4b33b60",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "grass_groundcover",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "grass_groundcover"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_GR_05",
+      "axis": "none",
+      "scene_intent": "visual_detail",
+      "source_sheet": "DF-GR-A",
+      "authored_collision_policy": "none",
+      "authored_collision_preset": "none",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_gr_06",
+      "display_name": "沿 iso_x 轴连续草带",
+      "asset_type": "decoration",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "grass_groundcover",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/草地覆盖/DF_GR_06.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/草地覆盖/DF_GR_06.png",
+      "canvas_size": [
+        256,
+        128
+      ],
+      "image_size": [
+        256,
+        128
+      ],
+      "visible_bounds_px": [
+        47,
+        8,
+        209,
+        96
+      ],
+      "anchor_px": [
+        128,
+        96
+      ],
+      "placement_anchor_px": [
+        128,
+        96
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        4,
+        1
+      ],
+      "visual_footprint_tiles": [
+        4,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        1
+      ],
+      "base_footprint_tiles": [
+        4,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_overlay",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/草地覆盖",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/grass_groundcover/DF_GR_06.png",
+      "source_sha256": "41f8ebe1ac8b522b586e656dec9a2a5b56e0ad13976479999d85895be199c5d4",
+      "output_sha256": "41f8ebe1ac8b522b586e656dec9a2a5b56e0ad13976479999d85895be199c5d4",
+      "thumbnail_source_sha256": "41f8ebe1ac8b522b586e656dec9a2a5b56e0ad13976479999d85895be199c5d4",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "grass_groundcover",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "grass_groundcover"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_GR_06",
+      "axis": "none",
+      "scene_intent": "visual_detail",
+      "source_sheet": "DF-GR-A",
+      "authored_collision_policy": "none",
+      "authored_collision_preset": "none",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_gr_07",
+      "display_name": "沿 iso_y 轴连续草带",
+      "asset_type": "decoration",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "grass_groundcover",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/草地覆盖/DF_GR_07.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/草地覆盖/DF_GR_07.png",
+      "canvas_size": [
+        256,
+        128
+      ],
+      "image_size": [
+        256,
+        128
+      ],
+      "visible_bounds_px": [
+        76,
+        8,
+        181,
+        96
+      ],
+      "anchor_px": [
+        128,
+        96
+      ],
+      "placement_anchor_px": [
+        128,
+        96
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        1,
+        4
+      ],
+      "visual_footprint_tiles": [
+        1,
+        4
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        4
+      ],
+      "base_footprint_tiles": [
+        1,
+        4
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_overlay",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/草地覆盖",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/grass_groundcover/DF_GR_07.png",
+      "source_sha256": "33479f996345ea4f21cbfef232084e6a3aae4f324166306d7821f047652d9e22",
+      "output_sha256": "33479f996345ea4f21cbfef232084e6a3aae4f324166306d7821f047652d9e22",
+      "thumbnail_source_sha256": "33479f996345ea4f21cbfef232084e6a3aae4f324166306d7821f047652d9e22",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "grass_groundcover",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "grass_groundcover"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_GR_07",
+      "axis": "none",
+      "scene_intent": "visual_detail",
+      "source_sheet": "DF-GR-A",
+      "authored_collision_policy": "none",
+      "authored_collision_preset": "none",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_gr_08",
+      "display_name": "蕨类与高草连续片",
+      "asset_type": "decoration",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "grass_groundcover",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/草地覆盖/DF_GR_08.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/草地覆盖/DF_GR_08.png",
+      "canvas_size": [
+        256,
+        128
+      ],
+      "image_size": [
+        256,
+        128
+      ],
+      "visible_bounds_px": [
+        56,
+        8,
+        201,
+        96
+      ],
+      "anchor_px": [
+        128,
+        96
+      ],
+      "placement_anchor_px": [
+        128,
+        96
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        4,
+        2
+      ],
+      "visual_footprint_tiles": [
+        4,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        2
+      ],
+      "base_footprint_tiles": [
+        4,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_overlay",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/草地覆盖",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/grass_groundcover/DF_GR_08.png",
+      "source_sha256": "c7d70bb473e40f261f4e1972b7871bb7f3de8cd65dbcb738d38b477ea7c9f89b",
+      "output_sha256": "c7d70bb473e40f261f4e1972b7871bb7f3de8cd65dbcb738d38b477ea7c9f89b",
+      "thumbnail_source_sha256": "c7d70bb473e40f261f4e1972b7871bb7f3de8cd65dbcb738d38b477ea7c9f89b",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "grass_groundcover",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "grass_groundcover"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_GR_08",
+      "axis": "none",
+      "scene_intent": "visual_detail",
+      "source_sheet": "DF-GR-A",
+      "authored_collision_policy": "none",
+      "authored_collision_preset": "none",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_gr_09",
+      "display_name": "林间花草地覆盖片",
+      "asset_type": "decoration",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "grass_groundcover",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/草地覆盖/DF_GR_09.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/草地覆盖/DF_GR_09.png",
+      "canvas_size": [
+        256,
+        128
+      ],
+      "image_size": [
+        256,
+        128
+      ],
+      "visible_bounds_px": [
+        48,
+        8,
+        207,
+        96
+      ],
+      "anchor_px": [
+        128,
+        96
+      ],
+      "placement_anchor_px": [
+        128,
+        96
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_overlay",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/草地覆盖",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/grass_groundcover/DF_GR_09.png",
+      "source_sha256": "0bbffd4271f493ddb4f89e8c457d1e485262fdf893b7a9fdcace26eaa1d86d01",
+      "output_sha256": "0bbffd4271f493ddb4f89e8c457d1e485262fdf893b7a9fdcace26eaa1d86d01",
+      "thumbnail_source_sha256": "0bbffd4271f493ddb4f89e8c457d1e485262fdf893b7a9fdcace26eaa1d86d01",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "grass_groundcover",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "grass_groundcover"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_GR_09",
+      "axis": "none",
+      "scene_intent": "visual_detail",
+      "source_sheet": "DF-GR-B",
+      "authored_collision_policy": "none",
+      "authored_collision_preset": "none",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_gr_10",
+      "display_name": "深林落叶、苔藓与低草混合覆盖片",
+      "asset_type": "decoration",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "grass_groundcover",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/草地覆盖/DF_GR_10.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/草地覆盖/DF_GR_10.png",
+      "canvas_size": [
+        256,
+        128
+      ],
+      "image_size": [
+        256,
+        128
+      ],
+      "visible_bounds_px": [
+        72,
+        8,
+        184,
+        96
+      ],
+      "anchor_px": [
+        128,
+        96
+      ],
+      "placement_anchor_px": [
+        128,
+        96
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        4,
+        4
+      ],
+      "visual_footprint_tiles": [
+        4,
+        4
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        4
+      ],
+      "base_footprint_tiles": [
+        4,
+        4
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_overlay",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/草地覆盖",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/grass_groundcover/DF_GR_10.png",
+      "source_sha256": "3a5e36a588dbc6397c80d05b2ee100c42050b6c2fcd04f1d4d38e0f202f0b69d",
+      "output_sha256": "3a5e36a588dbc6397c80d05b2ee100c42050b6c2fcd04f1d4d38e0f202f0b69d",
+      "thumbnail_source_sha256": "3a5e36a588dbc6397c80d05b2ee100c42050b6c2fcd04f1d4d38e0f202f0b69d",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "grass_groundcover",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "grass_groundcover"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_GR_10",
+      "axis": "none",
+      "scene_intent": "visual_detail",
+      "source_sheet": "DF-GR-B",
+      "authored_collision_policy": "none",
+      "authored_collision_preset": "none",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_sp_01",
+      "display_name": "小型平切树墩",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "stumps",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_01.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_01.png",
+      "canvas_size": [
+        160,
+        160
+      ],
+      "image_size": [
+        160,
+        160
+      ],
+      "visible_bounds_px": [
+        8,
+        39,
+        152,
+        128
+      ],
+      "anchor_px": [
+        80,
+        128
+      ],
+      "placement_anchor_px": [
+        80,
+        128
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/树墩",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/stumps/DF_SP_01.png",
+      "source_sha256": "495a47cc85ff97bc92231f6fbcda522fe1e5f2bed139312a741aa1e8873ff0d0",
+      "output_sha256": "495a47cc85ff97bc92231f6fbcda522fe1e5f2bed139312a741aa1e8873ff0d0",
+      "thumbnail_source_sha256": "495a47cc85ff97bc92231f6fbcda522fe1e5f2bed139312a741aa1e8873ff0d0",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "stumps",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "stumps"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_SP_01",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-SP-A",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "stump_small",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_sp_02",
+      "display_name": "大型苔藓树墩",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "stumps",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_02.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_02.png",
+      "canvas_size": [
+        160,
+        160
+      ],
+      "image_size": [
+        160,
+        160
+      ],
+      "visible_bounds_px": [
+        8,
+        12,
+        152,
+        128
+      ],
+      "anchor_px": [
+        80,
+        128
+      ],
+      "placement_anchor_px": [
+        80,
+        128
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "visual_footprint_tiles": [
+        2,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        2
+      ],
+      "base_footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/树墩",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/stumps/DF_SP_02.png",
+      "source_sha256": "da8e5cf1befbdb0ebe45f34786d08442085b6056ce38447166d7938dd6f68118",
+      "output_sha256": "da8e5cf1befbdb0ebe45f34786d08442085b6056ce38447166d7938dd6f68118",
+      "thumbnail_source_sha256": "da8e5cf1befbdb0ebe45f34786d08442085b6056ce38447166d7938dd6f68118",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "stumps",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "stumps"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_SP_02",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-SP-A",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "stump_cluster",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_sp_03",
+      "display_name": "中空锯齿树墩",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "stumps",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_03.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_03.png",
+      "canvas_size": [
+        160,
+        160
+      ],
+      "image_size": [
+        160,
+        160
+      ],
+      "visible_bounds_px": [
+        8,
+        8,
+        152,
+        128
+      ],
+      "anchor_px": [
+        80,
+        128
+      ],
+      "placement_anchor_px": [
+        80,
+        128
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "visual_footprint_tiles": [
+        2,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        2
+      ],
+      "base_footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/树墩",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/stumps/DF_SP_03.png",
+      "source_sha256": "78c31856358f49e5ce7e66978afb4915e272b8638e5b02aa39bae6a8ac0b5b04",
+      "output_sha256": "78c31856358f49e5ce7e66978afb4915e272b8638e5b02aa39bae6a8ac0b5b04",
+      "thumbnail_source_sha256": "78c31856358f49e5ce7e66978afb4915e272b8638e5b02aa39bae6a8ac0b5b04",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "stumps",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "stumps"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_SP_03",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-SP-A",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "stump_cluster",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_sp_04",
+      "display_name": "焦黑烧毁树墩",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "stumps",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_04.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_04.png",
+      "canvas_size": [
+        160,
+        160
+      ],
+      "image_size": [
+        160,
+        160
+      ],
+      "visible_bounds_px": [
+        12,
+        8,
+        149,
+        128
+      ],
+      "anchor_px": [
+        80,
+        128
+      ],
+      "placement_anchor_px": [
+        80,
+        128
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/树墩",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/stumps/DF_SP_04.png",
+      "source_sha256": "072c25b55bea78218316c8ad35b0c8a49273a30287b6a5aca79c3e4177465abd",
+      "output_sha256": "072c25b55bea78218316c8ad35b0c8a49273a30287b6a5aca79c3e4177465abd",
+      "thumbnail_source_sha256": "072c25b55bea78218316c8ad35b0c8a49273a30287b6a5aca79c3e4177465abd",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "stumps",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "stumps"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_SP_04",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-SP-A",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "stump_small",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_sp_05",
+      "display_name": "灰白枯死树墩",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "stumps",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_05.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_05.png",
+      "canvas_size": [
+        160,
+        160
+      ],
+      "image_size": [
+        160,
+        160
+      ],
+      "visible_bounds_px": [
+        11,
+        8,
+        149,
+        128
+      ],
+      "anchor_px": [
+        80,
+        128
+      ],
+      "placement_anchor_px": [
+        80,
+        128
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/树墩",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/stumps/DF_SP_05.png",
+      "source_sha256": "e47add6166aad178e93723484ecbc8ade0833985ddc453c6946bc686b3b3b2c8",
+      "output_sha256": "e47add6166aad178e93723484ecbc8ade0833985ddc453c6946bc686b3b3b2c8",
+      "thumbnail_source_sha256": "e47add6166aad178e93723484ecbc8ade0833985ddc453c6946bc686b3b3b2c8",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "stumps",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "stumps"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_SP_05",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-SP-A",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "stump_small",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_sp_06",
+      "display_name": "带蘑菇树墩",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "stumps",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_06.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_06.png",
+      "canvas_size": [
+        160,
+        160
+      ],
+      "image_size": [
+        160,
+        160
+      ],
+      "visible_bounds_px": [
+        8,
+        20,
+        152,
+        128
+      ],
+      "anchor_px": [
+        80,
+        128
+      ],
+      "placement_anchor_px": [
+        80,
+        128
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/树墩",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/stumps/DF_SP_06.png",
+      "source_sha256": "ab3e4eb2670943529afd20e59c120351d3a07a21448b81dbfe8a3d5de3ebe9ae",
+      "output_sha256": "ab3e4eb2670943529afd20e59c120351d3a07a21448b81dbfe8a3d5de3ebe9ae",
+      "thumbnail_source_sha256": "ab3e4eb2670943529afd20e59c120351d3a07a21448b81dbfe8a3d5de3ebe9ae",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "stumps",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "stumps"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_SP_06",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-SP-A",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "stump_small",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_sp_07",
+      "display_name": "长出新芽的树墩",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "stumps",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_07.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_07.png",
+      "canvas_size": [
+        160,
+        160
+      ],
+      "image_size": [
+        160,
+        160
+      ],
+      "visible_bounds_px": [
+        8,
+        8,
+        151,
+        128
+      ],
+      "anchor_px": [
+        80,
+        128
+      ],
+      "placement_anchor_px": [
+        80,
+        128
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/树墩",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/stumps/DF_SP_07.png",
+      "source_sha256": "2634575e725c198fe068973f806b922d22a2e7326e07e4aa1cb5b9ba291e673f",
+      "output_sha256": "2634575e725c198fe068973f806b922d22a2e7326e07e4aa1cb5b9ba291e673f",
+      "thumbnail_source_sha256": "2634575e725c198fe068973f806b922d22a2e7326e07e4aa1cb5b9ba291e673f",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "stumps",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "stumps"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_SP_07",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-SP-B",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "stump_small",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_sp_08",
+      "display_name": "巨大远古树墩",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "stumps",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_08.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_08.png",
+      "canvas_size": [
+        160,
+        160
+      ],
+      "image_size": [
+        160,
+        160
+      ],
+      "visible_bounds_px": [
+        11,
+        8,
+        149,
+        128
+      ],
+      "anchor_px": [
+        80,
+        128
+      ],
+      "placement_anchor_px": [
+        80,
+        128
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/树墩",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/stumps/DF_SP_08.png",
+      "source_sha256": "0c649184d15b57f5d182ab2a16753eb9482b951519f4c3b99a95d56e43884118",
+      "output_sha256": "0c649184d15b57f5d182ab2a16753eb9482b951519f4c3b99a95d56e43884118",
+      "thumbnail_source_sha256": "0c649184d15b57f5d182ab2a16753eb9482b951519f4c3b99a95d56e43884118",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "stumps",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "stumps"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_SP_08",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-SP-B",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "stump_cluster",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_sp_09",
+      "display_name": "两个小树墩组合",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "stumps",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_09.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_09.png",
+      "canvas_size": [
+        256,
+        192
+      ],
+      "image_size": [
+        256,
+        192
+      ],
+      "visible_bounds_px": [
+        16,
+        8,
+        241,
+        160
+      ],
+      "anchor_px": [
+        128,
+        160
+      ],
+      "placement_anchor_px": [
+        128,
+        160
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        2
+      ],
+      "visual_footprint_tiles": [
+        2,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        2
+      ],
+      "base_footprint_tiles": [
+        2,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/树墩",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/stumps/DF_SP_09.png",
+      "source_sha256": "edfb1e0a858092ac8ca79ef6e65d3558d9e091a384c5adf1e1ef9d586ab010a1",
+      "output_sha256": "edfb1e0a858092ac8ca79ef6e65d3558d9e091a384c5adf1e1ef9d586ab010a1",
+      "thumbnail_source_sha256": "edfb1e0a858092ac8ca79ef6e65d3558d9e091a384c5adf1e1ef9d586ab010a1",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "stumps",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "stumps"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_SP_09",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-SP-B",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "stump_cluster",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_sp_10",
+      "display_name": "三个高低树墩组合",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "stumps",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_10.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_10.png",
+      "canvas_size": [
+        256,
+        192
+      ],
+      "image_size": [
+        256,
+        192
+      ],
+      "visible_bounds_px": [
+        37,
+        8,
+        219,
+        160
+      ],
+      "anchor_px": [
+        128,
+        160
+      ],
+      "placement_anchor_px": [
+        128,
+        160
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        2
+      ],
+      "visual_footprint_tiles": [
+        3,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        2
+      ],
+      "base_footprint_tiles": [
+        3,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/树墩",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/stumps/DF_SP_10.png",
+      "source_sha256": "ab2779d8d0327f47263460df2c6063e5fc215e5933bdbdfeaafd569c35961324",
+      "output_sha256": "ab2779d8d0327f47263460df2c6063e5fc215e5933bdbdfeaafd569c35961324",
+      "thumbnail_source_sha256": "ab2779d8d0327f47263460df2c6063e5fc215e5933bdbdfeaafd569c35961324",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "stumps",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "stumps"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_SP_10",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-SP-B",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "stump_cluster",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_sp_11",
+      "display_name": "林间砍伐空地树墩组合",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "stumps",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_11.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_11.png",
+      "canvas_size": [
+        256,
+        192
+      ],
+      "image_size": [
+        256,
+        192
+      ],
+      "visible_bounds_px": [
+        18,
+        8,
+        238,
+        160
+      ],
+      "anchor_px": [
+        128,
+        160
+      ],
+      "placement_anchor_px": [
+        128,
+        160
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/树墩",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/stumps/DF_SP_11.png",
+      "source_sha256": "abe1be4232a539a270a0a3f73a1fa6013e729076e45e1cd91e0f07cb8b095cf8",
+      "output_sha256": "abe1be4232a539a270a0a3f73a1fa6013e729076e45e1cd91e0f07cb8b095cf8",
+      "thumbnail_source_sha256": "abe1be4232a539a270a0a3f73a1fa6013e729076e45e1cd91e0f07cb8b095cf8",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "stumps",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "stumps"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_SP_11",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-SP-B",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "stump_cluster",
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.deep_forest.df_sp_12",
+      "display_name": "四至五个密集树墩组合",
+      "asset_type": "large_prop",
+      "category": "tree",
+      "object_class": "tree",
+      "source_category": "stumps",
+      "theme": "deep_forest",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_12.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44/树墩/DF_SP_12.png",
+      "canvas_size": [
+        256,
+        192
+      ],
+      "image_size": [
+        256,
+        192
+      ],
+      "visible_bounds_px": [
+        8,
+        8,
+        248,
+        160
+      ],
+      "anchor_px": [
+        128,
+        160
+      ],
+      "placement_anchor_px": [
+        128,
+        160
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        4,
+        3
+      ],
+      "visual_footprint_tiles": [
+        4,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        3
+      ],
+      "base_footprint_tiles": [
+        4,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "package_metadata_anchor_verified_v1",
+      "palette_path": "装饰物1/树木/MSE深林44/树墩",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\树木\\MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE.zip::transparent_assets/stumps/DF_SP_12.png",
+      "source_sha256": "e6e26b1e4ad6a5cee719ffe61b31bcee41fc267bc14ddf3368699eb0d893123f",
+      "output_sha256": "e6e26b1e4ad6a5cee719ffe61b31bcee41fc267bc14ddf3368699eb0d893123f",
+      "thumbnail_source_sha256": "e6e26b1e4ad6a5cee719ffe61b31bcee41fc267bc14ddf3368699eb0d893123f",
+      "processing": "verified_package_rgba_passthrough",
+      "tags": [
+        "stumps",
+        "deep_forest",
+        "ancient_gothic",
+        "outdoor",
+        "tree",
+        "manual_collision",
+        "stumps"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE",
+      "package_asset_id": "DF_SP_12",
+      "axis": "none",
+      "scene_intent": "block_path",
+      "source_sheet": "DF-SP-B",
+      "authored_collision_policy": "preset",
+      "authored_collision_preset": "stump_cluster",
+      "projection": "orthographic_isometric_2_to_1"
+    }
+  ]
+}
