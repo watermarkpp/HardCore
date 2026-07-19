@@ -193,7 +193,11 @@ def build_asset(
         "scale_approved": True,
         "anchor_approved": True,
         "default_layer": str(meta["default_layer"]),
-        "default_object_role": str(meta["default_object_role"]),
+        # This pack is visual-only in the user's workflow. Keeping the source
+        # "obstacle" role makes the editor UI re-enable overlap blocking during
+        # validation even though the catalog collision policy is "none".
+        "authored_default_object_role": str(meta["default_object_role"]),
+        "default_object_role": "decoration",
         "collision_policy": "none",
         "collision_profile_id": "none_visual",
         "navigation_policy": "ignore",

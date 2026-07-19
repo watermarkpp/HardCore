@@ -31,6 +31,7 @@ func _ready() -> void:
 		ids[asset_id] = true
 		assert(str(asset.get("object_class", "")) == "tree")
 		assert(str(asset.get("category", "")) == "tree")
+		assert(str(asset.get("default_object_role", "")) == "decoration")
 		assert(str(asset.get("collision_policy", "")) == "none")
 		assert(str(asset.get("collision_profile_id", "")) == "none_visual")
 		assert(str(asset.get("navigation_policy", "")) == "ignore")
@@ -83,6 +84,17 @@ func _ready() -> void:
 		"Deep Forest Asset Pack Test",
 		Vector2i(64, 64)
 	)
+	# Reproduce the real editor case: the user may place a visual tree over an
+	# existing colliding prop. The tree's menu-selected default role must stay
+	# decoration so its intentionally empty collision never becomes an
+	# obstacle-only overlap rejection.
+	document.layers.terrain_base.append({
+		"instance_id": "existing_blocker",
+		"asset_id": "test.existing_blocker",
+		"tile": [18, 18],
+		"footprint_tiles": [8, 8],
+		"collision_policy": "preset",
+	})
 	for asset: Dictionary in assets:
 		assert(
 			MapEditorPlacementValidator.validate(
@@ -103,7 +115,7 @@ func _ready() -> void:
 	var placed := MapEditorInstanceService.create_instance(
 		document,
 		str(assets[0].asset_id),
-		"terrain",
+		str(assets[0].default_object_role),
 		Vector2i(20, 20)
 	)
 	assert(placed.ok, str(placed.get("errors", [])))
@@ -122,7 +134,7 @@ func _ready() -> void:
 
 	print(
 		"MSE_DEEP_FOREST_ASSET_PACK_PASS "
-		+ "assets=44 categories=4 alpha=44 collision=none "
+		+ "assets=44 categories=4 alpha=44 collision=none role=decoration "
 		+ "forest_clusters=excluded"
 	)
 	get_tree().quit(0)
