@@ -1,0 +1,44 @@
+{
+  "contractId": "ui.loading.transition.v1",
+  "policy": "The overlay only displays the exact text Loading...... on a clean translucent dark-gray shade. Atmosphere is limited to a low-opacity game-icon watermark, subtle red breathing glow, sparse embers, text breathing, and an edge vignette. It never displays a map name, region description, tip, progress bar, or gameplay status.",
+  "stableVisualId": "ui.loading.overlay",
+  "stableAtmosphereIds": [
+    "ui.loading.game_icon_watermark",
+    "ui.loading.red_breathing_glow",
+    "ui.loading.edge_vignette"
+  ],
+  "exactVisibleText": "Loading......",
+  "atmosphere": {
+    "gameIconPath": "res://assets/branding/game_icon.png",
+    "watermarkOpacityRange": [
+      0.48,
+      0.62
+    ],
+    "loadingTextOpacityRange": [
+      0.75,
+      1.0
+    ],
+    "maximumEmberCount": 16,
+    "background": "cool near-black charcoal blue at approximately 90 percent coverage and 10 percent scene visibility",
+    "blackBackgroundRemoval": "brightness mask plus elliptical edge feathering in the watermark shader"
+  },
+  "forbiddenContent": [
+    "map name",
+    "region description",
+    "gameplay tip",
+    "progress bar",
+    "decorative frame"
+  ],
+  "hudMethods": {
+    "begin": "GameHUD.begin_loading_transition(transition_id)",
+    "finish": "GameHUD.finish_loading_transition()"
+  },
+  "hudSignals": [
+    "GameHUD.loading_transition_covered(request)",
+    "GameHUD.loading_transition_finished(request)"
+  ],
+  "requestFields": [
+    "contract_id",
+    "transition_id"
+  ]
+}
