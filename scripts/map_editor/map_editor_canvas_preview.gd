@@ -559,34 +559,206 @@ func _draw_ghost(design_size: Vector2i, offset: Vector2, scale_factor: float) ->
 
 
 func _draw_instances(design_size: Vector2i, offset: Vector2, scale_factor: float) -> void:
-	for layer_name: String in ["terrain_base", "terrain_front", "object_base", "object_front"]:
+	var commands: Array[Dictionary] = []
+	var sequence := 0
+	var layer_names := ["terrain_base", "terrain_front", "object_base", "object_front"]
+	for layer_index in layer_names.size():
+		var layer_name: String = layer_names[layer_index]
 		for instance: Dictionary in document.get("layers", {}).get(layer_name, []):
 			if not instance.has("asset_id"):
 				continue
 			var asset := MapAssetCatalogService.find_asset(str(instance.asset_id))
-			var texture := _texture_for_asset(str(instance.asset_id))
+			for command: Dictionary in instance_draw_commands(
+				instance,
+				asset,
+				layer_index,
+				sequence
+			):
+				commands.append(command)
+			sequence += 1
+	commands.sort_custom(_draw_command_less)
+	for command: Dictionary in commands:
+			var image_path := str(command.get("image_path", ""))
+			var texture := (
+				_texture_for_path(image_path)
+				if not image_path.is_empty()
+				else _texture_for_asset(str(command.instance.get("asset_id", "")))
+			)
 			if texture == null:
 				continue
-			var geometry := instance_visual_geometry(instance, design_size, offset, scale_factor, texture.get_size(), asset)
+			var geometry := instance_visual_geometry(
+				command.instance,
+				design_size,
+				offset,
+				scale_factor,
+				texture.get_size(),
+				command.asset
+			)
+			var raw_anchor: Array = command.get("anchor", [])
+			var draw_anchor: Vector2 = (
+				Vector2(float(raw_anchor[0]), float(raw_anchor[1]))
+				if raw_anchor.size() == 2
+				else geometry.anchor
+			)
 			draw_set_transform(geometry.center, geometry.rotation, geometry.visual_scale)
-			draw_texture(texture, -geometry.anchor)
+			draw_texture(texture, -draw_anchor)
 			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+
+static func instance_draw_commands(
+	instance: Dictionary,
+	asset: Dictionary,
+	layer_index := 0,
+	sequence := 0
+) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	var tile_raw: Array = instance.get("tile", [0, 0])
+	var footprint: Array = instance.get(
+		"footprint_tiles",
+		asset.get("footprint_tiles", [1, 1])
+	)
+	var instance_tile := Vector2i(int(tile_raw[0]), int(tile_raw[1]))
+	var render_parts: Array = asset.get("render_parts", [])
+	if (
+		str(asset.get("asset_type", "")) == "wall_module"
+		and not render_parts.is_empty()
+	):
+		for part: Dictionary in render_parts:
+			var sort_offset_raw: Array = part.get(
+				"sort_tile_offset",
+				part.get("tile_offset", [0, 0])
+			)
+			var sort_tile := instance_tile + Vector2i(
+				int(sort_offset_raw[0]),
+				int(sort_offset_raw[1])
+			)
+			var anchor: Array = part.get(
+				"anchor",
+				asset.get("anchor_px", [0, 0])
+			)
+			for image_pass: Dictionary in [
+				{"field": "shadow_image", "pass": 0},
+				{"field": "base_image", "pass": 1},
+				{"field": "front_image", "pass": 2},
+			]:
+				var image_path := str(part.get(str(image_pass["field"]), ""))
+				if image_path.is_empty():
+					continue
+				result.append({
+					"instance": instance,
+					"asset": asset,
+					"image_path": image_path,
+					"anchor": anchor,
+					"sort_tile": sort_tile,
+					"layer_index": layer_index,
+					"image_pass": int(image_pass["pass"]),
+					"part_order": int(part.get("draw_order_index", 0)),
+					"sequence": sequence,
+				})
+		return result
+	var sort_tile := instance_tile + Vector2i(
+		maxi(0, int(footprint[0]) - 1),
+		maxi(0, int(footprint[1]) - 1)
+	)
+	result.append({
+		"instance": instance,
+		"asset": asset,
+		"image_path": str(asset.get("image", "")),
+		"anchor": asset.get("anchor_px", []),
+		"sort_tile": sort_tile,
+		"layer_index": layer_index,
+		"image_pass": 1,
+		"part_order": 0,
+		"sequence": sequence,
+	})
+	return result
+
+
+static func _draw_command_less(a: Dictionary, b: Dictionary) -> bool:
+	var a_tile: Vector2i = a.sort_tile
+	var b_tile: Vector2i = b.sort_tile
+	var a_depth := a_tile.x + a_tile.y
+	var b_depth := b_tile.x + b_tile.y
+	if a_depth != b_depth:
+		return a_depth < b_depth
+	if a_tile.x != b_tile.x:
+		return a_tile.x < b_tile.x
+	if int(a.layer_index) != int(b.layer_index):
+		return int(a.layer_index) < int(b.layer_index)
+	if int(a.image_pass) != int(b.image_pass):
+		return int(a.image_pass) < int(b.image_pass)
+	if int(a.part_order) != int(b.part_order):
+		return int(a.part_order) < int(b.part_order)
+	return int(a.sequence) < int(b.sequence)
 
 
 func _hit_selectable(screen_position: Vector2) -> String:
 	var raw_size: Array=document.design.design_size; var design_size:=Vector2i(int(raw_size[0]),int(raw_size[1]))
-	var all:=MapEditorInstanceService.all_instances(document); all.reverse()
+	var candidates: Array[Dictionary] = []
+	var all:=MapEditorInstanceService.all_instances(document)
+	var sequence := 0
 	for instance: Dictionary in all:
-		if bool(instance.get("selection_locked",false)): continue
+		if bool(instance.get("selection_locked",false)):
+			sequence += 1
+			continue
 		var asset := MapAssetCatalogService.find_asset(str(instance.get("asset_id", "")))
-		var texture:=_texture_for_asset(str(instance.get("asset_id",""))); if texture==null: continue
+		var texture:=_texture_for_asset(str(instance.get("asset_id","")))
+		if texture==null:
+			sequence += 1
+			continue
 		var geometry := instance_visual_geometry(instance, design_size, _draw_offset, _draw_scale, texture.get_size(), asset)
 		var hit_rect: Rect2 = geometry.rect.grow(4.0)
-		if hit_rect.has_point(screen_position): return str(instance.instance_id)
+		if hit_rect.has_point(screen_position):
+			var anchor_distance: float = (
+				geometry.center as Vector2
+			).distance_squared_to(screen_position)
+			var anchor_radius := maxf(12.0, 18.0 * _draw_scale)
+			candidates.append({
+				"selectable_id": str(instance.instance_id),
+				"anchor_distance": anchor_distance,
+				"direct_anchor": anchor_distance <= anchor_radius * anchor_radius,
+				"selection_area": hit_rect.size.x * hit_rect.size.y,
+				"depth": _instance_selection_depth(instance),
+				"sequence": sequence,
+			})
+		sequence += 1
 	for entry: Dictionary in MapEditorGameplaySemanticService.all_entries(document):
 		var raw:Array=entry.get("tile",[0,0]); var center:=_draw_offset+MapEditorCoordinate.cell_center_to_ground_px(Vector2(raw[0],raw[1]),design_size)*_draw_scale
-		if center.distance_to(screen_position)<=14.0:return str(entry.get("semantic_id",""))
-	return ""
+		var distance_squared := center.distance_squared_to(screen_position)
+		if distance_squared <= 14.0 * 14.0:
+			candidates.append({
+				"selectable_id": str(entry.get("semantic_id", "")),
+				"anchor_distance": distance_squared,
+				"direct_anchor": true,
+				"selection_area": 0.0,
+				"depth": 1_000_000,
+				"sequence": sequence,
+			})
+			sequence += 1
+	if candidates.is_empty():
+		return ""
+	candidates.sort_custom(_selection_candidate_less)
+	return str(candidates[0].selectable_id)
+
+
+static func _selection_candidate_less(a: Dictionary, b: Dictionary) -> bool:
+	if bool(a.direct_anchor) != bool(b.direct_anchor):
+		return bool(a.direct_anchor)
+	if not is_equal_approx(float(a.anchor_distance), float(b.anchor_distance)):
+		return float(a.anchor_distance) < float(b.anchor_distance)
+	if not is_equal_approx(float(a.selection_area), float(b.selection_area)):
+		return float(a.selection_area) < float(b.selection_area)
+	if int(a.depth) != int(b.depth):
+		return int(a.depth) > int(b.depth)
+	return int(a.sequence) > int(b.sequence)
+
+
+static func _instance_selection_depth(instance: Dictionary) -> int:
+	var tile: Array = instance.get("tile", [0, 0])
+	var footprint: Array = instance.get("footprint_tiles", [1, 1])
+	var front_x := int(tile[0]) + maxi(0, int(footprint[0]) - 1)
+	var front_y := int(tile[1]) + maxi(0, int(footprint[1]) - 1)
+	return (front_x + front_y) * 10000 + front_x
 
 
 func _draw_selection_overlays(design_size: Vector2i, offset: Vector2, scale_factor: float) -> void:
@@ -885,6 +1057,18 @@ func _texture_for_asset(asset_id: String) -> Texture2D:
 		return _ground_texture
 	var texture := load("res://" + image_path) as Texture2D
 	_texture_cache[asset_id] = texture
+	return texture
+
+
+func _texture_for_path(image_path: String) -> Texture2D:
+	if image_path.is_empty():
+		return null
+	var cache_key := "path:" + image_path
+	if _texture_cache.has(cache_key):
+		return _texture_cache[cache_key]
+	var resolved := image_path if image_path.begins_with("res://") else "res://" + image_path
+	var texture := load(resolved) as Texture2D
+	_texture_cache[cache_key] = texture
 	return texture
 
 

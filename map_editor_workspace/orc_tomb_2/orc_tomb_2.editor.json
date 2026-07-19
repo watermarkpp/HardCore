@@ -60,11 +60,13 @@
     "blank_template_id": "blank.orc_tomb_2",
     "clone_size_policy": "exact_source_copy_38x38",
     "clone_source_map_id": "orc_tomb_1",
-    "clone_source_revision": 2,
+    "clone_source_revision": 2.0,
     "content_policy": "full_copy_from_orc_tomb_1",
     "created_by": "human_codex_shared_tool",
     "milestone": "ORC_TOMB_2-CLONE-FROM-1-V1",
-    "revision": 1,
+    "revision": 1.0,
+    "runtime_approved": true,
+    "runtime_approved_revision": 1,
     "structure_id": "orc_tomb_2.hui_ring.v1",
     "structure_policy": "visual_walls_only_manual_collision_and_decoration",
     "template_kind": "cloned_map",
@@ -80,6 +82,7 @@
       1024.0
     ],
     "collision_from_ground": false,
+    "coordinate_contract_id": "isometric_cell_center_64x32_v1",
     "editable_source_required": true,
     "ground_mode": "generated_painted_chunks",
     "mask_storage": "chunked_l8",
@@ -91,13 +94,32 @@
     "paint_manifest": "res://assets/data/maps/ground_paint/orc_tomb_2.ground_paint_ops.json",
     "paint_state": "res://assets/data/maps/ground_paint/orc_tomb_2.ground_paint_state.json",
     "source_manifest": "res://assets/data/maps/ground_paint/orc_tomb_2.ground_source_manifest.json",
-    "tile_anchor_mode": "center",
+    "tile_anchor_mode": "cell_center",
     "visual_only": true,
     "workspace_manifest": "res://map_editor_workspace/orc_tomb_2/ground/ground_manifest.json",
     "workspace_state": "res://map_editor_workspace/orc_tomb_2/ground/ground_state.json"
   },
   "layers": {
-    "boss_spawn": [],
+    "boss_spawn": [
+      {
+        "boss_id": "boss.56",
+        "content_id": "boss.56",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅精灵",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000001",
+        "spawn_rule": "boss",
+        "tile": [
+          15.0,
+          15.0
+        ]
+      }
+    ],
     "collision": [
       {
         "blocks_monster": true,
@@ -926,24 +948,6 @@
         "radius_tiles": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
-        "semantic_id": "monster_spawn_000017",
-        "spawn_rule": "ambient",
-        "tile": [
-          15.0,
-          15.0
-        ]
-      },
-      {
-        "content_id": "monster.52",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "骷髅战士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.52",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
         "semantic_id": "monster_spawn_000018",
         "spawn_rule": "ambient",
         "tile": [
@@ -1111,42 +1115,6 @@
         "tile": [
           12.0,
           3.0
-        ]
-      },
-      {
-        "content_id": "monster.45",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "蝎子",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.45",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000032",
-        "spawn_rule": "ambient",
-        "tile": [
-          20.0,
-          15.0
-        ]
-      },
-      {
-        "content_id": "monster.46",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "洞蛆",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.46",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000033",
-        "spawn_rule": "ambient",
-        "tile": [
-          15.0,
-          20.0
         ]
       },
       {
@@ -6327,7 +6295,7 @@
     "terrain_front": []
   },
   "map_id": "orc_tomb_2",
-  "runtime_map_id": 218,
+  "runtime_map_id": 218.0,
   "schema_version": 4.0,
   "source_policy": "expansion_editable",
   "source_reference": {

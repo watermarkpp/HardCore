@@ -3,6 +3,7 @@ extends Control
 
 const LAST_DOCUMENT_PATH_FILE := "user://mse_last_document_path.txt"
 const InstanceProfileService := preload("res://scripts/map_editor/map_editor_instance_profile_service.gd")
+const WallLoopService := preload("res://scripts/map_editor/map_editor_wall_loop_service.gd")
 
 var current_document: Dictionary = {}
 var current_document_path := ""
@@ -20,6 +21,13 @@ var create_dialog_submit_button: Button
 var create_chunk_x: SpinBox
 var create_chunk_y: SpinBox
 var create_size_preview: Label
+var wall_loop_dialog: ConfirmationDialog
+var wall_loop_family_option: OptionButton
+var wall_loop_corner_option: OptionButton
+var wall_loop_min_x: SpinBox
+var wall_loop_min_y: SpinBox
+var wall_loop_max_x: SpinBox
+var wall_loop_max_y: SpinBox
 var size_label: Label
 var path_label: Label
 var status_label: Label
@@ -148,6 +156,12 @@ func _build_ui() -> void:
 	asset_tree = Tree.new(); asset_tree.custom_minimum_size.y = 260; asset_tree.hide_root = true; asset_tree.select_mode = Tree.SELECT_MULTI; asset_tree.item_selected.connect(_on_asset_tree_selected); asset_tree.multi_selected.connect(_on_asset_tree_multi_selected); asset_tree.gui_input.connect(_on_asset_tree_gui_input); sidebar.add_child(asset_tree); _refresh_asset_tree()
 	brush_label = Label.new(); brush_label.text = "地面笔刷：暗色草地 01"; brush_label.modulate = Color("d7aa62"); sidebar.add_child(brush_label)
 	var normal_place_button := Button.new(); normal_place_button.text = "单素材左键铺设 / 摆放"; normal_place_button.pressed.connect(_activate_normal_placement); sidebar.add_child(normal_place_button)
+	var wall_loop_button := Button.new()
+	wall_loop_button.text = "生成闭合矩形墙体"
+	wall_loop_button.tooltip_text = "自动预留四个角格、选择正确角件，并按墙体连接方向生成无重叠闭环"
+	wall_loop_button.pressed.connect(_on_wall_loop_dialog_requested)
+	sidebar.add_child(wall_loop_button)
+	_build_wall_loop_dialog()
 	var select_button:=Button.new(); select_button.text="选择工具（悬停高亮／左键选取／方向键移动）"; select_button.pressed.connect(_activate_select_tool); sidebar.add_child(select_button)
 	random_region_fill_toggle = CheckBox.new(); random_region_fill_toggle.text = "自由套索选择模式"; random_region_fill_toggle.toggled.connect(_on_lasso_mode_toggled); sidebar.add_child(random_region_fill_toggle)
 	point_erase_toggle = CheckBox.new(); point_erase_toggle.text = "点选/拖动擦除地面和对象"; point_erase_toggle.toggled.connect(_on_point_erase_toggled); sidebar.add_child(point_erase_toggle)
@@ -292,6 +306,123 @@ func _refresh_create_size_preview() -> void:
 		chunks.y * MapEditorTypes.AUTHORING_CHUNK_SIZE_TILES.y
 	)
 	create_size_preview.text = "将创建地图模板：%d×%d Chunk，地图尺寸 %d×%d 格" % [chunks.x, chunks.y, design_size.x, design_size.y]
+
+
+func _build_wall_loop_dialog() -> void:
+	wall_loop_dialog = ConfirmationDialog.new()
+	wall_loop_dialog.title = "生成闭合矩形墙体"
+	wall_loop_dialog.dialog_text = "四条边会预留角格并自动使用匹配连接方向的角件。边界上同墙族的旧墙体会被替换，装饰物、碰撞和功能标注不会改动。"
+	wall_loop_dialog.confirmed.connect(_on_wall_loop_confirmed)
+	add_child(wall_loop_dialog)
+	var form := GridContainer.new()
+	form.columns = 2
+	form.custom_minimum_size = Vector2(500, 0)
+	form.add_theme_constant_override("h_separation", 12)
+	form.add_theme_constant_override("v_separation", 6)
+	wall_loop_dialog.add_child(form)
+	var family_label := Label.new()
+	family_label.text = "墙体系列"
+	form.add_child(family_label)
+	wall_loop_family_option = OptionButton.new()
+	wall_loop_family_option.fit_to_longest_item = false
+	form.add_child(wall_loop_family_option)
+	var corner_label := Label.new()
+	corner_label.text = "角件类型"
+	form.add_child(corner_label)
+	wall_loop_corner_option = OptionButton.new()
+	for entry: Array in [["外圈墙体", "outer_corner"], ["内圈墙体", "inner_corner"]]:
+		wall_loop_corner_option.add_item(entry[0])
+		wall_loop_corner_option.set_item_metadata(
+			wall_loop_corner_option.item_count - 1,
+			entry[1]
+		)
+	form.add_child(wall_loop_corner_option)
+	wall_loop_min_x = _spin_field(form, "左上格 X", 0, 1024)
+	wall_loop_min_y = _spin_field(form, "左上格 Y", 0, 1024)
+	wall_loop_max_x = _spin_field(form, "右下格 X", 2, 1024)
+	wall_loop_max_y = _spin_field(form, "右下格 Y", 2, 1024)
+
+
+func _on_wall_loop_dialog_requested() -> void:
+	if current_document.is_empty():
+		status_label.text = "请先创建或打开地图模板"
+		return
+	wall_loop_family_option.clear()
+	var preferred_family := str(
+		current_document.get("design", {}).get(
+			"dungeon_structure",
+			{}
+		).get("wall_family_id", "")
+	)
+	var selected_family_index := 0
+	for family: Dictionary in WallLoopService.available_families():
+		wall_loop_family_option.add_item(str(family.display_name))
+		wall_loop_family_option.set_item_metadata(
+			wall_loop_family_option.item_count - 1,
+			str(family.wall_family_id)
+		)
+		if str(family.wall_family_id) == preferred_family:
+			selected_family_index = wall_loop_family_option.item_count - 1
+	if wall_loop_family_option.item_count == 0:
+		status_label.text = "素材库中没有可用的洞穴或地下城墙体系列"
+		return
+	wall_loop_family_option.select(selected_family_index)
+	var raw_size: Array = current_document.design.design_size
+	var map_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
+	for spin: SpinBox in [wall_loop_min_x, wall_loop_max_x]:
+		spin.max_value = map_size.x - 1
+	for spin: SpinBox in [wall_loop_min_y, wall_loop_max_y]:
+		spin.max_value = map_size.y - 1
+	wall_loop_min_x.value = 0
+	wall_loop_min_y.value = 0
+	wall_loop_max_x.value = map_size.x - 1
+	wall_loop_max_y.value = map_size.y - 1
+	wall_loop_dialog.popup_centered()
+
+
+func _on_wall_loop_confirmed() -> void:
+	var minimum := Vector2i(int(wall_loop_min_x.value), int(wall_loop_min_y.value))
+	var maximum := Vector2i(int(wall_loop_max_x.value), int(wall_loop_max_y.value))
+	if maximum.x - minimum.x < 2 or maximum.y - minimum.y < 2:
+		status_label.text = "闭合墙体至少需要 3×3 格"
+		return
+	var family_id := str(
+		wall_loop_family_option.get_item_metadata(wall_loop_family_option.selected)
+	)
+	var corner_topology := str(
+		wall_loop_corner_option.get_item_metadata(wall_loop_corner_option.selected)
+	)
+	var bounds := Rect2i(minimum, maximum - minimum + Vector2i.ONE)
+	var before_layers: Dictionary = current_document.layers.duplicate(true)
+	var before_design: Dictionary = current_document.design.duplicate(true)
+	var result: Dictionary = WallLoopService.apply_closed_rectangle(
+		current_document,
+		family_id,
+		bounds,
+		corner_topology,
+		"terrain_base",
+		true
+	)
+	if not bool(result.get("ok", false)):
+		status_label.text = "生成闭合墙体失败：%s" % result.get("errors", [])
+		return
+	var after_layers: Dictionary = current_document.layers.duplicate(true)
+	var after_design: Dictionary = current_document.design.duplicate(true)
+	command_stack.execute({
+		"do": func():
+			current_document.layers = after_layers.duplicate(true)
+			current_document.design = after_design.duplicate(true)
+			preview.set_document(current_document),
+		"undo": func():
+			current_document.layers = before_layers.duplicate(true)
+			current_document.design = before_design.duplicate(true)
+			preview.set_document(current_document),
+	})
+	preview.set_document(current_document)
+	status_label.text = (
+		"闭合墙体已生成：新增 %d 段，替换 %d 段。确认后点击“保存地图”。"
+		% [int(result.added_count), int(result.removed_count)]
+	)
 
 
 func _find_type_index(map_type: String) -> int:
@@ -815,7 +946,12 @@ func _on_ground_paint_requested(tile: Vector2i, asset_id: String) -> void:
 	var selected_asset := MapAssetCatalogService.find_asset(asset_id)
 	if str(selected_asset.get("asset_type", "")) != "ground_brush":
 		var role := str(object_role_option.get_item_metadata(object_role_option.selected))
-		var layer := "terrain_base" if str(selected_asset.get("asset_type", "")) == "terrain_stamp" else "object_base"
+		var asset_type := str(selected_asset.get("asset_type", ""))
+		var layer := (
+			str(selected_asset.get("default_layer", "terrain_base"))
+			if asset_type == "wall_module"
+			else "terrain_base" if asset_type == "terrain_stamp" else "object_base"
+		)
 		var placed := MapEditorInstanceService.create_instance(current_document, asset_id, role, tile, layer)
 		if placed.ok:
 			var is_map_portal := str(selected_asset.get("object_class", "")) == "map_entrance"

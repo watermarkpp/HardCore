@@ -20,7 +20,7 @@ func _ready() -> void:
 		assert(str(document.ground.workspace_manifest) == "res://map_editor_workspace/%s/ground/ground_manifest.json" % map_id)
 		assert(str(document.ground.workspace_state) == "res://map_editor_workspace/%s/ground/ground_state.json" % map_id)
 		assert(document.layers.map_entrance_points.size() == 1)
-		assert(document.layers.map_exit_points.size() == 1)
+		assert(document.layers.map_exit_points.size() == (1 if index < MAP_IDS.size() - 1 else 0))
 		var ground := MapEditorGroundService.initialize(document)
 		assert(ground.ok, "%s:%s" % [map_id, ground.get("errors", [])])
 		assert(str(ground.manifest.map_id) == map_id)
@@ -29,8 +29,7 @@ func _ready() -> void:
 
 	_assert_link(documents[0], documents[1])
 	_assert_link(documents[1], documents[2])
-	assert(str(documents[2].layers.map_exit_points[0].target_map_id).is_empty())
-	assert(str(documents[2].layers.map_exit_points[0].target_entrance_id).is_empty())
+	assert(documents[2].layers.map_exit_points.is_empty())
 	print("ORC_TOMB_LAYER_CONNECTIONS_PASS maps=3 links=2 size=38x38")
 	get_tree().quit()
 
