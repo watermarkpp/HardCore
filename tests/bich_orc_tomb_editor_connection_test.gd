@@ -14,6 +14,33 @@ func _ready() -> void:
 	var tomb: Dictionary = tomb_result.document
 	var doors: Array = bich.layers.door_points
 	assert(doors.size() == 4)
+	var expected_portal_tiles := {
+		"inst_000001": Vector2i(4, 4),
+		"inst_000002": Vector2i(75, 5),
+		"inst_000004": Vector2i(75, 76),
+		"inst_000016": Vector2i(4, 75),
+	}
+	for door: Dictionary in doors:
+		var visual_id := str(door.linked_visual_instance_id)
+		assert(expected_portal_tiles.has(visual_id), visual_id)
+		var actual_tile := Vector2i(int(door.tile[0]), int(door.tile[1]))
+		assert(actual_tile == expected_portal_tiles[visual_id], str(door))
+		assert(
+			str(door.portal_anchor_contract_id)
+			== MapEditorPortalAnchorService.CONTRACT_ID
+		)
+		var located := MapEditorInstanceService._locate(bich, visual_id)
+		assert(located.ok, visual_id)
+		var asset := MapAssetCatalogService.find_asset(
+			str(located.instance.asset_id)
+		)
+		assert(
+			MapEditorPortalAnchorService.trigger_tile(
+				located.instance,
+				asset,
+				Vector2i(80, 80)
+			) == actual_tile
+		)
 	var east_door: Dictionary = doors[0]
 	var east_score := _east_score(east_door)
 	for door: Dictionary in doors.slice(1):
@@ -22,7 +49,7 @@ func _ready() -> void:
 			east_score = score
 			east_door = door
 	assert(str(east_door.semantic_id) == "door_000002")
-	assert(Vector2i(int(east_door.tile[0]), int(east_door.tile[1])) == Vector2i(71, 2))
+	assert(Vector2i(int(east_door.tile[0]), int(east_door.tile[1])) == Vector2i(75, 5))
 
 	var entrance: Dictionary = tomb.layers.map_entrance_points[0]
 	assert(str(entrance.entrance_id) == "map_entrance_000001")
@@ -66,7 +93,12 @@ func _ready() -> void:
 	assert(marker is Dictionary)
 	assert(int(marker.content.doors_pending_target_configuration) == 3)
 	assert(int(marker.content.configured_connections[0].target_map_id) == 217)
-	print("BICH_ORC_TOMB_EDITOR_CONNECTION_PASS exit=71,2 entrance=3,35 target=217")
+	assert(marker.content.east_exit_tile == [75.0, 5.0])
+	assert(
+		str(marker.content.configured_connections[0].portal_anchor_contract_id)
+		== MapEditorPortalAnchorService.CONTRACT_ID
+	)
+	print("BICH_ORC_TOMB_EDITOR_CONNECTION_PASS exit=75,5 entrance=3,35 target=217")
 	get_tree().quit(0)
 
 

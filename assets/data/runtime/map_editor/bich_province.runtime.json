@@ -1,5 +1,5 @@
 {
-  "build_sha256": "fdd0ec444a80f7c5cfbf8cfdcc4a038d0c40b6224ddcef182696e73f7157fb35",
+  "build_sha256": "8a7245e4c8c46a29610a4e52cc34f945b61db08a437d2366ae0e44d853351654",
   "collision": {
     "blocked_count": 180.0,
     "blocked_tiles": [
@@ -12976,6 +12976,15 @@
         "kind": "door",
         "linked_visual_instance_id": "inst_000001",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+        "portal_visual_footprint_tiles": [
+          8.0,
+          6.0
+        ],
+        "portal_visual_origin_tile": [
+          0.0,
+          1.0
+        ],
         "runtime_export": true,
         "semantic_id": "door_000001",
         "semantic_role": "map_portal",
@@ -12986,8 +12995,8 @@
           0.0
         ],
         "tile": [
-          0.0,
-          1.0
+          4.0,
+          4.0
         ],
         "trigger_on_enter": true
       },
@@ -12999,7 +13008,17 @@
         "door_id": "door.inst_000002",
         "kind": "door",
         "linked_visual_instance_id": "inst_000002",
+        "official_connection_id": "bich_east_to_orc_tomb_1_v1",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+        "portal_visual_footprint_tiles": [
+          8.0,
+          6.0
+        ],
+        "portal_visual_origin_tile": [
+          71.0,
+          2.0
+        ],
         "runtime_export": true,
         "semantic_id": "door_000002",
         "semantic_role": "map_portal",
@@ -13012,8 +13031,8 @@
           35.0
         ],
         "tile": [
-          71.0,
-          2.0
+          75.0,
+          5.0
         ],
         "trigger_on_enter": true
       },
@@ -13026,6 +13045,15 @@
         "kind": "door",
         "linked_visual_instance_id": "inst_000004",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+        "portal_visual_footprint_tiles": [
+          8.0,
+          6.0
+        ],
+        "portal_visual_origin_tile": [
+          71.0,
+          73.0
+        ],
         "runtime_export": true,
         "semantic_id": "door_000003",
         "semantic_role": "map_portal",
@@ -13036,8 +13064,8 @@
           0.0
         ],
         "tile": [
-          71.0,
-          73.0
+          75.0,
+          76.0
         ],
         "trigger_on_enter": true
       },
@@ -13050,6 +13078,15 @@
         "kind": "door",
         "linked_visual_instance_id": "inst_000016",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+        "portal_visual_footprint_tiles": [
+          8.0,
+          6.0
+        ],
+        "portal_visual_origin_tile": [
+          0.0,
+          72.0
+        ],
         "runtime_export": true,
         "semantic_id": "door_000004",
         "semantic_role": "map_portal",
@@ -13060,8 +13097,8 @@
           0.0
         ],
         "tile": [
-          0.0,
-          72.0
+          4.0,
+          75.0
         ],
         "trigger_on_enter": true
       }
@@ -14184,6 +14221,6 @@
     "content_layer": "personal_expansion",
     "editor_schema_version": 4.0,
     "map_id": "bich_province",
-    "revision": 1.0
+    "revision": 2.0
   }
 }

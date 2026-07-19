@@ -1,5 +1,5 @@
 {
-  "build_sha256": "dfd91ad342d6a681b7d1ef8f4ca5455fd60ab69d06a2af75968c040ae0388c8e",
+  "build_sha256": "dc820fd780828f337e9dbc0e1ae560c1a47f6c053e5ca29e75dc996c1ae2b566",
   "collision": {
     "blocked_count": 201.0,
     "blocked_tiles": [
@@ -898,7 +898,10 @@
         ],
         "collision_authority": "manual_by_user",
         "corner_topology": "outer_corner",
+        "strict_closed_perimeter": false,
         "structure_id": "orc_tomb_3.outer_closed_loop.v1",
+        "topology_status": "user_customized_opening",
+        "validation_contract_id": "wall_loop_perimeter_v1",
         "visual_render_contract": "segmented_isometric_depth_v1",
         "wall_family_id": "orc_tomb_rough_stone_u0"
       }
@@ -3446,76 +3449,6 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        50.0,
-        157.3333282470703
-      ],
-      "asset_id": "cave_dungeon.brazier_01",
-      "collision_authority": "asset",
-      "collision_cells": [],
-      "collision_footprint_tiles": [
-        1.0,
-        1.0
-      ],
-      "collision_policy": "preset",
-      "collision_policy_id": "",
-      "collision_profile_id": "solid_logical_footprint",
-      "content_layer": "personal_expansion",
-      "flip_x": false,
-      "flip_y": false,
-      "footprint_tiles": [
-        1.0,
-        1.0
-      ],
-      "gameplay_role": "navigation_blocker",
-      "instance_base_footprint_tiles": [
-        1.0,
-        1.0
-      ],
-      "instance_base_scale": 0.505263,
-      "instance_id": "inst_000112",
-      "layer": "object_base",
-      "manual_collision_expected": false,
-      "map_collision_override": "default",
-      "movable": true,
-      "navigation_policy": "block_player_and_monster",
-      "object_role": "obstacle",
-      "occlusion": false,
-      "occupancy_footprint_tiles": [
-        1.0,
-        1.0
-      ],
-      "offset_px": [
-        0.0,
-        0.0
-      ],
-      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-      "placement_anchor_px": [
-        50.0,
-        157.3333282470703
-      ],
-      "placement_rule": "non_overlapping",
-      "position_mode": "tile_anchor",
-      "rotation_deg": 0.0,
-      "runtime_export": true,
-      "scale": [
-        0.505263,
-        0.505263
-      ],
-      "scene_intent": "block_path",
-      "selectable": true,
-      "selection_locked": false,
-      "tile": [
-        31.0,
-        0.0
-      ],
-      "tile_anchor": [
-        31.0,
-        0.0
-      ]
-    },
-    {
-      "anchor_mode": "foot_tile",
-      "anchor_px": [
         80.0,
         144.0
       ],
@@ -3551,6 +3484,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -3620,6 +3557,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -3689,6 +3630,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -3758,6 +3703,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -3827,6 +3776,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -3896,6 +3849,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -3965,6 +3922,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -4034,6 +3995,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -4103,6 +4068,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -4172,6 +4141,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -4241,6 +4214,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -4310,6 +4287,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -4379,6 +4360,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -4521,6 +4506,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -4663,6 +4652,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -4805,6 +4798,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -4947,6 +4944,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -5089,6 +5090,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -5231,6 +5236,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -5300,6 +5309,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -5369,6 +5382,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -5398,75 +5415,6 @@
       "tile_anchor": [
         37.0,
         0.0
-      ]
-    },
-    {
-      "anchor_mode": "foot_tile",
-      "anchor_px": [
-        48.0,
-        112.0
-      ],
-      "asset_id": "orc_tomb_wall_straight_x_l4_v01",
-      "collision_authority": "manual_by_user",
-      "collision_cells": [],
-      "collision_footprint_tiles": [
-        0.0,
-        0.0
-      ],
-      "collision_policy": "none",
-      "collision_policy_id": "cave_tomb_manual_collision_v1",
-      "collision_profile_id": "none_visual",
-      "content_layer": "personal_expansion",
-      "flip_x": false,
-      "flip_y": false,
-      "footprint_tiles": [
-        4.0,
-        1.0
-      ],
-      "gameplay_role": "navigation_blocker",
-      "generated_by": "MapEditorWallLoopService",
-      "instance_base_footprint_tiles": [
-        4.0,
-        1.0
-      ],
-      "instance_base_scale": 1.0,
-      "instance_id": "inst_000126",
-      "layer": "terrain_base",
-      "manual_collision_expected": true,
-      "map_collision_override": "disabled",
-      "movable": true,
-      "navigation_policy": "ignore",
-      "object_role": "terrain",
-      "occlusion": true,
-      "offset_px": [
-        0.0,
-        0.0
-      ],
-      "placement_anchor_policy_id": "",
-      "placement_anchor_px": [
-        48.0,
-        112.0
-      ],
-      "placement_rule": "non_overlapping",
-      "position_mode": "tile_anchor",
-      "rotation_deg": 0.0,
-      "runtime_export": true,
-      "scale": [
-        1.0,
-        1.0
-      ],
-      "scene_intent": "dungeon_wall_visual_structure",
-      "selectable": true,
-      "selection_locked": false,
-      "structure_id": "orc_tomb_3.outer_closed_loop.v1",
-      "structure_role": "edge_max_y_00",
-      "tile": [
-        1.0,
-        37.0
-      ],
-      "tile_anchor": [
-        1.0,
-        37.0
       ]
     },
     {
@@ -5580,6 +5528,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -5649,6 +5601,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -5672,7 +5628,7 @@
       "structure_id": "orc_tomb_3.outer_closed_loop.v1",
       "structure_role": "edge_max_y_01",
       "tile": [
-        5.0,
+        7.0,
         37.0
       ],
       "tile_anchor": [
@@ -5864,6 +5820,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -5933,6 +5893,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -6148,6 +6112,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -6217,6 +6185,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -6286,6 +6258,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -6355,6 +6331,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -6424,6 +6404,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -6493,6 +6477,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -6562,6 +6550,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -6631,6 +6623,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -6700,6 +6696,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -6769,6 +6769,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -6838,6 +6842,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -6907,6 +6915,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -6976,6 +6988,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -7045,6 +7061,10 @@
       "navigation_policy": "ignore",
       "object_role": "terrain",
       "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
       "offset_px": [
         0.0,
         0.0
@@ -7130,7 +7150,7 @@
         "semantic_id": "boss_spawn_000003",
         "spawn_rule": "boss",
         "tile": [
-          31.0,
+          32.0,
           3.0
         ]
       }
@@ -7243,7 +7263,7 @@
         "semantic_id": "monster_spawn_000007",
         "spawn_rule": "ambient",
         "tile": [
-          6.0,
+          5.0,
           6.0
         ]
       },
@@ -7333,8 +7353,8 @@
         "semantic_id": "monster_spawn_000024",
         "spawn_rule": "ambient",
         "tile": [
-          9.0,
-          27.0
+          11.0,
+          29.0
         ]
       },
       {
@@ -7405,8 +7425,8 @@
         "semantic_id": "monster_spawn_000028",
         "spawn_rule": "ambient",
         "tile": [
-          28.0,
-          9.0
+          27.0,
+          10.0
         ]
       },
       {
@@ -7442,7 +7462,7 @@
         "spawn_rule": "ambient",
         "tile": [
           32.0,
-          15.0
+          16.0
         ]
       },
       {
@@ -7509,6 +7529,6 @@
     "content_layer": "personal_expansion",
     "editor_schema_version": 4.0,
     "map_id": "orc_tomb_3",
-    "revision": 2.0
+    "revision": 3.0
   }
 }

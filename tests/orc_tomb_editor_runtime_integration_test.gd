@@ -25,14 +25,17 @@ func _ready() -> void:
 		assert(int(source.document.runtime_map_id) == RUNTIME_IDS[index])
 		assert(bool(source.document.editor_meta.runtime_approved))
 		if map_id == "orc_tomb_3":
-			var wall_validation := MapEditorWallLoopService.validate_closed_rectangle(
-				source.document,
-				"orc_tomb_rough_stone_u0",
-				Rect2i(0, 0, 38, 38),
-				"orc_tomb_3.outer_closed_loop.v1"
+			assert(source.document.design.wall_loops.size() == 1)
+			var wall_loop: Dictionary = source.document.design.wall_loops[0]
+			assert(
+				str(wall_loop.visual_render_contract)
+				== "segmented_isometric_depth_v1"
 			)
-			assert(wall_validation.ok, str(wall_validation.get("errors", [])))
-			assert(int(wall_validation.perimeter_cell_count) == 148)
+			assert(
+				str(wall_loop.topology_status)
+				== "user_customized_opening"
+			)
+			assert(not bool(wall_loop.strict_closed_perimeter))
 
 	var floor_two_exit: Dictionary = runtimes[0].semantics.map_exit_points[0]
 	var floor_three_entrance: Dictionary = runtimes[1].semantics.map_entrance_points[0]

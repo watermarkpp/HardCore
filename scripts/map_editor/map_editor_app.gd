@@ -3,6 +3,7 @@ extends Control
 
 const LAST_DOCUMENT_PATH_FILE := "user://mse_last_document_path.txt"
 const InstanceProfileService := preload("res://scripts/map_editor/map_editor_instance_profile_service.gd")
+const PortalAnchorService := preload("res://scripts/map_editor/map_editor_portal_anchor_service.gd")
 const WallLoopService := preload("res://scripts/map_editor/map_editor_wall_loop_service.gd")
 
 var current_document: Dictionary = {}
@@ -771,11 +772,9 @@ func _ensure_map_portal_semantics() -> void:
 		var located := MapEditorInstanceService._locate(current_document, visual_id)
 		if not bool(located.get("ok", false)):
 			continue
-		var raw_tile: Array = located.instance.get("tile", [0, 0])
-		MapEditorGameplaySemanticService.sync_linked_instance_tile(
+		PortalAnchorService.synchronize_linked_semantics(
 			current_document,
-			visual_id,
-			Vector2i(int(raw_tile[0]), int(raw_tile[1]))
+			visual_id
 		)
 
 
@@ -1155,10 +1154,10 @@ func _on_selectable_move_requested(selectable_id:String,delta:Vector2i)->void:
 		command_stack.execute({
 			"do": func():
 				result_holder["value"] = MapEditorInstanceService.move_instance(current_document, selectable_id, new_tile)
-				if result_holder["value"].get("ok", false): MapEditorGameplaySemanticService.sync_linked_instance_tile(current_document, selectable_id, new_tile),
+				if result_holder["value"].get("ok", false): PortalAnchorService.synchronize_linked_semantics(current_document, selectable_id),
 			"undo": func():
 				MapEditorInstanceService.move_instance(current_document, selectable_id, old_tile)
-				MapEditorGameplaySemanticService.sync_linked_instance_tile(current_document, selectable_id, old_tile),
+				PortalAnchorService.synchronize_linked_semantics(current_document, selectable_id),
 		})
 	else:
 		command_stack.execute({

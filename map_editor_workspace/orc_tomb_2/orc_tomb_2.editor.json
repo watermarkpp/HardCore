@@ -53,7 +53,8 @@
       64.0,
       32.0
     ],
-    "view_type": "isometric_2_to_1"
+    "view_type": "isometric_2_to_1",
+    "wall_loops": []
   },
   "display_name": "兽人古墓二层",
   "editor_meta": {
@@ -64,9 +65,12 @@
     "content_policy": "full_copy_from_orc_tomb_1",
     "created_by": "human_codex_shared_tool",
     "milestone": "ORC_TOMB_2-CLONE-FROM-1-V1",
-    "revision": 1.0,
+    "official_runtime_map_id": 218,
+    "official_source_authority": "user_saved_editor_document",
+    "official_version_id": "bich_orc_tomb_official_v1",
+    "revision": 2.0,
     "runtime_approved": true,
-    "runtime_approved_revision": 1,
+    "runtime_approved_revision": 2,
     "structure_id": "orc_tomb_2.hui_ring.v1",
     "structure_policy": "visual_walls_only_manual_collision_and_decoration",
     "template_kind": "cloned_map",
@@ -1154,7 +1158,100 @@
         ]
       }
     ],
-    "npc_points": [],
+    "npc_points": [
+      {
+        "collision_policy": "profile",
+        "collision_profile_id": "small_prop_1x1",
+        "content_id": "npc.expansion.bich_pharmacist",
+        "content_layer": "personal_expansion",
+        "display_name": "比奇药剂商",
+        "editor_visual_asset_id": "editor_npc_placeholder_humanoid",
+        "editor_visual_only": true,
+        "facing": "south",
+        "kind": "npc",
+        "movable": true,
+        "npc_id": "npc.expansion.bich_pharmacist",
+        "npc_occupancy_profile_id": "npc_humanoid_1x1",
+        "object_role": "npc_placeholder",
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placeholder_instance_id": "npc_placeholder_npc_000001",
+        "placement_anchor_px": [
+          32.0,
+          48.0
+        ],
+        "radius_tiles": 3.0,
+        "runtime_export": true,
+        "safe": true,
+        "selectable": true,
+        "selection_shape": {
+          "padding_px": 4.0,
+          "type": "bounds"
+        },
+        "semantic_id": "npc_000001",
+        "service_role": "shop",
+        "tile": [
+          2.0,
+          5.0
+        ],
+        "tile_anchor": [
+          2.0,
+          5.0
+        ]
+      },
+      {
+        "collision_policy": "profile",
+        "collision_profile_id": "small_prop_1x1",
+        "content_id": "npc.4.001",
+        "content_layer": "personal_expansion",
+        "display_name": "比奇杂货商",
+        "editor_visual_asset_id": "editor_npc_placeholder_humanoid",
+        "editor_visual_only": true,
+        "facing": "south",
+        "kind": "npc",
+        "movable": true,
+        "npc_id": "npc.4.001",
+        "npc_occupancy_profile_id": "npc_humanoid_1x1",
+        "object_role": "npc_placeholder",
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placeholder_instance_id": "npc_placeholder_npc_000002",
+        "placement_anchor_px": [
+          32.0,
+          48.0
+        ],
+        "radius_tiles": 3.0,
+        "runtime_export": true,
+        "safe": true,
+        "selectable": true,
+        "selection_shape": {
+          "padding_px": 4.0,
+          "type": "bounds"
+        },
+        "semantic_id": "npc_000002",
+        "service_role": "shop",
+        "tile": [
+          6.0,
+          3.0
+        ],
+        "tile_anchor": [
+          6.0,
+          3.0
+        ]
+      }
+    ],
     "object_base": [
       {
         "anchor_mode": "foot_tile",

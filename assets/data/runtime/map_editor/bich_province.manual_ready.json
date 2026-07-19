@@ -1,42 +1,46 @@
 {
-  "schema_version": 1,
-  "map_id": "bich_province",
-  "runtime_map_id": 4,
-  "source_workspace": "map_editor_workspace/bich_province",
-  "status": "user_confirmed_ready_80x80",
   "content": {
-    "design_size": [
-      80,
-      80
-    ],
-    "instances": 56,
-    "monster_spawns": 44,
-    "npcs": 7,
-    "doors": 4,
-    "doors_pending_target_configuration": 3,
     "configured_connections": [
       {
         "door_id": "door_000002",
-        "tile": [
-          71,
-          2
+        "linked_visual_instance_id": "inst_000002",
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+        "portal_visual_origin_tile": [
+          71.0,
+          2.0
         ],
+        "target_entrance_id": "map_entrance_000001",
         "target_map_id": 217,
         "target_map_key": "orc_tomb_1",
-        "target_entrance_id": "map_entrance_000001",
         "target_tile": [
-          3,
-          35
+          3.0,
+          35.0
+        ],
+        "tile": [
+          75,
+          5
         ]
       }
     ],
-    "centered_from_size": [
-      64,
-      64
+    "design_size": [
+      80.0,
+      80.0
     ],
-    "tile_shift": [
-      8,
-      8
-    ]
-  }
+    "doors": 4,
+    "doors_pending_target_configuration": 3,
+    "east_exit_tile": [
+      75,
+      5
+    ],
+    "instances": 56,
+    "monster_spawns": 44,
+    "npcs": 7
+  },
+  "map_id": "bich_province",
+  "official_version_id": "bich_orc_tomb_official_v1",
+  "runtime_build_sha256": "8a7245e4c8c46a29610a4e52cc34f945b61db08a437d2366ae0e44d853351654",
+  "runtime_map_id": 4,
+  "schema_version": 1,
+  "source_workspace": "map_editor_workspace/bich_province",
+  "status": "user_confirmed_official_80x80"
 }

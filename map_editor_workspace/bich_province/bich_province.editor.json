@@ -35,9 +35,12 @@
   "editor_meta": {
     "created_by": "human_codex_shared_tool",
     "milestone": "BICH-USER-MAP-READY",
-    "revision": 1.0,
+    "official_runtime_map_id": 4,
+    "official_source_authority": "user_saved_editor_document",
+    "official_version_id": "bich_orc_tomb_official_v1",
+    "revision": 2.0,
     "runtime_approved": true,
-    "runtime_approved_revision": 1.0,
+    "runtime_approved_revision": 2,
     "size_migration": "bich_64_to_80_centered",
     "workspace": "res://map_editor_workspace/bich_province"
   },
@@ -2972,6 +2975,15 @@
         "kind": "door",
         "linked_visual_instance_id": "inst_000001",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+        "portal_visual_footprint_tiles": [
+          8.0,
+          6.0
+        ],
+        "portal_visual_origin_tile": [
+          0.0,
+          1.0
+        ],
         "runtime_export": true,
         "semantic_id": "door_000001",
         "semantic_role": "map_portal",
@@ -2982,8 +2994,8 @@
           0.0
         ],
         "tile": [
-          0.0,
-          1.0
+          4,
+          4
         ],
         "trigger_on_enter": true
       },
@@ -2995,21 +3007,31 @@
         "door_id": "door.inst_000002",
         "kind": "door",
         "linked_visual_instance_id": "inst_000002",
+        "official_connection_id": "bich_east_to_orc_tomb_1_v1",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+        "portal_visual_footprint_tiles": [
+          8.0,
+          6.0
+        ],
+        "portal_visual_origin_tile": [
+          71.0,
+          2.0
+        ],
         "runtime_export": true,
         "semantic_id": "door_000002",
         "semantic_role": "map_portal",
         "target_configured": true,
         "target_entrance_id": "map_entrance_000001",
-        "target_map_id": 217.0,
+        "target_map_id": 217,
         "target_map_key": "orc_tomb_1",
         "target_tile": [
           3.0,
           35.0
         ],
         "tile": [
-          71.0,
-          2.0
+          75,
+          5
         ],
         "trigger_on_enter": true
       },
@@ -3022,6 +3044,15 @@
         "kind": "door",
         "linked_visual_instance_id": "inst_000004",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+        "portal_visual_footprint_tiles": [
+          8.0,
+          6.0
+        ],
+        "portal_visual_origin_tile": [
+          71.0,
+          73.0
+        ],
         "runtime_export": true,
         "semantic_id": "door_000003",
         "semantic_role": "map_portal",
@@ -3032,8 +3063,8 @@
           0.0
         ],
         "tile": [
-          71.0,
-          73.0
+          75,
+          76
         ],
         "trigger_on_enter": true
       },
@@ -3046,6 +3077,15 @@
         "kind": "door",
         "linked_visual_instance_id": "inst_000016",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+        "portal_visual_footprint_tiles": [
+          8.0,
+          6.0
+        ],
+        "portal_visual_origin_tile": [
+          0.0,
+          72.0
+        ],
         "runtime_export": true,
         "semantic_id": "door_000004",
         "semantic_role": "map_portal",
@@ -3056,8 +3096,8 @@
           0.0
         ],
         "tile": [
-          0.0,
-          72.0
+          4,
+          75
         ],
         "trigger_on_enter": true
       }
