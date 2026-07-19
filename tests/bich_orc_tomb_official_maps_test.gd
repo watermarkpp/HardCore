@@ -51,7 +51,11 @@ func _ready() -> void:
 		func(entry: Dictionary) -> bool:
 			return str(entry.semantic_id) == "door_000002"
 	)[0]
-	assert(bich_east.tile == [75.0, 5.0])
+	assert(bich_east.tile == [76.0, 5.0])
+	assert(
+		str(bich_east.portal_trigger_policy_id)
+		== "bich_cave_mouth_explicit_v1"
+	)
 	assert(str(bich_east.target_map_key) == "orc_tomb_1")
 	assert(int(bich_east.target_map_id) == 217)
 
@@ -93,7 +97,7 @@ func _ready() -> void:
 	print(
 		(
 			"BICH_ORC_TOMB_OFFICIAL_MAPS_PASS maps=4 "
-			+ "bich_exit=75,5 floor2_npcs=2 floor3_npcs=0"
+			+ "bich_exit=76,5 floor2_npcs=2 floor3_npcs=0"
 		)
 	)
 	get_tree().quit(0)

@@ -33,14 +33,16 @@
   },
   "display_name": "比奇省（单机重制）",
   "editor_meta": {
+    "bich_cave_portal_policy_id": "bich_cave_mouth_explicit_v1",
+    "bich_cave_portal_version_id": "bich_cave_portals_v1",
     "created_by": "human_codex_shared_tool",
     "milestone": "BICH-USER-MAP-READY",
-    "official_runtime_map_id": 4,
+    "official_runtime_map_id": 4.0,
     "official_source_authority": "user_saved_editor_document",
     "official_version_id": "bich_orc_tomb_official_v1",
-    "revision": 2.0,
+    "revision": 3.0,
     "runtime_approved": true,
-    "runtime_approved_revision": 2,
+    "runtime_approved_revision": 3,
     "size_migration": "bich_64_to_80_centered",
     "workspace": "res://map_editor_workspace/bich_province"
   },
@@ -2976,6 +2978,7 @@
         "linked_visual_instance_id": "inst_000001",
         "one_way": false,
         "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+        "portal_trigger_policy_id": "bich_cave_mouth_explicit_v1",
         "portal_visual_footprint_tiles": [
           8.0,
           6.0
@@ -2994,7 +2997,7 @@
           0.0
         ],
         "tile": [
-          4,
+          5,
           4
         ],
         "trigger_on_enter": true
@@ -3010,6 +3013,7 @@
         "official_connection_id": "bich_east_to_orc_tomb_1_v1",
         "one_way": false,
         "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+        "portal_trigger_policy_id": "bich_cave_mouth_explicit_v1",
         "portal_visual_footprint_tiles": [
           8.0,
           6.0
@@ -3023,14 +3027,14 @@
         "semantic_role": "map_portal",
         "target_configured": true,
         "target_entrance_id": "map_entrance_000001",
-        "target_map_id": 217,
+        "target_map_id": 217.0,
         "target_map_key": "orc_tomb_1",
         "target_tile": [
           3.0,
           35.0
         ],
         "tile": [
-          75,
+          76,
           5
         ],
         "trigger_on_enter": true
@@ -3045,6 +3049,7 @@
         "linked_visual_instance_id": "inst_000004",
         "one_way": false,
         "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+        "portal_trigger_policy_id": "bich_cave_mouth_explicit_v1",
         "portal_visual_footprint_tiles": [
           8.0,
           6.0
@@ -3063,7 +3068,7 @@
           0.0
         ],
         "tile": [
-          75,
+          77,
           76
         ],
         "trigger_on_enter": true
@@ -3078,6 +3083,7 @@
         "linked_visual_instance_id": "inst_000016",
         "one_way": false,
         "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+        "portal_trigger_policy_id": "bich_cave_mouth_explicit_v1",
         "portal_visual_footprint_tiles": [
           8.0,
           6.0
@@ -3096,7 +3102,7 @@
           0.0
         ],
         "tile": [
-          4,
+          6,
           75
         ],
         "trigger_on_enter": true
@@ -4235,9 +4241,11 @@
           157.0
         ],
         "asset_id": "user.6fd631308bf359d5",
+        "collision_authority": "map_instance",
+        "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_profile_id": "none_visual",
@@ -4248,10 +4256,10 @@
           8.0,
           6.0
         ],
-        "gameplay_role": "navigation_blocker",
+        "gameplay_role": "none",
         "instance_id": "inst_000001",
         "layer": "object_base",
-        "map_collision_override": "default",
+        "map_collision_override": "disabled",
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -4270,6 +4278,11 @@
           157.0
         ],
         "placement_rule": "non_overlapping",
+        "portal_trigger_offset_tiles": [
+          5,
+          3
+        ],
+        "portal_trigger_policy_id": "bich_cave_mouth_explicit_v1",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
@@ -4277,7 +4290,7 @@
           1.0,
           1.0
         ],
-        "scene_intent": "terrain_boundary",
+        "scene_intent": "map_portal_visual",
         "selectable": true,
         "selection_locked": false,
         "tile": [
@@ -4296,9 +4309,11 @@
           151.0
         ],
         "asset_id": "user.c60c71686cf6a463",
+        "collision_authority": "map_instance",
+        "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_profile_id": "none_visual",
@@ -4309,10 +4324,10 @@
           8.0,
           6.0
         ],
-        "gameplay_role": "navigation_blocker",
+        "gameplay_role": "none",
         "instance_id": "inst_000002",
         "layer": "object_base",
-        "map_collision_override": "default",
+        "map_collision_override": "disabled",
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -4331,6 +4346,11 @@
           151.0
         ],
         "placement_rule": "non_overlapping",
+        "portal_trigger_offset_tiles": [
+          5,
+          3
+        ],
+        "portal_trigger_policy_id": "bich_cave_mouth_explicit_v1",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
@@ -4338,7 +4358,7 @@
           1.0,
           1.0
         ],
-        "scene_intent": "terrain_boundary",
+        "scene_intent": "map_portal_visual",
         "selectable": true,
         "selection_locked": false,
         "tile": [
@@ -4357,9 +4377,11 @@
           135.0
         ],
         "asset_id": "user.4f010a8b52c53082",
+        "collision_authority": "map_instance",
+        "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_profile_id": "none_visual",
@@ -4370,10 +4392,10 @@
           8.0,
           6.0
         ],
-        "gameplay_role": "navigation_blocker",
+        "gameplay_role": "none",
         "instance_id": "inst_000004",
         "layer": "object_base",
-        "map_collision_override": "default",
+        "map_collision_override": "disabled",
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -4392,6 +4414,11 @@
           135.0
         ],
         "placement_rule": "non_overlapping",
+        "portal_trigger_offset_tiles": [
+          6,
+          3
+        ],
+        "portal_trigger_policy_id": "bich_cave_mouth_explicit_v1",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
@@ -4399,7 +4426,7 @@
           1.0,
           1.0
         ],
-        "scene_intent": "terrain_boundary",
+        "scene_intent": "map_portal_visual",
         "selectable": true,
         "selection_locked": false,
         "tile": [
@@ -4976,9 +5003,11 @@
           135.0
         ],
         "asset_id": "user.4f010a8b52c53082",
+        "collision_authority": "map_instance",
+        "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_profile_id": "none_visual",
@@ -4989,10 +5018,10 @@
           8.0,
           6.0
         ],
-        "gameplay_role": "navigation_blocker",
+        "gameplay_role": "none",
         "instance_id": "inst_000016",
         "layer": "object_base",
-        "map_collision_override": "default",
+        "map_collision_override": "disabled",
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -5011,6 +5040,11 @@
           135.0
         ],
         "placement_rule": "non_overlapping",
+        "portal_trigger_offset_tiles": [
+          6,
+          3
+        ],
+        "portal_trigger_policy_id": "bich_cave_mouth_explicit_v1",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
@@ -5018,7 +5052,7 @@
           1.0,
           1.0
         ],
-        "scene_intent": "terrain_boundary",
+        "scene_intent": "map_portal_visual",
         "selectable": true,
         "selection_locked": false,
         "tile": [

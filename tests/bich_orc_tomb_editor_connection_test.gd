@@ -15,11 +15,18 @@ func _ready() -> void:
 	var doors: Array = bich.layers.door_points
 	assert(doors.size() == 4)
 	var expected_portal_tiles := {
-		"inst_000001": Vector2i(4, 4),
-		"inst_000002": Vector2i(75, 5),
-		"inst_000004": Vector2i(75, 76),
-		"inst_000016": Vector2i(4, 75),
+		"inst_000001": Vector2i(5, 4),
+		"inst_000002": Vector2i(76, 5),
+		"inst_000004": Vector2i(77, 76),
+		"inst_000016": Vector2i(6, 75),
 	}
+	var expected_offsets := {
+		"inst_000001": Vector2i(5, 3),
+		"inst_000002": Vector2i(5, 3),
+		"inst_000004": Vector2i(6, 3),
+		"inst_000016": Vector2i(6, 3),
+	}
+	var walkability := MapEditorCollisionService.build_walkability(bich)
 	for door: Dictionary in doors:
 		var visual_id := str(door.linked_visual_instance_id)
 		assert(expected_portal_tiles.has(visual_id), visual_id)
@@ -31,12 +38,37 @@ func _ready() -> void:
 		)
 		var located := MapEditorInstanceService._locate(bich, visual_id)
 		assert(located.ok, visual_id)
+		var instance: Dictionary = located.instance
+		var offset: Array = instance.portal_trigger_offset_tiles
+		assert(
+			Vector2i(int(offset[0]), int(offset[1]))
+			== expected_offsets[visual_id]
+		)
+		assert(
+			str(instance.portal_trigger_policy_id)
+			== "bich_cave_mouth_explicit_v1"
+		)
+		assert(str(instance.collision_policy) == "none")
+		assert(str(instance.map_collision_override) == "disabled")
+		var origin: Array = instance.tile
+		var footprint: Array = instance.footprint_tiles
+		for y in int(footprint[1]):
+			for x in int(footprint[0]):
+				assert(
+					not walkability.blocked_tiles.has(
+						"%d,%d" % [
+							int(origin[0]) + x,
+							int(origin[1]) + y,
+						]
+					),
+					"山洞范围不应存在碰撞：%s" % visual_id
+				)
 		var asset := MapAssetCatalogService.find_asset(
-			str(located.instance.asset_id)
+			str(instance.asset_id)
 		)
 		assert(
 			MapEditorPortalAnchorService.trigger_tile(
-				located.instance,
+				instance,
 				asset,
 				Vector2i(80, 80)
 			) == actual_tile
@@ -49,7 +81,7 @@ func _ready() -> void:
 			east_score = score
 			east_door = door
 	assert(str(east_door.semantic_id) == "door_000002")
-	assert(Vector2i(int(east_door.tile[0]), int(east_door.tile[1])) == Vector2i(75, 5))
+	assert(Vector2i(int(east_door.tile[0]), int(east_door.tile[1])) == Vector2i(76, 5))
 
 	var entrance: Dictionary = tomb.layers.map_entrance_points[0]
 	assert(str(entrance.entrance_id) == "map_entrance_000001")
@@ -93,12 +125,16 @@ func _ready() -> void:
 	assert(marker is Dictionary)
 	assert(int(marker.content.doors_pending_target_configuration) == 3)
 	assert(int(marker.content.configured_connections[0].target_map_id) == 217)
-	assert(marker.content.east_exit_tile == [75.0, 5.0])
+	assert(marker.content.east_exit_tile == [76.0, 5.0])
 	assert(
 		str(marker.content.configured_connections[0].portal_anchor_contract_id)
 		== MapEditorPortalAnchorService.CONTRACT_ID
 	)
-	print("BICH_ORC_TOMB_EDITOR_CONNECTION_PASS exit=75,5 entrance=3,35 target=217")
+	assert(
+		str(marker.content.configured_connections[0].portal_trigger_policy_id)
+		== "bich_cave_mouth_explicit_v1"
+	)
+	print("BICH_ORC_TOMB_EDITOR_CONNECTION_PASS exit=76,5 entrance=3,35 target=217")
 	get_tree().quit(0)
 
 
