@@ -595,14 +595,18 @@ func _draw_instances(design_size: Vector2i, offset: Vector2, scale_factor: float
 				command.asset
 			)
 			var raw_anchor: Array = command.get("anchor", [])
-			var draw_anchor: Vector2 = (
-				Vector2(float(raw_anchor[0]), float(raw_anchor[1]))
-				if raw_anchor.size() == 2
-				else geometry.anchor
-			)
+			var draw_anchor := draw_anchor_for_command(raw_anchor, geometry)
 			draw_set_transform(geometry.center, geometry.rotation, geometry.visual_scale)
 			draw_texture(texture, -draw_anchor)
 			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+
+static func draw_anchor_for_command(raw_anchor: Array, geometry: Dictionary) -> Vector2:
+	return (
+		Vector2(float(raw_anchor[0]), float(raw_anchor[1]))
+		if raw_anchor.size() == 2
+		else geometry.anchor
+	)
 
 
 static func instance_draw_commands(
@@ -664,7 +668,10 @@ static func instance_draw_commands(
 		"instance": instance,
 		"asset": asset,
 		"image_path": str(asset.get("image", "")),
-		"anchor": asset.get("anchor_px", []),
+		# Ordinary props must use the instance placement anchor resolved by
+		# instance_visual_geometry(). Supplying the catalog source anchor here
+		# bypasses calibration and shifts every prop by half a logical cell.
+		"anchor": [],
 		"sort_tile": sort_tile,
 		"layer_index": layer_index,
 		"image_pass": 1,
