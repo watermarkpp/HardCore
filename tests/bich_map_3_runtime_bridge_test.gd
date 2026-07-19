@@ -8,9 +8,12 @@ func _ready() -> void:
 	var content := MapEditorRuntimeBridge.game_content()
 	assert(content.spawns.size() == runtime.semantics.get("monster_spawn", []).size())
 	assert(content.npcs.size() == runtime.semantics.get("npc_points", []).size())
-	assert(content.portals.size() == 1, "仅最东侧已配置门点应进入运行时")
-	assert(int(content.portals[0].target_map_id) == 217)
-	assert(str(content.portals[0].label) == "进入兽人古墓一层")
+	assert(content.portals.size() == 2, "北侧沃玛森林与东侧兽人古墓出口都应进入运行时")
+	var portal_labels := {}
+	for portal: Dictionary in content.portals:
+		portal_labels[int(portal.target_map_id)] = str(portal.label)
+	assert(portal_labels[217] == "进入兽人古墓一层")
+	assert(portal_labels[268] == "前往沃玛森林")
 	var safe: Dictionary = runtime.semantics.safe_area[0]
 	assert(not bool(safe.get("return_anchor", false)))
 	assert(MapEditorRuntimeBridge.home_position() == Vector2.ZERO)

@@ -749,6 +749,18 @@ func _reset_document_session_state() -> void:
 	instance_size_menu_instance_id = ""
 	if preview != null:
 		preview.reset_for_document_open()
+	_reset_semantic_draft_fields()
+
+
+func _reset_semantic_draft_fields() -> void:
+	if semantic_content_id != null:
+		semantic_content_id.text = ""
+	if semantic_display_name != null:
+		semantic_display_name.text = ""
+	if semantic_target_map != null:
+		semantic_target_map.text = ""
+	if semantic_target_entrance != null:
+		semantic_target_entrance.text = ""
 
 
 func _migrate_loaded_blank_ground_policy() -> void:
@@ -1395,6 +1407,10 @@ func _on_semantic_place_toggled(enabled: bool) -> void:
 
 func _on_semantic_kind_selected(index: int, activate_placement := true) -> void:
 	var kind := str(semantic_kind_option.get_item_metadata(index))
+	# Draft fields belong to the selected semantic kind, not to the previous
+	# map or marker. In particular, a selected monster's hidden display name
+	# must never leak into a subsequently placed entrance or exit.
+	_reset_semantic_draft_fields()
 	if kind != "safe_area" and not safe_polygon_points.is_empty():
 		safe_polygon_points.clear()
 		if preview != null:
@@ -1483,7 +1499,9 @@ func _on_semantic_tile_clicked(tile: Vector2i) -> void:
 		preview.set_semantic_polygon_draft(safe_polygon_points)
 		status_label.text = "安全区已记录第 %d 点：(%d,%d)；继续左键加点，Enter 闭合，右键取消" % [safe_polygon_points.size(), tile.x, tile.y]
 		return
-	var properties := {"radius_tiles": int(semantic_radius.value)}
+	var properties := {}
+	if kind in ["monster_spawn", "boss_spawn", "light", "region_trigger"]:
+		properties["radius_tiles"] = int(semantic_radius.value)
 	var content_id := semantic_content_id.text.strip_edges()
 	var marker_name := semantic_display_name.text.strip_edges()
 	if not marker_name.is_empty():

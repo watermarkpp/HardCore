@@ -1,5 +1,5 @@
 {
-  "build_sha256": "b892e2c2174870faf0507c789dedb89fbfe2825a5ca0eaaa03d433ee11715236",
+  "build_sha256": "a5dfeee8dd7f849624cd1ccc16da34bc3d2170880f6218925b2467d8149b1be1",
   "collision": {
     "blocked_count": 180.0,
     "blocked_tiles": [
@@ -9515,142 +9515,6 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        127.0,
-        157.0
-      ],
-      "asset_id": "user.6fd631308bf359d5",
-      "collision_authority": "map_instance",
-      "collision_cells": [],
-      "collision_footprint_tiles": [
-        0.0,
-        0.0
-      ],
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "content_layer": "personal_expansion",
-      "flip_x": false,
-      "flip_y": false,
-      "footprint_tiles": [
-        8.0,
-        6.0
-      ],
-      "gameplay_role": "none",
-      "instance_id": "inst_000001",
-      "layer": "object_base",
-      "map_collision_override": "disabled",
-      "movable": true,
-      "navigation_policy": "ignore",
-      "object_role": "terrain",
-      "occlusion": true,
-      "occupancy_footprint_tiles": [
-        8.0,
-        6.0
-      ],
-      "offset_px": [
-        0.0,
-        0.0
-      ],
-      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-      "placement_anchor_px": [
-        127.0,
-        157.0
-      ],
-      "placement_rule": "non_overlapping",
-      "portal_trigger_offset_tiles": [
-        5.0,
-        3.0
-      ],
-      "portal_trigger_policy_id": "bich_cave_mouth_explicit_v1",
-      "position_mode": "tile_anchor",
-      "rotation_deg": 0.0,
-      "runtime_export": true,
-      "scale": [
-        1.0,
-        1.0
-      ],
-      "scene_intent": "map_portal_visual",
-      "selectable": true,
-      "selection_locked": false,
-      "tile": [
-        0.0,
-        1.0
-      ],
-      "tile_anchor": [
-        8.0,
-        8.0
-      ]
-    },
-    {
-      "anchor_mode": "foot_tile",
-      "anchor_px": [
-        123.0,
-        151.0
-      ],
-      "asset_id": "user.c60c71686cf6a463",
-      "collision_authority": "map_instance",
-      "collision_cells": [],
-      "collision_footprint_tiles": [
-        0.0,
-        0.0
-      ],
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "content_layer": "personal_expansion",
-      "flip_x": false,
-      "flip_y": false,
-      "footprint_tiles": [
-        8.0,
-        6.0
-      ],
-      "gameplay_role": "none",
-      "instance_id": "inst_000002",
-      "layer": "object_base",
-      "map_collision_override": "disabled",
-      "movable": true,
-      "navigation_policy": "ignore",
-      "object_role": "terrain",
-      "occlusion": true,
-      "occupancy_footprint_tiles": [
-        8.0,
-        6.0
-      ],
-      "offset_px": [
-        0.0,
-        0.0
-      ],
-      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-      "placement_anchor_px": [
-        123.0,
-        151.0
-      ],
-      "placement_rule": "non_overlapping",
-      "portal_trigger_offset_tiles": [
-        5.0,
-        3.0
-      ],
-      "portal_trigger_policy_id": "bich_cave_mouth_explicit_v1",
-      "position_mode": "tile_anchor",
-      "rotation_deg": 0.0,
-      "runtime_export": true,
-      "scale": [
-        1.0,
-        1.0
-      ],
-      "scene_intent": "map_portal_visual",
-      "selectable": true,
-      "selection_locked": false,
-      "tile": [
-        71.0,
-        2.0
-      ],
-      "tile_anchor": [
-        64.0,
-        8.0
-      ]
-    },
-    {
-      "anchor_mode": "foot_tile",
-      "anchor_px": [
         123.0,
         135.0
       ],
@@ -11146,494 +11010,6 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        92.0,
-        93.0
-      ],
-      "asset_id": "user.60445cb9a05efe9c",
-      "collision_footprint_tiles": [
-        0.0,
-        0.0
-      ],
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "content_layer": "personal_expansion",
-      "flip_x": false,
-      "flip_y": false,
-      "footprint_tiles": [
-        2.0,
-        2.0
-      ],
-      "gameplay_role": "none",
-      "instance_id": "inst_000034",
-      "layer": "object_base",
-      "map_collision_override": "default",
-      "movable": true,
-      "navigation_policy": "ignore",
-      "object_role": "decoration",
-      "occlusion": false,
-      "occupancy_footprint_tiles": [
-        2.0,
-        2.0
-      ],
-      "offset_px": [
-        0.0,
-        0.0
-      ],
-      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-      "placement_anchor_px": [
-        92.0,
-        93.0
-      ],
-      "placement_rule": "inside_map",
-      "position_mode": "tile_anchor",
-      "rotation_deg": 0.0,
-      "runtime_export": true,
-      "scale": [
-        0.3404255319148936,
-        0.3404255319148936
-      ],
-      "scene_intent": "visual_detail",
-      "selectable": true,
-      "selection_locked": false,
-      "tile": [
-        36.0,
-        43.0
-      ],
-      "tile_anchor": [
-        38.0,
-        49.0
-      ]
-    },
-    {
-      "anchor_mode": "foot_tile",
-      "anchor_px": [
-        163.0,
-        139.5
-      ],
-      "asset_id": "user.cb79196c20dbe85a",
-      "collision_footprint_tiles": [
-        0.0,
-        0.0
-      ],
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "content_layer": "personal_expansion",
-      "flip_x": false,
-      "flip_y": false,
-      "footprint_tiles": [
-        3.0,
-        3.0
-      ],
-      "gameplay_role": "none",
-      "instance_id": "inst_000035",
-      "layer": "object_base",
-      "map_collision_override": "default",
-      "movable": true,
-      "navigation_policy": "ignore",
-      "object_role": "decoration",
-      "occlusion": false,
-      "occupancy_footprint_tiles": [
-        3.0,
-        3.0
-      ],
-      "offset_px": [
-        0.0,
-        0.0
-      ],
-      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-      "placement_anchor_px": [
-        163.0,
-        139.5
-      ],
-      "placement_rule": "inside_map",
-      "position_mode": "tile_anchor",
-      "rotation_deg": 0.0,
-      "runtime_export": true,
-      "scale": [
-        0.3416370106761566,
-        0.3416370106761566
-      ],
-      "scene_intent": "visual_detail",
-      "selectable": true,
-      "selection_locked": false,
-      "tile": [
-        65.0,
-        45.0
-      ],
-      "tile_anchor": [
-        35.0,
-        29.0
-      ]
-    },
-    {
-      "anchor_mode": "foot_tile",
-      "anchor_px": [
-        92.0,
-        93.0
-      ],
-      "asset_id": "user.60445cb9a05efe9c",
-      "collision_footprint_tiles": [
-        0.0,
-        0.0
-      ],
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "content_layer": "personal_expansion",
-      "flip_x": false,
-      "flip_y": false,
-      "footprint_tiles": [
-        2.0,
-        2.0
-      ],
-      "gameplay_role": "none",
-      "instance_id": "inst_000038",
-      "layer": "object_base",
-      "map_collision_override": "default",
-      "movable": true,
-      "navigation_policy": "ignore",
-      "object_role": "decoration",
-      "occlusion": false,
-      "occupancy_footprint_tiles": [
-        2.0,
-        2.0
-      ],
-      "offset_px": [
-        0.0,
-        0.0
-      ],
-      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-      "placement_anchor_px": [
-        92.0,
-        93.0
-      ],
-      "placement_rule": "inside_map",
-      "position_mode": "tile_anchor",
-      "rotation_deg": 0.0,
-      "runtime_export": true,
-      "scale": [
-        0.3404255319148936,
-        0.3404255319148936
-      ],
-      "scene_intent": "visual_detail",
-      "selectable": true,
-      "selection_locked": false,
-      "tile": [
-        27.0,
-        42.0
-      ],
-      "tile_anchor": [
-        25.0,
-        41.0
-      ]
-    },
-    {
-      "anchor_mode": "foot_tile",
-      "anchor_px": [
-        92.0,
-        93.0
-      ],
-      "asset_id": "user.60445cb9a05efe9c",
-      "collision_footprint_tiles": [
-        0.0,
-        0.0
-      ],
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "content_layer": "personal_expansion",
-      "flip_x": false,
-      "flip_y": false,
-      "footprint_tiles": [
-        2.0,
-        2.0
-      ],
-      "gameplay_role": "none",
-      "instance_id": "inst_000039",
-      "layer": "object_base",
-      "map_collision_override": "default",
-      "movable": true,
-      "navigation_policy": "ignore",
-      "object_role": "decoration",
-      "occlusion": false,
-      "occupancy_footprint_tiles": [
-        2.0,
-        2.0
-      ],
-      "offset_px": [
-        0.0,
-        0.0
-      ],
-      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-      "placement_anchor_px": [
-        92.0,
-        93.0
-      ],
-      "placement_rule": "inside_map",
-      "position_mode": "tile_anchor",
-      "rotation_deg": 0.0,
-      "runtime_export": true,
-      "scale": [
-        0.3404255319148936,
-        0.3404255319148936
-      ],
-      "scene_intent": "visual_detail",
-      "selectable": true,
-      "selection_locked": false,
-      "tile": [
-        36.0,
-        34.0
-      ],
-      "tile_anchor": [
-        35.0,
-        39.0
-      ]
-    },
-    {
-      "anchor_mode": "foot_tile",
-      "anchor_px": [
-        150.0,
-        146.0
-      ],
-      "asset_id": "user.c3239594a8b7b6d3",
-      "collision_footprint_tiles": [
-        0.0,
-        0.0
-      ],
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "content_layer": "personal_expansion",
-      "flip_x": false,
-      "flip_y": false,
-      "footprint_tiles": [
-        4.0,
-        4.0
-      ],
-      "gameplay_role": "none",
-      "instance_id": "inst_000041",
-      "layer": "object_base",
-      "map_collision_override": "default",
-      "movable": true,
-      "navigation_policy": "ignore",
-      "object_role": "decoration",
-      "occlusion": false,
-      "occupancy_footprint_tiles": [
-        4.0,
-        4.0
-      ],
-      "offset_px": [
-        0.0,
-        0.0
-      ],
-      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-      "placement_anchor_px": [
-        150.0,
-        146.0
-      ],
-      "placement_rule": "inside_map",
-      "position_mode": "tile_anchor",
-      "rotation_deg": 0.0,
-      "runtime_export": true,
-      "scale": [
-        0.43537414965986393,
-        0.43537414965986393
-      ],
-      "scene_intent": "visual_detail",
-      "selectable": true,
-      "selection_locked": false,
-      "tile": [
-        42.0,
-        62.0
-      ],
-      "tile_anchor": [
-        42.0,
-        63.0
-      ]
-    },
-    {
-      "anchor_mode": "foot_tile",
-      "anchor_px": [
-        163.0,
-        139.5
-      ],
-      "asset_id": "user.cb79196c20dbe85a",
-      "collision_footprint_tiles": [
-        0.0,
-        0.0
-      ],
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "content_layer": "personal_expansion",
-      "flip_x": false,
-      "flip_y": false,
-      "footprint_tiles": [
-        3.0,
-        3.0
-      ],
-      "gameplay_role": "none",
-      "instance_id": "inst_000042",
-      "layer": "object_base",
-      "map_collision_override": "default",
-      "movable": true,
-      "navigation_policy": "ignore",
-      "object_role": "decoration",
-      "occlusion": false,
-      "occupancy_footprint_tiles": [
-        3.0,
-        3.0
-      ],
-      "offset_px": [
-        0.0,
-        0.0
-      ],
-      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-      "placement_anchor_px": [
-        163.0,
-        139.5
-      ],
-      "placement_rule": "inside_map",
-      "position_mode": "tile_anchor",
-      "rotation_deg": 0.0,
-      "runtime_export": true,
-      "scale": [
-        0.3416370106761566,
-        0.3416370106761566
-      ],
-      "scene_intent": "visual_detail",
-      "selectable": true,
-      "selection_locked": false,
-      "tile": [
-        34.0,
-        74.0
-      ],
-      "tile_anchor": [
-        31.0,
-        73.0
-      ]
-    },
-    {
-      "anchor_mode": "foot_tile",
-      "anchor_px": [
-        150.0,
-        146.0
-      ],
-      "asset_id": "user.c3239594a8b7b6d3",
-      "collision_footprint_tiles": [
-        0.0,
-        0.0
-      ],
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "content_layer": "personal_expansion",
-      "flip_x": false,
-      "flip_y": false,
-      "footprint_tiles": [
-        4.0,
-        4.0
-      ],
-      "gameplay_role": "none",
-      "instance_id": "inst_000043",
-      "layer": "object_base",
-      "map_collision_override": "default",
-      "movable": true,
-      "navigation_policy": "ignore",
-      "object_role": "decoration",
-      "occlusion": false,
-      "occupancy_footprint_tiles": [
-        4.0,
-        4.0
-      ],
-      "offset_px": [
-        0.0,
-        0.0
-      ],
-      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-      "placement_anchor_px": [
-        150.0,
-        146.0
-      ],
-      "placement_rule": "inside_map",
-      "position_mode": "tile_anchor",
-      "rotation_deg": 0.0,
-      "runtime_export": true,
-      "scale": [
-        0.43537414965986393,
-        0.43537414965986393
-      ],
-      "scene_intent": "visual_detail",
-      "selectable": true,
-      "selection_locked": false,
-      "tile": [
-        8.0,
-        33.0
-      ],
-      "tile_anchor": [
-        7.0,
-        32.0
-      ]
-    },
-    {
-      "anchor_mode": "foot_tile",
-      "anchor_px": [
-        162.0,
-        147.5
-      ],
-      "asset_id": "user.d1a0eee0a2dfde63",
-      "collision_footprint_tiles": [
-        0.0,
-        0.0
-      ],
-      "collision_policy": "none",
-      "collision_profile_id": "none_visual",
-      "content_layer": "personal_expansion",
-      "flip_x": false,
-      "flip_y": false,
-      "footprint_tiles": [
-        4.0,
-        4.0
-      ],
-      "gameplay_role": "none",
-      "instance_id": "inst_000045",
-      "layer": "object_base",
-      "map_collision_override": "default",
-      "movable": true,
-      "navigation_policy": "ignore",
-      "object_role": "decoration",
-      "occlusion": false,
-      "occupancy_footprint_tiles": [
-        4.0,
-        4.0
-      ],
-      "offset_px": [
-        0.0,
-        0.0
-      ],
-      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-      "placement_anchor_px": [
-        162.0,
-        147.5
-      ],
-      "placement_rule": "inside_map",
-      "position_mode": "tile_anchor",
-      "rotation_deg": 0.0,
-      "runtime_export": true,
-      "scale": [
-        0.43097643097643096,
-        0.43097643097643096
-      ],
-      "scene_intent": "visual_detail",
-      "selectable": true,
-      "selection_locked": false,
-      "tile": [
-        26.0,
-        11.0
-      ],
-      "tile_anchor": [
-        28.0,
-        8.0
-      ]
-    },
-    {
-      "anchor_mode": "foot_tile",
-      "anchor_px": [
         101.0,
         137.5
       ],
@@ -12478,7 +11854,7 @@
       "selection_locked": false,
       "tile": [
         1.0,
-        5.0
+        6.0
       ],
       "tile_anchor": [
         0.0,
@@ -12538,8 +11914,8 @@
       "selectable": true,
       "selection_locked": false,
       "tile": [
-        69.0,
-        1.0
+        67.0,
+        2.0
       ],
       "tile_anchor": [
         76.0,
@@ -12989,83 +12365,152 @@
         3.0,
         3.0
       ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        133.0,
+        239.0
+      ],
+      "asset_id": "mse.map_exit.temple_set_b_corner_east_inner_side_open",
+      "collision_authority": "asset",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        8.0,
+        6.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        8.0,
+        6.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000071",
+      "layer": "object_base",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        8.0,
+        6.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        133.0,
+        239.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        70.0,
+        1.0
+      ],
+      "tile_anchor": [
+        72.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        141.0,
+        286.0
+      ],
+      "asset_id": "mse.map_exit.deep_forest_set_a_edge_north_far_open",
+      "collision_authority": "asset",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        8.0,
+        6.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        8.0,
+        6.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000072",
+      "layer": "object_base",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        8.0,
+        6.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        141.0,
+        286.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        1.0,
+        2.0
+      ],
+      "tile_anchor": [
+        3.0,
+        2.0
+      ]
     }
   ],
   "runtime_schema_version": 1.0,
   "semantics": {
     "boss_spawn": [],
     "door_points": [
-      {
-        "auto_created_from_asset": true,
-        "blocks_movement": false,
-        "content_layer": "personal_expansion",
-        "display_name": "待配置地图传送门",
-        "door_id": "door.inst_000001",
-        "kind": "door",
-        "linked_visual_instance_id": "inst_000001",
-        "one_way": false,
-        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
-        "portal_trigger_policy_id": "bich_cave_mouth_explicit_v1",
-        "portal_visual_footprint_tiles": [
-          8.0,
-          6.0
-        ],
-        "portal_visual_origin_tile": [
-          0.0,
-          1.0
-        ],
-        "runtime_export": true,
-        "semantic_id": "door_000001",
-        "semantic_role": "map_portal",
-        "target_configured": false,
-        "target_map_id": -1.0,
-        "target_tile": [
-          0.0,
-          0.0
-        ],
-        "tile": [
-          5.0,
-          4.0
-        ],
-        "trigger_on_enter": true
-      },
-      {
-        "auto_created_from_asset": true,
-        "blocks_movement": false,
-        "content_layer": "personal_expansion",
-        "display_name": "进入兽人古墓一层",
-        "door_id": "door.inst_000002",
-        "kind": "door",
-        "linked_visual_instance_id": "inst_000002",
-        "official_connection_id": "bich_east_to_orc_tomb_1_v1",
-        "one_way": false,
-        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
-        "portal_trigger_policy_id": "bich_cave_mouth_explicit_v1",
-        "portal_visual_footprint_tiles": [
-          8.0,
-          6.0
-        ],
-        "portal_visual_origin_tile": [
-          71.0,
-          2.0
-        ],
-        "runtime_export": true,
-        "semantic_id": "door_000002",
-        "semantic_role": "map_portal",
-        "target_configured": true,
-        "target_entrance_id": "map_entrance_000001",
-        "target_map_id": 217.0,
-        "target_map_key": "orc_tomb_1",
-        "target_tile": [
-          3.0,
-          35.0
-        ],
-        "tile": [
-          76.0,
-          5.0
-        ],
-        "trigger_on_enter": true
-      },
       {
         "auto_created_from_asset": true,
         "blocks_movement": false,
@@ -13095,8 +12540,8 @@
           0.0
         ],
         "tile": [
-          77.0,
-          76.0
+          74.0,
+          73.0
         ],
         "trigger_on_enter": true
       },
@@ -13129,15 +12574,66 @@
           0.0
         ],
         "tile": [
-          6.0,
-          75.0
+          7.0,
+          74.0
         ],
         "trigger_on_enter": true
       }
     ],
     "light": [],
     "map_entrance_points": [],
-    "map_exit_points": [],
+    "map_exit_points": [
+      {
+        "blocks_movement": false,
+        "content_layer": "personal_expansion",
+        "display_name": "前往沃玛森林",
+        "exit_id": "map_exit_000001",
+        "kind": "map_exit",
+        "official_connection_id": "bich_north_to_wooma_forest_v1",
+        "portal_role": "exit",
+        "runtime_export": true,
+        "semantic_id": "map_exit_000001",
+        "semantic_role": "map_exit_trigger",
+        "target_configured": true,
+        "target_entrance_id": "map_entrance_000001",
+        "target_map_id": 268.0,
+        "target_map_key": "wooma_forest",
+        "target_tile": [
+          3.0,
+          52.0
+        ],
+        "tile": [
+          6.0,
+          5.0
+        ],
+        "trigger_on_enter": true
+      },
+      {
+        "blocks_movement": false,
+        "content_layer": "personal_expansion",
+        "display_name": "进入兽人古墓一层",
+        "exit_id": "map_exit_000002",
+        "kind": "map_exit",
+        "official_connection_id": "bich_east_to_orc_tomb_1_v2",
+        "portal_role": "exit",
+        "runtime_export": true,
+        "semantic_id": "map_exit_000002",
+        "semantic_role": "map_exit_trigger",
+        "target_configured": true,
+        "target_entrance_id": "map_entrance_000001",
+        "target_map_id": 217.0,
+        "target_map_key": "orc_tomb_1",
+        "target_tile": [
+          3.0,
+          35.0
+        ],
+        "tile": [
+          72.0,
+          5.0
+        ],
+        "trigger_on_enter": true
+      }
+    ],
     "monster_spawn": [
       {
         "content_id": "monster.21",
@@ -14253,6 +13749,6 @@
     "content_layer": "personal_expansion",
     "editor_schema_version": 4.0,
     "map_id": "bich_province",
-    "revision": 3.0
+    "revision": 4.0
   }
 }

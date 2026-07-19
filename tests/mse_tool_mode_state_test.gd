@@ -222,10 +222,19 @@ func _ready() -> void:
 	assert(editor.active_tool_mode == "select" and editor.preview.interaction_mode == "select")
 	editor.semantic_kind_option.select(exit_index)
 	editor._on_semantic_kind_selected(exit_index)
+	assert(editor.semantic_display_name.text.is_empty())
+	assert(editor.semantic_content_id.text.is_empty())
+	assert(editor.semantic_target_map.text.is_empty())
+	assert(editor.semantic_target_entrance.text.is_empty())
 	editor.semantic_display_name.text = "古墓墙门出口"
 	editor.semantic_target_map.text = ""
 	_click_preview_tile(editor, Vector2i(19, 18), MOUSE_BUTTON_LEFT)
 	assert(editor.current_document.layers.map_exit_points.size() == 1)
+	assert(
+		not editor.current_document.layers.map_exit_points[0].has(
+			"radius_tiles"
+		)
+	)
 	var exit_id := str(editor.current_document.layers.map_exit_points[0].semantic_id)
 	editor.preview.selected_selectable_id = exit_id
 	editor._on_selectable_selected(exit_id, false)

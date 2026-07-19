@@ -47,15 +47,11 @@ func _ready() -> void:
 		documents.append(document)
 		runtimes.append(runtime)
 
-	var bich_east: Dictionary = documents[0].layers.door_points.filter(
+	var bich_east: Dictionary = documents[0].layers.map_exit_points.filter(
 		func(entry: Dictionary) -> bool:
-			return str(entry.semantic_id) == "door_000002"
+			return str(entry.semantic_id) == "map_exit_000002"
 	)[0]
-	assert(bich_east.tile == [76.0, 5.0])
-	assert(
-		str(bich_east.portal_trigger_policy_id)
-		== "bich_cave_mouth_explicit_v1"
-	)
+	assert(bich_east.tile == [72.0, 5.0])
 	assert(str(bich_east.target_map_key) == "orc_tomb_1")
 	assert(int(bich_east.target_map_id) == 217)
 
@@ -97,7 +93,7 @@ func _ready() -> void:
 	print(
 		(
 			"BICH_ORC_TOMB_OFFICIAL_MAPS_PASS maps=4 "
-			+ "bich_exit=76,5 floor2_npcs=2 floor3_npcs=0"
+			+ "bich_exit=72,5 floor2_npcs=2 floor3_npcs=0"
 		)
 	)
 	get_tree().quit(0)

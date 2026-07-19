@@ -59,10 +59,10 @@
     },
     {
       "template_id": "blank.wooma_forest",
-      "template_kind": "empty_map",
+      "template_kind": "existing_map_or_empty_template",
       "map_id": "wooma_forest",
       "runtime_map_id": 268,
-      "display_name": "沃玛森林（可编辑空白模板）",
+      "display_name": "沃玛森林（当前地图）",
       "map_type": "outdoor_field",
       "design_size": [
         56,
@@ -73,12 +73,12 @@
         180
       ],
       "strategy": "shrink_and_recompose",
-      "content_policy": "empty_layers",
+      "content_policy": "open_existing_workspace_first",
       "ground_policy": "virtual_blank_until_dirty",
       "editable_layer": "expansion",
       "workspace_status": "ready",
       "template_version_id": "wooma_forest_blank_v1",
-      "size_status": "scaled_from_bich_80_basis"
+      "size_status": "user_confirmed_official"
     },
     {
       "template_id": "blank.snake_valley",

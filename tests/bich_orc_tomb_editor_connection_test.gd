@@ -2,142 +2,235 @@ extends Node
 
 
 func _ready() -> void:
-	var bich_result := MapEditorLoadService.load_document(
-		"res://map_editor_workspace/bich_province/bich_province.editor.json"
-	)
-	var tomb_result := MapEditorLoadService.load_document(
-		"res://map_editor_workspace/orc_tomb_1/orc_tomb_1.editor.json"
-	)
-	assert(bich_result.ok, str(bich_result.get("errors", [])))
-	assert(tomb_result.ok, str(tomb_result.get("errors", [])))
-	var bich: Dictionary = bich_result.document
-	var tomb: Dictionary = tomb_result.document
-	var doors: Array = bich.layers.door_points
-	assert(doors.size() == 4)
-	var expected_portal_tiles := {
-		"inst_000001": Vector2i(5, 4),
-		"inst_000002": Vector2i(76, 5),
-		"inst_000004": Vector2i(77, 76),
-		"inst_000016": Vector2i(6, 75),
-	}
-	var expected_offsets := {
-		"inst_000001": Vector2i(5, 3),
-		"inst_000002": Vector2i(5, 3),
-		"inst_000004": Vector2i(6, 3),
-		"inst_000016": Vector2i(6, 3),
-	}
-	var walkability := MapEditorCollisionService.build_walkability(bich)
-	for door: Dictionary in doors:
-		var visual_id := str(door.linked_visual_instance_id)
-		assert(expected_portal_tiles.has(visual_id), visual_id)
-		var actual_tile := Vector2i(int(door.tile[0]), int(door.tile[1]))
-		assert(actual_tile == expected_portal_tiles[visual_id], str(door))
-		assert(
-			str(door.portal_anchor_contract_id)
-			== MapEditorPortalAnchorService.CONTRACT_ID
-		)
-		var located := MapEditorInstanceService._locate(bich, visual_id)
-		assert(located.ok, visual_id)
-		var instance: Dictionary = located.instance
-		var offset: Array = instance.portal_trigger_offset_tiles
-		assert(
-			Vector2i(int(offset[0]), int(offset[1]))
-			== expected_offsets[visual_id]
-		)
-		assert(
-			str(instance.portal_trigger_policy_id)
-			== "bich_cave_mouth_explicit_v1"
-		)
-		assert(str(instance.collision_policy) == "none")
-		assert(str(instance.map_collision_override) == "disabled")
-		var origin: Array = instance.tile
-		var footprint: Array = instance.footprint_tiles
-		for y in int(footprint[1]):
-			for x in int(footprint[0]):
-				assert(
-					not walkability.blocked_tiles.has(
-						"%d,%d" % [
-							int(origin[0]) + x,
-							int(origin[1]) + y,
-						]
-					),
-					"山洞范围不应存在碰撞：%s" % visual_id
-				)
-		var asset := MapAssetCatalogService.find_asset(
-			str(instance.asset_id)
-		)
-		assert(
-			MapEditorPortalAnchorService.trigger_tile(
-				instance,
-				asset,
-				Vector2i(80, 80)
-			) == actual_tile
-		)
-	var east_door: Dictionary = doors[0]
-	var east_score := _east_score(east_door)
-	for door: Dictionary in doors.slice(1):
-		var score := _east_score(door)
-		if score > east_score:
-			east_score = score
-			east_door = door
-	assert(str(east_door.semantic_id) == "door_000002")
-	assert(Vector2i(int(east_door.tile[0]), int(east_door.tile[1])) == Vector2i(76, 5))
+	var bich := _load_document("bich_province")
+	var wooma := _load_document("wooma_forest")
+	var tomb := _load_document("orc_tomb_1")
+	var bich_runtime := _load_runtime("bich_province")
+	var wooma_runtime := _load_runtime("wooma_forest")
 
-	var entrance: Dictionary = tomb.layers.map_entrance_points[0]
-	assert(str(entrance.entrance_id) == "map_entrance_000001")
-	assert(Vector2i(int(entrance.tile[0]), int(entrance.tile[1])) == Vector2i(3, 35))
-	assert(bool(east_door.target_configured))
-	assert(int(east_door.target_map_id) == 217)
-	assert(str(east_door.target_map_key) == "orc_tomb_1")
-	assert(str(east_door.target_entrance_id) == str(entrance.entrance_id))
+	assert(bich.layers.map_exit_points.size() == 2)
+	var north_exit := _entry(
+		bich.layers.map_exit_points,
+		"map_exit_000001"
+	)
+	var east_exit := _entry(
+		bich.layers.map_exit_points,
+		"map_exit_000002"
+	)
+	var wooma_entrance: Dictionary = wooma.layers.map_entrance_points[0]
+	var tomb_entrance: Dictionary = tomb.layers.map_entrance_points[0]
+
+	_assert_exit(
+		north_exit,
+		Vector2i(6, 5),
+		"前往沃玛森林",
+		268,
+		"wooma_forest",
+		wooma_entrance,
+		"bich_north_to_wooma_forest_v1"
+	)
+	_assert_exit(
+		east_exit,
+		Vector2i(72, 5),
+		"进入兽人古墓一层",
+		217,
+		"orc_tomb_1",
+		tomb_entrance,
+		"bich_east_to_orc_tomb_1_v2"
+	)
 	assert(
-		Vector2i(int(east_door.target_tile[0]), int(east_door.target_tile[1]))
-		== Vector2i(int(entrance.tile[0]), int(entrance.tile[1]))
+		not str(north_exit.display_name).begins_with("半兽")
+		and not str(east_exit.display_name).begins_with("半兽")
+	)
+	assert(not north_exit.has("radius_tiles"))
+	assert(not east_exit.has("radius_tiles"))
+
+	_assert_exit_visual_contains(
+		bich,
+		north_exit,
+		"mse.map_exit.deep_forest_set_a_edge_north_far_open"
+	)
+	_assert_exit_visual_contains(
+		bich,
+		east_exit,
+		"mse.map_exit.temple_set_b_corner_east_inner_side_open"
 	)
 
-	var runtime_result := MapEditorRuntimeMapService.load_runtime(
-		"res://assets/data/runtime/map_editor/bich_province.runtime.json"
+	var runtime_north := _entry(
+		bich_runtime.semantics.map_exit_points,
+		"map_exit_000001"
 	)
-	assert(runtime_result.ok, str(runtime_result.get("errors", [])))
-	var runtime_door: Dictionary = (
-		runtime_result.runtime.semantics.door_points
-		.filter(func(entry: Dictionary) -> bool: return str(entry.semantic_id) == str(east_door.semantic_id))
-		[0]
+	var runtime_east := _entry(
+		bich_runtime.semantics.map_exit_points,
+		"map_exit_000002"
 	)
-	assert(int(runtime_door.target_map_id) == 217)
-	assert(str(runtime_door.target_entrance_id) == str(entrance.entrance_id))
-	var game_portals: Array = MapEditorRuntimeBridge.game_content().get("portals", [])
-	var tomb_portals := game_portals.filter(
-		func(portal: Dictionary) -> bool: return int(portal.target_map_id) == 217
-	)
-	assert(tomb_portals.size() == 1)
+	assert(int(runtime_north.target_map_id) == 268)
+	assert(int(runtime_east.target_map_id) == 217)
 	assert(
-		(tomb_portals[0].position as Vector2).is_equal_approx(
-			MapEditorRuntimeBridge.tile_to_world(runtime_result.runtime, east_door.tile)
+		str(runtime_north.target_entrance_id)
+		== str(wooma_entrance.entrance_id)
+	)
+	assert(
+		str(runtime_east.target_entrance_id)
+		== str(tomb_entrance.entrance_id)
+	)
+	assert(wooma_runtime.semantics.map_entrance_points.size() == 1)
+	assert(
+		str(
+			wooma_runtime.semantics.map_entrance_points[0].entrance_id
+		) == str(wooma_entrance.entrance_id)
+	)
+
+	var game_portals: Array = MapEditorRuntimeBridge.game_content().get(
+		"portals",
+		[]
+	)
+	assert(game_portals.size() == 2)
+	var portals_by_target := {}
+	for portal: Dictionary in game_portals:
+		portals_by_target[int(portal.target_map_id)] = portal
+	assert(portals_by_target.has(217))
+	assert(portals_by_target.has(268))
+	assert(
+		(portals_by_target[268].position as Vector2).is_equal_approx(
+			MapEditorRuntimeBridge.tile_to_world(
+				bich_runtime,
+				north_exit.tile
+			)
 		)
 	)
-	var marker_file := FileAccess.open(
-		"res://assets/data/runtime/map_editor/bich_province.manual_ready.json",
-		FileAccess.READ
-	)
-	assert(marker_file != null)
-	var marker: Variant = JSON.parse_string(marker_file.get_as_text())
-	assert(marker is Dictionary)
-	assert(int(marker.content.doors_pending_target_configuration) == 3)
-	assert(int(marker.content.configured_connections[0].target_map_id) == 217)
-	assert(marker.content.east_exit_tile == [76.0, 5.0])
 	assert(
-		str(marker.content.configured_connections[0].portal_anchor_contract_id)
-		== MapEditorPortalAnchorService.CONTRACT_ID
+		(portals_by_target[217].position as Vector2).is_equal_approx(
+			MapEditorRuntimeBridge.tile_to_world(
+				bich_runtime,
+				east_exit.tile
+			)
+		)
+	)
+
+	var bich_marker := _read_json(
+		"res://assets/data/runtime/map_editor/"
+		+ "bich_province.manual_ready.json"
 	)
 	assert(
-		str(marker.content.configured_connections[0].portal_trigger_policy_id)
-		== "bich_cave_mouth_explicit_v1"
+		str(bich_marker.connection_version_id)
+		== "bich_wooma_connection_v1"
 	)
-	print("BICH_ORC_TOMB_EDITOR_CONNECTION_PASS exit=76,5 entrance=3,35 target=217")
+	assert(int(bich_marker.content.map_exits) == 2)
+	assert(
+		int(bich_marker.content.map_exits_pending_target_configuration)
+		== 0
+	)
+	assert(bich_marker.content.north_exit_tile == [6.0, 5.0])
+	assert(bich_marker.content.east_exit_tile == [72.0, 5.0])
+
+	var wooma_marker := _read_json(
+		"res://assets/data/runtime/map_editor/"
+		+ "wooma_forest.manual_ready.json"
+	)
+	assert(str(wooma_marker.status) == "user_confirmed_official")
+	assert(
+		str(wooma_marker.content.entrance_id)
+		== str(wooma_entrance.entrance_id)
+	)
+	assert(wooma_marker.content.entrance_tile == [3.0, 52.0])
+	assert(int(wooma_marker.content.incoming_from.runtime_map_id) == 4)
+	assert(
+		str(wooma_marker.content.incoming_from.exit_id)
+		== str(north_exit.semantic_id)
+	)
+	print(
+		"BICH_WOOMA_ORC_TOMB_EDITOR_CONNECTION_PASS "
+		+ "north=6,5->268:3,52 east=72,5->217:3,35"
+	)
 	get_tree().quit(0)
 
 
-func _east_score(entry: Dictionary) -> int:
-	var tile: Array = entry.get("tile", [0, 0])
-	return int(tile[0]) - int(tile[1])
+func _load_document(map_id: String) -> Dictionary:
+	var loaded := MapEditorLoadService.load_document(
+		MapEditorSaveService.default_path(map_id)
+	)
+	assert(loaded.ok, "%s:%s" % [map_id, loaded.get("errors", [])])
+	return loaded.document
+
+
+func _load_runtime(map_id: String) -> Dictionary:
+	var loaded := MapEditorRuntimeMapService.load_runtime(
+		MapEditorBuildRuntimeService.default_runtime_path(map_id)
+	)
+	assert(loaded.ok, "%s:%s" % [map_id, loaded.get("errors", [])])
+	return loaded.runtime
+
+
+func _entry(entries: Array, semantic_id: String) -> Dictionary:
+	for entry: Dictionary in entries:
+		if str(entry.get("semantic_id", "")) == semantic_id:
+			return entry
+	assert(false, "missing_semantic:%s" % semantic_id)
+	return {}
+
+
+func _assert_exit(
+	map_exit: Dictionary,
+	expected_tile: Vector2i,
+	expected_name: String,
+	target_runtime_id: int,
+	target_map_key: String,
+	target_entrance: Dictionary,
+	connection_id: String
+) -> void:
+	assert(_tile(map_exit) == expected_tile)
+	assert(str(map_exit.display_name) == expected_name)
+	assert(bool(map_exit.target_configured))
+	assert(int(map_exit.target_map_id) == target_runtime_id)
+	assert(str(map_exit.target_map_key) == target_map_key)
+	assert(
+		str(map_exit.target_entrance_id)
+		== str(target_entrance.entrance_id)
+	)
+	assert(_tile_value(map_exit.target_tile) == _tile(target_entrance))
+	assert(str(map_exit.official_connection_id) == connection_id)
+
+
+func _assert_exit_visual_contains(
+	document: Dictionary,
+	map_exit: Dictionary,
+	asset_id: String
+) -> void:
+	var matching := MapEditorInstanceService.all_instances(document).filter(
+		func(instance: Dictionary) -> bool:
+			return str(instance.get("asset_id", "")) == asset_id
+	)
+	assert(matching.size() == 1, asset_id)
+	var instance: Dictionary = matching[0]
+	var origin := _tile(instance)
+	var footprint_raw: Array = instance.footprint_tiles
+	var footprint := Vector2i(
+		int(footprint_raw[0]),
+		int(footprint_raw[1])
+	)
+	assert(Rect2i(origin, footprint).has_point(_tile(map_exit)))
+	assert(str(instance.collision_policy) == "none")
+	assert(
+		not MapEditorCollisionService.build_walkability(
+			document
+		).blocked_tiles.has(
+			"%d,%d" % [_tile(map_exit).x, _tile(map_exit).y]
+		)
+	)
+
+
+func _tile(entry: Dictionary) -> Vector2i:
+	return _tile_value(entry.get("tile", [0, 0]))
+
+
+func _tile_value(raw: Array) -> Vector2i:
+	return Vector2i(int(raw[0]), int(raw[1]))
+
+
+func _read_json(path: String) -> Dictionary:
+	var file := FileAccess.open(path, FileAccess.READ)
+	assert(file != null, path)
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	assert(parsed is Dictionary, path)
+	return parsed

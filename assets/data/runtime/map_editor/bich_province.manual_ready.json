@@ -1,26 +1,39 @@
 {
-  "bich_cave_portal_version_id": "bich_cave_portals_v1",
+  "connection_version_id": "bich_wooma_connection_v1",
   "content": {
     "configured_connections": [
       {
-        "door_id": "door_000002",
-        "linked_visual_instance_id": "inst_000002",
-        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
-        "portal_trigger_policy_id": "bich_cave_mouth_explicit_v1",
-        "portal_visual_origin_tile": [
-          71.0,
-          2.0
-        ],
+        "display_name": "前往沃玛森林",
+        "kind": "map_exit",
+        "official_connection_id": "bich_north_to_wooma_forest_v1",
+        "semantic_id": "map_exit_000001",
         "target_entrance_id": "map_entrance_000001",
-        "target_map_id": 217.0,
+        "target_map_id": 268,
+        "target_map_key": "wooma_forest",
+        "target_tile": [
+          3.0,
+          52.0
+        ],
+        "tile": [
+          6.0,
+          5.0
+        ]
+      },
+      {
+        "display_name": "进入兽人古墓一层",
+        "kind": "map_exit",
+        "official_connection_id": "bich_east_to_orc_tomb_1_v2",
+        "semantic_id": "map_exit_000002",
+        "target_entrance_id": "map_entrance_000001",
+        "target_map_id": 217,
         "target_map_key": "orc_tomb_1",
         "target_tile": [
           3.0,
           35.0
         ],
         "tile": [
-          76,
-          5
+          72.0,
+          5.0
         ]
       }
     ],
@@ -28,21 +41,27 @@
       80.0,
       80.0
     ],
-    "doors": 4.0,
-    "doors_pending_target_configuration": 3.0,
+    "doors": 2,
+    "doors_pending_target_configuration": 2,
     "east_exit_tile": [
-      76,
+      72,
       5
     ],
-    "instances": 56.0,
-    "monster_spawns": 44.0,
-    "npcs": 7.0
+    "instances": 48,
+    "map_exits": 2,
+    "map_exits_pending_target_configuration": 0,
+    "monster_spawns": 44,
+    "north_exit_tile": [
+      6,
+      5
+    ],
+    "npcs": 7
   },
   "map_id": "bich_province",
   "official_version_id": "bich_orc_tomb_official_v1",
-  "runtime_build_sha256": "b892e2c2174870faf0507c789dedb89fbfe2825a5ca0eaaa03d433ee11715236",
-  "runtime_map_id": 4.0,
-  "schema_version": 1.0,
+  "runtime_build_sha256": "a5dfeee8dd7f849624cd1ccc16da34bc3d2170880f6218925b2467d8149b1be1",
+  "runtime_map_id": 4,
+  "schema_version": 2,
   "source_workspace": "map_editor_workspace/bich_province",
   "status": "user_confirmed_official_80x80"
 }
