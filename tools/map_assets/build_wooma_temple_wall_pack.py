@@ -223,16 +223,6 @@ def normalized_pillars() -> list[Image.Image]:
     return result
 
 
-def normalized_corner_junctions() -> dict[str, Image.Image]:
-    result: dict[str, Image.Image] = {}
-    for key in ("v", "inv"):
-        with Image.open(
-            SOURCE_DIR / f"corner_{key}_junction_alpha_v2.png"
-        ) as opened:
-            result[key] = alpha_trim(opened.convert("RGBA"))
-    return result
-
-
 def normalize_module_geometry(module: dict) -> None:
     topology = str(module["topology"])
     if topology in {"straight", "door_adapter", "broken_adapter"}:
@@ -439,39 +429,26 @@ def straight_art(
 
 def corner_art(
     module: dict,
-    corner_junctions: dict[str, Image.Image],
+    pillars: list[Image.Image],
 ) -> Image.Image:
     size = tuple(int(value) for value in module["canvas_size"])
     anchor = tuple(int(value) for value in module["anchor"])
-    asset_id = str(module["asset_id"])
-
-    def placed(source: Image.Image, target_width: int) -> Image.Image:
-        resized = alpha_trim(source).resize((target_width, 83), RESAMPLE)
-        source_foot = _alpha_baseline_y(resized, resized.width // 2, 2)
-        return place_anchored(
-            resized,
-            (resized.width // 2, source_foot),
-            size,
-            (anchor[0], anchor[1] - 8),
-        )
-
-    v_corner = placed(corner_junctions["v"], 72)
-    inv_corner = placed(corner_junctions["inv"], 72)
-    if "_nw_" in asset_id:
-        return inv_corner
-    if "_se_" in asset_id:
-        return v_corner
-
-    result = Image.new("RGBA", size, (0, 0, 0, 0))
-    if "_ne_" in asset_id:
-        half_box = (0, 0, anchor[0] + 1, size[1])
-        half_position = (0, 0)
-    else:
-        half_box = (anchor[0], 0, size[0], size[1])
-        half_position = (anchor[0], 0)
-    result.alpha_composite(v_corner.crop(half_box), half_position)
-    result.alpha_composite(inv_corner.crop(half_box), half_position)
-    return result
+    # A closed loop already brings both straight-wall sockets to the corner
+    # tile. The corner artwork must therefore only cover that seam. Building a
+    # second pair of wall faces here double-renders the joint and creates the
+    # visibly detached V/< /> shapes that this pack previously produced.
+    #
+    # Keep all four directional corner IDs for topology lookup, but render one
+    # clean, symmetric pillar at each corner. This is the same calibrated seam
+    # pillar used elsewhere in the family, so its base overlaps both adjoining
+    # wall feet without inventing another wall plane.
+    return stretch_on_canvas(
+        pillars[0],
+        size,
+        (58, 96),
+        center_x=anchor[0],
+        bottom_y=anchor[1] + 8,
+    )
 
 
 def pillar_art(module: dict, pillars: list[Image.Image], variant_seed: int) -> Image.Image:
@@ -515,7 +492,6 @@ def build_module(
     continuous_wall: Image.Image,
     adapters: list[Image.Image],
     pillars: list[Image.Image],
-    corner_junctions: dict[str, Image.Image],
 ) -> tuple[dict, dict]:
     module = copy.deepcopy(source_module)
     asset_id = str(module["asset_id"]).replace(SOURCE_PREFIX, TARGET_PREFIX, 1)
@@ -547,7 +523,7 @@ def build_module(
     if topology == "straight":
         artwork, parts = straight_art(module, continuous_wall, variant_seed)
     elif topology in {"inner_corner", "outer_corner"}:
-        artwork = corner_art(module, corner_junctions)
+        artwork = corner_art(module, pillars)
         parts = [artwork]
     elif topology in {"door_adapter", "broken_adapter"}:
         artwork = adapter_art(module, adapters)
@@ -684,8 +660,6 @@ def update_family_catalog() -> None:
 def main() -> None:
     required = [
         SOURCE_DIR / "continuous_wall_alpha_v4.png",
-        SOURCE_DIR / "corner_v_junction_alpha_v2.png",
-        SOURCE_DIR / "corner_inv_junction_alpha_v2.png",
         SOURCE_DIR / "adapter_sheet_alpha.png",
         SOURCE_DIR / "pillar_sheet_alpha.png",
     ]
@@ -705,7 +679,6 @@ def main() -> None:
     continuous_wall = normalized_continuous_wall()
     adapters = normalized_adapters()
     pillars = normalized_pillars()
-    corner_junctions = normalized_corner_junctions()
 
     modules: list[dict] = []
     assets: list[dict] = []
@@ -715,7 +688,6 @@ def main() -> None:
             continuous_wall,
             adapters,
             pillars,
-            corner_junctions,
         )
         modules.append(module)
         assets.append(asset)

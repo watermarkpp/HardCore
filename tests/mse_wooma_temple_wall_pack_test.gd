@@ -127,48 +127,32 @@ func _assert_segmented_straight() -> void:
 
 func _assert_corner_visual_baseline(assets: Array) -> void:
 	var corner := {}
-	var straight := {}
+	var seam_pillar := {}
 	for asset: Dictionary in assets:
 		match str(asset.get("asset_id", "")):
 			"wooma_temple_wall_outer_ne_v01":
 				corner = asset
-			"wooma_temple_wall_straight_x_l4_v01":
-				straight = asset
+			"wooma_temple_wall_seam_cover_01":
+				seam_pillar = asset
 	assert(not corner.is_empty())
-	assert(not straight.is_empty())
-	var texture := load("res://" + str(corner.get("image", ""))) as Texture2D
-	assert(texture != null)
-	var image := texture.get_image()
-	assert(image != null and not image.is_empty())
+	assert(not seam_pillar.is_empty())
+	var corner_texture := load(
+		"res://" + str(corner.get("image", ""))
+	) as Texture2D
+	var pillar_texture := load(
+		"res://" + str(seam_pillar.get("image", ""))
+	) as Texture2D
+	assert(corner_texture != null and pillar_texture != null)
+	var corner_image := corner_texture.get_image()
+	var pillar_image := pillar_texture.get_image()
+	assert(corner_image != null and not corner_image.is_empty())
+	assert(pillar_image != null and not pillar_image.is_empty())
+	assert(corner_image.get_data() == pillar_image.get_data())
 	var corner_anchor: Array = corner.get("placement_anchor_px", [])
-	var straight_anchor: Array = straight.get("placement_anchor_px", [])
-	var straight_start: Array = straight.get("start_seam_px", [])
+	var pillar_anchor: Array = seam_pillar.get("placement_anchor_px", [])
 	assert(corner_anchor.size() == 2)
-	assert(straight_anchor.size() == 2)
-	assert(straight_start.size() == 2)
-	var corner_foot_offset := (
-		_opaque_bottom_near_x(image, int(corner_anchor[0]), 2)
-		- int(corner_anchor[1])
-	)
-	var straight_foot_offset := int(straight_start[1]) - int(straight_anchor[1])
-	assert(
-		corner_foot_offset == straight_foot_offset,
-		"corner foot offset %d must match straight-wall foot offset %d"
-		% [corner_foot_offset, straight_foot_offset]
-	)
-
-
-func _opaque_bottom_near_x(image: Image, center_x: int, radius: int) -> int:
-	var bottom := -1
-	for x in range(
-		maxi(0, center_x - radius),
-		mini(image.get_width(), center_x + radius + 1)
-	):
-		for y in range(image.get_height()):
-			if image.get_pixel(x, y).a > 0.05:
-				bottom = maxi(bottom, y)
-	assert(bottom >= 0)
-	return bottom
+	assert(pillar_anchor.size() == 2)
+	assert(corner_anchor == pillar_anchor)
 
 
 func _assert_four_directional_corners(assets: Array) -> void:
@@ -183,35 +167,24 @@ func _assert_four_directional_corners(assets: Array) -> void:
 		]:
 			corners[asset_id] = asset
 	assert(corners.size() == 4)
-	var left_only := _corner_alpha_sides(corners["wooma_temple_wall_outer_ne_v01"])
-	var right_only := _corner_alpha_sides(corners["wooma_temple_wall_outer_sw_v01"])
-	var both_top := _corner_alpha_sides(corners["wooma_temple_wall_outer_nw_v01"])
-	var both_bottom := _corner_alpha_sides(corners["wooma_temple_wall_outer_se_v01"])
-	assert(left_only == Vector2i(1, 0))
-	assert(right_only == Vector2i(0, 1))
-	assert(both_top == Vector2i(1, 1))
-	assert(both_bottom == Vector2i(1, 1))
-
-
-func _corner_alpha_sides(asset: Dictionary) -> Vector2i:
-	var texture := load("res://" + str(asset.get("image", ""))) as Texture2D
-	assert(texture != null)
-	var image := texture.get_image()
-	assert(image != null and not image.is_empty())
-	var anchor: Array = asset.get("placement_anchor_px", [])
-	assert(anchor.size() == 2)
-	var anchor_x := int(anchor[0])
-	var left_visible := false
-	var right_visible := false
-	for y in range(image.get_height()):
-		for x in range(image.get_width()):
-			if image.get_pixel(x, y).a <= 0.05:
-				continue
-			if x < anchor_x - 2:
-				left_visible = true
-			elif x > anchor_x + 2:
-				right_visible = true
-	return Vector2i(int(left_visible), int(right_visible))
+	var reference_image: Image
+	for asset_id: String in corners:
+		var asset: Dictionary = corners[asset_id]
+		var texture := load("res://" + str(asset.get("image", ""))) as Texture2D
+		assert(texture != null)
+		var image := texture.get_image()
+		assert(image != null and not image.is_empty())
+		var used_rect := image.get_used_rect()
+		assert(used_rect.size.x <= 58 and used_rect.size.y <= 96)
+		assert(used_rect.position.x < 48 and used_rect.end.x > 48)
+		if reference_image == null:
+			reference_image = image
+		else:
+			assert(
+				image.get_data() == reference_image.get_data(),
+				"%s must use the same calibrated single-pillar corner artwork"
+				% asset_id
+			)
 
 
 func _assert_closed_loop() -> void:
