@@ -147,7 +147,9 @@ func _assert_corner_visual_baseline(assets: Array) -> void:
 	var pillar_image := pillar_texture.get_image()
 	assert(corner_image != null and not corner_image.is_empty())
 	assert(pillar_image != null and not pillar_image.is_empty())
-	assert(corner_image.get_data() == pillar_image.get_data())
+	var corner_region := corner_image.get_region(corner_image.get_used_rect())
+	var pillar_region := pillar_image.get_region(pillar_image.get_used_rect())
+	assert(corner_region.get_data() == pillar_region.get_data())
 	var corner_anchor: Array = corner.get("placement_anchor_px", [])
 	var pillar_anchor: Array = seam_pillar.get("placement_anchor_px", [])
 	assert(corner_anchor.size() == 2)
@@ -173,6 +175,12 @@ func _assert_four_directional_corners(assets: Array) -> void:
 		"wooma_temple_wall_outer_se_v01": 112,
 		"wooma_temple_wall_outer_sw_v01": 104,
 	}
+	var expected_left_by_id := {
+		"wooma_temple_wall_outer_nw_v01": 19,
+		"wooma_temple_wall_outer_ne_v01": 35,
+		"wooma_temple_wall_outer_se_v01": 19,
+		"wooma_temple_wall_outer_sw_v01": 3,
+	}
 	var reference_size := Vector2i.ZERO
 	for asset_id: String in corners:
 		var asset: Dictionary = corners[asset_id]
@@ -182,7 +190,7 @@ func _assert_four_directional_corners(assets: Array) -> void:
 		assert(image != null and not image.is_empty())
 		var used_rect := image.get_used_rect()
 		assert(used_rect.size.x <= 58 and used_rect.size.y <= 96)
-		assert(used_rect.position.x < 48 and used_rect.end.x > 48)
+		assert(used_rect.position.x == int(expected_left_by_id[asset_id]))
 		assert(used_rect.end.y == int(expected_bottom_by_id[asset_id]))
 		if reference_size == Vector2i.ZERO:
 			reference_size = used_rect.size

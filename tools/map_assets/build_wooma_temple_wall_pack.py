@@ -445,6 +445,13 @@ def corner_art(
         if "_nw_" in asset_id
         else 0
     )
+    lateral_compensation = (
+        16
+        if "_ne_" in asset_id
+        else -16
+        if "_sw_" in asset_id
+        else 0
+    )
     # A closed loop already brings both straight-wall sockets to the corner
     # tile. The corner artwork must therefore only cover that seam. Building a
     # second pair of wall faces here double-renders the joint and creates the
@@ -458,7 +465,7 @@ def corner_art(
         pillars[0],
         size,
         (58, 96),
-        center_x=anchor[0],
+        center_x=anchor[0] + lateral_compensation,
         bottom_y=anchor[1] + 8 + depth_compensation,
     )
 
