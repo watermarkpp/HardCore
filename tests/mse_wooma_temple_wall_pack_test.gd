@@ -66,6 +66,7 @@ func _ready() -> void:
 	})
 	_assert_family_menu()
 	_assert_segmented_straight()
+	_assert_corner_visual_baseline(assets)
 	_assert_closed_loop()
 	print("MSE_WOOMA_TEMPLE_WALL_PACK_PASS assets=42 closed_loop=12x10")
 	get_tree().quit(0)
@@ -121,6 +122,37 @@ func _assert_segmented_straight() -> void:
 		sort_tiles["%d,%d" % [tile.x, tile.y]] = true
 	for x in range(4, 8):
 		assert(sort_tiles.has("%d,4" % x))
+
+
+func _assert_corner_visual_baseline(assets: Array) -> void:
+	var corner := {}
+	var straight := {}
+	for asset: Dictionary in assets:
+		match str(asset.get("asset_id", "")):
+			"wooma_temple_wall_outer_ne_v01":
+				corner = asset
+			"wooma_temple_wall_straight_x_l4_v01":
+				straight = asset
+	assert(not corner.is_empty())
+	assert(not straight.is_empty())
+	var texture := load("res://" + str(corner.get("image", ""))) as Texture2D
+	assert(texture != null)
+	var image := texture.get_image()
+	assert(image != null and not image.is_empty())
+	var used_rect := image.get_used_rect()
+	var corner_anchor: Array = corner.get("placement_anchor_px", [])
+	var straight_anchor: Array = straight.get("placement_anchor_px", [])
+	var straight_start: Array = straight.get("start_seam_px", [])
+	assert(corner_anchor.size() == 2)
+	assert(straight_anchor.size() == 2)
+	assert(straight_start.size() == 2)
+	var corner_foot_offset := used_rect.end.y - 1 - int(corner_anchor[1])
+	var straight_foot_offset := int(straight_start[1]) - int(straight_anchor[1])
+	assert(
+		corner_foot_offset == straight_foot_offset,
+		"corner foot offset %d must match straight-wall foot offset %d"
+		% [corner_foot_offset, straight_foot_offset]
+	)
 
 
 func _assert_closed_loop() -> void:

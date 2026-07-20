@@ -14,7 +14,7 @@ import json
 from pathlib import Path
 import shutil
 
-from PIL import Image
+from PIL import Image, ImageDraw
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -201,7 +201,7 @@ def display_name(module: dict) -> str:
 
 
 def normalized_continuous_wall() -> Image.Image:
-    with Image.open(SOURCE_DIR / "continuous_wall_alpha_v2.png") as opened:
+    with Image.open(SOURCE_DIR / "continuous_wall_alpha_v3.png") as opened:
         return alpha_trim(opened.convert("RGBA"))
 
 
@@ -311,6 +311,23 @@ def _alpha_baseline_y(image: Image.Image, x: int, radius: int = 3) -> int:
     return values[len(values) // 2]
 
 
+def _alpha_top_y(image: Image.Image, x: int, radius: int = 1) -> int:
+    alpha = image.getchannel("A")
+    values: list[int] = []
+    for sample_x in range(max(0, x - radius), min(image.width, x + radius + 1)):
+        visible = [
+            y
+            for y in range(image.height)
+            if alpha.getpixel((sample_x, y)) > 32
+        ]
+        if visible:
+            values.append(min(visible))
+    if not values:
+        raise RuntimeError(f"no visible top pixels near x={x}")
+    values.sort()
+    return values[len(values) // 2]
+
+
 def align_wall_seams(
     artwork: Image.Image,
     start_seam: tuple[int, int],
@@ -329,6 +346,40 @@ def align_wall_seams(
         shift = int(round(target_y - measured_y))
         column = artwork.crop((x, 0, x + 1, artwork.height))
         result.alpha_composite(column, (x, shift))
+    return result
+
+
+def paint_isometric_cap_joints(
+    artwork: Image.Image,
+    length: int,
+) -> Image.Image:
+    """Lock coping joints to the opposite 2:1 isometric map axis."""
+    overlay = Image.new("RGBA", artwork.size, (0, 0, 0, 0))
+    draw = ImageDraw.Draw(overlay)
+    for tile_index in range(length + 1):
+        seam_x = 32 + 32 * tile_index
+        back_x = min(artwork.width - 1, seam_x + 4)
+        front_x = max(0, seam_x - 5)
+        back_y = _alpha_top_y(artwork, back_x) + 1
+        front_y = back_y + 5
+        draw.line(
+            [(back_x, back_y), (front_x, front_y)],
+            fill=(58, 54, 45, 210),
+            width=1,
+        )
+        draw.line(
+            [(back_x, back_y - 1), (front_x, front_y - 1)],
+            fill=(206, 201, 174, 105),
+            width=1,
+        )
+    clipped_alpha = Image.composite(
+        overlay.getchannel("A"),
+        Image.new("L", artwork.size, 0),
+        artwork.getchannel("A"),
+    )
+    overlay.putalpha(clipped_alpha)
+    result = artwork.copy()
+    result.alpha_composite(overlay)
     return result
 
 
@@ -354,6 +405,7 @@ def straight_art(
         (32, 88),
         (32 + 32 * length, 88 + 16 * length),
     )
+    artwork = paint_isometric_cap_joints(artwork, length)
     if axis == "iso_y":
         artwork = mirror(artwork)
     return artwork, split_continuous_parts(artwork, length, axis)
@@ -370,7 +422,10 @@ def corner_art(
         size,
         (54, 84),
         center_x=anchor[0],
-        bottom_y=anchor[1] + 8,
+        # Pillow's paste bottom is exclusive.  A bottom boundary seven
+        # pixels above the anchor makes the last visible corner pixel land
+        # exactly eight pixels above it, matching the straight-wall foot.
+        bottom_y=anchor[1] - 7,
     )
 
 
@@ -524,6 +579,7 @@ def build_module(
         "thumbnail_source_sha256": digest,
         "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
         "generation_source_ids": [
+            "call_bGEyuBMpAVbjI6KDM5QBFjkp",
             "call_8raUM7XLx5zAr6dA5fOpgLsh",
             "call_Y9TZ7EPiCWQgV026MYpIRyNL",
             "call_yV5OeDNzIezU9yrVumYXQqEu",
@@ -580,7 +636,7 @@ def update_family_catalog() -> None:
 
 def main() -> None:
     required = [
-        SOURCE_DIR / "continuous_wall_alpha_v2.png",
+        SOURCE_DIR / "continuous_wall_alpha_v3.png",
         SOURCE_DIR / "corner_pillar_alpha_v2.png",
         SOURCE_DIR / "adapter_sheet_alpha.png",
         SOURCE_DIR / "pillar_sheet_alpha.png",
