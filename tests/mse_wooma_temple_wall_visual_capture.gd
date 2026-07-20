@@ -7,6 +7,7 @@ const OUTPUT_PATH := "res://outputs/test/wooma_temple_wall_ring_review.png"
 
 func _ready() -> void:
 	print("MSE_WOOMA_TEMPLE_WALL_VISUAL_CAPTURE_BEGIN")
+	MapAssetCatalogService.invalidate_cache()
 	var document := MapEditorTypes.new_map(
 		"wooma_temple_wall_visual_review",
 		990313,
@@ -24,28 +25,15 @@ func _ready() -> void:
 		"test.wooma_temple.visual_review"
 	)
 	assert(applied.ok, str(applied.get("errors", [])))
+	assert(str(applied.plan.get("corner_join_mode", "")) == "straight_overlap")
 
-	var corners: Array[Dictionary] = []
+	var topology_counts := {}
 	for instance: Dictionary in MapEditorInstanceService.all_instances(document):
-		var asset := MapAssetCatalogService.find_asset(
-			str(instance.get("asset_id", ""))
-		)
-		if str(asset.get("topology", "")) not in [
-			"inner_corner",
-			"outer_corner",
-		]:
-			continue
-		corners.append({
-			"tile": instance.get("tile", []),
-			"asset_id": str(instance.get("asset_id", "")),
-			"orientation": str(asset.get("corner_orientation", "")),
-			"offset_px": instance.get("offset_px", []),
-			"sort_offset": instance.get(
-				"adaptive_corner_sort_tile_offset",
-				[]
-			),
-		})
-	assert(corners.size() == 4)
+		var asset := MapAssetCatalogService.find_asset(str(instance.asset_id))
+		var topology := str(asset.get("topology", ""))
+		topology_counts[topology] = int(topology_counts.get(topology, 0)) + 1
+	assert(topology_counts.size() == 1)
+	assert(topology_counts.has("straight"))
 
 	var canvas := MapEditorCanvasPreview.new()
 	canvas.size = Vector2(1600, 900)
@@ -62,9 +50,9 @@ func _ready() -> void:
 	var image := get_viewport().get_texture().get_image()
 	assert(image.save_png(OUTPUT_PATH) == OK)
 	print(
-		"MSE_WOOMA_TEMPLE_WALL_VISUAL_CAPTURE_PASS corners=",
-		JSON.stringify(corners),
-		" output=",
+		"MSE_WOOMA_TEMPLE_WALL_VISUAL_CAPTURE_PASS straight_modules=",
+		int(topology_counts.straight),
+		" corners=0 pillars=0 output=",
 		ProjectSettings.globalize_path(OUTPUT_PATH)
 	)
 	get_tree().quit(0)

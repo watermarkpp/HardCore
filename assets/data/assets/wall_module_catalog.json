@@ -12140,7 +12140,7 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l1_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l1_v01/part_00_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -12185,7 +12185,16 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ]
     },
     {
       "schema_version": 1,
@@ -12246,7 +12255,7 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l2_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l2_v01/part_00_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -12265,7 +12274,7 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l2_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l2_v01/part_01_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -12310,7 +12319,16 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ]
     },
     {
       "schema_version": 1,
@@ -12371,7 +12389,7 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/part_00_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -12390,7 +12408,7 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/part_01_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -12409,7 +12427,7 @@
             2,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/part_02_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/part_02_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -12454,7 +12472,16 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ]
     },
     {
       "schema_version": 1,
@@ -12515,7 +12542,7 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/part_00_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/part_00_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -12534,7 +12561,7 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/part_01_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/part_01_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -12553,7 +12580,7 @@
             2,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/part_02_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/part_02_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -12598,7 +12625,16 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ]
     },
     {
       "schema_version": 1,
@@ -12659,7 +12695,7 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/part_00_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/part_00_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -12678,7 +12714,7 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/part_01_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/part_01_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -12697,7 +12733,7 @@
             2,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/part_02_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/part_02_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -12742,7 +12778,16 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ]
     },
     {
       "schema_version": 1,
@@ -12803,7 +12848,7 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_00_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -12822,7 +12867,7 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_01_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -12841,7 +12886,7 @@
             2,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_02_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_02_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -12860,7 +12905,7 @@
             3,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_03_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_03_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -12905,7 +12950,16 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ]
     },
     {
       "schema_version": 1,
@@ -12966,7 +13020,7 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_00_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_00_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -12985,7 +13039,7 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_01_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_01_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13004,7 +13058,7 @@
             2,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_02_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_02_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13023,7 +13077,7 @@
             3,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_03_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_03_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13068,7 +13122,16 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ]
     },
     {
       "schema_version": 1,
@@ -13129,7 +13192,7 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_00_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_00_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13148,7 +13211,7 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_01_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_01_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13167,7 +13230,7 @@
             2,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_02_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_02_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13186,7 +13249,7 @@
             3,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_03_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_03_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13231,7 +13294,16 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ]
     },
     {
       "schema_version": 1,
@@ -13292,7 +13364,7 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l1_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l1_v01/part_00_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13337,7 +13409,16 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ]
     },
     {
       "schema_version": 1,
@@ -13398,7 +13479,7 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l2_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l2_v01/part_00_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13417,7 +13498,7 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l2_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l2_v01/part_01_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13462,7 +13543,16 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ]
     },
     {
       "schema_version": 1,
@@ -13523,7 +13613,7 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/part_00_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13542,7 +13632,7 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/part_01_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13561,7 +13651,7 @@
             0,
             2
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/part_02_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/part_02_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13606,7 +13696,16 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ]
     },
     {
       "schema_version": 1,
@@ -13667,7 +13766,7 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/part_00_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/part_00_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13686,7 +13785,7 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/part_01_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/part_01_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13705,7 +13804,7 @@
             0,
             2
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/part_02_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/part_02_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13750,7 +13849,16 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ]
     },
     {
       "schema_version": 1,
@@ -13811,7 +13919,7 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/part_00_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/part_00_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13830,7 +13938,7 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/part_01_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/part_01_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13849,7 +13957,7 @@
             0,
             2
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/part_02_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/part_02_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13894,7 +14002,16 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ]
     },
     {
       "schema_version": 1,
@@ -13955,7 +14072,7 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_00_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13974,7 +14091,7 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_01_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -13993,7 +14110,7 @@
             0,
             2
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_02_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_02_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -14012,7 +14129,7 @@
             0,
             3
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_03_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_03_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -14057,7 +14174,16 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ]
     },
     {
       "schema_version": 1,
@@ -14118,7 +14244,7 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_00_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_00_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -14137,7 +14263,7 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_01_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_01_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -14156,7 +14282,7 @@
             0,
             2
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_02_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_02_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -14175,7 +14301,7 @@
             0,
             3
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_03_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_03_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -14220,7 +14346,16 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ]
     },
     {
       "schema_version": 1,
@@ -14281,7 +14416,7 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_00_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_00_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -14300,7 +14435,7 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_01_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_01_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -14319,7 +14454,7 @@
             0,
             2
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_02_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_02_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -14338,7 +14473,7 @@
             0,
             3
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_03_wooma_temple_monumental_wall_v2_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_03_wooma_temple_native_2to1_wall_v3_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
@@ -14383,2975 +14518,16 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_inner_ne_v01",
-      "display_name": "沃玛寺庙内转角 变体1",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "inner_corner",
-      "axis": null,
-      "length_tiles": 1,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        1
-      ],
-      "canvas_size": [
-        160,
-        272
-      ],
-      "anchor": [
-        80,
-        192
-      ],
-      "next_start_tile_offset": [
-        0,
-        0
-      ],
-      "start_seam_px": [
-        80,
-        200
-      ],
-      "end_seam_px": [
-        80,
-        200
-      ],
-      "connectors": [
-        {
-          "name": "c0",
-          "direction": "iso_x_pos",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        },
-        {
-          "name": "c1",
-          "direction": "iso_y_neg",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        }
-      ],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_ne_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            80,
-            192
-          ],
-          "sort_tile_offset": [
-            0,
-            0
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_base",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "terrain_boundary",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": true,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "corner_orientation": "ne",
-      "blocked_side": "outside",
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_inner_se_v01",
-      "display_name": "沃玛寺庙内转角 变体1",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "inner_corner",
-      "axis": null,
-      "length_tiles": 1,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        1
-      ],
-      "canvas_size": [
-        160,
-        272
-      ],
-      "anchor": [
-        80,
-        192
-      ],
-      "next_start_tile_offset": [
-        0,
-        0
-      ],
-      "start_seam_px": [
-        80,
-        200
-      ],
-      "end_seam_px": [
-        80,
-        200
-      ],
-      "connectors": [
-        {
-          "name": "c0",
-          "direction": "iso_x_pos",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        },
-        {
-          "name": "c1",
-          "direction": "iso_y_pos",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        }
-      ],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "segmented",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_se_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            80,
-            192
-          ],
-          "sort_tile_offset": [
-            0,
-            0
-          ],
-          "draw_order_index": 0
-        },
-        {
-          "part_id": "p01",
-          "tile_offset": [
-            0,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_se_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            80,
-            192
-          ],
-          "sort_tile_offset": [
-            4,
-            4
-          ],
-          "draw_order_index": 1
-        }
-      ],
-      "default_layer": "terrain_base",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "terrain_boundary",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": true,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "corner_orientation": "se",
-      "blocked_side": "outside",
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_inner_sw_v01",
-      "display_name": "沃玛寺庙内转角 变体1",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "inner_corner",
-      "axis": null,
-      "length_tiles": 1,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        1
-      ],
-      "canvas_size": [
-        160,
-        272
-      ],
-      "anchor": [
-        80,
-        192
-      ],
-      "next_start_tile_offset": [
-        0,
-        0
-      ],
-      "start_seam_px": [
-        80,
-        200
-      ],
-      "end_seam_px": [
-        80,
-        200
-      ],
-      "connectors": [
-        {
-          "name": "c0",
-          "direction": "iso_x_neg",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        },
-        {
-          "name": "c1",
-          "direction": "iso_y_pos",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        }
-      ],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_sw_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            80,
-            192
-          ],
-          "sort_tile_offset": [
-            0,
-            0
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_base",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "terrain_boundary",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": true,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "corner_orientation": "sw",
-      "blocked_side": "outside",
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_inner_nw_v01",
-      "display_name": "沃玛寺庙内转角 变体1",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "inner_corner",
-      "axis": null,
-      "length_tiles": 1,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        1
-      ],
-      "canvas_size": [
-        160,
-        272
-      ],
-      "anchor": [
-        80,
-        192
-      ],
-      "next_start_tile_offset": [
-        0,
-        0
-      ],
-      "start_seam_px": [
-        80,
-        200
-      ],
-      "end_seam_px": [
-        80,
-        200
-      ],
-      "connectors": [
-        {
-          "name": "c0",
-          "direction": "iso_x_neg",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        },
-        {
-          "name": "c1",
-          "direction": "iso_y_neg",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        }
-      ],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_nw_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            80,
-            192
-          ],
-          "sort_tile_offset": [
-            0,
-            0
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_base",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "terrain_boundary",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": true,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "corner_orientation": "nw",
-      "blocked_side": "outside",
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_outer_ne_v01",
-      "display_name": "沃玛寺庙外转角 变体1",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "outer_corner",
-      "axis": null,
-      "length_tiles": 1,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        1
-      ],
-      "canvas_size": [
-        160,
-        272
-      ],
-      "anchor": [
-        80,
-        192
-      ],
-      "next_start_tile_offset": [
-        0,
-        0
-      ],
-      "start_seam_px": [
-        80,
-        200
-      ],
-      "end_seam_px": [
-        80,
-        200
-      ],
-      "connectors": [
-        {
-          "name": "c0",
-          "direction": "iso_x_pos",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        },
-        {
-          "name": "c1",
-          "direction": "iso_y_neg",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        }
-      ],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_ne_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            80,
-            192
-          ],
-          "sort_tile_offset": [
-            0,
-            0
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_base",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "terrain_boundary",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": true,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "corner_orientation": "ne",
-      "blocked_side": "outside",
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_outer_se_v01",
-      "display_name": "沃玛寺庙外转角 变体1",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "outer_corner",
-      "axis": null,
-      "length_tiles": 1,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        1
-      ],
-      "canvas_size": [
-        160,
-        272
-      ],
-      "anchor": [
-        80,
-        192
-      ],
-      "next_start_tile_offset": [
-        0,
-        0
-      ],
-      "start_seam_px": [
-        80,
-        200
-      ],
-      "end_seam_px": [
-        80,
-        200
-      ],
-      "connectors": [
-        {
-          "name": "c0",
-          "direction": "iso_x_pos",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        },
-        {
-          "name": "c1",
-          "direction": "iso_y_pos",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        }
-      ],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "segmented",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_se_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            80,
-            192
-          ],
-          "sort_tile_offset": [
-            0,
-            0
-          ],
-          "draw_order_index": 0
-        },
-        {
-          "part_id": "p01",
-          "tile_offset": [
-            0,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_se_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            80,
-            192
-          ],
-          "sort_tile_offset": [
-            4,
-            4
-          ],
-          "draw_order_index": 1
-        }
-      ],
-      "default_layer": "terrain_base",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "terrain_boundary",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": true,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "corner_orientation": "se",
-      "blocked_side": "outside",
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_outer_sw_v01",
-      "display_name": "沃玛寺庙外转角 变体1",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "outer_corner",
-      "axis": null,
-      "length_tiles": 1,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        1
-      ],
-      "canvas_size": [
-        160,
-        272
-      ],
-      "anchor": [
-        80,
-        192
-      ],
-      "next_start_tile_offset": [
-        0,
-        0
-      ],
-      "start_seam_px": [
-        80,
-        200
-      ],
-      "end_seam_px": [
-        80,
-        200
-      ],
-      "connectors": [
-        {
-          "name": "c0",
-          "direction": "iso_x_neg",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        },
-        {
-          "name": "c1",
-          "direction": "iso_y_pos",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        }
-      ],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_sw_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            80,
-            192
-          ],
-          "sort_tile_offset": [
-            0,
-            0
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_base",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "terrain_boundary",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": true,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "corner_orientation": "sw",
-      "blocked_side": "outside",
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_outer_nw_v01",
-      "display_name": "沃玛寺庙外转角 变体1",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "outer_corner",
-      "axis": null,
-      "length_tiles": 1,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        1
-      ],
-      "canvas_size": [
-        160,
-        272
-      ],
-      "anchor": [
-        80,
-        192
-      ],
-      "next_start_tile_offset": [
-        0,
-        0
-      ],
-      "start_seam_px": [
-        80,
-        200
-      ],
-      "end_seam_px": [
-        80,
-        200
-      ],
-      "connectors": [
-        {
-          "name": "c0",
-          "direction": "iso_x_neg",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        },
-        {
-          "name": "c1",
-          "direction": "iso_y_neg",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        }
-      ],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_nw_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            80,
-            192
-          ],
-          "sort_tile_offset": [
-            0,
-            0
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_base",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "terrain_boundary",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": true,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "corner_orientation": "nw",
-      "blocked_side": "outside",
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_end_x_pos_v01",
-      "display_name": "沃玛寺庙墙体端头 X向 变体1",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "end_cap",
-      "axis": "iso_x",
-      "length_tiles": 1,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        1
-      ],
-      "canvas_size": [
-        160,
-        272
-      ],
-      "anchor": [
-        80,
-        192
-      ],
-      "next_start_tile_offset": [
-        1,
-        0
-      ],
-      "start_seam_px": [
-        80,
-        200
-      ],
-      "end_seam_px": [
-        80,
-        200
-      ],
-      "connectors": [
-        {
-          "name": "open",
-          "direction": "iso_x_pos",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        }
-      ],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_x_pos_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            80,
-            192
-          ],
-          "sort_tile_offset": [
-            0,
-            0
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_base",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "terrain_boundary",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": true,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "open_direction": "iso_x_pos",
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_end_x_neg_v01",
-      "display_name": "沃玛寺庙墙体端头 X向 变体1",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "end_cap",
-      "axis": "iso_x",
-      "length_tiles": 1,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        1
-      ],
-      "canvas_size": [
-        160,
-        272
-      ],
-      "anchor": [
-        80,
-        192
-      ],
-      "next_start_tile_offset": [
-        1,
-        0
-      ],
-      "start_seam_px": [
-        80,
-        200
-      ],
-      "end_seam_px": [
-        80,
-        200
-      ],
-      "connectors": [
-        {
-          "name": "open",
-          "direction": "iso_x_neg",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        }
-      ],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_x_neg_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            80,
-            192
-          ],
-          "sort_tile_offset": [
-            0,
-            0
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_base",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "terrain_boundary",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": true,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "open_direction": "iso_x_neg",
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_end_y_pos_v01",
-      "display_name": "沃玛寺庙墙体端头 Y向 变体1",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "end_cap",
-      "axis": "iso_y",
-      "length_tiles": 1,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        1
-      ],
-      "canvas_size": [
-        160,
-        272
-      ],
-      "anchor": [
-        80,
-        192
-      ],
-      "next_start_tile_offset": [
-        0,
-        1
-      ],
-      "start_seam_px": [
-        80,
-        200
-      ],
-      "end_seam_px": [
-        80,
-        200
-      ],
-      "connectors": [
-        {
-          "name": "open",
-          "direction": "iso_y_pos",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        }
-      ],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_y_pos_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            80,
-            192
-          ],
-          "sort_tile_offset": [
-            0,
-            0
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_base",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "terrain_boundary",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": true,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "open_direction": "iso_y_pos",
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_end_y_neg_v01",
-      "display_name": "沃玛寺庙墙体端头 Y向 变体1",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "end_cap",
-      "axis": "iso_y",
-      "length_tiles": 1,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        1
-      ],
-      "canvas_size": [
-        160,
-        272
-      ],
-      "anchor": [
-        80,
-        192
-      ],
-      "next_start_tile_offset": [
-        0,
-        1
-      ],
-      "start_seam_px": [
-        80,
-        200
-      ],
-      "end_seam_px": [
-        80,
-        200
-      ],
-      "connectors": [
-        {
-          "name": "open",
-          "direction": "iso_y_neg",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        }
-      ],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_y_neg_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            80,
-            192
-          ],
-          "sort_tile_offset": [
-            0,
-            0
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_base",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "terrain_boundary",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": true,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "open_direction": "iso_y_neg",
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_door_x_open_v01",
-      "display_name": "沃玛寺庙门洞墙 X向 3格 变体1",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "door_adapter",
-      "axis": "iso_x",
-      "length_tiles": 3,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        3,
-        1
-      ],
-      "canvas_size": [
-        160,
-        256
-      ],
-      "anchor": [
-        48,
-        176
-      ],
-      "next_start_tile_offset": [
-        3,
-        0
-      ],
-      "start_seam_px": [
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
         32,
-        184
-      ],
-      "end_seam_px": [
-        128,
-        232
-      ],
-      "connectors": [
-        {
-          "name": "start",
-          "direction": "iso_x_neg",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        },
-        {
-          "name": "end",
-          "direction": "iso_x_pos",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        }
-      ],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            1,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_x_open_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            48,
-            176
-          ],
-          "sort_tile_offset": [
-            1,
-            0
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_base",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "terrain_boundary",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": true,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "door_state": "open",
-      "collision_cells_by_state": {
-        "open": [
-          [
-            0,
-            0
-          ],
-          [
-            2,
-            0
-          ]
-        ],
-        "closed": [
-          [
-            0,
-            0
-          ],
-          [
-            1,
-            0
-          ],
-          [
-            2,
-            0
-          ]
-        ],
-        "locked": [
-          [
-            0,
-            0
-          ],
-          [
-            1,
-            0
-          ],
-          [
-            2,
-            0
-          ]
-        ],
-        "broken": [
-          [
-            0,
-            0
-          ],
-          [
-            2,
-            0
-          ]
-        ]
-      },
-      "door_anchor": [
-        80,
-        144
-      ],
-      "requires_interact": false,
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_door_x_closed_v01",
-      "display_name": "沃玛寺庙门洞墙 X向 3格 变体1",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "door_adapter",
-      "axis": "iso_x",
-      "length_tiles": 3,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        3,
-        1
-      ],
-      "canvas_size": [
-        160,
-        256
-      ],
-      "anchor": [
-        48,
-        176
-      ],
-      "next_start_tile_offset": [
-        3,
-        0
-      ],
-      "start_seam_px": [
-        32,
-        184
-      ],
-      "end_seam_px": [
-        128,
-        232
-      ],
-      "connectors": [
-        {
-          "name": "start",
-          "direction": "iso_x_neg",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        },
-        {
-          "name": "end",
-          "direction": "iso_x_pos",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        }
-      ],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            1,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_x_closed_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            48,
-            176
-          ],
-          "sort_tile_offset": [
-            1,
-            0
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_base",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "terrain_boundary",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": true,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "door_state": "closed",
-      "collision_cells_by_state": {
-        "open": [
-          [
-            0,
-            0
-          ],
-          [
-            2,
-            0
-          ]
-        ],
-        "closed": [
-          [
-            0,
-            0
-          ],
-          [
-            1,
-            0
-          ],
-          [
-            2,
-            0
-          ]
-        ],
-        "locked": [
-          [
-            0,
-            0
-          ],
-          [
-            1,
-            0
-          ],
-          [
-            2,
-            0
-          ]
-        ],
-        "broken": [
-          [
-            0,
-            0
-          ],
-          [
-            2,
-            0
-          ]
-        ]
-      },
-      "door_anchor": [
-        80,
-        144
-      ],
-      "requires_interact": true,
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_door_y_open_v01",
-      "display_name": "沃玛寺庙门洞墙 Y向 3格 变体1",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "door_adapter",
-      "axis": "iso_y",
-      "length_tiles": 3,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        3
-      ],
-      "canvas_size": [
-        160,
-        256
-      ],
-      "anchor": [
-        112,
-        176
-      ],
-      "next_start_tile_offset": [
-        0,
-        3
-      ],
-      "start_seam_px": [
-        128,
-        184
-      ],
-      "end_seam_px": [
-        32,
-        232
-      ],
-      "connectors": [
-        {
-          "name": "start",
-          "direction": "iso_y_neg",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        },
-        {
-          "name": "end",
-          "direction": "iso_y_pos",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        }
-      ],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            1
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_y_open_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            112,
-            176
-          ],
-          "sort_tile_offset": [
-            0,
-            1
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_base",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "terrain_boundary",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": true,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "door_state": "open",
-      "collision_cells_by_state": {
-        "open": [
-          [
-            0,
-            0
-          ],
-          [
-            0,
-            2
-          ]
-        ],
-        "closed": [
-          [
-            0,
-            0
-          ],
-          [
-            0,
-            1
-          ],
-          [
-            0,
-            2
-          ]
-        ],
-        "locked": [
-          [
-            0,
-            0
-          ],
-          [
-            0,
-            1
-          ],
-          [
-            0,
-            2
-          ]
-        ],
-        "broken": [
-          [
-            0,
-            0
-          ],
-          [
-            0,
-            2
-          ]
-        ]
-      },
-      "door_anchor": [
-        80,
-        144
-      ],
-      "requires_interact": false,
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_door_y_closed_v01",
-      "display_name": "沃玛寺庙门洞墙 Y向 3格 变体1",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "door_adapter",
-      "axis": "iso_y",
-      "length_tiles": 3,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        3
-      ],
-      "canvas_size": [
-        160,
-        256
-      ],
-      "anchor": [
-        112,
-        176
-      ],
-      "next_start_tile_offset": [
-        0,
-        3
-      ],
-      "start_seam_px": [
-        128,
-        184
-      ],
-      "end_seam_px": [
-        32,
-        232
-      ],
-      "connectors": [
-        {
-          "name": "start",
-          "direction": "iso_y_neg",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        },
-        {
-          "name": "end",
-          "direction": "iso_y_pos",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        }
-      ],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            1
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_y_closed_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            112,
-            176
-          ],
-          "sort_tile_offset": [
-            0,
-            1
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_base",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "terrain_boundary",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": true,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "door_state": "closed",
-      "collision_cells_by_state": {
-        "open": [
-          [
-            0,
-            0
-          ],
-          [
-            0,
-            2
-          ]
-        ],
-        "closed": [
-          [
-            0,
-            0
-          ],
-          [
-            0,
-            1
-          ],
-          [
-            0,
-            2
-          ]
-        ],
-        "locked": [
-          [
-            0,
-            0
-          ],
-          [
-            0,
-            1
-          ],
-          [
-            0,
-            2
-          ]
-        ],
-        "broken": [
-          [
-            0,
-            0
-          ],
-          [
-            0,
-            2
-          ]
-        ]
-      },
-      "door_anchor": [
-        80,
-        144
-      ],
-      "requires_interact": true,
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_broken_x_v01",
-      "display_name": "沃玛寺庙破损墙 X向 3格 变体1",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "broken_adapter",
-      "axis": "iso_x",
-      "length_tiles": 3,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        3,
-        1
-      ],
-      "canvas_size": [
-        160,
-        256
-      ],
-      "anchor": [
-        48,
-        176
-      ],
-      "next_start_tile_offset": [
-        3,
-        0
-      ],
-      "start_seam_px": [
-        32,
-        184
-      ],
-      "end_seam_px": [
-        128,
-        232
-      ],
-      "connectors": [
-        {
-          "name": "start",
-          "direction": "iso_x_neg",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        },
-        {
-          "name": "end",
-          "direction": "iso_x_pos",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        }
-      ],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            1,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_x_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            48,
-            176
-          ],
-          "sort_tile_offset": [
-            1,
-            0
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_base",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "terrain_boundary",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": true,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "broken_section": [
-        1,
-        0
-      ],
-      "walkable_section": [
-        1,
-        0
-      ],
-      "variant": 1,
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_broken_x_v02",
-      "display_name": "沃玛寺庙破损墙 X向 3格 变体2",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "broken_adapter",
-      "axis": "iso_x",
-      "length_tiles": 3,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        3,
-        1
-      ],
-      "canvas_size": [
-        160,
-        256
-      ],
-      "anchor": [
-        48,
-        176
-      ],
-      "next_start_tile_offset": [
-        3,
-        0
-      ],
-      "start_seam_px": [
-        32,
-        184
-      ],
-      "end_seam_px": [
-        128,
-        232
-      ],
-      "connectors": [
-        {
-          "name": "start",
-          "direction": "iso_x_neg",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        },
-        {
-          "name": "end",
-          "direction": "iso_x_pos",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        }
-      ],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            1,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_x_v02/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            48,
-            176
-          ],
-          "sort_tile_offset": [
-            1,
-            0
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_base",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "terrain_boundary",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": true,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "broken_section": [
-        1,
-        0
-      ],
-      "walkable_section": [
-        1,
-        0
-      ],
-      "variant": 2,
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_broken_y_v01",
-      "display_name": "沃玛寺庙破损墙 Y向 3格 变体1",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "broken_adapter",
-      "axis": "iso_y",
-      "length_tiles": 3,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        3
-      ],
-      "canvas_size": [
-        160,
-        256
-      ],
-      "anchor": [
-        112,
-        176
-      ],
-      "next_start_tile_offset": [
-        0,
-        3
-      ],
-      "start_seam_px": [
-        128,
-        184
-      ],
-      "end_seam_px": [
-        32,
-        232
-      ],
-      "connectors": [
-        {
-          "name": "start",
-          "direction": "iso_y_neg",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        },
-        {
-          "name": "end",
-          "direction": "iso_y_pos",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        }
-      ],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            1
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_y_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            112,
-            176
-          ],
-          "sort_tile_offset": [
-            0,
-            1
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_base",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "terrain_boundary",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": true,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "broken_section": [
-        0,
-        1
-      ],
-      "walkable_section": [
-        0,
-        1
-      ],
-      "variant": 1,
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_broken_y_v02",
-      "display_name": "沃玛寺庙破损墙 Y向 3格 变体2",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "broken_adapter",
-      "axis": "iso_y",
-      "length_tiles": 3,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        3
-      ],
-      "canvas_size": [
-        160,
-        256
-      ],
-      "anchor": [
-        112,
-        176
-      ],
-      "next_start_tile_offset": [
-        0,
-        3
-      ],
-      "start_seam_px": [
-        128,
-        184
-      ],
-      "end_seam_px": [
-        32,
-        232
-      ],
-      "connectors": [
-        {
-          "name": "start",
-          "direction": "iso_y_neg",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        },
-        {
-          "name": "end",
-          "direction": "iso_y_pos",
-          "socket_profile_id": "wooma_temple_gothic_stone_socket_u0"
-        }
-      ],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            1
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_y_v02/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            112,
-            176
-          ],
-          "sort_tile_offset": [
-            0,
-            1
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_base",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "terrain_boundary",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": true,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "broken_section": [
-        0,
-        1
-      ],
-      "walkable_section": [
-        0,
-        1
-      ],
-      "variant": 2,
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_seam_cover_01",
-      "display_name": "沃玛寺庙接缝立柱 变体1",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "seam_cover",
-      "axis": null,
-      "length_tiles": 1,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        1
-      ],
-      "canvas_size": [
-        160,
-        272
-      ],
-      "anchor": [
-        80,
-        192
-      ],
-      "next_start_tile_offset": [
-        0,
-        0
-      ],
-      "start_seam_px": [
-        80,
-        200
-      ],
-      "end_seam_px": [
-        80,
-        200
-      ],
-      "connectors": [],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_01/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            80,
-            192
-          ],
-          "sort_tile_offset": [
-            0,
-            0
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_front",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "visual_detail",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": false,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "variant": 1,
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_seam_cover_02",
-      "display_name": "沃玛寺庙接缝立柱 变体2",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "seam_cover",
-      "axis": null,
-      "length_tiles": 1,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        1
-      ],
-      "canvas_size": [
-        160,
-        272
-      ],
-      "anchor": [
-        80,
-        192
-      ],
-      "next_start_tile_offset": [
-        0,
-        0
-      ],
-      "start_seam_px": [
-        80,
-        200
-      ],
-      "end_seam_px": [
-        80,
-        200
-      ],
-      "connectors": [],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_02/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            80,
-            192
-          ],
-          "sort_tile_offset": [
-            0,
-            0
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_front",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "visual_detail",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": false,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "variant": 2,
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_seam_cover_03",
-      "display_name": "沃玛寺庙接缝立柱 变体3",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "seam_cover",
-      "axis": null,
-      "length_tiles": 1,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        1
-      ],
-      "canvas_size": [
-        160,
-        272
-      ],
-      "anchor": [
-        80,
-        192
-      ],
-      "next_start_tile_offset": [
-        0,
-        0
-      ],
-      "start_seam_px": [
-        80,
-        200
-      ],
-      "end_seam_px": [
-        80,
-        200
-      ],
-      "connectors": [],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_03/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            80,
-            192
-          ],
-          "sort_tile_offset": [
-            0,
-            0
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_front",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "visual_detail",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": false,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "variant": 3,
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_seam_cover_04",
-      "display_name": "沃玛寺庙接缝立柱 变体4",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "seam_cover",
-      "axis": null,
-      "length_tiles": 1,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        1
-      ],
-      "canvas_size": [
-        160,
-        272
-      ],
-      "anchor": [
-        80,
-        192
-      ],
-      "next_start_tile_offset": [
-        0,
-        0
-      ],
-      "start_seam_px": [
-        80,
-        200
-      ],
-      "end_seam_px": [
-        80,
-        200
-      ],
-      "connectors": [],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_04/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            80,
-            192
-          ],
-          "sort_tile_offset": [
-            0,
-            0
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_front",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "visual_detail",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": false,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "variant": 4,
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_seam_cover_05",
-      "display_name": "沃玛寺庙接缝立柱 变体5",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "seam_cover",
-      "axis": null,
-      "length_tiles": 1,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        1
-      ],
-      "canvas_size": [
-        160,
-        272
-      ],
-      "anchor": [
-        80,
-        192
-      ],
-      "next_start_tile_offset": [
-        0,
-        0
-      ],
-      "start_seam_px": [
-        80,
-        200
-      ],
-      "end_seam_px": [
-        80,
-        200
-      ],
-      "connectors": [],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_05/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            80,
-            192
-          ],
-          "sort_tile_offset": [
-            0,
-            0
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_front",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "visual_detail",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": false,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "variant": 5,
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
-    },
-    {
-      "schema_version": 1,
-      "asset_id": "wooma_temple_wall_seam_cover_06",
-      "display_name": "沃玛寺庙接缝立柱 变体6",
-      "asset_type": "wall_module",
-      "category": "dungeon_wall",
-      "theme": "wooma_temple",
-      "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
-      "topology": "seam_cover",
-      "axis": null,
-      "length_tiles": 1,
-      "thickness_tiles": 1,
-      "footprint_tiles": [
-        1,
-        1
-      ],
-      "canvas_size": [
-        160,
-        272
-      ],
-      "anchor": [
-        80,
-        192
-      ],
-      "next_start_tile_offset": [
-        0,
-        0
-      ],
-      "start_seam_px": [
-        80,
-        200
-      ],
-      "end_seam_px": [
-        80,
-        200
-      ],
-      "connectors": [],
-      "collision_cells": [],
-      "placement_clearance_cells": [],
-      "render_mode": "single_part",
-      "render_parts": [
-        {
-          "part_id": "p00",
-          "tile_offset": [
-            0,
-            0
-          ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_06/part_00_wooma_temple_monumental_wall_v2_base.png",
-          "front_image": "",
-          "shadow_image": "",
-          "anchor": [
-            80,
-            192
-          ],
-          "sort_tile_offset": [
-            0,
-            0
-          ],
-          "draw_order_index": 0
-        }
-      ],
-      "default_layer": "terrain_front",
-      "front_layer": "terrain_front",
-      "shadow_layer": "shadow",
-      "object_role": "terrain",
-      "scene_intent": "visual_detail",
-      "collision_policy": "none",
-      "navigation_policy": "ignore",
-      "occlusion": false,
-      "seam_guard_px": 16,
-      "seam_overlap_px": 2,
-      "variant_weight": 100,
-      "offset_px": [
-        0,
-        0
-      ],
-      "scale": [
-        1,
-        1
-      ],
-      "rotation_degrees": 0,
-      "allow_flip": false,
-      "runtime_export": true,
-      "content_layer": "personal_expansion",
-      "calibration_status": "placeable",
-      "seam_test_status": "passed",
-      "placeable": true,
-      "variant": 6,
-      "manual_collision_expected": true,
-      "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual",
-      "repeat_group": "",
-      "visual_profile_id": "wooma_temple_monumental_wall_v2"
+        16
+      ]
     }
   ]
 }

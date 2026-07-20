@@ -47,41 +47,64 @@ static func plan_closed_rectangle(
 	var modules := _family_modules(wall_family_id)
 	if modules.is_empty():
 		return {"ok": false, "errors": ["wall_family_not_found:%s" % wall_family_id], "entries": []}
+	var corner_join_mode := str(
+		modules[0].get("corner_join_mode", "dedicated_corner")
+	)
 	var minimum := bounds.position
 	var maximum := bounds.end - Vector2i.ONE
 	var entries: Array[Dictionary] = []
-	var corner_specs := [
-		{"tile": minimum, "directions": ["iso_x_pos", "iso_y_pos"], "role": "corner_min_min"},
-		{"tile": Vector2i(maximum.x, minimum.y), "directions": ["iso_x_neg", "iso_y_pos"], "role": "corner_max_min"},
-		{"tile": maximum, "directions": ["iso_x_neg", "iso_y_neg"], "role": "corner_max_max"},
-		{"tile": Vector2i(minimum.x, maximum.y), "directions": ["iso_x_pos", "iso_y_neg"], "role": "corner_min_max"},
-	]
-	for spec: Dictionary in corner_specs:
-		var corner := _find_corner(modules, corner_topology, spec.directions)
-		if corner.is_empty():
-			errors.append(
-				"wall_corner_missing:%s:%s"
-				% [wall_family_id, ",".join(spec.directions)]
-			)
-			continue
-		entries.append(_entry(corner, spec.tile, spec.role))
+	if corner_join_mode == "straight_overlap":
+		# Both straight spans intentionally own each corner tile. Their exact
+		# 64x32 cap planes overlap without a separate pillar/corner bitmap.
+		_append_span(
+			entries, errors, modules, AXIS_X,
+			Vector2i(minimum.x, minimum.y), bounds.size.x, "edge_min_y"
+		)
+		_append_span(
+			entries, errors, modules, AXIS_X,
+			Vector2i(minimum.x, maximum.y), bounds.size.x, "edge_max_y"
+		)
+		_append_span(
+			entries, errors, modules, AXIS_Y,
+			Vector2i(minimum.x, minimum.y), bounds.size.y, "edge_min_x"
+		)
+		_append_span(
+			entries, errors, modules, AXIS_Y,
+			Vector2i(maximum.x, minimum.y), bounds.size.y, "edge_max_x"
+		)
+	else:
+		var corner_specs := [
+			{"tile": minimum, "directions": ["iso_x_pos", "iso_y_pos"], "role": "corner_min_min"},
+			{"tile": Vector2i(maximum.x, minimum.y), "directions": ["iso_x_neg", "iso_y_pos"], "role": "corner_max_min"},
+			{"tile": maximum, "directions": ["iso_x_neg", "iso_y_neg"], "role": "corner_max_max"},
+			{"tile": Vector2i(minimum.x, maximum.y), "directions": ["iso_x_pos", "iso_y_neg"], "role": "corner_min_max"},
+		]
+		for spec: Dictionary in corner_specs:
+			var corner := _find_corner(modules, corner_topology, spec.directions)
+			if corner.is_empty():
+				errors.append(
+					"wall_corner_missing:%s:%s"
+						% [wall_family_id, ",".join(spec.directions)]
+				)
+				continue
+			entries.append(_entry(corner, spec.tile, spec.role))
 
-	_append_span(
-		entries, errors, modules, AXIS_X,
-		Vector2i(minimum.x + 1, minimum.y), bounds.size.x - 2, "edge_min_y"
-	)
-	_append_span(
-		entries, errors, modules, AXIS_X,
-		Vector2i(minimum.x + 1, maximum.y), bounds.size.x - 2, "edge_max_y"
-	)
-	_append_span(
-		entries, errors, modules, AXIS_Y,
-		Vector2i(minimum.x, minimum.y + 1), bounds.size.y - 2, "edge_min_x"
-	)
-	_append_span(
-		entries, errors, modules, AXIS_Y,
-		Vector2i(maximum.x, minimum.y + 1), bounds.size.y - 2, "edge_max_x"
-	)
+		_append_span(
+			entries, errors, modules, AXIS_X,
+			Vector2i(minimum.x + 1, minimum.y), bounds.size.x - 2, "edge_min_y"
+		)
+		_append_span(
+			entries, errors, modules, AXIS_X,
+			Vector2i(minimum.x + 1, maximum.y), bounds.size.x - 2, "edge_max_y"
+		)
+		_append_span(
+			entries, errors, modules, AXIS_Y,
+			Vector2i(minimum.x, minimum.y + 1), bounds.size.y - 2, "edge_min_x"
+		)
+		_append_span(
+			entries, errors, modules, AXIS_Y,
+			Vector2i(maximum.x, minimum.y + 1), bounds.size.y - 2, "edge_max_x"
+		)
 	if not errors.is_empty():
 		return {"ok": false, "errors": errors, "entries": entries}
 	return {
@@ -90,6 +113,7 @@ static func plan_closed_rectangle(
 		"entries": entries,
 		"wall_family_id": wall_family_id,
 		"corner_topology": corner_topology,
+		"corner_join_mode": corner_join_mode,
 		"bounds": [bounds.position.x, bounds.position.y, bounds.size.x, bounds.size.y],
 	}
 
@@ -188,8 +212,13 @@ static func apply_closed_rectangle(
 		"structure_id": resolved_structure_id,
 		"wall_family_id": wall_family_id,
 		"corner_topology": corner_topology,
+		"corner_join_mode": str(plan.get("corner_join_mode", "dedicated_corner")),
 		"bounds": [bounds.position.x, bounds.position.y, bounds.size.x, bounds.size.y],
-		"visual_render_contract": "segmented_isometric_depth_v1",
+		"visual_render_contract": (
+			"native_2to1_straight_overlap_v1"
+			if str(plan.get("corner_join_mode", "")) == "straight_overlap"
+			else "segmented_isometric_depth_v1"
+		),
 		"collision_authority": "manual_by_user",
 	})
 	document.design["wall_loops"] = loops
@@ -231,9 +260,22 @@ static func validate_closed_rectangle(
 					var key := "%d,%d" % [x, y]
 					counts[key] = int(counts.get(key, 0)) + 1
 	var errors: Array[String] = []
+	var modules := _family_modules(wall_family_id)
+	var straight_overlap := (
+		not modules.is_empty()
+		and str(modules[0].get("corner_join_mode", "")) == "straight_overlap"
+	)
+	var maximum := bounds.end - Vector2i.ONE
 	for cell: Vector2i in _perimeter_cells(bounds):
 		var key := "%d,%d" % [cell.x, cell.y]
-		if int(counts.get(key, 0)) != 1:
+		var expected_count := 1
+		if (
+			straight_overlap
+			and cell.x in [bounds.position.x, maximum.x]
+			and cell.y in [bounds.position.y, maximum.y]
+		):
+			expected_count = 2
+		if int(counts.get(key, 0)) != expected_count:
 			errors.append("wall_loop_cell_count:%s:%d" % [key, int(counts.get(key, 0))])
 	return {
 		"ok": errors.is_empty(),
