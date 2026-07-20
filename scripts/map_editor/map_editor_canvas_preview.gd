@@ -568,6 +568,12 @@ func _draw_ghost(design_size: Vector2i, offset: Vector2, scale_factor: float) ->
 				"scale": [approved_scale, approved_scale],
 				"rotation_deg": 0.0,
 			}
+			MapEditorInstanceProfileService.apply_adaptive_corner_offset(
+				preview_instance,
+				asset,
+				design_size,
+				true
+			)
 			var geometry := instance_visual_geometry(
 				preview_instance,
 				design_size,
@@ -661,6 +667,14 @@ static func instance_draw_commands(
 		asset.get("footprint_tiles", [1, 1])
 	)
 	var instance_tile := Vector2i(int(tile_raw[0]), int(tile_raw[1]))
+	var adaptive_sort_raw: Array = instance.get(
+		"adaptive_corner_sort_tile_offset",
+		[0, 0]
+	)
+	var adaptive_sort_offset := Vector2i(
+		int(adaptive_sort_raw[0]) if adaptive_sort_raw.size() >= 1 else 0,
+		int(adaptive_sort_raw[1]) if adaptive_sort_raw.size() >= 2 else 0
+	)
 	var render_parts: Array = asset.get("render_parts", [])
 	if (
 		str(asset.get("asset_type", "")) == "wall_module"
@@ -671,9 +685,13 @@ static func instance_draw_commands(
 				"sort_tile_offset",
 				part.get("tile_offset", [0, 0])
 			)
-			var sort_tile := instance_tile + Vector2i(
-				int(sort_offset_raw[0]),
-				int(sort_offset_raw[1])
+			var sort_tile := (
+				instance_tile
+				+ Vector2i(
+					int(sort_offset_raw[0]),
+					int(sort_offset_raw[1])
+				)
+				+ adaptive_sort_offset
 			)
 			var anchor: Array = part.get(
 				"anchor",
@@ -702,7 +720,7 @@ static func instance_draw_commands(
 	var sort_tile := instance_tile + Vector2i(
 		maxi(0, int(footprint[0]) - 1),
 		maxi(0, int(footprint[1]) - 1)
-	)
+	) + adaptive_sort_offset
 	result.append({
 		"instance": instance,
 		"asset": asset,
@@ -951,6 +969,11 @@ func _draw_clipboard_paste_preview(
 		preview_instance["tile_anchor"] = [_hover_tile.x, _hover_tile.y]
 		var asset_id := str(preview_instance.get("asset_id", ""))
 		var asset := MapAssetCatalogService.find_asset(asset_id)
+		MapEditorInstanceProfileService.apply_adaptive_corner_offset(
+			preview_instance,
+			asset,
+			design_size
+		)
 		var texture := _texture_for_asset(asset_id)
 		if texture != null:
 			var geometry := instance_visual_geometry(

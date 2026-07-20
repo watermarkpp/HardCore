@@ -811,7 +811,15 @@ func _migrate_loaded_instances_to_class_profiles()->void:
 			if str(asset.get("asset_type","")) in ["ground_brush","procedural_ground"]:
 				legacy_ground_paints.append({"op":"paint_tile","tile":instance.get("tile",[0,0]),"asset_id":str(instance.asset_id)})
 				continue
-			InstanceProfileService.refresh_from_asset(instance, asset)
+			var design_raw: Array = current_document.design.get(
+				"design_size",
+				[0, 0]
+			)
+			InstanceProfileService.refresh_from_asset(
+				instance,
+				asset,
+				Vector2i(int(design_raw[0]), int(design_raw[1]))
+			)
 			migrated_entries.append(instance)
 		current_document.layers[layer_name]=migrated_entries
 	if not legacy_ground_paints.is_empty():MapEditorGroundService.record_tile_paint_batch(current_document,legacy_ground_paints)

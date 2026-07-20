@@ -44,6 +44,13 @@ static func create_instance(document: Dictionary, asset_id: String, object_role:
 		"instance_base_footprint_tiles": asset.get("footprint_tiles", [1, 1]).duplicate(),
 		"selectable":true,"movable":true,"selection_locked":false,
 	}
+	var design_raw: Array = document.design.get("design_size", [0, 0])
+	MapEditorInstanceProfileService.apply_adaptive_corner_offset(
+		instance,
+		asset,
+		Vector2i(int(design_raw[0]), int(design_raw[1])),
+		true
+	)
 	var layers: Dictionary = document.layers
 	var entries: Array = layers.get(layer, [])
 	entries.append(instance)
@@ -69,6 +76,14 @@ static func move_instance(document: Dictionary, instance_id: String, tile: Vecto
 	if not validation.ok:
 		return {"ok": false, "errors": validation.errors}
 	instance.tile = [tile.x, tile.y]
+	instance.tile_anchor = [tile.x, tile.y]
+	var asset := MapAssetCatalogService.find_asset(str(instance.get("asset_id", "")))
+	var design_raw: Array = document.design.get("design_size", [0, 0])
+	MapEditorInstanceProfileService.apply_adaptive_corner_offset(
+		instance,
+		asset,
+		Vector2i(int(design_raw[0]), int(design_raw[1]))
+	)
 	_located_replace(document, located, instance)
 	return {"ok": true, "instance": instance}
 
@@ -114,6 +129,13 @@ static func duplicate_instance_snapshot(
 	duplicate["tile"] = [tile.x, tile.y]
 	duplicate["tile_anchor"] = [tile.x, tile.y]
 	duplicate["layer"] = layer
+	var asset := MapAssetCatalogService.find_asset(asset_id)
+	var design_raw: Array = document.design.get("design_size", [0, 0])
+	MapEditorInstanceProfileService.apply_adaptive_corner_offset(
+		duplicate,
+		asset,
+		Vector2i(int(design_raw[0]), int(design_raw[1]))
+	)
 	# A manual copy is independent from generated dungeon structure metadata.
 	for generated_key: String in ["generated_by", "structure_id", "structure_role"]:
 		duplicate.erase(generated_key)

@@ -86,6 +86,8 @@ func _ready() -> void:
 	_assert_monumental_geometry(assets)
 	_assert_saved_instance_profile_refresh()
 	_assert_four_directional_corners(assets)
+	_assert_adaptive_corner_copy_offsets()
+	_assert_corner_occlusion_order()
 	_assert_closed_loop()
 	print("MSE_WOOMA_TEMPLE_WALL_PACK_PASS assets=42 closed_loop=12x10")
 	get_tree().quit(0)
@@ -234,6 +236,131 @@ func _assert_four_directional_corners(assets: Array) -> void:
 			reference_size = used_rect.size
 		else:
 			assert(used_rect.size == reference_size)
+
+
+func _assert_adaptive_corner_copy_offsets() -> void:
+	var document := MapEditorTypes.new_map(
+		"wooma_corner_copy_test",
+		990312,
+		"Wooma Corner Copy",
+		Vector2i(44, 44)
+	)
+	var asset_id := "wooma_temple_wall_inner_ne_v01"
+	var bottom := MapEditorInstanceService.create_instance(
+		document,
+		asset_id,
+		"terrain",
+		Vector2i(43, 43),
+		"terrain_base"
+	)
+	assert(bottom.ok)
+	assert(
+		str(bottom.instance.asset_id)
+		== "wooma_temple_wall_inner_nw_v01"
+	)
+	assert(bottom.instance.offset_px == [0, -8])
+	assert(str(bottom.instance.adaptive_corner_zone) == "max_max")
+
+	var top := MapEditorInstanceService.duplicate_instance_snapshot(
+		document,
+		bottom.instance,
+		Vector2i(0, 0)
+	)
+	assert(top.ok)
+	assert(
+		str(top.instance.asset_id)
+		== "wooma_temple_wall_inner_se_v01"
+	)
+	assert(top.instance.offset_px == [0, 8])
+	assert(str(top.instance.adaptive_corner_zone) == "min_min")
+	assert(top.instance.adaptive_corner_sort_tile_offset == [2, 1])
+	var top_commands := MapEditorCanvasPreview.instance_draw_commands(
+		top.instance,
+		MapAssetCatalogService.find_asset(asset_id)
+	)
+	assert(top_commands.size() == 1)
+	assert(top_commands[0].sort_tile == Vector2i(2, 1))
+
+	var moved := MapEditorInstanceService.move_instance(
+		document,
+		str(top.instance.instance_id),
+		Vector2i(0, 43)
+	)
+	assert(moved.ok)
+	assert(str(moved.instance.asset_id) == asset_id)
+	assert(moved.instance.offset_px == [-16, 0])
+	assert(str(moved.instance.adaptive_corner_zone) == "min_max")
+	assert(moved.instance.adaptive_corner_sort_tile_offset == [2, 1])
+	assert(moved.instance.tile_anchor == [0, 43])
+
+	var right := MapEditorInstanceService.duplicate_instance_snapshot(
+		document,
+		bottom.instance,
+		Vector2i(43, 0)
+	)
+	assert(right.ok)
+	assert(
+		str(right.instance.asset_id)
+		== "wooma_temple_wall_inner_sw_v01"
+	)
+	assert(right.instance.offset_px == [16, 0])
+	assert(str(right.instance.adaptive_corner_zone) == "max_min")
+	assert(right.instance.adaptive_corner_sort_tile_offset == [0, 0])
+
+	moved.instance["offset_px"] = [5, 7]
+	var custom_move := MapEditorInstanceService.move_instance(
+		document,
+		str(moved.instance.instance_id),
+		Vector2i(43, 0)
+	)
+	assert(custom_move.ok)
+	assert(custom_move.instance.offset_px == [5, 7])
+
+
+func _assert_corner_occlusion_order() -> void:
+	var layer := 0
+	var wall_before := {
+		"sort_tile": Vector2i(42, 0),
+		"layer_index": layer,
+		"image_pass": 1,
+		"part_order": 0,
+		"sequence": 0,
+	}
+	var right_corner := {
+		"sort_tile": Vector2i(43, 0),
+		"layer_index": layer,
+		"image_pass": 1,
+		"part_order": 0,
+		"sequence": 1,
+	}
+	var wall_after := {
+		"sort_tile": Vector2i(43, 1),
+		"layer_index": layer,
+		"image_pass": 1,
+		"part_order": 0,
+		"sequence": 2,
+	}
+	assert(MapEditorCanvasPreview._draw_command_less(wall_before, right_corner))
+	assert(MapEditorCanvasPreview._draw_command_less(right_corner, wall_after))
+
+	var left_wall_before := wall_before.duplicate()
+	left_wall_before.sort_tile = Vector2i(0, 42)
+	var left_corner := right_corner.duplicate()
+	left_corner.sort_tile = Vector2i(0, 43)
+	var left_wall_after := wall_after.duplicate()
+	left_wall_after.sort_tile = Vector2i(1, 43)
+	assert(
+		MapEditorCanvasPreview._draw_command_less(
+			left_wall_before,
+			left_corner
+		)
+	)
+	assert(
+		MapEditorCanvasPreview._draw_command_less(
+			left_corner,
+			left_wall_after
+		)
+	)
 
 
 func _assert_closed_loop() -> void:

@@ -393,25 +393,35 @@ def straight_art(
     axis = str(module["axis"])
     length = int(module["length_tiles"])
     size = tuple(int(value) for value in module["canvas_size"])
-    # Wall elevation is independent from its grid length. The extra 16 px per
-    # tile is isometric depth; the 176 px body is the temple's actual height.
-    visual_size = (32 * length + 40, 176 + 16 * length)
-    source = continuous_wall_window(continuous_wall, length, variant_seed)
-    artwork = stretch_on_canvas(
-        source,
-        size,
-        visual_size,
-        center_x=size[0] // 2,
-        bottom_y=size[1] - 16,
+    # Build every length from the same calibrated one-cell span. Stretching a
+    # separate source window for L1/L2/L3/L4 gave their socket silhouettes
+    # different slopes, so a valid L4→L2 joint produced a raised triangular
+    # lip even though both seam coordinates were numerically identical.
+    segment_size = (96, 224)
+    segment_source = continuous_wall_window(
+        continuous_wall,
+        1,
+        variant_seed,
     )
-    start_seam = tuple(int(value) for value in module["start_seam_px"])
-    end_seam = tuple(int(value) for value in module["end_seam_px"])
-    artwork = align_wall_seams(
-        artwork,
-        (32, start_seam[1]),
-        (32 + 32 * length, end_seam[1]),
+    segment = stretch_on_canvas(
+        segment_source,
+        segment_size,
+        (72, 192),
+        center_x=48,
+        bottom_y=208,
     )
-    artwork = paint_isometric_cap_joints(artwork, length)
+    segment = align_wall_seams(
+        segment,
+        (32, 184),
+        (64, 200),
+    )
+    segment = paint_isometric_cap_joints(segment, 1)
+    artwork = Image.new("RGBA", size, (0, 0, 0, 0))
+    for tile_index in range(length):
+        artwork.alpha_composite(
+            segment,
+            (32 * tile_index, 16 * tile_index),
+        )
     if axis == "iso_y":
         artwork = mirror(artwork)
     return artwork, split_continuous_parts(artwork, length, axis)
@@ -633,6 +643,36 @@ def build_module(
         "editable": True,
         "runtime_export": True,
     }
+    if topology in {"inner_corner", "outer_corner"}:
+        # A copied single-column corner must adapt to its destination. These
+        # offsets recreate the calibrated 2:1 isometric overlap at the four
+        # map corners without baking one direction into the bitmap itself.
+        asset["adaptive_corner_contract_id"] = (
+            "wooma_temple_map_quadrant_corner_v1"
+        )
+        corner_kind = "inner" if topology == "inner_corner" else "outer"
+        asset["adaptive_corner_asset_ids"] = {
+            "min_min": f"wooma_temple_wall_{corner_kind}_se_v01",
+            "max_min": f"wooma_temple_wall_{corner_kind}_sw_v01",
+            "max_max": f"wooma_temple_wall_{corner_kind}_nw_v01",
+            "min_max": f"wooma_temple_wall_{corner_kind}_ne_v01",
+        }
+        asset["adaptive_corner_family_geometry_invariant"] = True
+        asset["adaptive_corner_offsets_px"] = {
+            "min_min": [0, 8],
+            "max_min": [16, 0],
+            "max_max": [0, -8],
+            "min_max": [-16, 0],
+        }
+        # The rear/top and screen-left joins otherwise sort one adjacent
+        # straight wall after the pillar and hide most of its shaft.  Move
+        # only those corner draw keys past the two touching wall ends.
+        asset["adaptive_corner_sort_tile_offsets"] = {
+            "min_min": [2, 1],
+            "max_min": [0, 0],
+            "max_max": [0, 0],
+            "min_max": [2, 1],
+        }
     return module, asset
 
 
