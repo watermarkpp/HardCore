@@ -454,6 +454,33 @@ def corner_art(
     )
 
 
+def rear_corner_front_strip(artwork: Image.Image) -> Image.Image:
+    """Keep the rear corner readable without putting it wholly above both walls.
+
+    At the min/min (screen-top) corner both descending wall faces sort after
+    the pillar.  A single pillar bitmap is therefore either completely hidden
+    or, when its entire sort key is forced forward, covers both walls at 1:1.
+    The centre half is the visible front seam of the square pillar in the
+    project's 2:1 view; the wall faces remain authoritative on either side.
+    """
+    overlay = Image.new("RGBA", artwork.size, (0, 0, 0, 0))
+    alpha_bounds = artwork.getchannel("A").getbbox()
+    if alpha_bounds is None:
+        return overlay
+    left, top, right, bottom = alpha_bounds
+    width = right - left
+    seam_left = left + width // 4
+    seam_right = right - width // 4
+    mask = Image.new("L", artwork.size, 0)
+    draw = ImageDraw.Draw(mask)
+    draw.rectangle(
+        (seam_left, top, seam_right - 1, bottom - 1),
+        fill=255,
+    )
+    overlay.paste(artwork, (0, 0), mask)
+    return overlay
+
+
 def pillar_art(module: dict, pillars: list[Image.Image], variant_seed: int) -> Image.Image:
     size = tuple(int(value) for value in module["canvas_size"])
     anchor = tuple(int(value) for value in module["anchor"])
@@ -532,6 +559,9 @@ def build_module(
     elif topology in {"inner_corner", "outer_corner"}:
         artwork = corner_art(module, pillars)
         parts = [artwork]
+        if str(module.get("corner_orientation", "")) == "se":
+            parts.append(rear_corner_front_strip(artwork))
+            module["render_mode"] = "segmented"
     elif topology in {"door_adapter", "broken_adapter"}:
         artwork = adapter_art(module, adapters)
         parts = [artwork]
@@ -559,6 +589,15 @@ def build_module(
             tile_offset = [1, 0] if module["axis"] == "iso_x" else [0, 1]
         else:
             tile_offset = [0, 0]
+        sort_tile_offset = tile_offset
+        if (
+            topology in {"inner_corner", "outer_corner"}
+            and str(module.get("corner_orientation", "")) == "se"
+            and index == 1
+        ):
+            # The rear pillar base remains at natural depth; only its centre
+            # seam returns after both adjacent four-cell wall modules.
+            sort_tile_offset = [4, 4]
         render_parts.append(
             {
                 "part_id": f"p{index:02d}",
@@ -567,7 +606,7 @@ def build_module(
                 "front_image": "",
                 "shadow_image": "",
                 "anchor": list(module["anchor"]),
-                "sort_tile_offset": tile_offset,
+                "sort_tile_offset": sort_tile_offset,
                 "draw_order_index": index,
             }
         )
@@ -660,18 +699,22 @@ def build_module(
         asset["adaptive_corner_family_geometry_invariant"] = True
         asset["adaptive_corner_offsets_px"] = {
             "min_min": [0, 8],
-            "max_min": [16, 0],
+            # Side pillars must move toward the map interior.  The previous
+            # signs pushed them outward and left the descending wall face
+            # joined at a 1:1 screen angle instead of the 2:1 half-depth seam.
+            "max_min": [-16, 0],
             "max_max": [0, -8],
-            "min_max": [-16, 0],
+            "min_max": [16, 0],
         }
-        # The rear/top and screen-left joins otherwise sort one adjacent
-        # straight wall after the pillar and hide most of its shaft.  Move
-        # only those corner draw keys past the two touching wall ends.
+        # Isometric tile depth already provides the required four-corner
+        # sandwich: both rear walls after the rear pillar, one wall on each
+        # side of the side pillars, and both front walls before the front
+        # pillar.  Extra sort offsets break that relationship.
         asset["adaptive_corner_sort_tile_offsets"] = {
-            "min_min": [2, 1],
+            "min_min": [0, 0],
             "max_min": [0, 0],
             "max_max": [0, 0],
-            "min_max": [2, 1],
+            "min_max": [0, 0],
         }
     return module, asset
 

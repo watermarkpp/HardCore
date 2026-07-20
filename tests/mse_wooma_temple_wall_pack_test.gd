@@ -273,13 +273,21 @@ func _assert_adaptive_corner_copy_offsets() -> void:
 	)
 	assert(top.instance.offset_px == [0, 8])
 	assert(str(top.instance.adaptive_corner_zone) == "min_min")
-	assert(top.instance.adaptive_corner_sort_tile_offset == [2, 1])
+	assert(top.instance.adaptive_corner_sort_tile_offset == [0, 0])
 	var top_commands := MapEditorCanvasPreview.instance_draw_commands(
 		top.instance,
-		MapAssetCatalogService.find_asset(asset_id)
+		MapAssetCatalogService.find_asset(str(top.instance.asset_id))
 	)
-	assert(top_commands.size() == 1)
-	assert(top_commands[0].sort_tile == Vector2i(2, 1))
+	assert(top_commands.size() == 2)
+	assert(top_commands[0].sort_tile == Vector2i(0, 0))
+	assert(top_commands[1].sort_tile == Vector2i(4, 4))
+	var top_overlay := load(
+		"res://" + str(top_commands[1].image_path)
+	) as Texture2D
+	assert(top_overlay != null)
+	var top_overlay_rect := top_overlay.get_image().get_used_rect()
+	assert(top_overlay_rect.position.x == 56)
+	assert(top_overlay_rect.size.x == 48)
 
 	var moved := MapEditorInstanceService.move_instance(
 		document,
@@ -288,9 +296,9 @@ func _assert_adaptive_corner_copy_offsets() -> void:
 	)
 	assert(moved.ok)
 	assert(str(moved.instance.asset_id) == asset_id)
-	assert(moved.instance.offset_px == [-16, 0])
+	assert(moved.instance.offset_px == [16, 0])
 	assert(str(moved.instance.adaptive_corner_zone) == "min_max")
-	assert(moved.instance.adaptive_corner_sort_tile_offset == [2, 1])
+	assert(moved.instance.adaptive_corner_sort_tile_offset == [0, 0])
 	assert(moved.instance.tile_anchor == [0, 43])
 
 	var right := MapEditorInstanceService.duplicate_instance_snapshot(
@@ -303,9 +311,15 @@ func _assert_adaptive_corner_copy_offsets() -> void:
 		str(right.instance.asset_id)
 		== "wooma_temple_wall_inner_sw_v01"
 	)
-	assert(right.instance.offset_px == [16, 0])
+	assert(right.instance.offset_px == [-16, 0])
 	assert(str(right.instance.adaptive_corner_zone) == "max_min")
 	assert(right.instance.adaptive_corner_sort_tile_offset == [0, 0])
+	var right_commands := MapEditorCanvasPreview.instance_draw_commands(
+		right.instance,
+		MapAssetCatalogService.find_asset(str(right.instance.asset_id))
+	)
+	assert(right_commands.size() == 1)
+	assert(right_commands[0].sort_tile == Vector2i(43, 0))
 
 	moved.instance["offset_px"] = [5, 7]
 	var custom_move := MapEditorInstanceService.move_instance(

@@ -3826,7 +3826,7 @@
           8
         ],
         "max_min": [
-          16,
+          -16,
           0
         ],
         "max_max": [
@@ -3834,14 +3834,14 @@
           -8
         ],
         "min_max": [
-          -16,
+          16,
           0
         ]
       },
       "adaptive_corner_sort_tile_offsets": {
         "min_min": [
-          2,
-          1
+          0,
+          0
         ],
         "max_min": [
           0,
@@ -3852,8 +3852,8 @@
           0
         ],
         "min_max": [
-          2,
-          1
+          0,
+          0
         ]
       }
     },
@@ -3908,7 +3908,7 @@
       ],
       "collision_cells": [],
       "placement_clearance_cells": [],
-      "render_mode": "single_part",
+      "render_mode": "segmented",
       "render_parts": [
         {
           "part_id": "p00",
@@ -3928,6 +3928,25 @@
             0
           ],
           "draw_order_index": 0
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_se_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            80,
+            192
+          ],
+          "sort_tile_offset": [
+            4,
+            4
+          ],
+          "draw_order_index": 1
         }
       ],
       "default_layer": "terrain_base",
@@ -4059,7 +4078,7 @@
           8
         ],
         "max_min": [
-          16,
+          -16,
           0
         ],
         "max_max": [
@@ -4067,14 +4086,14 @@
           -8
         ],
         "min_max": [
-          -16,
+          16,
           0
         ]
       },
       "adaptive_corner_sort_tile_offsets": {
         "min_min": [
-          2,
-          1
+          0,
+          0
         ],
         "max_min": [
           0,
@@ -4085,8 +4104,8 @@
           0
         ],
         "min_max": [
-          2,
-          1
+          0,
+          0
         ]
       }
     },
@@ -4292,7 +4311,7 @@
           8
         ],
         "max_min": [
-          16,
+          -16,
           0
         ],
         "max_max": [
@@ -4300,14 +4319,14 @@
           -8
         ],
         "min_max": [
-          -16,
+          16,
           0
         ]
       },
       "adaptive_corner_sort_tile_offsets": {
         "min_min": [
-          2,
-          1
+          0,
+          0
         ],
         "max_min": [
           0,
@@ -4318,8 +4337,8 @@
           0
         ],
         "min_max": [
-          2,
-          1
+          0,
+          0
         ]
       }
     },
@@ -4525,7 +4544,7 @@
           8
         ],
         "max_min": [
-          16,
+          -16,
           0
         ],
         "max_max": [
@@ -4533,14 +4552,14 @@
           -8
         ],
         "min_max": [
-          -16,
+          16,
           0
         ]
       },
       "adaptive_corner_sort_tile_offsets": {
         "min_min": [
-          2,
-          1
+          0,
+          0
         ],
         "max_min": [
           0,
@@ -4551,8 +4570,8 @@
           0
         ],
         "min_max": [
-          2,
-          1
+          0,
+          0
         ]
       }
     },
@@ -4758,7 +4777,7 @@
           8
         ],
         "max_min": [
-          16,
+          -16,
           0
         ],
         "max_max": [
@@ -4766,14 +4785,14 @@
           -8
         ],
         "min_max": [
-          -16,
+          16,
           0
         ]
       },
       "adaptive_corner_sort_tile_offsets": {
         "min_min": [
-          2,
-          1
+          0,
+          0
         ],
         "max_min": [
           0,
@@ -4784,8 +4803,8 @@
           0
         ],
         "min_max": [
-          2,
-          1
+          0,
+          0
         ]
       }
     },
@@ -4840,7 +4859,7 @@
       ],
       "collision_cells": [],
       "placement_clearance_cells": [],
-      "render_mode": "single_part",
+      "render_mode": "segmented",
       "render_parts": [
         {
           "part_id": "p00",
@@ -4860,6 +4879,25 @@
             0
           ],
           "draw_order_index": 0
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_se_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            80,
+            192
+          ],
+          "sort_tile_offset": [
+            4,
+            4
+          ],
+          "draw_order_index": 1
         }
       ],
       "default_layer": "terrain_base",
@@ -4991,7 +5029,7 @@
           8
         ],
         "max_min": [
-          16,
+          -16,
           0
         ],
         "max_max": [
@@ -4999,14 +5037,14 @@
           -8
         ],
         "min_max": [
-          -16,
+          16,
           0
         ]
       },
       "adaptive_corner_sort_tile_offsets": {
         "min_min": [
-          2,
-          1
+          0,
+          0
         ],
         "max_min": [
           0,
@@ -5017,8 +5055,8 @@
           0
         ],
         "min_max": [
-          2,
-          1
+          0,
+          0
         ]
       }
     },
@@ -5224,7 +5262,7 @@
           8
         ],
         "max_min": [
-          16,
+          -16,
           0
         ],
         "max_max": [
@@ -5232,14 +5270,14 @@
           -8
         ],
         "min_max": [
-          -16,
+          16,
           0
         ]
       },
       "adaptive_corner_sort_tile_offsets": {
         "min_min": [
-          2,
-          1
+          0,
+          0
         ],
         "max_min": [
           0,
@@ -5250,8 +5288,8 @@
           0
         ],
         "min_max": [
-          2,
-          1
+          0,
+          0
         ]
       }
     },
@@ -5457,7 +5495,7 @@
           8
         ],
         "max_min": [
-          16,
+          -16,
           0
         ],
         "max_max": [
@@ -5465,14 +5503,14 @@
           -8
         ],
         "min_max": [
-          -16,
+          16,
           0
         ]
       },
       "adaptive_corner_sort_tile_offsets": {
         "min_min": [
-          2,
-          1
+          0,
+          0
         ],
         "max_min": [
           0,
@@ -5483,8 +5521,8 @@
           0
         ],
         "min_max": [
-          2,
-          1
+          0,
+          0
         ]
       }
     },
