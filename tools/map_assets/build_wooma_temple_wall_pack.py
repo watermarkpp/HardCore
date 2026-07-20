@@ -423,40 +423,22 @@ def corner_art(
 ) -> Image.Image:
     size = tuple(int(value) for value in module["canvas_size"])
     anchor = tuple(int(value) for value in module["anchor"])
-    asset_id = str(module["asset_id"])
-    # At a 64x32 isometric tile ratio, advancing one half-cell sideways changes
-    # screen Y by eight pixels, not sixteen. The back (+,+) and front (-,-)
-    # corners therefore need equal and opposite 8 px depth compensation; the
-    # two side corners remain on the neutral seam baseline.
-    depth_compensation = (
-        8
-        if "_se_" in asset_id
-        else -8
-        if "_nw_" in asset_id
-        else 0
-    )
-    lateral_compensation = (
-        16
-        if "_ne_" in asset_id
-        else -16
-        if "_sw_" in asset_id
-        else 0
-    )
     # A closed loop already brings both straight-wall sockets to the corner
     # tile. The corner artwork must therefore only cover that seam. Building a
     # second pair of wall faces here double-renders the joint and creates the
     # visibly detached V/< /> shapes that this pack previously produced.
     #
-    # Keep all four directional corner IDs for topology lookup, but render one
-    # clean, symmetric pillar at each corner. This is the same calibrated seam
-    # pillar used elsewhere in the family, so its base overlaps both adjoining
-    # wall feet without inventing another wall plane.
+    # All four directional IDs deliberately share one centred 1-cell pillar.
+    # Direction-specific pixel compensation makes the art drift away from the
+    # tile anchor when the same module is placed manually. A 64 px visible
+    # width is the exact width of one logical tile; the 176 px height matches
+    # the approved straight-wall body without turning the pillar into a fence.
     return stretch_on_canvas(
         pillars[0],
         size,
-        (96, 200),
-        center_x=anchor[0] + lateral_compensation,
-        bottom_y=anchor[1] + 24 + depth_compensation,
+        (64, 176),
+        center_x=anchor[0],
+        bottom_y=anchor[1] + 8,
     )
 
 
@@ -464,8 +446,8 @@ def pillar_art(module: dict, pillars: list[Image.Image], variant_seed: int) -> I
     size = tuple(int(value) for value in module["canvas_size"])
     anchor = tuple(int(value) for value in module["anchor"])
     topology = str(module["topology"])
-    target_size = (96, 200) if topology == "end_cap" else (76, 184)
-    bottom_y = anchor[1] + 24 if topology == "end_cap" else anchor[1] + 16
+    target_size = (64, 176) if topology == "end_cap" else (56, 168)
+    bottom_y = anchor[1] + 8
     return stretch_on_canvas(
         pillars[variant_seed % len(pillars)],
         size,
@@ -606,6 +588,10 @@ def build_module(
         "placement_anchor_px": list(module["anchor"]),
         "anchor_tile": [0, 0],
         "anchor_mode": "foot_tile",
+        # This pack contains tall 1-cell wall art. Show the real translucent
+        # sprite while placing it so the editor never promises a tiny diamond
+        # and then produces a much larger-looking object after the click.
+        "placement_preview_mode": "image_and_footprint",
         "visual_footprint_tiles": list(module["footprint_tiles"]),
         "occupancy_footprint_tiles": list(module["footprint_tiles"]),
         "base_footprint_tiles": list(module["footprint_tiles"]),

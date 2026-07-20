@@ -551,6 +551,42 @@ func _draw_ghost(design_size: Vector2i, offset: Vector2, scale_factor: float) ->
 	if interaction_mode != "place" or _region_paint_mode or _hover_tile.x < 0 or selected_brush_asset_id.is_empty():
 		return
 	var ghost := MapEditorGhostPreview.build(document, selected_brush_asset_id, _hover_tile, selected_placement_layer)
+	var asset := MapAssetCatalogService.find_asset(selected_brush_asset_id)
+	if str(asset.get("placement_preview_mode", "")) == "image_and_footprint":
+		var texture := _texture_for_asset(selected_brush_asset_id)
+		if texture != null:
+			var approved_scale := float(asset.get("approved_scale", 1.0))
+			var preview_instance := {
+				"asset_id": selected_brush_asset_id,
+				"tile": [_hover_tile.x, _hover_tile.y],
+				"footprint_tiles": asset.get("footprint_tiles", [1, 1]),
+				"offset_px": [0, 0],
+				"anchor_px": asset.get(
+					"placement_anchor_px",
+					asset.get("anchor_px", [0, 0])
+				),
+				"scale": [approved_scale, approved_scale],
+				"rotation_deg": 0.0,
+			}
+			var geometry := instance_visual_geometry(
+				preview_instance,
+				design_size,
+				offset,
+				scale_factor,
+				texture.get_size(),
+				asset
+			)
+			draw_set_transform(
+				geometry.center,
+				geometry.rotation,
+				geometry.visual_scale
+			)
+			draw_texture(
+				texture,
+				-geometry.anchor,
+				Color(1.0, 1.0, 1.0, 0.55)
+			)
+			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	var polygon: PackedVector2Array = ghost.polygon_ground_px
 	var screen_polygon := PackedVector2Array()
 	for point in polygon:
