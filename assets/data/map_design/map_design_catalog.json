@@ -371,7 +371,10 @@
         44,
         44
       ],
-      "strategy": "shrink_and_recompose",
+      "strategy": "exact_clone_of_wooma_temple_1",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-07-21",
+      "clone_source_map_id": "wooma_temple_1",
       "source_map_path": "research/mir2_client_raw/Map/D023.map",
       "template_default_size": [
         140,
@@ -398,17 +401,20 @@
     {
       "map_id": "wooma_temple_3",
       "runtime_map_id": 315,
-      "name": "沃玛寺庙三层（核心）",
+      "name": "沃玛教主大厅",
       "map_type": "temple_floor",
       "pre_scale_design_size": [
         112,
         112
       ],
       "design_size": [
-        35,
-        35
+        44,
+        44
       ],
-      "strategy": "preserve_arena",
+      "strategy": "exact_clone_of_wooma_temple_1",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-07-21",
+      "clone_source_map_id": "wooma_temple_1",
       "source_map_path": "research/mir2_client_raw/Map/D024.map",
       "template_default_size": [
         140,

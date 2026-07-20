@@ -208,7 +208,7 @@
     },
     {
       "template_id": "blank.wooma_temple_2",
-      "template_kind": "empty_map",
+      "template_kind": "existing_map_or_empty_template",
       "map_id": "wooma_temple_2",
       "runtime_map_id": 314,
       "display_name": "沃玛寺庙二层",
@@ -221,30 +221,38 @@
         140,
         140
       ],
-      "strategy": "shrink_and_recompose",
-      "content_policy": "empty_layers",
+      "strategy": "exact_clone_of_wooma_temple_1",
+      "content_policy": "open_existing_workspace_first",
       "ground_policy": "virtual_blank_until_dirty",
-      "editable_layer": "expansion"
+      "editable_layer": "expansion",
+      "workspace_status": "ready",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-07-21",
+      "clone_source_map_id": "wooma_temple_1"
     },
     {
       "template_id": "blank.wooma_temple_3",
-      "template_kind": "empty_map",
+      "template_kind": "existing_map_or_empty_template",
       "map_id": "wooma_temple_3",
       "runtime_map_id": 315,
-      "display_name": "沃玛寺庙三层（核心）",
+      "display_name": "沃玛教主大厅",
       "map_type": "temple_floor",
       "design_size": [
-        35,
-        35
+        44,
+        44
       ],
       "pre_scale_design_size": [
         112,
         112
       ],
-      "strategy": "preserve_arena",
-      "content_policy": "empty_layers",
+      "strategy": "exact_clone_of_wooma_temple_1",
+      "content_policy": "open_existing_workspace_first",
       "ground_policy": "virtual_blank_until_dirty",
-      "editable_layer": "expansion"
+      "editable_layer": "expansion",
+      "workspace_status": "ready",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-07-21",
+      "clone_source_map_id": "wooma_temple_1"
     },
     {
       "template_id": "blank.bich_mine_1",

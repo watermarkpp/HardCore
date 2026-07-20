@@ -85,7 +85,7 @@
     },
     {
       "wall_family_id": "wooma_temple_gothic_stone_u0",
-      "display_name": "沃玛寺庙哥特旧石墙 U0",
+      "display_name": "标准灰绿色哥特寺庙墙 U0",
       "theme": "wooma_temple",
       "material": "gothic_gray_green_stone",
       "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
@@ -121,7 +121,90 @@
       "palette_id": "wooma_temple_gothic_stone_u0",
       "content_layer": "personal_expansion",
       "collision_authority": "manual_by_user",
+      "palette_role": "standard_reusable_temple_wall",
+      "intended_uses": [
+        "zuma_temple",
+        "other_temple_maps"
+      ],
       "enabled": true
+    },
+    {
+      "wall_family_id": "wooma_temple_floor_warm_stone_u0",
+      "display_name": "沃玛寺庙暖灰褐石墙 U0",
+      "theme": "wooma_temple_floor_warm",
+      "material": "warm_olive_taupe_sandstone",
+      "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0",
+      "tile_size": [
+        64,
+        32
+      ],
+      "wall_height_px": 160,
+      "side_pad_px": 16,
+      "allowed_lengths": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "primary_lengths": [
+        4,
+        3
+      ],
+      "repair_lengths": [
+        2,
+        1
+      ],
+      "default_blocked_side": "outside",
+      "seam_guard_px": 16,
+      "seam_overlap_px": 0,
+      "seam_cover_asset_ids": [],
+      "corner_join_mode": "straight_overlap",
+      "corner_asset_ids": [],
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "contains_corner_pillars": false,
+      "palette_id": "wooma_temple_floor_warm_stone_u0",
+      "content_layer": "personal_expansion",
+      "collision_authority": "manual_by_user",
+      "palette_role": "wooma_temple_floor_matched_wall",
+      "intended_uses": [
+        "zuma_temple",
+        "other_temple_maps"
+      ],
+      "enabled": true,
+      "color_match_contract_id": "wooma_floor_weighted_palette_match_v1",
+      "ground_reference_map_id": "wooma_temple_1",
+      "ground_reference_asset_counts": {
+        "mse.new_ground.stone_platform.07": 526,
+        "mse.new_ground.stone_platform.08": 547,
+        "mse.new_ground.stone_platform.09": 523,
+        "mse.new_ground.stone_platform.10": 522,
+        "mse.new_ground.stone_platform.11": 546,
+        "mse.new_ground.stone_platform.12": 546
+      },
+      "ground_weighted_median_rgb": [
+        148,
+        136,
+        112
+      ],
+      "asset_ids": [
+        "wooma_temple_warm_wall_straight_x_l1_v01",
+        "wooma_temple_warm_wall_straight_x_l2_v01",
+        "wooma_temple_warm_wall_straight_x_l3_v01",
+        "wooma_temple_warm_wall_straight_x_l3_v02",
+        "wooma_temple_warm_wall_straight_x_l3_v03",
+        "wooma_temple_warm_wall_straight_x_l4_v01",
+        "wooma_temple_warm_wall_straight_x_l4_v02",
+        "wooma_temple_warm_wall_straight_x_l4_v03",
+        "wooma_temple_warm_wall_straight_y_l1_v01",
+        "wooma_temple_warm_wall_straight_y_l2_v01",
+        "wooma_temple_warm_wall_straight_y_l3_v01",
+        "wooma_temple_warm_wall_straight_y_l3_v02",
+        "wooma_temple_warm_wall_straight_y_l3_v03",
+        "wooma_temple_warm_wall_straight_y_l4_v01",
+        "wooma_temple_warm_wall_straight_y_l4_v02",
+        "wooma_temple_warm_wall_straight_y_l4_v03"
+      ]
     }
   ]
 }

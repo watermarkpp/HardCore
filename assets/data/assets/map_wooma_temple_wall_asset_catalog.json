@@ -1,7 +1,7 @@
 {
   "asset_schema_version": 2,
   "catalog_id": "wooma_temple_wall_pack",
-  "display_name": "沃玛寺庙无柱直墙素材包",
+  "display_name": "标准灰绿色哥特寺庙直墙素材包",
   "source_policy": "imagegen_flat_sources_native_2to1_projection",
   "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
   "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
@@ -10,11 +10,12 @@
     "wooma_temple_gothic_stone_u0"
   ],
   "collision_authority": "manual_by_user",
+  "palette_role": "standard_reusable_temple_wall",
   "assets": [
     {
       "schema_version": 1,
       "asset_id": "wooma_temple_wall_straight_x_l1_v01",
-      "display_name": "沃玛寺庙直墙 X向 1格 变体1",
+      "display_name": "标准哥特直墙 X向 1格 变体1",
       "asset_type": "wall_module",
       "category": "wall_module",
       "theme": "wooma_temple",
@@ -208,7 +209,7 @@
     {
       "schema_version": 1,
       "asset_id": "wooma_temple_wall_straight_x_l2_v01",
-      "display_name": "沃玛寺庙直墙 X向 2格 变体1",
+      "display_name": "标准哥特直墙 X向 2格 变体1",
       "asset_type": "wall_module",
       "category": "wall_module",
       "theme": "wooma_temple",
@@ -421,7 +422,7 @@
     {
       "schema_version": 1,
       "asset_id": "wooma_temple_wall_straight_x_l3_v01",
-      "display_name": "沃玛寺庙直墙 X向 3格 变体1",
+      "display_name": "标准哥特直墙 X向 3格 变体1",
       "asset_type": "wall_module",
       "category": "wall_module",
       "theme": "wooma_temple",
@@ -653,7 +654,7 @@
     {
       "schema_version": 1,
       "asset_id": "wooma_temple_wall_straight_x_l3_v02",
-      "display_name": "沃玛寺庙直墙 X向 3格 变体2",
+      "display_name": "标准哥特直墙 X向 3格 变体2",
       "asset_type": "wall_module",
       "category": "wall_module",
       "theme": "wooma_temple",
@@ -885,7 +886,7 @@
     {
       "schema_version": 1,
       "asset_id": "wooma_temple_wall_straight_x_l3_v03",
-      "display_name": "沃玛寺庙直墙 X向 3格 变体3",
+      "display_name": "标准哥特直墙 X向 3格 变体3",
       "asset_type": "wall_module",
       "category": "wall_module",
       "theme": "wooma_temple",
@@ -1117,7 +1118,7 @@
     {
       "schema_version": 1,
       "asset_id": "wooma_temple_wall_straight_x_l4_v01",
-      "display_name": "沃玛寺庙直墙 X向 4格 变体1",
+      "display_name": "标准哥特直墙 X向 4格 变体1",
       "asset_type": "wall_module",
       "category": "wall_module",
       "theme": "wooma_temple",
@@ -1368,7 +1369,7 @@
     {
       "schema_version": 1,
       "asset_id": "wooma_temple_wall_straight_x_l4_v02",
-      "display_name": "沃玛寺庙直墙 X向 4格 变体2",
+      "display_name": "标准哥特直墙 X向 4格 变体2",
       "asset_type": "wall_module",
       "category": "wall_module",
       "theme": "wooma_temple",
@@ -1619,7 +1620,7 @@
     {
       "schema_version": 1,
       "asset_id": "wooma_temple_wall_straight_x_l4_v03",
-      "display_name": "沃玛寺庙直墙 X向 4格 变体3",
+      "display_name": "标准哥特直墙 X向 4格 变体3",
       "asset_type": "wall_module",
       "category": "wall_module",
       "theme": "wooma_temple",
@@ -1870,7 +1871,7 @@
     {
       "schema_version": 1,
       "asset_id": "wooma_temple_wall_straight_y_l1_v01",
-      "display_name": "沃玛寺庙直墙 Y向 1格 变体1",
+      "display_name": "标准哥特直墙 Y向 1格 变体1",
       "asset_type": "wall_module",
       "category": "wall_module",
       "theme": "wooma_temple",
@@ -2064,7 +2065,7 @@
     {
       "schema_version": 1,
       "asset_id": "wooma_temple_wall_straight_y_l2_v01",
-      "display_name": "沃玛寺庙直墙 Y向 2格 变体1",
+      "display_name": "标准哥特直墙 Y向 2格 变体1",
       "asset_type": "wall_module",
       "category": "wall_module",
       "theme": "wooma_temple",
@@ -2277,7 +2278,7 @@
     {
       "schema_version": 1,
       "asset_id": "wooma_temple_wall_straight_y_l3_v01",
-      "display_name": "沃玛寺庙直墙 Y向 3格 变体1",
+      "display_name": "标准哥特直墙 Y向 3格 变体1",
       "asset_type": "wall_module",
       "category": "wall_module",
       "theme": "wooma_temple",
@@ -2509,7 +2510,7 @@
     {
       "schema_version": 1,
       "asset_id": "wooma_temple_wall_straight_y_l3_v02",
-      "display_name": "沃玛寺庙直墙 Y向 3格 变体2",
+      "display_name": "标准哥特直墙 Y向 3格 变体2",
       "asset_type": "wall_module",
       "category": "wall_module",
       "theme": "wooma_temple",
@@ -2741,7 +2742,7 @@
     {
       "schema_version": 1,
       "asset_id": "wooma_temple_wall_straight_y_l3_v03",
-      "display_name": "沃玛寺庙直墙 Y向 3格 变体3",
+      "display_name": "标准哥特直墙 Y向 3格 变体3",
       "asset_type": "wall_module",
       "category": "wall_module",
       "theme": "wooma_temple",
@@ -2973,7 +2974,7 @@
     {
       "schema_version": 1,
       "asset_id": "wooma_temple_wall_straight_y_l4_v01",
-      "display_name": "沃玛寺庙直墙 Y向 4格 变体1",
+      "display_name": "标准哥特直墙 Y向 4格 变体1",
       "asset_type": "wall_module",
       "category": "wall_module",
       "theme": "wooma_temple",
@@ -3224,7 +3225,7 @@
     {
       "schema_version": 1,
       "asset_id": "wooma_temple_wall_straight_y_l4_v02",
-      "display_name": "沃玛寺庙直墙 Y向 4格 变体2",
+      "display_name": "标准哥特直墙 Y向 4格 变体2",
       "asset_type": "wall_module",
       "category": "wall_module",
       "theme": "wooma_temple",
@@ -3475,7 +3476,7 @@
     {
       "schema_version": 1,
       "asset_id": "wooma_temple_wall_straight_y_l4_v03",
-      "display_name": "沃玛寺庙直墙 Y向 4格 变体3",
+      "display_name": "标准哥特直墙 Y向 4格 变体3",
       "asset_type": "wall_module",
       "category": "wall_module",
       "theme": "wooma_temple",

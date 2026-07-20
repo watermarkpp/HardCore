@@ -654,6 +654,10 @@ func _on_open_pressed() -> void:
 		status_label.text = "当前没有可重新载入的地图"
 		return
 	MapAssetCatalogService.invalidate_cache()
+	_refresh_asset_tree()
+	_refresh_map_template_options(
+		"blank.%s" % str(current_document.get("map_id", ""))
+	)
 	_open_document_path(_resolved_current_document_path())
 
 

@@ -97,7 +97,7 @@ def res_path(path: Path) -> str:
 def display_name(module: dict) -> str:
     axis_name = "X向" if module["axis"] == "iso_x" else "Y向"
     return (
-        f"沃玛寺庙直墙 {axis_name} "
+        f"标准哥特直墙 {axis_name} "
         f"{int(module['length_tiles'])}格 变体{int(module.get('variant', 1))}"
     )
 
@@ -378,7 +378,7 @@ def update_family_catalog() -> None:
     catalog["wall_families"].append(
         {
             "wall_family_id": FAMILY_ID,
-            "display_name": "沃玛寺庙哥特旧石墙 U0",
+            "display_name": "标准灰绿色哥特寺庙墙 U0",
             "theme": "wooma_temple",
             "material": "gothic_gray_green_stone",
             "socket_profile_id": SOCKET_ID,
@@ -400,6 +400,8 @@ def update_family_catalog() -> None:
             "palette_id": FAMILY_ID,
             "content_layer": "personal_expansion",
             "collision_authority": "manual_by_user",
+            "palette_role": "standard_reusable_temple_wall",
+            "intended_uses": ["zuma_temple", "other_temple_maps"],
             "enabled": True,
         }
     )
@@ -452,13 +454,14 @@ def main() -> None:
         {
             "asset_schema_version": 2,
             "catalog_id": "wooma_temple_wall_pack",
-            "display_name": "沃玛寺庙无柱直墙素材包",
+            "display_name": "标准灰绿色哥特寺庙直墙素材包",
             "source_policy": "imagegen_flat_sources_native_2to1_projection",
             "native_projection_contract_id": PROJECTION_CONTRACT_ID,
             "placement_contract_id": PLACEMENT_CONTRACT_ID,
             "corner_join_mode": "straight_overlap",
             "wall_family_ids": [FAMILY_ID],
             "collision_authority": "manual_by_user",
+            "palette_role": "standard_reusable_temple_wall",
             "assets": assets,
         },
     )

@@ -30,13 +30,14 @@
     "connection_version_id": "bich_wooma_connection_v1",
     "content_policy": "user_authored_layers",
     "created_by": "human_codex_shared_tool",
-    "milestone": "WOOMA-FOREST-USER-MAP-READY",
-    "official_runtime_map_id": 268,
+    "milestone": "WOOMA-FOREST-TO-TEMPLE-1-V1",
+    "official_runtime_map_id": 268.0,
     "official_source_authority": "user_saved_editor_document",
     "official_version_id": "wooma_forest_user_official_v1",
-    "revision": 2,
+    "revision": 3,
+    "route_version_id": "wooma_temple_user_route_v1",
     "runtime_approved": true,
-    "runtime_approved_revision": 2,
+    "runtime_approved_revision": 3,
     "template_kind": "empty_map",
     "template_status": "user_authored_official",
     "template_version_id": "wooma_forest_blank_v1",
@@ -3840,16 +3841,22 @@
       {
         "blocks_movement": false,
         "content_layer": "personal_expansion",
+        "display_name": "进入沃玛寺庙一层",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
+        "official_connection_id": "wooma_forest_top_to_temple_1_v1",
         "portal_role": "exit",
-        "radius_tiles": 3.0,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_exit_trigger",
-        "target_configured": false,
-        "target_entrance_id": "",
-        "target_map_id": -1,
+        "target_configured": true,
+        "target_entrance_id": "map_entrance_000001",
+        "target_map_id": 313,
+        "target_map_key": "wooma_temple_1",
+        "target_tile": [
+          20.0,
+          41.0
+        ],
         "tile": [
           51.0,
           4.0
@@ -3868,7 +3875,7 @@
         "semantic_role": "map_exit_trigger",
         "target_configured": false,
         "target_entrance_id": "",
-        "target_map_id": -1,
+        "target_map_id": -1.0,
         "tile": [
           5.0,
           5.0
@@ -3887,7 +3894,7 @@
         "semantic_role": "map_exit_trigger",
         "target_configured": false,
         "target_entrance_id": "",
-        "target_map_id": -1,
+        "target_map_id": -1.0,
         "tile": [
           50.0,
           50.0
@@ -6010,6 +6017,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          2.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -6076,6 +6087,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          2.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -6142,6 +6157,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -6284,6 +6303,10 @@
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": false,
+        "occupancy_footprint_tiles": [
+          8.0,
+          6.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -6350,6 +6373,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          2.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -6492,6 +6519,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          2.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -6558,6 +6589,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -6624,6 +6659,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -6690,6 +6729,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -6756,6 +6799,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -6822,6 +6869,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -6888,6 +6939,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -7030,6 +7085,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          4.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -7172,6 +7231,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -7238,6 +7301,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -7304,6 +7371,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -7522,6 +7593,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          2.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -7588,6 +7663,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          4.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -7654,6 +7733,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          2.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -7720,6 +7803,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          2.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -7862,6 +7949,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          2.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -7928,6 +8019,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -7994,6 +8089,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          2.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -8060,6 +8159,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -8126,6 +8229,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -8268,6 +8375,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          2.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -8334,6 +8445,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
         "offset_px": [
           0.0,
           0.0
@@ -8476,6 +8591,10 @@
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
+        "occupancy_footprint_tiles": [
+          10.0,
+          10.0
+        ],
         "offset_px": [
           0.0,
           0.0
