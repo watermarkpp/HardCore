@@ -129,6 +129,23 @@ def fit_on_canvas(
     return canvas
 
 
+def stretch_on_canvas(
+    image: Image.Image,
+    canvas_size: tuple[int, int],
+    target_size: tuple[int, int],
+    *,
+    center_x: int,
+    bottom_y: int,
+) -> Image.Image:
+    source = alpha_trim(image)
+    resized = source.resize(target_size, RESAMPLE)
+    canvas = Image.new("RGBA", canvas_size, (0, 0, 0, 0))
+    left = int(round(center_x - resized.width / 2))
+    top = bottom_y - resized.height
+    canvas.alpha_composite(resized, (left, top))
+    return canvas
+
+
 def mirror(image: Image.Image) -> Image.Image:
     return image.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
 
@@ -183,22 +200,9 @@ def display_name(module: dict) -> str:
     return f"沃玛寺庙{names[topology]} {axis_name}{suffix} 变体{variant}".replace("  ", " ")
 
 
-def normalized_straights() -> tuple[list[Image.Image], list[Image.Image]]:
-    with Image.open(SOURCE_DIR / "straight_sheet_alpha.png") as opened:
-        sheet = opened.convert("RGBA")
-    x_variants: list[Image.Image] = []
-    for box in STRAIGHT_BOXES:
-        crop = crop_sheet(sheet, box)
-        x_variants.append(
-            fit_on_canvas(
-                crop,
-                (96, 160),
-                (92, 150),
-                center_x=48,
-                bottom_y=158,
-            )
-        )
-    return x_variants, [mirror(image) for image in x_variants]
+def normalized_continuous_wall() -> Image.Image:
+    with Image.open(SOURCE_DIR / "continuous_wall_alpha_v2.png") as opened:
+        return alpha_trim(opened.convert("RGBA"))
 
 
 def normalized_adapters() -> list[Image.Image]:
@@ -206,16 +210,7 @@ def normalized_adapters() -> list[Image.Image]:
         sheet = opened.convert("RGBA")
     result: list[Image.Image] = []
     for box in ADAPTER_BOXES:
-        crop = crop_sheet(sheet, box)
-        result.append(
-            fit_on_canvas(
-                crop,
-                (160, 192),
-                (156, 186),
-                center_x=80,
-                bottom_y=190,
-            )
-        )
+        result.append(crop_sheet(sheet, box))
     return result
 
 
@@ -224,63 +219,170 @@ def normalized_pillars() -> list[Image.Image]:
         sheet = opened.convert("RGBA")
     result: list[Image.Image] = []
     for box in PILLAR_BOXES:
-        crop = crop_sheet(sheet, box)
-        result.append(
-            fit_on_canvas(
-                crop,
-                (96, 128),
-                (88, 124),
-                center_x=48,
-                bottom_y=127,
-            )
-        )
+        result.append(crop_sheet(sheet, box))
+    return result
+
+
+def normalized_corner_pillar() -> Image.Image:
+    with Image.open(SOURCE_DIR / "corner_pillar_alpha_v2.png") as opened:
+        return alpha_trim(opened.convert("RGBA"))
+
+
+def normalize_module_geometry(module: dict) -> None:
+    topology = str(module["topology"])
+    if topology in {"straight", "door_adapter", "broken_adapter"}:
+        length = int(module.get("length_tiles", 1))
+        visual_width = 32 * length + 32
+        visual_height = 80 + 16 * length
+        canvas_width = visual_width + 32
+        canvas_height = visual_height + 16
+        axis = str(module.get("axis", "iso_x"))
+        anchor_x = 48 if axis == "iso_x" else canvas_width - 48
+        module["canvas_size"] = [canvas_width, canvas_height]
+        module["anchor"] = [anchor_x, 96]
+        if axis == "iso_x":
+            module["start_seam_px"] = [32, 88]
+            module["end_seam_px"] = [32 + 32 * length, 88 + 16 * length]
+        else:
+            module["start_seam_px"] = [canvas_width - 32, 88]
+            module["end_seam_px"] = [
+                canvas_width - 32 - 32 * length,
+                88 + 16 * length,
+            ]
+        return
+    module["canvas_size"] = [96, 128]
+    module["anchor"] = [48, 96]
+    module["start_seam_px"] = [48, 96]
+    module["end_seam_px"] = [48, 96]
+
+
+def continuous_wall_window(
+    source: Image.Image,
+    length: int,
+    variant_seed: int,
+) -> Image.Image:
+    source = alpha_trim(source)
+    fraction = min(1.0, max(0.25, length / 4.0))
+    window_width = max(1, int(round(source.width * fraction)))
+    available = max(0, source.width - window_width)
+    variant_ratio = (variant_seed % 3) / 2.0 if available > 0 else 0.0
+    left = int(round(available * variant_ratio))
+    return alpha_trim(source.crop((left, 0, left + window_width, source.height)))
+
+
+def split_continuous_parts(
+    artwork: Image.Image,
+    length: int,
+    axis: str,
+) -> list[Image.Image]:
+    if length <= 1:
+        return [artwork.copy()]
+    alpha_box = artwork.getchannel("A").getbbox()
+    if alpha_box is None:
+        raise RuntimeError("continuous wall artwork has no visible pixels")
+    left, _top, right, _bottom = alpha_box
+    width = max(1, right - left)
+    parts = [
+        Image.new("RGBA", artwork.size, (0, 0, 0, 0))
+        for _index in range(length)
+    ]
+    for x in range(left, right):
+        normalized = min(length - 1, int((x - left) * length / width))
+        index = normalized if axis == "iso_x" else length - 1 - normalized
+        column = artwork.crop((x, 0, x + 1, artwork.height))
+        parts[index].alpha_composite(column, (x, 0))
+    return parts
+
+
+def _alpha_baseline_y(image: Image.Image, x: int, radius: int = 3) -> int:
+    alpha = image.getchannel("A")
+    values: list[int] = []
+    for sample_x in range(max(0, x - radius), min(image.width, x + radius + 1)):
+        visible = [
+            y
+            for y in range(image.height)
+            if alpha.getpixel((sample_x, y)) > 32
+        ]
+        if visible:
+            values.append(max(visible))
+    if not values:
+        raise RuntimeError(f"no visible seam pixels near x={x}")
+    values.sort()
+    return values[len(values) // 2]
+
+
+def align_wall_seams(
+    artwork: Image.Image,
+    start_seam: tuple[int, int],
+    end_seam: tuple[int, int],
+) -> Image.Image:
+    start_x, target_start_y = start_seam
+    end_x, target_end_y = end_seam
+    measured_start_y = _alpha_baseline_y(artwork, start_x)
+    measured_end_y = _alpha_baseline_y(artwork, end_x)
+    span = max(1, end_x - start_x)
+    result = Image.new("RGBA", artwork.size, (0, 0, 0, 0))
+    for x in range(artwork.width):
+        ratio = (x - start_x) / span
+        measured_y = measured_start_y + (measured_end_y - measured_start_y) * ratio
+        target_y = target_start_y + (target_end_y - target_start_y) * ratio
+        shift = int(round(target_y - measured_y))
+        column = artwork.crop((x, 0, x + 1, artwork.height))
+        result.alpha_composite(column, (x, shift))
     return result
 
 
 def straight_art(
     module: dict,
-    x_variants: list[Image.Image],
-    y_variants: list[Image.Image],
+    continuous_wall: Image.Image,
     variant_seed: int,
 ) -> tuple[Image.Image, list[Image.Image]]:
     axis = str(module["axis"])
     length = int(module["length_tiles"])
     size = tuple(int(value) for value in module["canvas_size"])
-    anchor = tuple(int(value) for value in module["anchor"])
-    base_anchor = (48, 128)
-    variants = x_variants if axis == "iso_x" else y_variants
-    parts: list[Image.Image] = []
-    for index in range(length):
-        source = variants[(variant_seed + index) % len(variants)]
-        delta = (32 * index, 16 * index) if axis == "iso_x" else (-32 * index, 16 * index)
-        target_anchor = (anchor[0] + delta[0], anchor[1] + delta[1])
-        parts.append(place_anchored(source, base_anchor, size, target_anchor))
-    return composite(parts, size), parts
+    visual_size = (32 * length + 32, 80 + 16 * length)
+    source = continuous_wall_window(continuous_wall, length, variant_seed)
+    artwork = stretch_on_canvas(
+        source,
+        size,
+        visual_size,
+        center_x=size[0] // 2,
+        bottom_y=size[1] - 8,
+    )
+    artwork = align_wall_seams(
+        artwork,
+        (32, 88),
+        (32 + 32 * length, 88 + 16 * length),
+    )
+    if axis == "iso_y":
+        artwork = mirror(artwork)
+    return artwork, split_continuous_parts(artwork, length, axis)
 
 
 def corner_art(
     module: dict,
-    x_variants: list[Image.Image],
-    y_variants: list[Image.Image],
-    pillars: list[Image.Image],
-    variant_seed: int,
+    corner_pillar: Image.Image,
 ) -> Image.Image:
     size = tuple(int(value) for value in module["canvas_size"])
     anchor = tuple(int(value) for value in module["anchor"])
-    x_part = place_anchored(x_variants[variant_seed % 4], (48, 128), size, anchor)
-    y_part = place_anchored(y_variants[(variant_seed + 1) % 4], (48, 128), size, anchor)
-    pillar = place_anchored(pillars[(variant_seed + 2) % 8], (48, 104), size, anchor)
-    return composite([x_part, y_part, pillar], size)
+    return stretch_on_canvas(
+        corner_pillar,
+        size,
+        (54, 84),
+        center_x=anchor[0],
+        bottom_y=anchor[1] + 8,
+    )
 
 
 def pillar_art(module: dict, pillars: list[Image.Image], variant_seed: int) -> Image.Image:
     size = tuple(int(value) for value in module["canvas_size"])
     anchor = tuple(int(value) for value in module["anchor"])
-    return place_anchored(
+    return stretch_on_canvas(
         pillars[variant_seed % len(pillars)],
-        (48, 104),
         size,
-        anchor,
+        (58, 96),
+        center_x=anchor[0],
+        bottom_y=anchor[1] + 8,
     )
 
 
@@ -294,17 +396,26 @@ def adapter_art(module: dict, adapters: list[Image.Image]) -> Image.Image:
         ("broken_adapter", 2): 3,
     }[(topology, int(module.get("variant", 1)))]
     source = adapters[source_index]
+    length = int(module.get("length_tiles", 3))
+    size = tuple(int(value) for value in module["canvas_size"])
+    artwork = stretch_on_canvas(
+        source,
+        size,
+        (32 * length + 32, 80 + 16 * length),
+        center_x=size[0] // 2,
+        bottom_y=size[1] - 8,
+    )
     if axis == "iso_y":
-        source = mirror(source)
-    return source
+        artwork = mirror(artwork)
+    return artwork
 
 
 def build_module(
     source_module: dict,
-    x_variants: list[Image.Image],
-    y_variants: list[Image.Image],
+    continuous_wall: Image.Image,
     adapters: list[Image.Image],
     pillars: list[Image.Image],
+    corner_pillar: Image.Image,
 ) -> tuple[dict, dict]:
     module = copy.deepcopy(source_module)
     asset_id = str(module["asset_id"]).replace(SOURCE_PREFIX, TARGET_PREFIX, 1)
@@ -327,19 +438,16 @@ def build_module(
     module["repeat_group"] = str(module.get("repeat_group", "")).replace(
         "orc_tomb_", "wooma_temple_", 1
     )
+    normalize_module_geometry(module)
     for connector in module.get("connectors", []):
         connector["socket_profile_id"] = SOCKET_ID
 
     topology = str(module["topology"])
     variant_seed = max(0, int(module.get("variant", 1)) - 1)
     if topology == "straight":
-        artwork, parts = straight_art(
-            module, x_variants, y_variants, variant_seed
-        )
+        artwork, parts = straight_art(module, continuous_wall, variant_seed)
     elif topology in {"inner_corner", "outer_corner"}:
-        artwork = corner_art(
-            module, x_variants, y_variants, pillars, variant_seed
-        )
+        artwork = corner_art(module, corner_pillar)
         parts = [artwork]
     elif topology in {"door_adapter", "broken_adapter"}:
         artwork = adapter_art(module, adapters)
@@ -416,8 +524,8 @@ def build_module(
         "thumbnail_source_sha256": digest,
         "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
         "generation_source_ids": [
-            "call_xXn4eC7qB47nNHjtEWxSeT1w",
-            "call_RkPJjEbxRLq4GslLL27OVQx1",
+            "call_8raUM7XLx5zAr6dA5fOpgLsh",
+            "call_Y9TZ7EPiCWQgV026MYpIRyNL",
             "call_yV5OeDNzIezU9yrVumYXQqEu",
             "call_QwTKuxDXelxir3RMaDjAzlXe",
         ],
@@ -472,7 +580,8 @@ def update_family_catalog() -> None:
 
 def main() -> None:
     required = [
-        SOURCE_DIR / "straight_sheet_alpha.png",
+        SOURCE_DIR / "continuous_wall_alpha_v2.png",
+        SOURCE_DIR / "corner_pillar_alpha_v2.png",
         SOURCE_DIR / "adapter_sheet_alpha.png",
         SOURCE_DIR / "pillar_sheet_alpha.png",
     ]
@@ -489,19 +598,20 @@ def main() -> None:
     if len(source_modules) != 42:
         raise RuntimeError(f"expected 42 source modules, found {len(source_modules)}")
 
-    x_variants, y_variants = normalized_straights()
+    continuous_wall = normalized_continuous_wall()
     adapters = normalized_adapters()
     pillars = normalized_pillars()
+    corner_pillar = normalized_corner_pillar()
 
     modules: list[dict] = []
     assets: list[dict] = []
     for source_module in source_modules:
         module, asset = build_module(
             source_module,
-            x_variants,
-            y_variants,
+            continuous_wall,
             adapters,
             pillars,
+            corner_pillar,
         )
         modules.append(module)
         assets.append(asset)
