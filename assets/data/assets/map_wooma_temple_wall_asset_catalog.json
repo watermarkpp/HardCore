@@ -27,11 +27,11 @@
       ],
       "canvas_size": [
         96,
-        160
+        224
       ],
       "anchor": [
         48,
-        128
+        176
       ],
       "next_start_tile_offset": [
         1,
@@ -39,11 +39,11 @@
       ],
       "start_seam_px": [
         32,
-        120
+        184
       ],
       "end_seam_px": [
         64,
-        136
+        200
       ],
       "connectors": [
         {
@@ -67,12 +67,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l1_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l1_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -112,26 +112,27 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l1_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l1_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l1_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l1_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         96,
-        160
+        224
       ],
       "visible_bounds_px": [
         0,
         0,
         96,
-        160
+        224
       ],
       "anchor_px": [
         48,
-        128
+        176
       ],
       "placement_anchor_px": [
         48,
-        128
+        176
       ],
       "anchor_tile": [
         0,
@@ -165,9 +166,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/straight/iso_x",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "ad5b8135c693ed41553fd5dacb79fe532b6de031a63be722acb2b71a4b230f2f",
-      "output_sha256": "ad5b8135c693ed41553fd5dacb79fe532b6de031a63be722acb2b71a4b230f2f",
-      "thumbnail_source_sha256": "ad5b8135c693ed41553fd5dacb79fe532b6de031a63be722acb2b71a4b230f2f",
+      "source_sha256": "e827380896f190e48e5fbf24a558fd5d0a6a3616a691b74978f2e7677a432142",
+      "output_sha256": "e827380896f190e48e5fbf24a558fd5d0a6a3616a691b74978f2e7677a432142",
+      "thumbnail_source_sha256": "e827380896f190e48e5fbf24a558fd5d0a6a3616a691b74978f2e7677a432142",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -207,11 +208,11 @@
       ],
       "canvas_size": [
         128,
-        160
+        240
       ],
       "anchor": [
         48,
-        112
+        176
       ],
       "next_start_tile_offset": [
         2,
@@ -219,11 +220,11 @@
       ],
       "start_seam_px": [
         32,
-        104
+        184
       ],
       "end_seam_px": [
         96,
-        136
+        216
       ],
       "connectors": [
         {
@@ -247,12 +248,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l2_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l2_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -266,12 +267,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l2_v01/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l2_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -311,26 +312,27 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l2_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l2_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l2_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l2_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         128,
-        160
+        240
       ],
       "visible_bounds_px": [
         0,
         0,
         128,
-        160
+        240
       ],
       "anchor_px": [
         48,
-        112
+        176
       ],
       "placement_anchor_px": [
         48,
-        112
+        176
       ],
       "anchor_tile": [
         0,
@@ -364,9 +366,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/straight/iso_x",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "745585be880776b3ff9b4aeb38cb4a275e42f5b4afb2db7c15d451ddf9e062bb",
-      "output_sha256": "745585be880776b3ff9b4aeb38cb4a275e42f5b4afb2db7c15d451ddf9e062bb",
-      "thumbnail_source_sha256": "745585be880776b3ff9b4aeb38cb4a275e42f5b4afb2db7c15d451ddf9e062bb",
+      "source_sha256": "b5f50a047ff64ebbeba48edcf3e38141ccb26cad42b35fe984b87362c8f17507",
+      "output_sha256": "b5f50a047ff64ebbeba48edcf3e38141ccb26cad42b35fe984b87362c8f17507",
+      "thumbnail_source_sha256": "b5f50a047ff64ebbeba48edcf3e38141ccb26cad42b35fe984b87362c8f17507",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -406,11 +408,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         48,
-        128
+        176
       ],
       "next_start_tile_offset": [
         3,
@@ -418,11 +420,11 @@
       ],
       "start_seam_px": [
         32,
-        120
+        184
       ],
       "end_seam_px": [
         128,
-        168
+        232
       ],
       "connectors": [
         {
@@ -446,12 +448,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -465,12 +467,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -484,12 +486,12 @@
             2,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             2,
@@ -529,26 +531,27 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        256
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        256
       ],
       "anchor_px": [
         48,
-        128
+        176
       ],
       "placement_anchor_px": [
         48,
-        128
+        176
       ],
       "anchor_tile": [
         0,
@@ -582,9 +585,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/straight/iso_x",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "df18b260fe5cc758029aca7ffdf8ee5aa2bd870d9a31d8a846629e2351af583d",
-      "output_sha256": "df18b260fe5cc758029aca7ffdf8ee5aa2bd870d9a31d8a846629e2351af583d",
-      "thumbnail_source_sha256": "df18b260fe5cc758029aca7ffdf8ee5aa2bd870d9a31d8a846629e2351af583d",
+      "source_sha256": "b8025a7ad88f362f6dbb6afccbc11fc1b222d1a7cebd9590a8718059cc0c3973",
+      "output_sha256": "b8025a7ad88f362f6dbb6afccbc11fc1b222d1a7cebd9590a8718059cc0c3973",
+      "thumbnail_source_sha256": "b8025a7ad88f362f6dbb6afccbc11fc1b222d1a7cebd9590a8718059cc0c3973",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -624,11 +627,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         48,
-        128
+        176
       ],
       "next_start_tile_offset": [
         3,
@@ -636,11 +639,11 @@
       ],
       "start_seam_px": [
         32,
-        120
+        184
       ],
       "end_seam_px": [
         128,
-        168
+        232
       ],
       "connectors": [
         {
@@ -664,12 +667,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -683,12 +686,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -702,12 +705,12 @@
             2,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             2,
@@ -747,26 +750,27 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        256
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        256
       ],
       "anchor_px": [
         48,
-        128
+        176
       ],
       "placement_anchor_px": [
         48,
-        128
+        176
       ],
       "anchor_tile": [
         0,
@@ -800,9 +804,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/straight/iso_x",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "afe2f7d5ecb153ba55bb28300a82c11c05a796aa09c5f921841dec1d6a65ebb0",
-      "output_sha256": "afe2f7d5ecb153ba55bb28300a82c11c05a796aa09c5f921841dec1d6a65ebb0",
-      "thumbnail_source_sha256": "afe2f7d5ecb153ba55bb28300a82c11c05a796aa09c5f921841dec1d6a65ebb0",
+      "source_sha256": "59b1095fd5ab9c567d73deb70d3bc8555bfd79a72dd5304abcf150937ac3bb84",
+      "output_sha256": "59b1095fd5ab9c567d73deb70d3bc8555bfd79a72dd5304abcf150937ac3bb84",
+      "thumbnail_source_sha256": "59b1095fd5ab9c567d73deb70d3bc8555bfd79a72dd5304abcf150937ac3bb84",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -842,11 +846,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         48,
-        128
+        176
       ],
       "next_start_tile_offset": [
         3,
@@ -854,11 +858,11 @@
       ],
       "start_seam_px": [
         32,
-        120
+        184
       ],
       "end_seam_px": [
         128,
-        168
+        232
       ],
       "connectors": [
         {
@@ -882,12 +886,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -901,12 +905,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -920,12 +924,12 @@
             2,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             2,
@@ -965,26 +969,27 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        256
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        256
       ],
       "anchor_px": [
         48,
-        128
+        176
       ],
       "placement_anchor_px": [
         48,
-        128
+        176
       ],
       "anchor_tile": [
         0,
@@ -1018,9 +1023,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/straight/iso_x",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "8c74c6362c1131ad73a564872bd61ef74f1857eb37b34ec2773ffe0cca55ebc8",
-      "output_sha256": "8c74c6362c1131ad73a564872bd61ef74f1857eb37b34ec2773ffe0cca55ebc8",
-      "thumbnail_source_sha256": "8c74c6362c1131ad73a564872bd61ef74f1857eb37b34ec2773ffe0cca55ebc8",
+      "source_sha256": "e70a1a0b4c2de3204081dcd4161131368470adffde7ff5a09d176cd81122fe82",
+      "output_sha256": "e70a1a0b4c2de3204081dcd4161131368470adffde7ff5a09d176cd81122fe82",
+      "thumbnail_source_sha256": "e70a1a0b4c2de3204081dcd4161131368470adffde7ff5a09d176cd81122fe82",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -1060,11 +1065,11 @@
       ],
       "canvas_size": [
         192,
-        192
+        272
       ],
       "anchor": [
         48,
-        112
+        176
       ],
       "next_start_tile_offset": [
         4,
@@ -1072,11 +1077,11 @@
       ],
       "start_seam_px": [
         32,
-        104
+        184
       ],
       "end_seam_px": [
         160,
-        168
+        248
       ],
       "connectors": [
         {
@@ -1100,12 +1105,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -1119,12 +1124,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -1138,12 +1143,12 @@
             2,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             2,
@@ -1157,12 +1162,12 @@
             3,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_03_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_03_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             3,
@@ -1202,26 +1207,27 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         192,
-        192
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
         192,
-        192
+        272
       ],
       "anchor_px": [
         48,
-        112
+        176
       ],
       "placement_anchor_px": [
         48,
-        112
+        176
       ],
       "anchor_tile": [
         0,
@@ -1255,9 +1261,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/straight/iso_x",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "762d76699c50b6dcbee1c84fd3d1e35bafe99014bf389f9ade9b4ecdcecb48b7",
-      "output_sha256": "762d76699c50b6dcbee1c84fd3d1e35bafe99014bf389f9ade9b4ecdcecb48b7",
-      "thumbnail_source_sha256": "762d76699c50b6dcbee1c84fd3d1e35bafe99014bf389f9ade9b4ecdcecb48b7",
+      "source_sha256": "ad45879407313e3e1af73df8347c988d0cc8656b0660ca396cdb56b9217d1045",
+      "output_sha256": "ad45879407313e3e1af73df8347c988d0cc8656b0660ca396cdb56b9217d1045",
+      "thumbnail_source_sha256": "ad45879407313e3e1af73df8347c988d0cc8656b0660ca396cdb56b9217d1045",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -1297,11 +1303,11 @@
       ],
       "canvas_size": [
         192,
-        192
+        272
       ],
       "anchor": [
         48,
-        112
+        176
       ],
       "next_start_tile_offset": [
         4,
@@ -1309,11 +1315,11 @@
       ],
       "start_seam_px": [
         32,
-        104
+        184
       ],
       "end_seam_px": [
         160,
-        168
+        248
       ],
       "connectors": [
         {
@@ -1337,12 +1343,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -1356,12 +1362,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -1375,12 +1381,12 @@
             2,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             2,
@@ -1394,12 +1400,12 @@
             3,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_03_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_03_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             3,
@@ -1439,26 +1445,27 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         192,
-        192
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
         192,
-        192
+        272
       ],
       "anchor_px": [
         48,
-        112
+        176
       ],
       "placement_anchor_px": [
         48,
-        112
+        176
       ],
       "anchor_tile": [
         0,
@@ -1492,9 +1499,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/straight/iso_x",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "762d76699c50b6dcbee1c84fd3d1e35bafe99014bf389f9ade9b4ecdcecb48b7",
-      "output_sha256": "762d76699c50b6dcbee1c84fd3d1e35bafe99014bf389f9ade9b4ecdcecb48b7",
-      "thumbnail_source_sha256": "762d76699c50b6dcbee1c84fd3d1e35bafe99014bf389f9ade9b4ecdcecb48b7",
+      "source_sha256": "ad45879407313e3e1af73df8347c988d0cc8656b0660ca396cdb56b9217d1045",
+      "output_sha256": "ad45879407313e3e1af73df8347c988d0cc8656b0660ca396cdb56b9217d1045",
+      "thumbnail_source_sha256": "ad45879407313e3e1af73df8347c988d0cc8656b0660ca396cdb56b9217d1045",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -1534,11 +1541,11 @@
       ],
       "canvas_size": [
         192,
-        192
+        272
       ],
       "anchor": [
         48,
-        112
+        176
       ],
       "next_start_tile_offset": [
         4,
@@ -1546,11 +1553,11 @@
       ],
       "start_seam_px": [
         32,
-        104
+        184
       ],
       "end_seam_px": [
         160,
-        168
+        248
       ],
       "connectors": [
         {
@@ -1574,12 +1581,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -1593,12 +1600,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -1612,12 +1619,12 @@
             2,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             2,
@@ -1631,12 +1638,12 @@
             3,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_03_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_03_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             3,
@@ -1676,26 +1683,27 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         192,
-        192
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
         192,
-        192
+        272
       ],
       "anchor_px": [
         48,
-        112
+        176
       ],
       "placement_anchor_px": [
         48,
-        112
+        176
       ],
       "anchor_tile": [
         0,
@@ -1729,9 +1737,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/straight/iso_x",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "762d76699c50b6dcbee1c84fd3d1e35bafe99014bf389f9ade9b4ecdcecb48b7",
-      "output_sha256": "762d76699c50b6dcbee1c84fd3d1e35bafe99014bf389f9ade9b4ecdcecb48b7",
-      "thumbnail_source_sha256": "762d76699c50b6dcbee1c84fd3d1e35bafe99014bf389f9ade9b4ecdcecb48b7",
+      "source_sha256": "ad45879407313e3e1af73df8347c988d0cc8656b0660ca396cdb56b9217d1045",
+      "output_sha256": "ad45879407313e3e1af73df8347c988d0cc8656b0660ca396cdb56b9217d1045",
+      "thumbnail_source_sha256": "ad45879407313e3e1af73df8347c988d0cc8656b0660ca396cdb56b9217d1045",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -1771,11 +1779,11 @@
       ],
       "canvas_size": [
         96,
-        160
+        224
       ],
       "anchor": [
         48,
-        128
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -1783,11 +1791,11 @@
       ],
       "start_seam_px": [
         64,
-        120
+        184
       ],
       "end_seam_px": [
         32,
-        136
+        200
       ],
       "connectors": [
         {
@@ -1811,12 +1819,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l1_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l1_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -1856,26 +1864,27 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l1_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l1_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l1_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l1_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         96,
-        160
+        224
       ],
       "visible_bounds_px": [
         0,
         0,
         96,
-        160
+        224
       ],
       "anchor_px": [
         48,
-        128
+        176
       ],
       "placement_anchor_px": [
         48,
-        128
+        176
       ],
       "anchor_tile": [
         0,
@@ -1909,9 +1918,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/straight/iso_y",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "0f1c21e324025d1db5f01cefc4ef21945d6a0c6f958453ffc2e2bdda84777ff5",
-      "output_sha256": "0f1c21e324025d1db5f01cefc4ef21945d6a0c6f958453ffc2e2bdda84777ff5",
-      "thumbnail_source_sha256": "0f1c21e324025d1db5f01cefc4ef21945d6a0c6f958453ffc2e2bdda84777ff5",
+      "source_sha256": "d63fcc82a1379406eea0973f166a7107aa52fc05870de5eb34e5c21db91d5912",
+      "output_sha256": "d63fcc82a1379406eea0973f166a7107aa52fc05870de5eb34e5c21db91d5912",
+      "thumbnail_source_sha256": "d63fcc82a1379406eea0973f166a7107aa52fc05870de5eb34e5c21db91d5912",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -1951,11 +1960,11 @@
       ],
       "canvas_size": [
         128,
-        160
+        240
       ],
       "anchor": [
         80,
-        112
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -1963,11 +1972,11 @@
       ],
       "start_seam_px": [
         96,
-        104
+        184
       ],
       "end_seam_px": [
         32,
-        136
+        216
       ],
       "connectors": [
         {
@@ -1991,12 +2000,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l2_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l2_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             80,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -2010,12 +2019,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l2_v01/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l2_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             80,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -2055,26 +2064,27 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l2_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l2_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l2_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l2_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         128,
-        160
+        240
       ],
       "visible_bounds_px": [
         0,
         0,
         128,
-        160
+        240
       ],
       "anchor_px": [
         80,
-        112
+        176
       ],
       "placement_anchor_px": [
         80,
-        112
+        176
       ],
       "anchor_tile": [
         0,
@@ -2108,9 +2118,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/straight/iso_y",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "ffe3879f2fd102bec59589f94fb638467929d4821b6a9f1afc1b5cfe30683c8c",
-      "output_sha256": "ffe3879f2fd102bec59589f94fb638467929d4821b6a9f1afc1b5cfe30683c8c",
-      "thumbnail_source_sha256": "ffe3879f2fd102bec59589f94fb638467929d4821b6a9f1afc1b5cfe30683c8c",
+      "source_sha256": "ebfa1decba9689bbc24f884392637e723c037bc3b3b90a936ec79aa1d57288d3",
+      "output_sha256": "ebfa1decba9689bbc24f884392637e723c037bc3b3b90a936ec79aa1d57288d3",
+      "thumbnail_source_sha256": "ebfa1decba9689bbc24f884392637e723c037bc3b3b90a936ec79aa1d57288d3",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -2150,11 +2160,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         112,
-        128
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -2162,11 +2172,11 @@
       ],
       "start_seam_px": [
         128,
-        120
+        184
       ],
       "end_seam_px": [
         32,
-        168
+        232
       ],
       "connectors": [
         {
@@ -2190,12 +2200,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -2209,12 +2219,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -2228,12 +2238,12 @@
             0,
             2
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -2273,26 +2283,27 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        256
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        256
       ],
       "anchor_px": [
         112,
-        128
+        176
       ],
       "placement_anchor_px": [
         112,
-        128
+        176
       ],
       "anchor_tile": [
         0,
@@ -2326,9 +2337,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/straight/iso_y",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "b64212a4820038f6deff20f3e96ce8b4f3ecb604ef36baf1444df66102fce85a",
-      "output_sha256": "b64212a4820038f6deff20f3e96ce8b4f3ecb604ef36baf1444df66102fce85a",
-      "thumbnail_source_sha256": "b64212a4820038f6deff20f3e96ce8b4f3ecb604ef36baf1444df66102fce85a",
+      "source_sha256": "9c489e6f1bd27f5f187468c60cc4749007d9e8b8f14d3617c36e36bb66dbe28c",
+      "output_sha256": "9c489e6f1bd27f5f187468c60cc4749007d9e8b8f14d3617c36e36bb66dbe28c",
+      "thumbnail_source_sha256": "9c489e6f1bd27f5f187468c60cc4749007d9e8b8f14d3617c36e36bb66dbe28c",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -2368,11 +2379,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         112,
-        128
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -2380,11 +2391,11 @@
       ],
       "start_seam_px": [
         128,
-        120
+        184
       ],
       "end_seam_px": [
         32,
-        168
+        232
       ],
       "connectors": [
         {
@@ -2408,12 +2419,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -2427,12 +2438,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -2446,12 +2457,12 @@
             0,
             2
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -2491,26 +2502,27 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        256
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        256
       ],
       "anchor_px": [
         112,
-        128
+        176
       ],
       "placement_anchor_px": [
         112,
-        128
+        176
       ],
       "anchor_tile": [
         0,
@@ -2544,9 +2556,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/straight/iso_y",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "abe92939ab156d47a1b7ce5e3a3ad42029f334f7e25b9a2fac7ecf88bd743fdd",
-      "output_sha256": "abe92939ab156d47a1b7ce5e3a3ad42029f334f7e25b9a2fac7ecf88bd743fdd",
-      "thumbnail_source_sha256": "abe92939ab156d47a1b7ce5e3a3ad42029f334f7e25b9a2fac7ecf88bd743fdd",
+      "source_sha256": "6660fdb39227a4c78513596bd1467e82acc97e6d6e0a2222328f5acde2670429",
+      "output_sha256": "6660fdb39227a4c78513596bd1467e82acc97e6d6e0a2222328f5acde2670429",
+      "thumbnail_source_sha256": "6660fdb39227a4c78513596bd1467e82acc97e6d6e0a2222328f5acde2670429",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -2586,11 +2598,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         112,
-        128
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -2598,11 +2610,11 @@
       ],
       "start_seam_px": [
         128,
-        120
+        184
       ],
       "end_seam_px": [
         32,
-        168
+        232
       ],
       "connectors": [
         {
@@ -2626,12 +2638,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -2645,12 +2657,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -2664,12 +2676,12 @@
             0,
             2
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -2709,26 +2721,27 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        256
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        256
       ],
       "anchor_px": [
         112,
-        128
+        176
       ],
       "placement_anchor_px": [
         112,
-        128
+        176
       ],
       "anchor_tile": [
         0,
@@ -2762,9 +2775,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/straight/iso_y",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "224d1f2a4802220d1ebb5d897b16ab65f66b4f7ee676df25906e9217c872f3db",
-      "output_sha256": "224d1f2a4802220d1ebb5d897b16ab65f66b4f7ee676df25906e9217c872f3db",
-      "thumbnail_source_sha256": "224d1f2a4802220d1ebb5d897b16ab65f66b4f7ee676df25906e9217c872f3db",
+      "source_sha256": "6950538e1541288507d6fb9893a436dff7eefa20de5476c7467871bed5b8fa5c",
+      "output_sha256": "6950538e1541288507d6fb9893a436dff7eefa20de5476c7467871bed5b8fa5c",
+      "thumbnail_source_sha256": "6950538e1541288507d6fb9893a436dff7eefa20de5476c7467871bed5b8fa5c",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -2804,11 +2817,11 @@
       ],
       "canvas_size": [
         192,
-        192
+        272
       ],
       "anchor": [
         144,
-        112
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -2816,11 +2829,11 @@
       ],
       "start_seam_px": [
         160,
-        104
+        184
       ],
       "end_seam_px": [
         32,
-        168
+        248
       ],
       "connectors": [
         {
@@ -2844,12 +2857,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -2863,12 +2876,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -2882,12 +2895,12 @@
             0,
             2
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -2901,12 +2914,12 @@
             0,
             3
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_03_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_03_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -2946,26 +2959,27 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         192,
-        192
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
         192,
-        192
+        272
       ],
       "anchor_px": [
         144,
-        112
+        176
       ],
       "placement_anchor_px": [
         144,
-        112
+        176
       ],
       "anchor_tile": [
         0,
@@ -2999,9 +3013,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/straight/iso_y",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "8b26c1fead3b5dde5c14f686ffeadb821e68027a4679aeb4a4a45b9953849504",
-      "output_sha256": "8b26c1fead3b5dde5c14f686ffeadb821e68027a4679aeb4a4a45b9953849504",
-      "thumbnail_source_sha256": "8b26c1fead3b5dde5c14f686ffeadb821e68027a4679aeb4a4a45b9953849504",
+      "source_sha256": "4a3dd72f44191d471547e437a148a289d14635054066f9c22fd3416bb935e1e0",
+      "output_sha256": "4a3dd72f44191d471547e437a148a289d14635054066f9c22fd3416bb935e1e0",
+      "thumbnail_source_sha256": "4a3dd72f44191d471547e437a148a289d14635054066f9c22fd3416bb935e1e0",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -3041,11 +3055,11 @@
       ],
       "canvas_size": [
         192,
-        192
+        272
       ],
       "anchor": [
         144,
-        112
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -3053,11 +3067,11 @@
       ],
       "start_seam_px": [
         160,
-        104
+        184
       ],
       "end_seam_px": [
         32,
-        168
+        248
       ],
       "connectors": [
         {
@@ -3081,12 +3095,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -3100,12 +3114,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -3119,12 +3133,12 @@
             0,
             2
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -3138,12 +3152,12 @@
             0,
             3
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_03_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_03_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -3183,26 +3197,27 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         192,
-        192
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
         192,
-        192
+        272
       ],
       "anchor_px": [
         144,
-        112
+        176
       ],
       "placement_anchor_px": [
         144,
-        112
+        176
       ],
       "anchor_tile": [
         0,
@@ -3236,9 +3251,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/straight/iso_y",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "8b26c1fead3b5dde5c14f686ffeadb821e68027a4679aeb4a4a45b9953849504",
-      "output_sha256": "8b26c1fead3b5dde5c14f686ffeadb821e68027a4679aeb4a4a45b9953849504",
-      "thumbnail_source_sha256": "8b26c1fead3b5dde5c14f686ffeadb821e68027a4679aeb4a4a45b9953849504",
+      "source_sha256": "4a3dd72f44191d471547e437a148a289d14635054066f9c22fd3416bb935e1e0",
+      "output_sha256": "4a3dd72f44191d471547e437a148a289d14635054066f9c22fd3416bb935e1e0",
+      "thumbnail_source_sha256": "4a3dd72f44191d471547e437a148a289d14635054066f9c22fd3416bb935e1e0",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -3278,11 +3293,11 @@
       ],
       "canvas_size": [
         192,
-        192
+        272
       ],
       "anchor": [
         144,
-        112
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -3290,11 +3305,11 @@
       ],
       "start_seam_px": [
         160,
-        104
+        184
       ],
       "end_seam_px": [
         32,
-        168
+        248
       ],
       "connectors": [
         {
@@ -3318,12 +3333,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -3337,12 +3352,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -3356,12 +3371,12 @@
             0,
             2
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -3375,12 +3390,12 @@
             0,
             3
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_03_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_03_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -3420,26 +3435,27 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         192,
-        192
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
         192,
-        192
+        272
       ],
       "anchor_px": [
         144,
-        112
+        176
       ],
       "placement_anchor_px": [
         144,
-        112
+        176
       ],
       "anchor_tile": [
         0,
@@ -3473,9 +3489,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/straight/iso_y",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "8b26c1fead3b5dde5c14f686ffeadb821e68027a4679aeb4a4a45b9953849504",
-      "output_sha256": "8b26c1fead3b5dde5c14f686ffeadb821e68027a4679aeb4a4a45b9953849504",
-      "thumbnail_source_sha256": "8b26c1fead3b5dde5c14f686ffeadb821e68027a4679aeb4a4a45b9953849504",
+      "source_sha256": "4a3dd72f44191d471547e437a148a289d14635054066f9c22fd3416bb935e1e0",
+      "output_sha256": "4a3dd72f44191d471547e437a148a289d14635054066f9c22fd3416bb935e1e0",
+      "thumbnail_source_sha256": "4a3dd72f44191d471547e437a148a289d14635054066f9c22fd3416bb935e1e0",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -3515,11 +3531,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        272
       ],
       "anchor": [
         80,
-        144
+        192
       ],
       "next_start_tile_offset": [
         0,
@@ -3527,11 +3543,11 @@
       ],
       "start_seam_px": [
         80,
-        144
+        200
       ],
       "end_seam_px": [
         80,
-        144
+        200
       ],
       "connectors": [
         {
@@ -3555,12 +3571,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_ne_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_ne_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             80,
-            144
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -3601,26 +3617,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_ne_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_ne_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_ne_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_ne_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        272
       ],
       "anchor_px": [
         80,
-        144
+        192
       ],
       "placement_anchor_px": [
         80,
-        144
+        192
       ],
       "anchor_tile": [
         0,
@@ -3654,9 +3671,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/inner_corner/通用",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "199f4f03291510e1dcb01e7a6a2a9fe34a54a8b4c667bdb2f0c4bccaa2121f7c",
-      "output_sha256": "199f4f03291510e1dcb01e7a6a2a9fe34a54a8b4c667bdb2f0c4bccaa2121f7c",
-      "thumbnail_source_sha256": "199f4f03291510e1dcb01e7a6a2a9fe34a54a8b4c667bdb2f0c4bccaa2121f7c",
+      "source_sha256": "4570c6e54c23ce239c6e471d41372e7bcbf80efd613e3dd10f6ff98d8e2a04c8",
+      "output_sha256": "4570c6e54c23ce239c6e471d41372e7bcbf80efd613e3dd10f6ff98d8e2a04c8",
+      "thumbnail_source_sha256": "4570c6e54c23ce239c6e471d41372e7bcbf80efd613e3dd10f6ff98d8e2a04c8",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -3696,11 +3713,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        272
       ],
       "anchor": [
         80,
-        144
+        192
       ],
       "next_start_tile_offset": [
         0,
@@ -3708,11 +3725,11 @@
       ],
       "start_seam_px": [
         80,
-        144
+        200
       ],
       "end_seam_px": [
         80,
-        144
+        200
       ],
       "connectors": [
         {
@@ -3736,12 +3753,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_se_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_se_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             80,
-            144
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -3782,26 +3799,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_se_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_se_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_se_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_se_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        272
       ],
       "anchor_px": [
         80,
-        144
+        192
       ],
       "placement_anchor_px": [
         80,
-        144
+        192
       ],
       "anchor_tile": [
         0,
@@ -3835,9 +3853,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/inner_corner/通用",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "ab31b39cccdec5c168a1621a66528d0e0f890f8f88abe2cedf983e0cfd93347f",
-      "output_sha256": "ab31b39cccdec5c168a1621a66528d0e0f890f8f88abe2cedf983e0cfd93347f",
-      "thumbnail_source_sha256": "ab31b39cccdec5c168a1621a66528d0e0f890f8f88abe2cedf983e0cfd93347f",
+      "source_sha256": "99b33232eaeea944d8be9f2b5736d3b877e4a5a37ce544e05fd11b06ab1776c4",
+      "output_sha256": "99b33232eaeea944d8be9f2b5736d3b877e4a5a37ce544e05fd11b06ab1776c4",
+      "thumbnail_source_sha256": "99b33232eaeea944d8be9f2b5736d3b877e4a5a37ce544e05fd11b06ab1776c4",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -3877,11 +3895,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        272
       ],
       "anchor": [
         80,
-        144
+        192
       ],
       "next_start_tile_offset": [
         0,
@@ -3889,11 +3907,11 @@
       ],
       "start_seam_px": [
         80,
-        144
+        200
       ],
       "end_seam_px": [
         80,
-        144
+        200
       ],
       "connectors": [
         {
@@ -3917,12 +3935,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_sw_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_sw_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             80,
-            144
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -3963,26 +3981,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_sw_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_sw_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_sw_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_sw_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        272
       ],
       "anchor_px": [
         80,
-        144
+        192
       ],
       "placement_anchor_px": [
         80,
-        144
+        192
       ],
       "anchor_tile": [
         0,
@@ -4016,9 +4035,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/inner_corner/通用",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "c3c9475af20a338269e43a56d86de0e12f0b404b1021563915c59294ad7be6e3",
-      "output_sha256": "c3c9475af20a338269e43a56d86de0e12f0b404b1021563915c59294ad7be6e3",
-      "thumbnail_source_sha256": "c3c9475af20a338269e43a56d86de0e12f0b404b1021563915c59294ad7be6e3",
+      "source_sha256": "c27055baea3ee8ed4f78f80f8c6900f38dda84206b0b1438a2c58a27299bd43b",
+      "output_sha256": "c27055baea3ee8ed4f78f80f8c6900f38dda84206b0b1438a2c58a27299bd43b",
+      "thumbnail_source_sha256": "c27055baea3ee8ed4f78f80f8c6900f38dda84206b0b1438a2c58a27299bd43b",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -4058,11 +4077,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        272
       ],
       "anchor": [
         80,
-        144
+        192
       ],
       "next_start_tile_offset": [
         0,
@@ -4070,11 +4089,11 @@
       ],
       "start_seam_px": [
         80,
-        144
+        200
       ],
       "end_seam_px": [
         80,
-        144
+        200
       ],
       "connectors": [
         {
@@ -4098,12 +4117,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_nw_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_nw_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             80,
-            144
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -4144,26 +4163,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_nw_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_nw_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_nw_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_nw_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        272
       ],
       "anchor_px": [
         80,
-        144
+        192
       ],
       "placement_anchor_px": [
         80,
-        144
+        192
       ],
       "anchor_tile": [
         0,
@@ -4197,9 +4217,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/inner_corner/通用",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "d749d3fd2a5336daacc599f98c7097f6f3d7ab25a936851852d9581143bb5c57",
-      "output_sha256": "d749d3fd2a5336daacc599f98c7097f6f3d7ab25a936851852d9581143bb5c57",
-      "thumbnail_source_sha256": "d749d3fd2a5336daacc599f98c7097f6f3d7ab25a936851852d9581143bb5c57",
+      "source_sha256": "e26bfd3d4f77919bf83dd683ca5db9b0b5ceefde872457ba7c8fb726dcae8ebe",
+      "output_sha256": "e26bfd3d4f77919bf83dd683ca5db9b0b5ceefde872457ba7c8fb726dcae8ebe",
+      "thumbnail_source_sha256": "e26bfd3d4f77919bf83dd683ca5db9b0b5ceefde872457ba7c8fb726dcae8ebe",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -4239,11 +4259,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        272
       ],
       "anchor": [
         80,
-        144
+        192
       ],
       "next_start_tile_offset": [
         0,
@@ -4251,11 +4271,11 @@
       ],
       "start_seam_px": [
         80,
-        144
+        200
       ],
       "end_seam_px": [
         80,
-        144
+        200
       ],
       "connectors": [
         {
@@ -4279,12 +4299,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_ne_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_ne_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             80,
-            144
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -4325,26 +4345,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_ne_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_ne_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_ne_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_ne_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        272
       ],
       "anchor_px": [
         80,
-        144
+        192
       ],
       "placement_anchor_px": [
         80,
-        144
+        192
       ],
       "anchor_tile": [
         0,
@@ -4378,9 +4399,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/outer_corner/通用",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "199f4f03291510e1dcb01e7a6a2a9fe34a54a8b4c667bdb2f0c4bccaa2121f7c",
-      "output_sha256": "199f4f03291510e1dcb01e7a6a2a9fe34a54a8b4c667bdb2f0c4bccaa2121f7c",
-      "thumbnail_source_sha256": "199f4f03291510e1dcb01e7a6a2a9fe34a54a8b4c667bdb2f0c4bccaa2121f7c",
+      "source_sha256": "4570c6e54c23ce239c6e471d41372e7bcbf80efd613e3dd10f6ff98d8e2a04c8",
+      "output_sha256": "4570c6e54c23ce239c6e471d41372e7bcbf80efd613e3dd10f6ff98d8e2a04c8",
+      "thumbnail_source_sha256": "4570c6e54c23ce239c6e471d41372e7bcbf80efd613e3dd10f6ff98d8e2a04c8",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -4420,11 +4441,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        272
       ],
       "anchor": [
         80,
-        144
+        192
       ],
       "next_start_tile_offset": [
         0,
@@ -4432,11 +4453,11 @@
       ],
       "start_seam_px": [
         80,
-        144
+        200
       ],
       "end_seam_px": [
         80,
-        144
+        200
       ],
       "connectors": [
         {
@@ -4460,12 +4481,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_se_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_se_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             80,
-            144
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -4506,26 +4527,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_se_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_se_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_se_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_se_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        272
       ],
       "anchor_px": [
         80,
-        144
+        192
       ],
       "placement_anchor_px": [
         80,
-        144
+        192
       ],
       "anchor_tile": [
         0,
@@ -4559,9 +4581,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/outer_corner/通用",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "ab31b39cccdec5c168a1621a66528d0e0f890f8f88abe2cedf983e0cfd93347f",
-      "output_sha256": "ab31b39cccdec5c168a1621a66528d0e0f890f8f88abe2cedf983e0cfd93347f",
-      "thumbnail_source_sha256": "ab31b39cccdec5c168a1621a66528d0e0f890f8f88abe2cedf983e0cfd93347f",
+      "source_sha256": "99b33232eaeea944d8be9f2b5736d3b877e4a5a37ce544e05fd11b06ab1776c4",
+      "output_sha256": "99b33232eaeea944d8be9f2b5736d3b877e4a5a37ce544e05fd11b06ab1776c4",
+      "thumbnail_source_sha256": "99b33232eaeea944d8be9f2b5736d3b877e4a5a37ce544e05fd11b06ab1776c4",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -4601,11 +4623,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        272
       ],
       "anchor": [
         80,
-        144
+        192
       ],
       "next_start_tile_offset": [
         0,
@@ -4613,11 +4635,11 @@
       ],
       "start_seam_px": [
         80,
-        144
+        200
       ],
       "end_seam_px": [
         80,
-        144
+        200
       ],
       "connectors": [
         {
@@ -4641,12 +4663,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_sw_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_sw_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             80,
-            144
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -4687,26 +4709,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_sw_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_sw_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_sw_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_sw_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        272
       ],
       "anchor_px": [
         80,
-        144
+        192
       ],
       "placement_anchor_px": [
         80,
-        144
+        192
       ],
       "anchor_tile": [
         0,
@@ -4740,9 +4763,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/outer_corner/通用",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "c3c9475af20a338269e43a56d86de0e12f0b404b1021563915c59294ad7be6e3",
-      "output_sha256": "c3c9475af20a338269e43a56d86de0e12f0b404b1021563915c59294ad7be6e3",
-      "thumbnail_source_sha256": "c3c9475af20a338269e43a56d86de0e12f0b404b1021563915c59294ad7be6e3",
+      "source_sha256": "c27055baea3ee8ed4f78f80f8c6900f38dda84206b0b1438a2c58a27299bd43b",
+      "output_sha256": "c27055baea3ee8ed4f78f80f8c6900f38dda84206b0b1438a2c58a27299bd43b",
+      "thumbnail_source_sha256": "c27055baea3ee8ed4f78f80f8c6900f38dda84206b0b1438a2c58a27299bd43b",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -4782,11 +4805,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        272
       ],
       "anchor": [
         80,
-        144
+        192
       ],
       "next_start_tile_offset": [
         0,
@@ -4794,11 +4817,11 @@
       ],
       "start_seam_px": [
         80,
-        144
+        200
       ],
       "end_seam_px": [
         80,
-        144
+        200
       ],
       "connectors": [
         {
@@ -4822,12 +4845,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_nw_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_nw_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             80,
-            144
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -4868,26 +4891,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_nw_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_nw_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_nw_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_nw_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        272
       ],
       "anchor_px": [
         80,
-        144
+        192
       ],
       "placement_anchor_px": [
         80,
-        144
+        192
       ],
       "anchor_tile": [
         0,
@@ -4921,9 +4945,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/outer_corner/通用",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "d749d3fd2a5336daacc599f98c7097f6f3d7ab25a936851852d9581143bb5c57",
-      "output_sha256": "d749d3fd2a5336daacc599f98c7097f6f3d7ab25a936851852d9581143bb5c57",
-      "thumbnail_source_sha256": "d749d3fd2a5336daacc599f98c7097f6f3d7ab25a936851852d9581143bb5c57",
+      "source_sha256": "e26bfd3d4f77919bf83dd683ca5db9b0b5ceefde872457ba7c8fb726dcae8ebe",
+      "output_sha256": "e26bfd3d4f77919bf83dd683ca5db9b0b5ceefde872457ba7c8fb726dcae8ebe",
+      "thumbnail_source_sha256": "e26bfd3d4f77919bf83dd683ca5db9b0b5ceefde872457ba7c8fb726dcae8ebe",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -4962,24 +4986,24 @@
         1
       ],
       "canvas_size": [
-        96,
-        160
+        160,
+        272
       ],
       "anchor": [
-        48,
-        128
+        80,
+        192
       ],
       "next_start_tile_offset": [
         1,
         0
       ],
       "start_seam_px": [
-        32,
-        120
+        80,
+        200
       ],
       "end_seam_px": [
-        64,
-        136
+        80,
+        200
       ],
       "connectors": [
         {
@@ -4998,12 +5022,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_x_pos_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_x_pos_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            128
+            80,
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -5043,26 +5067,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_x_pos_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_x_pos_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_x_pos_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_x_pos_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
-        96,
-        160
+        160,
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
-        96,
-        160
+        160,
+        272
       ],
       "anchor_px": [
-        48,
-        128
+        80,
+        192
       ],
       "placement_anchor_px": [
-        48,
-        128
+        80,
+        192
       ],
       "anchor_tile": [
         0,
@@ -5096,9 +5121,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/end_cap/iso_x",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "5f1fc5a5fa386f6eb7cd6b7411138d55601a7ce41c86a0caaaab6175eb02f88a",
-      "output_sha256": "5f1fc5a5fa386f6eb7cd6b7411138d55601a7ce41c86a0caaaab6175eb02f88a",
-      "thumbnail_source_sha256": "5f1fc5a5fa386f6eb7cd6b7411138d55601a7ce41c86a0caaaab6175eb02f88a",
+      "source_sha256": "560b910ae6f2fb40c027fec34fb064392e312eb1e6af2473213d672f7e667da8",
+      "output_sha256": "560b910ae6f2fb40c027fec34fb064392e312eb1e6af2473213d672f7e667da8",
+      "thumbnail_source_sha256": "560b910ae6f2fb40c027fec34fb064392e312eb1e6af2473213d672f7e667da8",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -5137,24 +5162,24 @@
         1
       ],
       "canvas_size": [
-        96,
-        160
+        160,
+        272
       ],
       "anchor": [
-        48,
-        128
+        80,
+        192
       ],
       "next_start_tile_offset": [
         1,
         0
       ],
       "start_seam_px": [
-        32,
-        120
+        80,
+        200
       ],
       "end_seam_px": [
-        64,
-        136
+        80,
+        200
       ],
       "connectors": [
         {
@@ -5173,12 +5198,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_x_neg_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_x_neg_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            128
+            80,
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -5218,26 +5243,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_x_neg_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_x_neg_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_x_neg_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_x_neg_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
-        96,
-        160
+        160,
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
-        96,
-        160
+        160,
+        272
       ],
       "anchor_px": [
-        48,
-        128
+        80,
+        192
       ],
       "placement_anchor_px": [
-        48,
-        128
+        80,
+        192
       ],
       "anchor_tile": [
         0,
@@ -5271,9 +5297,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/end_cap/iso_x",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "5f1fc5a5fa386f6eb7cd6b7411138d55601a7ce41c86a0caaaab6175eb02f88a",
-      "output_sha256": "5f1fc5a5fa386f6eb7cd6b7411138d55601a7ce41c86a0caaaab6175eb02f88a",
-      "thumbnail_source_sha256": "5f1fc5a5fa386f6eb7cd6b7411138d55601a7ce41c86a0caaaab6175eb02f88a",
+      "source_sha256": "560b910ae6f2fb40c027fec34fb064392e312eb1e6af2473213d672f7e667da8",
+      "output_sha256": "560b910ae6f2fb40c027fec34fb064392e312eb1e6af2473213d672f7e667da8",
+      "thumbnail_source_sha256": "560b910ae6f2fb40c027fec34fb064392e312eb1e6af2473213d672f7e667da8",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -5312,24 +5338,24 @@
         1
       ],
       "canvas_size": [
-        96,
-        160
+        160,
+        272
       ],
       "anchor": [
-        48,
-        128
+        80,
+        192
       ],
       "next_start_tile_offset": [
         0,
         1
       ],
       "start_seam_px": [
-        64,
-        120
+        80,
+        200
       ],
       "end_seam_px": [
-        32,
-        136
+        80,
+        200
       ],
       "connectors": [
         {
@@ -5348,12 +5374,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_y_pos_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_y_pos_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            128
+            80,
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -5393,26 +5419,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_y_pos_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_y_pos_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_y_pos_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_y_pos_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
-        96,
-        160
+        160,
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
-        96,
-        160
+        160,
+        272
       ],
       "anchor_px": [
-        48,
-        128
+        80,
+        192
       ],
       "placement_anchor_px": [
-        48,
-        128
+        80,
+        192
       ],
       "anchor_tile": [
         0,
@@ -5446,9 +5473,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/end_cap/iso_y",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "5f1fc5a5fa386f6eb7cd6b7411138d55601a7ce41c86a0caaaab6175eb02f88a",
-      "output_sha256": "5f1fc5a5fa386f6eb7cd6b7411138d55601a7ce41c86a0caaaab6175eb02f88a",
-      "thumbnail_source_sha256": "5f1fc5a5fa386f6eb7cd6b7411138d55601a7ce41c86a0caaaab6175eb02f88a",
+      "source_sha256": "560b910ae6f2fb40c027fec34fb064392e312eb1e6af2473213d672f7e667da8",
+      "output_sha256": "560b910ae6f2fb40c027fec34fb064392e312eb1e6af2473213d672f7e667da8",
+      "thumbnail_source_sha256": "560b910ae6f2fb40c027fec34fb064392e312eb1e6af2473213d672f7e667da8",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -5487,24 +5514,24 @@
         1
       ],
       "canvas_size": [
-        96,
-        160
+        160,
+        272
       ],
       "anchor": [
-        48,
-        128
+        80,
+        192
       ],
       "next_start_tile_offset": [
         0,
         1
       ],
       "start_seam_px": [
-        64,
-        120
+        80,
+        200
       ],
       "end_seam_px": [
-        32,
-        136
+        80,
+        200
       ],
       "connectors": [
         {
@@ -5523,12 +5550,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_y_neg_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_y_neg_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            128
+            80,
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -5568,26 +5595,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_y_neg_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_y_neg_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_y_neg_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_y_neg_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
-        96,
-        160
+        160,
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
-        96,
-        160
+        160,
+        272
       ],
       "anchor_px": [
-        48,
-        128
+        80,
+        192
       ],
       "placement_anchor_px": [
-        48,
-        128
+        80,
+        192
       ],
       "anchor_tile": [
         0,
@@ -5621,9 +5649,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/end_cap/iso_y",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "5f1fc5a5fa386f6eb7cd6b7411138d55601a7ce41c86a0caaaab6175eb02f88a",
-      "output_sha256": "5f1fc5a5fa386f6eb7cd6b7411138d55601a7ce41c86a0caaaab6175eb02f88a",
-      "thumbnail_source_sha256": "5f1fc5a5fa386f6eb7cd6b7411138d55601a7ce41c86a0caaaab6175eb02f88a",
+      "source_sha256": "560b910ae6f2fb40c027fec34fb064392e312eb1e6af2473213d672f7e667da8",
+      "output_sha256": "560b910ae6f2fb40c027fec34fb064392e312eb1e6af2473213d672f7e667da8",
+      "thumbnail_source_sha256": "560b910ae6f2fb40c027fec34fb064392e312eb1e6af2473213d672f7e667da8",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -5663,11 +5691,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         48,
-        128
+        176
       ],
       "next_start_tile_offset": [
         3,
@@ -5675,11 +5703,11 @@
       ],
       "start_seam_px": [
         32,
-        120
+        184
       ],
       "end_seam_px": [
         128,
-        168
+        232
       ],
       "connectors": [
         {
@@ -5703,12 +5731,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_x_open_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_x_open_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -5803,26 +5831,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_x_open_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_x_open_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_x_open_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_x_open_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        256
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        256
       ],
       "anchor_px": [
         48,
-        128
+        176
       ],
       "placement_anchor_px": [
         48,
-        128
+        176
       ],
       "anchor_tile": [
         0,
@@ -5856,9 +5885,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/door_adapter/iso_x",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "dec3333cc093b60540a51ad4f66519e293a89c2bc96d9c625be0b790a1e068c4",
-      "output_sha256": "dec3333cc093b60540a51ad4f66519e293a89c2bc96d9c625be0b790a1e068c4",
-      "thumbnail_source_sha256": "dec3333cc093b60540a51ad4f66519e293a89c2bc96d9c625be0b790a1e068c4",
+      "source_sha256": "a4cf5971e61e59481e8402b4f0b37351cdf6062a1ffebeba93f4432bc7ed54ef",
+      "output_sha256": "a4cf5971e61e59481e8402b4f0b37351cdf6062a1ffebeba93f4432bc7ed54ef",
+      "thumbnail_source_sha256": "a4cf5971e61e59481e8402b4f0b37351cdf6062a1ffebeba93f4432bc7ed54ef",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -5898,11 +5927,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         48,
-        128
+        176
       ],
       "next_start_tile_offset": [
         3,
@@ -5910,11 +5939,11 @@
       ],
       "start_seam_px": [
         32,
-        120
+        184
       ],
       "end_seam_px": [
         128,
-        168
+        232
       ],
       "connectors": [
         {
@@ -5938,12 +5967,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_x_closed_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_x_closed_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -6038,26 +6067,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_x_closed_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_x_closed_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_x_closed_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_x_closed_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        256
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        256
       ],
       "anchor_px": [
         48,
-        128
+        176
       ],
       "placement_anchor_px": [
         48,
-        128
+        176
       ],
       "anchor_tile": [
         0,
@@ -6091,9 +6121,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/door_adapter/iso_x",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "dec3333cc093b60540a51ad4f66519e293a89c2bc96d9c625be0b790a1e068c4",
-      "output_sha256": "dec3333cc093b60540a51ad4f66519e293a89c2bc96d9c625be0b790a1e068c4",
-      "thumbnail_source_sha256": "dec3333cc093b60540a51ad4f66519e293a89c2bc96d9c625be0b790a1e068c4",
+      "source_sha256": "a4cf5971e61e59481e8402b4f0b37351cdf6062a1ffebeba93f4432bc7ed54ef",
+      "output_sha256": "a4cf5971e61e59481e8402b4f0b37351cdf6062a1ffebeba93f4432bc7ed54ef",
+      "thumbnail_source_sha256": "a4cf5971e61e59481e8402b4f0b37351cdf6062a1ffebeba93f4432bc7ed54ef",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -6133,11 +6163,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         112,
-        128
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -6145,11 +6175,11 @@
       ],
       "start_seam_px": [
         128,
-        120
+        184
       ],
       "end_seam_px": [
         32,
-        168
+        232
       ],
       "connectors": [
         {
@@ -6173,12 +6203,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_y_open_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_y_open_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -6273,26 +6303,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_y_open_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_y_open_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_y_open_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_y_open_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        256
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        256
       ],
       "anchor_px": [
         112,
-        128
+        176
       ],
       "placement_anchor_px": [
         112,
-        128
+        176
       ],
       "anchor_tile": [
         0,
@@ -6326,9 +6357,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/door_adapter/iso_y",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "6531f8da836f455247e8f1881fff6b52f90cd5d4302d7d68c372719ec0ab95bf",
-      "output_sha256": "6531f8da836f455247e8f1881fff6b52f90cd5d4302d7d68c372719ec0ab95bf",
-      "thumbnail_source_sha256": "6531f8da836f455247e8f1881fff6b52f90cd5d4302d7d68c372719ec0ab95bf",
+      "source_sha256": "46669d77feb5fa7154c56383724d5949862069da3763b0e879e88ca28ea4129c",
+      "output_sha256": "46669d77feb5fa7154c56383724d5949862069da3763b0e879e88ca28ea4129c",
+      "thumbnail_source_sha256": "46669d77feb5fa7154c56383724d5949862069da3763b0e879e88ca28ea4129c",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -6368,11 +6399,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         112,
-        128
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -6380,11 +6411,11 @@
       ],
       "start_seam_px": [
         128,
-        120
+        184
       ],
       "end_seam_px": [
         32,
-        168
+        232
       ],
       "connectors": [
         {
@@ -6408,12 +6439,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_y_closed_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_y_closed_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -6508,26 +6539,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_y_closed_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_y_closed_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_y_closed_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_y_closed_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        256
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        256
       ],
       "anchor_px": [
         112,
-        128
+        176
       ],
       "placement_anchor_px": [
         112,
-        128
+        176
       ],
       "anchor_tile": [
         0,
@@ -6561,9 +6593,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/door_adapter/iso_y",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "6531f8da836f455247e8f1881fff6b52f90cd5d4302d7d68c372719ec0ab95bf",
-      "output_sha256": "6531f8da836f455247e8f1881fff6b52f90cd5d4302d7d68c372719ec0ab95bf",
-      "thumbnail_source_sha256": "6531f8da836f455247e8f1881fff6b52f90cd5d4302d7d68c372719ec0ab95bf",
+      "source_sha256": "46669d77feb5fa7154c56383724d5949862069da3763b0e879e88ca28ea4129c",
+      "output_sha256": "46669d77feb5fa7154c56383724d5949862069da3763b0e879e88ca28ea4129c",
+      "thumbnail_source_sha256": "46669d77feb5fa7154c56383724d5949862069da3763b0e879e88ca28ea4129c",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -6603,11 +6635,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         48,
-        128
+        176
       ],
       "next_start_tile_offset": [
         3,
@@ -6615,11 +6647,11 @@
       ],
       "start_seam_px": [
         32,
-        120
+        184
       ],
       "end_seam_px": [
         128,
-        168
+        232
       ],
       "connectors": [
         {
@@ -6643,12 +6675,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_x_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_x_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -6696,26 +6728,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_x_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_x_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_x_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_x_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        256
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        256
       ],
       "anchor_px": [
         48,
-        128
+        176
       ],
       "placement_anchor_px": [
         48,
-        128
+        176
       ],
       "anchor_tile": [
         0,
@@ -6749,9 +6782,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/broken_adapter/iso_x",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "f0d36e84cddeeb8eaa271b310053657da6d3bce65fe8926dcfbdf77de21b7131",
-      "output_sha256": "f0d36e84cddeeb8eaa271b310053657da6d3bce65fe8926dcfbdf77de21b7131",
-      "thumbnail_source_sha256": "f0d36e84cddeeb8eaa271b310053657da6d3bce65fe8926dcfbdf77de21b7131",
+      "source_sha256": "7729435164d0682b3494cf4374f53a6ba460f3e909de3f1daf1d9528a01f2e3a",
+      "output_sha256": "7729435164d0682b3494cf4374f53a6ba460f3e909de3f1daf1d9528a01f2e3a",
+      "thumbnail_source_sha256": "7729435164d0682b3494cf4374f53a6ba460f3e909de3f1daf1d9528a01f2e3a",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -6791,11 +6824,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         48,
-        128
+        176
       ],
       "next_start_tile_offset": [
         3,
@@ -6803,11 +6836,11 @@
       ],
       "start_seam_px": [
         32,
-        120
+        184
       ],
       "end_seam_px": [
         128,
-        168
+        232
       ],
       "connectors": [
         {
@@ -6831,12 +6864,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_x_v02/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_x_v02/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -6884,26 +6917,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_x_v02/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_x_v02/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_x_v02/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_x_v02/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        256
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        256
       ],
       "anchor_px": [
         48,
-        128
+        176
       ],
       "placement_anchor_px": [
         48,
-        128
+        176
       ],
       "anchor_tile": [
         0,
@@ -6937,9 +6971,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/broken_adapter/iso_x",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "bd6819ed4e34217908e39718b5510af33375063c29e8dfa090bfc4714809a34a",
-      "output_sha256": "bd6819ed4e34217908e39718b5510af33375063c29e8dfa090bfc4714809a34a",
-      "thumbnail_source_sha256": "bd6819ed4e34217908e39718b5510af33375063c29e8dfa090bfc4714809a34a",
+      "source_sha256": "f327622a72e263f2638267283303c9a5165e7df6d4d860e0d14789bee805c40e",
+      "output_sha256": "f327622a72e263f2638267283303c9a5165e7df6d4d860e0d14789bee805c40e",
+      "thumbnail_source_sha256": "f327622a72e263f2638267283303c9a5165e7df6d4d860e0d14789bee805c40e",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -6979,11 +7013,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         112,
-        128
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -6991,11 +7025,11 @@
       ],
       "start_seam_px": [
         128,
-        120
+        184
       ],
       "end_seam_px": [
         32,
-        168
+        232
       ],
       "connectors": [
         {
@@ -7019,12 +7053,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_y_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_y_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -7072,26 +7106,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_y_v01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_y_v01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_y_v01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_y_v01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        256
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        256
       ],
       "anchor_px": [
         112,
-        128
+        176
       ],
       "placement_anchor_px": [
         112,
-        128
+        176
       ],
       "anchor_tile": [
         0,
@@ -7125,9 +7160,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/broken_adapter/iso_y",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "6ed1564d8a5d08b9965da7d531a718846de0c822e8886d4ec7444ff7ba10ce16",
-      "output_sha256": "6ed1564d8a5d08b9965da7d531a718846de0c822e8886d4ec7444ff7ba10ce16",
-      "thumbnail_source_sha256": "6ed1564d8a5d08b9965da7d531a718846de0c822e8886d4ec7444ff7ba10ce16",
+      "source_sha256": "fae4fd73b371a573e8f1ae4a18ad4108d26c56e453e9ebc0256dd0689bd42afb",
+      "output_sha256": "fae4fd73b371a573e8f1ae4a18ad4108d26c56e453e9ebc0256dd0689bd42afb",
+      "thumbnail_source_sha256": "fae4fd73b371a573e8f1ae4a18ad4108d26c56e453e9ebc0256dd0689bd42afb",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -7167,11 +7202,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         112,
-        128
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -7179,11 +7214,11 @@
       ],
       "start_seam_px": [
         128,
-        120
+        184
       ],
       "end_seam_px": [
         32,
-        168
+        232
       ],
       "connectors": [
         {
@@ -7207,12 +7242,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_y_v02/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_y_v02/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -7260,26 +7295,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_y_v02/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_y_v02/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_y_v02/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_y_v02/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
         160,
-        192
+        256
       ],
       "visible_bounds_px": [
         0,
         0,
         160,
-        192
+        256
       ],
       "anchor_px": [
         112,
-        128
+        176
       ],
       "placement_anchor_px": [
         112,
-        128
+        176
       ],
       "anchor_tile": [
         0,
@@ -7313,9 +7349,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/broken_adapter/iso_y",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "a4c033626a8f51263f072d63edc39c9c2ceb3e7ad6397c77f05d5bc30b1f3744",
-      "output_sha256": "a4c033626a8f51263f072d63edc39c9c2ceb3e7ad6397c77f05d5bc30b1f3744",
-      "thumbnail_source_sha256": "a4c033626a8f51263f072d63edc39c9c2ceb3e7ad6397c77f05d5bc30b1f3744",
+      "source_sha256": "2324d1477636e62d8f02f6c6540c4411fe025c63b21d6884549f8ccc3c839a85",
+      "output_sha256": "2324d1477636e62d8f02f6c6540c4411fe025c63b21d6884549f8ccc3c839a85",
+      "thumbnail_source_sha256": "2324d1477636e62d8f02f6c6540c4411fe025c63b21d6884549f8ccc3c839a85",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -7354,24 +7390,24 @@
         1
       ],
       "canvas_size": [
-        96,
-        128
+        160,
+        272
       ],
       "anchor": [
-        48,
-        104
+        80,
+        192
       ],
       "next_start_tile_offset": [
         0,
         0
       ],
       "start_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "end_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "connectors": [],
       "collision_cells": [],
@@ -7384,12 +7420,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            104
+            80,
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -7429,26 +7465,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_01/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_01/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_01/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_01/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
-        96,
-        128
+        160,
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
-        96,
-        128
+        160,
+        272
       ],
       "anchor_px": [
-        48,
-        104
+        80,
+        192
       ],
       "placement_anchor_px": [
-        48,
-        104
+        80,
+        192
       ],
       "anchor_tile": [
         0,
@@ -7482,9 +7519,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/seam_cover/通用",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "e992c266265a0a9d42afc27f204030d015775c7fa8ee13501cb2727e814f6bd7",
-      "output_sha256": "e992c266265a0a9d42afc27f204030d015775c7fa8ee13501cb2727e814f6bd7",
-      "thumbnail_source_sha256": "e992c266265a0a9d42afc27f204030d015775c7fa8ee13501cb2727e814f6bd7",
+      "source_sha256": "59e6951457cb49ffa43a9edd5592c77e743bef0b1d4a05a8ca51d5150d046027",
+      "output_sha256": "59e6951457cb49ffa43a9edd5592c77e743bef0b1d4a05a8ca51d5150d046027",
+      "thumbnail_source_sha256": "59e6951457cb49ffa43a9edd5592c77e743bef0b1d4a05a8ca51d5150d046027",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -7523,24 +7560,24 @@
         1
       ],
       "canvas_size": [
-        96,
-        128
+        160,
+        272
       ],
       "anchor": [
-        48,
-        104
+        80,
+        192
       ],
       "next_start_tile_offset": [
         0,
         0
       ],
       "start_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "end_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "connectors": [],
       "collision_cells": [],
@@ -7553,12 +7590,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_02/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_02/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            104
+            80,
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -7598,26 +7635,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_02/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_02/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_02/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_02/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
-        96,
-        128
+        160,
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
-        96,
-        128
+        160,
+        272
       ],
       "anchor_px": [
-        48,
-        104
+        80,
+        192
       ],
       "placement_anchor_px": [
-        48,
-        104
+        80,
+        192
       ],
       "anchor_tile": [
         0,
@@ -7651,9 +7689,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/seam_cover/通用",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "4bd6db31f6d1c5393aa001fafc257f7e3bdf87058f064a21e7c57a25d446180f",
-      "output_sha256": "4bd6db31f6d1c5393aa001fafc257f7e3bdf87058f064a21e7c57a25d446180f",
-      "thumbnail_source_sha256": "4bd6db31f6d1c5393aa001fafc257f7e3bdf87058f064a21e7c57a25d446180f",
+      "source_sha256": "5b269281f065e2f438d771aac20346a0eb379cc9775becf4cef4aaea359609e9",
+      "output_sha256": "5b269281f065e2f438d771aac20346a0eb379cc9775becf4cef4aaea359609e9",
+      "thumbnail_source_sha256": "5b269281f065e2f438d771aac20346a0eb379cc9775becf4cef4aaea359609e9",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -7692,24 +7730,24 @@
         1
       ],
       "canvas_size": [
-        96,
-        128
+        160,
+        272
       ],
       "anchor": [
-        48,
-        104
+        80,
+        192
       ],
       "next_start_tile_offset": [
         0,
         0
       ],
       "start_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "end_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "connectors": [],
       "collision_cells": [],
@@ -7722,12 +7760,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_03/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_03/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            104
+            80,
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -7767,26 +7805,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_03/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_03/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_03/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_03/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
-        96,
-        128
+        160,
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
-        96,
-        128
+        160,
+        272
       ],
       "anchor_px": [
-        48,
-        104
+        80,
+        192
       ],
       "placement_anchor_px": [
-        48,
-        104
+        80,
+        192
       ],
       "anchor_tile": [
         0,
@@ -7820,9 +7859,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/seam_cover/通用",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "4d525b79e862a1b8f003afc4309e47f9d996e64f5e3fae01367cf1c866270222",
-      "output_sha256": "4d525b79e862a1b8f003afc4309e47f9d996e64f5e3fae01367cf1c866270222",
-      "thumbnail_source_sha256": "4d525b79e862a1b8f003afc4309e47f9d996e64f5e3fae01367cf1c866270222",
+      "source_sha256": "59ec2a9d3bd9e0f7c3ab08cdd163a4d3624ac204a2fa30a8c1b1440b9944d674",
+      "output_sha256": "59ec2a9d3bd9e0f7c3ab08cdd163a4d3624ac204a2fa30a8c1b1440b9944d674",
+      "thumbnail_source_sha256": "59ec2a9d3bd9e0f7c3ab08cdd163a4d3624ac204a2fa30a8c1b1440b9944d674",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -7861,24 +7900,24 @@
         1
       ],
       "canvas_size": [
-        96,
-        128
+        160,
+        272
       ],
       "anchor": [
-        48,
-        104
+        80,
+        192
       ],
       "next_start_tile_offset": [
         0,
         0
       ],
       "start_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "end_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "connectors": [],
       "collision_cells": [],
@@ -7891,12 +7930,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_04/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_04/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            104
+            80,
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -7936,26 +7975,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_04/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_04/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_04/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_04/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
-        96,
-        128
+        160,
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
-        96,
-        128
+        160,
+        272
       ],
       "anchor_px": [
-        48,
-        104
+        80,
+        192
       ],
       "placement_anchor_px": [
-        48,
-        104
+        80,
+        192
       ],
       "anchor_tile": [
         0,
@@ -7989,9 +8029,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/seam_cover/通用",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "fe3a93695fad4b489208aa93e24a1c61fe9529eefaf30e33d119b47b9fba6f9e",
-      "output_sha256": "fe3a93695fad4b489208aa93e24a1c61fe9529eefaf30e33d119b47b9fba6f9e",
-      "thumbnail_source_sha256": "fe3a93695fad4b489208aa93e24a1c61fe9529eefaf30e33d119b47b9fba6f9e",
+      "source_sha256": "57a387a36383f474cfb94c741865cd3b132c28e6a0a07c21d2f4df099652ce63",
+      "output_sha256": "57a387a36383f474cfb94c741865cd3b132c28e6a0a07c21d2f4df099652ce63",
+      "thumbnail_source_sha256": "57a387a36383f474cfb94c741865cd3b132c28e6a0a07c21d2f4df099652ce63",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -8030,24 +8070,24 @@
         1
       ],
       "canvas_size": [
-        96,
-        128
+        160,
+        272
       ],
       "anchor": [
-        48,
-        104
+        80,
+        192
       ],
       "next_start_tile_offset": [
         0,
         0
       ],
       "start_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "end_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "connectors": [],
       "collision_cells": [],
@@ -8060,12 +8100,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_05/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_05/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            104
+            80,
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -8105,26 +8145,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_05/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_05/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_05/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_05/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
-        96,
-        128
+        160,
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
-        96,
-        128
+        160,
+        272
       ],
       "anchor_px": [
-        48,
-        104
+        80,
+        192
       ],
       "placement_anchor_px": [
-        48,
-        104
+        80,
+        192
       ],
       "anchor_tile": [
         0,
@@ -8158,9 +8199,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/seam_cover/通用",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "7d833e7da3f31523e62942bf2afdcbaa02681cd09995f7b2d77e3addb666f463",
-      "output_sha256": "7d833e7da3f31523e62942bf2afdcbaa02681cd09995f7b2d77e3addb666f463",
-      "thumbnail_source_sha256": "7d833e7da3f31523e62942bf2afdcbaa02681cd09995f7b2d77e3addb666f463",
+      "source_sha256": "4006c15e0ddc464d006d4a479d8b015f5495fc2cd7ebc28636c99ca676c82aa5",
+      "output_sha256": "4006c15e0ddc464d006d4a479d8b015f5495fc2cd7ebc28636c99ca676c82aa5",
+      "thumbnail_source_sha256": "4006c15e0ddc464d006d4a479d8b015f5495fc2cd7ebc28636c99ca676c82aa5",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",
@@ -8199,24 +8240,24 @@
         1
       ],
       "canvas_size": [
-        96,
-        128
+        160,
+        272
       ],
       "anchor": [
-        48,
-        104
+        80,
+        192
       ],
       "next_start_tile_offset": [
         0,
         0
       ],
       "start_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "end_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "connectors": [],
       "collision_cells": [],
@@ -8229,12 +8270,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_06/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_06/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            104
+            80,
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -8274,26 +8315,27 @@
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
       "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2",
       "object_class": "wall",
-      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_06/composite.png",
-      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_06/composite.png",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_06/composite_wooma_temple_monumental_wall_v2.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_06/composite_wooma_temple_monumental_wall_v2.png",
       "image_size": [
-        96,
-        128
+        160,
+        272
       ],
       "visible_bounds_px": [
         0,
         0,
-        96,
-        128
+        160,
+        272
       ],
       "anchor_px": [
-        48,
-        104
+        80,
+        192
       ],
       "placement_anchor_px": [
-        48,
-        104
+        80,
+        192
       ],
       "anchor_tile": [
         0,
@@ -8327,9 +8369,9 @@
       "default_object_role": "terrain",
       "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙墙体/seam_cover/通用",
       "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
-      "source_sha256": "a86f25c3e651390016b22e20d9de2b52a398105d27d21f71db5f9bff10d3546d",
-      "output_sha256": "a86f25c3e651390016b22e20d9de2b52a398105d27d21f71db5f9bff10d3546d",
-      "thumbnail_source_sha256": "a86f25c3e651390016b22e20d9de2b52a398105d27d21f71db5f9bff10d3546d",
+      "source_sha256": "8c176a3c96fa5c3702ebcb3bb85bc1bf8191af2feeb37102421c790a9ed7f6e1",
+      "output_sha256": "8c176a3c96fa5c3702ebcb3bb85bc1bf8191af2feeb37102421c790a9ed7f6e1",
+      "thumbnail_source_sha256": "8c176a3c96fa5c3702ebcb3bb85bc1bf8191af2feeb37102421c790a9ed7f6e1",
       "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
       "generation_source_ids": [
         "call_cyNH4ptmEJLuV8B1ng02tFGb",

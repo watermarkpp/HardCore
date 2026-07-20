@@ -45,6 +45,7 @@ SOURCE_REFERENCE = (
 )
 FAMILY_ID = "wooma_temple_gothic_stone_u0"
 SOCKET_ID = "wooma_temple_gothic_stone_socket_u0"
+VISUAL_PROFILE_ID = "wooma_temple_monumental_wall_v2"
 SOURCE_FAMILY_ID = "orc_tomb_rough_stone_u0"
 SOURCE_PREFIX = "orc_tomb_wall_"
 TARGET_PREFIX = "wooma_temple_wall_"
@@ -223,6 +224,40 @@ def normalized_pillars() -> list[Image.Image]:
     return result
 
 
+def apply_wooma_temple_geometry(module: dict) -> None:
+    """Give this family a monumental wall profile without changing grid rules."""
+    topology = str(module["topology"])
+    if topology in {"straight", "door_adapter", "broken_adapter"}:
+        length = int(module.get("length_tiles", 1))
+        axis = str(module.get("axis", "iso_x"))
+        canvas_width = 32 * length + 64
+        canvas_height = 208 + 16 * length
+        anchor_x = 48 if axis == "iso_x" else canvas_width - 48
+        anchor_y = 176
+        module["canvas_size"] = [canvas_width, canvas_height]
+        module["anchor"] = [anchor_x, anchor_y]
+        if axis == "iso_x":
+            module["start_seam_px"] = [32, anchor_y + 8]
+            module["end_seam_px"] = [
+                32 + 32 * length,
+                anchor_y + 8 + 16 * length,
+            ]
+        else:
+            module["start_seam_px"] = [canvas_width - 32, anchor_y + 8]
+            module["end_seam_px"] = [
+                canvas_width - 32 - 32 * length,
+                anchor_y + 8 + 16 * length,
+            ]
+        return
+    # Extra transparent headroom prevents the rear (-8 px) corner pillar from
+    # being clipped. Anchor and artwork move together, so its world position
+    # remains identical to the adjoining straight-wall socket.
+    module["canvas_size"] = [160, 272]
+    module["anchor"] = [80, 192]
+    module["start_seam_px"] = [80, 200]
+    module["end_seam_px"] = [80, 200]
+
+
 def continuous_wall_window(
     source: Image.Image,
     length: int,
@@ -358,17 +393,16 @@ def straight_art(
     axis = str(module["axis"])
     length = int(module["length_tiles"])
     size = tuple(int(value) for value in module["canvas_size"])
-    # Preserve the proven orc-tomb module geometry inherited by this family.
-    # The previous Wooma-only normalization compressed 48 px of elevation and
-    # clipped the side overhang, turning a temple wall into a low fence.
-    visual_size = (32 * length + 40, 128 + 16 * length)
+    # Wall elevation is independent from its grid length. The extra 16 px per
+    # tile is isometric depth; the 176 px body is the temple's actual height.
+    visual_size = (32 * length + 40, 176 + 16 * length)
     source = continuous_wall_window(continuous_wall, length, variant_seed)
     artwork = stretch_on_canvas(
         source,
         size,
         visual_size,
         center_x=size[0] // 2,
-        bottom_y=size[1],
+        bottom_y=size[1] - 16,
     )
     start_seam = tuple(int(value) for value in module["start_seam_px"])
     end_seam = tuple(int(value) for value in module["end_seam_px"])
@@ -420,9 +454,9 @@ def corner_art(
     return stretch_on_canvas(
         pillars[0],
         size,
-        (72, 154),
+        (96, 200),
         center_x=anchor[0] + lateral_compensation,
-        bottom_y=anchor[1] + 38 + depth_compensation,
+        bottom_y=anchor[1] + 24 + depth_compensation,
     )
 
 
@@ -430,8 +464,8 @@ def pillar_art(module: dict, pillars: list[Image.Image], variant_seed: int) -> I
     size = tuple(int(value) for value in module["canvas_size"])
     anchor = tuple(int(value) for value in module["anchor"])
     topology = str(module["topology"])
-    target_size = (72, 148) if topology == "end_cap" else (58, 96)
-    bottom_y = size[1] if topology == "end_cap" else anchor[1] + 8
+    target_size = (96, 200) if topology == "end_cap" else (76, 184)
+    bottom_y = anchor[1] + 24 if topology == "end_cap" else anchor[1] + 16
     return stretch_on_canvas(
         pillars[variant_seed % len(pillars)],
         size,
@@ -456,9 +490,9 @@ def adapter_art(module: dict, adapters: list[Image.Image]) -> Image.Image:
     artwork = stretch_on_canvas(
         source,
         size,
-        (32 * length + 40, 128 + 16 * length),
+        (32 * length + 40, 176 + 16 * length),
         center_x=size[0] // 2,
-        bottom_y=size[1],
+        bottom_y=size[1] - 16,
     )
     if axis == "iso_y":
         artwork = mirror(artwork)
@@ -492,6 +526,8 @@ def build_module(
     module["repeat_group"] = str(module.get("repeat_group", "")).replace(
         "orc_tomb_", "wooma_temple_", 1
     )
+    module["visual_profile_id"] = VISUAL_PROFILE_ID
+    apply_wooma_temple_geometry(module)
     for connector in module.get("connectors", []):
         connector["socket_profile_id"] = SOCKET_ID
 
@@ -516,12 +552,12 @@ def build_module(
     if asset_dir.exists():
         shutil.rmtree(asset_dir)
     asset_dir.mkdir(parents=True)
-    composite_path = asset_dir / "composite.png"
+    composite_path = asset_dir / f"composite_{VISUAL_PROFILE_ID}.png"
     save_png(artwork, composite_path)
 
     render_parts: list[dict] = []
     for index, part_image in enumerate(parts):
-        part_path = asset_dir / f"part_{index:02d}_base.png"
+        part_path = asset_dir / f"part_{index:02d}_{VISUAL_PROFILE_ID}_base.png"
         save_png(part_image, part_path)
         if topology == "straight":
             tile_offset = [index, 0] if module["axis"] == "iso_x" else [0, index]

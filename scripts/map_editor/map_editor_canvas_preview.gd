@@ -72,6 +72,9 @@ func set_document(value: Dictionary) -> void:
 
 
 func reset_for_document_open() -> void:
+	# Asset files and catalog geometry can be rebuilt while the editor remains
+	# open. An explicit document reload must not keep drawing the old Texture2D.
+	_texture_cache.clear()
 	_baked_ground_chunks.clear()
 	_ground_overlay_keys.clear()
 	_paint_overrides.clear()

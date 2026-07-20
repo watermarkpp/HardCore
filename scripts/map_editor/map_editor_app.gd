@@ -653,6 +653,7 @@ func _on_open_pressed() -> void:
 	if current_document.is_empty():
 		status_label.text = "当前没有可重新载入的地图"
 		return
+	MapAssetCatalogService.invalidate_cache()
 	_open_document_path(_resolved_current_document_path())
 
 

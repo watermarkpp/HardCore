@@ -12100,11 +12100,11 @@
       ],
       "canvas_size": [
         96,
-        160
+        224
       ],
       "anchor": [
         48,
-        128
+        176
       ],
       "next_start_tile_offset": [
         1,
@@ -12112,11 +12112,11 @@
       ],
       "start_seam_px": [
         32,
-        120
+        184
       ],
       "end_seam_px": [
         64,
-        136
+        200
       ],
       "connectors": [
         {
@@ -12140,12 +12140,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l1_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l1_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -12184,7 +12184,8 @@
       "variant": 1,
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual"
+      "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -12205,11 +12206,11 @@
       ],
       "canvas_size": [
         128,
-        160
+        240
       ],
       "anchor": [
         48,
-        112
+        176
       ],
       "next_start_tile_offset": [
         2,
@@ -12217,11 +12218,11 @@
       ],
       "start_seam_px": [
         32,
-        104
+        184
       ],
       "end_seam_px": [
         96,
-        136
+        216
       ],
       "connectors": [
         {
@@ -12245,12 +12246,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l2_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l2_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -12264,12 +12265,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l2_v01/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l2_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -12308,7 +12309,8 @@
       "variant": 1,
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual"
+      "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -12329,11 +12331,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         48,
-        128
+        176
       ],
       "next_start_tile_offset": [
         3,
@@ -12341,11 +12343,11 @@
       ],
       "start_seam_px": [
         32,
-        120
+        184
       ],
       "end_seam_px": [
         128,
-        168
+        232
       ],
       "connectors": [
         {
@@ -12369,12 +12371,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -12388,12 +12390,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -12407,12 +12409,12 @@
             2,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v01/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             2,
@@ -12451,7 +12453,8 @@
       "variant": 1,
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual"
+      "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -12472,11 +12475,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         48,
-        128
+        176
       ],
       "next_start_tile_offset": [
         3,
@@ -12484,11 +12487,11 @@
       ],
       "start_seam_px": [
         32,
-        120
+        184
       ],
       "end_seam_px": [
         128,
-        168
+        232
       ],
       "connectors": [
         {
@@ -12512,12 +12515,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -12531,12 +12534,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -12550,12 +12553,12 @@
             2,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v02/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             2,
@@ -12594,7 +12597,8 @@
       "variant": 2,
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual"
+      "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -12615,11 +12619,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         48,
-        128
+        176
       ],
       "next_start_tile_offset": [
         3,
@@ -12627,11 +12631,11 @@
       ],
       "start_seam_px": [
         32,
-        120
+        184
       ],
       "end_seam_px": [
         128,
-        168
+        232
       ],
       "connectors": [
         {
@@ -12655,12 +12659,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -12674,12 +12678,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -12693,12 +12697,12 @@
             2,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l3_v03/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             2,
@@ -12737,7 +12741,8 @@
       "variant": 3,
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual"
+      "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -12758,11 +12763,11 @@
       ],
       "canvas_size": [
         192,
-        192
+        272
       ],
       "anchor": [
         48,
-        112
+        176
       ],
       "next_start_tile_offset": [
         4,
@@ -12770,11 +12775,11 @@
       ],
       "start_seam_px": [
         32,
-        104
+        184
       ],
       "end_seam_px": [
         160,
-        168
+        248
       ],
       "connectors": [
         {
@@ -12798,12 +12803,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -12817,12 +12822,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -12836,12 +12841,12 @@
             2,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             2,
@@ -12855,12 +12860,12 @@
             3,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_03_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_03_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             3,
@@ -12899,7 +12904,8 @@
       "variant": 1,
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual"
+      "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -12920,11 +12926,11 @@
       ],
       "canvas_size": [
         192,
-        192
+        272
       ],
       "anchor": [
         48,
-        112
+        176
       ],
       "next_start_tile_offset": [
         4,
@@ -12932,11 +12938,11 @@
       ],
       "start_seam_px": [
         32,
-        104
+        184
       ],
       "end_seam_px": [
         160,
-        168
+        248
       ],
       "connectors": [
         {
@@ -12960,12 +12966,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -12979,12 +12985,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -12998,12 +13004,12 @@
             2,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             2,
@@ -13017,12 +13023,12 @@
             3,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_03_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_03_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             3,
@@ -13061,7 +13067,8 @@
       "variant": 2,
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual"
+      "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -13082,11 +13089,11 @@
       ],
       "canvas_size": [
         192,
-        192
+        272
       ],
       "anchor": [
         48,
-        112
+        176
       ],
       "next_start_tile_offset": [
         4,
@@ -13094,11 +13101,11 @@
       ],
       "start_seam_px": [
         32,
-        104
+        184
       ],
       "end_seam_px": [
         160,
-        168
+        248
       ],
       "connectors": [
         {
@@ -13122,12 +13129,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -13141,12 +13148,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -13160,12 +13167,12 @@
             2,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             2,
@@ -13179,12 +13186,12 @@
             3,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_03_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_03_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            112
+            176
           ],
           "sort_tile_offset": [
             3,
@@ -13223,7 +13230,8 @@
       "variant": 3,
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual"
+      "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -13244,11 +13252,11 @@
       ],
       "canvas_size": [
         96,
-        160
+        224
       ],
       "anchor": [
         48,
-        128
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -13256,11 +13264,11 @@
       ],
       "start_seam_px": [
         64,
-        120
+        184
       ],
       "end_seam_px": [
         32,
-        136
+        200
       ],
       "connectors": [
         {
@@ -13284,12 +13292,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l1_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l1_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -13328,7 +13336,8 @@
       "variant": 1,
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual"
+      "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -13349,11 +13358,11 @@
       ],
       "canvas_size": [
         128,
-        160
+        240
       ],
       "anchor": [
         80,
-        112
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -13361,11 +13370,11 @@
       ],
       "start_seam_px": [
         96,
-        104
+        184
       ],
       "end_seam_px": [
         32,
-        136
+        216
       ],
       "connectors": [
         {
@@ -13389,12 +13398,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l2_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l2_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             80,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -13408,12 +13417,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l2_v01/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l2_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             80,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -13452,7 +13461,8 @@
       "variant": 1,
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual"
+      "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -13473,11 +13483,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         112,
-        128
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -13485,11 +13495,11 @@
       ],
       "start_seam_px": [
         128,
-        120
+        184
       ],
       "end_seam_px": [
         32,
-        168
+        232
       ],
       "connectors": [
         {
@@ -13513,12 +13523,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -13532,12 +13542,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -13551,12 +13561,12 @@
             0,
             2
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v01/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -13595,7 +13605,8 @@
       "variant": 1,
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual"
+      "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -13616,11 +13627,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         112,
-        128
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -13628,11 +13639,11 @@
       ],
       "start_seam_px": [
         128,
-        120
+        184
       ],
       "end_seam_px": [
         32,
-        168
+        232
       ],
       "connectors": [
         {
@@ -13656,12 +13667,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -13675,12 +13686,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -13694,12 +13705,12 @@
             0,
             2
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v02/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -13738,7 +13749,8 @@
       "variant": 2,
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual"
+      "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -13759,11 +13771,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         112,
-        128
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -13771,11 +13783,11 @@
       ],
       "start_seam_px": [
         128,
-        120
+        184
       ],
       "end_seam_px": [
         32,
-        168
+        232
       ],
       "connectors": [
         {
@@ -13799,12 +13811,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -13818,12 +13830,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -13837,12 +13849,12 @@
             0,
             2
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l3_v03/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -13881,7 +13893,8 @@
       "variant": 3,
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual"
+      "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -13902,11 +13915,11 @@
       ],
       "canvas_size": [
         192,
-        192
+        272
       ],
       "anchor": [
         144,
-        112
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -13914,11 +13927,11 @@
       ],
       "start_seam_px": [
         160,
-        104
+        184
       ],
       "end_seam_px": [
         32,
-        168
+        248
       ],
       "connectors": [
         {
@@ -13942,12 +13955,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -13961,12 +13974,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -13980,12 +13993,12 @@
             0,
             2
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -13999,12 +14012,12 @@
             0,
             3
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_03_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_03_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -14043,7 +14056,8 @@
       "variant": 1,
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual"
+      "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -14064,11 +14078,11 @@
       ],
       "canvas_size": [
         192,
-        192
+        272
       ],
       "anchor": [
         144,
-        112
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -14076,11 +14090,11 @@
       ],
       "start_seam_px": [
         160,
-        104
+        184
       ],
       "end_seam_px": [
         32,
-        168
+        248
       ],
       "connectors": [
         {
@@ -14104,12 +14118,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -14123,12 +14137,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -14142,12 +14156,12 @@
             0,
             2
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -14161,12 +14175,12 @@
             0,
             3
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_03_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_03_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -14205,7 +14219,8 @@
       "variant": 2,
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual"
+      "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -14226,11 +14241,11 @@
       ],
       "canvas_size": [
         192,
-        192
+        272
       ],
       "anchor": [
         144,
-        112
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -14238,11 +14253,11 @@
       ],
       "start_seam_px": [
         160,
-        104
+        184
       ],
       "end_seam_px": [
         32,
-        168
+        248
       ],
       "connectors": [
         {
@@ -14266,12 +14281,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -14285,12 +14300,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_01_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_01_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -14304,12 +14319,12 @@
             0,
             2
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_02_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_02_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -14323,12 +14338,12 @@
             0,
             3
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_03_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_03_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             144,
-            112
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -14367,7 +14382,8 @@
       "variant": 3,
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
-      "collision_profile_id": "none_visual"
+      "collision_profile_id": "none_visual",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -14388,11 +14404,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        272
       ],
       "anchor": [
         80,
-        144
+        192
       ],
       "next_start_tile_offset": [
         0,
@@ -14400,11 +14416,11 @@
       ],
       "start_seam_px": [
         80,
-        144
+        200
       ],
       "end_seam_px": [
         80,
-        144
+        200
       ],
       "connectors": [
         {
@@ -14428,12 +14444,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_ne_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_ne_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             80,
-            144
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -14473,7 +14489,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -14494,11 +14511,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        272
       ],
       "anchor": [
         80,
-        144
+        192
       ],
       "next_start_tile_offset": [
         0,
@@ -14506,11 +14523,11 @@
       ],
       "start_seam_px": [
         80,
-        144
+        200
       ],
       "end_seam_px": [
         80,
-        144
+        200
       ],
       "connectors": [
         {
@@ -14534,12 +14551,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_se_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_se_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             80,
-            144
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -14579,7 +14596,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -14600,11 +14618,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        272
       ],
       "anchor": [
         80,
-        144
+        192
       ],
       "next_start_tile_offset": [
         0,
@@ -14612,11 +14630,11 @@
       ],
       "start_seam_px": [
         80,
-        144
+        200
       ],
       "end_seam_px": [
         80,
-        144
+        200
       ],
       "connectors": [
         {
@@ -14640,12 +14658,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_sw_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_sw_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             80,
-            144
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -14685,7 +14703,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -14706,11 +14725,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        272
       ],
       "anchor": [
         80,
-        144
+        192
       ],
       "next_start_tile_offset": [
         0,
@@ -14718,11 +14737,11 @@
       ],
       "start_seam_px": [
         80,
-        144
+        200
       ],
       "end_seam_px": [
         80,
-        144
+        200
       ],
       "connectors": [
         {
@@ -14746,12 +14765,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_nw_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_inner_nw_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             80,
-            144
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -14791,7 +14810,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -14812,11 +14832,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        272
       ],
       "anchor": [
         80,
-        144
+        192
       ],
       "next_start_tile_offset": [
         0,
@@ -14824,11 +14844,11 @@
       ],
       "start_seam_px": [
         80,
-        144
+        200
       ],
       "end_seam_px": [
         80,
-        144
+        200
       ],
       "connectors": [
         {
@@ -14852,12 +14872,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_ne_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_ne_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             80,
-            144
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -14897,7 +14917,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -14918,11 +14939,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        272
       ],
       "anchor": [
         80,
-        144
+        192
       ],
       "next_start_tile_offset": [
         0,
@@ -14930,11 +14951,11 @@
       ],
       "start_seam_px": [
         80,
-        144
+        200
       ],
       "end_seam_px": [
         80,
-        144
+        200
       ],
       "connectors": [
         {
@@ -14958,12 +14979,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_se_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_se_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             80,
-            144
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -15003,7 +15024,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -15024,11 +15046,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        272
       ],
       "anchor": [
         80,
-        144
+        192
       ],
       "next_start_tile_offset": [
         0,
@@ -15036,11 +15058,11 @@
       ],
       "start_seam_px": [
         80,
-        144
+        200
       ],
       "end_seam_px": [
         80,
-        144
+        200
       ],
       "connectors": [
         {
@@ -15064,12 +15086,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_sw_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_sw_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             80,
-            144
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -15109,7 +15131,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -15130,11 +15153,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        272
       ],
       "anchor": [
         80,
-        144
+        192
       ],
       "next_start_tile_offset": [
         0,
@@ -15142,11 +15165,11 @@
       ],
       "start_seam_px": [
         80,
-        144
+        200
       ],
       "end_seam_px": [
         80,
-        144
+        200
       ],
       "connectors": [
         {
@@ -15170,12 +15193,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_nw_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_outer_nw_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             80,
-            144
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -15215,7 +15238,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -15235,24 +15259,24 @@
         1
       ],
       "canvas_size": [
-        96,
-        160
+        160,
+        272
       ],
       "anchor": [
-        48,
-        128
+        80,
+        192
       ],
       "next_start_tile_offset": [
         1,
         0
       ],
       "start_seam_px": [
-        32,
-        120
+        80,
+        200
       ],
       "end_seam_px": [
-        64,
-        136
+        80,
+        200
       ],
       "connectors": [
         {
@@ -15271,12 +15295,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_x_pos_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_x_pos_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            128
+            80,
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -15315,7 +15339,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -15335,24 +15360,24 @@
         1
       ],
       "canvas_size": [
-        96,
-        160
+        160,
+        272
       ],
       "anchor": [
-        48,
-        128
+        80,
+        192
       ],
       "next_start_tile_offset": [
         1,
         0
       ],
       "start_seam_px": [
-        32,
-        120
+        80,
+        200
       ],
       "end_seam_px": [
-        64,
-        136
+        80,
+        200
       ],
       "connectors": [
         {
@@ -15371,12 +15396,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_x_neg_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_x_neg_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            128
+            80,
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -15415,7 +15440,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -15435,24 +15461,24 @@
         1
       ],
       "canvas_size": [
-        96,
-        160
+        160,
+        272
       ],
       "anchor": [
-        48,
-        128
+        80,
+        192
       ],
       "next_start_tile_offset": [
         0,
         1
       ],
       "start_seam_px": [
-        64,
-        120
+        80,
+        200
       ],
       "end_seam_px": [
-        32,
-        136
+        80,
+        200
       ],
       "connectors": [
         {
@@ -15471,12 +15497,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_y_pos_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_y_pos_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            128
+            80,
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -15515,7 +15541,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -15535,24 +15562,24 @@
         1
       ],
       "canvas_size": [
-        96,
-        160
+        160,
+        272
       ],
       "anchor": [
-        48,
-        128
+        80,
+        192
       ],
       "next_start_tile_offset": [
         0,
         1
       ],
       "start_seam_px": [
-        64,
-        120
+        80,
+        200
       ],
       "end_seam_px": [
-        32,
-        136
+        80,
+        200
       ],
       "connectors": [
         {
@@ -15571,12 +15598,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_y_neg_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_end_y_neg_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            128
+            80,
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -15615,7 +15642,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -15636,11 +15664,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         48,
-        128
+        176
       ],
       "next_start_tile_offset": [
         3,
@@ -15648,11 +15676,11 @@
       ],
       "start_seam_px": [
         32,
-        120
+        184
       ],
       "end_seam_px": [
         128,
-        168
+        232
       ],
       "connectors": [
         {
@@ -15676,12 +15704,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_x_open_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_x_open_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -15775,7 +15803,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -15796,11 +15825,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         48,
-        128
+        176
       ],
       "next_start_tile_offset": [
         3,
@@ -15808,11 +15837,11 @@
       ],
       "start_seam_px": [
         32,
-        120
+        184
       ],
       "end_seam_px": [
         128,
-        168
+        232
       ],
       "connectors": [
         {
@@ -15836,12 +15865,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_x_closed_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_x_closed_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -15935,7 +15964,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -15956,11 +15986,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         112,
-        128
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -15968,11 +15998,11 @@
       ],
       "start_seam_px": [
         128,
-        120
+        184
       ],
       "end_seam_px": [
         32,
-        168
+        232
       ],
       "connectors": [
         {
@@ -15996,12 +16026,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_y_open_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_y_open_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -16095,7 +16125,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -16116,11 +16147,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         112,
-        128
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -16128,11 +16159,11 @@
       ],
       "start_seam_px": [
         128,
-        120
+        184
       ],
       "end_seam_px": [
         32,
-        168
+        232
       ],
       "connectors": [
         {
@@ -16156,12 +16187,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_y_closed_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_door_y_closed_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -16255,7 +16286,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -16276,11 +16308,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         48,
-        128
+        176
       ],
       "next_start_tile_offset": [
         3,
@@ -16288,11 +16320,11 @@
       ],
       "start_seam_px": [
         32,
-        120
+        184
       ],
       "end_seam_px": [
         128,
-        168
+        232
       ],
       "connectors": [
         {
@@ -16316,12 +16348,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_x_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_x_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -16368,7 +16400,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -16389,11 +16422,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         48,
-        128
+        176
       ],
       "next_start_tile_offset": [
         3,
@@ -16401,11 +16434,11 @@
       ],
       "start_seam_px": [
         32,
-        120
+        184
       ],
       "end_seam_px": [
         128,
-        168
+        232
       ],
       "connectors": [
         {
@@ -16429,12 +16462,12 @@
             1,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_x_v02/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_x_v02/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             48,
-            128
+            176
           ],
           "sort_tile_offset": [
             1,
@@ -16481,7 +16514,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -16502,11 +16536,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         112,
-        128
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -16514,11 +16548,11 @@
       ],
       "start_seam_px": [
         128,
-        120
+        184
       ],
       "end_seam_px": [
         32,
-        168
+        232
       ],
       "connectors": [
         {
@@ -16542,12 +16576,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_y_v01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_y_v01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -16594,7 +16628,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -16615,11 +16650,11 @@
       ],
       "canvas_size": [
         160,
-        192
+        256
       ],
       "anchor": [
         112,
-        128
+        176
       ],
       "next_start_tile_offset": [
         0,
@@ -16627,11 +16662,11 @@
       ],
       "start_seam_px": [
         128,
-        120
+        184
       ],
       "end_seam_px": [
         32,
-        168
+        232
       ],
       "connectors": [
         {
@@ -16655,12 +16690,12 @@
             0,
             1
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_y_v02/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_broken_y_v02/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
             112,
-            128
+            176
           ],
           "sort_tile_offset": [
             0,
@@ -16707,7 +16742,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -16727,24 +16763,24 @@
         1
       ],
       "canvas_size": [
-        96,
-        128
+        160,
+        272
       ],
       "anchor": [
-        48,
-        104
+        80,
+        192
       ],
       "next_start_tile_offset": [
         0,
         0
       ],
       "start_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "end_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "connectors": [],
       "collision_cells": [],
@@ -16757,12 +16793,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_01/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_01/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            104
+            80,
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -16801,7 +16837,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -16821,24 +16858,24 @@
         1
       ],
       "canvas_size": [
-        96,
-        128
+        160,
+        272
       ],
       "anchor": [
-        48,
-        104
+        80,
+        192
       ],
       "next_start_tile_offset": [
         0,
         0
       ],
       "start_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "end_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "connectors": [],
       "collision_cells": [],
@@ -16851,12 +16888,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_02/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_02/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            104
+            80,
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -16895,7 +16932,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -16915,24 +16953,24 @@
         1
       ],
       "canvas_size": [
-        96,
-        128
+        160,
+        272
       ],
       "anchor": [
-        48,
-        104
+        80,
+        192
       ],
       "next_start_tile_offset": [
         0,
         0
       ],
       "start_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "end_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "connectors": [],
       "collision_cells": [],
@@ -16945,12 +16983,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_03/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_03/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            104
+            80,
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -16989,7 +17027,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -17009,24 +17048,24 @@
         1
       ],
       "canvas_size": [
-        96,
-        128
+        160,
+        272
       ],
       "anchor": [
-        48,
-        104
+        80,
+        192
       ],
       "next_start_tile_offset": [
         0,
         0
       ],
       "start_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "end_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "connectors": [],
       "collision_cells": [],
@@ -17039,12 +17078,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_04/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_04/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            104
+            80,
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -17083,7 +17122,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -17103,24 +17143,24 @@
         1
       ],
       "canvas_size": [
-        96,
-        128
+        160,
+        272
       ],
       "anchor": [
-        48,
-        104
+        80,
+        192
       ],
       "next_start_tile_offset": [
         0,
         0
       ],
       "start_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "end_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "connectors": [],
       "collision_cells": [],
@@ -17133,12 +17173,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_05/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_05/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            104
+            80,
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -17177,7 +17217,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     },
     {
       "schema_version": 1,
@@ -17197,24 +17238,24 @@
         1
       ],
       "canvas_size": [
-        96,
-        128
+        160,
+        272
       ],
       "anchor": [
-        48,
-        104
+        80,
+        192
       ],
       "next_start_tile_offset": [
         0,
         0
       ],
       "start_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "end_seam_px": [
-        48,
-        104
+        80,
+        200
       ],
       "connectors": [],
       "collision_cells": [],
@@ -17227,12 +17268,12 @@
             0,
             0
           ],
-          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_06/part_00_base.png",
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_seam_cover_06/part_00_wooma_temple_monumental_wall_v2_base.png",
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            104
+            80,
+            192
           ],
           "sort_tile_offset": [
             0,
@@ -17271,7 +17312,8 @@
       "manual_collision_expected": true,
       "collision_authority": "manual_by_user",
       "collision_profile_id": "none_visual",
-      "repeat_group": ""
+      "repeat_group": "",
+      "visual_profile_id": "wooma_temple_monumental_wall_v2"
     }
   ]
 }
