@@ -47,6 +47,15 @@ func _ready() -> void:
 		var image := texture.get_image()
 		assert(image != null and not image.is_empty(), "%s invalid image" % asset_id)
 		assert(image.detect_alpha() != Image.ALPHA_NONE, "%s missing alpha" % asset_id)
+		var used_rect := image.get_used_rect()
+		var selection_bounds: Array = asset.get("selection_bounds_px", [])
+		assert(selection_bounds.size() == 4)
+		assert(
+			int(selection_bounds[0]) == used_rect.position.x
+			and int(selection_bounds[1]) == used_rect.position.y
+			and int(selection_bounds[2]) == used_rect.size.x
+			and int(selection_bounds[3]) == used_rect.size.y
+		)
 		var topology := str(asset.get("topology", ""))
 		topology_counts[topology] = int(topology_counts.get(topology, 0)) + 1
 		var effective := MapAssetCatalogService.find_asset(asset_id)

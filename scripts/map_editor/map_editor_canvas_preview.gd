@@ -800,12 +800,25 @@ static func instance_visual_geometry(instance: Dictionary, design_size: Vector2i
 	var visual_scale := Vector2(float(instance_scale[0]), float(instance_scale[1])) * draw_scale
 	var anchor_vector := Vector2(float(anchor[0]), float(anchor[1]))
 	var top_left := center - anchor_vector * visual_scale
+	var selection_bounds: Array = asset.get("selection_bounds_px", [])
+	var visual_rect := Rect2(top_left, texture_size * visual_scale)
+	if selection_bounds.size() == 4:
+		visual_rect = Rect2(
+			top_left + Vector2(
+				float(selection_bounds[0]),
+				float(selection_bounds[1])
+			) * visual_scale,
+			Vector2(
+				float(selection_bounds[2]),
+				float(selection_bounds[3])
+			) * visual_scale
+		)
 	return {
 		"center": center,
 		"anchor": anchor_vector,
 		"visual_scale": visual_scale,
 		"rotation": deg_to_rad(float(instance.get("rotation_deg", 0.0))),
-		"rect": Rect2(top_left, texture_size * visual_scale),
+		"rect": visual_rect,
 	}
 
 

@@ -580,6 +580,15 @@ def build_module(
     module["render_parts"] = render_parts
 
     size = list(artwork.size)
+    alpha_bounds = artwork.getchannel("A").getbbox()
+    if alpha_bounds is None:
+        raise RuntimeError(f"{asset_id} has no visible pixels")
+    visible_bounds = [
+        alpha_bounds[0],
+        alpha_bounds[1],
+        alpha_bounds[2] - alpha_bounds[0],
+        alpha_bounds[3] - alpha_bounds[1],
+    ]
     digest = sha256(composite_path)
     asset = {
         **copy.deepcopy(module),
@@ -588,7 +597,11 @@ def build_module(
         "image": res_path(composite_path),
         "thumbnail": res_path(composite_path),
         "image_size": size,
-        "visible_bounds_px": [0, 0, size[0], size[1]],
+        "visible_bounds_px": visible_bounds,
+        # Selection and hit testing use the real alpha bounds. This keeps the
+        # yellow box centred on side-compensated corner pillars instead of on
+        # the transparent module canvas.
+        "selection_bounds_px": visible_bounds,
         "anchor_px": list(module["anchor"]),
         "placement_anchor_px": list(module["anchor"]),
         "anchor_tile": [0, 0],
