@@ -404,4 +404,5 @@ static func _family_display_name(family_id: String, theme: String) -> String:
 	return {
 		"orc_tomb_rough_stone_u0": "兽人古墓粗砌旧石墙",
 		"cave_granite_u0": "天然洞穴花岗岩墙",
+		"wooma_temple_gothic_stone_u0": "沃玛寺庙哥特旧石墙",
 	}.get(family_id, "%s（%s）" % [family_id, theme])

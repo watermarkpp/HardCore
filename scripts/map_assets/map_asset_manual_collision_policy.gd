@@ -5,6 +5,7 @@ const POLICY_ID := "cave_tomb_manual_collision_v1"
 const VISUAL_ONLY_WALL_FAMILIES := [
 	"orc_tomb_rough_stone_u0",
 	"cave_granite_u0",
+	"wooma_temple_gothic_stone_u0",
 ]
 
 

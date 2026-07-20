@@ -82,6 +82,48 @@
       "palette_id": "orc_tomb_old_stone_u0",
       "content_layer": "vanilla",
       "enabled": true
+    },
+    {
+      "wall_family_id": "wooma_temple_gothic_stone_u0",
+      "display_name": "沃玛寺庙哥特旧石墙 U0",
+      "theme": "wooma_temple",
+      "material": "gothic_gray_green_stone",
+      "socket_profile_id": "wooma_temple_gothic_stone_socket_u0",
+      "tile_size": [
+        64,
+        32
+      ],
+      "wall_height_px": 96,
+      "side_pad_px": 16,
+      "allowed_lengths": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "primary_lengths": [
+        4,
+        3
+      ],
+      "repair_lengths": [
+        2,
+        1
+      ],
+      "default_blocked_side": "outside",
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "seam_cover_asset_ids": [
+        "wooma_temple_wall_seam_cover_01",
+        "wooma_temple_wall_seam_cover_02",
+        "wooma_temple_wall_seam_cover_03",
+        "wooma_temple_wall_seam_cover_04",
+        "wooma_temple_wall_seam_cover_05",
+        "wooma_temple_wall_seam_cover_06"
+      ],
+      "palette_id": "wooma_temple_gothic_stone_u0",
+      "content_layer": "personal_expansion",
+      "collision_authority": "manual_by_user",
+      "enabled": true
     }
   ]
 }
