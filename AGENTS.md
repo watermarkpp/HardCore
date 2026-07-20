@@ -43,7 +43,7 @@
 ## 品牌与命名规则
 
 - 正式游戏品牌和安装后的应用名称统一为 `HardCore`。
-- Android 包名统一为 `com.personal.hardcore`。
+- Android 玩家可见应用名称统一为 `HardCore`；内部包 ID `com.personal.mafaoffline` 为旧安装与存档升级兼容标识，不得仅因品牌改名而变更。
 - 玩家可见标题、按钮、世界总称、通用提示和新建内容不得再使用“玛法”“传奇”“MafaOffline”等旧品牌名称。
 - 原始客户端/服务端来源说明、历史验收记录、`legend176_data.json` 等内部溯源路径，以及 `mafa_world` 等既有稳定 ID 允许保留；它们不得直接作为玩家可见文案，也不得仅为改名而破坏兼容性。
 - 各专业分支新增 UI 文案、数据展示名或导出配置时，必须以 `HardCore` 为品牌基线。

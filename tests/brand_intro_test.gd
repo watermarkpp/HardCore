@@ -23,7 +23,7 @@ func _run() -> void:
 	var export_preset := FileAccess.get_file_as_string("res://export_presets.cfg")
 	assert(export_preset.contains("launcher_icons/main_192x192=\"res://assets/branding/android_icon_192.png\""))
 	assert(export_preset.contains("package/name=\"HardCore\""))
-	assert(export_preset.contains("package/unique_name=\"com.personal.hardcore\""))
+	assert(export_preset.contains("package/unique_name=\"com.personal.mafaoffline\""))
 	var intro: Control = load("res://scenes/brand_intro.tscn").instantiate()
 	intro.auto_advance = false
 	add_child(intro)
