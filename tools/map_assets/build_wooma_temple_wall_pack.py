@@ -428,17 +428,19 @@ def corner_art(
     # second pair of wall faces here double-renders the joint and creates the
     # visibly detached V/< /> shapes that this pack previously produced.
     #
-    # All four directional IDs deliberately share one centred 1-cell pillar.
-    # Direction-specific pixel compensation makes the art drift away from the
-    # tile anchor when the same module is placed manually. A 64 px visible
-    # width is the exact width of one logical tile; the 176 px height matches
-    # the approved straight-wall body without turning the pillar into a fence.
+    # All four directional IDs deliberately share one centred pillar.
+    # "One cell" is the logical placement footprint, not an instruction to
+    # squeeze the tall artwork into 64 screen pixels. Preserve the approved
+    # 96x200 pillar aspect while keeping its visual centre on the tile anchor.
+    # The +24 baseline is the calibrated in-cell foot point used by the wall
+    # foundation; moving it to +8 places the base on the neighbouring grid
+    # intersection instead of inside the intended diamond.
     return stretch_on_canvas(
         pillars[0],
         size,
-        (64, 176),
+        (96, 200),
         center_x=anchor[0],
-        bottom_y=anchor[1] + 8,
+        bottom_y=anchor[1] + 24,
     )
 
 
@@ -446,8 +448,8 @@ def pillar_art(module: dict, pillars: list[Image.Image], variant_seed: int) -> I
     size = tuple(int(value) for value in module["canvas_size"])
     anchor = tuple(int(value) for value in module["anchor"])
     topology = str(module["topology"])
-    target_size = (64, 176) if topology == "end_cap" else (56, 168)
-    bottom_y = anchor[1] + 8
+    target_size = (96, 200) if topology == "end_cap" else (76, 184)
+    bottom_y = anchor[1] + 24 if topology == "end_cap" else anchor[1] + 16
     return stretch_on_canvas(
         pillars[variant_seed % len(pillars)],
         size,

@@ -208,16 +208,16 @@ func _assert_four_directional_corners(assets: Array) -> void:
 			corners[asset_id] = asset
 	assert(corners.size() == 4)
 	var expected_bottom_by_id := {
-		"wooma_temple_wall_outer_nw_v01": 200,
-		"wooma_temple_wall_outer_ne_v01": 200,
-		"wooma_temple_wall_outer_se_v01": 200,
-		"wooma_temple_wall_outer_sw_v01": 200,
+		"wooma_temple_wall_outer_nw_v01": 216,
+		"wooma_temple_wall_outer_ne_v01": 216,
+		"wooma_temple_wall_outer_se_v01": 216,
+		"wooma_temple_wall_outer_sw_v01": 216,
 	}
 	var expected_left_by_id := {
-		"wooma_temple_wall_outer_nw_v01": 48,
-		"wooma_temple_wall_outer_ne_v01": 48,
-		"wooma_temple_wall_outer_se_v01": 48,
-		"wooma_temple_wall_outer_sw_v01": 48,
+		"wooma_temple_wall_outer_nw_v01": 32,
+		"wooma_temple_wall_outer_ne_v01": 32,
+		"wooma_temple_wall_outer_se_v01": 32,
+		"wooma_temple_wall_outer_sw_v01": 32,
 	}
 	var reference_size := Vector2i.ZERO
 	for asset_id: String in corners:
@@ -227,7 +227,7 @@ func _assert_four_directional_corners(assets: Array) -> void:
 		var image := texture.get_image()
 		assert(image != null and not image.is_empty())
 		var used_rect := image.get_used_rect()
-		assert(used_rect.size.x == 64 and used_rect.size.y == 176)
+		assert(used_rect.size.x == 96 and used_rect.size.y == 200)
 		assert(used_rect.position.x == int(expected_left_by_id[asset_id]))
 		assert(used_rect.end.y == int(expected_bottom_by_id[asset_id]))
 		if reference_size == Vector2i.ZERO:
