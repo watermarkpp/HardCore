@@ -223,34 +223,6 @@ def normalized_pillars() -> list[Image.Image]:
     return result
 
 
-def normalize_module_geometry(module: dict) -> None:
-    topology = str(module["topology"])
-    if topology in {"straight", "door_adapter", "broken_adapter"}:
-        length = int(module.get("length_tiles", 1))
-        visual_width = 32 * length + 32
-        visual_height = 80 + 16 * length
-        canvas_width = visual_width + 32
-        canvas_height = visual_height + 16
-        axis = str(module.get("axis", "iso_x"))
-        anchor_x = 48 if axis == "iso_x" else canvas_width - 48
-        module["canvas_size"] = [canvas_width, canvas_height]
-        module["anchor"] = [anchor_x, 96]
-        if axis == "iso_x":
-            module["start_seam_px"] = [32, 88]
-            module["end_seam_px"] = [32 + 32 * length, 88 + 16 * length]
-        else:
-            module["start_seam_px"] = [canvas_width - 32, 88]
-            module["end_seam_px"] = [
-                canvas_width - 32 - 32 * length,
-                88 + 16 * length,
-            ]
-        return
-    module["canvas_size"] = [96, 128]
-    module["anchor"] = [48, 96]
-    module["start_seam_px"] = [48, 96]
-    module["end_seam_px"] = [48, 96]
-
-
 def continuous_wall_window(
     source: Image.Image,
     length: int,
@@ -378,22 +350,6 @@ def paint_isometric_cap_joints(
     return result
 
 
-def clip_wall_to_seams(
-    artwork: Image.Image,
-    start_x: int,
-    end_x: int,
-) -> Image.Image:
-    """Remove visual overhang outside the declared wall socket planes."""
-    left = max(0, min(start_x, end_x))
-    right = min(artwork.width - 1, max(start_x, end_x))
-    result = Image.new("RGBA", artwork.size, (0, 0, 0, 0))
-    result.alpha_composite(
-        artwork.crop((left, 0, right + 1, artwork.height)),
-        (left, 0),
-    )
-    return result
-
-
 def straight_art(
     module: dict,
     continuous_wall: Image.Image,
@@ -402,28 +358,28 @@ def straight_art(
     axis = str(module["axis"])
     length = int(module["length_tiles"])
     size = tuple(int(value) for value in module["canvas_size"])
-    visual_size = (32 * length + 32, 80 + 16 * length)
+    # Preserve the proven orc-tomb module geometry inherited by this family.
+    # The previous Wooma-only normalization compressed 48 px of elevation and
+    # clipped the side overhang, turning a temple wall into a low fence.
+    visual_size = (32 * length + 40, 128 + 16 * length)
     source = continuous_wall_window(continuous_wall, length, variant_seed)
     artwork = stretch_on_canvas(
         source,
         size,
         visual_size,
         center_x=size[0] // 2,
-        bottom_y=size[1] - 8,
+        bottom_y=size[1],
     )
+    start_seam = tuple(int(value) for value in module["start_seam_px"])
+    end_seam = tuple(int(value) for value in module["end_seam_px"])
     artwork = align_wall_seams(
         artwork,
-        (32, 88),
-        (32 + 32 * length, 88 + 16 * length),
+        (32, start_seam[1]),
+        (32 + 32 * length, end_seam[1]),
     )
     artwork = paint_isometric_cap_joints(artwork, length)
     if axis == "iso_y":
         artwork = mirror(artwork)
-    artwork = clip_wall_to_seams(
-        artwork,
-        int(module["start_seam_px"][0]),
-        int(module["end_seam_px"][0]),
-    )
     return artwork, split_continuous_parts(artwork, length, axis)
 
 
@@ -464,21 +420,24 @@ def corner_art(
     return stretch_on_canvas(
         pillars[0],
         size,
-        (58, 96),
+        (72, 154),
         center_x=anchor[0] + lateral_compensation,
-        bottom_y=anchor[1] + 8 + depth_compensation,
+        bottom_y=anchor[1] + 38 + depth_compensation,
     )
 
 
 def pillar_art(module: dict, pillars: list[Image.Image], variant_seed: int) -> Image.Image:
     size = tuple(int(value) for value in module["canvas_size"])
     anchor = tuple(int(value) for value in module["anchor"])
+    topology = str(module["topology"])
+    target_size = (72, 148) if topology == "end_cap" else (58, 96)
+    bottom_y = size[1] if topology == "end_cap" else anchor[1] + 8
     return stretch_on_canvas(
         pillars[variant_seed % len(pillars)],
         size,
-        (58, 96),
+        target_size,
         center_x=anchor[0],
-        bottom_y=anchor[1] + 8,
+        bottom_y=bottom_y,
     )
 
 
@@ -497,9 +456,9 @@ def adapter_art(module: dict, adapters: list[Image.Image]) -> Image.Image:
     artwork = stretch_on_canvas(
         source,
         size,
-        (32 * length + 32, 80 + 16 * length),
+        (32 * length + 40, 128 + 16 * length),
         center_x=size[0] // 2,
-        bottom_y=size[1] - 8,
+        bottom_y=size[1],
     )
     if axis == "iso_y":
         artwork = mirror(artwork)
@@ -533,7 +492,6 @@ def build_module(
     module["repeat_group"] = str(module.get("repeat_group", "")).replace(
         "orc_tomb_", "wooma_temple_", 1
     )
-    normalize_module_geometry(module)
     for connector in module.get("connectors", []):
         connector["socket_profile_id"] = SOCKET_ID
 

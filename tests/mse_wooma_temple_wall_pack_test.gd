@@ -66,7 +66,7 @@ func _ready() -> void:
 	})
 	_assert_family_menu()
 	_assert_segmented_straight()
-	_assert_corner_visual_baseline(assets)
+	_assert_source_geometry_baseline(assets)
 	_assert_four_directional_corners(assets)
 	_assert_closed_loop()
 	print("MSE_WOOMA_TEMPLE_WALL_PACK_PASS assets=42 closed_loop=12x10")
@@ -125,36 +125,21 @@ func _assert_segmented_straight() -> void:
 		assert(sort_tiles.has("%d,4" % x))
 
 
-func _assert_corner_visual_baseline(assets: Array) -> void:
-	var corner := {}
-	var seam_pillar := {}
+func _assert_source_geometry_baseline(assets: Array) -> void:
 	for asset: Dictionary in assets:
-		match str(asset.get("asset_id", "")):
-			"wooma_temple_wall_outer_ne_v01":
-				corner = asset
-			"wooma_temple_wall_seam_cover_01":
-				seam_pillar = asset
-	assert(not corner.is_empty())
-	assert(not seam_pillar.is_empty())
-	var corner_texture := load(
-		"res://" + str(corner.get("image", ""))
-	) as Texture2D
-	var pillar_texture := load(
-		"res://" + str(seam_pillar.get("image", ""))
-	) as Texture2D
-	assert(corner_texture != null and pillar_texture != null)
-	var corner_image := corner_texture.get_image()
-	var pillar_image := pillar_texture.get_image()
-	assert(corner_image != null and not corner_image.is_empty())
-	assert(pillar_image != null and not pillar_image.is_empty())
-	var corner_region := corner_image.get_region(corner_image.get_used_rect())
-	var pillar_region := pillar_image.get_region(pillar_image.get_used_rect())
-	assert(corner_region.get_data() == pillar_region.get_data())
-	var corner_anchor: Array = corner.get("placement_anchor_px", [])
-	var pillar_anchor: Array = seam_pillar.get("placement_anchor_px", [])
-	assert(corner_anchor.size() == 2)
-	assert(pillar_anchor.size() == 2)
-	assert(corner_anchor == pillar_anchor)
+		var source_id := str(asset.get("asset_id", "")).replace(
+			"wooma_temple_wall_",
+			"orc_tomb_wall_"
+		)
+		var source := MapAssetCatalogService.find_asset(source_id)
+		assert(not source.is_empty(), "missing source geometry: %s" % source_id)
+		assert(asset.get("image_size", []) == source.get("image_size", []))
+		assert(
+			asset.get("placement_anchor_px", [])
+			== source.get("placement_anchor_px", [])
+		)
+		assert(asset.get("start_seam_px", []) == source.get("start_seam_px", []))
+		assert(asset.get("end_seam_px", []) == source.get("end_seam_px", []))
 
 
 func _assert_four_directional_corners(assets: Array) -> void:
@@ -170,16 +155,16 @@ func _assert_four_directional_corners(assets: Array) -> void:
 			corners[asset_id] = asset
 	assert(corners.size() == 4)
 	var expected_bottom_by_id := {
-		"wooma_temple_wall_outer_nw_v01": 96,
-		"wooma_temple_wall_outer_ne_v01": 104,
-		"wooma_temple_wall_outer_se_v01": 112,
-		"wooma_temple_wall_outer_sw_v01": 104,
+		"wooma_temple_wall_outer_nw_v01": 174,
+		"wooma_temple_wall_outer_ne_v01": 182,
+		"wooma_temple_wall_outer_se_v01": 190,
+		"wooma_temple_wall_outer_sw_v01": 182,
 	}
 	var expected_left_by_id := {
-		"wooma_temple_wall_outer_nw_v01": 19,
-		"wooma_temple_wall_outer_ne_v01": 35,
-		"wooma_temple_wall_outer_se_v01": 19,
-		"wooma_temple_wall_outer_sw_v01": 3,
+		"wooma_temple_wall_outer_nw_v01": 44,
+		"wooma_temple_wall_outer_ne_v01": 60,
+		"wooma_temple_wall_outer_se_v01": 44,
+		"wooma_temple_wall_outer_sw_v01": 28,
 	}
 	var reference_size := Vector2i.ZERO
 	for asset_id: String in corners:
@@ -189,7 +174,7 @@ func _assert_four_directional_corners(assets: Array) -> void:
 		var image := texture.get_image()
 		assert(image != null and not image.is_empty())
 		var used_rect := image.get_used_rect()
-		assert(used_rect.size.x <= 58 and used_rect.size.y <= 96)
+		assert(used_rect.size.x == 72 and used_rect.size.y == 154)
 		assert(used_rect.position.x == int(expected_left_by_id[asset_id]))
 		assert(used_rect.end.y == int(expected_bottom_by_id[asset_id]))
 		if reference_size == Vector2i.ZERO:
