@@ -4,6 +4,7 @@
   "display_name": "沃玛寺庙无柱直墙素材包",
   "source_policy": "imagegen_flat_sources_native_2to1_projection",
   "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+  "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
   "corner_join_mode": "straight_overlap",
   "wall_family_ids": [
     "wooma_temple_gothic_stone_u0"
@@ -32,8 +33,8 @@
         224
       ],
       "anchor": [
-        48,
-        176
+        64,
+        184
       ],
       "next_start_tile_offset": [
         1,
@@ -73,8 +74,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -117,6 +118,7 @@
       "map_collision_override": "disabled",
       "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
       "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
       "corner_join_mode": "straight_overlap",
       "contains_corner_pillar": false,
       "wall_cap_thickness_tiles": 1,
@@ -144,12 +146,12 @@
         191
       ],
       "anchor_px": [
-        48,
-        176
+        64,
+        184
       ],
       "placement_anchor_px": [
-        48,
-        176
+        64,
+        184
       ],
       "anchor_tile": [
         0,
@@ -225,8 +227,8 @@
         240
       ],
       "anchor": [
-        48,
-        176
+        64,
+        184
       ],
       "next_start_tile_offset": [
         2,
@@ -266,8 +268,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -285,8 +287,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             1,
@@ -329,6 +331,7 @@
       "map_collision_override": "disabled",
       "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
       "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
       "corner_join_mode": "straight_overlap",
       "contains_corner_pillar": false,
       "wall_cap_thickness_tiles": 1,
@@ -356,12 +359,12 @@
         207
       ],
       "anchor_px": [
-        48,
-        176
+        64,
+        184
       ],
       "placement_anchor_px": [
-        48,
-        176
+        64,
+        184
       ],
       "anchor_tile": [
         0,
@@ -437,8 +440,8 @@
         256
       ],
       "anchor": [
-        48,
-        176
+        64,
+        184
       ],
       "next_start_tile_offset": [
         3,
@@ -478,8 +481,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -497,8 +500,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             1,
@@ -516,8 +519,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             2,
@@ -560,6 +563,7 @@
       "map_collision_override": "disabled",
       "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
       "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
       "corner_join_mode": "straight_overlap",
       "contains_corner_pillar": false,
       "wall_cap_thickness_tiles": 1,
@@ -587,12 +591,12 @@
         223
       ],
       "anchor_px": [
-        48,
-        176
+        64,
+        184
       ],
       "placement_anchor_px": [
-        48,
-        176
+        64,
+        184
       ],
       "anchor_tile": [
         0,
@@ -668,8 +672,8 @@
         256
       ],
       "anchor": [
-        48,
-        176
+        64,
+        184
       ],
       "next_start_tile_offset": [
         3,
@@ -709,8 +713,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -728,8 +732,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             1,
@@ -747,8 +751,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             2,
@@ -791,6 +795,7 @@
       "map_collision_override": "disabled",
       "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
       "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
       "corner_join_mode": "straight_overlap",
       "contains_corner_pillar": false,
       "wall_cap_thickness_tiles": 1,
@@ -818,12 +823,12 @@
         223
       ],
       "anchor_px": [
-        48,
-        176
+        64,
+        184
       ],
       "placement_anchor_px": [
-        48,
-        176
+        64,
+        184
       ],
       "anchor_tile": [
         0,
@@ -899,8 +904,8 @@
         256
       ],
       "anchor": [
-        48,
-        176
+        64,
+        184
       ],
       "next_start_tile_offset": [
         3,
@@ -940,8 +945,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -959,8 +964,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             1,
@@ -978,8 +983,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             2,
@@ -1022,6 +1027,7 @@
       "map_collision_override": "disabled",
       "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
       "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
       "corner_join_mode": "straight_overlap",
       "contains_corner_pillar": false,
       "wall_cap_thickness_tiles": 1,
@@ -1049,12 +1055,12 @@
         223
       ],
       "anchor_px": [
-        48,
-        176
+        64,
+        184
       ],
       "placement_anchor_px": [
-        48,
-        176
+        64,
+        184
       ],
       "anchor_tile": [
         0,
@@ -1130,8 +1136,8 @@
         272
       ],
       "anchor": [
-        48,
-        176
+        64,
+        184
       ],
       "next_start_tile_offset": [
         4,
@@ -1171,8 +1177,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -1190,8 +1196,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             1,
@@ -1209,8 +1215,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             2,
@@ -1228,8 +1234,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             3,
@@ -1272,6 +1278,7 @@
       "map_collision_override": "disabled",
       "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
       "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
       "corner_join_mode": "straight_overlap",
       "contains_corner_pillar": false,
       "wall_cap_thickness_tiles": 1,
@@ -1299,12 +1306,12 @@
         239
       ],
       "anchor_px": [
-        48,
-        176
+        64,
+        184
       ],
       "placement_anchor_px": [
-        48,
-        176
+        64,
+        184
       ],
       "anchor_tile": [
         0,
@@ -1380,8 +1387,8 @@
         272
       ],
       "anchor": [
-        48,
-        176
+        64,
+        184
       ],
       "next_start_tile_offset": [
         4,
@@ -1421,8 +1428,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -1440,8 +1447,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             1,
@@ -1459,8 +1466,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             2,
@@ -1478,8 +1485,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             3,
@@ -1522,6 +1529,7 @@
       "map_collision_override": "disabled",
       "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
       "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
       "corner_join_mode": "straight_overlap",
       "contains_corner_pillar": false,
       "wall_cap_thickness_tiles": 1,
@@ -1549,12 +1557,12 @@
         239
       ],
       "anchor_px": [
-        48,
-        176
+        64,
+        184
       ],
       "placement_anchor_px": [
-        48,
-        176
+        64,
+        184
       ],
       "anchor_tile": [
         0,
@@ -1630,8 +1638,8 @@
         272
       ],
       "anchor": [
-        48,
-        176
+        64,
+        184
       ],
       "next_start_tile_offset": [
         4,
@@ -1671,8 +1679,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -1690,8 +1698,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             1,
@@ -1709,8 +1717,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             2,
@@ -1728,8 +1736,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             3,
@@ -1772,6 +1780,7 @@
       "map_collision_override": "disabled",
       "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
       "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
       "corner_join_mode": "straight_overlap",
       "contains_corner_pillar": false,
       "wall_cap_thickness_tiles": 1,
@@ -1799,12 +1808,12 @@
         239
       ],
       "anchor_px": [
-        48,
-        176
+        64,
+        184
       ],
       "placement_anchor_px": [
-        48,
-        176
+        64,
+        184
       ],
       "anchor_tile": [
         0,
@@ -1880,8 +1889,8 @@
         224
       ],
       "anchor": [
-        48,
-        176
+        32,
+        184
       ],
       "next_start_tile_offset": [
         0,
@@ -1921,8 +1930,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            48,
-            176
+            32,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -1965,6 +1974,7 @@
       "map_collision_override": "disabled",
       "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
       "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
       "corner_join_mode": "straight_overlap",
       "contains_corner_pillar": false,
       "wall_cap_thickness_tiles": 1,
@@ -1992,12 +2002,12 @@
         191
       ],
       "anchor_px": [
-        48,
-        176
+        32,
+        184
       ],
       "placement_anchor_px": [
-        48,
-        176
+        32,
+        184
       ],
       "anchor_tile": [
         0,
@@ -2073,8 +2083,8 @@
         240
       ],
       "anchor": [
-        80,
-        176
+        64,
+        184
       ],
       "next_start_tile_offset": [
         0,
@@ -2114,8 +2124,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            80,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -2133,8 +2143,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            80,
-            176
+            64,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -2177,6 +2187,7 @@
       "map_collision_override": "disabled",
       "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
       "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
       "corner_join_mode": "straight_overlap",
       "contains_corner_pillar": false,
       "wall_cap_thickness_tiles": 1,
@@ -2204,12 +2215,12 @@
         207
       ],
       "anchor_px": [
-        80,
-        176
+        64,
+        184
       ],
       "placement_anchor_px": [
-        80,
-        176
+        64,
+        184
       ],
       "anchor_tile": [
         0,
@@ -2285,8 +2296,8 @@
         256
       ],
       "anchor": [
-        112,
-        176
+        96,
+        184
       ],
       "next_start_tile_offset": [
         0,
@@ -2326,8 +2337,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            112,
-            176
+            96,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -2345,8 +2356,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            112,
-            176
+            96,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -2364,8 +2375,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            112,
-            176
+            96,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -2408,6 +2419,7 @@
       "map_collision_override": "disabled",
       "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
       "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
       "corner_join_mode": "straight_overlap",
       "contains_corner_pillar": false,
       "wall_cap_thickness_tiles": 1,
@@ -2435,12 +2447,12 @@
         223
       ],
       "anchor_px": [
-        112,
-        176
+        96,
+        184
       ],
       "placement_anchor_px": [
-        112,
-        176
+        96,
+        184
       ],
       "anchor_tile": [
         0,
@@ -2516,8 +2528,8 @@
         256
       ],
       "anchor": [
-        112,
-        176
+        96,
+        184
       ],
       "next_start_tile_offset": [
         0,
@@ -2557,8 +2569,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            112,
-            176
+            96,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -2576,8 +2588,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            112,
-            176
+            96,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -2595,8 +2607,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            112,
-            176
+            96,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -2639,6 +2651,7 @@
       "map_collision_override": "disabled",
       "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
       "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
       "corner_join_mode": "straight_overlap",
       "contains_corner_pillar": false,
       "wall_cap_thickness_tiles": 1,
@@ -2666,12 +2679,12 @@
         223
       ],
       "anchor_px": [
-        112,
-        176
+        96,
+        184
       ],
       "placement_anchor_px": [
-        112,
-        176
+        96,
+        184
       ],
       "anchor_tile": [
         0,
@@ -2747,8 +2760,8 @@
         256
       ],
       "anchor": [
-        112,
-        176
+        96,
+        184
       ],
       "next_start_tile_offset": [
         0,
@@ -2788,8 +2801,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            112,
-            176
+            96,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -2807,8 +2820,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            112,
-            176
+            96,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -2826,8 +2839,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            112,
-            176
+            96,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -2870,6 +2883,7 @@
       "map_collision_override": "disabled",
       "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
       "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
       "corner_join_mode": "straight_overlap",
       "contains_corner_pillar": false,
       "wall_cap_thickness_tiles": 1,
@@ -2897,12 +2911,12 @@
         223
       ],
       "anchor_px": [
-        112,
-        176
+        96,
+        184
       ],
       "placement_anchor_px": [
-        112,
-        176
+        96,
+        184
       ],
       "anchor_tile": [
         0,
@@ -2978,8 +2992,8 @@
         272
       ],
       "anchor": [
-        144,
-        176
+        128,
+        184
       ],
       "next_start_tile_offset": [
         0,
@@ -3019,8 +3033,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            144,
-            176
+            128,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -3038,8 +3052,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            144,
-            176
+            128,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -3057,8 +3071,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            144,
-            176
+            128,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -3076,8 +3090,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            144,
-            176
+            128,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -3120,6 +3134,7 @@
       "map_collision_override": "disabled",
       "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
       "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
       "corner_join_mode": "straight_overlap",
       "contains_corner_pillar": false,
       "wall_cap_thickness_tiles": 1,
@@ -3147,12 +3162,12 @@
         239
       ],
       "anchor_px": [
-        144,
-        176
+        128,
+        184
       ],
       "placement_anchor_px": [
-        144,
-        176
+        128,
+        184
       ],
       "anchor_tile": [
         0,
@@ -3228,8 +3243,8 @@
         272
       ],
       "anchor": [
-        144,
-        176
+        128,
+        184
       ],
       "next_start_tile_offset": [
         0,
@@ -3269,8 +3284,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            144,
-            176
+            128,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -3288,8 +3303,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            144,
-            176
+            128,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -3307,8 +3322,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            144,
-            176
+            128,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -3326,8 +3341,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            144,
-            176
+            128,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -3370,6 +3385,7 @@
       "map_collision_override": "disabled",
       "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
       "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
       "corner_join_mode": "straight_overlap",
       "contains_corner_pillar": false,
       "wall_cap_thickness_tiles": 1,
@@ -3397,12 +3413,12 @@
         239
       ],
       "anchor_px": [
-        144,
-        176
+        128,
+        184
       ],
       "placement_anchor_px": [
-        144,
-        176
+        128,
+        184
       ],
       "anchor_tile": [
         0,
@@ -3478,8 +3494,8 @@
         272
       ],
       "anchor": [
-        144,
-        176
+        128,
+        184
       ],
       "next_start_tile_offset": [
         0,
@@ -3519,8 +3535,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            144,
-            176
+            128,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -3538,8 +3554,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            144,
-            176
+            128,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -3557,8 +3573,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            144,
-            176
+            128,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -3576,8 +3592,8 @@
           "front_image": "",
           "shadow_image": "",
           "anchor": [
-            144,
-            176
+            128,
+            184
           ],
           "sort_tile_offset": [
             0,
@@ -3620,6 +3636,7 @@
       "map_collision_override": "disabled",
       "visual_profile_id": "wooma_temple_native_2to1_wall_v3",
       "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
       "corner_join_mode": "straight_overlap",
       "contains_corner_pillar": false,
       "wall_cap_thickness_tiles": 1,
@@ -3647,12 +3664,12 @@
         239
       ],
       "anchor_px": [
-        144,
-        176
+        128,
+        184
       ],
       "placement_anchor_px": [
-        144,
-        176
+        128,
+        184
       ],
       "anchor_tile": [
         0,

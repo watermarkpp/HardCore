@@ -46,13 +46,14 @@ FAMILY_ID = "wooma_temple_gothic_stone_u0"
 SOCKET_ID = "wooma_temple_gothic_stone_socket_u0"
 VISUAL_PROFILE_ID = "wooma_temple_native_2to1_wall_v3"
 PROJECTION_CONTRACT_ID = "isometric_cell_64x32_exact_v1"
+PLACEMENT_CONTRACT_ID = "wall_foot_on_cell_edge_64x32_v1"
 SOURCE_FAMILY_ID = "orc_tomb_rough_stone_u0"
 SOURCE_PREFIX = "orc_tomb_wall_"
 TARGET_PREFIX = "wooma_temple_wall_"
 GRID_TILE = (64, 32)
 FACE_SIZE = (32, 160)
 SEGMENT_SIZE = (96, 224)
-ANCHOR_Y = 176
+ANCHOR_Y = 184
 RESAMPLE = Image.Resampling.LANCZOS
 
 
@@ -188,20 +189,27 @@ def _apply_native_geometry(module: dict) -> None:
     axis = str(module["axis"])
     canvas_width = 32 * length + 64
     canvas_height = 208 + 16 * length
-    anchor_x = 48 if axis == "iso_x" else canvas_width - 48
+    # Wall instances are positioned at a cell centre by the editor.  The
+    # visible foot must therefore use one complete diamond edge, never the
+    # centre diagonal.  These anchors produce:
+    #   iso_x: (-32, 0) -> (0, 16)
+    #   iso_y: ( 32, 0) -> (0, 16)
+    # relative to that cell centre.
+    anchor_x = 64 if axis == "iso_x" else canvas_width - 64
     module["canvas_size"] = [canvas_width, canvas_height]
     module["anchor"] = [anchor_x, ANCHOR_Y]
+    seam_start_y = ANCHOR_Y
     if axis == "iso_x":
-        module["start_seam_px"] = [32, ANCHOR_Y + 8]
+        module["start_seam_px"] = [32, seam_start_y]
         module["end_seam_px"] = [
             32 + 32 * length,
-            ANCHOR_Y + 8 + 16 * length,
+            seam_start_y + 16 * length,
         ]
     else:
-        module["start_seam_px"] = [canvas_width - 32, ANCHOR_Y + 8]
+        module["start_seam_px"] = [canvas_width - 32, seam_start_y]
         module["end_seam_px"] = [
             canvas_width - 32 - 32 * length,
-            ANCHOR_Y + 8 + 16 * length,
+            seam_start_y + 16 * length,
         ]
 
 
@@ -257,6 +265,7 @@ def build_module(
             ),
             "visual_profile_id": VISUAL_PROFILE_ID,
             "native_projection_contract_id": PROJECTION_CONTRACT_ID,
+            "placement_contract_id": PLACEMENT_CONTRACT_ID,
             "corner_join_mode": "straight_overlap",
             "contains_corner_pillar": False,
             "wall_cap_thickness_tiles": 1,
@@ -386,6 +395,7 @@ def update_family_catalog() -> None:
             "corner_join_mode": "straight_overlap",
             "corner_asset_ids": [],
             "native_projection_contract_id": PROJECTION_CONTRACT_ID,
+            "placement_contract_id": PLACEMENT_CONTRACT_ID,
             "contains_corner_pillars": False,
             "palette_id": FAMILY_ID,
             "content_layer": "personal_expansion",
@@ -445,6 +455,7 @@ def main() -> None:
             "display_name": "沃玛寺庙无柱直墙素材包",
             "source_policy": "imagegen_flat_sources_native_2to1_projection",
             "native_projection_contract_id": PROJECTION_CONTRACT_ID,
+            "placement_contract_id": PLACEMENT_CONTRACT_ID,
             "corner_join_mode": "straight_overlap",
             "wall_family_ids": [FAMILY_ID],
             "collision_authority": "manual_by_user",

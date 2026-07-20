@@ -3,6 +3,7 @@ extends Node
 const FAMILY_ID := "wooma_temple_gothic_stone_u0"
 const CATALOG_PATH := "res://assets/data/assets/map_wooma_temple_wall_asset_catalog.json"
 const PROJECTION_CONTRACT := "isometric_cell_64x32_exact_v1"
+const PLACEMENT_CONTRACT := "wall_foot_on_cell_edge_64x32_v1"
 
 
 func _ready() -> void:
@@ -28,6 +29,7 @@ func _ready() -> void:
 		assert(str(asset.get("corner_join_mode", "")) == "straight_overlap")
 		assert(not bool(asset.get("contains_corner_pillar", true)))
 		assert(str(asset.get("native_projection_contract_id", "")) == PROJECTION_CONTRACT)
+		assert(str(asset.get("placement_contract_id", "")) == PLACEMENT_CONTRACT)
 		assert(
 			str(asset.get("visual_profile_id", ""))
 			== "wooma_temple_native_2to1_wall_v3"
@@ -84,12 +86,39 @@ func _assert_native_geometry(asset: Dictionary) -> void:
 		and int(image_size[1]) == 208 + 16 * length
 	)
 	var anchor: Array = asset.get("placement_anchor_px", [])
-	assert(anchor.size() == 2 and int(anchor[1]) == 176)
-	assert(int(anchor[0]) == (48 if axis == "iso_x" else int(image_size[0]) - 48))
+	assert(anchor.size() == 2 and int(anchor[1]) == 184)
+	assert(int(anchor[0]) == (64 if axis == "iso_x" else int(image_size[0]) - 64))
 	var start_seam: Array = asset.get("start_seam_px", [])
 	var end_seam: Array = asset.get("end_seam_px", [])
 	assert(int(start_seam[1]) == 184)
+	assert(int(start_seam[1]) - int(anchor[1]) == 0)
 	assert(int(end_seam[1]) - int(start_seam[1]) == 16 * length)
+	if axis == "iso_x":
+		assert(
+			Vector2i(
+				int(start_seam[0]) - int(anchor[0]),
+				int(start_seam[1]) - int(anchor[1])
+			) == Vector2i(-32, 0)
+		)
+		assert(
+			Vector2i(
+				int(end_seam[0]) - int(anchor[0]),
+				int(end_seam[1]) - int(anchor[1])
+			) == Vector2i(32 * (length - 1), 16 * length)
+		)
+	else:
+		assert(
+			Vector2i(
+				int(start_seam[0]) - int(anchor[0]),
+				int(start_seam[1]) - int(anchor[1])
+			) == Vector2i(32, 0)
+		)
+		assert(
+			Vector2i(
+				int(end_seam[0]) - int(anchor[0]),
+				int(end_seam[1]) - int(anchor[1])
+			) == Vector2i(-32 * (length - 1), 16 * length)
+		)
 	var cap_projection: Array = asset.get("wall_cap_projection_px", [])
 	assert(
 		cap_projection.size() == 2
