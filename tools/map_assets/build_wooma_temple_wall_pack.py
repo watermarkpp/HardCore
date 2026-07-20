@@ -201,7 +201,7 @@ def display_name(module: dict) -> str:
 
 
 def normalized_continuous_wall() -> Image.Image:
-    with Image.open(SOURCE_DIR / "continuous_wall_alpha_v3.png") as opened:
+    with Image.open(SOURCE_DIR / "continuous_wall_alpha_v4.png") as opened:
         return alpha_trim(opened.convert("RGBA"))
 
 
@@ -223,9 +223,14 @@ def normalized_pillars() -> list[Image.Image]:
     return result
 
 
-def normalized_corner_pillar() -> Image.Image:
-    with Image.open(SOURCE_DIR / "corner_pillar_alpha_v2.png") as opened:
-        return alpha_trim(opened.convert("RGBA"))
+def normalized_corner_junctions() -> dict[str, Image.Image]:
+    result: dict[str, Image.Image] = {}
+    for key in ("v", "inv"):
+        with Image.open(
+            SOURCE_DIR / f"corner_{key}_junction_alpha_v2.png"
+        ) as opened:
+            result[key] = alpha_trim(opened.convert("RGBA"))
+    return result
 
 
 def normalize_module_geometry(module: dict) -> None:
@@ -383,6 +388,22 @@ def paint_isometric_cap_joints(
     return result
 
 
+def clip_wall_to_seams(
+    artwork: Image.Image,
+    start_x: int,
+    end_x: int,
+) -> Image.Image:
+    """Remove visual overhang outside the declared wall socket planes."""
+    left = max(0, min(start_x, end_x))
+    right = min(artwork.width - 1, max(start_x, end_x))
+    result = Image.new("RGBA", artwork.size, (0, 0, 0, 0))
+    result.alpha_composite(
+        artwork.crop((left, 0, right + 1, artwork.height)),
+        (left, 0),
+    )
+    return result
+
+
 def straight_art(
     module: dict,
     continuous_wall: Image.Image,
@@ -408,25 +429,49 @@ def straight_art(
     artwork = paint_isometric_cap_joints(artwork, length)
     if axis == "iso_y":
         artwork = mirror(artwork)
+    artwork = clip_wall_to_seams(
+        artwork,
+        int(module["start_seam_px"][0]),
+        int(module["end_seam_px"][0]),
+    )
     return artwork, split_continuous_parts(artwork, length, axis)
 
 
 def corner_art(
     module: dict,
-    corner_pillar: Image.Image,
+    corner_junctions: dict[str, Image.Image],
 ) -> Image.Image:
     size = tuple(int(value) for value in module["canvas_size"])
     anchor = tuple(int(value) for value in module["anchor"])
-    return stretch_on_canvas(
-        corner_pillar,
-        size,
-        (54, 84),
-        center_x=anchor[0],
-        # Pillow's paste bottom is exclusive.  A bottom boundary seven
-        # pixels above the anchor makes the last visible corner pixel land
-        # exactly eight pixels above it, matching the straight-wall foot.
-        bottom_y=anchor[1] - 7,
-    )
+    asset_id = str(module["asset_id"])
+
+    def placed(source: Image.Image, target_width: int) -> Image.Image:
+        resized = alpha_trim(source).resize((target_width, 83), RESAMPLE)
+        source_foot = _alpha_baseline_y(resized, resized.width // 2, 2)
+        return place_anchored(
+            resized,
+            (resized.width // 2, source_foot),
+            size,
+            (anchor[0], anchor[1] - 8),
+        )
+
+    v_corner = placed(corner_junctions["v"], 72)
+    inv_corner = placed(corner_junctions["inv"], 72)
+    if "_nw_" in asset_id:
+        return inv_corner
+    if "_se_" in asset_id:
+        return v_corner
+
+    result = Image.new("RGBA", size, (0, 0, 0, 0))
+    if "_ne_" in asset_id:
+        half_box = (0, 0, anchor[0] + 1, size[1])
+        half_position = (0, 0)
+    else:
+        half_box = (anchor[0], 0, size[0], size[1])
+        half_position = (anchor[0], 0)
+    result.alpha_composite(v_corner.crop(half_box), half_position)
+    result.alpha_composite(inv_corner.crop(half_box), half_position)
+    return result
 
 
 def pillar_art(module: dict, pillars: list[Image.Image], variant_seed: int) -> Image.Image:
@@ -470,7 +515,7 @@ def build_module(
     continuous_wall: Image.Image,
     adapters: list[Image.Image],
     pillars: list[Image.Image],
-    corner_pillar: Image.Image,
+    corner_junctions: dict[str, Image.Image],
 ) -> tuple[dict, dict]:
     module = copy.deepcopy(source_module)
     asset_id = str(module["asset_id"]).replace(SOURCE_PREFIX, TARGET_PREFIX, 1)
@@ -502,7 +547,7 @@ def build_module(
     if topology == "straight":
         artwork, parts = straight_art(module, continuous_wall, variant_seed)
     elif topology in {"inner_corner", "outer_corner"}:
-        artwork = corner_art(module, corner_pillar)
+        artwork = corner_art(module, corner_junctions)
         parts = [artwork]
     elif topology in {"door_adapter", "broken_adapter"}:
         artwork = adapter_art(module, adapters)
@@ -579,6 +624,8 @@ def build_module(
         "thumbnail_source_sha256": digest,
         "processing": "codex_imagegen_chroma_key_crop_grid_calibration",
         "generation_source_ids": [
+            "call_cyNH4ptmEJLuV8B1ng02tFGb",
+            "call_xsfjESoCTQVCnquzeXlIB5Rj",
             "call_bGEyuBMpAVbjI6KDM5QBFjkp",
             "call_8raUM7XLx5zAr6dA5fOpgLsh",
             "call_Y9TZ7EPiCWQgV026MYpIRyNL",
@@ -636,8 +683,9 @@ def update_family_catalog() -> None:
 
 def main() -> None:
     required = [
-        SOURCE_DIR / "continuous_wall_alpha_v3.png",
-        SOURCE_DIR / "corner_pillar_alpha_v2.png",
+        SOURCE_DIR / "continuous_wall_alpha_v4.png",
+        SOURCE_DIR / "corner_v_junction_alpha_v2.png",
+        SOURCE_DIR / "corner_inv_junction_alpha_v2.png",
         SOURCE_DIR / "adapter_sheet_alpha.png",
         SOURCE_DIR / "pillar_sheet_alpha.png",
     ]
@@ -657,7 +705,7 @@ def main() -> None:
     continuous_wall = normalized_continuous_wall()
     adapters = normalized_adapters()
     pillars = normalized_pillars()
-    corner_pillar = normalized_corner_pillar()
+    corner_junctions = normalized_corner_junctions()
 
     modules: list[dict] = []
     assets: list[dict] = []
@@ -667,7 +715,7 @@ def main() -> None:
             continuous_wall,
             adapters,
             pillars,
-            corner_pillar,
+            corner_junctions,
         )
         modules.append(module)
         assets.append(asset)

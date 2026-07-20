@@ -67,6 +67,7 @@ func _ready() -> void:
 	_assert_family_menu()
 	_assert_segmented_straight()
 	_assert_corner_visual_baseline(assets)
+	_assert_four_directional_corners(assets)
 	_assert_closed_loop()
 	print("MSE_WOOMA_TEMPLE_WALL_PACK_PASS assets=42 closed_loop=12x10")
 	get_tree().quit(0)
@@ -139,20 +140,78 @@ func _assert_corner_visual_baseline(assets: Array) -> void:
 	assert(texture != null)
 	var image := texture.get_image()
 	assert(image != null and not image.is_empty())
-	var used_rect := image.get_used_rect()
 	var corner_anchor: Array = corner.get("placement_anchor_px", [])
 	var straight_anchor: Array = straight.get("placement_anchor_px", [])
 	var straight_start: Array = straight.get("start_seam_px", [])
 	assert(corner_anchor.size() == 2)
 	assert(straight_anchor.size() == 2)
 	assert(straight_start.size() == 2)
-	var corner_foot_offset := used_rect.end.y - 1 - int(corner_anchor[1])
+	var corner_foot_offset := (
+		_opaque_bottom_near_x(image, int(corner_anchor[0]), 2)
+		- int(corner_anchor[1])
+	)
 	var straight_foot_offset := int(straight_start[1]) - int(straight_anchor[1])
 	assert(
 		corner_foot_offset == straight_foot_offset,
 		"corner foot offset %d must match straight-wall foot offset %d"
 		% [corner_foot_offset, straight_foot_offset]
 	)
+
+
+func _opaque_bottom_near_x(image: Image, center_x: int, radius: int) -> int:
+	var bottom := -1
+	for x in range(
+		maxi(0, center_x - radius),
+		mini(image.get_width(), center_x + radius + 1)
+	):
+		for y in range(image.get_height()):
+			if image.get_pixel(x, y).a > 0.05:
+				bottom = maxi(bottom, y)
+	assert(bottom >= 0)
+	return bottom
+
+
+func _assert_four_directional_corners(assets: Array) -> void:
+	var corners := {}
+	for asset: Dictionary in assets:
+		var asset_id := str(asset.get("asset_id", ""))
+		if asset_id in [
+			"wooma_temple_wall_outer_nw_v01",
+			"wooma_temple_wall_outer_ne_v01",
+			"wooma_temple_wall_outer_se_v01",
+			"wooma_temple_wall_outer_sw_v01",
+		]:
+			corners[asset_id] = asset
+	assert(corners.size() == 4)
+	var left_only := _corner_alpha_sides(corners["wooma_temple_wall_outer_ne_v01"])
+	var right_only := _corner_alpha_sides(corners["wooma_temple_wall_outer_sw_v01"])
+	var both_top := _corner_alpha_sides(corners["wooma_temple_wall_outer_nw_v01"])
+	var both_bottom := _corner_alpha_sides(corners["wooma_temple_wall_outer_se_v01"])
+	assert(left_only == Vector2i(1, 0))
+	assert(right_only == Vector2i(0, 1))
+	assert(both_top == Vector2i(1, 1))
+	assert(both_bottom == Vector2i(1, 1))
+
+
+func _corner_alpha_sides(asset: Dictionary) -> Vector2i:
+	var texture := load("res://" + str(asset.get("image", ""))) as Texture2D
+	assert(texture != null)
+	var image := texture.get_image()
+	assert(image != null and not image.is_empty())
+	var anchor: Array = asset.get("placement_anchor_px", [])
+	assert(anchor.size() == 2)
+	var anchor_x := int(anchor[0])
+	var left_visible := false
+	var right_visible := false
+	for y in range(image.get_height()):
+		for x in range(image.get_width()):
+			if image.get_pixel(x, y).a <= 0.05:
+				continue
+			if x < anchor_x - 2:
+				left_visible = true
+			elif x > anchor_x + 2:
+				right_visible = true
+	return Vector2i(int(left_visible), int(right_visible))
 
 
 func _assert_closed_loop() -> void:
