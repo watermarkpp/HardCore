@@ -167,7 +167,13 @@ func _assert_four_directional_corners(assets: Array) -> void:
 		]:
 			corners[asset_id] = asset
 	assert(corners.size() == 4)
-	var reference_image: Image
+	var expected_bottom_by_id := {
+		"wooma_temple_wall_outer_nw_v01": 96,
+		"wooma_temple_wall_outer_ne_v01": 104,
+		"wooma_temple_wall_outer_se_v01": 112,
+		"wooma_temple_wall_outer_sw_v01": 104,
+	}
+	var reference_size := Vector2i.ZERO
 	for asset_id: String in corners:
 		var asset: Dictionary = corners[asset_id]
 		var texture := load("res://" + str(asset.get("image", ""))) as Texture2D
@@ -177,14 +183,11 @@ func _assert_four_directional_corners(assets: Array) -> void:
 		var used_rect := image.get_used_rect()
 		assert(used_rect.size.x <= 58 and used_rect.size.y <= 96)
 		assert(used_rect.position.x < 48 and used_rect.end.x > 48)
-		if reference_image == null:
-			reference_image = image
+		assert(used_rect.end.y == int(expected_bottom_by_id[asset_id]))
+		if reference_size == Vector2i.ZERO:
+			reference_size = used_rect.size
 		else:
-			assert(
-				image.get_data() == reference_image.get_data(),
-				"%s must use the same calibrated single-pillar corner artwork"
-				% asset_id
-			)
+			assert(used_rect.size == reference_size)
 
 
 func _assert_closed_loop() -> void:

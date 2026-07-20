@@ -433,6 +433,18 @@ def corner_art(
 ) -> Image.Image:
     size = tuple(int(value) for value in module["canvas_size"])
     anchor = tuple(int(value) for value in module["anchor"])
+    asset_id = str(module["asset_id"])
+    # At a 64x32 isometric tile ratio, advancing one half-cell sideways changes
+    # screen Y by eight pixels, not sixteen. The back (+,+) and front (-,-)
+    # corners therefore need equal and opposite 8 px depth compensation; the
+    # two side corners remain on the neutral seam baseline.
+    depth_compensation = (
+        8
+        if "_se_" in asset_id
+        else -8
+        if "_nw_" in asset_id
+        else 0
+    )
     # A closed loop already brings both straight-wall sockets to the corner
     # tile. The corner artwork must therefore only cover that seam. Building a
     # second pair of wall faces here double-renders the joint and creates the
@@ -447,7 +459,7 @@ def corner_art(
         size,
         (58, 96),
         center_x=anchor[0],
-        bottom_y=anchor[1] + 8,
+        bottom_y=anchor[1] + 8 + depth_compensation,
     )
 
 
