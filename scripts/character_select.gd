@@ -121,7 +121,7 @@ func _build_header() -> void:
 	content_root.add_child(subtitle)
 	var archive := Label.new()
 	archive.name = "ArchiveLabel"
-	archive.text = "玛法纪元 · 本地独立档案"
+	archive.text = "HardCore · 本地独立档案"
 	archive.position = Vector2(910, 23)
 	archive.size = Vector2(320, 34)
 	archive.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
@@ -206,7 +206,7 @@ func _build_preview_panel() -> void:
 	stage.add_child(preview_detail_label)
 	enter_button = Button.new()
 	enter_button.name = "EnterGame"
-	enter_button.text = "进入玛法"
+	enter_button.text = "进入 HardCore"
 	enter_button.position = Vector2(94, 458)
 	enter_button.size = Vector2(296, 62)
 	enter_button.theme_type_variation = "GothicComponentSelectedButton"
@@ -392,7 +392,7 @@ func _refresh_selection_state() -> void:
 			ai_profile.get("profession", "战士"),
 		]
 	enter_button.disabled = selected_main_profile_id.is_empty()
-	enter_button.text = "选择主角色" if enter_button.disabled else "进入玛法"
+	enter_button.text = "选择主角色" if enter_button.disabled else "进入 HardCore"
 	_refresh_character_preview()
 
 

@@ -6,11 +6,13 @@ func _ready() -> void:
 
 
 func _run() -> void:
+	assert(ProjectSettings.get_setting("application/config/name") == "HardCore")
 	assert(ProjectSettings.get_setting("application/run/main_scene") == "res://scenes/brand_intro.tscn")
 	assert(ProjectSettings.get_setting("application/config/icon") == "res://assets/branding/game_icon.png")
 	assert(ProjectSettings.get_setting("application/boot_splash/image") == "res://assets/branding/boot_splash.png")
 	assert(FileAccess.file_exists("res://assets/branding/brand_manifest.json"))
 	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/branding/brand_manifest.json"))
+	assert(manifest.get("displayName", "") == "HardCore")
 	var outputs: Array = manifest.get("outputs", [])
 	var android_icon_registered := false
 	for output: Dictionary in outputs:
@@ -20,6 +22,8 @@ func _run() -> void:
 	assert(android_icon_registered)
 	var export_preset := FileAccess.get_file_as_string("res://export_presets.cfg")
 	assert(export_preset.contains("launcher_icons/main_192x192=\"res://assets/branding/android_icon_192.png\""))
+	assert(export_preset.contains("package/name=\"HardCore\""))
+	assert(export_preset.contains("package/unique_name=\"com.personal.hardcore\""))
 	var intro: Control = load("res://scenes/brand_intro.tscn").instantiate()
 	intro.auto_advance = false
 	add_child(intro)

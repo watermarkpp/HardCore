@@ -1,8 +1,8 @@
-# 玛法离线原型
+# HardCore
 
 ## 项目定位
 
-私人离线刷装游戏，以传奇1.76为可追溯、不可被扩展内容污染的基准层，在其上构建可长期增加装备、属性、套装、Boss、地图、任务、职业玩法与不同美术风格的扩展层。所有系统优先满足数据可追溯、玩法可扩展、资源可替换、系统可测试和内容可批量生产。最高原则详见 `总规划_任务结构图.md`。
+私人离线刷装游戏，以经典 1.76 内容作为可追溯、不可被扩展内容污染的基准层，在其上构建可长期增加装备、属性、套装、Boss、地图、任务、职业玩法与不同美术风格的扩展层。正式游戏品牌统一为 `HardCore`。所有系统优先满足数据可追溯、玩法可扩展、资源可替换、系统可测试和内容可批量生产。最高原则详见 `总规划_任务结构图.md`。
 
 ## 资源目录约定
 
@@ -18,7 +18,7 @@
 
 Godot 4.7 标准版 / GDScript / Compatibility 渲染器。
 
-Android M7里程碑包：`outputs/legend176/MafaOffline_M7_2_milestone.apk`（arm64、API 24–36、版本24 / 1.13-m7.2、Sensor Landscape）。项目内`tools/verify_android_build.ps1`可校验签名、包名、版本、架构与方向。
+Android 导出目标：`outputs/hardcore/HardCore.apk`（arm64、API 24–36、Sensor Landscape）。项目内 `tools/verify_android_build.ps1` 可校验签名、包名、应用名、版本、架构与方向。
 
 当前 v1.11 开发里程碑包含：
 
