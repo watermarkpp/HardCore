@@ -13,7 +13,8 @@ func _run() -> void:
 	PlayerState.reset_progress()
 	MonsterVisual._client_resource_profiles.clear()
 	MonsterVisual._client_resource_profile_lru.clear()
-	assert(MonsterVisual.CLIENT_RESOURCE_CACHE_CAPACITY == 16, "mobile texture cache capacity changed unexpectedly")
+	MonsterVisual._client_texture_load_request_count = 0
+	assert(MonsterVisual.CLIENT_RESOURCE_CACHE_CAPACITY == 32, "mobile texture cache must cover the largest single-region profile set")
 	var player := PlayerCharacter.new()
 	add_child(player)
 	player.set_physics_process(false)
@@ -47,8 +48,42 @@ func _run() -> void:
 	assert(MonsterVisual.cached_client_profile_count() == 1, "returning to an area rebuilt an already-seen species profile")
 	for action_name: String in retained_rids:
 		assert((returned.visual.active_resources[action_name] as Texture2D).get_rid() == retained_rids[action_name], "returning to an area recreated %s texture" % action_name)
+	returned.queue_free()
+	await get_tree().process_frame
 
-	print("MONSTER_RUNTIME_TEXTURE_CACHE_PASS same species shares and retains five action RIDs; unchanged frames do not resubmit")
+	# Bich's common runtime set contains 22 distinct visual profiles. A player can
+	# leave it for a neighboring area and encounter ten more profiles before
+	# returning; the full Bich set must still be resident and issue no new loads.
+	MonsterVisual._client_resource_profiles.clear()
+	MonsterVisual._client_resource_profile_lru.clear()
+	MonsterVisual._client_texture_load_request_count = 0
+	var bich_profiles: Dictionary = GameData.bich_common_art.get("runtimeMappings", {})
+	var bich_keys: Array = bich_profiles.keys()
+	bich_keys.sort()
+	assert(bich_keys.size() == 22, "Bich common visual working set changed: %d" % bich_keys.size())
+	var loader := MonsterVisual.new()
+	for key: Variant in bich_keys:
+		assert(not loader._client_resources(bich_profiles[key]).is_empty(), "failed to load Bich profile: %s" % key)
+	assert(MonsterVisual.cached_client_profile_count() == 22, "Bich working set was not retained in full")
+	assert(MonsterVisual.client_texture_load_request_count() == 110, "Bich first visit must request exactly 22 x 5 action textures")
+
+	var seed_profile: Dictionary = bich_profiles[bich_keys[0]]
+	for index in range(10):
+		assert(not loader._client_resources(_synthetic_neighbor_profile(seed_profile, index)).is_empty())
+	assert(MonsterVisual.cached_client_profile_count() == 32, "Bich plus neighboring profiles did not fill the bounded cache")
+	var requests_before_return := MonsterVisual.client_texture_load_request_count()
+	for key: Variant in bich_keys:
+		assert(not loader._client_resources(bich_profiles[key]).is_empty())
+	assert(MonsterVisual.client_texture_load_request_count() == requests_before_return, "returning to Bich re-requested an evicted action texture")
+	assert(MonsterVisual.cached_client_profile_count() == 32, "return visit changed bounded cache size")
+
+	assert(not loader._client_resources(_synthetic_neighbor_profile(seed_profile, 10)).is_empty())
+	assert(MonsterVisual.cached_client_profile_count() == MonsterVisual.CLIENT_RESOURCE_CACHE_CAPACITY, "LRU cache grew beyond its mobile bound")
+	loader.free()
+	MonsterVisual._client_resource_profiles.clear()
+	MonsterVisual._client_resource_profile_lru.clear()
+
+	print("MONSTER_RUNTIME_TEXTURE_CACHE_PASS 22-profile Bich round trip adds zero loads; 32-profile LRU remains bounded")
 	get_tree().quit(0)
 
 
@@ -66,3 +101,9 @@ func _spawn_sample(player: PlayerCharacter) -> EnemyActor:
 	await get_tree().process_frame
 	assert(enemy.visual.uses_final_art(), "cache fixture did not resolve final client art")
 	return enemy
+
+
+func _synthetic_neighbor_profile(seed_profile: Dictionary, index: int) -> Dictionary:
+	var profile := seed_profile.duplicate(true)
+	profile["directionPolicy"] = "neighbor_profile_%d" % index
+	return profile

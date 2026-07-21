@@ -9,12 +9,13 @@ const COMPLETE_ART_PATH := "res://assets/data/complete_monster_client_art_source
 # origin by (+32,+28); monsters must use the identical coordinate conversion.
 const CLIENT_ACTOR_GROUND_OFFSET := Vector2i(32, 28)
 const HEALTH_BAR_FRAME_MARGIN := 8.0
-const CLIENT_RESOURCE_CACHE_CAPACITY := 16
+const CLIENT_RESOURCE_CACHE_CAPACITY := 32
 
 static var _boss_art: Dictionary = {}
 static var _complete_art: Dictionary = {}
 static var _client_resource_profiles: Dictionary = {}
 static var _client_resource_profile_lru: Array[String] = []
+static var _client_texture_load_request_count := 0
 
 var actor: EnemyActor
 var sprite: Sprite2D
@@ -262,7 +263,12 @@ static func cached_client_profile_count() -> int:
 	return _client_resource_profiles.size()
 
 
+static func client_texture_load_request_count() -> int:
+	return _client_texture_load_request_count
+
+
 func _load_client_texture(path: String, expected_size: Vector2i) -> Texture2D:
+	_client_texture_load_request_count += 1
 	if ResourceLoader.exists(path):
 		var imported := load(path) as Texture2D
 		if imported != null and Vector2i(imported.get_size()) == expected_size:
