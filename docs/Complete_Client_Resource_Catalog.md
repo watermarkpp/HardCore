@@ -95,4 +95,4 @@ ORDER BY h.score DESC;
 - 共建立58个独立端档案，位于`outputs/resource_catalog/complete_local_mir_sources/distributions/`。每端保留独立清单和语义命中，客户端、服务端、源码端、共享组件及资源包不会因同名文件相互覆盖。
 - 跨端相同哈希只记录到`cross_distribution_duplicates.csv`作为互相参考，不改变来源身份；私服端内容仍为B/C候选，不能直接冒充官服基线。
 - 已知22项解析异常全部保留：3个缺密码资源包、18个0字节加密解包占位、1个DelphiX同扩展名`.map`示例文件；未知异常为0。
-- 独立机器验收报告：`outputs/validation/complete_local_mir_scan_acceptance.json`；完整解释：`docs/COMPLETE-LOCAL-MIR-SCAN-1_本地多端全量拆解验收报告.md`。
+- 独立机器验收报告：`outputs/validation/complete_local_mir_scan_acceptance.json`；完整解释：`docs/COMPLETE-LOCAL-MIR-SCAN-1_Local_Multi_Client_Extraction_Report.md`。

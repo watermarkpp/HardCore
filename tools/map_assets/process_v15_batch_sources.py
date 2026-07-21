@@ -20,7 +20,7 @@ SOURCE_ROOT = Path(r"C:\Users\Administrator\Desktop\sucai\fangansucai")
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 RAW_ROOT = PROJECT_ROOT / "assets" / "raw_import" / "map_editor_batches_v1_5"
 STAGING_ROOT = PROJECT_ROOT / "assets" / "art" / "maps" / "_staging" / "v1_5"
-REPORT_PATH = PROJECT_ROOT / "docs" / "mafa_scene_editor" / "V1.5_素材本地处理报告.json"
+REPORT_PATH = PROJECT_ROOT / "docs" / "mafa_scene_editor" / "V1.5_Local_Asset_Processing_Report.json"
 
 
 @dataclass(frozen=True)
