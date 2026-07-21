@@ -8,6 +8,7 @@ const COMPLETE_ART_PATH := "res://assets/data/complete_monster_client_art_source
 # actor's ground point. The player client-art path already migrates this same
 # origin by (+32,+28); monsters must use the identical coordinate conversion.
 const CLIENT_ACTOR_GROUND_OFFSET := Vector2i(32, 28)
+const HEALTH_BAR_FRAME_MARGIN := 8.0
 
 static var _boss_art: Dictionary = {}
 static var _complete_art: Dictionary = {}
@@ -27,6 +28,7 @@ var _attack_remaining := 0.0
 var _hit_remaining := 0.0
 var _death_remaining := 0.0
 var _action_duration := 0.0
+var _fixed_health_bar_y := 0.0
 
 
 func setup(owner_actor: EnemyActor) -> void:
@@ -49,6 +51,11 @@ func _ready() -> void:
 	sprite.region_rect = Rect2(Vector2.ZERO, frame_size)
 	sprite.centered = false
 	sprite.position = -Vector2(foot_anchor + actor_ground_offset)
+	# Every action and direction uses the same authored frame rectangle and foot
+	# anchor. Pin UI to that rectangle's upper edge instead of the current
+	# animation pixels, so a changing pose can never move the health bar through
+	# the monster's head, chest, or waist.
+	_fixed_health_bar_y = position.y + sprite.position.y - HEALTH_BAR_FRAME_MARGIN
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	add_child(sprite)
 	if visible:
@@ -153,6 +160,10 @@ func ground_contact_offset() -> Vector2:
 
 func ground_contact_position(fallback: Vector2) -> Vector2:
 	return position if uses_final_art() else fallback
+
+
+func health_bar_anchor_y(fallback_y: float) -> float:
+	return _fixed_health_bar_y if uses_final_art() else fallback_y
 
 
 func _direction_row(direction: Vector2) -> int:
