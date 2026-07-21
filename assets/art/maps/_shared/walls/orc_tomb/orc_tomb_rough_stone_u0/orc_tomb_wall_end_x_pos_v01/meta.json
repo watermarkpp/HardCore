@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "asset_id": "orc_tomb_wall_end_x_pos_v01",
+  "display_name": "orc_tomb_wall_end_x_pos_v01",
+  "asset_type": "wall_module",
+  "category": "dungeon_wall",
+  "theme": "orc_tomb",
+  "wall_family_id": "orc_tomb_rough_stone_u0",
+  "socket_profile_id": "orc_tomb_rough_stone_socket_u0",
+  "topology": "end_cap",
+  "axis": "iso_x",
+  "length_tiles": 1,
+  "thickness_tiles": 1,
+  "footprint_tiles": [
+    1,
+    1
+  ],
+  "canvas_size": [
+    96,
+    160
+  ],
+  "anchor": [
+    48,
+    128
+  ],
+  "next_start_tile_offset": [
+    1,
+    0
+  ],
+  "start_seam_px": [
+    32,
+    120
+  ],
+  "end_seam_px": [
+    64,
+    136
+  ],
+  "connectors": [
+    {
+      "name": "open",
+      "direction": "iso_x_pos",
+      "socket_profile_id": "orc_tomb_rough_stone_socket_u0"
+    }
+  ],
+  "collision_cells": [
+    [
+      0,
+      0
+    ]
+  ],
+  "placement_clearance_cells": [
+    [
+      0,
+      0
+    ]
+  ],
+  "render_mode": "single_part",
+  "render_parts": [
+    {
+      "part_id": "p00",
+      "tile_offset": [
+        0,
+        0
+      ],
+      "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_end_x_pos_v01/part_00_base.png",
+      "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_end_x_pos_v01/part_00_front.png",
+      "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_end_x_pos_v01/part_00_shadow.png",
+      "anchor": [
+        48,
+        128
+      ],
+      "sort_tile_offset": [
+        0,
+        0
+      ],
+      "draw_order_index": 0
+    }
+  ],
+  "default_layer": "terrain_base",
+  "front_layer": "terrain_front",
+  "shadow_layer": "shadow",
+  "object_role": "terrain",
+  "scene_intent": "terrain_boundary",
+  "collision_policy": "wall_cells_generated",
+  "navigation_policy": "block_player_and_monster",
+  "occlusion": true,
+  "seam_guard_px": 16,
+  "seam_overlap_px": 2,
+  "variant_weight": 100,
+  "offset_px": [
+    0,
+    0
+  ],
+  "scale": [
+    1,
+    1
+  ],
+  "rotation_degrees": 0,
+  "allow_flip": false,
+  "runtime_export": true,
+  "content_layer": "vanilla",
+  "calibration_status": "calibrated",
+  "seam_test_status": "passed",
+  "placeable": true,
+  "open_direction": "iso_x_pos"
+}

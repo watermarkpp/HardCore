@@ -1,0 +1,211 @@
+{
+  "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+  "connection_pairs": [
+    {
+      "connection_pair_id": "wooma_forest_temple_1_pair_v1",
+      "maps": [
+        "wooma_forest",
+        "wooma_temple_1"
+      ],
+      "mode": "bidirectional"
+    },
+    {
+      "connection_pair_id": "wooma_temple_1_2_pair_v1",
+      "maps": [
+        "wooma_temple_1",
+        "wooma_temple_2"
+      ],
+      "mode": "bidirectional"
+    },
+    {
+      "connection_pair_id": "wooma_temple_2_leader_hall_pair_v1",
+      "maps": [
+        "wooma_temple_2",
+        "wooma_temple_3"
+      ],
+      "mode": "bidirectional"
+    }
+  ],
+  "connection_policy_id": "map_connection_unified_bidirectional_v2",
+  "connections": [
+    {
+      "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+      "connection_direction": "forward",
+      "connection_pair_id": "wooma_forest_temple_1_pair_v1",
+      "exit_id": "map_exit_000001",
+      "exit_tile": [
+        51.0,
+        4.0
+      ],
+      "official_connection_id": "wooma_forest_top_to_temple_1_v2",
+      "reciprocal_exit_id": "map_exit_000002",
+      "return_minimum_seconds": 3.0,
+      "return_unlock_distance_tiles": 1.5,
+      "source_map_id": "wooma_forest",
+      "source_runtime_map_id": 268,
+      "target_entrance_id": "map_exit_000002",
+      "target_map_id": 313,
+      "target_map_key": "wooma_temple_1",
+      "target_portal_id": "map_exit_000002",
+      "target_tile": [
+        20.0,
+        41.0
+      ]
+    },
+    {
+      "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+      "connection_direction": "forward",
+      "connection_pair_id": "wooma_temple_1_2_pair_v1",
+      "exit_id": "map_exit_000001",
+      "exit_tile": [
+        18.0,
+        2.0
+      ],
+      "official_connection_id": "wooma_temple_1_to_2_v2",
+      "reciprocal_exit_id": "map_exit_000002",
+      "return_minimum_seconds": 3.0,
+      "return_unlock_distance_tiles": 1.5,
+      "source_map_id": "wooma_temple_1",
+      "source_runtime_map_id": 313,
+      "target_entrance_id": "map_exit_000002",
+      "target_map_id": 314,
+      "target_map_key": "wooma_temple_2",
+      "target_portal_id": "map_exit_000002",
+      "target_tile": [
+        20.0,
+        41.0
+      ]
+    },
+    {
+      "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+      "connection_direction": "reverse",
+      "connection_pair_id": "wooma_forest_temple_1_pair_v1",
+      "exit_id": "map_exit_000002",
+      "exit_tile": [
+        20.0,
+        41.0
+      ],
+      "official_connection_id": "wooma_temple_1_to_forest_v1",
+      "reciprocal_exit_id": "map_exit_000001",
+      "return_minimum_seconds": 3.0,
+      "return_unlock_distance_tiles": 1.5,
+      "source_map_id": "wooma_temple_1",
+      "source_runtime_map_id": 313,
+      "target_entrance_id": "map_exit_000001",
+      "target_map_id": 268,
+      "target_map_key": "wooma_forest",
+      "target_portal_id": "map_exit_000001",
+      "target_tile": [
+        51.0,
+        4.0
+      ]
+    },
+    {
+      "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+      "connection_direction": "forward",
+      "connection_pair_id": "wooma_temple_2_leader_hall_pair_v1",
+      "exit_id": "map_exit_000001",
+      "exit_tile": [
+        18.0,
+        2.0
+      ],
+      "official_connection_id": "wooma_temple_2_to_leader_hall_v2",
+      "reciprocal_exit_id": "map_exit_000001",
+      "return_minimum_seconds": 3.0,
+      "return_unlock_distance_tiles": 1.5,
+      "source_map_id": "wooma_temple_2",
+      "source_runtime_map_id": 314,
+      "target_entrance_id": "map_exit_000001",
+      "target_map_id": 315,
+      "target_map_key": "wooma_temple_3",
+      "target_portal_id": "map_exit_000001",
+      "target_tile": [
+        20.0,
+        41.0
+      ]
+    },
+    {
+      "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+      "connection_direction": "reverse",
+      "connection_pair_id": "wooma_temple_1_2_pair_v1",
+      "exit_id": "map_exit_000002",
+      "exit_tile": [
+        20.0,
+        41.0
+      ],
+      "official_connection_id": "wooma_temple_2_to_1_v1",
+      "reciprocal_exit_id": "map_exit_000001",
+      "return_minimum_seconds": 3.0,
+      "return_unlock_distance_tiles": 1.5,
+      "source_map_id": "wooma_temple_2",
+      "source_runtime_map_id": 314,
+      "target_entrance_id": "map_exit_000001",
+      "target_map_id": 313,
+      "target_map_key": "wooma_temple_1",
+      "target_portal_id": "map_exit_000001",
+      "target_tile": [
+        18.0,
+        2.0
+      ]
+    },
+    {
+      "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+      "connection_direction": "reverse",
+      "connection_pair_id": "wooma_temple_2_leader_hall_pair_v1",
+      "exit_id": "map_exit_000001",
+      "exit_tile": [
+        20.0,
+        41.0
+      ],
+      "official_connection_id": "wooma_leader_hall_to_temple_2_v1",
+      "reciprocal_exit_id": "map_exit_000001",
+      "return_minimum_seconds": 3.0,
+      "return_unlock_distance_tiles": 1.5,
+      "source_map_id": "wooma_temple_3",
+      "source_runtime_map_id": 315,
+      "target_entrance_id": "map_exit_000001",
+      "target_map_id": 314,
+      "target_map_key": "wooma_temple_2",
+      "target_portal_id": "map_exit_000001",
+      "target_tile": [
+        18.0,
+        2.0
+      ]
+    }
+  ],
+  "default_connection_mode": "bidirectional",
+  "maps": [
+    {
+      "display_name": "沃玛森林",
+      "map_id": "wooma_forest",
+      "runtime_build_sha256": "95065cf780d75c1c0a9756364fa0f77c5db277c264185291dcc93d8883e3d36e",
+      "runtime_map_id": 268
+    },
+    {
+      "display_name": "沃玛寺庙一层",
+      "map_id": "wooma_temple_1",
+      "runtime_build_sha256": "42fc27f811c333c80c905b5a9faa209110acb692df8678c692193a2eea7caed7",
+      "runtime_map_id": 313
+    },
+    {
+      "display_name": "沃玛寺庙二层",
+      "map_id": "wooma_temple_2",
+      "runtime_build_sha256": "d9a5414812ad26f94dd11dace7fb4da6c03d878cee227732ae81002f86d10b8a",
+      "runtime_map_id": 314
+    },
+    {
+      "display_name": "沃玛教主大厅",
+      "map_id": "wooma_temple_3",
+      "runtime_build_sha256": "96146914bfa88be4bcb03034324dda36a0219993382a865dd88c89336267b55b",
+      "runtime_map_id": 315
+    }
+  ],
+  "portal_contract_id": "unified_map_portal_endpoint_v1",
+  "return_minimum_seconds": 3.0,
+  "return_requires_fresh_activation": true,
+  "return_unlock_distance_tiles": 1.5,
+  "route_version_id": "wooma_temple_user_route_v3_unified_portals",
+  "schema_version": 2,
+  "status": "user_requested_unified_bidirectional_portals",
+  "travel_request_single_flight": true
+}

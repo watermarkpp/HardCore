@@ -33,10 +33,17 @@
   },
   "display_name": "比奇省（单机重制）",
   "editor_meta": {
+    "bich_cave_portal_policy_id": "bich_cave_mouth_explicit_v1",
+    "bich_cave_portal_version_id": "bich_cave_portals_v1",
+    "connection_version_id": "bich_wooma_connection_v1",
     "created_by": "human_codex_shared_tool",
-    "milestone": "BICH-USER-MAP-READY",
-    "revision": 1.0,
-    "runtime_approved": false,
+    "milestone": "BICH-WOOMA-CONNECTION-V1",
+    "official_runtime_map_id": 4,
+    "official_source_authority": "user_saved_editor_document",
+    "official_version_id": "bich_orc_tomb_official_v1",
+    "revision": 4,
+    "runtime_approved": true,
+    "runtime_approved_revision": 4,
     "size_migration": "bich_64_to_80_centered",
     "workspace": "res://map_editor_workspace/bich_province"
   },
@@ -50,6 +57,7 @@
       1024.0
     ],
     "collision_from_ground": false,
+    "coordinate_contract_id": "isometric_cell_center_64x32_v1",
     "editable_source_required": true,
     "ground_mode": "generated_painted_chunks",
     "mask_storage": "chunked_l8",
@@ -61,63 +69,2906 @@
     "paint_manifest": "res://assets/data/maps/ground_paint/sandbox_64.ground_paint_ops.json",
     "paint_state": "res://assets/data/maps/ground_paint/sandbox_64.ground_paint_state.json",
     "source_manifest": "res://assets/data/maps/ground_paint/sandbox_64.ground_source_manifest.json",
-    "tile_anchor_mode": "center",
+    "tile_anchor_mode": "cell_center",
     "visual_only": true,
-    "workspace_manifest": "res://map_editor_workspace/sandbox_64/ground/ground_manifest.json",
-    "workspace_state": "res://map_editor_workspace/sandbox_64/ground/ground_state.json"
+    "workspace_manifest": "res://map_editor_workspace/bich_province/ground/ground_manifest.json",
+    "workspace_state": "res://map_editor_workspace/bich_province/ground/ground_state.json"
   },
   "layers": {
     "boss_spawn": [],
-    "collision": [],
-    "door_points": [
+    "collision": [
       {
-        "auto_created_from_asset": true,
-        "blocks_movement": false,
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000002",
         "content_layer": "personal_expansion",
-        "display_name": "待配置地图传送门",
-        "door_id": "door.inst_000001",
-        "kind": "door",
-        "linked_visual_instance_id": "inst_000001",
-        "one_way": false,
-        "runtime_export": true,
-        "semantic_id": "door_000001",
-        "semantic_role": "map_portal",
-        "target_configured": false,
-        "target_map_id": -1.0,
-        "target_tile": [
-          0.0,
-          0.0
-        ],
-        "tile": [
-          10.0,
-          11.0
-        ],
-        "trigger_on_enter": true
+        "data": {
+          "rect": [
+            49.0,
+            32.0,
+            1.0,
+            8.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
       },
       {
-        "auto_created_from_asset": true,
-        "blocks_movement": false,
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000016",
         "content_layer": "personal_expansion",
-        "display_name": "待配置地图传送门",
-        "door_id": "door.inst_000002",
-        "kind": "door",
-        "linked_visual_instance_id": "inst_000002",
-        "one_way": false,
-        "runtime_export": true,
-        "semantic_id": "door_000002",
-        "semantic_role": "map_portal",
-        "target_configured": false,
-        "target_map_id": -1.0,
-        "target_tile": [
-          0.0,
-          0.0
-        ],
+        "data": {
+          "rect": [
+            44.0,
+            28.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000024",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            17.0,
+            58.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000025",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            18.0,
+            58.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000026",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            19.0,
+            58.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000027",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            19.0,
+            57.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000028",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            19.0,
+            56.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000029",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            18.0,
+            56.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000030",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            17.0,
+            56.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000031",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            17.0,
+            57.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000032",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            18.0,
+            57.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000033",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            39.0,
+            55.0,
+            5.0,
+            2.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000034",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            32.0,
+            52.0,
+            4.0,
+            5.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000035",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            45.0,
+            44.0,
+            5.0,
+            5.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000036",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            51.0,
+            36.0,
+            2.0,
+            7.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000037",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            42.0,
+            23.0,
+            2.0,
+            6.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000038",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            32.0,
+            24.0,
+            6.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000039",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            20.0,
+            28.0,
+            5.0,
+            5.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000040",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            22.0,
+            38.0,
+            1.0,
+            6.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000041",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            37.0,
+            25.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000042",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            36.0,
+            25.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000043",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            44.0,
+            25.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000044",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            44.0,
+            26.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000045",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            45.0,
+            26.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000046",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            45.0,
+            25.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000047",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            44.0,
+            24.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000048",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            41.0,
+            28.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000049",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            41.0,
+            27.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000050",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            41.0,
+            26.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000051",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            41.0,
+            25.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000052",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            51.0,
+            35.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000053",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            52.0,
+            35.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000054",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            53.0,
+            36.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000055",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            53.0,
+            35.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000056",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            53.0,
+            40.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000057",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            53.0,
+            39.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000058",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            54.0,
+            40.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000059",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            22.0,
+            19.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000060",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            23.0,
+            19.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000061",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            23.0,
+            18.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000062",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            23.0,
+            17.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000063",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            22.0,
+            17.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000064",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            22.0,
+            18.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000065",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            21.0,
+            19.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000066",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            21.0,
+            18.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000067",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            21.0,
+            17.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000068",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            62.0,
+            31.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000069",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            61.0,
+            30.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000070",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            62.0,
+            30.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000071",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            62.0,
+            29.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000072",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            61.0,
+            29.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000073",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            60.0,
+            29.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000074",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            59.0,
+            29.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000075",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            59.0,
+            30.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000076",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            59.0,
+            31.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000077",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            59.0,
+            32.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000078",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            60.0,
+            32.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000079",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            61.0,
+            32.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000080",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            61.0,
+            31.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000081",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            60.0,
+            31.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000082",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            60.0,
+            30.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000083",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            65.0,
+            64.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000084",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            65.0,
+            63.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000085",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            65.0,
+            62.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000086",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            65.0,
+            61.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000087",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            66.0,
+            61.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000088",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            67.0,
+            61.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000089",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            65.0,
+            60.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000090",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            64.0,
+            60.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000091",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            63.0,
+            60.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000092",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            64.0,
+            61.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000093",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            64.0,
+            63.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000094",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            64.0,
+            64.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000095",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            64.0,
+            62.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000096",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            63.0,
+            61.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000097",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            63.0,
+            62.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000098",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            63.0,
+            63.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000099",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            63.0,
+            64.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000100",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            62.0,
+            64.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000101",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            61.0,
+            64.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000102",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            61.0,
+            63.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000103",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            62.0,
+            63.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000104",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            61.0,
+            62.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000105",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            62.0,
+            62.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000106",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            62.0,
+            61.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      }
+    ],
+    "collision_erase": [
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          25.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20.0,
+          33.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          33.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          34.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20.0,
+          34.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21.0,
+          34.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          32.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22.0,
+          37.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          25.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          24.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26.0,
+          29.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          31.0,
+          26.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          32.0,
+          26.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          33.0,
+          26.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          34.0,
+          26.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          36.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          34.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          35.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          33.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          32.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          31.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30.0,
+          24.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          36.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          31.0,
+          25.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          46.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          46.0,
+          21.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          45.0,
+          21.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          44.0,
+          21.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          43.0,
+          21.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          21.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          40.0,
+          21.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          41.0,
+          21.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          39.0,
+          21.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          39.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          39.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          39.0,
+          24.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          40.0,
+          25.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          39.0,
+          25.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          39.0,
+          26.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          39.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          39.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          40.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          40.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          40.0,
+          26.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          40.0,
+          24.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          40.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          40.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          41.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          45.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          46.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          46.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          50.0,
+          32.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          49.0,
+          32.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          48.0,
+          38.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          48.0,
+          37.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          48.0,
+          36.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          48.0,
+          35.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          48.0,
+          34.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          49.0,
+          39.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          49.0,
+          38.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          49.0,
+          37.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          49.0,
+          36.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          49.0,
+          34.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          49.0,
+          35.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          49.0,
+          33.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          50.0,
+          33.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          49.0,
+          43.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          48.0,
+          42.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          49.0,
+          42.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          50.0,
+          42.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          50.0,
+          44.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          50.0,
+          43.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          44.0,
+          49.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          43.0,
+          49.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          43.0,
+          48.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          43.0,
+          46.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          43.0,
+          47.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          45.0,
+          49.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          44.0,
+          48.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          43.0,
+          42.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          43.0,
+          43.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          44.0,
+          42.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          45.0,
+          42.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          43.0,
+          44.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          47.0,
+          42.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          46.0,
+          42.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          44.0,
+          43.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          43.0,
+          45.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          29.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          30.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          31.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20.0,
+          29.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20.0,
+          30.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20.0,
+          31.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20.0,
+          32.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26.0,
+          34.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          32.0,
+          47.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          33.0,
+          47.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          33.0,
+          48.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          32.0,
+          48.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          31.0,
+          47.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30.0,
+          47.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          29.0,
+          47.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          47.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          47.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26.0,
+          47.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26.0,
+          48.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26.0,
+          50.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26.0,
+          49.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          33.0,
+          49.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          48.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          50.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          49.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          48.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          31.0,
+          48.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30.0,
+          48.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          29.0,
+          48.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          49.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          36.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          40.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          39.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          38.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          37.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          36.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          40.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          38.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          39.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          37.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          36.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          31.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          32.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          33.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          34.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          35.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          17.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          16.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20.0,
+          17.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          60.0,
+          25.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          25.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          25.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          60.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          61.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          61.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          60.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          59.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          58.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          60.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          61.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          44.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          67.0,
+          61.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
         "tile": [
           66.0,
-          13.0
-        ],
-        "trigger_on_enter": true
+          61.0
+        ]
       },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          32.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          45.0,
+          44.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          45.0,
+          48.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          24.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          24.0,
+          29.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          24.0,
+          32.0
+        ]
+      }
+    ],
+    "door_points": [
       {
         "auto_created_from_asset": true,
         "blocks_movement": false,
@@ -127,6 +2978,16 @@
         "kind": "door",
         "linked_visual_instance_id": "inst_000004",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+        "portal_trigger_policy_id": "bich_cave_mouth_explicit_v1",
+        "portal_visual_footprint_tiles": [
+          8.0,
+          6.0
+        ],
+        "portal_visual_origin_tile": [
+          71.0,
+          73.0
+        ],
         "runtime_export": true,
         "semantic_id": "door_000003",
         "semantic_role": "map_portal",
@@ -137,8 +2998,8 @@
           0.0
         ],
         "tile": [
-          67.0,
-          68.0
+          74.0,
+          73.0
         ],
         "trigger_on_enter": true
       },
@@ -151,6 +3012,16 @@
         "kind": "door",
         "linked_visual_instance_id": "inst_000016",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+        "portal_trigger_policy_id": "bich_cave_mouth_explicit_v1",
+        "portal_visual_footprint_tiles": [
+          8.0,
+          6.0
+        ],
+        "portal_visual_origin_tile": [
+          0.0,
+          72.0
+        ],
         "runtime_export": true,
         "semantic_id": "door_000004",
         "semantic_role": "map_portal",
@@ -161,8 +3032,8 @@
           0.0
         ],
         "tile": [
-          10.0,
-          68.0
+          7.0,
+          74.0
         ],
         "trigger_on_enter": true
       }
@@ -172,6 +3043,59 @@
     "ground_overlay": [],
     "interactables": [],
     "light": [],
+    "map_entrance_points": [],
+    "map_exit_points": [
+      {
+        "blocks_movement": false,
+        "content_layer": "personal_expansion",
+        "display_name": "前往沃玛森林",
+        "exit_id": "map_exit_000001",
+        "kind": "map_exit",
+        "official_connection_id": "bich_north_to_wooma_forest_v1",
+        "portal_role": "exit",
+        "runtime_export": true,
+        "semantic_id": "map_exit_000001",
+        "semantic_role": "map_exit_trigger",
+        "target_configured": true,
+        "target_entrance_id": "map_entrance_000001",
+        "target_map_id": 268,
+        "target_map_key": "wooma_forest",
+        "target_tile": [
+          3.0,
+          52.0
+        ],
+        "tile": [
+          6.0,
+          5.0
+        ],
+        "trigger_on_enter": true
+      },
+      {
+        "blocks_movement": false,
+        "content_layer": "personal_expansion",
+        "display_name": "进入兽人古墓一层",
+        "exit_id": "map_exit_000002",
+        "kind": "map_exit",
+        "official_connection_id": "bich_east_to_orc_tomb_1_v2",
+        "portal_role": "exit",
+        "runtime_export": true,
+        "semantic_id": "map_exit_000002",
+        "semantic_role": "map_exit_trigger",
+        "target_configured": true,
+        "target_entrance_id": "map_entrance_000001",
+        "target_map_id": 217,
+        "target_map_key": "orc_tomb_1",
+        "target_tile": [
+          3.0,
+          35.0
+        ],
+        "tile": [
+          72.0,
+          5.0
+        ],
+        "trigger_on_enter": true
+      }
+    ],
     "monster_spawn": [
       {
         "content_id": "monster.21",
@@ -187,8 +3111,8 @@
         "semantic_id": "monster_spawn_000001",
         "spawn_rule": "ambient",
         "tile": [
-          38.0,
-          62.0
+          35.0,
+          60.0
         ]
       },
       {
@@ -205,8 +3129,8 @@
         "semantic_id": "monster_spawn_000002",
         "spawn_rule": "ambient",
         "tile": [
-          32.0,
-          61.0
+          34.0,
+          69.0
         ]
       },
       {
@@ -223,8 +3147,8 @@
         "semantic_id": "monster_spawn_000003",
         "spawn_rule": "ambient",
         "tile": [
-          32.0,
-          66.0
+          45.0,
+          72.0
         ]
       },
       {
@@ -241,8 +3165,8 @@
         "semantic_id": "monster_spawn_000004",
         "spawn_rule": "ambient",
         "tile": [
-          40.0,
-          68.0
+          55.0,
+          72.0
         ]
       },
       {
@@ -260,7 +3184,7 @@
         "spawn_rule": "ambient",
         "tile": [
           46.0,
-          61.0
+          60.0
         ]
       },
       {
@@ -277,8 +3201,8 @@
         "semantic_id": "monster_spawn_000006",
         "spawn_rule": "ambient",
         "tile": [
-          21.0,
-          60.0
+          18.0,
+          61.0
         ]
       },
       {
@@ -314,7 +3238,7 @@
         "spawn_rule": "ambient",
         "tile": [
           24.0,
-          67.0
+          72.0
         ]
       },
       {
@@ -331,7 +3255,7 @@
         "semantic_id": "monster_spawn_000010",
         "spawn_rule": "ambient",
         "tile": [
-          12.0,
+          5.0,
           59.0
         ]
       },
@@ -349,8 +3273,8 @@
         "semantic_id": "monster_spawn_000011",
         "spawn_rule": "ambient",
         "tile": [
-          19.0,
-          47.0
+          17.0,
+          44.0
         ]
       },
       {
@@ -367,8 +3291,8 @@
         "semantic_id": "monster_spawn_000012",
         "spawn_rule": "ambient",
         "tile": [
-          11.0,
-          36.0
+          4.0,
+          35.0
         ]
       },
       {
@@ -385,8 +3309,8 @@
         "semantic_id": "monster_spawn_000013",
         "spawn_rule": "ambient",
         "tile": [
-          13.0,
-          29.0
+          6.0,
+          25.0
         ]
       },
       {
@@ -404,7 +3328,7 @@
         "spawn_rule": "ambient",
         "tile": [
           10.0,
-          43.0
+          46.0
         ]
       },
       {
@@ -421,7 +3345,7 @@
         "semantic_id": "monster_spawn_000015",
         "spawn_rule": "ambient",
         "tile": [
-          10.0,
+          4.0,
           48.0
         ]
       },
@@ -439,8 +3363,8 @@
         "semantic_id": "monster_spawn_000009",
         "spawn_rule": "ambient",
         "tile": [
-          55.0,
-          67.0
+          65.0,
+          73.0
         ]
       },
       {
@@ -457,8 +3381,8 @@
         "semantic_id": "monster_spawn_000018",
         "spawn_rule": "ambient",
         "tile": [
-          68.0,
-          58.0
+          74.0,
+          68.0
         ]
       },
       {
@@ -475,8 +3399,8 @@
         "semantic_id": "monster_spawn_000019",
         "spawn_rule": "ambient",
         "tile": [
-          62.0,
-          50.0
+          68.0,
+          57.0
         ]
       },
       {
@@ -529,8 +3453,8 @@
         "semantic_id": "monster_spawn_000022",
         "spawn_rule": "ambient",
         "tile": [
-          59.0,
-          41.0
+          63.0,
+          39.0
         ]
       },
       {
@@ -547,7 +3471,7 @@
         "semantic_id": "monster_spawn_000023",
         "spawn_rule": "ambient",
         "tile": [
-          66.0,
+          73.0,
           40.0
         ]
       },
@@ -565,8 +3489,8 @@
         "semantic_id": "monster_spawn_000024",
         "spawn_rule": "ambient",
         "tile": [
-          68.0,
-          32.0
+          72.0,
+          27.0
         ]
       },
       {
@@ -583,8 +3507,8 @@
         "semantic_id": "monster_spawn_000025",
         "spawn_rule": "ambient",
         "tile": [
-          60.0,
-          33.0
+          64.0,
+          27.0
         ]
       },
       {
@@ -601,26 +3525,8 @@
         "semantic_id": "monster_spawn_000026",
         "spawn_rule": "ambient",
         "tile": [
-          66.0,
-          23.0
-        ]
-      },
-      {
-        "content_id": "monster.27",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "钉耙猫0",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": "monster.27",
-        "radius_tiles": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "monster_spawn_000028",
-        "spawn_rule": "ambient",
-        "tile": [
-          49.0,
-          68.0
+          72.0,
+          17.0
         ]
       },
       {
@@ -638,7 +3544,7 @@
         "spawn_rule": "ambient",
         "tile": [
           52.0,
-          14.0
+          8.0
         ]
       },
       {
@@ -655,8 +3561,8 @@
         "semantic_id": "monster_spawn_000030",
         "spawn_rule": "ambient",
         "tile": [
-          44.0,
-          11.0
+          42.0,
+          5.0
         ]
       },
       {
@@ -673,8 +3579,8 @@
         "semantic_id": "monster_spawn_000031",
         "spawn_rule": "ambient",
         "tile": [
-          38.0,
-          12.0
+          32.0,
+          6.0
         ]
       },
       {
@@ -691,8 +3597,8 @@
         "semantic_id": "monster_spawn_000032",
         "spawn_rule": "ambient",
         "tile": [
-          31.0,
-          11.0
+          32.0,
+          16.0
         ]
       },
       {
@@ -709,8 +3615,8 @@
         "semantic_id": "monster_spawn_000033",
         "spawn_rule": "ambient",
         "tile": [
-          29.0,
-          17.0
+          24.0,
+          16.0
         ]
       },
       {
@@ -727,8 +3633,8 @@
         "semantic_id": "monster_spawn_000034",
         "spawn_rule": "ambient",
         "tile": [
-          18.0,
-          11.0
+          14.0,
+          4.0
         ]
       },
       {
@@ -745,7 +3651,7 @@
         "semantic_id": "monster_spawn_000035",
         "spawn_rule": "ambient",
         "tile": [
-          17.0,
+          13.0,
           65.0
         ]
       },
@@ -763,8 +3669,8 @@
         "semantic_id": "monster_spawn_000036",
         "spawn_rule": "ambient",
         "tile": [
-          16.0,
-          70.0
+          14.0,
+          74.0
         ]
       },
       {
@@ -781,8 +3687,8 @@
         "semantic_id": "monster_spawn_000037",
         "spawn_rule": "ambient",
         "tile": [
-          12.0,
-          23.0
+          11.0,
+          20.0
         ]
       },
       {
@@ -799,8 +3705,8 @@
         "semantic_id": "monster_spawn_000038",
         "spawn_rule": "ambient",
         "tile": [
-          10.0,
-          17.0
+          5.0,
+          12.0
         ]
       },
       {
@@ -817,8 +3723,8 @@
         "semantic_id": "monster_spawn_000039",
         "spawn_rule": "ambient",
         "tile": [
-          17.0,
-          18.0
+          10.0,
+          10.0
         ]
       },
       {
@@ -853,7 +3759,7 @@
         "semantic_id": "monster_spawn_000041",
         "spawn_rule": "ambient",
         "tile": [
-          49.0,
+          52.0,
           19.0
         ]
       },
@@ -871,8 +3777,8 @@
         "semantic_id": "monster_spawn_000042",
         "spawn_rule": "ambient",
         "tile": [
-          42.0,
-          18.0
+          41.0,
+          14.0
         ]
       },
       {
@@ -889,8 +3795,8 @@
         "semantic_id": "monster_spawn_000043",
         "spawn_rule": "ambient",
         "tile": [
-          24.0,
-          12.0
+          22.0,
+          6.0
         ]
       },
       {
@@ -907,8 +3813,8 @@
         "semantic_id": "monster_spawn_000044",
         "spawn_rule": "ambient",
         "tile": [
-          52.0,
-          28.0
+          56.0,
+          30.0
         ]
       },
       {
@@ -925,8 +3831,8 @@
         "semantic_id": "monster_spawn_000045",
         "spawn_rule": "ambient",
         "tile": [
-          59.0,
-          20.0
+          61.0,
+          12.0
         ]
       },
       {
@@ -943,8 +3849,8 @@
         "semantic_id": "monster_spawn_000046",
         "spawn_rule": "ambient",
         "tile": [
-          59.0,
-          13.0
+          65.0,
+          4.0
         ]
       },
       {
@@ -979,8 +3885,8 @@
         "semantic_id": "monster_spawn_000048",
         "spawn_rule": "ambient",
         "tile": [
-          68.0,
-          48.0
+          73.0,
+          51.0
         ]
       }
     ],
@@ -1023,8 +3929,8 @@
         "semantic_id": "npc_000001",
         "service_role": "shop",
         "tile": [
-          39.0,
-          28.0
+          43.0,
+          29.0
         ],
         "tile_anchor": [
           31.0,
@@ -1069,7 +3975,7 @@
         "semantic_id": "npc_000002",
         "service_role": "shop",
         "tile": [
-          26.0,
+          25.0,
           29.0
         ],
         "tile_anchor": [
@@ -1116,7 +4022,7 @@
         "service_role": "shop",
         "tile": [
           40.0,
-          46.0
+          45.0
         ],
         "tile_anchor": [
           41.0,
@@ -1161,8 +4067,8 @@
         "semantic_id": "npc_000004",
         "service_role": "trainer",
         "tile": [
-          32.0,
-          47.0
+          33.0,
+          48.0
         ],
         "tile_anchor": [
           31.0,
@@ -1214,134 +4120,110 @@
           34.0,
           37.0
         ]
+      },
+      {
+        "collision_policy": "profile",
+        "collision_profile_id": "small_prop_1x1",
+        "content_id": "npc.expansion.bich_warehouse",
+        "content_layer": "personal_expansion",
+        "display_name": "比奇仓库管理员",
+        "editor_visual_asset_id": "editor_npc_placeholder_humanoid",
+        "editor_visual_only": true,
+        "facing": "south",
+        "kind": "npc",
+        "movable": true,
+        "npc_id": "npc.expansion.bich_warehouse",
+        "npc_occupancy_profile_id": "npc_humanoid_1x1",
+        "object_role": "npc_placeholder",
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placeholder_instance_id": "npc_placeholder_npc_000006",
+        "placement_anchor_px": [
+          32.0,
+          48.0
+        ],
+        "radius_tiles": 3.0,
+        "runtime_export": true,
+        "safe": true,
+        "selectable": true,
+        "selection_shape": {
+          "padding_px": 4.0,
+          "type": "bounds"
+        },
+        "semantic_id": "npc_000006",
+        "service_role": "warehouse",
+        "tile": [
+          46.0,
+          36.0
+        ],
+        "tile_anchor": [
+          45.0,
+          35.0
+        ]
+      },
+      {
+        "collision_policy": "profile",
+        "collision_profile_id": "small_prop_1x1",
+        "content_id": "npc.expansion.bich_pharmacist",
+        "content_layer": "personal_expansion",
+        "display_name": "比奇药剂商",
+        "editor_visual_asset_id": "editor_npc_placeholder_humanoid",
+        "editor_visual_only": true,
+        "facing": "south",
+        "kind": "npc",
+        "movable": true,
+        "npc_id": "npc.expansion.bich_pharmacist",
+        "npc_occupancy_profile_id": "npc_humanoid_1x1",
+        "object_role": "npc_placeholder",
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placeholder_instance_id": "npc_placeholder_npc_000007",
+        "placement_anchor_px": [
+          32.0,
+          48.0
+        ],
+        "radius_tiles": 3.0,
+        "runtime_export": true,
+        "safe": true,
+        "selectable": true,
+        "selection_shape": {
+          "padding_px": 4.0,
+          "type": "bounds"
+        },
+        "semantic_id": "npc_000007",
+        "service_role": "shop",
+        "tile": [
+          33.0,
+          26.0
+        ],
+        "tile_anchor": [
+          33.0,
+          29.0
+        ]
       }
     ],
     "object_base": [
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          159.0,
-          269.0
-        ],
-        "asset_id": "user.6fd631308bf359d5",
-        "collision_footprint_tiles": [
-          0.0,
-          0.0
-        ],
-        "collision_policy": "none",
-        "collision_profile_id": "none_visual",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          8.0,
-          6.0
-        ],
-        "gameplay_role": "navigation_blocker",
-        "instance_id": "inst_000001",
-        "layer": "object_base",
-        "movable": true,
-        "navigation_policy": "block_player_and_monster",
-        "object_role": "terrain",
-        "occlusion": true,
-        "occupancy_footprint_tiles": [
-          8.0,
-          6.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_px": [
-          159.0,
-          269.0
-        ],
-        "placement_rule": "non_overlapping",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "scene_intent": "terrain_boundary",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          10.0,
-          11.0
-        ],
-        "tile_anchor": [
-          8.0,
-          8.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
-          155.0,
-          263.0
-        ],
-        "asset_id": "user.c60c71686cf6a463",
-        "collision_footprint_tiles": [
-          0.0,
-          0.0
-        ],
-        "collision_policy": "none",
-        "collision_profile_id": "none_visual",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          8.0,
-          6.0
-        ],
-        "gameplay_role": "navigation_blocker",
-        "instance_id": "inst_000002",
-        "layer": "object_base",
-        "movable": true,
-        "navigation_policy": "block_player_and_monster",
-        "object_role": "terrain",
-        "occlusion": true,
-        "occupancy_footprint_tiles": [
-          8.0,
-          6.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_px": [
-          155.0,
-          263.0
-        ],
-        "placement_rule": "non_overlapping",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "scene_intent": "terrain_boundary",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          66.0,
-          13.0
-        ],
-        "tile_anchor": [
-          64.0,
-          8.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
-          155.0,
-          247.0
+          123.0,
+          135.0
         ],
         "asset_id": "user.4f010a8b52c53082",
+        "collision_authority": "map_instance",
+        "collision_cells": [],
         "collision_footprint_tiles": [
           0.0,
           0.0
@@ -1355,11 +4237,12 @@
           8.0,
           6.0
         ],
-        "gameplay_role": "navigation_blocker",
+        "gameplay_role": "none",
         "instance_id": "inst_000004",
         "layer": "object_base",
+        "map_collision_override": "disabled",
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
         "occupancy_footprint_tiles": [
@@ -1370,11 +4253,17 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          155.0,
-          247.0
+          123.0,
+          135.0
         ],
         "placement_rule": "non_overlapping",
+        "portal_trigger_offset_tiles": [
+          6.0,
+          3.0
+        ],
+        "portal_trigger_policy_id": "bich_cave_mouth_explicit_v1",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
@@ -1382,12 +4271,12 @@
           1.0,
           1.0
         ],
-        "scene_intent": "terrain_boundary",
+        "scene_intent": "map_portal_visual",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          67.0,
-          68.0
+          71.0,
+          73.0
         ],
         "tile_anchor": [
           64.0,
@@ -1398,15 +4287,16 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           188.0,
-          409.0
+          281.0
         ],
         "asset_id": "user.9a06a7324293dccd",
+        "collision_cells": [],
         "collision_footprint_tiles": [
-          8.0,
-          8.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "solid_footprint",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
@@ -1417,8 +4307,9 @@
         "gameplay_role": "service_or_landmark",
         "instance_id": "inst_000005",
         "layer": "object_base",
+        "map_collision_override": "disabled",
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "building",
         "occlusion": true,
         "occupancy_footprint_tiles": [
@@ -1429,9 +4320,10 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           188.0,
-          409.0
+          281.0
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
@@ -1445,8 +4337,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          23.0,
-          31.0
+          18.0,
+          26.0
         ],
         "tile_anchor": [
           21.0,
@@ -1457,15 +4349,16 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           188.0,
-          382.0
+          254.0
         ],
         "asset_id": "user.b04497d68cdcdb8c",
+        "collision_cells": [],
         "collision_footprint_tiles": [
-          8.0,
-          8.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "solid_footprint",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
@@ -1476,8 +4369,9 @@
         "gameplay_role": "service_or_landmark",
         "instance_id": "inst_000006",
         "layer": "object_base",
+        "map_collision_override": "disabled",
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "building",
         "occlusion": true,
         "occupancy_footprint_tiles": [
@@ -1488,9 +4382,134 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           188.0,
-          382.0
+          254.0
+        ],
+        "placement_rule": "non_overlapping",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "landmark",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          38.0,
+          21.0
+        ],
+        "tile_anchor": [
+          40.0,
+          25.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          180.0,
+          266.0
+        ],
+        "asset_id": "user.ee72b340a8cdfe93",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          8.0,
+          8.0
+        ],
+        "gameplay_role": "service_or_landmark",
+        "instance_id": "inst_000007",
+        "layer": "object_base",
+        "map_collision_override": "disabled",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "building",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          8.0,
+          8.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          180.0,
+          266.0
+        ],
+        "placement_rule": "non_overlapping",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "landmark",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          29.0,
+          50.0
+        ],
+        "tile_anchor": [
+          30.0,
+          44.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          195.0,
+          295.0
+        ],
+        "asset_id": "user.ab77eee07a0aca71",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          8.0,
+          8.0
+        ],
+        "gameplay_role": "service_or_landmark",
+        "instance_id": "inst_000008",
+        "layer": "object_base",
+        "map_collision_override": "disabled",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "building",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          8.0,
+          8.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          195.0,
+          295.0
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
@@ -1505,125 +4524,7 @@
         "selection_locked": false,
         "tile": [
           43.0,
-          25.0
-        ],
-        "tile_anchor": [
-          40.0,
-          25.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
-          180.0,
-          394.0
-        ],
-        "asset_id": "user.ee72b340a8cdfe93",
-        "collision_footprint_tiles": [
-          8.0,
-          8.0
-        ],
-        "collision_policy": "solid_footprint",
-        "collision_profile_id": "solid_logical_footprint",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          8.0,
-          8.0
-        ],
-        "gameplay_role": "service_or_landmark",
-        "instance_id": "inst_000007",
-        "layer": "object_base",
-        "movable": true,
-        "navigation_policy": "block_player_and_monster",
-        "object_role": "building",
-        "occlusion": true,
-        "occupancy_footprint_tiles": [
-          8.0,
-          8.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_px": [
-          180.0,
-          394.0
-        ],
-        "placement_rule": "non_overlapping",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "scene_intent": "landmark",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          30.0,
-          51.0
-        ],
-        "tile_anchor": [
-          30.0,
-          44.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
-          195.0,
-          423.0
-        ],
-        "asset_id": "user.ab77eee07a0aca71",
-        "collision_footprint_tiles": [
-          8.0,
-          8.0
-        ],
-        "collision_policy": "solid_footprint",
-        "collision_profile_id": "solid_logical_footprint",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          8.0,
-          8.0
-        ],
-        "gameplay_role": "service_or_landmark",
-        "instance_id": "inst_000008",
-        "layer": "object_base",
-        "movable": true,
-        "navigation_policy": "block_player_and_monster",
-        "object_role": "building",
-        "occlusion": true,
-        "occupancy_footprint_tiles": [
-          8.0,
-          8.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_px": [
-          195.0,
-          423.0
-        ],
-        "placement_rule": "non_overlapping",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "scene_intent": "landmark",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          46.0,
-          45.0
+          42.0
         ],
         "tile_anchor": [
           42.0,
@@ -1633,16 +4534,17 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          168.0,
-          309.0
+          152.0,
+          221.0
         ],
         "asset_id": "user.eb62724db3f83335",
+        "collision_cells": [],
         "collision_footprint_tiles": [
-          6.0,
-          5.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "solid_footprint",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
@@ -1653,8 +4555,9 @@
         "gameplay_role": "navigation_blocker",
         "instance_id": "inst_000009",
         "layer": "object_base",
+        "map_collision_override": "disabled",
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
@@ -1665,9 +4568,10 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          168.0,
-          309.0
+          152.0,
+          221.0
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
@@ -1681,8 +4585,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          34.0,
-          25.0
+          32.0,
+          22.0
         ],
         "tile_anchor": [
           31.0,
@@ -1693,15 +4597,16 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           153.0,
-          306.0
+          226.0
         ],
         "asset_id": "user.189fe88afe77097a",
+        "collision_cells": [],
         "collision_footprint_tiles": [
-          5.0,
-          5.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "solid_footprint",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
@@ -1712,8 +4617,9 @@
         "gameplay_role": "navigation_blocker",
         "instance_id": "inst_000010",
         "layer": "object_base",
+        "map_collision_override": "disabled",
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
@@ -1724,9 +4630,10 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           153.0,
-          306.0
+          226.0
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
@@ -1741,7 +4648,7 @@
         "selection_locked": false,
         "tile": [
           39.0,
-          55.0
+          53.0
         ],
         "tile_anchor": [
           34.0,
@@ -1751,16 +4658,17 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          126.0,
-          313.0
+          142.0,
+          241.0
         ],
         "asset_id": "user.5deb556174ab1f3e",
+        "collision_cells": [],
         "collision_footprint_tiles": [
-          4.0,
-          5.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "solid_footprint",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
@@ -1771,8 +4679,9 @@
         "gameplay_role": "navigation_blocker",
         "instance_id": "inst_000011",
         "layer": "object_base",
+        "map_collision_override": "disabled",
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
@@ -1783,9 +4692,10 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          126.0,
-          313.0
+          142.0,
+          241.0
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
@@ -1811,15 +4721,16 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           153.0,
-          317.0
+          237.0
         ],
         "asset_id": "user.9505da16d89e5ea5",
+        "collision_cells": [],
         "collision_footprint_tiles": [
-          5.0,
-          5.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "solid_footprint",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
@@ -1830,8 +4741,9 @@
         "gameplay_role": "navigation_blocker",
         "instance_id": "inst_000012",
         "layer": "object_base",
+        "map_collision_override": "disabled",
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
@@ -1842,9 +4754,10 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           153.0,
-          317.0
+          237.0
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
@@ -1858,7 +4771,7 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          51.0,
+          50.0,
           37.0
         ],
         "tile_anchor": [
@@ -1869,16 +4782,17 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          224.0,
-          560.0
+          256.0,
+          480.0
         ],
         "asset_id": "user.2e816d1c79e095e8",
+        "collision_cells": [],
         "collision_footprint_tiles": [
-          3.0,
-          3.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "preset",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
@@ -1889,8 +4803,9 @@
         "gameplay_role": "navigation_blocker",
         "instance_id": "inst_000014",
         "layer": "object_base",
+        "map_collision_override": "disabled",
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
@@ -1901,9 +4816,10 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          224.0,
-          560.0
+          256.0,
+          480.0
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
@@ -1928,10 +4844,12 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          155.0,
-          247.0
+          123.0,
+          135.0
         ],
         "asset_id": "user.4f010a8b52c53082",
+        "collision_authority": "map_instance",
+        "collision_cells": [],
         "collision_footprint_tiles": [
           0.0,
           0.0
@@ -1945,11 +4863,12 @@
           8.0,
           6.0
         ],
-        "gameplay_role": "navigation_blocker",
+        "gameplay_role": "none",
         "instance_id": "inst_000016",
         "layer": "object_base",
+        "map_collision_override": "disabled",
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
         "occupancy_footprint_tiles": [
@@ -1960,11 +4879,17 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          155.0,
-          247.0
+          123.0,
+          135.0
         ],
         "placement_rule": "non_overlapping",
+        "portal_trigger_offset_tiles": [
+          6.0,
+          3.0
+        ],
+        "portal_trigger_policy_id": "bich_cave_mouth_explicit_v1",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
@@ -1972,12 +4897,12 @@
           1.0,
           1.0
         ],
-        "scene_intent": "terrain_boundary",
+        "scene_intent": "map_portal_visual",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          10.0,
-          68.0
+          0.0,
+          72.0
         ],
         "tile_anchor": [
           8.0,
@@ -1987,16 +4912,17 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          216.0,
-          539.0
+          248.0,
+          459.0
         ],
         "asset_id": "user.858a55fd0730983a",
+        "collision_cells": [],
         "collision_footprint_tiles": [
-          3.0,
-          3.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "preset",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
@@ -2007,8 +4933,9 @@
         "gameplay_role": "navigation_blocker",
         "instance_id": "inst_000018",
         "layer": "object_base",
+        "map_collision_override": "disabled",
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
@@ -2019,9 +4946,10 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          216.0,
-          539.0
+          248.0,
+          459.0
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
@@ -2035,7 +4963,7 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          18.0,
+          17.0,
           54.0
         ],
         "tile_anchor": [
@@ -2046,16 +4974,17 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          214.0,
-          534.0
+          256.6666564941406,
+          448.6666564941406
         ],
         "asset_id": "user.372fca8cba840f8a",
+        "collision_cells": [],
         "collision_footprint_tiles": [
-          3.0,
-          5.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "preset",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
@@ -2066,8 +4995,9 @@
         "gameplay_role": "navigation_blocker",
         "instance_id": "inst_000019",
         "layer": "object_base",
+        "map_collision_override": "disabled",
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
@@ -2078,9 +5008,10 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          214.0,
-          534.0
+          256.6666564941406,
+          448.6666564941406
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
@@ -2094,8 +5025,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          23.0,
-          17.0
+          21.0,
+          15.0
         ],
         "tile_anchor": [
           21.0,
@@ -2105,16 +5036,17 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          220.0,
-          496.0
+          252.0,
+          416.0
         ],
         "asset_id": "user.2c7897c89d3302a7",
+        "collision_cells": [],
         "collision_footprint_tiles": [
-          3.0,
-          3.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "preset",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
@@ -2125,8 +5057,9 @@
         "gameplay_role": "navigation_blocker",
         "instance_id": "inst_000020",
         "layer": "object_base",
+        "map_collision_override": "disabled",
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
@@ -2137,9 +5070,10 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          220.0,
-          496.0
+          252.0,
+          416.0
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
@@ -2165,66 +5099,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           170.0,
-          249.0
-        ],
-        "asset_id": "user.33ff89346abf48a1",
-        "collision_footprint_tiles": [
-          0.0,
-          0.0
-        ],
-        "collision_policy": "none",
-        "collision_profile_id": "none_visual",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "gameplay_role": "none",
-        "instance_id": "inst_000021",
-        "layer": "object_base",
-        "movable": true,
-        "navigation_policy": "ignore",
-        "object_role": "decoration",
-        "occlusion": false,
-        "occupancy_footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_px": [
-          170.0,
-          249.0
-        ],
-        "placement_rule": "inside_map",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          0.384,
-          0.384
-        ],
-        "scene_intent": "visual_detail",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          42.0,
-          63.0
-        ],
-        "tile_anchor": [
-          42.0,
-          63.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
-          170.0,
-          249.0
+          124.0
         ],
         "asset_id": "user.33ff89346abf48a1",
         "collision_footprint_tiles": [
@@ -2243,6 +5118,7 @@
         "gameplay_role": "none",
         "instance_id": "inst_000022",
         "layer": "object_base",
+        "map_collision_override": "default",
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2255,9 +5131,10 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           170.0,
-          249.0
+          124.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -2271,8 +5148,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          25.0,
-          61.0
+          29.0,
+          64.0
         ],
         "tile_anchor": [
           25.0,
@@ -2283,7 +5160,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           163.0,
-          323.0
+          161.0
         ],
         "asset_id": "user.2ac356ebea0bc411",
         "collision_footprint_tiles": [
@@ -2302,6 +5179,7 @@
         "gameplay_role": "none",
         "instance_id": "inst_000023",
         "layer": "object_base",
+        "map_collision_override": "default",
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2314,9 +5192,10 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           163.0,
-          323.0
+          161.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -2330,8 +5209,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          14.0,
-          40.0
+          12.0,
+          41.0
         ],
         "tile_anchor": [
           14.0,
@@ -2342,7 +5221,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           172.0,
-          325.0
+          162.0
         ],
         "asset_id": "user.46cdf7b3717a3ea5",
         "collision_footprint_tiles": [
@@ -2361,6 +5240,7 @@
         "gameplay_role": "none",
         "instance_id": "inst_000024",
         "layer": "object_base",
+        "map_collision_override": "default",
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2373,9 +5253,10 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           172.0,
-          325.0
+          162.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -2389,8 +5270,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          9.0,
-          29.0
+          12.0,
+          27.0
         ],
         "tile_anchor": [
           9.0,
@@ -2401,7 +5282,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           161.0,
-          244.0
+          121.5
         ],
         "asset_id": "user.f40da4572b2f787b",
         "collision_footprint_tiles": [
@@ -2420,6 +5301,7 @@
         "gameplay_role": "none",
         "instance_id": "inst_000025",
         "layer": "object_base",
+        "map_collision_override": "default",
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2432,9 +5314,10 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           161.0,
-          244.0
+          121.5
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -2454,72 +5337,13 @@
         "tile_anchor": [
           33.0,
           15.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
-          161.0,
-          244.0
-        ],
-        "asset_id": "user.f40da4572b2f787b",
-        "collision_footprint_tiles": [
-          0.0,
-          0.0
-        ],
-        "collision_policy": "none",
-        "collision_profile_id": "none_visual",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "gameplay_role": "none",
-        "instance_id": "inst_000026",
-        "layer": "object_base",
-        "movable": true,
-        "navigation_policy": "ignore",
-        "object_role": "decoration",
-        "occlusion": false,
-        "occupancy_footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_px": [
-          161.0,
-          244.0
-        ],
-        "placement_rule": "inside_map",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          0.39183673469387753,
-          0.39183673469387753
-        ],
-        "scene_intent": "visual_detail",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          35.0,
-          9.0
-        ],
-        "tile_anchor": [
-          35.0,
-          9.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           162.0,
-          285.0
+          142.0
         ],
         "asset_id": "user.c8f3f038eaa20e5a",
         "collision_footprint_tiles": [
@@ -2538,6 +5362,7 @@
         "gameplay_role": "none",
         "instance_id": "inst_000027",
         "layer": "object_base",
+        "map_collision_override": "default",
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2550,9 +5375,10 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           162.0,
-          285.0
+          142.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -2566,8 +5392,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          59.0,
-          20.0
+          64.0,
+          9.0
         ],
         "tile_anchor": [
           59.0,
@@ -2578,7 +5404,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           181.0,
-          288.0
+          143.5
         ],
         "asset_id": "user.f541f8d1a66f1355",
         "collision_footprint_tiles": [
@@ -2597,6 +5423,7 @@
         "gameplay_role": "none",
         "instance_id": "inst_000028",
         "layer": "object_base",
+        "map_collision_override": "default",
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2609,9 +5436,10 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           181.0,
-          288.0
+          143.5
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -2625,8 +5453,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          52.0,
-          11.0
+          47.0,
+          10.0
         ],
         "tile_anchor": [
           52.0,
@@ -2637,7 +5465,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           197.0,
-          240.0
+          176.0
         ],
         "asset_id": "user.6f2ae9e2a8cf8930",
         "collision_footprint_tiles": [
@@ -2650,53 +5478,60 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4.0,
-          4.0
+          1.0,
+          1.0
         ],
         "gameplay_role": "none",
+        "instance_custom_scale": true,
         "instance_id": "inst_000029",
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          4.0,
-          4.0
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
-          0.0
+          -48.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           197.0,
-          240.0
+          176.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.5311203319502075,
-          0.5311203319502075
+          0.25,
+          0.25
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          50.0,
-          23.0
+          53.0,
+          26.0
         ],
         "tile_anchor": [
-          50.0,
-          23.0
+          53.0,
+          26.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           160.0,
-          231.0
+          115.0
         ],
         "asset_id": "user.a340a0d37815d460",
         "collision_footprint_tiles": [
@@ -2715,6 +5550,7 @@
         "gameplay_role": "none",
         "instance_id": "inst_000030",
         "layer": "object_base",
+        "map_collision_override": "default",
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2727,9 +5563,10 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           160.0,
-          231.0
+          115.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -2743,8 +5580,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          66.0,
-          48.0
+          64.0,
+          57.0
         ],
         "tile_anchor": [
           66.0,
@@ -2755,7 +5592,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           163.0,
-          239.0
+          119.0
         ],
         "asset_id": "user.c1d4e70ad63276aa",
         "collision_footprint_tiles": [
@@ -2774,6 +5611,7 @@
         "gameplay_role": "none",
         "instance_id": "inst_000031",
         "layer": "object_base",
+        "map_collision_override": "default",
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2786,9 +5624,10 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           163.0,
-          239.0
+          119.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -2802,8 +5641,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          55.0,
-          43.0
+          52.0,
+          39.0
         ],
         "tile_anchor": [
           55.0,
@@ -2814,7 +5653,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           177.0,
-          254.0
+          126.5
         ],
         "asset_id": "user.dbcf36c91f48fe8e",
         "collision_footprint_tiles": [
@@ -2833,6 +5672,7 @@
         "gameplay_role": "none",
         "instance_id": "inst_000032",
         "layer": "object_base",
+        "map_collision_override": "default",
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2845,9 +5685,10 @@
           0.0,
           0.0
         ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           177.0,
-          254.0
+          126.5
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -2861,88 +5702,1568 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          54.0,
-          32.0
+          52.0,
+          35.0
         ],
         "tile_anchor": [
           54.0,
           32.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          101.0,
+          137.5
+        ],
+        "asset_id": "user.4b578a2e393aee5f",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000046",
+        "layer": "object_base",
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          101.0,
+          137.5
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.34657039711191334,
+          0.34657039711191334
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          42.0,
+          52.0
+        ],
+        "tile_anchor": [
+          36.0,
+          43.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          113.0,
+          111.5
+        ],
+        "asset_id": "user.3a22e204b6dbc32d",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000047",
+        "layer": "object_base",
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          113.0,
+          111.5
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.4266666666666667,
+          0.4266666666666667
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          14.0,
+          57.0
+        ],
+        "tile_anchor": [
+          9.0,
+          56.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          113.0,
+          111.5
+        ],
+        "asset_id": "user.3a22e204b6dbc32d",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000048",
+        "layer": "object_base",
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          113.0,
+          111.5
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.4266666666666667,
+          0.4266666666666667
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          65.0,
+          59.0
+        ],
+        "tile_anchor": [
+          65.0,
+          62.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          104.0,
+          134.5
+        ],
+        "asset_id": "user.0e71a29ed6eeff31",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000049",
+        "layer": "object_base",
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          104.0,
+          134.5
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.35424354243542433,
+          0.35424354243542433
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          24.0,
+          20.0
+        ],
+        "tile_anchor": [
+          25.0,
+          23.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          108.0,
+          136.5
+        ],
+        "asset_id": "user.b47f67e1f5cedf56",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000050",
+        "layer": "object_base",
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          108.0,
+          136.5
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3490909090909091,
+          0.3490909090909091
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          19.0,
+          43.0
+        ],
+        "tile_anchor": [
+          21.0,
+          46.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          108.0,
+          136.5
+        ],
+        "asset_id": "user.b47f67e1f5cedf56",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000051",
+        "layer": "object_base",
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          108.0,
+          136.5
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3490909090909091,
+          0.3490909090909091
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          51.0,
+          31.0
+        ],
+        "tile_anchor": [
+          50.0,
+          27.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          106.0,
+          102.5
+        ],
+        "asset_id": "user.cb5ec321760a2f62",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000052",
+        "layer": "object_base",
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          106.0,
+          102.5
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.463768115942029,
+          0.463768115942029
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          36.0,
+          24.0
+        ],
+        "tile_anchor": [
+          28.0,
+          28.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          92.0,
+          104.5
+        ],
+        "asset_id": "user.fb5fcf8cc43c684e",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000053",
+        "layer": "object_base",
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          92.0,
+          104.5
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.4549763033175355,
+          0.4549763033175355
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          22.0,
+          41.0
+        ],
+        "tile_anchor": [
+          33.0,
+          44.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          107.0,
+          103.5
+        ],
+        "asset_id": "user.83ef012d55284f48",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000054",
+        "layer": "object_base",
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          107.0,
+          103.5
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.45933014354066987,
+          0.45933014354066987
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          21.0,
+          32.0
+        ],
+        "tile_anchor": [
+          22.0,
+          35.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          108.0,
+          104.5
+        ],
+        "asset_id": "user.f4efc016a43e4ce0",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000055",
+        "layer": "object_base",
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          108.0,
+          104.5
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.4549763033175355,
+          0.4549763033175355
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          44.0,
+          25.0
+        ],
+        "tile_anchor": [
+          43.0,
+          30.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          110.0,
+          105.5
+        ],
+        "asset_id": "user.6a614546bd760256",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000058",
+        "layer": "object_base",
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          110.0,
+          105.5
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.4507042253521127,
+          0.4507042253521127
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          51.0,
+          64.0
+        ],
+        "tile_anchor": [
+          51.0,
+          64.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          98.0,
+          141.5
+        ],
+        "asset_id": "user.5f3275a65a03a303",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000059",
+        "layer": "object_base",
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          98.0,
+          141.5
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3368421052631579,
+          0.3368421052631579
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          70.0,
+          75.0
+        ],
+        "tile_anchor": [
+          70.0,
+          74.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          98.0,
+          141.5
+        ],
+        "asset_id": "user.5f3275a65a03a303",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000060",
+        "layer": "object_base",
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          98.0,
+          141.5
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3368421052631579,
+          0.3368421052631579
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          1.0,
+          68.0
+        ],
+        "tile_anchor": [
+          1.0,
+          69.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          98.0,
+          141.5
+        ],
+        "asset_id": "user.5f3275a65a03a303",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000061",
+        "layer": "object_base",
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          98.0,
+          141.5
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3368421052631579,
+          0.3368421052631579
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          1.0,
+          6.0
+        ],
+        "tile_anchor": [
+          0.0,
+          6.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          98.0,
+          141.5
+        ],
+        "asset_id": "user.5f3275a65a03a303",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000062",
+        "layer": "object_base",
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          98.0,
+          141.5
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3368421052631579,
+          0.3368421052631579
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          67.0,
+          2.0
+        ],
+        "tile_anchor": [
+          76.0,
+          8.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          172.0,
+          126.5
+        ],
+        "asset_id": "user.03958ff6409f2772",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000063",
+        "layer": "object_base",
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          172.0,
+          126.5
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3764705882352941,
+          0.3764705882352941
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          35.0,
+          5.0
+        ],
+        "tile_anchor": [
+          36.0,
+          7.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          171.0,
+          123.0
+        ],
+        "asset_id": "user.adde7a65453c0cbc",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000064",
+        "layer": "object_base",
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          171.0,
+          123.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3870967741935484,
+          0.3870967741935484
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          19.0,
+          71.0
+        ],
+        "tile_anchor": [
+          20.0,
+          73.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          168.0,
+          124.0
+        ],
+        "asset_id": "user.7f6c3a92d4eb22eb",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000065",
+        "layer": "object_base",
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          168.0,
+          124.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.384,
+          0.384
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          5.0,
+          67.0
+        ],
+        "tile_anchor": [
+          4.0,
+          65.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          171.0,
+          127.0
+        ],
+        "asset_id": "user.e4d917467d61c4e7",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000066",
+        "layer": "object_base",
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          171.0,
+          127.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.375,
+          0.375
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          17.0,
+          51.0
+        ],
+        "tile_anchor": [
+          17.0,
+          51.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          154.0,
+          105.0
+        ],
+        "asset_id": "user.a8322e37209343be",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "none",
+        "instance_id": "inst_000067",
+        "layer": "object_base",
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          154.0,
+          105.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.4528301886792453,
+          0.4528301886792453
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          51.0,
+          75.0
+        ],
+        "tile_anchor": [
+          51.0,
+          75.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          172.0,
+          177.0
+        ],
+        "asset_id": "user.ccd90b0060ecebbc",
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_custom_scale": true,
+        "instance_id": "inst_000069",
+        "instance_scale_level": -2.0,
+        "layer": "object_base",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          -32.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          172.0,
+          177.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3333333333333333,
+          0.3333333333333333
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          69.0,
+          37.0
+        ],
+        "tile_anchor": [
+          68.0,
+          35.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          88.0,
+          116.00001525878906
+        ],
+        "asset_id": "cave_dungeon.magic_fire_orange_01",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "interactable",
+        "instance_base_footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "instance_base_scale": 0.727273,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000070",
+        "instance_scale_level": 1.0,
+        "layer": "object_base",
+        "map_collision_override": "disabled",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "interactable",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          -16.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          88.0,
+          116.00001525878906
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.090909481048584,
+          1.090909481048584
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          34.0,
+          38.0
+        ],
+        "tile_anchor": [
+          33.0,
+          38.0
+        ],
+        "visual_footprint_tiles": [
+          3.0,
+          3.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          133.0,
+          239.0
+        ],
+        "asset_id": "mse.map_exit.temple_set_b_corner_east_inner_side_open",
+        "collision_authority": "asset",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          8.0,
+          6.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          8.0,
+          6.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000071",
+        "layer": "object_base",
+        "manual_collision_expected": false,
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          8.0,
+          6.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          133.0,
+          239.0
+        ],
+        "placement_rule": "non_overlapping",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          70.0,
+          1.0
+        ],
+        "tile_anchor": [
+          72.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          141.0,
+          286.0
+        ],
+        "asset_id": "mse.map_exit.deep_forest_set_a_edge_north_far_open",
+        "collision_authority": "asset",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          8.0,
+          6.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          8.0,
+          6.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000072",
+        "layer": "object_base",
+        "manual_collision_expected": false,
+        "map_collision_override": "default",
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          8.0,
+          6.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          141.0,
+          286.0
+        ],
+        "placement_rule": "non_overlapping",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          1.0,
+          2.0
+        ],
+        "tile_anchor": [
+          3.0,
+          2.0
         ]
       }
     ],
     "object_front": [],
     "region_semantics": [],
     "region_trigger": [],
+    "respawn_points": [],
     "safe_area": [
       {
-        "area_id": "safe.bich_city",
+        "area_id": "safe_area_000002",
         "blocks_monster_damage": true,
-        "blocks_monster_entry": true,
         "blocks_pvp": true,
         "content_layer": "personal_expansion",
-        "death_return_anchor": true,
-        "display_name": "比奇城五边形安全区",
-        "expansion_tiles": 5.0,
+        "display_name": "比奇杂货商",
         "kind": "safe_area",
-        "logout_return_anchor": true,
-        "measured_monster_clearance_tiles": 5.14,
-        "minimum_monster_clearance_tiles": 3.0,
-        "npc_hull_tiles": [
-          [
-            24.0,
-            39.0
-          ],
-          [
-            26.0,
-            29.0
-          ],
-          [
-            39.0,
-            28.0
-          ],
-          [
-            40.0,
-            46.0
-          ],
-          [
-            32.0,
-            47.0
-          ]
-        ],
         "polygon_tiles": [
           [
-            19.0,
-            40.0
-          ],
-          [
-            23.0,
-            25.0
-          ],
-          [
-            42.0,
-            24.0
+            47.0,
+            37.0
           ],
           [
             43.0,
-            50.0
+            28.0
           ],
           [
             32.0,
+            24.0
+          ],
+          [
+            24.0,
+            30.0
+          ],
+          [
+            23.0,
+            40.0
+          ],
+          [
+            33.0,
             52.0
+          ],
+          [
+            44.0,
+            52.0
+          ],
+          [
+            47.0,
+            37.0
           ]
         ],
-        "radius_tiles": 5.0,
-        "return_anchor": true,
-        "return_tile": [
-          33.0,
-          37.0
-        ],
+        "radius_tiles": 0.0,
+        "return_anchor": false,
         "runtime_export": true,
-        "semantic_id": "safe_area_000001",
+        "semantic_id": "safe_area_000002",
         "shape": "polygon",
         "tile": [
-          40.0,
-          40.0
+          37.0,
+          38.0
         ]
       }
     ],

@@ -3,12 +3,19 @@ extends Node
 
 func _ready() -> void:
 	var document := MapEditorTypes.new_map("stage7_runtime", 990007, "Stage 7", Vector2i(32, 32))
+	document.editor_meta.workspace = "user://mse_stage7_runtime_%s" % str(Time.get_ticks_usec())
 	var ground := MapEditorGroundService.initialize(document)
 	assert(ground.ok)
 	var npc := MapEditorGameplaySemanticService.add_entry(document, "npc", Vector2i(3, 3), {"content_id": "npc.bich_guard", "npc_id": "npc.bich_guard"})
 	var door := MapEditorGameplaySemanticService.add_entry(document, "door", Vector2i(4, 4), {"target_map_id": "bich_province", "target_tile": [8, 8]})
+	var entrance := MapEditorGameplaySemanticService.add_entry(document, "map_entrance", Vector2i(5, 5), {"display_name": "测试入口"})
+	var map_exit := MapEditorGameplaySemanticService.add_entry(document, "map_exit", Vector2i(6, 5), {"target_map_id": "bich_province", "target_entrance_id": str(entrance.entry.semantic_id)})
+	var respawn := MapEditorGameplaySemanticService.add_entry(document, "respawn_point", Vector2i(7, 7), {"display_name": "出生复活点"})
+	var safe_polygon := MapEditorGameplaySemanticService.add_entry(document, "safe_area", Vector2i(7, 7), {
+		"shape": "polygon", "polygon_tiles": [[5, 5], [9, 5], [9, 9], [5, 9]], "radius_tiles": 0,
+	})
 	var wall := MapEditorInstanceService.create_instance(document, "terrain.palisade_wall_01", "terrain", Vector2i(10, 10), "terrain_base")
-	assert(npc.ok and door.ok and wall.ok)
+	assert(npc.ok and door.ok and entrance.ok and map_exit.ok and respawn.ok and safe_polygon.ok and wall.ok)
 	var no_approval := MapEditorBuildRuntimeService.build(document, "user://stage7_runtime.runtime.json")
 	assert(not no_approval.ok)
 	assert("runtime_approval_required" in no_approval.errors)
@@ -19,6 +26,10 @@ func _ready() -> void:
 	assert(built.runtime.collision.blocked_count == 3)
 	assert(built.runtime.semantics.npc_points.size() == 1)
 	assert(built.runtime.semantics.door_points[0].target_map_id == "bich_province")
+	assert(built.runtime.semantics.map_entrance_points.size() == 1)
+	assert(built.runtime.semantics.map_exit_points[0].target_entrance_id == str(entrance.entry.semantic_id))
+	assert(built.runtime.semantics.respawn_points[0].is_birth_point)
+	assert(built.runtime.semantics.safe_area[0].polygon_tiles.size() == 4)
 	assert(not MapEditorJsonCodec.encode(built.runtime).contains("map_editor_workspace"))
 	var paint := MapEditorGroundService.record_tile_paint(document, Vector2i(1, 1), "ground.dark_grass.001")
 	assert(paint.ok)

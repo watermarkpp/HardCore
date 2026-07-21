@@ -1,5 +1,6 @@
 extends Node
 
+const InstanceProfileService := preload("res://scripts/map_editor/map_editor_instance_profile_service.gd")
 
 func _ready() -> void:
 	var document := MapEditorTypes.new_map("stage5_collision_test", 991005, "Stage5 Collision Test", Vector2i(64, 64))
@@ -14,10 +15,61 @@ func _ready() -> void:
 	assert(polygon.ok)
 	var walkable := MapEditorCollisionService.build_walkability(document)
 	assert(walkable.blocked_count > 10)
-	for key: String in ["10,10", "11,10", "12,10", "20,20", "21,21", "31,31", "41,41"]:
+	var palisade_collision_origin := MapEditorCollisionService._collision_origin(palisade.instance)
+	assert(walkable.blocked_tiles.has("%d,%d" % [palisade_collision_origin.x, palisade_collision_origin.y]))
+	for key: String in ["20,20", "21,21", "31,31", "41,41"]:
 		assert(walkable.blocked_tiles.has(key), "missing blocked tile %s" % key)
 	assert(not walkable.blocked_tiles.has("0,0"))
 	assert(walkable.sources.size() == 4)
 	assert(document.layers.collision.size() == 3)
+	assert(MapEditorCollisionService.erase_collision_cell(document, palisade_collision_origin).ok)
+	assert(not MapEditorCollisionService.build_walkability(document).blocked_tiles.has("%d,%d" % [palisade_collision_origin.x, palisade_collision_origin.y]))
+	assert(MapEditorInstanceService.all_instances(document)[0].collision_policy == "terrain_stamp_generated")
+	assert(MapEditorCollisionService.paint_collision_cell(document, palisade_collision_origin).ok)
+	assert(MapEditorCollisionService.build_walkability(document).blocked_tiles.has("%d,%d" % [palisade_collision_origin.x, palisade_collision_origin.y]))
+	assert(MapEditorCollisionService.erase_collision_cell(document, Vector2i(20, 20)).ok)
+	var single_erased_walkable := MapEditorCollisionService.build_walkability(document)
+	assert(not single_erased_walkable.blocked_tiles.has("20,20"))
+	assert(single_erased_walkable.blocked_tiles.has("21,21"))
+	var save_path := "user://mse_single_cell_collision.editor.json"
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(save_path))
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(save_path + ".bak"))
+	assert(MapEditorSaveService.save_document(document, save_path).ok)
+	var loaded := MapEditorLoadService.load_document(ProjectSettings.globalize_path(save_path), false)
+	assert(loaded.ok and loaded.document.layers.collision_erase.size() == 1)
+	assert(not MapEditorCollisionService.build_walkability(loaded.document).blocked_tiles.has("20,20"))
+	assert(MapEditorCollisionService.paint_collision_cell(document, Vector2i(20, 20)).ok)
+	assert(document.layers.collision_erase.is_empty())
+	var overlap_manual := MapEditorCollisionService.add_manual_shape(document, "rect", {"rect": [palisade_collision_origin.x, palisade_collision_origin.y, 1, 1]})
+	assert(overlap_manual.ok)
+	var overlap_erase := MapEditorCollisionService.erase_collision_at_tile(document, palisade_collision_origin)
+	assert(overlap_erase.ok and overlap_erase.manual_count == 1 and overlap_erase.instance_count == 1)
+	assert(MapEditorInstanceService.all_instances(document)[0].collision_policy == "none")
+	var disabled_instance: Dictionary = MapEditorInstanceService.all_instances(document)[0]
+	assert(str(disabled_instance.get("map_collision_override", "")) == "disabled")
+	InstanceProfileService.refresh_from_asset(disabled_instance, MapAssetCatalogService.find_asset("terrain.palisade_wall_01"))
+	assert(str(disabled_instance.get("collision_policy", "")) == "none")
+	assert(str(disabled_instance.get("map_collision_override", "")) == "disabled")
+	var default_instance := {
+		"instance_custom_scale": false,
+		"map_collision_override": "default",
+		"collision_policy": "none",
+		"collision_cells": [],
+		"collision_footprint_tiles": [0, 0],
+	}
+	InstanceProfileService.refresh_from_asset(default_instance, MapAssetCatalogService.find_asset("terrain.palisade_wall_01"))
+	assert(str(default_instance.get("collision_policy", "")) == "terrain_stamp_generated")
+	var manual_on_disabled_asset := MapEditorCollisionService.add_manual_shape(document, "rect", {"rect": [palisade_collision_origin.x, palisade_collision_origin.y, 1, 1]})
+	assert(manual_on_disabled_asset.ok)
+	var disabled_asset_erase := MapEditorCollisionService.erase_collision_at_tile(document, palisade_collision_origin)
+	assert(disabled_asset_erase.ok and disabled_asset_erase.manual_count == 1 and disabled_asset_erase.instance_count == 0)
+	assert(MapEditorCollisionService.erase_collision_at_tile(document, Vector2i(20, 20)).manual_count == 1)
+	assert(MapEditorCollisionService.erase_collision_at_tile(document, Vector2i(31, 31)).manual_count == 1)
+	assert(MapEditorCollisionService.erase_collision_at_tile(document, Vector2i(41, 41)).manual_count == 1)
+	assert(document.layers.collision.is_empty())
+	var replacement := MapEditorCollisionService.add_manual_shape(document, "rect", {"rect": [5, 5, 1, 1]})
+	assert(replacement.ok and replacement.collision.collision_id == "manual_000001")
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(save_path))
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(save_path + ".bak"))
 	print("MSE_STAGE5_COLLISION_WALKABLE_PASS")
 	get_tree().quit(0)

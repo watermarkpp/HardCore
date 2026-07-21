@@ -47,6 +47,15 @@ static func game_content() -> Dictionary:
 	for entry: Dictionary in runtime.semantics.get("door_points", []):
 		if not bool(entry.get("target_configured", true)) or int(entry.get("target_map_id", -1)) < 0: continue
 		result.portals.append({"position":tile_to_world(runtime,entry.tile), "target_map_id":int(entry.get("target_map_id",-1)), "label":entry.get("display_name","地图入口")})
+	for entry: Dictionary in runtime.semantics.get("map_exit_points", []):
+		if not bool(entry.get("target_configured", true)) or int(entry.get("target_map_id", -1)) < 0:
+			continue
+		result.portals.append({
+			"position": tile_to_world(runtime, entry.tile),
+			"target_map_id": int(entry.get("target_map_id", -1)),
+			"target_entrance_id": str(entry.get("target_entrance_id", "")),
+			"label": entry.get("display_name", "地图出口"),
+		})
 	# Single-player policy override: the safe area is a predictable circle with
 	# a radius of nine logical tiles around the actual resurrection/return point.
 	# Do not reuse the editor's former NPC-hull pentagon for combat rules.
