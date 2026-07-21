@@ -12,7 +12,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SOURCE = Path.home() / "Desktop" / "sucai" / "新增" / "王座"
-DESTINATION = ROOT / "assets/art/maps/_shared/user_palette/装饰物1/王座"
+DESTINATION = ROOT / "assets/art/maps/_shared/user_palette/decorations_1/thrones"
 CATALOG_PATH = ROOT / "assets/data/assets/map_new_throne_asset_catalog.json"
 PACKAGE_ID = "mse_new_throne_addition_6_v1"
 PALETTE_PATH = "装饰物1/王座"

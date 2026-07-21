@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 AUDIT = ROOT / "assets/data/bich_closure_audit.json"
 OUTPUT_JSON = ROOT / "assets/data/bich_gap_registry.json"
-OUTPUT_MD = ROOT / "docs/BICH-GAP-CLOSE-1_缺口清理与阻塞清单.md"
+OUTPUT_MD = ROOT / "docs/BICH-GAP-CLOSE-1_Gap_Cleanup_and_Blocker_List.md"
 
 CLIENT_ASSET_GAPS = {"客户端动作、特效与音效", "客户端装备图标与穿戴外观"}
 MILESTONE_ONLY = {"比奇闭环里程碑APK", "骷髅精灵与尸王Boss机制"}

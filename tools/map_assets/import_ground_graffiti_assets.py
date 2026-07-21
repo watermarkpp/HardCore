@@ -17,7 +17,7 @@ DEFAULT_SOURCE = Path(
 )
 DESTINATION = (
     ROOT
-    / "assets/art/maps/_shared/user_palette/装饰物1/地面涂鸦"
+    / "assets/art/maps/_shared/user_palette/decorations_1/ground_graffiti"
 )
 CATALOG_PATH = ROOT / "assets/data/assets/map_ground_graffiti_asset_catalog.json"
 PACKAGE_ID = "mse_ground_graffiti_8_dual_size_v1"

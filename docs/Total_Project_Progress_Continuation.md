@@ -8,9 +8,9 @@
 
 后续施工优先级固定为：数据可追溯、玩法可扩展、资源可替换、系统可测试、内容可批量生产。每项任务必须标记所属层；跨层底层系统必须保持配置隔离、存档兼容和独立回归。本原则高于续表中所有历史阶段决策。
 
-自2026-07-14起，资源研究采用“完整客户端先学习、需求查询后执行”的固定顺序。原始数据库分类和资源文件名不可信，只保留为来源；至少一个完整客户端必须逐容器、逐索引帧建立真实尺寸、偏移、像素摘要和哈希目录。任何装备、武器、头盔或人物外观都不得只在名称相符的分类内搜索。每次施工必须同步更新[施工记录](施工记录.md)、[项目总目录](项目总目录.md)、专项资源目录和需要长期贯彻的总纲规则。
+自2026-07-14起，资源研究采用“完整客户端先学习、需求查询后执行”的固定顺序。原始数据库分类和资源文件名不可信，只保留为来源；至少一个完整客户端必须逐容器、逐索引帧建立真实尺寸、偏移、像素摘要和哈希目录。任何装备、武器、头盔或人物外观都不得只在名称相符的分类内搜索。每次施工必须同步更新[施工记录](Construction_Log.md)、[项目总目录](Project_Master_Index.md)、专项资源目录和需要长期贯彻的总纲规则。
 
-正式采用五层：`Vanilla Core → Expansion Layer → Rule Systems → Presentation / Art Skin → Runtime Services`。运行数据由ContentLayers按`Vanilla + 已启用Expansion + User Override`合并，玩法代码只消费Merged Game Database。详细规范与迁移状态见[五层架构规范与迁移表](五层架构规范与迁移表.md)。
+正式采用五层：`Vanilla Core → Expansion Layer → Rule Systems → Presentation / Art Skin → Runtime Services`。运行数据由ContentLayers按`Vanilla + 已启用Expansion + User Override`合并，玩法代码只消费Merged Game Database。详细规范与迁移状态见[五层架构规范与迁移表](Five_Layer_Architecture_Standard_and_Migration_Matrix.md)。
 
 ## ARCH-LAYER-1 完成记录（2026-07-04）
 
@@ -27,7 +27,7 @@
 - 刷新、NPC、地图连接、职业成长以及`game_root.gd`部分系统明确登记为Legacy Adapter，禁止继续新增同类硬编码，按迁移表逐批拆除。
 - 五层静态审计通过；架构、攻击时序、物品目录和比奇区域回归4/4通过。
 
-详细规范：[五层架构规范与迁移表](五层架构规范与迁移表.md)。
+详细规范：[五层架构规范与迁移表](Five_Layer_Architecture_Standard_and_Migration_Matrix.md)。
 
 进度折算：比奇可玩版本保持93.7%；总体结构由82.4%提升至83.0%。架构已正式建立，但不把尚未迁出的Legacy Adapter虚报为完成。
 
@@ -40,9 +40,9 @@
 
 > 本节是当前唯一有效进度指针；下方历史任务中的架构和进度描述均以本节为准。
 
-> 原总纲：`总规划_任务结构图.md`。由于原文件历史内容存在编码污染，从 MIR2-DATA-3 起在本文件记录清晰的任务结果；总体百分比继续沿用原总纲权重，不重新起算。
+> 原总纲：`Total_Project_Plan_Task_Structure.md`。由于原文件历史内容存在编码污染，从 MIR2-DATA-3 起在本文件记录清晰的任务结果；总体百分比继续沿用原总纲权重，不重新起算。
 >
-> 项目结构、文件用途与路径：[项目总目录](项目总目录.md)。
+> 项目结构、文件用途与路径：[项目总目录](Project_Master_Index.md)。
 
 ## MIR2-DATA-3 完成记录（2026-07-02）
 
@@ -250,7 +250,7 @@
 完成效果：
 
 - 建立可重复执行的`tools/audit_bich_vertical_slice.py`，统一检查地图路线、怪物与Boss、战士职业、装备系统、任务经济存档及手机验收六类内容。
-- 生成`assets/data/bich_closure_audit.json`机器清单和`docs/BICH-CLOSE-1_比奇垂直切片缺口审计.md`人工报告；每项包含权重、完成比例、证据、缺口和后续任务编号。
+- 生成`assets/data/bich_closure_audit.json`机器清单和`docs/BICH-CLOSE-1_Bich_Vertical_Slice_Gap_Audit.md`人工报告；每项包含权重、完成比例、证据、缺口和后续任务编号。
 - 审计明确区分“运行占位”与“正式完成”，项目候选倍率、通用场景、颜色装备外观等不再按满完成计算。
 - 核实19张比奇运行地图、12张矿区原MAP映射、六项战士技能各4级数据、175件装备目录、按住攻击/850ms间隔/510ms动作锁和手机选怪入口。
 - 明确最高缺口：服务端HomeMap=0与客户端0.map/0100.map尚未映射为正式比奇省/城；兽人古墓与天然洞穴原MAP证据不足；战士公式和技能专属机制仍有项目候选值；装备缺双手镯/双戒指、幸运诅咒、特殊效果和客户端外观；多数怪物缺最终五动作。
@@ -319,7 +319,7 @@
 - 客户端动作确认：普通攻击与四类剑术共用6帧×85ms=510ms动作，表现/声音在第2号帧（170ms）；用户明确指定的850ms连续攻击间隔继续覆盖服务端包600ms防刷阈值，两者独立记录。
 - 修正旧属性错误：0级基本剑术不再错误增加3点准确；角色基础准确/敏捷和装备准确/敏捷进入统一结算；普通攻击与战士技能正式消费命中公式。
 - 生成`assets/data/warrior_service_rules.json`，保存源码路径、公式、逐级值、可信度和缺失项。完整`Magic.DB`尚未取得，MP/训练字段继续显式标记缺失。
-- 建立`tools/run_godot_tests.ps1`隔离测试链和`docs/测试执行规范.md`。每项测试独立进程、断言早停、默认8秒超时、按启动前进程基线清理本次子进程；不影响用户已有Godot编辑器。
+- 建立`tools/run_godot_tests.ps1`隔离测试链和`docs/Test_Execution_Standard.md`。每项测试独立进程、断言早停、默认8秒超时、按启动前进程基线清理本次子进程；不影响用户已有Godot编辑器。
 - 修正旧测试对默认出生地图、随机Boss伤害和低血量目标的依赖。战士套件8项全部通过；清理逻辑单项复验后Godot残留进程为0。本阶段不导出APK。
 
 进度折算：比奇可玩版本由62.5%提升至65.2%；总体结构由约68.2%提升至约68.8%。本任务完成度100%；未取得的Magic.DB字段不计为服务端精确完成。
@@ -604,7 +604,7 @@
 4. 高级词条统一使用 `modifiers`，当前正式支持暴击率、暴击倍率、攻击速度、施法速度、全技能等级和指定技能等级。
 5. 攻速同时缩短攻击间隔、动作与命中前摇；施法速度缩短技能冷却、动作与施法前摇。无速度词条时仍保持850ms攻击间隔和510ms动作。
 6. 所有扩展词条继续服从零耐久硬规则：装备保留，但普通属性、特殊效果、高级词条和技能等级加成全部失效，维修后恢复。
-7. 新增 `docs/装备自定义指南.md`，提供修改木剑、新增装备和高级词条JSON示例。全新的行为型效果只需新增一次通用执行器，之后可由任意装备配置复用。
+7. 新增 `docs/Equipment_Customization_Guide.md`，提供修改木剑、新增装备和高级词条JSON示例。全新的行为型效果只需新增一次通用执行器，之后可由任意装备配置复用。
 
 - 生成更新后的特殊装备来源表；新增主动戒指/套装闭环测试、装备配置测试和未来词条测试。
 - 特殊装备第二阶段相关回归10/10通过；配置改造相关回归6/6通过；高级词条及战士时序相关回归7/7通过。Godot残留进程为0，本阶段不导出APK。
@@ -732,7 +732,7 @@
 
 ## 项目总目录建立记录（2026-07-03）
 
-- 新增与本总纲同目录的 [`项目总目录.md`](项目总目录.md)，集中登记项目结构、文件名称、用途和项目内路径。
+- 新增与本总纲同目录的 [`Project_Master_Index.md`](Project_Master_Index.md)，集中登记项目结构、文件名称、用途和项目内路径。
 - 目录覆盖根文件、场景、运行脚本、结构化数据、工具、美术/音频资源、测试、文档与外部研究资料；大批量资源按分组与数量登记，避免目录失控。
 - 新增 `tools/generate_project_catalog.py` 作为唯一生成入口；以后增加、删除或移动文件后重新运行，目录会从真实文件系统刷新，不依赖手工维护。
 
@@ -808,7 +808,7 @@
 - 客户端包没有服务端MapInfo连接坐标，三个运行门点明确保持C级安全闭环候选；原MAP结构与资源为A级，不把候选门点冒充官服精确值。
 - 新增确定性来源/运行测试1/1通过；修正环境内存测试为先预热纹理、再衡量重复切换增量，最终天然洞穴、环境模板、怪物资源与矿区路线相关回归4/4通过。Godot无残留进程，本阶段不导出APK。
 
-验收报告：[`BICH-MAP-3_天然洞穴D011-D012验收报告.md`](BICH-MAP-3_天然洞穴D011-D012验收报告.md)。
+验收报告：[`BICH-MAP-3_Natural_Cave_D011-D012_Acceptance_Report.md`](BICH-MAP-3_Natural_Cave_D011-D012_Acceptance_Report.md)。
 
 进度折算：比奇可玩版本由85.0%提升至86.3%；总体结构由约76.8%提升至约77.5%。本任务工程目标完成度95%；余下5%是缺失服务端MapInfo导致的原门点坐标复核。
 
@@ -839,7 +839,7 @@
 - 客户端包缺服务端MapInfo连接坐标，五个运行门点保持C级安全闭环候选；原MAP结构、哈希、客户端像素和阻挡证据为A级。
 - 新增原MAP来源集成测试1/1通过；修复新配置漏带Boss符文战区的回归后，古墓环境、骷髅精灵Boss和任务链相关回归最终4/4通过。Godot无残留进程，本阶段不导出APK。
 
-验收报告：[`BICH-MAP-2_兽人古墓D001-D003验收报告.md`](BICH-MAP-2_兽人古墓D001-D003验收报告.md)。
+验收报告：[`BICH-MAP-2_Orc_Tomb_D001-D003_Acceptance_Report.md`](BICH-MAP-2_Orc_Tomb_D001-D003_Acceptance_Report.md)。
 
 进度折算：比奇可玩版本由86.3%提升至88.0%；总体结构由约77.5%提升至约78.2%。本任务工程目标完成度95%；余下5%为服务端MapInfo原门点坐标复核。
 
@@ -869,7 +869,7 @@
 - 服务端类与状态机证据为A级；名称到Race、属性、攻击/移动速度来自候选资料，保持B级，等待同版本 `Monster.DB` 覆盖。
 - 修正Boss测试夹具对本地魔法盾/复活装备的依赖，避免命中已发生却被误判失败；Boss、自动选怪和任务链轻量回归4/4通过，无Godot残留进程，本阶段不导出APK。
 
-验收报告：[`BICH-BOSS-1_骷髅精灵与尸王校准报告.md`](BICH-BOSS-1_骷髅精灵与尸王校准报告.md)。
+验收报告：[`BICH-BOSS-1_Skeleton_Spirit_and_Corpse_King_Calibration_Report.md`](BICH-BOSS-1_Skeleton_Spirit_and_Corpse_King_Calibration_Report.md)。
 
 进度折算：比奇可玩版本由88.0%提升至89.3%；总体结构由约78.2%提升至约78.9%。本任务工程目标完成度90%；余下10%为同版本 `Monster.DB` 精确属性和速度字段复核。
 
@@ -898,7 +898,7 @@
 - 19张比奇地图完成刷新、Boss、NPC、门点的越界、重复坐标、统一投影和内部双向门点审计；修正D001/D002四处重复刷新并补齐404→402返回门点。
 - 无正式MapInfo/MonGen的条目继续保持C级。三项定向轻量回归全部通过，本阶段未导出APK。
 
-验收报告：[`BICH-CONTENT-CLOSE_原MAP阻挡与内容收口报告.md`](BICH-CONTENT-CLOSE_原MAP阻挡与内容收口报告.md)。
+验收报告：[`BICH-CONTENT-CLOSE_Original_MAP_Collision_and_Content_Closure_Report.md`](BICH-CONTENT-CLOSE_Original_MAP_Collision_and_Content_Closure_Report.md)。
 
 进度折算：本任务工程目标完成度100%；比奇可玩版本由90.3%提升至90.7%，总体结构由79.8%提升至80.5%。
 
@@ -928,7 +928,7 @@
 - 跨图落脚、矿区任务、自动选怪、尸王AI与掉落入口保持正常。
 - 最后组合测试返回期间Codex中断，但四项子测试均已写入PASS日志且Godot残留为0；连同矿区环境测试，相关五项最终全部通过，未重复消耗测试，未导出APK。
 
-验收报告：[`BICH-MAP-SIZE-2_矿区与尸王殿原尺寸验收报告.md`](BICH-MAP-SIZE-2_矿区与尸王殿原尺寸验收报告.md)。
+验收报告：[`BICH-MAP-SIZE-2_Mine_and_Corpse_King_Hall_Original_Size_Report.md`](BICH-MAP-SIZE-2_Mine_and_Corpse_King_Hall_Original_Size_Report.md)。
 
 进度折算：本任务工程目标完成度100%；当前比奇运行闭环19张地图的原尺寸和统一坐标覆盖达到100%。比奇可玩版本由90.0%提升至90.3%，总体结构由79.3%提升至79.8%。
 
@@ -959,7 +959,7 @@
 - D001/D002/D003名称再次确认对应半兽古墓一至三层；后期坐标、数量和刷新周期未直接采用。D011/D012/Q004仍等待传统MapInfo/MonGen。
 - 导入器单元测试5/5通过；Boss与任务链轻量回归最终3/3通过。两类Boss测试均改为固定HP/MP/防御夹具，不再受本地魔法盾、复活或防御装备污染；未导出APK。
 
-审计报告：[`BICH-DATA-1_数据来源与覆盖审计.md`](BICH-DATA-1_数据来源与覆盖审计.md)。
+审计报告：[`BICH-DATA-1_Data_Source_and_Coverage_Audit.md`](BICH-DATA-1_Data_Source_and_Coverage_Audit.md)。
 
 进度折算：本任务工程链完成度65%，版本隔离与导入准备完成度100%，正式数据覆盖完成度0%。由于没有把后期库冒充官服数据，比奇可玩完成度保持89.3%，总体结构进度保持78.9%。
 
@@ -990,7 +990,7 @@
 - 六图均增加四条原MAP边界碰撞；路线信标、Boss房、任务链、回城和自动选怪随新坐标更新。
 - 坐标、比奇环境、古墓/洞穴原图、Boss房和垂直闭环相关轻量测试最终8/8通过，Godot无残留进程，本阶段不导出APK。
 
-验收报告：[`BICH-MAP-SIZE-1_原始尺寸与统一坐标验收报告.md`](BICH-MAP-SIZE-1_原始尺寸与统一坐标验收报告.md)。
+验收报告：[`BICH-MAP-SIZE-1_Original_Size_and_Unified_Coordinates_Report.md`](BICH-MAP-SIZE-1_Original_Size_and_Unified_Coordinates_Report.md)。
 
 进度折算：本批工程目标完成度100%；比奇可玩版本由89.3%提升至90.0%，总体结构由78.9%提升至79.3%。原尺寸恢复总目标约55%，余下主要是矿区D401系、Q004尸王殿及0.map逐格阻挡分块接入。
 
@@ -1030,7 +1030,7 @@
 - 每项登记明确所需文件并统一标记 `safeToGuess=false`；后期数据库、网页候选和无来源音效不得冒充2003官服基准。
 - 审计与项目总目录已重新生成。本任务只清理判定和施工入口，不虚增游戏完成度，也不导出APK。
 
-缺口清单：[`BICH-GAP-CLOSE-1_缺口清理与阻塞清单.md`](BICH-GAP-CLOSE-1_缺口清理与阻塞清单.md)。
+缺口清单：[`BICH-GAP-CLOSE-1_Gap_Cleanup_and_Blocker_List.md`](BICH-GAP-CLOSE-1_Gap_Cleanup_and_Blocker_List.md)。
 
 进度折算：比奇可玩版本保持90.7%，总体结构保持80.5%。
 
@@ -1064,7 +1064,7 @@
 - 375条掉落进入经典候选，411条后期、非白名单或异常概率记录被拒绝；本批未修改运行爆率。
 - 专项测试及比奇区域、双Boss回归4/4通过，未导出APK。
 
-报告：[`BICH-COMMUNITY-DATA-2_选择性导入报告.md`](BICH-COMMUNITY-DATA-2_选择性导入报告.md)。
+报告：[`BICH-COMMUNITY-DATA-2_Selective_Import_Report.md`](BICH-COMMUNITY-DATA-2_Selective_Import_Report.md)。
 
 进度折算：比奇可玩版本由90.7%提升至91.1%，总体结构由80.5%提升至80.9%。
 
@@ -1088,7 +1088,7 @@
 - D011/D012、D401系和Q004没有同代码社区MapInfo，继续保留客户端原图与现有C级安全闭环，不能伪造来源升级。
 - 本批只完成搜索、下载和采用规则，不修改运行数值、不虚增完成度、不导出APK。
 
-报告：[`BICH-COMMUNITY-DATA-1_社区数据库搜索与采用报告.md`](BICH-COMMUNITY-DATA-1_社区数据库搜索与采用报告.md)。
+报告：[`BICH-COMMUNITY-DATA-1_Community_Database_Research_and_Adoption_Report.md`](BICH-COMMUNITY-DATA-1_Community_Database_Research_and_Adoption_Report.md)。
 
 进度折算：比奇可玩版本保持90.7%，总体结构保持80.5%。
 
@@ -1156,7 +1156,7 @@
 
 任务效果：可选地面笔刷、连续绘制、撤销重做、仅dirty Chunk烘焙预览PNG；编辑器继续不写入运行时目录。
 
-报告：[`mafa_scene_editor/MSE-STAGE-1_空白地面与虚拟Chunk验收报告.md`](mafa_scene_editor/MSE-STAGE-1_空白地面与虚拟Chunk验收报告.md)。
+报告：[`mafa_scene_editor/MSE-STAGE-1_Blank_Ground_and_Virtual_Chunk_Acceptance_Report.md`](mafa_scene_editor/MSE-STAGE-1_Blank_Ground_and_Virtual_Chunk_Acceptance_Report.md)。
 
 > 仅本节作为后续施工指针；此前所有“当前指针”均为历史快照。
 
@@ -1191,7 +1191,7 @@
 
 任务规划：64×64 旧草地视觉底图 → 1024×1024 虚拟共享空白 Chunk → 首次编辑物化 → ground manifest/dirty state → 保存重开一致性测试。完成后预计 MSE 总工程约 22.2%。
 
-报告：[`mafa_scene_editor/MSE-STAGE-0_核心底座验收报告.md`](mafa_scene_editor/MSE-STAGE-0_核心底座验收报告.md)。
+报告：[`mafa_scene_editor/MSE-STAGE-0_Core_Foundation_Acceptance_Report.md`](mafa_scene_editor/MSE-STAGE-0_Core_Foundation_Acceptance_Report.md)。
 
 > 本节是当前唯一有效进度指针；上方各阶段指针均为历史记录。
 
@@ -1201,7 +1201,7 @@
 - 编辑器定位为用户与 Codex 共用工具：用户使用 Godot 桌面界面，Codex 使用相同 Schema、构建服务和测试修改同一份地图源数据。
 - 已批准工程补强：桌面作者工具、双地图 ID、双坐标适配、Schema v4、Legacy Adapter、虚拟空 Chunk、Chunk Mask、`.gdignore` 工作区、原子写入、Vanilla 只读/Expansion 默认、素材校准与确定性构建。
 - 施工顺序固定为 Stage 0–8；先以 64×64 沙盒贯通，再迁移比奇。Stage 9–11 不得提前阻塞 MVP。
-- 详细规范：[`mafa_scene_editor/MSE-V3.4.5_施工决策与人机协作规范.md`](mafa_scene_editor/MSE-V3.4.5_施工决策与人机协作规范.md)。
+- 详细规范：[`mafa_scene_editor/MSE-V3.4.5_Implementation_Decisions_and_Collaboration_Standard.md`](mafa_scene_editor/MSE-V3.4.5_Implementation_Decisions_and_Collaboration_Standard.md)。
 
 ## 当前施工基线（2026-07-10，最终位置）
 
@@ -1235,7 +1235,7 @@
 - 正式采用《专用地图编辑器完整方案 v1.0》，目标升级为全项目通用地图生产线。
 - 完成地图Schema、十层结构、共享素材模板扫描、多地图实例目录及Godot校验加载器。
 - 下一任务：`MAP-EDITOR-CANVAS：数据驱动通用十图层画布`。
-- 详细规划：[`MAP-EDITOR-ROADMAP_通用地图生产线.md`](MAP-EDITOR-ROADMAP_通用地图生产线.md)。
+- 详细规划：[`MAP-EDITOR-ROADMAP_Generic_Map_Production_Pipeline.md`](MAP-EDITOR-ROADMAP_Generic_Map_Production_Pipeline.md)。
 
 ## V34人物朝向与攻击事务里程碑（2026-07-05）
 
@@ -1322,7 +1322,7 @@ APK：`outputs/legend176/MafaOffline_Bich_M1_MovementFix.apk`。
 - 修复Android系统返回键绕过菜单直接退出。
 - 版本26已覆盖安装荣耀90，真机返回键菜单截图验证通过。
 
-报告：[`BICH-HOTFIX-1_移动复活与返回键修复报告.md`](BICH-HOTFIX-1_移动复活与返回键修复报告.md)。
+报告：[`BICH-HOTFIX-1_Movement_Respawn_and_Back_Button_Report.md`](BICH-HOTFIX-1_Movement_Respawn_and_Back_Button_Report.md)。
 
 进度口径：缺陷修复不重复计分，比奇93.7%，总体82.4%。
 
@@ -1342,7 +1342,7 @@ APK：`outputs/legend176/MafaOffline_Bich_M1_MovementFix.apk`。
 - APK签名、清单、arm64结构通过；荣耀90覆盖安装并启动成功。
 - 真机截图确认角色选择页和旧角色迁移正常，启动日志无崩溃。
 
-报告：[`BICH-MILESTONE-1_比奇完整闭环阶段验收报告.md`](BICH-MILESTONE-1_比奇完整闭环阶段验收报告.md)。
+报告：[`BICH-MILESTONE-1_Bich_Complete_Loop_Acceptance_Report.md`](BICH-MILESTONE-1_Bich_Complete_Loop_Acceptance_Report.md)。
 
 进度折算：比奇可玩版本由91.7%提升至93.7%，总体结构由81.4%提升至82.4%。
 
@@ -1363,7 +1363,7 @@ APK：`outputs/legend176/MafaOffline_Bich_M1_MovementFix.apk`。
 - 强杀场景不依赖退出回调：每次进入玩法世界都强制从最近城镇出生。
 - 定向回归3/3通过，未构建APK。
 
-报告：[`SAVE-MENU-1_游戏菜单与安全回城报告.md`](SAVE-MENU-1_游戏菜单与安全回城报告.md)。
+报告：[`SAVE-MENU-1_Game_Menu_and_Safe_Return_Report.md`](SAVE-MENU-1_Game_Menu_and_Safe_Return_Report.md)。
 
 进度口径：任务自身100%；比奇保持91.7%，总体保持81.4%。
 
@@ -1388,7 +1388,7 @@ APK：`outputs/legend176/MafaOffline_Bich_M1_MovementFix.apk`。
 - v02/v03旧单角色档可自动迁移为“旧角色”。
 - 定向回归3/3通过，未构建APK。
 
-报告：[`SAVE-MULTI-1_多角色与启动选择系统报告.md`](SAVE-MULTI-1_多角色与启动选择系统报告.md)。
+报告：[`SAVE-MULTI-1_Multi_Character_and_Startup_Selection_Report.md`](SAVE-MULTI-1_Multi_Character_and_Startup_Selection_Report.md)。
 
 进度口径：新增任务自身100%；原总纲存档条目此前已满分，不重复虚增，比奇保持91.7%，总体保持81.4%。
 
@@ -1412,7 +1412,7 @@ APK：`outputs/legend176/MafaOffline_Bich_M1_MovementFix.apk`。
 - 掉落物同步进入统一物品目录；普通怪及Boss概率上限由自动测试约束。
 - 专项测试与比奇区域、双Boss回归4/4通过；未导出APK。
 
-报告：[`BICH-COMMUNITY-DATA-3_经典掉落运行接入报告.md`](BICH-COMMUNITY-DATA-3_经典掉落运行接入报告.md)。
+报告：[`BICH-COMMUNITY-DATA-3_Classic_Drop_Runtime_Integration_Report.md`](BICH-COMMUNITY-DATA-3_Classic_Drop_Runtime_Integration_Report.md)。
 
 进度折算：比奇可玩版本由91.1%提升至91.7%，总体结构由80.9%提升至81.4%。
 
@@ -1590,7 +1590,7 @@ APK：`outputs/legend176/MafaOffline_Bich_M1_MovementFix.apk`。
 
 - 最近完成：`BICH-MONSTER-ANIMATION-1`。
 - 当前验收图：`outputs/visual_acceptance/bich_monster_original_client_actions_20260715.png`。
-- 完整报告：`docs/BICH-MONSTER-ANIMATION-1_比奇怪物客户端动作补全报告.md`。
+- 完整报告：`docs/BICH-MONSTER-ANIMATION-1_Bich_Monster_Client_Animation_Report.md`。
 
 > 仅本节作为后续施工指针；本文件此前所有“当前指针”均视为历史快照。
 
@@ -1600,7 +1600,7 @@ APK：`outputs/legend176/MafaOffline_Bich_M1_MovementFix.apk`。
 - 58个端已分别建档；复合源码树按客户端、服务端、共享组件/工具拆分。全局SQLite只做检索与跨端哈希对照，不覆盖端身份或合并同名内容。
 - 243个资源库、1,663,124个全路径逻辑帧、8,057张MAP画像和16个压缩包已入库；SQLite完整性与数据库SHA-256验收通过。
 - 22项解析异常均为可解释的来源阻塞：3个缺密码压缩包、18个0字节加密解包占位、1个DelphiX同扩展名示例文件；未知异常为0。
-- 机器验收报告为`outputs/validation/complete_local_mir_scan_acceptance.json`，完整说明为`docs/COMPLETE-LOCAL-MIR-SCAN-1_本地多端全量拆解验收报告.md`。
+- 机器验收报告为`outputs/validation/complete_local_mir_scan_acceptance.json`，完整说明为`docs/COMPLETE-LOCAL-MIR-SCAN-1_Local_Multi_Client_Extraction_Report.md`。
 
 ## 当前施工指针（2026-07-15，文档末尾最终生效）
 
@@ -1634,7 +1634,7 @@ APK：`outputs/legend176/MafaOffline_Bich_M1_MovementFix.apk`。
 - 权重固定为主资料100、辅1为70、辅2为40、辅3为20；镜像与隔离资料权重为0。
 - 新增机器策略与降级守卫。任何辅资料引用必须逐级证明所有更高层缺失、不可用或版本不兼容；无证据、缺层或跳级均拒绝。
 - 多端原始资料继续独立保存，默认禁止跨端拼接；任何正式派生内容必须保留资料线、端标识、层级、原路径和授权证据。
-- 机器验收12项全部通过；完整报告为`docs/MIR-SOURCE-PRIORITY-1_客户端与服务端主辅资料分级报告.md`。
+- 机器验收12项全部通过；完整报告为`docs/MIR-SOURCE-PRIORITY-1_Client_and_Server_Source_Priority_Report.md`。
 
 ## 当前施工指针（2026-07-15，文档末尾最终生效）
 
@@ -1669,7 +1669,7 @@ APK：`outputs/legend176/MafaOffline_Bich_M1_MovementFix.apk`。
 - 烈火改为1:1源像素四分片；按当前武器、方向、帧自动将火焰起燃点吸附到武器头，禁止再用全局截图偏移。
 - 机器审计穿戴3496帧、特效192帧全部通过；战士专项14/14、完整关键回归51/51通过。
 - 验收图：`outputs/visual_acceptance/warrior_skill_direction_audit/fire_hit.png`和`warrior_skill_six_by_eight_audit.png`。
-- 完整报告：`docs/WARRIOR-SKILL-VISUAL-AUDIT-2_战士技能八方向动画审计报告.md`。
+- 完整报告：`docs/WARRIOR-SKILL-VISUAL-AUDIT-2_Warrior_Eight_Direction_Animation_Audit.md`。
 
 ## 当前施工指针（2026-07-15，文档末尾最终生效）
 
@@ -1700,7 +1700,7 @@ APK：`outputs/legend176/MafaOffline_Bich_M1_MovementFix.apk`。
 - 人物创建展示战士/法师/道士三职业；人物资源表现采用左血球/右蓝球，HUD顶部只显示怪物目标血条。
 - 状态为“等待用户审图确认”；正式运行入口和现有 UI 脚本尚未替换，APK尚未打包。
 - 当前插入式施工指针：`UI-GOTHIC-PREVIEW-1 用户审图`。确认后进入 `UI-GOTHIC-INTEGRATION-1`；原主线 `NPC-DATA-2` 暂存，不丢失。
-- 证据：`docs/UI-GOTHIC-PREVIEW-1_暗黑哥特界面审图样板.md`、`outputs/validation/ui_gothic_preview_acceptance.json`。
+- 证据：`docs/UI-GOTHIC-PREVIEW-1_Dark_Gothic_UI_Review_Prototype.md`、`outputs/validation/ui_gothic_preview_acceptance.json`。
 - 审图修订规则：底部无物品栏、无当前追踪；血蓝瓶自动使用。战士技能为可见开关且开启后自动使用；法师/道士为互斥选择，普通攻击也属于选择项；每行最多4技能。战士右下仅攻击，法道右下为释放技能，切换敌人和自动锁定必须保留。
 - 战士例外：基本剑术与攻杀剑术属于不可关闭的常驻被动；自动开关只适用于刺杀、半月、野蛮和烈火。
 - HUD布局规则：左上不显示人物身份卡；右侧建立可扩展功能栏并放置自动锁定；切换敌人必须紧邻右下攻击/释放技能键。

@@ -33,7 +33,7 @@
 
 ## 正式五层架构
 
-项目固定采用以下五层，详细职责、目录、依赖规则、当前文件归属和迁移状态见 [`docs/五层架构规范与迁移表.md`](docs/五层架构规范与迁移表.md)。
+项目固定采用以下五层，详细职责、目录、依赖规则、当前文件归属和迁移状态见 [`docs/Five_Layer_Architecture_Standard_and_Migration_Matrix.md`](docs/Five_Layer_Architecture_Standard_and_Migration_Matrix.md)。
 
 1. **原版基准层 Vanilla Core**：只读保存1.76基础世界；必要手感调整使用可追溯`policyOverride`。
 2. **扩展内容层 Expansion Layer**：以可关闭扩展包承载私人创意，禁止写入Vanilla。
@@ -45,7 +45,7 @@
 
 本文件是 v1.11 之后开发工作的唯一总规划基准。每批任务开始前确定其所属阶段；完成后按本文件验收、更新累计百分比，并给出下一任务名称与计划。
 
-当前进度续表：`docs/总规划_进度续表.md`；项目结构与文件用途：`docs/项目总目录.md`。
+当前进度续表：`docs/Total_Project_Progress_Continuation.md`；项目结构与文件用途：`docs/Project_Master_Index.md`。
 
 ## 任务结构图
 
@@ -142,7 +142,7 @@ flowchart TD
 
 ## 可追溯施工与完整客户端学习强制规则（2026-07-14起）
 
-1. 每次施工必须同步留下三类记录：`docs/施工记录.md`记录操作、依据、验证和未完成项；`docs/项目总目录.md`及专项资源目录记录文件位置、来源和用途；本总纲或`docs/总规划_进度续表.md`固化需要长期贯彻的工程原则。
+1. 每次施工必须同步留下三类记录：`docs/Construction_Log.md`记录操作、依据、验证和未完成项；`docs/Project_Master_Index.md`及专项资源目录记录文件位置、来源和用途；本总纲或`docs/Total_Project_Progress_Continuation.md`固化需要长期贯彻的工程原则。
 2. 任何原始数据库分类、WIL/WZL文件名、物品类别和人工目录名都只作为来源字段，不作为资源实际用途的最终依据。传奇早期资料存在人工命名不统一、分类错误和跨类别存放，禁止只扫描“看起来相关”的分类后下结论。
 3. 至少选择一个完整客户端建立全量知识库：扫描全部资源容器、全部索引帧及真实尺寸、偏移、像素摘要和哈希；需求查询必须建立在这份全量目录上，不得每次临时按文件名猜测。
 4. 动画切割必须先由配套客户端源码、索引总数或多个关联库结构证明步长；不得把600帧等经验值无条件套用到所有客户端，否则会跨动作或跨外观混帧。
@@ -614,7 +614,7 @@ flowchart TD
 
 ## MIR2-WARRIOR-7-2完成记录：参考服务端数据索引与战士MIR2原始动作替换（2026-07-02）
 
-- 新增`docs/服务端数据参考索引.md`，明确当前可用服务端来源：`MirServer/Mir200/!Setup.txt`、`M2Server/*.pas`、`MirClient/Actor.pas`、客户端WIL/MAP资源和项目结构化JSON。
+- 新增`docs/Server_Data_Reference_Index.md`，明确当前可用服务端来源：`MirServer/Mir200/!Setup.txt`、`M2Server/*.pas`、`MirClient/Actor.pas`、客户端WIL/MAP资源和项目结构化JSON。
 - 自检确认当前本地没有完整传统服务端数据包：未找到`Envir/MapInfo.txt`、`Envir/MonGen.txt`、`Envir/MonItems/*.txt`、`Monster.DB`、`StdItems.DB`、`Magic.DB`；后续涉及地图、刷怪、掉落和怪物数值时必须标记该缺口，不得把项目内推导数据冒充完整服务端DB。
 - 摘录服务端关键参数：出生点`0/289/618`、红名回城点`3/845/674`、`MonGenRate=20`、`HitIntervalTime=600ms`、`MagicHitIntervalTime=600ms`、`MagicAttackRage=8`和三职业HP成长相关值。
 - 保留用户已确认的手机战士普攻手感：`850ms`续刀间隔、`510ms`完整动作锁；服务端`HitIntervalTime=600ms`作为参考值，不直接覆盖。
@@ -644,7 +644,7 @@ flowchart TD
 
 - 新增`tools/audit_service_data.py`，可重复读取服务端`MirServer/Mir200/!Setup.txt`，扫描完整服务端`Envir/DB`数据包是否存在，并审计项目七张结构化表。
 - 生成机器可读参考文件`assets/data/service_reference.json`，固化服务端关键参数、1-60级经验表、完整DB缺口清单、七张项目表行数与来源覆盖率。
-- 生成`docs/MIR2-DATA-1_服务端数据校准报告.md`，明确当前本地缺少8类传统服务端数据：地图信息、刷怪表、怪物掉落、商人、NPC脚本、怪物DB、物品DB、技能DB。
+- 生成`docs/MIR2-DATA-1_Server_Data_Calibration_Report.md`，明确当前本地缺少8类传统服务端数据：地图信息、刷怪表、怪物掉落、商人、NPC脚本、怪物DB、物品DB、技能DB。
 - 确认项目当前七张主表规模：地图142、怪物217、Boss46、装备175、技能等级132、掉落槽3424、任务9；sourceUrl与verification字段均已有覆盖，但掉落表可信度仍主要为C，需后续用完整服务端DB校准。
 - 服务端`!Setup.txt`关键参数已固化：出生点`0/289/618`、红名回城点`3/845/674`、`MonGenRate=20`、`HitIntervalTime=600ms`、`MagicHitIntervalTime=600ms`、`MagicAttackRage=8`、三职业HP成长参数和1-60级经验表。
 - 保留用户指定的手机版战士普攻手感：服务端参考`600ms`，当前移动端设计`850ms`，该覆盖决策写入`policyOverrides.normalAttackIntervalMs`。
