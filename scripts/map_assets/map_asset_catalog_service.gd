@@ -13,6 +13,7 @@ const EXTENSION_CATALOG_PATHS := [
 	"res://assets/data/assets/map_ground_graffiti_asset_catalog.json",
 	"res://assets/data/assets/map_new_carpet_asset_catalog.json",
 	"res://assets/data/assets/map_new_ground_pillar_throne_asset_catalog.json",
+	"res://assets/data/assets/map_new_throne_asset_catalog.json",
 	"res://assets/data/assets/map_wooma_temple_wall_asset_catalog.json",
 	"res://assets/data/assets/map_wooma_temple_warm_wall_asset_catalog.json",
 ]

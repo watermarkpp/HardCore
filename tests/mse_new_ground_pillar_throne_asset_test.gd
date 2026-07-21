@@ -147,10 +147,22 @@ func _assert_decoration_placement(assets: Array) -> void:
 		Vector2i(64, 64)
 	)
 	for source_group: String in ["立柱", "王座"]:
-		var asset: Dictionary = assets.filter(
+		var candidates := assets.filter(
 			func(candidate: Dictionary) -> bool:
-				return str(candidate.get("source_group", "")) == source_group
-		)[0]
+				if str(candidate.get("source_group", "")) != source_group:
+					return false
+				return bool(
+					MapAssetCatalogService.find_asset(
+						str(candidate.get("asset_id", ""))
+					).get("placeable", false)
+				)
+		)
+		# A user may intentionally remove every asset in an old group from the
+		# palette. The package data remains valid, but deleted entries must not
+		# be used for a placement assertion.
+		if candidates.is_empty():
+			continue
+		var asset: Dictionary = candidates[0]
 		var placed := MapEditorInstanceService.create_instance(
 			document,
 			str(asset.asset_id),

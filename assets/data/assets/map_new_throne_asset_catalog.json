@@ -1,0 +1,697 @@
+{
+  "asset_schema_version": 2,
+  "package_id": "mse_new_throne_addition_6_v1",
+  "package_version": 1,
+  "source_directory": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\王座",
+  "source_count": 6,
+  "asset_count": 6,
+  "classification": "装饰物1/王座",
+  "cutting_policy": "single_rgba_alpha_bbox_with_padding",
+  "default_collision_policy": "none",
+  "assets": [
+    {
+      "asset_id": "mse.new_throne.07",
+      "display_name": "王座 07",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/王座/gothic_throne_07.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/王座/gothic_throne_07.png",
+      "canvas_size": [
+        380,
+        493
+      ],
+      "image_size": [
+        380,
+        493
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        376,
+        489
+      ],
+      "anchor_px": [
+        190,
+        488
+      ],
+      "placement_anchor_px": [
+        190,
+        488
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        6,
+        6
+      ],
+      "visual_footprint_tiles": [
+        6,
+        6
+      ],
+      "occupancy_footprint_tiles": [
+        6,
+        6
+      ],
+      "base_footprint_tiles": [
+        6,
+        6
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "single_rgba_alpha_bbox_crop_v1",
+      "palette_path": "装饰物1/王座",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\王座\\1.png",
+      "source_sha256": "99868ff158b5357618df1b6534017b2d6f33154bf8049f904c51f21961b65432",
+      "output_sha256": "385a8b5c5033e6ab9091ddb4d7e8ad6cd63e56ae98f8e33d6cf21a20d540525f",
+      "thumbnail_source_sha256": "385a8b5c5033e6ab9091ddb4d7e8ad6cd63e56ae98f8e33d6cf21a20d540525f",
+      "processing": {
+        "pipeline": "single_rgba_alpha_bbox_crop_v1",
+        "source_canvas": [
+          420,
+          523
+        ],
+        "source_bounds_px": [
+          29,
+          16,
+          401,
+          501
+        ],
+        "padding_px": 4,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "throne",
+        "gothic",
+        "large_prop"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_throne_addition_6_v1",
+      "source_group": "王座",
+      "source_index": 1,
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_throne.08",
+      "display_name": "王座 08",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/王座/gothic_throne_08.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/王座/gothic_throne_08.png",
+      "canvas_size": [
+        404,
+        483
+      ],
+      "image_size": [
+        404,
+        483
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        400,
+        479
+      ],
+      "anchor_px": [
+        202,
+        478
+      ],
+      "placement_anchor_px": [
+        202,
+        478
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        6,
+        6
+      ],
+      "visual_footprint_tiles": [
+        6,
+        6
+      ],
+      "occupancy_footprint_tiles": [
+        6,
+        6
+      ],
+      "base_footprint_tiles": [
+        6,
+        6
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "single_rgba_alpha_bbox_crop_v1",
+      "palette_path": "装饰物1/王座",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\王座\\2.png",
+      "source_sha256": "c83d34df3fa523e70b211d3dcb2ab851482b1f0299725a3579eddf35116d51bc",
+      "output_sha256": "c48631a906cfa885a0b6d888179c2054346bb70d86046f3b35bbabf407ab9f2a",
+      "thumbnail_source_sha256": "c48631a906cfa885a0b6d888179c2054346bb70d86046f3b35bbabf407ab9f2a",
+      "processing": {
+        "pipeline": "single_rgba_alpha_bbox_crop_v1",
+        "source_canvas": [
+          439,
+          509
+        ],
+        "source_bounds_px": [
+          16,
+          22,
+          412,
+          497
+        ],
+        "padding_px": 4,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "throne",
+        "gothic",
+        "large_prop"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_throne_addition_6_v1",
+      "source_group": "王座",
+      "source_index": 2,
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_throne.09",
+      "display_name": "王座 09",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/王座/gothic_throne_09.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/王座/gothic_throne_09.png",
+      "canvas_size": [
+        426,
+        441
+      ],
+      "image_size": [
+        426,
+        441
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        422,
+        437
+      ],
+      "anchor_px": [
+        213,
+        436
+      ],
+      "placement_anchor_px": [
+        213,
+        436
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        6,
+        6
+      ],
+      "visual_footprint_tiles": [
+        6,
+        6
+      ],
+      "occupancy_footprint_tiles": [
+        6,
+        6
+      ],
+      "base_footprint_tiles": [
+        6,
+        6
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "single_rgba_alpha_bbox_crop_v1",
+      "palette_path": "装饰物1/王座",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\王座\\3.png",
+      "source_sha256": "31cb9562d6921c72c4d08292b12e6d5cb8fbfa34f2592b5fd77fe7096a6e30d7",
+      "output_sha256": "ac53886b6f4eefd60c202cdec1ff25753c1cd714cc797a181ae59d9f9f41df91",
+      "thumbnail_source_sha256": "ac53886b6f4eefd60c202cdec1ff25753c1cd714cc797a181ae59d9f9f41df91",
+      "processing": {
+        "pipeline": "single_rgba_alpha_bbox_crop_v1",
+        "source_canvas": [
+          458,
+          473
+        ],
+        "source_bounds_px": [
+          14,
+          30,
+          432,
+          463
+        ],
+        "padding_px": 4,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "throne",
+        "gothic",
+        "large_prop"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_throne_addition_6_v1",
+      "source_group": "王座",
+      "source_index": 3,
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_throne.10",
+      "display_name": "王座 10",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/王座/gothic_throne_10.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/王座/gothic_throne_10.png",
+      "canvas_size": [
+        422,
+        475
+      ],
+      "image_size": [
+        422,
+        475
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        418,
+        471
+      ],
+      "anchor_px": [
+        211,
+        470
+      ],
+      "placement_anchor_px": [
+        211,
+        470
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        6,
+        6
+      ],
+      "visual_footprint_tiles": [
+        6,
+        6
+      ],
+      "occupancy_footprint_tiles": [
+        6,
+        6
+      ],
+      "base_footprint_tiles": [
+        6,
+        6
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "single_rgba_alpha_bbox_crop_v1",
+      "palette_path": "装饰物1/王座",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\王座\\4.png",
+      "source_sha256": "b09712248940ea1ca10100a0fb73ea6f5d512373e6479215fe04f0b430c84969",
+      "output_sha256": "bd7300fb0b4264bb03641277feb6a37e8b2269d29ffa32a207caf53f134aca95",
+      "thumbnail_source_sha256": "bd7300fb0b4264bb03641277feb6a37e8b2269d29ffa32a207caf53f134aca95",
+      "processing": {
+        "pipeline": "single_rgba_alpha_bbox_crop_v1",
+        "source_canvas": [
+          456,
+          491
+        ],
+        "source_bounds_px": [
+          18,
+          11,
+          432,
+          478
+        ],
+        "padding_px": 4,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "throne",
+        "gothic",
+        "large_prop"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_throne_addition_6_v1",
+      "source_group": "王座",
+      "source_index": 4,
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_throne.11",
+      "display_name": "王座 11",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/王座/gothic_throne_11.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/王座/gothic_throne_11.png",
+      "canvas_size": [
+        384,
+        481
+      ],
+      "image_size": [
+        384,
+        481
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        380,
+        477
+      ],
+      "anchor_px": [
+        192,
+        476
+      ],
+      "placement_anchor_px": [
+        192,
+        476
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        6,
+        6
+      ],
+      "visual_footprint_tiles": [
+        6,
+        6
+      ],
+      "occupancy_footprint_tiles": [
+        6,
+        6
+      ],
+      "base_footprint_tiles": [
+        6,
+        6
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "single_rgba_alpha_bbox_crop_v1",
+      "palette_path": "装饰物1/王座",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\王座\\5.png",
+      "source_sha256": "a1cfa840ed2848f101ffe4101ac6736ea69643b43bbe5e8fc8b3613f3d2f17ce",
+      "output_sha256": "5a62902b113230beb81a1f3e0b0005387254fb04b66844ee3b5ac167d4b4f7ac",
+      "thumbnail_source_sha256": "5a62902b113230beb81a1f3e0b0005387254fb04b66844ee3b5ac167d4b4f7ac",
+      "processing": {
+        "pipeline": "single_rgba_alpha_bbox_crop_v1",
+        "source_canvas": [
+          406,
+          493
+        ],
+        "source_bounds_px": [
+          11,
+          11,
+          387,
+          484
+        ],
+        "padding_px": 4,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "throne",
+        "gothic",
+        "large_prop"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_throne_addition_6_v1",
+      "source_group": "王座",
+      "source_index": 5,
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_throne.12",
+      "display_name": "王座 12",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/装饰物1/王座/gothic_throne_12.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/装饰物1/王座/gothic_throne_12.png",
+      "canvas_size": [
+        389,
+        467
+      ],
+      "image_size": [
+        389,
+        467
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        385,
+        463
+      ],
+      "anchor_px": [
+        194,
+        462
+      ],
+      "placement_anchor_px": [
+        194,
+        462
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        6,
+        6
+      ],
+      "visual_footprint_tiles": [
+        6,
+        6
+      ],
+      "occupancy_footprint_tiles": [
+        6,
+        6
+      ],
+      "base_footprint_tiles": [
+        6,
+        6
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "single_rgba_alpha_bbox_crop_v1",
+      "palette_path": "装饰物1/王座",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\王座\\6.png",
+      "source_sha256": "e7586fa081584cffa7ea2a50487cc45a93f353f62265a4f56f99bcab773a265f",
+      "output_sha256": "99013a62002de18b2eedd8d82590c9f67049e441a602db8cc26648db515ed6e0",
+      "thumbnail_source_sha256": "99013a62002de18b2eedd8d82590c9f67049e441a602db8cc26648db515ed6e0",
+      "processing": {
+        "pipeline": "single_rgba_alpha_bbox_crop_v1",
+        "source_canvas": [
+          430,
+          465
+        ],
+        "source_bounds_px": [
+          20,
+          6,
+          401,
+          465
+        ],
+        "padding_px": 4,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "throne",
+        "gothic",
+        "large_prop"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_throne_addition_6_v1",
+      "source_group": "王座",
+      "source_index": 6,
+      "projection": "orthographic_isometric_2_to_1"
+    }
+  ]
+}
