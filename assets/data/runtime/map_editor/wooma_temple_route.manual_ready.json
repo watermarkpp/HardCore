@@ -120,8 +120,8 @@
       "target_map_key": "wooma_temple_3",
       "target_portal_id": "map_exit_000001",
       "target_tile": [
-        20,
-        41
+        20.0,
+        41.0
       ]
     },
     {
@@ -154,8 +154,8 @@
       "connection_pair_id": "wooma_temple_2_leader_hall_pair_v1",
       "exit_id": "map_exit_000001",
       "exit_tile": [
-        20,
-        41
+        20.0,
+        41.0
       ],
       "official_connection_id": "wooma_leader_hall_to_temple_2_v1",
       "reciprocal_exit_id": "map_exit_000001",
@@ -184,19 +184,19 @@
     {
       "display_name": "沃玛寺庙一层",
       "map_id": "wooma_temple_1",
-      "runtime_build_sha256": "8cc251131e07766ebdb902360117f67eec094a31cc3c4ff48e8cbbc130d7bc57",
+      "runtime_build_sha256": "42fc27f811c333c80c905b5a9faa209110acb692df8678c692193a2eea7caed7",
       "runtime_map_id": 313
     },
     {
       "display_name": "沃玛寺庙二层",
       "map_id": "wooma_temple_2",
-      "runtime_build_sha256": "5609e6e12fd561fb1ce9274a56ad8f224b0d98dfd780a59ac9b20fed9be21e82",
+      "runtime_build_sha256": "d9a5414812ad26f94dd11dace7fb4da6c03d878cee227732ae81002f86d10b8a",
       "runtime_map_id": 314
     },
     {
       "display_name": "沃玛教主大厅",
       "map_id": "wooma_temple_3",
-      "runtime_build_sha256": "9bc3ed9865cb9a43d3528cfa712a8ca6f33e29969b4f862ad1df6388100b78e3",
+      "runtime_build_sha256": "96146914bfa88be4bcb03034324dda36a0219993382a865dd88c89336267b55b",
       "runtime_map_id": 315
     }
   ],

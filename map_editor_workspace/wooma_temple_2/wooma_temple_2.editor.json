@@ -1995,6 +1995,102 @@
         },
         "shape": "rect",
         "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000121",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            43.0,
+            18.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000122",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            0.0,
+            1.0,
+            44.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000123",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            0.0,
+            16.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000124",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            22.0,
+            0.0,
+            22.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000125",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            43.0,
+            0.0,
+            1.0,
+            44.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000126",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            24.0,
+            43.0,
+            20.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
       }
     ],
     "collision_erase": [
@@ -2311,8 +2407,8 @@
         "target_map_key": "wooma_temple_3",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
-          20,
-          41
+          20.0,
+          41.0
         ],
         "tile": [
           18.0,
@@ -3455,12 +3551,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          16.0,
-          14.0
+          15.0,
+          15.0
         ],
         "tile_anchor": [
-          16.0,
-          14.0
+          15.0,
+          15.0
         ]
       },
       {

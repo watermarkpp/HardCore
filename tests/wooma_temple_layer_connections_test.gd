@@ -34,6 +34,7 @@ func _ready() -> void:
 			str(runtime.source.map_id) == map_id,
 			"runtime:%s" % map_id
 		)
+		_assert_runtime_matches_document(document, runtime)
 		documents[map_id] = document
 		runtimes[map_id] = runtime
 
@@ -164,12 +165,61 @@ func _ready() -> void:
 	assert(marker.maps.size() == 4)
 	assert(marker.connection_pairs.size() == 3)
 	assert(marker.connections.size() == 6)
+	for map_summary: Dictionary in marker.maps:
+		var map_id := str(map_summary.map_id)
+		assert(runtimes.has(map_id))
+		assert(
+			str(map_summary.runtime_build_sha256)
+			== str(runtimes[map_id].build_sha256)
+		)
 	print(
 		"WOOMA_TEMPLE_LAYER_CONNECTIONS_PASS "
 		+ "maps=4 pairs=3 endpoints=6 overlap=0 clone_size=44x44 "
 		+ "route=268<->313<->314<->315"
 	)
 	get_tree().quit(0)
+
+
+func _assert_runtime_matches_document(
+	document: Dictionary,
+	runtime: Dictionary
+) -> void:
+	assert(
+		int(runtime.source.revision)
+		== int(document.editor_meta.revision)
+	)
+	var exported_instances := MapEditorInstanceService.all_instances(
+		document
+	).filter(
+		func(instance: Dictionary) -> bool:
+			return bool(instance.get("runtime_export", true))
+	)
+	assert(runtime.instances.size() == exported_instances.size())
+	assert(
+		runtime.collision.manual_shapes.size()
+		== document.layers.collision.size()
+	)
+	assert(
+		runtime.collision.erased_cells.size()
+		== document.layers.collision_erase.size()
+	)
+	for layer: String in [
+		"npc_points",
+		"monster_spawn",
+		"boss_spawn",
+		"door_points",
+		"map_entrance_points",
+		"map_exit_points",
+		"respawn_points",
+		"safe_area",
+		"light",
+		"region_trigger",
+	]:
+		assert(
+			runtime.semantics.get(layer, []).size()
+			== document.layers.get(layer, []).size()
+		)
+	assert(not str(runtime.build_sha256).is_empty())
 
 
 func _assert_clone_layers(

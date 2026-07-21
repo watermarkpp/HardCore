@@ -37,7 +37,7 @@
     "milestone": "WOOMA-LEADER-HALL-CLONE-V1",
     "official_source_authority": "user_saved_editor_document",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 3,
+    "revision": 3.0,
     "route_version_id": "wooma_temple_user_route_v3_unified_portals",
     "runtime_approved": true,
     "runtime_approved_revision": 3,
@@ -2062,6 +2062,86 @@
         },
         "shape": "rect",
         "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000181",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            43.0,
+            19.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000182",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            0.0,
+            1.0,
+            44.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000183",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            0.0,
+            44.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000184",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            43.0,
+            0.0,
+            1.0,
+            44.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000185",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            24.0,
+            43.0,
+            20.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
       }
     ],
     "collision_erase": [
@@ -2158,8 +2238,8 @@
           2.0
         ],
         "tile": [
-          20,
-          41
+          20.0,
+          41.0
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true

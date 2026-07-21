@@ -1894,6 +1894,102 @@
         },
         "shape": "rect",
         "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000115",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            25.0,
+            43.0,
+            19.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000116",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            43.0,
+            0.0,
+            1.0,
+            44.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000117",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            23.0,
+            0.0,
+            21.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000118",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            0.0,
+            16.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000119",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            0.0,
+            1.0,
+            44.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000120",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            43.0,
+            18.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
       }
     ],
     "collision_erase": [
@@ -3127,12 +3223,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          16.0,
-          14.0
+          15.0,
+          15.0
         ],
         "tile_anchor": [
-          16.0,
-          14.0
+          15.0,
+          15.0
         ]
       },
       {
