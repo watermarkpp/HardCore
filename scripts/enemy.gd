@@ -717,9 +717,15 @@ func _draw() -> void:
 		draw_circle(body_center + Vector2(-radius * 0.35, -3), 3.0, Color(0.95, 0.75, 0.25))
 		draw_circle(body_center + Vector2(radius * 0.35, -3), 3.0, Color(0.95, 0.75, 0.25))
 	var bar_width := 80.0 if is_boss else 46.0
-	var bar_y := -92.0 if bool(behavior_profile.get("largeClientBoss", false)) else -radius - 24.0
+	var bar_y := health_bar_anchor_y()
 	draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width, 5), Color(0.10, 0.03, 0.03, 0.9))
 	draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width * float(current_hp) / float(max_hp), 5), Color(0.85, 0.12, 0.08))
+
+
+func health_bar_anchor_y() -> float:
+	var radius := 27.0 if is_boss else 16.0
+	var fallback_y := -92.0 if bool(behavior_profile.get("largeClientBoss", false)) else -radius - 24.0
+	return visual.health_bar_anchor_y(fallback_y) if visual != null else fallback_y
 
 
 func ground_indicator_center() -> Vector2:
