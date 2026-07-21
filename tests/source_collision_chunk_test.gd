@@ -37,7 +37,8 @@ func _verify_map(game: Node, map_id: int, expected_size: Vector2i) -> void:
 		assert(background.source_collision_shape_count() >= 4, "地图%d编辑器阻挡或四边硬边界缺失" % map_id)
 		assert(background.editor_runtime_ground_ready(), "地图%d编辑器运行时地表未就绪" % map_id)
 		if map_id == 217:
-			assert(background.uses_editor_runtime_fallback_ground(), "兽人古墓一层未启用编辑器尺寸地表回退")
+			assert(background.editor_runtime_chunk_texture_count() == 5, "兽人古墓一层正式编辑器地表块未完整加载")
+			assert(not background.uses_editor_runtime_fallback_ground(), "兽人古墓一层错误回退到旧地表")
 			assert(background._editor_runtime_size == Vector2i(38, 38), "兽人古墓一层碰撞仍在使用旧400x400尺寸")
 			assert(not background.is_environment_point_blocked(game.player.global_position), "兽人古墓一层出生点被阻挡")
 		if map_id == 1578:

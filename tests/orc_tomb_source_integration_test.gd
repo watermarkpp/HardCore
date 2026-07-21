@@ -66,7 +66,9 @@ func _run() -> void:
 		var background: WorldBackground = game.background
 		assert(background.uses_orc_tomb_art() and background.environment_source_map_code() == EXPECTED[map_id].code, "地图%d运行时客户端古墓资源未加载" % map_id)
 		assert(background.orc_tomb_ground_atlas_size() == Vector2i(512, 32) and background.orc_tomb_prop_atlas_size() == Vector2i(768, 128), "兽人古墓图集规格错误")
-		assert(background.editor_runtime_ground_ready() and background.uses_editor_runtime_fallback_ground(), "地图%d编辑器尺寸地表未加载" % map_id)
+		assert(background.editor_runtime_ground_ready(), "地图%d编辑器尺寸地表未加载" % map_id)
+		assert(background.editor_runtime_chunk_texture_count() == 5, "地图%d正式编辑器地表块未完整加载" % map_id)
+		assert(not background.uses_editor_runtime_fallback_ground(), "地图%d错误回退到旧兽人古墓地表" % map_id)
 		assert(background._editor_runtime_size == Vector2i(38, 38), "地图%d仍混用旧400x400运行碰撞" % map_id)
 		assert(background.source_collision_mask_size() == Vector2i.ZERO, "地图%d仍加载旧MAP阻挡图" % map_id)
 		assert(background.source_collision_shape_count() >= 4, "地图%d编辑器阻挡网格或硬边界缺失" % map_id)
