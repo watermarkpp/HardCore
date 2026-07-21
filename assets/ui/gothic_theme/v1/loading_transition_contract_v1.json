@@ -37,6 +37,12 @@
     "GameHUD.loading_transition_covered(request)",
     "GameHUD.loading_transition_finished(request)"
   ],
+  "integrationLifecycle": [
+    "Call GameHUD.begin_loading_transition(transition_id) before changing the active map.",
+    "Wait for GameHUD.loading_transition_covered(request) with the same transition_id before unloading or loading gameplay content.",
+    "After the new map has produced its first process and render frame, call GameHUD.finish_loading_transition().",
+    "Ignore stale callbacks and prevent overlapping map transitions in the gameplay coordinator."
+  ],
   "requestFields": [
     "contract_id",
     "transition_id"
