@@ -1,12 +1,17 @@
 {
-  "schema_version": 1,
-  "policy_id": "map_connection_bidirectional_default_v1",
+  "schema_version": 2,
+  "policy_id": "map_connection_unified_bidirectional_v2",
+  "portal_contract_id": "unified_map_portal_endpoint_v1",
   "default_connection_mode": "bidirectional",
   "one_way_requires_explicit_override": true,
   "one_way_reason_required": true,
-  "reverse_exit_placement": "target_entrance_tile",
-  "arrival_reentry_policy_id": "portal_leave_then_reenter_v1",
-  "arrival_reentry_rule": "A player arriving at an entrance shared with a reverse exit must leave that trigger tile before the reverse exit can activate.",
+  "endpoint_rule": "Each physical doorway or stair uses exactly one portal endpoint. Reciprocal endpoints target each other directly; no entrance and exit semantics may overlap.",
+  "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+  "arrival_reentry_rule": "Arrival locks the destination endpoint. Return requires a fresh activation after either 3 seconds or moving at least 1.5 tiles from the arrival point. A travel request is single-flight until loading finishes.",
+  "return_minimum_seconds": 3.0,
+  "return_unlock_distance_tiles": 1.5,
+  "return_requires_fresh_activation": true,
+  "travel_request_single_flight": true,
   "scope": "all_new_editor_map_connections",
   "legacy_unconfigured_exits": "allowed_until_configured"
 }

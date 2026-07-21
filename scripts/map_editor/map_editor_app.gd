@@ -188,7 +188,7 @@ func _build_ui() -> void:
 	semantic_kind_option = OptionButton.new()
 	for kind: Array in [
 		["NPC","npc"],["普通怪物刷新点","monster_spawn"],["Boss刷新点","boss_spawn"],
-		["地图入口（进入本图的落点）","map_entrance"],["地图出口（墙门触发点）","map_exit"],
+		["地图传送点（默认双向）","map_exit"],["独立到达点（特殊用途）","map_entrance"],
 		["出生／复活点","respawn_point"],["多边形安全区","safe_area"],
 		["光效点","light"],["区域触发器","region_trigger"],
 	]:
@@ -200,8 +200,8 @@ func _build_ui() -> void:
 	semantic_catalog_tree = Tree.new(); semantic_catalog_tree.hide_root = true; semantic_catalog_tree.custom_minimum_size.y = 150; semantic_catalog_tree.item_selected.connect(_on_semantic_catalog_selected); semantic_catalog_tree.gui_input.connect(_on_semantic_catalog_gui_input); sidebar.add_child(semantic_catalog_tree); _refresh_semantic_catalog_tree()
 	semantic_content_id = _field(sidebar, "内容ID（高级选项，可手工覆盖）", "")
 	semantic_display_name = _field(sidebar, "标注名称", "")
-	semantic_target_map = _field(sidebar, "出口连接的目标地图 ID（可稍后填写）", "")
-	semantic_target_entrance = _field(sidebar, "出口连接的目标入口 ID（可稍后填写）", "")
+	semantic_target_map = _field(sidebar, "传送点连接的目标地图 ID（由连接工具配置）", "")
+	semantic_target_entrance = _field(sidebar, "目标传送点 ID（由连接工具配置）", "")
 	semantic_radius = _spin_field(sidebar, "刷新/区域半径（格；Boss 可为 0）", 0, 64); semantic_radius.value = 3
 	semantic_count = _spin_field(sidebar, "刷新数量", 1, 200); semantic_count.value = 1
 	semantic_respawn = _spin_field(sidebar, "刷新间隔（秒）", 1, 86400); semantic_respawn.value = 60
@@ -1130,7 +1130,7 @@ func _activate_semantic_placement() -> void:
 	var kind := str(semantic_kind_option.get_item_metadata(semantic_kind_option.selected)) if semantic_kind_option != null and semantic_kind_option.selected >= 0 else "semantic"
 	var content_id := semantic_content_id.text.strip_edges() if semantic_content_id != null else ""
 	var kind_name := str({
-		"map_entrance": "地图入口", "map_exit": "地图出口",
+		"map_entrance": "独立到达点", "map_exit": "地图传送点",
 		"respawn_point": "出生／复活点", "safe_area": "多边形安全区",
 	}.get(kind, kind))
 	status_label.text = "功能标注已启用：%s%s" % [kind_name, " / " + content_id if not content_id.is_empty() else ""]

@@ -4,7 +4,7 @@ const ConnectionPolicyService := preload(
 	"res://scripts/map_editor/map_editor_connection_policy_service.gd"
 )
 
-const ROUTE_VERSION_ID := "wooma_temple_user_route_v2_bidirectional"
+const ROUTE_VERSION_ID := "wooma_temple_user_route_v3_unified_portals"
 const MARKER_PATH := (
 	"res://assets/data/runtime/map_editor/"
 	+ "wooma_temple_route.manual_ready.json"
@@ -98,6 +98,9 @@ func _init() -> void:
 		meta["connection_policy_id"] = (
 			ConnectionPolicyService.POLICY_ID
 		)
+		meta["portal_contract_id"] = (
+			ConnectionPolicyService.PORTAL_CONTRACT_ID
+		)
 		meta["default_connection_mode"] = "bidirectional"
 		document["editor_meta"] = meta
 		var runtime := _save_and_build(document)
@@ -109,11 +112,20 @@ func _init() -> void:
 		"schema_version": 2,
 		"route_version_id": ROUTE_VERSION_ID,
 		"connection_policy_id": ConnectionPolicyService.POLICY_ID,
+		"portal_contract_id": ConnectionPolicyService.PORTAL_CONTRACT_ID,
 		"default_connection_mode": "bidirectional",
 		"arrival_reentry_policy_id": (
 			ConnectionPolicyService.ARRIVAL_REENTRY_POLICY_ID
 		),
-		"status": "user_requested_official_bidirectional_route",
+		"return_minimum_seconds": (
+			ConnectionPolicyService.RETURN_MINIMUM_SECONDS
+		),
+		"return_unlock_distance_tiles": (
+			ConnectionPolicyService.RETURN_UNLOCK_DISTANCE_TILES
+		),
+		"return_requires_fresh_activation": true,
+		"travel_request_single_flight": true,
+		"status": "user_requested_unified_bidirectional_portals",
 		"maps": [],
 		"connection_pairs": [],
 		"connections": [],
@@ -146,8 +158,8 @@ func _init() -> void:
 		_fail("marker_write_failed:%s" % write.get("errors", []))
 		return
 	print(
-		"WOOMA_TEMPLE_BIDIRECTIONAL_ROUTE_PASS "
-		+ "pairs=3 directed_exits=6 route=268<->313<->314<->315"
+		"WOOMA_TEMPLE_UNIFIED_PORTAL_ROUTE_PASS "
+		+ "pairs=3 endpoints=6 overlap=0 route=268<->313<->314<->315"
 	)
 	quit(0)
 
@@ -187,11 +199,21 @@ func _connection_summary(
 		"target_map_id": int(map_exit.target_map_id),
 		"target_map_key": str(map_exit.target_map_key),
 		"target_entrance_id": str(map_exit.target_entrance_id),
+		"target_portal_id": str(map_exit.target_portal_id),
 		"target_tile": map_exit.target_tile.duplicate(),
 		"connection_pair_id": str(map_exit.connection_pair_id),
 		"connection_direction": str(map_exit.connection_direction),
 		"reciprocal_exit_id": str(map_exit.reciprocal_exit_id),
 		"official_connection_id": str(map_exit.official_connection_id),
+		"arrival_reentry_policy_id": str(
+			map_exit.arrival_reentry_policy_id
+		),
+		"return_minimum_seconds": float(
+			map_exit.return_minimum_seconds
+		),
+		"return_unlock_distance_tiles": float(
+			map_exit.return_unlock_distance_tiles
+		),
 	}
 
 

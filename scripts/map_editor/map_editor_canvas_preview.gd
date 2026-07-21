@@ -950,7 +950,7 @@ func _draw_semantics(design_size: Vector2i, offset: Vector2, scale_factor: float
 		if display_name.is_empty():
 			display_name = {
 				"npc":"NPC","monster_spawn":"怪物刷新","boss_spawn":"Boss刷新","door":"旧地图出口",
-				"map_entrance":"地图入口","map_exit":"地图出口","respawn_point":"出生/复活点",
+				"map_entrance":"独立到达点","map_exit":"地图传送点","respawn_point":"出生/复活点",
 				"safe_area":"安全区","light":"光效","region_trigger":"触发区域",
 			}.get(kind,"功能点")
 		draw_string(ThemeDB.fallback_font, center+Vector2(radius+3,4), display_name, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color.WHITE)

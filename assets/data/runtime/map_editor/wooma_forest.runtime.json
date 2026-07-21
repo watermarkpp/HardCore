@@ -1,5 +1,5 @@
 {
-  "build_sha256": "c22a1f3403221c87de3dcb542c3874bebfba9f14da5b0dbfd25b35aaa7c9cbbc",
+  "build_sha256": "95065cf780d75c1c0a9756364fa0f77c5db277c264185291dcc93d8883e3d36e",
   "collision": {
     "blocked_count": 232.0,
     "blocked_tiles": [
@@ -11241,30 +11241,36 @@
     ],
     "map_exit_points": [
       {
-        "arrival_reentry_policy_id": "portal_leave_then_reenter_v1",
+        "arrival_locks_current_portal": true,
+        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
         "connection_direction": "forward",
         "connection_mode": "bidirectional",
         "connection_pair_id": "wooma_forest_temple_1_pair_v1",
-        "connection_policy_id": "map_connection_bidirectional_default_v1",
+        "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
         "display_name": "进入沃玛寺庙一层",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
         "official_connection_id": "wooma_forest_top_to_temple_1_v2",
         "one_way": false,
-        "portal_role": "exit",
+        "portal_contract_id": "unified_map_portal_endpoint_v1",
+        "portal_role": "bidirectional_endpoint",
         "reciprocal_exit_id": "map_exit_000002",
         "reciprocal_map_key": "wooma_temple_1",
         "requires_leave_before_retrigger": true,
+        "return_minimum_seconds": 3.0,
+        "return_requires_fresh_activation": true,
+        "return_unlock_distance_tiles": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
-        "semantic_role": "map_exit_trigger",
+        "semantic_role": "map_portal_endpoint",
         "source_map_key": "wooma_forest",
         "target_configured": true,
-        "target_entrance_id": "map_entrance_000001",
+        "target_entrance_id": "map_exit_000002",
         "target_map_id": 313.0,
         "target_map_key": "wooma_temple_1",
+        "target_portal_id": "map_exit_000002",
         "target_tile": [
           20.0,
           41.0
@@ -11273,6 +11279,7 @@
           51.0,
           4.0
         ],
+        "travel_request_single_flight": true,
         "trigger_on_enter": true
       },
       {
@@ -11973,6 +11980,6 @@
     "content_layer": "personal_expansion",
     "editor_schema_version": 4.0,
     "map_id": "wooma_forest",
-    "revision": 4.0
+    "revision": 5.0
   }
 }

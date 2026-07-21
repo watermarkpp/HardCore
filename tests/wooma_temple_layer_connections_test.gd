@@ -13,7 +13,7 @@ const DISPLAY_NAMES := [
 	"沃玛寺庙二层",
 	"沃玛教主大厅",
 ]
-const ROUTE_VERSION_ID := "wooma_temple_user_route_v2_bidirectional"
+const ROUTE_VERSION_ID := "wooma_temple_user_route_v3_unified_portals"
 
 
 func _ready() -> void:
@@ -42,7 +42,10 @@ func _ready() -> void:
 	var leader_hall: Dictionary = documents["wooma_temple_3"]
 	for document: Dictionary in [floor_one, floor_two, leader_hall]:
 		assert(document.design.design_size == [44.0, 44.0])
-		assert(document.layers.map_entrance_points.size() == 1)
+		assert(
+			document.layers.map_entrance_points.size()
+			== (1 if str(document.map_id) == "wooma_forest" else 0)
+		)
 		assert(
 			str(document.ground.workspace_manifest)
 			== (
@@ -85,6 +88,7 @@ func _ready() -> void:
 		Vector2i(51, 4),
 		"进入沃玛寺庙一层",
 		floor_one,
+		_entry(floor_one.layers.map_exit_points, "map_exit_000002"),
 		"wooma_forest_top_to_temple_1_v2"
 	)
 	_assert_link(
@@ -92,6 +96,7 @@ func _ready() -> void:
 		Vector2i(18, 2),
 		"前往沃玛寺庙二层",
 		floor_two,
+		_entry(floor_two.layers.map_exit_points, "map_exit_000002"),
 		"wooma_temple_1_to_2_v2"
 	)
 	_assert_link(
@@ -99,6 +104,7 @@ func _ready() -> void:
 		Vector2i(18, 2),
 		"进入沃玛教主大厅",
 		leader_hall,
+		_entry(leader_hall.layers.map_exit_points, "map_exit_000001"),
 		"wooma_temple_2_to_leader_hall_v2"
 	)
 	_assert_reciprocal_pair(
@@ -160,7 +166,7 @@ func _ready() -> void:
 	assert(marker.connections.size() == 6)
 	print(
 		"WOOMA_TEMPLE_LAYER_CONNECTIONS_PASS "
-		+ "maps=4 pairs=3 directed_links=6 clone_size=44x44 "
+		+ "maps=4 pairs=3 endpoints=6 overlap=0 clone_size=44x44 "
 		+ "route=268<->313<->314<->315"
 	)
 	get_tree().quit(0)
@@ -190,9 +196,9 @@ func _assert_link(
 	expected_tile: Vector2i,
 	expected_name: String,
 	target: Dictionary,
+	target_endpoint: Dictionary,
 	connection_id: String
 ) -> void:
-	var entrance: Dictionary = target.layers.map_entrance_points[0]
 	assert(_tile(map_exit) == expected_tile)
 	assert(str(map_exit.display_name) == expected_name)
 	assert(bool(map_exit.target_configured))
@@ -200,13 +206,16 @@ func _assert_link(
 	assert(str(map_exit.target_map_key) == str(target.map_id))
 	assert(
 		str(map_exit.target_entrance_id)
-		== str(entrance.entrance_id)
+		== str(target_endpoint.semantic_id)
 	)
-	assert(_tile_value(map_exit.target_tile) == _tile(entrance))
+	assert(str(map_exit.target_portal_id) == str(target_endpoint.semantic_id))
+	assert(_tile_value(map_exit.target_tile) == _tile(target_endpoint))
 	assert(str(map_exit.official_connection_id) == connection_id)
 	assert(str(map_exit.connection_mode) == "bidirectional")
 	assert(not bool(map_exit.one_way))
 	assert(bool(map_exit.requires_leave_before_retrigger))
+	assert(float(map_exit.return_minimum_seconds) == 3.0)
+	assert(float(map_exit.return_unlock_distance_tiles) == 1.5)
 
 
 func _assert_reciprocal_pair(
