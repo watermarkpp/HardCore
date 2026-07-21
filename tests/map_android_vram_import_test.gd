@@ -4,6 +4,9 @@ extends Node
 const VISUAL_MANIFESTS := [
 	"res://assets/data/runtime/map_editor/bich_province.visual.json",
 	"res://assets/data/runtime/map_editor/wooma_forest.visual.json",
+	"res://assets/data/runtime/map_editor/orc_tomb_1.visual.json",
+	"res://assets/data/runtime/map_editor/orc_tomb_2.visual.json",
+	"res://assets/data/runtime/map_editor/orc_tomb_3.visual.json",
 ]
 
 
@@ -19,7 +22,7 @@ func _ready() -> void:
 		for chunk: Dictionary in manifest.get("chunks", []):
 			import_paths.append("res://%s.import" % str(chunk.get("image", "")))
 
-	assert(import_paths.size() == 21, "预期检查 21 个移动端地图块导入规则，实际 %d" % import_paths.size())
+	assert(import_paths.size() == 36, "预期检查 36 个移动端地图块导入规则，实际 %d" % import_paths.size())
 	for import_path: String in import_paths:
 		var import_file := FileAccess.open(import_path, FileAccess.READ)
 		assert(import_file != null, "地图块缺少持久导入规则：%s" % import_path)
