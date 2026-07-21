@@ -386,10 +386,11 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 			return "穿戴重量不足：需要%d，上限%d" % [prospective_wear, max_wear]
 	var previous: Variant = equipment.get(slot, {})
 	if previous is Dictionary and not previous.is_empty():
-		inventory.append(previous.duplicate(true))
+		inventory[index] = previous.duplicate(true)
 	elif not previous is Dictionary and not str(previous).is_empty():
-		inventory.append(_make_item_instance(str(previous), GameData.get_item_record(str(previous))))
-	inventory.remove_at(index)
+		inventory[index] = _make_item_instance(str(previous), GameData.get_item_record(str(previous)))
+	else:
+		inventory.remove_at(index)
 	equipment[slot] = inventory_record.duplicate(true)
 	recalculate_stats()
 	inventory_changed.emit()
