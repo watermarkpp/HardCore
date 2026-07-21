@@ -4,6 +4,7 @@ extends Node2D
 const EnvironmentCatalogScript := preload("res://scripts/environment_catalog.gd")
 const MapCoordinateMapperScript := preload("res://scripts/map_coordinate_mapper.gd")
 const GothicBichCampBuilderScript := preload("res://scripts/layers/presentation/gothic_bich_camp_builder.gd")
+const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 const EditorCoordinateScript := preload("res://scripts/map_editor/map_editor_coordinate.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const BICH_GROUND_ATLAS := preload("res://assets/art/maps/bich/bich_ground_tiles.png")
@@ -490,7 +491,10 @@ func _rebuild_environment() -> void:
 	_collision_focus_source = Vector2i(-99999, -99999)
 	if not is_inside_tree():
 		return
-	if _active_map_id() == 4 and _build_editor_runtime_environment():
+	if (
+		MapEditorRuntimeBridgeScript.has_runtime_map(_active_map_id())
+		and _build_editor_runtime_environment(_active_map_id())
+	):
 		return
 	var profile := environment_profile()
 	if not profile.is_empty():
@@ -503,22 +507,27 @@ func _rebuild_environment() -> void:
 			_build_full_ground(profile)
 
 
-func _build_editor_runtime_environment() -> bool:
-	var manifest_path := "res://assets/data/runtime/map_editor/bich_province.visual.json"
-	var runtime_path := "res://assets/data/runtime/map_editor/bich_province.runtime.json"
-	if not FileAccess.file_exists(manifest_path) or not FileAccess.file_exists(runtime_path): return false
-	var manifest_file := FileAccess.open(manifest_path, FileAccess.READ)
-	var parsed: Variant = JSON.parse_string(manifest_file.get_as_text()) if manifest_file != null else null
-	if not parsed is Dictionary: return false
-	_editor_runtime_visual = parsed
-	var center: Array = parsed.get("ground_pixel_center", [8192,4096])
-	for chunk: Dictionary in parsed.get("chunks", []):
-		var image_path := "res://" + str(chunk.get("image", ""))
-		if not ResourceLoader.exists(image_path): continue
+func _build_editor_runtime_environment(runtime_map_id := -1) -> bool:
+	var runtime := MapEditorRuntimeBridgeScript.load_map(runtime_map_id)
+	if runtime.is_empty():
+		return false
+	var visual := _load_editor_runtime_visual(runtime_map_id, runtime)
+	if visual.is_empty():
+		return false
+	_editor_runtime_visual = visual
+	var center: Array = visual.get("ground_pixel_center", [8192, 4096])
+	for chunk: Dictionary in visual.get("chunks", []):
+		var image_path := str(chunk.get("image", ""))
+		if not image_path.begins_with("res://"):
+			image_path = "res://" + image_path
+		if not ResourceLoader.exists(image_path):
+			continue
 		var rect: Array = chunk.get("rect_px", [])
-		if rect.size() != 4: continue
+		if rect.size() != 4:
+			continue
 		var texture := load(image_path) as Texture2D
-		if texture == null: continue
+		if texture == null:
+			continue
 		_editor_runtime_chunk_draws.append({
 			"chunk_id": str(chunk.get("chunk_id", "")),
 			"texture": texture,
@@ -529,13 +538,41 @@ func _build_editor_runtime_environment() -> bool:
 				float(rect[3])
 			),
 		})
-	_build_editor_runtime_guard_band(parsed)
-	var loaded := MapEditorRuntimeMapService.load_runtime(runtime_path)
-	if loaded.ok:
-		_build_editor_runtime_instances(loaded.runtime)
-		_build_editor_runtime_collisions(loaded.runtime)
+	_build_editor_runtime_guard_band(visual)
+	_build_editor_runtime_instances(runtime)
+	_build_editor_runtime_collisions(runtime)
 	_full_ground_ready = false
 	return true
+
+
+func _load_editor_runtime_visual(
+	runtime_map_id: int,
+	runtime: Dictionary
+) -> Dictionary:
+	var visual_path := MapEditorRuntimeBridgeScript.visual_path(
+		runtime_map_id
+	)
+	var visual := _read_editor_json(visual_path)
+	if visual.is_empty():
+		return {}
+	var runtime_map_key := str(runtime.get("source", {}).get("map_id", ""))
+	if str(visual.get("map_id", "")) != runtime_map_key:
+		return {}
+	if int(visual.get("runtime_map_id", -1)) != runtime_map_id:
+		return {}
+	if not bool(visual.get("coverage", {}).get("complete", runtime_map_id == 4)):
+		return {}
+	return visual
+
+
+func _read_editor_json(path: String) -> Dictionary:
+	if path.is_empty() or not FileAccess.file_exists(path):
+		return {}
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return {}
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	return parsed if parsed is Dictionary else {}
 
 
 func _build_editor_runtime_guard_band(visual: Dictionary) -> void:

@@ -6,6 +6,12 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+# Some Codex desktop shells inherit both `Path` and `PATH`. PowerShell's
+# Start-Process treats environment keys case-insensitively and aborts when both
+# spellings are present, so normalize the process copy before launching Godot.
+$ProcessPath = [Environment]::GetEnvironmentVariable('Path', 'Process')
+[Environment]::SetEnvironmentVariable('PATH', $null, 'Process')
+[Environment]::SetEnvironmentVariable('Path', $ProcessPath, 'Process')
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $Godot = Join-Path $ProjectRoot 'tools\godot-4.7\Godot_v4.7-stable_win64_console.exe'
 $LogRoot = Join-Path $ProjectRoot 'outputs\test_logs'
@@ -51,6 +57,7 @@ $Suites = @{
 		'tests/bich_hard_boundary_test.tscn',
 		'tests/bich_content_1_test.tscn',
 		'tests/bich_map_3_runtime_bridge_test.tscn',
+		'tests/wooma_game_runtime_integration_test.tscn',
 		'tests/architecture_final_test.tscn',
 		'tests/five_layer_architecture_test.tscn',
 		'tests/bich_community_baseline_test.tscn',

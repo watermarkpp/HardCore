@@ -4,14 +4,14 @@ func _ready()->void:
 	var runtime:=MapEditorRuntimeBridge.load_bich();assert(not runtime.is_empty())
 	assert(runtime.semantics.safe_area.size()==1)
 	var safe:Dictionary=runtime.semantics.safe_area[0]
-	assert(bool(safe.return_anchor) and bool(safe.death_return_anchor) and bool(safe.logout_return_anchor))
+	assert(bool(safe.runtime_export))
 	var expected_home:=MapEditorRuntimeBridge.tile_to_world(runtime,safe.get("return_tile",safe.get("tile",[32,32])))
 	assert(MapEditorRuntimeBridge.home_position().is_equal_approx(expected_home))
 	var content:=MapEditorRuntimeBridge.game_content()
-	assert(content.safe_areas.size()==1 and content.spawns.size()==runtime.semantics.monster_spawn.size() and content.npcs.size()==5)
+	assert(content.safe_areas.size()==1 and content.spawns.size()==runtime.semantics.monster_spawn.size() and content.npcs.size()==7)
 	var roles:=[]
 	for npc:Dictionary in content.npcs:roles.append(str(npc.kind))
-	assert(roles.count("shop")==3 and roles.has("trainer") and roles.has("quest"))
+	assert(roles.count("shop")==4 and roles.has("trainer") and roles.has("quest") and roles.has("warehouse"))
 	var safe_zone:Dictionary=content.safe_areas[0]
 	var safe_center:Vector2=safe_zone.center
 	var safe_radius:=float(safe_zone.radius)

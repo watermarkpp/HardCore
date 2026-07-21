@@ -16,7 +16,11 @@ func _ready() -> void:
 	assert(portal_labels[268] == "前往沃玛森林")
 	var safe: Dictionary = runtime.semantics.safe_area[0]
 	assert(not bool(safe.get("return_anchor", false)))
-	assert(MapEditorRuntimeBridge.home_position() == Vector2.ZERO)
+	assert(
+		MapEditorRuntimeBridge.home_position().is_equal_approx(
+			MapEditorRuntimeBridge.tile_to_world(runtime, safe.tile)
+		)
+	)
 	var background := WorldBackground.new(); add_child(background)
 	background.set_zone_data("比奇省", {"mapId":4,"name":"比奇省"})
 	await get_tree().process_frame
