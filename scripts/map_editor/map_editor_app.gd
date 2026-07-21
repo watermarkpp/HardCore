@@ -236,7 +236,7 @@ func _build_ui() -> void:
 	region_fill_menu = PopupMenu.new(); region_fill_menu.add_item("用素材列表已选地面随机填充", 1); region_fill_menu.add_item("删除套索内地面和对象", 3); region_fill_menu.add_separator(); region_fill_menu.add_item("取消", 2); region_fill_menu.id_pressed.connect(_on_region_fill_menu_pressed); add_child(region_fill_menu)
 	asset_size_menu = PopupMenu.new(); asset_size_menu.add_item("放大一格", 1); asset_size_menu.add_item("缩小一格", 2); asset_size_menu.add_separator(); asset_size_menu.add_item("恢复初始占位", 3); asset_size_menu.add_separator(); asset_size_menu.add_item("删除素材", 4); asset_size_menu.id_pressed.connect(_on_asset_size_menu_pressed); add_child(asset_size_menu)
 	_build_asset_delete_dialog()
-	instance_size_menu = PopupMenu.new(); instance_size_menu.add_item("放大当前地图素材", 1); instance_size_menu.add_item("缩小当前地图素材", 2); instance_size_menu.id_pressed.connect(_on_instance_size_menu_pressed); add_child(instance_size_menu)
+	instance_size_menu = PopupMenu.new(); instance_size_menu.add_item("放大当前地图素材", 1); instance_size_menu.add_item("缩小当前地图素材", 2); instance_size_menu.add_separator(); instance_size_menu.add_item("提高一层（仅素材间）", 3); instance_size_menu.add_item("下降一层（仅素材间）", 4); instance_size_menu.id_pressed.connect(_on_instance_size_menu_pressed); add_child(instance_size_menu)
 	_on_semantic_kind_selected(0)
 	var first_asset := _first_asset_tree_item()
 	if first_asset != null:
@@ -1216,6 +1216,22 @@ func _on_selectable_context_requested(selectable_id:String,screen_position:Vecto
 
 
 func _on_instance_size_menu_pressed(action_id:int)->void:
+	if action_id in [3, 4]:
+		var layer_result := MapEditorInstanceService.adjust_material_layer_order(
+			current_document,
+			instance_size_menu_instance_id,
+			1 if action_id == 3 else -1
+		)
+		if layer_result.get("ok", false):
+			preview.set_document(current_document)
+			_save_current_document()
+			status_label.text = "素材覆盖层级已%s至 %d（不会影响人物或怪物）" % [
+				"提高" if action_id == 3 else "下降",
+				int(layer_result.get("material_layer_order", 0)),
+			]
+		else:
+			status_label.text = "调整素材覆盖层级失败：%s" % layer_result.get("errors", [])
+		return
 	var result:=MapEditorInstanceService.resize_instance(current_document,instance_size_menu_instance_id,1 if action_id==1 else -1)
 	if result.get("ok",false):
 		preview.set_document(current_document)

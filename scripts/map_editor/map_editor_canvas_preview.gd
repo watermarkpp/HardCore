@@ -739,6 +739,10 @@ static func instance_draw_commands(
 
 
 static func _draw_command_less(a: Dictionary, b: Dictionary) -> bool:
+	var a_material_order := MapEditorInstanceService.material_layer_order(a.instance)
+	var b_material_order := MapEditorInstanceService.material_layer_order(b.instance)
+	if a_material_order != b_material_order:
+		return a_material_order < b_material_order
 	var a_tile: Vector2i = a.sort_tile
 	var b_tile: Vector2i = b.sort_tile
 	var a_depth := a_tile.x + a_tile.y
@@ -822,7 +826,11 @@ static func _instance_selection_depth(instance: Dictionary) -> int:
 	var footprint: Array = instance.get("footprint_tiles", [1, 1])
 	var front_x := int(tile[0]) + maxi(0, int(footprint[0]) - 1)
 	var front_y := int(tile[1]) + maxi(0, int(footprint[1]) - 1)
-	return (front_x + front_y) * 10000 + front_x
+	return (
+		MapEditorInstanceService.material_layer_order(instance) * 1_000_000_000
+		+ (front_x + front_y) * 10000
+		+ front_x
+	)
 
 
 func _draw_selection_overlays(design_size: Vector2i, offset: Vector2, scale_factor: float) -> void:

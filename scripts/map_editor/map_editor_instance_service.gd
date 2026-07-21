@@ -2,6 +2,12 @@ class_name MapEditorInstanceService
 extends RefCounted
 
 const PlacementAnchorPolicy := preload("res://scripts/map_assets/map_asset_placement_anchor_policy.gd")
+const MATERIAL_LAYER_ORDER_MIN := -128
+const MATERIAL_LAYER_ORDER_MAX := 128
+const STATIC_MATERIAL_CHILD_Z_INDEX := 1
+const MATERIAL_LAYER_NAMES := [
+	"terrain_base", "terrain_front", "object_base", "object_front",
+]
 const ROLE_DEFAULTS := {
 	"decoration": {"scene_intent": "visual_detail", "gameplay_role": "none", "placement_rule": "inside_map", "collision_policy": "none", "navigation_policy": "ignore"},
 	"obstacle": {"scene_intent": "block_path", "gameplay_role": "navigation_blocker", "placement_rule": "non_overlapping", "collision_policy": "preset", "navigation_policy": "block_player_and_monster"},
@@ -42,6 +48,7 @@ static func create_instance(document: Dictionary, asset_id: String, object_role:
 		"content_layer": "personal_expansion", "rotation_deg": 0.0, "scale": [float(asset.get("approved_scale",1.0)),float(asset.get("approved_scale",1.0))], "flip_x": false, "flip_y": false,
 		"instance_base_scale": float(asset.get("approved_scale", 1.0)),
 		"instance_base_footprint_tiles": asset.get("footprint_tiles", [1, 1]).duplicate(),
+		"material_layer_order": 0,
 		"selectable":true,"movable":true,"selection_locked":false,
 	}
 	var design_raw: Array = document.design.get("design_size", [0, 0])
@@ -212,6 +219,95 @@ static func resized_visual_scale(current_scale: Vector2, old_fp: Array, new_fp: 
 	var old_primary := maxf(1.0, maxf(float(old_fp[0]), float(old_fp[1])))
 	var new_primary := maxf(1.0, maxf(float(new_fp[0]), float(new_fp[1])))
 	return current_scale * (new_primary / old_primary)
+
+
+static func adjust_material_layer_order(
+	document: Dictionary,
+	instance_id: String,
+	delta: int
+) -> Dictionary:
+	var located := _locate(document, instance_id)
+	if not located.get("ok", false):
+		return located
+	if delta == 0:
+		return {
+			"ok": true,
+			"instance": located.instance,
+			"material_layer_order": material_layer_order(located.instance),
+		}
+	var instance: Dictionary = located.instance
+	var next_order := clampi(
+		material_layer_order(instance) + delta,
+		MATERIAL_LAYER_ORDER_MIN,
+		MATERIAL_LAYER_ORDER_MAX
+	)
+	instance["material_layer_order"] = next_order
+	_located_replace(document, located, instance)
+	return {
+		"ok": true,
+		"instance": instance,
+		"material_layer_order": next_order,
+	}
+
+
+static func material_layer_order(instance: Dictionary) -> int:
+	return clampi(
+		int(instance.get("material_layer_order", 0)),
+		MATERIAL_LAYER_ORDER_MIN,
+		MATERIAL_LAYER_ORDER_MAX
+	)
+
+
+static func sorted_for_material_render(instances: Array) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for instance: Dictionary in instances:
+		result.append(instance)
+	result.sort_custom(_material_render_less)
+	return result
+
+
+static func _material_render_less(a: Dictionary, b: Dictionary) -> bool:
+	var a_order := material_layer_order(a)
+	var b_order := material_layer_order(b)
+	if a_order != b_order:
+		return a_order < b_order
+	var a_tile := _material_sort_tile(a)
+	var b_tile := _material_sort_tile(b)
+	var a_depth := a_tile.x + a_tile.y
+	var b_depth := b_tile.x + b_tile.y
+	if a_depth != b_depth:
+		return a_depth < b_depth
+	if a_tile.x != b_tile.x:
+		return a_tile.x < b_tile.x
+	var a_layer := MATERIAL_LAYER_NAMES.find(str(a.get("layer", "object_base")))
+	var b_layer := MATERIAL_LAYER_NAMES.find(str(b.get("layer", "object_base")))
+	if a_layer != b_layer:
+		return a_layer < b_layer
+	return str(a.get("instance_id", "")) < str(b.get("instance_id", ""))
+
+
+static func _material_sort_tile(instance: Dictionary) -> Vector2i:
+	var tile: Array = instance.get("tile", [0, 0])
+	var footprint: Array = instance.get("footprint_tiles", [1, 1])
+	var adaptive: Array = instance.get("adaptive_corner_sort_tile_offset", [0, 0])
+	return Vector2i(
+		int(tile[0]) + maxi(0, int(footprint[0]) - 1)
+			+ (int(adaptive[0]) if adaptive.size() >= 1 else 0),
+		int(tile[1]) + maxi(0, int(footprint[1]) - 1)
+			+ (int(adaptive[1]) if adaptive.size() >= 2 else 0)
+	)
+
+
+static func configure_runtime_material_canvas_item(
+	item: CanvasItem,
+	instance: Dictionary
+) -> void:
+	# Runtime map materials stay relative to WorldBackground (z=-20). Keeping
+	# every material at child z=1 makes sibling order control only material vs.
+	# material overlap; actors at the world root remain above them at z=0.
+	item.z_as_relative = true
+	item.z_index = STATIC_MATERIAL_CHILD_Z_INDEX
+	item.set_meta("material_layer_order", material_layer_order(instance))
 
 
 static func _resize_instance_collision(instance: Dictionary, old_fp: Array, new_fp: Array) -> void:

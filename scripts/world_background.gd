@@ -601,14 +601,17 @@ func editor_runtime_chunk_texture_count() -> int:
 
 func _build_editor_runtime_instances(runtime:Dictionary)->void:
 	var raw_size:Array=runtime.design.get("design_size",[64,64]);var size:=Vector2i(int(raw_size[0]),int(raw_size[1]))
-	for instance:Dictionary in runtime.get("instances",[]):
+	var material_instances := MapEditorInstanceService.sorted_for_material_render(
+		runtime.get("instances", [])
+	)
+	for instance:Dictionary in material_instances:
 		var asset:=MapAssetCatalogService.find_asset(str(instance.get("asset_id","")));var image_path:=str(asset.get("image",""))
 		if image_path.is_empty() or not ResourceLoader.exists("res://"+image_path):continue
 		var tile:Array=instance.get("tile",[0,0]);var footprint:Array=instance.get("footprint_tiles",[1,1]);var offset_px:Array=instance.get("offset_px",[0,0]);var anchor:Array=instance.get("anchor_px",asset.get("anchor_px",[0,0]));var scale_value:Array=instance.get("scale",[1,1])
 		var foot_tile:=Vector2(float(tile[0])+float(footprint[0])*.5,float(tile[1])+float(footprint[1])*.5)
 		var foot_world:=EditorCoordinateScript.tile_to_world(foot_tile,size)+Vector2(float(offset_px[0]),float(offset_px[1]))
 		var sprite:=Sprite2D.new();sprite.name="EditorRuntimeInstance";sprite.set_meta("editor_runtime_instance",true);sprite.texture=load("res://"+image_path);sprite.centered=false;sprite.scale=Vector2(float(scale_value[0]),float(scale_value[1]));sprite.position=foot_world-Vector2(float(anchor[0]),float(anchor[1]))*sprite.scale
-		sprite.z_as_relative=false;sprite.z_index=-10+clampi(roundi(foot_world.y/32.0),-8,8);sprite.texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST
+		MapEditorInstanceService.configure_runtime_material_canvas_item(sprite, instance);sprite.texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST
 		add_child(sprite);_environment_nodes.append(sprite)
 
 
