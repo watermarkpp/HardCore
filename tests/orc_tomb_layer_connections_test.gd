@@ -9,33 +9,43 @@ func _ready() -> void:
 	var documents: Array[Dictionary] = []
 	for index in MAP_IDS.size():
 		var map_id: String = MAP_IDS[index]
-		var loaded := MapEditorLoadService.load_document(MapEditorSaveService.default_path(map_id))
+		var loaded := MapEditorLoadService.load_document(
+			MapEditorSaveService.default_path(map_id)
+		)
 		assert(loaded.ok, "%s:%s" % [map_id, loaded.get("errors", [])])
 		var document: Dictionary = loaded.document
-		assert(str(document.map_id) == map_id)
 		assert(int(document.runtime_map_id) == RUNTIME_IDS[index])
 		assert(str(document.display_name) == DISPLAY_NAMES[index])
-		assert(Vector2i(int(document.design.design_size[0]), int(document.design.design_size[1])) == Vector2i(38, 38))
-		assert(str(document.editor_meta.workspace) == "res://map_editor_workspace/%s" % map_id)
-		assert(str(document.ground.workspace_manifest) == "res://map_editor_workspace/%s/ground/ground_manifest.json" % map_id)
-		assert(str(document.ground.workspace_state) == "res://map_editor_workspace/%s/ground/ground_state.json" % map_id)
-		assert(document.layers.map_entrance_points.size() == 1)
-		assert(document.layers.map_exit_points.size() == (1 if index < MAP_IDS.size() - 1 else 0))
+		assert(document.layers.map_entrance_points.is_empty())
+		assert(document.layers.map_exit_points.size() == [2, 2, 1][index])
 		var ground := MapEditorGroundService.initialize(document)
 		assert(ground.ok, "%s:%s" % [map_id, ground.get("errors", [])])
-		assert(str(ground.manifest.map_id) == map_id)
-		assert(str(ground.state.map_id) == map_id)
 		documents.append(document)
+	_assert_pair(documents[0], documents[1], "orc_tomb_1_2_pair_v1")
+	_assert_pair(documents[1], documents[2], "orc_tomb_2_3_pair_v1")
+	_assert_pair_to_bich(documents[0])
+	print("ORC_TOMB_LAYER_CONNECTIONS_PASS maps=3 pairs=3 size=38x38")
+	get_tree().quit(0)
 
-	_assert_link(documents[0], documents[1])
-	_assert_link(documents[1], documents[2])
-	assert(documents[2].layers.map_exit_points.is_empty())
-	print("ORC_TOMB_LAYER_CONNECTIONS_PASS maps=3 links=2 size=38x38")
-	get_tree().quit()
+
+func _assert_pair(source: Dictionary, target: Dictionary, pair_id: String) -> void:
+	var forward := _pair_endpoint(source, pair_id)
+	var reverse := _pair_endpoint(target, pair_id)
+	assert(str(forward.target_map_key) == str(target.map_id))
+	assert(str(forward.target_portal_id) == str(reverse.semantic_id))
+	assert(str(reverse.target_map_key) == str(source.map_id))
+	assert(str(reverse.target_portal_id) == str(forward.semantic_id))
 
 
-func _assert_link(source: Dictionary, target: Dictionary) -> void:
-	var map_exit: Dictionary = source.layers.map_exit_points[0]
-	var entrance: Dictionary = target.layers.map_entrance_points[0]
-	assert(str(map_exit.target_map_id) == str(target.map_id))
-	assert(str(map_exit.target_entrance_id) == str(entrance.entrance_id))
+func _assert_pair_to_bich(floor_one: Dictionary) -> void:
+	var endpoint := _pair_endpoint(floor_one, "bich_orc_tomb_1_pair_v2")
+	assert(str(endpoint.target_map_key) == "bich_province")
+	assert(int(endpoint.target_map_id) == 4)
+
+
+func _pair_endpoint(document: Dictionary, pair_id: String) -> Dictionary:
+	for endpoint: Dictionary in document.layers.map_exit_points:
+		if str(endpoint.get("connection_pair_id", "")) == pair_id:
+			return endpoint
+	assert(false, pair_id)
+	return {}

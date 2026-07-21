@@ -49,6 +49,14 @@ static func validate_runtime(runtime: Dictionary, raw_text := "") -> Array[Strin
 	for map_exit: Dictionary in runtime.get("semantics", {}).get("map_exit_points", []):
 		if str(map_exit.get("target_map_id", "")).strip_edges().is_empty():
 			errors.append("runtime_map_exit_target_missing")
+		if bool(map_exit.get("arrival_only", false)):
+			if bool(map_exit.get("trigger_on_enter", true)):
+				errors.append("runtime_arrival_only_trigger_enabled")
+			if bool(map_exit.get("target_configured", true)):
+				errors.append("runtime_arrival_only_target_enabled")
+			continue
+		if not bool(map_exit.get("target_configured", false)):
+			continue
 		if str(map_exit.get("portal_contract_id", "")) == PortalRuntimeService.PORTAL_CONTRACT_ID:
 			for field: String in [
 				"target_portal_id",

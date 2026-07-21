@@ -111,6 +111,123 @@ static func configure_bidirectional(
 	}
 
 
+static func configure_bidirectional_endpoints(
+	source: Dictionary,
+	source_exit_id: String,
+	target: Dictionary,
+	target_exit_id: String,
+	pair_id: String,
+	forward_display_name: String,
+	reverse_display_name: String,
+	forward_connection_id: String,
+	reverse_connection_id: String
+) -> Dictionary:
+	if pair_id.strip_edges().is_empty():
+		return {"ok": false, "errors": ["connection_pair_id_required"]}
+	var source_endpoint := _entry(
+		source.layers.get("map_exit_points", []), source_exit_id
+	)
+	var target_endpoint := _entry(
+		target.layers.get("map_exit_points", []), target_exit_id
+	)
+	if source_endpoint.is_empty():
+		return {"ok": false, "errors": ["source_portal_missing"]}
+	if target_endpoint.is_empty():
+		return {"ok": false, "errors": ["target_portal_missing"]}
+	_configure_endpoint(
+		source_endpoint,
+		source,
+		target,
+		target_endpoint,
+		pair_id,
+		"forward",
+		forward_display_name,
+		forward_connection_id
+	)
+	_configure_endpoint(
+		target_endpoint,
+		target,
+		source,
+		source_endpoint,
+		pair_id,
+		"reverse",
+		reverse_display_name,
+		reverse_connection_id
+	)
+	_link_reciprocals(source, source_endpoint, target, target_endpoint)
+	_mark_document(source)
+	_mark_document(target)
+	return {
+		"ok": true,
+		"pair_id": pair_id,
+		"forward_endpoint": source_endpoint,
+		"reverse_endpoint": target_endpoint,
+	}
+
+
+static func configure_one_way_to_arrival(
+	source: Dictionary,
+	source_exit_id: String,
+	target: Dictionary,
+	target_arrival_id: String,
+	display_name: String,
+	connection_id: String,
+	reason: String
+) -> Dictionary:
+	var source_endpoint := _entry(
+		source.layers.get("map_exit_points", []), source_exit_id
+	)
+	var target_arrival := _entry(
+		target.layers.get("map_exit_points", []), target_arrival_id
+	)
+	if source_endpoint.is_empty():
+		return {"ok": false, "errors": ["source_portal_missing"]}
+	if target_arrival.is_empty():
+		return {"ok": false, "errors": ["target_arrival_missing"]}
+	var one_way := configure_explicit_one_way(source_endpoint, reason)
+	if not bool(one_way.get("ok", false)):
+		return one_way
+	source_endpoint["display_name"] = display_name
+	source_endpoint["target_configured"] = true
+	source_endpoint["target_map_id"] = int(target.runtime_map_id)
+	source_endpoint["target_map_key"] = str(target.map_id)
+	source_endpoint["target_portal_id"] = str(target_arrival.semantic_id)
+	source_endpoint["target_entrance_id"] = str(target_arrival.semantic_id)
+	source_endpoint["target_tile"] = target_arrival.tile.duplicate()
+	source_endpoint["official_connection_id"] = connection_id
+	source_endpoint["source_map_key"] = str(source.map_id)
+
+	target_arrival.merge(new_exit_defaults(), true)
+	for field: String in [
+		"connection_pair_id",
+		"reciprocal_exit_id",
+		"reciprocal_map_key",
+		"target_portal_id",
+		"target_entrance_id",
+		"target_tile",
+		"official_connection_id",
+	]:
+		target_arrival.erase(field)
+	target_arrival["display_name"] = "尸王殿入口（仅到达）"
+	target_arrival["portal_role"] = "arrival_only_endpoint"
+	target_arrival["semantic_role"] = "map_portal_arrival_anchor"
+	target_arrival["connection_mode"] = "arrival_only"
+	target_arrival["one_way"] = false
+	target_arrival["arrival_only"] = true
+	target_arrival["trigger_on_enter"] = false
+	target_arrival["target_configured"] = false
+	target_arrival["target_map_id"] = -1
+	target_arrival["explicit_one_way_reason"] = reason.strip_edges()
+	target_arrival["exit_policy"] = "town_scroll_or_death_only"
+	_mark_document(source)
+	_mark_document(target)
+	return {
+		"ok": true,
+		"source_endpoint": source_endpoint,
+		"target_arrival": target_arrival,
+	}
+
+
 static func configure_explicit_one_way(
 	map_exit: Dictionary,
 	reason: String
@@ -139,6 +256,10 @@ static func validate_document(document: Dictionary) -> Array[String]:
 	for endpoint: Dictionary in document.get("layers", {}).get(
 		"map_exit_points", []
 	):
+		var semantic_id := str(endpoint.get("semantic_id", ""))
+		if bool(endpoint.get("arrival_only", false)):
+			_validate_arrival_only(endpoint, semantic_id, errors)
+			continue
 		if not bool(endpoint.get("target_configured", false)):
 			continue
 		var policy_id := str(endpoint.get("connection_policy_id", ""))
@@ -150,7 +271,6 @@ static func validate_document(document: Dictionary) -> Array[String]:
 			continue
 		if policy_id != POLICY_ID:
 			continue
-		var semantic_id := str(endpoint.get("semantic_id", ""))
 		if str(endpoint.get("portal_contract_id", "")) != PORTAL_CONTRACT_ID:
 			errors.append("unified_portal_contract_required:%s" % semantic_id)
 		if bool(endpoint.get("one_way", false)):
@@ -323,6 +443,36 @@ static func _validate_one_way(
 		errors.append("one_way_mode_mismatch:%s" % semantic_id)
 	if str(endpoint.get("explicit_one_way_reason", "")).strip_edges().is_empty():
 		errors.append("one_way_reason_required:%s" % semantic_id)
+	if str(endpoint.get("portal_role", "")) != "one_way_endpoint":
+		errors.append("one_way_portal_role_required:%s" % semantic_id)
+	for field: String in [
+		"target_map_key",
+		"target_portal_id",
+	]:
+		if str(endpoint.get(field, "")).strip_edges().is_empty():
+			errors.append("%s_required:%s" % [field, semantic_id])
+	var target_tile: Array = endpoint.get("target_tile", [])
+	if target_tile.size() != 2:
+		errors.append("target_tile_required:%s" % semantic_id)
+
+
+static func _validate_arrival_only(
+	endpoint: Dictionary,
+	semantic_id: String,
+	errors: Array[String]
+) -> void:
+	if str(endpoint.get("portal_contract_id", "")) != PORTAL_CONTRACT_ID:
+		errors.append("arrival_portal_contract_required:%s" % semantic_id)
+	if str(endpoint.get("portal_role", "")) != "arrival_only_endpoint":
+		errors.append("arrival_only_portal_role_required:%s" % semantic_id)
+	if str(endpoint.get("connection_mode", "")) != "arrival_only":
+		errors.append("arrival_only_mode_required:%s" % semantic_id)
+	if bool(endpoint.get("trigger_on_enter", true)):
+		errors.append("arrival_only_trigger_must_be_disabled:%s" % semantic_id)
+	if bool(endpoint.get("target_configured", true)):
+		errors.append("arrival_only_target_must_be_disabled:%s" % semantic_id)
+	if str(endpoint.get("exit_policy", "")) != "town_scroll_or_death_only":
+		errors.append("arrival_only_exit_policy_required:%s" % semantic_id)
 
 
 static func _validate_pair_endpoint(

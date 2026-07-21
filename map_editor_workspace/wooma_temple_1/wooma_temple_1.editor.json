@@ -31,11 +31,13 @@
     "content_policy": "empty_layers",
     "created_by": "human_codex_shared_tool",
     "default_connection_mode": "bidirectional",
+    "phase1_map_production_complete": true,
+    "phase1_network_version_id": "phase1_finished_map_network_v1",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 4.0,
+    "revision": 5.0,
     "route_version_id": "wooma_temple_user_route_v3_unified_portals",
     "runtime_approved": true,
-    "runtime_approved_revision": 4,
+    "runtime_approved_revision": 5,
     "template_kind": "empty_map",
     "wooma_wall_corner_contract": "native_2to1_straight_overlap_v1",
     "wooma_wall_corner_migration": "WOOMA-TEMPLE-1-NO-PILLAR-V1",
@@ -1894,102 +1896,6 @@
         },
         "shape": "rect",
         "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000115",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            25.0,
-            43.0,
-            19.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000116",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            43.0,
-            0.0,
-            1.0,
-            44.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000117",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            23.0,
-            0.0,
-            21.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000118",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            0.0,
-            0.0,
-            16.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000119",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            0.0,
-            0.0,
-            1.0,
-            44.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000120",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            0.0,
-            43.0,
-            18.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
       }
     ],
     "collision_erase": [
@@ -2310,7 +2216,7 @@
         "source_map_key": "wooma_temple_1",
         "target_configured": true,
         "target_entrance_id": "map_exit_000002",
-        "target_map_id": 314,
+        "target_map_id": 314.0,
         "target_map_key": "wooma_temple_2",
         "target_portal_id": "map_exit_000002",
         "target_tile": [
@@ -2352,7 +2258,7 @@
         "source_map_key": "wooma_temple_1",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 268,
+        "target_map_id": 268.0,
         "target_map_key": "wooma_forest",
         "target_portal_id": "map_exit_000001",
         "target_tile": [

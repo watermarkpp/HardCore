@@ -1,5 +1,5 @@
 {
-  "build_sha256": "a5dfeee8dd7f849624cd1ccc16da34bc3d2170880f6218925b2467d8149b1be1",
+  "build_sha256": "fe8cb448385c3734f7ed7016a733a285a93ef41c16f1f67f449c878195c95f44",
   "collision": {
     "blocked_count": 180.0,
     "blocked_tiles": [
@@ -12544,17 +12544,114 @@
           73.0
         ],
         "trigger_on_enter": true
+      }
+    ],
+    "light": [],
+    "map_entrance_points": [],
+    "map_exit_points": [
+      {
+        "arrival_locks_current_portal": true,
+        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+        "blocks_movement": false,
+        "connection_direction": "forward",
+        "connection_mode": "bidirectional",
+        "connection_pair_id": "bich_wooma_forest_pair_v2",
+        "connection_policy_id": "map_connection_unified_bidirectional_v2",
+        "content_layer": "personal_expansion",
+        "display_name": "前往沃玛森林",
+        "exit_id": "map_exit_000001",
+        "kind": "map_exit",
+        "official_connection_id": "bich_north_to_wooma_forest_v2",
+        "one_way": false,
+        "portal_contract_id": "unified_map_portal_endpoint_v1",
+        "portal_role": "bidirectional_endpoint",
+        "reciprocal_exit_id": "map_exit_000004",
+        "reciprocal_map_key": "wooma_forest",
+        "requires_leave_before_retrigger": true,
+        "return_minimum_seconds": 3.0,
+        "return_requires_fresh_activation": true,
+        "return_unlock_distance_tiles": 1.5,
+        "runtime_export": true,
+        "semantic_id": "map_exit_000001",
+        "semantic_role": "map_portal_endpoint",
+        "source_map_key": "bich_province",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000004",
+        "target_map_id": 268.0,
+        "target_map_key": "wooma_forest",
+        "target_portal_id": "map_exit_000004",
+        "target_tile": [
+          3.0,
+          52.0
+        ],
+        "tile": [
+          6.0,
+          5.0
+        ],
+        "travel_request_single_flight": true,
+        "trigger_on_enter": true
       },
       {
+        "arrival_locks_current_portal": true,
+        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+        "blocks_movement": false,
+        "connection_direction": "forward",
+        "connection_mode": "bidirectional",
+        "connection_pair_id": "bich_orc_tomb_1_pair_v2",
+        "connection_policy_id": "map_connection_unified_bidirectional_v2",
+        "content_layer": "personal_expansion",
+        "display_name": "进入兽人古墓一层",
+        "exit_id": "map_exit_000002",
+        "kind": "map_exit",
+        "official_connection_id": "bich_east_to_orc_tomb_1_v3",
+        "one_way": false,
+        "portal_contract_id": "unified_map_portal_endpoint_v1",
+        "portal_role": "bidirectional_endpoint",
+        "reciprocal_exit_id": "map_exit_000002",
+        "reciprocal_map_key": "orc_tomb_1",
+        "requires_leave_before_retrigger": true,
+        "return_minimum_seconds": 3.0,
+        "return_requires_fresh_activation": true,
+        "return_unlock_distance_tiles": 1.5,
+        "runtime_export": true,
+        "semantic_id": "map_exit_000002",
+        "semantic_role": "map_portal_endpoint",
+        "source_map_key": "bich_province",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000002",
+        "target_map_id": 217.0,
+        "target_map_key": "orc_tomb_1",
+        "target_portal_id": "map_exit_000002",
+        "target_tile": [
+          3.0,
+          35.0
+        ],
+        "tile": [
+          72.0,
+          5.0
+        ],
+        "travel_request_single_flight": true,
+        "trigger_on_enter": true
+      },
+      {
+        "arrival_locks_current_portal": true,
+        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "auto_created_from_asset": true,
         "blocks_movement": false,
+        "connection_direction": "forward",
+        "connection_mode": "bidirectional",
+        "connection_pair_id": "bich_mine_1_pair_v1",
+        "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
-        "display_name": "待配置地图传送门",
-        "door_id": "door.inst_000016",
-        "kind": "door",
+        "display_name": "进入矿区一层",
+        "exit_id": "map_exit_000003",
+        "kind": "map_exit",
         "linked_visual_instance_id": "inst_000016",
+        "official_connection_id": "bich_bottom_to_mine_1_v1",
         "one_way": false,
         "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+        "portal_contract_id": "unified_map_portal_endpoint_v1",
+        "portal_role": "bidirectional_endpoint",
         "portal_trigger_policy_id": "bich_cave_mouth_explicit_v1",
         "portal_visual_footprint_tiles": [
           8.0,
@@ -12564,73 +12661,30 @@
           0.0,
           72.0
         ],
+        "reciprocal_exit_id": "map_exit_000001",
+        "reciprocal_map_key": "bich_mine_1",
+        "requires_leave_before_retrigger": true,
+        "return_minimum_seconds": 3.0,
+        "return_requires_fresh_activation": true,
+        "return_unlock_distance_tiles": 1.5,
         "runtime_export": true,
-        "semantic_id": "door_000004",
-        "semantic_role": "map_portal",
-        "target_configured": false,
-        "target_map_id": -1.0,
+        "semantic_id": "map_exit_000003",
+        "semantic_role": "map_portal_endpoint",
+        "source_map_key": "bich_province",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000001",
+        "target_map_id": 406.0,
+        "target_map_key": "bich_mine_1",
+        "target_portal_id": "map_exit_000001",
         "target_tile": [
-          0.0,
-          0.0
+          3.0,
+          46.0
         ],
         "tile": [
           7.0,
           74.0
         ],
-        "trigger_on_enter": true
-      }
-    ],
-    "light": [],
-    "map_entrance_points": [],
-    "map_exit_points": [
-      {
-        "blocks_movement": false,
-        "content_layer": "personal_expansion",
-        "display_name": "前往沃玛森林",
-        "exit_id": "map_exit_000001",
-        "kind": "map_exit",
-        "official_connection_id": "bich_north_to_wooma_forest_v1",
-        "portal_role": "exit",
-        "runtime_export": true,
-        "semantic_id": "map_exit_000001",
-        "semantic_role": "map_exit_trigger",
-        "target_configured": true,
-        "target_entrance_id": "map_entrance_000001",
-        "target_map_id": 268.0,
-        "target_map_key": "wooma_forest",
-        "target_tile": [
-          3.0,
-          52.0
-        ],
-        "tile": [
-          6.0,
-          5.0
-        ],
-        "trigger_on_enter": true
-      },
-      {
-        "blocks_movement": false,
-        "content_layer": "personal_expansion",
-        "display_name": "进入兽人古墓一层",
-        "exit_id": "map_exit_000002",
-        "kind": "map_exit",
-        "official_connection_id": "bich_east_to_orc_tomb_1_v2",
-        "portal_role": "exit",
-        "runtime_export": true,
-        "semantic_id": "map_exit_000002",
-        "semantic_role": "map_exit_trigger",
-        "target_configured": true,
-        "target_entrance_id": "map_entrance_000001",
-        "target_map_id": 217.0,
-        "target_map_key": "orc_tomb_1",
-        "target_tile": [
-          3.0,
-          35.0
-        ],
-        "tile": [
-          72.0,
-          5.0
-        ],
+        "travel_request_single_flight": true,
         "trigger_on_enter": true
       }
     ],
@@ -13749,6 +13803,6 @@
     "content_layer": "personal_expansion",
     "editor_schema_version": 4.0,
     "map_id": "bich_province",
-    "revision": 4.0
+    "revision": 5.0
   }
 }
