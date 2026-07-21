@@ -70,6 +70,8 @@ var point_erase_toggle: CheckBox
 var region_fill_menu: PopupMenu
 var asset_size_menu: PopupMenu
 var asset_size_menu_asset_id := ""
+var asset_delete_dialog: ConfirmationDialog
+var pending_asset_delete_id := ""
 var instance_size_menu: PopupMenu
 var instance_size_menu_instance_id := ""
 var pending_fill_tiles: Array[Vector2i] = []
@@ -232,7 +234,8 @@ func _build_ui() -> void:
 	preview.clipboard_paste_requested.connect(_on_clipboard_paste_requested)
 	preview.clipboard_paste_cancelled.connect(_on_clipboard_paste_cancelled)
 	region_fill_menu = PopupMenu.new(); region_fill_menu.add_item("用素材列表已选地面随机填充", 1); region_fill_menu.add_item("删除套索内地面和对象", 3); region_fill_menu.add_separator(); region_fill_menu.add_item("取消", 2); region_fill_menu.id_pressed.connect(_on_region_fill_menu_pressed); add_child(region_fill_menu)
-	asset_size_menu = PopupMenu.new(); asset_size_menu.add_item("放大一格", 1); asset_size_menu.add_item("缩小一格", 2); asset_size_menu.add_separator(); asset_size_menu.add_item("恢复初始占位", 3); asset_size_menu.id_pressed.connect(_on_asset_size_menu_pressed); add_child(asset_size_menu)
+	asset_size_menu = PopupMenu.new(); asset_size_menu.add_item("放大一格", 1); asset_size_menu.add_item("缩小一格", 2); asset_size_menu.add_separator(); asset_size_menu.add_item("恢复初始占位", 3); asset_size_menu.add_separator(); asset_size_menu.add_item("删除素材", 4); asset_size_menu.id_pressed.connect(_on_asset_size_menu_pressed); add_child(asset_size_menu)
+	_build_asset_delete_dialog()
 	instance_size_menu = PopupMenu.new(); instance_size_menu.add_item("放大当前地图素材", 1); instance_size_menu.add_item("缩小当前地图素材", 2); instance_size_menu.id_pressed.connect(_on_instance_size_menu_pressed); add_child(instance_size_menu)
 	_on_semantic_kind_selected(0)
 	var first_asset := _first_asset_tree_item()
@@ -296,6 +299,16 @@ func _build_create_map_dialog() -> void:
 	var cancel_button := Button.new(); cancel_button.text = "取消"; cancel_button.pressed.connect(create_map_dialog.hide); actions.add_child(cancel_button)
 	create_dialog_submit_button = Button.new(); create_dialog_submit_button.text = "创建地图模板"; create_dialog_submit_button.pressed.connect(_on_create_pressed); actions.add_child(create_dialog_submit_button)
 	_refresh_create_size_preview()
+
+
+func _build_asset_delete_dialog() -> void:
+	asset_delete_dialog = ConfirmationDialog.new()
+	asset_delete_dialog.title = "删除素材"
+	asset_delete_dialog.get_ok_button().text = "删除素材"
+	asset_delete_dialog.get_cancel_button().text = "取消"
+	asset_delete_dialog.confirmed.connect(_on_asset_delete_confirmed)
+	asset_delete_dialog.canceled.connect(_on_asset_delete_cancelled)
+	add_child(asset_delete_dialog)
 
 
 func _refresh_create_size_preview() -> void:
@@ -751,6 +764,7 @@ func _reset_document_session_state() -> void:
 	safe_polygon_points.clear()
 	pending_fill_tiles.clear()
 	asset_size_menu_asset_id = ""
+	pending_asset_delete_id = ""
 	instance_size_menu_instance_id = ""
 	if preview != null:
 		preview.reset_for_document_open()
@@ -880,6 +894,9 @@ func _on_asset_tree_gui_input(event: InputEvent) -> void:
 
 
 func _on_asset_size_menu_pressed(action_id: int) -> void:
+	if action_id == 4:
+		_request_asset_delete(asset_size_menu_asset_id)
+		return
 	var asset := MapAssetCatalogService.find_asset(asset_size_menu_asset_id)
 	var base := MapAssetCatalogService.find_base_asset(asset_size_menu_asset_id)
 	if asset.is_empty() or base.is_empty():
@@ -898,6 +915,45 @@ func _on_asset_size_menu_pressed(action_id: int) -> void:
 		status_label.text = "素材占位已调整为 %d×%d 格" % [new_fp[0], new_fp[1]]
 	else:
 		status_label.text = "素材尺寸调整失败：%s" % result.get("errors", [])
+
+
+func _request_asset_delete(asset_id: String) -> void:
+	var asset := MapAssetCatalogService.find_asset(asset_id)
+	if asset.is_empty():
+		status_label.text = "删除素材失败：找不到素材 %s" % asset_id
+		return
+	pending_asset_delete_id = asset_id
+	asset_delete_dialog.dialog_text = (
+		"确定从素材列表删除“%s”吗？\n\n"
+		+ "原图文件和地图中已放置的内容会保留，避免破坏已有地图。"
+	) % str(asset.get("display_name", asset_id))
+	asset_delete_dialog.popup_centered(Vector2i(460, 180))
+
+
+func _on_asset_delete_confirmed() -> void:
+	var asset_id := pending_asset_delete_id
+	pending_asset_delete_id = ""
+	if asset_id.is_empty():
+		return
+	var asset := MapAssetCatalogService.find_asset(asset_id)
+	var display_name := str(asset.get("display_name", asset_id))
+	var result := MapAssetCalibrationService.delete_from_palette(asset_id)
+	if not result.get("ok", false):
+		status_label.text = "删除素材失败：%s" % result.get("errors", [])
+		return
+	MapAssetCatalogService.invalidate_cache()
+	selected_asset_id = ""
+	preview.set_selected_brush("")
+	_refresh_asset_tree()
+	var first_asset := _first_asset_tree_item()
+	if first_asset != null:
+		first_asset.select(0)
+		_activate_asset_tree_item(first_asset)
+	status_label.text = "已从素材列表删除：%s（原图和地图实例已保留）" % display_name
+
+
+func _on_asset_delete_cancelled() -> void:
+	pending_asset_delete_id = ""
 
 
 static func build_asset_resize_draft(asset: Dictionary, base: Dictionary, action_id: int) -> Dictionary:

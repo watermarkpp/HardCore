@@ -58,6 +58,24 @@ static func save_override(asset_id: String, draft: Dictionary, path := OVERRIDE_
 	return _write_atomic(path, payload)
 
 
+static func delete_from_palette(asset_id: String, path := OVERRIDE_PATH) -> Dictionary:
+	var base := MapAssetCatalogService.find_base_asset(asset_id)
+	if base.is_empty():
+		return {"ok": false, "errors": ["asset_not_found"]}
+	var payload := load_overrides(path)
+	var overrides: Dictionary = payload.get("overrides", {})
+	var existing: Dictionary = overrides.get(asset_id, {}).duplicate(true)
+	existing["placeable"] = false
+	existing["content_layer"] = "personal_expansion"
+	overrides[asset_id] = existing
+	payload["overrides"] = overrides
+	var result := _write_atomic(path, payload)
+	if result.get("ok", false):
+		result["asset_id"] = asset_id
+		result["deleted_from_palette"] = true
+	return result
+
+
 static func _write_atomic(path: String, value: Dictionary) -> Dictionary:
 	var resolved := ProjectSettings.globalize_path(path) if path.begins_with("res://") or path.begins_with("user://") else path
 	var mkdir_error := DirAccess.make_dir_recursive_absolute(resolved.get_base_dir())
