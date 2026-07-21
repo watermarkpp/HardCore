@@ -1,6 +1,10 @@
 class_name MapEditorGameplaySemanticService
 extends RefCounted
 
+const ConnectionPolicyService := preload(
+	"res://scripts/map_editor/map_editor_connection_policy_service.gd"
+)
+
 const KIND_TO_LAYER := {
 	"npc": "npc_points", "monster_spawn": "monster_spawn", "boss_spawn": "boss_spawn", "door": "door_points",
 	"map_entrance": "map_entrance_points", "map_exit": "map_exit_points", "respawn_point": "respawn_points",
@@ -198,7 +202,12 @@ static func _defaults(kind: String, tile: Vector2i, properties: Dictionary) -> D
 		"boss_spawn": entry.merge({"boss_id": "boss.unassigned", "count": 1, "max_alive": 1, "respawn_seconds": 1800, "radius_tiles": 0, "spawn_rule": "boss"})
 		"door": entry.merge({"door_id": "door.unassigned", "target_map_id": "", "target_tile": [0, 0], "one_way": false, "semantic_role":"map_portal", "trigger_on_enter":true, "blocks_movement":false})
 		"map_entrance": entry.merge({"entrance_id": "entrance.unassigned", "portal_role": "entrance", "is_default": false, "semantic_role": "map_landing_point", "blocks_movement": false})
-		"map_exit": entry.merge({"exit_id": "exit.unassigned", "portal_role": "exit", "target_map_id": "", "target_entrance_id": "", "semantic_role": "map_exit_trigger", "trigger_on_enter": true, "blocks_movement": false})
+		"map_exit":
+			entry.merge({"exit_id": "exit.unassigned", "portal_role": "exit", "target_map_id": "", "target_entrance_id": "", "semantic_role": "map_exit_trigger", "trigger_on_enter": true, "blocks_movement": false})
+			entry.merge(
+				ConnectionPolicyService.new_exit_defaults(),
+				true
+			)
 		"respawn_point": entry.merge({"respawn_id": "respawn.unassigned", "is_birth_point": true, "is_respawn_point": true, "is_default": true, "semantic_role": "birth_and_respawn"})
 		"safe_area": entry.merge({"area_id": "safe.unassigned", "shape": "circle", "radius_tiles": 4, "polygon_tiles": [], "blocks_pvp": true, "blocks_monster_damage": true, "return_anchor": false})
 		"light": entry.merge({"light_id": "light.unassigned", "radius_tiles": 3, "color": "#f2b96d", "intensity": 1.0, "flicker": false})

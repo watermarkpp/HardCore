@@ -1,5 +1,5 @@
 {
-  "build_sha256": "9708f79ad547519ff3a70a091942586216c645bcb99ba4b68906cd0461d4f694",
+  "build_sha256": "00cd672bb40df119595fa79363b03a73b0da26fab8e6c6eb059063c671aaa525",
   "collision": {
     "blocked_count": 88.0,
     "blocked_tiles": [
@@ -8048,9 +8048,8 @@
       {
         "blocks_movement": false,
         "content_layer": "personal_expansion",
-        "display_name": "沃玛寺庙一层入口",
         "entrance_id": "map_entrance_000001",
-        "is_default": true,
+        "is_default": false,
         "kind": "map_entrance",
         "portal_role": "entrance",
         "runtime_export": true,
@@ -8064,16 +8063,26 @@
     ],
     "map_exit_points": [
       {
+        "arrival_reentry_policy_id": "portal_leave_then_reenter_v1",
         "blocks_movement": false,
+        "connection_direction": "forward",
+        "connection_mode": "bidirectional",
+        "connection_pair_id": "wooma_temple_1_2_pair_v1",
+        "connection_policy_id": "map_connection_bidirectional_default_v1",
         "content_layer": "personal_expansion",
         "display_name": "前往沃玛寺庙二层",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
-        "official_connection_id": "wooma_temple_1_to_2_v1",
+        "official_connection_id": "wooma_temple_1_to_2_v2",
+        "one_way": false,
         "portal_role": "exit",
+        "reciprocal_exit_id": "map_exit_000002",
+        "reciprocal_map_key": "wooma_temple_2",
+        "requires_leave_before_retrigger": true,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_exit_trigger",
+        "source_map_key": "wooma_temple_1",
         "target_configured": true,
         "target_entrance_id": "map_entrance_000001",
         "target_map_id": 314.0,
@@ -8085,6 +8094,42 @@
         "tile": [
           18.0,
           2.0
+        ],
+        "trigger_on_enter": true
+      },
+      {
+        "arrival_reentry_policy_id": "portal_leave_then_reenter_v1",
+        "blocks_movement": false,
+        "connection_direction": "reverse",
+        "connection_mode": "bidirectional",
+        "connection_pair_id": "wooma_forest_temple_1_pair_v1",
+        "connection_policy_id": "map_connection_bidirectional_default_v1",
+        "content_layer": "personal_expansion",
+        "display_name": "返回沃玛森林",
+        "exit_id": "map_exit_000002",
+        "kind": "map_exit",
+        "official_connection_id": "wooma_temple_1_to_forest_v1",
+        "one_way": false,
+        "portal_role": "exit",
+        "reciprocal_exit_id": "map_exit_000001",
+        "reciprocal_map_key": "wooma_forest",
+        "requires_leave_before_retrigger": true,
+        "runtime_export": true,
+        "semantic_id": "map_exit_000002",
+        "semantic_role": "map_exit_trigger",
+        "shared_with_entrance_id": "map_entrance_000001",
+        "source_map_key": "wooma_temple_1",
+        "target_configured": true,
+        "target_entrance_id": "map_entrance_000001",
+        "target_map_id": 268.0,
+        "target_map_key": "wooma_forest",
+        "target_tile": [
+          3.0,
+          52.0
+        ],
+        "tile": [
+          20.0,
+          41.0
         ],
         "trigger_on_enter": true
       }

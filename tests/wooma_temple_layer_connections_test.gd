@@ -13,7 +13,7 @@ const DISPLAY_NAMES := [
 	"沃玛寺庙二层",
 	"沃玛教主大厅",
 ]
-const ROUTE_VERSION_ID := "wooma_temple_user_route_v1"
+const ROUTE_VERSION_ID := "wooma_temple_user_route_v2_bidirectional"
 
 
 func _ready() -> void:
@@ -71,9 +71,9 @@ func _ready() -> void:
 
 	_assert_clone_layers(floor_one, floor_two, false)
 	_assert_clone_layers(floor_one, leader_hall, true)
-	assert(floor_one.layers.map_exit_points.size() == 1)
-	assert(floor_two.layers.map_exit_points.size() == 1)
-	assert(leader_hall.layers.map_exit_points.is_empty())
+	assert(floor_one.layers.map_exit_points.size() == 2)
+	assert(floor_two.layers.map_exit_points.size() == 2)
+	assert(leader_hall.layers.map_exit_points.size() == 1)
 
 	var forest: Dictionary = documents["wooma_forest"]
 	var forest_top := _entry(
@@ -85,21 +85,33 @@ func _ready() -> void:
 		Vector2i(51, 4),
 		"进入沃玛寺庙一层",
 		floor_one,
-		"wooma_forest_top_to_temple_1_v1"
+		"wooma_forest_top_to_temple_1_v2"
 	)
 	_assert_link(
 		floor_one.layers.map_exit_points[0],
 		Vector2i(18, 2),
 		"前往沃玛寺庙二层",
 		floor_two,
-		"wooma_temple_1_to_2_v1"
+		"wooma_temple_1_to_2_v2"
 	)
 	_assert_link(
 		floor_two.layers.map_exit_points[0],
 		Vector2i(18, 2),
 		"进入沃玛教主大厅",
 		leader_hall,
-		"wooma_temple_2_to_leader_hall_v1"
+		"wooma_temple_2_to_leader_hall_v2"
+	)
+	_assert_reciprocal_pair(
+		forest_top,
+		_entry(floor_one.layers.map_exit_points, "map_exit_000002")
+	)
+	_assert_reciprocal_pair(
+		floor_one.layers.map_exit_points[0],
+		_entry(floor_two.layers.map_exit_points, "map_exit_000002")
+	)
+	_assert_reciprocal_pair(
+		floor_two.layers.map_exit_points[0],
+		_entry(leader_hall.layers.map_exit_points, "map_exit_000001")
 	)
 	for semantic_id: String in [
 		"map_exit_000002",
@@ -144,11 +156,12 @@ func _ready() -> void:
 	)
 	assert(str(marker.route_version_id) == ROUTE_VERSION_ID)
 	assert(marker.maps.size() == 4)
-	assert(marker.connections.size() == 3)
+	assert(marker.connection_pairs.size() == 3)
+	assert(marker.connections.size() == 6)
 	print(
 		"WOOMA_TEMPLE_LAYER_CONNECTIONS_PASS "
-		+ "maps=4 links=3 clone_size=44x44 "
-		+ "route=268->313->314->315"
+		+ "maps=4 pairs=3 directed_links=6 clone_size=44x44 "
+		+ "route=268<->313<->314<->315"
 	)
 	get_tree().quit(0)
 
@@ -158,16 +171,9 @@ func _assert_clone_layers(
 	clone: Dictionary,
 	final_hall: bool
 ) -> void:
-	for layer_name: String in source.layers:
-		if layer_name in [
-			"map_entrance_points",
-			"map_exit_points",
-		]:
-			continue
-		assert(
-			clone.layers[layer_name] == source.layers[layer_name],
-			"%s:%s" % [clone.map_id, layer_name]
-		)
+	# The user edits every copied floor independently after creation.  Preserve
+	# clone provenance, but never require live map content to remain identical.
+	assert(source.design.design_size == clone.design.design_size)
 	assert(
 		str(clone.editor_meta.clone_source_map_id)
 		== "wooma_temple_1"
@@ -176,11 +182,7 @@ func _assert_clone_layers(
 		str(clone.editor_meta.clone_size_policy)
 		== "exact_source_copy_44x44"
 	)
-	assert(
-		clone.layers.map_exit_points.is_empty()
-		if final_hall
-		else clone.layers.map_exit_points.size() == 1
-	)
+	assert(final_hall == (str(clone.map_id) == "wooma_temple_3"))
 
 
 func _assert_link(
@@ -202,6 +204,29 @@ func _assert_link(
 	)
 	assert(_tile_value(map_exit.target_tile) == _tile(entrance))
 	assert(str(map_exit.official_connection_id) == connection_id)
+	assert(str(map_exit.connection_mode) == "bidirectional")
+	assert(not bool(map_exit.one_way))
+	assert(bool(map_exit.requires_leave_before_retrigger))
+
+
+func _assert_reciprocal_pair(
+	forward_exit: Dictionary,
+	reverse_exit: Dictionary
+) -> void:
+	assert(str(forward_exit.connection_direction) == "forward")
+	assert(str(reverse_exit.connection_direction) == "reverse")
+	assert(
+		str(forward_exit.connection_pair_id)
+		== str(reverse_exit.connection_pair_id)
+	)
+	assert(
+		str(forward_exit.reciprocal_exit_id)
+		== str(reverse_exit.semantic_id)
+	)
+	assert(
+		str(reverse_exit.reciprocal_exit_id)
+		== str(forward_exit.semantic_id)
+	)
 
 
 func _assert_template(

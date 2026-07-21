@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "policy_id": "map_connection_bidirectional_default_v1",
+  "default_connection_mode": "bidirectional",
+  "one_way_requires_explicit_override": true,
+  "one_way_reason_required": true,
+  "reverse_exit_placement": "target_entrance_tile",
+  "arrival_reentry_policy_id": "portal_leave_then_reenter_v1",
+  "arrival_reentry_rule": "A player arriving at an entrance shared with a reverse exit must leave that trigger tile before the reverse exit can activate.",
+  "scope": "all_new_editor_map_connections",
+  "legacy_unconfigured_exits": "allowed_until_configured"
+}

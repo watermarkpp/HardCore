@@ -1,6 +1,10 @@
 class_name MapEditorBuildRuntimeService
 extends RefCounted
 
+const ConnectionPolicyService := preload(
+	"res://scripts/map_editor/map_editor_connection_policy_service.gd"
+)
+
 const RUNTIME_SCHEMA_VERSION := 1
 const RUNTIME_ROOT := "res://assets/data/runtime/map_editor/"
 
@@ -40,6 +44,9 @@ static func validate_for_runtime(document: Dictionary) -> Dictionary:
 			errors.append("door_target_map_required:%s" % semantic_id)
 		if str(entry.get("kind", "")) == "map_exit" and str(entry.get("target_map_id", "")).strip_edges().is_empty():
 			errors.append("map_exit_target_map_required:%s" % semantic_id)
+	errors.append_array(
+		ConnectionPolicyService.validate_document(document)
+	)
 	var walkability := MapEditorCollisionService.build_walkability(document)
 	if int(walkability.get("walkable_count", 0)) <= 0:
 		errors.append("map_has_no_walkable_tile")
