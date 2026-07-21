@@ -6,7 +6,7 @@ func _ready() -> void:
 
 
 func _run() -> void:
-	var expected_portals := {268: 1, 313: 2, 314: 2, 315: 1}
+	var expected_portals := {268: 2, 313: 2, 314: 2, 315: 1}
 	for map_id: int in [268, 313, 314, 315]:
 		assert(MapEditorRuntimeBridge.has_runtime_map(map_id))
 		var runtime := MapEditorRuntimeBridge.load_map(map_id)

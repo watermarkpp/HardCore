@@ -3,6 +3,11 @@ extends RefCounted
 
 const BICH_MAP_ID := 4
 const SAFE_RADIUS_TILES := 9.0
+const BOSS_RESPAWN_OVERRIDES := {
+	218: 3600.0,
+	221: 3600.0,
+	1578: 1800.0,
+}
 const MAP_CONFIG := {
 	4: {
 		"map_key": "bich_province",
@@ -28,6 +33,36 @@ const MAP_CONFIG := {
 		"map_key": "wooma_temple_3",
 		"display_name": "沃玛教主大厅",
 		"marker": "res://assets/data/runtime/map_editor/wooma_temple_route.manual_ready.json",
+	},
+	217: {
+		"map_key": "orc_tomb_1",
+		"display_name": "兽人古墓一层",
+		"marker": "res://assets/data/runtime/map_editor/phase1_map_network.manual_ready.json",
+	},
+	218: {
+		"map_key": "orc_tomb_2",
+		"display_name": "兽人古墓二层",
+		"marker": "res://assets/data/runtime/map_editor/phase1_map_network.manual_ready.json",
+	},
+	221: {
+		"map_key": "orc_tomb_3",
+		"display_name": "兽人古墓三层",
+		"marker": "res://assets/data/runtime/map_editor/phase1_map_network.manual_ready.json",
+	},
+	406: {
+		"map_key": "bich_mine_1",
+		"display_name": "矿区一层",
+		"marker": "res://assets/data/runtime/map_editor/phase1_map_network.manual_ready.json",
+	},
+	408: {
+		"map_key": "bich_mine_2",
+		"display_name": "矿区二层",
+		"marker": "res://assets/data/runtime/map_editor/phase1_map_network.manual_ready.json",
+	},
+	1578: {
+		"map_key": "corpse_king_hall",
+		"display_name": "尸王殿",
+		"marker": "res://assets/data/runtime/map_editor/phase1_map_network.manual_ready.json",
 	},
 }
 
@@ -189,7 +224,11 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 	for entry: Dictionary in semantics.get("monster_spawn", []):
 		result.spawns.append(_combat_spawn(runtime, entry))
 	for entry: Dictionary in semantics.get("boss_spawn", []):
-		result.bosses.append(_combat_spawn(runtime, entry))
+		result.bosses.append(_combat_spawn(
+			runtime,
+			entry,
+			float(BOSS_RESPAWN_OVERRIDES.get(runtime_map_id, -1.0))
+		))
 	for entry: Dictionary in semantics.get("npc_points", []):
 		var npc_id := str(entry.get("npc_id", ""))
 		var stock_key := str({
@@ -240,14 +279,18 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 
 static func _combat_spawn(
 	runtime: Dictionary,
-	entry: Dictionary
+	entry: Dictionary,
+	respawn_override := -1.0
 ) -> Dictionary:
 	var monster_key := str(entry.get("monster_id", "monster.-1"))
+	var respawn_seconds := float(entry.get("respawn_seconds", 60.0))
+	if respawn_override > 0.0:
+		respawn_seconds = respawn_override
 	return {
 		"name": entry.get("display_name", ""),
 		"monster_id": int(monster_key.trim_prefix("monster.")),
 		"position": tile_to_world(runtime, entry.get("tile", [0, 0])),
-		"respawn_seconds": float(entry.get("respawn_seconds", 60.0)),
+		"respawn_seconds": respawn_seconds,
 		"count": int(entry.get("count", 1)),
 		"max_alive": int(entry.get("max_alive", 1)),
 		"radius_tiles": float(entry.get("radius_tiles", 0.0)),

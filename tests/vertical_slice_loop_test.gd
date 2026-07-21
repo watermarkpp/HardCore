@@ -25,30 +25,31 @@ func _run() -> void:
 	await get_tree().process_frame
 	assert(PlayerState.quest_progress("bich_beginner_gear") == 3, "三只稻草人没有推进任务")
 
-	game.travel_to_map(217)
+	_travel_via_portal(game, 217)
 	await _settle()
 	_assert_arrival(game, 217, game.route_arrival_position(217, 4), game.route_next_target(217).position)
 	assert(game.background.orc_tomb_collision_count() == int(game.background.environment_profile().expected_collisions), "一层环境碰撞未加载")
 	await _assert_real_pillar_collision(game)
 	_assert_mobile_target_available(game, "一层怪群附近没有手机自动选敌目标")
 
-	game.travel_to_map(218)
+	_travel_via_portal(game, 218)
 	await _settle()
 	_assert_arrival(game, 218, game.route_arrival_position(218, 217), game.route_next_target(218).position)
 	_assert_mobile_target_available(game, "二层怪群附近没有手机自动选敌目标")
 
-	game.travel_to_map(221)
+	_travel_via_portal(game, 221)
 	await _settle()
 	_assert_arrival(game, 221, game.route_arrival_position(221, 218), game.route_next_target(221).position)
 	var boss := _first_boss()
 	assert(boss != null, "三层刷装闭环缺少骷髅精灵")
 	assert(not GameData.get_drops_for_boss(int(boss.monster_data.get("monsterId", 0))).is_empty(), "骷髅精灵没有数据库掉落链")
 	var experience_before := PlayerState.experience
+	var boss_count_before := _boss_count()
 	game.player.global_position = boss.global_position + Vector2(-120, 0)
 	boss.apply_control(5.0)
 	boss.take_damage(boss.max_hp)
 	await get_tree().process_frame
-	assert(_first_boss() == null, "骷髅精灵死亡后仍保留在战斗目标组")
+	assert(_boss_count() == boss_count_before - 1, "被击杀的骷髅精灵仍保留在战斗目标组")
 	assert(PlayerState.experience > experience_before or PlayerState.level > 22, "击杀Boss没有获得经验")
 
 	PlayerState.add_item("回城卷")
@@ -87,7 +88,15 @@ func _assert_arrival(game: Node, map_id: int, expected: Vector2, route_target: V
 	assert(not game.background.is_orc_tomb_point_blocked(game.player.global_position), "地图%d落脚点被环境堵塞" % map_id)
 	for node: Node in get_tree().get_nodes_in_group("interactable"):
 		if node is ZonePortal:
-			assert(game.player.global_position.distance_to(node.global_position) > 105.0, "地图%d落脚点位于门点重复交互范围" % map_id)
+			if game.player.global_position.distance_to(node.global_position) <= 105.0:
+				var expected_lock := "%d:%s" % [
+					map_id,
+					str(node.portal_data.get("source_portal_id", "")),
+				]
+				assert(
+					str(game._portal_guard_state.get("locked_portal_id", "")) == expected_lock,
+					"地图%d精确门点落脚缺少防回弹锁" % map_id
+				)
 	var beacons := get_tree().get_nodes_in_group("route_guidance")
 	assert(beacons.size() == 1 and beacons[0] is RouteBeacon, "地图%d方向信标数量错误" % map_id)
 	var expected_direction: Vector2 = game.player.global_position.direction_to(route_target)
@@ -104,6 +113,14 @@ func _assert_real_pillar_collision(game: Node) -> void:
 	game.player.set_touch_vector(Vector2.ZERO)
 	assert(game.player.global_position.x < prop_position.x + 40.0, "角色穿过了一层石柱实体碰撞")
 	game.player.global_position = game.route_arrival_position(217, 4)
+
+
+func _travel_via_portal(game: Node, target_map_id: int) -> void:
+	for node: Node in get_tree().get_nodes_in_group("zone_content"):
+		if node is ZonePortal and node.target_map_id == target_map_id:
+			assert(game.travel_via_portal(node, true), "统一门点旅行失败:%d" % target_map_id)
+			return
+	assert(false, "统一门点缺失:%d" % target_map_id)
 
 
 func _assert_mobile_target_available(game: Node, message: String) -> void:
@@ -140,6 +157,14 @@ func _first_boss() -> EnemyActor:
 		if node is EnemyActor and node.is_boss:
 			return node
 	return null
+
+
+func _boss_count() -> int:
+	var count := 0
+	for node: Node in get_tree().get_nodes_in_group("enemies"):
+		if node is EnemyActor and node.is_boss:
+			count += 1
+	return count
 
 
 func _settle() -> void:
