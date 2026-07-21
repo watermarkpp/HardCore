@@ -21,7 +21,7 @@ PACKAGE_DIRECTORY = "MSE_ISO_Map_Exit_Assets_64_v1"
 PACKAGE_ID = "mse_iso_map_exit_assets_64_v1"
 DESTINATION = (
     ROOT
-    / "assets/art/maps/_shared/user_palette/装饰物1/地图出入口/MSE固定64"
+    / "assets/art/maps/_shared/user_palette/decorations_1/map_entrances/mse_fixed_64"
 )
 CATALOG_PATH = ROOT / "assets/data/assets/map_exit_asset_catalog.json"
 THEME_LABELS = {

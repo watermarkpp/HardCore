@@ -15,7 +15,7 @@ from PIL import Image, ImageChops, ImageFilter
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SOURCE = Path.home() / "Desktop" / "sucai" / "新增" / "地毯"
 DESTINATION = (
-    ROOT / "assets/art/maps/_shared/user_palette/装饰物1/地毯"
+    ROOT / "assets/art/maps/_shared/user_palette/decorations_1/carpets"
 )
 CATALOG_PATH = ROOT / "assets/data/assets/map_new_carpet_asset_catalog.json"
 PACKAGE_ID = "mse_new_carpet_6_v1"

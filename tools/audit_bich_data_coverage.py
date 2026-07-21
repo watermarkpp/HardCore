@@ -12,7 +12,7 @@ RUNTIME = ROOT / "assets/data/legend176_data.json"
 CROSSCHECK = ROOT / "assets/data/bich_public_database_crosscheck.json"
 SERVICE_REFERENCE = ROOT / "assets/data/service_reference.json"
 IMPORT_REPORT = ROOT / "assets/data/server_import_report.json"
-OUTPUT = ROOT / "docs/BICH-DATA-1_数据来源与覆盖审计.md"
+OUTPUT = ROOT / "docs/BICH-DATA-1_Data_Source_and_Coverage_Audit.md"
 TARGETS = ["稻草人", "钉耙猫", "半兽人", "森林雪人", "食人花", "骷髅", "掷斧骷髅", "骷髅战士", "骷髅战将", "骷髅精灵", "僵尸1", "尸王", "洞蛆", "蝎子", "山洞蝙蝠"]
 FIELDS = ["level", "hp", "exp", "defense", "magicDefense", "attackMin", "attackMax"]
 

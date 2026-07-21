@@ -1,6 +1,6 @@
 # 项目总目录
 
-本文件与[总规划进度续表](总规划_进度续表.md)放在同一目录，用于说明项目结构、核心文件用途和路径。结构变化后运行 `python tools/generate_project_catalog.py` 刷新。
+本文件与[总规划进度续表](Total_Project_Progress_Continuation.md)放在同一目录，用于说明项目结构、核心文件用途和路径。结构变化后运行 `python tools/generate_project_catalog.py` 刷新。
 
 ## 项目根目录
 
@@ -35,7 +35,7 @@ legend176_game/
 | `project.godot` | Godot项目、ContentLayers/GameData/PlayerState/RuntimeServices自动加载和窗口设置 | `project.godot` |
 | `export_presets.cfg` | Android导出预设 | `export_presets.cfg` |
 | `README.md` | 项目启动与基础说明 | `README.md` |
-| `总规划_任务结构图.md` | 初始任务结构图入口 | `总规划_任务结构图.md` |
+| `Total_Project_Plan_Task_Structure.md` | 初始任务结构图入口 | `Total_Project_Plan_Task_Structure.md` |
 | `main.tscn` | 游戏主场景 | `scenes/main.tscn` |
 | `technical_art_sample.tscn` | 技术美术规范样例 | `scenes/technical_art_sample.tscn` |
 
@@ -442,57 +442,57 @@ legend176_game/
 
 | 文件 | 用途 | 路径 |
 |---|---|---|
-| `2D美术与技术标准_v1.md` | 阶段规范、数据报告或验收记录 | `docs/2D美术与技术标准_v1.md` |
-| `BICH-BOSS-1_骷髅精灵与尸王校准报告.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-BOSS-1_骷髅精灵与尸王校准报告.md` |
-| `BICH-CITY-1_哥特比奇主城样板报告.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-CITY-1_哥特比奇主城样板报告.md` |
-| `BICH-CLOSE-1_比奇垂直切片缺口审计.md` | 机器生成的比奇完成度和优先级缺口 | `docs/BICH-CLOSE-1_比奇垂直切片缺口审计.md` |
-| `BICH-COMMUNITY-DATA-1_社区数据库搜索与采用报告.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-COMMUNITY-DATA-1_社区数据库搜索与采用报告.md` |
-| `BICH-COMMUNITY-DATA-2_选择性导入报告.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-COMMUNITY-DATA-2_选择性导入报告.md` |
-| `BICH-COMMUNITY-DATA-3_经典掉落运行接入报告.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-COMMUNITY-DATA-3_经典掉落运行接入报告.md` |
-| `BICH-CONTENT-CLOSE_原MAP阻挡与内容收口报告.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-CONTENT-CLOSE_原MAP阻挡与内容收口报告.md` |
-| `BICH-DATA-1_数据来源与覆盖审计.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-DATA-1_数据来源与覆盖审计.md` |
-| `BICH-GAP-CLOSE-1_缺口清理与阻塞清单.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-GAP-CLOSE-1_缺口清理与阻塞清单.md` |
-| `BICH-HOTFIX-1_移动复活与返回键修复报告.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-HOTFIX-1_移动复活与返回键修复报告.md` |
-| `BICH-MAP-2_兽人古墓D001-D003验收报告.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-MAP-2_兽人古墓D001-D003验收报告.md` |
-| `BICH-MAP-3_天然洞穴D011-D012验收报告.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-MAP-3_天然洞穴D011-D012验收报告.md` |
-| `BICH-MAP-SIZE-1_原始尺寸与统一坐标验收报告.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-MAP-SIZE-1_原始尺寸与统一坐标验收报告.md` |
-| `BICH-MAP-SIZE-2_矿区与尸王殿原尺寸验收报告.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-MAP-SIZE-2_矿区与尸王殿原尺寸验收报告.md` |
-| `BICH-MILESTONE-1_比奇完整闭环阶段验收报告.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-MILESTONE-1_比奇完整闭环阶段验收报告.md` |
-| `BICH-MONSTER-ANIMATION-1_比奇怪物客户端动作补全报告.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-MONSTER-ANIMATION-1_比奇怪物客户端动作补全报告.md` |
-| `BICH-WARRIOR-1_比奇战士基础战斗与技能数据化报告.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-WARRIOR-1_比奇战士基础战斗与技能数据化报告.md` |
-| `BRAND-INTRO-1_游戏图标与开场动画报告.md` | 阶段规范、数据报告或验收记录 | `docs/BRAND-INTRO-1_游戏图标与开场动画报告.md` |
-| `COMPLETE-ITEM-SYSTEM-1_完整物品与地面掉落外观报告.md` | 阶段规范、数据报告或验收记录 | `docs/COMPLETE-ITEM-SYSTEM-1_完整物品与地面掉落外观报告.md` |
-| `COMPLETE-LOCAL-MIR-SCAN-1_本地多端全量拆解验收报告.md` | 阶段规范、数据报告或验收记录 | `docs/COMPLETE-LOCAL-MIR-SCAN-1_本地多端全量拆解验收报告.md` |
-| `Codex崩溃自检记录.md` | 桌面崩溃与资源压力记录 | `docs/Codex崩溃自检记录.md` |
-| `M1_2D美术技术标准_验收报告.md` | 阶段规范、数据报告或验收记录 | `docs/M1_2D美术技术标准_验收报告.md` |
-| `M2_战士人物美术简报.md` | 阶段规范、数据报告或验收记录 | `docs/M2_战士人物美术简报.md` |
-| `M6-1_Android验收报告.md` | 阶段规范、数据报告或验收记录 | `docs/M6-1_Android验收报告.md` |
-| `M6-2_荣耀90真机验收报告.md` | 阶段规范、数据报告或验收记录 | `docs/M6-2_荣耀90真机验收报告.md` |
+| `2D_Art_and_Technical_Standards_v1.md` | 阶段规范、数据报告或验收记录 | `docs/2D_Art_and_Technical_Standards_v1.md` |
+| `BICH-BOSS-1_Skeleton_Spirit_and_Corpse_King_Calibration_Report.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-BOSS-1_Skeleton_Spirit_and_Corpse_King_Calibration_Report.md` |
+| `BICH-CITY-1_Gothic_Bich_City_Prototype_Report.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-CITY-1_Gothic_Bich_City_Prototype_Report.md` |
+| `BICH-CLOSE-1_Bich_Vertical_Slice_Gap_Audit.md` | 机器生成的比奇完成度和优先级缺口 | `docs/BICH-CLOSE-1_Bich_Vertical_Slice_Gap_Audit.md` |
+| `BICH-COMMUNITY-DATA-1_Community_Database_Research_and_Adoption_Report.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-COMMUNITY-DATA-1_Community_Database_Research_and_Adoption_Report.md` |
+| `BICH-COMMUNITY-DATA-2_Selective_Import_Report.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-COMMUNITY-DATA-2_Selective_Import_Report.md` |
+| `BICH-COMMUNITY-DATA-3_Classic_Drop_Runtime_Integration_Report.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-COMMUNITY-DATA-3_Classic_Drop_Runtime_Integration_Report.md` |
+| `BICH-CONTENT-CLOSE_Original_MAP_Collision_and_Content_Closure_Report.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-CONTENT-CLOSE_Original_MAP_Collision_and_Content_Closure_Report.md` |
+| `BICH-DATA-1_Data_Source_and_Coverage_Audit.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-DATA-1_Data_Source_and_Coverage_Audit.md` |
+| `BICH-GAP-CLOSE-1_Gap_Cleanup_and_Blocker_List.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-GAP-CLOSE-1_Gap_Cleanup_and_Blocker_List.md` |
+| `BICH-HOTFIX-1_Movement_Respawn_and_Back_Button_Report.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-HOTFIX-1_Movement_Respawn_and_Back_Button_Report.md` |
+| `BICH-MAP-2_Orc_Tomb_D001-D003_Acceptance_Report.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-MAP-2_Orc_Tomb_D001-D003_Acceptance_Report.md` |
+| `BICH-MAP-3_Natural_Cave_D011-D012_Acceptance_Report.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-MAP-3_Natural_Cave_D011-D012_Acceptance_Report.md` |
+| `BICH-MAP-SIZE-1_Original_Size_and_Unified_Coordinates_Report.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-MAP-SIZE-1_Original_Size_and_Unified_Coordinates_Report.md` |
+| `BICH-MAP-SIZE-2_Mine_and_Corpse_King_Hall_Original_Size_Report.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-MAP-SIZE-2_Mine_and_Corpse_King_Hall_Original_Size_Report.md` |
+| `BICH-MILESTONE-1_Bich_Complete_Loop_Acceptance_Report.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-MILESTONE-1_Bich_Complete_Loop_Acceptance_Report.md` |
+| `BICH-MONSTER-ANIMATION-1_Bich_Monster_Client_Animation_Report.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-MONSTER-ANIMATION-1_Bich_Monster_Client_Animation_Report.md` |
+| `BICH-WARRIOR-1_Bich_Warrior_Combat_and_Skill_Data_Report.md` | 阶段规范、数据报告或验收记录 | `docs/BICH-WARRIOR-1_Bich_Warrior_Combat_and_Skill_Data_Report.md` |
+| `BRAND-INTRO-1_Game_Icon_and_Intro_Animation_Report.md` | 阶段规范、数据报告或验收记录 | `docs/BRAND-INTRO-1_Game_Icon_and_Intro_Animation_Report.md` |
+| `COMPLETE-ITEM-SYSTEM-1_Item_and_Ground_Drop_Visual_Report.md` | 阶段规范、数据报告或验收记录 | `docs/COMPLETE-ITEM-SYSTEM-1_Item_and_Ground_Drop_Visual_Report.md` |
+| `COMPLETE-LOCAL-MIR-SCAN-1_Local_Multi_Client_Extraction_Report.md` | 阶段规范、数据报告或验收记录 | `docs/COMPLETE-LOCAL-MIR-SCAN-1_Local_Multi_Client_Extraction_Report.md` |
+| `Codex_Crash_Self_Check_Record.md` | 桌面崩溃与资源压力记录 | `docs/Codex_Crash_Self_Check_Record.md` |
+| `M1_2D_Art_Technical_Standards_Acceptance_Report.md` | 阶段规范、数据报告或验收记录 | `docs/M1_2D_Art_Technical_Standards_Acceptance_Report.md` |
+| `M2_Warrior_Character_Art_Brief.md` | 阶段规范、数据报告或验收记录 | `docs/M2_Warrior_Character_Art_Brief.md` |
+| `M6-1_Android_Acceptance_Report.md` | 阶段规范、数据报告或验收记录 | `docs/M6-1_Android_Acceptance_Report.md` |
+| `M6-2_Honor_90_Device_Acceptance_Report.md` | 阶段规范、数据报告或验收记录 | `docs/M6-2_Honor_90_Device_Acceptance_Report.md` |
 | `M7_2_environment_coverage.md` | 阶段规范、数据报告或验收记录 | `docs/M7_2_environment_coverage.md` |
-| `M8-1_比奇矿区资源与地图验收报告.md` | 阶段规范、数据报告或验收记录 | `docs/M8-1_比奇矿区资源与地图验收报告.md` |
-| `M8-2_沃玛寺庙资源与地图验收报告.md` | 阶段规范、数据报告或验收记录 | `docs/M8-2_沃玛寺庙资源与地图验收报告.md` |
-| `M8-3_沃玛森林与自然洞穴验收报告.md` | 阶段规范、数据报告或验收记录 | `docs/M8-3_沃玛森林与自然洞穴验收报告.md` |
-| `M8-4_毒蛇山谷与山谷矿区验收报告.md` | 阶段规范、数据报告或验收记录 | `docs/M8-4_毒蛇山谷与山谷矿区验收报告.md` |
-| `MAP-EDITOR-ROADMAP_通用地图生产线.md` | 阶段规范、数据报告或验收记录 | `docs/MAP-EDITOR-ROADMAP_通用地图生产线.md` |
-| `MIR-SOURCE-PRIORITY-1_客户端与服务端主辅资料分级报告.md` | 阶段规范、数据报告或验收记录 | `docs/MIR-SOURCE-PRIORITY-1_客户端与服务端主辅资料分级报告.md` |
-| `MIR2-DATA-1_服务端数据校准报告.md` | 阶段规范、数据报告或验收记录 | `docs/MIR2-DATA-1_服务端数据校准报告.md` |
-| `MIR2-DATA-3_服务端导入差异报告.md` | 阶段规范、数据报告或验收记录 | `docs/MIR2-DATA-3_服务端导入差异报告.md` |
-| `NPC-FACING-1_经典NPC交互转向施工报告.md` | 阶段规范、数据报告或验收记录 | `docs/NPC-FACING-1_经典NPC交互转向施工报告.md` |
-| `PROJECT-OPTIMIZATION-1_项目瘦身与工具归档报告.md` | 阶段规范、数据报告或验收记录 | `docs/PROJECT-OPTIMIZATION-1_项目瘦身与工具归档报告.md` |
-| `SAVE-MENU-1_游戏菜单与安全回城报告.md` | 阶段规范、数据报告或验收记录 | `docs/SAVE-MENU-1_游戏菜单与安全回城报告.md` |
-| `SAVE-MULTI-1_多角色与启动选择系统报告.md` | 阶段规范、数据报告或验收记录 | `docs/SAVE-MULTI-1_多角色与启动选择系统报告.md` |
-| `UI-GOTHIC-PREVIEW-1_暗黑哥特界面审图样板.md` | 阶段规范、数据报告或验收记录 | `docs/UI-GOTHIC-PREVIEW-1_暗黑哥特界面审图样板.md` |
-| `WARRIOR-SKILL-VISUAL-AUDIT-2_战士技能八方向动画审计报告.md` | 阶段规范、数据报告或验收记录 | `docs/WARRIOR-SKILL-VISUAL-AUDIT-2_战士技能八方向动画审计报告.md` |
-| `WORLD-SPATIAL-STABILITY-1_空间规则统一与Godot稳定性报告.md` | 阶段规范、数据报告或验收记录 | `docs/WORLD-SPATIAL-STABILITY-1_空间规则统一与Godot稳定性报告.md` |
-| `三职业技能战斗参数基线_v1.md` | 阶段规范、数据报告或验收记录 | `docs/三职业技能战斗参数基线_v1.md` |
-| `五层架构规范与迁移表.md` | 阶段规范、数据报告或验收记录 | `docs/五层架构规范与迁移表.md` |
-| `客户端全量资源目录.md` | 阶段规范、数据报告或验收记录 | `docs/客户端全量资源目录.md` |
-| `总规划_进度续表.md` | 当前唯一施工总纲、完成记录、进度和下一任务 | `docs/总规划_进度续表.md` |
-| `施工记录.md` | 阶段规范、数据报告或验收记录 | `docs/施工记录.md` |
-| `服务端数据参考索引.md` | 阶段规范、数据报告或验收记录 | `docs/服务端数据参考索引.md` |
-| `测试执行规范.md` | 后续必须贯彻的轻量测试链 | `docs/测试执行规范.md` |
-| `装备自定义指南.md` | 装备数值、词条、效果和美术修改说明 | `docs/装备自定义指南.md` |
-| `项目总目录.md` | 本目录 | `docs/项目总目录.md` |
+| `M8-1_Bich_Mine_Assets_and_Map_Acceptance_Report.md` | 阶段规范、数据报告或验收记录 | `docs/M8-1_Bich_Mine_Assets_and_Map_Acceptance_Report.md` |
+| `M8-2_Wooma_Temple_Assets_and_Map_Acceptance_Report.md` | 阶段规范、数据报告或验收记录 | `docs/M8-2_Wooma_Temple_Assets_and_Map_Acceptance_Report.md` |
+| `M8-3_Wooma_Forest_and_Natural_Cave_Acceptance_Report.md` | 阶段规范、数据报告或验收记录 | `docs/M8-3_Wooma_Forest_and_Natural_Cave_Acceptance_Report.md` |
+| `M8-4_Viper_Valley_and_Valley_Mine_Acceptance_Report.md` | 阶段规范、数据报告或验收记录 | `docs/M8-4_Viper_Valley_and_Valley_Mine_Acceptance_Report.md` |
+| `MAP-EDITOR-ROADMAP_Generic_Map_Production_Pipeline.md` | 阶段规范、数据报告或验收记录 | `docs/MAP-EDITOR-ROADMAP_Generic_Map_Production_Pipeline.md` |
+| `MIR-SOURCE-PRIORITY-1_Client_and_Server_Source_Priority_Report.md` | 阶段规范、数据报告或验收记录 | `docs/MIR-SOURCE-PRIORITY-1_Client_and_Server_Source_Priority_Report.md` |
+| `MIR2-DATA-1_Server_Data_Calibration_Report.md` | 阶段规范、数据报告或验收记录 | `docs/MIR2-DATA-1_Server_Data_Calibration_Report.md` |
+| `MIR2-DATA-3_Server_Import_Difference_Report.md` | 阶段规范、数据报告或验收记录 | `docs/MIR2-DATA-3_Server_Import_Difference_Report.md` |
+| `NPC-FACING-1_Classic_NPC_Interaction_Facing_Report.md` | 阶段规范、数据报告或验收记录 | `docs/NPC-FACING-1_Classic_NPC_Interaction_Facing_Report.md` |
+| `PROJECT-OPTIMIZATION-1_Project_Slimming_and_Tool_Archive_Report.md` | 阶段规范、数据报告或验收记录 | `docs/PROJECT-OPTIMIZATION-1_Project_Slimming_and_Tool_Archive_Report.md` |
+| `SAVE-MENU-1_Game_Menu_and_Safe_Return_Report.md` | 阶段规范、数据报告或验收记录 | `docs/SAVE-MENU-1_Game_Menu_and_Safe_Return_Report.md` |
+| `SAVE-MULTI-1_Multi_Character_and_Startup_Selection_Report.md` | 阶段规范、数据报告或验收记录 | `docs/SAVE-MULTI-1_Multi_Character_and_Startup_Selection_Report.md` |
+| `UI-GOTHIC-PREVIEW-1_Dark_Gothic_UI_Review_Prototype.md` | 阶段规范、数据报告或验收记录 | `docs/UI-GOTHIC-PREVIEW-1_Dark_Gothic_UI_Review_Prototype.md` |
+| `WARRIOR-SKILL-VISUAL-AUDIT-2_Warrior_Eight_Direction_Animation_Audit.md` | 阶段规范、数据报告或验收记录 | `docs/WARRIOR-SKILL-VISUAL-AUDIT-2_Warrior_Eight_Direction_Animation_Audit.md` |
+| `WORLD-SPATIAL-STABILITY-1_Spatial_Rules_and_Godot_Stability_Report.md` | 阶段规范、数据报告或验收记录 | `docs/WORLD-SPATIAL-STABILITY-1_Spatial_Rules_and_Godot_Stability_Report.md` |
+| `Three_Profession_Skill_Combat_Parameter_Baseline_v1.md` | 阶段规范、数据报告或验收记录 | `docs/Three_Profession_Skill_Combat_Parameter_Baseline_v1.md` |
+| `Five_Layer_Architecture_Standard_and_Migration_Matrix.md` | 阶段规范、数据报告或验收记录 | `docs/Five_Layer_Architecture_Standard_and_Migration_Matrix.md` |
+| `Complete_Client_Resource_Catalog.md` | 阶段规范、数据报告或验收记录 | `docs/Complete_Client_Resource_Catalog.md` |
+| `Total_Project_Progress_Continuation.md` | 当前唯一施工总纲、完成记录、进度和下一任务 | `docs/Total_Project_Progress_Continuation.md` |
+| `Construction_Log.md` | 阶段规范、数据报告或验收记录 | `docs/Construction_Log.md` |
+| `Server_Data_Reference_Index.md` | 阶段规范、数据报告或验收记录 | `docs/Server_Data_Reference_Index.md` |
+| `Test_Execution_Standard.md` | 后续必须贯彻的轻量测试链 | `docs/Test_Execution_Standard.md` |
+| `Equipment_Customization_Guide.md` | 装备数值、词条、效果和美术修改说明 | `docs/Equipment_Customization_Guide.md` |
+| `Project_Master_Index.md` | 本目录 | `docs/Project_Master_Index.md` |
 
 ## 外部研究资料（不打入游戏包）
 

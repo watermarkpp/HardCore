@@ -21,11 +21,11 @@ PACKAGE_DIRECTORY = "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE"
 PACKAGE_ID = "MSE_ISO_Deep_Forest_AssetPack_56_v3_LOCAL_FREE"
 DESTINATION = (
     ROOT
-    / "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林44"
+    / "assets/art/maps/_shared/user_palette/decorations_1/trees/mse_deep_forest_44"
 )
 LEGACY_DESTINATION = (
     ROOT
-    / "assets/art/maps/_shared/user_palette/装饰物1/树木/MSE深林56"
+    / "assets/art/maps/_shared/user_palette/decorations_1/trees/MSE深林56"
 )
 CATALOG_PATH = ROOT / "assets/data/assets/map_deep_forest_asset_catalog.json"
 CATEGORY_LABELS = {

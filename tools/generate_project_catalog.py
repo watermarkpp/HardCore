@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "docs/项目总目录.md"
+OUTPUT = ROOT / "docs/Project_Master_Index.md"
 
 SCRIPT_PURPOSES = {
     "art_spec.gd": "统一角色、怪物、图集帧尺寸、方向与脚底锚点规范",
@@ -174,7 +174,7 @@ def main() -> None:
     lines = [
         "# 项目总目录",
         "",
-        "本文件与[总规划进度续表](总规划_进度续表.md)放在同一目录，用于说明项目结构、核心文件用途和路径。结构变化后运行 `python tools/generate_project_catalog.py` 刷新。",
+        "本文件与[总规划进度续表](Total_Project_Progress_Continuation.md)放在同一目录，用于说明项目结构、核心文件用途和路径。结构变化后运行 `python tools/generate_project_catalog.py` 刷新。",
         "",
         "## 项目根目录",
         "",
@@ -209,7 +209,7 @@ def main() -> None:
         "| `project.godot` | Godot项目、ContentLayers/GameData/PlayerState/RuntimeServices自动加载和窗口设置 | `project.godot` |",
         "| `export_presets.cfg` | Android导出预设 | `export_presets.cfg` |",
         "| `README.md` | 项目启动与基础说明 | `README.md` |",
-        "| `总规划_任务结构图.md` | 初始任务结构图入口 | `总规划_任务结构图.md` |",
+        "| `Total_Project_Plan_Task_Structure.md` | 初始任务结构图入口 | `Total_Project_Plan_Task_Structure.md` |",
         "| `main.tscn` | 游戏主场景 | `scenes/main.tscn` |",
         "| `technical_art_sample.tscn` | 技术美术规范样例 | `scenes/technical_art_sample.tscn` |",
         "",
@@ -273,12 +273,12 @@ def main() -> None:
         "|---|---|---|",
     ]
     doc_purposes = {
-        "总规划_进度续表.md": "当前唯一施工总纲、完成记录、进度和下一任务",
-        "项目总目录.md": "本目录",
-        "BICH-CLOSE-1_比奇垂直切片缺口审计.md": "机器生成的比奇完成度和优先级缺口",
-        "测试执行规范.md": "后续必须贯彻的轻量测试链",
-        "装备自定义指南.md": "装备数值、词条、效果和美术修改说明",
-        "Codex崩溃自检记录.md": "桌面崩溃与资源压力记录",
+        "Total_Project_Progress_Continuation.md": "当前唯一施工总纲、完成记录、进度和下一任务",
+        "Project_Master_Index.md": "本目录",
+        "BICH-CLOSE-1_Bich_Vertical_Slice_Gap_Audit.md": "机器生成的比奇完成度和优先级缺口",
+        "Test_Execution_Standard.md": "后续必须贯彻的轻量测试链",
+        "Equipment_Customization_Guide.md": "装备数值、词条、效果和美术修改说明",
+        "Codex_Crash_Self_Check_Record.md": "桌面崩溃与资源压力记录",
     }
     for path in docs:
         lines.append(f"| `{path.name}` | {doc_purposes.get(path.name, '阶段规范、数据报告或验收记录')} | `{rel(path)}` |")

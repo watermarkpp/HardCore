@@ -1,6 +1,6 @@
 # 施工记录
 
-本文件是按时间追加的工程施工账。每项记录必须包含目标、实际操作、依据、产物、验证、状态和未完成项；不得用计划冒充完成。长期规则写入项目总纲，结构变化同步刷新`项目总目录.md`，资源来源和扫描结果同步写入专项资源目录。
+本文件是按时间追加的工程施工账。每项记录必须包含目标、实际操作、依据、产物、验证、状态和未完成项；不得用计划冒充完成。长期规则写入项目总纲，结构变化同步刷新`Project_Master_Index.md`，资源来源和扫描结果同步写入专项资源目录。
 
 ## 2026-07-15：NPC-FACING-1 经典 NPC 六视图激活与交互转向
 
@@ -10,13 +10,13 @@
 - 产物：23 套 NPC 待机图集、逐帧来源清单、八方向接触表、Godot 实际加载截图和专项自动测试。
 - 验证：专项 1/1、比奇 24/24、完整关键回归 51/51 通过；非 headless OpenGL 截图通过。
 - 状态：本阶段完成。主服务端 Crystal `Server.MirDB` 全量 NPC 表解析与精确 `Image` 对应留给 `NPC-DATA-2`，不得把当前兜底外观冒充服务端原值。
-- 完整报告：`docs/NPC-FACING-1_经典NPC交互转向施工报告.md`。
+- 完整报告：`docs/NPC-FACING-1_Classic_NPC_Interaction_Facing_Report.md`。
 
 ## 2026-07-15：项目瘦身与工具归档
 
 - 目标：清除无用资料、保留客户端/服务端证据和地图编辑器能力，补齐可重复维护工具。
 - 实际操作：审计当前工程及 `Documents/My Games`；确认后者仅为其他游戏目录。删除 6 组扫描 smoke 输出和所有 Python `__pycache__`；未删除 `dev_art_sources`、地图编辑器工作区/备份、正式验收产物或 Godot 工具。
-- 产物：新增 `tools/project_maintenance.py` 和 `docs/PROJECT-OPTIMIZATION-1_项目瘦身与工具归档报告.md`；审计结果为 `outputs/validation/project_maintenance_audit.json`。
+- 产物：新增 `tools/project_maintenance.py` 和 `docs/PROJECT-OPTIMIZATION-1_Project_Slimming_and_Tool_Archive_Report.md`；审计结果为 `outputs/validation/project_maintenance_audit.json`。
 - 验证：维护工具语法检查通过；正式多端验收档案仍保留；项目输出约 2.92GB，原始端资料约 14.60GB。
 - 状态：完成。后续新增资料必须按端归档，临时产物不得进入正式验收目录。
 
@@ -140,7 +140,7 @@
 - `tools/build_bich_client_undead.py`去除旧工程路径依赖；`tools/build_monster_animation_catalog.py`改为精确怪物名优先，修复僵尸1至僵尸5等资源存在但目录误判缺失的问题。
 - 动画目录由 formal 23 / provisional 9 / missing 182 更新为 formal 42 / provisional 0 / missing 172。
 - 独立重解码源 WIL 并逐逻辑帧比较：2,384 帧，0 失败；四项 Godot 专项测试全部通过。
-- 验收图为 `outputs/visual_acceptance/bich_monster_original_client_actions_20260715.png`，完整证据见 `docs/BICH-MONSTER-ANIMATION-1_比奇怪物客户端动作补全报告.md`。
+- 验收图为 `outputs/visual_acceptance/bich_monster_original_client_actions_20260715.png`，完整证据见 `docs/BICH-MONSTER-ANIMATION-1_Bich_Monster_Client_Animation_Report.md`。
 
 ## 2026-07-15：本地客户端与服务端多端全量拆解收口
 
@@ -151,7 +151,7 @@
 - 全局库收录243个资源库、1,663,124个全路径逻辑帧、8,057张MAP画像和16个压缩包；跨端相同哈希只进入对照表，不合并归属。
 - 22项解析异常全部完成归因：3个缺密码压缩包、18个0字节加密解包占位、1个与传奇MAP同扩展名的DelphiX示例文件；未发现未知异常。
 - 新增`tools/verify_complete_local_mir_scan.py`与`outputs/validation/complete_local_mir_scan_acceptance.json`，12项验收全部通过；数据库SHA-256与清单一致，SQLite完整性为`ok`。
-- 完整报告见`docs/COMPLETE-LOCAL-MIR-SCAN-1_本地多端全量拆解验收报告.md`。下一阶段回到NPC施工，但必须先按端提取再横向对照，不得把多个私服端合并为无来源的统一数据。
+- 完整报告见`docs/COMPLETE-LOCAL-MIR-SCAN-1_Local_Multi_Client_Extraction_Report.md`。下一阶段回到NPC施工，但必须先按端提取再横向对照，不得把多个私服端合并为无来源的统一数据。
 
 ## 2026-07-15：空间规则统一、Godot 稳定性修复与最终清理
 
@@ -164,7 +164,7 @@
 - 新增`world_spatial_contract_test`并纳入关键测试；完整49项全部通过。
 - Windows事件日志表明已知Godot原生崩溃集中在首次全量导入；隔离`outputs`等非资源目录后，工作区健康检查和10次启动压力测试均通过。
 - 删除最终测试日志和Python缓存；保留净化后的`.godot`缓存、地图编辑器备份、原始多端证据和正式验收产物。
-- 完整报告：`docs/WORLD-SPATIAL-STABILITY-1_空间规则统一与Godot稳定性报告.md`。
+- 完整报告：`docs/WORLD-SPATIAL-STABILITY-1_Spatial_Rules_and_Godot_Stability_Report.md`。
 
 ## 2026-07-15：客户端与服务端主辅资料分级
 
@@ -175,7 +175,7 @@
 - 内容最丰富但混有Git、BMP和程序文件的`server.angelk727_full`定为服务端数据辅1，只能补主资料已有证据证明的缺项。
 - 新增`assets/data/source_priority_policy.json`和`tools/source_priority_guard.py`。辅1、辅2、辅3必须逐级证明所有更高层缺失、不可用或不兼容；没有证据或越级时工具直接拒绝。
 - 镜像权重为0，仅用于哈希复核；隔离端不得进入运行层。跨端组合默认禁止，确需组合时必须逐项保留端标识、原路径、采用原因和授权结果。
-- `tools/verify_source_priority_policy.py`验收通过，12项检查全部为真；报告见`docs/MIR-SOURCE-PRIORITY-1_客户端与服务端主辅资料分级报告.md`。
+- `tools/verify_source_priority_policy.py`验收通过，12项检查全部为真；报告见`docs/MIR-SOURCE-PRIORITY-1_Client_and_Server_Source_Priority_Report.md`。
 
 ## 2026-07-15：正式游戏图标与品牌开场动画
 
@@ -187,7 +187,7 @@
 - `project.godot`主入口改为品牌开场，Godot内置加载画面和应用图标统一使用正式品牌资源；Android导出预设显式使用同一图标。
 - 动画1秒后允许键盘、鼠标或触屏跳过，不操作时自动进入原`character_select.tscn`。
 - Godot导入和专项测试通过；真实OpenGL截图为`outputs/visual_acceptance/brand_intro_20260715.png`；完整关键回归50/50通过。
-- 完整说明见`docs/BRAND-INTRO-1_游戏图标与开场动画报告.md`。
+- 完整说明见`docs/BRAND-INTRO-1_Game_Icon_and_Intro_Animation_Report.md`。
 
 ## 2026-07-15：战士技能八方向动画与烈火武器头吸附
 
@@ -199,7 +199,7 @@
 - 烈火旧图曾被缩至52%，导致火焰缩回人物和裁决中部；现恢复1:1原始像素并拆成4张1920×1920分片，删除旧缩小图。
 - 新增通用逐帧附着逻辑：从Weapon.wil计算当前武器头，从Magic.wil计算烈火起燃点，按已装备武器、方向、帧自动对齐。
 - `tools/audit_warrior_skill_visuals.py`通过：穿戴3496帧、特效192帧、裁决新裁切0、烈火48帧附着元数据齐全。
-- 战士专项14/14、完整关键回归51/51通过；报告见`docs/WARRIOR-SKILL-VISUAL-AUDIT-2_战士技能八方向动画审计报告.md`。
+- 战士专项14/14、完整关键回归51/51通过；报告见`docs/WARRIOR-SKILL-VISUAL-AUDIT-2_Warrior_Eight_Direction_Animation_Audit.md`。
 
 ## 2026-07-15：COMPLETE-ITEM-SYSTEM-1 完整物品与地面掉落外观
 
@@ -210,14 +210,14 @@
 - 接入血瓶、蓝瓶、太阳水、雪霜、回城卷、随机传送卷、地牢逃脱卷、祝福油、修复油、战神油、金币、技能书、矿石、材料和任务物。普通药瓶使用原服务端分跳恢复公式；随机传送调用统一空间契约，不能穿越地图硬边界。
 - 强制刷新Godot导入缓存并把测试升级为`ResourceLoader.exists`，保证不是“PNG已修改但CTEX仍旧”的假完成；已知运行物品不再显示彩色菱形占位。
 - Equipment回归16/16、Bich回归24/24、工作区健康检查全部通过；真实OpenGL验收图为`outputs/visual_acceptance/complete_item_system_20260715.png`。
-- 完整说明见`docs/COMPLETE-ITEM-SYSTEM-1_完整物品与地面掉落外观报告.md`，机器验收见`outputs/validation/complete_item_system_acceptance.json`。
+- 完整说明见`docs/COMPLETE-ITEM-SYSTEM-1_Item_and_Ground_Drop_Visual_Report.md`，机器验收见`outputs/validation/complete_item_system_acceptance.json`。
 # 2026-07-16：UI-GOTHIC-PREVIEW-1 暗黑哥特统一界面审图样板
 
 - 完成人物选择+创建合并界面、游戏内退出菜单、游戏 HUD 三张隔离式视觉样板；创建人物明确提供战士、法师、道士三职业。
 - 根据用户新增规范，HUD不显示人物横向血条/蓝条，改为《Diablo 1》式左红血球、右蓝球；顶部保留怪物目标血条。
 - 新大厅背景归档为 `project.generated.ui_preview`；快捷栏使用主资料的药品和卷轴真实图标，未跨级随意引用客户端素材。
 - 三张截图均由 Godot 4.7 非 headless OpenGL 真实渲染，分辨率 1280×720；专项隔离测试通过。
-- 本轮仅供审图，正式入口、人物选择逻辑、系统菜单和 HUD 运行脚本均未替换，APK未打包。报告：`docs/UI-GOTHIC-PREVIEW-1_暗黑哥特界面审图样板.md`。
+- 本轮仅供审图，正式入口、人物选择逻辑、系统菜单和 HUD 运行脚本均未替换，APK未打包。报告：`docs/UI-GOTHIC-PREVIEW-1_Dark_Gothic_UI_Review_Prototype.md`。
 - 用户审图修订：删除HUD物品快捷栏和“当前追踪”；血/蓝瓶改为背包自动使用。战士六技能改为每行最多4个的自动施放开关；法师/道士预留“普通攻击+技能”互斥选择，右下动作分别为战士“攻击”和法道“释放技能”。保留切换敌人与自动锁定开关。
 - 战士技能语义校正：基本剑术、攻杀剑术不提供开关，作为不可点击的常驻被动显示；仅刺杀、半月、野蛮、烈火保留自动使用开关。
 - HUD位置修订：删除左上人物名称/等级/职业卡片；自动锁定归入屏幕右侧固定功能栏；切换敌人移动到攻击键旁，右侧保留后续功能扩展空间。

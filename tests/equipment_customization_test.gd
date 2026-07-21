@@ -7,7 +7,7 @@ func _ready() -> void:
 
 func _run() -> void:
 	assert(FileAccess.file_exists("res://assets/data/equipment_customization.json"), "装备自定义配置文件缺失")
-	assert(FileAccess.file_exists("res://docs/装备自定义指南.md"), "装备自定义指南缺失")
+	assert(FileAccess.file_exists("res://docs/Equipment_Customization_Guide.md"), "装备自定义指南缺失")
 	assert(int(GameData.equipment_customization.get("schemaVersion", 0)) == 1, "装备自定义配置版本错误")
 	assert(GameData.equipment_customization.get("supportedSpecialEffectIds", []).size() == 8, "通用特殊效果ID清单不完整")
 
