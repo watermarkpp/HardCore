@@ -62,6 +62,7 @@ var _editor_runtime_size := Vector2i.ZERO
 var _editor_runtime_blocked_tiles: Dictionary = {}
 var _editor_runtime_manual_rects: Array[Rect2] = []
 var _editor_runtime_chunk_draws: Array[Dictionary] = []
+var _editor_runtime_fallback_ground := false
 
 
 func _ready() -> void:
@@ -477,6 +478,7 @@ func _rebuild_environment() -> void:
 	_editor_runtime_blocked_tiles.clear()
 	_editor_runtime_manual_rects.clear()
 	_editor_runtime_chunk_draws.clear()
+	_editor_runtime_fallback_ground = false
 	for node: Node in _environment_nodes:
 		if is_instance_valid(node):
 			node.queue_free()
@@ -491,11 +493,11 @@ func _rebuild_environment() -> void:
 	_collision_focus_source = Vector2i(-99999, -99999)
 	if not is_inside_tree():
 		return
-	if (
-		MapEditorRuntimeBridgeScript.has_runtime_map(_active_map_id())
-		and _build_editor_runtime_environment(_active_map_id())
-	):
-		return
+	if MapEditorRuntimeBridgeScript.has_runtime_map(_active_map_id()):
+		if _build_editor_runtime_environment(_active_map_id()):
+			return
+		if _build_editor_runtime_fallback_environment(_active_map_id()):
+			return
 	var profile := environment_profile()
 	if not profile.is_empty():
 		_build_profile_environment(profile)
@@ -543,6 +545,30 @@ func _build_editor_runtime_environment(runtime_map_id := -1) -> bool:
 	_build_editor_runtime_collisions(runtime)
 	_full_ground_ready = false
 	return true
+
+
+func _build_editor_runtime_fallback_environment(runtime_map_id: int) -> bool:
+	var runtime := MapEditorRuntimeBridgeScript.load_map(runtime_map_id)
+	var profile := environment_profile()
+	if runtime.is_empty() or profile.is_empty():
+		return false
+	var raw_size: Array = runtime.get("design", {}).get("design_size", [])
+	if raw_size.size() != 2:
+		return false
+	var runtime_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
+	if runtime_size.x <= 0 or runtime_size.y <= 0:
+		return false
+	# Some approved editor maps predate packaged ground chunk manifests. Keep
+	# their authored instances and collision grid authoritative, while drawing
+	# the matching legacy atlas across the editor-sized diamond. This avoids
+	# mixing the 38x38 editor route with a 400x400 legacy collision bitmap.
+	var runtime_profile := profile.duplicate(true)
+	runtime_profile["source_size"] = runtime_size
+	_build_full_ground(runtime_profile)
+	_build_editor_runtime_instances(runtime)
+	_build_editor_runtime_collisions(runtime)
+	_editor_runtime_fallback_ground = _full_ground_ready
+	return _editor_runtime_fallback_ground
 
 
 func _load_editor_runtime_visual(
@@ -634,6 +660,14 @@ void fragment() {
 
 func editor_runtime_chunk_texture_count() -> int:
 	return _editor_runtime_chunk_draws.size()
+
+
+func editor_runtime_ground_ready() -> bool:
+	return not _editor_runtime_visual.is_empty() or _editor_runtime_fallback_ground
+
+
+func uses_editor_runtime_fallback_ground() -> bool:
+	return _editor_runtime_fallback_ground
 
 
 func _build_editor_runtime_instances(runtime:Dictionary)->void:

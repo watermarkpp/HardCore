@@ -111,6 +111,10 @@ func _travel_orc_tomb_round_trip(game: Node) -> void:
 		await get_tree().process_frame
 		assert(game.current_map_id == target_map_id)
 		assert(game.background.uses_orc_tomb_art(), "orc client art fallback lost:%d" % target_map_id)
+		assert(game.background.editor_runtime_ground_ready(), "orc ground missing:%d" % target_map_id)
+		assert(game.background.uses_editor_runtime_fallback_ground(), "orc fallback ground not active:%d" % target_map_id)
+		assert(game.background._editor_runtime_size == Vector2i(38, 38), "orc runtime collision size mismatch:%d" % target_map_id)
+		assert(not game.background.is_environment_point_blocked(game.player.global_position), "orc arrival blocked:%d" % target_map_id)
 	_move_from_arrival(game, 221)
 	for target_map_id: int in [218, 217, 4]:
 		var reverse := _portal_to(target_map_id)

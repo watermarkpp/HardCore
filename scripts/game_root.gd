@@ -8,6 +8,7 @@ const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_
 const MapPortalRuntimeServiceScript := preload("res://scripts/map_editor/map_portal_runtime_service.gd")
 const MapPortalTravelGuardScript := preload("res://scripts/map_editor/map_portal_travel_guard.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const SystemMenuPanelScript := preload("res://scripts/system_menu_panel.gd")
 const DEFAULT_NORMAL_RESPAWN_SECONDS := 180.0
 const DEFAULT_BOSS_RESPAWN_SECONDS := 3600.0
 
@@ -145,56 +146,49 @@ func _build_system_menu() -> void:
 	_system_menu_layer = CanvasLayer.new()
 	_system_menu_layer.layer = 200
 	add_child(_system_menu_layer)
-	_system_menu_panel = Control.new()
+	_system_menu_panel = SystemMenuPanelScript.new()
+	_system_menu_panel.name = "SystemMenuPanel"
 	_system_menu_panel.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
-	_system_menu_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_system_menu_panel.visible = false
+	_system_menu_panel.continue_requested.connect(_hide_system_menu)
+	_system_menu_panel.return_to_character_select_requested.connect(_return_to_character_select)
+	_system_menu_panel.save_and_exit_requested.connect(_exit_game)
+	_system_menu_panel.audio_setting_changed.connect(_on_system_menu_audio_setting_changed)
 	_system_menu_layer.add_child(_system_menu_panel)
-	var shade := ColorRect.new()
-	shade.color = Color(0.02, 0.01, 0.01, 0.82)
-	shade.mouse_filter = Control.MOUSE_FILTER_STOP
-	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_system_menu_panel.add_child(shade)
-	var center := CenterContainer.new()
-	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_system_menu_panel.add_child(center)
-	var menu := VBoxContainer.new()
-	menu.custom_minimum_size = Vector2(420, 0)
-	menu.add_theme_constant_override("separation", 16)
-	center.add_child(menu)
-	var title := Label.new()
-	title.text = "游戏菜单"
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 32)
-	menu.add_child(title)
-	_add_system_menu_button(menu, "继续游戏", _hide_system_menu)
-	_add_system_menu_button(menu, "回到角色选择", _return_to_character_select)
-	_add_system_menu_button(menu, "保存并退出游戏", _exit_game)
-	var hint := Label.new()
-	hint.text = "退出时角色将返回最近城镇"
-	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	menu.add_child(hint)
-
-
-func _add_system_menu_button(parent: VBoxContainer, label: String, callback: Callable) -> void:
-	var button := Button.new()
-	button.text = label
-	button.custom_minimum_size.y = 64
-	button.pressed.connect(callback)
-	parent.add_child(button)
+	_system_menu_panel.set_audio_settings(
+		_audio_bus_enabled("Music"),
+		_audio_bus_enabled("SFX")
+	)
 
 
 func _show_system_menu() -> void:
 	if _system_menu_panel == null:
 		return
-	_system_menu_panel.visible = true
+	_system_menu_panel.open_menu()
 	get_tree().paused = true
 
 
 func _hide_system_menu() -> void:
 	get_tree().paused = false
 	if _system_menu_panel != null:
-		_system_menu_panel.visible = false
+		_system_menu_panel.close_menu()
+
+
+func _audio_bus_enabled(bus_name: StringName) -> bool:
+	var bus_index := AudioServer.get_bus_index(bus_name)
+	return bus_index < 0 or not AudioServer.is_bus_mute(bus_index)
+
+
+func _on_system_menu_audio_setting_changed(request: Dictionary) -> void:
+	if str(request.get("contract_id", "")) != "ui.audio.setting.v1":
+		return
+	var setting_id := str(request.get("setting_id", ""))
+	var bus_name := "Music" if setting_id == "audio.music.enabled" else "SFX"
+	if setting_id not in ["audio.music.enabled", "audio.sfx.enabled"]:
+		return
+	var bus_index := AudioServer.get_bus_index(bus_name)
+	if bus_index >= 0:
+		AudioServer.set_bus_mute(bus_index, not bool(request.get("enabled", true)))
 
 
 func _prepare_safe_logout() -> bool:
@@ -258,7 +252,6 @@ func travel_to_map(map_id: int) -> void:
 	if current_map_id == map_id:
 		player.global_position = route_arrival_position(map_id, source_map_id)
 		player.velocity = Vector2.ZERO
-		_spawn_route_beacon(map_id)
 
 
 func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
@@ -336,7 +329,6 @@ func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
 		Time.get_ticks_msec(),
 		target_tile
 	)
-	_spawn_route_beacon(target_map_id)
 	return true
 
 
@@ -428,15 +420,6 @@ func _bich_portal_position_to(target_map_id: int) -> Vector2:
 		if int(portal.get("target_map_id", -1)) == target_map_id:
 			return portal.get("position", _bich_home_world_position())
 	return _bich_home_world_position()
-
-
-func _spawn_route_beacon(map_id: int) -> void:
-	var route := route_next_target(map_id)
-	if route.is_empty():
-		return
-	var beacon := RouteBeacon.new()
-	beacon.setup(player.global_position, route.position, str(route.label))
-	add_child(beacon)
 
 
 func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
