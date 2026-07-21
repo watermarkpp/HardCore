@@ -66,7 +66,10 @@ func _run() -> void:
 		var background: WorldBackground = game.background
 		assert(background.uses_orc_tomb_art() and background.environment_source_map_code() == EXPECTED[map_id].code, "地图%d运行时客户端古墓资源未加载" % map_id)
 		assert(background.orc_tomb_ground_atlas_size() == Vector2i(512, 32) and background.orc_tomb_prop_atlas_size() == Vector2i(768, 128), "兽人古墓图集规格错误")
-		assert(background.environment_collision_count() == int(background.environment_profile().expected_collisions), "地图%d运行碰撞数量错误" % map_id)
-		assert(background.environment_light_count() == int(background.environment_profile().expected_lights), "地图%d运行灯光数量错误" % map_id)
+		assert(background.editor_runtime_ground_ready() and background.uses_editor_runtime_fallback_ground(), "地图%d编辑器尺寸地表未加载" % map_id)
+		assert(background._editor_runtime_size == Vector2i(38, 38), "地图%d仍混用旧400x400运行碰撞" % map_id)
+		assert(background.source_collision_mask_size() == Vector2i.ZERO, "地图%d仍加载旧MAP阻挡图" % map_id)
+		assert(background.source_collision_shape_count() >= 4, "地图%d编辑器阻挡网格或硬边界缺失" % map_id)
+		assert(not background.is_environment_point_blocked(game.player.global_position), "地图%d出生点不可行走" % map_id)
 	print("ORC_TOMB_SOURCE_INTEGRATION_PASS：D001—D003哈希、400×400结构、专用资源、碰撞、门点、刷新和Boss空间完整")
 	get_tree().quit(0)
