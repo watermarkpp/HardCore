@@ -991,6 +991,13 @@
       }
     }
   },
+  "combatReactionPolicy": {
+    "policy_id": "player_struck_threshold_v1",
+    "max_hp_ratio": 0.02,
+    "minimum_actual_damage": 3,
+    "comparison": "actual_damage_gte_threshold",
+    "attack_interrupt_phase": "before_hit_commit"
+  },
   "skillTimingOverrides": {
     "刺杀剑术": {
       "action_duration": 0.51,

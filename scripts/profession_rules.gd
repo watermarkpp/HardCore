@@ -122,6 +122,18 @@ const SKILL_TIMING_OVERRIDES := {
 	"烈火剑法": {"windup": 0.17, "hit_frame": 2, "cooldown": 0.85, "action_duration": 0.51, "service_arm_cooldown": 10.0},
 }
 
+# 玩家受击反应使用一次最终伤害与最大生命值之间的统一关系，避免把
+# “能否打断”散落为逐怪开关。2% 让同级重击保留硬直，至少 3 点则过滤
+# 早期弱怪的 1~2 点擦伤。命中阈值本身是稳定数据契约，运行时只依赖 ID
+# 和字段，不依赖任何 monster_id。
+const COMBAT_REACTION_POLICY := {
+	"policy_id": "player_struck_threshold_v1",
+	"max_hp_ratio": 0.02,
+	"minimum_actual_damage": 3,
+	"comparison": "actual_damage_gte_threshold",
+	"attack_interrupt_phase": "before_hit_commit",
+}
+
 static var _runtime_data: Dictionary = {}
 static var _skill_ids_by_name: Dictionary = {}
 
@@ -135,6 +147,7 @@ static func _data() -> Dictionary:
 	_runtime_data = parsed if parsed is Dictionary else {
 		"baseStats": BASE_STATS, "skillProfiles": SKILL_PROFILES,
 		"castDefaults": CAST_DEFAULTS, "skillTimingOverrides": SKILL_TIMING_OVERRIDES,
+		"combatReactionPolicy": COMBAT_REACTION_POLICY,
 	}
 	return _runtime_data
 
@@ -237,6 +250,17 @@ static func primary_damage_range(profession: String, stats: Dictionary) -> Vecto
 		"法师": return Vector2i(int(stats.get("magic_min", 0)), int(stats.get("magic_max", 0)))
 		"道士": return Vector2i(int(stats.get("tao_min", 0)), int(stats.get("tao_max", 0)))
 		_: return Vector2i(int(stats.get("attack_min", 1)), int(stats.get("attack_max", 1)))
+
+
+static func player_struck_damage_threshold(max_hp_value: int) -> int:
+	var policy: Dictionary = _data().get("combatReactionPolicy", COMBAT_REACTION_POLICY)
+	var ratio := maxf(0.0, float(policy.get("max_hp_ratio", COMBAT_REACTION_POLICY.max_hp_ratio)))
+	var minimum := maxi(1, int(policy.get("minimum_actual_damage", COMBAT_REACTION_POLICY.minimum_actual_damage)))
+	return maxi(minimum, ceili(float(maxi(1, max_hp_value)) * ratio))
+
+
+static func should_player_stagger(actual_damage: int, max_hp_value: int) -> bool:
+	return actual_damage >= player_struck_damage_threshold(max_hp_value)
 
 
 static func missing_runtime_skills(skill_rows: Array) -> PackedStringArray:
