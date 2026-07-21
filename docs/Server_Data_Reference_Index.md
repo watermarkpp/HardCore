@@ -51,7 +51,7 @@
 4. 当前 `legend176_data.json` 的结构化候选；
 5. 其他网络或人工整理数据，必须标记来源和可信度。
 
-社区库包含刺客、坐骑、英雄、觉醒、钓鱼和私服化爆率；只能按经典地图、怪物和物品白名单选择性导入。采用细则见 `BICH-COMMUNITY-DATA-1_社区数据库搜索与采用报告.md`。
+社区库包含刺客、坐骑、英雄、觉醒、钓鱼和私服化爆率；只能按经典地图、怪物和物品白名单选择性导入。采用细则见 `BICH-COMMUNITY-DATA-1_Community_Database_Research_and_Adoption_Report.md`。
 
 ## M7-2 当前执行约束
 

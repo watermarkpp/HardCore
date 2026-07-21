@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_OVERRIDES = ROOT / "assets/data/map_design/map_scale_overrides.json"
 DEFAULT_OUTPUT = ROOT / "assets/data/map_design/source_map_audit.json"
-DEFAULT_REPORT = ROOT / "docs/map_design/原始地图尺寸审计报告.md"
+DEFAULT_REPORT = ROOT / "docs/map_design/Original_Map_Size_Audit_Report.md"
 
 def resolve_source(project_root: Path, value: str) -> Path:
     direct = project_root / value

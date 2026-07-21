@@ -50,7 +50,7 @@ HUD_PATH = ROOT / "scripts/hud.gd"
 QUEST_PANEL_PATH = ROOT / "scripts/quest_panel.gd"
 MONSTER_ART = ROOT / "assets/art/monsters"
 OUTPUT_JSON = ROOT / "assets/data/bich_closure_audit.json"
-OUTPUT_MD = ROOT / "docs/BICH-CLOSE-1_比奇垂直切片缺口审计.md"
+OUTPUT_MD = ROOT / "docs/BICH-CLOSE-1_Bich_Vertical_Slice_Gap_Audit.md"
 
 BICH_MAP_IDS = [4, 217, 218, 221, 248, 249, *range(401, 413), 1578]
 WARRIOR_SKILLS = ["基本剑术", "攻杀剑术", "刺杀剑术", "半月弯刀", "野蛮冲撞", "烈火剑法"]

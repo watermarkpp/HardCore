@@ -13,7 +13,7 @@ SETUP_PATH = WORKSPACE / "research/MIR2/GameOfMir/MirServer/Mir200/!Setup.txt"
 M2SHARE_PATH = WORKSPACE / "research/MIR2/GameOfMir/M2Server/M2Share.pas"
 DATA_PATH = ROOT / "assets/data/legend176_data.json"
 REFERENCE_PATH = ROOT / "assets/data/service_reference.json"
-REPORT_PATH = ROOT / "docs/MIR2-DATA-1_服务端数据校准报告.md"
+REPORT_PATH = ROOT / "docs/MIR2-DATA-1_Server_Data_Calibration_Report.md"
 
 REQUIRED_SERVER_TABLES = {
     "map_info": ["Envir/MapInfo.txt", "Mir200/Envir/MapInfo.txt"],
