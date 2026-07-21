@@ -238,6 +238,18 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 		queue_redraw()
 		return
+	# Keep the established retarget/attack/summon timing, but immobilization must
+	# win over the no-target return path after an actor is relocated beyond its
+	# authored spawn leash.
+	if control_time > 0.0 or charm_time > 0.0:
+		if _control_anchor == Vector2.INF:
+			_control_anchor = global_position
+		else:
+			global_position = _control_anchor
+		velocity = Vector2.ZERO
+		queue_redraw()
+		return
+	_control_anchor = Vector2.INF
 	if not is_instance_valid(target):
 		_return_to_spawn()
 		return
@@ -284,15 +296,6 @@ func _physics_process(delta: float) -> void:
 			velocity = Vector2.ZERO
 			queue_redraw()
 			return
-	if control_time > 0.0 or charm_time > 0.0:
-		if _control_anchor == Vector2.INF:
-			_control_anchor = global_position
-		else:
-			global_position = _control_anchor
-		velocity = Vector2.ZERO
-		queue_redraw()
-		return
-	_control_anchor = Vector2.INF
 	if target.has_method("is_stealthed") and target.is_stealthed() and distance > 35.0:
 		velocity = Vector2.ZERO
 		return
