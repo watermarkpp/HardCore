@@ -1,0 +1,94 @@
+{
+  "base_color": "#17130f",
+  "chunks": [
+    {
+      "chunk_id": "c_0_0",
+      "image": "assets/art/maps/wooma_temple/editor_runtime_chunks/wooma_temple_3/c_0_0.png",
+      "rect_px": [
+        0.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "910671982d0a772ac618bee489ce5cc64e6b223dee9c7e09e9c7581a6447e71f"
+    },
+    {
+      "chunk_id": "c_1_0",
+      "image": "assets/art/maps/wooma_temple/editor_runtime_chunks/wooma_temple_3/c_1_0.png",
+      "rect_px": [
+        1024.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "26e3beffae499f97315d3164df7684e9ded525826af16f77a90acb3469a12218"
+    },
+    {
+      "chunk_id": "c_2_0",
+      "image": "assets/art/maps/wooma_temple/editor_runtime_chunks/wooma_temple_3/c_2_0.png",
+      "rect_px": [
+        2048.0,
+        0.0,
+        768.0,
+        1024.0
+      ],
+      "sha256": "4cd7c1c17543cca370aa122ac171080a64c7302bad8fdeacf11233369611a1c5"
+    },
+    {
+      "chunk_id": "c_0_1",
+      "image": "assets/art/maps/wooma_temple/editor_runtime_chunks/wooma_temple_3/c_0_1.png",
+      "rect_px": [
+        0.0,
+        1024.0,
+        1024.0,
+        384.0
+      ],
+      "sha256": "3526f608c2c805f2b0392b108f660c48aa4b1211442be393504a6df206d32f8e"
+    },
+    {
+      "chunk_id": "c_1_1",
+      "image": "assets/art/maps/wooma_temple/editor_runtime_chunks/wooma_temple_3/c_1_1.png",
+      "rect_px": [
+        1024.0,
+        1024.0,
+        1024.0,
+        384.0
+      ],
+      "sha256": "9003e5d7e52fcd83ed636eb1575640b0b3a09dff865851a9efc86ee08064a82d"
+    },
+    {
+      "chunk_id": "c_2_1",
+      "image": "assets/art/maps/wooma_temple/editor_runtime_chunks/wooma_temple_3/c_2_1.png",
+      "rect_px": [
+        2048.0,
+        1024.0,
+        768.0,
+        384.0
+      ],
+      "sha256": "2585c7a27a5c8a39a30dac23451c7d105d980e24eb22e8611cc580994784afde"
+    }
+  ],
+  "coverage": {
+    "complete": true,
+    "packaged_chunk_count": 6,
+    "required_chunk_count": 6
+  },
+  "design_size": [
+    44.0,
+    44.0
+  ],
+  "ground_pixel_center": [
+    1408.0,
+    704.0
+  ],
+  "ground_pixel_size": [
+    2816.0,
+    1408.0
+  ],
+  "guard_band_px": 512.0,
+  "map_id": "wooma_temple_3",
+  "render_mode": "batched_canvas_draw",
+  "runtime_map_id": 315,
+  "schema_version": 1,
+  "visual_contract_id": "wooma_editor_runtime_visual_v1"
+}
