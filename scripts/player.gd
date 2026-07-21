@@ -11,9 +11,8 @@ const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 # - ClientWalkXY/ClientRunXY call CheckActionStatus before moving.
 # - CheckActionStatus rejects the action while dwStruckTime has not elapsed.
 # - M2Server/Mir200/!Setup.txt configures StruckTime=100 (milliseconds).
-# HardCore keeps that 100ms lock duration, but gates player hard-stagger through
-# ProfessionRules.player_struck_damage_threshold so chip damage does not cancel actions.
-const SERVER_STRUCK_TIME_SECONDS := 0.100
+# That source identifies itself as a modified 1.5 build, not an exact 1.76 source.
+# HardCore keeps source evidence and its custom balance values in ProfessionRules.
 
 signal stats_changed(current_hp: int, max_hp: int)
 signal attack_requested(origin: Vector2, direction: Vector2, damage: int)
@@ -49,6 +48,8 @@ var facing := Vector2.DOWN
 var _attack_timer := 0.0
 var _attack_action_timer := 0.0
 var _struck_lock_remaining := 0.0
+var _struck_reaction_lock_remaining := 0.0
+var _queued_struck_reaction := false
 var _rng := RandomNumberGenerator.new()
 var visual: Node2D
 var health_bar: PlayerHealthBar
@@ -124,12 +125,16 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	var position_before_move := global_position
-	var was_struck_locked := _struck_lock_remaining > 0.0
+	var was_struck_locked := _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0
 	_attack_timer = maxf(0.0, _attack_timer - delta)
 	_attack_action_timer = maxf(0.0, _attack_action_timer - delta)
 	if _attack_action_timer <= 0.0 and _pending_combat_action_active and _pending_combat_action_committed:
 		_finish_combat_action(_pending_combat_action_id)
+	if _attack_action_timer <= 0.0 and _queued_struck_reaction:
+		_start_queued_struck_reaction()
+		was_struck_locked = true
 	_struck_lock_remaining = maxf(0.0, _struck_lock_remaining - delta)
+	_struck_reaction_lock_remaining = maxf(0.0, _struck_reaction_lock_remaining - delta)
 	if _struck_lock_remaining < 0.000001:
 		_struck_lock_remaining = 0.0
 	shield_time = maxf(0.0, shield_time - delta)
@@ -197,7 +202,7 @@ func set_combat_facing(direction: Vector2) -> void:
 
 
 func can_start_attack() -> bool:
-	return _attack_timer <= 0.0 and _attack_action_timer <= 0.0 and _struck_lock_remaining <= 0.0 and control_time <= 0.0
+	return _attack_timer <= 0.0 and _attack_action_timer <= 0.0 and _struck_lock_remaining <= 0.0 and _struck_reaction_lock_remaining <= 0.0 and control_time <= 0.0
 
 
 func request_attack() -> bool:
@@ -231,7 +236,7 @@ func request_attack_toward(direction: Vector2) -> bool:
 func request_skill(skill_name: String) -> bool:
 	if skill_name.is_empty() or not PlayerState.learned_skills.has(skill_name):
 		return false
-	if _struck_lock_remaining > 0.0 or control_time > 0.0 or _dead:
+	if _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0 or control_time > 0.0 or _dead:
 		return false
 	var learned_level := PlayerState.effective_skill_level(skill_name)
 	if PlayerState.profession == "战士" and skill_name in ["基本剑术", "攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"]:
@@ -278,11 +283,16 @@ func take_damage(amount: int, causes_struck: bool = true) -> void:
 			final_damage = int(round(unpaid_mp / 1.5))
 	current_hp = maxi(0, current_hp - final_damage)
 	if causes_struck and ProfessionRules.should_player_stagger(final_damage, max_hp) and current_hp > 0:
-		_cancel_uncommitted_combat_action()
-		_struck_lock_remaining = SERVER_STRUCK_TIME_SECONDS
+		_struck_lock_remaining = maxf(_struck_lock_remaining, ProfessionRules.player_struck_action_lock_seconds())
 		velocity = Vector2.ZERO
 		movement_input_active = false
-		visual.play_hit()
+		# The legacy client only consumes SM_STRUCK while its current action is
+		# idle. Queue the reaction so an attack animation and its hit transaction
+		# remain causally consistent instead of showing a false cancellation.
+		if _attack_action_timer > 0.0 or _pending_combat_action_active:
+			_queued_struck_reaction = true
+		else:
+			_start_struck_reaction()
 	if _rng.randi_range(1, 30) == 1:
 		PlayerState.damage_equipment_durability("衣服")
 	stats_changed.emit(current_hp, max_hp)
@@ -345,21 +355,22 @@ func _commit_combat_action(action_id: int) -> bool:
 	return true
 
 
-func _cancel_uncommitted_combat_action() -> bool:
-	if not _pending_combat_action_active or _pending_combat_action_committed:
-		return false
-	_pending_combat_action_active = false
-	_pending_combat_action_kind = ""
-	_attack_action_timer = 0.0
-	_combat_action_sequence += 1
-	return true
-
-
 func _finish_combat_action(action_id: int) -> void:
 	if action_id != _pending_combat_action_id:
 		return
 	_pending_combat_action_active = false
 	_pending_combat_action_kind = ""
+
+
+func _start_struck_reaction() -> void:
+	var duration := ProfessionRules.player_struck_reaction_seconds()
+	_struck_reaction_lock_remaining = maxf(_struck_reaction_lock_remaining, duration)
+	visual.play_hit(duration)
+
+
+func _start_queued_struck_reaction() -> void:
+	_queued_struck_reaction = false
+	_start_struck_reaction()
 
 
 func combat_action_snapshot() -> Dictionary:
@@ -368,6 +379,15 @@ func combat_action_snapshot() -> Dictionary:
 		"kind": _pending_combat_action_kind,
 		"active": _pending_combat_action_active,
 		"committed": _pending_combat_action_committed,
+	}
+
+
+func struck_reaction_snapshot() -> Dictionary:
+	return {
+		"policy_id": str(ProfessionRules.COMBAT_REACTION_POLICY.policy_id),
+		"server_action_lock_remaining": _struck_lock_remaining,
+		"reaction_lock_remaining": _struck_reaction_lock_remaining,
+		"queued": _queued_struck_reaction,
 	}
 
 

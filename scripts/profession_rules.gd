@@ -122,16 +122,27 @@ const SKILL_TIMING_OVERRIDES := {
 	"烈火剑法": {"windup": 0.17, "hit_frame": 2, "cooldown": 0.85, "action_duration": 0.51, "service_arm_cooldown": 10.0},
 }
 
-# 玩家受击反应使用一次最终伤害与最大生命值之间的统一关系，避免把
-# “能否打断”散落为逐怪开关。2% 让同级重击保留硬直，至少 3 点则过滤
-# 早期弱怪的 1~2 点擦伤。命中阈值本身是稳定数据契约，运行时只依赖 ID
-# 和字段，不依赖任何 monster_id。
+# 这不是“1.76 原版阈值”。可读的本地 2002 源码自述为修改版 1.5：
+# 服务端对任意 nPower>0 发 SM_STRUCK，并以 StruckTime=100 拒绝新动作；
+# 客户端则将 SM_STRUCK 排在当前动作之后，并以三帧表现受击。用户明确要求
+# 小额擦伤不能触发硬反应，因此下列阈值是 HardCore 的数据化平衡策略。
 const COMBAT_REACTION_POLICY := {
-	"policy_id": "player_struck_threshold_v1",
+	"policy_id": "hardcore_player_hit_reaction_v2",
+	"origin": "hardcore_custom_balance_not_original_176",
 	"max_hp_ratio": 0.02,
 	"minimum_actual_damage": 3,
 	"comparison": "actual_damage_gte_threshold",
-	"attack_interrupt_phase": "before_hit_commit",
+	"server_action_lock_seconds": 0.10,
+	"reaction_animation_seconds": 0.24,
+	"reaction_frame_count": 3,
+	"reaction_queue_policy": "after_current_action",
+	"balance_basis": "Bich baseline: scarecrow 1-2; rake/hook cats 2-4; level-1 warrior HP 120",
+	"reaction_basis": "mobile fixed 3x80ms, using the floor of modified-1.5 client max(80, 200-level*5) per-frame timing",
+	"evidence": [
+		{"confidence": "B", "scope": "modified_1.5_2002_not_verified_1.76", "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas:5468-5521,25225-25243", "finding": "nPower>0 sends SM_STRUCK; CheckActionStatus uses configured StruckTime"},
+		{"confidence": "B", "scope": "modified_1.5_2002_not_verified_1.76", "path": "dev_art_sources/reference/original_gameofmir/Client/Actor.pas:75-90,1407-1414,1536-1546,1617-1634", "finding": "three struck frames; frame_ms=max(80,200-level*5); SM_STRUCK waits for current action to finish"},
+		{"confidence": "C_corroboration_only", "url": "https://github.com/miniPizza/mir2/blob/e8859977462558a09bf3fb2278dd07be7269a4f4/Client/MirScenes/GameScene.cs#L2920-L2971", "finding": "later community client also appends Struck to ActionFeed"},
+	],
 }
 
 static var _runtime_data: Dictionary = {}
@@ -261,6 +272,16 @@ static func player_struck_damage_threshold(max_hp_value: int) -> int:
 
 static func should_player_stagger(actual_damage: int, max_hp_value: int) -> bool:
 	return actual_damage >= player_struck_damage_threshold(max_hp_value)
+
+
+static func player_struck_action_lock_seconds() -> float:
+	var policy: Dictionary = _data().get("combatReactionPolicy", COMBAT_REACTION_POLICY)
+	return maxf(0.0, float(policy.get("server_action_lock_seconds", COMBAT_REACTION_POLICY.server_action_lock_seconds)))
+
+
+static func player_struck_reaction_seconds() -> float:
+	var policy: Dictionary = _data().get("combatReactionPolicy", COMBAT_REACTION_POLICY)
+	return maxf(0.0, float(policy.get("reaction_animation_seconds", COMBAT_REACTION_POLICY.reaction_animation_seconds)))
 
 
 static func missing_runtime_skills(skill_rows: Array) -> PackedStringArray:
