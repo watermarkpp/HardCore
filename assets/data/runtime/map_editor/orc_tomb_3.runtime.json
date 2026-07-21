@@ -1,5 +1,5 @@
 {
-  "build_sha256": "dc820fd780828f337e9dbc0e1ae560c1a47f6c053e5ca29e75dc996c1ae2b566",
+  "build_sha256": "5db0b7c1da1932ce0d9afdf2bc0ba6fb8b036849f5a561c6f5b50d9263d8a859",
   "collision": {
     "blocked_count": 201.0,
     "blocked_tiles": [
@@ -7157,25 +7157,51 @@
     ],
     "door_points": [],
     "light": [],
-    "map_entrance_points": [
+    "map_entrance_points": [],
+    "map_exit_points": [
       {
+        "arrival_locks_current_portal": true,
+        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
+        "connection_direction": "reverse",
+        "connection_mode": "bidirectional",
+        "connection_pair_id": "orc_tomb_2_3_pair_v1",
+        "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
-        "entrance_id": "map_entrance_000001",
-        "is_default": false,
-        "kind": "map_entrance",
-        "portal_role": "entrance",
-        "radius_tiles": 3.0,
+        "display_name": "返回兽人古墓二层",
+        "exit_id": "map_exit_000001",
+        "kind": "map_exit",
+        "official_connection_id": "orc_tomb_3_to_2_v1",
+        "one_way": false,
+        "portal_contract_id": "unified_map_portal_endpoint_v1",
+        "portal_role": "bidirectional_endpoint",
+        "reciprocal_exit_id": "map_exit_000001",
+        "reciprocal_map_key": "orc_tomb_2",
+        "requires_leave_before_retrigger": true,
+        "return_minimum_seconds": 3.0,
+        "return_requires_fresh_activation": true,
+        "return_unlock_distance_tiles": 1.5,
         "runtime_export": true,
-        "semantic_id": "map_entrance_000001",
-        "semantic_role": "map_landing_point",
+        "semantic_id": "map_exit_000001",
+        "semantic_role": "map_portal_endpoint",
+        "source_map_key": "orc_tomb_3",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000001",
+        "target_map_id": 218.0,
+        "target_map_key": "orc_tomb_2",
+        "target_portal_id": "map_exit_000001",
+        "target_tile": [
+          32.0,
+          2.0
+        ],
         "tile": [
           3.0,
           35.0
-        ]
+        ],
+        "travel_request_single_flight": true,
+        "trigger_on_enter": true
       }
     ],
-    "map_exit_points": [],
     "monster_spawn": [
       {
         "content_id": "monster.47",
@@ -7529,6 +7555,6 @@
     "content_layer": "personal_expansion",
     "editor_schema_version": 4.0,
     "map_id": "orc_tomb_3",
-    "revision": 3.0
+    "revision": 4.0
   }
 }

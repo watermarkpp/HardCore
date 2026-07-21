@@ -55,9 +55,9 @@ func _ready() -> void:
 	assert(str(bich_east.target_map_key) == "orc_tomb_1")
 	assert(int(bich_east.target_map_id) == 217)
 
-	_assert_runtime_link(runtimes[1], runtimes[2])
-	_assert_runtime_link(runtimes[2], runtimes[3])
-	assert(runtimes[3].semantics.map_exit_points.is_empty())
+	_assert_runtime_link(runtimes[1], runtimes[2], "orc_tomb_1_2_pair_v1")
+	_assert_runtime_link(runtimes[2], runtimes[3], "orc_tomb_2_3_pair_v1")
+	assert(runtimes[3].semantics.map_exit_points.size() == 1)
 
 	var floor_two_npcs: Array = runtimes[2].semantics.npc_points
 	assert(floor_two_npcs.size() == 2)
@@ -99,10 +99,21 @@ func _ready() -> void:
 	get_tree().quit(0)
 
 
-func _assert_runtime_link(source: Dictionary, target: Dictionary) -> void:
-	assert(source.semantics.map_exit_points.size() == 1)
-	assert(target.semantics.map_entrance_points.size() == 1)
-	var map_exit: Dictionary = source.semantics.map_exit_points[0]
-	var entrance: Dictionary = target.semantics.map_entrance_points[0]
-	assert(str(map_exit.target_map_id) == str(target.source.map_id))
-	assert(str(map_exit.target_entrance_id) == str(entrance.entrance_id))
+func _assert_runtime_link(
+	source: Dictionary,
+	target: Dictionary,
+	pair_id: String
+) -> void:
+	var forward: Dictionary = {}
+	var reverse: Dictionary = {}
+	for endpoint: Dictionary in source.semantics.map_exit_points:
+		if str(endpoint.get("connection_pair_id", "")) == pair_id:
+			forward = endpoint
+	for endpoint: Dictionary in target.semantics.map_exit_points:
+		if str(endpoint.get("connection_pair_id", "")) == pair_id:
+			reverse = endpoint
+	assert(not forward.is_empty() and not reverse.is_empty())
+	assert(str(forward.target_map_key) == str(target.source.map_id))
+	assert(str(forward.target_portal_id) == str(reverse.semantic_id))
+	assert(str(reverse.target_map_key) == str(source.source.map_id))
+	assert(str(reverse.target_portal_id) == str(forward.semantic_id))

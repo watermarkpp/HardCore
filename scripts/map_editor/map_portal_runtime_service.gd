@@ -59,6 +59,10 @@ static func validate_network(
 		var source: Dictionary = runtimes_by_map_key[source_map_key]
 		for endpoint: Dictionary in endpoints(source):
 			var portal_id := str(endpoint.get("semantic_id", ""))
+			if bool(endpoint.get("arrival_only", false)):
+				continue
+			if not bool(endpoint.get("target_configured", false)):
+				continue
 			var target_map_key := str(endpoint.get("target_map_key", ""))
 			if not runtimes_by_map_key.has(target_map_key):
 				errors.append("target_runtime_missing:%s" % portal_id)
@@ -71,12 +75,27 @@ static func validate_network(
 			if target_endpoint.is_empty():
 				errors.append("target_portal_missing:%s" % portal_id)
 				continue
+			if bool(endpoint.get("one_way", false)):
+				if not bool(target_endpoint.get("arrival_only", false)):
+					errors.append("one_way_target_not_arrival_only:%s" % portal_id)
+				if bool(target_endpoint.get("trigger_on_enter", true)):
+					errors.append("one_way_target_trigger_enabled:%s" % portal_id)
+				_validate_guard(endpoint, portal_id, errors)
+				continue
 			if str(target_endpoint.get("target_map_key", "")) != source_map_key:
 				errors.append("target_map_not_reciprocal:%s" % portal_id)
 			if str(target_endpoint.get("target_portal_id", "")) != portal_id:
 				errors.append("target_portal_not_reciprocal:%s" % portal_id)
-			if str(endpoint.get("arrival_reentry_policy_id", "")) != ARRIVAL_GUARD_POLICY_ID:
-				errors.append("arrival_guard_missing:%s" % portal_id)
-			if not bool(endpoint.get("travel_request_single_flight", false)):
-				errors.append("single_flight_missing:%s" % portal_id)
+			_validate_guard(endpoint, portal_id, errors)
 	return errors
+
+
+static func _validate_guard(
+	endpoint: Dictionary,
+	portal_id: String,
+	errors: Array[String]
+) -> void:
+	if str(endpoint.get("arrival_reentry_policy_id", "")) != ARRIVAL_GUARD_POLICY_ID:
+		errors.append("arrival_guard_missing:%s" % portal_id)
+	if not bool(endpoint.get("travel_request_single_flight", false)):
+		errors.append("single_flight_missing:%s" % portal_id)

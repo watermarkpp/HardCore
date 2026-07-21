@@ -1,5 +1,5 @@
 {
-  "build_sha256": "95065cf780d75c1c0a9756364fa0f77c5db277c264185291dcc93d8883e3d36e",
+  "build_sha256": "e470a4844dfafe6f4a5fb640a899dbfa67383461d428db14b3c59019dca08b3f",
   "collision": {
     "blocked_count": 232.0,
     "blocked_tiles": [
@@ -11220,25 +11220,7 @@
     "boss_spawn": [],
     "door_points": [],
     "light": [],
-    "map_entrance_points": [
-      {
-        "blocks_movement": false,
-        "content_layer": "personal_expansion",
-        "display_name": "沃玛森林入口",
-        "entrance_id": "map_entrance_000001",
-        "is_default": false,
-        "kind": "map_entrance",
-        "portal_role": "entrance",
-        "radius_tiles": 3.0,
-        "runtime_export": true,
-        "semantic_id": "map_entrance_000001",
-        "semantic_role": "map_landing_point",
-        "tile": [
-          3.0,
-          52.0
-        ]
-      }
-    ],
+    "map_entrance_points": [],
     "map_exit_points": [
       {
         "arrival_locks_current_portal": true,
@@ -11318,6 +11300,48 @@
           50.0,
           50.0
         ],
+        "trigger_on_enter": true
+      },
+      {
+        "arrival_locks_current_portal": true,
+        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+        "blocks_movement": false,
+        "connection_direction": "reverse",
+        "connection_mode": "bidirectional",
+        "connection_pair_id": "bich_wooma_forest_pair_v2",
+        "connection_policy_id": "map_connection_unified_bidirectional_v2",
+        "content_layer": "personal_expansion",
+        "display_name": "返回比奇省",
+        "exit_id": "map_exit_000004",
+        "kind": "map_exit",
+        "official_connection_id": "wooma_forest_to_bich_v1",
+        "one_way": false,
+        "portal_contract_id": "unified_map_portal_endpoint_v1",
+        "portal_role": "bidirectional_endpoint",
+        "reciprocal_exit_id": "map_exit_000001",
+        "reciprocal_map_key": "bich_province",
+        "requires_leave_before_retrigger": true,
+        "return_minimum_seconds": 3.0,
+        "return_requires_fresh_activation": true,
+        "return_unlock_distance_tiles": 1.5,
+        "runtime_export": true,
+        "semantic_id": "map_exit_000004",
+        "semantic_role": "map_portal_endpoint",
+        "source_map_key": "wooma_forest",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000001",
+        "target_map_id": 4.0,
+        "target_map_key": "bich_province",
+        "target_portal_id": "map_exit_000001",
+        "target_tile": [
+          6.0,
+          5.0
+        ],
+        "tile": [
+          3.0,
+          52.0
+        ],
+        "travel_request_single_flight": true,
         "trigger_on_enter": true
       }
     ],
@@ -11980,6 +12004,6 @@
     "content_layer": "personal_expansion",
     "editor_schema_version": 4.0,
     "map_id": "wooma_forest",
-    "revision": 5.0
+    "revision": 6.0
   }
 }

@@ -42,9 +42,9 @@
       "return_minimum_seconds": 3.0,
       "return_unlock_distance_tiles": 1.5,
       "source_map_id": "wooma_forest",
-      "source_runtime_map_id": 268,
+      "source_runtime_map_id": 268.0,
       "target_entrance_id": "map_exit_000002",
-      "target_map_id": 313,
+      "target_map_id": 313.0,
       "target_map_key": "wooma_temple_1",
       "target_portal_id": "map_exit_000002",
       "target_tile": [
@@ -66,9 +66,9 @@
       "return_minimum_seconds": 3.0,
       "return_unlock_distance_tiles": 1.5,
       "source_map_id": "wooma_temple_1",
-      "source_runtime_map_id": 313,
+      "source_runtime_map_id": 313.0,
       "target_entrance_id": "map_exit_000002",
-      "target_map_id": 314,
+      "target_map_id": 314.0,
       "target_map_key": "wooma_temple_2",
       "target_portal_id": "map_exit_000002",
       "target_tile": [
@@ -90,9 +90,9 @@
       "return_minimum_seconds": 3.0,
       "return_unlock_distance_tiles": 1.5,
       "source_map_id": "wooma_temple_1",
-      "source_runtime_map_id": 313,
+      "source_runtime_map_id": 313.0,
       "target_entrance_id": "map_exit_000001",
-      "target_map_id": 268,
+      "target_map_id": 268.0,
       "target_map_key": "wooma_forest",
       "target_portal_id": "map_exit_000001",
       "target_tile": [
@@ -114,9 +114,9 @@
       "return_minimum_seconds": 3.0,
       "return_unlock_distance_tiles": 1.5,
       "source_map_id": "wooma_temple_2",
-      "source_runtime_map_id": 314,
+      "source_runtime_map_id": 314.0,
       "target_entrance_id": "map_exit_000001",
-      "target_map_id": 315,
+      "target_map_id": 315.0,
       "target_map_key": "wooma_temple_3",
       "target_portal_id": "map_exit_000001",
       "target_tile": [
@@ -138,9 +138,9 @@
       "return_minimum_seconds": 3.0,
       "return_unlock_distance_tiles": 1.5,
       "source_map_id": "wooma_temple_2",
-      "source_runtime_map_id": 314,
+      "source_runtime_map_id": 314.0,
       "target_entrance_id": "map_exit_000001",
-      "target_map_id": 313,
+      "target_map_id": 313.0,
       "target_map_key": "wooma_temple_1",
       "target_portal_id": "map_exit_000001",
       "target_tile": [
@@ -162,9 +162,9 @@
       "return_minimum_seconds": 3.0,
       "return_unlock_distance_tiles": 1.5,
       "source_map_id": "wooma_temple_3",
-      "source_runtime_map_id": 315,
+      "source_runtime_map_id": 315.0,
       "target_entrance_id": "map_exit_000001",
-      "target_map_id": 314,
+      "target_map_id": 314.0,
       "target_map_key": "wooma_temple_2",
       "target_portal_id": "map_exit_000001",
       "target_tile": [
@@ -178,26 +178,26 @@
     {
       "display_name": "沃玛森林",
       "map_id": "wooma_forest",
-      "runtime_build_sha256": "95065cf780d75c1c0a9756364fa0f77c5db277c264185291dcc93d8883e3d36e",
-      "runtime_map_id": 268
+      "runtime_build_sha256": "e470a4844dfafe6f4a5fb640a899dbfa67383461d428db14b3c59019dca08b3f",
+      "runtime_map_id": 268.0
     },
     {
       "display_name": "沃玛寺庙一层",
       "map_id": "wooma_temple_1",
-      "runtime_build_sha256": "42fc27f811c333c80c905b5a9faa209110acb692df8678c692193a2eea7caed7",
-      "runtime_map_id": 313
+      "runtime_build_sha256": "d7286cef7e69e18cd5b3eedc511bcb1792b6ba03a6391f41e78e87eb2bd78240",
+      "runtime_map_id": 313.0
     },
     {
       "display_name": "沃玛寺庙二层",
       "map_id": "wooma_temple_2",
-      "runtime_build_sha256": "d9a5414812ad26f94dd11dace7fb4da6c03d878cee227732ae81002f86d10b8a",
-      "runtime_map_id": 314
+      "runtime_build_sha256": "48da6fe01996d1346531436407af460942f14869c5c17d62099968799e87fe67",
+      "runtime_map_id": 314.0
     },
     {
       "display_name": "沃玛教主大厅",
       "map_id": "wooma_temple_3",
-      "runtime_build_sha256": "96146914bfa88be4bcb03034324dda36a0219993382a865dd88c89336267b55b",
-      "runtime_map_id": 315
+      "runtime_build_sha256": "d18a8be9e9597ee88bec19627608a454ca19e877cef0a7984b881254f8f8d447",
+      "runtime_map_id": 315.0
     }
   ],
   "portal_contract_id": "unified_map_portal_endpoint_v1",
@@ -205,7 +205,7 @@
   "return_requires_fresh_activation": true,
   "return_unlock_distance_tiles": 1.5,
   "route_version_id": "wooma_temple_user_route_v3_unified_portals",
-  "schema_version": 2,
+  "schema_version": 2.0,
   "status": "user_requested_unified_bidirectional_portals",
   "travel_request_single_flight": true
 }

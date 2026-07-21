@@ -1,0 +1,4321 @@
+{
+  "build_sha256": "faa0fbc55fbc22085c6c4a44550a6f088cbd22d9805bcb388b0c593030c748b3",
+  "collision": {
+    "blocked_count": 132.0,
+    "blocked_tiles": [
+      "0,0",
+      "0,1",
+      "0,10",
+      "0,11",
+      "0,12",
+      "0,13",
+      "0,14",
+      "0,15",
+      "0,16",
+      "0,17",
+      "0,18",
+      "0,19",
+      "0,2",
+      "0,20",
+      "0,21",
+      "0,22",
+      "0,23",
+      "0,24",
+      "0,25",
+      "0,26",
+      "0,27",
+      "0,28",
+      "0,29",
+      "0,3",
+      "0,4",
+      "0,5",
+      "0,6",
+      "0,7",
+      "0,8",
+      "0,9",
+      "1,0",
+      "1,29",
+      "10,0",
+      "10,29",
+      "11,0",
+      "11,29",
+      "12,0",
+      "12,29",
+      "13,0",
+      "13,29",
+      "14,0",
+      "14,29",
+      "15,0",
+      "15,29",
+      "16,0",
+      "16,29",
+      "17,0",
+      "17,29",
+      "18,0",
+      "18,29",
+      "19,0",
+      "19,29",
+      "2,0",
+      "2,29",
+      "20,0",
+      "20,20",
+      "20,21",
+      "20,29",
+      "20,6",
+      "20,7",
+      "21,0",
+      "21,20",
+      "21,21",
+      "21,29",
+      "21,6",
+      "21,7",
+      "22,0",
+      "22,29",
+      "23,0",
+      "23,29",
+      "24,0",
+      "24,29",
+      "25,0",
+      "25,29",
+      "26,0",
+      "26,29",
+      "27,0",
+      "27,29",
+      "28,0",
+      "28,29",
+      "29,0",
+      "29,1",
+      "29,10",
+      "29,11",
+      "29,12",
+      "29,13",
+      "29,14",
+      "29,15",
+      "29,16",
+      "29,17",
+      "29,18",
+      "29,19",
+      "29,2",
+      "29,20",
+      "29,21",
+      "29,22",
+      "29,23",
+      "29,24",
+      "29,25",
+      "29,26",
+      "29,27",
+      "29,28",
+      "29,29",
+      "29,3",
+      "29,4",
+      "29,5",
+      "29,6",
+      "29,7",
+      "29,8",
+      "29,9",
+      "3,0",
+      "3,29",
+      "4,0",
+      "4,29",
+      "5,0",
+      "5,29",
+      "6,0",
+      "6,20",
+      "6,21",
+      "6,29",
+      "6,6",
+      "6,7",
+      "7,0",
+      "7,20",
+      "7,21",
+      "7,29",
+      "7,6",
+      "7,7",
+      "8,0",
+      "8,29",
+      "9,0",
+      "9,29"
+    ],
+    "erased_cells": [],
+    "manual_shapes": [
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000001",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            29.0,
+            30.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000002",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            29.0,
+            0.0,
+            1.0,
+            30.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000003",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            1.0,
+            0.0,
+            29.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000004",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            0.0,
+            0.0,
+            1.0,
+            30.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000005",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            7.0,
+            21.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000006",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            7.0,
+            20.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000007",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            6.0,
+            20.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000008",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            6.0,
+            21.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000009",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            6.0,
+            7.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000010",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            7.0,
+            7.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000011",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            7.0,
+            6.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000012",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            6.0,
+            6.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000013",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            20.0,
+            21.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000014",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            21.0,
+            21.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000015",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            21.0,
+            20.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000016",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            20.0,
+            20.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000017",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            20.0,
+            7.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000018",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            21.0,
+            7.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000019",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            21.0,
+            6.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000020",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            20.0,
+            6.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      }
+    ]
+  },
+  "design": {
+    "design_size": [
+      30.0,
+      30.0
+    ],
+    "map_type": "boss_room",
+    "pre_scale_design_size": [
+      96.0,
+      96.0
+    ],
+    "scale_factor": 0.3125,
+    "scale_rounding": "nearest_integer_half_up",
+    "source_size": [
+      30.0,
+      30.0
+    ],
+    "source_size_is_design_size": false,
+    "strategy": "preserve_arena",
+    "tile_size": [
+      64.0,
+      32.0
+    ],
+    "view_type": "isometric_2_to_1"
+  },
+  "ground": {
+    "default_fill_asset_id": "",
+    "ground_mode": "generated_painted_chunks",
+    "tile_overrides": {
+      "0,0": "user.910897c5bb5b6f4a",
+      "0,1": "user.910897c5bb5b6f4a",
+      "0,10": "user.910897c5bb5b6f4a",
+      "0,11": "user.9e53c480a8f91399",
+      "0,12": "user.20a99dbfbf4c22e6",
+      "0,13": "user.20a99dbfbf4c22e6",
+      "0,14": "user.910897c5bb5b6f4a",
+      "0,15": "user.20a99dbfbf4c22e6",
+      "0,16": "user.9e53c480a8f91399",
+      "0,17": "user.9e53c480a8f91399",
+      "0,18": "user.910897c5bb5b6f4a",
+      "0,19": "user.9e53c480a8f91399",
+      "0,2": "user.9e53c480a8f91399",
+      "0,20": "user.1f547e1ef6d4f5f9",
+      "0,21": "user.1f547e1ef6d4f5f9",
+      "0,22": "user.9e53c480a8f91399",
+      "0,23": "user.1f547e1ef6d4f5f9",
+      "0,24": "user.9e53c480a8f91399",
+      "0,25": "user.910897c5bb5b6f4a",
+      "0,26": "user.9e53c480a8f91399",
+      "0,27": "user.20a99dbfbf4c22e6",
+      "0,28": "user.1f547e1ef6d4f5f9",
+      "0,29": "user.1f547e1ef6d4f5f9",
+      "0,3": "user.1f547e1ef6d4f5f9",
+      "0,4": "user.1f547e1ef6d4f5f9",
+      "0,5": "user.9e53c480a8f91399",
+      "0,6": "user.20a99dbfbf4c22e6",
+      "0,7": "user.20a99dbfbf4c22e6",
+      "0,8": "user.20a99dbfbf4c22e6",
+      "0,9": "user.1f547e1ef6d4f5f9",
+      "1,0": "user.9e53c480a8f91399",
+      "1,1": "user.20a99dbfbf4c22e6",
+      "1,10": "user.9e53c480a8f91399",
+      "1,11": "user.9e53c480a8f91399",
+      "1,12": "user.20a99dbfbf4c22e6",
+      "1,13": "user.910897c5bb5b6f4a",
+      "1,14": "user.9e53c480a8f91399",
+      "1,15": "user.1f547e1ef6d4f5f9",
+      "1,16": "user.1f547e1ef6d4f5f9",
+      "1,17": "user.9e53c480a8f91399",
+      "1,18": "user.20a99dbfbf4c22e6",
+      "1,19": "user.1f547e1ef6d4f5f9",
+      "1,2": "user.9e53c480a8f91399",
+      "1,20": "user.1f547e1ef6d4f5f9",
+      "1,21": "user.9e53c480a8f91399",
+      "1,22": "user.20a99dbfbf4c22e6",
+      "1,23": "user.910897c5bb5b6f4a",
+      "1,24": "user.9e53c480a8f91399",
+      "1,25": "user.910897c5bb5b6f4a",
+      "1,26": "user.9e53c480a8f91399",
+      "1,27": "user.1f547e1ef6d4f5f9",
+      "1,28": "user.910897c5bb5b6f4a",
+      "1,29": "user.20a99dbfbf4c22e6",
+      "1,3": "user.1f547e1ef6d4f5f9",
+      "1,4": "user.20a99dbfbf4c22e6",
+      "1,5": "user.20a99dbfbf4c22e6",
+      "1,6": "user.910897c5bb5b6f4a",
+      "1,7": "user.20a99dbfbf4c22e6",
+      "1,8": "user.20a99dbfbf4c22e6",
+      "1,9": "user.910897c5bb5b6f4a",
+      "10,0": "user.9e53c480a8f91399",
+      "10,1": "user.1f547e1ef6d4f5f9",
+      "10,10": "user.9e53c480a8f91399",
+      "10,11": "user.1f547e1ef6d4f5f9",
+      "10,12": "user.9e53c480a8f91399",
+      "10,13": "user.910897c5bb5b6f4a",
+      "10,14": "user.20a99dbfbf4c22e6",
+      "10,15": "user.1f547e1ef6d4f5f9",
+      "10,16": "user.9e53c480a8f91399",
+      "10,17": "user.9e53c480a8f91399",
+      "10,18": "user.910897c5bb5b6f4a",
+      "10,19": "user.20a99dbfbf4c22e6",
+      "10,2": "user.9e53c480a8f91399",
+      "10,20": "user.20a99dbfbf4c22e6",
+      "10,21": "user.20a99dbfbf4c22e6",
+      "10,22": "user.9e53c480a8f91399",
+      "10,23": "user.910897c5bb5b6f4a",
+      "10,24": "user.9e53c480a8f91399",
+      "10,25": "user.910897c5bb5b6f4a",
+      "10,26": "user.910897c5bb5b6f4a",
+      "10,27": "user.910897c5bb5b6f4a",
+      "10,28": "user.20a99dbfbf4c22e6",
+      "10,29": "user.9e53c480a8f91399",
+      "10,3": "user.9e53c480a8f91399",
+      "10,4": "user.20a99dbfbf4c22e6",
+      "10,5": "user.9e53c480a8f91399",
+      "10,6": "user.9e53c480a8f91399",
+      "10,7": "user.1f547e1ef6d4f5f9",
+      "10,8": "user.1f547e1ef6d4f5f9",
+      "10,9": "user.9e53c480a8f91399",
+      "11,0": "user.9e53c480a8f91399",
+      "11,1": "user.20a99dbfbf4c22e6",
+      "11,10": "user.20a99dbfbf4c22e6",
+      "11,11": "user.9e53c480a8f91399",
+      "11,12": "user.9e53c480a8f91399",
+      "11,13": "user.9e53c480a8f91399",
+      "11,14": "user.20a99dbfbf4c22e6",
+      "11,15": "user.910897c5bb5b6f4a",
+      "11,16": "user.20a99dbfbf4c22e6",
+      "11,17": "user.20a99dbfbf4c22e6",
+      "11,18": "user.1f547e1ef6d4f5f9",
+      "11,19": "user.9e53c480a8f91399",
+      "11,2": "user.20a99dbfbf4c22e6",
+      "11,20": "user.1f547e1ef6d4f5f9",
+      "11,21": "user.910897c5bb5b6f4a",
+      "11,22": "user.20a99dbfbf4c22e6",
+      "11,23": "user.9e53c480a8f91399",
+      "11,24": "user.20a99dbfbf4c22e6",
+      "11,25": "user.9e53c480a8f91399",
+      "11,26": "user.20a99dbfbf4c22e6",
+      "11,27": "user.9e53c480a8f91399",
+      "11,28": "user.20a99dbfbf4c22e6",
+      "11,29": "user.1f547e1ef6d4f5f9",
+      "11,3": "user.9e53c480a8f91399",
+      "11,4": "user.9e53c480a8f91399",
+      "11,5": "user.910897c5bb5b6f4a",
+      "11,6": "user.910897c5bb5b6f4a",
+      "11,7": "user.910897c5bb5b6f4a",
+      "11,8": "user.20a99dbfbf4c22e6",
+      "11,9": "user.20a99dbfbf4c22e6",
+      "12,0": "user.9e53c480a8f91399",
+      "12,1": "user.20a99dbfbf4c22e6",
+      "12,10": "user.20a99dbfbf4c22e6",
+      "12,11": "user.20a99dbfbf4c22e6",
+      "12,12": "user.9e53c480a8f91399",
+      "12,13": "user.9e53c480a8f91399",
+      "12,14": "user.910897c5bb5b6f4a",
+      "12,15": "user.1f547e1ef6d4f5f9",
+      "12,16": "user.9e53c480a8f91399",
+      "12,17": "user.20a99dbfbf4c22e6",
+      "12,18": "user.910897c5bb5b6f4a",
+      "12,19": "user.9e53c480a8f91399",
+      "12,2": "user.20a99dbfbf4c22e6",
+      "12,20": "user.910897c5bb5b6f4a",
+      "12,21": "user.910897c5bb5b6f4a",
+      "12,22": "user.910897c5bb5b6f4a",
+      "12,23": "user.910897c5bb5b6f4a",
+      "12,24": "user.1f547e1ef6d4f5f9",
+      "12,25": "user.20a99dbfbf4c22e6",
+      "12,26": "user.1f547e1ef6d4f5f9",
+      "12,27": "user.9e53c480a8f91399",
+      "12,28": "user.9e53c480a8f91399",
+      "12,29": "user.1f547e1ef6d4f5f9",
+      "12,3": "user.9e53c480a8f91399",
+      "12,4": "user.9e53c480a8f91399",
+      "12,5": "user.1f547e1ef6d4f5f9",
+      "12,6": "user.910897c5bb5b6f4a",
+      "12,7": "user.20a99dbfbf4c22e6",
+      "12,8": "user.910897c5bb5b6f4a",
+      "12,9": "user.910897c5bb5b6f4a",
+      "13,0": "user.9e53c480a8f91399",
+      "13,1": "user.910897c5bb5b6f4a",
+      "13,10": "user.910897c5bb5b6f4a",
+      "13,11": "user.910897c5bb5b6f4a",
+      "13,12": "user.1f547e1ef6d4f5f9",
+      "13,13": "user.20a99dbfbf4c22e6",
+      "13,14": "user.9e53c480a8f91399",
+      "13,15": "user.20a99dbfbf4c22e6",
+      "13,16": "user.9e53c480a8f91399",
+      "13,17": "user.9e53c480a8f91399",
+      "13,18": "user.910897c5bb5b6f4a",
+      "13,19": "user.20a99dbfbf4c22e6",
+      "13,2": "user.20a99dbfbf4c22e6",
+      "13,20": "user.910897c5bb5b6f4a",
+      "13,21": "user.20a99dbfbf4c22e6",
+      "13,22": "user.1f547e1ef6d4f5f9",
+      "13,23": "user.910897c5bb5b6f4a",
+      "13,24": "user.910897c5bb5b6f4a",
+      "13,25": "user.1f547e1ef6d4f5f9",
+      "13,26": "user.910897c5bb5b6f4a",
+      "13,27": "user.20a99dbfbf4c22e6",
+      "13,28": "user.9e53c480a8f91399",
+      "13,29": "user.910897c5bb5b6f4a",
+      "13,3": "user.20a99dbfbf4c22e6",
+      "13,4": "user.1f547e1ef6d4f5f9",
+      "13,5": "user.20a99dbfbf4c22e6",
+      "13,6": "user.9e53c480a8f91399",
+      "13,7": "user.910897c5bb5b6f4a",
+      "13,8": "user.20a99dbfbf4c22e6",
+      "13,9": "user.1f547e1ef6d4f5f9",
+      "14,0": "user.910897c5bb5b6f4a",
+      "14,1": "user.20a99dbfbf4c22e6",
+      "14,10": "user.910897c5bb5b6f4a",
+      "14,11": "user.20a99dbfbf4c22e6",
+      "14,12": "user.1f547e1ef6d4f5f9",
+      "14,13": "user.910897c5bb5b6f4a",
+      "14,14": "user.1f547e1ef6d4f5f9",
+      "14,15": "user.20a99dbfbf4c22e6",
+      "14,16": "user.20a99dbfbf4c22e6",
+      "14,17": "user.1f547e1ef6d4f5f9",
+      "14,18": "user.1f547e1ef6d4f5f9",
+      "14,19": "user.910897c5bb5b6f4a",
+      "14,2": "user.1f547e1ef6d4f5f9",
+      "14,20": "user.910897c5bb5b6f4a",
+      "14,21": "user.910897c5bb5b6f4a",
+      "14,22": "user.20a99dbfbf4c22e6",
+      "14,23": "user.910897c5bb5b6f4a",
+      "14,24": "user.910897c5bb5b6f4a",
+      "14,25": "user.20a99dbfbf4c22e6",
+      "14,26": "user.20a99dbfbf4c22e6",
+      "14,27": "user.20a99dbfbf4c22e6",
+      "14,28": "user.910897c5bb5b6f4a",
+      "14,29": "user.9e53c480a8f91399",
+      "14,3": "user.9e53c480a8f91399",
+      "14,4": "user.1f547e1ef6d4f5f9",
+      "14,5": "user.910897c5bb5b6f4a",
+      "14,6": "user.9e53c480a8f91399",
+      "14,7": "user.9e53c480a8f91399",
+      "14,8": "user.910897c5bb5b6f4a",
+      "14,9": "user.910897c5bb5b6f4a",
+      "15,0": "user.9e53c480a8f91399",
+      "15,1": "user.20a99dbfbf4c22e6",
+      "15,10": "user.1f547e1ef6d4f5f9",
+      "15,11": "user.1f547e1ef6d4f5f9",
+      "15,12": "user.9e53c480a8f91399",
+      "15,13": "user.910897c5bb5b6f4a",
+      "15,14": "user.1f547e1ef6d4f5f9",
+      "15,15": "user.910897c5bb5b6f4a",
+      "15,16": "user.1f547e1ef6d4f5f9",
+      "15,17": "user.20a99dbfbf4c22e6",
+      "15,18": "user.20a99dbfbf4c22e6",
+      "15,19": "user.20a99dbfbf4c22e6",
+      "15,2": "user.9e53c480a8f91399",
+      "15,20": "user.910897c5bb5b6f4a",
+      "15,21": "user.910897c5bb5b6f4a",
+      "15,22": "user.9e53c480a8f91399",
+      "15,23": "user.910897c5bb5b6f4a",
+      "15,24": "user.910897c5bb5b6f4a",
+      "15,25": "user.1f547e1ef6d4f5f9",
+      "15,26": "user.9e53c480a8f91399",
+      "15,27": "user.20a99dbfbf4c22e6",
+      "15,28": "user.9e53c480a8f91399",
+      "15,29": "user.910897c5bb5b6f4a",
+      "15,3": "user.910897c5bb5b6f4a",
+      "15,4": "user.1f547e1ef6d4f5f9",
+      "15,5": "user.910897c5bb5b6f4a",
+      "15,6": "user.1f547e1ef6d4f5f9",
+      "15,7": "user.910897c5bb5b6f4a",
+      "15,8": "user.20a99dbfbf4c22e6",
+      "15,9": "user.9e53c480a8f91399",
+      "16,0": "user.9e53c480a8f91399",
+      "16,1": "user.910897c5bb5b6f4a",
+      "16,10": "user.9e53c480a8f91399",
+      "16,11": "user.9e53c480a8f91399",
+      "16,12": "user.9e53c480a8f91399",
+      "16,13": "user.20a99dbfbf4c22e6",
+      "16,14": "user.1f547e1ef6d4f5f9",
+      "16,15": "user.20a99dbfbf4c22e6",
+      "16,16": "user.910897c5bb5b6f4a",
+      "16,17": "user.9e53c480a8f91399",
+      "16,18": "user.910897c5bb5b6f4a",
+      "16,19": "user.910897c5bb5b6f4a",
+      "16,2": "user.9e53c480a8f91399",
+      "16,20": "user.9e53c480a8f91399",
+      "16,21": "user.1f547e1ef6d4f5f9",
+      "16,22": "user.1f547e1ef6d4f5f9",
+      "16,23": "user.20a99dbfbf4c22e6",
+      "16,24": "user.9e53c480a8f91399",
+      "16,25": "user.1f547e1ef6d4f5f9",
+      "16,26": "user.20a99dbfbf4c22e6",
+      "16,27": "user.910897c5bb5b6f4a",
+      "16,28": "user.9e53c480a8f91399",
+      "16,29": "user.910897c5bb5b6f4a",
+      "16,3": "user.910897c5bb5b6f4a",
+      "16,4": "user.910897c5bb5b6f4a",
+      "16,5": "user.9e53c480a8f91399",
+      "16,6": "user.910897c5bb5b6f4a",
+      "16,7": "user.910897c5bb5b6f4a",
+      "16,8": "user.1f547e1ef6d4f5f9",
+      "16,9": "user.9e53c480a8f91399",
+      "17,0": "user.910897c5bb5b6f4a",
+      "17,1": "user.20a99dbfbf4c22e6",
+      "17,10": "user.20a99dbfbf4c22e6",
+      "17,11": "user.20a99dbfbf4c22e6",
+      "17,12": "user.1f547e1ef6d4f5f9",
+      "17,13": "user.20a99dbfbf4c22e6",
+      "17,14": "user.910897c5bb5b6f4a",
+      "17,15": "user.20a99dbfbf4c22e6",
+      "17,16": "user.9e53c480a8f91399",
+      "17,17": "user.1f547e1ef6d4f5f9",
+      "17,18": "user.1f547e1ef6d4f5f9",
+      "17,19": "user.9e53c480a8f91399",
+      "17,2": "user.910897c5bb5b6f4a",
+      "17,20": "user.1f547e1ef6d4f5f9",
+      "17,21": "user.9e53c480a8f91399",
+      "17,22": "user.910897c5bb5b6f4a",
+      "17,23": "user.910897c5bb5b6f4a",
+      "17,24": "user.20a99dbfbf4c22e6",
+      "17,25": "user.9e53c480a8f91399",
+      "17,26": "user.20a99dbfbf4c22e6",
+      "17,27": "user.1f547e1ef6d4f5f9",
+      "17,28": "user.20a99dbfbf4c22e6",
+      "17,29": "user.20a99dbfbf4c22e6",
+      "17,3": "user.910897c5bb5b6f4a",
+      "17,4": "user.1f547e1ef6d4f5f9",
+      "17,5": "user.20a99dbfbf4c22e6",
+      "17,6": "user.1f547e1ef6d4f5f9",
+      "17,7": "user.9e53c480a8f91399",
+      "17,8": "user.910897c5bb5b6f4a",
+      "17,9": "user.1f547e1ef6d4f5f9",
+      "18,0": "user.20a99dbfbf4c22e6",
+      "18,1": "user.910897c5bb5b6f4a",
+      "18,10": "user.9e53c480a8f91399",
+      "18,11": "user.9e53c480a8f91399",
+      "18,12": "user.9e53c480a8f91399",
+      "18,13": "user.910897c5bb5b6f4a",
+      "18,14": "user.1f547e1ef6d4f5f9",
+      "18,15": "user.9e53c480a8f91399",
+      "18,16": "user.20a99dbfbf4c22e6",
+      "18,17": "user.9e53c480a8f91399",
+      "18,18": "user.910897c5bb5b6f4a",
+      "18,19": "user.9e53c480a8f91399",
+      "18,2": "user.9e53c480a8f91399",
+      "18,20": "user.910897c5bb5b6f4a",
+      "18,21": "user.20a99dbfbf4c22e6",
+      "18,22": "user.20a99dbfbf4c22e6",
+      "18,23": "user.9e53c480a8f91399",
+      "18,24": "user.1f547e1ef6d4f5f9",
+      "18,25": "user.910897c5bb5b6f4a",
+      "18,26": "user.9e53c480a8f91399",
+      "18,27": "user.1f547e1ef6d4f5f9",
+      "18,28": "user.9e53c480a8f91399",
+      "18,29": "user.20a99dbfbf4c22e6",
+      "18,3": "user.20a99dbfbf4c22e6",
+      "18,4": "user.1f547e1ef6d4f5f9",
+      "18,5": "user.1f547e1ef6d4f5f9",
+      "18,6": "user.1f547e1ef6d4f5f9",
+      "18,7": "user.1f547e1ef6d4f5f9",
+      "18,8": "user.910897c5bb5b6f4a",
+      "18,9": "user.910897c5bb5b6f4a",
+      "19,0": "user.1f547e1ef6d4f5f9",
+      "19,1": "user.1f547e1ef6d4f5f9",
+      "19,10": "user.20a99dbfbf4c22e6",
+      "19,11": "user.9e53c480a8f91399",
+      "19,12": "user.1f547e1ef6d4f5f9",
+      "19,13": "user.9e53c480a8f91399",
+      "19,14": "user.910897c5bb5b6f4a",
+      "19,15": "user.9e53c480a8f91399",
+      "19,16": "user.910897c5bb5b6f4a",
+      "19,17": "user.910897c5bb5b6f4a",
+      "19,18": "user.9e53c480a8f91399",
+      "19,19": "user.910897c5bb5b6f4a",
+      "19,2": "user.910897c5bb5b6f4a",
+      "19,20": "user.20a99dbfbf4c22e6",
+      "19,21": "user.910897c5bb5b6f4a",
+      "19,22": "user.910897c5bb5b6f4a",
+      "19,23": "user.1f547e1ef6d4f5f9",
+      "19,24": "user.20a99dbfbf4c22e6",
+      "19,25": "user.20a99dbfbf4c22e6",
+      "19,26": "user.20a99dbfbf4c22e6",
+      "19,27": "user.9e53c480a8f91399",
+      "19,28": "user.910897c5bb5b6f4a",
+      "19,29": "user.20a99dbfbf4c22e6",
+      "19,3": "user.9e53c480a8f91399",
+      "19,4": "user.1f547e1ef6d4f5f9",
+      "19,5": "user.9e53c480a8f91399",
+      "19,6": "user.910897c5bb5b6f4a",
+      "19,7": "user.910897c5bb5b6f4a",
+      "19,8": "user.20a99dbfbf4c22e6",
+      "19,9": "user.20a99dbfbf4c22e6",
+      "2,0": "user.9e53c480a8f91399",
+      "2,1": "user.910897c5bb5b6f4a",
+      "2,10": "user.20a99dbfbf4c22e6",
+      "2,11": "user.20a99dbfbf4c22e6",
+      "2,12": "user.9e53c480a8f91399",
+      "2,13": "user.910897c5bb5b6f4a",
+      "2,14": "user.1f547e1ef6d4f5f9",
+      "2,15": "user.20a99dbfbf4c22e6",
+      "2,16": "user.20a99dbfbf4c22e6",
+      "2,17": "user.20a99dbfbf4c22e6",
+      "2,18": "user.1f547e1ef6d4f5f9",
+      "2,19": "user.1f547e1ef6d4f5f9",
+      "2,2": "user.9e53c480a8f91399",
+      "2,20": "user.20a99dbfbf4c22e6",
+      "2,21": "user.9e53c480a8f91399",
+      "2,22": "user.20a99dbfbf4c22e6",
+      "2,23": "user.1f547e1ef6d4f5f9",
+      "2,24": "user.1f547e1ef6d4f5f9",
+      "2,25": "user.1f547e1ef6d4f5f9",
+      "2,26": "user.910897c5bb5b6f4a",
+      "2,27": "user.910897c5bb5b6f4a",
+      "2,28": "user.1f547e1ef6d4f5f9",
+      "2,29": "user.1f547e1ef6d4f5f9",
+      "2,3": "user.1f547e1ef6d4f5f9",
+      "2,4": "user.20a99dbfbf4c22e6",
+      "2,5": "user.20a99dbfbf4c22e6",
+      "2,6": "user.910897c5bb5b6f4a",
+      "2,7": "user.9e53c480a8f91399",
+      "2,8": "user.20a99dbfbf4c22e6",
+      "2,9": "user.9e53c480a8f91399",
+      "20,0": "user.20a99dbfbf4c22e6",
+      "20,1": "user.910897c5bb5b6f4a",
+      "20,10": "user.910897c5bb5b6f4a",
+      "20,11": "user.9e53c480a8f91399",
+      "20,12": "user.910897c5bb5b6f4a",
+      "20,13": "user.9e53c480a8f91399",
+      "20,14": "user.20a99dbfbf4c22e6",
+      "20,15": "user.9e53c480a8f91399",
+      "20,16": "user.20a99dbfbf4c22e6",
+      "20,17": "user.1f547e1ef6d4f5f9",
+      "20,18": "user.9e53c480a8f91399",
+      "20,19": "user.20a99dbfbf4c22e6",
+      "20,2": "user.9e53c480a8f91399",
+      "20,20": "user.9e53c480a8f91399",
+      "20,21": "user.9e53c480a8f91399",
+      "20,22": "user.20a99dbfbf4c22e6",
+      "20,23": "user.1f547e1ef6d4f5f9",
+      "20,24": "user.20a99dbfbf4c22e6",
+      "20,25": "user.1f547e1ef6d4f5f9",
+      "20,26": "user.1f547e1ef6d4f5f9",
+      "20,27": "user.1f547e1ef6d4f5f9",
+      "20,28": "user.1f547e1ef6d4f5f9",
+      "20,29": "user.910897c5bb5b6f4a",
+      "20,3": "user.20a99dbfbf4c22e6",
+      "20,4": "user.1f547e1ef6d4f5f9",
+      "20,5": "user.20a99dbfbf4c22e6",
+      "20,6": "user.9e53c480a8f91399",
+      "20,7": "user.9e53c480a8f91399",
+      "20,8": "user.1f547e1ef6d4f5f9",
+      "20,9": "user.910897c5bb5b6f4a",
+      "21,0": "user.1f547e1ef6d4f5f9",
+      "21,1": "user.20a99dbfbf4c22e6",
+      "21,10": "user.910897c5bb5b6f4a",
+      "21,11": "user.20a99dbfbf4c22e6",
+      "21,12": "user.9e53c480a8f91399",
+      "21,13": "user.20a99dbfbf4c22e6",
+      "21,14": "user.910897c5bb5b6f4a",
+      "21,15": "user.910897c5bb5b6f4a",
+      "21,16": "user.9e53c480a8f91399",
+      "21,17": "user.1f547e1ef6d4f5f9",
+      "21,18": "user.9e53c480a8f91399",
+      "21,19": "user.20a99dbfbf4c22e6",
+      "21,2": "user.9e53c480a8f91399",
+      "21,20": "user.9e53c480a8f91399",
+      "21,21": "user.910897c5bb5b6f4a",
+      "21,22": "user.1f547e1ef6d4f5f9",
+      "21,23": "user.1f547e1ef6d4f5f9",
+      "21,24": "user.20a99dbfbf4c22e6",
+      "21,25": "user.910897c5bb5b6f4a",
+      "21,26": "user.1f547e1ef6d4f5f9",
+      "21,27": "user.20a99dbfbf4c22e6",
+      "21,28": "user.9e53c480a8f91399",
+      "21,29": "user.9e53c480a8f91399",
+      "21,3": "user.20a99dbfbf4c22e6",
+      "21,4": "user.1f547e1ef6d4f5f9",
+      "21,5": "user.9e53c480a8f91399",
+      "21,6": "user.1f547e1ef6d4f5f9",
+      "21,7": "user.9e53c480a8f91399",
+      "21,8": "user.9e53c480a8f91399",
+      "21,9": "user.1f547e1ef6d4f5f9",
+      "22,0": "user.910897c5bb5b6f4a",
+      "22,1": "user.910897c5bb5b6f4a",
+      "22,10": "user.1f547e1ef6d4f5f9",
+      "22,11": "user.1f547e1ef6d4f5f9",
+      "22,12": "user.9e53c480a8f91399",
+      "22,13": "user.910897c5bb5b6f4a",
+      "22,14": "user.20a99dbfbf4c22e6",
+      "22,15": "user.1f547e1ef6d4f5f9",
+      "22,16": "user.20a99dbfbf4c22e6",
+      "22,17": "user.1f547e1ef6d4f5f9",
+      "22,18": "user.20a99dbfbf4c22e6",
+      "22,19": "user.20a99dbfbf4c22e6",
+      "22,2": "user.9e53c480a8f91399",
+      "22,20": "user.9e53c480a8f91399",
+      "22,21": "user.20a99dbfbf4c22e6",
+      "22,22": "user.1f547e1ef6d4f5f9",
+      "22,23": "user.9e53c480a8f91399",
+      "22,24": "user.20a99dbfbf4c22e6",
+      "22,25": "user.9e53c480a8f91399",
+      "22,26": "user.1f547e1ef6d4f5f9",
+      "22,27": "user.910897c5bb5b6f4a",
+      "22,28": "user.1f547e1ef6d4f5f9",
+      "22,29": "user.910897c5bb5b6f4a",
+      "22,3": "user.9e53c480a8f91399",
+      "22,4": "user.20a99dbfbf4c22e6",
+      "22,5": "user.20a99dbfbf4c22e6",
+      "22,6": "user.20a99dbfbf4c22e6",
+      "22,7": "user.1f547e1ef6d4f5f9",
+      "22,8": "user.910897c5bb5b6f4a",
+      "22,9": "user.9e53c480a8f91399",
+      "23,0": "user.1f547e1ef6d4f5f9",
+      "23,1": "user.1f547e1ef6d4f5f9",
+      "23,10": "user.910897c5bb5b6f4a",
+      "23,11": "user.910897c5bb5b6f4a",
+      "23,12": "user.20a99dbfbf4c22e6",
+      "23,13": "user.9e53c480a8f91399",
+      "23,14": "user.9e53c480a8f91399",
+      "23,15": "user.9e53c480a8f91399",
+      "23,16": "user.1f547e1ef6d4f5f9",
+      "23,17": "user.1f547e1ef6d4f5f9",
+      "23,18": "user.9e53c480a8f91399",
+      "23,19": "user.20a99dbfbf4c22e6",
+      "23,2": "user.20a99dbfbf4c22e6",
+      "23,20": "user.9e53c480a8f91399",
+      "23,21": "user.910897c5bb5b6f4a",
+      "23,22": "user.9e53c480a8f91399",
+      "23,23": "user.9e53c480a8f91399",
+      "23,24": "user.910897c5bb5b6f4a",
+      "23,25": "user.1f547e1ef6d4f5f9",
+      "23,26": "user.9e53c480a8f91399",
+      "23,27": "user.9e53c480a8f91399",
+      "23,28": "user.1f547e1ef6d4f5f9",
+      "23,29": "user.9e53c480a8f91399",
+      "23,3": "user.1f547e1ef6d4f5f9",
+      "23,4": "user.1f547e1ef6d4f5f9",
+      "23,5": "user.1f547e1ef6d4f5f9",
+      "23,6": "user.20a99dbfbf4c22e6",
+      "23,7": "user.1f547e1ef6d4f5f9",
+      "23,8": "user.1f547e1ef6d4f5f9",
+      "23,9": "user.910897c5bb5b6f4a",
+      "24,0": "user.910897c5bb5b6f4a",
+      "24,1": "user.910897c5bb5b6f4a",
+      "24,10": "user.910897c5bb5b6f4a",
+      "24,11": "user.9e53c480a8f91399",
+      "24,12": "user.9e53c480a8f91399",
+      "24,13": "user.910897c5bb5b6f4a",
+      "24,14": "user.20a99dbfbf4c22e6",
+      "24,15": "user.910897c5bb5b6f4a",
+      "24,16": "user.9e53c480a8f91399",
+      "24,17": "user.910897c5bb5b6f4a",
+      "24,18": "user.1f547e1ef6d4f5f9",
+      "24,19": "user.1f547e1ef6d4f5f9",
+      "24,2": "user.1f547e1ef6d4f5f9",
+      "24,20": "user.910897c5bb5b6f4a",
+      "24,21": "user.20a99dbfbf4c22e6",
+      "24,22": "user.20a99dbfbf4c22e6",
+      "24,23": "user.1f547e1ef6d4f5f9",
+      "24,24": "user.20a99dbfbf4c22e6",
+      "24,25": "user.1f547e1ef6d4f5f9",
+      "24,26": "user.910897c5bb5b6f4a",
+      "24,27": "user.1f547e1ef6d4f5f9",
+      "24,28": "user.20a99dbfbf4c22e6",
+      "24,29": "user.910897c5bb5b6f4a",
+      "24,3": "user.1f547e1ef6d4f5f9",
+      "24,4": "user.20a99dbfbf4c22e6",
+      "24,5": "user.9e53c480a8f91399",
+      "24,6": "user.910897c5bb5b6f4a",
+      "24,7": "user.20a99dbfbf4c22e6",
+      "24,8": "user.9e53c480a8f91399",
+      "24,9": "user.20a99dbfbf4c22e6",
+      "25,0": "user.910897c5bb5b6f4a",
+      "25,1": "user.1f547e1ef6d4f5f9",
+      "25,10": "user.9e53c480a8f91399",
+      "25,11": "user.20a99dbfbf4c22e6",
+      "25,12": "user.20a99dbfbf4c22e6",
+      "25,13": "user.20a99dbfbf4c22e6",
+      "25,14": "user.20a99dbfbf4c22e6",
+      "25,15": "user.910897c5bb5b6f4a",
+      "25,16": "user.20a99dbfbf4c22e6",
+      "25,17": "user.1f547e1ef6d4f5f9",
+      "25,18": "user.1f547e1ef6d4f5f9",
+      "25,19": "user.910897c5bb5b6f4a",
+      "25,2": "user.910897c5bb5b6f4a",
+      "25,20": "user.910897c5bb5b6f4a",
+      "25,21": "user.20a99dbfbf4c22e6",
+      "25,22": "user.1f547e1ef6d4f5f9",
+      "25,23": "user.20a99dbfbf4c22e6",
+      "25,24": "user.1f547e1ef6d4f5f9",
+      "25,25": "user.9e53c480a8f91399",
+      "25,26": "user.910897c5bb5b6f4a",
+      "25,27": "user.20a99dbfbf4c22e6",
+      "25,28": "user.20a99dbfbf4c22e6",
+      "25,29": "user.1f547e1ef6d4f5f9",
+      "25,3": "user.910897c5bb5b6f4a",
+      "25,4": "user.9e53c480a8f91399",
+      "25,5": "user.910897c5bb5b6f4a",
+      "25,6": "user.910897c5bb5b6f4a",
+      "25,7": "user.910897c5bb5b6f4a",
+      "25,8": "user.1f547e1ef6d4f5f9",
+      "25,9": "user.9e53c480a8f91399",
+      "26,0": "user.1f547e1ef6d4f5f9",
+      "26,1": "user.9e53c480a8f91399",
+      "26,10": "user.910897c5bb5b6f4a",
+      "26,11": "user.9e53c480a8f91399",
+      "26,12": "user.1f547e1ef6d4f5f9",
+      "26,13": "user.20a99dbfbf4c22e6",
+      "26,14": "user.20a99dbfbf4c22e6",
+      "26,15": "user.910897c5bb5b6f4a",
+      "26,16": "user.910897c5bb5b6f4a",
+      "26,17": "user.9e53c480a8f91399",
+      "26,18": "user.20a99dbfbf4c22e6",
+      "26,19": "user.910897c5bb5b6f4a",
+      "26,2": "user.9e53c480a8f91399",
+      "26,20": "user.910897c5bb5b6f4a",
+      "26,21": "user.9e53c480a8f91399",
+      "26,22": "user.910897c5bb5b6f4a",
+      "26,23": "user.910897c5bb5b6f4a",
+      "26,24": "user.910897c5bb5b6f4a",
+      "26,25": "user.20a99dbfbf4c22e6",
+      "26,26": "user.1f547e1ef6d4f5f9",
+      "26,27": "user.1f547e1ef6d4f5f9",
+      "26,28": "user.9e53c480a8f91399",
+      "26,29": "user.20a99dbfbf4c22e6",
+      "26,3": "user.1f547e1ef6d4f5f9",
+      "26,4": "user.20a99dbfbf4c22e6",
+      "26,5": "user.910897c5bb5b6f4a",
+      "26,6": "user.20a99dbfbf4c22e6",
+      "26,7": "user.1f547e1ef6d4f5f9",
+      "26,8": "user.20a99dbfbf4c22e6",
+      "26,9": "user.9e53c480a8f91399",
+      "27,0": "user.9e53c480a8f91399",
+      "27,1": "user.20a99dbfbf4c22e6",
+      "27,10": "user.910897c5bb5b6f4a",
+      "27,11": "user.9e53c480a8f91399",
+      "27,12": "user.9e53c480a8f91399",
+      "27,13": "user.9e53c480a8f91399",
+      "27,14": "user.1f547e1ef6d4f5f9",
+      "27,15": "user.1f547e1ef6d4f5f9",
+      "27,16": "user.1f547e1ef6d4f5f9",
+      "27,17": "user.9e53c480a8f91399",
+      "27,18": "user.9e53c480a8f91399",
+      "27,19": "user.1f547e1ef6d4f5f9",
+      "27,2": "user.20a99dbfbf4c22e6",
+      "27,20": "user.9e53c480a8f91399",
+      "27,21": "user.20a99dbfbf4c22e6",
+      "27,22": "user.20a99dbfbf4c22e6",
+      "27,23": "user.20a99dbfbf4c22e6",
+      "27,24": "user.20a99dbfbf4c22e6",
+      "27,25": "user.910897c5bb5b6f4a",
+      "27,26": "user.20a99dbfbf4c22e6",
+      "27,27": "user.9e53c480a8f91399",
+      "27,28": "user.20a99dbfbf4c22e6",
+      "27,29": "user.910897c5bb5b6f4a",
+      "27,3": "user.9e53c480a8f91399",
+      "27,4": "user.1f547e1ef6d4f5f9",
+      "27,5": "user.910897c5bb5b6f4a",
+      "27,6": "user.9e53c480a8f91399",
+      "27,7": "user.9e53c480a8f91399",
+      "27,8": "user.20a99dbfbf4c22e6",
+      "27,9": "user.9e53c480a8f91399",
+      "28,0": "user.910897c5bb5b6f4a",
+      "28,1": "user.20a99dbfbf4c22e6",
+      "28,10": "user.1f547e1ef6d4f5f9",
+      "28,11": "user.9e53c480a8f91399",
+      "28,12": "user.9e53c480a8f91399",
+      "28,13": "user.9e53c480a8f91399",
+      "28,14": "user.20a99dbfbf4c22e6",
+      "28,15": "user.9e53c480a8f91399",
+      "28,16": "user.9e53c480a8f91399",
+      "28,17": "user.910897c5bb5b6f4a",
+      "28,18": "user.9e53c480a8f91399",
+      "28,19": "user.9e53c480a8f91399",
+      "28,2": "user.20a99dbfbf4c22e6",
+      "28,20": "user.20a99dbfbf4c22e6",
+      "28,21": "user.910897c5bb5b6f4a",
+      "28,22": "user.20a99dbfbf4c22e6",
+      "28,23": "user.910897c5bb5b6f4a",
+      "28,24": "user.1f547e1ef6d4f5f9",
+      "28,25": "user.1f547e1ef6d4f5f9",
+      "28,26": "user.910897c5bb5b6f4a",
+      "28,27": "user.910897c5bb5b6f4a",
+      "28,28": "user.20a99dbfbf4c22e6",
+      "28,29": "user.1f547e1ef6d4f5f9",
+      "28,3": "user.20a99dbfbf4c22e6",
+      "28,4": "user.20a99dbfbf4c22e6",
+      "28,5": "user.910897c5bb5b6f4a",
+      "28,6": "user.9e53c480a8f91399",
+      "28,7": "user.1f547e1ef6d4f5f9",
+      "28,8": "user.9e53c480a8f91399",
+      "28,9": "user.9e53c480a8f91399",
+      "29,0": "user.20a99dbfbf4c22e6",
+      "29,1": "user.20a99dbfbf4c22e6",
+      "29,10": "user.1f547e1ef6d4f5f9",
+      "29,11": "user.1f547e1ef6d4f5f9",
+      "29,12": "user.20a99dbfbf4c22e6",
+      "29,13": "user.9e53c480a8f91399",
+      "29,14": "user.1f547e1ef6d4f5f9",
+      "29,15": "user.1f547e1ef6d4f5f9",
+      "29,16": "user.910897c5bb5b6f4a",
+      "29,17": "user.9e53c480a8f91399",
+      "29,18": "user.9e53c480a8f91399",
+      "29,19": "user.1f547e1ef6d4f5f9",
+      "29,2": "user.20a99dbfbf4c22e6",
+      "29,20": "user.9e53c480a8f91399",
+      "29,21": "user.910897c5bb5b6f4a",
+      "29,22": "user.910897c5bb5b6f4a",
+      "29,23": "user.20a99dbfbf4c22e6",
+      "29,24": "user.910897c5bb5b6f4a",
+      "29,25": "user.1f547e1ef6d4f5f9",
+      "29,26": "user.9e53c480a8f91399",
+      "29,27": "user.20a99dbfbf4c22e6",
+      "29,28": "user.20a99dbfbf4c22e6",
+      "29,29": "user.910897c5bb5b6f4a",
+      "29,3": "user.20a99dbfbf4c22e6",
+      "29,4": "user.9e53c480a8f91399",
+      "29,5": "user.910897c5bb5b6f4a",
+      "29,6": "user.1f547e1ef6d4f5f9",
+      "29,7": "user.910897c5bb5b6f4a",
+      "29,8": "user.20a99dbfbf4c22e6",
+      "29,9": "user.20a99dbfbf4c22e6",
+      "3,0": "user.1f547e1ef6d4f5f9",
+      "3,1": "user.910897c5bb5b6f4a",
+      "3,10": "user.20a99dbfbf4c22e6",
+      "3,11": "user.1f547e1ef6d4f5f9",
+      "3,12": "user.20a99dbfbf4c22e6",
+      "3,13": "user.9e53c480a8f91399",
+      "3,14": "user.910897c5bb5b6f4a",
+      "3,15": "user.20a99dbfbf4c22e6",
+      "3,16": "user.1f547e1ef6d4f5f9",
+      "3,17": "user.1f547e1ef6d4f5f9",
+      "3,18": "user.9e53c480a8f91399",
+      "3,19": "user.20a99dbfbf4c22e6",
+      "3,2": "user.910897c5bb5b6f4a",
+      "3,20": "user.1f547e1ef6d4f5f9",
+      "3,21": "user.9e53c480a8f91399",
+      "3,22": "user.20a99dbfbf4c22e6",
+      "3,23": "user.20a99dbfbf4c22e6",
+      "3,24": "user.910897c5bb5b6f4a",
+      "3,25": "user.1f547e1ef6d4f5f9",
+      "3,26": "user.9e53c480a8f91399",
+      "3,27": "user.20a99dbfbf4c22e6",
+      "3,28": "user.20a99dbfbf4c22e6",
+      "3,29": "user.1f547e1ef6d4f5f9",
+      "3,3": "user.1f547e1ef6d4f5f9",
+      "3,4": "user.1f547e1ef6d4f5f9",
+      "3,5": "user.9e53c480a8f91399",
+      "3,6": "user.20a99dbfbf4c22e6",
+      "3,7": "user.9e53c480a8f91399",
+      "3,8": "user.20a99dbfbf4c22e6",
+      "3,9": "user.1f547e1ef6d4f5f9",
+      "4,0": "user.9e53c480a8f91399",
+      "4,1": "user.20a99dbfbf4c22e6",
+      "4,10": "user.910897c5bb5b6f4a",
+      "4,11": "user.20a99dbfbf4c22e6",
+      "4,12": "user.910897c5bb5b6f4a",
+      "4,13": "user.1f547e1ef6d4f5f9",
+      "4,14": "user.9e53c480a8f91399",
+      "4,15": "user.20a99dbfbf4c22e6",
+      "4,16": "user.910897c5bb5b6f4a",
+      "4,17": "user.910897c5bb5b6f4a",
+      "4,18": "user.910897c5bb5b6f4a",
+      "4,19": "user.20a99dbfbf4c22e6",
+      "4,2": "user.9e53c480a8f91399",
+      "4,20": "user.1f547e1ef6d4f5f9",
+      "4,21": "user.20a99dbfbf4c22e6",
+      "4,22": "user.1f547e1ef6d4f5f9",
+      "4,23": "user.20a99dbfbf4c22e6",
+      "4,24": "user.1f547e1ef6d4f5f9",
+      "4,25": "user.910897c5bb5b6f4a",
+      "4,26": "user.1f547e1ef6d4f5f9",
+      "4,27": "user.1f547e1ef6d4f5f9",
+      "4,28": "user.910897c5bb5b6f4a",
+      "4,29": "user.20a99dbfbf4c22e6",
+      "4,3": "user.910897c5bb5b6f4a",
+      "4,4": "user.1f547e1ef6d4f5f9",
+      "4,5": "user.910897c5bb5b6f4a",
+      "4,6": "user.1f547e1ef6d4f5f9",
+      "4,7": "user.9e53c480a8f91399",
+      "4,8": "user.1f547e1ef6d4f5f9",
+      "4,9": "user.9e53c480a8f91399",
+      "5,0": "user.9e53c480a8f91399",
+      "5,1": "user.20a99dbfbf4c22e6",
+      "5,10": "user.20a99dbfbf4c22e6",
+      "5,11": "user.9e53c480a8f91399",
+      "5,12": "user.20a99dbfbf4c22e6",
+      "5,13": "user.1f547e1ef6d4f5f9",
+      "5,14": "user.20a99dbfbf4c22e6",
+      "5,15": "user.1f547e1ef6d4f5f9",
+      "5,16": "user.910897c5bb5b6f4a",
+      "5,17": "user.9e53c480a8f91399",
+      "5,18": "user.20a99dbfbf4c22e6",
+      "5,19": "user.20a99dbfbf4c22e6",
+      "5,2": "user.20a99dbfbf4c22e6",
+      "5,20": "user.1f547e1ef6d4f5f9",
+      "5,21": "user.1f547e1ef6d4f5f9",
+      "5,22": "user.910897c5bb5b6f4a",
+      "5,23": "user.20a99dbfbf4c22e6",
+      "5,24": "user.9e53c480a8f91399",
+      "5,25": "user.910897c5bb5b6f4a",
+      "5,26": "user.1f547e1ef6d4f5f9",
+      "5,27": "user.9e53c480a8f91399",
+      "5,28": "user.1f547e1ef6d4f5f9",
+      "5,29": "user.9e53c480a8f91399",
+      "5,3": "user.20a99dbfbf4c22e6",
+      "5,4": "user.910897c5bb5b6f4a",
+      "5,5": "user.1f547e1ef6d4f5f9",
+      "5,6": "user.1f547e1ef6d4f5f9",
+      "5,7": "user.20a99dbfbf4c22e6",
+      "5,8": "user.910897c5bb5b6f4a",
+      "5,9": "user.1f547e1ef6d4f5f9",
+      "6,0": "user.9e53c480a8f91399",
+      "6,1": "user.1f547e1ef6d4f5f9",
+      "6,10": "user.910897c5bb5b6f4a",
+      "6,11": "user.1f547e1ef6d4f5f9",
+      "6,12": "user.910897c5bb5b6f4a",
+      "6,13": "user.20a99dbfbf4c22e6",
+      "6,14": "user.20a99dbfbf4c22e6",
+      "6,15": "user.9e53c480a8f91399",
+      "6,16": "user.910897c5bb5b6f4a",
+      "6,17": "user.1f547e1ef6d4f5f9",
+      "6,18": "user.1f547e1ef6d4f5f9",
+      "6,19": "user.1f547e1ef6d4f5f9",
+      "6,2": "user.1f547e1ef6d4f5f9",
+      "6,20": "user.9e53c480a8f91399",
+      "6,21": "user.1f547e1ef6d4f5f9",
+      "6,22": "user.1f547e1ef6d4f5f9",
+      "6,23": "user.20a99dbfbf4c22e6",
+      "6,24": "user.1f547e1ef6d4f5f9",
+      "6,25": "user.910897c5bb5b6f4a",
+      "6,26": "user.9e53c480a8f91399",
+      "6,27": "user.20a99dbfbf4c22e6",
+      "6,28": "user.1f547e1ef6d4f5f9",
+      "6,29": "user.9e53c480a8f91399",
+      "6,3": "user.9e53c480a8f91399",
+      "6,4": "user.1f547e1ef6d4f5f9",
+      "6,5": "user.910897c5bb5b6f4a",
+      "6,6": "user.9e53c480a8f91399",
+      "6,7": "user.9e53c480a8f91399",
+      "6,8": "user.9e53c480a8f91399",
+      "6,9": "user.20a99dbfbf4c22e6",
+      "7,0": "user.9e53c480a8f91399",
+      "7,1": "user.1f547e1ef6d4f5f9",
+      "7,10": "user.910897c5bb5b6f4a",
+      "7,11": "user.9e53c480a8f91399",
+      "7,12": "user.20a99dbfbf4c22e6",
+      "7,13": "user.910897c5bb5b6f4a",
+      "7,14": "user.9e53c480a8f91399",
+      "7,15": "user.9e53c480a8f91399",
+      "7,16": "user.20a99dbfbf4c22e6",
+      "7,17": "user.910897c5bb5b6f4a",
+      "7,18": "user.1f547e1ef6d4f5f9",
+      "7,19": "user.9e53c480a8f91399",
+      "7,2": "user.1f547e1ef6d4f5f9",
+      "7,20": "user.1f547e1ef6d4f5f9",
+      "7,21": "user.9e53c480a8f91399",
+      "7,22": "user.20a99dbfbf4c22e6",
+      "7,23": "user.910897c5bb5b6f4a",
+      "7,24": "user.1f547e1ef6d4f5f9",
+      "7,25": "user.1f547e1ef6d4f5f9",
+      "7,26": "user.9e53c480a8f91399",
+      "7,27": "user.9e53c480a8f91399",
+      "7,28": "user.20a99dbfbf4c22e6",
+      "7,29": "user.20a99dbfbf4c22e6",
+      "7,3": "user.20a99dbfbf4c22e6",
+      "7,4": "user.9e53c480a8f91399",
+      "7,5": "user.1f547e1ef6d4f5f9",
+      "7,6": "user.20a99dbfbf4c22e6",
+      "7,7": "user.9e53c480a8f91399",
+      "7,8": "user.9e53c480a8f91399",
+      "7,9": "user.20a99dbfbf4c22e6",
+      "8,0": "user.20a99dbfbf4c22e6",
+      "8,1": "user.9e53c480a8f91399",
+      "8,10": "user.910897c5bb5b6f4a",
+      "8,11": "user.20a99dbfbf4c22e6",
+      "8,12": "user.910897c5bb5b6f4a",
+      "8,13": "user.9e53c480a8f91399",
+      "8,14": "user.9e53c480a8f91399",
+      "8,15": "user.910897c5bb5b6f4a",
+      "8,16": "user.1f547e1ef6d4f5f9",
+      "8,17": "user.20a99dbfbf4c22e6",
+      "8,18": "user.910897c5bb5b6f4a",
+      "8,19": "user.1f547e1ef6d4f5f9",
+      "8,2": "user.910897c5bb5b6f4a",
+      "8,20": "user.1f547e1ef6d4f5f9",
+      "8,21": "user.1f547e1ef6d4f5f9",
+      "8,22": "user.910897c5bb5b6f4a",
+      "8,23": "user.20a99dbfbf4c22e6",
+      "8,24": "user.910897c5bb5b6f4a",
+      "8,25": "user.9e53c480a8f91399",
+      "8,26": "user.1f547e1ef6d4f5f9",
+      "8,27": "user.1f547e1ef6d4f5f9",
+      "8,28": "user.20a99dbfbf4c22e6",
+      "8,29": "user.1f547e1ef6d4f5f9",
+      "8,3": "user.910897c5bb5b6f4a",
+      "8,4": "user.910897c5bb5b6f4a",
+      "8,5": "user.9e53c480a8f91399",
+      "8,6": "user.9e53c480a8f91399",
+      "8,7": "user.910897c5bb5b6f4a",
+      "8,8": "user.9e53c480a8f91399",
+      "8,9": "user.1f547e1ef6d4f5f9",
+      "9,0": "user.9e53c480a8f91399",
+      "9,1": "user.20a99dbfbf4c22e6",
+      "9,10": "user.9e53c480a8f91399",
+      "9,11": "user.20a99dbfbf4c22e6",
+      "9,12": "user.910897c5bb5b6f4a",
+      "9,13": "user.20a99dbfbf4c22e6",
+      "9,14": "user.20a99dbfbf4c22e6",
+      "9,15": "user.20a99dbfbf4c22e6",
+      "9,16": "user.20a99dbfbf4c22e6",
+      "9,17": "user.9e53c480a8f91399",
+      "9,18": "user.20a99dbfbf4c22e6",
+      "9,19": "user.20a99dbfbf4c22e6",
+      "9,2": "user.9e53c480a8f91399",
+      "9,20": "user.1f547e1ef6d4f5f9",
+      "9,21": "user.20a99dbfbf4c22e6",
+      "9,22": "user.910897c5bb5b6f4a",
+      "9,23": "user.910897c5bb5b6f4a",
+      "9,24": "user.1f547e1ef6d4f5f9",
+      "9,25": "user.9e53c480a8f91399",
+      "9,26": "user.1f547e1ef6d4f5f9",
+      "9,27": "user.910897c5bb5b6f4a",
+      "9,28": "user.9e53c480a8f91399",
+      "9,29": "user.20a99dbfbf4c22e6",
+      "9,3": "user.1f547e1ef6d4f5f9",
+      "9,4": "user.20a99dbfbf4c22e6",
+      "9,5": "user.9e53c480a8f91399",
+      "9,6": "user.910897c5bb5b6f4a",
+      "9,7": "user.20a99dbfbf4c22e6",
+      "9,8": "user.1f547e1ef6d4f5f9",
+      "9,9": "user.910897c5bb5b6f4a"
+    }
+  },
+  "instances": [
+    {
+      "anchor_mode": "tile_center",
+      "anchor_px": [
+        320.0,
+        160.0
+      ],
+      "asset_id": "mse.ground_graffiti.10x10.02",
+      "collision_authority": "visual_only",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        9.0,
+        9.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        10.0,
+        10.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000001",
+      "instance_scale_level": -1.0,
+      "layer": "object_base",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": false,
+      "occupancy_footprint_tiles": [
+        9.0,
+        9.0
+      ],
+      "offset_px": [
+        0.0,
+        -16.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        320.0,
+        160.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.8999999761581421,
+        0.8999999761581421
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        10.0,
+        10.0
+      ],
+      "tile_anchor": [
+        10.0,
+        10.0
+      ],
+      "visual_footprint_tiles": [
+        9.0,
+        9.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        130.0,
+        422.0
+      ],
+      "asset_id": "mse.new_pillar.13",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000002",
+      "instance_scale_level": -2.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        -32.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        130.0,
+        422.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.3333333432674408,
+        0.3333333432674408
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        8.0,
+        22.0
+      ],
+      "tile_anchor": [
+        8.0,
+        22.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        129.0,
+        423.0
+      ],
+      "asset_id": "mse.new_pillar.12",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000003",
+      "instance_scale_level": -2.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        -32.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        129.0,
+        423.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.3333333432674408,
+        0.3333333432674408
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        8.0,
+        8.0
+      ],
+      "tile_anchor": [
+        8.0,
+        8.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        130.0,
+        421.0
+      ],
+      "asset_id": "mse.new_pillar.14",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000004",
+      "instance_scale_level": -2.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        -32.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        130.0,
+        421.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.3333333432674408,
+        0.3333333432674408
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        22.0,
+        8.0
+      ],
+      "tile_anchor": [
+        22.0,
+        8.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        133.0,
+        422.0
+      ],
+      "asset_id": "mse.new_pillar.15",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        3.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
+      "instance_id": "inst_000005",
+      "instance_scale_level": -2.0,
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        -32.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        133.0,
+        422.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        0.3333333432674408,
+        0.3333333432674408
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        22.0,
+        22.0
+      ],
+      "tile_anchor": [
+        22.0,
+        22.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_x_l4_v02",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000007",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        4.0,
+        29.0
+      ],
+      "tile_anchor": [
+        4.0,
+        29.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000008",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        0.0,
+        29.0
+      ],
+      "tile_anchor": [
+        0.0,
+        29.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_x_l4_v01",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000009",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        8.0,
+        29.0
+      ],
+      "tile_anchor": [
+        8.0,
+        29.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        160.0
+      ],
+      "asset_id": "cave_granite_straight_x_l3_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        3.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        3.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000010",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        3.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        160.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        12.0,
+        29.0
+      ],
+      "tile_anchor": [
+        12.0,
+        29.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_x_l4_v02",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000011",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        15.0,
+        29.0
+      ],
+      "tile_anchor": [
+        15.0,
+        29.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000012",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        19.0,
+        29.0
+      ],
+      "tile_anchor": [
+        19.0,
+        29.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_x_l4_v01",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000013",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        23.0,
+        29.0
+      ],
+      "tile_anchor": [
+        23.0,
+        29.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000014",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        26.0,
+        29.0
+      ],
+      "tile_anchor": [
+        26.0,
+        29.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000015",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        0.0,
+        0.0
+      ],
+      "tile_anchor": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_x_l4_v02",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000016",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        4.0,
+        0.0
+      ],
+      "tile_anchor": [
+        4.0,
+        0.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_x_l4_v01",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000017",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        8.0,
+        0.0
+      ],
+      "tile_anchor": [
+        8.0,
+        0.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        160.0
+      ],
+      "asset_id": "cave_granite_straight_x_l3_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        3.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        3.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000018",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        3.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        160.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        12.0,
+        0.0
+      ],
+      "tile_anchor": [
+        12.0,
+        0.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_x_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000019",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        15.0,
+        0.0
+      ],
+      "tile_anchor": [
+        15.0,
+        0.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_x_l4_v02",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000020",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        19.0,
+        0.0
+      ],
+      "tile_anchor": [
+        19.0,
+        0.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_x_l4_v01",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000021",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        4.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        23.0,
+        0.0
+      ],
+      "tile_anchor": [
+        23.0,
+        0.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        64.0,
+        160.0
+      ],
+      "asset_id": "cave_granite_straight_x_l3_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        3.0,
+        1.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        3.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000022",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        3.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        64.0,
+        160.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        27.0,
+        0.0
+      ],
+      "tile_anchor": [
+        27.0,
+        0.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        160.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_y_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000023",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        160.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        0.0,
+        26.0
+      ],
+      "tile_anchor": [
+        0.0,
+        26.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        160.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_y_l4_v02",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000024",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        160.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        0.0,
+        22.0
+      ],
+      "tile_anchor": [
+        0.0,
+        22.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        160.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_y_l4_v01",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000025",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        160.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        0.0,
+        18.0
+      ],
+      "tile_anchor": [
+        0.0,
+        18.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        160.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_y_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000026",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        160.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        0.0,
+        14.0
+      ],
+      "tile_anchor": [
+        0.0,
+        14.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        160.0
+      ],
+      "asset_id": "cave_granite_straight_y_l3_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        3.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000027",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        3.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        160.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        0.0,
+        11.0
+      ],
+      "tile_anchor": [
+        0.0,
+        11.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        160.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_y_l4_v01",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000028",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        160.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        0.0,
+        7.0
+      ],
+      "tile_anchor": [
+        0.0,
+        7.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        160.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_y_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000029",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        160.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        0.0,
+        3.0
+      ],
+      "tile_anchor": [
+        0.0,
+        3.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        160.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_y_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000030",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        160.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        0.0,
+        1.0
+      ],
+      "tile_anchor": [
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        160.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_y_l4_v02",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000031",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        160.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        29.0,
+        26.0
+      ],
+      "tile_anchor": [
+        29.0,
+        26.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        160.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_y_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000032",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        160.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        29.0,
+        22.0
+      ],
+      "tile_anchor": [
+        29.0,
+        22.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        160.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_y_l4_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000033",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        160.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        29.0,
+        18.0
+      ],
+      "tile_anchor": [
+        29.0,
+        18.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        160.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_y_l4_v01",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000034",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        160.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        29.0,
+        14.0
+      ],
+      "tile_anchor": [
+        29.0,
+        14.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        160.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_y_l4_v01",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000035",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        160.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        29.0,
+        10.0
+      ],
+      "tile_anchor": [
+        29.0,
+        10.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        160.0
+      ],
+      "asset_id": "cave_granite_straight_y_l3_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        3.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000036",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        3.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        160.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        29.0,
+        7.0
+      ],
+      "tile_anchor": [
+        29.0,
+        7.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        128.0,
+        160.0
+      ],
+      "asset_id": "cave_granite_straight_y_l3_v03",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        3.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        3.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000037",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        3.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        128.0,
+        160.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        29.0,
+        4.0
+      ],
+      "tile_anchor": [
+        29.0,
+        4.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        160.0,
+        144.0
+      ],
+      "asset_id": "cave_granite_straight_y_l4_v01",
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "cave_tomb_manual_collision_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "gameplay_role": "navigation_blocker",
+      "instance_base_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000038",
+      "layer": "terrain_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "terrain",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        4.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "",
+      "placement_anchor_px": [
+        160.0,
+        144.0
+      ],
+      "placement_rule": "non_overlapping",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "terrain_boundary",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        29.0,
+        0.0
+      ],
+      "tile_anchor": [
+        29.0,
+        0.0
+      ]
+    }
+  ],
+  "runtime_schema_version": 1.0,
+  "semantics": {
+    "boss_spawn": [
+      {
+        "boss_id": "boss.89",
+        "content_id": "boss.89",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000001",
+        "spawn_rule": "boss",
+        "tile": [
+          5.0,
+          9.0
+        ]
+      },
+      {
+        "boss_id": "boss.89",
+        "content_id": "boss.89",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000002",
+        "spawn_rule": "boss",
+        "tile": [
+          8.0,
+          6.0
+        ]
+      },
+      {
+        "boss_id": "boss.89",
+        "content_id": "boss.89",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000003",
+        "spawn_rule": "boss",
+        "tile": [
+          12.0,
+          5.0
+        ]
+      },
+      {
+        "boss_id": "boss.89",
+        "content_id": "boss.89",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000004",
+        "spawn_rule": "boss",
+        "tile": [
+          17.0,
+          7.0
+        ]
+      },
+      {
+        "boss_id": "boss.89",
+        "content_id": "boss.89",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000005",
+        "spawn_rule": "boss",
+        "tile": [
+          21.0,
+          11.0
+        ]
+      },
+      {
+        "boss_id": "boss.89",
+        "content_id": "boss.89",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000006",
+        "spawn_rule": "boss",
+        "tile": [
+          21.0,
+          15.0
+        ]
+      },
+      {
+        "boss_id": "boss.89",
+        "content_id": "boss.89",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000007",
+        "spawn_rule": "boss",
+        "tile": [
+          19.0,
+          18.0
+        ]
+      },
+      {
+        "boss_id": "boss.89",
+        "content_id": "boss.89",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000008",
+        "spawn_rule": "boss",
+        "tile": [
+          16.0,
+          20.0
+        ]
+      },
+      {
+        "boss_id": "boss.89",
+        "content_id": "boss.89",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000009",
+        "spawn_rule": "boss",
+        "tile": [
+          11.0,
+          20.0
+        ]
+      },
+      {
+        "boss_id": "boss.89",
+        "content_id": "boss.89",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000010",
+        "spawn_rule": "boss",
+        "tile": [
+          7.0,
+          17.0
+        ]
+      },
+      {
+        "boss_id": "boss.89",
+        "content_id": "boss.89",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000011",
+        "spawn_rule": "boss",
+        "tile": [
+          5.0,
+          12.0
+        ]
+      },
+      {
+        "boss_id": "boss.91",
+        "content_id": "boss.91",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王2",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000012",
+        "spawn_rule": "boss",
+        "tile": [
+          13.0,
+          13.0
+        ]
+      }
+    ],
+    "door_points": [],
+    "light": [],
+    "map_entrance_points": [],
+    "map_exit_points": [
+      {
+        "arrival_locks_current_portal": true,
+        "arrival_only": true,
+        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+        "blocks_movement": false,
+        "connection_mode": "arrival_only",
+        "connection_policy_id": "map_connection_unified_bidirectional_v2",
+        "content_layer": "personal_expansion",
+        "display_name": "尸王殿入口（仅到达）",
+        "exit_id": "map_exit_000001",
+        "exit_policy": "town_scroll_or_death_only",
+        "explicit_one_way_reason": "尸王殿只允许进入，离开必须使用回城功能或死亡回城",
+        "kind": "map_exit",
+        "one_way": false,
+        "portal_contract_id": "unified_map_portal_endpoint_v1",
+        "portal_role": "arrival_only_endpoint",
+        "requires_leave_before_retrigger": true,
+        "return_minimum_seconds": 3.0,
+        "return_requires_fresh_activation": true,
+        "return_unlock_distance_tiles": 1.5,
+        "runtime_export": true,
+        "semantic_id": "map_exit_000001",
+        "semantic_role": "map_portal_arrival_anchor",
+        "target_configured": false,
+        "target_map_id": -1.0,
+        "tile": [
+          3.0,
+          23.0
+        ],
+        "travel_request_single_flight": true,
+        "trigger_on_enter": false
+      }
+    ],
+    "monster_spawn": [],
+    "npc_points": [],
+    "region_trigger": [],
+    "respawn_points": [],
+    "safe_area": []
+  },
+  "source": {
+    "content_layer": "personal_expansion",
+    "editor_schema_version": 4.0,
+    "map_id": "corpse_king_hall",
+    "revision": 2.0
+  }
+}

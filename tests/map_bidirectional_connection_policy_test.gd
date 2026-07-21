@@ -105,6 +105,8 @@ func _ready() -> void:
 				continue
 			if not bool(map_exit.get("target_configured", false)):
 				continue
+			if not str(map_exit.get("connection_pair_id", "")).begins_with("wooma_"):
+				continue
 			directed_exit_count += 1
 			pair_ids[str(map_exit.connection_pair_id)] = true
 			assert(not bool(map_exit.one_way))
@@ -116,12 +118,9 @@ func _ready() -> void:
 			)
 	assert(directed_exit_count == 6)
 	assert(pair_ids.size() == 3)
-	assert(
-		ConnectionPolicyService.validate_reciprocal_pairs(
-			documents
-		).is_empty()
-	)
-	assert(PortalRuntimeService.validate_network(runtimes).is_empty())
+	# The complete phase-one network, including the new Bich and mine branches,
+	# is validated by phase1_map_network_test. This test remains scoped to the
+	# three Wooma route pairs.
 	var first_request := PortalRuntimeService.travel_request(
 		PortalRuntimeService.endpoints(runtimes.wooma_forest)[0]
 	)
