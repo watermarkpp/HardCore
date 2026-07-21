@@ -44,7 +44,7 @@
 - `map_scale_overrides.json`：首批 21 张地图的单机尺寸决策。
 - `source_map_audit.json`：本地原 MAP 二进制头审计结果。
 - `map_design_catalog.json`：供 MSE 和自动化脚本统一读取的合并目录。
-- `map_blank_templates.json`：供 MSE 下拉选择的后续 20 张空地图模板；比奇使用现有正式工作地图。
+- `map_blank_templates.json`：供 MSE 下拉选择的 21 张地图模板；比奇项优先打开现有正式工作地图，其余 20 项按需创建空地图。
 - `audit_mir2_map_headers.py`：只扫描覆盖表声明过的源文件，避免全盘扫描卡死。
 - `build_map_design_catalog.py`：确定性合并模板、覆盖和审计。
 - `validate_map_design_catalog.py`：检查上限、坐标、Boss 房、迷宫房和来源状态。

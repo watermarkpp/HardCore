@@ -1,0 +1,744 @@
+{
+  "asset_schema_version": 2,
+  "package_id": "MSE_ISO_CARPETS_6_GEOMETRY_CORRECTED",
+  "package_version": 1,
+  "replaces_package_id": "mse_new_carpet_6_v1",
+  "source_archive": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\地毯\\MSE_ISO_CARPETS_6_GEOMETRY_CORRECTED.zip",
+  "source_archive_sha256": "5439bde5bc79629bc0b72942e60aba0abb7b873bfcd08a4c3da1a20589720765",
+  "source_count": 6,
+  "asset_count": 6,
+  "classification": "装饰物1/地毯",
+  "projection": "fixed_2_1_orthographic_isometric",
+  "geometry": {
+    "iso_x_vector": [
+      64,
+      32
+    ],
+    "iso_y_vector": [
+      -64,
+      32
+    ],
+    "long_edge_slopes": [
+      0.5,
+      -0.5
+    ],
+    "short_edge_slopes": [
+      -0.5,
+      0.5
+    ],
+    "short_ends_are_seamless": true
+  },
+  "editor_review_status": "passed",
+  "promotion_policy": "package_contract_plus_visual_review",
+  "default_collision_policy": "none",
+  "assets": [
+    {
+      "asset_id": "mse.new_carpet.01",
+      "display_name": "地毯 RED SKULL LEFT",
+      "asset_type": "decoration",
+      "category": "decoration",
+      "object_class": "carpet",
+      "theme": "gothic_ritual",
+      "carpet_style": "red_skull",
+      "direction": "left",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/carpets/gothic_carpet_01.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/carpets/gothic_carpet_01.png",
+      "canvas_size": [
+        960,
+        480
+      ],
+      "image_size": [
+        960,
+        480
+      ],
+      "visible_bounds_px": [
+        0,
+        0,
+        960,
+        480
+      ],
+      "anchor_px": [
+        480,
+        240
+      ],
+      "placement_anchor_px": [
+        480,
+        240
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        10,
+        5
+      ],
+      "visual_footprint_tiles": [
+        10,
+        5
+      ],
+      "occupancy_footprint_tiles": [
+        10,
+        5
+      ],
+      "base_footprint_tiles": [
+        10,
+        5
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "authored_default_layer": "ground_overlay",
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "visual_only",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "source_calibration_status": "generated_needs_editor_review",
+      "calibration_source": "package_geometry_contract_and_editor_visual_review_v1",
+      "palette_path": "装饰物1/地毯",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\地毯\\MSE_ISO_CARPETS_6_GEOMETRY_CORRECTED.zip::transparent_assets/CARPET_RED_SKULL_LEFT.png",
+      "source_sha256": "14e53aebc8edaa1d166a7b91347d88009d97c3aeb0b6164a42b2dddfee0e2ab9",
+      "output_sha256": "14e53aebc8edaa1d166a7b91347d88009d97c3aeb0b6164a42b2dddfee0e2ab9",
+      "thumbnail_source_sha256": "14e53aebc8edaa1d166a7b91347d88009d97c3aeb0b6164a42b2dddfee0e2ab9",
+      "processing": "verified_geometry_corrected_package_rgba_passthrough",
+      "tags": [
+        "carpet",
+        "floor_decoration",
+        "geometry_corrected",
+        "short_end_seamless",
+        "red_skull",
+        "left"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_CARPETS_6_GEOMETRY_CORRECTED",
+      "package_asset_id": "CARPET_RED_SKULL_LEFT",
+      "projection": "fixed_2_1_orthographic_isometric",
+      "iso_x_vector": [
+        64,
+        32
+      ],
+      "iso_y_vector": [
+        -64,
+        32
+      ],
+      "long_edge_screen_slope": 0.5,
+      "short_edge_screen_slope": -0.5,
+      "short_end_seamless": true,
+      "runtime_rotation_required": false,
+      "runtime_mirroring_required": false
+    },
+    {
+      "asset_id": "mse.new_carpet.02",
+      "display_name": "地毯 BLACK ARCANE LEFT",
+      "asset_type": "decoration",
+      "category": "decoration",
+      "object_class": "carpet",
+      "theme": "gothic_ritual",
+      "carpet_style": "black_arcane",
+      "direction": "left",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/carpets/gothic_carpet_02.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/carpets/gothic_carpet_02.png",
+      "canvas_size": [
+        960,
+        480
+      ],
+      "image_size": [
+        960,
+        480
+      ],
+      "visible_bounds_px": [
+        0,
+        0,
+        960,
+        480
+      ],
+      "anchor_px": [
+        480,
+        240
+      ],
+      "placement_anchor_px": [
+        480,
+        240
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        10,
+        5
+      ],
+      "visual_footprint_tiles": [
+        10,
+        5
+      ],
+      "occupancy_footprint_tiles": [
+        10,
+        5
+      ],
+      "base_footprint_tiles": [
+        10,
+        5
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "authored_default_layer": "ground_overlay",
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "visual_only",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "source_calibration_status": "generated_needs_editor_review",
+      "calibration_source": "package_geometry_contract_and_editor_visual_review_v1",
+      "palette_path": "装饰物1/地毯",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\地毯\\MSE_ISO_CARPETS_6_GEOMETRY_CORRECTED.zip::transparent_assets/CARPET_BLACK_ARCANE_LEFT.png",
+      "source_sha256": "99f13f5fbe0e5f43dee3dc4a66865d2783f07627b1a41bc258496692f06f37ae",
+      "output_sha256": "99f13f5fbe0e5f43dee3dc4a66865d2783f07627b1a41bc258496692f06f37ae",
+      "thumbnail_source_sha256": "99f13f5fbe0e5f43dee3dc4a66865d2783f07627b1a41bc258496692f06f37ae",
+      "processing": "verified_geometry_corrected_package_rgba_passthrough",
+      "tags": [
+        "carpet",
+        "floor_decoration",
+        "geometry_corrected",
+        "short_end_seamless",
+        "black_arcane",
+        "left"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_CARPETS_6_GEOMETRY_CORRECTED",
+      "package_asset_id": "CARPET_BLACK_ARCANE_LEFT",
+      "projection": "fixed_2_1_orthographic_isometric",
+      "iso_x_vector": [
+        64,
+        32
+      ],
+      "iso_y_vector": [
+        -64,
+        32
+      ],
+      "long_edge_screen_slope": 0.5,
+      "short_edge_screen_slope": -0.5,
+      "short_end_seamless": true,
+      "runtime_rotation_required": false,
+      "runtime_mirroring_required": false
+    },
+    {
+      "asset_id": "mse.new_carpet.03",
+      "display_name": "地毯 PURPLE GOTHIC LEFT",
+      "asset_type": "decoration",
+      "category": "decoration",
+      "object_class": "carpet",
+      "theme": "gothic_ritual",
+      "carpet_style": "purple_gothic",
+      "direction": "left",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/carpets/gothic_carpet_03.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/carpets/gothic_carpet_03.png",
+      "canvas_size": [
+        960,
+        480
+      ],
+      "image_size": [
+        960,
+        480
+      ],
+      "visible_bounds_px": [
+        0,
+        0,
+        960,
+        480
+      ],
+      "anchor_px": [
+        480,
+        240
+      ],
+      "placement_anchor_px": [
+        480,
+        240
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        10,
+        5
+      ],
+      "visual_footprint_tiles": [
+        10,
+        5
+      ],
+      "occupancy_footprint_tiles": [
+        10,
+        5
+      ],
+      "base_footprint_tiles": [
+        10,
+        5
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "authored_default_layer": "ground_overlay",
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "visual_only",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "source_calibration_status": "generated_needs_editor_review",
+      "calibration_source": "package_geometry_contract_and_editor_visual_review_v1",
+      "palette_path": "装饰物1/地毯",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\地毯\\MSE_ISO_CARPETS_6_GEOMETRY_CORRECTED.zip::transparent_assets/CARPET_PURPLE_GOTHIC_LEFT.png",
+      "source_sha256": "07a2fabc9ae550f0d29d9cd3f9044117d4e3302dd358a3d7189a492ef073b1d4",
+      "output_sha256": "07a2fabc9ae550f0d29d9cd3f9044117d4e3302dd358a3d7189a492ef073b1d4",
+      "thumbnail_source_sha256": "07a2fabc9ae550f0d29d9cd3f9044117d4e3302dd358a3d7189a492ef073b1d4",
+      "processing": "verified_geometry_corrected_package_rgba_passthrough",
+      "tags": [
+        "carpet",
+        "floor_decoration",
+        "geometry_corrected",
+        "short_end_seamless",
+        "purple_gothic",
+        "left"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_CARPETS_6_GEOMETRY_CORRECTED",
+      "package_asset_id": "CARPET_PURPLE_GOTHIC_LEFT",
+      "projection": "fixed_2_1_orthographic_isometric",
+      "iso_x_vector": [
+        64,
+        32
+      ],
+      "iso_y_vector": [
+        -64,
+        32
+      ],
+      "long_edge_screen_slope": 0.5,
+      "short_edge_screen_slope": -0.5,
+      "short_end_seamless": true,
+      "runtime_rotation_required": false,
+      "runtime_mirroring_required": false
+    },
+    {
+      "asset_id": "mse.new_carpet.04",
+      "display_name": "地毯 RED SKULL RIGHT",
+      "asset_type": "decoration",
+      "category": "decoration",
+      "object_class": "carpet",
+      "theme": "gothic_ritual",
+      "carpet_style": "red_skull",
+      "direction": "right",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/carpets/gothic_carpet_04.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/carpets/gothic_carpet_04.png",
+      "canvas_size": [
+        960,
+        480
+      ],
+      "image_size": [
+        960,
+        480
+      ],
+      "visible_bounds_px": [
+        0,
+        0,
+        960,
+        480
+      ],
+      "anchor_px": [
+        480,
+        240
+      ],
+      "placement_anchor_px": [
+        480,
+        240
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        5,
+        10
+      ],
+      "visual_footprint_tiles": [
+        5,
+        10
+      ],
+      "occupancy_footprint_tiles": [
+        5,
+        10
+      ],
+      "base_footprint_tiles": [
+        5,
+        10
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "authored_default_layer": "ground_overlay",
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "visual_only",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "source_calibration_status": "generated_needs_editor_review",
+      "calibration_source": "package_geometry_contract_and_editor_visual_review_v1",
+      "palette_path": "装饰物1/地毯",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\地毯\\MSE_ISO_CARPETS_6_GEOMETRY_CORRECTED.zip::transparent_assets/CARPET_RED_SKULL_RIGHT.png",
+      "source_sha256": "33cb6b1bb8db39b7756efb32a4d619b9d7e7521c2a5d39fcdc6eca953429971a",
+      "output_sha256": "33cb6b1bb8db39b7756efb32a4d619b9d7e7521c2a5d39fcdc6eca953429971a",
+      "thumbnail_source_sha256": "33cb6b1bb8db39b7756efb32a4d619b9d7e7521c2a5d39fcdc6eca953429971a",
+      "processing": "verified_geometry_corrected_package_rgba_passthrough",
+      "tags": [
+        "carpet",
+        "floor_decoration",
+        "geometry_corrected",
+        "short_end_seamless",
+        "red_skull",
+        "right"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_CARPETS_6_GEOMETRY_CORRECTED",
+      "package_asset_id": "CARPET_RED_SKULL_RIGHT",
+      "projection": "fixed_2_1_orthographic_isometric",
+      "iso_x_vector": [
+        64,
+        32
+      ],
+      "iso_y_vector": [
+        -64,
+        32
+      ],
+      "long_edge_screen_slope": -0.5,
+      "short_edge_screen_slope": 0.5,
+      "short_end_seamless": true,
+      "runtime_rotation_required": false,
+      "runtime_mirroring_required": false
+    },
+    {
+      "asset_id": "mse.new_carpet.05",
+      "display_name": "地毯 BLACK ARCANE RIGHT",
+      "asset_type": "decoration",
+      "category": "decoration",
+      "object_class": "carpet",
+      "theme": "gothic_ritual",
+      "carpet_style": "black_arcane",
+      "direction": "right",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/carpets/gothic_carpet_05.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/carpets/gothic_carpet_05.png",
+      "canvas_size": [
+        960,
+        480
+      ],
+      "image_size": [
+        960,
+        480
+      ],
+      "visible_bounds_px": [
+        0,
+        0,
+        960,
+        480
+      ],
+      "anchor_px": [
+        480,
+        240
+      ],
+      "placement_anchor_px": [
+        480,
+        240
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        5,
+        10
+      ],
+      "visual_footprint_tiles": [
+        5,
+        10
+      ],
+      "occupancy_footprint_tiles": [
+        5,
+        10
+      ],
+      "base_footprint_tiles": [
+        5,
+        10
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "authored_default_layer": "ground_overlay",
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "visual_only",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "source_calibration_status": "generated_needs_editor_review",
+      "calibration_source": "package_geometry_contract_and_editor_visual_review_v1",
+      "palette_path": "装饰物1/地毯",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\地毯\\MSE_ISO_CARPETS_6_GEOMETRY_CORRECTED.zip::transparent_assets/CARPET_BLACK_ARCANE_RIGHT.png",
+      "source_sha256": "ccc92bf287e5bfdf1459d20238835a4d6508c18140040128c240c4d591349b52",
+      "output_sha256": "ccc92bf287e5bfdf1459d20238835a4d6508c18140040128c240c4d591349b52",
+      "thumbnail_source_sha256": "ccc92bf287e5bfdf1459d20238835a4d6508c18140040128c240c4d591349b52",
+      "processing": "verified_geometry_corrected_package_rgba_passthrough",
+      "tags": [
+        "carpet",
+        "floor_decoration",
+        "geometry_corrected",
+        "short_end_seamless",
+        "black_arcane",
+        "right"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_CARPETS_6_GEOMETRY_CORRECTED",
+      "package_asset_id": "CARPET_BLACK_ARCANE_RIGHT",
+      "projection": "fixed_2_1_orthographic_isometric",
+      "iso_x_vector": [
+        64,
+        32
+      ],
+      "iso_y_vector": [
+        -64,
+        32
+      ],
+      "long_edge_screen_slope": -0.5,
+      "short_edge_screen_slope": 0.5,
+      "short_end_seamless": true,
+      "runtime_rotation_required": false,
+      "runtime_mirroring_required": false
+    },
+    {
+      "asset_id": "mse.new_carpet.06",
+      "display_name": "地毯 PURPLE GOTHIC RIGHT",
+      "asset_type": "decoration",
+      "category": "decoration",
+      "object_class": "carpet",
+      "theme": "gothic_ritual",
+      "carpet_style": "purple_gothic",
+      "direction": "right",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/carpets/gothic_carpet_06.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/carpets/gothic_carpet_06.png",
+      "canvas_size": [
+        960,
+        480
+      ],
+      "image_size": [
+        960,
+        480
+      ],
+      "visible_bounds_px": [
+        0,
+        0,
+        960,
+        480
+      ],
+      "anchor_px": [
+        480,
+        240
+      ],
+      "placement_anchor_px": [
+        480,
+        240
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        5,
+        10
+      ],
+      "visual_footprint_tiles": [
+        5,
+        10
+      ],
+      "occupancy_footprint_tiles": [
+        5,
+        10
+      ],
+      "base_footprint_tiles": [
+        5,
+        10
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "authored_default_layer": "ground_overlay",
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "visual_only",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "source_calibration_status": "generated_needs_editor_review",
+      "calibration_source": "package_geometry_contract_and_editor_visual_review_v1",
+      "palette_path": "装饰物1/地毯",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\地毯\\MSE_ISO_CARPETS_6_GEOMETRY_CORRECTED.zip::transparent_assets/CARPET_PURPLE_GOTHIC_RIGHT.png",
+      "source_sha256": "026e9a6f8b4e9a8895cc57b2f3078561eb850ccfbc6813f8bf1d4ce3f353200b",
+      "output_sha256": "026e9a6f8b4e9a8895cc57b2f3078561eb850ccfbc6813f8bf1d4ce3f353200b",
+      "thumbnail_source_sha256": "026e9a6f8b4e9a8895cc57b2f3078561eb850ccfbc6813f8bf1d4ce3f353200b",
+      "processing": "verified_geometry_corrected_package_rgba_passthrough",
+      "tags": [
+        "carpet",
+        "floor_decoration",
+        "geometry_corrected",
+        "short_end_seamless",
+        "purple_gothic",
+        "right"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "MSE_ISO_CARPETS_6_GEOMETRY_CORRECTED",
+      "package_asset_id": "CARPET_PURPLE_GOTHIC_RIGHT",
+      "projection": "fixed_2_1_orthographic_isometric",
+      "iso_x_vector": [
+        64,
+        32
+      ],
+      "iso_y_vector": [
+        -64,
+        32
+      ],
+      "long_edge_screen_slope": -0.5,
+      "short_edge_screen_slope": 0.5,
+      "short_end_seamless": true,
+      "runtime_rotation_required": false,
+      "runtime_mirroring_required": false
+    }
+  ]
+}

@@ -6,6 +6,12 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+# Some Codex desktop shells inherit both `Path` and `PATH`. PowerShell's
+# Start-Process treats environment keys case-insensitively and aborts when both
+# spellings are present, so normalize the process copy before launching Godot.
+$ProcessPath = [Environment]::GetEnvironmentVariable('Path', 'Process')
+[Environment]::SetEnvironmentVariable('PATH', $null, 'Process')
+[Environment]::SetEnvironmentVariable('Path', $ProcessPath, 'Process')
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $Godot = Join-Path $ProjectRoot 'tools\godot-4.7\Godot_v4.7-stable_win64_console.exe'
 $LogRoot = Join-Path $ProjectRoot 'outputs\test_logs'
@@ -51,6 +57,8 @@ $Suites = @{
 		'tests/bich_hard_boundary_test.tscn',
 		'tests/bich_content_1_test.tscn',
 		'tests/bich_map_3_runtime_bridge_test.tscn',
+		'tests/wooma_game_runtime_integration_test.tscn',
+		'tests/phase1_game_runtime_integration_test.tscn',
 		'tests/architecture_final_test.tscn',
 		'tests/five_layer_architecture_test.tscn',
 		'tests/bich_community_baseline_test.tscn',
@@ -125,9 +133,11 @@ foreach ($testPath in $SelectedTests) {
     $testName = [IO.Path]::GetFileNameWithoutExtension($testPath)
     $stdout = Join-Path $LogRoot "$testName.stdout.log"
     $stderr = Join-Path $LogRoot "$testName.stderr.log"
-    Remove-Item -LiteralPath $stdout, $stderr -Force -ErrorAction SilentlyContinue
+    $engineLog = Join-Path $LogRoot "$testName.godot.log"
+    $engineLogArgument = "outputs/test_logs/$testName.godot.log"
+    Remove-Item -LiteralPath $stdout, $stderr, $engineLog -Force -ErrorAction SilentlyContinue
     $process = Start-Process -FilePath $Godot `
-        -ArgumentList @('--headless', '--path', '.', $testPath) `
+        -ArgumentList @('--headless', '--log-file', $engineLogArgument, '--path', '.', $testPath) `
         -WorkingDirectory $ProjectRoot -WindowStyle Hidden `
         -RedirectStandardOutput $stdout -RedirectStandardError $stderr -PassThru
     $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)

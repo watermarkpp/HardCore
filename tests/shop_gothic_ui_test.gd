@@ -36,6 +36,8 @@ func _run() -> void:
 	await get_tree().process_frame
 	assert(panel.size == Vector2(1080, 620), "商店没有使用横屏安全尺寸")
 	assert(panel.theme_type_variation == "GothicModalFrame", "商店没有复用公共哥特外框")
+	assert(panel.gold_label.position.y >= 20.0 and panel.gold_label.vertical_alignment == VERTICAL_ALIGNMENT_CENTER, "商店金币文字仍然贴近装饰框上沿")
+	assert(panel.detail_label.position.x >= 24.0 and panel.detail_label.position.y >= 60.0, "商品详情文字没有避开装饰框安全内边距")
 	assert(panel.goods_grid.columns == 2 and panel.goods_buttons.size() == STOCK.size(), "商品没有使用两列双格卡布局")
 	assert(not panel.item_list.visible and panel.item_list.item_count == STOCK.size(), "商店兼容选择列表异常")
 	for card: Button in panel.goods_buttons:
@@ -80,7 +82,13 @@ func _run() -> void:
 	panel._select_sell_item(risky_index)
 	panel._request_sell(1)
 	assert(not panel._pending_sell_request.is_empty() and sell_requests.size() == 1, "高风险装备没有进入二次确认")
-	panel._confirm_pending_sell()
+	assert(panel.sell_confirmation.visible, "高风险出售没有打开公共确认组件")
+	assert(panel.sell_confirmation.get_meta("stable_id", "") == "ui.confirmation.dialog", "商店没有复用公共确认组件")
+	assert(panel.sell_confirmation.current_request.action_id == "shop.sell.risky_item", "商店确认操作 ID 错误")
+	panel.sell_confirmation.cancel_button.pressed.emit()
+	assert(panel._pending_sell_request.is_empty() and sell_requests.size() == 1, "取消高风险出售后仍保留待处理交易")
+	panel._request_sell(1)
+	panel.sell_confirmation.confirm_button.pressed.emit()
 	assert(sell_requests.size() == 2 and "quote_id" in sell_requests[1], "确认后没有提交玩法层报价ID")
 	print("SHOP_GOTHIC_UI_PASS：购买/出售分页、玩法报价、数量选择、风险确认、购买与维修入口均正常")
 	get_tree().quit(0)

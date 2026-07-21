@@ -1,6 +1,10 @@
 class_name MapEditorBuildRuntimeService
 extends RefCounted
 
+const ConnectionPolicyService := preload(
+	"res://scripts/map_editor/map_editor_connection_policy_service.gd"
+)
+
 const RUNTIME_SCHEMA_VERSION := 1
 const RUNTIME_ROOT := "res://assets/data/runtime/map_editor/"
 
@@ -38,6 +42,11 @@ static func validate_for_runtime(document: Dictionary) -> Dictionary:
 			errors.append("semantic_tile_missing:%s" % semantic_id)
 		if str(entry.get("kind", "")) == "door" and str(entry.get("target_map_id", "")).strip_edges().is_empty():
 			errors.append("door_target_map_required:%s" % semantic_id)
+		if str(entry.get("kind", "")) == "map_exit" and str(entry.get("target_map_id", "")).strip_edges().is_empty():
+			errors.append("map_exit_target_map_required:%s" % semantic_id)
+	errors.append_array(
+		ConnectionPolicyService.validate_document(document)
+	)
 	var walkability := MapEditorCollisionService.build_walkability(document)
 	if int(walkability.get("walkable_count", 0)) <= 0:
 		errors.append("map_has_no_walkable_tile")
@@ -73,7 +82,11 @@ static func _compile(document: Dictionary, walkability: Dictionary) -> Dictionar
 	var initialized := MapEditorGroundService.initialize(document)
 	var state: Dictionary = initialized.state
 	var semantic_layers := {}
-	for layer: String in ["npc_points", "monster_spawn", "boss_spawn", "door_points", "safe_area", "light", "region_trigger"]:
+	for layer: String in [
+		"npc_points", "monster_spawn", "boss_spawn", "door_points",
+		"map_entrance_points", "map_exit_points", "respawn_points",
+		"safe_area", "light", "region_trigger",
+	]:
 		var runtime_entries:Array=[]
 		for source_entry:Dictionary in document.layers.get(layer,[]):
 			var entry:=source_entry.duplicate(true)
@@ -92,7 +105,12 @@ static func _compile(document: Dictionary, walkability: Dictionary) -> Dictionar
 		"design": document.design.duplicate(true),
 		"ground": {"ground_mode": document.ground.ground_mode, "default_fill_asset_id": document.ground.blank_fill_asset_id, "tile_overrides": MapEditorGroundService.tile_overrides(state)},
 		"instances": instances,
-		"collision": {"blocked_tiles": blocked, "blocked_count": blocked.size(), "manual_shapes": document.layers.get("collision", []).duplicate(true)},
+		"collision": {
+			"blocked_tiles": blocked,
+			"blocked_count": blocked.size(),
+			"manual_shapes": document.layers.get("collision", []).duplicate(true),
+			"erased_cells": document.layers.get("collision_erase", []).duplicate(true),
+		},
 		"semantics": semantic_layers,
 	}
 	output["build_sha256"] = ""

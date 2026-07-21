@@ -1,0 +1,30 @@
+{
+  "menuContractId": "ui.system_menu.action.v1",
+  "audioContractId": "ui.audio.setting.v1",
+  "actions": [
+    "continue",
+    "return_to_character_select",
+    "save_and_exit",
+    "open_settings"
+  ],
+  "settings": [
+    {
+      "settingId": "audio.music.enabled",
+      "type": "boolean",
+      "default": true,
+      "targetBus": "Music"
+    },
+    {
+      "settingId": "audio.sfx.enabled",
+      "type": "boolean",
+      "default": true,
+      "targetBus": "SFX"
+    }
+  ],
+  "policy": [
+    "The UI emits requests and does not mutate AudioServer buses or the save schema.",
+    "Runtime integration owns pausing, continuing, safe save, scene changes and application exit.",
+    "Runtime integration owns applying and persisting audio settings.",
+    "The first settings version contains only music and sound-effect switches."
+  ]
+}

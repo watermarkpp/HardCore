@@ -4,9 +4,18 @@ extends Node2D
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const BOSS_ART_PATH := "res://assets/data/classic_boss_client_art_sources.json"
 const COMPLETE_ART_PATH := "res://assets/data/complete_monster_client_art_sources.json"
+# WIL px/py values are relative to the classic DrawChr origin, not to the
+# actor's ground point. The player client-art path already migrates this same
+# origin by (+32,+28); monsters must use the identical coordinate conversion.
+const CLIENT_ACTOR_GROUND_OFFSET := Vector2i(32, 28)
+const HEALTH_BAR_FRAME_MARGIN := 8.0
+const CLIENT_RESOURCE_CACHE_CAPACITY := 32
 
 static var _boss_art: Dictionary = {}
 static var _complete_art: Dictionary = {}
+static var _client_resource_profiles: Dictionary = {}
+static var _client_resource_profile_lru: Array[String] = []
+static var _client_texture_load_request_count := 0
 
 var actor: EnemyActor
 var sprite: Sprite2D
@@ -16,12 +25,15 @@ var current_direction := 0
 var current_frame := 0
 var frame_size := ArtSpec.MONSTER_FRAME
 var foot_anchor := ArtSpec.MONSTER_FOOT_ANCHOR
+var actor_ground_offset := Vector2i.ZERO
 var _elapsed := 0.0
 var _last_state := ""
 var _attack_remaining := 0.0
 var _hit_remaining := 0.0
 var _death_remaining := 0.0
 var _action_duration := 0.0
+var _fixed_health_bar_y := 0.0
+var _render_state_update_count := 0
 
 
 func setup(owner_actor: EnemyActor) -> void:
@@ -37,16 +49,22 @@ func _ready() -> void:
 		var resources: Dictionary = active_resources
 		frame_size = resources.get("frame_size", ArtSpec.MONSTER_FRAME)
 		foot_anchor = resources.get("foot_anchor", ArtSpec.MONSTER_FOOT_ANCHOR)
+		actor_ground_offset = resources.get("actor_ground_offset", Vector2i.ZERO)
 	sprite = Sprite2D.new()
 	sprite.name = "BodySprite"
 	sprite.region_enabled = true
 	sprite.region_rect = Rect2(Vector2.ZERO, frame_size)
 	sprite.centered = false
-	sprite.position = -Vector2(foot_anchor)
+	sprite.position = -Vector2(foot_anchor + actor_ground_offset)
+	# Every action and direction uses the same authored frame rectangle and foot
+	# anchor. Pin UI to that rectangle's upper edge instead of the current
+	# animation pixels, so a changing pose can never move the health bar through
+	# the monster's head, chest, or waist.
+	_fixed_health_bar_y = position.y + sprite.position.y - HEALTH_BAR_FRAME_MARGIN
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	add_child(sprite)
 	if visible:
-		sprite.texture = active_resources["idle"]
+		_apply_render_state(active_resources["idle"], Rect2(Vector2.ZERO, frame_size))
 
 
 func _process(delta: float) -> void:
@@ -80,8 +98,10 @@ func _process(delta: float) -> void:
 	else:
 		var fps := MonsterAnimationPolicy.loop_fps(StringName(current_state))
 		current_frame = int(floor(_elapsed * fps)) % frame_count
-	sprite.texture = active_resources[current_state]
-	sprite.region_rect = Rect2(current_frame * frame_size.x, current_direction * frame_size.y, frame_size.x, frame_size.y)
+	_apply_render_state(
+		active_resources[current_state],
+		Rect2(current_frame * frame_size.x, current_direction * frame_size.y, frame_size.x, frame_size.y)
+	)
 
 
 func _resources_for(monster_data: Dictionary) -> Dictionary:
@@ -141,7 +161,21 @@ func _complete_art_manifest() -> Dictionary:
 	return _complete_art
 
 
+func ground_contact_offset() -> Vector2:
+	return Vector2.ZERO
+
+
+func ground_contact_position(fallback: Vector2) -> Vector2:
+	return position if uses_final_art() else fallback
+
+
+func health_bar_anchor_y(fallback_y: float) -> float:
+	return _fixed_health_bar_y if uses_final_art() else fallback_y
+
+
 func _direction_row(direction: Vector2) -> int:
+	if str(active_resources.get("direction_policy", "mir2_directional")) == "fixed_source_direction":
+		return 0
 	# Raw Mon*.wil atlases are north-first. Project-authored turnaround atlases
 	# are south-first. Every resource declares its convention here instead of
 	# forcing one global mapping and breaking half the monster roster.
@@ -149,12 +183,19 @@ func _direction_row(direction: Vector2) -> int:
 
 
 func _client_resources(client_mapping: Dictionary) -> Dictionary:
+	var cache_key := _client_resource_cache_key(client_mapping)
+	var cached: Variant = _client_resource_profiles.get(cache_key, {})
+	if cached is Dictionary and not cached.is_empty():
+		_touch_client_resource_profile(cache_key)
+		return cached
 	var actions: Variant = client_mapping.get("actions", {})
 	var result := {
 		"frame_size": Vector2i(int(client_mapping.get("frameSize", [160, 160])[0]), int(client_mapping.get("frameSize", [160, 160])[1])),
 		"foot_anchor": Vector2i(int(client_mapping.get("footAnchor", [80, 138])[0]), int(client_mapping.get("footAnchor", [80, 138])[1])),
+		"actor_ground_offset": CLIENT_ACTOR_GROUND_OFFSET,
 		"frame_counts": {},
 		"direction_mode": "mir2_north_first",
+		"direction_policy": str(client_mapping.get("directionPolicy", "mir2_directional")),
 		"animation_source": "classic_client_wil",
 	}
 	for action_name: String in ["idle", "walk", "attack", "hit", "death"]:
@@ -168,10 +209,66 @@ func _client_resources(client_mapping: Dictionary) -> Dictionary:
 			return {}
 		result[action_name] = texture
 		result["frame_counts"][action_name] = frame_count
-	return result if MonsterAnimationPolicy.validate(result).is_empty() else {}
+	if not MonsterAnimationPolicy.validate(result).is_empty():
+		return {}
+	# Keep a bounded strong-reference window across nearby streamed areas. Godot's
+	# resource cache may release an atlas after the last actor leaves; this LRU
+	# prevents an immediate return from decoding/uploading all five actions again
+	# without eventually retaining the entire 214-monster catalog on mobile.
+	_client_resource_profiles[cache_key] = result
+	_touch_client_resource_profile(cache_key)
+	while _client_resource_profile_lru.size() > CLIENT_RESOURCE_CACHE_CAPACITY:
+		var expired_key: String = _client_resource_profile_lru.pop_front()
+		_client_resource_profiles.erase(expired_key)
+	return result
+
+
+func _client_resource_cache_key(client_mapping: Dictionary) -> String:
+	var frame_values: Array = client_mapping.get("frameSize", [160, 160])
+	var foot_values: Array = client_mapping.get("footAnchor", [80, 138])
+	var parts := PackedStringArray([
+		"%sx%s" % [int(frame_values[0]), int(frame_values[1])],
+		"%s,%s" % [int(foot_values[0]), int(foot_values[1])],
+		str(client_mapping.get("directionPolicy", "mir2_directional")),
+	])
+	var actions: Dictionary = client_mapping.get("actions", {})
+	for action_name: String in ["idle", "walk", "attack", "hit", "death"]:
+		var action: Dictionary = actions.get(action_name, {})
+		parts.append("%s:%d" % [str(action.get("path", "")), int(action.get("framesPerDirection", 0))])
+	return "|".join(parts)
+
+
+func _touch_client_resource_profile(cache_key: String) -> void:
+	_client_resource_profile_lru.erase(cache_key)
+	_client_resource_profile_lru.append(cache_key)
+
+
+func _apply_render_state(texture: Texture2D, region: Rect2) -> void:
+	var changed := false
+	if sprite.texture != texture:
+		sprite.texture = texture
+		changed = true
+	if sprite.region_rect != region:
+		sprite.region_rect = region
+		changed = true
+	if changed:
+		_render_state_update_count += 1
+
+
+func render_state_update_count() -> int:
+	return _render_state_update_count
+
+
+static func cached_client_profile_count() -> int:
+	return _client_resource_profiles.size()
+
+
+static func client_texture_load_request_count() -> int:
+	return _client_texture_load_request_count
 
 
 func _load_client_texture(path: String, expected_size: Vector2i) -> Texture2D:
+	_client_texture_load_request_count += 1
 	if ResourceLoader.exists(path):
 		var imported := load(path) as Texture2D
 		if imported != null and Vector2i(imported.get_size()) == expected_size:

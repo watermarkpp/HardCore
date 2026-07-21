@@ -1,0 +1,60 @@
+{
+  "contractId": "ui.death.revival.v1",
+  "policy": "UI displays gameplay-owned revival choices and submits a selected method. The confirmed death penalty is 10 percent experience with no gold or item loss. Gameplay owns the deduction, rounding, cooldowns, item consumption, destination maps, arrival anchors, and revival eligibility.",
+  "deathPenalty": {
+    "experiencePercent": 10,
+    "goldPercent": 0,
+    "loseItems": false,
+    "uiText": "死亡损失：经验 10%"
+  },
+  "visual": {
+    "iconPath": "res://assets/branding/game_icon.png",
+    "stableId": "ui.death.game_icon",
+    "forbiddenLegacyDecoration": [
+      "DeathMark circle",
+      "亡 label"
+    ]
+  },
+  "openMethod": {
+    "name": "GameHUD.show_death_screen(context)",
+    "contextFields": [
+      "death_id",
+      "message",
+      "loss_text",
+      "revival_options"
+    ]
+  },
+  "optionFields": [
+    "option_slot",
+    "method_id",
+    "label",
+    "enabled",
+    "countdown_seconds",
+    "hint",
+    "reason"
+  ],
+  "stableOptionSlots": [
+    "town",
+    "special"
+  ],
+  "stableButtonIds": [
+    "death.revival.town",
+    "death.revival.special"
+  ],
+  "requestSignal": {
+    "panelSignal": "DeathRevivalPanel.revival_requested(request)",
+    "hudForwardSignal": "GameHUD.revival_requested(request)",
+    "requestFields": [
+      "contract_id",
+      "death_id",
+      "option_slot",
+      "method_id"
+    ]
+  },
+  "responseMethods": [
+    "GameHUD.set_revival_options(options)",
+    "GameHUD.update_revival_option(option_slot, state)",
+    "GameHUD.apply_revival_result(result)",
+    "GameHUD.close_death_screen()"
+  ]
+}

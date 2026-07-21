@@ -50,7 +50,8 @@ func _run() -> void:
 		var visual: MonsterVisual = enemy.get_node("MonsterVisual")
 		var sprite: Sprite2D = visual.get_node("BodySprite")
 		assert(visual.uses_final_art() and visual.frame_size == Vector2i(160, 160), "%s未启用客户端正式资源" % monster_name)
-		assert(sprite.position == Vector2(-80, -138) and sprite.texture.get_size() == Vector2(640, 1280), "%s待机锚点或图集尺寸错误" % monster_name)
+		assert(visual.actor_ground_offset == Vector2i(32, 28), "%s 未采用经典客户端角色原点迁移量" % monster_name)
+		assert(sprite.position == Vector2(-112, -166) and sprite.texture.get_size() == Vector2(640, 1280), "%s 待机绘制原点迁移或图集尺寸错误" % monster_name)
 		enemy.facing = Vector2.RIGHT
 		enemy.movement_facing = Vector2.RIGHT
 		enemy.velocity = Vector2.RIGHT * 50.0

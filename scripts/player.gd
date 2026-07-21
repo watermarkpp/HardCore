@@ -11,8 +11,8 @@ const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 # - ClientWalkXY/ClientRunXY call CheckActionStatus before moving.
 # - CheckActionStatus rejects the action while dwStruckTime has not elapsed.
 # - M2Server/Mir200/!Setup.txt configures StruckTime=100 (milliseconds).
-const SERVER_STRUCK_TIME_SECONDS := 0.100
-const SERVER_STRUCK_DAMAGE_THRESHOLD := 0
+# That source identifies itself as a modified 1.5 build, not an exact 1.76 source.
+# HardCore keeps source evidence and its custom balance values in ProfessionRules.
 
 signal stats_changed(current_hp: int, max_hp: int)
 signal attack_requested(origin: Vector2, direction: Vector2, damage: int)
@@ -48,6 +48,8 @@ var facing := Vector2.DOWN
 var _attack_timer := 0.0
 var _attack_action_timer := 0.0
 var _struck_lock_remaining := 0.0
+var _struck_reaction_lock_remaining := 0.0
+var _queued_struck_reaction := false
 var _rng := RandomNumberGenerator.new()
 var visual: Node2D
 var health_bar: PlayerHealthBar
@@ -60,6 +62,11 @@ var _slaying_cycle_remaining := 0
 var _slaying_trigger_point := -1
 var _slaying_cycle_size := 0
 var _pending_attack_context: Dictionary = {}
+var _combat_action_sequence := 0
+var _pending_combat_action_id := 0
+var _pending_combat_action_active := false
+var _pending_combat_action_committed := false
+var _pending_combat_action_kind := ""
 var _test_combat_time_ms := -1
 var _last_revival_at_ms := -60000
 var _pending_potion_health := 0
@@ -118,10 +125,16 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	var position_before_move := global_position
-	var was_struck_locked := _struck_lock_remaining > 0.0
+	var was_struck_locked := _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0
 	_attack_timer = maxf(0.0, _attack_timer - delta)
 	_attack_action_timer = maxf(0.0, _attack_action_timer - delta)
+	if _attack_action_timer <= 0.0 and _pending_combat_action_active and _pending_combat_action_committed:
+		_finish_combat_action(_pending_combat_action_id)
+	if _attack_action_timer <= 0.0 and _queued_struck_reaction:
+		_start_queued_struck_reaction()
+		was_struck_locked = true
 	_struck_lock_remaining = maxf(0.0, _struck_lock_remaining - delta)
+	_struck_reaction_lock_remaining = maxf(0.0, _struck_reaction_lock_remaining - delta)
 	if _struck_lock_remaining < 0.000001:
 		_struck_lock_remaining = 0.0
 	shield_time = maxf(0.0, shield_time - delta)
@@ -189,7 +202,7 @@ func set_combat_facing(direction: Vector2) -> void:
 
 
 func can_start_attack() -> bool:
-	return _attack_timer <= 0.0 and _attack_action_timer <= 0.0 and _struck_lock_remaining <= 0.0 and control_time <= 0.0
+	return _attack_timer <= 0.0 and _attack_action_timer <= 0.0 and _struck_lock_remaining <= 0.0 and _struck_reaction_lock_remaining <= 0.0 and control_time <= 0.0
 
 
 func request_attack() -> bool:
@@ -200,13 +213,14 @@ func request_attack() -> bool:
 	_attack_action_timer = action_duration
 	velocity = Vector2.ZERO
 	var context := _build_warrior_attack_context()
+	var action_id := _begin_combat_action("attack")
 	var animation_name := str(context.get("skill_name", "attack"))
 	visual.play_action(animation_name, action_duration)
 	var damage := WarriorCombatMath.roll_attack_power(attack_min, attack_max, int(PlayerState.computed_stats.get("luck", 0)), _rng)
 	var critical_chance := float(PlayerState.computed_stats.get("critical_chance", 0.0))
 	if critical_chance > 0.0 and EquipmentRulesScript.critical_succeeds(critical_chance, _rng.randf()):
 		damage = EquipmentRulesScript.critical_damage(damage, float(PlayerState.computed_stats.get("critical_damage_multiplier", 1.5)))
-	_emit_attack_after_windup(global_position, facing.normalized(), damage, attack_hit_windup / _attack_speed_multiplier, context)
+	_emit_attack_after_windup(global_position, facing.normalized(), damage, attack_hit_windup / _attack_speed_multiplier, context, action_id)
 	if _rng.randi_range(1, 25) == 1:
 		PlayerState.damage_equipment_durability("武器")
 	return true
@@ -222,7 +236,7 @@ func request_attack_toward(direction: Vector2) -> bool:
 func request_skill(skill_name: String) -> bool:
 	if skill_name.is_empty() or not PlayerState.learned_skills.has(skill_name):
 		return false
-	if _struck_lock_remaining > 0.0 or control_time > 0.0 or _dead:
+	if _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0 or control_time > 0.0 or _dead:
 		return false
 	var learned_level := PlayerState.effective_skill_level(skill_name)
 	if PlayerState.profession == "战士" and skill_name in ["基本剑术", "攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"]:
@@ -238,6 +252,7 @@ func request_skill(skill_name: String) -> bool:
 	_attack_timer = float(combat_profile.get("cooldown", 0.78)) / _cast_speed_multiplier
 	var action_duration := float(combat_profile.get("action_duration", _attack_timer)) / _cast_speed_multiplier
 	_attack_action_timer = action_duration if PlayerState.profession == "战士" else 0.0
+	var action_id := _begin_combat_action("skill:%s" % skill_name)
 	visual.play_action(skill_name if PlayerState.profession == "战士" else "cast", action_duration)
 	var primary := ProfessionRules.primary_damage_range(PlayerState.profession, PlayerState.computed_stats)
 	if primary.y <= 0:
@@ -246,7 +261,7 @@ func request_skill(skill_name: String) -> bool:
 	var critical_chance := float(PlayerState.computed_stats.get("critical_chance", 0.0))
 	if critical_chance > 0.0 and EquipmentRulesScript.critical_succeeds(critical_chance, _rng.randf()):
 		damage = EquipmentRulesScript.critical_damage(damage, float(PlayerState.computed_stats.get("critical_damage_multiplier", 1.5)))
-	_emit_skill_after_windup(skill_name, global_position, facing.normalized(), damage, float(combat_profile.get("windup", 0.0)) / _cast_speed_multiplier)
+	_emit_skill_after_windup(skill_name, global_position, facing.normalized(), damage, float(combat_profile.get("windup", 0.0)) / _cast_speed_multiplier, action_id)
 	if _rng.randi_range(1, 30) == 1:
 		PlayerState.damage_equipment_durability("武器")
 	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
@@ -267,11 +282,17 @@ func take_damage(amount: int, causes_struck: bool = true) -> void:
 			current_mp = 0
 			final_damage = int(round(unpaid_mp / 1.5))
 	current_hp = maxi(0, current_hp - final_damage)
-	if causes_struck and final_damage > SERVER_STRUCK_DAMAGE_THRESHOLD and current_hp > 0:
-		_struck_lock_remaining = SERVER_STRUCK_TIME_SECONDS
+	if causes_struck and ProfessionRules.should_player_stagger(final_damage, max_hp) and current_hp > 0:
+		_struck_lock_remaining = maxf(_struck_lock_remaining, ProfessionRules.player_struck_action_lock_seconds())
 		velocity = Vector2.ZERO
 		movement_input_active = false
-		visual.play_hit()
+		# The legacy client only consumes SM_STRUCK while its current action is
+		# idle. Queue the reaction so an attack animation and its hit transaction
+		# remain causally consistent instead of showing a false cancellation.
+		if _attack_action_timer > 0.0 or _pending_combat_action_active:
+			_queued_struck_reaction = true
+		else:
+			_start_struck_reaction()
 	if _rng.randi_range(1, 30) == 1:
 		PlayerState.damage_equipment_durability("衣服")
 	stats_changed.emit(current_hp, max_hp)
@@ -302,20 +323,72 @@ func take_damage(amount: int, causes_struck: bool = true) -> void:
 		resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
 
 
-func _emit_attack_after_windup(origin: Vector2, direction: Vector2, damage: int, windup: float, context: Dictionary) -> void:
+func _emit_attack_after_windup(origin: Vector2, direction: Vector2, damage: int, windup: float, context: Dictionary, action_id: int) -> void:
 	if windup > 0.0:
 		await get_tree().create_timer(windup).timeout
-	if is_inside_tree():
+	if is_inside_tree() and _commit_combat_action(action_id):
 		_pending_attack_context = context.duplicate(true)
 		attack_requested.emit(origin, direction, damage)
 		_pending_attack_context.clear()
 
 
-func _emit_skill_after_windup(skill_name: String, origin: Vector2, direction: Vector2, damage: int, windup: float) -> void:
+func _emit_skill_after_windup(skill_name: String, origin: Vector2, direction: Vector2, damage: int, windup: float, action_id: int) -> void:
 	if windup > 0.0:
 		await get_tree().create_timer(windup).timeout
-	if is_inside_tree():
+	if is_inside_tree() and _commit_combat_action(action_id):
 		skill_requested.emit(skill_name, origin, direction, damage)
+
+
+func _begin_combat_action(action_kind: String) -> int:
+	_combat_action_sequence += 1
+	_pending_combat_action_id = _combat_action_sequence
+	_pending_combat_action_active = true
+	_pending_combat_action_committed = false
+	_pending_combat_action_kind = action_kind
+	return _pending_combat_action_id
+
+
+func _commit_combat_action(action_id: int) -> bool:
+	if not _pending_combat_action_active or action_id != _pending_combat_action_id:
+		return false
+	_pending_combat_action_committed = true
+	return true
+
+
+func _finish_combat_action(action_id: int) -> void:
+	if action_id != _pending_combat_action_id:
+		return
+	_pending_combat_action_active = false
+	_pending_combat_action_kind = ""
+
+
+func _start_struck_reaction() -> void:
+	var duration := ProfessionRules.player_struck_reaction_seconds()
+	_struck_reaction_lock_remaining = maxf(_struck_reaction_lock_remaining, duration)
+	visual.play_hit(duration)
+
+
+func _start_queued_struck_reaction() -> void:
+	_queued_struck_reaction = false
+	_start_struck_reaction()
+
+
+func combat_action_snapshot() -> Dictionary:
+	return {
+		"action_id": _pending_combat_action_id,
+		"kind": _pending_combat_action_kind,
+		"active": _pending_combat_action_active,
+		"committed": _pending_combat_action_committed,
+	}
+
+
+func struck_reaction_snapshot() -> Dictionary:
+	return {
+		"policy_id": str(ProfessionRules.COMBAT_REACTION_POLICY.policy_id),
+		"server_action_lock_remaining": _struck_lock_remaining,
+		"reaction_lock_remaining": _struck_reaction_lock_remaining,
+		"queued": _queued_struck_reaction,
+	}
 
 
 func consume_attack_context() -> Dictionary:

@@ -32,13 +32,17 @@ func _run() -> void:
 		var sprite: Sprite2D = visual.get_node("BodySprite")
 		assert(visual.uses_final_art(), "%s 未启用原客户端逐帧资源" % monster_name)
 		assert(visual.active_resources.get("animation_source", "") == "classic_client_wil", "%s 仍在使用程序变形动画" % monster_name)
+		assert(visual.actor_ground_offset == Vector2i(32, 28), "%s 旧名称入口未采用经典客户端角色原点迁移量" % monster_name)
+		enemy.set_targeted(true)
+		assert(enemy.ground_indicator_center().is_equal_approx(visual.position), "%s 旧名称入口的锁定光圈未使用统一地面原点" % monster_name)
 		assert(sprite.texture.get_size() == Vector2(frame_size.x * 4, frame_size.y * 8), "%s 待机图集尺寸错误" % monster_name)
 		enemy.facing = Vector2.RIGHT
 		enemy.movement_facing = Vector2.RIGHT
 		if monster_name == "食人花":
 			assert(enemy.move_speed == 0.0 and enemy.attack_range == 78.0, "食人花固定怪参数错误")
 			visual._process(0.12)
-			assert(visual.current_state == "idle" and visual.current_direction == 2, "食人花待机方向错误")
+			assert(visual.active_resources.get("direction_policy", "") == "fixed_source_direction", "食人花未加载固定源方向策略")
+			assert(visual.current_state == "idle" and visual.current_direction == 0, "食人花仍被玩家方向带偏到相邻状态帧")
 		else:
 			enemy.velocity = Vector2.RIGHT * 50.0
 			visual._process(0.12)

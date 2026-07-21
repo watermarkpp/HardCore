@@ -1,0 +1,50 @@
+{
+  "base_color": "#120e0d",
+  "chunks": [
+    {
+      "chunk_id": "c_0_0",
+      "image": "assets/art/maps/bich_mine/editor_runtime_chunks/corpse_king_hall/c_0_0.png",
+      "rect_px": [
+        0.0,
+        0.0,
+        1024.0,
+        960.0
+      ],
+      "sha256": "679ea23e11542360914e153f50de89e01b72a8ef115510239ea247855e0ab2e7"
+    },
+    {
+      "chunk_id": "c_1_0",
+      "image": "assets/art/maps/bich_mine/editor_runtime_chunks/corpse_king_hall/c_1_0.png",
+      "rect_px": [
+        1024.0,
+        0.0,
+        896.0,
+        960.0
+      ],
+      "sha256": "df5507638a9b55178a07cca8cc55accb8df570a36d415f879abf0d53a66761ee"
+    }
+  ],
+  "coverage": {
+    "complete": true,
+    "packaged_chunk_count": 2,
+    "required_chunk_count": 2
+  },
+  "design_size": [
+    30.0,
+    30.0
+  ],
+  "ground_pixel_center": [
+    960.0,
+    480.0
+  ],
+  "ground_pixel_size": [
+    1920.0,
+    960.0
+  ],
+  "guard_band_px": 512.0,
+  "map_id": "corpse_king_hall",
+  "render_mode": "batched_canvas_draw",
+  "runtime_map_id": 1578,
+  "schema_version": 1,
+  "visual_contract_id": "phase1_mine_editor_runtime_visual_v1"
+}

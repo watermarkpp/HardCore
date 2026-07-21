@@ -4,6 +4,16 @@ extends CharacterBody2D
 const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const CROWD_GRID_CELL_SIZE := 96.0
+const FAR_RETARGET_MIN_SECONDS := 0.28
+const FAR_RETARGET_STAGGER_SECONDS := 0.017
+
+static var _crowd_grid_physics_frame := -1
+static var _crowd_grid: Dictionary = {}
+static var _crowd_grid_build_count := 0
+static var _crowd_grid_actor_scan_count := 0
+static var _crowd_query_candidate_count := 0
+static var _retarget_full_scan_count := 0
 
 signal died(enemy: EnemyActor, monster_data: Dictionary)
 signal target_requested(enemy: EnemyActor)
@@ -195,6 +205,8 @@ func _ready() -> void:
 	if _burrowed:
 		visual.visible = false
 		name_label.visible = false
+	if boss_rule.is_empty():
+		_retarget_timer = FAR_RETARGET_STAGGER_SECONDS * float(posmod(get_instance_id(), 11))
 	queue_redraw()
 
 
@@ -238,6 +250,18 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 		queue_redraw()
 		return
+	# Keep the established retarget/attack/summon timing, but immobilization must
+	# win over the no-target return path after an actor is relocated beyond its
+	# authored spawn leash.
+	if control_time > 0.0 or charm_time > 0.0:
+		if _control_anchor == Vector2.INF:
+			_control_anchor = global_position
+		else:
+			global_position = _control_anchor
+		velocity = Vector2.ZERO
+		queue_redraw()
+		return
+	_control_anchor = Vector2.INF
 	if not is_instance_valid(target):
 		_return_to_spawn()
 		return
@@ -284,15 +308,6 @@ func _physics_process(delta: float) -> void:
 			velocity = Vector2.ZERO
 			queue_redraw()
 			return
-	if control_time > 0.0 or charm_time > 0.0:
-		if _control_anchor == Vector2.INF:
-			_control_anchor = global_position
-		else:
-			global_position = _control_anchor
-		velocity = Vector2.ZERO
-		queue_redraw()
-		return
-	_control_anchor = Vector2.INF
 	if target.has_method("is_stealthed") and target.is_stealthed() and distance > 35.0:
 		velocity = Vector2.ZERO
 		return
@@ -334,7 +349,8 @@ func _physics_process(delta: float) -> void:
 		var fresh_offset := target.global_position - global_position
 		if fresh_offset.length_squared() > 0.001:
 			facing = fresh_offset.normalized()
-	queue_redraw()
+	if visual != null and visual.is_fallback_attacking():
+		queue_redraw()
 
 
 func _point_inside_safe_zone(point:Vector2)->bool:
@@ -465,22 +481,68 @@ func _target_collision_radius(target_node: Node2D) -> float:
 
 
 func _crowd_separation() -> Vector2:
+	_ensure_crowd_grid()
 	var separation := Vector2.ZERO
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if node == self or not node is EnemyActor or node.is_queued_for_deletion():
-			continue
-		var other := node as EnemyActor
-		var away := global_position - other.global_position
-		var desired := collision_radius + other.collision_radius + 12.0
-		var distance := away.length()
-		if distance >= desired:
-			continue
-		if distance < 0.01:
-			var angle := float(posmod(get_instance_id(), 16)) / 16.0 * TAU
-			away = Vector2.from_angle(angle)
-			distance = 1.0
-		separation += away.normalized() * (1.0 - distance / desired)
+	var center_cell := _crowd_grid_cell(global_position)
+	for offset_y in range(-1, 2):
+		for offset_x in range(-1, 2):
+			var bucket: Array = _crowd_grid.get(center_cell + Vector2i(offset_x, offset_y), [])
+			for node: Node in bucket:
+				_crowd_query_candidate_count += 1
+				if node == self or not node is EnemyActor or node.is_queued_for_deletion():
+					continue
+				var other := node as EnemyActor
+				var away := global_position - other.global_position
+				var desired := collision_radius + other.collision_radius + 12.0
+				var distance := away.length()
+				if distance >= desired:
+					continue
+				if distance < 0.01:
+					var angle := float(posmod(get_instance_id(), 16)) / 16.0 * TAU
+					away = Vector2.from_angle(angle)
+					distance = 1.0
+				separation += away.normalized() * (1.0 - distance / desired)
 	return separation.limit_length(1.0)
+
+
+func _ensure_crowd_grid() -> void:
+	var physics_frame := Engine.get_physics_frames()
+	if _crowd_grid_physics_frame == physics_frame:
+		return
+	_crowd_grid_physics_frame = physics_frame
+	_crowd_grid.clear()
+	_crowd_grid_build_count += 1
+	for node: Node in get_tree().get_nodes_in_group("enemies"):
+		if not node is EnemyActor or node.is_queued_for_deletion():
+			continue
+		_crowd_grid_actor_scan_count += 1
+		var enemy := node as EnemyActor
+		var cell := _crowd_grid_cell(enemy.global_position)
+		var bucket: Array = _crowd_grid.get(cell, [])
+		bucket.append(enemy)
+		_crowd_grid[cell] = bucket
+
+
+func _crowd_grid_cell(world_position: Vector2) -> Vector2i:
+	return Vector2i(floori(world_position.x / CROWD_GRID_CELL_SIZE), floori(world_position.y / CROWD_GRID_CELL_SIZE))
+
+
+static func reset_performance_diagnostics() -> void:
+	_crowd_grid_physics_frame = -1
+	_crowd_grid.clear()
+	_crowd_grid_build_count = 0
+	_crowd_grid_actor_scan_count = 0
+	_crowd_query_candidate_count = 0
+	_retarget_full_scan_count = 0
+
+
+static func performance_diagnostics() -> Dictionary:
+	return {
+		"crowd_grid_builds": _crowd_grid_build_count,
+		"crowd_grid_actor_scans": _crowd_grid_actor_scan_count,
+		"crowd_query_candidates": _crowd_query_candidate_count,
+		"retarget_full_scans": _retarget_full_scan_count,
+	}
 
 
 func apply_life_steal(dealt_damage: int) -> void:
@@ -562,6 +624,7 @@ func apply_charm(seconds: float) -> void:
 
 
 func _update_status_effects(delta: float) -> void:
+	var had_visible_status := poison_time > 0.0 or control_time > 0.0 or charm_time > 0.0
 	var previous_poison_second := int(ceil(poison_time))
 	poison_time = maxf(0.0, poison_time - delta)
 	control_time = maxf(0.0, control_time - delta)
@@ -573,6 +636,9 @@ func _update_status_effects(delta: float) -> void:
 			_attack_interval = _boss_base_attack_interval
 	if poison_time > 0.0 and int(ceil(poison_time)) < previous_poison_second:
 		take_damage(poison_damage)
+	var has_visible_status := poison_time > 0.0 or control_time > 0.0 or charm_time > 0.0
+	if had_visible_status != has_visible_status:
+		queue_redraw()
 
 
 func _apply_health_stage_mechanics() -> void:
@@ -600,10 +666,21 @@ func _retarget(delta := 0.0) -> void:
 	if charm_time > 0.0:
 		return
 	_decay_threat(delta)
+	_retarget_timer = maxf(0.0, _retarget_timer - delta)
 	if not boss_rule.is_empty():
-		_retarget_timer = maxf(0.0, _retarget_timer - delta)
 		if is_instance_valid(target) and _retarget_timer > 0.0:
 			return
+	else:
+		var target_needs_realtime_retarget := (
+			is_instance_valid(target)
+			and (
+				global_position.distance_to(target.global_position) <= aggro_radius
+				or _threat_for(target) > 0.0
+			)
+		)
+		if not target_needs_realtime_retarget and _retarget_timer > 0.0:
+			return
+	_retarget_full_scan_count += 1
 	var chosen: Node2D
 	var best_score := -INF
 	var spawn_position:Vector2=get_meta("spawn_position",global_position)
@@ -626,6 +703,10 @@ func _retarget(delta := 0.0) -> void:
 	if not boss_rule.is_empty():
 		var search: Dictionary = boss_rule.get("targetSearch", {})
 		_retarget_timer = float(search.get("withTargetMs" if is_instance_valid(target) else "withoutTargetMs", 1000)) / 1000.0
+	elif is_instance_valid(target):
+		_retarget_timer = 0.0
+	else:
+		_retarget_timer = FAR_RETARGET_MIN_SECONDS + FAR_RETARGET_STAGGER_SECONDS * float(posmod(get_instance_id(), 11))
 
 
 func _add_threat(source:Node2D,amount:float)->void:
@@ -661,15 +742,19 @@ func _return_to_spawn()->void:
 
 func _draw() -> void:
 	var radius := 27.0 if is_boss else 16.0
-	draw_ellipse_shadow(radius)
+	var uses_final_art := visual != null and visual.uses_final_art()
+	var ground_center := ground_indicator_center()
+	# Final WIL frames already contain their direction-aware source shadow.
+	# A second ellipse creates a detached double shadow below the actor.
+	if not uses_final_art:
+		draw_ellipse_shadow(radius, ground_center)
 	if _dying:
 		return
 	if is_targeted:
 		# 细线选中圈与脚底接触阴影共面，避免形成托起Boss的发光平台。
-		draw_set_transform(Vector2(0, radius * 0.28), 0.0, Vector2(1.0, 0.30))
+		draw_set_transform(ground_center, 0.0, Vector2(1.0, 0.30))
 		draw_circle(Vector2.ZERO, radius + 6.0, Color(1.0, 0.78, 0.18, 0.78), false, 2.0)
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
-	var uses_final_art := visual != null and visual.uses_final_art()
 	var fallback_attacking := visual != null and visual.is_fallback_attacking()
 	var body_center := Vector2(0, -5) + (visual.fallback_lunge_offset(facing) if fallback_attacking else Vector2.ZERO)
 	if not uses_final_art:
@@ -710,13 +795,25 @@ func _draw() -> void:
 		draw_circle(body_center + Vector2(-radius * 0.35, -3), 3.0, Color(0.95, 0.75, 0.25))
 		draw_circle(body_center + Vector2(radius * 0.35, -3), 3.0, Color(0.95, 0.75, 0.25))
 	var bar_width := 80.0 if is_boss else 46.0
-	var bar_y := -92.0 if bool(behavior_profile.get("largeClientBoss", false)) else -radius - 24.0
+	var bar_y := health_bar_anchor_y()
 	draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width, 5), Color(0.10, 0.03, 0.03, 0.9))
 	draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width * float(current_hp) / float(max_hp), 5), Color(0.85, 0.12, 0.08))
 
 
-func draw_ellipse_shadow(radius: float) -> void:
-	draw_set_transform(Vector2(0, radius * 0.28), 0.0, Vector2(1.0, 0.36))
+func health_bar_anchor_y() -> float:
+	var radius := 27.0 if is_boss else 16.0
+	var fallback_y := -92.0 if bool(behavior_profile.get("largeClientBoss", false)) else -radius - 24.0
+	return visual.health_bar_anchor_y(fallback_y) if visual != null else fallback_y
+
+
+func ground_indicator_center() -> Vector2:
+	var radius := 27.0 if is_boss else 16.0
+	var fallback := Vector2(0, radius * 0.28)
+	return visual.ground_contact_position(fallback) if visual != null else fallback
+
+
+func draw_ellipse_shadow(radius: float, center := Vector2.ZERO) -> void:
+	draw_set_transform(center, 0.0, Vector2(1.0, 0.36))
 	draw_circle(Vector2.ZERO, radius, Color(0, 0, 0, 0.30))
 	draw_circle(Vector2(0, -radius * 0.08), radius * 0.56, Color(0, 0, 0, 0.58))
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
@@ -730,6 +827,7 @@ func _update_boss_skill(delta: float, distance: float) -> void:
 	if _boss_phase_two:
 		damage_multiplier = int(phase.get("skillDamageMultiplier", damage_multiplier))
 	if _boss_warning > 0.0:
+		queue_redraw()
 		_boss_warning -= delta
 		if _boss_warning <= 0.0:
 			_last_boss_skill_hit = false

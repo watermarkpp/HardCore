@@ -16,6 +16,28 @@
   },
   "templates": [
     {
+      "template_id": "blank.bich_province",
+      "template_kind": "existing_map_or_empty_template",
+      "map_id": "bich_province",
+      "runtime_map_id": 4,
+      "display_name": "比奇省（当前地图）",
+      "map_type": "outdoor_province",
+      "design_size": [
+        80,
+        80
+      ],
+      "pre_scale_design_size": [
+        256,
+        256
+      ],
+      "strategy": "preserve_function",
+      "content_policy": "open_existing_workspace_first",
+      "ground_policy": "virtual_blank_until_dirty",
+      "editable_layer": "expansion",
+      "size_status": "user_confirmed_final",
+      "size_decision_source": "user_2026-07-17_80x80"
+    },
+    {
       "template_id": "blank.mengzhong_province",
       "template_kind": "empty_map",
       "map_id": "mengzhong_province",
@@ -37,10 +59,10 @@
     },
     {
       "template_id": "blank.wooma_forest",
-      "template_kind": "empty_map",
+      "template_kind": "existing_map_or_empty_template",
       "map_id": "wooma_forest",
       "runtime_map_id": 268,
-      "display_name": "沃玛森林",
+      "display_name": "沃玛森林（当前地图）",
       "map_type": "outdoor_field",
       "design_size": [
         56,
@@ -51,9 +73,12 @@
         180
       ],
       "strategy": "shrink_and_recompose",
-      "content_policy": "empty_layers",
+      "content_policy": "open_existing_workspace_first",
       "ground_policy": "virtual_blank_until_dirty",
-      "editable_layer": "expansion"
+      "editable_layer": "expansion",
+      "workspace_status": "ready",
+      "template_version_id": "wooma_forest_blank_v1",
+      "size_status": "user_confirmed_official"
     },
     {
       "template_id": "blank.snake_valley",
@@ -103,17 +128,20 @@
       "display_name": "兽人古墓二层",
       "map_type": "dungeon_floor",
       "design_size": [
-        35,
-        35
+        38,
+        38
       ],
       "pre_scale_design_size": [
         112,
         112
       ],
-      "strategy": "shrink_and_recompose",
+      "strategy": "exact_clone_of_orc_tomb_1",
       "content_policy": "empty_layers",
       "ground_policy": "virtual_blank_until_dirty",
-      "editable_layer": "expansion"
+      "editable_layer": "expansion",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-07-18",
+      "clone_source_map_id": "orc_tomb_1"
     },
     {
       "template_id": "blank.orc_tomb_3",
@@ -123,17 +151,20 @@
       "display_name": "兽人古墓三层",
       "map_type": "dungeon_floor",
       "design_size": [
-        30,
-        30
+        38,
+        38
       ],
       "pre_scale_design_size": [
         96,
         96
       ],
-      "strategy": "shrink_and_recompose",
+      "strategy": "exact_clone_of_orc_tomb_1",
       "content_policy": "empty_layers",
       "ground_policy": "virtual_blank_until_dirty",
-      "editable_layer": "expansion"
+      "editable_layer": "expansion",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-07-18",
+      "clone_source_map_id": "orc_tomb_1"
     },
     {
       "template_id": "blank.wooma_temple_entrance",
@@ -177,7 +208,7 @@
     },
     {
       "template_id": "blank.wooma_temple_2",
-      "template_kind": "empty_map",
+      "template_kind": "existing_map_or_empty_template",
       "map_id": "wooma_temple_2",
       "runtime_map_id": 314,
       "display_name": "沃玛寺庙二层",
@@ -190,30 +221,38 @@
         140,
         140
       ],
-      "strategy": "shrink_and_recompose",
-      "content_policy": "empty_layers",
+      "strategy": "exact_clone_of_wooma_temple_1",
+      "content_policy": "open_existing_workspace_first",
       "ground_policy": "virtual_blank_until_dirty",
-      "editable_layer": "expansion"
+      "editable_layer": "expansion",
+      "workspace_status": "ready",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-07-21",
+      "clone_source_map_id": "wooma_temple_1"
     },
     {
       "template_id": "blank.wooma_temple_3",
-      "template_kind": "empty_map",
+      "template_kind": "existing_map_or_empty_template",
       "map_id": "wooma_temple_3",
       "runtime_map_id": 315,
-      "display_name": "沃玛寺庙三层（核心）",
+      "display_name": "沃玛教主大厅",
       "map_type": "temple_floor",
       "design_size": [
-        35,
-        35
+        44,
+        44
       ],
       "pre_scale_design_size": [
         112,
         112
       ],
-      "strategy": "preserve_arena",
-      "content_policy": "empty_layers",
+      "strategy": "exact_clone_of_wooma_temple_1",
+      "content_policy": "open_existing_workspace_first",
       "ground_policy": "virtual_blank_until_dirty",
-      "editable_layer": "expansion"
+      "editable_layer": "expansion",
+      "workspace_status": "ready",
+      "size_status": "user_confirmed_exact_clone",
+      "size_decision_source": "user_request_2026-07-21",
+      "clone_source_map_id": "wooma_temple_1"
     },
     {
       "template_id": "blank.bich_mine_1",

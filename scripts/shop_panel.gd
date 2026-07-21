@@ -2,6 +2,7 @@ class_name ShopPanel
 extends Panel
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const GothicConfirmationPanelScript := preload("res://scripts/gothic_confirmation_panel.gd")
 
 signal closed
 signal sell_quotes_requested(items: Array)
@@ -25,7 +26,7 @@ var sell_quantity_row: Control
 var sell_quantity_label: Label
 var sell_one_button: Button
 var sell_quantity_button: Button
-var sell_confirmation: ConfirmationDialog
+var sell_confirmation: Control
 var stock: Array = []
 var _trade_mode := "buy"
 var _sell_quotes: Dictionary = {}
@@ -115,9 +116,10 @@ func _build_goods_section() -> void:
 	panel.add_child(sell_tab_button)
 	gold_label = Label.new()
 	gold_label.name = "GoldLabel"
-	gold_label.position = Vector2(372, 14)
-	gold_label.size = Vector2(254, 30)
+	gold_label.position = Vector2(372, 20)
+	gold_label.size = Vector2(246, 28)
 	gold_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	gold_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	gold_label.theme_type_variation = "GothicMutedLabel"
 	gold_label.add_theme_color_override("font_color", Color("d6b16f"))
 	panel.add_child(gold_label)
@@ -142,8 +144,8 @@ func _build_detail_section() -> void:
 	panel.add_child(_section_title("商品详情", 366))
 	detail_label = RichTextLabel.new()
 	detail_label.name = "DetailLabel"
-	detail_label.position = Vector2(18, 56)
-	detail_label.size = Vector2(330, 286)
+	detail_label.position = Vector2(26, 62)
+	detail_label.size = Vector2(314, 280)
 	detail_label.bbcode_enabled = true
 	detail_label.fit_content = false
 	detail_label.scroll_active = true
@@ -215,12 +217,10 @@ func _build_detail_section() -> void:
 	sell_quantity_button.visible = false
 	sell_quantity_button.pressed.connect(_request_selected_quantity)
 	panel.add_child(sell_quantity_button)
-	sell_confirmation = ConfirmationDialog.new()
+	sell_confirmation = GothicConfirmationPanelScript.new()
 	sell_confirmation.name = "SellConfirmation"
-	sell_confirmation.title = "确认出售"
-	sell_confirmation.ok_button_text = "确认出售"
-	sell_confirmation.cancel_button_text = "取消"
-	sell_confirmation.confirmed.connect(_confirm_pending_sell)
+	sell_confirmation.confirmed.connect(_on_sell_confirmation_confirmed)
+	sell_confirmation.cancelled.connect(_cancel_pending_sell)
 	add_child(sell_confirmation)
 
 
@@ -254,9 +254,10 @@ func _framed_section(node_name: String, rect: Rect2) -> Panel:
 func _section_title(text_value: String, section_width: float) -> Label:
 	var label := Label.new()
 	label.text = text_value
-	label.position = Vector2(18, 12)
-	label.size = Vector2(section_width - 36.0, 30)
+	label.position = Vector2(24, 18)
+	label.size = Vector2(section_width - 48.0, 28)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.theme_type_variation = "GothicSectionTitle"
 	return label
 
@@ -511,10 +512,28 @@ func _request_sell(amount: int) -> void:
 	if bool(quote.get("requires_confirmation", false)):
 		_pending_sell_request = request
 		var warning := str(quote.get("warning", "该物品具有高价值或特殊属性，出售后无法恢复。"))
-		sell_confirmation.dialog_text = "%s\n\n出售：%s ×%d" % [warning, request.item_name, request.amount]
-		sell_confirmation.popup_centered(Vector2i(430, 230))
+		sell_confirmation.open_confirmation({
+			"action_id": "shop.sell.risky_item",
+			"title": "确认出售",
+			"message": "%s\n出售：%s ×%d" % [warning, request.item_name, request.amount],
+			"confirm_label": "确认出售",
+			"cancel_label": "取消",
+			"tone": "danger",
+			"context": {
+				"quote_id": request.quote_id,
+				"instance_id": request.instance_id,
+			},
+		})
 		return
 	_emit_sell_request(request)
+
+
+func _on_sell_confirmation_confirmed(_confirmation: Dictionary) -> void:
+	_confirm_pending_sell()
+
+
+func _cancel_pending_sell(_confirmation: Dictionary) -> void:
+	_pending_sell_request.clear()
 
 
 func _confirm_pending_sell() -> void:
@@ -625,5 +644,7 @@ func _value(value: Variant) -> String:
 
 
 func _close() -> void:
+	sell_confirmation.close_confirmation()
+	_pending_sell_request.clear()
 	hide()
 	closed.emit()

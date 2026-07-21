@@ -20,7 +20,7 @@ func _run() -> void:
 	await _verify_map(game, 401, Vector2i(200, 200))
 	await _verify_map(game, 402, Vector2i(100, 100))
 	await _verify_map(game, 1578, Vector2i(30, 30))
-	print("SOURCE_COLLISION_CHUNK_PASS：五种尺寸原MAP掩码、局部合并碰撞、路线清空和切图重建正常")
+	print("SOURCE_COLLISION_CHUNK_PASS：三种原MAP掩码与两种编辑器运行图碰撞、路线清空和切图重建正常")
 	get_tree().quit(0)
 
 
@@ -30,11 +30,19 @@ func _verify_map(game: Node, map_id: int, expected_size: Vector2i) -> void:
 	await get_tree().process_frame
 	var background: WorldBackground = game.background
 	var content := RegionContent.get_map_content(map_id)
-	if map_id == 4:
-		# 比奇省已切换为地图编辑器运行图；内部阻挡和四边硬边界来自
-		# runtime JSON，不再加载旧700×700位图掩码。
-		assert(background.source_collision_mask_size() == Vector2i.ZERO, "比奇省仍错误加载旧原MAP掩码")
-		assert(background.source_collision_shape_count() >= 4, "比奇省地图编辑器阻挡或四边硬边界缺失")
+	if map_id in [4, 217, 1578]:
+		# 已发布地表的编辑器运行图以 runtime JSON 阻挡和四边硬边界为
+		# 权威来源，不再加载旧原 MAP 位图掩码。
+		assert(background.source_collision_mask_size() == Vector2i.ZERO, "地图%d仍错误加载旧原MAP掩码" % map_id)
+		assert(background.source_collision_shape_count() >= 4, "地图%d编辑器阻挡或四边硬边界缺失" % map_id)
+		assert(background.editor_runtime_ground_ready(), "地图%d编辑器运行时地表未就绪" % map_id)
+		if map_id == 217:
+			assert(background.uses_editor_runtime_fallback_ground(), "兽人古墓一层未启用编辑器尺寸地表回退")
+			assert(background._editor_runtime_size == Vector2i(38, 38), "兽人古墓一层碰撞仍在使用旧400x400尺寸")
+			assert(not background.is_environment_point_blocked(game.player.global_position), "兽人古墓一层出生点被阻挡")
+		if map_id == 1578:
+			assert(background.editor_runtime_chunk_texture_count() == 2, "尸王殿发布地表块未完整加载")
+			assert(MapEditorRuntimeBridge.game_content_for_map(1578).portals.is_empty(), "尸王殿不应生成出口")
 		return
 	assert(background.source_collision_mask_size() == expected_size, "地图%d阻挡掩码尺寸错误" % map_id)
 	assert(background.source_collision_shape_count() > 0 and background.source_collision_shape_count() <= 703, "地图%d局部合并碰撞数量异常：%d" % [map_id, background.source_collision_shape_count()])

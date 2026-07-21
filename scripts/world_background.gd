@@ -4,6 +4,7 @@ extends Node2D
 const EnvironmentCatalogScript := preload("res://scripts/environment_catalog.gd")
 const MapCoordinateMapperScript := preload("res://scripts/map_coordinate_mapper.gd")
 const GothicBichCampBuilderScript := preload("res://scripts/layers/presentation/gothic_bich_camp_builder.gd")
+const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 const EditorCoordinateScript := preload("res://scripts/map_editor/map_editor_coordinate.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const BICH_GROUND_ATLAS := preload("res://assets/art/maps/bich/bich_ground_tiles.png")
@@ -60,10 +61,13 @@ var _editor_runtime_visual: Dictionary = {}
 var _editor_runtime_size := Vector2i.ZERO
 var _editor_runtime_blocked_tiles: Dictionary = {}
 var _editor_runtime_manual_rects: Array[Rect2] = []
+var _editor_runtime_chunk_draws: Array[Dictionary] = []
+var _editor_runtime_fallback_ground := false
 
 
 func _ready() -> void:
 	z_index = -20
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_rebuild_environment()
 	queue_redraw()
 
@@ -364,6 +368,14 @@ func _draw() -> void:
 			EditorCoordinateScript.tile_to_world(Vector2(0,0),size), EditorCoordinateScript.tile_to_world(Vector2(size.x,0),size),
 			EditorCoordinateScript.tile_to_world(Vector2(size.x,size.y),size), EditorCoordinateScript.tile_to_world(Vector2(0,size.y),size)])
 		draw_colored_polygon(corners, Color(str(_editor_runtime_visual.get("base_color", "#465827"))))
+		# Keep all authored chunk textures on one CanvasItem. Godot otherwise
+		# culls distant Sprite2D chunks and can defer their GPU upload until the
+		# player approaches an edge, producing a visible hitch on mobile.
+		for chunk_draw: Dictionary in _editor_runtime_chunk_draws:
+			var texture: Texture2D = chunk_draw.get("texture")
+			var rect: Rect2 = chunk_draw.get("rect", Rect2())
+			if texture != null and rect.size.x > 0.0 and rect.size.y > 0.0:
+				draw_texture_rect(texture, rect, false)
 		return
 	if _full_ground_ready:
 		return
@@ -465,6 +477,8 @@ func _rebuild_environment() -> void:
 	_editor_runtime_size = Vector2i.ZERO
 	_editor_runtime_blocked_tiles.clear()
 	_editor_runtime_manual_rects.clear()
+	_editor_runtime_chunk_draws.clear()
+	_editor_runtime_fallback_ground = false
 	for node: Node in _environment_nodes:
 		if is_instance_valid(node):
 			node.queue_free()
@@ -479,8 +493,11 @@ func _rebuild_environment() -> void:
 	_collision_focus_source = Vector2i(-99999, -99999)
 	if not is_inside_tree():
 		return
-	if _active_map_id() == 4 and _build_editor_runtime_environment():
-		return
+	if MapEditorRuntimeBridgeScript.has_runtime_map(_active_map_id()):
+		if _build_editor_runtime_environment(_active_map_id()):
+			return
+		if _build_editor_runtime_fallback_environment(_active_map_id()):
+			return
 	var profile := environment_profile()
 	if not profile.is_empty():
 		_build_profile_environment(profile)
@@ -492,41 +509,180 @@ func _rebuild_environment() -> void:
 			_build_full_ground(profile)
 
 
-func _build_editor_runtime_environment() -> bool:
-	var manifest_path := "res://assets/data/runtime/map_editor/bich_province.visual.json"
-	var runtime_path := "res://assets/data/runtime/map_editor/bich_province.runtime.json"
-	if not FileAccess.file_exists(manifest_path) or not FileAccess.file_exists(runtime_path): return false
-	var manifest_file := FileAccess.open(manifest_path, FileAccess.READ)
-	var parsed: Variant = JSON.parse_string(manifest_file.get_as_text()) if manifest_file != null else null
-	if not parsed is Dictionary: return false
-	_editor_runtime_visual = parsed
-	var center: Array = parsed.get("ground_pixel_center", [8192,4096])
-	for chunk: Dictionary in parsed.get("chunks", []):
-		var image_path := "res://" + str(chunk.get("image", ""))
-		if not ResourceLoader.exists(image_path): continue
+func _build_editor_runtime_environment(runtime_map_id := -1) -> bool:
+	var runtime := MapEditorRuntimeBridgeScript.load_map(runtime_map_id)
+	if runtime.is_empty():
+		return false
+	var visual := _load_editor_runtime_visual(runtime_map_id, runtime)
+	if visual.is_empty():
+		return false
+	_editor_runtime_visual = visual
+	var center: Array = visual.get("ground_pixel_center", [8192, 4096])
+	for chunk: Dictionary in visual.get("chunks", []):
+		var image_path := str(chunk.get("image", ""))
+		if not image_path.begins_with("res://"):
+			image_path = "res://" + image_path
+		if not ResourceLoader.exists(image_path):
+			continue
 		var rect: Array = chunk.get("rect_px", [])
-		if rect.size() != 4: continue
-		var sprite := Sprite2D.new(); sprite.name = "EditorGroundChunk"; sprite.set_meta("editor_runtime_chunk", true); sprite.texture = load(image_path); sprite.z_as_relative=false; sprite.z_index=-20
-		sprite.position = Vector2(float(rect[0])+float(rect[2])*.5-float(center[0]), float(rect[1])+float(rect[3])*.5-float(center[1]))
-		add_child(sprite); _environment_nodes.append(sprite)
-	var loaded := MapEditorRuntimeMapService.load_runtime(runtime_path)
-	if loaded.ok:
-		_build_editor_runtime_instances(loaded.runtime)
-		_build_editor_runtime_collisions(loaded.runtime)
+		if rect.size() != 4:
+			continue
+		var texture := load(image_path) as Texture2D
+		if texture == null:
+			continue
+		_editor_runtime_chunk_draws.append({
+			"chunk_id": str(chunk.get("chunk_id", "")),
+			"texture": texture,
+			"rect": Rect2(
+				float(rect[0]) - float(center[0]),
+				float(rect[1]) - float(center[1]),
+				float(rect[2]),
+				float(rect[3])
+			),
+		})
+	_build_editor_runtime_guard_band(visual)
+	_build_editor_runtime_instances(runtime)
+	_build_editor_runtime_collisions(runtime)
 	_full_ground_ready = false
 	return true
 
 
+func _build_editor_runtime_fallback_environment(runtime_map_id: int) -> bool:
+	var runtime := MapEditorRuntimeBridgeScript.load_map(runtime_map_id)
+	var profile := environment_profile()
+	if runtime.is_empty() or profile.is_empty():
+		return false
+	var raw_size: Array = runtime.get("design", {}).get("design_size", [])
+	if raw_size.size() != 2:
+		return false
+	var runtime_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
+	if runtime_size.x <= 0 or runtime_size.y <= 0:
+		return false
+	# Some approved editor maps predate packaged ground chunk manifests. Keep
+	# their authored instances and collision grid authoritative, while drawing
+	# the matching legacy atlas across the editor-sized diamond. This avoids
+	# mixing the 38x38 editor route with a 400x400 legacy collision bitmap.
+	var runtime_profile := profile.duplicate(true)
+	runtime_profile["source_size"] = runtime_size
+	_build_full_ground(runtime_profile)
+	_build_editor_runtime_instances(runtime)
+	_build_editor_runtime_collisions(runtime)
+	_editor_runtime_fallback_ground = _full_ground_ready
+	return _editor_runtime_fallback_ground
+
+
+func _load_editor_runtime_visual(
+	runtime_map_id: int,
+	runtime: Dictionary
+) -> Dictionary:
+	var visual_path := MapEditorRuntimeBridgeScript.visual_path(
+		runtime_map_id
+	)
+	var visual := _read_editor_json(visual_path)
+	if visual.is_empty():
+		return {}
+	var runtime_map_key := str(runtime.get("source", {}).get("map_id", ""))
+	if str(visual.get("map_id", "")) != runtime_map_key:
+		return {}
+	if int(visual.get("runtime_map_id", -1)) != runtime_map_id:
+		return {}
+	if not bool(visual.get("coverage", {}).get("complete", runtime_map_id == 4)):
+		return {}
+	return visual
+
+
+func _read_editor_json(path: String) -> Dictionary:
+	if path.is_empty() or not FileAccess.file_exists(path):
+		return {}
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return {}
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	return parsed if parsed is Dictionary else {}
+
+
+func _build_editor_runtime_guard_band(visual: Dictionary) -> void:
+	var raw_size: Array = visual.get("design_size", [64, 64])
+	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
+	var corners := [
+		EditorCoordinateScript.tile_to_world(Vector2(-0.5, -0.5), size),
+		EditorCoordinateScript.tile_to_world(Vector2(float(size.x) - 0.5, -0.5), size),
+		EditorCoordinateScript.tile_to_world(Vector2(float(size.x) - 0.5, float(size.y) - 0.5), size),
+		EditorCoordinateScript.tile_to_world(Vector2(-0.5, float(size.y) - 0.5), size),
+	]
+	var authored_bounds := Rect2(corners[0], Vector2.ZERO)
+	for point: Vector2 in corners:
+		authored_bounds = authored_bounds.expand(point)
+	var guard_bounds := authored_bounds.grow(float(visual.get("guard_band_px", 1536.0)))
+	var guard := Polygon2D.new()
+	guard.name = "EditorRuntimeGuardBand"
+	guard.set_meta("editor_runtime_guard_band", true)
+	guard.z_as_relative = false
+	guard.z_index = -30
+	guard.polygon = PackedVector2Array([
+		guard_bounds.position,
+		Vector2(guard_bounds.end.x, guard_bounds.position.y),
+		guard_bounds.end,
+		Vector2(guard_bounds.position.x, guard_bounds.end.y),
+	])
+	var shader := Shader.new()
+	shader.code = """
+shader_type canvas_item;
+render_mode unshaded;
+varying vec2 map_position;
+void vertex() {
+	map_position = VERTEX;
+}
+float terrain_hash(vec2 p) {
+	return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+}
+void fragment() {
+	float coarse = terrain_hash(floor(map_position / 64.0));
+	float fine = terrain_hash(floor(map_position / 12.0));
+	vec3 dark_grass = vec3(0.055, 0.085, 0.040);
+	vec3 old_grass = vec3(0.120, 0.155, 0.070);
+	vec3 color = mix(dark_grass, old_grass, 0.30 + coarse * 0.34 + fine * 0.10);
+	vec2 iso = vec2(
+		(map_position.x / 32.0 + map_position.y / 16.0) * 0.5,
+		(map_position.y / 16.0 - map_position.x / 32.0) * 0.5
+	);
+	vec2 cell_edge = abs(fract(iso) - vec2(0.5));
+	float seam = smoothstep(0.475, 0.5, max(cell_edge.x, cell_edge.y));
+	COLOR = vec4(color - vec3(seam * 0.018), 1.0);
+}
+"""
+	var material := ShaderMaterial.new()
+	material.shader = shader
+	guard.material = material
+	add_child(guard)
+	_environment_nodes.append(guard)
+
+
+func editor_runtime_chunk_texture_count() -> int:
+	return _editor_runtime_chunk_draws.size()
+
+
+func editor_runtime_ground_ready() -> bool:
+	return not _editor_runtime_visual.is_empty() or _editor_runtime_fallback_ground
+
+
+func uses_editor_runtime_fallback_ground() -> bool:
+	return _editor_runtime_fallback_ground
+
+
 func _build_editor_runtime_instances(runtime:Dictionary)->void:
 	var raw_size:Array=runtime.design.get("design_size",[64,64]);var size:=Vector2i(int(raw_size[0]),int(raw_size[1]))
-	for instance:Dictionary in runtime.get("instances",[]):
+	var material_instances := MapEditorInstanceService.sorted_for_material_render(
+		runtime.get("instances", [])
+	)
+	for instance:Dictionary in material_instances:
 		var asset:=MapAssetCatalogService.find_asset(str(instance.get("asset_id","")));var image_path:=str(asset.get("image",""))
 		if image_path.is_empty() or not ResourceLoader.exists("res://"+image_path):continue
 		var tile:Array=instance.get("tile",[0,0]);var footprint:Array=instance.get("footprint_tiles",[1,1]);var offset_px:Array=instance.get("offset_px",[0,0]);var anchor:Array=instance.get("anchor_px",asset.get("anchor_px",[0,0]));var scale_value:Array=instance.get("scale",[1,1])
 		var foot_tile:=Vector2(float(tile[0])+float(footprint[0])*.5,float(tile[1])+float(footprint[1])*.5)
 		var foot_world:=EditorCoordinateScript.tile_to_world(foot_tile,size)+Vector2(float(offset_px[0]),float(offset_px[1]))
 		var sprite:=Sprite2D.new();sprite.name="EditorRuntimeInstance";sprite.set_meta("editor_runtime_instance",true);sprite.texture=load("res://"+image_path);sprite.centered=false;sprite.scale=Vector2(float(scale_value[0]),float(scale_value[1]));sprite.position=foot_world-Vector2(float(anchor[0]),float(anchor[1]))*sprite.scale
-		sprite.z_as_relative=false;sprite.z_index=-10+clampi(roundi(foot_world.y/32.0),-8,8);sprite.texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST
+		MapEditorInstanceService.configure_runtime_material_canvas_item(sprite, instance);sprite.texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST
 		add_child(sprite);_environment_nodes.append(sprite)
 
 

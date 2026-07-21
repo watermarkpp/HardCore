@@ -6,6 +6,9 @@ const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const HUDResourceOrbScript := preload("res://scripts/hud_resource_orb.gd")
 const HUDSkillIconCatalogScript := preload("res://scripts/hud_skill_icon_catalog.gd")
+const DeathRevivalPanelScript := preload("res://scripts/death_revival_panel.gd")
+const LootFeedbackLayerScript := preload("res://scripts/loot_feedback_layer.gd")
+const LoadingTransitionOverlayScript := preload("res://scripts/loading_transition_overlay.gd")
 const HUDTargetBarTexture := preload("res://assets/ui/gothic_hud/v2/runtime/target_bar_v2.png")
 const HUDUtilityStackTexture := preload("res://assets/ui/gothic_hud/v2/runtime/utility_stack_v2.png")
 const HUDJoystickTexture := preload("res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png")
@@ -17,7 +20,14 @@ signal attack_pressed
 signal attack_released
 signal interact_pressed
 signal skill_pressed(slot_index: int)
+signal skill_quick_slot_assignment_requested(request: Dictionary)
+signal skill_button_assignment_requested(request: Dictionary)
 signal map_travel_requested(map_id: int)
+signal map_teleport_requested(request: Dictionary)
+signal map_teleport_availability_requested(map_ids: Array)
+signal revival_requested(request: Dictionary)
+signal loading_transition_covered(request: Dictionary)
+signal loading_transition_finished(request: Dictionary)
 signal target_switch_pressed
 signal auto_target_changed(enabled: bool)
 signal special_action_pressed(effect_id: String)
@@ -39,6 +49,9 @@ var quest_panel: QuestPanel
 var profession_panel: ProfessionPanel
 var map_panel: MapPanel
 var warehouse_panel: WarehousePanel
+var death_revival_panel
+var loot_feedback_layer
+var loading_transition_overlay
 var quick_buttons: Array[Button] = []
 var health_orb: Control
 var mana_orb: Control
@@ -75,10 +88,12 @@ func _build_approved_hud() -> void:
 
 	_build_hidden_compatibility_info(root)
 	_build_target_bar(root)
+	_build_loot_feedback(root)
 	_build_right_utility_stack(root)
 	_build_bottom_chassis(root)
 	_build_combat_controls(root)
 	_build_modal_panels(root)
+	_build_loading_transition(root)
 
 	PlayerState.profile_changed.connect(update_profile)
 	PlayerState.quests_changed.connect(update_quest_tracker)
@@ -152,6 +167,24 @@ func _build_target_bar(root: Control) -> void:
 	target_label.add_theme_font_size_override("font_size", 18)
 	target_label.add_theme_color_override("font_color", Color("e7c38c"))
 	target_panel.add_child(target_label)
+
+
+func _build_loot_feedback(root: Control) -> void:
+	loot_feedback_layer = LootFeedbackLayerScript.new()
+	loot_feedback_layer.name = "LootFeedbackLayer"
+	root.add_child(loot_feedback_layer)
+
+
+func _build_loading_transition(root: Control) -> void:
+	loading_transition_overlay = LoadingTransitionOverlayScript.new()
+	loading_transition_overlay.name = "LoadingTransitionOverlay"
+	loading_transition_overlay.transition_covered.connect(
+		func(request: Dictionary) -> void: loading_transition_covered.emit(request)
+	)
+	loading_transition_overlay.transition_finished.connect(
+		func(request: Dictionary) -> void: loading_transition_finished.emit(request)
+	)
+	root.add_child(loading_transition_overlay)
 
 
 func _build_right_utility_stack(root: Control) -> void:
@@ -479,6 +512,12 @@ func _build_modal_panels(root: Control) -> void:
 	root.add_child(shop_panel)
 	skill_panel = SkillPanel.new()
 	skill_panel.hide()
+	skill_panel.quick_slot_assignment_requested.connect(
+		func(request: Dictionary) -> void: skill_quick_slot_assignment_requested.emit(request)
+	)
+	skill_panel.skill_button_assignment_requested.connect(
+		func(request: Dictionary) -> void: skill_button_assignment_requested.emit(request)
+	)
 	root.add_child(skill_panel)
 	quest_panel = QuestPanel.new()
 	quest_panel.hide()
@@ -489,10 +528,20 @@ func _build_modal_panels(root: Control) -> void:
 	map_panel = MapPanel.new()
 	map_panel.hide()
 	map_panel.map_selected.connect(func(map_id: int) -> void: map_travel_requested.emit(map_id))
+	map_panel.teleport_requested.connect(func(request: Dictionary) -> void: map_teleport_requested.emit(request))
+	map_panel.teleport_availability_requested.connect(
+		func(map_ids: Array) -> void: map_teleport_availability_requested.emit(map_ids)
+	)
 	root.add_child(map_panel)
 	warehouse_panel = WarehousePanel.new()
 	warehouse_panel.hide()
 	root.add_child(warehouse_panel)
+	death_revival_panel = DeathRevivalPanelScript.new()
+	death_revival_panel.hide()
+	death_revival_panel.revival_requested.connect(
+		func(request: Dictionary) -> void: revival_requested.emit(request)
+	)
+	root.add_child(death_revival_panel)
 
 
 func _add_utility_button(root: Control, node_name: String, label_text: String, rect: Rect2) -> Button:
@@ -613,9 +662,28 @@ func set_auto_target_enabled(enabled: bool) -> void:
 
 
 func show_loot(item_name: String) -> void:
-	if loot_label != null:
-		loot_label.text = "获得：%s" % item_name
-		_loot_message_timer = 2.0
+	show_loot_feedback({
+		"event_type": "pickup_success",
+		"item_name": item_name,
+		"count": 1,
+		"item_kind": GameData.get_item_kind(item_name),
+		"emphasis": "normal",
+	})
+
+
+func show_loot_feedback(event: Dictionary) -> void:
+	if loot_feedback_layer != null:
+		loot_feedback_layer.show_feedback(event)
+
+
+func begin_loading_transition(transition_id := "") -> void:
+	if loading_transition_overlay != null:
+		loading_transition_overlay.begin_loading(transition_id)
+
+
+func finish_loading_transition() -> void:
+	if loading_transition_overlay != null:
+		loading_transition_overlay.finish_loading()
 
 
 func update_profile() -> void:
@@ -693,6 +761,11 @@ func _toggle_map_panel() -> void:
 		map_panel.open_panel()
 
 
+func set_map_teleport_availability(rules: Dictionary) -> void:
+	if map_panel != null:
+		map_panel.set_teleport_availability(rules)
+
+
 func set_zone_name(zone_name: String) -> void:
 	current_zone_name = zone_name
 	if hp_label != null:
@@ -712,6 +785,37 @@ func open_shop(display_name: String, stock: Array) -> void:
 func open_skill_trainer(display_name: String) -> void:
 	_close_modal_panels()
 	skill_panel.open_for(display_name)
+
+
+func set_skill_button_assignments(assignments: Dictionary, interaction_modes := {}) -> void:
+	if skill_panel != null:
+		skill_panel.set_skill_button_assignments(assignments, interaction_modes)
+
+
+func show_death_screen(context := {}) -> void:
+	_close_modal_panels()
+	if death_revival_panel != null:
+		death_revival_panel.open_death_screen(context)
+
+
+func set_revival_options(options: Array) -> void:
+	if death_revival_panel != null:
+		death_revival_panel.set_revival_options(options)
+
+
+func update_revival_option(option_slot: String, state: Dictionary) -> void:
+	if death_revival_panel != null:
+		death_revival_panel.update_revival_option(option_slot, state)
+
+
+func apply_revival_result(result: Dictionary) -> void:
+	if death_revival_panel != null:
+		death_revival_panel.apply_revival_result(result)
+
+
+func close_death_screen() -> void:
+	if death_revival_panel != null:
+		death_revival_panel.close_death_screen()
 
 
 func open_quest(display_name: String) -> void:

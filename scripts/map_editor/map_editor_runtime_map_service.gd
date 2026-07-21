@@ -1,6 +1,10 @@
 class_name MapEditorRuntimeMapService
 extends RefCounted
 
+const PortalRuntimeService := preload(
+	"res://scripts/map_editor/map_portal_runtime_service.gd"
+)
+
 
 static func load_runtime(path: String) -> Dictionary:
 	# Keep virtual Godot paths virtual.  Globalizing res:// works in the desktop
@@ -42,6 +46,27 @@ static func validate_runtime(runtime: Dictionary, raw_text := "") -> Array[Strin
 	for door: Dictionary in runtime.get("semantics", {}).get("door_points", []):
 		if str(door.get("target_map_id", "")).strip_edges().is_empty():
 			errors.append("runtime_door_target_missing")
+	for map_exit: Dictionary in runtime.get("semantics", {}).get("map_exit_points", []):
+		if str(map_exit.get("target_map_id", "")).strip_edges().is_empty():
+			errors.append("runtime_map_exit_target_missing")
+		if bool(map_exit.get("arrival_only", false)):
+			if bool(map_exit.get("trigger_on_enter", true)):
+				errors.append("runtime_arrival_only_trigger_enabled")
+			if bool(map_exit.get("target_configured", true)):
+				errors.append("runtime_arrival_only_target_enabled")
+			continue
+		if not bool(map_exit.get("target_configured", false)):
+			continue
+		if str(map_exit.get("portal_contract_id", "")) == PortalRuntimeService.PORTAL_CONTRACT_ID:
+			for field: String in [
+				"target_portal_id",
+				"target_map_key",
+				"arrival_reentry_policy_id",
+			]:
+				if str(map_exit.get(field, "")).strip_edges().is_empty():
+					errors.append("runtime_portal_%s_missing" % field)
+			if not bool(map_exit.get("travel_request_single_flight", false)):
+				errors.append("runtime_portal_single_flight_required")
 	return errors
 
 
