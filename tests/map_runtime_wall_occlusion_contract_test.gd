@@ -1,14 +1,23 @@
 extends Node
 
-const RuntimeBridge := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 const VisualGeometry := preload("res://scripts/map_editor/map_editor_runtime_visual_geometry_service.gd")
+
+const ORC_RUNTIME_PATHS := {
+	217: "res://assets/data/runtime/map_editor/orc_tomb_1.runtime.json",
+	218: "res://assets/data/runtime/map_editor/orc_tomb_2.runtime.json",
+	221: "res://assets/data/runtime/map_editor/orc_tomb_3.runtime.json",
+}
 
 
 func _ready() -> void:
 	var wall_fronts := 0
 	var wall_backgrounds := 0
 	for map_id: int in [217, 218, 221]:
-		var runtime := RuntimeBridge.load_map(map_id)
+		var loaded := MapEditorRuntimeMapService.load_runtime(
+			str(ORC_RUNTIME_PATHS[map_id])
+		)
+		assert(loaded.ok, "orc runtime invalid: %d %s" % [map_id, loaded.errors])
+		var runtime: Dictionary = loaded.runtime
 		var raw_size: Array = runtime.design.design_size
 		var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 		for command: Dictionary in VisualGeometry.sorted_draw_commands(runtime.instances):
