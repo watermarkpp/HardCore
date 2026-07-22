@@ -1,8 +1,9 @@
 class_name MapEditorRuntimeVisualGeometryService
 extends RefCounted
 
-const VISUAL_GEOMETRY_CONTRACT_ID := "map_editor_runtime_visual_geometry_v2"
+const VISUAL_GEOMETRY_CONTRACT_ID := "map_editor_runtime_visual_geometry_v3"
 const EDITOR_LAYOUT_CONTRACT_ID := "map_editor_authoritative_layout_v1"
+const OCCLUSION_SORT_CONTRACT_ID := "map_actor_occlusion_sort_v3"
 const RENDER_DOMAIN_STATIC_BACKGROUND := "static_background"
 const RENDER_DOMAIN_ACTOR_Y_SORT := "actor_y_sort"
 const MATERIAL_LAYER_NAMES := [
@@ -184,9 +185,17 @@ static func instance_draw_commands(
 		int(adaptive_raw[1]) if adaptive_raw.size() >= 2 else 0
 	)
 	var render_parts: Array = asset.get("render_parts", [])
-	if (
+	var split_wall := (
 		str(asset.get("asset_type", "")) == "wall_module"
 		and not render_parts.is_empty()
+	)
+	var has_split_foreground := false
+	for part: Dictionary in render_parts:
+		if not str(part.get("front_image", "")).is_empty():
+			has_split_foreground = true
+			break
+	if (
+		split_wall
 	):
 		for part: Dictionary in render_parts:
 			var sort_offset_raw: Array = part.get(
@@ -214,11 +223,13 @@ static func instance_draw_commands(
 					"sort_tile": sort_tile,
 					"layer_index": layer_index,
 					"image_pass": int(image_pass.pass),
-					"render_domain": (
-						RENDER_DOMAIN_ACTOR_Y_SORT
-						if int(image_pass.pass) == 2
-						else RENDER_DOMAIN_STATIC_BACKGROUND
+					"render_domain": render_domain_for_pass(
+						instance,
+						asset,
+						int(image_pass.pass),
+						has_split_foreground
 					),
+					"occlusion_contract_id": OCCLUSION_SORT_CONTRACT_ID,
 					"part_order": int(part.get("draw_order_index", 0)),
 					"sequence": sequence,
 				})
@@ -235,20 +246,81 @@ static func instance_draw_commands(
 		"sort_tile": sort_tile,
 		"layer_index": layer_index,
 		"image_pass": 1,
-		"render_domain": RENDER_DOMAIN_STATIC_BACKGROUND,
+		"render_domain": render_domain_for_pass(
+			instance, asset, 1, false
+		),
+		"occlusion_contract_id": OCCLUSION_SORT_CONTRACT_ID,
 		"part_order": 0,
 		"sequence": sequence,
 	})
 	return result
 
 
+static func instance_is_occluder(
+	instance: Dictionary,
+	asset: Dictionary
+) -> bool:
+	# Runtime instances snapshot the author's occlusion choice. Older published
+	# maps may not carry that field, so retain the calibrated asset as fallback.
+	# Wall modules are structural occluders even when a legacy catalog omitted
+	# the flag; this also covers unsplit wall assets.
+	if str(asset.get("asset_type", "")) == "wall_module":
+		return true
+	if instance.has("occlusion"):
+		return bool(instance.get("occlusion", false))
+	return bool(asset.get("occlusion", false))
+
+
+static func render_domain_for_pass(
+	instance: Dictionary,
+	asset: Dictionary,
+	image_pass: int,
+	has_split_foreground: bool
+) -> String:
+	# Shadows and the lower/base half of a deliberately split wall stay baked
+	# behind actors. Its foreground half sorts at the authored foot. Every
+	# unsplit occluder (ordinary tree/building or legacy wall) sorts as one unit.
+	if image_pass == 0:
+		return RENDER_DOMAIN_STATIC_BACKGROUND
+	if has_split_foreground:
+		return (
+			RENDER_DOMAIN_ACTOR_Y_SORT
+			if image_pass == 2
+			else RENDER_DOMAIN_STATIC_BACKGROUND
+		)
+	return (
+		RENDER_DOMAIN_ACTOR_Y_SORT
+		if instance_is_occluder(instance, asset)
+		else RENDER_DOMAIN_STATIC_BACKGROUND
+	)
+
+
+static func legacy_profile_prop_render_domain(prop: Dictionary) -> String:
+	# Profile props are world-space objects, not ground decoration. The legacy
+	# renderer historically duplicated canopies at a fixed z, which made actors
+	# visible through objects from one side and permanently hidden from the
+	# other. Unless a profile explicitly opts out, sort the complete prop by its
+	# foot position in the actor domain.
+	return (
+		RENDER_DOMAIN_ACTOR_Y_SORT
+		if bool(prop.get("occlusion", true))
+		else RENDER_DOMAIN_STATIC_BACKGROUND
+	)
+
+
+static func legacy_profile_prop_actor_sort_world(prop: Dictionary) -> Vector2:
+	return prop.get("position", Vector2.ZERO)
+
+
 static func sorted_draw_commands(instances: Array) -> Array[Dictionary]:
 	var commands: Array[Dictionary] = []
+	var asset_cache := {}
 	var sequence := 0
 	for instance: Dictionary in instances:
-		var asset := MapAssetCatalogService.find_asset(
-			str(instance.get("asset_id", ""))
-		)
+		var asset_id := str(instance.get("asset_id", ""))
+		if not asset_cache.has(asset_id):
+			asset_cache[asset_id] = MapAssetCatalogService.find_asset(asset_id)
+		var asset: Dictionary = asset_cache[asset_id]
 		var layer_index := MATERIAL_LAYER_NAMES.find(
 			str(instance.get("layer", "object_base"))
 		)
@@ -334,6 +406,9 @@ static func draw_command_payload(instances: Array) -> Array[Dictionary]:
 			"image_pass": int(command.image_pass),
 			"render_domain": str(command.get(
 				"render_domain", RENDER_DOMAIN_STATIC_BACKGROUND
+			)),
+			"occlusion_contract_id": str(command.get(
+				"occlusion_contract_id", OCCLUSION_SORT_CONTRACT_ID
 			)),
 			"part_order": int(command.part_order),
 			"sequence": int(command.sequence),
