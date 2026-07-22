@@ -510,8 +510,11 @@ func _crowd_separation() -> Vector2:
 	for offset_y in range(-1, 2):
 		for offset_x in range(-1, 2):
 			var bucket: Array = _crowd_grid.get(center_cell + Vector2i(offset_x, offset_y), [])
-			for node: Node in bucket:
+			for value: Variant in bucket:
 				_crowd_query_candidate_count += 1
+				if not is_instance_valid(value):
+					continue
+				var node := value as Node
 				if node == self or not node is EnemyActor or node.is_queued_for_deletion():
 					continue
 				var other := node as EnemyActor
@@ -725,7 +728,10 @@ func _retarget(delta := 0.0) -> void:
 		# Damage threat still switches immediately in _add_threat(), so scanning
 		# the target set every physics frame adds CPU cost without improving
 		# reaction latency.
-		if _retarget_timer > 0.0:
+		# delta == 0 is the explicit decision API used when the target set changes
+		# immediately (for example, a newly summoned combat target). Physics calls
+		# always pass delta and remain rate-limited.
+		if _retarget_timer > 0.0 and delta > 0.0:
 			return
 	_retarget_full_scan_count += 1
 	var chosen: Node2D
