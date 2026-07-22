@@ -873,7 +873,12 @@ func _build_profile_environment(profile: Dictionary) -> void:
 	if _active_asset_set() == "bich":
 		for prop_data: Dictionary in profile.get("props", []):
 			var position: Vector2 = prop_data.get("position", Vector2.ZERO)
-			_add_prop(int(prop_data.get("kind", 0)), position, bool(prop_data.get("canopy", false)))
+			_add_prop(
+				int(prop_data.get("kind", 0)),
+				position,
+				bool(prop_data.get("canopy", false)),
+				prop_data
+			)
 			match str(prop_data.get("shape", "")):
 				"circle": _add_circle_obstacle(position + prop_data.get("collision_offset", Vector2.ZERO), float(prop_data.get("radius", 22.0)))
 				"rect": _add_rect_obstacle(position + prop_data.get("collision_offset", Vector2.ZERO), prop_data.get("size", Vector2(88, 34)))
@@ -887,12 +892,15 @@ func _build_dungeon_profile(profile: Dictionary) -> void:
 		var kind := int(prop_data.get("kind", 0))
 		var position: Vector2 = prop_data.get("position", Vector2.ZERO)
 		var canopy := bool(prop_data.get("canopy", kind in [0, 1, 5]))
-		_add_tomb_prop(kind, position, canopy)
+		_add_tomb_prop(kind, position, canopy, prop_data)
 		match str(prop_data.get("shape", "")):
 			"circle": _add_tomb_circle_obstacle(position + prop_data.get("collision_offset", Vector2.ZERO), float(prop_data.get("radius", 22.0)))
 			"rect": _add_tomb_rect_obstacle(position + prop_data.get("collision_offset", Vector2(0, -8)), prop_data.get("size", Vector2(88, 34)))
 	for brazier_position: Vector2 in profile.get("braziers", []):
-		_add_tomb_prop(2, brazier_position, true)
+		_add_tomb_prop(2, brazier_position, true, {
+			"position": brazier_position,
+			"occlusion": true,
+		})
 		_add_tomb_light(brazier_position + Vector2(0, -54))
 	if str(profile.get("coordinate_projection", "")) == "isometric_64x32_full_size":
 		_add_dungeon_map_boundaries(profile)
@@ -902,31 +910,26 @@ func _build_orc_tomb_environment() -> void:
 	_build_dungeon_profile(environment_profile())
 
 
-func _add_prop(kind: int, foot_position: Vector2, canopy: bool) -> void:
+func _add_prop(
+	kind: int,
+	foot_position: Vector2,
+	_canopy: bool,
+	prop: Dictionary = {}
+) -> void:
 	var sprite := Sprite2D.new()
 	sprite.texture = BICH_PROP_ATLAS
 	sprite.region_enabled = true
 	sprite.region_rect = Rect2(Vector2(kind * 96, 0), BICH_PROP_SIZE)
 	sprite.centered = false
-	sprite.position = foot_position - Vector2(48, 118)
-	sprite.z_as_relative = false
-	sprite.z_index = -5
-	add_child(sprite)
-	_environment_nodes.append(sprite)
-	if canopy:
-		var crown := Sprite2D.new()
-		crown.texture = BICH_PROP_ATLAS
-		crown.region_enabled = true
-		crown.region_rect = Rect2(Vector2(kind * 96, 0), Vector2(96, 86))
-		crown.centered = false
-		crown.position = foot_position - Vector2(48, 118)
-		crown.z_as_relative = false
-		crown.z_index = 5
-		add_child(crown)
-		_environment_nodes.append(crown)
+	_add_legacy_profile_prop_sprite(sprite, foot_position, prop)
 
 
-func _add_tomb_prop(kind: int, foot_position: Vector2, canopy: bool) -> void:
+func _add_tomb_prop(
+	kind: int,
+	foot_position: Vector2,
+	_canopy: bool,
+	prop: Dictionary = {}
+) -> void:
 	var prop_texture: Texture2D = ORC_TOMB_PROP_ATLAS
 	var override_path := str(environment_profile().get("prop_atlas_override", ""))
 	if not override_path.is_empty() and ResourceLoader.exists(override_path):
@@ -948,22 +951,49 @@ func _add_tomb_prop(kind: int, foot_position: Vector2, canopy: bool) -> void:
 	sprite.region_enabled = true
 	sprite.region_rect = Rect2(Vector2(kind * 96, 0), ORC_TOMB_PROP_SIZE)
 	sprite.centered = false
+	_add_legacy_profile_prop_sprite(sprite, foot_position, prop)
+
+
+func _add_legacy_profile_prop_sprite(
+	sprite: Sprite2D,
+	foot_position: Vector2,
+	prop: Dictionary
+) -> void:
+	var effective_prop := prop.duplicate(true)
+	effective_prop["position"] = foot_position
+	var render_domain := RuntimeVisualGeometryScript.legacy_profile_prop_render_domain(
+		effective_prop
+	)
+	if (
+		render_domain == RuntimeVisualGeometryScript.RENDER_DOMAIN_ACTOR_Y_SORT
+		and get_parent() != null
+	):
+		var actor_sort_root := Node2D.new()
+		actor_sort_root.name = "LegacyProfileOccluder"
+		actor_sort_root.position = RuntimeVisualGeometryScript.legacy_profile_prop_actor_sort_world(
+			effective_prop
+		)
+		actor_sort_root.z_as_relative = false
+		actor_sort_root.z_index = 0
+		actor_sort_root.set_meta("legacy_profile_actor_occluder", true)
+		actor_sort_root.set_meta(
+			"map_occlusion_sort_contract_id",
+			RuntimeVisualGeometryScript.OCCLUSION_SORT_CONTRACT_ID
+		)
+		actor_sort_root.set_meta("legacy_profile_render_domain", render_domain)
+		sprite.position = foot_position - Vector2(48, 118) - actor_sort_root.position
+		sprite.z_as_relative = true
+		sprite.z_index = 0
+		get_parent().add_child(actor_sort_root)
+		actor_sort_root.add_child(sprite)
+		_environment_nodes.append(actor_sort_root)
+		return
 	sprite.position = foot_position - Vector2(48, 118)
 	sprite.z_as_relative = false
 	sprite.z_index = -5
+	sprite.set_meta("legacy_profile_render_domain", render_domain)
 	add_child(sprite)
 	_environment_nodes.append(sprite)
-	if canopy:
-		var foreground := Sprite2D.new()
-		foreground.texture = prop_texture
-		foreground.region_enabled = true
-		foreground.region_rect = Rect2(Vector2(kind * 96, 0), Vector2(96, 86))
-		foreground.centered = false
-		foreground.position = foot_position - Vector2(48, 118)
-		foreground.z_as_relative = false
-		foreground.z_index = 5
-		add_child(foreground)
-		_environment_nodes.append(foreground)
 
 
 func _add_tomb_light(position: Vector2) -> void:

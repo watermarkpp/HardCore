@@ -194,10 +194,12 @@ static func coverage_report() -> Dictionary:
 static func expected_runtime_nodes(profile: Dictionary) -> int:
 	var count := 0
 	for prop: Dictionary in profile.get("props", []):
-		count += 2 if bool(prop.get("canopy", false)) else 1
+		# One complete prop is one actor-domain Y-sort unit. Canopies are no
+		# longer duplicated as an always-on-top fixed-z sprite.
+		count += 1
 		if str(prop.get("shape", "")) in ["circle", "rect"]:
 			count += 1
-	count += profile.get("braziers", []).size() * 4
+	count += profile.get("braziers", []).size() * 3
 	return count
 
 
