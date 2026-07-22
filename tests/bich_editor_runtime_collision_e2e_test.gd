@@ -125,6 +125,17 @@ func _run() -> void:
 	assert(bool(runtime_sprite.get_parent().get_meta(
 		"editor_runtime_actor_occluder", false
 	)), "house sprite lost actor Y-sort wrapper")
+	var sort_world := VisualGeometry.command_actor_sort_world(
+		command, design_size
+	)
+	assert(runtime_sprite.get_parent().global_position.is_equal_approx(sort_world),
+		"house actor-sort wrapper is not at authored front vertex")
+	assert(sort_world.is_equal_approx(MapEditorCoordinate.tile_to_world(
+		Vector2(command.sort_tile), design_size
+	)), "house sort tile was incorrectly interpreted as a cell centre")
+	assert(not sort_world.is_equal_approx(MapEditorCoordinate.cell_center_to_world(
+		Vector2(command.sort_tile), design_size
+	)), "house retained the one-row mobile occlusion offset")
 	var blocked_center := CollisionGeometry.cell_center_world(
 		HOUSE_BLOCKED_CELL, design_size
 	)

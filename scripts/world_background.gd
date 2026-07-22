@@ -783,20 +783,20 @@ func _editor_runtime_blocks_world(world_position: Vector2) -> bool:
 
 
 func _add_editor_map_boundary(body: StaticBody2D, size: Vector2i) -> void:
-	var inner := RuntimeCollisionGeometryScript.map_inner_boundary_tile_polygon(
+	var inner := RuntimeCollisionGeometryScript.map_actor_boundary_world(
 		size
 	)
-	var outer := RuntimeCollisionGeometryScript.map_outer_boundary_tile_polygon(
+	var outer := RuntimeCollisionGeometryScript.map_outer_boundary_world(
 		size
 	)
-	for side in range(4):
+	for side in range(inner.size()):
 		var next := (side + 1) % 4
 		var shape := ConvexPolygonShape2D.new()
 		shape.points = PackedVector2Array([
-			EditorCoordinateScript.tile_to_world(outer[side], size),
-			EditorCoordinateScript.tile_to_world(outer[next], size),
-			EditorCoordinateScript.tile_to_world(inner[next], size),
-			EditorCoordinateScript.tile_to_world(inner[side], size),
+			outer[side],
+			outer[next],
+			inner[next],
+			inner[side],
 		])
 		var collision := CollisionShape2D.new()
 		collision.name = "MapBoundary%d" % side

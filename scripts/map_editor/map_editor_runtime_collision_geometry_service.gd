@@ -3,8 +3,10 @@ extends RefCounted
 
 const CONTRACT_ID := "map_editor_runtime_collision_geometry_v2"
 const PHYSICS_SOURCE_ID := "published_blocked_cells_after_erasure_v1"
+const ACTOR_BOUNDARY_CONTRACT_ID := "map_visible_edge_actor_clearance_v1"
 const ELLIPSE_SEGMENTS := 32
 const DEFAULT_BOUNDARY_MARGIN_TILES := 8.0
+const DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD := 18.0
 
 
 static func map_inner_boundary_tile_polygon(
@@ -57,6 +59,80 @@ static func map_inner_boundary_world(
 	return tile_polygon_world(
 		map_inner_boundary_tile_polygon(design_size), design_size
 	)
+
+
+static func map_actor_boundary_world(
+	design_size: Vector2i,
+	clearance_world := DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD
+) -> PackedVector2Array:
+	# CharacterBody2D uses a foot-centred circle.  If the hard boundary is put
+	# directly on the last visible ground pixel, the circle centre (and thus the
+	# rendered feet) stops one apparent mobile tile before that pixel.  Expand
+	# only the artificial outer boundary by the actor radius; authored blocked
+	# cells remain exact and retain their normal body clearance.
+	var visual_boundary := map_inner_boundary_world(design_size)
+	return _expand_convex_polygon(
+		visual_boundary, maxf(0.0, clearance_world)
+	)
+
+
+static func map_outer_boundary_world(
+	design_size: Vector2i,
+	clearance_world := DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD
+) -> PackedVector2Array:
+	var actor_boundary := map_actor_boundary_world(design_size, clearance_world)
+	return _expand_convex_polygon(
+		actor_boundary,
+		DEFAULT_BOUNDARY_MARGIN_TILES * MapEditorCoordinate.GROUND_TILE_SIZE_PX.y
+	)
+
+
+static func runtime_boundary_contains_world(
+	world: Vector2,
+	design_size: Vector2i,
+	clearance_world := DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD
+) -> bool:
+	return Geometry2D.is_point_in_polygon(
+		world, map_actor_boundary_world(design_size, clearance_world)
+	)
+
+
+static func _expand_convex_polygon(
+	polygon: PackedVector2Array,
+	distance: float
+) -> PackedVector2Array:
+	if polygon.size() < 3 or distance <= 0.0:
+		return polygon
+	var signed_area := 0.0
+	for index in polygon.size():
+		var following := (index + 1) % polygon.size()
+		signed_area += _cross(polygon[index], polygon[following])
+	var result := PackedVector2Array()
+	for index in polygon.size():
+		var previous := (index - 1 + polygon.size()) % polygon.size()
+		var following := (index + 1) % polygon.size()
+		var previous_edge := polygon[index] - polygon[previous]
+		var next_edge := polygon[following] - polygon[index]
+		var previous_normal := Vector2(
+			previous_edge.y, -previous_edge.x
+		).normalized()
+		var next_normal := Vector2(next_edge.y, -next_edge.x).normalized()
+		if signed_area < 0.0:
+			previous_normal = -previous_normal
+			next_normal = -next_normal
+		var previous_line := polygon[index] + previous_normal * distance
+		var next_line := polygon[index] + next_normal * distance
+		var denominator := _cross(previous_edge, next_edge)
+		if absf(denominator) <= 0.0001:
+			result.append(polygon[index] + next_normal * distance)
+			continue
+		var ratio := _cross(next_line - previous_line, next_edge) / denominator
+		result.append(previous_line + previous_edge * ratio)
+	return result
+
+
+static func _cross(a: Vector2, b: Vector2) -> float:
+	return a.x * b.y - a.y * b.x
 
 
 static func cell_center_world(cell: Vector2i, design_size: Vector2i) -> Vector2:
@@ -119,8 +195,7 @@ static func blocked_cells_contain_world(
 	world: Vector2,
 	design_size: Vector2i
 ) -> bool:
-	var tile := MapEditorCoordinate.world_to_tile(world, design_size)
-	if not visible_ground_contains_tile(tile, design_size):
+	if not runtime_boundary_contains_world(world, design_size):
 		return true
 	var cell := world_cell(world, design_size)
 	return blocked_cells.has("%d,%d" % [cell.x, cell.y])
