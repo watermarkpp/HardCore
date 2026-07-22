@@ -874,10 +874,7 @@ func update_warrior_states(snapshot: Dictionary) -> void:
 	warrior_state_label.visible = PlayerState.profession == "战士"
 	if not warrior_state_label.visible:
 		return
-	var fire_text := "蓄力" if bool(snapshot.get("fire_armed", false)) else "就绪"
-	var ready_ms := int(snapshot.get("fire_ready_remaining_ms", 0))
-	if not bool(snapshot.get("fire_armed", false)) and ready_ms > 0:
-		fire_text = "冷却%.1fs" % (float(ready_ms) / 1000.0)
+	var fire_text := "开" if bool(snapshot.get("fire_auto_enabled", false)) else "关"
 	warrior_state_label.text = "攻杀:%s　刺杀:%s　半月:%s　烈火:%s" % [
 		"自动" if bool(snapshot.get("slaying_auto", false)) else "未学",
 		"开" if bool(snapshot.get("thrusting", false)) else "关",
@@ -893,11 +890,7 @@ func _warrior_skill_marker(skill_name: String) -> String:
 		"刺杀剑术": return "[开]" if bool(_warrior_snapshot.get("thrusting", false)) else "[关]"
 		"半月弯刀": return "[开]" if bool(_warrior_snapshot.get("half_moon", false)) else "[关]"
 		"烈火剑法":
-			if bool(_warrior_snapshot.get("fire_armed", false)):
-				return "[蓄]"
-			if int(_warrior_snapshot.get("fire_ready_remaining_ms", 0)) > 0:
-				return "[冷]"
-			return "[就绪]"
+			return "[开]" if bool(_warrior_snapshot.get("fire_auto_enabled", false)) else "[关]"
 	return ""
 
 
