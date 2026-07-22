@@ -32,7 +32,7 @@ static func validate_draft(base_asset: Dictionary, draft: Dictionary) -> Array[S
 	if anchor.size() != 2 or int(anchor[0]) < 0 or int(anchor[1]) < 0:
 		errors.append("invalid_anchor")
 	var collision_policy := str(draft.get("collision_policy", base_asset.get("collision_policy", "")))
-	if collision_policy not in ["none", "preset", "manual", "terrain_stamp_generated", "solid_footprint", "custom_polygon"]:
+	if collision_policy not in ["none", "preset", "manual", "terrain_stamp_generated", "wall_cells_generated", "solid_footprint", "custom_polygon"]:
 		errors.append("invalid_collision_policy")
 	if str(base_asset.get("asset_type", "")) == "ground_brush" and (int(footprint[0]) != 1 or int(footprint[1]) != 1):
 		errors.append("ground_footprint_requires_new_normalized_image")
@@ -56,6 +56,24 @@ static func save_override(asset_id: String, draft: Dictionary, path := OVERRIDE_
 	overrides[asset_id] = allowed
 	payload["overrides"] = overrides
 	return _write_atomic(path, payload)
+
+
+static func delete_from_palette(asset_id: String, path := OVERRIDE_PATH) -> Dictionary:
+	var base := MapAssetCatalogService.find_base_asset(asset_id)
+	if base.is_empty():
+		return {"ok": false, "errors": ["asset_not_found"]}
+	var payload := load_overrides(path)
+	var overrides: Dictionary = payload.get("overrides", {})
+	var existing: Dictionary = overrides.get(asset_id, {}).duplicate(true)
+	existing["placeable"] = false
+	existing["content_layer"] = "personal_expansion"
+	overrides[asset_id] = existing
+	payload["overrides"] = overrides
+	var result := _write_atomic(path, payload)
+	if result.get("ok", false):
+		result["asset_id"] = asset_id
+		result["deleted_from_palette"] = true
+	return result
 
 
 static func _write_atomic(path: String, value: Dictionary) -> Dictionary:

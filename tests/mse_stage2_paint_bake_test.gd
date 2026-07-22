@@ -28,10 +28,15 @@ func _ready() -> void:
 	for chunk: Dictionary in reopened.manifest.chunks:
 		if chunk.chunk_id == "c_2_1": materialized = chunk
 	assert(materialized.get("state", "") == "materialized")
+	assert(materialized.get("baked_coordinate_contract_id", "") == MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID)
 	var output := MapEditorGroundService.workspace_root(document).path_join(str(materialized.preview_png))
 	assert(FileAccess.file_exists(output))
 	var baked_image := Image.load_from_file(ProjectSettings.globalize_path(output))
 	assert(baked_image.get_size() == Vector2i(1024, 1024))
+	var preview_manifest := MapEditorGroundService._read_json(
+		MapEditorGroundService.workspace_root(document).path_join("ground/baked_preview/bake_manifest.json")
+	)
+	assert(preview_manifest.get("coordinate_contract_id", "") == MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID)
 	assert(MapEditorChunkBakeService.bake_dirty_chunks(document).get("message", "") == "no_dirty_chunks")
 	print("MSE_STAGE2_PAINT_BAKE_PASS")
 	get_tree().quit(0)

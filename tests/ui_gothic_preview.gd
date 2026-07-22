@@ -392,7 +392,7 @@ func _build_character_preview() -> void:
 	add_child(top_shade)
 	_label(self, "人物殿堂", Rect2(48, 18, 300, 46), 34, GOLD_BRIGHT)
 	_label(self, "选择传承，或在此铸造新的命运", Rect2(50, 57, 360, 24), 14, MUTED)
-	_label(self, "玛法纪元 · 本地档案", Rect2(930, 24, 300, 34), 15, MUTED, HORIZONTAL_ALIGNMENT_RIGHT)
+	_label(self, "HardCore · 本地档案", Rect2(930, 24, 300, 34), 15, MUTED, HORIZONTAL_ALIGNMENT_RIGHT)
 	_separator(self, Rect2(48, 87, 1184, 1))
 
 	var roster := _panel(self, Rect2(38, 112, 304, 538), Color("100d0ce8"), Color("6c5539"), 8, 2)
@@ -421,7 +421,7 @@ func _build_character_preview() -> void:
 	var name_plate := _panel(self, Rect2(436, 540, 328, 64), Color("0e0a09df"), Color("8a693e"), 3, 1)
 	_label(name_plate, "北 辰", Rect2(0, 4, 328, 30), 24, GOLD_BRIGHT, HORIZONTAL_ALIGNMENT_CENTER)
 	_label(name_plate, "战士 · 等级 26 · 战力 1847", Rect2(0, 31, 328, 24), 13, MUTED, HORIZONTAL_ALIGNMENT_CENTER)
-	_button(self, "进入玛法", Rect2(472, 620, 256, 58), true)
+	_button(self, "进入 HardCore", Rect2(472, 620, 256, 58), true)
 
 	var create := _panel(self, Rect2(884, 112, 358, 566), Color("100d0cef"), Color("6c5539"), 8, 2)
 	_ornament_header(create, "创建人物", Rect2(24, 12, 310, 42), "人物选择与创建位于同一界面")
@@ -457,7 +457,7 @@ func _build_exit_preview() -> void:
 	var modal := _panel(self, Rect2(390, 76, 500, 578), Color("100c0bfd"), Color("8b6b42"), 10, 2)
 	var crest := _panel(modal, Rect2(216, -28, 68, 68), Color("28100ffb"), RED, 34, 2)
 	_label(crest, "◆", Rect2(0, 0, 68, 68), 28, RED_BRIGHT, HORIZONTAL_ALIGNMENT_CENTER)
-	_ornament_header(modal, "暂离玛法", Rect2(54, 50, 392, 48), "游戏已经暂停")
+	_ornament_header(modal, "暂停 HardCore", Rect2(54, 50, 392, 48), "游戏已经暂停")
 	_separator(modal, Rect2(54, 120, 392, 1))
 	var status := _panel(modal, Rect2(72, 140, 356, 58), Color("111713e8"), Color("445b43"), 4, 1)
 	_label(status, "✓  角色数据已自动保存", Rect2(0, 0, 356, 58), 15, Color("b8caa9"), HORIZONTAL_ALIGNMENT_CENTER)

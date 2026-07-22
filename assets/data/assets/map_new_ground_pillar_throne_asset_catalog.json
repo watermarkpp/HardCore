@@ -1,0 +1,5247 @@
+{
+  "asset_schema_version": 2,
+  "package_id": "mse_new_ground_pillar_throne_42_v1",
+  "package_version": 1,
+  "source_root": "C:\\Users\\Administrator\\Desktop\\sucai\\新增",
+  "source_count": 6,
+  "asset_count": 42,
+  "group_counts": {
+    "地面": 12,
+    "立柱": 24,
+    "王座": 6
+  },
+  "classifications": {
+    "地面": "地面/新增石板地面",
+    "立柱": "装饰物1/立柱",
+    "王座": "装饰物1/王座"
+  },
+  "cutting_policy": "fixed_grid_primary_alpha_cluster_then_bbox_with_padding",
+  "assets": [
+    {
+      "asset_id": "mse.new_ground.stone_platform.01",
+      "display_name": "新增石板地面 01",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_01.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_01.png",
+      "canvas_size": [
+        467,
+        310
+      ],
+      "image_size": [
+        467,
+        310
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        463,
+        306
+      ],
+      "anchor_px": [
+        233,
+        155
+      ],
+      "placement_anchor_px": [
+        233,
+        155
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "ground_visual",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "地面/新增石板地面",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\地面\\ChatGPT Image 2026年7月19日 22_31_49 (1).png",
+      "source_sha256": "cd34ef1f8210ad520220a14dce0c5822ce935fb277cc82af1a66a478fea8066f",
+      "output_sha256": "509432af8f16bd74c8b15ba2d29f837c83bdf755e3285ba35e09ba6bac38bd20",
+      "thumbnail_source_sha256": "509432af8f16bd74c8b15ba2d29f837c83bdf755e3285ba35e09ba6bac38bd20",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          3,
+          2
+        ],
+        "sheet_index": 1,
+        "grid_row": 1,
+        "grid_column": 1,
+        "source_bounds_px": [
+          8,
+          181,
+          467,
+          483
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "地面",
+        "地面",
+        "新增石板地面"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "地面",
+      "source_sheet_index": 1,
+      "source_grid": [
+        1,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "gothic_stone_platform",
+      "paintable": true,
+      "normalization": "runtime_alpha_bounds_to_64x32_diamond_mask",
+      "diamond_inner_coverage": 1.0
+    },
+    {
+      "asset_id": "mse.new_ground.stone_platform.02",
+      "display_name": "新增石板地面 02",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_02.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_02.png",
+      "canvas_size": [
+        466,
+        311
+      ],
+      "image_size": [
+        466,
+        311
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        462,
+        307
+      ],
+      "anchor_px": [
+        233,
+        155
+      ],
+      "placement_anchor_px": [
+        233,
+        155
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "ground_visual",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "地面/新增石板地面",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\地面\\ChatGPT Image 2026年7月19日 22_31_49 (1).png",
+      "source_sha256": "cd34ef1f8210ad520220a14dce0c5822ce935fb277cc82af1a66a478fea8066f",
+      "output_sha256": "2395b79984eb39a5741824f0e82edf1f2f7d2481f9747b8f2c851611e6beb18f",
+      "thumbnail_source_sha256": "2395b79984eb39a5741824f0e82edf1f2f7d2481f9747b8f2c851611e6beb18f",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          3,
+          2
+        ],
+        "sheet_index": 1,
+        "grid_row": 1,
+        "grid_column": 2,
+        "source_bounds_px": [
+          495,
+          181,
+          953,
+          484
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "地面",
+        "地面",
+        "新增石板地面"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "地面",
+      "source_sheet_index": 1,
+      "source_grid": [
+        2,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "gothic_stone_platform",
+      "paintable": true,
+      "normalization": "runtime_alpha_bounds_to_64x32_diamond_mask",
+      "diamond_inner_coverage": 1.0
+    },
+    {
+      "asset_id": "mse.new_ground.stone_platform.03",
+      "display_name": "新增石板地面 03",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_03.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_03.png",
+      "canvas_size": [
+        468,
+        313
+      ],
+      "image_size": [
+        468,
+        313
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        464,
+        309
+      ],
+      "anchor_px": [
+        234,
+        156
+      ],
+      "placement_anchor_px": [
+        234,
+        156
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "ground_visual",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "地面/新增石板地面",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\地面\\ChatGPT Image 2026年7月19日 22_31_49 (1).png",
+      "source_sha256": "cd34ef1f8210ad520220a14dce0c5822ce935fb277cc82af1a66a478fea8066f",
+      "output_sha256": "aff9f92ba61016714c1e6e037e1e31dbf639eb19c78885e3932ecd15630be37f",
+      "thumbnail_source_sha256": "aff9f92ba61016714c1e6e037e1e31dbf639eb19c78885e3932ecd15630be37f",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          3,
+          2
+        ],
+        "sheet_index": 1,
+        "grid_row": 1,
+        "grid_column": 3,
+        "source_bounds_px": [
+          980,
+          181,
+          1440,
+          486
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "地面",
+        "地面",
+        "新增石板地面"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "地面",
+      "source_sheet_index": 1,
+      "source_grid": [
+        3,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "gothic_stone_platform",
+      "paintable": true,
+      "normalization": "runtime_alpha_bounds_to_64x32_diamond_mask",
+      "diamond_inner_coverage": 1.0
+    },
+    {
+      "asset_id": "mse.new_ground.stone_platform.04",
+      "display_name": "新增石板地面 04",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_04.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_04.png",
+      "canvas_size": [
+        468,
+        316
+      ],
+      "image_size": [
+        468,
+        316
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        464,
+        312
+      ],
+      "anchor_px": [
+        234,
+        158
+      ],
+      "placement_anchor_px": [
+        234,
+        158
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "ground_visual",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "地面/新增石板地面",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\地面\\ChatGPT Image 2026年7月19日 22_31_49 (1).png",
+      "source_sha256": "cd34ef1f8210ad520220a14dce0c5822ce935fb277cc82af1a66a478fea8066f",
+      "output_sha256": "c52e3f0d28997c06a64b6a417d4c101a606a3aba18bb1dd67785c0917f095e8d",
+      "thumbnail_source_sha256": "c52e3f0d28997c06a64b6a417d4c101a606a3aba18bb1dd67785c0917f095e8d",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          3,
+          2
+        ],
+        "sheet_index": 1,
+        "grid_row": 2,
+        "grid_column": 1,
+        "source_bounds_px": [
+          7,
+          573,
+          467,
+          881
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "地面",
+        "地面",
+        "新增石板地面"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "地面",
+      "source_sheet_index": 1,
+      "source_grid": [
+        1,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "gothic_stone_platform",
+      "paintable": true,
+      "normalization": "runtime_alpha_bounds_to_64x32_diamond_mask",
+      "diamond_inner_coverage": 1.0
+    },
+    {
+      "asset_id": "mse.new_ground.stone_platform.05",
+      "display_name": "新增石板地面 05",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_05.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_05.png",
+      "canvas_size": [
+        469,
+        317
+      ],
+      "image_size": [
+        469,
+        317
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        465,
+        313
+      ],
+      "anchor_px": [
+        234,
+        158
+      ],
+      "placement_anchor_px": [
+        234,
+        158
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "ground_visual",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "地面/新增石板地面",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\地面\\ChatGPT Image 2026年7月19日 22_31_49 (1).png",
+      "source_sha256": "cd34ef1f8210ad520220a14dce0c5822ce935fb277cc82af1a66a478fea8066f",
+      "output_sha256": "66a1f5c97dcc850e5231730da26a5c56c4333f869ec64726ed40e74b866ba25e",
+      "thumbnail_source_sha256": "66a1f5c97dcc850e5231730da26a5c56c4333f869ec64726ed40e74b866ba25e",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          3,
+          2
+        ],
+        "sheet_index": 1,
+        "grid_row": 2,
+        "grid_column": 2,
+        "source_bounds_px": [
+          493,
+          573,
+          954,
+          882
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "地面",
+        "地面",
+        "新增石板地面"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "地面",
+      "source_sheet_index": 1,
+      "source_grid": [
+        2,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "gothic_stone_platform",
+      "paintable": true,
+      "normalization": "runtime_alpha_bounds_to_64x32_diamond_mask",
+      "diamond_inner_coverage": 1.0
+    },
+    {
+      "asset_id": "mse.new_ground.stone_platform.06",
+      "display_name": "新增石板地面 06",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_06.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_06.png",
+      "canvas_size": [
+        468,
+        316
+      ],
+      "image_size": [
+        468,
+        316
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        464,
+        312
+      ],
+      "anchor_px": [
+        234,
+        158
+      ],
+      "placement_anchor_px": [
+        234,
+        158
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "ground_visual",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "地面/新增石板地面",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\地面\\ChatGPT Image 2026年7月19日 22_31_49 (1).png",
+      "source_sha256": "cd34ef1f8210ad520220a14dce0c5822ce935fb277cc82af1a66a478fea8066f",
+      "output_sha256": "b6d4b82c27a8dec21e530b0d77b764529eb62b995d95eaa26937ece5cc2da140",
+      "thumbnail_source_sha256": "b6d4b82c27a8dec21e530b0d77b764529eb62b995d95eaa26937ece5cc2da140",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          3,
+          2
+        ],
+        "sheet_index": 1,
+        "grid_row": 2,
+        "grid_column": 3,
+        "source_bounds_px": [
+          978,
+          574,
+          1438,
+          882
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "地面",
+        "地面",
+        "新增石板地面"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "地面",
+      "source_sheet_index": 1,
+      "source_grid": [
+        3,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "gothic_stone_platform",
+      "paintable": true,
+      "normalization": "runtime_alpha_bounds_to_64x32_diamond_mask",
+      "diamond_inner_coverage": 1.0
+    },
+    {
+      "asset_id": "mse.new_ground.stone_platform.07",
+      "display_name": "新增石板地面 07",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_07.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_07.png",
+      "canvas_size": [
+        450,
+        344
+      ],
+      "image_size": [
+        450,
+        344
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        446,
+        340
+      ],
+      "anchor_px": [
+        225,
+        172
+      ],
+      "placement_anchor_px": [
+        225,
+        172
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "ground_visual",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "地面/新增石板地面",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\地面\\ChatGPT Image 2026年7月19日 22_31_49 (2).png",
+      "source_sha256": "4bec4327615f10221fbe3b48bc2bb08e72e268f4718df43df1b2b66806966dd6",
+      "output_sha256": "f72d45aa9483b4aea949d824f5561b0f3fd643ce4d7358d5c029f6713c0d8108",
+      "thumbnail_source_sha256": "f72d45aa9483b4aea949d824f5561b0f3fd643ce4d7358d5c029f6713c0d8108",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          3,
+          2
+        ],
+        "sheet_index": 2,
+        "grid_row": 1,
+        "grid_column": 1,
+        "source_bounds_px": [
+          34,
+          142,
+          476,
+          478
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "地面",
+        "地面",
+        "新增石板地面"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "地面",
+      "source_sheet_index": 2,
+      "source_grid": [
+        1,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "gothic_stone_platform",
+      "paintable": true,
+      "normalization": "runtime_alpha_bounds_to_64x32_diamond_mask",
+      "diamond_inner_coverage": 1.0
+    },
+    {
+      "asset_id": "mse.new_ground.stone_platform.08",
+      "display_name": "新增石板地面 08",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_08.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_08.png",
+      "canvas_size": [
+        449,
+        343
+      ],
+      "image_size": [
+        449,
+        343
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        445,
+        339
+      ],
+      "anchor_px": [
+        224,
+        171
+      ],
+      "placement_anchor_px": [
+        224,
+        171
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "ground_visual",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "地面/新增石板地面",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\地面\\ChatGPT Image 2026年7月19日 22_31_49 (2).png",
+      "source_sha256": "4bec4327615f10221fbe3b48bc2bb08e72e268f4718df43df1b2b66806966dd6",
+      "output_sha256": "d1b403ef2101dc8bc4b8b3803ff808c0682dd92d0a254cc4031c63c48fae5070",
+      "thumbnail_source_sha256": "d1b403ef2101dc8bc4b8b3803ff808c0682dd92d0a254cc4031c63c48fae5070",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          3,
+          2
+        ],
+        "sheet_index": 2,
+        "grid_row": 1,
+        "grid_column": 2,
+        "source_bounds_px": [
+          505,
+          142,
+          946,
+          477
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "地面",
+        "地面",
+        "新增石板地面"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "地面",
+      "source_sheet_index": 2,
+      "source_grid": [
+        2,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "gothic_stone_platform",
+      "paintable": true,
+      "normalization": "runtime_alpha_bounds_to_64x32_diamond_mask",
+      "diamond_inner_coverage": 1.0
+    },
+    {
+      "asset_id": "mse.new_ground.stone_platform.09",
+      "display_name": "新增石板地面 09",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_09.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_09.png",
+      "canvas_size": [
+        452,
+        348
+      ],
+      "image_size": [
+        452,
+        348
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        448,
+        344
+      ],
+      "anchor_px": [
+        226,
+        174
+      ],
+      "placement_anchor_px": [
+        226,
+        174
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "ground_visual",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "地面/新增石板地面",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\地面\\ChatGPT Image 2026年7月19日 22_31_49 (2).png",
+      "source_sha256": "4bec4327615f10221fbe3b48bc2bb08e72e268f4718df43df1b2b66806966dd6",
+      "output_sha256": "5e9cc42c83928ebfe15d40026f2b2d04f697430e3011c65b8d0d836ca0a37f83",
+      "thumbnail_source_sha256": "5e9cc42c83928ebfe15d40026f2b2d04f697430e3011c65b8d0d836ca0a37f83",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          3,
+          2
+        ],
+        "sheet_index": 2,
+        "grid_row": 1,
+        "grid_column": 3,
+        "source_bounds_px": [
+          975,
+          141,
+          1419,
+          481
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "地面",
+        "地面",
+        "新增石板地面"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "地面",
+      "source_sheet_index": 2,
+      "source_grid": [
+        3,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "gothic_stone_platform",
+      "paintable": true,
+      "normalization": "runtime_alpha_bounds_to_64x32_diamond_mask",
+      "diamond_inner_coverage": 1.0
+    },
+    {
+      "asset_id": "mse.new_ground.stone_platform.10",
+      "display_name": "新增石板地面 10",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_10.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_10.png",
+      "canvas_size": [
+        449,
+        350
+      ],
+      "image_size": [
+        449,
+        350
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        445,
+        346
+      ],
+      "anchor_px": [
+        224,
+        175
+      ],
+      "placement_anchor_px": [
+        224,
+        175
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "ground_visual",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "地面/新增石板地面",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\地面\\ChatGPT Image 2026年7月19日 22_31_49 (2).png",
+      "source_sha256": "4bec4327615f10221fbe3b48bc2bb08e72e268f4718df43df1b2b66806966dd6",
+      "output_sha256": "f752a5953069869ababd0b880c0d4e8978dd5f30bdfe3a0b7db30a605fcb57e8",
+      "thumbnail_source_sha256": "f752a5953069869ababd0b880c0d4e8978dd5f30bdfe3a0b7db30a605fcb57e8",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          3,
+          2
+        ],
+        "sheet_index": 2,
+        "grid_row": 2,
+        "grid_column": 1,
+        "source_bounds_px": [
+          30,
+          588,
+          471,
+          930
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "地面",
+        "地面",
+        "新增石板地面"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "地面",
+      "source_sheet_index": 2,
+      "source_grid": [
+        1,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "gothic_stone_platform",
+      "paintable": true,
+      "normalization": "runtime_alpha_bounds_to_64x32_diamond_mask",
+      "diamond_inner_coverage": 1.0
+    },
+    {
+      "asset_id": "mse.new_ground.stone_platform.11",
+      "display_name": "新增石板地面 11",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_11.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_11.png",
+      "canvas_size": [
+        450,
+        353
+      ],
+      "image_size": [
+        450,
+        353
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        446,
+        349
+      ],
+      "anchor_px": [
+        225,
+        176
+      ],
+      "placement_anchor_px": [
+        225,
+        176
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "ground_visual",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "地面/新增石板地面",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\地面\\ChatGPT Image 2026年7月19日 22_31_49 (2).png",
+      "source_sha256": "4bec4327615f10221fbe3b48bc2bb08e72e268f4718df43df1b2b66806966dd6",
+      "output_sha256": "9800fa8bac0cbe875df48c6b95f81cbe3694a2bfe88564d06d8042b237d081e3",
+      "thumbnail_source_sha256": "9800fa8bac0cbe875df48c6b95f81cbe3694a2bfe88564d06d8042b237d081e3",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          3,
+          2
+        ],
+        "sheet_index": 2,
+        "grid_row": 2,
+        "grid_column": 2,
+        "source_bounds_px": [
+          502,
+          585,
+          944,
+          930
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "地面",
+        "地面",
+        "新增石板地面"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "地面",
+      "source_sheet_index": 2,
+      "source_grid": [
+        2,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "gothic_stone_platform",
+      "paintable": true,
+      "normalization": "runtime_alpha_bounds_to_64x32_diamond_mask",
+      "diamond_inner_coverage": 1.0
+    },
+    {
+      "asset_id": "mse.new_ground.stone_platform.12",
+      "display_name": "新增石板地面 12",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_12.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/ground/new_stone_ground/stone_ground_12.png",
+      "canvas_size": [
+        452,
+        351
+      ],
+      "image_size": [
+        452,
+        351
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        448,
+        347
+      ],
+      "anchor_px": [
+        226,
+        175
+      ],
+      "placement_anchor_px": [
+        226,
+        175
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "map_collision_override": "default",
+      "collision_authority": "ground_visual",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "地面/新增石板地面",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\地面\\ChatGPT Image 2026年7月19日 22_31_49 (2).png",
+      "source_sha256": "4bec4327615f10221fbe3b48bc2bb08e72e268f4718df43df1b2b66806966dd6",
+      "output_sha256": "f6ba567333fa7518e2317f9cc7c626587e7f5bf40901fb731cada0c746eda4c3",
+      "thumbnail_source_sha256": "f6ba567333fa7518e2317f9cc7c626587e7f5bf40901fb731cada0c746eda4c3",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          3,
+          2
+        ],
+        "sheet_index": 2,
+        "grid_row": 2,
+        "grid_column": 3,
+        "source_bounds_px": [
+          975,
+          587,
+          1419,
+          930
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "地面",
+        "地面",
+        "新增石板地面"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "地面",
+      "source_sheet_index": 2,
+      "source_grid": [
+        3,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "gothic_stone_platform",
+      "paintable": true,
+      "normalization": "runtime_alpha_bounds_to_64x32_diamond_mask",
+      "diamond_inner_coverage": 1.0
+    },
+    {
+      "asset_id": "mse.new_pillar.01",
+      "display_name": "立柱 01",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_01.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_01.png",
+      "canvas_size": [
+        232,
+        479
+      ],
+      "image_size": [
+        232,
+        479
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        228,
+        475
+      ],
+      "anchor_px": [
+        116,
+        474
+      ],
+      "placement_anchor_px": [
+        116,
+        474
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_15_00 (1).png",
+      "source_sha256": "c0f3c2e8a321ed952287dfba3a4b60eb9f040708e5d3d470cf0f72a101428847",
+      "output_sha256": "ac76ae9008701faaa8b77b226fc0dace3b600be753e16bd18316f2af673c6a54",
+      "thumbnail_source_sha256": "ac76ae9008701faaa8b77b226fc0dace3b600be753e16bd18316f2af673c6a54",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 1,
+        "grid_row": 1,
+        "grid_column": 1,
+        "source_bounds_px": [
+          105,
+          27,
+          329,
+          498
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 18
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 1,
+      "source_grid": [
+        1,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.02",
+      "display_name": "立柱 02",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_02.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_02.png",
+      "canvas_size": [
+        250,
+        483
+      ],
+      "image_size": [
+        250,
+        483
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        246,
+        479
+      ],
+      "anchor_px": [
+        125,
+        478
+      ],
+      "placement_anchor_px": [
+        125,
+        478
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_15_00 (1).png",
+      "source_sha256": "c0f3c2e8a321ed952287dfba3a4b60eb9f040708e5d3d470cf0f72a101428847",
+      "output_sha256": "de3055cac4104fb0773ce3e705c8781028f938670faa2170e7b2df3a522b1d46",
+      "thumbnail_source_sha256": "de3055cac4104fb0773ce3e705c8781028f938670faa2170e7b2df3a522b1d46",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 1,
+        "grid_row": 1,
+        "grid_column": 2,
+        "source_bounds_px": [
+          440,
+          24,
+          682,
+          499
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 1,
+      "source_grid": [
+        2,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.03",
+      "display_name": "立柱 03",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_03.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_03.png",
+      "canvas_size": [
+        244,
+        491
+      ],
+      "image_size": [
+        244,
+        491
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        240,
+        487
+      ],
+      "anchor_px": [
+        122,
+        486
+      ],
+      "placement_anchor_px": [
+        122,
+        486
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_15_00 (1).png",
+      "source_sha256": "c0f3c2e8a321ed952287dfba3a4b60eb9f040708e5d3d470cf0f72a101428847",
+      "output_sha256": "5dec014946e0911129e5f4f11d9e29faf140a5cc2c8d05158b1b56a6997ba2e7",
+      "thumbnail_source_sha256": "5dec014946e0911129e5f4f11d9e29faf140a5cc2c8d05158b1b56a6997ba2e7",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 1,
+        "grid_row": 1,
+        "grid_column": 3,
+        "source_bounds_px": [
+          785,
+          24,
+          1021,
+          507
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 10
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 1,
+      "source_grid": [
+        3,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.04",
+      "display_name": "立柱 04",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_04.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_04.png",
+      "canvas_size": [
+        253,
+        477
+      ],
+      "image_size": [
+        253,
+        477
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        249,
+        473
+      ],
+      "anchor_px": [
+        126,
+        472
+      ],
+      "placement_anchor_px": [
+        126,
+        472
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_15_00 (1).png",
+      "source_sha256": "c0f3c2e8a321ed952287dfba3a4b60eb9f040708e5d3d470cf0f72a101428847",
+      "output_sha256": "9d4e15bad2c8c117d5ac32047a799de97222fe1b8f2e7bb93ece57189fe54a96",
+      "thumbnail_source_sha256": "9d4e15bad2c8c117d5ac32047a799de97222fe1b8f2e7bb93ece57189fe54a96",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 1,
+        "grid_row": 1,
+        "grid_column": 4,
+        "source_bounds_px": [
+          1118,
+          42,
+          1363,
+          511
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 1,
+      "source_grid": [
+        4,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.05",
+      "display_name": "立柱 05",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_05.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_05.png",
+      "canvas_size": [
+        239,
+        480
+      ],
+      "image_size": [
+        239,
+        480
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        235,
+        476
+      ],
+      "anchor_px": [
+        119,
+        475
+      ],
+      "placement_anchor_px": [
+        119,
+        475
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_15_00 (1).png",
+      "source_sha256": "c0f3c2e8a321ed952287dfba3a4b60eb9f040708e5d3d470cf0f72a101428847",
+      "output_sha256": "82dbbc22316aefd340b60f6c19900dcea87cca87cf8f99a756f0c95926e71aa4",
+      "thumbnail_source_sha256": "82dbbc22316aefd340b60f6c19900dcea87cca87cf8f99a756f0c95926e71aa4",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 1,
+        "grid_row": 2,
+        "grid_column": 1,
+        "source_bounds_px": [
+          97,
+          527,
+          328,
+          999
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 1,
+      "source_grid": [
+        1,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.06",
+      "display_name": "立柱 06",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_06.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_06.png",
+      "canvas_size": [
+        245,
+        486
+      ],
+      "image_size": [
+        245,
+        486
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        241,
+        482
+      ],
+      "anchor_px": [
+        122,
+        481
+      ],
+      "placement_anchor_px": [
+        122,
+        481
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_15_00 (1).png",
+      "source_sha256": "c0f3c2e8a321ed952287dfba3a4b60eb9f040708e5d3d470cf0f72a101428847",
+      "output_sha256": "bd0cf043a3bd63da585c059f9a5b44568c2fea2f9eea42d73dde383df14a2891",
+      "thumbnail_source_sha256": "bd0cf043a3bd63da585c059f9a5b44568c2fea2f9eea42d73dde383df14a2891",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 1,
+        "grid_row": 2,
+        "grid_column": 2,
+        "source_bounds_px": [
+          441,
+          527,
+          678,
+          1005
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 1,
+      "source_grid": [
+        2,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.07",
+      "display_name": "立柱 07",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_07.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_07.png",
+      "canvas_size": [
+        255,
+        487
+      ],
+      "image_size": [
+        255,
+        487
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        251,
+        483
+      ],
+      "anchor_px": [
+        127,
+        482
+      ],
+      "placement_anchor_px": [
+        127,
+        482
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_15_00 (1).png",
+      "source_sha256": "c0f3c2e8a321ed952287dfba3a4b60eb9f040708e5d3d470cf0f72a101428847",
+      "output_sha256": "234ba0d1e0bc8593dd5cf0ff3cfc84609b8a9130b8a63b31b7b3eba874879aee",
+      "thumbnail_source_sha256": "234ba0d1e0bc8593dd5cf0ff3cfc84609b8a9130b8a63b31b7b3eba874879aee",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 1,
+        "grid_row": 2,
+        "grid_column": 3,
+        "source_bounds_px": [
+          771,
+          530,
+          1018,
+          1009
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 1,
+      "source_grid": [
+        3,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.08",
+      "display_name": "立柱 08",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_08.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_08.png",
+      "canvas_size": [
+        243,
+        486
+      ],
+      "image_size": [
+        243,
+        486
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        239,
+        482
+      ],
+      "anchor_px": [
+        121,
+        481
+      ],
+      "placement_anchor_px": [
+        121,
+        481
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_15_00 (1).png",
+      "source_sha256": "c0f3c2e8a321ed952287dfba3a4b60eb9f040708e5d3d470cf0f72a101428847",
+      "output_sha256": "007620e398bd4770a27a0d7e70721041d609f58197fb96da1ad08452a682071a",
+      "thumbnail_source_sha256": "007620e398bd4770a27a0d7e70721041d609f58197fb96da1ad08452a682071a",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 1,
+        "grid_row": 2,
+        "grid_column": 4,
+        "source_bounds_px": [
+          1121,
+          530,
+          1356,
+          1008
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 1,
+      "source_grid": [
+        4,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.09",
+      "display_name": "立柱 09",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_09.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_09.png",
+      "canvas_size": [
+        263,
+        474
+      ],
+      "image_size": [
+        263,
+        474
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        259,
+        470
+      ],
+      "anchor_px": [
+        131,
+        469
+      ],
+      "placement_anchor_px": [
+        131,
+        469
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_15_01 (2).png",
+      "source_sha256": "6c4618f5faeb0731bef737bd4ac53a921c87afffd43ec4df0ba2ba0ac01250a9",
+      "output_sha256": "677de41a38fdb001fe45ad4bce02949fbac0fb5685ceaffc1fea468b225bf12d",
+      "thumbnail_source_sha256": "677de41a38fdb001fe45ad4bce02949fbac0fb5685ceaffc1fea468b225bf12d",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 2,
+        "grid_row": 1,
+        "grid_column": 1,
+        "source_bounds_px": [
+          88,
+          38,
+          343,
+          504
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 2,
+      "source_grid": [
+        1,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.10",
+      "display_name": "立柱 10",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_10.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_10.png",
+      "canvas_size": [
+        260,
+        473
+      ],
+      "image_size": [
+        260,
+        473
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        256,
+        469
+      ],
+      "anchor_px": [
+        130,
+        468
+      ],
+      "placement_anchor_px": [
+        130,
+        468
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_15_01 (2).png",
+      "source_sha256": "6c4618f5faeb0731bef737bd4ac53a921c87afffd43ec4df0ba2ba0ac01250a9",
+      "output_sha256": "6f60c34ed6f8f656f2a0e5e8690836c0b7c852895b7ea742cd5bb4b137e16660",
+      "thumbnail_source_sha256": "6f60c34ed6f8f656f2a0e5e8690836c0b7c852895b7ea742cd5bb4b137e16660",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 2,
+        "grid_row": 1,
+        "grid_column": 2,
+        "source_bounds_px": [
+          429,
+          40,
+          681,
+          505
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 2,
+      "source_grid": [
+        2,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.11",
+      "display_name": "立柱 11",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_11.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_11.png",
+      "canvas_size": [
+        257,
+        475
+      ],
+      "image_size": [
+        257,
+        475
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        253,
+        471
+      ],
+      "anchor_px": [
+        128,
+        470
+      ],
+      "placement_anchor_px": [
+        128,
+        470
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_15_01 (2).png",
+      "source_sha256": "6c4618f5faeb0731bef737bd4ac53a921c87afffd43ec4df0ba2ba0ac01250a9",
+      "output_sha256": "405ff652d532e999c21f5c1546884540c62b14753e944852b097d732b2e3a520",
+      "thumbnail_source_sha256": "405ff652d532e999c21f5c1546884540c62b14753e944852b097d732b2e3a520",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 2,
+        "grid_row": 1,
+        "grid_column": 3,
+        "source_bounds_px": [
+          778,
+          39,
+          1027,
+          506
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 2,
+      "source_grid": [
+        3,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.12",
+      "display_name": "立柱 12",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_12.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_12.png",
+      "canvas_size": [
+        258,
+        476
+      ],
+      "image_size": [
+        258,
+        476
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        254,
+        472
+      ],
+      "anchor_px": [
+        129,
+        471
+      ],
+      "placement_anchor_px": [
+        129,
+        471
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_15_01 (2).png",
+      "source_sha256": "6c4618f5faeb0731bef737bd4ac53a921c87afffd43ec4df0ba2ba0ac01250a9",
+      "output_sha256": "70c212b4d6388e98741c922cb0f4ad576a8ba6bee788900adacd9ca4ac85210c",
+      "thumbnail_source_sha256": "70c212b4d6388e98741c922cb0f4ad576a8ba6bee788900adacd9ca4ac85210c",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 2,
+        "grid_row": 1,
+        "grid_column": 4,
+        "source_bounds_px": [
+          1120,
+          38,
+          1370,
+          506
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 2,
+      "source_grid": [
+        4,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.13",
+      "display_name": "立柱 13",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_13.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_13.png",
+      "canvas_size": [
+        261,
+        475
+      ],
+      "image_size": [
+        261,
+        475
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        257,
+        471
+      ],
+      "anchor_px": [
+        130,
+        470
+      ],
+      "placement_anchor_px": [
+        130,
+        470
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_15_01 (2).png",
+      "source_sha256": "6c4618f5faeb0731bef737bd4ac53a921c87afffd43ec4df0ba2ba0ac01250a9",
+      "output_sha256": "2261173c8adb3f02b44964d6691d3f5eb0f142b1d34275f1bb99d2603f4bc11b",
+      "thumbnail_source_sha256": "2261173c8adb3f02b44964d6691d3f5eb0f142b1d34275f1bb99d2603f4bc11b",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 2,
+        "grid_row": 2,
+        "grid_column": 1,
+        "source_bounds_px": [
+          90,
+          545,
+          343,
+          1012
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 2,
+      "source_grid": [
+        1,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.14",
+      "display_name": "立柱 14",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_14.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_14.png",
+      "canvas_size": [
+        260,
+        474
+      ],
+      "image_size": [
+        260,
+        474
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        256,
+        470
+      ],
+      "anchor_px": [
+        130,
+        469
+      ],
+      "placement_anchor_px": [
+        130,
+        469
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_15_01 (2).png",
+      "source_sha256": "6c4618f5faeb0731bef737bd4ac53a921c87afffd43ec4df0ba2ba0ac01250a9",
+      "output_sha256": "abf4be1867e8ee40c9b5b5a649743c3094448dbb9ccf504197da64a60575e55c",
+      "thumbnail_source_sha256": "abf4be1867e8ee40c9b5b5a649743c3094448dbb9ccf504197da64a60575e55c",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 2,
+        "grid_row": 2,
+        "grid_column": 2,
+        "source_bounds_px": [
+          431,
+          546,
+          683,
+          1012
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 2,
+      "source_grid": [
+        2,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.15",
+      "display_name": "立柱 15",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_15.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_15.png",
+      "canvas_size": [
+        266,
+        475
+      ],
+      "image_size": [
+        266,
+        475
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        262,
+        471
+      ],
+      "anchor_px": [
+        133,
+        470
+      ],
+      "placement_anchor_px": [
+        133,
+        470
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_15_01 (2).png",
+      "source_sha256": "6c4618f5faeb0731bef737bd4ac53a921c87afffd43ec4df0ba2ba0ac01250a9",
+      "output_sha256": "bfc258feac2647ae44354e82d1fa416b095e627c95eefe9a7da6c30529f89e2f",
+      "thumbnail_source_sha256": "bfc258feac2647ae44354e82d1fa416b095e627c95eefe9a7da6c30529f89e2f",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 2,
+        "grid_row": 2,
+        "grid_column": 3,
+        "source_bounds_px": [
+          772,
+          545,
+          1030,
+          1012
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 155
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 2,
+      "source_grid": [
+        3,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.16",
+      "display_name": "立柱 16",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_16.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_16.png",
+      "canvas_size": [
+        265,
+        458
+      ],
+      "image_size": [
+        265,
+        458
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        261,
+        454
+      ],
+      "anchor_px": [
+        132,
+        453
+      ],
+      "placement_anchor_px": [
+        132,
+        453
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_15_01 (2).png",
+      "source_sha256": "6c4618f5faeb0731bef737bd4ac53a921c87afffd43ec4df0ba2ba0ac01250a9",
+      "output_sha256": "3f8e22624a41e0c87b9364ac40b32aa26cf22a8d22a8db0ad0c32af859decb01",
+      "thumbnail_source_sha256": "3f8e22624a41e0c87b9364ac40b32aa26cf22a8d22a8db0ad0c32af859decb01",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 2,
+        "grid_row": 2,
+        "grid_column": 4,
+        "source_bounds_px": [
+          1118,
+          562,
+          1375,
+          1012
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 2,
+      "source_grid": [
+        4,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.17",
+      "display_name": "立柱 17",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_17.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_17.png",
+      "canvas_size": [
+        210,
+        470
+      ],
+      "image_size": [
+        210,
+        470
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        206,
+        466
+      ],
+      "anchor_px": [
+        105,
+        465
+      ],
+      "placement_anchor_px": [
+        105,
+        465
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
+      "source_sha256": "8a57ab1c5cb8b42051780c0836eb4ca421b7317dc352853d7841a3b70b1bff5b",
+      "output_sha256": "77fafcf98745eb34cee58e017a160a80b0602f72f884579cb2204f8c2870965c",
+      "thumbnail_source_sha256": "77fafcf98745eb34cee58e017a160a80b0602f72f884579cb2204f8c2870965c",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 3,
+        "grid_row": 1,
+        "grid_column": 1,
+        "source_bounds_px": [
+          105,
+          33,
+          307,
+          495
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 3,
+      "source_grid": [
+        1,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.18",
+      "display_name": "立柱 18",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_18.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_18.png",
+      "canvas_size": [
+        210,
+        470
+      ],
+      "image_size": [
+        210,
+        470
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        206,
+        466
+      ],
+      "anchor_px": [
+        105,
+        465
+      ],
+      "placement_anchor_px": [
+        105,
+        465
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
+      "source_sha256": "8a57ab1c5cb8b42051780c0836eb4ca421b7317dc352853d7841a3b70b1bff5b",
+      "output_sha256": "496cae21381b667a6bb16a38fa9970aa87dd304d567d5fc5d29e5f95e014f1c7",
+      "thumbnail_source_sha256": "496cae21381b667a6bb16a38fa9970aa87dd304d567d5fc5d29e5f95e014f1c7",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 3,
+        "grid_row": 1,
+        "grid_column": 2,
+        "source_bounds_px": [
+          469,
+          33,
+          671,
+          495
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 3,
+      "source_grid": [
+        2,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.19",
+      "display_name": "立柱 19",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_19.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_19.png",
+      "canvas_size": [
+        195,
+        470
+      ],
+      "image_size": [
+        195,
+        470
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        191,
+        466
+      ],
+      "anchor_px": [
+        97,
+        465
+      ],
+      "placement_anchor_px": [
+        97,
+        465
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
+      "source_sha256": "8a57ab1c5cb8b42051780c0836eb4ca421b7317dc352853d7841a3b70b1bff5b",
+      "output_sha256": "7bbbdb1abeeac38afc77c80de0da3c59456e20cf29ca6c083a0c233fb285ea74",
+      "thumbnail_source_sha256": "7bbbdb1abeeac38afc77c80de0da3c59456e20cf29ca6c083a0c233fb285ea74",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 3,
+        "grid_row": 1,
+        "grid_column": 3,
+        "source_bounds_px": [
+          819,
+          32,
+          1006,
+          494
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 3,
+      "source_grid": [
+        3,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.20",
+      "display_name": "立柱 20",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_20.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_20.png",
+      "canvas_size": [
+        201,
+        470
+      ],
+      "image_size": [
+        201,
+        470
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        197,
+        466
+      ],
+      "anchor_px": [
+        100,
+        465
+      ],
+      "placement_anchor_px": [
+        100,
+        465
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
+      "source_sha256": "8a57ab1c5cb8b42051780c0836eb4ca421b7317dc352853d7841a3b70b1bff5b",
+      "output_sha256": "78d2df0441c7ba7bf08c0ac2b5429215a63b4dbcdf5c6628ec02a30f7b875a0f",
+      "thumbnail_source_sha256": "78d2df0441c7ba7bf08c0ac2b5429215a63b4dbcdf5c6628ec02a30f7b875a0f",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 3,
+        "grid_row": 1,
+        "grid_column": 4,
+        "source_bounds_px": [
+          1171,
+          33,
+          1364,
+          495
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 3,
+      "source_grid": [
+        4,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.21",
+      "display_name": "立柱 21",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_21.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_21.png",
+      "canvas_size": [
+        199,
+        474
+      ],
+      "image_size": [
+        199,
+        474
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        195,
+        470
+      ],
+      "anchor_px": [
+        99,
+        469
+      ],
+      "placement_anchor_px": [
+        99,
+        469
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
+      "source_sha256": "8a57ab1c5cb8b42051780c0836eb4ca421b7317dc352853d7841a3b70b1bff5b",
+      "output_sha256": "ed2e87379ba11785b53ade4f85b1d0d203b6e036713b6e2473e27344ea4fe422",
+      "thumbnail_source_sha256": "ed2e87379ba11785b53ade4f85b1d0d203b6e036713b6e2473e27344ea4fe422",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 3,
+        "grid_row": 2,
+        "grid_column": 1,
+        "source_bounds_px": [
+          114,
+          532,
+          305,
+          998
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 3,
+      "source_grid": [
+        1,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.22",
+      "display_name": "立柱 22",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_22.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_22.png",
+      "canvas_size": [
+        222,
+        474
+      ],
+      "image_size": [
+        222,
+        474
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        218,
+        470
+      ],
+      "anchor_px": [
+        111,
+        469
+      ],
+      "placement_anchor_px": [
+        111,
+        469
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
+      "source_sha256": "8a57ab1c5cb8b42051780c0836eb4ca421b7317dc352853d7841a3b70b1bff5b",
+      "output_sha256": "bb55352cb9a85184bd9279191d69e691a8479fb633656b4217642fe90536294a",
+      "thumbnail_source_sha256": "bb55352cb9a85184bd9279191d69e691a8479fb633656b4217642fe90536294a",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 3,
+        "grid_row": 2,
+        "grid_column": 2,
+        "source_bounds_px": [
+          450,
+          532,
+          664,
+          998
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 3,
+      "source_grid": [
+        2,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.23",
+      "display_name": "立柱 23",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_23.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_23.png",
+      "canvas_size": [
+        196,
+        473
+      ],
+      "image_size": [
+        196,
+        473
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        192,
+        469
+      ],
+      "anchor_px": [
+        98,
+        468
+      ],
+      "placement_anchor_px": [
+        98,
+        468
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
+      "source_sha256": "8a57ab1c5cb8b42051780c0836eb4ca421b7317dc352853d7841a3b70b1bff5b",
+      "output_sha256": "cc78aaaa19ce32c7ac13080995442d3ddad61196d5f45157fe798c930981158e",
+      "thumbnail_source_sha256": "cc78aaaa19ce32c7ac13080995442d3ddad61196d5f45157fe798c930981158e",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 3,
+        "grid_row": 2,
+        "grid_column": 3,
+        "source_bounds_px": [
+          819,
+          532,
+          1007,
+          997
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 3,
+      "source_grid": [
+        3,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_pillar.24",
+      "display_name": "立柱 24",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_24.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/pillars/gothic_pillar_24.png",
+      "canvas_size": [
+        226,
+        477
+      ],
+      "image_size": [
+        226,
+        477
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        222,
+        473
+      ],
+      "anchor_px": [
+        113,
+        472
+      ],
+      "placement_anchor_px": [
+        113,
+        472
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        3,
+        3
+      ],
+      "visual_footprint_tiles": [
+        3,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        3
+      ],
+      "base_footprint_tiles": [
+        3,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/立柱",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\立柱\\ChatGPT Image 2026年7月19日 22_29_59.png",
+      "source_sha256": "8a57ab1c5cb8b42051780c0836eb4ca421b7317dc352853d7841a3b70b1bff5b",
+      "output_sha256": "d64aabd50542f9aa5129ae81dca9bdb2fa4fbc78712be26b3a4d942bcc95a26e",
+      "thumbnail_source_sha256": "d64aabd50542f9aa5129ae81dca9bdb2fa4fbc78712be26b3a4d942bcc95a26e",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          4,
+          2
+        ],
+        "sheet_index": 3,
+        "grid_row": 2,
+        "grid_column": 4,
+        "source_bounds_px": [
+          1164,
+          533,
+          1382,
+          1002
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "立柱",
+        "装饰物1",
+        "立柱"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "立柱",
+      "source_sheet_index": 3,
+      "source_grid": [
+        4,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_throne.01",
+      "display_name": "王座 01",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/thrones/gothic_throne_01.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/thrones/gothic_throne_01.png",
+      "canvas_size": [
+        344,
+        513
+      ],
+      "image_size": [
+        344,
+        513
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        340,
+        509
+      ],
+      "anchor_px": [
+        172,
+        508
+      ],
+      "placement_anchor_px": [
+        172,
+        508
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        6,
+        6
+      ],
+      "visual_footprint_tiles": [
+        6,
+        6
+      ],
+      "occupancy_footprint_tiles": [
+        6,
+        6
+      ],
+      "base_footprint_tiles": [
+        6,
+        6
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/王座",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\王座\\ChatGPT Image 2026年7月19日 22_57_35.png",
+      "source_sha256": "20d50cb374840dad032991296786d3d117acaee87ef29c5dd23c04151d632f37",
+      "output_sha256": "06051fb75bd470a7b87a136751ededed05bff1cbe790728c51acf0428617daf2",
+      "thumbnail_source_sha256": "06051fb75bd470a7b87a136751ededed05bff1cbe790728c51acf0428617daf2",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          3,
+          2
+        ],
+        "sheet_index": 1,
+        "grid_row": 1,
+        "grid_column": 1,
+        "source_bounds_px": [
+          54,
+          13,
+          390,
+          518
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 922
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "王座",
+        "装饰物1",
+        "王座"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "王座",
+      "source_sheet_index": 1,
+      "source_grid": [
+        1,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_throne.02",
+      "display_name": "王座 02",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/thrones/gothic_throne_02.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/thrones/gothic_throne_02.png",
+      "canvas_size": [
+        476,
+        480
+      ],
+      "image_size": [
+        476,
+        480
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        472,
+        476
+      ],
+      "anchor_px": [
+        238,
+        475
+      ],
+      "placement_anchor_px": [
+        238,
+        475
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        6,
+        6
+      ],
+      "visual_footprint_tiles": [
+        6,
+        6
+      ],
+      "occupancy_footprint_tiles": [
+        6,
+        6
+      ],
+      "base_footprint_tiles": [
+        6,
+        6
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/王座",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\王座\\ChatGPT Image 2026年7月19日 22_57_35.png",
+      "source_sha256": "20d50cb374840dad032991296786d3d117acaee87ef29c5dd23c04151d632f37",
+      "output_sha256": "34e8dc53f8aa20b7c84bd7da15941f0ead2f201c8cd4ac3675278a0f1c573d5e",
+      "thumbnail_source_sha256": "34e8dc53f8aa20b7c84bd7da15941f0ead2f201c8cd4ac3675278a0f1c573d5e",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          3,
+          2
+        ],
+        "sheet_index": 1,
+        "grid_row": 1,
+        "grid_column": 2,
+        "source_bounds_px": [
+          482,
+          43,
+          950,
+          515
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 60
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "王座",
+        "装饰物1",
+        "王座"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "王座",
+      "source_sheet_index": 1,
+      "source_grid": [
+        2,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_throne.03",
+      "display_name": "王座 03",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/thrones/gothic_throne_03.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/thrones/gothic_throne_03.png",
+      "canvas_size": [
+        441,
+        454
+      ],
+      "image_size": [
+        441,
+        454
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        437,
+        450
+      ],
+      "anchor_px": [
+        220,
+        449
+      ],
+      "placement_anchor_px": [
+        220,
+        449
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        6,
+        6
+      ],
+      "visual_footprint_tiles": [
+        6,
+        6
+      ],
+      "occupancy_footprint_tiles": [
+        6,
+        6
+      ],
+      "base_footprint_tiles": [
+        6,
+        6
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/王座",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\王座\\ChatGPT Image 2026年7月19日 22_57_35.png",
+      "source_sha256": "20d50cb374840dad032991296786d3d117acaee87ef29c5dd23c04151d632f37",
+      "output_sha256": "abb77977f7f44dfc7ddd44107795310f3632ed2953270bec06c07337a409f255",
+      "thumbnail_source_sha256": "abb77977f7f44dfc7ddd44107795310f3632ed2953270bec06c07337a409f255",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          3,
+          2
+        ],
+        "sheet_index": 1,
+        "grid_row": 1,
+        "grid_column": 3,
+        "source_bounds_px": [
+          988,
+          70,
+          1421,
+          516
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "王座",
+        "装饰物1",
+        "王座"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "王座",
+      "source_sheet_index": 1,
+      "source_grid": [
+        3,
+        1
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_throne.04",
+      "display_name": "王座 04",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/thrones/gothic_throne_04.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/thrones/gothic_throne_04.png",
+      "canvas_size": [
+        458,
+        470
+      ],
+      "image_size": [
+        458,
+        470
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        454,
+        466
+      ],
+      "anchor_px": [
+        229,
+        465
+      ],
+      "placement_anchor_px": [
+        229,
+        465
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        6,
+        6
+      ],
+      "visual_footprint_tiles": [
+        6,
+        6
+      ],
+      "occupancy_footprint_tiles": [
+        6,
+        6
+      ],
+      "base_footprint_tiles": [
+        6,
+        6
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/王座",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\王座\\ChatGPT Image 2026年7月19日 22_57_35.png",
+      "source_sha256": "20d50cb374840dad032991296786d3d117acaee87ef29c5dd23c04151d632f37",
+      "output_sha256": "eaea40d44490b8b5396b7ed89a0cc369e41bffaa519df6fa59757faed197ccf2",
+      "thumbnail_source_sha256": "eaea40d44490b8b5396b7ed89a0cc369e41bffaa519df6fa59757faed197ccf2",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          3,
+          2
+        ],
+        "sheet_index": 1,
+        "grid_row": 2,
+        "grid_column": 1,
+        "source_bounds_px": [
+          25,
+          560,
+          475,
+          1022
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "王座",
+        "装饰物1",
+        "王座"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "王座",
+      "source_sheet_index": 1,
+      "source_grid": [
+        1,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_throne.05",
+      "display_name": "王座 05",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/thrones/gothic_throne_05.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/thrones/gothic_throne_05.png",
+      "canvas_size": [
+        402,
+        502
+      ],
+      "image_size": [
+        402,
+        502
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        398,
+        498
+      ],
+      "anchor_px": [
+        201,
+        497
+      ],
+      "placement_anchor_px": [
+        201,
+        497
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        6,
+        6
+      ],
+      "visual_footprint_tiles": [
+        6,
+        6
+      ],
+      "occupancy_footprint_tiles": [
+        6,
+        6
+      ],
+      "base_footprint_tiles": [
+        6,
+        6
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/王座",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\王座\\ChatGPT Image 2026年7月19日 22_57_35.png",
+      "source_sha256": "20d50cb374840dad032991296786d3d117acaee87ef29c5dd23c04151d632f37",
+      "output_sha256": "edb7f75e5f7c53f3db09eced6b750f43912c264db75c7e72f0ec177b72cf1d93",
+      "thumbnail_source_sha256": "edb7f75e5f7c53f3db09eced6b750f43912c264db75c7e72f0ec177b72cf1d93",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          3,
+          2
+        ],
+        "sheet_index": 1,
+        "grid_row": 2,
+        "grid_column": 2,
+        "source_bounds_px": [
+          506,
+          543,
+          900,
+          1037
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 412
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "王座",
+        "装饰物1",
+        "王座"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "王座",
+      "source_sheet_index": 1,
+      "source_grid": [
+        2,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.new_throne.06",
+      "display_name": "王座 06",
+      "asset_type": "large_prop",
+      "category": "decoration",
+      "object_class": "decoration",
+      "theme": "gothic_ruins",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/thrones/gothic_throne_06.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/thrones/gothic_throne_06.png",
+      "canvas_size": [
+        396,
+        512
+      ],
+      "image_size": [
+        396,
+        512
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        392,
+        508
+      ],
+      "anchor_px": [
+        198,
+        507
+      ],
+      "placement_anchor_px": [
+        198,
+        507
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        6,
+        6
+      ],
+      "visual_footprint_tiles": [
+        6,
+        6
+      ],
+      "occupancy_footprint_tiles": [
+        6,
+        6
+      ],
+      "base_footprint_tiles": [
+        6,
+        6
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_layer": "object_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "transparent_sheet_grid_alpha_crop_v1",
+      "palette_path": "装饰物1/王座",
+      "source_external_path": "C:\\Users\\Administrator\\Desktop\\sucai\\新增\\王座\\ChatGPT Image 2026年7月19日 22_57_35.png",
+      "source_sha256": "20d50cb374840dad032991296786d3d117acaee87ef29c5dd23c04151d632f37",
+      "output_sha256": "6461bc52c297d53b248fb851a106c1ff74b671b3edb338f38f4050bcb27ee47d",
+      "thumbnail_source_sha256": "6461bc52c297d53b248fb851a106c1ff74b671b3edb338f38f4050bcb27ee47d",
+      "processing": {
+        "pipeline": "fixed_grid_alpha_bbox_crop_v1",
+        "sheet_grid": [
+          3,
+          2
+        ],
+        "sheet_index": 1,
+        "grid_row": 2,
+        "grid_column": 3,
+        "source_bounds_px": [
+          965,
+          543,
+          1353,
+          1047
+        ],
+        "padding_px": 4,
+        "cluster_join_kernel_px": 15,
+        "discarded_alpha_pixels": 0
+      },
+      "tags": [
+        "new_local_asset",
+        "transparent_sheet_cut",
+        "王座",
+        "装饰物1",
+        "王座"
+      ],
+      "editable": true,
+      "allows_edge_clipping": false,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_new_ground_pillar_throne_42_v1",
+      "source_group": "王座",
+      "source_sheet_index": 1,
+      "source_grid": [
+        3,
+        2
+      ],
+      "projection": "orthographic_isometric_2_to_1"
+    }
+  ]
+}

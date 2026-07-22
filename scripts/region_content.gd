@@ -472,7 +472,7 @@ const CENTIPEDE_MAPS := {
 	1388: {"name": "阴森石路", "spawn_count": 0, "targets": [1387, 1445, 1446, 1447, 1448]},
 	1445: {"name": "黑暗地带", "spawn_count": 6, "targets": [1388, 1446, 1449, 1450, 1451], "boss": "邪恶钳虫", "boss_respawn": 3600.0},
 	1446: {"name": "生死之间", "spawn_count": 6, "targets": [1445, 1447]},
-	1447: {"name": "传奇部落", "spawn_count": 6, "targets": [1446, 1448]},
+	1447: {"name": "荒野部落", "spawn_count": 6, "targets": [1446, 1448]},
 	1448: {"name": "邪恶势力", "spawn_count": 6, "targets": [1447, 1449]},
 	1449: {"name": "幽名圣域", "spawn_count": 6, "targets": [1448, 1450]},
 	1450: {"name": "恐怖空间", "spawn_count": 6, "targets": [1449, 1451]},

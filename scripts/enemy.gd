@@ -4,6 +4,29 @@ extends CharacterBody2D
 const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const CROWD_GRID_CELL_SIZE := 96.0
+const CROWD_GRID_REFRESH_FRAMES := 3
+const CROWD_STEERING_INTERVAL_SECONDS := 0.10
+const FAR_RETARGET_MIN_SECONDS := 0.28
+const FAR_RETARGET_STAGGER_SECONDS := 0.017
+const NEAR_RETARGET_MIN_SECONDS := 0.18
+const NEAR_RETARGET_STAGGER_SECONDS := 0.011
+const BACKGROUND_AI_INTERVAL_SECONDS := 0.25
+const BACKGROUND_AI_MIN_DISTANCE := 1200.0
+const ENVIRONMENT_GUARD_INTERVAL_SECONDS := 0.10
+const ENEMY_MOTION_MASK := WorldSpatialRulesScript.WORLD_LAYER | WorldSpatialRulesScript.PLAYER_LAYER
+const POISON_INDICATOR_STYLE := "overhead_three_diamonds"
+
+static var _crowd_grid_physics_frame := -1
+static var _crowd_grid: Dictionary = {}
+static var _crowd_grid_build_count := 0
+static var _crowd_grid_actor_scan_count := 0
+static var _crowd_query_candidate_count := 0
+static var _crowd_steering_evaluation_count := 0
+static var _retarget_full_scan_count := 0
+static var _background_ai_evaluation_count := 0
+static var _physics_move_count := 0
+static var _environment_guard_check_count := 0
 
 signal died(enemy: EnemyActor, monster_data: Dictionary)
 signal target_requested(enemy: EnemyActor)
@@ -61,6 +84,9 @@ var _pending_attack_time := -1.0
 var _pending_attack_damage := 0
 var _pending_attack_target: Node2D
 var _retarget_timer := 0.0
+var _crowd_steering_timer := 0.0
+var _cached_crowd_separation := Vector2.ZERO
+var _background_ai_timer := 0.0
 var _boss_skill_cooldown := 3.0
 var _boss_warning := 0.0
 var _boss_phase_two := false
@@ -82,6 +108,8 @@ var _area_attack_cooldown := 0.0
 var _area_attack_warning := 0.0
 var _summon_cooldown := 0.0
 var _summon_warning := 0.0
+var _environment_guard_timer := 0.0
+var _last_environment_safe_position := Vector2.INF
 
 
 func setup(data: Dictionary, player_target: PlayerCharacter, boss := false) -> void:
@@ -163,7 +191,11 @@ func _ready() -> void:
 	add_to_group("enemies")
 	input_pickable = true
 	collision_layer = WorldSpatialRulesScript.ENEMY_LAYER
-	collision_mask = WorldSpatialRulesScript.ENEMY_MASK
+	# The crowd grid/separation policy is authoritative for monster-to-monster
+	# spacing. Keeping ENEMY_LAYER in this mask makes the physics server solve the
+	# same dense crowd again for every moving actor, which scales disastrously.
+	# World and player remain hard physics collisions.
+	collision_mask = ENEMY_MOTION_MASK
 	if not bool(behavior_profile.get("worldCollision", true)):
 		# 飞行怪参与攻击和选取，但不作为人物移动的实体墙。
 		collision_layer = 0
@@ -181,6 +213,8 @@ func _ready() -> void:
 	collision.shape = shape
 	add_child(collision)
 	_resolve_invalid_spawn_overlap()
+	_last_environment_safe_position = global_position
+	_environment_guard_timer = ENVIRONMENT_GUARD_INTERVAL_SECONDS * float(posmod(get_instance_id(), 11)) / 11.0
 	name_label = Label.new()
 	name_label.text = display_name
 	name_label.position = Vector2(-70, -116 if bool(behavior_profile.get("largeClientBoss", false)) else (-62 if is_boss else -50))
@@ -195,6 +229,10 @@ func _ready() -> void:
 	if _burrowed:
 		visual.visible = false
 		name_label.visible = false
+	if boss_rule.is_empty():
+		_retarget_timer = FAR_RETARGET_STAGGER_SECONDS * float(posmod(get_instance_id(), 11))
+		_crowd_steering_timer = CROWD_STEERING_INTERVAL_SECONDS * float(posmod(get_instance_id(), 7)) / 7.0
+		_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS * float(posmod(get_instance_id(), 13)) / 13.0
 	queue_redraw()
 
 
@@ -229,6 +267,16 @@ func _physics_process(delta: float) -> void:
 	_attack_timer = maxf(0.0, _attack_timer - delta)
 	_update_status_effects(delta)
 	_update_pending_attack(delta)
+	if _can_use_background_ai():
+		_background_ai_timer -= delta
+		if _background_ai_timer <= 0.0:
+			_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS
+			_background_ai_evaluation_count += 1
+			_retarget(BACKGROUND_AI_INTERVAL_SECONDS)
+			if not is_instance_valid(target):
+				_return_to_spawn()
+		return
+	_background_ai_timer = 0.0
 	_retarget(delta)
 	if _update_area_attack(delta):
 		velocity = Vector2.ZERO
@@ -238,6 +286,18 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 		queue_redraw()
 		return
+	# Keep the established retarget/attack/summon timing, but immobilization must
+	# win over the no-target return path after an actor is relocated beyond its
+	# authored spawn leash.
+	if control_time > 0.0 or charm_time > 0.0:
+		if _control_anchor == Vector2.INF:
+			_control_anchor = global_position
+		else:
+			global_position = _control_anchor
+		velocity = Vector2.ZERO
+		queue_redraw()
+		return
+	_control_anchor = Vector2.INF
 	if not is_instance_valid(target):
 		_return_to_spawn()
 		return
@@ -248,7 +308,7 @@ func _physics_process(delta: float) -> void:
 		var spawn_position:Vector2=get_meta("spawn_position",global_position)
 		if _point_inside_safe_zone(global_position) and global_position.distance_to(spawn_position)>4.0:
 			velocity=global_position.direction_to(spawn_position)*move_speed
-			_move_with_spatial_rules()
+			_move_with_spatial_rules(delta)
 		queue_redraw()
 		return
 	var offset := target.global_position - global_position
@@ -284,15 +344,6 @@ func _physics_process(delta: float) -> void:
 			velocity = Vector2.ZERO
 			queue_redraw()
 			return
-	if control_time > 0.0 or charm_time > 0.0:
-		if _control_anchor == Vector2.INF:
-			_control_anchor = global_position
-		else:
-			global_position = _control_anchor
-		velocity = Vector2.ZERO
-		queue_redraw()
-		return
-	_control_anchor = Vector2.INF
 	if target.has_method("is_stealthed") and target.is_stealthed() and distance > 35.0:
 		velocity = Vector2.ZERO
 		return
@@ -316,7 +367,7 @@ func _physics_process(delta: float) -> void:
 				_deal_melee_hit(target, dealt_damage)
 	elif distance <= aggro_radius:
 		var pursuit := offset.normalized()
-		var steering := pursuit + _crowd_separation() * 0.72
+		var steering := pursuit + _crowd_separation_for_motion(delta) * 0.72
 		# Separation may move sideways but must never reverse a pursuing monster.
 		# Removing the negative forward component eliminates visible rollback.
 		if steering.dot(pursuit) < 0.12:
@@ -327,27 +378,48 @@ func _physics_process(delta: float) -> void:
 		velocity = velocity.move_toward(Vector2.ZERO, move_speed * 3.0 * delta)
 	# 零速度时不做碰撞恢复，避免玩家压住碰撞边缘时把怪物挤走。
 	if velocity.length_squared() > 0.01:
-		_move_with_spatial_rules()
+		_move_with_spatial_rules(delta)
 		if get_real_velocity().length_squared() > 9.0:
 			movement_facing = get_real_velocity().normalized()
 	if is_boss and is_instance_valid(target):
 		var fresh_offset := target.global_position - global_position
 		if fresh_offset.length_squared() > 0.001:
 			facing = fresh_offset.normalized()
-	queue_redraw()
+	if visual != null and visual.is_fallback_attacking():
+		queue_redraw()
 
 
 func _point_inside_safe_zone(point:Vector2)->bool:
 	return WorldSpatialRulesScript.point_inside_safe_zones(point, get_meta("safe_zones", []))
 
 
-func _move_with_spatial_rules() -> void:
+func _move_with_spatial_rules(delta := 1.0 / 60.0) -> void:
 	var position_before_move := global_position
 	move_and_slide()
+	_physics_move_count += 1
 	var entered_safe_zone := not _point_inside_safe_zone(position_before_move) and _point_inside_safe_zone(global_position)
-	if entered_safe_zone or WorldSpatialRulesScript.environment_blocks_actor(environment_blocker, global_position, collision_radius):
+	if entered_safe_zone:
 		global_position = position_before_move
 		velocity = Vector2.ZERO
+		return
+	# Physics chunks are the per-frame wall authority. The imported occupancy
+	# provider is a deterministic fallback, sampled at a staggered 10 Hz instead
+	# of doing five script calls for every moving monster on every physics tick.
+	# A failed sample rolls back to the last verified point, so a rebuilding or
+	# temporarily absent chunk cannot let an actor tunnel through map occupancy.
+	if _last_environment_safe_position == Vector2.INF or position_before_move.distance_squared_to(_last_environment_safe_position) > 4096.0:
+		_last_environment_safe_position = position_before_move
+		_environment_guard_timer = 0.0
+	_environment_guard_timer = maxf(0.0, _environment_guard_timer - maxf(0.0, delta))
+	if _environment_guard_timer > 0.0:
+		return
+	_environment_guard_timer = ENVIRONMENT_GUARD_INTERVAL_SECONDS
+	_environment_guard_check_count += 1
+	if WorldSpatialRulesScript.environment_blocks_actor(environment_blocker, global_position, collision_radius):
+		global_position = _last_environment_safe_position
+		velocity = Vector2.ZERO
+	else:
+		_last_environment_safe_position = global_position
 
 
 func _current_attack_interval() -> float:
@@ -465,22 +537,102 @@ func _target_collision_radius(target_node: Node2D) -> float:
 
 
 func _crowd_separation() -> Vector2:
+	_ensure_crowd_grid()
 	var separation := Vector2.ZERO
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if node == self or not node is EnemyActor or node.is_queued_for_deletion():
-			continue
-		var other := node as EnemyActor
-		var away := global_position - other.global_position
-		var desired := collision_radius + other.collision_radius + 12.0
-		var distance := away.length()
-		if distance >= desired:
-			continue
-		if distance < 0.01:
-			var angle := float(posmod(get_instance_id(), 16)) / 16.0 * TAU
-			away = Vector2.from_angle(angle)
-			distance = 1.0
-		separation += away.normalized() * (1.0 - distance / desired)
+	var center_cell := _crowd_grid_cell(global_position)
+	for offset_y in range(-1, 2):
+		for offset_x in range(-1, 2):
+			var bucket: Array = _crowd_grid.get(center_cell + Vector2i(offset_x, offset_y), [])
+			for value: Variant in bucket:
+				_crowd_query_candidate_count += 1
+				if not is_instance_valid(value):
+					continue
+				var node := value as Node
+				if node == self or not node is EnemyActor or node.is_queued_for_deletion():
+					continue
+				var other := node as EnemyActor
+				var away := global_position - other.global_position
+				var desired := collision_radius + other.collision_radius + 12.0
+				var distance := away.length()
+				if distance >= desired:
+					continue
+				if distance < 0.01:
+					var angle := float(posmod(get_instance_id(), 16)) / 16.0 * TAU
+					away = Vector2.from_angle(angle)
+					distance = 1.0
+				separation += away.normalized() * (1.0 - distance / desired)
 	return separation.limit_length(1.0)
+
+
+func _crowd_separation_for_motion(delta: float) -> Vector2:
+	_crowd_steering_timer = maxf(0.0, _crowd_steering_timer - delta)
+	if _crowd_steering_timer > 0.0:
+		return _cached_crowd_separation
+	_crowd_steering_timer = CROWD_STEERING_INTERVAL_SECONDS
+	_crowd_steering_evaluation_count += 1
+	_cached_crowd_separation = _crowd_separation()
+	return _cached_crowd_separation
+
+
+func _ensure_crowd_grid() -> void:
+	var physics_frame := Engine.get_physics_frames()
+	if _crowd_grid_physics_frame >= 0 and physics_frame - _crowd_grid_physics_frame < CROWD_GRID_REFRESH_FRAMES:
+		return
+	_crowd_grid_physics_frame = physics_frame
+	_crowd_grid.clear()
+	_crowd_grid_build_count += 1
+	for node: Node in get_tree().get_nodes_in_group("enemies"):
+		if not node is EnemyActor or node.is_queued_for_deletion():
+			continue
+		_crowd_grid_actor_scan_count += 1
+		var enemy := node as EnemyActor
+		var cell := _crowd_grid_cell(enemy.global_position)
+		var bucket: Array = _crowd_grid.get(cell, [])
+		bucket.append(enemy)
+		_crowd_grid[cell] = bucket
+
+
+func _crowd_grid_cell(world_position: Vector2) -> Vector2i:
+	return Vector2i(floori(world_position.x / CROWD_GRID_CELL_SIZE), floori(world_position.y / CROWD_GRID_CELL_SIZE))
+
+
+static func reset_performance_diagnostics() -> void:
+	_crowd_grid_physics_frame = -1
+	_crowd_grid.clear()
+	_crowd_grid_build_count = 0
+	_crowd_grid_actor_scan_count = 0
+	_crowd_query_candidate_count = 0
+	_crowd_steering_evaluation_count = 0
+	_retarget_full_scan_count = 0
+	_background_ai_evaluation_count = 0
+	_physics_move_count = 0
+	_environment_guard_check_count = 0
+
+
+static func performance_diagnostics() -> Dictionary:
+	return {
+		"crowd_grid_builds": _crowd_grid_build_count,
+		"crowd_grid_actor_scans": _crowd_grid_actor_scan_count,
+		"crowd_query_candidates": _crowd_query_candidate_count,
+		"crowd_steering_evaluations": _crowd_steering_evaluation_count,
+		"retarget_full_scans": _retarget_full_scan_count,
+		"background_ai_evaluations": _background_ai_evaluation_count,
+		"physics_moves": _physics_move_count,
+		"environment_guard_checks": _environment_guard_check_count,
+	}
+
+
+func _can_use_background_ai() -> bool:
+	if is_boss or not is_instance_valid(primary_target):
+		return false
+	if target != primary_target and is_instance_valid(target):
+		return false
+	if not _threat_table.is_empty() or poison_time > 0.0 or control_time > 0.0 or charm_time > 0.0:
+		return false
+	if _pending_attack_time >= 0.0 or _area_attack_warning > 0.0 or _summon_warning > 0.0:
+		return false
+	var activation_distance := maxf(BACKGROUND_AI_MIN_DISTANCE, aggro_radius + 256.0)
+	return global_position.distance_squared_to(primary_target.global_position) > activation_distance * activation_distance
 
 
 func apply_life_steal(dealt_damage: int) -> void:
@@ -562,6 +714,7 @@ func apply_charm(seconds: float) -> void:
 
 
 func _update_status_effects(delta: float) -> void:
+	var had_visible_status := poison_time > 0.0 or control_time > 0.0 or charm_time > 0.0
 	var previous_poison_second := int(ceil(poison_time))
 	poison_time = maxf(0.0, poison_time - delta)
 	control_time = maxf(0.0, control_time - delta)
@@ -573,6 +726,9 @@ func _update_status_effects(delta: float) -> void:
 			_attack_interval = _boss_base_attack_interval
 	if poison_time > 0.0 and int(ceil(poison_time)) < previous_poison_second:
 		take_damage(poison_damage)
+	var has_visible_status := poison_time > 0.0 or control_time > 0.0 or charm_time > 0.0
+	if had_visible_status != has_visible_status:
+		queue_redraw()
 
 
 func _apply_health_stage_mechanics() -> void:
@@ -600,10 +756,21 @@ func _retarget(delta := 0.0) -> void:
 	if charm_time > 0.0:
 		return
 	_decay_threat(delta)
+	_retarget_timer = maxf(0.0, _retarget_timer - delta)
 	if not boss_rule.is_empty():
-		_retarget_timer = maxf(0.0, _retarget_timer - delta)
 		if is_instance_valid(target) and _retarget_timer > 0.0:
 			return
+	else:
+		# Ordinary monsters keep their current target between decision ticks.
+		# Damage threat still switches immediately in _add_threat(), so scanning
+		# the target set every physics frame adds CPU cost without improving
+		# reaction latency.
+		# delta == 0 is the explicit decision API used when the target set changes
+		# immediately (for example, a newly summoned combat target). Physics calls
+		# always pass delta and remain rate-limited.
+		if _retarget_timer > 0.0 and delta > 0.0:
+			return
+	_retarget_full_scan_count += 1
 	var chosen: Node2D
 	var best_score := -INF
 	var spawn_position:Vector2=get_meta("spawn_position",global_position)
@@ -626,6 +793,10 @@ func _retarget(delta := 0.0) -> void:
 	if not boss_rule.is_empty():
 		var search: Dictionary = boss_rule.get("targetSearch", {})
 		_retarget_timer = float(search.get("withTargetMs" if is_instance_valid(target) else "withoutTargetMs", 1000)) / 1000.0
+	elif is_instance_valid(target):
+		_retarget_timer = NEAR_RETARGET_MIN_SECONDS + NEAR_RETARGET_STAGGER_SECONDS * float(posmod(get_instance_id(), 7))
+	else:
+		_retarget_timer = FAR_RETARGET_MIN_SECONDS + FAR_RETARGET_STAGGER_SECONDS * float(posmod(get_instance_id(), 11))
 
 
 func _add_threat(source:Node2D,amount:float)->void:
@@ -661,15 +832,19 @@ func _return_to_spawn()->void:
 
 func _draw() -> void:
 	var radius := 27.0 if is_boss else 16.0
-	draw_ellipse_shadow(radius)
+	var uses_final_art := visual != null and visual.uses_final_art()
+	var ground_center := ground_indicator_center()
+	# Final WIL frames already contain their direction-aware source shadow.
+	# A second ellipse creates a detached double shadow below the actor.
+	if not uses_final_art:
+		draw_ellipse_shadow(radius, ground_center)
 	if _dying:
 		return
 	if is_targeted:
 		# 细线选中圈与脚底接触阴影共面，避免形成托起Boss的发光平台。
-		draw_set_transform(Vector2(0, radius * 0.28), 0.0, Vector2(1.0, 0.30))
+		draw_set_transform(ground_center, 0.0, Vector2(1.0, 0.30))
 		draw_circle(Vector2.ZERO, radius + 6.0, Color(1.0, 0.78, 0.18, 0.78), false, 2.0)
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
-	var uses_final_art := visual != null and visual.uses_final_art()
 	var fallback_attacking := visual != null and visual.is_fallback_attacking()
 	var body_center := Vector2(0, -5) + (visual.fallback_lunge_offset(facing) if fallback_attacking else Vector2.ZERO)
 	if not uses_final_art:
@@ -687,7 +862,15 @@ func _draw() -> void:
 	if is_boss and _boss_phase_two:
 		draw_circle(Vector2(0, -5), radius + 7.0, Color(0.90, 0.15, 0.05, 0.22), false, 4.0)
 	if poison_time > 0.0:
-		draw_circle(Vector2(0, -5), radius + 4.0, Color(0.20, 0.85, 0.22, 0.55), false, 3.0)
+		# Poison is an overhead three-diamond badge. It stays readable without
+		# creating a green ground ring that can be mistaken for a portal marker.
+		var poison_anchor := Vector2(-8.0, poison_indicator_anchor_y())
+		for index in range(3):
+			var center := poison_anchor + Vector2(float(index) * 8.0, 0.0 if index == 1 else 2.0)
+			draw_colored_polygon(PackedVector2Array([
+				center + Vector2(0, -3), center + Vector2(3, 0),
+				center + Vector2(0, 3), center + Vector2(-3, 0),
+			]), Color(0.36, 0.92, 0.28, 0.90))
 	if control_time > 0.0 or charm_time > 0.0:
 		draw_circle(Vector2(0, -5), radius + 8.0, Color(0.35, 0.65, 1.0, 0.55), false, 3.0)
 	if dormant:
@@ -710,13 +893,29 @@ func _draw() -> void:
 		draw_circle(body_center + Vector2(-radius * 0.35, -3), 3.0, Color(0.95, 0.75, 0.25))
 		draw_circle(body_center + Vector2(radius * 0.35, -3), 3.0, Color(0.95, 0.75, 0.25))
 	var bar_width := 80.0 if is_boss else 46.0
-	var bar_y := -92.0 if bool(behavior_profile.get("largeClientBoss", false)) else -radius - 24.0
+	var bar_y := health_bar_anchor_y()
 	draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width, 5), Color(0.10, 0.03, 0.03, 0.9))
 	draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width * float(current_hp) / float(max_hp), 5), Color(0.85, 0.12, 0.08))
 
 
-func draw_ellipse_shadow(radius: float) -> void:
-	draw_set_transform(Vector2(0, radius * 0.28), 0.0, Vector2(1.0, 0.36))
+func health_bar_anchor_y() -> float:
+	var radius := 27.0 if is_boss else 16.0
+	var fallback_y := -92.0 if bool(behavior_profile.get("largeClientBoss", false)) else -radius - 24.0
+	return visual.health_bar_anchor_y(fallback_y) if visual != null else fallback_y
+
+
+func poison_indicator_anchor_y() -> float:
+	return health_bar_anchor_y() - 8.0
+
+
+func ground_indicator_center() -> Vector2:
+	var radius := 27.0 if is_boss else 16.0
+	var fallback := Vector2(0, radius * 0.28)
+	return visual.ground_contact_position(fallback) if visual != null else fallback
+
+
+func draw_ellipse_shadow(radius: float, center := Vector2.ZERO) -> void:
+	draw_set_transform(center, 0.0, Vector2(1.0, 0.36))
 	draw_circle(Vector2.ZERO, radius, Color(0, 0, 0, 0.30))
 	draw_circle(Vector2(0, -radius * 0.08), radius * 0.56, Color(0, 0, 0, 0.58))
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
@@ -730,6 +929,7 @@ func _update_boss_skill(delta: float, distance: float) -> void:
 	if _boss_phase_two:
 		damage_multiplier = int(phase.get("skillDamageMultiplier", damage_multiplier))
 	if _boss_warning > 0.0:
+		queue_redraw()
 		_boss_warning -= delta
 		if _boss_warning <= 0.0:
 			_last_boss_skill_hit = false

@@ -1,0 +1,3838 @@
+{
+  "asset_schema_version": 2,
+  "catalog_id": "wooma_temple_warm_wall_pack",
+  "display_name": "沃玛寺庙地面配色无柱直墙素材包",
+  "derived_from_catalog_id": "wooma_temple_wall_pack",
+  "color_match_contract_id": "wooma_floor_weighted_palette_match_v1",
+  "ground_reference_map_id": "wooma_temple_1",
+  "ground_reference_asset_counts": {
+    "mse.new_ground.stone_platform.07": 526,
+    "mse.new_ground.stone_platform.08": 547,
+    "mse.new_ground.stone_platform.09": 523,
+    "mse.new_ground.stone_platform.10": 522,
+    "mse.new_ground.stone_platform.11": 546,
+    "mse.new_ground.stone_platform.12": 546
+  },
+  "ground_weighted_median_rgb": [
+    148,
+    136,
+    112
+  ],
+  "geometry_contract_id": "isometric_cell_64x32_exact_v1",
+  "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+  "corner_join_mode": "straight_overlap",
+  "wall_family_ids": [
+    "wooma_temple_floor_warm_stone_u0"
+  ],
+  "collision_authority": "manual_by_user",
+  "assets": [
+    {
+      "schema_version": 1,
+      "asset_id": "wooma_temple_warm_wall_straight_x_l1_v01",
+      "display_name": "沃玛寺庙暖灰褐直墙 X向 1格 变体1",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "wooma_temple_floor_warm",
+      "wall_family_id": "wooma_temple_floor_warm_stone_u0",
+      "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0",
+      "topology": "straight",
+      "axis": "iso_x",
+      "length_tiles": 1,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "canvas_size": [
+        96,
+        224
+      ],
+      "anchor": [
+        64,
+        184
+      ],
+      "next_start_tile_offset": [
+        1,
+        0
+      ],
+      "start_seam_px": [
+        32,
+        184
+      ],
+      "end_seam_px": [
+        64,
+        200
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_x_neg",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_x_pos",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "single_part",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l1_v01/part_00_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "wooma_temple_wall_straight_iso_x_l1",
+      "variant": 1,
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_floor_match_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l1_v01/composite_wooma_temple_floor_match_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l1_v01/composite_wooma_temple_floor_match_v1.png",
+      "image_size": [
+        96,
+        224
+      ],
+      "visible_bounds_px": [
+        32,
+        8,
+        63,
+        191
+      ],
+      "selection_bounds_px": [
+        32,
+        8,
+        63,
+        191
+      ],
+      "anchor_px": [
+        64,
+        184
+      ],
+      "placement_anchor_px": [
+        64,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙暖灰褐墙/直墙/iso_x",
+      "source_external_path": "C:\\Users\\Administrator\\Documents\\我的刷子游戏-worktrees\\maps\\outputs\\wooma_temple_regenerated",
+      "source_sha256": "32eb23c1d2d49cfaa7f3e8db1e34d4209ac35d304917af01bc3f91d579cc8525",
+      "output_sha256": "e1f6de3ab75f47af3b6d4dd08cdb2a5eaf8b57e414c2502a3095236e818363da",
+      "thumbnail_source_sha256": "e1f6de3ab75f47af3b6d4dd08cdb2a5eaf8b57e414c2502a3095236e818363da",
+      "processing": "standard_wall_weighted_ground_palette_transfer",
+      "generation_source_ids": [
+        "call_7z8NxnZ8imcRKyhEds3sTwzU",
+        "call_HTxU8temh6Nr84TzLrrnTClr"
+      ],
+      "tags": [
+        "cave_dungeon",
+        "wooma_temple",
+        "wall_module",
+        "straight",
+        "straight_overlap_corner",
+        "manual_collision",
+        "wooma_temple_floor_warm_stone_u0",
+        "wooma_floor_color_match",
+        "warm_olive_taupe"
+      ],
+      "editable": true,
+      "material": "warm_olive_taupe_sandstone",
+      "color_match_contract_id": "wooma_floor_weighted_palette_match_v1",
+      "source_standard_asset_id": "wooma_temple_wall_straight_x_l1_v01",
+      "source_standard_output_sha256": "274bdcac46597ccb3aeda07b6bf4218d6e0cf0ce1462eefabf03c8d744b6d24f"
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "wooma_temple_warm_wall_straight_x_l2_v01",
+      "display_name": "沃玛寺庙暖灰褐直墙 X向 2格 变体1",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "wooma_temple_floor_warm",
+      "wall_family_id": "wooma_temple_floor_warm_stone_u0",
+      "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0",
+      "topology": "straight",
+      "axis": "iso_x",
+      "length_tiles": 2,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        2,
+        1
+      ],
+      "canvas_size": [
+        128,
+        240
+      ],
+      "anchor": [
+        64,
+        184
+      ],
+      "next_start_tile_offset": [
+        2,
+        0
+      ],
+      "start_seam_px": [
+        32,
+        184
+      ],
+      "end_seam_px": [
+        96,
+        216
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_x_neg",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_x_pos",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l2_v01/part_00_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            1,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l2_v01/part_01_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            1,
+            0
+          ],
+          "draw_order_index": 1
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "wooma_temple_wall_straight_iso_x_l2",
+      "variant": 1,
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_floor_match_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l2_v01/composite_wooma_temple_floor_match_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l2_v01/composite_wooma_temple_floor_match_v1.png",
+      "image_size": [
+        128,
+        240
+      ],
+      "visible_bounds_px": [
+        32,
+        8,
+        95,
+        207
+      ],
+      "selection_bounds_px": [
+        32,
+        8,
+        95,
+        207
+      ],
+      "anchor_px": [
+        64,
+        184
+      ],
+      "placement_anchor_px": [
+        64,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        2,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        1
+      ],
+      "base_footprint_tiles": [
+        2,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙暖灰褐墙/直墙/iso_x",
+      "source_external_path": "C:\\Users\\Administrator\\Documents\\我的刷子游戏-worktrees\\maps\\outputs\\wooma_temple_regenerated",
+      "source_sha256": "32eb23c1d2d49cfaa7f3e8db1e34d4209ac35d304917af01bc3f91d579cc8525",
+      "output_sha256": "eae39d5eeaf555145b86733f4f65ac236f98f0b657c5b891b43a4a05fcd121bc",
+      "thumbnail_source_sha256": "eae39d5eeaf555145b86733f4f65ac236f98f0b657c5b891b43a4a05fcd121bc",
+      "processing": "standard_wall_weighted_ground_palette_transfer",
+      "generation_source_ids": [
+        "call_7z8NxnZ8imcRKyhEds3sTwzU",
+        "call_HTxU8temh6Nr84TzLrrnTClr"
+      ],
+      "tags": [
+        "cave_dungeon",
+        "wooma_temple",
+        "wall_module",
+        "straight",
+        "straight_overlap_corner",
+        "manual_collision",
+        "wooma_temple_floor_warm_stone_u0",
+        "wooma_floor_color_match",
+        "warm_olive_taupe"
+      ],
+      "editable": true,
+      "material": "warm_olive_taupe_sandstone",
+      "color_match_contract_id": "wooma_floor_weighted_palette_match_v1",
+      "source_standard_asset_id": "wooma_temple_wall_straight_x_l2_v01",
+      "source_standard_output_sha256": "53e7ea057d00d515a07963fb795b41abd25fb6c5df79e6564abf861d9f220646"
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "wooma_temple_warm_wall_straight_x_l3_v01",
+      "display_name": "沃玛寺庙暖灰褐直墙 X向 3格 变体1",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "wooma_temple_floor_warm",
+      "wall_family_id": "wooma_temple_floor_warm_stone_u0",
+      "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0",
+      "topology": "straight",
+      "axis": "iso_x",
+      "length_tiles": 3,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        3,
+        1
+      ],
+      "canvas_size": [
+        160,
+        256
+      ],
+      "anchor": [
+        64,
+        184
+      ],
+      "next_start_tile_offset": [
+        3,
+        0
+      ],
+      "start_seam_px": [
+        32,
+        184
+      ],
+      "end_seam_px": [
+        128,
+        232
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_x_neg",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_x_pos",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l3_v01/part_00_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            1,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l3_v01/part_01_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            1,
+            0
+          ],
+          "draw_order_index": 1
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            2,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l3_v01/part_02_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            2,
+            0
+          ],
+          "draw_order_index": 2
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "wooma_temple_wall_straight_iso_x_l3",
+      "variant": 1,
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_floor_match_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l3_v01/composite_wooma_temple_floor_match_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l3_v01/composite_wooma_temple_floor_match_v1.png",
+      "image_size": [
+        160,
+        256
+      ],
+      "visible_bounds_px": [
+        32,
+        8,
+        127,
+        223
+      ],
+      "selection_bounds_px": [
+        32,
+        8,
+        127,
+        223
+      ],
+      "anchor_px": [
+        64,
+        184
+      ],
+      "placement_anchor_px": [
+        64,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        3,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        1
+      ],
+      "base_footprint_tiles": [
+        3,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙暖灰褐墙/直墙/iso_x",
+      "source_external_path": "C:\\Users\\Administrator\\Documents\\我的刷子游戏-worktrees\\maps\\outputs\\wooma_temple_regenerated",
+      "source_sha256": "32eb23c1d2d49cfaa7f3e8db1e34d4209ac35d304917af01bc3f91d579cc8525",
+      "output_sha256": "633e61bba2ce41bde515ddbdfdd4a8e84adb6111f1680323f24b56a4e11fa0f1",
+      "thumbnail_source_sha256": "633e61bba2ce41bde515ddbdfdd4a8e84adb6111f1680323f24b56a4e11fa0f1",
+      "processing": "standard_wall_weighted_ground_palette_transfer",
+      "generation_source_ids": [
+        "call_7z8NxnZ8imcRKyhEds3sTwzU",
+        "call_HTxU8temh6Nr84TzLrrnTClr"
+      ],
+      "tags": [
+        "cave_dungeon",
+        "wooma_temple",
+        "wall_module",
+        "straight",
+        "straight_overlap_corner",
+        "manual_collision",
+        "wooma_temple_floor_warm_stone_u0",
+        "wooma_floor_color_match",
+        "warm_olive_taupe"
+      ],
+      "editable": true,
+      "material": "warm_olive_taupe_sandstone",
+      "color_match_contract_id": "wooma_floor_weighted_palette_match_v1",
+      "source_standard_asset_id": "wooma_temple_wall_straight_x_l3_v01",
+      "source_standard_output_sha256": "16f3cc86658f2d8e6321822f9cd4d2ffa571a46124f358c8f063b21e4a0392c6"
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "wooma_temple_warm_wall_straight_x_l3_v02",
+      "display_name": "沃玛寺庙暖灰褐直墙 X向 3格 变体2",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "wooma_temple_floor_warm",
+      "wall_family_id": "wooma_temple_floor_warm_stone_u0",
+      "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0",
+      "topology": "straight",
+      "axis": "iso_x",
+      "length_tiles": 3,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        3,
+        1
+      ],
+      "canvas_size": [
+        160,
+        256
+      ],
+      "anchor": [
+        64,
+        184
+      ],
+      "next_start_tile_offset": [
+        3,
+        0
+      ],
+      "start_seam_px": [
+        32,
+        184
+      ],
+      "end_seam_px": [
+        128,
+        232
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_x_neg",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_x_pos",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l3_v02/part_00_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            1,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l3_v02/part_01_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            1,
+            0
+          ],
+          "draw_order_index": 1
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            2,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l3_v02/part_02_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            2,
+            0
+          ],
+          "draw_order_index": 2
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "wooma_temple_wall_straight_iso_x_l3",
+      "variant": 2,
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_floor_match_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l3_v02/composite_wooma_temple_floor_match_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l3_v02/composite_wooma_temple_floor_match_v1.png",
+      "image_size": [
+        160,
+        256
+      ],
+      "visible_bounds_px": [
+        32,
+        8,
+        127,
+        223
+      ],
+      "selection_bounds_px": [
+        32,
+        8,
+        127,
+        223
+      ],
+      "anchor_px": [
+        64,
+        184
+      ],
+      "placement_anchor_px": [
+        64,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        3,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        1
+      ],
+      "base_footprint_tiles": [
+        3,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙暖灰褐墙/直墙/iso_x",
+      "source_external_path": "C:\\Users\\Administrator\\Documents\\我的刷子游戏-worktrees\\maps\\outputs\\wooma_temple_regenerated",
+      "source_sha256": "32eb23c1d2d49cfaa7f3e8db1e34d4209ac35d304917af01bc3f91d579cc8525",
+      "output_sha256": "93bb72ada96b87e2400a9b15cdabe54a501083ad8ac76b345a27f3a7c6c25d64",
+      "thumbnail_source_sha256": "93bb72ada96b87e2400a9b15cdabe54a501083ad8ac76b345a27f3a7c6c25d64",
+      "processing": "standard_wall_weighted_ground_palette_transfer",
+      "generation_source_ids": [
+        "call_7z8NxnZ8imcRKyhEds3sTwzU",
+        "call_HTxU8temh6Nr84TzLrrnTClr"
+      ],
+      "tags": [
+        "cave_dungeon",
+        "wooma_temple",
+        "wall_module",
+        "straight",
+        "straight_overlap_corner",
+        "manual_collision",
+        "wooma_temple_floor_warm_stone_u0",
+        "wooma_floor_color_match",
+        "warm_olive_taupe"
+      ],
+      "editable": true,
+      "material": "warm_olive_taupe_sandstone",
+      "color_match_contract_id": "wooma_floor_weighted_palette_match_v1",
+      "source_standard_asset_id": "wooma_temple_wall_straight_x_l3_v02",
+      "source_standard_output_sha256": "8c2e3e34657a42ec805aec80d4ea73082be0d9b9680366b54d8624f5689486d8"
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "wooma_temple_warm_wall_straight_x_l3_v03",
+      "display_name": "沃玛寺庙暖灰褐直墙 X向 3格 变体3",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "wooma_temple_floor_warm",
+      "wall_family_id": "wooma_temple_floor_warm_stone_u0",
+      "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0",
+      "topology": "straight",
+      "axis": "iso_x",
+      "length_tiles": 3,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        3,
+        1
+      ],
+      "canvas_size": [
+        160,
+        256
+      ],
+      "anchor": [
+        64,
+        184
+      ],
+      "next_start_tile_offset": [
+        3,
+        0
+      ],
+      "start_seam_px": [
+        32,
+        184
+      ],
+      "end_seam_px": [
+        128,
+        232
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_x_neg",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_x_pos",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l3_v03/part_00_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            1,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l3_v03/part_01_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            1,
+            0
+          ],
+          "draw_order_index": 1
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            2,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l3_v03/part_02_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            2,
+            0
+          ],
+          "draw_order_index": 2
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "wooma_temple_wall_straight_iso_x_l3",
+      "variant": 3,
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_floor_match_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l3_v03/composite_wooma_temple_floor_match_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l3_v03/composite_wooma_temple_floor_match_v1.png",
+      "image_size": [
+        160,
+        256
+      ],
+      "visible_bounds_px": [
+        32,
+        8,
+        127,
+        223
+      ],
+      "selection_bounds_px": [
+        32,
+        8,
+        127,
+        223
+      ],
+      "anchor_px": [
+        64,
+        184
+      ],
+      "placement_anchor_px": [
+        64,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        3,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        3,
+        1
+      ],
+      "base_footprint_tiles": [
+        3,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙暖灰褐墙/直墙/iso_x",
+      "source_external_path": "C:\\Users\\Administrator\\Documents\\我的刷子游戏-worktrees\\maps\\outputs\\wooma_temple_regenerated",
+      "source_sha256": "32eb23c1d2d49cfaa7f3e8db1e34d4209ac35d304917af01bc3f91d579cc8525",
+      "output_sha256": "3e96ac0f74f1e1a9bc4ff848aa7ca8cab2428b226d8ec59b0a1c0396080ad9f5",
+      "thumbnail_source_sha256": "3e96ac0f74f1e1a9bc4ff848aa7ca8cab2428b226d8ec59b0a1c0396080ad9f5",
+      "processing": "standard_wall_weighted_ground_palette_transfer",
+      "generation_source_ids": [
+        "call_7z8NxnZ8imcRKyhEds3sTwzU",
+        "call_HTxU8temh6Nr84TzLrrnTClr"
+      ],
+      "tags": [
+        "cave_dungeon",
+        "wooma_temple",
+        "wall_module",
+        "straight",
+        "straight_overlap_corner",
+        "manual_collision",
+        "wooma_temple_floor_warm_stone_u0",
+        "wooma_floor_color_match",
+        "warm_olive_taupe"
+      ],
+      "editable": true,
+      "material": "warm_olive_taupe_sandstone",
+      "color_match_contract_id": "wooma_floor_weighted_palette_match_v1",
+      "source_standard_asset_id": "wooma_temple_wall_straight_x_l3_v03",
+      "source_standard_output_sha256": "52cc6939d3f9b40058f2e463fce1c409ca67d1099a2f6217da9191ed6275b27c"
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "wooma_temple_warm_wall_straight_x_l4_v01",
+      "display_name": "沃玛寺庙暖灰褐直墙 X向 4格 变体1",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "wooma_temple_floor_warm",
+      "wall_family_id": "wooma_temple_floor_warm_stone_u0",
+      "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0",
+      "topology": "straight",
+      "axis": "iso_x",
+      "length_tiles": 4,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        4,
+        1
+      ],
+      "canvas_size": [
+        192,
+        272
+      ],
+      "anchor": [
+        64,
+        184
+      ],
+      "next_start_tile_offset": [
+        4,
+        0
+      ],
+      "start_seam_px": [
+        32,
+        184
+      ],
+      "end_seam_px": [
+        160,
+        248
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_x_neg",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_x_pos",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v01/part_00_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            1,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v01/part_01_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            1,
+            0
+          ],
+          "draw_order_index": 1
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            2,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v01/part_02_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            2,
+            0
+          ],
+          "draw_order_index": 2
+        },
+        {
+          "part_id": "p03",
+          "tile_offset": [
+            3,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v01/part_03_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            3,
+            0
+          ],
+          "draw_order_index": 3
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "wooma_temple_wall_straight_iso_x_l4",
+      "variant": 1,
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_floor_match_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v01/composite_wooma_temple_floor_match_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v01/composite_wooma_temple_floor_match_v1.png",
+      "image_size": [
+        192,
+        272
+      ],
+      "visible_bounds_px": [
+        32,
+        8,
+        159,
+        239
+      ],
+      "selection_bounds_px": [
+        32,
+        8,
+        159,
+        239
+      ],
+      "anchor_px": [
+        64,
+        184
+      ],
+      "placement_anchor_px": [
+        64,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        4,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        1
+      ],
+      "base_footprint_tiles": [
+        4,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙暖灰褐墙/直墙/iso_x",
+      "source_external_path": "C:\\Users\\Administrator\\Documents\\我的刷子游戏-worktrees\\maps\\outputs\\wooma_temple_regenerated",
+      "source_sha256": "32eb23c1d2d49cfaa7f3e8db1e34d4209ac35d304917af01bc3f91d579cc8525",
+      "output_sha256": "3494d748911b0ff2d1b25399fbcf002fef05dae0c2ee73dcf17888474da18578",
+      "thumbnail_source_sha256": "3494d748911b0ff2d1b25399fbcf002fef05dae0c2ee73dcf17888474da18578",
+      "processing": "standard_wall_weighted_ground_palette_transfer",
+      "generation_source_ids": [
+        "call_7z8NxnZ8imcRKyhEds3sTwzU",
+        "call_HTxU8temh6Nr84TzLrrnTClr"
+      ],
+      "tags": [
+        "cave_dungeon",
+        "wooma_temple",
+        "wall_module",
+        "straight",
+        "straight_overlap_corner",
+        "manual_collision",
+        "wooma_temple_floor_warm_stone_u0",
+        "wooma_floor_color_match",
+        "warm_olive_taupe"
+      ],
+      "editable": true,
+      "material": "warm_olive_taupe_sandstone",
+      "color_match_contract_id": "wooma_floor_weighted_palette_match_v1",
+      "source_standard_asset_id": "wooma_temple_wall_straight_x_l4_v01",
+      "source_standard_output_sha256": "220cbf4956aa36bad674aff581885fb5c1e658cd167f8f4dd9c19b0c7f468d09"
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "wooma_temple_warm_wall_straight_x_l4_v02",
+      "display_name": "沃玛寺庙暖灰褐直墙 X向 4格 变体2",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "wooma_temple_floor_warm",
+      "wall_family_id": "wooma_temple_floor_warm_stone_u0",
+      "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0",
+      "topology": "straight",
+      "axis": "iso_x",
+      "length_tiles": 4,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        4,
+        1
+      ],
+      "canvas_size": [
+        192,
+        272
+      ],
+      "anchor": [
+        64,
+        184
+      ],
+      "next_start_tile_offset": [
+        4,
+        0
+      ],
+      "start_seam_px": [
+        32,
+        184
+      ],
+      "end_seam_px": [
+        160,
+        248
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_x_neg",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_x_pos",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v02/part_00_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            1,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v02/part_01_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            1,
+            0
+          ],
+          "draw_order_index": 1
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            2,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v02/part_02_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            2,
+            0
+          ],
+          "draw_order_index": 2
+        },
+        {
+          "part_id": "p03",
+          "tile_offset": [
+            3,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v02/part_03_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            3,
+            0
+          ],
+          "draw_order_index": 3
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "wooma_temple_wall_straight_iso_x_l4",
+      "variant": 2,
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_floor_match_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v02/composite_wooma_temple_floor_match_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v02/composite_wooma_temple_floor_match_v1.png",
+      "image_size": [
+        192,
+        272
+      ],
+      "visible_bounds_px": [
+        32,
+        8,
+        159,
+        239
+      ],
+      "selection_bounds_px": [
+        32,
+        8,
+        159,
+        239
+      ],
+      "anchor_px": [
+        64,
+        184
+      ],
+      "placement_anchor_px": [
+        64,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        4,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        1
+      ],
+      "base_footprint_tiles": [
+        4,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙暖灰褐墙/直墙/iso_x",
+      "source_external_path": "C:\\Users\\Administrator\\Documents\\我的刷子游戏-worktrees\\maps\\outputs\\wooma_temple_regenerated",
+      "source_sha256": "32eb23c1d2d49cfaa7f3e8db1e34d4209ac35d304917af01bc3f91d579cc8525",
+      "output_sha256": "8b506136862f5b70387004ad052c9c50ef919d2fcfa5de60692f5a66d526723c",
+      "thumbnail_source_sha256": "8b506136862f5b70387004ad052c9c50ef919d2fcfa5de60692f5a66d526723c",
+      "processing": "standard_wall_weighted_ground_palette_transfer",
+      "generation_source_ids": [
+        "call_7z8NxnZ8imcRKyhEds3sTwzU",
+        "call_HTxU8temh6Nr84TzLrrnTClr"
+      ],
+      "tags": [
+        "cave_dungeon",
+        "wooma_temple",
+        "wall_module",
+        "straight",
+        "straight_overlap_corner",
+        "manual_collision",
+        "wooma_temple_floor_warm_stone_u0",
+        "wooma_floor_color_match",
+        "warm_olive_taupe"
+      ],
+      "editable": true,
+      "material": "warm_olive_taupe_sandstone",
+      "color_match_contract_id": "wooma_floor_weighted_palette_match_v1",
+      "source_standard_asset_id": "wooma_temple_wall_straight_x_l4_v02",
+      "source_standard_output_sha256": "ba0ad0e7a7fd0298d2b6f9649231d3b3a02b79cd425a7b674d17547a0c06df4b"
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "wooma_temple_warm_wall_straight_x_l4_v03",
+      "display_name": "沃玛寺庙暖灰褐直墙 X向 4格 变体3",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "wooma_temple_floor_warm",
+      "wall_family_id": "wooma_temple_floor_warm_stone_u0",
+      "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0",
+      "topology": "straight",
+      "axis": "iso_x",
+      "length_tiles": 4,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        4,
+        1
+      ],
+      "canvas_size": [
+        192,
+        272
+      ],
+      "anchor": [
+        64,
+        184
+      ],
+      "next_start_tile_offset": [
+        4,
+        0
+      ],
+      "start_seam_px": [
+        32,
+        184
+      ],
+      "end_seam_px": [
+        160,
+        248
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_x_neg",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_x_pos",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v03/part_00_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            1,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v03/part_01_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            1,
+            0
+          ],
+          "draw_order_index": 1
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            2,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v03/part_02_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            2,
+            0
+          ],
+          "draw_order_index": 2
+        },
+        {
+          "part_id": "p03",
+          "tile_offset": [
+            3,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v03/part_03_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            3,
+            0
+          ],
+          "draw_order_index": 3
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "wooma_temple_wall_straight_iso_x_l4",
+      "variant": 3,
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_floor_match_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v03/composite_wooma_temple_floor_match_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v03/composite_wooma_temple_floor_match_v1.png",
+      "image_size": [
+        192,
+        272
+      ],
+      "visible_bounds_px": [
+        32,
+        8,
+        159,
+        239
+      ],
+      "selection_bounds_px": [
+        32,
+        8,
+        159,
+        239
+      ],
+      "anchor_px": [
+        64,
+        184
+      ],
+      "placement_anchor_px": [
+        64,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        4,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        4,
+        1
+      ],
+      "base_footprint_tiles": [
+        4,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙暖灰褐墙/直墙/iso_x",
+      "source_external_path": "C:\\Users\\Administrator\\Documents\\我的刷子游戏-worktrees\\maps\\outputs\\wooma_temple_regenerated",
+      "source_sha256": "32eb23c1d2d49cfaa7f3e8db1e34d4209ac35d304917af01bc3f91d579cc8525",
+      "output_sha256": "c3d1991056d008bbec4dda5b228425ff9412f945a9f10b4d4dc9df1fb072ef30",
+      "thumbnail_source_sha256": "c3d1991056d008bbec4dda5b228425ff9412f945a9f10b4d4dc9df1fb072ef30",
+      "processing": "standard_wall_weighted_ground_palette_transfer",
+      "generation_source_ids": [
+        "call_7z8NxnZ8imcRKyhEds3sTwzU",
+        "call_HTxU8temh6Nr84TzLrrnTClr"
+      ],
+      "tags": [
+        "cave_dungeon",
+        "wooma_temple",
+        "wall_module",
+        "straight",
+        "straight_overlap_corner",
+        "manual_collision",
+        "wooma_temple_floor_warm_stone_u0",
+        "wooma_floor_color_match",
+        "warm_olive_taupe"
+      ],
+      "editable": true,
+      "material": "warm_olive_taupe_sandstone",
+      "color_match_contract_id": "wooma_floor_weighted_palette_match_v1",
+      "source_standard_asset_id": "wooma_temple_wall_straight_x_l4_v03",
+      "source_standard_output_sha256": "75aa98f5ee95a5158e751a1a34ec9f885991f1c3ff85304557adcb9b11331c69"
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "wooma_temple_warm_wall_straight_y_l1_v01",
+      "display_name": "沃玛寺庙暖灰褐直墙 Y向 1格 变体1",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "wooma_temple_floor_warm",
+      "wall_family_id": "wooma_temple_floor_warm_stone_u0",
+      "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0",
+      "topology": "straight",
+      "axis": "iso_y",
+      "length_tiles": 1,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "canvas_size": [
+        96,
+        224
+      ],
+      "anchor": [
+        32,
+        184
+      ],
+      "next_start_tile_offset": [
+        0,
+        1
+      ],
+      "start_seam_px": [
+        64,
+        184
+      ],
+      "end_seam_px": [
+        32,
+        200
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_y_neg",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_y_pos",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "single_part",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l1_v01/part_00_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            32,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "wooma_temple_wall_straight_iso_y_l1",
+      "variant": 1,
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_floor_match_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l1_v01/composite_wooma_temple_floor_match_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l1_v01/composite_wooma_temple_floor_match_v1.png",
+      "image_size": [
+        96,
+        224
+      ],
+      "visible_bounds_px": [
+        1,
+        8,
+        63,
+        191
+      ],
+      "selection_bounds_px": [
+        1,
+        8,
+        63,
+        191
+      ],
+      "anchor_px": [
+        32,
+        184
+      ],
+      "placement_anchor_px": [
+        32,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙暖灰褐墙/直墙/iso_y",
+      "source_external_path": "C:\\Users\\Administrator\\Documents\\我的刷子游戏-worktrees\\maps\\outputs\\wooma_temple_regenerated",
+      "source_sha256": "32eb23c1d2d49cfaa7f3e8db1e34d4209ac35d304917af01bc3f91d579cc8525",
+      "output_sha256": "497660ebd5eac7a94fe0fbced2a607dd13ebce7ffeffca5e9155dc64ebe0478d",
+      "thumbnail_source_sha256": "497660ebd5eac7a94fe0fbced2a607dd13ebce7ffeffca5e9155dc64ebe0478d",
+      "processing": "standard_wall_weighted_ground_palette_transfer",
+      "generation_source_ids": [
+        "call_7z8NxnZ8imcRKyhEds3sTwzU",
+        "call_HTxU8temh6Nr84TzLrrnTClr"
+      ],
+      "tags": [
+        "cave_dungeon",
+        "wooma_temple",
+        "wall_module",
+        "straight",
+        "straight_overlap_corner",
+        "manual_collision",
+        "wooma_temple_floor_warm_stone_u0",
+        "wooma_floor_color_match",
+        "warm_olive_taupe"
+      ],
+      "editable": true,
+      "material": "warm_olive_taupe_sandstone",
+      "color_match_contract_id": "wooma_floor_weighted_palette_match_v1",
+      "source_standard_asset_id": "wooma_temple_wall_straight_y_l1_v01",
+      "source_standard_output_sha256": "c214ed468412c12592266cdb7e56d3b60d6e46930f7e88a9a98a8b59f317f75b"
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "wooma_temple_warm_wall_straight_y_l2_v01",
+      "display_name": "沃玛寺庙暖灰褐直墙 Y向 2格 变体1",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "wooma_temple_floor_warm",
+      "wall_family_id": "wooma_temple_floor_warm_stone_u0",
+      "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0",
+      "topology": "straight",
+      "axis": "iso_y",
+      "length_tiles": 2,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        1,
+        2
+      ],
+      "canvas_size": [
+        128,
+        240
+      ],
+      "anchor": [
+        64,
+        184
+      ],
+      "next_start_tile_offset": [
+        0,
+        2
+      ],
+      "start_seam_px": [
+        96,
+        184
+      ],
+      "end_seam_px": [
+        32,
+        216
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_y_neg",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_y_pos",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l2_v01/part_00_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            0,
+            1
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l2_v01/part_01_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            64,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            1
+          ],
+          "draw_order_index": 1
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "wooma_temple_wall_straight_iso_y_l2",
+      "variant": 1,
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_floor_match_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l2_v01/composite_wooma_temple_floor_match_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l2_v01/composite_wooma_temple_floor_match_v1.png",
+      "image_size": [
+        128,
+        240
+      ],
+      "visible_bounds_px": [
+        1,
+        8,
+        95,
+        207
+      ],
+      "selection_bounds_px": [
+        1,
+        8,
+        95,
+        207
+      ],
+      "anchor_px": [
+        64,
+        184
+      ],
+      "placement_anchor_px": [
+        64,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        1,
+        2
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        2
+      ],
+      "base_footprint_tiles": [
+        1,
+        2
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙暖灰褐墙/直墙/iso_y",
+      "source_external_path": "C:\\Users\\Administrator\\Documents\\我的刷子游戏-worktrees\\maps\\outputs\\wooma_temple_regenerated",
+      "source_sha256": "32eb23c1d2d49cfaa7f3e8db1e34d4209ac35d304917af01bc3f91d579cc8525",
+      "output_sha256": "5fc2a1b852538181b28a90072a45c026533e551fc185e46b7f616dc6bdb152ca",
+      "thumbnail_source_sha256": "5fc2a1b852538181b28a90072a45c026533e551fc185e46b7f616dc6bdb152ca",
+      "processing": "standard_wall_weighted_ground_palette_transfer",
+      "generation_source_ids": [
+        "call_7z8NxnZ8imcRKyhEds3sTwzU",
+        "call_HTxU8temh6Nr84TzLrrnTClr"
+      ],
+      "tags": [
+        "cave_dungeon",
+        "wooma_temple",
+        "wall_module",
+        "straight",
+        "straight_overlap_corner",
+        "manual_collision",
+        "wooma_temple_floor_warm_stone_u0",
+        "wooma_floor_color_match",
+        "warm_olive_taupe"
+      ],
+      "editable": true,
+      "material": "warm_olive_taupe_sandstone",
+      "color_match_contract_id": "wooma_floor_weighted_palette_match_v1",
+      "source_standard_asset_id": "wooma_temple_wall_straight_y_l2_v01",
+      "source_standard_output_sha256": "b9eb6c1dc5a158ddae4ca1babef448457d8c9d301f1149ae4a9006ed264fb32f"
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "wooma_temple_warm_wall_straight_y_l3_v01",
+      "display_name": "沃玛寺庙暖灰褐直墙 Y向 3格 变体1",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "wooma_temple_floor_warm",
+      "wall_family_id": "wooma_temple_floor_warm_stone_u0",
+      "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0",
+      "topology": "straight",
+      "axis": "iso_y",
+      "length_tiles": 3,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        1,
+        3
+      ],
+      "canvas_size": [
+        160,
+        256
+      ],
+      "anchor": [
+        96,
+        184
+      ],
+      "next_start_tile_offset": [
+        0,
+        3
+      ],
+      "start_seam_px": [
+        128,
+        184
+      ],
+      "end_seam_px": [
+        32,
+        232
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_y_neg",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_y_pos",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l3_v01/part_00_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            96,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            0,
+            1
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l3_v01/part_01_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            96,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            1
+          ],
+          "draw_order_index": 1
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            0,
+            2
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l3_v01/part_02_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            96,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            2
+          ],
+          "draw_order_index": 2
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "wooma_temple_wall_straight_iso_y_l3",
+      "variant": 1,
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_floor_match_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l3_v01/composite_wooma_temple_floor_match_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l3_v01/composite_wooma_temple_floor_match_v1.png",
+      "image_size": [
+        160,
+        256
+      ],
+      "visible_bounds_px": [
+        1,
+        8,
+        127,
+        223
+      ],
+      "selection_bounds_px": [
+        1,
+        8,
+        127,
+        223
+      ],
+      "anchor_px": [
+        96,
+        184
+      ],
+      "placement_anchor_px": [
+        96,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        1,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        3
+      ],
+      "base_footprint_tiles": [
+        1,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙暖灰褐墙/直墙/iso_y",
+      "source_external_path": "C:\\Users\\Administrator\\Documents\\我的刷子游戏-worktrees\\maps\\outputs\\wooma_temple_regenerated",
+      "source_sha256": "32eb23c1d2d49cfaa7f3e8db1e34d4209ac35d304917af01bc3f91d579cc8525",
+      "output_sha256": "bac1e1c96e8b72e4fe4a1357fc10dd722f3457aa2896b9c197d018e29312717f",
+      "thumbnail_source_sha256": "bac1e1c96e8b72e4fe4a1357fc10dd722f3457aa2896b9c197d018e29312717f",
+      "processing": "standard_wall_weighted_ground_palette_transfer",
+      "generation_source_ids": [
+        "call_7z8NxnZ8imcRKyhEds3sTwzU",
+        "call_HTxU8temh6Nr84TzLrrnTClr"
+      ],
+      "tags": [
+        "cave_dungeon",
+        "wooma_temple",
+        "wall_module",
+        "straight",
+        "straight_overlap_corner",
+        "manual_collision",
+        "wooma_temple_floor_warm_stone_u0",
+        "wooma_floor_color_match",
+        "warm_olive_taupe"
+      ],
+      "editable": true,
+      "material": "warm_olive_taupe_sandstone",
+      "color_match_contract_id": "wooma_floor_weighted_palette_match_v1",
+      "source_standard_asset_id": "wooma_temple_wall_straight_y_l3_v01",
+      "source_standard_output_sha256": "d7f4556c9c7d9f4105d2807ca01521615baab7fe7e95a67238ba31e1fcddd623"
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "wooma_temple_warm_wall_straight_y_l3_v02",
+      "display_name": "沃玛寺庙暖灰褐直墙 Y向 3格 变体2",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "wooma_temple_floor_warm",
+      "wall_family_id": "wooma_temple_floor_warm_stone_u0",
+      "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0",
+      "topology": "straight",
+      "axis": "iso_y",
+      "length_tiles": 3,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        1,
+        3
+      ],
+      "canvas_size": [
+        160,
+        256
+      ],
+      "anchor": [
+        96,
+        184
+      ],
+      "next_start_tile_offset": [
+        0,
+        3
+      ],
+      "start_seam_px": [
+        128,
+        184
+      ],
+      "end_seam_px": [
+        32,
+        232
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_y_neg",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_y_pos",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l3_v02/part_00_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            96,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            0,
+            1
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l3_v02/part_01_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            96,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            1
+          ],
+          "draw_order_index": 1
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            0,
+            2
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l3_v02/part_02_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            96,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            2
+          ],
+          "draw_order_index": 2
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "wooma_temple_wall_straight_iso_y_l3",
+      "variant": 2,
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_floor_match_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l3_v02/composite_wooma_temple_floor_match_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l3_v02/composite_wooma_temple_floor_match_v1.png",
+      "image_size": [
+        160,
+        256
+      ],
+      "visible_bounds_px": [
+        1,
+        8,
+        127,
+        223
+      ],
+      "selection_bounds_px": [
+        1,
+        8,
+        127,
+        223
+      ],
+      "anchor_px": [
+        96,
+        184
+      ],
+      "placement_anchor_px": [
+        96,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        1,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        3
+      ],
+      "base_footprint_tiles": [
+        1,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙暖灰褐墙/直墙/iso_y",
+      "source_external_path": "C:\\Users\\Administrator\\Documents\\我的刷子游戏-worktrees\\maps\\outputs\\wooma_temple_regenerated",
+      "source_sha256": "32eb23c1d2d49cfaa7f3e8db1e34d4209ac35d304917af01bc3f91d579cc8525",
+      "output_sha256": "c71f870238aab3f315635089f80e8211f4f364e6b2fe91a25d2cf34ab568c696",
+      "thumbnail_source_sha256": "c71f870238aab3f315635089f80e8211f4f364e6b2fe91a25d2cf34ab568c696",
+      "processing": "standard_wall_weighted_ground_palette_transfer",
+      "generation_source_ids": [
+        "call_7z8NxnZ8imcRKyhEds3sTwzU",
+        "call_HTxU8temh6Nr84TzLrrnTClr"
+      ],
+      "tags": [
+        "cave_dungeon",
+        "wooma_temple",
+        "wall_module",
+        "straight",
+        "straight_overlap_corner",
+        "manual_collision",
+        "wooma_temple_floor_warm_stone_u0",
+        "wooma_floor_color_match",
+        "warm_olive_taupe"
+      ],
+      "editable": true,
+      "material": "warm_olive_taupe_sandstone",
+      "color_match_contract_id": "wooma_floor_weighted_palette_match_v1",
+      "source_standard_asset_id": "wooma_temple_wall_straight_y_l3_v02",
+      "source_standard_output_sha256": "45a82f8e1202cc2de0858f5151e71b88b305bbed558a3e9019ebb2e33625db7e"
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "wooma_temple_warm_wall_straight_y_l3_v03",
+      "display_name": "沃玛寺庙暖灰褐直墙 Y向 3格 变体3",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "wooma_temple_floor_warm",
+      "wall_family_id": "wooma_temple_floor_warm_stone_u0",
+      "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0",
+      "topology": "straight",
+      "axis": "iso_y",
+      "length_tiles": 3,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        1,
+        3
+      ],
+      "canvas_size": [
+        160,
+        256
+      ],
+      "anchor": [
+        96,
+        184
+      ],
+      "next_start_tile_offset": [
+        0,
+        3
+      ],
+      "start_seam_px": [
+        128,
+        184
+      ],
+      "end_seam_px": [
+        32,
+        232
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_y_neg",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_y_pos",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l3_v03/part_00_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            96,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            0,
+            1
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l3_v03/part_01_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            96,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            1
+          ],
+          "draw_order_index": 1
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            0,
+            2
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l3_v03/part_02_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            96,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            2
+          ],
+          "draw_order_index": 2
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "wooma_temple_wall_straight_iso_y_l3",
+      "variant": 3,
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_floor_match_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l3_v03/composite_wooma_temple_floor_match_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l3_v03/composite_wooma_temple_floor_match_v1.png",
+      "image_size": [
+        160,
+        256
+      ],
+      "visible_bounds_px": [
+        1,
+        8,
+        127,
+        223
+      ],
+      "selection_bounds_px": [
+        1,
+        8,
+        127,
+        223
+      ],
+      "anchor_px": [
+        96,
+        184
+      ],
+      "placement_anchor_px": [
+        96,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        1,
+        3
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        3
+      ],
+      "base_footprint_tiles": [
+        1,
+        3
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙暖灰褐墙/直墙/iso_y",
+      "source_external_path": "C:\\Users\\Administrator\\Documents\\我的刷子游戏-worktrees\\maps\\outputs\\wooma_temple_regenerated",
+      "source_sha256": "32eb23c1d2d49cfaa7f3e8db1e34d4209ac35d304917af01bc3f91d579cc8525",
+      "output_sha256": "45a99ed687ca73b6e235745155a6c66716c4770208c0cd1c1886ac859adcb1bf",
+      "thumbnail_source_sha256": "45a99ed687ca73b6e235745155a6c66716c4770208c0cd1c1886ac859adcb1bf",
+      "processing": "standard_wall_weighted_ground_palette_transfer",
+      "generation_source_ids": [
+        "call_7z8NxnZ8imcRKyhEds3sTwzU",
+        "call_HTxU8temh6Nr84TzLrrnTClr"
+      ],
+      "tags": [
+        "cave_dungeon",
+        "wooma_temple",
+        "wall_module",
+        "straight",
+        "straight_overlap_corner",
+        "manual_collision",
+        "wooma_temple_floor_warm_stone_u0",
+        "wooma_floor_color_match",
+        "warm_olive_taupe"
+      ],
+      "editable": true,
+      "material": "warm_olive_taupe_sandstone",
+      "color_match_contract_id": "wooma_floor_weighted_palette_match_v1",
+      "source_standard_asset_id": "wooma_temple_wall_straight_y_l3_v03",
+      "source_standard_output_sha256": "87bd5d5755c80823ca765e96e2c143269628b0983e0128b3a6043d9f57f71044"
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "wooma_temple_warm_wall_straight_y_l4_v01",
+      "display_name": "沃玛寺庙暖灰褐直墙 Y向 4格 变体1",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "wooma_temple_floor_warm",
+      "wall_family_id": "wooma_temple_floor_warm_stone_u0",
+      "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0",
+      "topology": "straight",
+      "axis": "iso_y",
+      "length_tiles": 4,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        1,
+        4
+      ],
+      "canvas_size": [
+        192,
+        272
+      ],
+      "anchor": [
+        128,
+        184
+      ],
+      "next_start_tile_offset": [
+        0,
+        4
+      ],
+      "start_seam_px": [
+        160,
+        184
+      ],
+      "end_seam_px": [
+        32,
+        248
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_y_neg",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_y_pos",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v01/part_00_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            0,
+            1
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v01/part_01_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            1
+          ],
+          "draw_order_index": 1
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            0,
+            2
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v01/part_02_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            2
+          ],
+          "draw_order_index": 2
+        },
+        {
+          "part_id": "p03",
+          "tile_offset": [
+            0,
+            3
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v01/part_03_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            3
+          ],
+          "draw_order_index": 3
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "wooma_temple_wall_straight_iso_y_l4",
+      "variant": 1,
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_floor_match_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v01/composite_wooma_temple_floor_match_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v01/composite_wooma_temple_floor_match_v1.png",
+      "image_size": [
+        192,
+        272
+      ],
+      "visible_bounds_px": [
+        1,
+        8,
+        159,
+        239
+      ],
+      "selection_bounds_px": [
+        1,
+        8,
+        159,
+        239
+      ],
+      "anchor_px": [
+        128,
+        184
+      ],
+      "placement_anchor_px": [
+        128,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        1,
+        4
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        4
+      ],
+      "base_footprint_tiles": [
+        1,
+        4
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙暖灰褐墙/直墙/iso_y",
+      "source_external_path": "C:\\Users\\Administrator\\Documents\\我的刷子游戏-worktrees\\maps\\outputs\\wooma_temple_regenerated",
+      "source_sha256": "32eb23c1d2d49cfaa7f3e8db1e34d4209ac35d304917af01bc3f91d579cc8525",
+      "output_sha256": "9fabe1aa13e2d1e9aac39c2dffeab9174ef4367b8732bc3743e2414aed3cc9de",
+      "thumbnail_source_sha256": "9fabe1aa13e2d1e9aac39c2dffeab9174ef4367b8732bc3743e2414aed3cc9de",
+      "processing": "standard_wall_weighted_ground_palette_transfer",
+      "generation_source_ids": [
+        "call_7z8NxnZ8imcRKyhEds3sTwzU",
+        "call_HTxU8temh6Nr84TzLrrnTClr"
+      ],
+      "tags": [
+        "cave_dungeon",
+        "wooma_temple",
+        "wall_module",
+        "straight",
+        "straight_overlap_corner",
+        "manual_collision",
+        "wooma_temple_floor_warm_stone_u0",
+        "wooma_floor_color_match",
+        "warm_olive_taupe"
+      ],
+      "editable": true,
+      "material": "warm_olive_taupe_sandstone",
+      "color_match_contract_id": "wooma_floor_weighted_palette_match_v1",
+      "source_standard_asset_id": "wooma_temple_wall_straight_y_l4_v01",
+      "source_standard_output_sha256": "f2093fa639a39169c01ad3206a65cbe974045e4e2a9f66f68e482199e2c80673"
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "wooma_temple_warm_wall_straight_y_l4_v02",
+      "display_name": "沃玛寺庙暖灰褐直墙 Y向 4格 变体2",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "wooma_temple_floor_warm",
+      "wall_family_id": "wooma_temple_floor_warm_stone_u0",
+      "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0",
+      "topology": "straight",
+      "axis": "iso_y",
+      "length_tiles": 4,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        1,
+        4
+      ],
+      "canvas_size": [
+        192,
+        272
+      ],
+      "anchor": [
+        128,
+        184
+      ],
+      "next_start_tile_offset": [
+        0,
+        4
+      ],
+      "start_seam_px": [
+        160,
+        184
+      ],
+      "end_seam_px": [
+        32,
+        248
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_y_neg",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_y_pos",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v02/part_00_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            0,
+            1
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v02/part_01_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            1
+          ],
+          "draw_order_index": 1
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            0,
+            2
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v02/part_02_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            2
+          ],
+          "draw_order_index": 2
+        },
+        {
+          "part_id": "p03",
+          "tile_offset": [
+            0,
+            3
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v02/part_03_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            3
+          ],
+          "draw_order_index": 3
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "wooma_temple_wall_straight_iso_y_l4",
+      "variant": 2,
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_floor_match_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v02/composite_wooma_temple_floor_match_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v02/composite_wooma_temple_floor_match_v1.png",
+      "image_size": [
+        192,
+        272
+      ],
+      "visible_bounds_px": [
+        1,
+        8,
+        159,
+        239
+      ],
+      "selection_bounds_px": [
+        1,
+        8,
+        159,
+        239
+      ],
+      "anchor_px": [
+        128,
+        184
+      ],
+      "placement_anchor_px": [
+        128,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        1,
+        4
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        4
+      ],
+      "base_footprint_tiles": [
+        1,
+        4
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙暖灰褐墙/直墙/iso_y",
+      "source_external_path": "C:\\Users\\Administrator\\Documents\\我的刷子游戏-worktrees\\maps\\outputs\\wooma_temple_regenerated",
+      "source_sha256": "32eb23c1d2d49cfaa7f3e8db1e34d4209ac35d304917af01bc3f91d579cc8525",
+      "output_sha256": "55b4f942b116dcfc19023d8eff0cfce75be3a632f04b7604c1ae15f705f85594",
+      "thumbnail_source_sha256": "55b4f942b116dcfc19023d8eff0cfce75be3a632f04b7604c1ae15f705f85594",
+      "processing": "standard_wall_weighted_ground_palette_transfer",
+      "generation_source_ids": [
+        "call_7z8NxnZ8imcRKyhEds3sTwzU",
+        "call_HTxU8temh6Nr84TzLrrnTClr"
+      ],
+      "tags": [
+        "cave_dungeon",
+        "wooma_temple",
+        "wall_module",
+        "straight",
+        "straight_overlap_corner",
+        "manual_collision",
+        "wooma_temple_floor_warm_stone_u0",
+        "wooma_floor_color_match",
+        "warm_olive_taupe"
+      ],
+      "editable": true,
+      "material": "warm_olive_taupe_sandstone",
+      "color_match_contract_id": "wooma_floor_weighted_palette_match_v1",
+      "source_standard_asset_id": "wooma_temple_wall_straight_y_l4_v02",
+      "source_standard_output_sha256": "6274cc01db158a87a990e5bd6c22cf6d352ac3b24e58a22b39b71111e05e9515"
+    },
+    {
+      "schema_version": 1,
+      "asset_id": "wooma_temple_warm_wall_straight_y_l4_v03",
+      "display_name": "沃玛寺庙暖灰褐直墙 Y向 4格 变体3",
+      "asset_type": "wall_module",
+      "category": "wall_module",
+      "theme": "wooma_temple_floor_warm",
+      "wall_family_id": "wooma_temple_floor_warm_stone_u0",
+      "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0",
+      "topology": "straight",
+      "axis": "iso_y",
+      "length_tiles": 4,
+      "thickness_tiles": 1,
+      "footprint_tiles": [
+        1,
+        4
+      ],
+      "canvas_size": [
+        192,
+        272
+      ],
+      "anchor": [
+        128,
+        184
+      ],
+      "next_start_tile_offset": [
+        0,
+        4
+      ],
+      "start_seam_px": [
+        160,
+        184
+      ],
+      "end_seam_px": [
+        32,
+        248
+      ],
+      "connectors": [
+        {
+          "name": "start",
+          "direction": "iso_y_neg",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        },
+        {
+          "name": "end",
+          "direction": "iso_y_pos",
+          "socket_profile_id": "wooma_temple_floor_warm_stone_socket_u0"
+        }
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "render_mode": "segmented",
+      "render_parts": [
+        {
+          "part_id": "p00",
+          "tile_offset": [
+            0,
+            0
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v03/part_00_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            0
+          ],
+          "draw_order_index": 0
+        },
+        {
+          "part_id": "p01",
+          "tile_offset": [
+            0,
+            1
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v03/part_01_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            1
+          ],
+          "draw_order_index": 1
+        },
+        {
+          "part_id": "p02",
+          "tile_offset": [
+            0,
+            2
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v03/part_02_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            2
+          ],
+          "draw_order_index": 2
+        },
+        {
+          "part_id": "p03",
+          "tile_offset": [
+            0,
+            3
+          ],
+          "base_image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v03/part_03_wooma_temple_floor_match_v1_base.png",
+          "front_image": "",
+          "shadow_image": "",
+          "anchor": [
+            128,
+            184
+          ],
+          "sort_tile_offset": [
+            0,
+            3
+          ],
+          "draw_order_index": 3
+        }
+      ],
+      "default_layer": "terrain_base",
+      "front_layer": "terrain_front",
+      "shadow_layer": "shadow",
+      "object_role": "terrain",
+      "scene_intent": "terrain_boundary",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
+      "occlusion": true,
+      "seam_guard_px": 16,
+      "seam_overlap_px": 2,
+      "variant_weight": 100,
+      "offset_px": [
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1
+      ],
+      "rotation_degrees": 0,
+      "allow_flip": false,
+      "runtime_export": true,
+      "content_layer": "personal_expansion",
+      "calibration_status": "placeable",
+      "seam_test_status": "passed",
+      "placeable": true,
+      "repeat_group": "wooma_temple_wall_straight_iso_y_l4",
+      "variant": 3,
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_profile_id": "none_visual",
+      "map_collision_override": "disabled",
+      "visual_profile_id": "wooma_temple_floor_match_v1",
+      "native_projection_contract_id": "isometric_cell_64x32_exact_v1",
+      "placement_contract_id": "wall_foot_on_cell_edge_64x32_v1",
+      "corner_join_mode": "straight_overlap",
+      "contains_corner_pillar": false,
+      "wall_cap_thickness_tiles": 1,
+      "wall_cap_projection_px": [
+        32,
+        16
+      ],
+      "object_class": "wall",
+      "image": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v03/composite_wooma_temple_floor_match_v1.png",
+      "thumbnail": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v03/composite_wooma_temple_floor_match_v1.png",
+      "image_size": [
+        192,
+        272
+      ],
+      "visible_bounds_px": [
+        1,
+        8,
+        159,
+        239
+      ],
+      "selection_bounds_px": [
+        1,
+        8,
+        159,
+        239
+      ],
+      "anchor_px": [
+        128,
+        184
+      ],
+      "placement_anchor_px": [
+        128,
+        184
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "placement_preview_mode": "image_and_footprint",
+      "visual_footprint_tiles": [
+        1,
+        4
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        4
+      ],
+      "base_footprint_tiles": [
+        1,
+        4
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": true,
+      "anchor_approved": true,
+      "default_object_role": "terrain",
+      "palette_path": "洞穴与地下城/墙体模块/沃玛寺庙暖灰褐墙/直墙/iso_y",
+      "source_external_path": "C:\\Users\\Administrator\\Documents\\我的刷子游戏-worktrees\\maps\\outputs\\wooma_temple_regenerated",
+      "source_sha256": "32eb23c1d2d49cfaa7f3e8db1e34d4209ac35d304917af01bc3f91d579cc8525",
+      "output_sha256": "558145fcbaebdb1cd21f3eec77a6152ac03399cf540d78ab035f0a4174352ae1",
+      "thumbnail_source_sha256": "558145fcbaebdb1cd21f3eec77a6152ac03399cf540d78ab035f0a4174352ae1",
+      "processing": "standard_wall_weighted_ground_palette_transfer",
+      "generation_source_ids": [
+        "call_7z8NxnZ8imcRKyhEds3sTwzU",
+        "call_HTxU8temh6Nr84TzLrrnTClr"
+      ],
+      "tags": [
+        "cave_dungeon",
+        "wooma_temple",
+        "wall_module",
+        "straight",
+        "straight_overlap_corner",
+        "manual_collision",
+        "wooma_temple_floor_warm_stone_u0",
+        "wooma_floor_color_match",
+        "warm_olive_taupe"
+      ],
+      "editable": true,
+      "material": "warm_olive_taupe_sandstone",
+      "color_match_contract_id": "wooma_floor_weighted_palette_match_v1",
+      "source_standard_asset_id": "wooma_temple_wall_straight_y_l4_v03",
+      "source_standard_output_sha256": "2b9f832d1830a1fe7a79fafb382a702d499c5df6f1484a12b1e146ef3b2ae9ce"
+    }
+  ]
+}

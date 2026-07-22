@@ -16,8 +16,18 @@ func _ready() -> void:
 	assert(moved.ok and moved.instance.tile == [30, 20])
 	var chest := MapEditorInstanceService.create_instance(document, "prop.storage_chest_01", "interactable", Vector2i(20, 20))
 	assert(chest.ok and chest.instance.gameplay_role == "interactable")
+	var chest_located := MapEditorInstanceService._locate(document, str(chest.instance.instance_id))
+	chest_located.instance["scale"] = [0.75, 0.75]
+	chest_located.instance["offset_px"] = [7, -5]
+	chest_located.instance["instance_custom_scale"] = true
+	MapEditorInstanceService._located_replace(document, chest_located, chest_located.instance)
 	var duplicate := MapEditorInstanceService.duplicate_instance(document, str(chest.instance.instance_id), Vector2i(21, 20))
 	assert(duplicate.ok)
+	assert(str(duplicate.instance.instance_id) != str(chest.instance.instance_id))
+	assert(duplicate.instance.tile == [21, 20] and duplicate.instance.tile_anchor == [21, 20])
+	assert(duplicate.instance.scale == [0.75, 0.75])
+	assert(duplicate.instance.offset_px == [7, -5])
+	assert(bool(duplicate.instance.instance_custom_scale))
 	var deleted := MapEditorInstanceService.delete_instance(document, str(duplicate.instance.instance_id))
 	assert(deleted.ok)
 	assert(MapEditorInstanceService.all_instances(document).size() == 3)

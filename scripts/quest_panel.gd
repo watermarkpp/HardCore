@@ -313,7 +313,7 @@ func _refresh_selected_quest(active_quest_id: String) -> void:
 		title_label.text = "%s｜比奇任务" % npc_display_name
 		quest_name_label.text = "比奇主线已经全部完成"
 		quest_meta_label.text = "六段任务链已完成"
-		description_label.text = "[color=#d8c8ae]玛法大陆仍有新的委托等待探索。[/color]"
+		description_label.text = "[color=#d8c8ae]HardCore 世界仍有新的委托等待探索。[/color]"
 		objective_label.text = "[color=#a99479]当前没有可执行的比奇主线目标。[/color]"
 		reward_label.text = "[color=#a99479]奖励已全部领取[/color]"
 		status_label.text = "全部完成"

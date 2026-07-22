@@ -83,6 +83,24 @@
         61,
         112
       ],
+      "contentBounds": [
+        -53,
+        -104,
+        166,
+        64
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        50,
+        50,
+        51,
+        53,
+        56,
+        55,
+        52,
+        50
+      ],
       "directions": 8,
       "actions": {
         "idle": {
@@ -1743,12 +1761,30 @@
       "clientLibraryImageCount": 490,
       "blockBase": 0,
       "frameSize": [
-        256,
+        192,
         192
       ],
       "footAnchor": [
-        92,
-        91
+        58,
+        88
+      ],
+      "contentBounds": [
+        -50,
+        -80,
+        126,
+        82
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22
       ],
       "directions": 8,
       "actions": {
@@ -1757,7 +1793,7 @@
           "framesPerDirection": 4,
           "frameMs": 200,
           "sourceStart": 0,
-          "sourceDirectionStride": 10,
+          "sourceDirectionStride": 0,
           "sourceFrames": [
             {
               "index": 0,
@@ -1796,267 +1832,268 @@
               ]
             },
             {
-              "index": 10,
+              "index": 0,
               "direction": 1,
               "frame": 0,
               "drawOffset": [
-                -13,
-                -3
+                -46,
+                -65
               ]
             },
             {
-              "index": 11,
+              "index": 1,
               "direction": 1,
               "frame": 1,
               "drawOffset": [
-                -13,
-                -7
+                -44,
+                -65
               ]
             },
             {
-              "index": 12,
+              "index": 2,
               "direction": 1,
               "frame": 2,
               "drawOffset": [
-                -19,
-                -10
+                -38,
+                -66
               ]
             },
             {
-              "index": 13,
+              "index": 3,
               "direction": 1,
               "frame": 3,
               "drawOffset": [
-                -28,
-                -11
+                -43,
+                -65
               ]
             },
             {
-              "index": 20,
+              "index": 0,
               "direction": 2,
               "frame": 0,
               "drawOffset": [
-                -35,
-                -69
+                -46,
+                -65
               ]
             },
             {
-              "index": 21,
+              "index": 1,
               "direction": 2,
               "frame": 1,
               "drawOffset": [
-                -31,
-                -57
+                -44,
+                -65
               ]
             },
             {
-              "index": 22,
+              "index": 2,
               "direction": 2,
               "frame": 2,
               "drawOffset": [
-                -29,
-                -29
+                -38,
+                -66
               ]
             },
             {
-              "index": 23,
+              "index": 3,
               "direction": 2,
               "frame": 3,
               "drawOffset": [
-                -29,
-                -19
+                -43,
+                -65
               ]
             },
             {
-              "index": 30,
+              "index": 0,
               "direction": 3,
               "frame": 0,
               "drawOffset": [
-                -35,
-                -63
+                -46,
+                -65
               ]
             },
             {
-              "index": 31,
+              "index": 1,
               "direction": 3,
               "frame": 1,
               "drawOffset": [
-                -35,
-                -69
+                -44,
+                -65
               ]
             },
             {
-              "index": 32,
+              "index": 2,
               "direction": 3,
               "frame": 2,
               "drawOffset": [
-                -35,
-                -67
+                -38,
+                -66
               ]
             },
             {
-              "index": 33,
+              "index": 3,
               "direction": 3,
               "frame": 3,
               "drawOffset": [
-                -35,
-                -80
+                -43,
+                -65
               ]
             },
             {
-              "index": 40,
+              "index": 0,
               "direction": 4,
               "frame": 0,
               "drawOffset": [
-                -35,
-                -67
+                -46,
+                -65
               ]
             },
             {
-              "index": 41,
+              "index": 1,
               "direction": 4,
               "frame": 1,
               "drawOffset": [
-                -35,
-                -60
+                -44,
+                -65
               ]
             },
             {
-              "index": 42,
+              "index": 2,
               "direction": 4,
               "frame": 2,
               "drawOffset": [
-                -35,
-                -56
+                -38,
+                -66
               ]
             },
             {
-              "index": 43,
+              "index": 3,
               "direction": 4,
               "frame": 3,
               "drawOffset": [
-                -35,
-                -67
+                -43,
+                -65
               ]
             },
             {
-              "index": 50,
+              "index": 0,
               "direction": 5,
               "frame": 0,
               "drawOffset": [
-                -39,
-                -63
+                -46,
+                -65
               ]
             },
             {
-              "index": 51,
+              "index": 1,
               "direction": 5,
               "frame": 1,
               "drawOffset": [
-                -35,
-                -62
+                -44,
+                -65
               ]
             },
             {
-              "index": 52,
+              "index": 2,
               "direction": 5,
               "frame": 2,
               "drawOffset": [
-                -35,
-                -63
+                -38,
+                -66
               ]
             },
             {
-              "index": 53,
+              "index": 3,
               "direction": 5,
               "frame": 3,
               "drawOffset": [
-                -35,
-                -63
+                -43,
+                -65
               ]
             },
             {
-              "index": 60,
+              "index": 0,
               "direction": 6,
               "frame": 0,
               "drawOffset": [
-                -35,
-                -59
+                -46,
+                -65
               ]
             },
             {
-              "index": 61,
+              "index": 1,
               "direction": 6,
               "frame": 1,
               "drawOffset": [
-                -35,
-                -56
+                -44,
+                -65
               ]
             },
             {
-              "index": 62,
+              "index": 2,
               "direction": 6,
               "frame": 2,
               "drawOffset": [
-                -35,
-                -64
+                -38,
+                -66
               ]
             },
             {
-              "index": 63,
+              "index": 3,
               "direction": 6,
               "frame": 3,
               "drawOffset": [
-                -35,
-                -52
+                -43,
+                -65
               ]
             },
             {
-              "index": 70,
+              "index": 0,
               "direction": 7,
               "frame": 0,
               "drawOffset": [
-                -35,
-                -64
+                -46,
+                -65
               ]
             },
             {
-              "index": 71,
+              "index": 1,
               "direction": 7,
               "frame": 1,
               "drawOffset": [
-                -35,
-                -62
+                -44,
+                -65
               ]
             },
             {
-              "index": 72,
+              "index": 2,
               "direction": 7,
               "frame": 2,
               "drawOffset": [
-                -35,
-                -75
+                -38,
+                -66
               ]
             },
             {
-              "index": 73,
+              "index": 3,
               "direction": 7,
               "frame": 3,
               "drawOffset": [
-                -35,
-                -40
+                -43,
+                -65
               ]
             }
           ],
           "missingFrames": [],
-          "confidence": "A"
+          "confidence": "A",
+          "fixedSourceDirection": 0
         },
         "walk": {
           "path": "res://assets/art/monsters/client_bich_common/cannibal_flower/cannibal_flower_walk.png",
           "framesPerDirection": 8,
           "frameMs": 160,
           "sourceStart": 10,
-          "sourceDirectionStride": 10,
+          "sourceDirectionStride": 0,
           "sourceFrames": [
             {
               "index": 10,
@@ -2131,519 +2168,520 @@
               ]
             },
             {
-              "index": 20,
+              "index": 10,
               "direction": 1,
               "frame": 0,
-              "drawOffset": [
-                -35,
-                -69
-              ]
-            },
-            {
-              "index": 21,
-              "direction": 1,
-              "frame": 1,
-              "drawOffset": [
-                -31,
-                -57
-              ]
-            },
-            {
-              "index": 22,
-              "direction": 1,
-              "frame": 2,
-              "drawOffset": [
-                -29,
-                -29
-              ]
-            },
-            {
-              "index": 23,
-              "direction": 1,
-              "frame": 3,
-              "drawOffset": [
-                -29,
-                -19
-              ]
-            },
-            {
-              "index": 24,
-              "direction": 1,
-              "frame": 4,
-              "drawOffset": [
-                -28,
-                -11
-              ]
-            },
-            {
-              "index": 25,
-              "direction": 1,
-              "frame": 5,
-              "drawOffset": [
-                -19,
-                -10
-              ]
-            },
-            {
-              "index": 26,
-              "direction": 1,
-              "frame": 6,
-              "drawOffset": [
-                -13,
-                -7
-              ]
-            },
-            {
-              "index": 27,
-              "direction": 1,
-              "frame": 7,
               "drawOffset": [
                 -13,
                 -3
               ]
             },
             {
-              "index": 30,
-              "direction": 2,
-              "frame": 0,
+              "index": 11,
+              "direction": 1,
+              "frame": 1,
               "drawOffset": [
-                -35,
-                -63
+                -13,
+                -7
               ]
             },
             {
-              "index": 31,
-              "direction": 2,
-              "frame": 1,
+              "index": 12,
+              "direction": 1,
+              "frame": 2,
+              "drawOffset": [
+                -19,
+                -10
+              ]
+            },
+            {
+              "index": 13,
+              "direction": 1,
+              "frame": 3,
+              "drawOffset": [
+                -28,
+                -11
+              ]
+            },
+            {
+              "index": 14,
+              "direction": 1,
+              "frame": 4,
+              "drawOffset": [
+                -29,
+                -19
+              ]
+            },
+            {
+              "index": 15,
+              "direction": 1,
+              "frame": 5,
+              "drawOffset": [
+                -29,
+                -29
+              ]
+            },
+            {
+              "index": 16,
+              "direction": 1,
+              "frame": 6,
+              "drawOffset": [
+                -31,
+                -57
+              ]
+            },
+            {
+              "index": 17,
+              "direction": 1,
+              "frame": 7,
               "drawOffset": [
                 -35,
                 -69
               ]
             },
             {
-              "index": 32,
+              "index": 10,
+              "direction": 2,
+              "frame": 0,
+              "drawOffset": [
+                -13,
+                -3
+              ]
+            },
+            {
+              "index": 11,
+              "direction": 2,
+              "frame": 1,
+              "drawOffset": [
+                -13,
+                -7
+              ]
+            },
+            {
+              "index": 12,
               "direction": 2,
               "frame": 2,
               "drawOffset": [
-                -35,
-                -67
+                -19,
+                -10
               ]
             },
             {
-              "index": 33,
+              "index": 13,
               "direction": 2,
               "frame": 3,
               "drawOffset": [
-                -35,
-                -80
+                -28,
+                -11
               ]
             },
             {
-              "index": 34,
+              "index": 14,
               "direction": 2,
               "frame": 4,
               "drawOffset": [
-                -35,
-                -71
+                -29,
+                -19
               ]
             },
             {
-              "index": 35,
+              "index": 15,
               "direction": 2,
               "frame": 5,
               "drawOffset": [
-                -35,
-                -62
+                -29,
+                -29
               ]
             },
             {
-              "index": 36,
+              "index": 16,
               "direction": 2,
               "frame": 6,
               "drawOffset": [
-                0,
-                0
+                -31,
+                -57
               ]
             },
             {
-              "index": 37,
+              "index": 17,
               "direction": 2,
               "frame": 7,
               "drawOffset": [
-                0,
-                0
+                -35,
+                -69
               ]
             },
             {
-              "index": 40,
+              "index": 10,
               "direction": 3,
               "frame": 0,
               "drawOffset": [
-                -35,
-                -67
+                -13,
+                -3
               ]
             },
             {
-              "index": 41,
+              "index": 11,
               "direction": 3,
               "frame": 1,
               "drawOffset": [
-                -35,
-                -60
+                -13,
+                -7
               ]
             },
             {
-              "index": 42,
+              "index": 12,
               "direction": 3,
               "frame": 2,
               "drawOffset": [
-                -35,
-                -56
+                -19,
+                -10
               ]
             },
             {
-              "index": 43,
+              "index": 13,
               "direction": 3,
               "frame": 3,
               "drawOffset": [
-                -35,
-                -67
+                -28,
+                -11
               ]
             },
             {
-              "index": 44,
+              "index": 14,
               "direction": 3,
               "frame": 4,
               "drawOffset": [
-                -35,
-                -60
+                -29,
+                -19
               ]
             },
             {
-              "index": 45,
+              "index": 15,
               "direction": 3,
               "frame": 5,
               "drawOffset": [
-                -35,
-                -64
+                -29,
+                -29
               ]
             },
             {
-              "index": 46,
+              "index": 16,
               "direction": 3,
               "frame": 6,
               "drawOffset": [
-                0,
-                0
+                -31,
+                -57
               ]
             },
             {
-              "index": 47,
+              "index": 17,
               "direction": 3,
               "frame": 7,
               "drawOffset": [
-                0,
-                0
+                -35,
+                -69
               ]
             },
             {
-              "index": 50,
+              "index": 10,
               "direction": 4,
               "frame": 0,
               "drawOffset": [
-                -39,
-                -63
+                -13,
+                -3
               ]
             },
             {
-              "index": 51,
+              "index": 11,
               "direction": 4,
               "frame": 1,
               "drawOffset": [
-                -35,
-                -62
+                -13,
+                -7
               ]
             },
             {
-              "index": 52,
+              "index": 12,
               "direction": 4,
               "frame": 2,
               "drawOffset": [
-                -35,
-                -63
+                -19,
+                -10
               ]
             },
             {
-              "index": 53,
+              "index": 13,
               "direction": 4,
               "frame": 3,
               "drawOffset": [
-                -35,
-                -63
+                -28,
+                -11
               ]
             },
             {
-              "index": 54,
+              "index": 14,
               "direction": 4,
               "frame": 4,
               "drawOffset": [
-                -35,
-                -56
+                -29,
+                -19
               ]
             },
             {
-              "index": 55,
+              "index": 15,
               "direction": 4,
               "frame": 5,
               "drawOffset": [
-                -35,
-                -48
+                -29,
+                -29
               ]
             },
             {
-              "index": 56,
+              "index": 16,
               "direction": 4,
               "frame": 6,
               "drawOffset": [
-                0,
-                0
+                -31,
+                -57
               ]
             },
             {
-              "index": 57,
+              "index": 17,
               "direction": 4,
               "frame": 7,
               "drawOffset": [
-                0,
-                0
+                -35,
+                -69
               ]
             },
             {
-              "index": 60,
+              "index": 10,
               "direction": 5,
               "frame": 0,
               "drawOffset": [
-                -35,
-                -59
+                -13,
+                -3
               ]
             },
             {
-              "index": 61,
+              "index": 11,
               "direction": 5,
               "frame": 1,
               "drawOffset": [
-                -35,
-                -56
+                -13,
+                -7
               ]
             },
             {
-              "index": 62,
+              "index": 12,
               "direction": 5,
               "frame": 2,
               "drawOffset": [
-                -35,
-                -64
+                -19,
+                -10
               ]
             },
             {
-              "index": 63,
+              "index": 13,
               "direction": 5,
               "frame": 3,
               "drawOffset": [
-                -35,
-                -52
+                -28,
+                -11
               ]
             },
             {
-              "index": 64,
+              "index": 14,
               "direction": 5,
               "frame": 4,
               "drawOffset": [
-                -35,
-                -43
+                -29,
+                -19
               ]
             },
             {
-              "index": 65,
+              "index": 15,
               "direction": 5,
               "frame": 5,
               "drawOffset": [
-                -35,
-                -40
+                -29,
+                -29
               ]
             },
             {
-              "index": 66,
+              "index": 16,
               "direction": 5,
               "frame": 6,
               "drawOffset": [
-                0,
-                0
+                -31,
+                -57
               ]
             },
             {
-              "index": 67,
+              "index": 17,
               "direction": 5,
               "frame": 7,
               "drawOffset": [
-                0,
-                0
+                -35,
+                -69
               ]
             },
             {
-              "index": 70,
+              "index": 10,
               "direction": 6,
               "frame": 0,
               "drawOffset": [
-                -35,
-                -64
+                -13,
+                -3
               ]
             },
             {
-              "index": 71,
+              "index": 11,
               "direction": 6,
               "frame": 1,
               "drawOffset": [
-                -35,
-                -62
+                -13,
+                -7
               ]
             },
             {
-              "index": 72,
+              "index": 12,
               "direction": 6,
               "frame": 2,
               "drawOffset": [
-                -35,
-                -75
+                -19,
+                -10
               ]
             },
             {
-              "index": 73,
+              "index": 13,
               "direction": 6,
               "frame": 3,
               "drawOffset": [
-                -35,
-                -40
+                -28,
+                -11
               ]
             },
             {
-              "index": 74,
+              "index": 14,
               "direction": 6,
               "frame": 4,
               "drawOffset": [
-                -35,
-                -42
+                -29,
+                -19
               ]
             },
             {
-              "index": 75,
+              "index": 15,
               "direction": 6,
               "frame": 5,
               "drawOffset": [
-                -35,
-                -43
+                -29,
+                -29
               ]
             },
             {
-              "index": 76,
+              "index": 16,
               "direction": 6,
               "frame": 6,
               "drawOffset": [
-                0,
-                0
+                -31,
+                -57
               ]
             },
             {
-              "index": 77,
+              "index": 17,
               "direction": 6,
               "frame": 7,
               "drawOffset": [
-                0,
-                0
+                -35,
+                -69
               ]
             },
             {
-              "index": 80,
+              "index": 10,
               "direction": 7,
               "frame": 0,
               "drawOffset": [
-                -35,
-                -68
+                -13,
+                -3
               ]
             },
             {
-              "index": 81,
+              "index": 11,
               "direction": 7,
               "frame": 1,
               "drawOffset": [
-                -46,
-                -65
+                -13,
+                -7
               ]
             },
             {
-              "index": 82,
+              "index": 12,
               "direction": 7,
               "frame": 2,
               "drawOffset": [
-                -37,
-                -73
+                -19,
+                -10
               ]
             },
             {
-              "index": 83,
+              "index": 13,
               "direction": 7,
               "frame": 3,
               "drawOffset": [
-                -39,
-                -36
+                -28,
+                -11
               ]
             },
             {
-              "index": 84,
+              "index": 14,
               "direction": 7,
               "frame": 4,
               "drawOffset": [
-                -37,
-                -44
+                -29,
+                -19
               ]
             },
             {
-              "index": 85,
+              "index": 15,
               "direction": 7,
               "frame": 5,
               "drawOffset": [
-                -35,
-                -56
+                -29,
+                -29
               ]
             },
             {
-              "index": 86,
+              "index": 16,
               "direction": 7,
               "frame": 6,
               "drawOffset": [
-                0,
-                0
+                -31,
+                -57
               ]
             },
             {
-              "index": 87,
+              "index": 17,
               "direction": 7,
               "frame": 7,
               "drawOffset": [
-                0,
-                0
+                -35,
+                -69
               ]
             }
           ],
           "missingFrames": [],
-          "confidence": "A"
+          "confidence": "A",
+          "fixedSourceDirection": 0
         },
         "attack": {
           "path": "res://assets/art/monsters/client_bich_common/cannibal_flower/cannibal_flower_attack.png",
           "framesPerDirection": 6,
           "frameMs": 120,
           "sourceStart": 30,
-          "sourceDirectionStride": 10,
+          "sourceDirectionStride": 0,
           "sourceFrames": [
             {
               "index": 30,
@@ -2700,287 +2738,17 @@
               ]
             },
             {
-              "index": 40,
+              "index": 30,
               "direction": 1,
               "frame": 0,
-              "drawOffset": [
-                -35,
-                -67
-              ]
-            },
-            {
-              "index": 41,
-              "direction": 1,
-              "frame": 1,
-              "drawOffset": [
-                -35,
-                -60
-              ]
-            },
-            {
-              "index": 42,
-              "direction": 1,
-              "frame": 2,
-              "drawOffset": [
-                -35,
-                -56
-              ]
-            },
-            {
-              "index": 43,
-              "direction": 1,
-              "frame": 3,
-              "drawOffset": [
-                -35,
-                -67
-              ]
-            },
-            {
-              "index": 44,
-              "direction": 1,
-              "frame": 4,
-              "drawOffset": [
-                -35,
-                -60
-              ]
-            },
-            {
-              "index": 45,
-              "direction": 1,
-              "frame": 5,
-              "drawOffset": [
-                -35,
-                -64
-              ]
-            },
-            {
-              "index": 50,
-              "direction": 2,
-              "frame": 0,
-              "drawOffset": [
-                -39,
-                -63
-              ]
-            },
-            {
-              "index": 51,
-              "direction": 2,
-              "frame": 1,
-              "drawOffset": [
-                -35,
-                -62
-              ]
-            },
-            {
-              "index": 52,
-              "direction": 2,
-              "frame": 2,
               "drawOffset": [
                 -35,
                 -63
               ]
             },
             {
-              "index": 53,
-              "direction": 2,
-              "frame": 3,
-              "drawOffset": [
-                -35,
-                -63
-              ]
-            },
-            {
-              "index": 54,
-              "direction": 2,
-              "frame": 4,
-              "drawOffset": [
-                -35,
-                -56
-              ]
-            },
-            {
-              "index": 55,
-              "direction": 2,
-              "frame": 5,
-              "drawOffset": [
-                -35,
-                -48
-              ]
-            },
-            {
-              "index": 60,
-              "direction": 3,
-              "frame": 0,
-              "drawOffset": [
-                -35,
-                -59
-              ]
-            },
-            {
-              "index": 61,
-              "direction": 3,
-              "frame": 1,
-              "drawOffset": [
-                -35,
-                -56
-              ]
-            },
-            {
-              "index": 62,
-              "direction": 3,
-              "frame": 2,
-              "drawOffset": [
-                -35,
-                -64
-              ]
-            },
-            {
-              "index": 63,
-              "direction": 3,
-              "frame": 3,
-              "drawOffset": [
-                -35,
-                -52
-              ]
-            },
-            {
-              "index": 64,
-              "direction": 3,
-              "frame": 4,
-              "drawOffset": [
-                -35,
-                -43
-              ]
-            },
-            {
-              "index": 65,
-              "direction": 3,
-              "frame": 5,
-              "drawOffset": [
-                -35,
-                -40
-              ]
-            },
-            {
-              "index": 70,
-              "direction": 4,
-              "frame": 0,
-              "drawOffset": [
-                -35,
-                -64
-              ]
-            },
-            {
-              "index": 71,
-              "direction": 4,
-              "frame": 1,
-              "drawOffset": [
-                -35,
-                -62
-              ]
-            },
-            {
-              "index": 72,
-              "direction": 4,
-              "frame": 2,
-              "drawOffset": [
-                -35,
-                -75
-              ]
-            },
-            {
-              "index": 73,
-              "direction": 4,
-              "frame": 3,
-              "drawOffset": [
-                -35,
-                -40
-              ]
-            },
-            {
-              "index": 74,
-              "direction": 4,
-              "frame": 4,
-              "drawOffset": [
-                -35,
-                -42
-              ]
-            },
-            {
-              "index": 75,
-              "direction": 4,
-              "frame": 5,
-              "drawOffset": [
-                -35,
-                -43
-              ]
-            },
-            {
-              "index": 80,
-              "direction": 5,
-              "frame": 0,
-              "drawOffset": [
-                -35,
-                -68
-              ]
-            },
-            {
-              "index": 81,
-              "direction": 5,
-              "frame": 1,
-              "drawOffset": [
-                -46,
-                -65
-              ]
-            },
-            {
-              "index": 82,
-              "direction": 5,
-              "frame": 2,
-              "drawOffset": [
-                -37,
-                -73
-              ]
-            },
-            {
-              "index": 83,
-              "direction": 5,
-              "frame": 3,
-              "drawOffset": [
-                -39,
-                -36
-              ]
-            },
-            {
-              "index": 84,
-              "direction": 5,
-              "frame": 4,
-              "drawOffset": [
-                -37,
-                -44
-              ]
-            },
-            {
-              "index": 85,
-              "direction": 5,
-              "frame": 5,
-              "drawOffset": [
-                -35,
-                -56
-              ]
-            },
-            {
-              "index": 90,
-              "direction": 6,
-              "frame": 0,
-              "drawOffset": [
-                -35,
-                -77
-              ]
-            },
-            {
-              "index": 91,
-              "direction": 6,
+              "index": 31,
+              "direction": 1,
               "frame": 1,
               "drawOffset": [
                 -35,
@@ -2988,105 +2756,376 @@
               ]
             },
             {
-              "index": 92,
-              "direction": 6,
+              "index": 32,
+              "direction": 1,
               "frame": 2,
               "drawOffset": [
-                -40,
-                -59
+                -35,
+                -67
               ]
             },
             {
-              "index": 93,
-              "direction": 6,
+              "index": 33,
+              "direction": 1,
               "frame": 3,
-              "drawOffset": [
-                -35,
-                -54
-              ]
-            },
-            {
-              "index": 94,
-              "direction": 6,
-              "frame": 4,
-              "drawOffset": [
-                -53,
-                -65
-              ]
-            },
-            {
-              "index": 95,
-              "direction": 6,
-              "frame": 5,
-              "drawOffset": [
-                -35,
-                -69
-              ]
-            },
-            {
-              "index": 100,
-              "direction": 7,
-              "frame": 0,
-              "drawOffset": [
-                -35,
-                -72
-              ]
-            },
-            {
-              "index": 101,
-              "direction": 7,
-              "frame": 1,
               "drawOffset": [
                 -35,
                 -80
               ]
             },
             {
-              "index": 102,
-              "direction": 7,
-              "frame": 2,
-              "drawOffset": [
-                -35,
-                -64
-              ]
-            },
-            {
-              "index": 103,
-              "direction": 7,
-              "frame": 3,
-              "drawOffset": [
-                -35,
-                -76
-              ]
-            },
-            {
-              "index": 104,
-              "direction": 7,
+              "index": 34,
+              "direction": 1,
               "frame": 4,
-              "drawOffset": [
-                -35,
-                -74
-              ]
-            },
-            {
-              "index": 105,
-              "direction": 7,
-              "frame": 5,
               "drawOffset": [
                 -35,
                 -71
               ]
+            },
+            {
+              "index": 35,
+              "direction": 1,
+              "frame": 5,
+              "drawOffset": [
+                -35,
+                -62
+              ]
+            },
+            {
+              "index": 30,
+              "direction": 2,
+              "frame": 0,
+              "drawOffset": [
+                -35,
+                -63
+              ]
+            },
+            {
+              "index": 31,
+              "direction": 2,
+              "frame": 1,
+              "drawOffset": [
+                -35,
+                -69
+              ]
+            },
+            {
+              "index": 32,
+              "direction": 2,
+              "frame": 2,
+              "drawOffset": [
+                -35,
+                -67
+              ]
+            },
+            {
+              "index": 33,
+              "direction": 2,
+              "frame": 3,
+              "drawOffset": [
+                -35,
+                -80
+              ]
+            },
+            {
+              "index": 34,
+              "direction": 2,
+              "frame": 4,
+              "drawOffset": [
+                -35,
+                -71
+              ]
+            },
+            {
+              "index": 35,
+              "direction": 2,
+              "frame": 5,
+              "drawOffset": [
+                -35,
+                -62
+              ]
+            },
+            {
+              "index": 30,
+              "direction": 3,
+              "frame": 0,
+              "drawOffset": [
+                -35,
+                -63
+              ]
+            },
+            {
+              "index": 31,
+              "direction": 3,
+              "frame": 1,
+              "drawOffset": [
+                -35,
+                -69
+              ]
+            },
+            {
+              "index": 32,
+              "direction": 3,
+              "frame": 2,
+              "drawOffset": [
+                -35,
+                -67
+              ]
+            },
+            {
+              "index": 33,
+              "direction": 3,
+              "frame": 3,
+              "drawOffset": [
+                -35,
+                -80
+              ]
+            },
+            {
+              "index": 34,
+              "direction": 3,
+              "frame": 4,
+              "drawOffset": [
+                -35,
+                -71
+              ]
+            },
+            {
+              "index": 35,
+              "direction": 3,
+              "frame": 5,
+              "drawOffset": [
+                -35,
+                -62
+              ]
+            },
+            {
+              "index": 30,
+              "direction": 4,
+              "frame": 0,
+              "drawOffset": [
+                -35,
+                -63
+              ]
+            },
+            {
+              "index": 31,
+              "direction": 4,
+              "frame": 1,
+              "drawOffset": [
+                -35,
+                -69
+              ]
+            },
+            {
+              "index": 32,
+              "direction": 4,
+              "frame": 2,
+              "drawOffset": [
+                -35,
+                -67
+              ]
+            },
+            {
+              "index": 33,
+              "direction": 4,
+              "frame": 3,
+              "drawOffset": [
+                -35,
+                -80
+              ]
+            },
+            {
+              "index": 34,
+              "direction": 4,
+              "frame": 4,
+              "drawOffset": [
+                -35,
+                -71
+              ]
+            },
+            {
+              "index": 35,
+              "direction": 4,
+              "frame": 5,
+              "drawOffset": [
+                -35,
+                -62
+              ]
+            },
+            {
+              "index": 30,
+              "direction": 5,
+              "frame": 0,
+              "drawOffset": [
+                -35,
+                -63
+              ]
+            },
+            {
+              "index": 31,
+              "direction": 5,
+              "frame": 1,
+              "drawOffset": [
+                -35,
+                -69
+              ]
+            },
+            {
+              "index": 32,
+              "direction": 5,
+              "frame": 2,
+              "drawOffset": [
+                -35,
+                -67
+              ]
+            },
+            {
+              "index": 33,
+              "direction": 5,
+              "frame": 3,
+              "drawOffset": [
+                -35,
+                -80
+              ]
+            },
+            {
+              "index": 34,
+              "direction": 5,
+              "frame": 4,
+              "drawOffset": [
+                -35,
+                -71
+              ]
+            },
+            {
+              "index": 35,
+              "direction": 5,
+              "frame": 5,
+              "drawOffset": [
+                -35,
+                -62
+              ]
+            },
+            {
+              "index": 30,
+              "direction": 6,
+              "frame": 0,
+              "drawOffset": [
+                -35,
+                -63
+              ]
+            },
+            {
+              "index": 31,
+              "direction": 6,
+              "frame": 1,
+              "drawOffset": [
+                -35,
+                -69
+              ]
+            },
+            {
+              "index": 32,
+              "direction": 6,
+              "frame": 2,
+              "drawOffset": [
+                -35,
+                -67
+              ]
+            },
+            {
+              "index": 33,
+              "direction": 6,
+              "frame": 3,
+              "drawOffset": [
+                -35,
+                -80
+              ]
+            },
+            {
+              "index": 34,
+              "direction": 6,
+              "frame": 4,
+              "drawOffset": [
+                -35,
+                -71
+              ]
+            },
+            {
+              "index": 35,
+              "direction": 6,
+              "frame": 5,
+              "drawOffset": [
+                -35,
+                -62
+              ]
+            },
+            {
+              "index": 30,
+              "direction": 7,
+              "frame": 0,
+              "drawOffset": [
+                -35,
+                -63
+              ]
+            },
+            {
+              "index": 31,
+              "direction": 7,
+              "frame": 1,
+              "drawOffset": [
+                -35,
+                -69
+              ]
+            },
+            {
+              "index": 32,
+              "direction": 7,
+              "frame": 2,
+              "drawOffset": [
+                -35,
+                -67
+              ]
+            },
+            {
+              "index": 33,
+              "direction": 7,
+              "frame": 3,
+              "drawOffset": [
+                -35,
+                -80
+              ]
+            },
+            {
+              "index": 34,
+              "direction": 7,
+              "frame": 4,
+              "drawOffset": [
+                -35,
+                -71
+              ]
+            },
+            {
+              "index": 35,
+              "direction": 7,
+              "frame": 5,
+              "drawOffset": [
+                -35,
+                -62
+              ]
             }
           ],
           "missingFrames": [],
-          "confidence": "A"
+          "confidence": "A",
+          "fixedSourceDirection": 0
         },
         "hit": {
           "path": "res://assets/art/monsters/client_bich_common/cannibal_flower/cannibal_flower_hit.png",
           "framesPerDirection": 2,
           "frameMs": 100,
           "sourceStart": 110,
-          "sourceDirectionStride": 2,
+          "sourceDirectionStride": 0,
           "sourceFrames": [
             {
               "index": 110,
@@ -3107,141 +3146,142 @@
               ]
             },
             {
-              "index": 112,
+              "index": 110,
               "direction": 1,
               "frame": 0,
               "drawOffset": [
                 -35,
-                -52
+                -48
               ]
             },
             {
-              "index": 113,
+              "index": 111,
               "direction": 1,
               "frame": 1,
               "drawOffset": [
                 -35,
-                -56
-              ]
-            },
-            {
-              "index": 114,
-              "direction": 2,
-              "frame": 0,
-              "drawOffset": [
-                -35,
-                -53
-              ]
-            },
-            {
-              "index": 115,
-              "direction": 2,
-              "frame": 1,
-              "drawOffset": [
-                -35,
-                -61
-              ]
-            },
-            {
-              "index": 116,
-              "direction": 3,
-              "frame": 0,
-              "drawOffset": [
-                -50,
                 -60
               ]
             },
             {
-              "index": 117,
+              "index": 110,
+              "direction": 2,
+              "frame": 0,
+              "drawOffset": [
+                -35,
+                -48
+              ]
+            },
+            {
+              "index": 111,
+              "direction": 2,
+              "frame": 1,
+              "drawOffset": [
+                -35,
+                -60
+              ]
+            },
+            {
+              "index": 110,
+              "direction": 3,
+              "frame": 0,
+              "drawOffset": [
+                -35,
+                -48
+              ]
+            },
+            {
+              "index": 111,
               "direction": 3,
               "frame": 1,
               "drawOffset": [
                 -35,
-                -62
+                -60
               ]
             },
             {
-              "index": 118,
+              "index": 110,
               "direction": 4,
               "frame": 0,
               "drawOffset": [
-                -47,
-                -55
+                -35,
+                -48
               ]
             },
             {
-              "index": 119,
+              "index": 111,
               "direction": 4,
               "frame": 1,
               "drawOffset": [
-                -39,
-                -58
+                -35,
+                -60
               ]
             },
             {
-              "index": 120,
+              "index": 110,
               "direction": 5,
               "frame": 0,
               "drawOffset": [
                 -35,
-                -53
+                -48
               ]
             },
             {
-              "index": 121,
+              "index": 111,
               "direction": 5,
               "frame": 1,
               "drawOffset": [
                 -35,
-                -56
+                -60
               ]
             },
             {
-              "index": 122,
+              "index": 110,
               "direction": 6,
               "frame": 0,
               "drawOffset": [
                 -35,
-                -49
+                -48
               ]
             },
             {
-              "index": 123,
+              "index": 111,
               "direction": 6,
               "frame": 1,
               "drawOffset": [
                 -35,
-                -55
+                -60
               ]
             },
             {
-              "index": 124,
+              "index": 110,
               "direction": 7,
               "frame": 0,
               "drawOffset": [
                 -35,
-                -42
+                -48
               ]
             },
             {
-              "index": 125,
+              "index": 111,
               "direction": 7,
               "frame": 1,
               "drawOffset": [
                 -35,
-                -57
+                -60
               ]
             }
           ],
           "missingFrames": [],
-          "confidence": "A"
+          "confidence": "A",
+          "fixedSourceDirection": 0
         },
         "death": {
           "path": "res://assets/art/monsters/client_bich_common/cannibal_flower/cannibal_flower_death.png",
           "framesPerDirection": 10,
           "frameMs": 120,
           "sourceStart": 130,
-          "sourceDirectionStride": 10,
+          "sourceDirectionStride": 0,
           "sourceFrames": [
             {
               "index": 130,
@@ -3334,557 +3374,107 @@
               ]
             },
             {
-              "index": 140,
+              "index": 130,
               "direction": 1,
               "frame": 0,
               "drawOffset": [
                 -35,
-                -60
+                -67
               ]
             },
             {
-              "index": 141,
+              "index": 131,
               "direction": 1,
               "frame": 1,
               "drawOffset": [
                 -35,
-                -64
+                -63
               ]
             },
             {
-              "index": 142,
+              "index": 132,
               "direction": 1,
               "frame": 2,
               "drawOffset": [
                 -35,
-                -66
+                -65
               ]
             },
             {
-              "index": 143,
+              "index": 133,
               "direction": 1,
               "frame": 3,
               "drawOffset": [
                 -35,
-                -49
+                -48
               ]
             },
             {
-              "index": 144,
+              "index": 134,
               "direction": 1,
               "frame": 4,
               "drawOffset": [
                 -35,
-                -35
-              ]
-            },
-            {
-              "index": 145,
-              "direction": 1,
-              "frame": 5,
-              "drawOffset": [
-                -45,
                 -28
               ]
             },
             {
-              "index": 146,
+              "index": 135,
+              "direction": 1,
+              "frame": 5,
+              "drawOffset": [
+                -35,
+                -20
+              ]
+            },
+            {
+              "index": 136,
               "direction": 1,
               "frame": 6,
               "drawOffset": [
-                -63,
-                -29
+                -41,
+                -20
               ]
             },
             {
-              "index": 147,
+              "index": 137,
               "direction": 1,
               "frame": 7,
               "drawOffset": [
-                -63,
-                -23
+                -50,
+                -20
               ]
             },
             {
-              "index": 148,
+              "index": 138,
               "direction": 1,
               "frame": 8,
               "drawOffset": [
-                -63,
-                -23
+                -50,
+                -20
               ]
             },
             {
-              "index": 149,
+              "index": 139,
               "direction": 1,
               "frame": 9,
               "drawOffset": [
-                -63,
-                -23
+                -50,
+                -20
               ]
             },
             {
-              "index": 150,
+              "index": 130,
               "direction": 2,
               "frame": 0,
-              "drawOffset": [
-                -35,
-                -65
-              ]
-            },
-            {
-              "index": 151,
-              "direction": 2,
-              "frame": 1,
               "drawOffset": [
                 -35,
                 -67
               ]
             },
             {
-              "index": 152,
+              "index": 131,
               "direction": 2,
-              "frame": 2,
-              "drawOffset": [
-                -35,
-                -62
-              ]
-            },
-            {
-              "index": 153,
-              "direction": 2,
-              "frame": 3,
-              "drawOffset": [
-                -35,
-                -53
-              ]
-            },
-            {
-              "index": 154,
-              "direction": 2,
-              "frame": 4,
-              "drawOffset": [
-                -37,
-                -52
-              ]
-            },
-            {
-              "index": 155,
-              "direction": 2,
-              "frame": 5,
-              "drawOffset": [
-                -61,
-                -46
-              ]
-            },
-            {
-              "index": 156,
-              "direction": 2,
-              "frame": 6,
-              "drawOffset": [
-                -84,
-                -52
-              ]
-            },
-            {
-              "index": 157,
-              "direction": 2,
-              "frame": 7,
-              "drawOffset": [
-                -79,
-                -45
-              ]
-            },
-            {
-              "index": 158,
-              "direction": 2,
-              "frame": 8,
-              "drawOffset": [
-                -79,
-                -45
-              ]
-            },
-            {
-              "index": 159,
-              "direction": 2,
-              "frame": 9,
-              "drawOffset": [
-                -79,
-                -45
-              ]
-            },
-            {
-              "index": 160,
-              "direction": 3,
-              "frame": 0,
-              "drawOffset": [
-                -40,
-                -65
-              ]
-            },
-            {
-              "index": 161,
-              "direction": 3,
-              "frame": 1,
-              "drawOffset": [
-                -35,
-                -71
-              ]
-            },
-            {
-              "index": 162,
-              "direction": 3,
-              "frame": 2,
-              "drawOffset": [
-                -35,
-                -61
-              ]
-            },
-            {
-              "index": 163,
-              "direction": 3,
-              "frame": 3,
-              "drawOffset": [
-                -35,
-                -56
-              ]
-            },
-            {
-              "index": 164,
-              "direction": 3,
-              "frame": 4,
-              "drawOffset": [
-                -35,
-                -67
-              ]
-            },
-            {
-              "index": 165,
-              "direction": 3,
-              "frame": 5,
-              "drawOffset": [
-                -43,
-                -73
-              ]
-            },
-            {
-              "index": 166,
-              "direction": 3,
-              "frame": 6,
-              "drawOffset": [
-                -58,
-                -59
-              ]
-            },
-            {
-              "index": 167,
-              "direction": 3,
-              "frame": 7,
-              "drawOffset": [
-                -59,
-                -47
-              ]
-            },
-            {
-              "index": 168,
-              "direction": 3,
-              "frame": 8,
-              "drawOffset": [
-                -59,
-                -47
-              ]
-            },
-            {
-              "index": 169,
-              "direction": 3,
-              "frame": 9,
-              "drawOffset": [
-                -59,
-                -47
-              ]
-            },
-            {
-              "index": 170,
-              "direction": 4,
-              "frame": 0,
-              "drawOffset": [
-                -43,
-                -71
-              ]
-            },
-            {
-              "index": 171,
-              "direction": 4,
-              "frame": 1,
-              "drawOffset": [
-                -45,
-                -75
-              ]
-            },
-            {
-              "index": 172,
-              "direction": 4,
-              "frame": 2,
-              "drawOffset": [
-                -35,
-                -61
-              ]
-            },
-            {
-              "index": 173,
-              "direction": 4,
-              "frame": 3,
-              "drawOffset": [
-                -35,
-                -58
-              ]
-            },
-            {
-              "index": 174,
-              "direction": 4,
-              "frame": 4,
-              "drawOffset": [
-                -35,
-                -75
-              ]
-            },
-            {
-              "index": 175,
-              "direction": 4,
-              "frame": 5,
-              "drawOffset": [
-                -38,
-                -83
-              ]
-            },
-            {
-              "index": 176,
-              "direction": 4,
-              "frame": 6,
-              "drawOffset": [
-                -52,
-                -69
-              ]
-            },
-            {
-              "index": 177,
-              "direction": 4,
-              "frame": 7,
-              "drawOffset": [
-                -53,
-                -56
-              ]
-            },
-            {
-              "index": 178,
-              "direction": 4,
-              "frame": 8,
-              "drawOffset": [
-                -53,
-                -56
-              ]
-            },
-            {
-              "index": 179,
-              "direction": 4,
-              "frame": 9,
-              "drawOffset": [
-                -53,
-                -56
-              ]
-            },
-            {
-              "index": 180,
-              "direction": 5,
-              "frame": 0,
-              "drawOffset": [
-                -35,
-                -65
-              ]
-            },
-            {
-              "index": 181,
-              "direction": 5,
-              "frame": 1,
-              "drawOffset": [
-                -35,
-                -71
-              ]
-            },
-            {
-              "index": 182,
-              "direction": 5,
-              "frame": 2,
-              "drawOffset": [
-                -35,
-                -62
-              ]
-            },
-            {
-              "index": 183,
-              "direction": 5,
-              "frame": 3,
-              "drawOffset": [
-                -35,
-                -57
-              ]
-            },
-            {
-              "index": 184,
-              "direction": 5,
-              "frame": 4,
-              "drawOffset": [
-                -35,
-                -65
-              ]
-            },
-            {
-              "index": 185,
-              "direction": 5,
-              "frame": 5,
-              "drawOffset": [
-                -35,
-                -68
-              ]
-            },
-            {
-              "index": 186,
-              "direction": 5,
-              "frame": 6,
-              "drawOffset": [
-                -35,
-                -57
-              ]
-            },
-            {
-              "index": 187,
-              "direction": 5,
-              "frame": 7,
-              "drawOffset": [
-                -35,
-                -45
-              ]
-            },
-            {
-              "index": 188,
-              "direction": 5,
-              "frame": 8,
-              "drawOffset": [
-                -35,
-                -45
-              ]
-            },
-            {
-              "index": 189,
-              "direction": 5,
-              "frame": 9,
-              "drawOffset": [
-                -35,
-                -45
-              ]
-            },
-            {
-              "index": 190,
-              "direction": 6,
-              "frame": 0,
-              "drawOffset": [
-                -35,
-                -66
-              ]
-            },
-            {
-              "index": 191,
-              "direction": 6,
-              "frame": 1,
-              "drawOffset": [
-                -35,
-                -67
-              ]
-            },
-            {
-              "index": 192,
-              "direction": 6,
-              "frame": 2,
-              "drawOffset": [
-                -35,
-                -63
-              ]
-            },
-            {
-              "index": 193,
-              "direction": 6,
-              "frame": 3,
-              "drawOffset": [
-                -35,
-                -56
-              ]
-            },
-            {
-              "index": 194,
-              "direction": 6,
-              "frame": 4,
-              "drawOffset": [
-                -35,
-                -53
-              ]
-            },
-            {
-              "index": 195,
-              "direction": 6,
-              "frame": 5,
-              "drawOffset": [
-                -35,
-                -49
-              ]
-            },
-            {
-              "index": 196,
-              "direction": 6,
-              "frame": 6,
-              "drawOffset": [
-                -35,
-                -36
-              ]
-            },
-            {
-              "index": 197,
-              "direction": 6,
-              "frame": 7,
-              "drawOffset": [
-                -35,
-                -30
-              ]
-            },
-            {
-              "index": 198,
-              "direction": 6,
-              "frame": 8,
-              "drawOffset": [
-                -35,
-                -30
-              ]
-            },
-            {
-              "index": 199,
-              "direction": 6,
-              "frame": 9,
-              "drawOffset": [
-                -35,
-                -30
-              ]
-            },
-            {
-              "index": 200,
-              "direction": 7,
-              "frame": 0,
-              "drawOffset": [
-                -35,
-                -61
-              ]
-            },
-            {
-              "index": 201,
-              "direction": 7,
               "frame": 1,
               "drawOffset": [
                 -35,
@@ -3892,82 +3482,534 @@
               ]
             },
             {
-              "index": 202,
+              "index": 132,
+              "direction": 2,
+              "frame": 2,
+              "drawOffset": [
+                -35,
+                -65
+              ]
+            },
+            {
+              "index": 133,
+              "direction": 2,
+              "frame": 3,
+              "drawOffset": [
+                -35,
+                -48
+              ]
+            },
+            {
+              "index": 134,
+              "direction": 2,
+              "frame": 4,
+              "drawOffset": [
+                -35,
+                -28
+              ]
+            },
+            {
+              "index": 135,
+              "direction": 2,
+              "frame": 5,
+              "drawOffset": [
+                -35,
+                -20
+              ]
+            },
+            {
+              "index": 136,
+              "direction": 2,
+              "frame": 6,
+              "drawOffset": [
+                -41,
+                -20
+              ]
+            },
+            {
+              "index": 137,
+              "direction": 2,
+              "frame": 7,
+              "drawOffset": [
+                -50,
+                -20
+              ]
+            },
+            {
+              "index": 138,
+              "direction": 2,
+              "frame": 8,
+              "drawOffset": [
+                -50,
+                -20
+              ]
+            },
+            {
+              "index": 139,
+              "direction": 2,
+              "frame": 9,
+              "drawOffset": [
+                -50,
+                -20
+              ]
+            },
+            {
+              "index": 130,
+              "direction": 3,
+              "frame": 0,
+              "drawOffset": [
+                -35,
+                -67
+              ]
+            },
+            {
+              "index": 131,
+              "direction": 3,
+              "frame": 1,
+              "drawOffset": [
+                -35,
+                -63
+              ]
+            },
+            {
+              "index": 132,
+              "direction": 3,
+              "frame": 2,
+              "drawOffset": [
+                -35,
+                -65
+              ]
+            },
+            {
+              "index": 133,
+              "direction": 3,
+              "frame": 3,
+              "drawOffset": [
+                -35,
+                -48
+              ]
+            },
+            {
+              "index": 134,
+              "direction": 3,
+              "frame": 4,
+              "drawOffset": [
+                -35,
+                -28
+              ]
+            },
+            {
+              "index": 135,
+              "direction": 3,
+              "frame": 5,
+              "drawOffset": [
+                -35,
+                -20
+              ]
+            },
+            {
+              "index": 136,
+              "direction": 3,
+              "frame": 6,
+              "drawOffset": [
+                -41,
+                -20
+              ]
+            },
+            {
+              "index": 137,
+              "direction": 3,
+              "frame": 7,
+              "drawOffset": [
+                -50,
+                -20
+              ]
+            },
+            {
+              "index": 138,
+              "direction": 3,
+              "frame": 8,
+              "drawOffset": [
+                -50,
+                -20
+              ]
+            },
+            {
+              "index": 139,
+              "direction": 3,
+              "frame": 9,
+              "drawOffset": [
+                -50,
+                -20
+              ]
+            },
+            {
+              "index": 130,
+              "direction": 4,
+              "frame": 0,
+              "drawOffset": [
+                -35,
+                -67
+              ]
+            },
+            {
+              "index": 131,
+              "direction": 4,
+              "frame": 1,
+              "drawOffset": [
+                -35,
+                -63
+              ]
+            },
+            {
+              "index": 132,
+              "direction": 4,
+              "frame": 2,
+              "drawOffset": [
+                -35,
+                -65
+              ]
+            },
+            {
+              "index": 133,
+              "direction": 4,
+              "frame": 3,
+              "drawOffset": [
+                -35,
+                -48
+              ]
+            },
+            {
+              "index": 134,
+              "direction": 4,
+              "frame": 4,
+              "drawOffset": [
+                -35,
+                -28
+              ]
+            },
+            {
+              "index": 135,
+              "direction": 4,
+              "frame": 5,
+              "drawOffset": [
+                -35,
+                -20
+              ]
+            },
+            {
+              "index": 136,
+              "direction": 4,
+              "frame": 6,
+              "drawOffset": [
+                -41,
+                -20
+              ]
+            },
+            {
+              "index": 137,
+              "direction": 4,
+              "frame": 7,
+              "drawOffset": [
+                -50,
+                -20
+              ]
+            },
+            {
+              "index": 138,
+              "direction": 4,
+              "frame": 8,
+              "drawOffset": [
+                -50,
+                -20
+              ]
+            },
+            {
+              "index": 139,
+              "direction": 4,
+              "frame": 9,
+              "drawOffset": [
+                -50,
+                -20
+              ]
+            },
+            {
+              "index": 130,
+              "direction": 5,
+              "frame": 0,
+              "drawOffset": [
+                -35,
+                -67
+              ]
+            },
+            {
+              "index": 131,
+              "direction": 5,
+              "frame": 1,
+              "drawOffset": [
+                -35,
+                -63
+              ]
+            },
+            {
+              "index": 132,
+              "direction": 5,
+              "frame": 2,
+              "drawOffset": [
+                -35,
+                -65
+              ]
+            },
+            {
+              "index": 133,
+              "direction": 5,
+              "frame": 3,
+              "drawOffset": [
+                -35,
+                -48
+              ]
+            },
+            {
+              "index": 134,
+              "direction": 5,
+              "frame": 4,
+              "drawOffset": [
+                -35,
+                -28
+              ]
+            },
+            {
+              "index": 135,
+              "direction": 5,
+              "frame": 5,
+              "drawOffset": [
+                -35,
+                -20
+              ]
+            },
+            {
+              "index": 136,
+              "direction": 5,
+              "frame": 6,
+              "drawOffset": [
+                -41,
+                -20
+              ]
+            },
+            {
+              "index": 137,
+              "direction": 5,
+              "frame": 7,
+              "drawOffset": [
+                -50,
+                -20
+              ]
+            },
+            {
+              "index": 138,
+              "direction": 5,
+              "frame": 8,
+              "drawOffset": [
+                -50,
+                -20
+              ]
+            },
+            {
+              "index": 139,
+              "direction": 5,
+              "frame": 9,
+              "drawOffset": [
+                -50,
+                -20
+              ]
+            },
+            {
+              "index": 130,
+              "direction": 6,
+              "frame": 0,
+              "drawOffset": [
+                -35,
+                -67
+              ]
+            },
+            {
+              "index": 131,
+              "direction": 6,
+              "frame": 1,
+              "drawOffset": [
+                -35,
+                -63
+              ]
+            },
+            {
+              "index": 132,
+              "direction": 6,
+              "frame": 2,
+              "drawOffset": [
+                -35,
+                -65
+              ]
+            },
+            {
+              "index": 133,
+              "direction": 6,
+              "frame": 3,
+              "drawOffset": [
+                -35,
+                -48
+              ]
+            },
+            {
+              "index": 134,
+              "direction": 6,
+              "frame": 4,
+              "drawOffset": [
+                -35,
+                -28
+              ]
+            },
+            {
+              "index": 135,
+              "direction": 6,
+              "frame": 5,
+              "drawOffset": [
+                -35,
+                -20
+              ]
+            },
+            {
+              "index": 136,
+              "direction": 6,
+              "frame": 6,
+              "drawOffset": [
+                -41,
+                -20
+              ]
+            },
+            {
+              "index": 137,
+              "direction": 6,
+              "frame": 7,
+              "drawOffset": [
+                -50,
+                -20
+              ]
+            },
+            {
+              "index": 138,
+              "direction": 6,
+              "frame": 8,
+              "drawOffset": [
+                -50,
+                -20
+              ]
+            },
+            {
+              "index": 139,
+              "direction": 6,
+              "frame": 9,
+              "drawOffset": [
+                -50,
+                -20
+              ]
+            },
+            {
+              "index": 130,
+              "direction": 7,
+              "frame": 0,
+              "drawOffset": [
+                -35,
+                -67
+              ]
+            },
+            {
+              "index": 131,
+              "direction": 7,
+              "frame": 1,
+              "drawOffset": [
+                -35,
+                -63
+              ]
+            },
+            {
+              "index": 132,
               "direction": 7,
               "frame": 2,
               "drawOffset": [
                 -35,
-                -64
+                -65
               ]
             },
             {
-              "index": 203,
+              "index": 133,
               "direction": 7,
               "frame": 3,
               "drawOffset": [
                 -35,
-                -51
+                -48
               ]
             },
             {
-              "index": 204,
+              "index": 134,
               "direction": 7,
               "frame": 4,
               "drawOffset": [
                 -35,
-                -33
+                -28
               ]
             },
             {
-              "index": 205,
+              "index": 135,
               "direction": 7,
               "frame": 5,
               "drawOffset": [
                 -35,
-                -35
+                -20
               ]
             },
             {
-              "index": 206,
+              "index": 136,
               "direction": 7,
               "frame": 6,
               "drawOffset": [
-                -35,
-                -23
+                -41,
+                -20
               ]
             },
             {
-              "index": 207,
+              "index": 137,
               "direction": 7,
               "frame": 7,
               "drawOffset": [
-                -35,
+                -50,
                 -20
               ]
             },
             {
-              "index": 208,
+              "index": 138,
               "direction": 7,
               "frame": 8,
               "drawOffset": [
-                -35,
+                -50,
                 -20
               ]
             },
             {
-              "index": 209,
+              "index": 139,
               "direction": 7,
               "frame": 9,
               "drawOffset": [
-                -35,
+                -50,
                 -20
               ]
             }
           ],
           "missingFrames": [],
-          "confidence": "A"
+          "confidence": "A",
+          "fixedSourceDirection": 0
         }
-      }
+      },
+      "directionPolicy": "fixed_source_direction"
     },
     "洞蛆": {
       "name": "洞蛆",
@@ -3992,6 +4034,24 @@
       "footAnchor": [
         18,
         37
+      ],
+      "contentBounds": [
+        -10,
+        -29,
+        67,
+        38
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        22,
+        33,
+        39,
+        35,
+        26,
+        35,
+        39,
+        33
       ],
       "directions": 8,
       "actions": {
@@ -5660,6 +5720,24 @@
       "footAnchor": [
         41,
         91
+      ],
+      "contentBounds": [
+        -33,
+        -83,
+        121,
+        57
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        58,
+        60,
+        62,
+        67,
+        73,
+        67,
+        62,
+        60
       ],
       "directions": 8,
       "actions": {
@@ -7761,6 +7839,24 @@
         58,
         91
       ],
+      "contentBounds": [
+        -50,
+        -83,
+        139,
+        68
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        58,
+        60,
+        62,
+        67,
+        73,
+        63,
+        48,
+        47
+      ],
       "directions": 8,
       "actions": {
         "idle": {
@@ -9860,6 +9956,24 @@
       "footAnchor": [
         27,
         81
+      ],
+      "contentBounds": [
+        -19,
+        -73,
+        111,
+        53
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        27,
+        22,
+        26,
+        37,
+        38,
+        37,
+        26,
+        22
       ],
       "directions": 8,
       "actions": {
@@ -11961,6 +12075,24 @@
         67,
         94
       ],
+      "contentBounds": [
+        -59,
+        -86,
+        141,
+        77
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        47,
+        47,
+        49,
+        46,
+        44,
+        45,
+        48,
+        46
+      ],
       "directions": 8,
       "actions": {
         "idle": {
@@ -14061,6 +14193,24 @@
         41,
         80
       ],
+      "contentBounds": [
+        -33,
+        -72,
+        128,
+        62
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        33,
+        32,
+        19,
+        22,
+        21,
+        21,
+        20,
+        35
+      ],
       "directions": 8,
       "actions": {
         "idle": {
@@ -16159,6 +16309,24 @@
       "footAnchor": [
         57,
         62
+      ],
+      "contentBounds": [
+        -49,
+        -54,
+        120,
+        66
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        33,
+        37,
+        26,
+        19,
+        17,
+        20,
+        28,
+        39
       ],
       "directions": 8,
       "actions": {
@@ -18259,6 +18427,24 @@
         136,
         111
       ],
+      "contentBounds": [
+        -128,
+        -103,
+        189,
+        119
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        65,
+        69,
+        73,
+        73,
+        74,
+        70,
+        73,
+        64
+      ],
       "directions": 8,
       "actions": {
         "idle": {
@@ -20357,6 +20543,24 @@
       "footAnchor": [
         54,
         82
+      ],
+      "contentBounds": [
+        -46,
+        -74,
+        120,
+        52
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        51,
+        51,
+        57,
+        65,
+        68,
+        65,
+        57,
+        51
       ],
       "directions": 8,
       "actions": {
@@ -22457,6 +22661,24 @@
       "footAnchor": [
         79,
         108
+      ],
+      "contentBounds": [
+        -71,
+        -100,
+        164,
+        85
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        58,
+        57,
+        59,
+        57,
+        55,
+        56,
+        58,
+        56
       ],
       "directions": 8,
       "actions": {
@@ -24559,6 +24781,24 @@
         84,
         113
       ],
+      "contentBounds": [
+        -76,
+        -105,
+        171,
+        88
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        63,
+        62,
+        64,
+        62,
+        60,
+        61,
+        60,
+        61
+      ],
       "directions": 8,
       "actions": {
         "idle": {
@@ -26657,6 +26897,24 @@
       "footAnchor": [
         51,
         66
+      ],
+      "contentBounds": [
+        -43,
+        -58,
+        122,
+        61
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        24,
+        27,
+        40,
+        64,
+        56,
+        64,
+        42,
+        28
       ],
       "directions": 8,
       "actions": {
@@ -28758,6 +29016,24 @@
         43,
         76
       ],
+      "contentBounds": [
+        -35,
+        -68,
+        105,
+        50
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        40,
+        43,
+        46,
+        50,
+        44,
+        49,
+        45,
+        43
+      ],
       "directions": 8,
       "actions": {
         "idle": {
@@ -30857,6 +31133,24 @@
       "footAnchor": [
         133,
         109
+      ],
+      "contentBounds": [
+        -125,
+        -101,
+        171,
+        127
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        34,
+        39,
+        48,
+        59,
+        69,
+        59,
+        48,
+        38
       ],
       "directions": 8,
       "actions": {
@@ -32958,6 +33252,24 @@
         158,
         132
       ],
+      "contentBounds": [
+        -150,
+        -124,
+        196,
+        142
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        59,
+        64,
+        73,
+        84,
+        94,
+        84,
+        73,
+        63
+      ],
       "directions": 8,
       "actions": {
         "idle": {
@@ -35058,6 +35370,24 @@
         169,
         149
       ],
+      "contentBounds": [
+        -161,
+        -141,
+        207,
+        148
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        76,
+        81,
+        90,
+        101,
+        111,
+        101,
+        90,
+        80
+      ],
       "directions": 8,
       "actions": {
         "idle": {
@@ -37157,6 +37487,24 @@
       "footAnchor": [
         135,
         133
+      ],
+      "contentBounds": [
+        -127,
+        -125,
+        172,
+        127
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        55,
+        48,
+        40,
+        41,
+        44,
+        37,
+        39,
+        45
       ],
       "directions": 8,
       "actions": {
@@ -39261,6 +39609,24 @@
         125,
         168
       ],
+      "contentBounds": [
+        -117,
+        -160,
+        305,
+        115
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        75,
+        76,
+        101,
+        112,
+        122,
+        112,
+        101,
+        81
+      ],
       "directions": 8,
       "actions": {
         "idle": {
@@ -41361,6 +41727,24 @@
         52,
         70
       ],
+      "contentBounds": [
+        -44,
+        -62,
+        101,
+        64
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        43,
+        47,
+        61,
+        49,
+        48,
+        54,
+        60,
+        47
+      ],
       "directions": 8,
       "actions": {
         "idle": {
@@ -43460,6 +43844,24 @@
       "footAnchor": [
         52,
         63
+      ],
+      "contentBounds": [
+        -44,
+        -55,
+        98,
+        63
+      ],
+      "contentPadding": 8,
+      "atlasCellIsolation": "per_frame",
+      "healthBarTopByDirection": [
+        36,
+        40,
+        53,
+        42,
+        40,
+        47,
+        52,
+        40
       ],
       "directions": 8,
       "actions": {

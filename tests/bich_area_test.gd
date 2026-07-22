@@ -23,22 +23,23 @@ func _run() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	assert(game.current_zone == "兽人古墓一层", "未进入兽人古墓一层")
-	assert(get_tree().get_nodes_in_group("enemies").size() == 5, "一层手工怪物配置不符")
-	assert(_boss_count() == 0, "一层不应刷新骷髅精灵")
-	assert(get_tree().get_nodes_in_group("interactable").size() == 2, "一层双向门点不完整")
+	assert(get_tree().get_nodes_in_group("enemies").size() == _runtime_enemy_count(217), "一层编辑器怪物配置未完整加载")
+	assert(_boss_count() == MapEditorRuntimeBridge.game_content_for_map(217).bosses.size(), "一层Boss配置与编辑器运行时不一致")
+	assert(_zone_portal_count() == MapEditorRuntimeBridge.game_content_for_map(217).portals.size(), "一层双向门点不完整")
 
 	game.travel_to_map(218)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	assert(get_tree().get_nodes_in_group("enemies").size() == 8, "二层怪物与Boss数量不符")
-	assert(_boss_count() == 1, "二层应刷新一只骷髅精灵")
+	assert(get_tree().get_nodes_in_group("enemies").size() == _runtime_enemy_count(218), "二层怪物与Boss数量不符")
+	assert(_boss_count() == MapEditorRuntimeBridge.game_content_for_map(218).bosses.size(), "二层Boss配置与编辑器运行时不一致")
 	var boss := _first_boss()
 	assert(boss != null and float(boss.get_meta("respawn_seconds", 0.0)) == 3600.0, "骷髅精灵60分钟刷新规则失效")
 
 	game.travel_to_map(221)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	assert(get_tree().get_nodes_in_group("enemies").size() == 8 and _boss_count() == 1, "三层高密度怪物或Boss不完整")
+	assert(get_tree().get_nodes_in_group("enemies").size() == _runtime_enemy_count(221), "三层高密度怪物不完整")
+	assert(_boss_count() == MapEditorRuntimeBridge.game_content_for_map(221).bosses.size(), "三层Boss点未按编辑器运行时完整加载")
 	PlayerState.add_item("回城卷")
 	var scroll_index := PlayerState.inventory.size() - 1
 	assert(PlayerState.use_inventory_index(scroll_index).begins_with("使用"), "回城卷无法使用")
@@ -53,6 +54,25 @@ func _boss_count() -> int:
 	var count := 0
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if node is EnemyActor and node.is_boss:
+			count += 1
+	return count
+
+
+func _runtime_enemy_count(map_id: int) -> int:
+	var content := MapEditorRuntimeBridge.game_content_for_map(map_id)
+	var count: int = content.get("bosses", []).size()
+	for spawn: Dictionary in content.get("spawns", []):
+		count += maxi(1, mini(
+			int(spawn.get("count", 1)),
+			int(spawn.get("max_alive", spawn.get("count", 1)))
+		))
+	return count
+
+
+func _zone_portal_count() -> int:
+	var count := 0
+	for node: Node in get_tree().get_nodes_in_group("zone_content"):
+		if node is ZonePortal:
 			count += 1
 	return count
 

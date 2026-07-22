@@ -47,6 +47,10 @@ func _run() -> void:
 	assert(int(catalog_summary.get("total", -1)) == 214, "动画总目录未覆盖214个怪物")
 	assert(int(catalog_summary.get("formal", -1)) == 214, "正式五动作绑定未达到214")
 	assert(int(catalog_summary.get("missing", -1)) == 0, "动画总目录仍登记缺失")
+	for row: Variant in catalog.get("monsters", []):
+		assert(row is Dictionary and not str(row.get("direction_policy", "")).is_empty(), "正式怪物目录缺少视觉方向策略")
+		if int(row.get("monster_id", -1)) == 30:
+			assert(row.get("direction_policy", "") == "fixed_source_direction", "食人花目录未登记固定源方向")
 
 	var player := PlayerCharacter.new()
 	player.global_position = Vector2(900, 0)
@@ -62,6 +66,14 @@ func _run() -> void:
 		await get_tree().process_frame
 		assert(enemy.visual.uses_final_art(), "monsterId=%d 未在运行时启用完整客户端动画" % monster_id)
 		assert(enemy.visual.active_resources.get("animation_source", "") == "classic_client_wil", "monsterId=%d 动画来源错误" % monster_id)
+		assert(enemy.visual.actor_ground_offset == Vector2i(32, 28), "monsterId=%d 未采用经典客户端角色原点迁移量" % monster_id)
+		var sprite: Sprite2D = enemy.visual.get_node("BodySprite")
+		assert(
+			sprite.position == -Vector2(enemy.visual.foot_anchor + enemy.visual.actor_ground_offset),
+			"monsterId=%d 图像绘制原点未迁移到统一地面原点" % monster_id
+		)
+		enemy.set_targeted(true)
+		assert(enemy.ground_indicator_center().is_equal_approx(enemy.visual.position), "monsterId=%d 锁定光圈未使用统一地面原点" % monster_id)
 		enemy.queue_free()
 
 	player.queue_free()

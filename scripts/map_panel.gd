@@ -12,7 +12,7 @@ const PANEL_SIZE := Vector2(1160, 650)
 const MAP_CARD_SIZE := Vector2(226, 58)
 const WORLD_NODE_SIZE := Vector2(430, 50)
 const WORLD_TREE_BLUEPRINT := [
-	{"node_id": "mafa_world", "label": "玛法世界", "depth": 0},
+	{"node_id": "mafa_world", "label": "HardCore 世界", "depth": 0},
 	{"node_id": "bich_province", "label": "比奇省", "depth": 1, "regions": ["比奇地区"]},
 	{"node_id": "orc_tomb", "label": "兽人古墓／骷髅洞", "depth": 2, "map_groups": ["兽人古墓"]},
 	{"node_id": "natural_cave", "label": "天然洞穴", "depth": 2, "map_groups": ["天然洞穴"]},
@@ -157,7 +157,7 @@ func _build_map_list_section() -> void:
 
 func _build_world_tree_section() -> void:
 	var panel := _framed_section("MapPreviewPanel", Rect2(302, 76, 520, 548))
-	panel.add_child(_section_title("玛法世界地图树", 520))
+	panel.add_child(_section_title("HardCore 世界地图树", 520))
 	var hint := Label.new()
 	hint.name = "WorldTreeHint"
 	hint.text = "选择大地图节点，在左侧展开其包含的全部地图"
@@ -263,7 +263,7 @@ func refresh() -> void:
 		var later_marker := "［后期］" if str(map_data.get("versionTag", "")).begins_with("1.76后期") else ""
 		map_list.add_item("%s%s　%s" % [later_marker, map_data.get("name", "未命名"), map_data.get("mapGroup", "")])
 	_rebuild_map_cards()
-	var node_label := str(node.get("label", "玛法世界"))
+	var node_label := str(node.get("label", "HardCore 世界"))
 	count_label.text = "%s · %d 张" % [node_label, map_entries.size()]
 	var selected_index := _index_for_map_id(_selected_map_id)
 	if selected_index >= 0:
@@ -393,7 +393,7 @@ func _show_selected(index: int) -> void:
 			boss_names.append(str(boss.get("name", "Boss")))
 	map_name_label.text = str(map_data.get("name", "未命名地图"))
 	_detail_base_text = "[color=#d8c8ae]所属大地图：%s\n地区：%s\n地图组：%s\n\n资料ID：%s\n运行时ID：%d\n版本：%s\n资料状态：%s\n可信度：%s\n\n门点：%d　怪物点：%d\n关联Boss：%s[/color]" % [
-		_world_node(_selected_world_node_id).get("label", "玛法世界"),
+		_world_node(_selected_world_node_id).get("label", "HardCore 世界"),
 		map_data.get("region", "未分类"),
 		map_data.get("mapGroup", "未分类"),
 		_source_id_label(map_data.get("sourceMapId", map_data.get("mapId", -1))),

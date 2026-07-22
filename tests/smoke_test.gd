@@ -77,7 +77,7 @@ func _run() -> void:
 	for interactable: Node in interactables:
 		if interactable is NPCActor:
 			npc_count += 1
-	assert(npc_count == 5, "比奇省城镇NPC数量不符")
+	assert(npc_count == 7, "比奇省正式运行时NPC数量不符")
 	var bookseller: NPCActor
 	var trainer: NPCActor
 	var veteran: NPCActor

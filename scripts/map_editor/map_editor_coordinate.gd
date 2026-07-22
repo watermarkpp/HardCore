@@ -3,6 +3,8 @@ extends RefCounted
 
 const HALF_TILE_W := 32.0
 const HALF_TILE_H := 16.0
+const GROUND_COORDINATE_CONTRACT_ID := "isometric_cell_center_64x32_v1"
+const GROUND_TILE_SIZE_PX := Vector2(64.0, 32.0)
 
 
 static func origin_px(design_size: Vector2i) -> Vector2:
@@ -18,6 +20,26 @@ static func tile_to_ground_px(tile: Vector2, design_size: Vector2i) -> Vector2:
 	return Vector2(origin.x + (tile.x - tile.y) * HALF_TILE_W, origin.y + (tile.x + tile.y) * HALF_TILE_H)
 
 
+static func cell_center_to_ground_px(cell: Vector2, design_size: Vector2i) -> Vector2:
+	return tile_to_ground_px(cell + Vector2(0.5, 0.5), design_size)
+
+
+static func cell_texture_rect_ground_px(cell: Vector2, design_size: Vector2i) -> Rect2:
+	return Rect2(
+		cell_center_to_ground_px(cell, design_size) - GROUND_TILE_SIZE_PX * 0.5,
+		GROUND_TILE_SIZE_PX
+	)
+
+
+static func cell_polygon_ground_px(cell: Vector2i, design_size: Vector2i) -> PackedVector2Array:
+	return PackedVector2Array([
+		tile_to_ground_px(Vector2(cell), design_size),
+		tile_to_ground_px(Vector2(cell + Vector2i(1, 0)), design_size),
+		tile_to_ground_px(Vector2(cell + Vector2i(1, 1)), design_size),
+		tile_to_ground_px(Vector2(cell + Vector2i(0, 1)), design_size),
+	])
+
+
 static func ground_px_to_tile(ground_px: Vector2, design_size: Vector2i) -> Vector2:
 	var relative := ground_px - origin_px(design_size)
 	return Vector2(
@@ -26,10 +48,40 @@ static func ground_px_to_tile(ground_px: Vector2, design_size: Vector2i) -> Vect
 	)
 
 
+static func ground_px_to_cell(ground_px: Vector2, design_size: Vector2i) -> Vector2i:
+	var lattice := ground_px_to_tile(ground_px, design_size)
+	return Vector2i(floori(lattice.x), floori(lattice.y))
+
+
+static func ground_px_to_grid_vertex(ground_px: Vector2, design_size: Vector2i) -> Vector2i:
+	var lattice := ground_px_to_tile(ground_px, design_size)
+	return Vector2i(roundi(lattice.x), roundi(lattice.y))
+
+
+static func contains_grid_vertex(vertex: Vector2i, design_size: Vector2i) -> bool:
+	return vertex.x >= 0 and vertex.y >= 0 and vertex.x <= design_size.x and vertex.y <= design_size.y
+
+
 static func tile_to_world(tile: Vector2, design_size: Vector2i) -> Vector2:
 	var center := (Vector2(design_size) - Vector2.ONE) * 0.5
 	var local := tile - center
 	return Vector2((local.x - local.y) * HALF_TILE_W, (local.x + local.y) * HALF_TILE_H)
+
+
+static func cell_center_to_world(cell: Vector2, design_size: Vector2i) -> Vector2:
+	return tile_to_world(cell + Vector2(0.5, 0.5), design_size)
+
+
+static func cell_polygon_world(
+	cell: Vector2i,
+	design_size: Vector2i
+) -> PackedVector2Array:
+	return PackedVector2Array([
+		tile_to_world(Vector2(cell), design_size),
+		tile_to_world(Vector2(cell + Vector2i(1, 0)), design_size),
+		tile_to_world(Vector2(cell + Vector2i(1, 1)), design_size),
+		tile_to_world(Vector2(cell + Vector2i(0, 1)), design_size),
+	])
 
 
 static func world_to_tile(world: Vector2, design_size: Vector2i) -> Vector2:
@@ -37,6 +89,11 @@ static func world_to_tile(world: Vector2, design_size: Vector2i) -> Vector2:
 	var vertical := world.y / HALF_TILE_H
 	var center := (Vector2(design_size) - Vector2.ONE) * 0.5
 	return center + Vector2((horizontal + vertical) * 0.5, (vertical - horizontal) * 0.5)
+
+
+static func world_to_cell(world: Vector2, design_size: Vector2i) -> Vector2i:
+	var tile := world_to_tile(world, design_size)
+	return Vector2i(floori(tile.x), floori(tile.y))
 
 
 static func contains_tile(tile: Vector2, design_size: Vector2i) -> bool:

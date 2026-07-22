@@ -34,7 +34,7 @@ func _run() -> void:
 		await get_tree().physics_frame
 
 	for enemy: EnemyActor in enemies:
-		assert(enemy.collision_layer == 4 and enemy.collision_mask == 7, "怪物碰撞层未包含world/player/enemy")
+		assert(enemy.collision_layer == 4 and enemy.collision_mask == 3, "怪物必须保留world/player硬碰撞并关闭enemy互撞")
 		var minimum_player_distance := ArtSpec.PLAYER_COLLISION_RADIUS + enemy.collision_radius + 10.0
 		assert(enemy.global_position.distance_to(player.global_position) >= minimum_player_distance, "怪物进入玩家近战安全环")
 	for first in range(enemies.size()):

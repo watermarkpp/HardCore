@@ -87,8 +87,34 @@ func _run() -> void:
 		summoner.queue_free()
 		await get_tree().process_frame
 	summoner_player.queue_free()
+	await get_tree().process_frame
 
-	print("FIXED_AREA_MONSTER_PASS：固定攻击怪与固定召唤怪均按monsterId输出原服特殊机制")
+	# Regression: an immobilized normal monster can temporarily lose its target
+	# after a scripted relocation.  It must stay pinned instead of entering the
+	# return-to-spawn path before the control-state check.
+	var control_player := PlayerCharacter.new()
+	control_player.global_position = Vector2(2400, 0)
+	add_child(control_player)
+	control_player.set_physics_process(false)
+	var controlled := EnemyActor.new()
+	controlled.global_position = Vector2(640, -64)
+	controlled.setup(GameData.get_monster_by_id(21), control_player, false)
+	add_child(controlled)
+	controlled.set_physics_process(false)
+	await get_tree().process_frame
+	controlled.global_position = Vector2(640, -64)
+	controlled.set_meta("spawn_position", Vector2(-1200, 320))
+	controlled.target = null
+	controlled.apply_control(30.0)
+	var controlled_origin := controlled.global_position
+	for _frame in range(32):
+		controlled._physics_process(1.0 / 60.0)
+	assert(controlled.global_position.distance_to(controlled_origin) < 0.001, "受控怪物丢失目标后被返巢逻辑带动")
+	controlled.queue_free()
+	control_player.queue_free()
+	await get_tree().process_frame
+
+	print("FIXED_AREA_MONSTER_PASS：固定攻击怪、固定召唤怪与无目标受控怪物均保持不可推动")
 	get_tree().quit(0)
 
 
