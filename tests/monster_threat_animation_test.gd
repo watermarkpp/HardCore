@@ -14,6 +14,7 @@ func _ready()->void:
 	assert(enemy.poison_indicator_anchor_y() < enemy.health_bar_anchor_y(), "poison indicator must stay overhead")
 	assert(enemy.poison_indicator_anchor_y() < enemy.ground_indicator_center().y - 24.0, "poison feedback regressed to a ground/portal ring")
 	var fallback_enemy:=EnemyActor.new();fallback_enemy.display_name="测试占位怪";var fallback:=MonsterVisual.new();fallback.setup(fallback_enemy);fallback_enemy.visual=fallback;fallback.play_attack(0.46);fallback._attack_remaining=0.23
+	assert(not fallback.has_authored_client_art() and fallback.should_draw_procedural_fallback(), "unmapped test monster lost its intentional procedural fallback")
 	assert(fallback.is_fallback_attacking());assert(fallback.fallback_attack_scale()!=Vector2.ONE)
 	fallback.free();fallback_enemy.free();enemy.queue_free();player.queue_free()
 	print("MONSTER_THREAT_ANIMATION_PASS")
