@@ -6,6 +6,7 @@ const MapCoordinateMapperScript := preload("res://scripts/map_coordinate_mapper.
 const GothicBichCampBuilderScript := preload("res://scripts/layers/presentation/gothic_bich_camp_builder.gd")
 const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 const EditorCoordinateScript := preload("res://scripts/map_editor/map_editor_coordinate.gd")
+const RuntimeVisualGeometryScript := preload("res://scripts/map_editor/map_editor_runtime_visual_geometry_service.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const BICH_GROUND_ATLAS := preload("res://assets/art/maps/bich/bich_ground_tiles.png")
 const GOTHIC_BICH_GROUND_ATLAS := preload("res://assets/presentation/skins/gothic_bich_camp/gothic_bich_ground_tiles.png")
@@ -677,19 +678,50 @@ func uses_editor_runtime_fallback_ground() -> bool:
 
 
 func _build_editor_runtime_instances(runtime:Dictionary)->void:
-	var raw_size:Array=runtime.design.get("design_size",[64,64]);var size:=Vector2i(int(raw_size[0]),int(raw_size[1]))
-	var material_instances := MapEditorInstanceService.sorted_for_material_render(
+	var raw_size: Array = runtime.design.get("design_size", [64, 64])
+	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
+	var commands := RuntimeVisualGeometryScript.sorted_draw_commands(
 		runtime.get("instances", [])
 	)
-	for instance:Dictionary in material_instances:
-		var asset:=MapAssetCatalogService.find_asset(str(instance.get("asset_id","")));var image_path:=str(asset.get("image",""))
-		if image_path.is_empty() or not ResourceLoader.exists("res://"+image_path):continue
-		var tile:Array=instance.get("tile",[0,0]);var footprint:Array=instance.get("footprint_tiles",[1,1]);var offset_px:Array=instance.get("offset_px",[0,0]);var anchor:Array=instance.get("anchor_px",asset.get("anchor_px",[0,0]));var scale_value:Array=instance.get("scale",[1,1])
-		var foot_tile:=Vector2(float(tile[0])+float(footprint[0])*.5,float(tile[1])+float(footprint[1])*.5)
-		var foot_world:=EditorCoordinateScript.tile_to_world(foot_tile,size)+Vector2(float(offset_px[0]),float(offset_px[1]))
-		var sprite:=Sprite2D.new();sprite.name="EditorRuntimeInstance";sprite.set_meta("editor_runtime_instance",true);sprite.texture=load("res://"+image_path);sprite.centered=false;sprite.scale=Vector2(float(scale_value[0]),float(scale_value[1]));sprite.position=foot_world-Vector2(float(anchor[0]),float(anchor[1]))*sprite.scale
-		MapEditorInstanceService.configure_runtime_material_canvas_item(sprite, instance);sprite.texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST
-		add_child(sprite);_environment_nodes.append(sprite)
+	for command_index in commands.size():
+		var command: Dictionary = commands[command_index]
+		var image_path := str(command.get("image_path", ""))
+		if image_path.is_empty():
+			continue
+		var resource_path := (
+			image_path if image_path.begins_with("res://") else "res://" + image_path
+		)
+		if not ResourceLoader.exists(resource_path):
+			continue
+		var texture := load(resource_path) as Texture2D
+		if texture == null:
+			continue
+		var geometry := RuntimeVisualGeometryScript.runtime_command_geometry(
+			command, size, texture.get_size()
+		)
+		var sprite := Sprite2D.new()
+		sprite.name = "EditorRuntimeInstance_%d" % command_index
+		sprite.set_meta("editor_runtime_instance", true)
+		sprite.set_meta(
+			"editor_runtime_instance_id",
+			str(command.get("instance", {}).get("instance_id", ""))
+		)
+		sprite.set_meta("editor_runtime_image_path", image_path)
+		sprite.texture = texture
+		sprite.centered = false
+		# Keep the node at the authored foot/part center and move only the drawn
+		# pixels.  Using top_left as position would rotate wall parts around the
+		# wrong pivot and recreate the editor/runtime offset.
+		sprite.position = geometry.center
+		sprite.offset = -geometry.anchor
+		sprite.scale = geometry.visual_scale
+		sprite.rotation = geometry.rotation
+		MapEditorInstanceService.configure_runtime_material_canvas_item(
+			sprite, command.instance
+		)
+		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		add_child(sprite)
+		_environment_nodes.append(sprite)
 
 
 func _build_editor_runtime_collisions(runtime: Dictionary) -> void:
