@@ -1,5 +1,5 @@
 {
-  "build_sha256": "abb8e55b6d02f34ae13875dd4d0ae45291d5815b305a8c967c69ba00d03586f5",
+  "build_sha256": "e45cd4f3445823b0e04e981ca9e8109a5bc905d948e90877460a248715bb8fef",
   "collision": {
     "blocked_count": 201.0,
     "blocked_tiles": [
@@ -205,6 +205,7 @@
       "9,0",
       "9,37"
     ],
+    "coordinate_contract_id": "map_editor_runtime_collision_geometry_v2",
     "erased_cells": [
       {
         "content_layer": "personal_expansion",
@@ -832,7 +833,8 @@
         "shape": "rect",
         "source": "manual"
       }
-    ]
+    ],
+    "physics_source_id": "published_blocked_cells_after_erasure_v1"
   },
   "design": {
     "design_size": [
