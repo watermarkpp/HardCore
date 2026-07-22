@@ -6,6 +6,8 @@ signal profile_changed
 signal inventory_changed
 signal equipment_changed
 signal skills_changed
+signal quick_slots_changed(change: Dictionary)
+signal warrior_runtime_state_changed(snapshot: Dictionary)
 signal consumable_requested(item_name: String)
 signal scroll_requested(item_name: String)
 signal quests_changed
@@ -17,6 +19,7 @@ const LEGACY_SAVE_PATH := "user://player_save_v02.json"
 const PROFILE_INDEX_PATH := "user://character_profiles.json"
 const PROFILE_DIRECTORY := "user://characters"
 const AUTOSAVE_INTERVAL := 30.0
+const WARRIOR_RUNTIME_CONTRACT_ID := "gameplay.warrior.skill_runtime.v2"
 const EQUIPMENT_SLOTS: Array[String] = ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指"]
 const VERIFIED_EXPERIENCE_1_TO_22 := {
 	1: 100, 2: 200, 3: 300, 4: 400, 5: 600, 6: 900, 7: 1200, 8: 1700, 9: 2500,
@@ -39,6 +42,7 @@ var equipment: Dictionary = {
 }
 var learned_skills: Dictionary = {}
 var quick_slots: Array[String] = ["", "", "", ""]
+var warrior_runtime_state: Dictionary = {}
 var quest_states: Dictionary = {}
 var saved_map_id := 4
 var saved_position := Vector2.ZERO
@@ -86,6 +90,7 @@ func reset_progress(emit_updates := true) -> void:
 	equipment = _empty_equipment()
 	learned_skills = {}
 	quick_slots = ["", "", "", ""]
+	warrior_runtime_state = _default_warrior_runtime_state()
 	quest_states = {}
 	saved_map_id = 4
 	saved_position = Vector2.ZERO
@@ -112,6 +117,8 @@ func select_profession(value: String) -> String:
 	for index in range(quick_slots.size()):
 		if not learned_skills.has(quick_slots[index]):
 			quick_slots[index] = ""
+	if profession != "战士":
+		warrior_runtime_state = _default_warrior_runtime_state()
 	var returned_items: Array[String] = []
 	for slot: String in equipment.keys():
 		var equipped_record: Variant = equipment[slot]
@@ -911,6 +918,7 @@ func save_game() -> void:
 		"equipment": equipment,
 		"learned_skills": learned_skills,
 		"quick_slots": quick_slots,
+		"warrior_runtime_state": warrior_runtime_state,
 		"quest_states": quest_states,
 		"content_packages": ContentLayers.enabled_package_ids(),
 		"content_schema_version": 1,
@@ -955,6 +963,7 @@ func load_save() -> void:
 	quick_slots = ["", "", "", ""]
 	for index in range(mini(4, saved_slots.size())):
 		quick_slots[index] = str(saved_slots[index])
+	warrior_runtime_state = _normalized_warrior_runtime_state(parsed.get("warrior_runtime_state", {}))
 	quest_states = parsed.get("quest_states", {})
 	saved_map_id = int(parsed.get("map_id", 4))
 	var position_data: Variant = parsed.get("position", [0.0, 0.0])
@@ -967,6 +976,75 @@ func load_save() -> void:
 	if load_path == LEGACY_SAVE_PATH:
 		_commit_save()
 	recalculate_stats()
+
+
+func apply_quick_slot_assignment(result: Dictionary) -> bool:
+	if not bool(result.get("ok", false)):
+		return false
+	var change: Dictionary = result.get("change", {})
+	if str(change.get("contract_id", "")) != "gameplay.skill.quick_slot_assignment.v1":
+		return false
+	var slots_value: Variant = result.get("slots", [])
+	if not slots_value is Array or slots_value.size() != quick_slots.size():
+		return false
+	var next_slots: Array[String] = []
+	for value: Variant in slots_value:
+		var skill_name := str(value)
+		if not skill_name.is_empty() and not learned_skills.has(skill_name):
+			return false
+		next_slots.append(skill_name)
+	quick_slots = next_slots
+	quick_slots_changed.emit(change.duplicate(true))
+	skills_changed.emit()
+	profile_changed.emit()
+	_commit_save()
+	return true
+
+
+func apply_warrior_runtime_state(snapshot: Dictionary, persist := false) -> bool:
+	var normalized := _normalized_warrior_runtime_state(snapshot)
+	if normalized.is_empty():
+		return false
+	warrior_runtime_state = normalized
+	warrior_runtime_state_changed.emit(warrior_runtime_state.duplicate(true))
+	if persist:
+		profile_changed.emit()
+		_commit_save()
+	return true
+
+
+func warrior_runtime_state_for_restore() -> Dictionary:
+	return warrior_runtime_state.duplicate(true)
+
+
+func _normalized_warrior_runtime_state(snapshot: Variant) -> Dictionary:
+	if not snapshot is Dictionary or str(snapshot.get("contract_id", "")) != WARRIOR_RUNTIME_CONTRACT_ID:
+		return _default_warrior_runtime_state()
+	var toggles: Dictionary = snapshot.get("toggles", {})
+	var cooldowns: Dictionary = snapshot.get("cooldowns", {})
+	return {
+		"contract_id": WARRIOR_RUNTIME_CONTRACT_ID,
+		"toggles": {
+			"warrior.thrusting": bool(toggles.get("warrior.thrusting", false)),
+			"warrior.half_moon": bool(toggles.get("warrior.half_moon", false)),
+			"warrior.fire_sword.auto_enabled": bool(toggles.get("warrior.fire_sword.auto_enabled", false)),
+		},
+		"cooldowns": {
+			"warrior.fire_sword.ready_remaining_ms": maxi(0, int(cooldowns.get("warrior.fire_sword.ready_remaining_ms", 0))),
+		},
+	}
+
+
+func _default_warrior_runtime_state() -> Dictionary:
+	return {
+		"contract_id": WARRIOR_RUNTIME_CONTRACT_ID,
+		"toggles": {
+			"warrior.thrusting": false,
+			"warrior.half_moon": false,
+			"warrior.fire_sword.auto_enabled": false,
+		},
+		"cooldowns": {"warrior.fire_sword.ready_remaining_ms": 0},
+	}
 
 
 func update_world_location(map_id: int, position: Vector2) -> void:

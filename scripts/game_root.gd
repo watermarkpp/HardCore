@@ -10,6 +10,7 @@ const MapPortalTravelGuardScript := preload("res://scripts/map_editor/map_portal
 const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const SystemMenuPanelScript := preload("res://scripts/system_menu_panel.gd")
+const SkillLoadoutRulesScript := preload("res://scripts/skill_loadout_rules.gd")
 const DEFAULT_NORMAL_RESPAWN_SECONDS := 180.0
 const DEFAULT_BOSS_RESPAWN_SECONDS := 3600.0
 const MONSTER_PREFETCH_TIMEOUT_MSEC := 8000
@@ -61,6 +62,7 @@ func _ready() -> void:
 	PlayerState.consumable_requested.connect(_on_consumable_used)
 	PlayerState.scroll_requested.connect(_on_scroll_used)
 	add_child(player)
+	player.restore_warrior_runtime_state(PlayerState.warrior_runtime_state_for_restore())
 
 	var camera := Camera2D.new()
 	camera.position_smoothing_enabled = true
@@ -78,6 +80,7 @@ func _ready() -> void:
 	hud.target_switch_pressed.connect(_cycle_target)
 	hud.auto_target_changed.connect(_set_auto_target_enabled)
 	hud.special_action_pressed.connect(_on_special_action_pressed)
+	hud.skill_button_assignment_requested.connect(_on_skill_button_assignment_requested)
 	add_child(hud)
 	player.resources_changed.connect(hud.update_resources)
 	# 重登始终从服务端HomeMap出生。该规则不依赖退出回调，Android强杀后同样安全回城。
@@ -117,6 +120,7 @@ func _process(delta: float) -> void:
 	_movement_target_refresh_remaining = maxf(0.0, _movement_target_refresh_remaining - delta)
 	if _warrior_hud_timer <= 0.0:
 		_warrior_hud_timer = 0.2
+		PlayerState.apply_warrior_runtime_state(player.warrior_runtime_state_for_save())
 		hud.update_warrior_states(player.warrior_state_snapshot())
 	if _mobile_attack_held or Input.is_action_pressed("attack"):
 		_request_mobile_attack()
@@ -199,6 +203,7 @@ func _on_system_menu_audio_setting_changed(request: Dictionary) -> void:
 
 
 func _prepare_safe_logout() -> bool:
+	PlayerState.apply_warrior_runtime_state(player.warrior_runtime_state_for_save())
 	return PlayerState.save_safe_logout(GameData.service_home_runtime_map_id(false), _bich_home_world_position())
 
 
@@ -1027,9 +1032,16 @@ func _request_mobile_attack() -> void:
 		return
 	var target := _ensure_combat_target()
 	if is_instance_valid(target):
-		player.request_attack_toward(player.global_position.direction_to(target.global_position))
+		var target_direction := player.global_position.direction_to(target.global_position)
+		player.request_attack_toward(target_direction, _has_melee_hittable_target(target_direction))
 		return
-	player.request_attack_toward(player.facing)
+	player.request_attack_toward(player.facing, _has_melee_hittable_target(player.facing))
+
+
+func _has_melee_hittable_target(direction: Vector2) -> bool:
+	if direction.length_squared() <= 0.01:
+		return false
+	return _physical_primary_target(player.global_position, direction.normalized(), 105.0) != null
 
 
 func _on_mobile_attack_pressed() -> void:
@@ -1311,6 +1323,18 @@ func _use_quick_slot(index: int) -> void:
 		hud.show_message("技能冷却中或魔法不足")
 
 
+func _on_skill_button_assignment_requested(request: Dictionary) -> void:
+	var result := SkillLoadoutRulesScript.assign_quick_slot(PlayerState.quick_slots, PlayerState.learned_skills, request)
+	if not bool(result.get("ok", false)):
+		hud.show_message("技能栏配置失败：%s" % str(result.get("reason", "invalid_request")))
+		return
+	if not PlayerState.apply_quick_slot_assignment(result):
+		hud.show_message("技能栏配置未能保存")
+		return
+	hud.update_quick_slots()
+	hud.show_message("已将%s配置到快捷栏%d" % [str(result.get("change", {}).get("skill_name", "技能")), int(result.get("change", {}).get("slot_index", 0)) + 1], 1.5)
+
+
 func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void:
 	var context := player.consume_attack_context()
 	var mode := str(context.get("mode", "normal"))
@@ -1379,6 +1403,7 @@ func _try_safe_ring_teleport() -> bool:
 
 
 func _on_warrior_skill_state_changed(_skill_name: String, _enabled: bool, message: String) -> void:
+	PlayerState.apply_warrior_runtime_state(player.warrior_runtime_state_for_save(), true)
 	if hud != null:
 		hud.show_message(message, 1.5)
 		hud.update_warrior_states(player.warrior_state_snapshot())
