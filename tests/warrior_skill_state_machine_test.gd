@@ -30,7 +30,14 @@ func _run() -> void:
 	assert(half_context.mode == "half_moon" and player.current_mp == mp_before_half - 3, "半月没有优先刺杀或没有逐刀消耗3MP")
 	assert(player.request_skill("半月弯刀") and not player.half_moon_enabled, "半月开关没有关闭")
 
+	player.set_test_combat_time_ms(-1)
+	assert(player.restore_warrior_runtime_state({
+		"contract_id": "gameplay.warrior.skill_runtime.v2",
+		"toggles": {"warrior.fire_sword.auto_enabled": false},
+		"cooldowns": {"warrior.fire_sword.ready_remaining_ms": 0},
+	}), "零冷却战士技能快照无法恢复")
 	player.set_test_combat_time_ms(1000)
+	assert(player.warrior_state_snapshot().fire_ready_remaining_ms == 0, "零剩余冷却跨时钟域恢复后不应进入等待")
 	var mp_before_fire := player.current_mp
 	assert(player.request_skill("烈火剑法") and player.fire_sword_auto_enabled, "烈火自动释放开关没有开启")
 	assert(not player.fire_sword_armed and player.current_mp == mp_before_fire, "开启烈火自动释放时不应蓄力或消耗魔法")
