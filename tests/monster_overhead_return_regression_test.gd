@@ -58,6 +58,9 @@ func _run() -> void:
 
 
 func _assert_name_above_health_bar(enemy: EnemyActor) -> void:
-	assert(is_equal_approx(enemy.name_label.position.y, enemy.name_label_anchor_y()), "monster name did not follow authored frame-top anchor")
-	var label_bottom := enemy.name_label.position.y + enemy.name_label.size.y
-	assert(is_equal_approx(label_bottom + EnemyActor.NAME_LABEL_HEALTH_BAR_GAP, enemy.health_bar_anchor_y()), "monster name overlaps or detaches from health bar")
+	var overhead: Variant = enemy.get_node("MonsterOverhead")
+	var bar_top_y: float = overhead.bar_global_top_y()
+	var label_bottom_y: float = overhead.name_global_bottom_y()
+	assert(is_equal_approx(overhead.position.y, enemy.health_bar_anchor_y()), "real monster overhead root did not follow its fixed full-frame anchor")
+	assert(label_bottom_y < bar_top_y, "monster name is not above the health bar")
+	assert(is_equal_approx(label_bottom_y + EnemyActor.NAME_LABEL_HEALTH_BAR_GAP, bar_top_y), "monster name overlaps or detaches from health bar")

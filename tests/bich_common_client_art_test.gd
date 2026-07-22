@@ -75,8 +75,8 @@ func _run() -> void:
 		assert(visual.frame_size == frame_size, "%s 运行帧尺寸与清单不一致" % monster_name)
 		assert(visual.actor_ground_offset == Vector2i(32, 28), "%s 未采用经典客户端角色原点迁移量" % monster_name)
 		assert(sprite.position == -Vector2(foot_anchor + visual.actor_ground_offset), "%s 绘制原点未迁移到统一地面原点" % monster_name)
-		var expected_bar_y := visual.position.y + sprite.position.y + int(health_bar_tops.min()) - MonsterVisual.HEALTH_BAR_FRAME_MARGIN
-		assert(is_equal_approx(enemy.health_bar_anchor_y(), expected_bar_y), "%s 血条未按稳定最高身体顶边定位" % monster_name)
+		var expected_bar_y := visual.position.y + sprite.position.y - MonsterVisual.HEALTH_BAR_FRAME_MARGIN
+		assert(is_equal_approx(enemy.health_bar_anchor_y(), expected_bar_y), "%s 血条未固定在完整动画帧单元上方" % monster_name)
 		enemy.facing = Vector2.RIGHT
 		enemy.movement_facing = Vector2.RIGHT
 		enemy.velocity = Vector2.RIGHT * 50.0

@@ -1,6 +1,7 @@
 extends Node
 
 
+const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
 const FINAL_ART_CASES := [
 	{"monster_id": 28, "boss": false},
 	{"monster_id": 46, "boss": false},
@@ -26,6 +27,10 @@ func _ready() -> void:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
+	var camera := Camera2D.new()
+	camera.zoom = Vector2(1.35, 1.35)
+	camera.enabled = true
+	add_child(camera)
 	var player := PlayerCharacter.new()
 	add_child(player)
 	player.set_physics_process(false)
@@ -47,15 +52,22 @@ func _run() -> void:
 
 		var visual: MonsterVisual = enemy.get_node("MonsterVisual")
 		var sprite: Sprite2D = visual.get_node("BodySprite")
+		var overhead: Variant = enemy.get_node("MonsterOverhead")
 		assert(visual.uses_final_art(), "monsterId=%d did not load final client art" % monster_id)
-		var stable_top := 0.0
-		if visual.health_bar_top_by_direction.size() == 8:
-			stable_top = float(visual.health_bar_top_by_direction.min())
-		var expected_y := visual.position.y + sprite.position.y + stable_top - MonsterVisual.HEALTH_BAR_FRAME_MARGIN
+		var expected_y := visual.position.y + sprite.position.y - MonsterVisual.HEALTH_BAR_FRAME_MARGIN
 		var fixed_y := enemy.health_bar_anchor_y()
-		var fixed_name_y := enemy.name_label.position.y
-		assert(is_equal_approx(fixed_y, expected_y), "monsterId=%d health bar is not anchored to its stable visual profile" % monster_id)
-		assert(is_equal_approx(fixed_name_y + enemy.name_label.size.y + EnemyActor.NAME_LABEL_HEALTH_BAR_GAP, fixed_y), "monsterId=%d name and health bar do not share one stable anchor" % monster_id)
+		var fixed_bar_global_y: float = overhead.bar_global_top_y()
+		var fixed_name_global_bottom_y: float = overhead.name_global_bottom_y()
+		var fixed_gap: float = fixed_bar_global_y - fixed_name_global_bottom_y
+		var fixed_bar_canvas_y: float = (overhead.get_global_transform_with_canvas() * Vector2.ZERO).y
+		var fixed_name_canvas_bottom_y: float = (enemy.name_label.get_global_transform_with_canvas() * Vector2(EnemyActor.NAME_LABEL_SIZE.x * 0.5, EnemyActor.NAME_LABEL_SIZE.y)).y
+		var fixed_canvas_gap: float = fixed_bar_canvas_y - fixed_name_canvas_bottom_y
+		assert(is_equal_approx(fixed_y, expected_y), "monsterId=%d health bar is not anchored above the complete animation cell" % monster_id)
+		assert(fixed_name_global_bottom_y < fixed_bar_global_y, "monsterId=%d name is not above the health bar" % monster_id)
+		assert(is_equal_approx(fixed_gap, EnemyActor.NAME_LABEL_HEALTH_BAR_GAP), "monsterId=%d name/bar fixed gap changed: %s" % [monster_id, fixed_gap])
+		assert(fixed_name_canvas_bottom_y < fixed_bar_canvas_y, "monsterId=%d camera/viewport transform put name below bar" % monster_id)
+		assert(is_equal_approx(fixed_canvas_gap, fixed_gap * camera.zoom.y), "monsterId=%d camera zoom changed the overhead gap contract: %s" % [monster_id, fixed_canvas_gap])
+		assert(enemy.get_child(enemy.get_child_count() - 1) == overhead, "monsterId=%d overhead is not the final actor render layer" % monster_id)
 
 		var states := ["idle", "walk", "attack", "hit", "death"]
 		for state: String in states:
@@ -67,7 +79,12 @@ func _run() -> void:
 					assert(visual.current_direction == visual._direction_row(direction), "monsterId=%d %s did not sample direction=%s" % [monster_id, state, direction])
 					assert(visual.current_frame == frame_index, "monsterId=%d %s did not sample frame=%d" % [monster_id, state, frame_index])
 					assert(is_equal_approx(enemy.health_bar_anchor_y(), fixed_y), "monsterId=%d %s direction=%s frame=%d moved health bar" % [monster_id, state, direction, frame_index])
-					assert(is_equal_approx(enemy.name_label.position.y, fixed_name_y), "monsterId=%d %s direction=%s frame=%d moved name" % [monster_id, state, direction, frame_index])
+					assert(is_equal_approx(overhead.bar_global_top_y(), fixed_bar_global_y), "monsterId=%d %s direction=%s frame=%d moved real bar node" % [monster_id, state, direction, frame_index])
+					assert(is_equal_approx(overhead.name_global_bottom_y(), fixed_name_global_bottom_y), "monsterId=%d %s direction=%s frame=%d moved real name node" % [monster_id, state, direction, frame_index])
+					assert(overhead.name_global_bottom_y() < overhead.bar_global_top_y(), "monsterId=%d %s direction=%s frame=%d put name below bar" % [monster_id, state, direction, frame_index])
+					assert(is_equal_approx(overhead.bar_global_top_y() - overhead.name_global_bottom_y(), fixed_gap), "monsterId=%d %s direction=%s frame=%d changed name/bar gap" % [monster_id, state, direction, frame_index])
+					assert(is_equal_approx((overhead.get_global_transform_with_canvas() * Vector2.ZERO).y, fixed_bar_canvas_y), "monsterId=%d %s direction=%s frame=%d moved real bar after camera transform" % [monster_id, state, direction, frame_index])
+					assert(is_equal_approx((enemy.name_label.get_global_transform_with_canvas() * Vector2(EnemyActor.NAME_LABEL_SIZE.x * 0.5, EnemyActor.NAME_LABEL_SIZE.y)).y, fixed_name_canvas_bottom_y), "monsterId=%d %s direction=%s frame=%d moved real name after camera transform" % [monster_id, state, direction, frame_index])
 		enemy.queue_free()
 		await get_tree().process_frame
 
@@ -79,8 +96,9 @@ func _run() -> void:
 	assert(not fallback.visual.uses_final_art(), "fallback fixture unexpectedly resolved final art")
 	assert(is_equal_approx(fallback.health_bar_anchor_y(), -40.0), "procedural fallback health bar position changed")
 
-	assert(MonsterVisual.OVERHEAD_ANCHOR_CONTRACT == "monster.overhead_anchor.v2", "stable overhead contract changed")
-	print("MONSTER_HEALTH_BAR_ANCHOR_PASS stable profile anchor across every direction, action, and frame")
+	assert(MonsterVisual.OVERHEAD_ANCHOR_CONTRACT == "monster.overhead_anchor.v3", "stable overhead anchor contract changed")
+	assert(MonsterOverheadScript.LAYOUT_CONTRACT == "monster.overhead_layout.v3", "stable overhead layout contract changed")
+	print("MONSTER_HEALTH_BAR_ANCHOR_PASS real name/bar nodes remain ordered above the full animation cell across every direction, action, and frame")
 	get_tree().quit(0)
 
 

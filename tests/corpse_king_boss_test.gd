@@ -36,8 +36,8 @@ func _run() -> void:
 	assert(visual.uses_final_art() and visual.frame_size == expected_frame, "尸王客户端资源未启用")
 	assert(visual.actor_ground_offset == Vector2i(32, 28), "尸王未采用经典客户端角色原点迁移量")
 	assert(sprite.position == -Vector2(expected_foot + visual.actor_ground_offset) and visual.position.y == 6.0, "尸王绘制原点迁移与地面原点不一致")
-	assert(is_equal_approx(boss.name_label.position.y, boss.name_label_anchor_y()), "尸王名称未按客户端造型顶边定位")
-	assert(boss.name_label.position.y + boss.name_label.size.y < boss.health_bar_anchor_y(), "尸王名称压住大型造型")
+	assert(is_equal_approx(boss.overhead.position.y, boss.health_bar_anchor_y()), "尸王头顶层未按固定动画帧锚点定位")
+	assert(boss.overhead.name_global_bottom_y() < boss.overhead.bar_global_top_y(), "尸王名称没有固定在血条上方")
 	assert(boss.max_hp == 500 and boss.attack_min == 18 and boss.attack_max == 36, "尸王2003候选属性未采用")
 	assert(is_equal_approx(boss._attack_interval, 2.8) and is_equal_approx(boss._attack_animation_duration, 0.72) and is_equal_approx(boss._attack_hit_delay, 0.36), "尸王速度或命中帧错误")
 

@@ -2,6 +2,7 @@ class_name EnemyActor
 extends CharacterBody2D
 
 const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
+const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const CROWD_GRID_CELL_SIZE := 96.0
@@ -16,8 +17,8 @@ const BACKGROUND_AI_MIN_DISTANCE := 1200.0
 const ENVIRONMENT_GUARD_INTERVAL_SECONDS := 0.10
 const ENEMY_MOTION_MASK := WorldSpatialRulesScript.WORLD_LAYER | WorldSpatialRulesScript.PLAYER_LAYER
 const POISON_INDICATOR_STYLE := "overhead_three_diamonds"
-const NAME_LABEL_SIZE := Vector2(140, 24)
-const NAME_LABEL_HEALTH_BAR_GAP := 4.0
+const NAME_LABEL_SIZE := MonsterOverheadScript.NAME_LABEL_SIZE
+const NAME_LABEL_HEALTH_BAR_GAP := MonsterOverheadScript.NAME_LABEL_HEALTH_BAR_GAP
 
 static var _crowd_grid_physics_frame := -1
 static var _crowd_grid: Dictionary = {}
@@ -67,6 +68,7 @@ var facing := Vector2.DOWN
 var movement_facing := Vector2.DOWN
 var visual: MonsterVisual
 var name_label: Label
+var overhead: Variant
 var collision_radius := ArtSpec.MONSTER_COLLISION_RADIUS
 var environment_blocker: Node
 var _dying := false
@@ -218,21 +220,21 @@ func _ready() -> void:
 	_resolve_invalid_spawn_overlap()
 	_last_environment_safe_position = global_position
 	_environment_guard_timer = ENVIRONMENT_GUARD_INTERVAL_SECONDS * float(posmod(get_instance_id(), 11)) / 11.0
-	name_label = Label.new()
-	MonsterVisualScript.configure_actor_y_sort_item(name_label, "name_label")
-	name_label.text = display_name
-	name_label.size = NAME_LABEL_SIZE
-	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.add_theme_color_override("font_color", Color(1.0, 0.60, 0.34) if is_boss else Color(0.82, 0.78, 0.66))
-	add_child(name_label)
 	visual = MonsterVisualScript.new()
 	visual.name = "MonsterVisual"
 	visual.setup(self)
 	add_child(visual)
+	overhead = MonsterOverheadScript.new()
+	overhead.name = "MonsterOverhead"
+	MonsterVisualScript.configure_actor_y_sort_item(overhead, "overhead_root")
+	overhead.setup(display_name, is_boss, current_hp, max_hp)
+	add_child(overhead)
+	name_label = overhead.name_label
+	MonsterVisualScript.configure_actor_y_sort_item(name_label, "name_label")
 	refresh_name_label_position()
 	if _burrowed:
 		visual.visible = false
-		name_label.visible = false
+		overhead.visible = false
 	if boss_rule.is_empty():
 		_retarget_timer = FAR_RETARGET_STAGGER_SECONDS * float(posmod(get_instance_id(), 11))
 		_crowd_steering_timer = CROWD_STEERING_INTERVAL_SECONDS * float(posmod(get_instance_id(), 7)) / 7.0
@@ -324,9 +326,11 @@ func _physics_process(delta: float) -> void:
 			dormant = false
 			if bool(burrow.get("healToFullOnEmerge", false)):
 				current_hp = max_hp
+				_refresh_overhead_health()
 			if visual != null:
 				visual.visible = true
-			name_label.visible = true
+			if overhead != null:
+				overhead.visible = true
 		else:
 			velocity = Vector2.ZERO
 			return
@@ -649,6 +653,7 @@ func apply_life_steal(dealt_damage: int) -> void:
 	if life_steal_ratio <= 0.0 or dealt_damage <= 0:
 		return
 	current_hp = mini(max_hp, current_hp + maxi(1, int(dealt_damage * life_steal_ratio)))
+	_refresh_overhead_health()
 
 
 func take_damage(amount: int, attacker: Node2D = null) -> void:
@@ -657,6 +662,7 @@ func take_damage(amount: int, attacker: Node2D = null) -> void:
 	if is_instance_valid(attacker):
 		_add_threat(attacker, float(maxi(1,amount))*5.0+25.0)
 	current_hp = maxi(0, current_hp - amount)
+	_refresh_overhead_health()
 	if is_boss and not boss_rule.is_empty():
 		_apply_health_stage_mechanics()
 	if visual != null and current_hp > 0:
@@ -681,8 +687,8 @@ func _begin_death() -> void:
 	collision_layer = 0
 	collision_mask = 0
 	remove_from_group("enemies")
-	if name_label != null:
-		name_label.visible = false
+	if overhead != null:
+		overhead.visible = false
 	var has_death_art := visual != null and visual.uses_final_art()
 	if has_death_art:
 		visual.play_death()
@@ -912,12 +918,6 @@ func _draw() -> void:
 	if draw_procedural_fallback:
 		draw_circle(body_center + Vector2(-radius * 0.35, -3), 3.0, Color(0.95, 0.75, 0.25))
 		draw_circle(body_center + Vector2(radius * 0.35, -3), 3.0, Color(0.95, 0.75, 0.25))
-	var bar_width := 80.0 if is_boss else 46.0
-	var bar_y := health_bar_anchor_y()
-	draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width, 5), Color(0.10, 0.03, 0.03, 0.9))
-	draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width * float(current_hp) / float(max_hp), 5), Color(0.85, 0.12, 0.08))
-
-
 func health_bar_anchor_y() -> float:
 	var radius := 27.0 if is_boss else 16.0
 	var fallback_y := -92.0 if bool(behavior_profile.get("largeClientBoss", false)) else -radius - 24.0
@@ -929,8 +929,13 @@ func name_label_anchor_y() -> float:
 
 
 func refresh_name_label_position() -> void:
-	if name_label != null:
-		name_label.position = Vector2(-NAME_LABEL_SIZE.x * 0.5, name_label_anchor_y())
+	if overhead != null:
+		overhead.set_anchor_y(health_bar_anchor_y())
+
+
+func _refresh_overhead_health() -> void:
+	if overhead != null:
+		overhead.set_health(current_hp, max_hp)
 
 
 func poison_indicator_anchor_y() -> float:

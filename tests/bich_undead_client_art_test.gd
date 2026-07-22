@@ -54,8 +54,8 @@ func _run() -> void:
 		await get_tree().process_frame
 		player.global_position = enemy.global_position + Vector2(200, 0)
 		if boss:
-			assert(is_equal_approx(enemy.name_label.position.y, enemy.name_label_anchor_y()), "%s名称未按客户端造型顶边定位" % monster_name)
-			assert(enemy.name_label.position.y + enemy.name_label.size.y < enemy.health_bar_anchor_y(), "%s名称压住大型客户端Boss血条" % monster_name)
+			assert(is_equal_approx(enemy.overhead.position.y, enemy.health_bar_anchor_y()), "%s头顶层未按固定动画帧锚点定位" % monster_name)
+			assert(enemy.overhead.name_global_bottom_y() < enemy.overhead.bar_global_top_y(), "%s名称没有固定在大型客户端Boss血条上方" % monster_name)
 		var visual: MonsterVisual = enemy.get_node("MonsterVisual")
 		var sprite: Sprite2D = visual.get_node("BodySprite")
 		var mapping: Dictionary = mappings[monster_name]
@@ -65,8 +65,8 @@ func _run() -> void:
 		assert(visual.actor_ground_offset == Vector2i(32, 28), "%s 未采用经典客户端角色原点迁移量" % monster_name)
 		assert(sprite.position == -Vector2(expected_foot + visual.actor_ground_offset), "%s 待机绘制原点迁移错误" % monster_name)
 		assert(sprite.texture.get_size() == Vector2(expected_frame.x * 4, expected_frame.y * 8), "%s 待机图集尺寸错误" % monster_name)
-		var expected_bar_y := visual.position.y + sprite.position.y + int(mapping.healthBarTopByDirection.min()) - MonsterVisual.HEALTH_BAR_FRAME_MARGIN
-		assert(is_equal_approx(enemy.health_bar_anchor_y(), expected_bar_y), "%s 血条未按稳定最高身体顶边定位" % monster_name)
+		var expected_bar_y := visual.position.y + sprite.position.y - MonsterVisual.HEALTH_BAR_FRAME_MARGIN
+		assert(is_equal_approx(enemy.health_bar_anchor_y(), expected_bar_y), "%s 血条未固定在完整动画帧单元上方" % monster_name)
 		assert(is_equal_approx(enemy.ground_indicator_center().y, visual.position.y), "%s 脚底光圈偏离统一地面原点" % monster_name)
 		enemy.facing = Vector2.RIGHT
 		enemy.movement_facing = Vector2.RIGHT
