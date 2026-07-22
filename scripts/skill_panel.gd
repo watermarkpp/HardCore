@@ -3,6 +3,7 @@ extends Panel
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const HUDSkillIconCatalogScript := preload("res://scripts/hud_skill_icon_catalog.gd")
+const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
 
 signal closed
 signal quick_slot_assignment_requested(request: Dictionary)
@@ -40,6 +41,8 @@ var _press_origin := Vector2.ZERO
 var _long_press_opened := false
 var skill_button_assignments: Dictionary = {}
 var skill_button_modes: Dictionary = {}
+var _refresh_pending := false
+var _refresh_execution_count := 0
 
 
 func _ready() -> void:
@@ -60,8 +63,9 @@ func _ready() -> void:
 	_build_assignment_popup()
 	_build_compatibility_list()
 	_build_long_press_timer()
-	PlayerState.skills_changed.connect(refresh)
-	PlayerState.inventory_changed.connect(refresh)
+	visibility_changed.connect(_on_visibility_changed)
+	PlayerState.skills_changed.connect(_on_panel_data_changed)
+	PlayerState.inventory_changed.connect(_on_panel_data_changed)
 
 
 func _build_modal_surface() -> void:
@@ -381,9 +385,23 @@ func set_skill_button_assignments(assignments: Dictionary, interaction_modes := 
 		refresh()
 
 
+func _on_panel_data_changed() -> void:
+	if not visible:
+		_refresh_pending = true
+		return
+	refresh()
+
+
+func _on_visibility_changed() -> void:
+	if visible and _refresh_pending:
+		refresh()
+
+
 func refresh() -> void:
 	if skill_list == null:
 		return
+	_refresh_pending = false
+	_refresh_execution_count += 1
 	skill_list.clear()
 	for entry: Variant in skill_entries:
 		var skill_name := str(entry.get("skillName", "技能"))
@@ -732,15 +750,9 @@ func _skill_texture(skill_name: String) -> Texture2D:
 	var texture := HUDSkillIconCatalogScript.texture_for(skill_name)
 	if texture != null:
 		return texture
-	var item := GameData.get_item_record(skill_name)
-	var art: Variant = item.get("art", {})
-	if not art is Dictionary:
-		return null
-	var source: Variant = art.get("inventoryIcon", {})
-	var path := str(source.get("path", "")) if source is Dictionary else str(source)
-	if path.is_empty() or not ResourceLoader.exists(path):
-		return null
-	return load(path) as Texture2D
+	return UIItemTextureCacheScript.texture_for(
+		GameData.get_item_record(skill_name), "inventoryIcon"
+	)
 
 
 func _cast_type_label(cast_type: String) -> String:
