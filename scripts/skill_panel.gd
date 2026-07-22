@@ -287,7 +287,9 @@ func _build_assignment_popup() -> void:
 	assignment_scrim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	assignment_scrim.z_index = 100
 	assignment_scrim.mouse_filter = Control.MOUSE_FILTER_STOP
-	assignment_scrim.theme_type_variation = "GothicModalSurface"
+	# This full-rect node is only an input barrier.  The visible modal background
+	# belongs to PopupSurface and must never expand to the whole skill codex.
+	assignment_scrim.theme_type_variation = "GothicModalScrim"
 	assignment_scrim.visible = false
 	add_child(assignment_scrim)
 	assignment_popup = Panel.new()
@@ -305,8 +307,8 @@ func _build_assignment_popup() -> void:
 	assignment_scrim.add_child(assignment_popup)
 	var popup_surface := Panel.new()
 	popup_surface.name = "PopupSurface"
-	popup_surface.position = Vector2(18, 20)
-	popup_surface.size = Vector2(584, 384)
+	popup_surface.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	popup_surface.show_behind_parent = true
 	popup_surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	popup_surface.theme_type_variation = "GothicModalSurface"
 	assignment_popup.add_child(popup_surface)
