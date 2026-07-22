@@ -26,6 +26,7 @@ var current_frame := 0
 var frame_size := ArtSpec.MONSTER_FRAME
 var foot_anchor := ArtSpec.MONSTER_FOOT_ANCHOR
 var actor_ground_offset := Vector2i.ZERO
+var health_bar_top_by_direction: Array = []
 var _elapsed := 0.0
 var _last_state := ""
 var _attack_remaining := 0.0
@@ -50,6 +51,7 @@ func _ready() -> void:
 		frame_size = resources.get("frame_size", ArtSpec.MONSTER_FRAME)
 		foot_anchor = resources.get("foot_anchor", ArtSpec.MONSTER_FOOT_ANCHOR)
 		actor_ground_offset = resources.get("actor_ground_offset", Vector2i.ZERO)
+		health_bar_top_by_direction = resources.get("health_bar_top_by_direction", [])
 	sprite = Sprite2D.new()
 	sprite.name = "BodySprite"
 	sprite.region_enabled = true
@@ -170,7 +172,12 @@ func ground_contact_position(fallback: Vector2) -> Vector2:
 
 
 func health_bar_anchor_y(fallback_y: float) -> float:
-	return _fixed_health_bar_y if uses_final_art() else fallback_y
+	if not uses_final_art():
+		return fallback_y
+	if health_bar_top_by_direction.size() == 8:
+		var direction := clampi(current_direction, 0, health_bar_top_by_direction.size() - 1)
+		return position.y + sprite.position.y + float(health_bar_top_by_direction[direction]) - HEALTH_BAR_FRAME_MARGIN
+	return _fixed_health_bar_y
 
 
 func _direction_row(direction: Vector2) -> int:
@@ -193,6 +200,7 @@ func _client_resources(client_mapping: Dictionary) -> Dictionary:
 		"frame_size": Vector2i(int(client_mapping.get("frameSize", [160, 160])[0]), int(client_mapping.get("frameSize", [160, 160])[1])),
 		"foot_anchor": Vector2i(int(client_mapping.get("footAnchor", [80, 138])[0]), int(client_mapping.get("footAnchor", [80, 138])[1])),
 		"actor_ground_offset": CLIENT_ACTOR_GROUND_OFFSET,
+		"health_bar_top_by_direction": client_mapping.get("healthBarTopByDirection", []),
 		"frame_counts": {},
 		"direction_mode": "mir2_north_first",
 		"direction_policy": str(client_mapping.get("directionPolicy", "mir2_directional")),
@@ -230,6 +238,7 @@ func _client_resource_cache_key(client_mapping: Dictionary) -> String:
 		"%sx%s" % [int(frame_values[0]), int(frame_values[1])],
 		"%s,%s" % [int(foot_values[0]), int(foot_values[1])],
 		str(client_mapping.get("directionPolicy", "mir2_directional")),
+		str(client_mapping.get("healthBarTopByDirection", [])),
 	])
 	var actions: Dictionary = client_mapping.get("actions", {})
 	for action_name: String in ["idle", "walk", "attack", "hit", "death"]:

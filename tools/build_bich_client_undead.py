@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -11,7 +12,12 @@ from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CLIENT_DATA = ROOT / "dev_art_sources/reference/mir2_client_raw/Data"
+CLIENT_DATA = Path(
+    os.environ.get(
+        "MIR2_CLIENT_DATA",
+        ROOT / "dev_art_sources/reference/mir2_client_raw/Data",
+    )
+)
 OUTPUT = ROOT / "assets/art/monsters/client_undead"
 MANIFEST = ROOT / "assets/data/bich_undead_client_art_sources.json"
 
@@ -19,8 +25,7 @@ sys.path.insert(0, str(ROOT / "tools/vendor"))
 from extract_wil import decode_sprite, read_library  # noqa: E402
 
 
-CELL = (160, 160)
-FOOT = (80, 138)
+PADDING = 8
 ACTIONS = {
     "idle": {"start": 0, "frames": 4, "frameMs": 200},
     "walk": {"start": 80, "frames": 6, "frameMs": 160},
@@ -66,11 +71,12 @@ def build_monster(name: str, spec: dict) -> dict:
     data, palette, offsets, info = read_library(library)
     output_dir = OUTPUT / str(spec["slug"])
     output_dir.mkdir(parents=True, exist_ok=True)
-    actions = {}
+    decoded = {}
+    bounds = []
+    living_top_by_direction = [None] * 8
     for action_name, action_spec in ACTIONS.items():
         frame_count = int(action_spec["frames"])
-        atlas = Image.new("RGBA", (CELL[0] * frame_count, CELL[1] * 8), (0, 0, 0, 0))
-        frames, missing = [], []
+        frames, missing = {}, []
         for direction in range(8):
             for frame in range(frame_count):
                 index = base + int(action_spec["start"]) + direction * 10 + frame
@@ -82,18 +88,75 @@ def build_monster(name: str, spec: dict) -> dict:
                 except ValueError:
                     missing.append(index)
                     continue
-                paste = (frame * CELL[0] + FOOT[0] + meta["x"], direction * CELL[1] + FOOT[1] + meta["y"])
-                atlas.alpha_composite(image.convert("RGBA"), paste)
-                frames.append({"index": index, "direction": direction, "frame": frame, "drawOffset": [meta["x"], meta["y"]]})
+                image = image.convert("RGBA")
+                alpha_bounds = image.getchannel("A").getbbox()
+                if alpha_bounds is None:
+                    missing.append(index)
+                    continue
+                frames[(direction, frame)] = (image, meta, index)
+                bounds.append(
+                    (
+                        meta["x"] + alpha_bounds[0],
+                        meta["y"] + alpha_bounds[1],
+                        meta["x"] + alpha_bounds[2],
+                        meta["y"] + alpha_bounds[3],
+                    )
+                )
+                # Health UI follows the standing body silhouette. Walk/attack
+                # frames can raise weapons far above the head; including those
+                # extrema permanently leaves the bar floating in empty space.
+                if action_name == "idle":
+                    source_top = meta["y"] + alpha_bounds[1]
+                    previous_top = living_top_by_direction[direction]
+                    living_top_by_direction[direction] = (
+                        source_top if previous_top is None else min(previous_top, source_top)
+                    )
+        decoded[action_name] = {
+            "spec": action_spec,
+            "frame_count": frame_count,
+            "frames": frames,
+            "missing": missing,
+        }
+
+    if not bounds:
+        raise ValueError("monster contains no drawable frames")
+    min_x = min(row[0] for row in bounds)
+    min_y = min(row[1] for row in bounds)
+    max_x = max(row[2] for row in bounds)
+    max_y = max(row[3] for row in bounds)
+    cell_width = ((max_x - min_x + PADDING * 2 + 15) // 16) * 16
+    cell_height = ((max_y - min_y + PADDING * 2 + 15) // 16) * 16
+    foot_anchor = (-min_x + PADDING, -min_y + PADDING)
+    if any(value is None for value in living_top_by_direction):
+        raise ValueError("monster contains a direction without a living-pose top")
+    health_bar_top_by_direction = [
+        foot_anchor[1] + int(value) for value in living_top_by_direction
+    ]
+
+    actions = {}
+    for action_name, action in decoded.items():
+        frame_count = int(action["frame_count"])
+        atlas = Image.new("RGBA", (cell_width * frame_count, cell_height * 8), (0, 0, 0, 0))
+        frame_records = []
+        for (direction, frame), (image, meta, index) in action["frames"].items():
+            # Always compose through a cell-sized image. Directly writing the
+            # decoded WIL sprite into the whole atlas lets feet extending below
+            # one direction row leak into the next row's head area.
+            isolated = Image.new("RGBA", (cell_width, cell_height), (0, 0, 0, 0))
+            isolated.alpha_composite(image, (foot_anchor[0] + meta["x"], foot_anchor[1] + meta["y"]))
+            atlas.alpha_composite(isolated, (frame * cell_width, direction * cell_height))
+            frame_records.append(
+                {"index": index, "direction": direction, "frame": frame, "drawOffset": [meta["x"], meta["y"]]}
+            )
         target = output_dir / f"{spec['slug']}_{action_name}.png"
         atlas.save(target)
         actions[action_name] = {
             "path": f"res://{target.relative_to(ROOT).as_posix()}",
             "framesPerDirection": frame_count,
-            "frameMs": int(action_spec["frameMs"]),
-            "sourceStart": base + int(action_spec["start"]),
-            "sourceFrames": frames,
-            "missingFrames": missing,
+            "frameMs": int(action["spec"]["frameMs"]),
+            "sourceStart": base + int(action["spec"]["start"]),
+            "sourceFrames": sorted(frame_records, key=lambda row: (row["direction"], row["frame"])),
+            "missingFrames": action["missing"],
             "confidence": "A",
         }
     return {
@@ -106,8 +169,12 @@ def build_monster(name: str, spec: dict) -> dict:
         "clientLibrary": f"dev_art_sources/reference/mir2_client_raw/Data/{library_name}",
         "clientLibraryImageCount": info["image_count"],
         "blockBase": base,
-        "frameSize": list(CELL),
-        "footAnchor": list(FOOT),
+        "frameSize": [cell_width, cell_height],
+        "footAnchor": [foot_anchor[0], foot_anchor[1]],
+        "contentBounds": [min_x, min_y, max_x, max_y],
+        "contentPadding": PADDING,
+        "atlasCellIsolation": "per_frame",
+        "healthBarTopByDirection": health_bar_top_by_direction,
         "directions": 8,
         "actions": actions,
     }
