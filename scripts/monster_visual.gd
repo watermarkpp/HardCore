@@ -9,12 +9,18 @@ const COMPLETE_ART_PATH := "res://assets/data/complete_monster_client_art_source
 # origin by (+32,+28); monsters must use the identical coordinate conversion.
 const CLIENT_ACTOR_GROUND_OFFSET := Vector2i(32, 28)
 const HEALTH_BAR_FRAME_MARGIN := 8.0
-const CLIENT_RESOURCE_CACHE_CAPACITY := 32
+const CLIENT_RESOURCE_CACHE_CAPACITY := 12
+const CLIENT_RESOURCE_CACHE_BUDGET_BYTES := 64 * 1024 * 1024
+const VISUAL_ACTIVATION_DISTANCE := 1600.0
+const VISUAL_RELEASE_DISTANCE := 2000.0
+const RESOURCE_RESIDENCY_CHECK_SECONDS := 0.12
 
 static var _boss_art: Dictionary = {}
 static var _complete_art: Dictionary = {}
 static var _client_resource_profiles: Dictionary = {}
 static var _client_resource_profile_lru: Array[String] = []
+static var _client_resource_profile_bytes: Dictionary = {}
+static var _client_resource_cache_bytes := 0
 static var _client_texture_load_request_count := 0
 
 var actor: EnemyActor
@@ -35,6 +41,7 @@ var _death_remaining := 0.0
 var _action_duration := 0.0
 var _fixed_health_bar_y := 0.0
 var _render_state_update_count := 0
+var _resource_residency_timer := 0.0
 
 
 func setup(owner_actor: EnemyActor) -> void:
@@ -44,14 +51,7 @@ func setup(owner_actor: EnemyActor) -> void:
 func _ready() -> void:
 	# 普通怪下沉4px，Boss下沉6px，使脚底与阴影中心实际重叠。
 	position = Vector2(0, 6 if actor.is_boss else 4)
-	active_resources = _resources_for(actor.monster_data)
-	visible = not active_resources.is_empty()
-	if visible:
-		var resources: Dictionary = active_resources
-		frame_size = resources.get("frame_size", ArtSpec.MONSTER_FRAME)
-		foot_anchor = resources.get("foot_anchor", ArtSpec.MONSTER_FOOT_ANCHOR)
-		actor_ground_offset = resources.get("actor_ground_offset", Vector2i.ZERO)
-		health_bar_top_by_direction = resources.get("health_bar_top_by_direction", [])
+	visible = false
 	sprite = Sprite2D.new()
 	sprite.name = "BodySprite"
 	sprite.region_enabled = true
@@ -65,8 +65,9 @@ func _ready() -> void:
 	_fixed_health_bar_y = position.y + sprite.position.y - HEALTH_BAR_FRAME_MARGIN
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	add_child(sprite)
-	if visible:
-		_apply_render_state(active_resources["idle"], Rect2(Vector2.ZERO, frame_size))
+	_resource_residency_timer = RESOURCE_RESIDENCY_CHECK_SECONDS * float(posmod(get_instance_id(), 7)) / 7.0
+	if _inside_visual_distance(VISUAL_ACTIVATION_DISTANCE):
+		_activate_resources()
 
 
 func _process(delta: float) -> void:
@@ -75,7 +76,15 @@ func _process(delta: float) -> void:
 	_attack_remaining = maxf(0.0, _attack_remaining - delta)
 	_hit_remaining = maxf(0.0, _hit_remaining - delta)
 	_death_remaining = maxf(0.0, _death_remaining - delta)
-	if not visible:
+	_resource_residency_timer -= delta
+	if _resource_residency_timer <= 0.0:
+		_resource_residency_timer = RESOURCE_RESIDENCY_CHECK_SECONDS
+		if active_resources.is_empty():
+			if _inside_visual_distance(VISUAL_ACTIVATION_DISTANCE):
+				_activate_resources()
+		elif not _inside_visual_distance(VISUAL_RELEASE_DISTANCE):
+			_release_resources()
+	if active_resources.is_empty() or not visible:
 		return
 	if _death_remaining > 0.0:
 		current_state = "death"
@@ -100,10 +109,42 @@ func _process(delta: float) -> void:
 	else:
 		var fps := MonsterAnimationPolicy.loop_fps(StringName(current_state))
 		current_frame = int(floor(_elapsed * fps)) % frame_count
-	_apply_render_state(
-		active_resources[current_state],
-		Rect2(current_frame * frame_size.x, current_direction * frame_size.y, frame_size.x, frame_size.y)
-	)
+	var next_region := Rect2(current_frame * frame_size.x, current_direction * frame_size.y, frame_size.x, frame_size.y)
+	if sprite.texture != active_resources[current_state] or sprite.region_rect != next_region:
+		_apply_render_state(active_resources[current_state], next_region)
+
+
+func _inside_visual_distance(distance: float) -> bool:
+	if not is_instance_valid(actor) or not is_instance_valid(actor.primary_target):
+		return true
+	return actor.global_position.distance_squared_to(actor.primary_target.global_position) <= distance * distance
+
+
+func _activate_resources() -> void:
+	if not active_resources.is_empty():
+		return
+	var resources := _resources_for(actor.monster_data)
+	if resources.is_empty():
+		return
+	active_resources = resources
+	frame_size = resources.get("frame_size", ArtSpec.MONSTER_FRAME)
+	foot_anchor = resources.get("foot_anchor", ArtSpec.MONSTER_FOOT_ANCHOR)
+	actor_ground_offset = resources.get("actor_ground_offset", Vector2i.ZERO)
+	health_bar_top_by_direction = resources.get("health_bar_top_by_direction", [])
+	sprite.region_rect = Rect2(Vector2.ZERO, frame_size)
+	sprite.position = -Vector2(foot_anchor + actor_ground_offset)
+	_fixed_health_bar_y = position.y + sprite.position.y - HEALTH_BAR_FRAME_MARGIN
+	visible = not actor._burrowed
+	_last_state = ""
+	_apply_render_state(active_resources["idle"], Rect2(Vector2.ZERO, frame_size))
+
+
+func _release_resources() -> void:
+	if active_resources.is_empty():
+		return
+	visible = false
+	sprite.texture = null
+	active_resources = {}
 
 
 func _resources_for(monster_data: Dictionary) -> Dictionary:
@@ -223,12 +264,38 @@ func _client_resources(client_mapping: Dictionary) -> Dictionary:
 	# resource cache may release an atlas after the last actor leaves; this LRU
 	# prevents an immediate return from decoding/uploading all five actions again
 	# without eventually retaining the entire 214-monster catalog on mobile.
-	_client_resource_profiles[cache_key] = result
-	_touch_client_resource_profile(cache_key)
-	while _client_resource_profile_lru.size() > CLIENT_RESOURCE_CACHE_CAPACITY:
-		var expired_key: String = _client_resource_profile_lru.pop_front()
-		_client_resource_profiles.erase(expired_key)
+	_retain_client_resource_profile(cache_key, result)
 	return result
+
+
+func _retain_client_resource_profile(cache_key: String, resources: Dictionary) -> void:
+	if _client_resource_profiles.has(cache_key):
+		_client_resource_cache_bytes -= int(_client_resource_profile_bytes.get(cache_key, 0))
+	_client_resource_profiles[cache_key] = resources
+	var estimated_bytes := _estimated_client_profile_bytes(resources)
+	_client_resource_profile_bytes[cache_key] = estimated_bytes
+	_client_resource_cache_bytes += estimated_bytes
+	_touch_client_resource_profile(cache_key)
+	while (
+		_client_resource_profile_lru.size() > CLIENT_RESOURCE_CACHE_CAPACITY
+		or _client_resource_cache_bytes > CLIENT_RESOURCE_CACHE_BUDGET_BYTES
+	):
+		var expired_key: String = _client_resource_profile_lru.pop_front()
+		_client_resource_cache_bytes -= int(_client_resource_profile_bytes.get(expired_key, 0))
+		_client_resource_profile_bytes.erase(expired_key)
+		_client_resource_profiles.erase(expired_key)
+
+
+func _estimated_client_profile_bytes(resources: Dictionary) -> int:
+	# Android imports these atlases as ETC2 RGBA8 (8 bits per pixel). This is a
+	# conservative GPU-residency estimate and deliberately excludes mipmaps.
+	var total := 0
+	for action_name: String in ["idle", "walk", "attack", "hit", "death"]:
+		var texture := resources.get(action_name) as Texture2D
+		if texture != null:
+			var size := texture.get_size()
+			total += int(size.x) * int(size.y)
+	return total
 
 
 func _client_resource_cache_key(client_mapping: Dictionary) -> String:
@@ -270,6 +337,18 @@ func render_state_update_count() -> int:
 
 static func cached_client_profile_count() -> int:
 	return _client_resource_profiles.size()
+
+
+static func cached_client_profile_estimated_bytes() -> int:
+	return _client_resource_cache_bytes
+
+
+static func reset_client_resource_cache() -> void:
+	_client_resource_profiles.clear()
+	_client_resource_profile_lru.clear()
+	_client_resource_profile_bytes.clear()
+	_client_resource_cache_bytes = 0
+	_client_texture_load_request_count = 0
 
 
 static func client_texture_load_request_count() -> int:
