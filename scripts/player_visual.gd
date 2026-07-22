@@ -1,4 +1,6 @@
-extends Node2D
+extends CanvasGroup
+
+const ACTOR_COMPOSITE_SORT_CONTRACT := "equipment_actor_visual_sort_unit_v1"
 
 const WARRIOR_SKILL_COLORS := {
 	"攻杀剑术": Color(1.0, 0.82, 0.30, 0.95),
@@ -65,6 +67,13 @@ func setup(owner_actor: PlayerCharacter) -> void:
 
 
 func _ready() -> void:
+	z_index = 0
+	z_as_relative = true
+	y_sort_enabled = false
+	show_behind_parent = false
+	set_as_top_level(false)
+	set_meta("actor_render_domain", "actor_y_sort")
+	set_meta("actor_composite_sort_contract", ACTOR_COMPOSITE_SORT_CONTRACT)
 	# 图集脚掌压入演员原点处的地面阴影，消除手机缩放后的悬空缝隙。
 	position = Vector2(0, 4)
 	sprite = Sprite2D.new()

@@ -15,6 +15,8 @@ const VISUAL_ACTIVATION_DISTANCE := 1600.0
 const VISUAL_RELEASE_DISTANCE := 2000.0
 const RESOURCE_RESIDENCY_CHECK_SECONDS := 0.12
 const MAX_CONCURRENT_PROFILE_LOADS := 2
+const ACTOR_Y_SORT_RENDER_DOMAIN := "actor_y_sort"
+const ACTOR_Y_SORT_RENDER_CONTRACT := "monster.actor_y_sort.v1"
 
 static var _boss_art: Dictionary = {}
 static var _complete_art: Dictionary = {}
@@ -56,16 +58,30 @@ var _render_state_update_count := 0
 var _resource_residency_timer := 0.0
 
 
+static func configure_actor_y_sort_item(item: CanvasItem, role: String) -> void:
+	# Keep the complete monster composite under EnemyActor's GameRoot Y-sort key.
+	item.z_index = 0
+	item.z_as_relative = true
+	item.y_sort_enabled = false
+	item.show_behind_parent = false
+	item.set_as_top_level(false)
+	item.set_meta("monster_render_domain", ACTOR_Y_SORT_RENDER_DOMAIN)
+	item.set_meta("monster_render_contract", ACTOR_Y_SORT_RENDER_CONTRACT)
+	item.set_meta("monster_render_role", role)
+
+
 func setup(owner_actor: EnemyActor) -> void:
 	actor = owner_actor
 
 
 func _ready() -> void:
+	configure_actor_y_sort_item(self, "visual_root")
 	# 普通怪下沉4px，Boss下沉6px，使脚底与阴影中心实际重叠。
 	position = Vector2(0, 6 if actor.is_boss else 4)
 	visible = false
 	sprite = Sprite2D.new()
 	sprite.name = "BodySprite"
+	configure_actor_y_sort_item(sprite, "body_sprite")
 	sprite.region_enabled = true
 	sprite.region_rect = Rect2(Vector2.ZERO, frame_size)
 	sprite.centered = false
