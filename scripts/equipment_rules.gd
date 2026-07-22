@@ -13,6 +13,10 @@ const LUCK_POINT_3 := 7
 const LUCK_POINT_2_RATE := 6
 const LUCK_POINT_3_RATE := 40
 const MAX_WEAPON_CURSE := 10
+const ACTOR_VISUAL_SORT_CONTRACT_ID := "equipment_actor_visual_sort_unit_v2"
+const ACTOR_VISUAL_BODY_LAYER := &"body_and_dress"
+const ACTOR_VISUAL_WEAPON_LAYER := &"weapon"
+const ACTOR_VISUAL_HELMET_LAYER := &"helmet"
 const SPECIAL_EFFECTS_BY_NAME := {
 	"隐身戒指": {"id": "stealth", "label": "隐身", "source_code": 111, "runtime": true, "confidence": "B"},
 	"传送戒指": {"id": "teleport", "label": "安全传送", "source_code": 112, "runtime": true, "confidence": "B"},
@@ -31,6 +35,27 @@ const SET_PIECES_BY_NAME := {
 	"虹魔手镯": {"set": "rainbow_demon", "piece": "bracelet", "power": 3},
 	"虹魔戒指": {"set": "rainbow_demon", "piece": "ring", "power": 2},
 }
+
+
+static func weapon_draws_behind_actor(direction_row: int) -> bool:
+	return posmod(direction_row, 8) in [7, 0, 1]
+
+
+static func actor_visual_layer_order(direction_row: int) -> Array[StringName]:
+	# Wall fronts and actors only Y-sort when their final z_index matches. Keep
+	# every wear layer on Z=0 and express classic equipment overlap by sibling
+	# tree order inside the actor subtree.
+	if weapon_draws_behind_actor(direction_row):
+		return [
+			ACTOR_VISUAL_WEAPON_LAYER,
+			ACTOR_VISUAL_BODY_LAYER,
+			ACTOR_VISUAL_HELMET_LAYER,
+		]
+	return [
+		ACTOR_VISUAL_BODY_LAYER,
+		ACTOR_VISUAL_WEAPON_LAYER,
+		ACTOR_VISUAL_HELMET_LAYER,
+	]
 
 
 static func max_wear_weight(profession: String, level: int) -> int:

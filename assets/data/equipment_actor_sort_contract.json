@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 1,
-  "contractId": "equipment_actor_visual_sort_unit_v1",
+  "schemaVersion": 2,
+  "contractId": "equipment_actor_visual_sort_unit_v2",
   "scope": "runtime_equipment_appearance",
   "worldAppearanceFields": [
     "dressAppearance",
@@ -10,41 +10,33 @@
   "actorSortUnit": {
     "actorNode": "Player",
     "visualNode": "PlayerVisual",
-    "requiredCompositeBoundary": "CanvasGroup",
+    "requiredCompositeBoundary": "single_non_y_sorted_canvas_subtree",
     "worldZIndex": 0,
     "zAsRelative": true,
     "topLevel": false,
     "showBehindParent": false,
     "sortOrigin": "actor_feet",
-    "rule": "body, dress, weapon and helmet must enter actor_y_sort as one composite CanvasItem"
+    "internalOrderMechanism": "sibling_tree_order",
+    "rule": "body, dress, weapon and helmet must stay on final world z_index 0 and enter actor_y_sort as one subtree"
   },
-  "internalLayers": [
+  "worldPlaneLayers": [
+    {"id": "body_and_dress", "node": "BodySprite", "zIndex": 0},
+    {"id": "weapon", "node": "ClientWeaponLayer", "zIndex": 0},
+    {"id": "helmet", "node": "ClientHelmetLayer", "zIndex": 0}
+  ],
+  "siblingOrderByDirection": [
     {
-      "id": "weapon_back",
-      "node": "ClientWeaponLayer",
-      "zIndex": -1,
-      "directionRows": [7, 0, 1]
+      "directionRows": [7, 0, 1],
+      "backToFront": ["weapon", "body_and_dress", "helmet"]
     },
     {
-      "id": "body_and_dress",
-      "node": "BodySprite",
-      "zIndex": 0
-    },
-    {
-      "id": "weapon_front",
-      "node": "ClientWeaponLayer",
-      "zIndex": 1,
-      "directionRows": [2, 3, 4, 5, 6]
-    },
-    {
-      "id": "helmet",
-      "node": "ClientHelmetLayer",
-      "zIndex": 2
+      "directionRows": [2, 3, 4, 5, 6],
+      "backToFront": ["body_and_dress", "weapon", "helmet"]
     }
   ],
   "invariants": [
-    "Internal layer z_index values are resolved inside the composite boundary.",
-    "No equipment child contributes an independent world z_index against wall fronts.",
+    "Every body and equipment CanvasItem has final world z_index 0, matching actor_y_sort wall fronts.",
+    "Equipment front/back order uses sibling tree order, never z_index offsets.",
     "No equipment child is top_level or uses z_as_relative=false.",
     "A wall-front actor_y_sort unit in front of the actor feet occludes body, dress, weapon and helmet together.",
     "A wall-front actor_y_sort unit behind the actor feet leaves the complete actor visible."
