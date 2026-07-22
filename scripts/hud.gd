@@ -14,6 +14,9 @@ const HUDUtilityStackTexture := preload("res://assets/ui/gothic_hud/v2/runtime/u
 const HUDJoystickTexture := preload("res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png")
 const HUDChassisTexture := preload("res://assets/ui/gothic_hud/v2/runtime/bottom_chassis_v2.png")
 const HUDRightControlsTexture := preload("res://assets/ui/gothic_hud/v2/runtime/right_controls_v2.png")
+const HUD_RESOURCE_ORB_SIZE := Vector2(110, 110)
+const HUD_HEALTH_ORB_CENTER := Vector2(182, 188)
+const HUD_MANA_ORB_CENTER := Vector2(639, 188)
 
 signal movement_changed(value: Vector2)
 signal attack_pressed
@@ -260,18 +263,20 @@ func _build_bottom_chassis(root: Control) -> void:
 
 	health_orb = HUDResourceOrbScript.new()
 	health_orb.name = "HealthOrb"
-	health_orb.position = Vector2(132, 138)
-	health_orb.size = Vector2(100, 100)
+	health_orb.position = HUD_HEALTH_ORB_CENTER - HUD_RESOURCE_ORB_SIZE * 0.5
+	health_orb.size = HUD_RESOURCE_ORB_SIZE
 	health_orb.resource_name = "生命"
 	health_orb.liquid_color = Color("a51422")
+	health_orb.set_meta("stable_id", "ui.hud.resource_orb.hole_fill.v1")
 	chassis_root.add_child(health_orb)
 
 	mana_orb = HUDResourceOrbScript.new()
 	mana_orb.name = "ManaOrb"
-	mana_orb.position = Vector2(589, 138)
-	mana_orb.size = Vector2(100, 100)
+	mana_orb.position = HUD_MANA_ORB_CENTER - HUD_RESOURCE_ORB_SIZE * 0.5
+	mana_orb.size = HUD_RESOURCE_ORB_SIZE
 	mana_orb.resource_name = "魔法"
 	mana_orb.liquid_color = Color("174eaa")
+	mana_orb.set_meta("stable_id", "ui.hud.resource_orb.hole_fill.v1")
 	chassis_root.add_child(mana_orb)
 
 	var chassis := TextureRect.new()
