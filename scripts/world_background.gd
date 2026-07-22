@@ -5,6 +5,7 @@ const EnvironmentCatalogScript := preload("res://scripts/environment_catalog.gd"
 const MapCoordinateMapperScript := preload("res://scripts/map_coordinate_mapper.gd")
 const GothicBichCampBuilderScript := preload("res://scripts/layers/presentation/gothic_bich_camp_builder.gd")
 const EditorCoordinateScript := preload("res://scripts/map_editor/map_editor_coordinate.gd")
+const RuntimeCollisionGeometryScript := preload("res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd")
 const RuntimeVisualGeometryScript := preload("res://scripts/map_editor/map_editor_runtime_visual_geometry_service.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const BICH_GROUND_ATLAS := preload("res://assets/art/maps/bich/bich_ground_tiles.png")
@@ -60,7 +61,6 @@ var _gothic_camp_layout: Dictionary = {}
 var _editor_runtime_visual: Dictionary = {}
 var _editor_runtime_size := Vector2i.ZERO
 var _editor_runtime_blocked_tiles: Dictionary = {}
-var _editor_runtime_manual_rects: Array[Rect2] = []
 var _editor_runtime_chunk_draws: Array[Dictionary] = []
 
 
@@ -475,7 +475,6 @@ func _rebuild_environment() -> void:
 	_editor_runtime_visual.clear()
 	_editor_runtime_size = Vector2i.ZERO
 	_editor_runtime_blocked_tiles.clear()
-	_editor_runtime_manual_rects.clear()
 	_editor_runtime_chunk_draws.clear()
 	for node: Node in _environment_nodes:
 		if is_instance_valid(node):
@@ -543,10 +542,10 @@ func _build_editor_runtime_guard_band(visual: Dictionary) -> void:
 	var raw_size: Array = visual.get("design_size", [64, 64])
 	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var corners := [
-		EditorCoordinateScript.tile_to_world(Vector2(-0.5, -0.5), size),
-		EditorCoordinateScript.tile_to_world(Vector2(float(size.x) - 0.5, -0.5), size),
-		EditorCoordinateScript.tile_to_world(Vector2(float(size.x) - 0.5, float(size.y) - 0.5), size),
-		EditorCoordinateScript.tile_to_world(Vector2(-0.5, float(size.y) - 0.5), size),
+		EditorCoordinateScript.tile_to_world(Vector2.ZERO, size),
+		EditorCoordinateScript.tile_to_world(Vector2(float(size.x), 0.0), size),
+		EditorCoordinateScript.tile_to_world(Vector2(size), size),
+		EditorCoordinateScript.tile_to_world(Vector2(0.0, float(size.y)), size),
 	]
 	var authored_bounds := Rect2(corners[0], Vector2.ZERO)
 	for point: Vector2 in corners:
@@ -626,60 +625,42 @@ func _build_editor_runtime_collisions(runtime: Dictionary) -> void:
 	# The ring lives just outside the last logical tile and applies equally to
 	# the player and monsters through environment collision layer 1.
 	_add_editor_map_boundary(body, size)
-	var blocked_by_row := {}
-	for raw_key: Variant in runtime.collision.get("blocked_tiles", []):
-		var parts := str(raw_key).split(",")
-		if parts.size()!=2: continue
-		_editor_runtime_blocked_tiles[str(raw_key)] = true
-		var y:=int(parts[1]); var xs:Array=blocked_by_row.get(y,[]); xs.append(int(parts[0])); blocked_by_row[y]=xs
-	for y: int in blocked_by_row:
-		var xs:Array=blocked_by_row[y]; xs.sort(); if xs.is_empty():continue
-		var run_start:=int(xs[0]); var previous:=run_start
-		for index in range(1,xs.size()+1):
-			var flush:=index==xs.size() or int(xs[index])!=previous+1
-			if flush:
-				_add_editor_collision_tile_rect(body,Rect2i(run_start,y,previous-run_start+1,1),size)
-				if index<xs.size():run_start=int(xs[index])
-			if index<xs.size():previous=int(xs[index])
-	for manual: Dictionary in runtime.collision.get("manual_shapes", []):
-		if str(manual.get("shape", "")) != "rect": continue
-		var rect: Array = manual.get("data", {}).get("rect", [])
-		if rect.size()!=4: continue
-		var x:=float(rect[0]); var y:=float(rect[1]); var w:=float(rect[2]); var h:=float(rect[3])
-		_editor_runtime_manual_rects.append(Rect2(x - 0.5, y - 0.5, w, h))
-		var shape := ConvexPolygonShape2D.new()
-		shape.points = PackedVector2Array([EditorCoordinateScript.tile_to_world(Vector2(x-.5,y-.5),size), EditorCoordinateScript.tile_to_world(Vector2(x+w-.5,y-.5),size), EditorCoordinateScript.tile_to_world(Vector2(x+w-.5,y+h-.5),size), EditorCoordinateScript.tile_to_world(Vector2(x-.5,y+h-.5),size)])
-		var node := CollisionShape2D.new(); node.shape=shape; body.add_child(node); _source_collision_shape_count += 1
+	# blocked_tiles is the compiled, final collision authority. It already
+	# contains instance and manual sources after every single-cell erasure.
+	# Building manual_shapes again would duplicate geometry and, worse, restore
+	# cells the author explicitly erased (Bich currently has 191 such cells).
+	_editor_runtime_blocked_tiles = RuntimeCollisionGeometryScript.blocked_cell_set(
+		runtime.collision
+	)
+	for rect: Rect2i in RuntimeCollisionGeometryScript.blocked_cell_runs(
+		runtime.collision
+	):
+		_add_editor_collision_tile_rect(body, rect, size)
 
 
 func _editor_runtime_blocks_world(world_position: Vector2) -> bool:
 	if _editor_runtime_size == Vector2i.ZERO:
 		return false
-	var tile := EditorCoordinateScript.world_to_tile(world_position, _editor_runtime_size)
-	if not EditorCoordinateScript.contains_tile(tile, _editor_runtime_size):
-		return true
-	var nearest := Vector2i(tile.round())
-	if _editor_runtime_blocked_tiles.has("%d,%d" % [nearest.x, nearest.y]):
-		return true
-	for rect: Rect2 in _editor_runtime_manual_rects:
-		if rect.has_point(tile):
-			return true
-	return false
+	return RuntimeCollisionGeometryScript.blocked_cells_contain_world(
+		_editor_runtime_blocked_tiles,
+		world_position,
+		_editor_runtime_size
+	)
 
 
 func _add_editor_map_boundary(body: StaticBody2D, size: Vector2i) -> void:
 	var inner := [
-		Vector2(-0.5, -0.5),
-		Vector2(float(size.x) - 0.5, -0.5),
-		Vector2(float(size.x) - 0.5, float(size.y) - 0.5),
-		Vector2(-0.5, float(size.y) - 0.5),
+		Vector2.ZERO,
+		Vector2(float(size.x), 0.0),
+		Vector2(size),
+		Vector2(0.0, float(size.y)),
 	]
 	var margin := 8.0
 	var outer := [
-		Vector2(-0.5 - margin, -0.5 - margin),
-		Vector2(float(size.x) - 0.5 + margin, -0.5 - margin),
-		Vector2(float(size.x) - 0.5 + margin, float(size.y) - 0.5 + margin),
-		Vector2(-0.5 - margin, float(size.y) - 0.5 + margin),
+		Vector2(-margin, -margin),
+		Vector2(float(size.x) + margin, -margin),
+		Vector2(float(size.x) + margin, float(size.y) + margin),
+		Vector2(-margin, float(size.y) + margin),
 	]
 	for side in range(4):
 		var next := (side + 1) % 4
@@ -700,7 +681,7 @@ func _add_editor_map_boundary(body: StaticBody2D, size: Vector2i) -> void:
 func _add_editor_collision_tile_rect(body:StaticBody2D,rect:Rect2i,size:Vector2i)->void:
 	var x:=float(rect.position.x);var y:=float(rect.position.y);var w:=float(rect.size.x);var h:=float(rect.size.y)
 	var shape:=ConvexPolygonShape2D.new()
-	shape.points=PackedVector2Array([EditorCoordinateScript.tile_to_world(Vector2(x-.5,y-.5),size),EditorCoordinateScript.tile_to_world(Vector2(x+w-.5,y-.5),size),EditorCoordinateScript.tile_to_world(Vector2(x+w-.5,y+h-.5),size),EditorCoordinateScript.tile_to_world(Vector2(x-.5,y+h-.5),size)])
+	shape.points=RuntimeCollisionGeometryScript.rect_polygon_world([x,y,w,h],size)
 	var node:=CollisionShape2D.new();node.shape=shape;body.add_child(node);_source_collision_shape_count+=1
 
 

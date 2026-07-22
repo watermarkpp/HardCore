@@ -1,12 +1,119 @@
 class_name MapEditorRuntimeCollisionGeometryService
 extends RefCounted
 
-const CONTRACT_ID := "map_editor_runtime_collision_geometry_v1"
+const CONTRACT_ID := "map_editor_runtime_collision_geometry_v2"
+const PHYSICS_SOURCE_ID := "published_blocked_cells_after_erasure_v1"
 const ELLIPSE_SEGMENTS := 32
+const DEFAULT_BOUNDARY_MARGIN_TILES := 8.0
+
+
+static func map_inner_boundary_tile_polygon(
+	design_size: Vector2i
+) -> PackedVector2Array:
+	return PackedVector2Array([
+		Vector2.ZERO,
+		Vector2(float(design_size.x), 0.0),
+		Vector2(design_size),
+		Vector2(0.0, float(design_size.y)),
+	])
+
+
+static func map_outer_boundary_tile_polygon(
+	design_size: Vector2i,
+	margin_tiles := DEFAULT_BOUNDARY_MARGIN_TILES
+) -> PackedVector2Array:
+	var margin := maxf(0.0, margin_tiles)
+	return PackedVector2Array([
+		Vector2(-margin, -margin),
+		Vector2(float(design_size.x) + margin, -margin),
+		Vector2(design_size) + Vector2.ONE * margin,
+		Vector2(-margin, float(design_size.y) + margin),
+	])
+
+
+static func tile_polygon_world(
+	tile_polygon: PackedVector2Array,
+	design_size: Vector2i
+) -> PackedVector2Array:
+	var result := PackedVector2Array()
+	for tile_point: Vector2 in tile_polygon:
+		result.append(MapEditorCoordinate.tile_to_world(tile_point, design_size))
+	return result
+
+
+static func map_inner_boundary_world(
+	design_size: Vector2i
+) -> PackedVector2Array:
+	return tile_polygon_world(
+		map_inner_boundary_tile_polygon(design_size), design_size
+	)
 
 
 static func cell_center_world(cell: Vector2i, design_size: Vector2i) -> Vector2:
 	return MapEditorCoordinate.cell_center_to_world(Vector2(cell), design_size)
+
+
+static func blocked_cell_set(runtime_collision: Dictionary) -> Dictionary:
+	var result := {}
+	for raw_key: Variant in runtime_collision.get("blocked_tiles", []):
+		var parts := str(raw_key).split(",")
+		if parts.size() != 2:
+			continue
+		result["%d,%d" % [int(parts[0]), int(parts[1])]] = true
+	return result
+
+
+static func blocked_cell_runs(runtime_collision: Dictionary) -> Array[Rect2i]:
+	var blocked_by_row := {}
+	for key: String in blocked_cell_set(runtime_collision):
+		var parts := key.split(",")
+		var y := int(parts[1])
+		var xs: Array = blocked_by_row.get(y, [])
+		xs.append(int(parts[0]))
+		blocked_by_row[y] = xs
+	var rows: Array = blocked_by_row.keys()
+	rows.sort()
+	var result: Array[Rect2i] = []
+	for raw_y: Variant in rows:
+		var y := int(raw_y)
+		var xs: Array = blocked_by_row[y]
+		xs.sort()
+		if xs.is_empty():
+			continue
+		var run_start := int(xs[0])
+		var previous := run_start
+		for index in range(1, xs.size() + 1):
+			if index == xs.size() or int(xs[index]) != previous + 1:
+				result.append(Rect2i(
+					run_start, y, previous - run_start + 1, 1
+				))
+				if index < xs.size():
+					run_start = int(xs[index])
+			if index < xs.size():
+				previous = int(xs[index])
+	return result
+
+
+static func runtime_collision_contains_world(
+	runtime_collision: Dictionary,
+	world: Vector2,
+	design_size: Vector2i
+) -> bool:
+	return blocked_cells_contain_world(
+		blocked_cell_set(runtime_collision), world, design_size
+	)
+
+
+static func blocked_cells_contain_world(
+	blocked_cells: Dictionary,
+	world: Vector2,
+	design_size: Vector2i
+) -> bool:
+	var tile := MapEditorCoordinate.world_to_tile(world, design_size)
+	if not MapEditorCoordinate.contains_tile(tile, design_size):
+		return true
+	var cell := world_cell(world, design_size)
+	return blocked_cells.has("%d,%d" % [cell.x, cell.y])
 
 
 static func world_cell(world: Vector2, design_size: Vector2i) -> Vector2i:
