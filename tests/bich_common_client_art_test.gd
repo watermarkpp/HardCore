@@ -35,7 +35,7 @@ func _run() -> void:
 	var player := PlayerCharacter.new()
 	add_child(player)
 	player.set_physics_process(false)
-	player.global_position = Vector2(2000, 0)
+	player.global_position = Vector2.ZERO
 	for monster_name: String in EXPECTED:
 		var mapping: Dictionary = mappings.get(monster_name, {})
 		var expected_confidence := "B" if monster_name in ["半兽人", "毒蜘蛛"] else "A"

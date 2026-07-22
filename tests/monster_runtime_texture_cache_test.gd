@@ -17,7 +17,7 @@ func _run() -> void:
 	var player := PlayerCharacter.new()
 	add_child(player)
 	player.set_physics_process(false)
-	player.global_position = Vector2(2000, 0)
+	player.global_position = Vector2.ZERO
 
 	var first := await _spawn_sample(player)
 	var second := await _spawn_sample(player)
@@ -40,6 +40,7 @@ func _run() -> void:
 	var retained_rids := {}
 	for action_name: String in ["idle", "walk", "attack", "hit", "death"]:
 		retained_rids[action_name] = (first.visual.active_resources[action_name] as Texture2D).get_rid()
+	var fixture_resources: Dictionary = first.visual.active_resources
 	first.queue_free()
 	second.queue_free()
 	await get_tree().process_frame
@@ -55,7 +56,6 @@ func _run() -> void:
 	# cache accounts conservative ETC2 residency from atlas dimensions.
 	MonsterVisual.reset_client_resource_cache()
 	var loader := MonsterVisual.new()
-	var fixture_resources: Dictionary = first.visual.active_resources
 	var fixture_bytes := loader._estimated_client_profile_bytes(fixture_resources)
 	assert(fixture_bytes > 0, "fixture did not produce a measurable ETC2 residency estimate")
 	for index in range(40):

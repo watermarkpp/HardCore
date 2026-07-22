@@ -30,7 +30,7 @@ func _run() -> void:
 	assert(manifest.get("identityKey", "") == "monsterId", "比奇路线怪动画清单未声明monsterId主键")
 
 	var player := PlayerCharacter.new()
-	player.global_position = Vector2(2000, 0)
+	player.global_position = Vector2.ZERO
 	add_child(player)
 	player.set_physics_process(false)
 
