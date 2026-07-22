@@ -53,22 +53,20 @@ func _process(delta: float) -> void:
 func _build_toasts() -> void:
 	toast_container = Control.new()
 	toast_container.name = "PickupToastStack"
-	toast_container.position = Vector2(500, 108)
-	toast_container.size = Vector2(280, 102)
 	toast_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(toast_container)
+	_layout_centered_control(toast_container, 280.0, 108.0, 102.0)
 
 
 func _build_rare_banner() -> void:
 	rare_banner = Panel.new()
 	rare_banner.name = "RareDropBanner"
-	rare_banner.position = Vector2(460, 104)
-	rare_banner.size = Vector2(360, 56)
 	rare_banner.theme_type_variation = "GothicLootRareBanner"
 	rare_banner.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	rare_banner.visible = false
 	rare_banner.set_meta("stable_id", "loot.feedback.rare_drop")
 	add_child(rare_banner)
+	_layout_centered_control(rare_banner, 360.0, 104.0, 56.0)
 	rare_title = Label.new()
 	rare_title.name = "RareTitle"
 	rare_title.position = Vector2(12, 4)
@@ -92,13 +90,12 @@ func _build_rare_banner() -> void:
 func _build_failure_notice() -> void:
 	failure_panel = Panel.new()
 	failure_panel.name = "PickupFailure"
-	failure_panel.position = Vector2(28, 122)
-	failure_panel.size = Vector2(220, 36)
 	failure_panel.theme_type_variation = "GothicLootErrorPanel"
 	failure_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	failure_panel.visible = false
 	failure_panel.set_meta("stable_id", "loot.feedback.inventory_full")
 	add_child(failure_panel)
+	_layout_centered_control(failure_panel, 220.0, 122.0, 36.0)
 	failure_label = Label.new()
 	failure_label.name = "FailureLabel"
 	failure_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 5)
@@ -149,8 +146,7 @@ func _show_rare_drop(event: Dictionary) -> void:
 		240,
 		420
 	)
-	rare_banner.position.x = (1280.0 - banner_width) * 0.5
-	rare_banner.size.x = banner_width
+	_set_centered_width(rare_banner, banner_width)
 	rare_title.size.x = banner_width - 24
 	rare_detail.size.x = banner_width - 24
 	rare_remaining = maxf(1.0, float(event.get("duration", 4.0)))
@@ -161,9 +157,25 @@ func _show_pickup_failure(event: Dictionary) -> void:
 	var item_name := str(event.get("item_name", "物品"))
 	var reason := str(event.get("reason", "当前无法拾取"))
 	failure_label.text = "%s · %s" % [reason, item_name]
-	failure_panel.size.x = clampi(failure_label.text.length() * 15 + 28, 150, 320)
+	_set_centered_width(failure_panel, clampi(failure_label.text.length() * 15 + 28, 150, 320))
 	failure_remaining = maxf(1.0, float(event.get("duration", 3.0)))
 	failure_panel.show()
+
+
+func _layout_centered_control(control: Control, width: float, top: float, height: float) -> void:
+	control.anchor_left = 0.5
+	control.anchor_right = 0.5
+	control.anchor_top = 0.0
+	control.anchor_bottom = 0.0
+	_set_centered_width(control, width)
+	control.offset_top = top
+	control.offset_bottom = top + height
+
+
+func _set_centered_width(control: Control, width: float) -> void:
+	var half_width := maxf(1.0, width) * 0.5
+	control.offset_left = -half_width
+	control.offset_right = half_width
 
 
 func _rebuild_toasts() -> void:
