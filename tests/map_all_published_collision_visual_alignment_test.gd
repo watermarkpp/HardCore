@@ -220,25 +220,39 @@ func _assert_boundary_contract(
 		"map %d half-cell boundary must remove collision_y=+16" % runtime_map_id
 	)
 	var empty_collision := {"blocked_tiles": []}
-	var visible_interior := MapEditorCoordinate.tile_to_world(
-		Vector2(float(design_size.x) * 0.5 - 0.5, -0.25),
+	var visual_edge := MapEditorCoordinate.tile_to_world(
+		Vector2(float(design_size.x) * 0.5 - 0.5, -0.5),
 		design_size
 	)
-	var first_outside := MapEditorCoordinate.tile_to_world(
-		Vector2(float(design_size.x) * 0.5 - 0.5, -0.75),
-		design_size
+	var edge_direction := (
+		MapEditorCoordinate.tile_to_world(
+			Vector2(float(design_size.x) - 0.5, -0.5), design_size
+		) - top_vertex
+	)
+	var outward := Vector2(edge_direction.y, -edge_direction.x).normalized()
+	var padded_outside := visual_edge + outward * (
+		CollisionGeometry.DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD * 0.5
+	)
+	var hard_outside := visual_edge + outward * (
+		CollisionGeometry.DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD + 2.0
 	)
 	assert(
 		not CollisionGeometry.runtime_collision_contains_world(
-			empty_collision, visible_interior, design_size
+			empty_collision, visual_edge, design_size
 		),
-		"map %d visible ground interior blocked" % runtime_map_id
+		"map %d visible ground edge blocked" % runtime_map_id
+	)
+	assert(
+		not CollisionGeometry.runtime_collision_contains_world(
+			empty_collision, padded_outside, design_size
+		),
+		"map %d actor clearance missing outside visual edge" % runtime_map_id
 	)
 	assert(
 		CollisionGeometry.runtime_collision_contains_world(
-			empty_collision, first_outside, design_size
+			empty_collision, hard_outside, design_size
 		),
-		"map %d first black outside not blocked" % runtime_map_id
+		"map %d exterior past actor clearance not blocked" % runtime_map_id
 	)
 	var world_boundary := CollisionGeometry.map_inner_boundary_world(design_size)
 	for index in expected.size():
@@ -375,29 +389,31 @@ func _assert_bich_runtime_physics() -> void:
 	)
 	assert(background._editor_runtime_blocks_world(blocked_center))
 	assert(not _physics_hits(blocked_center).is_empty())
-	var visible_interior := MapEditorCoordinate.tile_to_world(
-		Vector2(float(design_size.x) * 0.5 - 0.5, -0.25),
+	var visual_edge := MapEditorCoordinate.tile_to_world(
+		Vector2(float(design_size.x) * 0.5 - 0.5, -0.5),
 		design_size
 	)
-	var first_outside := MapEditorCoordinate.tile_to_world(
-		Vector2(float(design_size.x) * 0.5 - 0.5, -0.75),
-		design_size
+	var visual_boundary := CollisionGeometry.map_inner_boundary_world(design_size)
+	var edge_direction := visual_boundary[1] - visual_boundary[0]
+	var outward := Vector2(edge_direction.y, -edge_direction.x).normalized()
+	var hard_outside := visual_edge + outward * (
+		CollisionGeometry.DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD + 2.0
 	)
 	assert(
-		not background._editor_runtime_blocks_world(visible_interior),
-		"Bich visible edge interior rejected by software collision"
+		not background._editor_runtime_blocks_world(visual_edge),
+		"Bich visible edge rejected by software collision"
 	)
 	assert(
-		_physics_hits(visible_interior).is_empty(),
-		"Bich visible edge interior rejected by Physics2D"
+		_physics_hits(visual_edge).is_empty(),
+		"Bich visible edge rejected by Physics2D"
 	)
 	assert(
-		background._editor_runtime_blocks_world(first_outside),
-		"Bich first black outside accepted by software collision"
+		background._editor_runtime_blocks_world(hard_outside),
+		"Bich exterior past actor clearance accepted by software collision"
 	)
 	assert(
-		not _physics_hits(first_outside).is_empty(),
-		"Bich first black outside accepted by Physics2D"
+		not _physics_hits(hard_outside).is_empty(),
+		"Bich exterior past actor clearance accepted by Physics2D"
 	)
 	var erased_checked := 0
 	var blocked_set := CollisionGeometry.blocked_cell_set(runtime.collision)

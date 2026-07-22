@@ -3,7 +3,7 @@ extends RefCounted
 
 const VISUAL_GEOMETRY_CONTRACT_ID := "map_editor_runtime_visual_geometry_v3"
 const EDITOR_LAYOUT_CONTRACT_ID := "map_editor_authoritative_layout_v1"
-const OCCLUSION_SORT_CONTRACT_ID := "map_actor_occlusion_sort_v3"
+const OCCLUSION_SORT_CONTRACT_ID := "map_actor_occlusion_sort_v4"
 const RENDER_DOMAIN_STATIC_BACKGROUND := "static_background"
 const RENDER_DOMAIN_ACTOR_Y_SORT := "actor_y_sort"
 const MATERIAL_LAYER_NAMES := [
@@ -360,7 +360,11 @@ static func command_actor_sort_world(
 	design_size: Vector2i
 ) -> Vector2:
 	var sort_tile: Vector2i = command.get("sort_tile", Vector2i.ZERO)
-	return MapEditorCoordinate.cell_center_to_world(Vector2(sort_tile), design_size)
+	# sort_tile already denotes the authored front vertex of an occluder.  It is
+	# not a cell address.  Adding the cell-centre half offset moved the runtime
+	# threshold down by one 16 px isometric row; actors then hit the correctly
+	# authored collision before they could ever sort in front of a house/tree.
+	return MapEditorCoordinate.tile_to_world(Vector2(sort_tile), design_size)
 
 
 static func draw_command_less(a: Dictionary, b: Dictionary) -> bool:

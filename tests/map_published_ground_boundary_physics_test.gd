@@ -43,7 +43,7 @@ func _run() -> void:
 	assert(checked == PUBLISHED_RUNTIME_MAPS.size())
 	print(
 		"MAP_PUBLISHED_GROUND_BOUNDARY_PHYSICS_PASS "
-		+ "maps=%d visible_interior=free first_black_outside=blocked"
+		+ "maps=%d feet_reach_visual_edge=true outside_ring=blocked"
 		% checked
 	)
 	get_tree().quit(0)
@@ -80,40 +80,61 @@ func _assert_physics_edge(
 ) -> void:
 	var body := StaticBody2D.new()
 	body.collision_layer = 1
-	var inner := CollisionGeometry.map_inner_boundary_tile_polygon(design_size)
-	var outer := CollisionGeometry.map_outer_boundary_tile_polygon(design_size)
-	for side in 4:
-		var next := (side + 1) % 4
+	var inner := CollisionGeometry.map_actor_boundary_world(design_size)
+	var outer := CollisionGeometry.map_outer_boundary_world(design_size)
+	for side in inner.size():
+		var next := (side + 1) % inner.size()
 		var shape := ConvexPolygonShape2D.new()
-		shape.points = CollisionGeometry.tile_polygon_world(
-			PackedVector2Array([
-				outer[side], outer[next], inner[next], inner[side],
-			]),
-			design_size
-		)
+		shape.points = PackedVector2Array([
+			outer[side], outer[next], inner[next], inner[side],
+		])
 		var collision := CollisionShape2D.new()
 		collision.shape = shape
 		body.add_child(collision)
 	add_child(body)
 	await get_tree().physics_frame
 	var tile_x := float(design_size.x) * 0.5 - 0.5
-	var visible_interior := MapEditorCoordinate.tile_to_world(
-		Vector2(tile_x, -0.25), design_size
+	var visual_edge := MapEditorCoordinate.tile_to_world(
+		Vector2(tile_x, -0.5), design_size
 	)
-	var first_outside := MapEditorCoordinate.tile_to_world(
-		Vector2(tile_x, -0.75), design_size
-	)
+	var visual_polygon := CollisionGeometry.map_inner_boundary_world(design_size)
+	var edge_direction := visual_polygon[1] - visual_polygon[0]
+	var outward := Vector2(edge_direction.y, -edge_direction.x).normalized()
+	var clearance := CollisionGeometry.DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD
+	var padded_outside := visual_edge + outward * (clearance * 0.5)
+	var hard_outside := visual_edge + outward * (clearance + 2.0)
 	var empty_collision := {"blocked_tiles": []}
 	assert(not CollisionGeometry.runtime_collision_contains_world(
-		empty_collision, visible_interior, design_size
-	), "map %d software blocked visible interior" % runtime_map_id)
+		empty_collision, visual_edge, design_size
+	), "map %d software blocks rendered feet at ground edge" % runtime_map_id)
+	assert(not CollisionGeometry.runtime_collision_contains_world(
+		empty_collision, padded_outside, design_size
+	), "map %d software boundary omitted actor clearance" % runtime_map_id)
 	assert(CollisionGeometry.runtime_collision_contains_world(
-		empty_collision, first_outside, design_size
-	), "map %d software accepted black outside" % runtime_map_id)
-	assert(_physics_hits(visible_interior).is_empty(),
-		"map %d Physics2D blocked visible interior" % runtime_map_id)
-	assert(not _physics_hits(first_outside).is_empty(),
-		"map %d Physics2D accepted black outside" % runtime_map_id)
+		empty_collision, hard_outside, design_size
+	), "map %d software accepted exterior past actor clearance" % runtime_map_id)
+	assert(_physics_hits(visual_edge).is_empty(),
+		"map %d Physics2D blocks foot point before visible edge" % runtime_map_id)
+	assert(not _physics_hits(hard_outside).is_empty(),
+		"map %d Physics2D accepted exterior past actor clearance" % runtime_map_id)
+
+	var actor := CharacterBody2D.new()
+	actor.collision_layer = 2
+	actor.collision_mask = 1
+	var actor_shape := CollisionShape2D.new()
+	var circle := CircleShape2D.new()
+	circle.radius = clearance
+	actor_shape.shape = circle
+	actor.add_child(actor_shape)
+	add_child(actor)
+	actor.global_position = visual_edge - outward * (clearance + 4.0)
+	await get_tree().physics_frame
+	var collision := actor.move_and_collide(outward * (clearance * 3.0))
+	assert(collision != null, "map %d actor escaped hard boundary" % runtime_map_id)
+	var edge_error := absf((actor.global_position - visual_edge).dot(outward))
+	assert(edge_error <= 1.5,
+		"map %d feet stop %.2f px before visual edge" % [runtime_map_id, edge_error])
+	actor.queue_free()
 	body.queue_free()
 	await get_tree().process_frame
 
