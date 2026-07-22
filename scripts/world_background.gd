@@ -6,6 +6,7 @@ const MapCoordinateMapperScript := preload("res://scripts/map_coordinate_mapper.
 const GothicBichCampBuilderScript := preload("res://scripts/layers/presentation/gothic_bich_camp_builder.gd")
 const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 const EditorCoordinateScript := preload("res://scripts/map_editor/map_editor_coordinate.gd")
+const RuntimeCollisionGeometryScript := preload("res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd")
 const RuntimeVisualGeometryScript := preload("res://scripts/map_editor/map_editor_runtime_visual_geometry_service.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const BICH_GROUND_ATLAS := preload("res://assets/art/maps/bich/bich_ground_tiles.png")
@@ -62,6 +63,7 @@ var _editor_runtime_visual: Dictionary = {}
 var _editor_runtime_size := Vector2i.ZERO
 var _editor_runtime_blocked_tiles: Dictionary = {}
 var _editor_runtime_manual_rects: Array[Rect2] = []
+var _editor_runtime_manual_shapes: Array[Dictionary] = []
 var _editor_runtime_chunk_draws: Array[Dictionary] = []
 var _editor_runtime_fallback_ground := false
 
@@ -484,6 +486,7 @@ func _rebuild_environment() -> void:
 	_editor_runtime_size = Vector2i.ZERO
 	_editor_runtime_blocked_tiles.clear()
 	_editor_runtime_manual_rects.clear()
+	_editor_runtime_manual_shapes.clear()
 	_editor_runtime_chunk_draws.clear()
 	_editor_runtime_fallback_ground = false
 	for node: Node in _environment_nodes:
@@ -707,21 +710,51 @@ func _build_editor_runtime_instances(runtime:Dictionary)->void:
 			str(command.get("instance", {}).get("instance_id", ""))
 		)
 		sprite.set_meta("editor_runtime_image_path", image_path)
+		sprite.set_meta("editor_runtime_command_index", command_index)
 		sprite.texture = texture
 		sprite.centered = false
 		# Keep the node at the authored foot/part center and move only the drawn
 		# pixels.  Using top_left as position would rotate wall parts around the
 		# wrong pivot and recreate the editor/runtime offset.
-		sprite.position = geometry.center
+		var render_domain := str(command.get(
+			"render_domain",
+			RuntimeVisualGeometryScript.RENDER_DOMAIN_STATIC_BACKGROUND
+		))
+		var actor_sort_root: Node2D = null
+		if render_domain == RuntimeVisualGeometryScript.RENDER_DOMAIN_ACTOR_Y_SORT:
+			actor_sort_root = Node2D.new()
+			actor_sort_root.name = "EditorRuntimeOccluder_%d" % command_index
+			actor_sort_root.position = RuntimeVisualGeometryScript.command_actor_sort_world(
+				command, size
+			)
+			actor_sort_root.set_meta("editor_runtime_actor_occluder", true)
+			actor_sort_root.set_meta("editor_runtime_sort_tile", command.sort_tile)
+			actor_sort_root.set_meta("editor_runtime_instance_id", str(
+				command.get("instance", {}).get("instance_id", "")
+			))
+			sprite.position = geometry.center - actor_sort_root.position
+		else:
+			sprite.position = geometry.center
+		sprite.set_meta("editor_runtime_render_domain", render_domain)
 		sprite.offset = -geometry.anchor
 		sprite.scale = geometry.visual_scale
 		sprite.rotation = geometry.rotation
 		MapEditorInstanceService.configure_runtime_material_canvas_item(
 			sprite, command.instance
 		)
+		if actor_sort_root != null:
+			# The wrapper is a direct sibling of actors under GameRoot's Y-sort.
+			# Keep the sprite in that same z domain so Y order, not a fixed z,
+			# determines whether the wall front is before or behind an actor.
+			sprite.z_index = 0
 		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-		add_child(sprite)
-		_environment_nodes.append(sprite)
+		if actor_sort_root != null and get_parent() != null:
+			get_parent().add_child(actor_sort_root)
+			actor_sort_root.add_child(sprite)
+			_environment_nodes.append(actor_sort_root)
+		else:
+			add_child(sprite)
+			_environment_nodes.append(sprite)
 
 
 func _build_editor_runtime_collisions(runtime: Dictionary) -> void:
@@ -750,14 +783,22 @@ func _build_editor_runtime_collisions(runtime: Dictionary) -> void:
 				if index<xs.size():run_start=int(xs[index])
 			if index<xs.size():previous=int(xs[index])
 	for manual: Dictionary in runtime.collision.get("manual_shapes", []):
-		if str(manual.get("shape", "")) != "rect": continue
-		var rect: Array = manual.get("data", {}).get("rect", [])
-		if rect.size()!=4: continue
-		var x:=float(rect[0]); var y:=float(rect[1]); var w:=float(rect[2]); var h:=float(rect[3])
-		_editor_runtime_manual_rects.append(Rect2(x - 0.5, y - 0.5, w, h))
-		var shape := ConvexPolygonShape2D.new()
-		shape.points = PackedVector2Array([EditorCoordinateScript.tile_to_world(Vector2(x-.5,y-.5),size), EditorCoordinateScript.tile_to_world(Vector2(x+w-.5,y-.5),size), EditorCoordinateScript.tile_to_world(Vector2(x+w-.5,y+h-.5),size), EditorCoordinateScript.tile_to_world(Vector2(x-.5,y+h-.5),size)])
-		var node := CollisionShape2D.new(); node.shape=shape; body.add_child(node); _source_collision_shape_count += 1
+		var polygon := RuntimeCollisionGeometryScript.manual_shape_polygon_world(
+			manual, size
+		)
+		if polygon.size() < 3:
+			continue
+		_editor_runtime_manual_shapes.append(manual.duplicate(true))
+		if str(manual.get("shape", "")) == "rect":
+			var rect: Array = manual.get("data", {}).get("rect", [])
+			if rect.size() == 4:
+				_editor_runtime_manual_rects.append(
+					RuntimeCollisionGeometryScript.rect_tile_bounds(rect)
+				)
+		var node := CollisionPolygon2D.new()
+		node.polygon = polygon
+		body.add_child(node)
+		_source_collision_shape_count += 1
 
 
 func _editor_runtime_blocks_world(world_position: Vector2) -> bool:
@@ -766,11 +807,15 @@ func _editor_runtime_blocks_world(world_position: Vector2) -> bool:
 	var tile := EditorCoordinateScript.world_to_tile(world_position, _editor_runtime_size)
 	if not EditorCoordinateScript.contains_tile(tile, _editor_runtime_size):
 		return true
-	var nearest := Vector2i(tile.round())
+	var nearest := RuntimeCollisionGeometryScript.world_cell(
+		world_position, _editor_runtime_size
+	)
 	if _editor_runtime_blocked_tiles.has("%d,%d" % [nearest.x, nearest.y]):
 		return true
-	for rect: Rect2 in _editor_runtime_manual_rects:
-		if rect.has_point(tile):
+	for manual: Dictionary in _editor_runtime_manual_shapes:
+		if RuntimeCollisionGeometryScript.tile_shape_contains_world(
+			manual, world_position, _editor_runtime_size
+		):
 			return true
 	return false
 
@@ -808,7 +853,7 @@ func _add_editor_map_boundary(body: StaticBody2D, size: Vector2i) -> void:
 func _add_editor_collision_tile_rect(body:StaticBody2D,rect:Rect2i,size:Vector2i)->void:
 	var x:=float(rect.position.x);var y:=float(rect.position.y);var w:=float(rect.size.x);var h:=float(rect.size.y)
 	var shape:=ConvexPolygonShape2D.new()
-	shape.points=PackedVector2Array([EditorCoordinateScript.tile_to_world(Vector2(x-.5,y-.5),size),EditorCoordinateScript.tile_to_world(Vector2(x+w-.5,y-.5),size),EditorCoordinateScript.tile_to_world(Vector2(x+w-.5,y+h-.5),size),EditorCoordinateScript.tile_to_world(Vector2(x-.5,y+h-.5),size)])
+	shape.points=RuntimeCollisionGeometryScript.rect_polygon_world([x,y,w,h],size)
 	var node:=CollisionShape2D.new();node.shape=shape;body.add_child(node);_source_collision_shape_count+=1
 
 

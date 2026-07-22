@@ -402,7 +402,7 @@ func _complete_portal_travel(
 	if current_map_id != target_map_id:
 		_portal_guard_state["travel_in_flight"] = false
 		return false
-	var arrival_position := MapEditorRuntimeBridgeScript.tile_to_world(
+	var arrival_position := MapEditorRuntimeBridgeScript.cell_to_world(
 		target_runtime, [target_tile.x, target_tile.y]
 	)
 	player.global_position = arrival_position

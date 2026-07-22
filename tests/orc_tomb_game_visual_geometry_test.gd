@@ -29,18 +29,25 @@ func _run() -> void:
 		var commands := GeometryService.sorted_draw_commands(
 			runtime.get("instances", [])
 		)
-		var sprites: Array[Sprite2D] = []
+		var sprites_by_index: Dictionary = {}
 		for child: Node in game.background.get_children():
 			if child is Sprite2D and bool(child.get_meta("editor_runtime_instance", false)):
-				sprites.append(child)
+				sprites_by_index[int(child.get_meta("editor_runtime_command_index", -1))] = child
+		for child: Node in game.get_children():
+			if not bool(child.get_meta("editor_runtime_actor_occluder", false)):
+				continue
+			for nested: Node in child.get_children():
+				if nested is Sprite2D and bool(nested.get_meta("editor_runtime_instance", false)):
+					sprites_by_index[int(nested.get_meta("editor_runtime_command_index", -1))] = nested
 		assert(
-			sprites.size() == commands.size(),
+			sprites_by_index.size() == commands.size(),
 			"map %d runtime flattened/dropped draw commands: %d/%d"
-				% [map_id, sprites.size(), commands.size()]
+				% [map_id, sprites_by_index.size(), commands.size()]
 		)
 		for index in commands.size():
 			var command: Dictionary = commands[index]
-			var sprite := sprites[index]
+			assert(sprites_by_index.has(index), "missing command %d" % index)
+			var sprite: Sprite2D = sprites_by_index[index]
 			var image_path := str(command.image_path)
 			var resource_path := (
 				image_path
@@ -55,7 +62,7 @@ func _run() -> void:
 			var geometry := GeometryService.runtime_command_geometry(
 				command, design_size, sprite.texture.get_size()
 			)
-			assert(sprite.position.is_equal_approx(geometry.center))
+			assert(sprite.global_position.is_equal_approx(geometry.center))
 			assert(sprite.offset.is_equal_approx(-geometry.anchor))
 			assert(sprite.scale.is_equal_approx(geometry.visual_scale))
 			assert(is_equal_approx(sprite.rotation, float(geometry.rotation)))
