@@ -1,6 +1,6 @@
-extends CanvasGroup
+extends Node2D
 
-const ACTOR_COMPOSITE_SORT_CONTRACT := "equipment_actor_visual_sort_unit_v1"
+const ACTOR_COMPOSITE_SORT_CONTRACT := EquipmentRules.ACTOR_VISUAL_SORT_CONTRACT_ID
 
 const WARRIOR_SKILL_COLORS := {
 	"攻杀剑术": Color(1.0, 0.82, 0.30, 0.95),
@@ -60,6 +60,7 @@ var _weapon_frame_size := ArtSpec.WARRIOR_FRAME
 var _weapon_source_anchor := ArtSpec.WARRIOR_SOURCE_FOOT_ANCHOR
 var _weapon_attack_source_frames: Array = []
 var _weapon_mapping_known := false
+var _equipment_layer_direction := -1
 
 
 func setup(owner_actor: PlayerCharacter) -> void:
@@ -84,6 +85,7 @@ func _ready() -> void:
 	sprite.centered = false
 	sprite.position = -Vector2(ArtSpec.CHARACTER_FOOT_ANCHOR)
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.z_index = 0
 	add_child(sprite)
 	worn_weapon_sprite = Sprite2D.new()
 	worn_weapon_sprite.name = "ClientWeaponLayer"
@@ -91,6 +93,7 @@ func _ready() -> void:
 	worn_weapon_sprite.centered = false
 	worn_weapon_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	worn_weapon_sprite.visible = false
+	worn_weapon_sprite.z_index = 0
 	add_child(worn_weapon_sprite)
 	worn_helmet_sprite = Sprite2D.new()
 	worn_helmet_sprite.name = "ClientHelmetLayer"
@@ -98,7 +101,7 @@ func _ready() -> void:
 	worn_helmet_sprite.centered = false
 	worn_helmet_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	worn_helmet_sprite.visible = false
-	worn_helmet_sprite.z_index = 2
+	worn_helmet_sprite.z_index = 0
 	add_child(worn_helmet_sprite)
 	hand_r = _marker("hand_r")
 	hand_l = _marker("hand_l")
@@ -115,7 +118,7 @@ func _ready() -> void:
 	skill_effect_sprite.centered = false
 	skill_effect_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	skill_effect_sprite.visible = false
-	skill_effect_sprite.z_index = 1
+	skill_effect_sprite.z_index = 0
 	add_child(skill_effect_sprite)
 	weapon_audio = AudioStreamPlayer2D.new()
 	weapon_audio.name = "WeaponAudio"
@@ -436,17 +439,26 @@ func _update_equipment_layers() -> void:
 		direction = Vector2.DOWN
 	weapon_accent.points = PackedVector2Array([hand_r.position, hand_r.position + direction * 42.0])
 	weapon_accent.visible = false
-	if worn_weapon_sprite != null:
-		# MIR2 rows are N, NE, E, SE, S, SW, W, NW. The weapon is behind the
-		# body only while facing away from the camera, including NW (row 7).
-		worn_weapon_sprite.z_index = -1 if weapon_draws_behind(current_direction) else 1
+	if sprite != null and worn_weapon_sprite != null and worn_helmet_sprite != null and _equipment_layer_direction != current_direction:
+		# All appearance children must remain on the actor/wall Z=0 plane. Classic
+		# front/back overlap is expressed only by sibling order, otherwise a positive
+		# equipment Z escapes the wall-front Y-sort domain and appears through walls.
+		var layers := {
+			EquipmentRules.ACTOR_VISUAL_BODY_LAYER: sprite,
+			EquipmentRules.ACTOR_VISUAL_WEAPON_LAYER: worn_weapon_sprite,
+			EquipmentRules.ACTOR_VISUAL_HELMET_LAYER: worn_helmet_sprite,
+		}
+		var layer_order := EquipmentRules.actor_visual_layer_order(current_direction)
+		for layer_index: int in range(layer_order.size()):
+			move_child(layers[layer_order[layer_index]], layer_index)
+		_equipment_layer_direction = current_direction
 	# Helmet and body use the same 192x160 directional atlas grid.  Its region
 	# is updated with the body each frame, so it stays on the actual head rather
 	# than becoming an independent icon beside the health bar.
 
 
 func weapon_draws_behind(direction_row: int) -> bool:
-	return direction_row in [7, 0, 1]
+	return EquipmentRules.weapon_draws_behind_actor(direction_row)
 
 
 func _load_world_helmet_actions(record: Dictionary, art: Dictionary) -> Dictionary:
