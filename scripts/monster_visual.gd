@@ -17,7 +17,7 @@ const RESOURCE_RESIDENCY_CHECK_SECONDS := 0.12
 const MAX_CONCURRENT_PROFILE_LOADS := 2
 const ACTOR_Y_SORT_RENDER_DOMAIN := "actor_y_sort"
 const ACTOR_Y_SORT_RENDER_CONTRACT := "monster.actor_y_sort.v1"
-const OVERHEAD_ANCHOR_CONTRACT := "monster.overhead_anchor.v2"
+const OVERHEAD_ANCHOR_CONTRACT := "monster.overhead_anchor.v3"
 
 static var _boss_art: Dictionary = {}
 static var _complete_art: Dictionary = {}
@@ -266,16 +266,11 @@ func health_bar_anchor_y(fallback_y: float) -> float:
 
 
 func _stable_overhead_anchor_y() -> float:
-	# The authored values describe the visible top in each direction. Using the
-	# current row makes the name and health bar jump whenever an actor turns.
-	# Select the highest safe top once for this monster profile instead: body
-	# sizes remain distinct, while direction/action/frame changes cannot move UI.
-	var stable_top := 0.0
-	if health_bar_top_by_direction.size() == 8:
-		stable_top = float(health_bar_top_by_direction[0])
-		for top: Variant in health_bar_top_by_direction:
-			stable_top = minf(stable_top, float(top))
-	return position.y + sprite.position.y + stable_top - HEALTH_BAR_FRAME_MARGIN
+	# Every generated atlas uses one fixed cell that encloses every direction,
+	# action and frame with transparent padding. Anchor above that cell instead
+	# of using idle-pose alpha bounds: attack/hit/death pixels can extend above
+	# the idle silhouette and must never cover or cross the overhead layer.
+	return position.y + sprite.position.y - HEALTH_BAR_FRAME_MARGIN
 
 
 func _direction_row(direction: Vector2) -> int:
