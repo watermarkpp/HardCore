@@ -67,6 +67,11 @@ def main() -> None:
         actions = profile.get("actions", {})
         assert set(actions) == REQUIRED_ACTIONS, f"{name} does not expose the formal five actions"
         fixed_profile = profile.get("directionPolicy") == "fixed_source_direction"
+        content_padding = int(profile.get("contentPadding", 0))
+        if content_padding:
+            assert profile.get("atlasCellIsolation") == "per_frame", (
+                f"{name} declares content padding without per-frame atlas isolation"
+            )
         for action_name, action in actions.items():
             frames_per_direction = int(action["framesPerDirection"])
             image = Image.open(atlas_path(str(action["path"]))).convert("RGBA")
@@ -83,9 +88,21 @@ def main() -> None:
                     alpha = image.crop(
                         (left, top, left + frame_width, top + frame_height)
                     ).getchannel("A")
-                    assert alpha.getbbox() is not None, (
+                    alpha_bounds = alpha.getbbox()
+                    assert alpha_bounds is not None, (
                         f"{name}/{action_name} direction={direction} frame={frame} is empty"
                     )
+                    if content_padding:
+                        assert (
+                            alpha_bounds[0] >= content_padding
+                            and alpha_bounds[1] >= content_padding
+                            and alpha_bounds[2] <= frame_width - content_padding
+                            and alpha_bounds[3] <= frame_height - content_padding
+                        ), (
+                            f"{name}/{action_name} direction={direction} frame={frame} "
+                            f"crosses its isolated cell: bounds={alpha_bounds} "
+                            f"cell={(frame_width, frame_height)} padding={content_padding}"
+                        )
                     if frame == 0:
                         histogram = alpha.histogram()
                         first_frame_opaque.append(

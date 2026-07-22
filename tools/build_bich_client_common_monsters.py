@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -11,8 +12,8 @@ from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CLIENT_DATA = ROOT / "dev_art_sources/reference/mir2_client_raw/Data"
-CLIENT_ACTOR = ROOT / "dev_art_sources/reference/original_gameofmir/Client/Actor.pas"
+CLIENT_DATA = Path(os.environ.get("MIR2_CLIENT_DATA", ROOT / "dev_art_sources/reference/mir2_client_raw/Data"))
+CLIENT_ACTOR = Path(os.environ.get("MIR2_CLIENT_ACTOR", ROOT / "dev_art_sources/reference/original_gameofmir/Client/Actor.pas"))
 OUTPUT = ROOT / "assets/art/monsters/client_bich_common"
 MANIFEST = ROOT / "assets/data/bich_common_client_art_sources.json"
 
@@ -145,6 +146,7 @@ def build_monster(name: str, spec: dict) -> dict:
     output_dir.mkdir(parents=True, exist_ok=True)
     decoded: dict = {}
     bounds: list[tuple[int, int, int, int]] = []
+    idle_top_by_direction: list[int | None] = [None] * 8
 
     for action_name, (start, frame_count, frame_ms, direction_stride) in TABLES[str(spec["actionTable"])].items():
         action = {
@@ -183,6 +185,12 @@ def build_monster(name: str, spec: dict) -> dict:
                         meta["y"] + alpha_bounds[3],
                     )
                 )
+                if action_name == "idle":
+                    source_top = meta["y"] + alpha_bounds[1]
+                    previous_top = idle_top_by_direction[direction]
+                    idle_top_by_direction[direction] = (
+                        source_top if previous_top is None else min(previous_top, source_top)
+                    )
 
     if not bounds:
         raise ValueError("monster contains no drawable frames")
@@ -193,6 +201,11 @@ def build_monster(name: str, spec: dict) -> dict:
     cell_w = ((max_x - min_x + PADDING * 2 + 15) // 16) * 16
     cell_h = ((max_y - min_y + PADDING * 2 + 15) // 16) * 16
     foot = (-min_x + PADDING, -min_y + PADDING)
+    if any(value is None for value in idle_top_by_direction):
+        raise ValueError("monster contains a direction without an idle-pose top")
+    health_bar_top_by_direction = [
+        foot[1] + int(value) for value in idle_top_by_direction
+    ]
 
     actions = {}
     for action_name, action in decoded.items():
@@ -248,6 +261,10 @@ def build_monster(name: str, spec: dict) -> dict:
         "blockBase": base,
         "frameSize": [cell_w, cell_h],
         "footAnchor": [foot[0], foot[1]],
+        "contentBounds": [min_x, min_y, max_x, max_y],
+        "contentPadding": PADDING,
+        "atlasCellIsolation": "per_frame",
+        "healthBarTopByDirection": health_bar_top_by_direction,
         "directions": 8,
         "actions": actions,
     }
