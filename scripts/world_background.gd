@@ -717,27 +717,23 @@ func _build_editor_runtime_instances(runtime:Dictionary)->void:
 			RuntimeVisualGeometryScript.RENDER_DOMAIN_STATIC_BACKGROUND
 		))
 		var actor_sort_root: Node2D = null
+		var parent_world_origin := Vector2.ZERO
 		if render_domain == RuntimeVisualGeometryScript.RENDER_DOMAIN_ACTOR_Y_SORT:
 			actor_sort_root = Node2D.new()
 			actor_sort_root.name = "EditorRuntimeOccluder_%d" % command_index
 			actor_sort_root.position = RuntimeVisualGeometryScript.command_actor_sort_world(
 				command, size
 			)
+			parent_world_origin = actor_sort_root.position
 			actor_sort_root.set_meta("editor_runtime_actor_occluder", true)
 			actor_sort_root.set_meta("editor_runtime_sort_tile", command.sort_tile)
 			actor_sort_root.set_meta("editor_runtime_instance_id", str(
 				command.get("instance", {}).get("instance_id", "")
 			))
-			sprite.position = geometry.center - actor_sort_root.position
-		else:
-			sprite.position = geometry.center
-		sprite.set_meta("editor_runtime_render_domain", render_domain)
-		sprite.offset = -geometry.anchor
-		sprite.scale = geometry.visual_scale
-		sprite.rotation = geometry.rotation
-		MapEditorInstanceService.configure_runtime_material_canvas_item(
-			sprite, command.instance
+		RuntimeVisualGeometryScript.apply_runtime_sprite_geometry(
+			sprite, command, geometry, parent_world_origin
 		)
+		sprite.set_meta("editor_runtime_render_domain", render_domain)
 		if actor_sort_root != null:
 			# The wrapper is a direct sibling of actors under GameRoot's Y-sort.
 			# Keep the sprite in that same z domain so Y order, not a fixed z,
@@ -787,19 +783,12 @@ func _editor_runtime_blocks_world(world_position: Vector2) -> bool:
 
 
 func _add_editor_map_boundary(body: StaticBody2D, size: Vector2i) -> void:
-	var inner := [
-		Vector2.ZERO,
-		Vector2(float(size.x), 0.0),
-		Vector2(size),
-		Vector2(0.0, float(size.y)),
-	]
-	var margin := 8.0
-	var outer := [
-		Vector2(-margin, -margin),
-		Vector2(float(size.x) + margin, -margin),
-		Vector2(float(size.x) + margin, float(size.y) + margin),
-		Vector2(-margin, float(size.y) + margin),
-	]
+	var inner := RuntimeCollisionGeometryScript.map_inner_boundary_tile_polygon(
+		size
+	)
+	var outer := RuntimeCollisionGeometryScript.map_outer_boundary_tile_polygon(
+		size
+	)
 	for side in range(4):
 		var next := (side + 1) % 4
 		var shape := ConvexPolygonShape2D.new()

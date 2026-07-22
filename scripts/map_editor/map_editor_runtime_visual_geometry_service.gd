@@ -130,6 +130,28 @@ static func runtime_command_geometry(
 	)
 
 
+static func apply_runtime_sprite_geometry(
+	sprite: Sprite2D,
+	command: Dictionary,
+	geometry: Dictionary,
+	parent_world_origin := Vector2.ZERO
+) -> void:
+	# Y-sorted occluders are reparented under a wrapper at their sort foot. The
+	# wrapper changes only the sprite's local position: anchor, scale, rotation,
+	# and material configuration must remain identical to ordinary instances.
+	var center: Vector2 = geometry.get("center", Vector2.ZERO)
+	var anchor: Vector2 = geometry.get("anchor", Vector2.ZERO)
+	var visual_scale: Vector2 = geometry.get("visual_scale", Vector2.ONE)
+	var instance: Dictionary = command.get("instance", {})
+	sprite.position = center - parent_world_origin
+	sprite.offset = -anchor
+	sprite.scale = visual_scale
+	sprite.rotation = float(geometry.get("rotation", 0.0))
+	MapEditorInstanceService.configure_runtime_material_canvas_item(
+		sprite, instance
+	)
+
+
 static func _geometry_from_center(
 	instance: Dictionary,
 	asset: Dictionary,
