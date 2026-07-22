@@ -93,7 +93,7 @@ func _build_approved_hud() -> void:
 	_build_bottom_chassis(root)
 	_build_combat_controls(root)
 	_build_modal_panels(root)
-	_build_loading_transition(root)
+	_build_loading_transition()
 
 	PlayerState.profile_changed.connect(update_profile)
 	PlayerState.quests_changed.connect(update_quest_tracker)
@@ -175,7 +175,7 @@ func _build_loot_feedback(root: Control) -> void:
 	root.add_child(loot_feedback_layer)
 
 
-func _build_loading_transition(root: Control) -> void:
+func _build_loading_transition() -> void:
 	loading_transition_overlay = LoadingTransitionOverlayScript.new()
 	loading_transition_overlay.name = "LoadingTransitionOverlay"
 	loading_transition_overlay.transition_covered.connect(
@@ -184,7 +184,7 @@ func _build_loading_transition(root: Control) -> void:
 	loading_transition_overlay.transition_finished.connect(
 		func(request: Dictionary) -> void: loading_transition_finished.emit(request)
 	)
-	root.add_child(loading_transition_overlay)
+	add_child(loading_transition_overlay)
 
 
 func _build_right_utility_stack(root: Control) -> void:
