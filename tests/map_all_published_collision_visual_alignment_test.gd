@@ -91,14 +91,24 @@ func _ready() -> void:
 				continue
 			var key := "%d,%d" % [cell.x, cell.y]
 			assert(not blocked_set.has(key), "%s erased cell restored %s" % [map_key, key])
-			assert(
-				not CollisionGeometry.blocked_cells_contain_world(
-					blocked_set,
-					CollisionGeometry.cell_center_world(cell, design_size),
-					design_size
-				),
-				"%s software collision restored erased cell %s" % [map_key, key]
+			var erased_world := CollisionGeometry.cell_center_world(
+				cell, design_size
 			)
+			# A last-row logical cell can have its center exactly on the packaged
+			# canvas edge (size - 0.5). That point is intentionally outside the
+			# visible-ground contract and must remain boundary-blocked even though
+			# the authored cell itself was erased.
+			if CollisionGeometry.visible_ground_contains_tile(
+				MapEditorCoordinate.world_to_tile(erased_world, design_size),
+				design_size
+			):
+				assert(
+					not CollisionGeometry.blocked_cells_contain_world(
+						blocked_set, erased_world, design_size
+					),
+					"%s software collision restored erased cell %s"
+						% [map_key, key]
+				)
 		total_manual += (runtime_collision.manual_shapes as Array).size()
 		total_erased += (runtime_collision.erased_cells as Array).size()
 		covered_maps += 1
@@ -142,6 +152,11 @@ func _assert_ground_origin(
 	var raw_center: Array = visual.get("ground_pixel_center", [])
 	assert(raw_center.size() == 2, "%s ground center missing" % map_key)
 	var ground_center := Vector2(float(raw_center[0]), float(raw_center[1]))
+	var raw_pixel_size: Array = visual.get("ground_pixel_size", [])
+	assert(raw_pixel_size.size() == 2, "%s ground size missing" % map_key)
+	var ground_pixel_size := Vector2(
+		float(raw_pixel_size[0]), float(raw_pixel_size[1])
+	)
 	var expected_center := Vector2(
 		MapEditorCoordinate.ground_image_size(design_size)
 	) * 0.5
@@ -162,6 +177,22 @@ func _assert_ground_origin(
 			ground_cell_center.is_equal_approx(world_cell_center),
 			"%s ground/world origin mismatch at %s" % [map_key, cell]
 		)
+	var visible_top_world := Vector2(ground_center.x, 0.0) - ground_center
+	var visible_bottom_world := (
+		Vector2(ground_center.x, ground_pixel_size.y) - ground_center
+	)
+	assert(
+		visible_top_world.is_equal_approx(MapEditorCoordinate.tile_to_world(
+			Vector2(-0.5, -0.5), design_size
+		)),
+		"%s visible canvas top does not match physical boundary" % map_key
+	)
+	assert(
+		visible_bottom_world.is_equal_approx(MapEditorCoordinate.tile_to_world(
+			Vector2(design_size) - Vector2(0.5, 0.5), design_size
+		)),
+		"%s visible canvas bottom does not match physical boundary" % map_key
+	)
 
 
 func _assert_boundary_contract(
@@ -172,12 +203,43 @@ func _assert_boundary_contract(
 		design_size
 	)
 	var expected := PackedVector2Array([
-		Vector2.ZERO,
-		Vector2(float(design_size.x), 0.0),
-		Vector2(design_size),
-		Vector2(0.0, float(design_size.y)),
+		Vector2(-0.5, -0.5),
+		Vector2(float(design_size.x) - 0.5, -0.5),
+		Vector2(design_size) - Vector2(0.5, 0.5),
+		Vector2(-0.5, float(design_size.y) - 0.5),
 	])
-	assert(tile_boundary == expected, "map %d boundary has half-cell shift" % runtime_map_id)
+	assert(tile_boundary == expected, "map %d visible edge mismatch" % runtime_map_id)
+	var top_vertex := MapEditorCoordinate.tile_to_world(
+		Vector2(-0.5, -0.5), design_size
+	)
+	var logical_top := MapEditorCoordinate.tile_to_world(
+		Vector2.ZERO, design_size
+	)
+	assert(
+		is_equal_approx(logical_top.y - top_vertex.y, 16.0),
+		"map %d half-cell boundary must remove collision_y=+16" % runtime_map_id
+	)
+	var empty_collision := {"blocked_tiles": []}
+	var visible_interior := MapEditorCoordinate.tile_to_world(
+		Vector2(float(design_size.x) * 0.5 - 0.5, -0.25),
+		design_size
+	)
+	var first_outside := MapEditorCoordinate.tile_to_world(
+		Vector2(float(design_size.x) * 0.5 - 0.5, -0.75),
+		design_size
+	)
+	assert(
+		not CollisionGeometry.runtime_collision_contains_world(
+			empty_collision, visible_interior, design_size
+		),
+		"map %d visible ground interior blocked" % runtime_map_id
+	)
+	assert(
+		CollisionGeometry.runtime_collision_contains_world(
+			empty_collision, first_outside, design_size
+		),
+		"map %d first black outside not blocked" % runtime_map_id
+	)
 	var world_boundary := CollisionGeometry.map_inner_boundary_world(design_size)
 	for index in expected.size():
 		assert(
@@ -313,6 +375,30 @@ func _assert_bich_runtime_physics() -> void:
 	)
 	assert(background._editor_runtime_blocks_world(blocked_center))
 	assert(not _physics_hits(blocked_center).is_empty())
+	var visible_interior := MapEditorCoordinate.tile_to_world(
+		Vector2(float(design_size.x) * 0.5 - 0.5, -0.25),
+		design_size
+	)
+	var first_outside := MapEditorCoordinate.tile_to_world(
+		Vector2(float(design_size.x) * 0.5 - 0.5, -0.75),
+		design_size
+	)
+	assert(
+		not background._editor_runtime_blocks_world(visible_interior),
+		"Bich visible edge interior rejected by software collision"
+	)
+	assert(
+		_physics_hits(visible_interior).is_empty(),
+		"Bich visible edge interior rejected by Physics2D"
+	)
+	assert(
+		background._editor_runtime_blocks_world(first_outside),
+		"Bich first black outside accepted by software collision"
+	)
+	assert(
+		not _physics_hits(first_outside).is_empty(),
+		"Bich first black outside accepted by Physics2D"
+	)
 	var erased_checked := 0
 	var blocked_set := CollisionGeometry.blocked_cell_set(runtime.collision)
 	for erased: Dictionary in runtime.collision.erased_cells:

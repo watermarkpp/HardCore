@@ -600,19 +600,73 @@ func editor_runtime_chunk_texture_count() -> int:
 
 
 func _build_editor_runtime_instances(runtime:Dictionary)->void:
-	var raw_size:Array=runtime.design.get("design_size",[64,64]);var size:=Vector2i(int(raw_size[0]),int(raw_size[1]))
-	var material_instances := MapEditorInstanceService.sorted_for_material_render(
+	var raw_size: Array = runtime.design.get("design_size", [64, 64])
+	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
+	var commands := RuntimeVisualGeometryScript.sorted_draw_commands(
 		runtime.get("instances", [])
 	)
-	for instance:Dictionary in material_instances:
-		var asset:=MapAssetCatalogService.find_asset(str(instance.get("asset_id","")));var image_path:=str(asset.get("image",""))
-		if image_path.is_empty() or not ResourceLoader.exists("res://"+image_path):continue
-		var tile:Array=instance.get("tile",[0,0]);var footprint:Array=instance.get("footprint_tiles",[1,1]);var offset_px:Array=instance.get("offset_px",[0,0]);var anchor:Array=instance.get("anchor_px",asset.get("anchor_px",[0,0]));var scale_value:Array=instance.get("scale",[1,1])
-		var foot_tile:=Vector2(float(tile[0])+float(footprint[0])*.5,float(tile[1])+float(footprint[1])*.5)
-		var foot_world:=EditorCoordinateScript.tile_to_world(foot_tile,size)+Vector2(float(offset_px[0]),float(offset_px[1]))
-		var sprite:=Sprite2D.new();sprite.name="EditorRuntimeInstance";sprite.set_meta("editor_runtime_instance",true);sprite.texture=load("res://"+image_path);sprite.centered=false;sprite.scale=Vector2(float(scale_value[0]),float(scale_value[1]));sprite.position=foot_world-Vector2(float(anchor[0]),float(anchor[1]))*sprite.scale
-		MapEditorInstanceService.configure_runtime_material_canvas_item(sprite, instance);sprite.texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST
-		add_child(sprite);_environment_nodes.append(sprite)
+	for command_index in commands.size():
+		var command: Dictionary = commands[command_index]
+		var image_path := str(command.get("image_path", ""))
+		if image_path.is_empty():
+			continue
+		var resource_path := (
+			image_path if image_path.begins_with("res://") else "res://" + image_path
+		)
+		if not ResourceLoader.exists(resource_path):
+			continue
+		var texture := load(resource_path) as Texture2D
+		if texture == null:
+			continue
+		var geometry := RuntimeVisualGeometryScript.runtime_command_geometry(
+			command, size, texture.get_size()
+		)
+		var sprite := Sprite2D.new()
+		sprite.name = "EditorRuntimeInstance_%d" % command_index
+		sprite.set_meta("editor_runtime_instance", true)
+		sprite.set_meta(
+			"editor_runtime_instance_id",
+			str(command.get("instance", {}).get("instance_id", ""))
+		)
+		sprite.set_meta("editor_runtime_image_path", image_path)
+		sprite.set_meta("editor_runtime_command_index", command_index)
+		sprite.texture = texture
+		sprite.centered = false
+		var render_domain := str(command.get(
+			"render_domain",
+			RuntimeVisualGeometryScript.RENDER_DOMAIN_STATIC_BACKGROUND
+		))
+		var actor_sort_root: Node2D = null
+		var parent_world_origin := Vector2.ZERO
+		if render_domain == RuntimeVisualGeometryScript.RENDER_DOMAIN_ACTOR_Y_SORT:
+			actor_sort_root = Node2D.new()
+			actor_sort_root.name = "EditorRuntimeOccluder_%d" % command_index
+			actor_sort_root.position = RuntimeVisualGeometryScript.command_actor_sort_world(
+				command, size
+			)
+			parent_world_origin = actor_sort_root.position
+			actor_sort_root.set_meta("editor_runtime_actor_occluder", true)
+			actor_sort_root.set_meta("editor_runtime_sort_tile", command.sort_tile)
+			actor_sort_root.set_meta("editor_runtime_instance_id", str(
+				command.get("instance", {}).get("instance_id", "")
+			))
+		RuntimeVisualGeometryScript.apply_runtime_sprite_geometry(
+			sprite, command, geometry, parent_world_origin
+		)
+		sprite.set_meta("editor_runtime_render_domain", render_domain)
+		if actor_sort_root != null:
+			# The wrapper is a direct sibling of actors under GameRoot's Y-sort.
+			# Keep the sprite in that same z domain so Y order, not a fixed z,
+			# determines whether the wall front is before or behind an actor.
+			sprite.z_index = 0
+		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		if actor_sort_root != null and get_parent() != null:
+			get_parent().add_child(actor_sort_root)
+			actor_sort_root.add_child(sprite)
+			_environment_nodes.append(actor_sort_root)
+		else:
+			add_child(sprite)
+			_environment_nodes.append(sprite)
 
 
 func _build_editor_runtime_collisions(runtime: Dictionary) -> void:
@@ -649,19 +703,12 @@ func _editor_runtime_blocks_world(world_position: Vector2) -> bool:
 
 
 func _add_editor_map_boundary(body: StaticBody2D, size: Vector2i) -> void:
-	var inner := [
-		Vector2.ZERO,
-		Vector2(float(size.x), 0.0),
-		Vector2(size),
-		Vector2(0.0, float(size.y)),
-	]
-	var margin := 8.0
-	var outer := [
-		Vector2(-margin, -margin),
-		Vector2(float(size.x) + margin, -margin),
-		Vector2(float(size.x) + margin, float(size.y) + margin),
-		Vector2(-margin, float(size.y) + margin),
-	]
+	var inner := RuntimeCollisionGeometryScript.map_inner_boundary_tile_polygon(
+		size
+	)
+	var outer := RuntimeCollisionGeometryScript.map_outer_boundary_tile_polygon(
+		size
+	)
 	for side in range(4):
 		var next := (side + 1) % 4
 		var shape := ConvexPolygonShape2D.new()

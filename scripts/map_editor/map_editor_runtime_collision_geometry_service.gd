@@ -10,11 +10,16 @@ const DEFAULT_BOUNDARY_MARGIN_TILES := 8.0
 static func map_inner_boundary_tile_polygon(
 	design_size: Vector2i
 ) -> PackedVector2Array:
+	# Packaged ground canvases are centered on the authored tile centers. Their
+	# first/last visible half-diamonds therefore end at -0.5 and size - 0.5,
+	# rather than at the logical cell vertices used by interior blocked cells.
+	var minimum := Vector2(-0.5, -0.5)
+	var maximum := Vector2(design_size) - Vector2(0.5, 0.5)
 	return PackedVector2Array([
-		Vector2.ZERO,
-		Vector2(float(design_size.x), 0.0),
-		Vector2(design_size),
-		Vector2(0.0, float(design_size.y)),
+		minimum,
+		Vector2(maximum.x, minimum.y),
+		maximum,
+		Vector2(minimum.x, maximum.y),
 	])
 
 
@@ -23,11 +28,16 @@ static func map_outer_boundary_tile_polygon(
 	margin_tiles := DEFAULT_BOUNDARY_MARGIN_TILES
 ) -> PackedVector2Array:
 	var margin := maxf(0.0, margin_tiles)
+	var minimum := Vector2(-0.5, -0.5) - Vector2.ONE * margin
+	var maximum := (
+		Vector2(design_size) - Vector2(0.5, 0.5)
+		+ Vector2.ONE * margin
+	)
 	return PackedVector2Array([
-		Vector2(-margin, -margin),
-		Vector2(float(design_size.x) + margin, -margin),
-		Vector2(design_size) + Vector2.ONE * margin,
-		Vector2(-margin, float(design_size.y) + margin),
+		minimum,
+		Vector2(maximum.x, minimum.y),
+		maximum,
+		Vector2(minimum.x, maximum.y),
 	])
 
 
@@ -110,10 +120,21 @@ static func blocked_cells_contain_world(
 	design_size: Vector2i
 ) -> bool:
 	var tile := MapEditorCoordinate.world_to_tile(world, design_size)
-	if not MapEditorCoordinate.contains_tile(tile, design_size):
+	if not visible_ground_contains_tile(tile, design_size):
 		return true
 	var cell := world_cell(world, design_size)
 	return blocked_cells.has("%d,%d" % [cell.x, cell.y])
+
+
+static func visible_ground_contains_tile(
+	tile: Vector2,
+	design_size: Vector2i
+) -> bool:
+	return (
+		tile.x >= -0.5 and tile.y >= -0.5
+		and tile.x < float(design_size.x) - 0.5
+		and tile.y < float(design_size.y) - 0.5
+	)
 
 
 static func world_cell(world: Vector2, design_size: Vector2i) -> Vector2i:
