@@ -24,7 +24,7 @@ func _run() -> void:
 	var blocked_tiles: Array = runtime.get("collision", {}).get("blocked_tiles", [])
 	assert(not blocked_tiles.is_empty(), "Editor runtime has no obstacle occupancy data")
 	var blocked_parts := str(blocked_tiles[0]).split(",")
-	var blocked_world := MapEditorRuntimeBridge.tile_to_world(runtime, [float(blocked_parts[0]), float(blocked_parts[1])])
+	var blocked_world := MapEditorRuntimeBridge.cell_to_world(runtime, [float(blocked_parts[0]), float(blocked_parts[1])])
 	assert(background.is_environment_point_blocked(blocked_world), "Editor obstacle is absent from unified spatial query")
 	var outside_world := MapEditorRuntimeBridge.tile_to_world(runtime, [-1.0, 0.0])
 	assert(background.is_environment_point_blocked(outside_world), "Black area outside the map is not a hard boundary")

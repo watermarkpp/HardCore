@@ -1,0 +1,86 @@
+{
+  "base_color": "#16120e",
+  "chunks": [
+    {
+      "chunk_id": "c_0_0",
+      "image": "assets/art/maps/orc_tomb/editor_runtime_chunks/orc_tomb_3/c_0_0.png",
+      "rect_px": [
+        0.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "70f1e9de24033df0908be20f9e6c62763a9a39aef2a3b64c1582525af01b5aa5"
+    },
+    {
+      "chunk_id": "c_1_0",
+      "image": "assets/art/maps/orc_tomb/editor_runtime_chunks/orc_tomb_3/c_1_0.png",
+      "rect_px": [
+        1024.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "5ec52faeef38ccd883cb9ba8d8c0f57091faa334c8fc176a3cfb0fcbf485e9a4"
+    },
+    {
+      "chunk_id": "c_2_0",
+      "image": "assets/art/maps/orc_tomb/editor_runtime_chunks/orc_tomb_3/c_2_0.png",
+      "rect_px": [
+        2048.0,
+        0.0,
+        384.0,
+        1024.0
+      ],
+      "sha256": "3aa00ad25c8ce687df5438d32106eea6261f7053662151b2747fec93d9524fa2"
+    },
+    {
+      "chunk_id": "c_0_1",
+      "image": "assets/art/maps/orc_tomb/editor_runtime_chunks/orc_tomb_3/c_0_1.png",
+      "rect_px": [
+        0.0,
+        1024.0,
+        1024.0,
+        192.0
+      ],
+      "sha256": "f29ccaf697d5f168a0d1f46756e2bfb781dcc585e990974bb0594f9e11512678"
+    },
+    {
+      "chunk_id": "c_1_1",
+      "image": "assets/art/maps/orc_tomb/editor_runtime_chunks/orc_tomb_3/c_1_1.png",
+      "rect_px": [
+        1024.0,
+        1024.0,
+        1024.0,
+        192.0
+      ],
+      "sha256": "0025fdee8f59dc46ed15097ade9c964494eca94bbeaaca3655d82470d9d2c66e"
+    }
+  ],
+  "coverage": {
+    "complete": true,
+    "packaged_chunk_count": 5,
+    "required_chunk_count": 5,
+    "source_chunk_count": 6
+  },
+  "design_size": [
+    38.0,
+    38.0
+  ],
+  "ground_pixel_center": [
+    1216.0,
+    608.0
+  ],
+  "ground_pixel_size": [
+    2432.0,
+    1216.0
+  ],
+  "guard_band_px": 512.0,
+  "map_id": "orc_tomb_3",
+  "render_mode": "batched_canvas_draw",
+  "runtime_map_id": 221,
+  "schema_version": 1,
+  "source_editor_document_sha256": "efc658f771525716b630398ebc31cb26d3eead7de43b6826a81e2ba06a507ecc",
+  "source_ground_manifest_sha256": "21ebca5a21f89b6b09ebed65872243f14e382f4d740f7b27055a48e7e0d83049",
+  "visual_contract_id": "orc_tomb_editor_runtime_visual_v1"
+}

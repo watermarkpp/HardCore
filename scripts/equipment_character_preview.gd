@@ -4,10 +4,11 @@ extends Control
 const PAPER_DOLL_MANIFEST := "res://assets/data/warrior_paper_doll_sources.json"
 const PAPER_LAYER_SLOTS := ["衣服", "武器", "头盔"]
 const ORIGINAL_CANVAS_SIZE := Vector2(168.0, 199.0)
-const PREVIEW_SCALE := 1.22
+const DEFAULT_PREVIEW_SCALE := 1.22
 const FOOT_STAGE_CENTER := Vector2(84.0, 186.0)
 const FOOT_STAGE_RADII := Vector2(52.0, 16.0)
 
+var preview_scale := DEFAULT_PREVIEW_SCALE
 var _direction_row := 4
 var _paper_mappings: Dictionary = {}
 var _paper_layers: Array[Dictionary] = []
@@ -68,15 +69,15 @@ func refresh() -> void:
 func _draw() -> void:
 	if _base_texture == null:
 		return
-	var scaled_canvas := ORIGINAL_CANVAS_SIZE * PREVIEW_SCALE
+	var scaled_canvas := ORIGINAL_CANVAS_SIZE * preview_scale
 	# Put the original 199px client canvas near the bottom of the available
 	# preview.  This uses the space below the character while preserving every
 	# original layer coordinate.
 	var origin := Vector2((size.x - scaled_canvas.x) * 0.5, size.y - scaled_canvas.y - 6.0)
 	# A flattened stage sits under the character's feet. The previous circle
 	# read as a misplaced halo and did not match the paper-doll perspective.
-	var stage_center := origin + FOOT_STAGE_CENTER * PREVIEW_SCALE
-	var stage_radii := FOOT_STAGE_RADII * PREVIEW_SCALE
+	var stage_center := origin + FOOT_STAGE_CENTER * preview_scale
+	var stage_radii := FOOT_STAGE_RADII * preview_scale
 	var shadow_points := _ellipse_points(stage_center + Vector2(0, 4), stage_radii + Vector2(5, 3))
 	draw_colored_polygon(shadow_points, Color(0.008, 0.005, 0.004, 0.72))
 	var stage_points := _ellipse_points(stage_center, stage_radii)
@@ -125,8 +126,8 @@ func _draw_layer(layer: Dictionary, origin: Vector2) -> void:
 	if texture == null:
 		return
 	var target := Rect2(
-		origin + _mapping_offset(layer) * PREVIEW_SCALE,
-		texture.get_size() * PREVIEW_SCALE
+		origin + _mapping_offset(layer) * preview_scale,
+		texture.get_size() * preview_scale
 	)
 	draw_texture_rect(texture, target, false)
 

@@ -5,9 +5,14 @@ const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const MapCoordinateMapperScript := preload("res://scripts/map_coordinate_mapper.gd")
 const GothicBichCampBuilderScript := preload("res://scripts/layers/presentation/gothic_bich_camp_builder.gd")
 const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
+const MapPortalRuntimeServiceScript := preload("res://scripts/map_editor/map_portal_runtime_service.gd")
+const MapPortalTravelGuardScript := preload("res://scripts/map_editor/map_portal_travel_guard.gd")
+const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const SystemMenuPanelScript := preload("res://scripts/system_menu_panel.gd")
 const DEFAULT_NORMAL_RESPAWN_SECONDS := 180.0
 const DEFAULT_BOSS_RESPAWN_SECONDS := 3600.0
+const MONSTER_PREFETCH_TIMEOUT_MSEC := 8000
 
 var player: PlayerCharacter
 var hud: GameHUD
@@ -28,6 +33,12 @@ var _movement_target_refresh_remaining := 0.0
 var _bich_camp_layout: Dictionary = {}
 var _active_safe_zones: Array = []
 var _runtime_spawn_serial := 0
+var _portal_guard_state := MapPortalTravelGuardScript.new_state()
+var _map_transition_in_progress := false
+var _map_transition_serial := 0
+var _active_map_transition_id := ""
+var _monster_prefetch_enabled := true
+var _last_monster_prefetch_status: Dictionary = {}
 
 
 func _ready() -> void:
@@ -96,6 +107,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	background.set_focus_position(player.global_position)
+	_update_portal_arrival_guard()
 	_enforce_bich_safe_zone()
 	_update_boss_world_mechanics(delta)
 	PlayerState.update_world_location(current_map_id, player.global_position)
@@ -141,56 +153,49 @@ func _build_system_menu() -> void:
 	_system_menu_layer = CanvasLayer.new()
 	_system_menu_layer.layer = 200
 	add_child(_system_menu_layer)
-	_system_menu_panel = Control.new()
+	_system_menu_panel = SystemMenuPanelScript.new()
+	_system_menu_panel.name = "SystemMenuPanel"
 	_system_menu_panel.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
-	_system_menu_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_system_menu_panel.visible = false
+	_system_menu_panel.continue_requested.connect(_hide_system_menu)
+	_system_menu_panel.return_to_character_select_requested.connect(_return_to_character_select)
+	_system_menu_panel.save_and_exit_requested.connect(_exit_game)
+	_system_menu_panel.audio_setting_changed.connect(_on_system_menu_audio_setting_changed)
 	_system_menu_layer.add_child(_system_menu_panel)
-	var shade := ColorRect.new()
-	shade.color = Color(0.02, 0.01, 0.01, 0.82)
-	shade.mouse_filter = Control.MOUSE_FILTER_STOP
-	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_system_menu_panel.add_child(shade)
-	var center := CenterContainer.new()
-	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_system_menu_panel.add_child(center)
-	var menu := VBoxContainer.new()
-	menu.custom_minimum_size = Vector2(420, 0)
-	menu.add_theme_constant_override("separation", 16)
-	center.add_child(menu)
-	var title := Label.new()
-	title.text = "游戏菜单"
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 32)
-	menu.add_child(title)
-	_add_system_menu_button(menu, "继续游戏", _hide_system_menu)
-	_add_system_menu_button(menu, "回到角色选择", _return_to_character_select)
-	_add_system_menu_button(menu, "保存并退出游戏", _exit_game)
-	var hint := Label.new()
-	hint.text = "退出时角色将返回最近城镇"
-	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	menu.add_child(hint)
-
-
-func _add_system_menu_button(parent: VBoxContainer, label: String, callback: Callable) -> void:
-	var button := Button.new()
-	button.text = label
-	button.custom_minimum_size.y = 64
-	button.pressed.connect(callback)
-	parent.add_child(button)
+	_system_menu_panel.set_audio_settings(
+		_audio_bus_enabled("Music"),
+		_audio_bus_enabled("SFX")
+	)
 
 
 func _show_system_menu() -> void:
 	if _system_menu_panel == null:
 		return
-	_system_menu_panel.visible = true
+	_system_menu_panel.open_menu()
 	get_tree().paused = true
 
 
 func _hide_system_menu() -> void:
 	get_tree().paused = false
 	if _system_menu_panel != null:
-		_system_menu_panel.visible = false
+		_system_menu_panel.close_menu()
+
+
+func _audio_bus_enabled(bus_name: StringName) -> bool:
+	var bus_index := AudioServer.get_bus_index(bus_name)
+	return bus_index < 0 or not AudioServer.is_bus_mute(bus_index)
+
+
+func _on_system_menu_audio_setting_changed(request: Dictionary) -> void:
+	if str(request.get("contract_id", "")) != "ui.audio.setting.v1":
+		return
+	var setting_id := str(request.get("setting_id", ""))
+	var bus_name := "Music" if setting_id == "audio.music.enabled" else "SFX"
+	if setting_id not in ["audio.music.enabled", "audio.sfx.enabled"]:
+		return
+	var bus_index := AudioServer.get_bus_index(bus_name)
+	if bus_index >= 0:
+		AudioServer.set_bus_mute(bus_index, not bool(request.get("enabled", true)))
 
 
 func _prepare_safe_logout() -> bool:
@@ -210,6 +215,14 @@ func _exit_game() -> void:
 
 
 func change_zone(zone_name: String, initial := false) -> void:
+	var operation := Callable(self, "_change_zone_immediate").bind(zone_name, initial)
+	if _should_animate_map_transition(initial):
+		_begin_map_transition(operation)
+	else:
+		operation.call()
+
+
+func _change_zone_immediate(zone_name: String, initial := false) -> void:
 	if zone_name == "比奇城":
 		# 旧样板把“比奇城”画成独立伪地图；经典客户端中城镇属于0.map的比奇省。
 		# 保留旧调用兼容，但统一进入服务端地图0所映射的运行地图4。
@@ -222,7 +235,40 @@ func change_zone(zone_name: String, initial := false) -> void:
 	_load_zone(zone_name, initial, GameData.get_map(zone_name))
 
 
-func travel_to_service_home(red_name := false, initial := false, fallback_zone := "") -> void:
+func travel_to_service_home(
+	red_name := false,
+	initial := false,
+	fallback_zone := "",
+	after_arrival := Callable()
+) -> bool:
+	var operation := Callable(self, "_complete_service_home_travel").bind(
+		red_name, initial, fallback_zone, after_arrival
+	)
+	if _should_animate_map_transition(initial):
+		var service_map_id := GameData.service_home_map_id(red_name)
+		return _begin_map_transition(
+			operation, GameData.service_runtime_map_id(service_map_id)
+		)
+	operation.call()
+	return true
+
+
+func _complete_service_home_travel(
+	red_name: bool,
+	initial: bool,
+	fallback_zone: String,
+	after_arrival: Callable
+) -> void:
+	_travel_to_service_home_immediate(red_name, initial, fallback_zone)
+	if after_arrival.is_valid():
+		after_arrival.call()
+
+
+func _travel_to_service_home_immediate(
+	red_name := false,
+	initial := false,
+	fallback_zone := ""
+) -> void:
 	var service_map_id := GameData.service_home_map_id(red_name)
 	var runtime_map_id := GameData.service_runtime_map_id(service_map_id)
 	var map_data := GameData.get_map_by_id(runtime_map_id)
@@ -238,25 +284,287 @@ func travel_to_service_home(red_name := false, initial := false, fallback_zone :
 		var resolved_fallback := fallback_zone
 		if resolved_fallback.is_empty():
 			resolved_fallback = "比奇省" if not red_name else "比奇郊外"
-		change_zone(resolved_fallback, initial)
+		_change_zone_immediate(resolved_fallback, initial)
 
 
 func travel_to_map(map_id: int) -> void:
+	_request_map_travel(map_id)
+
+
+func _request_map_travel(map_id: int) -> bool:
 	var map_data := GameData.get_map_by_id(map_id)
 	if map_data.is_empty():
 		hud.show_message("地图数据不存在：%d" % map_id)
-		return
+		return false
 	if current_map_id == map_id:
-		return
+		return false
+	var operation := Callable(self, "_travel_to_map_immediate").bind(map_id)
+	if _should_animate_map_transition(false):
+		return _begin_map_transition(operation, map_id)
+	return bool(operation.call())
+
+
+func _travel_to_map_immediate(map_id: int) -> bool:
+	var map_data := GameData.get_map_by_id(map_id)
+	if map_data.is_empty() or current_map_id == map_id:
+		return false
+	map_data = _runtime_named_map_data(map_data)
 	var source_map_id := current_map_id
 	_load_zone(str(map_data.get("name", "未命名地图")), false, map_data)
 	if current_map_id == map_id:
 		player.global_position = route_arrival_position(map_id, source_map_id)
 		player.velocity = Vector2.ZERO
-		_spawn_route_beacon(map_id)
+		background.set_focus_position(player.global_position)
+	return current_map_id == map_id
+
+
+func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
+	if str(portal.portal_data.get("portal_contract_id", "")) != MapPortalRuntimeServiceScript.PORTAL_CONTRACT_ID:
+		return _request_map_travel(portal.target_map_id)
+	var portal_id := str(portal.portal_data.get("source_portal_id", ""))
+	var current_runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
+	var endpoint := MapPortalRuntimeServiceScript.endpoint_by_id(
+		current_runtime, portal_id
+	)
+	if endpoint.is_empty():
+		hud.show_message("传送节点端点不存在", 1.5)
+		return false
+	var current_tile := (
+		MapEditorRuntimeBridgeScript.world_to_tile(
+			current_runtime, player.global_position
+		)
+		if not current_runtime.is_empty()
+		else Vector2.ZERO
+	)
+	if not MapPortalTravelGuardScript.can_activate(
+		_portal_guard_state,
+		_portal_guard_key(current_map_id, portal_id),
+		Time.get_ticks_msec(),
+		current_tile,
+		fresh_activation
+	):
+		hud.show_message("传送节点尚未稳定，请稍候或先离开入口", 1.5)
+		return false
+	var request := MapPortalRuntimeServiceScript.travel_request(endpoint)
+	if not _valid_portal_request(request):
+		hud.show_message("传送节点配置无效", 1.5)
+		return false
+	if not MapPortalTravelGuardScript.begin_travel(_portal_guard_state):
+		return false
+	var target_map_id := int(request.get("target_map_id", -1))
+	var map_data := GameData.get_map_by_id(target_map_id)
+	if map_data.is_empty():
+		_portal_guard_state["travel_in_flight"] = false
+		hud.show_message("地图数据不存在：%d" % target_map_id)
+		return false
+	var target_runtime := MapEditorRuntimeBridgeScript.load_map(target_map_id)
+	var target_portal_id := str(request.get("target_portal_id", ""))
+	var target_endpoint := MapPortalRuntimeServiceScript.endpoint_by_id(
+		target_runtime, target_portal_id
+	)
+	if target_runtime.is_empty() or target_endpoint.is_empty():
+		_portal_guard_state["travel_in_flight"] = false
+		hud.show_message("目标地图或目标门点不可用", 1.5)
+		return false
+	if str(target_runtime.get("source", {}).get("map_id", "")) != str(request.get("target_map_key", "")):
+		_portal_guard_state["travel_in_flight"] = false
+		hud.show_message("目标地图标识不匹配", 1.5)
+		return false
+	var target_tile := _portal_tile(target_endpoint.get("tile", []))
+	if target_tile == Vector2.INF or target_tile != _portal_tile(request.get("target_tile", [])):
+		_portal_guard_state["travel_in_flight"] = false
+		hud.show_message("目标门点坐标不匹配", 1.5)
+		return false
+	map_data = _runtime_named_map_data(map_data)
+	var operation := Callable(self, "_complete_portal_travel").bind(
+		target_map_id,
+		map_data,
+		target_runtime,
+		target_portal_id,
+		target_tile
+	)
+	if _should_animate_map_transition(false):
+		if _begin_map_transition(operation, target_map_id):
+			return true
+		_portal_guard_state["travel_in_flight"] = false
+		return false
+	return bool(operation.call())
+
+
+func _complete_portal_travel(
+	target_map_id: int,
+	map_data: Dictionary,
+	target_runtime: Dictionary,
+	target_portal_id: String,
+	target_tile: Vector2
+) -> bool:
+	_load_zone(str(map_data.get("name", "未命名地图")), false, map_data)
+	if current_map_id != target_map_id:
+		_portal_guard_state["travel_in_flight"] = false
+		return false
+	var arrival_position := MapEditorRuntimeBridgeScript.cell_to_world(
+		target_runtime, [target_tile.x, target_tile.y]
+	)
+	player.global_position = arrival_position
+	player.velocity = Vector2.ZERO
+	background.set_focus_position(player.global_position)
+	MapPortalTravelGuardScript.finish_arrival(
+		_portal_guard_state,
+		_portal_guard_key(target_map_id, target_portal_id),
+		Time.get_ticks_msec(),
+		target_tile
+	)
+	return true
+
+
+func _should_animate_map_transition(initial: bool) -> bool:
+	return (
+		not initial
+		and not PlayerState.test_mode
+		and is_instance_valid(hud)
+		and hud.has_method("begin_loading_transition")
+		and hud.has_method("finish_loading_transition")
+		and hud.has_signal("loading_transition_covered")
+	)
+
+
+func _begin_map_transition(operation: Callable, target_map_id := -1) -> bool:
+	if _map_transition_in_progress or not operation.is_valid():
+		return false
+	_map_transition_serial += 1
+	_active_map_transition_id = "map:%d:%d" % [
+		Time.get_ticks_msec(),
+		_map_transition_serial,
+	]
+	_map_transition_in_progress = true
+	_run_map_transition(_active_map_transition_id, operation, target_map_id)
+	return true
+
+
+func _run_map_transition(
+	transition_id: String,
+	operation: Callable,
+	target_map_id: int
+) -> void:
+	hud.begin_loading_transition(transition_id)
+	while _map_transition_in_progress and _active_map_transition_id == transition_id:
+		var request: Dictionary = await hud.loading_transition_covered
+		if (
+			str(request.get("contract_id", "")) == LoadingTransitionOverlay.CONTRACT_ID
+			and str(request.get("transition_id", "")) == transition_id
+		):
+			break
+	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
+		return
+	_last_monster_prefetch_status.clear()
+	if _monster_prefetch_enabled and target_map_id >= 0:
+		_last_monster_prefetch_status = MonsterVisualScript.begin_map_prefetch(
+			_monster_ids_for_map(target_map_id)
+		)
+		var prefetch_deadline := (
+			Time.get_ticks_msec() + MONSTER_PREFETCH_TIMEOUT_MSEC
+		)
+		while (
+			_map_transition_in_progress
+			and _active_map_transition_id == transition_id
+			and not bool(_last_monster_prefetch_status.get("complete", false))
+			and Time.get_ticks_msec() < prefetch_deadline
+		):
+			await get_tree().process_frame
+			_last_monster_prefetch_status = MonsterVisualScript.poll_streaming()
+	elif _monster_prefetch_enabled:
+		MonsterVisualScript.release_map_pins()
+	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
+		return
+	operation.call()
+	await get_tree().process_frame
+	if DisplayServer.get_name() != "headless":
+		await RenderingServer.frame_post_draw
+	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
+		return
+	hud.finish_loading_transition()
+	_active_map_transition_id = ""
+	_map_transition_in_progress = false
+
+
+func _monster_ids_for_map(map_id: int) -> Array[int]:
+	var content: Dictionary = {}
+	if MapEditorRuntimeBridgeScript.has_runtime_map(map_id):
+		content = MapEditorRuntimeBridgeScript.game_content_for_map(map_id)
+	if content.is_empty() and RegionContent.has_map(map_id):
+		content = RegionContent.get_map_content(map_id)
+	var result: Array[int] = []
+	var seen := {}
+	for group_name: String in ["spawns", "bosses"]:
+		for raw_entry: Variant in content.get(group_name, []):
+			if not raw_entry is Dictionary:
+				continue
+			var entry: Dictionary = raw_entry
+			var monster_id := int(entry.get(
+				"monster_id", entry.get("monsterId", -1)
+			))
+			if monster_id < 0 or seen.has(monster_id):
+				continue
+			seen[monster_id] = true
+			result.append(monster_id)
+	return result
+
+
+func _valid_portal_request(request: Dictionary) -> bool:
+	return (
+		bool(request.get("ok", false))
+		and int(request.get("target_map_id", -1)) >= 0
+		and not str(request.get("target_map_key", "")).is_empty()
+		and not str(request.get("target_portal_id", "")).is_empty()
+		and str(request.get("arrival_guard_policy_id", "")) == MapPortalTravelGuardScript.POLICY_ID
+		and is_equal_approx(float(request.get("return_minimum_seconds", 0.0)), 3.0)
+		and is_equal_approx(
+			float(request.get("return_unlock_distance_tiles", 0.0)),
+			MapPortalTravelGuardScript.UNLOCK_DISTANCE_TILES
+		)
+		and bool(request.get("single_flight", false))
+	)
+
+
+func _portal_tile(raw_tile: Variant) -> Vector2:
+	if not raw_tile is Array or raw_tile.size() != 2:
+		return Vector2.INF
+	return Vector2(float(raw_tile[0]), float(raw_tile[1]))
+
+
+func _portal_guard_key(map_id: int, portal_id: String) -> String:
+	return "%d:%s" % [map_id, portal_id]
+
+
+func _runtime_named_map_data(map_data: Dictionary) -> Dictionary:
+	var resolved := map_data.duplicate(true)
+	var map_id := int(resolved.get("mapId", -1))
+	if MapEditorRuntimeBridgeScript.has_runtime_map(map_id):
+		var content := MapEditorRuntimeBridgeScript.game_content_for_map(map_id)
+		if not content.is_empty():
+			resolved["name"] = str(content.get("name", resolved.get("name", "未命名地图")))
+	return resolved
+
+
+func _update_portal_arrival_guard() -> void:
+	var locked_key := str(_portal_guard_state.get("locked_portal_id", ""))
+	if locked_key.is_empty() or bool(_portal_guard_state.get("travel_in_flight", false)):
+		return
+	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
+	if runtime.is_empty():
+		return
+	MapPortalTravelGuardScript.clear_lock_after_departure(
+		_portal_guard_state,
+		locked_key,
+		MapEditorRuntimeBridgeScript.world_to_tile(runtime, player.global_position)
+	)
 
 
 func route_arrival_position(destination_map_id: int, source_map_id: int) -> Vector2:
+	if MapEditorRuntimeBridgeScript.has_runtime_map(destination_map_id):
+		return MapEditorRuntimeBridgeScript.portal_position(
+			destination_map_id, "", source_map_id
+		)
 	var content := RegionContent.get_map_content(destination_map_id)
 	for portal: Dictionary in content.get("portals", []):
 		if int(portal.get("target_map_id", -1)) == source_map_id:
@@ -290,15 +598,6 @@ func _bich_portal_position_to(target_map_id: int) -> Vector2:
 		if int(portal.get("target_map_id", -1)) == target_map_id:
 			return portal.get("position", _bich_home_world_position())
 	return _bich_home_world_position()
-
-
-func _spawn_route_beacon(map_id: int) -> void:
-	var route := route_next_target(map_id)
-	if route.is_empty():
-		return
-	var beacon := RouteBeacon.new()
-	beacon.setup(player.global_position, route.position, str(route.label))
-	add_child(beacon)
 
 
 func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
@@ -336,8 +635,10 @@ func _spawn_database_zone_content(map_data: Dictionary) -> void:
 		_spawn_outskirts_content()
 		return
 	var map_id := int(map_data.get("mapId", -1))
-	if map_id == 4:
-		var editor_content := MapEditorRuntimeBridgeScript.game_content()
+	if MapEditorRuntimeBridgeScript.has_runtime_map(map_id):
+		var editor_content := (
+			MapEditorRuntimeBridgeScript.game_content_for_map(map_id)
+		)
 		if not editor_content.is_empty():
 			_spawn_editor_runtime_content(editor_content)
 			return
@@ -421,6 +722,35 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 						"respawn_random_seconds": float(spawn.get("respawn_random_seconds", 0.0)),
 					}
 				)
+	for spawn: Dictionary in content.get("bosses", []):
+		var boss := GameData.get_monster_by_id(
+			int(spawn.get("monster_id", -1))
+		)
+		if boss.is_empty():
+			boss = GameData.get_monster(str(spawn.get("name", "")))
+		if boss.is_empty():
+			continue
+		var raw_group: Dictionary = spawn.get("spawn_group", {})
+		var group_id := str(raw_group.get(
+			"spawn_group_id",
+			"editor:%d:boss:%d" % [
+				current_map_id,
+				int(content.get("bosses", []).find(spawn)),
+			]
+		))
+		_spawn_enemy(
+			boss,
+			spawn.get("position", Vector2.ZERO),
+			true,
+			float(spawn.get("respawn_seconds", DEFAULT_BOSS_RESPAWN_SECONDS)),
+			{
+				"spawn_group_id": group_id,
+				"spawn_slot_id": "%s:0" % group_id,
+				"respawn_evidence": {
+					"status": "map_editor_authored",
+				},
+			}
+		)
 	for npc_data: Dictionary in content.get("npcs", []):
 		var role := str(npc_data.get("kind", "dialogue"))
 		var name := str(npc_data.get("name", "NPC"))
@@ -432,7 +762,12 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 			"books": stock = _build_skill_book_stock(PlayerState.profession)
 		_spawn_npc(npc_data.get("position", Vector2.ZERO), name, role, stock, stock_key, int(npc_data.get("appearance", -1)), content.get("map_center_world", _current_map_center_world()))
 	for portal: Dictionary in content.get("portals", []):
-		_spawn_map_portal(portal.get("position", Vector2.ZERO), int(portal.get("target_map_id", -1)), str(portal.get("label", "地图入口")))
+		_spawn_map_portal(
+			portal.get("position", Vector2.ZERO),
+			int(portal.get("target_map_id", -1)),
+			str(portal.get("label", "地图入口")),
+			portal
+		)
 
 
 func _spawn_authored_map_content(content: Dictionary) -> void:
@@ -633,9 +968,14 @@ func _spawn_portal(position: Vector2, target_zone: String, label_text: String) -
 	add_child(portal)
 
 
-func _spawn_map_portal(position: Vector2, target_map_id: int, label_text: String) -> void:
+func _spawn_map_portal(
+	position: Vector2,
+	target_map_id: int,
+	label_text: String,
+	portal_data: Dictionary = {}
+) -> void:
 	var portal := ZonePortal.new()
-	portal.setup_map(target_map_id, label_text)
+	portal.setup_map(target_map_id, label_text, portal_data)
 	portal.global_position = position
 	add_child(portal)
 
@@ -887,7 +1227,17 @@ func _on_player_moved(_position: Vector2, _facing: Vector2) -> void:
 
 func _on_player_death_requested() -> void:
 	_cancel_target()
-	travel_to_service_home(false, false, "比奇省")
+	var accepted := travel_to_service_home(
+		false,
+		false,
+		"比奇省",
+		Callable(self, "_finish_death_revival")
+	)
+	if not accepted:
+		call_deferred("_on_player_death_requested")
+
+
+func _finish_death_revival() -> void:
 	player.global_position = _bich_home_world_position()
 	player.velocity = Vector2.ZERO
 	background.set_focus_position(player.global_position)

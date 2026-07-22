@@ -28,6 +28,7 @@ func _run() -> void:
 	assert(panel.theme.get_stylebox("normal", "GothicComponentSlotButton") is StyleBoxFlat, "人物与背包插槽没有使用简洁原生方格")
 	assert(panel.get_node("AttributePanel").position.x < panel.get_node("EquipmentPanel").position.x, "人物属性面板必须位于装备栏左侧")
 	assert(panel.get_node("EquipmentPanel").position.x < panel.get_node("BagPanel").position.x, "综合背包必须位于装备栏右侧")
+	assert(panel.bag_summary_label.position.y >= 18.0 and panel.bag_summary_label.vertical_alignment == VERTICAL_ALIGNMENT_CENTER, "背包金币与占用格数仍然贴近装饰框上沿")
 	assert(panel.equipment_buttons.size() == 8, "人物装备栏必须显示八个直接装备槽")
 	assert(panel.item_grid.columns == 8 and panel.item_grid.get_child_count() == 100, "综合背包必须使用8列并提供固定100格")
 	var bag_scroll := panel.get_node("BagPanel/InventoryScroll") as ScrollContainer

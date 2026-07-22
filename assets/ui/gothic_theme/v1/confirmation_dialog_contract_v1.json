@@ -1,0 +1,58 @@
+{
+  "contractId": "ui.confirmation.dialog.v1",
+  "stableVisualId": "ui.confirmation.dialog",
+  "purpose": "Shared compact confirmation surface for UI-owned panels.",
+  "tones": [
+    "normal",
+    "danger"
+  ],
+  "input": {
+    "action_id": "Stable action identifier supplied by the calling panel.",
+    "title": "Reader-facing title.",
+    "message": "Reader-facing concise message.",
+    "confirm_label": "Confirmation button label.",
+    "cancel_label": "Cancellation button label.",
+    "tone": "normal or danger.",
+    "context": "Opaque UI context returned unchanged to the caller."
+  },
+  "outputSignals": {
+    "confirmed": [
+      "contract_id",
+      "action_id",
+      "tone",
+      "context"
+    ],
+    "cancelled": [
+      "contract_id",
+      "action_id",
+      "tone",
+      "context"
+    ]
+  },
+  "layout": {
+    "referenceViewport": [
+      1280,
+      720
+    ],
+    "modalSize": [
+      560,
+      304
+    ],
+    "contentSafeRect": [
+      32,
+      20,
+      496,
+      256
+    ],
+    "minimumTouchHeight": 56,
+    "safeAreaBehavior": "Centered inside the current viewport."
+  },
+  "rules": [
+    "The component renders only supplied UI copy and never decides gameplay outcomes.",
+    "The caller validates the action again after confirmation.",
+    "Danger tone is visual emphasis only and does not bypass gameplay checks.",
+    "Panels must reuse this component instead of creating system-native or duplicated confirmation styles.",
+    "The dark inner fill must remain inside the compact inset frame and the frame clips all child drawing.",
+    "Titles, messages, and buttons must remain inside the declared content safe rectangle."
+  ]
+}

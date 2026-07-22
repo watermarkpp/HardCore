@@ -17,6 +17,9 @@ func _run() -> void:
 
 	game.hud._toggle_map_panel()
 	assert(game.hud.map_panel.visible, "地图目录未打开")
+	assert(game.hud.has_signal("map_teleport_availability_requested"), "HUD 没有转发传送规则请求")
+	assert(game.hud.has_signal("map_teleport_requested"), "HUD 没有转发结构化传送请求")
+	assert(game.hud.has_method("set_map_teleport_availability"), "HUD 缺少传送开放规则注入方法")
 	assert(game.hud.map_panel.map_entries.size() == 129, "地图目录默认筛选错误")
 	game.hud.map_panel.later_toggle.button_pressed = true
 	assert(PlayerState.later_content_enabled, "后期内容开关未保存")

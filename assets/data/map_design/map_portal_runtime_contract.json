@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "contract_id": "map_portal_runtime_contract_v1",
+  "portal_endpoint_contract_id": "unified_map_portal_endpoint_v1",
+  "arrival_guard_policy_id": "portal_arrival_guard_v2",
+  "activation_mode": "fresh_interaction_or_fresh_trigger_entry",
+  "return_unlock": {
+    "operator": "or",
+    "minimum_seconds": 3.0,
+    "minimum_distance_tiles": 1.5
+  },
+  "single_flight": true,
+  "arrival_target": "target_portal_id_and_target_tile",
+  "runtime_loader_scope": "all_runtime_approved_editor_maps",
+  "legacy_map_policy": "adapt_static_portals_to_unified_endpoint_contract",
+  "required_runtime_sequence": [
+    "reject_if_travel_in_flight",
+    "resolve_reciprocal_target_portal",
+    "begin_single_flight_map_load",
+    "place_actor_at_target_tile",
+    "lock_arrival_portal_for_actor",
+    "finish_map_load",
+    "unlock_on_fresh_activation_after_time_or_distance"
+  ]
+}

@@ -39,7 +39,7 @@ func _run() -> void:
 			npc_count += 1
 			if node.stock_key == "books":
 				bookseller = node
-	assert(npc_count == 5, "Bich must expose all five authored NPCs")
+	assert(npc_count == 7, "Bich must expose all seven authored NPCs")
 	assert(bookseller != null, "Bich bookseller is missing")
 
 	for profession_name: String in ProfessionRules.PROFESSIONS:

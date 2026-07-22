@@ -2,6 +2,7 @@ extends Control
 
 const BUY_OUTPUT_PATH := "res://outputs/visual_acceptance/shop/shop_gothic_sample_v1.png"
 const SELL_OUTPUT_PATH := "res://outputs/visual_acceptance/shop/shop_gothic_sell_v1.png"
+const SELL_CONFIRM_OUTPUT_PATH := "res://outputs/visual_acceptance/shop/shop_sell_confirmation_v1.png"
 const WORLD_TEXTURE := preload("res://assets/ui/gothic_preview/world_scene_clean.png")
 
 const SAMPLE_STOCK := [
@@ -56,7 +57,11 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	_capture(SELL_OUTPUT_PATH)
-	print("SHOP_GOTHIC_PREVIEW_CAPTURE_PASS buy=%s sell=%s" % [BUY_OUTPUT_PATH, SELL_OUTPUT_PATH])
+	panel._request_sell(1)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_capture(SELL_CONFIRM_OUTPUT_PATH)
+	print("SHOP_GOTHIC_PREVIEW_CAPTURE_PASS buy=%s sell=%s confirmation=%s" % [BUY_OUTPUT_PATH, SELL_OUTPUT_PATH, SELL_CONFIRM_OUTPUT_PATH])
 	get_tree().quit(0)
 
 

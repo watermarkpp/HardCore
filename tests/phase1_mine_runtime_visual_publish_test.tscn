@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/phase1_mine_runtime_visual_publish_test.gd" type="Script" id="1"]
+
+[node name="Phase1MineRuntimeVisualPublishTest" type="Node"]
+script = ExtResource("1")

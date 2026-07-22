@@ -12,6 +12,8 @@ func _run() -> void:
 	add_child(game)
 	await get_tree().process_frame
 	assert(game.get("_system_menu_panel") != null, "游戏内系统菜单未创建")
+	assert(game.get("_system_menu_panel") is SystemMenuPanel, "主体游戏仍在使用临时系统菜单")
+	assert(game.get("_system_menu_panel").settings_button != null, "UI 分支制作的设置入口未接入")
 	game.call("_show_system_menu")
 	assert(get_tree().paused and game.get("_system_menu_panel").visible, "系统菜单没有暂停游戏")
 	game.call("_hide_system_menu")

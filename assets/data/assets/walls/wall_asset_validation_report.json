@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "asset_count": 84,
+  "family_counts": {
+    "cave_granite_u0": 42,
+    "orc_tomb_rough_stone_u0": 42
+  },
+  "issues": [],
+  "passed": true,
+  "notes": [
+    "Straight modules share deterministic socket geometry; endpoints are zero-displacement profiles.",
+    "Door/broken adapters preserve the same outer sockets as straight modules.",
+    "Visual socket guard is 16 px; collision continuity follows explicit cell lists."
+  ]
+}

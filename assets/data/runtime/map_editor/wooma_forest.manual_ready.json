@@ -1,0 +1,33 @@
+{
+  "connection_version_id": "bich_wooma_connection_v1",
+  "content": {
+    "design_size": [
+      56.0,
+      56.0
+    ],
+    "entrance_id": "map_entrance_000001",
+    "entrance_tile": [
+      3.0,
+      52.0
+    ],
+    "incoming_from": {
+      "exit_id": "map_exit_000001",
+      "exit_tile": [
+        6.0,
+        5.0
+      ],
+      "map_id": "bich_province",
+      "runtime_map_id": 4
+    },
+    "instances": 56,
+    "monster_spawns": 36,
+    "pending_exit_targets": 3
+  },
+  "map_id": "wooma_forest",
+  "official_version_id": "wooma_forest_user_official_v1",
+  "runtime_build_sha256": "44cb7d2e3edd6837caaba780f250fc5df43512a76fe76dc68dd9a0e19d58e70d",
+  "runtime_map_id": 268,
+  "schema_version": 1,
+  "source_workspace": "map_editor_workspace/wooma_forest",
+  "status": "user_confirmed_official"
+}

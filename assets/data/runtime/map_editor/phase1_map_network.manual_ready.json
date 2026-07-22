@@ -1,0 +1,432 @@
+{
+  "bidirectional_pair_count": 9,
+  "connection_policy_id": "map_connection_unified_bidirectional_v2",
+  "connections": [
+    {
+      "connection_mode": "bidirectional",
+      "connection_pair_id": "bich_wooma_forest_pair_v2",
+      "source_map_key": "bich_province",
+      "source_portal_id": "map_exit_000001",
+      "source_runtime_map_id": 4,
+      "source_tile": [
+        6.0,
+        5.0
+      ],
+      "target_map_id": 268,
+      "target_map_key": "wooma_forest",
+      "target_portal_id": "map_exit_000004",
+      "target_tile": [
+        3.0,
+        52.0
+      ]
+    },
+    {
+      "connection_mode": "bidirectional",
+      "connection_pair_id": "bich_orc_tomb_1_pair_v2",
+      "source_map_key": "bich_province",
+      "source_portal_id": "map_exit_000002",
+      "source_runtime_map_id": 4,
+      "source_tile": [
+        72.0,
+        5.0
+      ],
+      "target_map_id": 217,
+      "target_map_key": "orc_tomb_1",
+      "target_portal_id": "map_exit_000002",
+      "target_tile": [
+        3.0,
+        35.0
+      ]
+    },
+    {
+      "connection_mode": "bidirectional",
+      "connection_pair_id": "bich_mine_1_pair_v1",
+      "source_map_key": "bich_province",
+      "source_portal_id": "map_exit_000003",
+      "source_runtime_map_id": 4,
+      "source_tile": [
+        7.0,
+        74.0
+      ],
+      "target_map_id": 406,
+      "target_map_key": "bich_mine_1",
+      "target_portal_id": "map_exit_000001",
+      "target_tile": [
+        3.0,
+        46.0
+      ]
+    },
+    {
+      "connection_mode": "bidirectional",
+      "connection_pair_id": "wooma_forest_temple_1_pair_v1",
+      "source_map_key": "wooma_forest",
+      "source_portal_id": "map_exit_000001",
+      "source_runtime_map_id": 268,
+      "source_tile": [
+        51.0,
+        4.0
+      ],
+      "target_map_id": 313,
+      "target_map_key": "wooma_temple_1",
+      "target_portal_id": "map_exit_000002",
+      "target_tile": [
+        20.0,
+        41.0
+      ]
+    },
+    {
+      "connection_mode": "bidirectional",
+      "connection_pair_id": "bich_wooma_forest_pair_v2",
+      "source_map_key": "wooma_forest",
+      "source_portal_id": "map_exit_000004",
+      "source_runtime_map_id": 268,
+      "source_tile": [
+        3.0,
+        52.0
+      ],
+      "target_map_id": 4,
+      "target_map_key": "bich_province",
+      "target_portal_id": "map_exit_000001",
+      "target_tile": [
+        6.0,
+        5.0
+      ]
+    },
+    {
+      "connection_mode": "bidirectional",
+      "connection_pair_id": "wooma_temple_1_2_pair_v1",
+      "source_map_key": "wooma_temple_1",
+      "source_portal_id": "map_exit_000001",
+      "source_runtime_map_id": 313,
+      "source_tile": [
+        18.0,
+        2.0
+      ],
+      "target_map_id": 314,
+      "target_map_key": "wooma_temple_2",
+      "target_portal_id": "map_exit_000002",
+      "target_tile": [
+        20.0,
+        41.0
+      ]
+    },
+    {
+      "connection_mode": "bidirectional",
+      "connection_pair_id": "wooma_forest_temple_1_pair_v1",
+      "source_map_key": "wooma_temple_1",
+      "source_portal_id": "map_exit_000002",
+      "source_runtime_map_id": 313,
+      "source_tile": [
+        20.0,
+        41.0
+      ],
+      "target_map_id": 268,
+      "target_map_key": "wooma_forest",
+      "target_portal_id": "map_exit_000001",
+      "target_tile": [
+        51.0,
+        4.0
+      ]
+    },
+    {
+      "connection_mode": "bidirectional",
+      "connection_pair_id": "wooma_temple_2_leader_hall_pair_v1",
+      "source_map_key": "wooma_temple_2",
+      "source_portal_id": "map_exit_000001",
+      "source_runtime_map_id": 314,
+      "source_tile": [
+        18.0,
+        2.0
+      ],
+      "target_map_id": 315,
+      "target_map_key": "wooma_temple_3",
+      "target_portal_id": "map_exit_000001",
+      "target_tile": [
+        20.0,
+        41.0
+      ]
+    },
+    {
+      "connection_mode": "bidirectional",
+      "connection_pair_id": "wooma_temple_1_2_pair_v1",
+      "source_map_key": "wooma_temple_2",
+      "source_portal_id": "map_exit_000002",
+      "source_runtime_map_id": 314,
+      "source_tile": [
+        20.0,
+        41.0
+      ],
+      "target_map_id": 313,
+      "target_map_key": "wooma_temple_1",
+      "target_portal_id": "map_exit_000001",
+      "target_tile": [
+        18.0,
+        2.0
+      ]
+    },
+    {
+      "connection_mode": "bidirectional",
+      "connection_pair_id": "wooma_temple_2_leader_hall_pair_v1",
+      "source_map_key": "wooma_temple_3",
+      "source_portal_id": "map_exit_000001",
+      "source_runtime_map_id": 315,
+      "source_tile": [
+        20.0,
+        41.0
+      ],
+      "target_map_id": 314,
+      "target_map_key": "wooma_temple_2",
+      "target_portal_id": "map_exit_000001",
+      "target_tile": [
+        18.0,
+        2.0
+      ]
+    },
+    {
+      "connection_mode": "bidirectional",
+      "connection_pair_id": "orc_tomb_1_2_pair_v1",
+      "source_map_key": "orc_tomb_1",
+      "source_portal_id": "map_exit_000001",
+      "source_runtime_map_id": 217,
+      "source_tile": [
+        32.0,
+        2.0
+      ],
+      "target_map_id": 218,
+      "target_map_key": "orc_tomb_2",
+      "target_portal_id": "map_exit_000002",
+      "target_tile": [
+        3.0,
+        35.0
+      ]
+    },
+    {
+      "connection_mode": "bidirectional",
+      "connection_pair_id": "bich_orc_tomb_1_pair_v2",
+      "source_map_key": "orc_tomb_1",
+      "source_portal_id": "map_exit_000002",
+      "source_runtime_map_id": 217,
+      "source_tile": [
+        3.0,
+        35.0
+      ],
+      "target_map_id": 4,
+      "target_map_key": "bich_province",
+      "target_portal_id": "map_exit_000002",
+      "target_tile": [
+        72.0,
+        5.0
+      ]
+    },
+    {
+      "connection_mode": "bidirectional",
+      "connection_pair_id": "orc_tomb_2_3_pair_v1",
+      "source_map_key": "orc_tomb_2",
+      "source_portal_id": "map_exit_000001",
+      "source_runtime_map_id": 218,
+      "source_tile": [
+        32.0,
+        2.0
+      ],
+      "target_map_id": 221,
+      "target_map_key": "orc_tomb_3",
+      "target_portal_id": "map_exit_000001",
+      "target_tile": [
+        3.0,
+        35.0
+      ]
+    },
+    {
+      "connection_mode": "bidirectional",
+      "connection_pair_id": "orc_tomb_1_2_pair_v1",
+      "source_map_key": "orc_tomb_2",
+      "source_portal_id": "map_exit_000002",
+      "source_runtime_map_id": 218,
+      "source_tile": [
+        3.0,
+        35.0
+      ],
+      "target_map_id": 217,
+      "target_map_key": "orc_tomb_1",
+      "target_portal_id": "map_exit_000001",
+      "target_tile": [
+        32.0,
+        2.0
+      ]
+    },
+    {
+      "connection_mode": "bidirectional",
+      "connection_pair_id": "orc_tomb_2_3_pair_v1",
+      "source_map_key": "orc_tomb_3",
+      "source_portal_id": "map_exit_000001",
+      "source_runtime_map_id": 221,
+      "source_tile": [
+        3.0,
+        35.0
+      ],
+      "target_map_id": 218,
+      "target_map_key": "orc_tomb_2",
+      "target_portal_id": "map_exit_000001",
+      "target_tile": [
+        32.0,
+        2.0
+      ]
+    },
+    {
+      "connection_mode": "bidirectional",
+      "connection_pair_id": "bich_mine_1_pair_v1",
+      "source_map_key": "bich_mine_1",
+      "source_portal_id": "map_exit_000001",
+      "source_runtime_map_id": 406,
+      "source_tile": [
+        3.0,
+        46.0
+      ],
+      "target_map_id": 4,
+      "target_map_key": "bich_province",
+      "target_portal_id": "map_exit_000003",
+      "target_tile": [
+        7.0,
+        74.0
+      ]
+    },
+    {
+      "connection_mode": "bidirectional",
+      "connection_pair_id": "bich_mine_1_2_pair_v1",
+      "source_map_key": "bich_mine_1",
+      "source_portal_id": "map_exit_000002",
+      "source_runtime_map_id": 406,
+      "source_tile": [
+        47.0,
+        4.0
+      ],
+      "target_map_id": 408,
+      "target_map_key": "bich_mine_2",
+      "target_portal_id": "map_exit_000001",
+      "target_tile": [
+        3.0,
+        46.0
+      ]
+    },
+    {
+      "connection_mode": "bidirectional",
+      "connection_pair_id": "bich_mine_1_2_pair_v1",
+      "source_map_key": "bich_mine_2",
+      "source_portal_id": "map_exit_000001",
+      "source_runtime_map_id": 408,
+      "source_tile": [
+        3.0,
+        46.0
+      ],
+      "target_map_id": 406,
+      "target_map_key": "bich_mine_1",
+      "target_portal_id": "map_exit_000002",
+      "target_tile": [
+        47.0,
+        4.0
+      ]
+    },
+    {
+      "connection_mode": "one_way",
+      "connection_pair_id": "",
+      "source_map_key": "bich_mine_2",
+      "source_portal_id": "map_exit_000002",
+      "source_runtime_map_id": 408,
+      "source_tile": [
+        47.0,
+        4.0
+      ],
+      "target_map_id": 1578,
+      "target_map_key": "corpse_king_hall",
+      "target_portal_id": "map_exit_000001",
+      "target_tile": [
+        3.0,
+        23.0
+      ]
+    }
+  ],
+  "default_connection_mode": "bidirectional",
+  "maps": [
+    {
+      "display_name": "比奇省（单机重制）",
+      "map_id": "bich_province",
+      "runtime_build_sha256": "fe8cb448385c3734f7ed7016a733a285a93ef41c16f1f67f449c878195c95f44",
+      "runtime_map_id": 4
+    },
+    {
+      "display_name": "沃玛森林",
+      "map_id": "wooma_forest",
+      "runtime_build_sha256": "e470a4844dfafe6f4a5fb640a899dbfa67383461d428db14b3c59019dca08b3f",
+      "runtime_map_id": 268
+    },
+    {
+      "display_name": "沃玛寺庙一层",
+      "map_id": "wooma_temple_1",
+      "runtime_build_sha256": "d7286cef7e69e18cd5b3eedc511bcb1792b6ba03a6391f41e78e87eb2bd78240",
+      "runtime_map_id": 313
+    },
+    {
+      "display_name": "沃玛寺庙二层",
+      "map_id": "wooma_temple_2",
+      "runtime_build_sha256": "48da6fe01996d1346531436407af460942f14869c5c17d62099968799e87fe67",
+      "runtime_map_id": 314
+    },
+    {
+      "display_name": "沃玛教主大厅",
+      "map_id": "wooma_temple_3",
+      "runtime_build_sha256": "d18a8be9e9597ee88bec19627608a454ca19e877cef0a7984b881254f8f8d447",
+      "runtime_map_id": 315
+    },
+    {
+      "display_name": "兽人古墓一层",
+      "map_id": "orc_tomb_1",
+      "runtime_build_sha256": "abb8e55b6d02f34ae13875dd4d0ae45291d5815b305a8c967c69ba00d03586f5",
+      "runtime_map_id": 217
+    },
+    {
+      "display_name": "兽人古墓二层",
+      "map_id": "orc_tomb_2",
+      "runtime_build_sha256": "c5893571aceff410256bbf20e87d3f35f17d58fccf01ccb8fdff25a39220d80f",
+      "runtime_map_id": 218
+    },
+    {
+      "display_name": "兽人古墓三层",
+      "map_id": "orc_tomb_3",
+      "runtime_build_sha256": "5db0b7c1da1932ce0d9afdf2bc0ba6fb8b036849f5a561c6f5b50d9263d8a859",
+      "runtime_map_id": 221
+    },
+    {
+      "display_name": "矿区一层",
+      "map_id": "bich_mine_1",
+      "runtime_build_sha256": "d92aaaeb8ab97145f4bf3f5ccae3c776bf9d142edf6548b9ca415865637176e2",
+      "runtime_map_id": 406
+    },
+    {
+      "display_name": "矿区二层",
+      "map_id": "bich_mine_2",
+      "runtime_build_sha256": "c97df9c69a490aab824327ff3f23047853f0f08cbc58923d924b67fec488e1d3",
+      "runtime_map_id": 408
+    },
+    {
+      "display_name": "尸王殿",
+      "map_id": "corpse_king_hall",
+      "runtime_build_sha256": "faa0fbc55fbc22085c6c4a44550a6f088cbd22d9805bcb388b0c593030c748b3",
+      "runtime_map_id": 1578
+    }
+  ],
+  "network_version_id": "phase1_finished_map_network_v1",
+  "one_way_exception_count": 1,
+  "one_way_exceptions": [
+    {
+      "exception_id": "corpse_king_hall_one_way_v1",
+      "exit_policy": "town_scroll_or_death_only",
+      "reason": "尸王殿只允许进入，离开必须使用回城功能或死亡回城",
+      "source_map_key": "bich_mine_2",
+      "target_arrival_portal_id": "map_exit_000001",
+      "target_map_key": "corpse_king_hall"
+    }
+  ],
+  "phase1_map_production_complete": true,
+  "portal_contract_id": "unified_map_portal_endpoint_v1",
+  "schema_version": 1
+}

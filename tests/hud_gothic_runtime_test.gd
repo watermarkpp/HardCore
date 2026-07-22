@@ -16,6 +16,27 @@ func _run() -> void:
 	var root := hud.get_node("MobileSafeRoot") as Control
 	assert(root != null)
 	assert(not (root.get_node("TopInfoPanel") as Control).visible)
+	assert(hud.has_signal("skill_button_assignment_requested"), "HUD 没有转发七槽技能分配请求")
+	assert(hud.has_method("set_skill_button_assignments"), "HUD 缺少七槽技能配置注入方法")
+	assert(hud.has_signal("revival_requested"), "HUD 没有转发复活请求")
+	assert(hud.has_method("show_death_screen"), "HUD 缺少死亡界面入口")
+	assert(hud.has_method("show_loot_feedback"), "HUD 缺少结构化拾取反馈入口")
+	assert(hud.get("loot_feedback_layer") != null, "HUD 没有接入战利品反馈层")
+	assert(hud.has_method("begin_loading_transition") and hud.has_method("finish_loading_transition"), "HUD 缺少地图Loading过渡入口")
+	var loading_overlay: Control = hud.get("loading_transition_overlay") as Control
+	assert(loading_overlay != null and not loading_overlay.visible, "Loading过渡层没有以隐藏状态接入HUD")
+	var covered_requests: Array[Dictionary] = []
+	var finished_requests: Array[Dictionary] = []
+	hud.loading_transition_covered.connect(func(request: Dictionary) -> void: covered_requests.append(request.duplicate(true)))
+	hud.loading_transition_finished.connect(func(request: Dictionary) -> void: finished_requests.append(request.duplicate(true)))
+	hud.begin_loading_transition("hud:test:001")
+	await get_tree().create_timer(0.27).timeout
+	assert(covered_requests.size() == 1 and covered_requests[0].transition_id == "hud:test:001", "HUD 没有转发Loading完全覆盖信号")
+	hud.finish_loading_transition()
+	await get_tree().create_timer(0.25).timeout
+	assert(finished_requests.size() == 1 and finished_requests[0].transition_id == "hud:test:001", "HUD 没有转发Loading结束信号")
+	var death_panel: Control = hud.get("death_revival_panel") as Control
+	assert(death_panel != null and not death_panel.visible, "死亡界面没有以隐藏状态接入 HUD")
 
 	var chassis := root.get_node("IntegratedHUDChassis") as Control
 	assert(chassis != null and chassis.size == Vector2(820, 273))

@@ -39,7 +39,7 @@ func _run() -> void:
 	var outside := MapEditorRuntimeBridge.tile_to_world(runtime, [-1.0, 0.0])
 	assert(game.background.is_environment_point_blocked(outside), "Map exterior is not part of unified occupancy")
 	var first_blocked := str(runtime.get("collision", {}).get("blocked_tiles", [])[0]).split(",")
-	var obstacle := MapEditorRuntimeBridge.tile_to_world(runtime, [float(first_blocked[0]), float(first_blocked[1])])
+	var obstacle := MapEditorRuntimeBridge.cell_to_world(runtime, [float(first_blocked[0]), float(first_blocked[1])])
 	assert(game.background.is_environment_point_blocked(obstacle), "Editor obstacle is not part of unified occupancy")
 
 	var probe := enemies[0] as EnemyActor

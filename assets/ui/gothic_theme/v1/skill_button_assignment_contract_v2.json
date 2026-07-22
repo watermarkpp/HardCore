@@ -1,0 +1,46 @@
+{
+  "contractId": "ui.skill.button_assignment.v2",
+  "policy": "Gameplay skill data owns interaction_mode and assignment eligibility. UI displays the supplied mode and submits a target slot without mutating skill behavior or saved assignments.",
+  "assignmentInput": {
+    "method": "SkillPanel.set_skill_button_assignments(assignments, interaction_modes)",
+    "hudForwardMethod": "GameHUD.set_skill_button_assignments(assignments, interaction_modes)",
+    "groups": {
+      "center": {
+        "count": 4,
+        "stableSlotIds": [
+          "hud.profession_skill.1",
+          "hud.profession_skill.2",
+          "hud.profession_skill.3",
+          "hud.profession_skill.4"
+        ]
+      },
+      "attack_ring": {
+        "count": 3,
+        "stableSlotIds": [
+          "hud.attack_ring_skill.1",
+          "hud.attack_ring_skill.2",
+          "hud.attack_ring_skill.3"
+        ]
+      }
+    },
+    "interactionModes": ["toggle", "click", "passive"]
+  },
+  "requestSignal": {
+    "panelSignal": "SkillPanel.skill_button_assignment_requested(request)",
+    "hudForwardSignal": "GameHUD.skill_button_assignment_requested(request)",
+    "requestFields": [
+      "contract_id",
+      "profession_id",
+      "skill_id",
+      "skill_name",
+      "slot_group",
+      "slot_index",
+      "slot_id",
+      "interaction_mode"
+    ]
+  },
+  "compatibility": {
+    "legacyContractId": "ui.skill.quick_slot_assignment.v1",
+    "behavior": "Attack-ring assignments continue to emit the legacy three-slot request."
+  }
+}

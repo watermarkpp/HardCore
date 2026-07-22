@@ -1,6 +1,13 @@
 class_name MapEditorInstanceService
 extends RefCounted
 
+const PlacementAnchorPolicy := preload("res://scripts/map_assets/map_asset_placement_anchor_policy.gd")
+const MATERIAL_LAYER_ORDER_MIN := -128
+const MATERIAL_LAYER_ORDER_MAX := 128
+const STATIC_MATERIAL_CHILD_Z_INDEX := 1
+const MATERIAL_LAYER_NAMES := [
+	"terrain_base", "terrain_front", "object_base", "object_front",
+]
 const ROLE_DEFAULTS := {
 	"decoration": {"scene_intent": "visual_detail", "gameplay_role": "none", "placement_rule": "inside_map", "collision_policy": "none", "navigation_policy": "ignore"},
 	"obstacle": {"scene_intent": "block_path", "gameplay_role": "navigation_blocker", "placement_rule": "non_overlapping", "collision_policy": "preset", "navigation_policy": "block_player_and_monster"},
@@ -18,19 +25,39 @@ static func create_instance(document: Dictionary, asset_id: String, object_role:
 	var asset: Dictionary = validation.asset
 	var placement := MapEditorPlacementResolver.resolve(document,asset_id,tile,layer,role)
 	var defaults: Dictionary = ROLE_DEFAULTS[role]
+	var collision_policy := str(asset.get("collision_policy", defaults.collision_policy))
+	var collision_footprint: Array = asset.get("collision_footprint_tiles", [])
+	if collision_footprint.size() != 2:
+		collision_footprint = [0, 0] if collision_policy in ["none", "manual"] else asset.get("footprint_tiles", [1, 1]).duplicate()
 	var instance := {
 		"instance_id": _next_id(document), "asset_id": asset_id, "object_role": role,
 		"scene_intent": defaults.scene_intent, "gameplay_role": defaults.gameplay_role, "placement_rule": defaults.placement_rule,
 		"tile": [tile.x, tile.y], "tile_anchor":[tile.x,tile.y], "offset_px": [0, 0], "position_mode":"tile_anchor", "layer": layer,
 		"anchor_px": [placement.placement_anchor_px.x,placement.placement_anchor_px.y], "placement_anchor_px":[placement.placement_anchor_px.x,placement.placement_anchor_px.y], "anchor_mode": asset.get("anchor_mode", "foot_tile"),
+		"placement_anchor_policy_id": str(asset.get("placement_anchor_policy_id", "")),
 		"footprint_tiles": asset.get("footprint_tiles", [1, 1]),
-		"collision_policy": asset.get("collision_policy", defaults.collision_policy),
-		"collision_profile_id":asset.get("collision_profile_id","none_visual"), "collision_footprint_tiles":asset.get("collision_footprint_tiles",[0,0]),
+		"collision_policy": collision_policy,
+		"collision_profile_id":asset.get("collision_profile_id","none_visual"), "collision_footprint_tiles":collision_footprint,
+		"collision_cells": asset.get("collision_cells", []).duplicate(true),
 		"navigation_policy": asset.get("navigation_policy", defaults.navigation_policy),
+		"manual_collision_expected": bool(asset.get("manual_collision_expected", false)),
+		"map_collision_override": str(asset.get("map_collision_override", "default")),
+		"collision_authority": str(asset.get("collision_authority", "asset")),
+		"collision_policy_id": str(asset.get("collision_policy_id", "")),
 		"occlusion": bool(asset.get("occlusion", false)), "runtime_export": true,
 		"content_layer": "personal_expansion", "rotation_deg": 0.0, "scale": [float(asset.get("approved_scale",1.0)),float(asset.get("approved_scale",1.0))], "flip_x": false, "flip_y": false,
+		"instance_base_scale": float(asset.get("approved_scale", 1.0)),
+		"instance_base_footprint_tiles": asset.get("footprint_tiles", [1, 1]).duplicate(),
+		"material_layer_order": 0,
 		"selectable":true,"movable":true,"selection_locked":false,
 	}
+	var design_raw: Array = document.design.get("design_size", [0, 0])
+	MapEditorInstanceProfileService.apply_adaptive_corner_offset(
+		instance,
+		asset,
+		Vector2i(int(design_raw[0]), int(design_raw[1])),
+		true
+	)
 	var layers: Dictionary = document.layers
 	var entries: Array = layers.get(layer, [])
 	entries.append(instance)
@@ -44,10 +71,26 @@ static func move_instance(document: Dictionary, instance_id: String, tile: Vecto
 	if not located.ok:
 		return located
 	var instance: Dictionary = located.instance
-	var validation := MapEditorPlacementValidator.validate(document, instance.asset_id, tile, instance.layer, instance.object_role, instance_id)
+	var validation := MapEditorPlacementValidator.validate(
+		document,
+		instance.asset_id,
+		tile,
+		instance.layer,
+		instance.object_role,
+		instance_id,
+		instance.get("footprint_tiles", [])
+	)
 	if not validation.ok:
 		return {"ok": false, "errors": validation.errors}
 	instance.tile = [tile.x, tile.y]
+	instance.tile_anchor = [tile.x, tile.y]
+	var asset := MapAssetCatalogService.find_asset(str(instance.get("asset_id", "")))
+	var design_raw: Array = document.design.get("design_size", [0, 0])
+	MapEditorInstanceProfileService.apply_adaptive_corner_offset(
+		instance,
+		asset,
+		Vector2i(int(design_raw[0]), int(design_raw[1]))
+	)
 	_located_replace(document, located, instance)
 	return {"ok": true, "instance": instance}
 
@@ -66,7 +109,49 @@ static func duplicate_instance(document: Dictionary, instance_id: String, tile: 
 	var located := _locate(document, instance_id)
 	if not located.ok:
 		return located
-	return create_instance(document, located.instance.asset_id, located.instance.object_role, tile, located.layer)
+	return duplicate_instance_snapshot(document, located.instance, tile)
+
+
+static func duplicate_instance_snapshot(
+	document: Dictionary,
+	source_instance: Dictionary,
+	tile: Vector2i
+) -> Dictionary:
+	var asset_id := str(source_instance.get("asset_id", ""))
+	var layer := str(source_instance.get("layer", "object_base"))
+	var role := str(source_instance.get("object_role", "decoration"))
+	var validation := MapEditorPlacementValidator.validate(
+		document,
+		asset_id,
+		tile,
+		layer,
+		role,
+		"",
+		source_instance.get("footprint_tiles", [])
+	)
+	if not validation.ok:
+		return {"ok": false, "errors": validation.errors, "warnings": validation.warnings}
+	var duplicate := source_instance.duplicate(true)
+	duplicate["instance_id"] = _next_id(document)
+	duplicate["tile"] = [tile.x, tile.y]
+	duplicate["tile_anchor"] = [tile.x, tile.y]
+	duplicate["layer"] = layer
+	var asset := MapAssetCatalogService.find_asset(asset_id)
+	var design_raw: Array = document.design.get("design_size", [0, 0])
+	MapEditorInstanceProfileService.apply_adaptive_corner_offset(
+		duplicate,
+		asset,
+		Vector2i(int(design_raw[0]), int(design_raw[1]))
+	)
+	# A manual copy is independent from generated dungeon structure metadata.
+	for generated_key: String in ["generated_by", "structure_id", "structure_role"]:
+		duplicate.erase(generated_key)
+	var layers: Dictionary = document.layers
+	var entries: Array = layers.get(layer, [])
+	entries.append(duplicate)
+	layers[layer] = entries
+	document.layers = layers
+	return {"ok": true, "instance": duplicate, "warnings": validation.warnings}
 
 
 static func resize_instance(document: Dictionary, instance_id: String, direction: int) -> Dictionary:
@@ -101,7 +186,12 @@ static func resize_instance(document: Dictionary, instance_id: String, direction
 	var map_size: Array = document.design.design_size
 	if new_tile.x < 0 or new_tile.y < 0 or new_tile.x + int(new_fp[0]) > int(map_size[0]) or new_tile.y + int(new_fp[1]) > int(map_size[1]):
 		return {"ok": false, "errors": ["缩放后超出地图边界"]}
-	var ratio := minf(float(new_fp[0]) / float(base_fp[0]), float(new_fp[1]) / float(base_fp[1]))
+	# Resize relative to the instance's current visual scale. The approved asset
+	# scale is independent from its logical footprint (for example a 4×4 tree
+	# may start at 0.40). Recomputing from footprint/base_footprint would reset
+	# 0.40 to 0.75 on the first shrink and make the sprite grow instead.
+	var old_scale: Array = instance.get("scale", [float(asset.get("approved_scale", 1.0)), float(asset.get("approved_scale", 1.0))])
+	var next_scale := resized_visual_scale(Vector2(float(old_scale[0]), float(old_scale[1])), old_fp, new_fp)
 	var raw_size: Array = document.design.design_size
 	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var old_center := MapEditorCoordinate.tile_to_ground_px(Vector2(old_tile_v) + Vector2(float(old_fp[0]),float(old_fp[1])) * 0.5, design_size)
@@ -113,16 +203,131 @@ static func resize_instance(document: Dictionary, instance_id: String, direction
 	instance["footprint_tiles"] = new_fp
 	instance["occupancy_footprint_tiles"] = new_fp
 	instance["visual_footprint_tiles"] = new_fp
-	instance["scale"] = [ratio, ratio]
+	instance["scale"] = [next_scale.x, next_scale.y]
 	instance["offset_px"] = [roundi(compensated_offset.x),roundi(compensated_offset.y)]
 	instance["instance_scale_level"] = int(instance.get("instance_scale_level", 0)) + (1 if direction > 0 else -1)
 	instance["instance_custom_scale"] = true
-	var collision: Array = instance.get("collision_footprint_tiles", [0, 0])
-	if int(collision[0]) > 0 and int(collision[1]) > 0:
-		var base_collision: Array = asset.get("collision_footprint_tiles", collision)
-		instance["collision_footprint_tiles"] = [maxi(1, roundi(float(base_collision[0]) * ratio)), maxi(1, roundi(float(base_collision[1]) * ratio))]
+	instance["instance_base_scale"] = float(instance.get("instance_base_scale", asset.get("approved_scale", 1.0)))
+	instance["instance_base_footprint_tiles"] = instance.get("instance_base_footprint_tiles", old_fp).duplicate()
+	PlacementAnchorPolicy.refresh_custom_instance(instance, asset)
+	_resize_instance_collision(instance, old_fp, new_fp)
 	_located_replace(document, located, instance)
 	return {"ok": true, "instance": instance}
+
+
+static func resized_visual_scale(current_scale: Vector2, old_fp: Array, new_fp: Array) -> Vector2:
+	var old_primary := maxf(1.0, maxf(float(old_fp[0]), float(old_fp[1])))
+	var new_primary := maxf(1.0, maxf(float(new_fp[0]), float(new_fp[1])))
+	return current_scale * (new_primary / old_primary)
+
+
+static func adjust_material_layer_order(
+	document: Dictionary,
+	instance_id: String,
+	delta: int
+) -> Dictionary:
+	var located := _locate(document, instance_id)
+	if not located.get("ok", false):
+		return located
+	if delta == 0:
+		return {
+			"ok": true,
+			"instance": located.instance,
+			"material_layer_order": material_layer_order(located.instance),
+		}
+	var instance: Dictionary = located.instance
+	var next_order := clampi(
+		material_layer_order(instance) + delta,
+		MATERIAL_LAYER_ORDER_MIN,
+		MATERIAL_LAYER_ORDER_MAX
+	)
+	instance["material_layer_order"] = next_order
+	_located_replace(document, located, instance)
+	return {
+		"ok": true,
+		"instance": instance,
+		"material_layer_order": next_order,
+	}
+
+
+static func material_layer_order(instance: Dictionary) -> int:
+	return clampi(
+		int(instance.get("material_layer_order", 0)),
+		MATERIAL_LAYER_ORDER_MIN,
+		MATERIAL_LAYER_ORDER_MAX
+	)
+
+
+static func sorted_for_material_render(instances: Array) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for instance: Dictionary in instances:
+		result.append(instance)
+	result.sort_custom(_material_render_less)
+	return result
+
+
+static func _material_render_less(a: Dictionary, b: Dictionary) -> bool:
+	var a_order := material_layer_order(a)
+	var b_order := material_layer_order(b)
+	if a_order != b_order:
+		return a_order < b_order
+	var a_tile := _material_sort_tile(a)
+	var b_tile := _material_sort_tile(b)
+	var a_depth := a_tile.x + a_tile.y
+	var b_depth := b_tile.x + b_tile.y
+	if a_depth != b_depth:
+		return a_depth < b_depth
+	if a_tile.x != b_tile.x:
+		return a_tile.x < b_tile.x
+	var a_layer := MATERIAL_LAYER_NAMES.find(str(a.get("layer", "object_base")))
+	var b_layer := MATERIAL_LAYER_NAMES.find(str(b.get("layer", "object_base")))
+	if a_layer != b_layer:
+		return a_layer < b_layer
+	return str(a.get("instance_id", "")) < str(b.get("instance_id", ""))
+
+
+static func _material_sort_tile(instance: Dictionary) -> Vector2i:
+	var tile: Array = instance.get("tile", [0, 0])
+	var footprint: Array = instance.get("footprint_tiles", [1, 1])
+	var adaptive: Array = instance.get("adaptive_corner_sort_tile_offset", [0, 0])
+	return Vector2i(
+		int(tile[0]) + maxi(0, int(footprint[0]) - 1)
+			+ (int(adaptive[0]) if adaptive.size() >= 1 else 0),
+		int(tile[1]) + maxi(0, int(footprint[1]) - 1)
+			+ (int(adaptive[1]) if adaptive.size() >= 2 else 0)
+	)
+
+
+static func configure_runtime_material_canvas_item(
+	item: CanvasItem,
+	instance: Dictionary
+) -> void:
+	# Runtime map materials stay relative to WorldBackground (z=-20). Keeping
+	# every material at child z=1 makes sibling order control only material vs.
+	# material overlap; actors at the world root remain above them at z=0.
+	item.z_as_relative = true
+	item.z_index = STATIC_MATERIAL_CHILD_Z_INDEX
+	item.set_meta("material_layer_order", material_layer_order(instance))
+
+
+static func _resize_instance_collision(instance: Dictionary, old_fp: Array, new_fp: Array) -> void:
+	var policy := str(instance.get("collision_policy", "none"))
+	if policy in ["none", "manual"]:
+		instance["collision_footprint_tiles"] = [0, 0]
+		return
+	if policy in ["solid_footprint", "terrain_stamp_generated"]:
+		instance["collision_footprint_tiles"] = new_fp.duplicate()
+		return
+	var collision: Array = instance.get("collision_footprint_tiles", [0, 0])
+	if collision.size() != 2 or int(collision[0]) <= 0 or int(collision[1]) <= 0:
+		instance["collision_footprint_tiles"] = new_fp.duplicate()
+		return
+	var width_ratio := float(new_fp[0]) / maxf(1.0, float(old_fp[0]))
+	var height_ratio := float(new_fp[1]) / maxf(1.0, float(old_fp[1]))
+	instance["collision_footprint_tiles"] = [
+		maxi(1, roundi(float(collision[0]) * width_ratio)),
+		maxi(1, roundi(float(collision[1]) * height_ratio)),
+	]
 
 
 static func all_instances(document: Dictionary) -> Array[Dictionary]:

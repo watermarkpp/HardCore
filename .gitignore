@@ -1,6 +1,8 @@
 # Godot local cache and generated import metadata
 .godot/
 *.import
+!assets/art/maps/bich/editor_runtime_chunks/*.png.import
+!assets/art/maps/wooma_region/editor_runtime_chunks/wooma_forest/*.png.import
 
 # Build/export output
 outputs/
