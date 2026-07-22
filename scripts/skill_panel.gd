@@ -29,6 +29,7 @@ var center_assignment_buttons: Array[Button] = []
 var attack_ring_assignment_buttons: Array[Button] = []
 var assignment_buttons: Array[Button] = []
 var assignment_popup: Panel
+var assignment_scrim: Panel
 var assignment_popup_title: Label
 var assignment_popup_buttons: Array[Button] = []
 var skill_entries: Array = []
@@ -281,14 +282,34 @@ func _build_assignment_section() -> void:
 
 
 func _build_assignment_popup() -> void:
+	assignment_scrim = Panel.new()
+	assignment_scrim.name = "AssignmentScrim"
+	assignment_scrim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	assignment_scrim.z_index = 100
+	assignment_scrim.mouse_filter = Control.MOUSE_FILTER_STOP
+	assignment_scrim.theme_type_variation = "GothicModalSurface"
+	assignment_scrim.visible = false
+	add_child(assignment_scrim)
 	assignment_popup = Panel.new()
 	assignment_popup.name = "SkillAssignmentPopup"
-	assignment_popup.position = Vector2(294, 116)
+	assignment_popup.set_anchors_preset(Control.PRESET_CENTER)
+	assignment_popup.offset_left = -310
+	assignment_popup.offset_top = -212
+	assignment_popup.offset_right = 310
+	assignment_popup.offset_bottom = 212
 	assignment_popup.size = Vector2(620, 424)
-	assignment_popup.z_index = 100
+	assignment_popup.z_index = 1
+	assignment_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	assignment_popup.theme_type_variation = "GothicModalFrame"
 	assignment_popup.visible = false
-	add_child(assignment_popup)
+	assignment_scrim.add_child(assignment_popup)
+	var popup_surface := Panel.new()
+	popup_surface.name = "PopupSurface"
+	popup_surface.position = Vector2(18, 20)
+	popup_surface.size = Vector2(584, 384)
+	popup_surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	popup_surface.theme_type_variation = "GothicModalSurface"
+	assignment_popup.add_child(popup_surface)
 	assignment_popup_title = Label.new()
 	assignment_popup_title.name = "PopupTitle"
 	assignment_popup_title.position = Vector2(28, 28)
@@ -349,7 +370,7 @@ func _build_assignment_popup() -> void:
 	cancel_button.position = Vector2(244, 350)
 	cancel_button.size = Vector2(132, 62)
 	cancel_button.theme_type_variation = "GothicComponentButton"
-	cancel_button.pressed.connect(func() -> void: assignment_popup.hide())
+	cancel_button.pressed.connect(_hide_assignment_popup)
 	assignment_popup.add_child(cancel_button)
 
 
@@ -632,6 +653,7 @@ func _open_assignment_popup_for(index: int) -> void:
 	assignment_popup.set_meta("skill_name", skill_name)
 	assignment_popup.set_meta("skill_id", ProfessionRules.skill_id(skill_name))
 	assignment_popup.set_meta("interaction_mode", _skill_interaction_mode(skill_name))
+	assignment_scrim.show()
 	assignment_popup.show()
 
 
@@ -640,9 +662,11 @@ func _assign_selected_to_slot(slot_index: int) -> void:
 
 
 func _assign_selected_to_target(slot_group: String, slot_index: int) -> void:
-	if selected_skill_index < 0 or selected_skill_index >= skill_entries.size():
-		return
-	var skill_name := str(skill_entries[selected_skill_index].get("skillName", ""))
+	var skill_name := ""
+	if assignment_popup.visible:
+		skill_name = str(assignment_popup.get_meta("skill_name", ""))
+	elif selected_skill_index >= 0 and selected_skill_index < skill_entries.size():
+		skill_name = str(skill_entries[selected_skill_index].get("skillName", ""))
 	if not PlayerState.is_skill_learned(skill_name):
 		return
 	var maximum := CENTER_SKILL_SLOT_COUNT if slot_group == "center" else ATTACK_RING_SLOT_COUNT
@@ -674,7 +698,12 @@ func _assign_selected_to_target(slot_group: String, slot_index: int) -> void:
 			"slot_index": slot_index,
 		}
 		quick_slot_assignment_requested.emit(legacy_request)
+	_hide_assignment_popup()
+
+
+func _hide_assignment_popup() -> void:
 	assignment_popup.hide()
+	assignment_scrim.hide()
 
 
 func _skill_card_input(event: InputEvent, index: int) -> void:
@@ -808,6 +837,6 @@ func _section_title(text_value: String, width: float) -> Label:
 
 func _close() -> void:
 	_cancel_skill_long_press()
-	assignment_popup.hide()
+	_hide_assignment_popup()
 	hide()
 	closed.emit()
