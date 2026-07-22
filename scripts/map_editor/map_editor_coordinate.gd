@@ -68,11 +68,32 @@ static func tile_to_world(tile: Vector2, design_size: Vector2i) -> Vector2:
 	return Vector2((local.x - local.y) * HALF_TILE_W, (local.x + local.y) * HALF_TILE_H)
 
 
+static func cell_center_to_world(cell: Vector2, design_size: Vector2i) -> Vector2:
+	return tile_to_world(cell + Vector2(0.5, 0.5), design_size)
+
+
+static func cell_polygon_world(
+	cell: Vector2i,
+	design_size: Vector2i
+) -> PackedVector2Array:
+	return PackedVector2Array([
+		tile_to_world(Vector2(cell), design_size),
+		tile_to_world(Vector2(cell + Vector2i(1, 0)), design_size),
+		tile_to_world(Vector2(cell + Vector2i(1, 1)), design_size),
+		tile_to_world(Vector2(cell + Vector2i(0, 1)), design_size),
+	])
+
+
 static func world_to_tile(world: Vector2, design_size: Vector2i) -> Vector2:
 	var horizontal := world.x / HALF_TILE_W
 	var vertical := world.y / HALF_TILE_H
 	var center := (Vector2(design_size) - Vector2.ONE) * 0.5
 	return center + Vector2((horizontal + vertical) * 0.5, (vertical - horizontal) * 0.5)
+
+
+static func world_to_cell(world: Vector2, design_size: Vector2i) -> Vector2i:
+	var tile := world_to_tile(world, design_size)
+	return Vector2i(floori(tile.x), floori(tile.y))
 
 
 static func contains_tile(tile: Vector2, design_size: Vector2i) -> bool:

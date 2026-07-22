@@ -1,8 +1,10 @@
 class_name MapEditorRuntimeVisualGeometryService
 extends RefCounted
 
-const VISUAL_GEOMETRY_CONTRACT_ID := "map_editor_runtime_visual_geometry_v1"
+const VISUAL_GEOMETRY_CONTRACT_ID := "map_editor_runtime_visual_geometry_v2"
 const EDITOR_LAYOUT_CONTRACT_ID := "map_editor_authoritative_layout_v1"
+const RENDER_DOMAIN_STATIC_BACKGROUND := "static_background"
+const RENDER_DOMAIN_ACTOR_Y_SORT := "actor_y_sort"
 const MATERIAL_LAYER_NAMES := [
 	"terrain_base", "terrain_front", "object_base", "object_front",
 ]
@@ -212,6 +214,11 @@ static func instance_draw_commands(
 					"sort_tile": sort_tile,
 					"layer_index": layer_index,
 					"image_pass": int(image_pass.pass),
+					"render_domain": (
+						RENDER_DOMAIN_ACTOR_Y_SORT
+						if int(image_pass.pass) == 2
+						else RENDER_DOMAIN_STATIC_BACKGROUND
+					),
 					"part_order": int(part.get("draw_order_index", 0)),
 					"sequence": sequence,
 				})
@@ -228,6 +235,7 @@ static func instance_draw_commands(
 		"sort_tile": sort_tile,
 		"layer_index": layer_index,
 		"image_pass": 1,
+		"render_domain": RENDER_DOMAIN_STATIC_BACKGROUND,
 		"part_order": 0,
 		"sequence": sequence,
 	})
@@ -251,6 +259,14 @@ static func sorted_draw_commands(instances: Array) -> Array[Dictionary]:
 		sequence += 1
 	commands.sort_custom(draw_command_less)
 	return commands
+
+
+static func command_actor_sort_world(
+	command: Dictionary,
+	design_size: Vector2i
+) -> Vector2:
+	var sort_tile: Vector2i = command.get("sort_tile", Vector2i.ZERO)
+	return MapEditorCoordinate.cell_center_to_world(Vector2(sort_tile), design_size)
 
 
 static func draw_command_less(a: Dictionary, b: Dictionary) -> bool:
@@ -316,6 +332,9 @@ static func draw_command_payload(instances: Array) -> Array[Dictionary]:
 			"sort_tile": [sort_tile.x, sort_tile.y],
 			"layer_index": int(command.layer_index),
 			"image_pass": int(command.image_pass),
+			"render_domain": str(command.get(
+				"render_domain", RENDER_DOMAIN_STATIC_BACKGROUND
+			)),
 			"part_order": int(command.part_order),
 			"sequence": int(command.sequence),
 		})
