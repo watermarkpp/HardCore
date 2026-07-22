@@ -449,7 +449,7 @@ func restore_warrior_runtime_state(saved_state: Dictionary) -> bool:
 	_fire_sword_expires_at_ms = 0
 	var cooldowns: Dictionary = saved_state.get("cooldowns", {})
 	var remaining_ms := maxi(0, int(cooldowns.get("warrior.fire_sword.ready_remaining_ms", 0)))
-	_fire_sword_ready_at_ms = _combat_time_ms() + remaining_ms
+	_fire_sword_ready_at_ms = _combat_time_ms() + remaining_ms if remaining_ms > 0 else 0
 	return true
 
 
