@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "contractId": "equipment_actor_visual_sort_unit_v1",
+  "scope": "runtime_equipment_appearance",
+  "worldAppearanceFields": [
+    "dressAppearance",
+    "weaponAppearance",
+    "helmetAppearance"
+  ],
+  "actorSortUnit": {
+    "actorNode": "Player",
+    "visualNode": "PlayerVisual",
+    "requiredCompositeBoundary": "CanvasGroup",
+    "worldZIndex": 0,
+    "zAsRelative": true,
+    "topLevel": false,
+    "showBehindParent": false,
+    "sortOrigin": "actor_feet",
+    "rule": "body, dress, weapon and helmet must enter actor_y_sort as one composite CanvasItem"
+  },
+  "internalLayers": [
+    {
+      "id": "weapon_back",
+      "node": "ClientWeaponLayer",
+      "zIndex": -1,
+      "directionRows": [7, 0, 1]
+    },
+    {
+      "id": "body_and_dress",
+      "node": "BodySprite",
+      "zIndex": 0
+    },
+    {
+      "id": "weapon_front",
+      "node": "ClientWeaponLayer",
+      "zIndex": 1,
+      "directionRows": [2, 3, 4, 5, 6]
+    },
+    {
+      "id": "helmet",
+      "node": "ClientHelmetLayer",
+      "zIndex": 2
+    }
+  ],
+  "invariants": [
+    "Internal layer z_index values are resolved inside the composite boundary.",
+    "No equipment child contributes an independent world z_index against wall fronts.",
+    "No equipment child is top_level or uses z_as_relative=false.",
+    "A wall-front actor_y_sort unit in front of the actor feet occludes body, dress, weapon and helmet together.",
+    "A wall-front actor_y_sort unit behind the actor feet leaves the complete actor visible."
+  ]
+}

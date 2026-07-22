@@ -188,6 +188,7 @@ func _apply_boss_rule() -> void:
 
 
 func _ready() -> void:
+	MonsterVisualScript.configure_actor_y_sort_item(self, "actor_root")
 	add_to_group("enemies")
 	input_pickable = true
 	collision_layer = WorldSpatialRulesScript.ENEMY_LAYER
@@ -216,6 +217,7 @@ func _ready() -> void:
 	_last_environment_safe_position = global_position
 	_environment_guard_timer = ENVIRONMENT_GUARD_INTERVAL_SECONDS * float(posmod(get_instance_id(), 11)) / 11.0
 	name_label = Label.new()
+	MonsterVisualScript.configure_actor_y_sort_item(name_label, "name_label")
 	name_label.text = display_name
 	name_label.position = Vector2(-70, -116 if bool(behavior_profile.get("largeClientBoss", false)) else (-62 if is_boss else -50))
 	name_label.size = Vector2(140, 24)
