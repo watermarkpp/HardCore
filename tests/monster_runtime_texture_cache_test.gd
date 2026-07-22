@@ -78,14 +78,55 @@ func _run() -> void:
 	streamed.visual._process(0.13)
 	assert(streamed.visual.active_resources.is_empty(), "far actor retained its atlas resources")
 	streamed.queue_free()
+
+	# Runtime path: map loading requests/pins stable monsterIds on the threaded
+	# loader. Approaching the already-prefetched crowd must perform zero sync loads.
+	MonsterVisual.reset_client_resource_cache()
+	MonsterVisual.set_synchronous_loading_for_tests(false)
+	assert(loader._try_pin_map_profile("priority_a", 48 * 1024 * 1024), "first priority profile did not fit hard pin budget")
+	assert(not loader._try_pin_map_profile("priority_b", 20 * 1024 * 1024), "map pins exceeded the 64 MiB hard budget")
+	assert(int(MonsterVisual.map_prefetch_status().pinned_bytes) == 48 * 1024 * 1024, "rejected pin changed budget accounting")
+	MonsterVisual.release_map_pins()
+	var prefetch := MonsterVisual.begin_map_prefetch([31, 31, 76, 18])
+	assert(int(prefetch.requested) == 3, "map prefetch did not deduplicate stable monsterIds: %s" % prefetch)
+	assert(MonsterVisual.threaded_texture_request_count() <= MonsterVisual.MAX_CONCURRENT_PROFILE_LOADS * 5, "map prefetch launched the entire map at once")
+	player.global_position = Vector2.ZERO
+	var prefetched_actor := EnemyActor.new()
+	prefetched_actor.setup({
+		"monsterId": SAMPLE_MONSTER_ID, "name": "async_fallback_sample",
+		"hp": 100, "attackMin": 1, "attackMax": 2,
+	}, player, false)
+	add_child(prefetched_actor)
+	prefetched_actor.set_physics_process(false)
+	assert(not prefetched_actor.visual.uses_final_art(), "proximity actor bypassed async fallback before prefetch completed")
+	var deadline_msec := Time.get_ticks_msec() + 15000
+	var poll_count := 0
+	while not bool(prefetch.complete) and Time.get_ticks_msec() < deadline_msec:
+		prefetch = MonsterVisual.poll_streaming()
+		poll_count += 1
+		if poll_count % 60 == 0:
+			print("MONSTER_STREAMING_PENDING %s" % prefetch)
+		await get_tree().process_frame
+	assert(bool(prefetch.complete) and int(prefetch.failed) == 0, "threaded map prefetch exceeded 15s; pending path/status: %s" % prefetch)
+	assert(int(prefetch.ready) + int(prefetch.streamed) == 3, "prefetch completion accounting lost a profile: %s" % prefetch)
+	assert(int(prefetch.pinned_bytes) <= MonsterVisual.CLIENT_RESOURCE_CACHE_BUDGET_BYTES, "map pins exceeded the 64 MiB hard budget: %s" % prefetch)
+	assert(MonsterVisual.cached_client_profile_estimated_bytes() <= MonsterVisual.CLIENT_RESOURCE_CACHE_BUDGET_BYTES, "async cache exceeded the 64 MiB hard budget")
+	assert(MonsterVisual.threaded_texture_request_count() == 15, "bounded queue did not eventually request 3 x 5 atlases")
+	assert(MonsterVisual.client_texture_load_request_count() == 0, "map prefetch used synchronous texture loading")
+	prefetched_actor.visual._resource_residency_timer = 0.0
+	prefetched_actor.visual._process(0.13)
+	assert(prefetched_actor.visual.uses_final_art(), "fallback MonsterVisual did not automatically retry after async completion")
+	assert(MonsterVisual.client_texture_load_request_count() == 0, "approaching a prefetched monster blocked on synchronous loading")
+	prefetched_actor.queue_free()
+	MonsterVisual.release_map_pins()
 	loader.free()
 	MonsterVisual.reset_client_resource_cache()
 
-	print("MONSTER_RUNTIME_TEXTURE_CACHE_PASS lazy actor residency; 12-profile/64MiB LRU remains bounded")
+	print("MONSTER_RUNTIME_TEXTURE_CACHE_PASS lazy residency; async stable-ID map pin; runtime sync loads=0")
 	get_tree().quit(0)
 
 
-func _spawn_sample(player: PlayerCharacter) -> EnemyActor:
+func _spawn_sample(player: PlayerCharacter, expect_final_art := true) -> EnemyActor:
 	var enemy := EnemyActor.new()
 	enemy.setup({
 		"monsterId": SAMPLE_MONSTER_ID,
@@ -97,7 +138,7 @@ func _spawn_sample(player: PlayerCharacter) -> EnemyActor:
 	add_child(enemy)
 	enemy.set_physics_process(false)
 	await get_tree().process_frame
-	if enemy.global_position.distance_to(player.global_position) <= MonsterVisual.VISUAL_ACTIVATION_DISTANCE:
+	if expect_final_art and enemy.global_position.distance_to(player.global_position) <= MonsterVisual.VISUAL_ACTIVATION_DISTANCE:
 		assert(enemy.visual.uses_final_art(), "cache fixture did not resolve final client art")
 	return enemy
 

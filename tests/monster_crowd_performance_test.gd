@@ -66,6 +66,27 @@ func _run() -> void:
 	assert(int(dense_metrics.crowd_grid_actor_scans) <= ENEMY_COUNT * 22, "dense crowd grid still rebuilt every physics frame: %s" % dense_metrics)
 	print("MONSTER_CROWD_STAGE dense %s" % dense_metrics)
 
+	# Action budget: all 96 monsters advance for half a second, while imported
+	# occupancy fallback checks stay at 10 Hz rather than 60 Hz. Enemy-to-enemy
+	# collision is absent from the mask; world/player collision remains physical.
+	EnemyActor.reset_performance_diagnostics()
+	for step in range(30):
+		for enemy: EnemyActor in enemies:
+			enemy.velocity = Vector2.RIGHT * enemy.move_speed
+			enemy._move_with_spatial_rules(1.0 / 60.0)
+	var movement_metrics := EnemyActor.performance_diagnostics()
+	assert(int(movement_metrics.physics_moves) == ENEMY_COUNT * 30, "moving crowd skipped playable motion ticks: %s" % movement_metrics)
+	assert(int(movement_metrics.environment_guard_checks) <= ENEMY_COUNT * 6, "occupancy fallback returned to per-frame sampling: %s" % movement_metrics)
+	for enemy: EnemyActor in enemies:
+		assert(enemy.collision_mask == EnemyActor.ENEMY_MOTION_MASK and enemy.collision_mask == 3, "dense actor still participates in enemy mutual physics")
+	print("MONSTER_CROWD_STAGE moving %s" % movement_metrics)
+
+	# A stale/null bucket value can exist between a death queue and the next grid
+	# rebuild; it must be ignored instead of aborting the shared crowd decision.
+	var stale_cell := enemies[0]._crowd_grid_cell(enemies[0].global_position)
+	EnemyActor._crowd_grid[stale_cell] = [null, enemies[0]]
+	enemies[0]._crowd_separation()
+
 	# Actors well outside both camera and aggro working sets only wake four times
 	# per second. Status/threat/alternate-target actors must never take this path.
 	player.global_position = Vector2(50000, 50000)
@@ -98,7 +119,7 @@ func _run() -> void:
 	assert(int(respawn_metrics.crowd_grid_actor_scans) == ENEMY_COUNT, "dead actors remained in the rebuilt crowd index")
 	assert(int(respawn_metrics.crowd_query_candidates) <= ENEMY_COUNT * 32, "respawned crowd query count became unbounded")
 
-	print("MONSTER_CROWD_PERFORMANCE_PASS 96 enemies use one spatial build; far retarget bounded; kill/respawn index clean")
+	print("MONSTER_CROWD_PERFORMANCE_PASS 96 moving enemies use crowd authority; occupancy guard <=10Hz; retarget/respawn bounded")
 	get_tree().quit(0)
 
 

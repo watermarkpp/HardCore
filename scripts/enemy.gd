@@ -13,6 +13,9 @@ const NEAR_RETARGET_MIN_SECONDS := 0.18
 const NEAR_RETARGET_STAGGER_SECONDS := 0.011
 const BACKGROUND_AI_INTERVAL_SECONDS := 0.25
 const BACKGROUND_AI_MIN_DISTANCE := 1200.0
+const ENVIRONMENT_GUARD_INTERVAL_SECONDS := 0.10
+const ENEMY_MOTION_MASK := WorldSpatialRulesScript.WORLD_LAYER | WorldSpatialRulesScript.PLAYER_LAYER
+const POISON_INDICATOR_STYLE := "overhead_three_diamonds"
 
 static var _crowd_grid_physics_frame := -1
 static var _crowd_grid: Dictionary = {}
@@ -22,6 +25,8 @@ static var _crowd_query_candidate_count := 0
 static var _crowd_steering_evaluation_count := 0
 static var _retarget_full_scan_count := 0
 static var _background_ai_evaluation_count := 0
+static var _physics_move_count := 0
+static var _environment_guard_check_count := 0
 
 signal died(enemy: EnemyActor, monster_data: Dictionary)
 signal target_requested(enemy: EnemyActor)
@@ -103,6 +108,8 @@ var _area_attack_cooldown := 0.0
 var _area_attack_warning := 0.0
 var _summon_cooldown := 0.0
 var _summon_warning := 0.0
+var _environment_guard_timer := 0.0
+var _last_environment_safe_position := Vector2.INF
 
 
 func setup(data: Dictionary, player_target: PlayerCharacter, boss := false) -> void:
@@ -184,7 +191,11 @@ func _ready() -> void:
 	add_to_group("enemies")
 	input_pickable = true
 	collision_layer = WorldSpatialRulesScript.ENEMY_LAYER
-	collision_mask = WorldSpatialRulesScript.ENEMY_MASK
+	# The crowd grid/separation policy is authoritative for monster-to-monster
+	# spacing. Keeping ENEMY_LAYER in this mask makes the physics server solve the
+	# same dense crowd again for every moving actor, which scales disastrously.
+	# World and player remain hard physics collisions.
+	collision_mask = ENEMY_MOTION_MASK
 	if not bool(behavior_profile.get("worldCollision", true)):
 		# 飞行怪参与攻击和选取，但不作为人物移动的实体墙。
 		collision_layer = 0
@@ -202,6 +213,8 @@ func _ready() -> void:
 	collision.shape = shape
 	add_child(collision)
 	_resolve_invalid_spawn_overlap()
+	_last_environment_safe_position = global_position
+	_environment_guard_timer = ENVIRONMENT_GUARD_INTERVAL_SECONDS * float(posmod(get_instance_id(), 11)) / 11.0
 	name_label = Label.new()
 	name_label.text = display_name
 	name_label.position = Vector2(-70, -116 if bool(behavior_profile.get("largeClientBoss", false)) else (-62 if is_boss else -50))
@@ -295,7 +308,7 @@ func _physics_process(delta: float) -> void:
 		var spawn_position:Vector2=get_meta("spawn_position",global_position)
 		if _point_inside_safe_zone(global_position) and global_position.distance_to(spawn_position)>4.0:
 			velocity=global_position.direction_to(spawn_position)*move_speed
-			_move_with_spatial_rules()
+			_move_with_spatial_rules(delta)
 		queue_redraw()
 		return
 	var offset := target.global_position - global_position
@@ -365,7 +378,7 @@ func _physics_process(delta: float) -> void:
 		velocity = velocity.move_toward(Vector2.ZERO, move_speed * 3.0 * delta)
 	# 零速度时不做碰撞恢复，避免玩家压住碰撞边缘时把怪物挤走。
 	if velocity.length_squared() > 0.01:
-		_move_with_spatial_rules()
+		_move_with_spatial_rules(delta)
 		if get_real_velocity().length_squared() > 9.0:
 			movement_facing = get_real_velocity().normalized()
 	if is_boss and is_instance_valid(target):
@@ -380,13 +393,33 @@ func _point_inside_safe_zone(point:Vector2)->bool:
 	return WorldSpatialRulesScript.point_inside_safe_zones(point, get_meta("safe_zones", []))
 
 
-func _move_with_spatial_rules() -> void:
+func _move_with_spatial_rules(delta := 1.0 / 60.0) -> void:
 	var position_before_move := global_position
 	move_and_slide()
+	_physics_move_count += 1
 	var entered_safe_zone := not _point_inside_safe_zone(position_before_move) and _point_inside_safe_zone(global_position)
-	if entered_safe_zone or WorldSpatialRulesScript.environment_blocks_actor(environment_blocker, global_position, collision_radius):
+	if entered_safe_zone:
 		global_position = position_before_move
 		velocity = Vector2.ZERO
+		return
+	# Physics chunks are the per-frame wall authority. The imported occupancy
+	# provider is a deterministic fallback, sampled at a staggered 10 Hz instead
+	# of doing five script calls for every moving monster on every physics tick.
+	# A failed sample rolls back to the last verified point, so a rebuilding or
+	# temporarily absent chunk cannot let an actor tunnel through map occupancy.
+	if _last_environment_safe_position == Vector2.INF or position_before_move.distance_squared_to(_last_environment_safe_position) > 4096.0:
+		_last_environment_safe_position = position_before_move
+		_environment_guard_timer = 0.0
+	_environment_guard_timer = maxf(0.0, _environment_guard_timer - maxf(0.0, delta))
+	if _environment_guard_timer > 0.0:
+		return
+	_environment_guard_timer = ENVIRONMENT_GUARD_INTERVAL_SECONDS
+	_environment_guard_check_count += 1
+	if WorldSpatialRulesScript.environment_blocks_actor(environment_blocker, global_position, collision_radius):
+		global_position = _last_environment_safe_position
+		velocity = Vector2.ZERO
+	else:
+		_last_environment_safe_position = global_position
 
 
 func _current_attack_interval() -> float:
@@ -572,6 +605,8 @@ static func reset_performance_diagnostics() -> void:
 	_crowd_steering_evaluation_count = 0
 	_retarget_full_scan_count = 0
 	_background_ai_evaluation_count = 0
+	_physics_move_count = 0
+	_environment_guard_check_count = 0
 
 
 static func performance_diagnostics() -> Dictionary:
@@ -582,6 +617,8 @@ static func performance_diagnostics() -> Dictionary:
 		"crowd_steering_evaluations": _crowd_steering_evaluation_count,
 		"retarget_full_scans": _retarget_full_scan_count,
 		"background_ai_evaluations": _background_ai_evaluation_count,
+		"physics_moves": _physics_move_count,
+		"environment_guard_checks": _environment_guard_check_count,
 	}
 
 
@@ -825,7 +862,15 @@ func _draw() -> void:
 	if is_boss and _boss_phase_two:
 		draw_circle(Vector2(0, -5), radius + 7.0, Color(0.90, 0.15, 0.05, 0.22), false, 4.0)
 	if poison_time > 0.0:
-		draw_circle(Vector2(0, -5), radius + 4.0, Color(0.20, 0.85, 0.22, 0.55), false, 3.0)
+		# Poison is an overhead three-diamond badge. It stays readable without
+		# creating a green ground ring that can be mistaken for a portal marker.
+		var poison_anchor := Vector2(-8.0, poison_indicator_anchor_y())
+		for index in range(3):
+			var center := poison_anchor + Vector2(float(index) * 8.0, 0.0 if index == 1 else 2.0)
+			draw_colored_polygon(PackedVector2Array([
+				center + Vector2(0, -3), center + Vector2(3, 0),
+				center + Vector2(0, 3), center + Vector2(-3, 0),
+			]), Color(0.36, 0.92, 0.28, 0.90))
 	if control_time > 0.0 or charm_time > 0.0:
 		draw_circle(Vector2(0, -5), radius + 8.0, Color(0.35, 0.65, 1.0, 0.55), false, 3.0)
 	if dormant:
@@ -857,6 +902,10 @@ func health_bar_anchor_y() -> float:
 	var radius := 27.0 if is_boss else 16.0
 	var fallback_y := -92.0 if bool(behavior_profile.get("largeClientBoss", false)) else -radius - 24.0
 	return visual.health_bar_anchor_y(fallback_y) if visual != null else fallback_y
+
+
+func poison_indicator_anchor_y() -> float:
+	return health_bar_anchor_y() - 8.0
 
 
 func ground_indicator_center() -> Vector2:
