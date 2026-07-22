@@ -200,7 +200,13 @@ func environment_light_count() -> int:
 
 
 func is_environment_point_blocked(world_position: Vector2) -> bool:
-	return _editor_runtime_blocks_world(world_position) or is_bich_point_blocked(world_position) or is_orc_tomb_point_blocked(world_position) or _source_mask_blocks_world(world_position)
+	# Editor-authored maps already contain the complete boundary, blocked-tile and
+	# manual-shape contract.  Falling through to every legacy map profile here
+	# repeats expensive geometry work for each pursuing monster and can also mix
+	# obsolete collision data into the current map.
+	if _editor_runtime_size != Vector2i.ZERO:
+		return _editor_runtime_blocks_world(world_position)
+	return is_bich_point_blocked(world_position) or is_orc_tomb_point_blocked(world_position) or _source_mask_blocks_world(world_position)
 
 
 func bich_collision_count() -> int:
