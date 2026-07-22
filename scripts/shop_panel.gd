@@ -3,6 +3,7 @@ extends Panel
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const GothicConfirmationPanelScript := preload("res://scripts/gothic_confirmation_panel.gd")
+const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
 
 signal closed
 signal sell_quotes_requested(items: Array)
@@ -33,6 +34,8 @@ var _sell_quotes: Dictionary = {}
 var _selected_sell_index := -1
 var _sell_quantity := 1
 var _pending_sell_request: Dictionary = {}
+var _inventory_refresh_pending := false
+var _inventory_refresh_execution_count := 0
 
 
 func _ready() -> void:
@@ -53,6 +56,7 @@ func _ready() -> void:
 	PlayerState.profile_changed.connect(_refresh_gold)
 	PlayerState.equipment_changed.connect(_refresh_repair_preview)
 	PlayerState.inventory_changed.connect(_on_inventory_changed)
+	visibility_changed.connect(_on_visibility_changed)
 	_refresh_gold()
 	_refresh_repair_preview()
 
@@ -570,6 +574,20 @@ func _sell_risk_text(quote: Dictionary) -> String:
 func _on_inventory_changed() -> void:
 	if _trade_mode != "sell":
 		return
+	if not visible:
+		_inventory_refresh_pending = true
+		return
+	_apply_inventory_change()
+
+
+func _on_visibility_changed() -> void:
+	if visible and _inventory_refresh_pending and _trade_mode == "sell":
+		_apply_inventory_change()
+
+
+func _apply_inventory_change() -> void:
+	_inventory_refresh_pending = false
+	_inventory_refresh_execution_count += 1
 	_selected_sell_index = -1
 	_rebuild_sell_cards()
 	_set_sell_actions_enabled(false)
@@ -629,14 +647,7 @@ func _buy_selected() -> void:
 
 
 func _item_texture(record: Dictionary) -> Texture2D:
-	var art: Variant = record.get("art", {})
-	if not art is Dictionary:
-		return null
-	var source: Variant = art.get("inventoryIcon", {})
-	var path := str(source.get("path", "")) if source is Dictionary else str(source)
-	if path.is_empty() or not ResourceLoader.exists(path):
-		return null
-	return load(path) as Texture2D
+	return UIItemTextureCacheScript.texture_for(record, "inventoryIcon")
 
 
 func _value(value: Variant) -> String:
