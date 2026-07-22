@@ -2,6 +2,7 @@ class_name WarehousePanel
 extends Panel
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
 
 signal closed
 signal warehouse_sort_requested
@@ -30,6 +31,8 @@ var withdraw_button: Button
 var selected_bag_index := -1
 var selected_stash_index := -1
 var warehouse_page := 0
+var _refresh_pending := false
+var _refresh_execution_count := 0
 
 
 func _ready() -> void:
@@ -46,7 +49,8 @@ func _ready() -> void:
 	_build_header()
 	_build_storage_sections()
 	_build_compatibility_lists()
-	PlayerState.inventory_changed.connect(refresh)
+	visibility_changed.connect(_on_visibility_changed)
+	PlayerState.inventory_changed.connect(_on_inventory_changed)
 	refresh()
 
 
@@ -232,9 +236,23 @@ func open_panel() -> void:
 	show()
 
 
+func _on_inventory_changed() -> void:
+	if not visible:
+		_refresh_pending = true
+		return
+	refresh()
+
+
+func _on_visibility_changed() -> void:
+	if visible and _refresh_pending:
+		refresh()
+
+
 func refresh() -> void:
 	if bag_grid == null or stash_grid == null:
 		return
+	_refresh_pending = false
+	_refresh_execution_count += 1
 	if selected_bag_index >= PlayerState.inventory.size():
 		selected_bag_index = -1
 	if _warehouse_record(selected_stash_index).is_empty():
@@ -425,15 +443,9 @@ func _trim_empty_warehouse_tail() -> void:
 func _item_texture(record: Dictionary) -> Texture2D:
 	if record.is_empty():
 		return null
-	var item := GameData.get_item_record(str(record.get("name", "")))
-	var art: Variant = item.get("art", {})
-	if not art is Dictionary:
-		return null
-	var source: Variant = art.get("inventoryIcon", {})
-	var path := str(source.get("path", "")) if source is Dictionary else str(source)
-	if path.is_empty() or not ResourceLoader.exists(path):
-		return null
-	return load(path) as Texture2D
+	return UIItemTextureCacheScript.texture_for(
+		GameData.get_item_record(str(record.get("name", ""))), "inventoryIcon"
+	)
 
 
 func _set_button_texture(button: Button, texture: Texture2D) -> void:

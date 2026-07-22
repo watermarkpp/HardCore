@@ -17,7 +17,7 @@ func _run() -> void:
 	var player := PlayerCharacter.new()
 	add_child(player)
 	player.set_physics_process(false)
-	player.global_position = Vector2(2000, 0)
+	player.global_position = Vector2.ZERO
 
 	for sample: Dictionary in FINAL_ART_CASES:
 		var monster_id := int(sample.monster_id)

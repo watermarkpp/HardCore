@@ -31,10 +31,16 @@ func _run() -> void:
 	assert(overlay.vignette.get_meta("stable_id", "") == "ui.loading.edge_vignette", "边缘暗角稳定ID错误")
 	assert(overlay.embers.size() == 14 and overlay.embers.size() <= 16, "Loading余烬数量不符合低开销限制")
 
-	overlay.show_loading_immediately("map:test:001")
-	assert(overlay.visible and overlay.modulate.a == 1.0, "Loading立即显示入口错误")
+	var covered_requests: Array[Dictionary] = []
 	var finished_requests: Array[Dictionary] = []
+	overlay.transition_covered.connect(func(request: Dictionary) -> void: covered_requests.append(request.duplicate(true)))
 	overlay.transition_finished.connect(func(request: Dictionary) -> void: finished_requests.append(request.duplicate(true)))
+	overlay.begin_loading("map:test:001")
+	await get_tree().create_timer(0.27).timeout
+	assert(overlay.visible and is_equal_approx(overlay.modulate.a, 1.0), "Loading淡入后没有完全遮住旧地图")
+	assert(covered_requests.size() == 1, "Loading完全覆盖后没有发出切图许可信号")
+	assert(covered_requests[0].contract_id == "ui.loading.transition.v1", "Loading覆盖信号契约错误")
+	assert(covered_requests[0].transition_id == "map:test:001", "Loading覆盖信号丢失transition_id")
 	overlay.finish_loading()
 	await get_tree().create_timer(0.25).timeout
 	assert(not overlay.visible, "Loading完成后没有隐藏")

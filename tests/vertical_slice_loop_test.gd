@@ -107,7 +107,7 @@ func _assert_editor_runtime_collision(game: Node, map_id: int) -> void:
 	assert(not blocked_tiles.is_empty(), "地图%d缺少编辑器阻挡网格" % map_id)
 	var parts := str(blocked_tiles[0]).split(",")
 	assert(parts.size() == 2)
-	var blocked_world := MapEditorRuntimeBridge.tile_to_world(
+	var blocked_world := MapEditorRuntimeBridge.cell_to_world(
 		runtime, [float(parts[0]), float(parts[1])]
 	)
 	assert(game.background.is_environment_point_blocked(blocked_world), "地图%d阻挡网格未接入主体游戏" % map_id)
@@ -134,11 +134,29 @@ func _assert_mobile_target_available(game: Node, message: String) -> void:
 func _run_reentry_stability(game: Node) -> void:
 	game.change_zone("比奇郊外")
 	await _settle()
+	var stable_environment_counts := {}
+	var stable_child_counts := {}
 	# 里程碑只采样一次完整往返；长时间压力测试不混入日常功能验收。
 	for map_id in [4, 217, 218, 221, 4]:
 		game.travel_to_map(map_id)
 		await _settle()
-		assert(game.background.get_child_count() < 80, "连续往返后环境节点异常增长")
+		var environment_count: int = game.background.environment_node_count()
+		var child_count: int = game.background.get_child_count()
+		var actor_occluder_count := 0
+		for child: Node in game.get_children():
+			if bool(child.get_meta("editor_runtime_actor_occluder", false)):
+				actor_occluder_count += 1
+		assert(environment_count > 0, "地图%d没有构建环境节点" % map_id)
+		assert(
+			child_count + actor_occluder_count == environment_count,
+			"地图%d切换后残留待删除的环境节点" % map_id
+		)
+		if stable_environment_counts.has(map_id):
+			assert(environment_count == int(stable_environment_counts[map_id]), "地图%d重复进入后环境节点数量增长" % map_id)
+			assert(child_count == int(stable_child_counts[map_id]), "地图%d重复进入后背景子节点数量增长" % map_id)
+		else:
+			stable_environment_counts[map_id] = environment_count
+			stable_child_counts[map_id] = child_count
 		assert(get_tree().get_nodes_in_group("route_guidance").is_empty(), "连续往返后不应生成单箭头导航信标")
 	assert(game.current_map_id == 4 and game.background.uses_bich_art(), "再次出发没有回到比奇省")
 

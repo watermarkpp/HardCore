@@ -29,7 +29,7 @@ func _ready()->void:
 	for portal: Dictionary in content.portals:
 		portals_by_target[int(portal.target_map_id)] = portal
 	assert(portals_by_target.has(217) and portals_by_target.has(268))
-	assert((portals_by_target[217].position as Vector2).is_equal_approx(MapEditorRuntimeBridge.tile_to_world(runtime, [72, 5])))
-	assert((portals_by_target[268].position as Vector2).is_equal_approx(MapEditorRuntimeBridge.tile_to_world(runtime, [6, 5])))
+	assert((portals_by_target[217].position as Vector2).is_equal_approx(MapEditorRuntimeBridge.cell_to_world(runtime, [72, 5])))
+	assert((portals_by_target[268].position as Vector2).is_equal_approx(MapEditorRuntimeBridge.cell_to_world(runtime, [6, 5])))
 	print("BICH_USER_RUNTIME_IMPORT_PASS")
 	get_tree().quit()

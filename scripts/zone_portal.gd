@@ -64,10 +64,6 @@ func _draw() -> void:
 	draw_circle(Vector2.ZERO, 46.0, Color(color.r * 0.32, color.g * 0.32, color.b * 0.32, 0.54))
 	draw_circle(Vector2.ZERO, 38.0, Color(color.r, color.g, color.b, 0.22))
 	draw_arc(Vector2.ZERO, 44.0, 0.0, TAU, 48, color, 4.0)
-	if portal_role == "return":
-		draw_polyline(PackedVector2Array([Vector2(-24, 10), Vector2(0, -12), Vector2(24, 10)]), color.lightened(0.25), 5.0)
-	else:
-		draw_polyline(PackedVector2Array([Vector2(-24, -10), Vector2(0, 12), Vector2(24, -10)]), color.lightened(0.25), 5.0)
 
 
 func _role_color() -> Color:

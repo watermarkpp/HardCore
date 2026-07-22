@@ -136,6 +136,16 @@ static func tile_to_world(runtime: Dictionary, raw_tile: Array) -> Vector2:
 	)
 
 
+static func cell_to_world(runtime: Dictionary, raw_cell: Array) -> Vector2:
+	var raw_size: Array = runtime.get("design", {}).get(
+		"design_size", [256, 256]
+	)
+	return MapEditorCoordinate.cell_center_to_world(
+		Vector2(float(raw_cell[0]), float(raw_cell[1])),
+		Vector2i(int(raw_size[0]), int(raw_size[1]))
+	)
+
+
 static func world_to_tile(runtime: Dictionary, world: Vector2) -> Vector2:
 	var raw_size: Array = runtime.get("design", {}).get(
 		"design_size", [256, 256]
@@ -160,13 +170,13 @@ static func portal_position(
 		if not portal_id.is_empty() and str(
 			endpoint.get("semantic_id", "")
 		) == portal_id:
-			return tile_to_world(runtime, endpoint.get("tile", [0, 0]))
+			return cell_to_world(runtime, endpoint.get("tile", [0, 0]))
 		if (
 			portal_id.is_empty()
 			and source_map_id >= 0
 			and int(endpoint.get("target_map_id", -1)) == source_map_id
 		):
-			return tile_to_world(runtime, endpoint.get("tile", [0, 0]))
+			return cell_to_world(runtime, endpoint.get("tile", [0, 0]))
 	return Vector2.ZERO
 
 
@@ -175,7 +185,7 @@ static func home_position() -> Vector2:
 	var safe_areas: Array = runtime.get("semantics", {}).get("safe_area", [])
 	for safe: Dictionary in safe_areas:
 		if bool(safe.get("return_anchor", false)):
-			return tile_to_world(
+			return cell_to_world(
 				runtime,
 				safe.get("return_tile", safe.get("tile", [128, 128]))
 			)
@@ -184,7 +194,7 @@ static func home_position() -> Vector2:
 	# playable runtime by using that safe area's anchor tile.
 	if not safe_areas.is_empty():
 		var safe: Dictionary = safe_areas[0]
-		return tile_to_world(
+		return cell_to_world(
 			runtime,
 			safe.get("return_tile", safe.get("tile", [128, 128]))
 		)
@@ -238,7 +248,7 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 		}.get(npc_id, ""))
 		result.npcs.append({
 			"name": entry.get("display_name", "NPC"),
-			"position": tile_to_world(runtime, entry.get("tile", [0, 0])),
+			"position": cell_to_world(runtime, entry.get("tile", [0, 0])),
 			"kind": entry.get("service_role", "dialogue"),
 			"npc_id": npc_id,
 			"stock": stock_key,
@@ -270,7 +280,7 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 	else:
 		for safe: Dictionary in semantics.get("safe_area", []):
 			var converted := safe.duplicate(true)
-			converted["center"] = tile_to_world(
+			converted["center"] = cell_to_world(
 				runtime, safe.get("tile", [0, 0])
 			)
 			result.safe_areas.append(converted)
@@ -289,7 +299,7 @@ static func _combat_spawn(
 	return {
 		"name": entry.get("display_name", ""),
 		"monster_id": int(monster_key.trim_prefix("monster.")),
-		"position": tile_to_world(runtime, entry.get("tile", [0, 0])),
+		"position": cell_to_world(runtime, entry.get("tile", [0, 0])),
 		"respawn_seconds": respawn_seconds,
 		"count": int(entry.get("count", 1)),
 		"max_alive": int(entry.get("max_alive", 1)),
@@ -304,7 +314,7 @@ static func _portal_record(
 	entry: Dictionary
 ) -> Dictionary:
 	return {
-		"position": tile_to_world(runtime, entry.get("tile", [0, 0])),
+		"position": cell_to_world(runtime, entry.get("tile", [0, 0])),
 		"source_map_id": source_map_id,
 		"source_portal_id": str(entry.get("semantic_id", "")),
 		"target_map_id": int(entry.get("target_map_id", -1)),

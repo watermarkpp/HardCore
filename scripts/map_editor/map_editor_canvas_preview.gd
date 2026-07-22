@@ -2,6 +2,9 @@ class_name MapEditorCanvasPreview
 extends Control
 
 const VIRTUAL_TILE_DRAW_LIMIT := 2048
+const RuntimeVisualGeometryService := preload(
+	"res://scripts/map_editor/map_editor_runtime_visual_geometry_service.gd"
+)
 
 signal paint_requested(tile: Vector2i, asset_id: String)
 signal tile_hovered(tile: Vector2i)
@@ -631,16 +634,10 @@ func _draw_instances(design_size: Vector2i, offset: Vector2, scale_factor: float
 			)
 			if texture == null:
 				continue
-			var geometry := instance_visual_geometry(
-				command.instance,
-				design_size,
-				offset,
-				scale_factor,
-				texture.get_size(),
-				command.asset
+			var geometry := RuntimeVisualGeometryService.editor_command_geometry(
+				command, design_size, offset, scale_factor, texture.get_size()
 			)
-			var raw_anchor: Array = command.get("anchor", [])
-			var draw_anchor := draw_anchor_for_command(raw_anchor, geometry)
+			var draw_anchor: Vector2 = geometry.anchor
 			draw_set_transform(geometry.center, geometry.rotation, geometry.visual_scale)
 			draw_texture(texture, -draw_anchor)
 			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
@@ -660,104 +657,13 @@ static func instance_draw_commands(
 	layer_index := 0,
 	sequence := 0
 ) -> Array[Dictionary]:
-	var result: Array[Dictionary] = []
-	var tile_raw: Array = instance.get("tile", [0, 0])
-	var footprint: Array = instance.get(
-		"footprint_tiles",
-		asset.get("footprint_tiles", [1, 1])
+	return RuntimeVisualGeometryService.instance_draw_commands(
+		instance, asset, layer_index, sequence
 	)
-	var instance_tile := Vector2i(int(tile_raw[0]), int(tile_raw[1]))
-	var adaptive_sort_raw: Array = instance.get(
-		"adaptive_corner_sort_tile_offset",
-		[0, 0]
-	)
-	var adaptive_sort_offset := Vector2i(
-		int(adaptive_sort_raw[0]) if adaptive_sort_raw.size() >= 1 else 0,
-		int(adaptive_sort_raw[1]) if adaptive_sort_raw.size() >= 2 else 0
-	)
-	var render_parts: Array = asset.get("render_parts", [])
-	if (
-		str(asset.get("asset_type", "")) == "wall_module"
-		and not render_parts.is_empty()
-	):
-		for part: Dictionary in render_parts:
-			var sort_offset_raw: Array = part.get(
-				"sort_tile_offset",
-				part.get("tile_offset", [0, 0])
-			)
-			var sort_tile := (
-				instance_tile
-				+ Vector2i(
-					int(sort_offset_raw[0]),
-					int(sort_offset_raw[1])
-				)
-				+ adaptive_sort_offset
-			)
-			var anchor: Array = part.get(
-				"anchor",
-				asset.get("anchor_px", [0, 0])
-			)
-			for image_pass: Dictionary in [
-				{"field": "shadow_image", "pass": 0},
-				{"field": "base_image", "pass": 1},
-				{"field": "front_image", "pass": 2},
-			]:
-				var image_path := str(part.get(str(image_pass["field"]), ""))
-				if image_path.is_empty():
-					continue
-				result.append({
-					"instance": instance,
-					"asset": asset,
-					"image_path": image_path,
-					"anchor": anchor,
-					"sort_tile": sort_tile,
-					"layer_index": layer_index,
-					"image_pass": int(image_pass["pass"]),
-					"part_order": int(part.get("draw_order_index", 0)),
-					"sequence": sequence,
-				})
-		return result
-	var sort_tile := instance_tile + Vector2i(
-		maxi(0, int(footprint[0]) - 1),
-		maxi(0, int(footprint[1]) - 1)
-	) + adaptive_sort_offset
-	result.append({
-		"instance": instance,
-		"asset": asset,
-		"image_path": str(asset.get("image", "")),
-		# Ordinary props must use the instance placement anchor resolved by
-		# instance_visual_geometry(). Supplying the catalog source anchor here
-		# bypasses calibration and shifts every prop by half a logical cell.
-		"anchor": [],
-		"sort_tile": sort_tile,
-		"layer_index": layer_index,
-		"image_pass": 1,
-		"part_order": 0,
-		"sequence": sequence,
-	})
-	return result
 
 
 static func _draw_command_less(a: Dictionary, b: Dictionary) -> bool:
-	var a_material_order := MapEditorInstanceService.material_layer_order(a.instance)
-	var b_material_order := MapEditorInstanceService.material_layer_order(b.instance)
-	if a_material_order != b_material_order:
-		return a_material_order < b_material_order
-	var a_tile: Vector2i = a.sort_tile
-	var b_tile: Vector2i = b.sort_tile
-	var a_depth := a_tile.x + a_tile.y
-	var b_depth := b_tile.x + b_tile.y
-	if a_depth != b_depth:
-		return a_depth < b_depth
-	if a_tile.x != b_tile.x:
-		return a_tile.x < b_tile.x
-	if int(a.layer_index) != int(b.layer_index):
-		return int(a.layer_index) < int(b.layer_index)
-	if int(a.image_pass) != int(b.image_pass):
-		return int(a.image_pass) < int(b.image_pass)
-	if int(a.part_order) != int(b.part_order):
-		return int(a.part_order) < int(b.part_order)
-	return int(a.sequence) < int(b.sequence)
+	return RuntimeVisualGeometryService.draw_command_less(a, b)
 
 
 func _hit_selectable(screen_position: Vector2) -> String:
@@ -849,39 +755,14 @@ func _draw_selection_overlays(design_size: Vector2i, offset: Vector2, scale_fact
 
 
 static func instance_visual_geometry(instance: Dictionary, design_size: Vector2i, draw_offset: Vector2, draw_scale: float, texture_size: Vector2, asset := {}) -> Dictionary:
-	var tile: Array = instance.get("tile", [0, 0])
-	var footprint: Array = instance.get("footprint_tiles", [1, 1])
-	var offset_px: Array = instance.get("offset_px", [0, 0])
-	var anchor: Array = instance.get("anchor_px", instance.get("placement_anchor_px", asset.get("anchor_px", [0, 0])))
-	var instance_scale: Array = instance.get("scale", [1.0, 1.0])
-	var foot := Vector2(float(tile[0]) + 0.5, float(tile[1]) + 0.5)
-	if str(asset.get("asset_type", "")) != "wall_module":
-		foot = Vector2(float(tile[0]) + float(footprint[0]) * 0.5, float(tile[1]) + float(footprint[1]) * 0.5)
-	var ground_center := MapEditorCoordinate.tile_to_ground_px(foot, design_size) + Vector2(float(offset_px[0]), float(offset_px[1]))
-	var center := draw_offset + ground_center * draw_scale
-	var visual_scale := Vector2(float(instance_scale[0]), float(instance_scale[1])) * draw_scale
-	var anchor_vector := Vector2(float(anchor[0]), float(anchor[1]))
-	var top_left := center - anchor_vector * visual_scale
-	var selection_bounds: Array = asset.get("selection_bounds_px", [])
-	var visual_rect := Rect2(top_left, texture_size * visual_scale)
-	if selection_bounds.size() == 4:
-		visual_rect = Rect2(
-			top_left + Vector2(
-				float(selection_bounds[0]),
-				float(selection_bounds[1])
-			) * visual_scale,
-			Vector2(
-				float(selection_bounds[2]),
-				float(selection_bounds[3])
-			) * visual_scale
-		)
-	return {
-		"center": center,
-		"anchor": anchor_vector,
-		"visual_scale": visual_scale,
-		"rotation": deg_to_rad(float(instance.get("rotation_deg", 0.0))),
-		"rect": visual_rect,
-	}
+	return RuntimeVisualGeometryService.editor_instance_geometry(
+		instance,
+		asset,
+		design_size,
+		draw_offset,
+		draw_scale,
+		texture_size
+	)
 
 
 func _draw_blocked_tiles(design_size: Vector2i, offset: Vector2, scale_factor: float) -> void:

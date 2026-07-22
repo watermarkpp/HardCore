@@ -4,6 +4,7 @@ extends Panel
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const PreviewScript = preload("res://scripts/equipment_character_preview.gd")
 const GothicUIThemeScript = preload("res://scripts/gothic_ui_theme.gd")
+const UIItemTextureCacheScript = preload("res://scripts/ui_item_texture_cache.gd")
 
 signal closed
 
@@ -38,6 +39,8 @@ var _press_context: Dictionary = {}
 var _press_button: Button
 var _press_origin := Vector2.ZERO
 var _long_press_opened := false
+var _refresh_pending := false
+var _refresh_execution_count := 0
 
 
 func _ready() -> void:
@@ -56,8 +59,9 @@ func _ready() -> void:
 	_build_equipment_panel()
 	_build_bag_panel()
 	_build_context_menu()
-	PlayerState.inventory_changed.connect(refresh)
-	PlayerState.equipment_changed.connect(refresh)
+	visibility_changed.connect(_on_visibility_changed)
+	PlayerState.inventory_changed.connect(_on_panel_data_changed)
+	PlayerState.equipment_changed.connect(_on_panel_data_changed)
 	PlayerState.profile_changed.connect(_refresh_character_stats)
 	refresh()
 
@@ -272,9 +276,23 @@ func _create_equipment_slot(parent: Control, slot: String, position_value: Vecto
 	equipment_slot_labels[slot] = slot_label
 
 
+func _on_panel_data_changed() -> void:
+	if not visible:
+		_refresh_pending = true
+		return
+	refresh()
+
+
+func _on_visibility_changed() -> void:
+	if visible and _refresh_pending:
+		refresh()
+
+
 func refresh() -> void:
 	if item_grid == null:
 		return
+	_refresh_pending = false
+	_refresh_execution_count += 1
 	_refresh_equipment_slots()
 	_refresh_character_stats()
 	_refresh_bag_grid()
@@ -680,14 +698,7 @@ func _kind_label(kind: String) -> String:
 
 
 func _item_texture(record: Dictionary, field: String) -> Texture2D:
-	var art: Variant = record.get("art", {})
-	if not art is Dictionary:
-		return null
-	var source: Variant = art.get(field, {})
-	var path := str(source.get("path", "")) if source is Dictionary else str(source)
-	if path.is_empty() or not ResourceLoader.exists(path):
-		return null
-	return load(path) as Texture2D
+	return UIItemTextureCacheScript.texture_for(record, field)
 
 
 func _set_button_texture(button: Button, texture: Texture2D) -> void:
