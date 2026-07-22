@@ -16,6 +16,9 @@ func _run() -> void:
 	var game := packed.instantiate()
 	add_child(game)
 	await get_tree().process_frame
+	# This test isolates the UI handshake. Threaded monster streaming has its own
+	# budget/cache suite and must not make these transition timing assertions wait.
+	game._monster_prefetch_enabled = false
 
 	game.travel_to_map(217)
 	assert(game.current_map_id == 217, "test mode must preserve synchronous travel")

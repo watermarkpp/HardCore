@@ -7,10 +7,12 @@ const GothicBichCampBuilderScript := preload("res://scripts/layers/presentation/
 const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 const MapPortalRuntimeServiceScript := preload("res://scripts/map_editor/map_portal_runtime_service.gd")
 const MapPortalTravelGuardScript := preload("res://scripts/map_editor/map_portal_travel_guard.gd")
+const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const SystemMenuPanelScript := preload("res://scripts/system_menu_panel.gd")
 const DEFAULT_NORMAL_RESPAWN_SECONDS := 180.0
 const DEFAULT_BOSS_RESPAWN_SECONDS := 3600.0
+const MONSTER_PREFETCH_TIMEOUT_MSEC := 8000
 
 var player: PlayerCharacter
 var hud: GameHUD
@@ -35,6 +37,8 @@ var _portal_guard_state := MapPortalTravelGuardScript.new_state()
 var _map_transition_in_progress := false
 var _map_transition_serial := 0
 var _active_map_transition_id := ""
+var _monster_prefetch_enabled := true
+var _last_monster_prefetch_status: Dictionary = {}
 
 
 func _ready() -> void:
@@ -241,7 +245,10 @@ func travel_to_service_home(
 		red_name, initial, fallback_zone, after_arrival
 	)
 	if _should_animate_map_transition(initial):
-		return _begin_map_transition(operation)
+		var service_map_id := GameData.service_home_map_id(red_name)
+		return _begin_map_transition(
+			operation, GameData.service_runtime_map_id(service_map_id)
+		)
 	operation.call()
 	return true
 
@@ -293,7 +300,7 @@ func _request_map_travel(map_id: int) -> bool:
 		return false
 	var operation := Callable(self, "_travel_to_map_immediate").bind(map_id)
 	if _should_animate_map_transition(false):
-		return _begin_map_transition(operation)
+		return _begin_map_transition(operation, map_id)
 	return bool(operation.call())
 
 
@@ -377,7 +384,7 @@ func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
 		target_tile
 	)
 	if _should_animate_map_transition(false):
-		if _begin_map_transition(operation):
+		if _begin_map_transition(operation, target_map_id):
 			return true
 		_portal_guard_state["travel_in_flight"] = false
 		return false
@@ -421,7 +428,7 @@ func _should_animate_map_transition(initial: bool) -> bool:
 	)
 
 
-func _begin_map_transition(operation: Callable) -> bool:
+func _begin_map_transition(operation: Callable, target_map_id := -1) -> bool:
 	if _map_transition_in_progress or not operation.is_valid():
 		return false
 	_map_transition_serial += 1
@@ -430,11 +437,15 @@ func _begin_map_transition(operation: Callable) -> bool:
 		_map_transition_serial,
 	]
 	_map_transition_in_progress = true
-	_run_map_transition(_active_map_transition_id, operation)
+	_run_map_transition(_active_map_transition_id, operation, target_map_id)
 	return true
 
 
-func _run_map_transition(transition_id: String, operation: Callable) -> void:
+func _run_map_transition(
+	transition_id: String,
+	operation: Callable,
+	target_map_id: int
+) -> void:
 	hud.begin_loading_transition(transition_id)
 	while _map_transition_in_progress and _active_map_transition_id == transition_id:
 		var request: Dictionary = await hud.loading_transition_covered
@@ -443,6 +454,26 @@ func _run_map_transition(transition_id: String, operation: Callable) -> void:
 			and str(request.get("transition_id", "")) == transition_id
 		):
 			break
+	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
+		return
+	_last_monster_prefetch_status.clear()
+	if _monster_prefetch_enabled and target_map_id >= 0:
+		_last_monster_prefetch_status = MonsterVisualScript.begin_map_prefetch(
+			_monster_ids_for_map(target_map_id)
+		)
+		var prefetch_deadline := (
+			Time.get_ticks_msec() + MONSTER_PREFETCH_TIMEOUT_MSEC
+		)
+		while (
+			_map_transition_in_progress
+			and _active_map_transition_id == transition_id
+			and not bool(_last_monster_prefetch_status.get("complete", false))
+			and Time.get_ticks_msec() < prefetch_deadline
+		):
+			await get_tree().process_frame
+			_last_monster_prefetch_status = MonsterVisualScript.poll_streaming()
+	elif _monster_prefetch_enabled:
+		MonsterVisualScript.release_map_pins()
 	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 		return
 	operation.call()
@@ -454,6 +485,29 @@ func _run_map_transition(transition_id: String, operation: Callable) -> void:
 	hud.finish_loading_transition()
 	_active_map_transition_id = ""
 	_map_transition_in_progress = false
+
+
+func _monster_ids_for_map(map_id: int) -> Array[int]:
+	var content: Dictionary = {}
+	if MapEditorRuntimeBridgeScript.has_runtime_map(map_id):
+		content = MapEditorRuntimeBridgeScript.game_content_for_map(map_id)
+	if content.is_empty() and RegionContent.has_map(map_id):
+		content = RegionContent.get_map_content(map_id)
+	var result: Array[int] = []
+	var seen := {}
+	for group_name: String in ["spawns", "bosses"]:
+		for raw_entry: Variant in content.get(group_name, []):
+			if not raw_entry is Dictionary:
+				continue
+			var entry: Dictionary = raw_entry
+			var monster_id := int(entry.get(
+				"monster_id", entry.get("monsterId", -1)
+			))
+			if monster_id < 0 or seen.has(monster_id):
+				continue
+			seen[monster_id] = true
+			result.append(monster_id)
+	return result
 
 
 func _valid_portal_request(request: Dictionary) -> bool:
