@@ -20,6 +20,7 @@ from PIL import Image, ImageEnhance
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE_DIR = ROOT / "outputs" / "wooma_temple_regenerated"
+SOURCE_EXTERNAL_PATH = "outputs/wooma_temple_regenerated"
 FRONT_SOURCE = SOURCE_DIR / "wooma_wall_front_bay_alpha.png"
 CAP_SOURCE = SOURCE_DIR / "wooma_wall_capstone_alpha.png"
 ART_ROOT = (
@@ -342,7 +343,7 @@ def build_module(
             "洞穴与地下城/墙体模块/沃玛寺庙墙体/"
             f"直墙/{module['axis']}"
         ),
-        "source_external_path": str(SOURCE_DIR),
+        "source_external_path": SOURCE_EXTERNAL_PATH,
         "source_sha256": hashlib.sha256(
             (sha256(FRONT_SOURCE) + sha256(CAP_SOURCE)).encode("utf-8")
         ).hexdigest(),
