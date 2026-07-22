@@ -42,7 +42,7 @@ func _run() -> void:
 	var player := PlayerCharacter.new()
 	add_child(player)
 	player.set_physics_process(false)
-	player.global_position = Vector2(2000, 0)
+	player.global_position = Vector2.ZERO
 	for index in range(EXPECTED_NAMES.size()):
 		var monster_name: String = EXPECTED_NAMES[index]
 		var boss := monster_name in ["骷髅精灵", "尸王"]

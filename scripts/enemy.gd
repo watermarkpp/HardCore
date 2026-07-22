@@ -721,14 +721,11 @@ func _retarget(delta := 0.0) -> void:
 		if is_instance_valid(target) and _retarget_timer > 0.0:
 			return
 	else:
-		var target_needs_realtime_retarget := (
-			is_instance_valid(target)
-			and (
-				global_position.distance_to(target.global_position) <= aggro_radius
-				or _threat_for(target) > 0.0
-			)
-		)
-		if not target_needs_realtime_retarget and _retarget_timer > 0.0:
+		# Ordinary monsters keep their current target between decision ticks.
+		# Damage threat still switches immediately in _add_threat(), so scanning
+		# the target set every physics frame adds CPU cost without improving
+		# reaction latency.
+		if _retarget_timer > 0.0:
 			return
 	_retarget_full_scan_count += 1
 	var chosen: Node2D
