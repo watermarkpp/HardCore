@@ -47,6 +47,7 @@ var frame_size := ArtSpec.MONSTER_FRAME
 var foot_anchor := ArtSpec.MONSTER_FOOT_ANCHOR
 var actor_ground_offset := Vector2i.ZERO
 var health_bar_top_by_direction: Array = []
+var _has_authored_client_art := false
 var _elapsed := 0.0
 var _last_state := ""
 var _attack_remaining := 0.0
@@ -76,6 +77,7 @@ func setup(owner_actor: EnemyActor) -> void:
 
 func _ready() -> void:
 	configure_actor_y_sort_item(self, "visual_root")
+	_has_authored_client_art = not _client_mapping_for(actor.monster_data).is_empty()
 	# 普通怪下沉4px，Boss下沉6px，使脚底与阴影中心实际重叠。
 	position = Vector2(0, 6 if actor.is_boss else 4)
 	visible = false
@@ -126,7 +128,10 @@ func _process(delta: float) -> void:
 	else:
 		current_state = "idle"
 	var visual_facing: Vector2 = actor.movement_facing if current_state == "walk" else actor.facing
+	var previous_direction := current_direction
 	current_direction = _direction_row(visual_facing)
+	if current_direction != previous_direction:
+		actor.refresh_name_label_position()
 	if current_state != _last_state:
 		_elapsed = 0.0
 		_last_state = current_state
@@ -164,6 +169,7 @@ func _activate_resources() -> void:
 	sprite.position = -Vector2(foot_anchor + actor_ground_offset)
 	_fixed_health_bar_y = position.y + sprite.position.y - HEALTH_BAR_FRAME_MARGIN
 	visible = not actor._burrowed
+	actor.refresh_name_label_position()
 	_last_state = ""
 	_apply_render_state(active_resources["idle"], Rect2(Vector2.ZERO, frame_size))
 
@@ -744,6 +750,18 @@ func play_death(duration := 0.62) -> void:
 
 func uses_final_art() -> bool:
 	return visible and sprite != null and sprite.texture != null
+
+
+func has_authored_client_art() -> bool:
+	return _has_authored_client_art
+
+
+func should_draw_procedural_fallback() -> bool:
+	# A stable monsterId with authored client art may briefly wait for its
+	# threaded atlases. Drawing the old green placeholder during that window
+	# makes it look like a ground marker underneath the real monster as the
+	# resource becomes resident. Only genuinely unmapped monsters use it.
+	return not uses_final_art() and not _has_authored_client_art
 
 
 func is_fallback_attacking() -> bool:

@@ -54,7 +54,8 @@ func _run() -> void:
 		await get_tree().process_frame
 		player.global_position = enemy.global_position + Vector2(200, 0)
 		if boss:
-			assert(enemy.name_label.position.y == -116.0, "%s名称未避开大型客户端Boss造型" % monster_name)
+			assert(is_equal_approx(enemy.name_label.position.y, enemy.name_label_anchor_y()), "%s名称未按客户端造型顶边定位" % monster_name)
+			assert(enemy.name_label.position.y + enemy.name_label.size.y < enemy.health_bar_anchor_y(), "%s名称压住大型客户端Boss血条" % monster_name)
 		var visual: MonsterVisual = enemy.get_node("MonsterVisual")
 		var sprite: Sprite2D = visual.get_node("BodySprite")
 		var mapping: Dictionary = mappings[monster_name]
