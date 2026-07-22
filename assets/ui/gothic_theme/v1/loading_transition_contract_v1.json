@@ -5,7 +5,8 @@
   "stableAtmosphereIds": [
     "ui.loading.game_icon_watermark",
     "ui.loading.red_breathing_glow",
-    "ui.loading.edge_vignette"
+    "ui.loading.edge_vignette",
+    "ui.loading.safe_content"
   ],
   "exactVisibleText": "Loading......",
   "atmosphere": {
@@ -21,6 +22,17 @@
     "maximumEmberCount": 16,
     "background": "cool near-black charcoal blue at approximately 90 percent coverage and 10 percent scene visibility",
     "blackBackgroundRemoval": "brightness mask plus elliptical edge feathering in the watermark shader"
+  },
+  "viewportCoverage": {
+    "shadeAndVignette": "cover the complete renderable viewport including pixels outside display safe-area insets",
+    "safeContent": "game icon, glow, embers, and Loading text remain inside the display safe area",
+    "maximumEdgeGapPixels": 0,
+    "testedWindows": [
+      "2400x1080-left-inset",
+      "2400x1080-right-inset",
+      "2340x1080-bilateral-inset",
+      "1920x1080"
+    ]
   },
   "forbiddenContent": [
     "map name",

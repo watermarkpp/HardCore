@@ -39,7 +39,7 @@
 
 已执行：
 
-- 当前唯一工作目录确认为`C:/Users/Administrator/Documents/我的刷子游戏`；旧工程内容先迁入当前工程后使用。
+- 当前唯一工作目录确认为`C:/Users/Administrator/Documents/HardCore`；中文旧目录已经停用，后续工作树统一使用`HardCore-worktrees`英文路径。
 - 完整迁入经典客户端`dev_art_sources/reference/mir2_client_raw`，共1167个文件，包含`Data/Map/Wav`；经典`StateItem.wil #344`与当前装备栏黑铁头图标一致。
 - 完整解包2013客户端至`dev_art_sources/external/mir2opensource_full`；`Data`含122组WIL/WIX、962251个索引帧。
 - 根据配套`PlayerObject.cs`和`Frames.cs`纠正后期客户端人物步长：普通人物2224、Killer 1456，其他家族用关联库帧数结构推导；否定了把所有资源统一按600帧切割的旧做法。
