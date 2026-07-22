@@ -2,8 +2,20 @@ extends Node
 
 
 const FINAL_ART_CASES := [
+	{"monster_id": 28, "boss": false},
+	{"monster_id": 46, "boss": false},
 	{"monster_id": 31, "boss": false},
 	{"monster_id": 76, "boss": true},
+]
+const DIRECTIONS := [
+	Vector2.UP,
+	Vector2(1, -1),
+	Vector2.RIGHT,
+	Vector2(1, 1),
+	Vector2.DOWN,
+	Vector2(-1, 1),
+	Vector2.LEFT,
+	Vector2(-1, -1),
 ]
 
 
@@ -36,24 +48,26 @@ func _run() -> void:
 		var visual: MonsterVisual = enemy.get_node("MonsterVisual")
 		var sprite: Sprite2D = visual.get_node("BodySprite")
 		assert(visual.uses_final_art(), "monsterId=%d did not load final client art" % monster_id)
-		var expected_y := visual.position.y + sprite.position.y - MonsterVisual.HEALTH_BAR_FRAME_MARGIN
+		var stable_top := 0.0
+		if visual.health_bar_top_by_direction.size() == 8:
+			stable_top = float(visual.health_bar_top_by_direction.min())
+		var expected_y := visual.position.y + sprite.position.y + stable_top - MonsterVisual.HEALTH_BAR_FRAME_MARGIN
 		var fixed_y := enemy.health_bar_anchor_y()
-		assert(is_equal_approx(fixed_y, expected_y), "monsterId=%d health bar is not anchored above the final frame" % monster_id)
+		var fixed_name_y := enemy.name_label.position.y
+		assert(is_equal_approx(fixed_y, expected_y), "monsterId=%d health bar is not anchored to its stable visual profile" % monster_id)
+		assert(is_equal_approx(fixed_name_y + enemy.name_label.size.y + EnemyActor.NAME_LABEL_HEALTH_BAR_GAP, fixed_y), "monsterId=%d name and health bar do not share one stable anchor" % monster_id)
 
 		var states := ["idle", "walk", "attack", "hit", "death"]
 		for state: String in states:
-			enemy.facing = Vector2.RIGHT
-			enemy.movement_facing = Vector2.RIGHT
-			enemy.velocity = Vector2.RIGHT * 50.0 if state == "walk" else Vector2.ZERO
-			if state == "attack":
-				visual.play_attack(0.5)
-			elif state == "hit":
-				visual._attack_remaining = 0.0
-				visual.play_hit(0.5)
-			elif state == "death":
-				visual.play_death(0.5)
-			visual._process(0.05)
-			assert(is_equal_approx(enemy.health_bar_anchor_y(), fixed_y), "monsterId=%d %s moved the health bar anchor" % [monster_id, state])
+			var frame_count := MonsterAnimationPolicy.frame_count(visual.active_resources, StringName(state))
+			for direction: Vector2 in DIRECTIONS:
+				for frame_index in range(frame_count):
+					_prepare_visual_sample(visual, enemy, state, direction, frame_index, frame_count)
+					visual._process(0.0)
+					assert(visual.current_direction == visual._direction_row(direction), "monsterId=%d %s did not sample direction=%s" % [monster_id, state, direction])
+					assert(visual.current_frame == frame_index, "monsterId=%d %s did not sample frame=%d" % [monster_id, state, frame_index])
+					assert(is_equal_approx(enemy.health_bar_anchor_y(), fixed_y), "monsterId=%d %s direction=%s frame=%d moved health bar" % [monster_id, state, direction, frame_index])
+					assert(is_equal_approx(enemy.name_label.position.y, fixed_name_y), "monsterId=%d %s direction=%s frame=%d moved name" % [monster_id, state, direction, frame_index])
 		enemy.queue_free()
 		await get_tree().process_frame
 
@@ -65,5 +79,28 @@ func _run() -> void:
 	assert(not fallback.visual.uses_final_art(), "fallback fixture unexpectedly resolved final art")
 	assert(is_equal_approx(fallback.health_bar_anchor_y(), -40.0), "procedural fallback health bar position changed")
 
-	print("MONSTER_HEALTH_BAR_ANCHOR_PASS final art uses a fixed frame-top anchor across all animation states")
+	assert(MonsterVisual.OVERHEAD_ANCHOR_CONTRACT == "monster.overhead_anchor.v2", "stable overhead contract changed")
+	print("MONSTER_HEALTH_BAR_ANCHOR_PASS stable profile anchor across every direction, action, and frame")
 	get_tree().quit(0)
+
+
+func _prepare_visual_sample(visual: MonsterVisual, enemy: EnemyActor, state: String, direction: Vector2, frame_index: int, frame_count: int) -> void:
+	visual._attack_remaining = 0.0
+	visual._hit_remaining = 0.0
+	visual._death_remaining = 0.0
+	enemy.facing = direction
+	enemy.movement_facing = direction
+	enemy.velocity = direction * 50.0 if state == "walk" else Vector2.ZERO
+	visual._last_state = state
+	if state in ["attack", "hit", "death"]:
+		visual._action_duration = 1.0
+		visual._elapsed = (float(frame_index) + 0.25) / float(maxi(1, frame_count))
+		if state == "attack":
+			visual._attack_remaining = 1.0
+		elif state == "hit":
+			visual._hit_remaining = 1.0
+		else:
+			visual._death_remaining = 1.0
+	else:
+		var fps := MonsterAnimationPolicy.loop_fps(StringName(state))
+		visual._elapsed = (float(frame_index) + 0.25) / maxf(fps, 0.001)
