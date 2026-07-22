@@ -11,10 +11,9 @@ func _ready() -> void:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
-	MonsterVisual._client_resource_profiles.clear()
-	MonsterVisual._client_resource_profile_lru.clear()
-	MonsterVisual._client_texture_load_request_count = 0
-	assert(MonsterVisual.CLIENT_RESOURCE_CACHE_CAPACITY == 32, "mobile texture cache must cover the largest single-region profile set")
+	MonsterVisual.reset_client_resource_cache()
+	assert(MonsterVisual.CLIENT_RESOURCE_CACHE_CAPACITY == 12, "mobile texture cache count guard changed")
+	assert(MonsterVisual.CLIENT_RESOURCE_CACHE_BUDGET_BYTES == 64 * 1024 * 1024, "mobile texture cache byte guard changed")
 	var player := PlayerCharacter.new()
 	add_child(player)
 	player.set_physics_process(false)
@@ -51,39 +50,38 @@ func _run() -> void:
 	returned.queue_free()
 	await get_tree().process_frame
 
-	# Bich's common runtime set contains 22 distinct visual profiles. A player can
-	# leave it for a neighboring area and encounter ten more profiles before
-	# returning; the full Bich set must still be resident and issue no new loads.
-	MonsterVisual._client_resource_profiles.clear()
-	MonsterVisual._client_resource_profile_lru.clear()
-	MonsterVisual._client_texture_load_request_count = 0
-	var bich_profiles: Dictionary = GameData.bich_common_art.get("runtimeMappings", {})
-	var bich_keys: Array = bich_profiles.keys()
-	bich_keys.sort()
-	assert(bich_keys.size() == 22, "Bich common visual working set changed: %d" % bich_keys.size())
+	# Stress the byte/count eviction policy without decoding another 21 enormous
+	# profile sets. Reusing the fixture textures is sufficient here because the
+	# cache accounts conservative ETC2 residency from atlas dimensions.
+	MonsterVisual.reset_client_resource_cache()
 	var loader := MonsterVisual.new()
-	for key: Variant in bich_keys:
-		assert(not loader._client_resources(bich_profiles[key]).is_empty(), "failed to load Bich profile: %s" % key)
-	assert(MonsterVisual.cached_client_profile_count() == 22, "Bich working set was not retained in full")
-	assert(MonsterVisual.client_texture_load_request_count() == 110, "Bich first visit must request exactly 22 x 5 action textures")
+	var fixture_resources: Dictionary = first.visual.active_resources
+	var fixture_bytes := loader._estimated_client_profile_bytes(fixture_resources)
+	assert(fixture_bytes > 0, "fixture did not produce a measurable ETC2 residency estimate")
+	for index in range(40):
+		loader._retain_client_resource_profile("synthetic_pressure_%02d" % index, fixture_resources)
+	assert(MonsterVisual.cached_client_profile_count() <= MonsterVisual.CLIENT_RESOURCE_CACHE_CAPACITY, "pressure cache exceeded profile cap")
+	assert(MonsterVisual.cached_client_profile_estimated_bytes() <= MonsterVisual.CLIENT_RESOURCE_CACHE_BUDGET_BYTES, "pressure cache exceeded 64 MiB: %d" % MonsterVisual.cached_client_profile_estimated_bytes())
+	assert(MonsterVisual.cached_client_profile_count() < 40, "pressure cache did not evict old profiles")
 
-	var seed_profile: Dictionary = bich_profiles[bich_keys[0]]
-	for index in range(10):
-		assert(not loader._client_resources(_synthetic_neighbor_profile(seed_profile, index)).is_empty())
-	assert(MonsterVisual.cached_client_profile_count() == 32, "Bich plus neighboring profiles did not fill the bounded cache")
-	var requests_before_return := MonsterVisual.client_texture_load_request_count()
-	for key: Variant in bich_keys:
-		assert(not loader._client_resources(bich_profiles[key]).is_empty())
-	assert(MonsterVisual.client_texture_load_request_count() == requests_before_return, "returning to Bich re-requested an evicted action texture")
-	assert(MonsterVisual.cached_client_profile_count() == 32, "return visit changed bounded cache size")
-
-	assert(not loader._client_resources(_synthetic_neighbor_profile(seed_profile, 10)).is_empty())
-	assert(MonsterVisual.cached_client_profile_count() == MonsterVisual.CLIENT_RESOURCE_CACHE_CAPACITY, "LRU cache grew beyond its mobile bound")
+	# Actor residency is independent of the bounded cross-zone cache: far actors
+	# release their own five atlas references and reacquire before entering view.
+	player.global_position = Vector2(50000, 50000)
+	var streamed := await _spawn_sample(player)
+	assert(streamed.visual.active_resources.is_empty(), "far spawned actor eagerly retained five atlases")
+	player.global_position = streamed.global_position
+	streamed.visual._resource_residency_timer = 0.0
+	streamed.visual._process(0.13)
+	assert(not streamed.visual.active_resources.is_empty(), "near actor did not activate visual resources")
+	player.global_position = Vector2(50000, 50000)
+	streamed.visual._resource_residency_timer = 0.0
+	streamed.visual._process(0.13)
+	assert(streamed.visual.active_resources.is_empty(), "far actor retained its atlas resources")
+	streamed.queue_free()
 	loader.free()
-	MonsterVisual._client_resource_profiles.clear()
-	MonsterVisual._client_resource_profile_lru.clear()
+	MonsterVisual.reset_client_resource_cache()
 
-	print("MONSTER_RUNTIME_TEXTURE_CACHE_PASS 22-profile Bich round trip adds zero loads; 32-profile LRU remains bounded")
+	print("MONSTER_RUNTIME_TEXTURE_CACHE_PASS lazy actor residency; 12-profile/64MiB LRU remains bounded")
 	get_tree().quit(0)
 
 
@@ -99,7 +97,8 @@ func _spawn_sample(player: PlayerCharacter) -> EnemyActor:
 	add_child(enemy)
 	enemy.set_physics_process(false)
 	await get_tree().process_frame
-	assert(enemy.visual.uses_final_art(), "cache fixture did not resolve final client art")
+	if enemy.global_position.distance_to(player.global_position) <= MonsterVisual.VISUAL_ACTIVATION_DISTANCE:
+		assert(enemy.visual.uses_final_art(), "cache fixture did not resolve final client art")
 	return enemy
 
 

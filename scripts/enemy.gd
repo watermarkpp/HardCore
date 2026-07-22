@@ -5,15 +5,23 @@ const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const CROWD_GRID_CELL_SIZE := 96.0
+const CROWD_GRID_REFRESH_FRAMES := 3
+const CROWD_STEERING_INTERVAL_SECONDS := 0.10
 const FAR_RETARGET_MIN_SECONDS := 0.28
 const FAR_RETARGET_STAGGER_SECONDS := 0.017
+const NEAR_RETARGET_MIN_SECONDS := 0.18
+const NEAR_RETARGET_STAGGER_SECONDS := 0.011
+const BACKGROUND_AI_INTERVAL_SECONDS := 0.25
+const BACKGROUND_AI_MIN_DISTANCE := 1200.0
 
 static var _crowd_grid_physics_frame := -1
 static var _crowd_grid: Dictionary = {}
 static var _crowd_grid_build_count := 0
 static var _crowd_grid_actor_scan_count := 0
 static var _crowd_query_candidate_count := 0
+static var _crowd_steering_evaluation_count := 0
 static var _retarget_full_scan_count := 0
+static var _background_ai_evaluation_count := 0
 
 signal died(enemy: EnemyActor, monster_data: Dictionary)
 signal target_requested(enemy: EnemyActor)
@@ -71,6 +79,9 @@ var _pending_attack_time := -1.0
 var _pending_attack_damage := 0
 var _pending_attack_target: Node2D
 var _retarget_timer := 0.0
+var _crowd_steering_timer := 0.0
+var _cached_crowd_separation := Vector2.ZERO
+var _background_ai_timer := 0.0
 var _boss_skill_cooldown := 3.0
 var _boss_warning := 0.0
 var _boss_phase_two := false
@@ -207,6 +218,8 @@ func _ready() -> void:
 		name_label.visible = false
 	if boss_rule.is_empty():
 		_retarget_timer = FAR_RETARGET_STAGGER_SECONDS * float(posmod(get_instance_id(), 11))
+		_crowd_steering_timer = CROWD_STEERING_INTERVAL_SECONDS * float(posmod(get_instance_id(), 7)) / 7.0
+		_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS * float(posmod(get_instance_id(), 13)) / 13.0
 	queue_redraw()
 
 
@@ -241,6 +254,16 @@ func _physics_process(delta: float) -> void:
 	_attack_timer = maxf(0.0, _attack_timer - delta)
 	_update_status_effects(delta)
 	_update_pending_attack(delta)
+	if _can_use_background_ai():
+		_background_ai_timer -= delta
+		if _background_ai_timer <= 0.0:
+			_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS
+			_background_ai_evaluation_count += 1
+			_retarget(BACKGROUND_AI_INTERVAL_SECONDS)
+			if not is_instance_valid(target):
+				_return_to_spawn()
+		return
+	_background_ai_timer = 0.0
 	_retarget(delta)
 	if _update_area_attack(delta):
 		velocity = Vector2.ZERO
@@ -331,7 +354,7 @@ func _physics_process(delta: float) -> void:
 				_deal_melee_hit(target, dealt_damage)
 	elif distance <= aggro_radius:
 		var pursuit := offset.normalized()
-		var steering := pursuit + _crowd_separation() * 0.72
+		var steering := pursuit + _crowd_separation_for_motion(delta) * 0.72
 		# Separation may move sideways but must never reverse a pursuing monster.
 		# Removing the negative forward component eliminates visible rollback.
 		if steering.dot(pursuit) < 0.12:
@@ -505,9 +528,19 @@ func _crowd_separation() -> Vector2:
 	return separation.limit_length(1.0)
 
 
+func _crowd_separation_for_motion(delta: float) -> Vector2:
+	_crowd_steering_timer = maxf(0.0, _crowd_steering_timer - delta)
+	if _crowd_steering_timer > 0.0:
+		return _cached_crowd_separation
+	_crowd_steering_timer = CROWD_STEERING_INTERVAL_SECONDS
+	_crowd_steering_evaluation_count += 1
+	_cached_crowd_separation = _crowd_separation()
+	return _cached_crowd_separation
+
+
 func _ensure_crowd_grid() -> void:
 	var physics_frame := Engine.get_physics_frames()
-	if _crowd_grid_physics_frame == physics_frame:
+	if _crowd_grid_physics_frame >= 0 and physics_frame - _crowd_grid_physics_frame < CROWD_GRID_REFRESH_FRAMES:
 		return
 	_crowd_grid_physics_frame = physics_frame
 	_crowd_grid.clear()
@@ -533,7 +566,9 @@ static func reset_performance_diagnostics() -> void:
 	_crowd_grid_build_count = 0
 	_crowd_grid_actor_scan_count = 0
 	_crowd_query_candidate_count = 0
+	_crowd_steering_evaluation_count = 0
 	_retarget_full_scan_count = 0
+	_background_ai_evaluation_count = 0
 
 
 static func performance_diagnostics() -> Dictionary:
@@ -541,8 +576,23 @@ static func performance_diagnostics() -> Dictionary:
 		"crowd_grid_builds": _crowd_grid_build_count,
 		"crowd_grid_actor_scans": _crowd_grid_actor_scan_count,
 		"crowd_query_candidates": _crowd_query_candidate_count,
+		"crowd_steering_evaluations": _crowd_steering_evaluation_count,
 		"retarget_full_scans": _retarget_full_scan_count,
+		"background_ai_evaluations": _background_ai_evaluation_count,
 	}
+
+
+func _can_use_background_ai() -> bool:
+	if is_boss or not is_instance_valid(primary_target):
+		return false
+	if target != primary_target and is_instance_valid(target):
+		return false
+	if not _threat_table.is_empty() or poison_time > 0.0 or control_time > 0.0 or charm_time > 0.0:
+		return false
+	if _pending_attack_time >= 0.0 or _area_attack_warning > 0.0 or _summon_warning > 0.0:
+		return false
+	var activation_distance := maxf(BACKGROUND_AI_MIN_DISTANCE, aggro_radius + 256.0)
+	return global_position.distance_squared_to(primary_target.global_position) > activation_distance * activation_distance
 
 
 func apply_life_steal(dealt_damage: int) -> void:
@@ -704,7 +754,7 @@ func _retarget(delta := 0.0) -> void:
 		var search: Dictionary = boss_rule.get("targetSearch", {})
 		_retarget_timer = float(search.get("withTargetMs" if is_instance_valid(target) else "withoutTargetMs", 1000)) / 1000.0
 	elif is_instance_valid(target):
-		_retarget_timer = 0.0
+		_retarget_timer = NEAR_RETARGET_MIN_SECONDS + NEAR_RETARGET_STAGGER_SECONDS * float(posmod(get_instance_id(), 7))
 	else:
 		_retarget_timer = FAR_RETARGET_MIN_SECONDS + FAR_RETARGET_STAGGER_SECONDS * float(posmod(get_instance_id(), 11))
 

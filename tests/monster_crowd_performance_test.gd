@@ -19,6 +19,7 @@ func _run() -> void:
 	player.global_position = Vector2(50000, 50000)
 	var enemies := _spawn_groups(player, 0)
 	await get_tree().process_frame
+	print("MONSTER_CROWD_STAGE spawned")
 
 	EnemyActor.reset_performance_diagnostics()
 	for enemy: EnemyActor in enemies:
@@ -29,9 +30,11 @@ func _run() -> void:
 	assert(int(crowd_metrics.crowd_grid_builds) == 1, "crowd grid rebuilt for each enemy")
 	assert(int(crowd_metrics.crowd_grid_actor_scans) == ENEMY_COUNT, "crowd grid did not scan the active set exactly once")
 	assert(int(crowd_metrics.crowd_query_candidates) <= ENEMY_COUNT * 28, "crowd queries regressed toward O(N^2): %s" % crowd_metrics)
+	print("MONSTER_CROWD_STAGE indexed %s" % crowd_metrics)
 
-	# Far actors keep state and timers current but expensive target candidate scans
-	# are staggered. A near target or a threat target still bypasses the throttle.
+	# Retargeting is a decision tick, not a render/physics tick. Existing targets
+	# remain authoritative between decisions, and taking threat switches target
+	# immediately in _add_threat().
 	EnemyActor.reset_performance_diagnostics()
 	for step in range(60):
 		for enemy: EnemyActor in enemies:
@@ -41,10 +44,38 @@ func _run() -> void:
 	var near_enemy: EnemyActor = enemies[0]
 	player.global_position = near_enemy.global_position + Vector2(80, 0)
 	near_enemy.target = player
-	near_enemy._retarget_timer = 10.0
+	near_enemy._retarget_timer = 0.0
 	EnemyActor.reset_performance_diagnostics()
-	near_enemy._retarget(1.0 / 60.0)
-	assert(int(EnemyActor.performance_diagnostics().retarget_full_scans) == 1, "near-field AI was incorrectly throttled")
+	for step in range(60):
+		near_enemy._retarget(1.0 / 60.0)
+	assert(int(EnemyActor.performance_diagnostics().retarget_full_scans) <= 7, "near-field target decisions ran at render rate: %s" % EnemyActor.performance_diagnostics())
+	print("MONSTER_CROWD_STAGE retarget %s" % EnemyActor.performance_diagnostics())
+
+	# Model a dense tomb room: 96 pursuing actors remain smooth at physics rate,
+	# but collision steering is recomputed at 10 Hz and re-used between ticks.
+	player.global_position = Vector2(108, 54)
+	for enemy: EnemyActor in enemies:
+		enemy.target = player
+		enemy._crowd_steering_timer = EnemyActor.CROWD_STEERING_INTERVAL_SECONDS * float(posmod(enemy.get_instance_id(), 7)) / 7.0
+	EnemyActor.reset_performance_diagnostics()
+	for step in range(60):
+		for enemy: EnemyActor in enemies:
+			enemy._crowd_separation_for_motion(1.0 / 60.0)
+	var dense_metrics := EnemyActor.performance_diagnostics()
+	assert(int(dense_metrics.crowd_steering_evaluations) <= ENEMY_COUNT * 12, "dense steering still ran per actor per frame: %s" % dense_metrics)
+	assert(int(dense_metrics.crowd_grid_actor_scans) <= ENEMY_COUNT * 22, "dense crowd grid still rebuilt every physics frame: %s" % dense_metrics)
+	print("MONSTER_CROWD_STAGE dense %s" % dense_metrics)
+
+	# Actors well outside both camera and aggro working sets only wake four times
+	# per second. Status/threat/alternate-target actors must never take this path.
+	player.global_position = Vector2(50000, 50000)
+	var background_enemy: EnemyActor = enemies[1]
+	background_enemy.target = player
+	assert(background_enemy._can_use_background_ai(), "far idle actor did not enter background AI tier")
+	background_enemy._add_threat(player, 10.0)
+	assert(not background_enemy._can_use_background_ai(), "threatened actor was incorrectly background-throttled")
+	background_enemy._threat_table.clear()
+	print("MONSTER_CROWD_STAGE background")
 
 	# Simulate a leveling pass that kills one quarter of the population, then a
 	# respawn pass. The next frame must rebuild once without retaining dead actors.
