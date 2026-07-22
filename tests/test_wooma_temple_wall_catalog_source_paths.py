@@ -11,7 +11,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_SOURCE = "outputs/wooma_temple_regenerated"
-OLD_CHINESE_ROOT = "我的刷子游戏"
+OLD_CHINESE_ROOT = "\u6211\u7684\u5237\u5b50\u6e38\u620f"
 
 
 def load_module(name: str, relative_path: str):
