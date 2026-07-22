@@ -17,6 +17,7 @@ const RESOURCE_RESIDENCY_CHECK_SECONDS := 0.12
 const MAX_CONCURRENT_PROFILE_LOADS := 2
 const ACTOR_Y_SORT_RENDER_DOMAIN := "actor_y_sort"
 const ACTOR_Y_SORT_RENDER_CONTRACT := "monster.actor_y_sort.v1"
+const OVERHEAD_ANCHOR_CONTRACT := "monster.overhead_anchor.v2"
 
 static var _boss_art: Dictionary = {}
 static var _complete_art: Dictionary = {}
@@ -128,10 +129,7 @@ func _process(delta: float) -> void:
 	else:
 		current_state = "idle"
 	var visual_facing: Vector2 = actor.movement_facing if current_state == "walk" else actor.facing
-	var previous_direction := current_direction
 	current_direction = _direction_row(visual_facing)
-	if current_direction != previous_direction:
-		actor.refresh_name_label_position()
 	if current_state != _last_state:
 		_elapsed = 0.0
 		_last_state = current_state
@@ -167,7 +165,7 @@ func _activate_resources() -> void:
 	health_bar_top_by_direction = resources.get("health_bar_top_by_direction", [])
 	sprite.region_rect = Rect2(Vector2.ZERO, frame_size)
 	sprite.position = -Vector2(foot_anchor + actor_ground_offset)
-	_fixed_health_bar_y = position.y + sprite.position.y - HEALTH_BAR_FRAME_MARGIN
+	_fixed_health_bar_y = _stable_overhead_anchor_y()
 	visible = not actor._burrowed
 	actor.refresh_name_label_position()
 	_last_state = ""
@@ -264,10 +262,20 @@ func ground_contact_position(fallback: Vector2) -> Vector2:
 func health_bar_anchor_y(fallback_y: float) -> float:
 	if not uses_final_art():
 		return fallback_y
-	if health_bar_top_by_direction.size() == 8:
-		var direction := clampi(current_direction, 0, health_bar_top_by_direction.size() - 1)
-		return position.y + sprite.position.y + float(health_bar_top_by_direction[direction]) - HEALTH_BAR_FRAME_MARGIN
 	return _fixed_health_bar_y
+
+
+func _stable_overhead_anchor_y() -> float:
+	# The authored values describe the visible top in each direction. Using the
+	# current row makes the name and health bar jump whenever an actor turns.
+	# Select the highest safe top once for this monster profile instead: body
+	# sizes remain distinct, while direction/action/frame changes cannot move UI.
+	var stable_top := 0.0
+	if health_bar_top_by_direction.size() == 8:
+		stable_top = float(health_bar_top_by_direction[0])
+		for top: Variant in health_bar_top_by_direction:
+			stable_top = minf(stable_top, float(top))
+	return position.y + sprite.position.y + stable_top - HEALTH_BAR_FRAME_MARGIN
 
 
 func _direction_row(direction: Vector2) -> int:
