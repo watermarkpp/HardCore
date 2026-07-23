@@ -1,6 +1,8 @@
 extends Node
 
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
+const EquipmentTestLoadoutCatalogScript = preload("res://scripts/equipment_test_loadout_catalog.gd")
+const TestCharacterSkillProfilesScript = preload("res://scripts/test_character_skill_profiles.gd")
 
 signal profile_changed
 signal inventory_changed
@@ -20,6 +22,7 @@ const PROFILE_INDEX_PATH := "user://character_profiles.json"
 const PROFILE_DIRECTORY := "user://characters"
 const AUTOSAVE_INTERVAL := 30.0
 const WARRIOR_RUNTIME_CONTRACT_ID := "gameplay.warrior.skill_runtime.v2"
+const TEST_CHARACTER_ROSTER_CONTRACT_ID := "test.character.roster.full_equipment_skills.v1"
 const EQUIPMENT_SLOTS: Array[String] = ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指"]
 const VERIFIED_EXPERIENCE_1_TO_22 := {
 	1: 100, 2: 200, 3: 300, 4: 400, 5: 600, 6: 900, 7: 1200, 8: 1700, 9: 2500,
@@ -73,6 +76,8 @@ func _process(delta: float) -> void:
 func _ready() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(PROFILE_DIRECTORY))
 	_migrate_single_save_to_profile()
+	if OS.is_debug_build() and DisplayServer.get_name() != "headless":
+		ensure_equipment_skill_test_roster()
 	reset_progress(false)
 	recalculate_stats()
 
@@ -1071,6 +1076,113 @@ func list_characters() -> Array[Dictionary]:
 			result.append(entry.duplicate(true))
 	result.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a.get("updated_at", 0)) > int(b.get("updated_at", 0)))
 	return result
+
+
+func ensure_equipment_skill_test_roster() -> Dictionary:
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(profile_directory))
+	var index := _read_json(profile_index_path)
+	var profiles: Array = index.get("profiles", [])
+	var existing_index_ids := {}
+	for profile_value: Variant in profiles:
+		if profile_value is Dictionary:
+			existing_index_ids[str(profile_value.get("id", ""))] = true
+	var created := 0
+	var indexed := 0
+	var now := int(Time.get_unix_time_from_system())
+	for loadout_value: Variant in EquipmentTestLoadoutCatalogScript.loadouts():
+		if not loadout_value is Dictionary:
+			continue
+		var loadout: Dictionary = loadout_value
+		var skill_tier := _skill_tier_for_equipment_tier(str(loadout.get("tierId", "")))
+		var skill_profile := TestCharacterSkillProfilesScript.profile_for_character(
+			str(loadout.get("profession", "")),
+			skill_tier
+		)
+		if skill_profile.is_empty():
+			continue
+		var profile_id := str(skill_profile.get("character_profile_id", ""))
+		if profile_id.is_empty():
+			continue
+		var character_level := maxi(
+			int(loadout.get("level", 1)),
+			int(skill_profile.get("minimum_character_level", 1))
+		)
+		var profile_entry := {
+			"id": profile_id,
+			"name": str(loadout.get("characterName", profile_id)),
+			"profession": str(loadout.get("profession", "")),
+			"gender": str(loadout.get("gender", "男")),
+			"level": character_level,
+			"updated_at": now,
+		}
+		if not FileAccess.file_exists(_profile_path(profile_id)):
+			var payload := _test_character_payload(loadout, skill_profile, profile_entry, now)
+			if _write_json_atomic(_profile_path(profile_id), payload):
+				created += 1
+		if not existing_index_ids.has(profile_id) and FileAccess.file_exists(_profile_path(profile_id)):
+			profiles.append(profile_entry)
+			existing_index_ids[profile_id] = true
+			indexed += 1
+	if indexed > 0:
+		_write_json_atomic(profile_index_path, {"version": 1, "profiles": profiles})
+	return {
+		"contract_id": TEST_CHARACTER_ROSTER_CONTRACT_ID,
+		"created": created,
+		"indexed": indexed,
+		"total": EquipmentTestLoadoutCatalogScript.loadouts().size(),
+	}
+
+
+func _skill_tier_for_equipment_tier(equipment_tier: String) -> String:
+	return "woma" if equipment_tier == "wooma" else equipment_tier
+
+
+func _test_character_payload(loadout: Dictionary, skill_profile: Dictionary, profile_entry: Dictionary, now: int) -> Dictionary:
+	var equipment_data := {}
+	var equipment_names := EquipmentTestLoadoutCatalogScript.equipment_names(loadout)
+	for slot: String in EQUIPMENT_SLOTS:
+		var item_name := str(equipment_names.get(slot, ""))
+		equipment_data[slot] = _developer_item(
+			item_name,
+			"%s.%s" % [str(skill_profile.get("character_profile_id", "")), slot]
+		)
+	var runtime_defaults: Dictionary = skill_profile.get("runtime_defaults", {})
+	var warrior_state := _default_warrior_runtime_state()
+	if str(runtime_defaults.get("contract_id", "")) == WARRIOR_RUNTIME_CONTRACT_ID:
+		warrior_state = _normalized_warrior_runtime_state(runtime_defaults)
+	return {
+		"save_version": SAVE_VERSION,
+		"profile_id": str(profile_entry.get("id", "")),
+		"character_name": str(profile_entry.get("name", "")),
+		"updated_at": now,
+		"level": int(profile_entry.get("level", 1)),
+		"profession": str(profile_entry.get("profession", "")),
+		"gender": str(profile_entry.get("gender", "男")),
+		"later_content_enabled": false,
+		"game_mode_id": "classic_176",
+		"experience": 0,
+		"gold": 1000000,
+		"inventory": [
+			{"name": "强效太阳水", "count": 99},
+			{"name": "魔法药(中量)", "count": 99},
+		],
+		"warehouse_inventory": [],
+		"equipment": equipment_data,
+		"learned_skills": skill_profile.get("learned_skills", {}).duplicate(true),
+		"quick_slots": skill_profile.get("quick_slots", []).duplicate(),
+		"warrior_runtime_state": warrior_state,
+		"test_runtime_defaults": runtime_defaults.duplicate(true),
+		"test_contracts": {
+			"roster": TEST_CHARACTER_ROSTER_CONTRACT_ID,
+			"equipment": str(loadout.get("loadoutId", "")),
+			"skills": str(skill_profile.get("template_id", "")),
+		},
+		"quest_states": {},
+		"content_packages": ContentLayers.enabled_package_ids(),
+		"content_schema_version": 1,
+		"map_id": 4,
+		"position": [0.0, 0.0],
+	}
 
 
 func ensure_developer_test_character()->void:
