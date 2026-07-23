@@ -149,6 +149,8 @@ func _build_equipment_panel() -> void:
 	panel.add_child(_section_title("人物装备", 390))
 	character_preview = PreviewScript.new()
 	character_preview.name = "CharacterPreview"
+	character_preview.center_on_opaque_bounds = true
+	character_preview.set_meta("horizontal_alignment_contract", PreviewScript.OPAQUE_CENTER_CONTRACT_ID)
 	# Reserve the lower half of the equipment panel for the client paper-doll;
 	# the previous top placement left a visibly unused block under the figure.
 	character_preview.position = Vector2(80, 139)
