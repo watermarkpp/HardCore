@@ -74,7 +74,7 @@ func _run() -> void:
 			- MonsterVisual.HEALTH_BAR_BODY_GAP
 		)
 		assert(is_equal_approx(enemy.health_bar_anchor_y(), expected_bar_y), "%s 血条未固定在完整动画帧单元上方" % monster_name)
-		assert(is_equal_approx(enemy.ground_indicator_center().y, visual.position.y), "%s 脚底光圈偏离统一地面原点" % monster_name)
+		assert(enemy.ground_indicator_center().is_equal_approx(visual.position + visual.ground_contact_offset()), "%s 脚底光圈未采用真实素材落地点" % monster_name)
 		enemy.facing = Vector2.RIGHT
 		enemy.movement_facing = Vector2.RIGHT
 		enemy.velocity = Vector2.RIGHT * 50.0
