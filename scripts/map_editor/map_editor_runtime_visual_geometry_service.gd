@@ -6,6 +6,7 @@ const EDITOR_LAYOUT_CONTRACT_ID := "map_editor_authoritative_layout_v1"
 const OCCLUSION_SORT_CONTRACT_ID := "map_actor_occlusion_sort_v5"
 const RENDER_DOMAIN_STATIC_BACKGROUND := "static_background"
 const RENDER_DOMAIN_ACTOR_Y_SORT := "actor_y_sort"
+const WALL_PART_SORT_BASELINE_TILE_OFFSET := Vector2(0.5, 0.5)
 const MATERIAL_LAYER_NAMES := [
 	"terrain_base", "terrain_front", "object_base", "object_front",
 ]
@@ -336,6 +337,15 @@ static func instance_draw_commands(
 			var sort_tile := instance_tile + Vector2i(
 				int(sort_offset_raw[0]), int(sort_offset_raw[1])
 			) + adaptive
+			# Wall part offsets identify occupied cells, not world-space feet.
+			# Actors stand at cell centres.  Sorting a foreground part at the
+			# integer cell corner makes the open cell immediately behind it
+			# share the exact same world Y, so scene-tree insertion order can
+			# expose an actor through the wall.  Keep the authored per-part
+			# split, but place its sort cut at the centre of that occupied cell.
+			var part_sort_baseline := (
+				Vector2(sort_tile) + WALL_PART_SORT_BASELINE_TILE_OFFSET
+			)
 			var anchor: Array = part.get(
 				"anchor", asset.get("anchor_px", [0, 0])
 			)
@@ -354,8 +364,9 @@ static func instance_draw_commands(
 					"anchor": anchor,
 					"sort_tile": sort_tile,
 					# Split wall parts retain their authored front/base contract.
-					# Their part offset is already the explicit sort baseline.
-					"sort_baseline_tile": Vector2(sort_tile),
+					# Their part offset selects the occupied cell; the actual
+					# actor crossing baseline is that cell's physical centre.
+					"sort_baseline_tile": part_sort_baseline,
 					"sort_baseline_offset_px": Vector2.ZERO,
 					"layer_index": layer_index,
 					"image_pass": int(image_pass.pass),

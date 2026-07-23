@@ -46,7 +46,10 @@ func _run() -> void:
 		assert(not command.is_empty(), "%s actor-sorted occluder missing" % map_key)
 		var wall_part := str(command.asset.get("asset_type", "")) == "wall_module"
 		var expected_tile := (
-			Vector2(command.sort_tile)
+			(
+				Vector2(command.sort_tile)
+				+ VisualGeometry.WALL_PART_SORT_BASELINE_TILE_OFFSET
+			)
 			if wall_part
 			else VisualGeometry.instance_sort_baseline_tile(
 				command.instance, command.asset
