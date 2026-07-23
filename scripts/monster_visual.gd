@@ -21,7 +21,7 @@ const MAX_CONCURRENT_PROFILE_LOADS := 2
 const ACTOR_Y_SORT_RENDER_DOMAIN := "actor_y_sort"
 const ACTOR_Y_SORT_RENDER_CONTRACT := "monster.actor_y_sort.v1"
 const OVERHEAD_ANCHOR_CONTRACT := "monster.overhead_anchor.v4"
-const GROUND_CONTACT_CONTRACT := "monster.ground_contact.v3"
+const GROUND_CONTACT_CONTRACT := "monster.ground_contact.v4"
 
 static var _boss_art: Dictionary = {}
 static var _complete_art: Dictionary = {}
