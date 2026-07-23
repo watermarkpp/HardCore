@@ -167,9 +167,14 @@ func _activate_resources() -> void:
 	sprite.position = -Vector2(foot_anchor + actor_ground_offset)
 	_fixed_health_bar_y = _stable_overhead_anchor_y()
 	visible = not actor._burrowed
-	actor.refresh_name_label_position()
 	_last_state = ""
 	_apply_render_state(active_resources["idle"], Rect2(Vector2.ZERO, frame_size))
+	# A cold runtime profile reaches this method after the EnemyActor has already
+	# created its overhead. Apply the real texture before asking the actor for its
+	# anchor: health_bar_anchor_y() deliberately uses the procedural fallback
+	# while no final texture is resident. Refreshing one line earlier therefore
+	# left every asynchronously activated monster permanently at that fallback.
+	actor.refresh_name_label_position()
 
 
 func _release_resources() -> void:
