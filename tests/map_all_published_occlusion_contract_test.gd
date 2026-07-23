@@ -92,7 +92,7 @@ func _assert_synthetic_command_families() -> void:
 	var base := {
 		"instance_id": "synthetic",
 		"tile": [2, 3],
-		"footprint_tiles": [2, 2],
+		"footprint_tiles": [4, 6],
 		"occlusion": true,
 	}
 	var regular := VisualGeometry.instance_draw_commands(
@@ -101,6 +101,12 @@ func _assert_synthetic_command_families() -> void:
 	)
 	assert(regular.size() == 1)
 	assert(regular[0].render_domain == VisualGeometry.RENDER_DOMAIN_ACTOR_Y_SORT)
+	assert(Vector2(regular[0].sort_baseline_tile).is_equal_approx(
+		VisualGeometry.instance_foot_tile(base, regular[0].asset)
+	), "ordinary prop did not default to its independent visual foot")
+	assert(not Vector2(regular[0].sort_baseline_tile).is_equal_approx(
+		Vector2(regular[0].sort_tile)
+	), "ordinary prop reused the build-order far corner")
 	var unsplit := VisualGeometry.instance_draw_commands(
 		base,
 		{"asset_type": "wall_module", "occlusion": false, "image": "wall.png"}
@@ -131,6 +137,37 @@ func _assert_synthetic_command_families() -> void:
 	assert(split.size() == 2)
 	assert(split[0].render_domain == VisualGeometry.RENDER_DOMAIN_STATIC_BACKGROUND)
 	assert(split[1].render_domain == VisualGeometry.RENDER_DOMAIN_ACTOR_Y_SORT)
+	assert(Vector2(split[1].sort_baseline_tile).is_equal_approx(
+		Vector2(split[1].sort_tile)
+	), "split wall foreground lost its authored part baseline")
+	var segmented_prop := VisualGeometry.instance_draw_commands(base, {
+		"asset_type": "large_prop",
+		"occlusion": true,
+		"anchor_px": [96, 160],
+		"occlusion_base_image": "house_base.png",
+		"occlusion_segments": [
+			{
+				"image": "house_front_left.png",
+				"sort_baseline_tile_offset": [-1.5, 0.0],
+				"draw_order_index": 0,
+			},
+			{
+				"image": "house_front_right.png",
+				"sort_baseline_tile_offset": [1.5, 0.0],
+				"draw_order_index": 1,
+			},
+		],
+	})
+	assert(segmented_prop.size() == 3)
+	assert(segmented_prop[0].render_domain
+		== VisualGeometry.RENDER_DOMAIN_STATIC_BACKGROUND)
+	assert(segmented_prop[1].render_domain
+		== VisualGeometry.RENDER_DOMAIN_ACTOR_Y_SORT)
+	assert(segmented_prop[2].render_domain
+		== VisualGeometry.RENDER_DOMAIN_ACTOR_Y_SORT)
+	assert(not Vector2(segmented_prop[1].sort_baseline_tile).is_equal_approx(
+		Vector2(segmented_prop[2].sort_baseline_tile)
+	), "wide prop occlusion segments collapsed onto one baseline")
 
 
 func _assert_legacy_profile_coverage() -> void:

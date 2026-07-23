@@ -129,13 +129,14 @@ func _run() -> void:
 		command, design_size
 	)
 	assert(runtime_sprite.get_parent().global_position.is_equal_approx(sort_world),
-		"house actor-sort wrapper is not at authored front vertex")
-	assert(sort_world.is_equal_approx(MapEditorCoordinate.tile_to_world(
-		Vector2(command.sort_tile), design_size
-	)), "house sort tile was incorrectly interpreted as a cell centre")
-	assert(not sort_world.is_equal_approx(MapEditorCoordinate.cell_center_to_world(
-		Vector2(command.sort_tile), design_size
-	)), "house retained the one-row mobile occlusion offset")
+		"house actor-sort wrapper is not at authored visual foot")
+	assert(Vector2(command.sort_baseline_tile).is_equal_approx(foot_tile),
+		"house occlusion baseline reused build/collision geometry")
+	assert(sort_world.is_equal_approx(runtime_geometry.center),
+		"house occlusion baseline diverged from its rendered visual foot")
+	assert(not Vector2(command.sort_baseline_tile).is_equal_approx(
+		Vector2(command.sort_tile)
+	), "house occlusion baseline retained the footprint far corner")
 	var blocked_center := CollisionGeometry.cell_center_world(
 		HOUSE_BLOCKED_CELL, design_size
 	)

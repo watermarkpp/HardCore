@@ -1,9 +1,9 @@
 class_name MapEditorRuntimeVisualGeometryService
 extends RefCounted
 
-const VISUAL_GEOMETRY_CONTRACT_ID := "map_editor_runtime_visual_geometry_v3"
+const VISUAL_GEOMETRY_CONTRACT_ID := "map_editor_runtime_visual_geometry_v5"
 const EDITOR_LAYOUT_CONTRACT_ID := "map_editor_authoritative_layout_v1"
-const OCCLUSION_SORT_CONTRACT_ID := "map_actor_occlusion_sort_v4"
+const OCCLUSION_SORT_CONTRACT_ID := "map_actor_occlusion_sort_v5"
 const RENDER_DOMAIN_STATIC_BACKGROUND := "static_background"
 const RENDER_DOMAIN_ACTOR_Y_SORT := "actor_y_sort"
 const MATERIAL_LAYER_NAMES := [
@@ -30,6 +30,45 @@ static func instance_foot_tile(
 		float(tile[0]) + float(footprint[0]) * 0.5,
 		float(tile[1]) + float(footprint[1]) * 0.5
 	)
+
+
+static func instance_sort_baseline_tile(
+	instance: Dictionary,
+	asset: Dictionary
+) -> Vector2:
+	# Occlusion depth is an authored visual contract. It must not be inferred
+	# from collision cells, sprite anchor pixels, or the far corner used to
+	# order build commands. Ordinary props default to the same world foot that
+	# anchors their runtime visual, while an author may supply either an
+	# absolute per-instance baseline or a reusable tile offset.
+	var explicit: Array = instance.get("sort_baseline_tile", [])
+	if explicit.size() == 2:
+		return Vector2(float(explicit[0]), float(explicit[1]))
+	var result := instance_foot_tile(instance, asset)
+	var raw_offset: Array = instance.get(
+		"sort_baseline_tile_offset",
+		asset.get("sort_baseline_tile_offset", [0, 0])
+	)
+	if raw_offset.size() == 2:
+		result += Vector2(float(raw_offset[0]), float(raw_offset[1]))
+	return result
+
+
+static func instance_sort_baseline_world_offset(
+	instance: Dictionary,
+	asset: Dictionary
+) -> Vector2:
+	# offset_px moves the authored visual foot in world pixels, so the default
+	# sort baseline follows it. A dedicated override keeps that decision
+	# separate from sprite geometry when an asset needs a different cut line.
+	var visual_offset: Array = instance.get("offset_px", [0, 0])
+	var raw_offset: Array = instance.get(
+		"sort_baseline_offset_px",
+		asset.get("sort_baseline_offset_px", visual_offset)
+	)
+	if raw_offset.size() != 2:
+		return Vector2.ZERO
+	return Vector2(float(raw_offset[0]), float(raw_offset[1]))
 
 
 static func resolved_anchor_px(
@@ -211,6 +250,77 @@ static func instance_draw_commands(
 		str(asset.get("asset_type", "")) == "wall_module"
 		and not render_parts.is_empty()
 	)
+	var occlusion_segments: Array = instance.get(
+		"occlusion_segments", asset.get("occlusion_segments", [])
+	)
+	if (
+		str(asset.get("asset_type", "")) != "wall_module"
+		and not occlusion_segments.is_empty()
+	):
+		var base_image := str(asset.get("occlusion_base_image", ""))
+		if not base_image.is_empty():
+			result.append({
+				"instance": instance,
+				"asset": asset,
+				"image_path": base_image,
+				"anchor": asset.get("anchor_px", [0, 0]),
+				"sort_tile": instance_tile,
+				"sort_baseline_tile": instance_sort_baseline_tile(
+					instance, asset
+				),
+				"sort_baseline_offset_px": instance_sort_baseline_world_offset(
+					instance, asset
+				),
+				"layer_index": layer_index,
+				"image_pass": 1,
+				"render_domain": RENDER_DOMAIN_STATIC_BACKGROUND,
+				"occlusion_contract_id": OCCLUSION_SORT_CONTRACT_ID,
+				"part_order": -1,
+				"sequence": sequence,
+			})
+		for segment_index in occlusion_segments.size():
+			var segment: Dictionary = occlusion_segments[segment_index]
+			var segment_image := str(segment.get("image", ""))
+			if segment_image.is_empty():
+				continue
+			var segment_baseline := instance_sort_baseline_tile(instance, asset)
+			var raw_tile_offset: Array = segment.get(
+				"sort_baseline_tile_offset", [0, 0]
+			)
+			if raw_tile_offset.size() == 2:
+				segment_baseline += Vector2(
+					float(raw_tile_offset[0]), float(raw_tile_offset[1])
+				)
+			var segment_world_offset := instance_sort_baseline_world_offset(
+				instance, asset
+			)
+			var raw_pixel_offset: Array = segment.get(
+				"sort_baseline_offset_px", [0, 0]
+			)
+			if raw_pixel_offset.size() == 2:
+				segment_world_offset += Vector2(
+					float(raw_pixel_offset[0]), float(raw_pixel_offset[1])
+				)
+			result.append({
+				"instance": instance,
+				"asset": asset,
+				"image_path": segment_image,
+				"anchor": segment.get(
+					"anchor", asset.get("anchor_px", [0, 0])
+				),
+				"sort_tile": instance_tile,
+				"sort_baseline_tile": segment_baseline,
+				"sort_baseline_offset_px": segment_world_offset,
+				"layer_index": layer_index,
+				"image_pass": 2,
+				"render_domain": RENDER_DOMAIN_ACTOR_Y_SORT,
+				"occlusion_contract_id": OCCLUSION_SORT_CONTRACT_ID,
+				"part_order": int(segment.get(
+					"draw_order_index", segment_index
+				)),
+				"sequence": sequence + segment_index,
+			})
+		return result
 	var has_split_foreground := false
 	for part: Dictionary in render_parts:
 		if not str(part.get("front_image", "")).is_empty():
@@ -243,6 +353,10 @@ static func instance_draw_commands(
 					"image_path": image_path,
 					"anchor": anchor,
 					"sort_tile": sort_tile,
+					# Split wall parts retain their authored front/base contract.
+					# Their part offset is already the explicit sort baseline.
+					"sort_baseline_tile": Vector2(sort_tile),
+					"sort_baseline_offset_px": Vector2.ZERO,
 					"layer_index": layer_index,
 					"image_pass": int(image_pass.pass),
 					"render_domain": render_domain_for_pass(
@@ -266,6 +380,10 @@ static func instance_draw_commands(
 		"image_path": str(asset.get("image", "")),
 		"anchor": [],
 		"sort_tile": sort_tile,
+		"sort_baseline_tile": instance_sort_baseline_tile(instance, asset),
+		"sort_baseline_offset_px": instance_sort_baseline_world_offset(
+			instance, asset
+		),
 		"layer_index": layer_index,
 		"image_pass": 1,
 		"render_domain": render_domain_for_pass(
@@ -359,12 +477,17 @@ static func command_actor_sort_world(
 	command: Dictionary,
 	design_size: Vector2i
 ) -> Vector2:
-	var sort_tile: Vector2i = command.get("sort_tile", Vector2i.ZERO)
-	# sort_tile already denotes the authored front vertex of an occluder.  It is
-	# not a cell address.  Adding the cell-centre half offset moved the runtime
-	# threshold down by one 16 px isometric row; actors then hit the correctly
-	# authored collision before they could ever sort in front of a house/tree.
-	return MapEditorCoordinate.tile_to_world(Vector2(sort_tile), design_size)
+	var raw_baseline: Variant = command.get(
+		"sort_baseline_tile", command.get("sort_tile", Vector2i.ZERO)
+	)
+	var baseline_tile := Vector2(raw_baseline)
+	var raw_offset: Variant = command.get(
+		"sort_baseline_offset_px", Vector2.ZERO
+	)
+	return (
+		MapEditorCoordinate.tile_to_world(baseline_tile, design_size)
+		+ Vector2(raw_offset)
+	)
 
 
 static func draw_command_less(a: Dictionary, b: Dictionary) -> bool:
@@ -421,6 +544,12 @@ static func draw_command_payload(instances: Array) -> Array[Dictionary]:
 	var payload: Array[Dictionary] = []
 	for command: Dictionary in sorted_draw_commands(instances):
 		var sort_tile: Vector2i = command.sort_tile
+		var sort_baseline_tile := Vector2(command.get(
+			"sort_baseline_tile", sort_tile
+		))
+		var sort_baseline_offset_px := Vector2(command.get(
+			"sort_baseline_offset_px", Vector2.ZERO
+		))
 		payload.append({
 			"instance_id": str(command.instance.get("instance_id", "")),
 			"asset_id": str(command.instance.get("asset_id", "")),
@@ -428,6 +557,12 @@ static func draw_command_payload(instances: Array) -> Array[Dictionary]:
 			"image_path": str(command.image_path),
 			"anchor": command.get("anchor", []).duplicate(),
 			"sort_tile": [sort_tile.x, sort_tile.y],
+			"sort_baseline_tile": [
+				sort_baseline_tile.x, sort_baseline_tile.y,
+			],
+			"sort_baseline_offset_px": [
+				sort_baseline_offset_px.x, sort_baseline_offset_px.y,
+			],
 			"layer_index": int(command.layer_index),
 			"image_pass": int(command.image_pass),
 			"render_domain": str(command.get(
