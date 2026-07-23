@@ -113,7 +113,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	background.set_focus_position(player.global_position)
-	_update_world_camera_constraint()
+	_update_world_camera_constraint(delta)
 	_update_portal_arrival_guard()
 	_enforce_bich_safe_zone()
 	_update_boss_world_mechanics(delta)
@@ -135,7 +135,7 @@ func _process(delta: float) -> void:
 			_use_quick_slot(index)
 
 
-func _update_world_camera_constraint() -> void:
+func _update_world_camera_constraint(delta := 1.0 / 60.0) -> void:
 	if not is_instance_valid(_world_camera) or not is_instance_valid(player):
 		return
 	var base_zoom := Vector2.ONE * ArtSpec.CAMERA_ZOOM
@@ -151,24 +151,26 @@ func _update_world_camera_constraint() -> void:
 		return
 	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var viewport_half := get_viewport().get_visible_rect().size * 0.5
-	var result := MapDiamondCameraConstraintScript.constrain_center(
+	var target := MapDiamondCameraConstraintScript.resolve_soft_follow(
 		design_size, viewport_half, base_zoom, player.global_position
 	)
-	var resolved_zoom := base_zoom
-	if not bool(result.get("ok", false)):
-		var minimum_zoom := float(result.get("minimum_uniform_zoom", INF))
-		if minimum_zoom > 0.0 and minimum_zoom < INF:
-			var zoom_value := maxf(ArtSpec.CAMERA_ZOOM, minimum_zoom + 0.001)
-			resolved_zoom = Vector2.ONE * zoom_value
-			result = MapDiamondCameraConstraintScript.constrain_center(
-				design_size, viewport_half, resolved_zoom,
-				player.global_position
-			)
+	var target_zoom: Vector2 = target.get("recommended_zoom", base_zoom)
+	var zoom_alpha := 1.0 - exp(-6.0 * maxf(0.0, delta))
+	var resolved_zoom := _world_camera.zoom.lerp(target_zoom, zoom_alpha)
+	resolved_zoom.x = clampf(
+		resolved_zoom.x, ArtSpec.CAMERA_ZOOM,
+		MapDiamondCameraConstraintScript.DEFAULT_MAXIMUM_ZOOM
+	)
+	resolved_zoom.y = resolved_zoom.x
+	# Re-resolve the position at the zoom actually displayed this frame. This
+	# keeps the player inside the +/-14% screen band even while zoom is easing.
+	var result := MapDiamondCameraConstraintScript.resolve_soft_follow(
+		design_size, viewport_half, resolved_zoom, player.global_position,
+		resolved_zoom.x
+	)
 	_world_camera.zoom = resolved_zoom
-	_world_camera.global_position = (
-		Vector2(result.get("center", player.global_position))
-		if bool(result.get("ok", false))
-		else player.global_position
+	_world_camera.global_position = Vector2(
+		result.get("center", player.global_position)
 	)
 
 
