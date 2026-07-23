@@ -21,7 +21,7 @@ const MAX_CONCURRENT_PROFILE_LOADS := 2
 const ACTOR_Y_SORT_RENDER_DOMAIN := "actor_y_sort"
 const ACTOR_Y_SORT_RENDER_CONTRACT := "monster.actor_y_sort.v1"
 const OVERHEAD_ANCHOR_CONTRACT := "monster.overhead_anchor.v4"
-const GROUND_CONTACT_CONTRACT := "monster.ground_contact.v2"
+const GROUND_CONTACT_CONTRACT := "monster.ground_contact.v3"
 
 static var _boss_art: Dictionary = {}
 static var _complete_art: Dictionary = {}
@@ -54,7 +54,7 @@ var frame_size := ArtSpec.MONSTER_FRAME
 var foot_anchor := ArtSpec.MONSTER_FOOT_ANCHOR
 var actor_ground_offset := Vector2i.ZERO
 var health_bar_top_by_direction: Array = []
-var ground_contact_offsets: Dictionary = {}
+var ground_contact_profile: Dictionary = {}
 var _has_authored_client_art := false
 var _elapsed := 0.0
 var _last_state := ""
@@ -66,6 +66,7 @@ var _fixed_health_bar_y := 0.0
 var _render_state_update_count := 0
 var _resource_residency_timer := 0.0
 var _last_ground_contact_position := Vector2.INF
+var _last_ground_indicator_radii := Vector2.INF
 
 
 static func configure_actor_y_sort_item(item: CanvasItem, role: String) -> void:
@@ -170,7 +171,7 @@ func _activate_resources() -> void:
 	foot_anchor = resources.get("foot_anchor", ArtSpec.MONSTER_FOOT_ANCHOR)
 	actor_ground_offset = resources.get("actor_ground_offset", Vector2i.ZERO)
 	health_bar_top_by_direction = resources.get("health_bar_top_by_direction", [])
-	ground_contact_offsets = _ground_contact_offsets_for_actor()
+	ground_contact_profile = _ground_contact_profile_for_actor()
 	sprite.region_rect = Rect2(Vector2.ZERO, frame_size)
 	sprite.position = -Vector2(foot_anchor + actor_ground_offset)
 	_fixed_health_bar_y = _stable_overhead_anchor_y()
@@ -192,7 +193,7 @@ func _release_resources() -> void:
 	visible = false
 	sprite.texture = null
 	active_resources = {}
-	ground_contact_offsets = {}
+	ground_contact_profile = {}
 	_refresh_actor_ground_indicator()
 
 
@@ -268,28 +269,42 @@ func _complete_art_manifest() -> Dictionary:
 
 
 func ground_contact_offset() -> Vector2:
-	var action_offsets: Variant = ground_contact_offsets.get(current_state, [])
-	if not action_offsets is Array or action_offsets.is_empty():
-		action_offsets = ground_contact_offsets.get("idle", [])
-	if not action_offsets is Array or action_offsets.is_empty():
-		return Vector2.ZERO
-	var direction := clampi(current_direction, 0, action_offsets.size() - 1)
-	var values: Variant = action_offsets[direction]
+	var values: Variant = ground_contact_profile.get("ringCenterOffset", [])
 	if not values is Array or values.size() < 2:
 		return Vector2.ZERO
 	return Vector2(float(values[0]), float(values[1]))
 
 
 func ground_contact_position(fallback: Vector2) -> Vector2:
-	if not uses_final_art() or ground_contact_offsets.is_empty():
+	if not uses_final_art() or ground_contact_profile.is_empty():
 		return fallback
 	return position + ground_contact_offset()
 
 
-func _ground_contact_offsets_for_actor() -> Dictionary:
+func ground_indicator_radii(fallback: Vector2) -> Vector2:
+	if not uses_final_art() or ground_contact_profile.is_empty():
+		return fallback
+	var values: Variant = ground_contact_profile.get("ringEllipseRadii", [])
+	if not values is Array or values.size() < 2:
+		return fallback
+	return Vector2(float(values[0]), float(values[1]))
+
+
+func visual_foot_offset() -> Vector2:
+	var values: Variant = ground_contact_profile.get("visualFootOffset", [])
+	if not values is Array or values.size() < 2:
+		return Vector2.ZERO
+	return Vector2(float(values[0]), float(values[1]))
+
+
+func ground_projection_strategy() -> String:
+	return str(ground_contact_profile.get("projectionStrategy", "grounded"))
+
+
+func _ground_contact_profile_for_actor() -> Dictionary:
 	var manifest := _ground_contact_manifest()
 	var monster_key := str(actor.monster_id) if is_instance_valid(actor) else ""
-	if is_instance_valid(actor) and not manifest.get("profileByMonsterId", {}).has(monster_key):
+	if is_instance_valid(actor) and not manifest.get("entriesByMonsterId", {}).has(monster_key):
 		var legacy_ids: Dictionary = manifest.get("legacyNameToMonsterId", {})
 		for legacy_name: String in [
 			str(actor.monster_data.get("name", "")),
@@ -299,17 +314,8 @@ func _ground_contact_offsets_for_actor() -> Dictionary:
 			if legacy_ids.has(legacy_name):
 				monster_key = str(int(legacy_ids[legacy_name]))
 				break
-	var profile_id := str(
-		manifest.get("profileByMonsterId", {}).get(
-			monster_key,
-			"",
-		)
-	)
-	var profile: Variant = manifest.get("profiles", {}).get(profile_id, {})
-	if profile is Dictionary:
-		var offsets: Variant = profile.get("actorLocalOffsetsByActionDirection", {})
-		return offsets if offsets is Dictionary else {}
-	return {}
+	var profile: Variant = manifest.get("entriesByMonsterId", {}).get(monster_key, {})
+	return profile if profile is Dictionary else {}
 
 
 static func _ground_contact_manifest() -> Dictionary:
@@ -326,9 +332,17 @@ func _refresh_actor_ground_indicator() -> void:
 	var next_position := ground_contact_position(
 		Vector2(0.0, (27.0 if actor.is_boss else 16.0) * 0.28)
 	)
-	if _last_ground_contact_position.is_equal_approx(next_position):
+	var fallback_radius := (27.0 if actor.is_boss else 16.0) + 6.0
+	var next_radii := ground_indicator_radii(
+		Vector2(fallback_radius, fallback_radius * 0.30)
+	)
+	if (
+		_last_ground_contact_position.is_equal_approx(next_position)
+		and _last_ground_indicator_radii.is_equal_approx(next_radii)
+	):
 		return
 	_last_ground_contact_position = next_position
+	_last_ground_indicator_radii = next_radii
 	if actor.is_targeted:
 		actor.queue_redraw()
 
@@ -814,6 +828,7 @@ static func reset_client_resource_cache() -> void:
 	_map_prefetch_generation = 0
 	_last_streaming_poll_frame = -1
 	_synchronous_loading_for_tests = true
+	_ground_contact_data = {}
 
 
 static func client_texture_load_request_count() -> int:

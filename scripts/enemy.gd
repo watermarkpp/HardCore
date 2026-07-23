@@ -865,9 +865,12 @@ func _draw() -> void:
 		return
 	if is_targeted:
 		# 细线选中圈与脚底接触阴影共面，避免形成托起Boss的发光平台。
-		draw_set_transform(ground_center, 0.0, Vector2(1.0, 0.30))
-		draw_circle(Vector2.ZERO, radius + 6.0, Color(1.0, 0.78, 0.18, 0.78), false, 2.0)
-		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		_draw_ground_indicator_ellipse(
+			ground_center,
+			ground_indicator_radii(),
+			Color(1.0, 0.78, 0.18, 0.78),
+			2.0,
+		)
 	var draw_procedural_fallback := visual == null or visual.should_draw_procedural_fallback()
 	var fallback_attacking := draw_procedural_fallback and visual != null and visual.is_fallback_attacking()
 	var body_center := Vector2(0, -5) + (visual.fallback_lunge_offset(facing) if fallback_attacking else Vector2.ZERO)
@@ -944,6 +947,28 @@ func ground_indicator_center() -> Vector2:
 	var radius := 27.0 if is_boss else 16.0
 	var fallback := Vector2(0, radius * 0.28)
 	return visual.ground_contact_position(fallback) if visual != null else fallback
+
+
+func ground_indicator_radii() -> Vector2:
+	var radius := 27.0 if is_boss else 16.0
+	var fallback_radius := radius + 6.0
+	var fallback := Vector2(fallback_radius, fallback_radius * 0.30)
+	return visual.ground_indicator_radii(fallback) if visual != null else fallback
+
+
+func _draw_ground_indicator_ellipse(
+	center: Vector2,
+	radii: Vector2,
+	color: Color,
+	width: float,
+) -> void:
+	var points := PackedVector2Array()
+	for index in range(49):
+		var angle := TAU * float(index) / 48.0
+		points.append(
+			center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+		)
+	draw_polyline(points, color, width, true)
 
 
 func draw_ellipse_shadow(radius: float, center := Vector2.ZERO) -> void:
