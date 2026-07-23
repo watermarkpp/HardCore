@@ -7,6 +7,10 @@ func _ready() -> void:
 
 func _run() -> void:
 	assert(FileAccess.file_exists("res://assets/data/warrior_wear_sources.json"), "战士穿戴来源表缺失")
+	assert(FileAccess.file_exists("res://assets/data/equipment_visual_catalog.json"), "正式装备视觉目录缺失")
+	var catalog_file := FileAccess.open("res://assets/data/equipment_visual_catalog.json", FileAccess.READ)
+	var visual_catalog: Variant = JSON.parse_string(catalog_file.get_as_text())
+	assert(visual_catalog is Dictionary, "正式装备视觉目录无法解析")
 	var manifest: Dictionary = GameData.warrior_wear_art
 	assert(int(manifest.get("schemaVersion", 0)) == 2, "战士穿戴映射版本错误")
 	assert(manifest.get("sourcePolicy", {}).get("distributionId", "") == "client.classic_raw_complete", "战士穿戴必须使用主客户端资料")
@@ -72,9 +76,37 @@ func _run() -> void:
 	assert(body.texture.resource_path.ends_with("dress_006_idle.png"), "重盔甲动态人物图没有生效")
 	assert(weapon.visible and weapon.texture.resource_path.ends_with("weapon_032_idle.png"), "炼狱动态武器图没有生效")
 	assert(not visual.get_node("WeaponAccent").visible and not visual.get_node("ArmorAccent").visible, "客户端穿戴图生效时不应叠加占位强调层")
-	assert(weapon.region_rect.size == Vector2(192, 224), "武器独立画布必须容纳长武器攻击像素")
+
+	var formal_purgatory: Dictionary = visual_catalog.get("runtimeMappings", {}).get("炼狱", {}).get("weaponAppearance", {})
+	assert(not formal_purgatory.is_empty(), "炼狱正式世界穿戴映射缺失")
+	for action_name: String in formal_purgatory.get("actions", {}):
+		var formal_action: Dictionary = formal_purgatory.get("actions", {}).get(action_name, {})
+		var cell: Array = formal_action.get("cell", [])
+		var foot_anchor: Array = formal_action.get("footAnchor", [])
+		assert(cell.size() == 2 and foot_anchor.size() == 2, "炼狱%s动作缺少正式画布或源脚点" % action_name)
+		var texture := load(str(formal_action.get("path", ""))) as Texture2D
+		assert(texture != null, "炼狱%s正式图集缺失" % action_name)
+		assert(
+			texture.get_width() == int(cell[0]) * int(formal_action.get("framesPerDirection", 0))
+			and texture.get_height() == int(cell[1]) * int(formal_action.get("directions", 0)),
+			"炼狱%s正式图集必须完整覆盖全部方向与帧" % action_name
+		)
+
+	var current_action: Dictionary = formal_purgatory.get("actions", {}).get("idle", {})
+	var formal_layout: Dictionary = visual._appearance_layout({"actions": {"idle": current_action}})
+	var formal_cell: Vector2i = formal_layout.get("cell", Vector2i.ZERO)
+	var formal_source_anchor: Vector2i = formal_layout.get("foot_anchor", Vector2i.ZERO)
+	visual._weapon_action_textures = visual._load_appearance_actions(formal_purgatory)
+	visual._weapon_frame_size = formal_cell
+	visual._weapon_source_anchor = formal_source_anchor
+	visual._process(0.01)
+	assert(weapon.region_rect.size == Vector2(formal_cell), "武器运行画布必须采用正式目录当前动作的完整画布")
 	var body_actor_origin := body.position + Vector2(ArtSpec.WARRIOR_SOURCE_FOOT_ANCHOR)
-	var weapon_actor_origin := weapon.position + Vector2(68, 112)
+	var expected_weapon_position := Vector2(
+		ArtSpec.WARRIOR_SOURCE_FOOT_ANCHOR - ArtSpec.WARRIOR_FOOT_ANCHOR - formal_source_anchor
+	)
+	assert(weapon.position == expected_weapon_position, "武器位置必须按正式源脚点换算到经典演员原点")
+	var weapon_actor_origin := weapon.position + Vector2(formal_source_anchor)
 	assert(body_actor_origin == weapon_actor_origin, "武器与人物必须共享经典角色原点")
 	assert(int(PlayerState.computed_stats.get("attack_max", 0)) < 25, "零耐久装备不得恢复属性")
 
