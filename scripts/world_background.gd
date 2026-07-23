@@ -36,6 +36,9 @@ const BICH_PROP_SIZE := Vector2(96.0, 128.0)
 const ORC_TOMB_TILE_SIZE := Vector2(64.0, 32.0)
 const ORC_TOMB_PROP_SIZE := Vector2(96.0, 128.0)
 const SOURCE_COLLISION_RADIUS := 28
+const EDITOR_RUNTIME_EDGE_SKIRT_CONTRACT_ID := "map_runtime_nonwalkable_edge_skirt_v1"
+const EDITOR_RUNTIME_EDGE_SKIRT_FADE_TILES := 10.0
+const DEFAULT_EDITOR_RUNTIME_GUARD_BAND_WORLD := 1536.0
 
 @export var grid_radius := 28
 @export var tile_width := 64.0
@@ -620,10 +623,23 @@ func _build_editor_runtime_guard_band(visual: Dictionary) -> void:
 	var authored_bounds := Rect2(corners[0], Vector2.ZERO)
 	for point: Vector2 in corners:
 		authored_bounds = authored_bounds.expand(point)
-	var guard_bounds := authored_bounds.grow(float(visual.get("guard_band_px", 1536.0)))
+	var guard_band_world := float(visual.get(
+		"guard_band_px", DEFAULT_EDITOR_RUNTIME_GUARD_BAND_WORLD
+	))
+	var guard_bounds := authored_bounds.grow(guard_band_world)
 	var guard := Polygon2D.new()
 	guard.name = "EditorRuntimeGuardBand"
 	guard.set_meta("editor_runtime_guard_band", true)
+	guard.set_meta(
+		"editor_runtime_edge_skirt_contract_id",
+		EDITOR_RUNTIME_EDGE_SKIRT_CONTRACT_ID
+	)
+	guard.set_meta("editor_runtime_guard_non_walkable", true)
+	guard.set_meta("editor_runtime_guard_band_world", guard_band_world)
+	guard.set_meta(
+		"editor_runtime_guard_fade_tiles",
+		EDITOR_RUNTIME_EDGE_SKIRT_FADE_TILES
+	)
 	guard.z_as_relative = false
 	guard.z_index = -30
 	guard.polygon = PackedVector2Array([
@@ -636,6 +652,8 @@ func _build_editor_runtime_guard_band(visual: Dictionary) -> void:
 	shader.code = """
 shader_type canvas_item;
 render_mode unshaded;
+uniform vec2 design_size = vec2(80.0, 80.0);
+uniform float fade_tiles = 10.0;
 varying vec2 map_position;
 void vertex() {
 	map_position = VERTEX;
@@ -646,20 +664,34 @@ float terrain_hash(vec2 p) {
 void fragment() {
 	float coarse = terrain_hash(floor(map_position / 64.0));
 	float fine = terrain_hash(floor(map_position / 12.0));
-	vec3 dark_grass = vec3(0.055, 0.085, 0.040);
-	vec3 old_grass = vec3(0.120, 0.155, 0.070);
-	vec3 color = mix(dark_grass, old_grass, 0.30 + coarse * 0.34 + fine * 0.10);
 	vec2 iso = vec2(
 		(map_position.x / 32.0 + map_position.y / 16.0) * 0.5,
 		(map_position.y / 16.0 - map_position.x / 32.0) * 0.5
+	) + (design_size - vec2(1.0)) * 0.5;
+	vec2 outside_low = max(vec2(-0.5) - iso, vec2(0.0));
+	vec2 outside_high = max(
+		iso - (design_size - vec2(0.5)), vec2(0.0)
 	);
-	vec2 cell_edge = abs(fract(iso) - vec2(0.5));
-	float seam = smoothstep(0.475, 0.5, max(cell_edge.x, cell_edge.y));
-	COLOR = vec4(color - vec3(seam * 0.018), 1.0);
+	float outside_tiles = max(
+		max(outside_low.x, outside_low.y),
+		max(outside_high.x, outside_high.y)
+	);
+	float fade = smoothstep(0.0, max(fade_tiles, 0.001), outside_tiles);
+	float edge_mark = 1.0 - smoothstep(0.0, 0.55, outside_tiles);
+	vec3 near_skirt = vec3(0.050, 0.066, 0.033);
+	vec3 far_skirt = vec3(0.006, 0.010, 0.006);
+	vec3 variation = vec3((coarse - 0.5) * 0.014 + (fine - 0.5) * 0.005);
+	vec3 color = mix(near_skirt + variation, far_skirt, fade);
+	color += vec3(0.030, 0.025, 0.012) * edge_mark;
+	COLOR = vec4(color, mix(1.0, 0.92, fade));
 }
 """
 	var material := ShaderMaterial.new()
 	material.shader = shader
+	material.set_shader_parameter("design_size", Vector2(size))
+	material.set_shader_parameter(
+		"fade_tiles", EDITOR_RUNTIME_EDGE_SKIRT_FADE_TILES
+	)
 	guard.material = material
 	add_child(guard)
 	_environment_nodes.append(guard)
