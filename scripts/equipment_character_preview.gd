@@ -1,7 +1,14 @@
 class_name EquipmentCharacterPreview
 extends Control
 
+const OPAQUE_CENTER_CONTRACT_ID := "ui.equipment.paper_doll.opaque_center.v1"
 const PAPER_DOLL_MANIFEST := "res://assets/data/warrior_paper_doll_sources.json"
+const EQUIPMENT_VISUAL_CATALOG := "res://assets/data/equipment_visual_catalog.json"
+const PROFESSION_IDS := {
+	"战士": "warrior",
+	"法师": "wizard",
+	"道士": "taoist",
+}
 const PAPER_LAYER_SLOTS := ["衣服", "武器", "头盔"]
 const ORIGINAL_CANVAS_SIZE := Vector2(168.0, 199.0)
 const DEFAULT_PREVIEW_SCALE := 1.22
@@ -9,15 +16,28 @@ const FOOT_STAGE_CENTER := Vector2(84.0, 186.0)
 const FOOT_STAGE_RADII := Vector2(52.0, 16.0)
 
 var preview_scale := DEFAULT_PREVIEW_SCALE
+var center_on_opaque_bounds := false
+var profession_name := ""
+var paper_doll_manifest_path := ""
+var visual_catalog_path := EQUIPMENT_VISUAL_CATALOG
 var _direction_row := 4
 var _paper_mappings: Dictionary = {}
 var _paper_layers: Array[Dictionary] = []
+var _equipment_snapshot: Dictionary = {}
+var _use_equipment_snapshot := false
+var _source_document_override: Dictionary = {}
 var _base_texture: Texture2D
 var _hair_layer: Dictionary = {}
 var _body_layer: Dictionary = {}
 var _body_texture: Texture2D
 var _weapon_texture: Texture2D
 var _helmet_texture: Texture2D
+var _canvas_size := ORIGINAL_CANVAS_SIZE
+var _foot_stage_center := FOOT_STAGE_CENTER
+var _composition_opaque_bounds := Rect2(Vector2.ZERO, ORIGINAL_CANVAS_SIZE)
+
+static var _json_cache: Dictionary = {}
+static var _opaque_rect_cache: Dictionary = {}
 
 
 func _ready() -> void:
@@ -25,10 +45,37 @@ func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	clip_contents = true
 	custom_minimum_size = Vector2(230, 286)
+	if profession_name.is_empty():
+		profession_name = str(PlayerState.profession)
 	_load_paper_mappings()
 	if not PlayerState.equipment_changed.is_connected(refresh):
 		PlayerState.equipment_changed.connect(refresh)
 	refresh()
+
+
+func configure_profile(value: String, equipment_snapshot: Dictionary) -> void:
+	profession_name = value
+	_equipment_snapshot = equipment_snapshot.duplicate(true)
+	_use_equipment_snapshot = true
+	if is_node_ready():
+		_load_paper_mappings()
+		refresh()
+
+
+func configure_source_paths(manifest_path: String, catalog_path := "") -> void:
+	paper_doll_manifest_path = manifest_path
+	if not catalog_path.is_empty():
+		visual_catalog_path = catalog_path
+	if is_node_ready():
+		_load_paper_mappings()
+		refresh()
+
+
+func configure_source_document(document: Dictionary) -> void:
+	_source_document_override = document
+	if is_node_ready():
+		_load_paper_mappings()
+		refresh()
 
 
 func refresh() -> void:
@@ -39,8 +86,9 @@ func refresh() -> void:
 	_body_texture = null
 	_weapon_texture = null
 	_helmet_texture = null
+	var equipment_source := _equipment_snapshot if _use_equipment_snapshot else PlayerState.equipment
 	for slot: String in PAPER_LAYER_SLOTS:
-		var equipped: Variant = PlayerState.equipment.get(slot, {})
+		var equipped: Variant = equipment_source.get(slot, {})
 		if not equipped is Dictionary or equipped.is_empty():
 			continue
 		var mapping_value: Variant = _paper_mappings.get(str(equipped.get("name", "")), {})
@@ -63,20 +111,21 @@ func refresh() -> void:
 			_weapon_texture = texture
 		elif slot == "头盔":
 			_helmet_texture = texture
+	_recalculate_composition_opaque_bounds()
 	queue_redraw()
 
 
 func _draw() -> void:
 	if _base_texture == null:
 		return
-	var scaled_canvas := ORIGINAL_CANVAS_SIZE * preview_scale
+	var scaled_canvas := _canvas_size * preview_scale
 	# Put the original 199px client canvas near the bottom of the available
 	# preview.  This uses the space below the character while preserving every
 	# original layer coordinate.
-	var origin := Vector2((size.x - scaled_canvas.x) * 0.5, size.y - scaled_canvas.y - 6.0)
+	var origin := composition_draw_origin()
 	# A flattened stage sits under the character's feet. The previous circle
 	# read as a misplaced halo and did not match the paper-doll perspective.
-	var stage_center := origin + FOOT_STAGE_CENTER * preview_scale
+	var stage_center := origin + _foot_stage_center * preview_scale
 	var stage_radii := FOOT_STAGE_RADII * preview_scale
 	var shadow_points := _ellipse_points(stage_center + Vector2(0, 4), stage_radii + Vector2(5, 3))
 	draw_colored_polygon(shadow_points, Color(0.008, 0.005, 0.004, 0.72))
@@ -136,14 +185,25 @@ func _load_paper_mappings() -> void:
 	_paper_mappings.clear()
 	_base_texture = null
 	_hair_layer.clear()
-	if not FileAccess.file_exists(PAPER_DOLL_MANIFEST):
+	_canvas_size = ORIGINAL_CANVAS_SIZE
+	_foot_stage_center = FOOT_STAGE_CENTER
+	var source_document := _resolve_source_document()
+	if source_document.is_empty():
 		return
-	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(PAPER_DOLL_MANIFEST))
-	if not parsed is Dictionary:
-		return
+	var parsed := _profession_manifest(source_document)
 	var mappings: Variant = parsed.get("runtimeMappings", {})
+	if not mappings is Dictionary or mappings.is_empty():
+		mappings = _catalog_paper_mappings(source_document)
 	if mappings is Dictionary:
 		_paper_mappings = mappings
+	_canvas_size = _vector_from_value(
+		parsed.get("canvasSize", parsed.get("composition", {}).get("canvasSize", ORIGINAL_CANVAS_SIZE)),
+		ORIGINAL_CANVAS_SIZE
+	)
+	_foot_stage_center = _vector_from_value(
+		parsed.get("footAnchor", parsed.get("composition", {}).get("footAnchor", FOOT_STAGE_CENTER)),
+		FOOT_STAGE_CENTER
+	)
 	var base: Variant = parsed.get("base", {})
 	if base is Dictionary:
 		var base_path := str(base.get("path", ""))
@@ -155,13 +215,149 @@ func _load_paper_mappings() -> void:
 		if ResourceLoader.exists(hair_path):
 			_hair_layer = hair.duplicate(true)
 			_hair_layer["texture"] = load(hair_path) as Texture2D
+	_recalculate_composition_opaque_bounds()
+
+
+func _resolve_source_document() -> Dictionary:
+	if not _source_document_override.is_empty():
+		return _source_document_override
+	if not paper_doll_manifest_path.is_empty():
+		return _load_json_document(paper_doll_manifest_path)
+	if FileAccess.file_exists(visual_catalog_path):
+		var catalog := _load_json_document(visual_catalog_path)
+		if not catalog.is_empty():
+			return catalog
+	var profession_id := str(PROFESSION_IDS.get(profession_name, "warrior"))
+	var profession_path := "res://assets/data/%s_paper_doll_sources.json" % profession_id
+	if FileAccess.file_exists(profession_path):
+		return _load_json_document(profession_path)
+	return _load_json_document(PAPER_DOLL_MANIFEST)
+
+
+func _profession_manifest(document: Dictionary) -> Dictionary:
+	var manifests: Variant = document.get("professionManifests", {})
+	if manifests is Dictionary:
+		var profession_id := str(PROFESSION_IDS.get(profession_name, "warrior"))
+		var selected: Variant = manifests.get(profession_id, manifests.get(profession_name, {}))
+		if selected is Dictionary and not selected.is_empty():
+			var result: Dictionary = selected
+			var document_mappings := _catalog_paper_mappings(document)
+			if not document_mappings.is_empty():
+				result = selected.duplicate(true)
+				result["runtimeMappings"] = document_mappings
+			return result
+	return document
+
+
+func _catalog_paper_mappings(document: Dictionary) -> Dictionary:
+	var result: Dictionary = {}
+	var items: Variant = document.get("itemsById", {})
+	if not items is Dictionary:
+		return result
+	for item_value: Variant in items.values():
+		if not item_value is Dictionary:
+			continue
+		var item_name := str(item_value.get("itemName", ""))
+		var paper_doll: Variant = item_value.get("paperDoll", {})
+		if item_name.is_empty() or not paper_doll is Dictionary:
+			continue
+		var path := str(paper_doll.get("path", ""))
+		if path.is_empty():
+			continue
+		result[item_name] = paper_doll
+	return result
+
+
+func _load_json_document(path: String) -> Dictionary:
+	if path.is_empty() or not FileAccess.file_exists(path):
+		return {}
+	if _json_cache.has(path):
+		return _json_cache[path]
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if not parsed is Dictionary:
+		return {}
+	_json_cache[path] = parsed
+	return parsed
 
 
 func _mapping_offset(layer: Dictionary) -> Vector2:
 	var value: Variant = layer.get("drawOffset", [0, 0])
+	return _vector_from_value(value, Vector2.ZERO)
+
+
+func _vector_from_value(value: Variant, fallback: Vector2) -> Vector2:
 	if value is Array and value.size() >= 2:
 		return Vector2(float(value[0]), float(value[1]))
-	return Vector2.ZERO
+	if value is Vector2:
+		return value
+	if value is Vector2i:
+		return Vector2(value)
+	return fallback
+
+
+func _recalculate_composition_opaque_bounds() -> void:
+	var bounds := Rect2()
+	var has_bounds := false
+	if _base_texture != null:
+		var base_bounds := _texture_opaque_rect(_base_texture)
+		if base_bounds.has_area():
+			bounds = base_bounds
+			has_bounds = true
+	if _helmet_texture == null:
+		var hair_bounds := _layer_opaque_rect(_hair_layer)
+		if hair_bounds.has_area():
+			bounds = bounds.merge(hair_bounds) if has_bounds else hair_bounds
+			has_bounds = true
+	for layer: Dictionary in _paper_layers:
+		var layer_bounds := _layer_opaque_rect(layer)
+		if not layer_bounds.has_area():
+			continue
+		bounds = bounds.merge(layer_bounds) if has_bounds else layer_bounds
+		has_bounds = true
+	_composition_opaque_bounds = bounds if has_bounds else Rect2(Vector2.ZERO, _canvas_size)
+
+
+func _layer_opaque_rect(layer: Dictionary) -> Rect2:
+	if layer.is_empty():
+		return Rect2()
+	var texture: Texture2D = layer.get("texture")
+	if texture == null:
+		return Rect2()
+	var rect := _texture_opaque_rect(texture)
+	rect.position += _mapping_offset(layer)
+	return rect
+
+
+func _texture_opaque_rect(texture: Texture2D) -> Rect2:
+	if texture == null:
+		return Rect2()
+	var cache_key := texture.resource_path
+	if cache_key.is_empty():
+		cache_key = "instance:%d" % texture.get_instance_id()
+	if _opaque_rect_cache.has(cache_key):
+		return _opaque_rect_cache[cache_key]
+	var image := texture.get_image()
+	if image == null or image.is_empty():
+		return Rect2()
+	var used := image.get_used_rect()
+	var result := Rect2(Vector2(used.position), Vector2(used.size))
+	_opaque_rect_cache[cache_key] = result
+	return result
+
+
+func composition_draw_origin() -> Vector2:
+	var x := (size.x - _canvas_size.x * preview_scale) * 0.5
+	if center_on_opaque_bounds:
+		x = size.x * 0.5 - _composition_opaque_bounds.get_center().x * preview_scale
+	return Vector2(x, size.y - _canvas_size.y * preview_scale - 6.0)
+
+
+func composition_opaque_bounds() -> Rect2:
+	return _composition_opaque_bounds
+
+
+func has_renderable_assets() -> bool:
+	return _base_texture != null
 
 
 func paper_layer_source_index(slot: String) -> int:
