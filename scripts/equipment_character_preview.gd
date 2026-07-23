@@ -1,7 +1,10 @@
 class_name EquipmentCharacterPreview
 extends Control
 
+# Retained for serialized callers that still set the legacy property.  Bounds
+# are diagnostics only now: a weapon or helmet must never move the actor.
 const OPAQUE_CENTER_CONTRACT_ID := "ui.equipment.paper_doll.opaque_center.v1"
+const FOOT_STAGE_ANCHOR_CONTRACT_ID := "ui.equipment.paper_doll.foot_stage_anchor.v2"
 const PAPER_DOLL_MANIFEST := "res://assets/data/warrior_paper_doll_sources.json"
 const EQUIPMENT_VISUAL_CATALOG := "res://assets/data/equipment_visual_catalog.json"
 const PROFESSION_IDS := {
@@ -16,6 +19,8 @@ const FOOT_STAGE_CENTER := Vector2(84.0, 186.0)
 const FOOT_STAGE_RADII := Vector2(52.0, 16.0)
 
 var preview_scale := DEFAULT_PREVIEW_SCALE
+# Compatibility input for pre-v2 callers.  It deliberately no longer affects
+# placement; the manifest foot anchor is the only composition anchor.
 var center_on_opaque_bounds := false
 var profession_name := ""
 var paper_doll_manifest_path := ""
@@ -125,7 +130,7 @@ func _draw() -> void:
 	var origin := composition_draw_origin()
 	# A flattened stage sits under the character's feet. The previous circle
 	# read as a misplaced halo and did not match the paper-doll perspective.
-	var stage_center := origin + _foot_stage_center * preview_scale
+	var stage_center := foot_stage_center()
 	var stage_radii := FOOT_STAGE_RADII * preview_scale
 	var shadow_points := _ellipse_points(stage_center + Vector2(0, 4), stage_radii + Vector2(5, 3))
 	draw_colored_polygon(shadow_points, Color(0.008, 0.005, 0.004, 0.72))
@@ -139,9 +144,9 @@ func _draw() -> void:
 	# Helmet records now have a clean alpha edge, so suppress the underlying
 	# hair exactly as a paper-doll occlusion layer would.
 	if _helmet_texture == null:
-		_draw_layer(_hair_layer, origin)
+		_draw_layer(_hair_layer)
 	for layer: Dictionary in _paper_layers:
-		_draw_layer(layer, origin)
+		_draw_layer(layer)
 	# The front rim is drawn after the paper doll so the figure stands inside
 	# the stage instead of placing both feet directly on a complete outline.
 	var front_rim := _ellipse_arc_points(stage_center, stage_radii, 0.0, PI)
@@ -168,14 +173,14 @@ func _ellipse_arc_points(center: Vector2, radii: Vector2, start_angle: float, en
 	return points
 
 
-func _draw_layer(layer: Dictionary, origin: Vector2) -> void:
+func _draw_layer(layer: Dictionary) -> void:
 	if layer.is_empty():
 		return
 	var texture: Texture2D = layer.get("texture")
 	if texture == null:
 		return
 	var target := Rect2(
-		origin + _mapping_offset(layer) * preview_scale,
+		layer_draw_origin(layer),
 		texture.get_size() * preview_scale
 	)
 	draw_texture_rect(texture, target, false)
@@ -201,7 +206,10 @@ func _load_paper_mappings() -> void:
 		ORIGINAL_CANVAS_SIZE
 	)
 	_foot_stage_center = _vector_from_value(
-		parsed.get("footAnchor", parsed.get("composition", {}).get("footAnchor", FOOT_STAGE_CENTER)),
+		parsed.get(
+			"paperDollFootAnchor",
+			parsed.get("footAnchor", parsed.get("composition", {}).get("footAnchor", FOOT_STAGE_CENTER))
+		),
 		FOOT_STAGE_CENTER
 	)
 	var base: Variant = parsed.get("base", {})
@@ -346,10 +354,24 @@ func _texture_opaque_rect(texture: Texture2D) -> Rect2:
 
 
 func composition_draw_origin() -> Vector2:
-	var x := (size.x - _canvas_size.x * preview_scale) * 0.5
-	if center_on_opaque_bounds:
-		x = size.x * 0.5 - _composition_opaque_bounds.get_center().x * preview_scale
-	return Vector2(x, size.y - _canvas_size.y * preview_scale - 6.0)
+	return foot_stage_center() - _foot_stage_center * preview_scale
+
+
+func foot_stage_center() -> Vector2:
+	# Keep the historical lower inset while pinning the stage horizontally to
+	# the preview centre.  The same point is the paper-doll ground contact.
+	return Vector2(
+		size.x * 0.5,
+		size.y - (_canvas_size.y - _foot_stage_center.y) * preview_scale - 6.0
+	)
+
+
+func paper_doll_foot_anchor() -> Vector2:
+	return _foot_stage_center
+
+
+func layer_draw_origin(layer: Dictionary) -> Vector2:
+	return composition_draw_origin() + _mapping_offset(layer) * preview_scale
 
 
 func composition_opaque_bounds() -> Rect2:
