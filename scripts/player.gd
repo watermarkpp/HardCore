@@ -96,9 +96,8 @@ func _ready() -> void:
 	current_hp = max_hp
 	current_mp = max_mp
 	var collision := CollisionShape2D.new()
-	var shape := CircleShape2D.new()
-	shape.radius = ArtSpec.PLAYER_COLLISION_RADIUS
-	collision.shape = shape
+	collision.name = "CollisionShape2D"
+	collision.shape = WorldSpatialRulesScript.actor_footprint_shape(ArtSpec.PLAYER_COLLISION_RADIUS)
 	add_child(collision)
 	visual = PlayerVisualScript.new()
 	visual.name = "PlayerVisual"
