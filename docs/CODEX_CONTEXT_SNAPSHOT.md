@@ -16,24 +16,28 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `956393cf154be9af005c8ad58d8bd246a8b01ec1`（其后的快照提交只改本文档）。
+- 分支/运行时代码基线：`codex/integration` @ `23e14745f8f0971e57c323b74653e90e2903dbec`（其后的快照提交只改本文档）。
 - tracked 状态：clean。
-- 未跟踪状态：75 个 Godot 生成的 `*.gd.uid`；没有用户授权时不得删除。
+- 未跟踪状态：77 个 Godot 生成的 `*.gd.uid`；没有用户授权时不得删除。
 - 当前无待合并专业提交。
 - 用户已确认此前截图来自当时最新 APK；不要再次怀疑或重复核验安装版本。下一项外部验收是用户手动安装本页新 APK 并实测本轮修复。
 
 ## 最终 APK
 
 - 文件：`C:\Users\Administrator\Documents\HardCore\outputs\hardcore\HardCore-debug.apk`
-- 构建时间：`2026-07-23 10:59:25`
-- 大小：`1,619,615,156` 字节
-- SHA-256：`c551c4f0106a40ac5123d5639e5591cf7f4b4d34f83150ea38c32e9289e7d6b5`
-- 本包包含等距脚底碰撞、全局遮挡 v5、地图边缘/相机约束和怪物冷启动头顶刷新修复；尚待用户覆盖安装后实机验收。
+- 构建时间：`2026-07-23 11:45:25`
+- 大小：`1,619,623,450` 字节
+- SHA-256：`7dee0f52605bb3601927d4515f4d07f70fe88abe98989326df97eb1267ed745a`
+- 本包新增逐 `monster_id` 身体顶点锚定，以及人物优先柔性镜头、边缘动态缩放和不可行走渐暗裙边；尚待用户覆盖安装后实机验收。
 
 ## 最近已集成结果
 
 | 集成提交 | 领域 | 结果 |
 |---|---|---|
+| `23e14745` | integration | 接入人物中心 ±14% 柔性镜头与帧率无关的 1.06–1.16 动态缩放 |
+| `8f522258` | monsters | 214 个怪物逐 ID 使用八方向 idle 真实身体顶点固定头顶锚点 |
+| `f7165027` | maps/docs | 明确人物位于屏幕坐标 36%–64% 的中央带 |
+| `aa75736a` | maps | 柔性边缘相机 v2 与不可行走渐暗地图外裙边 |
 | `956393cf` | integration | Camera2D 以视口侵蚀后的地图菱形约束中心，避免暴露地图外区域 |
 | `c4af44a1` | monsters | 怪物物理脚底改为 2:1 等距椭圆，战斗/AI 标量半径不变 |
 | `1b7e53da` | skills/player | 玩家物理脚底改为 18×9 等距椭圆 |
@@ -53,14 +57,16 @@
 当前关键契约：
 
 - integration：`world.actor_footprint.iso_ellipse.v1`。
-- maps：`map_editor_runtime_collision_geometry_v2`、`published_blocked_cells_after_erasure_v1`、`map_editor_runtime_visual_geometry_v5`、`map_actor_occlusion_sort_v5`、`map_diamond_camera_center_constraint_v1`。
-- monsters：`monster.overhead_anchor.v3`、`monster.overhead_layout.v3`；贴图异步激活后必须刷新头顶锚点。
+- maps：`map_editor_runtime_collision_geometry_v2`、`published_blocked_cells_after_erasure_v1`、`map_editor_runtime_visual_geometry_v5`、`map_actor_occlusion_sort_v5`、`map_diamond_camera_center_constraint_v2`、`player_priority_soft_edge_v1`、`map_runtime_nonwalkable_edge_skirt_v1`。
+- monsters：`monster.overhead_anchor.v4`、`monster.overhead_layout.v3`；214 个 `monster_id` 各自使用稳定身体顶点，贴图异步激活后必须刷新。
 - UI：`ui.hud.resource_orb.hole_fill.v1`、`skill_button_assignment_contract_v2`。
 
 ## 已通过的必要验收
 
 - 总回归：`SMOKE_TEST_PASS`。
 - integration：共享 36×18 等距脚底契约通过；运行时 Camera2D 菱形视口约束通过。
+- camera：2664×1200 下人物屏幕偏移≤全尺寸 14%，动态缩放为 1.06–1.16；80×80 与 38×38 地图外露均由 1536px 不可行走裙边覆盖。
+- monsters：逐 ID 锚点数据生成检查、214 怪物数据契约、全动作/方向/帧稳定和小/中/大/Boss 冷启动通过。
 - physics：玩家 18×9、普通怪物 16×8、Boss 28×14 的真实物理与软件探针通过；战斗/AI 半径未改。
 - occlusion：11 张已发布地图、52 个交叉、4 类装饰物和 3 个比奇回归点通过；碰撞区、脚底深度点、装饰物遮挡基线已分离。
 - maps：比奇真实源 E2E（180 个阻挡格）；11 张地图真实 `CharacterBody2D` 脚点可达可见边缘且外环阻挡。
@@ -74,8 +80,8 @@
 
 | 工作树 | 分支/HEAD | dirty | 集成状态 |
 |---|---|---:|---|
-| `HardCore-worktrees/maps` | `codex/maps` @ `0f10419c` | 31 tracked + 41 untracked | 已集成为 `46cfcd27` |
-| `HardCore-worktrees/monsters` | `codex/monsters` @ `2a260b98` | clean | 已集成为 `c4af44a1` |
+| `HardCore-worktrees/maps` | `codex/maps` @ `599717ce` | 31 tracked + 41 untracked | 已集成为 `aa75736a`、`f7165027` |
+| `HardCore-worktrees/monsters` | `codex/monsters` @ `da00ca86` | clean | 已集成为 `8f522258` |
 | `HardCore-worktrees/ui-art` | `codex/ui-art` @ `40f9312e` | clean | 已等价集成为 `e0165bef` |
 | `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `075958e5` | clean | 已集成为 `1b7e53da` |
 | `HardCore-worktrees/equipment` | `codex/equipment` @ `6a28f394` | clean | 已等价集成为 `846e602f`；不要重复合并 ahead 提交 |
@@ -94,11 +100,12 @@ maps 的 72 项 dirty 全部视为用户进行中的地图编辑器内容，禁�
 
 ## 下次实机验收清单
 
-1. 比奇房屋/树木/围墙：角色在装饰物地面接触基线后方时由装饰物遮盖，越过基线后由角色遮盖；视觉关系与碰撞不得互相冒充。
-2. 地图可见外沿：不再出现底色与地面分成两层；相机视口不暴露地图菱形外区域。
-3. 玩家、普通怪物和 Boss 在 64×32 格上的左右/上下接触感一致，不再出现圆形脚底导致的左右过早碰撞。
-4. 怪物名字固定在血条上方，血条稳定在真实头顶；任何方向/动作/帧不偏移、不重合。
-5. 血球/蓝球恢复孔径尺寸且左右对称。
-6. 拾取提示居中；技能配置弹窗背景不越界；快捷技能可置换；烈火自动开关正常。
+1. 已由用户实机确认：比奇房屋/树木/围墙遮挡正确；碰撞准确。除出现新证据外冻结这两项。
+2. 城镇内外人物都保持在屏幕坐标 36%–64% 的中央带；边缘缩放连续、无跳变。
+3. 地图可见外沿不再出现底色与地面双层；地图外显示渐暗不可行走裙边而非突兀纯黑。
+4. 玩家、普通怪物和 Boss 在 64×32 格上的左右/上下接触感一致，不再出现圆形脚底导致的左右过早碰撞。
+5. 怪物名字固定在血条上方；多钩猫等各体型血条位于各自真实身体顶点上方约 8px，不再统一过高或随动作抖动。
+6. 血球/蓝球恢复孔径尺寸且左右对称。
+7. 拾取提示居中；技能配置弹窗背景不越界；快捷技能可置换；烈火自动开关正常。
 
 用户实测结果优先级高于内部测试；若实机失败，先保存截图和 APK 哈希，再按所属专业工作树返修。
