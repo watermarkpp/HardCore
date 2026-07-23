@@ -193,6 +193,24 @@ func _assert_ground_origin(
 		)),
 		"%s visible canvas bottom does not match physical boundary" % map_key
 	)
+	var background := WorldBackgroundScript.new()
+	var runtime_fill := background.editor_runtime_ground_boundary_world(
+		design_size
+	)
+	assert(
+		runtime_fill == CollisionGeometry.map_inner_boundary_world(design_size),
+		"%s runtime base fill/guard diverged from chunk and collision edge"
+			% map_key
+	)
+	var old_shifted_top := MapEditorCoordinate.tile_to_world(
+		Vector2.ZERO, design_size
+	)
+	assert(
+		is_equal_approx(old_shifted_top.y - runtime_fill[0].y, 16.0),
+		"%s regression probe no longer measures the historical +16px shift"
+			% map_key
+	)
+	background.free()
 
 
 func _assert_boundary_contract(

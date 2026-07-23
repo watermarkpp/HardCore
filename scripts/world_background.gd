@@ -371,9 +371,7 @@ func is_orc_tomb_point_blocked(world_position: Vector2) -> bool:
 func _draw() -> void:
 	if not _editor_runtime_visual.is_empty():
 		var raw_size:Array=_editor_runtime_visual.get("design_size",[64,64]);var size:=Vector2i(int(raw_size[0]),int(raw_size[1]))
-		var corners := PackedVector2Array([
-			EditorCoordinateScript.tile_to_world(Vector2(0,0),size), EditorCoordinateScript.tile_to_world(Vector2(size.x,0),size),
-			EditorCoordinateScript.tile_to_world(Vector2(size.x,size.y),size), EditorCoordinateScript.tile_to_world(Vector2(0,size.y),size)])
+		var corners := editor_runtime_ground_boundary_world(size)
 		draw_colored_polygon(corners, Color(str(_editor_runtime_visual.get("base_color", "#465827"))))
 		# Keep all authored chunk textures on one CanvasItem. Godot otherwise
 		# culls distant Sprite2D chunks and can defer their GPU upload until the
@@ -418,6 +416,14 @@ func _draw() -> void:
 		for position in [Vector2(-430, -210), Vector2(420, 190), Vector2(-50, 410), Vector2(680, -260), Vector2(-720, 280)]:
 			draw_colored_polygon(PackedVector2Array([position + Vector2(-45, 25), position + Vector2(-20, -35), position + Vector2(30, -48), position + Vector2(55, 22)]), Color(0.20, 0.19, 0.18, 0.82))
 			draw_line(position + Vector2(-25, 4), position + Vector2(28, -18), Color(0.34, 0.31, 0.27), 4.0)
+
+
+func editor_runtime_ground_boundary_world(size: Vector2i) -> PackedVector2Array:
+	# Ground chunks are rasterized around cell centres, so their visible diamond
+	# spans [-0.5, size - 0.5]. Keep base fill, guard calculations and hard
+	# collision on that one boundary. [0, size] is the same diamond shifted 16
+	# world pixels downward and creates the double edge visible on mobile.
+	return RuntimeCollisionGeometryScript.map_inner_boundary_world(size)
 
 
 func _draw_bich_ground() -> void:
@@ -610,12 +616,7 @@ func _read_editor_json(path: String) -> Dictionary:
 func _build_editor_runtime_guard_band(visual: Dictionary) -> void:
 	var raw_size: Array = visual.get("design_size", [64, 64])
 	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
-	var corners := [
-		EditorCoordinateScript.tile_to_world(Vector2.ZERO, size),
-		EditorCoordinateScript.tile_to_world(Vector2(float(size.x), 0.0), size),
-		EditorCoordinateScript.tile_to_world(Vector2(size), size),
-		EditorCoordinateScript.tile_to_world(Vector2(0.0, float(size.y)), size),
-	]
+	var corners := editor_runtime_ground_boundary_world(size)
 	var authored_bounds := Rect2(corners[0], Vector2.ZERO)
 	for point: Vector2 in corners:
 		authored_bounds = authored_bounds.expand(point)
