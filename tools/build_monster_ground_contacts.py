@@ -35,14 +35,21 @@ CALIBRATION_PATH = (
     ROOT / "assets/data/runtime/monster_ground_contact_calibrations.json"
 )
 DEFAULT_REVIEW_OUTPUT = (
-    ROOT / "outputs/test_visuals/monster_ground_contact_calibration_v3.png"
+    ROOT / "outputs/test_visuals/monster_ground_contact_calibration_v4.png"
 )
-CONTRACT = "monster.ground_contact.v3"
-CALIBRATION_CONTRACT = "monster.ground_contact.calibration.v3"
+CONTRACT = "monster.ground_contact.v4"
+CALIBRATION_CONTRACT = "monster.ground_contact.calibration.v4"
+MANUAL_CALIBRATION_SOURCE = "manual_runtime_composite_review_v4"
 CLIENT_ACTOR_GROUND_OFFSET = (32, 28)
 ALPHA_THRESHOLD = 16
 NEUTRAL_ACTIONS = ("idle", "walk")
 PROJECTION_STRATEGIES = ("grounded", "flying", "hover")
+REVIEW_POSES = (
+    ("idle", 0),
+    ("walk", 2),
+    ("attack", 4),
+    ("death", 6),
+)
 
 # These are semantic movement classes, not alpha-derived guesses.  The exact
 # values are written into the data calibration catalog by --seed-calibrations;
@@ -276,15 +283,26 @@ def seed_calibrations(initials: dict[str, dict[str, Any]]) -> dict[str, Any]:
             "visualFootOffset": initial["visualFootOffset"],
             "ringCenterOffset": initial["ringCenterOffset"],
             "ringEllipseRadii": initial["ringEllipseRadii"],
-            "calibrationSource": "neutral_pose_seed_reviewed_v3",
+            "ringVerticalSquash": round(
+                initial["ringEllipseRadii"][1] / initial["ringEllipseRadii"][0],
+                4,
+            ),
+            "calibrationSource": "unreviewed_seed_v4",
+            "review": {
+                "status": "pending_manual_review",
+                "archetype": "unclassified",
+                "poses": [],
+                "decision": "Seed only; normal builds reject this entry.",
+            },
         }
     return {
-        "schemaVersion": 3,
+        "schemaVersion": 4,
         "contract": CALIBRATION_CONTRACT,
         "identityKey": "monsterId",
         "policy": (
-            "Every formal monsterId owns an explicit absolute calibration. "
-            "Automatic alpha measurement may seed this file but never bypasses it."
+            "Every formal monsterId owns an independently reviewed absolute "
+            "calibration. Automatic alpha measurement may only create rejected "
+            "pending seeds and can never become runtime authority."
         ),
         "entriesByMonsterId": entries,
     }
@@ -309,6 +327,35 @@ def load_calibrations(initials: dict[str, dict[str, Any]]) -> dict[str, Any]:
         radii = entry["ringEllipseRadii"]
         if not (8 <= float(radii[0]) <= 80 and 3 <= float(radii[1]) <= 32):
             raise ValueError(f"monsterId={monster_id} ringEllipseRadii invalid")
+        squash = float(entry.get("ringVerticalSquash", 0.0))
+        if not math.isclose(
+            squash,
+            float(radii[1]) / float(radii[0]),
+            rel_tol=0.02,
+            abs_tol=0.005,
+        ):
+            raise ValueError(
+                f"monsterId={monster_id} ringVerticalSquash disagrees with radii"
+            )
+        if entry.get("calibrationSource") != MANUAL_CALIBRATION_SOURCE:
+            raise ValueError(
+                f"monsterId={monster_id} is not manually runtime-reviewed"
+            )
+        review = entry.get("review")
+        if not isinstance(review, dict):
+            raise ValueError(f"monsterId={monster_id} review record missing")
+        if review.get("status") != "approved":
+            raise ValueError(f"monsterId={monster_id} review is not approved")
+        if review.get("poses") != [
+            f"{action}:direction{direction}" for action, direction in REVIEW_POSES
+        ]:
+            raise ValueError(f"monsterId={monster_id} review poses incomplete")
+        if not str(review.get("archetype", "")):
+            raise ValueError(f"monsterId={monster_id} review archetype missing")
+        if str(monster_id) not in str(review.get("decision", "")):
+            raise ValueError(
+                f"monsterId={monster_id} decision is not independently attributable"
+            )
     return entries
 
 
@@ -328,6 +375,7 @@ def build() -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
         visual_foot = [int(round(value)) for value in calibration["visualFootOffset"]]
         ring_center = [int(round(value)) for value in calibration["ringCenterOffset"]]
         ring_radii = [int(round(value)) for value in calibration["ringEllipseRadii"]]
+        review = dict(calibration["review"])
         entries[key] = {
             "monsterId": monster_id,
             "name": str(row["name"]),
@@ -336,10 +384,12 @@ def build() -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
             "visualFootOffset": visual_foot,
             "ringCenterOffset": ring_center,
             "ringEllipseRadii": ring_radii,
+            "ringVerticalSquash": float(calibration["ringVerticalSquash"]),
             "hoverHeightPx": max(0, ring_center[1] - visual_foot[1]),
             "stableAcrossActions": list(REQUIRED_ACTIONS),
             "stableAcrossDirections": 8,
             "calibrationSource": str(calibration["calibrationSource"]),
+            "review": review,
             "automaticInitial": {
                 "visualFootOffset": initial["visualFootOffset"],
                 "ringCenterOffset": initial["ringCenterOffset"],
@@ -353,7 +403,7 @@ def build() -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
             if legacy_name and legacy_name not in legacy_name_to_monster_id:
                 legacy_name_to_monster_id[legacy_name] = monster_id
     output = {
-        "schemaVersion": 3,
+        "schemaVersion": 4,
         "contract": CONTRACT,
         "calibrationContract": CALIBRATION_CONTRACT,
         "identityKey": "monsterId",
@@ -363,8 +413,9 @@ def build() -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
         ),
         "clientActorGroundOffset": list(CLIENT_ACTOR_GROUND_OFFSET),
         "measurementPolicy": (
-            "idle/walk alpha contacts are review evidence only; explicit per-ID "
-            "calibrations separate visual feet from grounded/flying/hover projection"
+            "idle/walk alpha contacts are diagnostic evidence only; each monsterId "
+            "is approved from four runtime-coordinate composites, with authored "
+            "actor origin, body foot and ground projection reviewed separately"
         ),
         "runtimeStabilityPolicy": (
             "one immutable center and ellipse per monsterId across every action, "
@@ -373,6 +424,11 @@ def build() -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
         "summary": {
             "monsterCount": len(entries),
             "explicitCalibrationCount": len(calibrations),
+            "manualReviewCount": sum(
+                1
+                for entry in calibrations.values()
+                if entry.get("calibrationSource") == MANUAL_CALIBRATION_SOURCE
+            ),
             "requiredActions": list(REQUIRED_ACTIONS),
             "requiredDirections": 8,
             "projectionStrategyCounts": strategy_counts,
@@ -387,92 +443,131 @@ def render_review_atlas(
     output_path: Path,
     entries: dict[str, Any],
     initials: dict[str, dict[str, Any]],
-) -> None:
+) -> list[Path]:
     columns = 12
     cell_width = 208
     cell_height = 172
     rows = math.ceil(len(entries) / columns)
-    sheet = Image.new(
-        "RGBA",
-        (columns * cell_width, rows * cell_height),
-        (18, 22, 28, 255),
-    )
-    draw = ImageDraw.Draw(sheet)
-    for index, monster_id in enumerate(
-        sorted(entries, key=lambda value: int(value))
-    ):
-        entry = entries[monster_id]
-        initial = initials[monster_id]
-        profile = initial["_profile"]
-        frame_width, frame_height = map(int, profile["frameSize"])
-        foot_x, foot_y = map(int, profile["footAnchor"])
-        action = profile["actions"]["idle"]
-        atlas = Image.open(atlas_path(str(action["path"]))).convert("RGBA")
-        direction = 4
-        frame = atlas.crop(
-            (
-                0,
-                direction * frame_height,
-                frame_width,
-                (direction + 1) * frame_height,
-            )
-        )
-        frame_draw = ImageDraw.Draw(frame)
-        ring_center = entry["ringCenterOffset"]
-        visual_foot = entry["visualFootOffset"]
-        radii = entry["ringEllipseRadii"]
-        origin_x = foot_x + CLIENT_ACTOR_GROUND_OFFSET[0]
-        origin_y = foot_y + CLIENT_ACTOR_GROUND_OFFSET[1]
-        ring_box = (
-            origin_x + ring_center[0] - radii[0],
-            origin_y + ring_center[1] - radii[1],
-            origin_x + ring_center[0] + radii[0],
-            origin_y + ring_center[1] + radii[1],
-        )
-        frame_draw.ellipse(ring_box, outline=(255, 202, 45, 255), width=2)
-        foot_point = (
-            origin_x + visual_foot[0],
-            origin_y + visual_foot[1],
-        )
-        frame_draw.line(
-            (
-                foot_point[0] - 5,
-                foot_point[1],
-                foot_point[0] + 5,
-                foot_point[1],
-            ),
-            fill=(64, 220, 255, 255),
-            width=2,
-        )
-        frame_draw.line(
-            (
-                foot_point[0],
-                foot_point[1] - 5,
-                foot_point[0],
-                foot_point[1] + 5,
-            ),
-            fill=(64, 220, 255, 255),
-            width=2,
-        )
-        frame.thumbnail((cell_width - 12, cell_height - 30), Image.Resampling.LANCZOS)
-        cell_x = (index % columns) * cell_width
-        cell_y = (index // columns) * cell_height
-        paste_x = cell_x + (cell_width - frame.width) // 2
-        paste_y = cell_y + 22 + (cell_height - 28 - frame.height) // 2
-        sheet.alpha_composite(frame, (paste_x, paste_y))
-        strategy_short = str(entry["projectionStrategy"])[0].upper()
-        draw.text(
-            (cell_x + 5, cell_y + 4),
-            f"#{monster_id} {strategy_short} "
-            f"C{entry['ringCenterOffset']} R{entry['ringEllipseRadii']}",
-            fill=(235, 239, 244, 255),
-        )
-        draw.rectangle(
-            (cell_x, cell_y, cell_x + cell_width - 1, cell_y + cell_height - 1),
-            outline=(54, 63, 74, 255),
-        )
+    rendered_paths: list[Path] = []
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    sheet.convert("RGB").save(output_path, quality=92)
+    for action_name, direction in REVIEW_POSES:
+        sheet = Image.new(
+            "RGBA",
+            (columns * cell_width, rows * cell_height),
+            (18, 22, 28, 255),
+        )
+        draw = ImageDraw.Draw(sheet)
+        for index, monster_id in enumerate(
+            sorted(entries, key=lambda value: int(value))
+        ):
+            entry = entries[monster_id]
+            initial = initials[monster_id]
+            profile = initial["_profile"]
+            frame_width, frame_height = map(int, profile["frameSize"])
+            foot_x, foot_y = map(int, profile["footAnchor"])
+            action = profile["actions"][action_name]
+            atlas = Image.open(atlas_path(str(action["path"]))).convert("RGBA")
+            frame_count = int(action["framesPerDirection"])
+            frame_index = min(frame_count - 1, frame_count // 2)
+            frame = atlas.crop(
+                (
+                    frame_index * frame_width,
+                    direction * frame_height,
+                    (frame_index + 1) * frame_width,
+                    (direction + 1) * frame_height,
+                )
+            )
+            frame_draw = ImageDraw.Draw(frame)
+            ring_center = entry["ringCenterOffset"]
+            visual_foot = entry["visualFootOffset"]
+            radii = entry["ringEllipseRadii"]
+            origin_x = foot_x + CLIENT_ACTOR_GROUND_OFFSET[0]
+            origin_y = foot_y + CLIENT_ACTOR_GROUND_OFFSET[1]
+            ring_box = (
+                origin_x + ring_center[0] - radii[0],
+                origin_y + ring_center[1] - radii[1],
+                origin_x + ring_center[0] + radii[0],
+                origin_y + ring_center[1] + radii[1],
+            )
+            frame_draw.ellipse(ring_box, outline=(255, 202, 45, 255), width=2)
+            foot_point = (
+                origin_x + visual_foot[0],
+                origin_y + visual_foot[1],
+            )
+            frame_draw.line(
+                (
+                    foot_point[0] - 5,
+                    foot_point[1],
+                    foot_point[0] + 5,
+                    foot_point[1],
+                ),
+                fill=(64, 220, 255, 255),
+                width=2,
+            )
+            frame_draw.line(
+                (
+                    foot_point[0],
+                    foot_point[1] - 5,
+                    foot_point[0],
+                    foot_point[1] + 5,
+                ),
+                fill=(64, 220, 255, 255),
+                width=2,
+            )
+            frame.thumbnail(
+                (cell_width - 12, cell_height - 30),
+                Image.Resampling.LANCZOS,
+            )
+            cell_x = (index % columns) * cell_width
+            cell_y = (index // columns) * cell_height
+            paste_x = cell_x + (cell_width - frame.width) // 2
+            paste_y = cell_y + 22 + (cell_height - 28 - frame.height) // 2
+            sheet.alpha_composite(frame, (paste_x, paste_y))
+            strategy_short = str(entry["projectionStrategy"])[0].upper()
+            draw.text(
+                (cell_x + 5, cell_y + 4),
+                f"#{monster_id} {strategy_short} "
+                f"C{entry['ringCenterOffset']} R{entry['ringEllipseRadii']}",
+                fill=(235, 239, 244, 255),
+            )
+            draw.rectangle(
+                (
+                    cell_x,
+                    cell_y,
+                    cell_x + cell_width - 1,
+                    cell_y + cell_height - 1,
+                ),
+                outline=(54, 63, 74, 255),
+            )
+        rendered_path = output_path.with_name(
+            f"{output_path.stem}_{action_name}_d{direction}{output_path.suffix}"
+        )
+        sheet.convert("RGB").save(rendered_path, quality=92)
+        rendered_paths.append(rendered_path)
+    review_manifest_path = output_path.with_suffix(".review.json")
+    review_manifest_path.write_text(
+        json.dumps(
+            {
+                "contract": "monster.ground_contact.runtime_review.v4",
+                "monsterCount": len(entries),
+                "poses": [
+                    f"{action}:direction{direction}"
+                    for action, direction in REVIEW_POSES
+                ],
+                "atlases": [path.name for path in rendered_paths],
+                "coordinateSpace": (
+                    "Exact MonsterVisual source frame, authored actor origin, "
+                    "visualFootOffset and runtime ring center/radii."
+                ),
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    rendered_paths.append(review_manifest_path)
+    return rendered_paths
 
 
 def main() -> None:
@@ -504,7 +599,7 @@ def main() -> None:
             )
         print(
             "MONSTER_GROUND_CONTACT_DATA_PASS "
-            "contract=v3 monsters=214 explicit_calibrations=214"
+            "contract=v4 monsters=214 explicit_calibrations=214 manual_reviews=214"
         )
     else:
         OUTPUT_PATH.write_text(generated, encoding="utf-8")
@@ -516,12 +611,13 @@ def main() -> None:
             if review_output.is_absolute()
             else ROOT / review_output
         )
-        render_review_atlas(
+        rendered_paths = render_review_atlas(
             resolved_review,
             generated_data["entriesByMonsterId"],
             initials,
         )
-        print(f"wrote review atlas {resolved_review}")
+        for rendered_path in rendered_paths:
+            print(f"wrote review artifact {rendered_path}")
 
 
 if __name__ == "__main__":

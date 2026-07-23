@@ -8,10 +8,11 @@ const STRATEGIES := ["grounded", "flying", "hover"]
 func _ready() -> void:
 	var manifest := MonsterVisual._ground_contact_manifest()
 	assert(manifest.get("contract", "") == MonsterVisual.GROUND_CONTACT_CONTRACT)
-	assert(manifest.get("calibrationContract", "") == "monster.ground_contact.calibration.v3")
+	assert(manifest.get("calibrationContract", "") == "monster.ground_contact.calibration.v4")
 	var summary: Dictionary = manifest.get("summary", {})
 	assert(int(summary.get("monsterCount", 0)) == 214)
 	assert(int(summary.get("explicitCalibrationCount", 0)) == 214)
+	assert(int(summary.get("manualReviewCount", 0)) == 214)
 	assert(summary.get("requiredActions", []) == REQUIRED_ACTIONS)
 	assert(int(summary.get("requiredDirections", 0)) == 8)
 	var entries: Dictionary = manifest.get("entriesByMonsterId", {})
@@ -33,13 +34,30 @@ func _ready() -> void:
 		assert(entry.ringEllipseRadii is Array and entry.ringEllipseRadii.size() == 2)
 		assert(float(entry.ringEllipseRadii[0]) >= 8.0)
 		assert(float(entry.ringEllipseRadii[1]) >= 3.0)
+		assert(
+			absf(
+				float(entry.ringVerticalSquash)
+				- float(entry.ringEllipseRadii[1]) / float(entry.ringEllipseRadii[0])
+			) <= 0.0001,
+			"monsterId=%s vertical squash disagrees with ellipse" % monster_id,
+		)
 		assert(entry.stableAcrossActions == REQUIRED_ACTIONS)
 		assert(int(entry.stableAcrossDirections) == 8)
-		assert(not str(entry.calibrationSource).is_empty())
+		assert(entry.calibrationSource == "manual_runtime_composite_review_v4")
+		var review: Dictionary = entry.get("review", {})
+		assert(review.get("status", "") == "approved")
+		assert(not str(review.get("archetype", "")).is_empty())
+		assert(review.get("poses", []) == [
+			"idle:direction0",
+			"walk:direction2",
+			"attack:direction4",
+			"death:direction6",
+		])
+		assert(str(review.get("decision", "")).contains("monsterId=%s" % monster_id))
 		assert(entry.automaticInitial is Dictionary)
 	var counts: Dictionary = summary.get("projectionStrategyCounts", {})
 	assert(int(counts.get("grounded", 0)) > 0)
 	assert(int(counts.get("flying", 0)) > 0)
 	assert(int(counts.get("hover", 0)) > 0)
-	print("MONSTER_GROUND_CONTACT_CALIBRATION_COVERAGE_PASS: 214 explicit per-ID grounded/flying/hover centers, feet and ellipse radii")
+	print("MONSTER_GROUND_CONTACT_CALIBRATION_COVERAGE_PASS: 214 independently reviewed per-ID grounded/flying/hover feet, centers, radii and vertical squash")
 	get_tree().quit(0)
