@@ -1299,6 +1299,17 @@
       "mappingSource": "equipment_client_art_sources同名正式物品equippedIcon",
       "recordPolicy": "reuse complete decoded WIL record; never crop by opaque bounds"
     },
+    "天魔神甲": {
+      "slot": "衣服",
+      "sourceIndex": 85,
+      "path": "res://assets/art/items/client/equipped/085.png",
+      "drawOffset": [46, 43],
+      "rawDrawOffset": [53, -1],
+      "size": [84, 153],
+      "source": "stateitem.wil",
+      "mappingSource": "equipment_client_art_sources同名正式物品equippedIcon",
+      "recordPolicy": "reuse complete decoded WIL record; never crop by opaque bounds"
+    },
     "圣战宝甲": {
       "slot": "衣服",
       "sourceIndex": 88,
@@ -1403,7 +1414,9 @@
     },
     {
       "name": "天魔神甲",
-      "reason": "原客户端物品表无 ItemImage"
+      "reason": "原客户端物品表无 ItemImage",
+      "status": "superseded_by_equipment_client_art_mapping_v1",
+      "resolvedRuntimePath": "res://assets/art/items/client/equipped/085.png"
     },
     {
       "name": "圣战宝甲",

@@ -5,7 +5,8 @@
   "visualSources": [
     "res://assets/data/equipment_client_art_sources.json",
     "res://assets/data/warrior_wear_sources.json",
-    "res://assets/data/warrior_paper_doll_sources.json"
+    "res://assets/data/warrior_paper_doll_sources.json",
+    "res://assets/data/equipment_visual_catalog.json"
   ],
   "supportedSlots": [
     "武器",
@@ -74,7 +75,7 @@
       "tierName": "赤月",
       "equipment": {
         "武器": {"itemId": 113, "itemName": "怒斩", "selectionBasis": "赤月套没有武器槽；采用正式目录中的同档战士武器"},
-        "衣服": {"itemId": 141, "itemName": "圣战宝甲", "selectionBasis": "正式战士赤月衣服"},
+        "衣服": {"itemId": 140, "itemName": "天魔神甲", "selectionBasis": "正式男性战士赤月衣服；圣战宝甲为女性款"},
         "头盔": {"itemId": 232, "itemName": "圣战头盔", "selectionBasis": "正式战士赤月头盔"},
         "项链": {"itemId": 233, "itemName": "圣战项链", "selectionBasis": "正式战士赤月附件"},
         "左手镯": {"itemId": 234, "itemName": "圣战手镯", "selectionBasis": "正式战士赤月附件"},
