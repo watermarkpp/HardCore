@@ -16,24 +16,30 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/HEAD：`codex/integration` @ `e0165bef78054b5f5b2b465382798510fafdb89d`
+- 分支/运行时代码基线：`codex/integration` @ `956393cf154be9af005c8ad58d8bd246a8b01ec1`（其后的快照提交只改本文档）。
 - tracked 状态：clean。
-- 未跟踪状态：67 个 Godot 生成的 `*.gd.uid`；没有用户授权时不得删除。
+- 未跟踪状态：75 个 Godot 生成的 `*.gd.uid`；没有用户授权时不得删除。
 - 当前无待合并专业提交。
-- 下一项外部验收：用户将手动安装并测试最终 APK；在收到实机结果前不推断通过或失败。
+- 用户已确认此前截图来自当时最新 APK；不要再次怀疑或重复核验安装版本。下一项外部验收是用户手动安装本页新 APK 并实测本轮修复。
 
 ## 最终 APK
 
 - 文件：`C:\Users\Administrator\Documents\HardCore\outputs\hardcore\HardCore-debug.apk`
-- 构建时间：`2026-07-22 23:59:06`
-- 大小：`1,619,606,733` 字节
-- SHA-256：`caaf580f1aa872f15886a3aa7a359c98a1a803ad59ef47cb98dc60f56300c912`
-- 此最终包尚未覆盖安装到手机；手机最后安装的是上一包，不能用手机当前画面判断本包结果。
+- 构建时间：`2026-07-23 10:59:25`
+- 大小：`1,619,615,156` 字节
+- SHA-256：`c551c4f0106a40ac5123d5639e5591cf7f4b4d34f83150ea38c32e9289e7d6b5`
+- 本包包含等距脚底碰撞、全局遮挡 v5、地图边缘/相机约束和怪物冷启动头顶刷新修复；尚待用户覆盖安装后实机验收。
 
 ## 最近已集成结果
 
 | 集成提交 | 领域 | 结果 |
 |---|---|---|
+| `956393cf` | integration | Camera2D 以视口侵蚀后的地图菱形约束中心，避免暴露地图外区域 |
+| `c4af44a1` | monsters | 怪物物理脚底改为 2:1 等距椭圆，战斗/AI 标量半径不变 |
+| `1b7e53da` | skills/player | 玩家物理脚底改为 18×9 等距椭圆 |
+| `46cfcd27` | maps | 统一真实地图边界、遮挡深度 v5 与菱形相机约束服务 |
+| `1a67e76f` | integration | 新增共享等距脚底契约 `world.actor_footprint.iso_ellipse.v1` |
+| `4e022999` | monsters | 冷启动异步贴图激活后重新计算固定头顶层 |
 | `e0165bef` | UI | 血球/蓝球恢复到框体孔径；2664×1200 安全区布局 |
 | `4957b340` | maps | 房屋/树木遮挡阈值修正；角色脚点可达可见地图边缘 |
 | `4ffe67eb` | monsters | 最终复合头顶层固定为身体→血条→名字 |
@@ -46,13 +52,17 @@
 
 当前关键契约：
 
-- maps：`map_editor_runtime_collision_geometry_v2`、`published_blocked_cells_after_erasure_v1`、`map_editor_runtime_visual_geometry_v3`、`map_visible_edge_actor_clearance_v1`、`map_actor_occlusion_sort_v4`。
-- monsters：`monster.overhead_anchor.v3`、`monster.overhead_layout.v3`。
+- integration：`world.actor_footprint.iso_ellipse.v1`。
+- maps：`map_editor_runtime_collision_geometry_v2`、`published_blocked_cells_after_erasure_v1`、`map_editor_runtime_visual_geometry_v5`、`map_actor_occlusion_sort_v5`、`map_diamond_camera_center_constraint_v1`。
+- monsters：`monster.overhead_anchor.v3`、`monster.overhead_layout.v3`；贴图异步激活后必须刷新头顶锚点。
 - UI：`ui.hud.resource_orb.hole_fill.v1`、`skill_button_assignment_contract_v2`。
 
 ## 已通过的必要验收
 
 - 总回归：`SMOKE_TEST_PASS`。
+- integration：共享 36×18 等距脚底契约通过；运行时 Camera2D 菱形视口约束通过。
+- physics：玩家 18×9、普通怪物 16×8、Boss 28×14 的真实物理与软件探针通过；战斗/AI 半径未改。
+- occlusion：11 张已发布地图、52 个交叉、4 类装饰物和 3 个比奇回归点通过；碰撞区、脚底深度点、装饰物遮挡基线已分离。
 - maps：比奇真实源 E2E（180 个阻挡格）；11 张地图真实 `CharacterBody2D` 脚点可达可见边缘且外环阻挡。
 - monsters：真实名字/血条节点覆盖 4 类怪物、8 方向、idle/walk/attack/hit/death 全帧和 Camera2D 缩放；214 种怪物加载通过。
 - UI：2664×1200 HUD 血蓝球尺寸/对称/安全区通过；技能配置与拾取提示专项通过。
@@ -64,10 +74,10 @@
 
 | 工作树 | 分支/HEAD | dirty | 集成状态 |
 |---|---|---:|---|
-| `HardCore-worktrees/maps` | `codex/maps` @ `30cef051` | 31 tracked + 41 untracked | 已等价集成为 `4957b340` |
-| `HardCore-worktrees/monsters` | `codex/monsters` @ `e8d0739f` | clean | 已等价集成为 `4ffe67eb` |
+| `HardCore-worktrees/maps` | `codex/maps` @ `0f10419c` | 31 tracked + 41 untracked | 已集成为 `46cfcd27` |
+| `HardCore-worktrees/monsters` | `codex/monsters` @ `2a260b98` | clean | 已集成为 `c4af44a1` |
 | `HardCore-worktrees/ui-art` | `codex/ui-art` @ `40f9312e` | clean | 已等价集成为 `e0165bef` |
-| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `362ec7ca` | clean | 最近交付已集成 |
+| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `075958e5` | clean | 已集成为 `1b7e53da` |
 | `HardCore-worktrees/equipment` | `codex/equipment` @ `6a28f394` | clean | 已等价集成为 `846e602f`；不要重复合并 ahead 提交 |
 
 ### maps 保护红线
@@ -84,10 +94,11 @@ maps 的 72 项 dirty 全部视为用户进行中的地图编辑器内容，禁�
 
 ## 下次实机验收清单
 
-1. 比奇房屋/树木可见底座与角色碰撞、前后遮挡是否一致。
-2. 地图可见外沿：脚点可达地面边缘，角色与怪物不能进入黑区。
-3. 怪物名字固定在血条上方，任何方向/动作/帧不偏移、不重合。
-4. 血球/蓝球恢复孔径尺寸且左右对称。
-5. 拾取提示居中；技能配置弹窗背景不越界；快捷技能可置换；烈火自动开关正常。
+1. 比奇房屋/树木/围墙：角色在装饰物地面接触基线后方时由装饰物遮盖，越过基线后由角色遮盖；视觉关系与碰撞不得互相冒充。
+2. 地图可见外沿：不再出现底色与地面分成两层；相机视口不暴露地图菱形外区域。
+3. 玩家、普通怪物和 Boss 在 64×32 格上的左右/上下接触感一致，不再出现圆形脚底导致的左右过早碰撞。
+4. 怪物名字固定在血条上方，血条稳定在真实头顶；任何方向/动作/帧不偏移、不重合。
+5. 血球/蓝球恢复孔径尺寸且左右对称。
+6. 拾取提示居中；技能配置弹窗背景不越界；快捷技能可置换；烈火自动开关正常。
 
 用户实测结果优先级高于内部测试；若实机失败，先保存截图和 APK 哈希，再按所属专业工作树返修。
