@@ -22,7 +22,8 @@ func _ready() -> void:
 	print(
 		(
 			"MAP_SOFT_CAMERA_EDGE_SKIRT_PASS contract=%s mode=%s "
-			+ "viewport=2664x1200 offset=14%% zoom=1.06..1.16"
+			+ "viewport=2664x1200 center_offset=+/-14%% "
+			+ "screen_band=36%%..64%% zoom=1.06..1.16"
 		)
 		% [
 			CameraConstraint.CONTRACT_ID,
@@ -73,7 +74,7 @@ func _verify_map(size: Vector2i, include_all_corners: bool) -> void:
 		assert(
 			offset.x <= maximum_offset.x + 0.01
 			and offset.y <= maximum_offset.y + 0.01,
-			"player screen offset exceeded 14%% for %s at %s: %s/%s" % [
+			"player left center +/-14%% (36%%..64%%) for %s at %s: %s/%s" % [
 				size, player_center, offset, maximum_offset,
 			]
 		)
