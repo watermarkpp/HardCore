@@ -5,6 +5,7 @@ extends Control
 # are diagnostics only now: a weapon or helmet must never move the actor.
 const OPAQUE_CENTER_CONTRACT_ID := "ui.equipment.paper_doll.opaque_center.v1"
 const FOOT_STAGE_ANCHOR_CONTRACT_ID := "ui.equipment.paper_doll.foot_stage_anchor.v2"
+const BODY_FOOT_CONTACT_FIELD := "footContact"
 const PAPER_DOLL_MANIFEST := "res://assets/data/warrior_paper_doll_sources.json"
 const EQUIPMENT_VISUAL_CATALOG := "res://assets/data/equipment_visual_catalog.json"
 const PROFESSION_IDS := {
@@ -38,6 +39,7 @@ var _body_texture: Texture2D
 var _weapon_texture: Texture2D
 var _helmet_texture: Texture2D
 var _canvas_size := ORIGINAL_CANVAS_SIZE
+var _manifest_foot_anchor := FOOT_STAGE_CENTER
 var _foot_stage_center := FOOT_STAGE_CENTER
 var _composition_opaque_bounds := Rect2(Vector2.ZERO, ORIGINAL_CANVAS_SIZE)
 
@@ -91,6 +93,7 @@ func refresh() -> void:
 	_body_texture = null
 	_weapon_texture = null
 	_helmet_texture = null
+	_foot_stage_center = _manifest_foot_anchor
 	var equipment_source := _equipment_snapshot if _use_equipment_snapshot else PlayerState.equipment
 	for slot: String in PAPER_LAYER_SLOTS:
 		var equipped: Variant = equipment_source.get(slot, {})
@@ -112,6 +115,10 @@ func refresh() -> void:
 		if slot == "衣服":
 			_body_layer = layer
 			_body_texture = texture
+			_foot_stage_center = _vector_from_value(
+				layer.get(BODY_FOOT_CONTACT_FIELD, _manifest_foot_anchor),
+				_manifest_foot_anchor
+			)
 		elif slot == "武器":
 			_weapon_texture = texture
 		elif slot == "头盔":
@@ -191,6 +198,7 @@ func _load_paper_mappings() -> void:
 	_base_texture = null
 	_hair_layer.clear()
 	_canvas_size = ORIGINAL_CANVAS_SIZE
+	_manifest_foot_anchor = FOOT_STAGE_CENTER
 	_foot_stage_center = FOOT_STAGE_CENTER
 	var source_document := _resolve_source_document()
 	if source_document.is_empty():
@@ -205,13 +213,14 @@ func _load_paper_mappings() -> void:
 		parsed.get("canvasSize", parsed.get("composition", {}).get("canvasSize", ORIGINAL_CANVAS_SIZE)),
 		ORIGINAL_CANVAS_SIZE
 	)
-	_foot_stage_center = _vector_from_value(
+	_manifest_foot_anchor = _vector_from_value(
 		parsed.get(
 			"paperDollFootAnchor",
 			parsed.get("footAnchor", parsed.get("composition", {}).get("footAnchor", FOOT_STAGE_CENTER))
 		),
 		FOOT_STAGE_CENTER
 	)
+	_foot_stage_center = _manifest_foot_anchor
 	var base: Variant = parsed.get("base", {})
 	if base is Dictionary:
 		var base_path := str(base.get("path", ""))
