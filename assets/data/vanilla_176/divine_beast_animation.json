@@ -1,0 +1,2108 @@
+{
+  "schemaVersion": 1,
+  "contract_id": "summon.visual.divine_beast.directional.v1",
+  "skill_id": "taoist.summon_divine_beast",
+  "summon_id": "divine_beast",
+  "appearance": 171,
+  "race": 55,
+  "actionTable": "MA29",
+  "directionMode": "mir2_north_first",
+  "frameSize": [
+    240,
+    208
+  ],
+  "footAnchor": [
+    76,
+    119
+  ],
+  "actorGroundOffset": [
+    32,
+    28
+  ],
+  "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon18.wil",
+  "clientLibrarySha256": "eab9850feaecd7a3bf89d3e6274317e3543f5c07ec3e771627e1aa11c4c74bbd",
+  "clientLibraryImageCount": 3707,
+  "blockBase": 350,
+  "mappingSource": "MirClient/Actor.pas GetOffset(171)=350 + race 55 MA29; AxeMon.pas TWarriorElfMonster",
+  "mappingSourceSha256": "55a43cfdca869810217e007f2284d293c8d69c8d0867cc879327ddcde87e19cd",
+  "pixelConfidence": "A",
+  "mappingConfidence": "A",
+  "actions": {
+    "idle": {
+      "path": "res://assets/art/characters/taoist/effects/divine_beast/divine_beast_idle.png",
+      "framesPerDirection": 4,
+      "frameMs": 200,
+      "sourceStart": 430,
+      "sourceDirectionStride": 10,
+      "validatedSourceFrameCount": 32,
+      "missingFrames": [],
+      "sourceFrames": [
+        {
+          "index": 430,
+          "direction": 0,
+          "frame": 0,
+          "drawOffset": [
+            -17,
+            -83
+          ]
+        },
+        {
+          "index": 431,
+          "direction": 0,
+          "frame": 1,
+          "drawOffset": [
+            -20,
+            -82
+          ]
+        },
+        {
+          "index": 432,
+          "direction": 0,
+          "frame": 2,
+          "drawOffset": [
+            -17,
+            -84
+          ]
+        },
+        {
+          "index": 433,
+          "direction": 0,
+          "frame": 3,
+          "drawOffset": [
+            -15,
+            -84
+          ]
+        },
+        {
+          "index": 440,
+          "direction": 1,
+          "frame": 0,
+          "drawOffset": [
+            0,
+            -81
+          ]
+        },
+        {
+          "index": 441,
+          "direction": 1,
+          "frame": 1,
+          "drawOffset": [
+            -6,
+            -81
+          ]
+        },
+        {
+          "index": 442,
+          "direction": 1,
+          "frame": 2,
+          "drawOffset": [
+            0,
+            -82
+          ]
+        },
+        {
+          "index": 443,
+          "direction": 1,
+          "frame": 3,
+          "drawOffset": [
+            0,
+            -82
+          ]
+        },
+        {
+          "index": 450,
+          "direction": 2,
+          "frame": 0,
+          "drawOffset": [
+            3,
+            -76
+          ]
+        },
+        {
+          "index": 451,
+          "direction": 2,
+          "frame": 1,
+          "drawOffset": [
+            3,
+            -76
+          ]
+        },
+        {
+          "index": 452,
+          "direction": 2,
+          "frame": 2,
+          "drawOffset": [
+            3,
+            -76
+          ]
+        },
+        {
+          "index": 453,
+          "direction": 2,
+          "frame": 3,
+          "drawOffset": [
+            3,
+            -76
+          ]
+        },
+        {
+          "index": 460,
+          "direction": 3,
+          "frame": 0,
+          "drawOffset": [
+            0,
+            -70
+          ]
+        },
+        {
+          "index": 461,
+          "direction": 3,
+          "frame": 1,
+          "drawOffset": [
+            -6,
+            -73
+          ]
+        },
+        {
+          "index": 462,
+          "direction": 3,
+          "frame": 2,
+          "drawOffset": [
+            0,
+            -74
+          ]
+        },
+        {
+          "index": 463,
+          "direction": 3,
+          "frame": 3,
+          "drawOffset": [
+            1,
+            -70
+          ]
+        },
+        {
+          "index": 470,
+          "direction": 4,
+          "frame": 0,
+          "drawOffset": [
+            -18,
+            -65
+          ]
+        },
+        {
+          "index": 471,
+          "direction": 4,
+          "frame": 1,
+          "drawOffset": [
+            -20,
+            -70
+          ]
+        },
+        {
+          "index": 472,
+          "direction": 4,
+          "frame": 2,
+          "drawOffset": [
+            -17,
+            -72
+          ]
+        },
+        {
+          "index": 473,
+          "direction": 4,
+          "frame": 3,
+          "drawOffset": [
+            -15,
+            -65
+          ]
+        },
+        {
+          "index": 480,
+          "direction": 5,
+          "frame": 0,
+          "drawOffset": [
+            -18,
+            -68
+          ]
+        },
+        {
+          "index": 481,
+          "direction": 5,
+          "frame": 1,
+          "drawOffset": [
+            -14,
+            -74
+          ]
+        },
+        {
+          "index": 482,
+          "direction": 5,
+          "frame": 2,
+          "drawOffset": [
+            -17,
+            -76
+          ]
+        },
+        {
+          "index": 483,
+          "direction": 5,
+          "frame": 3,
+          "drawOffset": [
+            -19,
+            -70
+          ]
+        },
+        {
+          "index": 490,
+          "direction": 6,
+          "frame": 0,
+          "drawOffset": [
+            -19,
+            -71
+          ]
+        },
+        {
+          "index": 491,
+          "direction": 6,
+          "frame": 1,
+          "drawOffset": [
+            -15,
+            -77
+          ]
+        },
+        {
+          "index": 492,
+          "direction": 6,
+          "frame": 2,
+          "drawOffset": [
+            -14,
+            -79
+          ]
+        },
+        {
+          "index": 493,
+          "direction": 6,
+          "frame": 3,
+          "drawOffset": [
+            -20,
+            -75
+          ]
+        },
+        {
+          "index": 500,
+          "direction": 7,
+          "frame": 0,
+          "drawOffset": [
+            -17,
+            -80
+          ]
+        },
+        {
+          "index": 501,
+          "direction": 7,
+          "frame": 1,
+          "drawOffset": [
+            -12,
+            -81
+          ]
+        },
+        {
+          "index": 502,
+          "direction": 7,
+          "frame": 2,
+          "drawOffset": [
+            -16,
+            -83
+          ]
+        },
+        {
+          "index": 503,
+          "direction": 7,
+          "frame": 3,
+          "drawOffset": [
+            -18,
+            -82
+          ]
+        }
+      ],
+      "confidence": "A"
+    },
+    "walk": {
+      "path": "res://assets/art/characters/taoist/effects/divine_beast/divine_beast_walk.png",
+      "framesPerDirection": 6,
+      "frameMs": 160,
+      "sourceStart": 510,
+      "sourceDirectionStride": 10,
+      "validatedSourceFrameCount": 48,
+      "missingFrames": [],
+      "sourceFrames": [
+        {
+          "index": 510,
+          "direction": 0,
+          "frame": 0,
+          "drawOffset": [
+            -14,
+            -81
+          ]
+        },
+        {
+          "index": 511,
+          "direction": 0,
+          "frame": 1,
+          "drawOffset": [
+            -16,
+            -83
+          ]
+        },
+        {
+          "index": 512,
+          "direction": 0,
+          "frame": 2,
+          "drawOffset": [
+            -9,
+            -83
+          ]
+        },
+        {
+          "index": 513,
+          "direction": 0,
+          "frame": 3,
+          "drawOffset": [
+            -4,
+            -81
+          ]
+        },
+        {
+          "index": 514,
+          "direction": 0,
+          "frame": 4,
+          "drawOffset": [
+            -4,
+            -83
+          ]
+        },
+        {
+          "index": 515,
+          "direction": 0,
+          "frame": 5,
+          "drawOffset": [
+            -10,
+            -83
+          ]
+        },
+        {
+          "index": 520,
+          "direction": 1,
+          "frame": 0,
+          "drawOffset": [
+            -5,
+            -82
+          ]
+        },
+        {
+          "index": 521,
+          "direction": 1,
+          "frame": 1,
+          "drawOffset": [
+            -6,
+            -83
+          ]
+        },
+        {
+          "index": 522,
+          "direction": 1,
+          "frame": 2,
+          "drawOffset": [
+            -5,
+            -82
+          ]
+        },
+        {
+          "index": 523,
+          "direction": 1,
+          "frame": 3,
+          "drawOffset": [
+            -6,
+            -79
+          ]
+        },
+        {
+          "index": 524,
+          "direction": 1,
+          "frame": 4,
+          "drawOffset": [
+            -1,
+            -82
+          ]
+        },
+        {
+          "index": 525,
+          "direction": 1,
+          "frame": 5,
+          "drawOffset": [
+            0,
+            -82
+          ]
+        },
+        {
+          "index": 530,
+          "direction": 2,
+          "frame": 0,
+          "drawOffset": [
+            -5,
+            -80
+          ]
+        },
+        {
+          "index": 531,
+          "direction": 2,
+          "frame": 1,
+          "drawOffset": [
+            2,
+            -80
+          ]
+        },
+        {
+          "index": 532,
+          "direction": 2,
+          "frame": 2,
+          "drawOffset": [
+            -5,
+            -79
+          ]
+        },
+        {
+          "index": 533,
+          "direction": 2,
+          "frame": 3,
+          "drawOffset": [
+            -7,
+            -75
+          ]
+        },
+        {
+          "index": 534,
+          "direction": 2,
+          "frame": 4,
+          "drawOffset": [
+            2,
+            -78
+          ]
+        },
+        {
+          "index": 535,
+          "direction": 2,
+          "frame": 5,
+          "drawOffset": [
+            -5,
+            -79
+          ]
+        },
+        {
+          "index": 540,
+          "direction": 3,
+          "frame": 0,
+          "drawOffset": [
+            -5,
+            -78
+          ]
+        },
+        {
+          "index": 541,
+          "direction": 3,
+          "frame": 1,
+          "drawOffset": [
+            -1,
+            -78
+          ]
+        },
+        {
+          "index": 542,
+          "direction": 3,
+          "frame": 2,
+          "drawOffset": [
+            0,
+            -77
+          ]
+        },
+        {
+          "index": 543,
+          "direction": 3,
+          "frame": 3,
+          "drawOffset": [
+            -5,
+            -75
+          ]
+        },
+        {
+          "index": 544,
+          "direction": 3,
+          "frame": 4,
+          "drawOffset": [
+            -6,
+            -77
+          ]
+        },
+        {
+          "index": 545,
+          "direction": 3,
+          "frame": 5,
+          "drawOffset": [
+            -5,
+            -77
+          ]
+        },
+        {
+          "index": 550,
+          "direction": 4,
+          "frame": 0,
+          "drawOffset": [
+            -4,
+            -73
+          ]
+        },
+        {
+          "index": 551,
+          "direction": 4,
+          "frame": 1,
+          "drawOffset": [
+            -5,
+            -73
+          ]
+        },
+        {
+          "index": 552,
+          "direction": 4,
+          "frame": 2,
+          "drawOffset": [
+            -10,
+            -73
+          ]
+        },
+        {
+          "index": 553,
+          "direction": 4,
+          "frame": 3,
+          "drawOffset": [
+            -12,
+            -73
+          ]
+        },
+        {
+          "index": 554,
+          "direction": 4,
+          "frame": 4,
+          "drawOffset": [
+            -13,
+            -75
+          ]
+        },
+        {
+          "index": 555,
+          "direction": 4,
+          "frame": 5,
+          "drawOffset": [
+            -9,
+            -73
+          ]
+        },
+        {
+          "index": 560,
+          "direction": 5,
+          "frame": 0,
+          "drawOffset": [
+            -8,
+            -75
+          ]
+        },
+        {
+          "index": 561,
+          "direction": 5,
+          "frame": 1,
+          "drawOffset": [
+            -10,
+            -77
+          ]
+        },
+        {
+          "index": 562,
+          "direction": 5,
+          "frame": 2,
+          "drawOffset": [
+            -10,
+            -77
+          ]
+        },
+        {
+          "index": 563,
+          "direction": 5,
+          "frame": 3,
+          "drawOffset": [
+            -6,
+            -78
+          ]
+        },
+        {
+          "index": 564,
+          "direction": 5,
+          "frame": 4,
+          "drawOffset": [
+            -6,
+            -79
+          ]
+        },
+        {
+          "index": 565,
+          "direction": 5,
+          "frame": 5,
+          "drawOffset": [
+            -8,
+            -77
+          ]
+        },
+        {
+          "index": 570,
+          "direction": 6,
+          "frame": 0,
+          "drawOffset": [
+            -11,
+            -75
+          ]
+        },
+        {
+          "index": 571,
+          "direction": 6,
+          "frame": 1,
+          "drawOffset": [
+            -12,
+            -78
+          ]
+        },
+        {
+          "index": 572,
+          "direction": 6,
+          "frame": 2,
+          "drawOffset": [
+            -12,
+            -79
+          ]
+        },
+        {
+          "index": 573,
+          "direction": 6,
+          "frame": 3,
+          "drawOffset": [
+            -11,
+            -80
+          ]
+        },
+        {
+          "index": 574,
+          "direction": 6,
+          "frame": 4,
+          "drawOffset": [
+            -12,
+            -80
+          ]
+        },
+        {
+          "index": 575,
+          "direction": 6,
+          "frame": 5,
+          "drawOffset": [
+            -12,
+            -79
+          ]
+        },
+        {
+          "index": 580,
+          "direction": 7,
+          "frame": 0,
+          "drawOffset": [
+            -7,
+            -79
+          ]
+        },
+        {
+          "index": 581,
+          "direction": 7,
+          "frame": 1,
+          "drawOffset": [
+            -6,
+            -82
+          ]
+        },
+        {
+          "index": 582,
+          "direction": 7,
+          "frame": 2,
+          "drawOffset": [
+            -8,
+            -82
+          ]
+        },
+        {
+          "index": 583,
+          "direction": 7,
+          "frame": 3,
+          "drawOffset": [
+            -8,
+            -82
+          ]
+        },
+        {
+          "index": 584,
+          "direction": 7,
+          "frame": 4,
+          "drawOffset": [
+            -9,
+            -83
+          ]
+        },
+        {
+          "index": 585,
+          "direction": 7,
+          "frame": 5,
+          "drawOffset": [
+            -10,
+            -82
+          ]
+        }
+      ],
+      "confidence": "A"
+    },
+    "attack": {
+      "path": "res://assets/art/characters/taoist/effects/divine_beast/divine_beast_attack.png",
+      "framesPerDirection": 6,
+      "frameMs": 100,
+      "sourceStart": 590,
+      "sourceDirectionStride": 10,
+      "validatedSourceFrameCount": 48,
+      "missingFrames": [],
+      "sourceFrames": [
+        {
+          "index": 590,
+          "direction": 0,
+          "frame": 0,
+          "drawOffset": [
+            -16,
+            -82
+          ]
+        },
+        {
+          "index": 591,
+          "direction": 0,
+          "frame": 1,
+          "drawOffset": [
+            -19,
+            -80
+          ]
+        },
+        {
+          "index": 592,
+          "direction": 0,
+          "frame": 2,
+          "drawOffset": [
+            -24,
+            -64
+          ]
+        },
+        {
+          "index": 593,
+          "direction": 0,
+          "frame": 3,
+          "drawOffset": [
+            -27,
+            -62
+          ]
+        },
+        {
+          "index": 594,
+          "direction": 0,
+          "frame": 4,
+          "drawOffset": [
+            -18,
+            -81
+          ]
+        },
+        {
+          "index": 595,
+          "direction": 0,
+          "frame": 5,
+          "drawOffset": [
+            -12,
+            -81
+          ]
+        },
+        {
+          "index": 600,
+          "direction": 1,
+          "frame": 0,
+          "drawOffset": [
+            -4,
+            -79
+          ]
+        },
+        {
+          "index": 601,
+          "direction": 1,
+          "frame": 1,
+          "drawOffset": [
+            -6,
+            -80
+          ]
+        },
+        {
+          "index": 602,
+          "direction": 1,
+          "frame": 2,
+          "drawOffset": [
+            -17,
+            -70
+          ]
+        },
+        {
+          "index": 603,
+          "direction": 1,
+          "frame": 3,
+          "drawOffset": [
+            -18,
+            -68
+          ]
+        },
+        {
+          "index": 604,
+          "direction": 1,
+          "frame": 4,
+          "drawOffset": [
+            -5,
+            -81
+          ]
+        },
+        {
+          "index": 605,
+          "direction": 1,
+          "frame": 5,
+          "drawOffset": [
+            -6,
+            -76
+          ]
+        },
+        {
+          "index": 610,
+          "direction": 2,
+          "frame": 0,
+          "drawOffset": [
+            3,
+            -70
+          ]
+        },
+        {
+          "index": 611,
+          "direction": 2,
+          "frame": 1,
+          "drawOffset": [
+            3,
+            -80
+          ]
+        },
+        {
+          "index": 612,
+          "direction": 2,
+          "frame": 2,
+          "drawOffset": [
+            -10,
+            -82
+          ]
+        },
+        {
+          "index": 613,
+          "direction": 2,
+          "frame": 3,
+          "drawOffset": [
+            -15,
+            -81
+          ]
+        },
+        {
+          "index": 614,
+          "direction": 2,
+          "frame": 4,
+          "drawOffset": [
+            3,
+            -79
+          ]
+        },
+        {
+          "index": 615,
+          "direction": 2,
+          "frame": 5,
+          "drawOffset": [
+            2,
+            -62
+          ]
+        },
+        {
+          "index": 620,
+          "direction": 3,
+          "frame": 0,
+          "drawOffset": [
+            -4,
+            -64
+          ]
+        },
+        {
+          "index": 621,
+          "direction": 3,
+          "frame": 1,
+          "drawOffset": [
+            -6,
+            -80
+          ]
+        },
+        {
+          "index": 622,
+          "direction": 3,
+          "frame": 2,
+          "drawOffset": [
+            -18,
+            -96
+          ]
+        },
+        {
+          "index": 623,
+          "direction": 3,
+          "frame": 3,
+          "drawOffset": [
+            -18,
+            -98
+          ]
+        },
+        {
+          "index": 624,
+          "direction": 3,
+          "frame": 4,
+          "drawOffset": [
+            -5,
+            -79
+          ]
+        },
+        {
+          "index": 625,
+          "direction": 3,
+          "frame": 5,
+          "drawOffset": [
+            -6,
+            -54
+          ]
+        },
+        {
+          "index": 630,
+          "direction": 4,
+          "frame": 0,
+          "drawOffset": [
+            -17,
+            -58
+          ]
+        },
+        {
+          "index": 631,
+          "direction": 4,
+          "frame": 1,
+          "drawOffset": [
+            -20,
+            -78
+          ]
+        },
+        {
+          "index": 632,
+          "direction": 4,
+          "frame": 2,
+          "drawOffset": [
+            -25,
+            -98
+          ]
+        },
+        {
+          "index": 633,
+          "direction": 4,
+          "frame": 3,
+          "drawOffset": [
+            -27,
+            -101
+          ]
+        },
+        {
+          "index": 634,
+          "direction": 4,
+          "frame": 4,
+          "drawOffset": [
+            -20,
+            -76
+          ]
+        },
+        {
+          "index": 635,
+          "direction": 4,
+          "frame": 5,
+          "drawOffset": [
+            -14,
+            -47
+          ]
+        },
+        {
+          "index": 640,
+          "direction": 5,
+          "frame": 0,
+          "drawOffset": [
+            -11,
+            -64
+          ]
+        },
+        {
+          "index": 641,
+          "direction": 5,
+          "frame": 1,
+          "drawOffset": [
+            -17,
+            -80
+          ]
+        },
+        {
+          "index": 642,
+          "direction": 5,
+          "frame": 2,
+          "drawOffset": [
+            -14,
+            -96
+          ]
+        },
+        {
+          "index": 643,
+          "direction": 5,
+          "frame": 3,
+          "drawOffset": [
+            -15,
+            -98
+          ]
+        },
+        {
+          "index": 644,
+          "direction": 5,
+          "frame": 4,
+          "drawOffset": [
+            -18,
+            -78
+          ]
+        },
+        {
+          "index": 645,
+          "direction": 5,
+          "frame": 5,
+          "drawOffset": [
+            -18,
+            -55
+          ]
+        },
+        {
+          "index": 650,
+          "direction": 6,
+          "frame": 0,
+          "drawOffset": [
+            -23,
+            -70
+          ]
+        },
+        {
+          "index": 651,
+          "direction": 6,
+          "frame": 1,
+          "drawOffset": [
+            -6,
+            -80
+          ]
+        },
+        {
+          "index": 652,
+          "direction": 6,
+          "frame": 2,
+          "drawOffset": [
+            5,
+            -82
+          ]
+        },
+        {
+          "index": 653,
+          "direction": 6,
+          "frame": 3,
+          "drawOffset": [
+            2,
+            -81
+          ]
+        },
+        {
+          "index": 654,
+          "direction": 6,
+          "frame": 4,
+          "drawOffset": [
+            -10,
+            -77
+          ]
+        },
+        {
+          "index": 655,
+          "direction": 6,
+          "frame": 5,
+          "drawOffset": [
+            -33,
+            -65
+          ]
+        },
+        {
+          "index": 660,
+          "direction": 7,
+          "frame": 0,
+          "drawOffset": [
+            -11,
+            -79
+          ]
+        },
+        {
+          "index": 661,
+          "direction": 7,
+          "frame": 1,
+          "drawOffset": [
+            -15,
+            -80
+          ]
+        },
+        {
+          "index": 662,
+          "direction": 7,
+          "frame": 2,
+          "drawOffset": [
+            -12,
+            -70
+          ]
+        },
+        {
+          "index": 663,
+          "direction": 7,
+          "frame": 3,
+          "drawOffset": [
+            -14,
+            -68
+          ]
+        },
+        {
+          "index": 664,
+          "direction": 7,
+          "frame": 4,
+          "drawOffset": [
+            -17,
+            -80
+          ]
+        },
+        {
+          "index": 665,
+          "direction": 7,
+          "frame": 5,
+          "drawOffset": [
+            -17,
+            -77
+          ]
+        }
+      ],
+      "confidence": "A"
+    },
+    "hit": {
+      "path": "res://assets/art/characters/taoist/effects/divine_beast/divine_beast_hit.png",
+      "framesPerDirection": 2,
+      "frameMs": 100,
+      "sourceStart": 670,
+      "sourceDirectionStride": 2,
+      "validatedSourceFrameCount": 16,
+      "missingFrames": [],
+      "sourceFrames": [
+        {
+          "index": 670,
+          "direction": 0,
+          "frame": 0,
+          "drawOffset": [
+            -27,
+            -42
+          ]
+        },
+        {
+          "index": 671,
+          "direction": 0,
+          "frame": 1,
+          "drawOffset": [
+            -30,
+            -59
+          ]
+        },
+        {
+          "index": 672,
+          "direction": 1,
+          "frame": 0,
+          "drawOffset": [
+            -29,
+            -58
+          ]
+        },
+        {
+          "index": 673,
+          "direction": 1,
+          "frame": 1,
+          "drawOffset": [
+            -22,
+            -60
+          ]
+        },
+        {
+          "index": 674,
+          "direction": 2,
+          "frame": 0,
+          "drawOffset": [
+            -42,
+            -65
+          ]
+        },
+        {
+          "index": 675,
+          "direction": 2,
+          "frame": 1,
+          "drawOffset": [
+            -30,
+            -75
+          ]
+        },
+        {
+          "index": 676,
+          "direction": 3,
+          "frame": 0,
+          "drawOffset": [
+            -32,
+            -89
+          ]
+        },
+        {
+          "index": 677,
+          "direction": 3,
+          "frame": 1,
+          "drawOffset": [
+            -19,
+            -92
+          ]
+        },
+        {
+          "index": 678,
+          "direction": 4,
+          "frame": 0,
+          "drawOffset": [
+            -36,
+            -95
+          ]
+        },
+        {
+          "index": 679,
+          "direction": 4,
+          "frame": 1,
+          "drawOffset": [
+            -30,
+            -96
+          ]
+        },
+        {
+          "index": 680,
+          "direction": 5,
+          "frame": 0,
+          "drawOffset": [
+            -12,
+            -90
+          ]
+        },
+        {
+          "index": 681,
+          "direction": 5,
+          "frame": 1,
+          "drawOffset": [
+            -19,
+            -88
+          ]
+        },
+        {
+          "index": 682,
+          "direction": 6,
+          "frame": 0,
+          "drawOffset": [
+            8,
+            -73
+          ]
+        },
+        {
+          "index": 683,
+          "direction": 6,
+          "frame": 1,
+          "drawOffset": [
+            1,
+            -72
+          ]
+        },
+        {
+          "index": 684,
+          "direction": 7,
+          "frame": 0,
+          "drawOffset": [
+            -20,
+            -58
+          ]
+        },
+        {
+          "index": 685,
+          "direction": 7,
+          "frame": 1,
+          "drawOffset": [
+            -30,
+            -65
+          ]
+        }
+      ],
+      "confidence": "A"
+    },
+    "death": {
+      "path": "res://assets/art/characters/taoist/effects/divine_beast/divine_beast_death.png",
+      "framesPerDirection": 10,
+      "frameMs": 120,
+      "sourceStart": 690,
+      "sourceDirectionStride": 10,
+      "validatedSourceFrameCount": 80,
+      "missingFrames": [],
+      "sourceFrames": [
+        {
+          "index": 690,
+          "direction": 0,
+          "frame": 0,
+          "drawOffset": [
+            -22,
+            -64
+          ]
+        },
+        {
+          "index": 691,
+          "direction": 0,
+          "frame": 1,
+          "drawOffset": [
+            -26,
+            -62
+          ]
+        },
+        {
+          "index": 692,
+          "direction": 0,
+          "frame": 2,
+          "drawOffset": [
+            -28,
+            -52
+          ]
+        },
+        {
+          "index": 693,
+          "direction": 0,
+          "frame": 3,
+          "drawOffset": [
+            -38,
+            -54
+          ]
+        },
+        {
+          "index": 694,
+          "direction": 0,
+          "frame": 4,
+          "drawOffset": [
+            -25,
+            -56
+          ]
+        },
+        {
+          "index": 695,
+          "direction": 0,
+          "frame": 5,
+          "drawOffset": [
+            -27,
+            -58
+          ]
+        },
+        {
+          "index": 696,
+          "direction": 0,
+          "frame": 6,
+          "drawOffset": [
+            -33,
+            -64
+          ]
+        },
+        {
+          "index": 697,
+          "direction": 0,
+          "frame": 7,
+          "drawOffset": [
+            -40,
+            -71
+          ]
+        },
+        {
+          "index": 698,
+          "direction": 0,
+          "frame": 8,
+          "drawOffset": [
+            -49,
+            -75
+          ]
+        },
+        {
+          "index": 699,
+          "direction": 0,
+          "frame": 9,
+          "drawOffset": [
+            -43,
+            -79
+          ]
+        },
+        {
+          "index": 700,
+          "direction": 1,
+          "frame": 0,
+          "drawOffset": [
+            -17,
+            -70
+          ]
+        },
+        {
+          "index": 701,
+          "direction": 1,
+          "frame": 1,
+          "drawOffset": [
+            -24,
+            -64
+          ]
+        },
+        {
+          "index": 702,
+          "direction": 1,
+          "frame": 2,
+          "drawOffset": [
+            -26,
+            -55
+          ]
+        },
+        {
+          "index": 703,
+          "direction": 1,
+          "frame": 3,
+          "drawOffset": [
+            -23,
+            -61
+          ]
+        },
+        {
+          "index": 704,
+          "direction": 1,
+          "frame": 4,
+          "drawOffset": [
+            -24,
+            -55
+          ]
+        },
+        {
+          "index": 705,
+          "direction": 1,
+          "frame": 5,
+          "drawOffset": [
+            -26,
+            -55
+          ]
+        },
+        {
+          "index": 706,
+          "direction": 1,
+          "frame": 6,
+          "drawOffset": [
+            -32,
+            -61
+          ]
+        },
+        {
+          "index": 707,
+          "direction": 1,
+          "frame": 7,
+          "drawOffset": [
+            -37,
+            -67
+          ]
+        },
+        {
+          "index": 708,
+          "direction": 1,
+          "frame": 8,
+          "drawOffset": [
+            -49,
+            -81
+          ]
+        },
+        {
+          "index": 709,
+          "direction": 1,
+          "frame": 9,
+          "drawOffset": [
+            -62,
+            -89
+          ]
+        },
+        {
+          "index": 710,
+          "direction": 2,
+          "frame": 0,
+          "drawOffset": [
+            -22,
+            -76
+          ]
+        },
+        {
+          "index": 711,
+          "direction": 2,
+          "frame": 1,
+          "drawOffset": [
+            -23,
+            -71
+          ]
+        },
+        {
+          "index": 712,
+          "direction": 2,
+          "frame": 2,
+          "drawOffset": [
+            -27,
+            -70
+          ]
+        },
+        {
+          "index": 713,
+          "direction": 2,
+          "frame": 3,
+          "drawOffset": [
+            -30,
+            -69
+          ]
+        },
+        {
+          "index": 714,
+          "direction": 2,
+          "frame": 4,
+          "drawOffset": [
+            -26,
+            -61
+          ]
+        },
+        {
+          "index": 715,
+          "direction": 2,
+          "frame": 5,
+          "drawOffset": [
+            -26,
+            -62
+          ]
+        },
+        {
+          "index": 716,
+          "direction": 2,
+          "frame": 6,
+          "drawOffset": [
+            -29,
+            -68
+          ]
+        },
+        {
+          "index": 717,
+          "direction": 2,
+          "frame": 7,
+          "drawOffset": [
+            -30,
+            -76
+          ]
+        },
+        {
+          "index": 718,
+          "direction": 2,
+          "frame": 8,
+          "drawOffset": [
+            -36,
+            -93
+          ]
+        },
+        {
+          "index": 719,
+          "direction": 2,
+          "frame": 9,
+          "drawOffset": [
+            -51,
+            -92
+          ]
+        },
+        {
+          "index": 720,
+          "direction": 3,
+          "frame": 0,
+          "drawOffset": [
+            -17,
+            -81
+          ]
+        },
+        {
+          "index": 721,
+          "direction": 3,
+          "frame": 1,
+          "drawOffset": [
+            -10,
+            -85
+          ]
+        },
+        {
+          "index": 722,
+          "direction": 3,
+          "frame": 2,
+          "drawOffset": [
+            -21,
+            -85
+          ]
+        },
+        {
+          "index": 723,
+          "direction": 3,
+          "frame": 3,
+          "drawOffset": [
+            -28,
+            -84
+          ]
+        },
+        {
+          "index": 724,
+          "direction": 3,
+          "frame": 4,
+          "drawOffset": [
+            -27,
+            -72
+          ]
+        },
+        {
+          "index": 725,
+          "direction": 3,
+          "frame": 5,
+          "drawOffset": [
+            -27,
+            -73
+          ]
+        },
+        {
+          "index": 726,
+          "direction": 3,
+          "frame": 6,
+          "drawOffset": [
+            -28,
+            -77
+          ]
+        },
+        {
+          "index": 727,
+          "direction": 3,
+          "frame": 7,
+          "drawOffset": [
+            -34,
+            -86
+          ]
+        },
+        {
+          "index": 728,
+          "direction": 3,
+          "frame": 8,
+          "drawOffset": [
+            -41,
+            -97
+          ]
+        },
+        {
+          "index": 729,
+          "direction": 3,
+          "frame": 9,
+          "drawOffset": [
+            -50,
+            -109
+          ]
+        },
+        {
+          "index": 730,
+          "direction": 4,
+          "frame": 0,
+          "drawOffset": [
+            -25,
+            -87
+          ]
+        },
+        {
+          "index": 731,
+          "direction": 4,
+          "frame": 1,
+          "drawOffset": [
+            -24,
+            -86
+          ]
+        },
+        {
+          "index": 732,
+          "direction": 4,
+          "frame": 2,
+          "drawOffset": [
+            -28,
+            -87
+          ]
+        },
+        {
+          "index": 733,
+          "direction": 4,
+          "frame": 3,
+          "drawOffset": [
+            -36,
+            -87
+          ]
+        },
+        {
+          "index": 734,
+          "direction": 4,
+          "frame": 4,
+          "drawOffset": [
+            -40,
+            -83
+          ]
+        },
+        {
+          "index": 735,
+          "direction": 4,
+          "frame": 5,
+          "drawOffset": [
+            -41,
+            -83
+          ]
+        },
+        {
+          "index": 736,
+          "direction": 4,
+          "frame": 6,
+          "drawOffset": [
+            -47,
+            -86
+          ]
+        },
+        {
+          "index": 737,
+          "direction": 4,
+          "frame": 7,
+          "drawOffset": [
+            -53,
+            -94
+          ]
+        },
+        {
+          "index": 738,
+          "direction": 4,
+          "frame": 8,
+          "drawOffset": [
+            -64,
+            -107
+          ]
+        },
+        {
+          "index": 739,
+          "direction": 4,
+          "frame": 9,
+          "drawOffset": [
+            -72,
+            -111
+          ]
+        },
+        {
+          "index": 740,
+          "direction": 5,
+          "frame": 0,
+          "drawOffset": [
+            -31,
+            -84
+          ]
+        },
+        {
+          "index": 741,
+          "direction": 5,
+          "frame": 1,
+          "drawOffset": [
+            -28,
+            -77
+          ]
+        },
+        {
+          "index": 742,
+          "direction": 5,
+          "frame": 2,
+          "drawOffset": [
+            -15,
+            -80
+          ]
+        },
+        {
+          "index": 743,
+          "direction": 5,
+          "frame": 3,
+          "drawOffset": [
+            -19,
+            -79
+          ]
+        },
+        {
+          "index": 744,
+          "direction": 5,
+          "frame": 4,
+          "drawOffset": [
+            -30,
+            -84
+          ]
+        },
+        {
+          "index": 745,
+          "direction": 5,
+          "frame": 5,
+          "drawOffset": [
+            -31,
+            -86
+          ]
+        },
+        {
+          "index": 746,
+          "direction": 5,
+          "frame": 6,
+          "drawOffset": [
+            -37,
+            -91
+          ]
+        },
+        {
+          "index": 747,
+          "direction": 5,
+          "frame": 7,
+          "drawOffset": [
+            -43,
+            -98
+          ]
+        },
+        {
+          "index": 748,
+          "direction": 5,
+          "frame": 8,
+          "drawOffset": [
+            -46,
+            -111
+          ]
+        },
+        {
+          "index": 749,
+          "direction": 5,
+          "frame": 9,
+          "drawOffset": [
+            -53,
+            -115
+          ]
+        },
+        {
+          "index": 750,
+          "direction": 6,
+          "frame": 0,
+          "drawOffset": [
+            -9,
+            -71
+          ]
+        },
+        {
+          "index": 751,
+          "direction": 6,
+          "frame": 1,
+          "drawOffset": [
+            -7,
+            -70
+          ]
+        },
+        {
+          "index": 752,
+          "direction": 6,
+          "frame": 2,
+          "drawOffset": [
+            9,
+            -71
+          ]
+        },
+        {
+          "index": 753,
+          "direction": 6,
+          "frame": 3,
+          "drawOffset": [
+            9,
+            -70
+          ]
+        },
+        {
+          "index": 754,
+          "direction": 6,
+          "frame": 4,
+          "drawOffset": [
+            7,
+            -78
+          ]
+        },
+        {
+          "index": 755,
+          "direction": 6,
+          "frame": 5,
+          "drawOffset": [
+            6,
+            -79
+          ]
+        },
+        {
+          "index": 756,
+          "direction": 6,
+          "frame": 6,
+          "drawOffset": [
+            0,
+            -85
+          ]
+        },
+        {
+          "index": 757,
+          "direction": 6,
+          "frame": 7,
+          "drawOffset": [
+            -7,
+            -91
+          ]
+        },
+        {
+          "index": 758,
+          "direction": 6,
+          "frame": 8,
+          "drawOffset": [
+            -13,
+            -100
+          ]
+        },
+        {
+          "index": 759,
+          "direction": 6,
+          "frame": 9,
+          "drawOffset": [
+            -13,
+            -114
+          ]
+        },
+        {
+          "index": 760,
+          "direction": 7,
+          "frame": 0,
+          "drawOffset": [
+            -18,
+            -67
+          ]
+        },
+        {
+          "index": 761,
+          "direction": 7,
+          "frame": 1,
+          "drawOffset": [
+            -13,
+            -69
+          ]
+        },
+        {
+          "index": 762,
+          "direction": 7,
+          "frame": 2,
+          "drawOffset": [
+            -21,
+            -59
+          ]
+        },
+        {
+          "index": 763,
+          "direction": 7,
+          "frame": 3,
+          "drawOffset": [
+            -24,
+            -60
+          ]
+        },
+        {
+          "index": 764,
+          "direction": 7,
+          "frame": 4,
+          "drawOffset": [
+            -5,
+            -68
+          ]
+        },
+        {
+          "index": 765,
+          "direction": 7,
+          "frame": 5,
+          "drawOffset": [
+            -6,
+            -68
+          ]
+        },
+        {
+          "index": 766,
+          "direction": 7,
+          "frame": 6,
+          "drawOffset": [
+            -12,
+            -73
+          ]
+        },
+        {
+          "index": 767,
+          "direction": 7,
+          "frame": 7,
+          "drawOffset": [
+            -14,
+            -81
+          ]
+        },
+        {
+          "index": 768,
+          "direction": 7,
+          "frame": 8,
+          "drawOffset": [
+            -20,
+            -87
+          ]
+        },
+        {
+          "index": 769,
+          "direction": 7,
+          "frame": 9,
+          "drawOffset": [
+            -20,
+            -96
+          ]
+        }
+      ],
+      "confidence": "A"
+    }
+  }
+}

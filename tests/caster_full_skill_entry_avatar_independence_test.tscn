@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/caster_full_skill_entry_avatar_independence_test.gd" type="Script" id="1"]
+
+[node name="CasterFullSkillEntryAvatarIndependenceTest" type="Node"]
+script = ExtResource("1")
