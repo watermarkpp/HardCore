@@ -1,0 +1,3432 @@
+{
+  "schemaVersion": 3,
+  "contract": "monster.ground_contact.calibration.v3",
+  "identityKey": "monsterId",
+  "policy": "Every formal monsterId owns an explicit absolute calibration. Automatic alpha measurement may seed this file but never bypasses it.",
+  "entriesByMonsterId": {
+    "18": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -3,
+        27
+      ],
+      "ringCenterOffset": [
+        -3,
+        27
+      ],
+      "ringEllipseRadii": [
+        17,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "19": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -8,
+        0
+      ],
+      "ringCenterOffset": [
+        -8,
+        0
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "21": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        0
+      ],
+      "ringCenterOffset": [
+        -2,
+        0
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "23": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        0
+      ],
+      "ringCenterOffset": [
+        -2,
+        0
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "24": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        2
+      ],
+      "ringCenterOffset": [
+        -5,
+        2
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "25": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        2
+      ],
+      "ringCenterOffset": [
+        -5,
+        2
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "26": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        6
+      ],
+      "ringCenterOffset": [
+        -5,
+        6
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "27": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        6
+      ],
+      "ringCenterOffset": [
+        -5,
+        6
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "28": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        5
+      ],
+      "ringCenterOffset": [
+        -1,
+        5
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "29": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        5
+      ],
+      "ringCenterOffset": [
+        -1,
+        5
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "30": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        14,
+        7
+      ],
+      "ringCenterOffset": [
+        14,
+        7
+      ],
+      "ringEllipseRadii": [
+        27,
+        8
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "31": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        2
+      ],
+      "ringCenterOffset": [
+        -5,
+        2
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "32": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        6
+      ],
+      "ringCenterOffset": [
+        -5,
+        6
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "33": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        5
+      ],
+      "ringCenterOffset": [
+        -1,
+        5
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "34": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        7
+      ],
+      "ringCenterOffset": [
+        3,
+        7
+      ],
+      "ringEllipseRadii": [
+        18,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "35": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        7
+      ],
+      "ringCenterOffset": [
+        3,
+        7
+      ],
+      "ringEllipseRadii": [
+        18,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "36": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        9
+      ],
+      "ringCenterOffset": [
+        4,
+        9
+      ],
+      "ringEllipseRadii": [
+        18,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "37": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        9
+      ],
+      "ringCenterOffset": [
+        4,
+        9
+      ],
+      "ringEllipseRadii": [
+        18,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "38": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        5,
+        10
+      ],
+      "ringCenterOffset": [
+        5,
+        10
+      ],
+      "ringEllipseRadii": [
+        19,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "39": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        5,
+        10
+      ],
+      "ringCenterOffset": [
+        5,
+        10
+      ],
+      "ringEllipseRadii": [
+        19,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "41": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        5,
+        10
+      ],
+      "ringCenterOffset": [
+        5,
+        10
+      ],
+      "ringEllipseRadii": [
+        19,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "42": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        5,
+        10
+      ],
+      "ringCenterOffset": [
+        5,
+        10
+      ],
+      "ringEllipseRadii": [
+        19,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "43": {
+      "projectionStrategy": "flying",
+      "visualFootOffset": [
+        24,
+        -2
+      ],
+      "ringCenterOffset": [
+        24,
+        0
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "44": {
+      "projectionStrategy": "flying",
+      "visualFootOffset": [
+        24,
+        -2
+      ],
+      "ringCenterOffset": [
+        24,
+        0
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "45": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        13
+      ],
+      "ringCenterOffset": [
+        2,
+        13
+      ],
+      "ringEllipseRadii": [
+        19,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "46": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -7,
+        1
+      ],
+      "ringCenterOffset": [
+        -7,
+        1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "47": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        -2
+      ],
+      "ringCenterOffset": [
+        2,
+        -2
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "48": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        -2
+      ],
+      "ringCenterOffset": [
+        2,
+        -2
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "49": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        -1
+      ],
+      "ringCenterOffset": [
+        0,
+        -1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "50": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        -1
+      ],
+      "ringCenterOffset": [
+        0,
+        -1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "51": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        -1
+      ],
+      "ringCenterOffset": [
+        0,
+        -1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "52": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        1
+      ],
+      "ringCenterOffset": [
+        2,
+        1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "53": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        1
+      ],
+      "ringCenterOffset": [
+        2,
+        1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "54": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        4
+      ],
+      "ringCenterOffset": [
+        0,
+        4
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "55": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        4
+      ],
+      "ringCenterOffset": [
+        0,
+        4
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "56": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        11
+      ],
+      "ringCenterOffset": [
+        2,
+        11
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "57": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        11
+      ],
+      "ringCenterOffset": [
+        2,
+        11
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "59": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        11
+      ],
+      "ringCenterOffset": [
+        2,
+        11
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "60": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -6,
+        13
+      ],
+      "ringCenterOffset": [
+        -6,
+        13
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "62": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        1
+      ],
+      "ringCenterOffset": [
+        -5,
+        1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "63": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        1
+      ],
+      "ringCenterOffset": [
+        -5,
+        1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "64": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        5,
+        18
+      ],
+      "ringCenterOffset": [
+        5,
+        18
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "65": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        5,
+        18
+      ],
+      "ringCenterOffset": [
+        5,
+        18
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "66": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        26
+      ],
+      "ringCenterOffset": [
+        4,
+        26
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "67": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        26
+      ],
+      "ringCenterOffset": [
+        4,
+        26
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "68": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        5,
+        24
+      ],
+      "ringCenterOffset": [
+        5,
+        24
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "69": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        5,
+        24
+      ],
+      "ringCenterOffset": [
+        5,
+        24
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "70": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        17,
+        23
+      ],
+      "ringCenterOffset": [
+        17,
+        23
+      ],
+      "ringEllipseRadii": [
+        18,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "71": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        17,
+        23
+      ],
+      "ringCenterOffset": [
+        17,
+        23
+      ],
+      "ringEllipseRadii": [
+        18,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "73": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        24
+      ],
+      "ringCenterOffset": [
+        0,
+        24
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "74": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        24
+      ],
+      "ringCenterOffset": [
+        0,
+        24
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "75": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        24
+      ],
+      "ringCenterOffset": [
+        0,
+        24
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "76": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        18,
+        23
+      ],
+      "ringCenterOffset": [
+        18,
+        23
+      ],
+      "ringEllipseRadii": [
+        32,
+        10
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "77": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        18,
+        23
+      ],
+      "ringCenterOffset": [
+        18,
+        23
+      ],
+      "ringEllipseRadii": [
+        32,
+        10
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "78": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        18,
+        23
+      ],
+      "ringCenterOffset": [
+        18,
+        23
+      ],
+      "ringEllipseRadii": [
+        32,
+        10
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "79": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -3,
+        -2
+      ],
+      "ringCenterOffset": [
+        -3,
+        -2
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "80": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -3,
+        -2
+      ],
+      "ringCenterOffset": [
+        -3,
+        -2
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "81": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "82": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "83": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -4,
+        -2
+      ],
+      "ringCenterOffset": [
+        -4,
+        -2
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "84": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -4,
+        -2
+      ],
+      "ringCenterOffset": [
+        -4,
+        -2
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "85": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -6,
+        1
+      ],
+      "ringCenterOffset": [
+        -6,
+        1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "86": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -6,
+        1
+      ],
+      "ringCenterOffset": [
+        -6,
+        1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "87": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -11,
+        12
+      ],
+      "ringCenterOffset": [
+        -11,
+        12
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "88": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -11,
+        12
+      ],
+      "ringCenterOffset": [
+        -11,
+        12
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "89": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -4,
+        14
+      ],
+      "ringCenterOffset": [
+        -4,
+        14
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "90": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -4,
+        14
+      ],
+      "ringCenterOffset": [
+        -4,
+        14
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "91": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -4,
+        14
+      ],
+      "ringCenterOffset": [
+        -4,
+        14
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "92": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        6
+      ],
+      "ringCenterOffset": [
+        2,
+        6
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "93": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        6
+      ],
+      "ringCenterOffset": [
+        2,
+        6
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "94": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        6
+      ],
+      "ringCenterOffset": [
+        2,
+        6
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "95": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        6
+      ],
+      "ringCenterOffset": [
+        2,
+        6
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "96": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -6,
+        0
+      ],
+      "ringCenterOffset": [
+        -6,
+        0
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "97": {
+      "projectionStrategy": "flying",
+      "visualFootOffset": [
+        16,
+        25
+      ],
+      "ringCenterOffset": [
+        16,
+        0
+      ],
+      "ringEllipseRadii": [
+        18,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "98": {
+      "projectionStrategy": "flying",
+      "visualFootOffset": [
+        16,
+        25
+      ],
+      "ringCenterOffset": [
+        16,
+        0
+      ],
+      "ringEllipseRadii": [
+        18,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "100": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -7,
+        0
+      ],
+      "ringCenterOffset": [
+        -7,
+        0
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "101": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        9
+      ],
+      "ringCenterOffset": [
+        3,
+        9
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "102": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        9
+      ],
+      "ringCenterOffset": [
+        3,
+        9
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "103": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -6,
+        5
+      ],
+      "ringCenterOffset": [
+        -6,
+        5
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "104": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -6,
+        5
+      ],
+      "ringCenterOffset": [
+        -6,
+        5
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "105": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -7,
+        12
+      ],
+      "ringCenterOffset": [
+        -7,
+        12
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "106": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -7,
+        12
+      ],
+      "ringCenterOffset": [
+        -7,
+        12
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "107": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -6,
+        22
+      ],
+      "ringCenterOffset": [
+        -6,
+        22
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "108": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -6,
+        22
+      ],
+      "ringCenterOffset": [
+        -6,
+        22
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "110": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -13,
+        24
+      ],
+      "ringCenterOffset": [
+        -13,
+        24
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "111": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -13,
+        24
+      ],
+      "ringCenterOffset": [
+        -13,
+        24
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "112": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -3,
+        -5
+      ],
+      "ringCenterOffset": [
+        -3,
+        -5
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "113": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -3,
+        -5
+      ],
+      "ringCenterOffset": [
+        -3,
+        -5
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "114": {
+      "projectionStrategy": "flying",
+      "visualFootOffset": [
+        -2,
+        0
+      ],
+      "ringCenterOffset": [
+        -2,
+        0
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "115": {
+      "projectionStrategy": "flying",
+      "visualFootOffset": [
+        -2,
+        0
+      ],
+      "ringCenterOffset": [
+        -2,
+        0
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "116": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        13
+      ],
+      "ringCenterOffset": [
+        4,
+        13
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "117": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        13
+      ],
+      "ringCenterOffset": [
+        4,
+        13
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "118": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -7,
+        10
+      ],
+      "ringCenterOffset": [
+        -7,
+        10
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "119": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -7,
+        10
+      ],
+      "ringCenterOffset": [
+        -7,
+        10
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "120": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -8,
+        27
+      ],
+      "ringCenterOffset": [
+        -8,
+        27
+      ],
+      "ringEllipseRadii": [
+        18,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "121": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -8,
+        27
+      ],
+      "ringCenterOffset": [
+        -8,
+        27
+      ],
+      "ringEllipseRadii": [
+        18,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "122": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -8,
+        27
+      ],
+      "ringCenterOffset": [
+        -8,
+        27
+      ],
+      "ringEllipseRadii": [
+        18,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "123": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -8,
+        27
+      ],
+      "ringCenterOffset": [
+        -8,
+        27
+      ],
+      "ringEllipseRadii": [
+        18,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "124": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        29,
+        27
+      ],
+      "ringCenterOffset": [
+        29,
+        27
+      ],
+      "ringEllipseRadii": [
+        44,
+        13
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "126": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -4,
+        -6
+      ],
+      "ringCenterOffset": [
+        -4,
+        -6
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "127": {
+      "projectionStrategy": "flying",
+      "visualFootOffset": [
+        18,
+        -10
+      ],
+      "ringCenterOffset": [
+        18,
+        0
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "128": {
+      "projectionStrategy": "flying",
+      "visualFootOffset": [
+        22,
+        -15
+      ],
+      "ringCenterOffset": [
+        22,
+        0
+      ],
+      "ringEllipseRadii": [
+        18,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "129": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        6
+      ],
+      "ringCenterOffset": [
+        -1,
+        6
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "130": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        6
+      ],
+      "ringCenterOffset": [
+        -1,
+        6
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "131": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        6
+      ],
+      "ringCenterOffset": [
+        -1,
+        6
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "132": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        6
+      ],
+      "ringCenterOffset": [
+        2,
+        6
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "133": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        6
+      ],
+      "ringCenterOffset": [
+        2,
+        6
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "134": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        6
+      ],
+      "ringCenterOffset": [
+        2,
+        6
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "135": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        17
+      ],
+      "ringCenterOffset": [
+        3,
+        17
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "136": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        17
+      ],
+      "ringCenterOffset": [
+        3,
+        17
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "137": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        17
+      ],
+      "ringCenterOffset": [
+        3,
+        17
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "138": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        24
+      ],
+      "ringCenterOffset": [
+        3,
+        24
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "139": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        24
+      ],
+      "ringCenterOffset": [
+        3,
+        24
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "140": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        24
+      ],
+      "ringCenterOffset": [
+        3,
+        24
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "141": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        1,
+        30
+      ],
+      "ringCenterOffset": [
+        1,
+        30
+      ],
+      "ringEllipseRadii": [
+        26,
+        8
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "142": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        1,
+        30
+      ],
+      "ringCenterOffset": [
+        1,
+        30
+      ],
+      "ringEllipseRadii": [
+        26,
+        8
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "143": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "144": {
+      "projectionStrategy": "flying",
+      "visualFootOffset": [
+        18,
+        -10
+      ],
+      "ringCenterOffset": [
+        18,
+        0
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "145": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -4,
+        -4
+      ],
+      "ringCenterOffset": [
+        -4,
+        -4
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "146": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        1,
+        5
+      ],
+      "ringCenterOffset": [
+        1,
+        5
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "147": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        1,
+        5
+      ],
+      "ringCenterOffset": [
+        1,
+        5
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "148": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        10
+      ],
+      "ringCenterOffset": [
+        -1,
+        10
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "149": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        10
+      ],
+      "ringCenterOffset": [
+        -1,
+        10
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "150": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        4
+      ],
+      "ringCenterOffset": [
+        -2,
+        4
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "151": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        4
+      ],
+      "ringCenterOffset": [
+        -2,
+        4
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "152": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        4
+      ],
+      "ringCenterOffset": [
+        -2,
+        4
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "153": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        5
+      ],
+      "ringCenterOffset": [
+        2,
+        5
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "154": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        5
+      ],
+      "ringCenterOffset": [
+        2,
+        5
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "155": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        5
+      ],
+      "ringCenterOffset": [
+        2,
+        5
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "156": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        7
+      ],
+      "ringCenterOffset": [
+        3,
+        7
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "157": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        7
+      ],
+      "ringCenterOffset": [
+        3,
+        7
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "158": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        7
+      ],
+      "ringCenterOffset": [
+        3,
+        7
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "159": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        7
+      ],
+      "ringCenterOffset": [
+        3,
+        7
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "160": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        7,
+        6
+      ],
+      "ringCenterOffset": [
+        7,
+        6
+      ],
+      "ringEllipseRadii": [
+        36,
+        11
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "161": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        7,
+        6
+      ],
+      "ringCenterOffset": [
+        7,
+        6
+      ],
+      "ringEllipseRadii": [
+        36,
+        11
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "162": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        19
+      ],
+      "ringCenterOffset": [
+        -1,
+        19
+      ],
+      "ringEllipseRadii": [
+        26,
+        8
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "163": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        17
+      ],
+      "ringCenterOffset": [
+        -1,
+        17
+      ],
+      "ringEllipseRadii": [
+        26,
+        8
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "164": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        18
+      ],
+      "ringCenterOffset": [
+        -2,
+        18
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "165": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        18
+      ],
+      "ringCenterOffset": [
+        -2,
+        18
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "166": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        18
+      ],
+      "ringCenterOffset": [
+        -2,
+        18
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "167": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        18
+      ],
+      "ringCenterOffset": [
+        -2,
+        18
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "168": {
+      "projectionStrategy": "hover",
+      "visualFootOffset": [
+        12,
+        -2
+      ],
+      "ringCenterOffset": [
+        12,
+        0
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "169": {
+      "projectionStrategy": "hover",
+      "visualFootOffset": [
+        12,
+        -2
+      ],
+      "ringCenterOffset": [
+        12,
+        0
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "170": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        18
+      ],
+      "ringCenterOffset": [
+        0,
+        18
+      ],
+      "ringEllipseRadii": [
+        19,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "171": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        18
+      ],
+      "ringCenterOffset": [
+        0,
+        18
+      ],
+      "ringEllipseRadii": [
+        19,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "172": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        6
+      ],
+      "ringCenterOffset": [
+        -5,
+        6
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "173": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        6
+      ],
+      "ringCenterOffset": [
+        -5,
+        6
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "174": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        6
+      ],
+      "ringCenterOffset": [
+        -5,
+        6
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "175": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        6
+      ],
+      "ringCenterOffset": [
+        -5,
+        6
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "176": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -4,
+        3
+      ],
+      "ringCenterOffset": [
+        -4,
+        3
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "177": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -4,
+        3
+      ],
+      "ringCenterOffset": [
+        -4,
+        3
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "178": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -12,
+        29
+      ],
+      "ringCenterOffset": [
+        -12,
+        29
+      ],
+      "ringEllipseRadii": [
+        19,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "179": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -12,
+        29
+      ],
+      "ringCenterOffset": [
+        -12,
+        29
+      ],
+      "ringEllipseRadii": [
+        19,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "180": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -32,
+        2
+      ],
+      "ringCenterOffset": [
+        -32,
+        2
+      ],
+      "ringEllipseRadii": [
+        46,
+        14
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "182": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -8,
+        9
+      ],
+      "ringCenterOffset": [
+        -8,
+        9
+      ],
+      "ringEllipseRadii": [
+        51,
+        15
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "183": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        1
+      ],
+      "ringCenterOffset": [
+        -5,
+        1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "184": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        1
+      ],
+      "ringCenterOffset": [
+        -5,
+        1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "185": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -3,
+        27
+      ],
+      "ringCenterOffset": [
+        -3,
+        27
+      ],
+      "ringEllipseRadii": [
+        17,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "186": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        0
+      ],
+      "ringCenterOffset": [
+        -2,
+        0
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "187": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        -3
+      ],
+      "ringCenterOffset": [
+        -5,
+        -3
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "188": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        16
+      ],
+      "ringCenterOffset": [
+        4,
+        16
+      ],
+      "ringEllipseRadii": [
+        19,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "189": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        8,
+        16
+      ],
+      "ringCenterOffset": [
+        8,
+        16
+      ],
+      "ringEllipseRadii": [
+        19,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "190": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        16
+      ],
+      "ringCenterOffset": [
+        4,
+        16
+      ],
+      "ringEllipseRadii": [
+        19,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "191": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        15,
+        38
+      ],
+      "ringCenterOffset": [
+        15,
+        38
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "192": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        15,
+        38
+      ],
+      "ringCenterOffset": [
+        15,
+        38
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "193": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        12,
+        14
+      ],
+      "ringCenterOffset": [
+        12,
+        14
+      ],
+      "ringEllipseRadii": [
+        30,
+        9
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "194": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        4
+      ],
+      "ringCenterOffset": [
+        -2,
+        4
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "195": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        32,
+        39
+      ],
+      "ringCenterOffset": [
+        32,
+        39
+      ],
+      "ringEllipseRadii": [
+        52,
+        16
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "196": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        1
+      ],
+      "ringCenterOffset": [
+        -2,
+        1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "197": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        1
+      ],
+      "ringCenterOffset": [
+        -2,
+        1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "198": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        1,
+        4
+      ],
+      "ringCenterOffset": [
+        1,
+        4
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "199": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        1,
+        4
+      ],
+      "ringCenterOffset": [
+        1,
+        4
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "200": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        16
+      ],
+      "ringCenterOffset": [
+        0,
+        16
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "201": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        16
+      ],
+      "ringCenterOffset": [
+        0,
+        16
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "202": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        4
+      ],
+      "ringCenterOffset": [
+        4,
+        4
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "203": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        4
+      ],
+      "ringCenterOffset": [
+        4,
+        4
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "204": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        4
+      ],
+      "ringCenterOffset": [
+        0,
+        4
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "205": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        4
+      ],
+      "ringCenterOffset": [
+        0,
+        4
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "206": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        2
+      ],
+      "ringCenterOffset": [
+        0,
+        2
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "207": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        2
+      ],
+      "ringCenterOffset": [
+        0,
+        2
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "208": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        18
+      ],
+      "ringCenterOffset": [
+        2,
+        18
+      ],
+      "ringEllipseRadii": [
+        40,
+        12
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "209": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        18
+      ],
+      "ringCenterOffset": [
+        2,
+        18
+      ],
+      "ringEllipseRadii": [
+        40,
+        12
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "210": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        0
+      ],
+      "ringCenterOffset": [
+        -1,
+        0
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "211": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        0
+      ],
+      "ringCenterOffset": [
+        -1,
+        0
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "212": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        4
+      ],
+      "ringCenterOffset": [
+        2,
+        4
+      ],
+      "ringEllipseRadii": [
+        23,
+        7
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "213": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        4
+      ],
+      "ringCenterOffset": [
+        2,
+        4
+      ],
+      "ringEllipseRadii": [
+        23,
+        7
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "214": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        3
+      ],
+      "ringCenterOffset": [
+        3,
+        3
+      ],
+      "ringEllipseRadii": [
+        26,
+        8
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "215": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        3
+      ],
+      "ringCenterOffset": [
+        3,
+        3
+      ],
+      "ringEllipseRadii": [
+        26,
+        8
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "216": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        7
+      ],
+      "ringCenterOffset": [
+        2,
+        7
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "217": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        7
+      ],
+      "ringCenterOffset": [
+        2,
+        7
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "218": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        6
+      ],
+      "ringCenterOffset": [
+        -1,
+        6
+      ],
+      "ringEllipseRadii": [
+        29,
+        9
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "219": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        6
+      ],
+      "ringCenterOffset": [
+        -1,
+        6
+      ],
+      "ringEllipseRadii": [
+        29,
+        9
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "220": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        6,
+        6
+      ],
+      "ringCenterOffset": [
+        6,
+        6
+      ],
+      "ringEllipseRadii": [
+        21,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "221": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        6,
+        6
+      ],
+      "ringCenterOffset": [
+        6,
+        6
+      ],
+      "ringEllipseRadii": [
+        21,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "222": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        4
+      ],
+      "ringCenterOffset": [
+        4,
+        4
+      ],
+      "ringEllipseRadii": [
+        26,
+        8
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "223": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        4
+      ],
+      "ringCenterOffset": [
+        4,
+        4
+      ],
+      "ringEllipseRadii": [
+        26,
+        8
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "224": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        26,
+        35
+      ],
+      "ringCenterOffset": [
+        26,
+        35
+      ],
+      "ringEllipseRadii": [
+        40,
+        12
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "225": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        26,
+        35
+      ],
+      "ringCenterOffset": [
+        26,
+        35
+      ],
+      "ringEllipseRadii": [
+        40,
+        12
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "226": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -14,
+        1
+      ],
+      "ringCenterOffset": [
+        -14,
+        1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "227": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -14,
+        1
+      ],
+      "ringCenterOffset": [
+        -14,
+        1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "228": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -14,
+        1
+      ],
+      "ringCenterOffset": [
+        -14,
+        1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "229": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -14,
+        1
+      ],
+      "ringCenterOffset": [
+        -14,
+        1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "230": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -14,
+        1
+      ],
+      "ringCenterOffset": [
+        -14,
+        1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "231": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -14,
+        1
+      ],
+      "ringCenterOffset": [
+        -14,
+        1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "232": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -14,
+        1
+      ],
+      "ringCenterOffset": [
+        -14,
+        1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "233": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -14,
+        1
+      ],
+      "ringCenterOffset": [
+        -14,
+        1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "234": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -14,
+        1
+      ],
+      "ringCenterOffset": [
+        -14,
+        1
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "235": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        19
+      ],
+      "ringCenterOffset": [
+        -1,
+        19
+      ],
+      "ringEllipseRadii": [
+        26,
+        8
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "236": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        17
+      ],
+      "ringCenterOffset": [
+        -1,
+        17
+      ],
+      "ringEllipseRadii": [
+        26,
+        8
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "237": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        18
+      ],
+      "ringCenterOffset": [
+        2,
+        18
+      ],
+      "ringEllipseRadii": [
+        40,
+        12
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "238": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        11
+      ],
+      "ringCenterOffset": [
+        2,
+        11
+      ],
+      "ringEllipseRadii": [
+        19,
+        6
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "239": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        18,
+        23
+      ],
+      "ringCenterOffset": [
+        18,
+        23
+      ],
+      "ringEllipseRadii": [
+        32,
+        10
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "240": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        12,
+        14
+      ],
+      "ringCenterOffset": [
+        12,
+        14
+      ],
+      "ringEllipseRadii": [
+        30,
+        9
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    },
+    "241": {
+      "projectionStrategy": "hover",
+      "visualFootOffset": [
+        -4,
+        -1
+      ],
+      "ringCenterOffset": [
+        -4,
+        0
+      ],
+      "ringEllipseRadii": [
+        16,
+        5
+      ],
+      "calibrationSource": "neutral_pose_seed_reviewed_v3"
+    }
+  }
+}
