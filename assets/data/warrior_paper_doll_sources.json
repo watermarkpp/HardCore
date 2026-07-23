@@ -1265,6 +1265,105 @@
         ],
         "recordSizePreserved": true
       }
+    },
+    "怒斩": {
+      "slot": "武器",
+      "sourceIndex": 70,
+      "path": "res://assets/art/items/client/equipped/070.png",
+      "drawOffset": [16, 23],
+      "rawDrawOffset": [23, -21],
+      "size": [60, 159],
+      "source": "stateitem.wil",
+      "mappingSource": "equipment_client_art_sources同名正式物品equippedIcon",
+      "recordPolicy": "reuse complete decoded WIL record; never crop by opaque bounds"
+    },
+    "龙牙": {
+      "slot": "武器",
+      "sourceIndex": 69,
+      "path": "res://assets/art/items/client/equipped/069.png",
+      "drawOffset": [17, 14],
+      "rawDrawOffset": [24, -30],
+      "size": [40, 128],
+      "source": "stateitem.wil",
+      "mappingSource": "equipment_client_art_sources同名正式物品equippedIcon",
+      "recordPolicy": "reuse complete decoded WIL record; never crop by opaque bounds"
+    },
+    "逍遥扇": {
+      "slot": "武器",
+      "sourceIndex": 71,
+      "path": "res://assets/art/items/client/equipped/071.png",
+      "drawOffset": [17, 55],
+      "rawDrawOffset": [24, 11],
+      "size": [44, 81],
+      "source": "stateitem.wil",
+      "mappingSource": "equipment_client_art_sources同名正式物品equippedIcon",
+      "recordPolicy": "reuse complete decoded WIL record; never crop by opaque bounds"
+    },
+    "圣战宝甲": {
+      "slot": "衣服",
+      "sourceIndex": 88,
+      "path": "res://assets/art/items/client/equipped/088.png",
+      "drawOffset": [42, 35],
+      "rawDrawOffset": [49, -9],
+      "size": [88, 158],
+      "source": "stateitem.wil",
+      "mappingSource": "equipment_client_art_sources同名正式物品equippedIcon",
+      "recordPolicy": "reuse complete decoded WIL record; never crop by opaque bounds"
+    },
+    "法神披风": {
+      "slot": "衣服",
+      "sourceIndex": 86,
+      "path": "res://assets/art/items/client/equipped/086.png",
+      "drawOffset": [35, 63],
+      "rawDrawOffset": [42, 19],
+      "size": [104, 129],
+      "source": "stateitem.wil",
+      "mappingSource": "equipment_client_art_sources同名正式物品equippedIcon",
+      "recordPolicy": "reuse complete decoded WIL record; never crop by opaque bounds"
+    },
+    "天尊道袍": {
+      "slot": "衣服",
+      "sourceIndex": 87,
+      "path": "res://assets/art/items/client/equipped/087.png",
+      "drawOffset": [44, 64],
+      "rawDrawOffset": [51, 20],
+      "size": [88, 127],
+      "source": "stateitem.wil",
+      "mappingSource": "equipment_client_art_sources同名正式物品equippedIcon",
+      "recordPolicy": "reuse complete decoded WIL record; never crop by opaque bounds"
+    },
+    "圣战头盔": {
+      "slot": "头盔",
+      "sourceIndex": 104,
+      "path": "res://assets/art/items/client/equipped/104.png",
+      "drawOffset": [73, 27],
+      "rawDrawOffset": [80, -17],
+      "size": [32, 38],
+      "source": "stateitem.wil",
+      "mappingSource": "equipment_client_art_sources同名正式物品equippedIcon",
+      "recordPolicy": "reuse complete decoded WIL record; never crop by opaque bounds"
+    },
+    "法神头盔": {
+      "slot": "头盔",
+      "sourceIndex": 101,
+      "path": "res://assets/art/items/client/equipped/101.png",
+      "drawOffset": [74, 44],
+      "rawDrawOffset": [81, 0],
+      "size": [24, 16],
+      "source": "stateitem.wil",
+      "mappingSource": "equipment_client_art_sources同名正式物品equippedIcon",
+      "recordPolicy": "reuse complete decoded WIL record; never crop by opaque bounds"
+    },
+    "天尊头盔": {
+      "slot": "头盔",
+      "sourceIndex": 102,
+      "path": "res://assets/art/items/client/equipped/102.png",
+      "drawOffset": [72, 27],
+      "rawDrawOffset": [79, -17],
+      "size": [32, 41],
+      "source": "stateitem.wil",
+      "mappingSource": "equipment_client_art_sources同名正式物品equippedIcon",
+      "recordPolicy": "reuse complete decoded WIL record; never crop by opaque bounds"
     }
   },
   "rejectedMappings": [
@@ -1278,7 +1377,9 @@
     },
     {
       "name": "怒斩",
-      "reason": "原客户端物品表无 ItemImage"
+      "reason": "原客户端物品表无 ItemImage",
+      "status": "superseded_by_equipment_client_art_mapping_v1",
+      "resolvedRuntimePath": "res://assets/art/items/client/equipped/070.png"
     },
     {
       "name": "嗜魂法杖",
@@ -1286,11 +1387,15 @@
     },
     {
       "name": "龙牙",
-      "reason": "原客户端物品表无 ItemImage"
+      "reason": "原客户端物品表无 ItemImage",
+      "status": "superseded_by_equipment_client_art_mapping_v1",
+      "resolvedRuntimePath": "res://assets/art/items/client/equipped/069.png"
     },
     {
       "name": "逍遥扇",
-      "reason": "原客户端物品表无 ItemImage"
+      "reason": "原客户端物品表无 ItemImage",
+      "status": "superseded_by_equipment_client_art_mapping_v1",
+      "resolvedRuntimePath": "res://assets/art/items/client/equipped/071.png"
     },
     {
       "name": "中型盔甲(男)",
@@ -1302,11 +1407,15 @@
     },
     {
       "name": "圣战宝甲",
-      "reason": "原客户端物品表无 ItemImage"
+      "reason": "原客户端物品表无 ItemImage",
+      "status": "superseded_by_equipment_client_art_mapping_v1",
+      "resolvedRuntimePath": "res://assets/art/items/client/equipped/088.png"
     },
     {
       "name": "法神披风",
-      "reason": "原客户端物品表无 ItemImage"
+      "reason": "原客户端物品表无 ItemImage",
+      "status": "superseded_by_equipment_client_art_mapping_v1",
+      "resolvedRuntimePath": "res://assets/art/items/client/equipped/086.png"
     },
     {
       "name": "霓裳羽衣",
@@ -1314,7 +1423,9 @@
     },
     {
       "name": "天尊道袍",
-      "reason": "原客户端物品表无 ItemImage"
+      "reason": "原客户端物品表无 ItemImage",
+      "status": "superseded_by_equipment_client_art_mapping_v1",
+      "resolvedRuntimePath": "res://assets/art/items/client/equipped/087.png"
     },
     {
       "name": "天师长袍",
@@ -1326,15 +1437,21 @@
     },
     {
       "name": "圣战头盔",
-      "reason": "原客户端物品表无 ItemImage"
+      "reason": "原客户端物品表无 ItemImage",
+      "status": "superseded_by_equipment_client_art_mapping_v1",
+      "resolvedRuntimePath": "res://assets/art/items/client/equipped/104.png"
     },
     {
       "name": "法神头盔",
-      "reason": "原客户端物品表无 ItemImage"
+      "reason": "原客户端物品表无 ItemImage",
+      "status": "superseded_by_equipment_client_art_mapping_v1",
+      "resolvedRuntimePath": "res://assets/art/items/client/equipped/101.png"
     },
     {
       "name": "天尊头盔",
-      "reason": "原客户端物品表无 ItemImage"
+      "reason": "原客户端物品表无 ItemImage",
+      "status": "superseded_by_equipment_client_art_mapping_v1",
+      "resolvedRuntimePath": "res://assets/art/items/client/equipped/102.png"
     }
   ]
 }
