@@ -139,7 +139,8 @@ func _assert_synthetic_command_families() -> void:
 	assert(split[1].render_domain == VisualGeometry.RENDER_DOMAIN_ACTOR_Y_SORT)
 	assert(Vector2(split[1].sort_baseline_tile).is_equal_approx(
 		Vector2(split[1].sort_tile)
-	), "split wall foreground lost its authored part baseline")
+		+ VisualGeometry.WALL_PART_SORT_BASELINE_TILE_OFFSET
+	), "split wall foreground did not sort at its occupied cell centre")
 	var segmented_prop := VisualGeometry.instance_draw_commands(base, {
 		"asset_type": "large_prop",
 		"occlusion": true,
