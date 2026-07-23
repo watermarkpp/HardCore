@@ -211,11 +211,9 @@ func _ready() -> void:
 	_rng.randomize()
 	var collision := CollisionShape2D.new()
 	collision.name = "CollisionShape2D"
-	var shape := CircleShape2D.new()
 	var authored_radius := float(behavior_profile.get("collisionRadius", -1.0))
 	collision_radius = ArtSpec.BOSS_COLLISION_RADIUS if is_boss else (authored_radius if authored_radius > 0.0 else ArtSpec.MONSTER_COLLISION_RADIUS)
-	shape.radius = collision_radius
-	collision.shape = shape
+	collision.shape = WorldSpatialRules.actor_footprint_shape(collision_radius)
 	add_child(collision)
 	_resolve_invalid_spawn_overlap()
 	_last_environment_safe_position = global_position

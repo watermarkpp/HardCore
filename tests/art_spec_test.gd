@@ -31,7 +31,18 @@ func _run() -> void:
 	var wall: StaticBody2D = sample.get_node("TechnicalWorldCollision")
 	assert(actor.collision_layer == 2 and monster.collision_layer == 3 and wall.collision_layer == 1, "技术样例碰撞层错误")
 	assert((actor.get_node("CollisionShape2D").shape as CircleShape2D).radius == ArtSpec.PLAYER_COLLISION_RADIUS, "人物碰撞半径错误")
-	assert((monster.get_node("CollisionShape2D").shape as CircleShape2D).radius == ArtSpec.MONSTER_COLLISION_RADIUS, "怪物碰撞半径错误")
+	var runtime_monster := EnemyActor.new()
+	runtime_monster.name = "RuntimeMonsterCollisionSpec"
+	runtime_monster.set_physics_process(false)
+	add_child(runtime_monster)
+	await get_tree().process_frame
+	var monster_shape: Shape2D = runtime_monster.get_node("CollisionShape2D").shape
+	assert(monster_shape is ConvexPolygonShape2D, "怪物脚底必须使用等距椭圆碰撞")
+	assert(
+		(monster_shape as ConvexPolygonShape2D).points
+		== WorldSpatialRules.actor_footprint_polygon(ArtSpec.MONSTER_COLLISION_RADIUS),
+		"怪物脚底碰撞未遵守 2:1 等距世界契约"
+	)
 	assert(get_tree().get_nodes_in_group("art_sample_tiles").size() == 1, "地图技术样例未生成")
-	print("ART_SPEC_PASS：1280×720、32px瓦片、八方向、图集、锚点与碰撞层技术标准正常")
+	print("ART_SPEC_PASS：1280×720、32px瓦片、八方向、图集、锚点与怪物等距脚底技术标准正常")
 	get_tree().quit(0)
