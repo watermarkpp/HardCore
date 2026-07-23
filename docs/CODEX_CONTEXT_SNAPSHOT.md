@@ -16,25 +16,33 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `81651236e8f91aeecb46ce7b33c9aecf69b01178`（其后的快照提交只改本文档）。
+- 分支/运行时代码基线：`codex/integration` @ `c88c62774770bf2772aa4edd457b9607026d2348`（其后的快照提交只改本文档）。
 - tracked 状态：clean。
-- 未跟踪状态：84 个 Godot 生成的 `*.gd.uid`；没有用户授权时不得删除。
+- 未跟踪状态：92 个 Godot 生成的 `*.gd.uid`；没有用户授权时不得删除。
 - 当前无待合并专业提交。
 - 用户已确认此前截图来自当时最新 APK；不要再次怀疑或重复核验安装版本。用户已实机确认碰撞、装饰物遮挡、地图错位和视角全部解决，四项正式冻结；除非出现新的明确证据，后续任务不得顺带调整。
-- 怪物脚下光圈真实接触点、战士/法师/道士 × 沃玛/祖玛/赤月的 9 个独立满技能测试人物存档均已完成并进入最新 APK。
+- 怪物脚下光圈已升级为 214 个 `monster_id` 逐个、逐姿态人工复核的 v4 校准；战士/法师/道士 × 沃玛/祖玛/赤月的 9 个独立满技能测试人物、三职业正式人物与装备外观均已进入最新 APK。
 
 ## 最终 APK
 
 - 文件：`C:\Users\Administrator\Documents\HardCore\outputs\hardcore\HardCore-debug.apk`
-- 构建时间：`2026-07-23 12:24:35`
-- 大小：`1,619,656,911` 字节
-- SHA-256：`50bfcf358d1f1d20737f7331673efe5b4c1e320990be2eab43ef9bf68a5f8e3c`
-- 本包新增 214 种怪物逐动作/方向真实脚底光圈接触点，以及 9 个三职业三套装满技能独立测试人物；角色存档只补建缺失项，不覆盖后续测试进度。
+- 构建时间：`2026-07-23 18:15:58`
+- 大小：`1,636,702,816` 字节
+- SHA-256：`2c6cad66033df6477a3e702c1186d2e11d096fac41759d9ba825f2d3f571f698`
+- 本包包含 214 种怪物逐 ID v4 光圈校准、9 个三职业三套装满技能独立测试人物、三职业男女正式人物基础外观、正式装备视觉目录、神兽动画、人物列表触摸滚动和装备纸娃娃居中；角色存档只补建缺失项，不覆盖后续测试进度。
 
 ## 最近已集成结果
 
 | 集成提交 | 领域 | 结果 |
 |---|---|---|
+| `c88c6277` | monsters | 214 种怪物逐 ID 独立人工复核脚点、光圈中心、椭圆尺寸与地面/飞行/悬浮策略 |
+| `5fd35f07` | integration/tests | 覆盖男女基础外观、实时换装和运行时性别刷新 |
+| `ae5e800f` | integration/tests | 更新旧回归断言，法师正式人物层不再隐藏 |
+| `edcb989b` | equipment/tests | 装备图集画布与脚点测试改为读取正式视觉目录 |
+| `f6290510` | integration | 接入战士、法师、道士正式人物基础、衣服、武器与头盔运行时外观 |
+| `5eba6942` | equipment | 175 件正式装备目录、73 个可视穿戴项与 456 张世界穿戴动作图集 |
+| `a78222ac` | UI | 人物列表支持整块区域触摸滑动；装备界纸娃娃居中 |
+| `466f261a` | skills | 道士神兽正式动画接入 |
 | `8165123` | integration | 自动补建 9 个独立三职业三套装满技能测试人物，且不覆盖既有测试进度 |
 | `07fe41d4` | equipment | 9 套沃玛/祖玛/赤月正式装备目录，共 72 个装备槽 |
 | `b23ed8d0` | monsters | 214 种怪物按动作和方向使用稳定真实脚底接触点 |
@@ -63,9 +71,9 @@
 
 - integration：`world.actor_footprint.iso_ellipse.v1`、`test.character.roster.full_equipment_skills.v1`。
 - maps：`map_editor_runtime_collision_geometry_v2`、`published_blocked_cells_after_erasure_v1`、`map_editor_runtime_visual_geometry_v5`、`map_actor_occlusion_sort_v5`、`map_diamond_camera_center_constraint_v2`、`player_priority_soft_edge_v1`、`map_runtime_nonwalkable_edge_skirt_v1`。
-- monsters：`monster.overhead_anchor.v4`、`monster.overhead_layout.v3`、`monster.ground_contact.v2`；214 个 `monster_id` 各自使用稳定身体顶点与脚底接触点，贴图异步激活后必须刷新。
+- monsters：`monster.overhead_anchor.v4`、`monster.overhead_layout.v3`、`monster.ground_contact.v4`、`monster.ground_contact.calibration.v4`；214 个 `monster_id` 各自保存人工复核的脚点、光圈中心、椭圆尺寸和投影策略，贴图异步激活后必须刷新。
 - UI：`ui.hud.resource_orb.hole_fill.v1`、`skill_button_assignment_contract_v2`。
-- equipment：`equipment.test_loadouts.classic_three_tiers.v1` 与 9 个 `test.loadout.{profession}.{tier}.v1`。
+- equipment：`equipment.test_loadouts.classic_three_tiers.v1`、`equipment.visual_catalog.formal_wearables.v1` 与 9 个 `test.loadout.{profession}.{tier}.v1`。
 - skills：`test.characters.full_skills.v1` 与 9 个 `test.character.{profession}.{woma|zuma|chiyue}.v1`。
 
 ## 已通过的必要验收
@@ -73,8 +81,9 @@
 - 总回归：`SMOKE_TEST_PASS`。
 - integration：共享 36×18 等距脚底契约通过；运行时 Camera2D 菱形视口约束通过。
 - camera：2664×1200 下人物屏幕偏移≤全尺寸 14%，动态缩放为 1.06–1.16；80×80 与 38×38 地图外露均由 1536px 不可行走裙边覆盖。
-- monsters：逐 ID 锚点数据生成检查、214 怪物数据契约、全动作/方向/帧稳定和小/中/大/Boss 冷启动通过。
+- monsters：v4 数据生成检查、214/214 人工复核覆盖、214 种怪物五动作八方向运行时坐标链、214/214 冷激活、完整怪物客户端美术通过。
 - test roster：9 个独立存档、72 个正式装备槽、99 个角色技能加载项、三职业选择恢复和二次启动不覆盖通过。
+- player/equipment：三职业男女基础外观、实时换装、运行时性别刷新、正式装备视觉目录、装备纸娃娃居中和战士旧回归通过。
 - physics：玩家 18×9、普通怪物 16×8、Boss 28×14 的真实物理与软件探针通过；战斗/AI 半径未改。
 - occlusion：11 张已发布地图、52 个交叉、4 类装饰物和 3 个比奇回归点通过；碰撞区、脚底深度点、装饰物遮挡基线已分离。
 - maps：比奇真实源 E2E（180 个阻挡格）；11 张地图真实 `CharacterBody2D` 脚点可达可见边缘且外环阻挡。
@@ -88,15 +97,15 @@
 
 | 工作树 | 分支/HEAD | dirty | 集成状态 |
 |---|---|---:|---|
-| `HardCore-worktrees/maps` | `codex/maps` @ `599717ce` | 31 tracked + 41 untracked | 已集成为 `aa75736a`、`f7165027` |
-| `HardCore-worktrees/monsters` | `codex/monsters` @ `25815df2` | clean | 已集成为 `b23ed8d0` |
-| `HardCore-worktrees/ui-art` | `codex/ui-art` @ `40f9312e` | clean | 已等价集成为 `e0165bef` |
-| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `d25220c8` | clean | 已集成为 `2809e74a` |
-| `HardCore-worktrees/equipment` | `codex/equipment` @ `4665efd7` | clean | 已集成为 `07fe41d4` |
+| `HardCore-worktrees/maps` | `codex/maps` @ `599717ce` | 72 untracked | 用户地图编辑器内容，继续保护 |
+| `HardCore-worktrees/monsters` | `codex/monsters` @ `45781ded` | tracked clean；68 UID | 已集成为 `c88c6277` |
+| `HardCore-worktrees/ui-art` | `codex/ui-art` @ `1aff5350` | clean | 已集成为 `a78222ac` |
+| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `6a919103` | tracked clean；66 UID | 已集成为 `466f261a` |
+| `HardCore-worktrees/equipment` | `codex/equipment` @ `b9298496` | tracked clean；66 UID | 已集成为 `5eba6942`、`edcb989b` |
 
 ### maps 保护红线
 
-maps 的 72 项 dirty 全部视为用户进行中的地图编辑器内容，禁止清理、还原、覆盖或批量暂存。重点包括 `project.godot`、`map_asset_overrides.json`、地图 editor JSON/备份、ground chunks/manifests/state/preview、新地图工作区和 UID。开始新 maps 任务时只暂存本次明确修改的文件。
+maps 的 72 项未跟踪内容全部视为用户进行中的地图编辑器内容，禁止清理、还原、覆盖或批量暂存。重点包括地图 editor JSON/备份、ground chunks/manifests/state/preview、新地图工作区和 UID。开始新 maps 任务时只暂存本次明确修改的文件。
 
 ## 各领域最小必读
 
@@ -109,10 +118,11 @@ maps 的 72 项 dirty 全部视为用户进行中的地图编辑器内容，禁�
 ## 下次实机验收清单
 
 1. 已冻结：碰撞、装饰物遮挡、地图错位和视角均由用户实机确认通过。
-2. 待验收：怪物脚下光圈必须与最终贴图真实脚底重合，不因体型、方向、动作或冷启动漂移。
-3. 待验收：角色选择页出现 9 个独立测试人物；三职业各有沃玛、祖玛、赤月三档完整装备，并学习本职业全部技能。
-4. 怪物名字固定在血条上方；各体型血条位于各自真实身体顶点上方约 8px，不再统一过高或随动作抖动。
-5. 血球/蓝球恢复孔径尺寸且左右对称。
-6. 拾取提示居中；技能配置弹窗背景不越界；快捷技能可置换；烈火自动开关正常。
+2. 待验收：v4 怪物脚下光圈必须与最终贴图真实脚底重合；重点观察地面、飞行、悬浮、宽体和 Boss，不因方向、动作或冷启动漂移。
+3. 待验收：角色选择页出现 9 个独立测试人物；三职业各有沃玛、祖玛、赤月三档完整装备并学习本职业全部技能；列表整块区域可直接上下滑动。
+4. 待验收：法师、道士不再显示占位符；男女基础形象、正式散件/套装换装、装备界纸娃娃居中和神兽动画正常。
+5. 怪物名字固定在血条上方；各体型血条位于各自真实身体顶点上方约 8px，不再统一过高或随动作抖动。
+6. 血球/蓝球恢复孔径尺寸且左右对称。
+7. 拾取提示居中；技能配置弹窗背景不越界；快捷技能可置换；烈火自动开关正常。
 
 用户实测结果优先级高于内部测试；若实机失败，先保存截图和 APK 哈希，再按所属专业工作树返修。
