@@ -2,13 +2,15 @@ class_name MonsterVisual
 extends Node2D
 
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
+const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
 const BOSS_ART_PATH := "res://assets/data/classic_boss_client_art_sources.json"
 const COMPLETE_ART_PATH := "res://assets/data/complete_monster_client_art_sources.json"
+const OVERHEAD_ANCHOR_DATA_PATH := "res://assets/data/runtime/monster_overhead_anchors.json"
 # WIL px/py values are relative to the classic DrawChr origin, not to the
 # actor's ground point. The player client-art path already migrates this same
 # origin by (+32,+28); monsters must use the identical coordinate conversion.
 const CLIENT_ACTOR_GROUND_OFFSET := Vector2i(32, 28)
-const HEALTH_BAR_FRAME_MARGIN := 8.0
+const HEALTH_BAR_BODY_GAP := 8.0
 const CLIENT_RESOURCE_CACHE_CAPACITY := 12
 const CLIENT_RESOURCE_CACHE_BUDGET_BYTES := 64 * 1024 * 1024
 const VISUAL_ACTIVATION_DISTANCE := 1600.0
@@ -17,10 +19,11 @@ const RESOURCE_RESIDENCY_CHECK_SECONDS := 0.12
 const MAX_CONCURRENT_PROFILE_LOADS := 2
 const ACTOR_Y_SORT_RENDER_DOMAIN := "actor_y_sort"
 const ACTOR_Y_SORT_RENDER_CONTRACT := "monster.actor_y_sort.v1"
-const OVERHEAD_ANCHOR_CONTRACT := "monster.overhead_anchor.v3"
+const OVERHEAD_ANCHOR_CONTRACT := "monster.overhead_anchor.v4"
 
 static var _boss_art: Dictionary = {}
 static var _complete_art: Dictionary = {}
+static var _overhead_anchor_data: Dictionary = {}
 static var _client_resource_profiles: Dictionary = {}
 static var _client_resource_profile_lru: Array[String] = []
 static var _client_resource_profile_bytes: Dictionary = {}
@@ -89,11 +92,10 @@ func _ready() -> void:
 	sprite.region_rect = Rect2(Vector2.ZERO, frame_size)
 	sprite.centered = false
 	sprite.position = -Vector2(foot_anchor + actor_ground_offset)
-	# Every action and direction uses the same authored frame rectangle and foot
-	# anchor. Pin UI to that rectangle's upper edge instead of the current
-	# animation pixels, so a changing pose can never move the health bar through
-	# the monster's head, chest, or waist.
-	_fixed_health_bar_y = position.y + sprite.position.y - HEALTH_BAR_FRAME_MARGIN
+	# Procedural setup is replaced by the per-monster stable body crown as soon
+	# as final client art activates. Never derive overhead position from the
+	# current animation frame: that would reintroduce pose/direction jitter.
+	_fixed_health_bar_y = position.y + sprite.position.y
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	add_child(sprite)
 	_resource_residency_timer = RESOURCE_RESIDENCY_CHECK_SECONDS * float(posmod(get_instance_id(), 7)) / 7.0
@@ -271,11 +273,42 @@ func health_bar_anchor_y(fallback_y: float) -> float:
 
 
 func _stable_overhead_anchor_y() -> float:
-	# Every generated atlas uses one fixed cell that encloses every direction,
-	# action and frame with transparent padding. Anchor above that cell instead
-	# of using idle-pose alpha bounds: attack/hit/death pixels can extend above
-	# the idle silhouette and must never cover or cross the overhead layer.
-	return position.y + sprite.position.y - HEALTH_BAR_FRAME_MARGIN
+	# The checked-in data records one semantic body crown for each monsterId:
+	# the topmost visible pixel across every neutral idle frame and direction.
+	# Attack weapons, jumps and collapsed death poses are deliberately excluded
+	# from body height, while the immutable result remains stable throughout
+	# every action/direction/frame at runtime.
+	var body_top := stable_body_top()
+	return (
+		position.y
+		+ sprite.position.y
+		+ body_top
+		- MonsterOverheadScript.HEALTH_BAR_HEIGHT
+		- HEALTH_BAR_BODY_GAP
+	)
+
+
+func stable_body_top() -> float:
+	var anchors: Dictionary = _overhead_anchor_manifest().get("anchorsByMonsterId", {})
+	var entry: Variant = anchors.get(str(actor.monster_id), {}) if is_instance_valid(actor) else {}
+	if entry is Dictionary and entry.has("stableBodyTop"):
+		return float(entry["stableBodyTop"])
+	# Formal art should always resolve through the generated per-ID table. Keep
+	# a conservative compatibility fallback for isolated legacy fixtures.
+	if not health_bar_top_by_direction.is_empty():
+		var top := float(frame_size.y)
+		for value: Variant in health_bar_top_by_direction:
+			top = minf(top, float(value))
+		return top
+	return 0.0
+
+
+static func _overhead_anchor_manifest() -> Dictionary:
+	if _overhead_anchor_data.is_empty() and FileAccess.file_exists(OVERHEAD_ANCHOR_DATA_PATH):
+		var file := FileAccess.open(OVERHEAD_ANCHOR_DATA_PATH, FileAccess.READ)
+		var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
+		_overhead_anchor_data = parsed if parsed is Dictionary else {}
+	return _overhead_anchor_data
 
 
 func _direction_row(direction: Vector2) -> int:

@@ -1,6 +1,7 @@
 extends Node
 
 
+const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
 const EXPECTED_NAMES := ["骷髅", "掷斧骷髅", "骷髅战士", "骷髅战将", "僵尸1", "僵尸2", "僵尸3", "僵尸4", "僵尸5", "骷髅精灵", "尸王"]
 const EXPECTED_FRAMES := {"idle": 4, "walk": 6, "attack": 6, "hit": 2, "death": 10}
 
@@ -65,7 +66,13 @@ func _run() -> void:
 		assert(visual.actor_ground_offset == Vector2i(32, 28), "%s 未采用经典客户端角色原点迁移量" % monster_name)
 		assert(sprite.position == -Vector2(expected_foot + visual.actor_ground_offset), "%s 待机绘制原点迁移错误" % monster_name)
 		assert(sprite.texture.get_size() == Vector2(expected_frame.x * 4, expected_frame.y * 8), "%s 待机图集尺寸错误" % monster_name)
-		var expected_bar_y := visual.position.y + sprite.position.y - MonsterVisual.HEALTH_BAR_FRAME_MARGIN
+		var expected_bar_y := (
+			visual.position.y
+			+ sprite.position.y
+			+ visual.stable_body_top()
+			- MonsterOverheadScript.HEALTH_BAR_HEIGHT
+			- MonsterVisual.HEALTH_BAR_BODY_GAP
+		)
 		assert(is_equal_approx(enemy.health_bar_anchor_y(), expected_bar_y), "%s 血条未固定在完整动画帧单元上方" % monster_name)
 		assert(is_equal_approx(enemy.ground_indicator_center().y, visual.position.y), "%s 脚底光圈偏离统一地面原点" % monster_name)
 		enemy.facing = Vector2.RIGHT
