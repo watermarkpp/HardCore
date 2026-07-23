@@ -7,6 +7,7 @@ const GothicBichCampBuilderScript := preload("res://scripts/layers/presentation/
 const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 const MapPortalRuntimeServiceScript := preload("res://scripts/map_editor/map_portal_runtime_service.gd")
 const MapPortalTravelGuardScript := preload("res://scripts/map_editor/map_portal_travel_guard.gd")
+const MapDiamondCameraConstraintScript := preload("res://scripts/map_editor/map_diamond_camera_constraint_service.gd")
 const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const SystemMenuPanelScript := preload("res://scripts/system_menu_panel.gd")
@@ -16,6 +17,7 @@ const DEFAULT_BOSS_RESPAWN_SECONDS := 3600.0
 const MONSTER_PREFETCH_TIMEOUT_MSEC := 8000
 
 var player: PlayerCharacter
+var _world_camera: Camera2D
 var hud: GameHUD
 var background: WorldBackground
 var current_zone := ""
@@ -64,11 +66,12 @@ func _ready() -> void:
 	add_child(player)
 	player.restore_warrior_runtime_state(PlayerState.warrior_runtime_state_for_restore())
 
-	var camera := Camera2D.new()
-	camera.position_smoothing_enabled = true
-	camera.position_smoothing_speed = 7.0
-	camera.zoom = Vector2.ONE * ArtSpec.CAMERA_ZOOM
-	player.add_child(camera)
+	_world_camera = Camera2D.new()
+	_world_camera.name = "WorldCamera"
+	_world_camera.position_smoothing_enabled = true
+	_world_camera.position_smoothing_speed = 7.0
+	_world_camera.zoom = Vector2.ONE * ArtSpec.CAMERA_ZOOM
+	player.add_child(_world_camera)
 
 	hud = GameHUD.new()
 	hud.movement_changed.connect(player.set_touch_vector)
@@ -110,6 +113,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	background.set_focus_position(player.global_position)
+	_update_world_camera_constraint()
 	_update_portal_arrival_guard()
 	_enforce_bich_safe_zone()
 	_update_boss_world_mechanics(delta)
@@ -129,6 +133,43 @@ func _process(delta: float) -> void:
 	for index in range(4):
 		if Input.is_action_just_pressed("skill_%d" % (index + 1)):
 			_use_quick_slot(index)
+
+
+func _update_world_camera_constraint() -> void:
+	if not is_instance_valid(_world_camera) or not is_instance_valid(player):
+		return
+	var base_zoom := Vector2.ONE * ArtSpec.CAMERA_ZOOM
+	if not MapEditorRuntimeBridgeScript.has_runtime_map(current_map_id):
+		_world_camera.zoom = base_zoom
+		_world_camera.position = Vector2.ZERO
+		return
+	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
+	var raw_size: Array = runtime.get("design", {}).get("design_size", [])
+	if raw_size.size() != 2:
+		_world_camera.zoom = base_zoom
+		_world_camera.position = Vector2.ZERO
+		return
+	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
+	var viewport_half := get_viewport().get_visible_rect().size * 0.5
+	var result := MapDiamondCameraConstraintScript.constrain_center(
+		design_size, viewport_half, base_zoom, player.global_position
+	)
+	var resolved_zoom := base_zoom
+	if not bool(result.get("ok", false)):
+		var minimum_zoom := float(result.get("minimum_uniform_zoom", INF))
+		if minimum_zoom > 0.0 and minimum_zoom < INF:
+			var zoom_value := maxf(ArtSpec.CAMERA_ZOOM, minimum_zoom + 0.001)
+			resolved_zoom = Vector2.ONE * zoom_value
+			result = MapDiamondCameraConstraintScript.constrain_center(
+				design_size, viewport_half, resolved_zoom,
+				player.global_position
+			)
+	_world_camera.zoom = resolved_zoom
+	_world_camera.global_position = (
+		Vector2(result.get("center", player.global_position))
+		if bool(result.get("ok", false))
+		else player.global_position
+	)
 
 
 func _register_input_actions() -> void:
