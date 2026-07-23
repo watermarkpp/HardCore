@@ -75,8 +75,8 @@ static func resolve_soft_follow(
 	)
 	var strict_delta := strict_center - player_center
 	# tanh is a continuous saturating clamp. It retains the strict solution as
-	# the reference direction while guaranteeing that the actor never leaves
-	# the central 72% x 72% screen region (14% maximum offset per axis).
+	# the reference direction while keeping the actor within center +/-14% on
+	# each axis: screen coordinates 36%..64%, the central 28% x 28% band.
 	var soft_delta := Vector2(
 		_soft_saturate(strict_delta.x, maximum_offset_world.x),
 		_soft_saturate(strict_delta.y, maximum_offset_world.y)
