@@ -11,6 +11,10 @@ const WORLD_MASK := WORLD_LAYER
 const PLAYER_MASK := WORLD_LAYER | ENEMY_LAYER
 const ENEMY_MASK := WORLD_LAYER | PLAYER_LAYER | ENEMY_LAYER
 
+const ACTOR_FOOTPRINT_CONTRACT_ID := "world.actor_footprint.iso_ellipse.v1"
+const ACTOR_FOOTPRINT_Y_RATIO := 0.5
+const ACTOR_FOOTPRINT_SEGMENTS := 16
+
 
 static func point_inside_safe_zone(point: Vector2, zone: Dictionary) -> bool:
 	var polygon: PackedVector2Array = zone.get("polygon", PackedVector2Array())
@@ -53,7 +57,31 @@ static func environment_blocks_actor(provider: Node, position: Vector2, radius: 
 	var sample_radius := maxf(0.0, radius - 1.0)
 	if sample_radius <= 0.0:
 		return false
-	for direction: Vector2 in [Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT, Vector2.UP]:
-		if bool(provider.call("is_environment_point_blocked", position + direction * sample_radius)):
+	for offset: Vector2 in actor_footprint_polygon(sample_radius):
+		if bool(provider.call("is_environment_point_blocked", position + offset)):
 			return true
 	return false
+
+
+static func actor_footprint_radii(radius: float) -> Vector2:
+	var horizontal := maxf(0.0, radius)
+	return Vector2(horizontal, horizontal * ACTOR_FOOTPRINT_Y_RATIO)
+
+
+static func actor_footprint_polygon(
+	radius: float,
+	segments := ACTOR_FOOTPRINT_SEGMENTS
+) -> PackedVector2Array:
+	var radii := actor_footprint_radii(radius)
+	var count := maxi(8, segments)
+	var points := PackedVector2Array()
+	for index in range(count):
+		var angle := TAU * float(index) / float(count)
+		points.append(Vector2(cos(angle) * radii.x, sin(angle) * radii.y))
+	return points
+
+
+static func actor_footprint_shape(radius: float) -> ConvexPolygonShape2D:
+	var shape := ConvexPolygonShape2D.new()
+	shape.points = actor_footprint_polygon(radius)
+	return shape
