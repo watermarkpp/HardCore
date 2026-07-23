@@ -28,9 +28,9 @@ func _equipment_from_profile(profile: Dictionary) -> Dictionary:
 	return result
 
 
-func _spawn_visual(profession: String, equipment: Dictionary) -> Array:
+func _spawn_visual(profession: String, equipment: Dictionary, gender := "男") -> Array:
 	PlayerState.profession = profession
-	PlayerState.gender = "男"
+	PlayerState.gender = gender
 	PlayerState.equipment = equipment
 	var player := PlayerCharacter.new()
 	add_child(player)
@@ -62,13 +62,14 @@ func _run() -> void:
 	PlayerState.reset_progress(false)
 
 	for profession: String in PROFESSIONS:
-		var spawned := await _spawn_visual(profession, _equipment_from_profile({}))
-		var player: PlayerCharacter = spawned[0]
-		var visual: Node = spawned[1]
-		_assert_formal_visual(visual, profession)
-		assert(visual._dress_action_textures.is_empty(), "%s 裸装应使用正式基础人物" % profession)
-		player.queue_free()
-		await get_tree().process_frame
+		for gender: String in ["男", "女"]:
+			var spawned := await _spawn_visual(profession, _equipment_from_profile({}), gender)
+			var player: PlayerCharacter = spawned[0]
+			var visual: Node = spawned[1]
+			_assert_formal_visual(visual, "%s%s" % [gender, profession])
+			assert(visual._dress_action_textures.is_empty(), "%s%s 裸装应使用正式基础人物" % [gender, profession])
+			player.queue_free()
+			await get_tree().process_frame
 
 	var loadouts := _loadouts()
 	assert(loadouts.size() == 9, "验收矩阵必须是三职业×三套装")
@@ -84,6 +85,30 @@ func _run() -> void:
 		assert(visual._weapon_action_textures.size() == ACTIONS.size(), "%s 武器必须有六动作" % profile.get("loadoutId", ""))
 		player.queue_free()
 		await get_tree().process_frame
+
+	var live_wizard_profile: Dictionary = {}
+	for value: Variant in loadouts:
+		if value is Dictionary and str(value.get("profession", "")) == "法师":
+			live_wizard_profile = value
+			break
+	assert(not live_wizard_profile.is_empty())
+	var live_spawned := await _spawn_visual("法师", _equipment_from_profile({}))
+	var live_player: PlayerCharacter = live_spawned[0]
+	var live_visual: Node = live_spawned[1]
+	PlayerState.equipment = _equipment_from_profile(live_wizard_profile)
+	PlayerState.equipment_changed.emit()
+	await get_tree().process_frame
+	assert(live_visual._dress_action_textures.size() == ACTIONS.size(), "存活法师换装后衣服六动作未刷新")
+	assert(live_visual._weapon_action_textures.size() == ACTIONS.size(), "存活法师换装后武器六动作未刷新")
+	PlayerState.gender = "女"
+	live_visual.refresh_profession()
+	await get_tree().process_frame
+	assert(live_visual.uses_final_art(), "存活角色切换女性资源后必须保持正式人物")
+	assert(live_visual._base_action_textures.size() == ACTIONS.size(), "女性法师基础人物六动作未刷新")
+	assert(live_visual._dress_action_textures.size() == ACTIONS.size(), "女性法师衣服六动作未刷新")
+	assert(live_visual._weapon_action_textures.size() == ACTIONS.size(), "女性法师武器六动作未刷新")
+	live_player.queue_free()
+	await get_tree().process_frame
 
 	for unresolved_name: String in ["罗刹", "落魄神兵", "嗜魂法杖", "鹤嘴锄"]:
 		var item := GameData.get_item(unresolved_name)
