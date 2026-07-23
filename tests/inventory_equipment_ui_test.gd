@@ -39,10 +39,10 @@ func _run() -> void:
 	assert(bag_scroll.get_v_scroll_bar().visible, "背包后60格没有提供右侧滚动查看")
 	assert(panel.item_grid.get_child(3).has_node("StackCount") and panel.item_grid.get_child(3).get_node("StackCount").text == "2", "可堆叠物品没有在同一格显示数量")
 	assert(panel.character_preview != null, "装备面板缺少人物穿戴预览")
-	assert(panel.character_preview.center_on_opaque_bounds, "背包装备纸娃娃没有启用合成alpha边界自动居中")
+	assert(not panel.character_preview.center_on_opaque_bounds, "背包装备纸娃娃不应再由合成alpha边界移动")
 	assert(
-		panel.character_preview.get_meta("horizontal_alignment_contract", "") == PreviewScript.OPAQUE_CENTER_CONTRACT_ID,
-		"背包装备纸娃娃自动居中稳定契约丢失"
+		panel.character_preview.get_meta("horizontal_alignment_contract", "") == PreviewScript.FOOT_STAGE_ANCHOR_CONTRACT_ID,
+		"背包装备纸娃娃脚部锚点稳定契约丢失"
 	)
 	assert(PreviewScript.FOOT_STAGE_RADII.x > PreviewScript.FOOT_STAGE_RADII.y * 3.0, "人物脚下舞台没有使用正确的透视椭圆")
 	assert(PreviewScript.FOOT_STAGE_CENTER.y >= 185.0, "人物脚下舞台仍与双脚外沿重合")

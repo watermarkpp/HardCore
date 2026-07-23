@@ -149,8 +149,10 @@ func _build_equipment_panel() -> void:
 	panel.add_child(_section_title("人物装备", 390))
 	character_preview = PreviewScript.new()
 	character_preview.name = "CharacterPreview"
-	character_preview.center_on_opaque_bounds = true
-	character_preview.set_meta("horizontal_alignment_contract", PreviewScript.OPAQUE_CENTER_CONTRACT_ID)
+	# Every paper-doll layer is placed relative to the manifest foot anchor;
+	# alpha bounds remain diagnostic data and cannot move the stage.
+	character_preview.center_on_opaque_bounds = false
+	character_preview.set_meta("horizontal_alignment_contract", PreviewScript.FOOT_STAGE_ANCHOR_CONTRACT_ID)
 	# Reserve the lower half of the equipment panel for the client paper-doll;
 	# the previous top placement left a visibly unused block under the figure.
 	character_preview.position = Vector2(80, 139)
