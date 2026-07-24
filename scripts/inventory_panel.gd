@@ -153,6 +153,11 @@ func _build_equipment_panel() -> void:
 	# alpha bounds remain diagnostic data and cannot move the stage.
 	character_preview.center_on_opaque_bounds = false
 	character_preview.set_meta("horizontal_alignment_contract", PreviewScript.FOOT_STAGE_ANCHOR_CONTRACT_ID)
+	character_preview.set_meta("paper_doll_render_contract", PreviewScript.ORIGINAL_CLIENT_STAGE_CONTRACT_ID)
+	character_preview.set_meta(
+		"coordinate_space_policy",
+		"original stage aspect-fit; touch regions use inverse transform"
+	)
 	# Reserve the lower half of the equipment panel for the client paper-doll;
 	# the previous top placement left a visibly unused block under the figure.
 	character_preview.position = Vector2(80, 139)
