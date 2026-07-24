@@ -1,6 +1,6 @@
 # Codex 精简上下文快照
 
-更新时间：2026-07-23（Asia/Shanghai）
+更新时间：2026-07-24（Asia/Shanghai）
 
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。
 准确性规则：本文件不是代码或 Git 状态的替代品；只核实本次任务实际触及的分支、文件、接口和专项测试。
@@ -16,13 +16,15 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `c88c62774770bf2772aa4edd457b9607026d2348`（其后的快照提交只改本文档）。
+- 分支/运行时代码基线：`codex/integration` @ `7bd71d5d0b3d5403e38a12b5073d8e3a4be2a77a`（其后的快照提交只改本文档）。
 - tracked 状态：clean。
-- 未跟踪状态：92 个 Godot 生成的 `*.gd.uid`；没有用户授权时不得删除。
+- 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
 - 用户已确认此前截图来自当时最新 APK；不要再次怀疑或重复核验安装版本。用户已实机确认碰撞、装饰物遮挡、地图错位和视角全部解决，四项正式冻结；除非出现新的明确证据，后续任务不得顺带调整。
 - 用户已实机确认 214 个 `monster_id` 逐个、逐姿态人工复核的 v4 怪物脚下光圈正确，正式冻结；除非出现新的明确证据，禁止顺带修改脚点、光圈中心、椭圆尺寸或投影策略。
 - 战士/法师/道士 × 沃玛/祖玛/赤月的 9 个独立满技能测试人物已进入最新 APK；三职业装备外观仍需按原客户端正式素材重新取证，不能再将装备栏缩略图或带窗口背景的 raw stateitem 图当作纸娃娃/世界穿戴层。
+- 装备显示已改为男性专用正式管线：原客户端装备页纸娃娃、男性世界衣服、男性世界武器与 12 个男性世界头盔均已集成；新增或重建世界穿戴资源禁止生成女性资产。
+- 头盔概念表的格子顺序不可信。每个视觉身份必须保存显式 `sourceSlotDirectionOrder`，再重排为 `N,NE,E,SE,S,SW,W,NW`；方向重复或缺失必须阻断构建，禁止猜测。
 
 ## 最终 APK
 
@@ -36,6 +38,12 @@
 
 | 集成提交 | 领域 | 结果 |
 |---|---|---|
+| `7bd71d5d` | equipment | 男性世界头盔扩展：12 itemId、11 视觉身份、6 动作、8 方向、2784 逻辑帧；方向显式识别与重排 |
+| `a00fb90` | rules | 集成主任务成为唯一项目内审批者，禁止把子任务审批、取舍或测试确认转交用户 |
+| `3e3510fa` | integration/tests | Godot 自动化固定使用 console/headless、安全 runner、项目内日志与隔离 APPDATA，避免 Windows c0000005 弹窗 |
+| `5543fd9c` | equipment | 男性世界武器合同：37 件正式武器，31 件可见、2 件经典隐藏、4 件待原始证据 |
+| `94ebf0a7` | equipment | 男性世界衣服合同：12/12 男性衣服、6 动作、8 方向 |
+| `fe539a1d` | equipment | 原客户端男性装备页纸娃娃资源阶段与完整 StateItem 坐标溯源 |
 | `c88c6277` | monsters | 214 种怪物逐 ID 独立人工复核脚点、光圈中心、椭圆尺寸与地面/飞行/悬浮策略 |
 | `5fd35f07` | integration/tests | 覆盖男女基础外观、实时换装和运行时性别刷新 |
 | `ae5e800f` | integration/tests | 更新旧回归断言，法师正式人物层不再隐藏 |
@@ -74,7 +82,7 @@
 - maps：`map_editor_runtime_collision_geometry_v2`、`published_blocked_cells_after_erasure_v1`、`map_editor_runtime_visual_geometry_v5`、`map_actor_occlusion_sort_v5`、`map_diamond_camera_center_constraint_v2`、`player_priority_soft_edge_v1`、`map_runtime_nonwalkable_edge_skirt_v1`。
 - monsters：`monster.overhead_anchor.v4`、`monster.overhead_layout.v3`、`monster.ground_contact.v4`、`monster.ground_contact.calibration.v4`；214 个 `monster_id` 各自保存人工复核的脚点、光圈中心、椭圆尺寸和投影策略，贴图异步激活后必须刷新。
 - UI：`ui.hud.resource_orb.hole_fill.v1`、`skill_button_assignment_contract_v2`。
-- equipment：`equipment.test_loadouts.classic_three_tiers.v1`、`equipment.visual_catalog.formal_wearables.v1` 与 9 个 `test.loadout.{profession}.{tier}.v1`。
+- equipment：`equipment.test_loadouts.classic_three_tiers.v1`、`equipment.visual_catalog.formal_wearables.v1`、`equipment.paper_doll.original_client_stage.v1`、`equipment.world_wear.male_dress.v1`、`equipment.world_wear.male_weapon.v1`、`equipment.world_helmet.male.extension.v1` 与 9 个 `test.loadout.{profession}.{tier}.v1`。
 - skills：`test.characters.full_skills.v1` 与 9 个 `test.character.{profession}.{woma|zuma|chiyue}.v1`。
 
 ## 已通过的必要验收
@@ -84,7 +92,8 @@
 - camera：2664×1200 下人物屏幕偏移≤全尺寸 14%，动态缩放为 1.06–1.16；80×80 与 38×38 地图外露均由 1536px 不可行走裙边覆盖。
 - monsters：v4 数据生成检查、214/214 人工复核覆盖、214 种怪物五动作八方向运行时坐标链、214/214 冷激活、完整怪物客户端美术通过。
 - test roster：9 个独立存档、72 个正式装备槽、99 个角色技能加载项、三职业选择恢复和二次启动不覆盖通过。
-- player/equipment：三职业男女基础外观、实时换装、运行时性别刷新、正式装备视觉目录、装备纸娃娃居中和战士旧回归通过。
+- player/equipment：原客户端男性装备页纸娃娃、男性世界衣服、男性世界武器、男性世界头盔、实时换装、正式装备视觉目录、装备纸娃娃居中和战士旧回归通过。
+- equipment helmets：12 itemId/11 视觉身份、66 物理 atlas、2784 逻辑帧、6 动作×8 方向、透明角、Hair 逐帧锚点/SHA 溯源与 StateItem 世界像素零复用通过；Godot 头盔专项、视觉目录与 smoke 通过。
 - physics：玩家 18×9、普通怪物 16×8、Boss 28×14 的真实物理与软件探针通过；战斗/AI 半径未改。
 - occlusion：11 张已发布地图、52 个交叉、4 类装饰物和 3 个比奇回归点通过；碰撞区、脚底深度点、装饰物遮挡基线已分离。
 - maps：比奇真实源 E2E（180 个阻挡格）；11 张地图真实 `CharacterBody2D` 脚点可达可见边缘且外环阻挡。
@@ -102,7 +111,7 @@
 | `HardCore-worktrees/monsters` | `codex/monsters` @ `45781ded` | tracked clean；68 UID | 已集成为 `c88c6277` |
 | `HardCore-worktrees/ui-art` | `codex/ui-art` @ `1aff5350` | clean | 已集成为 `a78222ac` |
 | `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `6a919103` | tracked clean；66 UID | 已集成为 `466f261a` |
-| `HardCore-worktrees/equipment` | `codex/equipment` @ `b9298496` | tracked clean；66 UID | 已集成为 `5eba6942`、`edcb989b` |
+| `HardCore-worktrees/equipment` | `codex/equipment` @ `b5a21d71` | 4 个既有 monster import 与生成 UID 继续保护 | 已集成为 `7bd71d5d` |
 
 ### maps 保护红线
 
