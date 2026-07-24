@@ -4,8 +4,9 @@
 The nine developer profiles are acceptance samples only. This builder walks
 the complete immutable vanilla equipment directory and records icon,
 paper-doll and world-wear policy by stable item_id. World atlases are decoded
-from the classic client; an absent client layer is recorded explicitly and is
-never replaced by generated geometry.
+from the classic client except for the explicitly contracted male helmet
+extension, whose generated atlases retain their source and Hair-anchor
+provenance. Every other absent client layer remains explicitly unresolved.
 """
 
 from __future__ import annotations
@@ -27,6 +28,7 @@ SERVICE_CATALOG = ROOT / "assets/data/service_item_catalog.json"
 SOURCE_POLICY = ROOT / "assets/data/source_priority_policy.json"
 SOURCE_CSV = ROOT / "dev_art_sources/reference/mir2_database/angelk727/2_物品数据.csv"
 CLIENT_DATA = ROOT / "dev_art_sources/reference/mir2_client_raw/Data"
+MALE_WORLD_HELMET = ROOT / "assets/data/equipment_male_world_helmet.json"
 OUTPUT = ROOT / "assets/art/items/client/world_wear"
 MANIFEST = ROOT / "assets/data/equipment_visual_catalog.json"
 
@@ -82,12 +84,6 @@ EXPLICIT_ARMOR_GENDER = {
     "天尊道袍": "男",
     "天师长袍": "女",
 }
-
-BLACK_IRON_HELMET_ACTIONS = {
-    action: f"res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_{action}.png"
-    for action in ("idle", "walk", "attack", "hit", "death")
-}
-
 
 def resource_path(path: Path) -> str:
     return f"res://{path.relative_to(ROOT).as_posix()}"
@@ -339,6 +335,7 @@ def main() -> None:
         SERVICE_CATALOG,
         SOURCE_POLICY,
         SOURCE_CSV,
+        MALE_WORLD_HELMET,
         CLIENT_DATA / "Hum.wil",
         CLIENT_DATA / "Weapon.wil",
     ):
@@ -353,6 +350,14 @@ def main() -> None:
     icon_mappings = load_json(CLIENT_ART).get("runtimeMappings", {})
     paper_source = load_json(PAPER_DOLL_SOURCE)
     loadouts = load_json(LOADOUTS).get("loadouts", [])
+    helmet_contract = load_json(MALE_WORLD_HELMET)
+    if helmet_contract.get("contractId") != (
+        "equipment.world_helmet.male.extension.v1"
+    ):
+        raise AssertionError("male world helmet extension contract changed")
+    helmet_items = helmet_contract.get("itemsById", {})
+    if len(helmet_items) != 12:
+        raise AssertionError("male world helmet extension must contain 12 items")
     source_rows = load_source_rows()
     distribution, service_rows = primary_service_rows()
     libraries = {
@@ -521,44 +526,45 @@ def main() -> None:
                     }
                     coverage["unresolvedWorldShape"] += 1
         elif category == "头盔":
-            if name == "黑铁头盔":
-                missing = [
-                    path
-                    for path in BLACK_IRON_HELMET_ACTIONS.values()
-                    if not (ROOT / path.removeprefix("res://")).exists()
-                ]
-                if missing:
-                    raise ValueError(f"black-iron world extension missing: {missing}")
-                helmet_appearance = {
-                    "visible": True,
-                    "actions": {
-                        action: {
-                            "path": path,
-                            "cell": list(BODY_CELL),
-                            "footAnchor": list(BODY_FOOT_ANCHOR),
-                            "directions": 8,
-                            "framesPerDirection": int(
-                                ACTIONS.get(action, ACTIONS["idle"])["frames"]
-                            ),
-                            "confidence": "project_approved_exact",
-                        }
-                        for action, path in BLACK_IRON_HELMET_ACTIONS.items()
-                    },
-                    "actionFallbacks": {"cast": "idle"},
-                }
-                entry["worldWear"] = {
-                    "status": "approved_project_extension",
-                    "helmetAppearance": helmet_appearance,
-                    "reason": "classic actor does not draw item helmets; this existing extension is independently approved",
-                }
-                runtime_mappings[name] = {"helmetAppearance": helmet_appearance}
-                coverage["exactMaleWorldWear"] += 1
-            else:
-                entry["worldWear"] = {
-                    "status": "classic_client_no_world_layer",
-                    "reason": "classic actor protocol has no evidence-backed item helmet Shape; StateItem is paper-doll art and must not be used as world animation",
-                }
-                coverage["explicitNoWorldLayer"] += 1
+            helmet_item = helmet_items.get(item_id, {})
+            if not helmet_item:
+                raise ValueError(
+                    f"formal helmet is absent from male extension: "
+                    f"{item_id} {name}"
+                )
+            if (
+                str(helmet_item.get("itemName", "")) != name
+                or int(helmet_item.get("sourceIndex", -1))
+                != int(entry["paperDoll"].get("sourceIndex", -2))
+            ):
+                raise ValueError(
+                    f"male helmet identity evidence mismatch: {item_id} {name}"
+                )
+            helmet_appearance = helmet_item.get("maleAppearance", {})
+            if (
+                helmet_appearance.get("sex") != "male"
+                or set(helmet_appearance.get("actions", {})) != set(ACTIONS)
+                or helmet_appearance.get("actionFallbacks", {}) != {}
+            ):
+                raise ValueError(
+                    f"male helmet action contract is incomplete: {item_id} {name}"
+                )
+            entry["worldWear"] = {
+                "status": "approved_project_extension",
+                "contractId": helmet_contract["contractId"],
+                "identityId": str(helmet_item["identityId"]),
+                "sourceIndex": int(helmet_item["sourceIndex"]),
+                "helmetAppearance": helmet_appearance,
+                "reason": (
+                    "StateItem identifies the helmet only; transparent world "
+                    "atlases are project-generated and anchored to same-frame "
+                    "male Hair.wil head motion"
+                ),
+            }
+            runtime_mappings[name] = {
+                "helmetAppearance": helmet_appearance
+            }
+            coverage["exactMaleWorldWear"] += 1
         else:
             entry["worldWear"] = {
                 "status": "classic_client_no_world_layer",
@@ -628,6 +634,7 @@ def main() -> None:
             "clientAssets": "client.classic_raw_complete",
             "serverShapeDistribution": distribution,
             "noPlaceholderRule": True,
+            "maleWorldHelmetContract": resource_path(MALE_WORLD_HELMET),
         },
         "actorTemplate": {
             "contractId": "player.visual.classic_eight_direction.v1",
