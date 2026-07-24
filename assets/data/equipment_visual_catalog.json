@@ -27012,8 +27012,8 @@
         "appearanceType": "weaponAppearance",
         "shape": 24,
         "shapeEvidence": {
-          "confidence": "B",
-          "source": "accepted classic Weapon.wil appearance table",
+          "confidence": "manually_confirmed",
+          "source": "user-confirmed Judgement Staff Weapon.wil shape24 feature48",
           "rule": "feature = Shape*2 + gender"
         },
         "appearancesByGender": {
