@@ -21,6 +21,8 @@
 
 `manifest.json` 中的 `sourceRoot` 保留迁移前的历史中文路径；清单、SQLite 和哈希仍完整有效。本次审计直接查询既有 SQLite，不重新扫描 14.6 GB 原始资料。
 
+2026-07-17 的源目录复核 `passed=false`，原因是扫描完成后新增了 60 个文件、17,979,772 字节；没有原扫描文件丢失，也没有既有文件大小变化。新增内容包括未配置的 `mylgd` 目录和 UI/branding 文件，它们不在 2026-07-15 的完整扫描与正式来源优先级中，因此不得进入运行时。
+
 ## 强制判定规则
 
 1. 每个目标先按 lane 查询 `primary`。
@@ -39,6 +41,17 @@
 - 31 件中的 29 件，低级来源 Shape 与主数据库 Shape 冲突。
 - 其余 6 件也没有保存对所有更高等级来源的逐级缺失证据。
 - 可以保留用户明确提供的语义事实作为验收条件，例如木剑/乌木剑/罗刹/嗜魂法杖/屠龙具有世界外观，以及职业归属与实体造型分类必须分离；数值与 Shape 仍需从主源重新建立兼容映射。
+
+## 已完成的 primary-only 武器返修
+
+- 集成提交：`2b0da07e`
+- 稳定合同：`equipment.weapon_compatibility.primary.v1`
+- 37 件正式武器中 35 件使用主客户端 StateItem/Weapon 像素，隐藏 0，命运之刃与落魄神兵保持未解析。
+- 木剑、乌木剑、罗刹、噬魂法杖、屠龙均恢复世界外观。
+- 罗刹使用 `integration_user_required_shared_primary_appearance`：采用主客户端 StateItem 40 与 Weapon feature 14 的斧类像素；数据库 Shape 保持空值，并保存主库及正式 auxiliary_1/2/3 的缺失/错误候选拒绝证据。
+- `profession` 与 `visualWeaponClass` 独立：炼狱=战士/axe，裁决=战士/staff，龙纹剑=道士/sword，屠龙=战士/blade。
+- 低级来源采用数为 0；被拒的 `mylgd`、21CQ 和 external mir2opensource 均未进入合同。
+- Python 武器合同与 Godot 武器、视觉目录、角色排序、墙体遮挡、smoke 共 5 项通过。
 
 ## 当前主树的确定越级
 
@@ -67,7 +80,7 @@
 
 ## 返修顺序与所有权
 
-1. **P0 equipment**：用主数据库与主客户端资源重建武器兼容映射；恢复木剑、乌木剑、罗刹、嗜魂法杖、屠龙的真实世界外观，同时保持职业与 `visualWeaponClass` 双轴分离。
+1. **已完成 equipment**：已用主数据库与主客户端资源重建武器兼容映射；木剑、乌木剑、罗刹、噬魂法杖、屠龙已有世界外观，职业与 `visualWeaponClass` 双轴分离。
 2. **P0 equipment/integration**：装备属性和图标改为 primary-first；对 143 件逐字段生成采用/冲突报告，再由集成层接入。
 3. **P0 monsters/integration**：怪物与 Boss 核心数值、比奇覆盖、complete/早期外观身份改为 primary-first。
 4. **P0 integration/maps/monsters**：掉落文件按 primary 同名文件重建；地图刷新到掉落的最终映射由 integration 接入。

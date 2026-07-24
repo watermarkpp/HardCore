@@ -16,13 +16,14 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `62a7c006274e9966c8999785154172ad686250c6`（其后的快照提交只改本文档）。
+- 分支/运行时代码基线：`codex/integration` @ `2b0da07e`（其后的快照提交只改本文档）。
 - tracked 状态：clean。
 - 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
 - 来源优先级总表为 `assets/data/source_priority_policy.json`；每个 lane 必须先查 `primary`，只有精确目标确实 `missing` 才允许逐级 fallback。主源不可用、不兼容或效果不符合预期时必须修复解析/映射，禁止换用低级来源。
 - 完整资料扫描记录位于 `outputs/resource_catalog/complete_local_mir_sources/catalog.sqlite`（SHA-256 `3a133f39e9a0bf0b065b29778ff4f40d33aaa009ba1bed0a3213ae3a33233c79`）与 `manifest.json`：58 个 distribution、38,887 文件、14,595,954,010 字节、0 未哈希、SQLite integrity `ok`。
 - 越级使用审计见 `docs/audit/SOURCE_PRECEDENCE_VIOLATION_AUDIT_2026-07-24.md`。未合并装备提交 `7c37b771` 因跳过主库采用未配置 mylgd 数据已拒绝；不得 cherry-pick。
+- primary-only 武器返修已集成为 `2b0da07e`：37 件中 35 件可见、隐藏 0、命运之刃/落魄神兵未解析；木剑、乌木剑、罗刹、噬魂法杖、屠龙均有世界外观，低级库采用数为 0。
 - 用户已确认此前截图来自当时最新 APK；不要再次怀疑或重复核验安装版本。用户已实机确认碰撞、装饰物遮挡、地图错位和视角全部解决，四项正式冻结；除非出现新的明确证据，后续任务不得顺带调整。
 - 用户已实机确认 214 个 `monster_id` 逐个、逐姿态人工复核的 v4 怪物脚下光圈正确，正式冻结；除非出现新的明确证据，禁止顺带修改脚点、光圈中心、椭圆尺寸或投影策略。
 - 战士/法师/道士 × 沃玛/祖玛/赤月的 9 个独立满技能测试人物已进入最新 APK；三职业装备外观仍需按原客户端正式素材重新取证，不能再将装备栏缩略图或带窗口背景的 raw stateitem 图当作纸娃娃/世界穿戴层。
@@ -41,6 +42,7 @@
 
 | 集成提交 | 领域 | 结果 |
 |---|---|---|
+| `2b0da07e` | equipment | 主源专用武器兼容合同；35/37 可见、0 隐藏、2 未解析，职业与实体造型双轴分离 |
 | `62a7c00` | audit | 固化主库/分级库越级审计，列出 13 类确定违规及逐域返修顺序 |
 | `9512dbb` | rules | fallback 收紧为只有 primary 明确 missing 才允许；unusable/incompatible 必须修复而非降级 |
 | `3eebf00` | rules | 总纲加入数据库与资料源 primary-first 硬规则 |
@@ -117,7 +119,7 @@
 | `HardCore-worktrees/monsters` | `codex/monsters` @ `45781ded` | tracked clean；68 UID | 已集成为 `c88c6277` |
 | `HardCore-worktrees/ui-art` | `codex/ui-art` @ `1aff5350` | clean | 已集成为 `a78222ac` |
 | `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `6a919103` | tracked clean；66 UID | 已集成为 `466f261a` |
-| `HardCore-worktrees/equipment` | `codex/equipment` @ `f24b484e` | 4 个既有 monster import 与生成 UID 继续保护 | 已拒绝并 revert 低源提交 `7c37b771`；primary-only 武器返修进行中 |
+| `HardCore-worktrees/equipment` | `codex/equipment` @ `0f82bfed` | 4 个既有 monster import 与 65 个生成 UID 继续保护 | primary-only 武器返修已集成为 `2b0da07e` |
 
 ### maps 保护红线
 
