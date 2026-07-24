@@ -2,8 +2,9 @@ extends Node
 
 const PreviewScript := preload("res://scripts/equipment_character_preview.gd")
 
-const STAGE_SIZE := Vector2(282.0, 320.0)
-const BASE_HOT := Vector2(38.0, 52.0)
+const STAGE_SIZE := Vector2(232.0, 325.0)
+const VIEWPORT_ORIGIN := Vector2(0.0, -44.0)
+const BASE_HOT := Vector2(7.0, -44.0)
 const HAIR_HOT := Vector2(87.0, 0.0)
 const DRESS_HOT := Vector2(47.0, 14.0)
 const WEAPON_HOT := Vector2(25.0, -39.0)
@@ -59,6 +60,13 @@ func _assert_draw_order_and_offsets(preview: EquipmentCharacterPreview) -> void:
 	assert(kinds == PreviewScript.ORIGINAL_CLIENT_DRAW_ORDER)
 	assert(commands[0].stagePosition == BASE_HOT)
 	assert(
+		is_equal_approx(
+			commands[0].targetRect.position.y,
+			preview.original_stage_rect().position.y
+		),
+		"Prguse376 top edge was clipped instead of honoring viewportOrigin"
+	)
+	assert(
 		commands[1].stagePosition
 		== PreviewScript.ORIGINAL_CLIENT_EQUIPMENT_SCREEN_ANCHOR + HAIR_HOT
 	)
@@ -88,6 +96,11 @@ func _assert_aspect_fit_and_inverse_mapping(preview: EquipmentCharacterPreview) 
 	var fitted := preview.original_stage_rect()
 	assert(fitted.size.is_equal_approx(STAGE_SIZE * expected_scale))
 	assert(fitted.position.is_equal_approx((preview.size - fitted.size) * 0.5))
+	assert(
+		preview.original_stage_to_local(VIEWPORT_ORIGIN).is_equal_approx(
+			fitted.position
+		)
+	)
 	var stage_point := Vector2(31.0, 96.0)
 	var local_point := preview.original_stage_to_local(stage_point)
 	assert(preview.local_to_original_stage(local_point).is_equal_approx(stage_point))
@@ -130,6 +143,7 @@ func _fixture_document() -> Dictionary:
 		"contractId": PreviewScript.ORIGINAL_CLIENT_STAGE_CONTRACT_ID,
 		"sex": "male",
 		"canvasSize": [STAGE_SIZE.x, STAGE_SIZE.y],
+		"viewportOrigin": [VIEWPORT_ORIGIN.x, VIEWPORT_ORIGIN.y],
 		"stage": {
 			"source": "Prguse.wil",
 			"sourceIndex": 376,
@@ -147,6 +161,7 @@ func _fixture_document() -> Dictionary:
 		},
 		"composition": {
 			"canvasSize": [STAGE_SIZE.x, STAGE_SIZE.y],
+			"viewportOrigin": [VIEWPORT_ORIGIN.x, VIEWPORT_ORIGIN.y],
 			"equipmentScreenAnchor": [31, 96],
 			"drawOrder": PreviewScript.ORIGINAL_CLIENT_DRAW_ORDER,
 		},
