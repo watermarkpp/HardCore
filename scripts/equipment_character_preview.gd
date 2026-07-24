@@ -12,6 +12,7 @@ const ORIGINAL_CLIENT_EQUIPMENT_SCREEN_ANCHOR := Vector2(31.0, 96.0)
 const BODY_FOOT_CONTACT_FIELD := "footContact"
 const PAPER_DOLL_MANIFEST := "res://assets/data/warrior_paper_doll_sources.json"
 const EQUIPMENT_VISUAL_CATALOG := "res://assets/data/equipment_visual_catalog.json"
+const ORIGINAL_CLIENT_STAGE_MANIFEST := "res://assets/data/equipment_original_client_paper_doll_stage.json"
 const PROFESSION_IDS := {
 	"战士": "warrior",
 	"法师": "wizard",
@@ -49,6 +50,7 @@ var _composition_opaque_bounds := Rect2(Vector2.ZERO, ORIGINAL_CANVAS_SIZE)
 var _uses_original_client_stage := false
 var _base_record: Dictionary = {}
 var _equipment_screen_anchor := ORIGINAL_CLIENT_EQUIPMENT_SCREEN_ANCHOR
+var _viewport_origin := Vector2.ZERO
 var _render_revision := 0
 
 static var _json_cache: Dictionary = {}
@@ -227,6 +229,7 @@ func _load_paper_mappings() -> void:
 	_manifest_foot_anchor = FOOT_STAGE_CENTER
 	_foot_stage_center = FOOT_STAGE_CENTER
 	_equipment_screen_anchor = ORIGINAL_CLIENT_EQUIPMENT_SCREEN_ANCHOR
+	_viewport_origin = Vector2.ZERO
 	var source_document := _resolve_source_document()
 	if source_document.is_empty():
 		return
@@ -296,6 +299,13 @@ func _load_original_client_stage(parsed: Dictionary, source_document: Dictionary
 		),
 		ORIGINAL_CLIENT_EQUIPMENT_SCREEN_ANCHOR
 	)
+	_viewport_origin = _vector_from_value(
+		parsed.get(
+			"viewportOrigin",
+			composition.get("viewportOrigin", Vector2.ZERO)
+		),
+		Vector2.ZERO
+	)
 	var hair_value: Variant = parsed.get("hair", {})
 	if hair_value is Dictionary:
 		_hair_layer = hair_value.duplicate(true)
@@ -354,6 +364,10 @@ func _resolve_source_document() -> Dictionary:
 		return _source_document_override
 	if not paper_doll_manifest_path.is_empty():
 		return _load_json_document(paper_doll_manifest_path)
+	if FileAccess.file_exists(ORIGINAL_CLIENT_STAGE_MANIFEST):
+		var original_stage := _load_json_document(ORIGINAL_CLIENT_STAGE_MANIFEST)
+		if not original_stage.is_empty():
+			return original_stage
 	if FileAccess.file_exists(visual_catalog_path):
 		var catalog := _load_json_document(visual_catalog_path)
 		if not catalog.is_empty():
@@ -378,6 +392,8 @@ func _profession_manifest(document: Dictionary) -> Dictionary:
 				"stage",
 				"originalClientStage",
 				"composition",
+				"viewportOrigin",
+				"viewportBounds",
 				"equipmentScreenAnchor",
 				"itemMappings",
 			]:
@@ -474,8 +490,7 @@ func _record_hot_offset(record: Dictionary) -> Vector2:
 func _original_stage_layer_position(layer: Dictionary) -> Vector2:
 	# Original screen formula:
 	#   (31, 96) + record.HotX/HotY
-	# bbx/bby start at the equipment window's local (0, 0). The historical
-	# `// +38` and `// +52` expressions are comments, not active code.
+	# bbx/bby start at the equipment window's local (0, 0).
 	if (
 		not layer.has("hotX")
 		and not layer.has("hotY")
@@ -589,14 +604,20 @@ func original_stage_rect() -> Rect2:
 
 func original_stage_to_local(stage_point: Vector2) -> Vector2:
 	var stage_rect := original_stage_rect()
-	return stage_rect.position + stage_point * original_stage_scale()
+	return (
+		stage_rect.position
+		+ (stage_point - _viewport_origin) * original_stage_scale()
+	)
 
 
 func local_to_original_stage(local_point: Vector2) -> Vector2:
 	var scale_value := original_stage_scale()
 	if is_zero_approx(scale_value):
 		return Vector2.ZERO
-	return (local_point - original_stage_rect().position) / scale_value
+	return (
+		(local_point - original_stage_rect().position) / scale_value
+		+ _viewport_origin
+	)
 
 
 func original_hit_rect_to_local(stage_hit_rect: Rect2) -> Rect2:
