@@ -653,6 +653,12 @@ def main() -> None:
         json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
+    # Keep the item-id-first male dress contract synchronized with the
+    # existing name-keyed runtime catalog. The contract revalidates every
+    # atlas against Hum.wil and records every source-frame Hot coordinate.
+    from build_male_dress_world_wear_contract import main as build_male_dress
+
+    build_male_dress()
     print(
         "EQUIPMENT_VISUAL_CATALOG_PASS "
         f"formal={coverage['formalWearables']} "
