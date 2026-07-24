@@ -3,6 +3,7 @@
 本项目使用一个集成分支和五个专业工作树。开始工作前必须运行 `git branch --show-current`，根据当前分支遵守下面的文件所有权。
 
 - 快速启动时，在完整读取本文件后读取 `docs/CODEX_CONTEXT_SNAPSHOT.md`，先使用其中的基线、工作树状态和最小必读索引，禁止无目的重复扫描全项目或重复运行已通过测试。该快照仅用于导航；任何将被修改、合并、构建或删除的对象仍须用当前 Git、文件内容和专项测试核实。每次重要集成里程碑后由 `codex/integration` 更新快照。
+- Godot 自动化测试必须优先通过 `tools/run_godot_tests.ps1` 运行；不得启动 `Godot_v4.7-stable_win64.exe` GUI 版，也不得在受控环境中直接启动未指定项目内日志/用户数据目录的 Godot。该入口固定使用 console/headless、项目内 `outputs/test_logs` 与当前工作树 `.godot/runtime_appdata`，用于避免 Godot 4.7 在 `%APPDATA%` 日志写入被拒绝后触发 `c0000005` 退出崩溃弹窗。
 
 ## 分支职责
 
