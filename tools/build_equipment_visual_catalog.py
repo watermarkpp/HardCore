@@ -151,8 +151,11 @@ def shape_for_item(
         }
     if category == "武器" and name in CLASSIC_WEAPON_SHAPE_OVERRIDES:
         return CLASSIC_WEAPON_SHAPE_OVERRIDES[name], {
-            "confidence": "B",
-            "source": "accepted classic Weapon.wil appearance table",
+            "confidence": "manually_confirmed",
+            "source": (
+                "user-confirmed Judgement Staff Weapon.wil "
+                "shape24 feature48"
+            ),
             "rule": "feature = Shape*2 + gender",
         }
     service = service_rows.get(name)
@@ -659,6 +662,9 @@ def main() -> None:
     from build_male_dress_world_wear_contract import main as build_male_dress
 
     build_male_dress()
+    from build_male_weapon_world_wear_contract import main as build_male_weapon
+
+    build_male_weapon()
     print(
         "EQUIPMENT_VISUAL_CATALOG_PASS "
         f"formal={coverage['formalWearables']} "
