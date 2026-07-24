@@ -15,7 +15,7 @@ import json
 import sys
 from pathlib import Path
 
-from PIL import Image, ImageChops, ImageFilter
+from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,14 +28,17 @@ OUTPUT = ROOT / "assets/art/characters/warrior/paper_doll/classic"
 LAYERS = OUTPUT / "layers"
 MANIFEST = ROOT / "assets/data/warrior_paper_doll_sources.json"
 
+CONTRACT_ID = "equipment.paper_doll.original_client_stage.v1"
 BASE_INDEX = 376
 FEMALE_BASE_INDEX = 377
 HAIR_INDEX = 442
+BASE_SCREEN_ORIGIN = (0, 0)
+EQUIPMENT_ANCHOR = (31, 96)
+DRAW_ORDER = ("base", "hair", "dress", "weapon", "helmet")
 SUPPORTED_CATEGORIES = {"武器", "盔甲", "头盔"}
 
 sys.path.insert(0, str(ROOT / "tools/vendor"))
 from extract_wil import decode_sprite, read_library  # noqa: E402
-from sprite_foreground import remove_dark_border_background  # noqa: E402
 
 
 def resource_path(path: Path) -> str:
@@ -50,66 +53,13 @@ def decode_record(library: Path, index: int):
     return image.convert("RGBA"), meta, info
 
 
-def build_male_anatomy(male: Image.Image, female: Image.Image) -> Image.Image:
-    """Remove the shared equipment-window backdrop without hand cropping.
+def build_complete_stage(source: Image.Image) -> Image.Image:
+    """Return the complete Prguse record without differential extraction."""
 
-    Prguse 376 and 377 use the same backdrop for the male and female base.
-    Their pixel difference yields the body foreground.  We retain the largest
-    connected component (body/limbs), then recover the small disconnected bald
-    head from skin-colour seeds inside the original head envelope.  This is a
-    deterministic source rule, not an item-specific crop.
-    """
-
-    difference = ImageChops.difference(male.convert("RGB"), female.convert("RGB")).convert("L")
-    width, height = difference.size
-    pixels = difference.load()
-    seen: set[tuple[int, int]] = set()
-    largest: list[tuple[int, int]] = []
-    for y in range(height):
-        for x in range(width):
-            if pixels[x, y] == 0 or (x, y) in seen:
-                continue
-            pending = [(x, y)]
-            seen.add((x, y))
-            component: list[tuple[int, int]] = []
-            while pending:
-                px, py = pending.pop()
-                component.append((px, py))
-                for nx, ny in ((px - 1, py), (px + 1, py), (px, py - 1), (px, py + 1)):
-                    if (
-                        0 <= nx < width
-                        and 0 <= ny < height
-                        and pixels[nx, ny] != 0
-                        and (nx, ny) not in seen
-                    ):
-                        seen.add((nx, ny))
-                        pending.append((nx, ny))
-            if len(component) > len(largest):
-                largest = component
-
-    body_mask = Image.new("L", male.size, 0)
-    body_pixels = body_mask.load()
-    for x, y in largest:
-        body_pixels[x, y] = 255
-    body_mask = body_mask.filter(ImageFilter.MaxFilter(5))
-
-    head_mask = Image.new("L", male.size, 0)
-    head_pixels = head_mask.load()
-    male_pixels = male.load()
-    for y in range(24, 64):
-        for x in range(68, 108):
-            red, green, blue, _alpha = male_pixels[x, y]
-            if red > 80 and green > 45 and red > green and green > blue * 0.8:
-                head_pixels[x, y] = 255
-    head_mask = head_mask.filter(ImageFilter.MaxFilter(5))
-
-    mask = ImageChops.lighter(body_mask, head_mask)
-    result = Image.new("RGBA", male.size, (0, 0, 0, 0))
-    result.paste(male, (0, 0), mask)
-    return result
+    return source.convert("RGBA").copy()
 
 
-def main() -> None:
+def _legacy_main() -> None:
     for source in (PRGUSE, STATE_ITEM, SOURCE_CSV, CATALOG):
         if not source.exists():
             raise FileNotFoundError(f"Missing paper-doll source: {source}")
@@ -118,9 +68,8 @@ def main() -> None:
     LAYERS.mkdir(parents=True, exist_ok=True)
 
     base_source, base_meta, prguse_info = decode_record(PRGUSE, BASE_INDEX)
-    female_base, _female_meta, _ = decode_record(PRGUSE, FEMALE_BASE_INDEX)
-    base = build_male_anatomy(base_source, female_base)
-    base_path = OUTPUT / "base_male_00376_anatomy.png"
+    base = build_complete_stage(base_source)
+    base_path = OUTPUT / "prguse_00376_complete.png"
     base.save(base_path)
 
     hair, hair_meta, _ = decode_record(PRGUSE, HAIR_INDEX)
@@ -160,15 +109,17 @@ def main() -> None:
         except ValueError:
             rejected.append({"name": name, "sourceIndex": source_index, "reason": "StateItem 记录为空"})
             continue
-        foreground_image, foreground_meta = remove_dark_border_background(image)
         if source_index not in written:
             target = LAYERS / f"stateitem_{source_index:05d}.png"
-            foreground_image.save(target)
+            # Source-faithful original-client composition keeps every pixel in
+            # the StateItem record. Helmet records use stage-coloured pixels
+            # to restore/erase lower hair, dress, and weapon layers.
+            image.save(target)
             written[source_index] = resource_path(target)
 
-        # Original client composition:
-        # base at (38, 52), equipment anchor at (31, 96), therefore the
-        # equipment record is relative to base by (x - 7, y + 44).
+        # Original client composition uses window-local (0, 0) as its base
+        # origin. Every cached equipment record is drawn at (31, 96) plus
+        # that record's untouched HotX/HotY values.
         composition_offset = [
             int(meta["x"] - base_meta["x"]),
             int(meta["y"] - base_meta["y"]),
@@ -183,7 +134,10 @@ def main() -> None:
             "source": "stateitem.wil",
             "mappingSource": "同名物品 ItemImage",
             "recordPolicy": "decode complete WIL record; never crop by opaque bounds",
-            "foregroundPolicy": foreground_meta,
+            "foregroundPolicy": {
+                "applied": False,
+                "policy": "complete original record; no crop, matte, or background key",
+            },
         }
 
     required = {
@@ -210,7 +164,7 @@ def main() -> None:
             "path": resource_path(base_path),
             "size": [base.width, base.height],
             "rawDrawOffset": [int(base_meta["x"]), int(base_meta["y"])],
-            "extractionRule": "largest male/female difference component plus skin-seeded head",
+            "recordPolicy": "complete original Prguse record; no differential extraction",
         },
         "hair": {
             "sourceIndex": HAIR_INDEX,
@@ -221,7 +175,7 @@ def main() -> None:
         "composition": {
             "canvasSize": [base.width, base.height],
             "drawOrder": ["base", "footRing", "hair", "衣服", "武器", "头盔"],
-            "baseScreenOrigin": [38, 52],
+            "baseScreenOrigin": [0, 0],
             "equipmentScreenAnchor": [31, 96],
             "rule": "equipmentOffset = recordOffset - baseRecordOffset",
         },
@@ -238,6 +192,14 @@ def main() -> None:
         f"mapped={len(mappings)} layers={len(written)} "
         "battle_armor=62 judgement=55 black_iron=344"
     )
+
+
+def main() -> None:
+    """Compatibility entry point for the formal source-faithful generator."""
+
+    from build_original_client_paper_doll_stage import main as build_formal_stage
+
+    build_formal_stage()
 
 
 if __name__ == "__main__":
