@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "contractId": "equipment.world_helmet.male.extension.v1",
+  "sex": "male",
+  "actorContract": {
+    "cell": [192, 160],
+    "footAnchor": [64, 80],
+    "directions": ["N", "NE", "E", "SE", "S", "SW", "W", "NW"],
+    "actions": {
+      "idle": {"start": 0, "frames": 4},
+      "walk": {"start": 64, "frames": 6},
+      "attack": {"start": 200, "frames": 6},
+      "cast": {"start": 392, "frames": 6},
+      "hit": {"start": 472, "frames": 3},
+      "death": {"start": 536, "frames": 4}
+    }
+  },
+  "sourcePolicy": {
+    "conceptLayout": "recipe-specific row-major sourceGrid with manually classified slots",
+    "identityEvidence": "StateItem sourceIndex identifies the item only",
+    "runtimePixelSource": "approved eight-direction concept sheet",
+    "stateItemPixelsUsed": false,
+    "hairPixelsUsed": false,
+    "hairUsage": "same action, direction and frame head anchor only",
+    "femaleExcluded": true,
+    "backgroundPolicy": "remove the connected matte background and retain a transparent helmet cutout",
+    "envelopePolicy": "fit every direction inside the real-client Helmet.wil median envelope"
+  },
+  "items": [
+    {"itemId": 146, "itemName": "精灵头盔", "sourceIndex": 105, "identityId": "elf"},
+    {"itemId": 147, "itemName": "青铜头盔", "sourceIndex": 100, "identityId": "bronze_magic"},
+    {"itemId": 148, "itemName": "魔法头盔", "sourceIndex": 100, "identityId": "bronze_magic"},
+    {"itemId": 149, "itemName": "道士头盔", "sourceIndex": 106, "identityId": "taoist"},
+    {"itemId": 150, "itemName": "骷髅头盔", "sourceIndex": 103, "identityId": "skeleton"},
+    {"itemId": 151, "itemName": "黑铁头盔", "sourceIndex": 344, "identityId": "black_iron"},
+    {"itemId": 218, "itemName": "神秘头盔", "sourceIndex": 111, "identityId": "mystery"},
+    {"itemId": 224, "itemName": "祈祷头盔", "sourceIndex": 110, "identityId": "prayer"},
+    {"itemId": 228, "itemName": "记忆头盔", "sourceIndex": 109, "identityId": "memory"},
+    {"itemId": 232, "itemName": "圣战头盔", "sourceIndex": 104, "identityId": "holy_war"},
+    {"itemId": 236, "itemName": "法神头盔", "sourceIndex": 101, "identityId": "god_magic"},
+    {"itemId": 240, "itemName": "天尊头盔", "sourceIndex": 102, "identityId": "heavenly_taoist"}
+  ],
+  "identities": [
+    {
+      "identityId": "elf",
+      "sourceIndex": 105,
+      "concept": "res://assets/art/items/client/world_wear/helmet/male/source/elf_helmet_8dir.png",
+      "sourceGrid": [4, 2],
+      "directionClassificationStatus": "accepted_manual_visual_classification",
+      "directionClassificationEvidence": "independent full-resolution review: centred face opening at S0, right profile at S2, rear shell at S4 and left-front projection at S7",
+      "sourceSlotDirectionOrder": ["N", "NE", "E", "SE", "S", "SW", "W", "NW"],
+      "canonicalRowSourceSlots": [0, 1, 2, 3, 4, 5, 6, 7],
+      "outputPrefix": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet",
+      "matteTolerance": 14
+    },
+    {
+      "identityId": "bronze_magic",
+      "sourceIndex": 100,
+      "concept": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
+      "sourceGrid": [4, 2],
+      "directionClassificationStatus": "accepted_manual_visual_classification",
+      "directionClassificationEvidence": "independent full-resolution review: centred visor at S0, right edge at S2, rear shell at S4 and left-front visor at S7",
+      "sourceSlotDirectionOrder": ["N", "NE", "E", "SE", "S", "SW", "W", "NW"],
+      "canonicalRowSourceSlots": [0, 1, 2, 3, 4, 5, 6, 7],
+      "outputPrefix": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet",
+      "matteTolerance": 14
+    },
+    {
+      "identityId": "taoist",
+      "sourceIndex": 106,
+      "concept": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_helmet_8dir.png",
+      "sourceGrid": [4, 2],
+      "directionClassificationStatus": "accepted_manual_visual_classification",
+      "directionClassificationEvidence": "independent full-resolution review: front red jewel and nose bridge at S0, right gold ornament at S2, rear ridge at S4 and left-front ornament at S7",
+      "sourceSlotDirectionOrder": ["N", "NE", "E", "SE", "S", "SW", "W", "NW"],
+      "canonicalRowSourceSlots": [0, 1, 2, 3, 4, 5, 6, 7],
+      "outputPrefix": "res://assets/art/items/client/world_wear/helmet/male/taoist_helmet",
+      "matteTolerance": 14
+    },
+    {
+      "identityId": "skeleton",
+      "sourceIndex": 103,
+      "concept": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_helmet_8dir.png",
+      "sourceGrid": [4, 2],
+      "directionClassificationStatus": "accepted_manual_visual_classification",
+      "directionClassificationEvidence": "independent full-resolution review: frontal skull openings at S0, right skull profile at S2, rear seam at S4 and left-front skull at S7",
+      "sourceSlotDirectionOrder": ["N", "NE", "E", "SE", "S", "SW", "W", "NW"],
+      "canonicalRowSourceSlots": [0, 1, 2, 3, 4, 5, 6, 7],
+      "outputPrefix": "res://assets/art/items/client/world_wear/helmet/male/skeleton_helmet",
+      "matteTolerance": 14
+    },
+    {
+      "identityId": "black_iron",
+      "sourceIndex": 344,
+      "concept": "res://assets/art/characters/warrior/wear/helmet/source/black_iron_helmet_approved_meteoric_narrow_jaw_20260717.png",
+      "sourceGrid": [8, 1],
+      "directionClassificationStatus": "accepted_manual_visual_classification",
+      "directionClassificationEvidence": "face aperture, nose guard projection, rear shell and left/right jaw edge were inspected per source slot",
+      "sourceSlotDirectionOrder": ["N", "E", "W", "SW", "S", "SE", "NW", "NE"],
+      "canonicalRowSourceSlots": [0, 7, 1, 5, 4, 3, 2, 6],
+      "outputPrefix": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet",
+      "preserveAcceptedActions": ["idle", "walk", "attack", "hit", "death"],
+      "matteTolerance": 7
+    },
+    {
+      "identityId": "mystery",
+      "sourceIndex": 111,
+      "concept": "res://assets/art/items/client/world_wear/helmet/male/source/mystery_helmet_8dir.png",
+      "sourceGrid": [4, 2],
+      "directionClassificationStatus": "accepted_manual_visual_classification",
+      "directionClassificationEvidence": "independent full-resolution review: frontal opening at S0, right scale profile at S2, rear ridge at S4 and left-front opening at S7",
+      "sourceSlotDirectionOrder": ["N", "NE", "E", "SE", "S", "SW", "W", "NW"],
+      "canonicalRowSourceSlots": [0, 1, 2, 3, 4, 5, 6, 7],
+      "outputPrefix": "res://assets/art/items/client/world_wear/helmet/male/mystery_helmet",
+      "matteTolerance": 14
+    },
+    {
+      "identityId": "prayer",
+      "sourceIndex": 110,
+      "concept": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
+      "sourceGrid": [4, 2],
+      "directionClassificationStatus": "accepted_manual_visual_classification",
+      "directionClassificationEvidence": "independent full-resolution review of face opening, red-gem side projection, rear scale shell and mirrored left/right rim",
+      "sourceSlotDirectionOrder": ["N", "NW", "W", "E", "S", "SW", "SE", "NE"],
+      "canonicalRowSourceSlots": [0, 7, 3, 6, 4, 5, 2, 1],
+      "outputPrefix": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet",
+      "matteTolerance": 14
+    },
+    {
+      "identityId": "memory",
+      "sourceIndex": 109,
+      "concept": "res://assets/art/items/client/world_wear/helmet/male/source/memory_helmet_8dir.png",
+      "sourceGrid": [4, 2],
+      "directionClassificationStatus": "accepted_manual_visual_classification",
+      "directionClassificationEvidence": "independent full-resolution review of visor opening, purple-gem nose projection, rear white shell and mirrored side wings",
+      "sourceSlotDirectionOrder": ["N", "NW", "W", "E", "S", "SW", "SE", "NE"],
+      "canonicalRowSourceSlots": [0, 7, 3, 6, 4, 5, 2, 1],
+      "outputPrefix": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet",
+      "matteTolerance": 14
+    },
+    {
+      "identityId": "holy_war",
+      "sourceIndex": 104,
+      "concept": "res://assets/art/items/client/world_wear/helmet/male/source/holy_war_helmet_8dir.png",
+      "sourceGrid": [4, 2],
+      "directionClassificationStatus": "accepted_manual_visual_classification",
+      "directionClassificationEvidence": "independent full-resolution review of black face aperture, horn projection, gold rear shell and mirrored green side plates",
+      "sourceSlotDirectionOrder": ["N", "NW", "W", "E", "S", "SW", "SE", "NE"],
+      "canonicalRowSourceSlots": [0, 7, 3, 6, 4, 5, 2, 1],
+      "outputPrefix": "res://assets/art/items/client/world_wear/helmet/male/holy_war_helmet",
+      "matteTolerance": 14
+    },
+    {
+      "identityId": "god_magic",
+      "sourceIndex": 101,
+      "concept": "res://assets/art/items/client/world_wear/helmet/male/source/god_magic_helmet_8dir.png",
+      "sourceGrid": [4, 2],
+      "directionClassificationStatus": "accepted_manual_visual_classification",
+      "directionClassificationEvidence": "independent full-resolution review of face opening, blue crest projection, rear shell and mirrored gold side rims",
+      "sourceSlotDirectionOrder": ["N", "NW", "W", "E", "S", "SW", "SE", "NE"],
+      "canonicalRowSourceSlots": [0, 7, 3, 6, 4, 5, 2, 1],
+      "outputPrefix": "res://assets/art/items/client/world_wear/helmet/male/god_magic_helmet",
+      "matteTolerance": 14
+    },
+    {
+      "identityId": "heavenly_taoist",
+      "sourceIndex": 102,
+      "concept": "res://assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_helmet_8dir.png",
+      "sourceGrid": [4, 2],
+      "directionClassificationStatus": "accepted_manual_visual_classification",
+      "directionClassificationEvidence": "independent full-resolution review of front mask, red-gold crest projection, rear dome and mirrored side guards",
+      "sourceSlotDirectionOrder": ["N", "NW", "W", "E", "S", "SW", "SE", "NE"],
+      "canonicalRowSourceSlots": [0, 7, 3, 6, 4, 5, 2, 1],
+      "outputPrefix": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet",
+      "matteTolerance": 14
+    }
+  ]
+}

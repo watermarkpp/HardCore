@@ -13,12 +13,12 @@ func _ready() -> void:
 	assert(str(catalog.get("database", "")).ends_with("frame_catalog.sqlite"), "frame catalog SQLite path is missing")
 
 	var helmet := _read_json(HELMET_SOURCE_PATH)
-	assert(int(helmet.get("schemaVersion", 0)) == 15, "black iron helmet provenance schema must be v15")
+	assert(int(helmet.get("schemaVersion", 0)) == 16, "black iron helmet provenance schema must be v16")
 	assert(str(helmet.get("classification", "")).begins_with("project-generated"), "generated helmet must remain separated from original client resources")
 	assert(int(helmet.get("referenceIconImage", -1)) == 344, "black iron helmet identity must remain StateItem #344")
 	assert(bool(helmet.get("generation", {}).get("aiGenerated", false)), "direct approved-design pixels must be recorded")
 	assert(bool(helmet.get("generation", {}).get("aiConceptUsed", false)), "approved meteoric concept must be recorded")
-	assert((helmet.get("generation", {}).get("aiPixelsLimitedTo", []) as Array) == ["idle", "walk", "attack", "hit"], "approved-design pixels must be limited to standing/action atlases")
+	assert((helmet.get("generation", {}).get("aiPixelsLimitedTo", []) as Array) == ["idle", "walk", "attack", "cast", "hit"], "approved-design pixels must be limited to standing/action atlases")
 	var pixel_generator := str(helmet.get("generation", {}).get("runtimePixelGenerator", ""))
 	assert(pixel_generator.contains("Direct approved-design crops"), "standing/action helmet must use the approved design directly")
 	assert(pixel_generator.contains("Godot 4.7"), "death helmet must use the Godot orthographic renderer")
@@ -34,11 +34,11 @@ func _ready() -> void:
 	assert(str(direction_references.get("godotRenderer", "")).ends_with("render_black_iron_helmet_3d.gd"), "Godot helmet renderer is missing from provenance")
 	assert(is_equal_approx(float(helmet.get("generation", {}).get("runtimeEnvelopeScale", 0.0)), 1.0), "black iron helmet must use the client median size without arbitrary scale")
 	assert(is_equal_approx(float(helmet.get("generation", {}).get("visualMassTargetMultiplier", 0.0)), 1.15), "black iron helmet visual mass must be calibrated to 1.15x the client median")
-	assert(int(helmet.get("clientHelmetParameterBaseline", {}).get("poseAnchorRecords", 0)) == 184, "Helmet.wil same-cell anchor table must cover all 184 frames")
+	assert(int(helmet.get("clientHelmetParameterBaseline", {}).get("poseAnchorRecords", 0)) == 232, "Helmet.wil same-cell anchor table must cover all 232 frames")
 	assert(int(helmet.get("clientHelmetParameterBaseline", {}).get("outlierFilteredPoseRecords", 0)) > 0, "non-head Helmet.wil pose clusters must be filtered")
 	assert(int(helmet.get("deathPoseBaseline", {}).get("records", 0)) == 32, "death helmet mapping must cover 8 directions x 4 frames")
 	assert(int(helmet.get("completeClientCoverage", {}).get("indexedFrames", 0)) == 962251, "helmet provenance must bind the complete client scan")
-	for action_name in ["idle", "walk", "attack", "hit", "death"]:
+	for action_name in ["idle", "walk", "attack", "cast", "hit", "death"]:
 		var action: Dictionary = helmet.get("actions", {}).get(action_name, {})
 		assert(int(action.get("directions", 0)) == 8, "%s helmet must contain eight directions" % action_name)
 		assert((action.get("directionSignatures", []) as Array).size() == 8, "%s direction signatures are missing" % action_name)

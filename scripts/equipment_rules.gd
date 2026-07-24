@@ -14,6 +14,7 @@ const LUCK_POINT_2_RATE := 6
 const LUCK_POINT_3_RATE := 40
 const MAX_WEAPON_CURSE := 10
 const ACTOR_VISUAL_SORT_CONTRACT_ID := "equipment_actor_visual_sort_unit_v2"
+const MALE_WORLD_HELMET_EXTENSION_CONTRACT_ID := "equipment.world_helmet.male.extension.v1"
 const ACTOR_VISUAL_BODY_LAYER := &"body_and_dress"
 const ACTOR_VISUAL_WEAPON_LAYER := &"weapon"
 const ACTOR_VISUAL_HELMET_LAYER := &"helmet"

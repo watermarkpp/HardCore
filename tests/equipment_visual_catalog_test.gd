@@ -56,7 +56,7 @@ func _run() -> void:
 	assert(int(coverage.get("exactGroundIcons", 0)) == 175, "每件正式装备必须有精确地面图")
 	assert(int(coverage.get("visualWearables", 0)) == 73, "武器/衣服/头盔目录数错误")
 	assert(int(coverage.get("exactPaperDollOverlays", 0)) == 73, "所有可视穿戴槽必须有精确 StateItem 记录")
-	assert(int(coverage.get("exactMaleWorldWear", 0)) == 44, "男性正式世界穿戴覆盖数错误")
+	assert(int(coverage.get("exactMaleWorldWear", 0)) == 55, "男性正式世界穿戴覆盖数错误")
 	assert(int(coverage.get("exactFemaleWorldWear", 0)) == 43, "女性正式世界穿戴覆盖数错误")
 	assert(int(coverage.get("unresolvedWorldShape", 0)) == 4, "缺少可靠 Shape 的正式装备必须稳定为 4 件")
 	var profession_manifests: Dictionary = manifest.get("professionManifests", {})

@@ -5,7 +5,8 @@
   "sourcePolicy": {
     "clientAssets": "client.classic_raw_complete",
     "serverShapeDistribution": "server.crystal.cjlaaa",
-    "noPlaceholderRule": true
+    "noPlaceholderRule": true,
+    "maleWorldHelmetContract": "res://assets/data/equipment_male_world_helmet.json"
   },
   "actorTemplate": {
     "contractId": "player.visual.classic_eight_direction.v1",
@@ -999,9 +1000,9 @@
     "exactGroundIcons": 175,
     "visualWearables": 73,
     "exactPaperDollOverlays": 73,
-    "exactMaleWorldWear": 44,
+    "exactMaleWorldWear": 55,
     "exactFemaleWorldWear": 43,
-    "explicitNoWorldLayer": 115,
+    "explicitNoWorldLayer": 104,
     "unresolvedWorldShape": 4
   },
   "itemsById": {
@@ -74290,8 +74291,116 @@
         "mappingConfidence": "A"
       },
       "worldWear": {
-        "status": "classic_client_no_world_layer",
-        "reason": "classic actor protocol has no evidence-backed item helmet Shape; StateItem is paper-doll art and must not be used as world animation"
+        "status": "approved_project_extension",
+        "contractId": "equipment.world_helmet.male.extension.v1",
+        "identityId": "elf",
+        "sourceIndex": 105,
+        "helmetAppearance": {
+          "sex": "male",
+          "visible": true,
+          "identityId": "elf",
+          "identityRef": "visualIdentities.elf",
+          "actions": {
+            "idle": {
+              "identityActionRef": "visualIdentities.elf.actions.idle",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "walk": {
+              "identityActionRef": "visualIdentities.elf.actions.walk",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_walk.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "attack": {
+              "identityActionRef": "visualIdentities.elf.actions.attack",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_attack.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "cast": {
+              "identityActionRef": "visualIdentities.elf.actions.cast",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_cast.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "hit": {
+              "identityActionRef": "visualIdentities.elf.actions.hit",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_hit.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 3,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "death": {
+              "identityActionRef": "visualIdentities.elf.actions.death",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_death.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            }
+          },
+          "actionFallbacks": {}
+        },
+        "reason": "StateItem identifies the helmet only; transparent world atlases are project-generated and anchored to same-frame male Hair.wil head motion"
       }
     },
     "147": {
@@ -74373,8 +74482,116 @@
         "mappingConfidence": "A"
       },
       "worldWear": {
-        "status": "classic_client_no_world_layer",
-        "reason": "classic actor protocol has no evidence-backed item helmet Shape; StateItem is paper-doll art and must not be used as world animation"
+        "status": "approved_project_extension",
+        "contractId": "equipment.world_helmet.male.extension.v1",
+        "identityId": "bronze_magic",
+        "sourceIndex": 100,
+        "helmetAppearance": {
+          "sex": "male",
+          "visible": true,
+          "identityId": "bronze_magic",
+          "identityRef": "visualIdentities.bronze_magic",
+          "actions": {
+            "idle": {
+              "identityActionRef": "visualIdentities.bronze_magic.actions.idle",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_idle.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "walk": {
+              "identityActionRef": "visualIdentities.bronze_magic.actions.walk",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_walk.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "attack": {
+              "identityActionRef": "visualIdentities.bronze_magic.actions.attack",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_attack.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "cast": {
+              "identityActionRef": "visualIdentities.bronze_magic.actions.cast",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_cast.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "hit": {
+              "identityActionRef": "visualIdentities.bronze_magic.actions.hit",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_hit.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 3,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "death": {
+              "identityActionRef": "visualIdentities.bronze_magic.actions.death",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_death.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            }
+          },
+          "actionFallbacks": {}
+        },
+        "reason": "StateItem identifies the helmet only; transparent world atlases are project-generated and anchored to same-frame male Hair.wil head motion"
       }
     },
     "148": {
@@ -74456,8 +74673,116 @@
         "mappingConfidence": "A"
       },
       "worldWear": {
-        "status": "classic_client_no_world_layer",
-        "reason": "classic actor protocol has no evidence-backed item helmet Shape; StateItem is paper-doll art and must not be used as world animation"
+        "status": "approved_project_extension",
+        "contractId": "equipment.world_helmet.male.extension.v1",
+        "identityId": "bronze_magic",
+        "sourceIndex": 100,
+        "helmetAppearance": {
+          "sex": "male",
+          "visible": true,
+          "identityId": "bronze_magic",
+          "identityRef": "visualIdentities.bronze_magic",
+          "actions": {
+            "idle": {
+              "identityActionRef": "visualIdentities.bronze_magic.actions.idle",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_idle.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "walk": {
+              "identityActionRef": "visualIdentities.bronze_magic.actions.walk",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_walk.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "attack": {
+              "identityActionRef": "visualIdentities.bronze_magic.actions.attack",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_attack.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "cast": {
+              "identityActionRef": "visualIdentities.bronze_magic.actions.cast",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_cast.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "hit": {
+              "identityActionRef": "visualIdentities.bronze_magic.actions.hit",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_hit.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 3,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "death": {
+              "identityActionRef": "visualIdentities.bronze_magic.actions.death",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_death.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            }
+          },
+          "actionFallbacks": {}
+        },
+        "reason": "StateItem identifies the helmet only; transparent world atlases are project-generated and anchored to same-frame male Hair.wil head motion"
       }
     },
     "149": {
@@ -74539,8 +74864,116 @@
         "mappingConfidence": "A"
       },
       "worldWear": {
-        "status": "classic_client_no_world_layer",
-        "reason": "classic actor protocol has no evidence-backed item helmet Shape; StateItem is paper-doll art and must not be used as world animation"
+        "status": "approved_project_extension",
+        "contractId": "equipment.world_helmet.male.extension.v1",
+        "identityId": "taoist",
+        "sourceIndex": 106,
+        "helmetAppearance": {
+          "sex": "male",
+          "visible": true,
+          "identityId": "taoist",
+          "identityRef": "visualIdentities.taoist",
+          "actions": {
+            "idle": {
+              "identityActionRef": "visualIdentities.taoist.actions.idle",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/taoist_helmet_idle.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "walk": {
+              "identityActionRef": "visualIdentities.taoist.actions.walk",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/taoist_helmet_walk.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "attack": {
+              "identityActionRef": "visualIdentities.taoist.actions.attack",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/taoist_helmet_attack.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "cast": {
+              "identityActionRef": "visualIdentities.taoist.actions.cast",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/taoist_helmet_cast.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "hit": {
+              "identityActionRef": "visualIdentities.taoist.actions.hit",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/taoist_helmet_hit.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 3,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "death": {
+              "identityActionRef": "visualIdentities.taoist.actions.death",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/taoist_helmet_death.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            }
+          },
+          "actionFallbacks": {}
+        },
+        "reason": "StateItem identifies the helmet only; transparent world atlases are project-generated and anchored to same-frame male Hair.wil head motion"
       }
     },
     "150": {
@@ -74622,8 +75055,116 @@
         "mappingConfidence": "A"
       },
       "worldWear": {
-        "status": "classic_client_no_world_layer",
-        "reason": "classic actor protocol has no evidence-backed item helmet Shape; StateItem is paper-doll art and must not be used as world animation"
+        "status": "approved_project_extension",
+        "contractId": "equipment.world_helmet.male.extension.v1",
+        "identityId": "skeleton",
+        "sourceIndex": 103,
+        "helmetAppearance": {
+          "sex": "male",
+          "visible": true,
+          "identityId": "skeleton",
+          "identityRef": "visualIdentities.skeleton",
+          "actions": {
+            "idle": {
+              "identityActionRef": "visualIdentities.skeleton.actions.idle",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/skeleton_helmet_idle.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "walk": {
+              "identityActionRef": "visualIdentities.skeleton.actions.walk",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/skeleton_helmet_walk.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "attack": {
+              "identityActionRef": "visualIdentities.skeleton.actions.attack",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/skeleton_helmet_attack.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "cast": {
+              "identityActionRef": "visualIdentities.skeleton.actions.cast",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/skeleton_helmet_cast.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "hit": {
+              "identityActionRef": "visualIdentities.skeleton.actions.hit",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/skeleton_helmet_hit.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 3,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "death": {
+              "identityActionRef": "visualIdentities.skeleton.actions.death",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/skeleton_helmet_death.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            }
+          },
+          "actionFallbacks": {}
+        },
+        "reason": "StateItem identifies the helmet only; transparent world atlases are project-generated and anchored to same-frame male Hair.wil head motion"
       }
     },
     "151": {
@@ -74706,10 +75247,17 @@
       },
       "worldWear": {
         "status": "approved_project_extension",
+        "contractId": "equipment.world_helmet.male.extension.v1",
+        "identityId": "black_iron",
+        "sourceIndex": 344,
         "helmetAppearance": {
+          "sex": "male",
           "visible": true,
+          "identityId": "black_iron",
+          "identityRef": "visualIdentities.black_iron",
           "actions": {
             "idle": {
+              "identityActionRef": "visualIdentities.black_iron.actions.idle",
               "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
               "cell": [
                 192,
@@ -74721,9 +75269,11 @@
               ],
               "directions": 8,
               "framesPerDirection": 4,
+              "missingFrames": [],
               "confidence": "project_approved_exact"
             },
             "walk": {
+              "identityActionRef": "visualIdentities.black_iron.actions.walk",
               "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
               "cell": [
                 192,
@@ -74735,9 +75285,11 @@
               ],
               "directions": 8,
               "framesPerDirection": 6,
+              "missingFrames": [],
               "confidence": "project_approved_exact"
             },
             "attack": {
+              "identityActionRef": "visualIdentities.black_iron.actions.attack",
               "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
               "cell": [
                 192,
@@ -74749,9 +75301,27 @@
               ],
               "directions": 8,
               "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "cast": {
+              "identityActionRef": "visualIdentities.black_iron.actions.cast",
+              "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_cast.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
               "confidence": "project_approved_exact"
             },
             "hit": {
+              "identityActionRef": "visualIdentities.black_iron.actions.hit",
               "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
               "cell": [
                 192,
@@ -74763,9 +75333,11 @@
               ],
               "directions": 8,
               "framesPerDirection": 3,
+              "missingFrames": [],
               "confidence": "project_approved_exact"
             },
             "death": {
+              "identityActionRef": "visualIdentities.black_iron.actions.death",
               "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png",
               "cell": [
                 192,
@@ -74777,14 +75349,13 @@
               ],
               "directions": 8,
               "framesPerDirection": 4,
+              "missingFrames": [],
               "confidence": "project_approved_exact"
             }
           },
-          "actionFallbacks": {
-            "cast": "idle"
-          }
+          "actionFallbacks": {}
         },
-        "reason": "classic actor does not draw item helmets; this existing extension is independently approved"
+        "reason": "StateItem identifies the helmet only; transparent world atlases are project-generated and anchored to same-frame male Hair.wil head motion"
       }
     },
     "218": {
@@ -74866,8 +75437,116 @@
         "mappingConfidence": "A"
       },
       "worldWear": {
-        "status": "classic_client_no_world_layer",
-        "reason": "classic actor protocol has no evidence-backed item helmet Shape; StateItem is paper-doll art and must not be used as world animation"
+        "status": "approved_project_extension",
+        "contractId": "equipment.world_helmet.male.extension.v1",
+        "identityId": "mystery",
+        "sourceIndex": 111,
+        "helmetAppearance": {
+          "sex": "male",
+          "visible": true,
+          "identityId": "mystery",
+          "identityRef": "visualIdentities.mystery",
+          "actions": {
+            "idle": {
+              "identityActionRef": "visualIdentities.mystery.actions.idle",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/mystery_helmet_idle.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "walk": {
+              "identityActionRef": "visualIdentities.mystery.actions.walk",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/mystery_helmet_walk.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "attack": {
+              "identityActionRef": "visualIdentities.mystery.actions.attack",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/mystery_helmet_attack.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "cast": {
+              "identityActionRef": "visualIdentities.mystery.actions.cast",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/mystery_helmet_cast.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "hit": {
+              "identityActionRef": "visualIdentities.mystery.actions.hit",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/mystery_helmet_hit.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 3,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "death": {
+              "identityActionRef": "visualIdentities.mystery.actions.death",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/mystery_helmet_death.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            }
+          },
+          "actionFallbacks": {}
+        },
+        "reason": "StateItem identifies the helmet only; transparent world atlases are project-generated and anchored to same-frame male Hair.wil head motion"
       }
     },
     "224": {
@@ -74949,8 +75628,116 @@
         "mappingConfidence": "A"
       },
       "worldWear": {
-        "status": "classic_client_no_world_layer",
-        "reason": "classic actor protocol has no evidence-backed item helmet Shape; StateItem is paper-doll art and must not be used as world animation"
+        "status": "approved_project_extension",
+        "contractId": "equipment.world_helmet.male.extension.v1",
+        "identityId": "prayer",
+        "sourceIndex": 110,
+        "helmetAppearance": {
+          "sex": "male",
+          "visible": true,
+          "identityId": "prayer",
+          "identityRef": "visualIdentities.prayer",
+          "actions": {
+            "idle": {
+              "identityActionRef": "visualIdentities.prayer.actions.idle",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_idle.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "walk": {
+              "identityActionRef": "visualIdentities.prayer.actions.walk",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_walk.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "attack": {
+              "identityActionRef": "visualIdentities.prayer.actions.attack",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_attack.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "cast": {
+              "identityActionRef": "visualIdentities.prayer.actions.cast",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_cast.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "hit": {
+              "identityActionRef": "visualIdentities.prayer.actions.hit",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_hit.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 3,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "death": {
+              "identityActionRef": "visualIdentities.prayer.actions.death",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_death.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            }
+          },
+          "actionFallbacks": {}
+        },
+        "reason": "StateItem identifies the helmet only; transparent world atlases are project-generated and anchored to same-frame male Hair.wil head motion"
       }
     },
     "228": {
@@ -75032,8 +75819,116 @@
         "mappingConfidence": "A"
       },
       "worldWear": {
-        "status": "classic_client_no_world_layer",
-        "reason": "classic actor protocol has no evidence-backed item helmet Shape; StateItem is paper-doll art and must not be used as world animation"
+        "status": "approved_project_extension",
+        "contractId": "equipment.world_helmet.male.extension.v1",
+        "identityId": "memory",
+        "sourceIndex": 109,
+        "helmetAppearance": {
+          "sex": "male",
+          "visible": true,
+          "identityId": "memory",
+          "identityRef": "visualIdentities.memory",
+          "actions": {
+            "idle": {
+              "identityActionRef": "visualIdentities.memory.actions.idle",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_idle.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "walk": {
+              "identityActionRef": "visualIdentities.memory.actions.walk",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_walk.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "attack": {
+              "identityActionRef": "visualIdentities.memory.actions.attack",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_attack.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "cast": {
+              "identityActionRef": "visualIdentities.memory.actions.cast",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_cast.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "hit": {
+              "identityActionRef": "visualIdentities.memory.actions.hit",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_hit.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 3,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "death": {
+              "identityActionRef": "visualIdentities.memory.actions.death",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_death.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            }
+          },
+          "actionFallbacks": {}
+        },
+        "reason": "StateItem identifies the helmet only; transparent world atlases are project-generated and anchored to same-frame male Hair.wil head motion"
       }
     },
     "232": {
@@ -75115,8 +76010,116 @@
         "mappingConfidence": "A"
       },
       "worldWear": {
-        "status": "classic_client_no_world_layer",
-        "reason": "classic actor protocol has no evidence-backed item helmet Shape; StateItem is paper-doll art and must not be used as world animation"
+        "status": "approved_project_extension",
+        "contractId": "equipment.world_helmet.male.extension.v1",
+        "identityId": "holy_war",
+        "sourceIndex": 104,
+        "helmetAppearance": {
+          "sex": "male",
+          "visible": true,
+          "identityId": "holy_war",
+          "identityRef": "visualIdentities.holy_war",
+          "actions": {
+            "idle": {
+              "identityActionRef": "visualIdentities.holy_war.actions.idle",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/holy_war_helmet_idle.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "walk": {
+              "identityActionRef": "visualIdentities.holy_war.actions.walk",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/holy_war_helmet_walk.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "attack": {
+              "identityActionRef": "visualIdentities.holy_war.actions.attack",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/holy_war_helmet_attack.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "cast": {
+              "identityActionRef": "visualIdentities.holy_war.actions.cast",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/holy_war_helmet_cast.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "hit": {
+              "identityActionRef": "visualIdentities.holy_war.actions.hit",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/holy_war_helmet_hit.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 3,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "death": {
+              "identityActionRef": "visualIdentities.holy_war.actions.death",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/holy_war_helmet_death.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            }
+          },
+          "actionFallbacks": {}
+        },
+        "reason": "StateItem identifies the helmet only; transparent world atlases are project-generated and anchored to same-frame male Hair.wil head motion"
       }
     },
     "236": {
@@ -75198,8 +76201,116 @@
         "mappingConfidence": "A"
       },
       "worldWear": {
-        "status": "classic_client_no_world_layer",
-        "reason": "classic actor protocol has no evidence-backed item helmet Shape; StateItem is paper-doll art and must not be used as world animation"
+        "status": "approved_project_extension",
+        "contractId": "equipment.world_helmet.male.extension.v1",
+        "identityId": "god_magic",
+        "sourceIndex": 101,
+        "helmetAppearance": {
+          "sex": "male",
+          "visible": true,
+          "identityId": "god_magic",
+          "identityRef": "visualIdentities.god_magic",
+          "actions": {
+            "idle": {
+              "identityActionRef": "visualIdentities.god_magic.actions.idle",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/god_magic_helmet_idle.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "walk": {
+              "identityActionRef": "visualIdentities.god_magic.actions.walk",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/god_magic_helmet_walk.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "attack": {
+              "identityActionRef": "visualIdentities.god_magic.actions.attack",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/god_magic_helmet_attack.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "cast": {
+              "identityActionRef": "visualIdentities.god_magic.actions.cast",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/god_magic_helmet_cast.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "hit": {
+              "identityActionRef": "visualIdentities.god_magic.actions.hit",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/god_magic_helmet_hit.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 3,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "death": {
+              "identityActionRef": "visualIdentities.god_magic.actions.death",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/god_magic_helmet_death.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            }
+          },
+          "actionFallbacks": {}
+        },
+        "reason": "StateItem identifies the helmet only; transparent world atlases are project-generated and anchored to same-frame male Hair.wil head motion"
       }
     },
     "240": {
@@ -75281,8 +76392,116 @@
         "mappingConfidence": "A"
       },
       "worldWear": {
-        "status": "classic_client_no_world_layer",
-        "reason": "classic actor protocol has no evidence-backed item helmet Shape; StateItem is paper-doll art and must not be used as world animation"
+        "status": "approved_project_extension",
+        "contractId": "equipment.world_helmet.male.extension.v1",
+        "identityId": "heavenly_taoist",
+        "sourceIndex": 102,
+        "helmetAppearance": {
+          "sex": "male",
+          "visible": true,
+          "identityId": "heavenly_taoist",
+          "identityRef": "visualIdentities.heavenly_taoist",
+          "actions": {
+            "idle": {
+              "identityActionRef": "visualIdentities.heavenly_taoist.actions.idle",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "walk": {
+              "identityActionRef": "visualIdentities.heavenly_taoist.actions.walk",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "attack": {
+              "identityActionRef": "visualIdentities.heavenly_taoist.actions.attack",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "cast": {
+              "identityActionRef": "visualIdentities.heavenly_taoist.actions.cast",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "hit": {
+              "identityActionRef": "visualIdentities.heavenly_taoist.actions.hit",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 3,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            },
+            "death": {
+              "identityActionRef": "visualIdentities.heavenly_taoist.actions.death",
+              "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 4,
+              "missingFrames": [],
+              "confidence": "project_approved_exact"
+            }
+          },
+          "actionFallbacks": {}
+        },
+        "reason": "StateItem identifies the helmet only; transparent world atlases are project-generated and anchored to same-frame male Hair.wil head motion"
       }
     }
   },
@@ -105782,11 +107001,550 @@
         "actionFallbacks": {}
       }
     },
-    "黑铁头盔": {
+    "精灵头盔": {
       "helmetAppearance": {
+        "sex": "male",
         "visible": true,
+        "identityId": "elf",
+        "identityRef": "visualIdentities.elf",
         "actions": {
           "idle": {
+            "identityActionRef": "visualIdentities.elf.actions.idle",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "walk": {
+            "identityActionRef": "visualIdentities.elf.actions.walk",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_walk.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "attack": {
+            "identityActionRef": "visualIdentities.elf.actions.attack",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_attack.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "cast": {
+            "identityActionRef": "visualIdentities.elf.actions.cast",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_cast.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "hit": {
+            "identityActionRef": "visualIdentities.elf.actions.hit",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_hit.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 3,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "death": {
+            "identityActionRef": "visualIdentities.elf.actions.death",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_death.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          }
+        },
+        "actionFallbacks": {}
+      }
+    },
+    "青铜头盔": {
+      "helmetAppearance": {
+        "sex": "male",
+        "visible": true,
+        "identityId": "bronze_magic",
+        "identityRef": "visualIdentities.bronze_magic",
+        "actions": {
+          "idle": {
+            "identityActionRef": "visualIdentities.bronze_magic.actions.idle",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_idle.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "walk": {
+            "identityActionRef": "visualIdentities.bronze_magic.actions.walk",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_walk.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "attack": {
+            "identityActionRef": "visualIdentities.bronze_magic.actions.attack",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_attack.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "cast": {
+            "identityActionRef": "visualIdentities.bronze_magic.actions.cast",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_cast.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "hit": {
+            "identityActionRef": "visualIdentities.bronze_magic.actions.hit",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_hit.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 3,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "death": {
+            "identityActionRef": "visualIdentities.bronze_magic.actions.death",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_death.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          }
+        },
+        "actionFallbacks": {}
+      }
+    },
+    "魔法头盔": {
+      "helmetAppearance": {
+        "sex": "male",
+        "visible": true,
+        "identityId": "bronze_magic",
+        "identityRef": "visualIdentities.bronze_magic",
+        "actions": {
+          "idle": {
+            "identityActionRef": "visualIdentities.bronze_magic.actions.idle",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_idle.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "walk": {
+            "identityActionRef": "visualIdentities.bronze_magic.actions.walk",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_walk.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "attack": {
+            "identityActionRef": "visualIdentities.bronze_magic.actions.attack",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_attack.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "cast": {
+            "identityActionRef": "visualIdentities.bronze_magic.actions.cast",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_cast.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "hit": {
+            "identityActionRef": "visualIdentities.bronze_magic.actions.hit",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_hit.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 3,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "death": {
+            "identityActionRef": "visualIdentities.bronze_magic.actions.death",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_death.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          }
+        },
+        "actionFallbacks": {}
+      }
+    },
+    "道士头盔": {
+      "helmetAppearance": {
+        "sex": "male",
+        "visible": true,
+        "identityId": "taoist",
+        "identityRef": "visualIdentities.taoist",
+        "actions": {
+          "idle": {
+            "identityActionRef": "visualIdentities.taoist.actions.idle",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/taoist_helmet_idle.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "walk": {
+            "identityActionRef": "visualIdentities.taoist.actions.walk",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/taoist_helmet_walk.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "attack": {
+            "identityActionRef": "visualIdentities.taoist.actions.attack",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/taoist_helmet_attack.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "cast": {
+            "identityActionRef": "visualIdentities.taoist.actions.cast",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/taoist_helmet_cast.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "hit": {
+            "identityActionRef": "visualIdentities.taoist.actions.hit",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/taoist_helmet_hit.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 3,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "death": {
+            "identityActionRef": "visualIdentities.taoist.actions.death",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/taoist_helmet_death.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          }
+        },
+        "actionFallbacks": {}
+      }
+    },
+    "骷髅头盔": {
+      "helmetAppearance": {
+        "sex": "male",
+        "visible": true,
+        "identityId": "skeleton",
+        "identityRef": "visualIdentities.skeleton",
+        "actions": {
+          "idle": {
+            "identityActionRef": "visualIdentities.skeleton.actions.idle",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/skeleton_helmet_idle.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "walk": {
+            "identityActionRef": "visualIdentities.skeleton.actions.walk",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/skeleton_helmet_walk.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "attack": {
+            "identityActionRef": "visualIdentities.skeleton.actions.attack",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/skeleton_helmet_attack.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "cast": {
+            "identityActionRef": "visualIdentities.skeleton.actions.cast",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/skeleton_helmet_cast.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "hit": {
+            "identityActionRef": "visualIdentities.skeleton.actions.hit",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/skeleton_helmet_hit.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 3,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "death": {
+            "identityActionRef": "visualIdentities.skeleton.actions.death",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/skeleton_helmet_death.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          }
+        },
+        "actionFallbacks": {}
+      }
+    },
+    "黑铁头盔": {
+      "helmetAppearance": {
+        "sex": "male",
+        "visible": true,
+        "identityId": "black_iron",
+        "identityRef": "visualIdentities.black_iron",
+        "actions": {
+          "idle": {
+            "identityActionRef": "visualIdentities.black_iron.actions.idle",
             "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
             "cell": [
               192,
@@ -105798,9 +107556,11 @@
             ],
             "directions": 8,
             "framesPerDirection": 4,
+            "missingFrames": [],
             "confidence": "project_approved_exact"
           },
           "walk": {
+            "identityActionRef": "visualIdentities.black_iron.actions.walk",
             "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
             "cell": [
               192,
@@ -105812,9 +107572,11 @@
             ],
             "directions": 8,
             "framesPerDirection": 6,
+            "missingFrames": [],
             "confidence": "project_approved_exact"
           },
           "attack": {
+            "identityActionRef": "visualIdentities.black_iron.actions.attack",
             "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
             "cell": [
               192,
@@ -105826,9 +107588,27 @@
             ],
             "directions": 8,
             "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "cast": {
+            "identityActionRef": "visualIdentities.black_iron.actions.cast",
+            "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_cast.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
             "confidence": "project_approved_exact"
           },
           "hit": {
+            "identityActionRef": "visualIdentities.black_iron.actions.hit",
             "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
             "cell": [
               192,
@@ -105840,9 +107620,11 @@
             ],
             "directions": 8,
             "framesPerDirection": 3,
+            "missingFrames": [],
             "confidence": "project_approved_exact"
           },
           "death": {
+            "identityActionRef": "visualIdentities.black_iron.actions.death",
             "path": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png",
             "cell": [
               192,
@@ -105854,12 +107636,653 @@
             ],
             "directions": 8,
             "framesPerDirection": 4,
+            "missingFrames": [],
             "confidence": "project_approved_exact"
           }
         },
-        "actionFallbacks": {
-          "cast": "idle"
-        }
+        "actionFallbacks": {}
+      }
+    },
+    "神秘头盔": {
+      "helmetAppearance": {
+        "sex": "male",
+        "visible": true,
+        "identityId": "mystery",
+        "identityRef": "visualIdentities.mystery",
+        "actions": {
+          "idle": {
+            "identityActionRef": "visualIdentities.mystery.actions.idle",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/mystery_helmet_idle.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "walk": {
+            "identityActionRef": "visualIdentities.mystery.actions.walk",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/mystery_helmet_walk.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "attack": {
+            "identityActionRef": "visualIdentities.mystery.actions.attack",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/mystery_helmet_attack.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "cast": {
+            "identityActionRef": "visualIdentities.mystery.actions.cast",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/mystery_helmet_cast.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "hit": {
+            "identityActionRef": "visualIdentities.mystery.actions.hit",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/mystery_helmet_hit.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 3,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "death": {
+            "identityActionRef": "visualIdentities.mystery.actions.death",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/mystery_helmet_death.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          }
+        },
+        "actionFallbacks": {}
+      }
+    },
+    "祈祷头盔": {
+      "helmetAppearance": {
+        "sex": "male",
+        "visible": true,
+        "identityId": "prayer",
+        "identityRef": "visualIdentities.prayer",
+        "actions": {
+          "idle": {
+            "identityActionRef": "visualIdentities.prayer.actions.idle",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_idle.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "walk": {
+            "identityActionRef": "visualIdentities.prayer.actions.walk",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_walk.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "attack": {
+            "identityActionRef": "visualIdentities.prayer.actions.attack",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_attack.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "cast": {
+            "identityActionRef": "visualIdentities.prayer.actions.cast",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_cast.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "hit": {
+            "identityActionRef": "visualIdentities.prayer.actions.hit",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_hit.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 3,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "death": {
+            "identityActionRef": "visualIdentities.prayer.actions.death",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_death.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          }
+        },
+        "actionFallbacks": {}
+      }
+    },
+    "记忆头盔": {
+      "helmetAppearance": {
+        "sex": "male",
+        "visible": true,
+        "identityId": "memory",
+        "identityRef": "visualIdentities.memory",
+        "actions": {
+          "idle": {
+            "identityActionRef": "visualIdentities.memory.actions.idle",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_idle.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "walk": {
+            "identityActionRef": "visualIdentities.memory.actions.walk",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_walk.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "attack": {
+            "identityActionRef": "visualIdentities.memory.actions.attack",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_attack.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "cast": {
+            "identityActionRef": "visualIdentities.memory.actions.cast",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_cast.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "hit": {
+            "identityActionRef": "visualIdentities.memory.actions.hit",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_hit.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 3,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "death": {
+            "identityActionRef": "visualIdentities.memory.actions.death",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_death.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          }
+        },
+        "actionFallbacks": {}
+      }
+    },
+    "圣战头盔": {
+      "helmetAppearance": {
+        "sex": "male",
+        "visible": true,
+        "identityId": "holy_war",
+        "identityRef": "visualIdentities.holy_war",
+        "actions": {
+          "idle": {
+            "identityActionRef": "visualIdentities.holy_war.actions.idle",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/holy_war_helmet_idle.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "walk": {
+            "identityActionRef": "visualIdentities.holy_war.actions.walk",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/holy_war_helmet_walk.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "attack": {
+            "identityActionRef": "visualIdentities.holy_war.actions.attack",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/holy_war_helmet_attack.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "cast": {
+            "identityActionRef": "visualIdentities.holy_war.actions.cast",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/holy_war_helmet_cast.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "hit": {
+            "identityActionRef": "visualIdentities.holy_war.actions.hit",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/holy_war_helmet_hit.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 3,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "death": {
+            "identityActionRef": "visualIdentities.holy_war.actions.death",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/holy_war_helmet_death.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          }
+        },
+        "actionFallbacks": {}
+      }
+    },
+    "法神头盔": {
+      "helmetAppearance": {
+        "sex": "male",
+        "visible": true,
+        "identityId": "god_magic",
+        "identityRef": "visualIdentities.god_magic",
+        "actions": {
+          "idle": {
+            "identityActionRef": "visualIdentities.god_magic.actions.idle",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/god_magic_helmet_idle.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "walk": {
+            "identityActionRef": "visualIdentities.god_magic.actions.walk",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/god_magic_helmet_walk.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "attack": {
+            "identityActionRef": "visualIdentities.god_magic.actions.attack",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/god_magic_helmet_attack.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "cast": {
+            "identityActionRef": "visualIdentities.god_magic.actions.cast",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/god_magic_helmet_cast.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "hit": {
+            "identityActionRef": "visualIdentities.god_magic.actions.hit",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/god_magic_helmet_hit.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 3,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "death": {
+            "identityActionRef": "visualIdentities.god_magic.actions.death",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/god_magic_helmet_death.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          }
+        },
+        "actionFallbacks": {}
+      }
+    },
+    "天尊头盔": {
+      "helmetAppearance": {
+        "sex": "male",
+        "visible": true,
+        "identityId": "heavenly_taoist",
+        "identityRef": "visualIdentities.heavenly_taoist",
+        "actions": {
+          "idle": {
+            "identityActionRef": "visualIdentities.heavenly_taoist.actions.idle",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "walk": {
+            "identityActionRef": "visualIdentities.heavenly_taoist.actions.walk",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "attack": {
+            "identityActionRef": "visualIdentities.heavenly_taoist.actions.attack",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "cast": {
+            "identityActionRef": "visualIdentities.heavenly_taoist.actions.cast",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "hit": {
+            "identityActionRef": "visualIdentities.heavenly_taoist.actions.hit",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 3,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          },
+          "death": {
+            "identityActionRef": "visualIdentities.heavenly_taoist.actions.death",
+            "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "missingFrames": [],
+            "confidence": "project_approved_exact"
+          }
+        },
+        "actionFallbacks": {}
       }
     }
   },
