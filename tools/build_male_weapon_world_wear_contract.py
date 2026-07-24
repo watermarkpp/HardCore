@@ -14,13 +14,17 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 WEAPON = ROOT / "dev_art_sources/reference/mir2_client_raw/Data/Weapon.wil"
 VISUAL_CATALOG = ROOT / "assets/data/equipment_visual_catalog.json"
+COMPATIBILITY = (
+    ROOT / "assets/data/equipment_primary_weapon_compatibility.json"
+)
 ATLAS_ROOT = ROOT / "assets/art/items/client/world_wear/weapon/male"
 OUTPUT = ROOT / "assets/data/equipment_male_weapon_world_wear.json"
 
 CONTRACT_ID = "equipment.world_wear.male_weapon.v1"
-HIDDEN_ITEM_IDS = {80, 82}
-UNRESOLVED_ITEM_IDS = {86, 88, 109, 111}
-USER_CONFIRMED_ITEM_IDS = {105}
+HIDDEN_ITEM_IDS: set[int] = set()
+UNRESOLVED_ITEM_IDS = {110, 111}
+INTEGRATION_SHARED_PRIMARY_ITEM_IDS = {88}
+USER_CONFIRMED_CLASS_ITEM_IDS = {99, 105, 107, 108}
 CELL = (224, 224)
 ACTOR_ORIGIN = (80, 116)
 FOOT_POINT = ACTOR_ORIGIN
@@ -239,11 +243,19 @@ def build_feature_family(feature: int, library: tuple) -> dict:
 
 
 def main() -> None:
-    for source in (WEAPON, VISUAL_CATALOG):
+    for source in (WEAPON, VISUAL_CATALOG, COMPATIBILITY):
         if not source.exists():
             raise FileNotFoundError(f"missing male weapon input: {source}")
 
     catalog = load_json(VISUAL_CATALOG)
+    compatibility = load_json(COMPATIBILITY)
+    if compatibility.get("contractId") != (
+        "equipment.weapon_compatibility.primary.v1"
+    ):
+        raise AssertionError("primary weapon compatibility contract changed")
+    compatibility_items = compatibility.get("itemsById", {})
+    if len(compatibility_items) != 37:
+        raise AssertionError("primary weapon compatibility must cover 37 items")
     entries = catalog.get("itemsById", {})
     runtime_mappings = catalog.get("runtimeMappings", {})
     formal_weapons: list[tuple[int, dict]] = sorted(
@@ -270,8 +282,8 @@ def main() -> None:
             raise AssertionError(
                 f"unexpected world weapon status for {item_id}: {status}"
             )
-    if len(classified["visible"]) != 31:
-        raise AssertionError("visible weapon count must remain 31")
+    if len(classified["visible"]) != 35:
+        raise AssertionError("visible primary weapon count must be 35")
     if set(classified["hidden_by_classic_rule"]) != HIDDEN_ITEM_IDS:
         raise AssertionError("classic hidden weapon set changed")
     if set(classified["unresolved"]) != UNRESOLVED_ITEM_IDS:
@@ -296,7 +308,19 @@ def main() -> None:
         name = str(entry.get("itemName", ""))
         world = entry.get("worldWear", {})
         evidence = world.get("shapeEvidence", {})
+        compatibility_record = compatibility_items.get(str(item_id), {})
+        if (
+            int(compatibility_record.get("itemId", -1)) != item_id
+            or str(compatibility_record.get("itemName", "")) != name
+        ):
+            raise ValueError(
+                f"{item_id} {name} compatibility identity mismatch"
+            )
         if item_id in UNRESOLVED_ITEM_IDS:
+            if compatibility_record.get("status") != "unresolved":
+                raise ValueError(
+                    f"{item_id} {name} must remain compatibility-unresolved"
+                )
             record = {
                 "itemId": item_id,
                 "itemName": name,
@@ -306,7 +330,11 @@ def main() -> None:
                 "status": "unresolved",
                 "mappingAssessment": {
                     "confidence": "unresolved",
-                    "source": str(evidence.get("source", "none")),
+                    "source": (
+                        "res://assets/data/"
+                        "equipment_primary_weapon_compatibility.json"
+                        f"#/itemsById/{item_id}"
+                    ),
                     "reason": str(
                         evidence.get(
                             "reason",
@@ -325,61 +353,89 @@ def main() -> None:
         runtime = runtime_mappings.get(name, {}).get("weaponAppearance", {})
         if not runtime:
             raise ValueError(f"{item_id} {name} lacks runtime weaponAppearance")
-        shape = int(runtime.get("shape", -1))
-        feature = int(runtime.get("feature", -1))
-        if feature != shape * 2 or feature not in male_features:
+        if compatibility_record.get("status") != "resolved_primary_pixels":
             raise ValueError(
-                f"{item_id} {name} violates male feature=Shape*2"
+                f"{item_id} {name} lacks resolved primary compatibility"
             )
-        mapping_confidence = (
-            "manually_confirmed"
-            if item_id in USER_CONFIRMED_ITEM_IDS
-            else "B"
+        shape = int(compatibility_record.get("classicWeaponShape", -1))
+        raw_crystal_shape = compatibility_record.get("crystalShape")
+        crystal_shape = (
+            int(raw_crystal_shape)
+            if raw_crystal_shape is not None
+            else None
         )
-        mapping_source = str(evidence.get("source", ""))
-        if item_id in USER_CONFIRMED_ITEM_IDS and (shape, feature) != (24, 48):
-            raise AssertionError(
-                "Judgement Staff must remain shape24 feature48"
-            )
-        expected_evidence_confidence = (
-            "manually_confirmed"
-            if item_id in USER_CONFIRMED_ITEM_IDS
-            else "B"
-        )
-        if str(evidence.get("confidence", "")) != (
-            expected_evidence_confidence
+        feature = int(runtime.get("feature", -1))
+        if (
+            feature != int(compatibility_record.get("maleFeature", -1))
+            or feature != shape * 2
+            or feature not in male_features
         ):
             raise ValueError(
-                f"{item_id} {name} mapping evidence must remain "
-                f"{expected_evidence_confidence}"
+                f"{item_id} {name} violates reviewed classic compatibility"
+            )
+        if item_id in INTEGRATION_SHARED_PRIMARY_ITEM_IDS:
+            mapping_confidence = (
+                "integration_user_required_shared_primary_appearance"
+            )
+        elif item_id in USER_CONFIRMED_CLASS_ITEM_IDS:
+            mapping_confidence = (
+                "user_confirmed_primary_pixel_compatibility"
+            )
+        else:
+            mapping_confidence = "primary_pixel_compatibility"
+        mapping_source = (
+            "res://assets/data/"
+            "equipment_primary_weapon_compatibility.json"
+            f"#/itemsById/{item_id}"
+        )
+        if str(evidence.get("confidence", "")) != (
+            "primary_pixel_compatibility"
+        ):
+            raise ValueError(
+                f"{item_id} {name} must use primary pixel compatibility"
             )
 
-        visible = item_id not in HIDDEN_ITEM_IDS
-        status = "visible" if visible else "hidden_by_classic_rule"
+        visible = True
+        status = "visible"
         appearance = {
             "sex": "male",
             "shape": shape,
+            "classicShape": shape,
             "feature": feature,
+            "visualWeaponClass": str(
+                compatibility_record.get("visualWeaponClass", "")
+            ),
             "featureRef": f"featureFamilies.{feature}",
             "visible": visible,
-            "actions": (
-                {
-                    action: {
-                        "featureActionRef": (
-                            f"featureFamilies.{feature}.actions.{action}"
-                        ),
-                        "path": feature_families[str(feature)]["actions"][
-                            action
-                        ]["path"],
-                        "framesPerDirection": int(ACTIONS[action]["frames"]),
-                    }
-                    for action in ACTIONS
+            "actions": {
+                action: {
+                    "featureActionRef": (
+                        f"featureFamilies.{feature}.actions.{action}"
+                    ),
+                    "path": feature_families[str(feature)]["actions"][
+                        action
+                    ]["path"],
+                    "framesPerDirection": int(ACTIONS[action]["frames"]),
                 }
-                if visible
-                else {}
-            ),
+                for action in ACTIONS
+            },
             "actionFallbacks": {},
         }
+        if crystal_shape is None:
+            appearance["crystalShapeStatus"] = str(
+                compatibility_record.get("crystalShapeStatus", "")
+            )
+        else:
+            appearance["crystalShape"] = crystal_shape
+        mapping_rule = (
+            "male feature = integration-reviewed primary client Weapon "
+            "shape * 2; no database Shape is available or adopted"
+            if item_id in INTEGRATION_SHARED_PRIMARY_ITEM_IDS
+            else (
+                "male feature = reviewed classic Weapon shape * 2; "
+                "Crystal Shape is never multiplied directly"
+            )
+        )
         item_record = {
             "itemId": item_id,
             "itemName": name,
@@ -390,20 +446,19 @@ def main() -> None:
             "mappingAssessment": {
                 "confidence": mapping_confidence,
                 "source": mapping_source,
-                "rule": "male feature = weapon Shape * 2",
-                "pixelAndActionConfidence": "A" if visible else "not_drawn",
+                "mappingType": str(
+                    compatibility_record.get("mappingType", "")
+                ),
+                "rule": mapping_rule,
+                "crystalShapeUsedAsClassicShape": False,
+                "pixelAndActionConfidence": "A",
             },
             "maleAppearance": appearance,
         }
-        if not visible:
-            item_record["classicRule"] = (
-                "m_btWeapon < 2: retain the actor body and draw no weapon layer"
-            )
         items_by_id[str(item_id)] = item_record
-        if visible:
-            runtime_by_item_id[str(item_id)] = {
-                "weaponAppearance": appearance
-            }
+        runtime_by_item_id[str(item_id)] = {
+            "weaponAppearance": appearance
+        }
 
     payload = {
         "schemaVersion": 1,
@@ -416,7 +471,15 @@ def main() -> None:
             ),
             "imageCount": int(library_info["image_count"]),
             "blockFrames": BLOCK_FRAMES,
-            "maleFeatureRule": "feature = Shape * 2",
+            "maleFeatureRule": (
+                "feature = reviewed classic Weapon shape * 2; "
+                "never Crystal Shape * 2"
+            ),
+            "primaryCompatibilityContract": (
+                "res://assets/data/"
+                "equipment_primary_weapon_compatibility.json"
+            ),
+            "provenance": compatibility.get("primarySources", {}),
         },
         "actorContract": {
             "contractId": "player.visual.classic_eight_direction.v1",
@@ -432,9 +495,8 @@ def main() -> None:
         },
         "mappingPolicy": {
             "pixelAndActionCompleteness": "A",
-            "itemNameToShape": (
-                "B unless an item explicitly records manually_confirmed"
-            ),
+            "itemNameToShape": "primary Image/StateItem/Weapon compatibility",
+            "crystalShapeDirectMapping": False,
             "femaleExcluded": True,
             "unresolvedPolicy": "never infer or borrow a Weapon feature",
             "transparentEmptyFramePolicy": (
@@ -470,7 +532,7 @@ def main() -> None:
     )
     print(
         "EQUIPMENT_MALE_WEAPON_WORLD_WEAR_PASS "
-        "items=37 visible=31 hidden=2 unresolved=4 "
+        "items=37 visible=35 hidden=0 unresolved=2 "
         f"features={len(feature_families)} actions=6 directions=8"
     )
 

@@ -11,7 +11,6 @@ provenance. Every other absent client layer remains explicitly unresolved.
 
 from __future__ import annotations
 
-import csv
 import json
 import sys
 from pathlib import Path
@@ -26,7 +25,9 @@ PAPER_DOLL_SOURCE = ROOT / "assets/data/warrior_paper_doll_sources.json"
 LOADOUTS = ROOT / "assets/data/equipment_test_loadouts.json"
 SERVICE_CATALOG = ROOT / "assets/data/service_item_catalog.json"
 SOURCE_POLICY = ROOT / "assets/data/source_priority_policy.json"
-SOURCE_CSV = ROOT / "dev_art_sources/reference/mir2_database/angelk727/2_物品数据.csv"
+WEAPON_COMPATIBILITY = (
+    ROOT / "assets/data/equipment_primary_weapon_compatibility.json"
+)
 CLIENT_DATA = ROOT / "dev_art_sources/reference/mir2_client_raw/Data"
 MALE_WORLD_HELMET = ROOT / "assets/data/equipment_male_world_helmet.json"
 OUTPUT = ROOT / "assets/art/items/client/world_wear"
@@ -61,10 +62,6 @@ ACTIONS = {
     "death": {"start": 536, "frames": 4},
 }
 
-# Preserve the accepted warrior delivery: candidate/server Shape 21 points at
-# a thin staff, while the classic Judgement Staff pixel block is Shape 24.
-CLASSIC_WEAPON_SHAPE_OVERRIDES = {"裁决之杖": 24}
-
 # Hum.wil contains exactly 18 HUMANFRAME blocks: Shape 0..8, interleaved
 # male/female. StateItem 85..90 and the canonical six-armour order establish
 # the final three pairs.
@@ -91,15 +88,6 @@ def resource_path(path: Path) -> str:
 
 def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
-
-
-def load_source_rows() -> dict[str, dict]:
-    with SOURCE_CSV.open("r", encoding="utf-8-sig", newline="") as handle:
-        return {
-            str(row.get("ItemName", "")): row
-            for row in csv.DictReader(handle)
-            if row.get("ItemName")
-        }
 
 
 def primary_service_rows() -> tuple[str, dict[str, dict]]:
@@ -133,7 +121,6 @@ def item_gender(name: str, category: str) -> str:
 
 def shape_for_item(
     item: dict,
-    source_rows: dict[str, dict],
     service_rows: dict[str, dict],
     distribution: str,
 ) -> tuple[int | None, dict]:
@@ -145,15 +132,6 @@ def shape_for_item(
             "source": "classic Hum.wil 18-block capacity + StateItem 85..90 canonical pair order",
             "rule": "feature = Shape*2 + gender",
         }
-    if category == "武器" and name in CLASSIC_WEAPON_SHAPE_OVERRIDES:
-        return CLASSIC_WEAPON_SHAPE_OVERRIDES[name], {
-            "confidence": "manually_confirmed",
-            "source": (
-                "user-confirmed Judgement Staff Weapon.wil "
-                "shape24 feature48"
-            ),
-            "rule": "feature = Shape*2 + gender",
-        }
     service = service_rows.get(name)
     if service is not None and str(service.get("shape", "")).lstrip("-").isdigit():
         return int(service["shape"]), {
@@ -161,18 +139,10 @@ def shape_for_item(
             "source": f"{distribution} Server.MirDB ItemInfo[{int(service['serviceIndex'])}]",
             "rule": "feature = Shape*2 + gender",
         }
-    row = source_rows.get(name)
-    value = str(row.get("ItemShape", "")) if row else ""
-    if value.isdigit():
-        return int(value), {
-            "confidence": "B",
-            "source": "angelk727/Mir2ServerDatabases Exports/2_物品数据.csv",
-            "rule": "feature = Shape*2 + gender",
-        }
     return None, {
         "confidence": "none",
         "source": "none",
-        "reason": "no evidence-backed Shape in configured formal sources",
+        "reason": "no primary server Shape for this formal armour",
     }
 
 
@@ -327,6 +297,11 @@ def paper_overlay(item: dict, icon_mapping: dict) -> dict:
 
 
 def main() -> None:
+    from build_primary_weapon_compatibility import (
+        main as build_primary_weapon_compatibility,
+    )
+
+    build_primary_weapon_compatibility()
     for source in (
         CATALOG,
         CLIENT_ART,
@@ -334,7 +309,7 @@ def main() -> None:
         LOADOUTS,
         SERVICE_CATALOG,
         SOURCE_POLICY,
-        SOURCE_CSV,
+        WEAPON_COMPATIBILITY,
         MALE_WORLD_HELMET,
         CLIENT_DATA / "Hum.wil",
         CLIENT_DATA / "Weapon.wil",
@@ -358,8 +333,17 @@ def main() -> None:
     helmet_items = helmet_contract.get("itemsById", {})
     if len(helmet_items) != 12:
         raise AssertionError("male world helmet extension must contain 12 items")
-    source_rows = load_source_rows()
     distribution, service_rows = primary_service_rows()
+    weapon_compatibility = load_json(WEAPON_COMPATIBILITY)
+    if weapon_compatibility.get("contractId") != (
+        "equipment.weapon_compatibility.primary.v1"
+    ):
+        raise AssertionError("primary weapon compatibility contract changed")
+    weapon_items = weapon_compatibility.get("itemsById", {})
+    if len(weapon_items) != 37:
+        raise AssertionError(
+            "primary weapon compatibility must contain 37 items"
+        )
     libraries = {
         "dressAppearance": read_library(CLIENT_DATA / "Hum.wil"),
         "weaponAppearance": read_library(CLIENT_DATA / "Weapon.wil"),
@@ -427,6 +411,25 @@ def main() -> None:
                 "ground": icons["groundIcon"],
             },
         }
+        if category == "武器":
+            weapon_record = weapon_items.get(item_id, {})
+            if (
+                not weapon_record
+                or int(weapon_record.get("itemId", -1)) != int(item_id)
+                or str(weapon_record.get("itemName", "")) != name
+            ):
+                raise ValueError(
+                    f"weapon compatibility identity mismatch: "
+                    f"{item_id} {name}"
+                )
+            entry["visualWeaponClass"] = str(
+                weapon_record.get("visualWeaponClass", "unresolved")
+            )
+            entry["weaponCompatibilityRef"] = (
+                "res://assets/data/"
+                "equipment_primary_weapon_compatibility.json"
+                f"#/itemsById/{item_id}"
+            )
 
         if category in VISUAL_CATEGORIES:
             coverage["visualWearables"] += 1
@@ -439,9 +442,65 @@ def main() -> None:
             }
 
         if category in {"武器", "盔甲"}:
-            shape, evidence = shape_for_item(
-                item, source_rows, service_rows, distribution
-            )
+            if category == "武器":
+                weapon_record = weapon_items[item_id]
+                if weapon_record.get("status") == "resolved_primary_pixels":
+                    shape = int(weapon_record["classicWeaponShape"])
+                    evidence = {
+                        "confidence": "primary_pixel_compatibility",
+                        "source": entry["weaponCompatibilityRef"],
+                        "mappingType": str(
+                            weapon_record.get("mappingType", "")
+                        ),
+                        "stateItemIndex": int(
+                            weapon_record["stateItemEvidence"]["sourceIndex"]
+                        ),
+                        "classicWeaponShape": shape,
+                        "visualWeaponClass": str(
+                            weapon_record["visualWeaponClass"]
+                        ),
+                        "rule": (
+                            "male feature = reviewed classic Weapon shape * 2; "
+                            "Crystal Shape is evidence only and is never "
+                            "multiplied directly"
+                        ),
+                    }
+                    if weapon_record.get("crystalShape") is None:
+                        evidence["serverDataStatus"] = (
+                            "missing_after_complete_configured_fallback"
+                        )
+                        evidence["crystalShapeStatus"] = str(
+                            weapon_record.get("crystalShapeStatus", "")
+                        )
+                        evidence["rule"] = (
+                            "male feature = integration-reviewed primary "
+                            "client Weapon shape * 2; no database Shape is "
+                            "available or adopted"
+                        )
+                    else:
+                        evidence["serverDistribution"] = distribution
+                        evidence["crystalShape"] = int(
+                            weapon_record["crystalShape"]
+                        )
+                elif weapon_record.get("status") == "unresolved":
+                    shape = None
+                    evidence = {
+                        "confidence": "unresolved",
+                        "source": entry["weaponCompatibilityRef"],
+                        "reason": (
+                            "primary compatibility contract has no "
+                            "evidence-backed Weapon feature"
+                        ),
+                    }
+                else:
+                    raise ValueError(
+                        f"unexpected weapon compatibility status: "
+                        f"{item_id} {name}"
+                    )
+            else:
+                shape, evidence = shape_for_item(
+                    item, service_rows, distribution
+                )
             if shape is None:
                 entry["worldWear"] = {
                     "status": "unresolved_no_placeholder",
@@ -449,37 +508,14 @@ def main() -> None:
                     "runtimePolicy": "keep exact profession world base and hide this item layer",
                 }
                 coverage["unresolvedWorldShape"] += 1
-            elif category == "武器" and shape == 0:
-                hidden_appearances = {
-                    gender: {
-                        "shape": shape,
-                        "feature": shape * 2 + (1 if gender == "女" else 0),
-                        "gender": gender,
-                        "visible": False,
-                        "actions": {},
-                        "actionFallbacks": {},
-                    }
-                    for gender in GENDERS
-                }
-                entry["worldWear"] = {
-                    "status": "classic_client_hidden_weapon",
-                    "appearanceType": "weaponAppearance",
-                    "shape": shape,
-                    "shapeEvidence": evidence,
-                    "appearancesByGender": hidden_appearances,
-                    "actionFallbacks": {},
-                    "runtimePolicy": "classic m_btWeapon<2: keep exact profession world base and draw no weapon layer",
-                }
-                runtime_mappings[name] = {
-                    "weaponAppearance": hidden_appearances["男"],
-                }
-                coverage["explicitNoWorldLayer"] += 1
             else:
                 appearance_type = (
                     "weaponAppearance" if category == "武器" else "dressAppearance"
                 )
                 supported_genders = (
-                    GENDERS if category == "武器" else (item_gender(name, category),)
+                    ("男",)
+                    if category == "武器"
+                    else (item_gender(name, category),)
                 )
                 appearances: dict[str, dict] = {}
                 rejected_genders: dict[str, dict] = {}
@@ -513,6 +549,26 @@ def main() -> None:
                         "actionFallbacks": {},
                         "rejectedGenders": rejected_genders,
                     }
+                    if category == "武器":
+                        if weapon_record.get("crystalShape") is not None:
+                            entry["worldWear"]["crystalShape"] = int(
+                                weapon_record["crystalShape"]
+                            )
+                        else:
+                            entry["worldWear"][
+                                "crystalShapeStatus"
+                            ] = str(
+                                weapon_record.get(
+                                    "crystalShapeStatus",
+                                    "",
+                                )
+                            )
+                        entry["worldWear"]["mappingType"] = str(
+                            weapon_record.get("mappingType", "")
+                        )
+                        entry["worldWear"]["visualWeaponClass"] = str(
+                            weapon_record["visualWeaponClass"]
+                        )
                     male = appearances.get("男")
                     if male is not None:
                         runtime_mappings[name] = {appearance_type: male}
@@ -633,6 +689,10 @@ def main() -> None:
         "sourcePolicy": {
             "clientAssets": "client.classic_raw_complete",
             "serverShapeDistribution": distribution,
+            "primaryWeaponCompatibilityContract": resource_path(
+                WEAPON_COMPATIBILITY
+            ),
+            "crystalShapeDirectMapping": False,
             "noPlaceholderRule": True,
             "maleWorldHelmetContract": resource_path(MALE_WORLD_HELMET),
         },

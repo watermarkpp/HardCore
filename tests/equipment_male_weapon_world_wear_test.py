@@ -14,9 +14,22 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / "assets/data/equipment_male_weapon_world_wear.json"
 CATALOG = ROOT / "assets/data/equipment_visual_catalog.json"
+COMPATIBILITY = (
+    ROOT / "assets/data/equipment_primary_weapon_compatibility.json"
+)
 WEAPON = ROOT / "dev_art_sources/reference/mir2_client_raw/Data/Weapon.wil"
-HIDDEN_IDS = {80, 82}
-UNRESOLVED_IDS = {86, 88, 109, 111}
+HIDDEN_IDS: set[int] = set()
+UNRESOLVED_IDS = {110, 111}
+REQUIRED_PRIMARY_APPEARANCES = {
+    80: (2, "sword"),
+    82: (2, "sword"),
+    88: (14, "axe"),
+    99: (22, "axe"),
+    105: (48, "staff"),
+    107: (50, "sword"),
+    108: (58, "blade"),
+    109: (54, "staff"),
+}
 ACTION_FRAMES = {
     "idle": 4,
     "walk": 6,
@@ -63,7 +76,84 @@ def unpack_frame(value: str) -> dict:
 def main() -> None:
     contract = load_json(CONTRACT)
     catalog = load_json(CATALOG)
+    compatibility = load_json(COMPATIBILITY)
     assert contract["contractId"] == "equipment.world_wear.male_weapon.v1"
+    assert (
+        compatibility["contractId"]
+        == "equipment.weapon_compatibility.primary.v1"
+    )
+    assert compatibility["coverage"] == {
+        "formalWeapons": 37,
+        "resolvedPrimaryPixels": 35,
+        "integrationSharedPrimaryAppearance": 1,
+        "unresolved": 2,
+        "crystalShapeDiffersFromClassicShape": 31,
+        "directCrystalShapeMultiplication": 0,
+        "lowerTierValuesAdopted": 0,
+    }
+    compatibility_text = COMPATIBILITY.read_text(encoding="utf-8")
+    for forbidden in ("mylgd", "21CQ", "external/mir2opensource"):
+        assert forbidden not in compatibility_text
+    for compat_key, compat in compatibility["itemsById"].items():
+        assert int(compat["itemId"]) == int(compat_key)
+        primary = compat["primaryServerQuery"]
+        assert primary["lane"] == "server_data"
+        assert primary["distribution"] == "server.crystal.cjlaaa"
+        assert primary["tier"] == "primary"
+        assert len(primary["sha256"]) == 64
+        if compat["status"] == "resolved_primary_pixels":
+            assert compat["stateItemEvidence"]["distribution"] == (
+                "client.classic_raw_complete"
+            )
+            assert compat["weaponEvidence"]["distribution"] == (
+                "client.classic_raw_complete"
+            )
+            assert compat["crystalShapeUsedAsClassicShape"] is False
+        else:
+            assert int(compat_key) in UNRESOLVED_IDS
+            assert "maleFeature" not in compat
+    luosha = compatibility["itemsById"]["88"]
+    assert (
+        luosha["mappingType"]
+        == "integration_user_required_shared_primary_appearance"
+    )
+    assert luosha["primaryServerQuery"]["targetNameResult"]["status"] == (
+        "missing"
+    )
+    assert luosha["crystalShape"] is None
+    assert int(luosha["stateItemEvidence"]["sourceIndex"]) == 40
+    assert int(luosha["classicWeaponShape"]) == 7
+    assert int(luosha["maleFeature"]) == 14
+    luosha_fallback = luosha["fallbackEvidence"]
+    assert luosha_fallback["adopted"] is False
+    assert luosha_fallback["configuredChainExhausted"] is True
+    assert len(luosha_fallback["queriesInPolicyOrder"]) == 5
+    assert all(
+        query["status"] == "missing"
+        and query["adopted"] is False
+        and len(query["sha256"]) == 64
+        for query in luosha_fallback["queriesInPolicyOrder"]
+    )
+    assert [
+        query["distribution"]
+        for query in luosha_fallback["queriesInPolicyOrder"]
+    ] == [
+        "server.angelk727_full",
+        "server.angelk727_exports",
+        "server_reference.angelk727",
+        "server.crystal.Jev",
+        "server.crystal.Daneo1989",
+    ]
+    assert len(luosha_fallback["rejectedAliases"]) == 2
+    for rejected in luosha_fallback["rejectedAliases"]:
+        assert rejected["status"] == "rejected_incompatible_identity"
+        assert rejected["adopted"] is False
+        assert rejected["matchCount"] == 1
+        assert int(rejected["matches"][0]["requiredAmount"]) == 52
+        assert int(rejected["matches"][0]["image"]) == 1153
+        assert rejected["compatibility"]["primaryStateItemCapacity"][
+            "candidateWithinPrimaryLibrary"
+        ] is False
     assert contract["sex"] == "male"
     assert contract["actorContract"]["cell"] == [224, 224]
     assert contract["actorContract"]["actorOrigin"] == [80, 116]
@@ -71,11 +161,12 @@ def main() -> None:
     assert contract["actorContract"]["directions"] == 8
     assert contract["actorContract"]["footPointContractChanged"] is False
     assert contract["mappingPolicy"]["femaleExcluded"] is True
+    assert contract["mappingPolicy"]["crystalShapeDirectMapping"] is False
     assert contract["coverage"] == {
         "formalWeapons": 37,
-        "visible": 31,
-        "hiddenByClassicRule": 2,
-        "unresolved": 4,
+        "visible": 35,
+        "hiddenByClassicRule": 0,
+        "unresolved": 2,
         "maleWeaponFeatureFamilies": 34,
         "actionsPerFeature": 6,
         "directionsPerAction": 8,
@@ -85,7 +176,7 @@ def main() -> None:
     }
     assert set(contract["classification"]["hidden_by_classic_rule"]) == HIDDEN_IDS
     assert set(contract["classification"]["unresolved"]) == UNRESOLVED_IDS
-    assert len(contract["classification"]["visible"]) == 31
+    assert len(contract["classification"]["visible"]) == 35
     visible_ids = set(contract["classification"]["visible"])
     assert set(map(int, contract["runtimeMappingsByItemId"])) == visible_ids
     assert "appearancesByGender" not in CONTRACT.read_text(encoding="utf-8")
@@ -106,54 +197,80 @@ def main() -> None:
             assert item["mappingAssessment"]["confidence"] == "unresolved"
             assert "maleAppearance" not in item
             assert item["itemName"] not in runtime
+            compat = compatibility["itemsById"][item_key]
+            assert compat["status"] == "unresolved"
+            assert compat["visualWeaponClass"] == "unresolved"
             continue
         appearance = item["maleAppearance"]
         assert appearance["sex"] == "male"
-        assert int(appearance["feature"]) == int(appearance["shape"]) * 2
-        assessment = item["mappingAssessment"]
-        expected_confidence = (
-            "manually_confirmed" if item_id == 105 else "B"
+        assert int(appearance["feature"]) == int(
+            appearance["classicShape"]
+        ) * 2
+        assert int(appearance["shape"]) == int(appearance["classicShape"])
+        compat = compatibility["itemsById"][item_key]
+        assert compat["status"] == "resolved_primary_pixels"
+        if item_id == 88:
+            assert "crystalShape" not in appearance
+            assert "missing_after_complete_configured_fallback" in (
+                appearance["crystalShapeStatus"]
+            )
+            assert compat["crystalShape"] is None
+        else:
+            assert int(appearance["crystalShape"]) == int(
+                compat["crystalShape"]
+            )
+        assert int(appearance["classicShape"]) == int(
+            compat["classicWeaponShape"]
         )
+        assert appearance["visualWeaponClass"] == compat["visualWeaponClass"]
+        assert compat["crystalShapeUsedAsClassicShape"] is False
+        assessment = item["mappingAssessment"]
+        if item_id == 88:
+            expected_confidence = (
+                "integration_user_required_shared_primary_appearance"
+            )
+        elif item_id in {99, 105, 107, 108}:
+            expected_confidence = (
+                "user_confirmed_primary_pixel_compatibility"
+            )
+        else:
+            expected_confidence = "primary_pixel_compatibility"
         assert assessment["confidence"] == expected_confidence
-        assert assessment["confidence"] != "A"
+        assert assessment["crystalShapeUsedAsClassicShape"] is False
         runtime_appearance = runtime[item["itemName"]]["weaponAppearance"]
         assert int(runtime_appearance["shape"]) == int(appearance["shape"])
         assert int(runtime_appearance["feature"]) == int(appearance["feature"])
-        if item_id in HIDDEN_IDS:
-            assert status == "hidden_by_classic_rule"
-            assert appearance["visible"] is False
-            assert appearance["actions"] == {}
-            assert runtime_appearance["visible"] is False
-            assert runtime_appearance["actions"] == {}
-        else:
-            assert status == "visible"
-            assert appearance["visible"] is True
-            assert set(appearance["actions"]) == set(ACTION_FRAMES)
-            for action, frame_count in ACTION_FRAMES.items():
-                reference = appearance["actions"][action]
-                feature_action = features[str(appearance["feature"])][
-                    "actions"
-                ][action]
-                assert reference["path"] == feature_action["path"]
-                assert runtime_appearance["actions"][action]["path"] == (
-                    feature_action["path"]
-                )
-                assert runtime_appearance["actions"][action][
-                    "missingFrames"
-                ] == []
-                assert int(reference["framesPerDirection"]) == frame_count
-            contract_runtime = contract["runtimeMappingsByItemId"][item_key][
-                "weaponAppearance"
-            ]
-            assert contract_runtime == appearance
-        if item_id == 105:
-            assert int(appearance["shape"]) == 24
-            assert int(appearance["feature"]) == 48
-            catalog_evidence = catalog["itemsById"][item_key]["worldWear"][
-                "shapeEvidence"
-            ]
-            assert catalog_evidence["confidence"] == "manually_confirmed"
-            assert "user-confirmed" in catalog_evidence["source"]
+        assert status == "visible"
+        assert appearance["visible"] is True
+        assert set(appearance["actions"]) == set(ACTION_FRAMES)
+        for action, frame_count in ACTION_FRAMES.items():
+            reference = appearance["actions"][action]
+            feature_action = features[str(appearance["feature"])][
+                "actions"
+            ][action]
+            assert reference["path"] == feature_action["path"]
+            assert runtime_appearance["actions"][action]["path"] == (
+                feature_action["path"]
+            )
+            assert runtime_appearance["actions"][action][
+                "missingFrames"
+            ] == []
+            assert int(reference["framesPerDirection"]) == frame_count
+        contract_runtime = contract["runtimeMappingsByItemId"][item_key][
+            "weaponAppearance"
+        ]
+        assert contract_runtime == appearance
+
+    for item_id, expected in REQUIRED_PRIMARY_APPEARANCES.items():
+        item = items[str(item_id)]
+        appearance = item["maleAppearance"]
+        assert int(appearance["feature"]) == expected[0]
+        assert appearance["visualWeaponClass"] == expected[1]
+        evidence = catalog["itemsById"][str(item_id)]["worldWear"][
+            "shapeEvidence"
+        ]
+        assert evidence["confidence"] == "primary_pixel_compatibility"
+        assert evidence["source"].endswith(f"/itemsById/{item_id}")
 
     data, palette, offsets, _info = read_library(WEAPON)
     action_specs = contract["actorContract"]["actions"]
@@ -238,7 +355,7 @@ def main() -> None:
     assert transparent_frame_count == 232
     print(
         "EQUIPMENT_MALE_WEAPON_WORLD_WEAR_TEST_PASS "
-        "items=37 visible=31 hidden=2 unresolved=4 "
+        "items=37 visible=35 hidden=0 unresolved=2 "
         "features=34 actions=6 directions=8"
     )
 
