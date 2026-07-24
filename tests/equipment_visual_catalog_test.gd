@@ -12,16 +12,6 @@ const ACTION_FRAMES := {
 	"hit": 3,
 	"death": 4,
 }
-const REQUIRED_WEAPON_IDENTITIES := {
-	"80": [1, 2, "sword", "通用"],
-	"82": [1, 2, "sword", "通用"],
-	"88": [7, 14, "axe", "战士"],
-	"99": [11, 22, "axe", "战士"],
-	"105": [24, 48, "staff", "战士"],
-	"107": [25, 50, "sword", "道士"],
-	"108": [26, 52, "blade", "战士"],
-	"109": [27, 54, "staff", "法师"],
-}
 
 
 func _ready() -> void:
@@ -66,23 +56,9 @@ func _run() -> void:
 	assert(int(coverage.get("exactGroundIcons", 0)) == 175, "每件正式装备必须有精确地面图")
 	assert(int(coverage.get("visualWearables", 0)) == 73, "武器/衣服/头盔目录数错误")
 	assert(int(coverage.get("exactPaperDollOverlays", 0)) == 73, "所有可视穿戴槽必须有精确 StateItem 记录")
-	assert(int(coverage.get("exactMaleWorldWear", 0)) == 60, "男性正式世界穿戴覆盖数错误")
-	assert(int(coverage.get("exactFemaleWorldWear", 0)) == 12, "女性武器不得由男性管线生成")
-	assert(int(coverage.get("unresolvedWorldShape", 0)) == 1, "世界 Shape 缺口必须只剩落魄神兵")
-	assert(int(coverage.get("classicWeaponShapeRows", 0)) == 36, "1.76 StdItems 武器 Shape 覆盖错误")
-	assert(int(coverage.get("visualWeaponClassAudited", 0)) == 36, "职业/视觉武器分类审计不完整")
-	var source_policy: Dictionary = manifest.get("sourcePolicy", {})
-	var shape_source: Dictionary = source_policy.get("classicWeaponShapeSource", {})
-	assert(str(shape_source.get("path", "")).contains("mylgd_mir2server_176"), "武器 Shape 未使用 1.76 Paradox 源")
-	assert(shape_source.get("sha256", "") == "7978a8164b950a96b47ae15c0414f2925fa2418661dc74a1ac4d0427b1c0372b", "1.76 StdItems.DB 哈希变化")
-	assert(str(source_policy.get("classicWeaponShapeScope", "")).contains("Shape/Looks"), "1.76 StdItems 外观身份作用域未声明")
-	assert(str(source_policy.get("classicWeaponShapeScope", "")).contains("does not replace profession"), "1.76 StdItems 不得覆盖运行装备规则")
-	assert(str(source_policy.get("professionVisualClassSeparation", "")).contains("profession controls equip eligibility"), "profession/visualWeaponClass 未分离")
-	var taxonomy: Dictionary = manifest.get("visualWeaponClassTaxonomy", {})
-	var classes: Dictionary = taxonomy.get("classes", {})
-	assert(classes.size() == 7, "视觉武器分类必须覆盖七类")
-	assert(str(taxonomy.get("axis", "")).contains("independent from profession"), "视觉分类不得由职业决定")
-	assert(str(classes.get("staff", {}).get("semantic", "")).contains("long-handled"), "staff 必须声明为长柄武器族")
+	assert(int(coverage.get("exactMaleWorldWear", 0)) == 55, "男性正式世界穿戴覆盖数错误")
+	assert(int(coverage.get("exactFemaleWorldWear", 0)) == 43, "女性正式世界穿戴覆盖数错误")
+	assert(int(coverage.get("unresolvedWorldShape", 0)) == 4, "缺少可靠 Shape 的正式装备必须稳定为 4 件")
 	var profession_manifests: Dictionary = manifest.get("professionManifests", {})
 	assert(profession_manifests.keys().size() == 3, "必须提供战士/法师/道士三个职业纸娃娃入口")
 	for profession_id: String in ["warrior", "wizard", "taoist"]:
@@ -118,10 +94,6 @@ func _run() -> void:
 		else:
 			assert(entry.get("paperDoll", {}).get("status", "") == "slot_icon_only", "附件只能使用经典装备槽图")
 		var world: Dictionary = entry.get("worldWear", {})
-		if entry.get("category", "") == "武器":
-			assert(entry.has("visualWeaponClass"), "%s 缺少视觉武器分类" % entry.get("itemName", ""))
-			if str(world.get("status", "")) == "exact_client_animation":
-				assert(entry.get("visualWeaponClassEvidence", {}).get("confidence", "") == "manually_verified", "%s 视觉武器分类未审计" % entry.get("itemName", ""))
 		match str(world.get("status", "")):
 			"exact_client_animation":
 				for gender: String in world.get("appearancesByGender", {}):
@@ -129,30 +101,20 @@ func _run() -> void:
 			"unresolved_no_placeholder":
 				unresolved_names.append(str(entry.get("itemName", "")))
 				assert(world.get("runtimePolicy", "").contains("hide this item layer"), "无 Shape 装备必须保留人物底图并隐藏物品层")
+			"classic_client_hidden_weapon":
+				for gender: String in world.get("appearancesByGender", {}):
+					var hidden: Dictionary = world.get("appearancesByGender", {})[gender]
+					assert(not bool(hidden.get("visible", true)) and hidden.get("actions", {}).is_empty(), "Shape 0 武器必须遵守经典隐藏规则")
 			"classic_client_no_world_layer", "approved_project_extension":
 				pass
 			_:
 				assert(false, "%s 世界穿戴策略未声明" % entry.get("itemName", ""))
 	unresolved_names.sort()
-	var expected_unresolved: Array[String] = ["落魄神兵"]
+	var expected_unresolved: Array[String] = ["嗜魂法杖", "罗刹", "落魄神兵", "鹤嘴锄"]
 	expected_unresolved.sort()
-	assert(unresolved_names == expected_unresolved, "世界穿戴缺口必须只保留落魄神兵，不得猜 Shape")
-	for item_id: String in REQUIRED_WEAPON_IDENTITIES:
-		var entry: Dictionary = entries.get(item_id, {})
-		var expected: Array = REQUIRED_WEAPON_IDENTITIES[item_id]
-		var world: Dictionary = entry.get("worldWear", {})
-		var male: Dictionary = world.get("appearancesByGender", {}).get("男", {})
-		assert(world.get("status", "") == "exact_client_animation", "%s 必须绘制世界武器" % entry.get("itemName", ""))
-		assert(int(world.get("shape", -1)) == int(expected[0]))
-		assert(int(male.get("feature", -1)) == int(expected[1]))
-		assert(entry.get("visualWeaponClass", "") == expected[2])
-		assert(entry.get("profession", "") == expected[3])
-		assert(male.get("visualWeaponClass", "") == expected[2])
-		var expected_profile := "weapon.hold.%s.source_hot.v1" % str(expected[2])
-		assert(entry.get("weaponHoldAnchorProfile", "") == expected_profile)
-		assert(male.get("holdAnchorProfile", "") == expected_profile)
-	for user_item_id: String in ["80", "82", "88", "108", "109"]:
-		assert(entries.get(user_item_id, {}).get("worldWear", {}).get("shapeEvidence", {}).has("userEvidence"), "%s 缺少用户原版实机证据记录" % user_item_id)
+	assert(unresolved_names == expected_unresolved, "世界穿戴缺口必须只保留有证据的四件，不得猜 Shape")
+	for hidden_item_id: String in ["80", "82"]:
+		assert(entries.get(hidden_item_id, {}).get("worldWear", {}).get("status", "") == "classic_client_hidden_weapon", "木剑/乌木剑必须保持 m_btWeapon<2 隐藏行为")
 
 	var loadouts := _json(LOADOUT_PATH)
 	var matrix: Array = loadouts.get("loadouts", [])
@@ -191,7 +153,7 @@ func _run() -> void:
 	for item_name: String in ["炼狱", "裁决之杖", "怒斩", "魔杖", "骨玉权杖", "龙牙", "银蛇", "龙纹剑", "逍遥扇"]:
 		assert(runtime.has(item_name), "%s 必须有运行时世界外观映射" % item_name)
 	assert(int(runtime.get("裁决之杖", {}).get("weaponAppearance", {}).get("feature", -1)) == 48, "战士已验收裁决 feature 不得回归")
-	assert(source_policy.get("noPlaceholderRule", false), "缺源装备不得制造占位")
+	assert(manifest.get("sourcePolicy", {}).get("noPlaceholderRule", false), "缺源装备不得制造占位")
 
 	print("EQUIPMENT_VISUAL_CATALOG_TEST_PASS：175 件正式装备全图标、73 件纸娃娃、九人物武器/衣服八方向六动作通过")
 	get_tree().quit(0)

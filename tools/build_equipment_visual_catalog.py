@@ -12,9 +12,7 @@ provenance. Every other absent client layer remains explicitly unresolved.
 from __future__ import annotations
 
 import csv
-import hashlib
 import json
-import struct
 import sys
 from pathlib import Path
 
@@ -29,11 +27,6 @@ LOADOUTS = ROOT / "assets/data/equipment_test_loadouts.json"
 SERVICE_CATALOG = ROOT / "assets/data/service_item_catalog.json"
 SOURCE_POLICY = ROOT / "assets/data/source_priority_policy.json"
 SOURCE_CSV = ROOT / "dev_art_sources/reference/mir2_database/angelk727/2_物品数据.csv"
-CLASSIC_STD_ITEMS = (
-    ROOT
-    / "dev_art_sources/reference/mir2_database_candidates/"
-    "mylgd_mir2server_176/Mud2/DB/StdItems.DB"
-)
 CLIENT_DATA = ROOT / "dev_art_sources/reference/mir2_client_raw/Data"
 MALE_WORLD_HELMET = ROOT / "assets/data/equipment_male_world_helmet.json"
 OUTPUT = ROOT / "assets/art/items/client/world_wear"
@@ -68,88 +61,9 @@ ACTIONS = {
     "death": {"start": 536, "frames": 4},
 }
 
-# This is a visual taxonomy, not an equip/profession restriction.  The shape
-# groups are manually audited against the first male idle/attack pixels in
-# Weapon.wil.  For Shape 1..24 the original_gameofmir Client/Actor.pas attack
-# sound groups are only auxiliary material/impact evidence, not silhouette
-# authority; Shape 25..33 are cross-checked through StdItems Shape/Looks and
-# StateItem identity instead.  In particular, Shape 24 is the Judgement staff,
-# Shape 25 is the Dragon Sword, and Shape 11 is the Purgatory axe.
-CLASSIC_WEAPON_VISUAL_CLASSES_BY_SHAPE = {
-    1: "sword",
-    2: "sword",
-    3: "axe",
-    4: "sword",
-    5: "sword",
-    6: "dagger",
-    7: "axe",
-    8: "staff",
-    9: "sword",
-    10: "blade",
-    11: "axe",
-    12: "staff",
-    13: "sword",
-    14: "sword",
-    15: "blade",
-    16: "blade",
-    17: "blade",
-    18: "staff",
-    19: "pickaxe",
-    20: "dagger",
-    21: "staff",
-    22: "sword",
-    23: "blade",
-    24: "staff",
-    25: "sword",
-    26: "blade",
-    27: "staff",
-    28: "staff",
-    29: "blade",
-    30: "sword",
-    31: "sword",
-    32: "axe",
-    33: "fan",
-}
-VISUAL_WEAPON_CLASS_PROFILES = {
-    "sword": {
-        "profileId": "weapon.hold.sword.source_hot.v1",
-        "semantic": "sword-shaped one-handed or long sword silhouette",
-    },
-    "dagger": {
-        "profileId": "weapon.hold.dagger.source_hot.v1",
-        "semantic": "short blade or short paired-prong silhouette",
-    },
-    "axe": {
-        "profileId": "weapon.hold.axe.source_hot.v1",
-        "semantic": "axe or heavy cleaving-head silhouette",
-    },
-    "blade": {
-        "profileId": "weapon.hold.blade.source_hot.v1",
-        "semantic": "broad, curved or single-edged blade silhouette",
-    },
-    "staff": {
-        "profileId": "weapon.hold.staff.source_hot.v1",
-        "semantic": (
-            "long-handled family including staff, wand, rod and "
-            "hooked polearm silhouettes"
-        ),
-    },
-    "pickaxe": {
-        "profileId": "weapon.hold.pickaxe.source_hot.v1",
-        "semantic": "mining pick silhouette",
-    },
-    "fan": {
-        "profileId": "weapon.hold.fan.source_hot.v1",
-        "semantic": "folding fan silhouette",
-    },
-}
-USER_ORIGINAL_GAME_WORLD_EVIDENCE = {
-    "木剑",
-    "乌木剑",
-    "罗刹",
-    "嗜魂法杖",
-    "屠龙",
-}
+# Preserve the accepted warrior delivery: candidate/server Shape 21 points at
+# a thin staff, while the classic Judgement Staff pixel block is Shape 24.
+CLASSIC_WEAPON_SHAPE_OVERRIDES = {"裁决之杖": 24}
 
 # Hum.wil contains exactly 18 HUMANFRAME blocks: Shape 0..8, interleaved
 # male/female. StateItem 85..90 and the canonical six-armour order establish
@@ -188,110 +102,6 @@ def load_source_rows() -> dict[str, dict]:
         }
 
 
-def _decode_paradox_int(raw: bytes) -> int | None:
-    value = struct.unpack(">i", raw)[0]
-    if value == 0:
-        return None
-    complement = 1 << 31
-    return value + complement if value < 0 else value - complement
-
-
-def read_classic_weapon_rows() -> tuple[dict[str, dict], dict]:
-    """Read weapon identity/Shape rows from the selected 1.76 Paradox table."""
-    payload = CLASSIC_STD_ITEMS.read_bytes()
-    if len(payload) < 4096:
-        raise ValueError("classic StdItems.DB is truncated")
-    header_size = struct.unpack(">H", payload[2:4])[0] * 1024 // 4
-    block_size = int(payload[5]) * 1024
-    field_count = int(payload[33])
-    header = payload[:header_size]
-    # The distributed table was exported through a temporary BDE table and
-    # retains this internal name even though its selected path is StdItems.DB.
-    internal_name = b"resttemp.DB"
-    filename_offset = header.find(internal_name)
-    if filename_offset < 0:
-        raise ValueError("StdItems.DB header lacks the expected BDE table name")
-    definitions = header[120:]
-    names = (
-        header[filename_offset + len(internal_name):]
-        .strip(b"\x00")
-        .split(b"\x00")[:field_count]
-    )
-    fields = [
-        {
-            "name": names[index].decode("ascii"),
-            "type": int(definitions[index * 2]),
-            "size": int(definitions[index * 2 + 1]),
-        }
-        for index in range(field_count)
-    ]
-    expected_prefix = ["Idx", "Name", "Stdmode", "Shape"]
-    if [field["name"] for field in fields[:4]] != expected_prefix:
-        raise ValueError("StdItems.DB field layout does not match the 1.76 schema")
-    if any(field["type"] not in {1, 3, 4} for field in fields):
-        raise ValueError("StdItems.DB contains an unsupported Paradox field type")
-
-    record_size = sum(int(field["size"]) for field in fields)
-    rows: list[dict] = []
-    previous_record: bytes | None = None
-    block_count = (len(payload) - header_size) // block_size
-    for block_index in range(block_count):
-        block_start = header_size + block_index * block_size
-        block_header = payload[block_start:block_start + 6]
-        offset = block_start + 6
-        block_end = min(len(payload), block_start + block_size)
-        while offset + record_size <= block_end:
-            record = payload[offset:offset + record_size]
-            offset += record_size
-            if not record.strip(b"\x00"):
-                break
-            if record == previous_record:
-                continue
-            previous_record = record
-            row: dict = {}
-            cursor = 0
-            for field in fields:
-                size = int(field["size"])
-                raw = record[cursor:cursor + size]
-                cursor += size
-                if int(field["type"]) == 1:
-                    row[str(field["name"])] = raw.rstrip(b"\x00").decode(
-                        "gbk",
-                        errors="strict",
-                    )
-                elif int(field["type"]) == 4:
-                    row[str(field["name"])] = _decode_paradox_int(raw)
-                else:
-                    row[str(field["name"])] = struct.unpack(">h", raw)[0]
-            rows.append(row)
-        if (
-            len(block_header) == 6
-            and struct.unpack(">H", block_header[:2])[0] == 0
-        ):
-            break
-
-    weapons = {
-        str(row["Name"]): row
-        for row in rows
-        if int(row.get("Stdmode") or -1) in {5, 6}
-    }
-    if len(weapons) < 35:
-        raise ValueError(
-            f"classic StdItems.DB exposed only {len(weapons)} weapon rows"
-        )
-    return weapons, {
-        "path": (
-            "dev_art_sources/reference/mir2_database_candidates/"
-            "mylgd_mir2server_176/Mud2/DB/StdItems.DB"
-        ),
-        "sha256": hashlib.sha256(payload).hexdigest(),
-        "fieldCount": field_count,
-        "recordSize": record_size,
-        "decodedRowCount": len(rows),
-        "weaponRowCount": len(weapons),
-    }
-
-
 def primary_service_rows() -> tuple[str, dict[str, dict]]:
     policy = load_json(SOURCE_POLICY)
     sources = policy.get("lanes", {}).get("server_data", {}).get("sources", [])
@@ -323,8 +133,6 @@ def item_gender(name: str, category: str) -> str:
 
 def shape_for_item(
     item: dict,
-    classic_weapon_rows: dict[str, dict],
-    classic_weapon_source: dict,
     source_rows: dict[str, dict],
     service_rows: dict[str, dict],
     distribution: str,
@@ -337,38 +145,14 @@ def shape_for_item(
             "source": "classic Hum.wil 18-block capacity + StateItem 85..90 canonical pair order",
             "rule": "feature = Shape*2 + gender",
         }
-    if category == "武器":
-        classic_row = classic_weapon_rows.get(name)
-        if classic_row is not None:
-            evidence = {
-                "confidence": "A",
-                "source": (
-                    f"{classic_weapon_source['path']} "
-                    f"row Idx={int(classic_row['Idx'])} Name={name}"
-                ),
-                "sourceSha256": str(classic_weapon_source["sha256"]),
-                "stdMode": int(classic_row["Stdmode"]),
-                "looks": int(classic_row["Looks"]),
-                "rule": (
-                    "original_gameofmir/M2Server/ObjBase.pas: "
-                    "male feature = StdItems.Shape * 2"
-                ),
-            }
-            if name in USER_ORIGINAL_GAME_WORLD_EVIDENCE:
-                evidence["userEvidence"] = (
-                    "user original-game experience confirms a visible "
-                    "world weapon; technical Shape/Feature remains sourced "
-                    "from the selected 1.76 StdItems.DB and Weapon.wil"
-                )
-            return int(classic_row["Shape"]), evidence
-        return None, {
-            "confidence": "none",
-            "source": classic_weapon_source["path"],
-            "sourceSha256": classic_weapon_source["sha256"],
-            "reason": (
-                "item name is absent from the selected 1.76 StdItems.DB; "
-                "do not infer a world Shape from its name or slot icon"
+    if category == "武器" and name in CLASSIC_WEAPON_SHAPE_OVERRIDES:
+        return CLASSIC_WEAPON_SHAPE_OVERRIDES[name], {
+            "confidence": "manually_confirmed",
+            "source": (
+                "user-confirmed Judgement Staff Weapon.wil "
+                "shape24 feature48"
             ),
+            "rule": "feature = Shape*2 + gender",
         }
     service = service_rows.get(name)
     if service is not None and str(service.get("shape", "")).lstrip("-").isdigit():
@@ -389,40 +173,6 @@ def shape_for_item(
         "confidence": "none",
         "source": "none",
         "reason": "no evidence-backed Shape in configured formal sources",
-    }
-
-
-def weapon_visual_class(shape: int) -> tuple[str, dict]:
-    visual_class = CLASSIC_WEAPON_VISUAL_CLASSES_BY_SHAPE.get(shape)
-    if visual_class is None:
-        raise ValueError(
-            f"classic Weapon.wil Shape {shape} lacks a visual class audit"
-        )
-    profile = VISUAL_WEAPON_CLASS_PROFILES[visual_class]
-    source = (
-        "Weapon.wil male idle/attack pixel silhouette + "
-        "original_gameofmir/Client/Actor.pas Shape attack-sound group "
-        "(auxiliary material/impact evidence only)"
-        if shape <= 24
-        else (
-            "Weapon.wil male idle/attack pixel silhouette + "
-            "StdItems Shape/Looks and StateItem identity cross-check"
-        )
-    )
-    return visual_class, {
-        "confidence": "manually_verified",
-        "shape": shape,
-        "maleFeature": shape * 2,
-        "holdAnchorProfile": profile["profileId"],
-        "holdAnchorRule": (
-            "preserve each original Weapon.wil frame HotX/HotY; never "
-            "select an anchor from profession"
-        ),
-        "source": source,
-        "rule": (
-            "visualWeaponClass selects silhouette/hold behavior only; "
-            "profession remains an independent equip-rule field"
-        ),
     }
 
 
@@ -585,7 +335,6 @@ def main() -> None:
         SERVICE_CATALOG,
         SOURCE_POLICY,
         SOURCE_CSV,
-        CLASSIC_STD_ITEMS,
         MALE_WORLD_HELMET,
         CLIENT_DATA / "Hum.wil",
         CLIENT_DATA / "Weapon.wil",
@@ -610,7 +359,6 @@ def main() -> None:
     if len(helmet_items) != 12:
         raise AssertionError("male world helmet extension must contain 12 items")
     source_rows = load_source_rows()
-    classic_weapon_rows, classic_weapon_source = read_classic_weapon_rows()
     distribution, service_rows = primary_service_rows()
     libraries = {
         "dressAppearance": read_library(CLIENT_DATA / "Hum.wil"),
@@ -645,8 +393,6 @@ def main() -> None:
         "exactFemaleWorldWear": 0,
         "explicitNoWorldLayer": 0,
         "unresolvedWorldShape": 0,
-        "classicWeaponShapeRows": 0,
-        "visualWeaponClassAudited": 0,
     }
 
     for item in formal_items:
@@ -694,62 +440,46 @@ def main() -> None:
 
         if category in {"武器", "盔甲"}:
             shape, evidence = shape_for_item(
-                item,
-                classic_weapon_rows,
-                classic_weapon_source,
-                source_rows,
-                service_rows,
-                distribution,
+                item, source_rows, service_rows, distribution
             )
-            visual_weapon_class = ""
-            visual_weapon_class_evidence: dict = {}
-            if category == "武器":
-                if shape is None:
-                    visual_weapon_class = "unresolved"
-                    visual_weapon_class_evidence = {
-                        "confidence": "unresolved",
-                        "source": str(evidence.get("source", "none")),
-                        "reason": (
-                            "world Shape is unresolved; visual class must not "
-                            "be inferred from profession, name or slot icon"
-                        ),
-                    }
-                else:
-                    (
-                        visual_weapon_class,
-                        visual_weapon_class_evidence,
-                    ) = weapon_visual_class(shape)
-                    coverage["classicWeaponShapeRows"] += 1
-                    coverage["visualWeaponClassAudited"] += 1
-                entry["visualWeaponClass"] = visual_weapon_class
-                entry["visualWeaponClassEvidence"] = (
-                    visual_weapon_class_evidence
-                )
-                entry["weaponHoldAnchorProfile"] = (
-                    visual_weapon_class_evidence.get(
-                        "holdAnchorProfile",
-                        "unresolved",
-                    )
-                )
             if shape is None:
                 entry["worldWear"] = {
                     "status": "unresolved_no_placeholder",
                     "shapeEvidence": evidence,
                     "runtimePolicy": "keep exact profession world base and hide this item layer",
                 }
-                if category == "武器":
-                    entry["worldWear"]["visualWeaponClass"] = (
-                        visual_weapon_class
-                    )
                 coverage["unresolvedWorldShape"] += 1
+            elif category == "武器" and shape == 0:
+                hidden_appearances = {
+                    gender: {
+                        "shape": shape,
+                        "feature": shape * 2 + (1 if gender == "女" else 0),
+                        "gender": gender,
+                        "visible": False,
+                        "actions": {},
+                        "actionFallbacks": {},
+                    }
+                    for gender in GENDERS
+                }
+                entry["worldWear"] = {
+                    "status": "classic_client_hidden_weapon",
+                    "appearanceType": "weaponAppearance",
+                    "shape": shape,
+                    "shapeEvidence": evidence,
+                    "appearancesByGender": hidden_appearances,
+                    "actionFallbacks": {},
+                    "runtimePolicy": "classic m_btWeapon<2: keep exact profession world base and draw no weapon layer",
+                }
+                runtime_mappings[name] = {
+                    "weaponAppearance": hidden_appearances["男"],
+                }
+                coverage["explicitNoWorldLayer"] += 1
             else:
                 appearance_type = (
                     "weaponAppearance" if category == "武器" else "dressAppearance"
                 )
                 supported_genders = (
-                    ("男",)
-                    if category == "武器"
-                    else (item_gender(name, category),)
+                    GENDERS if category == "武器" else (item_gender(name, category),)
                 )
                 appearances: dict[str, dict] = {}
                 rejected_genders: dict[str, dict] = {}
@@ -768,15 +498,6 @@ def main() -> None:
                         libraries[appearance_type],
                         atlas_cache,
                     )
-                    if category == "武器":
-                        appearances[gender]["visualWeaponClass"] = (
-                            visual_weapon_class
-                        )
-                        appearances[gender]["holdAnchorProfile"] = (
-                            visual_weapon_class_evidence[
-                                "holdAnchorProfile"
-                            ]
-                        )
                     coverage[
                         "exactFemaleWorldWear"
                         if gender == "女"
@@ -792,18 +513,6 @@ def main() -> None:
                         "actionFallbacks": {},
                         "rejectedGenders": rejected_genders,
                     }
-                    if category == "武器":
-                        entry["worldWear"]["visualWeaponClass"] = (
-                            visual_weapon_class
-                        )
-                        entry["worldWear"][
-                            "visualWeaponClassEvidence"
-                        ] = visual_weapon_class_evidence
-                        entry["worldWear"]["holdAnchorProfile"] = (
-                            visual_weapon_class_evidence[
-                                "holdAnchorProfile"
-                            ]
-                        )
                     male = appearances.get("男")
                     if male is not None:
                         runtime_mappings[name] = {appearance_type: male}
@@ -924,19 +633,8 @@ def main() -> None:
         "sourcePolicy": {
             "clientAssets": "client.classic_raw_complete",
             "serverShapeDistribution": distribution,
-            "classicWeaponShapeSource": classic_weapon_source,
-            "classicWeaponShapeScope": (
-                "version-matched classic appearance identity only "
-                "(Shape/Looks); it does not replace profession, attributes, "
-                "requirements, durability or other runtime item rules"
-            ),
             "noPlaceholderRule": True,
             "maleWorldHelmetContract": resource_path(MALE_WORLD_HELMET),
-            "professionVisualClassSeparation": (
-                "profession controls equip eligibility; visualWeaponClass "
-                "controls silhouette/hold behavior and is derived from "
-                "StdItems.Shape plus Weapon.wil pixels"
-            ),
         },
         "actorTemplate": {
             "contractId": "player.visual.classic_eight_direction.v1",
@@ -955,13 +653,6 @@ def main() -> None:
             "worldActorSourceFootAnchor": list(BODY_FOOT_ANCHOR),
         },
         "professionManifests": profession_manifests,
-        "visualWeaponClassTaxonomy": {
-            "axis": (
-                "independent from profession; selects silhouette and "
-                "source-Hot hold-anchor profile"
-            ),
-            "classes": VISUAL_WEAPON_CLASS_PROFILES,
-        },
         "coverage": coverage,
         "itemsById": entries,
         "runtimeMappings": runtime_mappings,

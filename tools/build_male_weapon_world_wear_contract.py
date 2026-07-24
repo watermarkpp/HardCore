@@ -18,19 +18,9 @@ ATLAS_ROOT = ROOT / "assets/art/items/client/world_wear/weapon/male"
 OUTPUT = ROOT / "assets/data/equipment_male_weapon_world_wear.json"
 
 CONTRACT_ID = "equipment.world_wear.male_weapon.v1"
-HIDDEN_ITEM_IDS: set[int] = set()
-UNRESOLVED_ITEM_IDS = {111}
-USER_CONFIRMED_ITEM_IDS = {80, 82, 88, 105, 108, 109}
-REQUIRED_IDENTITY_AUDIT = {
-    80: (1, 2, "sword"),
-    82: (1, 2, "sword"),
-    88: (7, 14, "axe"),
-    99: (11, 22, "axe"),
-    105: (24, 48, "staff"),
-    107: (25, 50, "sword"),
-    108: (26, 52, "blade"),
-    109: (27, 54, "staff"),
-}
+HIDDEN_ITEM_IDS = {80, 82}
+UNRESOLVED_ITEM_IDS = {86, 88, 109, 111}
+USER_CONFIRMED_ITEM_IDS = {105}
 CELL = (224, 224)
 ACTOR_ORIGIN = (80, 116)
 FOOT_POINT = ACTOR_ORIGIN
@@ -280,8 +270,8 @@ def main() -> None:
             raise AssertionError(
                 f"unexpected world weapon status for {item_id}: {status}"
             )
-    if len(classified["visible"]) != 36:
-        raise AssertionError("visible weapon count must remain 36")
+    if len(classified["visible"]) != 31:
+        raise AssertionError("visible weapon count must remain 31")
     if set(classified["hidden_by_classic_rule"]) != HIDDEN_ITEM_IDS:
         raise AssertionError("classic hidden weapon set changed")
     if set(classified["unresolved"]) != UNRESOLVED_ITEM_IDS:
@@ -311,12 +301,6 @@ def main() -> None:
                 "itemId": item_id,
                 "itemName": name,
                 "profession": str(entry.get("profession", "")),
-                "visualWeaponClass": "unresolved",
-                "visualWeaponClassEvidence": entry.get(
-                    "visualWeaponClassEvidence",
-                    {},
-                ),
-                "weaponHoldAnchorProfile": "unresolved",
                 "slot": "weapon",
                 "sex": "male",
                 "status": "unresolved",
@@ -347,71 +331,59 @@ def main() -> None:
             raise ValueError(
                 f"{item_id} {name} violates male feature=Shape*2"
             )
-        mapping_confidence = str(evidence.get("confidence", ""))
-        mapping_source = str(evidence.get("source", ""))
-        if mapping_confidence != "A":
-            raise ValueError(
-                f"{item_id} {name} mapping evidence must be exact 1.76 A"
-            )
-        if item_id in USER_CONFIRMED_ITEM_IDS and "userEvidence" not in evidence:
-            if item_id != 105:
-                raise ValueError(
-                    f"{item_id} {name} lacks user original-game evidence"
-                )
-
-        visual_weapon_class = str(entry.get("visualWeaponClass", ""))
-        class_evidence = entry.get("visualWeaponClassEvidence", {})
-        hold_anchor_profile = str(
-            entry.get("weaponHoldAnchorProfile", "")
+        mapping_confidence = (
+            "manually_confirmed"
+            if item_id in USER_CONFIRMED_ITEM_IDS
+            else "B"
         )
-        if (
-            not visual_weapon_class
-            or visual_weapon_class == "unresolved"
-            or not hold_anchor_profile.startswith("weapon.hold.")
-            or str(class_evidence.get("confidence", ""))
-            != "manually_verified"
+        mapping_source = str(evidence.get("source", ""))
+        if item_id in USER_CONFIRMED_ITEM_IDS and (shape, feature) != (24, 48):
+            raise AssertionError(
+                "Judgement Staff must remain shape24 feature48"
+            )
+        expected_evidence_confidence = (
+            "manually_confirmed"
+            if item_id in USER_CONFIRMED_ITEM_IDS
+            else "B"
+        )
+        if str(evidence.get("confidence", "")) != (
+            expected_evidence_confidence
         ):
             raise ValueError(
-                f"{item_id} {name} lacks a verified visual weapon class"
+                f"{item_id} {name} mapping evidence must remain "
+                f"{expected_evidence_confidence}"
             )
-        if item_id in REQUIRED_IDENTITY_AUDIT:
-            expected = REQUIRED_IDENTITY_AUDIT[item_id]
-            if (shape, feature, visual_weapon_class) != expected:
-                raise AssertionError(
-                    f"{item_id} {name} identity changed: "
-                    f"{(shape, feature, visual_weapon_class)} != {expected}"
-                )
-        visible = True
-        status = "visible"
+
+        visible = item_id not in HIDDEN_ITEM_IDS
+        status = "visible" if visible else "hidden_by_classic_rule"
         appearance = {
             "sex": "male",
             "shape": shape,
             "feature": feature,
-            "visualWeaponClass": visual_weapon_class,
-            "holdAnchorProfile": hold_anchor_profile,
             "featureRef": f"featureFamilies.{feature}",
             "visible": visible,
-            "actions": {
-                action: {
-                    "featureActionRef": (
-                        f"featureFamilies.{feature}.actions.{action}"
-                    ),
-                    "path": feature_families[str(feature)]["actions"][
-                        action
-                    ]["path"],
-                    "framesPerDirection": int(ACTIONS[action]["frames"]),
+            "actions": (
+                {
+                    action: {
+                        "featureActionRef": (
+                            f"featureFamilies.{feature}.actions.{action}"
+                        ),
+                        "path": feature_families[str(feature)]["actions"][
+                            action
+                        ]["path"],
+                        "framesPerDirection": int(ACTIONS[action]["frames"]),
+                    }
+                    for action in ACTIONS
                 }
-                for action in ACTIONS
-            },
+                if visible
+                else {}
+            ),
             "actionFallbacks": {},
         }
         item_record = {
             "itemId": item_id,
             "itemName": name,
             "profession": str(entry.get("profession", "")),
-            "visualWeaponClass": visual_weapon_class,
-            "visualWeaponClassEvidence": class_evidence,
-            "weaponHoldAnchorProfile": hold_anchor_profile,
             "slot": "weapon",
             "sex": "male",
             "status": status,
@@ -419,16 +391,19 @@ def main() -> None:
                 "confidence": mapping_confidence,
                 "source": mapping_source,
                 "rule": "male feature = weapon Shape * 2",
-                "pixelAndActionConfidence": "A",
-                "sourceSha256": str(evidence.get("sourceSha256", "")),
-                "userEvidence": str(evidence.get("userEvidence", "")),
+                "pixelAndActionConfidence": "A" if visible else "not_drawn",
             },
             "maleAppearance": appearance,
         }
+        if not visible:
+            item_record["classicRule"] = (
+                "m_btWeapon < 2: retain the actor body and draw no weapon layer"
+            )
         items_by_id[str(item_id)] = item_record
-        runtime_by_item_id[str(item_id)] = {
-            "weaponAppearance": appearance
-        }
+        if visible:
+            runtime_by_item_id[str(item_id)] = {
+                "weaponAppearance": appearance
+            }
 
     payload = {
         "schemaVersion": 1,
@@ -442,10 +417,6 @@ def main() -> None:
             "imageCount": int(library_info["image_count"]),
             "blockFrames": BLOCK_FRAMES,
             "maleFeatureRule": "feature = Shape * 2",
-            "itemShapeSource": catalog.get("sourcePolicy", {}).get(
-                "classicWeaponShapeSource",
-                {},
-            ),
         },
         "actorContract": {
             "contractId": "player.visual.classic_eight_direction.v1",
@@ -462,22 +433,14 @@ def main() -> None:
         "mappingPolicy": {
             "pixelAndActionCompleteness": "A",
             "itemNameToShape": (
-                "A from the selected 1.76 Paradox StdItems.DB"
+                "B unless an item explicitly records manually_confirmed"
             ),
             "femaleExcluded": True,
             "unresolvedPolicy": "never infer or borrow a Weapon feature",
-            "professionVisualClassSeparation": (
-                "profession controls equip eligibility; visualWeaponClass "
-                "controls silhouette/hold behavior"
-            ),
             "transparentEmptyFramePolicy": (
                 "retain source transparency; never use a prior frame as fill"
             ),
         },
-        "visualWeaponClassTaxonomy": catalog.get(
-            "visualWeaponClassTaxonomy",
-            {},
-        ),
         "coverage": {
             "formalWeapons": len(formal_weapons),
             "visible": len(classified["visible"]),
@@ -507,7 +470,7 @@ def main() -> None:
     )
     print(
         "EQUIPMENT_MALE_WEAPON_WORLD_WEAR_PASS "
-        "items=37 visible=36 hidden=0 unresolved=1 "
+        "items=37 visible=31 hidden=2 unresolved=4 "
         f"features={len(feature_families)} actions=6 directions=8"
     )
 

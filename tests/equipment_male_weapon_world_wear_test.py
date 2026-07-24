@@ -15,47 +15,8 @@ ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / "assets/data/equipment_male_weapon_world_wear.json"
 CATALOG = ROOT / "assets/data/equipment_visual_catalog.json"
 WEAPON = ROOT / "dev_art_sources/reference/mir2_client_raw/Data/Weapon.wil"
-HIDDEN_IDS: set[int] = set()
-UNRESOLVED_IDS = {111}
-USER_EVIDENCE_IDS = {80, 82, 88, 108, 109}
-REQUIRED_IDENTITIES = {
-    80: (1, 2, "sword", "通用"),
-    81: (6, 12, "dagger", "通用"),
-    82: (1, 2, "sword", "通用"),
-    83: (2, 4, "sword", "通用"),
-    84: (4, 8, "sword", "通用"),
-    85: (2, 4, "sword", "通用"),
-    86: (19, 38, "pickaxe", "通用"),
-    87: (3, 6, "axe", "通用"),
-    88: (7, 14, "axe", "战士"),
-    89: (15, 30, "blade", "战士"),
-    90: (8, 16, "staff", "法师"),
-    91: (16, 32, "blade", "道士"),
-    92: (5, 10, "sword", "战士"),
-    93: (20, 40, "dagger", "战士"),
-    94: (10, 20, "blade", "战士"),
-    95: (18, 36, "staff", "法师"),
-    96: (14, 28, "sword", "道士"),
-    97: (7, 14, "axe", "战士"),
-    98: (13, 26, "sword", "战士"),
-    99: (11, 22, "axe", "战士"),
-    100: (12, 24, "staff", "法师"),
-    101: (9, 18, "sword", "道士"),
-    102: (17, 34, "blade", "战士"),
-    103: (22, 44, "sword", "法师"),
-    104: (21, 42, "staff", "道士"),
-    105: (24, 48, "staff", "战士"),
-    106: (28, 56, "staff", "法师"),
-    107: (25, 50, "sword", "道士"),
-    108: (26, 52, "blade", "战士"),
-    109: (27, 54, "staff", "法师"),
-    110: (29, 58, "blade", "战士"),
-    112: (30, 60, "sword", "战士"),
-    113: (32, 64, "axe", "战士"),
-    114: (31, 62, "sword", "法师"),
-    115: (33, 66, "fan", "道士"),
-    223: (23, 46, "blade", "战士"),
-}
+HIDDEN_IDS = {80, 82}
+UNRESOLVED_IDS = {86, 88, 109, 111}
 ACTION_FRAMES = {
     "idle": 4,
     "walk": 6,
@@ -110,23 +71,11 @@ def main() -> None:
     assert contract["actorContract"]["directions"] == 8
     assert contract["actorContract"]["footPointContractChanged"] is False
     assert contract["mappingPolicy"]["femaleExcluded"] is True
-    taxonomy = contract["visualWeaponClassTaxonomy"]
-    assert set(taxonomy["classes"]) == {
-        "sword",
-        "dagger",
-        "axe",
-        "blade",
-        "staff",
-        "pickaxe",
-        "fan",
-    }
-    assert "independent from profession" in taxonomy["axis"]
-    assert "long-handled" in taxonomy["classes"]["staff"]["semantic"]
     assert contract["coverage"] == {
         "formalWeapons": 37,
-        "visible": 36,
-        "hiddenByClassicRule": 0,
-        "unresolved": 1,
+        "visible": 31,
+        "hiddenByClassicRule": 2,
+        "unresolved": 4,
         "maleWeaponFeatureFamilies": 34,
         "actionsPerFeature": 6,
         "directionsPerAction": 8,
@@ -136,7 +85,7 @@ def main() -> None:
     }
     assert set(contract["classification"]["hidden_by_classic_rule"]) == HIDDEN_IDS
     assert set(contract["classification"]["unresolved"]) == UNRESOLVED_IDS
-    assert len(contract["classification"]["visible"]) == 36
+    assert len(contract["classification"]["visible"]) == 31
     visible_ids = set(contract["classification"]["visible"])
     assert set(map(int, contract["runtimeMappingsByItemId"])) == visible_ids
     assert "appearancesByGender" not in CONTRACT.read_text(encoding="utf-8")
@@ -155,12 +104,6 @@ def main() -> None:
         if item_id in UNRESOLVED_IDS:
             assert status == "unresolved"
             assert item["mappingAssessment"]["confidence"] == "unresolved"
-            assert item["visualWeaponClass"] == "unresolved"
-            assert item["visualWeaponClassEvidence"]["confidence"] == (
-                "unresolved"
-            )
-            assert item["profession"] == "战士"
-            assert item["weaponHoldAnchorProfile"] == "unresolved"
             assert "maleAppearance" not in item
             assert item["itemName"] not in runtime
             continue
@@ -168,63 +111,49 @@ def main() -> None:
         assert appearance["sex"] == "male"
         assert int(appearance["feature"]) == int(appearance["shape"]) * 2
         assessment = item["mappingAssessment"]
-        assert assessment["confidence"] == "A"
-        assert assessment["sourceSha256"] == (
-            "7978a8164b950a96b47ae15c0414f2925fa2418661dc74a1ac4d0427b1c0372b"
+        expected_confidence = (
+            "manually_confirmed" if item_id == 105 else "B"
         )
-        assert "mylgd_mir2server_176" in assessment["source"]
-        assert item["visualWeaponClass"] == appearance["visualWeaponClass"]
-        assert item["visualWeaponClassEvidence"]["confidence"] == (
-            "manually_verified"
-        )
-        class_source = item["visualWeaponClassEvidence"]["source"]
-        if int(appearance["shape"]) <= 24:
-            assert "auxiliary material/impact evidence only" in class_source
-        else:
-            assert "StdItems Shape/Looks and StateItem identity" in class_source
-        expected_hold_profile = (
-            f"weapon.hold.{item['visualWeaponClass']}.source_hot.v1"
-        )
-        assert item["weaponHoldAnchorProfile"] == expected_hold_profile
-        assert appearance["holdAnchorProfile"] == expected_hold_profile
+        assert assessment["confidence"] == expected_confidence
+        assert assessment["confidence"] != "A"
         runtime_appearance = runtime[item["itemName"]]["weaponAppearance"]
         assert int(runtime_appearance["shape"]) == int(appearance["shape"])
         assert int(runtime_appearance["feature"]) == int(appearance["feature"])
-        assert status == "visible"
-        assert appearance["visible"] is True
-        assert set(appearance["actions"]) == set(ACTION_FRAMES)
-        for action, frame_count in ACTION_FRAMES.items():
-            reference = appearance["actions"][action]
-            feature_action = features[str(appearance["feature"])][
-                "actions"
-            ][action]
-            assert reference["path"] == feature_action["path"]
-            assert runtime_appearance["actions"][action]["path"] == (
-                feature_action["path"]
-            )
-            assert runtime_appearance["actions"][action][
-                "missingFrames"
-            ] == []
-            assert int(reference["framesPerDirection"]) == frame_count
-        contract_runtime = contract["runtimeMappingsByItemId"][item_key][
-            "weaponAppearance"
-        ]
-        assert contract_runtime == appearance
-        if item_id in USER_EVIDENCE_IDS:
+        if item_id in HIDDEN_IDS:
+            assert status == "hidden_by_classic_rule"
+            assert appearance["visible"] is False
+            assert appearance["actions"] == {}
+            assert runtime_appearance["visible"] is False
+            assert runtime_appearance["actions"] == {}
+        else:
+            assert status == "visible"
+            assert appearance["visible"] is True
+            assert set(appearance["actions"]) == set(ACTION_FRAMES)
+            for action, frame_count in ACTION_FRAMES.items():
+                reference = appearance["actions"][action]
+                feature_action = features[str(appearance["feature"])][
+                    "actions"
+                ][action]
+                assert reference["path"] == feature_action["path"]
+                assert runtime_appearance["actions"][action]["path"] == (
+                    feature_action["path"]
+                )
+                assert runtime_appearance["actions"][action][
+                    "missingFrames"
+                ] == []
+                assert int(reference["framesPerDirection"]) == frame_count
+            contract_runtime = contract["runtimeMappingsByItemId"][item_key][
+                "weaponAppearance"
+            ]
+            assert contract_runtime == appearance
+        if item_id == 105:
+            assert int(appearance["shape"]) == 24
+            assert int(appearance["feature"]) == 48
             catalog_evidence = catalog["itemsById"][item_key]["worldWear"][
                 "shapeEvidence"
             ]
-            assert catalog_evidence["confidence"] == "A"
-            assert "userEvidence" in catalog_evidence
-            assert assessment["userEvidence"]
-        if item_id in REQUIRED_IDENTITIES:
-            expected_shape, expected_feature, expected_class, profession = (
-                REQUIRED_IDENTITIES[item_id]
-            )
-            assert int(appearance["shape"]) == expected_shape
-            assert int(appearance["feature"]) == expected_feature
-            assert appearance["visualWeaponClass"] == expected_class
-            assert item["profession"] == profession
+            assert catalog_evidence["confidence"] == "manually_confirmed"
+            assert "user-confirmed" in catalog_evidence["source"]
 
     data, palette, offsets, _info = read_library(WEAPON)
     action_specs = contract["actorContract"]["actions"]
@@ -309,7 +238,7 @@ def main() -> None:
     assert transparent_frame_count == 232
     print(
         "EQUIPMENT_MALE_WEAPON_WORLD_WEAR_TEST_PASS "
-        "items=37 visible=36 hidden=0 unresolved=1 "
+        "items=37 visible=31 hidden=2 unresolved=4 "
         "features=34 actions=6 directions=8"
     )
 
