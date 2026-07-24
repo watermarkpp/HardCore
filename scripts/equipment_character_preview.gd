@@ -5,6 +5,11 @@ extends Control
 # are diagnostics only now: a weapon or helmet must never move the actor.
 const OPAQUE_CENTER_CONTRACT_ID := "ui.equipment.paper_doll.opaque_center.v1"
 const FOOT_STAGE_ANCHOR_CONTRACT_ID := "ui.equipment.paper_doll.foot_stage_anchor.v2"
+const ORIGINAL_CLIENT_STAGE_CONTRACT_ID := "equipment.paper_doll.original_client_stage.v1"
+const ORIGINAL_CLIENT_DRAW_ORDER := ["base", "hair", "dress", "weapon", "helmet"]
+const ORIGINAL_CLIENT_BASE_SCREEN_ORIGIN := Vector2.ZERO
+const ORIGINAL_CLIENT_EQUIPMENT_SCREEN_ANCHOR := Vector2(31.0, 96.0)
+const BODY_FOOT_CONTACT_FIELD := "footContact"
 const PAPER_DOLL_MANIFEST := "res://assets/data/warrior_paper_doll_sources.json"
 const EQUIPMENT_VISUAL_CATALOG := "res://assets/data/equipment_visual_catalog.json"
 const PROFESSION_IDS := {
@@ -38,8 +43,13 @@ var _body_texture: Texture2D
 var _weapon_texture: Texture2D
 var _helmet_texture: Texture2D
 var _canvas_size := ORIGINAL_CANVAS_SIZE
+var _manifest_foot_anchor := FOOT_STAGE_CENTER
 var _foot_stage_center := FOOT_STAGE_CENTER
 var _composition_opaque_bounds := Rect2(Vector2.ZERO, ORIGINAL_CANVAS_SIZE)
+var _uses_original_client_stage := false
+var _base_record: Dictionary = {}
+var _equipment_screen_anchor := ORIGINAL_CLIENT_EQUIPMENT_SCREEN_ANCHOR
+var _render_revision := 0
 
 static var _json_cache: Dictionary = {}
 static var _opaque_rect_cache: Dictionary = {}
@@ -50,6 +60,8 @@ func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	clip_contents = true
 	custom_minimum_size = Vector2(230, 286)
+	if not resized.is_connected(queue_redraw):
+		resized.connect(queue_redraw)
 	if profession_name.is_empty():
 		profession_name = str(PlayerState.profession)
 	_load_paper_mappings()
@@ -91,37 +103,44 @@ func refresh() -> void:
 	_body_texture = null
 	_weapon_texture = null
 	_helmet_texture = null
+	_foot_stage_center = _manifest_foot_anchor
 	var equipment_source := _equipment_snapshot if _use_equipment_snapshot else PlayerState.equipment
 	for slot: String in PAPER_LAYER_SLOTS:
 		var equipped: Variant = equipment_source.get(slot, {})
 		if not equipped is Dictionary or equipped.is_empty():
 			continue
-		var mapping_value: Variant = _paper_mappings.get(str(equipped.get("name", "")), {})
+		var mapping_value: Variant = _mapping_for_equipped(equipped)
 		if not mapping_value is Dictionary or mapping_value.is_empty():
 			continue
-		var path := str(mapping_value.get("path", ""))
-		if path.is_empty() or not ResourceLoader.exists(path):
-			continue
-		var texture := load(path) as Texture2D
+		var texture := _texture_from_record(mapping_value)
 		if texture == null:
 			continue
 		var layer: Dictionary = mapping_value.duplicate(true)
 		layer["texture"] = texture
 		layer["equipmentSlot"] = slot
+		layer["layerKind"] = _slot_layer_kind(slot)
 		_paper_layers.append(layer)
 		if slot == "衣服":
 			_body_layer = layer
 			_body_texture = texture
+			_foot_stage_center = _vector_from_value(
+				layer.get(BODY_FOOT_CONTACT_FIELD, _manifest_foot_anchor),
+				_manifest_foot_anchor
+			)
 		elif slot == "武器":
 			_weapon_texture = texture
 		elif slot == "头盔":
 			_helmet_texture = texture
 	_recalculate_composition_opaque_bounds()
+	_render_revision += 1
 	queue_redraw()
 
 
 func _draw() -> void:
 	if _base_texture == null:
+		return
+	if _uses_original_client_stage:
+		_draw_original_client_stage()
 		return
 	var scaled_canvas := _canvas_size * preview_scale
 	# Put the original 199px client canvas near the bottom of the available
@@ -154,6 +173,18 @@ func _draw() -> void:
 	draw_polyline(front_rim, Color(0.70, 0.43, 0.19, 0.96), 2.0, true)
 	var inner_front := _ellipse_arc_points(stage_center, stage_radii - Vector2(8, 4), 0.0, PI)
 	draw_polyline(inner_front, Color(0.24, 0.13, 0.055, 0.78), 1.0, true)
+
+
+func _draw_original_client_stage() -> void:
+	# Source-faithful reconstruction of MirClient/FState.pas DStateWinDirectPaint.
+	# The complete Prguse #376 record is the first layer. StateItem records stay
+	# rectangular and are drawn with their WIL HotX/HotY values, including the
+	# helmet pixels which deliberately restore portions of the original stage.
+	for command: Dictionary in original_stage_draw_commands():
+		var texture: Texture2D = command.get("texture")
+		if texture == null:
+			continue
+		draw_texture_rect(texture, command.get("targetRect", Rect2()), false)
 
 
 func _ellipse_points(center: Vector2, radii: Vector2, segments := 64) -> PackedVector2Array:
@@ -190,12 +221,20 @@ func _load_paper_mappings() -> void:
 	_paper_mappings.clear()
 	_base_texture = null
 	_hair_layer.clear()
+	_base_record.clear()
+	_uses_original_client_stage = false
 	_canvas_size = ORIGINAL_CANVAS_SIZE
+	_manifest_foot_anchor = FOOT_STAGE_CENTER
 	_foot_stage_center = FOOT_STAGE_CENTER
+	_equipment_screen_anchor = ORIGINAL_CLIENT_EQUIPMENT_SCREEN_ANCHOR
 	var source_document := _resolve_source_document()
 	if source_document.is_empty():
 		return
 	var parsed := _profession_manifest(source_document)
+	_uses_original_client_stage = _document_contract_id(parsed) == ORIGINAL_CLIENT_STAGE_CONTRACT_ID
+	if _uses_original_client_stage:
+		_load_original_client_stage(parsed, source_document)
+		return
 	var mappings: Variant = parsed.get("runtimeMappings", {})
 	if not mappings is Dictionary or mappings.is_empty():
 		mappings = _catalog_paper_mappings(source_document)
@@ -205,13 +244,14 @@ func _load_paper_mappings() -> void:
 		parsed.get("canvasSize", parsed.get("composition", {}).get("canvasSize", ORIGINAL_CANVAS_SIZE)),
 		ORIGINAL_CANVAS_SIZE
 	)
-	_foot_stage_center = _vector_from_value(
+	_manifest_foot_anchor = _vector_from_value(
 		parsed.get(
 			"paperDollFootAnchor",
 			parsed.get("footAnchor", parsed.get("composition", {}).get("footAnchor", FOOT_STAGE_CENTER))
 		),
 		FOOT_STAGE_CENTER
 	)
+	_foot_stage_center = _manifest_foot_anchor
 	var base: Variant = parsed.get("base", {})
 	if base is Dictionary:
 		var base_path := str(base.get("path", ""))
@@ -224,6 +264,89 @@ func _load_paper_mappings() -> void:
 			_hair_layer = hair.duplicate(true)
 			_hair_layer["texture"] = load(hair_path) as Texture2D
 	_recalculate_composition_opaque_bounds()
+
+
+func _load_original_client_stage(parsed: Dictionary, source_document: Dictionary) -> void:
+	if str(parsed.get("sex", source_document.get("sex", "male"))).to_lower() != "male":
+		return
+	var stage_value: Variant = parsed.get(
+		"stage",
+		parsed.get("originalClientStage", parsed.get("base", {}))
+	)
+	if stage_value is Dictionary:
+		_base_record = stage_value.duplicate(true)
+		_base_texture = _texture_from_record(_base_record)
+	var composition_value: Variant = parsed.get("composition", {})
+	var composition: Dictionary = composition_value if composition_value is Dictionary else {}
+	_canvas_size = _vector_from_value(
+		parsed.get(
+			"canvasSize",
+			composition.get("canvasSize", _base_record.get("size", ORIGINAL_CANVAS_SIZE))
+		),
+		ORIGINAL_CANVAS_SIZE
+	)
+	if _base_texture != null and (
+		_canvas_size.x <= 0.0 or _canvas_size.y <= 0.0
+	):
+		_canvas_size = _base_texture.get_size()
+	_equipment_screen_anchor = _vector_from_value(
+		composition.get(
+			"equipmentScreenAnchor",
+			parsed.get("equipmentScreenAnchor", ORIGINAL_CLIENT_EQUIPMENT_SCREEN_ANCHOR)
+		),
+		ORIGINAL_CLIENT_EQUIPMENT_SCREEN_ANCHOR
+	)
+	var hair_value: Variant = parsed.get("hair", {})
+	if hair_value is Dictionary:
+		_hair_layer = hair_value.duplicate(true)
+		var hair_texture := _texture_from_record(_hair_layer)
+		if hair_texture != null:
+			_hair_layer["texture"] = hair_texture
+	_paper_mappings = _original_stage_mappings(source_document)
+	if _paper_mappings.is_empty() and source_document != parsed:
+		_paper_mappings = _original_stage_mappings(parsed)
+	_recalculate_composition_opaque_bounds()
+
+
+func _document_contract_id(document: Dictionary) -> String:
+	return str(document.get(
+		"contractId",
+		document.get("stableId", document.get("id", ""))
+	))
+
+
+func _original_stage_mappings(document: Dictionary) -> Dictionary:
+	var result: Dictionary = {}
+	var direct_value: Variant = document.get(
+		"itemMappings",
+		document.get("runtimeMappings", {})
+	)
+	if direct_value is Dictionary:
+		for key: Variant in direct_value:
+			var mapping_value: Variant = direct_value[key]
+			if mapping_value is Dictionary:
+				result[str(key)] = mapping_value
+	var items_value: Variant = document.get("itemsById", {})
+	if not items_value is Dictionary:
+		return result
+	for item_key: Variant in items_value:
+		var item_value: Variant = items_value[item_key]
+		if not item_value is Dictionary:
+			continue
+		var mapping_value: Variant = item_value.get(
+			"originalClientPaperDoll",
+			item_value.get("paperDollOriginalStage", item_value.get("paperDoll", {}))
+		)
+		if not mapping_value is Dictionary or mapping_value.is_empty():
+			continue
+		result[str(item_key)] = mapping_value
+		var item_id := str(item_value.get("itemId", item_value.get("item_id", "")))
+		var item_name := str(item_value.get("itemName", item_value.get("name", "")))
+		if not item_id.is_empty():
+			result[item_id] = mapping_value
+		if not item_name.is_empty():
+			result[item_name] = mapping_value
+	return result
 
 
 func _resolve_source_document() -> Dictionary:
@@ -248,10 +371,20 @@ func _profession_manifest(document: Dictionary) -> Dictionary:
 		var profession_id := str(PROFESSION_IDS.get(profession_name, "warrior"))
 		var selected: Variant = manifests.get(profession_id, manifests.get(profession_name, {}))
 		if selected is Dictionary and not selected.is_empty():
-			var result: Dictionary = selected
+			var result: Dictionary = selected.duplicate(true)
+			for shared_key: String in [
+				"contractId",
+				"stableId",
+				"stage",
+				"originalClientStage",
+				"composition",
+				"equipmentScreenAnchor",
+				"itemMappings",
+			]:
+				if not result.has(shared_key) and document.has(shared_key):
+					result[shared_key] = document[shared_key]
 			var document_mappings := _catalog_paper_mappings(document)
 			if not document_mappings.is_empty():
-				result = selected.duplicate(true)
 				result["runtimeMappings"] = document_mappings
 			return result
 	return document
@@ -288,9 +421,71 @@ func _load_json_document(path: String) -> Dictionary:
 	return parsed
 
 
+func _mapping_for_equipped(equipped: Dictionary) -> Dictionary:
+	for field_name: String in ["item_id", "itemId", "id", "name"]:
+		var candidate := str(equipped.get(field_name, ""))
+		if candidate.is_empty():
+			continue
+		var mapping_value: Variant = _paper_mappings.get(candidate, {})
+		if mapping_value is Dictionary and not mapping_value.is_empty():
+			return mapping_value
+	return {}
+
+
+func _texture_from_record(record: Dictionary) -> Texture2D:
+	var texture_value: Variant = record.get("texture")
+	if texture_value is Texture2D:
+		return texture_value
+	var path := str(record.get("path", ""))
+	if path.is_empty() or not ResourceLoader.exists(path):
+		return null
+	return load(path) as Texture2D
+
+
+func _slot_layer_kind(slot: String) -> String:
+	if slot == str(PAPER_LAYER_SLOTS[0]):
+		return "dress"
+	if slot == str(PAPER_LAYER_SLOTS[1]):
+		return "weapon"
+	if slot == str(PAPER_LAYER_SLOTS[2]):
+		return "helmet"
+	return ""
+
+
 func _mapping_offset(layer: Dictionary) -> Vector2:
+	if _uses_original_client_stage:
+		return _original_stage_layer_position(layer)
 	var value: Variant = layer.get("drawOffset", [0, 0])
 	return _vector_from_value(value, Vector2.ZERO)
+
+
+func _record_hot_offset(record: Dictionary) -> Vector2:
+	if record.has("hotX") or record.has("hotY"):
+		return Vector2(
+			float(record.get("hotX", 0.0)),
+			float(record.get("hotY", 0.0))
+		)
+	for field_name: String in ["hot", "rawDrawOffset", "recordOffset"]:
+		if record.has(field_name):
+			return _vector_from_value(record[field_name], Vector2.ZERO)
+	return Vector2.ZERO
+
+
+func _original_stage_layer_position(layer: Dictionary) -> Vector2:
+	# Original screen formula:
+	#   (31, 96) + record.HotX/HotY
+	# bbx/bby start at the equipment window's local (0, 0). The historical
+	# `// +38` and `// +52` expressions are comments, not active code.
+	if (
+		not layer.has("hotX")
+		and not layer.has("hotY")
+		and not layer.has("hot")
+		and not layer.has("rawDrawOffset")
+		and not layer.has("recordOffset")
+		and layer.has("drawOffset")
+	):
+		return _vector_from_value(layer.get("drawOffset"), Vector2.ZERO)
+	return _equipment_screen_anchor + _record_hot_offset(layer)
 
 
 func _vector_from_value(value: Variant, fallback: Vector2) -> Vector2:
@@ -354,10 +549,14 @@ func _texture_opaque_rect(texture: Texture2D) -> Rect2:
 
 
 func composition_draw_origin() -> Vector2:
+	if _uses_original_client_stage:
+		return original_stage_rect().position
 	return foot_stage_center() - _foot_stage_center * preview_scale
 
 
 func foot_stage_center() -> Vector2:
+	if _uses_original_client_stage:
+		return original_stage_to_local(_manifest_foot_anchor)
 	# Keep the historical lower inset while pinning the stage horizontally to
 	# the preview centre.  The same point is the paper-doll ground contact.
 	return Vector2(
@@ -371,7 +570,90 @@ func paper_doll_foot_anchor() -> Vector2:
 
 
 func layer_draw_origin(layer: Dictionary) -> Vector2:
+	if _uses_original_client_stage:
+		return original_stage_to_local(_original_stage_layer_position(layer))
 	return composition_draw_origin() + _mapping_offset(layer) * preview_scale
+
+
+func original_stage_scale() -> float:
+	if _canvas_size.x <= 0.0 or _canvas_size.y <= 0.0:
+		return 1.0
+	return maxf(0.0, minf(size.x / _canvas_size.x, size.y / _canvas_size.y))
+
+
+func original_stage_rect() -> Rect2:
+	var scale_value := original_stage_scale()
+	var fitted_size := _canvas_size * scale_value
+	return Rect2((size - fitted_size) * 0.5, fitted_size)
+
+
+func original_stage_to_local(stage_point: Vector2) -> Vector2:
+	var stage_rect := original_stage_rect()
+	return stage_rect.position + stage_point * original_stage_scale()
+
+
+func local_to_original_stage(local_point: Vector2) -> Vector2:
+	var scale_value := original_stage_scale()
+	if is_zero_approx(scale_value):
+		return Vector2.ZERO
+	return (local_point - original_stage_rect().position) / scale_value
+
+
+func original_hit_rect_to_local(stage_hit_rect: Rect2) -> Rect2:
+	return Rect2(
+		original_stage_to_local(stage_hit_rect.position),
+		stage_hit_rect.size * original_stage_scale()
+	)
+
+
+func original_stage_contains_local_point(local_point: Vector2) -> bool:
+	return original_stage_rect().has_point(local_point)
+
+
+func original_stage_draw_commands() -> Array[Dictionary]:
+	var commands: Array[Dictionary] = []
+	if not _uses_original_client_stage or _base_texture == null:
+		return commands
+	var base_stage_position := _record_hot_offset(_base_record)
+	commands.append({
+		"kind": "base",
+		"sourceIndex": int(_base_record.get("sourceIndex", _base_record.get("index", 376))),
+		"stagePosition": base_stage_position,
+		"targetRect": Rect2(
+			original_stage_to_local(base_stage_position),
+			_base_texture.get_size() * original_stage_scale()
+		),
+		"texture": _base_texture,
+	})
+	_append_original_layer_command(commands, "hair", _hair_layer)
+	for kind: String in ["dress", "weapon", "helmet"]:
+		for layer: Dictionary in _paper_layers:
+			if str(layer.get("layerKind", "")) == kind:
+				_append_original_layer_command(commands, kind, layer)
+	return commands
+
+
+func _append_original_layer_command(
+	commands: Array[Dictionary],
+	kind: String,
+	layer: Dictionary
+) -> void:
+	if layer.is_empty():
+		return
+	var texture: Texture2D = layer.get("texture")
+	if texture == null:
+		return
+	var stage_position := _original_stage_layer_position(layer)
+	commands.append({
+		"kind": kind,
+		"sourceIndex": int(layer.get("sourceIndex", layer.get("index", -1))),
+		"stagePosition": stage_position,
+		"targetRect": Rect2(
+			original_stage_to_local(stage_position),
+			texture.get_size() * original_stage_scale()
+		),
+		"texture": texture,
+	})
 
 
 func composition_opaque_bounds() -> Rect2:
@@ -380,6 +662,14 @@ func composition_opaque_bounds() -> Rect2:
 
 func has_renderable_assets() -> bool:
 	return _base_texture != null
+
+
+func uses_original_client_stage() -> bool:
+	return _uses_original_client_stage
+
+
+func render_revision() -> int:
+	return _render_revision
 
 
 func paper_layer_source_index(slot: String) -> int:
