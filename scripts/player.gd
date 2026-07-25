@@ -258,7 +258,7 @@ func request_skill(skill_name: String) -> bool:
 	var primary := ProfessionRules.primary_damage_range(PlayerState.profession, PlayerState.computed_stats)
 	if primary.x <= 0 and primary.y <= 0:
 		primary = Vector2i(attack_min, attack_max)
-	var damage := WarriorCombatMath.roll_attack_power(primary.x, primary.y, int(PlayerState.computed_stats.get("luck", 0)), _rng)
+	var damage := WarriorCombatMath.roll_primary_stat(primary.x, primary.y, int(PlayerState.computed_stats.get("luck", 0)), _rng)
 	var critical_chance := float(PlayerState.computed_stats.get("critical_chance", 0.0))
 	if critical_chance > 0.0 and EquipmentRulesScript.critical_succeeds(critical_chance, _rng.randf()):
 		damage = EquipmentRulesScript.critical_damage(damage, float(PlayerState.computed_stats.get("critical_damage_multiplier", 1.5)))
