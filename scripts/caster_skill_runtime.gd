@@ -1,6 +1,8 @@
 class_name CasterSkillRuntime
 extends RefCounted
 
+const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
+
 const SPECIAL_SKILLS := {
 	"wizard.repulsion_ring": true,
 	"wizard.temptation_light": true,
@@ -55,6 +57,10 @@ static func resolve(skill_name_or_id: String, context: Dictionary) -> Dictionary
 		"runtime_contract": "caster_skill_runtime.v1",
 		"formula_source": "source.original_gameofmir.server_suite",
 		"source_priority": {"lane": "server_rules", "tier": "primary", "order": 0, "weight": 100},
+		"evasion_channel": "anti_poison" if skill_id == "taoist.poison" else ("anti_magic" if CombatResolutionRules.anti_magic_eligible(skill_id) else "none"),
+		"anti_magic_eligible": CombatResolutionRules.anti_magic_eligible(skill_id),
+		"anti_magic_checked": false,
+		"magic_evaded": false,
 		"visual": visual_profile,
 	}
 	for resource_field: String in ["amulet_cost", "apply_delay_ms"]:
@@ -83,6 +89,17 @@ static func resolve(skill_name_or_id: String, context: Dictionary) -> Dictionary
 		result.operation = operation_and_shape[0]
 		result.execution_shape = operation_and_shape[1]
 		result.damage = _damage(skill_id, level, context)
+		if bool(result.anti_magic_eligible) and context.has("anti_magic_roll"):
+			var evasion := CombatResolutionRules.resolve_magic_damage(
+				skill_id,
+				int(result.damage),
+				CombatResolutionRules.anti_magic_points_from_context(context),
+				int(context.anti_magic_roll)
+			)
+			result.merge(evasion, true)
+			result.damage = int(evasion.damage_after_evasion)
+		else:
+			result.enters_magic_defense_stage = int(result.damage) > 0
 		if skill_id == "wizard.fire_wall":
 			result.duration_seconds = WizardCombatMath.fire_wall_duration(level, int(context.get("magic_stat_roll", 0)))
 			result.tick_interval_seconds = 3.0

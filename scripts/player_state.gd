@@ -3,6 +3,7 @@ extends Node
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const EquipmentTestLoadoutCatalogScript = preload("res://scripts/equipment_test_loadout_catalog.gd")
 const TestCharacterSkillProfilesScript = preload("res://scripts/test_character_skill_profiles.gd")
+const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
 
 signal profile_changed
 signal inventory_changed
@@ -648,6 +649,9 @@ func recalculate_stats() -> void:
 		"wear_weight": current_wear_weight(),
 		"critical_chance": 0.0,
 		"critical_damage_multiplier": 1.5,
+		"anti_magic_points": CombatResolutionRules.BASE_CHARACTER_ANTI_MAGIC_POINTS,
+		"magic_evasion_percent": CombatResolutionRules.anti_magic_display_percent(CombatResolutionRules.BASE_CHARACTER_ANTI_MAGIC_POINTS),
+		"attack_speed_tier": 0,
 		"attack_speed_percent": 0.0,
 		"cast_speed_percent": 0.0,
 		"skill_level_bonuses": {},
@@ -697,6 +701,9 @@ func recalculate_stats() -> void:
 		if modifiers is Dictionary:
 			result["critical_chance"] = float(result.get("critical_chance", 0.0)) + float(modifiers.get("criticalChance", 0.0))
 			result["critical_damage_multiplier"] = float(result.get("critical_damage_multiplier", 1.5)) + float(modifiers.get("criticalDamageBonus", 0.0))
+			result["anti_magic_points"] = int(result.get("anti_magic_points", 0)) + int(modifiers.get("antiMagicPoints", 0))
+			result["anti_magic_points"] = int(result.get("anti_magic_points", 0)) + CombatResolutionRules.anti_magic_points_from_display_percent(int(modifiers.get("magicEvasionPercent", 0)))
+			result["attack_speed_tier"] = int(result.get("attack_speed_tier", 0)) + int(modifiers.get("attackSpeedTier", 0))
 			result["attack_speed_percent"] = float(result.get("attack_speed_percent", 0.0)) + float(modifiers.get("attackSpeedPercent", 0.0))
 			result["cast_speed_percent"] = float(result.get("cast_speed_percent", 0.0)) + float(modifiers.get("castSpeedPercent", 0.0))
 			var skill_levels: Variant = modifiers.get("skillLevels", {})
@@ -733,6 +740,9 @@ func recalculate_stats() -> void:
 		result["accuracy"] = int(result.get("accuracy", 0)) + WarriorCombatMath.basic_sword_accuracy_bonus(int(learned_skills["基本剑术"]))
 	if learned_skills.has("攻杀剑术"):
 		result["accuracy"] = int(result.get("accuracy", 0)) + WarriorCombatMath.slaying_accuracy_bonus(int(learned_skills["攻杀剑术"]))
+	result["anti_magic_points"] = clampi(int(result.get("anti_magic_points", CombatResolutionRules.BASE_CHARACTER_ANTI_MAGIC_POINTS)), 0, CombatResolutionRules.ANTI_MAGIC_ROLL_SIDES)
+	result["magic_evasion_percent"] = CombatResolutionRules.anti_magic_display_percent(int(result.anti_magic_points))
+	result["attack_speed_tier"] = int(result.get("attack_speed_tier", 0))
 	computed_stats = result
 	profile_changed.emit()
 

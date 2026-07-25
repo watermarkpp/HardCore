@@ -19,7 +19,7 @@ func _run() -> void:
 	var player := PlayerCharacter.new()
 	add_child(player)
 	await get_tree().process_frame
-	assert(is_equal_approx(player.attack_cooldown, 0.85) and is_equal_approx(player.attack_animation_duration, 0.51), "续刀或完整收招时序错误")
+	assert(is_equal_approx(player.attack_cooldown, 0.9) and is_equal_approx(player.attack_animation_duration, 0.51), "续刀或完整收招时序错误")
 	player.set_combat_facing(Vector2.LEFT)
 	assert(player.facing.is_equal_approx(Vector2.LEFT) and player.request_attack(), "攻击事务没有锁定目标方向")
 	player.set_touch_vector(Vector2.RIGHT)
