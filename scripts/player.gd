@@ -256,9 +256,9 @@ func request_skill(skill_name: String) -> bool:
 	var action_id := _begin_combat_action("skill:%s" % skill_name)
 	visual.play_action(skill_name if PlayerState.profession == "战士" else "cast", action_duration)
 	var primary := ProfessionRules.primary_damage_range(PlayerState.profession, PlayerState.computed_stats)
-	if primary.y <= 0:
+	if primary.x <= 0 and primary.y <= 0:
 		primary = Vector2i(attack_min, attack_max)
-	var damage := WarriorCombatMath.roll_attack_power(maxi(1, primary.x), maxi(maxi(1, primary.x), primary.y), int(PlayerState.computed_stats.get("luck", 0)), _rng)
+	var damage := WarriorCombatMath.roll_attack_power(primary.x, primary.y, int(PlayerState.computed_stats.get("luck", 0)), _rng)
 	var critical_chance := float(PlayerState.computed_stats.get("critical_chance", 0.0))
 	if critical_chance > 0.0 and EquipmentRulesScript.critical_succeeds(critical_chance, _rng.randf()):
 		damage = EquipmentRulesScript.critical_damage(damage, float(PlayerState.computed_stats.get("critical_damage_multiplier", 1.5)))
@@ -643,7 +643,7 @@ func _apply_profile_stats() -> void:
 	max_hp = int(stats.get("max_hp", 120))
 	max_mp = int(stats.get("max_mp", 40))
 	attack_min = int(stats.get("attack_min", 2))
-	attack_max = maxi(attack_min, int(stats.get("attack_max", 5)))
+	attack_max = int(stats.get("attack_max", 5))
 	_attack_speed_multiplier = clampf(1.0 + float(stats.get("attack_speed_percent", 0.0)), 0.2, 6.0)
 	_cast_speed_multiplier = clampf(1.0 + float(stats.get("cast_speed_percent", 0.0)), 0.2, 6.0)
 	defense_min = int(stats.get("defense_min", 0))
