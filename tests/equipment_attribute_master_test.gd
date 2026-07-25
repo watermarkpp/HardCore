@@ -20,14 +20,31 @@ func _run() -> void:
 	var master := _load_json(MASTER_PATH)
 	assert(master.get("contractId", "") == EquipmentRulesScript.ATTRIBUTE_MASTER_CONTRACT_ID)
 	assert(master.get("distribution", "") == EquipmentRulesScript.ATTRIBUTE_MASTER_DISTRIBUTION)
-	assert(master.get("evidenceSha256", "") == "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98")
+	assert(master.get("schemaVersion", 0) == 2)
+	assert(master.get("evidenceSha256", "") == "CEEB2E68D07E2FFA112C46A954D04AAB68A95A576634199E05AB98FF23ABF83D")
 	assert(master.get("sourceTier", "") == "primary" and master.get("fallbackEvidence", []) == [])
-	assert(master.get("records", []).size() == 49)
+	assert(master.get("sourceKind", "") == "explicit_user_primary_override")
+	assert(master.get("blankOverridePolicy", "") == "preserve_existing_value")
+	assert(master.get("records", []).size() == 163)
 	assert(int(master.get("scope", {}).get("weaponRecords", 0)) == 37)
 	assert(int(master.get("scope", {}).get("maleArmorRecords", 0)) == 12)
+	assert(int(master.get("scope", {}).get("workbookOverrideRecords", 0)) == 114)
+	assert(int(master.get("scope", {}).get("helmetRecords", 0)) == 12)
+	assert(int(master.get("scope", {}).get("necklaceRecords", 0)) == 32)
+	assert(int(master.get("scope", {}).get("braceletRecords", 0)) == 31)
+	assert(int(master.get("scope", {}).get("ringRecords", 0)) == 39)
+	assert(int(master.get("units", {}).get("magicEvasionPercentPerPoint", 0)) == 10)
 
 	var by_id := {}
 	var warning_keys: Array[String] = []
+	var low_confidence_keys: Array[int] = []
+	var review_counts := {}
+	var accuracy_count := 0
+	var agility_count := 0
+	var magic_evasion_count := 0
+	var attack_speed_count := 0
+	var set_count := 0
+	var special_effect_count := 0
 	for value: Variant in master.get("records", []):
 		assert(value is Dictionary)
 		var record: Dictionary = value
@@ -38,12 +55,54 @@ func _run() -> void:
 		assert(record.get("rollPolicy", "") == EquipmentRulesScript.LEGACY_ROLL_POLICY)
 		assert(record.get("source", {}).get("contractId", "") == EquipmentRulesScript.ATTRIBUTE_MASTER_CONTRACT_ID)
 		assert(record.get("source", {}).get("distribution", "") == EquipmentRulesScript.ATTRIBUTE_MASTER_DISTRIBUTION)
+		if record.has("review"):
+			var review_status := str(record.get("review", {}).get("status", ""))
+			review_counts[review_status] = int(review_counts.get(review_status, 0)) + 1
+			assert(record.get("source", {}).get("sourceKind", "") == "explicit_user_primary_override")
+			assert(record.get("source", {}).get("evidenceSha256", "") == "CEEB2E68D07E2FFA112C46A954D04AAB68A95A576634199E05AB98FF23ABF83D")
+			assert(record.get("source", {}).get("recordKey", "").begins_with("修正后装备主表!A"))
+			assert(record.get("weightRequirementType", "") == "wear")
+			assert(record.get("jobLock", "missing") == null)
+			accuracy_count += int(record.has("accuracy"))
+			agility_count += int(record.has("agility"))
+			magic_evasion_count += int(record.has("magicEvasionPercent"))
+			attack_speed_count += int(record.has("attackSpeedTier"))
+			set_count += int(record.has("setId"))
+			special_effect_count += int(record.has("specialEffectId"))
+			if record.has("magicEvasionPercent"):
+				assert(int(record.get("magicEvasionPercent", -1)) == int(record.get("magicEvasionPoints", -1)) * 10)
+				assert(int(record.get("magicEvasionPercentPerPoint", 0)) == 10)
 		for warning: Dictionary in record.get("warnings", []):
-			assert(warning.get("warningCode", "") == "legacy_reverse_range")
-			assert(warning.get("runtimeBehavior", "") == EquipmentRulesScript.LEGACY_ROLL_POLICY)
-			assert(not bool(warning.get("isError", true)), "反向区间只能是warning")
-			warning_keys.append("%d:%s" % [item_id, warning.get("field", "")])
-	assert(warning_keys == ["88:dc", "111:dc", "112:dc", "112:mc", "112:sc"])
+			var warning_code := str(warning.get("warningCode", ""))
+			assert(not bool(warning.get("isError", true)), "主表warning不得作为error")
+			if warning_code == "legacy_reverse_range":
+				assert(warning.get("runtimeBehavior", "") == EquipmentRulesScript.LEGACY_ROLL_POLICY)
+				warning_keys.append("%d:%s" % [item_id, warning.get("field", "")])
+			elif warning_code == "low_confidence_user_override":
+				low_confidence_keys.append(item_id)
+				assert(warning.get("reviewStatus", "") == "低置信待确认")
+				assert(warning.get("evidenceGrade", "") == "C")
+			else:
+				assert(false, "未知主表warning：%s" % warning_code)
+	assert(warning_keys == [
+		"88:dc", "111:dc", "112:dc", "112:mc", "112:sc",
+		"156:dc", "157:mc", "158:sc", "161:dc", "162:mc",
+		"164:dc", "202:dc", "244:sc",
+	])
+	assert(low_confidence_keys == [196])
+	assert(review_counts == {
+		"已确认": 57,
+		"已修正": 51,
+		"低置信待确认": 1,
+		"特殊机制确认": 3,
+		"已补齐特效": 2,
+	})
+	assert(accuracy_count == 9)
+	assert(agility_count == 4)
+	assert(magic_evasion_count == 2)
+	assert(attack_speed_count == 2)
+	assert(set_count == 17)
+	assert(special_effect_count == 28)
 
 	for armor_id: int in [116, 118, 120, 122, 128, 140, 124, 130, 142, 126, 132, 144]:
 		var armor: Dictionary = by_id.get(armor_id, {})
@@ -80,5 +139,20 @@ func _run() -> void:
 	assert(lost_soul.get("stats", {}).get("dc", {}).get("max", -1) == 0)
 	assert(lost_soul.get("contentLayer", "") == "classic_legendary")
 	assert(lost_soul.get("historicalStatus", "") == "official_existence_unverified")
-	print("EQUIPMENT_ATTRIBUTE_MASTER_PASS：49条主表、需求/性别/重量、职业锁和反向区间策略正常")
+	assert(by_id[159].get("magicEvasionPercent", 0) == 20)
+	assert(by_id[159].get("magicEvasionPoints", 0) == 2)
+	assert(by_id[164].get("magicEvasionPercent", 0) == 10)
+	assert(by_id[164].get("magicEvasionPoints", 0) == 1)
+	assert(by_id[221].get("attackSpeedTier", 0) == 2)
+	assert(by_id[222].get("attackSpeedTier", 0) == 1)
+	assert(by_id[169].get("requirementType", "") == "max_mc")
+	assert(by_id[169].get("requirementValue", 0) == 25)
+	assert(by_id[169].get("accuracy", 0) == 1)
+	assert(by_id[160].get("agility", 0) == 3)
+	assert(by_id[225].get("jobAffinity", "") == "general")
+	assert(by_id[225].get("jobAffinityLabel", "") == "通用（祈祷套装）")
+	assert(by_id[225].get("setId", "") == "prayer_set")
+	assert(by_id[225].get("specialEffectId", "") == "prayer_pet_rebellion")
+	assert(by_id[196].get("review", {}).get("status", "") == "低置信待确认")
+	print("EQUIPMENT_ATTRIBUTE_MASTER_PASS：163条唯一主表、114条工作簿覆盖、单位换算和审核状态正常")
 	get_tree().quit(0)
