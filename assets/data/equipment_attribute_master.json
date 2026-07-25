@@ -1,0 +1,2352 @@
+{
+  "schemaVersion": 1,
+  "contractId": "equipment.attribute.master.v1",
+  "distribution": "project.hardcore.equipment_attribute_master.v1",
+  "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+  "sourceTier": "primary",
+  "originalPath": "user_authorized_attachment/pasted-text.txt",
+  "fallbackEvidence": [],
+  "scope": {
+    "weaponRecords": 37,
+    "maleArmorRecords": 12,
+    "totalRecords": 49
+  },
+  "supportingReferencePolicy": {
+    "21cq": "supporting_reference_only",
+    "17173": "supporting_reference_only"
+  },
+  "records": [
+    {
+      "itemId": 80,
+      "name": "木剑",
+      "category": "武器",
+      "jobAffinity": "general",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 1,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 1,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 7,
+      "weight": 7,
+      "durability": 4,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 2,
+          "max": 5,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=80",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 81,
+      "name": "匕首",
+      "category": "武器",
+      "jobAffinity": "general",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 1,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 1,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 5,
+      "weight": 5,
+      "durability": 10,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 4,
+          "max": 5,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=81",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 82,
+      "name": "乌木剑",
+      "category": "武器",
+      "jobAffinity": "general",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 1,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 1,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 8,
+      "weight": 8,
+      "durability": 7,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 4,
+          "max": 8,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mc": {
+          "min": 0,
+          "max": 1,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=82",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 83,
+      "name": "青铜剑",
+      "category": "武器",
+      "jobAffinity": "general",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 5,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 5,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 9,
+      "weight": 9,
+      "durability": 6,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 3,
+          "max": 7,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=83",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 84,
+      "name": "短剑",
+      "category": "武器",
+      "jobAffinity": "general",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 10,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 10,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 9,
+      "weight": 9,
+      "durability": 8,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 3,
+          "max": 11,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=84",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 85,
+      "name": "铁剑",
+      "category": "武器",
+      "jobAffinity": "general",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 10,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 10,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 10,
+      "weight": 10,
+      "durability": 10,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 5,
+          "max": 9,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=85",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 86,
+      "name": "鹤嘴锄",
+      "category": "武器",
+      "jobAffinity": "general",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 11,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 11,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 10,
+      "weight": 10,
+      "durability": 10,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 0,
+          "max": 8,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=86",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 87,
+      "name": "青铜斧",
+      "category": "武器",
+      "jobAffinity": "general",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 13,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 13,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 10,
+      "weight": 10,
+      "durability": 10,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 0,
+          "max": 15,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=87",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 88,
+      "name": "罗刹",
+      "category": "武器",
+      "jobAffinity": "warrior",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 15,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 15,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 30,
+      "weight": 30,
+      "durability": 25,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 15,
+          "max": 0,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [
+        {
+          "warningCode": "legacy_reverse_range",
+          "field": "dc",
+          "min": 15,
+          "max": 0,
+          "runtimeBehavior": "legacy_clamp_negative_span",
+          "isError": false
+        }
+      ],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=88",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 89,
+      "name": "八荒",
+      "category": "武器",
+      "jobAffinity": "warrior",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 15,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 15,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 25,
+      "weight": 25,
+      "durability": 18,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 4,
+          "max": 12,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=89",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 92,
+      "name": "凌风",
+      "category": "武器",
+      "jobAffinity": "warrior",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 19,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 19,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 20,
+      "weight": 20,
+      "durability": 18,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 6,
+          "max": 12,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=92",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 93,
+      "name": "破魂",
+      "category": "武器",
+      "jobAffinity": "warrior",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 20,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 20,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 8,
+      "weight": 8,
+      "durability": 11,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 8,
+          "max": 10,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=93",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 94,
+      "name": "斩马刀",
+      "category": "武器",
+      "jobAffinity": "warrior",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 20,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 20,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 27,
+      "weight": 27,
+      "durability": 19,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 5,
+          "max": 15,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=94",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 97,
+      "name": "修罗",
+      "category": "武器",
+      "jobAffinity": "warrior",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 22,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 22,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 40,
+      "weight": 40,
+      "durability": 25,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 0,
+          "max": 20,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=97",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 98,
+      "name": "凝霜",
+      "category": "武器",
+      "jobAffinity": "warrior",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 25,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 25,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 20,
+      "weight": 20,
+      "durability": 20,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 10,
+          "max": 13,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=98",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 99,
+      "name": "炼狱",
+      "category": "武器",
+      "jobAffinity": "warrior",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 26,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 26,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 60,
+      "weight": 60,
+      "durability": 28,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 0,
+          "max": 25,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=99",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 102,
+      "name": "井中月",
+      "category": "武器",
+      "jobAffinity": "warrior",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 28,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 28,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 58,
+      "weight": 58,
+      "durability": 30,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 7,
+          "max": 22,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=102",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 105,
+      "name": "裁决之杖",
+      "category": "武器",
+      "jobAffinity": "warrior",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 30,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 30,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 80,
+      "weight": 80,
+      "durability": 32,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 0,
+          "max": 30,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=105",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 108,
+      "name": "屠龙",
+      "category": "武器",
+      "jobAffinity": "warrior",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 34,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 34,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 99,
+      "weight": 99,
+      "durability": 33,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 5,
+          "max": 35,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=108",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 110,
+      "name": "命运之刃",
+      "category": "武器",
+      "jobAffinity": "warrior",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 35,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 35,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 48,
+      "weight": 48,
+      "durability": 20,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 12,
+          "max": 16,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=110",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 111,
+      "name": "落魄神兵",
+      "category": "武器",
+      "jobAffinity": "warrior",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 40,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 40,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 40,
+      "weight": 40,
+      "durability": 28,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 30,
+          "max": 0,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [
+        {
+          "warningCode": "legacy_reverse_range",
+          "field": "dc",
+          "min": 30,
+          "max": 0,
+          "runtimeBehavior": "legacy_clamp_negative_span",
+          "isError": false
+        }
+      ],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=111",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ],
+      "contentLayer": "classic_legendary",
+      "historicalStatus": "official_existence_unverified"
+    },
+    {
+      "itemId": 112,
+      "name": "赤血魔剑",
+      "category": "武器",
+      "jobAffinity": "general",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 0,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 0,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 22,
+      "weight": 22,
+      "durability": 23,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 15,
+          "max": 10,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mc": {
+          "min": 4,
+          "max": 3,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "sc": {
+          "min": 4,
+          "max": 2,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [
+        {
+          "warningCode": "legacy_reverse_range",
+          "field": "dc",
+          "min": 15,
+          "max": 10,
+          "runtimeBehavior": "legacy_clamp_negative_span",
+          "isError": false
+        },
+        {
+          "warningCode": "legacy_reverse_range",
+          "field": "mc",
+          "min": 4,
+          "max": 3,
+          "runtimeBehavior": "legacy_clamp_negative_span",
+          "isError": false
+        },
+        {
+          "warningCode": "legacy_reverse_range",
+          "field": "sc",
+          "min": 4,
+          "max": 2,
+          "runtimeBehavior": "legacy_clamp_negative_span",
+          "isError": false
+        }
+      ],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=112",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 113,
+      "name": "怒斩",
+      "category": "武器",
+      "jobAffinity": "warrior",
+      "jobLock": null,
+      "requirementType": "max_dc",
+      "requirementValue": 46,
+      "legacyNeed": 1,
+      "legacyNeedLevel": 46,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 85,
+      "weight": 85,
+      "durability": 35,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 12,
+          "max": 26,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=113",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 223,
+      "name": "祈祷之刃",
+      "category": "武器",
+      "jobAffinity": "warrior",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 20,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 20,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 10,
+      "weight": 10,
+      "durability": 20,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 8,
+          "max": 20,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=223",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 90,
+      "name": "海魂",
+      "category": "武器",
+      "jobAffinity": "wizard",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 15,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 15,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 12,
+      "weight": 12,
+      "durability": 12,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 3,
+          "max": 10,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mc": {
+          "min": 1,
+          "max": 2,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=90",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 95,
+      "name": "偃月",
+      "category": "武器",
+      "jobAffinity": "wizard",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 20,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 20,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 13,
+      "weight": 13,
+      "durability": 12,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 4,
+          "max": 10,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mc": {
+          "min": 1,
+          "max": 3,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=95",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 100,
+      "name": "魔杖",
+      "category": "武器",
+      "jobAffinity": "wizard",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 26,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 26,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 10,
+      "weight": 10,
+      "durability": 15,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 5,
+          "max": 9,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mc": {
+          "min": 2,
+          "max": 5,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=100",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 103,
+      "name": "血饮",
+      "category": "武器",
+      "jobAffinity": "wizard",
+      "jobLock": null,
+      "requirementType": "max_mc",
+      "requirementValue": 27,
+      "legacyNeed": 2,
+      "legacyNeedLevel": 27,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 12,
+      "weight": 12,
+      "durability": 20,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 3,
+          "max": 14,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mc": {
+          "min": 3,
+          "max": 5,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=103",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 106,
+      "name": "骨玉权杖",
+      "category": "武器",
+      "jobAffinity": "wizard",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 35,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 35,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 20,
+      "weight": 20,
+      "durability": 18,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 6,
+          "max": 12,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mc": {
+          "min": 2,
+          "max": 6,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=106",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 109,
+      "name": "嗜魂法杖",
+      "category": "武器",
+      "jobAffinity": "wizard",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 35,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 35,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 26,
+      "weight": 26,
+      "durability": 10,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 6,
+          "max": 13,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mc": {
+          "min": 2,
+          "max": 8,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=109",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 114,
+      "name": "龙牙",
+      "category": "武器",
+      "jobAffinity": "wizard",
+      "jobLock": null,
+      "requirementType": "max_mc",
+      "requirementValue": 28,
+      "legacyNeed": 2,
+      "legacyNeedLevel": 28,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 25,
+      "weight": 25,
+      "durability": 28,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 10,
+          "max": 18,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mc": {
+          "min": 3,
+          "max": 6,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=114",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 91,
+      "name": "半月",
+      "category": "武器",
+      "jobAffinity": "taoist",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 15,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 15,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 16,
+      "weight": 16,
+      "durability": 14,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 5,
+          "max": 10,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mc": {
+          "min": 0,
+          "max": 1,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "sc": {
+          "min": 1,
+          "max": 1,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=91",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 96,
+      "name": "降魔",
+      "category": "武器",
+      "jobAffinity": "taoist",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 20,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 20,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 20,
+      "weight": 20,
+      "durability": 17,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 6,
+          "max": 11,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "sc": {
+          "min": 1,
+          "max": 2,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=96",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 101,
+      "name": "银蛇",
+      "category": "武器",
+      "jobAffinity": "taoist",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 26,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 26,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 26,
+      "weight": 26,
+      "durability": 24,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 7,
+          "max": 14,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "sc": {
+          "min": 1,
+          "max": 3,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=101",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 104,
+      "name": "无极棍",
+      "category": "武器",
+      "jobAffinity": "taoist",
+      "jobLock": null,
+      "requirementType": "max_sc",
+      "requirementValue": 25,
+      "legacyNeed": 3,
+      "legacyNeedLevel": 25,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 15,
+      "weight": 15,
+      "durability": 25,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 8,
+          "max": 16,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "sc": {
+          "min": 3,
+          "max": 5,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=104",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 107,
+      "name": "龙纹剑",
+      "category": "武器",
+      "jobAffinity": "taoist",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 35,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 35,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 40,
+      "weight": 40,
+      "durability": 22,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 8,
+          "max": 20,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "sc": {
+          "min": 3,
+          "max": 6,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=107",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 115,
+      "name": "逍遥扇",
+      "category": "武器",
+      "jobAffinity": "taoist",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 35,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 35,
+      "genderRestriction": null,
+      "weightRequirementType": "hand",
+      "weightRequirementValue": 45,
+      "weight": 45,
+      "durability": 30,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 5,
+          "max": 13,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "sc": {
+          "min": 4,
+          "max": 10,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=115",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item2.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 116,
+      "name": "布衣(男)",
+      "category": "盔甲",
+      "jobAffinity": "general",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 1,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 1,
+      "genderRestriction": "male",
+      "weightRequirementType": "wear",
+      "weightRequirementValue": 5,
+      "weight": 5,
+      "durability": 5,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "ac": {
+          "min": 0,
+          "max": 2,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mac": {
+          "min": 0,
+          "max": 1,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=116",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item3.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 118,
+      "name": "轻型盔甲(男)",
+      "category": "盔甲",
+      "jobAffinity": "general",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 11,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 11,
+      "genderRestriction": "male",
+      "weightRequirementType": "wear",
+      "weightRequirementValue": 8,
+      "weight": 8,
+      "durability": 8,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "ac": {
+          "min": 3,
+          "max": 3,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mac": {
+          "min": 1,
+          "max": 2,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=118",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item3.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 120,
+      "name": "中型盔甲(男)",
+      "category": "盔甲",
+      "jobAffinity": "general",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 16,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 16,
+      "genderRestriction": "male",
+      "weightRequirementType": "wear",
+      "weightRequirementValue": 12,
+      "weight": 12,
+      "durability": 12,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "ac": {
+          "min": 3,
+          "max": 5,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mac": {
+          "min": 1,
+          "max": 2,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=120",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item3.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 122,
+      "name": "重盔甲(男)",
+      "category": "盔甲",
+      "jobAffinity": "warrior",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 22,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 22,
+      "genderRestriction": "male",
+      "weightRequirementType": "wear",
+      "weightRequirementValue": 23,
+      "weight": 23,
+      "durability": 25,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "ac": {
+          "min": 4,
+          "max": 7,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mac": {
+          "min": 2,
+          "max": 3,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=122",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item3.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 128,
+      "name": "战神盔甲(男)",
+      "category": "盔甲",
+      "jobAffinity": "warrior",
+      "jobLock": null,
+      "requirementType": "max_dc",
+      "requirementValue": 46,
+      "legacyNeed": 1,
+      "legacyNeedLevel": 46,
+      "genderRestriction": "male",
+      "weightRequirementType": "wear",
+      "weightRequirementValue": 45,
+      "weight": 45,
+      "durability": 30,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "ac": {
+          "min": 5,
+          "max": 9,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mac": {
+          "min": 3,
+          "max": 5,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=128",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item3.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 140,
+      "name": "天魔神甲",
+      "category": "盔甲",
+      "jobAffinity": "warrior",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 40,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 40,
+      "genderRestriction": "male",
+      "weightRequirementType": "wear",
+      "weightRequirementValue": 62,
+      "weight": 62,
+      "durability": 35,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "dc": {
+          "min": 1,
+          "max": 2,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "ac": {
+          "min": 5,
+          "max": 12,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mac": {
+          "min": 4,
+          "max": 7,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=140",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item3.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 124,
+      "name": "魔法长袍(男)",
+      "category": "盔甲",
+      "jobAffinity": "wizard",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 22,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 22,
+      "genderRestriction": "male",
+      "weightRequirementType": "wear",
+      "weightRequirementValue": 12,
+      "weight": 12,
+      "durability": 20,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "mc": {
+          "min": 0,
+          "max": 2,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "ac": {
+          "min": 3,
+          "max": 5,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mac": {
+          "min": 3,
+          "max": 4,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=124",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item3.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 130,
+      "name": "恶魔长袍(男)",
+      "category": "盔甲",
+      "jobAffinity": "wizard",
+      "jobLock": null,
+      "requirementType": "max_mc",
+      "requirementValue": 28,
+      "legacyNeed": 2,
+      "legacyNeedLevel": 28,
+      "genderRestriction": "male",
+      "weightRequirementType": "wear",
+      "weightRequirementValue": 19,
+      "weight": 19,
+      "durability": 25,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "mc": {
+          "min": 1,
+          "max": 4,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "ac": {
+          "min": 4,
+          "max": 7,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mac": {
+          "min": 3,
+          "max": 4,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=130",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item3.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 142,
+      "name": "法神披风",
+      "category": "盔甲",
+      "jobAffinity": "wizard",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 40,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 40,
+      "genderRestriction": "male",
+      "weightRequirementType": "wear",
+      "weightRequirementValue": 21,
+      "weight": 21,
+      "durability": 26,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "mc": {
+          "min": 2,
+          "max": 5,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "ac": {
+          "min": 4,
+          "max": 9,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mac": {
+          "min": 4,
+          "max": 6,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=142",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item3.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 126,
+      "name": "灵魂战衣(男)",
+      "category": "盔甲",
+      "jobAffinity": "taoist",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 22,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 22,
+      "genderRestriction": "male",
+      "weightRequirementType": "wear",
+      "weightRequirementValue": 15,
+      "weight": 15,
+      "durability": 20,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "sc": {
+          "min": 0,
+          "max": 2,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "ac": {
+          "min": 3,
+          "max": 6,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mac": {
+          "min": 3,
+          "max": 3,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=126",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item3.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 132,
+      "name": "幽灵战衣(男)",
+      "category": "盔甲",
+      "jobAffinity": "taoist",
+      "jobLock": null,
+      "requirementType": "max_sc",
+      "requirementValue": 27,
+      "legacyNeed": 3,
+      "legacyNeedLevel": 27,
+      "genderRestriction": "male",
+      "weightRequirementType": "wear",
+      "weightRequirementValue": 26,
+      "weight": 26,
+      "durability": 28,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "sc": {
+          "min": 1,
+          "max": 4,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "ac": {
+          "min": 4,
+          "max": 7,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mac": {
+          "min": 3,
+          "max": 4,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=132",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item3.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    },
+    {
+      "itemId": 144,
+      "name": "天尊道袍",
+      "category": "盔甲",
+      "jobAffinity": "taoist",
+      "jobLock": null,
+      "requirementType": "level",
+      "requirementValue": 40,
+      "legacyNeed": 0,
+      "legacyNeedLevel": 40,
+      "genderRestriction": "male",
+      "weightRequirementType": "wear",
+      "weightRequirementValue": 37,
+      "weight": 37,
+      "durability": 30,
+      "rollPolicy": "legacy_clamp_negative_span",
+      "stats": {
+        "sc": {
+          "min": 2,
+          "max": 5,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "ac": {
+          "min": 4,
+          "max": 9,
+          "rollPolicy": "legacy_clamp_negative_span"
+        },
+        "mac": {
+          "min": 4,
+          "max": 6,
+          "rollPolicy": "legacy_clamp_negative_span"
+        }
+      },
+      "warnings": [],
+      "source": {
+        "tier": "primary",
+        "contractId": "equipment.attribute.master.v1",
+        "distribution": "project.hardcore.equipment_attribute_master.v1",
+        "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+        "originalPath": "user_authorized_attachment/pasted-text.txt",
+        "fallbackEvidence": []
+      },
+      "supportingReferences": [
+        {
+          "url": "https://www.21cq.com/mir/View.aspx?id=144",
+          "role": "supporting_reference"
+        },
+        {
+          "url": "https://mir.17173.com/item/item3.htm",
+          "role": "supporting_reference"
+        }
+      ]
+    }
+  ]
+}

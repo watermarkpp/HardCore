@@ -60,7 +60,7 @@ CLASSIC_SHAPE_OVERRIDES = {
 ACCEPTED_BASELINE_SHAPES = {
     "木剑": 0, "匕首": 1, "乌木剑": 0, "青铜剑": 2, "短剑": 3,
     "铁剑": 2, "青铜斧": 4, "八荒": 5, "凌风": 8, "破魂": 12,
-    "斩马刀": 9, "修罗": 14, "凝霜": 15, "炼狱": 16, "井中月": 19,
+    "斩马刀": 9, "修罗": 14, "凝霜": 15, "炼狱": 11, "井中月": 19,
     "裁决之杖": 24, "屠龙": 26, "命运之刃": 29, "赤血魔剑": 25,
     "祈祷之刃": 13, "布衣(男)": 1, "轻型盔甲(男)": 2,
     "重盔甲(男)": 3, "战神盔甲(男)": 3,
@@ -71,7 +71,7 @@ ACCEPTED_BASELINE_SHAPES = {
 # revisit the original gaps; never replace the 24 already accepted mappings.
 PRIMARY_GAP_NAMES = {"鹤嘴锄", "怒斩", "中型盔甲(男)"}
 FEMALE_ONLY_ARMOR = {"圣战宝甲"}
-USER_CONFIRMED_PRIMARY_WEAPONS = {"屠龙", "命运之刃"}
+USER_CONFIRMED_PRIMARY_WEAPONS = {"炼狱", "屠龙", "命运之刃"}
 PRIMARY_UNRESOLVED_WEAPONS = {"落魄神兵"}
 
 
@@ -86,6 +86,26 @@ def sync_primary_weapon_runtime_bridge() -> None:
     mappings = manifest.get("runtimeMappings", {})
     formal_mappings = formal_catalog.get("runtimeMappings", {})
     items_by_id = compatibility.get("itemsById", {})
+
+    purgatory_record = items_by_id.get("99", {})
+    purgatory_mapping = formal_mappings.get("炼狱", {})
+    if (
+        purgatory_record.get("mappingType")
+        != "primary_server_image_to_primary_client_pixels"
+        or int(purgatory_record.get("maleFeature", -1)) != 22
+        or not bool(
+            purgatory_record.get("userAtlasReviewEvidence", {}).get(
+                "confirmed",
+                False,
+            )
+        )
+        or int(purgatory_mapping.get("weaponAppearance", {}).get(
+            "feature",
+            -1,
+        )) != 22
+    ):
+        raise ValueError("formal user-confirmed 炼狱 feature 22 mapping is missing")
+    mappings["炼狱"] = purgatory_mapping
 
     dragon_record = items_by_id.get("108", {})
     dragon_mapping = formal_mappings.get("屠龙", {})
@@ -146,6 +166,13 @@ def sync_primary_weapon_runtime_bridge() -> None:
             "candidate table for the explicitly affected names"
         ),
         "synced": {
+            "炼狱": {
+                "itemId": 99,
+                "maleFeature": 22,
+                "mappingType": (
+                    "primary_server_image_to_primary_client_pixels"
+                ),
+            },
             "屠龙": {
                 "itemId": 108,
                 "maleFeature": 52,
@@ -169,7 +196,8 @@ def sync_primary_weapon_runtime_bridge() -> None:
     )
     print(
         "WARRIOR_WEAR_PRIMARY_WEAPON_SYNC_PASS "
-        "屠龙=feature52 命运之刃=feature58 落魄神兵=unresolved"
+        "炼狱=feature22 屠龙=feature52 命运之刃=feature58 "
+        "落魄神兵=unresolved"
     )
 
 
