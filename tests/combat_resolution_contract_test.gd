@@ -64,9 +64,15 @@ func _run() -> void:
 		"战斗结算主源哈希或降级证据不完整"
 	)
 	assert(
-		contract.integrationAdapters.playerOutgoingDirectSpellImpact.api == "CombatResolutionRules.resolve_magic_damage_for_target_stats"
+		contract.integrationAdapters.playerOutgoingDirectSpellImpact.api == "CombatResolutionRules.resolve_direct_spell_damage"
 		and contract.integrationAdapters.playerIncomingDirectSpell.targetStats == "PlayerState.computed_stats",
 		"跨系统运行时适配清单不完整"
+	)
+	assert(
+		contract.professionRuntimeClosure.directSpellDamageApi == "CombatResolutionRules.resolve_direct_spell_damage"
+		and contract.professionRuntimeClosure.closedCallSites.size() == 2
+		and contract.integrationAdapters.playerOutgoingDirectSpellImpact.requiredProjectileArgument == "stable source_skill_id",
+		"职业运行时闭环或GameRoot最小接线契约不完整"
 	)
 
 	assert(WarriorCombatMath.PHYSICAL_HIT_POLICY_ID == "physical.hit.random_agility.strict_lt.v1")
@@ -85,6 +91,13 @@ func _run() -> void:
 	assert(CombatResolutionRules.anti_magic_points_from_display_percent(99) == 9, "显示百分比必须按10%内部点向下转换")
 	assert(CombatResolutionRules.anti_magic_points_from_context({}) == 1, "缺省角色AntiMagic没有使用基础1点")
 	assert(CombatResolutionRules.anti_magic_points_from_context({"target_magic_evasion_percent": 30}) == 3)
+	assert(
+		CombatResolutionRules.anti_magic_points_from_target_stats({
+			"magicEvasionPoints": 2,
+			"magicEvasionPercent": 90,
+		}) == 2,
+		"运行时目标属性未优先消费内部点或发生percent双算"
+	)
 	var target_stat_resolution := CombatResolutionRules.resolve_magic_damage_for_target_stats(
 		"wizard.fireball",
 		12,

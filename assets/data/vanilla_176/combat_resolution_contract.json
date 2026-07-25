@@ -88,10 +88,11 @@
       "callSites": [
         "scripts/game_root.gd::_on_player_skill",
         "scripts/game_root.gd::_spawn_projectile",
-        "scripts/skill_projectile.gd impact handoff"
+        "scripts/game_root.gd::_damage_enemies"
       ],
-      "api": "CombatResolutionRules.resolve_magic_damage_for_target_stats",
-      "requiredOrder": "anti_magic_then_magic_defense_then_take_damage"
+      "api": "CombatResolutionRules.resolve_direct_spell_damage",
+      "requiredOrder": "anti_magic_then_magic_defense_then_take_damage",
+      "requiredProjectileArgument": "stable source_skill_id"
     },
     "playerIncomingDirectSpell": {
       "owner": "codex/integration",
@@ -99,7 +100,7 @@
         "scripts/layers/runtime/combat_runtime_service.gd magic damage handoff"
       ],
       "targetStats": "PlayerState.computed_stats",
-      "api": "CombatResolutionRules.resolve_magic_damage_for_target_stats",
+      "api": "CombatResolutionRules.resolve_direct_spell_damage",
       "requiredOrder": "anti_magic_then_magic_defense_then_take_damage"
     },
     "physicalAttack": {
@@ -110,5 +111,15 @@
       ],
       "api": "WarriorCombatMath.roll_hit"
     }
+  },
+  "professionRuntimeClosure": {
+    "directSpellDamageApi": "CombatResolutionRules.resolve_direct_spell_damage",
+    "magicDefenseAdapterSignature": "(skill_id, damage_after_anti_magic, target_stats) -> final_damage",
+    "closedCallSites": [
+      "scripts/caster_skill_runtime.gd::execute_cast target_damage",
+      "scripts/skill_projectile.gd::_apply_hit projectile_damage"
+    ],
+    "poisonCallSite": "scripts/skill_projectile.gd::_apply_hit poison",
+    "poisonPolicy": "TaoistCombatMath.poison_succeeds uses AntiPoison only"
   }
 }
