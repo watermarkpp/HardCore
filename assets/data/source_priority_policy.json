@@ -46,17 +46,19 @@
       },
       "sources": [
         {
-          "distribution": "project.hardcore.equipment_attribute_master.v1",
+          "distribution": "project.hardcore.equipment_attribute_master.v2",
           "tier": "primary",
           "order": 0,
           "weight": 100,
           "eligible": true,
           "catalogRequired": false,
           "rootPrefix": "assets/data/equipment_attribute_master.json",
-          "contractId": "equipment.attribute.master.v1",
+          "contractId": "equipment.attribute.master.v2",
           "authority": "user_authoritative_override",
-          "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
-          "reason": "The user explicitly rejected Crystal equipment attributes as authoritative and ordered a revised project master. Crystal remains authoritative for other server_data scopes only."
+          "sourceKind": "explicit_user_primary_override",
+          "originalPath": "user_authorized_attachment/HardCore_装备系统核对清单_审核修正版_2026-07-25.xlsx",
+          "evidenceSha256": "CEEB2E68D07E2FFA112C46A954D04AAB68A95A576634199E05AB98FF23ABF83D",
+          "reason": "The user explicitly reviewed and corrected the 114 accessory/headgear records and ordered this workbook-backed v2 project master to replace the previous equipment attribute source. Crystal remains authoritative for other server_data scopes only."
         }
       ]
     },

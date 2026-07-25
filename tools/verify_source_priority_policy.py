@@ -60,9 +60,12 @@ def main() -> None:
     checks["serverPrimaryIsCleanDatabase"] = active_sources(policy, "server_data")[0]["distribution"] == "server.crystal.cjlaaa"
     equipment_primary = active_sources(policy, "equipment_attributes")[0]
     checks["equipmentPrimaryIsProjectMaster"] = (
-        equipment_primary["distribution"] == "project.hardcore.equipment_attribute_master.v1"
+        equipment_primary["distribution"] == "project.hardcore.equipment_attribute_master.v2"
         and equipment_primary.get("catalogRequired") is False
-        and equipment_primary.get("contractId") == "equipment.attribute.master.v1"
+        and equipment_primary.get("contractId") == "equipment.attribute.master.v2"
+        and equipment_primary.get("sourceKind") == "explicit_user_primary_override"
+        and equipment_primary.get("evidenceSha256")
+        == "CEEB2E68D07E2FFA112C46A954D04AAB68A95A576634199E05AB98FF23ABF83D"
         and len(str(equipment_primary.get("evidenceSha256", ""))) == 64
     )
     checks["equipmentAttributesExcludedFromServerData"] = set(
