@@ -12,6 +12,7 @@ const CLIENT_ATTACK_FRAMES := 6
 const CLIENT_ATTACK_FRAME_MS := 85
 const CLIENT_EFFECT_FRAME := 2
 const WILD_RUSH_COOLDOWN_MS := 3000
+const DAMAGE_RANGE_ROLL_POLICY := "legacy_clamp_negative_span"
 
 
 static func clamp_skill_level(level_value: int) -> int:
@@ -54,24 +55,26 @@ static func roll_hit(accuracy: int, target_agility: int, rng: RandomNumberGenera
 
 
 static func attack_power_for_roll(attack_min: int, attack_max: int, roll: int) -> int:
-	var low := mini(attack_min, attack_max)
-	var high := maxi(attack_min, attack_max)
-	return low + clampi(roll, 0, high - low)
+	var span := maxi(0, attack_max - attack_min)
+	return attack_min + clampi(roll, 0, span)
 
 
 static func roll_attack_power(attack_min: int, attack_max: int, luck: int, rng: RandomNumberGenerator) -> int:
-	var low := mini(attack_min, attack_max)
-	var high := maxi(attack_min, attack_max)
-	var span := high - low
+	# Primary source: M2Server/ObjBase.pas GetAttackPower receives the final
+	# low endpoint as nBasePower and clamps a negative high-low span to zero.
+	# Endpoint order is therefore semantic and must never be normalized.
+	var span := maxi(0, attack_max - attack_min)
+	if span == 0:
+		return attack_min
 	if luck > 0:
 		var maximum_gate := maxi(1, 10 - mini(9, luck))
 		if rng.randi_range(0, maximum_gate - 1) == 0:
-			return high
-	var result := low + rng.randi_range(0, span)
+			return attack_min + span
+	var result := attack_min + rng.randi_range(0, span)
 	if luck < 0:
 		var minimum_gate := maxi(1, 10 - mini(9, -luck))
 		if rng.randi_range(0, minimum_gate - 1) == 0:
-			return low
+			return attack_min
 	return result
 
 
