@@ -1,6 +1,6 @@
 # Codex 精简上下文快照
 
-更新时间：2026-07-25 10:06（Asia/Shanghai）
+更新时间：2026-07-25 12:45（Asia/Shanghai）
 
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。
 准确性规则：本文件不是代码或 Git 状态的替代品；只核实本次任务实际触及的分支、文件、接口和专项测试。
@@ -16,7 +16,7 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `b7d0ad7b`（其后的快照提交只改本文档）。
+- 分支/运行时代码基线：`codex/integration` @ `c1839b4`（其后的快照提交只改本文档）。
 - tracked 状态：clean。
 - 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
@@ -26,6 +26,8 @@
 - primary-only 武器返修已集成为 `2b0da07e`：37 件中 35 件可见、隐藏 0、命运之刃/落魄神兵未解析；木剑、乌木剑、罗刹、噬魂法杖、屠龙均有世界外观，低级库采用数为 0。
 - 用户已逐项确认武器与男性衣服外观；冻结提交 `c7489047` 将 37 件武器更新为 36 可见、0 隐藏、仅落魄神兵 1 件视觉未解析，并固定命运之刃、屠龙、炼狱等用户确认映射。
 - 装备属性不再走 Crystal `server_data`：`2a61617` 新增独立 `equipment_attributes` lane，唯一主源为 `assets/data/equipment_attribute_master.json`（`equipment.attribute.master.v1` / `project.hardcore.equipment_attribute_master.v1`）。该表覆盖 37 武器与 12 男衣；Crystal 仍是其他服务端数据范围的主源，禁止反向覆盖装备属性。
+- 上述装备属性合同已由用户审核工作簿正式升级为 `equipment.attribute.master.v2` / `project.hardcore.equipment_attribute_master.v2`：共 163 条唯一装备，其中 114 条头盔、项链、手镯、戒指审核覆盖；证据 SHA-256 为 `CEEB2E68D07E2FFA112C46A954D04AAB68A95A576634199E05AB98FF23ABF83D`。`magicEvasionPercent` 与 `magicEvasionPoints` 分离，准确、敏捷和攻击速度档位均进入正式字段。
+- `combat.resolution.openmir2.v1` 已接入运行时：物理命中统一为 `Random(敏捷) < 准确`；玩家基础 AntiMagic 为 1 点且只由 `PlayerState` 注入，怪物/通用空目标默认 0；直接法术固定按 AntiMagic → 随机 MAC → 最终扣血结算；攻击速度按 `max(0, 900 - tier × 60)` 毫秒且只影响物理攻击间隔。施毒继续使用独立 AntiPoison。
 - `595e485d` 将反向伤害区间明确为 `legacy_clamp_negative_span`：最终跨度 `max-min`，负跨度钳零，绝不交换端点；幸运/诅咒只影响正跨度分布。
 - `fcead306` 新增通用 `roll_primary_stat`：signed 总幸运统一作用于正跨度 DC/MC/SC，`+9/-9` 稳定命中上下限；治愈术使用 SC 掷骰，固定效果与施毒独立成功门不受幸运误影响。
 - `b7d0ad7b` 完成 `equipment.blessing_luck.v2`：祝福油三结果、固定 5% 负面、幸运 7/诅咒 10、逐级抵消、全部装备基础 `luck-curse`、武器实例幸运/诅咒、零耐久停用和存档恢复均接入；跨度因子固定为 `R=max(1,floor(abs(DCmax-DCmin)/5))`，命运之刃幸运 +3 后可继续提升。
@@ -50,6 +52,14 @@
 
 | 集成提交 | 领域 | 结果 |
 |---|---|---|
+| `c1839b4` | integration/runtime | 玩家受直接法术统一转交 `take_direct_spell_damage`，禁止重复 MAC、物防或二次扣血 |
+| `228063c` | integration/runtime | 火球、大火球、雷电、灵魂火符稳定技能 ID 与 AntiMagic/MAC 运行时接线 |
+| `3700cd1d` | skills | 直接法术与施毒实际命中闭环；AntiMagic 与 AntiPoison 隔离 |
+| `3d84db6c` | UI | 魔法躲避显示百分比，准确/敏捷显示点数，攻击速度显示档位 |
+| `f85e6941` | skills/player | 装备 v2 魔闪内部点与攻击速度档位进入玩家聚合 |
+| `555080da` | skills/player | 准确/敏捷严格命中、AntiMagic 与物理攻速统一规则 |
+| `4130b5ac` | rules/integration | 来源优先级正式提升到装备属性主表 v2 |
+| `e28fa1e5` | equipment | 导入用户审核工作簿，163 条正式装备属性与 v2 Schema |
 | `b7d0ad7b` | equipment | `equipment.blessing_luck.v2`、R=0 边界修正、全部装备 luck/curse 汇总、消耗/耐久/存档回归 |
 | `fcead306` | skills/player | 通用 `roll_primary_stat` 与 DC/MC/SC、治愈术、固定效果、反向区间专项 |
 | `2a61617` | rules/integration | 装备属性独立主源 lane、项目正式主表授权、来源守卫与装备测试入口 |
@@ -104,8 +114,8 @@
 - maps：`map_editor_runtime_collision_geometry_v2`、`published_blocked_cells_after_erasure_v1`、`map_editor_runtime_visual_geometry_v5`、`map_actor_occlusion_sort_v5`、`map_diamond_camera_center_constraint_v2`、`player_priority_soft_edge_v1`、`map_runtime_nonwalkable_edge_skirt_v1`。
 - monsters：`monster.overhead_anchor.v4`、`monster.overhead_layout.v3`、`monster.ground_contact.v4`、`monster.ground_contact.calibration.v4`；214 个 `monster_id` 各自保存人工复核的脚点、光圈中心、椭圆尺寸和投影策略，贴图异步激活后必须刷新。
 - UI：`ui.hud.resource_orb.hole_fill.v1`、`skill_button_assignment_contract_v2`。
-- equipment：`equipment.attribute.master.v1`、`equipment.test_loadouts.classic_three_tiers.v1`、`equipment.visual_catalog.formal_wearables.v1`、`equipment.paper_doll.original_client_stage.v1`、`equipment.world_wear.male_dress.v1`、`equipment.world_wear.male_weapon.v1`、`equipment.world_helmet.male.extension.v1` 与 9 个 `test.loadout.{profession}.{tier}.v1`。
-- skills：`legacy_clamp_negative_span`、`test.characters.full_skills.v1` 与 9 个 `test.character.{profession}.{woma|zuma|chiyue}.v1`。
+- equipment：`equipment.attribute.master.v2`、`project.hardcore.equipment_attribute_master.v2`、`equipment.test_loadouts.classic_three_tiers.v1`、`equipment.visual_catalog.formal_wearables.v1`、`equipment.paper_doll.original_client_stage.v1`、`equipment.world_wear.male_dress.v1`、`equipment.world_wear.male_weapon.v1`、`equipment.world_helmet.male.extension.v1` 与 9 个 `test.loadout.{profession}.{tier}.v1`。
+- skills：`combat.resolution.openmir2.v1`、`physical.hit.random_agility.strict_lt.v1`、`magic.evasion.anti_magic.direct_spell.v1`、`physical.attack_speed.interval_tier.v1`、`player.direct_spell_damage.openmir2.v1`、`legacy_clamp_negative_span`、`test.characters.full_skills.v1` 与 9 个 `test.character.{profession}.{woma|zuma|chiyue}.v1`。
 
 ## 已通过的必要验收
 
@@ -115,7 +125,8 @@
 - monsters：v4 数据生成检查、214/214 人工复核覆盖、214 种怪物五动作八方向运行时坐标链、214/214 冷激活、完整怪物客户端美术通过。
 - test roster：9 个独立存档、72 个正式装备槽、99 个角色技能加载项、三职业选择恢复和二次启动不覆盖通过。
 - player/equipment：原客户端男性装备页纸娃娃、男性世界衣服、男性世界武器、男性世界头盔、实时换装、正式装备视觉目录、装备纸娃娃居中和战士旧回归通过。
-- equipment attributes：49 条正式主表静态验证、Godot 装备完整套件 17/17、来源优先级政策、炼狱 feature22 运行映射均通过。
+- equipment attributes：163 条唯一正式装备、114 条工作簿覆盖、v2 Schema/来源优先级/幂等构建、魔闪点数拆分、准确/敏捷/攻速档位及 UI 单位均通过。
+- combat resolution：严格物理命中、AntiMagic/AntiPoison 隔离、玩家与怪物默认点数边界、直接法术 AntiMagic→MAC→扣血、tier 物理攻击间隔、GameRoot 稳定技能 ID 和共享运行时转交均通过；最终相关回归 9/9，`SMOKE_TEST_PASS`。
 - blessing/luck：`equipment.blessing_luck.v2`、三结果、5% 负面、幸运 7、诅咒 10、命运之刃 R=0 修正、全部装备 luck/curse、消耗/存档/零耐久、DC/MC/SC 与治愈术专项通过。
 - damage ranges：`legacy_clamp_negative_span`、通用 `roll_primary_stat`、战士公式、攻击时序与法系伤害公式通过；反向区间不会被幸运/诅咒交换端点，恢复正跨度后效果自动恢复。
 - equipment helmets：12 itemId/11 视觉身份、66 物理 atlas、2784 逻辑帧、6 动作×8 方向、透明角、Hair 逐帧锚点/SHA 溯源与 StateItem 世界像素零复用通过；Godot 头盔专项、视觉目录与 smoke 通过。
