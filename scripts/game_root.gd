@@ -2,6 +2,7 @@ extends Node2D
 
 const TargetingSystem := preload("res://scripts/targeting_system.gd")
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
+const CombatResolutionRulesScript := preload("res://scripts/combat_resolution_rules.gd")
 const MapCoordinateMapperScript := preload("res://scripts/map_coordinate_mapper.gd")
 const GothicBichCampBuilderScript := preload("res://scripts/layers/presentation/gothic_bich_camp_builder.gd")
 const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
@@ -1420,7 +1421,17 @@ func _on_special_action_pressed(effect_id: String) -> void:
 				direction = player.facing.normalized()
 			var low := maxi(1, int(PlayerState.computed_stats.get("magic_min", 0)))
 			var high := maxi(low, int(PlayerState.computed_stats.get("magic_max", low)))
-			_spawn_projectile(player.global_position, direction, _rng.randi_range(low, high), 360.0, Color(1.0, 0.30, 0.08))
+			_spawn_projectile(
+				player.global_position,
+				direction,
+				_rng.randi_range(low, high),
+				360.0,
+				Color(1.0, 0.30, 0.08),
+				"damage",
+				0,
+				0.0,
+				"wizard.fireball"
+			)
 			hud.show_message("火焰戒指：火球")
 		"recovery_skill":
 			if not player.spend_mana(5):
@@ -1459,6 +1470,7 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 		hud.show_message("技能运行时尚未登记：%s" % skill_name)
 		return
 	var cast_type := str(profile.get("cast_type", "melee"))
+	var stable_skill_id := ProfessionRules.skill_id(skill_name)
 	if _skill_needs_target(cast_type):
 		_ensure_combat_target()
 		direction = _face_locked_target()
@@ -1480,15 +1492,15 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 			player.restore_health(final_damage)
 			multiplier = 0.0
 		"projectile", "execute":
-			_spawn_projectile(origin, direction, final_damage, attack_range, effect_color)
+			_spawn_projectile(origin, direction, final_damage, attack_range, effect_color, "damage", 0, 0.0, stable_skill_id)
 			multiplier = 0.0
 			hit_any = true
 		"poison":
-			_spawn_projectile(origin, direction, final_damage, attack_range, effect_color, "poison", maxi(1, int(final_damage / 3)), 8.0)
+			_spawn_projectile(origin, direction, final_damage, attack_range, effect_color, "poison", maxi(1, int(final_damage / 3)), 8.0, stable_skill_id)
 			multiplier = 0.0
 			hit_any = true
 		"control":
-			_spawn_projectile(origin, direction, 0, attack_range, effect_color, "charm", 0, 6.0)
+			_spawn_projectile(origin, direction, 0, attack_range, effect_color, "charm", 0, 6.0, stable_skill_id)
 			multiplier = 0.0
 			hit_any = true
 		"ground_dot":
@@ -1523,7 +1535,15 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 				hud.show_message("%s：生命%d/%d" % [inspected.display_name, inspected.current_hp, inspected.max_hp], 2.0)
 			multiplier = 0.0
 	if multiplier > 0.0:
-		hit_any = _damage_enemies(origin, direction, final_damage, radial, attack_range, PlayerState.profession == "战士")
+		hit_any = _damage_enemies(
+			origin,
+			direction,
+			final_damage,
+			radial,
+			attack_range,
+			PlayerState.profession == "战士",
+			stable_skill_id
+		)
 	_show_attack_flash(origin, direction, hit_any, effect_color)
 	hud.show_message("施放：%s" % skill_name, 1.0)
 
@@ -1532,9 +1552,30 @@ func _skill_needs_target(cast_type: String) -> bool:
 	return cast_type not in ["passive", "heal", "heal_area", "shield", "stealth", "stealth_area", "magic_defense_buff", "defense_buff", "summon", "teleport"]
 
 
-func _spawn_projectile(origin: Vector2, direction: Vector2, damage: int, travel_range: float, color: Color, effect := "damage", effect_strength := 0, effect_duration := 0.0) -> void:
+func _spawn_projectile(
+	origin: Vector2,
+	direction: Vector2,
+	damage: int,
+	travel_range: float,
+	color: Color,
+	effect := "damage",
+	effect_strength := 0,
+	effect_duration := 0.0,
+	source_skill_id := ""
+) -> void:
 	var projectile := SkillProjectile.new()
-	projectile.setup(origin + direction * 24.0, direction, damage, travel_range, color, effect, effect_strength, effect_duration)
+	projectile.setup(
+		origin + direction * 24.0,
+		direction,
+		damage,
+		travel_range,
+		color,
+		effect,
+		effect_strength,
+		effect_duration,
+		source_skill_id
+	)
+	projectile.configure_runtime_resolution(player, Callable(self, "_resolve_magic_defense"))
 	add_child(projectile)
 
 
@@ -1567,7 +1608,15 @@ func _nearest_enemy(origin: Vector2, maximum_distance: float) -> EnemyActor:
 	return nearest
 
 
-func _damage_enemies(origin: Vector2, direction: Vector2, damage: int, radial: bool, attack_range := 105.0, physical_accuracy := false) -> bool:
+func _damage_enemies(
+	origin: Vector2,
+	direction: Vector2,
+	damage: int,
+	radial: bool,
+	attack_range := 105.0,
+	physical_accuracy := false,
+	source_skill_id := ""
+) -> bool:
 	var hit_any := false
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node.is_queued_for_deletion():
@@ -1579,9 +1628,39 @@ func _damage_enemies(origin: Vector2, direction: Vector2, damage: int, radial: b
 				var accuracy := int(PlayerState.computed_stats.get("accuracy", WarriorCombatMath.BASE_HIT))
 				if not WarriorCombatMath.roll_hit(accuracy, node.agility, _rng):
 					continue
-			node.take_damage(damage)
+			var resolved_damage := damage
+			if CombatResolutionRulesScript.anti_magic_eligible(source_skill_id):
+				var resolution := CombatResolutionRulesScript.resolve_direct_spell_damage(
+					source_skill_id,
+					damage,
+					node.monster_data,
+					_rng.randi_range(0, CombatResolutionRulesScript.ANTI_MAGIC_ROLL_SIDES - 1),
+					Callable(self, "_resolve_magic_defense")
+				)
+				resolved_damage = int(resolution.final_damage)
+			if resolved_damage <= 0:
+				continue
+			node.take_damage(resolved_damage, player)
 			hit_any = true
 	return hit_any
+
+
+func _resolve_magic_defense(_skill_id: String, damage_after_anti_magic: int, target_stats: Dictionary) -> int:
+	var defense_min := int(
+		target_stats.get(
+			"magic_defense_min",
+			target_stats.get("mdefMin", target_stats.get("MinMAC", 0))
+		)
+	)
+	var defense_max := int(
+		target_stats.get(
+			"magic_defense_max",
+			target_stats.get("mdefMax", target_stats.get("MaxMAC", defense_min))
+		)
+	)
+	defense_min = maxi(0, defense_min)
+	defense_max = maxi(defense_min, defense_max)
+	return maxi(0, damage_after_anti_magic - _rng.randi_range(defense_min, defense_max))
 
 
 func _physical_primary_target(origin: Vector2, direction: Vector2, maximum_distance: float) -> EnemyActor:
