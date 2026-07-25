@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "policyId": "MIR-SOURCE-PRIORITY-1",
   "catalogManifest": "outputs/resource_catalog/complete_local_mir_sources/manifest.json",
   "weights": {
@@ -20,15 +20,46 @@
     "fallbackMustRejectEveryHigherPrioritySource": true,
     "sameTierMustFollowOrder": true,
     "derivedAssetMustRecordDistributionAndOriginalPath": true,
+    "projectMasterRequiresTrackedContract": true,
+    "userAuthoritativeOverrideMustRecordEvidenceHash": true,
     "quarantineCannotEnterRuntime": true
   },
   "routing": {
     "pixels_frames_maps_audio": "client_assets",
     "client_animation_offsets_rendering_protocol": "client_rules",
+    "equipment_attributes_requirements_weights_affinity": "equipment_attributes",
     "npc_items_monsters_spawns_shops_quests_server_config": "server_data",
     "combat_movement_ai_timing_protocol": "server_rules"
   },
   "lanes": {
+    "equipment_attributes": {
+      "description": "HardCore formal equipment attributes, requirements, affinity, gender and weight contract",
+      "scopeExclusions": {
+        "server_data": [
+          "equipment_attributes",
+          "equipment_requirements",
+          "equipment_job_affinity",
+          "equipment_gender_restrictions",
+          "equipment_hand_weight",
+          "equipment_wear_weight"
+        ]
+      },
+      "sources": [
+        {
+          "distribution": "project.hardcore.equipment_attribute_master.v1",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100,
+          "eligible": true,
+          "catalogRequired": false,
+          "rootPrefix": "assets/data/equipment_attribute_master.json",
+          "contractId": "equipment.attribute.master.v1",
+          "authority": "user_authoritative_override",
+          "evidenceSha256": "8C87CD85F4E5FAF00E8D9F85E4394F021EB5EA26AC74CB453CC370BA10452F98",
+          "reason": "The user explicitly rejected Crystal equipment attributes as authoritative and ordered a revised project master. Crystal remains authoritative for other server_data scopes only."
+        }
+      ]
+    },
     "client_assets": {
       "description": "客户端原始像素、WIL/WIX、MAP与声音",
       "sources": [

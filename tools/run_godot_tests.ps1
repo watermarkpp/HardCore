@@ -104,6 +104,7 @@ $Suites = @{
         'tests/equipment_luck_test.tscn',
         'tests/equipment_durability_policy_test.tscn',
         'tests/equipment_service_rules_test.tscn',
+        'tests/equipment_attribute_master_test.tscn',
         'tests/equipment_slot_migration_test.tscn',
         'tests/item_catalog_test.tscn',
         'tests/vertical_slice_loop_test.tscn',
