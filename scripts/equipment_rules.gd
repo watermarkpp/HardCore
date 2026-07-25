@@ -6,8 +6,8 @@ const NEED_ATTACK := 1
 const NEED_MAGIC := 2
 const NEED_TAO := 3
 const SUPPORTED_NEEDS: Array[int] = [NEED_LEVEL, NEED_ATTACK, NEED_MAGIC, NEED_TAO]
-const ATTRIBUTE_MASTER_CONTRACT_ID := "equipment.attribute.master.v1"
-const ATTRIBUTE_MASTER_DISTRIBUTION := "project.hardcore.equipment_attribute_master.v1"
+const ATTRIBUTE_MASTER_CONTRACT_ID := "equipment.attribute.master.v2"
+const ATTRIBUTE_MASTER_DISTRIBUTION := "project.hardcore.equipment_attribute_master.v2"
 const LEGACY_ROLL_POLICY := "legacy_clamp_negative_span"
 const REQUIREMENT_TYPE_CODES := {
 	"level": NEED_LEVEL,
