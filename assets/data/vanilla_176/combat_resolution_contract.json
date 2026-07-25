@@ -44,6 +44,9 @@
     "successBehavior": "whole_spell_damage_zero_skip_magic_defense",
     "displayField": "magic_evasion_percent",
     "internalField": "anti_magic_points",
+    "itemInternalField": "magicEvasionPoints",
+    "itemDisplayField": "magicEvasionPercent",
+    "itemFieldPriority": "magicEvasionPoints_then_magicEvasionPercent_without_double_count",
     "dictionaryModifierInternalField": "antiMagicPoints",
     "dictionaryModifierDisplayField": "magicEvasionPercent",
     "eligibleSkillIds": [
@@ -67,6 +70,7 @@
   "physicalAttackSpeed": {
     "policyId": "physical.attack_speed.interval_tier.v1",
     "tierField": "attack_speed_tier",
+    "itemTierField": "attackSpeedTier",
     "dictionaryModifierTierField": "attackSpeedTier",
     "baseIntervalMs": 900,
     "reductionPerTierMs": 60,

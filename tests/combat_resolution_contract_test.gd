@@ -1,6 +1,7 @@
 extends Node
 
 const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
+const ITEM_COMBAT_FIELDS := ["magicEvasionPoints", "magicEvasionPercent", "attackSpeedTier"]
 
 
 func _ready() -> void:
@@ -34,6 +35,21 @@ func _assert_direct_spell_anti_magic(skill_id: String) -> void:
 
 	var zero_points := CasterSkillRuntime.resolve(skill_id, _direct_spell_context(skill_id, 0, 0))
 	assert(not zero_points.magic_evaded and zero_points.damage > 0, "%s的0点AntiMagic不应躲避" % skill_id)
+
+
+func _snapshot_item_combat_fields(item: Dictionary) -> Dictionary:
+	var snapshot := {}
+	for field: String in ITEM_COMBAT_FIELDS:
+		snapshot[field] = item[field] if item.has(field) else null
+	return snapshot
+
+
+func _restore_item_combat_fields(item: Dictionary, snapshot: Dictionary) -> void:
+	for field: String in ITEM_COMBAT_FIELDS:
+		if snapshot[field] == null:
+			item.erase(field)
+		else:
+			item[field] = snapshot[field]
 
 
 func _run() -> void:
@@ -100,6 +116,46 @@ func _run() -> void:
 		wood_sword.erase("modifiers")
 	else:
 		wood_sword["modifiers"] = previous_modifiers
+	PlayerState.reset_progress()
+
+	var white_tiger_tooth := GameData.get_item("白色虎齿项链")
+	var lantern_necklace := GameData.get_item("灯笼项链")
+	var gale_necklace := GameData.get_item("狂风项链")
+	var gale_ring := GameData.get_item("狂风戒指")
+	var item_field_snapshots := {
+		"white_tiger_tooth": _snapshot_item_combat_fields(white_tiger_tooth),
+		"lantern_necklace": _snapshot_item_combat_fields(lantern_necklace),
+		"gale_necklace": _snapshot_item_combat_fields(gale_necklace),
+		"gale_ring": _snapshot_item_combat_fields(gale_ring),
+	}
+	white_tiger_tooth.merge({"magicEvasionPoints": 2, "magicEvasionPercent": 20}, true)
+	lantern_necklace.merge({"magicEvasionPoints": 1, "magicEvasionPercent": 10}, true)
+	gale_necklace["attackSpeedTier"] = 2
+	gale_ring["attackSpeedTier"] = 1
+	# Synthetic multi-record loadout: it verifies recalculate_stats aggregation only,
+	# independently from inventory slot validation.
+	PlayerState.equipment.merge({
+		"项链": {"name": "白色虎齿项链", "durability": 1},
+		"头盔": {"name": "灯笼项链", "durability": 1},
+		"衣服": {"name": "狂风项链", "durability": 1},
+		"左戒指": {"name": "狂风戒指", "durability": 1},
+		"右戒指": {"name": "狂风戒指", "durability": 1},
+	}, true)
+	PlayerState.recalculate_stats()
+	assert(
+		int(PlayerState.computed_stats.anti_magic_points) == 4
+		and int(PlayerState.computed_stats.magic_evasion_percent) == 40,
+		"顶层魔闪字段未按基础1+虎齿2+灯笼1聚合，或points/percent发生双算"
+	)
+	assert(int(PlayerState.computed_stats.attack_speed_tier) == 4, "狂风项链2档与两枚狂风戒指各1档未累加为4档")
+	var field_contract_player := PlayerCharacter.new()
+	add_child(field_contract_player)
+	assert(is_equal_approx(field_contract_player.attack_cooldown, 0.66), "4档物理攻速应得到660ms最小间隔")
+	field_contract_player.free()
+	_restore_item_combat_fields(white_tiger_tooth, item_field_snapshots.white_tiger_tooth)
+	_restore_item_combat_fields(lantern_necklace, item_field_snapshots.lantern_necklace)
+	_restore_item_combat_fields(gale_necklace, item_field_snapshots.gale_necklace)
+	_restore_item_combat_fields(gale_ring, item_field_snapshots.gale_ring)
 	PlayerState.reset_progress()
 
 	for skill_id in [
