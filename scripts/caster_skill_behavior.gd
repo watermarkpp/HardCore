@@ -127,8 +127,9 @@ static func _poison(level: int, context: Dictionary) -> Dictionary:
 	var green := str(context.get("poison_type", "green")) != "red"
 	var power := TaoistCombatMath.poison_power(level, int(context.get("spiritual_stat_roll", 0)), green)
 	var result := _base("taoist.poison", "poison_health" if green else "poison_armor", level)
-	var anti_poison_bound := maxi(1, int(context.get("target_anti_poison", 0)) + 7)
-	result.success = int(context.get("anti_poison_random", 0)) <= 6
+	var target_anti_poison := int(context.get("target_anti_poison", 0))
+	var anti_poison_bound := TaoistCombatMath.anti_poison_random_bound(target_anti_poison)
+	result.success = TaoistCombatMath.poison_succeeds(target_anti_poison, int(context.get("anti_poison_random", 0)))
 	result.failure_reason = "" if result.success else "anti_poison_gate"
 	result.anti_poison_random_bound = anti_poison_bound
 	result.power = power

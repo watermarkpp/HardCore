@@ -89,6 +89,7 @@ static func resolve(skill_name_or_id: String, context: Dictionary) -> Dictionary
 		result.operation = operation_and_shape[0]
 		result.execution_shape = operation_and_shape[1]
 		result.damage = _damage(skill_id, level, context)
+		result.damage_before_evasion = int(result.damage)
 		if bool(result.anti_magic_eligible) and context.has("anti_magic_roll"):
 			var evasion := CombatResolutionRules.resolve_magic_damage(
 				skill_id,
@@ -130,7 +131,7 @@ static func create_projectile(plan: Dictionary, origin: Vector2, direction: Vect
 	projectile.setup(
 		origin + direction.normalized() * 24.0,
 		direction,
-		int(plan.get("damage", 0)),
+		int(plan.get("damage_before_evasion", plan.get("damage", 0))),
 		float(plan.get("range", 360.0)),
 		color,
 		"damage",
@@ -231,6 +232,7 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 		return result
 	var operation := str(plan.get("operation", ""))
 	var operation_adapter := _runtime_adapter(context, operation)
+	var magic_defense_adapter := _callable_context_field(context, "magic_defense_adapter")
 	if operation in ["magic_defense_buff", "physical_defense_buff"] and not context.has("defense_bonus"):
 		result.adapter_required = "defense_bonus"
 		return result
@@ -261,18 +263,46 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 	)
 	var parent := context.get("parent") as Node
 	for node: Node2D in nodes:
+		if node is SkillProjectile:
+			node.configure_runtime_resolution(
+				caster,
+				magic_defense_adapter,
+				int(context.get("anti_magic_roll", -1)),
+				int(context.get("anti_poison_random", -1))
+			)
 		if parent != null:
 			parent.add_child(node)
 	result.nodes = nodes
 	result.spawned_count = nodes.size()
+	result["target_resolutions"] = []
+	result["evaded_count"] = 0
 	var targets := _runtime_targets(context, primary_target, "affected_targets")
 	var allies := _runtime_targets(context, caster, "affected_allies")
 	match operation:
 		"target_damage", "line_damage", "area_damage":
 			for target: Node2D in targets:
 				if target is EnemyActor:
-					target.take_damage(int(plan.get("damage", 0)), caster)
-					result.applied_count += 1
+					var raw_damage := int(plan.get("damage_before_evasion", plan.get("damage", 0)))
+					if CombatResolutionRules.anti_magic_eligible(str(plan.get("skill_id", ""))):
+						var anti_magic_roll := int(context.get(
+							"anti_magic_roll",
+							randi_range(0, CombatResolutionRules.ANTI_MAGIC_ROLL_SIDES - 1)
+						))
+						var resolution := CombatResolutionRules.resolve_direct_spell_damage(
+							str(plan.get("skill_id", "")),
+							raw_damage,
+							target.monster_data,
+							anti_magic_roll,
+							magic_defense_adapter
+						)
+						result.target_resolutions.append(resolution)
+						if bool(resolution.magic_evaded):
+							result.evaded_count += 1
+							continue
+						raw_damage = int(resolution.final_damage)
+					if raw_damage > 0:
+						target.take_damage(raw_damage, caster)
+						result.applied_count += 1
 		"heal_target", "heal_area":
 			for ally: Node2D in allies:
 				if ally is PlayerCharacter:
@@ -376,6 +406,11 @@ static func _runtime_adapter(context: Dictionary, operation: String) -> Callable
 		if candidate is Callable:
 			return candidate
 	return Callable()
+
+
+static func _callable_context_field(context: Dictionary, field: String) -> Callable:
+	var candidate: Variant = context.get(field)
+	return candidate if candidate is Callable else Callable()
 
 
 static func _damage(skill_id: String, level: int, context: Dictionary) -> int:

@@ -76,8 +76,14 @@ static func anti_magic_points_from_context(context: Dictionary) -> int:
 static func anti_magic_points_from_target_stats(target_stats: Dictionary) -> int:
 	if target_stats.has("anti_magic_points"):
 		return clampi(int(target_stats.anti_magic_points), 0, ANTI_MAGIC_ROLL_SIDES)
+	if target_stats.has("magicEvasionPoints"):
+		return clampi(int(target_stats.magicEvasionPoints), 0, ANTI_MAGIC_ROLL_SIDES)
+	if target_stats.has("antiMagic"):
+		return clampi(int(target_stats.antiMagic), 0, ANTI_MAGIC_ROLL_SIDES)
 	if target_stats.has("magic_evasion_percent"):
 		return anti_magic_points_from_display_percent(int(target_stats.magic_evasion_percent))
+	if target_stats.has("magicEvasionPercent"):
+		return anti_magic_points_from_display_percent(int(target_stats.magicEvasionPercent))
 	return BASE_CHARACTER_ANTI_MAGIC_POINTS
 
 
@@ -122,6 +128,33 @@ static func resolve_magic_damage_for_target_stats(
 		anti_magic_points_from_target_stats(target_stats),
 		random_0_to_9
 	)
+
+
+static func resolve_direct_spell_damage(
+	skill_id: String,
+	raw_damage: int,
+	target_stats: Dictionary,
+	random_0_to_9: int,
+	magic_defense_resolver := Callable()
+) -> Dictionary:
+	var result := resolve_magic_damage_for_target_stats(
+		skill_id,
+		raw_damage,
+		target_stats,
+		random_0_to_9
+	)
+	result["stage_order"] = ["anti_magic", "magic_defense", "take_damage"]
+	result["magic_defense_checked"] = false
+	result["final_damage"] = int(result.damage_after_evasion)
+	if not bool(result.enters_magic_defense_stage):
+		return result
+	if magic_defense_resolver is Callable and magic_defense_resolver.is_valid():
+		result.magic_defense_checked = true
+		result.final_damage = maxi(
+			0,
+			int(magic_defense_resolver.call(skill_id, int(result.damage_after_evasion), target_stats))
+		)
+	return result
 
 
 static func physical_attack_interval_ms(attack_speed_tier: int) -> int:
