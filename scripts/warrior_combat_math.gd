@@ -59,23 +59,27 @@ static func attack_power_for_roll(attack_min: int, attack_max: int, roll: int) -
 	return attack_min + clampi(roll, 0, span)
 
 
-static func roll_attack_power(attack_min: int, attack_max: int, luck: int, rng: RandomNumberGenerator) -> int:
+static func roll_primary_stat(stat_min: int, stat_max: int, total_luck: int, rng: RandomNumberGenerator) -> int:
 	# Primary source: M2Server/ObjBase.pas GetAttackPower receives the final
-	# low endpoint as nBasePower and clamps a negative high-low span to zero.
-	# Endpoint order is therefore semantic and must never be normalized.
-	var span := maxi(0, attack_max - attack_min)
+	# DC/MC/SC low endpoint as nBasePower and clamps a negative high-low span
+	# to zero. Endpoint order is therefore semantic and must never be normalized.
+	var span := maxi(0, stat_max - stat_min)
 	if span == 0:
-		return attack_min
-	if luck > 0:
-		var maximum_gate := maxi(1, 10 - mini(9, luck))
+		return stat_min
+	if total_luck > 0:
+		var maximum_gate := maxi(1, 10 - mini(9, total_luck))
 		if rng.randi_range(0, maximum_gate - 1) == 0:
-			return attack_min + span
-	var result := attack_min + rng.randi_range(0, span)
-	if luck < 0:
-		var minimum_gate := maxi(1, 10 - mini(9, -luck))
+			return stat_min + span
+	var result := stat_min + rng.randi_range(0, span)
+	if total_luck < 0:
+		var minimum_gate := maxi(1, 10 - mini(9, -total_luck))
 		if rng.randi_range(0, minimum_gate - 1) == 0:
-			return attack_min
+			return stat_min
 	return result
+
+
+static func roll_attack_power(attack_min: int, attack_max: int, total_luck: int, rng: RandomNumberGenerator) -> int:
+	return roll_primary_stat(attack_min, attack_max, total_luck, rng)
 
 
 static func slaying_proc_cycle(level_value: int) -> int:
