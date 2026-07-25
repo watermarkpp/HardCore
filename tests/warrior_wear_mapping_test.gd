@@ -22,7 +22,7 @@ func _run() -> void:
 	var accepted_baseline_features := {
 		"木剑": 0, "匕首": 2, "乌木剑": 0, "青铜剑": 4, "短剑": 6,
 		"铁剑": 4, "青铜斧": 8, "八荒": 10, "凌风": 16, "破魂": 24,
-		"斩马刀": 18, "修罗": 28, "凝霜": 30, "炼狱": 32, "井中月": 38,
+		"斩马刀": 18, "修罗": 28, "凝霜": 30, "炼狱": 22, "井中月": 38,
 		"裁决之杖": 48, "屠龙": 52, "命运之刃": 58, "赤血魔剑": 50,
 		"祈祷之刃": 26, "布衣(男)": 2, "轻型盔甲(男)": 4,
 		"重盔甲(男)": 6, "战神盔甲(男)": 6,
@@ -56,7 +56,7 @@ func _run() -> void:
 
 	var purgatory := GameData.get_item("炼狱")
 	var heavy := GameData.get_item("重盔甲(男)")
-	assert(int(purgatory.get("art", {}).get("weaponAppearance", {}).get("feature", -1)) == 32, "炼狱穿戴映射未进入运行目录")
+	assert(int(purgatory.get("art", {}).get("weaponAppearance", {}).get("feature", -1)) == 22, "炼狱穿戴映射未进入运行目录")
 	assert(int(heavy.get("art", {}).get("dressAppearance", {}).get("feature", -1)) == 6, "重盔甲穿戴映射未进入运行目录")
 	var customized := GameData.apply_equipment_customization([purgatory], {"overrides": {"炼狱": {"fields": {"art": {"inventoryIcon": {"path": "res://custom_icon.png"}}}}}})
 	assert(customized[0].get("art", {}).has("weaponAppearance"), "只覆盖图标时不得误删动态武器映射")
@@ -78,7 +78,7 @@ func _run() -> void:
 	var body: Sprite2D = visual.get_node("BodySprite")
 	var weapon: Sprite2D = visual.get_node("ClientWeaponLayer")
 	assert(body.texture.resource_path.ends_with("dress_006_idle.png"), "重盔甲动态人物图没有生效")
-	assert(weapon.visible and weapon.texture.resource_path.ends_with("weapon_032_idle.png"), "炼狱动态武器图没有生效")
+	assert(weapon.visible and weapon.texture.resource_path.ends_with("weapon_022_idle.png"), "炼狱动态武器图没有生效")
 	assert(not visual.get_node("WeaponAccent").visible and not visual.get_node("ArmorAccent").visible, "客户端穿戴图生效时不应叠加占位强调层")
 
 	var formal_purgatory: Dictionary = visual_catalog.get("runtimeMappings", {}).get("炼狱", {}).get("weaponAppearance", {})
