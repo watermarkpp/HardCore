@@ -65,12 +65,14 @@ func _run() -> void:
 	)
 	assert(
 		contract.integrationAdapters.playerOutgoingDirectSpellImpact.api == "CombatResolutionRules.resolve_direct_spell_damage"
-		and contract.integrationAdapters.playerIncomingDirectSpell.targetStats == "PlayerState.computed_stats",
+		and contract.integrationAdapters.playerIncomingDirectSpell.targetStats == "PlayerState.computed_stats"
+		and contract.integrationAdapters.playerIncomingDirectSpell.api == "PlayerCharacter.take_direct_spell_damage",
 		"跨系统运行时适配清单不完整"
 	)
 	assert(
 		contract.professionRuntimeClosure.directSpellDamageApi == "CombatResolutionRules.resolve_direct_spell_damage"
-		and contract.professionRuntimeClosure.closedCallSites.size() == 2
+		and contract.professionRuntimeClosure.closedCallSites.size() == 3
+		and contract.professionRuntimeClosure.playerIncomingRuntimeId == PlayerCharacter.DIRECT_SPELL_DAMAGE_RUNTIME_ID
 		and contract.integrationAdapters.playerOutgoingDirectSpellImpact.requiredProjectileArgument == "stable source_skill_id",
 		"职业运行时闭环或GameRoot最小接线契约不完整"
 	)
@@ -89,8 +91,12 @@ func _run() -> void:
 	assert(CombatResolutionRules.anti_magic_display_percent(1) == 10, "1内部点必须显示10%")
 	assert(CombatResolutionRules.anti_magic_points_from_display_percent(10) == 1, "10%必须转换为1内部点")
 	assert(CombatResolutionRules.anti_magic_points_from_display_percent(99) == 9, "显示百分比必须按10%内部点向下转换")
-	assert(CombatResolutionRules.anti_magic_points_from_context({}) == 1, "缺省角色AntiMagic没有使用基础1点")
+	assert(CombatResolutionRules.anti_magic_points_from_context({}) == 0, "无目标字段的施法上下文不得凭空获得10%魔闪")
 	assert(CombatResolutionRules.anti_magic_points_from_context({"target_magic_evasion_percent": 30}) == 3)
+	assert(
+		CombatResolutionRules.anti_magic_points_from_target_stats({}) == 0,
+		"无AntiMagic字段的通用/怪物目标不得凭空获得10%魔闪"
+	)
 	assert(
 		CombatResolutionRules.anti_magic_points_from_target_stats({
 			"magicEvasionPoints": 2,

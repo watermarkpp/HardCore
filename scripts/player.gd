@@ -5,6 +5,8 @@ const PlayerVisualScript := preload("res://scripts/player_visual.gd")
 const PlayerHealthBarScript := preload("res://scripts/player_health_bar.gd")
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
+const DIRECT_SPELL_DAMAGE_RUNTIME_ID := "player.direct_spell_damage.openmir2.v1"
 
 # GameOfMir server evidence:
 # - M2Server/ObjBase.pas RM_STRUCK only records m_dwStruckTick when nPower > 0.
@@ -268,7 +270,65 @@ func request_skill(skill_name: String) -> bool:
 
 func take_damage(amount: int, causes_struck: bool = true) -> void:
 	var absorbed := (_rng.randi_range(defense_min, defense_max) if defense_max >= defense_min else defense_min) + defense_buff
-	var reduced_amount := int(round(maxi(1, amount - absorbed) * (1.0 - clampf(damage_reduction, 0.0, 0.8))))
+	_apply_resolved_damage(maxi(1, amount - absorbed), causes_struck)
+
+
+func take_direct_spell_damage(
+	skill_id: String,
+	raw_damage: int,
+	anti_magic_roll := -1,
+	magic_defense_roll := -1,
+	causes_struck := true
+) -> Dictionary:
+	var stable_skill_id := ProfessionRules.skill_id(skill_id)
+	var target_stats: Dictionary = PlayerState.computed_stats
+	var checked_anti_magic_roll := anti_magic_roll
+	if checked_anti_magic_roll < 0:
+		checked_anti_magic_roll = _rng.randi_range(0, CombatResolutionRules.ANTI_MAGIC_ROLL_SIDES - 1)
+	var magic_defense_state := {}
+	var magic_defense_adapter := Callable(
+		self,
+		"_resolve_direct_spell_magic_defense"
+	).bind(magic_defense_roll, magic_defense_state)
+	var resolution := CombatResolutionRules.resolve_direct_spell_damage(
+		stable_skill_id,
+		raw_damage,
+		target_stats,
+		checked_anti_magic_roll,
+		magic_defense_adapter
+	)
+	resolution["runtime_contract"] = DIRECT_SPELL_DAMAGE_RUNTIME_ID
+	resolution["magic_defense_min"] = maxi(0, int(target_stats.get("magic_defense_min", 0)))
+	resolution["magic_defense_max"] = maxi(
+		int(resolution.magic_defense_min),
+		int(target_stats.get("magic_defense_max", resolution.magic_defense_min))
+	)
+	resolution["magic_defense_roll"] = int(magic_defense_state.get("roll", -1))
+	resolution["physical_defense_bypassed"] = true
+	var hp_before := current_hp
+	if int(resolution.final_damage) > 0:
+		_apply_resolved_damage(int(resolution.final_damage), causes_struck)
+	resolution["player_pipeline_input"] = int(resolution.final_damage)
+	resolution["applied_damage"] = maxi(0, hp_before - current_hp)
+	return resolution
+
+
+func _resolve_direct_spell_magic_defense(
+	_skill_id: String,
+	incoming_damage: int,
+	target_stats: Dictionary,
+	roll_override: int,
+	resolution_state: Dictionary
+) -> int:
+	var minimum := maxi(0, int(target_stats.get("magic_defense_min", 0)))
+	var maximum := maxi(minimum, int(target_stats.get("magic_defense_max", minimum)))
+	var roll := clampi(roll_override, minimum, maximum) if roll_override >= 0 else _rng.randi_range(minimum, maximum)
+	resolution_state["roll"] = roll
+	return maxi(0, incoming_damage - roll)
+
+
+func _apply_resolved_damage(amount: int, causes_struck: bool) -> void:
+	var reduced_amount := int(round(maxi(1, amount) * (1.0 - clampf(damage_reduction, 0.0, 0.8))))
 	var final_damage := maxi(1, reduced_amount)
 	if PlayerState.has_special_effect("magic_shield") and current_mp > 0:
 		var shield_mp_cost := int(round(final_damage * 1.5))

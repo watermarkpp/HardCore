@@ -70,7 +70,7 @@ static func anti_magic_points_from_context(context: Dictionary) -> int:
 		return clampi(int(context.target_anti_magic_points), 0, ANTI_MAGIC_ROLL_SIDES)
 	if context.has("target_magic_evasion_percent"):
 		return anti_magic_points_from_display_percent(int(context.target_magic_evasion_percent))
-	return BASE_CHARACTER_ANTI_MAGIC_POINTS
+	return 0
 
 
 static func anti_magic_points_from_target_stats(target_stats: Dictionary) -> int:
@@ -84,7 +84,7 @@ static func anti_magic_points_from_target_stats(target_stats: Dictionary) -> int
 		return anti_magic_points_from_display_percent(int(target_stats.magic_evasion_percent))
 	if target_stats.has("magicEvasionPercent"):
 		return anti_magic_points_from_display_percent(int(target_stats.magicEvasionPercent))
-	return BASE_CHARACTER_ANTI_MAGIC_POINTS
+	return 0
 
 
 static func anti_magic_eligible(skill_id: String) -> bool:
