@@ -26,7 +26,7 @@ signal death_requested
 @export var max_hp := 120
 @export var attack_min := 2
 @export var attack_max := 5
-@export var attack_cooldown := 0.85
+@export var attack_cooldown := 0.9
 @export var attack_animation_duration := 0.51
 @export var attack_hit_windup := 0.17
 
@@ -74,7 +74,7 @@ var _last_revival_at_ms := -60000
 var _pending_potion_health := 0
 var _pending_potion_mana := 0
 var _potion_tick_remaining := 0.0
-var _attack_speed_multiplier := 1.0
+var _attack_speed_tier := 0
 var _cast_speed_multiplier := 1.0
 var _dead := false
 var movement_input_active := false
@@ -89,9 +89,6 @@ const FACING_DIRECTIONS: Array[Vector2] = [
 
 
 func _ready() -> void:
-	var attack_policy := ContentLayers.policy_override("warrior_basic_attack_mobile")
-	if not attack_policy.is_empty():
-		attack_cooldown = float(attack_policy.get("overrideValue", 850)) / 1000.0
 	add_to_group("player")
 	add_to_group("combat_targets")
 	collision_layer = WorldSpatialRulesScript.PLAYER_LAYER
@@ -209,8 +206,8 @@ func can_start_attack() -> bool:
 func request_attack(has_combat_target := false) -> bool:
 	if not can_start_attack():
 		return false
-	var action_duration := attack_animation_duration / _attack_speed_multiplier
-	_attack_timer = attack_cooldown / _attack_speed_multiplier
+	var action_duration := attack_animation_duration
+	_attack_timer = attack_cooldown
 	_attack_action_timer = action_duration
 	velocity = Vector2.ZERO
 	var context := _build_warrior_attack_context(has_combat_target)
@@ -221,7 +218,7 @@ func request_attack(has_combat_target := false) -> bool:
 	var critical_chance := float(PlayerState.computed_stats.get("critical_chance", 0.0))
 	if critical_chance > 0.0 and EquipmentRulesScript.critical_succeeds(critical_chance, _rng.randf()):
 		damage = EquipmentRulesScript.critical_damage(damage, float(PlayerState.computed_stats.get("critical_damage_multiplier", 1.5)))
-	_emit_attack_after_windup(global_position, facing.normalized(), damage, attack_hit_windup / _attack_speed_multiplier, context, action_id)
+	_emit_attack_after_windup(global_position, facing.normalized(), damage, attack_hit_windup, context, action_id)
 	if _rng.randi_range(1, 25) == 1:
 		PlayerState.damage_equipment_durability("武器")
 	return true
@@ -644,7 +641,8 @@ func _apply_profile_stats() -> void:
 	max_mp = int(stats.get("max_mp", 40))
 	attack_min = int(stats.get("attack_min", 2))
 	attack_max = int(stats.get("attack_max", 5))
-	_attack_speed_multiplier = clampf(1.0 + float(stats.get("attack_speed_percent", 0.0)), 0.2, 6.0)
+	_attack_speed_tier = int(stats.get("attack_speed_tier", 0))
+	attack_cooldown = WarriorCombatMath.physical_attack_interval_seconds(_attack_speed_tier)
 	_cast_speed_multiplier = clampf(1.0 + float(stats.get("cast_speed_percent", 0.0)), 0.2, 6.0)
 	defense_min = int(stats.get("defense_min", 0))
 	defense_max = maxi(defense_min, int(stats.get("defense_max", 0)))
