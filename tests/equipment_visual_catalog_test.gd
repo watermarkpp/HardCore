@@ -56,9 +56,9 @@ func _run() -> void:
 	assert(int(coverage.get("exactGroundIcons", 0)) == 175, "每件正式装备必须有精确地面图")
 	assert(int(coverage.get("visualWearables", 0)) == 73, "武器/衣服/头盔目录数错误")
 	assert(int(coverage.get("exactPaperDollOverlays", 0)) == 73, "所有可视穿戴槽必须有精确 StateItem 记录")
-	assert(int(coverage.get("exactMaleWorldWear", 0)) == 59, "男性正式世界穿戴覆盖数错误")
+	assert(int(coverage.get("exactMaleWorldWear", 0)) == 60, "男性正式世界穿戴覆盖数错误")
 	assert(int(coverage.get("exactFemaleWorldWear", 0)) == 12, "武器返修不得生成女性武器资产")
-	assert(int(coverage.get("unresolvedWorldShape", 0)) == 2, "缺少 primary 兼容证据的正式武器必须稳定为 2 件")
+	assert(int(coverage.get("unresolvedWorldShape", 0)) == 1, "缺少 primary 兼容证据的正式武器必须只保留落魄神兵")
 	var profession_manifests: Dictionary = manifest.get("professionManifests", {})
 	assert(profession_manifests.keys().size() == 3, "必须提供战士/法师/道士三个职业纸娃娃入口")
 	for profession_id: String in ["warrior", "wizard", "taoist"]:
@@ -105,7 +105,8 @@ func _run() -> void:
 				if entry.get("category", "") == "武器":
 					var weapon_genders: Dictionary = world.get("appearancesByGender", {})
 					assert(weapon_genders.size() == 1 and weapon_genders.has("男"), "%s 只能生成男性武器外观" % entry.get("itemName", ""))
-					assert(world.get("shapeEvidence", {}).get("confidence", "") == "primary_pixel_compatibility", "%s 未使用 primary 像素兼容证据" % entry.get("itemName", ""))
+					var expected_weapon_confidence := "user_confirmed_semantic_primary_weapon_feature" if int(entry.get("itemId", -1)) in [108, 110] else "primary_pixel_compatibility"
+					assert(world.get("shapeEvidence", {}).get("confidence", "") == expected_weapon_confidence, "%s 未使用合规 primary 像素兼容证据" % entry.get("itemName", ""))
 					assert(world.get("visualWeaponClass", "") == entry.get("visualWeaponClass", ""), "%s 视觉类别轴不一致" % entry.get("itemName", ""))
 				for gender: String in world.get("appearancesByGender", {}):
 					_validate_actions(world.get("appearancesByGender", {})[gender], "%s/%s" % [entry.get("itemName", ""), gender], false)
@@ -117,11 +118,11 @@ func _run() -> void:
 			_:
 				assert(false, "%s 世界穿戴策略未声明" % entry.get("itemName", ""))
 	unresolved_names.sort()
-	var expected_unresolved: Array[String] = ["命运之刃", "落魄神兵"]
+	var expected_unresolved: Array[String] = ["落魄神兵"]
 	expected_unresolved.sort()
-	assert(unresolved_names == expected_unresolved, "世界穿戴缺口必须只保留 2 件无 primary 兼容证据的武器，不得猜 Shape")
+	assert(unresolved_names == expected_unresolved, "世界穿戴缺口必须只保留落魄神兵，不得猜 Shape")
 	assert(formal_weapon_count == 37, "profession/visualWeaponClass 双轴必须覆盖 37 把武器")
-	for visible_item_id: String in ["80", "82", "86", "88", "99", "105", "107", "108", "109"]:
+	for visible_item_id: String in ["80", "82", "86", "88", "99", "105", "107", "108", "109", "110"]:
 		assert(entries.get(visible_item_id, {}).get("worldWear", {}).get("status", "") == "exact_client_animation", "%s 必须有 primary 真实世界外观" % visible_item_id)
 
 	var loadouts := _json(LOADOUT_PATH)
@@ -167,7 +168,8 @@ func _run() -> void:
 		"炼狱": 22,
 		"裁决之杖": 48,
 		"龙纹剑": 50,
-		"屠龙": 58,
+		"屠龙": 52,
+		"命运之刃": 58,
 		"嗜魂法杖": 54,
 	}
 	for item_name: String in required_features:
@@ -178,6 +180,7 @@ func _run() -> void:
 		"裁决之杖": "staff",
 		"龙纹剑": "sword",
 		"屠龙": "blade",
+		"命运之刃": "sword",
 	}
 	for item_name: String in required_classes:
 		var catalog_item: Dictionary = {}
@@ -186,6 +189,26 @@ func _run() -> void:
 				catalog_item = entries[item_id]
 				break
 		assert(catalog_item.get("visualWeaponClass", "") == required_classes[item_name], "%s visualWeaponClass 错误" % item_name)
+	var confirmed_male_dress_features := {
+		116: 2,
+		118: 4,
+		120: 4,
+		122: 6,
+		128: 6,
+		140: 12,
+		124: 8,
+		130: 8,
+		142: 14,
+		126: 10,
+		132: 10,
+		144: 16,
+	}
+	for item_id: int in confirmed_male_dress_features:
+		var armor_entry: Dictionary = entries.get(str(item_id), {})
+		var armor_world: Dictionary = armor_entry.get("worldWear", {})
+		assert(armor_world.get("shapeEvidence", {}).get("confidence", "") == "user_confirmed_full_atlas_review")
+		var male_armor: Dictionary = armor_world.get("appearancesByGender", {}).get("男", {})
+		assert(int(male_armor.get("feature", -1)) == int(confirmed_male_dress_features[item_id]))
 	assert(not bool(manifest.get("sourcePolicy", {}).get("crystalShapeDirectMapping", true)), "禁止 Crystal Shape 直接映射 classic Feature")
 	assert(manifest.get("sourcePolicy", {}).get("noPlaceholderRule", false), "缺源装备不得制造占位")
 

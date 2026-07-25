@@ -5,7 +5,7 @@ const CONTRACT_PATH := "res://assets/data/equipment_male_weapon_world_wear.json"
 const CATALOG_PATH := "res://assets/data/equipment_visual_catalog.json"
 const COMPATIBILITY_PATH := "res://assets/data/equipment_primary_weapon_compatibility.json"
 const HIDDEN_IDS: Array[int] = []
-const UNRESOLVED_IDS := [110, 111]
+const UNRESOLVED_IDS := [111]
 const REQUIRED_PRIMARY_APPEARANCES := {
 	80: [2, "sword"],
 	82: [2, "sword"],
@@ -13,8 +13,9 @@ const REQUIRED_PRIMARY_APPEARANCES := {
 	99: [22, "axe"],
 	105: [48, "staff"],
 	107: [50, "sword"],
-	108: [58, "blade"],
+	108: [52, "blade"],
 	109: [54, "staff"],
+	110: [58, "sword"],
 }
 const EXPECTED_ACTIONS := {
 	"idle": 4,
@@ -58,16 +59,39 @@ func _run() -> void:
 	assert(not bool(contract.get("actorContract", {}).get("footPointContractChanged", true)))
 	var coverage: Dictionary = contract.get("coverage", {})
 	assert(int(coverage.get("formalWeapons", 0)) == 37)
-	assert(int(coverage.get("visible", 0)) == 35)
+	assert(int(coverage.get("visible", 0)) == 36)
 	assert(int(coverage.get("hiddenByClassicRule", -1)) == 0)
-	assert(int(coverage.get("unresolved", 0)) == 2)
+	assert(int(coverage.get("unresolved", 0)) == 1)
 	assert(int(coverage.get("maleWeaponFeatureFamilies", 0)) == 34)
 	assert(int(coverage.get("transparentEmptyFrames", 0)) == 232)
+	assert(int(compatibility.get("coverage", {}).get("anonymousPrimaryWeaponFeatures", -1)) == 0)
+	var dragon_slayer: Dictionary = compatibility.get("itemsById", {}).get("108", {})
+	assert(dragon_slayer.get("mappingType", "") == "user_confirmed_semantic_primary_weapon_feature")
+	assert(int(dragon_slayer.get("classicWeaponShape", -1)) == 26)
+	assert(int(dragon_slayer.get("maleFeature", -1)) == 52)
+	assert(dragon_slayer.get("userConfirmation", {}).get("authority", "") == "explicit_user_confirmation")
+	var dragon_coverage: Dictionary = dragon_slayer.get("weaponEvidence", {}).get("actionCoverage", {})
+	assert(int(dragon_coverage.get("decodedFrames", 0)) == 232)
+	assert(int(dragon_coverage.get("missingFrames", -1)) == 0)
+	var destiny: Dictionary = compatibility.get("itemsById", {}).get("110", {})
+	assert(destiny.get("status", "") == "resolved_primary_pixels")
+	assert(destiny.get("mappingType", "") == "user_confirmed_semantic_primary_weapon_feature")
+	assert(destiny.get("primaryServerQuery", {}).get("targetNameResult", {}).get("status", "") == "missing")
+	assert(destiny.get("crystalShape") == null)
+	assert(int(destiny.get("stateItemEvidence", {}).get("sourceIndex", -1)) == 65)
+	assert(int(destiny.get("maleFeature", -1)) == 58)
+	assert(destiny.get("visualWeaponClass", "") == "sword")
+	assert(int(destiny.get("weaponEvidence", {}).get("actionCoverage", {}).get("decodedFrames", 0)) == 232)
+	var full_review: Dictionary = compatibility.get("acceptance", {}).get("fullAtlasUserReview", {})
+	assert(full_review.get("authority", "") == "explicit_user_confirmation")
+	assert(int(full_review.get("mappingCount", 0)) == 36)
+	_assert_int_array(full_review.get("unresolvedItemIds", []), [111], "weapon review unresolvedItemIds")
+	assert(str(full_review.get("reviewManifestSha256", "")).length() == 64)
 
 	var features: Dictionary = contract.get("featureFamilies", {})
 	assert(features.size() == 34)
 	var runtime_by_item_id: Dictionary = contract.get("runtimeMappingsByItemId", {})
-	assert(runtime_by_item_id.size() == 35)
+	assert(runtime_by_item_id.size() == 36)
 	var loaded_paths: Dictionary = {}
 	for feature_key: String in features:
 		assert(int(feature_key) % 2 == 0)
@@ -122,9 +146,9 @@ func _run() -> void:
 		assert(int(appearance.get("shape", -1)) == int(appearance.get("classicShape", -2)))
 		var compatibility_record: Dictionary = compatibility.get("itemsById", {}).get(item_key, {})
 		assert(compatibility_record.get("status", "") == "resolved_primary_pixels")
-		if item_id == 88:
+		if compatibility_record.get("crystalShape") == null:
 			assert(not appearance.has("crystalShape"))
-			assert(str(appearance.get("crystalShapeStatus", "")).contains("missing_after_complete_configured_fallback"))
+			assert(str(appearance.get("crystalShapeStatus", "")).contains("missing"))
 			assert(compatibility_record.get("crystalShape") == null)
 		else:
 			assert(int(appearance.get("crystalShape", -1)) == int(compatibility_record.get("crystalShape", -2)))
@@ -136,7 +160,9 @@ func _run() -> void:
 		var expected_confidence := "primary_pixel_compatibility"
 		if item_id == 88:
 			expected_confidence = "integration_user_required_shared_primary_appearance"
-		elif item_id in [99, 105, 107, 108]:
+		elif item_id in [108, 110]:
+			expected_confidence = "user_confirmed_semantic_primary_weapon_feature"
+		elif item_id in [99, 105, 107]:
 			expected_confidence = "user_confirmed_primary_pixel_compatibility"
 		assert(confidence == expected_confidence)
 		assert(not bool(item.get("mappingAssessment", {}).get("crystalShapeUsedAsClassicShape", true)))
@@ -156,10 +182,11 @@ func _run() -> void:
 		assert(int(required_appearance.get("feature", -1)) == int(expected[0]))
 		assert(required_appearance.get("visualWeaponClass", "") == str(expected[1]))
 		var required_evidence: Dictionary = catalog.get("itemsById", {}).get(str(required_item_id), {}).get("worldWear", {}).get("shapeEvidence", {})
-		assert(required_evidence.get("confidence", "") == "primary_pixel_compatibility")
+		var expected_evidence_confidence := "user_confirmed_semantic_primary_weapon_feature" if required_item_id in [108, 110] else "primary_pixel_compatibility"
+		assert(required_evidence.get("confidence", "") == expected_evidence_confidence)
 
-	assert(visible_count == 35)
+	assert(visible_count == 36)
 	assert(hidden_count == 0)
-	assert(unresolved_count == 2)
+	assert(unresolved_count == 1)
 	print("EQUIPMENT_MALE_WEAPON_WORLD_WEAR_GODOT_TEST_PASS items=37 atlases=%d" % loaded_paths.size())
 	get_tree().quit(0)

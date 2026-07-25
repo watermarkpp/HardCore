@@ -17,6 +17,20 @@ CATALOG = ROOT / "assets/data/equipment_visual_catalog.json"
 HUM = ROOT / "dev_art_sources/reference/mir2_client_raw/Data/Hum.wil"
 EXPECTED_IDS = {116, 118, 120, 122, 124, 126, 128, 130, 132, 140, 142, 144}
 EXPECTED_FEATURES = set(range(0, 18, 2))
+EXPECTED_ITEM_FEATURES = {
+    116: 2,
+    118: 4,
+    120: 4,
+    122: 6,
+    128: 6,
+    140: 12,
+    124: 8,
+    130: 8,
+    142: 14,
+    126: 10,
+    132: 10,
+    144: 16,
+}
 ACTION_FRAMES = {
     "idle": 4,
     "walk": 6,
@@ -64,6 +78,8 @@ def main() -> None:
     assert contract["actorContract"]["actorOrigin"] == [64, 80]
     assert contract["actorContract"]["directions"] == 8
     assert contract["actorContract"]["footPointContractChanged"] is False
+    assert len(contract["source"]["sha256"]["wil"]) == 64
+    assert len(contract["source"]["sha256"]["wix"]) == 64
     assert contract["coverage"] == {
         "maleArmorItems": 12,
         "expectedMaleArmorItems": 12,
@@ -80,6 +96,37 @@ def main() -> None:
     features = contract["featureFamilies"]
     assert {int(feature) for feature in features} == EXPECTED_FEATURES
     assert "appearancesByGender" not in CONTRACT.read_text(encoding="utf-8")
+    acceptance = contract["acceptance"]
+    assert acceptance["automaticRemappingProhibited"] is True
+    review = acceptance["fullAtlasUserReview"]
+    assert review["authority"] == "explicit_user_confirmation"
+    assert review["confirmationDate"] == "2026-07-25"
+    assert int(review["mappingCount"]) == 12
+    assert review["femaleAssetsConfirmed"] == 0
+    assert review["sharedFeatureGroups"] == {
+        "4": [118, 120],
+        "6": [122, 128],
+        "8": [124, 130],
+        "10": [126, 132],
+    }
+    assert {
+        int(value["itemId"]): int(value["maleFeature"])
+        for value in review["mappings"]
+    } == EXPECTED_ITEM_FEATURES
+    review_for_hash = {
+        key: value
+        for key, value in review.items()
+        if key not in {"reviewManifestSha256", "runtimeArtifactPolicy"}
+    }
+    canonical_review = json.dumps(
+        review_for_hash,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    assert hashlib.sha256(canonical_review).hexdigest() == (
+        review["reviewManifestSha256"]
+    )
 
     catalog_runtime = catalog["runtimeMappings"]
     for item_key, item in items.items():
@@ -87,16 +134,27 @@ def main() -> None:
         assert item["sex"] == "male"
         assert item["slot"] == "dress"
         assessment = item["mappingAssessment"]
-        expected_mapping_confidence = (
-            "manually_confirmed" if int(item_key) == 128 else "B"
+        assert assessment["confidence"] == (
+            "user_confirmed_full_atlas_review"
         )
-        assert assessment["confidence"] == expected_mapping_confidence
         assert assessment["confidence"] != "A"
         assert assessment["pixelAndActionConfidence"] == "A"
+        user_review = item["userAtlasReviewEvidence"]
+        assert user_review["authority"] == "explicit_user_confirmation"
+        assert user_review["confirmed"] is True
+        assert int(user_review["maleFeature"]) == (
+            EXPECTED_ITEM_FEATURES[int(item_key)]
+        )
+        assert user_review["reviewManifestSha256"] == (
+            review["reviewManifestSha256"]
+        )
         appearance = item["maleAppearance"]
         assert appearance["sex"] == "male"
         assert int(appearance["feature"]) == int(appearance["shape"]) * 2
         assert int(appearance["feature"]) % 2 == 0
+        assert int(appearance["feature"]) == (
+            EXPECTED_ITEM_FEATURES[int(item_key)]
+        )
         feature = features[str(int(appearance["feature"]))]
         assert appearance["featureRef"] == (
             f"featureFamilies.{int(appearance['feature'])}"

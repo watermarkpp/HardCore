@@ -57,12 +57,13 @@
   },
   "coverage": {
     "formalWeapons": 37,
-    "resolvedPrimaryPixels": 35,
+    "resolvedPrimaryPixels": 36,
     "integrationSharedPrimaryAppearance": 1,
-    "unresolved": 2,
-    "crystalShapeDiffersFromClassicShape": 31,
+    "unresolved": 1,
+    "crystalShapeDiffersFromClassicShape": 32,
     "directCrystalShapeMultiplication": 0,
-    "lowerTierValuesAdopted": 0
+    "lowerTierValuesAdopted": 0,
+    "anonymousPrimaryWeaponFeatures": 0
   },
   "classification": {
     "resolved": [
@@ -96,6 +97,7 @@
       107,
       108,
       109,
+      110,
       112,
       113,
       114,
@@ -106,7 +108,6 @@
       88
     ],
     "unresolved": [
-      110,
       111
     ],
     "crystalShapeDivergence": [
@@ -135,6 +136,7 @@
       105,
       106,
       107,
+      108,
       109,
       112,
       113,
@@ -146,8 +148,9 @@
   "acceptance": {
     "requiredWorldAppearance": {
       "乌木剑": "primary_server_image_to_primary_client_pixels",
+      "命运之刃": "user_confirmed_semantic_primary_weapon_feature",
       "嗜魂法杖": "primary_server_image_to_primary_client_pixels",
-      "屠龙": "primary_server_image_to_primary_client_pixels",
+      "屠龙": "user_confirmed_semantic_primary_weapon_feature",
       "木剑": "primary_server_image_to_primary_client_pixels",
       "罗刹": "integration_user_required_shared_primary_appearance"
     },
@@ -168,6 +171,321 @@
         "profession": "战士",
         "visualWeaponClass": "blade"
       }
+    },
+    "userConfirmedSemanticFeatures": {
+      "屠龙": {
+        "maleFeature": 52,
+        "classicWeaponShape": 26,
+        "stateItemIndex": 57,
+        "authority": "explicit_user_confirmation"
+      },
+      "命运之刃": {
+        "maleFeature": 58,
+        "classicWeaponShape": 29,
+        "stateItemIndex": 65,
+        "authority": "explicit_user_confirmation"
+      }
+    },
+    "fullAtlasUserReview": {
+      "confirmationDate": "2026-07-25",
+      "authority": "explicit_user_confirmation",
+      "scope": "all displayed formal weapon name-to-primary-Weapon-feature mappings in the three complete review sheets",
+      "mappingCount": 36,
+      "unresolvedItemIds": [
+        111
+      ],
+      "mappings": [
+        {
+          "itemId": 80,
+          "itemName": "木剑",
+          "stateItemIndex": 30,
+          "maleFeature": 2,
+          "classicWeaponShape": 1,
+          "visualWeaponClass": "sword"
+        },
+        {
+          "itemId": 81,
+          "itemName": "匕首",
+          "stateItemIndex": 35,
+          "maleFeature": 12,
+          "classicWeaponShape": 6,
+          "visualWeaponClass": "dagger"
+        },
+        {
+          "itemId": 82,
+          "itemName": "乌木剑",
+          "stateItemIndex": 43,
+          "maleFeature": 2,
+          "classicWeaponShape": 1,
+          "visualWeaponClass": "sword"
+        },
+        {
+          "itemId": 83,
+          "itemName": "青铜剑",
+          "stateItemIndex": 31,
+          "maleFeature": 4,
+          "classicWeaponShape": 2,
+          "visualWeaponClass": "sword"
+        },
+        {
+          "itemId": 84,
+          "itemName": "短剑",
+          "stateItemIndex": 33,
+          "maleFeature": 8,
+          "classicWeaponShape": 4,
+          "visualWeaponClass": "dagger"
+        },
+        {
+          "itemId": 85,
+          "itemName": "铁剑",
+          "stateItemIndex": 36,
+          "maleFeature": 4,
+          "classicWeaponShape": 2,
+          "visualWeaponClass": "sword"
+        },
+        {
+          "itemId": 86,
+          "itemName": "鹤嘴锄",
+          "stateItemIndex": 50,
+          "maleFeature": 38,
+          "classicWeaponShape": 19,
+          "visualWeaponClass": "pickaxe"
+        },
+        {
+          "itemId": 87,
+          "itemName": "青铜斧",
+          "stateItemIndex": 32,
+          "maleFeature": 6,
+          "classicWeaponShape": 3,
+          "visualWeaponClass": "axe"
+        },
+        {
+          "itemId": 88,
+          "itemName": "罗刹",
+          "stateItemIndex": 40,
+          "maleFeature": 14,
+          "classicWeaponShape": 7,
+          "visualWeaponClass": "axe"
+        },
+        {
+          "itemId": 89,
+          "itemName": "八荒",
+          "stateItemIndex": 44,
+          "maleFeature": 30,
+          "classicWeaponShape": 15,
+          "visualWeaponClass": "blade"
+        },
+        {
+          "itemId": 90,
+          "itemName": "海魂",
+          "stateItemIndex": 39,
+          "maleFeature": 16,
+          "classicWeaponShape": 8,
+          "visualWeaponClass": "staff"
+        },
+        {
+          "itemId": 91,
+          "itemName": "半月",
+          "stateItemIndex": 46,
+          "maleFeature": 32,
+          "classicWeaponShape": 16,
+          "visualWeaponClass": "blade"
+        },
+        {
+          "itemId": 92,
+          "itemName": "凌风",
+          "stateItemIndex": 34,
+          "maleFeature": 10,
+          "classicWeaponShape": 5,
+          "visualWeaponClass": "blade"
+        },
+        {
+          "itemId": 93,
+          "itemName": "破魂",
+          "stateItemIndex": 51,
+          "maleFeature": 40,
+          "classicWeaponShape": 20,
+          "visualWeaponClass": "dagger"
+        },
+        {
+          "itemId": 94,
+          "itemName": "斩马刀",
+          "stateItemIndex": 37,
+          "maleFeature": 20,
+          "classicWeaponShape": 10,
+          "visualWeaponClass": "blade"
+        },
+        {
+          "itemId": 95,
+          "itemName": "偃月",
+          "stateItemIndex": 49,
+          "maleFeature": 36,
+          "classicWeaponShape": 18,
+          "visualWeaponClass": "polearm"
+        },
+        {
+          "itemId": 96,
+          "itemName": "降魔",
+          "stateItemIndex": 47,
+          "maleFeature": 28,
+          "classicWeaponShape": 14,
+          "visualWeaponClass": "sword"
+        },
+        {
+          "itemId": 97,
+          "itemName": "修罗",
+          "stateItemIndex": 40,
+          "maleFeature": 14,
+          "classicWeaponShape": 7,
+          "visualWeaponClass": "axe"
+        },
+        {
+          "itemId": 98,
+          "itemName": "凝霜",
+          "stateItemIndex": 45,
+          "maleFeature": 26,
+          "classicWeaponShape": 13,
+          "visualWeaponClass": "sword"
+        },
+        {
+          "itemId": 99,
+          "itemName": "炼狱",
+          "stateItemIndex": 41,
+          "maleFeature": 22,
+          "classicWeaponShape": 11,
+          "visualWeaponClass": "axe"
+        },
+        {
+          "itemId": 100,
+          "itemName": "魔杖",
+          "stateItemIndex": 42,
+          "maleFeature": 24,
+          "classicWeaponShape": 12,
+          "visualWeaponClass": "staff"
+        },
+        {
+          "itemId": 101,
+          "itemName": "银蛇",
+          "stateItemIndex": 38,
+          "maleFeature": 18,
+          "classicWeaponShape": 9,
+          "visualWeaponClass": "sword"
+        },
+        {
+          "itemId": 102,
+          "itemName": "井中月",
+          "stateItemIndex": 48,
+          "maleFeature": 34,
+          "classicWeaponShape": 17,
+          "visualWeaponClass": "blade"
+        },
+        {
+          "itemId": 103,
+          "itemName": "血饮",
+          "stateItemIndex": 53,
+          "maleFeature": 44,
+          "classicWeaponShape": 22,
+          "visualWeaponClass": "sword"
+        },
+        {
+          "itemId": 104,
+          "itemName": "无极棍",
+          "stateItemIndex": 52,
+          "maleFeature": 42,
+          "classicWeaponShape": 21,
+          "visualWeaponClass": "staff"
+        },
+        {
+          "itemId": 105,
+          "itemName": "裁决之杖",
+          "stateItemIndex": 55,
+          "maleFeature": 48,
+          "classicWeaponShape": 24,
+          "visualWeaponClass": "staff"
+        },
+        {
+          "itemId": 106,
+          "itemName": "骨玉权杖",
+          "stateItemIndex": 59,
+          "maleFeature": 56,
+          "classicWeaponShape": 28,
+          "visualWeaponClass": "staff"
+        },
+        {
+          "itemId": 107,
+          "itemName": "龙纹剑",
+          "stateItemIndex": 56,
+          "maleFeature": 50,
+          "classicWeaponShape": 25,
+          "visualWeaponClass": "sword"
+        },
+        {
+          "itemId": 108,
+          "itemName": "屠龙",
+          "stateItemIndex": 57,
+          "maleFeature": 52,
+          "classicWeaponShape": 26,
+          "visualWeaponClass": "blade"
+        },
+        {
+          "itemId": 109,
+          "itemName": "嗜魂法杖",
+          "stateItemIndex": 58,
+          "maleFeature": 54,
+          "classicWeaponShape": 27,
+          "visualWeaponClass": "staff"
+        },
+        {
+          "itemId": 110,
+          "itemName": "命运之刃",
+          "stateItemIndex": 65,
+          "maleFeature": 58,
+          "classicWeaponShape": 29,
+          "visualWeaponClass": "sword"
+        },
+        {
+          "itemId": 112,
+          "itemName": "赤血魔剑",
+          "stateItemIndex": 66,
+          "maleFeature": 60,
+          "classicWeaponShape": 30,
+          "visualWeaponClass": "sword"
+        },
+        {
+          "itemId": 113,
+          "itemName": "怒斩",
+          "stateItemIndex": 70,
+          "maleFeature": 64,
+          "classicWeaponShape": 32,
+          "visualWeaponClass": "blade"
+        },
+        {
+          "itemId": 114,
+          "itemName": "龙牙",
+          "stateItemIndex": 69,
+          "maleFeature": 62,
+          "classicWeaponShape": 31,
+          "visualWeaponClass": "sword"
+        },
+        {
+          "itemId": 115,
+          "itemName": "逍遥扇",
+          "stateItemIndex": 71,
+          "maleFeature": 66,
+          "classicWeaponShape": 33,
+          "visualWeaponClass": "fan"
+        },
+        {
+          "itemId": 223,
+          "itemName": "祈祷之刃",
+          "stateItemIndex": 54,
+          "maleFeature": 46,
+          "classicWeaponShape": 23,
+          "visualWeaponClass": "sword"
+        }
+      ],
+      "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+      "runtimeArtifactPolicy": "the machine-checkable mapping table and hash are embedded here; runtime does not depend on outputs or review-image paths"
     },
     "allResolvedMappingsUsePrimaryPixels": true,
     "noCrystalShapeDirectMapping": true,
@@ -330,6 +648,13 @@
             "rgbaSha256": "100d7c565902425bbd415b160ae0292a43a642b534270535bfab978770fd3b94"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 80,
+        "confirmed": true
       }
     },
     "81": {
@@ -488,6 +813,13 @@
             "rgbaSha256": "67db853ace31dcbf4e5322b983597c90d4117948527e6f64baa36285e2fa5a69"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 81,
+        "confirmed": true
       }
     },
     "82": {
@@ -646,6 +978,13 @@
             "rgbaSha256": "100d7c565902425bbd415b160ae0292a43a642b534270535bfab978770fd3b94"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 82,
+        "confirmed": true
       }
     },
     "83": {
@@ -804,6 +1143,13 @@
             "rgbaSha256": "4ff9b4125bf94b2450e3fca7e356e3bd7198fd726a0f5841a6ed5f80851fa666"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 83,
+        "confirmed": true
       }
     },
     "84": {
@@ -962,6 +1308,13 @@
             "rgbaSha256": "db78c3cb1e3a9262fd7285ad5f8fb7bbefaf75f1de3beed9b286ee507c2705f4"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 84,
+        "confirmed": true
       }
     },
     "85": {
@@ -1120,6 +1473,13 @@
             "rgbaSha256": "4ff9b4125bf94b2450e3fca7e356e3bd7198fd726a0f5841a6ed5f80851fa666"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 85,
+        "confirmed": true
       }
     },
     "86": {
@@ -1278,6 +1638,13 @@
             "rgbaSha256": "7fda67a024a13935813dbc6ef7ee0e942330f7fb2a853f73531caf1d52feca37"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 86,
+        "confirmed": true
       }
     },
     "87": {
@@ -1436,6 +1803,13 @@
             "rgbaSha256": "54a58ecaaf7ba47c5e3e621e09c7f6acdf822ddfe58b44c2b6a722b49fcfafee"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 87,
+        "confirmed": true
       }
     },
     "88": {
@@ -1825,6 +2199,13 @@
             "rgbaSha256": "4a12337eb5837c06eba41c21e7f968b4f241586ac8a7ad7095d8afb8d6bd307b"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 88,
+        "confirmed": true
       }
     },
     "89": {
@@ -1983,6 +2364,13 @@
             "rgbaSha256": "0b79534885792d255e3e6f683aef589d97173c2af3e3eba5ae9eb712c6236b74"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 89,
+        "confirmed": true
       }
     },
     "90": {
@@ -2141,6 +2529,13 @@
             "rgbaSha256": "146c709dfc8a8a1af45f56882380e69b503b324b9236a68b942265e46665a6f1"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 90,
+        "confirmed": true
       }
     },
     "91": {
@@ -2299,6 +2694,13 @@
             "rgbaSha256": "18f4624aa311c13947b0b6f2473f7009ad18be9cd537c7e95a9d0a9804a9e059"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 91,
+        "confirmed": true
       }
     },
     "92": {
@@ -2457,6 +2859,13 @@
             "rgbaSha256": "1590f94f2493ee5f9f56baf8c2a341b28b7131cd082b10ce7f95e46fa5e33384"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 92,
+        "confirmed": true
       }
     },
     "93": {
@@ -2615,6 +3024,13 @@
             "rgbaSha256": "4a2ea58a18a356adde1251b0e4e7a98273176dbefd5f1a59844396089e60a451"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 93,
+        "confirmed": true
       }
     },
     "94": {
@@ -2773,6 +3189,13 @@
             "rgbaSha256": "b58619ec19f6270115bbad110394475544dcfc749bb0e5c616daffb4077667b9"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 94,
+        "confirmed": true
       }
     },
     "95": {
@@ -2931,6 +3354,13 @@
             "rgbaSha256": "23ba60eb8a3ac453b237e21b176295ecdbff04c13611eacc98cb6d32b9cfe891"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 95,
+        "confirmed": true
       }
     },
     "96": {
@@ -3089,6 +3519,13 @@
             "rgbaSha256": "ed7050fe586530f6727bb86313f996fbd33da59c006da3f6a3f8aaa97da62af3"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 96,
+        "confirmed": true
       }
     },
     "97": {
@@ -3247,6 +3684,13 @@
             "rgbaSha256": "4a12337eb5837c06eba41c21e7f968b4f241586ac8a7ad7095d8afb8d6bd307b"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 97,
+        "confirmed": true
       }
     },
     "98": {
@@ -3405,6 +3849,13 @@
             "rgbaSha256": "9eabea16fa719e278a4ea194f4f74a8c2bd41301ab4ef45152d606f6f9058621"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 98,
+        "confirmed": true
       }
     },
     "99": {
@@ -3563,6 +4014,13 @@
             "rgbaSha256": "2fa77302dd07aed2c41523a2924d2f96c6a9fbaf4aa2987e5e2058331d110701"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 99,
+        "confirmed": true
       }
     },
     "100": {
@@ -3721,6 +4179,13 @@
             "rgbaSha256": "aee7313d5fd1d62e292fa8cb7bc17edebbd356d73f1da578103855046cf517c4"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 100,
+        "confirmed": true
       }
     },
     "101": {
@@ -3879,6 +4344,13 @@
             "rgbaSha256": "b4fa8ff88265b804f314e14d1395730ddb519318231134461a7f61320306bf23"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 101,
+        "confirmed": true
       }
     },
     "102": {
@@ -4037,6 +4509,13 @@
             "rgbaSha256": "1e42ee1e1bd8709286d3da850f44013b411f46d644c1e8e380861de500af8135"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 102,
+        "confirmed": true
       }
     },
     "103": {
@@ -4195,6 +4674,13 @@
             "rgbaSha256": "ffac692809f3ccad2640acd3ef3ce4b0a0766059bacbe8d75d461862e615a6d9"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 103,
+        "confirmed": true
       }
     },
     "104": {
@@ -4353,6 +4839,13 @@
             "rgbaSha256": "b93c554091064431cbb9e6872c113c23b46db838a60868ed38b734943704f026"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 104,
+        "confirmed": true
       }
     },
     "105": {
@@ -4511,6 +5004,13 @@
             "rgbaSha256": "9d1f807b96858518b7e842115538a47132974dcc9d17c2bdf13f3bc872081f98"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 105,
+        "confirmed": true
       }
     },
     "106": {
@@ -4669,6 +5169,13 @@
             "rgbaSha256": "10e5b2d265269783c5ba12ffdcc38cb05ef1de85698e26634826fd315b696ee8"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 106,
+        "confirmed": true
       }
     },
     "107": {
@@ -4827,6 +5334,13 @@
             "rgbaSha256": "f3c9fbb8966b4eeacc26297e50b02afc251150c1c00c38de11711b50e141e498"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 107,
+        "confirmed": true
       }
     },
     "108": {
@@ -4867,7 +5381,7 @@
           ]
         }
       },
-      "mappingType": "primary_server_image_to_primary_client_pixels",
+      "mappingType": "user_confirmed_semantic_primary_weapon_feature",
       "status": "resolved_primary_pixels",
       "visualWeaponClass": "blade",
       "visualClassAxis": {
@@ -4878,8 +5392,8 @@
       },
       "crystalShape": 29,
       "crystalShapeStatus": "primary_server_evidence_only",
-      "classicWeaponShape": 29,
-      "maleFeature": 58,
+      "classicWeaponShape": 26,
+      "maleFeature": 52,
       "crystalShapeUsedAsClassicShape": false,
       "stateItemEvidence": {
         "lane": "client_assets",
@@ -4907,84 +5421,183 @@
           "wil": "130e39f4656584769d7d0ff8ab615830f4e74ddddcb82bd8ca76ac4da5c0a63e",
           "wix": "dfdfa65d82b1aa6a4f4cad8f2bbfcd65bfbfd42712c51dff97cc657201f85a38"
         },
-        "classicShape": 29,
-        "maleFeature": 58,
+        "classicShape": 26,
+        "maleFeature": 52,
         "reviewMethod": "manual primary StateItem silhouette/material to primary Weapon.wil eight-direction attack-frame compatibility",
-        "reviewResult": "massive dragon-slaying blade",
+        "reviewResult": "user-confirmed primary Weapon feature 52; the semantic identity does not come from Crystal Shape 29",
         "attackDirectionFrame0": [
           {
-            "sourceIndex": 35000,
-            "hotX": 46,
-            "hotY": -61,
-            "width": 24,
-            "height": 46,
-            "opaquePixels": 135,
-            "rgbaSha256": "9ec098b47d637af8a36c5ba6240cb89fb2068f62c1cb7be98dd07c8c0f42c112"
+            "sourceIndex": 31400,
+            "hotX": 47,
+            "hotY": -72,
+            "width": 40,
+            "height": 54,
+            "opaquePixels": 479,
+            "rgbaSha256": "4299f92d25ca7a83eeb1c555da03ebf8059fc22d331b7b59e4e3dbc796d9fc6a"
           },
           {
-            "sourceIndex": 35008,
-            "hotX": 40,
-            "hotY": -41,
-            "width": 24,
-            "height": 36,
-            "opaquePixels": 207,
-            "rgbaSha256": "5ac30d4ad8b103053c247194b2160c859a0f8781880f3bc9459b84bc479e05aa"
+            "sourceIndex": 31408,
+            "hotX": 42,
+            "hotY": -43,
+            "width": 32,
+            "height": 38,
+            "opaquePixels": 477,
+            "rgbaSha256": "a19e05274b2bb17d229a3bc11e542efe2ef5880732df0d4b06b9dd0212c063e3"
           },
           {
-            "sourceIndex": 35016,
-            "hotX": 23,
-            "hotY": -31,
-            "width": 8,
-            "height": 32,
-            "opaquePixels": 155,
-            "rgbaSha256": "007da5974a004a42b58d28c72d3a4b0b285195ff40ce0779e5646bc06c28e1fd"
-          },
-          {
-            "sourceIndex": 35024,
-            "hotX": -6,
-            "hotY": -39,
+            "sourceIndex": 31416,
+            "hotX": 16,
+            "hotY": -36,
             "width": 16,
-            "height": 37,
-            "opaquePixels": 84,
-            "rgbaSha256": "0c9e9dfb3f17c00bcd4d60b13b08130506da5ef11578d46093cc78e87bdf9d16"
+            "height": 38,
+            "opaquePixels": 223,
+            "rgbaSha256": "697443a6327f1076f0f4de869aabcd62f4e86b28c2d55a84662e89587d4849eb"
           },
           {
-            "sourceIndex": 35032,
-            "hotX": -22,
-            "hotY": -60,
+            "sourceIndex": 31424,
+            "hotX": -13,
+            "hotY": -44,
             "width": 24,
-            "height": 47,
-            "opaquePixels": 247,
-            "rgbaSha256": "4261e72a686a32e444ce6e0cbd0ae7b68024ed0048a5e7985639d5b3e2ce3f4e"
+            "height": 42,
+            "opaquePixels": 318,
+            "rgbaSha256": "5883bd04054f81014ed68f592b38f7c20ed8ea0b39ce71a8d381d4b27cd55807"
           },
           {
-            "sourceIndex": 35040,
-            "hotX": -14,
-            "hotY": -82,
-            "width": 24,
-            "height": 57,
-            "opaquePixels": 328,
-            "rgbaSha256": "319ab121771b4b8fce2a5978640f455844a5a3a794caeacbfcc408e4d80cac8c"
+            "sourceIndex": 31432,
+            "hotX": -36,
+            "hotY": -66,
+            "width": 40,
+            "height": 52,
+            "opaquePixels": 627,
+            "rgbaSha256": "24f2c6a454eb0a0dfcef38334bc99dbcfb373592556d003e88d5fa3dc7e0ccf0"
           },
           {
-            "sourceIndex": 35048,
-            "hotX": 17,
-            "hotY": -90,
-            "width": 8,
-            "height": 62,
-            "opaquePixels": 305,
-            "rgbaSha256": "c638b7c92b780ebcc9cecdeb6a9c370f5764484e48b0ab457d398949272acf6d"
+            "sourceIndex": 31440,
+            "hotX": -23,
+            "hotY": -94,
+            "width": 32,
+            "height": 67,
+            "opaquePixels": 698,
+            "rgbaSha256": "3bc2fc5ede25a64591e8bbce3ed935e3703390f67e26fe984ed5aca5b46ef3d0"
           },
           {
-            "sourceIndex": 35056,
+            "sourceIndex": 31448,
+            "hotX": 16,
+            "hotY": -107,
+            "width": 16,
+            "height": 75,
+            "opaquePixels": 527,
+            "rgbaSha256": "56c536f3ce282ca4ff305f51282c87e7f4c4a81ca8c55b6d9bd711c0ba55c2b6"
+          },
+          {
+            "sourceIndex": 31456,
             "hotX": 38,
-            "hotY": -81,
-            "width": 16,
-            "height": 57,
-            "opaquePixels": 157,
-            "rgbaSha256": "c1b6098259255db96f1e9a0779a83984ef0fcd3c10dc732dad719500fdc3b339"
+            "hotY": -97,
+            "width": 24,
+            "height": 68,
+            "opaquePixels": 265,
+            "rgbaSha256": "b05d96f2c2f7d494d971a6cce0f2a7b250b882ed0c1258dbb0865a54f2fe636b"
           }
+        ],
+        "actionCoverage": {
+          "evidenceStrength": "A",
+          "actions": {
+            "idle": {
+              "directions": 8,
+              "framesPerDirection": 4,
+              "expectedFrames": 32,
+              "decodedFrames": 32,
+              "missingFrames": [],
+              "transparentEmptyFrames": [],
+              "sourceFirst": 31200,
+              "sourceLast": 31259
+            },
+            "walk": {
+              "directions": 8,
+              "framesPerDirection": 6,
+              "expectedFrames": 48,
+              "decodedFrames": 48,
+              "missingFrames": [],
+              "transparentEmptyFrames": [],
+              "sourceFirst": 31264,
+              "sourceLast": 31325
+            },
+            "attack": {
+              "directions": 8,
+              "framesPerDirection": 6,
+              "expectedFrames": 48,
+              "decodedFrames": 48,
+              "missingFrames": [],
+              "transparentEmptyFrames": [],
+              "sourceFirst": 31400,
+              "sourceLast": 31461
+            },
+            "cast": {
+              "directions": 8,
+              "framesPerDirection": 6,
+              "expectedFrames": 48,
+              "decodedFrames": 48,
+              "missingFrames": [],
+              "transparentEmptyFrames": [],
+              "sourceFirst": 31592,
+              "sourceLast": 31653
+            },
+            "hit": {
+              "directions": 8,
+              "framesPerDirection": 3,
+              "expectedFrames": 24,
+              "decodedFrames": 24,
+              "missingFrames": [],
+              "transparentEmptyFrames": [],
+              "sourceFirst": 31672,
+              "sourceLast": 31730
+            },
+            "death": {
+              "directions": 8,
+              "framesPerDirection": 4,
+              "expectedFrames": 32,
+              "decodedFrames": 32,
+              "missingFrames": [],
+              "transparentEmptyFrames": [],
+              "sourceFirst": 31736,
+              "sourceLast": 31795
+            }
+          },
+          "expectedFrames": 232,
+          "decodedFrames": 232,
+          "missingFrames": 0,
+          "transparentEmptyFrames": 0
+        }
+      },
+      "userConfirmation": {
+        "authority": "explicit_user_confirmation",
+        "maleFeature": 52,
+        "classicWeaponShape": 26,
+        "stateItemIndex": 57,
+        "confirmation": "user explicitly confirmed primary Weapon.wil feature 52 is 屠龙's world appearance",
+        "scope": "semantic identity of the primary world-animation family; does not override the primary Server.MirDB Image field",
+        "adopted": true,
+        "confirmedPrimarySource": {
+          "distribution": "client.classic_raw_complete",
+          "tier": "primary",
+          "originalPath": "dev_art_sources/reference/mir2_client_raw/Data/Weapon.wil",
+          "librarySha256": {
+            "wil": "130e39f4656584769d7d0ff8ab615830f4e74ddddcb82bd8ca76ac4da5c0a63e",
+            "wix": "dfdfa65d82b1aa6a4f4cad8f2bbfcd65bfbfd42712c51dff97cc657201f85a38"
+          }
+        },
+        "prohibitions": [
+          "do not restore feature 58 for 屠龙",
+          "do not infer the feature from Crystal Shape 29",
+          "do not reuse feature 52 for 命运之刃"
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 108,
+        "confirmed": true
       }
     },
     "109": {
@@ -5155,6 +5768,13 @@
             "rgbaSha256": "7173b7015ffc9db4d325c640be180640e5936f0fc751238538c54a81354d3071"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 109,
+        "confirmed": true
       }
     },
     "110": {
@@ -5186,11 +5806,10 @@
           "matches": []
         }
       },
-      "status": "unresolved",
-      "visualWeaponClass": "unresolved",
-      "mappingPolicy": "draw no weapon layer; never infer a Weapon feature",
-      "missingEvidence": {
-        "primary": {
+      "mappingType": "user_confirmed_semantic_primary_weapon_feature",
+      "primaryServerMissingEvidence": {
+        "status": "missing",
+        "query": {
           "query": {
             "recordType": "ItemInfo",
             "field": "serviceName",
@@ -5201,10 +5820,225 @@
           "matchCount": 0,
           "matches": []
         },
-        "fallback": {
-          "entered": false,
-          "reason": "no lower-tier value is adopted by this primary compatibility repair"
+        "meaning": "server attributes and Crystal Shape remain unresolved; the user confirmation applies only to primary client semantic identity",
+        "lowerTierAdopted": false
+      },
+      "status": "resolved_primary_pixels",
+      "visualWeaponClass": "sword",
+      "visualClassAxis": {
+        "value": "sword",
+        "role": "physical silhouette/rendering identity",
+        "independentFrom": "profession",
+        "userConfirmed": false
+      },
+      "crystalShape": null,
+      "crystalShapeStatus": "missing_in_primary_server_data; explicit user confirmation maps primary-client pixels only",
+      "classicWeaponShape": 29,
+      "maleFeature": 58,
+      "crystalShapeUsedAsClassicShape": false,
+      "stateItemEvidence": {
+        "lane": "client_assets",
+        "distribution": "client.classic_raw_complete",
+        "tier": "primary",
+        "originalPath": "dev_art_sources/reference/mir2_client_raw/Data/stateitem.wil",
+        "librarySha256": {
+          "wil": "59fb3d62785b7ca49b63d0efe6bd084fb08474f509eec653806f064403922872",
+          "wix": "c9886853b63cd66ebedc36901153d02897467018e1157c7e77978415dc873d17"
+        },
+        "sourceIndex": 65,
+        "hotX": 31,
+        "hotY": -36,
+        "width": 32,
+        "height": 117,
+        "opaquePixels": 1253,
+        "rgbaSha256": "2997c1e41c0ee08f87b949787d2a143820318a7440e4285c4ec1546c58deca07"
+      },
+      "weaponEvidence": {
+        "lane": "client_assets",
+        "distribution": "client.classic_raw_complete",
+        "tier": "primary",
+        "originalPath": "dev_art_sources/reference/mir2_client_raw/Data/Weapon.wil",
+        "librarySha256": {
+          "wil": "130e39f4656584769d7d0ff8ab615830f4e74ddddcb82bd8ca76ac4da5c0a63e",
+          "wix": "dfdfa65d82b1aa6a4f4cad8f2bbfcd65bfbfd42712c51dff97cc657201f85a38"
+        },
+        "classicShape": 29,
+        "maleFeature": 58,
+        "reviewMethod": "manual primary StateItem silhouette/material to primary Weapon.wil eight-direction attack-frame compatibility",
+        "reviewResult": "user-confirmed primary StateItem 65 and primary Weapon feature 58; server attributes remain missing",
+        "attackDirectionFrame0": [
+          {
+            "sourceIndex": 35000,
+            "hotX": 46,
+            "hotY": -61,
+            "width": 24,
+            "height": 46,
+            "opaquePixels": 135,
+            "rgbaSha256": "9ec098b47d637af8a36c5ba6240cb89fb2068f62c1cb7be98dd07c8c0f42c112"
+          },
+          {
+            "sourceIndex": 35008,
+            "hotX": 40,
+            "hotY": -41,
+            "width": 24,
+            "height": 36,
+            "opaquePixels": 207,
+            "rgbaSha256": "5ac30d4ad8b103053c247194b2160c859a0f8781880f3bc9459b84bc479e05aa"
+          },
+          {
+            "sourceIndex": 35016,
+            "hotX": 23,
+            "hotY": -31,
+            "width": 8,
+            "height": 32,
+            "opaquePixels": 155,
+            "rgbaSha256": "007da5974a004a42b58d28c72d3a4b0b285195ff40ce0779e5646bc06c28e1fd"
+          },
+          {
+            "sourceIndex": 35024,
+            "hotX": -6,
+            "hotY": -39,
+            "width": 16,
+            "height": 37,
+            "opaquePixels": 84,
+            "rgbaSha256": "0c9e9dfb3f17c00bcd4d60b13b08130506da5ef11578d46093cc78e87bdf9d16"
+          },
+          {
+            "sourceIndex": 35032,
+            "hotX": -22,
+            "hotY": -60,
+            "width": 24,
+            "height": 47,
+            "opaquePixels": 247,
+            "rgbaSha256": "4261e72a686a32e444ce6e0cbd0ae7b68024ed0048a5e7985639d5b3e2ce3f4e"
+          },
+          {
+            "sourceIndex": 35040,
+            "hotX": -14,
+            "hotY": -82,
+            "width": 24,
+            "height": 57,
+            "opaquePixels": 328,
+            "rgbaSha256": "319ab121771b4b8fce2a5978640f455844a5a3a794caeacbfcc408e4d80cac8c"
+          },
+          {
+            "sourceIndex": 35048,
+            "hotX": 17,
+            "hotY": -90,
+            "width": 8,
+            "height": 62,
+            "opaquePixels": 305,
+            "rgbaSha256": "c638b7c92b780ebcc9cecdeb6a9c370f5764484e48b0ab457d398949272acf6d"
+          },
+          {
+            "sourceIndex": 35056,
+            "hotX": 38,
+            "hotY": -81,
+            "width": 16,
+            "height": 57,
+            "opaquePixels": 157,
+            "rgbaSha256": "c1b6098259255db96f1e9a0779a83984ef0fcd3c10dc732dad719500fdc3b339"
+          }
+        ],
+        "actionCoverage": {
+          "evidenceStrength": "A",
+          "actions": {
+            "idle": {
+              "directions": 8,
+              "framesPerDirection": 4,
+              "expectedFrames": 32,
+              "decodedFrames": 32,
+              "missingFrames": [],
+              "transparentEmptyFrames": [],
+              "sourceFirst": 34800,
+              "sourceLast": 34859
+            },
+            "walk": {
+              "directions": 8,
+              "framesPerDirection": 6,
+              "expectedFrames": 48,
+              "decodedFrames": 48,
+              "missingFrames": [],
+              "transparentEmptyFrames": [],
+              "sourceFirst": 34864,
+              "sourceLast": 34925
+            },
+            "attack": {
+              "directions": 8,
+              "framesPerDirection": 6,
+              "expectedFrames": 48,
+              "decodedFrames": 48,
+              "missingFrames": [],
+              "transparentEmptyFrames": [],
+              "sourceFirst": 35000,
+              "sourceLast": 35061
+            },
+            "cast": {
+              "directions": 8,
+              "framesPerDirection": 6,
+              "expectedFrames": 48,
+              "decodedFrames": 48,
+              "missingFrames": [],
+              "transparentEmptyFrames": [],
+              "sourceFirst": 35192,
+              "sourceLast": 35253
+            },
+            "hit": {
+              "directions": 8,
+              "framesPerDirection": 3,
+              "expectedFrames": 24,
+              "decodedFrames": 24,
+              "missingFrames": [],
+              "transparentEmptyFrames": [],
+              "sourceFirst": 35272,
+              "sourceLast": 35330
+            },
+            "death": {
+              "directions": 8,
+              "framesPerDirection": 4,
+              "expectedFrames": 32,
+              "decodedFrames": 32,
+              "missingFrames": [],
+              "transparentEmptyFrames": [],
+              "sourceFirst": 35336,
+              "sourceLast": 35395
+            }
+          },
+          "expectedFrames": 232,
+          "decodedFrames": 232,
+          "missingFrames": 0,
+          "transparentEmptyFrames": 0
         }
+      },
+      "userConfirmation": {
+        "authority": "explicit_user_confirmation",
+        "maleFeature": 58,
+        "classicWeaponShape": 29,
+        "stateItemIndex": 65,
+        "confirmation": "user explicitly confirmed primary StateItem.wil index 65 is 命运之刃 and primary Weapon.wil feature 58 is its world appearance",
+        "scope": "semantic identity of the primary inventory sprite and world-animation family; does not create a Server.MirDB record or Shape value",
+        "adopted": true,
+        "confirmedPrimarySource": {
+          "distribution": "client.classic_raw_complete",
+          "tier": "primary",
+          "originalPath": "dev_art_sources/reference/mir2_client_raw/Data/Weapon.wil",
+          "librarySha256": {
+            "wil": "130e39f4656584769d7d0ff8ab615830f4e74ddddcb82bd8ca76ac4da5c0a63e",
+            "wix": "dfdfa65d82b1aa6a4f4cad8f2bbfcd65bfbfd42712c51dff97cc657201f85a38"
+          }
+        },
+        "prohibitions": [
+          "do not reuse feature 52 for 命运之刃",
+          "do not reuse feature 48 from 裁决之杖",
+          "do not invent a Server.MirDB Shape"
+        ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 110,
+        "confirmed": true
       }
     },
     "111": {
@@ -5425,6 +6259,13 @@
             "rgbaSha256": "8c40f4394d8edd527e955a8c9050408290c701a33fe239ef62b9b66a1e4b61a8"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 112,
+        "confirmed": true
       }
     },
     "113": {
@@ -5583,6 +6424,13 @@
             "rgbaSha256": "176bdd6ba9d8ed64658cf19286dfa5c4811dbb9ae8f9ef1b7606889d3651f3ee"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 113,
+        "confirmed": true
       }
     },
     "114": {
@@ -5741,6 +6589,13 @@
             "rgbaSha256": "6e8132de283cc048c829a7930803cd703f1df971a0345d615333a4148a7ff03d"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 114,
+        "confirmed": true
       }
     },
     "115": {
@@ -5899,6 +6754,13 @@
             "rgbaSha256": "efd4114aa0d8475703ed5e1deee1eb973cfc734e60d4e2b5c8e2361198243542"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 115,
+        "confirmed": true
       }
     },
     "223": {
@@ -6069,6 +6931,13 @@
             "rgbaSha256": "abfe3ae2b430b7657b68ab68cfb434d88e1468dcb891f8bb295e5918d91cbbd5"
           }
         ]
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "reviewManifestSha256": "d0889ccfd7cbc4b9cc34cda5313c013a2d9dca17617abedc562a3eac299efed1",
+        "mappingItemId": 223,
+        "confirmed": true
       }
     }
   }

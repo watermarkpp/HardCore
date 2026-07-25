@@ -11,6 +11,20 @@ const EXPECTED_ACTIONS := {
 	"hit": 3,
 	"death": 4,
 }
+const EXPECTED_ITEM_FEATURES := {
+	116: 2,
+	118: 4,
+	120: 4,
+	122: 6,
+	128: 6,
+	140: 12,
+	124: 8,
+	130: 8,
+	142: 14,
+	126: 10,
+	132: 10,
+	144: 16,
+}
 
 
 func _ready() -> void:
@@ -39,6 +53,19 @@ func _run() -> void:
 	_assert_int_array(contract.get("actorContract", {}).get("cell", []), [192, 160], "cell")
 	_assert_int_array(contract.get("actorContract", {}).get("actorOrigin", []), [64, 80], "actorOrigin")
 	assert(not bool(contract.get("actorContract", {}).get("footPointContractChanged", true)))
+	assert(str(contract.get("source", {}).get("sha256", {}).get("wil", "")).length() == 64)
+	assert(str(contract.get("source", {}).get("sha256", {}).get("wix", "")).length() == 64)
+	var acceptance: Dictionary = contract.get("acceptance", {})
+	assert(bool(acceptance.get("automaticRemappingProhibited", false)))
+	var full_review: Dictionary = acceptance.get("fullAtlasUserReview", {})
+	assert(full_review.get("authority", "") == "explicit_user_confirmation")
+	assert(int(full_review.get("mappingCount", 0)) == 12)
+	assert(int(full_review.get("femaleAssetsConfirmed", -1)) == 0)
+	assert(str(full_review.get("reviewManifestSha256", "")).length() == 64)
+	_assert_int_array(full_review.get("sharedFeatureGroups", {}).get("4", []), [118, 120], "dress review feature4")
+	_assert_int_array(full_review.get("sharedFeatureGroups", {}).get("6", []), [122, 128], "dress review feature6")
+	_assert_int_array(full_review.get("sharedFeatureGroups", {}).get("8", []), [124, 130], "dress review feature8")
+	_assert_int_array(full_review.get("sharedFeatureGroups", {}).get("10", []), [126, 132], "dress review feature10")
 
 	var features: Dictionary = contract.get("featureFamilies", {})
 	assert(features.size() == 9)
@@ -73,11 +100,16 @@ func _run() -> void:
 		assert(int(item.get("itemId", -1)) == int(item_key))
 		assert(item.get("sex", "") == "male")
 		var confidence := str(item.get("mappingAssessment", {}).get("confidence", ""))
-		assert(confidence == ("manually_confirmed" if int(item_key) == 128 else "B"))
+		assert(confidence == "user_confirmed_full_atlas_review")
 		assert(confidence != "A")
+		var item_review: Dictionary = item.get("userAtlasReviewEvidence", {})
+		assert(item_review.get("authority", "") == "explicit_user_confirmation")
+		assert(bool(item_review.get("confirmed", false)))
+		assert(str(item_review.get("reviewManifestSha256", "")) == str(full_review.get("reviewManifestSha256", "")))
 		var appearance: Dictionary = item.get("maleAppearance", {})
 		assert(appearance.get("sex", "") == "male")
 		assert(int(appearance.get("feature", -1)) == int(appearance.get("shape", -1)) * 2)
+		assert(int(appearance.get("feature", -1)) == int(EXPECTED_ITEM_FEATURES.get(int(item_key), -2)))
 		var runtime_appearance: Dictionary = runtime.get(str(item.get("itemName", "")), {}).get("dressAppearance", {})
 		assert(int(runtime_appearance.get("feature", -1)) == int(appearance.get("feature", -2)))
 		for action: String in EXPECTED_ACTIONS:

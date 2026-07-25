@@ -81,6 +81,20 @@ EXPLICIT_ARMOR_GENDER = {
     "天尊道袍": "男",
     "天师长袍": "女",
 }
+USER_CONFIRMED_MALE_DRESS_FEATURE_BY_ITEM_ID = {
+    116: 2,
+    118: 4,
+    120: 4,
+    122: 6,
+    128: 6,
+    140: 12,
+    124: 8,
+    130: 8,
+    142: 14,
+    126: 10,
+    132: 10,
+    144: 16,
+}
 
 def resource_path(path: Path) -> str:
     return f"res://{path.relative_to(ROOT).as_posix()}"
@@ -446,12 +460,19 @@ def main() -> None:
                 weapon_record = weapon_items[item_id]
                 if weapon_record.get("status") == "resolved_primary_pixels":
                     shape = int(weapon_record["classicWeaponShape"])
+                    mapping_type = str(
+                        weapon_record.get("mappingType", "")
+                    )
+                    evidence_confidence = (
+                        "user_confirmed_semantic_primary_weapon_feature"
+                        if mapping_type
+                        == "user_confirmed_semantic_primary_weapon_feature"
+                        else "primary_pixel_compatibility"
+                    )
                     evidence = {
-                        "confidence": "primary_pixel_compatibility",
+                        "confidence": evidence_confidence,
                         "source": entry["weaponCompatibilityRef"],
-                        "mappingType": str(
-                            weapon_record.get("mappingType", "")
-                        ),
+                        "mappingType": mapping_type,
                         "stateItemIndex": int(
                             weapon_record["stateItemEvidence"]["sourceIndex"]
                         ),
@@ -467,15 +488,38 @@ def main() -> None:
                     }
                     if weapon_record.get("crystalShape") is None:
                         evidence["serverDataStatus"] = (
-                            "missing_after_complete_configured_fallback"
+                            (
+                                "missing_in_primary_server_data"
+                                if mapping_type
+                                == (
+                                    "user_confirmed_semantic_"
+                                    "primary_weapon_feature"
+                                )
+                                else (
+                                    "missing_after_complete_"
+                                    "configured_fallback"
+                                )
+                            )
                         )
                         evidence["crystalShapeStatus"] = str(
                             weapon_record.get("crystalShapeStatus", "")
                         )
                         evidence["rule"] = (
-                            "male feature = integration-reviewed primary "
-                            "client Weapon shape * 2; no database Shape is "
-                            "available or adopted"
+                            (
+                                "male feature is explicitly user-confirmed "
+                                "against primary Weapon.wil; primary server "
+                                "attributes remain missing"
+                            )
+                            if mapping_type
+                            == (
+                                "user_confirmed_semantic_"
+                                "primary_weapon_feature"
+                            )
+                            else (
+                                "male feature = integration-reviewed primary "
+                                "client Weapon shape * 2; no database Shape "
+                                "is available or adopted"
+                            )
                         )
                     else:
                         evidence["serverDistribution"] = distribution
@@ -501,6 +545,37 @@ def main() -> None:
                 shape, evidence = shape_for_item(
                     item, service_rows, distribution
                 )
+                if int(item_id) in (
+                    USER_CONFIRMED_MALE_DRESS_FEATURE_BY_ITEM_ID
+                ):
+                    expected_feature = (
+                        USER_CONFIRMED_MALE_DRESS_FEATURE_BY_ITEM_ID[
+                            int(item_id)
+                        ]
+                    )
+                    if (
+                        item_gender(name, category) != "男"
+                        or shape is None
+                        or int(shape) * 2 != expected_feature
+                    ):
+                        raise ValueError(
+                            f"{item_id} {name} violates frozen user-confirmed "
+                            f"male dress feature {expected_feature}"
+                        )
+                    evidence = {
+                        "confidence": (
+                            "user_confirmed_full_atlas_review"
+                        ),
+                        "source": (
+                            "explicit user confirmation of all 12 male "
+                            "dress world-feature mappings"
+                        ),
+                        "priorSourceEvidence": evidence,
+                        "confirmationDate": "2026-07-25",
+                        "maleFeature": expected_feature,
+                        "automaticRemappingProhibited": True,
+                        "rule": "male feature = Shape*2",
+                    }
             if shape is None:
                 entry["worldWear"] = {
                     "status": "unresolved_no_placeholder",

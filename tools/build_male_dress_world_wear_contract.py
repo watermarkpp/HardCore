@@ -18,7 +18,21 @@ OUTPUT = ROOT / "assets/data/equipment_male_dress_world_wear.json"
 
 CONTRACT_ID = "equipment.world_wear.male_dress.v1"
 MALE_ARMOR_IDS = (116, 118, 120, 122, 128, 140, 124, 130, 142, 126, 132, 144)
-USER_CONFIRMED_ITEM_IDS = {128}
+USER_CONFIRMED_FEATURE_BY_ITEM_ID = {
+    116: 2,
+    118: 4,
+    120: 4,
+    122: 6,
+    128: 6,
+    140: 12,
+    124: 8,
+    130: 8,
+    142: 14,
+    126: 10,
+    132: 10,
+    144: 16,
+}
+FULL_ATLAS_REVIEW_DATE = "2026-07-25"
 CELL = (192, 160)
 ACTOR_ORIGIN = (64, 80)
 BLOCK_FRAMES = 600
@@ -47,6 +61,14 @@ def disk_path(resource_path: str) -> Path:
 
 def image_sha256(image: Image.Image) -> str:
     return hashlib.sha256(image.convert("RGBA").tobytes()).hexdigest()
+
+
+def file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def feature_action_path(feature: int, action: str) -> str:
@@ -185,10 +207,17 @@ def main() -> None:
                 f"{item_id} {name} violates male feature=Shape*2: "
                 f"shape={shape} feature={feature}"
             )
-        evidence = world.get("shapeEvidence", {})
-        if str(evidence.get("confidence", "")) != "B":
+        if feature != USER_CONFIRMED_FEATURE_BY_ITEM_ID[item_id]:
             raise ValueError(
-                f"{item_id} {name} name mapping must remain B-grade evidence"
+                f"{item_id} {name} violates frozen user-confirmed "
+                f"male dress feature {USER_CONFIRMED_FEATURE_BY_ITEM_ID[item_id]}"
+            )
+        evidence = world.get("shapeEvidence", {})
+        if str(evidence.get("confidence", "")) != (
+            "user_confirmed_full_atlas_review"
+        ):
+            raise ValueError(
+                f"{item_id} {name} must retain full-atlas user evidence"
             )
         selected.append((item_id, entry, runtime, evidence))
 
@@ -208,15 +237,10 @@ def main() -> None:
     for item_id, entry, runtime, evidence in selected:
         shape = int(runtime["shape"])
         feature = int(runtime["feature"])
-        mapping_confidence = (
-            "manually_confirmed"
-            if item_id in USER_CONFIRMED_ITEM_IDS
-            else "B"
-        )
+        mapping_confidence = "user_confirmed_full_atlas_review"
         mapping_source = (
-            "user-confirmed accepted male Battle God armor appearance"
-            if item_id in USER_CONFIRMED_ITEM_IDS
-            else str(evidence.get("source", ""))
+            "explicit user confirmation of the complete male dress "
+            "world-feature review"
         )
         action_refs = {
             action: {
@@ -249,6 +273,13 @@ def main() -> None:
                 "rule": "male feature = dress Shape * 2",
                 "pixelAndActionConfidence": "A",
             },
+            "userAtlasReviewEvidence": {
+                "authority": "explicit_user_confirmation",
+                "confirmationDate": FULL_ATLAS_REVIEW_DATE,
+                "confirmed": True,
+                "itemId": item_id,
+                "maleFeature": feature,
+            },
             "maleAppearance": male_appearance,
         }
         items_by_id[str(item_id)] = item_record
@@ -257,6 +288,53 @@ def main() -> None:
         }
 
     _data, _palette, _offsets, library_info = library
+    review_mappings = [
+        {
+            "itemId": int(item_id),
+            "itemName": str(items_by_id[str(item_id)]["itemName"]),
+            "maleFeature": int(
+                items_by_id[str(item_id)]["maleAppearance"]["feature"]
+            ),
+            "classicShape": int(
+                items_by_id[str(item_id)]["maleAppearance"]["shape"]
+            ),
+        }
+        for item_id in sorted(USER_CONFIRMED_FEATURE_BY_ITEM_ID)
+    ]
+    review_manifest = {
+        "confirmationDate": FULL_ATLAS_REVIEW_DATE,
+        "authority": "explicit_user_confirmation",
+        "scope": (
+            "all 12 displayed male dress name-to-primary-Hum-feature "
+            "mappings"
+        ),
+        "mappingCount": len(review_mappings),
+        "mappings": review_mappings,
+        "sharedFeatureGroups": {
+            "4": [118, 120],
+            "6": [122, 128],
+            "8": [124, 130],
+            "10": [126, 132],
+        },
+        "femaleAssetsConfirmed": 0,
+    }
+    canonical_review = json.dumps(
+        review_manifest,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    review_manifest["reviewManifestSha256"] = hashlib.sha256(
+        canonical_review
+    ).hexdigest()
+    review_manifest["runtimeArtifactPolicy"] = (
+        "the mapping table and hash are embedded in this contract; no "
+        "runtime dependency on review-image or outputs paths"
+    )
+    for record in items_by_id.values():
+        record["userAtlasReviewEvidence"]["reviewManifestSha256"] = (
+            review_manifest["reviewManifestSha256"]
+        )
     payload = {
         "schemaVersion": 1,
         "contractId": CONTRACT_ID,
@@ -268,6 +346,10 @@ def main() -> None:
             ),
             "imageCount": int(library_info["image_count"]),
             "blockFrames": BLOCK_FRAMES,
+            "sha256": {
+                "wil": file_sha256(HUM),
+                "wix": file_sha256(HUM.with_suffix(".wix")),
+            },
         },
         "actorContract": {
             "contractId": "player.visual.classic_eight_direction.v1",
@@ -283,7 +365,8 @@ def main() -> None:
         "mappingPolicy": {
             "pixelAndActionCompleteness": "A",
             "itemNameToShape": (
-                "B unless an item explicitly records manually_confirmed"
+                "all 12 male mappings are frozen by explicit user review; "
+                "automatic remapping is prohibited"
             ),
             "femaleExcluded": True,
             "transparentEmptyFramePolicy": (
@@ -301,6 +384,10 @@ def main() -> None:
             "femaleItems": 0,
         },
         "featureFamilies": feature_families,
+        "acceptance": {
+            "fullAtlasUserReview": review_manifest,
+            "automaticRemappingProhibited": True,
+        },
         "itemsById": items_by_id,
         "runtimeMappingsByItemId": runtime_by_item_id,
     }

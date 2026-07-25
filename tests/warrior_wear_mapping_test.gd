@@ -23,7 +23,7 @@ func _run() -> void:
 		"木剑": 0, "匕首": 2, "乌木剑": 0, "青铜剑": 4, "短剑": 6,
 		"铁剑": 4, "青铜斧": 8, "八荒": 10, "凌风": 16, "破魂": 24,
 		"斩马刀": 18, "修罗": 28, "凝霜": 30, "炼狱": 32, "井中月": 38,
-		"裁决之杖": 48, "屠龙": 58, "命运之刃": 48, "赤血魔剑": 50,
+		"裁决之杖": 48, "屠龙": 52, "命运之刃": 58, "赤血魔剑": 50,
 		"祈祷之刃": 26, "布衣(男)": 2, "轻型盔甲(男)": 4,
 		"重盔甲(男)": 6, "战神盔甲(男)": 6,
 	}
@@ -31,6 +31,10 @@ func _run() -> void:
 		var art: Dictionary = mappings.get(item_name, {})
 		var appearance: Dictionary = art.get("weaponAppearance", art.get("dressAppearance", {}))
 		assert(int(appearance.get("feature", -1)) == int(accepted_baseline_features[item_name]), "主工作树已验收映射发生变化：%s" % item_name)
+	var primary_bridge: Dictionary = manifest.get("primaryWeaponCompatibilityBridge", {})
+	assert(int(primary_bridge.get("synced", {}).get("屠龙", {}).get("maleFeature", -1)) == 52)
+	assert(int(primary_bridge.get("synced", {}).get("命运之刃", {}).get("maleFeature", -1)) == 58)
+	assert(primary_bridge.get("removedUnresolved", []) == ["落魄神兵"])
 	var pickaxe_rejected := false
 	var female_armor_rejected := false
 	for value: Variant in manifest.get("rejectedMappings", []):
