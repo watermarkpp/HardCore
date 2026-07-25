@@ -1,6 +1,6 @@
 # Codex 精简上下文快照
 
-更新时间：2026-07-25 01:20（Asia/Shanghai）
+更新时间：2026-07-25 09:40（Asia/Shanghai）
 
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。
 准确性规则：本文件不是代码或 Git 状态的替代品；只核实本次任务实际触及的分支、文件、接口和专项测试。
@@ -16,7 +16,7 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `2b0da07e`（其后的快照提交只改本文档）。
+- 分支/运行时代码基线：`codex/integration` @ `2a61617`（其后的快照提交只改本文档）。
 - tracked 状态：clean。
 - 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
@@ -24,6 +24,9 @@
 - 完整资料扫描记录位于 `outputs/resource_catalog/complete_local_mir_sources/catalog.sqlite`（SHA-256 `3a133f39e9a0bf0b065b29778ff4f40d33aaa009ba1bed0a3213ae3a33233c79`）与 `manifest.json`：58 个 distribution、38,887 文件、14,595,954,010 字节、0 未哈希、SQLite integrity `ok`。
 - 越级使用审计见 `docs/audit/SOURCE_PRECEDENCE_VIOLATION_AUDIT_2026-07-24.md`。未合并装备提交 `7c37b771` 因跳过主库采用未配置 mylgd 数据已拒绝；不得 cherry-pick。
 - primary-only 武器返修已集成为 `2b0da07e`：37 件中 35 件可见、隐藏 0、命运之刃/落魄神兵未解析；木剑、乌木剑、罗刹、噬魂法杖、屠龙均有世界外观，低级库采用数为 0。
+- 用户已逐项确认武器与男性衣服外观；冻结提交 `c7489047` 将 37 件武器更新为 36 可见、0 隐藏、仅落魄神兵 1 件视觉未解析，并固定命运之刃、屠龙、炼狱等用户确认映射。
+- 装备属性不再走 Crystal `server_data`：`2a61617` 新增独立 `equipment_attributes` lane，唯一主源为 `assets/data/equipment_attribute_master.json`（`equipment.attribute.master.v1` / `project.hardcore.equipment_attribute_master.v1`）。该表覆盖 37 武器与 12 男衣；Crystal 仍是其他服务端数据范围的主源，禁止反向覆盖装备属性。
+- `595e485d` 将反向伤害区间明确为 `legacy_clamp_negative_span`：最终跨度 `max-min`，负跨度钳零，绝不交换端点；幸运/诅咒只影响正跨度分布。
 - 越级审计列出的其余领域尚未返修完成，禁止写成已完成。明日从审计文档按优先级继续：装备图标/属性与旧穿戴、怪物/Boss 数值与外观、掉落、技能、头盔锚点及服务端规则生成器；每一项都必须先修主源解析或映射，再运行对应专项测试并逐项集成。
 - 用户已确认此前截图来自当时最新 APK；不要再次怀疑或重复核验安装版本。用户已实机确认碰撞、装饰物遮挡、地图错位和视角全部解决，四项正式冻结；除非出现新的明确证据，后续任务不得顺带调整。
 - 用户已实机确认 214 个 `monster_id` 逐个、逐姿态人工复核的 v4 怪物脚下光圈正确，正式冻结；除非出现新的明确证据，禁止顺带修改脚点、光圈中心、椭圆尺寸或投影策略。
@@ -45,6 +48,10 @@
 
 | 集成提交 | 领域 | 结果 |
 |---|---|---|
+| `2a61617` | rules/integration | 装备属性独立主源 lane、项目正式主表授权、来源守卫与装备测试入口 |
+| `26df7993` | equipment | 49 条武器/男衣属性正式主表、结构化需求/定位/性别/负重、反向区间 warning、炼狱 feature22 回归 |
+| `595e485d` | skills/player | `legacy_clamp_negative_span` 统一 DC/MC/SC 反向区间、普通攻击与技能实际接线 |
+| `c7489047` | equipment | 冻结用户逐项确认的武器与男性衣服世界外观映射 |
 | `2b0da07e` | equipment | 主源专用武器兼容合同；35/37 可见、0 隐藏、2 未解析，职业与实体造型双轴分离 |
 | `62a7c00` | audit | 固化主库/分级库越级审计，列出 13 类确定违规及逐域返修顺序 |
 | `9512dbb` | rules | fallback 收紧为只有 primary 明确 missing 才允许；unusable/incompatible 必须修复而非降级 |
@@ -93,8 +100,8 @@
 - maps：`map_editor_runtime_collision_geometry_v2`、`published_blocked_cells_after_erasure_v1`、`map_editor_runtime_visual_geometry_v5`、`map_actor_occlusion_sort_v5`、`map_diamond_camera_center_constraint_v2`、`player_priority_soft_edge_v1`、`map_runtime_nonwalkable_edge_skirt_v1`。
 - monsters：`monster.overhead_anchor.v4`、`monster.overhead_layout.v3`、`monster.ground_contact.v4`、`monster.ground_contact.calibration.v4`；214 个 `monster_id` 各自保存人工复核的脚点、光圈中心、椭圆尺寸和投影策略，贴图异步激活后必须刷新。
 - UI：`ui.hud.resource_orb.hole_fill.v1`、`skill_button_assignment_contract_v2`。
-- equipment：`equipment.test_loadouts.classic_three_tiers.v1`、`equipment.visual_catalog.formal_wearables.v1`、`equipment.paper_doll.original_client_stage.v1`、`equipment.world_wear.male_dress.v1`、`equipment.world_wear.male_weapon.v1`、`equipment.world_helmet.male.extension.v1` 与 9 个 `test.loadout.{profession}.{tier}.v1`。
-- skills：`test.characters.full_skills.v1` 与 9 个 `test.character.{profession}.{woma|zuma|chiyue}.v1`。
+- equipment：`equipment.attribute.master.v1`、`equipment.test_loadouts.classic_three_tiers.v1`、`equipment.visual_catalog.formal_wearables.v1`、`equipment.paper_doll.original_client_stage.v1`、`equipment.world_wear.male_dress.v1`、`equipment.world_wear.male_weapon.v1`、`equipment.world_helmet.male.extension.v1` 与 9 个 `test.loadout.{profession}.{tier}.v1`。
+- skills：`legacy_clamp_negative_span`、`test.characters.full_skills.v1` 与 9 个 `test.character.{profession}.{woma|zuma|chiyue}.v1`。
 
 ## 已通过的必要验收
 
@@ -104,6 +111,8 @@
 - monsters：v4 数据生成检查、214/214 人工复核覆盖、214 种怪物五动作八方向运行时坐标链、214/214 冷激活、完整怪物客户端美术通过。
 - test roster：9 个独立存档、72 个正式装备槽、99 个角色技能加载项、三职业选择恢复和二次启动不覆盖通过。
 - player/equipment：原客户端男性装备页纸娃娃、男性世界衣服、男性世界武器、男性世界头盔、实时换装、正式装备视觉目录、装备纸娃娃居中和战士旧回归通过。
+- equipment attributes：49 条正式主表静态验证、Godot 装备完整套件 17/17、来源优先级政策、炼狱 feature22 运行映射均通过。
+- damage ranges：`legacy_clamp_negative_span`、战士公式、装备幸运、攻击时序与法系伤害公式 5/5 通过；反向区间不会被幸运/诅咒交换端点。
 - equipment helmets：12 itemId/11 视觉身份、66 物理 atlas、2784 逻辑帧、6 动作×8 方向、透明角、Hair 逐帧锚点/SHA 溯源与 StateItem 世界像素零复用通过；Godot 头盔专项、视觉目录与 smoke 通过。
 - physics：玩家 18×9、普通怪物 16×8、Boss 28×14 的真实物理与软件探针通过；战斗/AI 半径未改。
 - occlusion：11 张已发布地图、52 个交叉、4 类装饰物和 3 个比奇回归点通过；碰撞区、脚底深度点、装饰物遮挡基线已分离。
@@ -121,8 +130,8 @@
 | `HardCore-worktrees/maps` | `codex/maps` @ `599717ce` | 72 untracked | 用户地图编辑器内容，继续保护 |
 | `HardCore-worktrees/monsters` | `codex/monsters` @ `45781ded` | tracked clean；68 UID | 已集成为 `c88c6277` |
 | `HardCore-worktrees/ui-art` | `codex/ui-art` @ `1aff5350` | clean | 已集成为 `a78222ac` |
-| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `6a919103` | tracked clean；66 UID | 已集成为 `466f261a` |
-| `HardCore-worktrees/equipment` | `codex/equipment` @ `0f82bfed` | 4 个既有 monster import 与 65 个生成 UID 继续保护 | primary-only 武器返修已集成为 `2b0da07e` |
+| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `0d86ab38` | tracked clean；既有 UID 继续保护 | 反向区间规则已集成为 `595e485d` |
+| `HardCore-worktrees/equipment` | `codex/equipment` @ `fa8a8ff6` | 4 个既有 monster import 与全部生成 UID 继续保护 | 属性主表已集成为 `26df7993`；视觉冻结已集成为 `c7489047` |
 
 ### maps 保护红线
 
