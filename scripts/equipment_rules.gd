@@ -186,7 +186,7 @@ static func repair_cost(item: Dictionary, durability: int, max_durability: int) 
 static func blessing_outcome(luck: int, curse: int, attack_min: int, attack_max: int, unlucky_roll: int, success_roll: int) -> Dictionary:
 	var next_luck := clampi(luck, 0, LUCK_POINT_3)
 	var next_curse := clampi(curse, 0, MAX_WEAPON_CURSE)
-	if unlucky_roll == 1:
+	if blessing_is_unlucky_roll(unlucky_roll):
 		if next_luck > 0:
 			next_luck -= 1
 		elif next_curse < MAX_WEAPON_CURSE:
@@ -197,7 +197,7 @@ static func blessing_outcome(luck: int, curse: int, attack_min: int, attack_max:
 		return {"result": "improved", "luck": next_luck, "curse": next_curse}
 	if next_luck < LUCK_POINT_1:
 		return {"result": "improved", "luck": next_luck + 1, "curse": next_curse}
-	var span_factor := int(absi(attack_max - attack_min) / 5)
+	var span_factor := blessing_span_factor(attack_min, attack_max)
 	if next_luck < LUCK_POINT_2:
 		var denominator := span_factor + LUCK_POINT_2_RATE
 		if denominator > 1 and success_roll == 1:
@@ -209,8 +209,19 @@ static func blessing_outcome(luck: int, curse: int, attack_min: int, attack_max:
 	return {"result": "ineffective", "luck": next_luck, "curse": next_curse}
 
 
+static func blessing_is_unlucky_roll(unlucky_roll: int) -> bool:
+	return unlucky_roll == 1
+
+
+static func blessing_span_factor(attack_min: int, attack_max: int) -> int:
+	# The source calculates floor(abs(DCmax - DCmin) / 5). The authorized
+	# boundary revision clamps R to one so Random(R * 40) remains reachable
+	# for equal/narrow attack ranges such as 命运之刃 12—16.
+	return maxi(1, int(absi(attack_max - attack_min) / 5))
+
+
 static func blessing_success_denominator(luck: int, attack_min: int, attack_max: int) -> int:
-	var span_factor := int(absi(attack_max - attack_min) / 5)
+	var span_factor := blessing_span_factor(attack_min, attack_max)
 	if luck < LUCK_POINT_1:
 		return 1
 	if luck < LUCK_POINT_2:
@@ -218,6 +229,14 @@ static func blessing_success_denominator(luck: int, attack_min: int, attack_max:
 	if luck < LUCK_POINT_3:
 		return span_factor * LUCK_POINT_3_RATE
 	return 0
+
+
+static func equipment_luck_contribution(item: Dictionary, instance: Dictionary = {}, include_weapon_instance := false) -> int:
+	var item_luck := int(item.get("luck", 0)) if item.get("luck", null) != null else 0
+	var item_curse := int(item.get("curse", 0)) if item.get("curse", null) != null else 0
+	var instance_luck := int(instance.get("weapon_luck", 0)) if include_weapon_instance else 0
+	var instance_curse := int(instance.get("weapon_curse", 0)) if include_weapon_instance else 0
+	return item_luck - item_curse + instance_luck - instance_curse
 
 
 static func weapon_luck_label(instance: Dictionary) -> String:
