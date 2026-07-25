@@ -686,6 +686,15 @@ func recalculate_stats() -> void:
 		_add_nullable_stat(result, "max_hp", item.get("hpBonus", null))
 		_add_nullable_stat(result, "max_mp", item.get("mpBonus", null))
 		_add_nullable_stat(result, "life_steal_percent", item.get("lifeStealPercent", null))
+		if item.has("magicEvasionPoints"):
+			_add_nullable_stat(result, "anti_magic_points", item.get("magicEvasionPoints", null))
+		elif item.has("magicEvasionPercent"):
+			_add_nullable_stat(
+				result,
+				"anti_magic_points",
+				CombatResolutionRules.anti_magic_points_from_display_percent(int(item.magicEvasionPercent))
+			)
+		_add_nullable_stat(result, "attack_speed_tier", item.get("attackSpeedTier", null))
 		var modifiers: Variant = item.get("modifiers", {})
 		if modifiers is Array:
 			result = ModifierEffectRuntime.apply_modifiers(result, modifiers, {
