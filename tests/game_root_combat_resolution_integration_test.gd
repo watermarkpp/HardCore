@@ -86,5 +86,19 @@ func _run() -> void:
 	assert(projectile.source_actor == game.player, "投射物未保留施法者")
 	assert(projectile.magic_defense_adapter.is_valid(), "投射物未接入共享MAC适配器")
 
+	var combat_runtime: Node = load(
+		"res://scripts/layers/runtime/combat_runtime_service.gd"
+	).new()
+	var player_hp_before: int = game.player.current_hp
+	var player_resolution: Dictionary = combat_runtime.apply_player_direct_spell_damage(
+		game.player,
+		"wizard.fireball",
+		10,
+		0,
+		0
+	)
+	assert(player_resolution.success and player_resolution.magic_evaded, "共享运行时未转交玩家AntiMagic管线")
+	assert(game.player.current_hp == player_hp_before, "玩家AntiMagic成功后仍被重复扣血")
+
 	print("GAME_ROOT_COMBAT_RESOLUTION_INTEGRATION_PASS：稳定技能ID、AntiMagic、MAC与扣血顺序已接入")
 	get_tree().quit(0)

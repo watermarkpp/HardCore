@@ -18,3 +18,34 @@ func apply_damage(target: Node, amount: int) -> bool:
 		return false
 	target.take_damage(maxi(1, amount))
 	return true
+
+
+func apply_player_direct_spell_damage(
+	target: Node,
+	stable_skill_id: String,
+	raw_damage: int,
+	anti_magic_roll := -1,
+	magic_defense_roll := -1
+) -> Dictionary:
+	if not is_instance_valid(target) or not target.has_method("take_direct_spell_damage"):
+		return {
+			"success": false,
+			"failure_reason": "target_missing_direct_spell_pipeline",
+			"final_damage": 0,
+		}
+	var resolution: Variant = target.call(
+		"take_direct_spell_damage",
+		stable_skill_id,
+		maxi(0, raw_damage),
+		anti_magic_roll,
+		magic_defense_roll
+	)
+	if not resolution is Dictionary:
+		return {
+			"success": false,
+			"failure_reason": "invalid_direct_spell_resolution",
+			"final_damage": 0,
+		}
+	var result := (resolution as Dictionary).duplicate(true)
+	result["success"] = true
+	return result
