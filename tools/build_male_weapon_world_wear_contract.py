@@ -22,9 +22,10 @@ OUTPUT = ROOT / "assets/data/equipment_male_weapon_world_wear.json"
 
 CONTRACT_ID = "equipment.world_wear.male_weapon.v1"
 HIDDEN_ITEM_IDS: set[int] = set()
-UNRESOLVED_ITEM_IDS = {110, 111}
+UNRESOLVED_ITEM_IDS = {111}
 INTEGRATION_SHARED_PRIMARY_ITEM_IDS = {88}
 USER_CONFIRMED_CLASS_ITEM_IDS = {99, 105, 107, 108}
+USER_CONFIRMED_SEMANTIC_ITEM_IDS = {108, 110}
 CELL = (224, 224)
 ACTOR_ORIGIN = (80, 116)
 FOOT_POINT = ACTOR_ORIGIN
@@ -282,8 +283,8 @@ def main() -> None:
             raise AssertionError(
                 f"unexpected world weapon status for {item_id}: {status}"
             )
-    if len(classified["visible"]) != 35:
-        raise AssertionError("visible primary weapon count must be 35")
+    if len(classified["visible"]) != 36:
+        raise AssertionError("visible primary weapon count must be 36")
     if set(classified["hidden_by_classic_rule"]) != HIDDEN_ITEM_IDS:
         raise AssertionError("classic hidden weapon set changed")
     if set(classified["unresolved"]) != UNRESOLVED_ITEM_IDS:
@@ -377,6 +378,10 @@ def main() -> None:
             mapping_confidence = (
                 "integration_user_required_shared_primary_appearance"
             )
+        elif item_id in USER_CONFIRMED_SEMANTIC_ITEM_IDS:
+            mapping_confidence = (
+                "user_confirmed_semantic_primary_weapon_feature"
+            )
         elif item_id in USER_CONFIRMED_CLASS_ITEM_IDS:
             mapping_confidence = (
                 "user_confirmed_primary_pixel_compatibility"
@@ -388,8 +393,13 @@ def main() -> None:
             "equipment_primary_weapon_compatibility.json"
             f"#/itemsById/{item_id}"
         )
+        expected_evidence_confidence = (
+            "user_confirmed_semantic_primary_weapon_feature"
+            if item_id in USER_CONFIRMED_SEMANTIC_ITEM_IDS
+            else "primary_pixel_compatibility"
+        )
         if str(evidence.get("confidence", "")) != (
-            "primary_pixel_compatibility"
+            expected_evidence_confidence
         ):
             raise ValueError(
                 f"{item_id} {name} must use primary pixel compatibility"
@@ -432,8 +442,15 @@ def main() -> None:
             "shape * 2; no database Shape is available or adopted"
             if item_id in INTEGRATION_SHARED_PRIMARY_ITEM_IDS
             else (
-                "male feature = reviewed classic Weapon shape * 2; "
-                "Crystal Shape is never multiplied directly"
+                (
+                    "male feature is explicitly user-confirmed against "
+                    "primary Weapon.wil; Crystal Shape is evidence only"
+                )
+                if item_id in USER_CONFIRMED_SEMANTIC_ITEM_IDS
+                else (
+                    "male feature = reviewed classic Weapon shape * 2; "
+                    "Crystal Shape is never multiplied directly"
+                )
             )
         )
         item_record = {
@@ -532,7 +549,7 @@ def main() -> None:
     )
     print(
         "EQUIPMENT_MALE_WEAPON_WORLD_WEAR_PASS "
-        "items=37 visible=35 hidden=0 unresolved=2 "
+        "items=37 visible=36 hidden=0 unresolved=1 "
         f"features={len(feature_families)} actions=6 directions=8"
     )
 

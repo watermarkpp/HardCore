@@ -6,7 +6,11 @@
     "library": "Hum.wil",
     "path": "dev_art_sources/reference/mir2_client_raw/Data/Hum.wil",
     "imageCount": 10800,
-    "blockFrames": 600
+    "blockFrames": 600,
+    "sha256": {
+      "wil": "6a3867b84cdda2f972aea76586e68d113894832b07d93bb7f10bfcfb1e17005e",
+      "wix": "4bee2d5bc788aa6180672d83c76a253390ebe0c251f5f00ca4b2308771bcfaa8"
+    }
   },
   "actorContract": {
     "contractId": "player.visual.classic_eight_direction.v1",
@@ -50,7 +54,7 @@
   },
   "mappingPolicy": {
     "pixelAndActionCompleteness": "A",
-    "itemNameToShape": "B unless an item explicitly records manually_confirmed",
+    "itemNameToShape": "all 12 male mappings are frozen by explicit user review; automatic remapping is prohibited",
     "femaleExcluded": true,
     "transparentEmptyFramePolicy": "retain the source frame as transparent; never synthesize pixels"
   },
@@ -34797,6 +34801,110 @@
       }
     }
   },
+  "acceptance": {
+    "fullAtlasUserReview": {
+      "confirmationDate": "2026-07-25",
+      "authority": "explicit_user_confirmation",
+      "scope": "all 12 displayed male dress name-to-primary-Hum-feature mappings",
+      "mappingCount": 12,
+      "mappings": [
+        {
+          "itemId": 116,
+          "itemName": "布衣(男)",
+          "maleFeature": 2,
+          "classicShape": 1
+        },
+        {
+          "itemId": 118,
+          "itemName": "轻型盔甲(男)",
+          "maleFeature": 4,
+          "classicShape": 2
+        },
+        {
+          "itemId": 120,
+          "itemName": "中型盔甲(男)",
+          "maleFeature": 4,
+          "classicShape": 2
+        },
+        {
+          "itemId": 122,
+          "itemName": "重盔甲(男)",
+          "maleFeature": 6,
+          "classicShape": 3
+        },
+        {
+          "itemId": 124,
+          "itemName": "魔法长袍(男)",
+          "maleFeature": 8,
+          "classicShape": 4
+        },
+        {
+          "itemId": 126,
+          "itemName": "灵魂战衣(男)",
+          "maleFeature": 10,
+          "classicShape": 5
+        },
+        {
+          "itemId": 128,
+          "itemName": "战神盔甲(男)",
+          "maleFeature": 6,
+          "classicShape": 3
+        },
+        {
+          "itemId": 130,
+          "itemName": "恶魔长袍(男)",
+          "maleFeature": 8,
+          "classicShape": 4
+        },
+        {
+          "itemId": 132,
+          "itemName": "幽灵战衣(男)",
+          "maleFeature": 10,
+          "classicShape": 5
+        },
+        {
+          "itemId": 140,
+          "itemName": "天魔神甲",
+          "maleFeature": 12,
+          "classicShape": 6
+        },
+        {
+          "itemId": 142,
+          "itemName": "法神披风",
+          "maleFeature": 14,
+          "classicShape": 7
+        },
+        {
+          "itemId": 144,
+          "itemName": "天尊道袍",
+          "maleFeature": 16,
+          "classicShape": 8
+        }
+      ],
+      "sharedFeatureGroups": {
+        "4": [
+          118,
+          120
+        ],
+        "6": [
+          122,
+          128
+        ],
+        "8": [
+          124,
+          130
+        ],
+        "10": [
+          126,
+          132
+        ]
+      },
+      "femaleAssetsConfirmed": 0,
+      "reviewManifestSha256": "76f41154e62c3aedcf66d41a396394e73ab857c7690ee3fc527f5eff64683a27",
+      "runtimeArtifactPolicy": "the mapping table and hash are embedded in this contract; no runtime dependency on review-image or outputs paths"
+    },
+    "automaticRemappingProhibited": true
+  },
   "itemsById": {
     "116": {
       "itemId": 116,
@@ -34805,10 +34913,18 @@
       "slot": "dress",
       "sex": "male",
       "mappingAssessment": {
-        "confidence": "B",
-        "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[317]",
+        "confidence": "user_confirmed_full_atlas_review",
+        "source": "explicit user confirmation of the complete male dress world-feature review",
         "rule": "male feature = dress Shape * 2",
         "pixelAndActionConfidence": "A"
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "confirmed": true,
+        "itemId": 116,
+        "maleFeature": 2,
+        "reviewManifestSha256": "76f41154e62c3aedcf66d41a396394e73ab857c7690ee3fc527f5eff64683a27"
       },
       "maleAppearance": {
         "sex": "male",
@@ -34858,10 +34974,18 @@
       "slot": "dress",
       "sex": "male",
       "mappingAssessment": {
-        "confidence": "B",
-        "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[319]",
+        "confidence": "user_confirmed_full_atlas_review",
+        "source": "explicit user confirmation of the complete male dress world-feature review",
         "rule": "male feature = dress Shape * 2",
         "pixelAndActionConfidence": "A"
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "confirmed": true,
+        "itemId": 118,
+        "maleFeature": 4,
+        "reviewManifestSha256": "76f41154e62c3aedcf66d41a396394e73ab857c7690ee3fc527f5eff64683a27"
       },
       "maleAppearance": {
         "sex": "male",
@@ -34911,10 +35035,18 @@
       "slot": "dress",
       "sex": "male",
       "mappingAssessment": {
-        "confidence": "B",
-        "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[321]",
+        "confidence": "user_confirmed_full_atlas_review",
+        "source": "explicit user confirmation of the complete male dress world-feature review",
         "rule": "male feature = dress Shape * 2",
         "pixelAndActionConfidence": "A"
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "confirmed": true,
+        "itemId": 120,
+        "maleFeature": 4,
+        "reviewManifestSha256": "76f41154e62c3aedcf66d41a396394e73ab857c7690ee3fc527f5eff64683a27"
       },
       "maleAppearance": {
         "sex": "male",
@@ -34964,10 +35096,18 @@
       "slot": "dress",
       "sex": "male",
       "mappingAssessment": {
-        "confidence": "B",
-        "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[323]",
+        "confidence": "user_confirmed_full_atlas_review",
+        "source": "explicit user confirmation of the complete male dress world-feature review",
         "rule": "male feature = dress Shape * 2",
         "pixelAndActionConfidence": "A"
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "confirmed": true,
+        "itemId": 122,
+        "maleFeature": 6,
+        "reviewManifestSha256": "76f41154e62c3aedcf66d41a396394e73ab857c7690ee3fc527f5eff64683a27"
       },
       "maleAppearance": {
         "sex": "male",
@@ -35017,10 +35157,18 @@
       "slot": "dress",
       "sex": "male",
       "mappingAssessment": {
-        "confidence": "manually_confirmed",
-        "source": "user-confirmed accepted male Battle God armor appearance",
+        "confidence": "user_confirmed_full_atlas_review",
+        "source": "explicit user confirmation of the complete male dress world-feature review",
         "rule": "male feature = dress Shape * 2",
         "pixelAndActionConfidence": "A"
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "confirmed": true,
+        "itemId": 128,
+        "maleFeature": 6,
+        "reviewManifestSha256": "76f41154e62c3aedcf66d41a396394e73ab857c7690ee3fc527f5eff64683a27"
       },
       "maleAppearance": {
         "sex": "male",
@@ -35070,10 +35218,18 @@
       "slot": "dress",
       "sex": "male",
       "mappingAssessment": {
-        "confidence": "B",
-        "source": "classic Hum.wil 18-block capacity + StateItem 85..90 canonical pair order",
+        "confidence": "user_confirmed_full_atlas_review",
+        "source": "explicit user confirmation of the complete male dress world-feature review",
         "rule": "male feature = dress Shape * 2",
         "pixelAndActionConfidence": "A"
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "confirmed": true,
+        "itemId": 140,
+        "maleFeature": 12,
+        "reviewManifestSha256": "76f41154e62c3aedcf66d41a396394e73ab857c7690ee3fc527f5eff64683a27"
       },
       "maleAppearance": {
         "sex": "male",
@@ -35123,10 +35279,18 @@
       "slot": "dress",
       "sex": "male",
       "mappingAssessment": {
-        "confidence": "B",
-        "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[325]",
+        "confidence": "user_confirmed_full_atlas_review",
+        "source": "explicit user confirmation of the complete male dress world-feature review",
         "rule": "male feature = dress Shape * 2",
         "pixelAndActionConfidence": "A"
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "confirmed": true,
+        "itemId": 124,
+        "maleFeature": 8,
+        "reviewManifestSha256": "76f41154e62c3aedcf66d41a396394e73ab857c7690ee3fc527f5eff64683a27"
       },
       "maleAppearance": {
         "sex": "male",
@@ -35176,10 +35340,18 @@
       "slot": "dress",
       "sex": "male",
       "mappingAssessment": {
-        "confidence": "B",
-        "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[335]",
+        "confidence": "user_confirmed_full_atlas_review",
+        "source": "explicit user confirmation of the complete male dress world-feature review",
         "rule": "male feature = dress Shape * 2",
         "pixelAndActionConfidence": "A"
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "confirmed": true,
+        "itemId": 130,
+        "maleFeature": 8,
+        "reviewManifestSha256": "76f41154e62c3aedcf66d41a396394e73ab857c7690ee3fc527f5eff64683a27"
       },
       "maleAppearance": {
         "sex": "male",
@@ -35229,10 +35401,18 @@
       "slot": "dress",
       "sex": "male",
       "mappingAssessment": {
-        "confidence": "B",
-        "source": "classic Hum.wil 18-block capacity + StateItem 85..90 canonical pair order",
+        "confidence": "user_confirmed_full_atlas_review",
+        "source": "explicit user confirmation of the complete male dress world-feature review",
         "rule": "male feature = dress Shape * 2",
         "pixelAndActionConfidence": "A"
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "confirmed": true,
+        "itemId": 142,
+        "maleFeature": 14,
+        "reviewManifestSha256": "76f41154e62c3aedcf66d41a396394e73ab857c7690ee3fc527f5eff64683a27"
       },
       "maleAppearance": {
         "sex": "male",
@@ -35282,10 +35462,18 @@
       "slot": "dress",
       "sex": "male",
       "mappingAssessment": {
-        "confidence": "B",
-        "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[327]",
+        "confidence": "user_confirmed_full_atlas_review",
+        "source": "explicit user confirmation of the complete male dress world-feature review",
         "rule": "male feature = dress Shape * 2",
         "pixelAndActionConfidence": "A"
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "confirmed": true,
+        "itemId": 126,
+        "maleFeature": 10,
+        "reviewManifestSha256": "76f41154e62c3aedcf66d41a396394e73ab857c7690ee3fc527f5eff64683a27"
       },
       "maleAppearance": {
         "sex": "male",
@@ -35335,10 +35523,18 @@
       "slot": "dress",
       "sex": "male",
       "mappingAssessment": {
-        "confidence": "B",
-        "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[337]",
+        "confidence": "user_confirmed_full_atlas_review",
+        "source": "explicit user confirmation of the complete male dress world-feature review",
         "rule": "male feature = dress Shape * 2",
         "pixelAndActionConfidence": "A"
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "confirmed": true,
+        "itemId": 132,
+        "maleFeature": 10,
+        "reviewManifestSha256": "76f41154e62c3aedcf66d41a396394e73ab857c7690ee3fc527f5eff64683a27"
       },
       "maleAppearance": {
         "sex": "male",
@@ -35388,10 +35584,18 @@
       "slot": "dress",
       "sex": "male",
       "mappingAssessment": {
-        "confidence": "B",
-        "source": "classic Hum.wil 18-block capacity + StateItem 85..90 canonical pair order",
+        "confidence": "user_confirmed_full_atlas_review",
+        "source": "explicit user confirmation of the complete male dress world-feature review",
         "rule": "male feature = dress Shape * 2",
         "pixelAndActionConfidence": "A"
+      },
+      "userAtlasReviewEvidence": {
+        "authority": "explicit_user_confirmation",
+        "confirmationDate": "2026-07-25",
+        "confirmed": true,
+        "itemId": 144,
+        "maleFeature": 16,
+        "reviewManifestSha256": "76f41154e62c3aedcf66d41a396394e73ab857c7690ee3fc527f5eff64683a27"
       },
       "maleAppearance": {
         "sex": "male",

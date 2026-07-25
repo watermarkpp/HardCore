@@ -1002,10 +1002,10 @@
     "exactGroundIcons": 175,
     "visualWearables": 73,
     "exactPaperDollOverlays": 73,
-    "exactMaleWorldWear": 59,
+    "exactMaleWorldWear": 60,
     "exactFemaleWorldWear": 12,
     "explicitNoWorldLayer": 102,
-    "unresolvedWorldShape": 2
+    "unresolvedWorldShape": 1
   },
   "itemsById": {
     "80": {
@@ -19793,17 +19793,1056 @@
       "worldWear": {
         "status": "exact_client_animation",
         "appearanceType": "weaponAppearance",
-        "shape": 29,
+        "shape": 26,
         "shapeEvidence": {
-          "confidence": "primary_pixel_compatibility",
+          "confidence": "user_confirmed_semantic_primary_weapon_feature",
           "source": "res://assets/data/equipment_primary_weapon_compatibility.json#/itemsById/108",
-          "mappingType": "primary_server_image_to_primary_client_pixels",
+          "mappingType": "user_confirmed_semantic_primary_weapon_feature",
           "stateItemIndex": 57,
-          "classicWeaponShape": 29,
+          "classicWeaponShape": 26,
           "visualWeaponClass": "blade",
           "rule": "male feature = reviewed classic Weapon shape * 2; Crystal Shape is evidence only and is never multiplied directly",
           "serverDistribution": "server.crystal.cjlaaa",
           "crystalShape": 29
+        },
+        "appearancesByGender": {
+          "男": {
+            "shape": 26,
+            "feature": 52,
+            "gender": "男",
+            "visible": true,
+            "actions": {
+              "idle": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_idle.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 4,
+                "sourceFeature": 52,
+                "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "walk": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_walk.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 52,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "attack": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_attack.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 52,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A",
+                "sourceFrames": [
+                  {
+                    "index": 31400,
+                    "direction": 0,
+                    "frame": 0,
+                    "drawOffset": [
+                      47,
+                      -72
+                    ],
+                    "sourceSize": [
+                      40,
+                      54
+                    ],
+                    "weaponTipOffset": [
+                      80,
+                      -67
+                    ]
+                  },
+                  {
+                    "index": 31401,
+                    "direction": 0,
+                    "frame": 1,
+                    "drawOffset": [
+                      -37,
+                      -15
+                    ],
+                    "sourceSize": [
+                      64,
+                      35
+                    ],
+                    "weaponTipOffset": [
+                      -35,
+                      15
+                    ]
+                  },
+                  {
+                    "index": 31402,
+                    "direction": 0,
+                    "frame": 2,
+                    "drawOffset": [
+                      17,
+                      -54
+                    ],
+                    "sourceSize": [
+                      28,
+                      57
+                    ],
+                    "weaponTipOffset": [
+                      40,
+                      -52
+                    ]
+                  },
+                  {
+                    "index": 31403,
+                    "direction": 0,
+                    "frame": 3,
+                    "drawOffset": [
+                      40,
+                      -81
+                    ],
+                    "sourceSize": [
+                      52,
+                      24
+                    ],
+                    "weaponTipOffset": [
+                      84,
+                      -78
+                    ]
+                  },
+                  {
+                    "index": 31404,
+                    "direction": 0,
+                    "frame": 4,
+                    "drawOffset": [
+                      -5,
+                      -42
+                    ],
+                    "sourceSize": [
+                      32,
+                      26
+                    ],
+                    "weaponTipOffset": [
+                      7,
+                      -41
+                    ]
+                  },
+                  {
+                    "index": 31405,
+                    "direction": 0,
+                    "frame": 5,
+                    "drawOffset": [
+                      34,
+                      -52
+                    ],
+                    "sourceSize": [
+                      12,
+                      41
+                    ],
+                    "weaponTipOffset": [
+                      41,
+                      -49
+                    ]
+                  },
+                  {
+                    "index": 31408,
+                    "direction": 1,
+                    "frame": 0,
+                    "drawOffset": [
+                      42,
+                      -43
+                    ],
+                    "sourceSize": [
+                      32,
+                      38
+                    ],
+                    "weaponTipOffset": [
+                      68,
+                      -39
+                    ]
+                  },
+                  {
+                    "index": 31409,
+                    "direction": 1,
+                    "frame": 1,
+                    "drawOffset": [
+                      -73,
+                      -29
+                    ],
+                    "sourceSize": [
+                      76,
+                      13
+                    ],
+                    "weaponTipOffset": [
+                      -69,
+                      -28
+                    ]
+                  },
+                  {
+                    "index": 31410,
+                    "direction": 1,
+                    "frame": 2,
+                    "drawOffset": [
+                      -29,
+                      -47
+                    ],
+                    "sourceSize": [
+                      68,
+                      39
+                    ],
+                    "weaponTipOffset": [
+                      36,
+                      -45
+                    ]
+                  },
+                  {
+                    "index": 31411,
+                    "direction": 1,
+                    "frame": 3,
+                    "drawOffset": [
+                      61,
+                      -53
+                    ],
+                    "sourceSize": [
+                      20,
+                      23
+                    ],
+                    "weaponTipOffset": [
+                      75,
+                      -49
+                    ]
+                  },
+                  {
+                    "index": 31412,
+                    "direction": 1,
+                    "frame": 4,
+                    "drawOffset": [
+                      37,
+                      -35
+                    ],
+                    "sourceSize": [
+                      36,
+                      19
+                    ],
+                    "weaponTipOffset": [
+                      68,
+                      -32
+                    ]
+                  },
+                  {
+                    "index": 31413,
+                    "direction": 1,
+                    "frame": 5,
+                    "drawOffset": [
+                      37,
+                      -30
+                    ],
+                    "sourceSize": [
+                      52,
+                      26
+                    ],
+                    "weaponTipOffset": [
+                      84,
+                      -25
+                    ]
+                  },
+                  {
+                    "index": 31416,
+                    "direction": 2,
+                    "frame": 0,
+                    "drawOffset": [
+                      16,
+                      -36
+                    ],
+                    "sourceSize": [
+                      16,
+                      38
+                    ],
+                    "weaponTipOffset": [
+                      27,
+                      -29
+                    ]
+                  },
+                  {
+                    "index": 31417,
+                    "direction": 2,
+                    "frame": 1,
+                    "drawOffset": [
+                      -53,
+                      -77
+                    ],
+                    "sourceSize": [
+                      44,
+                      44
+                    ],
+                    "weaponTipOffset": [
+                      -50,
+                      -74
+                    ]
+                  },
+                  {
+                    "index": 31418,
+                    "direction": 2,
+                    "frame": 2,
+                    "drawOffset": [
+                      -43,
+                      -49
+                    ],
+                    "sourceSize": [
+                      72,
+                      19
+                    ],
+                    "weaponTipOffset": [
+                      -39,
+                      -48
+                    ]
+                  },
+                  {
+                    "index": 31419,
+                    "direction": 2,
+                    "frame": 3,
+                    "drawOffset": [
+                      27,
+                      -30
+                    ],
+                    "sourceSize": [
+                      40,
+                      15
+                    ],
+                    "weaponTipOffset": [
+                      62,
+                      -27
+                    ]
+                  },
+                  {
+                    "index": 31420,
+                    "direction": 2,
+                    "frame": 4,
+                    "drawOffset": [
+                      46,
+                      -10
+                    ],
+                    "sourceSize": [
+                      60,
+                      17
+                    ],
+                    "weaponTipOffset": [
+                      100,
+                      1
+                    ]
+                  },
+                  {
+                    "index": 31421,
+                    "direction": 2,
+                    "frame": 5,
+                    "drawOffset": [
+                      32,
+                      -3
+                    ],
+                    "sourceSize": [
+                      72,
+                      21
+                    ],
+                    "weaponTipOffset": [
+                      97,
+                      14
+                    ]
+                  },
+                  {
+                    "index": 31424,
+                    "direction": 3,
+                    "frame": 0,
+                    "drawOffset": [
+                      -13,
+                      -44
+                    ],
+                    "sourceSize": [
+                      24,
+                      42
+                    ],
+                    "weaponTipOffset": [
+                      -6,
+                      -43
+                    ]
+                  },
+                  {
+                    "index": 31425,
+                    "direction": 3,
+                    "frame": 1,
+                    "drawOffset": [
+                      -2,
+                      -102
+                    ],
+                    "sourceSize": [
+                      24,
+                      52
+                    ],
+                    "weaponTipOffset": [
+                      12,
+                      -97
+                    ]
+                  },
+                  {
+                    "index": 31426,
+                    "direction": 3,
+                    "frame": 2,
+                    "drawOffset": [
+                      -18,
+                      -78
+                    ],
+                    "sourceSize": [
+                      36,
+                      39
+                    ],
+                    "weaponTipOffset": [
+                      -15,
+                      -75
+                    ]
+                  },
+                  {
+                    "index": 31427,
+                    "direction": 3,
+                    "frame": 3,
+                    "drawOffset": [
+                      -14,
+                      -36
+                    ],
+                    "sourceSize": [
+                      56,
+                      28
+                    ],
+                    "weaponTipOffset": [
+                      39,
+                      -11
+                    ]
+                  },
+                  {
+                    "index": 31428,
+                    "direction": 3,
+                    "frame": 4,
+                    "drawOffset": [
+                      42,
+                      2
+                    ],
+                    "sourceSize": [
+                      60,
+                      46
+                    ],
+                    "weaponTipOffset": [
+                      97,
+                      43
+                    ]
+                  },
+                  {
+                    "index": 31429,
+                    "direction": 3,
+                    "frame": 5,
+                    "drawOffset": [
+                      21,
+                      -1
+                    ],
+                    "sourceSize": [
+                      52,
+                      53
+                    ],
+                    "weaponTipOffset": [
+                      69,
+                      47
+                    ]
+                  },
+                  {
+                    "index": 31432,
+                    "direction": 4,
+                    "frame": 0,
+                    "drawOffset": [
+                      -36,
+                      -66
+                    ],
+                    "sourceSize": [
+                      40,
+                      52
+                    ],
+                    "weaponTipOffset": [
+                      -32,
+                      -62
+                    ]
+                  },
+                  {
+                    "index": 31433,
+                    "direction": 4,
+                    "frame": 1,
+                    "drawOffset": [
+                      22,
+                      -88
+                    ],
+                    "sourceSize": [
+                      64,
+                      32
+                    ],
+                    "weaponTipOffset": [
+                      79,
+                      -85
+                    ]
+                  },
+                  {
+                    "index": 31434,
+                    "direction": 4,
+                    "frame": 2,
+                    "drawOffset": [
+                      6,
+                      -88
+                    ],
+                    "sourceSize": [
+                      28,
+                      42
+                    ],
+                    "weaponTipOffset": [
+                      28,
+                      -84
+                    ]
+                  },
+                  {
+                    "index": 31435,
+                    "direction": 4,
+                    "frame": 3,
+                    "drawOffset": [
+                      -42,
+                      -65
+                    ],
+                    "sourceSize": [
+                      52,
+                      57
+                    ],
+                    "weaponTipOffset": [
+                      -39,
+                      -63
+                    ]
+                  },
+                  {
+                    "index": 31436,
+                    "direction": 4,
+                    "frame": 4,
+                    "drawOffset": [
+                      24,
+                      8
+                    ],
+                    "sourceSize": [
+                      32,
+                      70
+                    ],
+                    "weaponTipOffset": [
+                      51,
+                      72
+                    ]
+                  },
+                  {
+                    "index": 31437,
+                    "direction": 4,
+                    "frame": 5,
+                    "drawOffset": [
+                      4,
+                      -5
+                    ],
+                    "sourceSize": [
+                      12,
+                      68
+                    ],
+                    "weaponTipOffset": [
+                      13,
+                      59
+                    ]
+                  },
+                  {
+                    "index": 31440,
+                    "direction": 5,
+                    "frame": 0,
+                    "drawOffset": [
+                      -23,
+                      -94
+                    ],
+                    "sourceSize": [
+                      32,
+                      67
+                    ],
+                    "weaponTipOffset": [
+                      -20,
+                      -90
+                    ]
+                  },
+                  {
+                    "index": 31441,
+                    "direction": 5,
+                    "frame": 1,
+                    "drawOffset": [
+                      48,
+                      -59
+                    ],
+                    "sourceSize": [
+                      76,
+                      31
+                    ],
+                    "weaponTipOffset": [
+                      114,
+                      -45
+                    ]
+                  },
+                  {
+                    "index": 31442,
+                    "direction": 5,
+                    "frame": 2,
+                    "drawOffset": [
+                      9,
+                      -73
+                    ],
+                    "sourceSize": [
+                      68,
+                      21
+                    ],
+                    "weaponTipOffset": [
+                      70,
+                      -71
+                    ]
+                  },
+                  {
+                    "index": 31443,
+                    "direction": 5,
+                    "frame": 3,
+                    "drawOffset": [
+                      -31,
+                      -99
+                    ],
+                    "sourceSize": [
+                      20,
+                      74
+                    ],
+                    "weaponTipOffset": [
+                      -30,
+                      -94
+                    ]
+                  },
+                  {
+                    "index": 31444,
+                    "direction": 5,
+                    "frame": 4,
+                    "drawOffset": [
+                      -23,
+                      4
+                    ],
+                    "sourceSize": [
+                      36,
+                      71
+                    ],
+                    "weaponTipOffset": [
+                      -12,
+                      71
+                    ]
+                  },
+                  {
+                    "index": 31445,
+                    "direction": 5,
+                    "frame": 5,
+                    "drawOffset": [
+                      -40,
+                      -13
+                    ],
+                    "sourceSize": [
+                      52,
+                      55
+                    ],
+                    "weaponTipOffset": [
+                      -38,
+                      39
+                    ]
+                  },
+                  {
+                    "index": 31448,
+                    "direction": 6,
+                    "frame": 0,
+                    "drawOffset": [
+                      16,
+                      -107
+                    ],
+                    "sourceSize": [
+                      16,
+                      75
+                    ],
+                    "weaponTipOffset": [
+                      19,
+                      -101
+                    ]
+                  },
+                  {
+                    "index": 31449,
+                    "direction": 6,
+                    "frame": 1,
+                    "drawOffset": [
+                      57,
+                      -37
+                    ],
+                    "sourceSize": [
+                      44,
+                      49
+                    ],
+                    "weaponTipOffset": [
+                      95,
+                      0
+                    ]
+                  },
+                  {
+                    "index": 31450,
+                    "direction": 6,
+                    "frame": 2,
+                    "drawOffset": [
+                      21,
+                      -63
+                    ],
+                    "sourceSize": [
+                      72,
+                      35
+                    ],
+                    "weaponTipOffset": [
+                      85,
+                      -39
+                    ]
+                  },
+                  {
+                    "index": 31451,
+                    "direction": 6,
+                    "frame": 3,
+                    "drawOffset": [
+                      -17,
+                      -116
+                    ],
+                    "sourceSize": [
+                      40,
+                      72
+                    ],
+                    "weaponTipOffset": [
+                      11,
+                      -111
+                    ]
+                  },
+                  {
+                    "index": 31452,
+                    "direction": 6,
+                    "frame": 4,
+                    "drawOffset": [
+                      -57,
+                      -6
+                    ],
+                    "sourceSize": [
+                      60,
+                      51
+                    ],
+                    "weaponTipOffset": [
+                      -54,
+                      42
+                    ]
+                  },
+                  {
+                    "index": 31453,
+                    "direction": 6,
+                    "frame": 5,
+                    "drawOffset": [
+                      -55,
+                      -19
+                    ],
+                    "sourceSize": [
+                      72,
+                      24
+                    ],
+                    "weaponTipOffset": [
+                      -52,
+                      2
+                    ]
+                  },
+                  {
+                    "index": 31456,
+                    "direction": 7,
+                    "frame": 0,
+                    "drawOffset": [
+                      38,
+                      -97
+                    ],
+                    "sourceSize": [
+                      24,
+                      68
+                    ],
+                    "weaponTipOffset": [
+                      59,
+                      -90
+                    ]
+                  },
+                  {
+                    "index": 31457,
+                    "direction": 7,
+                    "frame": 1,
+                    "drawOffset": [
+                      29,
+                      -21
+                    ],
+                    "sourceSize": [
+                      24,
+                      53
+                    ],
+                    "weaponTipOffset": [
+                      48,
+                      -17
+                    ]
+                  },
+                  {
+                    "index": 31458,
+                    "direction": 7,
+                    "frame": 2,
+                    "drawOffset": [
+                      32,
+                      -61
+                    ],
+                    "sourceSize": [
+                      36,
+                      55
+                    ],
+                    "weaponTipOffset": [
+                      40,
+                      -51
+                    ]
+                  },
+                  {
+                    "index": 31459,
+                    "direction": 7,
+                    "frame": 3,
+                    "drawOffset": [
+                      6,
+                      -109
+                    ],
+                    "sourceSize": [
+                      56,
+                      51
+                    ],
+                    "weaponTipOffset": [
+                      57,
+                      -104
+                    ]
+                  },
+                  {
+                    "index": 31460,
+                    "direction": 7,
+                    "frame": 4,
+                    "drawOffset": [
+                      -54,
+                      -19
+                    ],
+                    "sourceSize": [
+                      60,
+                      21
+                    ],
+                    "weaponTipOffset": [
+                      -51,
+                      -1
+                    ]
+                  },
+                  {
+                    "index": 31461,
+                    "direction": 7,
+                    "frame": 5,
+                    "drawOffset": [
+                      -24,
+                      -45
+                    ],
+                    "sourceSize": [
+                      52,
+                      33
+                    ],
+                    "weaponTipOffset": [
+                      -14,
+                      -43
+                    ]
+                  }
+                ]
+              },
+              "cast": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_cast.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 52,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "hit": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_hit.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 3,
+                "sourceFeature": 52,
+                "decodedFrameCount": 24,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "death": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_death.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 4,
+                "sourceFeature": 52,
+                "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              }
+            },
+            "actionFallbacks": {}
+          }
+        },
+        "actionFallbacks": {},
+        "rejectedGenders": {},
+        "crystalShape": 29,
+        "mappingType": "user_confirmed_semantic_primary_weapon_feature",
+        "visualWeaponClass": "blade"
+      }
+    },
+    "110": {
+      "itemId": 110,
+      "itemName": "命运之刃",
+      "profession": "战士",
+      "category": "武器",
+      "slot": "武器",
+      "gender": "通用",
+      "icons": {
+        "inventory": {
+          "path": "res://assets/art/items/client/inventory/065.png",
+          "library": "research/mir2_client_raw/Data/Items.wil",
+          "index": 65,
+          "sourceOffset": 52728,
+          "size": [
+            28,
+            30
+          ],
+          "drawOffset": [
+            10,
+            -46
+          ],
+          "libraryVersion": 0,
+          "confidence": "A"
+        },
+        "equippedSlot": {
+          "path": "res://assets/art/items/client/equipped/065.png",
+          "library": "research/mir2_client_raw/Data/stateitem.wil",
+          "index": 65,
+          "sourceOffset": 214166,
+          "size": [
+            32,
+            117
+          ],
+          "drawOffset": [
+            31,
+            -36
+          ],
+          "libraryVersion": 0,
+          "confidence": "A"
+        },
+        "ground": {
+          "path": "res://assets/art/items/client/ground/065.png",
+          "library": "research/mir2_client_raw/Data/DnItems.wil",
+          "index": 65,
+          "sourceOffset": 42280,
+          "size": [
+            28,
+            30
+          ],
+          "drawOffset": [
+            10,
+            -46
+          ],
+          "libraryVersion": 0,
+          "confidence": "A"
+        }
+      },
+      "visualWeaponClass": "sword",
+      "weaponCompatibilityRef": "res://assets/data/equipment_primary_weapon_compatibility.json#/itemsById/110",
+      "paperDoll": {
+        "status": "exact_client_record",
+        "slot": "武器",
+        "gender": "通用",
+        "sourceIndex": 65,
+        "path": "res://assets/art/items/client/equipped/065.png",
+        "drawOffset": [
+          24,
+          8
+        ],
+        "rawDrawOffset": [
+          31,
+          -36
+        ],
+        "size": [
+          32,
+          117
+        ],
+        "source": "stateitem.wil",
+        "mappingConfidence": "A"
+      },
+      "worldWear": {
+        "status": "exact_client_animation",
+        "appearanceType": "weaponAppearance",
+        "shape": 29,
+        "shapeEvidence": {
+          "confidence": "user_confirmed_semantic_primary_weapon_feature",
+          "source": "res://assets/data/equipment_primary_weapon_compatibility.json#/itemsById/110",
+          "mappingType": "user_confirmed_semantic_primary_weapon_feature",
+          "stateItemIndex": 65,
+          "classicWeaponShape": 29,
+          "visualWeaponClass": "sword",
+          "rule": "male feature is explicitly user-confirmed against primary Weapon.wil; primary server attributes remain missing",
+          "serverDataStatus": "missing_in_primary_server_data",
+          "crystalShapeStatus": "missing_in_primary_server_data; explicit user confirmation maps primary-client pixels only"
         },
         "appearancesByGender": {
           "男": {
@@ -20744,99 +21783,9 @@
         },
         "actionFallbacks": {},
         "rejectedGenders": {},
-        "crystalShape": 29,
-        "mappingType": "primary_server_image_to_primary_client_pixels",
-        "visualWeaponClass": "blade"
-      }
-    },
-    "110": {
-      "itemId": 110,
-      "itemName": "命运之刃",
-      "profession": "战士",
-      "category": "武器",
-      "slot": "武器",
-      "gender": "通用",
-      "icons": {
-        "inventory": {
-          "path": "res://assets/art/items/client/inventory/065.png",
-          "library": "research/mir2_client_raw/Data/Items.wil",
-          "index": 65,
-          "sourceOffset": 52728,
-          "size": [
-            28,
-            30
-          ],
-          "drawOffset": [
-            10,
-            -46
-          ],
-          "libraryVersion": 0,
-          "confidence": "A"
-        },
-        "equippedSlot": {
-          "path": "res://assets/art/items/client/equipped/065.png",
-          "library": "research/mir2_client_raw/Data/stateitem.wil",
-          "index": 65,
-          "sourceOffset": 214166,
-          "size": [
-            32,
-            117
-          ],
-          "drawOffset": [
-            31,
-            -36
-          ],
-          "libraryVersion": 0,
-          "confidence": "A"
-        },
-        "ground": {
-          "path": "res://assets/art/items/client/ground/065.png",
-          "library": "research/mir2_client_raw/Data/DnItems.wil",
-          "index": 65,
-          "sourceOffset": 42280,
-          "size": [
-            28,
-            30
-          ],
-          "drawOffset": [
-            10,
-            -46
-          ],
-          "libraryVersion": 0,
-          "confidence": "A"
-        }
-      },
-      "visualWeaponClass": "unresolved",
-      "weaponCompatibilityRef": "res://assets/data/equipment_primary_weapon_compatibility.json#/itemsById/110",
-      "paperDoll": {
-        "status": "exact_client_record",
-        "slot": "武器",
-        "gender": "通用",
-        "sourceIndex": 65,
-        "path": "res://assets/art/items/client/equipped/065.png",
-        "drawOffset": [
-          24,
-          8
-        ],
-        "rawDrawOffset": [
-          31,
-          -36
-        ],
-        "size": [
-          32,
-          117
-        ],
-        "source": "stateitem.wil",
-        "mappingConfidence": "A"
-      },
-      "worldWear": {
-        "status": "unresolved_no_placeholder",
-        "shapeEvidence": {
-          "confidence": "unresolved",
-          "source": "res://assets/data/equipment_primary_weapon_compatibility.json#/itemsById/110",
-          "reason": "primary compatibility contract has no evidence-backed Weapon feature"
-        },
-        "runtimePolicy": "keep exact profession world base and hide this item layer"
+        "crystalShapeStatus": "missing_in_primary_server_data; explicit user confirmation maps primary-client pixels only",
+        "mappingType": "user_confirmed_semantic_primary_weapon_feature",
+        "visualWeaponClass": "sword"
       }
     },
     "111": {
@@ -37636,9 +38585,17 @@
         "appearanceType": "dressAppearance",
         "shape": 1,
         "shapeEvidence": {
-          "confidence": "B",
-          "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[317]",
-          "rule": "feature = Shape*2 + gender"
+          "confidence": "user_confirmed_full_atlas_review",
+          "source": "explicit user confirmation of all 12 male dress world-feature mappings",
+          "priorSourceEvidence": {
+            "confidence": "B",
+            "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[317]",
+            "rule": "feature = Shape*2 + gender"
+          },
+          "confirmationDate": "2026-07-25",
+          "maleFeature": 2,
+          "automaticRemappingProhibited": true,
+          "rule": "male feature = Shape*2"
         },
         "appearancesByGender": {
           "男": {
@@ -38056,9 +39013,17 @@
         "appearanceType": "dressAppearance",
         "shape": 2,
         "shapeEvidence": {
-          "confidence": "B",
-          "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[319]",
-          "rule": "feature = Shape*2 + gender"
+          "confidence": "user_confirmed_full_atlas_review",
+          "source": "explicit user confirmation of all 12 male dress world-feature mappings",
+          "priorSourceEvidence": {
+            "confidence": "B",
+            "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[319]",
+            "rule": "feature = Shape*2 + gender"
+          },
+          "confirmationDate": "2026-07-25",
+          "maleFeature": 4,
+          "automaticRemappingProhibited": true,
+          "rule": "male feature = Shape*2"
         },
         "appearancesByGender": {
           "男": {
@@ -38476,9 +39441,17 @@
         "appearanceType": "dressAppearance",
         "shape": 2,
         "shapeEvidence": {
-          "confidence": "B",
-          "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[321]",
-          "rule": "feature = Shape*2 + gender"
+          "confidence": "user_confirmed_full_atlas_review",
+          "source": "explicit user confirmation of all 12 male dress world-feature mappings",
+          "priorSourceEvidence": {
+            "confidence": "B",
+            "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[321]",
+            "rule": "feature = Shape*2 + gender"
+          },
+          "confirmationDate": "2026-07-25",
+          "maleFeature": 4,
+          "automaticRemappingProhibited": true,
+          "rule": "male feature = Shape*2"
         },
         "appearancesByGender": {
           "男": {
@@ -38896,9 +39869,17 @@
         "appearanceType": "dressAppearance",
         "shape": 3,
         "shapeEvidence": {
-          "confidence": "B",
-          "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[323]",
-          "rule": "feature = Shape*2 + gender"
+          "confidence": "user_confirmed_full_atlas_review",
+          "source": "explicit user confirmation of all 12 male dress world-feature mappings",
+          "priorSourceEvidence": {
+            "confidence": "B",
+            "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[323]",
+            "rule": "feature = Shape*2 + gender"
+          },
+          "confirmationDate": "2026-07-25",
+          "maleFeature": 6,
+          "automaticRemappingProhibited": true,
+          "rule": "male feature = Shape*2"
         },
         "appearancesByGender": {
           "男": {
@@ -39316,9 +40297,17 @@
         "appearanceType": "dressAppearance",
         "shape": 3,
         "shapeEvidence": {
-          "confidence": "B",
-          "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[333]",
-          "rule": "feature = Shape*2 + gender"
+          "confidence": "user_confirmed_full_atlas_review",
+          "source": "explicit user confirmation of all 12 male dress world-feature mappings",
+          "priorSourceEvidence": {
+            "confidence": "B",
+            "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[333]",
+            "rule": "feature = Shape*2 + gender"
+          },
+          "confirmationDate": "2026-07-25",
+          "maleFeature": 6,
+          "automaticRemappingProhibited": true,
+          "rule": "male feature = Shape*2"
         },
         "appearancesByGender": {
           "男": {
@@ -39736,9 +40725,17 @@
         "appearanceType": "dressAppearance",
         "shape": 6,
         "shapeEvidence": {
-          "confidence": "B",
-          "source": "classic Hum.wil 18-block capacity + StateItem 85..90 canonical pair order",
-          "rule": "feature = Shape*2 + gender"
+          "confidence": "user_confirmed_full_atlas_review",
+          "source": "explicit user confirmation of all 12 male dress world-feature mappings",
+          "priorSourceEvidence": {
+            "confidence": "B",
+            "source": "classic Hum.wil 18-block capacity + StateItem 85..90 canonical pair order",
+            "rule": "feature = Shape*2 + gender"
+          },
+          "confirmationDate": "2026-07-25",
+          "maleFeature": 12,
+          "automaticRemappingProhibited": true,
+          "rule": "male feature = Shape*2"
         },
         "appearancesByGender": {
           "男": {
@@ -40156,9 +41153,17 @@
         "appearanceType": "dressAppearance",
         "shape": 4,
         "shapeEvidence": {
-          "confidence": "B",
-          "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[325]",
-          "rule": "feature = Shape*2 + gender"
+          "confidence": "user_confirmed_full_atlas_review",
+          "source": "explicit user confirmation of all 12 male dress world-feature mappings",
+          "priorSourceEvidence": {
+            "confidence": "B",
+            "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[325]",
+            "rule": "feature = Shape*2 + gender"
+          },
+          "confirmationDate": "2026-07-25",
+          "maleFeature": 8,
+          "automaticRemappingProhibited": true,
+          "rule": "male feature = Shape*2"
         },
         "appearancesByGender": {
           "男": {
@@ -40576,9 +41581,17 @@
         "appearanceType": "dressAppearance",
         "shape": 4,
         "shapeEvidence": {
-          "confidence": "B",
-          "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[335]",
-          "rule": "feature = Shape*2 + gender"
+          "confidence": "user_confirmed_full_atlas_review",
+          "source": "explicit user confirmation of all 12 male dress world-feature mappings",
+          "priorSourceEvidence": {
+            "confidence": "B",
+            "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[335]",
+            "rule": "feature = Shape*2 + gender"
+          },
+          "confirmationDate": "2026-07-25",
+          "maleFeature": 8,
+          "automaticRemappingProhibited": true,
+          "rule": "male feature = Shape*2"
         },
         "appearancesByGender": {
           "男": {
@@ -40996,9 +42009,17 @@
         "appearanceType": "dressAppearance",
         "shape": 7,
         "shapeEvidence": {
-          "confidence": "B",
-          "source": "classic Hum.wil 18-block capacity + StateItem 85..90 canonical pair order",
-          "rule": "feature = Shape*2 + gender"
+          "confidence": "user_confirmed_full_atlas_review",
+          "source": "explicit user confirmation of all 12 male dress world-feature mappings",
+          "priorSourceEvidence": {
+            "confidence": "B",
+            "source": "classic Hum.wil 18-block capacity + StateItem 85..90 canonical pair order",
+            "rule": "feature = Shape*2 + gender"
+          },
+          "confirmationDate": "2026-07-25",
+          "maleFeature": 14,
+          "automaticRemappingProhibited": true,
+          "rule": "male feature = Shape*2"
         },
         "appearancesByGender": {
           "男": {
@@ -41416,9 +42437,17 @@
         "appearanceType": "dressAppearance",
         "shape": 5,
         "shapeEvidence": {
-          "confidence": "B",
-          "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[327]",
-          "rule": "feature = Shape*2 + gender"
+          "confidence": "user_confirmed_full_atlas_review",
+          "source": "explicit user confirmation of all 12 male dress world-feature mappings",
+          "priorSourceEvidence": {
+            "confidence": "B",
+            "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[327]",
+            "rule": "feature = Shape*2 + gender"
+          },
+          "confirmationDate": "2026-07-25",
+          "maleFeature": 10,
+          "automaticRemappingProhibited": true,
+          "rule": "male feature = Shape*2"
         },
         "appearancesByGender": {
           "男": {
@@ -41836,9 +42865,17 @@
         "appearanceType": "dressAppearance",
         "shape": 5,
         "shapeEvidence": {
-          "confidence": "B",
-          "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[337]",
-          "rule": "feature = Shape*2 + gender"
+          "confidence": "user_confirmed_full_atlas_review",
+          "source": "explicit user confirmation of all 12 male dress world-feature mappings",
+          "priorSourceEvidence": {
+            "confidence": "B",
+            "source": "server.crystal.cjlaaa Server.MirDB ItemInfo[337]",
+            "rule": "feature = Shape*2 + gender"
+          },
+          "confirmationDate": "2026-07-25",
+          "maleFeature": 10,
+          "automaticRemappingProhibited": true,
+          "rule": "male feature = Shape*2"
         },
         "appearancesByGender": {
           "男": {
@@ -42256,9 +43293,17 @@
         "appearanceType": "dressAppearance",
         "shape": 8,
         "shapeEvidence": {
-          "confidence": "B",
-          "source": "classic Hum.wil 18-block capacity + StateItem 85..90 canonical pair order",
-          "rule": "feature = Shape*2 + gender"
+          "confidence": "user_confirmed_full_atlas_review",
+          "source": "explicit user confirmation of all 12 male dress world-feature mappings",
+          "priorSourceEvidence": {
+            "confidence": "B",
+            "source": "classic Hum.wil 18-block capacity + StateItem 85..90 canonical pair order",
+            "rule": "feature = Shape*2 + gender"
+          },
+          "confirmationDate": "2026-07-25",
+          "maleFeature": 16,
+          "automaticRemappingProhibited": true,
+          "rule": "male feature = Shape*2"
         },
         "appearancesByGender": {
           "男": {
@@ -68487,6 +69532,943 @@
     },
     "屠龙": {
       "weaponAppearance": {
+        "shape": 26,
+        "feature": 52,
+        "gender": "男",
+        "visible": true,
+        "actions": {
+          "idle": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_idle.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "sourceFeature": 52,
+            "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "walk": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_walk.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 52,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "attack": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_attack.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 52,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A",
+            "sourceFrames": [
+              {
+                "index": 31400,
+                "direction": 0,
+                "frame": 0,
+                "drawOffset": [
+                  47,
+                  -72
+                ],
+                "sourceSize": [
+                  40,
+                  54
+                ],
+                "weaponTipOffset": [
+                  80,
+                  -67
+                ]
+              },
+              {
+                "index": 31401,
+                "direction": 0,
+                "frame": 1,
+                "drawOffset": [
+                  -37,
+                  -15
+                ],
+                "sourceSize": [
+                  64,
+                  35
+                ],
+                "weaponTipOffset": [
+                  -35,
+                  15
+                ]
+              },
+              {
+                "index": 31402,
+                "direction": 0,
+                "frame": 2,
+                "drawOffset": [
+                  17,
+                  -54
+                ],
+                "sourceSize": [
+                  28,
+                  57
+                ],
+                "weaponTipOffset": [
+                  40,
+                  -52
+                ]
+              },
+              {
+                "index": 31403,
+                "direction": 0,
+                "frame": 3,
+                "drawOffset": [
+                  40,
+                  -81
+                ],
+                "sourceSize": [
+                  52,
+                  24
+                ],
+                "weaponTipOffset": [
+                  84,
+                  -78
+                ]
+              },
+              {
+                "index": 31404,
+                "direction": 0,
+                "frame": 4,
+                "drawOffset": [
+                  -5,
+                  -42
+                ],
+                "sourceSize": [
+                  32,
+                  26
+                ],
+                "weaponTipOffset": [
+                  7,
+                  -41
+                ]
+              },
+              {
+                "index": 31405,
+                "direction": 0,
+                "frame": 5,
+                "drawOffset": [
+                  34,
+                  -52
+                ],
+                "sourceSize": [
+                  12,
+                  41
+                ],
+                "weaponTipOffset": [
+                  41,
+                  -49
+                ]
+              },
+              {
+                "index": 31408,
+                "direction": 1,
+                "frame": 0,
+                "drawOffset": [
+                  42,
+                  -43
+                ],
+                "sourceSize": [
+                  32,
+                  38
+                ],
+                "weaponTipOffset": [
+                  68,
+                  -39
+                ]
+              },
+              {
+                "index": 31409,
+                "direction": 1,
+                "frame": 1,
+                "drawOffset": [
+                  -73,
+                  -29
+                ],
+                "sourceSize": [
+                  76,
+                  13
+                ],
+                "weaponTipOffset": [
+                  -69,
+                  -28
+                ]
+              },
+              {
+                "index": 31410,
+                "direction": 1,
+                "frame": 2,
+                "drawOffset": [
+                  -29,
+                  -47
+                ],
+                "sourceSize": [
+                  68,
+                  39
+                ],
+                "weaponTipOffset": [
+                  36,
+                  -45
+                ]
+              },
+              {
+                "index": 31411,
+                "direction": 1,
+                "frame": 3,
+                "drawOffset": [
+                  61,
+                  -53
+                ],
+                "sourceSize": [
+                  20,
+                  23
+                ],
+                "weaponTipOffset": [
+                  75,
+                  -49
+                ]
+              },
+              {
+                "index": 31412,
+                "direction": 1,
+                "frame": 4,
+                "drawOffset": [
+                  37,
+                  -35
+                ],
+                "sourceSize": [
+                  36,
+                  19
+                ],
+                "weaponTipOffset": [
+                  68,
+                  -32
+                ]
+              },
+              {
+                "index": 31413,
+                "direction": 1,
+                "frame": 5,
+                "drawOffset": [
+                  37,
+                  -30
+                ],
+                "sourceSize": [
+                  52,
+                  26
+                ],
+                "weaponTipOffset": [
+                  84,
+                  -25
+                ]
+              },
+              {
+                "index": 31416,
+                "direction": 2,
+                "frame": 0,
+                "drawOffset": [
+                  16,
+                  -36
+                ],
+                "sourceSize": [
+                  16,
+                  38
+                ],
+                "weaponTipOffset": [
+                  27,
+                  -29
+                ]
+              },
+              {
+                "index": 31417,
+                "direction": 2,
+                "frame": 1,
+                "drawOffset": [
+                  -53,
+                  -77
+                ],
+                "sourceSize": [
+                  44,
+                  44
+                ],
+                "weaponTipOffset": [
+                  -50,
+                  -74
+                ]
+              },
+              {
+                "index": 31418,
+                "direction": 2,
+                "frame": 2,
+                "drawOffset": [
+                  -43,
+                  -49
+                ],
+                "sourceSize": [
+                  72,
+                  19
+                ],
+                "weaponTipOffset": [
+                  -39,
+                  -48
+                ]
+              },
+              {
+                "index": 31419,
+                "direction": 2,
+                "frame": 3,
+                "drawOffset": [
+                  27,
+                  -30
+                ],
+                "sourceSize": [
+                  40,
+                  15
+                ],
+                "weaponTipOffset": [
+                  62,
+                  -27
+                ]
+              },
+              {
+                "index": 31420,
+                "direction": 2,
+                "frame": 4,
+                "drawOffset": [
+                  46,
+                  -10
+                ],
+                "sourceSize": [
+                  60,
+                  17
+                ],
+                "weaponTipOffset": [
+                  100,
+                  1
+                ]
+              },
+              {
+                "index": 31421,
+                "direction": 2,
+                "frame": 5,
+                "drawOffset": [
+                  32,
+                  -3
+                ],
+                "sourceSize": [
+                  72,
+                  21
+                ],
+                "weaponTipOffset": [
+                  97,
+                  14
+                ]
+              },
+              {
+                "index": 31424,
+                "direction": 3,
+                "frame": 0,
+                "drawOffset": [
+                  -13,
+                  -44
+                ],
+                "sourceSize": [
+                  24,
+                  42
+                ],
+                "weaponTipOffset": [
+                  -6,
+                  -43
+                ]
+              },
+              {
+                "index": 31425,
+                "direction": 3,
+                "frame": 1,
+                "drawOffset": [
+                  -2,
+                  -102
+                ],
+                "sourceSize": [
+                  24,
+                  52
+                ],
+                "weaponTipOffset": [
+                  12,
+                  -97
+                ]
+              },
+              {
+                "index": 31426,
+                "direction": 3,
+                "frame": 2,
+                "drawOffset": [
+                  -18,
+                  -78
+                ],
+                "sourceSize": [
+                  36,
+                  39
+                ],
+                "weaponTipOffset": [
+                  -15,
+                  -75
+                ]
+              },
+              {
+                "index": 31427,
+                "direction": 3,
+                "frame": 3,
+                "drawOffset": [
+                  -14,
+                  -36
+                ],
+                "sourceSize": [
+                  56,
+                  28
+                ],
+                "weaponTipOffset": [
+                  39,
+                  -11
+                ]
+              },
+              {
+                "index": 31428,
+                "direction": 3,
+                "frame": 4,
+                "drawOffset": [
+                  42,
+                  2
+                ],
+                "sourceSize": [
+                  60,
+                  46
+                ],
+                "weaponTipOffset": [
+                  97,
+                  43
+                ]
+              },
+              {
+                "index": 31429,
+                "direction": 3,
+                "frame": 5,
+                "drawOffset": [
+                  21,
+                  -1
+                ],
+                "sourceSize": [
+                  52,
+                  53
+                ],
+                "weaponTipOffset": [
+                  69,
+                  47
+                ]
+              },
+              {
+                "index": 31432,
+                "direction": 4,
+                "frame": 0,
+                "drawOffset": [
+                  -36,
+                  -66
+                ],
+                "sourceSize": [
+                  40,
+                  52
+                ],
+                "weaponTipOffset": [
+                  -32,
+                  -62
+                ]
+              },
+              {
+                "index": 31433,
+                "direction": 4,
+                "frame": 1,
+                "drawOffset": [
+                  22,
+                  -88
+                ],
+                "sourceSize": [
+                  64,
+                  32
+                ],
+                "weaponTipOffset": [
+                  79,
+                  -85
+                ]
+              },
+              {
+                "index": 31434,
+                "direction": 4,
+                "frame": 2,
+                "drawOffset": [
+                  6,
+                  -88
+                ],
+                "sourceSize": [
+                  28,
+                  42
+                ],
+                "weaponTipOffset": [
+                  28,
+                  -84
+                ]
+              },
+              {
+                "index": 31435,
+                "direction": 4,
+                "frame": 3,
+                "drawOffset": [
+                  -42,
+                  -65
+                ],
+                "sourceSize": [
+                  52,
+                  57
+                ],
+                "weaponTipOffset": [
+                  -39,
+                  -63
+                ]
+              },
+              {
+                "index": 31436,
+                "direction": 4,
+                "frame": 4,
+                "drawOffset": [
+                  24,
+                  8
+                ],
+                "sourceSize": [
+                  32,
+                  70
+                ],
+                "weaponTipOffset": [
+                  51,
+                  72
+                ]
+              },
+              {
+                "index": 31437,
+                "direction": 4,
+                "frame": 5,
+                "drawOffset": [
+                  4,
+                  -5
+                ],
+                "sourceSize": [
+                  12,
+                  68
+                ],
+                "weaponTipOffset": [
+                  13,
+                  59
+                ]
+              },
+              {
+                "index": 31440,
+                "direction": 5,
+                "frame": 0,
+                "drawOffset": [
+                  -23,
+                  -94
+                ],
+                "sourceSize": [
+                  32,
+                  67
+                ],
+                "weaponTipOffset": [
+                  -20,
+                  -90
+                ]
+              },
+              {
+                "index": 31441,
+                "direction": 5,
+                "frame": 1,
+                "drawOffset": [
+                  48,
+                  -59
+                ],
+                "sourceSize": [
+                  76,
+                  31
+                ],
+                "weaponTipOffset": [
+                  114,
+                  -45
+                ]
+              },
+              {
+                "index": 31442,
+                "direction": 5,
+                "frame": 2,
+                "drawOffset": [
+                  9,
+                  -73
+                ],
+                "sourceSize": [
+                  68,
+                  21
+                ],
+                "weaponTipOffset": [
+                  70,
+                  -71
+                ]
+              },
+              {
+                "index": 31443,
+                "direction": 5,
+                "frame": 3,
+                "drawOffset": [
+                  -31,
+                  -99
+                ],
+                "sourceSize": [
+                  20,
+                  74
+                ],
+                "weaponTipOffset": [
+                  -30,
+                  -94
+                ]
+              },
+              {
+                "index": 31444,
+                "direction": 5,
+                "frame": 4,
+                "drawOffset": [
+                  -23,
+                  4
+                ],
+                "sourceSize": [
+                  36,
+                  71
+                ],
+                "weaponTipOffset": [
+                  -12,
+                  71
+                ]
+              },
+              {
+                "index": 31445,
+                "direction": 5,
+                "frame": 5,
+                "drawOffset": [
+                  -40,
+                  -13
+                ],
+                "sourceSize": [
+                  52,
+                  55
+                ],
+                "weaponTipOffset": [
+                  -38,
+                  39
+                ]
+              },
+              {
+                "index": 31448,
+                "direction": 6,
+                "frame": 0,
+                "drawOffset": [
+                  16,
+                  -107
+                ],
+                "sourceSize": [
+                  16,
+                  75
+                ],
+                "weaponTipOffset": [
+                  19,
+                  -101
+                ]
+              },
+              {
+                "index": 31449,
+                "direction": 6,
+                "frame": 1,
+                "drawOffset": [
+                  57,
+                  -37
+                ],
+                "sourceSize": [
+                  44,
+                  49
+                ],
+                "weaponTipOffset": [
+                  95,
+                  0
+                ]
+              },
+              {
+                "index": 31450,
+                "direction": 6,
+                "frame": 2,
+                "drawOffset": [
+                  21,
+                  -63
+                ],
+                "sourceSize": [
+                  72,
+                  35
+                ],
+                "weaponTipOffset": [
+                  85,
+                  -39
+                ]
+              },
+              {
+                "index": 31451,
+                "direction": 6,
+                "frame": 3,
+                "drawOffset": [
+                  -17,
+                  -116
+                ],
+                "sourceSize": [
+                  40,
+                  72
+                ],
+                "weaponTipOffset": [
+                  11,
+                  -111
+                ]
+              },
+              {
+                "index": 31452,
+                "direction": 6,
+                "frame": 4,
+                "drawOffset": [
+                  -57,
+                  -6
+                ],
+                "sourceSize": [
+                  60,
+                  51
+                ],
+                "weaponTipOffset": [
+                  -54,
+                  42
+                ]
+              },
+              {
+                "index": 31453,
+                "direction": 6,
+                "frame": 5,
+                "drawOffset": [
+                  -55,
+                  -19
+                ],
+                "sourceSize": [
+                  72,
+                  24
+                ],
+                "weaponTipOffset": [
+                  -52,
+                  2
+                ]
+              },
+              {
+                "index": 31456,
+                "direction": 7,
+                "frame": 0,
+                "drawOffset": [
+                  38,
+                  -97
+                ],
+                "sourceSize": [
+                  24,
+                  68
+                ],
+                "weaponTipOffset": [
+                  59,
+                  -90
+                ]
+              },
+              {
+                "index": 31457,
+                "direction": 7,
+                "frame": 1,
+                "drawOffset": [
+                  29,
+                  -21
+                ],
+                "sourceSize": [
+                  24,
+                  53
+                ],
+                "weaponTipOffset": [
+                  48,
+                  -17
+                ]
+              },
+              {
+                "index": 31458,
+                "direction": 7,
+                "frame": 2,
+                "drawOffset": [
+                  32,
+                  -61
+                ],
+                "sourceSize": [
+                  36,
+                  55
+                ],
+                "weaponTipOffset": [
+                  40,
+                  -51
+                ]
+              },
+              {
+                "index": 31459,
+                "direction": 7,
+                "frame": 3,
+                "drawOffset": [
+                  6,
+                  -109
+                ],
+                "sourceSize": [
+                  56,
+                  51
+                ],
+                "weaponTipOffset": [
+                  57,
+                  -104
+                ]
+              },
+              {
+                "index": 31460,
+                "direction": 7,
+                "frame": 4,
+                "drawOffset": [
+                  -54,
+                  -19
+                ],
+                "sourceSize": [
+                  60,
+                  21
+                ],
+                "weaponTipOffset": [
+                  -51,
+                  -1
+                ]
+              },
+              {
+                "index": 31461,
+                "direction": 7,
+                "frame": 5,
+                "drawOffset": [
+                  -24,
+                  -45
+                ],
+                "sourceSize": [
+                  52,
+                  33
+                ],
+                "weaponTipOffset": [
+                  -14,
+                  -43
+                ]
+              }
+            ]
+          },
+          "cast": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_cast.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 52,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "hit": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_hit.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 3,
+            "sourceFeature": 52,
+            "decodedFrameCount": 24,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "death": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_death.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 4,
+            "sourceFeature": 52,
+            "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          }
+        },
+        "actionFallbacks": {}
+      }
+    },
+    "命运之刃": {
+      "weaponAppearance": {
         "shape": 29,
         "feature": 58,
         "gender": "男",
@@ -87345,5 +89327,5 @@
       "baseActionTemplate": "player.visual.classic_eight_direction.v1"
     }
   },
-  "generatedAtlases": 300
+  "generatedAtlases": 306
 }

@@ -159,7 +159,24 @@ PIXEL_COMPATIBILITY = {
     "裁决之杖": (55, 24, "staff", "heavy judgement staff"),
     "骨玉权杖": (59, 28, "staff", "white-gold casting staff"),
     "龙纹剑": (56, 25, "sword", "curved dragon-pattern sword"),
-    "屠龙": (57, 29, "blade", "massive dragon-slaying blade"),
+    "屠龙": (
+        57,
+        26,
+        "blade",
+        (
+            "user-confirmed primary Weapon feature 52; the semantic "
+            "identity does not come from Crystal Shape 29"
+        ),
+    ),
+    "命运之刃": (
+        65,
+        29,
+        "sword",
+        (
+            "user-confirmed primary StateItem 65 and primary Weapon "
+            "feature 58; server attributes remain missing"
+        ),
+    ),
     "嗜魂法杖": (58, 27, "staff", "twisted soul-eater staff"),
     "赤血魔剑": (66, 30, "sword", "red magic sword"),
     "怒斩": (70, 32, "blade", "crescent rage blade"),
@@ -205,8 +222,54 @@ USER_CONFIRMED_CLASSIFICATION = {
     "龙纹剑": ("道士", "sword"),
     "屠龙": ("战士", "blade"),
 }
-USER_REQUIRED_VISIBLE = {"木剑", "乌木剑", "罗刹", "嗜魂法杖", "屠龙"}
-UNRESOLVED_NAMES = {"命运之刃", "落魄神兵"}
+USER_CONFIRMED_SEMANTIC_FEATURES = {
+    "屠龙": {
+        "maleFeature": 52,
+        "classicWeaponShape": 26,
+        "stateItemIndex": 57,
+        "confirmation": (
+            "user explicitly confirmed primary Weapon.wil feature 52 "
+            "is 屠龙's world appearance"
+        ),
+        "scope": (
+            "semantic identity of the primary world-animation family; "
+            "does not override the primary Server.MirDB Image field"
+        ),
+    },
+    "命运之刃": {
+        "maleFeature": 58,
+        "classicWeaponShape": 29,
+        "stateItemIndex": 65,
+        "confirmation": (
+            "user explicitly confirmed primary StateItem.wil index 65 "
+            "is 命运之刃 and primary Weapon.wil feature 58 is its world "
+            "appearance"
+        ),
+        "scope": (
+            "semantic identity of the primary inventory sprite and "
+            "world-animation family; does not create a Server.MirDB record "
+            "or Shape value"
+        ),
+    },
+}
+USER_REQUIRED_VISIBLE = {
+    "木剑",
+    "乌木剑",
+    "罗刹",
+    "嗜魂法杖",
+    "屠龙",
+    "命运之刃",
+}
+UNRESOLVED_NAMES = {"落魄神兵"}
+FULL_ATLAS_REVIEW_DATE = "2026-07-25"
+ACTION_SPECS = {
+    "idle": {"start": 0, "frames": 4},
+    "walk": {"start": 64, "frames": 6},
+    "attack": {"start": 200, "frames": 6},
+    "cast": {"start": 392, "frames": 6},
+    "hit": {"start": 472, "frames": 3},
+    "death": {"start": 536, "frames": 4},
+}
 
 sys.path.insert(0, str(ROOT / "tools/vendor"))
 from extract_wil import decode_sprite, read_library  # noqa: E402
@@ -374,6 +437,67 @@ def sprite_evidence(
             alpha != 0 for alpha in image.getchannel("A").tobytes()
         ),
         "rgbaSha256": rgba_sha256(image),
+    }
+
+
+def feature_action_coverage(library: tuple, feature: int) -> dict:
+    data, palette, offsets, _info = library
+    actions: dict[str, dict[str, Any]] = {}
+    total_expected = 0
+    total_decoded = 0
+    total_missing = 0
+    total_transparent = 0
+    for action, spec in ACTION_SPECS.items():
+        source_indices: list[int] = []
+        missing: list[int] = []
+        transparent: list[int] = []
+        decoded = 0
+        for direction in range(8):
+            for frame in range(int(spec["frames"])):
+                source_index = (
+                    feature * 600
+                    + int(spec["start"])
+                    + direction * 8
+                    + frame
+                )
+                source_indices.append(source_index)
+                if source_index >= len(offsets):
+                    missing.append(source_index)
+                    continue
+                try:
+                    image, _metadata = decode_sprite(
+                        data,
+                        offsets[source_index],
+                        palette,
+                    )
+                except ValueError:
+                    missing.append(source_index)
+                    continue
+                decoded += 1
+                if image.convert("RGBA").getbbox() is None:
+                    transparent.append(source_index)
+        expected = 8 * int(spec["frames"])
+        actions[action] = {
+            "directions": 8,
+            "framesPerDirection": int(spec["frames"]),
+            "expectedFrames": expected,
+            "decodedFrames": decoded,
+            "missingFrames": missing,
+            "transparentEmptyFrames": transparent,
+            "sourceFirst": min(source_indices),
+            "sourceLast": max(source_indices),
+        }
+        total_expected += expected
+        total_decoded += decoded
+        total_missing += len(missing)
+        total_transparent += len(transparent)
+    return {
+        "evidenceStrength": "A",
+        "actions": actions,
+        "expectedFrames": total_expected,
+        "decodedFrames": total_decoded,
+        "missingFrames": total_missing,
+        "transparentEmptyFrames": total_transparent,
     }
 
 
@@ -780,6 +904,7 @@ def main() -> None:
         adopted_name = str(alias["name"]) if alias else name
         adopted_query = query_result(adopted_name, by_name)
         compatibility = PIXEL_COMPATIBILITY.get(name)
+        semantic_confirmation = USER_CONFIRMED_SEMANTIC_FEATURES.get(name)
 
         base_record: dict[str, Any] = {
             "itemId": item_id,
@@ -869,6 +994,26 @@ def main() -> None:
             )
             base_record["integrationDecision"] = shared_appearance
             shared_primary_appearance_ids.append(item_id)
+        elif semantic_confirmation and adopted_query["status"] == "missing":
+            if alias:
+                raise AssertionError(
+                    f"{name} cannot combine a DB alias and a user-confirmed "
+                    "primary-client semantic mapping"
+                )
+            source_record = None
+            base_record["mappingType"] = (
+                "user_confirmed_semantic_primary_weapon_feature"
+            )
+            base_record["primaryServerMissingEvidence"] = {
+                "status": "missing",
+                "query": target_query,
+                "meaning": (
+                    "server attributes and Crystal Shape remain unresolved; "
+                    "the user confirmation applies only to primary client "
+                    "semantic identity"
+                ),
+                "lowerTierAdopted": False,
+            }
         else:
             if adopted_query["status"] != "exact":
                 raise AssertionError(
@@ -880,7 +1025,9 @@ def main() -> None:
                 )
             source_record = by_name[adopted_name][0]
             base_record["mappingType"] = (
-                "primary_server_image_to_primary_client_pixels"
+                "user_confirmed_semantic_primary_weapon_feature"
+                if semantic_confirmation
+                else "primary_server_image_to_primary_client_pixels"
             )
 
         state_index, classic_shape, visual_class, review_note = compatibility
@@ -890,7 +1037,7 @@ def main() -> None:
                     f"primary Image changed for {item_id} {name}: "
                     f"{source_record['image']} != {state_index}"
                 )
-        else:
+        elif shared_appearance:
             if (
                 int(shared_appearance["stateItemIndex"]) != int(state_index)
                 or int(shared_appearance["classicWeaponShape"])
@@ -902,11 +1049,36 @@ def main() -> None:
                     f"integration shared appearance changed: "
                     f"{item_id} {name}"
                 )
+        elif semantic_confirmation:
+            if (
+                int(semantic_confirmation["stateItemIndex"])
+                != int(state_index)
+            ):
+                raise AssertionError(
+                    f"user-confirmed StateItem changed: {item_id} {name}"
+                )
+        else:
+            raise AssertionError(
+                f"{item_id} {name} has no source record or approved "
+                "primary-client semantic decision"
+            )
         feature = int(classic_shape) * 2
         if feature <= 0 or feature >= 68 or feature % 2 != 0:
             raise AssertionError(
                 f"invalid male classic feature for {item_id} {name}: {feature}"
             )
+        if semantic_confirmation:
+            if (
+                int(semantic_confirmation["stateItemIndex"])
+                != int(state_index)
+                or int(semantic_confirmation["classicWeaponShape"])
+                != int(classic_shape)
+                or int(semantic_confirmation["maleFeature"]) != feature
+            ):
+                raise AssertionError(
+                    f"user-confirmed semantic mapping changed: "
+                    f"{item_id} {name}"
+                )
 
         state_sprite = sprite_evidence(state_library, int(state_index))
         weapon_frames = [
@@ -940,8 +1112,15 @@ def main() -> None:
                 "primary_server_evidence_only"
                 if crystal_shape is not None
                 else (
-                    "missing_after_complete_configured_fallback; "
-                    "integration mapping is primary-client-only"
+                    (
+                        "missing_after_complete_configured_fallback; "
+                        "integration mapping is primary-client-only"
+                    )
+                    if shared_appearance
+                    else (
+                        "missing_in_primary_server_data; explicit user "
+                        "confirmation maps primary-client pixels only"
+                    )
                 )
             ),
             "classicWeaponShape": int(classic_shape),
@@ -971,8 +1150,119 @@ def main() -> None:
                 "attackDirectionFrame0": weapon_frames,
             },
         })
+        if semantic_confirmation:
+            action_coverage = feature_action_coverage(
+                weapon_library,
+                feature,
+            )
+            if (
+                int(action_coverage["expectedFrames"]) != 232
+                or int(action_coverage["decodedFrames"]) != 232
+                or int(action_coverage["missingFrames"]) != 0
+                or int(action_coverage["transparentEmptyFrames"]) != 0
+            ):
+                raise AssertionError(
+                    f"user-confirmed semantic feature incomplete: "
+                    f"{item_id} {name}"
+                )
+            base_record["userConfirmation"] = {
+                "authority": "explicit_user_confirmation",
+                **semantic_confirmation,
+                "adopted": True,
+                "confirmedPrimarySource": {
+                    "distribution": PRIMARY_CLIENT_DISTRIBUTION,
+                    "tier": "primary",
+                    "originalPath": source_path(WEAPON),
+                    "librarySha256": weapon_hashes,
+                },
+                "prohibitions": (
+                    [
+                        "do not restore feature 58 for 屠龙",
+                        "do not infer the feature from Crystal Shape 29",
+                        "do not reuse feature 52 for 命运之刃",
+                    ]
+                    if name == "屠龙"
+                    else [
+                        "do not reuse feature 52 for 命运之刃",
+                        "do not reuse feature 48 from 裁决之杖",
+                        "do not invent a Server.MirDB Shape",
+                    ]
+                ),
+            }
+            base_record["weaponEvidence"]["actionCoverage"] = (
+                action_coverage
+            )
         items_by_id[str(item_id)] = base_record
         resolved_ids.append(item_id)
+
+    resolved_features = {
+        int(record["maleFeature"])
+        for record in items_by_id.values()
+        if record.get("status") == "resolved_primary_pixels"
+    }
+    anonymous_features = set(range(0, 68, 2)) - resolved_features
+    if anonymous_features != {0}:
+        raise AssertionError(
+            "anonymous primary Weapon feature set changed: "
+            f"{sorted(anonymous_features)}"
+        )
+    full_atlas_review_mappings = [
+        {
+            "itemId": int(record["itemId"]),
+            "itemName": str(record["itemName"]),
+            "stateItemIndex": int(
+                record["stateItemEvidence"]["sourceIndex"]
+            ),
+            "maleFeature": int(record["maleFeature"]),
+            "classicWeaponShape": int(record["classicWeaponShape"]),
+            "visualWeaponClass": str(record["visualWeaponClass"]),
+        }
+        for record in items_by_id.values()
+        if record.get("status") == "resolved_primary_pixels"
+    ]
+    full_atlas_review_mappings.sort(key=lambda value: value["itemId"])
+    if (
+        len(full_atlas_review_mappings) != 36
+        or unresolved_ids != [111]
+    ):
+        raise AssertionError(
+            "full-atlas review roster must be 36 resolved / 1 unresolved"
+        )
+    full_atlas_review_manifest = {
+        "confirmationDate": FULL_ATLAS_REVIEW_DATE,
+        "authority": "explicit_user_confirmation",
+        "scope": (
+            "all displayed formal weapon name-to-primary-Weapon-feature "
+            "mappings in the three complete review sheets"
+        ),
+        "mappingCount": len(full_atlas_review_mappings),
+        "unresolvedItemIds": unresolved_ids,
+        "mappings": full_atlas_review_mappings,
+    }
+    canonical_review = json.dumps(
+        full_atlas_review_manifest,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    full_atlas_review_manifest["reviewManifestSha256"] = (
+        hashlib.sha256(canonical_review).hexdigest()
+    )
+    full_atlas_review_manifest["runtimeArtifactPolicy"] = (
+        "the machine-checkable mapping table and hash are embedded here; "
+        "runtime does not depend on outputs or review-image paths"
+    )
+    for mapping in full_atlas_review_mappings:
+        record = items_by_id[str(mapping["itemId"])]
+        record["userAtlasReviewEvidence"] = {
+            "authority": "explicit_user_confirmation",
+            "confirmationDate": FULL_ATLAS_REVIEW_DATE,
+            "reviewManifestSha256": (
+                full_atlas_review_manifest["reviewManifestSha256"]
+            ),
+            "mappingItemId": int(mapping["itemId"]),
+            "confirmed": True,
+        }
 
     for name, expected in USER_CONFIRMED_CLASSIFICATION.items():
         record = next(
@@ -1066,6 +1356,7 @@ def main() -> None:
             "crystalShapeDiffersFromClassicShape": len(divergent_shape_ids),
             "directCrystalShapeMultiplication": 0,
             "lowerTierValuesAdopted": 0,
+            "anonymousPrimaryWeaponFeatures": 0,
         },
         "classification": {
             "resolved": resolved_ids,
@@ -1084,6 +1375,19 @@ def main() -> None:
                 }
                 for name, values in USER_CONFIRMED_CLASSIFICATION.items()
             },
+            "userConfirmedSemanticFeatures": {
+                name: {
+                    "maleFeature": int(values["maleFeature"]),
+                    "classicWeaponShape": int(
+                        values["classicWeaponShape"]
+                    ),
+                    "stateItemIndex": int(values["stateItemIndex"]),
+                    "authority": "explicit_user_confirmation",
+                }
+                for name, values
+                in USER_CONFIRMED_SEMANTIC_FEATURES.items()
+            },
+            "fullAtlasUserReview": full_atlas_review_manifest,
             "allResolvedMappingsUsePrimaryPixels": True,
             "noCrystalShapeDirectMapping": True,
             "unresolvedNeverBorrowsFeature": True,

@@ -112,9 +112,9 @@
   },
   "coverage": {
     "formalWeapons": 37,
-    "visible": 35,
+    "visible": 36,
     "hiddenByClassicRule": 0,
-    "unresolved": 2,
+    "unresolved": 1,
     "maleWeaponFeatureFamilies": 34,
     "actionsPerFeature": 6,
     "directionsPerAction": 8,
@@ -154,6 +154,7 @@
       107,
       108,
       109,
+      110,
       112,
       113,
       114,
@@ -162,7 +163,6 @@
     ],
     "hidden_by_classic_rule": [],
     "unresolved": [
-      110,
       111
     ]
   },
@@ -16313,50 +16313,50 @@
       "sex": "male",
       "status": "visible",
       "mappingAssessment": {
-        "confidence": "user_confirmed_primary_pixel_compatibility",
+        "confidence": "user_confirmed_semantic_primary_weapon_feature",
         "source": "res://assets/data/equipment_primary_weapon_compatibility.json#/itemsById/108",
-        "mappingType": "primary_server_image_to_primary_client_pixels",
-        "rule": "male feature = reviewed classic Weapon shape * 2; Crystal Shape is never multiplied directly",
+        "mappingType": "user_confirmed_semantic_primary_weapon_feature",
+        "rule": "male feature is explicitly user-confirmed against primary Weapon.wil; Crystal Shape is evidence only",
         "crystalShapeUsedAsClassicShape": false,
         "pixelAndActionConfidence": "A"
       },
       "maleAppearance": {
         "sex": "male",
-        "shape": 29,
-        "classicShape": 29,
-        "feature": 58,
+        "shape": 26,
+        "classicShape": 26,
+        "feature": 52,
         "visualWeaponClass": "blade",
-        "featureRef": "featureFamilies.58",
+        "featureRef": "featureFamilies.52",
         "visible": true,
         "actions": {
           "idle": {
-            "featureActionRef": "featureFamilies.58.actions.idle",
-            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_idle.png",
+            "featureActionRef": "featureFamilies.52.actions.idle",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_idle.png",
             "framesPerDirection": 4
           },
           "walk": {
-            "featureActionRef": "featureFamilies.58.actions.walk",
-            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_walk.png",
+            "featureActionRef": "featureFamilies.52.actions.walk",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_walk.png",
             "framesPerDirection": 6
           },
           "attack": {
-            "featureActionRef": "featureFamilies.58.actions.attack",
-            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_attack.png",
+            "featureActionRef": "featureFamilies.52.actions.attack",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_attack.png",
             "framesPerDirection": 6
           },
           "cast": {
-            "featureActionRef": "featureFamilies.58.actions.cast",
-            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_cast.png",
+            "featureActionRef": "featureFamilies.52.actions.cast",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_cast.png",
             "framesPerDirection": 6
           },
           "hit": {
-            "featureActionRef": "featureFamilies.58.actions.hit",
-            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_hit.png",
+            "featureActionRef": "featureFamilies.52.actions.hit",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_hit.png",
             "framesPerDirection": 3
           },
           "death": {
-            "featureActionRef": "featureFamilies.58.actions.death",
-            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_death.png",
+            "featureActionRef": "featureFamilies.52.actions.death",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_death.png",
             "framesPerDirection": 4
           }
         },
@@ -16429,14 +16429,58 @@
       "profession": "战士",
       "slot": "weapon",
       "sex": "male",
-      "status": "unresolved",
+      "status": "visible",
       "mappingAssessment": {
-        "confidence": "unresolved",
+        "confidence": "user_confirmed_semantic_primary_weapon_feature",
         "source": "res://assets/data/equipment_primary_weapon_compatibility.json#/itemsById/110",
-        "reason": "primary compatibility contract has no evidence-backed Weapon feature",
-        "pixelAndActionConfidence": "not_applicable"
+        "mappingType": "user_confirmed_semantic_primary_weapon_feature",
+        "rule": "male feature is explicitly user-confirmed against primary Weapon.wil; Crystal Shape is evidence only",
+        "crystalShapeUsedAsClassicShape": false,
+        "pixelAndActionConfidence": "A"
       },
-      "runtimePolicy": "draw no weapon layer; do not guess a Weapon feature"
+      "maleAppearance": {
+        "sex": "male",
+        "shape": 29,
+        "classicShape": 29,
+        "feature": 58,
+        "visualWeaponClass": "sword",
+        "featureRef": "featureFamilies.58",
+        "visible": true,
+        "actions": {
+          "idle": {
+            "featureActionRef": "featureFamilies.58.actions.idle",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_idle.png",
+            "framesPerDirection": 4
+          },
+          "walk": {
+            "featureActionRef": "featureFamilies.58.actions.walk",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_walk.png",
+            "framesPerDirection": 6
+          },
+          "attack": {
+            "featureActionRef": "featureFamilies.58.actions.attack",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_attack.png",
+            "framesPerDirection": 6
+          },
+          "cast": {
+            "featureActionRef": "featureFamilies.58.actions.cast",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_cast.png",
+            "framesPerDirection": 6
+          },
+          "hit": {
+            "featureActionRef": "featureFamilies.58.actions.hit",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_hit.png",
+            "framesPerDirection": 3
+          },
+          "death": {
+            "featureActionRef": "featureFamilies.58.actions.death",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_death.png",
+            "framesPerDirection": 4
+          }
+        },
+        "actionFallbacks": {},
+        "crystalShapeStatus": "missing_in_primary_server_data; explicit user confirmation maps primary-client pixels only"
+      }
     },
     "111": {
       "itemId": 111,
@@ -18013,41 +18057,41 @@
     "108": {
       "weaponAppearance": {
         "sex": "male",
-        "shape": 29,
-        "classicShape": 29,
-        "feature": 58,
+        "shape": 26,
+        "classicShape": 26,
+        "feature": 52,
         "visualWeaponClass": "blade",
-        "featureRef": "featureFamilies.58",
+        "featureRef": "featureFamilies.52",
         "visible": true,
         "actions": {
           "idle": {
-            "featureActionRef": "featureFamilies.58.actions.idle",
-            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_idle.png",
+            "featureActionRef": "featureFamilies.52.actions.idle",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_idle.png",
             "framesPerDirection": 4
           },
           "walk": {
-            "featureActionRef": "featureFamilies.58.actions.walk",
-            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_walk.png",
+            "featureActionRef": "featureFamilies.52.actions.walk",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_walk.png",
             "framesPerDirection": 6
           },
           "attack": {
-            "featureActionRef": "featureFamilies.58.actions.attack",
-            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_attack.png",
+            "featureActionRef": "featureFamilies.52.actions.attack",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_attack.png",
             "framesPerDirection": 6
           },
           "cast": {
-            "featureActionRef": "featureFamilies.58.actions.cast",
-            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_cast.png",
+            "featureActionRef": "featureFamilies.52.actions.cast",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_cast.png",
             "framesPerDirection": 6
           },
           "hit": {
-            "featureActionRef": "featureFamilies.58.actions.hit",
-            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_hit.png",
+            "featureActionRef": "featureFamilies.52.actions.hit",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_hit.png",
             "framesPerDirection": 3
           },
           "death": {
-            "featureActionRef": "featureFamilies.58.actions.death",
-            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_death.png",
+            "featureActionRef": "featureFamilies.52.actions.death",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_death.png",
             "framesPerDirection": 4
           }
         },
@@ -18098,6 +18142,51 @@
         },
         "actionFallbacks": {},
         "crystalShape": 30
+      }
+    },
+    "110": {
+      "weaponAppearance": {
+        "sex": "male",
+        "shape": 29,
+        "classicShape": 29,
+        "feature": 58,
+        "visualWeaponClass": "sword",
+        "featureRef": "featureFamilies.58",
+        "visible": true,
+        "actions": {
+          "idle": {
+            "featureActionRef": "featureFamilies.58.actions.idle",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_idle.png",
+            "framesPerDirection": 4
+          },
+          "walk": {
+            "featureActionRef": "featureFamilies.58.actions.walk",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_walk.png",
+            "framesPerDirection": 6
+          },
+          "attack": {
+            "featureActionRef": "featureFamilies.58.actions.attack",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_attack.png",
+            "framesPerDirection": 6
+          },
+          "cast": {
+            "featureActionRef": "featureFamilies.58.actions.cast",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_cast.png",
+            "framesPerDirection": 6
+          },
+          "hit": {
+            "featureActionRef": "featureFamilies.58.actions.hit",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_hit.png",
+            "framesPerDirection": 3
+          },
+          "death": {
+            "featureActionRef": "featureFamilies.58.actions.death",
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_death.png",
+            "framesPerDirection": 4
+          }
+        },
+        "actionFallbacks": {},
+        "crystalShapeStatus": "missing_in_primary_server_data; explicit user confirmation maps primary-client pixels only"
       }
     },
     "112": {

@@ -19,7 +19,7 @@ COMPATIBILITY = (
 )
 WEAPON = ROOT / "dev_art_sources/reference/mir2_client_raw/Data/Weapon.wil"
 HIDDEN_IDS: set[int] = set()
-UNRESOLVED_IDS = {110, 111}
+UNRESOLVED_IDS = {111}
 REQUIRED_PRIMARY_APPEARANCES = {
     80: (2, "sword"),
     82: (2, "sword"),
@@ -27,8 +27,9 @@ REQUIRED_PRIMARY_APPEARANCES = {
     99: (22, "axe"),
     105: (48, "staff"),
     107: (50, "sword"),
-    108: (58, "blade"),
+    108: (52, "blade"),
     109: (54, "staff"),
+    110: (58, "sword"),
 }
 ACTION_FRAMES = {
     "idle": 4,
@@ -84,12 +85,13 @@ def main() -> None:
     )
     assert compatibility["coverage"] == {
         "formalWeapons": 37,
-        "resolvedPrimaryPixels": 35,
+        "resolvedPrimaryPixels": 36,
         "integrationSharedPrimaryAppearance": 1,
-        "unresolved": 2,
-        "crystalShapeDiffersFromClassicShape": 31,
+        "unresolved": 1,
+        "crystalShapeDiffersFromClassicShape": 32,
         "directCrystalShapeMultiplication": 0,
         "lowerTierValuesAdopted": 0,
+        "anonymousPrimaryWeaponFeatures": 0,
     }
     compatibility_text = COMPATIBILITY.read_text(encoding="utf-8")
     for forbidden in ("mylgd", "21CQ", "external/mir2opensource"):
@@ -154,6 +156,55 @@ def main() -> None:
         assert rejected["compatibility"]["primaryStateItemCapacity"][
             "candidateWithinPrimaryLibrary"
         ] is False
+    dragon_slayer = compatibility["itemsById"]["108"]
+    assert dragon_slayer["mappingType"] == (
+        "user_confirmed_semantic_primary_weapon_feature"
+    )
+    assert int(dragon_slayer["primaryServerQuery"]["targetNameResult"][
+        "matches"
+    ][0]["crystalShape"]) == 29
+    assert int(dragon_slayer["classicWeaponShape"]) == 26
+    assert int(dragon_slayer["maleFeature"]) == 52
+    assert dragon_slayer["crystalShapeUsedAsClassicShape"] is False
+    assert dragon_slayer["userConfirmation"]["authority"] == (
+        "explicit_user_confirmation"
+    )
+    dragon_coverage = dragon_slayer["weaponEvidence"]["actionCoverage"]
+    assert dragon_coverage["evidenceStrength"] == "A"
+    assert int(dragon_coverage["expectedFrames"]) == 232
+    assert int(dragon_coverage["decodedFrames"]) == 232
+    assert int(dragon_coverage["missingFrames"]) == 0
+    assert int(dragon_coverage["transparentEmptyFrames"]) == 0
+    assert set(dragon_coverage["actions"]) == set(ACTION_FRAMES)
+    destiny = compatibility["itemsById"]["110"]
+    assert destiny["status"] == "resolved_primary_pixels"
+    assert destiny["mappingType"] == (
+        "user_confirmed_semantic_primary_weapon_feature"
+    )
+    assert destiny["primaryServerQuery"]["targetNameResult"]["status"] == (
+        "missing"
+    )
+    assert destiny["crystalShape"] is None
+    assert int(destiny["stateItemEvidence"]["sourceIndex"]) == 65
+    assert int(destiny["classicWeaponShape"]) == 29
+    assert int(destiny["maleFeature"]) == 58
+    assert destiny["visualWeaponClass"] == "sword"
+    destiny_coverage = destiny["weaponEvidence"]["actionCoverage"]
+    assert int(destiny_coverage["decodedFrames"]) == 232
+    assert int(destiny_coverage["missingFrames"]) == 0
+    review = compatibility["acceptance"]["fullAtlasUserReview"]
+    assert review["authority"] == "explicit_user_confirmation"
+    assert review["confirmationDate"] == "2026-07-25"
+    assert int(review["mappingCount"]) == 36
+    assert review["unresolvedItemIds"] == [111]
+    assert len(review["reviewManifestSha256"]) == 64
+    assert len(review["mappings"]) == 36
+    assert all(
+        compatibility["itemsById"][str(mapping["itemId"])][
+            "userAtlasReviewEvidence"
+        ]["reviewManifestSha256"] == review["reviewManifestSha256"]
+        for mapping in review["mappings"]
+    )
     assert contract["sex"] == "male"
     assert contract["actorContract"]["cell"] == [224, 224]
     assert contract["actorContract"]["actorOrigin"] == [80, 116]
@@ -164,9 +215,9 @@ def main() -> None:
     assert contract["mappingPolicy"]["crystalShapeDirectMapping"] is False
     assert contract["coverage"] == {
         "formalWeapons": 37,
-        "visible": 35,
+        "visible": 36,
         "hiddenByClassicRule": 0,
-        "unresolved": 2,
+        "unresolved": 1,
         "maleWeaponFeatureFamilies": 34,
         "actionsPerFeature": 6,
         "directionsPerAction": 8,
@@ -176,7 +227,7 @@ def main() -> None:
     }
     assert set(contract["classification"]["hidden_by_classic_rule"]) == HIDDEN_IDS
     assert set(contract["classification"]["unresolved"]) == UNRESOLVED_IDS
-    assert len(contract["classification"]["visible"]) == 35
+    assert len(contract["classification"]["visible"]) == 36
     visible_ids = set(contract["classification"]["visible"])
     assert set(map(int, contract["runtimeMappingsByItemId"])) == visible_ids
     assert "appearancesByGender" not in CONTRACT.read_text(encoding="utf-8")
@@ -209,9 +260,9 @@ def main() -> None:
         assert int(appearance["shape"]) == int(appearance["classicShape"])
         compat = compatibility["itemsById"][item_key]
         assert compat["status"] == "resolved_primary_pixels"
-        if item_id == 88:
+        if compat["crystalShape"] is None:
             assert "crystalShape" not in appearance
-            assert "missing_after_complete_configured_fallback" in (
+            assert "missing" in (
                 appearance["crystalShapeStatus"]
             )
             assert compat["crystalShape"] is None
@@ -229,7 +280,11 @@ def main() -> None:
             expected_confidence = (
                 "integration_user_required_shared_primary_appearance"
             )
-        elif item_id in {99, 105, 107, 108}:
+        elif item_id in {108, 110}:
+            expected_confidence = (
+                "user_confirmed_semantic_primary_weapon_feature"
+            )
+        elif item_id in {99, 105, 107}:
             expected_confidence = (
                 "user_confirmed_primary_pixel_compatibility"
             )
@@ -269,7 +324,12 @@ def main() -> None:
         evidence = catalog["itemsById"][str(item_id)]["worldWear"][
             "shapeEvidence"
         ]
-        assert evidence["confidence"] == "primary_pixel_compatibility"
+        expected_evidence_confidence = (
+            "user_confirmed_semantic_primary_weapon_feature"
+            if item_id in {108, 110}
+            else "primary_pixel_compatibility"
+        )
+        assert evidence["confidence"] == expected_evidence_confidence
         assert evidence["source"].endswith(f"/itemsById/{item_id}")
 
     data, palette, offsets, _info = read_library(WEAPON)
@@ -355,7 +415,7 @@ def main() -> None:
     assert transparent_frame_count == 232
     print(
         "EQUIPMENT_MALE_WEAPON_WORLD_WEAR_TEST_PASS "
-        "items=37 visible=35 hidden=0 unresolved=2 "
+        "items=37 visible=36 hidden=0 unresolved=1 "
         "features=34 actions=6 directions=8"
     )
 
