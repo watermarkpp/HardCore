@@ -674,7 +674,11 @@ func recalculate_stats() -> void:
 		_add_nullable_stat(result, "magic_defense_max", item.get("mdefMax", null))
 		_add_nullable_stat(result, "accuracy", item.get("accuracy", null))
 		_add_nullable_stat(result, "agility", item.get("agility", null))
-		_add_nullable_stat(result, "luck", item.get("luck", null))
+		result["luck"] = int(result.get("luck", 0)) + EquipmentRulesScript.equipment_luck_contribution(
+			item,
+			equipped_value if equipped_value is Dictionary else {},
+			slot == "武器",
+		)
 		_add_nullable_stat(result, "max_hp", item.get("hpBonus", null))
 		_add_nullable_stat(result, "max_mp", item.get("mpBonus", null))
 		_add_nullable_stat(result, "life_steal_percent", item.get("lifeStealPercent", null))
@@ -699,8 +703,6 @@ func recalculate_stats() -> void:
 			if skill_levels is Dictionary:
 				for skill_name: String in skill_levels.keys():
 					result["skill_level_bonuses"][skill_name] = int(result["skill_level_bonuses"].get(skill_name, 0)) + int(skill_levels[skill_name])
-		if slot == "武器":
-			result["luck"] = int(result.get("luck", 0)) + int(equipped_value.get("weapon_luck", 0)) - int(equipped_value.get("weapon_curse", 0))
 		var special := EquipmentRulesScript.special_effect_for(item)
 		if not special.is_empty() and bool(special.get("runtime", false)):
 			var effect_id := str(special.get("id", ""))
