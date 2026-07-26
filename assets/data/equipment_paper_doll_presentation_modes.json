@@ -1,0 +1,260 @@
+{
+  "schemaVersion": 1,
+  "contractId": "equipment.paper_doll.presentation_modes.v1",
+  "defaultMode": "world_avatar",
+  "sex": "male",
+  "sourcePolicy": {
+    "clientAssetsLane": "client_assets",
+    "clientAssetsPrimary": "client.classic_raw_complete",
+    "clientRulesLane": "client_rules",
+    "clientRulesPrimary": "source.original_gameofmir.mirclient",
+    "visualCatalog": "res://assets/data/equipment_visual_catalog.json",
+    "classicSource": "res://assets/data/warrior_paper_doll_sources.json",
+    "legacyFullPanel": "res://assets/data/equipment_original_client_paper_doll_stage.json",
+    "fallbackUsed": false
+  },
+  "modes": {
+    "world_avatar": {
+      "contractId": "equipment.paper_doll.world_avatar.v1",
+      "playerUiAllowed": true,
+      "maleOnly": true,
+      "transparentOnly": true,
+      "sourceCatalog": "res://assets/data/equipment_visual_catalog.json",
+      "canvasSize": [
+        288,
+        224
+      ],
+      "viewportOrigin": [
+        0,
+        0
+      ],
+      "viewportBounds": [
+        0,
+        0,
+        288,
+        224
+      ],
+      "footAnchor": [
+        144,
+        116
+      ],
+      "frameSelection": {
+        "action": "idle",
+        "direction": "S",
+        "directionIndex": 4,
+        "frame": 0
+      },
+      "drawOrder": [
+        "base",
+        "dress",
+        "weapon",
+        "helmet"
+      ],
+      "dressPolicy": "equipped_dress_replaces_base",
+      "selectors": {
+        "profession": "professionManifests.{professionId}",
+        "base": "worldBaseByGender.* where gender=male; actions.{action}",
+        "equippedItem": "itemsById.{itemId}.worldWear",
+        "dress": "appearancesByGender.male.actions.{action}",
+        "weapon": "appearancesByGender.male.actions.{action}",
+        "helmet": "helmetAppearance.actions.{action}"
+      },
+      "layerLayouts": {
+        "base": {
+          "cell": [
+            192,
+            160
+          ],
+          "sourceFootAnchor": [
+            64,
+            80
+          ],
+          "stagePosition": [
+            80,
+            36
+          ]
+        },
+        "dress": {
+          "cell": [
+            192,
+            160
+          ],
+          "sourceFootAnchor": [
+            64,
+            80
+          ],
+          "stagePosition": [
+            80,
+            36
+          ]
+        },
+        "weapon": {
+          "cell": [
+            224,
+            224
+          ],
+          "sourceFootAnchor": [
+            80,
+            116
+          ],
+          "stagePosition": [
+            64,
+            0
+          ]
+        },
+        "helmet": {
+          "cell": [
+            192,
+            160
+          ],
+          "sourceFootAnchor": [
+            64,
+            80
+          ],
+          "stagePosition": [
+            80,
+            36
+          ]
+        }
+      }
+    },
+    "classic_avatar": {
+      "contractId": "equipment.paper_doll.avatar_only.v1",
+      "playerUiAllowed": true,
+      "maleOnly": true,
+      "transparentOnly": true,
+      "avatarOnly": {
+        "contractId": "equipment.paper_doll.avatar_only.v1",
+        "base": {
+          "source": "Prguse.wil",
+          "sourceIndex": 376,
+          "pairedBackgroundIndex": 377,
+          "path": "res://assets/art/characters/warrior/paper_doll/classic/base_male_00376_anatomy.png",
+          "stagePosition": [
+            0,
+            0
+          ],
+          "size": [
+            168,
+            199
+          ],
+          "recordPolicy": "transparent male anatomy isolated from the primary Prguse #376/#377 pair"
+        },
+        "hair": {
+          "source": "Prguse.wil",
+          "sourceIndex": 442,
+          "path": "res://assets/art/characters/warrior/paper_doll/classic/hair_male_00442.png",
+          "stagePosition": [
+            80,
+            44
+          ],
+          "size": [
+            16,
+            14
+          ]
+        },
+        "itemSelector": "res://assets/data/equipment_visual_catalog.json#/itemsById/{itemId}/paperDoll",
+        "stagePosition": [
+          0,
+          0
+        ],
+        "canvasSize": [
+          168,
+          199
+        ],
+        "viewportOrigin": [
+          0,
+          0
+        ],
+        "viewportBounds": [
+          0,
+          0,
+          168,
+          199
+        ],
+        "footAnchor": [
+          84,
+          186
+        ],
+        "drawOrder": [
+          "base",
+          "hair",
+          "dress",
+          "weapon",
+          "helmet"
+        ],
+        "slotExclusionRects": [
+          [
+            130,
+            33,
+            38,
+            43
+          ],
+          [
+            130,
+            77,
+            38,
+            42
+          ],
+          [
+            4,
+            119,
+            35,
+            43
+          ],
+          [
+            129,
+            119,
+            39,
+            43
+          ],
+          [
+            4,
+            163,
+            35,
+            36
+          ],
+          [
+            129,
+            163,
+            39,
+            36
+          ]
+        ],
+        "consumerRule": "draw only transparent anatomy, hair and equipped StateItem layers; never draw Prguse #376 full panel"
+      }
+    }
+  },
+  "legacyFullPanel": {
+    "contractId": "equipment.paper_doll.original_client_stage.v1",
+    "path": "res://assets/data/equipment_original_client_paper_doll_stage.json",
+    "presentationRole": "legacy_audit_full_panel",
+    "forbiddenForPlayerUI": true,
+    "containsBackground": true,
+    "containsEquipmentSlotFrames": true
+  },
+  "validation": {
+    "loadoutContractIds": [
+      "test.loadout.taoist.chiyue.v1",
+      "test.loadout.taoist.wooma.v1",
+      "test.loadout.taoist.zuma.v1",
+      "test.loadout.warrior.chiyue.v1",
+      "test.loadout.warrior.wooma.v1",
+      "test.loadout.warrior.zuma.v1",
+      "test.loadout.wizard.chiyue.v1",
+      "test.loadout.wizard.wooma.v1",
+      "test.loadout.wizard.zuma.v1"
+    ],
+    "professionIds": [
+      "warrior",
+      "wizard",
+      "taoist"
+    ],
+    "tierIds": [
+      "wooma",
+      "zuma",
+      "chiyue"
+    ],
+    "femaleAssetsGenerated": 0
+  }
+}

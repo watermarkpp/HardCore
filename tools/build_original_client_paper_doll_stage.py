@@ -212,6 +212,11 @@ def main() -> None:
         "schemaVersion": 1,
         "contractId": CONTRACT_ID,
         "sex": "male",
+        "presentationRole": "legacy_audit_full_panel",
+        "forbiddenForPlayerUI": True,
+        "presentationModesRef": (
+            "res://assets/data/equipment_paper_doll_presentation_modes.json"
+        ),
         "sourcePolicy": {
             "sourceCode": (
                 "MirClient/FState.pas::TFrmDlg.DStateWinDirectPaint "
