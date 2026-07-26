@@ -223,7 +223,11 @@ func _draw_world_avatar() -> void:
 	var stage_radii := FOOT_STAGE_RADII * preview_scale
 	var shadow_points := _ellipse_points(stage_center + Vector2(0, 4), stage_radii + Vector2(5, 3))
 	draw_colored_polygon(shadow_points, Color(0.008, 0.005, 0.004, 0.56))
-	_draw_world_avatar_layer(_world_base_layer)
+	# World dress atlases are complete body appearances.  As in PlayerVisual,
+	# an equipped dress replaces the bare world base instead of being composited
+	# on top of it; this prevents the anatomy from bleeding through clothing.
+	if not _has_world_layer_kind("dress"):
+		_draw_world_avatar_layer(_world_base_layer)
 	for kind: String in ["dress", "weapon", "helmet"]:
 		for layer: Dictionary in _paper_layers:
 			if str(layer.get("layerKind", "")) == kind:
@@ -255,6 +259,13 @@ func _draw_world_avatar_layer(layer: Dictionary) -> void:
 		Color.WHITE,
 		false
 	)
+
+
+func _has_world_layer_kind(kind: String) -> bool:
+	for layer: Dictionary in _paper_layers:
+		if str(layer.get("layerKind", "")) == kind:
+			return true
+	return false
 
 
 func _ellipse_points(center: Vector2, radii: Vector2, segments := 64) -> PackedVector2Array:
@@ -347,15 +358,13 @@ func _load_paper_mappings() -> void:
 	if not _uses_avatar_only_stage:
 		var base: Variant = parsed.get("base", {})
 		if base is Dictionary:
-			var base_path := str(base.get("path", ""))
-			if ResourceLoader.exists(base_path):
-				_base_texture = load(base_path) as Texture2D
+			_base_texture = _texture_from_record(base)
 		var hair: Variant = parsed.get("hair", {})
 		if hair is Dictionary:
-			var hair_path := str(hair.get("path", ""))
-			if ResourceLoader.exists(hair_path):
+			var hair_texture := _texture_from_record(hair)
+			if hair_texture != null:
 				_hair_layer = hair.duplicate(true)
-				_hair_layer["texture"] = load(hair_path) as Texture2D
+				_hair_layer["texture"] = hair_texture
 	_recalculate_composition_opaque_bounds()
 
 
@@ -422,7 +431,7 @@ func _world_avatar_mappings(document: Dictionary) -> Dictionary:
 		if action.is_empty():
 			continue
 		var path := str(action.get("path", ""))
-		if path.is_empty() or not ResourceLoader.exists(path):
+		if path.is_empty() or not FileAccess.file_exists(path):
 			continue
 		action["slot"] = slot
 		action["layerKind"] = _slot_layer_kind(slot)
@@ -469,9 +478,9 @@ func _load_avatar_only_stage(parsed: Dictionary) -> void:
 	var avatar: Dictionary = avatar_value
 	var avatar_base: Variant = avatar.get("base", {})
 	if avatar_base is Dictionary:
-		var base_path := str(avatar_base.get("path", ""))
-		if ResourceLoader.exists(base_path):
-			_base_texture = load(base_path) as Texture2D
+		var avatar_base_texture := _texture_from_record(avatar_base)
+		if avatar_base_texture != null:
+			_base_texture = avatar_base_texture
 			_uses_avatar_only_stage = true
 	var avatar_canvas := _vector_from_value(
 		avatar.get("canvasSize", parsed.get("canvasSize", ORIGINAL_CANVAS_SIZE)),
@@ -487,10 +496,10 @@ func _load_avatar_only_stage(parsed: Dictionary) -> void:
 	_viewport_origin = _vector_from_value(avatar.get("viewportOrigin", Vector2.ZERO), Vector2.ZERO)
 	var avatar_hair: Variant = avatar.get("hair", {})
 	if avatar_hair is Dictionary:
-		var hair_path := str(avatar_hair.get("path", ""))
-		if ResourceLoader.exists(hair_path):
+		var avatar_hair_texture := _texture_from_record(avatar_hair)
+		if avatar_hair_texture != null:
 			_hair_layer = avatar_hair.duplicate(true)
-			_hair_layer["texture"] = load(hair_path) as Texture2D
+			_hair_layer["texture"] = avatar_hair_texture
 
 
 func _load_original_client_stage(parsed: Dictionary, source_document: Dictionary) -> void:
@@ -713,9 +722,20 @@ func _texture_from_record(record: Dictionary) -> Texture2D:
 	if texture_value is Texture2D:
 		return texture_value
 	var path := str(record.get("path", ""))
-	if path.is_empty() or not ResourceLoader.exists(path):
+	if path.is_empty():
 		return null
-	return load(path) as Texture2D
+	if ResourceLoader.exists(path):
+		return load(path) as Texture2D
+	# World-wear atlas files are generated inputs and may not have an editor
+	# import record in a freshly synchronized permanent worktree yet.  Loading
+	# the verified PNG directly keeps the preview deterministic without falling
+	# back to paper-doll StateItem art.
+	if not FileAccess.file_exists(path):
+		return null
+	var image := Image.load_from_file(ProjectSettings.globalize_path(path))
+	if image == null or image.is_empty():
+		return null
+	return ImageTexture.create_from_image(image)
 
 
 func _slot_layer_kind(slot: String) -> String:
@@ -967,7 +987,7 @@ func world_avatar_draw_commands() -> Array[Dictionary]:
 	var commands: Array[Dictionary] = []
 	if not _uses_world_avatar:
 		return commands
-	if not _world_base_layer.is_empty():
+	if not _world_base_layer.is_empty() and not _has_world_layer_kind("dress"):
 		commands.append(_world_base_layer.duplicate(true))
 	for kind: String in ["dress", "weapon", "helmet"]:
 		for layer: Dictionary in _paper_layers:

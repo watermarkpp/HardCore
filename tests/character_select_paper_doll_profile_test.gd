@@ -27,12 +27,7 @@ func _run() -> void:
 	assert(paper_doll.size == preview_root.size, "人物选择页纸娃娃没有填满预览容器")
 	assert(paper_doll.mouse_filter == Control.MOUSE_FILTER_IGNORE)
 	assert(paper_doll.presentation_mode == "world_avatar", "人物选择页必须默认使用世界人物预览")
-	var source_document := paper_doll._resolve_source_document()
-	var profession_document := paper_doll._profession_manifest(source_document)
-	var bases: Dictionary = profession_document.get("worldBaseByGender", {})
-	var male_base: Dictionary = bases.get("男", {})
-	var idle: Dictionary = male_base.get("actions", {}).get("idle", {})
-	assert(paper_doll.uses_world_avatar(), "人物选择页没有加载正式世界人物管线: mode=%s path=%s exists=%s %s" % [paper_doll.presentation_mode, str(idle.get("path", "")), ResourceLoader.exists(str(idle.get("path", ""))), JSON.stringify(paper_doll._world_base_layer)])
+	assert(paper_doll.uses_world_avatar(), "人物选择页没有加载正式世界人物管线")
 	assert(not paper_doll.uses_original_client_stage(), "人物选择页错误加载完整Prguse装备页")
 	_assert_world_avatar_only(paper_doll, "战士人物选择页")
 	assert(
@@ -83,9 +78,9 @@ func _assert_world_avatar_only(preview: EquipmentCharacterPreview, label: String
 	for command: Dictionary in commands:
 		var texture: Texture2D = command.get("texture")
 		assert(texture != null, "%s存在空世界人物纹理" % label)
-		var path := texture.resource_path
+		var path := str(command.get("path", ""))
 		assert(
-			path.contains("/world_wear/") or path.contains("/world/"),
+			path.contains("/world_wear/") or path.contains("/characters/warrior/wear/"),
 			"%s错误回退到装备页/纸娃娃资源：%s" % [label, path]
 		)
 
