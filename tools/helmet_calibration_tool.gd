@@ -311,13 +311,16 @@ func _setup_ui() -> void:
 	zoom_control.select(1)
 	item_control.item_selected.connect(func(index: int) -> void:
 		select_item(int(item_control.get_item_id(index)))
+		item_control.release_focus()
 	)
 	action_control.item_selected.connect(func(index: int) -> void:
 		select_action(str(action_control.get_item_text(index)))
 		_refresh_mapping_editor_ui()
+		action_control.release_focus()
 	)
 	direction_control.item_selected.connect(func(index: int) -> void:
 		select_target_direction(index)
+		direction_control.release_focus()
 	)
 	var frame_control := get_node("CalibrationUI/Panel/VBox/Inputs/Frame") as SpinBox
 	frame_control.value_changed.connect(func(value: float) -> void:
@@ -327,6 +330,7 @@ func _setup_ui() -> void:
 	zoom_control.item_selected.connect(func(index: int) -> void:
 		set_head_zoom(int(zoom_control.get_item_id(index)))
 		_refresh_mapping_editor_ui()
+		zoom_control.release_focus()
 	)
 	var scale_control := get_node(
 		"CalibrationUI/Panel/VBox/Inputs/Scale"
@@ -400,6 +404,22 @@ func _setup_ui() -> void:
 		generate_all_actions_from_idle()
 		_refresh_mapping_editor_ui()
 	)
+	_disable_keyboard_focus_for_editor_controls()
+
+
+func _disable_keyboard_focus_for_editor_controls() -> void:
+	var root := get_node("CalibrationUI") as Control
+	root.focus_mode = Control.FOCUS_NONE
+	for node: Node in root.find_children("*", "Control", true, false):
+		(node as Control).focus_mode = Control.FOCUS_NONE
+	for spin_path: String in [
+		"CalibrationUI/Panel/VBox/Inputs/Frame",
+		"CalibrationUI/Panel/VBox/Inputs/Scale",
+	]:
+		var spin := get_node(spin_path) as SpinBox
+		spin.focus_mode = Control.FOCUS_NONE
+		spin.get_line_edit().focus_mode = Control.FOCUS_NONE
+	get_viewport().gui_release_focus()
 
 
 func _build_mapping_buttons() -> void:
@@ -439,6 +459,7 @@ func _direction_texture_button(
 ) -> TextureButton:
 	var button := TextureButton.new()
 	button.name = node_name
+	button.focus_mode = Control.FOCUS_NONE
 	button.custom_minimum_size = Vector2(104, 82)
 	button.ignore_texture_size = true
 	button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
@@ -929,14 +950,35 @@ func lock_current_direction() -> bool:
 	return save_current_direction()
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if not event is InputEventKey or not event.pressed or event.echo:
+func _input(event: InputEvent) -> void:
+	if not event is InputEventKey:
 		return
-	match event.keycode:
-		KEY_UP: nudge_current(Vector2i.UP)
-		KEY_DOWN: nudge_current(Vector2i.DOWN)
-		KEY_LEFT: nudge_current(Vector2i.LEFT)
-		KEY_RIGHT: nudge_current(Vector2i.RIGHT)
+	var key_event := event as InputEventKey
+	var nudge_delta := Vector2i.ZERO
+	match key_event.keycode:
+		KEY_UP: nudge_delta = Vector2i.UP
+		KEY_DOWN: nudge_delta = Vector2i.DOWN
+		KEY_LEFT: nudge_delta = Vector2i.LEFT
+		KEY_RIGHT: nudge_delta = Vector2i.RIGHT
+	if nudge_delta != Vector2i.ZERO:
+		# Handle both press (including echo for held-key repetition) and release
+		# before Control/PopupMenu keyboard navigation can see the arrows.
+		get_viewport().set_input_as_handled()
+		if key_event.pressed:
+			nudge_current(nudge_delta)
+			_refresh_mapping_editor_ui()
+		return
+	if key_event.keycode not in [
+		KEY_1, KEY_8, KEY_0,
+		KEY_EQUAL, KEY_KP_ADD, KEY_MINUS, KEY_KP_SUBTRACT,
+		KEY_S, KEY_L,
+	]:
+		return
+	# These editor shortcuts also bypass focused menu type-ahead/navigation.
+	get_viewport().set_input_as_handled()
+	if not key_event.pressed or key_event.echo:
+		return
+	match key_event.keycode:
 		KEY_1: set_head_zoom(1)
 		KEY_8: set_head_zoom(8)
 		KEY_0: set_head_zoom(10)

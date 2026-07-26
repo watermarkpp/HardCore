@@ -109,6 +109,68 @@ func _run() -> void:
 	await get_tree().process_frame
 	assert(calibration_ui.get_h_scroll_bar().visible)
 	assert(calibration_ui.get_v_scroll_bar().visible)
+	_assert_mouse_only_focus(editor, target_grid, source_grid)
+
+	# Reproduce the real bug with menu controls deliberately made focusable.
+	# Root _input must consume arrows before OptionButton GUI navigation.
+	var item_menu := editor.get_node(
+		"CalibrationUI/Panel/VBox/Inputs/Item"
+	) as OptionButton
+	var action_menu := editor.get_node(
+		"CalibrationUI/Panel/VBox/Inputs/Action"
+	) as OptionButton
+	var direction_menu := editor.get_node(
+		"CalibrationUI/Panel/VBox/Inputs/Direction"
+	) as OptionButton
+	var zoom_menu := editor.get_node(
+		"CalibrationUI/Panel/VBox/Inputs/Zoom"
+	) as OptionButton
+	var frame_spin := editor.get_node(
+		"CalibrationUI/Panel/VBox/Inputs/Frame"
+	) as SpinBox
+	var scale_spin := editor.get_node(
+		"CalibrationUI/Panel/VBox/Inputs/Scale"
+	) as SpinBox
+	var menu_state_before := {
+		"item": item_menu.selected,
+		"action": action_menu.selected,
+		"direction": direction_menu.selected,
+		"zoom": zoom_menu.selected,
+		"frame": frame_spin.value,
+		"scale": scale_spin.value,
+		"currentDirection": editor.current_direction,
+		"currentFrame": editor.current_frame,
+	}
+	var nudge_before := _vector(
+		HelmetVisualV2.direction_record(146, 0).get("nudge", [])
+	)
+	action_menu.focus_mode = Control.FOCUS_ALL
+	action_menu.grab_focus()
+	await _dispatch_key(KEY_UP, true, false)
+	await _dispatch_key(KEY_UP, true, true)
+	await _dispatch_key(KEY_UP, false, false)
+	await _dispatch_key(KEY_DOWN, true, false)
+	direction_menu.focus_mode = Control.FOCUS_ALL
+	direction_menu.grab_focus()
+	await _dispatch_key(KEY_LEFT, true, false)
+	await _dispatch_key(KEY_LEFT, false, false)
+	await _dispatch_key(KEY_RIGHT, true, false)
+	await _dispatch_key(KEY_RIGHT, false, false)
+	assert(
+		_vector(HelmetVisualV2.direction_record(146, 0).get("nudge", []))
+		== nudge_before + Vector2i.UP
+	)
+	assert(item_menu.selected == int(menu_state_before.item))
+	assert(action_menu.selected == int(menu_state_before.action))
+	assert(direction_menu.selected == int(menu_state_before.direction))
+	assert(zoom_menu.selected == int(menu_state_before.zoom))
+	assert(frame_spin.value == float(menu_state_before.frame))
+	assert(scale_spin.value == float(menu_state_before.scale))
+	assert(editor.current_direction == int(menu_state_before.currentDirection))
+	assert(editor.current_frame == int(menu_state_before.currentFrame))
+	editor._disable_keyboard_focus_for_editor_controls()
+	_assert_mouse_only_focus(editor, target_grid, source_grid)
+	editor.undo_current_direction()
 
 	# Mouse target selection: NE must become the highlighted player target.
 	var target_ne := target_grid.get_node("Target_NE") as TextureButton
@@ -142,7 +204,7 @@ func _run() -> void:
 	var right_event := InputEventKey.new()
 	right_event.keycode = KEY_RIGHT
 	right_event.pressed = true
-	editor._unhandled_input(right_event)
+	editor._input(right_event)
 	editor.get_node(
 		"CalibrationUI/Panel/VBox/Commands/NudgeUp"
 	).emit_signal("pressed")
@@ -162,7 +224,7 @@ func _run() -> void:
 
 	# Reapply, then save through the visible button and verify reload parity.
 	source_row_zero.emit_signal("pressed")
-	editor._unhandled_input(right_event)
+	editor._input(right_event)
 	editor.get_node(
 		"CalibrationUI/Panel/VBox/Commands/Save"
 	).emit_signal("pressed")
@@ -190,12 +252,12 @@ func _run() -> void:
 	var keyboard_plus := InputEventKey.new()
 	keyboard_plus.keycode = KEY_EQUAL
 	keyboard_plus.pressed = true
-	editor._unhandled_input(keyboard_plus)
+	editor._input(keyboard_plus)
 	assert(HelmetVisualV2.uniform_scale_percent(146) == 102)
 	var keyboard_minus := InputEventKey.new()
 	keyboard_minus.keycode = KEY_MINUS
 	keyboard_minus.pressed = true
-	editor._unhandled_input(keyboard_minus)
+	editor._input(keyboard_minus)
 	assert(HelmetVisualV2.uniform_scale_percent(146) == 101)
 	for direction_index: int in 8:
 		assert(HelmetVisualV2.uniform_scale_percent(146) == 101)
@@ -395,6 +457,35 @@ func _run() -> void:
 			FileAccess.get_sha256(str(evidence.get("path", "")))
 			== str(source_151_hashes[action])
 		)
+	# S/L remain root-level shortcuts even if a menu becomes a focus
+	# candidate, and must not alter any menu, frame, or scale selection.
+	var shortcut_state_before := {
+		"item": item_menu.selected,
+		"action": action_menu.selected,
+		"direction": direction_menu.selected,
+		"zoom": zoom_menu.selected,
+		"frame": frame_spin.value,
+		"scale": scale_spin.value,
+	}
+	action_menu.focus_mode = Control.FOCUS_ALL
+	action_menu.grab_focus()
+	await _dispatch_key(KEY_S, true, false)
+	await _dispatch_key(KEY_S, false, false)
+	assert(not HelmetVisualV2.saved_direction_override(
+		151, editor.current_direction
+	).is_empty())
+	await _dispatch_key(KEY_L, true, false)
+	await _dispatch_key(KEY_L, false, false)
+	assert(bool(HelmetVisualV2.direction_record(
+		151, editor.current_direction
+	).get("locked", false)))
+	assert(item_menu.selected == int(shortcut_state_before.item))
+	assert(action_menu.selected == int(shortcut_state_before.action))
+	assert(direction_menu.selected == int(shortcut_state_before.direction))
+	assert(zoom_menu.selected == int(shortcut_state_before.zoom))
+	assert(frame_spin.value == float(shortcut_state_before.frame))
+	assert(scale_spin.value == float(shortcut_state_before.scale))
+	editor._disable_keyboard_focus_for_editor_controls()
 	assert(not HelmetVisualV2.set_session_calibration_override(
 		146, 0, {"source_row": 8, "source_slot_id": "slot_8"}
 	))
@@ -492,3 +583,41 @@ func _assert_editor_layout(editor: Node) -> void:
 				grid_rect.encloses(child.get_global_rect()),
 				str(child.name)
 			)
+
+
+func _assert_mouse_only_focus(
+	editor: Node,
+	target_grid: GridContainer,
+	source_grid: GridContainer
+) -> void:
+	var base := "CalibrationUI/Panel/VBox/"
+	for path: String in [
+		"Inputs/Item",
+		"Inputs/Action",
+		"Inputs/Direction",
+		"Inputs/Frame",
+		"Inputs/Zoom",
+		"Inputs/ScaleMinus",
+		"Inputs/Scale",
+		"Inputs/ScalePlus",
+	]:
+		assert((editor.get_node(base + path) as Control).focus_mode == Control.FOCUS_NONE, path)
+	for spin_name: String in ["Frame", "Scale"]:
+		var spin := editor.get_node(base + "Inputs/" + spin_name) as SpinBox
+		assert(spin.get_line_edit().focus_mode == Control.FOCUS_NONE)
+	for grid: GridContainer in [target_grid, source_grid]:
+		for child: Control in grid.get_children():
+			assert(child.focus_mode == Control.FOCUS_NONE, str(child.name))
+	for container_name: String in ["Layers", "Commands"]:
+		var container := editor.get_node(base + container_name) as Container
+		for child: Control in container.get_children():
+			assert(child.focus_mode == Control.FOCUS_NONE, str(child.name))
+
+
+func _dispatch_key(keycode: Key, pressed: bool, echo: bool) -> void:
+	var event := InputEventKey.new()
+	event.keycode = keycode
+	event.pressed = pressed
+	event.echo = echo
+	Input.parse_input_event(event)
+	await get_tree().process_frame
