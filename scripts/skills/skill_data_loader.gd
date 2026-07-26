@@ -17,6 +17,9 @@ const RUNTIME_ALLOWED_STATUS_FRAGMENTS := [
 const RUNTIME_FORBIDDEN_STATUS_FRAGMENTS := [
 	"candidate",
 	"unverified",
+	"needs_regression_verification",
+	"selected_service_candidate",
+	"project_adapter_c_candidate",
 	"legacy_project_baseline",
 	"rejected_version_mismatch",
 ]
@@ -134,6 +137,12 @@ static func source_identity() -> Dictionary:
 		"package_zip_sha256": PACKAGE_ZIP_SHA256,
 		"package_manifest_path": PACKAGE_MANIFEST_PATH,
 	}
+
+
+static func runtime_status_allowed(status: String) -> bool:
+	var errors: Array[String] = []
+	_validate_status_string(status, "status_probe", errors)
+	return errors.is_empty()
 
 
 static func validate_package_integrity() -> Dictionary:
