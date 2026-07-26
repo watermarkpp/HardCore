@@ -1831,27 +1831,27 @@
         "actions": {
           "idle": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_idle.png",
-            "sha256": "f28ec6a1b9b11c5106d5bea6faaa7dea11aa8264fe80c33ed84bf3078d823622"
+            "sha256": "969ae4fc298a19fd82eacd5e7c4a18e6f134fe333223b4a80d6bd11cad887733"
           },
           "walk": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_walk.png",
-            "sha256": "8c9c8931f5e7a2f748964af679ef767ad7d8528947cefbdb6a63bfa10328e0f2"
+            "sha256": "fc69ebd01be1f05fcddd36598c043e8b4dccb65b11f695ae33f58af1473e1746"
           },
           "attack": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_attack.png",
-            "sha256": "bf9fa12b2f59839716ba87a3a392b14dd200012b64e71e4b03e3cc0cda5a0f23"
+            "sha256": "36c6bc164c5431e2aea7097060e89c545a992cb3ef95de62b8fa1fb7b1a89e16"
           },
           "cast": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_cast.png",
-            "sha256": "f3303a8e1c75f2e97b2069647038e8b849a5bbc7dada2c03abd018b9c2995411"
+            "sha256": "f678fef634fd1a1c4b647225da04dccc41f272e2696fd4e79791168a1b5a1331"
           },
           "hit": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_hit.png",
-            "sha256": "26aaa193ef8f2716edb8c58c95303603116497650289ea7d5dfb774b67a534df"
+            "sha256": "9b94cce2c4dae10c9b58f881c06619a08435465470be0e393d22e27eb6332964"
           },
           "death": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_death.png",
-            "sha256": "cf29ba357752fd3798d607297bc07afc6fbaf45b572293f4c2f7b69258a7cc7b"
+            "sha256": "d8546b5907dba59b775b808fb7cf6294d61f6b877650f41fd393c2abc70ace59"
           }
         },
         "pixelPolicy": "immutable_primary_source_runtime_atlas",
@@ -1870,6 +1870,9 @@
           "SW",
           "W",
           "NW"
+        ],
+        "calibrationPreparedSourceRows": [
+          0
         ],
         "calibrationSourceMatte": "green_chroma_key_despill_v2",
         "calibrationPreviewPolicy": "single_authored_source_for_buttons_previews_and_bakes"

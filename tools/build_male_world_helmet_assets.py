@@ -485,6 +485,26 @@ def fit_to_client_envelope(
     return result
 
 
+def despill_green_matte(image: Image.Image) -> Image.Image:
+    result = image.copy()
+    pixels = result.load()
+    for y in range(result.height):
+        for x in range(result.width):
+            red, green, blue, opacity = pixels[x, y]
+            non_green = max(red, blue)
+            green_spill = max(0, green - non_green)
+            if green_spill > 0:
+                opacity = round(
+                    opacity * max(0.0, 1.0 - green_spill / 114.75)
+                )
+                green = min(green, non_green + 6)
+            if opacity <= 5:
+                pixels[x, y] = (0, 0, 0, 0)
+            else:
+                pixels[x, y] = (red, green, blue, opacity)
+    return result
+
+
 def build_variants(
     recipe: dict,
     baseline: dict,
@@ -500,8 +520,25 @@ def build_variants(
             f"{recipe['identityId']} calibrationBaseScalePercent "
             f"must be between 50 and 200"
         )
-    scale_factor = calibration_scale / 100.0
+    direction_scale_overrides = recipe.get(
+        "directionScalePercentOverrides", {}
+    )
+    if not isinstance(direction_scale_overrides, dict):
+        raise ValueError("directionScalePercentOverrides must be an object")
+    prepared_source_rows = {
+        int(value)
+        for value in recipe.get("calibrationPreparedSourceRows", [])
+    }
     for direction_row, direction in enumerate(DIRECTIONS):
+        direction_scale = int(
+            direction_scale_overrides.get(direction, calibration_scale)
+        )
+        if direction_scale < 50 or direction_scale > 200:
+            raise ValueError(
+                f"{recipe['identityId']} {direction} scale must be "
+                "between 50 and 200"
+            )
+        scale_factor = direction_scale / 100.0
         client_maximum_size = baseline["directionRuntimeTargetSize"][direction]
         maximum_size = [
             max(1, round(float(value) * scale_factor))
@@ -516,9 +553,14 @@ def build_variants(
             maximum_size,
             target_mass,
         )
+        source_slot = canonical_slots[direction_row]
+        prepared_policy = "concept_direct_resize"
+        if source_slot in prepared_source_rows:
+            variant = despill_green_matte(variant)
+            prepared_policy = "concept_direct_resize_green_despill_v1"
         variants[direction] = variant
         records[direction] = {
-            "sourceSlot": canonical_slots[direction_row],
+            "sourceSlot": source_slot,
             "sourceCutoutSize": [cutout.width, cutout.height],
             "sourceCutoutRgbaSha256": rgba_sha256(cutout),
             "generatedSize": [variant.width, variant.height],
@@ -532,7 +574,9 @@ def build_variants(
                 target_mass / (scale_factor * scale_factor), 4
             ),
             "calibrationBaseScalePercent": calibration_scale,
+            "calibrationDirectionScalePercent": direction_scale,
             "calibrationEnvelope": list(maximum_size),
+            "preparedPixelPolicy": prepared_policy,
         }
     return variants, records, acceptance
 
@@ -989,6 +1033,9 @@ def build_contract() -> dict:
             ),
             "directionAcceptance": direction_acceptance,
             "directionCutouts": variant_records,
+            "calibrationPreparedSourceRows": list(
+                recipe.get("calibrationPreparedSourceRows", [])
+            ),
             "stateItemPixelsUsed": False,
             "hairPixelsUsed": False,
             "actions": actions,
@@ -1176,6 +1223,9 @@ def rebuild_generated_identity(identity_id: str) -> dict:
         ),
         "directionAcceptance": direction_acceptance,
         "directionCutouts": variant_records,
+        "calibrationPreparedSourceRows": list(
+            recipe.get("calibrationPreparedSourceRows", [])
+        ),
         "stateItemPixelsUsed": False,
         "hairPixelsUsed": False,
         "actions": actions,

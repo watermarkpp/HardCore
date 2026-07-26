@@ -992,6 +992,8 @@ func _authored_source_runtime_cell(
 	source_row: int,
 	frame_index: int
 ) -> Image:
+	if _is_prepared_source_row(source_row):
+		return _generated_atlas_source_cell(action, source_row, frame_index)
 	var authored_cutout := _authored_source_cutout(source_row)
 	if authored_cutout.is_empty():
 		return _generated_atlas_source_cell(action, source_row, frame_index)
@@ -1649,10 +1651,27 @@ func _has_authored_source_sheet() -> bool:
 	).get("source", {}).get("calibrationSourceSheet", "")).is_empty()
 
 
+func _is_prepared_source_row(source_row: int) -> bool:
+	var prepared_rows: Array = HelmetVisualV2.visual_asset_for_item(
+		current_item_id
+	).get("source", {}).get("calibrationPreparedSourceRows", [])
+	for prepared_row: Variant in prepared_rows:
+		if int(prepared_row) == source_row:
+			return true
+	return false
+
+
 func _authored_source_cutout(source_row: int) -> Image:
 	var source: Dictionary = HelmetVisualV2.visual_asset_for_item(
 		current_item_id
 	).get("source", {})
+	if _is_prepared_source_row(source_row):
+		var prepared_cell := _generated_atlas_source_cell(
+			"idle", source_row, 0
+		)
+		var prepared_rect := prepared_cell.get_used_rect()
+		if prepared_rect.has_area():
+			return prepared_cell.get_region(prepared_rect)
 	var path := str(source.get("calibrationSourceSheet", ""))
 	var grid: Array = source.get("calibrationSourceGrid", [])
 	if path.is_empty() or grid.size() != 2:

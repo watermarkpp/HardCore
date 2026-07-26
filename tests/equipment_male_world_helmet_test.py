@@ -56,6 +56,15 @@ PRESERVED_BLACK_IRON_FILE_SHA256 = {
     "hit": "605d12ebd303bbc9be5ee3da645145ad53f9077d28e0fff83ac5d95970575cf7",
     "death": "f99492398eadb01b1b7e50f1f7c5bb347b42994054a165e3318922fd5599beec",
 }
+BRONZE_APPROVED_OTHER_DIRECTION_RGBA_SHA256 = {
+    "NE": "b8ebe624b5039fbb5f0883a2ae065438902a212b098f7896007cfe6245cc22f2",
+    "E": "dd43386d3dd76523cfa9f83cde829f1d7778871e946bc7f560552ab9a72198e2",
+    "SE": "d57867c8a16f9818d2d85b08d1ce18607b1bfc857ad8852ea05d5e61431e420f",
+    "S": "791e310a18641cef33bb1c2549636035ee5f7166b48e923a05e786127829f157",
+    "SW": "c4206a60db370bde8a54a4e863551cf938aeaf3d40b059816ec7a21af9c3eed8",
+    "W": "72814ee60f0ccc1b78d421c1e731edfba7a0fad136896a9eb82153dd623ade34",
+    "NW": "53cd8d4157e339ae7db5a206590b0fae8c65dc8fe182c4998871b7564afa6423",
+}
 
 sys.path.insert(0, str(ROOT / "tools/vendor"))
 from extract_wil import decode_sprite, read_library  # noqa: E402
@@ -432,6 +441,19 @@ def main() -> None:
         record["calibrationBaseScalePercent"] == 83
         for record in bronze_cutouts.values()
     )
+    assert bronze_cutouts["N"]["calibrationDirectionScalePercent"] == 100
+    assert bronze_cutouts["N"]["generatedSize"] == [10, 16]
+    assert bronze_cutouts["N"]["preparedPixelPolicy"] == (
+        "concept_direct_resize_green_despill_v1"
+    )
+    assert all(
+        bronze_cutouts[direction]["calibrationDirectionScalePercent"] == 83
+        for direction in BRONZE_APPROVED_OTHER_DIRECTION_RGBA_SHA256
+    )
+    assert {
+        direction: bronze_cutouts[direction]["generatedRgbaSha256"]
+        for direction in BRONZE_APPROVED_OTHER_DIRECTION_RGBA_SHA256
+    } == BRONZE_APPROVED_OTHER_DIRECTION_RGBA_SHA256
     assert min(
         record["generatedSize"][1] for record in bronze_cutouts.values()
     ) >= 13
@@ -440,6 +462,7 @@ def main() -> None:
         for record in bronze_cutouts.values()
     )
     assert bronze_cutouts["S"]["generatedSize"][0] >= 8
+    assert identities["bronze_magic"]["calibrationPreparedSourceRows"] == [0]
     bronze_front = cropped_visible(
         bronze_idle.crop((0, 4 * CELL[1], CELL[0], 5 * CELL[1]))
     )

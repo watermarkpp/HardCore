@@ -3,7 +3,7 @@
   "contractId": "equipment.world_helmet.male.extension.v1",
   "sex": "male",
   "recipe": "res://assets/data/equipment_male_world_helmet_recipes.json",
-  "recipeFileSha256": "9f1076d108eb5cd4e9a351b303ba629b506f0dc4dc3d4a07cef6d3f13d330142",
+  "recipeFileSha256": "7f44ba29ded8f3163e9562611a73ab7ba3e5ae86143a3de9401e19675c065f55",
   "actorContract": {
     "contractId": "player.visual.classic_eight_direction.v1",
     "cell": [
@@ -12122,21 +12122,23 @@
           ],
           "sourceCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
           "generatedSize": [
-            8,
-            13
+            10,
+            16
           ],
-          "generatedRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-          "effectiveOpaquePixels": 75.0039,
+          "generatedRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+          "effectiveOpaquePixels": 115.1451,
           "clientMedianEnvelope": [
             13,
             16
           ],
           "clientMedianOpaquePixels": 141.0,
           "calibrationBaseScalePercent": 83,
+          "calibrationDirectionScalePercent": 100,
           "calibrationEnvelope": [
-            11,
-            13
-          ]
+            13,
+            16
+          ],
+          "preparedPixelPolicy": "concept_direct_resize_green_despill_v1"
         },
         "NE": {
           "sourceSlot": 1,
@@ -12157,10 +12159,12 @@
           ],
           "clientMedianOpaquePixels": 158.0,
           "calibrationBaseScalePercent": 83,
+          "calibrationDirectionScalePercent": 83,
           "calibrationEnvelope": [
             15,
             15
-          ]
+          ],
+          "preparedPixelPolicy": "concept_direct_resize"
         },
         "E": {
           "sourceSlot": 2,
@@ -12181,10 +12185,12 @@
           ],
           "clientMedianOpaquePixels": 148.0,
           "calibrationBaseScalePercent": 83,
+          "calibrationDirectionScalePercent": 83,
           "calibrationEnvelope": [
             12,
             17
-          ]
+          ],
+          "preparedPixelPolicy": "concept_direct_resize"
         },
         "SE": {
           "sourceSlot": 3,
@@ -12205,10 +12211,12 @@
           ],
           "clientMedianOpaquePixels": 136.0,
           "calibrationBaseScalePercent": 83,
+          "calibrationDirectionScalePercent": 83,
           "calibrationEnvelope": [
             13,
             19
-          ]
+          ],
+          "preparedPixelPolicy": "concept_direct_resize"
         },
         "S": {
           "sourceSlot": 4,
@@ -12229,10 +12237,12 @@
           ],
           "clientMedianOpaquePixels": 113.0,
           "calibrationBaseScalePercent": 83,
+          "calibrationDirectionScalePercent": 83,
           "calibrationEnvelope": [
             12,
             17
-          ]
+          ],
+          "preparedPixelPolicy": "concept_direct_resize"
         },
         "SW": {
           "sourceSlot": 5,
@@ -12253,10 +12263,12 @@
           ],
           "clientMedianOpaquePixels": 142.0,
           "calibrationBaseScalePercent": 83,
+          "calibrationDirectionScalePercent": 83,
           "calibrationEnvelope": [
             13,
             19
-          ]
+          ],
+          "preparedPixelPolicy": "concept_direct_resize"
         },
         "W": {
           "sourceSlot": 6,
@@ -12277,10 +12289,12 @@
           ],
           "clientMedianOpaquePixels": 150.0,
           "calibrationBaseScalePercent": 83,
+          "calibrationDirectionScalePercent": 83,
           "calibrationEnvelope": [
             13,
             17
-          ]
+          ],
+          "preparedPixelPolicy": "concept_direct_resize"
         },
         "NW": {
           "sourceSlot": 7,
@@ -12301,19 +12315,24 @@
           ],
           "clientMedianOpaquePixels": 156.0,
           "calibrationBaseScalePercent": 83,
+          "calibrationDirectionScalePercent": 83,
           "calibrationEnvelope": [
             13,
             14
-          ]
+          ],
+          "preparedPixelPolicy": "concept_direct_resize"
         }
       },
+      "calibrationPreparedSourceRows": [
+        0
+      ],
       "stateItemPixelsUsed": false,
       "hairPixelsUsed": false,
       "actions": {
         "idle": {
           "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_idle.png",
-          "fileSha256": "f28ec6a1b9b11c5106d5bea6faaa7dea11aa8264fe80c33ed84bf3078d823622",
-          "atlasRgbaSha256": "79087fd11d28b1a98db742fe0f5fef835ed5367b00b55a8a4f9a1eb0f22a748f",
+          "fileSha256": "969ae4fc298a19fd82eacd5e7c4a18e6f134fe333223b4a80d6bd11cad887733",
+          "atlasRgbaSha256": "3ed69be76d8f699acd5cc5534f5ca99e95984deb1c7c50c34966d13c1d44e5d3",
           "cell": [
             192,
             160
@@ -12363,16 +12382,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                84,
-                31
+                83,
+                29
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "8268bb25f89488f5af91a425b5bf856ea292e1b15cd83969084bac623245e64a",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "959a816a61a462079025ca1f0e8ca04abd1fde012debef5df419f7bb03b0764b",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -12413,16 +12432,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                84,
-                31
+                83,
+                29
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "8268bb25f89488f5af91a425b5bf856ea292e1b15cd83969084bac623245e64a",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "959a816a61a462079025ca1f0e8ca04abd1fde012debef5df419f7bb03b0764b",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -12463,16 +12482,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                84,
-                31
+                83,
+                29
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "8268bb25f89488f5af91a425b5bf856ea292e1b15cd83969084bac623245e64a",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "959a816a61a462079025ca1f0e8ca04abd1fde012debef5df419f7bb03b0764b",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -12513,16 +12532,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                84,
-                31
+                83,
+                29
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "8268bb25f89488f5af91a425b5bf856ea292e1b15cd83969084bac623245e64a",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "959a816a61a462079025ca1f0e8ca04abd1fde012debef5df419f7bb03b0764b",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -13932,8 +13951,8 @@
         },
         "walk": {
           "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_walk.png",
-          "fileSha256": "8c9c8931f5e7a2f748964af679ef767ad7d8528947cefbdb6a63bfa10328e0f2",
-          "atlasRgbaSha256": "516e68cf84b938b824e6c6a81b6f033a979ba8d5baccc7e41bc25c9cffa5a868",
+          "fileSha256": "fc69ebd01be1f05fcddd36598c043e8b4dccb65b11f695ae33f58af1473e1746",
+          "atlasRgbaSha256": "24fd04ab7e91e677d9d4724ac49d4364b410d04fc260406ad1b5f1f759a5db11",
           "cell": [
             192,
             160
@@ -13983,16 +14002,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                84,
-                31
+                83,
+                29
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "8268bb25f89488f5af91a425b5bf856ea292e1b15cd83969084bac623245e64a",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "959a816a61a462079025ca1f0e8ca04abd1fde012debef5df419f7bb03b0764b",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -14033,16 +14052,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                84,
-                31
+                83,
+                29
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "8268bb25f89488f5af91a425b5bf856ea292e1b15cd83969084bac623245e64a",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "959a816a61a462079025ca1f0e8ca04abd1fde012debef5df419f7bb03b0764b",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -14083,16 +14102,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                84,
-                30
+                83,
+                28
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "116feca21522bdc41b4c9645af1ea3a6082b36a3694bf52321761cac88931f79",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "98314ef54343fcd9c50d31257f6a044d68496cb4db8d077bb7ab7ac2f1f7cff3",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -14133,16 +14152,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                84,
-                31
+                83,
+                29
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "8268bb25f89488f5af91a425b5bf856ea292e1b15cd83969084bac623245e64a",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "959a816a61a462079025ca1f0e8ca04abd1fde012debef5df419f7bb03b0764b",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -14183,16 +14202,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                84,
-                31
+                83,
+                29
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "8268bb25f89488f5af91a425b5bf856ea292e1b15cd83969084bac623245e64a",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "959a816a61a462079025ca1f0e8ca04abd1fde012debef5df419f7bb03b0764b",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -14233,16 +14252,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                84,
-                30
+                83,
+                28
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "116feca21522bdc41b4c9645af1ea3a6082b36a3694bf52321761cac88931f79",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "98314ef54343fcd9c50d31257f6a044d68496cb4db8d077bb7ab7ac2f1f7cff3",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -16352,8 +16371,8 @@
         },
         "attack": {
           "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_attack.png",
-          "fileSha256": "bf9fa12b2f59839716ba87a3a392b14dd200012b64e71e4b03e3cc0cda5a0f23",
-          "atlasRgbaSha256": "1d41bb1db548924c4c98ca8ecccf3c39d7e279be48f66cb8c309808a56af48f8",
+          "fileSha256": "36c6bc164c5431e2aea7097060e89c545a992cb3ef95de62b8fa1fb7b1a89e16",
+          "atlasRgbaSha256": "3402c348c34de8c5d86cced63142d64dd9b8852e09d58e5c9736f65d23e0f8f8",
           "cell": [
             192,
             160
@@ -16403,16 +16422,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                87,
-                38
+                86,
+                36
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "ce6de0bb675457514d991fe5761260ebcfdf9416fb437d35960baeae7366dd72",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "2132126d4d0e2b894e0e3ca693ddad82100c1fc7c604caa6945edcfe0b316e09",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -16453,16 +16472,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                81,
-                51
+                80,
+                49
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "a3e8237f10737ab989721ad403c03f898cce201b55545bba07ea08024e3d83c9",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "46a2c91b0f6afa6e753a8d6ca60c5ee8de04fce57a53b590e14007833fa0b9b9",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -16503,16 +16522,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                85,
-                31
+                84,
+                29
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "04014bbfac72dbee1bad9343744b8faefdb1bf31c1af56d77be1653f9942e518",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "eaf4b6c609f2213c338a80fe8cd6e2efa58a158a34076cc22caf8a041e13fbe4",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -16553,16 +16572,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                85,
-                27
+                84,
+                25
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "1f9185859b03c4a9ae0eb342d58ae18ec4e33271278f3a3cac54772b044b90f1",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "e0fe9612df2e8caf5d80757b98320e59f80f6ba760e3876dfccfc01b8327acd9",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -16603,16 +16622,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                85,
-                27
+                84,
+                25
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "1f9185859b03c4a9ae0eb342d58ae18ec4e33271278f3a3cac54772b044b90f1",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "e0fe9612df2e8caf5d80757b98320e59f80f6ba760e3876dfccfc01b8327acd9",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -16653,16 +16672,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                87,
-                29
+                86,
+                27
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "b29ca946833312b4c22eb839840d5b604584ae1a7b456323413e863b378f1476",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "3fcde2bd16535a18825dc4e68b90fafce6bbd52887d28ebe85fc444aabdf8809",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -18772,8 +18791,8 @@
         },
         "cast": {
           "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_cast.png",
-          "fileSha256": "f3303a8e1c75f2e97b2069647038e8b849a5bbc7dada2c03abd018b9c2995411",
-          "atlasRgbaSha256": "b916e8cee8747e8c51495c9b97dc6c7f363e1430f291913a2392be31e05c0a74",
+          "fileSha256": "f678fef634fd1a1c4b647225da04dccc41f272e2696fd4e79791168a1b5a1331",
+          "atlasRgbaSha256": "d834dc262c490e182d790ed20046dd705dafd12999658c77975c8ba805bb1c62",
           "cell": [
             192,
             160
@@ -18823,16 +18842,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                86,
-                34
+                85,
+                32
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "0ce6ba3c456bb439bba548dbecb27a089f294837bc86d322fd35b04b429d0bd8",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "f69dcdb8960cc424c914327d7e50fe2a324b11980a5c140da3770eee03e2fd29",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -18873,16 +18892,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                85,
-                34
+                84,
+                32
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "d912d5dce7087135e723d1a3024fdd2cec62a82cc3409e66f5ccd46bdbeedda8",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "1b24f4634c80bfd6436d49cb645ce7e0717b05fd03a67906525e780c73cdb0f4",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -18923,16 +18942,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                86,
-                35
+                85,
+                33
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "cc3f1809dcd706e0e135f704d82abe64e2b8c14d48efc47c1536f3b93df38f44",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "40945c110f681b03aac29e63a49d27c1ac7509108d795d23be71b96068601d85",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -18973,16 +18992,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                84,
-                37
+                83,
+                35
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "842179eac380d044391353339692955280a01270fca2873480fe8c0b8e8ca819",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "a8dafa6913911d46b733267d8ccc6176eb6693a79d81d35ea62b70dfff54fd2b",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -19023,16 +19042,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                84,
-                37
+                83,
+                35
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "842179eac380d044391353339692955280a01270fca2873480fe8c0b8e8ca819",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "a8dafa6913911d46b733267d8ccc6176eb6693a79d81d35ea62b70dfff54fd2b",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -19073,16 +19092,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                86,
-                33
+                85,
+                31
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "8de98930aca24f45ee45ff74182ad718d9773ad8d4dc4532acd74003a62f0690",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "d1ef5c0ba6638ed5ac6fd6a4bde73253fe35c189a03dabae60987fefcd38811d",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -21192,8 +21211,8 @@
         },
         "hit": {
           "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_hit.png",
-          "fileSha256": "26aaa193ef8f2716edb8c58c95303603116497650289ea7d5dfb774b67a534df",
-          "atlasRgbaSha256": "98c5a2258c14c42ec6e4ff20b0a2554dada2fe3213cdcb970310420f9f619cb8",
+          "fileSha256": "9b94cce2c4dae10c9b58f881c06619a08435465470be0e393d22e27eb6332964",
+          "atlasRgbaSha256": "bfbedf4e1d7ef1a40cad49751c8d4bb24e72fef1cba78178f6f7cf8d835eaa25",
           "cell": [
             192,
             160
@@ -21243,16 +21262,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                82,
-                54
+                81,
+                52
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "eac1e0d2a3ef2d0bd1547d6dd2a87bed5ed91d43217023ba9202ad16ce411481",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "75d92bae5d16befbf88b2fdcba0beaee20bf449faaff35fe50db403a183c237f",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -21293,16 +21312,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                85,
-                44
+                84,
+                42
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "b7aa27f1172eb631dce896861475fa2f051a20c3f882a8bcac75881724dcef48",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "859e589beef55de68965c4cb38fe58eedd3b24b6bfaa3ba82700e2bb2f014537",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -21343,16 +21362,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                85,
-                33
+                84,
+                31
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "1c97f1ee48350d037a755f6577d6d5ef2a239d38ff4f243df440ab9fef48ad7d",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "1fdd8a7bf74b133eeb57b926e2954b3ae958643d501f4036a592f389329ce79d",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -22412,8 +22431,8 @@
         },
         "death": {
           "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_death.png",
-          "fileSha256": "cf29ba357752fd3798d607297bc07afc6fbaf45b572293f4c2f7b69258a7cc7b",
-          "atlasRgbaSha256": "385e3f3ce3201611f02fb383b74b81a638ab4455351c25a4b6bf0433a26e9812",
+          "fileSha256": "d8546b5907dba59b775b808fb7cf6294d61f6b877650f41fd393c2abc70ace59",
+          "atlasRgbaSha256": "b5d9b9c09b8ef5d3c4de0843e39ccf86872fe934f81339efd7ebf5cad7b87395",
           "cell": [
             192,
             160
@@ -22463,16 +22482,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                84,
-                31
+                83,
+                29
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "8268bb25f89488f5af91a425b5bf856ea292e1b15cd83969084bac623245e64a",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "959a816a61a462079025ca1f0e8ca04abd1fde012debef5df419f7bb03b0764b",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -22513,16 +22532,16 @@
               ],
               "rejectedHelmetWilAppearances": [],
               "paste": [
-                81,
-                43
+                80,
+                41
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "bf9a29e8b4ab66c12f92bec8b18e960ec14bccbd33185f46e3fa2b7312a5f13d",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "4110d3b55caf332189fd5c0c854e86e4ffa15a1d70362a537a0140394db11063",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -22564,16 +22583,16 @@
                 5
               ],
               "paste": [
-                88,
-                102
+                87,
+                100
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "7c733f6fdb884f864354e7292bcf9770cff1693e0006789e046e8f2b9bd1e308",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "87925dac6e9a3aa87c7f470054e9f9bebff9a3a7a372e29fc97c854f83af1dbe",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -22615,16 +22634,16 @@
                 1
               ],
               "paste": [
-                88,
-                116
+                87,
+                114
               ],
               "generatedSize": [
-                8,
-                13
+                10,
+                16
               ],
               "conceptCutoutRgbaSha256": "ce31a499dbf9957e5e986011d0d9c8293dfef09c908b2313a90a26ac1a9bfbd2",
-              "generatedHelmetRgbaSha256": "1188760f093450c37b39719971d6bec7cb52420e0678cb69b8ad8b8518f80ad1",
-              "cellRgbaSha256": "0564aa28e3b13a3a0e351a4d4a723368587b7eddab90d9a26e436d57d3c15d1f",
+              "generatedHelmetRgbaSha256": "7bda7332a884847ca925f3daead8768bce4cc4192f2f7ea038207b50cf25b366",
+              "cellRgbaSha256": "969325441732896f837312fb687bae8436ae378e95ca53fe23ec02f4426d184f",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,

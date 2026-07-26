@@ -253,6 +253,11 @@ func _run() -> void:
 	assert(str(bronze_source.get("calibrationPreviewPolicy", "")) == (
 		"single_authored_source_for_buttons_previews_and_bakes"
 	))
+	var prepared_rows: Array = bronze_source.get(
+		"calibrationPreparedSourceRows", []
+	)
+	assert(prepared_rows.size() == 1)
+	assert(int(prepared_rows[0]) == 0)
 	assert(editor._source_recipe_id().ends_with(".green_despill_v2"))
 	var authored_hashes: Dictionary = {}
 	var differs_from_runtime := false
@@ -289,6 +294,10 @@ func _run() -> void:
 			differs_from_generated_atlas = true
 	assert(differs_from_runtime)
 	assert(differs_from_generated_atlas)
+	assert(
+		editor.calibration_source_cell("idle", 0, 0).get_data()
+		== editor._generated_atlas_source_cell("idle", 0, 0).get_data()
+	)
 	assert(authored_strip.save_png(ProjectSettings.globalize_path(
 		"%s/helmet_147_authored_source_8dir.png" % OUTPUT_ROOT
 	)) == OK)

@@ -399,6 +399,9 @@ def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
                 "calibrationSourceSheetSha256": identity["conceptFileSha256"],
                 "calibrationSourceGrid": identity["sourceGrid"],
                 "calibrationSourceSlotDirectionOrder": source_order,
+                "calibrationPreparedSourceRows": identity.get(
+                    "calibrationPreparedSourceRows", []
+                ),
                 "calibrationSourceMatte": "green_chroma_key_despill_v2",
                 "calibrationPreviewPolicy": (
                     "single_authored_source_for_buttons_previews_and_bakes"
