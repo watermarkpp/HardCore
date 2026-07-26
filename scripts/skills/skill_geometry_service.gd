@@ -35,7 +35,7 @@ static func cells(definition: Dictionary, origin: Vector2i, facing: Vector2i, ta
 			var radius := int(geometry.get("radius_tiles", 1))
 			for y in range(-radius, radius + 1):
 				for x in range(-radius, radius + 1):
-					if maxi(absi(x), absi(y)) == radius:
+					if x != 0 or y != 0:
 						result.append(origin + Vector2i(x, y))
 		"chebyshev_area":
 			var radius := int(geometry.get("radius_tiles", 1))
@@ -45,7 +45,12 @@ static func cells(definition: Dictionary, origin: Vector2i, facing: Vector2i, ta
 		"project_canonical_four_target_arc":
 			var left := Vector2i(direction.y, -direction.x)
 			result = [origin + direction, origin + left, origin - left, origin - direction]
+		"hexagon_boundary_approximated_on_8dir_grid":
+			for y in range(-1, 2):
+				for x in range(-1, 2):
+					if x != 0 or y != 0:
+						result.append(center + Vector2i(x, y))
 		_:
-			if shape not in ["none", "none_until_next_melee_hit", "targeted", "targeted_light", "projectile", "sky_strike_targeted", "random_valid_map_destination", "nearest_valid_adjacent_tile", "line_push", "hexagon_boundary_approximated_on_8dir_grid"]:
+			if shape not in ["none", "none_until_next_melee_hit", "targeted", "targeted_light", "projectile", "sky_strike_targeted", "random_valid_map_destination", "nearest_valid_adjacent_tile", "line_push"]:
 				push_warning("未实现的技能几何形状：%s" % shape)
 	return result

@@ -2,7 +2,12 @@ class_name SkillResourceService
 extends RefCounted
 
 
-static func quote(definition: Dictionary, rank: int, resource_context: Dictionary) -> Dictionary:
+static func quote(
+	definition: Dictionary,
+	rank: int,
+	resource_context: Dictionary,
+	cast_context := {}
+) -> Dictionary:
 	var safe_rank := clampi(rank, 0, 3)
 	var mp_costs: Array = definition.get("mp_cost_by_rank", [])
 	var mp_cost := int(mp_costs[safe_rank]) if safe_rank < mp_costs.size() else 0
@@ -10,6 +15,11 @@ static func quote(definition: Dictionary, rank: int, resource_context: Dictionar
 	var item: Variant = resource.get("item")
 	var amounts: Array = resource.get("amount_by_rank", [])
 	var item_amount := int(amounts[safe_rank]) if safe_rank < amounts.size() else 0
+	if (
+		str(definition.get("mechanics", {}).get("runtime_family", "")) == "persistent_main_pet"
+		and bool(cast_context.get("has_main_pet", false))
+	):
+		item_amount = 0
 	var materials: Dictionary = resource_context.get("materials", {})
 	var selected_item := str(resource_context.get("selected_material", item if item != null else ""))
 	if item != null and str(item) == "selected_poison_powder" and selected_item not in ["grey_powder", "yellow_powder"]:

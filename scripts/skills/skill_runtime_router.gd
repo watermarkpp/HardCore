@@ -33,7 +33,8 @@ static func execute(request: Variant) -> Dictionary:
 	var resource_quote := SkillResourceServiceScript.quote(
 		definition,
 		int(request.get("rank", 0)),
-		request.get("resource_context", {})
+		request.get("resource_context", {}),
+		request.get("target_context", {})
 	)
 	if not bool(resource_quote.get("valid", false)):
 		return SkillCastResultScript.failure(skill_id, str(resource_quote.get("reason", "insufficient_resource")))
