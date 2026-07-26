@@ -154,6 +154,7 @@
           ]
         },
         "itemSelector": "res://assets/data/equipment_visual_catalog.json#/itemsById/{itemId}/paperDoll",
+        "headPatchSelector": "res://assets/data/equipment_classic_avatar_head_patches.json#/itemsById/{itemId}/flattenedHeadPatch",
         "stagePosition": [
           0,
           0
@@ -178,10 +179,9 @@
         ],
         "drawOrder": [
           "base",
-          "hair",
           "dress",
           "weapon",
-          "helmet"
+          "flattenedHeadPatch"
         ],
         "slotExclusionRects": [
           [
