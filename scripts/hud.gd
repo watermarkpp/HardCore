@@ -844,6 +844,8 @@ func update_quick_slots() -> void:
 		var skill_name := PlayerState.quick_slots[index]
 		var marker := _warrior_skill_marker(skill_name)
 		var skill_texture := HUDSkillIconCatalogScript.texture_for(skill_name)
+		var skill_icon_id := HUDSkillIconCatalogScript.source_id_for(skill_name)
+		var skill_icon_path := HUDSkillIconCatalogScript.source_path_for(skill_name)
 		var display_text := "%d\n%s%s" % [index + 1, skill_name if not skill_name.is_empty() else "空", marker]
 		quick_buttons[index].text = display_text
 		quick_buttons[index].tooltip_text = skill_name if not skill_name.is_empty() else "空技能槽"
@@ -851,14 +853,16 @@ func update_quick_slots() -> void:
 			quick_slot_icons[index].texture = skill_texture
 			quick_slot_icons[index].visible = skill_texture != null
 			quick_slot_icons[index].set_meta("skill_name", skill_name)
-			quick_slot_icons[index].set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
+			quick_slot_icons[index].set_meta("skill_icon_id", skill_icon_id)
+			quick_slot_icons[index].set_meta("skill_icon_path", skill_icon_path)
 		if index < quick_slot_labels.size():
 			quick_slot_labels[index].text = _compact_skill_label(index, skill_name, marker, skill_texture != null)
 		if index < attack_ring_skill_icons.size():
 			attack_ring_skill_icons[index].texture = skill_texture
 			attack_ring_skill_icons[index].visible = skill_texture != null
 			attack_ring_skill_icons[index].set_meta("skill_name", skill_name)
-			attack_ring_skill_icons[index].set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
+			attack_ring_skill_icons[index].set_meta("skill_icon_id", skill_icon_id)
+			attack_ring_skill_icons[index].set_meta("skill_icon_path", skill_icon_path)
 		if index < attack_ring_skill_labels.size():
 			attack_ring_skill_labels[index].text = str(index + 1) if skill_texture != null else "技%d" % (index + 1)
 			attack_ring_skill_labels[index].tooltip_text = skill_name
