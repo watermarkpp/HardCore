@@ -31,7 +31,7 @@ func _run() -> void:
 	assert(int(PlayerState.computed_stats.accuracy) == 5, "0级基本剑术/攻杀不应凭空加准确")
 	PlayerState.learned_skills = {"基本剑术": 3, "攻杀剑术": 3}
 	PlayerState.recalculate_stats()
-	assert(int(PlayerState.computed_stats.accuracy) == 17, "三级基本剑术和攻杀准确结算错误")
+	assert(int(PlayerState.computed_stats.accuracy) == 5, "技能准确仍被旧PlayerState公式提前注入，未交给Router")
 
 	var file := FileAccess.open("res://assets/data/warrior_service_rules.json", FileAccess.READ)
 	assert(file != null, "战士服务端规则数据不存在")
