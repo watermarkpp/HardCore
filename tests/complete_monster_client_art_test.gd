@@ -73,7 +73,7 @@ func _run() -> void:
 			"monsterId=%d 图像绘制原点未迁移到统一地面原点" % monster_id
 		)
 		enemy.set_targeted(true)
-		assert(enemy.ground_indicator_center().is_equal_approx(enemy.visual.position), "monsterId=%d 锁定光圈未使用统一地面原点" % monster_id)
+		assert(enemy.ground_indicator_center().is_equal_approx(enemy.visual.position + enemy.visual.ground_contact_offset()), "monsterId=%d 锁定光圈未使用真实素材落地点" % monster_id)
 		enemy.queue_free()
 
 	player.queue_free()

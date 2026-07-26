@@ -50,6 +50,9 @@ func _run() -> void:
 	launcher._select_main_profile("wizard_01")
 	assert(launcher.selected_main_profile_id == "wizard_01", "任意角色没有成功切换为主角色")
 	assert(PlayerState.active_profile_id == "wizard_01" and PlayerState.profession == "法师", "选择主角色没有读取对应档案")
+	await get_tree().process_frame
+	var wizard_paper_doll: Control = launcher.get_node("CenteredContent/CharacterPreviewPanel/PreviewStage/PreviewVisualRoot/RuntimePaperDoll")
+	assert(wizard_paper_doll.profession_name == "法师" and wizard_paper_doll.has_renderable_assets(), "法师人物选择预览仍在使用职业占位符")
 	launcher._set_ai_teammate_enabled(true)
 	launcher._select_ai_profile("taoist_01")
 	assert(launcher.selected_ai_profile_id == "taoist_01", "第二角色没有成功选择为 AI 队友")
@@ -85,7 +88,10 @@ func _run() -> void:
 	launcher._select_main_profile("warrior_01")
 	await get_tree().process_frame
 	var paper_doll: Control = launcher.get_node("CenteredContent/CharacterPreviewPanel/PreviewStage/PreviewVisualRoot/RuntimePaperDoll")
-	assert(paper_doll.preview_scale >= 1.5, "人物大厅纸娃娃没有按要求放大")
+	assert(not paper_doll.center_on_opaque_bounds, "背包战士偏左修正错误影响了人物选择页坐标")
+	assert(paper_doll.position == Vector2.ZERO, "人物选择页纸娃娃没有从预览容器原点开始适配")
+	assert(paper_doll.size == launcher.preview_visual_root.size, "人物选择页纸娃娃没有按容器等比适配")
+	assert(paper_doll.mouse_filter == Control.MOUSE_FILTER_IGNORE, "人物选择页纸娃娃错误拦截触摸")
 	assert(launcher.profile_cards["warrior_01"].main_button.alignment == HORIZONTAL_ALIGNMENT_CENTER, "角色名称、等级和职业没有在信息框中居中")
 
 	launcher.queue_free()

@@ -1,6 +1,7 @@
 extends Node
 
 const CHASSIS_PATH := "res://assets/ui/gothic_hud/v2/runtime/bottom_chassis_v2.png"
+const MobileLayout := preload("res://scripts/mobile_layout.gd")
 
 
 func _ready() -> void:
@@ -30,10 +31,10 @@ func _run() -> void:
 	hud.loading_transition_covered.connect(func(request: Dictionary) -> void: covered_requests.append(request.duplicate(true)))
 	hud.loading_transition_finished.connect(func(request: Dictionary) -> void: finished_requests.append(request.duplicate(true)))
 	hud.begin_loading_transition("hud:test:001")
-	await get_tree().create_timer(0.27).timeout
+	await get_tree().create_timer(0.50).timeout
 	assert(covered_requests.size() == 1 and covered_requests[0].transition_id == "hud:test:001", "HUD 没有转发Loading完全覆盖信号")
 	hud.finish_loading_transition()
-	await get_tree().create_timer(0.25).timeout
+	await get_tree().create_timer(0.45).timeout
 	assert(finished_requests.size() == 1 and finished_requests[0].transition_id == "hud:test:001", "HUD 没有转发Loading结束信号")
 	var death_panel: Control = hud.get("death_revival_panel") as Control
 	assert(death_panel != null and not death_panel.visible, "死亡界面没有以隐藏状态接入 HUD")
@@ -41,7 +42,14 @@ func _run() -> void:
 	var chassis := root.get_node("IntegratedHUDChassis") as Control
 	assert(chassis != null and chassis.size == Vector2(820, 273))
 	assert(chassis.get_meta("contents") == ["health_orb", "four_item_slots", "mana_orb"])
-	assert(chassis.get_node("HealthOrb") != null and chassis.get_node("ManaOrb") != null)
+	var health_orb := chassis.get_node("HealthOrb") as Control
+	var mana_orb := chassis.get_node("ManaOrb") as Control
+	assert(health_orb != null and mana_orb != null)
+	assert(health_orb.size == Vector2(110, 110) and mana_orb.size == Vector2(110, 110), "血蓝球没有恢复为与框体透明孔匹配的既定尺寸")
+	assert(health_orb.get_meta("stable_id") == "ui.hud.resource_orb.hole_fill.v1" and mana_orb.get_meta("stable_id") == "ui.hud.resource_orb.hole_fill.v1")
+	assert(is_equal_approx(health_orb.position.x + health_orb.size.x * 0.5, 182.0), "生命球圆心偏离框体透明孔")
+	assert(is_equal_approx(mana_orb.position.x + mana_orb.size.x * 0.5, 639.0), "魔法球圆心偏离框体透明孔")
+	assert(is_equal_approx(health_orb.position.y + health_orb.size.y * 0.5, mana_orb.position.y + mana_orb.size.y * 0.5), "血蓝球纵向不对称")
 	for index in range(4):
 		var item_slot := chassis.get_node("ItemSlot%d" % (index + 1)) as Button
 		assert(item_slot != null and item_slot.get_meta("stable_id") == "hud.item_slot.%d" % (index + 1))
@@ -100,5 +108,42 @@ func _run() -> void:
 	assert(FileAccess.file_exists("res://assets/ui/gothic_hud/v2/hud_asset_manifest.json"))
 	var hud_source := FileAccess.get_file_as_string("res://scripts/hud.gd")
 	assert("gothic_hud/v1" not in hud_source and "gothic_preview" not in hud_source, "正式HUD不得继续引用旧素材")
+	await _assert_2664x1200_landscape_layout(root, chassis, health_orb, mana_orb)
 	print("HUD_GOTHIC_RUNTIME_PASS：统一V2透明框体、动态血蓝球、4物品槽、4职业槽、3环绕技能与触控尺寸均通过")
 	get_tree().quit(0)
+
+
+func _assert_2664x1200_landscape_layout(root: Control, chassis: Control, health_orb: Control, mana_orb: Control) -> void:
+	# 2664x1200 在项目 720 高的 expand 逻辑视口中为 1598.4x720；左侧 120px 挖孔折算为 72 逻辑像素。
+	var physical_viewport := Vector2(2664, 1200)
+	var logical_viewport := Vector2(1598.4, 720)
+	var safe_rect := Rect2(120, 0, 2544, 1200)
+	var margins := MobileLayout.safe_margins(physical_viewport, safe_rect, logical_viewport)
+	assert(margins.is_equal_approx(Vector4(72, 0, 0, 0)), "2664x1200 安全区换算错误")
+	root.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	root.position = Vector2(margins.x, margins.y)
+	root.size = logical_viewport - Vector2(margins.x + margins.z, margins.y + margins.w)
+	await get_tree().process_frame
+
+	var safe_bounds := Rect2(root.global_position, root.size)
+	var bounded_controls: Array[Control] = [
+		chassis,
+		root.get_node("TouchJoystick") as Control,
+		root.get_node("UtilityStackArt") as Control,
+		root.get_node("RightControlsArt") as Control,
+		root.get_node("AttackButton") as Control,
+		root.get_node("InteractButton") as Control,
+		root.get_node("SwitchTargetButton") as Control,
+	]
+	for index in range(4):
+		bounded_controls.append(root.get_node("SkillButton%d" % (index + 1)) as Control)
+	for control: Control in bounded_controls:
+		var rect := control.get_global_rect()
+		assert(safe_bounds.encloses(rect), "2664x1200 安全区布局溢出：%s %s / %s" % [control.name, rect, safe_bounds])
+
+	var chassis_center_x := chassis.get_global_rect().get_center().x
+	var health_center_x := health_orb.get_global_rect().get_center().x
+	var mana_center_x := mana_orb.get_global_rect().get_center().x
+	var orb_symmetry_error := absf((chassis_center_x - health_center_x) - (mana_center_x - chassis_center_x))
+	assert(orb_symmetry_error <= 1.01, "2664x1200 血蓝球没有围绕底部框体左右对称：%.2f / %.2f / %.2f，误差 %.2f" % [health_center_x, chassis_center_x, mana_center_x, orb_symmetry_error])
+	assert(health_orb.size == Vector2(110, 110) and mana_orb.size == Vector2(110, 110), "2664x1200 布局错误缩小了血蓝球")

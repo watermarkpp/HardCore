@@ -8,8 +8,11 @@ signal character_launch_requested(request: Dictionary)
 
 const LAUNCH_CONTRACT_ID := "ui.character.launch.v1"
 const CREATION_CONTRACT_ID := "ui.character.creation.v1"
+const ROSTER_TOUCH_SCROLL_CONTRACT_ID := "ui.character.roster.touch_drag.v1"
 const LAUNCH_CONTEXT_META := &"pending_character_launch_context"
 const FIXED_CHARACTER_GENDER := "男"
+const ROSTER_DRAG_THRESHOLD := 12.0
+const ROSTER_PRESS_SUPPRESSION_MSEC := 220
 const HALL_TEXTURE := preload("res://assets/ui/gothic_preview/character_hall.png")
 const PROFESSION_PRESENTATION := {
 	"战士": {
@@ -54,6 +57,12 @@ var _profiles: Array[Dictionary] = []
 var suppress_scene_change_for_test := false
 var last_launch_request: Dictionary = {}
 var last_creation_request: Dictionary = {}
+var _roster_drag_candidate := false
+var _roster_drag_active := false
+var _roster_drag_start_position := Vector2.ZERO
+var _roster_drag_start_scroll := 0
+var _roster_drag_touch_index := -1
+var _roster_suppress_press_until_msec := 0
 
 
 func _ready() -> void:
@@ -66,6 +75,65 @@ func _ready() -> void:
 	_build_preview_panel()
 	_build_creation_panel()
 	_refresh_profiles()
+
+
+func _input(event: InputEvent) -> void:
+	if profile_scroll == null or not is_instance_valid(profile_scroll):
+		return
+	if event is InputEventScreenTouch:
+		if event.pressed and profile_scroll.get_global_rect().has_point(event.position):
+			_begin_roster_drag(event.position, event.index)
+		elif not event.pressed and _roster_drag_candidate and event.index == _roster_drag_touch_index:
+			_finish_roster_drag()
+	elif event is InputEventScreenDrag:
+		if _roster_drag_candidate and event.index == _roster_drag_touch_index:
+			_update_roster_drag(event.position)
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed and profile_scroll.get_global_rect().has_point(event.global_position):
+			_begin_roster_drag(event.global_position, -1)
+		elif not event.pressed and _roster_drag_candidate and _roster_drag_touch_index == -1:
+			_finish_roster_drag()
+	elif event is InputEventMouseMotion:
+		if _roster_drag_candidate and _roster_drag_touch_index == -1 and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
+			_update_roster_drag(event.global_position)
+
+
+func _begin_roster_drag(position_value: Vector2, touch_index := -1) -> void:
+	if _roster_drag_candidate:
+		return
+	_roster_drag_candidate = true
+	_roster_drag_active = false
+	_roster_drag_start_position = position_value
+	_roster_drag_start_scroll = profile_scroll.scroll_vertical
+	_roster_drag_touch_index = touch_index
+
+
+func _update_roster_drag(position_value: Vector2) -> void:
+	if not _roster_drag_candidate:
+		return
+	var delta := position_value - _roster_drag_start_position
+	if not _roster_drag_active and absf(delta.y) < ROSTER_DRAG_THRESHOLD:
+		return
+	_roster_drag_active = true
+	profile_scroll.scroll_vertical = maxi(0, _roster_drag_start_scroll - int(round(delta.y)))
+	get_viewport().set_input_as_handled()
+
+
+func _finish_roster_drag() -> bool:
+	if not _roster_drag_candidate:
+		return false
+	var was_dragging := _roster_drag_active
+	if was_dragging:
+		_roster_suppress_press_until_msec = Time.get_ticks_msec() + ROSTER_PRESS_SUPPRESSION_MSEC
+		get_viewport().set_input_as_handled()
+	_roster_drag_candidate = false
+	_roster_drag_active = false
+	_roster_drag_touch_index = -1
+	return was_dragging
+
+
+func _roster_press_is_suppressed() -> bool:
+	return Time.get_ticks_msec() <= _roster_suppress_press_until_msec
 
 
 func _build_content_root() -> void:
@@ -146,6 +214,8 @@ func _build_roster_panel() -> void:
 	profile_scroll.position = Vector2(18, 76)
 	profile_scroll.size = Vector2(290, 362)
 	profile_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	profile_scroll.scroll_deadzone = 100000
+	profile_scroll.set_meta("touch_scroll_contract", ROSTER_TOUCH_SCROLL_CONTRACT_ID)
 	panel.add_child(profile_scroll)
 	list_box = VBoxContainer.new()
 	list_box.name = "ProfileList"
@@ -347,7 +417,7 @@ func _add_profile_card(profile: Dictionary) -> void:
 	main_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	main_button.add_theme_font_size_override("font_size", 16)
 	main_button.set_meta("stable_id", "character.profile.%s.main" % profile_id)
-	main_button.pressed.connect(_select_main_profile.bind(profile_id))
+	main_button.pressed.connect(_on_profile_main_pressed.bind(profile_id))
 	card.add_child(main_button)
 	var ai_button := Button.new()
 	ai_button.name = "AITeammate"
@@ -355,7 +425,7 @@ func _add_profile_card(profile: Dictionary) -> void:
 	ai_button.size = Vector2(80, 81)
 	ai_button.add_theme_font_size_override("font_size", 12)
 	ai_button.set_meta("stable_id", "character.profile.%s.ai_teammate" % profile_id)
-	ai_button.pressed.connect(_select_ai_profile.bind(profile_id))
+	ai_button.pressed.connect(_on_profile_ai_pressed.bind(profile_id))
 	card.add_child(ai_button)
 	profile_cards[profile_id] = {
 		"panel": card,
@@ -410,46 +480,45 @@ func _refresh_character_preview() -> void:
 		profession_name,
 		int(profile.get("level", 1)),
 	]
-	if profession_name == "战士" and str(PlayerState.active_profile_id) == selected_main_profile_id:
-		var paper_doll := EquipmentCharacterPreviewScript.new()
-		paper_doll.name = "RuntimePaperDoll"
-		paper_doll.preview_scale = 1.52
-		paper_doll.position = Vector2(40, 0)
-		paper_doll.size = Vector2(320, 350)
-		paper_doll.set_meta("preview_source", "selected_profile_runtime_equipment")
-		preview_visual_root.add_child(paper_doll)
+	var paper_doll := EquipmentCharacterPreviewScript.new()
+	paper_doll.name = "RuntimePaperDoll"
+	paper_doll.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	paper_doll.center_on_opaque_bounds = false
+	paper_doll.configure_profile(
+		profession_name,
+		_profile_equipment_snapshot(selected_main_profile_id)
+	)
+	paper_doll.set_meta("preview_profile_id", selected_main_profile_id)
+	paper_doll.set_meta("preview_source", "selected_profile_save_equipment")
+	preview_visual_root.add_child(paper_doll)
+	paper_doll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+
+func _profile_equipment_snapshot(profile_id: String) -> Dictionary:
+	if profile_id.is_empty():
+		return {}
+	var profile_path := "%s/%s.json" % [PlayerState.profile_directory, profile_id]
+	if not FileAccess.file_exists(profile_path):
+		return {}
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(profile_path))
+	if not parsed is Dictionary:
+		return {}
+	var saved_equipment: Variant = parsed.get("equipment", {})
+	if not saved_equipment is Dictionary:
+		return {}
+	return PlayerState.migrate_equipment_slots(saved_equipment).duplicate(true)
+
+
+func _on_profile_main_pressed(profile_id: String) -> void:
+	if _roster_press_is_suppressed():
 		return
-	var presentation: Dictionary = PROFESSION_PRESENTATION.get(profession_name, PROFESSION_PRESENTATION["战士"])
-	var icon_path := str(presentation.get("icon", ""))
-	var icon := TextureRect.new()
-	icon.name = "ProfessionEmblem"
-	icon.position = Vector2(125, 54)
-	icon.size = Vector2(150, 150)
-	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon.texture = load(icon_path) as Texture2D if ResourceLoader.exists(icon_path) else null
-	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon.set_meta("source_path", icon_path)
-	preview_visual_root.add_child(icon)
-	var glyph := Label.new()
-	glyph.name = "ProfessionGlyph"
-	glyph.text = str(presentation.get("glyph", ""))
-	glyph.position = Vector2(120, 204)
-	glyph.size = Vector2(160, 46)
-	glyph.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	glyph.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	glyph.add_theme_font_size_override("font_size", 30)
-	glyph.add_theme_color_override("font_color", Color("e8c27d"))
-	preview_visual_root.add_child(glyph)
-	var note := Label.new()
-	note.name = "ProfessionPreviewNote"
-	note.text = "%s职业形象" % profession_name
-	note.position = Vector2(100, 252)
-	note.size = Vector2(200, 30)
-	note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	note.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	note.theme_type_variation = "GothicMutedLabel"
-	preview_visual_root.add_child(note)
+	_select_main_profile(profile_id)
+
+
+func _on_profile_ai_pressed(profile_id: String) -> void:
+	if _roster_press_is_suppressed():
+		return
+	_select_ai_profile(profile_id)
 
 
 func _select_main_profile(profile_id: String) -> void:

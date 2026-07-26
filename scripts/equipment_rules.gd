@@ -6,6 +6,21 @@ const NEED_ATTACK := 1
 const NEED_MAGIC := 2
 const NEED_TAO := 3
 const SUPPORTED_NEEDS: Array[int] = [NEED_LEVEL, NEED_ATTACK, NEED_MAGIC, NEED_TAO]
+const ATTRIBUTE_MASTER_CONTRACT_ID := "equipment.attribute.master.v2"
+const ATTRIBUTE_MASTER_DISTRIBUTION := "project.hardcore.equipment_attribute_master.v2"
+const LEGACY_ROLL_POLICY := "legacy_clamp_negative_span"
+const REQUIREMENT_TYPE_CODES := {
+	"level": NEED_LEVEL,
+	"max_dc": NEED_ATTACK,
+	"max_mc": NEED_MAGIC,
+	"max_sc": NEED_TAO,
+}
+const JOB_LOCK_DISPLAY_NAMES := {
+	"warrior": "战士",
+	"wizard": "法师",
+	"taoist": "道士",
+	"general": "通用",
+}
 const BLESSING_UNLUCKY_RATE := 20
 const LUCK_POINT_1 := 1
 const LUCK_POINT_2 := 3
@@ -13,6 +28,11 @@ const LUCK_POINT_3 := 7
 const LUCK_POINT_2_RATE := 6
 const LUCK_POINT_3_RATE := 40
 const MAX_WEAPON_CURSE := 10
+const ACTOR_VISUAL_SORT_CONTRACT_ID := "equipment_actor_visual_sort_unit_v2"
+const MALE_WORLD_HELMET_EXTENSION_CONTRACT_ID := "equipment.world_helmet.male.extension.v1"
+const ACTOR_VISUAL_BODY_LAYER := &"body_and_dress"
+const ACTOR_VISUAL_WEAPON_LAYER := &"weapon"
+const ACTOR_VISUAL_HELMET_LAYER := &"helmet"
 const SPECIAL_EFFECTS_BY_NAME := {
 	"隐身戒指": {"id": "stealth", "label": "隐身", "source_code": 111, "runtime": true, "confidence": "B"},
 	"传送戒指": {"id": "teleport", "label": "安全传送", "source_code": 112, "runtime": true, "confidence": "B"},
@@ -33,6 +53,27 @@ const SET_PIECES_BY_NAME := {
 }
 
 
+static func weapon_draws_behind_actor(direction_row: int) -> bool:
+	return posmod(direction_row, 8) in [7, 0, 1]
+
+
+static func actor_visual_layer_order(direction_row: int) -> Array[StringName]:
+	# Wall fronts and actors only Y-sort when their final z_index matches. Keep
+	# every wear layer on Z=0 and express classic equipment overlap by sibling
+	# tree order inside the actor subtree.
+	if weapon_draws_behind_actor(direction_row):
+		return [
+			ACTOR_VISUAL_WEAPON_LAYER,
+			ACTOR_VISUAL_BODY_LAYER,
+			ACTOR_VISUAL_HELMET_LAYER,
+		]
+	return [
+		ACTOR_VISUAL_BODY_LAYER,
+		ACTOR_VISUAL_WEAPON_LAYER,
+		ACTOR_VISUAL_HELMET_LAYER,
+	]
+
+
 static func max_wear_weight(profession: String, level: int) -> int:
 	var safe_level := maxi(1, level)
 	match profession:
@@ -49,7 +90,34 @@ static func max_hand_weight(profession: String, level: int) -> int:
 		_: return 12 + int(round((safe_level / 13.0) * safe_level))
 
 
+static func attribute_source_distribution(item: Dictionary) -> String:
+	var source: Variant = item.get("source", ATTRIBUTE_MASTER_DISTRIBUTION)
+	if source is Dictionary:
+		return str(source.get("distribution", ATTRIBUTE_MASTER_DISTRIBUTION))
+	return str(source)
+
+
 static func requirement_for(item: Dictionary) -> Dictionary:
+	if item.has("requirementType") and item.has("requirementValue"):
+		var master_type := str(item.get("requirementType", "level"))
+		return {
+			"type": int(REQUIREMENT_TYPE_CODES.get(master_type, -1)),
+			"type_id": master_type,
+			"value": maxi(0, int(item.get("requirementValue", 0))),
+			"source": attribute_source_distribution(item),
+			"contract_id": str(item.get("attributeSource", {}).get("contractId", ATTRIBUTE_MASTER_CONTRACT_ID)),
+			"confidence": "A",
+		}
+	if item.has("legacyNeed") and item.has("legacyNeedLevel"):
+		var legacy_type := int(item.get("legacyNeed", NEED_LEVEL))
+		return {
+			"type": legacy_type,
+			"type_id": str(REQUIREMENT_TYPE_CODES.find_key(legacy_type)),
+			"value": maxi(0, int(item.get("legacyNeedLevel", 0))),
+			"source": attribute_source_distribution(item),
+			"contract_id": str(item.get("attributeSource", {}).get("contractId", ATTRIBUTE_MASTER_CONTRACT_ID)),
+			"confidence": "A",
+		}
 	if item.has("serviceNeed") and item.has("serviceNeedLevel"):
 		return {
 			"type": int(item.get("serviceNeed", NEED_LEVEL)),
@@ -118,7 +186,7 @@ static func repair_cost(item: Dictionary, durability: int, max_durability: int) 
 static func blessing_outcome(luck: int, curse: int, attack_min: int, attack_max: int, unlucky_roll: int, success_roll: int) -> Dictionary:
 	var next_luck := clampi(luck, 0, LUCK_POINT_3)
 	var next_curse := clampi(curse, 0, MAX_WEAPON_CURSE)
-	if unlucky_roll == 1:
+	if blessing_is_unlucky_roll(unlucky_roll):
 		if next_luck > 0:
 			next_luck -= 1
 		elif next_curse < MAX_WEAPON_CURSE:
@@ -129,7 +197,7 @@ static func blessing_outcome(luck: int, curse: int, attack_min: int, attack_max:
 		return {"result": "improved", "luck": next_luck, "curse": next_curse}
 	if next_luck < LUCK_POINT_1:
 		return {"result": "improved", "luck": next_luck + 1, "curse": next_curse}
-	var span_factor := int(absi(attack_max - attack_min) / 5)
+	var span_factor := blessing_span_factor(attack_min, attack_max)
 	if next_luck < LUCK_POINT_2:
 		var denominator := span_factor + LUCK_POINT_2_RATE
 		if denominator > 1 and success_roll == 1:
@@ -141,8 +209,19 @@ static func blessing_outcome(luck: int, curse: int, attack_min: int, attack_max:
 	return {"result": "ineffective", "luck": next_luck, "curse": next_curse}
 
 
+static func blessing_is_unlucky_roll(unlucky_roll: int) -> bool:
+	return unlucky_roll == 1
+
+
+static func blessing_span_factor(attack_min: int, attack_max: int) -> int:
+	# The source calculates floor(abs(DCmax - DCmin) / 5). The authorized
+	# boundary revision clamps R to one so Random(R * 40) remains reachable
+	# for equal/narrow attack ranges such as 命运之刃 12—16.
+	return maxi(1, int(absi(attack_max - attack_min) / 5))
+
+
 static func blessing_success_denominator(luck: int, attack_min: int, attack_max: int) -> int:
-	var span_factor := int(absi(attack_max - attack_min) / 5)
+	var span_factor := blessing_span_factor(attack_min, attack_max)
 	if luck < LUCK_POINT_1:
 		return 1
 	if luck < LUCK_POINT_2:
@@ -150,6 +229,14 @@ static func blessing_success_denominator(luck: int, attack_min: int, attack_max:
 	if luck < LUCK_POINT_3:
 		return span_factor * LUCK_POINT_3_RATE
 	return 0
+
+
+static func equipment_luck_contribution(item: Dictionary, instance: Dictionary = {}, include_weapon_instance := false) -> int:
+	var item_luck := int(item.get("luck", 0)) if item.get("luck", null) != null else 0
+	var item_curse := int(item.get("curse", 0)) if item.get("curse", null) != null else 0
+	var instance_luck := int(instance.get("weapon_luck", 0)) if include_weapon_instance else 0
+	var instance_curse := int(instance.get("weapon_curse", 0)) if include_weapon_instance else 0
+	return item_luck - item_curse + instance_luck - instance_curse
 
 
 static func weapon_luck_label(instance: Dictionary) -> String:
@@ -216,6 +303,15 @@ static func set_piece_for(item: Dictionary) -> Dictionary:
 static func effective_profession(item: Dictionary) -> String:
 	if not set_piece_for(item).is_empty():
 		return "通用"
+	if item.has("jobLock"):
+		var job_lock: Variant = item.get("jobLock", null)
+		if job_lock == null or str(job_lock).is_empty():
+			return "通用"
+		return str(JOB_LOCK_DISPLAY_NAMES.get(str(job_lock), str(job_lock)))
+	if item.has("jobAffinity"):
+		# jobAffinity is descriptive only. Absence of an explicit jobLock means
+		# classic universal equipping after requirements and weight are met.
+		return "通用"
 	return str(item.get("profession", "通用"))
 
 
@@ -237,6 +333,11 @@ static func critical_damage(damage: int, multiplier: float) -> int:
 
 
 static func required_gender(item: Dictionary) -> String:
+	if item.has("genderRestriction"):
+		var restriction: Variant = item.get("genderRestriction", null)
+		if restriction == null or str(restriction).is_empty():
+			return ""
+		return str({"male": "男", "female": "女"}.get(str(restriction), str(restriction)))
 	var std_mode := int(item.get("serviceStdMode", -1))
 	if std_mode == 10:
 		return "男"
@@ -250,11 +351,39 @@ static func required_gender(item: Dictionary) -> String:
 	return ""
 
 
+static func weight_requirement_for(item: Dictionary) -> Dictionary:
+	if item.has("weightRequirementType") and item.has("weightRequirementValue"):
+		return {
+			"type": str(item.get("weightRequirementType", "")),
+			"value": maxi(0, int(item.get("weightRequirementValue", 0))),
+			"source": attribute_source_distribution(item),
+		}
+	var legacy_type := "hand" if str(item.get("category", "")) == "武器" else "wear"
+	return {
+		"type": legacy_type,
+		"value": maxi(0, int(item.get("weight", 0))),
+		"source": "legacy_weight_compatibility",
+	}
+
+
+static func legacy_range_warning(field: String, min_value: int, max_value: int) -> Dictionary:
+	if min_value <= max_value:
+		return {}
+	return {
+		"warningCode": "legacy_reverse_range",
+		"field": field,
+		"min": min_value,
+		"max": max_value,
+		"runtimeBehavior": LEGACY_ROLL_POLICY,
+		"isError": false,
+	}
+
+
 static func enrich_catalog_record(item: Dictionary) -> Dictionary:
 	var result := item.duplicate(true)
 	result["serviceRequirement"] = requirement_for(result)
 	result["fieldSemanticsSource"] = "M2Server/Common/Grobal2.pas:TStdItem + M2Server/ObjBase.pas:CanUseItem"
-	result["concreteStdItemsStatus"] = "已接入" if result.has("serviceNeed") else "数据库缺失·保留候选值"
+	result["concreteStdItemsStatus"] = "项目装备属性主表已接入" if result.has("requirementType") else ("已接入" if result.has("serviceNeed") else "数据库缺失·保留候选值")
 	result["referencePrice"] = reference_price(result)
 	result["referencePriceSource"] = "服务端StdItems.Price" if result.has("servicePrice") else "项目价格候选·待StdItems.Price替换"
 	var special := special_effect_for(result)

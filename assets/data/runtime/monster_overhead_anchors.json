@@ -1,0 +1,3659 @@
+{
+  "schemaVersion": 1,
+  "contract": "monster.overhead_anchor.v4",
+  "identityKey": "monsterId",
+  "measurementPolicy": "stableBodyTop is the minimum non-transparent cell-local Y across all neutral idle frames and all eight directions; every formal action is also measured and retained as audit evidence",
+  "runtimePolicy": "one immutable stableBodyTop per monsterId; health bar bottom remains a fixed gap above it, so direction/action/frame changes never move the overhead",
+  "summary": {
+    "monsterCount": 214,
+    "uniqueVisualProfileCount": 110,
+    "requiredActions": [
+      "idle",
+      "walk",
+      "attack",
+      "hit",
+      "death"
+    ],
+    "requiredDirections": 8
+  },
+  "anchorsByMonsterId": {
+    "18": {
+      "profile": "毒蜘蛛",
+      "frameSize": [
+        336,
+        240
+      ],
+      "stableBodyTop": 64,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 64,
+        "walk": 61,
+        "attack": 8,
+        "hit": 57,
+        "death": 22
+      },
+      "sampledFrames": 224
+    },
+    "19": {
+      "profile": "蛤蟆",
+      "frameSize": [
+        192,
+        144
+      ],
+      "stableBodyTop": 51,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 51,
+        "walk": 50,
+        "attack": 8,
+        "hit": 50,
+        "death": 24
+      },
+      "sampledFrames": 224
+    },
+    "21": {
+      "profile": "稻草人",
+      "frameSize": [
+        160,
+        144
+      ],
+      "stableBodyTop": 22,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 22,
+        "walk": 22,
+        "attack": 13,
+        "hit": 27,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "23": {
+      "profile": "稻草人",
+      "frameSize": [
+        160,
+        144
+      ],
+      "stableBodyTop": 22,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 22,
+        "walk": 22,
+        "attack": 13,
+        "hit": 27,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "24": {
+      "profile": "多钩猫",
+      "frameSize": [
+        176,
+        160
+      ],
+      "stableBodyTop": 58,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 58,
+        "walk": 59,
+        "attack": 8,
+        "hit": 37,
+        "death": 18
+      },
+      "sampledFrames": 224
+    },
+    "25": {
+      "profile": "多钩猫",
+      "frameSize": [
+        176,
+        160
+      ],
+      "stableBodyTop": 58,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 58,
+        "walk": 59,
+        "attack": 8,
+        "hit": 37,
+        "death": 18
+      },
+      "sampledFrames": 224
+    },
+    "26": {
+      "profile": "钉耙猫",
+      "frameSize": [
+        208,
+        176
+      ],
+      "stableBodyTop": 47,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 47,
+        "walk": 35,
+        "attack": 8,
+        "hit": 39,
+        "death": 15
+      },
+      "sampledFrames": 224
+    },
+    "27": {
+      "profile": "钉耙猫",
+      "frameSize": [
+        208,
+        176
+      ],
+      "stableBodyTop": 47,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 47,
+        "walk": 35,
+        "attack": 8,
+        "hit": 39,
+        "death": 15
+      },
+      "sampledFrames": 224
+    },
+    "28": {
+      "profile": "森林雪人",
+      "frameSize": [
+        240,
+        192
+      ],
+      "stableBodyTop": 50,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 50,
+        "walk": 48,
+        "attack": 8,
+        "hit": 37,
+        "death": 32
+      },
+      "sampledFrames": 176
+    },
+    "29": {
+      "profile": "森林雪人",
+      "frameSize": [
+        240,
+        192
+      ],
+      "stableBodyTop": 50,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 50,
+        "walk": 48,
+        "attack": 8,
+        "hit": 37,
+        "death": 32
+      },
+      "sampledFrames": 176
+    },
+    "30": {
+      "profile": "食人花",
+      "frameSize": [
+        192,
+        192
+      ],
+      "stableBodyTop": 22,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 22,
+        "walk": 19,
+        "attack": 8,
+        "hit": 28,
+        "death": 21
+      },
+      "sampledFrames": 240
+    },
+    "31": {
+      "profile": "多钩猫王",
+      "frameSize": [
+        176,
+        160
+      ],
+      "stableBodyTop": 58,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 58,
+        "walk": 59,
+        "attack": 8,
+        "hit": 37,
+        "death": 18
+      },
+      "sampledFrames": 224
+    },
+    "32": {
+      "profile": "钉耙猫王",
+      "frameSize": [
+        208,
+        176
+      ],
+      "stableBodyTop": 47,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 47,
+        "walk": 35,
+        "attack": 8,
+        "hit": 39,
+        "death": 15
+      },
+      "sampledFrames": 224
+    },
+    "33": {
+      "profile": "雪人王",
+      "frameSize": [
+        240,
+        192
+      ],
+      "stableBodyTop": 50,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 50,
+        "walk": 48,
+        "attack": 8,
+        "hit": 37,
+        "death": 32
+      },
+      "sampledFrames": 160
+    },
+    "34": {
+      "profile": "半兽人",
+      "frameSize": [
+        224,
+        192
+      ],
+      "stableBodyTop": 44,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 44,
+        "walk": 42,
+        "attack": 20,
+        "hit": 22,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "35": {
+      "profile": "半兽人",
+      "frameSize": [
+        224,
+        192
+      ],
+      "stableBodyTop": 44,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 44,
+        "walk": 42,
+        "attack": 20,
+        "hit": 22,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "36": {
+      "profile": "半兽战士",
+      "frameSize": [
+        256,
+        208
+      ],
+      "stableBodyTop": 55,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 55,
+        "walk": 46,
+        "attack": 21,
+        "hit": 22,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "37": {
+      "profile": "半兽战士",
+      "frameSize": [
+        256,
+        208
+      ],
+      "stableBodyTop": 55,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 55,
+        "walk": 46,
+        "attack": 21,
+        "hit": 22,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "38": {
+      "profile": "半兽勇士",
+      "frameSize": [
+        272,
+        224
+      ],
+      "stableBodyTop": 60,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 60,
+        "walk": 45,
+        "attack": 21,
+        "hit": 21,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "39": {
+      "profile": "半兽勇士",
+      "frameSize": [
+        272,
+        224
+      ],
+      "stableBodyTop": 60,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 60,
+        "walk": 45,
+        "attack": 21,
+        "hit": 21,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "41": {
+      "profile": "半兽勇士",
+      "frameSize": [
+        272,
+        224
+      ],
+      "stableBodyTop": 60,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 60,
+        "walk": 45,
+        "attack": 21,
+        "hit": 21,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "42": {
+      "profile": "半兽统领",
+      "frameSize": [
+        272,
+        224
+      ],
+      "stableBodyTop": 60,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 60,
+        "walk": 45,
+        "attack": 21,
+        "hit": 21,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "43": {
+      "profile": "山洞蝙蝠",
+      "frameSize": [
+        192,
+        160
+      ],
+      "stableBodyTop": 19,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 19,
+        "walk": 11,
+        "attack": 8,
+        "hit": 8,
+        "death": 26
+      },
+      "sampledFrames": 224
+    },
+    "44": {
+      "profile": "山洞蝙蝠",
+      "frameSize": [
+        192,
+        160
+      ],
+      "stableBodyTop": 19,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 19,
+        "walk": 11,
+        "attack": 8,
+        "hit": 8,
+        "death": 26
+      },
+      "sampledFrames": 224
+    },
+    "45": {
+      "profile": "蝎子",
+      "frameSize": [
+        192,
+        144
+      ],
+      "stableBodyTop": 17,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 17,
+        "walk": 19,
+        "attack": 14,
+        "hit": 10,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "46": {
+      "profile": "洞蛆",
+      "frameSize": [
+        96,
+        96
+      ],
+      "stableBodyTop": 22,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 22,
+        "walk": 22,
+        "attack": 8,
+        "hit": 19,
+        "death": 27
+      },
+      "sampledFrames": 176
+    },
+    "47": {
+      "profile": "骷髅",
+      "frameSize": [
+        240,
+        192
+      ],
+      "stableBodyTop": 31,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 31,
+        "walk": 32,
+        "attack": 8,
+        "hit": 23,
+        "death": 9
+      },
+      "sampledFrames": 224
+    },
+    "48": {
+      "profile": "骷髅",
+      "frameSize": [
+        240,
+        192
+      ],
+      "stableBodyTop": 31,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 31,
+        "walk": 32,
+        "attack": 8,
+        "hit": 23,
+        "death": 9
+      },
+      "sampledFrames": 224
+    },
+    "49": {
+      "profile": "掷斧骷髅",
+      "frameSize": [
+        208,
+        176
+      ],
+      "stableBodyTop": 43,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 43,
+        "walk": 41,
+        "attack": 8,
+        "hit": 26,
+        "death": 22
+      },
+      "sampledFrames": 224
+    },
+    "50": {
+      "profile": "掷斧骷髅",
+      "frameSize": [
+        208,
+        176
+      ],
+      "stableBodyTop": 43,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 43,
+        "walk": 41,
+        "attack": 8,
+        "hit": 26,
+        "death": 22
+      },
+      "sampledFrames": 224
+    },
+    "51": {
+      "profile": "掷斧骷髅",
+      "frameSize": [
+        208,
+        176
+      ],
+      "stableBodyTop": 43,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 43,
+        "walk": 41,
+        "attack": 8,
+        "hit": 26,
+        "death": 22
+      },
+      "sampledFrames": 224
+    },
+    "52": {
+      "profile": "骷髅战士",
+      "frameSize": [
+        240,
+        192
+      ],
+      "stableBodyTop": 47,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 47,
+        "walk": 29,
+        "attack": 8,
+        "hit": 35,
+        "death": 37
+      },
+      "sampledFrames": 224
+    },
+    "53": {
+      "profile": "骷髅战士",
+      "frameSize": [
+        240,
+        192
+      ],
+      "stableBodyTop": 47,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 47,
+        "walk": 29,
+        "attack": 8,
+        "hit": 35,
+        "death": 37
+      },
+      "sampledFrames": 224
+    },
+    "54": {
+      "profile": "骷髅战将",
+      "frameSize": [
+        272,
+        208
+      ],
+      "stableBodyTop": 49,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 49,
+        "walk": 37,
+        "attack": 8,
+        "hit": 32,
+        "death": 28
+      },
+      "sampledFrames": 224
+    },
+    "55": {
+      "profile": "骷髅战将",
+      "frameSize": [
+        272,
+        208
+      ],
+      "stableBodyTop": 49,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 49,
+        "walk": 37,
+        "attack": 8,
+        "hit": 32,
+        "death": 28
+      },
+      "sampledFrames": 224
+    },
+    "56": {
+      "profile": "骷髅精灵",
+      "frameSize": [
+        336,
+        256
+      ],
+      "stableBodyTop": 72,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 72,
+        "walk": 70,
+        "attack": 8,
+        "hit": 58,
+        "death": 30
+      },
+      "sampledFrames": 224
+    },
+    "57": {
+      "profile": "骷髅精灵",
+      "frameSize": [
+        336,
+        256
+      ],
+      "stableBodyTop": 72,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 72,
+        "walk": 70,
+        "attack": 8,
+        "hit": 58,
+        "death": 30
+      },
+      "sampledFrames": 224
+    },
+    "59": {
+      "profile": "骷髅精灵",
+      "frameSize": [
+        336,
+        256
+      ],
+      "stableBodyTop": 72,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 72,
+        "walk": 70,
+        "attack": 8,
+        "hit": 58,
+        "death": 30
+      },
+      "sampledFrames": 224
+    },
+    "60": {
+      "profile": "粪虫",
+      "frameSize": [
+        192,
+        144
+      ],
+      "stableBodyTop": 24,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 24,
+        "walk": 24,
+        "attack": 8,
+        "hit": 23,
+        "death": 22
+      },
+      "sampledFrames": 224
+    },
+    "62": {
+      "profile": "暗黑战士",
+      "frameSize": [
+        160,
+        144
+      ],
+      "stableBodyTop": 40,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 40,
+        "walk": 21,
+        "attack": 39,
+        "hit": 42,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "63": {
+      "profile": "暗黑战士",
+      "frameSize": [
+        160,
+        144
+      ],
+      "stableBodyTop": 40,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 40,
+        "walk": 21,
+        "attack": 39,
+        "hit": 42,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "64": {
+      "profile": "沃玛战士",
+      "frameSize": [
+        320,
+        256
+      ],
+      "stableBodyTop": 34,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 34,
+        "walk": 38,
+        "attack": 8,
+        "hit": 41,
+        "death": 12
+      },
+      "sampledFrames": 224
+    },
+    "65": {
+      "profile": "沃玛战士",
+      "frameSize": [
+        320,
+        256
+      ],
+      "stableBodyTop": 34,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 34,
+        "walk": 38,
+        "attack": 8,
+        "hit": 41,
+        "death": 12
+      },
+      "sampledFrames": 224
+    },
+    "66": {
+      "profile": "沃玛勇士",
+      "frameSize": [
+        368,
+        288
+      ],
+      "stableBodyTop": 59,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 59,
+        "walk": 61,
+        "attack": 8,
+        "hit": 50,
+        "death": 15
+      },
+      "sampledFrames": 224
+    },
+    "67": {
+      "profile": "沃玛勇士",
+      "frameSize": [
+        368,
+        288
+      ],
+      "stableBodyTop": 59,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 59,
+        "walk": 61,
+        "attack": 8,
+        "hit": 50,
+        "death": 15
+      },
+      "sampledFrames": 224
+    },
+    "68": {
+      "profile": "沃玛战将",
+      "frameSize": [
+        384,
+        320
+      ],
+      "stableBodyTop": 76,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 76,
+        "walk": 78,
+        "attack": 8,
+        "hit": 45,
+        "death": 33
+      },
+      "sampledFrames": 224
+    },
+    "69": {
+      "profile": "沃玛战将",
+      "frameSize": [
+        384,
+        320
+      ],
+      "stableBodyTop": 76,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 76,
+        "walk": 78,
+        "attack": 8,
+        "hit": 45,
+        "death": 33
+      },
+      "sampledFrames": 224
+    },
+    "70": {
+      "profile": "火焰沃玛",
+      "frameSize": [
+        320,
+        272
+      ],
+      "stableBodyTop": 37,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 37,
+        "walk": 43,
+        "attack": 8,
+        "hit": 35,
+        "death": 23
+      },
+      "sampledFrames": 224
+    },
+    "71": {
+      "profile": "火焰沃玛",
+      "frameSize": [
+        320,
+        272
+      ],
+      "stableBodyTop": 37,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 37,
+        "walk": 43,
+        "attack": 8,
+        "hit": 35,
+        "death": 23
+      },
+      "sampledFrames": 224
+    },
+    "73": {
+      "profile": "沃玛卫士",
+      "frameSize": [
+        448,
+        304
+      ],
+      "stableBodyTop": 75,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 75,
+        "walk": 74,
+        "attack": 17,
+        "hit": 58,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "74": {
+      "profile": "沃玛卫士",
+      "frameSize": [
+        448,
+        304
+      ],
+      "stableBodyTop": 75,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 75,
+        "walk": 74,
+        "attack": 17,
+        "hit": 58,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "75": {
+      "profile": "沃玛卫士",
+      "frameSize": [
+        448,
+        304
+      ],
+      "stableBodyTop": 75,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 75,
+        "walk": 74,
+        "attack": 17,
+        "hit": 58,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "76": {
+      "profile": "沃玛教主",
+      "frameSize": [
+        352,
+        288
+      ],
+      "stableBodyTop": 39,
+      "allActionVisibleTop": 10,
+      "actionVisibleTops": {
+        "idle": 39,
+        "walk": 42,
+        "attack": 29,
+        "hit": 32,
+        "death": 10
+      },
+      "sampledFrames": 224
+    },
+    "77": {
+      "profile": "沃玛教主",
+      "frameSize": [
+        352,
+        288
+      ],
+      "stableBodyTop": 39,
+      "allActionVisibleTop": 10,
+      "actionVisibleTops": {
+        "idle": 39,
+        "walk": 42,
+        "attack": 29,
+        "hit": 32,
+        "death": 10
+      },
+      "sampledFrames": 224
+    },
+    "78": {
+      "profile": "沃玛教主",
+      "frameSize": [
+        352,
+        288
+      ],
+      "stableBodyTop": 39,
+      "allActionVisibleTop": 10,
+      "actionVisibleTops": {
+        "idle": 39,
+        "walk": 42,
+        "attack": 29,
+        "hit": 32,
+        "death": 10
+      },
+      "sampledFrames": 224
+    },
+    "79": {
+      "profile": "僵尸1",
+      "frameSize": [
+        176,
+        160
+      ],
+      "stableBodyTop": 34,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 34,
+        "walk": 32,
+        "attack": 8,
+        "hit": 28,
+        "death": 14
+      },
+      "sampledFrames": 224
+    },
+    "80": {
+      "profile": "僵尸1",
+      "frameSize": [
+        176,
+        160
+      ],
+      "stableBodyTop": 34,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 34,
+        "walk": 32,
+        "attack": 8,
+        "hit": 28,
+        "death": 14
+      },
+      "sampledFrames": 224
+    },
+    "81": {
+      "profile": "僵尸2",
+      "frameSize": [
+        224,
+        176
+      ],
+      "stableBodyTop": 21,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 21,
+        "walk": 25,
+        "attack": 8,
+        "hit": 23,
+        "death": 16
+      },
+      "sampledFrames": 224
+    },
+    "82": {
+      "profile": "僵尸2",
+      "frameSize": [
+        224,
+        176
+      ],
+      "stableBodyTop": 21,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 21,
+        "walk": 25,
+        "attack": 8,
+        "hit": 23,
+        "death": 16
+      },
+      "sampledFrames": 224
+    },
+    "83": {
+      "profile": "僵尸3",
+      "frameSize": [
+        160,
+        144
+      ],
+      "stableBodyTop": 24,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 24,
+        "walk": 21,
+        "attack": 8,
+        "hit": 21,
+        "death": 16
+      },
+      "sampledFrames": 224
+    },
+    "84": {
+      "profile": "僵尸3",
+      "frameSize": [
+        160,
+        144
+      ],
+      "stableBodyTop": 24,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 24,
+        "walk": 21,
+        "attack": 8,
+        "hit": 21,
+        "death": 16
+      },
+      "sampledFrames": 224
+    },
+    "85": {
+      "profile": "僵尸4",
+      "frameSize": [
+        160,
+        144
+      ],
+      "stableBodyTop": 20,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 20,
+        "walk": 22,
+        "attack": 8,
+        "hit": 19,
+        "death": 14
+      },
+      "sampledFrames": 224
+    },
+    "86": {
+      "profile": "僵尸4",
+      "frameSize": [
+        160,
+        144
+      ],
+      "stableBodyTop": 20,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 20,
+        "walk": 22,
+        "attack": 8,
+        "hit": 19,
+        "death": 14
+      },
+      "sampledFrames": 224
+    },
+    "87": {
+      "profile": "僵尸5",
+      "frameSize": [
+        128,
+        112
+      ],
+      "stableBodyTop": 22,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 22,
+        "walk": 22,
+        "attack": 8,
+        "hit": 28,
+        "death": 22
+      },
+      "sampledFrames": 224
+    },
+    "88": {
+      "profile": "僵尸5",
+      "frameSize": [
+        128,
+        112
+      ],
+      "stableBodyTop": 22,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 22,
+        "walk": 22,
+        "attack": 8,
+        "hit": 28,
+        "death": 22
+      },
+      "sampledFrames": 224
+    },
+    "89": {
+      "profile": "尸王",
+      "frameSize": [
+        240,
+        192
+      ],
+      "stableBodyTop": 35,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 35,
+        "walk": 36,
+        "attack": 8,
+        "hit": 30,
+        "death": 27
+      },
+      "sampledFrames": 224
+    },
+    "90": {
+      "profile": "尸王",
+      "frameSize": [
+        240,
+        192
+      ],
+      "stableBodyTop": 35,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 35,
+        "walk": 36,
+        "attack": 8,
+        "hit": 30,
+        "death": 27
+      },
+      "sampledFrames": 224
+    },
+    "91": {
+      "profile": "尸王",
+      "frameSize": [
+        240,
+        192
+      ],
+      "stableBodyTop": 35,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 35,
+        "walk": 36,
+        "attack": 8,
+        "hit": 30,
+        "death": 27
+      },
+      "sampledFrames": 224
+    },
+    "92": {
+      "profile": "红蛇",
+      "frameSize": [
+        176,
+        144
+      ],
+      "stableBodyTop": 43,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 43,
+        "walk": 44,
+        "attack": 8,
+        "hit": 46,
+        "death": 16
+      },
+      "sampledFrames": 224
+    },
+    "93": {
+      "profile": "红蛇",
+      "frameSize": [
+        176,
+        144
+      ],
+      "stableBodyTop": 43,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 43,
+        "walk": 44,
+        "attack": 8,
+        "hit": 46,
+        "death": 16
+      },
+      "sampledFrames": 224
+    },
+    "94": {
+      "profile": "虎蛇",
+      "frameSize": [
+        160,
+        144
+      ],
+      "stableBodyTop": 36,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 36,
+        "walk": 35,
+        "attack": 31,
+        "hit": 38,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "95": {
+      "profile": "虎蛇",
+      "frameSize": [
+        160,
+        144
+      ],
+      "stableBodyTop": 36,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 36,
+        "walk": 35,
+        "attack": 31,
+        "hit": 38,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "96": {
+      "profile": "羊",
+      "frameSize": [
+        144,
+        112
+      ],
+      "stableBodyTop": 18,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 18,
+        "walk": 16,
+        "attack": 8,
+        "hit": 18,
+        "death": 12
+      },
+      "sampledFrames": 224
+    },
+    "97": {
+      "profile": "猎鹰",
+      "frameSize": [
+        304,
+        400
+      ],
+      "stableBodyTop": 49,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 49,
+        "walk": 49,
+        "attack": 8,
+        "hit": 58,
+        "death": 49
+      },
+      "sampledFrames": 224
+    },
+    "98": {
+      "profile": "猎鹰0",
+      "frameSize": [
+        304,
+        400
+      ],
+      "stableBodyTop": 49,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 49,
+        "walk": 49,
+        "attack": 8,
+        "hit": 58,
+        "death": 49
+      },
+      "sampledFrames": 224
+    },
+    "100": {
+      "profile": "狼",
+      "frameSize": [
+        160,
+        128
+      ],
+      "stableBodyTop": 49,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 49,
+        "walk": 45,
+        "attack": 8,
+        "hit": 35,
+        "death": 30
+      },
+      "sampledFrames": 224
+    },
+    "101": {
+      "profile": "盔甲虫",
+      "frameSize": [
+        160,
+        128
+      ],
+      "stableBodyTop": 19,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 19,
+        "walk": 18,
+        "attack": 9,
+        "hit": 9,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "102": {
+      "profile": "盔甲虫0",
+      "frameSize": [
+        160,
+        128
+      ],
+      "stableBodyTop": 19,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 19,
+        "walk": 18,
+        "attack": 9,
+        "hit": 9,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "103": {
+      "profile": "威思而小虫",
+      "frameSize": [
+        208,
+        160
+      ],
+      "stableBodyTop": 45,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 45,
+        "walk": 45,
+        "attack": 8,
+        "hit": 43,
+        "death": 46
+      },
+      "sampledFrames": 224
+    },
+    "104": {
+      "profile": "沙虫",
+      "frameSize": [
+        208,
+        160
+      ],
+      "stableBodyTop": 45,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 45,
+        "walk": 45,
+        "attack": 8,
+        "hit": 43,
+        "death": 46
+      },
+      "sampledFrames": 224
+    },
+    "105": {
+      "profile": "多角虫",
+      "frameSize": [
+        192,
+        160
+      ],
+      "stableBodyTop": 54,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 54,
+        "walk": 54,
+        "attack": 8,
+        "hit": 58,
+        "death": 40
+      },
+      "sampledFrames": 224
+    },
+    "106": {
+      "profile": "多角虫0",
+      "frameSize": [
+        192,
+        160
+      ],
+      "stableBodyTop": 54,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 54,
+        "walk": 54,
+        "attack": 8,
+        "hit": 58,
+        "death": 40
+      },
+      "sampledFrames": 224
+    },
+    "107": {
+      "profile": "巨型多角虫",
+      "frameSize": [
+        224,
+        176
+      ],
+      "stableBodyTop": 61,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 61,
+        "walk": 62,
+        "attack": 8,
+        "hit": 59,
+        "death": 38
+      },
+      "sampledFrames": 224
+    },
+    "108": {
+      "profile": "巨型多角虫1",
+      "frameSize": [
+        224,
+        176
+      ],
+      "stableBodyTop": 61,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 61,
+        "walk": 62,
+        "attack": 8,
+        "hit": 59,
+        "death": 38
+      },
+      "sampledFrames": 224
+    },
+    "110": {
+      "profile": "蜈蚣",
+      "frameSize": [
+        224,
+        208
+      ],
+      "stableBodyTop": 59,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 59,
+        "walk": 59,
+        "attack": 8,
+        "hit": 53,
+        "death": 42
+      },
+      "sampledFrames": 224
+    },
+    "111": {
+      "profile": "蜈蚣0",
+      "frameSize": [
+        224,
+        208
+      ],
+      "stableBodyTop": 59,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 59,
+        "walk": 59,
+        "attack": 8,
+        "hit": 53,
+        "death": 42
+      },
+      "sampledFrames": 224
+    },
+    "112": {
+      "profile": "黑色恶蛆",
+      "frameSize": [
+        160,
+        144
+      ],
+      "stableBodyTop": 48,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 48,
+        "walk": 45,
+        "attack": 8,
+        "hit": 44,
+        "death": 35
+      },
+      "sampledFrames": 224
+    },
+    "113": {
+      "profile": "黑色恶蛆0",
+      "frameSize": [
+        160,
+        144
+      ],
+      "stableBodyTop": 48,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 48,
+        "walk": 45,
+        "attack": 8,
+        "hit": 44,
+        "death": 35
+      },
+      "sampledFrames": 224
+    },
+    "114": {
+      "profile": "跳跳蜂",
+      "frameSize": [
+        192,
+        160
+      ],
+      "stableBodyTop": 34,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 34,
+        "walk": 30,
+        "attack": 8,
+        "hit": 8,
+        "death": 27
+      },
+      "sampledFrames": 224
+    },
+    "115": {
+      "profile": "跳跳蜂0",
+      "frameSize": [
+        192,
+        160
+      ],
+      "stableBodyTop": 34,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 34,
+        "walk": 30,
+        "attack": 8,
+        "hit": 8,
+        "death": 27
+      },
+      "sampledFrames": 224
+    },
+    "116": {
+      "profile": "巨型蠕虫",
+      "frameSize": [
+        208,
+        160
+      ],
+      "stableBodyTop": 29,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 29,
+        "walk": 31,
+        "attack": 8,
+        "hit": 32,
+        "death": 29
+      },
+      "sampledFrames": 224
+    },
+    "117": {
+      "profile": "巨型蠕虫0",
+      "frameSize": [
+        208,
+        160
+      ],
+      "stableBodyTop": 29,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 29,
+        "walk": 31,
+        "attack": 8,
+        "hit": 32,
+        "death": 29
+      },
+      "sampledFrames": 224
+    },
+    "118": {
+      "profile": "钳虫",
+      "frameSize": [
+        208,
+        176
+      ],
+      "stableBodyTop": 23,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 23,
+        "walk": 27,
+        "attack": 29,
+        "hit": 14,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "119": {
+      "profile": "钳虫0",
+      "frameSize": [
+        208,
+        176
+      ],
+      "stableBodyTop": 23,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 23,
+        "walk": 27,
+        "attack": 29,
+        "hit": 14,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "120": {
+      "profile": "邪恶钳虫",
+      "frameSize": [
+        272,
+        224
+      ],
+      "stableBodyTop": 55,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 55,
+        "walk": 58,
+        "attack": 45,
+        "hit": 42,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "121": {
+      "profile": "邪恶钳虫1",
+      "frameSize": [
+        272,
+        224
+      ],
+      "stableBodyTop": 55,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 55,
+        "walk": 58,
+        "attack": 45,
+        "hit": 42,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "122": {
+      "profile": "邪恶钳虫2",
+      "frameSize": [
+        272,
+        224
+      ],
+      "stableBodyTop": 55,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 55,
+        "walk": 58,
+        "attack": 45,
+        "hit": 42,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "123": {
+      "profile": "邪恶钳虫9",
+      "frameSize": [
+        272,
+        224
+      ],
+      "stableBodyTop": 55,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 55,
+        "walk": 58,
+        "attack": 45,
+        "hit": 42,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "124": {
+      "profile": "触龙神",
+      "frameSize": [
+        192,
+        208
+      ],
+      "stableBodyTop": 25,
+      "allActionVisibleTop": 10,
+      "actionVisibleTops": {
+        "idle": 25,
+        "walk": 25,
+        "attack": 30,
+        "hit": 30,
+        "death": 10
+      },
+      "sampledFrames": 192
+    },
+    "126": {
+      "profile": "角蝇",
+      "frameSize": [
+        128,
+        144
+      ],
+      "stableBodyTop": 58,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 58,
+        "walk": 58,
+        "attack": 8,
+        "hit": 59,
+        "death": 51
+      },
+      "sampledFrames": 208
+    },
+    "127": {
+      "profile": "蝙蝠",
+      "frameSize": [
+        128,
+        144
+      ],
+      "stableBodyTop": 20,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 20,
+        "walk": 21,
+        "attack": 8,
+        "hit": 23,
+        "death": 19
+      },
+      "sampledFrames": 224
+    },
+    "128": {
+      "profile": "楔蛾",
+      "frameSize": [
+        224,
+        192
+      ],
+      "stableBodyTop": 25,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 25,
+        "walk": 30,
+        "attack": 8,
+        "hit": 37,
+        "death": 33
+      },
+      "sampledFrames": 224
+    },
+    "129": {
+      "profile": "红野猪",
+      "frameSize": [
+        224,
+        192
+      ],
+      "stableBodyTop": 57,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 57,
+        "walk": 49,
+        "attack": 8,
+        "hit": 54,
+        "death": 35
+      },
+      "sampledFrames": 224
+    },
+    "130": {
+      "profile": "红野猪0",
+      "frameSize": [
+        224,
+        192
+      ],
+      "stableBodyTop": 57,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 57,
+        "walk": 49,
+        "attack": 8,
+        "hit": 54,
+        "death": 35
+      },
+      "sampledFrames": 224
+    },
+    "131": {
+      "profile": "红野猪3",
+      "frameSize": [
+        224,
+        192
+      ],
+      "stableBodyTop": 57,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 57,
+        "walk": 49,
+        "attack": 8,
+        "hit": 54,
+        "death": 35
+      },
+      "sampledFrames": 224
+    },
+    "132": {
+      "profile": "黑野猪",
+      "frameSize": [
+        240,
+        208
+      ],
+      "stableBodyTop": 64,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 64,
+        "walk": 48,
+        "attack": 8,
+        "hit": 60,
+        "death": 32
+      },
+      "sampledFrames": 224
+    },
+    "133": {
+      "profile": "黑野猪0",
+      "frameSize": [
+        240,
+        208
+      ],
+      "stableBodyTop": 64,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 64,
+        "walk": 48,
+        "attack": 8,
+        "hit": 60,
+        "death": 32
+      },
+      "sampledFrames": 224
+    },
+    "134": {
+      "profile": "黑野猪3",
+      "frameSize": [
+        240,
+        208
+      ],
+      "stableBodyTop": 64,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 64,
+        "walk": 48,
+        "attack": 8,
+        "hit": 60,
+        "death": 32
+      },
+      "sampledFrames": 224
+    },
+    "135": {
+      "profile": "白野猪",
+      "frameSize": [
+        272,
+        240
+      ],
+      "stableBodyTop": 65,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 65,
+        "walk": 61,
+        "attack": 8,
+        "hit": 62,
+        "death": 23
+      },
+      "sampledFrames": 224
+    },
+    "136": {
+      "profile": "白野猪0",
+      "frameSize": [
+        272,
+        240
+      ],
+      "stableBodyTop": 65,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 65,
+        "walk": 61,
+        "attack": 8,
+        "hit": 62,
+        "death": 23
+      },
+      "sampledFrames": 224
+    },
+    "137": {
+      "profile": "白野猪1",
+      "frameSize": [
+        272,
+        240
+      ],
+      "stableBodyTop": 65,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 65,
+        "walk": 61,
+        "attack": 8,
+        "hit": 62,
+        "death": 23
+      },
+      "sampledFrames": 224
+    },
+    "138": {
+      "profile": "蝎蛇",
+      "frameSize": [
+        256,
+        192
+      ],
+      "stableBodyTop": 29,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 29,
+        "walk": 16,
+        "attack": 22,
+        "hit": 31,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "139": {
+      "profile": "蝎蛇0",
+      "frameSize": [
+        256,
+        192
+      ],
+      "stableBodyTop": 29,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 29,
+        "walk": 16,
+        "attack": 22,
+        "hit": 31,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "140": {
+      "profile": "蝎蛇3",
+      "frameSize": [
+        256,
+        192
+      ],
+      "stableBodyTop": 29,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 29,
+        "walk": 16,
+        "attack": 22,
+        "hit": 31,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "141": {
+      "profile": "邪恶毒蛇",
+      "frameSize": [
+        368,
+        272
+      ],
+      "stableBodyTop": 66,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 66,
+        "walk": 50,
+        "attack": 42,
+        "hit": 51,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "142": {
+      "profile": "邪恶毒蛇1",
+      "frameSize": [
+        368,
+        272
+      ],
+      "stableBodyTop": 66,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 66,
+        "walk": 50,
+        "attack": 42,
+        "hit": 51,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "143": {
+      "profile": "石墓尸王",
+      "frameSize": [
+        224,
+        176
+      ],
+      "stableBodyTop": 21,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 21,
+        "walk": 25,
+        "attack": 8,
+        "hit": 18,
+        "death": 16
+      },
+      "sampledFrames": 224
+    },
+    "144": {
+      "profile": "蜜蜂",
+      "frameSize": [
+        128,
+        144
+      ],
+      "stableBodyTop": 20,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 20,
+        "walk": 21,
+        "attack": 8,
+        "hit": 23,
+        "death": 19
+      },
+      "sampledFrames": 224
+    },
+    "145": {
+      "profile": "变异骷髅0",
+      "frameSize": [
+        176,
+        160
+      ],
+      "stableBodyTop": 36,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 36,
+        "walk": 35,
+        "attack": 8,
+        "hit": 30,
+        "death": 29
+      },
+      "sampledFrames": 224
+    },
+    "146": {
+      "profile": "神兽0",
+      "frameSize": [
+        240,
+        208
+      ],
+      "stableBodyTop": 39,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 39,
+        "walk": 40,
+        "attack": 22,
+        "hit": 27,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "147": {
+      "profile": "神兽2",
+      "frameSize": [
+        240,
+        208
+      ],
+      "stableBodyTop": 39,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 39,
+        "walk": 40,
+        "attack": 22,
+        "hit": 27,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "148": {
+      "profile": "大老鼠",
+      "frameSize": [
+        240,
+        192
+      ],
+      "stableBodyTop": 55,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 55,
+        "walk": 40,
+        "attack": 8,
+        "hit": 46,
+        "death": 18
+      },
+      "sampledFrames": 224
+    },
+    "149": {
+      "profile": "大老鼠0",
+      "frameSize": [
+        240,
+        192
+      ],
+      "stableBodyTop": 55,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 55,
+        "walk": 40,
+        "attack": 8,
+        "hit": 46,
+        "death": 18
+      },
+      "sampledFrames": 224
+    },
+    "150": {
+      "profile": "祖玛弓箭手",
+      "frameSize": [
+        272,
+        240
+      ],
+      "stableBodyTop": 73,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 73,
+        "walk": 74,
+        "attack": 45,
+        "hit": 68,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "151": {
+      "profile": "祖玛弓箭手0",
+      "frameSize": [
+        272,
+        240
+      ],
+      "stableBodyTop": 73,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 73,
+        "walk": 74,
+        "attack": 45,
+        "hit": 68,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "152": {
+      "profile": "祖玛弓箭手3",
+      "frameSize": [
+        272,
+        240
+      ],
+      "stableBodyTop": 73,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 73,
+        "walk": 74,
+        "attack": 45,
+        "hit": 68,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "153": {
+      "profile": "祖玛雕像",
+      "frameSize": [
+        320,
+        256
+      ],
+      "stableBodyTop": 44,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 44,
+        "walk": 59,
+        "attack": 8,
+        "hit": 35,
+        "death": 16
+      },
+      "sampledFrames": 224
+    },
+    "154": {
+      "profile": "祖玛雕像0",
+      "frameSize": [
+        320,
+        256
+      ],
+      "stableBodyTop": 44,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 44,
+        "walk": 59,
+        "attack": 8,
+        "hit": 35,
+        "death": 16
+      },
+      "sampledFrames": 224
+    },
+    "155": {
+      "profile": "祖玛雕像3",
+      "frameSize": [
+        320,
+        256
+      ],
+      "stableBodyTop": 44,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 44,
+        "walk": 59,
+        "attack": 8,
+        "hit": 35,
+        "death": 16
+      },
+      "sampledFrames": 224
+    },
+    "156": {
+      "profile": "祖玛卫士",
+      "frameSize": [
+        240,
+        224
+      ],
+      "stableBodyTop": 78,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 78,
+        "walk": 77,
+        "attack": 8,
+        "hit": 62,
+        "death": 56
+      },
+      "sampledFrames": 224
+    },
+    "157": {
+      "profile": "祖玛卫士0",
+      "frameSize": [
+        240,
+        224
+      ],
+      "stableBodyTop": 78,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 78,
+        "walk": 77,
+        "attack": 8,
+        "hit": 62,
+        "death": 56
+      },
+      "sampledFrames": 224
+    },
+    "158": {
+      "profile": "祖玛卫士3",
+      "frameSize": [
+        240,
+        224
+      ],
+      "stableBodyTop": 78,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 78,
+        "walk": 77,
+        "attack": 8,
+        "hit": 62,
+        "death": 56
+      },
+      "sampledFrames": 224
+    },
+    "159": {
+      "profile": "祖玛卫士00",
+      "frameSize": [
+        240,
+        224
+      ],
+      "stableBodyTop": 78,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 78,
+        "walk": 77,
+        "attack": 8,
+        "hit": 62,
+        "death": 56
+      },
+      "sampledFrames": 224
+    },
+    "160": {
+      "profile": "祖玛教主",
+      "frameSize": [
+        384,
+        336
+      ],
+      "stableBodyTop": 10,
+      "allActionVisibleTop": 10,
+      "actionVisibleTops": {
+        "idle": 10,
+        "walk": 142,
+        "attack": 138,
+        "hit": 146,
+        "death": 102
+      },
+      "sampledFrames": 192
+    },
+    "161": {
+      "profile": "祖玛教主",
+      "frameSize": [
+        384,
+        336
+      ],
+      "stableBodyTop": 10,
+      "allActionVisibleTop": 10,
+      "actionVisibleTops": {
+        "idle": 10,
+        "walk": 142,
+        "attack": 138,
+        "hit": 146,
+        "death": 102
+      },
+      "sampledFrames": 192
+    },
+    "162": {
+      "profile": "双头血魔",
+      "frameSize": [
+        288,
+        304
+      ],
+      "stableBodyTop": 99,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 99,
+        "walk": 95,
+        "attack": 8,
+        "hit": 96,
+        "death": 16
+      },
+      "sampledFrames": 224
+    },
+    "163": {
+      "profile": "双头金刚",
+      "frameSize": [
+        288,
+        304
+      ],
+      "stableBodyTop": 95,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 95,
+        "walk": 91,
+        "attack": 8,
+        "hit": 93,
+        "death": 16
+      },
+      "sampledFrames": 224
+    },
+    "164": {
+      "profile": "血巨人",
+      "frameSize": [
+        272,
+        288
+      ],
+      "stableBodyTop": 98,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 98,
+        "walk": 100,
+        "attack": 8,
+        "hit": 99,
+        "death": 32
+      },
+      "sampledFrames": 224
+    },
+    "165": {
+      "profile": "血巨人0",
+      "frameSize": [
+        272,
+        288
+      ],
+      "stableBodyTop": 98,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 98,
+        "walk": 100,
+        "attack": 8,
+        "hit": 99,
+        "death": 32
+      },
+      "sampledFrames": 224
+    },
+    "166": {
+      "profile": "血僵尸",
+      "frameSize": [
+        272,
+        288
+      ],
+      "stableBodyTop": 98,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 98,
+        "walk": 100,
+        "attack": 8,
+        "hit": 99,
+        "death": 32
+      },
+      "sampledFrames": 224
+    },
+    "167": {
+      "profile": "血僵尸0",
+      "frameSize": [
+        272,
+        288
+      ],
+      "stableBodyTop": 98,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 98,
+        "walk": 100,
+        "attack": 8,
+        "hit": 99,
+        "death": 32
+      },
+      "sampledFrames": 224
+    },
+    "168": {
+      "profile": "月魔蜘蛛",
+      "frameSize": [
+        256,
+        208
+      ],
+      "stableBodyTop": 20,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 20,
+        "walk": 18,
+        "attack": 8,
+        "hit": 46,
+        "death": 36
+      },
+      "sampledFrames": 224
+    },
+    "169": {
+      "profile": "月魔蜘蛛0",
+      "frameSize": [
+        256,
+        208
+      ],
+      "stableBodyTop": 20,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 20,
+        "walk": 18,
+        "attack": 8,
+        "hit": 46,
+        "death": 36
+      },
+      "sampledFrames": 224
+    },
+    "170": {
+      "profile": "黑锷蜘蛛",
+      "frameSize": [
+        208,
+        176
+      ],
+      "stableBodyTop": 40,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 40,
+        "walk": 41,
+        "attack": 8,
+        "hit": 31,
+        "death": 12
+      },
+      "sampledFrames": 224
+    },
+    "171": {
+      "profile": "黑锷蜘蛛0",
+      "frameSize": [
+        208,
+        176
+      ],
+      "stableBodyTop": 40,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 40,
+        "walk": 41,
+        "attack": 8,
+        "hit": 31,
+        "death": 12
+      },
+      "sampledFrames": 224
+    },
+    "172": {
+      "profile": "钢牙蜘蛛",
+      "frameSize": [
+        336,
+        224
+      ],
+      "stableBodyTop": 87,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 87,
+        "walk": 86,
+        "attack": 51,
+        "hit": 86,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "173": {
+      "profile": "钢牙蜘蛛0",
+      "frameSize": [
+        336,
+        224
+      ],
+      "stableBodyTop": 87,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 87,
+        "walk": 86,
+        "attack": 51,
+        "hit": 86,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "174": {
+      "profile": "暴牙蜘蛛",
+      "frameSize": [
+        336,
+        224
+      ],
+      "stableBodyTop": 87,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 87,
+        "walk": 86,
+        "attack": 51,
+        "hit": 86,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "175": {
+      "profile": "暴牙蜘蛛0",
+      "frameSize": [
+        336,
+        224
+      ],
+      "stableBodyTop": 87,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 87,
+        "walk": 86,
+        "attack": 51,
+        "hit": 86,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "176": {
+      "profile": "天狼蜘蛛",
+      "frameSize": [
+        528,
+        208
+      ],
+      "stableBodyTop": 78,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 78,
+        "walk": 70,
+        "attack": 8,
+        "hit": 73,
+        "death": 47
+      },
+      "sampledFrames": 224
+    },
+    "177": {
+      "profile": "天狼蜘蛛0",
+      "frameSize": [
+        528,
+        208
+      ],
+      "stableBodyTop": 78,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 78,
+        "walk": 70,
+        "attack": 8,
+        "hit": 73,
+        "death": 47
+      },
+      "sampledFrames": 224
+    },
+    "178": {
+      "profile": "花吻蜘蛛",
+      "frameSize": [
+        320,
+        240
+      ],
+      "stableBodyTop": 65,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 65,
+        "walk": 62,
+        "attack": 20,
+        "hit": 60,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "179": {
+      "profile": "花吻蜘蛛0",
+      "frameSize": [
+        320,
+        240
+      ],
+      "stableBodyTop": 65,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 65,
+        "walk": 62,
+        "attack": 20,
+        "hit": 60,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "180": {
+      "profile": "赤月恶魔",
+      "frameSize": [
+        288,
+        208
+      ],
+      "stableBodyTop": 8,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 8,
+        "walk": 8,
+        "attack": 8,
+        "hit": 8,
+        "death": 8
+      },
+      "sampledFrames": 288
+    },
+    "182": {
+      "profile": "幻影蜘蛛",
+      "frameSize": [
+        256,
+        176
+      ],
+      "stableBodyTop": 12,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 12,
+        "walk": 12,
+        "attack": 12,
+        "hit": 12,
+        "death": 8
+      },
+      "sampledFrames": 208
+    },
+    "183": {
+      "profile": "爆裂蜘蛛",
+      "frameSize": [
+        192,
+        144
+      ],
+      "stableBodyTop": 52,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 52,
+        "walk": 50,
+        "attack": 50,
+        "hit": 51,
+        "death": 8
+      },
+      "sampledFrames": 200
+    },
+    "184": {
+      "profile": "爆裂蜘蛛0",
+      "frameSize": [
+        192,
+        144
+      ],
+      "stableBodyTop": 52,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 52,
+        "walk": 50,
+        "attack": 50,
+        "hit": 51,
+        "death": 8
+      },
+      "sampledFrames": 200
+    },
+    "185": {
+      "profile": "剧毒蜘蛛",
+      "frameSize": [
+        336,
+        240
+      ],
+      "stableBodyTop": 64,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 64,
+        "walk": 61,
+        "attack": 8,
+        "hit": 57,
+        "death": 22
+      },
+      "sampledFrames": 224
+    },
+    "186": {
+      "profile": "鹰卫",
+      "frameSize": [
+        208,
+        176
+      ],
+      "stableBodyTop": 37,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 37,
+        "walk": 36,
+        "attack": 8,
+        "hit": 33,
+        "death": 33
+      },
+      "sampledFrames": 224
+    },
+    "187": {
+      "profile": "虎卫",
+      "frameSize": [
+        208,
+        176
+      ],
+      "stableBodyTop": 46,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 46,
+        "walk": 39,
+        "attack": 8,
+        "hit": 32,
+        "death": 50
+      },
+      "sampledFrames": 224
+    },
+    "188": {
+      "profile": "虹魔猪卫",
+      "frameSize": [
+        320,
+        240
+      ],
+      "stableBodyTop": 65,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 65,
+        "walk": 61,
+        "attack": 10,
+        "hit": 64,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "189": {
+      "profile": "虹魔猪卫0",
+      "frameSize": [
+        320,
+        240
+      ],
+      "stableBodyTop": 65,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 65,
+        "walk": 61,
+        "attack": 10,
+        "hit": 64,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "190": {
+      "profile": "虹魔猪卫9",
+      "frameSize": [
+        320,
+        240
+      ],
+      "stableBodyTop": 65,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 65,
+        "walk": 61,
+        "attack": 10,
+        "hit": 64,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "191": {
+      "profile": "虹魔蝎卫",
+      "frameSize": [
+        448,
+        336
+      ],
+      "stableBodyTop": 142,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 142,
+        "walk": 131,
+        "attack": 85,
+        "hit": 141,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "192": {
+      "profile": "虹魔蝎卫0",
+      "frameSize": [
+        448,
+        336
+      ],
+      "stableBodyTop": 142,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 142,
+        "walk": 131,
+        "attack": 85,
+        "hit": 141,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "193": {
+      "profile": "虹魔教主",
+      "frameSize": [
+        288,
+        240
+      ],
+      "stableBodyTop": 22,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 22,
+        "walk": 27,
+        "attack": 8,
+        "hit": 19,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "194": {
+      "profile": "恶魔弓箭手",
+      "frameSize": [
+        272,
+        240
+      ],
+      "stableBodyTop": 73,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 73,
+        "walk": 74,
+        "attack": 45,
+        "hit": 68,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "195": {
+      "profile": "千年树妖",
+      "frameSize": [
+        368,
+        320
+      ],
+      "stableBodyTop": 8,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 8,
+        "walk": 8,
+        "attack": 8,
+        "hit": 8,
+        "death": 8
+      },
+      "sampledFrames": 288
+    },
+    "196": {
+      "profile": "恶灵僵尸",
+      "frameSize": [
+        192,
+        224
+      ],
+      "stableBodyTop": 96,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 96,
+        "walk": 95,
+        "attack": 67,
+        "hit": 99,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "197": {
+      "profile": "恶灵僵尸0",
+      "frameSize": [
+        192,
+        224
+      ],
+      "stableBodyTop": 96,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 96,
+        "walk": 95,
+        "attack": 67,
+        "hit": 99,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "198": {
+      "profile": "恶灵尸王",
+      "frameSize": [
+        192,
+        160
+      ],
+      "stableBodyTop": 10,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 10,
+        "walk": 10,
+        "attack": 9,
+        "hit": 19,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "199": {
+      "profile": "恶灵尸王0",
+      "frameSize": [
+        192,
+        160
+      ],
+      "stableBodyTop": 10,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 10,
+        "walk": 10,
+        "attack": 9,
+        "hit": 19,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "200": {
+      "profile": "骷髅锤兵",
+      "frameSize": [
+        304,
+        240
+      ],
+      "stableBodyTop": 23,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 23,
+        "walk": 21,
+        "attack": 8,
+        "hit": 34,
+        "death": 36
+      },
+      "sampledFrames": 224
+    },
+    "201": {
+      "profile": "骷髅锤兵0",
+      "frameSize": [
+        304,
+        240
+      ],
+      "stableBodyTop": 23,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 23,
+        "walk": 21,
+        "attack": 8,
+        "hit": 34,
+        "death": 36
+      },
+      "sampledFrames": 224
+    },
+    "202": {
+      "profile": "骷髅长枪兵",
+      "frameSize": [
+        304,
+        224
+      ],
+      "stableBodyTop": 13,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 13,
+        "walk": 15,
+        "attack": 18,
+        "hit": 8,
+        "death": 12
+      },
+      "sampledFrames": 224
+    },
+    "203": {
+      "profile": "骷髅长枪兵0",
+      "frameSize": [
+        304,
+        224
+      ],
+      "stableBodyTop": 13,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 13,
+        "walk": 15,
+        "attack": 18,
+        "hit": 8,
+        "death": 12
+      },
+      "sampledFrames": 224
+    },
+    "204": {
+      "profile": "骷髅刀斧手",
+      "frameSize": [
+        224,
+        192
+      ],
+      "stableBodyTop": 50,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 50,
+        "walk": 49,
+        "attack": 8,
+        "hit": 42,
+        "death": 39
+      },
+      "sampledFrames": 224
+    },
+    "205": {
+      "profile": "骷髅刀斧手0",
+      "frameSize": [
+        224,
+        192
+      ],
+      "stableBodyTop": 50,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 50,
+        "walk": 49,
+        "attack": 8,
+        "hit": 42,
+        "death": 39
+      },
+      "sampledFrames": 224
+    },
+    "206": {
+      "profile": "骷髅弓箭手",
+      "frameSize": [
+        192,
+        160
+      ],
+      "stableBodyTop": 24,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 24,
+        "walk": 23,
+        "attack": 8,
+        "hit": 22,
+        "death": 25
+      },
+      "sampledFrames": 224
+    },
+    "207": {
+      "profile": "骷髅弓箭手0",
+      "frameSize": [
+        192,
+        160
+      ],
+      "stableBodyTop": 24,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 24,
+        "walk": 23,
+        "attack": 8,
+        "hit": 22,
+        "death": 25
+      },
+      "sampledFrames": 224
+    },
+    "208": {
+      "profile": "黄泉教主",
+      "frameSize": [
+        352,
+        288
+      ],
+      "stableBodyTop": 77,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 77,
+        "walk": 58,
+        "attack": 8,
+        "hit": 56,
+        "death": 36
+      },
+      "sampledFrames": 304
+    },
+    "209": {
+      "profile": "黄泉教主0",
+      "frameSize": [
+        352,
+        288
+      ],
+      "stableBodyTop": 77,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 77,
+        "walk": 58,
+        "attack": 8,
+        "hit": 56,
+        "death": 36
+      },
+      "sampledFrames": 304
+    },
+    "210": {
+      "profile": "牛头魔",
+      "frameSize": [
+        368,
+        272
+      ],
+      "stableBodyTop": 73,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 73,
+        "walk": 66,
+        "attack": 8,
+        "hit": 70,
+        "death": 31
+      },
+      "sampledFrames": 224
+    },
+    "211": {
+      "profile": "牛头魔0",
+      "frameSize": [
+        368,
+        272
+      ],
+      "stableBodyTop": 73,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 73,
+        "walk": 66,
+        "attack": 8,
+        "hit": 70,
+        "death": 31
+      },
+      "sampledFrames": 224
+    },
+    "212": {
+      "profile": "牛魔战士",
+      "frameSize": [
+        240,
+        240
+      ],
+      "stableBodyTop": 55,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 55,
+        "walk": 48,
+        "attack": 8,
+        "hit": 49,
+        "death": 38
+      },
+      "sampledFrames": 224
+    },
+    "213": {
+      "profile": "牛魔战士0",
+      "frameSize": [
+        240,
+        240
+      ],
+      "stableBodyTop": 55,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 55,
+        "walk": 48,
+        "attack": 8,
+        "hit": 49,
+        "death": 38
+      },
+      "sampledFrames": 224
+    },
+    "214": {
+      "profile": "牛魔斗士",
+      "frameSize": [
+        224,
+        240
+      ],
+      "stableBodyTop": 52,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 52,
+        "walk": 44,
+        "attack": 8,
+        "hit": 41,
+        "death": 33
+      },
+      "sampledFrames": 224
+    },
+    "215": {
+      "profile": "牛魔斗士0",
+      "frameSize": [
+        224,
+        240
+      ],
+      "stableBodyTop": 52,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 52,
+        "walk": 44,
+        "attack": 8,
+        "hit": 41,
+        "death": 33
+      },
+      "sampledFrames": 224
+    },
+    "216": {
+      "profile": "牛魔侍卫",
+      "frameSize": [
+        288,
+        288
+      ],
+      "stableBodyTop": 74,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 74,
+        "walk": 73,
+        "attack": 8,
+        "hit": 60,
+        "death": 60
+      },
+      "sampledFrames": 224
+    },
+    "217": {
+      "profile": "牛魔侍卫0",
+      "frameSize": [
+        288,
+        288
+      ],
+      "stableBodyTop": 74,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 74,
+        "walk": 73,
+        "attack": 8,
+        "hit": 60,
+        "death": 60
+      },
+      "sampledFrames": 224
+    },
+    "218": {
+      "profile": "牛魔将军",
+      "frameSize": [
+        272,
+        272
+      ],
+      "stableBodyTop": 47,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 47,
+        "walk": 43,
+        "attack": 8,
+        "hit": 30,
+        "death": 31
+      },
+      "sampledFrames": 224
+    },
+    "219": {
+      "profile": "牛魔将军0",
+      "frameSize": [
+        272,
+        272
+      ],
+      "stableBodyTop": 47,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 47,
+        "walk": 43,
+        "attack": 8,
+        "hit": 30,
+        "death": 31
+      },
+      "sampledFrames": 224
+    },
+    "220": {
+      "profile": "牛魔法师",
+      "frameSize": [
+        272,
+        224
+      ],
+      "stableBodyTop": 38,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 38,
+        "walk": 24,
+        "attack": 8,
+        "hit": 35,
+        "death": 35
+      },
+      "sampledFrames": 224
+    },
+    "221": {
+      "profile": "牛魔法师0",
+      "frameSize": [
+        272,
+        224
+      ],
+      "stableBodyTop": 38,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 38,
+        "walk": 24,
+        "attack": 8,
+        "hit": 35,
+        "death": 35
+      },
+      "sampledFrames": 224
+    },
+    "222": {
+      "profile": "牛魔祭司",
+      "frameSize": [
+        240,
+        208
+      ],
+      "stableBodyTop": 44,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 44,
+        "walk": 13,
+        "attack": 8,
+        "hit": 45,
+        "death": 46
+      },
+      "sampledFrames": 224
+    },
+    "223": {
+      "profile": "牛魔祭司0",
+      "frameSize": [
+        240,
+        208
+      ],
+      "stableBodyTop": 44,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 44,
+        "walk": 13,
+        "attack": 8,
+        "hit": 45,
+        "death": 46
+      },
+      "sampledFrames": 224
+    },
+    "224": {
+      "profile": "牛魔王",
+      "frameSize": [
+        336,
+        288
+      ],
+      "stableBodyTop": 18,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 18,
+        "walk": 17,
+        "attack": 8,
+        "hit": 21,
+        "death": 11
+      },
+      "sampledFrames": 224
+    },
+    "225": {
+      "profile": "暗之牛魔王",
+      "frameSize": [
+        336,
+        288
+      ],
+      "stableBodyTop": 18,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 18,
+        "walk": 17,
+        "attack": 8,
+        "hit": 21,
+        "death": 11
+      },
+      "sampledFrames": 224
+    },
+    "226": {
+      "profile": "宝箱",
+      "frameSize": [
+        48,
+        48
+      ],
+      "stableBodyTop": 8,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 8,
+        "walk": 8,
+        "attack": 8,
+        "hit": 8,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "227": {
+      "profile": "宝箱1",
+      "frameSize": [
+        48,
+        48
+      ],
+      "stableBodyTop": 8,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 8,
+        "walk": 8,
+        "attack": 8,
+        "hit": 8,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "228": {
+      "profile": "宝箱2",
+      "frameSize": [
+        48,
+        48
+      ],
+      "stableBodyTop": 8,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 8,
+        "walk": 8,
+        "attack": 8,
+        "hit": 8,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "229": {
+      "profile": "宝箱3",
+      "frameSize": [
+        48,
+        48
+      ],
+      "stableBodyTop": 8,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 8,
+        "walk": 8,
+        "attack": 8,
+        "hit": 8,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "230": {
+      "profile": "宝箱4",
+      "frameSize": [
+        48,
+        48
+      ],
+      "stableBodyTop": 8,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 8,
+        "walk": 8,
+        "attack": 8,
+        "hit": 8,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "231": {
+      "profile": "宝箱5",
+      "frameSize": [
+        48,
+        48
+      ],
+      "stableBodyTop": 8,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 8,
+        "walk": 8,
+        "attack": 8,
+        "hit": 8,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "232": {
+      "profile": "宝箱6",
+      "frameSize": [
+        48,
+        48
+      ],
+      "stableBodyTop": 8,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 8,
+        "walk": 8,
+        "attack": 8,
+        "hit": 8,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "233": {
+      "profile": "宝箱7",
+      "frameSize": [
+        48,
+        48
+      ],
+      "stableBodyTop": 8,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 8,
+        "walk": 8,
+        "attack": 8,
+        "hit": 8,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "234": {
+      "profile": "宝箱8",
+      "frameSize": [
+        48,
+        48
+      ],
+      "stableBodyTop": 8,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 8,
+        "walk": 8,
+        "attack": 8,
+        "hit": 8,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "235": {
+      "profile": "暗之双头血魔",
+      "frameSize": [
+        288,
+        304
+      ],
+      "stableBodyTop": 99,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 99,
+        "walk": 95,
+        "attack": 8,
+        "hit": 96,
+        "death": 16
+      },
+      "sampledFrames": 224
+    },
+    "236": {
+      "profile": "暗之双头金刚",
+      "frameSize": [
+        288,
+        304
+      ],
+      "stableBodyTop": 95,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 95,
+        "walk": 91,
+        "attack": 8,
+        "hit": 93,
+        "death": 16
+      },
+      "sampledFrames": 224
+    },
+    "237": {
+      "profile": "暗之黄泉教主",
+      "frameSize": [
+        352,
+        288
+      ],
+      "stableBodyTop": 77,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 77,
+        "walk": 58,
+        "attack": 8,
+        "hit": 56,
+        "death": 36
+      },
+      "sampledFrames": 304
+    },
+    "238": {
+      "profile": "暗之骷髅精灵",
+      "frameSize": [
+        336,
+        256
+      ],
+      "stableBodyTop": 72,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 72,
+        "walk": 70,
+        "attack": 8,
+        "hit": 70,
+        "death": 30
+      },
+      "sampledFrames": 224
+    },
+    "239": {
+      "profile": "暗之沃玛教主",
+      "frameSize": [
+        336,
+        288
+      ],
+      "stableBodyTop": 37,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 37,
+        "walk": 40,
+        "attack": 27,
+        "hit": 30,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "240": {
+      "profile": "暗之虹魔教主",
+      "frameSize": [
+        288,
+        240
+      ],
+      "stableBodyTop": 22,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 22,
+        "walk": 27,
+        "attack": 8,
+        "hit": 19,
+        "death": 8
+      },
+      "sampledFrames": 224
+    },
+    "241": {
+      "profile": "飞火流星",
+      "frameSize": [
+        64,
+        64
+      ],
+      "stableBodyTop": 12,
+      "allActionVisibleTop": 8,
+      "actionVisibleTops": {
+        "idle": 12,
+        "walk": 8,
+        "attack": 8,
+        "hit": 8,
+        "death": 12
+      },
+      "sampledFrames": 160
+    }
+  }
+}

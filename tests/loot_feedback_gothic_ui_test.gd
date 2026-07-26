@@ -66,5 +66,43 @@ func _run() -> void:
 	for style: StyleBoxFlat in [normal_style, rare_style, error_style]:
 		assert(style.bg_color.a < 0.80, "战利品反馈背景不是半透明灰色")
 		assert(style.border_width_left == 1 and style.border_width_top == 1, "战利品反馈轮廓不是最细1像素")
+	await _assert_landscape_safe_area_centering()
 	print("LOOT_FEEDBACK_GOTHIC_UI_PASS：地面名称、分类颜色、三条拾取提示、满包失败和Boss高价值横幅均正常")
 	get_tree().quit(0)
+
+
+func _assert_landscape_safe_area_centering() -> void:
+	var cases := [
+		{"name": "1280x720", "viewport": Vector2(1280, 720), "safe": Rect2(0, 0, 1280, 720)},
+		{"name": "2400x1080", "viewport": Vector2(2400, 1080), "safe": Rect2(80, 0, 2240, 1080)},
+		{"name": "2664x1200", "viewport": Vector2(2664, 1200), "safe": Rect2(120, 0, 2544, 1200)},
+	]
+	for entry: Dictionary in cases:
+		var viewport_size: Vector2 = entry.viewport
+		var safe_rect: Rect2 = entry.safe
+		assert(safe_rect.end.x <= viewport_size.x, "%s 测试安全区越出视口" % entry.name)
+		var safe_root := Control.new()
+		safe_root.position = safe_rect.position
+		safe_root.size = safe_rect.size
+		add_child(safe_root)
+		var feedback: Control = LootFeedbackLayerScript.new()
+		safe_root.add_child(feedback)
+		await get_tree().process_frame
+		feedback.show_feedback({"event_type": "pickup_success", "item_name": "金币", "count": 1, "item_kind": "currency"})
+		feedback.show_feedback({"event_type": "rare_drop", "item_name": "裁决之杖", "source_is_boss": true})
+		feedback.show_feedback({"event_type": "pickup_failed", "item_name": "裁决之杖", "reason": "背包已满"})
+		var expected_center_x := safe_rect.get_center().x
+		var centered_controls: Array[Control] = [
+			feedback.toast_container,
+			feedback.toast_container.get_child(0) as Control,
+			feedback.rare_banner,
+			feedback.failure_panel,
+		]
+		for control: Control in centered_controls:
+			var actual_center_x := control.get_global_rect().get_center().x
+			assert(absf(actual_center_x - expected_center_x) <= 1.0, "%s 拾取提示没有对准可用安全区中心：%.2f != %.2f" % [entry.name, actual_center_x, expected_center_x])
+		assert(is_equal_approx(feedback.toast_container.position.y, 108.0), "%s 普通拾取提示纵向位置漂移" % entry.name)
+		assert(is_equal_approx(feedback.rare_banner.position.y, 104.0), "%s 稀有掉落横幅纵向位置漂移" % entry.name)
+		assert(is_equal_approx(feedback.failure_panel.position.y, 122.0), "%s 拾取失败提示纵向位置漂移" % entry.name)
+		safe_root.queue_free()
+		await get_tree().process_frame

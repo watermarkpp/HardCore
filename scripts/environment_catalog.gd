@@ -151,8 +151,22 @@ static func get_map_profile(map_id: int) -> Dictionary:
 
 
 static func configured_map_ids() -> Array:
-	var result := [4, 217, 218, 221, 248, 249, 1578]
-	result.append_array(BATCH_THEME_MAPS.keys())
+	# Keep coverage derived from every published profile family. The former
+	# hand-written subset silently omitted Wooma Forest/Caves and Snake maps,
+	# allowing shared rendering regressions to escape the environment suite.
+	var configured := {4: true}
+	for family: Dictionary in [
+		BATCH_THEME_MAPS,
+		MINE_SOURCE_LAYOUTS,
+		WOOMA_TEMPLE_SOURCE_LAYOUTS,
+		WOOMA_REGION_SOURCE_LAYOUTS,
+		SNAKE_VALLEY_SOURCE_LAYOUTS,
+		NATURAL_CAVE_SOURCE_LAYOUTS,
+		ORC_TOMB_SOURCE_LAYOUTS,
+	]:
+		for map_id: Variant in family.keys():
+			configured[int(map_id)] = true
+	var result := configured.keys()
 	result.sort()
 	return result
 
@@ -180,10 +194,12 @@ static func coverage_report() -> Dictionary:
 static func expected_runtime_nodes(profile: Dictionary) -> int:
 	var count := 0
 	for prop: Dictionary in profile.get("props", []):
-		count += 2 if bool(prop.get("canopy", false)) else 1
+		# One complete prop is one actor-domain Y-sort unit. Canopies are no
+		# longer duplicated as an always-on-top fixed-z sprite.
+		count += 1
 		if str(prop.get("shape", "")) in ["circle", "rect"]:
 			count += 1
-	count += profile.get("braziers", []).size() * 4
+	count += profile.get("braziers", []).size() * 3
 	return count
 
 
