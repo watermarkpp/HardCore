@@ -5,6 +5,7 @@ const HelmetVisualV2 := preload("res://scripts/helmet_visual_v2.gd")
 const ITEM_ID := 146
 const PLAYER_VISUAL_ID := "player.male.cloth_002"
 const OUTPUT_ROOT := "res://outputs/visual_acceptance/helmet_calibration"
+const TEST_OVERRIDE_PATH := OUTPUT_ROOT + "/helmet_146_test_overrides.json"
 const DIRECTIONS := HelmetVisualV2.CANONICAL_DIRECTIONS
 const ACTIONS := {"idle": 4, "walk": 6, "attack": 6, "hit": 3, "death": 4}
 const DIRECTION_VECTORS := [
@@ -34,6 +35,7 @@ var _session_unlocked: Dictionary = {}
 var _game: Node
 var _player: PlayerCharacter
 var _visual: Node2D
+var _formal_override_before := ""
 
 
 func _ready() -> void:
@@ -58,14 +60,26 @@ func _run() -> void:
 	_player = _game.player
 	_visual = _player.get_node("PlayerVisual")
 	assert(_visual != null)
+	var is_headless := DisplayServer.get_name() == "headless"
+	var output_dir := ProjectSettings.globalize_path(OUTPUT_ROOT)
+	DirAccess.make_dir_recursive_absolute(output_dir)
+	if is_headless:
+		_formal_override_before = FileAccess.get_file_as_string(
+			HelmetVisualV2.OVERRIDE_PATH
+		)
+		_write_json(
+			ProjectSettings.globalize_path(TEST_OVERRIDE_PATH),
+			HelmetVisualV2.calibration_overrides()
+		)
+		assert(HelmetVisualV2.set_calibration_override_path_for_test(
+			TEST_OVERRIDE_PATH
+		))
 	_render_current_previews()
 	assert(get_node("CalibrationUI/Panel/VBox/Previews/FullColumn/FullPersonPreview").texture != null)
 	assert(get_node("CalibrationUI/Panel/VBox/Previews/HeadColumn/HeadPreview").texture != null)
-	if DisplayServer.get_name() != "headless":
+	if not is_headless:
 		print("HELMET_CALIBRATION_TOOL_INTERACTIVE_READY item=146")
 		return
-	var output_dir := ProjectSettings.globalize_path(OUTPUT_ROOT)
-	DirAccess.make_dir_recursive_absolute(output_dir)
 	_generate_idle_outputs(output_dir)
 	_generate_all_actions_overview(output_dir)
 	var audit := _direction_audit()
@@ -73,6 +87,11 @@ func _run() -> void:
 	var validation := _validation_report(audit)
 	_write_json(output_dir.path_join("helmet_146_validation_report.json"), validation)
 	assert(bool(validation.get("passed", false)))
+	HelmetVisualV2.reset_calibration_override_path()
+	assert(
+		FileAccess.get_file_as_string(HelmetVisualV2.OVERRIDE_PATH)
+		== _formal_override_before
+	)
 	print(
 		"HELMET_CALIBRATION_TOOL_PASS "
 		+ "item=146 sockets=184 directions=8 golden151_pixel_diff=0"
@@ -537,6 +556,10 @@ func _validation_report(audit: Dictionary) -> Dictionary:
 	_add_check(checks, "face_hair_overlay_toggles_change_preview", _overlay_toggle_safe())
 	_add_check(checks, "arrow_nudge_exactly_one_pixel", _nudge_roundtrip_safe())
 	_add_check(checks, "formal_runtime_override_save", _formal_override_save_safe())
+	_add_check(checks, "headless_save_does_not_modify_tracked_override", (
+		FileAccess.get_file_as_string(HelmetVisualV2.OVERRIDE_PATH)
+		== _formal_override_before
+	))
 	var golden_diff := _golden_151_pixel_diff()
 	_add_check(checks, "golden_151_pixel_diff_zero", golden_diff == 0, {"pixelDiff": golden_diff})
 	var passed := true
