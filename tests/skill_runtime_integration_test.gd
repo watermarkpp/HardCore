@@ -52,7 +52,7 @@ func _run() -> void:
 	assert(is_equal_approx(player._attack_action_timer, 0.6), "烈火显式充能未使用SOT 600ms身体动作")
 	assert(is_equal_approx(player._attack_timer, 8.0), "烈火显式充能冷却未与600ms身体动作隔离")
 	await get_tree().create_timer(0.65).timeout
-	assert(not player.fire_sword_auto_enabled, "烈火仍错误保留旧自动开关")
+	assert(player.fire_sword_armed, "烈火Router结果未同步显式充能状态")
 	assert(game._canonical_fire_charge_expires_ms > Time.get_ticks_msec(), "烈火canonical结果未建立一次性充能")
 	var mana_after_charge := player.current_mp
 	assert(mana_after_charge == 33, "烈火显式充能未按SOT唯一扣除7点MP")
