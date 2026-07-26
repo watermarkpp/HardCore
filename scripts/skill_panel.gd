@@ -505,6 +505,8 @@ func _show_skill_detail(index: int) -> void:
 	skill_name_label.text = skill_name
 	skill_icon.texture = _skill_texture(skill_name)
 	skill_icon.set_meta("skill_id", ProfessionRules.skill_id(skill_name))
+	skill_icon.set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
+	skill_icon.set_meta("skill_icon_path", HUDSkillIconCatalogScript.source_path_for(skill_name))
 	detail_label.text = "[color=#ddc9a9]等级：%s　　熟练度：%s\n类型：%s　　交互：%s\n目标：%s　　消耗：%d MP\n冷却：%.2f 秒　　范围：%.0f\n状态：%s[/color]" % [
 		"Lv.%d" % learned_level if learned else "未学习",
 		mastery_text,
@@ -586,6 +588,8 @@ func _set_assignment_button_content(button: Button, slot_label_text: String, ski
 	icon.position = Vector2((button.size.x - 40.0) * 0.5, 10) if compact else Vector2(8, 22)
 	icon.size = Vector2(40, 40)
 	icon.texture = _skill_texture(skill_name)
+	icon.set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
+	icon.set_meta("skill_icon_path", HUDSkillIconCatalogScript.source_path_for(skill_name))
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
