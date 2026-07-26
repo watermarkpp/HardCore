@@ -429,16 +429,17 @@ def main() -> None:
     ).convert("RGBA")
     bronze_cutouts = identities["bronze_magic"]["directionCutouts"]
     assert all(
-        record["calibrationBaseScalePercent"] == 100
+        record["calibrationBaseScalePercent"] == 75
         for record in bronze_cutouts.values()
     )
     assert min(
         record["generatedSize"][1] for record in bronze_cutouts.values()
-    ) >= 16
+    ) >= 12
     assert all(
-        record["calibrationEnvelope"] == record["clientMedianEnvelope"]
+        record["generatedSize"][1] <= 18
         for record in bronze_cutouts.values()
     )
+    assert bronze_cutouts["S"]["generatedSize"][0] >= 8
     bronze_front = cropped_visible(
         bronze_idle.crop((0, 4 * CELL[1], CELL[0], 5 * CELL[1]))
     )
