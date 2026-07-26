@@ -27,6 +27,18 @@ func _ready() -> void:
 	var identity := SkillDataLoaderScript.source_identity()
 	assert(identity.authority == "user_authoritative_override")
 	assert(identity.sot_sha256 == SkillDataLoaderScript.SOURCE_OF_TRUTH_SHA256)
+	assert(SkillDataLoaderScript.runtime_status_allowed("historical_verified"))
+	assert(SkillDataLoaderScript.runtime_status_allowed("source_formula_reference"))
+	assert(SkillDataLoaderScript.runtime_status_allowed("project_canonical"))
+	for forbidden_status: String in [
+		"needs_regression_verification",
+		"selected_service_candidate",
+		"project_adapter_C_candidate",
+		"legacy_project_baseline",
+		"rejected_version_mismatch",
+		"unverified",
+	]:
+		assert(not SkillDataLoaderScript.runtime_status_allowed(forbidden_status))
 	var test_manifest := SkillDataLoaderScript.package_test_manifest()
 	assert(test_manifest.global_tests.size() == 19)
 	assert(test_manifest.skill_tests.size() == 150)
