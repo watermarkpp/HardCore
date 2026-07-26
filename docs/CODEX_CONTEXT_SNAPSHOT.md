@@ -1,6 +1,6 @@
 # Codex 精简上下文快照
 
-更新时间：2026-07-26 12:15（Asia/Shanghai）
+更新时间：2026-07-26 14:50（Asia/Shanghai）
 
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。
 准确性规则：本文件不是代码或 Git 状态的替代品；只核实本次任务实际触及的分支、文件、接口和专项测试。
@@ -16,7 +16,7 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `841c3e57`（其后的快照提交只改本文档）。
+- 分支/运行时代码基线：`codex/integration` @ `b0235f07`（其后的快照提交只改本文档）。
 - tracked 状态：clean。
 - 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
@@ -34,7 +34,7 @@
 - `d2b8ab8` 将法师/道士施法身体动作固定为主源 `HA.ActSpell` 的 6 帧×60ms=360ms，并在完整动作期间锁定移动；动作、技能释放点和冷却独立，360ms 动作结束后仍须等待技能自身冷却，施法速度不缩短身体动作。
 - `38592e01` + `b779594c` 修正原客户端装备页纸娃娃：Prguse #376 底图按主源码固定绘制于 `(38,52)`，衣服/武器/头盔继续使用 `(31,96)+Hot`；人物选择与装备页各只保留一个纸娃娃，选中存档装备与实时换装均有专项回归。
 - `1d74fc72` 将地图外圈由旧圆半径净空升级为 `18×9` 等距椭圆脚底的逐边法向支撑距离；比奇四边真实 CharacterBody 脚点误差统一为 `-0.749978px`，内部碰撞、遮挡、地面坐标、相机和裙边未改。
-- `c4257bfc`、`fa0ccd50` 与 `8223dda1` 完成纸娃娃双模式：玩家界面默认 `world_avatar`，直接复用世界人物的男性基础、衣服、武器、头盔和脚底锚点；透明原客户端分层保留为 `classic_avatar`；完整 Prguse #376 装备页只用于审计，禁止进入人物选择和装备玩家界面。三职业三套装 9 套加载、人物选择、装备实时刷新和经典夹具均通过。
+- `4a52cc54` 与 `b0235f07` 完成最终纸娃娃整改：12 个男性头盔严格由原客户端 StateItem 主资料按原坐标派生透明头部补丁及擦除遮罩，禁止 AI 重绘；人物选择与装备页默认使用高清透明 `classic_avatar`，固定按人物底图→衣服→武器→头盔绘制，完整 Prguse #376 底图、装备槽和矩形背景永不进入玩家界面。三职业×沃玛/祖玛/赤月 9 个独立真实存档、itemId/name-only 旧存档解析、角色选择、装备实时刷新与受控可视截图均通过。
 - `d6b4cec3` 按战士技能系统的动作状态机模板接入法师 14 项、道士 12 项主动技能的正式主资料动画与选帧图标；来源只使用 `Magic.wil`、`Magic2.wil`、`Mon3.wil`、`Mon18.wil` 及原客户端规则代码，没有分级库 fallback。道士被动 `taoist.spiritual_warfare` 的主源没有施法事件，保持 `no_runtime_visual`，禁止伪造动画。
 - `841c3e57` 将上述 26 个法师/道士主动技能图标接入技能面板、HUD 快捷栏和攻击环；4 个战士既有图标及优先级保持不变，所有法道主动技能禁止回退为背包物品缩略图。
 - 越级审计列出的其余领域尚未返修完成，禁止写成已完成。明日从审计文档按优先级继续：装备图标/属性与旧穿戴、怪物/Boss 数值与外观、掉落、技能、头盔锚点及服务端规则生成器；每一项都必须先修主源解析或映射，再运行对应专项测试并逐项集成。
@@ -46,6 +46,7 @@
 
 ## 最终 APK
 
+- 状态：下列 APK 是 12:10 的上一版测试包，尚未包含 `4a52cc54` 与 `b0235f07` 的最终纸娃娃整改；用户要求先确认截图，因此当前未重新构建 APK。
 - 文件：`C:\Users\Administrator\Documents\HardCore\outputs\hardcore\HardCore-debug.apk`
 - 构建时间：`2026-07-26 12:10:58`
 - 大小：`1,653,572,428` 字节
@@ -58,6 +59,8 @@
 
 | 集成提交 | 领域 | 结果 |
 |---|---|---|
+| `b0235f07` | UI | 人物选择/装备页使用透明高清 `classic_avatar`；完整装备页与内置槽位禁入玩家界面；9 个真实存档和 name-only 旧存档均通过 |
+| `4a52cc54` | equipment | 12 个男性头盔由原客户端 StateItem 主资料派生透明头部补丁与擦除遮罩，禁止 AI 生成素材进入运行时 |
 | `841c3e57` | UI | 26 个法师/道士主动技能在技能面板、快捷栏和攻击环使用主资料动画选帧图标；4 个战士图标冻结不变 |
 | `d6b4cec3` | skills | 按战士动作状态机模板接入法师14项、道士12项主资料动画与图标；1项道士被动明确无施法视觉 |
 | `c4257bfc`、`fa0ccd50`、`8223dda1` | equipment/UI | 纸娃娃双模式合同与玩家界面 `world_avatar`；`classic_avatar` 保留透明分层，完整装备页仅审计 |
@@ -129,7 +132,7 @@
 - maps：`map_editor_runtime_collision_geometry_v2`、`map_visible_edge_actor_footprint_clearance_v2`、`published_blocked_cells_after_erasure_v1`、`map_editor_runtime_visual_geometry_v5`、`map_actor_occlusion_sort_v5`、`map_diamond_camera_center_constraint_v2`、`player_priority_soft_edge_v1`、`map_runtime_nonwalkable_edge_skirt_v1`。
 - monsters：`monster.overhead_anchor.v4`、`monster.overhead_layout.v3`、`monster.ground_contact.v4`、`monster.ground_contact.calibration.v4`；214 个 `monster_id` 各自保存人工复核的脚点、光圈中心、椭圆尺寸和投影策略，贴图异步激活后必须刷新。
 - UI：`ui.hud.resource_orb.hole_fill.v1`、`skill_button_assignment_contract_v2`、`ui.hud.skill_icon.caster.<stable_skill_id>`。
-- equipment：`equipment.attribute.master.v2`、`project.hardcore.equipment_attribute_master.v2`、`equipment.test_loadouts.classic_three_tiers.v1`、`equipment.visual_catalog.formal_wearables.v1`、`equipment.paper_doll.presentation_modes.v1`、`equipment.paper_doll.world_avatar.v1`、`equipment.paper_doll.avatar_only.v1`、`equipment.paper_doll.original_client_stage.v1`、`equipment.world_wear.male_dress.v1`、`equipment.world_wear.male_weapon.v1`、`equipment.world_helmet.male.extension.v1` 与 9 个 `test.loadout.{profession}.{tier}.v1`。
+- equipment：`equipment.attribute.master.v2`、`project.hardcore.equipment_attribute_master.v2`、`equipment.test_loadouts.classic_three_tiers.v1`、`equipment.visual_catalog.formal_wearables.v1`、`equipment.paper_doll.presentation_modes.v1`、`equipment.paper_doll.world_avatar.v1`、`equipment.paper_doll.avatar_only.v1`、`equipment.paper_doll.original_client_stage.v1`、`equipment.paper_doll.classic_flattened_head_patch.v1`、`equipment.world_wear.male_dress.v1`、`equipment.world_wear.male_weapon.v1`、`equipment.world_helmet.male.extension.v1` 与 9 个 `test.loadout.{profession}.{tier}.v1`。
 - skills：`combat.resolution.openmir2.v1`、`physical.hit.random_agility.strict_lt.v1`、`magic.evasion.anti_magic.direct_spell.v1`、`physical.attack_speed.interval_tier.v1`、`player.direct_spell_damage.openmir2.v1`、`caster_skill_animation.v1`、法师/道士主动技能 `action_duration=0.36` / `action_frame_count=6` / `action_frame_time_ms=60` 时序字段、`legacy_clamp_negative_span`、`test.characters.full_skills.v1` 与 9 个 `test.character.{profession}.{woma|zuma|chiyue}.v1`。
 
 ## 已通过的必要验收
@@ -150,7 +153,7 @@
 - maps：比奇真实源 E2E（180 个阻挡格）；11 张地图真实 `CharacterBody2D` 脚点可达可见边缘且外环阻挡。
 - monsters：真实名字/血条节点覆盖 4 类怪物、8 方向、idle/walk/attack/hit/death 全帧和 Camera2D 缩放；214 种怪物加载通过。
 - UI：2664×1200 HUD 血蓝球尺寸/对称/安全区通过；技能配置与拾取提示专项通过。
-- paper doll：`world_avatar`/`classic_avatar` 模式隔离、完整装备页禁入玩家界面、三职业三套装 9 套加载、人物选择和装备实时刷新通过。
+- paper doll：玩家界面透明高清 `classic_avatar`、完整装备页/槽位禁入、12 个原客户端头盔透明补丁及擦除遮罩、三职业三套装 9 个真实存档、itemId/name-only 解析、人物选择、装备实时刷新和非 headless 可视截图全部通过；`world_avatar` 仅保留为地图/兼容回退。
 - skills：快捷槽 v2 换槽、烈火自动开关、战士技能状态机，以及法师/道士360ms施法动作、移动锁、独立冷却和6帧推进通过；法师14项、道士12项主动技能的主资料动画、图标、技能面板、快捷栏和攻击环路由通过，`SMOKE_TEST_PASS`。
 
 只在相关代码再次变化时重跑对应专项；跨域接线或发布前再跑一次 smoke。
@@ -161,9 +164,9 @@
 |---|---|---:|---|
 | `HardCore-worktrees/maps` | `codex/maps` @ `2a4d6ccf` | 72 untracked | 用户地图编辑器内容，继续保护；代码等价结果已集成为 `1d74fc72` |
 | `HardCore-worktrees/monsters` | `codex/monsters` @ `45781ded` | tracked clean；68 UID | 已集成为 `c88c6277` |
-| `HardCore-worktrees/ui-art` | `codex/ui-art` @ `70e65df7` | clean | 法道技能图标路由已集成为 `841c3e57` |
+| `HardCore-worktrees/ui-art` | `codex/ui-art` @ `2b9255de` | clean | 最终透明原客户端纸娃娃 UI 已集成为 `b0235f07` |
 | `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `9547d5f4` | tracked clean；66 UID 继续保护 | 法道主资料技能动画/图标已集成为 `d6b4cec3` |
-| `HardCore-worktrees/equipment` | `codex/equipment` @ `a4eb6c05` | tracked clean；69 UID/既有生成项继续保护 | 纸娃娃模式合同已集成为 `c4257bfc` |
+| `HardCore-worktrees/equipment` | `codex/equipment` @ `1f8be2a0` | tracked clean；69 UID/既有生成项继续保护 | 12 个原客户端头盔透明头部补丁已集成为 `4a52cc54` |
 
 ### maps 保护红线
 
