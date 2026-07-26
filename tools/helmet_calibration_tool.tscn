@@ -28,6 +28,13 @@ layout_mode = 2
 layout_mode = 2
 text = "PlayerVisual Helmet V2 — Item 146 Calibration"
 
+[node name="StartupStatus" type="Label" parent="CalibrationUI/Panel/VBox"]
+visible = false
+layout_mode = 2
+modulate = Color(1, 0.42, 0.32, 1)
+text = "初始化状态"
+autowrap_mode = 2
+
 [node name="Inputs" type="HBoxContainer" parent="CalibrationUI/Panel/VBox"]
 layout_mode = 2
 

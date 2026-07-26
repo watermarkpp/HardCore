@@ -8,6 +8,7 @@ const ITEM_ID := 146
 const PLAYER_VISUAL_ID := "player.male.cloth_002"
 const OUTPUT_ROOT := "res://outputs/visual_acceptance/helmet_calibration"
 const TEST_OVERRIDE_PATH := OUTPUT_ROOT + "/helmet_146_test_overrides.json"
+const INTERACTIVE_USER_ARG := "--helmet-calibration-interactive"
 const DIRECTIONS := HelmetVisualV2.CANONICAL_DIRECTIONS
 const ACTIONS := {
 	"idle": 4, "walk": 6, "attack": 6, "cast": 6, "hit": 3, "death": 4,
@@ -47,6 +48,9 @@ var _source_buttons: Array[TextureButton] = []
 var _dirty_directions: Dictionary = {}
 var _dirty_scale := false
 var _updating_ui := false
+var _interactive_requested := false
+var _initialization_error := ""
+var _quit_requested := false
 
 
 func _ready() -> void:
@@ -56,10 +60,16 @@ func _ready() -> void:
 
 
 func _run() -> void:
-	await initialize_editor_runtime(DisplayServer.get_name() == "headless")
-	if not should_auto_quit_for_display(DisplayServer.get_name()):
-		print("HELMET_CALIBRATION_TOOL_INTERACTIVE_READY item=146")
+	var user_args := OS.get_cmdline_user_args()
+	_interactive_requested = has_interactive_user_arg(user_args)
+	if (
+		_interactive_requested
+		or not should_auto_quit_for_context(user_args, DisplayServer.get_name())
+	):
+		await _start_interactive(false)
 		return
+	var initialized := await initialize_editor_runtime(true)
+	assert(initialized, "headless helmet calibration initialization failed")
 	var output_dir := ProjectSettings.globalize_path(OUTPUT_ROOT)
 	_generate_idle_outputs(output_dir)
 	_generate_all_actions_overview(output_dir)
@@ -78,32 +88,136 @@ func _run() -> void:
 		"HELMET_CALIBRATION_TOOL_PASS "
 		+ "items=146,151 sockets=232 directions=8 cast=true source_pixels_frozen=true"
 	)
-	get_tree().quit(0)
+	dispose_runtime_for_test()
+	_request_exit(0)
+
+
+func has_interactive_user_arg(user_args: PackedStringArray) -> bool:
+	return INTERACTIVE_USER_ARG in user_args
+
+
+func should_auto_quit_for_context(
+	user_args: PackedStringArray,
+	display_name: String
+) -> bool:
+	return (
+		not has_interactive_user_arg(user_args)
+		and display_name == "headless"
+	)
 
 
 func should_auto_quit_for_display(display_name: String) -> bool:
-	return display_name == "headless"
+	# Compatibility wrapper for existing callers. New startup decisions must
+	# include the explicit user-argument policy above.
+	return should_auto_quit_for_context(PackedStringArray(), display_name)
 
 
-func initialize_editor_runtime(use_test_override: bool = false) -> void:
+func _start_interactive(simulate_failure: bool = false) -> bool:
+	_interactive_requested = true
+	if simulate_failure:
+		_show_initialization_error("测试模拟：编辑器初始化失败")
+		return false
+	var initialized := await initialize_editor_runtime(false)
+	if not initialized:
+		return false
+	_show_interactive_ready()
+	print("HELMET_CALIBRATION_TOOL_INTERACTIVE_READY item=146")
+	return true
+
+
+func start_interactive_failure_for_test() -> bool:
+	return await _start_interactive(true)
+
+
+func _request_exit(exit_code: int) -> void:
+	_quit_requested = true
+	# Defer the engine exit so the current async validation stack can unwind
+	# and release its Image/Texture resources before Godot performs leak checks.
+	get_tree().quit.call_deferred(exit_code)
+
+
+func quit_was_requested() -> bool:
+	return _quit_requested
+
+
+func initialization_error() -> String:
+	return _initialization_error
+
+
+func dispose_runtime_for_test() -> void:
+	_visual = null
+	_player = null
+	if is_instance_valid(_game):
+		_game.free()
+	_game = null
+
+
+func _show_interactive_ready() -> void:
+	var status := get_node_or_null(
+		"CalibrationUI/Panel/VBox/StartupStatus"
+	) as Label
+	if status != null:
+		status.visible = true
+		status.modulate = Color(0.35, 1.0, 0.62)
+		status.text = (
+			"交互编辑器已就绪。窗口会保持打开；保存仅写入正式覆盖合同。"
+		)
+
+
+func _show_initialization_error(message: String) -> void:
+	_initialization_error = message
+	var status := get_node_or_null(
+		"CalibrationUI/Panel/VBox/StartupStatus"
+	) as Label
+	if status != null:
+		status.visible = true
+		status.modulate = Color(1.0, 0.42, 0.32)
+		status.text = (
+			"初始化失败：%s\n窗口将保持打开，请查看 outputs/helmet_calibration_interactive.log。"
+			% message
+		)
+	var state := get_node_or_null(
+		"CalibrationUI/Panel/VBox/MappingStatus/State"
+	) as Label
+	if state != null:
+		state.text = "初始化失败 / 未退出"
+	print("HELMET_CALIBRATION_TOOL_INTERACTIVE_ERROR " + message)
+
+
+func initialize_editor_runtime(use_test_override: bool = false) -> bool:
 	if _editor_initialized:
-		return
+		return true
 	PlayerState.test_mode = true
 	PlayerState.ensure_developer_test_character()
-	assert(PlayerState.select_character("developer_warrior_30"))
+	if not PlayerState.select_character("developer_warrior_30"):
+		_show_initialization_error("无法选择 developer_warrior_30 测试角色")
+		return false
 	PlayerState.profession = "战士"
 	PlayerState.gender = "男"
 	PlayerState.equipment = {
 		"衣服": {"item_id": 116, "name": "布衣(男)", "instance_id": "helmet_v2_cloth"},
 		"头盔": {"item_id": ITEM_ID, "name": "精灵头盔", "instance_id": "helmet_v2_146"},
 	}
-	_game = load("res://scenes/main.tscn").instantiate()
+	var main_scene: Resource = load("res://scenes/main.tscn")
+	if not main_scene is PackedScene:
+		_show_initialization_error("无法加载 res://scenes/main.tscn")
+		return false
+	_game = (main_scene as PackedScene).instantiate()
+	if _game == null:
+		_show_initialization_error("主场景实例化失败")
+		return false
 	add_child(_game)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	_player = _game.player
-	_visual = _player.get_node("PlayerVisual")
-	assert(_visual != null)
+	var player_candidate: Variant = _game.get("player")
+	if not player_candidate is PlayerCharacter:
+		_show_initialization_error("主场景未提供可用的 PlayerCharacter")
+		return false
+	_player = player_candidate as PlayerCharacter
+	_visual = _player.get_node_or_null("PlayerVisual")
+	if _visual == null:
+		_show_initialization_error("PlayerVisual 节点缺失")
+		return false
 	var output_dir := ProjectSettings.globalize_path(OUTPUT_ROOT)
 	DirAccess.make_dir_recursive_absolute(output_dir)
 	if use_test_override:
@@ -114,14 +228,30 @@ func initialize_editor_runtime(use_test_override: bool = false) -> void:
 			ProjectSettings.globalize_path(TEST_OVERRIDE_PATH),
 			HelmetVisualV2.calibration_overrides()
 		)
-		assert(HelmetVisualV2.set_calibration_override_path_for_test(
+		if not HelmetVisualV2.set_calibration_override_path_for_test(
 			TEST_OVERRIDE_PATH
-		))
+		):
+			_show_initialization_error("无法启用测试覆盖文件")
+			return false
 	_editor_initialized = true
 	select_item(ITEM_ID)
 	_refresh_mapping_editor_ui()
-	assert(get_node("CalibrationUI/Panel/VBox/Previews/FullColumn/FullPersonPreview").texture != null)
-	assert(get_node("CalibrationUI/Panel/VBox/Previews/HeadColumn/HeadPreview").texture != null)
+	var full_preview := get_node_or_null(
+		"CalibrationUI/Panel/VBox/Previews/FullColumn/FullPersonPreview"
+	) as TextureRect
+	var head_preview := get_node_or_null(
+		"CalibrationUI/Panel/VBox/Previews/HeadColumn/HeadPreview"
+	) as TextureRect
+	if (
+		full_preview == null
+		or head_preview == null
+		or full_preview.texture == null
+		or head_preview.texture == null
+	):
+		_editor_initialized = false
+		_show_initialization_error("预览纹理初始化失败")
+		return false
+	return true
 
 
 func _setup_ui() -> void:
