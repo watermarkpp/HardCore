@@ -1,6 +1,6 @@
 # Codex 精简上下文快照
 
-更新时间：2026-07-26 15:32（Asia/Shanghai）
+更新时间：2026-07-26 17:55（Asia/Shanghai）
 
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。
 准确性规则：本文件不是代码或 Git 状态的替代品；只核实本次任务实际触及的分支、文件、接口和专项测试。
@@ -16,7 +16,7 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `cc1edacc`（其后的快照提交只改本文档）。
+- 分支/运行时代码基线：`codex/integration` @ `0268128`（其后的快照提交只改本文档）。
 - tracked 状态：clean。
 - 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
@@ -31,7 +31,9 @@
 - `595e485d` 将反向伤害区间明确为 `legacy_clamp_negative_span`：最终跨度 `max-min`，负跨度钳零，绝不交换端点；幸运/诅咒只影响正跨度分布。
 - `fcead306` 新增通用 `roll_primary_stat`：signed 总幸运统一作用于正跨度 DC/MC/SC，`+9/-9` 稳定命中上下限；治愈术使用 SC 掷骰，固定效果与施毒独立成功门不受幸运误影响。
 - `b7d0ad7b` 完成 `equipment.blessing_luck.v2`：祝福油三结果、固定 5% 负面、幸运 7/诅咒 10、逐级抵消、全部装备基础 `luck-curse`、武器实例幸运/诅咒、零耐久停用和存档恢复均接入；跨度因子固定为 `R=max(1,floor(abs(DCmax-DCmin)/5))`，命运之刃幸运 +3 后可继续提升。
-- `d2b8ab8` 将法师/道士施法身体动作固定为主源 `HA.ActSpell` 的 6 帧×60ms=360ms，并在完整动作期间锁定移动；动作、技能释放点和冷却独立，360ms 动作结束后仍须等待技能自身冷却，施法速度不缩短身体动作。
+- 用户授权的 `MIR2_176_33技能唯一真源_Codex_v1.0.1.zip` 已提升为 `skills` lane 唯一主源：ZIP SHA-256 `2DAC78D285DFF8D5F1BA36A8B83E0E8F11C70B76ACE15A34EE7FBFB802862A22`，SOT JSON SHA-256 `275555E9F879969E4BB4BECFC268E0ED0912B7D79EF6DEA89731FE43DB0562F7`。共 33 技能、四 rank、150 条 P1 语义合同；旧 360ms 与烈火自动开关决定已被该显式主源覆盖。
+- `bb0e5c35`、`06e3479b`、`11b62c06` 将 33 技能生产入口统一接入 canonical Router、六类适配器和 v4 熟练度存档。法师/道士身体施法固定为 6 帧×100ms=600ms；释放点、身体动作、总动作锁和技能冷却分离。烈火为显式一次充能：身体动作 600ms、总动作锁 800ms、独立冷却 8s、充能寿命 10s；800ms 后可普通攻击，8s 内不可再次充能，空挥不消耗，有效近战尝试消费，永不自动释放。
+- 技能冷却按稳定 `skill_id` 独立保存于运行时，不再复用共享物理攻击锁；烈火充能只读 UI 快照字段为 `fire_armed`、`fire_expires_remaining_ms`，稳定状态 ID 为 `warrior.fire_sword.charge_armed`，不跨存档恢复。
 - `38592e01` + `b779594c` 修正原客户端装备页纸娃娃：Prguse #376 底图按主源码固定绘制于 `(38,52)`，衣服/武器/头盔继续使用 `(31,96)+Hot`；人物选择与装备页各只保留一个纸娃娃，选中存档装备与实时换装均有专项回归。
 - `1d74fc72` 将地图外圈由旧圆半径净空升级为 `18×9` 等距椭圆脚底的逐边法向支撑距离；比奇四边真实 CharacterBody 脚点误差统一为 `-0.749978px`，内部碰撞、遮挡、地面坐标、相机和裙边未改。
 - `4a52cc54` 与 `b0235f07` 完成最终纸娃娃整改：12 个男性头盔严格由原客户端 StateItem 主资料按原坐标派生透明头部补丁及擦除遮罩，禁止 AI 重绘；人物选择与装备页默认使用高清透明 `classic_avatar`，固定按人物底图→衣服→武器→头盔绘制，完整 Prguse #376 底图、装备槽和矩形背景永不进入玩家界面。三职业×沃玛/祖玛/赤月 9 个独立真实存档、itemId/name-only 旧存档解析、角色选择、装备实时刷新与受控可视截图均通过。
@@ -60,6 +62,13 @@
 
 | 集成提交 | 领域 | 结果 |
 |---|---|---|
+| `0268128`、`bf8bff64`、`d51f4aeb` | UI/integration | 烈火 UI 固定显示“主动充能/充能/未充能·就绪”，只读 canonical charge 快照，彻底移除旧开关文案 |
+| `11b62c06` | skills/integration | stable skill ID 独立冷却；烈火 600ms 身体、800ms 动作锁、8s 冷却与10s充能寿命分离 |
+| `06e3479b` | skills/player | 废止烈火自动开关，旧存档 auto 仅迁移为 false，正式状态 ID 改为 `warrior.fire_sword.charge_armed` |
+| `bb0e5c35` | integration/runtime | 33 技能生产入口、六类适配器、法道正式视觉、v4 技能进度存档与中文旧名迁移 |
+| `df7738ec`、`1e427621` | skills/tests | 169 条包合同绑定；150 条 P1 均由真实 Callable 执行语义验证，无缺项或多项 |
+| `da791b22`、`45d10fc2`、`988bb0bc`、`9b4105b6`、`16f442da` | skills | 33技能唯一真源、进度/施法服务及战士/法师/道士 canonical runtime |
+| `49637d0d` | rules | `skills` lane 主源提升为用户授权的 1.0.1 唯一真源包并加入来源守卫 |
 | `cc1edacc` | equipment/player | 旧存档四字段世界穿戴解析；战士赤月天魔神甲 itemId 140 / feature 12 六动作与非透明截图通过 |
 | `b0235f07` | UI | 人物选择/装备页使用透明高清 `classic_avatar`；完整装备页与内置槽位禁入玩家界面；9 个真实存档和 name-only 旧存档均通过 |
 | `4a52cc54` | equipment | 12 个男性头盔由原客户端 StateItem 主资料派生透明头部补丁与擦除遮罩，禁止 AI 生成素材进入运行时 |
@@ -135,7 +144,7 @@
 - monsters：`monster.overhead_anchor.v4`、`monster.overhead_layout.v3`、`monster.ground_contact.v4`、`monster.ground_contact.calibration.v4`；214 个 `monster_id` 各自保存人工复核的脚点、光圈中心、椭圆尺寸和投影策略，贴图异步激活后必须刷新。
 - UI：`ui.hud.resource_orb.hole_fill.v1`、`skill_button_assignment_contract_v2`、`ui.hud.skill_icon.caster.<stable_skill_id>`。
 - equipment：`equipment.attribute.master.v2`、`project.hardcore.equipment_attribute_master.v2`、`equipment.test_loadouts.classic_three_tiers.v1`、`equipment.visual_catalog.formal_wearables.v1`、`equipment.paper_doll.presentation_modes.v1`、`equipment.paper_doll.world_avatar.v1`、`equipment.paper_doll.avatar_only.v1`、`equipment.paper_doll.original_client_stage.v1`、`equipment.paper_doll.classic_flattened_head_patch.v1`、`equipment.world_wear.male_dress.v1`、`equipment.world_wear.male_weapon.v1`、`equipment.world_helmet.male.extension.v1` 与 9 个 `test.loadout.{profession}.{tier}.v1`。
-- skills：`combat.resolution.openmir2.v1`、`physical.hit.random_agility.strict_lt.v1`、`magic.evasion.anti_magic.direct_spell.v1`、`physical.attack_speed.interval_tier.v1`、`player.direct_spell_damage.openmir2.v1`、`caster_skill_animation.v1`、法师/道士主动技能 `action_duration=0.36` / `action_frame_count=6` / `action_frame_time_ms=60` 时序字段、`legacy_clamp_negative_span`、`test.characters.full_skills.v1` 与 9 个 `test.character.{profession}.{woma|zuma|chiyue}.v1`。
+- skills：`skills.runtime_router.cn_mir2_176.v1`、`skills.progression.cn_mir2_176.v1`、`skills.production_adaptation.hardcore.v1`、`warrior.fire_sword.charge_armed`、`combat.resolution.openmir2.v1`、`physical.hit.random_agility.strict_lt.v1`、`magic.evasion.anti_magic.direct_spell.v1`、`physical.attack_speed.interval_tier.v1`、`player.direct_spell_damage.openmir2.v1`、`caster_skill_animation.v1`、法师/道士主动技能 `action_duration=0.60` / `action_frame_count=6` / `action_frame_time_ms=100` 时序字段、`legacy_clamp_negative_span`、`test.characters.full_skills.v1` 与 9 个 `test.character.{profession}.{woma|zuma|chiyue}.v1`。
 
 ## 已通过的必要验收
 
@@ -156,7 +165,7 @@
 - monsters：真实名字/血条节点覆盖 4 类怪物、8 方向、idle/walk/attack/hit/death 全帧和 Camera2D 缩放；214 种怪物加载通过。
 - UI：2664×1200 HUD 血蓝球尺寸/对称/安全区通过；技能配置与拾取提示专项通过。
 - paper doll：玩家界面透明高清 `classic_avatar`、完整装备页/槽位禁入、12 个原客户端头盔透明补丁及擦除遮罩、三职业三套装 9 个真实存档、itemId/name-only 解析、人物选择、装备实时刷新和非 headless 可视截图全部通过；`world_avatar` 仅保留为地图/兼容回退。
-- skills：快捷槽 v2 换槽、烈火自动开关、战士技能状态机，以及法师/道士360ms施法动作、移动锁、独立冷却和6帧推进通过；法师14项、道士12项主动技能的主资料动画、图标、技能面板、快捷栏和攻击环路由通过，`SMOKE_TEST_PASS`。
+- skills：33 技能唯一真源、四 rank、169 条包合同与150条可执行语义合同全部通过；生产入口、六类适配器、v4进度存档/中文旧名迁移、法师/道士600ms施法动作与移动锁、独立技能冷却、26项正式视觉和图标通过。烈火显式一次充能、600ms身体/800ms动作锁/8s独立冷却/10s寿命、空挥保留、有效攻击消费及 UI 只读状态通过。最终技能/UI专项 20/20，`SMOKE_TEST_PASS`。
 
 只在相关代码再次变化时重跑对应专项；跨域接线或发布前再跑一次 smoke。
 
@@ -166,8 +175,8 @@
 |---|---|---:|---|
 | `HardCore-worktrees/maps` | `codex/maps` @ `2a4d6ccf` | 72 untracked | 用户地图编辑器内容，继续保护；代码等价结果已集成为 `1d74fc72` |
 | `HardCore-worktrees/monsters` | `codex/monsters` @ `45781ded` | tracked clean；68 UID | 已集成为 `c88c6277` |
-| `HardCore-worktrees/ui-art` | `codex/ui-art` @ `2b9255de` | clean | 最终透明原客户端纸娃娃 UI 已集成为 `b0235f07` |
-| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `9547d5f4` | tracked clean；66 UID 继续保护 | 法道主资料技能动画/图标已集成为 `d6b4cec3` |
+| `HardCore-worktrees/ui-art` | `codex/ui-art` @ `68c6f6e2` | clean | 烈火 canonical charge UI 已集成为 `d51f4aeb`、`bf8bff64`、`0268128` |
+| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `dfca1529` | tracked clean；66 UID 继续保护 | 33技能 runtime 与150条可执行语义合同已集成 |
 | `HardCore-worktrees/equipment` | `codex/equipment` @ `54302137` | 既有 import/UID/生成项继续保护 | 天魔神甲旧存档世界穿戴兼容已集成为 `cc1edacc` |
 
 ### maps 保护红线
@@ -190,6 +199,6 @@ maps 的 72 项未跟踪内容全部视为用户进行中的地图编辑器内�
 4. 待验收：法师、道士不再显示占位符；男性基础形象、正式散件/套装换装、装备界纸娃娃居中和神兽动画正常；禁止重新引入女性角色资产。
 5. 怪物名字固定在血条上方；各体型血条位于各自真实身体顶点上方约 8px，不再统一过高或随动作抖动。
 6. 血球/蓝球恢复孔径尺寸且左右对称。
-7. 拾取提示居中；技能配置弹窗背景不越界；快捷技能可置换；烈火自动开关正常。
+7. 拾取提示居中；技能配置弹窗背景不越界；快捷技能可置换；烈火点击后显示“充能”，800ms 后下一次有效近战消费，空挥保留，8s 内不可重复充能，绝不自动释放。
 
 用户实测结果优先级高于内部测试；若实机失败，先保存截图和 APK 哈希，再按所属专业工作树返修。
