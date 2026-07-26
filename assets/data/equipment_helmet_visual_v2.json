@@ -1854,7 +1854,24 @@
             "sha256": "79399f6227eab4cbc988bb5e3d4f2ad9f294f5fcf7cec402bdee7754ec5a09b5"
           }
         },
-        "pixelPolicy": "immutable_primary_source_runtime_atlas"
+        "pixelPolicy": "immutable_primary_source_runtime_atlas",
+        "calibrationSourceSheet": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
+        "calibrationSourceSheetSha256": "a1cb935c1c00f13ae2ccae2c5cea1706f4f549ffef66607574be2c67bd370f82",
+        "calibrationSourceGrid": [
+          4,
+          2
+        ],
+        "calibrationSourceSlotDirectionOrder": [
+          "N",
+          "NE",
+          "E",
+          "SE",
+          "S",
+          "SW",
+          "W",
+          "NW"
+        ],
+        "calibrationSourceMatte": "green_chroma_key"
       },
       "directions": {
         "N": {

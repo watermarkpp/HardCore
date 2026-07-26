@@ -46,6 +46,7 @@ var _formal_override_before := ""
 var _editor_initialized := false
 var _target_buttons: Array[TextureButton] = []
 var _source_buttons: Array[TextureButton] = []
+var _authored_source_thumbnail_cache: Dictionary = {}
 var _dirty_directions: Dictionary = {}
 var _dirty_scales: Dictionary = {}
 var _updating_ui := false
@@ -1433,11 +1434,21 @@ func _refresh_mapping_editor_ui() -> void:
 		var real_direction := HelmetVisualV2.source_direction_for_row(
 			current_item_id, row
 		)
-		(source_button.get_node("Label") as Label).text = (
-			"源槽 %d" % row
-			if current_item_id == 151
-			else "%s (row %d)" % [real_direction, row]
-		)
+		var authored_source := not str(
+			HelmetVisualV2.visual_asset_for_item(current_item_id).get(
+				"source", {}
+			).get("calibrationSourceSheet", "")
+		).is_empty()
+		if current_item_id == 151:
+			(source_button.get_node("Label") as Label).text = "源槽 %d" % row
+		elif authored_source:
+			(source_button.get_node("Label") as Label).text = (
+				"原图 %s (%d)" % [real_direction, row]
+			)
+		else:
+			(source_button.get_node("Label") as Label).text = (
+				"%s (row %d)" % [real_direction, row]
+			)
 		source_button.set_meta(
 			"source_cell_hash",
 			source_image.get_data().hex_encode().hash()
@@ -1489,6 +1500,9 @@ func _duplicate_saved_source_rows(item_id: int) -> Array[Dictionary]:
 
 func source_row_thumbnail(source_row: int) -> Image:
 	assert(source_row >= 0 and source_row < DIRECTIONS.size())
+	var authored_thumbnail := _authored_source_sheet_thumbnail(source_row)
+	if not authored_thumbnail.is_empty():
+		return authored_thumbnail
 	var cell := calibration_source_cell(
 		current_action, source_row, current_frame
 	)
@@ -1504,6 +1518,81 @@ func source_row_thumbnail(source_row: int) -> Image:
 		pivot - HEAD_ZOOM_SOURCE_SIZE / 2,
 		HEAD_ZOOM_SOURCE_SIZE
 	))
+
+
+func _authored_source_sheet_thumbnail(source_row: int) -> Image:
+	var source: Dictionary = HelmetVisualV2.visual_asset_for_item(
+		current_item_id
+	).get("source", {})
+	var path := str(source.get("calibrationSourceSheet", ""))
+	var grid: Array = source.get("calibrationSourceGrid", [])
+	if path.is_empty() or grid.size() != 2:
+		return Image.new()
+	var cache_key := "%d:%s:%d" % [current_item_id, path, source_row]
+	if _authored_source_thumbnail_cache.has(cache_key):
+		return _authored_source_thumbnail_cache[cache_key] as Image
+	var absolute_path := ProjectSettings.globalize_path(path)
+	if not FileAccess.file_exists(absolute_path):
+		return Image.new()
+	var expected_sha := str(source.get("calibrationSourceSheetSha256", ""))
+	if not expected_sha.is_empty():
+		assert(
+			FileAccess.get_sha256(absolute_path) == expected_sha,
+			"calibration source sheet changed: %s" % path
+		)
+	var sheet := Image.load_from_file(absolute_path)
+	if sheet.is_empty():
+		return Image.new()
+	sheet.convert(Image.FORMAT_RGBA8)
+	var columns := int(grid[0])
+	var rows := int(grid[1])
+	assert(columns > 0 and rows > 0)
+	assert(source_row < columns * rows)
+	var column := source_row % columns
+	var row := source_row / columns
+	var x0 := roundi(float(column * sheet.get_width()) / float(columns))
+	var x1 := roundi(float((column + 1) * sheet.get_width()) / float(columns))
+	var y0 := roundi(float(row * sheet.get_height()) / float(rows))
+	var y1 := roundi(float((row + 1) * sheet.get_height()) / float(rows))
+	var cell := sheet.get_region(Rect2i(x0, y0, x1 - x0, y1 - y0))
+	for y: int in cell.get_height():
+		for x: int in cell.get_width():
+			var color := cell.get_pixel(x, y)
+			if (
+				color.g >= 0.75
+				and color.g > color.r * 1.35
+				and color.g > color.b * 1.35
+			):
+				color.a = 0.0
+				cell.set_pixel(x, y, color)
+	var used_rect := cell.get_used_rect()
+	if not used_rect.has_area():
+		return Image.new()
+	cell = cell.get_region(used_rect)
+	var available := HEAD_ZOOM_SOURCE_SIZE - Vector2i(4, 4)
+	var fit_scale := minf(
+		float(available.x) / float(cell.get_width()),
+		float(available.y) / float(cell.get_height())
+	)
+	var fitted_size := Vector2i(
+		maxi(1, roundi(float(cell.get_width()) * fit_scale)),
+		maxi(1, roundi(float(cell.get_height()) * fit_scale))
+	)
+	cell.resize(fitted_size.x, fitted_size.y, Image.INTERPOLATE_NEAREST)
+	var thumbnail := Image.create(
+		HEAD_ZOOM_SOURCE_SIZE.x,
+		HEAD_ZOOM_SOURCE_SIZE.y,
+		false,
+		Image.FORMAT_RGBA8
+	)
+	thumbnail.fill(Color(0, 0, 0, 0))
+	thumbnail.blit_rect(
+		cell,
+		Rect2i(Vector2i.ZERO, fitted_size),
+		(HEAD_ZOOM_SOURCE_SIZE - fitted_size) / 2
+	)
+	_authored_source_thumbnail_cache[cache_key] = thumbnail
+	return thumbnail
 
 
 func scale_cell_around_pivot(

@@ -218,6 +218,59 @@ func _run() -> void:
 		"elf_146.user_authorized_nw_mirror.v1"
 	))
 	assert(not bool(recipe.get("runtimeFlip", true)))
+
+	# 147/148 source buttons must show the exact authored 4x2 sheet selected
+	# by the user, not a crop of the generated runtime atlas.
+	editor.select_item(147)
+	var bronze_asset := HelmetVisualV2.visual_asset_for_item(147)
+	var bronze_source: Dictionary = bronze_asset.get("source", {})
+	var bronze_sheet_path := str(bronze_source.get(
+		"calibrationSourceSheet", ""
+	))
+	assert(bronze_sheet_path.ends_with(
+		"source/bronze_magic_helmet_8dir.png"
+	))
+	assert(FileAccess.file_exists(bronze_sheet_path))
+	assert(
+		FileAccess.get_sha256(bronze_sheet_path)
+		== str(bronze_source.get("calibrationSourceSheetSha256", ""))
+	)
+	var bronze_grid: Array = bronze_source.get("calibrationSourceGrid", [])
+	assert(bronze_grid.size() == 2)
+	assert(int(bronze_grid[0]) == 4)
+	assert(int(bronze_grid[1]) == 2)
+	var bronze_order: Array = bronze_source.get(
+		"calibrationSourceSlotDirectionOrder", []
+	)
+	assert(bronze_order.size() == 8)
+	for direction_index: int in 8:
+		assert(str(bronze_order[direction_index]) == [
+			"N", "NE", "E", "SE", "S", "SW", "W", "NW",
+		][direction_index])
+	var authored_hashes: Dictionary = {}
+	var differs_from_runtime := false
+	for row: int in 8:
+		var bronze_button := source_grid.get_node(
+			"Source_Row%d" % row
+		) as TextureButton
+		assert("原图 " in str(
+			(bronze_button.get_node("Label") as Label).text
+		))
+		var authored: Image = editor.source_row_thumbnail(row)
+		assert(authored.get_size() == Vector2i(64, 64))
+		assert(_has_opaque_pixel(authored))
+		var authored_hash: int = authored.get_data().hex_encode().hash()
+		assert(not authored_hashes.has(authored_hash))
+		authored_hashes[authored_hash] = true
+		var runtime: Image = editor.calibration_source_cell("idle", row, 0)
+		if authored.get_data() != runtime.get_data():
+			differs_from_runtime = true
+	assert(differs_from_runtime)
+	assert(
+		HelmetVisualV2.visual_asset_for_item(148).get("source", {})
+		== bronze_source
+	)
+	editor.select_item(146)
 	var raw_idle := (load(
 		HelmetVisualV2.base_action_texture_path(
 			146, "idle", 0, "helmet_front"

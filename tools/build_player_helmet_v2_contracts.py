@@ -393,6 +393,14 @@ def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
             },
             "directions": directions,
         }
+        if identity_id == "bronze_magic":
+            asset["source"].update({
+                "calibrationSourceSheet": identity["concept"],
+                "calibrationSourceSheetSha256": identity["conceptFileSha256"],
+                "calibrationSourceGrid": identity["sourceGrid"],
+                "calibrationSourceSlotDirectionOrder": source_order,
+                "calibrationSourceMatte": "green_chroma_key",
+            })
         if identity_id != "black_iron":
             asset["source_direction_map"] = source_map
         else:
