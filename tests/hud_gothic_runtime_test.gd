@@ -70,12 +70,10 @@ func _run() -> void:
 		var icon := skill_button.get_node("SkillDisc/SkillIcon") as TextureRect
 		assert(icon != null and icon.texture != null and icon.visible, "四个职业槽必须显示当前快捷技能素材")
 		assert(str(icon.get_meta("skill_icon_id", "")).begins_with("ui.hud.skill_icon.warrior."))
-	hud.update_warrior_states({"fire_armed": true, "fire_ready_remaining_ms": 0})
+	hud.update_warrior_states({"fire_armed": true, "fire_expires_remaining_ms": 10000})
 	assert("烈火:充能" in hud.warrior_state_label.text and "[充能]" in hud.quick_buttons[3].text, "烈火快捷栏没有显示一次性充能")
-	hud.update_warrior_states({"fire_armed": false, "fire_ready_remaining_ms": 0})
+	hud.update_warrior_states({"fire_armed": false, "fire_expires_remaining_ms": 0})
 	assert("烈火:未充能·就绪" in hud.warrior_state_label.text and "[未充能·就绪]" in hud.quick_buttons[3].text, "烈火快捷栏没有显示未充能就绪")
-	hud.update_warrior_states({"fire_armed": false, "fire_ready_remaining_ms": 8000})
-	assert("烈火:冷却" in hud.warrior_state_label.text and "[冷却]" in hud.quick_buttons[3].text, "烈火快捷栏没有显示冷却")
 	assert("[开]" not in hud.quick_buttons[3].text and "[关]" not in hud.quick_buttons[3].text, "烈火快捷栏不得再显示开关状态")
 	assert((root.get_node("SkillButton1") as Control).position.y >= 450, "职业技能槽仍然过度侵入战斗区域")
 	var right_controls_art := root.get_node("RightControlsArt") as TextureRect

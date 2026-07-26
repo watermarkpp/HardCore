@@ -1135,13 +1135,11 @@ func _normalized_warrior_runtime_state(snapshot: Variant) -> Dictionary:
 		"toggles": {
 			"warrior.thrusting": bool(toggles.get("warrior.thrusting", false)),
 			"warrior.half_moon": bool(toggles.get("warrior.half_moon", false)),
-			# Canonical SOT treats fire sword as an explicit one-charge cast.
-			# Legacy auto toggles/cooldowns are intentionally discarded on load.
 			"warrior.fire_sword.auto_enabled": false,
 		},
-		"cooldowns": {
-			"warrior.fire_sword.ready_remaining_ms": 0,
-		},
+		# Legacy Fire Sword auto input is normalized to false and its cooldown is
+		# discarded. Neither field can restore an active charge.
+		"cooldowns": {},
 	}
 
 
@@ -1153,7 +1151,7 @@ func _default_warrior_runtime_state() -> Dictionary:
 			"warrior.half_moon": false,
 			"warrior.fire_sword.auto_enabled": false,
 		},
-		"cooldowns": {"warrior.fire_sword.ready_remaining_ms": 0},
+		"cooldowns": {},
 	}
 
 

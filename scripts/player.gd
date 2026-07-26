@@ -59,11 +59,8 @@ var visual: Node2D
 var health_bar: PlayerHealthBar
 var thrusting_enabled := false
 var half_moon_enabled := false
-# Deprecated compatibility field. HardCore no longer prepares one fire hit.
+# Explicit one-charge presentation state; GameRoot owns expiry and consumption.
 var fire_sword_armed := false
-var fire_sword_auto_enabled := false
-var _fire_sword_ready_at_ms := 0
-var _fire_sword_expires_at_ms := 0
 var _slaying_cycle_remaining := 0
 var _slaying_trigger_point := -1
 var _slaying_cycle_size := 0
@@ -144,7 +141,6 @@ func _physics_process(delta: float) -> void:
 	defense_buff_time = maxf(0.0, defense_buff_time - delta)
 	control_time = maxf(0.0, control_time - delta)
 	_process_potion_restore(delta)
-	_update_warrior_timers()
 	var previous_poison_second := int(ceil(poison_time))
 	poison_time = maxf(0.0, poison_time - delta)
 	if poison_time > 0.0 and int(ceil(poison_time)) < previous_poison_second:
@@ -481,18 +477,12 @@ func set_combat_seed(seed_value: int) -> void:
 
 
 func warrior_state_snapshot() -> Dictionary:
-	var now := _combat_time_ms()
 	return {
 		"contract_id": "gameplay.warrior.skill_runtime.v2",
 		"slaying_auto": PlayerState.learned_skills.has("攻杀剑术"),
 		"thrusting": thrusting_enabled,
 		"half_moon": half_moon_enabled,
-		"fire_auto_enabled": fire_sword_auto_enabled,
 		"fire_armed": fire_sword_armed,
-		"fire_ready_at_ms": _fire_sword_ready_at_ms,
-		"fire_expires_at_ms": _fire_sword_expires_at_ms,
-		"fire_ready_remaining_ms": maxi(0, _fire_sword_ready_at_ms - now),
-		"fire_expires_remaining_ms": maxi(0, _fire_sword_expires_at_ms - now) if fire_sword_armed else 0,
 		"slaying_remaining": _slaying_cycle_remaining,
 		"slaying_trigger": _slaying_trigger_point,
 	}
@@ -504,11 +494,11 @@ func warrior_runtime_state_for_save() -> Dictionary:
 		"toggles": {
 			"warrior.thrusting": thrusting_enabled,
 			"warrior.half_moon": half_moon_enabled,
-			"warrior.fire_sword.auto_enabled": fire_sword_auto_enabled,
+			# Read-only legacy compatibility. This value can never be restored
+			# or toggled true under the canonical explicit-charge contract.
+			"warrior.fire_sword.auto_enabled": false,
 		},
-		"cooldowns": {
-			"warrior.fire_sword.ready_remaining_ms": maxi(0, _fire_sword_ready_at_ms - _combat_time_ms()),
-		},
+		"cooldowns": {},
 	}
 
 
@@ -518,12 +508,9 @@ func restore_warrior_runtime_state(saved_state: Dictionary) -> bool:
 	var toggles: Dictionary = saved_state.get("toggles", {})
 	thrusting_enabled = bool(toggles.get("warrior.thrusting", false))
 	half_moon_enabled = bool(toggles.get("warrior.half_moon", false))
-	fire_sword_auto_enabled = bool(toggles.get("warrior.fire_sword.auto_enabled", false))
+	# Legacy fire auto/cooldown fields are intentionally ignored. Fire Sword is
+	# always an explicit cast and an in-flight charge never survives a reload.
 	fire_sword_armed = false
-	_fire_sword_expires_at_ms = 0
-	var cooldowns: Dictionary = saved_state.get("cooldowns", {})
-	var remaining_ms := maxi(0, int(cooldowns.get("warrior.fire_sword.ready_remaining_ms", 0)))
-	_fire_sword_ready_at_ms = _combat_time_ms() + remaining_ms if remaining_ms > 0 else 0
 	return true
 
 
@@ -547,26 +534,13 @@ func _request_warrior_state_skill(skill_name: String, _level: int) -> bool:
 			half_moon_enabled = not half_moon_enabled
 			warrior_skill_state_changed.emit(skill_name, half_moon_enabled, "半月弯刀：%s" % ("开启" if half_moon_enabled else "关闭"))
 			return true
-		"烈火剑法":
-			fire_sword_auto_enabled = not fire_sword_auto_enabled
-			fire_sword_armed = false
-			_fire_sword_expires_at_ms = 0
-			warrior_skill_state_changed.emit(skill_name, fire_sword_auto_enabled, "烈火剑法自动释放：%s" % ("开启" if fire_sword_auto_enabled else "关闭"))
-			return true
 	return false
-
-
-func _update_warrior_timers() -> void:
-	if fire_sword_auto_enabled and (PlayerState.profession != "战士" or not PlayerState.learned_skills.has("烈火剑法")):
-		fire_sword_auto_enabled = false
-		warrior_skill_state_changed.emit("烈火剑法", false, "烈火剑法自动释放已关闭")
 
 
 func _build_warrior_attack_context(has_combat_target := false) -> Dictionary:
 	var context := {"mode": "normal", "skill_name": "attack", "skill_level": 0}
 	if PlayerState.profession != "战士":
 		return context
-	_update_warrior_timers()
 	if half_moon_enabled and PlayerState.learned_skills.has("半月弯刀"):
 		return {"mode": "half_moon", "skill_name": "半月弯刀", "skill_level": PlayerState.effective_skill_level("半月弯刀")}
 	if thrusting_enabled and PlayerState.learned_skills.has("刺杀剑术"):

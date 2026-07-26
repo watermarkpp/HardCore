@@ -31,6 +31,13 @@ text = "PlayerVisual Helmet V2 — Item 146 Calibration"
 [node name="Inputs" type="HBoxContainer" parent="CalibrationUI/Panel/VBox"]
 layout_mode = 2
 
+[node name="ItemLabel" type="Label" parent="CalibrationUI/Panel/VBox/Inputs"]
+layout_mode = 2
+text = "Helmet"
+
+[node name="Item" type="OptionButton" parent="CalibrationUI/Panel/VBox/Inputs"]
+layout_mode = 2
+
 [node name="ActionLabel" type="Label" parent="CalibrationUI/Panel/VBox/Inputs"]
 layout_mode = 2
 text = "Action"
@@ -62,12 +69,64 @@ text = "Head Zoom"
 [node name="Zoom" type="OptionButton" parent="CalibrationUI/Panel/VBox/Inputs"]
 layout_mode = 2
 
+[node name="ScaleLabel" type="Label" parent="CalibrationUI/Panel/VBox/Inputs"]
+layout_mode = 2
+text = "Uniform Scale"
+
+[node name="ScaleMinus" type="Button" parent="CalibrationUI/Panel/VBox/Inputs"]
+layout_mode = 2
+text = "−"
+
+[node name="Scale" type="SpinBox" parent="CalibrationUI/Panel/VBox/Inputs"]
+layout_mode = 2
+min_value = 50.0
+max_value = 200.0
+step = 1.0
+value = 100.0
+suffix = "%"
+
+[node name="ScalePlus" type="Button" parent="CalibrationUI/Panel/VBox/Inputs"]
+layout_mode = 2
+text = "+"
+
+[node name="MappingStatus" type="HBoxContainer" parent="CalibrationUI/Panel/VBox"]
+layout_mode = 2
+
+[node name="Mapping" type="Label" parent="CalibrationUI/Panel/VBox/MappingStatus"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Target N <- source N (row 4)"
+
+[node name="Nudge" type="Label" parent="CalibrationUI/Panel/VBox/MappingStatus"]
+layout_mode = 2
+text = "nudge x=0 y=0"
+
+[node name="State" type="Label" parent="CalibrationUI/Panel/VBox/MappingStatus"]
+layout_mode = 2
+text = "LOCKED / CLEAN"
+
+[node name="TargetLabel" type="Label" parent="CalibrationUI/Panel/VBox"]
+layout_mode = 2
+text = "1. Player target direction (click one)"
+
+[node name="TargetDirections" type="GridContainer" parent="CalibrationUI/Panel/VBox"]
+layout_mode = 2
+columns = 8
+
+[node name="SourceLabel" type="Label" parent="CalibrationUI/Panel/VBox"]
+layout_mode = 2
+text = "2. Helmet source atlas row (real row thumbnails; click to map)"
+
+[node name="SourceDirections" type="GridContainer" parent="CalibrationUI/Panel/VBox"]
+layout_mode = 2
+columns = 8
+
 [node name="Previews" type="HBoxContainer" parent="CalibrationUI/Panel/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
 
 [node name="FullColumn" type="VBoxContainer" parent="CalibrationUI/Panel/VBox/Previews"]
-custom_minimum_size = Vector2(256, 300)
+custom_minimum_size = Vector2(256, 256)
 layout_mode = 2
 
 [node name="FullLabel" type="Label" parent="CalibrationUI/Panel/VBox/Previews/FullColumn"]
@@ -82,7 +141,7 @@ expand_mode = 1
 stretch_mode = 0
 
 [node name="HeadColumn" type="VBoxContainer" parent="CalibrationUI/Panel/VBox/Previews"]
-custom_minimum_size = Vector2(520, 550)
+custom_minimum_size = Vector2(384, 384)
 layout_mode = 2
 
 [node name="HeadLabel" type="Label" parent="CalibrationUI/Panel/VBox/Previews/HeadColumn"]
@@ -90,7 +149,7 @@ layout_mode = 2
 text = "Head nearest-neighbour 8x/10x"
 
 [node name="HeadPreview" type="TextureRect" parent="CalibrationUI/Panel/VBox/Previews/HeadColumn"]
-custom_minimum_size = Vector2(512, 512)
+custom_minimum_size = Vector2(384, 384)
 layout_mode = 2
 texture_filter = 1
 expand_mode = 1
@@ -127,6 +186,30 @@ text = "Occlusion result"
 [node name="Commands" type="HBoxContainer" parent="CalibrationUI/Panel/VBox"]
 layout_mode = 2
 
+[node name="NudgeUp" type="Button" parent="CalibrationUI/Panel/VBox/Commands"]
+layout_mode = 2
+text = "↑ 1px"
+
+[node name="NudgeDown" type="Button" parent="CalibrationUI/Panel/VBox/Commands"]
+layout_mode = 2
+text = "↓ 1px"
+
+[node name="NudgeLeft" type="Button" parent="CalibrationUI/Panel/VBox/Commands"]
+layout_mode = 2
+text = "← 1px"
+
+[node name="NudgeRight" type="Button" parent="CalibrationUI/Panel/VBox/Commands"]
+layout_mode = 2
+text = "→ 1px"
+
+[node name="Undo" type="Button" parent="CalibrationUI/Panel/VBox/Commands"]
+layout_mode = 2
+text = "Undo current"
+
+[node name="Reload" type="Button" parent="CalibrationUI/Panel/VBox/Commands"]
+layout_mode = 2
+text = "Reload formal"
+
 [node name="Save" type="Button" parent="CalibrationUI/Panel/VBox/Commands"]
 layout_mode = 2
 text = "Save formal override (S)"
@@ -134,6 +217,11 @@ text = "Save formal override (S)"
 [node name="Lock" type="Button" parent="CalibrationUI/Panel/VBox/Commands"]
 layout_mode = 2
 text = "Lock direction (L)"
+
+[node name="GenerateAllActions" type="Button" parent="CalibrationUI/Panel/VBox/Commands"]
+layout_mode = 2
+disabled = true
+text = "站立基准完成 → 生成全动作"
 
 [node name="Legend" type="Label" parent="CalibrationUI/Panel/VBox"]
 layout_mode = 2

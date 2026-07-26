@@ -24,11 +24,14 @@ func _run() -> void:
 	assert(contract is Dictionary, "技能快捷栏分配契约无法解析")
 	assert(contract.get("contractId", "") == "ui.skill.button_assignment.v2", "技能按钮分配契约 ID 不稳定")
 	assert("Gameplay skill data owns" in str(contract.get("policy", "")), "技能交互模式必须由玩法技能数据负责")
-	assert("active_charge" in contract.get("assignmentInput", {}).get("interactionModes", []), "技能按钮契约没有声明主动充能模式")
+	# UI runtimeStateDisplay remains owned by codex/ui-art. The production
+	# interaction mode must still come from canonical gameplay data.
+	assert("explicit-charge" in str(contract.get("policy", "")), "技能按钮契约没有声明烈火显式一次充能")
 	var fire_charge_contract: Dictionary = contract.get("runtimeStateDisplay", {}).get("fireSwordCharge", {})
 	assert(fire_charge_contract.get("stableSkillId", "") == "warrior.fire_sword", "烈火 UI 没有绑定稳定技能 ID")
+	assert(fire_charge_contract.get("stableChargeStateId", "") == "warrior.fire_sword.charge_armed", "烈火 UI 没有绑定一次性充能状态 ID")
 	assert(fire_charge_contract.get("armedField", "") == "fire_armed", "烈火 UI 没有绑定一次性充能状态")
-	assert(fire_charge_contract.get("cooldownRemainingField", "") == "fire_ready_remaining_ms", "烈火 UI 没有绑定冷却剩余状态")
+	assert(fire_charge_contract.get("chargeRemainingField", "") == "fire_expires_remaining_ms", "烈火 UI 没有绑定一次性充能有效期")
 	var panel := SkillPanel.new()
 	add_child(panel)
 	await get_tree().process_frame
@@ -66,8 +69,7 @@ func _run() -> void:
 	assert(panel.attack_ring_assignment_buttons[0].get_meta("skill_name", "") == "野蛮冲撞", "攻击环技能槽 1 没有读取独立配置")
 	assert(panel._skill_interaction_mode("刺杀剑术") == "toggle", "刺杀剑术应显示开关模式")
 	assert(panel._skill_interaction_mode("半月弯刀") == "toggle", "半月弯刀应显示开关模式")
-	panel.set_skill_button_assignments({}, {"warrior.fire_sword": "toggle"})
-	assert(panel._skill_interaction_mode("烈火剑法") == "active_charge", "烈火剑法必须忽略陈旧开关注入并显示主动充能")
+	assert(panel._skill_interaction_mode("烈火剑法") == "click", "烈火剑法应显示显式施放模式")
 	assert(panel._skill_interaction_mode("魔法盾") == "toggle", "魔法盾应显示开关模式")
 	assert(panel._skill_interaction_mode("火墙") == "click", "火墙应显示点击释放模式")
 	assert(panel._skill_interaction_mode("雷电术") == "click", "雷电术应显示点击释放模式")
@@ -97,7 +99,7 @@ func _run() -> void:
 			break
 	assert(fire_index >= 0, "技能面板缺少烈火剑法")
 	panel._on_skill_selected(fire_index)
-	assert("交互：充能" in panel.detail_label.text, "烈火详情仍显示为开关而非主动充能")
+	assert("交互：主动充能" in panel.detail_label.text, "烈火详情仍显示为开关而非主动充能")
 
 	panel._open_assignment_popup_for(thrusting_index)
 	assert(panel.assignment_popup.visible, "长按技能使用的分配弹窗没有打开")
@@ -143,7 +145,7 @@ func _run() -> void:
 		var request: Dictionary = assignment_requests.back()
 		assert(request.get("skill_name", "") == replacement_skills[slot_index], "中央快捷槽置换丢失弹窗锁定的技能")
 		if replacement_skills[slot_index] == "烈火剑法":
-			assert(request.get("interaction_mode", "") == "active_charge", "烈火快捷槽请求不得回退到开关模式")
+			assert(request.get("interaction_mode", "") == "click", "烈火快捷槽请求必须保留显式施放模式")
 		assert(request.get("slot_index", -1) == slot_index, "中央快捷槽置换发送了错误槽位")
 		assert(request.get("slot_id", "") == "hud.profession_skill.%d" % (slot_index + 1), "中央快捷槽置换稳定 ID 错误")
 		assert(not panel.assignment_popup.visible and not panel.assignment_scrim.visible, "置换完成后模态弹窗未正确关闭")

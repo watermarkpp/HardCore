@@ -9,7 +9,15 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "assets" / "data"
 DIRECTIONS = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
-ACTIONS = {"idle": 4, "walk": 6, "attack": 6, "hit": 3, "death": 4}
+ACTIONS = {
+    "idle": 4,
+    "walk": 6,
+    "attack": 6,
+    "cast": 6,
+    "hit": 3,
+    "death": 4,
+}
+HELMET_ACTIONS = ACTIONS
 SOURCE_MANIFEST = DATA / "equipment_male_world_helmet.json"
 OVERRIDE_NAME = "equipment_helmet_visual_v2_overrides.json"
 
@@ -41,7 +49,7 @@ def source_frames() -> dict[str, dict[str, list[dict]]]:
     manifest = read_json(SOURCE_MANIFEST)
     elf = manifest["visualIdentities"]["elf"]
     result: dict[str, dict[str, list[dict]]] = {}
-    for action, frame_count in ACTIONS.items():
+    for action, frame_count in HELMET_ACTIONS.items():
         by_direction = {direction: [] for direction in DIRECTIONS}
         for frame in elf["actions"][action]["frames"]:
             direction = frame["direction"]
@@ -159,7 +167,7 @@ def pivots_for_source_direction(
             rounded_point(frame["hairAnchorCentroid"])
             for frame in frames[action][source_direction]
         ]
-        for action in ACTIONS
+        for action in HELMET_ACTIONS
     }
 
 
@@ -197,6 +205,7 @@ def direction_record(
         "texturesByAction": action_paths,
         "source_direction": direction,
         "source_row": source_row,
+        "source_slot_id": f"slot_{source_row}",
         "pivot": pivot_by_action_frame["idle"][0],
         "pivotByActionFrame": pivot_by_action_frame,
         "nudge": [0, 0],
@@ -219,11 +228,11 @@ def direction_record(
 def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
     elf_paths = {
         action: f"res://assets/art/items/client/world_wear/helmet/male/elf_helmet_{action}.png"
-        for action in ACTIONS
+        for action in HELMET_ACTIONS
     }
     black_paths = {
         action: f"res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_{action}.png"
-        for action in ACTIONS
+        for action in HELMET_ACTIONS
     }
     # The concept's slot 0 is visibly front and slot 4 is visibly back.
     elf_map = {"N": 4, "NE": 3, "E": 2, "SE": 1, "S": 0, "SW": 7, "W": 6, "NW": 5}
@@ -252,7 +261,7 @@ def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
             opening[direction],
             True,
         )
-        black_directions[direction] = direction_record(
+        black_record = direction_record(
             direction,
             black_map[direction],
             black_paths,
@@ -260,15 +269,19 @@ def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
             "half_open",
             "hide",
             opening[direction],
-            True,
+            False,
         )
+        black_record.pop("source_direction")
+        black_record["source_slot_id"] = f"slot_{black_map[direction]}"
+        black_record["status"] = "unassigned"
+        black_directions[direction] = black_record
     return {
         "schemaVersion": 3,
         "contractId": "equipment.world_helmet.player_visual_v2",
         "canonicalDirections": DIRECTIONS,
         "runtimeFormula": (
             "final_position = body_head_socket - "
-            "helmet_local_pivot(action,direction,frame) + integer_nudge"
+            "source_helmet_local_pivot(action,source_row,frame) + integer_nudge"
         ),
         "renderPipeline": [
             "helmet_back",
@@ -285,6 +298,7 @@ def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
             "facePolicyValues": ["open_crown", "half_open", "closed"],
             "hairPolicyValues": ["keep", "clip", "hide"],
             "statusValues": [
+                "unassigned",
                 "valid",
                 "mapping_error",
                 "art_error",
@@ -333,11 +347,29 @@ def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
             "black_iron_golden_151": {
                 "visual_asset_id": "black_iron_golden_151",
                 "itemId": 151,
-                "readOnlyGoldenReference": True,
-                "goldenReference": (
+                "readOnlyGoldenReference": False,
+                "editableSourceSlots": True,
+                "sourceSlotSemantics": "unknown_user_assigned",
+                "historicalGoldenReferenceSuperseded": (
                     "res://assets/data/equipment_helmet_151_golden_reference.json"
                 ),
-                "source_direction_map": black_map,
+                "sourceSlots": {f"slot_{row}": row for row in range(8)},
+                "source": {
+                    "lane": "helmet_world_visuals",
+                    "tier": "primary",
+                    "distribution": "research.mir2_client_raw",
+                    "stateItemIndex": 344,
+                    "actions": {
+                        action: {
+                            "path": path,
+                            "sha256": sha256(
+                                ROOT / path.removeprefix("res://")
+                            ),
+                        }
+                        for action, path in black_paths.items()
+                    },
+                    "pixelPolicy": "immutable_original_no_repaint_no_recolor",
+                },
                 "directions": black_directions,
             },
         },
@@ -358,6 +390,7 @@ def build_overrides() -> dict:
         "contractId": "equipment.world_helmet.player_visual_v2.overrides.v1",
         "runtimeReadable": True,
         "itemOverrides": {},
+        "visualAssetOverrides": {},
     }
 
 
@@ -395,12 +428,18 @@ def build_golden() -> dict:
         },
     }
     return {
-        "schemaVersion": 2,
-        "contractId": "equipment.world_helmet.golden.151.v1",
+        "schemaVersion": 3,
+        "contractId": "equipment.world_helmet.historical_baseline.151.v1",
         "itemId": 151,
         "itemName": "黑铁头盔",
         "visualAssetId": "black_iron_golden_151",
-        "readOnly": True,
+        "readOnly": False,
+        "superseded": True,
+        "runtimeValidationGate": False,
+        "supersededReason": (
+            "User rejected the historical direction mapping and placement; "
+            "only original source atlas hashes remain immutable evidence."
+        ),
         "capturedBeforePlayerVisualHelmetV2": True,
         "baselineCommit": "49fa8d38a0f4d3848e16a73533d4f257f37ffca8",
         "stateItemSource": {
@@ -415,12 +454,12 @@ def build_golden() -> dict:
             "actions": list(ACTIONS),
             "canonicalDirections": DIRECTIONS,
         },
-        "pixelDiffTolerance": 0,
+        "historicalPixelDiffTolerance": 0,
         "compatibilityPivotPolicy": (
             "Per-frame pivot equals the primary same-frame head socket, preserving "
             "the immutable full-cell atlas at zero final delta."
         ),
-        "directionRemapChanged": False,
+        "directionRemapChanged": "user_editable_override",
         "assetPixelsChanged": False,
         "actions": actions,
     }
@@ -446,8 +485,8 @@ def build_audit() -> dict:
                 "id": 3,
                 "topic": "head_socket_granularity",
                 "result": (
-                    "184 sockets derived independently from primary same-frame "
-                    "Hair.wil centroids, including attack/hit/death movement."
+                    "232 sockets derived independently from primary same-frame "
+                    "Hair.wil centroids, including cast/attack/hit/death movement."
                 ),
                 "status": "implemented_from_primary_evidence",
             },
@@ -462,12 +501,13 @@ def build_audit() -> dict:
             },
             {
                 "id": 5,
-                "topic": "golden_151",
+                "topic": "historical_golden_151",
                 "result": (
-                    "Immutable original atlases use per-frame compatibility pivots; "
-                    "all 184 final composites remain pixel-identical."
+                    "The user rejected the historical mapping/placement baseline. "
+                    "StateItem 344 and all six original atlases remain pixel-frozen, "
+                    "while target-to-source-slot mapping is user editable."
                 ),
-                "status": "diff_zero_required",
+                "status": "superseded_not_a_runtime_gate",
             },
         ],
     }
@@ -484,7 +524,7 @@ def main() -> None:
     write_json("equipment_helmet_v2_audit.json", build_audit())
     print(
         "BUILD_PLAYER_HELMET_V2_CONTRACTS_PASS "
-        "sockets=184 pilot=146 golden=151 directions=8 primary_hair=true"
+        "sockets=232 editable=146,151 directions=8 primary_hair=true cast=true"
     )
 
 
