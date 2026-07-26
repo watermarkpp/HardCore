@@ -1,0 +1,1312 @@
+{
+  "schemaVersion": 1,
+  "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+  "sex": "male",
+  "presentationMode": "classic_avatar",
+  "sourcePolicy": {
+    "lane": "client_assets",
+    "tier": "primary",
+    "distribution": "client.classic_raw_complete",
+    "rootPrefix": "reference/mir2_client_raw",
+    "fallbackUsed": false,
+    "aiGeneratedAssets": 0,
+    "prgusePath": "dev_art_sources/reference/mir2_client_raw/Data/Prguse.wil",
+    "prguseFileSha256": "88a12492138bc85ba0429dce3cbd857efcea5b7659cdd8d85a4f2f4db68d5ef2",
+    "stateItemPath": "dev_art_sources/reference/mir2_client_raw/Data/StateItem.wil",
+    "stateItemFileSha256": "59fb3d62785b7ca49b63d0efe6bd084fb08474f509eec653806f064403922872",
+    "anatomyPath": "res://assets/art/characters/warrior/paper_doll/classic/base_male_00376_anatomy.png",
+    "anatomyFileSha256": "6aeaff70b141f6f18835428d6836ffafe204bd123f1d6008c9b32851e65f8b2c",
+    "hairPath": "res://assets/art/characters/warrior/paper_doll/classic/hair_male_00442.png",
+    "hairFileSha256": "c1d0b0fd4623cd78f4b722afb90b42b243546cce9838c6501d86fb64821e5ad6",
+    "baseSourceIndex": 376,
+    "baseRgbaSha256": "db7d5d79be35b53d5b4a17bdd519602630b03e07145b37250b275fbe530d4658",
+    "baseHotX": 7,
+    "baseHotY": -44,
+    "hairSourceIndex": 442,
+    "hairRgbaSha256": "fc3b7dae4516e3b742ad5c6e377d719385c3b06a2d629ef9c8bd4c5702e70ee2",
+    "hairHotX": 87,
+    "hairHotY": 0
+  },
+  "compositionPolicy": {
+    "id": "original_client_final_head_only.v1",
+    "drawOrder": [
+      "Prguse#376 male head anatomy",
+      "Prguse#442 male hair",
+      "StateItem helmet"
+    ],
+    "headBox": [
+      76,
+      40,
+      98,
+      68
+    ],
+    "shoulderStartY": 65,
+    "neckXRange": [
+      80,
+      92
+    ],
+    "cropRule": "union(primary StateItem rectangle, male head box)",
+    "bottomCornerAlphaRequired": 0,
+    "fullEquipmentPageForbidden": true,
+    "redrawAllowed": false,
+    "auxiliarySourceAllowed": false
+  },
+  "coverage": {
+    "formalMaleHelmetItems": 12,
+    "uniqueStateItemRecords": 11,
+    "itemIds": [
+      146,
+      147,
+      148,
+      149,
+      150,
+      151,
+      218,
+      224,
+      228,
+      232,
+      236,
+      240
+    ],
+    "officialTestHelmetItemIds": [
+      148,
+      149,
+      150,
+      151,
+      232,
+      236,
+      240
+    ],
+    "femaleAssetsGenerated": 0
+  },
+  "itemsById": {
+    "146": {
+      "itemId": 146,
+      "itemName": "精灵头盔",
+      "flattenedHeadPatch": {
+        "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+        "itemId": 146,
+        "itemName": "精灵头盔",
+        "slot": "头盔",
+        "source": "StateItem.wil",
+        "sourceIndex": 105,
+        "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00146_stateitem_00105.png",
+        "sourceRecordRgbaSha256": "b060d83e5a8f6ebc5782eedb2c144ba858d588ef9d63568d6b6bd98d0f0591f2",
+        "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00146_head.png",
+        "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00146_erase_mask.png",
+        "drawOffset": [
+          76,
+          40
+        ],
+        "size": [
+          24,
+          28
+        ],
+        "rgbaSha256": "3ca880c5ce63af6ee22dabb753036c41d087131dc950524aae81e17ec3372893",
+        "eraseMaskRgbaSha256": "389c28496caf76d9583a90761d0677a3cca808f9c40eacce4fa558791197ed0b",
+        "drawOrder": [
+          "male_head_anatomy",
+          "male_hair",
+          "helmet"
+        ],
+        "subjectEvidence": {
+          "method": "primary_exact_palette_connected_difference.v1",
+          "exactCoordinateSeedPixels": 1,
+          "paletteCandidatePixels": 45,
+          "removedBackgroundPixels": 5,
+          "subjectOpaquePixels": 193
+        },
+        "headOnlyEvidence": {
+          "headBox": [
+            76,
+            40,
+            98,
+            68
+          ],
+          "shoulderStartY": 65,
+          "neckXRange": [
+            80,
+            92
+          ],
+          "bottomLeftAlpha": 0,
+          "bottomRightAlpha": 0
+        }
+      }
+    },
+    "147": {
+      "itemId": 147,
+      "itemName": "青铜头盔",
+      "flattenedHeadPatch": {
+        "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+        "itemId": 147,
+        "itemName": "青铜头盔",
+        "slot": "头盔",
+        "source": "StateItem.wil",
+        "sourceIndex": 100,
+        "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00147_stateitem_00100.png",
+        "sourceRecordRgbaSha256": "86976fae87a323b663564f716e9cdd0b4a93a77a95c04a2d518a9be117332927",
+        "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00147_head.png",
+        "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00147_erase_mask.png",
+        "drawOffset": [
+          73,
+          27
+        ],
+        "size": [
+          32,
+          41
+        ],
+        "rgbaSha256": "bd3d06ac5fd625096439068fa281606c7ac8f1bb84db0d0eb0e805860e7396b9",
+        "eraseMaskRgbaSha256": "8856d736f1d431ff895925c33ad636133d294e837afa8bad0b58bd44fbd6d34b",
+        "drawOrder": [
+          "male_head_anatomy",
+          "male_hair",
+          "helmet"
+        ],
+        "subjectEvidence": {
+          "method": "primary_exact_palette_connected_difference.v1",
+          "exactCoordinateSeedPixels": 282,
+          "paletteCandidatePixels": 835,
+          "removedBackgroundPixels": 834,
+          "subjectOpaquePixels": 132
+        },
+        "headOnlyEvidence": {
+          "headBox": [
+            76,
+            40,
+            98,
+            68
+          ],
+          "shoulderStartY": 65,
+          "neckXRange": [
+            80,
+            92
+          ],
+          "bottomLeftAlpha": 0,
+          "bottomRightAlpha": 0
+        }
+      }
+    },
+    "148": {
+      "itemId": 148,
+      "itemName": "魔法头盔",
+      "flattenedHeadPatch": {
+        "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+        "itemId": 148,
+        "itemName": "魔法头盔",
+        "slot": "头盔",
+        "source": "StateItem.wil",
+        "sourceIndex": 100,
+        "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00148_stateitem_00100.png",
+        "sourceRecordRgbaSha256": "86976fae87a323b663564f716e9cdd0b4a93a77a95c04a2d518a9be117332927",
+        "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00148_head.png",
+        "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00148_erase_mask.png",
+        "drawOffset": [
+          73,
+          27
+        ],
+        "size": [
+          32,
+          41
+        ],
+        "rgbaSha256": "bd3d06ac5fd625096439068fa281606c7ac8f1bb84db0d0eb0e805860e7396b9",
+        "eraseMaskRgbaSha256": "8856d736f1d431ff895925c33ad636133d294e837afa8bad0b58bd44fbd6d34b",
+        "drawOrder": [
+          "male_head_anatomy",
+          "male_hair",
+          "helmet"
+        ],
+        "subjectEvidence": {
+          "method": "primary_exact_palette_connected_difference.v1",
+          "exactCoordinateSeedPixels": 282,
+          "paletteCandidatePixels": 835,
+          "removedBackgroundPixels": 834,
+          "subjectOpaquePixels": 132
+        },
+        "headOnlyEvidence": {
+          "headBox": [
+            76,
+            40,
+            98,
+            68
+          ],
+          "shoulderStartY": 65,
+          "neckXRange": [
+            80,
+            92
+          ],
+          "bottomLeftAlpha": 0,
+          "bottomRightAlpha": 0
+        }
+      }
+    },
+    "149": {
+      "itemId": 149,
+      "itemName": "道士头盔",
+      "flattenedHeadPatch": {
+        "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+        "itemId": 149,
+        "itemName": "道士头盔",
+        "slot": "头盔",
+        "source": "StateItem.wil",
+        "sourceIndex": 106,
+        "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00149_stateitem_00106.png",
+        "sourceRecordRgbaSha256": "b6d18e23b1467225bb936320e10114bf0ca58739c56bdb0ef5543d13352bc22b",
+        "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00149_head.png",
+        "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00149_erase_mask.png",
+        "drawOffset": [
+          72,
+          28
+        ],
+        "size": [
+          32,
+          40
+        ],
+        "rgbaSha256": "5ff803fd43c2e53884d8a36e18834234dcb23f45d9e49be66f8796e5a309b6d2",
+        "eraseMaskRgbaSha256": "6cbc2267377d4e4ae7977fd18447f364020fb53b1d4595ff9314968e008791d2",
+        "drawOrder": [
+          "male_head_anatomy",
+          "male_hair",
+          "helmet"
+        ],
+        "subjectEvidence": {
+          "method": "primary_exact_palette_connected_difference.v1",
+          "exactCoordinateSeedPixels": 522,
+          "paletteCandidatePixels": 849,
+          "removedBackgroundPixels": 828,
+          "subjectOpaquePixels": 241
+        },
+        "headOnlyEvidence": {
+          "headBox": [
+            76,
+            40,
+            98,
+            68
+          ],
+          "shoulderStartY": 65,
+          "neckXRange": [
+            80,
+            92
+          ],
+          "bottomLeftAlpha": 0,
+          "bottomRightAlpha": 0
+        }
+      }
+    },
+    "150": {
+      "itemId": 150,
+      "itemName": "骷髅头盔",
+      "flattenedHeadPatch": {
+        "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+        "itemId": 150,
+        "itemName": "骷髅头盔",
+        "slot": "头盔",
+        "source": "StateItem.wil",
+        "sourceIndex": 103,
+        "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00150_stateitem_00103.png",
+        "sourceRecordRgbaSha256": "6d571223be2ec99a7bc02008e1e2900b0c4cc782aba40d6b9ac4971f358b1ebd",
+        "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00150_head.png",
+        "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00150_erase_mask.png",
+        "drawOffset": [
+          62,
+          26
+        ],
+        "size": [
+          52,
+          42
+        ],
+        "rgbaSha256": "23f01e0e117a85bf0291112d5f4ab8670926ab0116e59d0fa9ca2e20eb3987c4",
+        "eraseMaskRgbaSha256": "3dadb5eeaddf8a44047def6f5195a443a92e5d388e88ad343faa00f28e7a2124",
+        "drawOrder": [
+          "male_head_anatomy",
+          "male_hair",
+          "helmet"
+        ],
+        "subjectEvidence": {
+          "method": "primary_exact_palette_connected_difference.v1",
+          "exactCoordinateSeedPixels": 898,
+          "paletteCandidatePixels": 1491,
+          "removedBackgroundPixels": 1482,
+          "subjectOpaquePixels": 240
+        },
+        "headOnlyEvidence": {
+          "headBox": [
+            76,
+            40,
+            98,
+            68
+          ],
+          "shoulderStartY": 65,
+          "neckXRange": [
+            80,
+            92
+          ],
+          "bottomLeftAlpha": 0,
+          "bottomRightAlpha": 0
+        }
+      }
+    },
+    "151": {
+      "itemId": 151,
+      "itemName": "黑铁头盔",
+      "flattenedHeadPatch": {
+        "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+        "itemId": 151,
+        "itemName": "黑铁头盔",
+        "slot": "头盔",
+        "source": "StateItem.wil",
+        "sourceIndex": 344,
+        "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00151_stateitem_00344.png",
+        "sourceRecordRgbaSha256": "da712dde231434450b5a38aed5e88341413c2170155aefa7aae6ea5727f43753",
+        "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00151_head.png",
+        "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00151_erase_mask.png",
+        "drawOffset": [
+          72,
+          36
+        ],
+        "size": [
+          28,
+          32
+        ],
+        "rgbaSha256": "e0680a54401b787d4510d2044e3b23c5bf875a46aa861aca37d1b5ab56b9c5dd",
+        "eraseMaskRgbaSha256": "d1cb31b80aceafb06e819ad5945bec02e9e5cddb34f9f9ced17e16596af017e4",
+        "drawOrder": [
+          "male_head_anatomy",
+          "male_hair",
+          "helmet"
+        ],
+        "subjectEvidence": {
+          "method": "primary_stateitem_complete_subject_protection.v1",
+          "subjectMaskPath": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00344.png",
+          "subjectMaskFileSha256": "24f535d351cdd18110b00ffda717a23dc2df3cf0b2890b1f7e80cf64d96b47df",
+          "subjectComponents": 1,
+          "removedBackgroundPixels": 417,
+          "subjectOpaquePixels": 354
+        },
+        "headOnlyEvidence": {
+          "headBox": [
+            76,
+            40,
+            98,
+            68
+          ],
+          "shoulderStartY": 65,
+          "neckXRange": [
+            80,
+            92
+          ],
+          "bottomLeftAlpha": 0,
+          "bottomRightAlpha": 0
+        }
+      }
+    },
+    "218": {
+      "itemId": 218,
+      "itemName": "神秘头盔",
+      "flattenedHeadPatch": {
+        "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+        "itemId": 218,
+        "itemName": "神秘头盔",
+        "slot": "头盔",
+        "source": "StateItem.wil",
+        "sourceIndex": 111,
+        "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00218_stateitem_00111.png",
+        "sourceRecordRgbaSha256": "98b79ad22d560ee46dc67c27b603b85440af1a1a6d1ad2f3766a3cf76ed35b65",
+        "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00218_head.png",
+        "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00218_erase_mask.png",
+        "drawOffset": [
+          70,
+          34
+        ],
+        "size": [
+          32,
+          34
+        ],
+        "rgbaSha256": "101431135c569447dc38a02e3866442bdb2948ddf7f62c078795a6fbbba76da9",
+        "eraseMaskRgbaSha256": "f4bd7f55d8ef910a5e72ba97a90f920eb6aa2cb29513e06c1560dc7e9366853f",
+        "drawOrder": [
+          "male_head_anatomy",
+          "male_hair",
+          "helmet"
+        ],
+        "subjectEvidence": {
+          "method": "primary_exact_palette_connected_difference.v1",
+          "exactCoordinateSeedPixels": 153,
+          "paletteCandidatePixels": 555,
+          "removedBackgroundPixels": 549,
+          "subjectOpaquePixels": 164
+        },
+        "headOnlyEvidence": {
+          "headBox": [
+            76,
+            40,
+            98,
+            68
+          ],
+          "shoulderStartY": 65,
+          "neckXRange": [
+            80,
+            92
+          ],
+          "bottomLeftAlpha": 0,
+          "bottomRightAlpha": 0
+        }
+      }
+    },
+    "224": {
+      "itemId": 224,
+      "itemName": "祈祷头盔",
+      "flattenedHeadPatch": {
+        "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+        "itemId": 224,
+        "itemName": "祈祷头盔",
+        "slot": "头盔",
+        "source": "StateItem.wil",
+        "sourceIndex": 110,
+        "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00224_stateitem_00110.png",
+        "sourceRecordRgbaSha256": "55cc9e918449339c33ace2bb7358dd68e48e39da4e71d7f4524cf8a3e65a484c",
+        "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00224_head.png",
+        "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00224_erase_mask.png",
+        "drawOffset": [
+          73,
+          28
+        ],
+        "size": [
+          32,
+          40
+        ],
+        "rgbaSha256": "6e674ab4813b9c73df00d0dcd2961e25c9058d94b84bbc4f68e3d5445b7564f7",
+        "eraseMaskRgbaSha256": "9209d5e63beeb0ab4768b731560d338c1f0445cca3a7ed9318dc9fd17084a42d",
+        "drawOrder": [
+          "male_head_anatomy",
+          "male_hair",
+          "helmet"
+        ],
+        "subjectEvidence": {
+          "method": "primary_exact_palette_connected_difference.v1",
+          "exactCoordinateSeedPixels": 464,
+          "paletteCandidatePixels": 758,
+          "removedBackgroundPixels": 755,
+          "subjectOpaquePixels": 151
+        },
+        "headOnlyEvidence": {
+          "headBox": [
+            76,
+            40,
+            98,
+            68
+          ],
+          "shoulderStartY": 65,
+          "neckXRange": [
+            80,
+            92
+          ],
+          "bottomLeftAlpha": 0,
+          "bottomRightAlpha": 0
+        }
+      }
+    },
+    "228": {
+      "itemId": 228,
+      "itemName": "记忆头盔",
+      "flattenedHeadPatch": {
+        "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+        "itemId": 228,
+        "itemName": "记忆头盔",
+        "slot": "头盔",
+        "source": "StateItem.wil",
+        "sourceIndex": 109,
+        "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00228_stateitem_00109.png",
+        "sourceRecordRgbaSha256": "1512cd7f571e8b7b752b94cf3d5413fa23a217d562416c0786dee0796ca75d5d",
+        "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00228_head.png",
+        "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00228_erase_mask.png",
+        "drawOffset": [
+          73,
+          26
+        ],
+        "size": [
+          32,
+          42
+        ],
+        "rgbaSha256": "c3cfbdc80fa900eb4eb761416fbe49db16e3b5883c3ec19d325040e94b3d87d1",
+        "eraseMaskRgbaSha256": "b27920d17c65b08fdfd70da1f8455b0e046530e5c1f780564bb284aa12cd4c2d",
+        "drawOrder": [
+          "male_head_anatomy",
+          "male_hair",
+          "helmet"
+        ],
+        "subjectEvidence": {
+          "method": "primary_exact_palette_connected_difference.v1",
+          "exactCoordinateSeedPixels": 465,
+          "paletteCandidatePixels": 794,
+          "removedBackgroundPixels": 784,
+          "subjectOpaquePixels": 189
+        },
+        "headOnlyEvidence": {
+          "headBox": [
+            76,
+            40,
+            98,
+            68
+          ],
+          "shoulderStartY": 65,
+          "neckXRange": [
+            80,
+            92
+          ],
+          "bottomLeftAlpha": 0,
+          "bottomRightAlpha": 0
+        }
+      }
+    },
+    "232": {
+      "itemId": 232,
+      "itemName": "圣战头盔",
+      "flattenedHeadPatch": {
+        "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+        "itemId": 232,
+        "itemName": "圣战头盔",
+        "slot": "头盔",
+        "source": "StateItem.wil",
+        "sourceIndex": 104,
+        "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00232_stateitem_00104.png",
+        "sourceRecordRgbaSha256": "bd7018e36ff800f5d7ec745ec87fcb34b35dc86905371740af24de0b41c4f144",
+        "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00232_head.png",
+        "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00232_erase_mask.png",
+        "drawOffset": [
+          73,
+          27
+        ],
+        "size": [
+          32,
+          41
+        ],
+        "rgbaSha256": "251799276a9390301b2fe1883551c6844e27d64cc33e9939a147b3b52b2c9b48",
+        "eraseMaskRgbaSha256": "9033002fb86cd4227b8848ade93df2a2ad0b3ee4c7132fdb59c98a90f6a433da",
+        "drawOrder": [
+          "male_head_anatomy",
+          "male_hair",
+          "helmet"
+        ],
+        "subjectEvidence": {
+          "method": "primary_exact_palette_connected_difference.v1",
+          "exactCoordinateSeedPixels": 428,
+          "paletteCandidatePixels": 724,
+          "removedBackgroundPixels": 714,
+          "subjectOpaquePixels": 247
+        },
+        "headOnlyEvidence": {
+          "headBox": [
+            76,
+            40,
+            98,
+            68
+          ],
+          "shoulderStartY": 65,
+          "neckXRange": [
+            80,
+            92
+          ],
+          "bottomLeftAlpha": 0,
+          "bottomRightAlpha": 0
+        }
+      }
+    },
+    "236": {
+      "itemId": 236,
+      "itemName": "法神头盔",
+      "flattenedHeadPatch": {
+        "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+        "itemId": 236,
+        "itemName": "法神头盔",
+        "slot": "头盔",
+        "source": "StateItem.wil",
+        "sourceIndex": 101,
+        "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00236_stateitem_00101.png",
+        "sourceRecordRgbaSha256": "9c5f6aa9787d617cf0229698fa7668f6475334d93980298ea3846f2ef040c834",
+        "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00236_head.png",
+        "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00236_erase_mask.png",
+        "drawOffset": [
+          74,
+          40
+        ],
+        "size": [
+          24,
+          28
+        ],
+        "rgbaSha256": "599495c823e7fd220584e31767b50c49acba9ffcef2675febd8e9ee9aa21860e",
+        "eraseMaskRgbaSha256": "be8c3ca049a215e6f32ca87966fba6192f3da0c7e5f7fcad57632b32a76107ee",
+        "drawOrder": [
+          "male_head_anatomy",
+          "male_hair",
+          "helmet"
+        ],
+        "subjectEvidence": {
+          "method": "primary_exact_palette_connected_difference.v1",
+          "exactCoordinateSeedPixels": 4,
+          "paletteCandidatePixels": 32,
+          "removedBackgroundPixels": 6,
+          "subjectOpaquePixels": 160
+        },
+        "headOnlyEvidence": {
+          "headBox": [
+            76,
+            40,
+            98,
+            68
+          ],
+          "shoulderStartY": 65,
+          "neckXRange": [
+            80,
+            92
+          ],
+          "bottomLeftAlpha": 0,
+          "bottomRightAlpha": 0
+        }
+      }
+    },
+    "240": {
+      "itemId": 240,
+      "itemName": "天尊头盔",
+      "flattenedHeadPatch": {
+        "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+        "itemId": 240,
+        "itemName": "天尊头盔",
+        "slot": "头盔",
+        "source": "StateItem.wil",
+        "sourceIndex": 102,
+        "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00240_stateitem_00102.png",
+        "sourceRecordRgbaSha256": "0d44c7b75e3219a2a61b13c8a890321b4be5388e3d34f0829d6575d36e91d396",
+        "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00240_head.png",
+        "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00240_erase_mask.png",
+        "drawOffset": [
+          72,
+          27
+        ],
+        "size": [
+          32,
+          41
+        ],
+        "rgbaSha256": "dee60aaebe972698b65c7d439cf92ff07d94c44e5a7d86061b7fdc9b3c7f4ce3",
+        "eraseMaskRgbaSha256": "fd02e29618806fdf061f28d68bc1471b4384df1bc9c5697bfbe29c2f0550adde",
+        "drawOrder": [
+          "male_head_anatomy",
+          "male_hair",
+          "helmet"
+        ],
+        "subjectEvidence": {
+          "method": "primary_exact_palette_connected_difference.v1",
+          "exactCoordinateSeedPixels": 447,
+          "paletteCandidatePixels": 819,
+          "removedBackgroundPixels": 773,
+          "subjectOpaquePixels": 311
+        },
+        "headOnlyEvidence": {
+          "headBox": [
+            76,
+            40,
+            98,
+            68
+          ],
+          "shoulderStartY": 65,
+          "neckXRange": [
+            80,
+            92
+          ],
+          "bottomLeftAlpha": 0,
+          "bottomRightAlpha": 0
+        }
+      }
+    }
+  },
+  "runtimeMappings": {
+    "精灵头盔": {
+      "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+      "itemId": 146,
+      "itemName": "精灵头盔",
+      "slot": "头盔",
+      "source": "StateItem.wil",
+      "sourceIndex": 105,
+      "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00146_stateitem_00105.png",
+      "sourceRecordRgbaSha256": "b060d83e5a8f6ebc5782eedb2c144ba858d588ef9d63568d6b6bd98d0f0591f2",
+      "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00146_head.png",
+      "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00146_erase_mask.png",
+      "drawOffset": [
+        76,
+        40
+      ],
+      "size": [
+        24,
+        28
+      ],
+      "rgbaSha256": "3ca880c5ce63af6ee22dabb753036c41d087131dc950524aae81e17ec3372893",
+      "eraseMaskRgbaSha256": "389c28496caf76d9583a90761d0677a3cca808f9c40eacce4fa558791197ed0b",
+      "drawOrder": [
+        "male_head_anatomy",
+        "male_hair",
+        "helmet"
+      ],
+      "subjectEvidence": {
+        "method": "primary_exact_palette_connected_difference.v1",
+        "exactCoordinateSeedPixels": 1,
+        "paletteCandidatePixels": 45,
+        "removedBackgroundPixels": 5,
+        "subjectOpaquePixels": 193
+      },
+      "headOnlyEvidence": {
+        "headBox": [
+          76,
+          40,
+          98,
+          68
+        ],
+        "shoulderStartY": 65,
+        "neckXRange": [
+          80,
+          92
+        ],
+        "bottomLeftAlpha": 0,
+        "bottomRightAlpha": 0
+      }
+    },
+    "青铜头盔": {
+      "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+      "itemId": 147,
+      "itemName": "青铜头盔",
+      "slot": "头盔",
+      "source": "StateItem.wil",
+      "sourceIndex": 100,
+      "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00147_stateitem_00100.png",
+      "sourceRecordRgbaSha256": "86976fae87a323b663564f716e9cdd0b4a93a77a95c04a2d518a9be117332927",
+      "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00147_head.png",
+      "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00147_erase_mask.png",
+      "drawOffset": [
+        73,
+        27
+      ],
+      "size": [
+        32,
+        41
+      ],
+      "rgbaSha256": "bd3d06ac5fd625096439068fa281606c7ac8f1bb84db0d0eb0e805860e7396b9",
+      "eraseMaskRgbaSha256": "8856d736f1d431ff895925c33ad636133d294e837afa8bad0b58bd44fbd6d34b",
+      "drawOrder": [
+        "male_head_anatomy",
+        "male_hair",
+        "helmet"
+      ],
+      "subjectEvidence": {
+        "method": "primary_exact_palette_connected_difference.v1",
+        "exactCoordinateSeedPixels": 282,
+        "paletteCandidatePixels": 835,
+        "removedBackgroundPixels": 834,
+        "subjectOpaquePixels": 132
+      },
+      "headOnlyEvidence": {
+        "headBox": [
+          76,
+          40,
+          98,
+          68
+        ],
+        "shoulderStartY": 65,
+        "neckXRange": [
+          80,
+          92
+        ],
+        "bottomLeftAlpha": 0,
+        "bottomRightAlpha": 0
+      }
+    },
+    "魔法头盔": {
+      "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+      "itemId": 148,
+      "itemName": "魔法头盔",
+      "slot": "头盔",
+      "source": "StateItem.wil",
+      "sourceIndex": 100,
+      "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00148_stateitem_00100.png",
+      "sourceRecordRgbaSha256": "86976fae87a323b663564f716e9cdd0b4a93a77a95c04a2d518a9be117332927",
+      "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00148_head.png",
+      "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00148_erase_mask.png",
+      "drawOffset": [
+        73,
+        27
+      ],
+      "size": [
+        32,
+        41
+      ],
+      "rgbaSha256": "bd3d06ac5fd625096439068fa281606c7ac8f1bb84db0d0eb0e805860e7396b9",
+      "eraseMaskRgbaSha256": "8856d736f1d431ff895925c33ad636133d294e837afa8bad0b58bd44fbd6d34b",
+      "drawOrder": [
+        "male_head_anatomy",
+        "male_hair",
+        "helmet"
+      ],
+      "subjectEvidence": {
+        "method": "primary_exact_palette_connected_difference.v1",
+        "exactCoordinateSeedPixels": 282,
+        "paletteCandidatePixels": 835,
+        "removedBackgroundPixels": 834,
+        "subjectOpaquePixels": 132
+      },
+      "headOnlyEvidence": {
+        "headBox": [
+          76,
+          40,
+          98,
+          68
+        ],
+        "shoulderStartY": 65,
+        "neckXRange": [
+          80,
+          92
+        ],
+        "bottomLeftAlpha": 0,
+        "bottomRightAlpha": 0
+      }
+    },
+    "道士头盔": {
+      "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+      "itemId": 149,
+      "itemName": "道士头盔",
+      "slot": "头盔",
+      "source": "StateItem.wil",
+      "sourceIndex": 106,
+      "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00149_stateitem_00106.png",
+      "sourceRecordRgbaSha256": "b6d18e23b1467225bb936320e10114bf0ca58739c56bdb0ef5543d13352bc22b",
+      "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00149_head.png",
+      "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00149_erase_mask.png",
+      "drawOffset": [
+        72,
+        28
+      ],
+      "size": [
+        32,
+        40
+      ],
+      "rgbaSha256": "5ff803fd43c2e53884d8a36e18834234dcb23f45d9e49be66f8796e5a309b6d2",
+      "eraseMaskRgbaSha256": "6cbc2267377d4e4ae7977fd18447f364020fb53b1d4595ff9314968e008791d2",
+      "drawOrder": [
+        "male_head_anatomy",
+        "male_hair",
+        "helmet"
+      ],
+      "subjectEvidence": {
+        "method": "primary_exact_palette_connected_difference.v1",
+        "exactCoordinateSeedPixels": 522,
+        "paletteCandidatePixels": 849,
+        "removedBackgroundPixels": 828,
+        "subjectOpaquePixels": 241
+      },
+      "headOnlyEvidence": {
+        "headBox": [
+          76,
+          40,
+          98,
+          68
+        ],
+        "shoulderStartY": 65,
+        "neckXRange": [
+          80,
+          92
+        ],
+        "bottomLeftAlpha": 0,
+        "bottomRightAlpha": 0
+      }
+    },
+    "骷髅头盔": {
+      "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+      "itemId": 150,
+      "itemName": "骷髅头盔",
+      "slot": "头盔",
+      "source": "StateItem.wil",
+      "sourceIndex": 103,
+      "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00150_stateitem_00103.png",
+      "sourceRecordRgbaSha256": "6d571223be2ec99a7bc02008e1e2900b0c4cc782aba40d6b9ac4971f358b1ebd",
+      "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00150_head.png",
+      "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00150_erase_mask.png",
+      "drawOffset": [
+        62,
+        26
+      ],
+      "size": [
+        52,
+        42
+      ],
+      "rgbaSha256": "23f01e0e117a85bf0291112d5f4ab8670926ab0116e59d0fa9ca2e20eb3987c4",
+      "eraseMaskRgbaSha256": "3dadb5eeaddf8a44047def6f5195a443a92e5d388e88ad343faa00f28e7a2124",
+      "drawOrder": [
+        "male_head_anatomy",
+        "male_hair",
+        "helmet"
+      ],
+      "subjectEvidence": {
+        "method": "primary_exact_palette_connected_difference.v1",
+        "exactCoordinateSeedPixels": 898,
+        "paletteCandidatePixels": 1491,
+        "removedBackgroundPixels": 1482,
+        "subjectOpaquePixels": 240
+      },
+      "headOnlyEvidence": {
+        "headBox": [
+          76,
+          40,
+          98,
+          68
+        ],
+        "shoulderStartY": 65,
+        "neckXRange": [
+          80,
+          92
+        ],
+        "bottomLeftAlpha": 0,
+        "bottomRightAlpha": 0
+      }
+    },
+    "黑铁头盔": {
+      "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+      "itemId": 151,
+      "itemName": "黑铁头盔",
+      "slot": "头盔",
+      "source": "StateItem.wil",
+      "sourceIndex": 344,
+      "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00151_stateitem_00344.png",
+      "sourceRecordRgbaSha256": "da712dde231434450b5a38aed5e88341413c2170155aefa7aae6ea5727f43753",
+      "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00151_head.png",
+      "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00151_erase_mask.png",
+      "drawOffset": [
+        72,
+        36
+      ],
+      "size": [
+        28,
+        32
+      ],
+      "rgbaSha256": "e0680a54401b787d4510d2044e3b23c5bf875a46aa861aca37d1b5ab56b9c5dd",
+      "eraseMaskRgbaSha256": "d1cb31b80aceafb06e819ad5945bec02e9e5cddb34f9f9ced17e16596af017e4",
+      "drawOrder": [
+        "male_head_anatomy",
+        "male_hair",
+        "helmet"
+      ],
+      "subjectEvidence": {
+        "method": "primary_stateitem_complete_subject_protection.v1",
+        "subjectMaskPath": "res://assets/art/characters/warrior/paper_doll/classic/layers/stateitem_00344.png",
+        "subjectMaskFileSha256": "24f535d351cdd18110b00ffda717a23dc2df3cf0b2890b1f7e80cf64d96b47df",
+        "subjectComponents": 1,
+        "removedBackgroundPixels": 417,
+        "subjectOpaquePixels": 354
+      },
+      "headOnlyEvidence": {
+        "headBox": [
+          76,
+          40,
+          98,
+          68
+        ],
+        "shoulderStartY": 65,
+        "neckXRange": [
+          80,
+          92
+        ],
+        "bottomLeftAlpha": 0,
+        "bottomRightAlpha": 0
+      }
+    },
+    "神秘头盔": {
+      "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+      "itemId": 218,
+      "itemName": "神秘头盔",
+      "slot": "头盔",
+      "source": "StateItem.wil",
+      "sourceIndex": 111,
+      "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00218_stateitem_00111.png",
+      "sourceRecordRgbaSha256": "98b79ad22d560ee46dc67c27b603b85440af1a1a6d1ad2f3766a3cf76ed35b65",
+      "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00218_head.png",
+      "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00218_erase_mask.png",
+      "drawOffset": [
+        70,
+        34
+      ],
+      "size": [
+        32,
+        34
+      ],
+      "rgbaSha256": "101431135c569447dc38a02e3866442bdb2948ddf7f62c078795a6fbbba76da9",
+      "eraseMaskRgbaSha256": "f4bd7f55d8ef910a5e72ba97a90f920eb6aa2cb29513e06c1560dc7e9366853f",
+      "drawOrder": [
+        "male_head_anatomy",
+        "male_hair",
+        "helmet"
+      ],
+      "subjectEvidence": {
+        "method": "primary_exact_palette_connected_difference.v1",
+        "exactCoordinateSeedPixels": 153,
+        "paletteCandidatePixels": 555,
+        "removedBackgroundPixels": 549,
+        "subjectOpaquePixels": 164
+      },
+      "headOnlyEvidence": {
+        "headBox": [
+          76,
+          40,
+          98,
+          68
+        ],
+        "shoulderStartY": 65,
+        "neckXRange": [
+          80,
+          92
+        ],
+        "bottomLeftAlpha": 0,
+        "bottomRightAlpha": 0
+      }
+    },
+    "祈祷头盔": {
+      "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+      "itemId": 224,
+      "itemName": "祈祷头盔",
+      "slot": "头盔",
+      "source": "StateItem.wil",
+      "sourceIndex": 110,
+      "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00224_stateitem_00110.png",
+      "sourceRecordRgbaSha256": "55cc9e918449339c33ace2bb7358dd68e48e39da4e71d7f4524cf8a3e65a484c",
+      "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00224_head.png",
+      "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00224_erase_mask.png",
+      "drawOffset": [
+        73,
+        28
+      ],
+      "size": [
+        32,
+        40
+      ],
+      "rgbaSha256": "6e674ab4813b9c73df00d0dcd2961e25c9058d94b84bbc4f68e3d5445b7564f7",
+      "eraseMaskRgbaSha256": "9209d5e63beeb0ab4768b731560d338c1f0445cca3a7ed9318dc9fd17084a42d",
+      "drawOrder": [
+        "male_head_anatomy",
+        "male_hair",
+        "helmet"
+      ],
+      "subjectEvidence": {
+        "method": "primary_exact_palette_connected_difference.v1",
+        "exactCoordinateSeedPixels": 464,
+        "paletteCandidatePixels": 758,
+        "removedBackgroundPixels": 755,
+        "subjectOpaquePixels": 151
+      },
+      "headOnlyEvidence": {
+        "headBox": [
+          76,
+          40,
+          98,
+          68
+        ],
+        "shoulderStartY": 65,
+        "neckXRange": [
+          80,
+          92
+        ],
+        "bottomLeftAlpha": 0,
+        "bottomRightAlpha": 0
+      }
+    },
+    "记忆头盔": {
+      "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+      "itemId": 228,
+      "itemName": "记忆头盔",
+      "slot": "头盔",
+      "source": "StateItem.wil",
+      "sourceIndex": 109,
+      "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00228_stateitem_00109.png",
+      "sourceRecordRgbaSha256": "1512cd7f571e8b7b752b94cf3d5413fa23a217d562416c0786dee0796ca75d5d",
+      "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00228_head.png",
+      "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00228_erase_mask.png",
+      "drawOffset": [
+        73,
+        26
+      ],
+      "size": [
+        32,
+        42
+      ],
+      "rgbaSha256": "c3cfbdc80fa900eb4eb761416fbe49db16e3b5883c3ec19d325040e94b3d87d1",
+      "eraseMaskRgbaSha256": "b27920d17c65b08fdfd70da1f8455b0e046530e5c1f780564bb284aa12cd4c2d",
+      "drawOrder": [
+        "male_head_anatomy",
+        "male_hair",
+        "helmet"
+      ],
+      "subjectEvidence": {
+        "method": "primary_exact_palette_connected_difference.v1",
+        "exactCoordinateSeedPixels": 465,
+        "paletteCandidatePixels": 794,
+        "removedBackgroundPixels": 784,
+        "subjectOpaquePixels": 189
+      },
+      "headOnlyEvidence": {
+        "headBox": [
+          76,
+          40,
+          98,
+          68
+        ],
+        "shoulderStartY": 65,
+        "neckXRange": [
+          80,
+          92
+        ],
+        "bottomLeftAlpha": 0,
+        "bottomRightAlpha": 0
+      }
+    },
+    "圣战头盔": {
+      "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+      "itemId": 232,
+      "itemName": "圣战头盔",
+      "slot": "头盔",
+      "source": "StateItem.wil",
+      "sourceIndex": 104,
+      "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00232_stateitem_00104.png",
+      "sourceRecordRgbaSha256": "bd7018e36ff800f5d7ec745ec87fcb34b35dc86905371740af24de0b41c4f144",
+      "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00232_head.png",
+      "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00232_erase_mask.png",
+      "drawOffset": [
+        73,
+        27
+      ],
+      "size": [
+        32,
+        41
+      ],
+      "rgbaSha256": "251799276a9390301b2fe1883551c6844e27d64cc33e9939a147b3b52b2c9b48",
+      "eraseMaskRgbaSha256": "9033002fb86cd4227b8848ade93df2a2ad0b3ee4c7132fdb59c98a90f6a433da",
+      "drawOrder": [
+        "male_head_anatomy",
+        "male_hair",
+        "helmet"
+      ],
+      "subjectEvidence": {
+        "method": "primary_exact_palette_connected_difference.v1",
+        "exactCoordinateSeedPixels": 428,
+        "paletteCandidatePixels": 724,
+        "removedBackgroundPixels": 714,
+        "subjectOpaquePixels": 247
+      },
+      "headOnlyEvidence": {
+        "headBox": [
+          76,
+          40,
+          98,
+          68
+        ],
+        "shoulderStartY": 65,
+        "neckXRange": [
+          80,
+          92
+        ],
+        "bottomLeftAlpha": 0,
+        "bottomRightAlpha": 0
+      }
+    },
+    "法神头盔": {
+      "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+      "itemId": 236,
+      "itemName": "法神头盔",
+      "slot": "头盔",
+      "source": "StateItem.wil",
+      "sourceIndex": 101,
+      "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00236_stateitem_00101.png",
+      "sourceRecordRgbaSha256": "9c5f6aa9787d617cf0229698fa7668f6475334d93980298ea3846f2ef040c834",
+      "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00236_head.png",
+      "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00236_erase_mask.png",
+      "drawOffset": [
+        74,
+        40
+      ],
+      "size": [
+        24,
+        28
+      ],
+      "rgbaSha256": "599495c823e7fd220584e31767b50c49acba9ffcef2675febd8e9ee9aa21860e",
+      "eraseMaskRgbaSha256": "be8c3ca049a215e6f32ca87966fba6192f3da0c7e5f7fcad57632b32a76107ee",
+      "drawOrder": [
+        "male_head_anatomy",
+        "male_hair",
+        "helmet"
+      ],
+      "subjectEvidence": {
+        "method": "primary_exact_palette_connected_difference.v1",
+        "exactCoordinateSeedPixels": 4,
+        "paletteCandidatePixels": 32,
+        "removedBackgroundPixels": 6,
+        "subjectOpaquePixels": 160
+      },
+      "headOnlyEvidence": {
+        "headBox": [
+          76,
+          40,
+          98,
+          68
+        ],
+        "shoulderStartY": 65,
+        "neckXRange": [
+          80,
+          92
+        ],
+        "bottomLeftAlpha": 0,
+        "bottomRightAlpha": 0
+      }
+    },
+    "天尊头盔": {
+      "contractId": "equipment.paper_doll.classic_flattened_head_patch.v1",
+      "itemId": 240,
+      "itemName": "天尊头盔",
+      "slot": "头盔",
+      "source": "StateItem.wil",
+      "sourceIndex": 102,
+      "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00240_stateitem_00102.png",
+      "sourceRecordRgbaSha256": "0d44c7b75e3219a2a61b13c8a890321b4be5388e3d34f0829d6575d36e91d396",
+      "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00240_head.png",
+      "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00240_erase_mask.png",
+      "drawOffset": [
+        72,
+        27
+      ],
+      "size": [
+        32,
+        41
+      ],
+      "rgbaSha256": "dee60aaebe972698b65c7d439cf92ff07d94c44e5a7d86061b7fdc9b3c7f4ce3",
+      "eraseMaskRgbaSha256": "fd02e29618806fdf061f28d68bc1471b4384df1bc9c5697bfbe29c2f0550adde",
+      "drawOrder": [
+        "male_head_anatomy",
+        "male_hair",
+        "helmet"
+      ],
+      "subjectEvidence": {
+        "method": "primary_exact_palette_connected_difference.v1",
+        "exactCoordinateSeedPixels": 447,
+        "paletteCandidatePixels": 819,
+        "removedBackgroundPixels": 773,
+        "subjectOpaquePixels": 311
+      },
+      "headOnlyEvidence": {
+        "headBox": [
+          76,
+          40,
+          98,
+          68
+        ],
+        "shoulderStartY": 65,
+        "neckXRange": [
+          80,
+          92
+        ],
+        "bottomLeftAlpha": 0,
+        "bottomRightAlpha": 0
+      }
+    }
+  }
+}

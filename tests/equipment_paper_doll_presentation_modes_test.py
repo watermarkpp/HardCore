@@ -12,6 +12,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "assets/data/equipment_paper_doll_presentation_modes.json"
 VISUAL = ROOT / "assets/data/equipment_visual_catalog.json"
+HEAD_PATCHES = ROOT / "assets/data/equipment_classic_avatar_head_patches.json"
 
 
 def load_json(path: Path) -> dict:
@@ -72,6 +73,7 @@ def world_frame(record: dict, direction: int, frame: int) -> Image.Image:
 def main() -> None:
     manifest = load_json(MANIFEST)
     visual = load_json(VISUAL)
+    head_patches = load_json(HEAD_PATCHES)
     assert manifest["contractId"] == "equipment.paper_doll.presentation_modes.v1"
     assert manifest["defaultMode"] == "world_avatar"
     assert manifest["sex"] == "male"
@@ -86,11 +88,14 @@ def main() -> None:
     assert world["drawOrder"] == ["base", "dress", "weapon", "helmet"]
     assert classic["drawOrder"] == [
         "base",
-        "hair",
         "dress",
         "weapon",
-        "helmet",
+        "flattenedHeadPatch",
     ]
+    assert classic["headPatchSelector"].endswith(
+        "equipment_classic_avatar_head_patches.json#/"
+        "itemsById/{itemId}/flattenedHeadPatch"
+    )
 
     legacy = manifest["legacyFullPanel"]
     assert legacy["forbiddenForPlayerUI"] is True
@@ -117,17 +122,20 @@ def main() -> None:
         base_appearance = male_appearance(profession["worldBaseByGender"])
         classic_composite = Image.new("RGBA", tuple(classic["canvasSize"]))
         alpha_composite_at(classic_composite, base, [0, 0])
-        alpha_composite_at(
-            classic_composite, hair, classic["hair"]["stagePosition"]
-        )
         world_composite = Image.new("RGBA", tuple(world["canvasSize"]))
         selected_world: dict[str, dict] = {"base": base_appearance}
         selected_classic: dict[str, dict] = {}
+        selected_head_patch: dict = {}
         for slot, layer_name in categories.items():
             item_id = str(loadout["visualSlots"][slot]["itemId"])
             item = visual["itemsById"][item_id]
             paper = item["paperDoll"]
-            selected_classic[layer_name] = paper
+            if layer_name == "helmet":
+                selected_head_patch = head_patches["itemsById"][item_id][
+                    "flattenedHeadPatch"
+                ]
+            else:
+                selected_classic[layer_name] = paper
             world_wear = item["worldWear"]
             if layer_name == "helmet":
                 appearance = world_wear["helmetAppearance"]
@@ -137,13 +145,18 @@ def main() -> None:
                 )
             selected_world[layer_name] = appearance
 
-        for layer_name in ("dress", "weapon", "helmet"):
+        for layer_name in ("dress", "weapon"):
             paper = selected_classic[layer_name]
             alpha_composite_at(
                 classic_composite,
                 image(paper["path"]),
                 paper["drawOffset"],
             )
+        alpha_composite_at(
+            classic_composite,
+            image(selected_head_patch["path"]),
+            selected_head_patch["drawOffset"],
+        )
         assert_transparent_corners(
             classic_composite, f"{loadout_id} classic composite"
         )

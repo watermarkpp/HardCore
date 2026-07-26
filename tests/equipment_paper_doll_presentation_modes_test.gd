@@ -2,6 +2,7 @@ extends Node
 
 
 const MANIFEST_PATH := "res://assets/data/equipment_paper_doll_presentation_modes.json"
+const HEAD_PATCHES_PATH := "res://assets/data/equipment_classic_avatar_head_patches.json"
 
 
 func _ready() -> void:
@@ -78,7 +79,16 @@ func _run() -> void:
 	assert(bool(world.get("transparentOnly", false)))
 	assert(bool(classic_mode.get("transparentOnly", false)))
 	assert(world.get("drawOrder", []) == ["base", "dress", "weapon", "helmet"])
-	assert(avatar.get("drawOrder", []) == ["base", "hair", "dress", "weapon", "helmet"])
+	assert(
+		avatar.get("drawOrder", [])
+		== ["base", "dress", "weapon", "flattenedHeadPatch"]
+	)
+	assert(
+		str(avatar.get("headPatchSelector", "")).ends_with(
+			"equipment_classic_avatar_head_patches.json#/"
+			+ "itemsById/{itemId}/flattenedHeadPatch"
+		)
+	)
 
 	var legacy: Dictionary = manifest.get("legacyFullPanel", {})
 	assert(bool(legacy.get("forbiddenForPlayerUI", false)))
@@ -92,6 +102,32 @@ func _run() -> void:
 		_assert_slot_rect_empty(base_image, rect_values)
 	var hair: Dictionary = avatar.get("hair", {})
 	_assert_alpha_layer(str(hair.get("path", "")), "classic avatar hair")
+	var head_patches := _load_json(HEAD_PATCHES_PATH)
+	assert(
+		head_patches.get("contractId", "")
+		== "equipment.paper_doll.classic_flattened_head_patch.v1"
+	)
+	var head_items: Dictionary = head_patches.get("itemsById", {})
+	assert(head_items.size() == 12)
+	for item_id: Variant in head_items:
+		var item: Dictionary = head_items[item_id]
+		var patch: Dictionary = item.get("flattenedHeadPatch", {})
+		var patch_image := _assert_transparent_corners(
+			str(patch.get("path", "")),
+			"classic head patch %s" % item_id
+		)
+		_assert_alpha_layer(
+			str(patch.get("eraseMaskPath", "")),
+			"classic head erase mask %s" % item_id
+		)
+		assert(patch_image.get_pixel(0, patch_image.get_height() - 1).a <= 0.001)
+		assert(
+			patch_image.get_pixel(
+				patch_image.get_width() - 1,
+				patch_image.get_height() - 1
+			).a
+			<= 0.001
+		)
 
 	var validation: Dictionary = manifest.get("validation", {})
 	assert(validation.get("professionIds", []).size() == 3)

@@ -16,6 +16,9 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE_POLICY = ROOT / "assets/data/source_priority_policy.json"
 VISUAL_CATALOG = ROOT / "assets/data/equipment_visual_catalog.json"
 CLASSIC_SOURCE = ROOT / "assets/data/warrior_paper_doll_sources.json"
+CLASSIC_HEAD_PATCHES = (
+    ROOT / "assets/data/equipment_classic_avatar_head_patches.json"
+)
 LEGACY_FULL_PANEL = (
     ROOT / "assets/data/equipment_original_client_paper_doll_stage.json"
 )
@@ -41,6 +44,7 @@ def main() -> None:
     policy = load_json(SOURCE_POLICY)
     visual = load_json(VISUAL_CATALOG)
     classic = load_json(CLASSIC_SOURCE)
+    classic_head_patches = load_json(CLASSIC_HEAD_PATCHES)
     legacy = load_json(LEGACY_FULL_PANEL)
 
     client_assets_primary = primary_distribution(policy, "client_assets")
@@ -49,6 +53,11 @@ def main() -> None:
         raise ValueError("formal visual catalog contract changed")
     if legacy.get("contractId") != "equipment.paper_doll.original_client_stage.v1":
         raise ValueError("legacy full-panel contract changed")
+    if (
+        classic_head_patches.get("contractId")
+        != "equipment.paper_doll.classic_flattened_head_patch.v1"
+    ):
+        raise ValueError("classic flattened head-patch contract changed")
 
     base = classic.get("base", {})
     hair = classic.get("hair", {})
@@ -171,6 +180,11 @@ def main() -> None:
                         "res://assets/data/equipment_visual_catalog.json#/"
                         "itemsById/{itemId}/paperDoll"
                     ),
+                    "headPatchSelector": (
+                        "res://assets/data/"
+                        "equipment_classic_avatar_head_patches.json#/"
+                        "itemsById/{itemId}/flattenedHeadPatch"
+                    ),
                     "stagePosition": [0, 0],
                     "canvasSize": [168, 199],
                     "viewportOrigin": [0, 0],
@@ -178,10 +192,9 @@ def main() -> None:
                     "footAnchor": [84, 186],
                     "drawOrder": [
                         "base",
-                        "hair",
                         "dress",
                         "weapon",
-                        "helmet",
+                        "flattenedHeadPatch",
                     ],
                     "slotExclusionRects": [
                         [130, 33, 38, 43],
