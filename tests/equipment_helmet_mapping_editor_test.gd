@@ -20,14 +20,38 @@ func _run() -> void:
 	var editor: Node = EDITOR_SCENE.instantiate()
 	editor.auto_run = false
 	add_child(editor)
-	await editor.initialize_editor_runtime(true)
-	assert(editor.should_auto_quit_for_display("headless"))
-	assert(not editor.should_auto_quit_for_display("windows"))
+	assert(await editor.initialize_editor_runtime(true))
+	var interactive_args := PackedStringArray([
+		"--helmet-calibration-interactive",
+	])
+	assert(editor.has_interactive_user_arg(interactive_args))
+	assert(not editor.has_interactive_user_arg(PackedStringArray()))
+	assert(editor.should_auto_quit_for_context(
+		PackedStringArray(), "headless"
+	))
+	assert(not editor.should_auto_quit_for_context(
+		interactive_args, "headless"
+	))
+	assert(not editor.should_auto_quit_for_context(
+		PackedStringArray(), "windows"
+	))
+	assert(not await editor.start_interactive_failure_for_test())
+	assert(not editor.quit_was_requested())
+	assert(not editor.initialization_error().is_empty())
+	var startup_status := editor.get_node(
+		"CalibrationUI/Panel/VBox/StartupStatus"
+	) as Label
+	assert(startup_status.visible)
+	assert("窗口将保持打开" in startup_status.text)
 	var launcher_text := FileAccess.get_file_as_string(
 		"res://tools/launch_helmet_calibration_tool.ps1"
 	)
 	assert("Godot_v4.7-stable_win64.exe" in launcher_text)
 	assert("--headless" not in launcher_text)
+	assert("--helmet-calibration-interactive" in launcher_text)
+	assert(".godot\\helmet_calibration_appdata" in launcher_text)
+	assert("Join-Path $OutputDirectory 'helmet_calibration_interactive.log'" in launcher_text)
+	assert("--log-file" in launcher_text)
 
 	var target_grid := editor.get_node(
 		"CalibrationUI/Panel/VBox/TargetDirections"
@@ -341,7 +365,10 @@ func _run() -> void:
 		+ "items=146,151 editable=true idle_to_all_actions=232 scale_baked=true cast=true"
 	)
 	HelmetVisualV2.reset_calibration_override_path()
-	get_tree().quit(0)
+	editor.dispose_runtime_for_test()
+	editor.queue_free()
+	await get_tree().process_frame
+	get_tree().quit.call_deferred(0)
 
 
 func _vector(value: Variant) -> Vector2i:
