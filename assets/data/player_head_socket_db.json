@@ -22,6 +22,7 @@
       "idle": 1,
       "walk": 2,
       "attack": 38,
+      "cast": 10,
       "hit": 20,
       "death": 79
     }
@@ -3943,6 +3944,1467 @@
                   "hairAnchorCentroid": [
                     83.5606,
                     36.2121
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "cast": {
+          "frameCount": 6,
+          "directions": {
+            "N": [
+              {
+                "frame_index": 0,
+                "head_socket": [
+                  90,
+                  43
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4840,
+                  "hairHot": [
+                    23,
+                    -46
+                  ],
+                  "hairSourceSize": [
+                    8,
+                    18
+                  ],
+                  "hairSourceRgbaSha256": "38ec1d257eb214f4fe6156c70af34aca0f7607623cef6842c10e7aff64897495",
+                  "hairAnchorCentroid": [
+                    90.1944,
+                    42.8704
+                  ]
+                }
+              },
+              {
+                "frame_index": 1,
+                "head_socket": [
+                  89,
+                  43
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4841,
+                  "hairHot": [
+                    22,
+                    -45
+                  ],
+                  "hairSourceSize": [
+                    8,
+                    18
+                  ],
+                  "hairSourceRgbaSha256": "d3211c23c1908e63ac4635de48a2a16bba91628e69751402ff775a4f84fda41b",
+                  "hairAnchorCentroid": [
+                    89.2212,
+                    43.3077
+                  ]
+                }
+              },
+              {
+                "frame_index": 2,
+                "head_socket": [
+                  89,
+                  45
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4842,
+                  "hairHot": [
+                    22,
+                    -43
+                  ],
+                  "hairSourceSize": [
+                    8,
+                    17
+                  ],
+                  "hairSourceRgbaSha256": "1132a65d069802135bf23a1f742945f0643d0ff3c48cf024d24bcb04d46f0064",
+                  "hairAnchorCentroid": [
+                    89.4787,
+                    45.1277
+                  ]
+                }
+              },
+              {
+                "frame_index": 3,
+                "head_socket": [
+                  88,
+                  48
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4843,
+                  "hairHot": [
+                    21,
+                    -40
+                  ],
+                  "hairSourceSize": [
+                    8,
+                    17
+                  ],
+                  "hairSourceRgbaSha256": "8f56b134f4e02a0a8afb731e9af8eebede82bb577c9e2ebbdc520742e92c7cda",
+                  "hairAnchorCentroid": [
+                    88.23,
+                    48.01
+                  ]
+                }
+              },
+              {
+                "frame_index": 4,
+                "head_socket": [
+                  88,
+                  45
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4844,
+                  "hairHot": [
+                    21,
+                    -44
+                  ],
+                  "hairSourceSize": [
+                    8,
+                    20
+                  ],
+                  "hairSourceRgbaSha256": "410bcbdbd36f40b7408b8907bef5efab882adaa7f538eec8f9bd7ced38210af7",
+                  "hairAnchorCentroid": [
+                    88.2241,
+                    45.4569
+                  ]
+                }
+              },
+              {
+                "frame_index": 5,
+                "head_socket": [
+                  90,
+                  40
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4845,
+                  "hairHot": [
+                    23,
+                    -49
+                  ],
+                  "hairSourceSize": [
+                    8,
+                    19
+                  ],
+                  "hairSourceRgbaSha256": "3a261579c5941828bc5275aec0171d56a3af524675d2aea7ebde273e937cf42d",
+                  "hairAnchorCentroid": [
+                    90.1565,
+                    40.2087
+                  ]
+                }
+              }
+            ],
+            "NE": [
+              {
+                "frame_index": 0,
+                "head_socket": [
+                  88,
+                  41
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4848,
+                  "hairHot": [
+                    20,
+                    -46
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    16
+                  ],
+                  "hairSourceRgbaSha256": "3664d7385494ba9a1bdde41d2d13a0465ba8907c31909f1ad1efc5f69d9a1f22",
+                  "hairAnchorCentroid": [
+                    88.1333,
+                    40.7048
+                  ]
+                }
+              },
+              {
+                "frame_index": 1,
+                "head_socket": [
+                  87,
+                  41
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4849,
+                  "hairHot": [
+                    17,
+                    -46
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    17
+                  ],
+                  "hairSourceRgbaSha256": "0a32cd4efbb445f7d73dff49c3175b64c1352e4912d36d66a7ca36324a096279",
+                  "hairAnchorCentroid": [
+                    86.7679,
+                    40.6875
+                  ]
+                }
+              },
+              {
+                "frame_index": 2,
+                "head_socket": [
+                  87,
+                  43
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4850,
+                  "hairHot": [
+                    17,
+                    -44
+                  ],
+                  "hairSourceSize": [
+                    16,
+                    16
+                  ],
+                  "hairSourceRgbaSha256": "f449a6ac9a725a9f2769115688e6829e115b200fa82885c2c329ab1b6bcb1503",
+                  "hairAnchorCentroid": [
+                    86.5312,
+                    42.625
+                  ]
+                }
+              },
+              {
+                "frame_index": 3,
+                "head_socket": [
+                  85,
+                  44
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4851,
+                  "hairHot": [
+                    16,
+                    -43
+                  ],
+                  "hairSourceSize": [
+                    16,
+                    18
+                  ],
+                  "hairSourceRgbaSha256": "1bfef610e145e0f3a868d08f39c73de137a7adf5f283cbd8233271c93907d527",
+                  "hairAnchorCentroid": [
+                    84.7551,
+                    44.3673
+                  ]
+                }
+              },
+              {
+                "frame_index": 4,
+                "head_socket": [
+                  86,
+                  42
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4852,
+                  "hairHot": [
+                    17,
+                    -46
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    19
+                  ],
+                  "hairSourceRgbaSha256": "60c9c9ce0aedc13bcd696a13c4d6dd357af1e30c1c92ab790a3ae10f4e7dd9fa",
+                  "hairAnchorCentroid": [
+                    85.6638,
+                    42.3879
+                  ]
+                }
+              },
+              {
+                "frame_index": 5,
+                "head_socket": [
+                  91,
+                  39
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4853,
+                  "hairHot": [
+                    22,
+                    -48
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    17
+                  ],
+                  "hairSourceRgbaSha256": "e6cee4e5c5cd6ddc8c0a7b2269aa11ddfed50c40fa65fd15acb0c7681e102f76",
+                  "hairAnchorCentroid": [
+                    90.8783,
+                    39.0522
+                  ]
+                }
+              }
+            ],
+            "E": [
+              {
+                "frame_index": 0,
+                "head_socket": [
+                  86,
+                  39
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4856,
+                  "hairHot": [
+                    17,
+                    -47
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    15
+                  ],
+                  "hairSourceRgbaSha256": "151edc9588c3007c39038b225be9bc4e33f6b44166e20e301faf03d00ac69886",
+                  "hairAnchorCentroid": [
+                    86.2323,
+                    39.2323
+                  ]
+                }
+              },
+              {
+                "frame_index": 1,
+                "head_socket": [
+                  86,
+                  39
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4857,
+                  "hairHot": [
+                    15,
+                    -47
+                  ],
+                  "hairSourceSize": [
+                    16,
+                    13
+                  ],
+                  "hairSourceRgbaSha256": "9db400bd443d414c278a36fa90b8b2545c68fb1fa1c9bee85261af39b4d0056b",
+                  "hairAnchorCentroid": [
+                    85.9694,
+                    38.6224
+                  ]
+                }
+              },
+              {
+                "frame_index": 2,
+                "head_socket": [
+                  84,
+                  40
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4858,
+                  "hairHot": [
+                    14,
+                    -45
+                  ],
+                  "hairSourceSize": [
+                    16,
+                    15
+                  ],
+                  "hairSourceRgbaSha256": "b2dfc28a8eaaf7608610daeaa134d65fdf3d0df45cb7679965e966708edf0ec9",
+                  "hairAnchorCentroid": [
+                    83.8,
+                    40.3556
+                  ]
+                }
+              },
+              {
+                "frame_index": 3,
+                "head_socket": [
+                  82,
+                  42
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4859,
+                  "hairHot": [
+                    13,
+                    -45
+                  ],
+                  "hairSourceSize": [
+                    16,
+                    19
+                  ],
+                  "hairSourceRgbaSha256": "348d5c773cf09596d0b6928248733de2a6372fc2351191a66821a7554913f42b",
+                  "hairAnchorCentroid": [
+                    81.989,
+                    41.6484
+                  ]
+                }
+              },
+              {
+                "frame_index": 4,
+                "head_socket": [
+                  84,
+                  39
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4860,
+                  "hairHot": [
+                    15,
+                    -46
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    16
+                  ],
+                  "hairSourceRgbaSha256": "61615e424f0df960ecfa3ff53e89576c383b13671c7ffcb9c1aeec237e280e13",
+                  "hairAnchorCentroid": [
+                    83.8947,
+                    39.2632
+                  ]
+                }
+              },
+              {
+                "frame_index": 5,
+                "head_socket": [
+                  90,
+                  39
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4861,
+                  "hairHot": [
+                    21,
+                    -46
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    14
+                  ],
+                  "hairSourceRgbaSha256": "d383a994ccaf3d70722318cdc6b60cd24fbb8c69b0647b05d35be2b5074dd41f",
+                  "hairAnchorCentroid": [
+                    90.398,
+                    39.1429
+                  ]
+                }
+              }
+            ],
+            "SE": [
+              {
+                "frame_index": 0,
+                "head_socket": [
+                  85,
+                  39
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4864,
+                  "hairHot": [
+                    16,
+                    -47
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    16
+                  ],
+                  "hairSourceRgbaSha256": "b6e08753ecc6c098e4e51b9c33e9394bbb3ef84026c9bd998b05e6196bdc7c40",
+                  "hairAnchorCentroid": [
+                    84.831,
+                    38.5775
+                  ]
+                }
+              },
+              {
+                "frame_index": 1,
+                "head_socket": [
+                  85,
+                  38
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4865,
+                  "hairHot": [
+                    16,
+                    -48
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    15
+                  ],
+                  "hairSourceRgbaSha256": "04ddf54b4895554007067fb431e65fab2e6a44bb396cb8c1fed026689c5225e5",
+                  "hairAnchorCentroid": [
+                    85.4133,
+                    37.9333
+                  ]
+                }
+              },
+              {
+                "frame_index": 2,
+                "head_socket": [
+                  83,
+                  39
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4866,
+                  "hairHot": [
+                    15,
+                    -46
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    14
+                  ],
+                  "hairSourceRgbaSha256": "f96ca4f5ca9892919abd8a93e93881300ee520b62aed2a8f32a9dd9010ea84e9",
+                  "hairAnchorCentroid": [
+                    82.8276,
+                    38.9483
+                  ]
+                }
+              },
+              {
+                "frame_index": 3,
+                "head_socket": [
+                  83,
+                  40
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4867,
+                  "hairHot": [
+                    15,
+                    -46
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    14
+                  ],
+                  "hairSourceRgbaSha256": "cbd86fc3eed5f4e1cc9043f9fcf606bb452b62155e001c1a8d2a5c6cf423e2e8",
+                  "hairAnchorCentroid": [
+                    83.3611,
+                    39.7222
+                  ]
+                }
+              },
+              {
+                "frame_index": 4,
+                "head_socket": [
+                  85,
+                  38
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4868,
+                  "hairHot": [
+                    17,
+                    -47
+                  ],
+                  "hairSourceSize": [
+                    8,
+                    16
+                  ],
+                  "hairSourceRgbaSha256": "d7bdf95baae3c9225bd89ccf3667c2ecb9433f36f621a52c2395d6c9ecf1fe3d",
+                  "hairAnchorCentroid": [
+                    84.6275,
+                    37.5882
+                  ]
+                }
+              },
+              {
+                "frame_index": 5,
+                "head_socket": [
+                  87,
+                  41
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4869,
+                  "hairHot": [
+                    19,
+                    -45
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    16
+                  ],
+                  "hairSourceRgbaSha256": "5b5bc80e0eadd9962763f5e7eb18365921308f2bc164872c00d339eb344865d4",
+                  "hairAnchorCentroid": [
+                    87.3506,
+                    40.5325
+                  ]
+                }
+              }
+            ],
+            "S": [
+              {
+                "frame_index": 0,
+                "head_socket": [
+                  85,
+                  35
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4872,
+                  "hairHot": [
+                    18,
+                    -50
+                  ],
+                  "hairSourceSize": [
+                    8,
+                    16
+                  ],
+                  "hairSourceRgbaSha256": "116d29cfb282f0d141c8b92e23070e02cca5dc8e3170ec8940ea869a47a54c69",
+                  "hairAnchorCentroid": [
+                    85.3393,
+                    35.375
+                  ]
+                }
+              },
+              {
+                "frame_index": 1,
+                "head_socket": [
+                  86,
+                  35
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4873,
+                  "hairHot": [
+                    19,
+                    -49
+                  ],
+                  "hairSourceSize": [
+                    8,
+                    10
+                  ],
+                  "hairSourceRgbaSha256": "033bd95fef646a58736988b80225b0e229db0c277dd1eec5a4c4bd56ef1c1379",
+                  "hairAnchorCentroid": [
+                    85.7959,
+                    35.3878
+                  ]
+                }
+              },
+              {
+                "frame_index": 2,
+                "head_socket": [
+                  85,
+                  34
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4874,
+                  "hairHot": [
+                    19,
+                    -49
+                  ],
+                  "hairSourceSize": [
+                    8,
+                    14
+                  ],
+                  "hairSourceRgbaSha256": "b1ec4166bf718ac6ac68a7e97011c82ffcea656c1a30122c7e76929e69ce8388",
+                  "hairAnchorCentroid": [
+                    85.2692,
+                    34.3846
+                  ]
+                }
+              },
+              {
+                "frame_index": 3,
+                "head_socket": [
+                  87,
+                  38
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4875,
+                  "hairHot": [
+                    20,
+                    -48
+                  ],
+                  "hairSourceSize": [
+                    8,
+                    15
+                  ],
+                  "hairSourceRgbaSha256": "27c1353367e83ce63387d31c76724772975932132984512348f10b59b15687b0",
+                  "hairAnchorCentroid": [
+                    86.8571,
+                    37.8095
+                  ]
+                }
+              },
+              {
+                "frame_index": 4,
+                "head_socket": [
+                  87,
+                  36
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4876,
+                  "hairHot": [
+                    20,
+                    -49
+                  ],
+                  "hairSourceSize": [
+                    8,
+                    17
+                  ],
+                  "hairSourceRgbaSha256": "a143c47959c200233cf0744f147c2681715dd3a08ef8f3ea9826a86b0524cb09",
+                  "hairAnchorCentroid": [
+                    86.8421,
+                    35.8158
+                  ]
+                }
+              },
+              {
+                "frame_index": 5,
+                "head_socket": [
+                  85,
+                  38
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4877,
+                  "hairHot": [
+                    18,
+                    -47
+                  ],
+                  "hairSourceSize": [
+                    8,
+                    17
+                  ],
+                  "hairSourceRgbaSha256": "03fca4dc95dfe071d2772a81524332e19fc1c886044093cbf1ea7139b8a8a898",
+                  "hairAnchorCentroid": [
+                    84.9815,
+                    37.8889
+                  ]
+                }
+              }
+            ],
+            "SW": [
+              {
+                "frame_index": 0,
+                "head_socket": [
+                  87,
+                  34
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4880,
+                  "hairHot": [
+                    18,
+                    -51
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    13
+                  ],
+                  "hairSourceRgbaSha256": "82321c8310f639f9e2a99f9e4682f96fd3a870628aa4c4e2afbd52669938c9a8",
+                  "hairAnchorCentroid": [
+                    87.0,
+                    34.0769
+                  ]
+                }
+              },
+              {
+                "frame_index": 1,
+                "head_socket": [
+                  88,
+                  34
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4881,
+                  "hairHot": [
+                    19,
+                    -51
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    13
+                  ],
+                  "hairSourceRgbaSha256": "09cfeb809cf603fdc8698ab7d833e35b6cddb7510bae31a6f768a1a86c8f7803",
+                  "hairAnchorCentroid": [
+                    87.7429,
+                    34.4714
+                  ]
+                }
+              },
+              {
+                "frame_index": 2,
+                "head_socket": [
+                  90,
+                  37
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4882,
+                  "hairHot": [
+                    21,
+                    -49
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    14
+                  ],
+                  "hairSourceRgbaSha256": "6b44abf4e7b33d53b7a2e6844ab2b02ab1cf4539de4acdeab5e3d944df359824",
+                  "hairAnchorCentroid": [
+                    90.303,
+                    36.6667
+                  ]
+                }
+              },
+              {
+                "frame_index": 3,
+                "head_socket": [
+                  92,
+                  39
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4883,
+                  "hairHot": [
+                    22,
+                    -48
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    16
+                  ],
+                  "hairSourceRgbaSha256": "d694f21f302716b119ac7eda45ec8b5cd1af65084c9a13184c105e9eb5938c5b",
+                  "hairAnchorCentroid": [
+                    92.2239,
+                    39.1194
+                  ]
+                }
+              },
+              {
+                "frame_index": 4,
+                "head_socket": [
+                  91,
+                  37
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4884,
+                  "hairHot": [
+                    23,
+                    -49
+                  ],
+                  "hairSourceSize": [
+                    8,
+                    15
+                  ],
+                  "hairSourceRgbaSha256": "21bc3cdaa7a80a6ba2dea3c669f4c6aef4324d81f5f115551fe6e538c8083963",
+                  "hairAnchorCentroid": [
+                    91.2466,
+                    37.137
+                  ]
+                }
+              },
+              {
+                "frame_index": 5,
+                "head_socket": [
+                  85,
+                  37
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4885,
+                  "hairHot": [
+                    16,
+                    -49
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    17
+                  ],
+                  "hairSourceRgbaSha256": "cdedf38f94b570e95b4fb3a8a6bf3f4813f1d9ae9e58e83ca699b8c496e52816",
+                  "hairAnchorCentroid": [
+                    84.7397,
+                    36.5342
+                  ]
+                }
+              }
+            ],
+            "W": [
+              {
+                "frame_index": 0,
+                "head_socket": [
+                  91,
+                  36
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4888,
+                  "hairHot": [
+                    22,
+                    -49
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    13
+                  ],
+                  "hairSourceRgbaSha256": "019dcfcb9f968dadfd212ab9ae905b91fc11228aef1544819766cd5d004b5d37",
+                  "hairAnchorCentroid": [
+                    91.2809,
+                    35.573
+                  ]
+                }
+              },
+              {
+                "frame_index": 1,
+                "head_socket": [
+                  91,
+                  36
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4889,
+                  "hairHot": [
+                    21,
+                    -49
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    13
+                  ],
+                  "hairSourceRgbaSha256": "fbb993447e53694ec04dbd854d760894b962993cce6b13395133cf49b6508c9e",
+                  "hairAnchorCentroid": [
+                    90.8333,
+                    35.7857
+                  ]
+                }
+              },
+              {
+                "frame_index": 2,
+                "head_socket": [
+                  94,
+                  38
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4890,
+                  "hairHot": [
+                    21,
+                    -48
+                  ],
+                  "hairSourceSize": [
+                    16,
+                    16
+                  ],
+                  "hairSourceRgbaSha256": "50811fbdda6ccc20a4cb8c44975c3b139537ab10512af8909ce427369e055036",
+                  "hairAnchorCentroid": [
+                    93.9149,
+                    38.1383
+                  ]
+                }
+              },
+              {
+                "frame_index": 3,
+                "head_socket": [
+                  95,
+                  41
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4891,
+                  "hairHot": [
+                    21,
+                    -46
+                  ],
+                  "hairSourceSize": [
+                    16,
+                    18
+                  ],
+                  "hairSourceRgbaSha256": "547695b18a42f8da014c6be23f8d340618199238defe97713891c0cd514c21b8",
+                  "hairAnchorCentroid": [
+                    95.0526,
+                    41.3895
+                  ]
+                }
+              },
+              {
+                "frame_index": 4,
+                "head_socket": [
+                  94,
+                  39
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4892,
+                  "hairHot": [
+                    22,
+                    -47
+                  ],
+                  "hairSourceSize": [
+                    16,
+                    15
+                  ],
+                  "hairSourceRgbaSha256": "4c99f0b48452efb7fa06cc0a1d6d089104d662054d0813f3c6c015bef1327a06",
+                  "hairAnchorCentroid": [
+                    93.5,
+                    39.1222
+                  ]
+                }
+              },
+              {
+                "frame_index": 5,
+                "head_socket": [
+                  87,
+                  36
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4893,
+                  "hairHot": [
+                    17,
+                    -49
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    13
+                  ],
+                  "hairSourceRgbaSha256": "d4cea6edb57fa8977db682976c0348c5164e98529fa2a66b5e91464ee295f02b",
+                  "hairAnchorCentroid": [
+                    86.8046,
+                    35.5632
+                  ]
+                }
+              }
+            ],
+            "NW": [
+              {
+                "frame_index": 0,
+                "head_socket": [
+                  91,
+                  39
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4896,
+                  "hairHot": [
+                    23,
+                    -48
+                  ],
+                  "hairSourceSize": [
+                    8,
+                    17
+                  ],
+                  "hairSourceRgbaSha256": "0d16a57afc11f360cf00c5162a29e1146927a410bd1a8bfc40806c51e79c1381",
+                  "hairAnchorCentroid": [
+                    91.1978,
+                    38.5604
+                  ]
+                }
+              },
+              {
+                "frame_index": 1,
+                "head_socket": [
+                  91,
+                  39
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4897,
+                  "hairHot": [
+                    22,
+                    -47
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    16
+                  ],
+                  "hairSourceRgbaSha256": "da6aa74d39b0ddf965d9350a6155704ea8c474104e0e9106f732376cf449cd4d",
+                  "hairAnchorCentroid": [
+                    90.9158,
+                    38.7368
+                  ]
+                }
+              },
+              {
+                "frame_index": 2,
+                "head_socket": [
+                  92,
+                  41
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4898,
+                  "hairHot": [
+                    21,
+                    -46
+                  ],
+                  "hairSourceSize": [
+                    16,
+                    17
+                  ],
+                  "hairSourceRgbaSha256": "b647518a7112da8dfffd06df20b784e513e9a1045c5aa770d772e12a47ceff6a",
+                  "hairAnchorCentroid": [
+                    92.4369,
+                    41.3981
+                  ]
+                }
+              },
+              {
+                "frame_index": 3,
+                "head_socket": [
+                  92,
+                  45
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4899,
+                  "hairHot": [
+                    20,
+                    -43
+                  ],
+                  "hairSourceSize": [
+                    16,
+                    18
+                  ],
+                  "hairSourceRgbaSha256": "6692c396d25b26ac78b4bc73153e117160a575241f5b48439a769d6f15cea715",
+                  "hairAnchorCentroid": [
+                    92.3469,
+                    44.5714
+                  ]
+                }
+              },
+              {
+                "frame_index": 4,
+                "head_socket": [
+                  91,
+                  42
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4900,
+                  "hairHot": [
+                    20,
+                    -46
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    19
+                  ],
+                  "hairSourceRgbaSha256": "af8d80a3b337a02481b748591ff885b7687bafddd13857ceea18efa7d24838ae",
+                  "hairAnchorCentroid": [
+                    91.213,
+                    42.4722
+                  ]
+                }
+              },
+              {
+                "frame_index": 5,
+                "head_socket": [
+                  89,
+                  37
+                ],
+                "coordinateSpace": "body_cell_integer_pixels",
+                "status": "calibrated_primary_hair_same_frame",
+                "evidence": {
+                  "derivation": "round_same_frame_hair_alpha_centroid",
+                  "sourceManifest": "res://assets/data/equipment_male_world_helmet.json",
+                  "sourceManifestSha256": "b0b5d028e2368a8b40fa91df46157332a85ffe4ed8a4345eb635648946899313",
+                  "hairLibrary": "res://dev_art_sources/external/mir2opensource_full/Data/Hair.wil",
+                  "hairLibrarySha256": "9f3dcbf07bfa277923f0d3962aaff3f5dc781b8cbf6eea044165b20c9940276f",
+                  "hairSourceIndex": 4901,
+                  "hairHot": [
+                    19,
+                    -50
+                  ],
+                  "hairSourceSize": [
+                    12,
+                    17
+                  ],
+                  "hairSourceRgbaSha256": "4d6ad0987485a3fd392454598b380feafa24a3925d3848b206734f995834b275",
+                  "hairAnchorCentroid": [
+                    88.598,
+                    36.598
                   ]
                 }
               }
