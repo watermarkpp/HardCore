@@ -55,6 +55,11 @@ def main() -> None:
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     assert manifest["contractId"] == "equipment.paper_doll.original_client_stage.v1"
     assert manifest["sex"] == "male"
+    assert manifest["presentationRole"] == "legacy_audit_full_panel"
+    assert manifest["forbiddenForPlayerUI"] is True
+    assert manifest["presentationModesRef"].endswith(
+        "equipment_paper_doll_presentation_modes.json"
+    )
     assert manifest["canvasSize"] == [232, 325]
     assert manifest["viewportOrigin"] == [0, 0]
     assert manifest["viewportBounds"] == [0, 0, 232, 325]

@@ -2,6 +2,9 @@
   "schemaVersion": 1,
   "contractId": "equipment.paper_doll.original_client_stage.v1",
   "sex": "male",
+  "presentationRole": "legacy_audit_full_panel",
+  "forbiddenForPlayerUI": true,
+  "presentationModesRef": "res://assets/data/equipment_paper_doll_presentation_modes.json",
   "sourcePolicy": {
     "sourceCode": "MirClient/FState.pas::TFrmDlg.DStateWinDirectPaint (equipment StatePage=0)",
     "sourceCodePath": "reference/original_gameofmir/MirClient/FState.pas:2896-2969",
