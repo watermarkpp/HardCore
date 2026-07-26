@@ -1,0 +1,140 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tools/helmet_calibration_tool.gd" type="Script" id="1"]
+
+[node name="HelmetCalibrationTool" type="Node"]
+script = ExtResource("1")
+
+[node name="CalibrationUI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="CalibrationUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="CalibrationUI/Panel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="CalibrationUI/Panel/VBox"]
+layout_mode = 2
+text = "PlayerVisual Helmet V2 — Item 146 Calibration"
+
+[node name="Inputs" type="HBoxContainer" parent="CalibrationUI/Panel/VBox"]
+layout_mode = 2
+
+[node name="ActionLabel" type="Label" parent="CalibrationUI/Panel/VBox/Inputs"]
+layout_mode = 2
+text = "Action"
+
+[node name="Action" type="OptionButton" parent="CalibrationUI/Panel/VBox/Inputs"]
+layout_mode = 2
+
+[node name="DirectionLabel" type="Label" parent="CalibrationUI/Panel/VBox/Inputs"]
+layout_mode = 2
+text = "Direction"
+
+[node name="Direction" type="OptionButton" parent="CalibrationUI/Panel/VBox/Inputs"]
+layout_mode = 2
+
+[node name="FrameLabel" type="Label" parent="CalibrationUI/Panel/VBox/Inputs"]
+layout_mode = 2
+text = "Frame"
+
+[node name="Frame" type="SpinBox" parent="CalibrationUI/Panel/VBox/Inputs"]
+layout_mode = 2
+min_value = 0.0
+max_value = 5.0
+step = 1.0
+
+[node name="ZoomLabel" type="Label" parent="CalibrationUI/Panel/VBox/Inputs"]
+layout_mode = 2
+text = "Head Zoom"
+
+[node name="Zoom" type="OptionButton" parent="CalibrationUI/Panel/VBox/Inputs"]
+layout_mode = 2
+
+[node name="Previews" type="HBoxContainer" parent="CalibrationUI/Panel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="FullColumn" type="VBoxContainer" parent="CalibrationUI/Panel/VBox/Previews"]
+custom_minimum_size = Vector2(256, 300)
+layout_mode = 2
+
+[node name="FullLabel" type="Label" parent="CalibrationUI/Panel/VBox/Previews/FullColumn"]
+layout_mode = 2
+text = "Full person 1x"
+
+[node name="FullPersonPreview" type="TextureRect" parent="CalibrationUI/Panel/VBox/Previews/FullColumn"]
+custom_minimum_size = Vector2(256, 256)
+layout_mode = 2
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 0
+
+[node name="HeadColumn" type="VBoxContainer" parent="CalibrationUI/Panel/VBox/Previews"]
+custom_minimum_size = Vector2(520, 550)
+layout_mode = 2
+
+[node name="HeadLabel" type="Label" parent="CalibrationUI/Panel/VBox/Previews/HeadColumn"]
+layout_mode = 2
+text = "Head nearest-neighbour 8x/10x"
+
+[node name="HeadPreview" type="TextureRect" parent="CalibrationUI/Panel/VBox/Previews/HeadColumn"]
+custom_minimum_size = Vector2(512, 512)
+layout_mode = 2
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 0
+
+[node name="Layers" type="HBoxContainer" parent="CalibrationUI/Panel/VBox"]
+layout_mode = 2
+
+[node name="FaceMask" type="CheckButton" parent="CalibrationUI/Panel/VBox/Layers"]
+layout_mode = 2
+button_pressed = true
+text = "Face overlay"
+
+[node name="HairMask" type="CheckButton" parent="CalibrationUI/Panel/VBox/Layers"]
+layout_mode = 2
+button_pressed = true
+text = "Hair overlay"
+
+[node name="HelmetBack" type="CheckButton" parent="CalibrationUI/Panel/VBox/Layers"]
+layout_mode = 2
+button_pressed = true
+text = "Helmet back"
+
+[node name="HelmetFront" type="CheckButton" parent="CalibrationUI/Panel/VBox/Layers"]
+layout_mode = 2
+button_pressed = true
+text = "Helmet front"
+
+[node name="OcclusionMask" type="CheckButton" parent="CalibrationUI/Panel/VBox/Layers"]
+layout_mode = 2
+button_pressed = true
+text = "Occlusion result"
+
+[node name="Commands" type="HBoxContainer" parent="CalibrationUI/Panel/VBox"]
+layout_mode = 2
+
+[node name="Save" type="Button" parent="CalibrationUI/Panel/VBox/Commands"]
+layout_mode = 2
+text = "Save formal override (S)"
+
+[node name="Lock" type="Button" parent="CalibrationUI/Panel/VBox/Commands"]
+layout_mode = 2
+text = "Lock direction (L)"
+
+[node name="Legend" type="Label" parent="CalibrationUI/Panel/VBox"]
+layout_mode = 2
+text = "Cyan X = body head socket; magenta + = helmet local pivot after placement; arrows nudge exactly 1 px."

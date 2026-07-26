@@ -23,6 +23,7 @@ def main() -> None:
     checks: dict[str, bool] = {}
 
     checks["requiredLanesPresent"] = set(policy["lanes"]) == {
+        "skills",
         "equipment_attributes",
         "client_assets",
         "client_rules",
@@ -78,6 +79,35 @@ def main() -> None:
         "equipment_hand_weight",
         "equipment_wear_weight",
     }
+    skill_primary = active_sources(policy, "skills")[0]
+    checks["skillsPrimaryIsUserAuthorizedContract"] = all([
+        skill_primary["distribution"] == "project.hardcore.mir2_176_skill_sot.v1.0.1",
+        skill_primary.get("catalogRequired") is False,
+        skill_primary.get("contractId") == "skills.mir2_176.vanilla_33.v1.0.1",
+        skill_primary.get("sourceKind") == "explicit_user_primary_override",
+        skill_primary.get("packageEvidenceSha256")
+        == "2DAC78D285DFF8D5F1BA36A8B83E0E8F11C70B76ACE15A34EE7FBFB802862A22",
+        skill_primary.get("contractEvidenceSha256")
+        == "275555E9F879969E4BB4BECFC268E0ED0912B7D79EF6DEA89731FE43DB0562F7",
+        len(str(skill_primary.get("packageEvidenceSha256", ""))) == 64,
+        len(str(skill_primary.get("contractEvidenceSha256", ""))) == 64,
+    ])
+    checks["skillsExcludedFromGenericSources"] = all([
+        set(policy["lanes"]["skills"]["scopeExclusions"]["server_data"]) == {
+            "vanilla_skill_membership",
+            "vanilla_skill_progression",
+            "vanilla_skill_mp",
+            "vanilla_skill_targeting",
+            "vanilla_skill_resources",
+        },
+        set(policy["lanes"]["skills"]["scopeExclusions"]["server_rules"]) == {
+            "vanilla_skill_formula_identity",
+            "vanilla_skill_geometry",
+            "vanilla_skill_timing",
+            "vanilla_skill_proficiency",
+            "vanilla_skill_state_machine",
+        },
+    ])
     checks["rulePrimariesAreARated"] = all(
         catalog_entries[active_sources(policy, lane)[0]["distribution"]]["confidence"] == "A-rule-source"
         for lane in ["client_rules", "server_rules"]

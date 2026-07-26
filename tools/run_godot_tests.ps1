@@ -14,6 +14,7 @@ $ProcessPath = [Environment]::GetEnvironmentVariable('Path', 'Process')
 [Environment]::SetEnvironmentVariable('Path', $ProcessPath, 'Process')
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $Godot = Join-Path $ProjectRoot 'tools\godot-4.7\Godot_v4.7-stable_win64_console.exe'
+$GodotDirectory = Split-Path -Parent $Godot
 $LogRoot = Join-Path $ProjectRoot 'outputs\test_logs'
 $RuntimeAppData = Join-Path $ProjectRoot '.godot\runtime_appdata'
 
@@ -49,6 +50,10 @@ $Suites = @{
 		'tests/warrior_wear_mapping_test.tscn',
         'tests/warrior_service_formula_test.tscn',
         'tests/warrior_skill_state_machine_test.tscn',
+        'tests/caster_spell_action_timing_test.tscn',
+        'tests/skill_runtime_integration_test.tscn',
+        'tests/canonical_skill_production_entry_test.tscn',
+        'tests/skill_progression_save_integration_test.tscn',
         'tests/warrior_client_art_test.tscn',
         'tests/skill_combat_profile_test.tscn',
         'tests/warrior_attack_timing_test.tscn',
@@ -125,9 +130,35 @@ if (-not (Test-Path -LiteralPath $Godot)) {
     throw "Godot不存在：$Godot"
 }
 New-Item -ItemType Directory -Path $LogRoot -Force | Out-Null
-$BaselineGodotIds = @(Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -like 'Godot*' } | Select-Object -ExpandProperty Id)
 
-function Stop-NewGodotProcesses {
+function Get-WorktreeGodotProcesses {
+    return @(Get-Process -ErrorAction SilentlyContinue | Where-Object {
+        if ($_.ProcessName -notlike 'Godot*' -or -not $_.Path) {
+            return $false
+        }
+        return (Split-Path -Parent $_.Path) -eq $GodotDirectory
+    })
+}
+
+$BaselineGodotIds = @(Get-WorktreeGodotProcesses | Select-Object -ExpandProperty Id)
+
+function Stop-NewGodotProcesses([int]$GraceMilliseconds = 0) {
+    if ($GraceMilliseconds -gt 0) {
+        $graceDeadline = [DateTime]::UtcNow.AddMilliseconds($GraceMilliseconds)
+        $quietSince = $null
+        while ([DateTime]::UtcNow -lt $graceDeadline) {
+            if (@(Get-NewGodotProcesses).Count -eq 0) {
+                if ($null -eq $quietSince) {
+                    $quietSince = [DateTime]::UtcNow
+                } elseif (([DateTime]::UtcNow - $quietSince).TotalMilliseconds -ge 300) {
+                    return
+                }
+            } else {
+                $quietSince = $null
+            }
+            Start-Sleep -Milliseconds 100
+        }
+    }
     $newProcesses = @(Get-NewGodotProcesses)
     foreach ($newProcess in $newProcesses) {
         Stop-TestProcessTree -ProcessId $newProcess.Id
@@ -135,9 +166,7 @@ function Stop-NewGodotProcesses {
 }
 
 function Get-NewGodotProcesses {
-    return @(Get-Process -ErrorAction SilentlyContinue | Where-Object {
-        $_.ProcessName -like 'Godot*' -and $_.Id -notin $BaselineGodotIds
-    })
+    return @(Get-WorktreeGodotProcesses | Where-Object { $_.Id -notin $BaselineGodotIds })
 }
 
 $SelectedTests = if ($TestPaths.Count -gt 0) { $TestPaths } else { $Suites[$Suite] }
@@ -155,6 +184,7 @@ foreach ($testPath in $SelectedTests) {
         -WorkingDirectory $ProjectRoot -WindowStyle Hidden `
         -RedirectStandardOutput $stdout -RedirectStandardError $stderr -PassThru
     $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
+    $wrapperExitWithoutChildSince = $null
     $earlyFailure = $false
     $hasPassMarker = $false
     while ([DateTime]::UtcNow -lt $deadline) {
@@ -174,14 +204,27 @@ foreach ($testPath in $SelectedTests) {
         # Godot process. Keep waiting while that child is still running instead
         # of treating the wrapper exit as the end of the test.
         if ($process.HasExited -and @(Get-NewGodotProcesses).Count -eq 0) {
-            break
+            if ($null -eq $wrapperExitWithoutChildSince) {
+                $wrapperExitWithoutChildSince = [DateTime]::UtcNow
+            } elseif (
+                ([DateTime]::UtcNow - $wrapperExitWithoutChildSince).TotalMilliseconds -ge 1000
+            ) {
+                break
+            }
+        } else {
+            $wrapperExitWithoutChildSince = $null
         }
     }
     $timedOut = -not $earlyFailure -and -not $hasPassMarker -and [DateTime]::UtcNow -ge $deadline
     if ($timedOut) {
         Stop-TestProcessTree -ProcessId $process.Id
     }
-    Stop-NewGodotProcesses
+    # A passing scene asks Godot to quit, but on Windows the console wrapper
+    # can print the PASS marker before the child process has fully released its
+    # handles. Give that child a short natural-exit window before force cleanup;
+    # otherwise the next headless launch can be killed during process handoff.
+    $graceMilliseconds = if ($hasPassMarker -and -not $earlyFailure -and -not $timedOut) { 2000 } else { 0 }
+    Stop-NewGodotProcesses -GraceMilliseconds $graceMilliseconds
     $outText = if (Test-Path -LiteralPath $stdout) { Get-Content -LiteralPath $stdout -Raw -ErrorAction SilentlyContinue } else { '' }
     $errText = if (Test-Path -LiteralPath $stderr) { Get-Content -LiteralPath $stderr -Raw -ErrorAction SilentlyContinue } else { '' }
     $hasPassMarker = $outText -match '[A-Z0-9_]+_PASS'

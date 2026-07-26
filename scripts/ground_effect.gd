@@ -20,13 +20,15 @@ var duration := 4.0
 var tick_interval := 0.8
 var effect_color := Color(1.0, 0.25, 0.05)
 var skill_id := ""
+var source_actor: Node2D
+var runtime_tick_adapter := Callable()
 var _tick_timer := 0.0
 var _sprite: Sprite2D
 
 
 func setup(position_value: Vector2, damage_value: int, radius_value: float, duration_value: float, color: Color, source_skill_id := "", tick_interval_value := 0.8) -> void:
 	global_position = position_value
-	damage = maxi(1, damage_value)
+	damage = maxi(0, damage_value)
 	radius = maxf(20.0, radius_value)
 	duration = maxf(0.1, duration_value)
 	tick_interval = maxf(0.05, tick_interval_value)
@@ -40,6 +42,11 @@ func _ready() -> void:
 	add_to_group("zone_content")
 	_install_visual()
 	queue_redraw()
+
+
+func configure_runtime_resolution(caster: Node2D, tick_adapter: Callable) -> void:
+	source_actor = caster
+	runtime_tick_adapter = tick_adapter
 
 
 func _install_visual() -> void:
@@ -59,7 +66,10 @@ func _physics_process(delta: float) -> void:
 		_tick_timer = tick_interval
 		for node: Node in get_tree().get_nodes_in_group("enemies"):
 			if node is EnemyActor and not node.is_queued_for_deletion() and global_position.distance_to(node.global_position) <= radius:
-				node.take_damage(damage)
+				if runtime_tick_adapter.is_valid():
+					runtime_tick_adapter.call(node, damage)
+				else:
+					node.take_damage(damage, source_actor)
 	if duration <= 0.0:
 		queue_free()
 	queue_redraw()

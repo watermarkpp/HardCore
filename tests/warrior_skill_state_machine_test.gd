@@ -27,48 +27,26 @@ func _run() -> void:
 	assert(player.request_skill("半月弯刀") and player.half_moon_enabled, "半月开关没有开启")
 	var mp_before_half := player.current_mp
 	var half_context := player._build_warrior_attack_context()
-	assert(half_context.mode == "half_moon" and player.current_mp == mp_before_half - 3, "半月没有优先刺杀或没有逐刀消耗3MP")
+	assert(half_context.mode == "half_moon" and player.current_mp == mp_before_half, "半月开关不应在Router执行前预扣MP")
 	assert(player.request_skill("半月弯刀") and not player.half_moon_enabled, "半月开关没有关闭")
 
-	player.set_test_combat_time_ms(-1)
-	assert(player.restore_warrior_runtime_state({
-		"contract_id": "gameplay.warrior.skill_runtime.v2",
-		"toggles": {"warrior.fire_sword.auto_enabled": false},
-		"cooldowns": {"warrior.fire_sword.ready_remaining_ms": 0},
-	}), "零冷却战士技能快照无法恢复")
-	player.set_test_combat_time_ms(1000)
-	assert(player.warrior_state_snapshot().fire_ready_remaining_ms == 0, "零剩余冷却跨时钟域恢复后不应进入等待")
 	var mp_before_fire := player.current_mp
-	assert(player.request_skill("烈火剑法") and player.fire_sword_auto_enabled, "烈火自动释放开关没有开启")
-	assert(not player.fire_sword_armed and player.current_mp == mp_before_fire, "开启烈火自动释放时不应蓄力或消耗魔法")
-	var no_target_context := player._build_warrior_attack_context(false)
-	assert(no_target_context.mode != "fire" and player.current_mp == mp_before_fire, "没有可命中目标时烈火错误消耗")
-	var fire_context := player._build_warrior_attack_context(true)
-	assert(fire_context.mode == "fire" and player.fire_sword_auto_enabled, "烈火没有在普通攻击循环中自动释放")
-	assert(player.current_mp == mp_before_fire - 7, "烈火自动释放没有按次消耗7MP")
-	var cooldown_context := player._build_warrior_attack_context(true)
-	assert(cooldown_context.mode != "fire", "烈火冷却期间错误重复释放")
-	player.set_test_combat_time_ms(11000)
-	var second_fire_context := player._build_warrior_attack_context(true)
-	assert(second_fire_context.mode == "fire", "烈火冷却结束后没有自动再次释放")
+	player._attack_timer = 0.0
+	assert(player.request_skill("烈火剑法"), "烈火SOT显式充能无法开始")
+	assert(not player.fire_sword_auto_enabled and player.current_mp == mp_before_fire, "烈火不应恢复旧auto或在Router前预扣MP")
+	assert(is_equal_approx(player._attack_action_timer, 0.6) and is_equal_approx(player._attack_timer, 8.0), "烈火600ms身体动作与8秒冷却未隔离")
+	await get_tree().create_timer(0.65).timeout
+	assert(game._canonical_fire_charge_expires_ms > Time.get_ticks_msec(), "烈火Router结果未建立一次性充能")
+	assert(player.current_mp == mp_before_fire - 7, "烈火Router未唯一提交7MP")
 	var saved_runtime := player.warrior_runtime_state_for_save()
 	assert(saved_runtime.contract_id == "gameplay.warrior.skill_runtime.v2", "战士技能运行时存档契约不稳定")
-	assert(saved_runtime.toggles["warrior.fire_sword.auto_enabled"], "烈火自动开关没有进入兼容存档快照")
-	assert(player.request_skill("烈火剑法") and not player.fire_sword_auto_enabled, "再次点击没有关闭烈火自动释放")
-	assert(player.restore_warrior_runtime_state(saved_runtime) and player.fire_sword_auto_enabled, "烈火自动开关无法从兼容快照恢复")
-	assert(player.warrior_state_snapshot().fire_ready_remaining_ms == 10000, "烈火冷却剩余时间没有稳定恢复")
-	player.set_test_combat_time_ms(21000)
-	player.current_mp = 6
-	var insufficient_mana_context := player._build_warrior_attack_context(true)
-	assert(insufficient_mana_context.mode != "fire" and player.fire_sword_auto_enabled, "资源不足时烈火应保持开启并等待后续普通攻击")
+	assert(not saved_runtime.toggles["warrior.fire_sword.auto_enabled"], "烈火旧auto状态未从兼容存档清理")
+	game._canonical_fire_charge_expires_ms = 0
+	player.fire_sword_armed = false
 
 	PlayerState.learned_skills = {"攻杀剑术": 3}
-	player.set_combat_seed(176)
-	var proc_count := 0
-	for _attack in range(WarriorCombatMath.slaying_proc_cycle(3)):
-		if player._next_slaying_proc():
-			proc_count += 1
-	assert(proc_count == 1, "三级攻杀每4刀周期必须且只能触发一次")
+	var ordinary_context := player._build_warrior_attack_context(true)
+	assert(ordinary_context.mode == "normal", "Player仍在Router之前用旧攻杀周期门控普通攻击")
 
 	PlayerState.learned_skills = {"刺杀剑术": 3, "半月弯刀": 3, "野蛮冲撞": 3}
 	player.thrusting_enabled = true
@@ -107,7 +85,7 @@ func _run() -> void:
 	assert(game._execute_wild_rush(Vector2.RIGHT, 3), "三级野蛮在开阔地没有移动")
 	assert(player.global_position.x > player_rush_origin.x and rush_target.global_position.x > rush_origin.x, "野蛮没有同时推进玩家和低级目标")
 
-	print("WARRIOR_SKILL_STATE_MACHINE_PASS：攻杀周期、刺杀/半月开关、烈火自动开关与野蛮冲撞状态机正常")
+	print("WARRIOR_SKILL_STATE_MACHINE_PASS：攻杀Router、刺杀/半月开关、烈火SOT显式充能与野蛮冲撞正常")
 	get_tree().quit(0)
 
 

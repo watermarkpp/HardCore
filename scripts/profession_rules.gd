@@ -89,7 +89,7 @@ const SKILL_PROFILES := {
 }
 
 # 手机战斗与动画共用时序基线。当前为运行时候选值，后续按可靠资料逐项替换。
-const CASTER_SPELL_ACTION_DURATION := 0.36
+const CASTER_SPELL_ACTION_DURATION := 0.60
 const CAST_DEFAULTS := {
 	"passive": {"target_mode": "self", "windup": 0.0, "hit_frame": 0, "cooldown": 0.0, "area_radius": 0.0},
 	"melee": {"target_mode": "single", "windup": 0.25, "hit_frame": 3, "cooldown": 0.55, "area_radius": 0.0},
@@ -255,11 +255,11 @@ static func skill_combat_profile(skill_name: String, learned_level := -1) -> Dic
 	else:
 		profile["verification"] = "未识别职业的兼容档案"
 	if stable_profession_id in ["wizard", "taoist"] and cast_type != "passive":
-		# MirClient/Actor.pas HA.ActSpell: 6 visible frames × 60ms.
-		# This body action is independent from the effect windup and skill cooldown.
+		# Canonical CN MIR2 1.76 SOT: HA.ActSpell is 6 visible frames × 100ms.
+		# The 600ms body lock is independent from effect windup and skill cooldown.
 		profile["action_duration"] = CASTER_SPELL_ACTION_DURATION
 		profile["action_frame_count"] = 6
-		profile["action_frame_time_ms"] = 60
+		profile["action_frame_time_ms"] = 100
 	return profile
 
 
