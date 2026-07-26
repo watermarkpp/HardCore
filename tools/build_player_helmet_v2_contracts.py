@@ -234,8 +234,19 @@ def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
         action: f"res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_{action}.png"
         for action in HELMET_ACTIONS
     }
-    # The concept's slot 0 is visibly front and slot 4 is visibly back.
-    elf_map = {"N": 4, "NE": 3, "E": 2, "SE": 1, "S": 0, "SW": 7, "W": 6, "NW": 5}
+    # User-calibrated source semantics. Row 3 is the only unused duplicate
+    # slot and is replaced at bake time by the explicitly authorized,
+    # pivot-aligned horizontal mirror of the accepted NE source in row 5.
+    elf_source_map = {
+        "N": 4, "NE": 5, "E": 6, "SE": 1,
+        "S": 0, "SW": 7, "W": 2, "NW": 3,
+    }
+    # Preserve the existing local-pivot records while the item 146 pilot is
+    # being calibrated. Runtime direction selection is supplied by overrides.
+    elf_pivot_compat_map = {
+        "N": 4, "NE": 3, "E": 2, "SE": 1,
+        "S": 0, "SW": 7, "W": 6, "NW": 5,
+    }
     black_map = {direction: row for row, direction in enumerate(DIRECTIONS)}
     opening = {
         "N": "none",
@@ -250,10 +261,10 @@ def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
     elf_directions: dict[str, dict] = {}
     black_directions: dict[str, dict] = {}
     for direction in DIRECTIONS:
-        source_direction = DIRECTIONS[elf_map[direction]]
+        source_direction = DIRECTIONS[elf_pivot_compat_map[direction]]
         elf_directions[direction] = direction_record(
             direction,
-            elf_map[direction],
+            elf_pivot_compat_map[direction],
             elf_paths,
             pivots_for_source_direction(frames, source_direction),
             "open_crown",
@@ -341,7 +352,21 @@ def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
                     ),
                     "poseEvidence": "res://assets/data/equipment_male_world_helmet.json",
                 },
-                "source_direction_map": elf_map,
+                "source_direction_map": elf_source_map,
+                "bakedSourceOverrides": {
+                    "recipeId": "elf_146.user_authorized_nw_mirror.v1",
+                    "runtimeFlip": False,
+                    "rows": {
+                        "3": {
+                            "direction": "NW",
+                            "sourceRow": 5,
+                            "sourceDirection": "NE",
+                            "operation": "horizontal_mirror",
+                            "alignment": "source_pivot_to_target_pivot",
+                            "authorization": "user_explicit_2026-07-26",
+                        }
+                    },
+                },
                 "directions": elf_directions,
             },
             "black_iron_golden_151": {
@@ -477,9 +502,10 @@ def build_audit() -> dict:
                 "topic": "helmet_source_direction_order",
                 "result": (
                     "Elf concept slot 0 is visibly front and slot 4 back; explicit "
-                    "canonical remap is N..NW = 4,3,2,1,0,7,6,5."
+                    "user-calibrated remap is N..NW = 4,5,6,1,0,7,2,3; "
+                    "row 3 NW is a user-authorized baked mirror of row 5 NE."
                 ),
-                "status": "mapping_error_confirmed",
+                "status": "user_corrected_and_baked",
             },
             {
                 "id": 3,

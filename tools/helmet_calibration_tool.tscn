@@ -110,6 +110,12 @@ suffix = "%"
 layout_mode = 2
 text = "+"
 
+[node name="SaveAll" type="Button" parent="CalibrationUI/Panel/VBox/Inputs"]
+custom_minimum_size = Vector2(190, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 1, 0.62, 1)
+text = "保存全部改动"
+
 [node name="MappingStatus" type="HBoxContainer" parent="CalibrationUI/Panel/VBox"]
 layout_mode = 2
 

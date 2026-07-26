@@ -74,13 +74,27 @@
       },
       "source_direction_map": {
         "N": 4,
-        "NE": 3,
-        "E": 2,
+        "NE": 5,
+        "E": 6,
         "SE": 1,
         "S": 0,
         "SW": 7,
-        "W": 6,
-        "NW": 5
+        "W": 2,
+        "NW": 3
+      },
+      "bakedSourceOverrides": {
+        "recipeId": "elf_146.user_authorized_nw_mirror.v1",
+        "runtimeFlip": false,
+        "rows": {
+          "3": {
+            "direction": "NW",
+            "sourceRow": 5,
+            "sourceDirection": "NE",
+            "operation": "horizontal_mirror",
+            "alignment": "source_pivot_to_target_pivot",
+            "authorization": "user_explicit_2026-07-26"
+          }
+        }
       },
       "directions": {
         "N": {

@@ -282,7 +282,10 @@ static func action_texture_path(
 		)
 		if derived is Dictionary:
 			var derived_path := str(derived.get(action, ""))
-			if not derived_path.is_empty():
+			if (
+				not derived_path.is_empty()
+				and FileAccess.file_exists(derived_path)
+			):
 				return derived_path
 	return base_action_texture_path(item_id, action, direction_row, layer_name)
 
@@ -335,7 +338,8 @@ static func persist_uniform_scale_bake(
 	percent: int,
 	derived_atlases: Dictionary,
 	source_sha256: Dictionary,
-	derived_sha256: Dictionary
+	derived_sha256: Dictionary,
+	source_recipe_id: String = "primary_source_rows.v1"
 ) -> bool:
 	if (
 		is_read_only(item_id)
@@ -379,6 +383,7 @@ static func persist_uniform_scale_bake(
 			"castPivotUsesSameFramePrimaryHairEvidence": true,
 			"runtimeScale": [1, 1],
 			"sourceAtlasModified": false,
+			"sourceRecipeId": source_recipe_id,
 		},
 	}
 	data["visualAssetOverrides"] = assets

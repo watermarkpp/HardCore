@@ -131,6 +131,11 @@ func _run() -> void:
 	var scale_spin := editor.get_node(
 		"CalibrationUI/Panel/VBox/Inputs/Scale"
 	) as SpinBox
+	var save_all := editor.get_node(
+		"CalibrationUI/Panel/VBox/Inputs/SaveAll"
+	) as Button
+	assert(save_all.text == "保存全部改动")
+	assert(save_all.focus_mode == Control.FOCUS_NONE)
 	var menu_state_before := {
 		"item": item_menu.selected,
 		"action": action_menu.selected,
@@ -177,6 +182,7 @@ func _run() -> void:
 	target_ne.emit_signal("pressed")
 	assert(editor.current_direction == 1)
 	assert(target_ne.button_pressed)
+	var formal_ne_before := HelmetVisualV2.saved_direction_override(146, 1)
 
 	# Every source thumbnail is the actual source atlas row advertised in metadata.
 	for row: int in 8:
@@ -187,10 +193,66 @@ func _run() -> void:
 			button.texture_normal.get_image().get_data()
 			== expected.get_data()
 		)
+	assert(HelmetVisualV2.source_direction_for_row(146, 3) == "NW")
+	assert(HelmetVisualV2.source_direction_for_row(146, 5) == "NE")
+	var recipe: Dictionary = HelmetVisualV2.visual_asset_for_item(146).get(
+		"bakedSourceOverrides", {}
+	)
+	assert(str(recipe.get("recipeId", "")) == (
+		"elf_146.user_authorized_nw_mirror.v1"
+	))
+	assert(not bool(recipe.get("runtimeFlip", true)))
+	var raw_idle := (load(
+		HelmetVisualV2.base_action_texture_path(
+			146, "idle", 0, "helmet_front"
+		)
+	) as Texture2D).get_image()
+	var raw_row_3 := raw_idle.get_region(Rect2i(
+		0,
+		3 * ArtSpec.WARRIOR_FRAME.y,
+		ArtSpec.WARRIOR_FRAME.x,
+		ArtSpec.WARRIOR_FRAME.y
+	))
+	var raw_row_5 := raw_idle.get_region(Rect2i(
+		0,
+		5 * ArtSpec.WARRIOR_FRAME.y,
+		ArtSpec.WARRIOR_FRAME.x,
+		ArtSpec.WARRIOR_FRAME.y
+	))
+	var baked_nw: Image = editor.calibration_source_cell("idle", 3, 0)
+	assert(baked_nw.get_data() != raw_row_3.get_data())
+	assert(baked_nw.get_data() != raw_row_5.get_data())
+	var expected_nw: Image = editor.mirror_cell_between_pivots(
+		raw_row_5,
+		HelmetVisualV2.pivot_for_source_row(146, "idle", 5, 0),
+		HelmetVisualV2.pivot_for_source_row(146, "idle", 3, 0)
+	)
+	assert(baked_nw.get_data() == expected_nw.get_data())
+
+	# The full-person and enlarged-head previews must use the same baked row 3
+	# as the source thumbnail, never the unchanged row 3 in the primary atlas.
+	editor._configure_runtime("idle", 7, 0)
+	var runtime_nw: Image = editor._runtime_layer_cell("ClientHelmetLayer")
+	var derived_idle_path := HelmetVisualV2.action_texture_path(
+		146, "idle", 7, "helmet_front"
+	)
+	assert(FileAccess.file_exists(derived_idle_path))
+	var derived_idle: Image = Image.load_from_file(derived_idle_path)
+	var derived_nw: Image = derived_idle.get_region(Rect2i(
+		0,
+		3 * ArtSpec.WARRIOR_FRAME.y,
+		ArtSpec.WARRIOR_FRAME.x,
+		ArtSpec.WARRIOR_FRAME.y
+	))
+	assert(runtime_nw.get_data() == derived_nw.get_data())
+	assert(runtime_nw.get_data() != raw_row_3.get_data())
 
 	# Mouse source-row selection maps the current target through explicit semantics.
 	var source_row_zero := source_grid.get_node("Source_Row0") as TextureButton
 	source_row_zero.emit_signal("pressed")
+	var mapped_nudge_before := _vector(
+		HelmetVisualV2.direction_record(146, 1).get("nudge", [])
+	)
 	var mapped := HelmetVisualV2.direction_record(146, 1)
 	assert(int(mapped.get("source_row", -1)) == 0)
 	assert(str(mapped.get("source_direction", "")) == "S")
@@ -209,7 +271,10 @@ func _run() -> void:
 		"CalibrationUI/Panel/VBox/Commands/NudgeUp"
 	).emit_signal("pressed")
 	mapped = HelmetVisualV2.direction_record(146, 1)
-	assert(_vector(mapped.get("nudge", [])) == Vector2i(1, -1))
+	assert(
+		_vector(mapped.get("nudge", []))
+		== mapped_nudge_before + Vector2i(1, -1)
+	)
 	assert("DIRTY" in str(editor.get_node(
 		"CalibrationUI/Panel/VBox/MappingStatus/State"
 	).text))
@@ -219,8 +284,14 @@ func _run() -> void:
 		"CalibrationUI/Panel/VBox/Commands/Undo"
 	).emit_signal("pressed")
 	mapped = HelmetVisualV2.direction_record(146, 1)
-	assert(int(mapped.get("source_row", -1)) == 3)
-	assert(_vector(mapped.get("nudge", [])) == Vector2i.ZERO)
+	assert(
+		int(mapped.get("source_row", -1))
+		== int(formal_ne_before.get("source_row", 3))
+	)
+	assert(
+		_vector(mapped.get("nudge", []))
+		== _vector(formal_ne_before.get("nudge", [0, 0]))
+	)
 
 	# Reapply, then save through the visible button and verify reload parity.
 	source_row_zero.emit_signal("pressed")
@@ -232,7 +303,10 @@ func _run() -> void:
 	mapped = HelmetVisualV2.direction_record(146, 1)
 	assert(int(mapped.get("source_row", -1)) == 0)
 	assert(str(mapped.get("source_direction", "")) == "S")
-	assert(_vector(mapped.get("nudge", [])) == Vector2i.RIGHT)
+	assert(
+		_vector(mapped.get("nudge", []))
+		== _vector(formal_ne_before.get("nudge", [0, 0])) + Vector2i.RIGHT
+	)
 	assert(str(mapped.get("status", "")) in ["valid", "locked"])
 	assert(mapped.has("locked"))
 
@@ -241,6 +315,40 @@ func _run() -> void:
 	assert(int(HelmetVisualV2.direction_record(146, 1).get("source_row", -1)) == 1)
 	editor.undo_current_direction()
 	assert(int(HelmetVisualV2.direction_record(146, 1).get("source_row", -1)) == 0)
+
+	# The always-visible save button persists every dirty direction in one click
+	# without falsely marking an untouched direction as complete.
+	var nw_saved_before := HelmetVisualV2.saved_direction_override(146, 7)
+	editor.select_target_direction(2)
+	var batch_e_before := _vector(
+		HelmetVisualV2.direction_record(146, 2).get("nudge", [])
+	)
+	assert(editor.map_source_row_to_current_target(6))
+	assert(editor.nudge_current(Vector2i.DOWN))
+	editor.select_target_direction(3)
+	var batch_se_before := _vector(
+		HelmetVisualV2.direction_record(146, 3).get("nudge", [])
+	)
+	assert(editor.map_source_row_to_current_target(1))
+	assert(editor.nudge_current(Vector2i.LEFT))
+	save_all.emit_signal("pressed")
+	assert("已保存全部改动" in str(editor.get_node(
+		"CalibrationUI/Panel/VBox/MappingStatus/State"
+	).text))
+	editor.reload_formal_data()
+	var batch_e := HelmetVisualV2.direction_record(146, 2)
+	var batch_se := HelmetVisualV2.direction_record(146, 3)
+	assert(int(batch_e.get("source_row", -1)) == 6)
+	assert(
+		_vector(batch_e.get("nudge", []))
+		== batch_e_before + Vector2i.DOWN
+	)
+	assert(int(batch_se.get("source_row", -1)) == 1)
+	assert(
+		_vector(batch_se.get("nudge", []))
+		== batch_se_before + Vector2i.LEFT
+	)
+	assert(HelmetVisualV2.saved_direction_override(146, 7) == nw_saved_before)
 
 	# Asset-level scale applies once to every direction, bakes all six actions,
 	# uses nearest-neighbour around the local pivot, and survives runtime reload.
@@ -305,7 +413,9 @@ func _run() -> void:
 					ArtSpec.WARRIOR_FRAME.y
 				)
 				var expected_cell: Image = editor.scale_cell_around_pivot(
-					source_image.get_region(cell_rect),
+					editor.calibration_source_cell(
+						action, source_row, frame_index
+					),
 					HelmetVisualV2.pivot_for_source_row(
 						146, action, source_row, frame_index
 					),
@@ -324,10 +434,10 @@ func _run() -> void:
 						),
 					]
 				)
-		assert(
-			HelmetVisualV2.action_texture_path(146, action, 0, "helmet_front")
-			== str(derived[action])
+		var runtime_path := HelmetVisualV2.action_texture_path(
+			146, action, 0, "helmet_front"
 		)
+		assert(runtime_path == str(derived[action]))
 	for direction_index: int in 8:
 		assert(
 			HelmetVisualV2.direction_record(
@@ -338,6 +448,9 @@ func _run() -> void:
 	assert(str(bake_policy.get("filter", "")) == "nearest")
 	assert(bool(bake_policy.get("pivotInvariant", false)))
 	assert(bool(bake_policy.get("castPivotUsesSameFramePrimaryHairEvidence", false)))
+	assert(str(bake_policy.get("sourceRecipeId", "")) == (
+		"elf_146.user_authorized_nw_mirror.v1"
+	))
 
 	# Complete the eight saved idle targets. Only then may the explicit
 	# "generate all actions" workflow become available.

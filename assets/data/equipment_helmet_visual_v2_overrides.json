@@ -2,6 +2,148 @@
 	"schemaVersion": 1.0,
 	"contractId": "equipment.world_helmet.player_visual_v2.overrides.v1",
 	"runtimeReadable": true,
-	"itemOverrides": {},
-	"visualAssetOverrides": {}
+	"itemOverrides": {
+		"146": {
+			"directions": {
+				"NE": {
+					"source_row": 5,
+					"source_slot_id": "slot_5",
+					"nudge": [
+						-1,
+						-5
+					],
+					"status": "valid",
+					"locked": true,
+					"source_direction": "NE"
+				},
+				"N": {
+					"source_row": 4,
+					"source_slot_id": "slot_4",
+					"nudge": [
+						1,
+						-5
+					],
+					"status": "valid",
+					"locked": true,
+					"source_direction": "N"
+				},
+				"E": {
+					"source_row": 6,
+					"source_slot_id": "slot_6",
+					"nudge": [
+						-1,
+						-1
+					],
+					"status": "valid",
+					"locked": true,
+					"source_direction": "E"
+				},
+				"SE": {
+					"source_row": 1,
+					"source_slot_id": "slot_1",
+					"nudge": [
+						0,
+						0
+					],
+					"status": "valid",
+					"locked": true,
+					"source_direction": "SE"
+				},
+				"S": {
+					"source_row": 0,
+					"source_slot_id": "slot_0",
+					"nudge": [
+						-1,
+						2
+					],
+					"status": "valid",
+					"locked": true,
+					"source_direction": "S"
+				},
+				"SW": {
+					"source_row": 7.0,
+					"source_slot_id": "slot_7",
+					"nudge": [
+						1.0,
+						-2.0
+					],
+					"status": "valid",
+					"locked": true,
+					"source_direction": "SW"
+				},
+				"W": {
+					"source_row": 2,
+					"source_slot_id": "slot_2",
+					"nudge": [
+						1,
+						-2
+					],
+					"status": "valid",
+					"locked": true,
+					"source_direction": "W"
+				},
+				"NW": {
+					"source_row": 3,
+					"source_slot_id": "slot_3",
+					"nudge": [
+						-1,
+						-1
+					],
+					"status": "valid",
+					"locked": true,
+					"source_direction": "NW"
+				}
+			}
+		}
+	},
+	"visualAssetOverrides": {
+		"elf_146": {
+			"uniform_scale_percent": 100,
+			"derivedAtlases": {
+				"idle": "res://assets/generated/helmet_v2/elf_146/scale_100/elf_146_idle_scale_100.png",
+				"walk": "res://assets/generated/helmet_v2/elf_146/scale_100/elf_146_walk_scale_100.png",
+				"attack": "res://assets/generated/helmet_v2/elf_146/scale_100/elf_146_attack_scale_100.png",
+				"cast": "res://assets/generated/helmet_v2/elf_146/scale_100/elf_146_cast_scale_100.png",
+				"hit": "res://assets/generated/helmet_v2/elf_146/scale_100/elf_146_hit_scale_100.png",
+				"death": "res://assets/generated/helmet_v2/elf_146/scale_100/elf_146_death_scale_100.png"
+			},
+			"sourceAtlasSha256": {
+				"idle": "d198680e4cace4df28a888451ff5fb43ebd080d3723dd03785f6a4995c816680",
+				"walk": "e026b7696a9a7b96d6fe350bace83a5e4bf23ec073ba5ff94d606a49375246bd",
+				"attack": "212844b23f1424c00550d256410392870dbfc5dc9d7da7c2cd889d2007988d62",
+				"cast": "beec777415c87889ef9f2fb00a92c572f9a38460430f820bc8525d143301d5f4",
+				"hit": "5aa60afeb7307fd954737153e76e8356f9ab60f7e7862959b49abd3187f15b44",
+				"death": "a457b418c3bd74cbd2c911ac3e1961645f78817a52fc2d8bc8acda784f2fd089"
+			},
+			"derivedAtlasSha256": {
+				"idle": "ea0655119b0541d73d1f1e753a0fe9aef29f4df3076b25de50d9a21d9eb94210",
+				"walk": "39da47f429c20932208243c6ad844fde9564244d8b78962f25076053c67cc24c",
+				"attack": "9de2421d0e44f4b7cc8c77c05b5547471f2052fbf62e4a1c6f9135987ce31591",
+				"cast": "1dcaca96632725d01c893d8f40c15c9813a7d3a3392ddff7448801fe6f8243b6",
+				"hit": "b214ca2d7b2fd6ddbe70b12449cdf8ebf5d350ec686c55fa050de78a4a00136f",
+				"death": "363a33235eef72ea58ac321534f0948c5f7bf1d9491df1d4f454b7fb11e59ad2"
+			},
+			"bakePolicy": {
+				"filter": "nearest",
+				"pivotInvariant": true,
+				"allActionsDirectionsFrames": true,
+				"requiredActions": [
+					"idle",
+					"walk",
+					"attack",
+					"cast",
+					"hit",
+					"death"
+				],
+				"pivotSource": "res://assets/data/equipment_male_world_helmet.json#visualIdentities.*.actions.*.frames[].hairAnchorCentroid",
+				"castPivotUsesSameFramePrimaryHairEvidence": true,
+				"runtimeScale": [
+					1,
+					1
+				],
+				"sourceAtlasModified": false,
+				"sourceRecipeId": "elf_146.user_authorized_nw_mirror.v1"
+			}
+		}
+	}
 }
