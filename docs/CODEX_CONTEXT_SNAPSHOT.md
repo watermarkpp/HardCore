@@ -42,12 +42,12 @@
 ## 最终 APK
 
 - 文件：`C:\Users\Administrator\Documents\HardCore\outputs\hardcore\HardCore-debug.apk`
-- 构建时间：`2026-07-25 01:06:47`
-- 大小：`1,649,547,000` 字节
-- SHA-256：`B4D3C8BCDA0DBB51E855E6652F23B6BBC8144F8B173D5978AEDACB8967476D2F`
+- 构建时间：`2026-07-26 08:49:39`
+- 大小：`1,649,592,550` 字节
+- SHA-256：`CACDF86CF86A0F8E46E7476539B9DEDEB3F1EC0C3C0F00C4A517B421EE4D7A38`
 - 包信息：`com.personal.mafaoffline`，versionCode `35`，versionName `1.16.0-bich-map-runtime`，应用名 `HardCore`，`arm64-v8a`。
 - 签名验证：APK Signature Scheme v2/v3 均通过，签名者 1。
-- 本包包含 214 种怪物逐 ID v4 光圈校准、9 个三职业三套装满技能独立测试人物、男性专用正式人物与装备显示管线、primary-only 世界武器兼容合同、正式装备视觉目录、神兽动画、人物列表触摸滚动和装备纸娃娃居中；角色存档只补建缺失项，不覆盖后续测试进度。
+- 本包包含 214 种怪物逐 ID v4 光圈校准、9 个三职业三套装满技能独立测试人物、男性专用正式人物与装备显示管线、primary-only 世界武器兼容合同、正式装备视觉目录、神兽动画、人物列表触摸滚动、装备纸娃娃居中，以及法师/道士360ms施法动作与移动锁修复；角色存档只补建缺失项，不覆盖后续测试进度。
 
 ## 最近已集成结果
 
