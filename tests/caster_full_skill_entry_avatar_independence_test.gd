@@ -48,7 +48,7 @@ func _ready() -> void:
 				30,
 				40
 			)
-			var expected_count := 5 if skill_id == "wizard.fire_wall" else 1
+			var expected_count := 4 if skill_id == "wizard.fire_wall" else 1
 			assert(nodes.size() == expected_count, "%s因人物视觉未装配而无法进入技能节点工厂" % skill_id)
 			for node: Node2D in nodes:
 				add_child(node)

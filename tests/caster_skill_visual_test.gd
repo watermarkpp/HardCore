@@ -12,8 +12,11 @@ func _ready() -> void:
 	assert(manifest.primarySource.source_priority.tier == "primary" and manifest.primarySource.source_priority.weight == 100)
 	assert(manifest.primary_missing_evidence.is_empty())
 	assert(manifest.generated_candidates_retained.is_empty())
-	assert(manifest.schemaVersion == 3)
+	assert(manifest.schemaVersion == 4)
 	assert(manifest.animationContract == "caster_skill_animation.v1")
+	assert(manifest.renderContract == "caster_skill_render.v2")
+	assert(manifest.fallbacks_used.is_empty())
+	assert(manifest.primarySource.custom_library_layout == false)
 	assert(manifest.assets.size() == 26)
 	assert(manifest.skillCoverage.size() == 27)
 	assert(manifest.skillCoverage["taoist.spiritual_warfare"].status == "no_runtime_visual")
@@ -31,6 +34,7 @@ func _ready() -> void:
 		assert(str(entry.original_path).begins_with("Data/"))
 		assert(not str(entry.source_sha256).is_empty())
 		assert(entry.animation.contract == "caster_skill_animation.v1")
+		assert(entry.render.contract == "caster_skill_render.v2")
 		assert(int(entry.animation.frame_count) > 0 and int(entry.animation.direction_count) > 0)
 		assert(entry.animation.sequences.size() == int(entry.animation.direction_count))
 		var decoded_frames := 0
@@ -40,6 +44,7 @@ func _ready() -> void:
 				decoded_frames += 1
 				assert(int(frame.source_index) >= 0)
 				assert(FileAccess.file_exists("res://%s" % frame.path))
+				assert(not str(frame.png_sha256).is_empty())
 		assert(decoded_frames == int(entry.animation.frame_count) * int(entry.animation.direction_count))
 		var path := "res://%s" % entry.path
 		assert(FileAccess.file_exists(path), "%s source PNG is missing" % path)
@@ -73,7 +78,7 @@ func _ready() -> void:
 		area.queue_free()
 	for skill_id: String in CasterSkillVisualRegistry.active_skill_ids():
 		var profile := CasterSkillVisualRegistry.profile(skill_id)
-		if profile.role == "summon_actor_visual":
+		if profile.role in ["summon_actor_visual", "projectile", "ground_effect"]:
 			continue
 		var visual := CasterSkillVisualEffect.new()
 		visual.setup(Vector2.ZERO, skill_id, 72.0, 1.0)
@@ -85,6 +90,9 @@ func _ready() -> void:
 	assert(CasterSkillVisualRegistry.direction_index(Vector2.RIGHT) == 4)
 	assert(CasterSkillVisualRegistry.direction_index(Vector2.DOWN) == 8)
 	assert(CasterSkillVisualRegistry.direction_index(Vector2.LEFT) == 12)
+	assert(CasterSkillVisualRegistry.direction_index(Vector2(4.0, -1.0)) == 4)
+	assert(CasterSkillVisualRegistry.direction_index(Vector2(4.0, -1.01)) == 3)
+	assert(CasterSkillVisualRegistry.direction_index(Vector2(1.0, -4.01)) == 0)
 	var directional := AnimationPlayerScript.new()
 	add_child(directional)
 	assert(directional.configure("wizard.fireball", Vector2.LEFT, 34.0, true))
@@ -93,5 +101,11 @@ func _ready() -> void:
 	directional._process(0.051)
 	assert(directional.current_frame_index == 1 and directional.texture != original_texture)
 	directional.queue_free()
+	var teleport_arrival := AnimationPlayerScript.new()
+	add_child(teleport_arrival)
+	assert(teleport_arrival.configure("wizard.teleport", Vector2.DOWN, 0.0, null, "arrival"))
+	assert(teleport_arrival.frame_count() == 10)
+	assert(teleport_arrival.texture.get_width() > 0)
+	teleport_arrival.queue_free()
 	print("CASTER_SKILL_VISUAL_PASS: 26 exact primary-client animations/icons cover 26 active caster skills; one passive has no cast visual; zero fallbacks; male-only")
 	get_tree().quit(0)

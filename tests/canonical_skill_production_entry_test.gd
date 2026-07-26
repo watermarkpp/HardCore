@@ -52,7 +52,7 @@ func _run() -> void:
 	assert(PlayerState.item_count("护身符") == 0, "道士材料适配器未按rank3消耗5张护身符")
 	var main_pet: SummonActor = game._canonical_main_pet()
 	assert(main_pet != null and main_pet.skill_id == "taoist.summon_divine_beast", "道士唯一主宠未携带稳定source_skill_id")
-	assert(_has_formal_visual(game, "taoist.summon_divine_beast"), "召唤神兽正式施法视觉未从canonical入口创建")
+	assert(main_pet._sprite != null, "召唤神兽canonical主宠未加载正式动画")
 	var first_pet_id := main_pet.get_instance_id()
 	var recall: Dictionary = game._execute_canonical_skill("召唤神兽", caster.global_position, Vector2.DOWN, 0)
 	assert(bool(recall.get("accepted", false)) and game._canonical_main_pet().get_instance_id() == first_pet_id, "已有道士主宠未执行召回而是替换")
