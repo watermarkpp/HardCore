@@ -429,12 +429,12 @@ def main() -> None:
     ).convert("RGBA")
     bronze_cutouts = identities["bronze_magic"]["directionCutouts"]
     assert all(
-        record["calibrationBaseScalePercent"] == 75
+        record["calibrationBaseScalePercent"] == 83
         for record in bronze_cutouts.values()
     )
     assert min(
         record["generatedSize"][1] for record in bronze_cutouts.values()
-    ) >= 12
+    ) >= 13
     assert all(
         record["generatedSize"][1] <= 18
         for record in bronze_cutouts.values()
