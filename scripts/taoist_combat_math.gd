@@ -49,6 +49,14 @@ static func poison_duration(level_value: int, power: int) -> int:
 	return WizardCombatMath.classic_round(float(clamp_skill_level(level_value)) / 3.0 * (float(power) / 20.0))
 
 
+static func anti_poison_random_bound(target_anti_poison: int) -> int:
+	return maxi(1, target_anti_poison + 7)
+
+
+static func poison_succeeds(target_anti_poison: int, random_roll: int) -> bool:
+	return random_roll >= 0 and random_roll < anti_poison_random_bound(target_anti_poison) and random_roll <= 6
+
+
 static func status_duration(skill_id: String, level_value: int, spiritual_stat_roll: int) -> int:
 	var rule := _skill_rule(skill_id)
 	var base := 40 if skill_id == "taoist.entrapment" else 30

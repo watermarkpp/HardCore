@@ -99,6 +99,8 @@ func _run() -> void:
 	add_child(prefetched_actor)
 	prefetched_actor.set_physics_process(false)
 	assert(not prefetched_actor.visual.uses_final_art(), "proximity actor bypassed async fallback before prefetch completed")
+	assert(prefetched_actor.visual.has_authored_client_art(), "stable monsterId lost its authored-client-art contract")
+	assert(not prefetched_actor.visual.should_draw_procedural_fallback(), "authored monster exposed the green procedural circle while atlases were pending")
 	var deadline_msec := Time.get_ticks_msec() + 15000
 	var poll_count := 0
 	while not bool(prefetch.complete) and Time.get_ticks_msec() < deadline_msec:

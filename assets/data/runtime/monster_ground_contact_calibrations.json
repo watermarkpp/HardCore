@@ -1,0 +1,6000 @@
+{
+  "schemaVersion": 4,
+  "contract": "monster.ground_contact.calibration.v4",
+  "identityKey": "monsterId",
+  "policy": "Every formal monsterId has an independently approved runtime-composite review. Authored per-profile ground origins are authoritative; alpha measurements remain diagnostic only.",
+  "entriesByMonsterId": {
+    "18": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -3,
+        0
+      ],
+      "ringCenterOffset": [
+        -3,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=18 independently reviewed: bodyFoot=[-3, 0], ringCenter=[-3, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "19": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -8,
+        0
+      ],
+      "ringCenterOffset": [
+        -8,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=19 independently reviewed: bodyFoot=[-8, 0], ringCenter=[-8, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "21": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        0
+      ],
+      "ringCenterOffset": [
+        -2,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=21 independently reviewed: bodyFoot=[-2, 0], ringCenter=[-2, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "23": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        0
+      ],
+      "ringCenterOffset": [
+        -2,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=23 independently reviewed: bodyFoot=[-2, 0], ringCenter=[-2, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "24": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=24 independently reviewed: bodyFoot=[-5, 0], ringCenter=[-5, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "25": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=25 independently reviewed: bodyFoot=[-5, 0], ringCenter=[-5, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "26": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=26 independently reviewed: bodyFoot=[-5, 0], ringCenter=[-5, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "27": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=27 independently reviewed: bodyFoot=[-5, 0], ringCenter=[-5, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "28": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        0
+      ],
+      "ringCenterOffset": [
+        -1,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=28 independently reviewed: bodyFoot=[-1, 0], ringCenter=[-1, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "29": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        0
+      ],
+      "ringCenterOffset": [
+        -1,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=29 independently reviewed: bodyFoot=[-1, 0], ringCenter=[-1, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "30": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        0
+      ],
+      "ringCenterOffset": [
+        0,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "rooted_or_stationary",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=30 independently reviewed: bodyFoot=[0, 0], ringCenter=[0, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "31": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=31 independently reviewed: bodyFoot=[-5, 0], ringCenter=[-5, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "32": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=32 independently reviewed: bodyFoot=[-5, 0], ringCenter=[-5, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "33": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        0
+      ],
+      "ringCenterOffset": [
+        -1,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=33 independently reviewed: bodyFoot=[-1, 0], ringCenter=[-1, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "34": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        0
+      ],
+      "ringCenterOffset": [
+        3,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=34 independently reviewed: bodyFoot=[3, 0], ringCenter=[3, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "35": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        0
+      ],
+      "ringCenterOffset": [
+        3,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=35 independently reviewed: bodyFoot=[3, 0], ringCenter=[3, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "36": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        0
+      ],
+      "ringCenterOffset": [
+        4,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=36 independently reviewed: bodyFoot=[4, 0], ringCenter=[4, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "37": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        0
+      ],
+      "ringCenterOffset": [
+        4,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=37 independently reviewed: bodyFoot=[4, 0], ringCenter=[4, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "38": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        5,
+        0
+      ],
+      "ringCenterOffset": [
+        5,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=38 independently reviewed: bodyFoot=[5, 0], ringCenter=[5, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "39": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        5,
+        0
+      ],
+      "ringCenterOffset": [
+        5,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=39 independently reviewed: bodyFoot=[5, 0], ringCenter=[5, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "41": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        5,
+        0
+      ],
+      "ringCenterOffset": [
+        5,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=41 independently reviewed: bodyFoot=[5, 0], ringCenter=[5, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "42": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        5,
+        0
+      ],
+      "ringCenterOffset": [
+        5,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=42 independently reviewed: bodyFoot=[5, 0], ringCenter=[5, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "43": {
+      "projectionStrategy": "flying",
+      "visualFootOffset": [
+        16,
+        -35
+      ],
+      "ringCenterOffset": [
+        24,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "airborne",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=43 independently reviewed: bodyFoot=[16, -35], ringCenter=[24, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "44": {
+      "projectionStrategy": "flying",
+      "visualFootOffset": [
+        16,
+        -35
+      ],
+      "ringCenterOffset": [
+        24,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "airborne",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=44 independently reviewed: bodyFoot=[16, -35], ringCenter=[24, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "45": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=45 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "46": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -7,
+        0
+      ],
+      "ringCenterOffset": [
+        -7,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=46 independently reviewed: bodyFoot=[-7, 0], ringCenter=[-7, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "47": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=47 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "48": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=48 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "49": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        0
+      ],
+      "ringCenterOffset": [
+        0,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=49 independently reviewed: bodyFoot=[0, 0], ringCenter=[0, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "50": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        0
+      ],
+      "ringCenterOffset": [
+        0,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=50 independently reviewed: bodyFoot=[0, 0], ringCenter=[0, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "51": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        0
+      ],
+      "ringCenterOffset": [
+        0,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=51 independently reviewed: bodyFoot=[0, 0], ringCenter=[0, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "52": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=52 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "53": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=53 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "54": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        0
+      ],
+      "ringCenterOffset": [
+        0,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=54 independently reviewed: bodyFoot=[0, 0], ringCenter=[0, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "55": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        0
+      ],
+      "ringCenterOffset": [
+        0,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=55 independently reviewed: bodyFoot=[0, 0], ringCenter=[0, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "56": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=56 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "57": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=57 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "59": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=59 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "60": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -6,
+        0
+      ],
+      "ringCenterOffset": [
+        -6,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=60 independently reviewed: bodyFoot=[-6, 0], ringCenter=[-6, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "62": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=62 independently reviewed: bodyFoot=[-5, 0], ringCenter=[-5, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "63": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=63 independently reviewed: bodyFoot=[-5, 0], ringCenter=[-5, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "64": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        5,
+        0
+      ],
+      "ringCenterOffset": [
+        5,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=64 independently reviewed: bodyFoot=[5, 0], ringCenter=[5, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "65": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        5,
+        0
+      ],
+      "ringCenterOffset": [
+        5,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=65 independently reviewed: bodyFoot=[5, 0], ringCenter=[5, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "66": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        0
+      ],
+      "ringCenterOffset": [
+        4,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=66 independently reviewed: bodyFoot=[4, 0], ringCenter=[4, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "67": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        0
+      ],
+      "ringCenterOffset": [
+        4,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=67 independently reviewed: bodyFoot=[4, 0], ringCenter=[4, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "68": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        5,
+        0
+      ],
+      "ringCenterOffset": [
+        5,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=68 independently reviewed: bodyFoot=[5, 0], ringCenter=[5, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "69": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        5,
+        0
+      ],
+      "ringCenterOffset": [
+        5,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=69 independently reviewed: bodyFoot=[5, 0], ringCenter=[5, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "70": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        17,
+        0
+      ],
+      "ringCenterOffset": [
+        17,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=70 independently reviewed: bodyFoot=[17, 0], ringCenter=[17, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "71": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        17,
+        0
+      ],
+      "ringCenterOffset": [
+        17,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=71 independently reviewed: bodyFoot=[17, 0], ringCenter=[17, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "73": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        0
+      ],
+      "ringCenterOffset": [
+        0,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=73 independently reviewed: bodyFoot=[0, 0], ringCenter=[0, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "74": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        0
+      ],
+      "ringCenterOffset": [
+        0,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=74 independently reviewed: bodyFoot=[0, 0], ringCenter=[0, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "75": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        0
+      ],
+      "ringCenterOffset": [
+        0,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=75 independently reviewed: bodyFoot=[0, 0], ringCenter=[0, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "76": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        18,
+        0
+      ],
+      "ringCenterOffset": [
+        18,
+        0
+      ],
+      "ringEllipseRadii": [
+        32,
+        10
+      ],
+      "ringVerticalSquash": 0.3125,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=76 independently reviewed: bodyFoot=[18, 0], ringCenter=[18, 0], radii=[32, 10]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "77": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        18,
+        0
+      ],
+      "ringCenterOffset": [
+        18,
+        0
+      ],
+      "ringEllipseRadii": [
+        32,
+        10
+      ],
+      "ringVerticalSquash": 0.3125,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=77 independently reviewed: bodyFoot=[18, 0], ringCenter=[18, 0], radii=[32, 10]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "78": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        18,
+        0
+      ],
+      "ringCenterOffset": [
+        18,
+        0
+      ],
+      "ringEllipseRadii": [
+        32,
+        10
+      ],
+      "ringVerticalSquash": 0.3125,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=78 independently reviewed: bodyFoot=[18, 0], ringCenter=[18, 0], radii=[32, 10]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "79": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -3,
+        0
+      ],
+      "ringCenterOffset": [
+        -3,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=79 independently reviewed: bodyFoot=[-3, 0], ringCenter=[-3, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "80": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -3,
+        0
+      ],
+      "ringCenterOffset": [
+        -3,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=80 independently reviewed: bodyFoot=[-3, 0], ringCenter=[-3, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "81": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=81 independently reviewed: bodyFoot=[-5, 0], ringCenter=[-5, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "82": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=82 independently reviewed: bodyFoot=[-5, 0], ringCenter=[-5, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "83": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -4,
+        0
+      ],
+      "ringCenterOffset": [
+        -4,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=83 independently reviewed: bodyFoot=[-4, 0], ringCenter=[-4, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "84": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -4,
+        0
+      ],
+      "ringCenterOffset": [
+        -4,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=84 independently reviewed: bodyFoot=[-4, 0], ringCenter=[-4, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "85": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -6,
+        0
+      ],
+      "ringCenterOffset": [
+        -6,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=85 independently reviewed: bodyFoot=[-6, 0], ringCenter=[-6, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "86": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -6,
+        0
+      ],
+      "ringCenterOffset": [
+        -6,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=86 independently reviewed: bodyFoot=[-6, 0], ringCenter=[-6, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "87": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -11,
+        0
+      ],
+      "ringCenterOffset": [
+        -11,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=87 independently reviewed: bodyFoot=[-11, 0], ringCenter=[-11, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "88": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -11,
+        0
+      ],
+      "ringCenterOffset": [
+        -11,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=88 independently reviewed: bodyFoot=[-11, 0], ringCenter=[-11, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "89": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -4,
+        0
+      ],
+      "ringCenterOffset": [
+        -4,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=89 independently reviewed: bodyFoot=[-4, 0], ringCenter=[-4, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "90": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -4,
+        0
+      ],
+      "ringCenterOffset": [
+        -4,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=90 independently reviewed: bodyFoot=[-4, 0], ringCenter=[-4, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "91": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -4,
+        0
+      ],
+      "ringCenterOffset": [
+        -4,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=91 independently reviewed: bodyFoot=[-4, 0], ringCenter=[-4, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "92": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=92 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "93": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=93 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "94": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=94 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "95": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=95 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "96": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -6,
+        0
+      ],
+      "ringCenterOffset": [
+        -6,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=96 independently reviewed: bodyFoot=[-6, 0], ringCenter=[-6, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "97": {
+      "projectionStrategy": "flying",
+      "visualFootOffset": [
+        -10,
+        -172
+      ],
+      "ringCenterOffset": [
+        16,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "airborne",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=97 independently reviewed: bodyFoot=[-10, -172], ringCenter=[16, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "98": {
+      "projectionStrategy": "flying",
+      "visualFootOffset": [
+        -10,
+        -172
+      ],
+      "ringCenterOffset": [
+        16,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "airborne",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=98 independently reviewed: bodyFoot=[-10, -172], ringCenter=[16, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "100": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -7,
+        0
+      ],
+      "ringCenterOffset": [
+        -7,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=100 independently reviewed: bodyFoot=[-7, 0], ringCenter=[-7, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "101": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        0
+      ],
+      "ringCenterOffset": [
+        3,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=101 independently reviewed: bodyFoot=[3, 0], ringCenter=[3, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "102": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        0
+      ],
+      "ringCenterOffset": [
+        3,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=102 independently reviewed: bodyFoot=[3, 0], ringCenter=[3, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "103": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -6,
+        0
+      ],
+      "ringCenterOffset": [
+        -6,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=103 independently reviewed: bodyFoot=[-6, 0], ringCenter=[-6, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "104": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -6,
+        0
+      ],
+      "ringCenterOffset": [
+        -6,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=104 independently reviewed: bodyFoot=[-6, 0], ringCenter=[-6, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "105": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -7,
+        0
+      ],
+      "ringCenterOffset": [
+        -7,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=105 independently reviewed: bodyFoot=[-7, 0], ringCenter=[-7, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "106": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -7,
+        0
+      ],
+      "ringCenterOffset": [
+        -7,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=106 independently reviewed: bodyFoot=[-7, 0], ringCenter=[-7, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "107": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -6,
+        0
+      ],
+      "ringCenterOffset": [
+        -6,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=107 independently reviewed: bodyFoot=[-6, 0], ringCenter=[-6, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "108": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -6,
+        0
+      ],
+      "ringCenterOffset": [
+        -6,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=108 independently reviewed: bodyFoot=[-6, 0], ringCenter=[-6, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "110": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -13,
+        0
+      ],
+      "ringCenterOffset": [
+        -13,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=110 independently reviewed: bodyFoot=[-13, 0], ringCenter=[-13, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "111": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -13,
+        0
+      ],
+      "ringCenterOffset": [
+        -13,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=111 independently reviewed: bodyFoot=[-13, 0], ringCenter=[-13, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "112": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -3,
+        0
+      ],
+      "ringCenterOffset": [
+        -3,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=112 independently reviewed: bodyFoot=[-3, 0], ringCenter=[-3, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "113": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -3,
+        0
+      ],
+      "ringCenterOffset": [
+        -3,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=113 independently reviewed: bodyFoot=[-3, 0], ringCenter=[-3, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "114": {
+      "projectionStrategy": "flying",
+      "visualFootOffset": [
+        -4,
+        -11
+      ],
+      "ringCenterOffset": [
+        -2,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "airborne",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=114 independently reviewed: bodyFoot=[-4, -11], ringCenter=[-2, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "115": {
+      "projectionStrategy": "flying",
+      "visualFootOffset": [
+        -4,
+        -11
+      ],
+      "ringCenterOffset": [
+        -2,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "airborne",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=115 independently reviewed: bodyFoot=[-4, -11], ringCenter=[-2, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "116": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        0
+      ],
+      "ringCenterOffset": [
+        4,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=116 independently reviewed: bodyFoot=[4, 0], ringCenter=[4, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "117": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        0
+      ],
+      "ringCenterOffset": [
+        4,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=117 independently reviewed: bodyFoot=[4, 0], ringCenter=[4, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "118": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -7,
+        0
+      ],
+      "ringCenterOffset": [
+        -7,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=118 independently reviewed: bodyFoot=[-7, 0], ringCenter=[-7, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "119": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -7,
+        0
+      ],
+      "ringCenterOffset": [
+        -7,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=119 independently reviewed: bodyFoot=[-7, 0], ringCenter=[-7, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "120": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -8,
+        0
+      ],
+      "ringCenterOffset": [
+        -8,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=120 independently reviewed: bodyFoot=[-8, 0], ringCenter=[-8, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "121": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -8,
+        0
+      ],
+      "ringCenterOffset": [
+        -8,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=121 independently reviewed: bodyFoot=[-8, 0], ringCenter=[-8, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "122": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -8,
+        0
+      ],
+      "ringCenterOffset": [
+        -8,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=122 independently reviewed: bodyFoot=[-8, 0], ringCenter=[-8, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "123": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -8,
+        0
+      ],
+      "ringCenterOffset": [
+        -8,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=123 independently reviewed: bodyFoot=[-8, 0], ringCenter=[-8, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "124": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        16,
+        0
+      ],
+      "ringCenterOffset": [
+        16,
+        0
+      ],
+      "ringEllipseRadii": [
+        44,
+        13
+      ],
+      "ringVerticalSquash": 0.2955,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "rooted_or_stationary",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=124 independently reviewed: bodyFoot=[16, 0], ringCenter=[16, 0], radii=[44, 13]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "126": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -4,
+        0
+      ],
+      "ringCenterOffset": [
+        -4,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=126 independently reviewed: bodyFoot=[-4, 0], ringCenter=[-4, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "127": {
+      "projectionStrategy": "flying",
+      "visualFootOffset": [
+        -9,
+        -44
+      ],
+      "ringCenterOffset": [
+        18,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "airborne",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=127 independently reviewed: bodyFoot=[-9, -44], ringCenter=[18, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "128": {
+      "projectionStrategy": "flying",
+      "visualFootOffset": [
+        -9,
+        -65
+      ],
+      "ringCenterOffset": [
+        22,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "airborne",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=128 independently reviewed: bodyFoot=[-9, -65], ringCenter=[22, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "129": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        0
+      ],
+      "ringCenterOffset": [
+        -1,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=129 independently reviewed: bodyFoot=[-1, 0], ringCenter=[-1, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "130": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        0
+      ],
+      "ringCenterOffset": [
+        -1,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=130 independently reviewed: bodyFoot=[-1, 0], ringCenter=[-1, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "131": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        0
+      ],
+      "ringCenterOffset": [
+        -1,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=131 independently reviewed: bodyFoot=[-1, 0], ringCenter=[-1, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "132": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=132 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "133": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=133 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "134": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=134 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "135": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        0
+      ],
+      "ringCenterOffset": [
+        3,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=135 independently reviewed: bodyFoot=[3, 0], ringCenter=[3, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "136": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        0
+      ],
+      "ringCenterOffset": [
+        3,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=136 independently reviewed: bodyFoot=[3, 0], ringCenter=[3, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "137": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        0
+      ],
+      "ringCenterOffset": [
+        3,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=137 independently reviewed: bodyFoot=[3, 0], ringCenter=[3, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "138": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        0
+      ],
+      "ringCenterOffset": [
+        3,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=138 independently reviewed: bodyFoot=[3, 0], ringCenter=[3, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "139": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        0
+      ],
+      "ringCenterOffset": [
+        3,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=139 independently reviewed: bodyFoot=[3, 0], ringCenter=[3, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "140": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        0
+      ],
+      "ringCenterOffset": [
+        3,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=140 independently reviewed: bodyFoot=[3, 0], ringCenter=[3, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "141": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        1,
+        0
+      ],
+      "ringCenterOffset": [
+        1,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=141 independently reviewed: bodyFoot=[1, 0], ringCenter=[1, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "142": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        1,
+        0
+      ],
+      "ringCenterOffset": [
+        1,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=142 independently reviewed: bodyFoot=[1, 0], ringCenter=[1, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "143": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=143 independently reviewed: bodyFoot=[-5, 0], ringCenter=[-5, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "144": {
+      "projectionStrategy": "flying",
+      "visualFootOffset": [
+        -9,
+        -44
+      ],
+      "ringCenterOffset": [
+        18,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "airborne",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=144 independently reviewed: bodyFoot=[-9, -44], ringCenter=[18, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "145": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -4,
+        0
+      ],
+      "ringCenterOffset": [
+        -4,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=145 independently reviewed: bodyFoot=[-4, 0], ringCenter=[-4, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "146": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        1,
+        0
+      ],
+      "ringCenterOffset": [
+        1,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=146 independently reviewed: bodyFoot=[1, 0], ringCenter=[1, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "147": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        1,
+        0
+      ],
+      "ringCenterOffset": [
+        1,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=147 independently reviewed: bodyFoot=[1, 0], ringCenter=[1, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "148": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        0
+      ],
+      "ringCenterOffset": [
+        -1,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=148 independently reviewed: bodyFoot=[-1, 0], ringCenter=[-1, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "149": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        0
+      ],
+      "ringCenterOffset": [
+        -1,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=149 independently reviewed: bodyFoot=[-1, 0], ringCenter=[-1, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "150": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        0
+      ],
+      "ringCenterOffset": [
+        -2,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=150 independently reviewed: bodyFoot=[-2, 0], ringCenter=[-2, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "151": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        0
+      ],
+      "ringCenterOffset": [
+        -2,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=151 independently reviewed: bodyFoot=[-2, 0], ringCenter=[-2, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "152": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        0
+      ],
+      "ringCenterOffset": [
+        -2,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=152 independently reviewed: bodyFoot=[-2, 0], ringCenter=[-2, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "153": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=153 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "154": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=154 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "155": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=155 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "156": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        0
+      ],
+      "ringCenterOffset": [
+        3,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=156 independently reviewed: bodyFoot=[3, 0], ringCenter=[3, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "157": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        0
+      ],
+      "ringCenterOffset": [
+        3,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=157 independently reviewed: bodyFoot=[3, 0], ringCenter=[3, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "158": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        0
+      ],
+      "ringCenterOffset": [
+        3,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=158 independently reviewed: bodyFoot=[3, 0], ringCenter=[3, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "159": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        0
+      ],
+      "ringCenterOffset": [
+        3,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=159 independently reviewed: bodyFoot=[3, 0], ringCenter=[3, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "160": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        7,
+        0
+      ],
+      "ringCenterOffset": [
+        7,
+        0
+      ],
+      "ringEllipseRadii": [
+        32,
+        10
+      ],
+      "ringVerticalSquash": 0.3125,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=160 independently reviewed: bodyFoot=[7, 0], ringCenter=[7, 0], radii=[32, 10]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "161": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        7,
+        0
+      ],
+      "ringCenterOffset": [
+        7,
+        0
+      ],
+      "ringEllipseRadii": [
+        32,
+        10
+      ],
+      "ringVerticalSquash": 0.3125,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=161 independently reviewed: bodyFoot=[7, 0], ringCenter=[7, 0], radii=[32, 10]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "162": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        0
+      ],
+      "ringCenterOffset": [
+        -1,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=162 independently reviewed: bodyFoot=[-1, 0], ringCenter=[-1, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "163": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        0
+      ],
+      "ringCenterOffset": [
+        -1,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=163 independently reviewed: bodyFoot=[-1, 0], ringCenter=[-1, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "164": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        0
+      ],
+      "ringCenterOffset": [
+        -2,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=164 independently reviewed: bodyFoot=[-2, 0], ringCenter=[-2, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "165": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        0
+      ],
+      "ringCenterOffset": [
+        -2,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=165 independently reviewed: bodyFoot=[-2, 0], ringCenter=[-2, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "166": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        0
+      ],
+      "ringCenterOffset": [
+        -2,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=166 independently reviewed: bodyFoot=[-2, 0], ringCenter=[-2, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "167": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        0
+      ],
+      "ringCenterOffset": [
+        -2,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=167 independently reviewed: bodyFoot=[-2, 0], ringCenter=[-2, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "168": {
+      "projectionStrategy": "hover",
+      "visualFootOffset": [
+        -8,
+        -33
+      ],
+      "ringCenterOffset": [
+        12,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "hovering",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=168 independently reviewed: bodyFoot=[-8, -33], ringCenter=[12, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "169": {
+      "projectionStrategy": "hover",
+      "visualFootOffset": [
+        -8,
+        -33
+      ],
+      "ringCenterOffset": [
+        12,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "hovering",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=169 independently reviewed: bodyFoot=[-8, -33], ringCenter=[12, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "170": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        0
+      ],
+      "ringCenterOffset": [
+        0,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=170 independently reviewed: bodyFoot=[0, 0], ringCenter=[0, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "171": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        0
+      ],
+      "ringCenterOffset": [
+        0,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=171 independently reviewed: bodyFoot=[0, 0], ringCenter=[0, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "172": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=172 independently reviewed: bodyFoot=[-5, 0], ringCenter=[-5, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "173": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=173 independently reviewed: bodyFoot=[-5, 0], ringCenter=[-5, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "174": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=174 independently reviewed: bodyFoot=[-5, 0], ringCenter=[-5, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "175": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=175 independently reviewed: bodyFoot=[-5, 0], ringCenter=[-5, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "176": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -4,
+        0
+      ],
+      "ringCenterOffset": [
+        -4,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=176 independently reviewed: bodyFoot=[-4, 0], ringCenter=[-4, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "177": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -4,
+        0
+      ],
+      "ringCenterOffset": [
+        -4,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=177 independently reviewed: bodyFoot=[-4, 0], ringCenter=[-4, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "178": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -12,
+        0
+      ],
+      "ringCenterOffset": [
+        -12,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=178 independently reviewed: bodyFoot=[-12, 0], ringCenter=[-12, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "179": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -12,
+        0
+      ],
+      "ringCenterOffset": [
+        -12,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=179 independently reviewed: bodyFoot=[-12, 0], ringCenter=[-12, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "180": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -32,
+        0
+      ],
+      "ringCenterOffset": [
+        -32,
+        0
+      ],
+      "ringEllipseRadii": [
+        46,
+        14
+      ],
+      "ringVerticalSquash": 0.3043,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "rooted_or_stationary",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=180 independently reviewed: bodyFoot=[-32, 0], ringCenter=[-32, 0], radii=[46, 14]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "182": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -8,
+        0
+      ],
+      "ringCenterOffset": [
+        -8,
+        0
+      ],
+      "ringEllipseRadii": [
+        52,
+        16
+      ],
+      "ringVerticalSquash": 0.3077,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "rooted_or_stationary",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=182 independently reviewed: bodyFoot=[-8, 0], ringCenter=[-8, 0], radii=[52, 16]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "183": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=183 independently reviewed: bodyFoot=[-5, 0], ringCenter=[-5, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "184": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=184 independently reviewed: bodyFoot=[-5, 0], ringCenter=[-5, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "185": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -3,
+        0
+      ],
+      "ringCenterOffset": [
+        -3,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=185 independently reviewed: bodyFoot=[-3, 0], ringCenter=[-3, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "186": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        0
+      ],
+      "ringCenterOffset": [
+        -2,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=186 independently reviewed: bodyFoot=[-2, 0], ringCenter=[-2, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "187": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -5,
+        0
+      ],
+      "ringCenterOffset": [
+        -5,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=187 independently reviewed: bodyFoot=[-5, 0], ringCenter=[-5, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "188": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        0
+      ],
+      "ringCenterOffset": [
+        4,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=188 independently reviewed: bodyFoot=[4, 0], ringCenter=[4, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "189": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        8,
+        0
+      ],
+      "ringCenterOffset": [
+        8,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=189 independently reviewed: bodyFoot=[8, 0], ringCenter=[8, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "190": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        0
+      ],
+      "ringCenterOffset": [
+        4,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=190 independently reviewed: bodyFoot=[4, 0], ringCenter=[4, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "191": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        15,
+        0
+      ],
+      "ringCenterOffset": [
+        15,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=191 independently reviewed: bodyFoot=[15, 0], ringCenter=[15, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "192": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        15,
+        0
+      ],
+      "ringCenterOffset": [
+        15,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "long_tail_or_multi_leg",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=192 independently reviewed: bodyFoot=[15, 0], ringCenter=[15, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "193": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        12,
+        0
+      ],
+      "ringCenterOffset": [
+        12,
+        0
+      ],
+      "ringEllipseRadii": [
+        32,
+        10
+      ],
+      "ringVerticalSquash": 0.3125,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=193 independently reviewed: bodyFoot=[12, 0], ringCenter=[12, 0], radii=[32, 10]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "194": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        0
+      ],
+      "ringCenterOffset": [
+        -2,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=194 independently reviewed: bodyFoot=[-2, 0], ringCenter=[-2, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "195": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        16,
+        0
+      ],
+      "ringCenterOffset": [
+        16,
+        0
+      ],
+      "ringEllipseRadii": [
+        52,
+        16
+      ],
+      "ringVerticalSquash": 0.3077,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "rooted_or_stationary",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=195 independently reviewed: bodyFoot=[16, 0], ringCenter=[16, 0], radii=[52, 16]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "196": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        0
+      ],
+      "ringCenterOffset": [
+        -2,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=196 independently reviewed: bodyFoot=[-2, 0], ringCenter=[-2, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "197": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -2,
+        0
+      ],
+      "ringCenterOffset": [
+        -2,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=197 independently reviewed: bodyFoot=[-2, 0], ringCenter=[-2, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "198": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        1,
+        0
+      ],
+      "ringCenterOffset": [
+        1,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=198 independently reviewed: bodyFoot=[1, 0], ringCenter=[1, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "199": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        1,
+        0
+      ],
+      "ringCenterOffset": [
+        1,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=199 independently reviewed: bodyFoot=[1, 0], ringCenter=[1, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "200": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        0
+      ],
+      "ringCenterOffset": [
+        0,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=200 independently reviewed: bodyFoot=[0, 0], ringCenter=[0, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "201": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        0
+      ],
+      "ringCenterOffset": [
+        0,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=201 independently reviewed: bodyFoot=[0, 0], ringCenter=[0, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "202": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        0
+      ],
+      "ringCenterOffset": [
+        4,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=202 independently reviewed: bodyFoot=[4, 0], ringCenter=[4, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "203": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        0
+      ],
+      "ringCenterOffset": [
+        4,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=203 independently reviewed: bodyFoot=[4, 0], ringCenter=[4, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "204": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        0
+      ],
+      "ringCenterOffset": [
+        0,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=204 independently reviewed: bodyFoot=[0, 0], ringCenter=[0, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "205": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        0
+      ],
+      "ringCenterOffset": [
+        0,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=205 independently reviewed: bodyFoot=[0, 0], ringCenter=[0, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "206": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        0
+      ],
+      "ringCenterOffset": [
+        0,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=206 independently reviewed: bodyFoot=[0, 0], ringCenter=[0, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "207": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        0,
+        0
+      ],
+      "ringCenterOffset": [
+        0,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=207 independently reviewed: bodyFoot=[0, 0], ringCenter=[0, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "208": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        40,
+        12
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=208 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[40, 12]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "209": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        40,
+        12
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=209 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[40, 12]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "210": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        0
+      ],
+      "ringCenterOffset": [
+        -1,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=210 independently reviewed: bodyFoot=[-1, 0], ringCenter=[-1, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "211": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        0
+      ],
+      "ringCenterOffset": [
+        -1,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=211 independently reviewed: bodyFoot=[-1, 0], ringCenter=[-1, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "212": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=212 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "213": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=213 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "214": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        0
+      ],
+      "ringCenterOffset": [
+        3,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=214 independently reviewed: bodyFoot=[3, 0], ringCenter=[3, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "215": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        3,
+        0
+      ],
+      "ringCenterOffset": [
+        3,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=215 independently reviewed: bodyFoot=[3, 0], ringCenter=[3, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "216": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=216 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "217": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=217 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "218": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        0
+      ],
+      "ringCenterOffset": [
+        -1,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=218 independently reviewed: bodyFoot=[-1, 0], ringCenter=[-1, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "219": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        0
+      ],
+      "ringCenterOffset": [
+        -1,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=219 independently reviewed: bodyFoot=[-1, 0], ringCenter=[-1, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "220": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        6,
+        0
+      ],
+      "ringCenterOffset": [
+        6,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=220 independently reviewed: bodyFoot=[6, 0], ringCenter=[6, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "221": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        6,
+        0
+      ],
+      "ringCenterOffset": [
+        6,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=221 independently reviewed: bodyFoot=[6, 0], ringCenter=[6, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "222": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        0
+      ],
+      "ringCenterOffset": [
+        4,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=222 independently reviewed: bodyFoot=[4, 0], ringCenter=[4, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "223": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        4,
+        0
+      ],
+      "ringCenterOffset": [
+        4,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "grounded_mobile",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=223 independently reviewed: bodyFoot=[4, 0], ringCenter=[4, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "224": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        26,
+        0
+      ],
+      "ringCenterOffset": [
+        26,
+        0
+      ],
+      "ringEllipseRadii": [
+        40,
+        12
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=224 independently reviewed: bodyFoot=[26, 0], ringCenter=[26, 0], radii=[40, 12]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "225": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        26,
+        0
+      ],
+      "ringCenterOffset": [
+        26,
+        0
+      ],
+      "ringEllipseRadii": [
+        40,
+        12
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=225 independently reviewed: bodyFoot=[26, 0], ringCenter=[26, 0], radii=[40, 12]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "226": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -14,
+        0
+      ],
+      "ringCenterOffset": [
+        -14,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "rooted_or_stationary",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=226 independently reviewed: bodyFoot=[-14, 0], ringCenter=[-14, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "227": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -14,
+        0
+      ],
+      "ringCenterOffset": [
+        -14,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "rooted_or_stationary",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=227 independently reviewed: bodyFoot=[-14, 0], ringCenter=[-14, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "228": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -14,
+        0
+      ],
+      "ringCenterOffset": [
+        -14,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "rooted_or_stationary",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=228 independently reviewed: bodyFoot=[-14, 0], ringCenter=[-14, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "229": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -14,
+        0
+      ],
+      "ringCenterOffset": [
+        -14,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "rooted_or_stationary",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=229 independently reviewed: bodyFoot=[-14, 0], ringCenter=[-14, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "230": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -14,
+        0
+      ],
+      "ringCenterOffset": [
+        -14,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "rooted_or_stationary",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=230 independently reviewed: bodyFoot=[-14, 0], ringCenter=[-14, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "231": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -14,
+        0
+      ],
+      "ringCenterOffset": [
+        -14,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "rooted_or_stationary",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=231 independently reviewed: bodyFoot=[-14, 0], ringCenter=[-14, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "232": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -14,
+        0
+      ],
+      "ringCenterOffset": [
+        -14,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "rooted_or_stationary",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=232 independently reviewed: bodyFoot=[-14, 0], ringCenter=[-14, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "233": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -14,
+        0
+      ],
+      "ringCenterOffset": [
+        -14,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "rooted_or_stationary",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=233 independently reviewed: bodyFoot=[-14, 0], ringCenter=[-14, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "234": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -14,
+        0
+      ],
+      "ringCenterOffset": [
+        -14,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "rooted_or_stationary",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=234 independently reviewed: bodyFoot=[-14, 0], ringCenter=[-14, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "235": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        0
+      ],
+      "ringCenterOffset": [
+        -1,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=235 independently reviewed: bodyFoot=[-1, 0], ringCenter=[-1, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "236": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        -1,
+        0
+      ],
+      "ringCenterOffset": [
+        -1,
+        0
+      ],
+      "ringEllipseRadii": [
+        28,
+        8
+      ],
+      "ringVerticalSquash": 0.2857,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=236 independently reviewed: bodyFoot=[-1, 0], ringCenter=[-1, 0], radii=[28, 8]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "237": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        40,
+        12
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=237 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[40, 12]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "238": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        2,
+        0
+      ],
+      "ringCenterOffset": [
+        2,
+        0
+      ],
+      "ringEllipseRadii": [
+        24,
+        7
+      ],
+      "ringVerticalSquash": 0.2917,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=238 independently reviewed: bodyFoot=[2, 0], ringCenter=[2, 0], radii=[24, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "239": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        18,
+        0
+      ],
+      "ringCenterOffset": [
+        18,
+        0
+      ],
+      "ringEllipseRadii": [
+        32,
+        10
+      ],
+      "ringVerticalSquash": 0.3125,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=239 independently reviewed: bodyFoot=[18, 0], ringCenter=[18, 0], radii=[32, 10]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "240": {
+      "projectionStrategy": "grounded",
+      "visualFootOffset": [
+        12,
+        0
+      ],
+      "ringCenterOffset": [
+        12,
+        0
+      ],
+      "ringEllipseRadii": [
+        32,
+        10
+      ],
+      "ringVerticalSquash": 0.3125,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "large_or_boss",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=240 independently reviewed: bodyFoot=[12, 0], ringCenter=[12, 0], radii=[32, 10]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    },
+    "241": {
+      "projectionStrategy": "hover",
+      "visualFootOffset": [
+        -11,
+        -5
+      ],
+      "ringCenterOffset": [
+        -4,
+        0
+      ],
+      "ringEllipseRadii": [
+        20,
+        6
+      ],
+      "ringVerticalSquash": 0.3,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "hovering",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=241 independently reviewed: bodyFoot=[-11, -5], ringCenter=[-4, 0], radii=[20, 6]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      }
+    }
+  }
+}

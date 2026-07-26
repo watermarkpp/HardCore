@@ -45,6 +45,7 @@ func _run() -> void:
 	for enemy: EnemyActor in enemies:
 		assert(enemy.get_parent() == self, "monster and actor occluder must be direct Y-sort siblings")
 		_assert_item(enemy, "actor_root")
+		_assert_item(enemy.overhead, "overhead_root")
 		_assert_item(enemy.name_label, "name_label")
 		_assert_item(enemy.visual, "visual_root")
 		_assert_item(enemy.visual.get_node("BodySprite"), "body_sprite")

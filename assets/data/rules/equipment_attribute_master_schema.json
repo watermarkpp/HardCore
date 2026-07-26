@@ -1,0 +1,307 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "equipment.attribute.master.schema.v2",
+  "title": "HardCore Equipment Attribute Master",
+  "description": "正式装备属性主表。空白审核单元格不得覆盖已有值；魔法躲避显示百分比固定等于内部点数乘10。",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "contractId",
+    "distribution",
+    "evidenceSha256",
+    "sourceTier",
+    "sourceKind",
+    "blankOverridePolicy",
+    "units",
+    "scope",
+    "records"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 2
+    },
+    "contractId": {
+      "const": "equipment.attribute.master.v2"
+    },
+    "distribution": {
+      "const": "project.hardcore.equipment_attribute_master.v2"
+    },
+    "evidenceSha256": {
+      "type": "string",
+      "pattern": "^[A-F0-9]{64}$"
+    },
+    "sourceTier": {
+      "const": "primary"
+    },
+    "sourceKind": {
+      "const": "explicit_user_primary_override"
+    },
+    "blankOverridePolicy": {
+      "const": "preserve_existing_value"
+    },
+    "records": {
+      "type": "array",
+      "minItems": 163,
+      "maxItems": 163,
+      "items": {
+        "$ref": "#/$defs/record"
+      }
+    }
+  },
+  "$defs": {
+    "range": {
+      "type": "object",
+      "required": [
+        "min",
+        "max",
+        "rollPolicy"
+      ],
+      "properties": {
+        "min": {
+          "type": "integer"
+        },
+        "max": {
+          "type": "integer"
+        },
+        "rollPolicy": {
+          "const": "legacy_clamp_negative_span"
+        }
+      },
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "tier",
+        "sourceKind",
+        "contractId",
+        "distribution",
+        "evidenceSha256",
+        "originalPath",
+        "recordKey",
+        "fallbackEvidence"
+      ],
+      "properties": {
+        "tier": {
+          "const": "primary"
+        },
+        "sourceKind": {
+          "enum": [
+            "explicit_user_primary_revision",
+            "explicit_user_primary_override"
+          ]
+        },
+        "contractId": {
+          "const": "equipment.attribute.master.v2"
+        },
+        "distribution": {
+          "const": "project.hardcore.equipment_attribute_master.v2"
+        },
+        "evidenceSha256": {
+          "type": "string",
+          "pattern": "^[A-F0-9]{64}$"
+        },
+        "originalPath": {
+          "type": "string",
+          "minLength": 1
+        },
+        "recordKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fallbackEvidence": {
+          "type": "array",
+          "maxItems": 0
+        }
+      }
+    },
+    "record": {
+      "type": "object",
+      "required": [
+        "itemId",
+        "name",
+        "category",
+        "jobAffinity",
+        "jobLock",
+        "requirementType",
+        "requirementValue",
+        "legacyNeed",
+        "legacyNeedLevel",
+        "genderRestriction",
+        "weightRequirementType",
+        "weightRequirementValue",
+        "weight",
+        "durability",
+        "rollPolicy",
+        "stats",
+        "warnings",
+        "source"
+      ],
+      "properties": {
+        "itemId": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category": {
+          "enum": [
+            "武器",
+            "盔甲",
+            "头盔",
+            "项链",
+            "手镯",
+            "戒指"
+          ]
+        },
+        "jobAffinity": {
+          "enum": [
+            "general",
+            "warrior",
+            "wizard",
+            "taoist"
+          ]
+        },
+        "jobAffinityLabel": {
+          "type": "string",
+          "minLength": 1
+        },
+        "jobLock": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "requirementType": {
+          "enum": [
+            "level",
+            "max_dc",
+            "max_mc",
+            "max_sc"
+          ]
+        },
+        "requirementValue": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "legacyNeed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "legacyNeedLevel": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "genderRestriction": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "male",
+            "female",
+            null
+          ]
+        },
+        "weightRequirementType": {
+          "enum": [
+            "hand",
+            "wear"
+          ]
+        },
+        "weightRequirementValue": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "weight": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "durability": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "rollPolicy": {
+          "const": "legacy_clamp_negative_span"
+        },
+        "stats": {
+          "type": "object",
+          "properties": {
+            "dc": {
+              "$ref": "#/$defs/range"
+            },
+            "mc": {
+              "$ref": "#/$defs/range"
+            },
+            "sc": {
+              "$ref": "#/$defs/range"
+            },
+            "ac": {
+              "$ref": "#/$defs/range"
+            },
+            "mac": {
+              "$ref": "#/$defs/range"
+            }
+          },
+          "additionalProperties": false
+        },
+        "accuracy": {
+          "type": "integer"
+        },
+        "agility": {
+          "type": "integer"
+        },
+        "luck": {
+          "type": "integer"
+        },
+        "curse": {
+          "type": "integer"
+        },
+        "magicEvasionPercent": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "multipleOf": 10
+        },
+        "magicEvasionPoints": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "magicEvasionPercentPerPoint": {
+          "const": 10
+        },
+        "attackSpeedTier": {
+          "type": "integer"
+        },
+        "setId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "specialEffectId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "specialEffectDescription": {
+          "type": "string",
+          "minLength": 1
+        },
+        "warnings": {
+          "type": "array"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        }
+      }
+    }
+  },
+  "x-hardcore-validation": {
+    "uniqueItemId": true,
+    "magicEvasionFormula": "magicEvasionPercent = magicEvasionPoints * magicEvasionPercentPerPoint",
+    "blankWorkbookCellPolicy": "preserve_existing_value",
+    "acceptedLowConfidencePolicy": "explicit user override is authoritative; retain warning and original review status"
+  }
+}

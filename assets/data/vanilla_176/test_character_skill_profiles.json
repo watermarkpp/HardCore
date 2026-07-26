@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "contract_id": "test.characters.full_skills.v1",
+  "skill_level": 3,
+  "minimum_character_level": 40,
+  "equipment_tiers": [
+    "woma",
+    "zuma",
+    "chiyue"
+  ],
+  "templates": {
+    "warrior": {
+      "template_id": "test.skills.warrior.full.v1",
+      "skill_ids": [
+        "warrior.basic_swordsmanship",
+        "warrior.slaying_swordsmanship",
+        "warrior.thrusting",
+        "warrior.half_moon",
+        "warrior.wild_rush",
+        "warrior.fire_sword"
+      ],
+      "quick_slot_ids": [
+        "warrior.slaying_swordsmanship",
+        "warrior.thrusting",
+        "warrior.half_moon",
+        "warrior.fire_sword"
+      ],
+      "runtime_defaults": {
+        "contract_id": "gameplay.warrior.skill_runtime.v2",
+        "toggles": {
+          "warrior.thrusting": false,
+          "warrior.half_moon": false,
+          "warrior.fire_sword.auto_enabled": false
+        },
+        "cooldowns": {
+          "warrior.fire_sword.ready_remaining_ms": 0
+        }
+      }
+    },
+    "wizard": {
+      "template_id": "test.skills.wizard.full.v1",
+      "skill_ids": [
+        "wizard.fireball",
+        "wizard.repulsion_ring",
+        "wizard.temptation_light",
+        "wizard.hellfire",
+        "wizard.lightning",
+        "wizard.teleport",
+        "wizard.great_fireball",
+        "wizard.exploding_flame",
+        "wizard.fire_wall",
+        "wizard.laser",
+        "wizard.hell_lightning",
+        "wizard.magic_shield",
+        "wizard.holy_word",
+        "wizard.ice_storm"
+      ],
+      "quick_slot_ids": [
+        "wizard.lightning",
+        "wizard.fire_wall",
+        "wizard.magic_shield",
+        "wizard.ice_storm"
+      ],
+      "runtime_defaults": {
+        "contract_id": "caster_profession_state.v1",
+        "cooldowns": {}
+      }
+    },
+    "taoist": {
+      "template_id": "test.skills.taoist.full.v1",
+      "skill_ids": [
+        "taoist.healing",
+        "taoist.spiritual_warfare",
+        "taoist.poison",
+        "taoist.soul_fire_talisman",
+        "taoist.summon_skeleton",
+        "taoist.invisibility",
+        "taoist.mass_invisibility",
+        "taoist.magic_defense",
+        "taoist.defense",
+        "taoist.revelation",
+        "taoist.entrapment",
+        "taoist.mass_healing",
+        "taoist.summon_divine_beast"
+      ],
+      "quick_slot_ids": [
+        "taoist.healing",
+        "taoist.poison",
+        "taoist.soul_fire_talisman",
+        "taoist.summon_divine_beast"
+      ],
+      "runtime_defaults": {
+        "contract_id": "caster_profession_state.v1",
+        "cooldowns": {},
+        "test_material_grants": {
+          "amulet": 999,
+          "poison_powder": 999
+        }
+      }
+    }
+  }
+}

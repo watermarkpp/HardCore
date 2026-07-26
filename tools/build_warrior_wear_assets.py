@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import csv
 import json
 import sys
@@ -19,6 +20,10 @@ SERVICE_CATALOG = ROOT / "assets/data/service_item_catalog.json"
 SOURCE_POLICY = ROOT / "assets/data/source_priority_policy.json"
 OUTPUT = ROOT / "assets/art/characters/warrior/wear"
 MANIFEST = ROOT / "assets/data/warrior_wear_sources.json"
+PRIMARY_WEAPON_COMPATIBILITY = (
+    ROOT / "assets/data/equipment_primary_weapon_compatibility.json"
+)
+FORMAL_VISUAL_CATALOG = ROOT / "assets/data/equipment_visual_catalog.json"
 
 sys.path.insert(0, str(ROOT / "tools/vendor"))
 from extract_wil import decode_sprite, read_library  # noqa: E402
@@ -55,8 +60,8 @@ CLASSIC_SHAPE_OVERRIDES = {
 ACCEPTED_BASELINE_SHAPES = {
     "木剑": 0, "匕首": 1, "乌木剑": 0, "青铜剑": 2, "短剑": 3,
     "铁剑": 2, "青铜斧": 4, "八荒": 5, "凌风": 8, "破魂": 12,
-    "斩马刀": 9, "修罗": 14, "凝霜": 15, "炼狱": 16, "井中月": 19,
-    "裁决之杖": 24, "屠龙": 29, "命运之刃": 24, "赤血魔剑": 25,
+    "斩马刀": 9, "修罗": 14, "凝霜": 15, "炼狱": 11, "井中月": 19,
+    "裁决之杖": 24, "屠龙": 26, "命运之刃": 29, "赤血魔剑": 25,
     "祈祷之刃": 13, "布衣(男)": 1, "轻型盔甲(男)": 2,
     "重盔甲(男)": 3, "战神盔甲(男)": 3,
 }
@@ -66,6 +71,134 @@ ACCEPTED_BASELINE_SHAPES = {
 # revisit the original gaps; never replace the 24 already accepted mappings.
 PRIMARY_GAP_NAMES = {"鹤嘴锄", "怒斩", "中型盔甲(男)"}
 FEMALE_ONLY_ARMOR = {"圣战宝甲"}
+USER_CONFIRMED_PRIMARY_WEAPONS = {"炼狱", "屠龙", "命运之刃"}
+PRIMARY_UNRESOLVED_WEAPONS = {"落魄神兵"}
+
+
+def sync_primary_weapon_runtime_bridge() -> None:
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    compatibility = json.loads(
+        PRIMARY_WEAPON_COMPATIBILITY.read_text(encoding="utf-8")
+    )
+    formal_catalog = json.loads(
+        FORMAL_VISUAL_CATALOG.read_text(encoding="utf-8")
+    )
+    mappings = manifest.get("runtimeMappings", {})
+    formal_mappings = formal_catalog.get("runtimeMappings", {})
+    items_by_id = compatibility.get("itemsById", {})
+
+    purgatory_record = items_by_id.get("99", {})
+    purgatory_mapping = formal_mappings.get("炼狱", {})
+    if (
+        purgatory_record.get("mappingType")
+        != "primary_server_image_to_primary_client_pixels"
+        or int(purgatory_record.get("maleFeature", -1)) != 22
+        or not bool(
+            purgatory_record.get("userAtlasReviewEvidence", {}).get(
+                "confirmed",
+                False,
+            )
+        )
+        or int(purgatory_mapping.get("weaponAppearance", {}).get(
+            "feature",
+            -1,
+        )) != 22
+    ):
+        raise ValueError("formal user-confirmed 炼狱 feature 22 mapping is missing")
+    mappings["炼狱"] = purgatory_mapping
+
+    dragon_record = items_by_id.get("108", {})
+    dragon_mapping = formal_mappings.get("屠龙", {})
+    if (
+        dragon_record.get("mappingType")
+        != "user_confirmed_semantic_primary_weapon_feature"
+        or int(dragon_record.get("maleFeature", -1)) != 52
+        or int(dragon_mapping.get("weaponAppearance", {}).get(
+            "feature",
+            -1,
+        )) != 52
+    ):
+        raise ValueError("formal primary 屠龙 feature 52 mapping is missing")
+    mappings["屠龙"] = dragon_mapping
+
+    destiny_record = items_by_id.get("110", {})
+    destiny_mapping = formal_mappings.get("命运之刃", {})
+    if (
+        destiny_record.get("mappingType")
+        != "user_confirmed_semantic_primary_weapon_feature"
+        or int(destiny_record.get("maleFeature", -1)) != 58
+        or int(destiny_mapping.get("weaponAppearance", {}).get(
+            "feature",
+            -1,
+        )) != 58
+    ):
+        raise ValueError("formal primary 命运之刃 feature 58 mapping is missing")
+    mappings["命运之刃"] = destiny_mapping
+
+    rejected = [
+        value
+        for value in manifest.get("rejectedMappings", [])
+        if value.get("name") not in {"命运之刃", "落魄神兵"}
+    ]
+    rejected.append({
+        "name": "落魄神兵",
+        "reason": (
+            "primary compatibility contract has no evidence-backed "
+            "Weapon feature; runtime layer must remain hidden"
+        ),
+        "compatibilityRef": (
+            "res://assets/data/"
+            "equipment_primary_weapon_compatibility.json#/itemsById/111"
+        ),
+    })
+    manifest["runtimeMappings"] = mappings
+    manifest["rejectedMappings"] = rejected
+    manifest["primaryWeaponCompatibilityBridge"] = {
+        "source": (
+            "res://assets/data/"
+            "equipment_primary_weapon_compatibility.json"
+        ),
+        "formalCatalog": (
+            "res://assets/data/equipment_visual_catalog.json"
+        ),
+        "policy": (
+            "primary formal weapon mappings override the legacy warrior "
+            "candidate table for the explicitly affected names"
+        ),
+        "synced": {
+            "炼狱": {
+                "itemId": 99,
+                "maleFeature": 22,
+                "mappingType": (
+                    "primary_server_image_to_primary_client_pixels"
+                ),
+            },
+            "屠龙": {
+                "itemId": 108,
+                "maleFeature": 52,
+                "mappingType": (
+                    "user_confirmed_semantic_primary_weapon_feature"
+                ),
+            },
+            "命运之刃": {
+                "itemId": 110,
+                "maleFeature": 58,
+                "mappingType": (
+                    "user_confirmed_semantic_primary_weapon_feature"
+                ),
+            },
+        },
+        "removedUnresolved": ["落魄神兵"],
+    }
+    MANIFEST.write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    print(
+        "WARRIOR_WEAR_PRIMARY_WEAPON_SYNC_PASS "
+        "炼狱=feature22 屠龙=feature52 命运之刃=feature58 "
+        "落魄神兵=unresolved"
+    )
 
 
 def source_rows() -> dict[str, dict]:
@@ -173,6 +306,16 @@ def main() -> None:
     catalog = json.loads(CATALOG.read_text(encoding="utf-8")).get("items", [])
     candidates = source_rows()
     primary_distribution, primary_rows = primary_service_rows()
+    primary_compatibility = json.loads(
+        PRIMARY_WEAPON_COMPATIBILITY.read_text(encoding="utf-8")
+    )
+    formal_weapon_mappings = json.loads(
+        FORMAL_VISUAL_CATALOG.read_text(encoding="utf-8")
+    ).get("runtimeMappings", {})
+    primary_items_by_name = {
+        str(value.get("itemName", "")): value
+        for value in primary_compatibility.get("itemsById", {}).values()
+    }
     target_names = {
         str(item.get("name", "")): item
         for item in catalog
@@ -192,6 +335,40 @@ def main() -> None:
     for name, item in target_names.items():
         if name in FEMALE_ONLY_ARMOR:
             rejected.append({"name": name, "reason": "女性角色不在当前开发范围"})
+            continue
+        if (
+            item.get("category") == "武器"
+            and name in PRIMARY_UNRESOLVED_WEAPONS
+        ):
+            rejected.append({
+                "name": name,
+                "reason": (
+                    "primary compatibility contract is unresolved; "
+                    "do not adopt a lower-tier Shape"
+                ),
+            })
+            continue
+        if (
+            item.get("category") == "武器"
+            and name in USER_CONFIRMED_PRIMARY_WEAPONS
+        ):
+            compatibility_record = primary_items_by_name.get(name, {})
+            formal_mapping = formal_weapon_mappings.get(name, {})
+            expected_feature = ACCEPTED_BASELINE_SHAPES[name] * 2
+            if (
+                compatibility_record.get("mappingType")
+                != "user_confirmed_semantic_primary_weapon_feature"
+                or int(compatibility_record.get("maleFeature", -1))
+                != expected_feature
+                or int(formal_mapping.get("weaponAppearance", {}).get(
+                    "feature",
+                    -1,
+                )) != expected_feature
+            ):
+                raise ValueError(
+                    f"{name} formal primary semantic mapping changed"
+                )
+            mappings[name] = formal_mapping
             continue
         primary_row = primary_rows.get(name) if name in PRIMARY_GAP_NAMES else None
         row = candidates.get(name)
@@ -301,10 +478,40 @@ def main() -> None:
         "rejectedMappings": rejected,
         "generatedAtlases": len(atlas_cache) * len(ACTIONS),
         "policy": "帧公式和客户端像素为A；逐件Shape为B。越界、缺名或不兼容值拒绝运行，不猜测替换。",
+        "primaryWeaponCompatibilityBridge": {
+            "source": (
+                "res://assets/data/"
+                "equipment_primary_weapon_compatibility.json"
+            ),
+            "formalCatalog": (
+                "res://assets/data/equipment_visual_catalog.json"
+            ),
+            "userConfirmedSemanticWeapons": {
+                name: {
+                    "feature": ACCEPTED_BASELINE_SHAPES[name] * 2,
+                    "lowerTierShapeAdopted": False,
+                }
+                for name in sorted(USER_CONFIRMED_PRIMARY_WEAPONS)
+            },
+            "unresolvedWeapons": sorted(PRIMARY_UNRESOLVED_WEAPONS),
+        },
     }
     MANIFEST.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"WARRIOR_WEAR_MAPPINGS={len(mappings)} REJECTED={len(rejected)} ATLASES={payload['generatedAtlases']}")
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--sync-primary-weapons-only",
+        action="store_true",
+        help=(
+            "Update only the affected legacy runtime weapon entries from "
+            "the formal primary contracts"
+        ),
+    )
+    arguments = parser.parse_args()
+    if arguments.sync_primary_weapons_only:
+        sync_primary_weapon_runtime_bridge()
+    else:
+        main()

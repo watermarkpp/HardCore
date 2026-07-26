@@ -3,6 +3,8 @@ extends CharacterBody2D
 
 signal summon_state_changed(previous_state: int, current_state: int)
 
+const SummonVisualRegistryScript := preload("res://scripts/summon_visual_registry.gd")
+
 enum SummonState {
 	FOLLOW_OWNER,
 	ACQUIRE_TARGET,
@@ -50,6 +52,16 @@ var _attack_timer := 0.0
 var _rng := RandomNumberGenerator.new()
 var _sprite: Sprite2D
 var _current_target: EnemyActor
+var _animation_resources: Dictionary = {}
+var _visual_state := "idle"
+var _visual_direction := 0
+var _visual_frame := 0
+var _visual_elapsed := 0.0
+var _visual_facing := Vector2.DOWN
+var _attack_visual_remaining := 0.0
+var _hit_visual_remaining := 0.0
+var _death_visual_remaining := 0.0
+var _visual_activation_retry := 0.0
 
 
 func setup(player: PlayerCharacter, display_name: String, power: int, learned_level := -1, source_skill_id := "", owner_level_value := -1) -> void:
@@ -110,7 +122,58 @@ func _ready() -> void:
 	queue_redraw()
 
 
+func _process(delta: float) -> void:
+	if summon_id != "divine_beast":
+		return
+	_attack_visual_remaining = maxf(0.0, _attack_visual_remaining - delta)
+	_hit_visual_remaining = maxf(0.0, _hit_visual_remaining - delta)
+	if state == SummonState.DEAD:
+		_death_visual_remaining = maxf(0.0, _death_visual_remaining - delta)
+		if _death_visual_remaining <= 0.0:
+			queue_free()
+			return
+	if _animation_resources.is_empty():
+		_visual_activation_retry = maxf(0.0, _visual_activation_retry - delta)
+		if _visual_activation_retry <= 0.0:
+			_visual_activation_retry = 0.25
+			activate_visual_resources()
+		return
+	var next_visual_state := "idle"
+	if state == SummonState.DEAD:
+		next_visual_state = "death"
+	elif _hit_visual_remaining > 0.0:
+		next_visual_state = "hit"
+	elif _attack_visual_remaining > 0.0:
+		next_visual_state = "attack"
+	elif velocity.length_squared() > 25.0:
+		next_visual_state = "walk"
+	if next_visual_state != _visual_state:
+		_visual_state = next_visual_state
+		_visual_elapsed = 0.0
+	else:
+		_visual_elapsed += delta
+	if velocity.length_squared() > 25.0:
+		_visual_facing = velocity.normalized()
+	elif is_instance_valid(_current_target):
+		var target_offset := _current_target.global_position - global_position
+		if target_offset.length_squared() > 0.001:
+			_visual_facing = target_offset.normalized()
+	elif is_instance_valid(owner_player) and owner_player.facing.length_squared() > 0.001:
+		_visual_facing = owner_player.facing.normalized()
+	_visual_direction = ArtSpec.mir2_client_direction_row(_visual_facing)
+	var frame_count := int(_animation_resources.get("frame_counts", {}).get(_visual_state, 1))
+	var frame_ms := int(_animation_resources.get("frame_ms", {}).get(_visual_state, 100))
+	if _visual_state in ["attack", "hit", "death"]:
+		_visual_frame = mini(frame_count - 1, int(floor(_visual_elapsed * 1000.0 / float(maxi(1, frame_ms)))))
+	else:
+		_visual_frame = int(floor(_visual_elapsed * 1000.0 / float(maxi(1, frame_ms)))) % frame_count
+	_apply_visual_frame()
+
+
 func _physics_process(delta: float) -> void:
+	if state == SummonState.DEAD:
+		velocity = Vector2.ZERO
+		return
 	_attack_timer = maxf(0.0, _attack_timer - delta)
 	remaining_lifetime = maxf(0.0, remaining_lifetime - delta)
 	if remaining_lifetime <= 0.0:
@@ -142,6 +205,7 @@ func _physics_process(delta: float) -> void:
 			if _attack_timer <= 0.0:
 				_attack_timer = attack_interval
 				last_attack_type = attack_type
+				_attack_visual_remaining = _visual_action_duration("attack")
 				enemy.take_damage(_rng.randi_range(attack_min, attack_max), self)
 		else:
 			_set_state(SummonState.CHASE_TARGET)
@@ -192,7 +256,15 @@ func take_damage(amount: int) -> void:
 	if current_hp == 0:
 		_set_state(SummonState.DEAD)
 		velocity = Vector2.ZERO
-		queue_free()
+		_hit_visual_remaining = 0.0
+		_attack_visual_remaining = 0.0
+		_death_visual_remaining = _visual_action_duration("death")
+		_visual_state = "death"
+		_visual_elapsed = 0.0
+	elif summon_id == "divine_beast":
+		_hit_visual_remaining = _visual_action_duration("hit")
+		_visual_state = "hit"
+		_visual_elapsed = 0.0
 	queue_redraw()
 
 
@@ -201,6 +273,15 @@ func state_name() -> String:
 
 
 func _install_visual() -> void:
+	if summon_id == "divine_beast":
+		_sprite = Sprite2D.new()
+		_sprite.name = "DivineBeastAnimatedBody"
+		_sprite.centered = false
+		_sprite.region_enabled = true
+		_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		add_child(_sprite)
+		activate_visual_resources()
+		return
 	var texture := CasterSkillVisualRegistry.texture(skill_id)
 	if texture == null:
 		return
@@ -213,6 +294,53 @@ func _install_visual() -> void:
 	add_child(_sprite)
 
 
+func activate_visual_resources() -> bool:
+	if summon_id != "divine_beast":
+		return _sprite != null
+	var profile := SummonVisualRegistryScript.profile(summon_id)
+	if profile.is_empty():
+		return false
+	_animation_resources = profile
+	var frame_size: Vector2i = profile.get("frame_size", Vector2i.ZERO)
+	var foot_anchor: Vector2i = profile.get("foot_anchor", Vector2i.ZERO)
+	var actor_ground_offset: Vector2i = profile.get("actor_ground_offset", Vector2i.ZERO)
+	_sprite.position = -Vector2(foot_anchor + actor_ground_offset)
+	_sprite.region_rect = Rect2(Vector2.ZERO, frame_size)
+	refresh_visual_after_activation()
+	return true
+
+
+func refresh_visual_after_activation() -> void:
+	if _animation_resources.is_empty() or _sprite == null:
+		return
+	_visual_state = "death" if state == SummonState.DEAD else "idle"
+	_visual_direction = ArtSpec.mir2_client_direction_row(_visual_facing)
+	_visual_frame = 0
+	_visual_elapsed = 0.0
+	_apply_visual_frame()
+
+
+func _apply_visual_frame() -> void:
+	if _animation_resources.is_empty() or _sprite == null:
+		return
+	var frame_size: Vector2i = _animation_resources.get("frame_size", Vector2i.ZERO)
+	_sprite.texture = _animation_resources.get(_visual_state, null)
+	_sprite.region_rect = Rect2(
+		_visual_frame * frame_size.x,
+		_visual_direction * frame_size.y,
+		frame_size.x,
+		frame_size.y
+	)
+
+
+func _visual_action_duration(action_name: String) -> float:
+	if _animation_resources.is_empty():
+		return 1.2 if action_name == "death" else 0.2
+	var frame_count := int(_animation_resources.get("frame_counts", {}).get(action_name, 1))
+	var frame_ms := int(_animation_resources.get("frame_ms", {}).get(action_name, 100))
+	return float(frame_count * frame_ms) / 1000.0
+
+
 func _draw() -> void:
 	var color := Color(0.88, 0.72, 0.35) if summon_name == "神兽" else Color(0.72, 0.74, 0.70)
 	var radius := 21.0 if summon_name == "神兽" else 15.0
@@ -220,7 +348,7 @@ func _draw() -> void:
 	draw_circle(Vector2.ZERO, radius, Color(0, 0, 0, 0.28))
 	draw_circle(Vector2(0, -1), radius * 0.56, Color(0, 0, 0, 0.56))
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
-	if _sprite == null:
+	if _sprite == null and summon_id != "divine_beast":
 		draw_circle(Vector2(0, -4), radius, color)
 		draw_circle(Vector2(-6, -7), 2.5, Color(0.15, 0.75, 0.35))
 		draw_circle(Vector2(6, -7), 2.5, Color(0.15, 0.75, 0.35))

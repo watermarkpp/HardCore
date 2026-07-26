@@ -13,11 +13,21 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 HELMET_ROOT = ROOT / "assets/art/characters/warrior/wear/helmet"
 DRESS_ROOT = ROOT / "assets/art/characters/warrior/wear/dress"
+FORMAL_DRESS_ROOT = (
+    ROOT / "assets/art/items/client/world_wear/dress/male"
+)
 SOURCE = HELMET_ROOT / "black_iron_helmet.source.json"
 DEATH_POSE_BASELINE = ROOT / "outputs/resource_catalog/black_iron_helmet/death_pose_baseline.json"
 GODOT_RENDER_MANIFEST = ROOT / "outputs/visual_acceptance/black_iron_helmet_3d/manifest.json"
 REPORT = ROOT / "outputs/validation/black_iron_helmet_asset_report.json"
-ACTIONS = {"idle": 4, "walk": 6, "attack": 6, "hit": 3, "death": 4}
+ACTIONS = {
+    "idle": 4,
+    "walk": 6,
+    "attack": 6,
+    "cast": 6,
+    "hit": 3,
+    "death": 4,
+}
 CELL = (192, 160)
 
 
@@ -27,8 +37,8 @@ def cell_box(frame: int, direction: int) -> tuple[int, int, int, int]:
 
 def main() -> None:
     source = json.loads(SOURCE.read_text(encoding="utf-8"))
-    if source.get("schemaVersion") != 15:
-        raise AssertionError("Black Iron Helmet provenance schema is not version 15")
+    if source.get("schemaVersion") != 16:
+        raise AssertionError("Black Iron Helmet provenance schema is not version 16")
     direction_references = source.get("approvedDirectionReferences", {})
     if direction_references.get("sourceSlotDirectionOrder") != [
         "N", "E", "W", "SW", "S", "SE", "NW", "NE"
@@ -40,7 +50,9 @@ def main() -> None:
         raise AssertionError("Direct approved-design pixels are not recorded")
     if not source.get("generation", {}).get("aiConceptUsed", False):
         raise AssertionError("Approved meteoric concept is missing from construction provenance")
-    if source.get("generation", {}).get("aiPixelsLimitedTo") != ["idle", "walk", "attack", "hit"]:
+    if source.get("generation", {}).get("aiPixelsLimitedTo") != [
+        "idle", "walk", "attack", "cast", "hit"
+    ]:
         raise AssertionError("Direct approved-design pixel scope is incorrect")
     generator = str(source.get("generation", {}).get("runtimePixelGenerator", ""))
     if "Direct approved-design crops" not in generator or "Godot 4.7" not in generator:
@@ -67,6 +79,8 @@ def main() -> None:
     for action, frames in ACTIONS.items():
         helmet_path = HELMET_ROOT / f"black_iron_helmet_{action}.png"
         dress_path = DRESS_ROOT / f"dress_006_{action}.png"
+        if not dress_path.exists():
+            dress_path = FORMAL_DRESS_ROOT / f"dress_006_{action}.png"
         helmet = Image.open(helmet_path).convert("RGBA")
         dress = Image.open(dress_path).convert("RGBA")
         expected_size = (CELL[0] * frames, CELL[1] * 8)
@@ -98,10 +112,15 @@ def main() -> None:
                     alpha * count for alpha, count in enumerate(alpha_histogram)
                 ) / 255.0
                 opaque_counts.append(round(effective_opaque_pixels, 3))
+                cell_bytes = helmet_cell.tobytes()
                 visible_colours = {
-                    pixel[:3]
-                    for pixel in helmet_cell.getdata()
-                    if pixel[3] >= 128
+                    (
+                        cell_bytes[offset],
+                        cell_bytes[offset + 1],
+                        cell_bytes[offset + 2],
+                    )
+                    for offset in range(0, len(cell_bytes), 4)
+                    if cell_bytes[offset + 3] >= 128
                 }
                 if not visible_colours:
                     raise AssertionError(f"{action} direction={direction} frame={frame} has no visible colours")
@@ -131,7 +150,7 @@ def main() -> None:
                 moving_directions += 1
         if len(set(direction_signatures)) != 8:
             raise AssertionError(f"{action} does not have eight distinct direction rows")
-        if action in {"walk", "attack", "hit", "death"} and moving_directions != 8:
+        if action in {"walk", "attack", "cast", "hit", "death"} and moving_directions != 8:
             raise AssertionError(f"{action} helmet does not follow every direction's frame motion")
         report_actions[action] = {
             "framesPerDirection": frames,
@@ -179,20 +198,23 @@ def main() -> None:
                 raise AssertionError(
                     f"{action} {direction_name} F{frame['frame']} is not centred on its same-cell Helmet.wil anchor"
                 )
-            if action == "death":
-                if len(hair_anchor) != 2:
-                    raise AssertionError(f"death {direction_name} F{frame['frame']} has no Hair.wil head anchor")
-                head_distance = math.dist(
-                    [float(value) for value in helmet_anchor],
-                    [float(value) for value in hair_anchor],
+            if len(hair_anchor) != 2:
+                raise AssertionError(
+                    f"{action} {direction_name} F{frame['frame']} "
+                    "has no Hair.wil head anchor"
                 )
-                if head_distance > 10.0:
-                    raise AssertionError(
-                        f"death {direction_name} F{frame['frame']} helmet is not on the actor head: "
-                        f"distance={head_distance:.3f}"
-                    )
-    if total_frames != 184:
-        raise AssertionError(f"Expected 184 logical frames, got {total_frames}")
+            head_distance = math.dist(
+                [float(value) for value in helmet_anchor],
+                [float(value) for value in hair_anchor],
+            )
+            if head_distance > 10.0:
+                raise AssertionError(
+                    f"{action} {direction_name} F{frame['frame']} "
+                    f"helmet is not on the actor head: "
+                    f"distance={head_distance:.3f}"
+                )
+    if total_frames != 232:
+        raise AssertionError(f"Expected 232 logical frames, got {total_frames}")
     report = {
         "status": "pass",
         "item": "黑铁头盔",
@@ -201,16 +223,16 @@ def main() -> None:
         "actions": report_actions,
         "checks": [
             "all action atlases use 192x160 cells",
-            "all 184 logical frames are non-empty",
+            "all 232 logical frames are non-empty",
             "all eight direction rows are distinct",
-            "walk/attack/hit/death follow per-frame head motion in every direction",
+            "walk/attack/cast/hit/death follow per-frame head motion in every direction",
             "helmet horizontally overlaps the equipped dress body in every frame",
             "all standing/action directions use direct approved-design crops with only background removal and resize",
             "standing/action alpha-weighted visual mass stays within 90%-125% of the same-direction client median",
             "all death directions come from one Godot geometry with explicit canonical yaw",
-            "all 184 cells use the matching action/direction/frame six-appearance Helmet.wil median anchor",
+            "all 232 cells use the matching action/direction/frame six-appearance Helmet.wil median anchor",
             "all 32 death cells use the matching direction/frame Godot pose record",
-            "every death helmet anchor remains within 10 pixels of the same-cell male-warrior Hair.wil head",
+            "every helmet anchor remains within 10 pixels of the same-cell male-warrior Hair.wil head",
             "every generated helmet fits within its real-client median envelope",
             "runtime pixels use only the four-tone neutral matte black-iron palette",
             "death opaque visual mass stays within 65%-135% of the matching client median",

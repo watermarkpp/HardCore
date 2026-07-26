@@ -84,6 +84,10 @@ func _ready() -> void:
 			_assert_same_geometry(
 				editor_geometry, runtime_geometry, map_id, command_index
 			)
+			_assert_sprite_geometry(
+				runtime_command, runtime_geometry, design_size, map_id,
+				command_index
+			)
 			var instance: Dictionary = runtime_command.instance
 			var asset: Dictionary = runtime_command.asset
 			var tile: Array = instance.get("tile", [0, 0])
@@ -167,3 +171,34 @@ func _assert_same_geometry(
 	var runtime_rect: Rect2 = runtime.rect
 	assert(editor_rect.position.is_equal_approx(runtime_rect.position), context)
 	assert(editor_rect.size.is_equal_approx(runtime_rect.size), context)
+
+
+func _assert_sprite_geometry(
+	command: Dictionary,
+	geometry: Dictionary,
+	design_size: Vector2i,
+	map_id: String,
+	command_index: int
+) -> void:
+	var context := "%s command=%d" % [map_id, command_index]
+	var parent_origin := Vector2.ZERO
+	if str(command.get("render_domain", "")) == GeometryService.RENDER_DOMAIN_ACTOR_Y_SORT:
+		parent_origin = GeometryService.command_actor_sort_world(
+			command, design_size
+		)
+	var sprite := Sprite2D.new()
+	sprite.centered = false
+	GeometryService.apply_runtime_sprite_geometry(
+		sprite, command, geometry, parent_origin
+	)
+	assert(
+		(sprite.position + parent_origin).is_equal_approx(geometry.center),
+		"%s parent-relative center shifted" % context
+	)
+	assert(sprite.offset.is_equal_approx(-geometry.anchor), "%s anchor" % context)
+	assert(sprite.scale.is_equal_approx(geometry.visual_scale), "%s scale" % context)
+	assert(
+		is_equal_approx(sprite.rotation, float(geometry.rotation)),
+		"%s rotation" % context
+	)
+	sprite.free()

@@ -1,11 +1,16 @@
 extends Node
 
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
+const EquipmentTestLoadoutCatalogScript = preload("res://scripts/equipment_test_loadout_catalog.gd")
+const TestCharacterSkillProfilesScript = preload("res://scripts/test_character_skill_profiles.gd")
+const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
 
 signal profile_changed
 signal inventory_changed
 signal equipment_changed
 signal skills_changed
+signal quick_slots_changed(change: Dictionary)
+signal warrior_runtime_state_changed(snapshot: Dictionary)
 signal consumable_requested(item_name: String)
 signal scroll_requested(item_name: String)
 signal quests_changed
@@ -17,6 +22,8 @@ const LEGACY_SAVE_PATH := "user://player_save_v02.json"
 const PROFILE_INDEX_PATH := "user://character_profiles.json"
 const PROFILE_DIRECTORY := "user://characters"
 const AUTOSAVE_INTERVAL := 30.0
+const WARRIOR_RUNTIME_CONTRACT_ID := "gameplay.warrior.skill_runtime.v2"
+const TEST_CHARACTER_ROSTER_CONTRACT_ID := "test.character.roster.full_equipment_skills.v1"
 const EQUIPMENT_SLOTS: Array[String] = ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指"]
 const VERIFIED_EXPERIENCE_1_TO_22 := {
 	1: 100, 2: 200, 3: 300, 4: 400, 5: 600, 6: 900, 7: 1200, 8: 1700, 9: 2500,
@@ -39,6 +46,7 @@ var equipment: Dictionary = {
 }
 var learned_skills: Dictionary = {}
 var quick_slots: Array[String] = ["", "", "", ""]
+var warrior_runtime_state: Dictionary = {}
 var quest_states: Dictionary = {}
 var saved_map_id := 4
 var saved_position := Vector2.ZERO
@@ -69,6 +77,8 @@ func _process(delta: float) -> void:
 func _ready() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(PROFILE_DIRECTORY))
 	_migrate_single_save_to_profile()
+	if OS.is_debug_build() and DisplayServer.get_name() != "headless":
+		ensure_equipment_skill_test_roster()
 	reset_progress(false)
 	recalculate_stats()
 
@@ -86,6 +96,7 @@ func reset_progress(emit_updates := true) -> void:
 	equipment = _empty_equipment()
 	learned_skills = {}
 	quick_slots = ["", "", "", ""]
+	warrior_runtime_state = _default_warrior_runtime_state()
 	quest_states = {}
 	saved_map_id = 4
 	saved_position = Vector2.ZERO
@@ -112,6 +123,8 @@ func select_profession(value: String) -> String:
 	for index in range(quick_slots.size()):
 		if not learned_skills.has(quick_slots[index]):
 			quick_slots[index] = ""
+	if profession != "战士":
+		warrior_runtime_state = _default_warrior_runtime_state()
 	var returned_items: Array[String] = []
 	for slot: String in equipment.keys():
 		var equipped_record: Variant = equipment[slot]
@@ -636,6 +649,9 @@ func recalculate_stats() -> void:
 		"wear_weight": current_wear_weight(),
 		"critical_chance": 0.0,
 		"critical_damage_multiplier": 1.5,
+		"anti_magic_points": CombatResolutionRules.BASE_CHARACTER_ANTI_MAGIC_POINTS,
+		"magic_evasion_percent": CombatResolutionRules.anti_magic_display_percent(CombatResolutionRules.BASE_CHARACTER_ANTI_MAGIC_POINTS),
+		"attack_speed_tier": 0,
 		"attack_speed_percent": 0.0,
 		"cast_speed_percent": 0.0,
 		"skill_level_bonuses": {},
@@ -662,10 +678,23 @@ func recalculate_stats() -> void:
 		_add_nullable_stat(result, "magic_defense_max", item.get("mdefMax", null))
 		_add_nullable_stat(result, "accuracy", item.get("accuracy", null))
 		_add_nullable_stat(result, "agility", item.get("agility", null))
-		_add_nullable_stat(result, "luck", item.get("luck", null))
+		result["luck"] = int(result.get("luck", 0)) + EquipmentRulesScript.equipment_luck_contribution(
+			item,
+			equipped_value if equipped_value is Dictionary else {},
+			slot == "武器",
+		)
 		_add_nullable_stat(result, "max_hp", item.get("hpBonus", null))
 		_add_nullable_stat(result, "max_mp", item.get("mpBonus", null))
 		_add_nullable_stat(result, "life_steal_percent", item.get("lifeStealPercent", null))
+		if item.has("magicEvasionPoints"):
+			_add_nullable_stat(result, "anti_magic_points", item.get("magicEvasionPoints", null))
+		elif item.has("magicEvasionPercent"):
+			_add_nullable_stat(
+				result,
+				"anti_magic_points",
+				CombatResolutionRules.anti_magic_points_from_display_percent(int(item.magicEvasionPercent))
+			)
+		_add_nullable_stat(result, "attack_speed_tier", item.get("attackSpeedTier", null))
 		var modifiers: Variant = item.get("modifiers", {})
 		if modifiers is Array:
 			result = ModifierEffectRuntime.apply_modifiers(result, modifiers, {
@@ -681,14 +710,15 @@ func recalculate_stats() -> void:
 		if modifiers is Dictionary:
 			result["critical_chance"] = float(result.get("critical_chance", 0.0)) + float(modifiers.get("criticalChance", 0.0))
 			result["critical_damage_multiplier"] = float(result.get("critical_damage_multiplier", 1.5)) + float(modifiers.get("criticalDamageBonus", 0.0))
+			result["anti_magic_points"] = int(result.get("anti_magic_points", 0)) + int(modifiers.get("antiMagicPoints", 0))
+			result["anti_magic_points"] = int(result.get("anti_magic_points", 0)) + CombatResolutionRules.anti_magic_points_from_display_percent(int(modifiers.get("magicEvasionPercent", 0)))
+			result["attack_speed_tier"] = int(result.get("attack_speed_tier", 0)) + int(modifiers.get("attackSpeedTier", 0))
 			result["attack_speed_percent"] = float(result.get("attack_speed_percent", 0.0)) + float(modifiers.get("attackSpeedPercent", 0.0))
 			result["cast_speed_percent"] = float(result.get("cast_speed_percent", 0.0)) + float(modifiers.get("castSpeedPercent", 0.0))
 			var skill_levels: Variant = modifiers.get("skillLevels", {})
 			if skill_levels is Dictionary:
 				for skill_name: String in skill_levels.keys():
 					result["skill_level_bonuses"][skill_name] = int(result["skill_level_bonuses"].get(skill_name, 0)) + int(skill_levels[skill_name])
-		if slot == "武器":
-			result["luck"] = int(result.get("luck", 0)) + int(equipped_value.get("weapon_luck", 0)) - int(equipped_value.get("weapon_curse", 0))
 		var special := EquipmentRulesScript.special_effect_for(item)
 		if not special.is_empty() and bool(special.get("runtime", false)):
 			var effect_id := str(special.get("id", ""))
@@ -719,6 +749,9 @@ func recalculate_stats() -> void:
 		result["accuracy"] = int(result.get("accuracy", 0)) + WarriorCombatMath.basic_sword_accuracy_bonus(int(learned_skills["基本剑术"]))
 	if learned_skills.has("攻杀剑术"):
 		result["accuracy"] = int(result.get("accuracy", 0)) + WarriorCombatMath.slaying_accuracy_bonus(int(learned_skills["攻杀剑术"]))
+	result["anti_magic_points"] = clampi(int(result.get("anti_magic_points", CombatResolutionRules.BASE_CHARACTER_ANTI_MAGIC_POINTS)), 0, CombatResolutionRules.ANTI_MAGIC_ROLL_SIDES)
+	result["magic_evasion_percent"] = CombatResolutionRules.anti_magic_display_percent(int(result.anti_magic_points))
+	result["attack_speed_tier"] = int(result.get("attack_speed_tier", 0))
 	computed_stats = result
 	profile_changed.emit()
 
@@ -911,6 +944,7 @@ func save_game() -> void:
 		"equipment": equipment,
 		"learned_skills": learned_skills,
 		"quick_slots": quick_slots,
+		"warrior_runtime_state": warrior_runtime_state,
 		"quest_states": quest_states,
 		"content_packages": ContentLayers.enabled_package_ids(),
 		"content_schema_version": 1,
@@ -955,6 +989,7 @@ func load_save() -> void:
 	quick_slots = ["", "", "", ""]
 	for index in range(mini(4, saved_slots.size())):
 		quick_slots[index] = str(saved_slots[index])
+	warrior_runtime_state = _normalized_warrior_runtime_state(parsed.get("warrior_runtime_state", {}))
 	quest_states = parsed.get("quest_states", {})
 	saved_map_id = int(parsed.get("map_id", 4))
 	var position_data: Variant = parsed.get("position", [0.0, 0.0])
@@ -967,6 +1002,75 @@ func load_save() -> void:
 	if load_path == LEGACY_SAVE_PATH:
 		_commit_save()
 	recalculate_stats()
+
+
+func apply_quick_slot_assignment(result: Dictionary) -> bool:
+	if not bool(result.get("ok", false)):
+		return false
+	var change: Dictionary = result.get("change", {})
+	if str(change.get("contract_id", "")) != "gameplay.skill.quick_slot_assignment.v1":
+		return false
+	var slots_value: Variant = result.get("slots", [])
+	if not slots_value is Array or slots_value.size() != quick_slots.size():
+		return false
+	var next_slots: Array[String] = []
+	for value: Variant in slots_value:
+		var skill_name := str(value)
+		if not skill_name.is_empty() and not learned_skills.has(skill_name):
+			return false
+		next_slots.append(skill_name)
+	quick_slots = next_slots
+	quick_slots_changed.emit(change.duplicate(true))
+	skills_changed.emit()
+	profile_changed.emit()
+	_commit_save()
+	return true
+
+
+func apply_warrior_runtime_state(snapshot: Dictionary, persist := false) -> bool:
+	var normalized := _normalized_warrior_runtime_state(snapshot)
+	if normalized.is_empty():
+		return false
+	warrior_runtime_state = normalized
+	warrior_runtime_state_changed.emit(warrior_runtime_state.duplicate(true))
+	if persist:
+		profile_changed.emit()
+		_commit_save()
+	return true
+
+
+func warrior_runtime_state_for_restore() -> Dictionary:
+	return warrior_runtime_state.duplicate(true)
+
+
+func _normalized_warrior_runtime_state(snapshot: Variant) -> Dictionary:
+	if not snapshot is Dictionary or str(snapshot.get("contract_id", "")) != WARRIOR_RUNTIME_CONTRACT_ID:
+		return _default_warrior_runtime_state()
+	var toggles: Dictionary = snapshot.get("toggles", {})
+	var cooldowns: Dictionary = snapshot.get("cooldowns", {})
+	return {
+		"contract_id": WARRIOR_RUNTIME_CONTRACT_ID,
+		"toggles": {
+			"warrior.thrusting": bool(toggles.get("warrior.thrusting", false)),
+			"warrior.half_moon": bool(toggles.get("warrior.half_moon", false)),
+			"warrior.fire_sword.auto_enabled": bool(toggles.get("warrior.fire_sword.auto_enabled", false)),
+		},
+		"cooldowns": {
+			"warrior.fire_sword.ready_remaining_ms": maxi(0, int(cooldowns.get("warrior.fire_sword.ready_remaining_ms", 0))),
+		},
+	}
+
+
+func _default_warrior_runtime_state() -> Dictionary:
+	return {
+		"contract_id": WARRIOR_RUNTIME_CONTRACT_ID,
+		"toggles": {
+			"warrior.thrusting": false,
+			"warrior.half_moon": false,
+			"warrior.fire_sword.auto_enabled": false,
+		},
+		"cooldowns": {"warrior.fire_sword.ready_remaining_ms": 0},
+	}
 
 
 func update_world_location(map_id: int, position: Vector2) -> void:
@@ -993,6 +1097,113 @@ func list_characters() -> Array[Dictionary]:
 			result.append(entry.duplicate(true))
 	result.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a.get("updated_at", 0)) > int(b.get("updated_at", 0)))
 	return result
+
+
+func ensure_equipment_skill_test_roster() -> Dictionary:
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(profile_directory))
+	var index := _read_json(profile_index_path)
+	var profiles: Array = index.get("profiles", [])
+	var existing_index_ids := {}
+	for profile_value: Variant in profiles:
+		if profile_value is Dictionary:
+			existing_index_ids[str(profile_value.get("id", ""))] = true
+	var created := 0
+	var indexed := 0
+	var now := int(Time.get_unix_time_from_system())
+	for loadout_value: Variant in EquipmentTestLoadoutCatalogScript.loadouts():
+		if not loadout_value is Dictionary:
+			continue
+		var loadout: Dictionary = loadout_value
+		var skill_tier := _skill_tier_for_equipment_tier(str(loadout.get("tierId", "")))
+		var skill_profile := TestCharacterSkillProfilesScript.profile_for_character(
+			str(loadout.get("profession", "")),
+			skill_tier
+		)
+		if skill_profile.is_empty():
+			continue
+		var profile_id := str(skill_profile.get("character_profile_id", ""))
+		if profile_id.is_empty():
+			continue
+		var character_level := maxi(
+			int(loadout.get("level", 1)),
+			int(skill_profile.get("minimum_character_level", 1))
+		)
+		var profile_entry := {
+			"id": profile_id,
+			"name": str(loadout.get("characterName", profile_id)),
+			"profession": str(loadout.get("profession", "")),
+			"gender": str(loadout.get("gender", "男")),
+			"level": character_level,
+			"updated_at": now,
+		}
+		if not FileAccess.file_exists(_profile_path(profile_id)):
+			var payload := _test_character_payload(loadout, skill_profile, profile_entry, now)
+			if _write_json_atomic(_profile_path(profile_id), payload):
+				created += 1
+		if not existing_index_ids.has(profile_id) and FileAccess.file_exists(_profile_path(profile_id)):
+			profiles.append(profile_entry)
+			existing_index_ids[profile_id] = true
+			indexed += 1
+	if indexed > 0:
+		_write_json_atomic(profile_index_path, {"version": 1, "profiles": profiles})
+	return {
+		"contract_id": TEST_CHARACTER_ROSTER_CONTRACT_ID,
+		"created": created,
+		"indexed": indexed,
+		"total": EquipmentTestLoadoutCatalogScript.loadouts().size(),
+	}
+
+
+func _skill_tier_for_equipment_tier(equipment_tier: String) -> String:
+	return "woma" if equipment_tier == "wooma" else equipment_tier
+
+
+func _test_character_payload(loadout: Dictionary, skill_profile: Dictionary, profile_entry: Dictionary, now: int) -> Dictionary:
+	var equipment_data := {}
+	var equipment_names := EquipmentTestLoadoutCatalogScript.equipment_names(loadout)
+	for slot: String in EQUIPMENT_SLOTS:
+		var item_name := str(equipment_names.get(slot, ""))
+		equipment_data[slot] = _developer_item(
+			item_name,
+			"%s.%s" % [str(skill_profile.get("character_profile_id", "")), slot]
+		)
+	var runtime_defaults: Dictionary = skill_profile.get("runtime_defaults", {})
+	var warrior_state := _default_warrior_runtime_state()
+	if str(runtime_defaults.get("contract_id", "")) == WARRIOR_RUNTIME_CONTRACT_ID:
+		warrior_state = _normalized_warrior_runtime_state(runtime_defaults)
+	return {
+		"save_version": SAVE_VERSION,
+		"profile_id": str(profile_entry.get("id", "")),
+		"character_name": str(profile_entry.get("name", "")),
+		"updated_at": now,
+		"level": int(profile_entry.get("level", 1)),
+		"profession": str(profile_entry.get("profession", "")),
+		"gender": str(profile_entry.get("gender", "男")),
+		"later_content_enabled": false,
+		"game_mode_id": "classic_176",
+		"experience": 0,
+		"gold": 1000000,
+		"inventory": [
+			{"name": "强效太阳水", "count": 99},
+			{"name": "魔法药(中量)", "count": 99},
+		],
+		"warehouse_inventory": [],
+		"equipment": equipment_data,
+		"learned_skills": skill_profile.get("learned_skills", {}).duplicate(true),
+		"quick_slots": skill_profile.get("quick_slots", []).duplicate(),
+		"warrior_runtime_state": warrior_state,
+		"test_runtime_defaults": runtime_defaults.duplicate(true),
+		"test_contracts": {
+			"roster": TEST_CHARACTER_ROSTER_CONTRACT_ID,
+			"equipment": str(loadout.get("loadoutId", "")),
+			"skills": str(skill_profile.get("template_id", "")),
+		},
+		"quest_states": {},
+		"content_packages": ContentLayers.enabled_package_ids(),
+		"content_schema_version": 1,
+		"map_id": 4,
+		"position": [0.0, 0.0],
+	}
 
 
 func ensure_developer_test_character()->void:

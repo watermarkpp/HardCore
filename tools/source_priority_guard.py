@@ -61,8 +61,17 @@ def authorize(policy: dict, catalog: dict, lane: str, candidate_key: str, eviden
         raise ValueError(f"candidate is not eligible in {lane}: {candidate_key}")
 
     catalog_keys = {entry.get("distributionKey") for entry in catalog.get("distributions", [])}
-    if candidate_key not in catalog_keys:
+    catalog_required = candidate.get("catalogRequired", True) is not False
+    if catalog_required and candidate_key not in catalog_keys:
         raise ValueError(f"candidate is absent from accepted catalog: {candidate_key}")
+    if not catalog_required:
+        contract_path = ROOT / str(candidate.get("rootPrefix", ""))
+        if not contract_path.is_file():
+            raise ValueError(f"project master contract is missing: {contract_path}")
+        if not str(candidate.get("contractId", "")).strip():
+            raise ValueError("project master source is missing contractId")
+        if not str(candidate.get("evidenceSha256", "")).strip():
+            raise ValueError("project master source is missing evidenceSha256")
 
     allowed_scopes = candidate.get("allowedScopes", [])
     evidence_scope = str((evidence or {}).get("scope", ""))

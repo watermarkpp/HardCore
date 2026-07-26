@@ -1,0 +1,2165 @@
+{
+  "schemaVersion": 1,
+  "contractId": "equipment.paper_doll.original_client_stage.v1",
+  "sex": "male",
+  "sourcePolicy": {
+    "sourceCode": "MirClient/FState.pas::TFrmDlg.DStateWinDirectPaint (equipment StatePage=0)",
+    "sourceCodePath": "reference/original_gameofmir/MirClient/FState.pas:2896-2969",
+    "baseScreenOrigin": [
+      38,
+      52
+    ],
+    "equipmentScreenAnchor": [
+      31,
+      96
+    ],
+    "recordPolicy": "Prguse #376 is the one opaque stage/background pass; hair and StateItem records retain their original transparent color-key pixels and are subsequent overlay passes",
+    "runtimeComposition": {
+      "output": "single_composited_paper_doll_layer",
+      "stageLayerMode": "opaque",
+      "overlayLayerMode": "transparent_color_key",
+      "consumerRule": "draw stage exactly once at stage.stagePosition, then draw hair/dress/weapon/helmet at their stagePosition in drawOrder; never add a second anatomy/base texture or independently translate the Prguse stage by its HotX/HotY"
+    },
+    "forbiddenOperations": [
+      "opaque-bounds crop",
+      "border-connected background removal",
+      "dark-pixel keying",
+      "base-difference matting"
+    ]
+  },
+  "canvasSize": [
+    232,
+    325
+  ],
+  "viewportOrigin": [
+    0,
+    0
+  ],
+  "viewportBounds": [
+    0,
+    0,
+    232,
+    325
+  ],
+  "sourceUnionBounds": [
+    31,
+    52,
+    206,
+    251
+  ],
+  "stage": {
+    "source": "Prguse.wil",
+    "sourceIndex": 376,
+    "path": "res://assets/art/items/client/original_paper_doll_stage/prguse_00376.png",
+    "size": [
+      168,
+      199
+    ],
+    "hotX": 7,
+    "hotY": -44,
+    "stagePosition": [
+      38,
+      52
+    ],
+    "rgbaSha256": "db7d5d79be35b53d5b4a17bdd519602630b03e07145b37250b275fbe530d4658",
+    "recordPolicy": "complete original Prguse record"
+  },
+  "hair": {
+    "source": "Prguse.wil",
+    "sourceIndex": 442,
+    "path": "res://assets/art/items/client/original_paper_doll_stage/prguse_00442.png",
+    "size": [
+      16,
+      14
+    ],
+    "hotX": 87,
+    "hotY": 0,
+    "stagePosition": [
+      118,
+      96
+    ],
+    "rgbaSha256": "fc3b7dae4516e3b742ad5c6e377d719385c3b06a2d629ef9c8bd4c5702e70ee2",
+    "recordPolicy": "complete original Prguse record"
+  },
+  "composition": {
+    "canvasSize": [
+      232,
+      325
+    ],
+    "viewportOrigin": [
+      0,
+      0
+    ],
+    "viewportBounds": [
+      0,
+      0,
+      232,
+      325
+    ],
+    "baseScreenOrigin": [
+      38,
+      52
+    ],
+    "equipmentScreenAnchor": [
+      31,
+      96
+    ],
+    "drawOrder": [
+      "base",
+      "hair",
+      "dress",
+      "weapon",
+      "helmet"
+    ],
+    "baseRule": "Prguse376 opaque stage at (38,52); do not apply its HotX/HotY",
+    "cachedRecordRule": "(31,96) + record HotX/HotY"
+  },
+  "coverage": {
+    "mappedItems": 61,
+    "uniqueStateItemRecords": 55,
+    "byCategory": {
+      "武器": 37,
+      "盔甲": 12,
+      "头盔": 12
+    },
+    "expectedByCategory": {
+      "武器": 37,
+      "盔甲": 12,
+      "头盔": 12
+    },
+    "completeRectangles": 61,
+    "croppedOrMattedRecords": 0
+  },
+  "libraries": {
+    "Prguse.wil": {
+      "image_count": 510,
+      "version": 0,
+      "wil_header_size": 56,
+      "wix_header_size": 48
+    },
+    "stateitem.wil": {
+      "image_count": 561,
+      "version": 0,
+      "wil_header_size": 56,
+      "wix_header_size": 48
+    }
+  },
+  "itemsById": {
+    "80": {
+      "itemId": 80,
+      "itemName": "木剑",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 30,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00080_stateitem_00030.png",
+        "size": [
+          28,
+          57
+        ],
+        "hotX": 32,
+        "hotY": 12,
+        "stagePosition": [
+          63,
+          108
+        ],
+        "rgbaSha256": "f187eafb2c94fbf47623465e223fed6fe01e6c9d0aa7eeb6145766f23dfe0831",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "81": {
+      "itemId": 81,
+      "itemName": "匕首",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 35,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00081_stateitem_00035.png",
+        "size": [
+          20,
+          44
+        ],
+        "hotX": 40,
+        "hotY": 26,
+        "stagePosition": [
+          71,
+          122
+        ],
+        "rgbaSha256": "d562a470d7b288d0cc01797c8799fcb8ffb4688f5e527b13af848e98c26145d1",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "82": {
+      "itemId": 82,
+      "itemName": "乌木剑",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 43,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00082_stateitem_00043.png",
+        "size": [
+          40,
+          94
+        ],
+        "hotX": 30,
+        "hotY": -13,
+        "stagePosition": [
+          61,
+          83
+        ],
+        "rgbaSha256": "6a1b1fcd565496dddf85dba11dca726ed17e4f867df206eddcb886fe69849d8d",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "83": {
+      "itemId": 83,
+      "itemName": "青铜剑",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 31,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00083_stateitem_00031.png",
+        "size": [
+          32,
+          67
+        ],
+        "hotX": 30,
+        "hotY": 5,
+        "stagePosition": [
+          61,
+          101
+        ],
+        "rgbaSha256": "6a22c258adf9d1a151b0158d6c49cbe1d98faa4a0025a7221470b93ffd94d498",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "84": {
+      "itemId": 84,
+      "itemName": "短剑",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 33,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00084_stateitem_00033.png",
+        "size": [
+          36,
+          84
+        ],
+        "hotX": 28,
+        "hotY": -11,
+        "stagePosition": [
+          59,
+          85
+        ],
+        "rgbaSha256": "88cab6c747526a3eb1c11f53011d7321a8cf5f79e5f87eec18de9761044399c0",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "85": {
+      "itemId": 85,
+      "itemName": "铁剑",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 36,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00085_stateitem_00036.png",
+        "size": [
+          36,
+          74
+        ],
+        "hotX": 27,
+        "hotY": -2,
+        "stagePosition": [
+          58,
+          94
+        ],
+        "rgbaSha256": "8df23acf7540e4616bda525c730d29853d79c8241c854a96d8a1f52562a70682",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "86": {
+      "itemId": 86,
+      "itemName": "鹤嘴锄",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 50,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00086_stateitem_00050.png",
+        "size": [
+          76,
+          108
+        ],
+        "hotX": 7,
+        "hotY": 5,
+        "stagePosition": [
+          38,
+          101
+        ],
+        "rgbaSha256": "931e1c017a211711626fa01c42346e28502108d9af631b71d2a0e86efaa3dd30",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "87": {
+      "itemId": 87,
+      "itemName": "青铜斧",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 32,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00087_stateitem_00032.png",
+        "size": [
+          44,
+          63
+        ],
+        "hotX": 22,
+        "hotY": 11,
+        "stagePosition": [
+          53,
+          107
+        ],
+        "rgbaSha256": "3bda5e7d06cba15c7a7e8002c21e9fd2d911f11619370d471580b336df615fc9",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "88": {
+      "itemId": 88,
+      "itemName": "罗刹",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 40,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00088_stateitem_00040.png",
+        "size": [
+          56,
+          77
+        ],
+        "hotX": 11,
+        "hotY": 0,
+        "stagePosition": [
+          42,
+          96
+        ],
+        "rgbaSha256": "6906b59d30aaef87839b441bdc8dc1504a41533711c3a89109097385828e8e6b",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "89": {
+      "itemId": 89,
+      "itemName": "八荒",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 44,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00089_stateitem_00044.png",
+        "size": [
+          36,
+          88
+        ],
+        "hotX": 27,
+        "hotY": -13,
+        "stagePosition": [
+          58,
+          83
+        ],
+        "rgbaSha256": "74f0036ea60593360ea8eb353a2b3b42de570b031d3b54b56735a326612a5815",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "90": {
+      "itemId": 90,
+      "itemName": "海魂",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 39,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00090_stateitem_00039.png",
+        "size": [
+          76,
+          144
+        ],
+        "hotX": 13,
+        "hotY": -20,
+        "stagePosition": [
+          44,
+          76
+        ],
+        "rgbaSha256": "8f1e80b0ca05e87b922ec11cec28a753b83715b16c1d698f878137057a284651",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "91": {
+      "itemId": 91,
+      "itemName": "半月",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 46,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00091_stateitem_00046.png",
+        "size": [
+          36,
+          89
+        ],
+        "hotX": 32,
+        "hotY": -16,
+        "stagePosition": [
+          63,
+          80
+        ],
+        "rgbaSha256": "3799f5bebc12616a5a969e690a5016f0e10f91855ca2b80e99d45fa835497107",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "92": {
+      "itemId": 92,
+      "itemName": "凌风",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 34,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00092_stateitem_00034.png",
+        "size": [
+          48,
+          100
+        ],
+        "hotX": 16,
+        "hotY": -25,
+        "stagePosition": [
+          47,
+          71
+        ],
+        "rgbaSha256": "8d80044667d5c29b901920359b0ae2c5d99bf1b6d2d9409786539c69132591d7",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "93": {
+      "itemId": 93,
+      "itemName": "破魂",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 51,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00093_stateitem_00051.png",
+        "size": [
+          20,
+          44
+        ],
+        "hotX": 40,
+        "hotY": 25,
+        "stagePosition": [
+          71,
+          121
+        ],
+        "rgbaSha256": "569ba1437d68ed9db7c8afbe2299e9332ed7fd82f44531f22b7ebee891d788cd",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "94": {
+      "itemId": 94,
+      "itemName": "斩马刀",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 37,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00094_stateitem_00037.png",
+        "size": [
+          48,
+          101
+        ],
+        "hotX": 18,
+        "hotY": -26,
+        "stagePosition": [
+          49,
+          70
+        ],
+        "rgbaSha256": "c915b8939cd824eb6b49ea21d020a95e19e20c3280402b52819f6d10b5eb254f",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "95": {
+      "itemId": 95,
+      "itemName": "偃月",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 49,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00095_stateitem_00049.png",
+        "size": [
+          72,
+          170
+        ],
+        "hotX": 20,
+        "hotY": -30,
+        "stagePosition": [
+          51,
+          66
+        ],
+        "rgbaSha256": "7a24817911f0755d1dc9dbce3c407ab8c03fa3a0b26f24fb3f02045dc93dccc2",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "96": {
+      "itemId": 96,
+      "itemName": "降魔",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 47,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00096_stateitem_00047.png",
+        "size": [
+          44,
+          96
+        ],
+        "hotX": 22,
+        "hotY": -21,
+        "stagePosition": [
+          53,
+          75
+        ],
+        "rgbaSha256": "62885b8ae22273b6b1b9a502d24209b2a2af09814907ccd91d23a18523a104ba",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "97": {
+      "itemId": 97,
+      "itemName": "修罗",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 40,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00097_stateitem_00040.png",
+        "size": [
+          56,
+          77
+        ],
+        "hotX": 11,
+        "hotY": 0,
+        "stagePosition": [
+          42,
+          96
+        ],
+        "rgbaSha256": "6906b59d30aaef87839b441bdc8dc1504a41533711c3a89109097385828e8e6b",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "98": {
+      "itemId": 98,
+      "itemName": "凝霜",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 45,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00098_stateitem_00045.png",
+        "size": [
+          48,
+          93
+        ],
+        "hotX": 19,
+        "hotY": -21,
+        "stagePosition": [
+          50,
+          75
+        ],
+        "rgbaSha256": "b68dd4d6b86f4518dc8a6753ded93026baee336342cf247faefedc0f7b298020",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "99": {
+      "itemId": 99,
+      "itemName": "炼狱",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 41,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00099_stateitem_00041.png",
+        "size": [
+          60,
+          101
+        ],
+        "hotX": 10,
+        "hotY": -15,
+        "stagePosition": [
+          41,
+          81
+        ],
+        "rgbaSha256": "50f6a6471722b1a5cce5d88553a1a5bfc5b257c88bd2382637a5d3b90cab754a",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "100": {
+      "itemId": 100,
+      "itemName": "魔杖",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 42,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00100_stateitem_00042.png",
+        "size": [
+          56,
+          118
+        ],
+        "hotX": 26,
+        "hotY": -1,
+        "stagePosition": [
+          57,
+          95
+        ],
+        "rgbaSha256": "7162548431f4248467a97e0dda1d8d17687824db4acde243bb08950ec049371f",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "101": {
+      "itemId": 101,
+      "itemName": "银蛇",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 38,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00101_stateitem_00038.png",
+        "size": [
+          44,
+          89
+        ],
+        "hotX": 19,
+        "hotY": -20,
+        "stagePosition": [
+          50,
+          76
+        ],
+        "rgbaSha256": "8584c78a165603e0b7f75f5d83c80bf3d0eeb4e111d2d57363dad61407066802",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "102": {
+      "itemId": 102,
+      "itemName": "井中月",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 48,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00102_stateitem_00048.png",
+        "size": [
+          52,
+          103
+        ],
+        "hotX": 17,
+        "hotY": -28,
+        "stagePosition": [
+          48,
+          68
+        ],
+        "rgbaSha256": "626624d4055b622134d2eb50d2b56fa3c7dfb8016f2261cdf7b496038a69feba",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "103": {
+      "itemId": 103,
+      "itemName": "血饮",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 53,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00103_stateitem_00053.png",
+        "size": [
+          44,
+          112
+        ],
+        "hotX": 18,
+        "hotY": -39,
+        "stagePosition": [
+          49,
+          57
+        ],
+        "rgbaSha256": "a27195b0535ccbdcc0842d65db946a9bed806c752e03f7e54673b30e4446277f",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "104": {
+      "itemId": 104,
+      "itemName": "无极棍",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 52,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00104_stateitem_00052.png",
+        "size": [
+          64,
+          153
+        ],
+        "hotX": 22,
+        "hotY": -14,
+        "stagePosition": [
+          53,
+          82
+        ],
+        "rgbaSha256": "dfa5f2a1e4ac94bdfd2a2e0bdfc5d5e13777087cdce78fffa220a724a37b18d4",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "105": {
+      "itemId": 105,
+      "itemName": "裁决之杖",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 55,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00105_stateitem_00055.png",
+        "size": [
+          44,
+          145
+        ],
+        "hotX": 25,
+        "hotY": -39,
+        "stagePosition": [
+          56,
+          57
+        ],
+        "rgbaSha256": "413dece639b581c30f9904e53b4d514843e684f0d4682294881e82ecbdda3947",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "106": {
+      "itemId": 106,
+      "itemName": "骨玉权杖",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 59,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00106_stateitem_00059.png",
+        "size": [
+          68,
+          168
+        ],
+        "hotX": 15,
+        "hotY": -22,
+        "stagePosition": [
+          46,
+          74
+        ],
+        "rgbaSha256": "30b764871a138e0f4a42a5f9a16687600d27cc8ea00c967db8424473c3342559",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "107": {
+      "itemId": 107,
+      "itemName": "龙纹剑",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 56,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00107_stateitem_00056.png",
+        "size": [
+          32,
+          117
+        ],
+        "hotX": 33,
+        "hotY": -37,
+        "stagePosition": [
+          64,
+          59
+        ],
+        "rgbaSha256": "56519912ffb2fe72e63da0d0d70439b3ff25ad970a1405f295f211be2796f7d2",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "108": {
+      "itemId": 108,
+      "itemName": "屠龙",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 57,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00108_stateitem_00057.png",
+        "size": [
+          52,
+          116
+        ],
+        "hotX": 10,
+        "hotY": -42,
+        "stagePosition": [
+          41,
+          54
+        ],
+        "rgbaSha256": "5892a54c5b3496ccc976877be452c37418e1da4c9ed34dfcceb467f90a7aa4ac",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "109": {
+      "itemId": 109,
+      "itemName": "嗜魂法杖",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 58,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00109_stateitem_00058.png",
+        "size": [
+          64,
+          161
+        ],
+        "hotX": 13,
+        "hotY": -23,
+        "stagePosition": [
+          44,
+          73
+        ],
+        "rgbaSha256": "c4b49413449ac9cff60f453042a1d28ad03d45effcde588c85b0b1b03d734b8d",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "110": {
+      "itemId": 110,
+      "itemName": "命运之刃",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 65,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00110_stateitem_00065.png",
+        "size": [
+          32,
+          117
+        ],
+        "hotX": 31,
+        "hotY": -36,
+        "stagePosition": [
+          62,
+          60
+        ],
+        "rgbaSha256": "2997c1e41c0ee08f87b949787d2a143820318a7440e4285c4ec1546c58deca07",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "111": {
+      "itemId": 111,
+      "itemName": "落魄神兵",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 75,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00111_stateitem_00075.png",
+        "size": [
+          1,
+          1
+        ],
+        "hotX": 0,
+        "hotY": 0,
+        "stagePosition": [
+          31,
+          96
+        ],
+        "rgbaSha256": "88ab202b7f7b589951c134960118e4991824cf9ede4726d1110e3dfac5138160",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "112": {
+      "itemId": 112,
+      "itemName": "赤血魔剑",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 66,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00112_stateitem_00066.png",
+        "size": [
+          52,
+          124
+        ],
+        "hotX": 14,
+        "hotY": -43,
+        "stagePosition": [
+          45,
+          53
+        ],
+        "rgbaSha256": "74210f86f2e3a05feafa9d9c01ace7b336ffaa4165ecc1547daebb24b4e1fc0f",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "113": {
+      "itemId": 113,
+      "itemName": "怒斩",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 70,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00113_stateitem_00070.png",
+        "size": [
+          60,
+          159
+        ],
+        "hotX": 23,
+        "hotY": -21,
+        "stagePosition": [
+          54,
+          75
+        ],
+        "rgbaSha256": "db74b2187a43d5a252d87e199ef96800d12a4aff2fcaaed57c6c67be50fc47e1",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "114": {
+      "itemId": 114,
+      "itemName": "龙牙",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 69,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00114_stateitem_00069.png",
+        "size": [
+          40,
+          128
+        ],
+        "hotX": 24,
+        "hotY": -30,
+        "stagePosition": [
+          55,
+          66
+        ],
+        "rgbaSha256": "89663eca36ca27d72fb55301994f684c3c096a464bc3dc33dbe88375b71243dc",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "115": {
+      "itemId": 115,
+      "itemName": "逍遥扇",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 71,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00115_stateitem_00071.png",
+        "size": [
+          44,
+          81
+        ],
+        "hotX": 24,
+        "hotY": 11,
+        "stagePosition": [
+          55,
+          107
+        ],
+        "rgbaSha256": "bff488c52534d4de58198511ddda7418074c983f96854b450e1ec56041b24a67",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "116": {
+      "itemId": 116,
+      "itemName": "布衣(男)",
+      "category": "盔甲",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "衣服",
+        "source": "stateitem.wil",
+        "sourceIndex": 60,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00116_stateitem_00060.png",
+        "size": [
+          80,
+          128
+        ],
+        "hotX": 48,
+        "hotY": 21,
+        "stagePosition": [
+          79,
+          117
+        ],
+        "rgbaSha256": "dc122123bca6a9e061ce099b9c274585dbaf95996ed62d3f9ca493ae26f87c7c",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "118": {
+      "itemId": 118,
+      "itemName": "轻型盔甲(男)",
+      "category": "盔甲",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "衣服",
+        "source": "stateitem.wil",
+        "sourceIndex": 61,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00118_stateitem_00061.png",
+        "size": [
+          84,
+          130
+        ],
+        "hotX": 48,
+        "hotY": 19,
+        "stagePosition": [
+          79,
+          115
+        ],
+        "rgbaSha256": "1c6bee0ad4096e9f363179d2e00fa996b1ac3c7932d0c7e9951ebe339c13514c",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "120": {
+      "itemId": 120,
+      "itemName": "中型盔甲(男)",
+      "category": "盔甲",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "衣服",
+        "source": "stateitem.wil",
+        "sourceIndex": 61,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00120_stateitem_00061.png",
+        "size": [
+          84,
+          130
+        ],
+        "hotX": 48,
+        "hotY": 19,
+        "stagePosition": [
+          79,
+          115
+        ],
+        "rgbaSha256": "1c6bee0ad4096e9f363179d2e00fa996b1ac3c7932d0c7e9951ebe339c13514c",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "122": {
+      "itemId": 122,
+      "itemName": "重盔甲(男)",
+      "category": "盔甲",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "衣服",
+        "source": "stateitem.wil",
+        "sourceIndex": 62,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00122_stateitem_00062.png",
+        "size": [
+          84,
+          140
+        ],
+        "hotX": 47,
+        "hotY": 14,
+        "stagePosition": [
+          78,
+          110
+        ],
+        "rgbaSha256": "a1cd655b0bfb242629aa37634c84177aeb1520405142a7f365ba1fdc4284ab88",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "124": {
+      "itemId": 124,
+      "itemName": "魔法长袍(男)",
+      "category": "盔甲",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "衣服",
+        "source": "stateitem.wil",
+        "sourceIndex": 63,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00124_stateitem_00063.png",
+        "size": [
+          80,
+          133
+        ],
+        "hotX": 48,
+        "hotY": 17,
+        "stagePosition": [
+          79,
+          113
+        ],
+        "rgbaSha256": "2566cbb6a9e3719f0317aff7f3918e0aab2b6ecc6abdf27a0ef28071336cd869",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "126": {
+      "itemId": 126,
+      "itemName": "灵魂战衣(男)",
+      "category": "盔甲",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "衣服",
+        "source": "stateitem.wil",
+        "sourceIndex": 64,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00126_stateitem_00064.png",
+        "size": [
+          80,
+          129
+        ],
+        "hotX": 49,
+        "hotY": 21,
+        "stagePosition": [
+          80,
+          117
+        ],
+        "rgbaSha256": "0137ed01b3850d68445e4a562e62b780a0bd08f8924fc03fe2191fbbf4512473",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "128": {
+      "itemId": 128,
+      "itemName": "战神盔甲(男)",
+      "category": "盔甲",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "衣服",
+        "source": "stateitem.wil",
+        "sourceIndex": 62,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00128_stateitem_00062.png",
+        "size": [
+          84,
+          140
+        ],
+        "hotX": 47,
+        "hotY": 14,
+        "stagePosition": [
+          78,
+          110
+        ],
+        "rgbaSha256": "a1cd655b0bfb242629aa37634c84177aeb1520405142a7f365ba1fdc4284ab88",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "130": {
+      "itemId": 130,
+      "itemName": "恶魔长袍(男)",
+      "category": "盔甲",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "衣服",
+        "source": "stateitem.wil",
+        "sourceIndex": 63,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00130_stateitem_00063.png",
+        "size": [
+          80,
+          133
+        ],
+        "hotX": 48,
+        "hotY": 17,
+        "stagePosition": [
+          79,
+          113
+        ],
+        "rgbaSha256": "2566cbb6a9e3719f0317aff7f3918e0aab2b6ecc6abdf27a0ef28071336cd869",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "132": {
+      "itemId": 132,
+      "itemName": "幽灵战衣(男)",
+      "category": "盔甲",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "衣服",
+        "source": "stateitem.wil",
+        "sourceIndex": 64,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00132_stateitem_00064.png",
+        "size": [
+          80,
+          129
+        ],
+        "hotX": 49,
+        "hotY": 21,
+        "stagePosition": [
+          80,
+          117
+        ],
+        "rgbaSha256": "0137ed01b3850d68445e4a562e62b780a0bd08f8924fc03fe2191fbbf4512473",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "140": {
+      "itemId": 140,
+      "itemName": "天魔神甲",
+      "category": "盔甲",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "衣服",
+        "source": "stateitem.wil",
+        "sourceIndex": 85,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00140_stateitem_00085.png",
+        "size": [
+          84,
+          153
+        ],
+        "hotX": 53,
+        "hotY": -1,
+        "stagePosition": [
+          84,
+          95
+        ],
+        "rgbaSha256": "9bda0d6721e867b5992a601315d6285f479d9a496ea8d048453945fd47446899",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "142": {
+      "itemId": 142,
+      "itemName": "法神披风",
+      "category": "盔甲",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "衣服",
+        "source": "stateitem.wil",
+        "sourceIndex": 86,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00142_stateitem_00086.png",
+        "size": [
+          104,
+          129
+        ],
+        "hotX": 42,
+        "hotY": 19,
+        "stagePosition": [
+          73,
+          115
+        ],
+        "rgbaSha256": "0a8fdc7c15b8cd428c1730c80350cfe46c3cdc35f65cb9173c704a230aba1977",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "144": {
+      "itemId": 144,
+      "itemName": "天尊道袍",
+      "category": "盔甲",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "衣服",
+        "source": "stateitem.wil",
+        "sourceIndex": 87,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00144_stateitem_00087.png",
+        "size": [
+          88,
+          127
+        ],
+        "hotX": 51,
+        "hotY": 20,
+        "stagePosition": [
+          82,
+          116
+        ],
+        "rgbaSha256": "0fc3516bd1eb220c38b4f50c4d4f285a0bc9989948247859d06e9e4a21a276c0",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "146": {
+      "itemId": 146,
+      "itemName": "精灵头盔",
+      "category": "头盔",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "头盔",
+        "source": "stateitem.wil",
+        "sourceIndex": 105,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00146_stateitem_00105.png",
+        "size": [
+          24,
+          17
+        ],
+        "hotX": 83,
+        "hotY": 0,
+        "stagePosition": [
+          114,
+          96
+        ],
+        "rgbaSha256": "b060d83e5a8f6ebc5782eedb2c144ba858d588ef9d63568d6b6bd98d0f0591f2",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "147": {
+      "itemId": 147,
+      "itemName": "青铜头盔",
+      "category": "头盔",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "头盔",
+        "source": "stateitem.wil",
+        "sourceIndex": 100,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00147_stateitem_00100.png",
+        "size": [
+          32,
+          40
+        ],
+        "hotX": 80,
+        "hotY": -17,
+        "stagePosition": [
+          111,
+          79
+        ],
+        "rgbaSha256": "86976fae87a323b663564f716e9cdd0b4a93a77a95c04a2d518a9be117332927",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "148": {
+      "itemId": 148,
+      "itemName": "魔法头盔",
+      "category": "头盔",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "头盔",
+        "source": "stateitem.wil",
+        "sourceIndex": 100,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00148_stateitem_00100.png",
+        "size": [
+          32,
+          40
+        ],
+        "hotX": 80,
+        "hotY": -17,
+        "stagePosition": [
+          111,
+          79
+        ],
+        "rgbaSha256": "86976fae87a323b663564f716e9cdd0b4a93a77a95c04a2d518a9be117332927",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "149": {
+      "itemId": 149,
+      "itemName": "道士头盔",
+      "category": "头盔",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "头盔",
+        "source": "stateitem.wil",
+        "sourceIndex": 106,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00149_stateitem_00106.png",
+        "size": [
+          32,
+          39
+        ],
+        "hotX": 79,
+        "hotY": -16,
+        "stagePosition": [
+          110,
+          80
+        ],
+        "rgbaSha256": "b6d18e23b1467225bb936320e10114bf0ca58739c56bdb0ef5543d13352bc22b",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "150": {
+      "itemId": 150,
+      "itemName": "骷髅头盔",
+      "category": "头盔",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "头盔",
+        "source": "stateitem.wil",
+        "sourceIndex": 103,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00150_stateitem_00103.png",
+        "size": [
+          52,
+          36
+        ],
+        "hotX": 69,
+        "hotY": -18,
+        "stagePosition": [
+          100,
+          78
+        ],
+        "rgbaSha256": "6d571223be2ec99a7bc02008e1e2900b0c4cc782aba40d6b9ac4971f358b1ebd",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "151": {
+      "itemId": 151,
+      "itemName": "黑铁头盔",
+      "category": "头盔",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "头盔",
+        "source": "stateitem.wil",
+        "sourceIndex": 344,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00151_stateitem_00344.png",
+        "size": [
+          28,
+          32
+        ],
+        "hotX": 79,
+        "hotY": -8,
+        "stagePosition": [
+          110,
+          88
+        ],
+        "rgbaSha256": "da712dde231434450b5a38aed5e88341413c2170155aefa7aae6ea5727f43753",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "218": {
+      "itemId": 218,
+      "itemName": "神秘头盔",
+      "category": "头盔",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "头盔",
+        "source": "stateitem.wil",
+        "sourceIndex": 111,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00218_stateitem_00111.png",
+        "size": [
+          32,
+          27
+        ],
+        "hotX": 77,
+        "hotY": -10,
+        "stagePosition": [
+          108,
+          86
+        ],
+        "rgbaSha256": "98b79ad22d560ee46dc67c27b603b85440af1a1a6d1ad2f3766a3cf76ed35b65",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "223": {
+      "itemId": 223,
+      "itemName": "祈祷之刃",
+      "category": "武器",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "武器",
+        "source": "stateitem.wil",
+        "sourceIndex": 54,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00223_stateitem_00054.png",
+        "size": [
+          52,
+          115
+        ],
+        "hotX": 14,
+        "hotY": -36,
+        "stagePosition": [
+          45,
+          60
+        ],
+        "rgbaSha256": "dd107923902d007d6fee36b3576ef7cf3d3cf956160caecb5d10b169a22ae381",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "224": {
+      "itemId": 224,
+      "itemName": "祈祷头盔",
+      "category": "头盔",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "头盔",
+        "source": "stateitem.wil",
+        "sourceIndex": 110,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00224_stateitem_00110.png",
+        "size": [
+          32,
+          36
+        ],
+        "hotX": 80,
+        "hotY": -16,
+        "stagePosition": [
+          111,
+          80
+        ],
+        "rgbaSha256": "55cc9e918449339c33ace2bb7358dd68e48e39da4e71d7f4524cf8a3e65a484c",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "228": {
+      "itemId": 228,
+      "itemName": "记忆头盔",
+      "category": "头盔",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "头盔",
+        "source": "stateitem.wil",
+        "sourceIndex": 109,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00228_stateitem_00109.png",
+        "size": [
+          32,
+          37
+        ],
+        "hotX": 80,
+        "hotY": -18,
+        "stagePosition": [
+          111,
+          78
+        ],
+        "rgbaSha256": "1512cd7f571e8b7b752b94cf3d5413fa23a217d562416c0786dee0796ca75d5d",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "232": {
+      "itemId": 232,
+      "itemName": "圣战头盔",
+      "category": "头盔",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "头盔",
+        "source": "stateitem.wil",
+        "sourceIndex": 104,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00232_stateitem_00104.png",
+        "size": [
+          32,
+          38
+        ],
+        "hotX": 80,
+        "hotY": -17,
+        "stagePosition": [
+          111,
+          79
+        ],
+        "rgbaSha256": "bd7018e36ff800f5d7ec745ec87fcb34b35dc86905371740af24de0b41c4f144",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "236": {
+      "itemId": 236,
+      "itemName": "法神头盔",
+      "category": "头盔",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "头盔",
+        "source": "stateitem.wil",
+        "sourceIndex": 101,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00236_stateitem_00101.png",
+        "size": [
+          24,
+          16
+        ],
+        "hotX": 81,
+        "hotY": 0,
+        "stagePosition": [
+          112,
+          96
+        ],
+        "rgbaSha256": "9c5f6aa9787d617cf0229698fa7668f6475334d93980298ea3846f2ef040c834",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    },
+    "240": {
+      "itemId": 240,
+      "itemName": "天尊头盔",
+      "category": "头盔",
+      "originalClientPaperDoll": {
+        "status": "exact_complete_client_record",
+        "slot": "头盔",
+        "source": "stateitem.wil",
+        "sourceIndex": 102,
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00240_stateitem_00102.png",
+        "size": [
+          32,
+          41
+        ],
+        "hotX": 79,
+        "hotY": -17,
+        "stagePosition": [
+          110,
+          79
+        ],
+        "rgbaSha256": "0d44c7b75e3219a2a61b13c8a890321b4be5388e3d34f0829d6575d36e91d396",
+        "recordPolicy": "complete original rectangle; no crop, matte, alpha rewrite, or background key"
+      }
+    }
+  },
+  "uniqueStateItemRecords": {
+    "30": {
+      "sourceIndex": 30,
+      "size": [
+        28,
+        57
+      ],
+      "hotX": 32,
+      "hotY": 12,
+      "rgbaSha256": "f187eafb2c94fbf47623465e223fed6fe01e6c9d0aa7eeb6145766f23dfe0831"
+    },
+    "35": {
+      "sourceIndex": 35,
+      "size": [
+        20,
+        44
+      ],
+      "hotX": 40,
+      "hotY": 26,
+      "rgbaSha256": "d562a470d7b288d0cc01797c8799fcb8ffb4688f5e527b13af848e98c26145d1"
+    },
+    "43": {
+      "sourceIndex": 43,
+      "size": [
+        40,
+        94
+      ],
+      "hotX": 30,
+      "hotY": -13,
+      "rgbaSha256": "6a1b1fcd565496dddf85dba11dca726ed17e4f867df206eddcb886fe69849d8d"
+    },
+    "31": {
+      "sourceIndex": 31,
+      "size": [
+        32,
+        67
+      ],
+      "hotX": 30,
+      "hotY": 5,
+      "rgbaSha256": "6a22c258adf9d1a151b0158d6c49cbe1d98faa4a0025a7221470b93ffd94d498"
+    },
+    "33": {
+      "sourceIndex": 33,
+      "size": [
+        36,
+        84
+      ],
+      "hotX": 28,
+      "hotY": -11,
+      "rgbaSha256": "88cab6c747526a3eb1c11f53011d7321a8cf5f79e5f87eec18de9761044399c0"
+    },
+    "36": {
+      "sourceIndex": 36,
+      "size": [
+        36,
+        74
+      ],
+      "hotX": 27,
+      "hotY": -2,
+      "rgbaSha256": "8df23acf7540e4616bda525c730d29853d79c8241c854a96d8a1f52562a70682"
+    },
+    "50": {
+      "sourceIndex": 50,
+      "size": [
+        76,
+        108
+      ],
+      "hotX": 7,
+      "hotY": 5,
+      "rgbaSha256": "931e1c017a211711626fa01c42346e28502108d9af631b71d2a0e86efaa3dd30"
+    },
+    "32": {
+      "sourceIndex": 32,
+      "size": [
+        44,
+        63
+      ],
+      "hotX": 22,
+      "hotY": 11,
+      "rgbaSha256": "3bda5e7d06cba15c7a7e8002c21e9fd2d911f11619370d471580b336df615fc9"
+    },
+    "40": {
+      "sourceIndex": 40,
+      "size": [
+        56,
+        77
+      ],
+      "hotX": 11,
+      "hotY": 0,
+      "rgbaSha256": "6906b59d30aaef87839b441bdc8dc1504a41533711c3a89109097385828e8e6b"
+    },
+    "44": {
+      "sourceIndex": 44,
+      "size": [
+        36,
+        88
+      ],
+      "hotX": 27,
+      "hotY": -13,
+      "rgbaSha256": "74f0036ea60593360ea8eb353a2b3b42de570b031d3b54b56735a326612a5815"
+    },
+    "39": {
+      "sourceIndex": 39,
+      "size": [
+        76,
+        144
+      ],
+      "hotX": 13,
+      "hotY": -20,
+      "rgbaSha256": "8f1e80b0ca05e87b922ec11cec28a753b83715b16c1d698f878137057a284651"
+    },
+    "46": {
+      "sourceIndex": 46,
+      "size": [
+        36,
+        89
+      ],
+      "hotX": 32,
+      "hotY": -16,
+      "rgbaSha256": "3799f5bebc12616a5a969e690a5016f0e10f91855ca2b80e99d45fa835497107"
+    },
+    "34": {
+      "sourceIndex": 34,
+      "size": [
+        48,
+        100
+      ],
+      "hotX": 16,
+      "hotY": -25,
+      "rgbaSha256": "8d80044667d5c29b901920359b0ae2c5d99bf1b6d2d9409786539c69132591d7"
+    },
+    "51": {
+      "sourceIndex": 51,
+      "size": [
+        20,
+        44
+      ],
+      "hotX": 40,
+      "hotY": 25,
+      "rgbaSha256": "569ba1437d68ed9db7c8afbe2299e9332ed7fd82f44531f22b7ebee891d788cd"
+    },
+    "37": {
+      "sourceIndex": 37,
+      "size": [
+        48,
+        101
+      ],
+      "hotX": 18,
+      "hotY": -26,
+      "rgbaSha256": "c915b8939cd824eb6b49ea21d020a95e19e20c3280402b52819f6d10b5eb254f"
+    },
+    "49": {
+      "sourceIndex": 49,
+      "size": [
+        72,
+        170
+      ],
+      "hotX": 20,
+      "hotY": -30,
+      "rgbaSha256": "7a24817911f0755d1dc9dbce3c407ab8c03fa3a0b26f24fb3f02045dc93dccc2"
+    },
+    "47": {
+      "sourceIndex": 47,
+      "size": [
+        44,
+        96
+      ],
+      "hotX": 22,
+      "hotY": -21,
+      "rgbaSha256": "62885b8ae22273b6b1b9a502d24209b2a2af09814907ccd91d23a18523a104ba"
+    },
+    "45": {
+      "sourceIndex": 45,
+      "size": [
+        48,
+        93
+      ],
+      "hotX": 19,
+      "hotY": -21,
+      "rgbaSha256": "b68dd4d6b86f4518dc8a6753ded93026baee336342cf247faefedc0f7b298020"
+    },
+    "41": {
+      "sourceIndex": 41,
+      "size": [
+        60,
+        101
+      ],
+      "hotX": 10,
+      "hotY": -15,
+      "rgbaSha256": "50f6a6471722b1a5cce5d88553a1a5bfc5b257c88bd2382637a5d3b90cab754a"
+    },
+    "42": {
+      "sourceIndex": 42,
+      "size": [
+        56,
+        118
+      ],
+      "hotX": 26,
+      "hotY": -1,
+      "rgbaSha256": "7162548431f4248467a97e0dda1d8d17687824db4acde243bb08950ec049371f"
+    },
+    "38": {
+      "sourceIndex": 38,
+      "size": [
+        44,
+        89
+      ],
+      "hotX": 19,
+      "hotY": -20,
+      "rgbaSha256": "8584c78a165603e0b7f75f5d83c80bf3d0eeb4e111d2d57363dad61407066802"
+    },
+    "48": {
+      "sourceIndex": 48,
+      "size": [
+        52,
+        103
+      ],
+      "hotX": 17,
+      "hotY": -28,
+      "rgbaSha256": "626624d4055b622134d2eb50d2b56fa3c7dfb8016f2261cdf7b496038a69feba"
+    },
+    "53": {
+      "sourceIndex": 53,
+      "size": [
+        44,
+        112
+      ],
+      "hotX": 18,
+      "hotY": -39,
+      "rgbaSha256": "a27195b0535ccbdcc0842d65db946a9bed806c752e03f7e54673b30e4446277f"
+    },
+    "52": {
+      "sourceIndex": 52,
+      "size": [
+        64,
+        153
+      ],
+      "hotX": 22,
+      "hotY": -14,
+      "rgbaSha256": "dfa5f2a1e4ac94bdfd2a2e0bdfc5d5e13777087cdce78fffa220a724a37b18d4"
+    },
+    "55": {
+      "sourceIndex": 55,
+      "size": [
+        44,
+        145
+      ],
+      "hotX": 25,
+      "hotY": -39,
+      "rgbaSha256": "413dece639b581c30f9904e53b4d514843e684f0d4682294881e82ecbdda3947"
+    },
+    "59": {
+      "sourceIndex": 59,
+      "size": [
+        68,
+        168
+      ],
+      "hotX": 15,
+      "hotY": -22,
+      "rgbaSha256": "30b764871a138e0f4a42a5f9a16687600d27cc8ea00c967db8424473c3342559"
+    },
+    "56": {
+      "sourceIndex": 56,
+      "size": [
+        32,
+        117
+      ],
+      "hotX": 33,
+      "hotY": -37,
+      "rgbaSha256": "56519912ffb2fe72e63da0d0d70439b3ff25ad970a1405f295f211be2796f7d2"
+    },
+    "57": {
+      "sourceIndex": 57,
+      "size": [
+        52,
+        116
+      ],
+      "hotX": 10,
+      "hotY": -42,
+      "rgbaSha256": "5892a54c5b3496ccc976877be452c37418e1da4c9ed34dfcceb467f90a7aa4ac"
+    },
+    "58": {
+      "sourceIndex": 58,
+      "size": [
+        64,
+        161
+      ],
+      "hotX": 13,
+      "hotY": -23,
+      "rgbaSha256": "c4b49413449ac9cff60f453042a1d28ad03d45effcde588c85b0b1b03d734b8d"
+    },
+    "65": {
+      "sourceIndex": 65,
+      "size": [
+        32,
+        117
+      ],
+      "hotX": 31,
+      "hotY": -36,
+      "rgbaSha256": "2997c1e41c0ee08f87b949787d2a143820318a7440e4285c4ec1546c58deca07"
+    },
+    "75": {
+      "sourceIndex": 75,
+      "size": [
+        1,
+        1
+      ],
+      "hotX": 0,
+      "hotY": 0,
+      "rgbaSha256": "88ab202b7f7b589951c134960118e4991824cf9ede4726d1110e3dfac5138160"
+    },
+    "66": {
+      "sourceIndex": 66,
+      "size": [
+        52,
+        124
+      ],
+      "hotX": 14,
+      "hotY": -43,
+      "rgbaSha256": "74210f86f2e3a05feafa9d9c01ace7b336ffaa4165ecc1547daebb24b4e1fc0f"
+    },
+    "70": {
+      "sourceIndex": 70,
+      "size": [
+        60,
+        159
+      ],
+      "hotX": 23,
+      "hotY": -21,
+      "rgbaSha256": "db74b2187a43d5a252d87e199ef96800d12a4aff2fcaaed57c6c67be50fc47e1"
+    },
+    "69": {
+      "sourceIndex": 69,
+      "size": [
+        40,
+        128
+      ],
+      "hotX": 24,
+      "hotY": -30,
+      "rgbaSha256": "89663eca36ca27d72fb55301994f684c3c096a464bc3dc33dbe88375b71243dc"
+    },
+    "71": {
+      "sourceIndex": 71,
+      "size": [
+        44,
+        81
+      ],
+      "hotX": 24,
+      "hotY": 11,
+      "rgbaSha256": "bff488c52534d4de58198511ddda7418074c983f96854b450e1ec56041b24a67"
+    },
+    "60": {
+      "sourceIndex": 60,
+      "size": [
+        80,
+        128
+      ],
+      "hotX": 48,
+      "hotY": 21,
+      "rgbaSha256": "dc122123bca6a9e061ce099b9c274585dbaf95996ed62d3f9ca493ae26f87c7c"
+    },
+    "61": {
+      "sourceIndex": 61,
+      "size": [
+        84,
+        130
+      ],
+      "hotX": 48,
+      "hotY": 19,
+      "rgbaSha256": "1c6bee0ad4096e9f363179d2e00fa996b1ac3c7932d0c7e9951ebe339c13514c"
+    },
+    "62": {
+      "sourceIndex": 62,
+      "size": [
+        84,
+        140
+      ],
+      "hotX": 47,
+      "hotY": 14,
+      "rgbaSha256": "a1cd655b0bfb242629aa37634c84177aeb1520405142a7f365ba1fdc4284ab88"
+    },
+    "63": {
+      "sourceIndex": 63,
+      "size": [
+        80,
+        133
+      ],
+      "hotX": 48,
+      "hotY": 17,
+      "rgbaSha256": "2566cbb6a9e3719f0317aff7f3918e0aab2b6ecc6abdf27a0ef28071336cd869"
+    },
+    "64": {
+      "sourceIndex": 64,
+      "size": [
+        80,
+        129
+      ],
+      "hotX": 49,
+      "hotY": 21,
+      "rgbaSha256": "0137ed01b3850d68445e4a562e62b780a0bd08f8924fc03fe2191fbbf4512473"
+    },
+    "85": {
+      "sourceIndex": 85,
+      "size": [
+        84,
+        153
+      ],
+      "hotX": 53,
+      "hotY": -1,
+      "rgbaSha256": "9bda0d6721e867b5992a601315d6285f479d9a496ea8d048453945fd47446899"
+    },
+    "86": {
+      "sourceIndex": 86,
+      "size": [
+        104,
+        129
+      ],
+      "hotX": 42,
+      "hotY": 19,
+      "rgbaSha256": "0a8fdc7c15b8cd428c1730c80350cfe46c3cdc35f65cb9173c704a230aba1977"
+    },
+    "87": {
+      "sourceIndex": 87,
+      "size": [
+        88,
+        127
+      ],
+      "hotX": 51,
+      "hotY": 20,
+      "rgbaSha256": "0fc3516bd1eb220c38b4f50c4d4f285a0bc9989948247859d06e9e4a21a276c0"
+    },
+    "105": {
+      "sourceIndex": 105,
+      "size": [
+        24,
+        17
+      ],
+      "hotX": 83,
+      "hotY": 0,
+      "rgbaSha256": "b060d83e5a8f6ebc5782eedb2c144ba858d588ef9d63568d6b6bd98d0f0591f2"
+    },
+    "100": {
+      "sourceIndex": 100,
+      "size": [
+        32,
+        40
+      ],
+      "hotX": 80,
+      "hotY": -17,
+      "rgbaSha256": "86976fae87a323b663564f716e9cdd0b4a93a77a95c04a2d518a9be117332927"
+    },
+    "106": {
+      "sourceIndex": 106,
+      "size": [
+        32,
+        39
+      ],
+      "hotX": 79,
+      "hotY": -16,
+      "rgbaSha256": "b6d18e23b1467225bb936320e10114bf0ca58739c56bdb0ef5543d13352bc22b"
+    },
+    "103": {
+      "sourceIndex": 103,
+      "size": [
+        52,
+        36
+      ],
+      "hotX": 69,
+      "hotY": -18,
+      "rgbaSha256": "6d571223be2ec99a7bc02008e1e2900b0c4cc782aba40d6b9ac4971f358b1ebd"
+    },
+    "344": {
+      "sourceIndex": 344,
+      "size": [
+        28,
+        32
+      ],
+      "hotX": 79,
+      "hotY": -8,
+      "rgbaSha256": "da712dde231434450b5a38aed5e88341413c2170155aefa7aae6ea5727f43753"
+    },
+    "111": {
+      "sourceIndex": 111,
+      "size": [
+        32,
+        27
+      ],
+      "hotX": 77,
+      "hotY": -10,
+      "rgbaSha256": "98b79ad22d560ee46dc67c27b603b85440af1a1a6d1ad2f3766a3cf76ed35b65"
+    },
+    "54": {
+      "sourceIndex": 54,
+      "size": [
+        52,
+        115
+      ],
+      "hotX": 14,
+      "hotY": -36,
+      "rgbaSha256": "dd107923902d007d6fee36b3576ef7cf3d3cf956160caecb5d10b169a22ae381"
+    },
+    "110": {
+      "sourceIndex": 110,
+      "size": [
+        32,
+        36
+      ],
+      "hotX": 80,
+      "hotY": -16,
+      "rgbaSha256": "55cc9e918449339c33ace2bb7358dd68e48e39da4e71d7f4524cf8a3e65a484c"
+    },
+    "109": {
+      "sourceIndex": 109,
+      "size": [
+        32,
+        37
+      ],
+      "hotX": 80,
+      "hotY": -18,
+      "rgbaSha256": "1512cd7f571e8b7b752b94cf3d5413fa23a217d562416c0786dee0796ca75d5d"
+    },
+    "104": {
+      "sourceIndex": 104,
+      "size": [
+        32,
+        38
+      ],
+      "hotX": 80,
+      "hotY": -17,
+      "rgbaSha256": "bd7018e36ff800f5d7ec745ec87fcb34b35dc86905371740af24de0b41c4f144"
+    },
+    "101": {
+      "sourceIndex": 101,
+      "size": [
+        24,
+        16
+      ],
+      "hotX": 81,
+      "hotY": 0,
+      "rgbaSha256": "9c5f6aa9787d617cf0229698fa7668f6475334d93980298ea3846f2ef040c834"
+    },
+    "102": {
+      "sourceIndex": 102,
+      "size": [
+        32,
+        41
+      ],
+      "hotX": 79,
+      "hotY": -17,
+      "rgbaSha256": "0d44c7b75e3219a2a61b13c8a890321b4be5388e3d34f0829d6575d36e91d396"
+    }
+  }
+}

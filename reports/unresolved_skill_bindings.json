@@ -1,0 +1,628 @@
+{
+  "audit_id": "MIR2-HUMAN-SKILL-SYSTEM-AUDIT-V1.0",
+  "audit_date": "2026-07-24",
+  "git_commit": "53c614522f729842746e48a17a89c102351d388b",
+  "scope": "first read-only execution",
+  "runtime": "HardCore offline Godot runtime",
+  "unresolved_skill_count": 33,
+  "records": [
+    {
+      "skill_id": "taoist.defense",
+      "name": "神圣战甲术",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified",
+        "required item/amulet is metadata-only and is not consumed"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "RESOURCE_CONSUMPTION_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.entrapment",
+      "name": "困魔咒",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified",
+        "required item/amulet is metadata-only and is not consumed"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "RESOURCE_CONSUMPTION_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.healing",
+      "name": "治愈术",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.invisibility",
+      "name": "隐身术",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified",
+        "required item/amulet is metadata-only and is not consumed"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "RESOURCE_CONSUMPTION_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.magic_defense",
+      "name": "幽灵盾",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified",
+        "required item/amulet is metadata-only and is not consumed"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "RESOURCE_CONSUMPTION_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.mass_healing",
+      "name": "群体治疗术",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.mass_invisibility",
+      "name": "集体隐身术",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified",
+        "required item/amulet is metadata-only and is not consumed"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "RESOURCE_CONSUMPTION_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.poison",
+      "name": "施毒术",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified",
+        "required item/amulet is metadata-only and is not consumed"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "RESOURCE_CONSUMPTION_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.revelation",
+      "name": "心灵启示",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.soul_fire_talisman",
+      "name": "灵魂火符",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified",
+        "required item/amulet is metadata-only and is not consumed"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "RESOURCE_CONSUMPTION_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.spiritual_warfare",
+      "name": "精神力战法",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.summon_divine_beast",
+      "name": "召唤神兽",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified",
+        "required item/amulet is metadata-only and is not consumed"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "RESOURCE_CONSUMPTION_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.summon_skeleton",
+      "name": "召唤骷髅",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified",
+        "required item/amulet is metadata-only and is not consumed"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "RESOURCE_CONSUMPTION_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.basic_swordsmanship",
+      "name": "基本剑术",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified",
+        "formal per-skill visual binding is absent"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.fire_sword",
+      "name": "烈火剑法",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified",
+        "formal per-skill visual binding is absent"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.half_moon",
+      "name": "半月弯刀",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified",
+        "formal per-skill visual binding is absent"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.slaying_swordsmanship",
+      "name": "攻杀剑术",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified",
+        "formal per-skill visual binding is absent"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.thrusting",
+      "name": "刺杀剑术",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified",
+        "formal per-skill visual binding is absent"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.wild_rush",
+      "name": "野蛮冲撞",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified",
+        "formal per-skill visual binding is absent"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.exploding_flame",
+      "name": "爆裂火焰",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.fire_wall",
+      "name": "火墙",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.fireball",
+      "name": "火球术",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.great_fireball",
+      "name": "大火球",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.hell_lightning",
+      "name": "地狱雷光",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.hellfire",
+      "name": "地狱火",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.holy_word",
+      "name": "圣言术",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.ice_storm",
+      "name": "冰咆哮",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.laser",
+      "name": "疾光电影",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.lightning",
+      "name": "雷电术",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.magic_shield",
+      "name": "魔法盾",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.repulsion_ring",
+      "name": "抗拒火环",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.teleport",
+      "name": "瞬息移动",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.temptation_light",
+      "name": "诱惑之光",
+      "issues": [
+        "same-distribution classic Magic.DB record is missing",
+        "no current client/server request-response protocol",
+        "no server-authoritative hit/damage boundary",
+        "no proficiency state or training path",
+        "MagIcon runtime binding is not verified"
+      ],
+      "error_classes": [
+        "EFFECT_BINDING_ERROR",
+        "MISSING_SOURCE_EVIDENCE",
+        "PROFICIENCY_ERROR",
+        "SERVER_AUTHORITY_ERROR",
+        "SKILL_PROTOCOL_ERROR"
+      ]
+    }
+  ]
+}

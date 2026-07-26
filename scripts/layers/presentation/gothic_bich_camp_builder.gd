@@ -2,6 +2,9 @@ class_name GothicBichCampBuilder
 extends RefCounted
 
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const RuntimeVisualGeometryScript := preload(
+	"res://scripts/map_editor/map_editor_runtime_visual_geometry_service.gd"
+)
 
 const LAYOUT_PATH := "res://assets/presentation/skins/gothic_bich_camp/layout.json"
 const SPRITE_ROOT := "res://assets/presentation/skins/gothic_bich_camp/sprites/"
@@ -29,10 +32,12 @@ static func build(parent: Node2D, home: Vector2) -> Dictionary:
 			continue
 		if str(record.get("layer", "")) == "ground":
 			sprite.z_index = -17
+			parent.add_child(sprite)
+			nodes.append(sprite)
 		else:
-			sprite.z_index = -5
-		parent.add_child(sprite)
-		nodes.append(sprite)
+			_add_actor_sorted_prop(
+				parent, sprite, position, str(record.get("asset", "")), nodes
+			)
 		var collision: Variant = record.get("collision", {})
 		if collision is Dictionary and not collision.is_empty():
 			var body := _collision_body(position, collision)
@@ -43,6 +48,44 @@ static func build(parent: Node2D, home: Vector2) -> Dictionary:
 		if record is Dictionary:
 			_build_light(parent, home, record, nodes)
 	return {"nodes": nodes, "collisions": collisions, "layout": layout}
+
+
+static func _add_actor_sorted_prop(
+	background: Node2D,
+	sprite: Sprite2D,
+	foot_position: Vector2,
+	asset_id: String,
+	nodes: Array[Node]
+) -> void:
+	var actor_parent := background.get_parent() as Node2D
+	var prop := {"position": foot_position, "occlusion": true}
+	if (
+		actor_parent == null
+		or RuntimeVisualGeometryScript.legacy_profile_prop_render_domain(prop)
+		!= RuntimeVisualGeometryScript.RENDER_DOMAIN_ACTOR_Y_SORT
+	):
+		sprite.z_index = -5
+		background.add_child(sprite)
+		nodes.append(sprite)
+		return
+	var actor_sort_root := Node2D.new()
+	actor_sort_root.name = "GothicBichOccluder_%s" % asset_id
+	actor_sort_root.position = RuntimeVisualGeometryScript.legacy_profile_prop_actor_sort_world(
+		prop
+	)
+	actor_sort_root.z_as_relative = false
+	actor_sort_root.z_index = 0
+	actor_sort_root.set_meta("gothic_bich_camp_actor_occluder", true)
+	actor_sort_root.set_meta(
+		"map_occlusion_sort_contract_id",
+		RuntimeVisualGeometryScript.OCCLUSION_SORT_CONTRACT_ID
+	)
+	sprite.position -= actor_sort_root.position
+	sprite.z_as_relative = true
+	sprite.z_index = 0
+	actor_parent.add_child(actor_sort_root)
+	actor_sort_root.add_child(sprite)
+	nodes.append(actor_sort_root)
 
 
 static func _sprite(asset_id: String, foot_position: Vector2) -> Sprite2D:

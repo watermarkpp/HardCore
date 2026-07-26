@@ -1,0 +1,1108 @@
+{
+  "audit_id": "MIR2-HUMAN-SKILL-SYSTEM-AUDIT-V1.0",
+  "audit_date": "2026-07-24",
+  "git_commit": "53c614522f729842746e48a17a89c102351d388b",
+  "scope": "first read-only execution",
+  "runtime": "HardCore offline Godot runtime",
+  "verdict": "server_source_reconstruction_is_not_same_distribution_as_candidate_database_and_caster_formula_package_is_not_in_active_game_path",
+  "formula_contracts": {
+    "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+    "get_power": "delphi_round(power_roll/(train_level+1)*(skill_level+1)) + def_power_roll",
+    "get_power13": "delphi_round((input-input/3)/(train_level+1)*(skill_level+1) + input/3 + def_power_roll)",
+    "magic_damage": "stat_roll + get_power(magic_power_roll)",
+    "healing": "get_power(magic_power_roll) + sc_roll*2",
+    "train_level": 3
+  },
+  "records": [
+    {
+      "skill_id": "taoist.defense",
+      "name": "神圣战甲术",
+      "formula_group": "classic_special",
+      "source_formula": "special formula fields in profession_combat_rules.json",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_DEJIWONHO",
+      "input_attributes": [
+        "SC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.entrapment",
+      "name": "困魔咒",
+      "formula_group": "classic_special",
+      "source_formula": "special formula fields in profession_combat_rules.json",
+      "source_anchor": "TMagicManager.MagMakeHolyCurtain",
+      "input_attributes": [
+        "SC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.healing",
+      "name": "治愈术",
+      "formula_group": "classic_healing",
+      "source_formula": "get_power(magic_power_roll) + sc_roll*2",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_HEALLING",
+      "input_attributes": [
+        "SC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": 1,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 14,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.invisibility",
+      "name": "隐身术",
+      "formula_group": "classic_special",
+      "source_formula": "special formula fields in profession_combat_rules.json",
+      "source_anchor": "TMagicManager.MagMakePrivateTransparent",
+      "input_attributes": [
+        "SC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.magic_defense",
+      "name": "幽灵盾",
+      "formula_group": "classic_special",
+      "source_formula": "special formula fields in profession_combat_rules.json",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_HANGMAJINBUB",
+      "input_attributes": [
+        "SC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.mass_healing",
+      "name": "群体治疗术",
+      "formula_group": "classic_healing",
+      "source_formula": "get_power(magic_power_roll) + sc_roll*2",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_BIGHEALLING",
+      "input_attributes": [
+        "SC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": 1,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 4,
+        "power_bonus": 0,
+        "magic_power_base": 10,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.mass_invisibility",
+      "name": "集体隐身术",
+      "formula_group": "classic_special",
+      "source_formula": "special formula fields in profession_combat_rules.json",
+      "source_anchor": "TMagicManager.MagMakeGroupTransparent",
+      "input_attributes": [
+        "SC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.poison",
+      "name": "施毒术",
+      "formula_group": "classic_special",
+      "source_formula": "special formula fields in profession_combat_rules.json",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_AMYOUNSUL",
+      "input_attributes": [
+        "SC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.revelation",
+      "name": "心灵启示",
+      "formula_group": "classic_special",
+      "source_formula": "special formula fields in profession_combat_rules.json",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_SHOWHP",
+      "input_attributes": [
+        "SC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.soul_fire_talisman",
+      "name": "灵魂火符",
+      "formula_group": "classic_magic_damage",
+      "source_formula": "stat_roll + get_power(magic_power_roll)",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_FIRECHARM",
+      "input_attributes": [
+        "SC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": 1,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 7,
+        "power_bonus": 0,
+        "magic_power_base": 13,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.spiritual_warfare",
+      "name": "精神力战法",
+      "formula_group": "classic_special",
+      "source_formula": "special formula fields in profession_combat_rules.json",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_SPIRIT",
+      "input_attributes": [
+        "SC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.summon_divine_beast",
+      "name": "召唤神兽",
+      "formula_group": "classic_summon",
+      "source_formula": "special formula fields in profession_combat_rules.json",
+      "source_anchor": "TMagicManager.MagMakeSinSuSlave",
+      "input_attributes": [
+        "SC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.summon_skeleton",
+      "name": "召唤骷髅",
+      "formula_group": "classic_summon",
+      "source_formula": "special formula fields in profession_combat_rules.json",
+      "source_anchor": "TMagicManager.MagMakeSlave",
+      "input_attributes": [
+        "SC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.basic_swordsmanship",
+      "name": "基本剑术",
+      "formula_group": "passive_accuracy",
+      "source_formula": "accuracy_bonus = 3 * skill_level",
+      "source_anchor": "M2Server/ObjBase.pas RecalcHitSpeed",
+      "input_attributes": [
+        "DC range",
+        "accuracy",
+        "luck",
+        "target agility/defense"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_source_reconstruction_with_project_adapter",
+      "active_runtime_formula": "WarriorCombatMath attack-path formula",
+      "source_formula_integrated_in_active_runtime": true,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE"
+      ]
+    },
+    {
+      "skill_id": "warrior.fire_sword",
+      "name": "烈火剑法",
+      "formula_group": "armed_next_attack",
+      "source_formula": "base attack plus level-scaled fire modifier",
+      "source_anchor": "M2Server/ObjBase.pas fire-sword path",
+      "input_attributes": [
+        "DC range",
+        "accuracy",
+        "luck",
+        "target agility/defense"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.399999976158142,
+        "multiplier_bonus": 0.4000000059604645
+      },
+      "source_status": "classic_source_reconstruction_with_project_adapter",
+      "active_runtime_formula": "WarriorCombatMath attack-path formula",
+      "source_formula_integrated_in_active_runtime": true,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE"
+      ]
+    },
+    {
+      "skill_id": "warrior.half_moon",
+      "name": "半月弯刀",
+      "formula_group": "attack_area_modifier",
+      "source_formula": "base attack plus directional area modifier",
+      "source_anchor": "M2Server/ObjBase.pas attack path",
+      "input_attributes": [
+        "DC range",
+        "accuracy",
+        "luck",
+        "target agility/defense"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_base": 0.30000001192092896,
+        "multiplier_bonus": 0.10000000149011612
+      },
+      "source_status": "classic_source_reconstruction_with_project_adapter",
+      "active_runtime_formula": "WarriorCombatMath attack-path formula",
+      "source_formula_integrated_in_active_runtime": true,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE"
+      ]
+    },
+    {
+      "skill_id": "warrior.slaying_swordsmanship",
+      "name": "攻杀剑术",
+      "formula_group": "attack_proc",
+      "source_formula": "attack proc cycle and added DC damage in WarriorCombatMath",
+      "source_anchor": "M2Server/ObjBase.pas attack path",
+      "input_attributes": [
+        "DC range",
+        "accuracy",
+        "luck",
+        "target agility/defense"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_source_reconstruction_with_project_adapter",
+      "active_runtime_formula": "WarriorCombatMath attack-path formula",
+      "source_formula_integrated_in_active_runtime": true,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE"
+      ]
+    },
+    {
+      "skill_id": "warrior.thrusting",
+      "name": "刺杀剑术",
+      "formula_group": "attack_line_modifier",
+      "source_formula": "base attack plus second-cell modifier in warrior attack context",
+      "source_anchor": "M2Server/ObjBase.pas attack path",
+      "input_attributes": [
+        "DC range",
+        "accuracy",
+        "luck",
+        "target agility/defense"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_base": 0.25,
+        "multiplier_bonus": 0.25
+      },
+      "source_status": "classic_source_reconstruction_with_project_adapter",
+      "active_runtime_formula": "WarriorCombatMath attack-path formula",
+      "source_formula_integrated_in_active_runtime": true,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE"
+      ]
+    },
+    {
+      "skill_id": "warrior.wild_rush",
+      "name": "野蛮冲撞",
+      "formula_group": "movement_attack",
+      "source_formula": "movement/push success; damage adapter is project-local",
+      "source_anchor": "M2Server/ObjBase.pas rush path",
+      "input_attributes": [
+        "DC range",
+        "accuracy",
+        "luck",
+        "target agility/defense"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 4,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_source_reconstruction_with_project_adapter",
+      "active_runtime_formula": "WarriorCombatMath attack-path formula",
+      "source_formula_integrated_in_active_runtime": true,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.exploding_flame",
+      "name": "爆裂火焰",
+      "formula_group": "classic_magic_damage",
+      "source_formula": "stat_roll + get_power(magic_power_roll)",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_FIREBOOM",
+      "input_attributes": [
+        "MC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": 1,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 8,
+        "power_bonus": 0,
+        "magic_power_base": 8,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.fire_wall",
+      "name": "火墙",
+      "formula_group": "classic_magic_damage",
+      "source_formula": "stat_roll + get_power(magic_power_roll)",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_EARTHFIRE + MagMakeFireCross",
+      "input_attributes": [
+        "MC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": 1,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 3,
+        "power_bonus": 0,
+        "magic_power_base": 3,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.fireball",
+      "name": "火球术",
+      "formula_group": "classic_magic_damage",
+      "source_formula": "stat_roll + get_power(magic_power_roll)",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_FIREBALL",
+      "input_attributes": [
+        "MC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": 1,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 2,
+        "power_bonus": 0,
+        "magic_power_base": 8,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.great_fireball",
+      "name": "大火球",
+      "formula_group": "classic_magic_damage",
+      "source_formula": "stat_roll + get_power(magic_power_roll)",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_FIREBALL2",
+      "input_attributes": [
+        "MC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": 1,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 10,
+        "power_bonus": 0,
+        "magic_power_base": 6,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.hell_lightning",
+      "name": "地狱雷光",
+      "formula_group": "classic_magic_damage",
+      "source_formula": "stat_roll + get_power(magic_power_roll)",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_LIGHTFLOWER",
+      "input_attributes": [
+        "MC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": 1,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 10,
+        "power_bonus": 20,
+        "magic_power_base": 10,
+        "magic_power_bonus": 20,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.hellfire",
+      "name": "地狱火",
+      "formula_group": "classic_magic_damage",
+      "source_formula": "stat_roll + get_power(magic_power_roll)",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_FIRE",
+      "input_attributes": [
+        "MC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": 1,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 6,
+        "power_bonus": 0,
+        "magic_power_base": 14,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.holy_word",
+      "name": "圣言术",
+      "formula_group": "classic_special",
+      "source_formula": "special formula fields in profession_combat_rules.json",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_KILLUNDEAD",
+      "input_attributes": [
+        "MC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.ice_storm",
+      "name": "冰咆哮",
+      "formula_group": "classic_magic_damage",
+      "source_formula": "stat_roll + get_power(magic_power_roll)",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_SNOWWIND",
+      "input_attributes": [
+        "MC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": 1,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 14,
+        "power_bonus": 0,
+        "magic_power_base": 12,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.laser",
+      "name": "疾光电影",
+      "formula_group": "classic_magic_damage",
+      "source_formula": "stat_roll + get_power(magic_power_roll)",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_SHOOTLIGHTEN",
+      "input_attributes": [
+        "MC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": 1,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 12,
+        "power_bonus": 0,
+        "magic_power_base": 12,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.lightning",
+      "name": "雷电术",
+      "formula_group": "classic_magic_damage",
+      "source_formula": "stat_roll + get_power(magic_power_roll)",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_LIGHTENING",
+      "input_attributes": [
+        "MC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": 1,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 11,
+        "power_bonus": 0,
+        "magic_power_base": 14,
+        "magic_power_bonus": 28,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.magic_shield",
+      "name": "魔法盾",
+      "formula_group": "classic_special",
+      "source_formula": "special formula fields in profession_combat_rules.json",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_SHIELD + MagBubbleDefenceUp",
+      "input_attributes": [
+        "MC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.repulsion_ring",
+      "name": "抗拒火环",
+      "formula_group": "classic_special",
+      "source_formula": "special formula fields in profession_combat_rules.json",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_FIREWIND",
+      "input_attributes": [
+        "MC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 4,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.teleport",
+      "name": "瞬息移动",
+      "formula_group": "classic_special",
+      "source_formula": "special formula fields in profession_combat_rules.json",
+      "source_anchor": "TMagicManager.DoSpell/SKILL_SPACEMOVE",
+      "input_attributes": [
+        "MC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.temptation_light",
+      "name": "诱惑之光",
+      "formula_group": "classic_special",
+      "source_formula": "special formula fields in profession_combat_rules.json",
+      "source_anchor": "TMagicManager.MagTamming",
+      "input_attributes": [
+        "MC roll",
+        "skill power roll",
+        "target defense/resistance"
+      ],
+      "random_interval": "runtime roll path exists; deterministic compatibility helpers use candidate lower bounds",
+      "skill_level_coefficient": "level clamped to 0..3",
+      "target_resistance": "partly applied by target.take_damage; not represented in a server protocol",
+      "rounding": "Delphi System.Round ties midpoint values to the nearest even integer",
+      "lower_bound": null,
+      "upper_bound": null,
+      "candidate_values": {
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "multiplier_base": 1.0,
+        "multiplier_bonus": 0.0
+      },
+      "source_status": "classic_rule_with_crystal_value_candidate",
+      "active_runtime_formula": "generic locally rolled profession stat damage multiplied by profession_growth multiplier",
+      "source_formula_integrated_in_active_runtime": false,
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "FORMULA_ERROR"
+      ]
+    }
+  ]
+}

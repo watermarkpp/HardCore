@@ -58,7 +58,7 @@ const SKILL_PROFILES := {
 	"刺杀剑术": {"profession": "战士", "cast_type": "line", "multiplier": 1.0, "range": 175.0, "service_magic_id": 12, "service_mode": "toggle_second_cell"},
 	"半月弯刀": {"profession": "战士", "cast_type": "area", "multiplier": 1.0, "range": 125.0, "service_magic_id": 25, "service_mode": "toggle_three_directions"},
 	"野蛮冲撞": {"profession": "战士", "cast_type": "dash", "multiplier": 0.8, "range": 115.0, "service_magic_id": 27, "service_mode": "rush"},
-	"烈火剑法": {"profession": "战士", "cast_type": "melee", "multiplier": 1.0, "range": 105.0, "service_magic_id": 26, "service_mode": "arm_next_hit"},
+	"烈火剑法": {"profession": "战士", "cast_type": "melee", "multiplier": 1.0, "range": 105.0, "service_magic_id": 26, "service_mode": "arm_next_hit", "ui_interaction_mode": "toggle", "runtime_activation_mode": "toggle_auto_use", "toggle_state_id": "warrior.fire_sword.auto_enabled"},
 	"火球术": {"profession": "法师", "cast_type": "projectile", "multiplier": 1.0, "range": 360.0},
 	"抗拒火环": {"profession": "法师", "cast_type": "knockback", "multiplier": 0.0, "range": 115.0},
 	"诱惑之光": {"profession": "法师", "cast_type": "control", "multiplier": 0.0, "range": 300.0},
@@ -89,6 +89,7 @@ const SKILL_PROFILES := {
 }
 
 # 手机战斗与动画共用时序基线。当前为运行时候选值，后续按可靠资料逐项替换。
+const CASTER_SPELL_ACTION_DURATION := 0.36
 const CAST_DEFAULTS := {
 	"passive": {"target_mode": "self", "windup": 0.0, "hit_frame": 0, "cooldown": 0.0, "area_radius": 0.0},
 	"melee": {"target_mode": "single", "windup": 0.25, "hit_frame": 3, "cooldown": 0.55, "area_radius": 0.0},
@@ -119,7 +120,7 @@ const SKILL_TIMING_OVERRIDES := {
 	"刺杀剑术": {"windup": 0.17, "hit_frame": 2, "cooldown": 0.85, "action_duration": 0.51},
 	"半月弯刀": {"windup": 0.17, "hit_frame": 2, "cooldown": 0.85, "action_duration": 0.51, "area_radius": 125.0},
 	"野蛮冲撞": {"windup": 0.17, "hit_frame": 2, "cooldown": 3.0, "action_duration": 0.51},
-	"烈火剑法": {"windup": 0.17, "hit_frame": 2, "cooldown": 0.85, "action_duration": 0.51, "service_arm_cooldown": 10.0},
+	"烈火剑法": {"windup": 0.17, "hit_frame": 2, "cooldown": 0.85, "action_duration": 0.51, "service_arm_cooldown": 10.0, "auto_release_cooldown": 10.0},
 }
 
 # 这不是“1.76 原版阈值”。可读的本地 2002 源码自述为修改版 1.5：
@@ -253,6 +254,12 @@ static func skill_combat_profile(skill_name: String, learned_level := -1) -> Dic
 		profile["verification"] = "道士专属公式层候选；字段来源见profession_combat_rules.json"
 	else:
 		profile["verification"] = "未识别职业的兼容档案"
+	if stable_profession_id in ["wizard", "taoist"] and cast_type != "passive":
+		# MirClient/Actor.pas HA.ActSpell: 6 visible frames × 60ms.
+		# This body action is independent from the effect windup and skill cooldown.
+		profile["action_duration"] = CASTER_SPELL_ACTION_DURATION
+		profile["action_frame_count"] = 6
+		profile["action_frame_time_ms"] = 60
 	return profile
 
 

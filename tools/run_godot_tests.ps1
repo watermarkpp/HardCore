@@ -15,6 +15,15 @@ $ProcessPath = [Environment]::GetEnvironmentVariable('Path', 'Process')
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $Godot = Join-Path $ProjectRoot 'tools\godot-4.7\Godot_v4.7-stable_win64_console.exe'
 $LogRoot = Join-Path $ProjectRoot 'outputs\test_logs'
+$RuntimeAppData = Join-Path $ProjectRoot '.godot\runtime_appdata'
+
+# Codex desktop may sandbox the normal roaming AppData directory. Godot 4.7
+# crashes in its Windows file logger after a denied user://logs write, even
+# when the test itself has already passed. Keep all test-only user data inside
+# the current worktree so every professional tree remains isolated and the
+# engine can shut down cleanly without an application-error dialog.
+New-Item -ItemType Directory -Path $RuntimeAppData -Force | Out-Null
+[Environment]::SetEnvironmentVariable('APPDATA', $RuntimeAppData, 'Process')
 
 $Suites = @{
     monster = @(
@@ -95,6 +104,7 @@ $Suites = @{
         'tests/equipment_luck_test.tscn',
         'tests/equipment_durability_policy_test.tscn',
         'tests/equipment_service_rules_test.tscn',
+        'tests/equipment_attribute_master_test.tscn',
         'tests/equipment_slot_migration_test.tscn',
         'tests/item_catalog_test.tscn',
         'tests/vertical_slice_loop_test.tscn',
