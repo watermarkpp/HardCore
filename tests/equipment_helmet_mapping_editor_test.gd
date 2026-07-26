@@ -38,6 +38,10 @@ func _run() -> void:
 	assert(not await editor.start_interactive_failure_for_test())
 	assert(not editor.quit_was_requested())
 	assert(not editor.initialization_error().is_empty())
+	var window_policy: Dictionary = editor.interactive_window_policy()
+	assert(window_policy.get("minimumSize", []) == [1600, 900])
+	assert(bool(window_policy.get("centered", false)))
+	assert(not bool(window_policy.get("projectSettingsModified", true)))
 	var startup_status := editor.get_node(
 		"CalibrationUI/Panel/VBox/StartupStatus"
 	) as Label
@@ -59,8 +63,23 @@ func _run() -> void:
 	var source_grid := editor.get_node(
 		"CalibrationUI/Panel/VBox/SourceDirections"
 	) as GridContainer
+	var calibration_ui := editor.get_node("CalibrationUI") as Control
+	var editor_background := editor.get_node("EditorBackground") as ColorRect
+	assert(editor.game_render_is_isolated())
+	assert(editor.get_node("GameDataViewport") is SubViewport)
+	assert(calibration_ui.custom_minimum_size == Vector2(1600, 900))
+	assert(editor_background.custom_minimum_size == Vector2(1600, 900))
+	assert(editor_background.color.a == 1.0)
+	assert(editor_background.color.r < 0.1)
+	assert(calibration_ui.z_index > editor_background.z_index)
+	assert(calibration_ui.get_global_rect().encloses(
+		editor_background.get_global_rect()
+	))
 	assert(target_grid.get_child_count() == 8)
 	assert(source_grid.get_child_count() == 8)
+	assert(target_grid.columns == 8)
+	assert(source_grid.columns == 8)
+	_assert_editor_layout(editor)
 
 	# Mouse target selection: NE must become the highlighted player target.
 	var target_ne := target_grid.get_node("Target_NE") as TextureButton
@@ -399,3 +418,43 @@ func _source_hashes(item_id: int) -> Dictionary:
 		)
 		result[action] = FileAccess.get_sha256(path)
 	return result
+
+
+func _assert_editor_layout(editor: Node) -> void:
+	var base := "CalibrationUI/Panel/VBox/"
+	var ordered_paths := [
+		"Inputs",
+		"MappingStatus",
+		"TargetLabel",
+		"TargetDirections",
+		"SourceLabel",
+		"SourceDirections",
+		"Previews",
+		"Layers",
+		"Commands",
+		"Legend",
+	]
+	var previous_end := -INF
+	for path: String in ordered_paths:
+		var control := editor.get_node(base + path) as Control
+		var rect := control.get_global_rect()
+		assert(rect.size.x > 0.0 and rect.size.y > 0.0, path)
+		assert(rect.position.y >= previous_end - 0.5, path)
+		previous_end = rect.end.y
+	var full_column := editor.get_node(
+		base + "Previews/FullColumn"
+	) as Control
+	var head_column := editor.get_node(
+		base + "Previews/HeadColumn"
+	) as Control
+	assert(not full_column.get_global_rect().intersects(
+		head_column.get_global_rect()
+	))
+	for grid_name: String in ["TargetDirections", "SourceDirections"]:
+		var grid := editor.get_node(base + grid_name) as GridContainer
+		var grid_rect := grid.get_global_rect()
+		for child: Control in grid.get_children():
+			assert(
+				grid_rect.encloses(child.get_global_rect()),
+				str(child.name)
+			)

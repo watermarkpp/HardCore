@@ -9,6 +9,7 @@ const PLAYER_VISUAL_ID := "player.male.cloth_002"
 const OUTPUT_ROOT := "res://outputs/visual_acceptance/helmet_calibration"
 const TEST_OVERRIDE_PATH := OUTPUT_ROOT + "/helmet_146_test_overrides.json"
 const INTERACTIVE_USER_ARG := "--helmet-calibration-interactive"
+const INTERACTIVE_WINDOW_SIZE := Vector2i(1600, 900)
 const DIRECTIONS := HelmetVisualV2.CANONICAL_DIRECTIONS
 const ACTIONS := {
 	"idle": 4, "walk": 6, "attack": 6, "cast": 6, "hit": 3, "death": 4,
@@ -39,6 +40,7 @@ var show_helmet_front := true
 var show_head_occlusion_mask := true
 var _session_unlocked: Dictionary = {}
 var _game: Node
+var _game_viewport: SubViewport
 var _player: PlayerCharacter
 var _visual: Node2D
 var _formal_override_before := ""
@@ -114,6 +116,7 @@ func should_auto_quit_for_display(display_name: String) -> bool:
 
 func _start_interactive(simulate_failure: bool = false) -> bool:
 	_interactive_requested = true
+	_configure_interactive_window()
 	if simulate_failure:
 		_show_initialization_error("测试模拟：编辑器初始化失败")
 		return false
@@ -144,12 +147,52 @@ func initialization_error() -> String:
 	return _initialization_error
 
 
+func interactive_window_policy() -> Dictionary:
+	return {
+		"minimumSize": [
+			INTERACTIVE_WINDOW_SIZE.x,
+			INTERACTIVE_WINDOW_SIZE.y,
+		],
+		"centered": true,
+		"projectSettingsModified": false,
+	}
+
+
+func _configure_interactive_window() -> void:
+	if DisplayServer.get_name() == "headless":
+		return
+	DisplayServer.window_set_min_size(INTERACTIVE_WINDOW_SIZE)
+	DisplayServer.window_set_size(INTERACTIVE_WINDOW_SIZE)
+	var screen := DisplayServer.window_get_current_screen()
+	var usable_rect := DisplayServer.screen_get_usable_rect(screen)
+	DisplayServer.window_set_position(
+		usable_rect.position
+		+ Vector2i(
+			(usable_rect.size.x - INTERACTIVE_WINDOW_SIZE.x) / 2,
+			(usable_rect.size.y - INTERACTIVE_WINDOW_SIZE.y) / 2
+		)
+	)
+
+
+func game_render_is_isolated() -> bool:
+	return (
+		is_instance_valid(_game_viewport)
+		and is_instance_valid(_game)
+		and _game.get_parent() == _game_viewport
+		and _game_viewport.render_target_update_mode
+			== SubViewport.UPDATE_DISABLED
+	)
+
+
 func dispose_runtime_for_test() -> void:
 	_visual = null
 	_player = null
-	if is_instance_valid(_game):
+	if is_instance_valid(_game_viewport):
+		_game_viewport.free()
+	elif is_instance_valid(_game):
 		_game.free()
 	_game = null
+	_game_viewport = null
 
 
 func _show_interactive_ready() -> void:
@@ -206,7 +249,15 @@ func initialize_editor_runtime(use_test_override: bool = false) -> bool:
 	if _game == null:
 		_show_initialization_error("主场景实例化失败")
 		return false
-	add_child(_game)
+	# The complete GameRoot remains alive as a data/runtime source, but it must
+	# never paint its world or HUD into the standalone calibration workspace.
+	_game_viewport = SubViewport.new()
+	_game_viewport.name = "GameDataViewport"
+	_game_viewport.size = Vector2i(1280, 720)
+	_game_viewport.disable_3d = true
+	_game_viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
+	add_child(_game_viewport)
+	_game_viewport.add_child(_game)
 	await get_tree().process_frame
 	await get_tree().process_frame
 	var player_candidate: Variant = _game.get("player")
