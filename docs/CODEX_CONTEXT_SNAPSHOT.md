@@ -176,7 +176,7 @@
 | `HardCore-worktrees/maps` | `codex/maps` @ `2a4d6ccf` | 72 untracked | 用户地图编辑器内容，继续保护；代码等价结果已集成为 `1d74fc72` |
 | `HardCore-worktrees/monsters` | `codex/monsters` @ `45781ded` | tracked clean；68 UID | 已集成为 `c88c6277` |
 | `HardCore-worktrees/ui-art` | `codex/ui-art` @ `68c6f6e2` | clean | 烈火 canonical charge UI 已集成为 `d51f4aeb`、`bf8bff64`、`0268128` |
-| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `dfca1529` | tracked clean；66 UID 继续保护 | 33技能 runtime 与150条可执行语义合同已集成 |
+| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `be710c6e` | 27 项 tracked 技能视觉在制修改；66 UID 继续保护 | 33技能 runtime 与150条可执行语义合同已集成；当前 fire_wall / summon_skeleton 视觉返修未交付，禁止清理或覆盖 |
 | `HardCore-worktrees/equipment` | `codex/equipment` @ `54302137` | 既有 import/UID/生成项继续保护 | 天魔神甲旧存档世界穿戴兼容已集成为 `cc1edacc` |
 
 ### maps 保护红线
