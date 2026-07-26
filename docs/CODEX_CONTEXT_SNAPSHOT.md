@@ -1,6 +1,6 @@
 # Codex 精简上下文快照
 
-更新时间：2026-07-26 10:17（Asia/Shanghai）
+更新时间：2026-07-26 12:15（Asia/Shanghai）
 
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。
 准确性规则：本文件不是代码或 Git 状态的替代品；只核实本次任务实际触及的分支、文件、接口和专项测试。
@@ -16,7 +16,7 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `345d073`（其后的快照提交只改本文档）。
+- 分支/运行时代码基线：`codex/integration` @ `841c3e57`（其后的快照提交只改本文档）。
 - tracked 状态：clean。
 - 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
@@ -34,6 +34,9 @@
 - `d2b8ab8` 将法师/道士施法身体动作固定为主源 `HA.ActSpell` 的 6 帧×60ms=360ms，并在完整动作期间锁定移动；动作、技能释放点和冷却独立，360ms 动作结束后仍须等待技能自身冷却，施法速度不缩短身体动作。
 - `38592e01` + `b779594c` 修正原客户端装备页纸娃娃：Prguse #376 底图按主源码固定绘制于 `(38,52)`，衣服/武器/头盔继续使用 `(31,96)+Hot`；人物选择与装备页各只保留一个纸娃娃，选中存档装备与实时换装均有专项回归。
 - `1d74fc72` 将地图外圈由旧圆半径净空升级为 `18×9` 等距椭圆脚底的逐边法向支撑距离；比奇四边真实 CharacterBody 脚点误差统一为 `-0.749978px`，内部碰撞、遮挡、地面坐标、相机和裙边未改。
+- `c4257bfc`、`fa0ccd50` 与 `8223dda1` 完成纸娃娃双模式：玩家界面默认 `world_avatar`，直接复用世界人物的男性基础、衣服、武器、头盔和脚底锚点；透明原客户端分层保留为 `classic_avatar`；完整 Prguse #376 装备页只用于审计，禁止进入人物选择和装备玩家界面。三职业三套装 9 套加载、人物选择、装备实时刷新和经典夹具均通过。
+- `d6b4cec3` 按战士技能系统的动作状态机模板接入法师 14 项、道士 12 项主动技能的正式主资料动画与选帧图标；来源只使用 `Magic.wil`、`Magic2.wil`、`Mon3.wil`、`Mon18.wil` 及原客户端规则代码，没有分级库 fallback。道士被动 `taoist.spiritual_warfare` 的主源没有施法事件，保持 `no_runtime_visual`，禁止伪造动画。
+- `841c3e57` 将上述 26 个法师/道士主动技能图标接入技能面板、HUD 快捷栏和攻击环；4 个战士既有图标及优先级保持不变，所有法道主动技能禁止回退为背包物品缩略图。
 - 越级审计列出的其余领域尚未返修完成，禁止写成已完成。明日从审计文档按优先级继续：装备图标/属性与旧穿戴、怪物/Boss 数值与外观、掉落、技能、头盔锚点及服务端规则生成器；每一项都必须先修主源解析或映射，再运行对应专项测试并逐项集成。
 - 用户已确认此前截图来自当时最新 APK；不要再次怀疑或重复核验安装版本。用户已实机确认碰撞、装饰物遮挡、地图错位和视角全部解决，四项正式冻结；除非出现新的明确证据，后续任务不得顺带调整。
 - 用户已实机确认 214 个 `monster_id` 逐个、逐姿态人工复核的 v4 怪物脚下光圈正确，正式冻结；除非出现新的明确证据，禁止顺带修改脚点、光圈中心、椭圆尺寸或投影策略。
@@ -44,17 +47,20 @@
 ## 最终 APK
 
 - 文件：`C:\Users\Administrator\Documents\HardCore\outputs\hardcore\HardCore-debug.apk`
-- 构建时间：`2026-07-26 10:11:35`
-- 大小：`1,649,596,646` 字节
-- SHA-256：`A5442D707659B766C4513DD57D6249486A9D60B2214EA34EC25D5A5CFB8C4325`
+- 构建时间：`2026-07-26 12:10:58`
+- 大小：`1,653,572,428` 字节
+- SHA-256：`1117D14E37960025E0D1C2205E960CA38A8D76B668FE5F295A91C824F6488E8A`
 - 包信息：`com.personal.mafaoffline`，versionCode `35`，versionName `1.16.0-bich-map-runtime`，应用名 `HardCore`，`arm64-v8a`。
 - 签名验证：APK Signature Scheme v2/v3 均通过，签名者 1。
-- 本包包含 214 种怪物逐 ID v4 光圈校准、9 个三职业三套装满技能独立测试人物、男性专用正式人物与装备显示管线、primary-only 世界武器兼容合同、正式装备视觉目录、神兽动画、人物列表触摸滚动、法师/道士360ms施法动作与移动锁、原客户端纸娃娃单层坐标修复，以及等距椭圆脚底四边地图边界修复；角色存档只补建缺失项，不覆盖后续测试进度。
+- 本包包含 214 种怪物逐 ID v4 光圈校准、9 个三职业三套装满技能独立测试人物、男性专用正式人物与装备显示管线、`world_avatar`/`classic_avatar` 双模式纸娃娃、primary-only 世界武器兼容合同、正式装备视觉目录、神兽动画、人物列表触摸滚动、法师/道士360ms施法动作与移动锁、26 个法师/道士主动技能的主资料动画和选帧图标，以及等距椭圆脚底四边地图边界修复；角色存档只补建缺失项，不覆盖后续测试进度。
 
 ## 最近已集成结果
 
 | 集成提交 | 领域 | 结果 |
 |---|---|---|
+| `841c3e57` | UI | 26 个法师/道士主动技能在技能面板、快捷栏和攻击环使用主资料动画选帧图标；4 个战士图标冻结不变 |
+| `d6b4cec3` | skills | 按战士动作状态机模板接入法师14项、道士12项主资料动画与图标；1项道士被动明确无施法视觉 |
+| `c4257bfc`、`fa0ccd50`、`8223dda1` | equipment/UI | 纸娃娃双模式合同与玩家界面 `world_avatar`；`classic_avatar` 保留透明分层，完整装备页仅审计 |
 | `345d073` | rules | 专业工作树开工前必须同步/锁定集成基线，交付后必须在当前主树复验，禁止旧基线假通过 |
 | `1d74fc72` | maps | 外圈边界按当前等距椭圆脚底逐边求支撑距离；比奇四边与全部发布地图物理边界专项通过 |
 | `8c7f6b4a` | maps/tests | 新增比奇四边真实 CharacterBody 边界对称性回归 |
@@ -122,9 +128,9 @@
 - integration：`world.actor_footprint.iso_ellipse.v1`、`test.character.roster.full_equipment_skills.v1`。
 - maps：`map_editor_runtime_collision_geometry_v2`、`map_visible_edge_actor_footprint_clearance_v2`、`published_blocked_cells_after_erasure_v1`、`map_editor_runtime_visual_geometry_v5`、`map_actor_occlusion_sort_v5`、`map_diamond_camera_center_constraint_v2`、`player_priority_soft_edge_v1`、`map_runtime_nonwalkable_edge_skirt_v1`。
 - monsters：`monster.overhead_anchor.v4`、`monster.overhead_layout.v3`、`monster.ground_contact.v4`、`monster.ground_contact.calibration.v4`；214 个 `monster_id` 各自保存人工复核的脚点、光圈中心、椭圆尺寸和投影策略，贴图异步激活后必须刷新。
-- UI：`ui.hud.resource_orb.hole_fill.v1`、`skill_button_assignment_contract_v2`。
-- equipment：`equipment.attribute.master.v2`、`project.hardcore.equipment_attribute_master.v2`、`equipment.test_loadouts.classic_three_tiers.v1`、`equipment.visual_catalog.formal_wearables.v1`、`equipment.paper_doll.original_client_stage.v1`、`equipment.world_wear.male_dress.v1`、`equipment.world_wear.male_weapon.v1`、`equipment.world_helmet.male.extension.v1` 与 9 个 `test.loadout.{profession}.{tier}.v1`。
-- skills：`combat.resolution.openmir2.v1`、`physical.hit.random_agility.strict_lt.v1`、`magic.evasion.anti_magic.direct_spell.v1`、`physical.attack_speed.interval_tier.v1`、`player.direct_spell_damage.openmir2.v1`、法师/道士主动技能 `action_duration=0.36` / `action_frame_count=6` / `action_frame_time_ms=60` 时序字段、`legacy_clamp_negative_span`、`test.characters.full_skills.v1` 与 9 个 `test.character.{profession}.{woma|zuma|chiyue}.v1`。
+- UI：`ui.hud.resource_orb.hole_fill.v1`、`skill_button_assignment_contract_v2`、`ui.hud.skill_icon.caster.<stable_skill_id>`。
+- equipment：`equipment.attribute.master.v2`、`project.hardcore.equipment_attribute_master.v2`、`equipment.test_loadouts.classic_three_tiers.v1`、`equipment.visual_catalog.formal_wearables.v1`、`equipment.paper_doll.presentation_modes.v1`、`equipment.paper_doll.world_avatar.v1`、`equipment.paper_doll.avatar_only.v1`、`equipment.paper_doll.original_client_stage.v1`、`equipment.world_wear.male_dress.v1`、`equipment.world_wear.male_weapon.v1`、`equipment.world_helmet.male.extension.v1` 与 9 个 `test.loadout.{profession}.{tier}.v1`。
+- skills：`combat.resolution.openmir2.v1`、`physical.hit.random_agility.strict_lt.v1`、`magic.evasion.anti_magic.direct_spell.v1`、`physical.attack_speed.interval_tier.v1`、`player.direct_spell_damage.openmir2.v1`、`caster_skill_animation.v1`、法师/道士主动技能 `action_duration=0.36` / `action_frame_count=6` / `action_frame_time_ms=60` 时序字段、`legacy_clamp_negative_span`、`test.characters.full_skills.v1` 与 9 个 `test.character.{profession}.{woma|zuma|chiyue}.v1`。
 
 ## 已通过的必要验收
 
@@ -144,7 +150,8 @@
 - maps：比奇真实源 E2E（180 个阻挡格）；11 张地图真实 `CharacterBody2D` 脚点可达可见边缘且外环阻挡。
 - monsters：真实名字/血条节点覆盖 4 类怪物、8 方向、idle/walk/attack/hit/death 全帧和 Camera2D 缩放；214 种怪物加载通过。
 - UI：2664×1200 HUD 血蓝球尺寸/对称/安全区通过；技能配置与拾取提示专项通过。
-- skills：快捷槽 v2 换槽、烈火自动开关、战士技能状态机，以及法师/道士360ms施法动作、移动锁、独立冷却和6帧推进通过。
+- paper doll：`world_avatar`/`classic_avatar` 模式隔离、完整装备页禁入玩家界面、三职业三套装 9 套加载、人物选择和装备实时刷新通过。
+- skills：快捷槽 v2 换槽、烈火自动开关、战士技能状态机，以及法师/道士360ms施法动作、移动锁、独立冷却和6帧推进通过；法师14项、道士12项主动技能的主资料动画、图标、技能面板、快捷栏和攻击环路由通过，`SMOKE_TEST_PASS`。
 
 只在相关代码再次变化时重跑对应专项；跨域接线或发布前再跑一次 smoke。
 
@@ -152,11 +159,11 @@
 
 | 工作树 | 分支/HEAD | dirty | 集成状态 |
 |---|---|---:|---|
-| `HardCore-worktrees/maps` | `codex/maps` @ `599717ce` | 72 untracked | 用户地图编辑器内容，继续保护 |
+| `HardCore-worktrees/maps` | `codex/maps` @ `2a4d6ccf` | 72 untracked | 用户地图编辑器内容，继续保护；代码等价结果已集成为 `1d74fc72` |
 | `HardCore-worktrees/monsters` | `codex/monsters` @ `45781ded` | tracked clean；68 UID | 已集成为 `c88c6277` |
-| `HardCore-worktrees/ui-art` | `codex/ui-art` @ `1aff5350` | clean | 已集成为 `a78222ac` |
-| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `0250935c` | tracked clean；既有 UID 继续保护 | 通用主属性幸运专项已集成为 `fcead306` |
-| `HardCore-worktrees/equipment` | `codex/equipment` @ `911487b7` | 4 个既有 monster import 与全部生成 UID 继续保护 | 祝福/诅咒 v2 已集成为 `b7d0ad7b`；属性主表与视觉冻结保持集成 |
+| `HardCore-worktrees/ui-art` | `codex/ui-art` @ `70e65df7` | clean | 法道技能图标路由已集成为 `841c3e57` |
+| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `9547d5f4` | tracked clean；66 UID 继续保护 | 法道主资料技能动画/图标已集成为 `d6b4cec3` |
+| `HardCore-worktrees/equipment` | `codex/equipment` @ `a4eb6c05` | tracked clean；69 UID/既有生成项继续保护 | 纸娃娃模式合同已集成为 `c4257bfc` |
 
 ### maps 保护红线
 
