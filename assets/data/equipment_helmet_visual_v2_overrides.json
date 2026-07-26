@@ -173,92 +173,118 @@
 		"147": {
 			"directions": {
 				"N": {
-					"source_row": 0,
+					"source_row": 0.0,
 					"source_slot_id": "slot_0",
 					"nudge": [
-						0,
-						-3
+						-1.0,
+						-2.0
 					],
 					"status": "valid",
 					"locked": false,
 					"source_direction": "N"
 				},
 				"NE": {
-					"source_row": 1,
+					"source_row": 1.0,
 					"source_slot_id": "slot_1",
 					"nudge": [
-						1,
-						-1
+						1.0,
+						-1.0
 					],
 					"status": "valid",
 					"locked": false,
 					"source_direction": "NE"
 				},
 				"E": {
-					"source_row": 2,
+					"source_row": 2.0,
 					"source_slot_id": "slot_2",
 					"nudge": [
-						1,
-						0
+						1.0,
+						0.0
 					],
 					"status": "unassigned",
 					"locked": false,
 					"source_direction": "E"
 				},
 				"SE": {
-					"source_row": 3,
+					"source_row": 3.0,
 					"source_slot_id": "slot_3",
 					"nudge": [
-						2,
-						-1
+						2.0,
+						-1.0
 					],
 					"status": "unassigned",
 					"locked": false,
 					"source_direction": "SE"
 				},
 				"S": {
-					"source_row": 4,
+					"source_row": 4.0,
 					"source_slot_id": "slot_4",
 					"nudge": [
-						1,
-						0
+						1.0,
+						0.0
 					],
 					"status": "unassigned",
 					"locked": false,
 					"source_direction": "S"
 				},
 				"SW": {
-					"source_row": 5,
+					"source_row": 5.0,
 					"source_slot_id": "slot_5",
 					"nudge": [
-						0,
-						0
+						0.0,
+						0.0
 					],
 					"status": "unassigned",
 					"locked": false,
 					"source_direction": "SW"
 				},
 				"W": {
-					"source_row": 6,
+					"source_row": 6.0,
 					"source_slot_id": "slot_6",
 					"nudge": [
-						-1,
-						1
+						-1.0,
+						1.0
 					],
 					"status": "unassigned",
 					"locked": false,
 					"source_direction": "W"
 				},
 				"NW": {
-					"source_row": 7,
+					"source_row": 7.0,
 					"source_slot_id": "slot_7",
 					"nudge": [
-						-2,
-						0
+						-2.0,
+						0.0
 					],
 					"status": "unassigned",
 					"locked": false,
 					"source_direction": "NW"
+				}
+			}
+		},
+		"149": {
+			"directions": {
+				"N": {
+					"source_row": 4.0,
+					"source_slot_id": "slot_4",
+					"nudge": [
+						0.0,
+						-7.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "S"
+				},
+				"NE": {
+					"source_row": 5.0,
+					"source_slot_id": "slot_5",
+					"nudge": [
+						0.0,
+						-5.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "SW"
 				}
 			}
 		}
@@ -361,7 +387,7 @@
 			}
 		},
 		"bronze_magic": {
-			"uniform_scale_percent": 100,
+			"uniform_scale_percent": 100.0,
 			"derivedAtlases": {
 				"idle": "res://assets/generated/helmet_v2/bronze_magic/scale_100/bronze_magic_idle_scale_100.png",
 				"walk": "res://assets/generated/helmet_v2/bronze_magic/scale_100/bronze_magic_walk_scale_100.png",
@@ -401,11 +427,59 @@
 				"pivotSource": "res://assets/data/equipment_male_world_helmet.json#visualIdentities.*.actions.*.frames[].hairAnchorCentroid",
 				"castPivotUsesSameFramePrimaryHairEvidence": true,
 				"runtimeScale": [
+					1.0,
+					1.0
+				],
+				"sourceAtlasModified": false,
+				"sourceRecipeId": "authored_source_sheet.a1cb935c1c00f13ae2ccae2c5cea1706f4f549ffef66607574be2c67bd370f82.layout.969ae4fc298a19fd82eacd5e7c4a18e6f134fe333223b4a80d6bd11cad887733.green_despill_v2"
+			}
+		},
+		"taoist": {
+			"uniform_scale_percent": 100,
+			"derivedAtlases": {
+				"idle": "res://assets/generated/helmet_v2/taoist/scale_100/taoist_idle_scale_100.png",
+				"walk": "res://assets/generated/helmet_v2/taoist/scale_100/taoist_walk_scale_100.png",
+				"attack": "res://assets/generated/helmet_v2/taoist/scale_100/taoist_attack_scale_100.png",
+				"cast": "res://assets/generated/helmet_v2/taoist/scale_100/taoist_cast_scale_100.png",
+				"hit": "res://assets/generated/helmet_v2/taoist/scale_100/taoist_hit_scale_100.png",
+				"death": "res://assets/generated/helmet_v2/taoist/scale_100/taoist_death_scale_100.png"
+			},
+			"sourceAtlasSha256": {
+				"idle": "81034b032ad5d9026d00a76b64afd9feeae089392fc7247d26ce34d1e977ed3d",
+				"walk": "15d6337bbde5a4747fe50492a645cd49a76288560fc5bcb29e15b51ea90e0209",
+				"attack": "df78c299edf078b28eb7d9af4deec327cb8a7efa23f6a2f194546b6246c7b466",
+				"cast": "63d091d8c239f5e1ccb7d9dbb2fa09130fdf9a2f7256c2f8b644b44e41ee5a13",
+				"hit": "97f664b70cf993b471d61a9164780090816d9a15c5dc4a125935aa0eb97a983c",
+				"death": "15f51d55f6b95939252754349a690a8530c51f0b9d2c1cdd18a6ce2fbe4ba627"
+			},
+			"derivedAtlasSha256": {
+				"idle": "135fd20527319b732f768296e5e927578b98e44fc38e0af55462139ed1d7ca9c",
+				"walk": "b40ae8162885fdd0801584249e3c2660a16457089cb9a4c7bee95e3a8dbba58c",
+				"attack": "474a4e6636340aed7c27f2614fba68898f9b01acc113d2762956505d537808c3",
+				"cast": "ecd622240280af54ba2c7b6fdbed00022cc5fea06e9be6468b4ecdd9aee1c9aa",
+				"hit": "5a240c33b05eea3f7b1e48164f0f875a4d7a7c535a770067f1d6adf8505d5b81",
+				"death": "5387a32e726bce4fba7fffd2247ca6608921768965de8aaa6feb840eda8391c5"
+			},
+			"bakePolicy": {
+				"filter": "nearest",
+				"pivotInvariant": true,
+				"allActionsDirectionsFrames": true,
+				"requiredActions": [
+					"idle",
+					"walk",
+					"attack",
+					"cast",
+					"hit",
+					"death"
+				],
+				"pivotSource": "res://assets/data/equipment_male_world_helmet.json#visualIdentities.*.actions.*.frames[].hairAnchorCentroid",
+				"castPivotUsesSameFramePrimaryHairEvidence": true,
+				"runtimeScale": [
 					1,
 					1
 				],
 				"sourceAtlasModified": false,
-				"sourceRecipeId": "authored_source_sheet.a1cb935c1c00f13ae2ccae2c5cea1706f4f549ffef66607574be2c67bd370f82.layout.969ae4fc298a19fd82eacd5e7c4a18e6f134fe333223b4a80d6bd11cad887733.green_despill_v2"
+				"sourceRecipeId": "primary_source_rows.v1"
 			}
 		}
 	}
