@@ -36,12 +36,23 @@ func _run() -> void:
 		PackedStringArray(), "windows"
 	))
 	assert(not await editor.start_interactive_failure_for_test())
+	await get_tree().process_frame
 	assert(not editor.quit_was_requested())
 	assert(not editor.initialization_error().is_empty())
 	var window_policy: Dictionary = editor.interactive_window_policy()
-	assert(window_policy.get("minimumSize", []) == [1600, 900])
-	assert(bool(window_policy.get("centered", false)))
+	assert(str(window_policy.get("mode", "")) == "maximized")
+	assert(bool(window_policy.get("dpiSafe", false)))
+	assert(not bool(window_policy.get("manualPhysicalSize", true)))
+	assert(not bool(window_policy.get("manualPosition", true)))
 	assert(not bool(window_policy.get("projectSettingsModified", true)))
+	var tool_text := FileAccess.get_file_as_string(
+		"res://tools/helmet_calibration_tool.gd"
+	)
+	assert("window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED)" in tool_text)
+	assert("window_set_size(" not in tool_text)
+	assert("window_set_min_size(" not in tool_text)
+	assert("window_set_position(" not in tool_text)
+	assert("screen_get_usable_rect(" not in tool_text)
 	var startup_status := editor.get_node(
 		"CalibrationUI/Panel/VBox/StartupStatus"
 	) as Label
@@ -63,12 +74,24 @@ func _run() -> void:
 	var source_grid := editor.get_node(
 		"CalibrationUI/Panel/VBox/SourceDirections"
 	) as GridContainer
-	var calibration_ui := editor.get_node("CalibrationUI") as Control
+	var calibration_ui := editor.get_node("CalibrationUI") as ScrollContainer
 	var editor_background := editor.get_node("EditorBackground") as ColorRect
+	var content_panel := editor.get_node(
+		"CalibrationUI/Panel"
+	) as PanelContainer
 	assert(editor.game_render_is_isolated())
 	assert(editor.get_node("GameDataViewport") is SubViewport)
-	assert(calibration_ui.custom_minimum_size == Vector2(1600, 900))
-	assert(editor_background.custom_minimum_size == Vector2(1600, 900))
+	assert(calibration_ui.get_child_count() == 1)
+	assert(calibration_ui.get_child(0) == content_panel)
+	assert(
+		calibration_ui.horizontal_scroll_mode
+		== ScrollContainer.SCROLL_MODE_AUTO
+	)
+	assert(
+		calibration_ui.vertical_scroll_mode
+		== ScrollContainer.SCROLL_MODE_AUTO
+	)
+	assert(content_panel.custom_minimum_size == Vector2(1600, 900))
 	assert(editor_background.color.a == 1.0)
 	assert(editor_background.color.r < 0.1)
 	assert(calibration_ui.z_index > editor_background.z_index)
@@ -80,6 +103,12 @@ func _run() -> void:
 	assert(target_grid.columns == 8)
 	assert(source_grid.columns == 8)
 	_assert_editor_layout(editor)
+	# Reproduce the user's high-DPI effective client area. The 1600x900
+	# workspace must remain reachable through both scroll axes at 802x480.
+	calibration_ui.size = Vector2(802, 480)
+	await get_tree().process_frame
+	assert(calibration_ui.get_h_scroll_bar().visible)
+	assert(calibration_ui.get_v_scroll_bar().visible)
 
 	# Mouse target selection: NE must become the highlighted player target.
 	var target_ne := target_grid.get_node("Target_NE") as TextureButton
@@ -423,6 +452,8 @@ func _source_hashes(item_id: int) -> Dictionary:
 func _assert_editor_layout(editor: Node) -> void:
 	var base := "CalibrationUI/Panel/VBox/"
 	var ordered_paths := [
+		"Title",
+		"StartupStatus",
 		"Inputs",
 		"MappingStatus",
 		"TargetLabel",
@@ -434,11 +465,14 @@ func _assert_editor_layout(editor: Node) -> void:
 		"Commands",
 		"Legend",
 	]
+	var content_panel := editor.get_node("CalibrationUI/Panel") as Control
+	var content_rect := content_panel.get_global_rect()
 	var previous_end := -INF
 	for path: String in ordered_paths:
 		var control := editor.get_node(base + path) as Control
 		var rect := control.get_global_rect()
 		assert(rect.size.x > 0.0 and rect.size.y > 0.0, path)
+		assert(content_rect.encloses(rect), path)
 		assert(rect.position.y >= previous_end - 0.5, path)
 		previous_end = rect.end.y
 	var full_column := editor.get_node(

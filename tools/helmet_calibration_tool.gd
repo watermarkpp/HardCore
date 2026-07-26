@@ -9,7 +9,6 @@ const PLAYER_VISUAL_ID := "player.male.cloth_002"
 const OUTPUT_ROOT := "res://outputs/visual_acceptance/helmet_calibration"
 const TEST_OVERRIDE_PATH := OUTPUT_ROOT + "/helmet_146_test_overrides.json"
 const INTERACTIVE_USER_ARG := "--helmet-calibration-interactive"
-const INTERACTIVE_WINDOW_SIZE := Vector2i(1600, 900)
 const DIRECTIONS := HelmetVisualV2.CANONICAL_DIRECTIONS
 const ACTIONS := {
 	"idle": 4, "walk": 6, "attack": 6, "cast": 6, "hit": 3, "death": 4,
@@ -149,11 +148,10 @@ func initialization_error() -> String:
 
 func interactive_window_policy() -> Dictionary:
 	return {
-		"minimumSize": [
-			INTERACTIVE_WINDOW_SIZE.x,
-			INTERACTIVE_WINDOW_SIZE.y,
-		],
-		"centered": true,
+		"mode": "maximized",
+		"dpiSafe": true,
+		"manualPhysicalSize": false,
+		"manualPosition": false,
 		"projectSettingsModified": false,
 	}
 
@@ -161,17 +159,9 @@ func interactive_window_policy() -> Dictionary:
 func _configure_interactive_window() -> void:
 	if DisplayServer.get_name() == "headless":
 		return
-	DisplayServer.window_set_min_size(INTERACTIVE_WINDOW_SIZE)
-	DisplayServer.window_set_size(INTERACTIVE_WINDOW_SIZE)
-	var screen := DisplayServer.window_get_current_screen()
-	var usable_rect := DisplayServer.screen_get_usable_rect(screen)
-	DisplayServer.window_set_position(
-		usable_rect.position
-		+ Vector2i(
-			(usable_rect.size.x - INTERACTIVE_WINDOW_SIZE.x) / 2,
-			(usable_rect.size.y - INTERACTIVE_WINDOW_SIZE.y) / 2
-		)
-	)
+	# Let Windows choose the DPI-aware physical bounds on the active monitor.
+	# Manual pixel sizes/positions are scaled twice on some high-DPI desktops.
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED)
 
 
 func game_render_is_isolated() -> bool:
