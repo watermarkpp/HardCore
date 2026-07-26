@@ -52,7 +52,7 @@ func _ready() -> void:
 	var lightning_cells := GeometryService.cells(
 		Loader.skill("wizard.hell_lightning"), Vector2i.ZERO, Vector2i.DOWN
 	)
-	assert(lightning_cells.size() == 16 and not lightning_cells.has(Vector2i.ZERO))
+	assert(lightning_cells.size() == 24 and not lightning_cells.has(Vector2i.ZERO))
 	var failure := CastResult.failure("wizard.fireball", "invalid_target")
 	assert(not failure.accepted and failure.proficiency_event.is_empty())
 	var success := CastResult.success("wizard.fireball", {
