@@ -62,6 +62,7 @@ static func resolve(skill_name_or_id: String, context: Dictionary) -> Dictionary
 		"anti_magic_checked": false,
 		"magic_evaded": false,
 		"visual": visual_profile,
+		"visual_duration": CasterSkillVisualRegistry.animation_duration(skill_id),
 	}
 	for resource_field: String in ["amulet_cost", "apply_delay_ms"]:
 		if combat_profile.has(resource_field):
@@ -212,8 +213,11 @@ static func create_cast_nodes(
 			if summon != null:
 				nodes.append(summon)
 		_:
-			if str(plan.get("visual", {}).get("status", "")) == "formal_primary_client_pixel":
-				nodes.append(create_visual(plan, target_position, direction, target))
+			if str(plan.get("visual", {}).get("status", "")) == "formal_primary_client_animation":
+				var role := str(plan.get("visual", {}).get("role", ""))
+				var visual_position := origin if role in ["self_effect", "self_area", "line_effect"] else target_position
+				var visual_target := target if role == "target_effect" else null
+				nodes.append(create_visual(plan, visual_position, direction, visual_target))
 	return nodes
 
 

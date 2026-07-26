@@ -15,7 +15,8 @@ func _ready() -> void:
 		if skill_id == "taoist.spiritual_warfare":
 			assert(definition.visual_profile.status == "no_runtime_visual")
 		else:
-			assert(definition.visual_profile.status == "formal_primary_client_pixel")
+			assert(definition.visual_profile.status == "formal_primary_client_animation")
+			assert(definition.visual_profile.animation_contract == "caster_skill_animation.v1")
 			assert(definition.visual_profile.source_priority.tier == "primary")
 		for record: Dictionary in definition.levels:
 			assert(record.source_trace.mana_cost.original_path == "Server.MirDB")

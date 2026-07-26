@@ -56,6 +56,29 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def compact_visual_profile(coverage: dict, asset: dict) -> dict:
+    """Embed the stable visual contract without duplicating every frame record."""
+    animation = asset.get("animation", {})
+    icon = asset.get("icon", {})
+    return {
+        **coverage,
+        "asset_id": coverage.get("asset_id", ""),
+        "distribution_id": asset.get("distribution_id", ""),
+        "source_priority": asset.get("source_priority", {}),
+        "original_path": asset.get("original_path", ""),
+        "source_sha256": asset.get("source_sha256", ""),
+        "mapping_rule": asset.get("mapping_rule", ""),
+        "mapping_confidence": asset.get("mapping_confidence", ""),
+        "animation_contract": animation.get("contract", ""),
+        "frame_time_ms": animation.get("frame_time_ms", 0),
+        "frame_count": animation.get("frame_count", 0),
+        "direction_count": animation.get("direction_count", 0),
+        "playback": animation.get("playback", ""),
+        "icon_path": icon.get("path", coverage.get("icon_path", "")),
+        "icon_selected_source_index": icon.get("selected_source_index", -1),
+    }
+
+
 def main() -> None:
     skills_data = read_json(SKILLS_PATH)
     growth = read_json(GROWTH_PATH)
@@ -106,8 +129,10 @@ def main() -> None:
             asset_id = coverage.get("asset_id", "")
             visual_profile = dict(coverage)
             if asset_id:
-                visual_profile.update(visuals["assets"][asset_id])
-                visual_profile["asset_id"] = asset_id
+                visual_profile = compact_visual_profile(
+                    coverage,
+                    visuals["assets"][asset_id],
+                )
             package_skills[skill_id] = {
                 "skill_id": skill_id,
                 "profession_id": profession_id,
@@ -173,7 +198,7 @@ def main() -> None:
                 "stable_ids": "authoritative",
                 "display_names": "Chinese display aliases only",
                 "magic_info": "server.crystal.cjlaaa B/C candidate retained per level",
-                "visuals": "primary client pixels only; generated fallback forbidden",
+                "visuals": "primary client animation pixels/rules only; generated fallback forbidden",
             },
         }
         output_path = OUTPUT_DIR / f"{profession_id}.json"
