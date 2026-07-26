@@ -1,6 +1,6 @@
 {
   "contractId": "ui.skill.button_assignment.v2",
-  "policy": "Gameplay skill data owns interaction_mode and assignment eligibility. UI displays the supplied mode and submits a target slot without mutating skill behavior or saved assignments.",
+  "policy": "Gameplay skill data owns interaction_mode and assignment eligibility. UI displays the supplied mode and submits a target slot without mutating skill behavior or saved assignments. warrior.fire_sword is the canonical active_charge mode: one explicit charge, never automatic use.",
   "assignmentInput": {
     "method": "SkillPanel.set_skill_button_assignments(assignments, interaction_modes)",
     "hudForwardMethod": "GameHUD.set_skill_button_assignments(assignments, interaction_modes)",
@@ -23,7 +23,7 @@
         ]
       }
     },
-    "interactionModes": ["toggle", "click", "passive"]
+    "interactionModes": ["toggle", "click", "passive", "active_charge"]
   },
   "requestSignal": {
     "panelSignal": "SkillPanel.skill_button_assignment_requested(request)",
@@ -41,10 +41,15 @@
   },
   "runtimeStateDisplay": {
     "contractId": "gameplay.warrior.skill_runtime.v2",
-    "fireSwordToggleField": "fire_auto_enabled",
-    "stableToggleId": "warrior.fire_sword.auto_enabled",
-    "enabledLabel": "开",
-    "disabledLabel": "关"
+    "fireSwordCharge": {
+      "stableSkillId": "warrior.fire_sword",
+      "armedField": "fire_armed",
+      "cooldownRemainingField": "fire_ready_remaining_ms",
+      "chargeRemainingField": "fire_expires_remaining_ms",
+      "chargedLabel": "充能",
+      "readyLabel": "未充能·就绪",
+      "cooldownLabel": "冷却"
+    }
   },
   "compatibility": {
     "legacyContractId": "ui.skill.quick_slot_assignment.v1",
