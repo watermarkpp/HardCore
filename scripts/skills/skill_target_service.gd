@@ -6,7 +6,7 @@ static func validate(definition: Dictionary, target_context: Dictionary) -> Dict
 	var target: Dictionary = definition.get("target", {})
 	var mode := str(target.get("mode", ""))
 	var requires_target := mode not in [
-		"self_stat", "self", "self_summon", "self_next_melee_charge",
+		"self_stat", "self", "self_summon", "self_next_melee_charge", "self_or_friendly_single",
 		"self_random_destination", "caster_surrounding_area", "surrounding_units",
 	]
 	if requires_target and not bool(target_context.get("has_target", false)):
