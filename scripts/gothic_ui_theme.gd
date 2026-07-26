@@ -84,6 +84,8 @@ static func build() -> Theme:
 	result.set_stylebox("panel", "GothicArtAttackFill", _flat(Color(0.30, 0.018, 0.018, 0.90), Color.TRANSPARENT, 0, 60))
 	result.set_type_variation("GothicModalSurface", "Panel")
 	result.set_stylebox("panel", "GothicModalSurface", _flat(Color(0.018, 0.014, 0.012, 0.94), Color.TRANSPARENT, 0, 24))
+	result.set_type_variation("GothicModalScrim", "Panel")
+	result.set_stylebox("panel", "GothicModalScrim", _flat(Color.TRANSPARENT, Color.TRANSPARENT, 0, 0))
 	result.set_type_variation("GothicModalFrame", "Panel")
 	result.set_stylebox("panel", "GothicModalFrame", _texture(COMPONENT_MODAL_FRAME, Vector4(112, 96, 112, 96), 42))
 	result.set_type_variation("GothicTitleBar", "Panel")

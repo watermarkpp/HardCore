@@ -149,6 +149,19 @@ func _build_equipment_panel() -> void:
 	panel.add_child(_section_title("人物装备", 390))
 	character_preview = PreviewScript.new()
 	character_preview.name = "CharacterPreview"
+	character_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# Every paper-doll layer is placed relative to the manifest foot anchor;
+	# alpha bounds remain diagnostic data and cannot move the stage.
+	character_preview.center_on_opaque_bounds = false
+	character_preview.set_meta("horizontal_alignment_contract", PreviewScript.FOOT_STAGE_ANCHOR_CONTRACT_ID)
+	character_preview.configure_presentation_mode("world_avatar")
+	character_preview.set_meta("paper_doll_render_contract", PreviewScript.PRESENTATION_MODES_CONTRACT_ID)
+	character_preview.set_meta("paper_doll_presentation_mode", "world_avatar")
+	character_preview.set_meta(
+		"coordinate_space_policy",
+		"transparent world avatar; touch regions remain external equipment slots"
+	)
+	character_preview.set_meta("input_policy", "visual_only_mouse_filter_ignore")
 	# Reserve the lower half of the equipment panel for the client paper-doll;
 	# the previous top placement left a visibly unused block under the figure.
 	character_preview.position = Vector2(80, 139)
@@ -323,8 +336,11 @@ func _refresh_equipment_slots() -> void:
 func _refresh_character_stats() -> void:
 	if equipment_stats_label == null:
 		return
-	var stats := PlayerState.computed_stats
-	equipment_stats_label.text = "%s　等级 %d\n生命 %d　魔法 %d\n攻击 %d-%d\n魔法 %d-%d　道术 %d-%d\n防御 %d-%d　魔防 %d-%d\n准确 %d　敏捷 %d　幸运 %d\n暴击 %.1f%%　攻速 %+.1f%%\n穿戴重量 %d/%d" % [
+	equipment_stats_label.text = _character_stats_text(PlayerState.computed_stats)
+
+
+func _character_stats_text(stats: Dictionary) -> String:
+	return "%s　等级 %d\n生命 %d　魔法 %d\n攻击 %d-%d\n魔法 %d-%d　道术 %d-%d\n防御 %d-%d　魔防 %d-%d\n准确 %d　敏捷 %d　幸运 %d\n魔法躲避 %d%%　攻击速度 %+d\n暴击 %.1f%%\n穿戴重量 %d/%d" % [
 		PlayerState.profession, PlayerState.level,
 		int(stats.get("max_hp", 0)), int(stats.get("max_mp", 0)),
 		int(stats.get("attack_min", 0)), int(stats.get("attack_max", 0)),
@@ -333,7 +349,8 @@ func _refresh_character_stats() -> void:
 		int(stats.get("defense_min", 0)), int(stats.get("defense_max", 0)),
 		int(stats.get("magic_defense_min", 0)), int(stats.get("magic_defense_max", 0)),
 		int(stats.get("accuracy", 0)), int(stats.get("agility", 0)), int(stats.get("luck", 0)),
-		float(stats.get("critical_chance", 0.0)) * 100.0, float(stats.get("attack_speed_percent", 0.0)),
+		int(stats.get("magic_evasion_percent", 0)), int(stats.get("attack_speed_tier", 0)),
+		float(stats.get("critical_chance", 0.0)) * 100.0,
 		int(stats.get("wear_weight", 0)), int(stats.get("max_wear_weight", 0)),
 	]
 
@@ -618,12 +635,14 @@ func _advanced_stat_line(item: Dictionary) -> String:
 	for pair: Array in [["accuracy", "准确"], ["agility", "敏捷"], ["luck", "幸运"], ["hpBonus", "生命"], ["mpBonus", "魔法值"]]:
 		if item.get(pair[0], null) != null and float(item.get(pair[0], 0)) != 0.0:
 			parts.append("%s %+d" % [pair[1], int(item.get(pair[0], 0))])
+	if item.get("magicEvasionPercent", null) != null and int(item.get("magicEvasionPercent", 0)) != 0:
+		parts.append("魔法躲避 %+d%%" % int(item.get("magicEvasionPercent", 0)))
+	if item.get("attackSpeedTier", null) != null and int(item.get("attackSpeedTier", 0)) != 0:
+		parts.append("攻击速度 %+d" % int(item.get("attackSpeedTier", 0)))
 	var modifiers: Variant = item.get("modifiers", {})
 	if modifiers is Dictionary:
 		if float(modifiers.get("criticalChance", 0.0)) != 0.0:
 			parts.append("暴击 +%.1f%%" % (float(modifiers.get("criticalChance", 0.0)) * 100.0))
-		if float(modifiers.get("attackSpeedPercent", 0.0)) != 0.0:
-			parts.append("攻速 +%.1f%%" % float(modifiers.get("attackSpeedPercent", 0.0)))
 	return "　".join(parts) if not parts.is_empty() else "无额外属性"
 
 

@@ -2,19 +2,23 @@ extends Node2D
 
 const TargetingSystem := preload("res://scripts/targeting_system.gd")
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
+const CombatResolutionRulesScript := preload("res://scripts/combat_resolution_rules.gd")
 const MapCoordinateMapperScript := preload("res://scripts/map_coordinate_mapper.gd")
 const GothicBichCampBuilderScript := preload("res://scripts/layers/presentation/gothic_bich_camp_builder.gd")
 const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 const MapPortalRuntimeServiceScript := preload("res://scripts/map_editor/map_portal_runtime_service.gd")
 const MapPortalTravelGuardScript := preload("res://scripts/map_editor/map_portal_travel_guard.gd")
+const MapDiamondCameraConstraintScript := preload("res://scripts/map_editor/map_diamond_camera_constraint_service.gd")
 const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const SystemMenuPanelScript := preload("res://scripts/system_menu_panel.gd")
+const SkillLoadoutRulesScript := preload("res://scripts/skill_loadout_rules.gd")
 const DEFAULT_NORMAL_RESPAWN_SECONDS := 180.0
 const DEFAULT_BOSS_RESPAWN_SECONDS := 3600.0
 const MONSTER_PREFETCH_TIMEOUT_MSEC := 8000
 
 var player: PlayerCharacter
+var _world_camera: Camera2D
 var hud: GameHUD
 var background: WorldBackground
 var current_zone := ""
@@ -61,12 +65,14 @@ func _ready() -> void:
 	PlayerState.consumable_requested.connect(_on_consumable_used)
 	PlayerState.scroll_requested.connect(_on_scroll_used)
 	add_child(player)
+	player.restore_warrior_runtime_state(PlayerState.warrior_runtime_state_for_restore())
 
-	var camera := Camera2D.new()
-	camera.position_smoothing_enabled = true
-	camera.position_smoothing_speed = 7.0
-	camera.zoom = Vector2.ONE * ArtSpec.CAMERA_ZOOM
-	player.add_child(camera)
+	_world_camera = Camera2D.new()
+	_world_camera.name = "WorldCamera"
+	_world_camera.position_smoothing_enabled = true
+	_world_camera.position_smoothing_speed = 7.0
+	_world_camera.zoom = Vector2.ONE * ArtSpec.CAMERA_ZOOM
+	player.add_child(_world_camera)
 
 	hud = GameHUD.new()
 	hud.movement_changed.connect(player.set_touch_vector)
@@ -78,6 +84,7 @@ func _ready() -> void:
 	hud.target_switch_pressed.connect(_cycle_target)
 	hud.auto_target_changed.connect(_set_auto_target_enabled)
 	hud.special_action_pressed.connect(_on_special_action_pressed)
+	hud.skill_button_assignment_requested.connect(_on_skill_button_assignment_requested)
 	add_child(hud)
 	player.resources_changed.connect(hud.update_resources)
 	# 重登始终从服务端HomeMap出生。该规则不依赖退出回调，Android强杀后同样安全回城。
@@ -107,6 +114,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	background.set_focus_position(player.global_position)
+	_update_world_camera_constraint(delta)
 	_update_portal_arrival_guard()
 	_enforce_bich_safe_zone()
 	_update_boss_world_mechanics(delta)
@@ -117,6 +125,7 @@ func _process(delta: float) -> void:
 	_movement_target_refresh_remaining = maxf(0.0, _movement_target_refresh_remaining - delta)
 	if _warrior_hud_timer <= 0.0:
 		_warrior_hud_timer = 0.2
+		PlayerState.apply_warrior_runtime_state(player.warrior_runtime_state_for_save())
 		hud.update_warrior_states(player.warrior_state_snapshot())
 	if _mobile_attack_held or Input.is_action_pressed("attack"):
 		_request_mobile_attack()
@@ -125,6 +134,45 @@ func _process(delta: float) -> void:
 	for index in range(4):
 		if Input.is_action_just_pressed("skill_%d" % (index + 1)):
 			_use_quick_slot(index)
+
+
+func _update_world_camera_constraint(delta := 1.0 / 60.0) -> void:
+	if not is_instance_valid(_world_camera) or not is_instance_valid(player):
+		return
+	var base_zoom := Vector2.ONE * ArtSpec.CAMERA_ZOOM
+	if not MapEditorRuntimeBridgeScript.has_runtime_map(current_map_id):
+		_world_camera.zoom = base_zoom
+		_world_camera.position = Vector2.ZERO
+		return
+	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
+	var raw_size: Array = runtime.get("design", {}).get("design_size", [])
+	if raw_size.size() != 2:
+		_world_camera.zoom = base_zoom
+		_world_camera.position = Vector2.ZERO
+		return
+	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
+	var viewport_half := get_viewport().get_visible_rect().size * 0.5
+	var target := MapDiamondCameraConstraintScript.resolve_soft_follow(
+		design_size, viewport_half, base_zoom, player.global_position
+	)
+	var target_zoom: Vector2 = target.get("recommended_zoom", base_zoom)
+	var zoom_alpha := 1.0 - exp(-6.0 * maxf(0.0, delta))
+	var resolved_zoom := _world_camera.zoom.lerp(target_zoom, zoom_alpha)
+	resolved_zoom.x = clampf(
+		resolved_zoom.x, ArtSpec.CAMERA_ZOOM,
+		MapDiamondCameraConstraintScript.DEFAULT_MAXIMUM_ZOOM
+	)
+	resolved_zoom.y = resolved_zoom.x
+	# Re-resolve the position at the zoom actually displayed this frame. This
+	# keeps the player inside the +/-14% screen band even while zoom is easing.
+	var result := MapDiamondCameraConstraintScript.resolve_soft_follow(
+		design_size, viewport_half, resolved_zoom, player.global_position,
+		resolved_zoom.x
+	)
+	_world_camera.zoom = resolved_zoom
+	_world_camera.global_position = Vector2(
+		result.get("center", player.global_position)
+	)
 
 
 func _register_input_actions() -> void:
@@ -199,6 +247,7 @@ func _on_system_menu_audio_setting_changed(request: Dictionary) -> void:
 
 
 func _prepare_safe_logout() -> bool:
+	PlayerState.apply_warrior_runtime_state(player.warrior_runtime_state_for_save())
 	return PlayerState.save_safe_logout(GameData.service_home_runtime_map_id(false), _bich_home_world_position())
 
 
@@ -1027,9 +1076,16 @@ func _request_mobile_attack() -> void:
 		return
 	var target := _ensure_combat_target()
 	if is_instance_valid(target):
-		player.request_attack_toward(player.global_position.direction_to(target.global_position))
+		var target_direction := player.global_position.direction_to(target.global_position)
+		player.request_attack_toward(target_direction, _has_melee_hittable_target(target_direction))
 		return
-	player.request_attack_toward(player.facing)
+	player.request_attack_toward(player.facing, _has_melee_hittable_target(player.facing))
+
+
+func _has_melee_hittable_target(direction: Vector2) -> bool:
+	if direction.length_squared() <= 0.01:
+		return false
+	return _physical_primary_target(player.global_position, direction.normalized(), 105.0) != null
 
 
 func _on_mobile_attack_pressed() -> void:
@@ -1311,6 +1367,18 @@ func _use_quick_slot(index: int) -> void:
 		hud.show_message("技能冷却中或魔法不足")
 
 
+func _on_skill_button_assignment_requested(request: Dictionary) -> void:
+	var result := SkillLoadoutRulesScript.assign_quick_slot(PlayerState.quick_slots, PlayerState.learned_skills, request)
+	if not bool(result.get("ok", false)):
+		hud.show_message("技能栏配置失败：%s" % str(result.get("reason", "invalid_request")))
+		return
+	if not PlayerState.apply_quick_slot_assignment(result):
+		hud.show_message("技能栏配置未能保存")
+		return
+	hud.update_quick_slots()
+	hud.show_message("已将%s配置到快捷栏%d" % [str(result.get("change", {}).get("skill_name", "技能")), int(result.get("change", {}).get("slot_index", 0)) + 1], 1.5)
+
+
 func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void:
 	var context := player.consume_attack_context()
 	var mode := str(context.get("mode", "normal"))
@@ -1353,7 +1421,17 @@ func _on_special_action_pressed(effect_id: String) -> void:
 				direction = player.facing.normalized()
 			var low := maxi(1, int(PlayerState.computed_stats.get("magic_min", 0)))
 			var high := maxi(low, int(PlayerState.computed_stats.get("magic_max", low)))
-			_spawn_projectile(player.global_position, direction, _rng.randi_range(low, high), 360.0, Color(1.0, 0.30, 0.08))
+			_spawn_projectile(
+				player.global_position,
+				direction,
+				_rng.randi_range(low, high),
+				360.0,
+				Color(1.0, 0.30, 0.08),
+				"damage",
+				0,
+				0.0,
+				"wizard.fireball"
+			)
 			hud.show_message("火焰戒指：火球")
 		"recovery_skill":
 			if not player.spend_mana(5):
@@ -1379,6 +1457,7 @@ func _try_safe_ring_teleport() -> bool:
 
 
 func _on_warrior_skill_state_changed(_skill_name: String, _enabled: bool, message: String) -> void:
+	PlayerState.apply_warrior_runtime_state(player.warrior_runtime_state_for_save(), true)
 	if hud != null:
 		hud.show_message(message, 1.5)
 		hud.update_warrior_states(player.warrior_state_snapshot())
@@ -1391,6 +1470,7 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 		hud.show_message("技能运行时尚未登记：%s" % skill_name)
 		return
 	var cast_type := str(profile.get("cast_type", "melee"))
+	var stable_skill_id := ProfessionRules.skill_id(skill_name)
 	if _skill_needs_target(cast_type):
 		_ensure_combat_target()
 		direction = _face_locked_target()
@@ -1412,15 +1492,15 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 			player.restore_health(final_damage)
 			multiplier = 0.0
 		"projectile", "execute":
-			_spawn_projectile(origin, direction, final_damage, attack_range, effect_color)
+			_spawn_projectile(origin, direction, final_damage, attack_range, effect_color, "damage", 0, 0.0, stable_skill_id)
 			multiplier = 0.0
 			hit_any = true
 		"poison":
-			_spawn_projectile(origin, direction, final_damage, attack_range, effect_color, "poison", maxi(1, int(final_damage / 3)), 8.0)
+			_spawn_projectile(origin, direction, final_damage, attack_range, effect_color, "poison", maxi(1, int(final_damage / 3)), 8.0, stable_skill_id)
 			multiplier = 0.0
 			hit_any = true
 		"control":
-			_spawn_projectile(origin, direction, 0, attack_range, effect_color, "charm", 0, 6.0)
+			_spawn_projectile(origin, direction, 0, attack_range, effect_color, "charm", 0, 6.0, stable_skill_id)
 			multiplier = 0.0
 			hit_any = true
 		"ground_dot":
@@ -1455,7 +1535,15 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 				hud.show_message("%s：生命%d/%d" % [inspected.display_name, inspected.current_hp, inspected.max_hp], 2.0)
 			multiplier = 0.0
 	if multiplier > 0.0:
-		hit_any = _damage_enemies(origin, direction, final_damage, radial, attack_range, PlayerState.profession == "战士")
+		hit_any = _damage_enemies(
+			origin,
+			direction,
+			final_damage,
+			radial,
+			attack_range,
+			PlayerState.profession == "战士",
+			stable_skill_id
+		)
 	_show_attack_flash(origin, direction, hit_any, effect_color)
 	hud.show_message("施放：%s" % skill_name, 1.0)
 
@@ -1464,9 +1552,30 @@ func _skill_needs_target(cast_type: String) -> bool:
 	return cast_type not in ["passive", "heal", "heal_area", "shield", "stealth", "stealth_area", "magic_defense_buff", "defense_buff", "summon", "teleport"]
 
 
-func _spawn_projectile(origin: Vector2, direction: Vector2, damage: int, travel_range: float, color: Color, effect := "damage", effect_strength := 0, effect_duration := 0.0) -> void:
+func _spawn_projectile(
+	origin: Vector2,
+	direction: Vector2,
+	damage: int,
+	travel_range: float,
+	color: Color,
+	effect := "damage",
+	effect_strength := 0,
+	effect_duration := 0.0,
+	source_skill_id := ""
+) -> void:
 	var projectile := SkillProjectile.new()
-	projectile.setup(origin + direction * 24.0, direction, damage, travel_range, color, effect, effect_strength, effect_duration)
+	projectile.setup(
+		origin + direction * 24.0,
+		direction,
+		damage,
+		travel_range,
+		color,
+		effect,
+		effect_strength,
+		effect_duration,
+		source_skill_id
+	)
+	projectile.configure_runtime_resolution(player, Callable(self, "_resolve_magic_defense"))
 	add_child(projectile)
 
 
@@ -1499,7 +1608,15 @@ func _nearest_enemy(origin: Vector2, maximum_distance: float) -> EnemyActor:
 	return nearest
 
 
-func _damage_enemies(origin: Vector2, direction: Vector2, damage: int, radial: bool, attack_range := 105.0, physical_accuracy := false) -> bool:
+func _damage_enemies(
+	origin: Vector2,
+	direction: Vector2,
+	damage: int,
+	radial: bool,
+	attack_range := 105.0,
+	physical_accuracy := false,
+	source_skill_id := ""
+) -> bool:
 	var hit_any := false
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node.is_queued_for_deletion():
@@ -1511,9 +1628,39 @@ func _damage_enemies(origin: Vector2, direction: Vector2, damage: int, radial: b
 				var accuracy := int(PlayerState.computed_stats.get("accuracy", WarriorCombatMath.BASE_HIT))
 				if not WarriorCombatMath.roll_hit(accuracy, node.agility, _rng):
 					continue
-			node.take_damage(damage)
+			var resolved_damage := damage
+			if CombatResolutionRulesScript.anti_magic_eligible(source_skill_id):
+				var resolution := CombatResolutionRulesScript.resolve_direct_spell_damage(
+					source_skill_id,
+					damage,
+					node.monster_data,
+					_rng.randi_range(0, CombatResolutionRulesScript.ANTI_MAGIC_ROLL_SIDES - 1),
+					Callable(self, "_resolve_magic_defense")
+				)
+				resolved_damage = int(resolution.final_damage)
+			if resolved_damage <= 0:
+				continue
+			node.take_damage(resolved_damage, player)
 			hit_any = true
 	return hit_any
+
+
+func _resolve_magic_defense(_skill_id: String, damage_after_anti_magic: int, target_stats: Dictionary) -> int:
+	var defense_min := int(
+		target_stats.get(
+			"magic_defense_min",
+			target_stats.get("mdefMin", target_stats.get("MinMAC", 0))
+		)
+	)
+	var defense_max := int(
+		target_stats.get(
+			"magic_defense_max",
+			target_stats.get("mdefMax", target_stats.get("MaxMAC", defense_min))
+		)
+	)
+	defense_min = maxi(0, defense_min)
+	defense_max = maxi(defense_min, defense_max)
+	return maxi(0, damage_after_anti_magic - _rng.randi_range(defense_min, defense_max))
 
 
 func _physical_primary_target(origin: Vector2, direction: Vector2, maximum_distance: float) -> EnemyActor:

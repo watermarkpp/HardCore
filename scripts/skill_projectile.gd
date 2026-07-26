@@ -1,6 +1,9 @@
 class_name SkillProjectile
 extends Node2D
 
+const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
+const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
+
 const VISUAL_PATHS := {
 	"wizard.fireball": "res://assets/art/characters/wizard/effects/arcane_projectile.png",
 	"wizard.great_fireball": "res://assets/art/characters/wizard/effects/great_fireball.png",
@@ -17,6 +20,12 @@ var effect_duration := 0.0
 var projectile_color := Color(0.35, 0.7, 1.0)
 var hit_radius := 24.0
 var skill_id := ""
+var resolution_skill_id := ""
+var source_actor: Node2D
+var magic_defense_adapter := Callable()
+var anti_magic_roll_override := -1
+var anti_poison_roll_override := -1
+var last_resolution: Dictionary = {}
 var _sprite: Sprite2D
 
 
@@ -29,12 +38,25 @@ func setup(start: Vector2, cast_direction: Vector2, value: int, travel_range: fl
 	effect = status_effect
 	effect_strength = status_strength
 	effect_duration = status_duration
-	skill_id = ProfessionRules.skill_id(source_skill_id) if not source_skill_id.is_empty() else ""
+	resolution_skill_id = ProfessionRules.skill_id(source_skill_id) if not source_skill_id.is_empty() else ""
+	skill_id = resolution_skill_id
 	if skill_id.is_empty() and PlayerState != null:
 		if PlayerState.profession == "法师":
 			skill_id = "wizard.fireball"
 		elif PlayerState.profession == "道士":
 			skill_id = "taoist.soul_fire_talisman"
+
+
+func configure_runtime_resolution(
+	caster: Node2D = null,
+	defense_adapter := Callable(),
+	anti_magic_roll := -1,
+	anti_poison_roll := -1
+) -> void:
+	source_actor = caster
+	magic_defense_adapter = defense_adapter if defense_adapter is Callable else Callable()
+	anti_magic_roll_override = anti_magic_roll
+	anti_poison_roll_override = anti_poison_roll
 
 
 func _ready() -> void:
@@ -44,13 +66,11 @@ func _ready() -> void:
 
 
 func _install_visual() -> void:
-	var texture := CasterSkillVisualRegistry.texture(skill_id)
-	if texture == null:
+	var candidate := AnimationPlayerScript.new()
+	if not candidate.configure(skill_id, direction, 34.0, true):
+		candidate.queue_free()
 		return
-	_sprite = Sprite2D.new()
-	_sprite.texture = texture
-	var maximum_dimension := maxf(float(texture.get_width()), float(texture.get_height()))
-	_sprite.scale = Vector2.ONE * 34.0 / maxf(1.0, maximum_dimension)
+	_sprite = candidate
 	add_child(_sprite)
 
 
@@ -71,8 +91,34 @@ func _physics_process(delta: float) -> void:
 
 
 func _apply_hit(enemy: EnemyActor) -> void:
-	if damage > 0:
-		enemy.take_damage(damage)
+	if effect == "poison":
+		var poison_bound := TaoistCombatMath.anti_poison_random_bound(enemy.anti_poison)
+		var poison_roll := anti_poison_roll_override if anti_poison_roll_override >= 0 else randi_range(0, poison_bound - 1)
+		var poison_applies := TaoistCombatMath.poison_succeeds(enemy.anti_poison, poison_roll)
+		last_resolution = {
+			"evasion_channel": "anti_poison",
+			"anti_poison_checked": true,
+			"anti_poison_random_bound": poison_bound,
+			"anti_poison_roll": poison_roll,
+			"poison_applies": poison_applies,
+		}
+		if not poison_applies:
+			return
+	elif effect == "damage" and CombatResolutionRules.anti_magic_eligible(resolution_skill_id):
+		var anti_magic_roll := anti_magic_roll_override if anti_magic_roll_override >= 0 else randi_range(0, CombatResolutionRules.ANTI_MAGIC_ROLL_SIDES - 1)
+		last_resolution = CombatResolutionRules.resolve_direct_spell_damage(
+			resolution_skill_id,
+			damage,
+			enemy.monster_data,
+			anti_magic_roll,
+			magic_defense_adapter
+		)
+		var resolved_damage := int(last_resolution.final_damage)
+		if resolved_damage <= 0:
+			return
+		enemy.take_damage(resolved_damage, source_actor)
+	elif damage > 0:
+		enemy.take_damage(damage, source_actor)
 	if not is_instance_valid(enemy):
 		return
 	match effect:

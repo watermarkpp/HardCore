@@ -24,6 +24,8 @@ func _run() -> void:
 	assert(contract is Dictionary, "技能快捷栏分配契约无法解析")
 	assert(contract.get("contractId", "") == "ui.skill.button_assignment.v2", "技能按钮分配契约 ID 不稳定")
 	assert("Gameplay skill data owns" in str(contract.get("policy", "")), "技能交互模式必须由玩法技能数据负责")
+	assert(contract.get("runtimeStateDisplay", {}).get("fireSwordToggleField", "") == "fire_auto_enabled", "烈火开关 UI 没有绑定玩法运行时 v2 状态字段")
+	assert(contract.get("runtimeStateDisplay", {}).get("stableToggleId", "") == "warrior.fire_sword.auto_enabled", "烈火开关稳定 ID 未写入 UI 契约")
 	var panel := SkillPanel.new()
 	add_child(panel)
 	await get_tree().process_frame
@@ -39,6 +41,16 @@ func _run() -> void:
 	assert(panel.get_node("SkillListPanel").theme_type_variation == "GothicInsetFrame", "技能列表没有使用公共内框")
 	assert(panel.get_node("SkillDetailPanel").theme_type_variation == "GothicInsetFrame", "技能详情没有使用公共内框")
 	assert(panel.get_node("AssignmentPanel").theme_type_variation == "GothicInsetFrame", "快捷技能配置没有使用公共内框")
+	assert(panel.assignment_scrim.theme_type_variation == "GothicModalScrim", "快捷技能弹窗遮罩没有使用透明的公共模态拦截层")
+	assert(panel.assignment_scrim.mouse_filter == Control.MOUSE_FILTER_STOP, "快捷技能弹窗遮罩没有阻止点击穿透")
+	var scrim_style := panel.assignment_scrim.get_theme_stylebox("panel")
+	assert(scrim_style is StyleBoxFlat and is_zero_approx(scrim_style.bg_color.a), "全屏点击拦截层不应绘制超出弹窗外框的实体背景")
+	assert(panel.assignment_popup.theme_type_variation == "GothicModalFrame", "快捷技能弹窗没有复用公共 Gothic 外框")
+	var popup_surface: Panel = panel.assignment_popup.get_node("PopupSurface")
+	assert(popup_surface.theme_type_variation == "GothicModalSurface", "快捷技能弹窗缺少足够遮蔽典籍页面的内背景")
+	assert(popup_surface.position == Vector2.ZERO, "快捷技能弹窗实体背景没有从外框原点开始")
+	assert(popup_surface.size == panel.assignment_popup.size, "快捷技能弹窗实体背景范围与外框不一致")
+	assert(popup_surface.get_global_rect().is_equal_approx(panel.assignment_popup.get_global_rect()), "快捷技能弹窗实体背景越过外框边界")
 	assert(panel.skill_entries.size() == 6 and panel.skill_buttons.size() == 6, "战士技能列表没有显示 6 项")
 	assert(panel.assignment_buttons.size() == 7, "技能页面必须配置中央四槽与攻击环三槽")
 	assert(panel.center_assignment_buttons.size() == 4, "中央技能槽数量不是 4")
@@ -76,6 +88,7 @@ func _run() -> void:
 
 	panel._open_assignment_popup_for(thrusting_index)
 	assert(panel.assignment_popup.visible, "长按技能使用的分配弹窗没有打开")
+	assert(panel.assignment_scrim.visible, "技能配置弹窗打开时没有显示模态遮罩")
 	assert(panel.assignment_popup.get_meta("skill_id", "") == "warrior.thrusting", "分配弹窗没有保留稳定技能 ID")
 	assert(panel.assignment_popup_buttons.size() == 7, "分配弹窗没有提供全部 7 个目标槽")
 	var assignment_requests: Array[Dictionary] = []
@@ -101,5 +114,25 @@ func _run() -> void:
 	assert(assignment_requests[1].get("slot_id", "") == "hud.attack_ring_skill.2", "攻击环稳定槽位 ID 错误")
 	assert(legacy_requests.size() == 1 and legacy_requests[0].get("slot_index", -1) == 1, "攻击环没有保留旧三槽兼容请求")
 	assert(PlayerState.quick_slots == old_quick_slots, "UI 不应自行改写玩法层快捷栏")
+
+	var replacement_skills := ["野蛮冲撞", "烈火剑法", "半月弯刀", "刺杀剑术"]
+	for slot_index in range(4):
+		var replacement_index := -1
+		for index in range(panel.skill_entries.size()):
+			if str(panel.skill_entries[index].get("skillName", "")) == replacement_skills[slot_index]:
+				replacement_index = index
+				break
+		assert(replacement_index >= 0, "四槽置换测试缺少已学技能：%s" % replacement_skills[slot_index])
+		panel._open_assignment_popup_for(replacement_index)
+		# 弹窗打开后即锁定待配置技能，后续刷新或选择变化不得串到别的技能。
+		panel.selected_skill_index = (replacement_index + 1) % panel.skill_entries.size()
+		panel._assign_selected_to_target("center", slot_index)
+		var request: Dictionary = assignment_requests.back()
+		assert(request.get("skill_name", "") == replacement_skills[slot_index], "中央快捷槽置换丢失弹窗锁定的技能")
+		assert(request.get("slot_index", -1) == slot_index, "中央快捷槽置换发送了错误槽位")
+		assert(request.get("slot_id", "") == "hud.profession_skill.%d" % (slot_index + 1), "中央快捷槽置换稳定 ID 错误")
+		assert(not panel.assignment_popup.visible and not panel.assignment_scrim.visible, "置换完成后模态弹窗未正确关闭")
+	assert(assignment_requests.size() == 6, "四个中央快捷槽没有逐一发出置换请求")
+	assert(PlayerState.quick_slots == old_quick_slots, "四槽置换 UI 不应绕过玩法接口直接改写状态")
 	print("SKILL_GOTHIC_UI_PASS：中央4槽、攻击环3槽、技能交互模式与双版本分配契约均正常")
 	get_tree().quit(0)

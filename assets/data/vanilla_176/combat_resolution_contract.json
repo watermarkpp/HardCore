@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "contractId": "combat.resolution.openmir2.v1",
+  "sourceTrace": {
+    "lane": "server_rules",
+    "distribution": "source.original_gameofmir.server_suite",
+    "tier": "primary",
+    "order": 0,
+    "originalPaths": [
+      "reference/original_gameofmir/M2Server/ObjBase.pas",
+      "reference/original_gameofmir/M2Server/Magic.pas"
+    ],
+    "workspacePaths": [
+      "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+      "dev_art_sources/reference/original_gameofmir/M2Server/Magic.pas"
+    ],
+    "sha256ByOriginalPath": {
+      "reference/original_gameofmir/M2Server/ObjBase.pas": "65d59610b8a1f7f4dcf76058a753651d1a97997ad273fc4df8e468e65a989262",
+      "reference/original_gameofmir/M2Server/Magic.pas": "bc8981dd4283b34ce35e21faa2a69520231b475c4300303181e0c66cc2c453bf"
+    },
+    "primaryResult": "present_parsed_compatible",
+    "fallbackUsed": false,
+    "fallbackEvidence": []
+  },
+  "physicalHit": {
+    "policyId": "physical.hit.random_agility.strict_lt.v1",
+    "roll": "Random(0..max(1, agility)-1)",
+    "comparison": "roll < max(0, accuracy)",
+    "agilityScope": "physical_evasion_only",
+    "eligibleModes": [
+      "normal",
+      "slaying",
+      "thrust",
+      "half_moon",
+      "fire"
+    ]
+  },
+  "magicEvasion": {
+    "policyId": "magic.evasion.anti_magic.direct_spell.v1",
+    "baseCharacterInternalPoints": 1,
+    "internalPointDisplayPercent": 10,
+    "roll": "Random(0..9)",
+    "comparison": "roll < anti_magic_internal_points",
+    "successBehavior": "whole_spell_damage_zero_skip_magic_defense",
+    "displayField": "magic_evasion_percent",
+    "internalField": "anti_magic_points",
+    "itemInternalField": "magicEvasionPoints",
+    "itemDisplayField": "magicEvasionPercent",
+    "itemFieldPriority": "magicEvasionPoints_then_magicEvasionPercent_without_double_count",
+    "dictionaryModifierInternalField": "antiMagicPoints",
+    "dictionaryModifierDisplayField": "magicEvasionPercent",
+    "eligibleSkillIds": [
+      "wizard.fireball",
+      "wizard.great_fireball",
+      "wizard.lightning",
+      "taoist.soul_fire_talisman"
+    ],
+    "antiPoisonSkillIds": [
+      "taoist.poison"
+    ],
+    "explicitlyIneligibleSkillIds": [
+      "taoist.healing",
+      "taoist.mass_healing",
+      "taoist.invisibility",
+      "taoist.mass_invisibility",
+      "taoist.summon_skeleton",
+      "taoist.summon_divine_beast"
+    ]
+  },
+  "physicalAttackSpeed": {
+    "policyId": "physical.attack_speed.interval_tier.v1",
+    "tierField": "attack_speed_tier",
+    "itemTierField": "attackSpeedTier",
+    "dictionaryModifierTierField": "attackSpeedTier",
+    "baseIntervalMs": 900,
+    "reductionPerTierMs": 60,
+    "minimumIntervalMs": 0,
+    "scope": "physical_attack_minimum_interval_only",
+    "excludedScopes": [
+      "cast_windup",
+      "movement_speed",
+      "skill_cooldown"
+    ]
+  },
+  "integrationAdapters": {
+    "playerOutgoingDirectSpellImpact": {
+      "owner": "codex/integration",
+      "callSites": [
+        "scripts/game_root.gd::_on_player_skill",
+        "scripts/game_root.gd::_spawn_projectile",
+        "scripts/game_root.gd::_damage_enemies"
+      ],
+      "api": "CombatResolutionRules.resolve_direct_spell_damage",
+      "requiredOrder": "anti_magic_then_magic_defense_then_take_damage",
+      "requiredProjectileArgument": "stable source_skill_id"
+    },
+    "playerIncomingDirectSpell": {
+      "owner": "codex/integration",
+      "callSites": [
+        "scripts/layers/runtime/combat_runtime_service.gd magic damage handoff"
+      ],
+      "targetStats": "PlayerState.computed_stats",
+      "api": "PlayerCharacter.take_direct_spell_damage",
+      "requiredOrder": "anti_magic_then_magic_defense_then_take_damage"
+    },
+    "physicalAttack": {
+      "owner": "codex/integration",
+      "callSites": [
+        "scripts/game_root.gd::_apply_physical_hit",
+        "scripts/game_root.gd::_damage_enemies"
+      ],
+      "api": "WarriorCombatMath.roll_hit"
+    }
+  },
+  "professionRuntimeClosure": {
+    "directSpellDamageApi": "CombatResolutionRules.resolve_direct_spell_damage",
+    "magicDefenseAdapterSignature": "(skill_id, damage_after_anti_magic, target_stats) -> final_damage",
+    "closedCallSites": [
+      "scripts/caster_skill_runtime.gd::execute_cast target_damage",
+      "scripts/skill_projectile.gd::_apply_hit projectile_damage",
+      "scripts/player.gd::take_direct_spell_damage incoming direct spell"
+    ],
+    "playerIncomingRuntimeId": "player.direct_spell_damage.openmir2.v1",
+    "poisonCallSite": "scripts/skill_projectile.gd::_apply_hit poison",
+    "poisonPolicy": "TaoistCombatMath.poison_succeeds uses AntiPoison only"
+  }
+}

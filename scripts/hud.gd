@@ -14,6 +14,9 @@ const HUDUtilityStackTexture := preload("res://assets/ui/gothic_hud/v2/runtime/u
 const HUDJoystickTexture := preload("res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png")
 const HUDChassisTexture := preload("res://assets/ui/gothic_hud/v2/runtime/bottom_chassis_v2.png")
 const HUDRightControlsTexture := preload("res://assets/ui/gothic_hud/v2/runtime/right_controls_v2.png")
+const HUD_RESOURCE_ORB_SIZE := Vector2(110, 110)
+const HUD_HEALTH_ORB_CENTER := Vector2(182, 188)
+const HUD_MANA_ORB_CENTER := Vector2(639, 188)
 
 signal movement_changed(value: Vector2)
 signal attack_pressed
@@ -260,18 +263,20 @@ func _build_bottom_chassis(root: Control) -> void:
 
 	health_orb = HUDResourceOrbScript.new()
 	health_orb.name = "HealthOrb"
-	health_orb.position = Vector2(132, 138)
-	health_orb.size = Vector2(100, 100)
+	health_orb.position = HUD_HEALTH_ORB_CENTER - HUD_RESOURCE_ORB_SIZE * 0.5
+	health_orb.size = HUD_RESOURCE_ORB_SIZE
 	health_orb.resource_name = "生命"
 	health_orb.liquid_color = Color("a51422")
+	health_orb.set_meta("stable_id", "ui.hud.resource_orb.hole_fill.v1")
 	chassis_root.add_child(health_orb)
 
 	mana_orb = HUDResourceOrbScript.new()
 	mana_orb.name = "ManaOrb"
-	mana_orb.position = Vector2(589, 138)
-	mana_orb.size = Vector2(100, 100)
+	mana_orb.position = HUD_MANA_ORB_CENTER - HUD_RESOURCE_ORB_SIZE * 0.5
+	mana_orb.size = HUD_RESOURCE_ORB_SIZE
 	mana_orb.resource_name = "魔法"
 	mana_orb.liquid_color = Color("174eaa")
+	mana_orb.set_meta("stable_id", "ui.hud.resource_orb.hole_fill.v1")
 	chassis_root.add_child(mana_orb)
 
 	var chassis := TextureRect.new()
@@ -839,6 +844,8 @@ func update_quick_slots() -> void:
 		var skill_name := PlayerState.quick_slots[index]
 		var marker := _warrior_skill_marker(skill_name)
 		var skill_texture := HUDSkillIconCatalogScript.texture_for(skill_name)
+		var skill_icon_id := HUDSkillIconCatalogScript.source_id_for(skill_name)
+		var skill_icon_path := HUDSkillIconCatalogScript.source_path_for(skill_name)
 		var display_text := "%d\n%s%s" % [index + 1, skill_name if not skill_name.is_empty() else "空", marker]
 		quick_buttons[index].text = display_text
 		quick_buttons[index].tooltip_text = skill_name if not skill_name.is_empty() else "空技能槽"
@@ -846,14 +853,16 @@ func update_quick_slots() -> void:
 			quick_slot_icons[index].texture = skill_texture
 			quick_slot_icons[index].visible = skill_texture != null
 			quick_slot_icons[index].set_meta("skill_name", skill_name)
-			quick_slot_icons[index].set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
+			quick_slot_icons[index].set_meta("skill_icon_id", skill_icon_id)
+			quick_slot_icons[index].set_meta("skill_icon_path", skill_icon_path)
 		if index < quick_slot_labels.size():
 			quick_slot_labels[index].text = _compact_skill_label(index, skill_name, marker, skill_texture != null)
 		if index < attack_ring_skill_icons.size():
 			attack_ring_skill_icons[index].texture = skill_texture
 			attack_ring_skill_icons[index].visible = skill_texture != null
 			attack_ring_skill_icons[index].set_meta("skill_name", skill_name)
-			attack_ring_skill_icons[index].set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
+			attack_ring_skill_icons[index].set_meta("skill_icon_id", skill_icon_id)
+			attack_ring_skill_icons[index].set_meta("skill_icon_path", skill_icon_path)
 		if index < attack_ring_skill_labels.size():
 			attack_ring_skill_labels[index].text = str(index + 1) if skill_texture != null else "技%d" % (index + 1)
 			attack_ring_skill_labels[index].tooltip_text = skill_name
@@ -874,10 +883,7 @@ func update_warrior_states(snapshot: Dictionary) -> void:
 	warrior_state_label.visible = PlayerState.profession == "战士"
 	if not warrior_state_label.visible:
 		return
-	var fire_text := "蓄力" if bool(snapshot.get("fire_armed", false)) else "就绪"
-	var ready_ms := int(snapshot.get("fire_ready_remaining_ms", 0))
-	if not bool(snapshot.get("fire_armed", false)) and ready_ms > 0:
-		fire_text = "冷却%.1fs" % (float(ready_ms) / 1000.0)
+	var fire_text := "开" if bool(snapshot.get("fire_auto_enabled", false)) else "关"
 	warrior_state_label.text = "攻杀:%s　刺杀:%s　半月:%s　烈火:%s" % [
 		"自动" if bool(snapshot.get("slaying_auto", false)) else "未学",
 		"开" if bool(snapshot.get("thrusting", false)) else "关",
@@ -893,11 +899,7 @@ func _warrior_skill_marker(skill_name: String) -> String:
 		"刺杀剑术": return "[开]" if bool(_warrior_snapshot.get("thrusting", false)) else "[关]"
 		"半月弯刀": return "[开]" if bool(_warrior_snapshot.get("half_moon", false)) else "[关]"
 		"烈火剑法":
-			if bool(_warrior_snapshot.get("fire_armed", false)):
-				return "[蓄]"
-			if int(_warrior_snapshot.get("fire_ready_remaining_ms", 0)) > 0:
-				return "[冷]"
-			return "[就绪]"
+			return "[开]" if bool(_warrior_snapshot.get("fire_auto_enabled", false)) else "[关]"
 	return ""
 
 

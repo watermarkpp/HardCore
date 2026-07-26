@@ -104,6 +104,7 @@ func _run() -> void:
 	assert(visual.current_animation_name() == "death", "death state must not be interrupted by attack")
 	PlayerState.select_profession("法师")
 	await get_tree().process_frame
-	assert(not visual.visible and not visual.uses_final_art(), "mage should fall back to procedural placeholder")
-	print("WARRIOR_VISUAL_PASS: warrior idle/walk/attack/hit/death atlases, hit timing, anchors, markers, and state switching are valid")
+	assert(visual.visible and visual.uses_final_art(), "法师必须切换到正式经典人物底层，不得退回几何占位")
+	assert(visual._base_action_textures.has("cast"), "法师正式人物必须包含施法动作")
+	print("WARRIOR_VISUAL_PASS: warrior actions stay valid and profession switching keeps formal classic art")
 	get_tree().quit(0)

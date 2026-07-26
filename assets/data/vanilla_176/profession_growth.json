@@ -681,6 +681,9 @@
       "range": 105.0,
       "service_magic_id": 26,
       "service_mode": "arm_next_hit",
+      "ui_interaction_mode": "toggle",
+      "runtime_activation_mode": "toggle_auto_use",
+      "toggle_state_id": "warrior.fire_sword.auto_enabled",
       "profession_id": "warrior",
       "skill_id": "warrior.fire_sword",
       "display_name": "烈火剑法",
@@ -1047,6 +1050,7 @@
       "action_duration": 0.51,
       "cooldown": 0.85,
       "hit_frame": 2,
+      "auto_release_cooldown": 10.0,
       "service_arm_cooldown": 10.0,
       "windup": 0.17
     },

@@ -36,6 +36,9 @@ const BICH_PROP_SIZE := Vector2(96.0, 128.0)
 const ORC_TOMB_TILE_SIZE := Vector2(64.0, 32.0)
 const ORC_TOMB_PROP_SIZE := Vector2(96.0, 128.0)
 const SOURCE_COLLISION_RADIUS := 28
+const EDITOR_RUNTIME_EDGE_SKIRT_CONTRACT_ID := "map_runtime_nonwalkable_edge_skirt_v1"
+const EDITOR_RUNTIME_EDGE_SKIRT_FADE_TILES := 10.0
+const DEFAULT_EDITOR_RUNTIME_GUARD_BAND_WORLD := 1536.0
 
 @export var grid_radius := 28
 @export var tile_width := 64.0
@@ -62,8 +65,6 @@ var _gothic_camp_layout: Dictionary = {}
 var _editor_runtime_visual: Dictionary = {}
 var _editor_runtime_size := Vector2i.ZERO
 var _editor_runtime_blocked_tiles: Dictionary = {}
-var _editor_runtime_manual_rects: Array[Rect2] = []
-var _editor_runtime_manual_shapes: Array[Dictionary] = []
 var _editor_runtime_chunk_draws: Array[Dictionary] = []
 var _editor_runtime_fallback_ground := false
 
@@ -373,9 +374,7 @@ func is_orc_tomb_point_blocked(world_position: Vector2) -> bool:
 func _draw() -> void:
 	if not _editor_runtime_visual.is_empty():
 		var raw_size:Array=_editor_runtime_visual.get("design_size",[64,64]);var size:=Vector2i(int(raw_size[0]),int(raw_size[1]))
-		var corners := PackedVector2Array([
-			EditorCoordinateScript.tile_to_world(Vector2(0,0),size), EditorCoordinateScript.tile_to_world(Vector2(size.x,0),size),
-			EditorCoordinateScript.tile_to_world(Vector2(size.x,size.y),size), EditorCoordinateScript.tile_to_world(Vector2(0,size.y),size)])
+		var corners := editor_runtime_ground_boundary_world(size)
 		draw_colored_polygon(corners, Color(str(_editor_runtime_visual.get("base_color", "#465827"))))
 		# Keep all authored chunk textures on one CanvasItem. Godot otherwise
 		# culls distant Sprite2D chunks and can defer their GPU upload until the
@@ -420,6 +419,14 @@ func _draw() -> void:
 		for position in [Vector2(-430, -210), Vector2(420, 190), Vector2(-50, 410), Vector2(680, -260), Vector2(-720, 280)]:
 			draw_colored_polygon(PackedVector2Array([position + Vector2(-45, 25), position + Vector2(-20, -35), position + Vector2(30, -48), position + Vector2(55, 22)]), Color(0.20, 0.19, 0.18, 0.82))
 			draw_line(position + Vector2(-25, 4), position + Vector2(28, -18), Color(0.34, 0.31, 0.27), 4.0)
+
+
+func editor_runtime_ground_boundary_world(size: Vector2i) -> PackedVector2Array:
+	# Ground chunks are rasterized around cell centres, so their visible diamond
+	# spans [-0.5, size - 0.5]. Keep base fill, guard calculations and hard
+	# collision on that one boundary. [0, size] is the same diamond shifted 16
+	# world pixels downward and creates the double edge visible on mobile.
+	return RuntimeCollisionGeometryScript.map_inner_boundary_world(size)
 
 
 func _draw_bich_ground() -> void:
@@ -485,8 +492,6 @@ func _rebuild_environment() -> void:
 	_editor_runtime_visual.clear()
 	_editor_runtime_size = Vector2i.ZERO
 	_editor_runtime_blocked_tiles.clear()
-	_editor_runtime_manual_rects.clear()
-	_editor_runtime_manual_shapes.clear()
 	_editor_runtime_chunk_draws.clear()
 	_editor_runtime_fallback_ground = false
 	for node: Node in _environment_nodes:
@@ -614,19 +619,27 @@ func _read_editor_json(path: String) -> Dictionary:
 func _build_editor_runtime_guard_band(visual: Dictionary) -> void:
 	var raw_size: Array = visual.get("design_size", [64, 64])
 	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
-	var corners := [
-		EditorCoordinateScript.tile_to_world(Vector2(-0.5, -0.5), size),
-		EditorCoordinateScript.tile_to_world(Vector2(float(size.x) - 0.5, -0.5), size),
-		EditorCoordinateScript.tile_to_world(Vector2(float(size.x) - 0.5, float(size.y) - 0.5), size),
-		EditorCoordinateScript.tile_to_world(Vector2(-0.5, float(size.y) - 0.5), size),
-	]
+	var corners := editor_runtime_ground_boundary_world(size)
 	var authored_bounds := Rect2(corners[0], Vector2.ZERO)
 	for point: Vector2 in corners:
 		authored_bounds = authored_bounds.expand(point)
-	var guard_bounds := authored_bounds.grow(float(visual.get("guard_band_px", 1536.0)))
+	var guard_band_world := float(visual.get(
+		"guard_band_px", DEFAULT_EDITOR_RUNTIME_GUARD_BAND_WORLD
+	))
+	var guard_bounds := authored_bounds.grow(guard_band_world)
 	var guard := Polygon2D.new()
 	guard.name = "EditorRuntimeGuardBand"
 	guard.set_meta("editor_runtime_guard_band", true)
+	guard.set_meta(
+		"editor_runtime_edge_skirt_contract_id",
+		EDITOR_RUNTIME_EDGE_SKIRT_CONTRACT_ID
+	)
+	guard.set_meta("editor_runtime_guard_non_walkable", true)
+	guard.set_meta("editor_runtime_guard_band_world", guard_band_world)
+	guard.set_meta(
+		"editor_runtime_guard_fade_tiles",
+		EDITOR_RUNTIME_EDGE_SKIRT_FADE_TILES
+	)
 	guard.z_as_relative = false
 	guard.z_index = -30
 	guard.polygon = PackedVector2Array([
@@ -639,6 +652,8 @@ func _build_editor_runtime_guard_band(visual: Dictionary) -> void:
 	shader.code = """
 shader_type canvas_item;
 render_mode unshaded;
+uniform vec2 design_size = vec2(80.0, 80.0);
+uniform float fade_tiles = 10.0;
 varying vec2 map_position;
 void vertex() {
 	map_position = VERTEX;
@@ -649,20 +664,34 @@ float terrain_hash(vec2 p) {
 void fragment() {
 	float coarse = terrain_hash(floor(map_position / 64.0));
 	float fine = terrain_hash(floor(map_position / 12.0));
-	vec3 dark_grass = vec3(0.055, 0.085, 0.040);
-	vec3 old_grass = vec3(0.120, 0.155, 0.070);
-	vec3 color = mix(dark_grass, old_grass, 0.30 + coarse * 0.34 + fine * 0.10);
 	vec2 iso = vec2(
 		(map_position.x / 32.0 + map_position.y / 16.0) * 0.5,
 		(map_position.y / 16.0 - map_position.x / 32.0) * 0.5
+	) + (design_size - vec2(1.0)) * 0.5;
+	vec2 outside_low = max(vec2(-0.5) - iso, vec2(0.0));
+	vec2 outside_high = max(
+		iso - (design_size - vec2(0.5)), vec2(0.0)
 	);
-	vec2 cell_edge = abs(fract(iso) - vec2(0.5));
-	float seam = smoothstep(0.475, 0.5, max(cell_edge.x, cell_edge.y));
-	COLOR = vec4(color - vec3(seam * 0.018), 1.0);
+	float outside_tiles = max(
+		max(outside_low.x, outside_low.y),
+		max(outside_high.x, outside_high.y)
+	);
+	float fade = smoothstep(0.0, max(fade_tiles, 0.001), outside_tiles);
+	float edge_mark = 1.0 - smoothstep(0.0, 0.55, outside_tiles);
+	vec3 near_skirt = vec3(0.050, 0.066, 0.033);
+	vec3 far_skirt = vec3(0.006, 0.010, 0.006);
+	vec3 variation = vec3((coarse - 0.5) * 0.014 + (fine - 0.5) * 0.005);
+	vec3 color = mix(near_skirt + variation, far_skirt, fade);
+	color += vec3(0.030, 0.025, 0.012) * edge_mark;
+	COLOR = vec4(color, mix(1.0, 0.92, fade));
 }
 """
 	var material := ShaderMaterial.new()
 	material.shader = shader
+	material.set_shader_parameter("design_size", Vector2(size))
+	material.set_shader_parameter(
+		"fade_tiles", EDITOR_RUNTIME_EDGE_SKIRT_FADE_TILES
+	)
 	guard.material = material
 	add_child(guard)
 	_environment_nodes.append(guard)
@@ -721,27 +750,23 @@ func _build_editor_runtime_instances(runtime:Dictionary)->void:
 			RuntimeVisualGeometryScript.RENDER_DOMAIN_STATIC_BACKGROUND
 		))
 		var actor_sort_root: Node2D = null
+		var parent_world_origin := Vector2.ZERO
 		if render_domain == RuntimeVisualGeometryScript.RENDER_DOMAIN_ACTOR_Y_SORT:
 			actor_sort_root = Node2D.new()
 			actor_sort_root.name = "EditorRuntimeOccluder_%d" % command_index
 			actor_sort_root.position = RuntimeVisualGeometryScript.command_actor_sort_world(
 				command, size
 			)
+			parent_world_origin = actor_sort_root.position
 			actor_sort_root.set_meta("editor_runtime_actor_occluder", true)
 			actor_sort_root.set_meta("editor_runtime_sort_tile", command.sort_tile)
 			actor_sort_root.set_meta("editor_runtime_instance_id", str(
 				command.get("instance", {}).get("instance_id", "")
 			))
-			sprite.position = geometry.center - actor_sort_root.position
-		else:
-			sprite.position = geometry.center
-		sprite.set_meta("editor_runtime_render_domain", render_domain)
-		sprite.offset = -geometry.anchor
-		sprite.scale = geometry.visual_scale
-		sprite.rotation = geometry.rotation
-		MapEditorInstanceService.configure_runtime_material_canvas_item(
-			sprite, command.instance
+		RuntimeVisualGeometryScript.apply_runtime_sprite_geometry(
+			sprite, command, geometry, parent_world_origin
 		)
+		sprite.set_meta("editor_runtime_render_domain", render_domain)
 		if actor_sort_root != null:
 			# The wrapper is a direct sibling of actors under GameRoot's Y-sort.
 			# Keep the sprite in that same z domain so Y order, not a fixed z,
@@ -767,81 +792,44 @@ func _build_editor_runtime_collisions(runtime: Dictionary) -> void:
 	# The ring lives just outside the last logical tile and applies equally to
 	# the player and monsters through environment collision layer 1.
 	_add_editor_map_boundary(body, size)
-	var blocked_by_row := {}
-	for raw_key: Variant in runtime.collision.get("blocked_tiles", []):
-		var parts := str(raw_key).split(",")
-		if parts.size()!=2: continue
-		_editor_runtime_blocked_tiles[str(raw_key)] = true
-		var y:=int(parts[1]); var xs:Array=blocked_by_row.get(y,[]); xs.append(int(parts[0])); blocked_by_row[y]=xs
-	for y: int in blocked_by_row:
-		var xs:Array=blocked_by_row[y]; xs.sort(); if xs.is_empty():continue
-		var run_start:=int(xs[0]); var previous:=run_start
-		for index in range(1,xs.size()+1):
-			var flush:=index==xs.size() or int(xs[index])!=previous+1
-			if flush:
-				_add_editor_collision_tile_rect(body,Rect2i(run_start,y,previous-run_start+1,1),size)
-				if index<xs.size():run_start=int(xs[index])
-			if index<xs.size():previous=int(xs[index])
-	for manual: Dictionary in runtime.collision.get("manual_shapes", []):
-		var polygon := RuntimeCollisionGeometryScript.manual_shape_polygon_world(
-			manual, size
-		)
-		if polygon.size() < 3:
-			continue
-		_editor_runtime_manual_shapes.append(manual.duplicate(true))
-		if str(manual.get("shape", "")) == "rect":
-			var rect: Array = manual.get("data", {}).get("rect", [])
-			if rect.size() == 4:
-				_editor_runtime_manual_rects.append(
-					RuntimeCollisionGeometryScript.rect_tile_bounds(rect)
-				)
-		var node := CollisionPolygon2D.new()
-		node.polygon = polygon
-		body.add_child(node)
-		_source_collision_shape_count += 1
+	# blocked_tiles is the compiled, final collision authority. It already
+	# contains instance and manual sources after every single-cell erasure.
+	# Building manual_shapes again would duplicate geometry and, worse, restore
+	# cells the author explicitly erased (Bich currently has 191 such cells).
+	_editor_runtime_blocked_tiles = RuntimeCollisionGeometryScript.blocked_cell_set(
+		runtime.collision
+	)
+	for rect: Rect2i in RuntimeCollisionGeometryScript.blocked_cell_runs(
+		runtime.collision
+	):
+		_add_editor_collision_tile_rect(body, rect, size)
 
 
 func _editor_runtime_blocks_world(world_position: Vector2) -> bool:
 	if _editor_runtime_size == Vector2i.ZERO:
 		return false
-	var tile := EditorCoordinateScript.world_to_tile(world_position, _editor_runtime_size)
-	if not EditorCoordinateScript.contains_tile(tile, _editor_runtime_size):
-		return true
-	var nearest := RuntimeCollisionGeometryScript.world_cell(
-		world_position, _editor_runtime_size
+	return RuntimeCollisionGeometryScript.blocked_cells_contain_world(
+		_editor_runtime_blocked_tiles,
+		world_position,
+		_editor_runtime_size
 	)
-	if _editor_runtime_blocked_tiles.has("%d,%d" % [nearest.x, nearest.y]):
-		return true
-	for manual: Dictionary in _editor_runtime_manual_shapes:
-		if RuntimeCollisionGeometryScript.tile_shape_contains_world(
-			manual, world_position, _editor_runtime_size
-		):
-			return true
-	return false
 
 
 func _add_editor_map_boundary(body: StaticBody2D, size: Vector2i) -> void:
-	var inner := [
-		Vector2(-0.5, -0.5),
-		Vector2(float(size.x) - 0.5, -0.5),
-		Vector2(float(size.x) - 0.5, float(size.y) - 0.5),
-		Vector2(-0.5, float(size.y) - 0.5),
-	]
-	var margin := 8.0
-	var outer := [
-		Vector2(-0.5 - margin, -0.5 - margin),
-		Vector2(float(size.x) - 0.5 + margin, -0.5 - margin),
-		Vector2(float(size.x) - 0.5 + margin, float(size.y) - 0.5 + margin),
-		Vector2(-0.5 - margin, float(size.y) - 0.5 + margin),
-	]
-	for side in range(4):
+	var inner := RuntimeCollisionGeometryScript.map_actor_boundary_world(
+		size
+	)
+	var outer := RuntimeCollisionGeometryScript.map_outer_boundary_world(
+		size
+	)
+	for side in range(inner.size()):
 		var next := (side + 1) % 4
 		var shape := ConvexPolygonShape2D.new()
 		shape.points = PackedVector2Array([
-			EditorCoordinateScript.tile_to_world(outer[side], size),
-			EditorCoordinateScript.tile_to_world(outer[next], size),
-			EditorCoordinateScript.tile_to_world(inner[next], size),
-			EditorCoordinateScript.tile_to_world(inner[side], size),
+			outer[side],
+			outer[next],
+			inner[next],
+			inner[side],
 		])
 		var collision := CollisionShape2D.new()
 		collision.name = "MapBoundary%d" % side
@@ -873,7 +861,12 @@ func _build_profile_environment(profile: Dictionary) -> void:
 	if _active_asset_set() == "bich":
 		for prop_data: Dictionary in profile.get("props", []):
 			var position: Vector2 = prop_data.get("position", Vector2.ZERO)
-			_add_prop(int(prop_data.get("kind", 0)), position, bool(prop_data.get("canopy", false)))
+			_add_prop(
+				int(prop_data.get("kind", 0)),
+				position,
+				bool(prop_data.get("canopy", false)),
+				prop_data
+			)
 			match str(prop_data.get("shape", "")):
 				"circle": _add_circle_obstacle(position + prop_data.get("collision_offset", Vector2.ZERO), float(prop_data.get("radius", 22.0)))
 				"rect": _add_rect_obstacle(position + prop_data.get("collision_offset", Vector2.ZERO), prop_data.get("size", Vector2(88, 34)))
@@ -887,12 +880,15 @@ func _build_dungeon_profile(profile: Dictionary) -> void:
 		var kind := int(prop_data.get("kind", 0))
 		var position: Vector2 = prop_data.get("position", Vector2.ZERO)
 		var canopy := bool(prop_data.get("canopy", kind in [0, 1, 5]))
-		_add_tomb_prop(kind, position, canopy)
+		_add_tomb_prop(kind, position, canopy, prop_data)
 		match str(prop_data.get("shape", "")):
 			"circle": _add_tomb_circle_obstacle(position + prop_data.get("collision_offset", Vector2.ZERO), float(prop_data.get("radius", 22.0)))
 			"rect": _add_tomb_rect_obstacle(position + prop_data.get("collision_offset", Vector2(0, -8)), prop_data.get("size", Vector2(88, 34)))
 	for brazier_position: Vector2 in profile.get("braziers", []):
-		_add_tomb_prop(2, brazier_position, true)
+		_add_tomb_prop(2, brazier_position, true, {
+			"position": brazier_position,
+			"occlusion": true,
+		})
 		_add_tomb_light(brazier_position + Vector2(0, -54))
 	if str(profile.get("coordinate_projection", "")) == "isometric_64x32_full_size":
 		_add_dungeon_map_boundaries(profile)
@@ -902,31 +898,26 @@ func _build_orc_tomb_environment() -> void:
 	_build_dungeon_profile(environment_profile())
 
 
-func _add_prop(kind: int, foot_position: Vector2, canopy: bool) -> void:
+func _add_prop(
+	kind: int,
+	foot_position: Vector2,
+	_canopy: bool,
+	prop: Dictionary = {}
+) -> void:
 	var sprite := Sprite2D.new()
 	sprite.texture = BICH_PROP_ATLAS
 	sprite.region_enabled = true
 	sprite.region_rect = Rect2(Vector2(kind * 96, 0), BICH_PROP_SIZE)
 	sprite.centered = false
-	sprite.position = foot_position - Vector2(48, 118)
-	sprite.z_as_relative = false
-	sprite.z_index = -5
-	add_child(sprite)
-	_environment_nodes.append(sprite)
-	if canopy:
-		var crown := Sprite2D.new()
-		crown.texture = BICH_PROP_ATLAS
-		crown.region_enabled = true
-		crown.region_rect = Rect2(Vector2(kind * 96, 0), Vector2(96, 86))
-		crown.centered = false
-		crown.position = foot_position - Vector2(48, 118)
-		crown.z_as_relative = false
-		crown.z_index = 5
-		add_child(crown)
-		_environment_nodes.append(crown)
+	_add_legacy_profile_prop_sprite(sprite, foot_position, prop)
 
 
-func _add_tomb_prop(kind: int, foot_position: Vector2, canopy: bool) -> void:
+func _add_tomb_prop(
+	kind: int,
+	foot_position: Vector2,
+	_canopy: bool,
+	prop: Dictionary = {}
+) -> void:
 	var prop_texture: Texture2D = ORC_TOMB_PROP_ATLAS
 	var override_path := str(environment_profile().get("prop_atlas_override", ""))
 	if not override_path.is_empty() and ResourceLoader.exists(override_path):
@@ -948,22 +939,49 @@ func _add_tomb_prop(kind: int, foot_position: Vector2, canopy: bool) -> void:
 	sprite.region_enabled = true
 	sprite.region_rect = Rect2(Vector2(kind * 96, 0), ORC_TOMB_PROP_SIZE)
 	sprite.centered = false
+	_add_legacy_profile_prop_sprite(sprite, foot_position, prop)
+
+
+func _add_legacy_profile_prop_sprite(
+	sprite: Sprite2D,
+	foot_position: Vector2,
+	prop: Dictionary
+) -> void:
+	var effective_prop := prop.duplicate(true)
+	effective_prop["position"] = foot_position
+	var render_domain := RuntimeVisualGeometryScript.legacy_profile_prop_render_domain(
+		effective_prop
+	)
+	if (
+		render_domain == RuntimeVisualGeometryScript.RENDER_DOMAIN_ACTOR_Y_SORT
+		and get_parent() != null
+	):
+		var actor_sort_root := Node2D.new()
+		actor_sort_root.name = "LegacyProfileOccluder"
+		actor_sort_root.position = RuntimeVisualGeometryScript.legacy_profile_prop_actor_sort_world(
+			effective_prop
+		)
+		actor_sort_root.z_as_relative = false
+		actor_sort_root.z_index = 0
+		actor_sort_root.set_meta("legacy_profile_actor_occluder", true)
+		actor_sort_root.set_meta(
+			"map_occlusion_sort_contract_id",
+			RuntimeVisualGeometryScript.OCCLUSION_SORT_CONTRACT_ID
+		)
+		actor_sort_root.set_meta("legacy_profile_render_domain", render_domain)
+		sprite.position = foot_position - Vector2(48, 118) - actor_sort_root.position
+		sprite.z_as_relative = true
+		sprite.z_index = 0
+		get_parent().add_child(actor_sort_root)
+		actor_sort_root.add_child(sprite)
+		_environment_nodes.append(actor_sort_root)
+		return
 	sprite.position = foot_position - Vector2(48, 118)
 	sprite.z_as_relative = false
 	sprite.z_index = -5
+	sprite.set_meta("legacy_profile_render_domain", render_domain)
 	add_child(sprite)
 	_environment_nodes.append(sprite)
-	if canopy:
-		var foreground := Sprite2D.new()
-		foreground.texture = prop_texture
-		foreground.region_enabled = true
-		foreground.region_rect = Rect2(Vector2(kind * 96, 0), Vector2(96, 86))
-		foreground.centered = false
-		foreground.position = foot_position - Vector2(48, 118)
-		foreground.z_as_relative = false
-		foreground.z_index = 5
-		add_child(foreground)
-		_environment_nodes.append(foreground)
 
 
 func _add_tomb_light(position: Vector2) -> void:

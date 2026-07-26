@@ -16,7 +16,8 @@ func _ready() -> void:
 	for skill_id: String in package.skill_ids():
 		var definition := package.skill_definition(skill_id)
 		assert(definition.levels.size() == 4)
-		assert(definition.visual_profile.status == "formal_primary_client_pixel")
+		assert(definition.visual_profile.status == "formal_primary_client_animation")
+		assert(definition.visual_profile.animation_contract == "caster_skill_animation.v1")
 		assert(definition.visual_profile.source_priority.tier == "primary")
 		for record: Dictionary in definition.levels:
 			assert(record.source_trace.mana_cost.original_path == "Server.MirDB")

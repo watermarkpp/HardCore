@@ -1,12 +1,273 @@
 class_name MapEditorRuntimeCollisionGeometryService
 extends RefCounted
 
-const CONTRACT_ID := "map_editor_runtime_collision_geometry_v1"
+const CONTRACT_ID := "map_editor_runtime_collision_geometry_v2"
+const PHYSICS_SOURCE_ID := "published_blocked_cells_after_erasure_v1"
+const ACTOR_BOUNDARY_CONTRACT_ID := "map_visible_edge_actor_footprint_clearance_v2"
 const ELLIPSE_SEGMENTS := 32
+const DEFAULT_BOUNDARY_MARGIN_TILES := 8.0
+const DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD := 18.0
+
+
+static func map_inner_boundary_tile_polygon(
+	design_size: Vector2i
+) -> PackedVector2Array:
+	# Packaged ground canvases are centered on the authored tile centers. Their
+	# first/last visible half-diamonds therefore end at -0.5 and size - 0.5,
+	# rather than at the logical cell vertices used by interior blocked cells.
+	var minimum := Vector2(-0.5, -0.5)
+	var maximum := Vector2(design_size) - Vector2(0.5, 0.5)
+	return PackedVector2Array([
+		minimum,
+		Vector2(maximum.x, minimum.y),
+		maximum,
+		Vector2(minimum.x, maximum.y),
+	])
+
+
+static func map_outer_boundary_tile_polygon(
+	design_size: Vector2i,
+	margin_tiles := DEFAULT_BOUNDARY_MARGIN_TILES
+) -> PackedVector2Array:
+	var margin := maxf(0.0, margin_tiles)
+	var minimum := Vector2(-0.5, -0.5) - Vector2.ONE * margin
+	var maximum := (
+		Vector2(design_size) - Vector2(0.5, 0.5)
+		+ Vector2.ONE * margin
+	)
+	return PackedVector2Array([
+		minimum,
+		Vector2(maximum.x, minimum.y),
+		maximum,
+		Vector2(minimum.x, maximum.y),
+	])
+
+
+static func tile_polygon_world(
+	tile_polygon: PackedVector2Array,
+	design_size: Vector2i
+) -> PackedVector2Array:
+	var result := PackedVector2Array()
+	for tile_point: Vector2 in tile_polygon:
+		result.append(MapEditorCoordinate.tile_to_world(tile_point, design_size))
+	return result
+
+
+static func map_inner_boundary_world(
+	design_size: Vector2i
+) -> PackedVector2Array:
+	return tile_polygon_world(
+		map_inner_boundary_tile_polygon(design_size), design_size
+	)
+
+
+static func map_actor_boundary_world(
+	design_size: Vector2i,
+	clearance_world := DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD
+) -> PackedVector2Array:
+	# CharacterBody2D uses a foot-centred circle.  If the hard boundary is put
+	# directly on the last visible ground pixel, the circle centre (and thus the
+	# rendered feet) stops one apparent mobile tile before that pixel.  Expand
+	# only the artificial outer boundary by the actor radius; authored blocked
+	# cells remain exact and retain their normal body clearance.
+	var visual_boundary := map_inner_boundary_world(design_size)
+	return _expand_convex_polygon_by_footprint(
+		visual_boundary,
+		WorldSpatialRules.actor_footprint_polygon(
+			maxf(0.0, clearance_world)
+		)
+	)
+
+
+static func map_outer_boundary_world(
+	design_size: Vector2i,
+	clearance_world := DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD
+) -> PackedVector2Array:
+	var actor_boundary := map_actor_boundary_world(design_size, clearance_world)
+	return _expand_convex_polygon(
+		actor_boundary,
+		DEFAULT_BOUNDARY_MARGIN_TILES * MapEditorCoordinate.GROUND_TILE_SIZE_PX.y
+	)
+
+
+static func runtime_boundary_contains_world(
+	world: Vector2,
+	design_size: Vector2i,
+	clearance_world := DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD
+) -> bool:
+	return Geometry2D.is_point_in_polygon(
+		world, map_actor_boundary_world(design_size, clearance_world)
+	)
+
+
+static func _expand_convex_polygon(
+	polygon: PackedVector2Array,
+	distance: float
+) -> PackedVector2Array:
+	if polygon.size() < 3 or distance <= 0.0:
+		return polygon
+	var signed_area := 0.0
+	for index in polygon.size():
+		var following := (index + 1) % polygon.size()
+		signed_area += _cross(polygon[index], polygon[following])
+	var result := PackedVector2Array()
+	for index in polygon.size():
+		var previous := (index - 1 + polygon.size()) % polygon.size()
+		var following := (index + 1) % polygon.size()
+		var previous_edge := polygon[index] - polygon[previous]
+		var next_edge := polygon[following] - polygon[index]
+		var previous_normal := Vector2(
+			previous_edge.y, -previous_edge.x
+		).normalized()
+		var next_normal := Vector2(next_edge.y, -next_edge.x).normalized()
+		if signed_area < 0.0:
+			previous_normal = -previous_normal
+			next_normal = -next_normal
+		var previous_line := polygon[index] + previous_normal * distance
+		var next_line := polygon[index] + next_normal * distance
+		var denominator := _cross(previous_edge, next_edge)
+		if absf(denominator) <= 0.0001:
+			result.append(polygon[index] + next_normal * distance)
+			continue
+		var ratio := _cross(next_line - previous_line, next_edge) / denominator
+		result.append(previous_line + previous_edge * ratio)
+	return result
+
+
+static func _expand_convex_polygon_by_footprint(
+	polygon: PackedVector2Array,
+	footprint: PackedVector2Array
+) -> PackedVector2Array:
+	if polygon.size() < 3 or footprint.is_empty():
+		return polygon
+	var signed_area := 0.0
+	for index in polygon.size():
+		var following := (index + 1) % polygon.size()
+		signed_area += _cross(polygon[index], polygon[following])
+	var result := PackedVector2Array()
+	for index in polygon.size():
+		var previous := (index - 1 + polygon.size()) % polygon.size()
+		var following := (index + 1) % polygon.size()
+		var previous_edge := polygon[index] - polygon[previous]
+		var next_edge := polygon[following] - polygon[index]
+		var previous_normal := Vector2(
+			previous_edge.y, -previous_edge.x
+		).normalized()
+		var next_normal := Vector2(next_edge.y, -next_edge.x).normalized()
+		if signed_area < 0.0:
+			previous_normal = -previous_normal
+			next_normal = -next_normal
+		var previous_line := (
+			polygon[index]
+			+ previous_normal * _footprint_support(
+				footprint, previous_normal
+			)
+		)
+		var next_line := (
+			polygon[index]
+			+ next_normal * _footprint_support(footprint, next_normal)
+		)
+		var denominator := _cross(previous_edge, next_edge)
+		if absf(denominator) <= 0.0001:
+			result.append(next_line)
+			continue
+		var ratio := (
+			_cross(next_line - previous_line, next_edge)
+			/ denominator
+		)
+		result.append(previous_line + previous_edge * ratio)
+	return result
+
+
+static func _footprint_support(
+	footprint: PackedVector2Array,
+	normal: Vector2
+) -> float:
+	var support := 0.0
+	for point: Vector2 in footprint:
+		support = maxf(support, point.dot(normal))
+	return support
+
+
+static func _cross(a: Vector2, b: Vector2) -> float:
+	return a.x * b.y - a.y * b.x
 
 
 static func cell_center_world(cell: Vector2i, design_size: Vector2i) -> Vector2:
 	return MapEditorCoordinate.cell_center_to_world(Vector2(cell), design_size)
+
+
+static func blocked_cell_set(runtime_collision: Dictionary) -> Dictionary:
+	var result := {}
+	for raw_key: Variant in runtime_collision.get("blocked_tiles", []):
+		var parts := str(raw_key).split(",")
+		if parts.size() != 2:
+			continue
+		result["%d,%d" % [int(parts[0]), int(parts[1])]] = true
+	return result
+
+
+static func blocked_cell_runs(runtime_collision: Dictionary) -> Array[Rect2i]:
+	var blocked_by_row := {}
+	for key: String in blocked_cell_set(runtime_collision):
+		var parts := key.split(",")
+		var y := int(parts[1])
+		var xs: Array = blocked_by_row.get(y, [])
+		xs.append(int(parts[0]))
+		blocked_by_row[y] = xs
+	var rows: Array = blocked_by_row.keys()
+	rows.sort()
+	var result: Array[Rect2i] = []
+	for raw_y: Variant in rows:
+		var y := int(raw_y)
+		var xs: Array = blocked_by_row[y]
+		xs.sort()
+		if xs.is_empty():
+			continue
+		var run_start := int(xs[0])
+		var previous := run_start
+		for index in range(1, xs.size() + 1):
+			if index == xs.size() or int(xs[index]) != previous + 1:
+				result.append(Rect2i(
+					run_start, y, previous - run_start + 1, 1
+				))
+				if index < xs.size():
+					run_start = int(xs[index])
+			if index < xs.size():
+				previous = int(xs[index])
+	return result
+
+
+static func runtime_collision_contains_world(
+	runtime_collision: Dictionary,
+	world: Vector2,
+	design_size: Vector2i
+) -> bool:
+	return blocked_cells_contain_world(
+		blocked_cell_set(runtime_collision), world, design_size
+	)
+
+
+static func blocked_cells_contain_world(
+	blocked_cells: Dictionary,
+	world: Vector2,
+	design_size: Vector2i
+) -> bool:
+	if not runtime_boundary_contains_world(world, design_size):
+		return true
+	var cell := world_cell(world, design_size)
+	return blocked_cells.has("%d,%d" % [cell.x, cell.y])
+
+
+static func visible_ground_contains_tile(
+	tile: Vector2,
+	design_size: Vector2i
+) -> bool:
+	return (
+		tile.x >= -0.5 and tile.y >= -0.5
+		and tile.x < float(design_size.x) - 0.5
+		and tile.y < float(design_size.y) - 0.5
+	)
 
 
 static func world_cell(world: Vector2, design_size: Vector2i) -> Vector2i:

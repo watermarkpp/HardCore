@@ -2,13 +2,16 @@ class_name MonsterVisual
 extends Node2D
 
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
+const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
 const BOSS_ART_PATH := "res://assets/data/classic_boss_client_art_sources.json"
 const COMPLETE_ART_PATH := "res://assets/data/complete_monster_client_art_sources.json"
+const OVERHEAD_ANCHOR_DATA_PATH := "res://assets/data/runtime/monster_overhead_anchors.json"
+const GROUND_CONTACT_DATA_PATH := "res://assets/data/runtime/monster_ground_contacts.json"
 # WIL px/py values are relative to the classic DrawChr origin, not to the
 # actor's ground point. The player client-art path already migrates this same
 # origin by (+32,+28); monsters must use the identical coordinate conversion.
 const CLIENT_ACTOR_GROUND_OFFSET := Vector2i(32, 28)
-const HEALTH_BAR_FRAME_MARGIN := 8.0
+const HEALTH_BAR_BODY_GAP := 8.0
 const CLIENT_RESOURCE_CACHE_CAPACITY := 12
 const CLIENT_RESOURCE_CACHE_BUDGET_BYTES := 64 * 1024 * 1024
 const VISUAL_ACTIVATION_DISTANCE := 1600.0
@@ -17,9 +20,13 @@ const RESOURCE_RESIDENCY_CHECK_SECONDS := 0.12
 const MAX_CONCURRENT_PROFILE_LOADS := 2
 const ACTOR_Y_SORT_RENDER_DOMAIN := "actor_y_sort"
 const ACTOR_Y_SORT_RENDER_CONTRACT := "monster.actor_y_sort.v1"
+const OVERHEAD_ANCHOR_CONTRACT := "monster.overhead_anchor.v4"
+const GROUND_CONTACT_CONTRACT := "monster.ground_contact.v4"
 
 static var _boss_art: Dictionary = {}
 static var _complete_art: Dictionary = {}
+static var _overhead_anchor_data: Dictionary = {}
+static var _ground_contact_data: Dictionary = {}
 static var _client_resource_profiles: Dictionary = {}
 static var _client_resource_profile_lru: Array[String] = []
 static var _client_resource_profile_bytes: Dictionary = {}
@@ -47,6 +54,8 @@ var frame_size := ArtSpec.MONSTER_FRAME
 var foot_anchor := ArtSpec.MONSTER_FOOT_ANCHOR
 var actor_ground_offset := Vector2i.ZERO
 var health_bar_top_by_direction: Array = []
+var ground_contact_profile: Dictionary = {}
+var _has_authored_client_art := false
 var _elapsed := 0.0
 var _last_state := ""
 var _attack_remaining := 0.0
@@ -56,6 +65,8 @@ var _action_duration := 0.0
 var _fixed_health_bar_y := 0.0
 var _render_state_update_count := 0
 var _resource_residency_timer := 0.0
+var _last_ground_contact_position := Vector2.INF
+var _last_ground_indicator_radii := Vector2.INF
 
 
 static func configure_actor_y_sort_item(item: CanvasItem, role: String) -> void:
@@ -76,6 +87,7 @@ func setup(owner_actor: EnemyActor) -> void:
 
 func _ready() -> void:
 	configure_actor_y_sort_item(self, "visual_root")
+	_has_authored_client_art = not _client_mapping_for(actor.monster_data).is_empty()
 	# 普通怪下沉4px，Boss下沉6px，使脚底与阴影中心实际重叠。
 	position = Vector2(0, 6 if actor.is_boss else 4)
 	visible = false
@@ -86,11 +98,10 @@ func _ready() -> void:
 	sprite.region_rect = Rect2(Vector2.ZERO, frame_size)
 	sprite.centered = false
 	sprite.position = -Vector2(foot_anchor + actor_ground_offset)
-	# Every action and direction uses the same authored frame rectangle and foot
-	# anchor. Pin UI to that rectangle's upper edge instead of the current
-	# animation pixels, so a changing pose can never move the health bar through
-	# the monster's head, chest, or waist.
-	_fixed_health_bar_y = position.y + sprite.position.y - HEALTH_BAR_FRAME_MARGIN
+	# Procedural setup is replaced by the per-monster stable body crown as soon
+	# as final client art activates. Never derive overhead position from the
+	# current animation frame: that would reintroduce pose/direction jitter.
+	_fixed_health_bar_y = position.y + sprite.position.y
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	add_child(sprite)
 	_resource_residency_timer = RESOURCE_RESIDENCY_CHECK_SECONDS * float(posmod(get_instance_id(), 7)) / 7.0
@@ -160,12 +171,20 @@ func _activate_resources() -> void:
 	foot_anchor = resources.get("foot_anchor", ArtSpec.MONSTER_FOOT_ANCHOR)
 	actor_ground_offset = resources.get("actor_ground_offset", Vector2i.ZERO)
 	health_bar_top_by_direction = resources.get("health_bar_top_by_direction", [])
+	ground_contact_profile = _ground_contact_profile_for_actor()
 	sprite.region_rect = Rect2(Vector2.ZERO, frame_size)
 	sprite.position = -Vector2(foot_anchor + actor_ground_offset)
-	_fixed_health_bar_y = position.y + sprite.position.y - HEALTH_BAR_FRAME_MARGIN
+	_fixed_health_bar_y = _stable_overhead_anchor_y()
 	visible = not actor._burrowed
 	_last_state = ""
 	_apply_render_state(active_resources["idle"], Rect2(Vector2.ZERO, frame_size))
+	# A cold runtime profile reaches this method after the EnemyActor has already
+	# created its overhead. Apply the real texture before asking the actor for its
+	# anchor: health_bar_anchor_y() deliberately uses the procedural fallback
+	# while no final texture is resident. Refreshing one line earlier therefore
+	# left every asynchronously activated monster permanently at that fallback.
+	actor.refresh_name_label_position()
+	_refresh_actor_ground_indicator()
 
 
 func _release_resources() -> void:
@@ -174,6 +193,8 @@ func _release_resources() -> void:
 	visible = false
 	sprite.texture = null
 	active_resources = {}
+	ground_contact_profile = {}
+	_refresh_actor_ground_indicator()
 
 
 func _resources_for(monster_data: Dictionary) -> Dictionary:
@@ -248,20 +269,127 @@ func _complete_art_manifest() -> Dictionary:
 
 
 func ground_contact_offset() -> Vector2:
-	return Vector2.ZERO
+	var values: Variant = ground_contact_profile.get("ringCenterOffset", [])
+	if not values is Array or values.size() < 2:
+		return Vector2.ZERO
+	return Vector2(float(values[0]), float(values[1]))
 
 
 func ground_contact_position(fallback: Vector2) -> Vector2:
-	return position if uses_final_art() else fallback
+	if not uses_final_art() or ground_contact_profile.is_empty():
+		return fallback
+	return position + ground_contact_offset()
+
+
+func ground_indicator_radii(fallback: Vector2) -> Vector2:
+	if not uses_final_art() or ground_contact_profile.is_empty():
+		return fallback
+	var values: Variant = ground_contact_profile.get("ringEllipseRadii", [])
+	if not values is Array or values.size() < 2:
+		return fallback
+	return Vector2(float(values[0]), float(values[1]))
+
+
+func visual_foot_offset() -> Vector2:
+	var values: Variant = ground_contact_profile.get("visualFootOffset", [])
+	if not values is Array or values.size() < 2:
+		return Vector2.ZERO
+	return Vector2(float(values[0]), float(values[1]))
+
+
+func ground_projection_strategy() -> String:
+	return str(ground_contact_profile.get("projectionStrategy", "grounded"))
+
+
+func _ground_contact_profile_for_actor() -> Dictionary:
+	var manifest := _ground_contact_manifest()
+	var monster_key := str(actor.monster_id) if is_instance_valid(actor) else ""
+	if is_instance_valid(actor) and not manifest.get("entriesByMonsterId", {}).has(monster_key):
+		var legacy_ids: Dictionary = manifest.get("legacyNameToMonsterId", {})
+		for legacy_name: String in [
+			str(actor.monster_data.get("name", "")),
+			str(actor.monster_data.get("baseName", "")),
+			actor.display_name,
+		]:
+			if legacy_ids.has(legacy_name):
+				monster_key = str(int(legacy_ids[legacy_name]))
+				break
+	var profile: Variant = manifest.get("entriesByMonsterId", {}).get(monster_key, {})
+	return profile if profile is Dictionary else {}
+
+
+static func _ground_contact_manifest() -> Dictionary:
+	if _ground_contact_data.is_empty() and FileAccess.file_exists(GROUND_CONTACT_DATA_PATH):
+		var file := FileAccess.open(GROUND_CONTACT_DATA_PATH, FileAccess.READ)
+		var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
+		_ground_contact_data = parsed if parsed is Dictionary else {}
+	return _ground_contact_data
+
+
+func _refresh_actor_ground_indicator() -> void:
+	if not is_instance_valid(actor):
+		return
+	var next_position := ground_contact_position(
+		Vector2(0.0, (27.0 if actor.is_boss else 16.0) * 0.28)
+	)
+	var fallback_radius := (27.0 if actor.is_boss else 16.0) + 6.0
+	var next_radii := ground_indicator_radii(
+		Vector2(fallback_radius, fallback_radius * 0.30)
+	)
+	if (
+		_last_ground_contact_position.is_equal_approx(next_position)
+		and _last_ground_indicator_radii.is_equal_approx(next_radii)
+	):
+		return
+	_last_ground_contact_position = next_position
+	_last_ground_indicator_radii = next_radii
+	if actor.is_targeted:
+		actor.queue_redraw()
 
 
 func health_bar_anchor_y(fallback_y: float) -> float:
 	if not uses_final_art():
 		return fallback_y
-	if health_bar_top_by_direction.size() == 8:
-		var direction := clampi(current_direction, 0, health_bar_top_by_direction.size() - 1)
-		return position.y + sprite.position.y + float(health_bar_top_by_direction[direction]) - HEALTH_BAR_FRAME_MARGIN
 	return _fixed_health_bar_y
+
+
+func _stable_overhead_anchor_y() -> float:
+	# The checked-in data records one semantic body crown for each monsterId:
+	# the topmost visible pixel across every neutral idle frame and direction.
+	# Attack weapons, jumps and collapsed death poses are deliberately excluded
+	# from body height, while the immutable result remains stable throughout
+	# every action/direction/frame at runtime.
+	var body_top := stable_body_top()
+	return (
+		position.y
+		+ sprite.position.y
+		+ body_top
+		- MonsterOverheadScript.HEALTH_BAR_HEIGHT
+		- HEALTH_BAR_BODY_GAP
+	)
+
+
+func stable_body_top() -> float:
+	var anchors: Dictionary = _overhead_anchor_manifest().get("anchorsByMonsterId", {})
+	var entry: Variant = anchors.get(str(actor.monster_id), {}) if is_instance_valid(actor) else {}
+	if entry is Dictionary and entry.has("stableBodyTop"):
+		return float(entry["stableBodyTop"])
+	# Formal art should always resolve through the generated per-ID table. Keep
+	# a conservative compatibility fallback for isolated legacy fixtures.
+	if not health_bar_top_by_direction.is_empty():
+		var top := float(frame_size.y)
+		for value: Variant in health_bar_top_by_direction:
+			top = minf(top, float(value))
+		return top
+	return 0.0
+
+
+static func _overhead_anchor_manifest() -> Dictionary:
+	if _overhead_anchor_data.is_empty() and FileAccess.file_exists(OVERHEAD_ANCHOR_DATA_PATH):
+		var file := FileAccess.open(OVERHEAD_ANCHOR_DATA_PATH, FileAccess.READ)
+		var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
+		_overhead_anchor_data = parsed if parsed is Dictionary else {}
+	return _overhead_anchor_data
 
 
 func _direction_row(direction: Vector2) -> int:
@@ -486,6 +614,7 @@ func _apply_render_state(texture: Texture2D, region: Rect2) -> void:
 		changed = true
 	if changed:
 		_render_state_update_count += 1
+		_refresh_actor_ground_indicator()
 
 
 func render_state_update_count() -> int:
@@ -699,6 +828,7 @@ static func reset_client_resource_cache() -> void:
 	_map_prefetch_generation = 0
 	_last_streaming_poll_frame = -1
 	_synchronous_loading_for_tests = true
+	_ground_contact_data = {}
 
 
 static func client_texture_load_request_count() -> int:
@@ -744,6 +874,18 @@ func play_death(duration := 0.62) -> void:
 
 func uses_final_art() -> bool:
 	return visible and sprite != null and sprite.texture != null
+
+
+func has_authored_client_art() -> bool:
+	return _has_authored_client_art
+
+
+func should_draw_procedural_fallback() -> bool:
+	# A stable monsterId with authored client art may briefly wait for its
+	# threaded atlases. Drawing the old green placeholder during that window
+	# makes it look like a ground marker underneath the real monster as the
+	# resource becomes resident. Only genuinely unmapped monsters use it.
+	return not uses_final_art() and not _has_authored_client_art
 
 
 func is_fallback_attacking() -> bool:

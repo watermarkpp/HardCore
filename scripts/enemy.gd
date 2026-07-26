@@ -2,6 +2,7 @@ class_name EnemyActor
 extends CharacterBody2D
 
 const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
+const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const CROWD_GRID_CELL_SIZE := 96.0
@@ -16,6 +17,8 @@ const BACKGROUND_AI_MIN_DISTANCE := 1200.0
 const ENVIRONMENT_GUARD_INTERVAL_SECONDS := 0.10
 const ENEMY_MOTION_MASK := WorldSpatialRulesScript.WORLD_LAYER | WorldSpatialRulesScript.PLAYER_LAYER
 const POISON_INDICATOR_STYLE := "overhead_three_diamonds"
+const NAME_LABEL_SIZE := MonsterOverheadScript.NAME_LABEL_SIZE
+const NAME_LABEL_HEALTH_BAR_GAP := MonsterOverheadScript.NAME_LABEL_HEALTH_BAR_GAP
 
 static var _crowd_grid_physics_frame := -1
 static var _crowd_grid: Dictionary = {}
@@ -65,6 +68,7 @@ var facing := Vector2.DOWN
 var movement_facing := Vector2.DOWN
 var visual: MonsterVisual
 var name_label: Label
+var overhead: Variant
 var collision_radius := ArtSpec.MONSTER_COLLISION_RADIUS
 var environment_blocker: Node
 var _dying := false
@@ -207,30 +211,28 @@ func _ready() -> void:
 	_rng.randomize()
 	var collision := CollisionShape2D.new()
 	collision.name = "CollisionShape2D"
-	var shape := CircleShape2D.new()
 	var authored_radius := float(behavior_profile.get("collisionRadius", -1.0))
 	collision_radius = ArtSpec.BOSS_COLLISION_RADIUS if is_boss else (authored_radius if authored_radius > 0.0 else ArtSpec.MONSTER_COLLISION_RADIUS)
-	shape.radius = collision_radius
-	collision.shape = shape
+	collision.shape = WorldSpatialRules.actor_footprint_shape(collision_radius)
 	add_child(collision)
 	_resolve_invalid_spawn_overlap()
 	_last_environment_safe_position = global_position
 	_environment_guard_timer = ENVIRONMENT_GUARD_INTERVAL_SECONDS * float(posmod(get_instance_id(), 11)) / 11.0
-	name_label = Label.new()
-	MonsterVisualScript.configure_actor_y_sort_item(name_label, "name_label")
-	name_label.text = display_name
-	name_label.position = Vector2(-70, -116 if bool(behavior_profile.get("largeClientBoss", false)) else (-62 if is_boss else -50))
-	name_label.size = Vector2(140, 24)
-	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.add_theme_color_override("font_color", Color(1.0, 0.60, 0.34) if is_boss else Color(0.82, 0.78, 0.66))
-	add_child(name_label)
 	visual = MonsterVisualScript.new()
 	visual.name = "MonsterVisual"
 	visual.setup(self)
 	add_child(visual)
+	overhead = MonsterOverheadScript.new()
+	overhead.name = "MonsterOverhead"
+	MonsterVisualScript.configure_actor_y_sort_item(overhead, "overhead_root")
+	overhead.setup(display_name, is_boss, current_hp, max_hp)
+	add_child(overhead)
+	name_label = overhead.name_label
+	MonsterVisualScript.configure_actor_y_sort_item(name_label, "name_label")
+	refresh_name_label_position()
 	if _burrowed:
 		visual.visible = false
-		name_label.visible = false
+		overhead.visible = false
 	if boss_rule.is_empty():
 		_retarget_timer = FAR_RETARGET_STAGGER_SECONDS * float(posmod(get_instance_id(), 11))
 		_crowd_steering_timer = CROWD_STEERING_INTERVAL_SECONDS * float(posmod(get_instance_id(), 7)) / 7.0
@@ -322,9 +324,11 @@ func _physics_process(delta: float) -> void:
 			dormant = false
 			if bool(burrow.get("healToFullOnEmerge", false)):
 				current_hp = max_hp
+				_refresh_overhead_health()
 			if visual != null:
 				visual.visible = true
-			name_label.visible = true
+			if overhead != null:
+				overhead.visible = true
 		else:
 			velocity = Vector2.ZERO
 			return
@@ -444,6 +448,8 @@ func _update_pending_attack(delta: float) -> void:
 	_pending_attack_damage = 0
 	if not is_instance_valid(hit_target):
 		return
+	if _target_is_safe_player(hit_target):
+		return
 	var offset := hit_target.global_position - global_position
 	var hit_distance := maxf(attack_range, collision_radius + _target_collision_radius(hit_target) + 14.0) + 8.0
 	if offset.length() > hit_distance:
@@ -454,7 +460,7 @@ func _update_pending_attack(delta: float) -> void:
 
 
 func _deal_melee_hit(hit_target: Node2D, dealt_damage: int) -> void:
-	if not is_instance_valid(hit_target) or not hit_target.has_method("take_damage"):
+	if not is_instance_valid(hit_target) or not hit_target.has_method("take_damage") or _target_is_safe_player(hit_target):
 		return
 	hit_target.take_damage(dealt_damage)
 	apply_life_steal(dealt_damage)
@@ -464,6 +470,10 @@ func _deal_melee_hit(hit_target: Node2D, dealt_damage: int) -> void:
 	var poison_damage_value := int(on_hit.get("poisonDamage", 0))
 	if poison_damage_value > 0 and hit_target.has_method("apply_poison"):
 		hit_target.apply_poison(poison_damage_value, float(on_hit.get("poisonSeconds", 0.0)))
+
+
+func _target_is_safe_player(hit_target: Node2D) -> bool:
+	return hit_target is PlayerCharacter and _point_inside_safe_zone(hit_target.global_position)
 
 
 func _update_area_attack(delta: float) -> bool:
@@ -641,6 +651,7 @@ func apply_life_steal(dealt_damage: int) -> void:
 	if life_steal_ratio <= 0.0 or dealt_damage <= 0:
 		return
 	current_hp = mini(max_hp, current_hp + maxi(1, int(dealt_damage * life_steal_ratio)))
+	_refresh_overhead_health()
 
 
 func take_damage(amount: int, attacker: Node2D = null) -> void:
@@ -649,6 +660,7 @@ func take_damage(amount: int, attacker: Node2D = null) -> void:
 	if is_instance_valid(attacker):
 		_add_threat(attacker, float(maxi(1,amount))*5.0+25.0)
 	current_hp = maxi(0, current_hp - amount)
+	_refresh_overhead_health()
 	if is_boss and not boss_rule.is_empty():
 		_apply_health_stage_mechanics()
 	if visual != null and current_hp > 0:
@@ -673,8 +685,8 @@ func _begin_death() -> void:
 	collision_layer = 0
 	collision_mask = 0
 	remove_from_group("enemies")
-	if name_label != null:
-		name_label.visible = false
+	if overhead != null:
+		overhead.visible = false
 	var has_death_art := visual != null and visual.uses_final_art()
 	if has_death_art:
 		visual.play_death()
@@ -826,9 +838,18 @@ func _return_to_spawn()->void:
 	var spawn_position:Vector2=get_meta("spawn_position",global_position)
 	var distance:=global_position.distance_to(spawn_position)
 	if distance<=6.0:velocity=Vector2.ZERO;return
-	velocity=global_position.direction_to(spawn_position)*move_speed*0.75
+	var return_direction := global_position.direction_to(spawn_position)
+	velocity=return_direction*move_speed*0.75
+	# Walk animation reads movement_facing, not combat facing. Update both before
+	# moving so a monster never spends a frame playing its stale pursuit row and
+	# visibly backing toward its spawn point.
+	facing=return_direction
+	movement_facing=return_direction
 	_move_with_spatial_rules()
-	if velocity.length_squared()>0.01:facing=velocity.normalized()
+	var actual_motion := get_real_velocity()
+	if actual_motion.length_squared()>9.0:
+		facing=actual_motion.normalized()
+		movement_facing=facing
 	queue_redraw()
 
 
@@ -844,12 +865,16 @@ func _draw() -> void:
 		return
 	if is_targeted:
 		# 细线选中圈与脚底接触阴影共面，避免形成托起Boss的发光平台。
-		draw_set_transform(ground_center, 0.0, Vector2(1.0, 0.30))
-		draw_circle(Vector2.ZERO, radius + 6.0, Color(1.0, 0.78, 0.18, 0.78), false, 2.0)
-		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
-	var fallback_attacking := visual != null and visual.is_fallback_attacking()
+		_draw_ground_indicator_ellipse(
+			ground_center,
+			ground_indicator_radii(),
+			Color(1.0, 0.78, 0.18, 0.78),
+			2.0,
+		)
+	var draw_procedural_fallback := visual == null or visual.should_draw_procedural_fallback()
+	var fallback_attacking := draw_procedural_fallback and visual != null and visual.is_fallback_attacking()
 	var body_center := Vector2(0, -5) + (visual.fallback_lunge_offset(facing) if fallback_attacking else Vector2.ZERO)
-	if not uses_final_art:
+	if draw_procedural_fallback:
 		var body_color := Color(0.55, 0.11, 0.09) if is_boss else Color(0.30, 0.48, 0.18)
 		var attack_scale:=visual.fallback_attack_scale() if visual!=null else Vector2.ONE
 		var attack_angle:=visual.fallback_attack_angle(facing) if visual!=null else 0.0
@@ -891,19 +916,27 @@ func _draw() -> void:
 		else:
 			draw_circle(Vector2.ZERO, warning_radius, Color(0.95, 0.18, 0.06, 0.16))
 			draw_circle(Vector2.ZERO, warning_radius, Color(1.0, 0.36, 0.12, 0.85), false, 5.0)
-	if not uses_final_art:
+	if draw_procedural_fallback:
 		draw_circle(body_center + Vector2(-radius * 0.35, -3), 3.0, Color(0.95, 0.75, 0.25))
 		draw_circle(body_center + Vector2(radius * 0.35, -3), 3.0, Color(0.95, 0.75, 0.25))
-	var bar_width := 80.0 if is_boss else 46.0
-	var bar_y := health_bar_anchor_y()
-	draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width, 5), Color(0.10, 0.03, 0.03, 0.9))
-	draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width * float(current_hp) / float(max_hp), 5), Color(0.85, 0.12, 0.08))
-
-
 func health_bar_anchor_y() -> float:
 	var radius := 27.0 if is_boss else 16.0
 	var fallback_y := -92.0 if bool(behavior_profile.get("largeClientBoss", false)) else -radius - 24.0
 	return visual.health_bar_anchor_y(fallback_y) if visual != null else fallback_y
+
+
+func name_label_anchor_y() -> float:
+	return health_bar_anchor_y() - NAME_LABEL_SIZE.y - NAME_LABEL_HEALTH_BAR_GAP
+
+
+func refresh_name_label_position() -> void:
+	if overhead != null:
+		overhead.set_anchor_y(health_bar_anchor_y())
+
+
+func _refresh_overhead_health() -> void:
+	if overhead != null:
+		overhead.set_health(current_hp, max_hp)
 
 
 func poison_indicator_anchor_y() -> float:
@@ -914,6 +947,28 @@ func ground_indicator_center() -> Vector2:
 	var radius := 27.0 if is_boss else 16.0
 	var fallback := Vector2(0, radius * 0.28)
 	return visual.ground_contact_position(fallback) if visual != null else fallback
+
+
+func ground_indicator_radii() -> Vector2:
+	var radius := 27.0 if is_boss else 16.0
+	var fallback_radius := radius + 6.0
+	var fallback := Vector2(fallback_radius, fallback_radius * 0.30)
+	return visual.ground_indicator_radii(fallback) if visual != null else fallback
+
+
+func _draw_ground_indicator_ellipse(
+	center: Vector2,
+	radii: Vector2,
+	color: Color,
+	width: float,
+) -> void:
+	var points := PackedVector2Array()
+	for index in range(49):
+		var angle := TAU * float(index) / 48.0
+		points.append(
+			center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+		)
+	draw_polyline(points, color, width, true)
 
 
 func draw_ellipse_shadow(radius: float, center := Vector2.ZERO) -> void:
@@ -938,7 +993,7 @@ func _update_boss_skill(delta: float, distance: float) -> void:
 			if str(special.get("shape", "circle")) == "cone" and is_instance_valid(target):
 				var fresh_offset := target.global_position - global_position
 				var in_cone := fresh_offset.length() <= skill_radius and fresh_offset.normalized().dot(_boss_skill_direction) >= cos(float(special.get("coneHalfAngleRadians", 0.68)))
-				if in_cone:
+				if in_cone and not _target_is_safe_player(target):
 					target.take_damage(_rng.randi_range(attack_min, attack_max) * damage_multiplier)
 					_last_boss_skill_hit = true
 			else:
@@ -949,6 +1004,8 @@ func _update_boss_skill(delta: float, distance: float) -> void:
 				elif is_instance_valid(target):
 					victims.append(target)
 				for victim: Node2D in victims:
+					if _target_is_safe_player(victim):
+						continue
 					victim.take_damage(_rng.randi_range(attack_min, attack_max) * damage_multiplier)
 					_apply_boss_skill_status(victim, special)
 					_last_boss_skill_hit = true
@@ -971,7 +1028,7 @@ func _boss_skill_targets(radius: float) -> Array[Node2D]:
 		if not candidates.has(node):
 			candidates.append(node)
 	for node: Node in candidates:
-		if node is Node2D and node.has_method("take_damage") and global_position.distance_to(node.global_position) <= radius:
+		if node is Node2D and node.has_method("take_damage") and not _target_is_safe_player(node) and global_position.distance_to(node.global_position) <= radius:
 			result.append(node)
 	return result
 

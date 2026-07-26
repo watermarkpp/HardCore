@@ -39,6 +39,13 @@
       "interaction_mode"
     ]
   },
+  "runtimeStateDisplay": {
+    "contractId": "gameplay.warrior.skill_runtime.v2",
+    "fireSwordToggleField": "fire_auto_enabled",
+    "stableToggleId": "warrior.fire_sword.auto_enabled",
+    "enabledLabel": "开",
+    "disabledLabel": "关"
+  },
   "compatibility": {
     "legacyContractId": "ui.skill.quick_slot_assignment.v1",
     "behavior": "Attack-ring assignments continue to emit the legacy three-slot request."

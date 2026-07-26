@@ -1,5 +1,8 @@
 extends Node
 
+const CollisionGeometry := preload(
+	"res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd"
+)
 
 func _ready() -> void:
 	var runtime := MapEditorRuntimeBridge.load_bich()
@@ -14,10 +17,11 @@ func _ready() -> void:
 
 	var raw_size: Array = runtime.design.design_size
 	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
-	var center_tile := (Vector2(size) - Vector2.ONE) * 0.5
-	var center := MapEditorCoordinate.tile_to_world(center_tile, size)
 	var edge := MapEditorCoordinate.tile_to_world(Vector2(float(size.x) * 0.5 - 0.5, -0.5), size)
-	var outward := center.direction_to(edge)
+	var visual_boundary := CollisionGeometry.map_inner_boundary_world(size)
+	var edge_direction := visual_boundary[1] - visual_boundary[0]
+	var outward := Vector2(edge_direction.y, -edge_direction.x).normalized()
+	var boundary_clearance := CollisionGeometry.DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD
 
 	var player := PlayerCharacter.new()
 	add_child(player)
@@ -25,7 +29,8 @@ func _ready() -> void:
 	player.global_position = edge - outward * (ArtSpec.PLAYER_COLLISION_RADIUS + 4.0)
 	var player_collision := player.move_and_collide(outward * 160.0)
 	assert(player_collision != null, "玩家可越过地图外部黑区硬边界")
-	assert(player.global_position.distance_to(center) < edge.distance_to(center))
+	assert(absf((player.global_position - edge).dot(outward)) <= 1.5,
+		"玩家脚点未到达可见地面边缘")
 	player.queue_free()
 	await get_tree().process_frame
 
@@ -36,8 +41,10 @@ func _ready() -> void:
 	enemy.global_position = edge - outward * (enemy.collision_radius + 4.0)
 	var enemy_collision := enemy.move_and_collide(outward * 160.0)
 	assert(enemy_collision != null, "怪物可越过地图外部黑区硬边界")
-	assert(enemy.global_position.distance_to(center) < edge.distance_to(center))
-	print("BICH_HARD_BOUNDARY_PASS：玩家与怪物均被四边实体边界阻挡")
+	var enemy_limit := maxf(0.0, boundary_clearance - enemy.collision_radius) + 1.5
+	assert((enemy.global_position - edge).dot(outward) <= enemy_limit,
+		"怪物脚点越过外沿净空")
+	print("BICH_HARD_BOUNDARY_PASS：角色脚点到达可见边缘且玩家与怪物均被硬边界阻挡")
 	get_tree().quit(0)
 
 

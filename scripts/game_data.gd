@@ -2,10 +2,13 @@ extends Node
 
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 
+signal database_reloaded
+
 const DATA_PATH := "res://assets/data/legend176_data.json"
 const SERVICE_REFERENCE_PATH := "res://assets/data/service_reference.json"
 const EQUIPMENT_CUSTOMIZATION_PATH := "res://assets/data/equipment_customization.json"
 const EQUIPMENT_ART_PATH := "res://assets/data/equipment_client_art_sources.json"
+const EQUIPMENT_VISUAL_CATALOG_PATH := "res://assets/data/equipment_visual_catalog.json"
 const WARRIOR_WEAR_PATH := "res://assets/data/warrior_wear_sources.json"
 const WARRIOR_CLIENT_ART_PATH := "res://assets/data/warrior_client_art_sources.json"
 const BICH_QUEST_CHAIN_PATH := "res://assets/data/bich_quest_chain.json"
@@ -26,11 +29,17 @@ const ITEM_ALIASES := {
 }
 # 服务端使用经典MAP代码，项目地图目录沿用资料站ID。别名必须显式保留，禁止改写原服务端值。
 const SERVICE_RUNTIME_MAP_ALIASES := {0: 4}
+const PROFESSION_VISUAL_IDS := {
+	"战士": "warrior",
+	"法师": "wizard",
+	"道士": "taoist",
+}
 
 var database: Dictionary = {}
 var service_reference: Dictionary = {}
 var equipment_customization: Dictionary = {}
 var equipment_client_art: Dictionary = {}
+var equipment_visual_catalog: Dictionary = {}
 var warrior_wear_art: Dictionary = {}
 var warrior_client_art: Dictionary = {}
 var bich_quest_chain: Dictionary = {}
@@ -83,6 +92,8 @@ func load_database() -> bool:
 	_load_warrior_wear_art()
 	_load_warrior_client_art()
 	items = apply_equipment_wear_mappings(items, warrior_wear_art)
+	_load_equipment_visual_catalog()
+	items = apply_equipment_visual_mappings(items, equipment_visual_catalog)
 	_load_equipment_customization()
 	items = apply_equipment_customization(items, equipment_customization)
 	skills = database.get("skills", [])
@@ -95,6 +106,7 @@ func load_database() -> bool:
 	_load_service_reference()
 	_load_service_item_catalog()
 	_build_indexes()
+	database_reloaded.emit()
 	print("数据库载入完成：地图%d 怪物%d Boss%d 装备%d 技能等级%d 掉落槽%d 任务%d" % [
 		maps.size(), monsters.size(), bosses.size(), items.size(), skills.size(), drops.size(), tasks.size()
 	])
@@ -239,6 +251,19 @@ func _load_equipment_client_art() -> void:
 		push_warning("装备客户端美术映射不是有效JSON：%s" % EQUIPMENT_ART_PATH)
 
 
+func _load_equipment_visual_catalog() -> void:
+	equipment_visual_catalog = {}
+	if not FileAccess.file_exists(EQUIPMENT_VISUAL_CATALOG_PATH):
+		push_warning("正式装备视觉目录不存在：%s" % EQUIPMENT_VISUAL_CATALOG_PATH)
+		return
+	var file := FileAccess.open(EQUIPMENT_VISUAL_CATALOG_PATH, FileAccess.READ)
+	var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
+	if parsed is Dictionary:
+		equipment_visual_catalog = parsed
+	else:
+		push_warning("正式装备视觉目录不是有效JSON：%s" % EQUIPMENT_VISUAL_CATALOG_PATH)
+
+
 func apply_equipment_art_mappings(base_items: Array, art_manifest: Dictionary) -> Array:
 	var result: Array = []
 	var mappings: Dictionary = art_manifest.get("runtimeMappings", {})
@@ -250,6 +275,32 @@ func apply_equipment_art_mappings(base_items: Array, art_manifest: Dictionary) -
 		if art is Dictionary and not art.is_empty():
 			record["art"] = art.duplicate(true)
 		result.append(record)
+	return result
+
+
+func apply_equipment_visual_mappings(base_items: Array, visual_catalog: Dictionary) -> Array:
+	var result: Array = []
+	var mappings: Dictionary = visual_catalog.get("runtimeMappings", {})
+	for value: Variant in base_items:
+		if not value is Dictionary:
+			continue
+		var record: Dictionary = value.duplicate(true)
+		var mapping: Variant = mappings.get(str(record.get("name", "")), {})
+		if mapping is Dictionary and not mapping.is_empty():
+			var art: Dictionary = record.get("art", {}).duplicate(true)
+			record["art"] = _deep_merge_dictionary(art, mapping)
+		result.append(record)
+	return result
+
+
+func _deep_merge_dictionary(base: Dictionary, overlay: Dictionary) -> Dictionary:
+	var result := base.duplicate(true)
+	for key: Variant in overlay:
+		var incoming: Variant = overlay[key]
+		if incoming is Dictionary and result.get(key, null) is Dictionary:
+			result[key] = _deep_merge_dictionary(result[key], incoming)
+		else:
+			result[key] = incoming.duplicate(true) if incoming is Dictionary or incoming is Array else incoming
 	return result
 
 
@@ -532,6 +583,54 @@ func get_bosses_for_map(map_data: Dictionary) -> Array:
 
 func get_item(item_name: String) -> Dictionary:
 	return _items_by_name.get(str(ITEM_ALIASES.get(item_name, item_name)), {})
+
+
+func player_base_appearance(profession: String, gender: String) -> Dictionary:
+	var profession_id := str(PROFESSION_VISUAL_IDS.get(profession, ""))
+	var manifests: Dictionary = equipment_visual_catalog.get("professionManifests", {})
+	var manifest: Variant = manifests.get(profession_id, {})
+	if not manifest is Dictionary:
+		return {}
+	var by_gender: Variant = manifest.get("worldBaseByGender", {})
+	if not by_gender is Dictionary:
+		return {}
+	var resolved_gender := gender if gender in ["男", "女"] else "男"
+	var appearance: Variant = by_gender.get(resolved_gender, by_gender.get("男", {}))
+	return appearance.duplicate(true) if appearance is Dictionary else {}
+
+
+func item_world_appearance(item_id: int, gender: String) -> Dictionary:
+	var entries: Dictionary = equipment_visual_catalog.get("itemsById", {})
+	var entry: Variant = entries.get(str(item_id), {})
+	if not entry is Dictionary:
+		return {}
+	var world: Variant = entry.get("worldWear", {})
+	if not world is Dictionary:
+		return {}
+	var appearance_type := str(world.get("appearanceType", ""))
+	if appearance_type.is_empty():
+		for candidate: String in ["weaponAppearance", "dressAppearance", "helmetAppearance"]:
+			if world.get(candidate, null) is Dictionary:
+				appearance_type = candidate
+				break
+	var appearance: Dictionary = {}
+	var by_gender: Variant = world.get("appearancesByGender", {})
+	var resolved_gender := gender if gender in ["男", "女"] else "男"
+	if by_gender is Dictionary:
+		var gender_value: Variant = by_gender.get(resolved_gender, by_gender.get("男", {}))
+		if gender_value is Dictionary:
+			appearance = gender_value.duplicate(true)
+	if appearance.is_empty() and not appearance_type.is_empty():
+		var direct: Variant = world.get(appearance_type, {})
+		if direct is Dictionary:
+			appearance = direct.duplicate(true)
+	return {
+		"itemId": item_id,
+		"itemName": str(entry.get("itemName", "")),
+		"status": str(world.get("status", "")),
+		"appearanceType": appearance_type,
+		"appearance": appearance,
+	}
 
 
 func get_item_record(item_name: String) -> Dictionary:
