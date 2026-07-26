@@ -45,7 +45,8 @@ func _ready() -> void:
 		if skill_id == "taoist.spiritual_warfare":
 			assert(not plan.castable and plan.visual.status == "no_runtime_visual")
 		else:
-			assert(plan.visual.status == "formal_primary_client_pixel", "%s lacks formal visual binding" % skill_id)
+			assert(plan.visual.status == "formal_primary_client_animation", "%s lacks formal visual binding" % skill_id)
+			assert(plan.visual.animation.contract == "caster_skill_animation.v1")
 		var cast_nodes := CasterSkillRuntime.create_cast_nodes(
 			plan,
 			Vector2.ZERO,
@@ -84,7 +85,8 @@ func _ready() -> void:
 		"skill_level": 3, "magic_stat_roll": 30, "target_is_undead": true,
 	})
 	assert(lightning.operation == "target_damage" and lightning.damage > 0)
-	assert(lightning.visual.original_path == "Data/Magic2.wil" and lightning.visual.source_index == 10)
+	assert(lightning.visual.original_path == "Data/Magic2.wil")
+	assert(lightning.visual.animation.sequences[0].frames[0].source_index == 10)
 	var lightning_visual := CasterSkillRuntime.create_visual(lightning, Vector2.ZERO)
 	add_child(lightning_visual)
 	assert(lightning_visual.visual_loaded and lightning_visual.visual_role == "target_effect")

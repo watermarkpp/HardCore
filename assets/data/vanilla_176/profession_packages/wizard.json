@@ -403,13 +403,11 @@
         "area_radius_cells": 1
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "exploding_flame",
         "role": "area_effect",
-        "path": "assets/art/characters/wizard/effects/area_burst.png",
-        "skill_ids": [
-          "wizard.exploding_flame"
-        ],
+        "path": "assets/art/characters/wizard/effects/exploding_flame.png",
+        "icon_path": "assets/art/characters/wizard/skill_icons/exploding_flame.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -419,20 +417,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 1660,
-        "source_offset": 18455780,
-        "source_draw_offset": [
-          -68,
-          -66
-        ],
-        "pixel_size": [
-          180,
-          135
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "PlayScn.NewMagic effect 21 explosion base 1660",
+        "mapping_rule": "PlayScn.NewMagic effect 21 sets MagExplosionBase=1660, NextFrameTime=80, ExplosionFrame=20",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 80,
+        "frame_count": 20,
+        "direction_count": 1,
+        "playback": "once",
+        "icon_selected_source_index": 1667
       }
     },
     "wizard.fire_wall": {
@@ -790,13 +782,11 @@
         "tick_interval_ms": 3000
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "fire_wall",
         "role": "ground_effect",
         "path": "assets/art/characters/wizard/effects/fire_wall.png",
-        "skill_ids": [
-          "wizard.fire_wall"
-        ],
+        "icon_path": "assets/art/characters/wizard/skill_icons/fire_wall.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -806,20 +796,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 1620,
-        "source_offset": 18205096,
-        "source_draw_offset": [
-          -19,
-          -54
-        ],
-        "pixel_size": [
-          84,
-          76
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "EffectBase effect 20 explicitly labels fire wall at 1620",
+        "mapping_rule": "EffectType=mtFireWind has no detached TMagicEff; Actor draws EffectBase[20]=1620 with DEFSPELLFRAME=10 and HA.ActSpell.ftime=60; persistent Godot cells loop the exact primary family",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 60,
+        "frame_count": 10,
+        "direction_count": 1,
+        "playback": "loop",
+        "icon_selected_source_index": 1622
       }
     },
     "wizard.fireball": {
@@ -1174,13 +1158,11 @@
         "service_spell_id": 31
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "fireball",
         "role": "projectile",
-        "path": "assets/art/characters/wizard/effects/arcane_projectile.png",
-        "skill_ids": [
-          "wizard.fireball"
-        ],
+        "path": "assets/art/characters/wizard/effects/fireball.png",
+        "icon_path": "assets/art/characters/wizard/skill_icons/fireball.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -1190,20 +1172,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 10,
-        "source_offset": 53060,
-        "source_draw_offset": [
-          -19,
-          -83
-        ],
-        "pixel_size": [
-          88,
-          117
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "EffectBase effect 1 base 0 + FLYBASE 10",
+        "mapping_rule": "EffectBase[1]=0 + FLYBASE=10 + Dir16*10; TMagicEff frame=MG_FLY=6",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 50,
+        "frame_count": 6,
+        "direction_count": 16,
+        "playback": "loop",
+        "icon_selected_source_index": 73
       }
     },
     "wizard.great_fireball": {
@@ -1558,13 +1534,11 @@
         "service_spell_id": 34
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "great_fireball",
         "role": "projectile",
         "path": "assets/art/characters/wizard/effects/great_fireball.png",
-        "skill_ids": [
-          "wizard.great_fireball"
-        ],
+        "icon_path": "assets/art/characters/wizard/skill_icons/great_fireball.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -1574,20 +1548,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 410,
-        "source_offset": 2036152,
-        "source_draw_offset": [
-          -17,
-          -72
-        ],
-        "pixel_size": [
-          84,
-          82
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "EffectBase effect 3 base 400 + FLYBASE 10",
+        "mapping_rule": "EffectBase[3]=400 + FLYBASE=10 + Dir16*10; TMagicEff frame=MG_FLY=6",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 50,
+        "frame_count": 6,
+        "direction_count": 16,
+        "playback": "loop",
+        "icon_selected_source_index": 530
       }
     },
     "wizard.hell_lightning": {
@@ -1945,13 +1913,11 @@
         "area_radius_cells": 2
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "hell_lightning",
         "role": "self_area",
         "path": "assets/art/characters/wizard/effects/hell_lightning.png",
-        "skill_ids": [
-          "wizard.hell_lightning"
-        ],
+        "icon_path": "assets/art/characters/wizard/skill_icons/hell_lightning.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -1961,20 +1927,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 1680,
-        "source_offset": 19171912,
-        "source_draw_offset": [
-          -27,
-          -64
-        ],
-        "pixel_size": [
-          100,
-          89
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "EffectBase effect 22 explicitly labels hell lightning at 1680",
+        "mapping_rule": "EffectType=mtFireWind has no detached TMagicEff; Actor draws EffectBase[22]=1680 with DEFSPELLFRAME=10 and HA.ActSpell.ftime=60",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 60,
+        "frame_count": 10,
+        "direction_count": 1,
+        "playback": "once",
+        "icon_selected_source_index": 1685
       }
     },
     "wizard.hellfire": {
@@ -2329,13 +2289,11 @@
         "service_spell_id": 35
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "hellfire",
         "role": "line_effect",
         "path": "assets/art/characters/wizard/effects/hellfire.png",
-        "skill_ids": [
-          "wizard.hellfire"
-        ],
+        "icon_path": "assets/art/characters/wizard/skill_icons/hellfire.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -2345,20 +2303,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 930,
-        "source_offset": 3487064,
-        "source_draw_offset": [
-          -13,
-          -67
-        ],
-        "pixel_size": [
-          88,
-          86
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "PlayScn.NewMagic mtFireGun constructs TFireGunEffect at base 930",
+        "mapping_rule": "PlayScn mtFireGun constructs TFireGunEffect at 930; FIREGUNFRAME=6, NextFrameTime=50",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 50,
+        "frame_count": 6,
+        "direction_count": 1,
+        "playback": "once",
+        "icon_selected_source_index": 934
       }
     },
     "wizard.holy_word": {
@@ -2715,13 +2667,11 @@
         "success_formula": "random(100) < skill_level*7 + 15 + caster_level-target_level"
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "holy_word",
         "role": "target_effect",
         "path": "assets/art/characters/wizard/effects/holy_word.png",
-        "skill_ids": [
-          "wizard.holy_word"
-        ],
+        "icon_path": "assets/art/characters/wizard/skill_icons/holy_word.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -2731,20 +2681,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 3930,
-        "source_offset": 33624256,
-        "source_draw_offset": [
-          -79,
-          -62
-        ],
-        "pixel_size": [
-          208,
-          137
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "PlayScn.NewMagic effect 30 explosion base 3930",
+        "mapping_rule": "PlayScn.NewMagic effect 30 sets MagExplosionBase=3930, NextFrameTime=80, ExplosionFrame=16",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 80,
+        "frame_count": 16,
+        "direction_count": 1,
+        "playback": "once",
+        "icon_selected_source_index": 3933
       }
     },
     "wizard.ice_storm": {
@@ -3100,13 +3044,11 @@
         "area_radius_cells": 1
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "ice_storm",
         "role": "area_effect",
         "path": "assets/art/characters/wizard/effects/ice_storm.png",
-        "skill_ids": [
-          "wizard.ice_storm"
-        ],
+        "icon_path": "assets/art/characters/wizard/skill_icons/ice_storm.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -3116,20 +3058,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 3850,
-        "source_offset": 32495596,
-        "source_draw_offset": [
-          -26,
-          -60
-        ],
-        "pixel_size": [
-          96,
-          94
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "PlayScn.NewMagic effect 31 explosion base 3850",
+        "mapping_rule": "PlayScn.NewMagic effect 31 sets MagExplosionBase=3850, NextFrameTime=80, ExplosionFrame=20",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 80,
+        "frame_count": 20,
+        "direction_count": 1,
+        "playback": "once",
+        "icon_selected_source_index": 3860
       }
     },
     "wizard.laser": {
@@ -3484,13 +3420,11 @@
         "service_spell_id": 40
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "laser",
         "role": "line_effect",
         "path": "assets/art/characters/wizard/effects/laser.png",
-        "skill_ids": [
-          "wizard.laser"
-        ],
+        "icon_path": "assets/art/characters/wizard/skill_icons/laser.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -3500,20 +3434,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 970,
-        "source_offset": 3954556,
-        "source_draw_offset": [
-          -36,
-          -368
-        ],
-        "pixel_size": [
-          124,
-          386
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "PlayScn.NewMagic mtLightingThunder explicitly constructs TLightingThunder at 970",
+        "mapping_rule": "PlayScn mtLightingThunder constructs TLightingThunder at 970; DrawEff uses 970 + Dir16*10 + curframe while curframe<6",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 50,
+        "frame_count": 6,
+        "direction_count": 16,
+        "playback": "once",
+        "icon_selected_source_index": 1104
       }
     },
     "wizard.lightning": {
@@ -3869,13 +3797,11 @@
         "undead_damage_multiplier": 1.5
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "lightning",
         "role": "target_effect",
         "path": "assets/art/characters/wizard/effects/lightning.png",
-        "skill_ids": [
-          "wizard.lightning"
-        ],
+        "icon_path": "assets/art/characters/wizard/skill_icons/lightning.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -3885,20 +3811,14 @@
         },
         "original_path": "Data/Magic2.wil",
         "source_sha256": "398e5376f19638df063cd6299199bf5c2365fa8525fe0c9e639eb3bb6c955d07",
-        "source_index": 10,
-        "source_offset": 126840,
-        "source_draw_offset": [
-          -61,
-          -920
-        ],
-        "pixel_size": [
-          148,
-          958
-        ],
-        "library_image_count": 33,
-        "mapping_rule": "PlayScn.NewMagic mtThunder explicitly constructs Magic2 TThuderEffect at 10",
+        "mapping_rule": "PlayScn mtThunder constructs Magic2 TThuderEffect at 10 and sets ExplosionFrame=6; inherited NextFrameTime=50",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 50,
+        "frame_count": 6,
+        "direction_count": 1,
+        "playback": "once",
+        "icon_selected_source_index": 12
       }
     },
     "wizard.magic_shield": {
@@ -4256,13 +4176,11 @@
         "damage_remaining_ratio_formula": "(skill_level+2)*0.08"
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "magic_shield",
         "role": "self_effect",
         "path": "assets/art/characters/wizard/effects/magic_shield.png",
-        "skill_ids": [
-          "wizard.magic_shield"
-        ],
+        "icon_path": "assets/art/characters/wizard/skill_icons/magic_shield.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -4272,20 +4190,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 3880,
-        "source_offset": 33354792,
-        "source_draw_offset": [
-          9,
-          -57
-        ],
-        "pixel_size": [
-          32,
-          14
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "EffectBase effect 29 explicitly labels magic shield at 3880",
+        "mapping_rule": "EffectType=mtFireWind has no detached TMagicEff; Actor draws EffectBase[29]=3880 with DEFSPELLFRAME=10 and HA.ActSpell.ftime=60",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 60,
+        "frame_count": 10,
+        "direction_count": 1,
+        "playback": "once",
+        "icon_selected_source_index": 3889
       }
     },
     "wizard.repulsion_ring": {
@@ -4642,13 +4554,11 @@
         "success_random_bound": 20
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "repulsion_ring",
         "role": "self_area",
         "path": "assets/art/characters/wizard/effects/repulsion_ring.png",
-        "skill_ids": [
-          "wizard.repulsion_ring"
-        ],
+        "icon_path": "assets/art/characters/wizard/skill_icons/repulsion_ring.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -4658,20 +4568,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 900,
-        "source_offset": 3338388,
-        "source_draw_offset": [
-          -18,
-          -58
-        ],
-        "pixel_size": [
-          80,
-          58
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "EffectBase effect 6 explicitly labels repulsion ring at 900",
+        "mapping_rule": "EffectType=mtFireWind has no detached TMagicEff; Actor draws EffectBase[6]=900 with DEFSPELLFRAME=10 and HA.ActSpell.ftime=60",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 60,
+        "frame_count": 10,
+        "direction_count": 1,
+        "playback": "once",
+        "icon_selected_source_index": 905
       }
     },
     "wizard.teleport": {
@@ -5027,13 +4931,11 @@
         "success_formula": "random(11) < skill_level * 2 + 4"
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "teleport",
         "role": "self_effect",
         "path": "assets/art/characters/wizard/effects/teleport.png",
-        "skill_ids": [
-          "wizard.teleport"
-        ],
+        "icon_path": "assets/art/characters/wizard/skill_icons/teleport.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -5043,20 +4945,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 1590,
-        "source_offset": 18132800,
-        "source_draw_offset": [
-          -9,
-          -19
-        ],
-        "pixel_size": [
-          64,
-          55
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "EffectBase effect 19 explicitly labels teleport at 1590",
+        "mapping_rule": "EffectType=mtFireWind has no detached TMagicEff; Actor draws EffectBase[19]=1590 with DEFSPELLFRAME=10 and HA.ActSpell.ftime=60",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 60,
+        "frame_count": 10,
+        "direction_count": 1,
+        "playback": "once",
+        "icon_selected_source_index": 1595
       }
     },
     "wizard.temptation_light": {
@@ -5417,13 +5313,11 @@
         "mutiny_minutes_formula": "random_range(0,caster_level) + 60*floor(caster_level/10) + (skill_level<<2)*5"
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "temptation_light",
         "role": "target_effect",
         "path": "assets/art/characters/wizard/effects/temptation_light.png",
-        "skill_ids": [
-          "wizard.temptation_light"
-        ],
+        "icon_path": "assets/art/characters/wizard/skill_icons/temptation_light.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -5433,20 +5327,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 1564,
-        "source_offset": 18041036,
-        "source_draw_offset": [
-          -7,
-          -72
-        ],
-        "pixel_size": [
-          60,
-          60
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "PlayScn.NewMagic effect 18 overrides explosion base to 1564",
+        "mapping_rule": "PlayScn.NewMagic effect 18 sets MagExplosionBase=1564, NextFrameTime=60, ExplosionFrame=16",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 60,
+        "frame_count": 16,
+        "direction_count": 1,
+        "playback": "once",
+        "icon_selected_source_index": 1570
       }
     }
   },
@@ -5457,7 +5345,7 @@
     },
     "growth": {
       "path": "assets/data/vanilla_176/profession_growth.json",
-      "sha256": "ff5b2e2cfcf03a441b33a04d488aa39c36c753a543954087ef32041992d8a756"
+      "sha256": "7ffcf675558b665da72226575d6cd1d30296835f83ebc36dd6c2948810fda4d2"
     },
     "combat_rules": {
       "path": "assets/data/vanilla_176/profession_combat_rules.json",
@@ -5465,13 +5353,13 @@
     },
     "visuals": {
       "path": "assets/data/caster_skill_visuals.json",
-      "sha256": "a0712488af504bf2e08c0a9a236e102ab6990e91f6115639e804275aac820f25"
+      "sha256": "4cc1f84df610775b240759dda9e79275cc276cb1a211fa1448e13fb87e40a760"
     }
   },
   "source_policy": {
     "stable_ids": "authoritative",
     "display_names": "Chinese display aliases only",
     "magic_info": "server.crystal.cjlaaa B/C candidate retained per level",
-    "visuals": "primary client pixels only; generated fallback forbidden"
+    "visuals": "primary client animation pixels/rules only; generated fallback forbidden"
   }
 }
