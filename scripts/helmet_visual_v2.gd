@@ -12,6 +12,7 @@ static var _contract: Dictionary = {}
 static var _head_sockets: Dictionary = {}
 static var _overrides: Dictionary = {}
 static var _session_overrides: Dictionary = {}
+static var _override_path := OVERRIDE_PATH
 
 
 static func _json(path: String) -> Dictionary:
@@ -33,13 +34,35 @@ static func head_socket_database() -> Dictionary:
 
 static func calibration_overrides() -> Dictionary:
 	if _overrides.is_empty():
-		_overrides = _json(OVERRIDE_PATH)
+		_overrides = _json(_override_path)
 	return _overrides
 
 
 static func reload_data() -> void:
 	_contract = {}
 	_head_sockets = {}
+	_overrides = {}
+	_session_overrides = {}
+
+
+static func calibration_override_path() -> String:
+	return _override_path
+
+
+static func set_calibration_override_path_for_test(path: String) -> bool:
+	if not (
+		path.begins_with("res://outputs/")
+		or path.begins_with("user://")
+	):
+		return false
+	_override_path = path
+	_overrides = {}
+	_session_overrides = {}
+	return true
+
+
+static func reset_calibration_override_path() -> void:
+	_override_path = OVERRIDE_PATH
 	_overrides = {}
 	_session_overrides = {}
 
@@ -187,7 +210,7 @@ static func persist_calibration_override(
 	item["directions"] = directions
 	items[str(item_id)] = item
 	data["itemOverrides"] = items
-	var file := FileAccess.open(OVERRIDE_PATH, FileAccess.WRITE)
+	var file := FileAccess.open(_override_path, FileAccess.WRITE)
 	if file == null:
 		return false
 	file.store_string(JSON.stringify(data, "\t", false) + "\n")
