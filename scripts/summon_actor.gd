@@ -4,6 +4,7 @@ extends CharacterBody2D
 signal summon_state_changed(previous_state: int, current_state: int)
 
 const SummonVisualRegistryScript := preload("res://scripts/summon_visual_registry.gd")
+const CasterAnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
 
 enum SummonState {
 	FOLLOW_OWNER,
@@ -281,6 +282,15 @@ func _install_visual() -> void:
 		_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		add_child(_sprite)
 		activate_visual_resources()
+		return
+	if skill_id == "taoist.summon_skeleton":
+		var skeleton_animation := CasterAnimationPlayerScript.new()
+		if not skeleton_animation.configure(skill_id, Vector2.DOWN, 0.0):
+			skeleton_animation.queue_free()
+			return
+		skeleton_animation.name = "SkeletonPrimaryStandAnimation"
+		_sprite = skeleton_animation
+		add_child(_sprite)
 		return
 	var texture := CasterSkillVisualRegistry.texture(skill_id)
 	if texture == null:

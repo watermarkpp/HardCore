@@ -5,13 +5,6 @@ const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_pla
 
 const VISUAL_PATHS := {
 	"wizard.fire_wall": "res://assets/art/characters/wizard/effects/fire_wall.png",
-	"wizard.exploding_flame": "res://assets/art/characters/wizard/effects/area_burst.png",
-	"wizard.hell_lightning": "res://assets/art/characters/wizard/effects/hell_lightning.png",
-	"wizard.ice_storm": "res://assets/art/characters/wizard/effects/ice_storm.png",
-	"taoist.magic_defense": "res://assets/art/characters/taoist/effects/magic_defense.png",
-	"taoist.defense": "res://assets/art/characters/taoist/effects/defense.png",
-	"taoist.entrapment": "res://assets/art/characters/taoist/effects/binding_circle.png",
-	"taoist.mass_healing": "res://assets/art/characters/taoist/effects/mass_healing.png",
 }
 
 var damage := 1
@@ -22,6 +15,7 @@ var effect_color := Color(1.0, 0.25, 0.05)
 var skill_id := ""
 var source_actor: Node2D
 var runtime_tick_adapter := Callable()
+var visual_rejection_reason := ""
 var _tick_timer := 0.0
 var _sprite: Sprite2D
 
@@ -49,13 +43,26 @@ func configure_runtime_resolution(caster: Node2D, tick_adapter: Callable) -> voi
 	runtime_tick_adapter = tick_adapter
 
 
+func configure_runtime_source(caster: Node2D) -> void:
+	source_actor = caster
+
+
 func _install_visual() -> void:
+	if not CasterSkillVisualRegistry.is_runtime_ready(skill_id):
+		visual_rejection_reason = CasterSkillVisualRegistry.runtime_readiness_reason(skill_id)
+		return
+	var profile := CasterSkillVisualRegistry.profile(skill_id)
+	if str(profile.get("role", "")) != CasterSkillVisualRegistry.ROLE_GROUND_EFFECT:
+		visual_rejection_reason = "non_ground_visual:%s" % str(
+			profile.get("role", "missing")
+		)
+		return
 	var candidate := AnimationPlayerScript.new()
-	if not candidate.configure(skill_id, Vector2.DOWN, radius * 1.6, true):
+	if not candidate.configure(skill_id, Vector2.DOWN, 0.0):
+		visual_rejection_reason = "ground_animation_failed"
 		candidate.queue_free()
 		return
 	_sprite = candidate
-	_sprite.modulate = Color(1, 1, 1, 0.72)
 	add_child(_sprite)
 
 
@@ -76,7 +83,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _draw() -> void:
-	if not skill_id.is_empty():
+	if _sprite != null or not skill_id.is_empty():
 		return
 	var pulse := 0.78 + sin(Time.get_ticks_msec() * 0.01) * 0.12
 	draw_circle(Vector2.ZERO, radius * pulse, Color(effect_color, 0.16))

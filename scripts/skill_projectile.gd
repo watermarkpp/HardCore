@@ -5,7 +5,7 @@ const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd
 const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
 
 const VISUAL_PATHS := {
-	"wizard.fireball": "res://assets/art/characters/wizard/effects/arcane_projectile.png",
+	"wizard.fireball": "res://assets/art/characters/wizard/effects/fireball.png",
 	"wizard.great_fireball": "res://assets/art/characters/wizard/effects/great_fireball.png",
 	"taoist.soul_fire_talisman": "res://assets/art/characters/taoist/effects/soul_fire_talisman.png",
 }
@@ -27,6 +27,8 @@ var anti_magic_roll_override := -1
 var anti_poison_roll_override := -1
 var last_resolution: Dictionary = {}
 var _sprite: Sprite2D
+var visual_rejection_reason := ""
+var _projectile_role_valid := false
 
 
 func setup(start: Vector2, cast_direction: Vector2, value: int, travel_range: float, color: Color, status_effect := "damage", status_strength := 0, status_duration := 0.0, source_skill_id := "") -> void:
@@ -66,8 +68,22 @@ func _ready() -> void:
 
 
 func _install_visual() -> void:
+	var profile := CasterSkillVisualRegistry.profile(skill_id)
+	if str(profile.get("role", "")) != CasterSkillVisualRegistry.ROLE_PROJECTILE:
+		visual_rejection_reason = "non_projectile_visual:%s" % str(
+			profile.get("role", "missing")
+		)
+		set_physics_process(false)
+		return
+	_projectile_role_valid = true
+	if not CasterSkillVisualRegistry.is_runtime_ready(skill_id):
+		visual_rejection_reason = CasterSkillVisualRegistry.runtime_readiness_reason(skill_id)
+		return
+	var render := CasterSkillVisualRegistry.render_policy(skill_id)
+	var desired_extent := maxf(1.0, float(render.get("fit_extent", 34.0)))
 	var candidate := AnimationPlayerScript.new()
-	if not candidate.configure(skill_id, direction, 34.0, true):
+	if not candidate.configure(skill_id, direction, desired_extent):
+		visual_rejection_reason = "projectile_animation_failed"
 		candidate.queue_free()
 		return
 	_sprite = candidate
@@ -75,6 +91,8 @@ func _install_visual() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if not skill_id.is_empty() and not _projectile_role_valid:
+		return
 	var travel := minf(speed * delta, remaining_range)
 	global_position += direction * travel
 	remaining_range -= travel
@@ -128,7 +146,9 @@ func _apply_hit(enemy: EnemyActor) -> void:
 
 
 func _draw() -> void:
-	if not skill_id.is_empty():
+	if not skill_id.is_empty() and not _projectile_role_valid:
+		return
+	if _sprite != null:
 		return
 	draw_line(-direction * 30.0, Vector2.ZERO, Color(projectile_color, 0.25), 10.0)
 	if _sprite == null:
