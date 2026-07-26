@@ -35,7 +35,7 @@ static func cells(definition: Dictionary, origin: Vector2i, facing: Vector2i, ta
 			var radius := int(geometry.get("radius_tiles", 1))
 			for y in range(-radius, radius + 1):
 				for x in range(-radius, radius + 1):
-					if maxi(absi(x), absi(y)) == radius:
+					if x != 0 or y != 0:
 						result.append(origin + Vector2i(x, y))
 		"chebyshev_area":
 			var radius := int(geometry.get("radius_tiles", 1))
