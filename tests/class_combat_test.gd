@@ -29,6 +29,8 @@ func _run() -> void:
 	enemy.control_time = 60.0
 
 	PlayerState.select_profession("法师")
+	PlayerState.learned_skills = {"火球术": 3, "魔法盾": 3, "火墙": 3}
+	game.player.current_mp = 200
 	enemy.global_position = game.player.global_position + Vector2(75, 0)
 	enemy.apply_control(10.0)
 	var hp_before_fireball := enemy.current_hp
@@ -47,6 +49,18 @@ func _run() -> void:
 	assert(enemy.current_hp < hp_before_firewall, "火墙持续区域未造成伤害")
 
 	PlayerState.select_profession("道士")
+	PlayerState.learned_skills = {
+		"施毒术": 3,
+		"治愈术": 3,
+		"困魔咒": 3,
+		"隐身术": 3,
+		"召唤骷髅": 3,
+	}
+	PlayerState.inventory = [
+		{"name": "灰色药粉", "count": 10},
+		{"name": "护身符", "count": 20},
+	]
+	game.player.current_mp = 200
 	enemy.global_position = game.player.global_position + Vector2(75, 0)
 	enemy.apply_control(10.0)
 	game._on_player_skill("施毒术", game.player.global_position, Vector2.RIGHT, 12)
@@ -69,6 +83,8 @@ func _run() -> void:
 	assert(summons.size() == 1 and summons[0] is SummonActor, "召唤骷髅未生成")
 	var summon: SummonActor = summons[0]
 	summon.global_position = enemy.global_position + Vector2(10, 0)
+	enemy._threat_table.clear()
+	enemy.target = null
 	enemy._retarget()
 	assert(enemy.target == summon, "怪物未将附近召唤物纳入仇恨目标")
 

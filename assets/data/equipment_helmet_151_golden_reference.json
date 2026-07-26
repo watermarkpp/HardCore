@@ -1,10 +1,13 @@
 {
-  "schemaVersion": 2,
-  "contractId": "equipment.world_helmet.golden.151.v1",
+  "schemaVersion": 3,
+  "contractId": "equipment.world_helmet.historical_baseline.151.v1",
   "itemId": 151,
   "itemName": "黑铁头盔",
   "visualAssetId": "black_iron_golden_151",
-  "readOnly": true,
+  "readOnly": false,
+  "superseded": true,
+  "runtimeValidationGate": false,
+  "supersededReason": "User rejected the historical direction mapping and placement; only original source atlas hashes remain immutable evidence.",
   "capturedBeforePlayerVisualHelmetV2": true,
   "baselineCommit": "49fa8d38a0f4d3848e16a73533d4f257f37ffca8",
   "stateItemSource": {
@@ -23,6 +26,7 @@
       "idle",
       "walk",
       "attack",
+      "cast",
       "hit",
       "death"
     ],
@@ -37,9 +41,9 @@
       "NW"
     ]
   },
-  "pixelDiffTolerance": 0,
+  "historicalPixelDiffTolerance": 0,
   "compatibilityPivotPolicy": "Per-frame pivot equals the primary same-frame head socket, preserving the immutable full-cell atlas at zero final delta.",
-  "directionRemapChanged": false,
+  "directionRemapChanged": "user_editable_override",
   "assetPixelsChanged": false,
   "actions": {
     "idle": {

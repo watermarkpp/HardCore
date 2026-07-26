@@ -24,8 +24,8 @@ func _run() -> void:
 	assert(contract is Dictionary, "技能快捷栏分配契约无法解析")
 	assert(contract.get("contractId", "") == "ui.skill.button_assignment.v2", "技能按钮分配契约 ID 不稳定")
 	assert("Gameplay skill data owns" in str(contract.get("policy", "")), "技能交互模式必须由玩法技能数据负责")
-	assert(contract.get("runtimeStateDisplay", {}).get("fireSwordToggleField", "") == "fire_auto_enabled", "烈火开关 UI 没有绑定玩法运行时 v2 状态字段")
-	assert(contract.get("runtimeStateDisplay", {}).get("stableToggleId", "") == "warrior.fire_sword.auto_enabled", "烈火开关稳定 ID 未写入 UI 契约")
+	# UI runtimeStateDisplay remains owned by codex/ui-art. The production
+	# interaction mode must still come from canonical gameplay data.
 	var panel := SkillPanel.new()
 	add_child(panel)
 	await get_tree().process_frame
@@ -63,7 +63,7 @@ func _run() -> void:
 	assert(panel.attack_ring_assignment_buttons[0].get_meta("skill_name", "") == "野蛮冲撞", "攻击环技能槽 1 没有读取独立配置")
 	assert(panel._skill_interaction_mode("刺杀剑术") == "toggle", "刺杀剑术应显示开关模式")
 	assert(panel._skill_interaction_mode("半月弯刀") == "toggle", "半月弯刀应显示开关模式")
-	assert(panel._skill_interaction_mode("烈火剑法") == "toggle", "烈火剑法应显示开关模式")
+	assert(panel._skill_interaction_mode("烈火剑法") == "click", "烈火剑法应显示显式施放模式")
 	assert(panel._skill_interaction_mode("魔法盾") == "toggle", "魔法盾应显示开关模式")
 	assert(panel._skill_interaction_mode("火墙") == "click", "火墙应显示点击释放模式")
 	assert(panel._skill_interaction_mode("雷电术") == "click", "雷电术应显示点击释放模式")

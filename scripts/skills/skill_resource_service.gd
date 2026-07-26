@@ -11,6 +11,11 @@ static func quote(
 	var safe_rank := clampi(rank, 0, 3)
 	var mp_costs: Array = definition.get("mp_cost_by_rank", [])
 	var mp_cost := int(mp_costs[safe_rank]) if safe_rank < mp_costs.size() else 0
+	if (
+		str(definition.get("mechanics", {}).get("runtime_family", "")) == "next_melee_charge"
+		and bool(cast_context.get("charge_consumed", false))
+	):
+		mp_cost = 0
 	var resource: Dictionary = definition.get("resource", {})
 	var item: Variant = resource.get("item")
 	var amounts: Array = resource.get("amount_by_rank", [])
