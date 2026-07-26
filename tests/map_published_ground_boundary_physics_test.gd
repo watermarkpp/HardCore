@@ -101,8 +101,10 @@ func _assert_physics_edge(
 	var edge_direction := visual_polygon[1] - visual_polygon[0]
 	var outward := Vector2(edge_direction.y, -edge_direction.x).normalized()
 	var clearance := CollisionGeometry.DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD
-	var padded_outside := visual_edge + outward * (clearance * 0.5)
-	var hard_outside := visual_edge + outward * (clearance + 2.0)
+	var footprint := WorldSpatialRules.actor_footprint_polygon(clearance)
+	var footprint_support := _support(footprint, outward)
+	var padded_outside := visual_edge + outward * (footprint_support * 0.5)
+	var hard_outside := visual_edge + outward * (footprint_support + 2.0)
 	var empty_collision := {"blocked_tiles": []}
 	assert(not CollisionGeometry.runtime_collision_contains_world(
 		empty_collision, visual_edge, design_size
@@ -122,9 +124,7 @@ func _assert_physics_edge(
 	actor.collision_layer = 2
 	actor.collision_mask = 1
 	var actor_shape := CollisionShape2D.new()
-	var circle := CircleShape2D.new()
-	circle.radius = clearance
-	actor_shape.shape = circle
+	actor_shape.shape = WorldSpatialRules.actor_footprint_shape(clearance)
 	actor.add_child(actor_shape)
 	add_child(actor)
 	actor.global_position = visual_edge - outward * (clearance + 4.0)
@@ -137,6 +137,13 @@ func _assert_physics_edge(
 	actor.queue_free()
 	body.queue_free()
 	await get_tree().process_frame
+
+
+func _support(points: PackedVector2Array, normal: Vector2) -> float:
+	var result := 0.0
+	for point: Vector2 in points:
+		result = maxf(result, point.dot(normal))
+	return result
 
 
 func _physics_hits(world_position: Vector2) -> Array[Dictionary]:
