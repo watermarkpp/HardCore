@@ -3,8 +3,9 @@ extends Node
 const PreviewScript := preload("res://scripts/equipment_character_preview.gd")
 
 const STAGE_SIZE := Vector2(232.0, 325.0)
-const VIEWPORT_ORIGIN := Vector2(0.0, -44.0)
-const BASE_HOT := Vector2(7.0, -44.0)
+const VIEWPORT_ORIGIN := Vector2.ZERO
+const BASE_STAGE_POSITION := Vector2(38.0, 52.0)
+const BASE_RECORD_HOT := Vector2(7.0, -44.0)
 const HAIR_HOT := Vector2(87.0, 0.0)
 const DRESS_HOT := Vector2(47.0, 14.0)
 const WEAPON_HOT := Vector2(25.0, -39.0)
@@ -30,7 +31,10 @@ func _run() -> void:
 		PreviewScript.ORIGINAL_CLIENT_STAGE_CONTRACT_ID
 		== "equipment.paper_doll.original_client_stage.v1"
 	)
-	assert(PreviewScript.ORIGINAL_CLIENT_BASE_SCREEN_ORIGIN == Vector2.ZERO)
+	assert(
+		PreviewScript.ORIGINAL_CLIENT_BASE_SCREEN_ORIGIN
+		== BASE_STAGE_POSITION
+	)
 	_assert_draw_order_and_offsets(preview)
 	_assert_aspect_fit_and_inverse_mapping(preview)
 	_assert_immediate_equipment_refresh(preview)
@@ -58,13 +62,10 @@ func _assert_draw_order_and_offsets(preview: EquipmentCharacterPreview) -> void:
 	for command: Dictionary in commands:
 		kinds.append(str(command.get("kind", "")))
 	assert(kinds == PreviewScript.ORIGINAL_CLIENT_DRAW_ORDER)
-	assert(commands[0].stagePosition == BASE_HOT)
+	assert(commands[0].stagePosition == BASE_STAGE_POSITION)
 	assert(
-		is_equal_approx(
-			commands[0].targetRect.position.y,
-			preview.original_stage_rect().position.y
-		),
-		"Prguse376 top edge was clipped instead of honoring viewportOrigin"
+		commands[0].stagePosition != BASE_RECORD_HOT,
+		"Prguse376 incorrectly consumed WIL HotX/HotY instead of its direct-paint stagePosition"
 	)
 	assert(
 		commands[1].stagePosition
@@ -149,8 +150,9 @@ func _fixture_document() -> Dictionary:
 			"sourceIndex": 376,
 			"texture": _solid_texture(Vector2i(168, 199), Color("24170f")),
 			"size": [168, 199],
-			"hotX": BASE_HOT.x,
-			"hotY": BASE_HOT.y,
+			"hotX": BASE_RECORD_HOT.x,
+			"hotY": BASE_RECORD_HOT.y,
+			"stagePosition": [BASE_STAGE_POSITION.x, BASE_STAGE_POSITION.y],
 		},
 		"hair": {
 			"source": "Prguse.wil",

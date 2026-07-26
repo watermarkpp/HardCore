@@ -88,9 +88,10 @@ func _run() -> void:
 	launcher._select_main_profile("warrior_01")
 	await get_tree().process_frame
 	var paper_doll: Control = launcher.get_node("CenteredContent/CharacterPreviewPanel/PreviewStage/PreviewVisualRoot/RuntimePaperDoll")
-	assert(paper_doll.preview_scale >= 1.5, "人物大厅纸娃娃没有按要求放大")
 	assert(not paper_doll.center_on_opaque_bounds, "背包战士偏左修正错误影响了人物选择页坐标")
-	assert(paper_doll.position == Vector2(40, 0), "人物选择页战士预览坐标被背包修正改动")
+	assert(paper_doll.position == Vector2.ZERO, "人物选择页纸娃娃没有从预览容器原点开始适配")
+	assert(paper_doll.size == launcher.preview_visual_root.size, "人物选择页纸娃娃没有按容器等比适配")
+	assert(paper_doll.mouse_filter == Control.MOUSE_FILTER_IGNORE, "人物选择页纸娃娃错误拦截触摸")
 	assert(launcher.profile_cards["warrior_01"].main_button.alignment == HORIZONTAL_ALIGNMENT_CENTER, "角色名称、等级和职业没有在信息框中居中")
 
 	launcher.queue_free()

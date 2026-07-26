@@ -7,7 +7,7 @@ const OPAQUE_CENTER_CONTRACT_ID := "ui.equipment.paper_doll.opaque_center.v1"
 const FOOT_STAGE_ANCHOR_CONTRACT_ID := "ui.equipment.paper_doll.foot_stage_anchor.v2"
 const ORIGINAL_CLIENT_STAGE_CONTRACT_ID := "equipment.paper_doll.original_client_stage.v1"
 const ORIGINAL_CLIENT_DRAW_ORDER := ["base", "hair", "dress", "weapon", "helmet"]
-const ORIGINAL_CLIENT_BASE_SCREEN_ORIGIN := Vector2.ZERO
+const ORIGINAL_CLIENT_BASE_SCREEN_ORIGIN := Vector2(38.0, 52.0)
 const ORIGINAL_CLIENT_EQUIPMENT_SCREEN_ANCHOR := Vector2(31.0, 96.0)
 const BODY_FOOT_CONTACT_FIELD := "footContact"
 const PAPER_DOLL_MANIFEST := "res://assets/data/warrior_paper_doll_sources.json"
@@ -635,7 +635,13 @@ func original_stage_draw_commands() -> Array[Dictionary]:
 	var commands: Array[Dictionary] = []
 	if not _uses_original_client_stage or _base_texture == null:
 		return commands
-	var base_stage_position := _record_hot_offset(_base_record)
+	# Prguse #376 is a direct-paint background record. MirClient places it at
+	# the explicit stage position (38, 52); unlike cached equipment records,
+	# its WIL HotX/HotY are not part of the screen-space formula.
+	var base_stage_position := _vector_from_value(
+		_base_record.get("stagePosition", ORIGINAL_CLIENT_BASE_SCREEN_ORIGIN),
+		ORIGINAL_CLIENT_BASE_SCREEN_ORIGIN
+	)
 	commands.append({
 		"kind": "base",
 		"sourceIndex": int(_base_record.get("sourceIndex", _base_record.get("index", 376))),
