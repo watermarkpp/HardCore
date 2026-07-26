@@ -7,7 +7,7 @@ const Router := preload("res://scripts/skills/skill_runtime_router.gd")
 
 func _ready() -> void:
 	assert(Loader.reload_data().valid)
-	assert(not Router.CANONICAL_PRODUCTION_DEFAULT)
+	assert(Router.CANONICAL_PRODUCTION_DEFAULT)
 	var passive := _execute("warrior.basic_swordsmanship", 3, {"valid_melee_swing": true})
 	assert(passive.accepted and passive.effects[0].value == 9)
 	assert(passive.proficiency_event == "valid_basic_melee_attack_resolved")

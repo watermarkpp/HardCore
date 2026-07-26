@@ -23,7 +23,9 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 		"wizard.hellfire":
 			var hellfire := _damage_effect(definition, request, rng, "line_damage")
 			hellfire["length_tiles"] = int(definition.get("geometry", {}).get("length_tiles", 5))
+			hellfire["width_tiles"] = int(definition.get("geometry", {}).get("width_tiles", 1))
 			hellfire["pierces_units"] = false
+			hellfire["stops_on_terrain"] = bool(definition.get("geometry", {}).get("stops_on_terrain", true))
 			plan.effects = [hellfire]
 			plan.proficiency_event = trigger
 		"wizard.lightning":
@@ -48,6 +50,7 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 			field["width_tiles"] = 2
 			field["height_tiles"] = 2
 			field["tick_interval_ms"] = int(definition.get("timing", {}).get("tick_interval_ms", 1000))
+			field["max_ticks_per_target_per_caster"] = 1
 			field["duration_seconds"] = maxi(
 				1,
 				Formula.get_power(rng, rank, 10) + int(floor(float(primary_stat_roll) / 2.0))
@@ -58,7 +61,9 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 		"wizard.laser":
 			var laser := _damage_effect(definition, request, rng, "piercing_line_damage")
 			laser["length_tiles"] = int(definition.get("geometry", {}).get("length_tiles", 8))
+			laser["width_tiles"] = int(definition.get("geometry", {}).get("width_tiles", 1))
 			laser["pierces_units"] = true
+			laser["stops_on_terrain"] = bool(definition.get("geometry", {}).get("stops_on_terrain", true))
 			plan.effects = [laser]
 			plan.proficiency_event = trigger
 		"wizard.hell_lightning":
@@ -266,13 +271,18 @@ static func _resolve_teleport(
 		return
 	var probability := float(2 * rank + 4) / 11.0
 	var roll_success: bool = (
-		bool(context.get("force_success", false))
-		or int(rng.call("pascal_random_exclusive", 11)) < 2 * rank + 4
+		not bool(context.get("force_failure", false))
+		and (
+			bool(context.get("force_success", false))
+			or int(rng.call("pascal_random_exclusive", 11)) < 2 * rank + 4
+		)
 	)
 	var destination_valid := bool(context.get("destination_valid", true))
 	var moved: bool = roll_success and destination_valid
 	plan.effects = [{
 		"type": "server_random_teleport",
+		"server_authoritative": true,
+		"forward_dash": false,
 		"success_probability": probability,
 		"moved": moved,
 		"destination": context.get("destination_tile") if moved else null,

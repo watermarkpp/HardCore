@@ -1,6 +1,8 @@
 class_name PlayerCharacter
 extends CharacterBody2D
 
+const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
+
 const PlayerVisualScript := preload("res://scripts/player_visual.gd")
 const PlayerHealthBarScript := preload("res://scripts/player_health_bar.gd")
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
@@ -57,11 +59,8 @@ var visual: Node2D
 var health_bar: PlayerHealthBar
 var thrusting_enabled := false
 var half_moon_enabled := false
-# Deprecated compatibility field. HardCore no longer prepares one fire hit.
+# Explicit one-charge presentation state; GameRoot owns expiry and consumption.
 var fire_sword_armed := false
-var fire_sword_auto_enabled := false
-var _fire_sword_ready_at_ms := 0
-var _fire_sword_expires_at_ms := 0
 var _slaying_cycle_remaining := 0
 var _slaying_trigger_point := -1
 var _slaying_cycle_size := 0
@@ -142,7 +141,6 @@ func _physics_process(delta: float) -> void:
 	defense_buff_time = maxf(0.0, defense_buff_time - delta)
 	control_time = maxf(0.0, control_time - delta)
 	_process_potion_restore(delta)
-	_update_warrior_timers()
 	var previous_poison_second := int(ceil(poison_time))
 	poison_time = maxf(0.0, poison_time - delta)
 	if poison_time > 0.0 and int(ceil(poison_time)) < previous_poison_second:
@@ -239,37 +237,48 @@ func request_skill(skill_name: String) -> bool:
 	if _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0 or control_time > 0.0 or _dead:
 		return false
 	var learned_level := PlayerState.effective_skill_level(skill_name)
-	if PlayerState.profession == "战士" and skill_name in ["基本剑术", "攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"]:
+	if PlayerState.profession == "战士" and skill_name in ["基本剑术", "攻杀剑术", "刺杀剑术", "半月弯刀"]:
 		return _request_warrior_state_skill(skill_name, learned_level)
 	if _attack_timer > 0.0:
 		return false
-	var skill_data := GameData.get_skill(skill_name, learned_level)
-	var mana_cost := int(skill_data.get("manaCost", 0)) if not skill_data.is_empty() else 0
+	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
+	var canonical_definition := SkillDataLoaderScript.skill(stable_skill_id)
+	if canonical_definition.is_empty():
+		return false
+	var mp_costs: Array = canonical_definition.get("mp_cost_by_rank", [])
+	var mana_cost := int(mp_costs[clampi(learned_level, 0, 3)]) if not mp_costs.is_empty() else 0
 	if current_mp < mana_cost:
 		return false
-	current_mp -= mana_cost
-	var combat_profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)
-	_attack_timer = float(combat_profile.get("cooldown", 0.78)) / _cast_speed_multiplier
-	var fallback_action_duration := _attack_timer if PlayerState.profession == "战士" else ProfessionRules.CASTER_SPELL_ACTION_DURATION
-	var action_duration := float(combat_profile.get("action_duration", fallback_action_duration))
-	if PlayerState.profession == "战士":
-		action_duration /= _cast_speed_multiplier
+	var canonical_timing: Dictionary = canonical_definition.get("timing", {})
+	var body_cast_ms := int(canonical_timing.get(
+		"body_cast_ms",
+		roundi(ProfessionRules.CASTER_SPELL_ACTION_DURATION * 1000.0)
+	))
+	var cooldown_ms := int(canonical_timing.get(
+		"cooldown_ms",
+		canonical_timing.get("total_action_lock_ms", 780)
+	))
+	var release_ms := int(canonical_timing.get(
+		"effect_resolve_ms_from_cast_start",
+		body_cast_ms
+	))
+	_attack_timer = maxf(0.0, float(cooldown_ms) / 1000.0) / _cast_speed_multiplier
+	var action_duration := maxf(0.0, float(body_cast_ms) / 1000.0)
 	_attack_action_timer = action_duration
 	velocity = Vector2.ZERO
 	movement_input_active = false
 	var action_id := _begin_combat_action("skill:%s" % skill_name)
 	visual.play_action(skill_name if PlayerState.profession == "战士" else "cast", action_duration)
-	var primary := ProfessionRules.primary_damage_range(PlayerState.profession, PlayerState.computed_stats)
-	if primary.x <= 0 and primary.y <= 0:
-		primary = Vector2i(attack_min, attack_max)
-	var damage := WarriorCombatMath.roll_primary_stat(primary.x, primary.y, int(PlayerState.computed_stats.get("luck", 0)), _rng)
-	var critical_chance := float(PlayerState.computed_stats.get("critical_chance", 0.0))
-	if critical_chance > 0.0 and EquipmentRulesScript.critical_succeeds(critical_chance, _rng.randf()):
-		damage = EquipmentRulesScript.critical_damage(damage, float(PlayerState.computed_stats.get("critical_damage_multiplier", 1.5)))
-	_emit_skill_after_windup(skill_name, global_position, facing.normalized(), damage, float(combat_profile.get("windup", 0.0)) / _cast_speed_multiplier, action_id)
+	_emit_skill_after_windup(
+		skill_name,
+		global_position,
+		facing.normalized(),
+		0,
+		maxf(0.0, float(release_ms) / 1000.0),
+		action_id
+	)
 	if _rng.randi_range(1, 30) == 1:
 		PlayerState.damage_equipment_durability("武器")
-	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
 	return true
 
 
@@ -468,18 +477,12 @@ func set_combat_seed(seed_value: int) -> void:
 
 
 func warrior_state_snapshot() -> Dictionary:
-	var now := _combat_time_ms()
 	return {
 		"contract_id": "gameplay.warrior.skill_runtime.v2",
 		"slaying_auto": PlayerState.learned_skills.has("攻杀剑术"),
 		"thrusting": thrusting_enabled,
 		"half_moon": half_moon_enabled,
-		"fire_auto_enabled": fire_sword_auto_enabled,
 		"fire_armed": fire_sword_armed,
-		"fire_ready_at_ms": _fire_sword_ready_at_ms,
-		"fire_expires_at_ms": _fire_sword_expires_at_ms,
-		"fire_ready_remaining_ms": maxi(0, _fire_sword_ready_at_ms - now),
-		"fire_expires_remaining_ms": maxi(0, _fire_sword_expires_at_ms - now) if fire_sword_armed else 0,
 		"slaying_remaining": _slaying_cycle_remaining,
 		"slaying_trigger": _slaying_trigger_point,
 	}
@@ -491,11 +494,11 @@ func warrior_runtime_state_for_save() -> Dictionary:
 		"toggles": {
 			"warrior.thrusting": thrusting_enabled,
 			"warrior.half_moon": half_moon_enabled,
-			"warrior.fire_sword.auto_enabled": fire_sword_auto_enabled,
+			# Read-only legacy compatibility. This value can never be restored
+			# or toggled true under the canonical explicit-charge contract.
+			"warrior.fire_sword.auto_enabled": false,
 		},
-		"cooldowns": {
-			"warrior.fire_sword.ready_remaining_ms": maxi(0, _fire_sword_ready_at_ms - _combat_time_ms()),
-		},
+		"cooldowns": {},
 	}
 
 
@@ -505,12 +508,9 @@ func restore_warrior_runtime_state(saved_state: Dictionary) -> bool:
 	var toggles: Dictionary = saved_state.get("toggles", {})
 	thrusting_enabled = bool(toggles.get("warrior.thrusting", false))
 	half_moon_enabled = bool(toggles.get("warrior.half_moon", false))
-	fire_sword_auto_enabled = bool(toggles.get("warrior.fire_sword.auto_enabled", false))
+	# Legacy fire auto/cooldown fields are intentionally ignored. Fire Sword is
+	# always an explicit cast and an in-flight charge never survives a reload.
 	fire_sword_armed = false
-	_fire_sword_expires_at_ms = 0
-	var cooldowns: Dictionary = saved_state.get("cooldowns", {})
-	var remaining_ms := maxi(0, int(cooldowns.get("warrior.fire_sword.ready_remaining_ms", 0)))
-	_fire_sword_ready_at_ms = _combat_time_ms() + remaining_ms if remaining_ms > 0 else 0
 	return true
 
 
@@ -534,44 +534,14 @@ func _request_warrior_state_skill(skill_name: String, _level: int) -> bool:
 			half_moon_enabled = not half_moon_enabled
 			warrior_skill_state_changed.emit(skill_name, half_moon_enabled, "半月弯刀：%s" % ("开启" if half_moon_enabled else "关闭"))
 			return true
-		"烈火剑法":
-			fire_sword_auto_enabled = not fire_sword_auto_enabled
-			fire_sword_armed = false
-			_fire_sword_expires_at_ms = 0
-			warrior_skill_state_changed.emit(skill_name, fire_sword_auto_enabled, "烈火剑法自动释放：%s" % ("开启" if fire_sword_auto_enabled else "关闭"))
-			return true
 	return false
-
-
-func _update_warrior_timers() -> void:
-	if fire_sword_auto_enabled and (PlayerState.profession != "战士" or not PlayerState.learned_skills.has("烈火剑法")):
-		fire_sword_auto_enabled = false
-		warrior_skill_state_changed.emit("烈火剑法", false, "烈火剑法自动释放已关闭")
 
 
 func _build_warrior_attack_context(has_combat_target := false) -> Dictionary:
 	var context := {"mode": "normal", "skill_name": "attack", "skill_level": 0}
 	if PlayerState.profession != "战士":
 		return context
-	_update_warrior_timers()
-	if fire_sword_auto_enabled and has_combat_target and PlayerState.learned_skills.has("烈火剑法"):
-		var now := _combat_time_ms()
-		var learned_level := PlayerState.effective_skill_level("烈火剑法")
-		var skill_data := GameData.get_skill("烈火剑法", learned_level)
-		var mana_cost := maxi(0, int(skill_data.get("manaCost", 7))) if not skill_data.is_empty() else 7
-		if now >= _fire_sword_ready_at_ms and current_mp >= mana_cost:
-			current_mp -= mana_cost
-			var profile := ProfessionRules.skill_combat_profile("烈火剑法", learned_level)
-			var cooldown_ms := int(round(float(profile.get("auto_release_cooldown", profile.get("service_arm_cooldown", 10.0))) * 1000.0))
-			_fire_sword_ready_at_ms = now + maxi(0, cooldown_ms)
-			resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
-			warrior_skill_state_changed.emit("烈火剑法", true, "烈火剑法自动释放")
-			return {"mode": "fire", "skill_name": "烈火剑法", "skill_level": learned_level}
-	if _next_slaying_proc():
-		return {"mode": "slaying", "skill_name": "攻杀剑术", "skill_level": PlayerState.effective_skill_level("攻杀剑术")}
-	if half_moon_enabled and PlayerState.learned_skills.has("半月弯刀") and current_mp >= 3:
-		current_mp -= 3
-		resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
+	if half_moon_enabled and PlayerState.learned_skills.has("半月弯刀"):
 		return {"mode": "half_moon", "skill_name": "半月弯刀", "skill_level": PlayerState.effective_skill_level("半月弯刀")}
 	if thrusting_enabled and PlayerState.learned_skills.has("刺杀剑术"):
 		return {"mode": "thrust", "skill_name": "刺杀剑术", "skill_level": PlayerState.effective_skill_level("刺杀剑术")}

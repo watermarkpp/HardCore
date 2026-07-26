@@ -13,7 +13,7 @@ const WizardRuntimeScript := preload("res://scripts/skills/runtimes/wizard_skill
 const TaoistRuntimeScript := preload("res://scripts/skills/runtimes/taoist_skill_runtime.gd")
 
 const RUNTIME_CONTRACT_ID := "skills.runtime_router.cn_mir2_176.v1"
-const CANONICAL_PRODUCTION_DEFAULT := false
+const CANONICAL_PRODUCTION_DEFAULT := true
 
 
 static func execute(request: Variant) -> Dictionary:

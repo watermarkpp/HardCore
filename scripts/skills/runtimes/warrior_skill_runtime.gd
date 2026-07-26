@@ -21,11 +21,18 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 				plan.proficiency_event = trigger
 		"warrior.slaying_swordsmanship":
 			var probabilities: Array = mechanics.get("proc_chance_by_rank", [0.1, 0.125, 1.0 / 6.0, 0.25])
-			var proc: bool = bool(context.get("force_proc", false)) or bool(rng.call("chance", float(probabilities[rank])))
+			var proc: bool = (
+				not bool(context.get("force_no_proc", false))
+				and (
+					bool(context.get("force_proc", false))
+					or bool(rng.call("chance", float(probabilities[rank])))
+				)
+			)
 			plan.effect_success = proc
 			plan.effects = [{
 				"type": "melee_proc_modifier",
 				"proc": proc,
+				"success_probability": float(probabilities[rank]),
 				"flat_dc_bonus": int(mechanics.get("flat_dc_bonus_by_rank", [5, 6, 7, 8])[rank]),
 				"flat_accuracy_bonus": int(mechanics.get("flat_accuracy_bonus_by_rank", [0, 1, 2, 3])[rank]),
 				"defence_type": "AC",
@@ -70,7 +77,13 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 				0.0,
 				1.0
 			)
-			var roll_success: bool = bool(context.get("force_success", false)) or bool(rng.call("chance", probability))
+			var roll_success: bool = (
+				not bool(context.get("force_failure", false))
+				and (
+					bool(context.get("force_success", false))
+					or bool(rng.call("chance", probability))
+				)
+			)
 			var path_blocked := bool(context.get("path_blocked_after_start", false))
 			var displaced: bool = roll_success and not path_blocked
 			plan.effect_success = displaced
