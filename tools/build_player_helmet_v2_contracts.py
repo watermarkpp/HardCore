@@ -45,13 +45,14 @@ def rounded_point(values: list[float]) -> list[int]:
     ]
 
 
-def source_frames() -> dict[str, dict[str, list[dict]]]:
-    manifest = read_json(SOURCE_MANIFEST)
-    elf = manifest["visualIdentities"]["elf"]
+def identity_frames(
+    manifest: dict, identity_id: str
+) -> dict[str, dict[str, list[dict]]]:
+    identity = manifest["visualIdentities"][identity_id]
     result: dict[str, dict[str, list[dict]]] = {}
     for action, frame_count in HELMET_ACTIONS.items():
         by_direction = {direction: [] for direction in DIRECTIONS}
-        for frame in elf["actions"][action]["frames"]:
+        for frame in identity["actions"][action]["frames"]:
             direction = frame["direction"]
             if direction not in by_direction:
                 continue
@@ -61,6 +62,10 @@ def source_frames() -> dict[str, dict[str, list[dict]]]:
             assert len(by_direction[direction]) == frame_count
         result[action] = by_direction
     return result
+
+
+def source_frames() -> dict[str, dict[str, list[dict]]]:
+    return identity_frames(read_json(SOURCE_MANIFEST), "elf")
 
 
 def build_head_sockets(frames: dict[str, dict[str, list[dict]]]) -> dict:
@@ -226,12 +231,9 @@ def direction_record(
 
 
 def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
+    manifest = read_json(SOURCE_MANIFEST)
     elf_paths = {
         action: f"res://assets/art/items/client/world_wear/helmet/male/elf_helmet_{action}.png"
-        for action in HELMET_ACTIONS
-    }
-    black_paths = {
-        action: f"res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_{action}.png"
         for action in HELMET_ACTIONS
     }
     # User-calibrated source semantics. Row 3 is the only unused duplicate
@@ -247,7 +249,6 @@ def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
         "N": 4, "NE": 3, "E": 2, "SE": 1,
         "S": 0, "SW": 7, "W": 6, "NW": 5,
     }
-    black_map = {direction: row for row, direction in enumerate(DIRECTIONS)}
     opening = {
         "N": "none",
         "NE": "partial",
@@ -259,7 +260,6 @@ def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
         "NW": "partial",
     }
     elf_directions: dict[str, dict] = {}
-    black_directions: dict[str, dict] = {}
     for direction in DIRECTIONS:
         source_direction = DIRECTIONS[elf_pivot_compat_map[direction]]
         elf_directions[direction] = direction_record(
@@ -272,20 +272,172 @@ def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
             opening[direction],
             True,
         )
-        black_record = direction_record(
-            direction,
-            black_map[direction],
-            black_paths,
-            pivots_for_source_direction(frames, direction),
-            "half_open",
-            "hide",
-            opening[direction],
-            False,
-        )
-        black_record.pop("source_direction")
-        black_record["source_slot_id"] = f"slot_{black_map[direction]}"
-        black_record["status"] = "unassigned"
-        black_directions[direction] = black_record
+
+    item_specs = {
+        int(item_id): item
+        for item_id, item in manifest["itemsById"].items()
+    }
+    asset_id_by_identity = {
+        "elf": "elf_146",
+        "black_iron": "black_iron_golden_151",
+    }
+    item_visual_asset_refs: dict[str, str] = {}
+    grouped_item_ids: dict[str, list[int]] = {}
+    for item_id, item in sorted(item_specs.items()):
+        identity_id = item["identityId"]
+        asset_id = asset_id_by_identity.get(identity_id, identity_id)
+        item_visual_asset_refs[str(item_id)] = asset_id
+        grouped_item_ids.setdefault(asset_id, []).append(item_id)
+
+    visual_assets: dict[str, dict] = {
+        "elf_146": {
+            "visual_asset_id": "elf_146",
+            "pilotItemId": 146,
+            "calibrationItemId": 146,
+            "calibrationScope": "all_helmet_editor",
+            "player_visual_id": "player.male.cloth_002",
+            "source": {
+                "lane": "helmet_world_visuals",
+                "tier": "primary",
+                "distribution": "research.mir2_client_raw",
+                "path": (
+                    "res://assets/art/items/client/world_wear/helmet/male/"
+                    "source/elf_helmet_8dir.png"
+                ),
+                "acceptanceEvidence": (
+                    "res://assets/art/items/client/world_wear/helmet/male/"
+                    "acceptance/elf_direction_mapping.png"
+                ),
+                "poseEvidence": "res://assets/data/equipment_male_world_helmet.json",
+            },
+            "source_direction_map": elf_source_map,
+            "bakedSourceOverrides": {
+                "recipeId": "elf_146.user_authorized_nw_mirror.v1",
+                "runtimeFlip": False,
+                "rows": {
+                    "3": {
+                        "direction": "NW",
+                        "sourceRow": 5,
+                        "sourceDirection": "NE",
+                        "operation": "horizontal_mirror",
+                        "alignment": "source_pivot_to_target_pivot",
+                        "authorization": "user_explicit_2026-07-26",
+                    }
+                },
+            },
+            "directions": elf_directions,
+        },
+    }
+
+    for asset_id, item_ids in grouped_item_ids.items():
+        if asset_id == "elf_146":
+            continue
+        identity_id = item_specs[item_ids[0]]["identityId"]
+        identity = manifest["visualIdentities"][identity_id]
+        identity_action_paths = {
+            action: identity["actions"][action]["path"]
+            for action in HELMET_ACTIONS
+        }
+        source_order = identity["sourceSlotDirectionOrder"]
+        assert sorted(source_order) == sorted(DIRECTIONS)
+        source_map = {
+            direction: source_order.index(direction)
+            for direction in DIRECTIONS
+        }
+        identity_frame_map = identity_frames(manifest, identity_id)
+        directions: dict[str, dict] = {}
+        for direction in DIRECTIONS:
+            record = direction_record(
+                direction,
+                source_map[direction],
+                identity_action_paths,
+                pivots_for_source_direction(identity_frame_map, direction),
+                "half_open" if identity_id == "black_iron" else "open_crown",
+                "hide" if identity_id == "black_iron" else "keep",
+                opening[direction],
+                False,
+            )
+            record["status"] = "unassigned"
+            if identity_id == "black_iron":
+                # The user assigns opaque source slots by sight.
+                record.pop("source_direction")
+            directions[direction] = record
+        asset = {
+            "visual_asset_id": asset_id,
+            "itemIds": item_ids,
+            "calibrationItemId": item_ids[0],
+            "player_visual_id": "player.male.cloth_002",
+            "editableSourceSlots": True,
+            "sourceSlotSemantics": (
+                "unknown_user_assigned"
+                if identity_id == "black_iron"
+                else "formal_manifest_direction_order"
+            ),
+            "sourceSlots": {f"slot_{row}": row for row in range(8)},
+            "source": {
+                "lane": "helmet_world_visuals",
+                "tier": "primary",
+                "distribution": "research.mir2_client_raw",
+                "identityId": identity_id,
+                "stateItemIndex": int(identity["sourceIndex"]),
+                "manifest": "res://assets/data/equipment_male_world_helmet.json",
+                "sourceSlotDirectionOrder": source_order,
+                "actions": {
+                    action: {
+                        "path": path,
+                        "sha256": sha256(ROOT / path.removeprefix("res://")),
+                    }
+                    for action, path in identity_action_paths.items()
+                },
+                "pixelPolicy": "immutable_primary_source_runtime_atlas",
+            },
+            "directions": directions,
+        }
+        if identity_id != "black_iron":
+            asset["source_direction_map"] = source_map
+        else:
+            asset.update({
+                "itemId": 151,
+                "readOnlyGoldenReference": False,
+                "historicalGoldenReferenceSuperseded": (
+                    "res://assets/data/equipment_helmet_151_golden_reference.json"
+                ),
+                "bakedSourceOverrides": {
+                    "recipeId": (
+                        "black_iron_151.user_authorized_missing_ne_nw_mirrors.v1"
+                    ),
+                    "runtimeFlip": False,
+                    "rows": {
+                        "3": {
+                            "direction": "missing_diagonal_slot_3",
+                            "sourceRow": 2,
+                            "operation": "horizontal_mirror",
+                            "alignment": "source_pivot_to_target_pivot",
+                            "authorization": "user_explicit_2026-07-26",
+                        },
+                        "7": {
+                            "direction": "missing_diagonal_slot_7",
+                            "sourceRow": 6,
+                            "operation": "horizontal_mirror",
+                            "alignment": "source_pivot_to_target_pivot",
+                            "authorization": "user_explicit_2026-07-26",
+                        },
+                    },
+                },
+            })
+        visual_assets[asset_id] = asset
+
+    calibration_items = []
+    for asset_id, item_ids in grouped_item_ids.items():
+        names = [item_specs[item_id]["itemName"] for item_id in item_ids]
+        calibration_items.append({
+            "calibrationItemId": item_ids[0],
+            "itemIds": item_ids,
+            "displayName": " / ".join(names),
+            "visualAssetId": asset_id,
+        })
+    calibration_items.sort(key=lambda item: int(item["calibrationItemId"]))
+
     return {
         "schemaVersion": 3,
         "contractId": "equipment.world_helmet.player_visual_v2",
@@ -326,85 +478,17 @@ def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
         },
         "headSocketDatabase": "res://assets/data/player_head_socket_db.json",
         "calibrationOverride": f"res://assets/data/{OVERRIDE_NAME}",
-        "itemVisualAssetRefs": {
-            "146": "elf_146",
-            "147": "bronze_magic",
-            "148": "bronze_magic",
-            "151": "black_iron_golden_151",
-        },
-        "visualAssets": {
-            "elf_146": {
-                "visual_asset_id": "elf_146",
-                "pilotItemId": 146,
-                "calibrationScope": "item_146_only",
-                "player_visual_id": "player.male.cloth_002",
-                "source": {
-                    "lane": "helmet_world_visuals",
-                    "tier": "primary",
-                    "distribution": "research.mir2_client_raw",
-                    "path": (
-                        "res://assets/art/items/client/world_wear/helmet/male/"
-                        "source/elf_helmet_8dir.png"
-                    ),
-                    "acceptanceEvidence": (
-                        "res://assets/art/items/client/world_wear/helmet/male/"
-                        "acceptance/elf_direction_mapping.png"
-                    ),
-                    "poseEvidence": "res://assets/data/equipment_male_world_helmet.json",
-                },
-                "source_direction_map": elf_source_map,
-                "bakedSourceOverrides": {
-                    "recipeId": "elf_146.user_authorized_nw_mirror.v1",
-                    "runtimeFlip": False,
-                    "rows": {
-                        "3": {
-                            "direction": "NW",
-                            "sourceRow": 5,
-                            "sourceDirection": "NE",
-                            "operation": "horizontal_mirror",
-                            "alignment": "source_pivot_to_target_pivot",
-                            "authorization": "user_explicit_2026-07-26",
-                        }
-                    },
-                },
-                "directions": elf_directions,
-            },
-            "black_iron_golden_151": {
-                "visual_asset_id": "black_iron_golden_151",
-                "itemId": 151,
-                "readOnlyGoldenReference": False,
-                "editableSourceSlots": True,
-                "sourceSlotSemantics": "unknown_user_assigned",
-                "historicalGoldenReferenceSuperseded": (
-                    "res://assets/data/equipment_helmet_151_golden_reference.json"
-                ),
-                "sourceSlots": {f"slot_{row}": row for row in range(8)},
-                "source": {
-                    "lane": "helmet_world_visuals",
-                    "tier": "primary",
-                    "distribution": "research.mir2_client_raw",
-                    "stateItemIndex": 344,
-                    "actions": {
-                        action: {
-                            "path": path,
-                            "sha256": sha256(
-                                ROOT / path.removeprefix("res://")
-                            ),
-                        }
-                        for action, path in black_paths.items()
-                    },
-                    "pixelPolicy": "immutable_original_no_repaint_no_recolor",
-                },
-                "directions": black_directions,
-            },
-        },
+        "calibrationItems": calibration_items,
+        "itemVisualAssetRefs": item_visual_asset_refs,
+        "visualAssets": visual_assets,
         "sharedVisualAssets": {
             "bronze_magic": {
                 "visual_asset_id": "bronze_magic",
                 "itemIds": [147, 148],
+                "calibrationItemId": 147,
                 "singleCalibrationRecordRequired": True,
-                "status": "not_in_146_pilot_scope",
-            }
+                "status": "loaded_in_calibration_tool",
+            },
         },
     }
 
@@ -550,7 +634,8 @@ def main() -> None:
     write_json("equipment_helmet_v2_audit.json", build_audit())
     print(
         "BUILD_PLAYER_HELMET_V2_CONTRACTS_PASS "
-        "sockets=232 editable=146,151 directions=8 primary_hair=true cast=true"
+        "sockets=232 calibration_assets=11 item_ids=12 "
+        "directions=8 primary_hair=true cast=true"
     )
 
 

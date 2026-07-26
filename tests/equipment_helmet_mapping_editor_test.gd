@@ -136,6 +136,22 @@ func _run() -> void:
 	) as Button
 	assert(save_all.text == "保存全部改动")
 	assert(save_all.focus_mode == Control.FOCUS_NONE)
+	var expected_calibration_items := [
+		146, 147, 149, 150, 151, 218, 224, 228, 232, 236, 240,
+	]
+	assert(item_menu.item_count == expected_calibration_items.size())
+	for item_index: int in item_menu.item_count:
+		assert(
+			int(item_menu.get_item_id(item_index))
+			== expected_calibration_items[item_index]
+		)
+		editor.select_item(expected_calibration_items[item_index])
+		editor._configure_runtime("idle", 0, 0)
+		var helmet_layer := editor._visual.get_node(
+			"ClientHelmetLayer"
+		) as Sprite2D
+		assert(helmet_layer.texture != null)
+	editor.select_item(146)
 	var menu_state_before := {
 		"item": item_menu.selected,
 		"action": action_menu.selected,
@@ -513,12 +529,48 @@ func _run() -> void:
 			in str((source_button.get_node("Label") as Label).text)
 		)
 		assert(_has_opaque_pixel(editor.source_row_thumbnail(source_row)))
+	var black_recipe: Dictionary = HelmetVisualV2.visual_asset_for_item(151).get(
+		"bakedSourceOverrides", {}
+	)
+	assert(str(black_recipe.get("recipeId", "")) == (
+		"black_iron_151.user_authorized_missing_ne_nw_mirrors.v1"
+	))
+	assert(not bool(black_recipe.get("runtimeFlip", true)))
+	var black_raw_idle := (load(
+		HelmetVisualV2.base_action_texture_path(
+			151, "idle", 0, "helmet_front"
+		)
+	) as Texture2D).get_image()
+	var raw_black_row_2 := black_raw_idle.get_region(Rect2i(
+		0, 2 * ArtSpec.WARRIOR_FRAME.y,
+		ArtSpec.WARRIOR_FRAME.x, ArtSpec.WARRIOR_FRAME.y
+	))
+	var raw_black_row_6 := black_raw_idle.get_region(Rect2i(
+		0, 6 * ArtSpec.WARRIOR_FRAME.y,
+		ArtSpec.WARRIOR_FRAME.x, ArtSpec.WARRIOR_FRAME.y
+	))
+	assert(
+		editor.calibration_source_cell("idle", 3, 0).get_data()
+		== editor.mirror_cell_between_pivots(
+			raw_black_row_2,
+			HelmetVisualV2.pivot_for_source_row(151, "idle", 2, 0),
+			HelmetVisualV2.pivot_for_source_row(151, "idle", 3, 0)
+		).get_data()
+	)
+	assert(
+		editor.calibration_source_cell("idle", 7, 0).get_data()
+		== editor.mirror_cell_between_pivots(
+			raw_black_row_6,
+			HelmetVisualV2.pivot_for_source_row(151, "idle", 6, 0),
+			HelmetVisualV2.pivot_for_source_row(151, "idle", 7, 0)
+		).get_data()
+	)
 	assert(editor.set_uniform_scale_percent(110))
 	target_ne.emit_signal("pressed")
-	(source_grid.get_node("Source_Row3") as TextureButton).emit_signal("pressed")
+	(source_grid.get_node("Source_Row0") as TextureButton).emit_signal("pressed")
 	assert(editor.nudge_current(Vector2i.LEFT))
 	assert(
-		"人物目标 NE <- 黑铁原始源槽 3"
+		"人物目标 NE <- 黑铁原始源槽 0"
 		in str(editor.get_node(
 			"CalibrationUI/Panel/VBox/MappingStatus/Mapping"
 		).text)
@@ -528,12 +580,12 @@ func _run() -> void:
 		if direction_index == 1:
 			continue
 		editor.select_target_direction(direction_index)
-		assert(editor.map_source_row_to_current_target((direction_index + 3) % 8))
+		var source_row := HelmetVisualV2.source_direction_row(
+			151, direction_index
+		)
+		assert(editor.map_source_row_to_current_target(source_row))
 		assert(editor.save_current_direction())
-	# Reusing source slot 3 is a visible warning, never a save blocker.
-	editor.select_target_direction(0)
-	assert(editor.map_source_row_to_current_target(3))
-	assert(editor.save_current_direction())
+	# Reusing source slot 0 is a visible warning, never a save blocker.
 	assert("警告" in str(editor.get_node(
 		"CalibrationUI/Panel/VBox/MappingStatus/State"
 	).text))
@@ -552,8 +604,8 @@ func _run() -> void:
 	editor.reload_formal_data()
 	assert(HelmetVisualV2.uniform_scale_percent(151) == 110)
 	var saved_151_ne := HelmetVisualV2.direction_record(151, 1)
-	assert(int(saved_151_ne.get("source_row", -1)) == 3)
-	assert(str(saved_151_ne.get("source_slot_id", "")) == "slot_3")
+	assert(int(saved_151_ne.get("source_row", -1)) == 0)
+	assert(str(saved_151_ne.get("source_slot_id", "")) == "slot_0")
 	assert(_vector(saved_151_ne.get("nudge", [])) == Vector2i.LEFT)
 	var trace_151 := _json(
 		"%s/helmet_151_generated_all_actions_trace.json" % OUTPUT_ROOT

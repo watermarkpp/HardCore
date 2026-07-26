@@ -47,7 +47,7 @@ var _editor_initialized := false
 var _target_buttons: Array[TextureButton] = []
 var _source_buttons: Array[TextureButton] = []
 var _dirty_directions: Dictionary = {}
-var _dirty_scale := false
+var _dirty_scales: Dictionary = {}
 var _updating_ui := false
 var _interactive_requested := false
 var _initialization_error := ""
@@ -88,7 +88,8 @@ func _run() -> void:
 	)
 	print(
 		"HELMET_CALIBRATION_TOOL_PASS "
-		+ "items=146,151 sockets=232 directions=8 cast=true source_pixels_frozen=true"
+		+ "calibration_assets=11 item_ids=12 sockets=232 "
+		+ "directions=8 cast=true source_pixels_frozen=true"
 	)
 	dispose_runtime_for_test()
 	_request_exit(0)
@@ -324,8 +325,23 @@ func _setup_ui() -> void:
 	var action_control := get_node("CalibrationUI/Panel/VBox/Inputs/Action") as OptionButton
 	var direction_control := get_node("CalibrationUI/Panel/VBox/Inputs/Direction") as OptionButton
 	var zoom_control := get_node("CalibrationUI/Panel/VBox/Inputs/Zoom") as OptionButton
-	item_control.add_item("146 精灵头盔", 146)
-	item_control.add_item("151 黑铁头盔（原始源槽 / 可编辑）", 151)
+	for item: Variant in HelmetVisualV2.calibration_items():
+		if not item is Dictionary:
+			continue
+		var calibration_item_id := int(item.get("calibrationItemId", -1))
+		var item_ids: Variant = item.get("itemIds", [])
+		var id_labels: PackedStringArray = []
+		if item_ids is Array:
+			for value: Variant in item_ids:
+				id_labels.append(str(int(value)))
+		var id_label := "/".join(id_labels)
+		var label := "%s %s" % [
+			id_label,
+			str(item.get("displayName", "")),
+		]
+		if item_ids is Array and item_ids.size() > 1:
+			label += "（共用）"
+		item_control.add_item(label, calibration_item_id)
 	for action: String in ACTIONS:
 		action_control.add_item(action)
 	for direction: String in DIRECTIONS:
@@ -505,10 +521,14 @@ func _direction_texture_button(
 
 
 func select_item(item_id: int) -> void:
-	assert(item_id in [146, 151])
+	var calibration_item_ids: Array[int] = []
+	for item: Variant in HelmetVisualV2.calibration_items():
+		if item is Dictionary:
+			calibration_item_ids.append(int(item.get("calibrationItemId", -1)))
+	assert(item_id in calibration_item_ids)
 	current_item_id = item_id
 	if _visual != null:
-		var item_name := "精灵头盔" if item_id == 146 else "黑铁头盔"
+		var item_name := _calibration_item_display_name(item_id)
 		PlayerState.equipment["头盔"] = {
 			"item_id": item_id,
 			"name": item_name,
@@ -516,6 +536,24 @@ func select_item(item_id: int) -> void:
 		}
 		_visual._refresh_equipment_visuals()
 	_refresh_mapping_editor_ui()
+
+
+func _calibration_item_display_name(item_id: int) -> String:
+	for item: Variant in HelmetVisualV2.calibration_items():
+		if item is Dictionary and int(item.get("calibrationItemId", -1)) == item_id:
+			return str(item.get("displayName", "Helmet %d" % item_id))
+	return "Helmet %d" % item_id
+
+
+func _direction_dirty_key(item_id: int, direction_index: int) -> String:
+	return "%d:%s" % [
+		HelmetVisualV2.calibration_item_id_for_item(item_id),
+		DIRECTIONS[direction_index],
+	]
+
+
+func _scale_dirty_key(item_id: int) -> String:
+	return HelmetVisualV2.visual_asset_id_for_item(item_id)
 
 
 func select_action(action: String) -> void:
@@ -557,7 +595,7 @@ func set_uniform_scale_percent(percent: int) -> bool:
 		current_item_id, safe_percent
 	):
 		return false
-	_dirty_scale = true
+	_dirty_scales[_scale_dirty_key(current_item_id)] = true
 	_refresh_mapping_editor_ui()
 	return true
 
@@ -589,7 +627,9 @@ func nudge_current(delta: Vector2i) -> bool:
 		{"nudge": [int(nudge_value[0]) + delta.x, int(nudge_value[1]) + delta.y]}
 	)
 	if changed:
-		_dirty_directions[DIRECTIONS[current_direction]] = true
+		_dirty_directions[
+			_direction_dirty_key(current_item_id, current_direction)
+		] = true
 	return changed
 
 
@@ -617,7 +657,9 @@ func map_source_row_to_current_target(source_row: int) -> bool:
 		fields
 	)
 	if changed:
-		_dirty_directions[DIRECTIONS[current_direction]] = true
+		_dirty_directions[
+			_direction_dirty_key(current_item_id, current_direction)
+		] = true
 		_refresh_mapping_editor_ui()
 	return changed
 
@@ -626,14 +668,16 @@ func undo_current_direction() -> void:
 	HelmetVisualV2.clear_session_calibration_override(
 		current_item_id, current_direction
 	)
-	_dirty_directions.erase(DIRECTIONS[current_direction])
+	_dirty_directions.erase(
+		_direction_dirty_key(current_item_id, current_direction)
+	)
 	_refresh_mapping_editor_ui()
 
 
 func reload_formal_data() -> void:
 	HelmetVisualV2.reload_data()
 	_dirty_directions.clear()
-	_dirty_scale = false
+	_dirty_scales.clear()
 	if _visual != null:
 		_visual._refresh_equipment_visuals()
 	_refresh_mapping_editor_ui()
@@ -672,7 +716,9 @@ func save_all_changes() -> bool:
 		return false
 	var pending: Array[int] = []
 	for direction_index: int in DIRECTIONS.size():
-		if _dirty_directions.has(DIRECTIONS[direction_index]):
+		if _dirty_directions.has(
+			_direction_dirty_key(current_item_id, direction_index)
+		):
 			pending.append(direction_index)
 	for direction_index: int in pending:
 		if not _persist_direction(direction_index):
@@ -721,7 +767,9 @@ func _persist_direction(direction_index: int) -> bool:
 	HelmetVisualV2.clear_session_calibration_override(
 		current_item_id, direction_index
 	)
-	_dirty_directions.erase(direction)
+	_dirty_directions.erase(
+		_direction_dirty_key(current_item_id, direction_index)
+	)
 	return true
 
 
@@ -838,7 +886,7 @@ func _bake_and_persist_uniform_scale() -> bool:
 		_source_recipe_id()
 	):
 		return false
-	_dirty_scale = false
+	_dirty_scales.erase(_scale_dirty_key(current_item_id))
 	if _visual != null:
 		_visual._refresh_equipment_visuals()
 	return true
@@ -846,7 +894,7 @@ func _bake_and_persist_uniform_scale() -> bool:
 
 func _scale_bake_required(asset_override: Dictionary) -> bool:
 	return (
-		_dirty_scale
+		_dirty_scales.has(_scale_dirty_key(current_item_id))
 		or not asset_override.has("uniform_scale_percent")
 		or not asset_override.has("derivedAtlases")
 		or str(asset_override.get("bakePolicy", {}).get(
@@ -950,7 +998,7 @@ func generate_all_actions_from_idle() -> bool:
 		current_item_id, percent
 	):
 		return false
-	_dirty_scale = true
+	_dirty_scales[_scale_dirty_key(current_item_id)] = true
 	if not _bake_and_persist_uniform_scale():
 		return false
 	var trace_records: Array[Dictionary] = []
@@ -1001,7 +1049,9 @@ func generate_all_actions_from_idle() -> bool:
 					ArtSpec.WARRIOR_FRAME.y
 				)
 				var source_nonempty := _image_has_opaque_pixel(
-					source_image.get_region(cell_rect)
+					calibration_source_cell(
+						action, source_row, frame_index
+					)
 				)
 				var derived_nonempty := _image_has_opaque_pixel(
 					derived_image.get_region(cell_rect)
@@ -1014,8 +1064,7 @@ func generate_all_actions_from_idle() -> bool:
 				)
 				var final_position := socket - pivot + nudge
 				var frame_ok: bool = (
-					source_nonempty
-					and derived_nonempty
+					source_nonempty == derived_nonempty
 					and socket != Vector2i.ZERO
 					and pivot != Vector2i.ZERO
 					and record.get("runtime_scale", []) == [1.0, 1.0]
@@ -1128,7 +1177,9 @@ func lock_current_direction() -> bool:
 		return false
 	record = HelmetVisualV2.direction_record(current_item_id, current_direction)
 	_session_unlocked.erase(DIRECTIONS[current_direction])
-	_dirty_directions[DIRECTIONS[current_direction]] = true
+	_dirty_directions[
+		_direction_dirty_key(current_item_id, current_direction)
+	] = true
 	return save_current_direction()
 
 
@@ -1297,6 +1348,10 @@ func _draw_overlay_rect(
 func _refresh_mapping_editor_ui() -> void:
 	if not _editor_initialized or _visual == null:
 		return
+	get_node("CalibrationUI/Panel/VBox/Title").text = (
+		"PlayerVisual Helmet V2 — Item %d %s"
+		% [current_item_id, _calibration_item_display_name(current_item_id)]
+	)
 	var read_only := HelmetVisualV2.is_read_only(current_item_id)
 	var direction := str(DIRECTIONS[current_direction])
 	var record := HelmetVisualV2.direction_record(
@@ -1328,14 +1383,17 @@ func _refresh_mapping_editor_ui() -> void:
 			HelmetVisualV2.uniform_scale_percent(current_item_id),
 		]
 	)
-	var direction_dirty := bool(_dirty_directions.get(direction, false))
+	var direction_dirty := _dirty_directions.has(
+		_direction_dirty_key(current_item_id, current_direction)
+	)
+	var scale_dirty := _dirty_scales.has(_scale_dirty_key(current_item_id))
 	var state_text := ""
 	if read_only:
 		state_text = "READ ONLY"
 	else:
 		state_text = "%s / %s" % [
 			"LOCKED" if bool(record.get("locked", false)) else "UNLOCKED",
-			"DIRTY" if direction_dirty or _dirty_scale else "CLEAN",
+			"DIRTY" if direction_dirty or scale_dirty else "CLEAN",
 		]
 		if not _duplicate_saved_source_rows(current_item_id).is_empty():
 			state_text += " / 警告：多个人物方向使用同一源槽"
@@ -1351,7 +1409,10 @@ func _refresh_mapping_editor_ui() -> void:
 	var item_control := get_node(
 		"CalibrationUI/Panel/VBox/Inputs/Item"
 	) as OptionButton
-	item_control.select(0 if current_item_id == 146 else 1)
+	for item_index: int in item_control.item_count:
+		if int(item_control.get_item_id(item_index)) == current_item_id:
+			item_control.select(item_index)
+			break
 	_updating_ui = false
 	for direction_index: int in _target_buttons.size():
 		var target_button := _target_buttons[direction_index]

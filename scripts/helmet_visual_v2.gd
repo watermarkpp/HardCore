@@ -82,6 +82,16 @@ static func visual_asset_id_for_item(item_id: int) -> String:
 	return str(contract().get("itemVisualAssetRefs", {}).get(str(item_id), ""))
 
 
+static func calibration_items() -> Array:
+	var items: Variant = contract().get("calibrationItems", [])
+	return items if items is Array else []
+
+
+static func calibration_item_id_for_item(item_id: int) -> int:
+	var asset := visual_asset_for_item(item_id)
+	return int(asset.get("calibrationItemId", item_id))
+
+
 static func visual_asset_override_for_item(item_id: int) -> Dictionary:
 	var asset_id := visual_asset_id_for_item(item_id)
 	var merged: Dictionary = calibration_overrides().get(
@@ -103,12 +113,13 @@ static func direction_record(item_id: int, direction_row: int) -> Dictionary:
 	if not record is Dictionary:
 		return {}
 	var merged: Dictionary = record.duplicate(true)
+	var calibration_item_id := calibration_item_id_for_item(item_id)
 	var override: Variant = calibration_overrides().get("itemOverrides", {}).get(
-		str(item_id), {}
+		str(calibration_item_id), {}
 	).get("directions", {}).get(canonical_direction(direction_row), {})
 	if override is Dictionary:
 		merged.merge(override, true)
-	var session: Variant = _session_overrides.get(str(item_id), {}).get(
+	var session: Variant = _session_overrides.get(str(calibration_item_id), {}).get(
 		canonical_direction(direction_row), {}
 	)
 	if session is Dictionary:
@@ -173,9 +184,10 @@ static func saved_direction_override(
 	item_id: int,
 	direction_row: int
 ) -> Dictionary:
+	var calibration_item_id := calibration_item_id_for_item(item_id)
 	var saved: Variant = calibration_overrides().get(
 		"itemOverrides", {}
-	).get(str(item_id), {}).get("directions", {}).get(
+	).get(str(calibration_item_id), {}).get("directions", {}).get(
 		canonical_direction(direction_row), {}
 	)
 	return saved if saved is Dictionary else {}
@@ -420,14 +432,15 @@ static func persist_calibration_override(
 			"runtimeReadable": true,
 			"itemOverrides": {},
 		}
+	var calibration_item_id := calibration_item_id_for_item(item_id)
 	var items: Dictionary = data.get("itemOverrides", {})
-	var item: Dictionary = items.get(str(item_id), {})
+	var item: Dictionary = items.get(str(calibration_item_id), {})
 	var directions: Dictionary = item.get("directions", {})
 	var saved: Dictionary = directions.get(canonical_direction(direction_row), {})
 	saved.merge(allowed, true)
 	directions[canonical_direction(direction_row)] = saved
 	item["directions"] = directions
-	items[str(item_id)] = item
+	items[str(calibration_item_id)] = item
 	data["itemOverrides"] = items
 	var file := FileAccess.open(_override_path, FileAccess.WRITE)
 	if file == null:
@@ -449,12 +462,13 @@ static func set_session_calibration_override(
 	var allowed := _validated_override_fields(item_id, override_fields)
 	if allowed.is_empty():
 		return false
-	var item: Dictionary = _session_overrides.get(str(item_id), {})
+	var calibration_item_id := calibration_item_id_for_item(item_id)
+	var item: Dictionary = _session_overrides.get(str(calibration_item_id), {})
 	var direction := canonical_direction(direction_row)
 	var current: Dictionary = item.get(direction, {})
 	current.merge(allowed, true)
 	item[direction] = current
-	_session_overrides[str(item_id)] = item
+	_session_overrides[str(calibration_item_id)] = item
 	return true
 
 
@@ -462,12 +476,13 @@ static func clear_session_calibration_override(
 	item_id: int,
 	direction_row: int
 ) -> void:
-	var item: Dictionary = _session_overrides.get(str(item_id), {})
+	var calibration_item_id := calibration_item_id_for_item(item_id)
+	var item: Dictionary = _session_overrides.get(str(calibration_item_id), {})
 	item.erase(canonical_direction(direction_row))
 	if item.is_empty():
-		_session_overrides.erase(str(item_id))
+		_session_overrides.erase(str(calibration_item_id))
 	else:
-		_session_overrides[str(item_id)] = item
+		_session_overrides[str(calibration_item_id)] = item
 
 
 static func _validated_override_fields(
