@@ -482,13 +482,31 @@ func _refresh_character_preview() -> void:
 	]
 	var paper_doll := EquipmentCharacterPreviewScript.new()
 	paper_doll.name = "RuntimePaperDoll"
-	paper_doll.preview_scale = 1.52
-	paper_doll.position = Vector2(40, 0)
-	paper_doll.size = Vector2(320, 350)
+	paper_doll.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	paper_doll.center_on_opaque_bounds = false
-	paper_doll.configure_profile(profession_name, PlayerState.equipment)
-	paper_doll.set_meta("preview_source", "selected_profile_runtime_equipment")
+	paper_doll.configure_profile(
+		profession_name,
+		_profile_equipment_snapshot(selected_main_profile_id)
+	)
+	paper_doll.set_meta("preview_profile_id", selected_main_profile_id)
+	paper_doll.set_meta("preview_source", "selected_profile_save_equipment")
 	preview_visual_root.add_child(paper_doll)
+	paper_doll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+
+func _profile_equipment_snapshot(profile_id: String) -> Dictionary:
+	if profile_id.is_empty():
+		return {}
+	var profile_path := "%s/%s.json" % [PlayerState.profile_directory, profile_id]
+	if not FileAccess.file_exists(profile_path):
+		return {}
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(profile_path))
+	if not parsed is Dictionary:
+		return {}
+	var saved_equipment: Variant = parsed.get("equipment", {})
+	if not saved_equipment is Dictionary:
+		return {}
+	return PlayerState.migrate_equipment_slots(saved_equipment).duplicate(true)
 
 
 func _on_profile_main_pressed(profile_id: String) -> void:
