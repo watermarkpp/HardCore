@@ -16,6 +16,8 @@ const PAPER_DOLL_MANIFEST := "res://assets/data/warrior_paper_doll_sources.json"
 const EQUIPMENT_VISUAL_CATALOG := "res://assets/data/equipment_visual_catalog.json"
 const ORIGINAL_CLIENT_STAGE_MANIFEST := "res://assets/data/equipment_original_client_paper_doll_stage.json"
 const PRESENTATION_MODES_MANIFEST := "res://assets/data/equipment_paper_doll_presentation_modes.json"
+const CLASSIC_HEAD_PATCHES_MANIFEST := "res://assets/data/equipment_classic_avatar_head_patches.json"
+const CLASSIC_HEAD_PATCHES_CONTRACT_ID := "equipment.paper_doll.classic_flattened_head_patch.v1"
 const PROFESSION_IDS := {
 	"战士": "warrior",
 	"法师": "wizard",
@@ -46,6 +48,7 @@ var _equipment_snapshot: Dictionary = {}
 var _use_equipment_snapshot := false
 var _source_document_override: Dictionary = {}
 var _base_texture: Texture2D
+var _base_source_texture: Texture2D
 var _hair_layer: Dictionary = {}
 var _body_layer: Dictionary = {}
 var _body_texture: Texture2D
@@ -113,7 +116,7 @@ func configure_presentation_mode(mode: String) -> void:
 	var requested := mode.strip_edges()
 	if requested == "legacyFullPanel":
 		# This mode is an archival source record, not a player UI presentation.
-		requested = "world_avatar"
+		requested = "classic_avatar"
 	presentation_mode = requested if not requested.is_empty() else "world_avatar"
 	if is_node_ready():
 		_load_paper_mappings()
@@ -123,6 +126,7 @@ func configure_presentation_mode(mode: String) -> void:
 func refresh() -> void:
 	if _paper_mappings.is_empty():
 		_load_paper_mappings()
+	_base_texture = _base_source_texture
 	_paper_layers.clear()
 	_body_layer.clear()
 	_body_texture = null
@@ -134,7 +138,9 @@ func refresh() -> void:
 		var equipped: Variant = equipment_source.get(slot, {})
 		if not equipped is Dictionary or equipped.is_empty():
 			continue
-		var mapping_value: Variant = _mapping_for_equipped(equipped)
+		var mapping_value: Variant = _classic_head_patch_for_equipped(equipped) if slot == str(PAPER_LAYER_SLOTS[2]) else {}
+		if not mapping_value is Dictionary or mapping_value.is_empty():
+			mapping_value = _mapping_for_equipped(equipped)
 		if not mapping_value is Dictionary or mapping_value.is_empty():
 			continue
 		var texture := _texture_from_record(mapping_value)
@@ -156,6 +162,7 @@ func refresh() -> void:
 			_weapon_texture = texture
 		elif slot == "头盔":
 			_helmet_texture = texture
+	_apply_classic_head_erase_mask()
 	_recalculate_composition_opaque_bounds()
 	_render_revision += 1
 	queue_redraw()
@@ -220,7 +227,10 @@ func _draw_world_avatar() -> void:
 	# idle action, south direction and frame zero.  A Control preview crops the
 	# one source cell instead of baking/borrowing the old equipment-page art.
 	var stage_center := foot_stage_center()
-	var stage_radii := FOOT_STAGE_RADII * preview_scale
+	var stage_radii := Vector2(
+		clampf(size.x * 0.23, 42.0, 60.0),
+		clampf(size.y * 0.055, 12.0, 18.0)
+	)
 	var shadow_points := _ellipse_points(stage_center + Vector2(0, 4), stage_radii + Vector2(5, 3))
 	draw_colored_polygon(shadow_points, Color(0.008, 0.005, 0.004, 0.56))
 	# World dress atlases are complete body appearances.  As in PlayerVisual,
@@ -301,6 +311,7 @@ func _draw_layer(layer: Dictionary) -> void:
 func _load_paper_mappings() -> void:
 	_paper_mappings.clear()
 	_base_texture = null
+	_base_source_texture = null
 	_hair_layer.clear()
 	_base_record.clear()
 	_uses_original_client_stage = false
@@ -313,6 +324,7 @@ func _load_paper_mappings() -> void:
 	_equipment_screen_anchor = ORIGINAL_CLIENT_EQUIPMENT_SCREEN_ANCHOR
 	_viewport_origin = Vector2.ZERO
 	_presentation_config.clear()
+	preview_scale = DEFAULT_PREVIEW_SCALE
 	var source_document := _resolve_source_document()
 	if source_document.is_empty():
 		return
@@ -359,6 +371,7 @@ func _load_paper_mappings() -> void:
 		var base: Variant = parsed.get("base", {})
 		if base is Dictionary:
 			_base_texture = _texture_from_record(base)
+			_base_source_texture = _base_texture
 		var hair: Variant = parsed.get("hair", {})
 		if hair is Dictionary:
 			var hair_texture := _texture_from_record(hair)
@@ -387,6 +400,7 @@ func _load_world_avatar(parsed: Dictionary, source_document: Dictionary) -> void
 	_world_base_layer["layerKind"] = "base"
 	_world_base_layer["directionRow"] = _direction_row
 	_base_texture = base_texture
+	_base_source_texture = base_texture
 	_canvas_size = _vector_from_value(
 		_presentation_config.get("canvasSize", [224, 224]),
 		Vector2(224, 224)
@@ -431,7 +445,12 @@ func _world_avatar_mappings(document: Dictionary) -> Dictionary:
 		if action.is_empty():
 			continue
 		var path := str(action.get("path", ""))
-		if path.is_empty() or not FileAccess.file_exists(path):
+		# Exported Godot builds store imported textures as .ctex resources. The
+		# source PNG is intentionally absent there, so FileAccess alone would
+		# silently discard every equipped overlay while the base still renders.
+		# Accept either the runtime resource or a source file (the latter keeps
+		# local source-tree tooling usable); texture loading remains centralized.
+		if path.is_empty() or (not ResourceLoader.exists(path) and not FileAccess.file_exists(path)):
 			continue
 		action["slot"] = slot
 		action["layerKind"] = _slot_layer_kind(slot)
@@ -481,6 +500,7 @@ func _load_avatar_only_stage(parsed: Dictionary) -> void:
 		var avatar_base_texture := _texture_from_record(avatar_base)
 		if avatar_base_texture != null:
 			_base_texture = avatar_base_texture
+			_base_source_texture = avatar_base_texture
 			_uses_avatar_only_stage = true
 	var avatar_canvas := _vector_from_value(
 		avatar.get("canvasSize", parsed.get("canvasSize", ORIGINAL_CANVAS_SIZE)),
@@ -694,6 +714,90 @@ func _catalog_paper_mappings(document: Dictionary) -> Dictionary:
 	return result
 
 
+func _classic_head_patch_for_equipped(equipped: Dictionary) -> Dictionary:
+	# Player UI never consumes the rectangular StateItem helmet record directly.
+	# The equipment-owned primary-client contract derives a transparent head-only
+	# patch and retains its source record, mask and exact offset for auditing.
+	if presentation_mode != "classic_avatar":
+		return {}
+	var item_id := _formal_item_id_for_equipped(equipped)
+	if item_id.is_empty():
+		return {}
+	var document := _load_json_document(CLASSIC_HEAD_PATCHES_MANIFEST)
+	if _document_contract_id(document) != CLASSIC_HEAD_PATCHES_CONTRACT_ID:
+		return {}
+	var items: Variant = document.get("itemsById", {})
+	if not items is Dictionary:
+		return {}
+	var item_value: Variant = items.get(item_id, {})
+	if not item_value is Dictionary:
+		return {}
+	var patch: Variant = item_value.get("flattenedHeadPatch", {})
+	if not patch is Dictionary:
+		return {}
+	if str(patch.get("contractId", "")) != CLASSIC_HEAD_PATCHES_CONTRACT_ID:
+		return {}
+	if str(patch.get("slot", "")) != str(PAPER_LAYER_SLOTS[2]):
+		return {}
+	var result: Dictionary = patch.duplicate(true)
+	result["layerAssetKind"] = "classic_flattened_head_patch"
+	return result
+
+
+func _formal_item_id_for_equipped(equipped: Dictionary) -> String:
+	var item_id := str(equipped.get("item_id", equipped.get("itemId", "")))
+	if not item_id.is_empty():
+		return item_id
+	# Older player archives may have retained only the visible item name. Resolve
+	# it by an exact record-name match in the formal visual catalog; never infer
+	# an ID from a display name or consult a lower-priority source.
+	var item_name := str(equipped.get("name", ""))
+	if item_name.is_empty():
+		return ""
+	var document := _load_json_document(visual_catalog_path)
+	var items: Variant = document.get("itemsById", {})
+	if not items is Dictionary:
+		return ""
+	for key: Variant in items:
+		var item_value: Variant = items[key]
+		if not item_value is Dictionary:
+			continue
+		if str(item_value.get("itemName", "")) == item_name:
+			return str(key)
+	return ""
+
+
+func _apply_classic_head_erase_mask() -> void:
+	if presentation_mode != "classic_avatar" or _base_source_texture == null:
+		return
+	var helmet_layer := paper_layer_source_record(str(PAPER_LAYER_SLOTS[2]))
+	if str(helmet_layer.get("layerAssetKind", "")) != "classic_flattened_head_patch":
+		return
+	var mask_path := str(helmet_layer.get("eraseMaskPath", ""))
+	if mask_path.is_empty():
+		return
+	var mask_texture := _texture_from_record({"path": mask_path})
+	if mask_texture == null:
+		return
+	var base_image := _base_source_texture.get_image()
+	var mask_image := mask_texture.get_image()
+	if base_image == null or base_image.is_empty() or mask_image == null or mask_image.is_empty():
+		return
+	var offset := _mapping_offset(helmet_layer)
+	for mask_y: int in mask_image.get_height():
+		for mask_x: int in mask_image.get_width():
+			if mask_image.get_pixel(mask_x, mask_y).a <= 0.001:
+				continue
+			var base_x := int(offset.x) + mask_x
+			var base_y := int(offset.y) + mask_y
+			if base_x < 0 or base_y < 0 or base_x >= base_image.get_width() or base_y >= base_image.get_height():
+				continue
+			var pixel := base_image.get_pixel(base_x, base_y)
+			pixel.a = 0.0
+			base_image.set_pixel(base_x, base_y, pixel)
+	_base_texture = ImageTexture.create_from_image(base_image)
+
+
 func _load_json_document(path: String) -> Dictionary:
 	if path.is_empty() or not FileAccess.file_exists(path):
 		return {}
@@ -852,6 +956,12 @@ func composition_draw_origin() -> Vector2:
 func foot_stage_center() -> Vector2:
 	if _uses_original_client_stage:
 		return original_stage_to_local(_manifest_foot_anchor)
+	if _uses_world_avatar:
+		# Player UI is deliberately larger than a map actor. Do not re-use the
+		# 224px atlas canvas as a screen inset: that pushed a correctly enlarged
+		# body above the panel. The actor's verified source foot anchor still
+		# determines its position inside the source crop.
+		return Vector2(size.x * 0.5, size.y - maxf(22.0, size.y * 0.11))
 	# Keep the historical lower inset while pinning the stage horizontally to
 	# the preview centre.  The same point is the paper-doll ground contact.
 	return Vector2(
@@ -1005,3 +1115,10 @@ func paper_layer_source_index(slot: String) -> int:
 		if str(layer.get("equipmentSlot", "")) == slot:
 			return int(layer.get("sourceIndex", -1))
 	return -1
+
+
+func paper_layer_source_record(slot: String) -> Dictionary:
+	for layer: Dictionary in _paper_layers:
+		if str(layer.get("equipmentSlot", "")) == slot:
+			return layer.duplicate(true)
+	return {}
