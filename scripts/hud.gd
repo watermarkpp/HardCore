@@ -896,10 +896,8 @@ func update_warrior_states(snapshot: Dictionary) -> void:
 func _fire_sword_charge_label(snapshot: Dictionary) -> String:
 	# Canonical fire sword is one explicit next-melee charge, never an auto-use toggle.
 	# The runtime snapshot owns these fields; UI only projects its current state.
-	if bool(snapshot.get("fire_armed", false)):
+	if bool(snapshot.get("fire_armed", false)) and int(snapshot.get("fire_expires_remaining_ms", 0)) > 0:
 		return "充能"
-	if int(snapshot.get("fire_ready_remaining_ms", 0)) > 0:
-		return "冷却"
 	return "未充能·就绪"
 
 
