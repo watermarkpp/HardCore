@@ -113,12 +113,14 @@ static func _resolve_poison(
 		)
 	)
 	var duration_seconds: int = int([8, 12, 16, 20][rank]) + int(floor(float(sc_roll) / 5.0))
+	var resist_bound := maxi(1, int(context.get("target_poison_resist", 0)) + 7)
 	var power_base: int = 40 if poison_type == "green_poison" else 30
 	var power: int = Formula.get_power13(rng, rank, power_base) + 2 * sc_roll
 	var effect: Dictionary = {
 		"type": "poison_resolution",
 		"poison_type": poison_type,
 		"resisted": resisted,
+		"apply_probability": float(mini(7, resist_bound)) / float(resist_bound),
 		"duration_seconds": duration_seconds,
 		"stacking_policy": "green_and_red_coexist_same_type_refresh",
 	}
