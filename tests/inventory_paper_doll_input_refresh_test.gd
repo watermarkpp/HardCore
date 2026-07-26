@@ -10,49 +10,42 @@ func _ready() -> void:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
+	var dress_slot := str(PreviewScript.PAPER_LAYER_SLOTS[0])
+	var weapon_slot := str(PreviewScript.PAPER_LAYER_SLOTS[1])
 	var panel := InventoryPanel.new()
 	add_child(panel)
 	await get_tree().process_frame
 
 	var equipment_panel: Control = panel.get_node("EquipmentPanel")
 	var preview: EquipmentCharacterPreview = panel.character_preview
-	assert(_preview_count(equipment_panel) == 1, "装备界同时挂载了多套纸娃娃")
+	assert(_preview_count(equipment_panel) == 1, "Inventory has more than one paper-doll preview")
 	assert(preview.mouse_filter == Control.MOUSE_FILTER_IGNORE)
-	assert(preview.presentation_mode == "world_avatar")
-	assert(preview.uses_world_avatar(), "装备页默认没有使用世界人物管线")
-	assert(not preview.uses_original_client_stage(), "装备页默认错误加载完整Prguse装备页")
+	assert(preview.presentation_mode == "classic_avatar")
+	assert(not preview.uses_world_avatar(), "Inventory uses the low-resolution world avatar")
+	assert(not preview.uses_original_client_stage(), "Inventory drew the full Prguse equipment page")
 	assert(preview.get_meta("paper_doll_render_contract", "") == PreviewScript.PRESENTATION_MODES_CONTRACT_ID)
 	preview.configure_presentation_mode("legacyFullPanel")
-	assert(preview.presentation_mode == "world_avatar", "玩家UI不得接受legacyFullPanel")
+	assert(preview.presentation_mode == "classic_avatar", "Player UI accepted the forbidden legacyFullPanel mode")
+	assert(preview.get_meta("input_policy", "") == "visual_only_mouse_filter_ignore")
+	var weapon_holder: Control = panel.equipment_buttons[weapon_slot].get_parent()
+	assert(preview.get_index() < weapon_holder.get_index(), "Paper doll is above the equipment interaction layer")
 	assert(
-		preview.get_meta("input_policy", "")
-		== "visual_only_mouse_filter_ignore"
-	)
-	var weapon_holder: Control = panel.equipment_buttons["武器"].get_parent()
-	assert(preview.get_index() < weapon_holder.get_index(), "纸娃娃错误绘制在装备槽交互层之上")
-	assert(
-		Rect2(preview.position, preview.size).intersects(
-			Rect2(weapon_holder.position, weapon_holder.size)
-		),
-		"测试没有覆盖纸娃娃与装备槽重叠区域"
+		Rect2(preview.position, preview.size).intersects(Rect2(weapon_holder.position, weapon_holder.size)),
+		"Test does not cover the preview/equipment-slot overlap"
 	)
 
 	preview.configure_source_document(_fixture_document())
 	var revision_before := preview.render_revision()
-	PlayerState.equipment["衣服"] = {"item_id": "dress.first", "name": "夹具衣服"}
+	PlayerState.equipment[dress_slot] = {"item_id": "dress.first", "name": "fixture_dress"}
 	PlayerState.equipment_changed.emit()
-	assert(preview.render_revision() > revision_before, "装备变化没有同步刷新纸娃娃")
-	assert(preview.paper_layer_source_index("衣服") == 62)
-	var commands := preview.original_stage_draw_commands()
-	assert(commands.size() == 3, "装备界纸娃娃没有保持单一 base/hair/dress 合成")
-	assert(commands[0].stagePosition == PreviewScript.ORIGINAL_CLIENT_BASE_SCREEN_ORIGIN)
-	assert(
-		commands[0].targetRect.intersects(commands[2].targetRect),
-		"裸体基底与衣服层仍被错误拆成上下两个人物"
-	)
+	assert(preview.render_revision() > revision_before, "Equipment change did not refresh the paper doll")
+	assert(preview.paper_layer_source_index(dress_slot) == 62)
+	assert(preview.original_stage_draw_commands().is_empty(), "Player inventory drew a complete Prguse background or slot frame")
+	assert(preview._body_texture != null, "Equipment refresh did not retain the dress layer")
+	assert(preview._paper_layers.size() == 1, "Paper doll did not retain the transparent base/dress composition")
 
-	(panel.equipment_buttons["衣服"] as Button).pressed.emit()
-	assert(panel.selected_equipment_slot == "衣服", "视觉预览层阻断了装备槽选择")
+	(panel.equipment_buttons[dress_slot] as Button).pressed.emit()
+	assert(panel.selected_equipment_slot == dress_slot, "Visual preview blocked equipment-slot selection")
 
 	print("INVENTORY_PAPER_DOLL_INPUT_REFRESH_PASS")
 	get_tree().quit(0)
@@ -67,36 +60,27 @@ func _preview_count(parent: Node) -> int:
 
 
 func _fixture_document() -> Dictionary:
+	var dress_slot := str(PreviewScript.PAPER_LAYER_SLOTS[0])
 	return {
-		"contractId": PreviewScript.ORIGINAL_CLIENT_STAGE_CONTRACT_ID,
+		"contractId": "test.paper_doll.avatar_only_fixture.v1",
 		"sex": "male",
-		"canvasSize": [232, 325],
-		"viewportOrigin": [0, 0],
-		"stage": {
+		"canvasSize": [168, 199],
+		"paperDollFootAnchor": [84, 186],
+		"base": {
 			"sourceIndex": 376,
 			"texture": _solid_texture(Vector2i(168, 199), Color("24170f")),
-			"hotX": 7,
-			"hotY": -44,
-			"stagePosition": [38, 52],
 		},
 		"hair": {
 			"sourceIndex": 442,
 			"texture": _solid_texture(Vector2i(16, 14), Color("422918")),
-			"hotX": 87,
-			"hotY": 0,
+			"drawOffset": [80, 44],
 		},
-		"composition": {
-			"canvasSize": [232, 325],
-			"viewportOrigin": [0, 0],
-			"equipmentScreenAnchor": [31, 96],
-		},
-		"itemMappings": {
+		"runtimeMappings": {
 			"dress.first": {
-				"slot": "衣服",
+				"slot": dress_slot,
 				"sourceIndex": 62,
 				"texture": _solid_texture(Vector2i(84, 140), Color("3c6a35")),
-				"hotX": 47,
-				"hotY": 14,
+				"drawOffset": [42, 42],
 			},
 		},
 	}
