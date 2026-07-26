@@ -909,7 +909,13 @@ func _source_recipe_id() -> String:
 	var source: Dictionary = asset.get("source", {})
 	var authored_sha := str(source.get("calibrationSourceSheetSha256", ""))
 	if not authored_sha.is_empty():
-		return "authored_source_sheet.%s.green_despill_v2" % authored_sha
+		var idle_layout_sha := str(
+			source.get("actions", {}).get("idle", {}).get("sha256", "")
+		)
+		return (
+			"authored_source_sheet.%s.layout.%s.green_despill_v2"
+			% [authored_sha, idle_layout_sha]
+		)
 	return str(asset.get("bakedSourceOverrides", {}).get(
 		"recipeId", "primary_source_rows.v1"
 	))
