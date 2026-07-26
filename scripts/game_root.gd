@@ -1730,7 +1730,16 @@ func _apply_canonical_effects(
 ) -> void:
 	var stable_skill_id := str(result.get("skill_id", ""))
 	var target := locked_target if is_instance_valid(locked_target) else null
-	_spawn_canonical_cast_visual(stable_skill_id, origin, direction, target)
+	var target_position := _canonical_tile_to_world(
+		target_context.get("target_tile", _canonical_world_to_tile(origin))
+	)
+	_spawn_canonical_cast_visual(
+		stable_skill_id,
+		origin,
+		direction,
+		target,
+		target_position
+	)
 	for raw_effect: Variant in result.get("effects", []):
 		if not raw_effect is Dictionary:
 			continue
@@ -1758,15 +1767,18 @@ func _apply_canonical_effects(
 				)
 				_apply_canonical_spell_damage(stable_skill_id, raw_power, damage_origin, direction, effect_type, target)
 			"persistent_ground_damage":
-				var effect_position := _canonical_tile_to_world(target_context.get("target_tile", Vector2i.ZERO))
-				_spawn_canonical_ground_effect(stable_skill_id, effect_position, effect)
+				_spawn_canonical_ground_field(
+					stable_skill_id,
+					result.get("geometry_cells", []),
+					target_position,
+					effect
+				)
 			"dedicated_heal":
 				player.restore_health(int(effect.get("actual_hp_restored", 0)))
 			"dedicated_area_heal":
 				var restored_by_target: Array = effect.get("actual_hp_restored_by_target", [])
 				if not restored_by_target.is_empty():
 					player.restore_health(int(restored_by_target[0]))
-				_spawn_canonical_ground_effect(stable_skill_id, player.global_position, {"raw_power": 0, "duration_seconds": 1})
 			"adjacent_push":
 				if target != null and bool(effect.get("displaced", false)):
 					_apply_canonical_displacement(target, target.global_position.direction_to(origin) * -float(effect.get("push_distance_tiles", 1)) * 50.0)
@@ -1779,14 +1791,21 @@ func _apply_canonical_effects(
 				_combat_runtime.apply_damage(player, int(effect.get("amount", 1)))
 			"server_random_teleport":
 				if bool(effect.get("moved", false)):
-					_apply_canonical_player_teleport(_canonical_tile_to_world(effect.get("destination", Vector2i.ZERO)))
+					var destination := _canonical_tile_to_world(
+						effect.get("destination", Vector2i.ZERO)
+					)
+					if _apply_canonical_player_teleport(destination):
+						_spawn_canonical_teleport_arrival(
+							stable_skill_id,
+							destination,
+							direction
+						)
 			"refreshable_damage_reduction_buff":
 				player.apply_magic_shield(float(effect.get("duration_seconds", 1)), float(effect.get("damage_reduction", 0.0)))
 			"monster_aggro_stealth", "area_monster_aggro_stealth":
 				player.apply_stealth(float(effect.get("duration_seconds", 1)))
 			"friendly_defence_buff":
 				player.apply_defense_buff(float(effect.get("duration_seconds", 1)), int(effect.get("flat_bonus", 1)))
-				_spawn_canonical_ground_effect(stable_skill_id, player.global_position, {"raw_power": 0, "duration_seconds": 1})
 			"poison_resolution":
 				if target != null and not bool(effect.get("resisted", false)):
 					_apply_canonical_poison(target, effect)
@@ -1804,7 +1823,6 @@ func _apply_canonical_effects(
 					for node: Node in get_tree().get_nodes_in_group("enemies"):
 						if node is EnemyActor and node.global_position.distance_to(_canonical_tile_to_world(target_context.get("target_tile", Vector2i.ZERO))) <= 115.0:
 							node.apply_control(float(effect.get("duration_seconds", 1)))
-					_spawn_canonical_ground_effect(stable_skill_id, _canonical_tile_to_world(target_context.get("target_tile", Vector2i.ZERO)), {"raw_power": 0, "duration_seconds": effect.get("duration_seconds", 1)})
 			"main_pet_spawn", "recall_existing_main_pet":
 				_apply_canonical_main_pet(effect, stable_skill_id)
 			"next_melee_charge":
@@ -1863,7 +1881,34 @@ func _apply_canonical_spell_damage(
 	return hit_any
 
 
-func _spawn_canonical_ground_effect(stable_skill_id: String, position: Vector2, effect: Dictionary) -> void:
+func _spawn_canonical_ground_field(
+	stable_skill_id: String,
+	raw_geometry_cells: Variant,
+	fallback_position: Vector2,
+	effect: Dictionary
+) -> void:
+	var positions: Array[Vector2] = []
+	if raw_geometry_cells is Array:
+		for raw_cell: Variant in raw_geometry_cells:
+			if raw_cell is Vector2i:
+				positions.append(_canonical_tile_to_world(raw_cell))
+	if positions.is_empty():
+		positions.append(fallback_position)
+	for index: int in range(positions.size()):
+		_spawn_canonical_ground_effect(
+			stable_skill_id,
+			positions[index],
+			effect,
+			index == 0
+		)
+
+
+func _spawn_canonical_ground_effect(
+	stable_skill_id: String,
+	position: Vector2,
+	effect: Dictionary,
+	applies_damage := true
+) -> void:
 	var ground_effect := GroundSkillEffect.new()
 	ground_effect.setup(
 		position,
@@ -1876,9 +1921,20 @@ func _spawn_canonical_ground_effect(stable_skill_id: String, position: Vector2, 
 	)
 	ground_effect.configure_runtime_resolution(
 		player,
-		Callable(self, "_apply_canonical_ground_tick").bind(stable_skill_id)
+		(
+			Callable(self, "_apply_canonical_ground_tick").bind(stable_skill_id)
+			if applies_damage
+			else Callable(self, "_ignore_canonical_ground_visual_tick")
+		)
 	)
 	add_child(ground_effect)
+
+
+func _ignore_canonical_ground_visual_tick(
+	_enemy: EnemyActor,
+	_raw_power: int
+) -> void:
+	pass
 
 
 func _apply_canonical_ground_tick(enemy: EnemyActor, raw_power: int, stable_skill_id: String) -> void:
@@ -1969,23 +2025,20 @@ func _spawn_canonical_cast_visual(
 	stable_skill_id: String,
 	origin: Vector2,
 	direction: Vector2,
-	target: EnemyActor
+	target: EnemyActor,
+	target_position: Vector2
 ) -> void:
 	if not stable_skill_id.begins_with("wizard.") and not stable_skill_id.begins_with("taoist."):
 		return
-	if stable_skill_id in [
-		"wizard.fireball",
-		"wizard.great_fireball",
-		"wizard.fire_wall",
-		"taoist.soul_fire_talisman",
-		"taoist.magic_defense",
-		"taoist.defense",
-		"taoist.entrapment",
-		"taoist.mass_healing",
-	]:
-		return
 	var visual_profile := CasterSkillVisualRegistry.profile(stable_skill_id)
-	if str(visual_profile.get("status", "")) != "formal_primary_client_animation":
+	if (
+		not CasterSkillVisualRegistry.is_runtime_ready(stable_skill_id)
+		or str(visual_profile.get("role", "")) in [
+			CasterSkillVisualRegistry.ROLE_PROJECTILE,
+			CasterSkillVisualRegistry.ROLE_GROUND_EFFECT,
+			CasterSkillVisualRegistry.ROLE_SUMMON_ACTOR,
+		]
+	):
 		return
 	var visual_plan := {
 		"success": true,
@@ -1995,7 +2048,6 @@ func _spawn_canonical_cast_visual(
 		"visual_duration": CasterSkillVisualRegistry.animation_duration(stable_skill_id),
 		"area_radius": 72.0,
 	}
-	var target_position := target.global_position if target != null else origin + direction.normalized() * 96.0
 	for visual_node: Node2D in CasterSkillRuntimeScript.create_cast_nodes(
 		visual_plan,
 		origin,
@@ -2008,6 +2060,36 @@ func _spawn_canonical_cast_visual(
 		PlayerState.level
 	):
 		add_child(visual_node)
+
+
+func _spawn_canonical_teleport_arrival(
+	stable_skill_id: String,
+	destination: Vector2,
+	direction: Vector2
+) -> void:
+	if stable_skill_id != "wizard.teleport":
+		return
+	var visual_profile := CasterSkillVisualRegistry.profile(stable_skill_id)
+	var visual_plan := {
+		"success": true,
+		"skill_id": stable_skill_id,
+		"operation": "canonical_visual_only",
+		"visual": visual_profile,
+		"visual_duration": CasterSkillVisualRegistry.animation_duration(
+			stable_skill_id,
+			"arrival"
+		),
+		"area_radius": 72.0,
+	}
+	var arrival := CasterSkillRuntimeScript.create_visual(
+		visual_plan,
+		destination,
+		direction,
+		player,
+		"arrival"
+	)
+	if arrival != null:
+		add_child(arrival)
 
 
 func _canonical_world_to_tile(world: Vector2) -> Vector2i:

@@ -58,7 +58,7 @@ func _ready() -> void:
 			30,
 			40
 		)
-		var expected_node_count := 0 if skill_id == "taoist.spiritual_warfare" else (5 if skill_id == "wizard.fire_wall" else 1)
+		var expected_node_count := 0 if skill_id == "taoist.spiritual_warfare" else (4 if skill_id == "wizard.fire_wall" else 1)
 		assert(cast_nodes.size() == expected_node_count, "%s cast factory returned %d nodes" % [skill_id, cast_nodes.size()])
 		for node: Node2D in cast_nodes:
 			add_child(node)
@@ -76,10 +76,10 @@ func _ready() -> void:
 	var fire_wall := CasterSkillRuntime.resolve("wizard.fire_wall", {
 		"skill_level": 3, "magic_stat_roll": 30, "cell_size": 48,
 	})
-	assert(fire_wall.operation == "ground_dot" and fire_wall.execution_shape == "five_cell_cross")
-	assert(fire_wall.duration_seconds == 28 and fire_wall.tick_interval_seconds == 3.0)
+	assert(fire_wall.operation == "ground_dot" and fire_wall.execution_shape == "square_2x2")
+	assert(fire_wall.duration_seconds == 28 and fire_wall.tick_interval_seconds == 1.0)
 	var fire_cells := CasterSkillRuntime.fire_wall_positions(Vector2(100, 100), 48)
-	assert(fire_cells.size() == 5 and fire_cells.has(Vector2(148, 100)) and fire_cells.has(Vector2(100, 52)))
+	assert(fire_cells.size() == 4 and fire_cells.has(Vector2(148, 100)) and fire_cells.has(Vector2(148, 148)))
 
 	var lightning := CasterSkillRuntime.resolve("wizard.lightning", {
 		"skill_level": 3, "magic_stat_roll": 30, "target_is_undead": true,

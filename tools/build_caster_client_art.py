@@ -20,6 +20,7 @@ DATA = ROOT / "dev_art_sources/reference/mir2_client_raw/Data"
 CLIENT_SOURCE = ROOT / "dev_art_sources/reference/original_gameofmir/MirClient"
 OUTPUT = ROOT / "assets/data/caster_skill_visuals.json"
 PROFESSION_GROWTH = ROOT / "assets/data/vanilla_176/profession_growth.json"
+SKILL_SOURCE = ROOT / "assets/data/vanilla_176/skills_source_of_truth_v1.json"
 FRAME_ROOT = ROOT / "assets/art/characters/caster_skill_frames"
 ICON_SIZE = 96
 CLASSIC_UNIT_HALF = (32, 16)
@@ -69,9 +70,9 @@ SPECS = {
         "ExplosionFrame=6; inherited NextFrameTime=50",
     ),
     "teleport": AnimationSpec(
-        "Magic.wil", 1590, 10, ("wizard.teleport",), "self_effect", 60,
-        "EffectType=mtFireWind has no detached TMagicEff; Actor draws EffectBase[19]=1590 "
-        "with DEFSPELLFRAME=10 and HA.ActSpell.ftime=60",
+        "Magic.wil", 1590, 10, ("wizard.teleport",), "self_effect", 30,
+        "Actor.pas SM_SPACEMOVE_HIDE2 constructs TScrollHideEffect(1590, 10); "
+        "magiceff.pas TMapEffect fixes NextFrameTime=30",
     ),
     "great_fireball": AnimationSpec(
         "Magic.wil", 410, 6, ("wizard.great_fireball",), "projectile", 50,
@@ -84,10 +85,12 @@ SPECS = {
         "ExplosionFrame=20",
     ),
     "fire_wall": AnimationSpec(
-        "Magic.wil", 1620, 10, ("wizard.fire_wall",), "ground_effect", 60,
-        "EffectType=mtFireWind has no detached TMagicEff; Actor draws EffectBase[20]=1620 "
-        "with DEFSPELLFRAME=10 and HA.ActSpell.ftime=60; persistent Godot cells loop "
-        "the exact primary family",
+        "Magic.wil", 1630, 6, ("wizard.fire_wall",), "ground_effect", 40,
+        "clEvent.pas ET_FIRE in the non-CUSTOMLIBFILE branch uses g_WMagicImages "
+        "FIREBURNBASE=1630 + ((m_dwCurframe div 2) mod 6). The primary "
+        "client.classic_raw_complete Data/Magic.wil distribution is that non-custom "
+        "library layout. Run advances m_dwCurframe every 20 ms, so visible frames are 40 ms. "
+        "EffectBase[20]=1620 is only the caster body ring and is not the ground fire.",
         playback="loop",
     ),
     "laser": AnimationSpec(
@@ -171,10 +174,11 @@ SPECS = {
         "ExplosionFrame=10",
     ),
     "summon_skeleton": AnimationSpec(
-        "Mon3.wil", 0, 10, ("taoist.summon_skeleton",), "summon_actor_visual", 160,
-        "Actor.aGetMonImg appearance 20 selects Mon3; skeleton stand block begins at 0. "
-        "SummonActor owns the state animation; this exact family supplies the skill icon.",
-        playback="loop", mapping_confidence="B",
+        "Mon3.wil", 0, 4, ("taoist.summon_skeleton",), "summon_actor_visual", 200,
+        "Actor.aGetMonImg appearance 20 selects Mon3; Actor.MA20 ActStand starts at 0, "
+        "has 4 visible frames, skips 6 sentinel slots, and uses ftime=200. "
+        "Indices 4..9 are not animation frames.",
+        playback="loop",
     ),
     "summon_divine_beast": AnimationSpec(
         "Mon18.wil", 350, 4, ("taoist.summon_divine_beast",), "summon_actor_visual", 160,
@@ -191,6 +195,17 @@ NO_VISUAL_SKILLS = {
         "source_original_path": "M2Server/Magic.pas",
     },
 }
+
+TELEPORT_ARRIVAL_SPEC = AnimationSpec(
+    "Magic.wil",
+    1600,
+    10,
+    ("wizard.teleport",),
+    "self_effect",
+    30,
+    "Actor.pas SM_SPACEMOVE_SHOW2 constructs TCharEffect(1600, 10); "
+    "magiceff.pas TCharEffect fixes NextFrameTime=30 and follows the arriving actor",
+)
 
 
 def digest(path: Path) -> str:
@@ -265,6 +280,133 @@ def save_icon(frame: Image.Image, output: Path) -> None:
     icon.save(output)
 
 
+def render_policy(asset_id: str, role: str) -> dict[str, object]:
+    if role == "projectile":
+        attachment = "world_projectile"
+        scale_mode = "fit_extent"
+        fit_extent = 34.0
+    elif role == "target_effect":
+        attachment = "target_actor"
+        scale_mode = "source_pixels"
+        fit_extent = 0.0
+    elif role in {"self_effect", "self_area", "line_effect"}:
+        attachment = "caster_actor"
+        scale_mode = "source_pixels"
+        fit_extent = 0.0
+    elif role == "summon_actor_visual":
+        attachment = "summon_actor"
+        scale_mode = "source_pixels"
+        fit_extent = 0.0
+    else:
+        attachment = "world_anchor"
+        scale_mode = "source_pixels"
+        fit_extent = 0.0
+    # These effects are sampled or emitted into the map rather than continuously
+    # following an actor. Teleport's arrival phase overrides this below.
+    if asset_id in {"lightning", "hellfire", "teleport"}:
+        attachment = "world_anchor"
+    result: dict[str, object] = {
+        "contract": "caster_skill_render.v2",
+        "scale_mode": scale_mode,
+        "source_scale": 1.0,
+        "fit_extent": fit_extent,
+        "anchor_policy": "top_left_from_world_anchor",
+        "attachment_policy": attachment,
+        "playback_strategy": "firegun_trail" if asset_id == "hellfire" else "frame_sequence",
+        "pixel_snap": True,
+    }
+    if asset_id == "hellfire":
+        result.update(
+            {
+                "trajectory_contract": "mirclient.tfireguneffect.v1",
+                "trajectory_length_tiles": 5,
+                "trajectory_step_ms": 50,
+                "trajectory_dominant_axis_pixels_per_second": 500.0 / 0.9,
+                "trail_frame_count": 6,
+            }
+        )
+    return result
+
+
+def decode_phase(
+    asset_id: str,
+    phase_id: str,
+    spec: AnimationSpec,
+    library: tuple,
+) -> dict[str, object]:
+    data, palette, offsets, _library_info = library
+    sequences = []
+    native_left = native_top = 2**31 - 1
+    native_right = native_bottom = -(2**31)
+    for source_slot in range(spec.directions):
+        frames = []
+        canonical_direction = round(source_slot * 16 / spec.directions) % 16
+        for frame_index in range(spec.frame_count):
+            source_index = spec.start + source_slot * spec.direction_stride + frame_index
+            if source_index >= len(offsets):
+                raise RuntimeError(
+                    f"{asset_id}:{phase_id} source index {source_index} is outside {spec.library}"
+                )
+            image, sprite = decode_sprite(data, offsets[source_index], palette)
+            frame_path = (
+                FRAME_ROOT
+                / f"{asset_id}_{phase_id}"
+                / f"direction_{source_slot:02d}"
+                / f"frame_{frame_index:02d}.png"
+            )
+            frame_path.parent.mkdir(parents=True, exist_ok=True)
+            image.save(frame_path)
+            top_left = [sprite["x"] - CLASSIC_UNIT_HALF[0], sprite["y"] - CLASSIC_UNIT_HALF[1]]
+            native_left = min(native_left, top_left[0])
+            native_top = min(native_top, top_left[1])
+            native_right = max(native_right, top_left[0] + sprite["width"])
+            native_bottom = max(native_bottom, top_left[1] + sprite["height"])
+            frames.append(
+                {
+                    "frame_index": frame_index,
+                    "source_index": source_index,
+                    "source_offset": sprite["offset"],
+                    "source_draw_offset": [sprite["x"], sprite["y"]],
+                    "top_left_from_world_anchor": top_left,
+                    "pixel_size": [sprite["width"], sprite["height"]],
+                    "path": rel(frame_path),
+                    "png_sha256": digest(frame_path),
+                }
+            )
+        sequences.append(
+            {
+                "source_direction_slot": source_slot,
+                "direction_index": canonical_direction,
+                "frames": frames,
+            }
+        )
+    return {
+        "contract": "caster_skill_animation.v1",
+        "phase_id": phase_id,
+        "frame_time_ms": spec.frame_time_ms,
+        "frame_count": spec.frame_count,
+        "direction_count": spec.directions,
+        "direction_order": "canonical16: 0=up, 4=right, 8=down, 12=left; clockwise",
+        "source_direction_slot_order": [
+            int(sequence["direction_index"]) for sequence in sequences
+        ],
+        "playback": spec.playback,
+        "native_bounds": [native_left, native_top, native_right, native_bottom],
+        "native_extent": [native_right - native_left, native_bottom - native_top],
+        "sequences": sequences,
+        "mapping_rule": spec.mapping_rule,
+        "distribution_id": "client.classic_raw_complete",
+        "source_priority": {
+            "lane": "client_assets",
+            "tier": "primary",
+            "order": 0,
+            "weight": 100,
+        },
+        "original_path": f"Data/{spec.library}",
+        "source_sha256": digest(DATA / spec.library),
+    }
+
+
 def main() -> None:
     if FRAME_ROOT.exists():
         shutil.rmtree(FRAME_ROOT)
@@ -284,6 +426,7 @@ def main() -> None:
 
         for direction_index in range(spec.directions):
             frames = []
+            canonical_direction = round(direction_index * 16 / spec.directions) % 16
             for frame_index in range(spec.frame_count):
                 source_index = spec.start + direction_index * spec.direction_stride + frame_index
                 if source_index >= len(offsets):
@@ -305,10 +448,17 @@ def main() -> None:
                     "top_left_from_world_anchor": top_left,
                     "pixel_size": [sprite["width"], sprite["height"]],
                     "path": rel(frame_path),
+                    "png_sha256": digest(frame_path),
                 }
                 frames.append(record)
                 candidate_frames.append((image, record, icon_metrics(image)))
-            sequences.append({"direction_index": direction_index, "frames": frames})
+            sequences.append(
+                {
+                    "source_direction_slot": direction_index,
+                    "direction_index": canonical_direction,
+                    "frames": frames,
+                }
+            )
 
         maximum_opaque = max(int(candidate[2]["opaque_pixels"]) for candidate in candidate_frames)
         maximum_bbox_area = max(int(candidate[2]["bbox_area"]) for candidate in candidate_frames)
@@ -353,7 +503,10 @@ def main() -> None:
             "frame_time_ms": spec.frame_time_ms,
             "frame_count": spec.frame_count,
             "direction_count": spec.directions,
-            "direction_order": "0=up, 4=right, 8=down, 12=left; clockwise; MirClient.GetFlyDirection16",
+            "direction_order": "canonical16: 0=up, 4=right, 8=down, 12=left; clockwise",
+            "source_direction_slot_order": [
+                int(sequence["direction_index"]) for sequence in sequences
+            ],
             "playback": spec.playback,
             "native_bounds": [native_left, native_top, native_right, native_bottom],
             "native_extent": [native_right - native_left, native_bottom - native_top],
@@ -385,6 +538,7 @@ def main() -> None:
                 "derived_only_from_animation_frame": True,
             },
             "animation": animation,
+            "render": render_policy(asset_id, spec.role),
             "distribution_id": "client.classic_raw_complete",
             "source_priority": {"lane": "client_assets", "tier": "primary", "order": 0, "weight": 100},
             "original_path": f"Data/{spec.library}",
@@ -393,6 +547,7 @@ def main() -> None:
             "mapping_rule": spec.mapping_rule,
             "mapping_confidence": spec.mapping_confidence,
             "pixel_confidence": "A",
+            "derived_status": "ready",
         }
         for skill_id in spec.skill_ids:
             if skill_id in skill_coverage:
@@ -403,7 +558,25 @@ def main() -> None:
                 "role": spec.role,
                 "path": rel(representative_path),
                 "icon_path": rel(icon_path),
+                "derived_status": "ready",
             }
+
+    teleport_arrival = decode_phase(
+        "teleport",
+        "arrival",
+        TELEPORT_ARRIVAL_SPEC,
+        libraries[TELEPORT_ARRIVAL_SPEC.library],
+    )
+    teleport_arrival["render"] = {
+        **render_policy("teleport", "self_effect"),
+        "attachment_policy": "caster_actor",
+    }
+    assets["teleport"]["animation"]["phase_id"] = "departure"
+    assets["teleport"]["animation_phases"] = {
+        "departure": assets["teleport"]["animation"],
+        "arrival": teleport_arrival,
+    }
+    assets["teleport"]["phase_contract"] = "mirclient.space_move.hide_show2.v1"
 
     skill_coverage.update(NO_VISUAL_SKILLS)
     growth = json.loads(PROFESSION_GROWTH.read_text(encoding="utf-8"))
@@ -418,24 +591,68 @@ def main() -> None:
             f"extra={sorted(set(skill_coverage) - expected)}"
         )
 
+    skill_source = json.loads(SKILL_SOURCE.read_text(encoding="utf-8"))
+    skill_rows = {
+        row["skill_id"]: row
+        for row in skill_source["skills"]
+        if row["skill_id"] in skill_coverage
+    }
+    if set(skill_rows) != set(skill_coverage):
+        raise RuntimeError("skills-lane source does not cover every caster visual identity")
+    for skill_id, coverage in skill_coverage.items():
+        row = skill_rows[skill_id]
+        coverage["skills_contract"] = {
+            "contract_id": "skills.mir2_176.vanilla_33.v1.0.1",
+            "distribution_id": "project.hardcore.mir2_176_skill_sot.v1.0.1",
+            "source_priority": {
+                "lane": "skills",
+                "tier": "primary",
+                "order": 0,
+                "weight": 100,
+            },
+            "activation": row.get("activation"),
+            "target": row.get("target"),
+            "geometry": row.get("geometry"),
+            "timing": row.get("timing"),
+        }
+
     source_files = [
         CLIENT_SOURCE / "magiceff.pas",
         CLIENT_SOURCE / "PlayScn.pas",
         CLIENT_SOURCE / "Actor.pas",
         CLIENT_SOURCE / "AxeMon.pas",
         CLIENT_SOURCE / "ClFunc.pas",
+        CLIENT_SOURCE / "clEvent.pas",
     ]
     payload = {
-        "schemaVersion": 3,
+        "schemaVersion": 4,
         "generator": "tools/build_caster_client_art.py exact primary-WIL animation decoder",
         "target_gender": "male_only",
         "sourcePolicy": "primary client pixels/rules only; no auxiliary fallback",
         "animationContract": "caster_skill_animation.v1",
+        "renderContract": "caster_skill_render.v2",
         "iconPolicy": "active skill icons are deterministic transforms of one selected exact animation frame",
         "primarySource": {
             "distribution_id": "client.classic_raw_complete",
             "source_priority": {"lane": "client_assets", "tier": "primary", "order": 0, "weight": 100},
             "original_root": "Data",
+            "custom_library_layout": False,
+            "custom_library_evidence": (
+                "client.classic_raw_complete/Data/Magic.wil matches the non-CUSTOMLIBFILE "
+                "g_WMagicImages index layout; clEvent.pas FIREBURNBASE=1630 applies"
+            ),
+        },
+        "skillIdentitySource": {
+            "distribution_id": "project.hardcore.mir2_176_skill_sot.v1.0.1",
+            "source_priority": {
+                "lane": "skills",
+                "tier": "primary",
+                "order": 0,
+                "weight": 100,
+            },
+            "contract_id": "skills.mir2_176.vanilla_33.v1.0.1",
+            "original_path": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+            "sha256": digest(SKILL_SOURCE),
         },
         "mappingSources": [
             {
@@ -449,6 +666,7 @@ def main() -> None:
         ],
         "primary_missing_evidence": [],
         "generated_candidates_retained": [],
+        "fallbacks_used": [],
         "skillCoverage": {skill_id: skill_coverage[skill_id] for skill_id in sorted(skill_coverage)},
         "assets": assets,
     }
