@@ -56,14 +56,14 @@ def main() -> None:
     assert manifest["contractId"] == "equipment.paper_doll.original_client_stage.v1"
     assert manifest["sex"] == "male"
     assert manifest["canvasSize"] == [232, 325]
-    assert manifest["viewportOrigin"] == [0, -44]
-    assert manifest["viewportBounds"] == [0, -44, 232, 281]
+    assert manifest["viewportOrigin"] == [0, 0]
+    assert manifest["viewportBounds"] == [0, 0, 232, 325]
 
     composition = manifest["composition"]
-    assert composition["baseScreenOrigin"] == [0, 0]
+    assert composition["baseScreenOrigin"] == [38, 52]
     assert composition["equipmentScreenAnchor"] == [31, 96]
-    assert composition["viewportOrigin"] == [0, -44]
-    assert composition["viewportBounds"] == [0, -44, 232, 281]
+    assert composition["viewportOrigin"] == [0, 0]
+    assert composition["viewportBounds"] == [0, 0, 232, 325]
     assert composition["drawOrder"] == [
         "base",
         "hair",
@@ -85,7 +85,11 @@ def main() -> None:
     stage = manifest["stage"]
     assert stage["sourceIndex"] == 376
     assert [stage["hotX"], stage["hotY"]] == [7, -44]
-    assert stage["stagePosition"] == [7, -44]
+    assert stage["stagePosition"] == [38, 52]
+    runtime_composition = manifest["sourcePolicy"]["runtimeComposition"]
+    assert runtime_composition["output"] == "single_composited_paper_doll_layer"
+    assert runtime_composition["stageLayerMode"] == "opaque"
+    assert runtime_composition["overlayLayerMode"] == "transparent_color_key"
     assert_record_matches_library(
         stage, prguse_data, prguse_palette, prguse_offsets
     )
@@ -144,7 +148,7 @@ def main() -> None:
         max(rect[2] for rect in rectangles),
         max(rect[3] for rect in rectangles),
     ]
-    assert union_bounds == [7, -44, 177, 250]
+    assert union_bounds == [31, 52, 206, 251]
     assert manifest["sourceUnionBounds"] == union_bounds
     assert all(
         union_bounds[index] >= manifest["viewportBounds"][index]
@@ -157,7 +161,7 @@ def main() -> None:
 
     print(
         "EQUIPMENT_ORIGINAL_CLIENT_PAPER_DOLL_STAGE_TEST_PASS "
-        "items=61 unique_stateitem=55 union=[7,-44,177,250]"
+        "items=61 unique_stateitem=55 union=[31,52,206,251]"
     )
 
 

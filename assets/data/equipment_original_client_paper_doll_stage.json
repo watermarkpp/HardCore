@@ -3,16 +3,23 @@
   "contractId": "equipment.paper_doll.original_client_stage.v1",
   "sex": "male",
   "sourcePolicy": {
-    "sourceCode": "MirClient/FState.pas DStateWinDirectPaint equipment page",
+    "sourceCode": "MirClient/FState.pas::TFrmDlg.DStateWinDirectPaint (equipment StatePage=0)",
+    "sourceCodePath": "reference/original_gameofmir/MirClient/FState.pas:2896-2969",
     "baseScreenOrigin": [
-      0,
-      0
+      38,
+      52
     ],
     "equipmentScreenAnchor": [
       31,
       96
     ],
-    "recordPolicy": "decode and retain every original RGBA pixel; helmet stage restore patches are intentional",
+    "recordPolicy": "Prguse #376 is the one opaque stage/background pass; hair and StateItem records retain their original transparent color-key pixels and are subsequent overlay passes",
+    "runtimeComposition": {
+      "output": "single_composited_paper_doll_layer",
+      "stageLayerMode": "opaque",
+      "overlayLayerMode": "transparent_color_key",
+      "consumerRule": "draw stage exactly once at stage.stagePosition, then draw hair/dress/weapon/helmet at their stagePosition in drawOrder; never add a second anatomy/base texture or independently translate the Prguse stage by its HotX/HotY"
+    },
     "forbiddenOperations": [
       "opaque-bounds crop",
       "border-connected background removal",
@@ -26,19 +33,19 @@
   ],
   "viewportOrigin": [
     0,
-    -44
+    0
   ],
   "viewportBounds": [
     0,
-    -44,
+    0,
     232,
-    281
+    325
   ],
   "sourceUnionBounds": [
-    7,
-    -44,
-    177,
-    250
+    31,
+    52,
+    206,
+    251
   ],
   "stage": {
     "source": "Prguse.wil",
@@ -51,8 +58,8 @@
     "hotX": 7,
     "hotY": -44,
     "stagePosition": [
-      7,
-      -44
+      38,
+      52
     ],
     "rgbaSha256": "db7d5d79be35b53d5b4a17bdd519602630b03e07145b37250b275fbe530d4658",
     "recordPolicy": "complete original Prguse record"
@@ -81,17 +88,17 @@
     ],
     "viewportOrigin": [
       0,
-      -44
+      0
     ],
     "viewportBounds": [
       0,
-      -44,
+      0,
       232,
-      281
+      325
     ],
     "baseScreenOrigin": [
-      0,
-      0
+      38,
+      52
     ],
     "equipmentScreenAnchor": [
       31,
@@ -104,7 +111,7 @@
       "weapon",
       "helmet"
     ],
-    "baseRule": "(0,0) + Prguse376 HotX/HotY",
+    "baseRule": "Prguse376 opaque stage at (38,52); do not apply its HotX/HotY",
     "cachedRecordRule": "(31,96) + record HotX/HotY"
   },
   "coverage": {
