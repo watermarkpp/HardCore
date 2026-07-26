@@ -127,6 +127,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _process(delta: float) -> void:
+	_expire_canonical_fire_charge_if_needed()
 	background.set_focus_position(player.global_position)
 	_update_world_camera_constraint(delta)
 	_update_portal_arrival_guard()
@@ -1397,15 +1398,12 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 	var context := player.consume_attack_context()
 	var mode := str(context.get("mode", "normal"))
 	var primary := _physical_primary_target(origin, direction, 105.0)
-	if _canonical_fire_charge_expires_ms > 0 and Time.get_ticks_msec() >= _canonical_fire_charge_expires_ms:
-		_canonical_fire_charge_expires_ms = 0
-		player.fire_sword_armed = false
+	_expire_canonical_fire_charge_if_needed()
 	if primary != null and Time.get_ticks_msec() < _canonical_fire_charge_expires_ms:
 		mode = "fire"
 		context["skill_name"] = "烈火剑法"
 		context["skill_level"] = PlayerState.effective_skill_level("烈火剑法")
-		_canonical_fire_charge_expires_ms = 0
-		player.fire_sword_armed = false
+		_set_canonical_fire_charge_expires_at(0)
 	elif mode == "normal" and PlayerState.is_skill_learned("攻杀剑术"):
 		mode = "slaying"
 	var basic_accuracy_bonus := _canonical_basic_sword_bonus(origin, direction, primary != null)
@@ -1810,8 +1808,23 @@ func _apply_canonical_effects(
 			"main_pet_spawn", "recall_existing_main_pet":
 				_apply_canonical_main_pet(effect, stable_skill_id)
 			"next_melee_charge":
-				_canonical_fire_charge_expires_ms = Time.get_ticks_msec() + maxi(1, int(effect.get("charge_lifetime_ms", 10000)))
-				player.fire_sword_armed = true
+				_set_canonical_fire_charge_expires_at(
+					Time.get_ticks_msec() + maxi(1, int(effect.get("charge_lifetime_ms", 10000)))
+				)
+
+
+func _set_canonical_fire_charge_expires_at(expires_at_ms: int) -> void:
+	_canonical_fire_charge_expires_ms = maxi(0, expires_at_ms)
+	if player != null:
+		player.set_fire_sword_charge_display(_canonical_fire_charge_expires_ms)
+
+
+func _expire_canonical_fire_charge_if_needed() -> void:
+	if (
+		_canonical_fire_charge_expires_ms > 0
+		and Time.get_ticks_msec() >= _canonical_fire_charge_expires_ms
+	):
+		_set_canonical_fire_charge_expires_at(0)
 
 
 func _apply_canonical_spell_damage(
