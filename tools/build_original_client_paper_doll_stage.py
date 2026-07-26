@@ -30,11 +30,15 @@ MANIFEST = ROOT / "assets/data/equipment_original_client_paper_doll_stage.json"
 CONTRACT_ID = "equipment.paper_doll.original_client_stage.v1"
 BASE_INDEX = 376
 HAIR_INDEX = 442
-BASE_SCREEN_ORIGIN = (0, 0)
+# MirClient/FState.pas::TFrmDlg.DStateWinDirectPaint draws Prguse #376 at
+# (38, 52), then switches to the (31, 96) anchor for hair and equipment.
+# WIL HotX/HotY are only consumed by GetCachedImage for the latter records;
+# they are *not* the position of the opaque Prguse stage image.
+BASE_SCREEN_ORIGIN = (38, 52)
 EQUIPMENT_ANCHOR = (31, 96)
 DRAW_ORDER = ("base", "hair", "dress", "weapon", "helmet")
 STAGE_CANVAS_SIZE = (232, 325)
-VIEWPORT_ORIGIN = (0, -44)
+VIEWPORT_ORIGIN = (0, 0)
 
 CATEGORY_WEAPON = "\u6b66\u5668"
 CATEGORY_ARMOR = "\u76d4\u7532"
@@ -121,10 +125,10 @@ def main() -> None:
     unique_records: dict[int, dict] = {}
     source_rectangles = [
         (
-            int(base_meta["x"]),
-            int(base_meta["y"]),
-            int(base_meta["x"]) + base_image.width,
-            int(base_meta["y"]) + base_image.height,
+            BASE_SCREEN_ORIGIN[0],
+            BASE_SCREEN_ORIGIN[1],
+            BASE_SCREEN_ORIGIN[0] + base_image.width,
+            BASE_SCREEN_ORIGIN[1] + base_image.height,
         ),
         (
             EQUIPMENT_ANCHOR[0] + int(hair_meta["x"]),
@@ -210,14 +214,30 @@ def main() -> None:
         "sex": "male",
         "sourcePolicy": {
             "sourceCode": (
-                "MirClient/FState.pas DStateWinDirectPaint equipment page"
+                "MirClient/FState.pas::TFrmDlg.DStateWinDirectPaint "
+                "(equipment StatePage=0)"
+            ),
+            "sourceCodePath": (
+                "reference/original_gameofmir/MirClient/FState.pas:2896-2969"
             ),
             "baseScreenOrigin": list(BASE_SCREEN_ORIGIN),
             "equipmentScreenAnchor": list(EQUIPMENT_ANCHOR),
             "recordPolicy": (
-                "decode and retain every original RGBA pixel; helmet stage "
-                "restore patches are intentional"
+                "Prguse #376 is the one opaque stage/background pass; "
+                "hair and StateItem records retain their original transparent "
+                "color-key pixels and are subsequent overlay passes"
             ),
+            "runtimeComposition": {
+                "output": "single_composited_paper_doll_layer",
+                "stageLayerMode": "opaque",
+                "overlayLayerMode": "transparent_color_key",
+                "consumerRule": (
+                    "draw stage exactly once at stage.stagePosition, then draw "
+                    "hair/dress/weapon/helmet at their stagePosition in drawOrder; "
+                    "never add a second anatomy/base texture or independently "
+                    "translate the Prguse stage by its HotX/HotY"
+                ),
+            },
             "forbiddenOperations": [
                 "opaque-bounds crop",
                 "border-connected background removal",
@@ -241,7 +261,7 @@ def main() -> None:
             "size": [base_image.width, base_image.height],
             "hotX": int(base_meta["x"]),
             "hotY": int(base_meta["y"]),
-            "stagePosition": [int(base_meta["x"]), int(base_meta["y"])],
+            "stagePosition": list(BASE_SCREEN_ORIGIN),
             "rgbaSha256": rgba_sha256(base_image),
             "recordPolicy": "complete original Prguse record",
         },
@@ -271,7 +291,7 @@ def main() -> None:
             "baseScreenOrigin": list(BASE_SCREEN_ORIGIN),
             "equipmentScreenAnchor": list(EQUIPMENT_ANCHOR),
             "drawOrder": list(DRAW_ORDER),
-            "baseRule": "(0,0) + Prguse376 HotX/HotY",
+            "baseRule": "Prguse376 opaque stage at (38,52); do not apply its HotX/HotY",
             "cachedRecordRule": "(31,96) + record HotX/HotY",
         },
         "coverage": {
