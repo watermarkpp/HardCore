@@ -154,10 +154,12 @@ func _build_equipment_panel() -> void:
 	# alpha bounds remain diagnostic data and cannot move the stage.
 	character_preview.center_on_opaque_bounds = false
 	character_preview.set_meta("horizontal_alignment_contract", PreviewScript.FOOT_STAGE_ANCHOR_CONTRACT_ID)
-	character_preview.set_meta("paper_doll_render_contract", PreviewScript.ORIGINAL_CLIENT_STAGE_CONTRACT_ID)
+	character_preview.configure_presentation_mode("classic_avatar")
+	character_preview.set_meta("paper_doll_render_contract", PreviewScript.PRESENTATION_MODES_CONTRACT_ID)
+	character_preview.set_meta("paper_doll_presentation_mode", "classic_avatar")
 	character_preview.set_meta(
 		"coordinate_space_policy",
-		"original stage aspect-fit; touch regions use inverse transform"
+		"transparent classic avatar; touch regions remain external equipment slots"
 	)
 	character_preview.set_meta("input_policy", "visual_only_mouse_filter_ignore")
 	# Reserve the lower half of the equipment panel for the client paper-doll;

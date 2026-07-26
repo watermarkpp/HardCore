@@ -26,6 +26,10 @@ func _run() -> void:
 	assert(paper_doll.position == Vector2.ZERO)
 	assert(paper_doll.size == preview_root.size, "人物选择页纸娃娃没有填满预览容器")
 	assert(paper_doll.mouse_filter == Control.MOUSE_FILTER_IGNORE)
+	assert(paper_doll.presentation_mode == "classic_avatar", "人物选择页必须默认使用透明原客户端纸娃娃")
+	assert(not paper_doll.uses_world_avatar(), "人物选择页不得使用低清世界人物图集")
+	assert(not paper_doll.uses_original_client_stage(), "人物选择页错误加载完整Prguse装备页")
+	_assert_classic_avatar_only(paper_doll, "战士人物选择页")
 	assert(
 		str(paper_doll._equipment_snapshot.get("衣服", {}).get("name", ""))
 		== "战神盔甲(男)",
@@ -54,6 +58,8 @@ func _run() -> void:
 	assert(preview_root.get_child_count() == 1, "切换人物后旧纸娃娃没有移除")
 	paper_doll = preview_root.get_child(0)
 	assert(paper_doll.profession_name == "法师")
+	assert(paper_doll.presentation_mode == "classic_avatar", "切换人物后没有保持透明原客户端纸娃娃")
+	_assert_classic_avatar_only(paper_doll, "法师人物选择页")
 	assert(
 		str(paper_doll._equipment_snapshot.get("衣服", {}).get("name", ""))
 		== "恶魔长袍(男)",
@@ -64,6 +70,14 @@ func _run() -> void:
 	_restore_profiles()
 	print("CHARACTER_SELECT_PAPER_DOLL_PROFILE_PASS")
 	get_tree().quit(0)
+
+
+func _assert_classic_avatar_only(preview: EquipmentCharacterPreview, label: String) -> void:
+	assert(preview.has_renderable_assets(), "%s缺少透明原客户端人物底图" % label)
+	assert(preview.original_stage_draw_commands().is_empty(), "%s错误绘制完整装备页背景或槽位" % label)
+	assert(preview._body_texture != null, "%s没有衣服层" % label)
+	assert(preview._weapon_texture != null, "%s没有武器层" % label)
+	assert(preview._helmet_texture != null, "%s没有头盔层" % label)
 
 
 func _prepare_profiles() -> void:

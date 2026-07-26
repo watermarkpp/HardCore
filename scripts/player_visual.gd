@@ -426,9 +426,60 @@ func _appearance_layout(source: Variant) -> Dictionary:
 	return fallback
 
 
-func _resolved_item_appearance(item: Dictionary, appearance_type: String, legacy_art: Dictionary) -> Dictionary:
+func _stable_item_id_for_equipped(record: Dictionary, item: Dictionary) -> int:
+	# Current saves use item_id while older equipment instances may use itemId.
+	# Prefer either stable ID over all display-name fields.
+	for field_name: String in ["item_id", "itemId"]:
+		var raw_id: Variant = record.get(field_name, null)
+		if raw_id is int or raw_id is float:
+			var numeric_id := int(raw_id)
+			if numeric_id >= 0:
+				return numeric_id
+		var text_id := str(raw_id)
+		if text_id.is_valid_int() and text_id.to_int() >= 0:
+			return text_id.to_int()
 	if not item.is_empty():
-		var resolved := GameData.item_world_appearance(int(item.get("itemId", -1)), PlayerState.gender)
+		var item_id := int(item.get("itemId", -1))
+		if item_id >= 0:
+			return item_id
+	# Name-only archives are resolved by an exact formal-catalog itemName match.
+	# Never guess from aliases or consult a lower-priority source.
+	var formal_items: Variant = GameData.equipment_visual_catalog.get("itemsById", {})
+	if not formal_items is Dictionary:
+		return -1
+	for field_name: String in ["name", "itemName"]:
+		var exact_name := str(record.get(field_name, ""))
+		if exact_name.is_empty():
+			continue
+		for item_key: Variant in formal_items:
+			var formal_item: Variant = formal_items[item_key]
+			if formal_item is Dictionary and str(formal_item.get("itemName", "")) == exact_name:
+				var item_key_text := str(item_key)
+				if item_key_text.is_valid_int():
+					return item_key_text.to_int()
+	return -1
+
+
+func _item_record_for_equipped(record: Dictionary) -> Dictionary:
+	for field_name: String in ["name", "itemName"]:
+		var exact_name := str(record.get(field_name, ""))
+		if exact_name.is_empty():
+			continue
+		var item := GameData.get_item(exact_name)
+		if not item.is_empty():
+			return item
+	return {}
+
+
+func _resolved_item_appearance(
+	record: Dictionary,
+	item: Dictionary,
+	appearance_type: String,
+	legacy_art: Dictionary
+) -> Dictionary:
+	var stable_item_id := _stable_item_id_for_equipped(record, item)
+	if stable_item_id >= 0:
+		var resolved := GameData.item_world_appearance(stable_item_id, PlayerState.gender)
 		if not resolved.is_empty():
 			if str(resolved.get("appearanceType", "")) == appearance_type:
 				var appearance: Variant = resolved.get("appearance", {})
@@ -447,13 +498,13 @@ func _refresh_equipment_visuals() -> void:
 	var weapon := _equipped_record("武器")
 	var armor := _equipped_record("衣服")
 	var helmet := _equipped_record("头盔")
-	var weapon_item := GameData.get_item(str(weapon.get("name", "")))
-	var armor_item := GameData.get_item(str(armor.get("name", "")))
-	var helmet_item := GameData.get_item(str(helmet.get("name", "")))
+	var weapon_item := _item_record_for_equipped(weapon)
+	var armor_item := _item_record_for_equipped(armor)
+	var helmet_item := _item_record_for_equipped(helmet)
 	var weapon_art: Dictionary = weapon_item.get("art", {}) if weapon_item is Dictionary else {}
 	var armor_art: Dictionary = armor_item.get("art", {}) if armor_item is Dictionary else {}
 	var helmet_art: Dictionary = helmet_item.get("art", {}) if helmet_item is Dictionary else {}
-	var weapon_appearance := _resolved_item_appearance(weapon_item, "weaponAppearance", weapon_art)
+	var weapon_appearance := _resolved_item_appearance(weapon, weapon_item, "weaponAppearance", weapon_art)
 	_weapon_action_textures = _load_appearance_actions(weapon_appearance)
 	_weapon_action_frame_counts = _appearance_frame_counts(weapon_appearance)
 	var weapon_layout := _appearance_layout(weapon_appearance)
@@ -464,7 +515,7 @@ func _refresh_equipment_visuals() -> void:
 		var attack_action: Variant = weapon_appearance.get("actions", {}).get("attack", {})
 		if attack_action is Dictionary:
 			_weapon_attack_source_frames = attack_action.get("sourceFrames", [])
-	var dress_appearance := _resolved_item_appearance(armor_item, "dressAppearance", armor_art)
+	var dress_appearance := _resolved_item_appearance(armor, armor_item, "dressAppearance", armor_art)
 	_dress_action_textures = _load_appearance_actions(dress_appearance)
 	var body_appearance: Dictionary = dress_appearance if not _dress_action_textures.is_empty() else base_appearance
 	_body_action_frame_counts = _appearance_frame_counts(body_appearance)
@@ -480,7 +531,7 @@ func _refresh_equipment_visuals() -> void:
 	# The old translucent polygon was prototype feedback and appeared as a
 	# floating blob beside the head/health bar. Use decoded client helmet art.
 	helmet_accent.visible = false
-	var helmet_appearance := _resolved_item_appearance(helmet_item, "helmetAppearance", helmet_art)
+	var helmet_appearance := _resolved_item_appearance(helmet, helmet_item, "helmetAppearance", helmet_art)
 	_helmet_action_textures = _load_appearance_actions(helmet_appearance)
 	_helmet_action_frame_counts = _appearance_frame_counts(helmet_appearance)
 	worn_helmet_sprite.texture = _helmet_action_textures.get("idle", null)
