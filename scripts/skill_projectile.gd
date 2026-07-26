@@ -2,6 +2,7 @@ class_name SkillProjectile
 extends Node2D
 
 const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
+const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
 
 const VISUAL_PATHS := {
 	"wizard.fireball": "res://assets/art/characters/wizard/effects/arcane_projectile.png",
@@ -65,13 +66,11 @@ func _ready() -> void:
 
 
 func _install_visual() -> void:
-	var texture := CasterSkillVisualRegistry.texture(skill_id)
-	if texture == null:
+	var candidate := AnimationPlayerScript.new()
+	if not candidate.configure(skill_id, direction, 34.0, true):
+		candidate.queue_free()
 		return
-	_sprite = Sprite2D.new()
-	_sprite.texture = texture
-	var maximum_dimension := maxf(float(texture.get_width()), float(texture.get_height()))
-	_sprite.scale = Vector2.ONE * 34.0 / maxf(1.0, maximum_dimension)
+	_sprite = candidate
 	add_child(_sprite)
 
 

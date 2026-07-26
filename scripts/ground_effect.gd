@@ -1,6 +1,8 @@
 class_name GroundSkillEffect
 extends Node2D
 
+const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
+
 const VISUAL_PATHS := {
 	"wizard.fire_wall": "res://assets/art/characters/wizard/effects/fire_wall.png",
 	"wizard.exploding_flame": "res://assets/art/characters/wizard/effects/area_burst.png",
@@ -41,13 +43,11 @@ func _ready() -> void:
 
 
 func _install_visual() -> void:
-	var texture := CasterSkillVisualRegistry.texture(skill_id)
-	if texture == null:
+	var candidate := AnimationPlayerScript.new()
+	if not candidate.configure(skill_id, Vector2.DOWN, radius * 1.6, true):
+		candidate.queue_free()
 		return
-	_sprite = Sprite2D.new()
-	_sprite.texture = texture
-	var maximum_dimension := maxf(float(texture.get_width()), float(texture.get_height()))
-	_sprite.scale = Vector2.ONE * radius * 1.6 / maxf(1.0, maximum_dimension)
+	_sprite = candidate
 	_sprite.modulate = Color(1, 1, 1, 0.72)
 	add_child(_sprite)
 

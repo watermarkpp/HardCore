@@ -1,6 +1,8 @@
 class_name CasterSkillVisualEffect
 extends Node2D
 
+const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
+
 var skill_id := ""
 var visual_role := ""
 var radius := 72.0
@@ -25,13 +27,12 @@ func _ready() -> void:
 	add_to_group("zone_content")
 	var entry := CasterSkillVisualRegistry.profile(skill_id)
 	visual_role = str(entry.get("role", ""))
-	var texture := CasterSkillVisualRegistry.texture(skill_id)
-	if texture == null:
+	if entry.get("animation", {}).get("contract", "") != "caster_skill_animation.v1":
 		return
 	if visual_role == "line_effect" and skill_id == "wizard.hellfire":
-		_install_repeated_line(texture)
+		_install_repeated_line()
 	else:
-		_install_single(texture)
+		_install_single()
 	visual_loaded = not _sprites.is_empty()
 
 
@@ -46,34 +47,30 @@ func _process(delta: float) -> void:
 		queue_free()
 
 
-func _install_single(texture: Texture2D) -> void:
-	var sprite := Sprite2D.new()
-	sprite.texture = texture
-	var width := maxf(1.0, float(texture.get_width()))
-	var height := maxf(1.0, float(texture.get_height()))
+func _install_single() -> void:
+	var sprite := AnimationPlayerScript.new()
+	var desired_extent := 72.0
 	match visual_role:
 		"line_effect":
-			sprite.rotation = direction.angle() + PI / 2.0
-			sprite.scale = Vector2(radius * 0.75 / width, radius * 2.0 / height)
-			sprite.position = direction * radius
+			desired_extent = radius * 2.0
 		"area_effect", "self_area", "ground_effect":
-			sprite.scale = Vector2.ONE * (radius * 2.0 / maxf(width, height))
+			desired_extent = radius * 2.0
 		"target_effect", "self_effect":
-			var desired_height := 260.0 if skill_id == "wizard.lightning" else minf(120.0, radius * 1.7)
-			sprite.scale = Vector2.ONE * (desired_height / height)
-		_:
-			sprite.scale = Vector2.ONE * (72.0 / maxf(width, height))
+			desired_extent = 260.0 if skill_id == "wizard.lightning" else minf(120.0, radius * 1.7)
+	if not sprite.configure(skill_id, direction, desired_extent):
+		sprite.queue_free()
+		return
 	add_child(sprite)
 	_sprites.append(sprite)
 
 
-func _install_repeated_line(texture: Texture2D) -> void:
-	var maximum_dimension := maxf(1.0, float(maxi(texture.get_width(), texture.get_height())))
+func _install_repeated_line() -> void:
 	var count := maxi(2, int(radius / 42.0))
 	for step: int in range(1, count + 1):
-		var sprite := Sprite2D.new()
-		sprite.texture = texture
-		sprite.scale = Vector2.ONE * (54.0 / maximum_dimension)
+		var sprite := AnimationPlayerScript.new()
+		if not sprite.configure(skill_id, direction, 54.0):
+			sprite.queue_free()
+			continue
 		sprite.position = direction * (float(step) * radius / float(count))
 		add_child(sprite)
 		_sprites.append(sprite)
