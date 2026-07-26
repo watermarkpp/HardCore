@@ -6,7 +6,7 @@ const ACTIONS := {
 	"idle": 4, "walk": 6, "attack": 6, "cast": 6, "hit": 3, "death": 4,
 }
 const EXPECTED_ELF_ROWS := [4, 5, 6, 1, 0, 7, 2, 3]
-const EXPECTED_BLACK_ROWS := [0, 7, 1, 5, 4, 3, 2, 6]
+const EXPECTED_BLACK_ROWS := [0, 1, 7, 2, 4, 3, 6, 5]
 const EXPECTED_CALIBRATION_ITEMS := [
 	146, 147, 149, 150, 151, 218, 224, 228, 232, 236, 240,
 ]
@@ -173,9 +173,14 @@ func _run() -> void:
 				assert(_has_opaque_pixel(cell))
 	var black_recipe: Dictionary = black_asset.get("bakedSourceOverrides", {})
 	assert(str(black_recipe.get("recipeId", "")) == (
-		"black_iron_151.user_authorized_missing_ne_nw_mirrors.v1"
+		"black_iron_151.user_authorized_nw_from_ne_mirror.v2"
 	))
 	assert(not bool(black_recipe.get("runtimeFlip", true)))
+	var black_rows: Dictionary = black_recipe.get("rows", {})
+	assert(black_rows.size() == 1)
+	assert(int(black_rows.get("5", {}).get("sourceRow", -1)) == 1)
+	assert(str(black_rows.get("5", {}).get("direction", "")) == "NW")
+	assert(str(black_rows.get("5", {}).get("sourceDirection", "")) == "NE")
 
 	var destination := Image.create(3, 3, false, Image.FORMAT_RGBA8)
 	destination.fill(Color(1, 1, 1, 1))

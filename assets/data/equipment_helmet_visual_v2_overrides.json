@@ -108,14 +108,65 @@
 					"locked": false
 				},
 				"E": {
-					"source_row": 1.0,
-					"source_slot_id": "slot_1",
+					"source_row": 7.0,
+					"source_slot_id": "slot_7",
 					"nudge": [
-						0.0,
+						-1.0,
 						3.0
 					],
 					"status": "valid",
 					"locked": false
+				},
+				"NE": {
+					"source_row": 1.0,
+					"source_slot_id": "slot_1",
+					"nudge": [
+						1.0,
+						-1.0
+					],
+					"status": "valid",
+					"locked": false
+				},
+				"SE": {
+					"source_row": 2.0,
+					"source_slot_id": "slot_2",
+					"nudge": [
+						3.0,
+						1.0
+					],
+					"status": "valid",
+					"locked": false
+				},
+				"SW": {
+					"source_row": 3.0,
+					"source_slot_id": "slot_3",
+					"nudge": [
+						-2.0,
+						0.0
+					],
+					"status": "unassigned",
+					"locked": false
+				},
+				"W": {
+					"source_row": 6.0,
+					"source_slot_id": "slot_6",
+					"nudge": [
+						-1.0,
+						2.0
+					],
+					"status": "valid",
+					"locked": false
+				},
+				"NW": {
+					"source_row": 5,
+					"source_slot_id": "slot_5",
+					"nudge": [
+						-1,
+						0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "NW"
 				}
 			}
 		}
@@ -188,12 +239,12 @@
 				"death": "f99492398eadb01b1b7e50f1f7c5bb347b42994054a165e3318922fd5599beec"
 			},
 			"derivedAtlasSha256": {
-				"idle": "0cb0f10a72c002a15bd8720a0ce87ce314628e91baa5e08d3295978642748487",
-				"walk": "207b98fb07b73c914a6b42e126d47254935a562a06e6accd78964d139c9a3406",
-				"attack": "6047b027d9e378537b503abd825d6f211e9074519276c620c8dede6e53d793da",
-				"cast": "21600ba85854cd60a92ba1aaa06e2afbde9d01c86d5a3482065b4e2559c4f658",
-				"hit": "263acd1b2359f6816715589a3faf512fa5720102cbfeb4412cb49e9b3364a4ef",
-				"death": "86215536527ddc287ac348ab69740c9416f86917eabf053682bbc2e2b886e449"
+				"idle": "f267381945fe278e45a90bfc19444e482d40dc1e533257cff50c8aeaccac742a",
+				"walk": "e21a908863025574899bca4230c6907a9888ab202b99cfaacf16eb6090bd24b4",
+				"attack": "cacbdee7a32792c2ab20c8d1a0aac0429a044f3a4f67d6660ea5889b4e4f464d",
+				"cast": "2a504fbf3f8164199d954c9c8850cb0ae21958aff112b2d385e4d93556428db5",
+				"hit": "251929bf03a25b535cb5ebee664c7296e24af96520434524d37ab1c15cbc3a9a",
+				"death": "4790de102e32ef77208bc8ad7dc95fc485addf24e6adfd492e4d9806d6561997"
 			},
 			"bakePolicy": {
 				"filter": "nearest",
@@ -214,7 +265,7 @@
 					1
 				],
 				"sourceAtlasModified": false,
-				"sourceRecipeId": "black_iron_151.user_authorized_missing_ne_nw_mirrors.v1"
+				"sourceRecipeId": "black_iron_151.user_authorized_nw_from_ne_mirror.v2"
 			}
 		}
 	}

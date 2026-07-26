@@ -1104,6 +1104,87 @@ def build_contract() -> dict:
     return payload
 
 
+def rebuild_generated_identity(identity_id: str) -> dict:
+    """Rebuild one non-Black-Iron identity without touching other helmets."""
+    if identity_id == "black_iron":
+        raise ValueError(
+            "targeted rebuild does not bypass Black Iron evidence requirements"
+        )
+    recipes = load_json(RECIPES)
+    if recipes.get("contractId") != CONTRACT_ID:
+        raise AssertionError("world helmet recipe contract id changed")
+    identity_recipes = {
+        str(recipe["identityId"]): recipe
+        for recipe in recipes["identities"]
+    }
+    if identity_id not in identity_recipes:
+        raise KeyError(f"unknown helmet identity: {identity_id}")
+    recipe = identity_recipes[identity_id]
+    concept_path = disk_path(str(recipe["concept"]))
+    if not concept_path.exists():
+        raise FileNotFoundError(f"missing approved helmet concept: {concept_path}")
+
+    baseline = load_json(CLIENT_BASELINE)
+    anchors = pose_anchor_map(baseline)
+    hair_library = read_library(HAIR_SOURCE)
+    _hair_data, _hair_palette, _hair_offsets, hair_info = hair_library
+    if int(hair_info["image_count"]) <= HAIR_APPEARANCE * HAIR_STRIDE + 599:
+        raise AssertionError("Hair.wil does not contain the male anchor family")
+
+    variants, variant_records, direction_acceptance = build_variants(
+        recipe,
+        baseline,
+    )
+    actions = {
+        action_name: build_generated_action(
+            recipe,
+            variants,
+            variant_records,
+            anchors,
+            hair_library,
+            action_name,
+        )
+        for action_name in ACTION_SPECS
+    }
+    identity = {
+        "identityId": identity_id,
+        "sourceIndex": int(recipe["sourceIndex"]),
+        "sex": "male",
+        "concept": str(recipe["concept"]),
+        "conceptFileSha256": file_sha256(concept_path),
+        "sourceGrid": list(recipe["sourceGrid"]),
+        "sourceSlotDirectionOrder": list(
+            recipe["sourceSlotDirectionOrder"]
+        ),
+        "canonicalRowSourceSlots": list(
+            recipe["canonicalRowSourceSlots"]
+        ),
+        "directionAcceptance": direction_acceptance,
+        "directionCutouts": variant_records,
+        "stateItemPixelsUsed": False,
+        "hairPixelsUsed": False,
+        "actions": actions,
+    }
+
+    payload = load_json(CONTRACT)
+    payload["recipeFileSha256"] = file_sha256(RECIPES)
+    payload["visualIdentities"][identity_id] = identity
+    for item in payload.get("itemsById", {}).values():
+        if str(item.get("identityId", "")) != identity_id:
+            continue
+        appearance = appearance_for_identity(identity)
+        item["maleAppearance"] = appearance
+        payload["runtimeMappingsByItemId"][str(item["itemId"])] = {
+            "helmetAppearance": deepcopy(appearance)
+        }
+    validate_contract(payload)
+    CONTRACT.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    return payload
+
+
 def validate_contract(contract: dict) -> None:
     if contract.get("contractId") != CONTRACT_ID:
         raise AssertionError("world helmet contract id changed")
@@ -1245,10 +1326,19 @@ def main() -> None:
         action="store_true",
         help="validate the committed contract and atlases without rebuilding",
     )
+    parser.add_argument(
+        "--identity",
+        help=(
+            "rebuild one generated visual identity without rebuilding "
+            "Black Iron or unrelated helmets"
+        ),
+    )
     args = parser.parse_args()
     if args.validate_only:
         validate_contract(load_json(CONTRACT))
         payload = load_json(CONTRACT)
+    elif args.identity:
+        payload = rebuild_generated_identity(str(args.identity))
     else:
         payload = build_contract()
     coverage = payload["coverage"]

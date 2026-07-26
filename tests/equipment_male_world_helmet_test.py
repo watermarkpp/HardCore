@@ -424,6 +424,23 @@ def main() -> None:
 
     assert len(physical_paths) == 66
     assert total_physical_cells == 2552
+    bronze_idle = Image.open(
+        disk_path(identities["bronze_magic"]["actions"]["idle"]["path"])
+    ).convert("RGBA")
+    bronze_front = cropped_visible(
+        bronze_idle.crop((0, 4 * CELL[1], CELL[0], 5 * CELL[1]))
+    )
+    bronze_rear = cropped_visible(
+        bronze_idle.crop((0, 0, CELL[0], CELL[1]))
+    )
+    face_x = bronze_front.width // 2
+    face_y = bronze_front.height - 3
+    assert bronze_front.getpixel((face_x, face_y))[3] == 0
+    assert bronze_front.getpixel((face_x - 3, face_y))[3] > 0
+    assert bronze_front.getpixel((face_x + 3, face_y))[3] > 0
+    assert bronze_rear.getpixel(
+        (bronze_rear.width // 2, bronze_rear.height - 3)
+    )[3] > 0
     black_actions = identities["black_iron"]["actions"]
     assert black_actions["cast"]["atlasRgbaSha256"] != (
         black_actions["idle"]["atlasRgbaSha256"]
@@ -435,8 +452,8 @@ def main() -> None:
         for action in PRESERVED_BLACK_IRON_FILE_SHA256
     )
 
-    assert catalog["coverage"]["exactMaleWorldWear"] == 55
-    assert catalog["coverage"]["exactFemaleWorldWear"] == 43
+    assert catalog["coverage"]["exactMaleWorldWear"] == 60
+    assert catalog["coverage"]["exactFemaleWorldWear"] == 12
     print(
         "EQUIPMENT_MALE_WORLD_HELMET_TEST_PASS "
         "items=12 identities=11 physical_atlases=66 "

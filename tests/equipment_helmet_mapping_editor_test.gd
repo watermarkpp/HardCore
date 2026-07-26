@@ -533,40 +533,45 @@ func _run() -> void:
 		"bakedSourceOverrides", {}
 	)
 	assert(str(black_recipe.get("recipeId", "")) == (
-		"black_iron_151.user_authorized_missing_ne_nw_mirrors.v1"
+		"black_iron_151.user_authorized_nw_from_ne_mirror.v2"
 	))
 	assert(not bool(black_recipe.get("runtimeFlip", true)))
-	var black_raw_idle := (load(
-		HelmetVisualV2.base_action_texture_path(
-			151, "idle", 0, "helmet_front"
-		)
-	) as Texture2D).get_image()
-	var raw_black_row_2 := black_raw_idle.get_region(Rect2i(
-		0, 2 * ArtSpec.WARRIOR_FRAME.y,
-		ArtSpec.WARRIOR_FRAME.x, ArtSpec.WARRIOR_FRAME.y
-	))
-	var raw_black_row_6 := black_raw_idle.get_region(Rect2i(
-		0, 6 * ArtSpec.WARRIOR_FRAME.y,
-		ArtSpec.WARRIOR_FRAME.x, ArtSpec.WARRIOR_FRAME.y
-	))
-	assert(
-		editor.calibration_source_cell("idle", 3, 0).get_data()
-		== editor.mirror_cell_between_pivots(
-			raw_black_row_2,
-			HelmetVisualV2.pivot_for_source_row(151, "idle", 2, 0),
-			HelmetVisualV2.pivot_for_source_row(151, "idle", 3, 0)
-		).get_data()
-	)
-	assert(
-		editor.calibration_source_cell("idle", 7, 0).get_data()
-		== editor.mirror_cell_between_pivots(
-			raw_black_row_6,
-			HelmetVisualV2.pivot_for_source_row(151, "idle", 6, 0),
-			HelmetVisualV2.pivot_for_source_row(151, "idle", 7, 0)
-		).get_data()
-	)
+	var black_action_frames := {
+		"idle": 4, "walk": 6, "attack": 6,
+		"cast": 6, "hit": 3, "death": 4,
+	}
+	for black_action: String in black_action_frames:
+		var black_raw := (load(
+			HelmetVisualV2.base_action_texture_path(
+				151, black_action, 0, "helmet_front"
+			)
+		) as Texture2D).get_image()
+		for black_frame: int in int(black_action_frames[black_action]):
+			var raw_black_ne := black_raw.get_region(Rect2i(
+				black_frame * ArtSpec.WARRIOR_FRAME.x,
+				1 * ArtSpec.WARRIOR_FRAME.y,
+				ArtSpec.WARRIOR_FRAME.x,
+				ArtSpec.WARRIOR_FRAME.y
+			))
+			assert(
+				editor.calibration_source_cell(
+					black_action, 5, black_frame
+				).get_data()
+				== editor.mirror_cell_between_pivots(
+					raw_black_ne,
+					HelmetVisualV2.pivot_for_source_row(
+						151, black_action, 1, black_frame
+					),
+					HelmetVisualV2.pivot_for_source_row(
+						151, black_action, 5, black_frame
+					)
+				).get_data()
+			)
 	assert(editor.set_uniform_scale_percent(110))
 	target_ne.emit_signal("pressed")
+	var initial_151_ne_nudge := _vector(
+		HelmetVisualV2.direction_record(151, 1).get("nudge", [])
+	)
 	(source_grid.get_node("Source_Row0") as TextureButton).emit_signal("pressed")
 	assert(editor.nudge_current(Vector2i.LEFT))
 	assert(
@@ -606,7 +611,10 @@ func _run() -> void:
 	var saved_151_ne := HelmetVisualV2.direction_record(151, 1)
 	assert(int(saved_151_ne.get("source_row", -1)) == 0)
 	assert(str(saved_151_ne.get("source_slot_id", "")) == "slot_0")
-	assert(_vector(saved_151_ne.get("nudge", [])) == Vector2i.LEFT)
+	assert(
+		_vector(saved_151_ne.get("nudge", []))
+		== initial_151_ne_nudge + Vector2i.LEFT
+	)
 	var trace_151 := _json(
 		"%s/helmet_151_generated_all_actions_trace.json" % OUTPUT_ROOT
 	)

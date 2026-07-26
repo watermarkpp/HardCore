@@ -404,20 +404,14 @@ def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
                 ),
                 "bakedSourceOverrides": {
                     "recipeId": (
-                        "black_iron_151.user_authorized_missing_ne_nw_mirrors.v1"
+                        "black_iron_151.user_authorized_nw_from_ne_mirror.v2"
                     ),
                     "runtimeFlip": False,
                     "rows": {
-                        "3": {
-                            "direction": "missing_diagonal_slot_3",
-                            "sourceRow": 2,
-                            "operation": "horizontal_mirror",
-                            "alignment": "source_pivot_to_target_pivot",
-                            "authorization": "user_explicit_2026-07-26",
-                        },
-                        "7": {
-                            "direction": "missing_diagonal_slot_7",
-                            "sourceRow": 6,
+                        "5": {
+                            "direction": "NW",
+                            "sourceRow": 1,
+                            "sourceDirection": "NE",
                             "operation": "horizontal_mirror",
                             "alignment": "source_pivot_to_target_pivot",
                             "authorization": "user_explicit_2026-07-26",

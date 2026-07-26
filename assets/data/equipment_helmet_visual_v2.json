@@ -1831,27 +1831,27 @@
         "actions": {
           "idle": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_idle.png",
-            "sha256": "258957080d3730d990213c5a9dbca4156437b583ee03fa478bb7ebbe87da2a3b"
+            "sha256": "540c54b4c9400753dc294ad79d920fe9d50c8577a1482105dce5451c78f46998"
           },
           "walk": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_walk.png",
-            "sha256": "d0cf3a1dfa02d1ab040e100e679c30b616b839a3a6731c229b33cd279955716b"
+            "sha256": "890b417aa6e7bab6028150ecf2d92e885aa4c85a24935ef45ae3d38afba82ee7"
           },
           "attack": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_attack.png",
-            "sha256": "230e509093e0993afc1c8395641fed0d141bb18fa81ed8d2b2b5d822546916f2"
+            "sha256": "dba8ca37d7d0b46b8b30f30213399fc20529f2e908a262b3976d2082d6167073"
           },
           "cast": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_cast.png",
-            "sha256": "29642730e0a1ffb9216510677c088931685b6726bef47777cce3760af27ba528"
+            "sha256": "6b5eaab73cdfbad4c468f15c4627142cd52961a6584438b94bef0dadc4eb15a0"
           },
           "hit": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_hit.png",
-            "sha256": "fe6b599db3ffd066485aee9757e34c85b5214a77bb2c34990c817e22fb126338"
+            "sha256": "416c04ae1bbdf1ae72af29de026a9f735f09e62318b83d316f0ed3d7c8042371"
           },
           "death": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_death.png",
-            "sha256": "544b66a82b6acad0167f8d976d3b9d637d9440ab062752ac9e24e39b7331d248"
+            "sha256": "e80f09cadc8db357d70d6076e9ba341f37eb1f6018f2ee3c4f007a7400a72832"
           }
         },
         "pixelPolicy": "immutable_primary_source_runtime_atlas"
@@ -8453,19 +8453,13 @@
       "readOnlyGoldenReference": false,
       "historicalGoldenReferenceSuperseded": "res://assets/data/equipment_helmet_151_golden_reference.json",
       "bakedSourceOverrides": {
-        "recipeId": "black_iron_151.user_authorized_missing_ne_nw_mirrors.v1",
+        "recipeId": "black_iron_151.user_authorized_nw_from_ne_mirror.v2",
         "runtimeFlip": false,
         "rows": {
-          "3": {
-            "direction": "missing_diagonal_slot_3",
-            "sourceRow": 2,
-            "operation": "horizontal_mirror",
-            "alignment": "source_pivot_to_target_pivot",
-            "authorization": "user_explicit_2026-07-26"
-          },
-          "7": {
-            "direction": "missing_diagonal_slot_7",
-            "sourceRow": 6,
+          "5": {
+            "direction": "NW",
+            "sourceRow": 1,
+            "sourceDirection": "NE",
             "operation": "horizontal_mirror",
             "alignment": "source_pivot_to_target_pivot",
             "authorization": "user_explicit_2026-07-26"

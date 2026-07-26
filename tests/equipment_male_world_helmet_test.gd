@@ -164,7 +164,7 @@ func _run() -> void:
 		black_actions.get("cast", {}).get("atlasRgbaSha256", "")
 		!= black_actions.get("idle", {}).get("atlasRgbaSha256", "")
 	)
-	assert(int(catalog.get("coverage", {}).get("exactMaleWorldWear", 0)) == 55)
+	assert(int(catalog.get("coverage", {}).get("exactMaleWorldWear", 0)) == 60)
 	print(
 		"EQUIPMENT_MALE_WORLD_HELMET_GODOT_TEST_PASS "
 		+ "items=12 identities=11 atlases=66 logical_cells=2784"
