@@ -26,6 +26,15 @@ func _run() -> void:
 	assert(paper_doll.position == Vector2.ZERO)
 	assert(paper_doll.size == preview_root.size, "人物选择页纸娃娃没有填满预览容器")
 	assert(paper_doll.mouse_filter == Control.MOUSE_FILTER_IGNORE)
+	assert(paper_doll.presentation_mode == "world_avatar", "人物选择页必须默认使用世界人物预览")
+	var source_document := paper_doll._resolve_source_document()
+	var profession_document := paper_doll._profession_manifest(source_document)
+	var bases: Dictionary = profession_document.get("worldBaseByGender", {})
+	var male_base: Dictionary = bases.get("男", {})
+	var idle: Dictionary = male_base.get("actions", {}).get("idle", {})
+	assert(paper_doll.uses_world_avatar(), "人物选择页没有加载正式世界人物管线: mode=%s path=%s exists=%s %s" % [paper_doll.presentation_mode, str(idle.get("path", "")), ResourceLoader.exists(str(idle.get("path", ""))), JSON.stringify(paper_doll._world_base_layer)])
+	assert(not paper_doll.uses_original_client_stage(), "人物选择页错误加载完整Prguse装备页")
+	_assert_world_avatar_only(paper_doll, "战士人物选择页")
 	assert(
 		str(paper_doll._equipment_snapshot.get("衣服", {}).get("name", ""))
 		== "战神盔甲(男)",
@@ -54,6 +63,8 @@ func _run() -> void:
 	assert(preview_root.get_child_count() == 1, "切换人物后旧纸娃娃没有移除")
 	paper_doll = preview_root.get_child(0)
 	assert(paper_doll.profession_name == "法师")
+	assert(paper_doll.uses_world_avatar(), "切换人物后没有保持世界人物预览")
+	_assert_world_avatar_only(paper_doll, "法师人物选择页")
 	assert(
 		str(paper_doll._equipment_snapshot.get("衣服", {}).get("name", ""))
 		== "恶魔长袍(男)",
@@ -64,6 +75,19 @@ func _run() -> void:
 	_restore_profiles()
 	print("CHARACTER_SELECT_PAPER_DOLL_PROFILE_PASS")
 	get_tree().quit(0)
+
+
+func _assert_world_avatar_only(preview: EquipmentCharacterPreview, label: String) -> void:
+	var commands := preview.world_avatar_draw_commands()
+	assert(not commands.is_empty(), "%s缺少世界人物绘制命令" % label)
+	for command: Dictionary in commands:
+		var texture: Texture2D = command.get("texture")
+		assert(texture != null, "%s存在空世界人物纹理" % label)
+		var path := texture.resource_path
+		assert(
+			path.contains("/world_wear/") or path.contains("/world/"),
+			"%s错误回退到装备页/纸娃娃资源：%s" % [label, path]
+		)
 
 
 func _prepare_profiles() -> void:
