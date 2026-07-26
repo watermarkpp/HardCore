@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 2,
+  "contractId": "equipment.world_helmet.golden.151.v1",
+  "itemId": 151,
+  "itemName": "黑铁头盔",
+  "visualAssetId": "black_iron_golden_151",
+  "readOnly": true,
+  "capturedBeforePlayerVisualHelmetV2": true,
+  "baselineCommit": "49fa8d38a0f4d3848e16a73533d4f257f37ffca8",
+  "stateItemSource": {
+    "library": "StateItem.wil",
+    "index": 344,
+    "originalSize": [
+      28,
+      32
+    ]
+  },
+  "fixture": {
+    "playerVisualId": "player.male.cloth_002",
+    "gender": "male",
+    "dress": "布衣(男)",
+    "actions": [
+      "idle",
+      "walk",
+      "attack",
+      "hit",
+      "death"
+    ],
+    "canonicalDirections": [
+      "N",
+      "NE",
+      "E",
+      "SE",
+      "S",
+      "SW",
+      "W",
+      "NW"
+    ]
+  },
+  "pixelDiffTolerance": 0,
+  "compatibilityPivotPolicy": "Per-frame pivot equals the primary same-frame head socket, preserving the immutable full-cell atlas at zero final delta.",
+  "directionRemapChanged": false,
+  "assetPixelsChanged": false,
+  "actions": {
+    "idle": {
+      "frames": 32,
+      "compositeRgbaSequenceSha256": "02a245cce66274fa34946ae403b8b3eb838f2aaece1dc13d8a3e1000a2291953",
+      "bodyAtlasSha256": "bbb1a24ff2cabfec586721221e5fae8ad298816b3ffdc329ff0effbc5692a84",
+      "helmetAtlasSha256": "8a78c841d88b47946ef6f559f731cbbe9c08313e11c7ef48e5457d12d839e052"
+    },
+    "walk": {
+      "frames": 48,
+      "compositeRgbaSequenceSha256": "39d32f754125ca6f534476de2145062a322ddf21a93facb0b61d6d6b5e5087d5",
+      "bodyAtlasSha256": "e2f12338fe19987c476de8601663ce89d6f99805dd5c1310e3a75c3aca800bbd",
+      "helmetAtlasSha256": "8b32472b1dd8ebe2723b34cb1fd2d5d73d151891c7372dfc4f93a4f5d3ceb4a6"
+    },
+    "attack": {
+      "frames": 48,
+      "compositeRgbaSequenceSha256": "5635f59deb313bffcf6e6aac389dd6d48a7916778dec95c78a2ef7692c01989e",
+      "bodyAtlasSha256": "e990f918d200e446c0b690d354bc233e84b5a8e15b3b5d630b9c5fa64035ebf4",
+      "helmetAtlasSha256": "427855f0a799fd8cc442071255861e6a22456532facb3801e9774c4236f069ca"
+    },
+    "hit": {
+      "frames": 24,
+      "compositeRgbaSequenceSha256": "c6688d0e7be4f803f815447f79a9ecec8794e082b40852b9c1b4dd193dccbd1c",
+      "bodyAtlasSha256": "ecfda8e1fd6fa2764baa0382ed925105b16a5ceb1c787e1cc36d002bef7695f3",
+      "helmetAtlasSha256": "605d12ebd303bbc9be5ee3da645145ad53f9077d28e0fff83ac5d95970575cf7"
+    },
+    "death": {
+      "frames": 32,
+      "compositeRgbaSequenceSha256": "07abb524f79d8757309bf22ec8a4bb9f9c95ef3cbe6fa312942561d258d39c54",
+      "bodyAtlasSha256": "b101305b65c447e871c6f9b0f06e48df095ac0a251f8a5566908a93a098a6206",
+      "helmetAtlasSha256": "f99492398eadb01b1b7e50f1f7c5bb347b42994054a165e3318922fd5599beec"
+    }
+  }
+}

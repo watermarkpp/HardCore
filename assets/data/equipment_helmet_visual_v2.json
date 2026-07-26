@@ -1,0 +1,2837 @@
+{
+  "schemaVersion": 3,
+  "contractId": "equipment.world_helmet.player_visual_v2",
+  "canonicalDirections": [
+    "N",
+    "NE",
+    "E",
+    "SE",
+    "S",
+    "SW",
+    "W",
+    "NW"
+  ],
+  "runtimeFormula": "final_position = body_head_socket - helmet_local_pivot(action,direction,frame) + integer_nudge",
+  "renderPipeline": [
+    "helmet_back",
+    "body_and_original_face",
+    "helmet_front",
+    "head_occlusion_mask"
+  ],
+  "maskComposition": {
+    "semantic": "destination_alpha *= (1.0 - mask_alpha)",
+    "execution": "CPU current-cell composition before helmet_front",
+    "ordinarySpriteOverlayForbidden": true
+  },
+  "policies": {
+    "facePolicyValues": [
+      "open_crown",
+      "half_open",
+      "closed"
+    ],
+    "hairPolicyValues": [
+      "keep",
+      "clip",
+      "hide"
+    ],
+    "statusValues": [
+      "valid",
+      "mapping_error",
+      "art_error",
+      "anchor_error",
+      "mask_error",
+      "locked"
+    ],
+    "integerCoordinatesOnly": true,
+    "textureFilter": "nearest",
+    "runtimeScalingForbidden": true,
+    "rotationForbidden": true,
+    "horizontalFlipForbidden": true,
+    "bakedPlayerFaceForbidden": true
+  },
+  "headSocketDatabase": "res://assets/data/player_head_socket_db.json",
+  "calibrationOverride": "res://assets/data/equipment_helmet_visual_v2_overrides.json",
+  "itemVisualAssetRefs": {
+    "146": "elf_146",
+    "147": "bronze_magic",
+    "148": "bronze_magic",
+    "151": "black_iron_golden_151"
+  },
+  "visualAssets": {
+    "elf_146": {
+      "visual_asset_id": "elf_146",
+      "pilotItemId": 146,
+      "calibrationScope": "item_146_only",
+      "player_visual_id": "player.male.cloth_002",
+      "source": {
+        "lane": "helmet_world_visuals",
+        "tier": "primary",
+        "distribution": "research.mir2_client_raw",
+        "path": "res://assets/art/items/client/world_wear/helmet/male/source/elf_helmet_8dir.png",
+        "acceptanceEvidence": "res://assets/art/items/client/world_wear/helmet/male/acceptance/elf_direction_mapping.png",
+        "poseEvidence": "res://assets/data/equipment_male_world_helmet.json"
+      },
+      "source_direction_map": {
+        "N": 4,
+        "NE": 3,
+        "E": 2,
+        "SE": 1,
+        "S": 0,
+        "SW": 7,
+        "W": 6,
+        "NW": 5
+      },
+      "directions": {
+        "N": {
+          "texture": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+          "texturesByAction": {
+            "idle": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+            "walk": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_walk.png",
+            "attack": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_attack.png",
+            "hit": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_hit.png",
+            "death": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_death.png"
+          },
+          "source_direction": "N",
+          "source_row": 4,
+          "pivot": [
+            88,
+            35
+          ],
+          "pivotByActionFrame": {
+            "idle": [
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                88,
+                36
+              ]
+            ],
+            "walk": [
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                88,
+                35
+              ]
+            ],
+            "attack": [
+              [
+                82,
+                37
+              ],
+              [
+                94,
+                34
+              ],
+              [
+                83,
+                49
+              ],
+              [
+                83,
+                62
+              ],
+              [
+                84,
+                67
+              ],
+              [
+                81,
+                54
+              ]
+            ],
+            "hit": [
+              [
+                88,
+                32
+              ],
+              [
+                86,
+                33
+              ],
+              [
+                86,
+                36
+              ]
+            ],
+            "death": [
+              [
+                85,
+                48
+              ],
+              [
+                87,
+                39
+              ],
+              [
+                83,
+                62
+              ],
+              [
+                83,
+                62
+              ]
+            ]
+          },
+          "nudge": [
+            0,
+            0
+          ],
+          "face_policy": "open_crown",
+          "hair_policy": "keep",
+          "openingVisibility": "none",
+          "status": "valid",
+          "locked": true,
+          "flip_h": false,
+          "runtime_scale": [
+            1,
+            1
+          ],
+          "calibrationOverlays": {
+            "face_mask": {
+              "shape": "rect",
+              "offset": [
+                -4,
+                -1
+              ],
+              "size": [
+                8,
+                10
+              ],
+              "rearDirection": true
+            },
+            "hair_mask": {
+              "shape": "rect",
+              "offset": [
+                -8,
+                -9
+              ],
+              "size": [
+                16,
+                10
+              ]
+            }
+          },
+          "layers": {
+            "helmet_back": null,
+            "helmet_front": {
+              "idle": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+              "walk": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_walk.png",
+              "attack": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_attack.png",
+              "hit": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_hit.png",
+              "death": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_death.png"
+            },
+            "head_occlusion_mask": null
+          }
+        },
+        "NE": {
+          "texture": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+          "texturesByAction": {
+            "idle": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+            "walk": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_walk.png",
+            "attack": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_attack.png",
+            "hit": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_hit.png",
+            "death": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_death.png"
+          },
+          "source_direction": "NE",
+          "source_row": 3,
+          "pivot": [
+            88,
+            36
+          ],
+          "pivotByActionFrame": {
+            "idle": [
+              [
+                88,
+                36
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                88,
+                36
+              ]
+            ],
+            "walk": [
+              [
+                89,
+                37
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                88,
+                37
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                87,
+                36
+              ]
+            ],
+            "attack": [
+              [
+                80,
+                42
+              ],
+              [
+                78,
+                36
+              ],
+              [
+                91,
+                51
+              ],
+              [
+                98,
+                60
+              ],
+              [
+                100,
+                65
+              ],
+              [
+                93,
+                55
+              ]
+            ],
+            "hit": [
+              [
+                73,
+                36
+              ],
+              [
+                77,
+                37
+              ],
+              [
+                86,
+                39
+              ]
+            ],
+            "death": [
+              [
+                93,
+                48
+              ],
+              [
+                84,
+                40
+              ],
+              [
+                61,
+                73
+              ],
+              [
+                53,
+                74
+              ]
+            ]
+          },
+          "nudge": [
+            0,
+            0
+          ],
+          "face_policy": "open_crown",
+          "hair_policy": "keep",
+          "openingVisibility": "partial",
+          "status": "valid",
+          "locked": true,
+          "flip_h": false,
+          "runtime_scale": [
+            1,
+            1
+          ],
+          "calibrationOverlays": {
+            "face_mask": {
+              "shape": "rect",
+              "offset": [
+                -4,
+                -1
+              ],
+              "size": [
+                8,
+                10
+              ],
+              "rearDirection": true
+            },
+            "hair_mask": {
+              "shape": "rect",
+              "offset": [
+                -8,
+                -9
+              ],
+              "size": [
+                16,
+                10
+              ]
+            }
+          },
+          "layers": {
+            "helmet_back": null,
+            "helmet_front": {
+              "idle": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+              "walk": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_walk.png",
+              "attack": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_attack.png",
+              "hit": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_hit.png",
+              "death": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_death.png"
+            },
+            "head_occlusion_mask": null
+          }
+        },
+        "E": {
+          "texture": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+          "texturesByAction": {
+            "idle": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+            "walk": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_walk.png",
+            "attack": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_attack.png",
+            "hit": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_hit.png",
+            "death": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_death.png"
+          },
+          "source_direction": "E",
+          "source_row": 2,
+          "pivot": [
+            88,
+            35
+          ],
+          "pivotByActionFrame": {
+            "idle": [
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ]
+            ],
+            "walk": [
+              [
+                89,
+                36
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                89,
+                35
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                87,
+                36
+              ],
+              [
+                87,
+                35
+              ]
+            ],
+            "attack": [
+              [
+                83,
+                44
+              ],
+              [
+                69,
+                43
+              ],
+              [
+                98,
+                45
+              ],
+              [
+                107,
+                51
+              ],
+              [
+                111,
+                54
+              ],
+              [
+                101,
+                49
+              ]
+            ],
+            "hit": [
+              [
+                66,
+                45
+              ],
+              [
+                75,
+                42
+              ],
+              [
+                87,
+                38
+              ]
+            ],
+            "death": [
+              [
+                98,
+                43
+              ],
+              [
+                85,
+                41
+              ],
+              [
+                55,
+                88
+              ],
+              [
+                43,
+                94
+              ]
+            ]
+          },
+          "nudge": [
+            0,
+            0
+          ],
+          "face_policy": "open_crown",
+          "hair_policy": "keep",
+          "openingVisibility": "partial",
+          "status": "valid",
+          "locked": true,
+          "flip_h": false,
+          "runtime_scale": [
+            1,
+            1
+          ],
+          "calibrationOverlays": {
+            "face_mask": {
+              "shape": "rect",
+              "offset": [
+                -4,
+                -1
+              ],
+              "size": [
+                8,
+                10
+              ],
+              "rearDirection": false
+            },
+            "hair_mask": {
+              "shape": "rect",
+              "offset": [
+                -8,
+                -9
+              ],
+              "size": [
+                16,
+                10
+              ]
+            }
+          },
+          "layers": {
+            "helmet_back": null,
+            "helmet_front": {
+              "idle": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+              "walk": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_walk.png",
+              "attack": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_attack.png",
+              "hit": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_hit.png",
+              "death": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_death.png"
+            },
+            "head_occlusion_mask": null
+          }
+        },
+        "SE": {
+          "texture": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+          "texturesByAction": {
+            "idle": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+            "walk": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_walk.png",
+            "attack": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_attack.png",
+            "hit": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_hit.png",
+            "death": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_death.png"
+          },
+          "source_direction": "SE",
+          "source_row": 1,
+          "pivot": [
+            87,
+            37
+          ],
+          "pivotByActionFrame": {
+            "idle": [
+              [
+                87,
+                37
+              ],
+              [
+                88,
+                37
+              ],
+              [
+                88,
+                37
+              ],
+              [
+                88,
+                37
+              ]
+            ],
+            "walk": [
+              [
+                88,
+                37
+              ],
+              [
+                87,
+                37
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                87,
+                37
+              ],
+              [
+                87,
+                38
+              ],
+              [
+                87,
+                37
+              ]
+            ],
+            "attack": [
+              [
+                88,
+                46
+              ],
+              [
+                72,
+                53
+              ],
+              [
+                97,
+                42
+              ],
+              [
+                104,
+                42
+              ],
+              [
+                107,
+                43
+              ],
+              [
+                101,
+                43
+              ]
+            ],
+            "hit": [
+              [
+                71,
+                56
+              ],
+              [
+                80,
+                49
+              ],
+              [
+                88,
+                40
+              ]
+            ],
+            "death": [
+              [
+                96,
+                39
+              ],
+              [
+                86,
+                43
+              ],
+              [
+                68,
+                104
+              ],
+              [
+                59,
+                115
+              ]
+            ]
+          },
+          "nudge": [
+            0,
+            0
+          ],
+          "face_policy": "open_crown",
+          "hair_policy": "keep",
+          "openingVisibility": "partial",
+          "status": "valid",
+          "locked": true,
+          "flip_h": false,
+          "runtime_scale": [
+            1,
+            1
+          ],
+          "calibrationOverlays": {
+            "face_mask": {
+              "shape": "rect",
+              "offset": [
+                -4,
+                -1
+              ],
+              "size": [
+                8,
+                10
+              ],
+              "rearDirection": false
+            },
+            "hair_mask": {
+              "shape": "rect",
+              "offset": [
+                -8,
+                -9
+              ],
+              "size": [
+                16,
+                10
+              ]
+            }
+          },
+          "layers": {
+            "helmet_back": null,
+            "helmet_front": {
+              "idle": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+              "walk": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_walk.png",
+              "attack": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_attack.png",
+              "hit": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_hit.png",
+              "death": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_death.png"
+            },
+            "head_occlusion_mask": null
+          }
+        },
+        "S": {
+          "texture": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+          "texturesByAction": {
+            "idle": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+            "walk": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_walk.png",
+            "attack": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_attack.png",
+            "hit": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_hit.png",
+            "death": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_death.png"
+          },
+          "source_direction": "S",
+          "source_row": 0,
+          "pivot": [
+            87,
+            40
+          ],
+          "pivotByActionFrame": {
+            "idle": [
+              [
+                87,
+                40
+              ],
+              [
+                87,
+                40
+              ],
+              [
+                87,
+                40
+              ],
+              [
+                87,
+                40
+              ]
+            ],
+            "walk": [
+              [
+                87,
+                40
+              ],
+              [
+                87,
+                41
+              ],
+              [
+                87,
+                40
+              ],
+              [
+                87,
+                40
+              ],
+              [
+                87,
+                41
+              ],
+              [
+                88,
+                40
+              ]
+            ],
+            "attack": [
+              [
+                93,
+                48
+              ],
+              [
+                83,
+                61
+              ],
+              [
+                92,
+                41
+              ],
+              [
+                92,
+                39
+              ],
+              [
+                91,
+                38
+              ],
+              [
+                94,
+                40
+              ]
+            ],
+            "hit": [
+              [
+                86,
+                62
+              ],
+              [
+                89,
+                53
+              ],
+              [
+                89,
+                42
+              ]
+            ],
+            "death": [
+              [
+                91,
+                39
+              ],
+              [
+                89,
+                45
+              ],
+              [
+                93,
+                110
+              ],
+              [
+                93,
+                124
+              ]
+            ]
+          },
+          "nudge": [
+            0,
+            0
+          ],
+          "face_policy": "open_crown",
+          "hair_policy": "keep",
+          "openingVisibility": "full",
+          "status": "valid",
+          "locked": true,
+          "flip_h": false,
+          "runtime_scale": [
+            1,
+            1
+          ],
+          "calibrationOverlays": {
+            "face_mask": {
+              "shape": "rect",
+              "offset": [
+                -4,
+                -1
+              ],
+              "size": [
+                8,
+                10
+              ],
+              "rearDirection": false
+            },
+            "hair_mask": {
+              "shape": "rect",
+              "offset": [
+                -8,
+                -9
+              ],
+              "size": [
+                16,
+                10
+              ]
+            }
+          },
+          "layers": {
+            "helmet_back": null,
+            "helmet_front": {
+              "idle": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+              "walk": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_walk.png",
+              "attack": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_attack.png",
+              "hit": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_hit.png",
+              "death": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_death.png"
+            },
+            "head_occlusion_mask": null
+          }
+        },
+        "SW": {
+          "texture": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+          "texturesByAction": {
+            "idle": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+            "walk": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_walk.png",
+            "attack": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_attack.png",
+            "hit": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_hit.png",
+            "death": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_death.png"
+          },
+          "source_direction": "SW",
+          "source_row": 7,
+          "pivot": [
+            88,
+            38
+          ],
+          "pivotByActionFrame": {
+            "idle": [
+              [
+                88,
+                38
+              ],
+              [
+                88,
+                37
+              ],
+              [
+                88,
+                37
+              ],
+              [
+                88,
+                37
+              ]
+            ],
+            "walk": [
+              [
+                88,
+                37
+              ],
+              [
+                89,
+                38
+              ],
+              [
+                88,
+                37
+              ],
+              [
+                88,
+                38
+              ],
+              [
+                89,
+                38
+              ],
+              [
+                89,
+                37
+              ]
+            ],
+            "attack": [
+              [
+                95,
+                43
+              ],
+              [
+                98,
+                59
+              ],
+              [
+                85,
+                38
+              ],
+              [
+                79,
+                37
+              ],
+              [
+                75,
+                39
+              ],
+              [
+                84,
+                36
+              ]
+            ],
+            "hit": [
+              [
+                103,
+                58
+              ],
+              [
+                98,
+                48
+              ],
+              [
+                90,
+                39
+              ]
+            ],
+            "death": [
+              [
+                85,
+                38
+              ],
+              [
+                92,
+                44
+              ],
+              [
+                115,
+                100
+              ],
+              [
+                124,
+                113
+              ]
+            ]
+          },
+          "nudge": [
+            0,
+            0
+          ],
+          "face_policy": "open_crown",
+          "hair_policy": "keep",
+          "openingVisibility": "partial",
+          "status": "valid",
+          "locked": true,
+          "flip_h": false,
+          "runtime_scale": [
+            1,
+            1
+          ],
+          "calibrationOverlays": {
+            "face_mask": {
+              "shape": "rect",
+              "offset": [
+                -4,
+                -1
+              ],
+              "size": [
+                8,
+                10
+              ],
+              "rearDirection": false
+            },
+            "hair_mask": {
+              "shape": "rect",
+              "offset": [
+                -8,
+                -9
+              ],
+              "size": [
+                16,
+                10
+              ]
+            }
+          },
+          "layers": {
+            "helmet_back": null,
+            "helmet_front": {
+              "idle": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+              "walk": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_walk.png",
+              "attack": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_attack.png",
+              "hit": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_hit.png",
+              "death": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_death.png"
+            },
+            "head_occlusion_mask": null
+          }
+        },
+        "W": {
+          "texture": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+          "texturesByAction": {
+            "idle": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+            "walk": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_walk.png",
+            "attack": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_attack.png",
+            "hit": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_hit.png",
+            "death": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_death.png"
+          },
+          "source_direction": "W",
+          "source_row": 6,
+          "pivot": [
+            89,
+            36
+          ],
+          "pivotByActionFrame": {
+            "idle": [
+              [
+                89,
+                36
+              ],
+              [
+                89,
+                36
+              ],
+              [
+                89,
+                36
+              ],
+              [
+                89,
+                36
+              ]
+            ],
+            "walk": [
+              [
+                88,
+                36
+              ],
+              [
+                89,
+                36
+              ],
+              [
+                89,
+                36
+              ],
+              [
+                89,
+                36
+              ],
+              [
+                90,
+                36
+              ],
+              [
+                89,
+                35
+              ]
+            ],
+            "attack": [
+              [
+                94,
+                38
+              ],
+              [
+                108,
+                50
+              ],
+              [
+                80,
+                40
+              ],
+              [
+                70,
+                45
+              ],
+              [
+                65,
+                48
+              ],
+              [
+                75,
+                40
+              ]
+            ],
+            "hit": [
+              [
+                112,
+                48
+              ],
+              [
+                104,
+                42
+              ],
+              [
+                90,
+                36
+              ]
+            ],
+            "death": [
+              [
+                81,
+                41
+              ],
+              [
+                94,
+                41
+              ],
+              [
+                124,
+                82
+              ],
+              [
+                136,
+                90
+              ]
+            ]
+          },
+          "nudge": [
+            0,
+            0
+          ],
+          "face_policy": "open_crown",
+          "hair_policy": "keep",
+          "openingVisibility": "partial",
+          "status": "valid",
+          "locked": true,
+          "flip_h": false,
+          "runtime_scale": [
+            1,
+            1
+          ],
+          "calibrationOverlays": {
+            "face_mask": {
+              "shape": "rect",
+              "offset": [
+                -4,
+                -1
+              ],
+              "size": [
+                8,
+                10
+              ],
+              "rearDirection": false
+            },
+            "hair_mask": {
+              "shape": "rect",
+              "offset": [
+                -8,
+                -9
+              ],
+              "size": [
+                16,
+                10
+              ]
+            }
+          },
+          "layers": {
+            "helmet_back": null,
+            "helmet_front": {
+              "idle": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+              "walk": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_walk.png",
+              "attack": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_attack.png",
+              "hit": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_hit.png",
+              "death": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_death.png"
+            },
+            "head_occlusion_mask": null
+          }
+        },
+        "NW": {
+          "texture": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+          "texturesByAction": {
+            "idle": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+            "walk": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_walk.png",
+            "attack": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_attack.png",
+            "hit": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_hit.png",
+            "death": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_death.png"
+          },
+          "source_direction": "NW",
+          "source_row": 5,
+          "pivot": [
+            88,
+            35
+          ],
+          "pivotByActionFrame": {
+            "idle": [
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ]
+            ],
+            "walk": [
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ]
+            ],
+            "attack": [
+              [
+                88,
+                35
+              ],
+              [
+                105,
+                40
+              ],
+              [
+                78,
+                45
+              ],
+              [
+                71,
+                54
+              ],
+              [
+                69,
+                60
+              ],
+              [
+                73,
+                47
+              ]
+            ],
+            "hit": [
+              [
+                105,
+                36
+              ],
+              [
+                98,
+                34
+              ],
+              [
+                88,
+                35
+              ]
+            ],
+            "death": [
+              [
+                80,
+                44
+              ],
+              [
+                92,
+                37
+              ],
+              [
+                108,
+                67
+              ],
+              [
+                116,
+                67
+              ]
+            ]
+          },
+          "nudge": [
+            0,
+            0
+          ],
+          "face_policy": "open_crown",
+          "hair_policy": "keep",
+          "openingVisibility": "partial",
+          "status": "valid",
+          "locked": true,
+          "flip_h": false,
+          "runtime_scale": [
+            1,
+            1
+          ],
+          "calibrationOverlays": {
+            "face_mask": {
+              "shape": "rect",
+              "offset": [
+                -4,
+                -1
+              ],
+              "size": [
+                8,
+                10
+              ],
+              "rearDirection": true
+            },
+            "hair_mask": {
+              "shape": "rect",
+              "offset": [
+                -8,
+                -9
+              ],
+              "size": [
+                16,
+                10
+              ]
+            }
+          },
+          "layers": {
+            "helmet_back": null,
+            "helmet_front": {
+              "idle": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_idle.png",
+              "walk": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_walk.png",
+              "attack": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_attack.png",
+              "hit": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_hit.png",
+              "death": "res://assets/art/items/client/world_wear/helmet/male/elf_helmet_death.png"
+            },
+            "head_occlusion_mask": null
+          }
+        }
+      }
+    },
+    "black_iron_golden_151": {
+      "visual_asset_id": "black_iron_golden_151",
+      "itemId": 151,
+      "readOnlyGoldenReference": true,
+      "goldenReference": "res://assets/data/equipment_helmet_151_golden_reference.json",
+      "source_direction_map": {
+        "N": 0,
+        "NE": 1,
+        "E": 2,
+        "SE": 3,
+        "S": 4,
+        "SW": 5,
+        "W": 6,
+        "NW": 7
+      },
+      "directions": {
+        "N": {
+          "texture": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+          "texturesByAction": {
+            "idle": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+            "walk": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
+            "attack": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
+            "hit": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
+            "death": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png"
+          },
+          "source_direction": "N",
+          "source_row": 0,
+          "pivot": [
+            87,
+            40
+          ],
+          "pivotByActionFrame": {
+            "idle": [
+              [
+                87,
+                40
+              ],
+              [
+                87,
+                40
+              ],
+              [
+                87,
+                40
+              ],
+              [
+                87,
+                40
+              ]
+            ],
+            "walk": [
+              [
+                87,
+                40
+              ],
+              [
+                87,
+                41
+              ],
+              [
+                87,
+                40
+              ],
+              [
+                87,
+                40
+              ],
+              [
+                87,
+                41
+              ],
+              [
+                88,
+                40
+              ]
+            ],
+            "attack": [
+              [
+                93,
+                48
+              ],
+              [
+                83,
+                61
+              ],
+              [
+                92,
+                41
+              ],
+              [
+                92,
+                39
+              ],
+              [
+                91,
+                38
+              ],
+              [
+                94,
+                40
+              ]
+            ],
+            "hit": [
+              [
+                86,
+                62
+              ],
+              [
+                89,
+                53
+              ],
+              [
+                89,
+                42
+              ]
+            ],
+            "death": [
+              [
+                91,
+                39
+              ],
+              [
+                89,
+                45
+              ],
+              [
+                93,
+                110
+              ],
+              [
+                93,
+                124
+              ]
+            ]
+          },
+          "nudge": [
+            0,
+            0
+          ],
+          "face_policy": "half_open",
+          "hair_policy": "hide",
+          "openingVisibility": "none",
+          "status": "valid",
+          "locked": true,
+          "flip_h": false,
+          "runtime_scale": [
+            1,
+            1
+          ],
+          "calibrationOverlays": {
+            "face_mask": {
+              "shape": "rect",
+              "offset": [
+                -4,
+                -1
+              ],
+              "size": [
+                8,
+                10
+              ],
+              "rearDirection": true
+            },
+            "hair_mask": {
+              "shape": "rect",
+              "offset": [
+                -8,
+                -9
+              ],
+              "size": [
+                16,
+                10
+              ]
+            }
+          },
+          "layers": {
+            "helmet_back": null,
+            "helmet_front": {
+              "idle": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+              "walk": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
+              "attack": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
+              "hit": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
+              "death": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png"
+            },
+            "head_occlusion_mask": null
+          }
+        },
+        "NE": {
+          "texture": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+          "texturesByAction": {
+            "idle": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+            "walk": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
+            "attack": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
+            "hit": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
+            "death": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png"
+          },
+          "source_direction": "NE",
+          "source_row": 1,
+          "pivot": [
+            87,
+            37
+          ],
+          "pivotByActionFrame": {
+            "idle": [
+              [
+                87,
+                37
+              ],
+              [
+                88,
+                37
+              ],
+              [
+                88,
+                37
+              ],
+              [
+                88,
+                37
+              ]
+            ],
+            "walk": [
+              [
+                88,
+                37
+              ],
+              [
+                87,
+                37
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                87,
+                37
+              ],
+              [
+                87,
+                38
+              ],
+              [
+                87,
+                37
+              ]
+            ],
+            "attack": [
+              [
+                88,
+                46
+              ],
+              [
+                72,
+                53
+              ],
+              [
+                97,
+                42
+              ],
+              [
+                104,
+                42
+              ],
+              [
+                107,
+                43
+              ],
+              [
+                101,
+                43
+              ]
+            ],
+            "hit": [
+              [
+                71,
+                56
+              ],
+              [
+                80,
+                49
+              ],
+              [
+                88,
+                40
+              ]
+            ],
+            "death": [
+              [
+                96,
+                39
+              ],
+              [
+                86,
+                43
+              ],
+              [
+                68,
+                104
+              ],
+              [
+                59,
+                115
+              ]
+            ]
+          },
+          "nudge": [
+            0,
+            0
+          ],
+          "face_policy": "half_open",
+          "hair_policy": "hide",
+          "openingVisibility": "partial",
+          "status": "valid",
+          "locked": true,
+          "flip_h": false,
+          "runtime_scale": [
+            1,
+            1
+          ],
+          "calibrationOverlays": {
+            "face_mask": {
+              "shape": "rect",
+              "offset": [
+                -4,
+                -1
+              ],
+              "size": [
+                8,
+                10
+              ],
+              "rearDirection": true
+            },
+            "hair_mask": {
+              "shape": "rect",
+              "offset": [
+                -8,
+                -9
+              ],
+              "size": [
+                16,
+                10
+              ]
+            }
+          },
+          "layers": {
+            "helmet_back": null,
+            "helmet_front": {
+              "idle": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+              "walk": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
+              "attack": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
+              "hit": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
+              "death": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png"
+            },
+            "head_occlusion_mask": null
+          }
+        },
+        "E": {
+          "texture": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+          "texturesByAction": {
+            "idle": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+            "walk": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
+            "attack": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
+            "hit": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
+            "death": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png"
+          },
+          "source_direction": "E",
+          "source_row": 2,
+          "pivot": [
+            88,
+            35
+          ],
+          "pivotByActionFrame": {
+            "idle": [
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ]
+            ],
+            "walk": [
+              [
+                89,
+                36
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                89,
+                35
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                87,
+                36
+              ],
+              [
+                87,
+                35
+              ]
+            ],
+            "attack": [
+              [
+                83,
+                44
+              ],
+              [
+                69,
+                43
+              ],
+              [
+                98,
+                45
+              ],
+              [
+                107,
+                51
+              ],
+              [
+                111,
+                54
+              ],
+              [
+                101,
+                49
+              ]
+            ],
+            "hit": [
+              [
+                66,
+                45
+              ],
+              [
+                75,
+                42
+              ],
+              [
+                87,
+                38
+              ]
+            ],
+            "death": [
+              [
+                98,
+                43
+              ],
+              [
+                85,
+                41
+              ],
+              [
+                55,
+                88
+              ],
+              [
+                43,
+                94
+              ]
+            ]
+          },
+          "nudge": [
+            0,
+            0
+          ],
+          "face_policy": "half_open",
+          "hair_policy": "hide",
+          "openingVisibility": "partial",
+          "status": "valid",
+          "locked": true,
+          "flip_h": false,
+          "runtime_scale": [
+            1,
+            1
+          ],
+          "calibrationOverlays": {
+            "face_mask": {
+              "shape": "rect",
+              "offset": [
+                -4,
+                -1
+              ],
+              "size": [
+                8,
+                10
+              ],
+              "rearDirection": false
+            },
+            "hair_mask": {
+              "shape": "rect",
+              "offset": [
+                -8,
+                -9
+              ],
+              "size": [
+                16,
+                10
+              ]
+            }
+          },
+          "layers": {
+            "helmet_back": null,
+            "helmet_front": {
+              "idle": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+              "walk": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
+              "attack": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
+              "hit": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
+              "death": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png"
+            },
+            "head_occlusion_mask": null
+          }
+        },
+        "SE": {
+          "texture": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+          "texturesByAction": {
+            "idle": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+            "walk": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
+            "attack": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
+            "hit": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
+            "death": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png"
+          },
+          "source_direction": "SE",
+          "source_row": 3,
+          "pivot": [
+            88,
+            36
+          ],
+          "pivotByActionFrame": {
+            "idle": [
+              [
+                88,
+                36
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                88,
+                36
+              ]
+            ],
+            "walk": [
+              [
+                89,
+                37
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                88,
+                37
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                87,
+                36
+              ]
+            ],
+            "attack": [
+              [
+                80,
+                42
+              ],
+              [
+                78,
+                36
+              ],
+              [
+                91,
+                51
+              ],
+              [
+                98,
+                60
+              ],
+              [
+                100,
+                65
+              ],
+              [
+                93,
+                55
+              ]
+            ],
+            "hit": [
+              [
+                73,
+                36
+              ],
+              [
+                77,
+                37
+              ],
+              [
+                86,
+                39
+              ]
+            ],
+            "death": [
+              [
+                93,
+                48
+              ],
+              [
+                84,
+                40
+              ],
+              [
+                61,
+                73
+              ],
+              [
+                53,
+                74
+              ]
+            ]
+          },
+          "nudge": [
+            0,
+            0
+          ],
+          "face_policy": "half_open",
+          "hair_policy": "hide",
+          "openingVisibility": "partial",
+          "status": "valid",
+          "locked": true,
+          "flip_h": false,
+          "runtime_scale": [
+            1,
+            1
+          ],
+          "calibrationOverlays": {
+            "face_mask": {
+              "shape": "rect",
+              "offset": [
+                -4,
+                -1
+              ],
+              "size": [
+                8,
+                10
+              ],
+              "rearDirection": false
+            },
+            "hair_mask": {
+              "shape": "rect",
+              "offset": [
+                -8,
+                -9
+              ],
+              "size": [
+                16,
+                10
+              ]
+            }
+          },
+          "layers": {
+            "helmet_back": null,
+            "helmet_front": {
+              "idle": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+              "walk": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
+              "attack": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
+              "hit": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
+              "death": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png"
+            },
+            "head_occlusion_mask": null
+          }
+        },
+        "S": {
+          "texture": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+          "texturesByAction": {
+            "idle": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+            "walk": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
+            "attack": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
+            "hit": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
+            "death": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png"
+          },
+          "source_direction": "S",
+          "source_row": 4,
+          "pivot": [
+            88,
+            35
+          ],
+          "pivotByActionFrame": {
+            "idle": [
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                88,
+                36
+              ]
+            ],
+            "walk": [
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                88,
+                35
+              ]
+            ],
+            "attack": [
+              [
+                82,
+                37
+              ],
+              [
+                94,
+                34
+              ],
+              [
+                83,
+                49
+              ],
+              [
+                83,
+                62
+              ],
+              [
+                84,
+                67
+              ],
+              [
+                81,
+                54
+              ]
+            ],
+            "hit": [
+              [
+                88,
+                32
+              ],
+              [
+                86,
+                33
+              ],
+              [
+                86,
+                36
+              ]
+            ],
+            "death": [
+              [
+                85,
+                48
+              ],
+              [
+                87,
+                39
+              ],
+              [
+                83,
+                62
+              ],
+              [
+                83,
+                62
+              ]
+            ]
+          },
+          "nudge": [
+            0,
+            0
+          ],
+          "face_policy": "half_open",
+          "hair_policy": "hide",
+          "openingVisibility": "full",
+          "status": "valid",
+          "locked": true,
+          "flip_h": false,
+          "runtime_scale": [
+            1,
+            1
+          ],
+          "calibrationOverlays": {
+            "face_mask": {
+              "shape": "rect",
+              "offset": [
+                -4,
+                -1
+              ],
+              "size": [
+                8,
+                10
+              ],
+              "rearDirection": false
+            },
+            "hair_mask": {
+              "shape": "rect",
+              "offset": [
+                -8,
+                -9
+              ],
+              "size": [
+                16,
+                10
+              ]
+            }
+          },
+          "layers": {
+            "helmet_back": null,
+            "helmet_front": {
+              "idle": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+              "walk": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
+              "attack": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
+              "hit": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
+              "death": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png"
+            },
+            "head_occlusion_mask": null
+          }
+        },
+        "SW": {
+          "texture": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+          "texturesByAction": {
+            "idle": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+            "walk": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
+            "attack": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
+            "hit": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
+            "death": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png"
+          },
+          "source_direction": "SW",
+          "source_row": 5,
+          "pivot": [
+            88,
+            35
+          ],
+          "pivotByActionFrame": {
+            "idle": [
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ]
+            ],
+            "walk": [
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                36
+              ],
+              [
+                88,
+                35
+              ],
+              [
+                88,
+                35
+              ]
+            ],
+            "attack": [
+              [
+                88,
+                35
+              ],
+              [
+                105,
+                40
+              ],
+              [
+                78,
+                45
+              ],
+              [
+                71,
+                54
+              ],
+              [
+                69,
+                60
+              ],
+              [
+                73,
+                47
+              ]
+            ],
+            "hit": [
+              [
+                105,
+                36
+              ],
+              [
+                98,
+                34
+              ],
+              [
+                88,
+                35
+              ]
+            ],
+            "death": [
+              [
+                80,
+                44
+              ],
+              [
+                92,
+                37
+              ],
+              [
+                108,
+                67
+              ],
+              [
+                116,
+                67
+              ]
+            ]
+          },
+          "nudge": [
+            0,
+            0
+          ],
+          "face_policy": "half_open",
+          "hair_policy": "hide",
+          "openingVisibility": "partial",
+          "status": "valid",
+          "locked": true,
+          "flip_h": false,
+          "runtime_scale": [
+            1,
+            1
+          ],
+          "calibrationOverlays": {
+            "face_mask": {
+              "shape": "rect",
+              "offset": [
+                -4,
+                -1
+              ],
+              "size": [
+                8,
+                10
+              ],
+              "rearDirection": false
+            },
+            "hair_mask": {
+              "shape": "rect",
+              "offset": [
+                -8,
+                -9
+              ],
+              "size": [
+                16,
+                10
+              ]
+            }
+          },
+          "layers": {
+            "helmet_back": null,
+            "helmet_front": {
+              "idle": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+              "walk": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
+              "attack": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
+              "hit": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
+              "death": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png"
+            },
+            "head_occlusion_mask": null
+          }
+        },
+        "W": {
+          "texture": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+          "texturesByAction": {
+            "idle": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+            "walk": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
+            "attack": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
+            "hit": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
+            "death": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png"
+          },
+          "source_direction": "W",
+          "source_row": 6,
+          "pivot": [
+            89,
+            36
+          ],
+          "pivotByActionFrame": {
+            "idle": [
+              [
+                89,
+                36
+              ],
+              [
+                89,
+                36
+              ],
+              [
+                89,
+                36
+              ],
+              [
+                89,
+                36
+              ]
+            ],
+            "walk": [
+              [
+                88,
+                36
+              ],
+              [
+                89,
+                36
+              ],
+              [
+                89,
+                36
+              ],
+              [
+                89,
+                36
+              ],
+              [
+                90,
+                36
+              ],
+              [
+                89,
+                35
+              ]
+            ],
+            "attack": [
+              [
+                94,
+                38
+              ],
+              [
+                108,
+                50
+              ],
+              [
+                80,
+                40
+              ],
+              [
+                70,
+                45
+              ],
+              [
+                65,
+                48
+              ],
+              [
+                75,
+                40
+              ]
+            ],
+            "hit": [
+              [
+                112,
+                48
+              ],
+              [
+                104,
+                42
+              ],
+              [
+                90,
+                36
+              ]
+            ],
+            "death": [
+              [
+                81,
+                41
+              ],
+              [
+                94,
+                41
+              ],
+              [
+                124,
+                82
+              ],
+              [
+                136,
+                90
+              ]
+            ]
+          },
+          "nudge": [
+            0,
+            0
+          ],
+          "face_policy": "half_open",
+          "hair_policy": "hide",
+          "openingVisibility": "partial",
+          "status": "valid",
+          "locked": true,
+          "flip_h": false,
+          "runtime_scale": [
+            1,
+            1
+          ],
+          "calibrationOverlays": {
+            "face_mask": {
+              "shape": "rect",
+              "offset": [
+                -4,
+                -1
+              ],
+              "size": [
+                8,
+                10
+              ],
+              "rearDirection": false
+            },
+            "hair_mask": {
+              "shape": "rect",
+              "offset": [
+                -8,
+                -9
+              ],
+              "size": [
+                16,
+                10
+              ]
+            }
+          },
+          "layers": {
+            "helmet_back": null,
+            "helmet_front": {
+              "idle": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+              "walk": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
+              "attack": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
+              "hit": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
+              "death": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png"
+            },
+            "head_occlusion_mask": null
+          }
+        },
+        "NW": {
+          "texture": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+          "texturesByAction": {
+            "idle": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+            "walk": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
+            "attack": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
+            "hit": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
+            "death": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png"
+          },
+          "source_direction": "NW",
+          "source_row": 7,
+          "pivot": [
+            88,
+            38
+          ],
+          "pivotByActionFrame": {
+            "idle": [
+              [
+                88,
+                38
+              ],
+              [
+                88,
+                37
+              ],
+              [
+                88,
+                37
+              ],
+              [
+                88,
+                37
+              ]
+            ],
+            "walk": [
+              [
+                88,
+                37
+              ],
+              [
+                89,
+                38
+              ],
+              [
+                88,
+                37
+              ],
+              [
+                88,
+                38
+              ],
+              [
+                89,
+                38
+              ],
+              [
+                89,
+                37
+              ]
+            ],
+            "attack": [
+              [
+                95,
+                43
+              ],
+              [
+                98,
+                59
+              ],
+              [
+                85,
+                38
+              ],
+              [
+                79,
+                37
+              ],
+              [
+                75,
+                39
+              ],
+              [
+                84,
+                36
+              ]
+            ],
+            "hit": [
+              [
+                103,
+                58
+              ],
+              [
+                98,
+                48
+              ],
+              [
+                90,
+                39
+              ]
+            ],
+            "death": [
+              [
+                85,
+                38
+              ],
+              [
+                92,
+                44
+              ],
+              [
+                115,
+                100
+              ],
+              [
+                124,
+                113
+              ]
+            ]
+          },
+          "nudge": [
+            0,
+            0
+          ],
+          "face_policy": "half_open",
+          "hair_policy": "hide",
+          "openingVisibility": "partial",
+          "status": "valid",
+          "locked": true,
+          "flip_h": false,
+          "runtime_scale": [
+            1,
+            1
+          ],
+          "calibrationOverlays": {
+            "face_mask": {
+              "shape": "rect",
+              "offset": [
+                -4,
+                -1
+              ],
+              "size": [
+                8,
+                10
+              ],
+              "rearDirection": true
+            },
+            "hair_mask": {
+              "shape": "rect",
+              "offset": [
+                -8,
+                -9
+              ],
+              "size": [
+                16,
+                10
+              ]
+            }
+          },
+          "layers": {
+            "helmet_back": null,
+            "helmet_front": {
+              "idle": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
+              "walk": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
+              "attack": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
+              "hit": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
+              "death": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png"
+            },
+            "head_occlusion_mask": null
+          }
+        }
+      }
+    }
+  },
+  "sharedVisualAssets": {
+    "bronze_magic": {
+      "visual_asset_id": "bronze_magic",
+      "itemIds": [
+        147,
+        148
+      ],
+      "singleCalibrationRecordRequired": true,
+      "status": "not_in_146_pilot_scope"
+    }
+  }
+}
