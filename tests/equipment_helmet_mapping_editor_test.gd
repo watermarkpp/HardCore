@@ -247,8 +247,18 @@ func _run() -> void:
 		assert(str(bronze_order[direction_index]) == [
 			"N", "NE", "E", "SE", "S", "SW", "W", "NW",
 		][direction_index])
+	assert(str(bronze_source.get("calibrationSourceMatte", "")) == (
+		"green_chroma_key_despill_v2"
+	))
+	assert(str(bronze_source.get("calibrationPreviewPolicy", "")) == (
+		"single_authored_source_for_buttons_previews_and_bakes"
+	))
+	assert(editor._source_recipe_id().ends_with(".green_despill_v2"))
 	var authored_hashes: Dictionary = {}
 	var differs_from_runtime := false
+	var differs_from_generated_atlas := false
+	var authored_strip := Image.create(8 * 64, 64, false, Image.FORMAT_RGBA8)
+	authored_strip.fill(Color(0, 0, 0, 0))
 	for row: int in 8:
 		var bronze_button := source_grid.get_node(
 			"Source_Row%d" % row
@@ -259,23 +269,114 @@ func _run() -> void:
 		var authored: Image = editor.source_row_thumbnail(row)
 		assert(authored.get_size() == Vector2i(64, 64))
 		assert(_has_opaque_pixel(authored))
+		_assert_no_green_matte(authored)
 		var authored_hash: int = authored.get_data().hex_encode().hash()
 		assert(not authored_hashes.has(authored_hash))
 		authored_hashes[authored_hash] = true
+		authored_strip.blit_rect(
+			authored,
+			Rect2i(Vector2i.ZERO, authored.get_size()),
+			Vector2i(row * 64, 0)
+		)
 		var runtime: Image = editor.calibration_source_cell("idle", row, 0)
+		_assert_no_green_matte(runtime)
 		if authored.get_data() != runtime.get_data():
 			differs_from_runtime = true
+		var generated_atlas: Image = editor._generated_atlas_source_cell(
+			"idle", row, 0
+		)
+		if runtime.get_data() != generated_atlas.get_data():
+			differs_from_generated_atlas = true
 	assert(differs_from_runtime)
+	assert(differs_from_generated_atlas)
+	assert(authored_strip.save_png(ProjectSettings.globalize_path(
+		"%s/helmet_147_authored_source_8dir.png" % OUTPUT_ROOT
+	)) == OK)
+	editor.select_target_direction(0)
+	editor.select_action("idle")
+	editor.select_frame(0)
+	for direction_index: int in 8:
+		editor._configure_runtime("idle", direction_index, 0)
+		var direction_record := HelmetVisualV2.direction_record(
+			147, direction_index
+		)
+		var source_row := int(direction_record.get(
+			"source_row", direction_index
+		))
+		var preview_source: Image = editor._runtime_layer_cell(
+			"ClientHelmetLayer", "idle", direction_index, 0
+		)
+		var expected_preview_source: Image = editor.scale_cell_around_pivot(
+			editor.calibration_source_cell("idle", source_row, 0),
+			HelmetVisualV2.pivot_for_source_row(
+				147, "idle", source_row, 0
+			),
+			HelmetVisualV2.uniform_scale_percent(147)
+		)
+		assert(
+			preview_source.get_data()
+			== expected_preview_source.get_data()
+		)
+	editor._render_current_previews()
+	var rendered_full: Image = (
+		editor.get_node(
+			"CalibrationUI/Panel/VBox/Previews/FullColumn/FullPersonPreview"
+		) as TextureRect
+	).texture.get_image()
+	var expected_full: Image = editor._runtime_frame("idle", 0, 0, true)
+	assert(rendered_full.get_data() == expected_full.get_data())
+	var rendered_head: Image = (
+		editor.get_node(
+			"CalibrationUI/Panel/VBox/Previews/HeadColumn/HeadPreview"
+		) as TextureRect
+	).texture.get_image()
+	var expected_head: Image = editor._head_preview(
+		expected_full, "idle", 0, 0, editor.head_zoom
+	)
+	assert(rendered_head.get_data() == expected_head.get_data())
+	var clean_full: Image = editor._runtime_frame("idle", 0, 0, false)
+	var clean_head: Image = editor._head_preview(
+		clean_full, "idle", 0, 0, editor.head_zoom
+	)
+	assert(clean_full.save_png(ProjectSettings.globalize_path(
+		"%s/helmet_147_single_source_full.png" % OUTPUT_ROOT
+	)) == OK)
+	assert(clean_head.save_png(ProjectSettings.globalize_path(
+		"%s/helmet_147_single_source_head.png" % OUTPUT_ROOT
+	)) == OK)
+	assert(editor.set_uniform_scale_percent(100))
+	assert(editor._bake_and_persist_uniform_scale())
+	var bronze_override: Dictionary = HelmetVisualV2.visual_asset_override_for_item(
+		147
+	)
+	var bronze_derived_path: String = str(
+		bronze_override.get("derivedAtlases", {}).get("idle", "")
+	)
+	assert(FileAccess.file_exists(bronze_derived_path))
+	assert(str(bronze_override.get("bakePolicy", {}).get(
+		"sourceRecipeId", ""
+	)).ends_with(".green_despill_v2"))
+	var bronze_derived: Image = Image.load_from_file(bronze_derived_path)
+	for row: int in 8:
+		var bronze_cell_rect := Rect2i(
+			Vector2i(0, row * ArtSpec.WARRIOR_FRAME.y),
+			ArtSpec.WARRIOR_FRAME
+		)
+		assert(
+			bronze_derived.get_region(bronze_cell_rect).get_data()
+			== editor.calibration_source_cell("idle", row, 0).get_data()
+		)
 	assert(
 		HelmetVisualV2.visual_asset_for_item(148).get("source", {})
 		== bronze_source
 	)
 	editor.select_item(146)
-	var raw_idle := (load(
+	editor.select_target_direction(1)
+	var raw_idle := Image.load_from_file(ProjectSettings.globalize_path(
 		HelmetVisualV2.base_action_texture_path(
 			146, "idle", 0, "helmet_front"
 		)
-	) as Texture2D).get_image()
+	))
 	var raw_row_3 := raw_idle.get_region(Rect2i(
 		0,
 		3 * ArtSpec.WARRIOR_FRAME.y,
@@ -594,11 +695,11 @@ func _run() -> void:
 		"cast": 6, "hit": 3, "death": 4,
 	}
 	for black_action: String in black_action_frames:
-		var black_raw := (load(
+		var black_raw := Image.load_from_file(ProjectSettings.globalize_path(
 			HelmetVisualV2.base_action_texture_path(
 				151, black_action, 0, "helmet_front"
 			)
-		) as Texture2D).get_image()
+		))
 		for black_frame: int in int(black_action_frames[black_action]):
 			var raw_black_ne := black_raw.get_region(Rect2i(
 				black_frame * ArtSpec.WARRIOR_FRAME.x,
@@ -754,6 +855,18 @@ func _has_opaque_pixel(image: Image) -> bool:
 			if image.get_pixel(x, y).a > 0.0:
 				return true
 	return false
+
+
+func _assert_no_green_matte(image: Image) -> void:
+	for y: int in image.get_height():
+		for x: int in image.get_width():
+			var color := image.get_pixel(x, y)
+			if color.a <= 0.02:
+				assert(color.r == 0.0)
+				assert(color.g == 0.0)
+				assert(color.b == 0.0)
+				continue
+			assert(color.g <= maxf(color.r, color.b) + 0.026)
 
 
 func _source_hashes(item_id: int) -> Dictionary:

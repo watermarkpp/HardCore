@@ -1871,7 +1871,8 @@
           "W",
           "NW"
         ],
-        "calibrationSourceMatte": "green_chroma_key"
+        "calibrationSourceMatte": "green_chroma_key_despill_v2",
+        "calibrationPreviewPolicy": "single_authored_source_for_buttons_previews_and_bakes"
       },
       "directions": {
         "N": {

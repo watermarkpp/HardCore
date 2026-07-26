@@ -399,7 +399,10 @@ def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
                 "calibrationSourceSheetSha256": identity["conceptFileSha256"],
                 "calibrationSourceGrid": identity["sourceGrid"],
                 "calibrationSourceSlotDirectionOrder": source_order,
-                "calibrationSourceMatte": "green_chroma_key",
+                "calibrationSourceMatte": "green_chroma_key_despill_v2",
+                "calibrationPreviewPolicy": (
+                    "single_authored_source_for_buttons_previews_and_bakes"
+                ),
             })
         if identity_id != "black_iron":
             asset["source_direction_map"] = source_map

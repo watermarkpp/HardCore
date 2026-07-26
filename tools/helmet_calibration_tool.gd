@@ -46,7 +46,7 @@ var _formal_override_before := ""
 var _editor_initialized := false
 var _target_buttons: Array[TextureButton] = []
 var _source_buttons: Array[TextureButton] = []
-var _authored_source_thumbnail_cache: Dictionary = {}
+var _authored_source_cutout_cache: Dictionary = {}
 var _dirty_directions: Dictionary = {}
 var _dirty_scales: Dictionary = {}
 var _updating_ui := false
@@ -905,9 +905,14 @@ func _scale_bake_required(asset_override: Dictionary) -> bool:
 
 
 func _source_recipe_id() -> String:
-	return str(HelmetVisualV2.visual_asset_for_item(current_item_id).get(
-		"bakedSourceOverrides", {}
-	).get("recipeId", "primary_source_rows.v1"))
+	var asset := HelmetVisualV2.visual_asset_for_item(current_item_id)
+	var source: Dictionary = asset.get("source", {})
+	var authored_sha := str(source.get("calibrationSourceSheetSha256", ""))
+	if not authored_sha.is_empty():
+		return "authored_source_sheet.%s.green_despill_v2" % authored_sha
+	return str(asset.get("bakedSourceOverrides", {}).get(
+		"recipeId", "primary_source_rows.v1"
+	))
 
 
 func calibration_source_cell(
@@ -916,10 +921,26 @@ func calibration_source_cell(
 	frame_index: int
 ) -> Image:
 	assert(source_row >= 0 and source_row < DIRECTIONS.size())
+	if _has_authored_source_sheet():
+		return _authored_source_runtime_cell(action, source_row, frame_index)
+	return _generated_atlas_source_cell(action, source_row, frame_index)
+
+
+func _generated_atlas_source_cell(
+	action: String,
+	source_row: int,
+	frame_index: int
+) -> Image:
 	var path := HelmetVisualV2.base_action_texture_path(
 		current_item_id, action, 0, "helmet_front"
 	)
-	if path.is_empty() or not ResourceLoader.exists(path):
+	if (
+		path.is_empty()
+		or (
+			not ResourceLoader.exists(path)
+			and not FileAccess.file_exists(path)
+		)
+	):
 		var empty := Image.create(
 			ArtSpec.WARRIOR_FRAME.x,
 			ArtSpec.WARRIOR_FRAME.y,
@@ -958,6 +979,44 @@ func calibration_source_cell(
 			)
 		)
 	return cell
+
+
+func _authored_source_runtime_cell(
+	action: String,
+	source_row: int,
+	frame_index: int
+) -> Image:
+	var authored_cutout := _authored_source_cutout(source_row)
+	if authored_cutout.is_empty():
+		return _generated_atlas_source_cell(action, source_row, frame_index)
+	# The generated atlas remains the placement envelope. Only its pixels are
+	# replaced. This preserves every action/frame pivot while guaranteeing the
+	# editor previews and later scale bake use the selected authored material.
+	var placement_cell := _generated_atlas_source_cell(
+		action, source_row, frame_index
+	)
+	var placement_rect := placement_cell.get_used_rect()
+	if not placement_rect.has_area():
+		return placement_cell
+	var fitted := authored_cutout.duplicate()
+	fitted.resize(
+		placement_rect.size.x,
+		placement_rect.size.y,
+		Image.INTERPOLATE_NEAREST
+	)
+	var result := Image.create(
+		ArtSpec.WARRIOR_FRAME.x,
+		ArtSpec.WARRIOR_FRAME.y,
+		false,
+		Image.FORMAT_RGBA8
+	)
+	result.fill(Color(0, 0, 0, 0))
+	result.blit_rect(
+		fitted,
+		Rect2i(Vector2i.ZERO, fitted.get_size()),
+		placement_rect.position
+	)
+	return result
 
 
 func mirror_cell_between_pivots(
@@ -1147,14 +1206,14 @@ func generate_all_actions_from_idle() -> bool:
 
 
 func _image_from_path(path: String) -> Image:
+	if FileAccess.file_exists(path) and path.get_extension().to_lower() == "png":
+		var raw_image := Image.load_from_file(ProjectSettings.globalize_path(path))
+		if not raw_image.is_empty():
+			return raw_image
 	if ResourceLoader.exists(path):
 		var texture := load(path) as Texture2D
 		if texture != null:
 			return texture.get_image()
-	if FileAccess.file_exists(path) and path.get_extension().to_lower() == "png":
-		var raw_image := Image.load_from_file(path)
-		if not raw_image.is_empty():
-			return raw_image
 	var empty := Image.create(1, 1, false, Image.FORMAT_RGBA8)
 	empty.fill(Color(0, 0, 0, 0))
 	return empty
@@ -1276,7 +1335,9 @@ func _runtime_frame(
 		if layer == null or not layer.visible:
 			continue
 		assert(layer.scale == Vector2.ONE and not layer.flip_h)
-		var cell := _runtime_layer_cell(layer_name)
+		var cell := _runtime_layer_cell(
+			layer_name, action, direction_index, frame_index
+		)
 		if cell.is_empty():
 			continue
 		var destination := FOOT_POINT + Vector2i(_visual.position.round()) + Vector2i(layer.position.round())
@@ -1286,10 +1347,37 @@ func _runtime_frame(
 	return frame
 
 
-func _runtime_layer_cell(layer_name: String) -> Image:
+func _runtime_layer_cell(
+	layer_name: String,
+	action: String = "",
+	direction_index: int = -1,
+	frame_index: int = -1
+) -> Image:
 	var layer := _visual.get_node(layer_name) as Sprite2D
 	if layer == null or not layer.visible or layer.texture == null:
 		return Image.new()
+	if (
+		layer_name == "ClientHelmetLayer"
+		and _has_authored_source_sheet()
+		and not action.is_empty()
+		and direction_index >= 0
+		and frame_index >= 0
+	):
+		var record := HelmetVisualV2.direction_record(
+			current_item_id, direction_index
+		)
+		var source_row := int(record.get("source_row", direction_index))
+		var authored_cell := calibration_source_cell(
+			action, source_row, frame_index
+		)
+		var pivot := HelmetVisualV2.pivot_for_source_row(
+			current_item_id, action, source_row, frame_index
+		)
+		return scale_cell_around_pivot(
+			authored_cell,
+			pivot,
+			HelmetVisualV2.uniform_scale_percent(current_item_id)
+		)
 	# The PlayerVisual node is the runtime source of truth. In particular,
 	# item 146 row 3 comes from the baked NW atlas; recomposing from the raw
 	# source atlas here would make the 1x/zoom previews show the old shape.
@@ -1521,6 +1609,41 @@ func source_row_thumbnail(source_row: int) -> Image:
 
 
 func _authored_source_sheet_thumbnail(source_row: int) -> Image:
+	var cell := _authored_source_cutout(source_row)
+	if cell.is_empty():
+		return Image.new()
+	var available := HEAD_ZOOM_SOURCE_SIZE - Vector2i(4, 4)
+	var fit_scale := minf(
+		float(available.x) / float(cell.get_width()),
+		float(available.y) / float(cell.get_height())
+	)
+	var fitted_size := Vector2i(
+		maxi(1, roundi(float(cell.get_width()) * fit_scale)),
+		maxi(1, roundi(float(cell.get_height()) * fit_scale))
+	)
+	cell.resize(fitted_size.x, fitted_size.y, Image.INTERPOLATE_NEAREST)
+	var thumbnail := Image.create(
+		HEAD_ZOOM_SOURCE_SIZE.x,
+		HEAD_ZOOM_SOURCE_SIZE.y,
+		false,
+		Image.FORMAT_RGBA8
+	)
+	thumbnail.fill(Color(0, 0, 0, 0))
+	thumbnail.blit_rect(
+		cell,
+		Rect2i(Vector2i.ZERO, fitted_size),
+		(HEAD_ZOOM_SOURCE_SIZE - fitted_size) / 2
+	)
+	return thumbnail
+
+
+func _has_authored_source_sheet() -> bool:
+	return not str(HelmetVisualV2.visual_asset_for_item(
+		current_item_id
+	).get("source", {}).get("calibrationSourceSheet", "")).is_empty()
+
+
+func _authored_source_cutout(source_row: int) -> Image:
 	var source: Dictionary = HelmetVisualV2.visual_asset_for_item(
 		current_item_id
 	).get("source", {})
@@ -1529,8 +1652,10 @@ func _authored_source_sheet_thumbnail(source_row: int) -> Image:
 	if path.is_empty() or grid.size() != 2:
 		return Image.new()
 	var cache_key := "%d:%s:%d" % [current_item_id, path, source_row]
-	if _authored_source_thumbnail_cache.has(cache_key):
-		return _authored_source_thumbnail_cache[cache_key] as Image
+	if _authored_source_cutout_cache.has(cache_key):
+		return (
+			_authored_source_cutout_cache[cache_key] as Image
+		).duplicate()
 	var absolute_path := ProjectSettings.globalize_path(path)
 	if not FileAccess.file_exists(absolute_path):
 		return Image.new()
@@ -1558,41 +1683,23 @@ func _authored_source_sheet_thumbnail(source_row: int) -> Image:
 	for y: int in cell.get_height():
 		for x: int in cell.get_width():
 			var color := cell.get_pixel(x, y)
-			if (
-				color.g >= 0.75
-				and color.g > color.r * 1.35
-				and color.g > color.b * 1.35
-			):
-				color.a = 0.0
-				cell.set_pixel(x, y, color)
+			var non_green := maxf(color.r, color.b)
+			var green_spill := maxf(0.0, color.g - non_green)
+			if green_spill > 0.0:
+				# Continuous chroma-key alpha removes the antialiased green
+				# fringe as well as the flat matte. Despill prevents partially
+				# transparent edge pixels from retaining a green halo.
+				color.a *= clampf(1.0 - green_spill / 0.45, 0.0, 1.0)
+				color.g = minf(color.g, non_green + 0.025)
+			if color.a <= 0.02:
+				color = Color(0, 0, 0, 0)
+			cell.set_pixel(x, y, color)
 	var used_rect := cell.get_used_rect()
 	if not used_rect.has_area():
 		return Image.new()
 	cell = cell.get_region(used_rect)
-	var available := HEAD_ZOOM_SOURCE_SIZE - Vector2i(4, 4)
-	var fit_scale := minf(
-		float(available.x) / float(cell.get_width()),
-		float(available.y) / float(cell.get_height())
-	)
-	var fitted_size := Vector2i(
-		maxi(1, roundi(float(cell.get_width()) * fit_scale)),
-		maxi(1, roundi(float(cell.get_height()) * fit_scale))
-	)
-	cell.resize(fitted_size.x, fitted_size.y, Image.INTERPOLATE_NEAREST)
-	var thumbnail := Image.create(
-		HEAD_ZOOM_SOURCE_SIZE.x,
-		HEAD_ZOOM_SOURCE_SIZE.y,
-		false,
-		Image.FORMAT_RGBA8
-	)
-	thumbnail.fill(Color(0, 0, 0, 0))
-	thumbnail.blit_rect(
-		cell,
-		Rect2i(Vector2i.ZERO, fitted_size),
-		(HEAD_ZOOM_SOURCE_SIZE - fitted_size) / 2
-	)
-	_authored_source_thumbnail_cache[cache_key] = thumbnail
-	return thumbnail
+	_authored_source_cutout_cache[cache_key] = cell
+	return cell.duplicate()
 
 
 func scale_cell_around_pivot(
