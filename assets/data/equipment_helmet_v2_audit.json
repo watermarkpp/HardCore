@@ -27,7 +27,7 @@
     {
       "id": 3,
       "topic": "head_socket_granularity",
-      "result": "184 sockets derived independently from primary same-frame Hair.wil centroids, including attack/hit/death movement.",
+      "result": "232 sockets derived independently from primary same-frame Hair.wil centroids, including cast/attack/hit/death movement.",
       "status": "implemented_from_primary_evidence"
     },
     {
@@ -38,9 +38,9 @@
     },
     {
       "id": 5,
-      "topic": "golden_151",
-      "result": "Immutable original atlases use per-frame compatibility pivots; all 184 final composites remain pixel-identical.",
-      "status": "diff_zero_required"
+      "topic": "historical_golden_151",
+      "result": "The user rejected the historical mapping/placement baseline. StateItem 344 and all six original atlases remain pixel-frozen, while target-to-source-slot mapping is user editable.",
+      "status": "superseded_not_a_runtime_gate"
     }
   ]
 }
