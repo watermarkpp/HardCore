@@ -1,6 +1,7 @@
 extends Node2D
 
 const ACTOR_COMPOSITE_SORT_CONTRACT := EquipmentRules.ACTOR_VISUAL_SORT_CONTRACT_ID
+const HelmetVisualV2 := preload("res://scripts/helmet_visual_v2.gd")
 
 const WARRIOR_SKILL_COLORS := {
 	"攻杀剑术": Color(1.0, 0.82, 0.30, 0.95),
@@ -26,7 +27,9 @@ const SUPPORTED_PROFESSIONS := ["战士", "法师", "道士"]
 var actor: PlayerCharacter
 var sprite: Sprite2D
 var worn_weapon_sprite: Sprite2D
+var worn_helmet_back_sprite: Sprite2D
 var worn_helmet_sprite: Sprite2D
+var head_occlusion_mask_sprite: Sprite2D
 var hand_r: Marker2D
 var hand_l: Marker2D
 var head: Marker2D
@@ -51,6 +54,7 @@ var _base_action_textures: Dictionary = {}
 var _dress_action_textures: Dictionary = {}
 var _weapon_action_textures: Dictionary = {}
 var _helmet_action_textures: Dictionary = {}
+var _v2_layer_texture_cache: Dictionary = {}
 var _body_action_frame_counts: Dictionary = {}
 var _weapon_action_frame_counts: Dictionary = {}
 var _helmet_action_frame_counts: Dictionary = {}
@@ -61,6 +65,8 @@ var _weapon_source_anchor := ArtSpec.WARRIOR_SOURCE_FOOT_ANCHOR
 var _weapon_attack_source_frames: Array = []
 var _equipment_layer_direction := -1
 var _formal_base_loaded := false
+var _helmet_item_id := -1
+var _helmet_player_visual_id := "player.male.cloth_002"
 
 
 func setup(owner_actor: PlayerCharacter) -> void:
@@ -95,6 +101,7 @@ func _ready() -> void:
 	worn_weapon_sprite.visible = false
 	worn_weapon_sprite.z_index = 0
 	add_child(worn_weapon_sprite)
+	worn_helmet_back_sprite = _helmet_sprite_layer("ClientHelmetBackLayer")
 	worn_helmet_sprite = Sprite2D.new()
 	worn_helmet_sprite.name = "ClientHelmetLayer"
 	worn_helmet_sprite.region_enabled = true
@@ -103,6 +110,7 @@ func _ready() -> void:
 	worn_helmet_sprite.visible = false
 	worn_helmet_sprite.z_index = 0
 	add_child(worn_helmet_sprite)
+	head_occlusion_mask_sprite = _helmet_sprite_layer("HeadOcclusionMaskLayer")
 	hand_r = _marker("hand_r")
 	hand_l = _marker("hand_l")
 	head = _marker("head")
@@ -179,16 +187,55 @@ func _process(delta: float) -> void:
 		_weapon_frame_size.x,
 		_weapon_frame_size.y
 	)
-	var helmet_texture: Texture2D = _helmet_action_textures.get(action_key, null)
+	var helmet_source_row := HelmetVisualV2.source_direction_row(_helmet_item_id, current_direction)
+	var helmet_frame := _layer_frame(action_key, _helmet_action_frame_counts)
+	var v2_front_texture := _v2_layer_texture(
+		_helmet_item_id, action_key, current_direction, "helmet_front"
+	)
+	var helmet_texture: Texture2D = (
+		v2_front_texture
+		if v2_front_texture != null
+		else _helmet_action_textures.get(action_key, null)
+	)
 	worn_helmet_sprite.texture = helmet_texture
 	worn_helmet_sprite.visible = helmet_texture != null
-	worn_helmet_sprite.position = sprite.position
+	var helmet_delta := HelmetVisualV2.final_position_delta(
+		_helmet_item_id,
+		_helmet_player_visual_id,
+		action_key,
+		current_direction,
+		helmet_frame
+	)
+	worn_helmet_sprite.position = sprite.position + Vector2(helmet_delta)
+	worn_helmet_sprite.scale = Vector2.ONE
+	worn_helmet_sprite.flip_h = false
 	worn_helmet_sprite.region_rect = Rect2(
-		_layer_frame(action_key, _helmet_action_frame_counts) * _body_frame_size.x,
-		current_direction * _body_frame_size.y,
+		helmet_frame * _body_frame_size.x,
+		helmet_source_row * _body_frame_size.y,
 		_body_frame_size.x,
 		_body_frame_size.y
 	)
+	var back_texture := _v2_layer_texture(
+		_helmet_item_id, action_key, current_direction, "helmet_back"
+	)
+	var mask_texture := _v2_layer_texture(
+		_helmet_item_id, action_key, current_direction, "head_occlusion_mask"
+	)
+	_update_optional_helmet_layer(
+		worn_helmet_back_sprite,
+		back_texture,
+		worn_helmet_sprite
+	)
+	_update_optional_helmet_layer(
+		head_occlusion_mask_sprite,
+		mask_texture,
+		worn_helmet_sprite,
+		false
+	)
+	if mask_texture != null:
+		_apply_current_head_occlusion_mask(
+			mask_texture, helmet_source_row, helmet_frame, helmet_delta
+		)
 	_update_markers()
 	_update_equipment_layers()
 	_update_skill_effect()
@@ -253,6 +300,57 @@ func _marker(marker_name: String) -> Marker2D:
 	marker.name = marker_name
 	add_child(marker)
 	return marker
+
+
+func _helmet_sprite_layer(layer_name: String) -> Sprite2D:
+	var layer := Sprite2D.new()
+	layer.name = layer_name
+	layer.region_enabled = true
+	layer.centered = false
+	layer.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	layer.visible = false
+	layer.z_index = 0
+	layer.scale = Vector2.ONE
+	layer.flip_h = false
+	add_child(layer)
+	return layer
+
+
+func _update_optional_helmet_layer(
+	layer: Sprite2D,
+	texture: Texture2D,
+	front_layer: Sprite2D,
+	draw_as_sprite: bool = true
+) -> void:
+	layer.texture = texture
+	# A head-occlusion mask is executable alpha data, never a visible colored
+	# sprite. The layer node remains available for calibration/debug inspection.
+	layer.visible = draw_as_sprite and texture != null and front_layer.visible
+	layer.position = front_layer.position
+	layer.region_rect = front_layer.region_rect
+	layer.scale = Vector2.ONE
+	layer.flip_h = false
+
+
+func _apply_current_head_occlusion_mask(
+	mask_texture: Texture2D,
+	source_row: int,
+	frame_index: int,
+	helmet_delta: Vector2i
+) -> void:
+	if sprite.texture == null:
+		return
+	var body_rect := Rect2i(sprite.region_rect)
+	var body_cell := sprite.texture.get_image().get_region(body_rect)
+	var mask_cell := mask_texture.get_image().get_region(Rect2i(
+		frame_index * _body_frame_size.x,
+		source_row * _body_frame_size.y,
+		_body_frame_size.x,
+		_body_frame_size.y
+	))
+	var masked := HelmetVisualV2.apply_alpha_mask(body_cell, mask_cell, helmet_delta)
+	sprite.texture = ImageTexture.create_from_image(masked)
+	sprite.region_rect = Rect2(Vector2.ZERO, _body_frame_size)
 
 
 func _line_layer(layer_name: String, width: float) -> Line2D:
@@ -402,6 +500,24 @@ func _appearance_frame_counts(source: Variant) -> Dictionary:
 	return result
 
 
+func _v2_layer_texture(
+	item_id: int,
+	action_name: String,
+	direction_row: int,
+	layer_name: String
+) -> Texture2D:
+	if item_id < 0:
+		return null
+	var path := HelmetVisualV2.action_texture_path(
+		item_id, action_name, direction_row, layer_name
+	)
+	if path.is_empty() or not ResourceLoader.exists(path):
+		return null
+	if not _v2_layer_texture_cache.has(path):
+		_v2_layer_texture_cache[path] = load(path) as Texture2D
+	return _v2_layer_texture_cache.get(path, null)
+
+
 func _appearance_layout(source: Variant) -> Dictionary:
 	var fallback := {
 		"cell": ArtSpec.WARRIOR_FRAME,
@@ -501,6 +617,13 @@ func _refresh_equipment_visuals() -> void:
 	var weapon_item := _item_record_for_equipped(weapon)
 	var armor_item := _item_record_for_equipped(armor)
 	var helmet_item := _item_record_for_equipped(helmet)
+	var armor_item_id := _stable_item_id_for_equipped(armor, armor_item)
+	_helmet_item_id = _stable_item_id_for_equipped(helmet, helmet_item)
+	# V2's first calibrated player visual is explicitly male Cloth. Other body
+	# visuals retain the established full-cell behavior until they receive their
+	# own action/direction/frame socket database.
+	if armor_item_id != 116 or PlayerState.gender != "男":
+		_helmet_item_id = -1
 	var weapon_art: Dictionary = weapon_item.get("art", {}) if weapon_item is Dictionary else {}
 	var armor_art: Dictionary = armor_item.get("art", {}) if armor_item is Dictionary else {}
 	var helmet_art: Dictionary = helmet_item.get("art", {}) if helmet_item is Dictionary else {}
@@ -534,8 +657,11 @@ func _refresh_equipment_visuals() -> void:
 	var helmet_appearance := _resolved_item_appearance(helmet, helmet_item, "helmetAppearance", helmet_art)
 	_helmet_action_textures = _load_appearance_actions(helmet_appearance)
 	_helmet_action_frame_counts = _appearance_frame_counts(helmet_appearance)
+	_v2_layer_texture_cache.clear()
 	worn_helmet_sprite.texture = _helmet_action_textures.get("idle", null)
 	worn_helmet_sprite.visible = _record_is_equipped(helmet) and worn_helmet_sprite.texture != null
+	worn_helmet_back_sprite.visible = false
+	head_occlusion_mask_sprite.visible = false
 	if weapon_accent.visible:
 		weapon_accent.default_color = _equipment_color(weapon)
 	if armor_accent.visible:
@@ -555,16 +681,41 @@ func _update_equipment_layers() -> void:
 		direction = Vector2.DOWN
 	weapon_accent.points = PackedVector2Array([hand_r.position, hand_r.position + direction * 42.0])
 	weapon_accent.visible = false
-	if sprite != null and worn_weapon_sprite != null and worn_helmet_sprite != null and _equipment_layer_direction != current_direction:
+	if (
+		sprite != null
+		and worn_weapon_sprite != null
+		and worn_helmet_back_sprite != null
+		and worn_helmet_sprite != null
+		and head_occlusion_mask_sprite != null
+		and _equipment_layer_direction != current_direction
+	):
 		# All appearance children must remain on the actor/wall Z=0 plane. Classic
 		# front/back overlap is expressed only by sibling order, otherwise a positive
 		# equipment Z escapes the wall-front Y-sort domain and appears through walls.
 		var layers := {
+			&"helmet_back": worn_helmet_back_sprite,
 			EquipmentRules.ACTOR_VISUAL_BODY_LAYER: sprite,
 			EquipmentRules.ACTOR_VISUAL_WEAPON_LAYER: worn_weapon_sprite,
 			EquipmentRules.ACTOR_VISUAL_HELMET_LAYER: worn_helmet_sprite,
+			&"head_occlusion_mask": head_occlusion_mask_sprite,
 		}
-		var layer_order := EquipmentRules.actor_visual_layer_order(current_direction)
+		var layer_order: Array[StringName]
+		if EquipmentRules.weapon_draws_behind_actor(current_direction):
+			layer_order = [
+				EquipmentRules.ACTOR_VISUAL_WEAPON_LAYER,
+				&"helmet_back",
+				EquipmentRules.ACTOR_VISUAL_BODY_LAYER,
+				EquipmentRules.ACTOR_VISUAL_HELMET_LAYER,
+				&"head_occlusion_mask",
+			]
+		else:
+			layer_order = [
+				&"helmet_back",
+				EquipmentRules.ACTOR_VISUAL_BODY_LAYER,
+				EquipmentRules.ACTOR_VISUAL_WEAPON_LAYER,
+				EquipmentRules.ACTOR_VISUAL_HELMET_LAYER,
+				&"head_occlusion_mask",
+			]
 		for layer_index: int in range(layer_order.size()):
 			move_child(layers[layer_order[layer_index]], layer_index)
 		_equipment_layer_direction = current_direction

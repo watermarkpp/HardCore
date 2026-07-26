@@ -1,5 +1,6 @@
 extends Node
 
+const HelmetVisualV2 := preload("res://scripts/helmet_visual_v2.gd")
 const CONTRACT_PATH := "res://assets/data/equipment_male_world_helmet.json"
 const OUTPUT_ROOT := "res://outputs/visual_acceptance/equipment_helmet_directions"
 const ITEM_IDS := ["146", "147", "148", "149", "150", "151", "218", "224", "228", "232", "236", "240"]
@@ -97,7 +98,11 @@ func _capture() -> void:
 				visual.sprite.region_rect.position
 				== Vector2(0, direction_index * ArtSpec.WARRIOR_FRAME.y)
 			)
-			assert(visual.worn_helmet_sprite.region_rect == visual.sprite.region_rect)
+			var expected_helmet_row := HelmetVisualV2.source_direction_row(int(item_id), direction_index)
+			assert(
+				int(visual.worn_helmet_sprite.region_rect.position.y)
+				== expected_helmet_row * ArtSpec.WARRIOR_FRAME.y
+			)
 			var image := _compose_player_visual(visual)
 			var file_name := "%s_%s.png" % [item_id, DIRECTIONS[direction_index]]
 			var output_path := output_dir.path_join(file_name)

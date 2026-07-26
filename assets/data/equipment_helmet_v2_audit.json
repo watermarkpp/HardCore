@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 2,
+  "contractId": "equipment.world_helmet.player_visual_v2.audit.v1",
+  "baselineCommit": "49fa8d38a0f4d3848e16a73533d4f257f37ffca8",
+  "findings": [
+    {
+      "id": 1,
+      "topic": "player_direction_order",
+      "result": [
+        "N",
+        "NE",
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW"
+      ],
+      "status": "explicit"
+    },
+    {
+      "id": 2,
+      "topic": "helmet_source_direction_order",
+      "result": "Elf concept slot 0 is visibly front and slot 4 back; explicit canonical remap is N..NW = 4,3,2,1,0,7,6,5.",
+      "status": "mapping_error_confirmed"
+    },
+    {
+      "id": 3,
+      "topic": "head_socket_granularity",
+      "result": "184 sockets derived independently from primary same-frame Hair.wil centroids, including attack/hit/death movement.",
+      "status": "implemented_from_primary_evidence"
+    },
+    {
+      "id": 4,
+      "topic": "mask_semantics",
+      "result": "Optional masks execute destination alpha subtraction on the current body cell before helmet-front composition.",
+      "status": "cpu_composition_contract"
+    },
+    {
+      "id": 5,
+      "topic": "golden_151",
+      "result": "Immutable original atlases use per-frame compatibility pivots; all 184 final composites remain pixel-identical.",
+      "status": "diff_zero_required"
+    }
+  ]
+}
