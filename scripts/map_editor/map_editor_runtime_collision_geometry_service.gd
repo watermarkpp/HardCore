@@ -3,7 +3,7 @@ extends RefCounted
 
 const CONTRACT_ID := "map_editor_runtime_collision_geometry_v2"
 const PHYSICS_SOURCE_ID := "published_blocked_cells_after_erasure_v1"
-const ACTOR_BOUNDARY_CONTRACT_ID := "map_visible_edge_actor_clearance_v1"
+const ACTOR_BOUNDARY_CONTRACT_ID := "map_visible_edge_actor_footprint_clearance_v2"
 const ELLIPSE_SEGMENTS := 32
 const DEFAULT_BOUNDARY_MARGIN_TILES := 8.0
 const DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD := 18.0
@@ -71,8 +71,11 @@ static func map_actor_boundary_world(
 	# only the artificial outer boundary by the actor radius; authored blocked
 	# cells remain exact and retain their normal body clearance.
 	var visual_boundary := map_inner_boundary_world(design_size)
-	return _expand_convex_polygon(
-		visual_boundary, maxf(0.0, clearance_world)
+	return _expand_convex_polygon_by_footprint(
+		visual_boundary,
+		WorldSpatialRules.actor_footprint_polygon(
+			maxf(0.0, clearance_world)
+		)
 	)
 
 
@@ -129,6 +132,61 @@ static func _expand_convex_polygon(
 		var ratio := _cross(next_line - previous_line, next_edge) / denominator
 		result.append(previous_line + previous_edge * ratio)
 	return result
+
+
+static func _expand_convex_polygon_by_footprint(
+	polygon: PackedVector2Array,
+	footprint: PackedVector2Array
+) -> PackedVector2Array:
+	if polygon.size() < 3 or footprint.is_empty():
+		return polygon
+	var signed_area := 0.0
+	for index in polygon.size():
+		var following := (index + 1) % polygon.size()
+		signed_area += _cross(polygon[index], polygon[following])
+	var result := PackedVector2Array()
+	for index in polygon.size():
+		var previous := (index - 1 + polygon.size()) % polygon.size()
+		var following := (index + 1) % polygon.size()
+		var previous_edge := polygon[index] - polygon[previous]
+		var next_edge := polygon[following] - polygon[index]
+		var previous_normal := Vector2(
+			previous_edge.y, -previous_edge.x
+		).normalized()
+		var next_normal := Vector2(next_edge.y, -next_edge.x).normalized()
+		if signed_area < 0.0:
+			previous_normal = -previous_normal
+			next_normal = -next_normal
+		var previous_line := (
+			polygon[index]
+			+ previous_normal * _footprint_support(
+				footprint, previous_normal
+			)
+		)
+		var next_line := (
+			polygon[index]
+			+ next_normal * _footprint_support(footprint, next_normal)
+		)
+		var denominator := _cross(previous_edge, next_edge)
+		if absf(denominator) <= 0.0001:
+			result.append(next_line)
+			continue
+		var ratio := (
+			_cross(next_line - previous_line, next_edge)
+			/ denominator
+		)
+		result.append(previous_line + previous_edge * ratio)
+	return result
+
+
+static func _footprint_support(
+	footprint: PackedVector2Array,
+	normal: Vector2
+) -> float:
+	var support := 0.0
+	for point: Vector2 in footprint:
+		support = maxf(support, point.dot(normal))
+	return support
 
 
 static func _cross(a: Vector2, b: Vector2) -> float:
