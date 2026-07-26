@@ -494,11 +494,22 @@ def build_variants(
     canonical_slots = list(recipe["canonicalRowSourceSlots"])
     variants: dict[str, Image.Image] = {}
     records: dict[str, dict] = {}
+    calibration_scale = int(recipe.get("calibrationBaseScalePercent", 100))
+    if calibration_scale < 50 or calibration_scale > 200:
+        raise ValueError(
+            f"{recipe['identityId']} calibrationBaseScalePercent "
+            f"must be between 50 and 200"
+        )
+    scale_factor = calibration_scale / 100.0
     for direction_row, direction in enumerate(DIRECTIONS):
-        maximum_size = baseline["directionRuntimeTargetSize"][direction]
+        client_maximum_size = baseline["directionRuntimeTargetSize"][direction]
+        maximum_size = [
+            max(1, round(float(value) * scale_factor))
+            for value in client_maximum_size
+        ]
         target_mass = float(
             baseline["directionRuntimeOpaquePixels"][direction]
-        )
+        ) * scale_factor * scale_factor
         cutout = cutouts[direction]
         variant = fit_to_client_envelope(
             cutout,
@@ -516,8 +527,12 @@ def build_variants(
                 effective_opaque_pixels(variant),
                 4,
             ),
-            "clientMedianEnvelope": list(maximum_size),
-            "clientMedianOpaquePixels": round(target_mass, 4),
+            "clientMedianEnvelope": list(client_maximum_size),
+            "clientMedianOpaquePixels": round(
+                target_mass / (scale_factor * scale_factor), 4
+            ),
+            "calibrationBaseScalePercent": calibration_scale,
+            "calibrationEnvelope": list(maximum_size),
         }
     return variants, records, acceptance
 

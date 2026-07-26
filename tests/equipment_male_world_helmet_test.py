@@ -427,6 +427,14 @@ def main() -> None:
     bronze_idle = Image.open(
         disk_path(identities["bronze_magic"]["actions"]["idle"]["path"])
     ).convert("RGBA")
+    bronze_cutouts = identities["bronze_magic"]["directionCutouts"]
+    assert all(
+        record["calibrationBaseScalePercent"] == 170
+        for record in bronze_cutouts.values()
+    )
+    assert min(
+        record["generatedSize"][1] for record in bronze_cutouts.values()
+    ) >= 27
     bronze_front = cropped_visible(
         bronze_idle.crop((0, 4 * CELL[1], CELL[0], 5 * CELL[1]))
     )
