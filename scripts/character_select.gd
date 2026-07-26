@@ -484,14 +484,14 @@ func _refresh_character_preview() -> void:
 	paper_doll.name = "RuntimePaperDoll"
 	paper_doll.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	paper_doll.center_on_opaque_bounds = false
-	paper_doll.configure_presentation_mode("world_avatar")
+	paper_doll.configure_presentation_mode("classic_avatar")
 	paper_doll.configure_profile(
 		profession_name,
 		_profile_equipment_snapshot(selected_main_profile_id)
 	)
 	paper_doll.set_meta("preview_profile_id", selected_main_profile_id)
 	paper_doll.set_meta("preview_source", "selected_profile_save_equipment")
-	paper_doll.set_meta("paper_doll_presentation_mode", "world_avatar")
+	paper_doll.set_meta("paper_doll_presentation_mode", "classic_avatar")
 	preview_visual_root.add_child(paper_doll)
 	paper_doll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
