@@ -250,8 +250,13 @@ func request_skill(skill_name: String) -> bool:
 	current_mp -= mana_cost
 	var combat_profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)
 	_attack_timer = float(combat_profile.get("cooldown", 0.78)) / _cast_speed_multiplier
-	var action_duration := float(combat_profile.get("action_duration", _attack_timer)) / _cast_speed_multiplier
-	_attack_action_timer = action_duration if PlayerState.profession == "战士" else 0.0
+	var fallback_action_duration := _attack_timer if PlayerState.profession == "战士" else ProfessionRules.CASTER_SPELL_ACTION_DURATION
+	var action_duration := float(combat_profile.get("action_duration", fallback_action_duration))
+	if PlayerState.profession == "战士":
+		action_duration /= _cast_speed_multiplier
+	_attack_action_timer = action_duration
+	velocity = Vector2.ZERO
+	movement_input_active = false
 	var action_id := _begin_combat_action("skill:%s" % skill_name)
 	visual.play_action(skill_name if PlayerState.profession == "战士" else "cast", action_duration)
 	var primary := ProfessionRules.primary_damage_range(PlayerState.profession, PlayerState.computed_stats)

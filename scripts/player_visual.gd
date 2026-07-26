@@ -148,6 +148,7 @@ func _process(delta: float) -> void:
 	if current_state == "action":
 		match _action_name:
 			"attack": frame_count = _warrior_or_default_frames(&"attack")
+			"cast": frame_count = _warrior_or_default_frames(&"cast")
 			"hit": frame_count = _warrior_or_default_frames(&"hit")
 			"death": frame_count = _warrior_or_default_frames(&"death")
 			_: frame_count = _warrior_or_default_frames(&"attack") if _is_warrior_attack_action(_action_name) else _warrior_or_default_frames(&"idle")
