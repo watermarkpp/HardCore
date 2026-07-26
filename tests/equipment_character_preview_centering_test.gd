@@ -135,6 +135,10 @@ func _run() -> void:
 	}
 	var preview := EquipmentCharacterPreview.new()
 	preview.size = Vector2(230, 286)
+	# This fixture injects the transparent classic paper-doll catalog rather
+	# than worldBase/worldWear.  Select that explicit presentation mode so the
+	# default player-facing world_avatar mode is not asked to resolve it.
+	preview.configure_presentation_mode("classic_avatar")
 	preview.center_on_opaque_bounds = true # Legacy input must have no effect.
 	add_child(preview)
 	await get_tree().process_frame
