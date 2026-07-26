@@ -752,14 +752,18 @@ func _skill_interaction_mode(skill_name: String) -> String:
 	if skill_name.is_empty():
 		return "empty"
 	var skill_id := ProfessionRules.skill_id(skill_name)
+	# The canonical SOT defines fire sword as an explicit, single active charge.
+	# Do this before compatibility injection so a stale toggle mode cannot revive auto-use.
+	if skill_id == "warrior.fire_sword":
+		return "active_charge"
 	for key: String in [skill_id, skill_name]:
 		if skill_button_modes.has(key):
 			var configured := str(skill_button_modes[key])
-			if configured in ["toggle", "click", "passive"]:
+			if configured in ["toggle", "click", "passive", "active_charge"]:
 				return configured
 	var profile := ProfessionRules.skill_profile(skill_name)
 	var explicit_mode := str(profile.get("ui_interaction_mode", ""))
-	if explicit_mode in ["toggle", "click", "passive"]:
+	if explicit_mode in ["toggle", "click", "passive", "active_charge"]:
 		return explicit_mode
 	var service_mode := str(profile.get("service_mode", ""))
 	var cast_type := str(profile.get("cast_type", ""))
@@ -775,6 +779,7 @@ func _interaction_mode_label(mode: String) -> String:
 		"toggle": "开关",
 		"click": "点击",
 		"passive": "被动",
+		"active_charge": "充能",
 		"empty": "空",
 	}.get(mode, "点击")
 
