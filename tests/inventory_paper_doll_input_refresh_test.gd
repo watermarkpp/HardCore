@@ -18,6 +18,12 @@ func _run() -> void:
 	var preview: EquipmentCharacterPreview = panel.character_preview
 	assert(_preview_count(equipment_panel) == 1, "装备界同时挂载了多套纸娃娃")
 	assert(preview.mouse_filter == Control.MOUSE_FILTER_IGNORE)
+	assert(preview.presentation_mode == "world_avatar")
+	assert(preview.uses_world_avatar(), "装备页默认没有使用世界人物管线")
+	assert(not preview.uses_original_client_stage(), "装备页默认错误加载完整Prguse装备页")
+	assert(preview.get_meta("paper_doll_render_contract", "") == PreviewScript.PRESENTATION_MODES_CONTRACT_ID)
+	preview.configure_presentation_mode("legacyFullPanel")
+	assert(preview.presentation_mode == "world_avatar", "玩家UI不得接受legacyFullPanel")
 	assert(
 		preview.get_meta("input_policy", "")
 		== "visual_only_mouse_filter_ignore"

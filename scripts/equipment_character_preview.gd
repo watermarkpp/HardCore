@@ -6,6 +6,8 @@ extends Control
 const OPAQUE_CENTER_CONTRACT_ID := "ui.equipment.paper_doll.opaque_center.v1"
 const FOOT_STAGE_ANCHOR_CONTRACT_ID := "ui.equipment.paper_doll.foot_stage_anchor.v2"
 const ORIGINAL_CLIENT_STAGE_CONTRACT_ID := "equipment.paper_doll.original_client_stage.v1"
+const AVATAR_ONLY_CONTRACT_ID := "equipment.paper_doll.avatar_only.v1"
+const PRESENTATION_MODES_CONTRACT_ID := "equipment.paper_doll.presentation_modes.v1"
 const ORIGINAL_CLIENT_DRAW_ORDER := ["base", "hair", "dress", "weapon", "helmet"]
 const ORIGINAL_CLIENT_BASE_SCREEN_ORIGIN := Vector2(38.0, 52.0)
 const ORIGINAL_CLIENT_EQUIPMENT_SCREEN_ANCHOR := Vector2(31.0, 96.0)
@@ -13,6 +15,7 @@ const BODY_FOOT_CONTACT_FIELD := "footContact"
 const PAPER_DOLL_MANIFEST := "res://assets/data/warrior_paper_doll_sources.json"
 const EQUIPMENT_VISUAL_CATALOG := "res://assets/data/equipment_visual_catalog.json"
 const ORIGINAL_CLIENT_STAGE_MANIFEST := "res://assets/data/equipment_original_client_paper_doll_stage.json"
+const PRESENTATION_MODES_MANIFEST := "res://assets/data/equipment_paper_doll_presentation_modes.json"
 const PROFESSION_IDS := {
 	"战士": "warrior",
 	"法师": "wizard",
@@ -31,6 +34,11 @@ var center_on_opaque_bounds := false
 var profession_name := ""
 var paper_doll_manifest_path := ""
 var visual_catalog_path := EQUIPMENT_VISUAL_CATALOG
+# Player-facing screens render an avatar, never the complete historical
+# equipment-window record.  The legacy record contains its own wallpaper and
+# six slot frames, so it is retained solely for explicit compatibility/audit
+# callers that request classic_avatar.
+var presentation_mode := "world_avatar"
 var _direction_row := 4
 var _paper_mappings: Dictionary = {}
 var _paper_layers: Array[Dictionary] = []
@@ -48,10 +56,14 @@ var _manifest_foot_anchor := FOOT_STAGE_CENTER
 var _foot_stage_center := FOOT_STAGE_CENTER
 var _composition_opaque_bounds := Rect2(Vector2.ZERO, ORIGINAL_CANVAS_SIZE)
 var _uses_original_client_stage := false
+var _uses_world_avatar := false
+var _uses_avatar_only_stage := false
 var _base_record: Dictionary = {}
+var _world_base_layer: Dictionary = {}
 var _equipment_screen_anchor := ORIGINAL_CLIENT_EQUIPMENT_SCREEN_ANCHOR
 var _viewport_origin := Vector2.ZERO
 var _render_revision := 0
+var _presentation_config: Dictionary = {}
 
 static var _json_cache: Dictionary = {}
 static var _opaque_rect_cache: Dictionary = {}
@@ -92,6 +104,17 @@ func configure_source_paths(manifest_path: String, catalog_path := "") -> void:
 
 func configure_source_document(document: Dictionary) -> void:
 	_source_document_override = document
+	if is_node_ready():
+		_load_paper_mappings()
+		refresh()
+
+
+func configure_presentation_mode(mode: String) -> void:
+	var requested := mode.strip_edges()
+	if requested == "legacyFullPanel":
+		# This mode is an archival source record, not a player UI presentation.
+		requested = "world_avatar"
+	presentation_mode = requested if not requested.is_empty() else "world_avatar"
 	if is_node_ready():
 		_load_paper_mappings()
 		refresh()
@@ -144,6 +167,9 @@ func _draw() -> void:
 	if _uses_original_client_stage:
 		_draw_original_client_stage()
 		return
+	if _uses_world_avatar:
+		_draw_world_avatar()
+		return
 	var scaled_canvas := _canvas_size * preview_scale
 	# Put the original 199px client canvas near the bottom of the available
 	# preview.  This uses the space below the character while preserving every
@@ -189,6 +215,48 @@ func _draw_original_client_stage() -> void:
 		draw_texture_rect(texture, command.get("targetRect", Rect2()), false)
 
 
+func _draw_world_avatar() -> void:
+	# This is the same male world-wear atlas family used by PlayerVisual:
+	# idle action, south direction and frame zero.  A Control preview crops the
+	# one source cell instead of baking/borrowing the old equipment-page art.
+	var stage_center := foot_stage_center()
+	var stage_radii := FOOT_STAGE_RADII * preview_scale
+	var shadow_points := _ellipse_points(stage_center + Vector2(0, 4), stage_radii + Vector2(5, 3))
+	draw_colored_polygon(shadow_points, Color(0.008, 0.005, 0.004, 0.56))
+	_draw_world_avatar_layer(_world_base_layer)
+	for kind: String in ["dress", "weapon", "helmet"]:
+		for layer: Dictionary in _paper_layers:
+			if str(layer.get("layerKind", "")) == kind:
+				_draw_world_avatar_layer(layer)
+	var front_rim := _ellipse_arc_points(stage_center, stage_radii, 0.0, PI)
+	draw_polyline(front_rim, Color(0.58, 0.36, 0.15, 0.72), 1.0, true)
+
+
+func _draw_world_avatar_layer(layer: Dictionary) -> void:
+	if layer.is_empty():
+		return
+	var texture: Texture2D = layer.get("texture")
+	if texture == null:
+		return
+	var cell := _vector_from_value(layer.get("cell", [224, 224]), Vector2(224, 224))
+	if cell.x <= 0.0 or cell.y <= 0.0:
+		return
+	var source_anchor := _vector_from_value(layer.get("footAnchor", [64, 80]), Vector2(64, 80))
+	var destination_anchor := foot_stage_center()
+	var target := Rect2(
+		destination_anchor - source_anchor * preview_scale,
+		cell * preview_scale
+	)
+	var direction_row := int(layer.get("directionRow", _direction_row))
+	draw_texture_rect_region(
+		texture,
+		target,
+		Rect2(Vector2(0, direction_row * cell.y), cell),
+		Color.WHITE,
+		false
+	)
+
+
 func _ellipse_points(center: Vector2, radii: Vector2, segments := 64) -> PackedVector2Array:
 	var points := PackedVector2Array()
 	for index in range(segments):
@@ -225,19 +293,40 @@ func _load_paper_mappings() -> void:
 	_hair_layer.clear()
 	_base_record.clear()
 	_uses_original_client_stage = false
+	_uses_world_avatar = false
+	_uses_avatar_only_stage = false
+	_world_base_layer.clear()
 	_canvas_size = ORIGINAL_CANVAS_SIZE
 	_manifest_foot_anchor = FOOT_STAGE_CENTER
 	_foot_stage_center = FOOT_STAGE_CENTER
 	_equipment_screen_anchor = ORIGINAL_CLIENT_EQUIPMENT_SCREEN_ANCHOR
 	_viewport_origin = Vector2.ZERO
+	_presentation_config.clear()
 	var source_document := _resolve_source_document()
 	if source_document.is_empty():
 		return
+	_presentation_config = _presentation_config_from_document(source_document)
 	var parsed := _profession_manifest(source_document)
-	_uses_original_client_stage = _document_contract_id(parsed) == ORIGINAL_CLIENT_STAGE_CONTRACT_ID
+	# A full Prguse #376 record embeds the legacy panel artwork and six empty
+	# equipment slots.  It must never enter the character hall or inventory
+	# preview merely because the catalog also contains that archival record.
+	# An explicit source document is the compatibility/audit escape hatch for
+	# the old original-stage test and for the optional classic_avatar mode.
+	var explicit_legacy_source := (
+		not _source_document_override.is_empty()
+		and _document_contract_id(parsed) == ORIGINAL_CLIENT_STAGE_CONTRACT_ID
+	)
+	_uses_original_client_stage = (
+		(presentation_mode == "classic_avatar" or explicit_legacy_source)
+		and _document_contract_id(parsed) == ORIGINAL_CLIENT_STAGE_CONTRACT_ID
+	)
 	if _uses_original_client_stage:
 		_load_original_client_stage(parsed, source_document)
 		return
+	if presentation_mode == "world_avatar":
+		_load_world_avatar(parsed, source_document)
+		return
+	_load_avatar_only_stage(parsed)
 	var mappings: Variant = parsed.get("runtimeMappings", {})
 	if not mappings is Dictionary or mappings.is_empty():
 		mappings = _catalog_paper_mappings(source_document)
@@ -255,18 +344,153 @@ func _load_paper_mappings() -> void:
 		FOOT_STAGE_CENTER
 	)
 	_foot_stage_center = _manifest_foot_anchor
-	var base: Variant = parsed.get("base", {})
-	if base is Dictionary:
-		var base_path := str(base.get("path", ""))
+	if not _uses_avatar_only_stage:
+		var base: Variant = parsed.get("base", {})
+		if base is Dictionary:
+			var base_path := str(base.get("path", ""))
+			if ResourceLoader.exists(base_path):
+				_base_texture = load(base_path) as Texture2D
+		var hair: Variant = parsed.get("hair", {})
+		if hair is Dictionary:
+			var hair_path := str(hair.get("path", ""))
+			if ResourceLoader.exists(hair_path):
+				_hair_layer = hair.duplicate(true)
+				_hair_layer["texture"] = load(hair_path) as Texture2D
+	_recalculate_composition_opaque_bounds()
+
+
+func _load_world_avatar(parsed: Dictionary, source_document: Dictionary) -> void:
+	# world_avatar is deliberately sourced from the formal world actor/wear
+	# catalog, not from StateItem equipment-page records.  It mirrors the
+	# runtime selection of idle/S/frame0 while keeping this Control transparent.
+	var gender_bases: Variant = parsed.get("worldBaseByGender", {})
+	if not gender_bases is Dictionary:
+		return
+	var base_value: Variant = gender_bases.get("男", gender_bases.get("male", {}))
+	if not base_value is Dictionary:
+		return
+	var base_action := _world_idle_action(base_value)
+	var base_texture := _texture_from_record(base_action)
+	if base_texture == null:
+		return
+	_world_base_layer = base_action.duplicate(true)
+	_world_base_layer["texture"] = base_texture
+	_world_base_layer["layerKind"] = "base"
+	_world_base_layer["directionRow"] = _direction_row
+	_base_texture = base_texture
+	_canvas_size = _vector_from_value(
+		_presentation_config.get("canvasSize", [224, 224]),
+		Vector2(224, 224)
+	)
+	_manifest_foot_anchor = _vector_from_value(
+		_presentation_config.get("footAnchor", [84, 186]),
+		FOOT_STAGE_CENTER
+	)
+	_foot_stage_center = _manifest_foot_anchor
+	_paper_mappings = _world_avatar_mappings(source_document)
+	_uses_world_avatar = not _paper_mappings.is_empty()
+	# A naked avatar remains valid even if no item overlay was found. The base
+	# is formal world art and remains useful for character creation/empty saves.
+	if not _uses_world_avatar:
+		_uses_world_avatar = true
+	_recalculate_composition_opaque_bounds()
+
+
+func _world_idle_action(appearance: Dictionary) -> Dictionary:
+	var actions_value: Variant = appearance.get("actions", {})
+	if not actions_value is Dictionary:
+		return {}
+	var action_value: Variant = actions_value.get("idle", {})
+	if action_value is Dictionary:
+		return action_value.duplicate(true)
+	return {}
+
+
+func _world_avatar_mappings(document: Dictionary) -> Dictionary:
+	var result: Dictionary = {}
+	var items_value: Variant = document.get("itemsById", {})
+	if not items_value is Dictionary:
+		return result
+	for item_key: Variant in items_value:
+		var item_value: Variant = items_value[item_key]
+		if not item_value is Dictionary:
+			continue
+		var slot := str(item_value.get("slot", ""))
+		if not (slot in PAPER_LAYER_SLOTS):
+			continue
+		var action := _world_item_idle_action(item_value, slot)
+		if action.is_empty():
+			continue
+		var path := str(action.get("path", ""))
+		if path.is_empty() or not ResourceLoader.exists(path):
+			continue
+		action["slot"] = slot
+		action["layerKind"] = _slot_layer_kind(slot)
+		action["directionRow"] = _direction_row
+		var item_id := str(item_value.get("itemId", item_key))
+		var item_name := str(item_value.get("itemName", ""))
+		result[item_id] = action
+		if not item_name.is_empty():
+			result[item_name] = action
+	return result
+
+
+func _world_item_idle_action(item: Dictionary, slot: String) -> Dictionary:
+	var world_wear: Variant = item.get("worldWear", {})
+	if not world_wear is Dictionary:
+		return {}
+	var appearance: Dictionary = {}
+	if slot == "头盔":
+		var helmet_value: Variant = world_wear.get("helmetAppearance", {})
+		if helmet_value is Dictionary:
+			appearance = helmet_value
+	else:
+		var gendered_value: Variant = world_wear.get("appearancesByGender", {})
+		if gendered_value is Dictionary:
+			var male_value: Variant = gendered_value.get("男", gendered_value.get("male", {}))
+			if male_value is Dictionary:
+				appearance = male_value
+	if appearance.is_empty() or not bool(appearance.get("visible", true)):
+		return {}
+	return _world_idle_action(appearance)
+
+
+func _load_avatar_only_stage(parsed: Dictionary) -> void:
+	# The equipment contract may provide a fully resolved transparent avatar
+	# record.  It is intentionally read before the catalog fallback, but only
+	# accepts the dedicated avatar-only contract; legacyFullPanel is forbidden.
+	var avatar_value: Variant = _presentation_config.get("avatarOnly", {})
+	if not avatar_value is Dictionary:
+		avatar_value = parsed.get("avatarOnly", {})
+	if not avatar_value is Dictionary or avatar_value.is_empty():
+		return
+	if str(avatar_value.get("contractId", "")) != AVATAR_ONLY_CONTRACT_ID:
+		return
+	var avatar: Dictionary = avatar_value
+	var avatar_base: Variant = avatar.get("base", {})
+	if avatar_base is Dictionary:
+		var base_path := str(avatar_base.get("path", ""))
 		if ResourceLoader.exists(base_path):
 			_base_texture = load(base_path) as Texture2D
-	var hair: Variant = parsed.get("hair", {})
-	if hair is Dictionary:
-		var hair_path := str(hair.get("path", ""))
+			_uses_avatar_only_stage = true
+	var avatar_canvas := _vector_from_value(
+		avatar.get("canvasSize", parsed.get("canvasSize", ORIGINAL_CANVAS_SIZE)),
+		ORIGINAL_CANVAS_SIZE
+	)
+	if avatar_canvas.x > 0.0 and avatar_canvas.y > 0.0:
+		_canvas_size = avatar_canvas
+	_manifest_foot_anchor = _vector_from_value(
+		avatar.get("footAnchor", avatar.get("paperDollFootAnchor", FOOT_STAGE_CENTER)),
+		FOOT_STAGE_CENTER
+	)
+	_foot_stage_center = _manifest_foot_anchor
+	_viewport_origin = _vector_from_value(avatar.get("viewportOrigin", Vector2.ZERO), Vector2.ZERO)
+	var avatar_hair: Variant = avatar.get("hair", {})
+	if avatar_hair is Dictionary:
+		var hair_path := str(avatar_hair.get("path", ""))
 		if ResourceLoader.exists(hair_path):
-			_hair_layer = hair.duplicate(true)
+			_hair_layer = avatar_hair.duplicate(true)
 			_hair_layer["texture"] = load(hair_path) as Texture2D
-	_recalculate_composition_opaque_bounds()
 
 
 func _load_original_client_stage(parsed: Dictionary, source_document: Dictionary) -> void:
@@ -364,10 +588,20 @@ func _resolve_source_document() -> Dictionary:
 		return _source_document_override
 	if not paper_doll_manifest_path.is_empty():
 		return _load_json_document(paper_doll_manifest_path)
-	if FileAccess.file_exists(ORIGINAL_CLIENT_STAGE_MANIFEST):
-		var original_stage := _load_json_document(ORIGINAL_CLIENT_STAGE_MANIFEST)
-		if not original_stage.is_empty():
-			return original_stage
+	var presentation := _load_json_document(PRESENTATION_MODES_MANIFEST)
+	var mode_config := _presentation_mode_config(presentation)
+	if not mode_config.is_empty():
+		var source_catalog := str(mode_config.get("sourceCatalog", ""))
+		var catalog_path := source_catalog if not source_catalog.is_empty() else visual_catalog_path
+		if FileAccess.file_exists(catalog_path):
+			var resolved_catalog := _load_json_document(catalog_path).duplicate(true)
+			resolved_catalog["_paperPresentationModes"] = presentation
+			resolved_catalog["_paperPresentationMode"] = mode_config
+			return resolved_catalog
+	# Until the presentation contract is generated, the formal visual catalog
+	# remains the routing source. world_avatar resolves its worldBase/worldWear
+	# records from it; classic_avatar reads only its transparent anatomy and
+	# StateItem records. Neither path loads a complete equipment-window record.
 	if FileAccess.file_exists(visual_catalog_path):
 		var catalog := _load_json_document(visual_catalog_path)
 		if not catalog.is_empty():
@@ -377,6 +611,32 @@ func _resolve_source_document() -> Dictionary:
 	if FileAccess.file_exists(profession_path):
 		return _load_json_document(profession_path)
 	return _load_json_document(PAPER_DOLL_MANIFEST)
+
+
+func _presentation_mode_config(document: Dictionary) -> Dictionary:
+	if _document_contract_id(document) != PRESENTATION_MODES_CONTRACT_ID:
+		return {}
+	var modes_value: Variant = document.get("modes", {})
+	if not modes_value is Dictionary:
+		return {}
+	var requested := presentation_mode
+	if requested.is_empty():
+		requested = str(document.get("defaultMode", "world_avatar"))
+	if requested == "legacyFullPanel":
+		requested = "world_avatar"
+	var value: Variant = modes_value.get(requested, {})
+	if not value is Dictionary:
+		return {}
+	var result: Dictionary = value.duplicate(true)
+	result["mode"] = requested
+	return result
+
+
+func _presentation_config_from_document(document: Dictionary) -> Dictionary:
+	var embedded: Variant = document.get("_paperPresentationMode", {})
+	if embedded is Dictionary and not embedded.is_empty():
+		return embedded.duplicate(true)
+	return _presentation_mode_config(document)
 
 
 func _profession_manifest(document: Dictionary) -> Dictionary:
@@ -693,6 +953,27 @@ func has_renderable_assets() -> bool:
 
 func uses_original_client_stage() -> bool:
 	return _uses_original_client_stage
+
+
+func uses_world_avatar() -> bool:
+	return _uses_world_avatar
+
+
+func presentation_contract_id() -> String:
+	return PRESENTATION_MODES_CONTRACT_ID
+
+
+func world_avatar_draw_commands() -> Array[Dictionary]:
+	var commands: Array[Dictionary] = []
+	if not _uses_world_avatar:
+		return commands
+	if not _world_base_layer.is_empty():
+		commands.append(_world_base_layer.duplicate(true))
+	for kind: String in ["dress", "weapon", "helmet"]:
+		for layer: Dictionary in _paper_layers:
+			if str(layer.get("layerKind", "")) == kind:
+				commands.append(layer.duplicate(true))
+	return commands
 
 
 func render_revision() -> int:
