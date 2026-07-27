@@ -3,7 +3,7 @@
   "contractId": "equipment.world_helmet.male.extension.v1",
   "sex": "male",
   "recipe": "res://assets/data/equipment_male_world_helmet_recipes.json",
-  "recipeFileSha256": "52d8aecd6beaf453fe360dc7c7ede4ef373942e7bdb7c9c6e4e9265a44826179",
+  "recipeFileSha256": "75b908b4834b663ca2f217fb444163619766dbb644a55e1f7a464e929b80e75f",
   "actorContract": {
     "contractId": "player.visual.classic_eight_direction.v1",
     "cell": [
@@ -73052,7 +73052,7 @@
       "sourceIndex": 110,
       "sex": "male",
       "concept": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
-      "conceptFileSha256": "6ae21eca219432a7ddf9028584809112f51504c7704d9bfd3dd83dc1cce2ae0e",
+      "conceptFileSha256": "d4c9c6db204f9c4735b91c68e778e2a64e38e16f8fc95f29ab3201c2273cfcd4",
       "sourceGrid": [
         4,
         2
@@ -73079,7 +73079,7 @@
       ],
       "directionAcceptance": {
         "path": "res://assets/art/items/client/world_wear/helmet/male/acceptance/prayer_direction_mapping.png",
-        "fileSha256": "55fd2efd23fb156ef06e64e356829da083b6597281ed3151571e952454cf9a13",
+        "fileSha256": "a76d5c997caf8ed37b718a4520efd19e1be66f9f25743401d62028022430cf8a",
         "sourceGrid": [
           4,
           2
@@ -73125,26 +73125,42 @@
             13,
             16
           ],
-          "clientMedianOpaquePixels": 141.0
+          "clientMedianOpaquePixels": 141.0,
+          "calibrationBaseScalePercent": 100,
+          "calibrationDirectionScalePercent": 100,
+          "calibrationEnvelope": [
+            13,
+            16
+          ],
+          "preparedPixelPolicy": "concept_direct_resize",
+          "angleAwareHorizontalDiameter": {}
         },
         "NE": {
           "sourceSlot": 7,
           "sourceCutoutSize": [
-            211,
-            279
+            216,
+            282
           ],
-          "sourceCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
+          "sourceCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
           "generatedSize": [
             14,
             18
           ],
-          "generatedRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-          "effectiveOpaquePixels": 173.6667,
+          "generatedRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+          "effectiveOpaquePixels": 187.2353,
           "clientMedianEnvelope": [
             18,
             18
           ],
-          "clientMedianOpaquePixels": 158.0
+          "clientMedianOpaquePixels": 158.0,
+          "calibrationBaseScalePercent": 100,
+          "calibrationDirectionScalePercent": 100,
+          "calibrationEnvelope": [
+            18,
+            18
+          ],
+          "preparedPixelPolicy": "concept_direct_resize",
+          "angleAwareHorizontalDiameter": {}
         },
         "E": {
           "sourceSlot": 3,
@@ -73163,7 +73179,15 @@
             15,
             20
           ],
-          "clientMedianOpaquePixels": 148.0
+          "clientMedianOpaquePixels": 148.0,
+          "calibrationBaseScalePercent": 100,
+          "calibrationDirectionScalePercent": 100,
+          "calibrationEnvelope": [
+            15,
+            20
+          ],
+          "preparedPixelPolicy": "concept_direct_resize",
+          "angleAwareHorizontalDiameter": {}
         },
         "SE": {
           "sourceSlot": 6,
@@ -73182,7 +73206,15 @@
             16,
             23
           ],
-          "clientMedianOpaquePixels": 136.0
+          "clientMedianOpaquePixels": 136.0,
+          "calibrationBaseScalePercent": 100,
+          "calibrationDirectionScalePercent": 100,
+          "calibrationEnvelope": [
+            16,
+            23
+          ],
+          "preparedPixelPolicy": "concept_direct_resize",
+          "angleAwareHorizontalDiameter": {}
         },
         "S": {
           "sourceSlot": 4,
@@ -73201,7 +73233,15 @@
             14,
             21
           ],
-          "clientMedianOpaquePixels": 113.0
+          "clientMedianOpaquePixels": 113.0,
+          "calibrationBaseScalePercent": 100,
+          "calibrationDirectionScalePercent": 100,
+          "calibrationEnvelope": [
+            14,
+            21
+          ],
+          "preparedPixelPolicy": "concept_direct_resize",
+          "angleAwareHorizontalDiameter": {}
         },
         "SW": {
           "sourceSlot": 5,
@@ -73220,7 +73260,15 @@
             16,
             23
           ],
-          "clientMedianOpaquePixels": 142.0
+          "clientMedianOpaquePixels": 142.0,
+          "calibrationBaseScalePercent": 100,
+          "calibrationDirectionScalePercent": 100,
+          "calibrationEnvelope": [
+            16,
+            23
+          ],
+          "preparedPixelPolicy": "concept_direct_resize",
+          "angleAwareHorizontalDiameter": {}
         },
         "W": {
           "sourceSlot": 2,
@@ -73239,35 +73287,52 @@
             16,
             20
           ],
-          "clientMedianOpaquePixels": 150.0
+          "clientMedianOpaquePixels": 150.0,
+          "calibrationBaseScalePercent": 100,
+          "calibrationDirectionScalePercent": 100,
+          "calibrationEnvelope": [
+            16,
+            20
+          ],
+          "preparedPixelPolicy": "concept_direct_resize",
+          "angleAwareHorizontalDiameter": {}
         },
         "NW": {
           "sourceSlot": 1,
           "sourceCutoutSize": [
-            214,
-            289
+            217,
+            282
           ],
-          "sourceCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
+          "sourceCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
           "generatedSize": [
             13,
             17
           ],
-          "generatedRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-          "effectiveOpaquePixels": 152.4235,
+          "generatedRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+          "effectiveOpaquePixels": 164.4588,
           "clientMedianEnvelope": [
             16,
             17
           ],
-          "clientMedianOpaquePixels": 156.0
+          "clientMedianOpaquePixels": 156.0,
+          "calibrationBaseScalePercent": 100,
+          "calibrationDirectionScalePercent": 100,
+          "calibrationEnvelope": [
+            16,
+            17
+          ],
+          "preparedPixelPolicy": "concept_direct_resize",
+          "angleAwareHorizontalDiameter": {}
         }
       },
+      "calibrationPreparedSourceRows": [],
       "stateItemPixelsUsed": false,
       "hairPixelsUsed": false,
       "actions": {
         "idle": {
           "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_idle.png",
-          "fileSha256": "89b400d3c94f54105449460104c275477be315c83bc62c28268d343a84b8350f",
-          "atlasRgbaSha256": "22a945b5d091b105fb659abddfe792ebc361513e4529c9ba2dd5417589cbcc09",
+          "fileSha256": "18aab75a74b57b6cf87500f13f07548a3a3bec6e05a337f1a0c72eb0b09aafa4",
+          "atlasRgbaSha256": "b5c1458606749b19f75290c04595fa238cd48ee3b6ccfcc78fda036ee0569a65",
           "cell": [
             192,
             160
@@ -73524,9 +73589,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "8510d7f5831b96ec5f58f56b798d30e218fe4f0e54617844384f78570f2ad205",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "cc10e039b944a130b0ba4aa9d717ff76e69019471533fd1609bf5379db049692",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -73574,9 +73639,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "8510d7f5831b96ec5f58f56b798d30e218fe4f0e54617844384f78570f2ad205",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "cc10e039b944a130b0ba4aa9d717ff76e69019471533fd1609bf5379db049692",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -73624,9 +73689,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "8510d7f5831b96ec5f58f56b798d30e218fe4f0e54617844384f78570f2ad205",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "cc10e039b944a130b0ba4aa9d717ff76e69019471533fd1609bf5379db049692",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -73674,9 +73739,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "8510d7f5831b96ec5f58f56b798d30e218fe4f0e54617844384f78570f2ad205",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "cc10e039b944a130b0ba4aa9d717ff76e69019471533fd1609bf5379db049692",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -74724,9 +74789,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "28fa5f6b7f05b709d78de847551b5faa11df7c44d8be6d94e34cbc4831f4d2ff",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "53ac00b9026eee28a02f8eca6a6da6669ee593a0f29d1d047f83d8ddc58077ab",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -74774,9 +74839,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "28fa5f6b7f05b709d78de847551b5faa11df7c44d8be6d94e34cbc4831f4d2ff",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "53ac00b9026eee28a02f8eca6a6da6669ee593a0f29d1d047f83d8ddc58077ab",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -74824,9 +74889,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "28fa5f6b7f05b709d78de847551b5faa11df7c44d8be6d94e34cbc4831f4d2ff",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "53ac00b9026eee28a02f8eca6a6da6669ee593a0f29d1d047f83d8ddc58077ab",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -74874,9 +74939,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "28fa5f6b7f05b709d78de847551b5faa11df7c44d8be6d94e34cbc4831f4d2ff",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "53ac00b9026eee28a02f8eca6a6da6669ee593a0f29d1d047f83d8ddc58077ab",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -74886,8 +74951,8 @@
         },
         "walk": {
           "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_walk.png",
-          "fileSha256": "7c2ca1bcd4ed6320ac7b345e9978fd0ac89b6ff23ada5d02332ba06b9e53f7a2",
-          "atlasRgbaSha256": "3ed915e46dfad14e08067d55d0615ecb5db8a43181b57dc462496baf1543a2a3",
+          "fileSha256": "1567249f8de1066e683ef007d3148a014021b7cf35687edd0ccab27d4ff1891b",
+          "atlasRgbaSha256": "d46dee322d93955bcc9621ca6414412eccf57832750360a0c2949d2b31ce9a57",
           "cell": [
             192,
             160
@@ -75244,9 +75309,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "b981a6d171c3a96174271e0cb4ebc8e661f84a268382738aebe21691b9a7f311",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "2a8192e131454906cfdc65106882d231ea28b9a22aa9a09f840bc91b7aa2bb20",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -75294,9 +75359,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "b981a6d171c3a96174271e0cb4ebc8e661f84a268382738aebe21691b9a7f311",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "2a8192e131454906cfdc65106882d231ea28b9a22aa9a09f840bc91b7aa2bb20",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -75344,9 +75409,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "8510d7f5831b96ec5f58f56b798d30e218fe4f0e54617844384f78570f2ad205",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "cc10e039b944a130b0ba4aa9d717ff76e69019471533fd1609bf5379db049692",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -75394,9 +75459,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "c4a25899293d22a2ba72501ec13c1d1d9125268abdb1433915a7e3e361b71b4b",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "884f2ae03e0284dc44ac84845059c65a9ceb0cee6c81823de64c7ba3a51e7f48",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -75444,9 +75509,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "8510d7f5831b96ec5f58f56b798d30e218fe4f0e54617844384f78570f2ad205",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "cc10e039b944a130b0ba4aa9d717ff76e69019471533fd1609bf5379db049692",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -75494,9 +75559,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "e11b2b994b27b8600a398ed0970150cde7036e85f14515c6fddfdeaacfccda0a",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "dcec7649d8ce82578da639261f6150d3ec18fc318a884376f5a8c8f7932ba009",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -77044,9 +77109,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "3820e4d56595bf7a3477338b5c464f18600d5dc0df1216ab174cd33ed03d7dfb",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "abe5402051b05672955fe821a0adef7c97e185d0cda3b6b4a246d559b47ad270",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -77094,9 +77159,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "3820e4d56595bf7a3477338b5c464f18600d5dc0df1216ab174cd33ed03d7dfb",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "abe5402051b05672955fe821a0adef7c97e185d0cda3b6b4a246d559b47ad270",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -77144,9 +77209,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "3820e4d56595bf7a3477338b5c464f18600d5dc0df1216ab174cd33ed03d7dfb",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "abe5402051b05672955fe821a0adef7c97e185d0cda3b6b4a246d559b47ad270",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -77194,9 +77259,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "cbdc080795b2e090c89d130f969ea2a00988f2ad4575d845c132edf500cfd982",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "f38d62297dca306b7a2249c028125ff85ccf3d71371010fa8e0ebe1546228a86",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -77244,9 +77309,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "3820e4d56595bf7a3477338b5c464f18600d5dc0df1216ab174cd33ed03d7dfb",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "abe5402051b05672955fe821a0adef7c97e185d0cda3b6b4a246d559b47ad270",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -77294,9 +77359,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "3820e4d56595bf7a3477338b5c464f18600d5dc0df1216ab174cd33ed03d7dfb",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "abe5402051b05672955fe821a0adef7c97e185d0cda3b6b4a246d559b47ad270",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -77306,8 +77371,8 @@
         },
         "attack": {
           "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_attack.png",
-          "fileSha256": "81df8e06c75e23d19468abec2eda37bb7434c3d7f452958f5bd26930fb6b127b",
-          "atlasRgbaSha256": "2ebd45c36af61c807ab3999cbacfa1505149be9ebe1e3e788e4e29c0bd0253c8",
+          "fileSha256": "e7390493dc9b6830a9d876d7d05fdac362e362fab41af0e3e01b8f0cbbba4421",
+          "atlasRgbaSha256": "4f547621b1f7335bfcea4684f31b216cf2d685ecbcbd3592289f8883695586e0",
           "cell": [
             192,
             160
@@ -77664,9 +77729,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "b63fbb3a8ad95a8757b55344744664f592aa09dc2ebcacdee9c4c8fd331c795c",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "19f91c2efc30d11b3c56c867e9c793369da6c9cfb824a367142df250636d0a83",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -77714,9 +77779,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "e6c8d95d83a4449bf5401daa1040482c6b6e4b8def3c4837feaa425a565c19a5",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "2fbf0dd24d9c2ce86b7f8de1441c6eca94b3e0c1ec4f7951e31703cd3c2ccc49",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -77764,9 +77829,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "fd0d3f03f9b9f84fe9b868490fefeee02a140bc4703648be14d486ad8320ceb5",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "5fa7eb6b94b0e457fc5f8f191558ee33de5e70487ff948a76e29499c266fa869",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -77814,9 +77879,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "ebe08585710726657da1d800c08e26b21b6d51cff526ab29564dba6ae05c65a1",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "f23db28dd6e14088998008529da017b0648f50864133c67b96ef3ec09c136669",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -77864,9 +77929,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "606b4184195faa770209fa29b5763021edbb9966e38b3a73983678f8c6deb9f9",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "3907ad338c443eccaf8dd1a83f9ffa058f42e6f3a2644c237690a41d4ab04945",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -77914,9 +77979,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "498acf07c5d4894bc87e7abaace345d19879a9a4af5d49f0889b3d488ff6d6f6",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "72d5e404704891dfdef244be88ea4b2a48e40cb62b6a5660b33ac0d6df6d27d4",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -79464,9 +79529,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "924d9830f34a5984396d0d02f02aa38a9c19a171a8c69fa3c45f7833ba8c4e33",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "1dd431028fa7f33778157ba10273fa00e9fbabd6539936e370077ae15a0daf08",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -79514,9 +79579,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "890e6d38cb4a6f33d10bedcfda315add61c7314d7ad2dedd7619db202538ebb0",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "ef0752596cce4b414b05f892eb4aada8a599ab8842bd9b604e9a5303338be6d4",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -79564,9 +79629,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "3a7872762346901d8d9ef2d64c6254b64856c9b263612b581dbaa4bf912a80c5",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "c87a62b01e7be4edc2ab9f5282b085c8639f9ec8b0a07061c014fe0d53b02e73",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -79614,9 +79679,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "615732c88a387697667b420246a693a7a172b6af053f164239f8ffcd25a47ba5",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "2a35f6d68bb82fa009b4c96594d5c398e49e640f59d9171be6d97f615a9d02e8",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -79664,9 +79729,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "9d68acfa9b911d75e96147e7ec7c926bd0aacbc7879ae7ba8f729b38d9f4e8a2",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "2f719bff29b3085f9f8642a439308cd1a0f25964b7b2d5a40dbd97b1b0d527de",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -79714,9 +79779,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "edb132dcb6a641efd1724b4d019e312b00782217a6e206764bc8926e77076f41",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "33058f5e39fc7daa9289a7f483b8a441f936bf270a929b784851d5e8af0cd075",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -79726,8 +79791,8 @@
         },
         "cast": {
           "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_cast.png",
-          "fileSha256": "47a4aa3ef50ccd13673519416b90ac31f4178c3ca7dde4c1f75600a9c9101b5d",
-          "atlasRgbaSha256": "30e67331f1dee09e3c3c7b73ca7346e4ffe25fab5a3c5bcd3353fefca7ce5665",
+          "fileSha256": "bb44e65f62f699b58b8a3621582d137138f4b3cde970fefe9edbc6df7be3f741",
+          "atlasRgbaSha256": "fd1ff771e270d246c2ec4535207e7491337b16514f9edbb8bcc806ee07a54ab6",
           "cell": [
             192,
             160
@@ -80084,9 +80149,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "2b6ed992bede2d12637ef2151307d84c53ad7ee4b5426ab1c8db032a97b1b34d",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "3bea53646e5699371df8daa32e1d9394a71b9dd25608aaa3d196a361d79bbea3",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -80134,9 +80199,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "77c9506d6c4c177bff449584e0caab1edfe0bf6c1119b58599d511d2085ac3ae",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "0cea10c41f07a3d79cad24f2be8c5969cf64fa81b1062dcbd6eae7c6132fee2b",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -80184,9 +80249,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "5da9cc052921c0a475da76876bf9a1b62bc9dd574e8af534bdb9f1c742b1f24c",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "43661b2ef96c04f3338961ffc7bb2a8fe05b284d2745ecdca96d6ec452fe49aa",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -80234,9 +80299,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "2a9655f0b98accb14881e9e803c306652dc5eaf94138dd03eafd8898b4ad82f5",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "d5eee8788af0cca862c8b31bdf11155c3773ce687a93383138872817fae74e53",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -80284,9 +80349,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "e67b3be398710116e69adf877695d1c55dfd66f368c0f57dadc67c0befca5028",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "6a8829b8d54f3763b85a9cf896eb1cbc6b4de1b05dd8d1c1c885009932eec604",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -80334,9 +80399,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "fd9a485064187904d41e8a8acca82b462d3ecf11313c9c01ba7ad4e095c78092",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "a4d2b5dd109df4069d30bc39576c1257955f6868d8060073bafc4de5dd0d7715",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -81884,9 +81949,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "944691a12659acf3951d61969f9de4d5124a1145f9340b38290e3562d601b790",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "e319b34f9349d95c6e0ec3ab19501c090b310c8cf839b8dcfba109209d6e0396",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -81934,9 +81999,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "944691a12659acf3951d61969f9de4d5124a1145f9340b38290e3562d601b790",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "e319b34f9349d95c6e0ec3ab19501c090b310c8cf839b8dcfba109209d6e0396",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -81984,9 +82049,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "5deec5c88c56e1bbfccfcdea22c9bf56b564994578b80e0d9b20e7c12c06879a",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "0b0cfac84a04d92c4791e8a6c0df1c1530ffca2718af1318baf7266e981c78f0",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -82034,9 +82099,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "49aea841124f283b5bc90db69dc0cc34ed49e9bb9236884a0fa02dbe955ee842",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "82411c9b1af8073a38ca043a959d9705d096be19d2f1f313548f39df43f4f4a4",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -82084,9 +82149,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "95fe689714cc0f8b9f9c52292cc69023bf67ed0386793182ea728c100744d466",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "9fcf42b0fd8b89d59d67a34dbbb7ed1297359709a2f9bf43692de22ff15e8ac3",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -82134,9 +82199,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "8a5d197c71c2c5fb048f94849f165347147efc512c52009ee5fda3e7a9905e15",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "048cef1c31e61a80a08d557a2c4dc7a0da4f67edb0a97a5094f9a4aab25bd294",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -82146,8 +82211,8 @@
         },
         "hit": {
           "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_hit.png",
-          "fileSha256": "5bd63f8df3747cebefcf1a63d1cec9415d74fbf970540536f8f5e3131dde0dcc",
-          "atlasRgbaSha256": "b2657f452b076a5e9871ab90694774b4adfe70d266c93c116fa04db78b0428c4",
+          "fileSha256": "985eaf3f1308646deac11d2a06ea638f37739b97ecf79f3aedfacda857dc4b10",
+          "atlasRgbaSha256": "7e9193746bf86b87ac50652d575fba63eb2dcd5b420e8c653e627e79df539f2b",
           "cell": [
             192,
             160
@@ -82354,9 +82419,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "0ec3978a72c2b9e8fbdfe373488a977d1e65cca53f74701d5cbad5773b145886",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "b6873b3c8b01967a6c9ae81ed8f50af3a9d6c0858a43577ec10d6b2ce469b9f9",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -82404,9 +82469,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "bda7c3376b1fc78ad55688159a88b09f99695d015feae6573326a60aa3cb9999",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "7e8fd8f6f3b698408191836a06b5f7a947570e9ed551fabccbbc5f3bc54c24d2",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -82454,9 +82519,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "47720218a104b3e04fed7defa2f7a8f0b76d0eee38ce0485df990a670799623f",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "a2674f724e120308232bd4f0128f3c45b3b9ce9fb2bd4d084c7720783344986f",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -83254,9 +83319,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "6a4ea9d21f64b95c50e8d56ea144490ab57c49054d78b68ee862ace87083f3f9",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "aa7e215abc6b9f915df6045a2d58a88330acb2d98600f1424abc836b75fc7bc7",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -83304,9 +83369,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "7f389a0f526a3e66123496de937d7a4a8851f4ef072e5018c32e71dddab138be",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "2d6367a80466a475af6d8a644d9216b166389b0653f6147755cd716fdc856ebe",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -83354,9 +83419,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "306e4cd5f413369b8904f16cf7916959764798f35696afab052c110dc9ae757a",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "0dfae9b98b4c30cc4d505adcd793298f6b846d07f6642df0264342caa46b3ce7",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -83366,8 +83431,8 @@
         },
         "death": {
           "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_death.png",
-          "fileSha256": "8f652b9c38773a69f3542cb999148924c0c99a1a796caae2088152ec636065ea",
-          "atlasRgbaSha256": "cc863a21ee0d3203e9c470d395754ec7a3a00d6344b8d7e99ee23b8f9202aa91",
+          "fileSha256": "4f8d34ddadb47b60b7c176e32e208bbb9267b9eca49c7f0419f597ffa7de9af6",
+          "atlasRgbaSha256": "5eac71665d5e73308ba4874004b322bd9775b1590752c158936beb3a63b75a27",
           "cell": [
             192,
             160
@@ -83626,9 +83691,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "f31470ab4c36834650bcc1a3d890d1e3806cffb07cfa82acdff620e1b8771519",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "a90474ea3629d792ca7e526cda9d5a42479dd3b7cf68cf3abae8de83bd1e4ea5",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -83676,9 +83741,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "a0ad64756735cb55d21b760e7edc18a5a7d22149c7130bf5460e666d0609d81c",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "7c841a9b731da941d87290f87de9ef069a7b966094bc103d24c0d153e83e06a5",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -83727,9 +83792,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "b4a78a24b963cc6b7bafa6a7220aa6a5a07da189e5a3d02df0a916b3abb6ec77",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "6b1a91b0f5c3f1804f31e02067c1b6ae535c0585c97b114007a616aa2b8b0284",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -83778,9 +83843,9 @@
                 14,
                 18
               ],
-              "conceptCutoutRgbaSha256": "521a34b7b19b793526a214666778023b39b01cecf1ca36d30a4e1c2677c44756",
-              "generatedHelmetRgbaSha256": "daeb31eeb3bc70ab464d177e11f055f15490164bc9f99c3f0b1dd0b620e04509",
-              "cellRgbaSha256": "4bc2930545efa52da8bc9316f985a07ae5e91bb90a55d2dc80aa79d73a792053",
+              "conceptCutoutRgbaSha256": "001add6abd78cb9b7f79a27e963c3d00c3d23f01576a6417cfeae9de92a94642",
+              "generatedHelmetRgbaSha256": "5ece1cab55f2ae5d54a0ab19b8e04088e8db2eda8f53ed819fe662d28e0eb239",
+              "cellRgbaSha256": "6aeb9e7564e369b07717446b328b7ae1b9c18c0afb58af70580cdfa5a028c200",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -84841,9 +84906,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "cfa70aaf4f0003c4acb6d5c8b6d900d47a253b441d6d9da99e37c7738ad861fb",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "29aa302a260cccfa354b2efe1c7bf7c4a331e8d5f34d400cc9338b90708d0804",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -84892,9 +84957,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "6bd597e75328a6020a7d80ebba46fbfc563f3f8637817e9d5490e200e53e3b8e",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "c90660e511d2280ed3a735ab43b3a484cdb92011f152a4189b161786128eee0f",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -84943,9 +85008,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "a8ac895a1a4757dbf24e270722c79ee6315792a09031a4aa6dbb6ff2933ab277",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "e4e952c363101291f9ba4149cf8b335463e5acb8d65c0128d476133b5a89236c",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
@@ -84994,9 +85059,9 @@
                 13,
                 17
               ],
-              "conceptCutoutRgbaSha256": "685b81f91e8bf170c3eb079d7cdc6619c2ba45283e1e324dd45adfeba66256e8",
-              "generatedHelmetRgbaSha256": "9bada370d3787d2ad0f5b5e5e00275476922d166382247c1e1d42ce84bf5f3ce",
-              "cellRgbaSha256": "2fc9ad3b0ecef84cbb9567b208aec270094cdc43d111cd5acd39330d4d987bd9",
+              "conceptCutoutRgbaSha256": "f7da721a48ba61655c8b907b2490fccd68e346c20b7a17d0096d4657b7134ff7",
+              "generatedHelmetRgbaSha256": "cf6aaee6973dcf8909cedbabbc59435aef26af1e16808acf9fef954ef31c8581",
+              "cellRgbaSha256": "6c9400f2f9a9a39df9455193e1992b0cf797742ff27f0747b32ff0a37507a79f",
               "pixelSource": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_helmet_8dir.png",
               "poseVariant": "concept-sheet-direct-resize",
               "stateItemPixelsUsed": false,
