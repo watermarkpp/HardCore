@@ -45,6 +45,8 @@ VISUAL_CATALOG = ROOT / "assets/data/equipment_visual_catalog.json"
 HEAD_PATCH_CONTRACT = (
     ROOT / "assets/data/equipment_classic_avatar_head_patches.json"
 )
+HELMET_V2_CONTRACT = ROOT / "assets/data/equipment_helmet_visual_v2.json"
+HEAD_SOCKET_CONTRACT = ROOT / "assets/data/player_head_socket_db.json"
 HEAD_PATCH = (
     ROOT
     / "assets/art/items/client/paper_doll/classic_flattened_head"
@@ -72,6 +74,12 @@ PRESENTATION_PREVIEW = (
     ROOT / "outputs/helmet_232/holy_war_232_paper_inventory_ground_preview.png"
 )
 REPORT = ROOT / "outputs/helmet_232/holy_war_232_validation_report.json"
+WORN_PREVIEW_1X = (
+    ROOT / "outputs/helmet_232/holy_war_232_worn_idle_8dir_1x.png"
+)
+WORN_PREVIEW_8X = (
+    ROOT / "outputs/helmet_232/holy_war_232_worn_idle_8dir_8x.png"
+)
 
 IDENTITY_ID = "holy_war"
 ITEM_ID = 232
@@ -129,18 +137,33 @@ FUR_POLYGONS = {
 # the player's original face without deleting the decorative cage/trim.
 FACE_WINDOWS: dict[str, list[list[list[int]]]] = {}
 
-# The whole horned silhouette is baked at integer pixel sizes.  Height stays
-# consistent across the eight views; the frontal/rear widths remain governed
-# by the approved artwork rather than runtime scaling.
+# The previous 35-36px bake treated the two tall horns as the helmet body's
+# sizing envelope and made the lower shell roughly twice the accepted helmet
+# width.  The approved sheet is now baked at 0.64x by overall height.  This
+# puts the horn-excluded S shell near 15px wide (the accepted range is
+# 10-15px) while keeping both horns proportional.  Runtime scale remains 1.
 WORLD_HEIGHT = {
-    "N": 36,
-    "NE": 36,
-    "E": 35,
-    "SE": 36,
-    "S": 36,
-    "SW": 36,
-    "W": 35,
-    "NW": 36,
+    "N": 23,
+    "NE": 23,
+    "E": 22,
+    "SE": 23,
+    "S": 23,
+    "SW": 23,
+    "W": 22,
+    "NW": 23,
+}
+WORLD_SCALE_RATIO = 0.64
+PAPER_CANVAS_SIZE = (32, 41)
+PAPER_CONTENT_ENVELOPE = (24, 29)
+FROZEN_V2_SOURCE_DIRECTION_MAP = {
+    "N": 0,
+    "NE": 7,
+    "E": 3,
+    "SE": 6,
+    "S": 4,
+    "SW": 5,
+    "W": 2,
+    "NW": 1,
 }
 OPAQUE_FACE_ROI_POINTS = {
     "N": [[192, 330]],
@@ -288,7 +311,7 @@ def crop_alpha(image: Image.Image) -> Image.Image:
 
 def resize_to_height(image: Image.Image, height: int) -> Image.Image:
     width = max(1, round(image.width * height / image.height))
-    return image.resize((width, height), Image.Resampling.LANCZOS)
+    return image.resize((width, height), Image.Resampling.NEAREST)
 
 
 def fit_inside(image: Image.Image, size: tuple[int, int]) -> Image.Image:
@@ -297,11 +320,32 @@ def fit_inside(image: Image.Image, size: tuple[int, int]) -> Image.Image:
         max(1, round(image.width * scale)),
         max(1, round(image.height * scale)),
     )
-    resized = image.resize(target, Image.Resampling.LANCZOS)
+    resized = image.resize(target, Image.Resampling.NEAREST)
     output = Image.new("RGBA", size, (0, 0, 0, 0))
     output.alpha_composite(
         resized,
         ((size[0] - resized.width) // 2, (size[1] - resized.height) // 2),
+    )
+    return output
+
+
+def fit_inside_envelope(
+    image: Image.Image,
+    canvas_size: tuple[int, int],
+    content_envelope: tuple[int, int],
+) -> Image.Image:
+    fitted = fit_inside(image, content_envelope)
+    used = fitted.getchannel("A").getbbox()
+    if used is None:
+        raise ValueError("empty fitted helmet image")
+    fitted = fitted.crop(used)
+    output = Image.new("RGBA", canvas_size, (0, 0, 0, 0))
+    output.alpha_composite(
+        fitted,
+        (
+            (canvas_size[0] - fitted.width) // 2,
+            (canvas_size[1] - fitted.height) // 2,
+        ),
     )
     return output
 
@@ -446,7 +490,8 @@ def build_world_identity(
             "clientMedianOpaquePixels": round(
                 float(baseline["directionRuntimeOpaquePixels"][direction]), 4
             ),
-            "resizeFilter": "lanczos_baked_source_to_integer_pixels",
+            "resizeFilter": "nearest_baked_source_to_integer_pixels",
+            "worldScaleRatio": WORLD_SCALE_RATIO,
             "runtimeScale": 1,
             "facePolicy": FACE_POLICY[direction],
             "hairPolicy": "hide",
@@ -485,6 +530,9 @@ def build_world_identity(
         ),
         "hairPolicy": "hide",
         "generatedFurOrNeckPixelsRetained": False,
+        "worldSizingPolicy": "horn_excluded_body_normalization_v1",
+        "worldScaleRatio": WORLD_SCALE_RATIO,
+        "worldDirectionHeights": WORLD_HEIGHT,
         "runtimeScale": 1,
         "textureFilter": "nearest",
         "integerPlacementCompatible": True,
@@ -502,7 +550,11 @@ def build_paper_doll_and_icons(
     # Paper doll uses the opaque S design.  The approved black face mask is
     # part of the helmet and must not be cut out.  No base-image erase pass is
     # needed because the opaque helmet layer covers the head itself.
-    paper = fit_inside(wearable["S"], (32, 41))
+    paper = fit_inside_envelope(
+        wearable["S"],
+        PAPER_CANVAS_SIZE,
+        PAPER_CONTENT_ENVELOPE,
+    )
     erase = Image.new("RGBA", paper.size, (0, 0, 0, 0))
     HEAD_PATCH.parent.mkdir(parents=True, exist_ok=True)
     paper.save(HEAD_PATCH, format="PNG", optimize=False)
@@ -674,6 +726,11 @@ def update_recipe() -> None:
             "inventoryFaceWindow": "opaque_black_mask_interior",
             "groundSourceDirection": "S",
             "groundFaceWindow": "opaque_black_mask_interior",
+            "worldSizingPolicy": "horn_excluded_body_normalization_v1",
+            "worldScaleRatio": WORLD_SCALE_RATIO,
+            "worldDirectionHeights": WORLD_HEIGHT,
+            "paperDollCanvasSize": list(PAPER_CANVAS_SIZE),
+            "paperDollContentEnvelope": list(PAPER_CONTENT_ENVELOPE),
             "runtimeScale": 1,
             "textureFilter": "nearest",
             "userOverrideAuthorization": (
@@ -811,6 +868,103 @@ def update_contracts(
     }
     head["runtimeMappings"]["圣战头盔"] = deepcopy(paper_record)
     write_json(HEAD_PATCH_CONTRACT, head)
+
+
+def holy_war_v2_frozen_snapshot() -> dict:
+    data = load_json(HELMET_V2_CONTRACT)
+    asset = deepcopy(data["visualAssets"][IDENTITY_ID])
+    for action in asset["source"]["actions"].values():
+        action.pop("sha256", None)
+    return asset
+
+
+def update_v2_action_hashes(identity: dict) -> None:
+    text = HELMET_V2_CONTRACT.read_text(encoding="utf-8")
+    data = json.loads(text)
+    asset = data["visualAssets"][IDENTITY_ID]
+    if asset["source_direction_map"] != FROZEN_V2_SOURCE_DIRECTION_MAP:
+        raise AssertionError("item 232 user source-direction mapping changed")
+    for direction, source_row in FROZEN_V2_SOURCE_DIRECTION_MAP.items():
+        record = asset["directions"][direction]
+        if int(record["source_row"]) != source_row:
+            raise AssertionError(
+                f"item 232 {direction} source row changed before SHA update"
+            )
+    for action_name in ACTION_SPECS:
+        old_sha = str(asset["source"]["actions"][action_name]["sha256"])
+        new_sha = str(identity["actions"][action_name]["fileSha256"])
+        old_token = f'"sha256": "{old_sha}"'
+        new_token = f'"sha256": "{new_sha}"'
+        if text.count(old_token) != 1:
+            raise AssertionError(
+                f"item 232 {action_name} old action SHA is not unique"
+            )
+        text = text.replace(old_token, new_token, 1)
+    HELMET_V2_CONTRACT.write_text(text, encoding="utf-8")
+
+
+def build_worn_previews() -> None:
+    v2 = load_json(HELMET_V2_CONTRACT)
+    asset = v2["visualAssets"][IDENTITY_ID]
+    sockets = load_json(HEAD_SOCKET_CONTRACT)["playerVisuals"][
+        asset["player_visual_id"]
+    ]["actions"]["idle"]["directions"]
+    body_path = (
+        ROOT
+        / "assets/art/items/client/world_wear/dress/male"
+        / "dress_002_idle.png"
+    )
+    body = Image.open(body_path).convert("RGBA")
+    helmet = Image.open(
+        ROOT
+        / asset["source"]["actions"]["idle"]["path"].removeprefix("res://")
+    ).convert("RGBA")
+    frames: dict[str, Image.Image] = {}
+    for target_row, direction in enumerate(DIRECTIONS):
+        source_row = int(asset["source_direction_map"][direction])
+        body_cell = body.crop((0, target_row * CELL[1], CELL[0], (target_row + 1) * CELL[1]))
+        helmet_cell = helmet.crop(
+            (0, source_row * CELL[1], CELL[0], (source_row + 1) * CELL[1])
+        )
+        record = asset["directions"][direction]
+        pivot = record["pivotByActionFrame"]["idle"][0]
+        socket = sockets[direction][0]["head_socket"]
+        nudge = record["nudge"]
+        destination = (
+            int(socket[0]) - int(pivot[0]) + int(nudge[0]),
+            int(socket[1]) - int(pivot[1]) + int(nudge[1]),
+        )
+        body_cell.alpha_composite(helmet_cell, destination)
+        frames[direction] = body_cell
+
+    WORN_PREVIEW_1X.parent.mkdir(parents=True, exist_ok=True)
+    one_x = Image.new("RGBA", (CELL[0] * 8, CELL[1] + 20), (18, 20, 24, 255))
+    one_draw = ImageDraw.Draw(one_x)
+    for index, direction in enumerate(DIRECTIONS):
+        one_x.alpha_composite(frames[direction], (index * CELL[0], 0))
+        one_draw.text((index * CELL[0] + 4, CELL[1] + 2), direction, fill=(255, 224, 120, 255))
+    one_x.save(WORN_PREVIEW_1X, format="PNG", optimize=False)
+
+    zoom_source = (40, 40)
+    zoom = 8
+    tile = (zoom_source[0] * zoom, zoom_source[1] * zoom + 24)
+    eight_x = Image.new("RGBA", (tile[0] * 4, tile[1] * 2), (18, 20, 24, 255))
+    eight_draw = ImageDraw.Draw(eight_x)
+    for index, direction in enumerate(DIRECTIONS):
+        socket = sockets[direction][0]["head_socket"]
+        crop = frames[direction].crop(
+            (
+                int(socket[0]) - zoom_source[0] // 2,
+                int(socket[1]) - zoom_source[1] // 2,
+                int(socket[0]) + zoom_source[0] // 2,
+                int(socket[1]) + zoom_source[1] // 2,
+            )
+        ).resize((tile[0], zoom_source[1] * zoom), Image.Resampling.NEAREST)
+        x = (index % 4) * tile[0]
+        y = (index // 4) * tile[1]
+        eight_x.alpha_composite(crop, (x, y))
+        eight_draw.text((x + 6, y + zoom_source[1] * zoom + 3), direction, fill=(255, 224, 120, 255))
+    eight_x.save(WORN_PREVIEW_8X, format="PNG", optimize=False)
 
 
 def build_preview(
@@ -979,6 +1133,20 @@ def validate_outputs() -> dict:
         raise AssertionError("inventory face center was made transparent")
     if presentation_face_alpha["ground"]["alpha"] == 0:
         raise AssertionError("ground face center was made transparent")
+    paper_bbox = paper.getchannel("A").getbbox()
+    if paper_bbox is None:
+        raise AssertionError("paper-doll helmet is empty")
+    paper_content_size = [
+        paper_bbox[2] - paper_bbox[0],
+        paper_bbox[3] - paper_bbox[1],
+    ]
+    if (
+        paper_content_size[0] > PAPER_CONTENT_ENVELOPE[0]
+        or paper_content_size[1] > PAPER_CONTENT_ENVELOPE[1]
+    ):
+        raise AssertionError(
+            f"paper-doll helmet exceeds content envelope: {paper_content_size}"
+        )
     world = load_json(WORLD_CONTRACT)
     identity = world["visualIdentities"][IDENTITY_ID]
     if identity["sourceSlotDirectionOrder"] != DIRECTIONS:
@@ -997,6 +1165,25 @@ def validate_outputs() -> dict:
         for record in identity["directionCutouts"].values()
     ):
         raise AssertionError("item 232 introduced runtime scaling")
+    for direction in DIRECTIONS:
+        record = identity["directionCutouts"][direction]
+        if int(record["generatedSize"][1]) != WORLD_HEIGHT[direction]:
+            raise AssertionError(
+                f"item 232 {direction} world height is not normalized"
+            )
+        if record["resizeFilter"] != "nearest_baked_source_to_integer_pixels":
+            raise AssertionError(
+                f"item 232 {direction} is not nearest-neighbour baked"
+            )
+    v2_asset = load_json(HELMET_V2_CONTRACT)["visualAssets"][IDENTITY_ID]
+    if v2_asset["source_direction_map"] != FROZEN_V2_SOURCE_DIRECTION_MAP:
+        raise AssertionError("item 232 saved source-direction mapping changed")
+    for direction, source_row in FROZEN_V2_SOURCE_DIRECTION_MAP.items():
+        record = v2_asset["directions"][direction]
+        if int(record["source_row"]) != source_row:
+            raise AssertionError(f"item 232 {direction} saved row changed")
+        if record["runtime_scale"] != [1, 1]:
+            raise AssertionError(f"item 232 {direction} runtime scale changed")
     for action_name, spec in ACTION_SPECS.items():
         action = identity["actions"][action_name]
         atlas_path = ROOT / action["path"].removeprefix("res://")
@@ -1005,6 +1192,13 @@ def validate_outputs() -> dict:
             raise AssertionError(f"{action_name} atlas size changed")
         if file_sha256(atlas_path) != action["fileSha256"]:
             raise AssertionError(f"{action_name} atlas SHA changed")
+        if (
+            v2_asset["source"]["actions"][action_name]["sha256"]
+            != action["fileSha256"]
+        ):
+            raise AssertionError(f"{action_name} v2 action SHA is stale")
+    if not WORN_PREVIEW_1X.exists() or not WORN_PREVIEW_8X.exists():
+        raise AssertionError("worn eight-direction previews are missing")
     return {
         "contractId": "equipment.world_helmet.holy_war_232.redesign.v1",
         "itemId": ITEM_ID,
@@ -1027,8 +1221,29 @@ def validate_outputs() -> dict:
         "generatedFurOrNeckPixelsRetained": False,
         "runtimeScale": 1,
         "textureFilter": "nearest",
+        "worldSizingAudit": {
+            "previousOverallBboxRange": {
+                "width": [24, 32],
+                "height": [35, 36],
+            },
+            "previousHornExcludedBodyWidthRange": [23, 30],
+            "acceptedReferenceOverallRange": {
+                "item218": {"width": [13, 16], "height": [22, 23]},
+                "item228": {"width": [10, 13], "height": [16, 20]},
+            },
+            "acceptedReferenceHornExcludedBodyWidthRange": [9, 17],
+            "playerHairHeadWidthMedian": 9,
+            "selectedScaleRatio": WORLD_SCALE_RATIO,
+            "worldDirectionHeights": WORLD_HEIGHT,
+            "paperDollCanvasSize": list(PAPER_CANVAS_SIZE),
+            "paperDollContentSize": paper_content_size,
+            "paperDollContentEnvelope": list(PAPER_CONTENT_ENVELOPE),
+            "sizingBasis": "helmet_body_excluding_two_horns",
+        },
         "preview": resource_path(PREVIEW),
         "paperInventoryGroundPreview": resource_path(PRESENTATION_PREVIEW),
+        "wornIdle8Direction1xPreview": resource_path(WORN_PREVIEW_1X),
+        "wornIdle8Direction8xPreview": resource_path(WORN_PREVIEW_8X),
         "presentationFaceCenterAlphaEvidence": presentation_face_alpha,
         "opaqueFaceMaskRoiEvidence": opaque_face_roi,
         "closedRearShellRoiEvidence": closed_shell_roi,
@@ -1039,6 +1254,7 @@ def validate_outputs() -> dict:
 def build() -> dict:
     non_target_semantic_before = semantic_non_target_snapshot()
     non_target_files_before = non_target_file_hashes()
+    frozen_v2_before = holy_war_v2_frozen_snapshot()
     opaque_no_face, wearable, variants = build_processed_sources()
     update_recipe()
     identity, appearance = build_world_identity(variants, wearable)
@@ -1053,7 +1269,13 @@ def build() -> dict:
         inventory_record,
         ground_record,
     )
+    update_v2_action_hashes(identity)
+    if holy_war_v2_frozen_snapshot() != frozen_v2_before:
+        raise AssertionError(
+            "item 232 mapping, pivots, nudges or policies changed"
+        )
     build_preview(wearable, opaque_no_face)
+    build_worn_previews()
     if semantic_non_target_snapshot() != non_target_semantic_before:
         raise AssertionError("single-target build changed non-232 contract data")
     non_target_files_after = non_target_file_hashes()
