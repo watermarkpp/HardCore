@@ -70,6 +70,14 @@ func _ready() -> void:
 		_run.call_deferred()
 
 
+func _notification(what: int) -> void:
+	if what in [
+		NOTIFICATION_WM_CLOSE_REQUEST,
+		NOTIFICATION_WM_GO_BACK_REQUEST,
+	]:
+		_request_exit(0)
+
+
 func _run() -> void:
 	var user_args := OS.get_cmdline_user_args()
 	_interactive_requested = has_interactive_user_arg(user_args)
@@ -204,11 +212,14 @@ func _load_active_target_manifest(path: String) -> bool:
 		return _fail_active_target(
 			"active target sourceDirectionOrder must contain 8 directions"
 		)
-	for direction_index: int in DIRECTIONS.size():
-		if str(direction_order[direction_index]) != str(DIRECTIONS[direction_index]):
+	var seen_directions := {}
+	for direction_value: Variant in direction_order:
+		var direction := str(direction_value)
+		if direction not in DIRECTIONS or seen_directions.has(direction):
 			return _fail_active_target(
-				"active target directions must be N,NE,E,SE,S,SW,W,NW"
+				"active target directions must be one unique N,NE,E,SE,S,SW,W,NW permutation"
 			)
+		seen_directions[direction] = true
 	_active_target_enabled = true
 	_active_target = target.duplicate(true)
 	current_item_id = item_id
@@ -384,6 +395,9 @@ func interactive_window_policy() -> Dictionary:
 		"manualPhysicalSize": false,
 		"manualPosition": false,
 		"projectSettingsModified": false,
+		"closeRequestHandled": true,
+		"closeButton": true,
+		"escapeCloses": true,
 	}
 
 
@@ -424,7 +438,7 @@ func _show_interactive_ready() -> void:
 		status.visible = true
 		status.modulate = Color(0.35, 1.0, 0.62)
 		status.text = (
-			"交互编辑器已就绪。窗口会保持打开；保存仅写入正式覆盖合同。"
+			"交互编辑器已就绪。保存仅写入正式覆盖合同；可用关闭按钮或 Esc 退出。"
 		)
 
 
@@ -437,7 +451,7 @@ func _show_initialization_error(message: String) -> void:
 		status.visible = true
 		status.modulate = Color(1.0, 0.42, 0.32)
 		status.text = (
-			"初始化失败：%s\n窗口将保持打开，请查看 outputs/helmet_calibration_interactive.log。"
+			"初始化失败：%s\n仍可关闭编辑器；详情见 outputs/helmet_calibration_interactive.log。"
 			% message
 		)
 	var state := get_node_or_null(
@@ -609,6 +623,10 @@ func _setup_ui() -> void:
 	get_node("CalibrationUI/Panel/VBox/Inputs/SaveAll").pressed.connect(
 		func() -> void:
 			save_all_changes()
+	)
+	get_node("CalibrationUI/Panel/VBox/Inputs/CloseEditor").pressed.connect(
+		func() -> void:
+			_request_exit(0)
 	)
 	_build_mapping_buttons()
 	var layer_controls := {
@@ -1541,6 +1559,11 @@ func _input(event: InputEvent) -> void:
 	if not event is InputEventKey:
 		return
 	var key_event := event as InputEventKey
+	if key_event.keycode == KEY_ESCAPE:
+		get_viewport().set_input_as_handled()
+		if key_event.pressed and not key_event.echo:
+			_request_exit(0)
+		return
 	var nudge_delta := Vector2i.ZERO
 	match key_event.keycode:
 		KEY_UP: nudge_delta = Vector2i.UP

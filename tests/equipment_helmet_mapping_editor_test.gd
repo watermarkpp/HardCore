@@ -19,6 +19,9 @@ func _run() -> void:
 	}
 	var editor: Node = EDITOR_SCENE.instantiate()
 	editor.auto_run = false
+	assert(editor._load_active_target_manifest(
+		"res://assets/data/helmet_calibration_active_target.json"
+	))
 	add_child(editor)
 	assert(await editor.initialize_editor_runtime(true))
 	var interactive_args := PackedStringArray([
@@ -45,6 +48,9 @@ func _run() -> void:
 	assert(not bool(window_policy.get("manualPhysicalSize", true)))
 	assert(not bool(window_policy.get("manualPosition", true)))
 	assert(not bool(window_policy.get("projectSettingsModified", true)))
+	assert(bool(window_policy.get("closeRequestHandled", false)))
+	assert(bool(window_policy.get("closeButton", false)))
+	assert(bool(window_policy.get("escapeCloses", false)))
 	var tool_text := FileAccess.get_file_as_string(
 		"res://tools/helmet_calibration_tool.gd"
 	)
@@ -53,11 +59,13 @@ func _run() -> void:
 	assert("window_set_min_size(" not in tool_text)
 	assert("window_set_position(" not in tool_text)
 	assert("screen_get_usable_rect(" not in tool_text)
+	assert("NOTIFICATION_WM_CLOSE_REQUEST" in tool_text)
+	assert("KEY_ESCAPE" in tool_text)
 	var startup_status := editor.get_node(
 		"CalibrationUI/Panel/VBox/StartupStatus"
 	) as Label
 	assert(startup_status.visible)
-	assert("窗口将保持打开" in startup_status.text)
+	assert("仍可关闭编辑器" in startup_status.text)
 	var launcher_text := FileAccess.get_file_as_string(
 		"res://tools/launch_helmet_calibration_tool.ps1"
 	)
@@ -84,6 +92,9 @@ func _run() -> void:
 	assert(str(active_target.get("sourceResizeFilter", "")) == (
 		"nearest"
 	))
+	assert(active_target.get("sourceDirectionOrder", []) == [
+		"S", "SW", "W", "SE", "N", "NE", "E", "NW",
+	])
 	assert(FileAccess.get_sha256(str(
 		active_target.get("sourceSheet", "")
 	)) == str(active_target.get("sourceSheetSha256", "")))
@@ -154,8 +165,13 @@ func _run() -> void:
 	var save_all := editor.get_node(
 		"CalibrationUI/Panel/VBox/Inputs/SaveAll"
 	) as Button
+	var close_editor := editor.get_node(
+		"CalibrationUI/Panel/VBox/Inputs/CloseEditor"
+	) as Button
 	assert(save_all.text == "保存全部改动")
 	assert(save_all.focus_mode == Control.FOCUS_NONE)
+	assert(close_editor.text == "关闭编辑器")
+	assert(close_editor.focus_mode == Control.FOCUS_NONE)
 	var expected_calibration_items := [
 		146, 147, 149, 150, 151, 218, 224, 228, 232, 236, 240,
 	]
