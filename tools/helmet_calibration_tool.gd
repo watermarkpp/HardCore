@@ -269,6 +269,9 @@ func _calibration_source_contract() -> Dictionary:
 			"calibrationSourceMatte": str(
 				_active_target.get("sourceMatte", "transparent")
 			),
+			"calibrationResizeFilter": str(
+				_active_target.get("sourceResizeFilter", "nearest")
+			),
 			"calibrationPreparedSourceRows": [],
 			"calibrationPreviewPolicy": (
 				"single_active_target_direct_png_hash_validated"
@@ -1134,10 +1137,13 @@ func _source_recipe_id() -> String:
 	if not authored_sha.is_empty():
 		if _active_target_applies_to_current_item():
 			return (
-				"active_target.%s.%s.direct_png_v1"
+				"active_target.%s.%s.%s.direct_png_v2"
 				% [
 					str(_active_target.get("sourceRevision", "unversioned")),
 					authored_sha,
+					str(_active_target.get(
+						"sourceResizeFilter", "nearest"
+					)),
 				]
 			)
 		var idle_layout_sha := str(

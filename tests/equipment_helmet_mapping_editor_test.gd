@@ -69,6 +69,22 @@ func _run() -> void:
 	assert(".godot\\helmet_calibration_appdata" in launcher_text)
 	assert("Join-Path $OutputDirectory 'helmet_calibration_interactive.log'" in launcher_text)
 	assert("--log-file" in launcher_text)
+	var active_target: Dictionary = JSON.parse_string(
+		FileAccess.get_file_as_string(
+			"res://assets/data/helmet_calibration_active_target.json"
+		)
+	)
+	assert(int(active_target.get("itemId", -1)) == 147)
+	assert(str(active_target.get("visualAssetId", "")) == "bronze_magic")
+	assert(str(active_target.get("sourceSheet", "")).ends_with(
+		"bronze_magic_helmet_8dir_transparent.png"
+	))
+	assert(str(active_target.get("sourceResizeFilter", "")) == (
+		"lanczos_downsample_nearest_runtime_v1"
+	))
+	assert(FileAccess.get_sha256(str(
+		active_target.get("sourceSheet", "")
+	)) == str(active_target.get("sourceSheetSha256", "")))
 
 	var target_grid := editor.get_node(
 		"CalibrationUI/Panel/VBox/TargetDirections"
