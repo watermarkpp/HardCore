@@ -117,21 +117,21 @@ FOOT_ANCHOR = (64, 80)
 # the player's original face without deleting the decorative cage/trim.
 FACE_WINDOWS: dict[str, list[list[list[int]]]] = {}
 
-# Rebuild directly from the approved 1774x887 source at the normal helmet
-# envelope.  This is 0.82x the previous accepted bake (an 18% reduction), not
-# a second resize of the already-small runtime art.  Runtime scale stays 1.
+# Rebuild directly from the approved 1774x887 source while reducing only the
+# world-worn content by another 10%.  This is not a resize of the prior
+# runtime art: atlas cells remain 192x160 and runtime scale stays 1.
 WORLD_HEIGHT = {
-    "N": 19,
-    "NE": 19,
-    "E": 18,
-    "SE": 19,
-    "S": 19,
-    "SW": 19,
-    "W": 18,
-    "NW": 19,
+    "N": 17,
+    "NE": 17,
+    "E": 16,
+    "SE": 17,
+    "S": 17,
+    "SW": 17,
+    "W": 16,
+    "NW": 17,
 }
-WORLD_SCALE_RATIO = 0.52
-RELATIVE_TO_PREVIOUS_SCALE = 0.82
+WORLD_SCALE_RATIO = 0.47
+RELATIVE_TO_PREVIOUS_SCALE = 0.90
 PAPER_CANVAS_SIZE = (32, 41)
 PAPER_CONTENT_ENVELOPE = (20, 24)
 
@@ -709,8 +709,8 @@ def update_recipe() -> None:
             "calibrationResizeFilter": (
                 "lanczos_downsample_nearest_runtime_v1"
             ),
-            "calibrationBaseScalePercent": 52,
-            "relativeToPreviousScalePercent": 82,
+            "calibrationBaseScalePercent": 47,
+            "relativeToPreviousScalePercent": 90,
             "singlePassDownsampleFromApprovedSource": True,
             "runtimeScale": 1,
             "textureFilter": "nearest",
@@ -1031,7 +1031,7 @@ def validate_outputs() -> dict:
         for direction, size in generated_sizes.items()
     ):
         raise AssertionError("item 236 world bake height left default envelope")
-    if max(size[0] for size in generated_sizes.values()) > 15:
+    if max(size[0] for size in generated_sizes.values()) > 14:
         raise AssertionError("item 236 world bake width exceeds default envelope")
     paper_bounds = paper.getchannel("A").getbbox()
     if paper_bounds is None:
@@ -1085,6 +1085,7 @@ def validate_outputs() -> dict:
             max(size[0] for size in generated_sizes.values()),
             max(size[1] for size in generated_sizes.values()),
         ],
+        "atlasCellResolutionPreserved": list(CELL),
         "paperDollContentEnvelope": list(PAPER_CONTENT_ENVELOPE),
         "paperDollContentSize": paper_content_size,
         "runtimeScale": 1,
