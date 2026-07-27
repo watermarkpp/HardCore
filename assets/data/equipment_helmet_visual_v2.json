@@ -10195,41 +10195,41 @@
         "actions": {
           "idle": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_idle.png",
-            "sha256": "89b400d3c94f54105449460104c275477be315c83bc62c28268d343a84b8350f"
+            "sha256": "18aab75a74b57b6cf87500f13f07548a3a3bec6e05a337f1a0c72eb0b09aafa4"
           },
           "walk": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_walk.png",
-            "sha256": "7c2ca1bcd4ed6320ac7b345e9978fd0ac89b6ff23ada5d02332ba06b9e53f7a2"
+            "sha256": "1567249f8de1066e683ef007d3148a014021b7cf35687edd0ccab27d4ff1891b"
           },
           "attack": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_attack.png",
-            "sha256": "81df8e06c75e23d19468abec2eda37bb7434c3d7f452958f5bd26930fb6b127b"
+            "sha256": "e7390493dc9b6830a9d876d7d05fdac362e362fab41af0e3e01b8f0cbbba4421"
           },
           "cast": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_cast.png",
-            "sha256": "47a4aa3ef50ccd13673519416b90ac31f4178c3ca7dde4c1f75600a9c9101b5d"
+            "sha256": "bb44e65f62f699b58b8a3621582d137138f4b3cde970fefe9edbc6df7be3f741"
           },
           "hit": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_hit.png",
-            "sha256": "5bd63f8df3747cebefcf1a63d1cec9415d74fbf970540536f8f5e3131dde0dcc"
+            "sha256": "985eaf3f1308646deac11d2a06ea638f37739b97ecf79f3aedfacda857dc4b10"
           },
           "death": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_death.png",
-            "sha256": "8f652b9c38773a69f3542cb999148924c0c99a1a796caae2088152ec636065ea"
+            "sha256": "4f8d34ddadb47b60b7c176e32e208bbb9267b9eca49c7f0419f597ffa7de9af6"
           }
         },
         "pixelPolicy": "immutable_primary_source_runtime_atlas",
         "calibrationSourceDirectionMap": {
           "N": 0,
-          "NE": 6,
+          "NE": 1,
           "E": 3,
-          "SE": 7,
+          "SE": 6,
           "S": 4,
           "SW": 5,
-          "W": 1,
-          "NW": 2
+          "W": 2,
+          "NW": 7
         },
-        "calibrationDirectionEvidence": "user-confirmed item 224 correction: source row 2 is NW rather than W and source row 6 is NE rather than SE; paired rows 1 and 7 are W and SE so all eight calibration rows remain unique"
+        "calibrationDirectionEvidence": "user-approved item 224 completion: the green-background reference supplies a genuine NE rear-diagonal in calibration row 1/source slot 7 and a genuine NW rear-diagonal in calibration row 7/source slot 1; the other six source cells remain unchanged"
       },
       "directions": {
         "N": {
@@ -10442,8 +10442,8 @@
             "death": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_death.png"
           },
           "source_direction": "NE",
-          "source_row": 6,
-          "source_slot_id": "slot_6",
+          "source_row": 1,
+          "source_slot_id": "slot_1",
           "pivot": [
             87,
             37
@@ -10840,8 +10840,8 @@
             "death": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_death.png"
           },
           "source_direction": "SE",
-          "source_row": 7,
-          "source_slot_id": "slot_7",
+          "source_row": 6,
+          "source_slot_id": "slot_6",
           "pivot": [
             88,
             36
@@ -11437,8 +11437,8 @@
             "death": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_death.png"
           },
           "source_direction": "W",
-          "source_row": 1,
-          "source_slot_id": "slot_1",
+          "source_row": 2,
+          "source_slot_id": "slot_2",
           "pivot": [
             89,
             36
@@ -11636,8 +11636,8 @@
             "death": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet_death.png"
           },
           "source_direction": "NW",
-          "source_row": 2,
-          "source_slot_id": "slot_2",
+          "source_row": 7,
+          "source_slot_id": "slot_7",
           "pivot": [
             88,
             38
@@ -11827,13 +11827,13 @@
       },
       "source_direction_map": {
         "N": 0,
-        "NE": 6,
+        "NE": 1,
         "E": 3,
-        "SE": 7,
+        "SE": 6,
         "S": 4,
         "SW": 5,
-        "W": 1,
-        "NW": 2
+        "W": 2,
+        "NW": 7
       }
     },
     "memory": {
