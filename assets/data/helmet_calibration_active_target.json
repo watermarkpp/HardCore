@@ -1,10 +1,10 @@
 {
   "contractId": "equipment.world_helmet.calibration.active_target.v1",
-  "itemId": 147,
-  "visualAssetId": "bronze_magic",
-  "displayName": "147/148 青铜头盔 / 魔法头盔（共用）",
-  "sourceSheet": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir_transparent.png",
-  "sourceSheetSha256": "8d5b9b4af6e28947cb4437d5f09ea8f26fd8822b4d589d619a8153eda37504ee",
+  "itemId": 151,
+  "visualAssetId": "black_iron_golden_151",
+  "displayName": "黑铁头盔",
+  "sourceSheet": "res://assets/art/characters/warrior/wear/helmet/source/black_iron_helmet_151_8dir_v2.png",
+  "sourceSheetSha256": "8ec5c751f001c5a7f66b3fec3ad1e9b0ee9c31fdc636455957c54fab8095dccd",
   "sourceGrid": [
     4,
     2
@@ -20,19 +20,28 @@
     "NW"
   ],
   "sourceMatte": "transparent",
-  "sourceResizeFilter": "lanczos_downsample_nearest_runtime_v1",
-  "sourceRevision": "bronze_magic.user_approved_transparent.v1",
+  "sourceResizeFilter": "nearest",
+  "sourceRevision": "black_iron_151.meteoric_streamlined.v2",
   "loadPolicy": "single_target_direct_png_hash_validated",
   "provenance": {
     "lane": "helmet_world_visuals",
     "tier": "primary",
     "distribution": "research.mir2_client_raw",
     "designAuthority": {
-      "path": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
-      "sha256": "a1cb935c1c00f13ae2ccae2c5cea1706f4f549ffef66607574be2c67bd370f82"
+      "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00151_stateitem_00344.png",
+      "sha256": "f6319f1026f752087e658305f15c4c5f81030c5492497f112c130458e272a77a"
     },
-    "supportingEvidence": [],
-    "derivation": "user_approved_full_sheet_then_component_preserving_transparent_despill",
+    "supportingEvidence": [
+      {
+        "path": "res://assets/art/items/client/inventory/344.png",
+        "sha256": "038d79137e1dd99177054604fc781b084992a3fd7f087cd080641305cd52abaa"
+      },
+      {
+        "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00151_head.png",
+        "sha256": "804ad4e1864bf6987d61e176f3a435ce58832c81b9522999853f0153f91ffd17"
+      }
+    ],
+    "derivation": "ai_reference_reconstruction_then_user_authorized_top_right_horizontal_mirror",
     "userAuthorizationDate": "2026-07-27"
   }
 }
