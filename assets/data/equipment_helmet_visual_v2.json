@@ -11844,7 +11844,7 @@
       "calibrationItemId": 228,
       "player_visual_id": "player.male.cloth_002",
       "editableSourceSlots": true,
-      "sourceSlotSemantics": "formal_manifest_direction_order",
+      "sourceSlotSemantics": "explicit_user_confirmed_calibration_direction_map",
       "sourceSlots": {
         "slot_0": 0,
         "slot_1": 1,
@@ -11863,42 +11863,53 @@
         "stateItemIndex": 109,
         "manifest": "res://assets/data/equipment_male_world_helmet.json",
         "sourceSlotDirectionOrder": [
-          "N",
-          "NW",
-          "W",
-          "E",
           "S",
           "SW",
+          "W",
           "SE",
-          "NE"
+          "N",
+          "NE",
+          "E",
+          "NW"
         ],
         "actions": {
           "idle": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_idle.png",
-            "sha256": "0a8d6899fe9e36e4e125bce91580154ff0be0dba62c2f8ca407d5be8736dd670"
+            "sha256": "05173ae4ad4dcfaaec72ab4bb728d364cbcc8b8189c5870e0af08bceb5588a9a"
           },
           "walk": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_walk.png",
-            "sha256": "13228bcb3998f2e7380908d489c94ff9fba3b56a36bf91091a0e957ee8bb7398"
+            "sha256": "99dbf26a32a8c39be2400dcc7920730de4025c5366bfb7b9bb53e3ff8884032c"
           },
           "attack": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_attack.png",
-            "sha256": "58cbe61a2ca0de048e3402825a602d9ab071d4a87342cfa6474bb8e5f2195fe0"
+            "sha256": "8b437f10416af84ca9ffde136227081ded37930f624be82816f440a024ec9e1a"
           },
           "cast": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_cast.png",
-            "sha256": "0ed4e212d3a488819a6703969c342446f7bb10800f83a3b0a174bc39a975044f"
+            "sha256": "f3cf01031fdf5c8c5d9009d7f3ec0e2c8614e36a1a6414e6ef9d6c2d68ad28a9"
           },
           "hit": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_hit.png",
-            "sha256": "5fe6ab94c15c2df95fd73ad438f0c8f36a1d5f877862d16ab01089c7c8f2e596"
+            "sha256": "c2a3805259e6d7eee620ee09dd679c2a83de93274abee065925c8e6ed5eb9549"
           },
           "death": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_death.png",
-            "sha256": "aecc5e90b6822c4c8c5e2569cd5845b1ad0b0f035fe2320e67f3709b027edbb0"
+            "sha256": "ad0c21d9cfcf39d2a03f57a84f81bf520996bf5b76d9d0dfc8503374be81988d"
           }
         },
-        "pixelPolicy": "immutable_primary_source_runtime_atlas"
+        "pixelPolicy": "immutable_primary_source_runtime_atlas",
+        "calibrationSourceDirectionMap": {
+          "N": 0,
+          "NE": 1,
+          "E": 2,
+          "SE": 3,
+          "S": 4,
+          "SW": 5,
+          "W": 6,
+          "NW": 7
+        },
+        "calibrationDirectionEvidence": ""
       },
       "directions": {
         "N": {
@@ -12111,8 +12122,8 @@
             "death": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_death.png"
           },
           "source_direction": "NE",
-          "source_row": 7,
-          "source_slot_id": "slot_7",
+          "source_row": 1,
+          "source_slot_id": "slot_1",
           "pivot": [
             87,
             37
@@ -12310,8 +12321,8 @@
             "death": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_death.png"
           },
           "source_direction": "E",
-          "source_row": 3,
-          "source_slot_id": "slot_3",
+          "source_row": 2,
+          "source_slot_id": "slot_2",
           "pivot": [
             88,
             35
@@ -12509,8 +12520,8 @@
             "death": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_death.png"
           },
           "source_direction": "SE",
-          "source_row": 6,
-          "source_slot_id": "slot_6",
+          "source_row": 3,
+          "source_slot_id": "slot_3",
           "pivot": [
             88,
             36
@@ -13106,8 +13117,8 @@
             "death": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_death.png"
           },
           "source_direction": "W",
-          "source_row": 2,
-          "source_slot_id": "slot_2",
+          "source_row": 6,
+          "source_slot_id": "slot_6",
           "pivot": [
             89,
             36
@@ -13305,8 +13316,8 @@
             "death": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet_death.png"
           },
           "source_direction": "NW",
-          "source_row": 1,
-          "source_slot_id": "slot_1",
+          "source_row": 7,
+          "source_slot_id": "slot_7",
           "pivot": [
             88,
             38
@@ -13496,13 +13507,13 @@
       },
       "source_direction_map": {
         "N": 0,
-        "NE": 7,
-        "E": 3,
-        "SE": 6,
+        "NE": 1,
+        "E": 2,
+        "SE": 3,
         "S": 4,
         "SW": 5,
-        "W": 2,
-        "NW": 1
+        "W": 6,
+        "NW": 7
       }
     },
     "holy_war": {

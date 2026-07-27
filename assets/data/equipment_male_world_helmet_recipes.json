@@ -249,9 +249,40 @@
       "concept": "res://assets/art/items/client/world_wear/helmet/male/source/memory_helmet_8dir.png",
       "sourceGrid": [4, 2],
       "directionClassificationStatus": "accepted_manual_visual_classification",
-      "directionClassificationEvidence": "independent full-resolution review of visor opening, purple-gem nose projection, rear white shell and mirrored side wings",
-      "sourceSlotDirectionOrder": ["N", "NW", "W", "E", "S", "SW", "SE", "NE"],
-      "canonicalRowSourceSlots": [0, 7, 3, 6, 4, 5, 2, 1],
+      "directionClassificationEvidence": "user-approved item 228 sheet: original six views are frozen; source slot 2 is the generated true W profile and source slot 6 is the generated true E profile, both matched to the authoritative paper-doll style",
+      "sourceSlotDirectionOrder": ["S", "SW", "W", "SE", "N", "NE", "E", "NW"],
+      "canonicalRowSourceSlots": [4, 5, 6, 3, 0, 1, 2, 7],
+      "calibrationSourceDirectionMap": {
+        "N": 0,
+        "NE": 1,
+        "E": 2,
+        "SE": 3,
+        "S": 4,
+        "SW": 5,
+        "W": 6,
+        "NW": 7
+      },
+      "directionPatches": {
+        "W": {
+          "sourceSlot": 2,
+          "reference": "res://assets/art/items/client/world_wear/helmet/male/source/memory_helmet_full_profiles_generated_reference.png",
+          "referenceHalf": "left",
+          "referenceSha256": "c7f7babb2d20e151b47e411a770539152ea322dff8a7279a5f7d45aa8ca59a19",
+          "status": "user_authorized"
+        },
+        "E": {
+          "sourceSlot": 6,
+          "reference": "res://assets/art/items/client/world_wear/helmet/male/source/memory_helmet_full_profiles_generated_reference.png",
+          "referenceHalf": "right",
+          "referenceSha256": "c7f7babb2d20e151b47e411a770539152ea322dff8a7279a5f7d45aa8ca59a19",
+          "status": "user_authorized"
+        }
+      },
+      "paperDollReference": {
+        "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00228_head.png",
+        "stateItemIndex": 109,
+        "policy": "authoritative_shape_and_palette_reference"
+      },
       "outputPrefix": "res://assets/art/items/client/world_wear/helmet/male/memory_helmet",
       "matteTolerance": 14
     },

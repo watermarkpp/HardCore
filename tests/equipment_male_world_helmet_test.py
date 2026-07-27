@@ -179,7 +179,6 @@ def main() -> None:
     }
     for identity_id in (
         "prayer",
-        "memory",
         "holy_war",
         "god_magic",
         "heavenly_taoist",
@@ -192,6 +191,26 @@ def main() -> None:
             recipe_identities[identity_id]["canonicalRowSourceSlots"]
             == GROUP_B_CANONICAL_SLOTS
         )
+    assert recipe_identities["memory"]["sourceSlotDirectionOrder"] == [
+        "S",
+        "SW",
+        "W",
+        "SE",
+        "N",
+        "NE",
+        "E",
+        "NW",
+    ]
+    assert recipe_identities["memory"]["canonicalRowSourceSlots"] == [
+        4,
+        5,
+        6,
+        3,
+        0,
+        1,
+        2,
+        7,
+    ]
 
     assert contract["contractId"] == CONTRACT_ID
     assert contract["sex"] == "male"
