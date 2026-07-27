@@ -142,13 +142,72 @@
       "identityId": "holy_war",
       "sourceIndex": 104,
       "concept": "res://assets/art/items/client/world_wear/helmet/male/source/holy_war_helmet_8dir.png",
-      "sourceGrid": [4, 2],
+      "approvedSource": "res://assets/art/items/client/world_wear/helmet/male/source/holy_war_helmet_approved_20260727.png",
+      "approvedSourceFileSha256": "93307c79e0d5d697d269eec3ba2c318385be96130026e1dbe1b67779437b583b",
+      "approvedSourceExternalEvidence": "C:\\Users\\Administrator\\.codex\\generated_images\\019f9cf3-2388-76c3-925a-c98a9cdbb355\\call_GKJo7DbapyE1Tz43MbMNAYIp.png",
+      "approvedSourceGrid": [
+        4,
+        2
+      ],
+      "sourceGrid": [
+        4,
+        2
+      ],
       "directionClassificationStatus": "accepted_manual_visual_classification",
-      "directionClassificationEvidence": "independent full-resolution review of black face aperture, horn projection, gold rear shell and mirrored green side plates",
-      "sourceSlotDirectionOrder": ["N", "NW", "W", "E", "S", "SW", "SE", "NE"],
-      "canonicalRowSourceSlots": [0, 7, 3, 6, 4, 5, 2, 1],
+      "directionClassificationEvidence": "user approved this exact sheet; top N,NE,E,SE and bottom S,SW,W,NW",
+      "sourceSlotDirectionOrder": [
+        "N",
+        "NE",
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW"
+      ],
+      "canonicalRowSourceSlots": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
       "outputPrefix": "res://assets/art/items/client/world_wear/helmet/male/holy_war_helmet",
-      "matteTolerance": 14
+      "mattePolicy": "pure_green_remove_and_despill_v1",
+      "generatedNeckFurPolicy": "remove",
+      "faceAperturePolicy": {
+        "N": "closed",
+        "NE": "closed",
+        "E": "closed",
+        "SE": "closed",
+        "S": "closed",
+        "SW": "closed",
+        "W": "closed",
+        "NW": "closed"
+      },
+      "faceApertureShape": {
+        "N": "none",
+        "NE": "none",
+        "E": "none",
+        "SE": "none",
+        "S": "none",
+        "SW": "none",
+        "W": "none",
+        "NW": "none"
+      },
+      "paperDollSourceDirection": "S",
+      "paperDollFaceWindow": "none_opaque_black_mask",
+      "paperDollEraseMask": "no_cutout_all_transparent",
+      "inventorySourceDirection": "S",
+      "inventoryFaceWindow": "opaque_black_mask_interior",
+      "groundSourceDirection": "S",
+      "groundFaceWindow": "opaque_black_mask_interior",
+      "runtimeScale": 1,
+      "textureFilter": "nearest",
+      "userOverrideAuthorization": "direct use of the explicitly approved generated design"
     },
     {
       "identityId": "god_magic",

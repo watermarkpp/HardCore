@@ -52098,77 +52098,83 @@
       "gender": "通用",
       "icons": {
         "inventory": {
-          "path": "res://assets/art/items/client/inventory/104.png",
-          "library": "research/mir2_client_raw/Data/Items.wil",
-          "index": 104,
-          "sourceOffset": 75117,
+          "path": "res://assets/art/items/client/project_redesign/helmet/holy_war/item_00232_inventory.png",
+          "library": "project.user_approved_redesign",
+          "index": 232,
           "size": [
             36,
             35
           ],
           "drawOffset": [
-            7,
-            -44
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact_design",
+          "sourceDirection": "S",
+          "faceAperture": "opaque_black_mask_interior",
+          "fileSha256": "48e32dafe3d2b136614aee15d1148eeecc08edc38f2651f777627e26f9cf2860",
+          "rgbaSha256": "7bed865314595eb3197d8200fea08debe08f77684e12bcbf6a34cdca28f0d39b"
         },
         "equippedSlot": {
-          "path": "res://assets/art/items/client/equipped/104.png",
-          "library": "research/mir2_client_raw/Data/stateitem.wil",
-          "index": 104,
-          "sourceOffset": 379475,
+          "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00232_head.png",
+          "library": "project.user_approved_redesign",
+          "index": 232,
           "size": [
             32,
-            38
+            41
           ],
           "drawOffset": [
-            80,
-            -17
+            73,
+            27
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact_design",
+          "sourceDirection": "S",
+          "faceAperture": "none_opaque_black_mask",
+          "fileSha256": "075073d605d82249a147c76c308413b4b42cac572b9172a14e2eeaadd990ddf4"
         },
         "ground": {
-          "path": "res://assets/art/items/client/ground/104.png",
-          "library": "research/mir2_client_raw/Data/DnItems.wil",
-          "index": 104,
-          "sourceOffset": 61329,
+          "path": "res://assets/art/items/client/project_redesign/helmet/holy_war/item_00232_ground.png",
+          "library": "project.user_approved_redesign",
+          "index": 232,
           "size": [
             16,
             17
           ],
           "drawOffset": [
-            7,
-            -44
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact_design",
+          "sourceDirection": "S",
+          "faceAperture": "opaque_black_mask_interior",
+          "fileSha256": "3ec962effdaf06e9011f4402aa12dcbd4eb5389c760ab785c9cf2cf53169f20d",
+          "rgbaSha256": "478a1eebb6525275c017d19704a7618a4ffb5f087b9d982070f705bfd59e5e85"
         }
       },
       "paperDoll": {
-        "status": "exact_client_record",
+        "status": "user_approved_project_redesign",
         "slot": "头盔",
         "gender": "通用",
         "sourceIndex": 104,
-        "path": "res://assets/art/items/client/equipped/104.png",
+        "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00232_head.png",
         "drawOffset": [
           73,
           27
         ],
         "rawDrawOffset": [
-          80,
-          -17
+          73,
+          27
         ],
         "size": [
           32,
-          38
+          41
         ],
-        "source": "stateitem.wil",
-        "mappingConfidence": "A"
+        "source": "approved item-232 S-direction",
+        "mappingConfidence": "user_approved_exact",
+        "faceWindow": "none_opaque_black_mask"
       },
       "worldWear": {
-        "status": "approved_project_extension",
+        "status": "user_approved_project_redesign",
         "contractId": "equipment.world_helmet.male.extension.v1",
         "identityId": "holy_war",
         "sourceIndex": 104,
@@ -52277,7 +52283,7 @@
           },
           "actionFallbacks": {}
         },
-        "reason": "StateItem identifies the helmet only; transparent world atlases are project-generated and anchored to same-frame male Hair.wil head motion"
+        "reason": "user approved exact eight-direction source; the original opaque black face mask is preserved without any cutout"
       }
     },
     "236": {
