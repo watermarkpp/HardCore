@@ -1831,32 +1831,32 @@
         "actions": {
           "idle": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_idle.png",
-            "sha256": "969ae4fc298a19fd82eacd5e7c4a18e6f134fe333223b4a80d6bd11cad887733"
+            "sha256": "725ba4db91370479dd63cc5425d99a89fe87a3a370b23dd91098b62b7c15d053"
           },
           "walk": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_walk.png",
-            "sha256": "fc69ebd01be1f05fcddd36598c043e8b4dccb65b11f695ae33f58af1473e1746"
+            "sha256": "eb08be22c3dcb2302f7158a1d18572559630ac73e9d525e0d37b866687ae5455"
           },
           "attack": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_attack.png",
-            "sha256": "36c6bc164c5431e2aea7097060e89c545a992cb3ef95de62b8fa1fb7b1a89e16"
+            "sha256": "bf099428a54ef5743de474147b2759ce3fcb061f18a08f0801b14b4984cf9ca8"
           },
           "cast": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_cast.png",
-            "sha256": "f678fef634fd1a1c4b647225da04dccc41f272e2696fd4e79791168a1b5a1331"
+            "sha256": "a32f7377dc21369fbb46a3e5543916cc40fbecdce619afabbf3784337f08cbd1"
           },
           "hit": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_hit.png",
-            "sha256": "9b94cce2c4dae10c9b58f881c06619a08435465470be0e393d22e27eb6332964"
+            "sha256": "b55e90d7a25e9c091712e6efe8c7a0e28367fcdd67568ace61d6b39408e21b70"
           },
           "death": {
             "path": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet_death.png",
-            "sha256": "d8546b5907dba59b775b808fb7cf6294d61f6b877650f41fd393c2abc70ace59"
+            "sha256": "343c0bf95dfb7eb6307cb35a445f70a8d3499e410b3fa0ae31553c11997d52f5"
           }
         },
         "pixelPolicy": "immutable_primary_source_runtime_atlas",
-        "calibrationSourceSheet": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir.png",
-        "calibrationSourceSheetSha256": "a1cb935c1c00f13ae2ccae2c5cea1706f4f549ffef66607574be2c67bd370f82",
+        "calibrationSourceSheet": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir_transparent.png",
+        "calibrationSourceSheetSha256": "8d5b9b4af6e28947cb4437d5f09ea8f26fd8822b4d589d619a8153eda37504ee",
         "calibrationSourceGrid": [
           4,
           2
@@ -1871,10 +1871,9 @@
           "W",
           "NW"
         ],
-        "calibrationPreparedSourceRows": [
-          0
-        ],
-        "calibrationSourceMatte": "green_chroma_key_despill_v2",
+        "calibrationPreparedSourceRows": [],
+        "calibrationSourceMatte": "transparent_user_approved_despill_v1",
+        "calibrationResizeFilter": "lanczos_downsample_nearest_runtime_v1",
         "calibrationPreviewPolicy": "single_authored_source_for_buttons_previews_and_bakes"
       },
       "directions": {

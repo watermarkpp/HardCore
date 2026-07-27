@@ -57,13 +57,13 @@ PRESERVED_BLACK_IRON_FILE_SHA256 = {
     "death": "f99492398eadb01b1b7e50f1f7c5bb347b42994054a165e3318922fd5599beec",
 }
 BRONZE_APPROVED_OTHER_DIRECTION_RGBA_SHA256 = {
-    "NE": "b8ebe624b5039fbb5f0883a2ae065438902a212b098f7896007cfe6245cc22f2",
-    "E": "dd43386d3dd76523cfa9f83cde829f1d7778871e946bc7f560552ab9a72198e2",
-    "SE": "d57867c8a16f9818d2d85b08d1ce18607b1bfc857ad8852ea05d5e61431e420f",
-    "S": "791e310a18641cef33bb1c2549636035ee5f7166b48e923a05e786127829f157",
-    "SW": "c4206a60db370bde8a54a4e863551cf938aeaf3d40b059816ec7a21af9c3eed8",
-    "W": "72814ee60f0ccc1b78d421c1e731edfba7a0fad136896a9eb82153dd623ade34",
-    "NW": "53cd8d4157e339ae7db5a206590b0fae8c65dc8fe182c4998871b7564afa6423",
+    "NE": "38621221e718547c422368f91b57e5ad677a6a4f0901a0d323d43c319a70aaf8",
+    "E": "b9666e04f14e81a30b5366762dc8106ca7e112ca19575476eb5e8061e6be2274",
+    "SE": "96ab5a43913c731603d540996891ca873ef2d41231496aa4891231593e7f6525",
+    "S": "2577794ac10fb80703901371bc65706a5d0f92accffbbc1d0ec00e367031b260",
+    "SW": "38ae1aa08459f79666e237551dc548ab46dd1e58c33c00addc7e6d11ccaa410c",
+    "W": "51ae88f12bc2edf18d9a30bd9d670ce212bb8ced8f329b27f009f5fb09abe0b1",
+    "NW": "51b1f4abe51bab89060ca2a882546c515d3e8ed31f8beb8671487f46d554d249",
 }
 
 sys.path.insert(0, str(ROOT / "tools/vendor"))
@@ -474,7 +474,7 @@ def main() -> None:
     assert bronze_cutouts["N"]["calibrationDirectionScalePercent"] == 100
     assert bronze_cutouts["N"]["generatedSize"] == [10, 16]
     assert bronze_cutouts["N"]["preparedPixelPolicy"] == (
-        "concept_direct_resize_green_despill_v1"
+        "concept_direct_resize"
     )
     assert all(
         bronze_cutouts[direction]["calibrationDirectionScalePercent"] == 83
@@ -492,7 +492,16 @@ def main() -> None:
         for record in bronze_cutouts.values()
     )
     assert bronze_cutouts["S"]["generatedSize"][0] >= 8
-    assert identities["bronze_magic"]["calibrationPreparedSourceRows"] == [0]
+    assert identities["bronze_magic"]["calibrationPreparedSourceRows"] == []
+    assert identities["bronze_magic"]["calibrationSourceSheet"].endswith(
+        "bronze_magic_helmet_8dir_transparent.png"
+    )
+    assert identities["bronze_magic"]["calibrationSourceMatte"] == (
+        "transparent_user_approved_despill_v1"
+    )
+    assert identities["bronze_magic"]["calibrationResizeFilter"] == (
+        "lanczos_downsample_nearest_runtime_v1"
+    )
     bronze_front = cropped_visible(
         bronze_idle.crop((0, 4 * CELL[1], CELL[0], 5 * CELL[1]))
     )
