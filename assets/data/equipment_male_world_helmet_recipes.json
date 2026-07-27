@@ -361,13 +361,72 @@
       "identityId": "god_magic",
       "sourceIndex": 101,
       "concept": "res://assets/art/items/client/world_wear/helmet/male/source/god_magic_helmet_8dir.png",
-      "sourceGrid": [4, 2],
+      "approvedSource": "res://assets/art/items/client/world_wear/helmet/male/source/god_magic_helmet_approved_20260727.png",
+      "approvedSourceFileSha256": "b676e30dbb335c55df10ac89aac4636f5a7b557cbd978f0edfd8a419c12afa14",
+      "approvedSourceExternalEvidence": "C:\\Users\\Administrator\\Downloads\\ChatGPT Image 2026年7月27日 17_18_23.png",
+      "approvedSourceGrid": [
+        4,
+        2
+      ],
+      "sourceGrid": [
+        4,
+        2
+      ],
       "directionClassificationStatus": "accepted_manual_visual_classification",
-      "directionClassificationEvidence": "independent full-resolution review of face opening, blue crest projection, rear shell and mirrored gold side rims",
-      "sourceSlotDirectionOrder": ["N", "NW", "W", "E", "S", "SW", "SE", "NE"],
-      "canonicalRowSourceSlots": [0, 7, 3, 6, 4, 5, 2, 1],
+      "directionClassificationEvidence": "user approved this exact sheet; top N,NE,E,SE and bottom S,SW,W,NW",
+      "sourceSlotDirectionOrder": [
+        "N",
+        "NE",
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW"
+      ],
+      "canonicalRowSourceSlots": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
       "outputPrefix": "res://assets/art/items/client/world_wear/helmet/male/god_magic_helmet",
-      "matteTolerance": 14
+      "mattePolicy": "pure_green_remove_and_despill_v1",
+      "approvedBlackClothVeilPolicy": "retain_exact_subject_pixels",
+      "faceAperturePolicy": {
+        "N": "closed",
+        "NE": "closed",
+        "E": "closed",
+        "SE": "closed",
+        "S": "closed",
+        "SW": "closed",
+        "W": "closed",
+        "NW": "closed"
+      },
+      "faceApertureShape": {
+        "N": "none",
+        "NE": "none",
+        "E": "none",
+        "SE": "none",
+        "S": "none",
+        "SW": "none",
+        "W": "none",
+        "NW": "none"
+      },
+      "paperDollSourceDirection": "S",
+      "paperDollFaceWindow": "none_opaque_black_mask",
+      "paperDollEraseMask": "clear_exact_approved_S_silhouette",
+      "inventorySourceDirection": "S",
+      "inventoryFaceWindow": "opaque_black_mask_interior",
+      "groundSourceDirection": "S",
+      "groundFaceWindow": "opaque_black_mask_interior",
+      "runtimeScale": 1,
+      "textureFilter": "nearest",
+      "userOverrideAuthorization": "direct use of the explicitly supplied replacement sheet"
     },
     {
       "identityId": "heavenly_taoist",

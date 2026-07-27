@@ -4,6 +4,7 @@ extends Node
 const CATALOG_PATH := "res://assets/data/equipment_visual_catalog.json"
 const LOADOUT_PATH := "res://assets/data/equipment_test_loadouts.json"
 const HOLY_WAR_ITEM_ID := "232"
+const GOD_MAGIC_ITEM_ID := "236"
 const HOLY_WAR_PAPER_PATH := "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00232_head.png"
 const HOLY_WAR_ERASE_MASK_PATH := "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00232_erase_mask.png"
 const VISUAL_CATEGORIES := ["武器", "盔甲", "头盔"]
@@ -114,12 +115,15 @@ func _run() -> void:
 		_resource_exists(icons.get("ground", {}), "%s 地面图" % entry.get("itemName", ""))
 		if entry.get("category", "") in VISUAL_CATEGORIES:
 			var paper: Dictionary = entry.get("paperDoll", {})
-			var expected_paper_status := "user_authorized_redesign" if int(item_id) == 218 else ("user_approved_project_redesign" if item_id == HOLY_WAR_ITEM_ID else "exact_client_record")
+			var expected_paper_status := "user_authorized_redesign" if int(item_id) == 218 else ("user_approved_project_redesign" if item_id in [HOLY_WAR_ITEM_ID, GOD_MAGIC_ITEM_ID] else "exact_client_record")
 			assert(paper.get("status", "") == expected_paper_status, "%s 纸娃娃不得占位" % entry.get("itemName", ""))
 			if int(item_id) == 218:
 				assert(paper.get("designIdentity", "") == "mystery_japanese_kabuto_218", "神秘头盔必须使用用户授权的统一重做造型")
 			elif item_id == HOLY_WAR_ITEM_ID:
 				_validate_holy_war_paper_doll(entry)
+			elif item_id == GOD_MAGIC_ITEM_ID:
+				assert(paper.get("faceWindow", "") == "none_opaque_black_mask", "item 236 must preserve the approved opaque black cloth veil")
+				assert(paper.get("mappingConfidence", "") == "user_approved_exact", "item 236 paper doll must not be a placeholder")
 			else:
 				assert(paper.get("status", "") == "exact_client_record", "%s 纸娃娃不得占位" % entry.get("itemName", ""))
 			_resource_exists(paper, "%s 纸娃娃" % entry.get("itemName", ""))
@@ -147,7 +151,7 @@ func _run() -> void:
 			"classic_client_no_world_layer", "approved_project_extension":
 				pass
 			"user_approved_project_redesign":
-				assert(item_id == HOLY_WAR_ITEM_ID, "only item 232 may use the approved project redesign status")
+				assert(item_id in [HOLY_WAR_ITEM_ID, GOD_MAGIC_ITEM_ID], "only explicitly approved helmet replacements may use the approved project redesign status")
 			_:
 				assert(false, "%s 世界穿戴策略未声明" % entry.get("itemName", ""))
 	unresolved_names.sort()

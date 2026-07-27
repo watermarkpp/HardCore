@@ -71,8 +71,11 @@ def main() -> None:
             "helmet",
         ]
         for before, erase in zip(patch.getdata(), mask.getdata()):
-            expected_alpha = 255 if before[3] > 0 else 0
-            assert erase[3] == expected_alpha
+            if item_id == "232":
+                assert erase[3] == 0
+            else:
+                expected_alpha = 255 if before[3] > 0 else 0
+                assert erase[3] == expected_alpha
 
     # Magic and Bronze intentionally share the same primary StateItem #100.
     assert (

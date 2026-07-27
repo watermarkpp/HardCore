@@ -633,46 +633,38 @@
         "itemId": 236,
         "itemName": "法神头盔",
         "slot": "头盔",
-        "source": "StateItem.wil",
+        "source": "user_approved_project_redesign",
         "sourceIndex": 101,
-        "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00236_stateitem_00101.png",
-        "sourceRecordRgbaSha256": "9c5f6aa9787d617cf0229698fa7668f6475334d93980298ea3846f2ef040c834",
+        "sourceRecordPath": "res://assets/art/items/client/world_wear/helmet/male/source/god_magic_helmet_approved_20260727.png",
+        "sourceRecordRgbaSha256": "b676e30dbb335c55df10ac89aac4636f5a7b557cbd978f0edfd8a419c12afa14",
+        "sourceDirection": "S",
         "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00236_head.png",
         "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00236_erase_mask.png",
         "drawOffset": [
-          74,
-          40
+          73,
+          27
         ],
         "size": [
-          24,
-          28
+          32,
+          41
         ],
-        "rgbaSha256": "599495c823e7fd220584e31767b50c49acba9ffcef2675febd8e9ee9aa21860e",
-        "eraseMaskRgbaSha256": "be8c3ca049a215e6f32ca87966fba6192f3da0c7e5f7fcad57632b32a76107ee",
+        "rgbaSha256": "0536068a5d50f3884dfd754e5fbd70ca28edfba619227c9edc35c84dc0d5ebc4",
+        "eraseMaskRgbaSha256": "49ee3ec89c3e5059b1326050939f898551c0840df209ece79f1869ca789c1a76",
         "drawOrder": [
           "male_head_anatomy",
           "male_hair",
           "helmet"
         ],
+        "faceWindowPolicy": "none; preserve approved opaque black face mask",
+        "eraseMaskPolicy": "clear_exact_approved_S_silhouette",
+        "facePixelsBaked": false,
+        "hairPixelsBaked": false,
         "subjectEvidence": {
-          "method": "primary_exact_palette_connected_difference.v1",
-          "exactCoordinateSeedPixels": 4,
-          "paletteCandidatePixels": 32,
-          "removedBackgroundPixels": 6,
-          "subjectOpaquePixels": 160
+          "method": "approved_source_S_direction_face_aperture_v1",
+          "approvedSourcePath": "res://assets/art/items/client/world_wear/helmet/male/source/god_magic_helmet_approved_20260727.png",
+          "approvedSourceFileSha256": "b676e30dbb335c55df10ac89aac4636f5a7b557cbd978f0edfd8a419c12afa14"
         },
         "headOnlyEvidence": {
-          "headBox": [
-            76,
-            40,
-            98,
-            68
-          ],
-          "shoulderStartY": 65,
-          "neckXRange": [
-            80,
-            92
-          ],
           "bottomLeftAlpha": 0,
           "bottomRightAlpha": 0
         }
@@ -1231,46 +1223,38 @@
       "itemId": 236,
       "itemName": "法神头盔",
       "slot": "头盔",
-      "source": "StateItem.wil",
+      "source": "user_approved_project_redesign",
       "sourceIndex": 101,
-      "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00236_stateitem_00101.png",
-      "sourceRecordRgbaSha256": "9c5f6aa9787d617cf0229698fa7668f6475334d93980298ea3846f2ef040c834",
+      "sourceRecordPath": "res://assets/art/items/client/world_wear/helmet/male/source/god_magic_helmet_approved_20260727.png",
+      "sourceRecordRgbaSha256": "b676e30dbb335c55df10ac89aac4636f5a7b557cbd978f0edfd8a419c12afa14",
+      "sourceDirection": "S",
       "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00236_head.png",
       "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00236_erase_mask.png",
       "drawOffset": [
-        74,
-        40
+        73,
+        27
       ],
       "size": [
-        24,
-        28
+        32,
+        41
       ],
-      "rgbaSha256": "599495c823e7fd220584e31767b50c49acba9ffcef2675febd8e9ee9aa21860e",
-      "eraseMaskRgbaSha256": "be8c3ca049a215e6f32ca87966fba6192f3da0c7e5f7fcad57632b32a76107ee",
+      "rgbaSha256": "0536068a5d50f3884dfd754e5fbd70ca28edfba619227c9edc35c84dc0d5ebc4",
+      "eraseMaskRgbaSha256": "49ee3ec89c3e5059b1326050939f898551c0840df209ece79f1869ca789c1a76",
       "drawOrder": [
         "male_head_anatomy",
         "male_hair",
         "helmet"
       ],
+      "faceWindowPolicy": "none; preserve approved opaque black face mask",
+      "eraseMaskPolicy": "clear_exact_approved_S_silhouette",
+      "facePixelsBaked": false,
+      "hairPixelsBaked": false,
       "subjectEvidence": {
-        "method": "primary_exact_palette_connected_difference.v1",
-        "exactCoordinateSeedPixels": 4,
-        "paletteCandidatePixels": 32,
-        "removedBackgroundPixels": 6,
-        "subjectOpaquePixels": 160
+        "method": "approved_source_S_direction_face_aperture_v1",
+        "approvedSourcePath": "res://assets/art/items/client/world_wear/helmet/male/source/god_magic_helmet_approved_20260727.png",
+        "approvedSourceFileSha256": "b676e30dbb335c55df10ac89aac4636f5a7b557cbd978f0edfd8a419c12afa14"
       },
       "headOnlyEvidence": {
-        "headBox": [
-          76,
-          40,
-          98,
-          68
-        ],
-        "shoulderStartY": 65,
-        "neckXRange": [
-          80,
-          92
-        ],
         "bottomLeftAlpha": 0,
         "bottomRightAlpha": 0
       }

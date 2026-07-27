@@ -179,8 +179,6 @@ def main() -> None:
     }
     for identity_id in (
         "prayer",
-        "holy_war",
-        "god_magic",
         "heavenly_taoist",
     ):
         assert (
@@ -191,6 +189,14 @@ def main() -> None:
             recipe_identities[identity_id]["canonicalRowSourceSlots"]
             == GROUP_B_CANONICAL_SLOTS
         )
+    for identity_id in ("holy_war", "god_magic"):
+        assert (
+            recipe_identities[identity_id]["sourceSlotDirectionOrder"]
+            == DIRECTIONS
+        )
+        assert recipe_identities[identity_id][
+            "canonicalRowSourceSlots"
+        ] == list(range(8))
     assert recipe_identities["memory"]["sourceSlotDirectionOrder"] == [
         "S",
         "SW",
@@ -255,7 +261,12 @@ def main() -> None:
         assert item["identityId"] == identity_id
         assert item["sex"] == "male"
         assert item["slot"] == "helmet"
-        assert item["status"] == "approved_project_extension"
+        expected_status = (
+            "user_approved_project_redesign"
+            if item_id in (232, 236)
+            else "approved_project_extension"
+        )
+        assert item["status"] == expected_status
         assert item["identityEvidence"]["sourceIndex"] == source_index
         assert item["identityEvidence"]["stateItemPixelsUsed"] is False
         appearance = item["maleAppearance"]

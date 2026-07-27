@@ -52308,77 +52308,83 @@
       "gender": "通用",
       "icons": {
         "inventory": {
-          "path": "res://assets/art/items/client/inventory/101.png",
-          "library": "research/mir2_client_raw/Data/Items.wil",
-          "index": 101,
-          "sourceOffset": 71125,
+          "path": "res://assets/art/items/client/project_redesign/helmet/god_magic/item_00236_inventory.png",
+          "library": "project.user_approved_redesign",
+          "index": 236,
           "size": [
-            40,
-            32
+            36,
+            35
           ],
           "drawOffset": [
-            7,
-            -44
-          ],
-          "libraryVersion": 0,
-          "confidence": "A"
-        },
-        "equippedSlot": {
-          "path": "res://assets/art/items/client/equipped/101.png",
-          "library": "research/mir2_client_raw/Data/stateitem.wil",
-          "index": 101,
-          "sourceOffset": 375883,
-          "size": [
-            24,
-            16
-          ],
-          "drawOffset": [
-            81,
+            0,
             0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact_design",
+          "sourceDirection": "S",
+          "faceAperture": "opaque_black_mask_interior",
+          "fileSha256": "41b450ae34c2b0827093b67edaef17877b148f35c988057312c08775d201975c",
+          "rgbaSha256": "0fc483f4d7514a4abafa5e0c5d131837ccbd6968f67762af9609020de9ac3d7d"
         },
-        "ground": {
-          "path": "res://assets/art/items/client/ground/101.png",
-          "library": "research/mir2_client_raw/Data/DnItems.wil",
-          "index": 101,
-          "sourceOffset": 60453,
+        "equippedSlot": {
+          "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00236_head.png",
+          "library": "project.user_approved_redesign",
+          "index": 236,
           "size": [
-            20,
-            12
+            32,
+            41
           ],
           "drawOffset": [
-            7,
-            -44
+            73,
+            27
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact_design",
+          "sourceDirection": "S",
+          "faceAperture": "none_opaque_black_mask",
+          "fileSha256": "b3ecd82c04a4b993e5435f0cd46da678bbf616962410f214900001ee012b3cee"
+        },
+        "ground": {
+          "path": "res://assets/art/items/client/project_redesign/helmet/god_magic/item_00236_ground.png",
+          "library": "project.user_approved_redesign",
+          "index": 236,
+          "size": [
+            16,
+            17
+          ],
+          "drawOffset": [
+            0,
+            0
+          ],
+          "confidence": "user_approved_exact_design",
+          "sourceDirection": "S",
+          "faceAperture": "opaque_black_mask_interior",
+          "fileSha256": "ba863374841afa4b070c0e7c6194c2fac729614984298f4a5e6237b6c4894b17",
+          "rgbaSha256": "75ff6f6663646bb0e99c1b77fb03f5dc7bac692462a9751bd075008e6a255271"
         }
       },
       "paperDoll": {
-        "status": "exact_client_record",
+        "status": "user_approved_project_redesign",
         "slot": "头盔",
         "gender": "通用",
         "sourceIndex": 101,
-        "path": "res://assets/art/items/client/equipped/101.png",
+        "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00236_head.png",
         "drawOffset": [
-          74,
-          44
+          73,
+          27
         ],
         "rawDrawOffset": [
-          81,
-          0
+          73,
+          27
         ],
         "size": [
-          24,
-          16
+          32,
+          41
         ],
-        "source": "stateitem.wil",
-        "mappingConfidence": "A"
+        "source": "approved item-236 S-direction",
+        "mappingConfidence": "user_approved_exact",
+        "faceWindow": "none_opaque_black_mask"
       },
       "worldWear": {
-        "status": "approved_project_extension",
+        "status": "user_approved_project_redesign",
         "contractId": "equipment.world_helmet.male.extension.v1",
         "identityId": "god_magic",
         "sourceIndex": 101,
@@ -52487,7 +52493,7 @@
           },
           "actionFallbacks": {}
         },
-        "reason": "StateItem identifies the helmet only; transparent world atlases are project-generated and anchored to same-frame male Hair.wil head motion"
+        "reason": "user approved exact eight-direction source; the original opaque black face mask is preserved without any cutout"
       }
     },
     "240": {
