@@ -1136,14 +1136,25 @@ func _source_recipe_id() -> String:
 	var authored_sha := str(source.get("calibrationSourceSheetSha256", ""))
 	if not authored_sha.is_empty():
 		if _active_target_applies_to_current_item():
+			var active_resize_filter := str(
+				_active_target.get("sourceResizeFilter", "nearest")
+			)
+			if active_resize_filter == "nearest":
+				return (
+					"active_target.%s.%s.direct_png_v1"
+					% [
+						str(_active_target.get(
+							"sourceRevision", "unversioned"
+						)),
+						authored_sha,
+					]
+				)
 			return (
 				"active_target.%s.%s.%s.direct_png_v2"
 				% [
 					str(_active_target.get("sourceRevision", "unversioned")),
 					authored_sha,
-					str(_active_target.get(
-						"sourceResizeFilter", "nearest"
-					)),
+					active_resize_filter,
 				]
 			)
 		var idle_layout_sha := str(
