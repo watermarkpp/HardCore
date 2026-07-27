@@ -49,11 +49,15 @@ func _run() -> void:
 	var item_control := editor.get_node(
 		"CalibrationUI/Panel/VBox/Inputs/Item"
 	) as OptionButton
-	assert(item_control.item_count == 1)
-	assert(int(item_control.get_item_id(0)) == 151)
-	assert(item_control.disabled)
+	assert(
+		item_control.item_count
+		== HelmetVisualV2.calibration_items().size()
+	)
+	assert(not item_control.disabled)
 	assert(await editor.initialize_editor_runtime(false))
 	assert(editor.active_target_item_id() == 151)
+	assert(editor.current_item_id == 151)
+	assert(editor._active_target_applies_to_current_item())
 	assert(
 		editor.active_target_source_sheet_sha256()
 		== FileAccess.get_sha256(TEST_SOURCE).to_lower()
@@ -83,6 +87,23 @@ func _run() -> void:
 		)
 		assert(actual.get_data() == expected.get_data())
 
+	editor.select_item(150)
+	assert(editor.current_item_id == 150)
+	assert(not editor._active_target_applies_to_current_item())
+	assert(
+		str(editor._calibration_source_contract().get(
+			"calibrationSourceSheet", ""
+		)) != TEST_SOURCE
+	)
+	editor.select_item(151)
+	assert(editor.current_item_id == 151)
+	assert(editor._active_target_applies_to_current_item())
+	assert(
+		str(editor._calibration_source_contract().get(
+			"calibrationSourceSheet", ""
+		)) == TEST_SOURCE
+	)
+
 	var source_before: Image = editor._authored_source_cutout(0)
 	var changed_sheet := Image.load_from_file(
 		ProjectSettings.globalize_path(TEST_SOURCE)
@@ -111,7 +132,8 @@ func _run() -> void:
 	editor.queue_free()
 	print(
 		"EQUIPMENT_HELMET_SINGLE_TARGET_AUTOLOAD_TEST_PASS "
-		+ "item=151 item_menu_count=1 direct_png=true cache_refresh=true "
+		+ "startup_item=151 menu_switchable=true per_item_source=true "
+		+ "direct_png=true cache_refresh=true "
 		+ "protected_overrides_unchanged=true"
 	)
 	get_tree().quit()

@@ -240,22 +240,19 @@ func active_target_source_sheet_sha256() -> String:
 	)
 
 
+func _active_target_applies_to_current_item() -> bool:
+	return (
+		_active_target_enabled
+		and current_item_id == active_target_item_id()
+	)
+
+
 func _session_calibration_items() -> Array:
-	var items := HelmetVisualV2.calibration_items()
-	if not _active_target_enabled:
-		return items
-	var result: Array = []
-	for item: Variant in items:
-		if (
-			item is Dictionary
-			and int(item.get("calibrationItemId", -1)) == current_item_id
-		):
-			result.append(item)
-	return result
+	return HelmetVisualV2.calibration_items()
 
 
 func _calibration_source_contract() -> Dictionary:
-	if _active_target_enabled:
+	if _active_target_applies_to_current_item():
 		return {
 			"calibrationSourceSheet": str(
 				_active_target.get("sourceSheet", "")
@@ -286,7 +283,7 @@ func _calibration_source_contract() -> Dictionary:
 func _calibration_source_direction_for_row(source_row: int) -> String:
 	if source_row < 0 or source_row >= DIRECTIONS.size():
 		return ""
-	if _active_target_enabled:
+	if _active_target_applies_to_current_item():
 		var order: Array = _active_target.get(
 			"sourceDirectionOrder", DIRECTIONS
 		)
@@ -301,7 +298,7 @@ func _calibration_pivot_for_source_row(
 	source_row: int,
 	frame_index: int
 ) -> Vector2i:
-	if _active_target_enabled:
+	if _active_target_applies_to_current_item():
 		var direction := _calibration_source_direction_for_row(source_row)
 		var direction_index := DIRECTIONS.find(direction)
 		assert(direction_index >= 0)
@@ -314,7 +311,7 @@ func _calibration_pivot_for_source_row(
 
 
 func _placement_source_row(source_row: int) -> int:
-	if not _active_target_enabled:
+	if not _active_target_applies_to_current_item():
 		return source_row
 	var direction := _calibration_source_direction_for_row(source_row)
 	var record: Variant = HelmetVisualV2.visual_asset_for_item(
@@ -556,7 +553,7 @@ func _setup_ui() -> void:
 		if item_ids is Array and item_ids.size() > 1:
 			label += "（共用）"
 		item_control.add_item(label, calibration_item_id)
-	item_control.disabled = _active_target_enabled
+	item_control.disabled = false
 	for action: String in ACTIONS:
 		action_control.add_item(action)
 	for direction: String in DIRECTIONS:
@@ -1135,7 +1132,7 @@ func _source_recipe_id() -> String:
 	var source := _calibration_source_contract()
 	var authored_sha := str(source.get("calibrationSourceSheetSha256", ""))
 	if not authored_sha.is_empty():
-		if _active_target_enabled:
+		if _active_target_applies_to_current_item():
 			return (
 				"active_target.%s.%s.direct_png_v1"
 				% [
@@ -1233,7 +1230,7 @@ func _authored_source_runtime_cell(
 	var authored_cutout := _authored_source_cutout(source_row)
 	if authored_cutout.is_empty():
 		assert(
-			not _active_target_enabled,
+			not _active_target_applies_to_current_item(),
 			"active target source row %d failed to load" % source_row
 		)
 		return _generated_atlas_source_cell(action, source_row, frame_index)
@@ -1707,7 +1704,7 @@ func _refresh_mapping_editor_ui() -> void:
 		_calibration_source_direction_for_row(source_row)
 	))
 	var nudge := _array_vector(record.get("nudge", []))
-	if current_item_id == 151 and not _active_target_enabled:
+	if current_item_id == 151 and not _active_target_applies_to_current_item():
 		get_node("CalibrationUI/Panel/VBox/MappingStatus/Mapping").text = (
 			"人物目标 %s <- 黑铁原始源槽 %d"
 			% [direction, source_row]
@@ -1780,7 +1777,10 @@ func _refresh_mapping_editor_ui() -> void:
 				"calibrationSourceSheet", ""
 			)
 		).is_empty()
-		if current_item_id == 151 and not _active_target_enabled:
+		if (
+			current_item_id == 151
+			and not _active_target_applies_to_current_item()
+		):
 			(source_button.get_node("Label") as Label).text = "源槽 %d" % row
 		elif authored_source:
 			(source_button.get_node("Label") as Label).text = (
