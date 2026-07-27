@@ -769,9 +769,10 @@ def project_horizontal_diameter(
     """Shrink the physical horizontal diameter without changing height.
 
     The lateral and front/back axes are projected at the direction yaw before
-    resizing. Scaling both physical axes to 90% makes every view 90% as wide,
-    including the side views, while each generated frame remains centred on
-    its own direction-specific head pivot.
+    resizing. Scaling both physical axes by the same requested diameter ratio
+    makes every view consistently narrower, including the side views, while
+    each generated frame remains centred on its own direction-specific head
+    pivot.
     """
     yaw_degrees = {
         "N": 180.0,
@@ -805,7 +806,11 @@ def project_horizontal_diameter(
         + depth_projection * depth_scale
     )
     projected_scale = projected_after / projected_before
-    target_width = max(1, round(image.width * projected_scale))
+    # Floor positive pixel widths so integer quantisation never weakens a
+    # requested reduction (for example, 17px at 80% must become 13px, not
+    # 14px). This guarantees every physical view is reduced by at least the
+    # configured percentage.
+    target_width = max(1, math.floor(image.width * projected_scale))
     result = image.resize(
         (target_width, image.height),
         Image.Resampling.NEAREST,

@@ -434,8 +434,8 @@
           48,
           48
         ],
-        "rgbaSha256": "b78bc628fb1c406ee476d879b779482b55f64061a239447dd44ebb6aa5518af9",
-        "eraseMaskRgbaSha256": "5b4eac08e727610b5ed24d528c70dca6d44cf04ef9e7dbee2c20d0eda7492761",
+        "rgbaSha256": "df0f597345a3184a22ef5250ad11fca6f8aa959f9a82dc514548b188a988583d",
+        "eraseMaskRgbaSha256": "f73127caf93f384f1d4817c87e007dac7bcdd608bacb24c6beda4c01e6fcf314",
         "drawOrder": [
           "male_head_anatomy",
           "male_hair",
@@ -444,7 +444,17 @@
         "subjectEvidence": {
           "method": "user_authorized_chroma_key_redesign.v1",
           "designIdentity": "mystery_japanese_kabuto_218",
-          "subjectOpaquePixels": 1838,
+          "diameterProjection": {
+            "horizontalDiameterPercent": 80,
+            "heightPercent": 100,
+            "canvasPreserved": [
+              48,
+              48
+            ],
+            "centredOnOriginalHeadAnchor": true,
+            "filter": "nearest"
+          },
+          "subjectOpaquePixels": 1471,
           "originalClientAppearanceRequired": false
         },
         "headOnlyEvidence": {
@@ -1046,8 +1056,8 @@
         48,
         48
       ],
-      "rgbaSha256": "b78bc628fb1c406ee476d879b779482b55f64061a239447dd44ebb6aa5518af9",
-      "eraseMaskRgbaSha256": "5b4eac08e727610b5ed24d528c70dca6d44cf04ef9e7dbee2c20d0eda7492761",
+      "rgbaSha256": "df0f597345a3184a22ef5250ad11fca6f8aa959f9a82dc514548b188a988583d",
+      "eraseMaskRgbaSha256": "f73127caf93f384f1d4817c87e007dac7bcdd608bacb24c6beda4c01e6fcf314",
       "drawOrder": [
         "male_head_anatomy",
         "male_hair",
@@ -1056,7 +1066,17 @@
       "subjectEvidence": {
         "method": "user_authorized_chroma_key_redesign.v1",
         "designIdentity": "mystery_japanese_kabuto_218",
-        "subjectOpaquePixels": 1838,
+        "diameterProjection": {
+          "horizontalDiameterPercent": 80,
+          "heightPercent": 100,
+          "canvasPreserved": [
+            48,
+            48
+          ],
+          "centredOnOriginalHeadAnchor": true,
+          "filter": "nearest"
+        },
+        "subjectOpaquePixels": 1471,
         "originalClientAppearanceRequired": false
       },
       "headOnlyEvidence": {

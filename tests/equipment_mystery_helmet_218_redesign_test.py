@@ -39,6 +39,13 @@ def main() -> None:
     assert item["paperDoll"]["designIdentity"] == (
         "mystery_japanese_kabuto_218"
     )
+    assert item["paperDoll"]["diameterProjection"] == {
+        "horizontalDiameterPercent": 80,
+        "heightPercent": 100,
+        "canvasPreserved": [48, 48],
+        "centredOnOriginalHeadAnchor": True,
+        "filter": "nearest",
+    }
 
     expected_sizes = {
         "inventory": (40, 40),
@@ -70,6 +77,17 @@ def main() -> None:
     mask = Image.open(disk_path(head["eraseMaskPath"])).convert("RGBA")
     assert head["source"] == "user_authorized_redesign"
     assert tuple(head["size"]) == head_image.size == (48, 48)
+    assert head["subjectEvidence"]["diameterProjection"] == {
+        "horizontalDiameterPercent": 80,
+        "heightPercent": 100,
+        "canvasPreserved": [48, 48],
+        "centredOnOriginalHeadAnchor": True,
+        "filter": "nearest",
+    }
+    head_box = head_image.getchannel("A").getbbox()
+    assert head_box is not None
+    assert head_box[2] - head_box[0] <= 36
+    assert head_box[3] - head_box[1] == 44
     assert rgba_sha(head_image) == head["rgbaSha256"]
     assert rgba_sha(mask) == head["eraseMaskRgbaSha256"]
     assert [
@@ -91,18 +109,31 @@ def main() -> None:
     assert len({cutouts[d]["sourceCutoutRgbaSha256"] for d in DIRECTIONS}) == 8
     for direction in DIRECTIONS:
         sizing = cutouts[direction]["bodyDrivenSizing"]
+        diameter = cutouts[direction]["angleAwareHorizontalDiameter"]
         assert sizing["excludedAccessory"] == "crescent_maedate"
         assert sizing["accessoryExcludedFromScaleCalculation"] is True
         assert sizing["hornsExcludedFromScaleCalculation"] is False
         assert sizing["generatedBodySize"][1] == 18
-        assert sizing["fullGeneratedSize"] == cutouts[direction][
+        assert sizing["fullGeneratedSize"] == diameter[
+            "preProjectionSize"
+        ]
+        assert diameter["postProjectionSize"] == cutouts[direction][
             "generatedSize"
         ]
+        assert diameter["lateralDiameterPercent"] == 80.0
+        assert diameter["depthDiameterPercent"] == 80.0
+        assert diameter["projectedHorizontalPercent"] == 80.0
+        assert diameter["integerPixelHorizontalPercent"] <= 80.0
+        assert diameter["heightPercent"] == 100
+        assert diameter["postProjectionSize"][1] == (
+            diameter["preProjectionSize"][1]
+        )
 
     assert world["itemsById"]["218"]["identityId"] == "mystery"
     print(
         "EQUIPMENT_MYSTERY_HELMET_218_REDESIGN_TEST_PASS "
-        "directions=8 unique=8 world_body_height=18 "
+        "directions=8 unique=8 world_diameter=80% "
+        "paper_diameter=80% height=100% "
         "paper=48x48 inventory=40x40 ground=18x18"
     )
 

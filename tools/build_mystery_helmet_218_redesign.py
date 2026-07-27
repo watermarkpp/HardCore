@@ -41,6 +41,7 @@ ITEM_NAME = "神秘头盔"
 SOURCE_INDEX = 111
 HEAD_CENTER_X = 86
 HEAD_TOP_Y = 21
+HELMET_DIAMETER_PERCENT = 80
 
 
 def rgba_sha(image: Image.Image) -> str:
@@ -108,6 +109,23 @@ def fit(source: Image.Image, maximum_size: tuple[int, int]) -> Image.Image:
     return result
 
 
+def project_horizontal_diameter(
+    source: Image.Image,
+    diameter_percent: int,
+) -> Image.Image:
+    """Resize the helmet's horizontal diameter and preserve full height."""
+    if not 50 <= diameter_percent <= 100:
+        raise ValueError("diameter_percent must be between 50 and 100")
+    target_width = max(
+        1,
+        int(source.width * diameter_percent / 100.0),
+    )
+    return source.resize(
+        (target_width, source.height),
+        Image.Resampling.NEAREST,
+    )
+
+
 def save(image: Image.Image, path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     image.save(path, format="PNG", optimize=False, compress_level=9)
@@ -130,7 +148,10 @@ def build_assets() -> dict[str, Image.Image]:
     )
     ground = chroma_cutout(SOURCE_DIR / "ground_drop_green.png")
 
-    head_subject = fit(paper, (44, 44))
+    head_subject = project_horizontal_diameter(
+        fit(paper, (44, 44)),
+        HELMET_DIAMETER_PERCENT,
+    )
     head = padded_canvas(
         head_subject,
         (48, 48),
@@ -223,6 +244,13 @@ def update_head_manifest(images: dict[str, Image.Image]) -> None:
         "subjectEvidence": {
             "method": "user_authorized_chroma_key_redesign.v1",
             "designIdentity": "mystery_japanese_kabuto_218",
+            "diameterProjection": {
+                "horizontalDiameterPercent": HELMET_DIAMETER_PERCENT,
+                "heightPercent": 100,
+                "canvasPreserved": [48, 48],
+                "centredOnOriginalHeadAnchor": True,
+                "filter": "nearest",
+            },
             "subjectOpaquePixels": sum(
                 1
                 for opacity in head.getchannel("A").get_flattened_data()
@@ -306,6 +334,13 @@ def update_visual_catalog(images: dict[str, Image.Image]) -> None:
         "source": "user_authorized_redesign",
         "mappingConfidence": "user_authorized_exact",
         "designIdentity": "mystery_japanese_kabuto_218",
+        "diameterProjection": {
+            "horizontalDiameterPercent": HELMET_DIAMETER_PERCENT,
+            "heightPercent": 100,
+            "canvasPreserved": [48, 48],
+            "centredOnOriginalHeadAnchor": True,
+            "filter": "nearest",
+        },
     }
     write_json(VISUAL_CATALOG, catalog)
 
