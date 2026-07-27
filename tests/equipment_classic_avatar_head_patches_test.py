@@ -34,7 +34,18 @@ def main() -> None:
     )
     assert manifest["sourcePolicy"]["tier"] == "primary"
     assert manifest["sourcePolicy"]["fallbackUsed"] is False
-    assert manifest["sourcePolicy"]["aiGeneratedAssets"] == 0
+    assert manifest["sourcePolicy"]["aiGeneratedAssets"] == 1
+    assert set(
+        manifest["sourcePolicy"]["userAuthorizedRedesignExceptions"]
+    ) == {"218"}
+    mystery_exception = manifest["sourcePolicy"][
+        "userAuthorizedRedesignExceptions"
+    ]["218"]
+    assert mystery_exception["tier"] == "user_authorized_redesign"
+    assert mystery_exception["originalClientAppearanceRequired"] is False
+    assert manifest["compositionPolicy"][
+        "userAuthorizedRedrawExceptions"
+    ] == [218]
     assert manifest["coverage"]["itemIds"] == EXPECTED_IDS
     assert manifest["coverage"]["officialTestHelmetItemIds"] == TEST_IDS
     assert manifest["coverage"]["formalMaleHelmetItems"] == 12
@@ -73,6 +84,14 @@ def main() -> None:
     assert black_iron["sourceIndex"] == 344
     assert black_iron["subjectEvidence"]["subjectComponents"] == 1
     assert black_iron["subjectEvidence"]["subjectOpaquePixels"] == 354
+    mystery = manifest["itemsById"]["218"]["flattenedHeadPatch"]
+    assert mystery["source"] == "user_authorized_redesign"
+    assert mystery["subjectEvidence"]["designIdentity"] == (
+        "mystery_japanese_kabuto_218"
+    )
+    assert mystery["subjectEvidence"][
+        "originalClientAppearanceRequired"
+    ] is False
 
     presentation = json.loads(PRESENTATION.read_text(encoding="utf-8"))
     classic = presentation["modes"]["classic_avatar"]["avatarOnly"]
@@ -88,7 +107,7 @@ def main() -> None:
     ]
     print(
         "EQUIPMENT_CLASSIC_AVATAR_HEAD_PATCHES_TEST_PASS "
-        "items=12 records=11 primary=true ai=0"
+        "items=12 records=11 primary=true ai=1 exception=218"
     )
 
 

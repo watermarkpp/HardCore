@@ -9,7 +9,7 @@
     "distribution": "client.classic_raw_complete",
     "rootPrefix": "reference/mir2_client_raw",
     "fallbackUsed": false,
-    "aiGeneratedAssets": 0,
+    "aiGeneratedAssets": 1,
     "prgusePath": "dev_art_sources/reference/mir2_client_raw/Data/Prguse.wil",
     "prguseFileSha256": "88a12492138bc85ba0429dce3cbd857efcea5b7659cdd8d85a4f2f4db68d5ef2",
     "stateItemPath": "dev_art_sources/reference/mir2_client_raw/Data/StateItem.wil",
@@ -25,7 +25,16 @@
     "hairSourceIndex": 442,
     "hairRgbaSha256": "fc3b7dae4516e3b742ad5c6e377d719385c3b06a2d629ef9c8bd4c5702e70ee2",
     "hairHotX": 87,
-    "hairHotY": 0
+    "hairHotY": 0,
+    "userAuthorizedRedesignExceptions": {
+      "218": {
+        "itemId": 218,
+        "itemName": "神秘头盔",
+        "tier": "user_authorized_redesign",
+        "originalClientAppearanceRequired": false,
+        "sourceDirectory": "res://assets/art/items/client/source/user_authorized_redesign/mystery_helmet_218"
+      }
+    }
   },
   "compositionPolicy": {
     "id": "original_client_final_head_only.v1",
@@ -49,7 +58,10 @@
     "bottomCornerAlphaRequired": 0,
     "fullEquipmentPageForbidden": true,
     "redrawAllowed": false,
-    "auxiliarySourceAllowed": false
+    "auxiliarySourceAllowed": false,
+    "userAuthorizedRedrawExceptions": [
+      218
+    ]
   },
   "coverage": {
     "formalMaleHelmetItems": 12,
@@ -407,33 +419,33 @@
         "itemId": 218,
         "itemName": "神秘头盔",
         "slot": "头盔",
-        "source": "StateItem.wil",
+        "source": "user_authorized_redesign",
         "sourceIndex": 111,
-        "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00218_stateitem_00111.png",
-        "sourceRecordRgbaSha256": "98b79ad22d560ee46dc67c27b603b85440af1a1a6d1ad2f3766a3cf76ed35b65",
+        "sourceRecordPath": "res://assets/art/items/client/source/user_authorized_redesign/mystery_helmet_218/paper_doll_front_green.png",
+        "sourceRecordRgbaSha256": "be6e7c575735190a53927aeec9dd06ea71f6df8950456756c82c746d3047c1a7",
+        "sourceFileSha256": "293d2496de61c527958fe077695c402d75a2966a19378324fce8809e82143ed8",
         "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00218_head.png",
         "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00218_erase_mask.png",
         "drawOffset": [
-          70,
-          34
+          62,
+          21
         ],
         "size": [
-          32,
-          34
+          48,
+          48
         ],
-        "rgbaSha256": "101431135c569447dc38a02e3866442bdb2948ddf7f62c078795a6fbbba76da9",
-        "eraseMaskRgbaSha256": "f4bd7f55d8ef910a5e72ba97a90f920eb6aa2cb29513e06c1560dc7e9366853f",
+        "rgbaSha256": "b78bc628fb1c406ee476d879b779482b55f64061a239447dd44ebb6aa5518af9",
+        "eraseMaskRgbaSha256": "5b4eac08e727610b5ed24d528c70dca6d44cf04ef9e7dbee2c20d0eda7492761",
         "drawOrder": [
           "male_head_anatomy",
           "male_hair",
           "helmet"
         ],
         "subjectEvidence": {
-          "method": "primary_exact_palette_connected_difference.v1",
-          "exactCoordinateSeedPixels": 153,
-          "paletteCandidatePixels": 555,
-          "removedBackgroundPixels": 549,
-          "subjectOpaquePixels": 164
+          "method": "user_authorized_chroma_key_redesign.v1",
+          "designIdentity": "mystery_japanese_kabuto_218",
+          "subjectOpaquePixels": 1838,
+          "originalClientAppearanceRequired": false
         },
         "headOnlyEvidence": {
           "headBox": [
@@ -1019,33 +1031,33 @@
       "itemId": 218,
       "itemName": "神秘头盔",
       "slot": "头盔",
-      "source": "StateItem.wil",
+      "source": "user_authorized_redesign",
       "sourceIndex": 111,
-      "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00218_stateitem_00111.png",
-      "sourceRecordRgbaSha256": "98b79ad22d560ee46dc67c27b603b85440af1a1a6d1ad2f3766a3cf76ed35b65",
+      "sourceRecordPath": "res://assets/art/items/client/source/user_authorized_redesign/mystery_helmet_218/paper_doll_front_green.png",
+      "sourceRecordRgbaSha256": "be6e7c575735190a53927aeec9dd06ea71f6df8950456756c82c746d3047c1a7",
+      "sourceFileSha256": "293d2496de61c527958fe077695c402d75a2966a19378324fce8809e82143ed8",
       "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00218_head.png",
       "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00218_erase_mask.png",
       "drawOffset": [
-        70,
-        34
+        62,
+        21
       ],
       "size": [
-        32,
-        34
+        48,
+        48
       ],
-      "rgbaSha256": "101431135c569447dc38a02e3866442bdb2948ddf7f62c078795a6fbbba76da9",
-      "eraseMaskRgbaSha256": "f4bd7f55d8ef910a5e72ba97a90f920eb6aa2cb29513e06c1560dc7e9366853f",
+      "rgbaSha256": "b78bc628fb1c406ee476d879b779482b55f64061a239447dd44ebb6aa5518af9",
+      "eraseMaskRgbaSha256": "5b4eac08e727610b5ed24d528c70dca6d44cf04ef9e7dbee2c20d0eda7492761",
       "drawOrder": [
         "male_head_anatomy",
         "male_hair",
         "helmet"
       ],
       "subjectEvidence": {
-        "method": "primary_exact_palette_connected_difference.v1",
-        "exactCoordinateSeedPixels": 153,
-        "paletteCandidatePixels": 555,
-        "removedBackgroundPixels": 549,
-        "subjectOpaquePixels": 164
+        "method": "user_authorized_chroma_key_redesign.v1",
+        "designIdentity": "mystery_japanese_kabuto_218",
+        "subjectOpaquePixels": 1838,
+        "originalClientAppearanceRequired": false
       },
       "headOnlyEvidence": {
         "headBox": [
