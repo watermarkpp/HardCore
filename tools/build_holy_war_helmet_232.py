@@ -3,8 +3,8 @@
 
 This is intentionally a single-target builder.  The approved 4x2 sheet is
 kept byte-for-byte as provenance, then a transparent world sheet, six physical
-world atlases, a face-window paper-doll layer, and opaque inventory/ground
-icons are derived from it.  No other visual identity can be selected.
+world atlases, an opaque paper-doll layer, and opaque inventory/ground icons
+are derived from it.  No other visual identity can be selected.
 """
 
 from __future__ import annotations
@@ -17,7 +17,7 @@ import sys
 from copy import deepcopy
 from pathlib import Path
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageChops, ImageDraw
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -46,6 +46,10 @@ HEAD_PATCH_CONTRACT = (
     ROOT / "assets/data/equipment_classic_avatar_head_patches.json"
 )
 HELMET_V2_CONTRACT = ROOT / "assets/data/equipment_helmet_visual_v2.json"
+HELMET_V2_OVERRIDES = (
+    ROOT / "assets/data/equipment_helmet_visual_v2_overrides.json"
+)
+GENERATED_HELMET_V2_ROOT = ROOT / "assets/generated/helmet_v2"
 HEAD_SOCKET_CONTRACT = ROOT / "assets/data/player_head_socket_db.json"
 HEAD_PATCH = (
     ROOT
@@ -137,24 +141,24 @@ FUR_POLYGONS = {
 # the player's original face without deleting the decorative cage/trim.
 FACE_WINDOWS: dict[str, list[list[list[int]]]] = {}
 
-# The previous 35-36px bake treated the two tall horns as the helmet body's
-# sizing envelope and made the lower shell roughly twice the accepted helmet
-# width.  The approved sheet is now baked at 0.64x by overall height.  This
-# puts the horn-excluded S shell near 15px wide (the accepted range is
-# 10-15px) while keeping both horns proportional.  Runtime scale remains 1.
+# These are the user-approved final per-direction pixel heights.  Every
+# runtime/paper/icon derivative is produced directly from the 1536x1024
+# approved sheet in one alpha-safe high-quality downsample.  Width alone is
+# compressed to 80% so the horned design keeps its height without using the
+# horns as the helmet-body diameter.
 WORLD_HEIGHT = {
     "N": 23,
-    "NE": 23,
-    "E": 22,
-    "SE": 23,
+    "NE": 21,
+    "E": 20,
+    "SE": 22,
     "S": 23,
-    "SW": 23,
+    "SW": 22,
     "W": 22,
     "NW": 23,
 }
-WORLD_SCALE_RATIO = 0.64
+HORIZONTAL_DIAMETER_SCALE = 0.8
 PAPER_CANVAS_SIZE = (32, 41)
-PAPER_CONTENT_ENVELOPE = (24, 29)
+PAPER_CONTENT_HEIGHT = 29
 FROZEN_V2_SOURCE_DIRECTION_MAP = {
     "N": 0,
     "NE": 7,
@@ -164,6 +168,31 @@ FROZEN_V2_SOURCE_DIRECTION_MAP = {
     "SW": 5,
     "W": 2,
     "NW": 1,
+}
+SOURCE_VARIANT_HEIGHT = {
+    DIRECTIONS[source_row]: WORLD_HEIGHT[target_direction]
+    for target_direction, source_row in FROZEN_V2_SOURCE_DIRECTION_MAP.items()
+}
+PREVIOUS_TARGET_BBOX_SIZE = {
+    "N": [21, 23],
+    "NE": [16, 21],
+    "E": [15, 20],
+    "SE": [17, 22],
+    "S": [19, 23],
+    "SW": [16, 22],
+    "W": [15, 22],
+    "NW": [17, 23],
+}
+EXPECTED_TARGET_BBOX_SIZE = {
+    direction: [
+        round(PREVIOUS_TARGET_BBOX_SIZE[direction][0] * 0.8),
+        PREVIOUS_TARGET_BBOX_SIZE[direction][1],
+    ]
+    for direction in DIRECTIONS
+}
+SOURCE_VARIANT_SIZE = {
+    DIRECTIONS[source_row]: EXPECTED_TARGET_BBOX_SIZE[target_direction]
+    for target_direction, source_row in FROZEN_V2_SOURCE_DIRECTION_MAP.items()
 }
 OPAQUE_FACE_ROI_POINTS = {
     "N": [[192, 330]],
@@ -309,18 +338,62 @@ def crop_alpha(image: Image.Image) -> Image.Image:
     return image.crop(box)
 
 
-def resize_to_height(image: Image.Image, height: int) -> Image.Image:
-    width = max(1, round(image.width * height / image.height))
-    return image.resize((width, height), Image.Resampling.NEAREST)
+def premultiplied_lanczos_resize(
+    image: Image.Image,
+    size: tuple[int, int],
+) -> Image.Image:
+    """Resize transparent art once without bleeding matte RGB into its edge."""
+    source = image.convert("RGBA")
+    alpha = source.getchannel("A")
+    red, green, blue, _ = source.split()
+    premultiplied = Image.merge(
+        "RGBA",
+        (
+            ImageChops.multiply(red, alpha),
+            ImageChops.multiply(green, alpha),
+            ImageChops.multiply(blue, alpha),
+            alpha,
+        ),
+    ).resize(size, Image.Resampling.LANCZOS)
+    output = Image.new("RGBA", size, (0, 0, 0, 0))
+    source_pixels = premultiplied.load()
+    target_pixels = output.load()
+    for y in range(size[1]):
+        for x in range(size[0]):
+            red, green, blue, alpha = source_pixels[x, y]
+            if alpha <= 1:
+                target_pixels[x, y] = (0, 0, 0, 0)
+                continue
+            target_pixels[x, y] = (
+                min(255, round(red * 255 / alpha)),
+                min(255, round(green * 255 / alpha)),
+                min(255, round(blue * 255 / alpha)),
+                alpha,
+            )
+    return crop_alpha(output)
 
 
-def fit_inside(image: Image.Image, size: tuple[int, int]) -> Image.Image:
+def resize_to_height(
+    image: Image.Image,
+    height: int,
+    horizontal_scale: float = HORIZONTAL_DIAMETER_SCALE,
+) -> Image.Image:
+    natural_width = image.width * height / image.height
+    width = max(1, round(natural_width * horizontal_scale))
+    return premultiplied_lanczos_resize(image, (width, height))
+
+
+def fit_inside(
+    image: Image.Image,
+    size: tuple[int, int],
+    horizontal_scale: float = HORIZONTAL_DIAMETER_SCALE,
+) -> Image.Image:
     scale = min(size[0] / image.width, size[1] / image.height)
     target = (
-        max(1, round(image.width * scale)),
+        max(1, round(image.width * scale * horizontal_scale)),
         max(1, round(image.height * scale)),
     )
-    resized = image.resize(target, Image.Resampling.NEAREST)
+    resized = premultiplied_lanczos_resize(image, target)
     output = Image.new("RGBA", size, (0, 0, 0, 0))
     output.alpha_composite(
         resized,
@@ -329,16 +402,16 @@ def fit_inside(image: Image.Image, size: tuple[int, int]) -> Image.Image:
     return output
 
 
-def fit_inside_envelope(
+def fit_height_on_canvas(
     image: Image.Image,
     canvas_size: tuple[int, int],
-    content_envelope: tuple[int, int],
+    content_height: int,
 ) -> Image.Image:
-    fitted = fit_inside(image, content_envelope)
-    used = fitted.getchannel("A").getbbox()
-    if used is None:
-        raise ValueError("empty fitted helmet image")
-    fitted = fitted.crop(used)
+    fitted = resize_to_height(image, content_height)
+    if fitted.width > canvas_size[0] or fitted.height > canvas_size[1]:
+        raise ValueError(
+            f"fitted helmet {fitted.size} exceeds canvas {canvas_size}"
+        )
     output = Image.new("RGBA", canvas_size, (0, 0, 0, 0))
     output.alpha_composite(
         fitted,
@@ -388,7 +461,10 @@ def build_processed_sources() -> tuple[
     WORLD_SOURCE.parent.mkdir(parents=True, exist_ok=True)
     world_sheet.save(WORLD_SOURCE, format="PNG", optimize=False)
     return opaque_no_face, wearable, {
-        direction: resize_to_height(wearable[direction], WORLD_HEIGHT[direction])
+        direction: premultiplied_lanczos_resize(
+            wearable[direction],
+            tuple(SOURCE_VARIANT_SIZE[direction]),
+        )
         for direction in DIRECTIONS
     }
 
@@ -490,8 +566,11 @@ def build_world_identity(
             "clientMedianOpaquePixels": round(
                 float(baseline["directionRuntimeOpaquePixels"][direction]), 4
             ),
-            "resizeFilter": "nearest_baked_source_to_integer_pixels",
-            "worldScaleRatio": WORLD_SCALE_RATIO,
+            "resizeFilter": (
+                "premultiplied_alpha_lanczos_high_res_single_pass"
+            ),
+            "sourceBakePolicy": "approved_high_res_single_pass",
+            "horizontalDiameterScale": HORIZONTAL_DIAMETER_SCALE,
             "runtimeScale": 1,
             "facePolicy": FACE_POLICY[direction],
             "hairPolicy": "hide",
@@ -530,9 +609,15 @@ def build_world_identity(
         ),
         "hairPolicy": "hide",
         "generatedFurOrNeckPixelsRetained": False,
-        "worldSizingPolicy": "horn_excluded_body_normalization_v1",
-        "worldScaleRatio": WORLD_SCALE_RATIO,
+        "worldSizingPolicy": (
+            "approved_high_res_single_pass_horizontal_diameter_v1"
+        ),
+        "sourceBakePolicy": "approved_high_res_single_pass",
+        "horizontalDiameterScale": HORIZONTAL_DIAMETER_SCALE,
+        "offlineDownsampleFilter": "premultiplied_alpha_lanczos",
         "worldDirectionHeights": WORLD_HEIGHT,
+        "sourceRowDirectionHeights": SOURCE_VARIANT_HEIGHT,
+        "sourceRowDirectionSizes": SOURCE_VARIANT_SIZE,
         "runtimeScale": 1,
         "textureFilter": "nearest",
         "integerPlacementCompatible": True,
@@ -550,10 +635,10 @@ def build_paper_doll_and_icons(
     # Paper doll uses the opaque S design.  The approved black face mask is
     # part of the helmet and must not be cut out.  No base-image erase pass is
     # needed because the opaque helmet layer covers the head itself.
-    paper = fit_inside_envelope(
+    paper = fit_height_on_canvas(
         wearable["S"],
         PAPER_CANVAS_SIZE,
-        PAPER_CONTENT_ENVELOPE,
+        PAPER_CONTENT_HEIGHT,
     )
     erase = Image.new("RGBA", paper.size, (0, 0, 0, 0))
     HEAD_PATCH.parent.mkdir(parents=True, exist_ok=True)
@@ -562,8 +647,8 @@ def build_paper_doll_and_icons(
 
     # Inventory and ground derivatives deliberately use the opaque S face
     # interior; these are item icons, not wearable face windows.
-    inventory = fit_inside(opaque_no_face["S"], (36, 35))
-    ground = fit_inside(opaque_no_face["S"], (16, 17))
+    inventory = fit_height_on_canvas(opaque_no_face["S"], (36, 35), 35)
+    ground = fit_height_on_canvas(opaque_no_face["S"], (16, 17), 17)
     PROJECT_ICON_DIR.mkdir(parents=True, exist_ok=True)
     inventory.save(INVENTORY_ICON, format="PNG", optimize=False)
     ground.save(GROUND_ICON, format="PNG", optimize=False)
@@ -692,6 +777,204 @@ def non_target_file_hashes() -> dict[str, str]:
     return result
 
 
+def file_tree_hashes(root: Path) -> dict[str, str]:
+    return {
+        path.relative_to(ROOT).as_posix(): file_sha256(path)
+        for path in sorted(root.rglob("*"))
+        if path.is_file()
+    }
+
+
+def alpha_sprite_metrics(image: Image.Image) -> dict:
+    alpha = image.convert("RGBA").getchannel("A")
+    bbox = alpha.getbbox()
+    if bbox is None:
+        raise ValueError("cannot measure an empty helmet sprite")
+    cropped = alpha.crop(bbox)
+    values = list(cropped.get_flattened_data())
+    opaque_pixels = sum(value > 0 for value in values)
+    solid_pixels = sum(value == 255 for value in values)
+    semitransparent_pixels = sum(0 < value < 255 for value in values)
+    lower_start = max(0, cropped.height // 2)
+    row_spans: list[tuple[int, int]] = []
+    for y in range(lower_start, cropped.height):
+        xs = [x for x in range(cropped.width) if cropped.getpixel((x, y)) > 0]
+        if xs:
+            row_spans.append((min(xs), max(xs) + 1))
+    if not row_spans:
+        raise ValueError("helmet lower shell has no measurable alpha")
+    sorted_widths = sorted(right - left for left, right in row_spans)
+    body_width = sorted_widths[len(sorted_widths) // 2]
+    sorted_centers = sorted((left + right) / 2 for left, right in row_spans)
+    body_center = sorted_centers[len(sorted_centers) // 2]
+    body_left = round(bbox[0] + body_center - body_width / 2)
+    body_bbox = [
+        body_left,
+        bbox[1] + lower_start,
+        body_left + body_width,
+        bbox[3],
+    ]
+    transparent_rgb_leaks = 0
+    rgba = image.convert("RGBA")
+    for red, green, blue, pixel_alpha in rgba.get_flattened_data():
+        if pixel_alpha == 0 and (red != 0 or green != 0 or blue != 0):
+            transparent_rgb_leaks += 1
+    bbox_area = cropped.width * cropped.height
+    return {
+        "totalBbox": list(bbox),
+        "totalBboxSize": [cropped.width, cropped.height],
+        "bodyCoreBbox": body_bbox,
+        "bodyCoreWidth": body_width,
+        "effectivePixelDensity": round(opaque_pixels / bbox_area, 4),
+        "solidPixelDensity": round(solid_pixels / bbox_area, 4),
+        "semiTransparentEdgePixels": semitransparent_pixels,
+        "semiTransparentEdgeRatio": round(
+            semitransparent_pixels / max(1, opaque_pixels),
+            4,
+        ),
+        "transparentRgbLeakPixels": transparent_rgb_leaks,
+        "playerHeadReferenceWidth": 9,
+        "bodyToPlayerHeadWidthRatio": round(body_width / 9, 4),
+    }
+
+
+def runtime_idle_sprite(
+    asset: dict,
+    direction: str,
+) -> Image.Image:
+    record = asset["directions"][direction]
+    path = record.get("texturesByAction", {}).get("idle")
+    if path is None:
+        path = record.get("texture")
+    if not isinstance(path, str):
+        raise ValueError(f"missing idle texture for {direction}")
+    atlas = Image.open(ROOT / path.removeprefix("res://")).convert("RGBA")
+    source_row = int(record["source_row"])
+    return atlas.crop(
+        (
+            0,
+            source_row * CELL[1],
+            CELL[0],
+            (source_row + 1) * CELL[1],
+        )
+    )
+
+
+def paper_doll_occupancy(item_id: int) -> dict:
+    path = (
+        ROOT
+        / "assets/art/items/client/paper_doll/classic_flattened_head"
+        / f"item_{item_id:05d}_head.png"
+    )
+    if not path.exists():
+        return {"available": False}
+    image = Image.open(path).convert("RGBA")
+    bbox = image.getchannel("A").getbbox()
+    if bbox is None:
+        return {"available": True, "empty": True}
+    bbox_size = [bbox[2] - bbox[0], bbox[3] - bbox[1]]
+    return {
+        "available": True,
+        "canvasSize": list(image.size),
+        "contentBbox": list(bbox),
+        "contentBboxSize": bbox_size,
+        "widthOccupancy": round(bbox_size[0] / image.width, 4),
+        "heightOccupancy": round(bbox_size[1] / image.height, 4),
+    }
+
+
+def reference_pixel_parameter_audit() -> dict:
+    contract = load_json(HELMET_V2_CONTRACT)
+    items = [146, 147, 149, 150, 151, ITEM_ID]
+    audit: dict[str, dict] = {}
+    accepted_body_widths: list[int] = []
+    for item_id in items:
+        asset_id = contract["itemVisualAssetRefs"][str(item_id)]
+        asset = contract["visualAssets"][asset_id]
+        directions = {
+            direction: alpha_sprite_metrics(
+                runtime_idle_sprite(asset, direction)
+            )
+            for direction in DIRECTIONS
+        }
+        if item_id in {146, 147, 149, 151}:
+            accepted_body_widths.extend(
+                record["bodyCoreWidth"] for record in directions.values()
+            )
+        audit[str(item_id)] = {
+            "visualAssetId": asset_id,
+            "directionMetrics": directions,
+            "paperDollOccupancy": paper_doll_occupancy(item_id),
+            "readOnlyReference": item_id != ITEM_ID,
+            "bodyCorePolicy": (
+                "median alpha span across lower half; for item150 this "
+                "intentionally excludes the upper decorative horns"
+            ),
+        }
+    accepted_range = [
+        min(accepted_body_widths),
+        max(accepted_body_widths),
+    ]
+    target_widths = [
+        record["bodyCoreWidth"]
+        for record in audit[str(ITEM_ID)]["directionMetrics"].values()
+    ]
+    target_bbox_audit: dict[str, dict] = {}
+    for direction, record in audit[str(ITEM_ID)]["directionMetrics"].items():
+        actual_size = record["totalBboxSize"]
+        previous_size = PREVIOUS_TARGET_BBOX_SIZE[direction]
+        expected_size = EXPECTED_TARGET_BBOX_SIZE[direction]
+        if actual_size[1] != previous_size[1]:
+            raise AssertionError(
+                f"item 232 {direction} target-semantic height changed: "
+                f"{actual_size[1]} != {previous_size[1]}"
+            )
+        if abs(actual_size[0] - expected_size[0]) > 1:
+            raise AssertionError(
+                f"item 232 {direction} target-semantic width is not 0.8x: "
+                f"{actual_size[0]} vs expected {expected_size[0]}"
+            )
+        target_bbox_audit[direction] = {
+            "previousTargetSemanticBboxSize": previous_size,
+            "expectedTargetSemanticBboxSizeAt0_8": expected_size,
+            "actualTargetSemanticBboxSize": actual_size,
+            "actualWidthRatio": round(
+                actual_size[0] / previous_size[0],
+                4,
+            ),
+            "heightUnchanged": True,
+            "sourceRow": FROZEN_V2_SOURCE_DIRECTION_MAP[direction],
+        }
+    if min(target_widths) < accepted_range[0] - 1:
+        raise AssertionError(
+            "item 232 body diameter is narrower than accepted helmet range"
+        )
+    armored_shell_allowance = 2
+    if max(target_widths) > accepted_range[1] + armored_shell_allowance:
+        raise AssertionError(
+            "item 232 body diameter remains wider than accepted helmet range"
+        )
+    if any(
+        record["transparentRgbLeakPixels"] != 0
+        for record in audit[str(ITEM_ID)]["directionMetrics"].values()
+    ):
+        raise AssertionError("item 232 contains RGB color in fully transparent pixels")
+    return {
+        "referenceItemIds": [146, 147, 149, 151],
+        "hornedReferenceItemId": 150,
+        "acceptedBodyCoreWidthRange": accepted_range,
+        "armoredShellDecorationAllowancePx": armored_shell_allowance,
+        "acceptedBodyCoreWidthRangeWithArmoredShellAllowance": [
+            accepted_range[0] - 1,
+            accepted_range[1] + armored_shell_allowance,
+        ],
+        "targetBodyCoreWidthRange": [min(target_widths), max(target_widths)],
+        "playerHeadWidthBasisPx": 9,
+        "targetSemanticOldToNewBbox": target_bbox_audit,
+        "items": audit,
+    }
+
+
 def update_recipe() -> None:
     replacement = {
             "identityId": IDENTITY_ID,
@@ -726,11 +1009,17 @@ def update_recipe() -> None:
             "inventoryFaceWindow": "opaque_black_mask_interior",
             "groundSourceDirection": "S",
             "groundFaceWindow": "opaque_black_mask_interior",
-            "worldSizingPolicy": "horn_excluded_body_normalization_v1",
-            "worldScaleRatio": WORLD_SCALE_RATIO,
+            "worldSizingPolicy": (
+                "approved_high_res_single_pass_horizontal_diameter_v1"
+            ),
+            "sourceBakePolicy": "approved_high_res_single_pass",
+            "horizontalDiameterScale": HORIZONTAL_DIAMETER_SCALE,
+            "offlineDownsampleFilter": "premultiplied_alpha_lanczos",
             "worldDirectionHeights": WORLD_HEIGHT,
+            "sourceRowDirectionHeights": SOURCE_VARIANT_HEIGHT,
+            "sourceRowDirectionSizes": SOURCE_VARIANT_SIZE,
             "paperDollCanvasSize": list(PAPER_CANVAS_SIZE),
-            "paperDollContentEnvelope": list(PAPER_CONTENT_ENVELOPE),
+            "paperDollContentHeight": PAPER_CONTENT_HEIGHT,
             "runtimeScale": 1,
             "textureFilter": "nearest",
             "userOverrideAuthorization": (
@@ -1140,12 +1429,10 @@ def validate_outputs() -> dict:
         paper_bbox[2] - paper_bbox[0],
         paper_bbox[3] - paper_bbox[1],
     ]
-    if (
-        paper_content_size[0] > PAPER_CONTENT_ENVELOPE[0]
-        or paper_content_size[1] > PAPER_CONTENT_ENVELOPE[1]
-    ):
+    if paper_content_size[1] != PAPER_CONTENT_HEIGHT:
         raise AssertionError(
-            f"paper-doll helmet exceeds content envelope: {paper_content_size}"
+            "paper-doll helmet height changed: "
+            f"{paper_content_size[1]} != {PAPER_CONTENT_HEIGHT}"
         )
     world = load_json(WORLD_CONTRACT)
     identity = world["visualIdentities"][IDENTITY_ID]
@@ -1167,13 +1454,21 @@ def validate_outputs() -> dict:
         raise AssertionError("item 232 introduced runtime scaling")
     for direction in DIRECTIONS:
         record = identity["directionCutouts"][direction]
-        if int(record["generatedSize"][1]) != WORLD_HEIGHT[direction]:
+        if record["generatedSize"] != SOURCE_VARIANT_SIZE[direction]:
             raise AssertionError(
-                f"item 232 {direction} world height is not normalized"
+                f"item 232 source row {direction} size is not normalized"
             )
-        if record["resizeFilter"] != "nearest_baked_source_to_integer_pixels":
+        if record["resizeFilter"] != (
+            "premultiplied_alpha_lanczos_high_res_single_pass"
+        ):
             raise AssertionError(
-                f"item 232 {direction} is not nearest-neighbour baked"
+                f"item 232 {direction} was not baked directly from high-res"
+            )
+        if float(record["horizontalDiameterScale"]) != (
+            HORIZONTAL_DIAMETER_SCALE
+        ):
+            raise AssertionError(
+                f"item 232 {direction} horizontal scale contract changed"
             )
     v2_asset = load_json(HELMET_V2_CONTRACT)["visualAssets"][IDENTITY_ID]
     if v2_asset["source_direction_map"] != FROZEN_V2_SOURCE_DIRECTION_MAP:
@@ -1199,6 +1494,7 @@ def validate_outputs() -> dict:
             raise AssertionError(f"{action_name} v2 action SHA is stale")
     if not WORN_PREVIEW_1X.exists() or not WORN_PREVIEW_8X.exists():
         raise AssertionError("worn eight-direction previews are missing")
+    pixel_parameter_audit = reference_pixel_parameter_audit()
     return {
         "contractId": "equipment.world_helmet.holy_war_232.redesign.v1",
         "itemId": ITEM_ID,
@@ -1221,25 +1517,28 @@ def validate_outputs() -> dict:
         "generatedFurOrNeckPixelsRetained": False,
         "runtimeScale": 1,
         "textureFilter": "nearest",
+        "offlineBakeFilter": "premultiplied_alpha_lanczos",
+        "sourceBakePolicy": "approved_high_res_single_pass",
+        "horizontalDiameterScale": HORIZONTAL_DIAMETER_SCALE,
         "worldSizingAudit": {
-            "previousOverallBboxRange": {
-                "width": [24, 32],
-                "height": [35, 36],
-            },
-            "previousHornExcludedBodyWidthRange": [23, 30],
-            "acceptedReferenceOverallRange": {
-                "item218": {"width": [13, 16], "height": [22, 23]},
-                "item228": {"width": [10, 13], "height": [16, 20]},
-            },
-            "acceptedReferenceHornExcludedBodyWidthRange": [9, 17],
+            "bakePolicy": "approved_high_res_single_pass",
+            "approvedSourceSize": [1536, 1024],
+            "approvedSourceSha256": APPROVED_SHA256,
+            "offlineDownsampleFilter": "premultiplied_alpha_lanczos",
+            "horizontalDiameterScale": HORIZONTAL_DIAMETER_SCALE,
+            "heightsUnchanged": True,
             "playerHairHeadWidthMedian": 9,
-            "selectedScaleRatio": WORLD_SCALE_RATIO,
             "worldDirectionHeights": WORLD_HEIGHT,
+            "sourceRowDirectionHeights": SOURCE_VARIANT_HEIGHT,
+            "sourceRowDirectionSizes": SOURCE_VARIANT_SIZE,
             "paperDollCanvasSize": list(PAPER_CANVAS_SIZE),
             "paperDollContentSize": paper_content_size,
-            "paperDollContentEnvelope": list(PAPER_CONTENT_ENVELOPE),
-            "sizingBasis": "helmet_body_excluding_two_horns",
+            "paperDollContentHeight": PAPER_CONTENT_HEIGHT,
+            "sizingBasis": (
+                "helmet_body_diameter; decorative horns may exceed body core"
+            ),
         },
+        "acceptedHelmetPixelParameterAudit": pixel_parameter_audit,
         "preview": resource_path(PREVIEW),
         "paperInventoryGroundPreview": resource_path(PRESENTATION_PREVIEW),
         "wornIdle8Direction1xPreview": resource_path(WORN_PREVIEW_1X),
@@ -1254,6 +1553,8 @@ def validate_outputs() -> dict:
 def build() -> dict:
     non_target_semantic_before = semantic_non_target_snapshot()
     non_target_files_before = non_target_file_hashes()
+    generated_helmet_v2_before = file_tree_hashes(GENERATED_HELMET_V2_ROOT)
+    helmet_v2_overrides_before = file_sha256(HELMET_V2_OVERRIDES)
     frozen_v2_before = holy_war_v2_frozen_snapshot()
     opaque_no_face, wearable, variants = build_processed_sources()
     update_recipe()
@@ -1278,6 +1579,16 @@ def build() -> dict:
     build_worn_previews()
     if semantic_non_target_snapshot() != non_target_semantic_before:
         raise AssertionError("single-target build changed non-232 contract data")
+    generated_helmet_v2_after = file_tree_hashes(GENERATED_HELMET_V2_ROOT)
+    if generated_helmet_v2_after != generated_helmet_v2_before:
+        raise AssertionError(
+            "single-target build changed assets/generated/helmet_v2"
+        )
+    helmet_v2_overrides_after = file_sha256(HELMET_V2_OVERRIDES)
+    if helmet_v2_overrides_after != helmet_v2_overrides_before:
+        raise AssertionError(
+            "single-target build changed helmet calibration overrides"
+        )
     non_target_files_after = non_target_file_hashes()
     if non_target_files_after != non_target_files_before:
         changed = sorted(
@@ -1296,6 +1607,13 @@ def build() -> dict:
     report["frozenNon232FileCount"] = len(non_target_files_before)
     report["frozenNon232FilesUnchanged"] = True
     report["non232ContractDataUnchanged"] = True
+    report["generatedHelmetV2FrozenFileCount"] = len(
+        generated_helmet_v2_before
+    )
+    report["generatedHelmetV2FilesUnchanged"] = True
+    report["helmetV2OverridesSha256Before"] = helmet_v2_overrides_before
+    report["helmetV2OverridesSha256After"] = helmet_v2_overrides_after
+    report["helmetV2OverridesUnchanged"] = True
     report["singleTargetBuild"] = {
         "acceptedIdentity": IDENTITY_ID,
         "acceptedItemId": ITEM_ID,

@@ -56,14 +56,15 @@ EXPECTED_APPROVED_SHA = (
 DIRECTIONS = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
 WORLD_HEIGHT = {
     "N": 23,
-    "NE": 23,
-    "E": 22,
-    "SE": 23,
+    "NE": 21,
+    "E": 20,
+    "SE": 22,
     "S": 23,
-    "SW": 23,
+    "SW": 22,
     "W": 22,
     "NW": 23,
 }
+HORIZONTAL_DIAMETER_SCALE = 0.8
 FROZEN_SOURCE_MAP = {
     "N": 0,
     "NE": 7,
@@ -73,6 +74,31 @@ FROZEN_SOURCE_MAP = {
     "SW": 5,
     "W": 2,
     "NW": 1,
+}
+SOURCE_VARIANT_HEIGHT = {
+    DIRECTIONS[source_row]: WORLD_HEIGHT[target_direction]
+    for target_direction, source_row in FROZEN_SOURCE_MAP.items()
+}
+PREVIOUS_TARGET_BBOX_SIZE = {
+    "N": [21, 23],
+    "NE": [16, 21],
+    "E": [15, 20],
+    "SE": [17, 22],
+    "S": [19, 23],
+    "SW": [16, 22],
+    "W": [15, 22],
+    "NW": [17, 23],
+}
+EXPECTED_TARGET_BBOX_SIZE = {
+    direction: [
+        round(PREVIOUS_TARGET_BBOX_SIZE[direction][0] * 0.8),
+        PREVIOUS_TARGET_BBOX_SIZE[direction][1],
+    ]
+    for direction in DIRECTIONS
+}
+SOURCE_VARIANT_SIZE = {
+    DIRECTIONS[source_row]: EXPECTED_TARGET_BBOX_SIZE[target_direction]
+    for target_direction, source_row in FROZEN_SOURCE_MAP.items()
 }
 
 
@@ -125,12 +151,19 @@ def main() -> None:
         identity["directionCutouts"][direction]["runtimeScale"] == 1
         for direction in DIRECTIONS
     )
-    assert identity["worldScaleRatio"] == 0.64
+    assert identity["sourceBakePolicy"] == "approved_high_res_single_pass"
+    assert identity["horizontalDiameterScale"] == HORIZONTAL_DIAMETER_SCALE
+    assert identity["offlineDownsampleFilter"] == "premultiplied_alpha_lanczos"
     assert identity["worldDirectionHeights"] == WORLD_HEIGHT
+    assert identity["sourceRowDirectionHeights"] == SOURCE_VARIANT_HEIGHT
+    assert identity["sourceRowDirectionSizes"] == SOURCE_VARIANT_SIZE
     for direction in DIRECTIONS:
         cutout = identity["directionCutouts"][direction]
-        assert cutout["generatedSize"][1] == WORLD_HEIGHT[direction]
-        assert cutout["resizeFilter"] == "nearest_baked_source_to_integer_pixels"
+        assert cutout["generatedSize"] == SOURCE_VARIANT_SIZE[direction]
+        assert cutout["resizeFilter"] == (
+            "premultiplied_alpha_lanczos_high_res_single_pass"
+        )
+        assert cutout["horizontalDiameterScale"] == HORIZONTAL_DIAMETER_SCALE
 
     erase = Image.open(ERASE).convert("RGBA")
     assert erase.getchannel("A").getbbox() is None
@@ -138,7 +171,8 @@ def main() -> None:
     paper_box = paper.getchannel("A").getbbox()
     assert paper.size == (32, 41)
     assert paper_box is not None
-    assert (paper_box[2] - paper_box[0], paper_box[3] - paper_box[1]) == (24, 29)
+    assert paper_box[3] - paper_box[1] == 29
+    assert paper_box[2] - paper_box[0] <= 20
     inventory = Image.open(INVENTORY).convert("RGBA")
     ground = Image.open(GROUND).convert("RGBA")
     assert paper.getpixel((16, 28))[3] == 255
@@ -163,9 +197,42 @@ def main() -> None:
     assert report["groundFaceWindowOpaque"] is True
     assert report["frozenNon232FilesUnchanged"] is True
     assert report["non232ContractDataUnchanged"] is True
-    assert report["worldSizingAudit"]["selectedScaleRatio"] == 0.64
+    assert report["generatedHelmetV2FilesUnchanged"] is True
+    assert report["helmetV2OverridesUnchanged"] is True
+    assert report["sourceBakePolicy"] == "approved_high_res_single_pass"
+    assert report["horizontalDiameterScale"] == HORIZONTAL_DIAMETER_SCALE
+    assert report["worldSizingAudit"]["bakePolicy"] == (
+        "approved_high_res_single_pass"
+    )
+    assert report["worldSizingAudit"]["horizontalDiameterScale"] == (
+        HORIZONTAL_DIAMETER_SCALE
+    )
+    assert report["worldSizingAudit"]["heightsUnchanged"] is True
     assert report["worldSizingAudit"]["worldDirectionHeights"] == WORLD_HEIGHT
-    assert report["worldSizingAudit"]["paperDollContentSize"] == [24, 29]
+    assert report["worldSizingAudit"]["paperDollContentSize"][1] == 29
+    assert report["worldSizingAudit"]["paperDollContentSize"][0] <= 20
+    audit = report["acceptedHelmetPixelParameterAudit"]
+    assert audit["referenceItemIds"] == [146, 147, 149, 151]
+    assert audit["hornedReferenceItemId"] == 150
+    assert set(audit["items"]) == {"146", "147", "149", "150", "151", "232"}
+    assert audit["targetBodyCoreWidthRange"][1] <= (
+        audit["acceptedBodyCoreWidthRange"][1]
+        + audit["armoredShellDecorationAllowancePx"]
+    )
+    for record in audit["items"]["232"]["directionMetrics"].values():
+        assert record["transparentRgbLeakPixels"] == 0
+        assert record["totalBboxSize"][1] > 0
+        assert record["bodyCoreWidth"] > 0
+    for direction, record in audit["targetSemanticOldToNewBbox"].items():
+        assert record["previousTargetSemanticBboxSize"] == (
+            PREVIOUS_TARGET_BBOX_SIZE[direction]
+        )
+        assert record["actualTargetSemanticBboxSize"][1] == WORLD_HEIGHT[direction]
+        assert record["actualTargetSemanticBboxSize"] == (
+            EXPECTED_TARGET_BBOX_SIZE[direction]
+        )
+        assert abs(record["actualWidthRatio"] - 0.8) <= 0.08
+        assert record["sourceRow"] == FROZEN_SOURCE_MAP[direction]
     assert WORN_PREVIEW_1X.exists()
     assert WORN_PREVIEW_8X.exists()
     assert all(
@@ -190,6 +257,7 @@ def main() -> None:
     print(
         "EQUIPMENT_HOLY_WAR_HELMET_232_TEST_PASS "
         "source_sha=true directions=8 no_cutout=true "
+        "high_res_single_pass=true horizontal_diameter=0.8 "
         "paper_inventory_ground_opaque=true non232_guard=true"
     )
 
