@@ -158,6 +158,23 @@ def main() -> None:
         "filter": "nearest",
         "pivotPolicy": "direction_frame_head_pivot_preserved",
     }
+    skeleton_body_policy = recipe_identities["skeleton"][
+        "bodyDrivenSizing"
+    ]
+    assert recipe_identities["skeleton"]["despillGreenCutouts"] is True
+    assert skeleton_body_policy == {
+        "method": "central_column_density",
+        "columnDensityThresholdPercent": 30,
+        "maximumColumnGapPercent": 4,
+        "horizontalPaddingPercent": 2.5,
+        "minimumBodyWidthFraction": 0.35,
+        "maximumBodyWidthFraction": 0.65,
+        "scaleBasis": "main_helmet_body_only",
+        "excludedAccessory": "two_long_lateral_horns",
+        "preserveAccessoryToBodyRatio": True,
+        "fullBoundsMayExceedClientEnvelope": True,
+        "filter": "lanczos_downsample_then_nearest_runtime",
+    }
     for identity_id in (
         "prayer",
         "memory",
@@ -521,6 +538,42 @@ def main() -> None:
         assert record["preparedPixelPolicy"].endswith(
             "_angle_aware_diameter_projection"
         )
+    skeleton_cutouts = identities["skeleton"]["directionCutouts"]
+    for direction in DIRECTIONS:
+        record = skeleton_cutouts[direction]
+        sizing = record["bodyDrivenSizing"]
+        assert sizing["enabled"] is True
+        assert sizing["clientEnvelopeAppliedTo"] == (
+            "main_helmet_body_only"
+        )
+        assert sizing["excludedAccessory"] == (
+            "two_long_lateral_horns"
+        )
+        assert sizing["hornsExcludedFromScaleCalculation"] is True
+        assert sizing["fullBoundsMayExceedClientEnvelope"] is True
+        assert sizing["generatedBodySize"][0] <= (
+            record["calibrationEnvelope"][0]
+        )
+        assert sizing["generatedBodySize"][1] <= (
+            record["calibrationEnvelope"][1]
+        )
+        assert sizing["fullGeneratedSize"] == record["generatedSize"]
+        assert record["preparedPixelPolicy"] == (
+            "concept_body_driven_resize_horns_excluded_v1"
+            "_source_green_despill"
+        )
+    assert all(
+        skeleton_cutouts[direction]["generatedSize"][0]
+        > skeleton_cutouts[direction]["bodyDrivenSizing"][
+            "generatedBodySize"
+        ][0]
+        for direction in DIRECTIONS
+    )
+    assert any(
+        skeleton_cutouts[direction]["generatedSize"][0]
+        > skeleton_cutouts[direction]["calibrationEnvelope"][0]
+        for direction in DIRECTIONS
+    )
     black_actions = identities["black_iron"]["actions"]
     assert black_actions["cast"]["atlasRgbaSha256"] != (
         black_actions["idle"]["atlasRgbaSha256"]

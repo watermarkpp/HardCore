@@ -363,10 +363,13 @@ def concept_cutouts(recipe: dict) -> dict[str, Image.Image]:
     tolerance = int(recipe.get("matteTolerance", 12))
     by_direction: dict[str, Image.Image] = {}
     for source_slot, direction in enumerate(slot_order):
-        by_direction[direction] = remove_matte(
+        cutout = remove_matte(
             source_slot_crop(concept, grid, source_slot),
             tolerance,
         )
+        if bool(recipe.get("despillGreenCutouts", False)):
+            cutout = despill_green_matte(cutout)
+        by_direction[direction] = cutout
     signatures = {rgba_sha256(by_direction[value]) for value in DIRECTIONS}
     if len(signatures) < 6:
         raise AssertionError(
@@ -439,11 +442,11 @@ def build_direction_acceptance_sheet(
     }
 
 
-def fit_to_client_envelope(
+def fit_to_client_envelope_with_scale(
     cutout: Image.Image,
     maximum_size: list[int],
     target_opaque_pixels: float,
-) -> Image.Image:
+) -> tuple[Image.Image, float]:
     maximum_width, maximum_height = map(int, maximum_size)
     maximum_scale = min(
         maximum_width / cutout.width,
@@ -452,7 +455,7 @@ def fit_to_client_envelope(
     if maximum_scale <= 0.0:
         raise ValueError("invalid client helmet envelope")
     target_mass = target_opaque_pixels * VISUAL_MASS_TARGET_MULTIPLIER
-    candidates: dict[tuple[int, int], Image.Image] = {}
+    candidates: dict[tuple[int, int], tuple[Image.Image, float]] = {}
     for step in range(1, 501):
         scale = maximum_scale * step / 500.0
         size = (
@@ -460,17 +463,20 @@ def fit_to_client_envelope(
             max(1, round(cutout.height * scale)),
         )
         if size not in candidates:
-            candidates[size] = cutout.resize(size, Image.Resampling.LANCZOS)
-    result = min(
+            candidates[size] = (
+                cutout.resize(size, Image.Resampling.LANCZOS),
+                scale,
+            )
+    result, selected_scale = min(
         candidates.values(),
-        key=lambda image: (
+        key=lambda candidate: (
             abs(
                 math.log(
-                    max(effective_opaque_pixels(image), 0.001)
+                    max(effective_opaque_pixels(candidate[0]), 0.001)
                     / target_mass
                 )
             ),
-            -effective_opaque_pixels(image),
+            -effective_opaque_pixels(candidate[0]),
         ),
     )
     if result.width > maximum_width or result.height > maximum_height:
@@ -482,7 +488,162 @@ def fit_to_client_envelope(
             red, green, blue, opacity = result_pixels[x, y]
             if opacity <= 7:
                 result_pixels[x, y] = (0, 0, 0, 0)
+    return result, selected_scale
+
+
+def fit_to_client_envelope(
+    cutout: Image.Image,
+    maximum_size: list[int],
+    target_opaque_pixels: float,
+) -> Image.Image:
+    result, _selected_scale = fit_to_client_envelope_with_scale(
+        cutout,
+        maximum_size,
+        target_opaque_pixels,
+    )
     return result
+
+
+def helmet_body_box(
+    cutout: Image.Image,
+    policy: dict,
+) -> tuple[int, int, int, int]:
+    """Find the dense main helmet body while excluding long lateral horns."""
+    if str(policy.get("method", "")) != "central_column_density":
+        raise ValueError(
+            "bodyDrivenSizing.method must be central_column_density"
+        )
+    threshold_percent = float(policy["columnDensityThresholdPercent"])
+    maximum_gap_percent = float(policy["maximumColumnGapPercent"])
+    padding_percent = float(policy["horizontalPaddingPercent"])
+    if not (5.0 <= threshold_percent <= 90.0):
+        raise ValueError(
+            "columnDensityThresholdPercent must be between 5 and 90"
+        )
+    if not (0.0 <= maximum_gap_percent <= 25.0):
+        raise ValueError(
+            "maximumColumnGapPercent must be between 0 and 25"
+        )
+    if not (0.0 <= padding_percent <= 20.0):
+        raise ValueError(
+            "horizontalPaddingPercent must be between 0 and 20"
+        )
+
+    alpha = cutout.getchannel("A")
+    column_mass = [
+        sum(alpha.getpixel((x, y)) for y in range(cutout.height)) / 255.0
+        for x in range(cutout.width)
+    ]
+    peak_mass = max(column_mass, default=0.0)
+    if peak_mass <= 0.0:
+        raise ValueError("cannot measure the body of an empty helmet")
+    peak_x = max(range(cutout.width), key=column_mass.__getitem__)
+    threshold = peak_mass * threshold_percent / 100.0
+    active_columns = [
+        x for x, mass in enumerate(column_mass) if mass >= threshold
+    ]
+    if not active_columns:
+        raise ValueError("helmet body density threshold removed every column")
+
+    maximum_gap = max(
+        1,
+        round(cutout.width * maximum_gap_percent / 100.0),
+    )
+    groups: list[tuple[int, int]] = []
+    start = active_columns[0]
+    previous = start
+    for x in active_columns[1:]:
+        if x - previous > maximum_gap:
+            groups.append((start, previous))
+            start = x
+        previous = x
+    groups.append((start, previous))
+    body_group = next(
+        (
+            group
+            for group in groups
+            if group[0] <= peak_x <= group[1]
+        ),
+        max(groups, key=lambda group: group[1] - group[0]),
+    )
+    padding = max(1, round(cutout.width * padding_percent / 100.0))
+    left = max(0, body_group[0] - padding)
+    right = min(cutout.width, body_group[1] + 1 + padding)
+    body_alpha_box = alpha.crop((left, 0, right, cutout.height)).getbbox()
+    if body_alpha_box is None:
+        raise ValueError("helmet body box is empty")
+    box = (
+        left,
+        int(body_alpha_box[1]),
+        right,
+        int(body_alpha_box[3]),
+    )
+    width_fraction = (box[2] - box[0]) / cutout.width
+    minimum_fraction = float(policy["minimumBodyWidthFraction"])
+    maximum_fraction = float(policy["maximumBodyWidthFraction"])
+    if not minimum_fraction <= width_fraction <= maximum_fraction:
+        raise AssertionError(
+            "helmet body detection did not exclude the lateral horns: "
+            f"{width_fraction:.4f} not in "
+            f"[{minimum_fraction:.4f}, {maximum_fraction:.4f}]"
+        )
+    return box
+
+
+def fit_body_to_client_envelope(
+    cutout: Image.Image,
+    maximum_size: list[int],
+    target_opaque_pixels: float,
+    policy: dict,
+) -> tuple[Image.Image, dict]:
+    """Scale the complete helmet from its horn-free main body measurement."""
+    body_box = helmet_body_box(cutout, policy)
+    body_reference = cutout.crop(body_box)
+    generated_body, selected_scale = fit_to_client_envelope_with_scale(
+        body_reference,
+        maximum_size,
+        target_opaque_pixels,
+    )
+    full_size = (
+        max(1, round(cutout.width * selected_scale)),
+        max(1, round(cutout.height * selected_scale)),
+    )
+    result = cutout.resize(full_size, Image.Resampling.LANCZOS)
+    result = result.copy()
+    pixels = result.load()
+    for y in range(result.height):
+        for x in range(result.width):
+            red, green, blue, opacity = pixels[x, y]
+            if opacity <= 7:
+                pixels[x, y] = (0, 0, 0, 0)
+    return result, {
+        "enabled": True,
+        "method": "central_column_density",
+        "clientEnvelopeAppliedTo": "main_helmet_body_only",
+        "excludedAccessory": "two_long_lateral_horns",
+        "hornsExcludedFromScaleCalculation": True,
+        "fullBoundsMayExceedClientEnvelope": True,
+        "sourceBodyBox": list(body_box),
+        "sourceBodySize": [
+            body_reference.width,
+            body_reference.height,
+        ],
+        "generatedBodySize": [
+            generated_body.width,
+            generated_body.height,
+        ],
+        "fullGeneratedSize": [result.width, result.height],
+        "selectedScale": round(selected_scale, 8),
+        "columnDensityThresholdPercent": float(
+            policy["columnDensityThresholdPercent"]
+        ),
+        "maximumColumnGapPercent": float(
+            policy["maximumColumnGapPercent"]
+        ),
+        "horizontalPaddingPercent": float(
+            policy["horizontalPaddingPercent"]
+        ),
+    }
 
 
 def project_horizontal_diameter(
@@ -598,6 +759,9 @@ def build_variants(
     diameter_policy = recipe.get("angleAwareHorizontalDiameter", {})
     if diameter_policy and not isinstance(diameter_policy, dict):
         raise ValueError("angleAwareHorizontalDiameter must be an object")
+    body_sizing_policy = recipe.get("bodyDrivenSizing", {})
+    if body_sizing_policy and not isinstance(body_sizing_policy, dict):
+        raise ValueError("bodyDrivenSizing must be an object")
     prepared_source_rows = {
         int(value)
         for value in recipe.get("calibrationPreparedSourceRows", [])
@@ -621,13 +785,28 @@ def build_variants(
             baseline["directionRuntimeOpaquePixels"][direction]
         ) * scale_factor * scale_factor
         cutout = cutouts[direction]
-        variant = fit_to_client_envelope(
-            cutout,
-            maximum_size,
-            target_mass,
-        )
+        body_sizing_record = {}
+        if body_sizing_policy:
+            variant, body_sizing_record = fit_body_to_client_envelope(
+                cutout,
+                maximum_size,
+                target_mass,
+                body_sizing_policy,
+            )
+        else:
+            variant = fit_to_client_envelope(
+                cutout,
+                maximum_size,
+                target_mass,
+            )
         source_slot = canonical_slots[direction_row]
-        prepared_policy = "concept_direct_resize"
+        prepared_policy = (
+            "concept_body_driven_resize_horns_excluded_v1"
+            if body_sizing_policy
+            else "concept_direct_resize"
+        )
+        if bool(recipe.get("despillGreenCutouts", False)):
+            prepared_policy += "_source_green_despill"
         if source_slot in prepared_source_rows:
             variant = despill_green_matte(variant)
             prepared_policy = "concept_direct_resize_green_despill_v1"
@@ -640,7 +819,7 @@ def build_variants(
             )
             prepared_policy += "_angle_aware_diameter_projection"
         variants[direction] = variant
-        records[direction] = {
+        record = {
             "sourceSlot": source_slot,
             "sourceCutoutSize": [cutout.width, cutout.height],
             "sourceCutoutRgbaSha256": rgba_sha256(cutout),
@@ -660,6 +839,9 @@ def build_variants(
             "preparedPixelPolicy": prepared_policy,
             "angleAwareHorizontalDiameter": diameter_record,
         }
+        if body_sizing_record:
+            record["bodyDrivenSizing"] = body_sizing_record
+        records[direction] = record
     return variants, records, acceptance
 
 

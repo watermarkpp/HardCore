@@ -105,10 +105,32 @@
       "concept": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_helmet_8dir.png",
       "sourceGrid": [4, 2],
       "directionClassificationStatus": "accepted_manual_visual_classification",
-      "directionClassificationEvidence": "independent full-resolution review: frontal skull openings at S0, right skull profile at S2, rear seam at S4 and left-front skull at S7",
+      "directionClassificationEvidence": "independent full-resolution review of the regenerated primary-reference reconstruction: complete rear shell at S0, right-rear at S1, right profile at S2, right-front at S3, complete skull face at S4, left-front at S5, left profile at S6 and left-rear at S7",
+      "stateItemEvidence": {
+        "library": "StateItem.wil",
+        "librarySha256": "59FB3D62785B7CA49B63D0EFE6BD084FB08474F509EEC653806F064403922872",
+        "index": 103,
+        "recordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00150_stateitem_00103.png",
+        "recordFileSha256": "50F92B328BA48808D14871B09AE529FD3A162505B8D7E4CFCC5701DAB4991BE6",
+        "usage": "sole design authority for skull mask, bone palette, two exceptionally long lateral horns and main-body proportions"
+      },
       "sourceSlotDirectionOrder": ["N", "NE", "E", "SE", "S", "SW", "W", "NW"],
       "canonicalRowSourceSlots": [0, 1, 2, 3, 4, 5, 6, 7],
       "outputPrefix": "res://assets/art/items/client/world_wear/helmet/male/skeleton_helmet",
+      "bodyDrivenSizing": {
+        "method": "central_column_density",
+        "columnDensityThresholdPercent": 30,
+        "maximumColumnGapPercent": 4,
+        "horizontalPaddingPercent": 2.5,
+        "minimumBodyWidthFraction": 0.35,
+        "maximumBodyWidthFraction": 0.65,
+        "scaleBasis": "main_helmet_body_only",
+        "excludedAccessory": "two_long_lateral_horns",
+        "preserveAccessoryToBodyRatio": true,
+        "fullBoundsMayExceedClientEnvelope": true,
+        "filter": "lanczos_downsample_then_nearest_runtime"
+      },
+      "despillGreenCutouts": true,
       "matteTolerance": 14
     },
     {
