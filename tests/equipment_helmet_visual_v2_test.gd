@@ -153,10 +153,15 @@ func _run() -> void:
 		)
 		var source_image := (load(source_path) as Texture2D).get_image()
 		for direction_index: int in 8:
-			var expected_row: int = int(EXPECTED_BLACK_ROWS[direction_index])
+			var saved_direction := HelmetVisualV2.saved_direction_override(
+				151, direction_index
+			)
+			var expected_row: int = int(saved_direction.get(
+				"source_row", EXPECTED_BLACK_ROWS[direction_index]
+			))
 			assert(
 				HelmetVisualV2.source_direction_row(151, direction_index)
-				== expected_row
+					== expected_row
 			)
 			assert(str(
 				HelmetVisualV2.direction_record(151, direction_index).get(
