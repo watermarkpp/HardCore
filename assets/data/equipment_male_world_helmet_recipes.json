@@ -213,6 +213,17 @@
       "directionClassificationEvidence": "independent full-resolution review of face opening, red-gem side projection, rear scale shell and mirrored left/right rim",
       "sourceSlotDirectionOrder": ["N", "NW", "W", "E", "S", "SW", "SE", "NE"],
       "canonicalRowSourceSlots": [0, 7, 3, 6, 4, 5, 2, 1],
+      "calibrationSourceDirectionMap": {
+        "N": 0,
+        "NE": 6,
+        "E": 3,
+        "SE": 7,
+        "S": 4,
+        "SW": 5,
+        "W": 1,
+        "NW": 2
+      },
+      "calibrationDirectionEvidence": "user-confirmed item 224 correction: source row 2 is NW rather than W and source row 6 is NE rather than SE; paired rows 1 and 7 are W and SE so all eight calibration rows remain unique",
       "outputPrefix": "res://assets/art/items/client/world_wear/helmet/male/prayer_helmet",
       "matteTolerance": 14
     },

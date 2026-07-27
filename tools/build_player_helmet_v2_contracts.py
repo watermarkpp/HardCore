@@ -19,6 +19,7 @@ ACTIONS = {
 }
 HELMET_ACTIONS = ACTIONS
 SOURCE_MANIFEST = DATA / "equipment_male_world_helmet.json"
+SOURCE_RECIPES = DATA / "equipment_male_world_helmet_recipes.json"
 OVERRIDE_NAME = "equipment_helmet_visual_v2_overrides.json"
 
 
@@ -232,6 +233,11 @@ def direction_record(
 
 def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
     manifest = read_json(SOURCE_MANIFEST)
+    recipes = read_json(SOURCE_RECIPES)
+    recipes_by_identity = {
+        str(recipe["identityId"]): recipe
+        for recipe in recipes["identities"]
+    }
     elf_paths = {
         action: f"res://assets/art/items/client/world_wear/helmet/male/elf_helmet_{action}.png"
         for action in HELMET_ACTIONS
@@ -340,10 +346,22 @@ def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
         }
         source_order = identity["sourceSlotDirectionOrder"]
         assert sorted(source_order) == sorted(DIRECTIONS)
-        source_map = {
-            direction: source_order.index(direction)
-            for direction in DIRECTIONS
-        }
+        recipe = recipes_by_identity[identity_id]
+        explicit_source_map = recipe.get(
+            "calibrationSourceDirectionMap", {}
+        )
+        if explicit_source_map:
+            assert set(explicit_source_map) == set(DIRECTIONS)
+            source_map = {
+                direction: int(explicit_source_map[direction])
+                for direction in DIRECTIONS
+            }
+            assert sorted(source_map.values()) == list(range(8))
+        else:
+            source_map = {
+                direction: source_order.index(direction)
+                for direction in DIRECTIONS
+            }
         identity_frame_map = identity_frames(manifest, identity_id)
         directions: dict[str, dict] = {}
         for direction in DIRECTIONS:
@@ -371,7 +389,11 @@ def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
             "sourceSlotSemantics": (
                 "unknown_user_assigned"
                 if identity_id == "black_iron"
-                else "formal_manifest_direction_order"
+                else (
+                    "explicit_user_confirmed_calibration_direction_map"
+                    if explicit_source_map
+                    else "formal_manifest_direction_order"
+                )
             ),
             "sourceSlots": {f"slot_{row}": row for row in range(8)},
             "source": {
@@ -393,6 +415,13 @@ def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
             },
             "directions": directions,
         }
+        if explicit_source_map:
+            asset["source"].update({
+                "calibrationSourceDirectionMap": source_map,
+                "calibrationDirectionEvidence": str(
+                    recipe.get("calibrationDirectionEvidence", "")
+                ),
+            })
         if identity_id == "bronze_magic":
             asset["source"].update({
                 "calibrationSourceSheet": identity["calibrationSourceSheet"],
