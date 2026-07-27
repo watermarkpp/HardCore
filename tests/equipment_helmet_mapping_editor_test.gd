@@ -64,6 +64,8 @@ func _run() -> void:
 	assert("Godot_v4.7-stable_win64.exe" in launcher_text)
 	assert("--headless" not in launcher_text)
 	assert("--helmet-calibration-interactive" in launcher_text)
+	assert("--helmet-calibration-target=" in launcher_text)
+	assert("helmet_calibration_active_target.json" in launcher_text)
 	assert(".godot\\helmet_calibration_appdata" in launcher_text)
 	assert("Join-Path $OutputDirectory 'helmet_calibration_interactive.log'" in launcher_text)
 	assert("--log-file" in launcher_text)

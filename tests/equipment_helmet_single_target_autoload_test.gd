@@ -1,0 +1,132 @@
+extends Node
+
+const HelmetVisualV2 := preload("res://scripts/helmet_visual_v2.gd")
+const EDITOR_SCENE := preload("res://tools/helmet_calibration_tool.tscn")
+const FORMAL_OVERRIDE := (
+	"res://assets/data/equipment_helmet_visual_v2_overrides.json"
+)
+const ACTIVE_TARGET := (
+	"res://assets/data/helmet_calibration_active_target.json"
+)
+const TEST_ROOT := "res://outputs/test_helmet_single_target_autoload"
+const TEST_SOURCE := TEST_ROOT + "/source.png"
+const TEST_TARGET := TEST_ROOT + "/target.json"
+
+
+func _ready() -> void:
+	_run.call_deferred()
+
+
+func _run() -> void:
+	var override_before := FileAccess.get_file_as_string(FORMAL_OVERRIDE)
+	var target: Dictionary = JSON.parse_string(
+		FileAccess.get_file_as_string(ACTIVE_TARGET)
+	)
+	assert(int(target.get("itemId", -1)) == 151)
+	assert(str(target.get("loadPolicy", "")) == (
+		"single_target_direct_png_hash_validated"
+	))
+	var source_path := str(target.get("sourceSheet", ""))
+	var expected_sha := str(target.get("sourceSheetSha256", "")).to_lower()
+	assert(FileAccess.file_exists(source_path))
+	assert(FileAccess.get_sha256(source_path).to_lower() == expected_sha)
+
+	DirAccess.make_dir_recursive_absolute(
+		ProjectSettings.globalize_path(TEST_ROOT)
+	)
+	assert(DirAccess.copy_absolute(
+		ProjectSettings.globalize_path(source_path),
+		ProjectSettings.globalize_path(TEST_SOURCE)
+	) == OK)
+	target["sourceSheet"] = TEST_SOURCE
+	target["sourceSheetSha256"] = FileAccess.get_sha256(TEST_SOURCE).to_lower()
+	_write_json(TEST_TARGET, target)
+
+	var editor: Node = EDITOR_SCENE.instantiate()
+	editor.auto_run = false
+	assert(editor._load_active_target_manifest(TEST_TARGET))
+	add_child(editor)
+	var item_control := editor.get_node(
+		"CalibrationUI/Panel/VBox/Inputs/Item"
+	) as OptionButton
+	assert(item_control.item_count == 1)
+	assert(int(item_control.get_item_id(0)) == 151)
+	assert(item_control.disabled)
+	assert(await editor.initialize_editor_runtime(false))
+	assert(editor.active_target_item_id() == 151)
+	assert(
+		editor.active_target_source_sheet_sha256()
+		== FileAccess.get_sha256(TEST_SOURCE).to_lower()
+	)
+
+	for source_row: int in 8:
+		var source_cell: Image = editor._authored_source_cutout(source_row)
+		assert(not source_cell.is_empty())
+		assert(source_cell.get_used_rect().has_area())
+	for direction_index: int in 8:
+		editor._configure_runtime("idle", direction_index, 0)
+		var record := HelmetVisualV2.direction_record(151, direction_index)
+		var source_row := int(record.get("source_row", direction_index))
+		var expected: Image = editor.calibration_source_cell(
+			"idle", source_row, 0
+		)
+		var pivot: Vector2i = editor._calibration_pivot_for_source_row(
+			"idle", source_row, 0
+		)
+		expected = editor.scale_cell_around_pivot(
+			expected,
+			pivot,
+			HelmetVisualV2.uniform_scale_percent(151)
+		)
+		var actual: Image = editor._runtime_layer_cell(
+			"ClientHelmetLayer", "idle", direction_index, 0
+		)
+		assert(actual.get_data() == expected.get_data())
+
+	var source_before: Image = editor._authored_source_cutout(0)
+	var changed_sheet := Image.load_from_file(
+		ProjectSettings.globalize_path(TEST_SOURCE)
+	)
+	assert(not changed_sheet.is_empty())
+	var changed_pixel := _first_opaque_pixel(changed_sheet)
+	assert(changed_pixel.x >= 0)
+	var changed_color := changed_sheet.get_pixelv(changed_pixel)
+	changed_color.r = 1.0 - changed_color.r
+	changed_sheet.set_pixelv(changed_pixel, changed_color)
+	assert(changed_sheet.save_png(
+		ProjectSettings.globalize_path(TEST_SOURCE)
+	) == OK)
+	target["sourceSheetSha256"] = FileAccess.get_sha256(TEST_SOURCE).to_lower()
+	_write_json(TEST_TARGET, target)
+	editor.reload_formal_data()
+	assert(
+		editor.active_target_source_sheet_sha256()
+		== FileAccess.get_sha256(TEST_SOURCE).to_lower()
+	)
+	var source_after: Image = editor._authored_source_cutout(0)
+	assert(source_after.get_data() != source_before.get_data())
+
+	assert(FileAccess.get_file_as_string(FORMAL_OVERRIDE) == override_before)
+	editor.dispose_runtime_for_test()
+	editor.queue_free()
+	print(
+		"EQUIPMENT_HELMET_SINGLE_TARGET_AUTOLOAD_TEST_PASS "
+		+ "item=151 item_menu_count=1 direct_png=true cache_refresh=true "
+		+ "protected_overrides_unchanged=true"
+	)
+	get_tree().quit()
+
+
+func _first_opaque_pixel(image: Image) -> Vector2i:
+	for y: int in image.get_height():
+		for x: int in image.get_width():
+			if image.get_pixel(x, y).a > 0.9:
+				return Vector2i(x, y)
+	return Vector2i(-1, -1)
+
+
+func _write_json(path: String, payload: Dictionary) -> void:
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	assert(file != null)
+	file.store_string(JSON.stringify(payload, "\t") + "\n")
+	file.close()
