@@ -588,10 +588,11 @@
         "itemId": 232,
         "itemName": "圣战头盔",
         "slot": "头盔",
-        "source": "StateItem.wil",
+        "source": "user_approved_project_redesign",
         "sourceIndex": 104,
-        "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00232_stateitem_00104.png",
-        "sourceRecordRgbaSha256": "bd7018e36ff800f5d7ec745ec87fcb34b35dc86905371740af24de0b41c4f144",
+        "sourceRecordPath": "res://assets/art/items/client/world_wear/helmet/male/source/holy_war_helmet_approved_20260727.png",
+        "sourceRecordRgbaSha256": "93307c79e0d5d697d269eec3ba2c318385be96130026e1dbe1b67779437b583b",
+        "sourceDirection": "S",
         "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00232_head.png",
         "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00232_erase_mask.png",
         "drawOffset": [
@@ -602,32 +603,23 @@
           32,
           41
         ],
-        "rgbaSha256": "251799276a9390301b2fe1883551c6844e27d64cc33e9939a147b3b52b2c9b48",
-        "eraseMaskRgbaSha256": "9033002fb86cd4227b8848ade93df2a2ad0b3ee4c7132fdb59c98a90f6a433da",
+        "rgbaSha256": "c92e737bdac899435fefa2bff87b8f28a5b7c47c1c0daa74f143451b19205802",
+        "eraseMaskRgbaSha256": "106a421892418247d826dec66e54bd03fe38db018682883950ab63486f4bb876",
         "drawOrder": [
           "male_head_anatomy",
           "male_hair",
           "helmet"
         ],
+        "faceWindowPolicy": "none; preserve approved opaque black face mask",
+        "eraseMaskPolicy": "no_cutout_all_transparent",
+        "facePixelsBaked": false,
+        "hairPixelsBaked": false,
         "subjectEvidence": {
-          "method": "primary_exact_palette_connected_difference.v1",
-          "exactCoordinateSeedPixels": 428,
-          "paletteCandidatePixels": 724,
-          "removedBackgroundPixels": 714,
-          "subjectOpaquePixels": 247
+          "method": "approved_source_S_direction_face_aperture_v1",
+          "approvedSourcePath": "res://assets/art/items/client/world_wear/helmet/male/source/holy_war_helmet_approved_20260727.png",
+          "approvedSourceFileSha256": "93307c79e0d5d697d269eec3ba2c318385be96130026e1dbe1b67779437b583b"
         },
         "headOnlyEvidence": {
-          "headBox": [
-            76,
-            40,
-            98,
-            68
-          ],
-          "shoulderStartY": 65,
-          "neckXRange": [
-            80,
-            92
-          ],
           "bottomLeftAlpha": 0,
           "bottomRightAlpha": 0
         }
@@ -1198,10 +1190,11 @@
       "itemId": 232,
       "itemName": "圣战头盔",
       "slot": "头盔",
-      "source": "StateItem.wil",
+      "source": "user_approved_project_redesign",
       "sourceIndex": 104,
-      "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00232_stateitem_00104.png",
-      "sourceRecordRgbaSha256": "bd7018e36ff800f5d7ec745ec87fcb34b35dc86905371740af24de0b41c4f144",
+      "sourceRecordPath": "res://assets/art/items/client/world_wear/helmet/male/source/holy_war_helmet_approved_20260727.png",
+      "sourceRecordRgbaSha256": "93307c79e0d5d697d269eec3ba2c318385be96130026e1dbe1b67779437b583b",
+      "sourceDirection": "S",
       "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00232_head.png",
       "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00232_erase_mask.png",
       "drawOffset": [
@@ -1212,32 +1205,23 @@
         32,
         41
       ],
-      "rgbaSha256": "251799276a9390301b2fe1883551c6844e27d64cc33e9939a147b3b52b2c9b48",
-      "eraseMaskRgbaSha256": "9033002fb86cd4227b8848ade93df2a2ad0b3ee4c7132fdb59c98a90f6a433da",
+      "rgbaSha256": "c92e737bdac899435fefa2bff87b8f28a5b7c47c1c0daa74f143451b19205802",
+      "eraseMaskRgbaSha256": "106a421892418247d826dec66e54bd03fe38db018682883950ab63486f4bb876",
       "drawOrder": [
         "male_head_anatomy",
         "male_hair",
         "helmet"
       ],
+      "faceWindowPolicy": "none; preserve approved opaque black face mask",
+      "eraseMaskPolicy": "no_cutout_all_transparent",
+      "facePixelsBaked": false,
+      "hairPixelsBaked": false,
       "subjectEvidence": {
-        "method": "primary_exact_palette_connected_difference.v1",
-        "exactCoordinateSeedPixels": 428,
-        "paletteCandidatePixels": 724,
-        "removedBackgroundPixels": 714,
-        "subjectOpaquePixels": 247
+        "method": "approved_source_S_direction_face_aperture_v1",
+        "approvedSourcePath": "res://assets/art/items/client/world_wear/helmet/male/source/holy_war_helmet_approved_20260727.png",
+        "approvedSourceFileSha256": "93307c79e0d5d697d269eec3ba2c318385be96130026e1dbe1b67779437b583b"
       },
       "headOnlyEvidence": {
-        "headBox": [
-          76,
-          40,
-          98,
-          68
-        ],
-        "shoulderStartY": 65,
-        "neckXRange": [
-          80,
-          92
-        ],
         "bottomLeftAlpha": 0,
         "bottomRightAlpha": 0
       }
