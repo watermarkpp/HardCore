@@ -1,6 +1,6 @@
 # Codex 精简上下文快照
 
-更新时间：2026-07-27 17:55（Asia/Shanghai）
+更新时间：2026-07-27 18:07（Asia/Shanghai）
 
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。
 准确性规则：本文件不是代码或 Git 状态的替代品；只核实本次任务实际触及的分支、文件、接口和专项测试。
@@ -16,7 +16,7 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `165f3500`（其后的快照提交只改本文档）。
+- 分支/运行时代码基线：`codex/integration` @ `443c08c8`（其后的快照提交只改本文档）。
 - tracked 状态：13 个既有头盔 v2 合同/生成素材修改继续保护；本次法神头盔接入前后 SHA-256 逐项不变。
 - 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
@@ -62,6 +62,7 @@
 
 | 集成提交 | 领域 | 结果 |
 |---|---|---|
+| `443c08c8`（专业提交 `bae1d81`） | equipment/integration | 修正法神头盔 236 尺寸漏检：世界八方向由 `24–29×35–36px` 收敛为 `16–19×22–23px`，与当前圣战头盔使用同一 `0.64` 烘焙比例、nearest 像素缩放及运行时 `1x`；纸娃娃内容限制为 `24×29px`，真实角色八方向合成与 Godot 集成专项 6/6 通过 |
 | `165f3500`（专业提交 `c6ac7b01`） | equipment/integration | 法神头盔 `item_id=236` / `identityId=god_magic` 按圣战头盔同类单目标流程完成八方向、六动作、纸娃娃、背包与地面素材替换；用户原图 SHA-256、全遮脸、方向映射与非 236 零变化守卫通过，Godot 集成专项 5/5 通过 |
 | `0268128`、`bf8bff64`、`d51f4aeb` | UI/integration | 烈火 UI 固定显示“主动充能/充能/未充能·就绪”，只读 canonical charge 快照，彻底移除旧开关文案 |
 | `11b62c06` | skills/integration | stable skill ID 独立冷却；烈火 600ms 身体、800ms 动作锁、8s 冷却与10s充能寿命分离 |
@@ -159,7 +160,7 @@
 - combat resolution：严格物理命中、AntiMagic/AntiPoison 隔离、玩家与怪物默认点数边界、直接法术 AntiMagic→MAC→扣血、tier 物理攻击间隔、GameRoot 稳定技能 ID 和共享运行时转交均通过；最终相关回归 9/9，`SMOKE_TEST_PASS`。
 - blessing/luck：`equipment.blessing_luck.v2`、三结果、5% 负面、幸运 7、诅咒 10、命运之刃 R=0 修正、全部装备 luck/curse、消耗/存档/零耐久、DC/MC/SC 与治愈术专项通过。
 - damage ranges：`legacy_clamp_negative_span`、通用 `roll_primary_stat`、战士公式、攻击时序与法系伤害公式通过；反向区间不会被幸运/诅咒交换端点，恢复正跨度后效果自动恢复。
-- equipment helmets：12 itemId/11 视觉身份、66 物理 atlas、2784 逻辑帧、6 动作×8 方向、透明角、Hair 逐帧锚点/SHA 溯源与 StateItem 世界像素零复用通过；法神头盔 `item_id=236` 使用用户授权原图与单目标构建器完成全遮脸替换，非 236 文件及合同数据零变化；Godot 头盔专项、视觉目录与 smoke 通过。
+- equipment helmets：12 itemId/11 视觉身份、66 物理 atlas、2784 逻辑帧、6 动作×8 方向、透明角、Hair 逐帧锚点/SHA 溯源与 StateItem 世界像素零复用通过；法神头盔 `item_id=236` 使用用户授权原图与单目标构建器完成全遮脸替换，并按默认尺寸硬限制世界像素为最大 `19×23px`、纸娃娃内容为最大 `24×29px`；非 236 文件及合同数据零变化，Godot 头盔专项、视觉目录与真实角色八方向合成通过。
 - physics：玩家 18×9、普通怪物 16×8、Boss 28×14 的真实物理与软件探针通过；战斗/AI 半径未改。
 - occlusion：11 张已发布地图、52 个交叉、4 类装饰物和 3 个比奇回归点通过；碰撞区、脚底深度点、装饰物遮挡基线已分离。
 - maps：比奇真实源 E2E（180 个阻挡格）；11 张地图真实 `CharacterBody2D` 脚点可达可见边缘且外环阻挡。
@@ -178,7 +179,7 @@
 | `HardCore-worktrees/monsters` | `codex/monsters` @ `45781ded` | tracked clean；68 UID | 已集成为 `c88c6277` |
 | `HardCore-worktrees/ui-art` | `codex/ui-art` @ `68c6f6e2` | clean | 烈火 canonical charge UI 已集成为 `d51f4aeb`、`bf8bff64`、`0268128` |
 | `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `be710c6e` | 27 项 tracked 技能视觉在制修改；66 UID 继续保护 | 33技能 runtime 与150条可执行语义合同已集成；当前 fire_wall / summon_skeleton 视觉返修未交付，禁止清理或覆盖 |
-| `HardCore-worktrees/equipment` | `codex/equipment` @ `c6ac7b01` | 4 个既有 monster import 修改及 UID/生成项继续保护 | 法神头盔 236 专业提交已集成为 `165f3500` |
+| `HardCore-worktrees/equipment` | `codex/equipment` @ `bae1d81` | 4 个既有 monster import 修改及 UID/生成项继续保护 | 圣战/法神默认尺寸修正分别已集成为 `ff30c3ed` / `443c08c8` |
 
 ### maps 保护红线
 
