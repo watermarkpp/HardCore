@@ -90,7 +90,10 @@ func _run() -> void:
 		_resource_exists(icons.get("ground", {}), "%s 地面图" % entry.get("itemName", ""))
 		if entry.get("category", "") in VISUAL_CATEGORIES:
 			var paper: Dictionary = entry.get("paperDoll", {})
-			assert(paper.get("status", "") == "exact_client_record", "%s 纸娃娃不得占位" % entry.get("itemName", ""))
+			var expected_paper_status := "user_authorized_redesign" if int(item_id) == 218 else "exact_client_record"
+			assert(paper.get("status", "") == expected_paper_status, "%s 纸娃娃不得占位" % entry.get("itemName", ""))
+			if int(item_id) == 218:
+				assert(paper.get("designIdentity", "") == "mystery_japanese_kabuto_218", "神秘头盔必须使用用户授权的统一重做造型")
 			_resource_exists(paper, "%s 纸娃娃" % entry.get("itemName", ""))
 		else:
 			assert(entry.get("paperDoll", {}).get("status", "") == "slot_icon_only", "附件只能使用经典装备槽图")
