@@ -51,6 +51,16 @@ EXPECTED_APPROVED_SHA = (
     "b676e30dbb335c55df10ac89aac4636f5a7b557cbd978f0edfd8a419c12afa14"
 )
 DIRECTIONS = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+EXPECTED_WORLD_HEIGHTS = {
+    "N": 23,
+    "NE": 23,
+    "E": 22,
+    "SE": 23,
+    "S": 23,
+    "SW": 23,
+    "W": 22,
+    "NW": 23,
+}
 SOURCE_SIZE = (1774, 887)
 SOURCE_X_BOUNDS = [0, 444, 887, 1331, 1774]
 SOURCE_Y_BOUNDS = [0, 444, 887]
@@ -115,12 +125,35 @@ def main() -> None:
         identity["directionCutouts"][direction]["runtimeScale"] == 1
         for direction in DIRECTIONS
     )
+    generated_sizes = {
+        direction: identity["directionCutouts"][direction]["generatedSize"]
+        for direction in DIRECTIONS
+    }
+    assert all(
+        generated_sizes[direction][1] == EXPECTED_WORLD_HEIGHTS[direction]
+        for direction in DIRECTIONS
+    )
+    assert max(size[0] for size in generated_sizes.values()) <= 19
+    assert max(size[1] for size in generated_sizes.values()) <= 23
+    assert all(
+        identity["directionCutouts"][direction]["worldScaleRatio"] == 0.64
+        for direction in DIRECTIONS
+    )
+    assert all(
+        identity["directionCutouts"][direction]["resizeFilter"]
+        == "nearest_baked_source_to_integer_pixels"
+        for direction in DIRECTIONS
+    )
 
     erase = Image.open(ERASE).convert("RGBA")
     assert erase.getchannel("A").getbbox() is not None
     assert erase.getpixel((0, 0))[3] == 0
     assert erase.getpixel((erase.width - 1, erase.height - 1))[3] == 0
     paper = Image.open(HEAD).convert("RGBA")
+    paper_bounds = paper.getchannel("A").getbbox()
+    assert paper_bounds is not None
+    assert paper_bounds[2] - paper_bounds[0] <= 24
+    assert paper_bounds[3] - paper_bounds[1] <= 29
     inventory = Image.open(INVENTORY).convert("RGBA")
     ground = Image.open(GROUND).convert("RGBA")
     assert paper.getpixel((16, 28))[3] == 255
@@ -135,6 +168,10 @@ def main() -> None:
     assert report["paperDollEraseMaskHasTransparentAndOpaquePixels"] is True
     assert report["inventoryFaceWindowOpaque"] is True
     assert report["groundFaceWindowOpaque"] is True
+    assert report["worldScaleRatio"] == 0.64
+    assert report["worldMaximumSize"][0] <= 19
+    assert report["worldMaximumSize"][1] <= 23
+    assert report["paperDollContentEnvelope"] == [24, 29]
     assert report["frozenNon236FilesUnchanged"] is True
     assert report["non236ContractDataUnchanged"] is True
     assert all(
@@ -155,7 +192,8 @@ def main() -> None:
     print(
         "EQUIPMENT_GOD_MAGIC_HELMET_236_TEST_PASS "
         "source_sha=true directions=8 no_cutout=true "
-        "paper_inventory_ground_opaque=true non236_guard=true"
+        "default_world_size=true paper_inventory_ground_opaque=true "
+        "non236_guard=true"
     )
 
 

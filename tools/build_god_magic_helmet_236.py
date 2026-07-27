@@ -117,19 +117,24 @@ FOOT_ANCHOR = (64, 80)
 # the player's original face without deleting the decorative cage/trim.
 FACE_WINDOWS: dict[str, list[list[list[int]]]] = {}
 
-# The whole horned silhouette is baked at integer pixel sizes.  Height stays
-# consistent across the eight views; the frontal/rear widths remain governed
-# by the approved artwork rather than runtime scaling.
+# Match the accepted default helmet envelope used by the corrected Holy War
+# helmet.  The previous 35-36px bake was about 1.56x the default world size.
+# Bake the approved design at 0.64x with integer pixels; runtime scale stays 1.
 WORLD_HEIGHT = {
-    "N": 36,
-    "NE": 36,
-    "E": 35,
-    "SE": 36,
-    "S": 36,
-    "SW": 36,
-    "W": 35,
-    "NW": 36,
+    "N": 23,
+    "NE": 23,
+    "E": 22,
+    "SE": 23,
+    "S": 23,
+    "SW": 23,
+    "W": 22,
+    "NW": 23,
 }
+WORLD_SCALE_RATIO = 0.64
+PAPER_CANVAS_SIZE = (32, 41)
+PAPER_CONTENT_ENVELOPE = (24, 29)
+
+
 def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
@@ -250,7 +255,7 @@ def crop_alpha(image: Image.Image) -> Image.Image:
 
 def resize_to_height(image: Image.Image, height: int) -> Image.Image:
     width = max(1, round(image.width * height / image.height))
-    return image.resize((width, height), Image.Resampling.LANCZOS)
+    return image.resize((width, height), Image.Resampling.NEAREST)
 
 
 def fit_inside(image: Image.Image, size: tuple[int, int]) -> Image.Image:
@@ -259,11 +264,32 @@ def fit_inside(image: Image.Image, size: tuple[int, int]) -> Image.Image:
         max(1, round(image.width * scale)),
         max(1, round(image.height * scale)),
     )
-    resized = image.resize(target, Image.Resampling.LANCZOS)
+    resized = image.resize(target, Image.Resampling.NEAREST)
     output = Image.new("RGBA", size, (0, 0, 0, 0))
     output.alpha_composite(
         resized,
         ((size[0] - resized.width) // 2, (size[1] - resized.height) // 2),
+    )
+    return output
+
+
+def fit_inside_envelope(
+    image: Image.Image,
+    canvas_size: tuple[int, int],
+    content_envelope: tuple[int, int],
+) -> Image.Image:
+    fitted = fit_inside(image, content_envelope)
+    used = fitted.getchannel("A").getbbox()
+    if used is None:
+        raise ValueError("empty fitted helmet image")
+    fitted = fitted.crop(used)
+    output = Image.new("RGBA", canvas_size, (0, 0, 0, 0))
+    output.alpha_composite(
+        fitted,
+        (
+            (canvas_size[0] - fitted.width) // 2,
+            (canvas_size[1] - fitted.height) // 2,
+        ),
     )
     return output
 
@@ -409,7 +435,8 @@ def build_world_identity(
             "clientMedianOpaquePixels": round(
                 float(baseline["directionRuntimeOpaquePixels"][direction]), 4
             ),
-            "resizeFilter": "lanczos_baked_source_to_integer_pixels",
+            "resizeFilter": "nearest_baked_source_to_integer_pixels",
+            "worldScaleRatio": WORLD_SCALE_RATIO,
             "runtimeScale": 1,
             "facePolicy": FACE_POLICY[direction],
             "hairPolicy": "hide",
@@ -465,7 +492,11 @@ def build_paper_doll_and_icons(
     # Paper doll uses the opaque S design.  The approved black face mask is
     # part of the helmet and must not be cut out.  No base-image erase pass is
     # needed because the opaque helmet layer covers the head itself.
-    paper = fit_inside(wearable["S"], (32, 41))
+    paper = fit_inside_envelope(
+        wearable["S"],
+        PAPER_CANVAS_SIZE,
+        PAPER_CONTENT_ENVELOPE,
+    )
     erase = Image.new("RGBA", paper.size, (255, 255, 255, 0))
     erase.putalpha(
         paper.getchannel("A").point(lambda alpha: 255 if alpha > 0 else 0)
@@ -952,6 +983,29 @@ def validate_outputs() -> dict:
         for record in identity["directionCutouts"].values()
     ):
         raise AssertionError("item 236 introduced runtime scaling")
+    generated_sizes = {
+        direction: identity["directionCutouts"][direction]["generatedSize"]
+        for direction in DIRECTIONS
+    }
+    if any(
+        size[1] != WORLD_HEIGHT[direction]
+        for direction, size in generated_sizes.items()
+    ):
+        raise AssertionError("item 236 world bake height left default envelope")
+    if max(size[0] for size in generated_sizes.values()) > 19:
+        raise AssertionError("item 236 world bake width exceeds default envelope")
+    paper_bounds = paper.getchannel("A").getbbox()
+    if paper_bounds is None:
+        raise AssertionError("paper-doll helmet is empty")
+    paper_content_size = [
+        paper_bounds[2] - paper_bounds[0],
+        paper_bounds[3] - paper_bounds[1],
+    ]
+    if (
+        paper_content_size[0] > PAPER_CONTENT_ENVELOPE[0]
+        or paper_content_size[1] > PAPER_CONTENT_ENVELOPE[1]
+    ):
+        raise AssertionError("paper-doll helmet exceeds default content envelope")
     for action_name, spec in ACTION_SPECS.items():
         action = identity["actions"][action_name]
         atlas_path = ROOT / action["path"].removeprefix("res://")
@@ -981,6 +1035,14 @@ def validate_outputs() -> dict:
         "inventoryFaceWindowOpaque": True,
         "groundFaceWindowOpaque": True,
         "approvedBlackClothVeilRetained": True,
+        "worldScaleRatio": WORLD_SCALE_RATIO,
+        "worldGeneratedSizes": generated_sizes,
+        "worldMaximumSize": [
+            max(size[0] for size in generated_sizes.values()),
+            max(size[1] for size in generated_sizes.values()),
+        ],
+        "paperDollContentEnvelope": list(PAPER_CONTENT_ENVELOPE),
+        "paperDollContentSize": paper_content_size,
         "runtimeScale": 1,
         "textureFilter": "nearest",
         "preview": resource_path(PREVIEW),
