@@ -25,6 +25,7 @@ PROCESSED = (
 )
 WORLD = ROOT / "assets/data/equipment_male_world_helmet.json"
 RECIPE = ROOT / "assets/data/equipment_male_world_helmet_recipes.json"
+HELMET_V2 = ROOT / "assets/data/equipment_helmet_visual_v2.json"
 HEAD = (
     ROOT
     / "assets/art/items/client/paper_doll/classic_flattened_head"
@@ -46,11 +47,33 @@ GROUND = (
     / "item_00232_ground.png"
 )
 REPORT = ROOT / "outputs/helmet_232/holy_war_232_validation_report.json"
+WORN_PREVIEW_1X = ROOT / "outputs/helmet_232/holy_war_232_worn_idle_8dir_1x.png"
+WORN_PREVIEW_8X = ROOT / "outputs/helmet_232/holy_war_232_worn_idle_8dir_8x.png"
 BUILDER = ROOT / "tools/build_holy_war_helmet_232.py"
 EXPECTED_APPROVED_SHA = (
     "93307c79e0d5d697d269eec3ba2c318385be96130026e1dbe1b67779437b583b"
 )
 DIRECTIONS = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+WORLD_HEIGHT = {
+    "N": 23,
+    "NE": 23,
+    "E": 22,
+    "SE": 23,
+    "S": 23,
+    "SW": 23,
+    "W": 22,
+    "NW": 23,
+}
+FROZEN_SOURCE_MAP = {
+    "N": 0,
+    "NE": 7,
+    "E": 3,
+    "SE": 6,
+    "S": 4,
+    "SW": 5,
+    "W": 2,
+    "NW": 1,
+}
 
 
 def sha256(path: Path) -> str:
@@ -102,15 +125,33 @@ def main() -> None:
         identity["directionCutouts"][direction]["runtimeScale"] == 1
         for direction in DIRECTIONS
     )
+    assert identity["worldScaleRatio"] == 0.64
+    assert identity["worldDirectionHeights"] == WORLD_HEIGHT
+    for direction in DIRECTIONS:
+        cutout = identity["directionCutouts"][direction]
+        assert cutout["generatedSize"][1] == WORLD_HEIGHT[direction]
+        assert cutout["resizeFilter"] == "nearest_baked_source_to_integer_pixels"
 
     erase = Image.open(ERASE).convert("RGBA")
     assert erase.getchannel("A").getbbox() is None
     paper = Image.open(HEAD).convert("RGBA")
+    paper_box = paper.getchannel("A").getbbox()
+    assert paper.size == (32, 41)
+    assert paper_box is not None
+    assert (paper_box[2] - paper_box[0], paper_box[3] - paper_box[1]) == (24, 29)
     inventory = Image.open(INVENTORY).convert("RGBA")
     ground = Image.open(GROUND).convert("RGBA")
     assert paper.getpixel((16, 28))[3] == 255
     assert inventory.getpixel((18, 24))[3] == 255
     assert ground.getpixel((8, 12))[3] == 255
+
+    v2 = load_json(HELMET_V2)["visualAssets"]["holy_war"]
+    assert v2["source_direction_map"] == FROZEN_SOURCE_MAP
+    for direction, source_row in FROZEN_SOURCE_MAP.items():
+        assert v2["directions"][direction]["source_row"] == source_row
+        assert v2["directions"][direction]["runtime_scale"] == [1, 1]
+    for action_name, action in identity["actions"].items():
+        assert v2["source"]["actions"][action_name]["sha256"] == action["fileSha256"]
 
     report = load_json(REPORT)
     assert report["sourceSlotDirectionOrder"] == DIRECTIONS
@@ -122,6 +163,11 @@ def main() -> None:
     assert report["groundFaceWindowOpaque"] is True
     assert report["frozenNon232FilesUnchanged"] is True
     assert report["non232ContractDataUnchanged"] is True
+    assert report["worldSizingAudit"]["selectedScaleRatio"] == 0.64
+    assert report["worldSizingAudit"]["worldDirectionHeights"] == WORLD_HEIGHT
+    assert report["worldSizingAudit"]["paperDollContentSize"] == [24, 29]
+    assert WORN_PREVIEW_1X.exists()
+    assert WORN_PREVIEW_8X.exists()
     assert all(
         record["allOpaque"] is True
         and all(alpha == 255 for alpha in record["alpha"])

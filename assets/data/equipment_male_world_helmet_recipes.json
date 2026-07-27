@@ -353,6 +353,26 @@
       "inventoryFaceWindow": "opaque_black_mask_interior",
       "groundSourceDirection": "S",
       "groundFaceWindow": "opaque_black_mask_interior",
+      "worldSizingPolicy": "horn_excluded_body_normalization_v1",
+      "worldScaleRatio": 0.64,
+      "worldDirectionHeights": {
+        "N": 23,
+        "NE": 23,
+        "E": 22,
+        "SE": 23,
+        "S": 23,
+        "SW": 23,
+        "W": 22,
+        "NW": 23
+      },
+      "paperDollCanvasSize": [
+        32,
+        41
+      ],
+      "paperDollContentEnvelope": [
+        24,
+        29
+      ],
       "runtimeScale": 1,
       "textureFilter": "nearest",
       "userOverrideAuthorization": "direct use of the explicitly approved generated design"
