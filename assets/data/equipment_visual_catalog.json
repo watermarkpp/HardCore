@@ -52505,77 +52505,83 @@
       "gender": "通用",
       "icons": {
         "inventory": {
-          "path": "res://assets/art/items/client/inventory/102.png",
-          "library": "research/mir2_client_raw/Data/Items.wil",
-          "index": 102,
-          "sourceOffset": 72413,
+          "path": "res://assets/art/items/client/project_redesign/helmet/heavenly_taoist/item_00240_inventory.png",
+          "library": "project.user_approved_redesign",
+          "index": 240,
           "size": [
-            32,
-            39
+            36,
+            35
           ],
           "drawOffset": [
-            7,
-            -44
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact_design",
+          "sourceDirection": "S",
+          "faceAperture": "opaque_dark_interior_for_item_icon",
+          "fileSha256": "748996fde82303b911acf650e254d16d8d79d7da42ab8a1d94dda82e6fbe4a4c",
+          "rgbaSha256": "2a407768a063257d3ee41c4966accb3bcabbc2c9a459e1244ac839616ca4463e"
         },
         "equippedSlot": {
-          "path": "res://assets/art/items/client/equipped/102.png",
-          "library": "research/mir2_client_raw/Data/stateitem.wil",
-          "index": 102,
-          "sourceOffset": 376275,
+          "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00240_head.png",
+          "library": "project.user_approved_redesign",
+          "index": 240,
           "size": [
             32,
             41
           ],
           "drawOffset": [
-            79,
-            -17
+            73,
+            27
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact_design",
+          "sourceDirection": "S",
+          "faceAperture": "open_source_face_aperture",
+          "fileSha256": "bda1b588d5aeaf6a61085c65040e46ac5f0351b44be073e55e32083d298c3ce0"
         },
         "ground": {
-          "path": "res://assets/art/items/client/ground/102.png",
-          "library": "research/mir2_client_raw/Data/DnItems.wil",
-          "index": 102,
-          "sourceOffset": 60701,
+          "path": "res://assets/art/items/client/project_redesign/helmet/heavenly_taoist/item_00240_ground.png",
+          "library": "project.user_approved_redesign",
+          "index": 240,
           "size": [
             16,
             17
           ],
           "drawOffset": [
-            7,
-            -44
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact_design",
+          "sourceDirection": "S",
+          "faceAperture": "opaque_dark_interior_for_item_icon",
+          "fileSha256": "332915019c4173e2a48f9d9c1837be003253b62964396234fc1a3b7574f23da0",
+          "rgbaSha256": "a2122a2a5ab5b131c3f8ca77b6f533a82c2cd51e6380f3cd84f53c1f91859775"
         }
       },
       "paperDoll": {
-        "status": "exact_client_record",
+        "status": "user_approved_project_redesign",
         "slot": "头盔",
         "gender": "通用",
         "sourceIndex": 102,
-        "path": "res://assets/art/items/client/equipped/102.png",
+        "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00240_head.png",
         "drawOffset": [
-          72,
+          73,
           27
         ],
         "rawDrawOffset": [
-          79,
-          -17
+          73,
+          27
         ],
         "size": [
           32,
           41
         ],
-        "source": "stateitem.wil",
-        "mappingConfidence": "A"
+        "source": "approved item-240 S-direction",
+        "mappingConfidence": "user_approved_exact",
+        "faceWindow": "open_source_face_aperture"
       },
       "worldWear": {
-        "status": "approved_project_extension",
+        "status": "user_approved_project_redesign",
         "contractId": "equipment.world_helmet.male.extension.v1",
         "identityId": "heavenly_taoist",
         "sourceIndex": 102,
@@ -52684,7 +52690,7 @@
           },
           "actionFallbacks": {}
         },
-        "reason": "StateItem identifies the helmet only; transparent world atlases are project-generated and anchored to same-frame male Hair.wil head motion"
+        "reason": "user supplied exact canonical eight-direction source; front and side face openings expose the original player face"
       }
     }
   },

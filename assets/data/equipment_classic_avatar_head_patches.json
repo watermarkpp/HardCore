@@ -678,46 +678,38 @@
         "itemId": 240,
         "itemName": "天尊头盔",
         "slot": "头盔",
-        "source": "StateItem.wil",
+        "source": "user_approved_project_redesign",
         "sourceIndex": 102,
-        "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00240_stateitem_00102.png",
-        "sourceRecordRgbaSha256": "0d44c7b75e3219a2a61b13c8a890321b4be5388e3d34f0829d6575d36e91d396",
+        "sourceRecordPath": "res://assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_helmet_approved_20260727.png",
+        "sourceRecordRgbaSha256": "a5e474da3c081ad2f5dd0926bd9dd1358e4179737e6b8d5614a77cf7b2ba9e8e",
+        "sourceDirection": "S",
         "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00240_head.png",
         "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00240_erase_mask.png",
         "drawOffset": [
-          72,
+          73,
           27
         ],
         "size": [
           32,
           41
         ],
-        "rgbaSha256": "dee60aaebe972698b65c7d439cf92ff07d94c44e5a7d86061b7fdc9b3c7f4ce3",
-        "eraseMaskRgbaSha256": "fd02e29618806fdf061f28d68bc1471b4384df1bc9c5697bfbe29c2f0550adde",
+        "rgbaSha256": "3a0685a36e8a63589a9fa219e9b63a47101886c2d4e2120bc218074335ca134d",
+        "eraseMaskRgbaSha256": "941ce04cfa92d3934c0b5dbcf6838fed158b3734c1ac0f54d35fdc5de7157a8d",
         "drawOrder": [
           "male_head_anatomy",
           "male_hair",
           "helmet"
         ],
+        "faceWindowPolicy": "open_source_face_aperture",
+        "eraseMaskPolicy": "clear_helmet_silhouette_but_preserve_face_window",
+        "facePixelsBaked": false,
+        "hairPixelsBaked": false,
         "subjectEvidence": {
-          "method": "primary_exact_palette_connected_difference.v1",
-          "exactCoordinateSeedPixels": 447,
-          "paletteCandidatePixels": 819,
-          "removedBackgroundPixels": 773,
-          "subjectOpaquePixels": 311
+          "method": "user_supplied_source_S_direction_single_pass_v1",
+          "approvedSourcePath": "res://assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_helmet_approved_20260727.png",
+          "approvedSourceFileSha256": "a5e474da3c081ad2f5dd0926bd9dd1358e4179737e6b8d5614a77cf7b2ba9e8e"
         },
         "headOnlyEvidence": {
-          "headBox": [
-            76,
-            40,
-            98,
-            68
-          ],
-          "shoulderStartY": 65,
-          "neckXRange": [
-            80,
-            92
-          ],
           "bottomLeftAlpha": 0,
           "bottomRightAlpha": 0
         }
@@ -1264,46 +1256,38 @@
       "itemId": 240,
       "itemName": "天尊头盔",
       "slot": "头盔",
-      "source": "StateItem.wil",
+      "source": "user_approved_project_redesign",
       "sourceIndex": 102,
-      "sourceRecordPath": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00240_stateitem_00102.png",
-      "sourceRecordRgbaSha256": "0d44c7b75e3219a2a61b13c8a890321b4be5388e3d34f0829d6575d36e91d396",
+      "sourceRecordPath": "res://assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_helmet_approved_20260727.png",
+      "sourceRecordRgbaSha256": "a5e474da3c081ad2f5dd0926bd9dd1358e4179737e6b8d5614a77cf7b2ba9e8e",
+      "sourceDirection": "S",
       "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00240_head.png",
       "eraseMaskPath": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00240_erase_mask.png",
       "drawOffset": [
-        72,
+        73,
         27
       ],
       "size": [
         32,
         41
       ],
-      "rgbaSha256": "dee60aaebe972698b65c7d439cf92ff07d94c44e5a7d86061b7fdc9b3c7f4ce3",
-      "eraseMaskRgbaSha256": "fd02e29618806fdf061f28d68bc1471b4384df1bc9c5697bfbe29c2f0550adde",
+      "rgbaSha256": "3a0685a36e8a63589a9fa219e9b63a47101886c2d4e2120bc218074335ca134d",
+      "eraseMaskRgbaSha256": "941ce04cfa92d3934c0b5dbcf6838fed158b3734c1ac0f54d35fdc5de7157a8d",
       "drawOrder": [
         "male_head_anatomy",
         "male_hair",
         "helmet"
       ],
+      "faceWindowPolicy": "open_source_face_aperture",
+      "eraseMaskPolicy": "clear_helmet_silhouette_but_preserve_face_window",
+      "facePixelsBaked": false,
+      "hairPixelsBaked": false,
       "subjectEvidence": {
-        "method": "primary_exact_palette_connected_difference.v1",
-        "exactCoordinateSeedPixels": 447,
-        "paletteCandidatePixels": 819,
-        "removedBackgroundPixels": 773,
-        "subjectOpaquePixels": 311
+        "method": "user_supplied_source_S_direction_single_pass_v1",
+        "approvedSourcePath": "res://assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_helmet_approved_20260727.png",
+        "approvedSourceFileSha256": "a5e474da3c081ad2f5dd0926bd9dd1358e4179737e6b8d5614a77cf7b2ba9e8e"
       },
       "headOnlyEvidence": {
-        "headBox": [
-          76,
-          40,
-          98,
-          68
-        ],
-        "shoulderStartY": 65,
-        "neckXRange": [
-          80,
-          92
-        ],
         "bottomLeftAlpha": 0,
         "bottomRightAlpha": 0
       }

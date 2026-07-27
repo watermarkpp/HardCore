@@ -16855,1674 +16855,1676 @@
       }
     },
     "heavenly_taoist": {
-      "visual_asset_id": "heavenly_taoist",
-      "itemIds": [
-        240
-      ],
-      "calibrationItemId": 240,
-      "player_visual_id": "player.male.cloth_002",
-      "editableSourceSlots": true,
-      "sourceSlotSemantics": "formal_manifest_direction_order",
-      "sourceSlots": {
-        "slot_0": 0,
-        "slot_1": 1,
-        "slot_2": 2,
-        "slot_3": 3,
-        "slot_4": 4,
-        "slot_5": 5,
-        "slot_6": 6,
-        "slot_7": 7
-      },
-      "source": {
-        "lane": "helmet_world_visuals",
-        "tier": "primary",
-        "distribution": "research.mir2_client_raw",
-        "identityId": "heavenly_taoist",
-        "stateItemIndex": 102,
-        "manifest": "res://assets/data/equipment_male_world_helmet.json",
-        "sourceSlotDirectionOrder": [
-          "N",
-          "NW",
-          "W",
-          "E",
-          "S",
-          "SW",
-          "SE",
-          "NE"
-        ],
-        "actions": {
-          "idle": {
-            "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-            "sha256": "df7e214e3a64fdbb673417375ddf20a419d724993266620055d47270f6915b62"
-          },
-          "walk": {
-            "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
-            "sha256": "47c954c675998f46c378ead382606a0e8cfde1cf03b0c469b284c20950380921"
-          },
-          "attack": {
-            "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
-            "sha256": "eedc8f3dffe82ef8959d1ecc9e3244d514e2bc4fe506f700f29b457b72c77fdc"
-          },
-          "cast": {
-            "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
-            "sha256": "4a49e78ab75d9a1a6bb9711582f634cae5f25e75d01ab97d976dfddc174a027a"
-          },
-          "hit": {
-            "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
-            "sha256": "c7d200859f6b2946e1b771d3c4c19be6f17662de556717ff51ed98a6ed0fbe90"
-          },
-          "death": {
-            "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png",
-            "sha256": "b4acf8f2e324f4c455e3b961d3b6b8b1029575c6ce78e05c84eb3af3d3ec9953"
-          }
-        },
-        "pixelPolicy": "immutable_primary_source_runtime_atlas"
-      },
-      "directions": {
-        "N": {
-          "texture": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-          "texturesByAction": {
-            "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-            "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
-            "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
-            "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
-            "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
-            "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
-          },
-          "source_direction": "N",
-          "source_row": 0,
-          "source_slot_id": "slot_0",
-          "pivot": [
-            87,
-            40
-          ],
-          "pivotByActionFrame": {
-            "idle": [
-              [
-                87,
-                40
-              ],
-              [
-                87,
-                40
-              ],
-              [
-                87,
-                40
-              ],
-              [
-                87,
-                40
-              ]
-            ],
-            "walk": [
-              [
-                87,
-                40
-              ],
-              [
-                87,
-                41
-              ],
-              [
-                87,
-                40
-              ],
-              [
-                87,
-                40
-              ],
-              [
-                87,
-                41
-              ],
-              [
-                88,
-                40
-              ]
-            ],
-            "attack": [
-              [
-                93,
-                48
-              ],
-              [
-                83,
-                61
-              ],
-              [
-                92,
-                41
-              ],
-              [
-                92,
-                39
-              ],
-              [
-                91,
-                38
-              ],
-              [
-                94,
-                40
-              ]
-            ],
-            "cast": [
-              [
-                90,
-                43
-              ],
-              [
-                89,
-                43
-              ],
-              [
-                89,
-                45
-              ],
-              [
-                88,
-                48
-              ],
-              [
-                88,
-                45
-              ],
-              [
-                90,
-                40
-              ]
-            ],
-            "hit": [
-              [
-                86,
-                62
-              ],
-              [
-                89,
-                53
-              ],
-              [
-                89,
-                42
-              ]
-            ],
-            "death": [
-              [
-                91,
-                39
-              ],
-              [
-                89,
-                45
-              ],
-              [
-                93,
-                110
-              ],
-              [
-                93,
-                124
-              ]
-            ]
-          },
-          "nudge": [
-            0,
-            0
-          ],
-          "face_policy": "open_crown",
-          "hair_policy": "keep",
-          "openingVisibility": "none",
-          "status": "unassigned",
-          "locked": false,
-          "flip_h": false,
-          "runtime_scale": [
-            1,
-            1
-          ],
-          "calibrationOverlays": {
-            "face_mask": {
-              "shape": "rect",
-              "offset": [
-                -4,
-                -1
-              ],
-              "size": [
-                8,
-                10
-              ],
-              "rearDirection": true
-            },
-            "hair_mask": {
-              "shape": "rect",
-              "offset": [
-                -8,
-                -9
-              ],
-              "size": [
-                16,
-                10
-              ]
-            }
-          },
-          "layers": {
-            "helmet_back": null,
-            "helmet_front": {
-              "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-              "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
-              "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
-              "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
-              "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
-              "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
-            },
-            "head_occlusion_mask": null
-          }
-        },
-        "NE": {
-          "texture": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-          "texturesByAction": {
-            "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-            "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
-            "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
-            "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
-            "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
-            "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
-          },
-          "source_direction": "NE",
-          "source_row": 7,
-          "source_slot_id": "slot_7",
-          "pivot": [
-            87,
-            37
-          ],
-          "pivotByActionFrame": {
-            "idle": [
-              [
-                87,
-                37
-              ],
-              [
-                88,
-                37
-              ],
-              [
-                88,
-                37
-              ],
-              [
-                88,
-                37
-              ]
-            ],
-            "walk": [
-              [
-                88,
-                37
-              ],
-              [
-                87,
-                37
-              ],
-              [
-                88,
-                36
-              ],
-              [
-                87,
-                37
-              ],
-              [
-                87,
-                38
-              ],
-              [
-                87,
-                37
-              ]
-            ],
-            "attack": [
-              [
-                88,
-                46
-              ],
-              [
-                72,
-                53
-              ],
-              [
-                97,
-                42
-              ],
-              [
-                104,
-                42
-              ],
-              [
-                107,
-                43
-              ],
-              [
-                101,
-                43
-              ]
-            ],
-            "cast": [
-              [
-                88,
-                41
-              ],
-              [
-                87,
-                41
-              ],
-              [
-                87,
-                43
-              ],
-              [
-                85,
-                44
-              ],
-              [
-                86,
-                42
-              ],
-              [
-                91,
-                39
-              ]
-            ],
-            "hit": [
-              [
-                71,
-                56
-              ],
-              [
-                80,
-                49
-              ],
-              [
-                88,
-                40
-              ]
-            ],
-            "death": [
-              [
-                96,
-                39
-              ],
-              [
-                86,
-                43
-              ],
-              [
-                68,
-                104
-              ],
-              [
-                59,
-                115
-              ]
-            ]
-          },
-          "nudge": [
-            0,
-            0
-          ],
-          "face_policy": "open_crown",
-          "hair_policy": "keep",
-          "openingVisibility": "partial",
-          "status": "unassigned",
-          "locked": false,
-          "flip_h": false,
-          "runtime_scale": [
-            1,
-            1
-          ],
-          "calibrationOverlays": {
-            "face_mask": {
-              "shape": "rect",
-              "offset": [
-                -4,
-                -1
-              ],
-              "size": [
-                8,
-                10
-              ],
-              "rearDirection": true
-            },
-            "hair_mask": {
-              "shape": "rect",
-              "offset": [
-                -8,
-                -9
-              ],
-              "size": [
-                16,
-                10
-              ]
-            }
-          },
-          "layers": {
-            "helmet_back": null,
-            "helmet_front": {
-              "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-              "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
-              "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
-              "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
-              "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
-              "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
-            },
-            "head_occlusion_mask": null
-          }
-        },
-        "E": {
-          "texture": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-          "texturesByAction": {
-            "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-            "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
-            "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
-            "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
-            "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
-            "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
-          },
-          "source_direction": "E",
-          "source_row": 3,
-          "source_slot_id": "slot_3",
-          "pivot": [
-            88,
-            35
-          ],
-          "pivotByActionFrame": {
-            "idle": [
-              [
-                88,
-                35
-              ],
-              [
-                88,
-                35
-              ],
-              [
-                88,
-                35
-              ],
-              [
-                88,
-                35
-              ]
-            ],
-            "walk": [
-              [
-                89,
-                36
-              ],
-              [
-                88,
-                36
-              ],
-              [
-                89,
-                35
-              ],
-              [
-                88,
-                36
-              ],
-              [
-                87,
-                36
-              ],
-              [
-                87,
-                35
-              ]
-            ],
-            "attack": [
-              [
-                83,
-                44
-              ],
-              [
-                69,
-                43
-              ],
-              [
-                98,
-                45
-              ],
-              [
-                107,
-                51
-              ],
-              [
-                111,
-                54
-              ],
-              [
-                101,
-                49
-              ]
-            ],
-            "cast": [
-              [
-                86,
-                39
-              ],
-              [
-                86,
-                39
-              ],
-              [
-                84,
-                40
-              ],
-              [
-                82,
-                42
-              ],
-              [
-                84,
-                39
-              ],
-              [
-                90,
-                39
-              ]
-            ],
-            "hit": [
-              [
-                66,
-                45
-              ],
-              [
-                75,
-                42
-              ],
-              [
-                87,
-                38
-              ]
-            ],
-            "death": [
-              [
-                98,
-                43
-              ],
-              [
-                85,
-                41
-              ],
-              [
-                55,
-                88
-              ],
-              [
-                43,
-                94
-              ]
-            ]
-          },
-          "nudge": [
-            0,
-            0
-          ],
-          "face_policy": "open_crown",
-          "hair_policy": "keep",
-          "openingVisibility": "partial",
-          "status": "unassigned",
-          "locked": false,
-          "flip_h": false,
-          "runtime_scale": [
-            1,
-            1
-          ],
-          "calibrationOverlays": {
-            "face_mask": {
-              "shape": "rect",
-              "offset": [
-                -4,
-                -1
-              ],
-              "size": [
-                8,
-                10
-              ],
-              "rearDirection": false
-            },
-            "hair_mask": {
-              "shape": "rect",
-              "offset": [
-                -8,
-                -9
-              ],
-              "size": [
-                16,
-                10
-              ]
-            }
-          },
-          "layers": {
-            "helmet_back": null,
-            "helmet_front": {
-              "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-              "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
-              "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
-              "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
-              "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
-              "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
-            },
-            "head_occlusion_mask": null
-          }
-        },
-        "SE": {
-          "texture": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-          "texturesByAction": {
-            "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-            "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
-            "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
-            "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
-            "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
-            "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
-          },
-          "source_direction": "SE",
-          "source_row": 6,
-          "source_slot_id": "slot_6",
-          "pivot": [
-            88,
-            36
-          ],
-          "pivotByActionFrame": {
-            "idle": [
-              [
-                88,
-                36
-              ],
-              [
-                88,
-                36
-              ],
-              [
-                88,
-                36
-              ],
-              [
-                88,
-                36
-              ]
-            ],
-            "walk": [
-              [
-                89,
-                37
-              ],
-              [
-                88,
-                36
-              ],
-              [
-                88,
-                36
-              ],
-              [
-                88,
-                37
-              ],
-              [
-                88,
-                36
-              ],
-              [
-                87,
-                36
-              ]
-            ],
-            "attack": [
-              [
-                80,
-                42
-              ],
-              [
-                78,
-                36
-              ],
-              [
-                91,
-                51
-              ],
-              [
-                98,
-                60
-              ],
-              [
-                100,
-                65
-              ],
-              [
-                93,
-                55
-              ]
-            ],
-            "cast": [
-              [
-                85,
-                39
-              ],
-              [
-                85,
-                38
-              ],
-              [
-                83,
-                39
-              ],
-              [
-                83,
-                40
-              ],
-              [
-                85,
-                38
-              ],
-              [
-                87,
-                41
-              ]
-            ],
-            "hit": [
-              [
-                73,
-                36
-              ],
-              [
-                77,
-                37
-              ],
-              [
-                86,
-                39
-              ]
-            ],
-            "death": [
-              [
-                93,
-                48
-              ],
-              [
-                84,
-                40
-              ],
-              [
-                61,
-                73
-              ],
-              [
-                53,
-                74
-              ]
-            ]
-          },
-          "nudge": [
-            0,
-            0
-          ],
-          "face_policy": "open_crown",
-          "hair_policy": "keep",
-          "openingVisibility": "partial",
-          "status": "unassigned",
-          "locked": false,
-          "flip_h": false,
-          "runtime_scale": [
-            1,
-            1
-          ],
-          "calibrationOverlays": {
-            "face_mask": {
-              "shape": "rect",
-              "offset": [
-                -4,
-                -1
-              ],
-              "size": [
-                8,
-                10
-              ],
-              "rearDirection": false
-            },
-            "hair_mask": {
-              "shape": "rect",
-              "offset": [
-                -8,
-                -9
-              ],
-              "size": [
-                16,
-                10
-              ]
-            }
-          },
-          "layers": {
-            "helmet_back": null,
-            "helmet_front": {
-              "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-              "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
-              "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
-              "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
-              "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
-              "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
-            },
-            "head_occlusion_mask": null
-          }
-        },
-        "S": {
-          "texture": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-          "texturesByAction": {
-            "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-            "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
-            "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
-            "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
-            "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
-            "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
-          },
-          "source_direction": "S",
-          "source_row": 4,
-          "source_slot_id": "slot_4",
-          "pivot": [
-            88,
-            35
-          ],
-          "pivotByActionFrame": {
-            "idle": [
-              [
-                88,
-                35
-              ],
-              [
-                88,
-                35
-              ],
-              [
-                88,
-                36
-              ],
-              [
-                88,
-                36
-              ]
-            ],
-            "walk": [
-              [
-                88,
-                35
-              ],
-              [
-                88,
-                35
-              ],
-              [
-                88,
-                36
-              ],
-              [
-                88,
-                36
-              ],
-              [
-                88,
-                36
-              ],
-              [
-                88,
-                35
-              ]
-            ],
-            "attack": [
-              [
-                82,
-                37
-              ],
-              [
-                94,
-                34
-              ],
-              [
-                83,
-                49
-              ],
-              [
-                83,
-                62
-              ],
-              [
-                84,
-                67
-              ],
-              [
-                81,
-                54
-              ]
-            ],
-            "cast": [
-              [
-                85,
-                35
-              ],
-              [
-                86,
-                35
-              ],
-              [
-                85,
-                34
-              ],
-              [
-                87,
-                38
-              ],
-              [
-                87,
-                36
-              ],
-              [
-                85,
-                38
-              ]
-            ],
-            "hit": [
-              [
-                88,
-                32
-              ],
-              [
-                86,
-                33
-              ],
-              [
-                86,
-                36
-              ]
-            ],
-            "death": [
-              [
-                85,
-                48
-              ],
-              [
-                87,
-                39
-              ],
-              [
-                83,
-                62
-              ],
-              [
-                83,
-                62
-              ]
-            ]
-          },
-          "nudge": [
-            0,
-            0
-          ],
-          "face_policy": "open_crown",
-          "hair_policy": "keep",
-          "openingVisibility": "full",
-          "status": "unassigned",
-          "locked": false,
-          "flip_h": false,
-          "runtime_scale": [
-            1,
-            1
-          ],
-          "calibrationOverlays": {
-            "face_mask": {
-              "shape": "rect",
-              "offset": [
-                -4,
-                -1
-              ],
-              "size": [
-                8,
-                10
-              ],
-              "rearDirection": false
-            },
-            "hair_mask": {
-              "shape": "rect",
-              "offset": [
-                -8,
-                -9
-              ],
-              "size": [
-                16,
-                10
-              ]
-            }
-          },
-          "layers": {
-            "helmet_back": null,
-            "helmet_front": {
-              "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-              "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
-              "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
-              "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
-              "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
-              "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
-            },
-            "head_occlusion_mask": null
-          }
-        },
-        "SW": {
-          "texture": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-          "texturesByAction": {
-            "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-            "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
-            "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
-            "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
-            "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
-            "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
-          },
-          "source_direction": "SW",
-          "source_row": 5,
-          "source_slot_id": "slot_5",
-          "pivot": [
-            88,
-            35
-          ],
-          "pivotByActionFrame": {
-            "idle": [
-              [
-                88,
-                35
-              ],
-              [
-                88,
-                35
-              ],
-              [
-                88,
-                35
-              ],
-              [
-                88,
-                35
-              ]
-            ],
-            "walk": [
-              [
-                88,
-                35
-              ],
-              [
-                88,
-                35
-              ],
-              [
-                88,
-                35
-              ],
-              [
-                88,
-                36
-              ],
-              [
-                88,
-                35
-              ],
-              [
-                88,
-                35
-              ]
-            ],
-            "attack": [
-              [
-                88,
-                35
-              ],
-              [
-                105,
-                40
-              ],
-              [
-                78,
-                45
-              ],
-              [
-                71,
-                54
-              ],
-              [
-                69,
-                60
-              ],
-              [
-                73,
-                47
-              ]
-            ],
-            "cast": [
-              [
-                87,
-                34
-              ],
-              [
-                88,
-                34
-              ],
-              [
-                90,
-                37
-              ],
-              [
-                92,
-                39
-              ],
-              [
-                91,
-                37
-              ],
-              [
-                85,
-                37
-              ]
-            ],
-            "hit": [
-              [
-                105,
-                36
-              ],
-              [
-                98,
-                34
-              ],
-              [
-                88,
-                35
-              ]
-            ],
-            "death": [
-              [
-                80,
-                44
-              ],
-              [
-                92,
-                37
-              ],
-              [
-                108,
-                67
-              ],
-              [
-                116,
-                67
-              ]
-            ]
-          },
-          "nudge": [
-            0,
-            0
-          ],
-          "face_policy": "open_crown",
-          "hair_policy": "keep",
-          "openingVisibility": "partial",
-          "status": "unassigned",
-          "locked": false,
-          "flip_h": false,
-          "runtime_scale": [
-            1,
-            1
-          ],
-          "calibrationOverlays": {
-            "face_mask": {
-              "shape": "rect",
-              "offset": [
-                -4,
-                -1
-              ],
-              "size": [
-                8,
-                10
-              ],
-              "rearDirection": false
-            },
-            "hair_mask": {
-              "shape": "rect",
-              "offset": [
-                -8,
-                -9
-              ],
-              "size": [
-                16,
-                10
-              ]
-            }
-          },
-          "layers": {
-            "helmet_back": null,
-            "helmet_front": {
-              "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-              "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
-              "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
-              "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
-              "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
-              "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
-            },
-            "head_occlusion_mask": null
-          }
-        },
-        "W": {
-          "texture": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-          "texturesByAction": {
-            "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-            "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
-            "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
-            "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
-            "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
-            "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
-          },
-          "source_direction": "W",
-          "source_row": 2,
-          "source_slot_id": "slot_2",
-          "pivot": [
-            89,
-            36
-          ],
-          "pivotByActionFrame": {
-            "idle": [
-              [
-                89,
-                36
-              ],
-              [
-                89,
-                36
-              ],
-              [
-                89,
-                36
-              ],
-              [
-                89,
-                36
-              ]
-            ],
-            "walk": [
-              [
-                88,
-                36
-              ],
-              [
-                89,
-                36
-              ],
-              [
-                89,
-                36
-              ],
-              [
-                89,
-                36
-              ],
-              [
-                90,
-                36
-              ],
-              [
-                89,
-                35
-              ]
-            ],
-            "attack": [
-              [
-                94,
-                38
-              ],
-              [
-                108,
-                50
-              ],
-              [
-                80,
-                40
-              ],
-              [
-                70,
-                45
-              ],
-              [
-                65,
-                48
-              ],
-              [
-                75,
-                40
-              ]
-            ],
-            "cast": [
-              [
-                91,
-                36
-              ],
-              [
-                91,
-                36
-              ],
-              [
-                94,
-                38
-              ],
-              [
-                95,
-                41
-              ],
-              [
-                94,
-                39
-              ],
-              [
-                87,
-                36
-              ]
-            ],
-            "hit": [
-              [
-                112,
-                48
-              ],
-              [
-                104,
-                42
-              ],
-              [
-                90,
-                36
-              ]
-            ],
-            "death": [
-              [
-                81,
-                41
-              ],
-              [
-                94,
-                41
-              ],
-              [
-                124,
-                82
-              ],
-              [
-                136,
-                90
-              ]
-            ]
-          },
-          "nudge": [
-            0,
-            0
-          ],
-          "face_policy": "open_crown",
-          "hair_policy": "keep",
-          "openingVisibility": "partial",
-          "status": "unassigned",
-          "locked": false,
-          "flip_h": false,
-          "runtime_scale": [
-            1,
-            1
-          ],
-          "calibrationOverlays": {
-            "face_mask": {
-              "shape": "rect",
-              "offset": [
-                -4,
-                -1
-              ],
-              "size": [
-                8,
-                10
-              ],
-              "rearDirection": false
-            },
-            "hair_mask": {
-              "shape": "rect",
-              "offset": [
-                -8,
-                -9
-              ],
-              "size": [
-                16,
-                10
-              ]
-            }
-          },
-          "layers": {
-            "helmet_back": null,
-            "helmet_front": {
-              "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-              "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
-              "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
-              "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
-              "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
-              "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
-            },
-            "head_occlusion_mask": null
-          }
-        },
-        "NW": {
-          "texture": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-          "texturesByAction": {
-            "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-            "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
-            "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
-            "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
-            "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
-            "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
-          },
-          "source_direction": "NW",
-          "source_row": 1,
-          "source_slot_id": "slot_1",
-          "pivot": [
-            88,
-            38
-          ],
-          "pivotByActionFrame": {
-            "idle": [
-              [
-                88,
-                38
-              ],
-              [
-                88,
-                37
-              ],
-              [
-                88,
-                37
-              ],
-              [
-                88,
-                37
-              ]
-            ],
-            "walk": [
-              [
-                88,
-                37
-              ],
-              [
-                89,
-                38
-              ],
-              [
-                88,
-                37
-              ],
-              [
-                88,
-                38
-              ],
-              [
-                89,
-                38
-              ],
-              [
-                89,
-                37
-              ]
-            ],
-            "attack": [
-              [
-                95,
-                43
-              ],
-              [
-                98,
-                59
-              ],
-              [
-                85,
-                38
-              ],
-              [
-                79,
-                37
-              ],
-              [
-                75,
-                39
-              ],
-              [
-                84,
-                36
-              ]
-            ],
-            "cast": [
-              [
-                91,
-                39
-              ],
-              [
-                91,
-                39
-              ],
-              [
-                92,
-                41
-              ],
-              [
-                92,
-                45
-              ],
-              [
-                91,
-                42
-              ],
-              [
-                89,
-                37
-              ]
-            ],
-            "hit": [
-              [
-                103,
-                58
-              ],
-              [
-                98,
-                48
-              ],
-              [
-                90,
-                39
-              ]
-            ],
-            "death": [
-              [
-                85,
-                38
-              ],
-              [
-                92,
-                44
-              ],
-              [
-                115,
-                100
-              ],
-              [
-                124,
-                113
-              ]
-            ]
-          },
-          "nudge": [
-            0,
-            0
-          ],
-          "face_policy": "open_crown",
-          "hair_policy": "keep",
-          "openingVisibility": "partial",
-          "status": "unassigned",
-          "locked": false,
-          "flip_h": false,
-          "runtime_scale": [
-            1,
-            1
-          ],
-          "calibrationOverlays": {
-            "face_mask": {
-              "shape": "rect",
-              "offset": [
-                -4,
-                -1
-              ],
-              "size": [
-                8,
-                10
-              ],
-              "rearDirection": true
-            },
-            "hair_mask": {
-              "shape": "rect",
-              "offset": [
-                -8,
-                -9
-              ],
-              "size": [
-                16,
-                10
-              ]
-            }
-          },
-          "layers": {
-            "helmet_back": null,
-            "helmet_front": {
-              "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
-              "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
-              "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
-              "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
-              "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
-              "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
-            },
-            "head_occlusion_mask": null
-          }
-        }
-      },
-      "source_direction_map": {
-        "N": 0,
-        "NE": 7,
-        "E": 3,
-        "SE": 6,
-        "S": 4,
-        "SW": 5,
-        "W": 2,
-        "NW": 1
-      }
-    }
+                         "visual_asset_id": "heavenly_taoist",
+                         "itemIds": [
+                           240
+                         ],
+                         "calibrationItemId": 240,
+                         "player_visual_id": "player.male.cloth_002",
+                         "editableSourceSlots": true,
+                         "sourceSlotSemantics": "formal_manifest_direction_order",
+                         "sourceSlots": {
+                           "slot_0": 0,
+                           "slot_1": 1,
+                           "slot_2": 2,
+                           "slot_3": 3,
+                           "slot_4": 4,
+                           "slot_5": 5,
+                           "slot_6": 6,
+                           "slot_7": 7
+                         },
+                         "source": {
+                           "lane": "helmet_world_visuals",
+                           "tier": "primary",
+                           "distribution": "user.supplied",
+                           "identityId": "heavenly_taoist",
+                           "stateItemIndex": 102,
+                           "manifest": "res://assets/data/equipment_male_world_helmet.json",
+                           "sourceSlotDirectionOrder": [
+                             "N",
+                             "NE",
+                             "E",
+                             "SE",
+                             "S",
+                             "SW",
+                             "W",
+                             "NW"
+                           ],
+                           "actions": {
+                             "idle": {
+                               "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                               "sha256": "cd5c255f226343f2d4bb6119ff33bdbc89d1b0817ddcf3013f2dfd5353ab43b3"
+                             },
+                             "walk": {
+                               "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
+                               "sha256": "e1030c5a53ae4066d96226401f11f498a8c422e20c1129aa979b7b58ff5d8487"
+                             },
+                             "attack": {
+                               "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
+                               "sha256": "b5a32c5c24b5d1d8b50949f80f806862357428ea41333e9652c221a2466484b6"
+                             },
+                             "cast": {
+                               "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
+                               "sha256": "8658d90f240857c038832d272872f3b61c8dc52772d2f05fb7838e77e57f8c16"
+                             },
+                             "hit": {
+                               "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
+                               "sha256": "7adaa6f5e533b9cad97efea643385ad9edbf11e03c35737917d30b75f42be6bb"
+                             },
+                             "death": {
+                               "path": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png",
+                               "sha256": "1b33c0ff195d78ee05cb2044dbdf87941045ec4958ead1d55f4ba0a9add492c7"
+                             }
+                           },
+                           "pixelPolicy": "user_approved_exact_runtime_atlas",
+                           "approvedSource": "res://assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_helmet_approved_20260727.png",
+                           "approvedSourceFileSha256": "a5e474da3c081ad2f5dd0926bd9dd1358e4179737e6b8d5614a77cf7b2ba9e8e"
+                         },
+                         "directions": {
+                           "N": {
+                             "texture": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                             "texturesByAction": {
+                               "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                               "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
+                               "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
+                               "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
+                               "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
+                               "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
+                             },
+                             "source_direction": "N",
+                             "source_row": 0,
+                             "source_slot_id": "slot_0",
+                             "pivot": [
+                               88,
+                               37
+                             ],
+                             "pivotByActionFrame": {
+                               "idle": [
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ]
+                               ],
+                               "walk": [
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   36
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   36
+                                 ]
+                               ],
+                               "attack": [
+                                 [
+                                   91,
+                                   44
+                                 ],
+                                 [
+                                   85,
+                                   57
+                                 ],
+                                 [
+                                   89,
+                                   37
+                                 ],
+                                 [
+                                   89,
+                                   33
+                                 ],
+                                 [
+                                   89,
+                                   33
+                                 ],
+                                 [
+                                   91,
+                                   35
+                                 ]
+                               ],
+                               "cast": [
+                                 [
+                                   90,
+                                   40
+                                 ],
+                                 [
+                                   89,
+                                   40
+                                 ],
+                                 [
+                                   90,
+                                   41
+                                 ],
+                                 [
+                                   88,
+                                   43
+                                 ],
+                                 [
+                                   88,
+                                   43
+                                 ],
+                                 [
+                                   90,
+                                   39
+                                 ]
+                               ],
+                               "hit": [
+                                 [
+                                   86,
+                                   60
+                                 ],
+                                 [
+                                   89,
+                                   50
+                                 ],
+                                 [
+                                   89,
+                                   39
+                                 ]
+                               ],
+                               "death": [
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   85,
+                                   49
+                                 ],
+                                 [
+                                   92,
+                                   108
+                                 ],
+                                 [
+                                   92,
+                                   122
+                                 ]
+                               ]
+                             },
+                             "nudge": [
+                               0,
+                               0
+                             ],
+                             "face_policy": "closed",
+                             "hair_policy": "keep",
+                             "openingVisibility": "none",
+                             "status": "unassigned",
+                             "locked": false,
+                             "flip_h": false,
+                             "runtime_scale": [
+                               1,
+                               1
+                             ],
+                             "calibrationOverlays": {
+                               "face_mask": {
+                                 "shape": "rect",
+                                 "offset": [
+                                   -4,
+                                   -1
+                                 ],
+                                 "size": [
+                                   8,
+                                   10
+                                 ],
+                                 "rearDirection": true
+                               },
+                               "hair_mask": {
+                                 "shape": "rect",
+                                 "offset": [
+                                   -8,
+                                   -9
+                                 ],
+                                 "size": [
+                                   16,
+                                   10
+                                 ]
+                               }
+                             },
+                             "layers": {
+                               "helmet_back": null,
+                               "helmet_front": {
+                                 "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                                 "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
+                                 "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
+                                 "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
+                                 "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
+                                 "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
+                               },
+                               "head_occlusion_mask": null
+                             }
+                           },
+                           "NE": {
+                             "texture": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                             "texturesByAction": {
+                               "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                               "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
+                               "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
+                               "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
+                               "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
+                               "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
+                             },
+                             "source_direction": "NE",
+                             "source_row": 1,
+                             "source_slot_id": "slot_1",
+                             "pivot": [
+                               87,
+                               36
+                             ],
+                             "pivotByActionFrame": {
+                               "idle": [
+                                 [
+                                   87,
+                                   36
+                                 ],
+                                 [
+                                   87,
+                                   36
+                                 ],
+                                 [
+                                   87,
+                                   36
+                                 ],
+                                 [
+                                   87,
+                                   36
+                                 ]
+                               ],
+                               "walk": [
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   87,
+                                   36
+                                 ],
+                                 [
+                                   87,
+                                   37
+                                 ],
+                                 [
+                                   87,
+                                   36
+                                 ],
+                                 [
+                                   88,
+                                   36
+                                 ]
+                               ],
+                               "attack": [
+                                 [
+                                   86,
+                                   45
+                                 ],
+                                 [
+                                   74,
+                                   53
+                                 ],
+                                 [
+                                   96,
+                                   38
+                                 ],
+                                 [
+                                   104,
+                                   38
+                                 ],
+                                 [
+                                   108,
+                                   39
+                                 ],
+                                 [
+                                   101,
+                                   39
+                                 ]
+                               ],
+                               "cast": [
+                                 [
+                                   87,
+                                   41
+                                 ],
+                                 [
+                                   87,
+                                   40
+                                 ],
+                                 [
+                                   86,
+                                   41
+                                 ],
+                                 [
+                                   84,
+                                   42
+                                 ],
+                                 [
+                                   83,
+                                   41
+                                 ],
+                                 [
+                                   88,
+                                   40
+                                 ]
+                               ],
+                               "hit": [
+                                 [
+                                   70,
+                                   55
+                                 ],
+                                 [
+                                   79,
+                                   48
+                                 ],
+                                 [
+                                   88,
+                                   39
+                                 ]
+                               ],
+                               "death": [
+                                 [
+                                   92,
+                                   38
+                                 ],
+                                 [
+                                   85,
+                                   48
+                                 ],
+                                 [
+                                   66,
+                                   103
+                                 ],
+                                 [
+                                   57,
+                                   115
+                                 ]
+                               ]
+                             },
+                             "nudge": [
+                               0,
+                               0
+                             ],
+                             "face_policy": "closed",
+                             "hair_policy": "keep",
+                             "openingVisibility": "none",
+                             "status": "unassigned",
+                             "locked": false,
+                             "flip_h": false,
+                             "runtime_scale": [
+                               1,
+                               1
+                             ],
+                             "calibrationOverlays": {
+                               "face_mask": {
+                                 "shape": "rect",
+                                 "offset": [
+                                   -4,
+                                   -1
+                                 ],
+                                 "size": [
+                                   8,
+                                   10
+                                 ],
+                                 "rearDirection": true
+                               },
+                               "hair_mask": {
+                                 "shape": "rect",
+                                 "offset": [
+                                   -8,
+                                   -9
+                                 ],
+                                 "size": [
+                                   16,
+                                   10
+                                 ]
+                               }
+                             },
+                             "layers": {
+                               "helmet_back": null,
+                               "helmet_front": {
+                                 "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                                 "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
+                                 "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
+                                 "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
+                                 "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
+                                 "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
+                               },
+                               "head_occlusion_mask": null
+                             }
+                           },
+                           "E": {
+                             "texture": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                             "texturesByAction": {
+                               "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                               "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
+                               "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
+                               "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
+                               "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
+                               "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
+                             },
+                             "source_direction": "E",
+                             "source_row": 2,
+                             "source_slot_id": "slot_2",
+                             "pivot": [
+                               87,
+                               36
+                             ],
+                             "pivotByActionFrame": {
+                               "idle": [
+                                 [
+                                   87,
+                                   36
+                                 ],
+                                 [
+                                   87,
+                                   36
+                                 ],
+                                 [
+                                   87,
+                                   36
+                                 ],
+                                 [
+                                   87,
+                                   36
+                                 ]
+                               ],
+                               "walk": [
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   36
+                                 ],
+                                 [
+                                   88,
+                                   36
+                                 ],
+                                 [
+                                   88,
+                                   36
+                                 ],
+                                 [
+                                   87,
+                                   36
+                                 ],
+                                 [
+                                   88,
+                                   36
+                                 ]
+                               ],
+                               "attack": [
+                                 [
+                                   83,
+                                   43
+                                 ],
+                                 [
+                                   71,
+                                   44
+                                 ],
+                                 [
+                                   98,
+                                   44
+                                 ],
+                                 [
+                                   111,
+                                   48
+                                 ],
+                                 [
+                                   116,
+                                   52
+                                 ],
+                                 [
+                                   105,
+                                   47
+                                 ]
+                               ],
+                               "cast": [
+                                 [
+                                   86,
+                                   40
+                                 ],
+                                 [
+                                   86,
+                                   40
+                                 ],
+                                 [
+                                   85,
+                                   40
+                                 ],
+                                 [
+                                   82,
+                                   40
+                                 ],
+                                 [
+                                   81,
+                                   38
+                                 ],
+                                 [
+                                   87,
+                                   40
+                                 ]
+                               ],
+                               "hit": [
+                                 [
+                                   65,
+                                   44
+                                 ],
+                                 [
+                                   75,
+                                   41
+                                 ],
+                                 [
+                                   87,
+                                   38
+                                 ]
+                               ],
+                               "death": [
+                                 [
+                                   93,
+                                   40
+                                 ],
+                                 [
+                                   87,
+                                   47
+                                 ],
+                                 [
+                                   51,
+                                   87
+                                 ],
+                                 [
+                                   39,
+                                   94
+                                 ]
+                               ]
+                             },
+                             "nudge": [
+                               0,
+                               0
+                             ],
+                             "face_policy": "open_crown",
+                             "hair_policy": "keep",
+                             "openingVisibility": "partial",
+                             "status": "unassigned",
+                             "locked": false,
+                             "flip_h": false,
+                             "runtime_scale": [
+                               1,
+                               1
+                             ],
+                             "calibrationOverlays": {
+                               "face_mask": {
+                                 "shape": "rect",
+                                 "offset": [
+                                   -4,
+                                   -1
+                                 ],
+                                 "size": [
+                                   8,
+                                   10
+                                 ],
+                                 "rearDirection": false
+                               },
+                               "hair_mask": {
+                                 "shape": "rect",
+                                 "offset": [
+                                   -8,
+                                   -9
+                                 ],
+                                 "size": [
+                                   16,
+                                   10
+                                 ]
+                               }
+                             },
+                             "layers": {
+                               "helmet_back": null,
+                               "helmet_front": {
+                                 "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                                 "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
+                                 "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
+                                 "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
+                                 "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
+                                 "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
+                               },
+                               "head_occlusion_mask": null
+                             }
+                           },
+                           "SE": {
+                             "texture": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                             "texturesByAction": {
+                               "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                               "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
+                               "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
+                               "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
+                               "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
+                               "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
+                             },
+                             "source_direction": "SE",
+                             "source_row": 3,
+                             "source_slot_id": "slot_3",
+                             "pivot": [
+                               87,
+                               36
+                             ],
+                             "pivotByActionFrame": {
+                               "idle": [
+                                 [
+                                   87,
+                                   36
+                                 ],
+                                 [
+                                   87,
+                                   36
+                                 ],
+                                 [
+                                   87,
+                                   36
+                                 ],
+                                 [
+                                   87,
+                                   36
+                                 ]
+                               ],
+                               "walk": [
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   87,
+                                   36
+                                 ],
+                                 [
+                                   88,
+                                   36
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   36
+                                 ],
+                                 [
+                                   88,
+                                   36
+                                 ]
+                               ],
+                               "attack": [
+                                 [
+                                   82,
+                                   40
+                                 ],
+                                 [
+                                   78,
+                                   37
+                                 ],
+                                 [
+                                   94,
+                                   49
+                                 ],
+                                 [
+                                   103,
+                                   60
+                                 ],
+                                 [
+                                   108,
+                                   66
+                                 ],
+                                 [
+                                   97,
+                                   55
+                                 ]
+                               ],
+                               "cast": [
+                                 [
+                                   86,
+                                   39
+                                 ],
+                                 [
+                                   86,
+                                   39
+                                 ],
+                                 [
+                                   84,
+                                   38
+                                 ],
+                                 [
+                                   83,
+                                   37
+                                 ],
+                                 [
+                                   84,
+                                   35
+                                 ],
+                                 [
+                                   86,
+                                   39
+                                 ]
+                               ],
+                               "hit": [
+                                 [
+                                   73,
+                                   33
+                                 ],
+                                 [
+                                   78,
+                                   35
+                                 ],
+                                 [
+                                   86,
+                                   38
+                                 ]
+                               ],
+                               "death": [
+                                 [
+                                   91,
+                                   43
+                                 ],
+                                 [
+                                   89,
+                                   48
+                                 ],
+                                 [
+                                   59,
+                                   70
+                                 ],
+                                 [
+                                   51,
+                                   71
+                                 ]
+                               ]
+                             },
+                             "nudge": [
+                               0,
+                               0
+                             ],
+                             "face_policy": "open_crown",
+                             "hair_policy": "keep",
+                             "openingVisibility": "partial",
+                             "status": "unassigned",
+                             "locked": false,
+                             "flip_h": false,
+                             "runtime_scale": [
+                               1,
+                               1
+                             ],
+                             "calibrationOverlays": {
+                               "face_mask": {
+                                 "shape": "rect",
+                                 "offset": [
+                                   -4,
+                                   -1
+                                 ],
+                                 "size": [
+                                   8,
+                                   10
+                                 ],
+                                 "rearDirection": false
+                               },
+                               "hair_mask": {
+                                 "shape": "rect",
+                                 "offset": [
+                                   -8,
+                                   -9
+                                 ],
+                                 "size": [
+                                   16,
+                                   10
+                                 ]
+                               }
+                             },
+                             "layers": {
+                               "helmet_back": null,
+                               "helmet_front": {
+                                 "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                                 "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
+                                 "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
+                                 "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
+                                 "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
+                                 "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
+                               },
+                               "head_occlusion_mask": null
+                             }
+                           },
+                           "S": {
+                             "texture": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                             "texturesByAction": {
+                               "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                               "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
+                               "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
+                               "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
+                               "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
+                               "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
+                             },
+                             "source_direction": "S",
+                             "source_row": 4,
+                             "source_slot_id": "slot_4",
+                             "pivot": [
+                               88,
+                               36
+                             ],
+                             "pivotByActionFrame": {
+                               "idle": [
+                                 [
+                                   88,
+                                   36
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ]
+                               ],
+                               "walk": [
+                                 [
+                                   88,
+                                   38
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   89,
+                                   38
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ]
+                               ],
+                               "attack": [
+                                 [
+                                   85,
+                                   39
+                                 ],
+                                 [
+                                   92,
+                                   36
+                                 ],
+                                 [
+                                   87,
+                                   51
+                                 ],
+                                 [
+                                   87,
+                                   65
+                                 ],
+                                 [
+                                   88,
+                                   73
+                                 ],
+                                 [
+                                   85,
+                                   58
+                                 ]
+                               ],
+                               "cast": [
+                                 [
+                                   87,
+                                   39
+                                 ],
+                                 [
+                                   87,
+                                   39
+                                 ],
+                                 [
+                                   87,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   36
+                                 ],
+                                 [
+                                   89,
+                                   34
+                                 ],
+                                 [
+                                   86,
+                                   38
+                                 ]
+                               ],
+                               "hit": [
+                                 [
+                                   89,
+                                   30
+                                 ],
+                                 [
+                                   87,
+                                   33
+                                 ],
+                                 [
+                                   87,
+                                   38
+                                 ]
+                               ],
+                               "death": [
+                                 [
+                                   88,
+                                   44
+                                 ],
+                                 [
+                                   86,
+                                   41
+                                 ],
+                                 [
+                                   83,
+                                   61
+                                 ],
+                                 [
+                                   83,
+                                   59
+                                 ]
+                               ]
+                             },
+                             "nudge": [
+                               0,
+                               0
+                             ],
+                             "face_policy": "open_crown",
+                             "hair_policy": "keep",
+                             "openingVisibility": "full",
+                             "status": "unassigned",
+                             "locked": false,
+                             "flip_h": false,
+                             "runtime_scale": [
+                               1,
+                               1
+                             ],
+                             "calibrationOverlays": {
+                               "face_mask": {
+                                 "shape": "rect",
+                                 "offset": [
+                                   -4,
+                                   -1
+                                 ],
+                                 "size": [
+                                   8,
+                                   10
+                                 ],
+                                 "rearDirection": false
+                               },
+                               "hair_mask": {
+                                 "shape": "rect",
+                                 "offset": [
+                                   -8,
+                                   -9
+                                 ],
+                                 "size": [
+                                   16,
+                                   10
+                                 ]
+                               }
+                             },
+                             "layers": {
+                               "helmet_back": null,
+                               "helmet_front": {
+                                 "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                                 "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
+                                 "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
+                                 "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
+                                 "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
+                                 "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
+                               },
+                               "head_occlusion_mask": null
+                             }
+                           },
+                           "SW": {
+                             "texture": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                             "texturesByAction": {
+                               "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                               "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
+                               "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
+                               "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
+                               "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
+                               "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
+                             },
+                             "source_direction": "SW",
+                             "source_row": 5,
+                             "source_slot_id": "slot_5",
+                             "pivot": [
+                               89,
+                               36
+                             ],
+                             "pivotByActionFrame": {
+                               "idle": [
+                                 [
+                                   89,
+                                   36
+                                 ],
+                                 [
+                                   89,
+                                   36
+                                 ],
+                                 [
+                                   89,
+                                   36
+                                 ],
+                                 [
+                                   89,
+                                   36
+                                 ]
+                               ],
+                               "walk": [
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   89,
+                                   37
+                                 ],
+                                 [
+                                   89,
+                                   37
+                                 ],
+                                 [
+                                   89,
+                                   37
+                                 ],
+                                 [
+                                   89,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   36
+                                 ]
+                               ],
+                               "attack": [
+                                 [
+                                   90,
+                                   38
+                                 ],
+                                 [
+                                   102,
+                                   41
+                                 ],
+                                 [
+                                   80,
+                                   48
+                                 ],
+                                 [
+                                   72,
+                                   59
+                                 ],
+                                 [
+                                   68,
+                                   66
+                                 ],
+                                 [
+                                   74,
+                                   52
+                                 ]
+                               ],
+                               "cast": [
+                                 [
+                                   88,
+                                   38
+                                 ],
+                                 [
+                                   89,
+                                   38
+                                 ],
+                                 [
+                                   90,
+                                   37
+                                 ],
+                                 [
+                                   93,
+                                   37
+                                 ],
+                                 [
+                                   93,
+                                   37
+                                 ],
+                                 [
+                                   87,
+                                   37
+                                 ]
+                               ],
+                               "hit": [
+                                 [
+                                   106,
+                                   37
+                                 ],
+                                 [
+                                   98,
+                                   35
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ]
+                               ],
+                               "death": [
+                                 [
+                                   85,
+                                   43
+                                 ],
+                                 [
+                                   88,
+                                   40
+                                 ],
+                                 [
+                                   110,
+                                   65
+                                 ],
+                                 [
+                                   118,
+                                   67
+                                 ]
+                               ]
+                             },
+                             "nudge": [
+                               0,
+                               0
+                             ],
+                             "face_policy": "open_crown",
+                             "hair_policy": "keep",
+                             "openingVisibility": "partial",
+                             "status": "unassigned",
+                             "locked": false,
+                             "flip_h": false,
+                             "runtime_scale": [
+                               1,
+                               1
+                             ],
+                             "calibrationOverlays": {
+                               "face_mask": {
+                                 "shape": "rect",
+                                 "offset": [
+                                   -4,
+                                   -1
+                                 ],
+                                 "size": [
+                                   8,
+                                   10
+                                 ],
+                                 "rearDirection": false
+                               },
+                               "hair_mask": {
+                                 "shape": "rect",
+                                 "offset": [
+                                   -8,
+                                   -9
+                                 ],
+                                 "size": [
+                                   16,
+                                   10
+                                 ]
+                               }
+                             },
+                             "layers": {
+                               "helmet_back": null,
+                               "helmet_front": {
+                                 "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                                 "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
+                                 "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
+                                 "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
+                                 "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
+                                 "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
+                               },
+                               "head_occlusion_mask": null
+                             }
+                           },
+                           "W": {
+                             "texture": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                             "texturesByAction": {
+                               "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                               "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
+                               "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
+                               "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
+                               "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
+                               "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
+                             },
+                             "source_direction": "W",
+                             "source_row": 6,
+                             "source_slot_id": "slot_6",
+                             "pivot": [
+                               89,
+                               36
+                             ],
+                             "pivotByActionFrame": {
+                               "idle": [
+                                 [
+                                   89,
+                                   36
+                                 ],
+                                 [
+                                   89,
+                                   36
+                                 ],
+                                 [
+                                   89,
+                                   36
+                                 ],
+                                 [
+                                   89,
+                                   36
+                                 ]
+                               ],
+                               "walk": [
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   89,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   38
+                                 ],
+                                 [
+                                   89,
+                                   37
+                                 ],
+                                 [
+                                   89,
+                                   37
+                                 ]
+                               ],
+                               "attack": [
+                                 [
+                                   93,
+                                   40
+                                 ],
+                                 [
+                                   105,
+                                   49
+                                 ],
+                                 [
+                                   78,
+                                   43
+                                 ],
+                                 [
+                                   65,
+                                   48
+                                 ],
+                                 [
+                                   60,
+                                   53
+                                 ],
+                                 [
+                                   71,
+                                   44
+                                 ]
+                               ],
+                               "cast": [
+                                 [
+                                   90,
+                                   39
+                                 ],
+                                 [
+                                   90,
+                                   38
+                                 ],
+                                 [
+                                   92,
+                                   38
+                                 ],
+                                 [
+                                   94,
+                                   39
+                                 ],
+                                 [
+                                   94,
+                                   40
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ]
+                               ],
+                               "hit": [
+                                 [
+                                   111,
+                                   48
+                                 ],
+                                 [
+                                   102,
+                                   42
+                                 ],
+                                 [
+                                   89,
+                                   37
+                                 ]
+                               ],
+                               "death": [
+                                 [
+                                   82,
+                                   41
+                                 ],
+                                 [
+                                   91,
+                                   41
+                                 ],
+                                 [
+                                   125,
+                                   83
+                                 ],
+                                 [
+                                   136,
+                                   90
+                                 ]
+                               ]
+                             },
+                             "nudge": [
+                               0,
+                               0
+                             ],
+                             "face_policy": "open_crown",
+                             "hair_policy": "keep",
+                             "openingVisibility": "partial",
+                             "status": "unassigned",
+                             "locked": false,
+                             "flip_h": false,
+                             "runtime_scale": [
+                               1,
+                               1
+                             ],
+                             "calibrationOverlays": {
+                               "face_mask": {
+                                 "shape": "rect",
+                                 "offset": [
+                                   -4,
+                                   -1
+                                 ],
+                                 "size": [
+                                   8,
+                                   10
+                                 ],
+                                 "rearDirection": false
+                               },
+                               "hair_mask": {
+                                 "shape": "rect",
+                                 "offset": [
+                                   -8,
+                                   -9
+                                 ],
+                                 "size": [
+                                   16,
+                                   10
+                                 ]
+                               }
+                             },
+                             "layers": {
+                               "helmet_back": null,
+                               "helmet_front": {
+                                 "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                                 "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
+                                 "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
+                                 "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
+                                 "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
+                                 "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
+                               },
+                               "head_occlusion_mask": null
+                             }
+                           },
+                           "NW": {
+                             "texture": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                             "texturesByAction": {
+                               "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                               "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
+                               "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
+                               "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
+                               "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
+                               "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
+                             },
+                             "source_direction": "NW",
+                             "source_row": 7,
+                             "source_slot_id": "slot_7",
+                             "pivot": [
+                               89,
+                               37
+                             ],
+                             "pivotByActionFrame": {
+                               "idle": [
+                                 [
+                                   89,
+                                   37
+                                 ],
+                                 [
+                                   89,
+                                   37
+                                 ],
+                                 [
+                                   89,
+                                   37
+                                 ],
+                                 [
+                                   89,
+                                   37
+                                 ]
+                               ],
+                               "walk": [
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   38
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ],
+                                 [
+                                   88,
+                                   37
+                                 ]
+                               ],
+                               "attack": [
+                                 [
+                                   93,
+                                   43
+                                 ],
+                                 [
+                                   98,
+                                   58
+                                 ],
+                                 [
+                                   82,
+                                   39
+                                 ],
+                                 [
+                                   73,
+                                   38
+                                 ],
+                                 [
+                                   68,
+                                   40
+                                 ],
+                                 [
+                                   79,
+                                   37
+                                 ]
+                               ],
+                               "cast": [
+                                 [
+                                   90,
+                                   40
+                                 ],
+                                 [
+                                   90,
+                                   40
+                                 ],
+                                 [
+                                   91,
+                                   40
+                                 ],
+                                 [
+                                   92,
+                                   43
+                                 ],
+                                 [
+                                   92,
+                                   42
+                                 ],
+                                 [
+                                   91,
+                                   38
+                                 ]
+                               ],
+                               "hit": [
+                                 [
+                                   102,
+                                   59
+                                 ],
+                                 [
+                                   97,
+                                   49
+                                 ],
+                                 [
+                                   90,
+                                   38
+                                 ]
+                               ],
+                               "death": [
+                                 [
+                                   85,
+                                   38
+                                 ],
+                                 [
+                                   91,
+                                   44
+                                 ],
+                                 [
+                                   116,
+                                   101
+                                 ],
+                                 [
+                                   124,
+                                   113
+                                 ]
+                               ]
+                             },
+                             "nudge": [
+                               0,
+                               0
+                             ],
+                             "face_policy": "closed",
+                             "hair_policy": "keep",
+                             "openingVisibility": "none",
+                             "status": "unassigned",
+                             "locked": false,
+                             "flip_h": false,
+                             "runtime_scale": [
+                               1,
+                               1
+                             ],
+                             "calibrationOverlays": {
+                               "face_mask": {
+                                 "shape": "rect",
+                                 "offset": [
+                                   -4,
+                                   -1
+                                 ],
+                                 "size": [
+                                   8,
+                                   10
+                                 ],
+                                 "rearDirection": true
+                               },
+                               "hair_mask": {
+                                 "shape": "rect",
+                                 "offset": [
+                                   -8,
+                                   -9
+                                 ],
+                                 "size": [
+                                   16,
+                                   10
+                                 ]
+                               }
+                             },
+                             "layers": {
+                               "helmet_back": null,
+                               "helmet_front": {
+                                 "idle": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_idle.png",
+                                 "walk": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_walk.png",
+                                 "attack": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_attack.png",
+                                 "cast": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_cast.png",
+                                 "hit": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_hit.png",
+                                 "death": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet_death.png"
+                               },
+                               "head_occlusion_mask": null
+                             }
+                           }
+                         },
+                         "source_direction_map": {
+                           "N": 0,
+                           "NE": 1,
+                           "E": 2,
+                           "SE": 3,
+                           "S": 4,
+                           "SW": 5,
+                           "W": 6,
+                           "NW": 7
+                         }
+                       }
   },
   "sharedVisualAssets": {
     "bronze_magic": {
