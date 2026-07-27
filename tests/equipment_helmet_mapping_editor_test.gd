@@ -17,11 +17,15 @@ func _run() -> void:
 		"146": _source_hashes(146),
 		"151": _source_hashes(151),
 	}
-	var editor: Node = EDITOR_SCENE.instantiate()
-	editor.auto_run = false
-	assert(editor._load_active_target_manifest(
+	var active_target_probe: Node = EDITOR_SCENE.instantiate()
+	active_target_probe.auto_run = false
+	assert(active_target_probe._load_active_target_manifest(
 		"res://assets/data/helmet_calibration_active_target.json"
 	))
+	assert(active_target_probe.active_target_item_id() == 228)
+	active_target_probe.free()
+	var editor: Node = EDITOR_SCENE.instantiate()
+	editor.auto_run = false
 	add_child(editor)
 	assert(await editor.initialize_editor_runtime(true))
 	var interactive_args := PackedStringArray([
