@@ -177,10 +177,7 @@ def main() -> None:
         "uniformEditorScaleAcrossDirections": True,
         "filter": "lanczos_downsample_then_nearest_runtime",
     }
-    for identity_id in (
-        "prayer",
-        "heavenly_taoist",
-    ):
+    for identity_id in ("prayer",):
         assert (
             recipe_identities[identity_id]["sourceSlotDirectionOrder"]
             == GROUP_B_SOURCE_ORDER
@@ -189,7 +186,7 @@ def main() -> None:
             recipe_identities[identity_id]["canonicalRowSourceSlots"]
             == GROUP_B_CANONICAL_SLOTS
         )
-    for identity_id in ("holy_war", "god_magic"):
+    for identity_id in ("holy_war", "god_magic", "heavenly_taoist"):
         assert (
             recipe_identities[identity_id]["sourceSlotDirectionOrder"]
             == DIRECTIONS
@@ -263,7 +260,7 @@ def main() -> None:
         assert item["slot"] == "helmet"
         expected_status = (
             "user_approved_project_redesign"
-            if item_id in (232, 236)
+            if item_id in (232, 236, 240)
             else "approved_project_extension"
         )
         assert item["status"] == expected_status

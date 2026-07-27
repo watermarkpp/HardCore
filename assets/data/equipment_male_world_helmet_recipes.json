@@ -499,13 +499,116 @@
       "identityId": "heavenly_taoist",
       "sourceIndex": 102,
       "concept": "res://assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_helmet_8dir.png",
-      "sourceGrid": [4, 2],
+      "approvedSource": "res://assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_helmet_approved_20260727.png",
+      "approvedSourceFileSha256": "a5e474da3c081ad2f5dd0926bd9dd1358e4179737e6b8d5614a77cf7b2ba9e8e",
+      "approvedSourceExternalEvidence": "C:\\Users\\Administrator\\Downloads\\ChatGPT Image 2026年7月27日 18_50_11.png",
+      "approvedSourceGrid": [
+        4,
+        2
+      ],
+      "sourceGrid": [
+        4,
+        2
+      ],
       "directionClassificationStatus": "accepted_manual_visual_classification",
-      "directionClassificationEvidence": "independent full-resolution review of front mask, red-gold crest projection, rear dome and mirrored side guards",
-      "sourceSlotDirectionOrder": ["N", "NW", "W", "E", "S", "SW", "SE", "NE"],
-      "canonicalRowSourceSlots": [0, 7, 3, 6, 4, 5, 2, 1],
+      "directionClassificationEvidence": "user supplied the exact canonical sheet; top N,NE,E,SE and bottom S,SW,W,NW",
+      "sourceSlotDirectionOrder": [
+        "N",
+        "NE",
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW"
+      ],
+      "canonicalRowSourceSlots": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
       "outputPrefix": "res://assets/art/items/client/world_wear/helmet/male/heavenly_taoist_helmet",
-      "matteTolerance": 14
+      "mattePolicy": "generated_magenta_remove_v1",
+      "faceAperturePolicy": {
+        "N": "closed",
+        "NE": "closed",
+        "E": "open_crown",
+        "SE": "open_crown",
+        "S": "open_crown",
+        "SW": "open_crown",
+        "W": "open_crown",
+        "NW": "closed"
+      },
+      "faceApertureShape": {
+        "N": "none",
+        "NE": "none",
+        "E": "polygon_dark_only",
+        "SE": "polygon_dark_only",
+        "S": "polygon_dark_only",
+        "SW": "polygon_dark_only",
+        "W": "polygon_dark_only",
+        "NW": "none"
+      },
+      "paperDollSourceDirection": "S",
+      "paperDollFaceWindow": "open_source_face_aperture",
+      "paperDollEraseMask": "clear_helmet_silhouette_preserve_face",
+      "inventorySourceDirection": "S",
+      "inventoryFaceWindow": "opaque_dark_interior",
+      "groundSourceDirection": "S",
+      "groundFaceWindow": "opaque_dark_interior",
+      "worldSizingPolicy": "primary_client_direction_envelope_fit_v1",
+      "worldDirectionEnvelopes": {
+        "N": [
+          13,
+          16
+        ],
+        "NE": [
+          18,
+          18
+        ],
+        "E": [
+          15,
+          20
+        ],
+        "SE": [
+          16,
+          23
+        ],
+        "S": [
+          14,
+          21
+        ],
+        "SW": [
+          16,
+          23
+        ],
+        "W": [
+          16,
+          20
+        ],
+        "NW": [
+          16,
+          17
+        ]
+      },
+      "paperDollCanvasSize": [
+        32,
+        41
+      ],
+      "paperDollContentEnvelope": [
+        20,
+        24
+      ],
+      "singlePassDownsampleFromApprovedSource": true,
+      "offlineDownsampleFilter": "premultiplied_alpha_lanczos",
+      "runtimeScale": 1,
+      "textureFilter": "nearest",
+      "userOverrideAuthorization": "direct use of user-supplied replacement sheet"
     }
   ]
 }
