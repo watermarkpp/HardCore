@@ -74,12 +74,12 @@ func _run() -> void:
 			"res://assets/data/helmet_calibration_active_target.json"
 		)
 	)
-	assert(int(active_target.get("itemId", -1)) == 151)
+	assert(int(active_target.get("itemId", -1)) == 228)
 	assert(str(active_target.get(
 		"visualAssetId", ""
-	)) == "black_iron_golden_151")
+	)) == "memory")
 	assert(str(active_target.get("sourceSheet", "")).ends_with(
-		"black_iron_helmet_151_8dir_v2.png"
+		"memory_helmet_8dir.png"
 	))
 	assert(str(active_target.get("sourceResizeFilter", "")) == (
 		"nearest"
