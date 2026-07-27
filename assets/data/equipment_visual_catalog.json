@@ -51595,7 +51595,17 @@
         ],
         "source": "user_authorized_redesign",
         "mappingConfidence": "user_authorized_exact",
-        "designIdentity": "mystery_japanese_kabuto_218"
+        "designIdentity": "mystery_japanese_kabuto_218",
+        "diameterProjection": {
+          "horizontalDiameterPercent": 80,
+          "heightPercent": 100,
+          "canvasPreserved": [
+            48,
+            48
+          ],
+          "centredOnOriginalHeadAnchor": true,
+          "filter": "nearest"
+        }
       },
       "worldWear": {
         "status": "approved_project_extension",

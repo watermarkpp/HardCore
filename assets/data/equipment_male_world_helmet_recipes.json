@@ -177,6 +177,14 @@
       "calibrationSourceMatte": "transparent_user_authorized_redesign_despill_v1",
       "calibrationResizeFilter": "lanczos_downsample_nearest_runtime_v1",
       "calibrationBaseScalePercent": 100,
+      "angleAwareHorizontalDiameter": {
+        "lateralDiameterPercent": 80,
+        "depthDiameterPercent": 80,
+        "depthToWidthRatio": 1.0,
+        "heightPercent": 100,
+        "filter": "nearest",
+        "pivotPolicy": "direction_frame_head_pivot_preserved"
+      },
       "bodyDrivenSizing": {
         "method": "central_column_density",
         "columnDensityThresholdPercent": 30,
