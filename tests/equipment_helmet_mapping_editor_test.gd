@@ -213,14 +213,30 @@ func _run() -> void:
 			== expected.get_data()
 		)
 	# 150 source buttons, worn player and zoom preview must all use the exact
-	# generated runtime PNG pixels. The tool must not read a stale .ctex.
+	# generated runtime PNG pixels selected by the user's saved source-row
+	# mapping. The tool must not assume direction_index == source_row and must
+	# not read a stale .ctex.
 	editor.select_item(150)
-	for row: int in 8:
+	for direction_index: int in 8:
+		var direction_record := HelmetVisualV2.direction_record(
+			150, direction_index
+		)
+		var source_row := int(direction_record.get(
+			"source_row", direction_index
+		))
 		var direct_source: Image = editor.calibration_source_cell(
-			"idle", row, 0
+			"idle", source_row, 0
+		)
+		var pivot := HelmetVisualV2.pivot_for_source_row(
+			150, "idle", source_row, 0
+		)
+		direct_source = editor.scale_cell_around_pivot(
+			direct_source,
+			pivot,
+			HelmetVisualV2.uniform_scale_percent(150)
 		)
 		var runtime_source: Image = editor._runtime_layer_cell(
-			"ClientHelmetLayer", "idle", row, 0
+			"ClientHelmetLayer", "idle", direction_index, 0
 		)
 		assert(runtime_source.get_data() == direct_source.get_data())
 	assert(HelmetVisualV2.source_direction_for_row(146, 3) == "NW")
