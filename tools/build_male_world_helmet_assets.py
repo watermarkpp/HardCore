@@ -393,7 +393,10 @@ def approved_calibration_cutouts(
     if not target_value:
         return None
     matte_policy = str(recipe.get("calibrationSourceMatte", ""))
-    if matte_policy != "transparent_user_approved_despill_v1":
+    if matte_policy not in {
+        "transparent_user_approved_despill_v1",
+        "transparent_user_authorized_redesign_despill_v1",
+    }:
         raise ValueError(
             f"{recipe['identityId']} has unsupported calibration matte "
             f"policy: {matte_policy}"
@@ -581,6 +584,9 @@ def helmet_body_box(
     threshold_percent = float(policy["columnDensityThresholdPercent"])
     maximum_gap_percent = float(policy["maximumColumnGapPercent"])
     padding_percent = float(policy["horizontalPaddingPercent"])
+    body_top_crop_percent = float(
+        policy.get("bodyTopCropPercent", 0.0)
+    )
     if not (5.0 <= threshold_percent <= 90.0):
         raise ValueError(
             "columnDensityThresholdPercent must be between 5 and 90"
@@ -593,10 +599,19 @@ def helmet_body_box(
         raise ValueError(
             "horizontalPaddingPercent must be between 0 and 20"
         )
+    if not (0.0 <= body_top_crop_percent <= 50.0):
+        raise ValueError(
+            "bodyTopCropPercent must be between 0 and 50"
+        )
 
     alpha = cutout.getchannel("A")
+    body_top = round(cutout.height * body_top_crop_percent / 100.0)
     column_mass = [
-        sum(alpha.getpixel((x, y)) for y in range(cutout.height)) / 255.0
+        sum(
+            alpha.getpixel((x, y))
+            for y in range(body_top, cutout.height)
+        )
+        / 255.0
         for x in range(cutout.width)
     ]
     peak_mass = max(column_mass, default=0.0)
@@ -634,14 +649,16 @@ def helmet_body_box(
     padding = max(1, round(cutout.width * padding_percent / 100.0))
     left = max(0, body_group[0] - padding)
     right = min(cutout.width, body_group[1] + 1 + padding)
-    body_alpha_box = alpha.crop((left, 0, right, cutout.height)).getbbox()
+    body_alpha_box = alpha.crop(
+        (left, body_top, right, cutout.height)
+    ).getbbox()
     if body_alpha_box is None:
         raise ValueError("helmet body box is empty")
     box = (
         left,
-        int(body_alpha_box[1]),
+        body_top + int(body_alpha_box[1]),
         right,
-        int(body_alpha_box[3]),
+        body_top + int(body_alpha_box[3]),
     )
     width_fraction = (box[2] - box[0]) / cutout.width
     minimum_fraction = float(policy["minimumBodyWidthFraction"])
@@ -696,12 +713,18 @@ def fit_body_to_client_envelope(
             red, green, blue, opacity = pixels[x, y]
             if opacity <= 7:
                 pixels[x, y] = (0, 0, 0, 0)
+    excluded_accessory = str(
+        policy.get("excludedAccessory", "two_long_lateral_horns")
+    )
     return result, {
         "enabled": True,
         "method": "central_column_density",
         "clientEnvelopeAppliedTo": "main_helmet_body_only",
-        "excludedAccessory": "two_long_lateral_horns",
-        "hornsExcludedFromScaleCalculation": True,
+        "excludedAccessory": excluded_accessory,
+        "accessoryExcludedFromScaleCalculation": True,
+        "hornsExcludedFromScaleCalculation": (
+            excluded_accessory == "two_long_lateral_horns"
+        ),
         "fullBoundsMayExceedClientEnvelope": True,
         "sourceBodyBox": list(body_box),
         "sourceBodySize": [
@@ -731,6 +754,9 @@ def fit_body_to_client_envelope(
         ),
         "horizontalPaddingPercent": float(
             policy["horizontalPaddingPercent"]
+        ),
+        "bodyTopCropPercent": float(
+            policy.get("bodyTopCropPercent", 0.0)
         ),
     }
 
@@ -891,10 +917,23 @@ def build_variants(
                 target_mass,
             )
         source_slot = canonical_slots[direction_row]
+        excluded_accessory = str(
+            body_sizing_policy.get(
+                "excludedAccessory",
+                "two_long_lateral_horns",
+            )
+        )
         prepared_policy = (
             "concept_body_driven_resize_horns_excluded_v1"
-            if body_sizing_policy
-            else "concept_direct_resize"
+            if (
+                body_sizing_policy
+                and excluded_accessory == "two_long_lateral_horns"
+            )
+            else (
+                "concept_body_driven_resize_accessory_excluded_v1"
+                if body_sizing_policy
+                else "concept_direct_resize"
+            )
         )
         if bool(recipe.get("despillGreenCutouts", False)):
             prepared_policy += "_source_green_despill"
