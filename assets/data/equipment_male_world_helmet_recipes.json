@@ -444,6 +444,10 @@
       "inventoryFaceWindow": "opaque_black_mask_interior",
       "groundSourceDirection": "S",
       "groundFaceWindow": "opaque_black_mask_interior",
+      "calibrationResizeFilter": "lanczos_downsample_nearest_runtime_v1",
+      "calibrationBaseScalePercent": 52,
+      "relativeToPreviousScalePercent": 82,
+      "singlePassDownsampleFromApprovedSource": true,
       "runtimeScale": 1,
       "textureFilter": "nearest",
       "userOverrideAuthorization": "direct use of the explicitly supplied replacement sheet"

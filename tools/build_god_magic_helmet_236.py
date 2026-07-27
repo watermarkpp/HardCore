@@ -117,22 +117,23 @@ FOOT_ANCHOR = (64, 80)
 # the player's original face without deleting the decorative cage/trim.
 FACE_WINDOWS: dict[str, list[list[list[int]]]] = {}
 
-# Match the accepted default helmet envelope used by the corrected Holy War
-# helmet.  The previous 35-36px bake was about 1.56x the default world size.
-# Bake the approved design at 0.64x with integer pixels; runtime scale stays 1.
+# Rebuild directly from the approved 1774x887 source at the normal helmet
+# envelope.  This is 0.82x the previous accepted bake (an 18% reduction), not
+# a second resize of the already-small runtime art.  Runtime scale stays 1.
 WORLD_HEIGHT = {
-    "N": 23,
-    "NE": 23,
-    "E": 22,
-    "SE": 23,
-    "S": 23,
-    "SW": 23,
-    "W": 22,
-    "NW": 23,
+    "N": 19,
+    "NE": 19,
+    "E": 18,
+    "SE": 19,
+    "S": 19,
+    "SW": 19,
+    "W": 18,
+    "NW": 19,
 }
-WORLD_SCALE_RATIO = 0.64
+WORLD_SCALE_RATIO = 0.52
+RELATIVE_TO_PREVIOUS_SCALE = 0.82
 PAPER_CANVAS_SIZE = (32, 41)
-PAPER_CONTENT_ENVELOPE = (24, 29)
+PAPER_CONTENT_ENVELOPE = (20, 24)
 
 
 def load_json(path: Path) -> dict:
@@ -253,9 +254,33 @@ def crop_alpha(image: Image.Image) -> Image.Image:
     return image.crop(box)
 
 
+def clean_lanczos_matte_edge(image: Image.Image) -> Image.Image:
+    output = image.convert("RGBA")
+    pixels = output.load()
+    for y in range(output.height):
+        for x in range(output.width):
+            red, green, blue, alpha = pixels[x, y]
+            if alpha <= 3:
+                pixels[x, y] = (0, 0, 0, 0)
+                continue
+            if (
+                green >= 180
+                and green >= red + 70
+                and green >= blue + 70
+            ):
+                pixels[x, y] = (0, 0, 0, 0)
+                continue
+            if green > max(red, blue) + 28:
+                green = max(red, blue) + 12
+            pixels[x, y] = (red, green, blue, alpha)
+    return output
+
+
 def resize_to_height(image: Image.Image, height: int) -> Image.Image:
     width = max(1, round(image.width * height / image.height))
-    return image.resize((width, height), Image.Resampling.NEAREST)
+    return clean_lanczos_matte_edge(
+        image.resize((width, height), Image.Resampling.LANCZOS)
+    )
 
 
 def fit_inside(image: Image.Image, size: tuple[int, int]) -> Image.Image:
@@ -264,7 +289,9 @@ def fit_inside(image: Image.Image, size: tuple[int, int]) -> Image.Image:
         max(1, round(image.width * scale)),
         max(1, round(image.height * scale)),
     )
-    resized = image.resize(target, Image.Resampling.NEAREST)
+    resized = clean_lanczos_matte_edge(
+        image.resize(target, Image.Resampling.LANCZOS)
+    )
     output = Image.new("RGBA", size, (0, 0, 0, 0))
     output.alpha_composite(
         resized,
@@ -435,8 +462,10 @@ def build_world_identity(
             "clientMedianOpaquePixels": round(
                 float(baseline["directionRuntimeOpaquePixels"][direction]), 4
             ),
-            "resizeFilter": "nearest_baked_source_to_integer_pixels",
+            "resizeFilter": "lanczos_original_source_to_final_integer_pixels",
             "worldScaleRatio": WORLD_SCALE_RATIO,
+            "relativeToPreviousScale": RELATIVE_TO_PREVIOUS_SCALE,
+            "singlePassDownsampleFromApprovedSource": True,
             "runtimeScale": 1,
             "facePolicy": FACE_POLICY[direction],
             "hairPolicy": "hide",
@@ -475,6 +504,10 @@ def build_world_identity(
         ),
         "hairPolicy": "hide",
         "approvedBlackClothVeilRetained": True,
+        "worldScaleRatio": WORLD_SCALE_RATIO,
+        "relativeToPreviousScale": RELATIVE_TO_PREVIOUS_SCALE,
+        "bakeResizeFilter": "lanczos",
+        "singlePassDownsampleFromApprovedSource": True,
         "runtimeScale": 1,
         "textureFilter": "nearest",
         "integerPlacementCompatible": True,
@@ -673,6 +706,12 @@ def update_recipe() -> None:
             "inventoryFaceWindow": "opaque_black_mask_interior",
             "groundSourceDirection": "S",
             "groundFaceWindow": "opaque_black_mask_interior",
+            "calibrationResizeFilter": (
+                "lanczos_downsample_nearest_runtime_v1"
+            ),
+            "calibrationBaseScalePercent": 52,
+            "relativeToPreviousScalePercent": 82,
+            "singlePassDownsampleFromApprovedSource": True,
             "runtimeScale": 1,
             "textureFilter": "nearest",
             "userOverrideAuthorization": (
@@ -992,7 +1031,7 @@ def validate_outputs() -> dict:
         for direction, size in generated_sizes.items()
     ):
         raise AssertionError("item 236 world bake height left default envelope")
-    if max(size[0] for size in generated_sizes.values()) > 19:
+    if max(size[0] for size in generated_sizes.values()) > 15:
         raise AssertionError("item 236 world bake width exceeds default envelope")
     paper_bounds = paper.getchannel("A").getbbox()
     if paper_bounds is None:
@@ -1036,6 +1075,11 @@ def validate_outputs() -> dict:
         "groundFaceWindowOpaque": True,
         "approvedBlackClothVeilRetained": True,
         "worldScaleRatio": WORLD_SCALE_RATIO,
+        "relativeToPreviousScale": RELATIVE_TO_PREVIOUS_SCALE,
+        "worldBakeSource": resource_path(APPROVED_SOURCE),
+        "singlePassDownsampleFromApprovedSource": True,
+        "bakeResizeFilter": "lanczos",
+        "postResizeMatteEdgePolicy": "clear_alpha_lte_3_and_green_despill",
         "worldGeneratedSizes": generated_sizes,
         "worldMaximumSize": [
             max(size[0] for size in generated_sizes.values()),

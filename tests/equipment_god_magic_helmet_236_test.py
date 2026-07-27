@@ -52,14 +52,14 @@ EXPECTED_APPROVED_SHA = (
 )
 DIRECTIONS = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
 EXPECTED_WORLD_HEIGHTS = {
-    "N": 23,
-    "NE": 23,
-    "E": 22,
-    "SE": 23,
-    "S": 23,
-    "SW": 23,
-    "W": 22,
-    "NW": 23,
+    "N": 19,
+    "NE": 19,
+    "E": 18,
+    "SE": 19,
+    "S": 19,
+    "SW": 19,
+    "W": 18,
+    "NW": 19,
 }
 SOURCE_SIZE = (1774, 887)
 SOURCE_X_BOUNDS = [0, 444, 887, 1331, 1774]
@@ -92,6 +92,13 @@ def main() -> None:
         identity_recipe["paperDollEraseMask"]
         == "clear_exact_approved_S_silhouette"
     )
+    assert (
+        identity_recipe["calibrationResizeFilter"]
+        == "lanczos_downsample_nearest_runtime_v1"
+    )
+    assert identity_recipe["calibrationBaseScalePercent"] == 52
+    assert identity_recipe["relativeToPreviousScalePercent"] == 82
+    assert identity_recipe["singlePassDownsampleFromApprovedSource"] is True
 
     processed = Image.open(PROCESSED).convert("RGBA")
     assert processed.size == SOURCE_SIZE
@@ -121,6 +128,10 @@ def main() -> None:
     assert identity["canonicalRowSourceSlots"] == list(range(8))
     assert set(identity["faceAperturePolicy"].values()) == {"closed"}
     assert set(identity["faceApertureShape"].values()) == {"none"}
+    assert identity["worldScaleRatio"] == 0.52
+    assert identity["relativeToPreviousScale"] == 0.82
+    assert identity["bakeResizeFilter"] == "lanczos"
+    assert identity["singlePassDownsampleFromApprovedSource"] is True
     assert all(
         identity["directionCutouts"][direction]["runtimeScale"] == 1
         for direction in DIRECTIONS
@@ -133,15 +144,27 @@ def main() -> None:
         generated_sizes[direction][1] == EXPECTED_WORLD_HEIGHTS[direction]
         for direction in DIRECTIONS
     )
-    assert max(size[0] for size in generated_sizes.values()) <= 19
-    assert max(size[1] for size in generated_sizes.values()) <= 23
+    assert max(size[0] for size in generated_sizes.values()) <= 15
+    assert max(size[1] for size in generated_sizes.values()) <= 19
     assert all(
-        identity["directionCutouts"][direction]["worldScaleRatio"] == 0.64
+        identity["directionCutouts"][direction]["worldScaleRatio"] == 0.52
+        for direction in DIRECTIONS
+    )
+    assert all(
+        identity["directionCutouts"][direction]["relativeToPreviousScale"]
+        == 0.82
+        for direction in DIRECTIONS
+    )
+    assert all(
+        identity["directionCutouts"][direction][
+            "singlePassDownsampleFromApprovedSource"
+        ]
+        is True
         for direction in DIRECTIONS
     )
     assert all(
         identity["directionCutouts"][direction]["resizeFilter"]
-        == "nearest_baked_source_to_integer_pixels"
+        == "lanczos_original_source_to_final_integer_pixels"
         for direction in DIRECTIONS
     )
 
@@ -152,8 +175,8 @@ def main() -> None:
     paper = Image.open(HEAD).convert("RGBA")
     paper_bounds = paper.getchannel("A").getbbox()
     assert paper_bounds is not None
-    assert paper_bounds[2] - paper_bounds[0] <= 24
-    assert paper_bounds[3] - paper_bounds[1] <= 29
+    assert paper_bounds[2] - paper_bounds[0] <= 20
+    assert paper_bounds[3] - paper_bounds[1] <= 24
     inventory = Image.open(INVENTORY).convert("RGBA")
     ground = Image.open(GROUND).convert("RGBA")
     assert paper.getpixel((16, 28))[3] == 255
@@ -168,10 +191,20 @@ def main() -> None:
     assert report["paperDollEraseMaskHasTransparentAndOpaquePixels"] is True
     assert report["inventoryFaceWindowOpaque"] is True
     assert report["groundFaceWindowOpaque"] is True
-    assert report["worldScaleRatio"] == 0.64
-    assert report["worldMaximumSize"][0] <= 19
-    assert report["worldMaximumSize"][1] <= 23
-    assert report["paperDollContentEnvelope"] == [24, 29]
+    assert report["worldScaleRatio"] == 0.52
+    assert report["relativeToPreviousScale"] == 0.82
+    assert report["worldBakeSource"].endswith(
+        "god_magic_helmet_approved_20260727.png"
+    )
+    assert report["singlePassDownsampleFromApprovedSource"] is True
+    assert report["bakeResizeFilter"] == "lanczos"
+    assert (
+        report["postResizeMatteEdgePolicy"]
+        == "clear_alpha_lte_3_and_green_despill"
+    )
+    assert report["worldMaximumSize"][0] <= 15
+    assert report["worldMaximumSize"][1] <= 19
+    assert report["paperDollContentEnvelope"] == [20, 24]
     assert report["frozenNon236FilesUnchanged"] is True
     assert report["non236ContractDataUnchanged"] is True
     assert all(
