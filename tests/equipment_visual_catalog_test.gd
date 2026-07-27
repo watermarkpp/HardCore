@@ -114,7 +114,11 @@ func _run() -> void:
 		_resource_exists(icons.get("ground", {}), "%s 地面图" % entry.get("itemName", ""))
 		if entry.get("category", "") in VISUAL_CATEGORIES:
 			var paper: Dictionary = entry.get("paperDoll", {})
-			if item_id == HOLY_WAR_ITEM_ID:
+			var expected_paper_status := "user_authorized_redesign" if int(item_id) == 218 else ("user_approved_project_redesign" if item_id == HOLY_WAR_ITEM_ID else "exact_client_record")
+			assert(paper.get("status", "") == expected_paper_status, "%s 纸娃娃不得占位" % entry.get("itemName", ""))
+			if int(item_id) == 218:
+				assert(paper.get("designIdentity", "") == "mystery_japanese_kabuto_218", "神秘头盔必须使用用户授权的统一重做造型")
+			elif item_id == HOLY_WAR_ITEM_ID:
 				_validate_holy_war_paper_doll(entry)
 			else:
 				assert(paper.get("status", "") == "exact_client_record", "%s 纸娃娃不得占位" % entry.get("itemName", ""))

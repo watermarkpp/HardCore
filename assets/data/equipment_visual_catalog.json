@@ -51526,73 +51526,86 @@
       "icons": {
         "inventory": {
           "path": "res://assets/art/items/client/inventory/111.png",
-          "library": "research/mir2_client_raw/Data/Items.wil",
+          "library": "user_authorized_redesign",
           "index": 111,
-          "sourceOffset": 82709,
           "size": [
-            24,
-            30
+            40,
+            40
           ],
           "drawOffset": [
-            12,
-            -41
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_authorized_exact",
+          "designIdentity": "mystery_japanese_kabuto_218",
+          "sourcePath": "res://assets/art/items/client/source/user_authorized_redesign/mystery_helmet_218/inventory_three_quarter_green.png",
+          "sourceFileSha256": "d6678ce9249f84c465dd0eb38bedfbdcef50b1a7c7737d6add37f807fbcd1740",
+          "sourceRole": "backpack_inventory"
         },
         "equippedSlot": {
           "path": "res://assets/art/items/client/equipped/111.png",
-          "library": "research/mir2_client_raw/Data/stateitem.wil",
+          "library": "user_authorized_redesign",
           "index": 111,
-          "sourceOffset": 387011,
           "size": [
-            32,
-            27
+            48,
+            48
           ],
           "drawOffset": [
-            77,
-            -10
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_authorized_exact",
+          "designIdentity": "mystery_japanese_kabuto_218",
+          "sourcePath": "res://assets/art/items/client/source/user_authorized_redesign/mystery_helmet_218/paper_doll_front_green.png",
+          "sourceFileSha256": "293d2496de61c527958fe077695c402d75a2966a19378324fce8809e82143ed8",
+          "sourceRole": "paper_doll_equipped"
         },
         "ground": {
           "path": "res://assets/art/items/client/ground/111.png",
-          "library": "research/mir2_client_raw/Data/DnItems.wil",
+          "library": "user_authorized_redesign",
           "index": 111,
-          "sourceOffset": 62805,
           "size": [
-            12,
-            15
+            18,
+            18
           ],
           "drawOffset": [
-            18,
-            -34
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_authorized_exact",
+          "designIdentity": "mystery_japanese_kabuto_218",
+          "sourcePath": "res://assets/art/items/client/source/user_authorized_redesign/mystery_helmet_218/ground_drop_green.png",
+          "sourceFileSha256": "b97db3cc4c5a78103b39349d3c4d16ef3d6a99f67631b77ffcc8db5351a9cc64",
+          "sourceRole": "ground_drop"
         }
       },
       "paperDoll": {
-        "status": "exact_client_record",
+        "status": "user_authorized_redesign",
         "slot": "头盔",
         "gender": "通用",
         "sourceIndex": 111,
         "path": "res://assets/art/items/client/equipped/111.png",
         "drawOffset": [
-          70,
-          34
-        ],
-        "rawDrawOffset": [
-          77,
-          -10
+          62,
+          21
         ],
         "size": [
-          32,
-          27
+          48,
+          48
         ],
-        "source": "stateitem.wil",
-        "mappingConfidence": "A"
+        "source": "user_authorized_redesign",
+        "mappingConfidence": "user_authorized_exact",
+        "designIdentity": "mystery_japanese_kabuto_218",
+        "diameterProjection": {
+          "horizontalDiameterPercent": 80,
+          "heightPercent": 100,
+          "canvasPreserved": [
+            48,
+            48
+          ],
+          "centredOnOriginalHeadAnchor": true,
+          "filter": "nearest"
+        }
       },
       "worldWear": {
         "status": "approved_project_extension",

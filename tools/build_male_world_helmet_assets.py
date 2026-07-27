@@ -363,10 +363,13 @@ def concept_cutouts(recipe: dict) -> dict[str, Image.Image]:
     tolerance = int(recipe.get("matteTolerance", 12))
     by_direction: dict[str, Image.Image] = {}
     for source_slot, direction in enumerate(slot_order):
-        by_direction[direction] = remove_matte(
+        cutout = remove_matte(
             source_slot_crop(concept, grid, source_slot),
             tolerance,
         )
+        if bool(recipe.get("despillGreenCutouts", False)):
+            cutout = despill_green_matte(cutout)
+        by_direction[direction] = cutout
     signatures = {rgba_sha256(by_direction[value]) for value in DIRECTIONS}
     if len(signatures) < 6:
         raise AssertionError(
@@ -374,6 +377,74 @@ def concept_cutouts(recipe: dict) -> dict[str, Image.Image]:
             "eight-direction visual family"
         )
     return by_direction
+
+
+def approved_calibration_cutouts(
+    recipe: dict,
+) -> dict[str, Image.Image] | None:
+    """Build the user-approved transparent sheet without dropping components.
+
+    The calibration sheet is deliberately derived from the complete authored
+    source cell. Unlike ``remove_matte``, it does not select only the largest
+    connected component, so detached trim, cheek guards and edge ornaments
+    remain available to both the source buttons and the worn-world bake.
+    """
+    target_value = str(recipe.get("calibrationSourceSheet", "")).strip()
+    if not target_value:
+        return None
+    matte_policy = str(recipe.get("calibrationSourceMatte", ""))
+    if matte_policy not in {
+        "transparent_user_approved_despill_v1",
+        "transparent_user_authorized_redesign_despill_v1",
+    }:
+        raise ValueError(
+            f"{recipe['identityId']} has unsupported calibration matte "
+            f"policy: {matte_policy}"
+        )
+    concept = Image.open(disk_path(str(recipe["concept"]))).convert("RGBA")
+    transparent = despill_green_matte(concept)
+    target = disk_path(target_value)
+    save_deterministic_atlas(target, transparent)
+
+    _canonical_slots, slot_order = validated_direction_mapping(recipe)
+    grid = list(recipe["sourceGrid"])
+    by_direction: dict[str, Image.Image] = {}
+    for source_slot, direction in enumerate(slot_order):
+        cell = source_slot_crop(transparent, grid, source_slot)
+        box = cell.getchannel("A").getbbox()
+        if box is None:
+            raise ValueError(
+                f"{recipe['identityId']} calibration source slot "
+                f"{source_slot} is empty"
+            )
+        by_direction[direction] = cell.crop(box)
+    return by_direction
+
+
+def calibration_source_metadata(recipe: dict) -> dict:
+    target_value = str(recipe.get("calibrationSourceSheet", "")).strip()
+    if not target_value:
+        return {}
+    target = disk_path(target_value)
+    if not target.exists():
+        raise FileNotFoundError(
+            f"missing built calibration source sheet: {target}"
+        )
+    return {
+        "calibrationSourceSheet": target_value,
+        "calibrationSourceSheetSha256": file_sha256(target),
+        "calibrationSourceGrid": list(recipe["sourceGrid"]),
+        "calibrationSourceSlotDirectionOrder": list(
+            recipe["sourceSlotDirectionOrder"]
+        ),
+        "calibrationPreparedSourceRows": [],
+        "calibrationSourceMatte": str(
+            recipe["calibrationSourceMatte"]
+        ),
+        "calibrationResizeFilter": str(
+            recipe["calibrationResizeFilter"]
+        ),
+    }
 
 
 def build_direction_acceptance_sheet(
@@ -439,11 +510,11 @@ def build_direction_acceptance_sheet(
     }
 
 
-def fit_to_client_envelope(
+def fit_to_client_envelope_with_scale(
     cutout: Image.Image,
     maximum_size: list[int],
     target_opaque_pixels: float,
-) -> Image.Image:
+) -> tuple[Image.Image, float]:
     maximum_width, maximum_height = map(int, maximum_size)
     maximum_scale = min(
         maximum_width / cutout.width,
@@ -452,7 +523,7 @@ def fit_to_client_envelope(
     if maximum_scale <= 0.0:
         raise ValueError("invalid client helmet envelope")
     target_mass = target_opaque_pixels * VISUAL_MASS_TARGET_MULTIPLIER
-    candidates: dict[tuple[int, int], Image.Image] = {}
+    candidates: dict[tuple[int, int], tuple[Image.Image, float]] = {}
     for step in range(1, 501):
         scale = maximum_scale * step / 500.0
         size = (
@@ -460,17 +531,20 @@ def fit_to_client_envelope(
             max(1, round(cutout.height * scale)),
         )
         if size not in candidates:
-            candidates[size] = cutout.resize(size, Image.Resampling.LANCZOS)
-    result = min(
+            candidates[size] = (
+                cutout.resize(size, Image.Resampling.LANCZOS),
+                scale,
+            )
+    result, selected_scale = min(
         candidates.values(),
-        key=lambda image: (
+        key=lambda candidate: (
             abs(
                 math.log(
-                    max(effective_opaque_pixels(image), 0.001)
+                    max(effective_opaque_pixels(candidate[0]), 0.001)
                     / target_mass
                 )
             ),
-            -effective_opaque_pixels(image),
+            -effective_opaque_pixels(candidate[0]),
         ),
     )
     if result.width > maximum_width or result.height > maximum_height:
@@ -482,6 +556,303 @@ def fit_to_client_envelope(
             red, green, blue, opacity = result_pixels[x, y]
             if opacity <= 7:
                 result_pixels[x, y] = (0, 0, 0, 0)
+    return result, selected_scale
+
+
+def fit_to_client_envelope(
+    cutout: Image.Image,
+    maximum_size: list[int],
+    target_opaque_pixels: float,
+) -> Image.Image:
+    result, _selected_scale = fit_to_client_envelope_with_scale(
+        cutout,
+        maximum_size,
+        target_opaque_pixels,
+    )
+    return result
+
+
+def helmet_body_box(
+    cutout: Image.Image,
+    policy: dict,
+) -> tuple[int, int, int, int]:
+    """Find the dense main helmet body while excluding long lateral horns."""
+    if str(policy.get("method", "")) != "central_column_density":
+        raise ValueError(
+            "bodyDrivenSizing.method must be central_column_density"
+        )
+    threshold_percent = float(policy["columnDensityThresholdPercent"])
+    maximum_gap_percent = float(policy["maximumColumnGapPercent"])
+    padding_percent = float(policy["horizontalPaddingPercent"])
+    body_top_crop_percent = float(
+        policy.get("bodyTopCropPercent", 0.0)
+    )
+    if not (5.0 <= threshold_percent <= 90.0):
+        raise ValueError(
+            "columnDensityThresholdPercent must be between 5 and 90"
+        )
+    if not (0.0 <= maximum_gap_percent <= 25.0):
+        raise ValueError(
+            "maximumColumnGapPercent must be between 0 and 25"
+        )
+    if not (0.0 <= padding_percent <= 20.0):
+        raise ValueError(
+            "horizontalPaddingPercent must be between 0 and 20"
+        )
+    if not (0.0 <= body_top_crop_percent <= 50.0):
+        raise ValueError(
+            "bodyTopCropPercent must be between 0 and 50"
+        )
+
+    alpha = cutout.getchannel("A")
+    body_top = round(cutout.height * body_top_crop_percent / 100.0)
+    column_mass = [
+        sum(
+            alpha.getpixel((x, y))
+            for y in range(body_top, cutout.height)
+        )
+        / 255.0
+        for x in range(cutout.width)
+    ]
+    peak_mass = max(column_mass, default=0.0)
+    if peak_mass <= 0.0:
+        raise ValueError("cannot measure the body of an empty helmet")
+    peak_x = max(range(cutout.width), key=column_mass.__getitem__)
+    threshold = peak_mass * threshold_percent / 100.0
+    active_columns = [
+        x for x, mass in enumerate(column_mass) if mass >= threshold
+    ]
+    if not active_columns:
+        raise ValueError("helmet body density threshold removed every column")
+
+    maximum_gap = max(
+        1,
+        round(cutout.width * maximum_gap_percent / 100.0),
+    )
+    groups: list[tuple[int, int]] = []
+    start = active_columns[0]
+    previous = start
+    for x in active_columns[1:]:
+        if x - previous > maximum_gap:
+            groups.append((start, previous))
+            start = x
+        previous = x
+    groups.append((start, previous))
+    body_group = next(
+        (
+            group
+            for group in groups
+            if group[0] <= peak_x <= group[1]
+        ),
+        max(groups, key=lambda group: group[1] - group[0]),
+    )
+    padding = max(1, round(cutout.width * padding_percent / 100.0))
+    left = max(0, body_group[0] - padding)
+    right = min(cutout.width, body_group[1] + 1 + padding)
+    body_alpha_box = alpha.crop(
+        (left, body_top, right, cutout.height)
+    ).getbbox()
+    if body_alpha_box is None:
+        raise ValueError("helmet body box is empty")
+    box = (
+        left,
+        body_top + int(body_alpha_box[1]),
+        right,
+        body_top + int(body_alpha_box[3]),
+    )
+    width_fraction = (box[2] - box[0]) / cutout.width
+    minimum_fraction = float(policy["minimumBodyWidthFraction"])
+    maximum_fraction = float(policy["maximumBodyWidthFraction"])
+    if not minimum_fraction <= width_fraction <= maximum_fraction:
+        raise AssertionError(
+            "helmet body detection did not exclude the lateral horns: "
+            f"{width_fraction:.4f} not in "
+            f"[{minimum_fraction:.4f}, {maximum_fraction:.4f}]"
+        )
+    return box
+
+
+def fit_body_to_client_envelope(
+    cutout: Image.Image,
+    maximum_size: list[int],
+    target_opaque_pixels: float,
+    policy: dict,
+) -> tuple[Image.Image, dict]:
+    """Scale the complete helmet from its horn-free main body measurement."""
+    body_box = helmet_body_box(cutout, policy)
+    body_reference = cutout.crop(body_box)
+    fitted_body, candidate_scale = fit_to_client_envelope_with_scale(
+        body_reference,
+        maximum_size,
+        target_opaque_pixels,
+    )
+    shared_target_height = int(
+        policy.get("sharedBodyTargetHeightPixels", 0)
+    )
+    selected_scale = (
+        shared_target_height / body_reference.height
+        if shared_target_height > 0
+        else candidate_scale
+    )
+    generated_body = body_reference.resize(
+        (
+            max(1, round(body_reference.width * selected_scale)),
+            max(1, round(body_reference.height * selected_scale)),
+        ),
+        Image.Resampling.LANCZOS,
+    )
+    full_size = (
+        max(1, round(cutout.width * selected_scale)),
+        max(1, round(cutout.height * selected_scale)),
+    )
+    result = cutout.resize(full_size, Image.Resampling.LANCZOS)
+    result = result.copy()
+    pixels = result.load()
+    for y in range(result.height):
+        for x in range(result.width):
+            red, green, blue, opacity = pixels[x, y]
+            if opacity <= 7:
+                pixels[x, y] = (0, 0, 0, 0)
+    excluded_accessory = str(
+        policy.get("excludedAccessory", "two_long_lateral_horns")
+    )
+    return result, {
+        "enabled": True,
+        "method": "central_column_density",
+        "clientEnvelopeAppliedTo": "main_helmet_body_only",
+        "excludedAccessory": excluded_accessory,
+        "accessoryExcludedFromScaleCalculation": True,
+        "hornsExcludedFromScaleCalculation": (
+            excluded_accessory == "two_long_lateral_horns"
+        ),
+        "fullBoundsMayExceedClientEnvelope": True,
+        "sourceBodyBox": list(body_box),
+        "sourceBodySize": [
+            body_reference.width,
+            body_reference.height,
+        ],
+        "generatedBodySize": [
+            generated_body.width,
+            generated_body.height,
+        ],
+        "fullGeneratedSize": [result.width, result.height],
+        "directionalCandidateBodySize": [
+            fitted_body.width,
+            fitted_body.height,
+        ],
+        "directionalCandidateScale": round(candidate_scale, 8),
+        "selectedScale": round(selected_scale, 8),
+        "sharedBodyTargetHeightPixels": shared_target_height,
+        "uniformEditorScaleAcrossDirections": bool(
+            policy.get("uniformEditorScaleAcrossDirections", False)
+        ),
+        "columnDensityThresholdPercent": float(
+            policy["columnDensityThresholdPercent"]
+        ),
+        "maximumColumnGapPercent": float(
+            policy["maximumColumnGapPercent"]
+        ),
+        "horizontalPaddingPercent": float(
+            policy["horizontalPaddingPercent"]
+        ),
+        "bodyTopCropPercent": float(
+            policy.get("bodyTopCropPercent", 0.0)
+        ),
+    }
+
+
+def project_horizontal_diameter(
+    image: Image.Image,
+    direction: str,
+    policy: dict,
+) -> tuple[Image.Image, dict]:
+    """Shrink the physical horizontal diameter without changing height.
+
+    The lateral and front/back axes are projected at the direction yaw before
+    resizing. Scaling both physical axes by the same requested diameter ratio
+    makes every view consistently narrower, including the side views, while
+    each generated frame remains centred on its own direction-specific head
+    pivot.
+    """
+    yaw_degrees = {
+        "N": 180.0,
+        "NE": 135.0,
+        "E": 90.0,
+        "SE": 45.0,
+        "S": 0.0,
+        "SW": -45.0,
+        "W": -90.0,
+        "NW": -135.0,
+    }[direction]
+    lateral_scale = float(policy["lateralDiameterPercent"]) / 100.0
+    depth_scale = float(policy["depthDiameterPercent"]) / 100.0
+    depth_to_width = float(policy.get("depthToWidthRatio", 1.0))
+    if not (0.5 <= lateral_scale <= 2.0):
+        raise ValueError(
+            "lateralDiameterPercent must be between 50 and 200"
+        )
+    if not (0.5 <= depth_scale <= 2.0):
+        raise ValueError(
+            "depthDiameterPercent must be between 50 and 200"
+        )
+    if depth_to_width <= 0.0:
+        raise ValueError("depthToWidthRatio must be positive")
+    yaw = math.radians(yaw_degrees)
+    lateral_projection = abs(math.cos(yaw))
+    depth_projection = abs(math.sin(yaw)) * depth_to_width
+    projected_before = lateral_projection + depth_projection
+    projected_after = (
+        lateral_projection * lateral_scale
+        + depth_projection * depth_scale
+    )
+    projected_scale = projected_after / projected_before
+    # Floor positive pixel widths so integer quantisation never weakens a
+    # requested reduction (for example, 17px at 80% must become 13px, not
+    # 14px). This guarantees every physical view is reduced by at least the
+    # configured percentage.
+    target_width = max(1, math.floor(image.width * projected_scale))
+    result = image.resize(
+        (target_width, image.height),
+        Image.Resampling.NEAREST,
+    )
+    return result, {
+        "yawDegrees": yaw_degrees,
+        "lateralDiameterPercent": round(lateral_scale * 100.0, 4),
+        "depthDiameterPercent": round(depth_scale * 100.0, 4),
+        "depthToWidthRatio": depth_to_width,
+        "projectedHorizontalPercent": round(
+            projected_scale * 100.0,
+            4,
+        ),
+        "integerPixelHorizontalPercent": round(
+            target_width / image.width * 100.0,
+            4,
+        ),
+        "heightPercent": 100,
+        "preProjectionSize": [image.width, image.height],
+        "postProjectionSize": [result.width, result.height],
+        "filter": "nearest",
+        "pivotPolicy": "direction_frame_head_pivot_preserved",
+    }
+
+
+def despill_green_matte(image: Image.Image) -> Image.Image:
+    result = image.copy()
+    pixels = result.load()
+    for y in range(result.height):
+        for x in range(result.width):
+            red, green, blue, opacity = pixels[x, y]
+            non_green = max(red, blue)
+            green_spill = max(0, green - non_green)
+            if green_spill > 0:
+                opacity = round(
+                    opacity * max(0.0, 1.0 - green_spill / 114.75)
+                )
+                green = min(green, non_green + 6)
+            if opacity <= 5:
+                pixels[x, y] = (0, 0, 0, 0)
+            else:
+                pixels[x, y] = (red, green, blue, opacity)
     return result
 
 
@@ -489,25 +860,102 @@ def build_variants(
     recipe: dict,
     baseline: dict,
 ) -> tuple[dict[str, Image.Image], dict[str, dict], dict]:
-    cutouts = concept_cutouts(recipe)
+    cutouts = approved_calibration_cutouts(recipe)
+    if cutouts is None:
+        cutouts = concept_cutouts(recipe)
     acceptance = build_direction_acceptance_sheet(recipe, cutouts)
     canonical_slots = list(recipe["canonicalRowSourceSlots"])
     variants: dict[str, Image.Image] = {}
     records: dict[str, dict] = {}
+    calibration_scale = int(recipe.get("calibrationBaseScalePercent", 100))
+    if calibration_scale < 50 or calibration_scale > 200:
+        raise ValueError(
+            f"{recipe['identityId']} calibrationBaseScalePercent "
+            f"must be between 50 and 200"
+        )
+    direction_scale_overrides = recipe.get(
+        "directionScalePercentOverrides", {}
+    )
+    if not isinstance(direction_scale_overrides, dict):
+        raise ValueError("directionScalePercentOverrides must be an object")
+    diameter_policy = recipe.get("angleAwareHorizontalDiameter", {})
+    if diameter_policy and not isinstance(diameter_policy, dict):
+        raise ValueError("angleAwareHorizontalDiameter must be an object")
+    body_sizing_policy = recipe.get("bodyDrivenSizing", {})
+    if body_sizing_policy and not isinstance(body_sizing_policy, dict):
+        raise ValueError("bodyDrivenSizing must be an object")
+    prepared_source_rows = {
+        int(value)
+        for value in recipe.get("calibrationPreparedSourceRows", [])
+    }
     for direction_row, direction in enumerate(DIRECTIONS):
-        maximum_size = baseline["directionRuntimeTargetSize"][direction]
+        direction_scale = int(
+            direction_scale_overrides.get(direction, calibration_scale)
+        )
+        if direction_scale < 50 or direction_scale > 200:
+            raise ValueError(
+                f"{recipe['identityId']} {direction} scale must be "
+                "between 50 and 200"
+            )
+        scale_factor = direction_scale / 100.0
+        client_maximum_size = baseline["directionRuntimeTargetSize"][direction]
+        maximum_size = [
+            max(1, round(float(value) * scale_factor))
+            for value in client_maximum_size
+        ]
         target_mass = float(
             baseline["directionRuntimeOpaquePixels"][direction]
-        )
+        ) * scale_factor * scale_factor
         cutout = cutouts[direction]
-        variant = fit_to_client_envelope(
-            cutout,
-            maximum_size,
-            target_mass,
+        body_sizing_record = {}
+        if body_sizing_policy:
+            variant, body_sizing_record = fit_body_to_client_envelope(
+                cutout,
+                maximum_size,
+                target_mass,
+                body_sizing_policy,
+            )
+        else:
+            variant = fit_to_client_envelope(
+                cutout,
+                maximum_size,
+                target_mass,
+            )
+        source_slot = canonical_slots[direction_row]
+        excluded_accessory = str(
+            body_sizing_policy.get(
+                "excludedAccessory",
+                "two_long_lateral_horns",
+            )
         )
+        prepared_policy = (
+            "concept_body_driven_resize_horns_excluded_v1"
+            if (
+                body_sizing_policy
+                and excluded_accessory == "two_long_lateral_horns"
+            )
+            else (
+                "concept_body_driven_resize_accessory_excluded_v1"
+                if body_sizing_policy
+                else "concept_direct_resize"
+            )
+        )
+        if bool(recipe.get("despillGreenCutouts", False)):
+            prepared_policy += "_source_green_despill"
+        if source_slot in prepared_source_rows:
+            variant = despill_green_matte(variant)
+            prepared_policy = "concept_direct_resize_green_despill_v1"
+        diameter_record = {}
+        if diameter_policy:
+            variant, diameter_record = project_horizontal_diameter(
+                variant,
+                direction,
+                diameter_policy,
+            )
+            prepared_policy += "_angle_aware_diameter_projection"
         variants[direction] = variant
-        records[direction] = {
-            "sourceSlot": canonical_slots[direction_row],
+        record = {
+            "sourceSlot": source_slot,
             "sourceCutoutSize": [cutout.width, cutout.height],
             "sourceCutoutRgbaSha256": rgba_sha256(cutout),
             "generatedSize": [variant.width, variant.height],
@@ -516,9 +964,19 @@ def build_variants(
                 effective_opaque_pixels(variant),
                 4,
             ),
-            "clientMedianEnvelope": list(maximum_size),
-            "clientMedianOpaquePixels": round(target_mass, 4),
+            "clientMedianEnvelope": list(client_maximum_size),
+            "clientMedianOpaquePixels": round(
+                target_mass / (scale_factor * scale_factor), 4
+            ),
+            "calibrationBaseScalePercent": calibration_scale,
+            "calibrationDirectionScalePercent": direction_scale,
+            "calibrationEnvelope": list(maximum_size),
+            "preparedPixelPolicy": prepared_policy,
+            "angleAwareHorizontalDiameter": diameter_record,
         }
+        if body_sizing_record:
+            record["bodyDrivenSizing"] = body_sizing_record
+        records[direction] = record
     return variants, records, acceptance
 
 
@@ -974,10 +1432,14 @@ def build_contract() -> dict:
             ),
             "directionAcceptance": direction_acceptance,
             "directionCutouts": variant_records,
+            "calibrationPreparedSourceRows": list(
+                recipe.get("calibrationPreparedSourceRows", [])
+            ),
             "stateItemPixelsUsed": False,
             "hairPixelsUsed": False,
             "actions": actions,
         }
+        identities[identity_id].update(calibration_source_metadata(recipe))
 
     existing_catalog = load_json(VISUAL_CATALOG)
     item_recipes = {
@@ -1104,6 +1566,91 @@ def build_contract() -> dict:
     return payload
 
 
+def rebuild_generated_identity(identity_id: str) -> dict:
+    """Rebuild one non-Black-Iron identity without touching other helmets."""
+    if identity_id == "black_iron":
+        raise ValueError(
+            "targeted rebuild does not bypass Black Iron evidence requirements"
+        )
+    recipes = load_json(RECIPES)
+    if recipes.get("contractId") != CONTRACT_ID:
+        raise AssertionError("world helmet recipe contract id changed")
+    identity_recipes = {
+        str(recipe["identityId"]): recipe
+        for recipe in recipes["identities"]
+    }
+    if identity_id not in identity_recipes:
+        raise KeyError(f"unknown helmet identity: {identity_id}")
+    recipe = identity_recipes[identity_id]
+    concept_path = disk_path(str(recipe["concept"]))
+    if not concept_path.exists():
+        raise FileNotFoundError(f"missing approved helmet concept: {concept_path}")
+
+    baseline = load_json(CLIENT_BASELINE)
+    anchors = pose_anchor_map(baseline)
+    hair_library = read_library(HAIR_SOURCE)
+    _hair_data, _hair_palette, _hair_offsets, hair_info = hair_library
+    if int(hair_info["image_count"]) <= HAIR_APPEARANCE * HAIR_STRIDE + 599:
+        raise AssertionError("Hair.wil does not contain the male anchor family")
+
+    variants, variant_records, direction_acceptance = build_variants(
+        recipe,
+        baseline,
+    )
+    actions = {
+        action_name: build_generated_action(
+            recipe,
+            variants,
+            variant_records,
+            anchors,
+            hair_library,
+            action_name,
+        )
+        for action_name in ACTION_SPECS
+    }
+    identity = {
+        "identityId": identity_id,
+        "sourceIndex": int(recipe["sourceIndex"]),
+        "sex": "male",
+        "concept": str(recipe["concept"]),
+        "conceptFileSha256": file_sha256(concept_path),
+        "sourceGrid": list(recipe["sourceGrid"]),
+        "sourceSlotDirectionOrder": list(
+            recipe["sourceSlotDirectionOrder"]
+        ),
+        "canonicalRowSourceSlots": list(
+            recipe["canonicalRowSourceSlots"]
+        ),
+        "directionAcceptance": direction_acceptance,
+        "directionCutouts": variant_records,
+        "calibrationPreparedSourceRows": list(
+            recipe.get("calibrationPreparedSourceRows", [])
+        ),
+        "stateItemPixelsUsed": False,
+        "hairPixelsUsed": False,
+        "actions": actions,
+    }
+    identity.update(calibration_source_metadata(recipe))
+
+    payload = load_json(CONTRACT)
+    payload["recipeFileSha256"] = file_sha256(RECIPES)
+    payload["visualIdentities"][identity_id] = identity
+    for item in payload.get("itemsById", {}).values():
+        if str(item.get("identityId", "")) != identity_id:
+            continue
+        appearance = appearance_for_identity(identity)
+        item["maleAppearance"] = appearance
+        payload["runtimeMappingsByItemId"][str(item["itemId"])] = {
+            "helmetAppearance": deepcopy(appearance)
+        }
+    validate_contract(payload)
+    CONTRACT.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    return payload
+
+
 def validate_contract(contract: dict) -> None:
     if contract.get("contractId") != CONTRACT_ID:
         raise AssertionError("world helmet contract id changed")
@@ -1140,6 +1687,26 @@ def validate_contract(contract: dict) -> None:
             raise AssertionError(f"{identity_id} claims StateItem pixels")
         if set(identity.get("actions", {})) != set(ACTION_SPECS):
             raise AssertionError(f"{identity_id} lacks a physical action")
+        calibration_source = str(
+            identity.get("calibrationSourceSheet", "")
+        )
+        if calibration_source:
+            calibration_path = disk_path(calibration_source)
+            if not calibration_path.exists():
+                raise AssertionError(
+                    f"{identity_id} calibration source is missing"
+                )
+            if file_sha256(calibration_path) != str(
+                identity.get("calibrationSourceSheetSha256", "")
+            ):
+                raise AssertionError(
+                    f"{identity_id} calibration source SHA changed"
+                )
+            if identity.get("calibrationPreparedSourceRows", []) != []:
+                raise AssertionError(
+                    f"{identity_id} calibration source has a low-resolution "
+                    "prepared-row exception"
+                )
         slot_order = list(identity.get("sourceSlotDirectionOrder", []))
         canonical_slots = [
             int(value)
@@ -1245,10 +1812,19 @@ def main() -> None:
         action="store_true",
         help="validate the committed contract and atlases without rebuilding",
     )
+    parser.add_argument(
+        "--identity",
+        help=(
+            "rebuild one generated visual identity without rebuilding "
+            "Black Iron or unrelated helmets"
+        ),
+    )
     args = parser.parse_args()
     if args.validate_only:
         validate_contract(load_json(CONTRACT))
         payload = load_json(CONTRACT)
+    elif args.identity:
+        payload = rebuild_generated_identity(str(args.identity))
     else:
         payload = build_contract()
     coverage = payload["coverage"]

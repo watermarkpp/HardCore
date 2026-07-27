@@ -1,0 +1,47 @@
+{
+  "contractId": "equipment.world_helmet.calibration.active_target.v1",
+  "itemId": 228,
+  "visualAssetId": "memory",
+  "displayName": "记忆头盔",
+  "sourceSheet": "res://assets/art/items/client/world_wear/helmet/male/source/memory_helmet_8dir.png",
+  "sourceSheetSha256": "770778d6cdb5eee2346eb2b4c873de55a5bf73aa2112a6cefeb5742d5aa5b40a",
+  "sourceGrid": [
+    4,
+    2
+  ],
+  "sourceDirectionOrder": [
+    "S",
+    "SW",
+    "W",
+    "SE",
+    "N",
+    "NE",
+    "E",
+    "NW"
+  ],
+  "sourceMatte": "#00ff00",
+  "sourceResizeFilter": "nearest",
+  "sourceRevision": "memory_228.full_profiles.v1",
+  "loadPolicy": "single_target_direct_png_hash_validated",
+  "provenance": {
+    "lane": "helmet_world_visuals",
+    "tier": "primary",
+    "distribution": "research.mir2_client_raw",
+    "designAuthority": {
+      "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00228_head.png",
+      "sha256": "7c05f80c3567f3f8a520ada3e37b92e112b2b6613b0ededd81ead17f1b321b57"
+    },
+    "supportingEvidence": [
+      {
+        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00228_stateitem_00109.png",
+        "sha256": "6e4aa253005018ce6ff06ff604eb424fc0f03dd6cd0edbb3c58ea58f172bdc74"
+      },
+      {
+        "path": "res://assets/art/items/client/inventory/109.png",
+        "sha256": "f6ad5fea1ee29c0def0d9b11a9ddea7bcf8151db1a5df5fcfd203eb471e125d4"
+      }
+    ],
+    "derivation": "user_approved_six_views_plus_generated_true_w_e_profiles",
+    "userAuthorizationDate": "2026-07-27"
+  }
+}

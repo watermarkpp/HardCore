@@ -17,6 +17,13 @@ func _run() -> void:
 		"146": _source_hashes(146),
 		"151": _source_hashes(151),
 	}
+	var active_target_probe: Node = EDITOR_SCENE.instantiate()
+	active_target_probe.auto_run = false
+	assert(active_target_probe._load_active_target_manifest(
+		"res://assets/data/helmet_calibration_active_target.json"
+	))
+	assert(active_target_probe.active_target_item_id() == 228)
+	active_target_probe.free()
 	var editor: Node = EDITOR_SCENE.instantiate()
 	editor.auto_run = false
 	add_child(editor)
@@ -45,6 +52,9 @@ func _run() -> void:
 	assert(not bool(window_policy.get("manualPhysicalSize", true)))
 	assert(not bool(window_policy.get("manualPosition", true)))
 	assert(not bool(window_policy.get("projectSettingsModified", true)))
+	assert(bool(window_policy.get("closeRequestHandled", false)))
+	assert(bool(window_policy.get("closeButton", false)))
+	assert(bool(window_policy.get("escapeCloses", false)))
 	var tool_text := FileAccess.get_file_as_string(
 		"res://tools/helmet_calibration_tool.gd"
 	)
@@ -53,20 +63,45 @@ func _run() -> void:
 	assert("window_set_min_size(" not in tool_text)
 	assert("window_set_position(" not in tool_text)
 	assert("screen_get_usable_rect(" not in tool_text)
+	assert("NOTIFICATION_WM_CLOSE_REQUEST" in tool_text)
+	assert("KEY_ESCAPE" in tool_text)
 	var startup_status := editor.get_node(
 		"CalibrationUI/Panel/VBox/StartupStatus"
 	) as Label
 	assert(startup_status.visible)
-	assert("窗口将保持打开" in startup_status.text)
+	assert("仍可关闭编辑器" in startup_status.text)
 	var launcher_text := FileAccess.get_file_as_string(
 		"res://tools/launch_helmet_calibration_tool.ps1"
 	)
 	assert("Godot_v4.7-stable_win64.exe" in launcher_text)
 	assert("--headless" not in launcher_text)
 	assert("--helmet-calibration-interactive" in launcher_text)
+	assert("--helmet-calibration-target=" in launcher_text)
+	assert("helmet_calibration_active_target.json" in launcher_text)
 	assert(".godot\\helmet_calibration_appdata" in launcher_text)
 	assert("Join-Path $OutputDirectory 'helmet_calibration_interactive.log'" in launcher_text)
 	assert("--log-file" in launcher_text)
+	var active_target: Dictionary = JSON.parse_string(
+		FileAccess.get_file_as_string(
+			"res://assets/data/helmet_calibration_active_target.json"
+		)
+	)
+	assert(int(active_target.get("itemId", -1)) == 228)
+	assert(str(active_target.get(
+		"visualAssetId", ""
+	)) == "memory")
+	assert(str(active_target.get("sourceSheet", "")).ends_with(
+		"memory_helmet_8dir.png"
+	))
+	assert(str(active_target.get("sourceResizeFilter", "")) == (
+		"nearest"
+	))
+	assert(active_target.get("sourceDirectionOrder", []) == [
+		"S", "SW", "W", "SE", "N", "NE", "E", "NW",
+	])
+	assert(FileAccess.get_sha256(str(
+		active_target.get("sourceSheet", "")
+	)) == str(active_target.get("sourceSheetSha256", "")))
 
 	var target_grid := editor.get_node(
 		"CalibrationUI/Panel/VBox/TargetDirections"
@@ -131,6 +166,32 @@ func _run() -> void:
 	var scale_spin := editor.get_node(
 		"CalibrationUI/Panel/VBox/Inputs/Scale"
 	) as SpinBox
+	var save_all := editor.get_node(
+		"CalibrationUI/Panel/VBox/Inputs/SaveAll"
+	) as Button
+	var close_editor := editor.get_node(
+		"CalibrationUI/Panel/VBox/Inputs/CloseEditor"
+	) as Button
+	assert(save_all.text == "保存全部改动")
+	assert(save_all.focus_mode == Control.FOCUS_NONE)
+	assert(close_editor.text == "关闭编辑器")
+	assert(close_editor.focus_mode == Control.FOCUS_NONE)
+	var expected_calibration_items := [
+		146, 147, 149, 150, 151, 218, 224, 228, 232, 236, 240,
+	]
+	assert(item_menu.item_count == expected_calibration_items.size())
+	for item_index: int in item_menu.item_count:
+		assert(
+			int(item_menu.get_item_id(item_index))
+			== expected_calibration_items[item_index]
+		)
+		editor.select_item(expected_calibration_items[item_index])
+		editor._configure_runtime("idle", 0, 0)
+		var helmet_layer := editor._visual.get_node(
+			"ClientHelmetLayer"
+		) as Sprite2D
+		assert(helmet_layer.texture != null)
+	editor.select_item(146)
 	var menu_state_before := {
 		"item": item_menu.selected,
 		"action": action_menu.selected,
@@ -177,20 +238,271 @@ func _run() -> void:
 	target_ne.emit_signal("pressed")
 	assert(editor.current_direction == 1)
 	assert(target_ne.button_pressed)
+	var formal_ne_before := HelmetVisualV2.saved_direction_override(146, 1)
 
 	# Every source thumbnail is the actual source atlas row advertised in metadata.
 	for row: int in 8:
 		var button := source_grid.get_node("Source_Row%d" % row) as TextureButton
 		assert(int(button.get_meta("source_row", -1)) == row)
+		assert(button.stretch_mode == TextureButton.STRETCH_KEEP_CENTERED)
 		var expected: Image = editor.source_row_thumbnail(row)
 		assert(
 			button.texture_normal.get_image().get_data()
 			== expected.get_data()
 		)
+	# 150 source buttons, worn player and zoom preview must all use the exact
+	# generated runtime PNG pixels selected by the user's saved source-row
+	# mapping. The tool must not assume direction_index == source_row and must
+	# not read a stale .ctex.
+	editor.select_item(150)
+	for direction_index: int in 8:
+		var direction_record := HelmetVisualV2.direction_record(
+			150, direction_index
+		)
+		var source_row := int(direction_record.get(
+			"source_row", direction_index
+		))
+		var direct_source: Image = editor.calibration_source_cell(
+			"idle", source_row, 0
+		)
+		var pivot := HelmetVisualV2.pivot_for_source_row(
+			150, "idle", source_row, 0
+		)
+		direct_source = editor.scale_cell_around_pivot(
+			direct_source,
+			pivot,
+			HelmetVisualV2.uniform_scale_percent(150)
+		)
+		var runtime_source: Image = editor._runtime_layer_cell(
+			"ClientHelmetLayer", "idle", direction_index, 0
+		)
+		assert(runtime_source.get_data() == direct_source.get_data())
+	assert(HelmetVisualV2.source_direction_for_row(146, 3) == "NW")
+	assert(HelmetVisualV2.source_direction_for_row(146, 5) == "NE")
+	var recipe: Dictionary = HelmetVisualV2.visual_asset_for_item(146).get(
+		"bakedSourceOverrides", {}
+	)
+	assert(str(recipe.get("recipeId", "")) == (
+		"elf_146.user_authorized_nw_mirror.v1"
+	))
+	assert(not bool(recipe.get("runtimeFlip", true)))
+
+	# 147/148 source buttons must show the exact authored 4x2 sheet selected
+	# by the user, not a crop of the generated runtime atlas.
+	editor.select_item(147)
+	var bronze_asset := HelmetVisualV2.visual_asset_for_item(147)
+	var bronze_source: Dictionary = bronze_asset.get("source", {})
+	var bronze_sheet_path := str(bronze_source.get(
+		"calibrationSourceSheet", ""
+	))
+	assert(bronze_sheet_path.ends_with(
+		"source/bronze_magic_helmet_8dir_transparent.png"
+	))
+	assert(FileAccess.file_exists(bronze_sheet_path))
+	assert(
+		FileAccess.get_sha256(bronze_sheet_path)
+		== str(bronze_source.get("calibrationSourceSheetSha256", ""))
+	)
+	var bronze_grid: Array = bronze_source.get("calibrationSourceGrid", [])
+	assert(bronze_grid.size() == 2)
+	assert(int(bronze_grid[0]) == 4)
+	assert(int(bronze_grid[1]) == 2)
+	var bronze_order: Array = bronze_source.get(
+		"calibrationSourceSlotDirectionOrder", []
+	)
+	assert(bronze_order.size() == 8)
+	for direction_index: int in 8:
+		assert(str(bronze_order[direction_index]) == [
+			"N", "NE", "E", "SE", "S", "SW", "W", "NW",
+		][direction_index])
+	assert(str(bronze_source.get("calibrationSourceMatte", "")) == (
+		"transparent_user_approved_despill_v1"
+	))
+	assert(str(bronze_source.get("calibrationResizeFilter", "")) == (
+		"lanczos_downsample_nearest_runtime_v1"
+	))
+	assert(str(bronze_source.get("calibrationPreviewPolicy", "")) == (
+		"single_authored_source_for_buttons_previews_and_bakes"
+	))
+	var prepared_rows: Array = bronze_source.get(
+		"calibrationPreparedSourceRows", []
+	)
+	assert(prepared_rows.is_empty())
+	assert(not editor._is_prepared_source_row(0))
+	assert(editor._source_recipe_id().ends_with(
+		".transparent_user_approved_despill_v1"
+		+ ".lanczos_downsample_nearest_runtime_v1"
+	))
+	var authored_hashes: Dictionary = {}
+	var differs_from_runtime := false
+	var authored_strip := Image.create(8 * 64, 64, false, Image.FORMAT_RGBA8)
+	authored_strip.fill(Color(0, 0, 0, 0))
+	for row: int in 8:
+		var bronze_button := source_grid.get_node(
+			"Source_Row%d" % row
+		) as TextureButton
+		assert("原图 " in str(
+			(bronze_button.get_node("Label") as Label).text
+		))
+		var authored: Image = editor.source_row_thumbnail(row)
+		assert(authored.get_size() == Vector2i(64, 64))
+		assert(_has_opaque_pixel(authored))
+		_assert_no_green_matte(authored)
+		var full_resolution_source: Image = editor._authored_source_cutout(row)
+		assert(full_resolution_source.get_width() >= 174)
+		assert(full_resolution_source.get_height() >= 280)
+		var authored_hash: int = authored.get_data().hex_encode().hash()
+		assert(not authored_hashes.has(authored_hash))
+		authored_hashes[authored_hash] = true
+		authored_strip.blit_rect(
+			authored,
+			Rect2i(Vector2i.ZERO, authored.get_size()),
+			Vector2i(row * 64, 0)
+		)
+		var runtime: Image = editor.calibration_source_cell("idle", row, 0)
+		_assert_no_green_matte(runtime)
+		if authored.get_data() != runtime.get_data():
+			differs_from_runtime = true
+	assert(differs_from_runtime)
+	assert(editor._authored_source_cutout(0).get_width() >= 175)
+	assert(editor._authored_source_cutout(0).get_height() >= 288)
+	assert(authored_strip.save_png(ProjectSettings.globalize_path(
+		"%s/helmet_147_authored_source_8dir.png" % OUTPUT_ROOT
+	)) == OK)
+	editor.select_target_direction(0)
+	editor.select_action("idle")
+	editor.select_frame(0)
+	for direction_index: int in 8:
+		editor._configure_runtime("idle", direction_index, 0)
+		var direction_record := HelmetVisualV2.direction_record(
+			147, direction_index
+		)
+		var source_row := int(direction_record.get(
+			"source_row", direction_index
+		))
+		var preview_source: Image = editor._runtime_layer_cell(
+			"ClientHelmetLayer", "idle", direction_index, 0
+		)
+		var expected_preview_source: Image = editor.scale_cell_around_pivot(
+			editor.calibration_source_cell("idle", source_row, 0),
+			HelmetVisualV2.pivot_for_source_row(
+				147, "idle", source_row, 0
+			),
+			HelmetVisualV2.uniform_scale_percent(147)
+		)
+		assert(
+			preview_source.get_data()
+			== expected_preview_source.get_data()
+		)
+	editor._render_current_previews()
+	var rendered_full: Image = (
+		editor.get_node(
+			"CalibrationUI/Panel/VBox/Previews/FullColumn/FullPersonPreview"
+		) as TextureRect
+	).texture.get_image()
+	var expected_full: Image = editor._runtime_frame("idle", 0, 0, true)
+	assert(rendered_full.get_data() == expected_full.get_data())
+	var rendered_head: Image = (
+		editor.get_node(
+			"CalibrationUI/Panel/VBox/Previews/HeadColumn/HeadPreview"
+		) as TextureRect
+	).texture.get_image()
+	var expected_head: Image = editor._head_preview(
+		expected_full, "idle", 0, 0, editor.head_zoom
+	)
+	assert(rendered_head.get_data() == expected_head.get_data())
+	var clean_full: Image = editor._runtime_frame("idle", 0, 0, false)
+	var clean_head: Image = editor._head_preview(
+		clean_full, "idle", 0, 0, editor.head_zoom
+	)
+	assert(clean_full.save_png(ProjectSettings.globalize_path(
+		"%s/helmet_147_single_source_full.png" % OUTPUT_ROOT
+	)) == OK)
+	assert(clean_head.save_png(ProjectSettings.globalize_path(
+		"%s/helmet_147_single_source_head.png" % OUTPUT_ROOT
+	)) == OK)
+	assert(editor.set_uniform_scale_percent(100))
+	assert(editor._bake_and_persist_uniform_scale())
+	var bronze_override: Dictionary = HelmetVisualV2.visual_asset_override_for_item(
+		147
+	)
+	var bronze_derived_path: String = str(
+		bronze_override.get("derivedAtlases", {}).get("idle", "")
+	)
+	assert(FileAccess.file_exists(bronze_derived_path))
+	assert(str(bronze_override.get("bakePolicy", {}).get(
+		"sourceRecipeId", ""
+	)).ends_with(
+		".transparent_user_approved_despill_v1"
+		+ ".lanczos_downsample_nearest_runtime_v1"
+	))
+	var bronze_derived: Image = Image.load_from_file(bronze_derived_path)
+	for row: int in 8:
+		var bronze_cell_rect := Rect2i(
+			Vector2i(0, row * ArtSpec.WARRIOR_FRAME.y),
+			ArtSpec.WARRIOR_FRAME
+		)
+		assert(
+			bronze_derived.get_region(bronze_cell_rect).get_data()
+			== editor.calibration_source_cell("idle", row, 0).get_data()
+		)
+	assert(
+		HelmetVisualV2.visual_asset_for_item(148).get("source", {})
+		== bronze_source
+	)
+	editor.select_item(146)
+	editor.select_target_direction(1)
+	var raw_idle := Image.load_from_file(ProjectSettings.globalize_path(
+		HelmetVisualV2.base_action_texture_path(
+			146, "idle", 0, "helmet_front"
+		)
+	))
+	var raw_row_3 := raw_idle.get_region(Rect2i(
+		0,
+		3 * ArtSpec.WARRIOR_FRAME.y,
+		ArtSpec.WARRIOR_FRAME.x,
+		ArtSpec.WARRIOR_FRAME.y
+	))
+	var raw_row_5 := raw_idle.get_region(Rect2i(
+		0,
+		5 * ArtSpec.WARRIOR_FRAME.y,
+		ArtSpec.WARRIOR_FRAME.x,
+		ArtSpec.WARRIOR_FRAME.y
+	))
+	var baked_nw: Image = editor.calibration_source_cell("idle", 3, 0)
+	assert(baked_nw.get_data() != raw_row_3.get_data())
+	assert(baked_nw.get_data() != raw_row_5.get_data())
+	var expected_nw: Image = editor.mirror_cell_between_pivots(
+		raw_row_5,
+		HelmetVisualV2.pivot_for_source_row(146, "idle", 5, 0),
+		HelmetVisualV2.pivot_for_source_row(146, "idle", 3, 0)
+	)
+	assert(baked_nw.get_data() == expected_nw.get_data())
+
+	# The full-person and enlarged-head previews must use the same baked row 3
+	# as the source thumbnail, never the unchanged row 3 in the primary atlas.
+	editor._configure_runtime("idle", 7, 0)
+	var runtime_nw: Image = editor._runtime_layer_cell("ClientHelmetLayer")
+	var derived_idle_path := HelmetVisualV2.action_texture_path(
+		146, "idle", 7, "helmet_front"
+	)
+	assert(FileAccess.file_exists(derived_idle_path))
+	var derived_idle: Image = Image.load_from_file(derived_idle_path)
+	var derived_nw: Image = derived_idle.get_region(Rect2i(
+		0,
+		3 * ArtSpec.WARRIOR_FRAME.y,
+		ArtSpec.WARRIOR_FRAME.x,
+		ArtSpec.WARRIOR_FRAME.y
+	))
+	assert(runtime_nw.get_data() == derived_nw.get_data())
+	assert(runtime_nw.get_data() != raw_row_3.get_data())
 
 	# Mouse source-row selection maps the current target through explicit semantics.
 	var source_row_zero := source_grid.get_node("Source_Row0") as TextureButton
 	source_row_zero.emit_signal("pressed")
+	var mapped_nudge_before := _vector(
+		HelmetVisualV2.direction_record(146, 1).get("nudge", [])
+	)
 	var mapped := HelmetVisualV2.direction_record(146, 1)
 	assert(int(mapped.get("source_row", -1)) == 0)
 	assert(str(mapped.get("source_direction", "")) == "S")
@@ -209,7 +521,10 @@ func _run() -> void:
 		"CalibrationUI/Panel/VBox/Commands/NudgeUp"
 	).emit_signal("pressed")
 	mapped = HelmetVisualV2.direction_record(146, 1)
-	assert(_vector(mapped.get("nudge", [])) == Vector2i(1, -1))
+	assert(
+		_vector(mapped.get("nudge", []))
+		== mapped_nudge_before + Vector2i(1, -1)
+	)
 	assert("DIRTY" in str(editor.get_node(
 		"CalibrationUI/Panel/VBox/MappingStatus/State"
 	).text))
@@ -219,8 +534,14 @@ func _run() -> void:
 		"CalibrationUI/Panel/VBox/Commands/Undo"
 	).emit_signal("pressed")
 	mapped = HelmetVisualV2.direction_record(146, 1)
-	assert(int(mapped.get("source_row", -1)) == 3)
-	assert(_vector(mapped.get("nudge", [])) == Vector2i.ZERO)
+	assert(
+		int(mapped.get("source_row", -1))
+		== int(formal_ne_before.get("source_row", 3))
+	)
+	assert(
+		_vector(mapped.get("nudge", []))
+		== _vector(formal_ne_before.get("nudge", [0, 0]))
+	)
 
 	# Reapply, then save through the visible button and verify reload parity.
 	source_row_zero.emit_signal("pressed")
@@ -232,7 +553,10 @@ func _run() -> void:
 	mapped = HelmetVisualV2.direction_record(146, 1)
 	assert(int(mapped.get("source_row", -1)) == 0)
 	assert(str(mapped.get("source_direction", "")) == "S")
-	assert(_vector(mapped.get("nudge", [])) == Vector2i.RIGHT)
+	assert(
+		_vector(mapped.get("nudge", []))
+		== _vector(formal_ne_before.get("nudge", [0, 0])) + Vector2i.RIGHT
+	)
 	assert(str(mapped.get("status", "")) in ["valid", "locked"])
 	assert(mapped.has("locked"))
 
@@ -241,6 +565,40 @@ func _run() -> void:
 	assert(int(HelmetVisualV2.direction_record(146, 1).get("source_row", -1)) == 1)
 	editor.undo_current_direction()
 	assert(int(HelmetVisualV2.direction_record(146, 1).get("source_row", -1)) == 0)
+
+	# The always-visible save button persists every dirty direction in one click
+	# without falsely marking an untouched direction as complete.
+	var nw_saved_before := HelmetVisualV2.saved_direction_override(146, 7)
+	editor.select_target_direction(2)
+	var batch_e_before := _vector(
+		HelmetVisualV2.direction_record(146, 2).get("nudge", [])
+	)
+	assert(editor.map_source_row_to_current_target(6))
+	assert(editor.nudge_current(Vector2i.DOWN))
+	editor.select_target_direction(3)
+	var batch_se_before := _vector(
+		HelmetVisualV2.direction_record(146, 3).get("nudge", [])
+	)
+	assert(editor.map_source_row_to_current_target(1))
+	assert(editor.nudge_current(Vector2i.LEFT))
+	save_all.emit_signal("pressed")
+	assert("已保存全部改动" in str(editor.get_node(
+		"CalibrationUI/Panel/VBox/MappingStatus/State"
+	).text))
+	editor.reload_formal_data()
+	var batch_e := HelmetVisualV2.direction_record(146, 2)
+	var batch_se := HelmetVisualV2.direction_record(146, 3)
+	assert(int(batch_e.get("source_row", -1)) == 6)
+	assert(
+		_vector(batch_e.get("nudge", []))
+		== batch_e_before + Vector2i.DOWN
+	)
+	assert(int(batch_se.get("source_row", -1)) == 1)
+	assert(
+		_vector(batch_se.get("nudge", []))
+		== batch_se_before + Vector2i.LEFT
+	)
+	assert(HelmetVisualV2.saved_direction_override(146, 7) == nw_saved_before)
 
 	# Asset-level scale applies once to every direction, bakes all six actions,
 	# uses nearest-neighbour around the local pivot, and survives runtime reload.
@@ -305,7 +663,9 @@ func _run() -> void:
 					ArtSpec.WARRIOR_FRAME.y
 				)
 				var expected_cell: Image = editor.scale_cell_around_pivot(
-					source_image.get_region(cell_rect),
+					editor.calibration_source_cell(
+						action, source_row, frame_index
+					),
 					HelmetVisualV2.pivot_for_source_row(
 						146, action, source_row, frame_index
 					),
@@ -324,10 +684,10 @@ func _run() -> void:
 						),
 					]
 				)
-		assert(
-			HelmetVisualV2.action_texture_path(146, action, 0, "helmet_front")
-			== str(derived[action])
+		var runtime_path := HelmetVisualV2.action_texture_path(
+			146, action, 0, "helmet_front"
 		)
+		assert(runtime_path == str(derived[action]))
 	for direction_index: int in 8:
 		assert(
 			HelmetVisualV2.direction_record(
@@ -338,6 +698,9 @@ func _run() -> void:
 	assert(str(bake_policy.get("filter", "")) == "nearest")
 	assert(bool(bake_policy.get("pivotInvariant", false)))
 	assert(bool(bake_policy.get("castPivotUsesSameFramePrimaryHairEvidence", false)))
+	assert(str(bake_policy.get("sourceRecipeId", "")) == (
+		"elf_146.user_authorized_nw_mirror.v1"
+	))
 
 	# Complete the eight saved idle targets. Only then may the explicit
 	# "generate all actions" workflow become available.
@@ -400,12 +763,53 @@ func _run() -> void:
 			in str((source_button.get_node("Label") as Label).text)
 		)
 		assert(_has_opaque_pixel(editor.source_row_thumbnail(source_row)))
+	var black_recipe: Dictionary = HelmetVisualV2.visual_asset_for_item(151).get(
+		"bakedSourceOverrides", {}
+	)
+	assert(str(black_recipe.get("recipeId", "")) == (
+		"black_iron_151.user_authorized_nw_from_ne_mirror.v2"
+	))
+	assert(not bool(black_recipe.get("runtimeFlip", true)))
+	var black_action_frames := {
+		"idle": 4, "walk": 6, "attack": 6,
+		"cast": 6, "hit": 3, "death": 4,
+	}
+	for black_action: String in black_action_frames:
+		var black_raw := Image.load_from_file(ProjectSettings.globalize_path(
+			HelmetVisualV2.base_action_texture_path(
+				151, black_action, 0, "helmet_front"
+			)
+		))
+		for black_frame: int in int(black_action_frames[black_action]):
+			var raw_black_ne := black_raw.get_region(Rect2i(
+				black_frame * ArtSpec.WARRIOR_FRAME.x,
+				1 * ArtSpec.WARRIOR_FRAME.y,
+				ArtSpec.WARRIOR_FRAME.x,
+				ArtSpec.WARRIOR_FRAME.y
+			))
+			assert(
+				editor.calibration_source_cell(
+					black_action, 5, black_frame
+				).get_data()
+				== editor.mirror_cell_between_pivots(
+					raw_black_ne,
+					HelmetVisualV2.pivot_for_source_row(
+						151, black_action, 1, black_frame
+					),
+					HelmetVisualV2.pivot_for_source_row(
+						151, black_action, 5, black_frame
+					)
+				).get_data()
+			)
 	assert(editor.set_uniform_scale_percent(110))
 	target_ne.emit_signal("pressed")
-	(source_grid.get_node("Source_Row3") as TextureButton).emit_signal("pressed")
+	var initial_151_ne_nudge := _vector(
+		HelmetVisualV2.direction_record(151, 1).get("nudge", [])
+	)
+	(source_grid.get_node("Source_Row0") as TextureButton).emit_signal("pressed")
 	assert(editor.nudge_current(Vector2i.LEFT))
 	assert(
-		"人物目标 NE <- 黑铁原始源槽 3"
+		"人物目标 NE <- 黑铁原始源槽 0"
 		in str(editor.get_node(
 			"CalibrationUI/Panel/VBox/MappingStatus/Mapping"
 		).text)
@@ -415,12 +819,12 @@ func _run() -> void:
 		if direction_index == 1:
 			continue
 		editor.select_target_direction(direction_index)
-		assert(editor.map_source_row_to_current_target((direction_index + 3) % 8))
+		var source_row := HelmetVisualV2.source_direction_row(
+			151, direction_index
+		)
+		assert(editor.map_source_row_to_current_target(source_row))
 		assert(editor.save_current_direction())
-	# Reusing source slot 3 is a visible warning, never a save blocker.
-	editor.select_target_direction(0)
-	assert(editor.map_source_row_to_current_target(3))
-	assert(editor.save_current_direction())
+	# Reusing source slot 0 is a visible warning, never a save blocker.
 	assert("警告" in str(editor.get_node(
 		"CalibrationUI/Panel/VBox/MappingStatus/State"
 	).text))
@@ -439,9 +843,12 @@ func _run() -> void:
 	editor.reload_formal_data()
 	assert(HelmetVisualV2.uniform_scale_percent(151) == 110)
 	var saved_151_ne := HelmetVisualV2.direction_record(151, 1)
-	assert(int(saved_151_ne.get("source_row", -1)) == 3)
-	assert(str(saved_151_ne.get("source_slot_id", "")) == "slot_3")
-	assert(_vector(saved_151_ne.get("nudge", [])) == Vector2i.LEFT)
+	assert(int(saved_151_ne.get("source_row", -1)) == 0)
+	assert(str(saved_151_ne.get("source_slot_id", "")) == "slot_0")
+	assert(
+		_vector(saved_151_ne.get("nudge", []))
+		== initial_151_ne_nudge + Vector2i.LEFT
+	)
 	var trace_151 := _json(
 		"%s/helmet_151_generated_all_actions_trace.json" % OUTPUT_ROOT
 	)
@@ -528,6 +935,18 @@ func _has_opaque_pixel(image: Image) -> bool:
 			if image.get_pixel(x, y).a > 0.0:
 				return true
 	return false
+
+
+func _assert_no_green_matte(image: Image) -> void:
+	for y: int in image.get_height():
+		for x: int in image.get_width():
+			var color := image.get_pixel(x, y)
+			if color.a <= 0.02:
+				assert(color.r == 0.0)
+				assert(color.g == 0.0)
+				assert(color.b == 0.0)
+				continue
+			assert(color.g <= maxf(color.r, color.b) + 0.026)
 
 
 func _source_hashes(item_id: int) -> Dictionary:

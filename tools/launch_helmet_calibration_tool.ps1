@@ -1,4 +1,6 @@
-param()
+param(
+    [string]$TargetManifest = 'res://assets/data/helmet_calibration_active_target.json'
+)
 
 $ErrorActionPreference = 'Stop'
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
@@ -8,9 +10,17 @@ $InteractiveArgument = '--helmet-calibration-interactive'
 $RuntimeAppData = Join-Path $ProjectRoot '.godot\helmet_calibration_appdata'
 $OutputDirectory = Join-Path $ProjectRoot 'outputs'
 $EngineLog = Join-Path $OutputDirectory 'helmet_calibration_interactive.log'
+$TargetManifestPath = if ($TargetManifest.StartsWith('res://')) {
+    Join-Path $ProjectRoot ($TargetManifest.Substring(6).Replace('/', '\'))
+} else {
+    $TargetManifest
+}
 
 if (-not (Test-Path -LiteralPath $Godot)) {
     throw "Godot executable not found: $Godot"
+}
+if (-not (Test-Path -LiteralPath $TargetManifestPath)) {
+    throw "Helmet calibration target manifest not found: $TargetManifestPath"
 }
 
 New-Item -ItemType Directory -Path $RuntimeAppData -Force | Out-Null
@@ -26,7 +36,8 @@ Start-Process -FilePath $Godot `
         '--path', $ProjectRoot,
         '--log-file', $EngineLog,
         $Scene,
-        '--', $InteractiveArgument
+        '--', $InteractiveArgument,
+        "--helmet-calibration-target=$TargetManifest"
     ) `
     -WorkingDirectory $ProjectRoot `
     -WindowStyle Normal
