@@ -89,6 +89,14 @@
       "sourceSlotDirectionOrder": ["N", "NE", "E", "SE", "S", "SW", "W", "NW"],
       "canonicalRowSourceSlots": [0, 1, 2, 3, 4, 5, 6, 7],
       "outputPrefix": "res://assets/art/items/client/world_wear/helmet/male/taoist_helmet",
+      "angleAwareHorizontalDiameter": {
+        "lateralDiameterPercent": 90,
+        "depthDiameterPercent": 90,
+        "depthToWidthRatio": 1.0,
+        "heightPercent": 100,
+        "filter": "nearest",
+        "pivotPolicy": "direction_frame_head_pivot_preserved"
+      },
       "matteTolerance": 14
     },
     {

@@ -485,6 +485,76 @@ def fit_to_client_envelope(
     return result
 
 
+def project_horizontal_diameter(
+    image: Image.Image,
+    direction: str,
+    policy: dict,
+) -> tuple[Image.Image, dict]:
+    """Shrink the physical horizontal diameter without changing height.
+
+    The lateral and front/back axes are projected at the direction yaw before
+    resizing. Scaling both physical axes to 90% makes every view 90% as wide,
+    including the side views, while each generated frame remains centred on
+    its own direction-specific head pivot.
+    """
+    yaw_degrees = {
+        "N": 180.0,
+        "NE": 135.0,
+        "E": 90.0,
+        "SE": 45.0,
+        "S": 0.0,
+        "SW": -45.0,
+        "W": -90.0,
+        "NW": -135.0,
+    }[direction]
+    lateral_scale = float(policy["lateralDiameterPercent"]) / 100.0
+    depth_scale = float(policy["depthDiameterPercent"]) / 100.0
+    depth_to_width = float(policy.get("depthToWidthRatio", 1.0))
+    if not (0.5 <= lateral_scale <= 2.0):
+        raise ValueError(
+            "lateralDiameterPercent must be between 50 and 200"
+        )
+    if not (0.5 <= depth_scale <= 2.0):
+        raise ValueError(
+            "depthDiameterPercent must be between 50 and 200"
+        )
+    if depth_to_width <= 0.0:
+        raise ValueError("depthToWidthRatio must be positive")
+    yaw = math.radians(yaw_degrees)
+    lateral_projection = abs(math.cos(yaw))
+    depth_projection = abs(math.sin(yaw)) * depth_to_width
+    projected_before = lateral_projection + depth_projection
+    projected_after = (
+        lateral_projection * lateral_scale
+        + depth_projection * depth_scale
+    )
+    projected_scale = projected_after / projected_before
+    target_width = max(1, round(image.width * projected_scale))
+    result = image.resize(
+        (target_width, image.height),
+        Image.Resampling.NEAREST,
+    )
+    return result, {
+        "yawDegrees": yaw_degrees,
+        "lateralDiameterPercent": round(lateral_scale * 100.0, 4),
+        "depthDiameterPercent": round(depth_scale * 100.0, 4),
+        "depthToWidthRatio": depth_to_width,
+        "projectedHorizontalPercent": round(
+            projected_scale * 100.0,
+            4,
+        ),
+        "integerPixelHorizontalPercent": round(
+            target_width / image.width * 100.0,
+            4,
+        ),
+        "heightPercent": 100,
+        "preProjectionSize": [image.width, image.height],
+        "postProjectionSize": [result.width, result.height],
+        "filter": "nearest",
+        "pivotPolicy": "direction_frame_head_pivot_preserved",
+    }
+
+
 def despill_green_matte(image: Image.Image) -> Image.Image:
     result = image.copy()
     pixels = result.load()
@@ -525,6 +595,9 @@ def build_variants(
     )
     if not isinstance(direction_scale_overrides, dict):
         raise ValueError("directionScalePercentOverrides must be an object")
+    diameter_policy = recipe.get("angleAwareHorizontalDiameter", {})
+    if diameter_policy and not isinstance(diameter_policy, dict):
+        raise ValueError("angleAwareHorizontalDiameter must be an object")
     prepared_source_rows = {
         int(value)
         for value in recipe.get("calibrationPreparedSourceRows", [])
@@ -558,6 +631,14 @@ def build_variants(
         if source_slot in prepared_source_rows:
             variant = despill_green_matte(variant)
             prepared_policy = "concept_direct_resize_green_despill_v1"
+        diameter_record = {}
+        if diameter_policy:
+            variant, diameter_record = project_horizontal_diameter(
+                variant,
+                direction,
+                diameter_policy,
+            )
+            prepared_policy += "_angle_aware_diameter_projection"
         variants[direction] = variant
         records[direction] = {
             "sourceSlot": source_slot,
@@ -577,6 +658,7 @@ def build_variants(
             "calibrationDirectionScalePercent": direction_scale,
             "calibrationEnvelope": list(maximum_size),
             "preparedPixelPolicy": prepared_policy,
+            "angleAwareHorizontalDiameter": diameter_record,
         }
     return variants, records, acceptance
 

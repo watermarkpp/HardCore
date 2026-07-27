@@ -147,6 +147,17 @@ def main() -> None:
         ]
         assert sorted(canonical_slots) == list(range(8))
         assert disk_path(recipe["concept"]).exists()
+    taoist_diameter_policy = recipe_identities["taoist"][
+        "angleAwareHorizontalDiameter"
+    ]
+    assert taoist_diameter_policy == {
+        "lateralDiameterPercent": 90,
+        "depthDiameterPercent": 90,
+        "depthToWidthRatio": 1.0,
+        "heightPercent": 100,
+        "filter": "nearest",
+        "pivotPolicy": "direction_frame_head_pivot_preserved",
+    }
     for identity_id in (
         "prayer",
         "memory",
@@ -477,6 +488,39 @@ def main() -> None:
     assert bronze_rear.getpixel(
         (bronze_rear.width // 2, bronze_rear.height - 3)
     )[3] > 0
+    taoist_cutouts = identities["taoist"]["directionCutouts"]
+    taoist_yaw = {
+        "N": 180.0,
+        "NE": 135.0,
+        "E": 90.0,
+        "SE": 45.0,
+        "S": 0.0,
+        "SW": -45.0,
+        "W": -90.0,
+        "NW": -135.0,
+    }
+    for direction, expected_yaw in taoist_yaw.items():
+        record = taoist_cutouts[direction]
+        projection = record["angleAwareHorizontalDiameter"]
+        assert projection["yawDegrees"] == expected_yaw
+        assert projection["lateralDiameterPercent"] == 90.0
+        assert projection["depthDiameterPercent"] == 90.0
+        assert projection["projectedHorizontalPercent"] == 90.0
+        assert projection["heightPercent"] == 100
+        assert projection["filter"] == "nearest"
+        assert projection["pivotPolicy"] == (
+            "direction_frame_head_pivot_preserved"
+        )
+        assert projection["postProjectionSize"][0] < (
+            projection["preProjectionSize"][0]
+        )
+        assert projection["postProjectionSize"][1] == (
+            projection["preProjectionSize"][1]
+        )
+        assert record["generatedSize"] == projection["postProjectionSize"]
+        assert record["preparedPixelPolicy"].endswith(
+            "_angle_aware_diameter_projection"
+        )
     black_actions = identities["black_iron"]["actions"]
     assert black_actions["cast"]["atlasRgbaSha256"] != (
         black_actions["idle"]["atlasRgbaSha256"]
