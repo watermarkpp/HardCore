@@ -128,6 +128,8 @@
         "excludedAccessory": "two_long_lateral_horns",
         "preserveAccessoryToBodyRatio": true,
         "fullBoundsMayExceedClientEnvelope": true,
+        "sharedBodyTargetHeightPixels": 18,
+        "uniformEditorScaleAcrossDirections": true,
         "filter": "lanczos_downsample_then_nearest_runtime"
       },
       "despillGreenCutouts": true,

@@ -507,7 +507,9 @@ func _direction_texture_button(
 	button.focus_mode = Control.FOCUS_NONE
 	button.custom_minimum_size = Vector2(104, 82)
 	button.ignore_texture_size = true
-	button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+	# Keep the 64x64 runtime source crop at 1x. Scaling each thumbnail to the
+	# button bounds made its apparent size disagree with the worn preview.
+	button.stretch_mode = TextureButton.STRETCH_KEEP_CENTERED
 	button.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	button.toggle_mode = true
 	var label := Label.new()
@@ -1366,7 +1368,6 @@ func _runtime_layer_cell(
 		return Image.new()
 	if (
 		layer_name == "ClientHelmetLayer"
-		and _has_authored_source_sheet()
 		and not action.is_empty()
 		and direction_index >= 0
 		and frame_index >= 0
@@ -1386,9 +1387,17 @@ func _runtime_layer_cell(
 			pivot,
 			HelmetVisualV2.uniform_scale_percent(current_item_id)
 		)
-	# The PlayerVisual node is the runtime source of truth. In particular,
-	# item 146 row 3 comes from the baked NW atlas; recomposing from the raw
-	# source atlas here would make the 1x/zoom previews show the old shape.
+	if (
+		layer_name == "ClientHelmetLayer"
+		and not layer.texture.resource_path.is_empty()
+	):
+		var direct_runtime_atlas := _image_from_path(
+			layer.texture.resource_path
+		)
+		return direct_runtime_atlas.get_region(Rect2i(layer.region_rect))
+	# Body and non-helmet layers still come from PlayerVisual. The helmet layer
+	# deliberately uses the same direct PNG path as the source buttons so a
+	# stale Godot .ctex import can never make the worn preview show old pixels.
 	return layer.texture.get_image().get_region(Rect2i(layer.region_rect))
 
 

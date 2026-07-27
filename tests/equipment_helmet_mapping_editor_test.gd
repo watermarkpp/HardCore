@@ -204,11 +204,23 @@ func _run() -> void:
 	for row: int in 8:
 		var button := source_grid.get_node("Source_Row%d" % row) as TextureButton
 		assert(int(button.get_meta("source_row", -1)) == row)
+		assert(button.stretch_mode == TextureButton.STRETCH_KEEP_CENTERED)
 		var expected: Image = editor.source_row_thumbnail(row)
 		assert(
 			button.texture_normal.get_image().get_data()
 			== expected.get_data()
 		)
+	# 150 source buttons, worn player and zoom preview must all use the exact
+	# generated runtime PNG pixels. The tool must not read a stale .ctex.
+	editor.select_item(150)
+	for row: int in 8:
+		var direct_source: Image = editor.calibration_source_cell(
+			"idle", row, 0
+		)
+		var runtime_source: Image = editor._runtime_layer_cell(
+			"ClientHelmetLayer", "idle", row, 0
+		)
+		assert(runtime_source.get_data() == direct_source.get_data())
 	assert(HelmetVisualV2.source_direction_for_row(146, 3) == "NW")
 	assert(HelmetVisualV2.source_direction_for_row(146, 5) == "NE")
 	var recipe: Dictionary = HelmetVisualV2.visual_asset_for_item(146).get(

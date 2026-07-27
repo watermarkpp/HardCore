@@ -173,6 +173,8 @@ def main() -> None:
         "excludedAccessory": "two_long_lateral_horns",
         "preserveAccessoryToBodyRatio": True,
         "fullBoundsMayExceedClientEnvelope": True,
+        "sharedBodyTargetHeightPixels": 18,
+        "uniformEditorScaleAcrossDirections": True,
         "filter": "lanczos_downsample_then_nearest_runtime",
     }
     for identity_id in (
@@ -539,6 +541,7 @@ def main() -> None:
             "_angle_aware_diameter_projection"
         )
     skeleton_cutouts = identities["skeleton"]["directionCutouts"]
+    skeleton_body_heights = []
     for direction in DIRECTIONS:
         record = skeleton_cutouts[direction]
         sizing = record["bodyDrivenSizing"]
@@ -551,17 +554,15 @@ def main() -> None:
         )
         assert sizing["hornsExcludedFromScaleCalculation"] is True
         assert sizing["fullBoundsMayExceedClientEnvelope"] is True
-        assert sizing["generatedBodySize"][0] <= (
-            record["calibrationEnvelope"][0]
-        )
-        assert sizing["generatedBodySize"][1] <= (
-            record["calibrationEnvelope"][1]
-        )
+        assert sizing["sharedBodyTargetHeightPixels"] == 18
+        assert sizing["uniformEditorScaleAcrossDirections"] is True
+        skeleton_body_heights.append(sizing["generatedBodySize"][1])
         assert sizing["fullGeneratedSize"] == record["generatedSize"]
         assert record["preparedPixelPolicy"] == (
             "concept_body_driven_resize_horns_excluded_v1"
             "_source_green_despill"
         )
+    assert set(skeleton_body_heights) == {18}
     assert all(
         skeleton_cutouts[direction]["generatedSize"][0]
         > skeleton_cutouts[direction]["bodyDrivenSizing"][

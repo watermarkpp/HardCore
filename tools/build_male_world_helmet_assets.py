@@ -599,10 +599,25 @@ def fit_body_to_client_envelope(
     """Scale the complete helmet from its horn-free main body measurement."""
     body_box = helmet_body_box(cutout, policy)
     body_reference = cutout.crop(body_box)
-    generated_body, selected_scale = fit_to_client_envelope_with_scale(
+    fitted_body, candidate_scale = fit_to_client_envelope_with_scale(
         body_reference,
         maximum_size,
         target_opaque_pixels,
+    )
+    shared_target_height = int(
+        policy.get("sharedBodyTargetHeightPixels", 0)
+    )
+    selected_scale = (
+        shared_target_height / body_reference.height
+        if shared_target_height > 0
+        else candidate_scale
+    )
+    generated_body = body_reference.resize(
+        (
+            max(1, round(body_reference.width * selected_scale)),
+            max(1, round(body_reference.height * selected_scale)),
+        ),
+        Image.Resampling.LANCZOS,
     )
     full_size = (
         max(1, round(cutout.width * selected_scale)),
@@ -633,7 +648,16 @@ def fit_body_to_client_envelope(
             generated_body.height,
         ],
         "fullGeneratedSize": [result.width, result.height],
+        "directionalCandidateBodySize": [
+            fitted_body.width,
+            fitted_body.height,
+        ],
+        "directionalCandidateScale": round(candidate_scale, 8),
         "selectedScale": round(selected_scale, 8),
+        "sharedBodyTargetHeightPixels": shared_target_height,
+        "uniformEditorScaleAcrossDirections": bool(
+            policy.get("uniformEditorScaleAcrossDirections", False)
+        ),
         "columnDensityThresholdPercent": float(
             policy["columnDensityThresholdPercent"]
         ),
