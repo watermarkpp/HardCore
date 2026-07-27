@@ -46,8 +46,10 @@ func _validate_holy_war_paper_doll(entry: Dictionary) -> void:
 	assert(equipped_slot.get("faceAperture", "") == "none_opaque_black_mask", "item 232 equipped preview must preserve the no-cutout mask")
 	var head_image := Image.load_from_file(HOLY_WAR_PAPER_PATH)
 	assert(not head_image.is_empty(), "item 232 approved head patch must load")
+	# The 0.8-diameter high-resolution bake keeps the opaque face mask in
+	# this narrower central ROI; Lanczos edge pixels outside it may be partial.
 	for y in range(24, 33):
-		for x in range(12, 21):
+		for x in range(13, 20):
 			assert(head_image.get_pixel(x, y).a > 0.99, "item 232 face-mask region must remain opaque")
 	var erase_mask := Image.load_from_file(HOLY_WAR_ERASE_MASK_PATH)
 	assert(not erase_mask.is_empty(), "item 232 erase mask must load")

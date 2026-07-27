@@ -353,26 +353,69 @@
       "inventoryFaceWindow": "opaque_black_mask_interior",
       "groundSourceDirection": "S",
       "groundFaceWindow": "opaque_black_mask_interior",
-      "worldSizingPolicy": "horn_excluded_body_normalization_v1",
-      "worldScaleRatio": 0.64,
+      "worldSizingPolicy": "approved_high_res_single_pass_horizontal_diameter_v1",
+      "sourceBakePolicy": "approved_high_res_single_pass",
+      "horizontalDiameterScale": 0.8,
+      "offlineDownsampleFilter": "premultiplied_alpha_lanczos",
       "worldDirectionHeights": {
         "N": 23,
-        "NE": 23,
-        "E": 22,
-        "SE": 23,
+        "NE": 21,
+        "E": 20,
+        "SE": 22,
         "S": 23,
-        "SW": 23,
+        "SW": 22,
         "W": 22,
         "NW": 23
+      },
+      "sourceRowDirectionHeights": {
+        "N": 23,
+        "NW": 21,
+        "SE": 20,
+        "W": 22,
+        "S": 23,
+        "SW": 22,
+        "E": 22,
+        "NE": 23
+      },
+      "sourceRowDirectionSizes": {
+        "N": [
+          17,
+          23
+        ],
+        "NW": [
+          13,
+          21
+        ],
+        "SE": [
+          12,
+          20
+        ],
+        "W": [
+          14,
+          22
+        ],
+        "S": [
+          15,
+          23
+        ],
+        "SW": [
+          13,
+          22
+        ],
+        "E": [
+          12,
+          22
+        ],
+        "NE": [
+          14,
+          23
+        ]
       },
       "paperDollCanvasSize": [
         32,
         41
       ],
-      "paperDollContentEnvelope": [
-        24,
-        29
-      ],
+      "paperDollContentHeight": 29,
       "runtimeScale": 1,
       "textureFilter": "nearest",
       "userOverrideAuthorization": "direct use of the explicitly approved generated design"
