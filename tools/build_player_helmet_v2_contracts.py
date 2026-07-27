@@ -395,14 +395,21 @@ def build_visual_contract(frames: dict[str, dict[str, list[dict]]]) -> dict:
         }
         if identity_id == "bronze_magic":
             asset["source"].update({
-                "calibrationSourceSheet": identity["concept"],
-                "calibrationSourceSheetSha256": identity["conceptFileSha256"],
-                "calibrationSourceGrid": identity["sourceGrid"],
+                "calibrationSourceSheet": identity["calibrationSourceSheet"],
+                "calibrationSourceSheetSha256": identity[
+                    "calibrationSourceSheetSha256"
+                ],
+                "calibrationSourceGrid": identity[
+                    "calibrationSourceGrid"
+                ],
                 "calibrationSourceSlotDirectionOrder": source_order,
-                "calibrationPreparedSourceRows": identity.get(
-                    "calibrationPreparedSourceRows", []
-                ),
-                "calibrationSourceMatte": "green_chroma_key_despill_v2",
+                "calibrationPreparedSourceRows": [],
+                "calibrationSourceMatte": identity[
+                    "calibrationSourceMatte"
+                ],
+                "calibrationResizeFilter": identity[
+                    "calibrationResizeFilter"
+                ],
                 "calibrationPreviewPolicy": (
                     "single_authored_source_for_buttons_previews_and_bakes"
                 ),

@@ -1143,9 +1143,20 @@ func _source_recipe_id() -> String:
 		var idle_layout_sha := str(
 			source.get("actions", {}).get("idle", {}).get("sha256", "")
 		)
+		var matte_policy := str(
+			source.get("calibrationSourceMatte", "unspecified_matte")
+		)
+		var resize_filter := str(
+			source.get("calibrationResizeFilter", "nearest")
+		)
 		return (
-			"authored_source_sheet.%s.layout.%s.green_despill_v2"
-			% [authored_sha, idle_layout_sha]
+			"authored_source_sheet.%s.layout.%s.%s.%s"
+			% [
+				authored_sha,
+				idle_layout_sha,
+				matte_policy,
+				resize_filter,
+			]
 		)
 	return str(HelmetVisualV2.visual_asset_for_item(
 		current_item_id
@@ -1244,11 +1255,20 @@ func _authored_source_runtime_cell(
 	if not placement_rect.has_area():
 		return placement_cell
 	var fitted := authored_cutout.duplicate()
+	var resize_filter := Image.INTERPOLATE_NEAREST
+	if "lanczos_downsample" in str(
+		_calibration_source_contract().get(
+			"calibrationResizeFilter", ""
+		)
+	):
+		resize_filter = Image.INTERPOLATE_LANCZOS
 	fitted.resize(
 		placement_rect.size.x,
 		placement_rect.size.y,
-		Image.INTERPOLATE_NEAREST
+		resize_filter
 	)
+	if resize_filter == Image.INTERPOLATE_LANCZOS:
+		_sanitize_transparent_downsample(fitted)
 	var result := Image.create(
 		ArtSpec.WARRIOR_FRAME.x,
 		ArtSpec.WARRIOR_FRAME.y,
@@ -1262,6 +1282,18 @@ func _authored_source_runtime_cell(
 		placement_rect.position
 	)
 	return result
+
+
+func _sanitize_transparent_downsample(image: Image) -> void:
+	for y: int in image.get_height():
+		for x: int in image.get_width():
+			var color := image.get_pixel(x, y)
+			if color.a <= 0.02:
+				image.set_pixel(x, y, Color(0, 0, 0, 0))
+				continue
+			var non_green := maxf(color.r, color.b)
+			color.g = minf(color.g, non_green + 0.025)
+			image.set_pixel(x, y, color)
 
 
 func mirror_cell_between_pivots(
@@ -1922,10 +1954,12 @@ func _authored_source_cutout(source_row: int) -> Image:
 	var expected_sha := str(
 		source.get("calibrationSourceSheetSha256", "")
 	).to_lower()
-	var cache_key := "%d:%s:%s:%d" % [
+	var matte_policy := str(source.get("calibrationSourceMatte", ""))
+	var cache_key := "%d:%s:%s:%s:%d" % [
 		current_item_id,
 		path,
 		expected_sha,
+		matte_policy,
 		source_row,
 	]
 	if _authored_source_cutout_cache.has(cache_key):
@@ -1955,20 +1989,22 @@ func _authored_source_cutout(source_row: int) -> Image:
 	var y0 := roundi(float(row * sheet.get_height()) / float(rows))
 	var y1 := roundi(float((row + 1) * sheet.get_height()) / float(rows))
 	var cell := sheet.get_region(Rect2i(x0, y0, x1 - x0, y1 - y0))
-	for y: int in cell.get_height():
-		for x: int in cell.get_width():
-			var color := cell.get_pixel(x, y)
-			var non_green := maxf(color.r, color.b)
-			var green_spill := maxf(0.0, color.g - non_green)
-			if green_spill > 0.0:
-				# Continuous chroma-key alpha removes the antialiased green
-				# fringe as well as the flat matte. Despill prevents partially
-				# transparent edge pixels from retaining a green halo.
-				color.a *= clampf(1.0 - green_spill / 0.45, 0.0, 1.0)
-				color.g = minf(color.g, non_green + 0.025)
-			if color.a <= 0.02:
-				color = Color(0, 0, 0, 0)
-			cell.set_pixel(x, y, color)
+	if not matte_policy.begins_with("transparent_"):
+		for y: int in cell.get_height():
+			for x: int in cell.get_width():
+				var color := cell.get_pixel(x, y)
+				var non_green := maxf(color.r, color.b)
+				var green_spill := maxf(0.0, color.g - non_green)
+				if green_spill > 0.0:
+					# Legacy green concepts still require chroma-key removal.
+					# Approved transparent sheets skip this destructive pass.
+					color.a *= clampf(
+						1.0 - green_spill / 0.45, 0.0, 1.0
+					)
+					color.g = minf(color.g, non_green + 0.025)
+				if color.a <= 0.02:
+					color = Color(0, 0, 0, 0)
+				cell.set_pixel(x, y, color)
 	var used_rect := cell.get_used_rect()
 	if not used_rect.has_area():
 		return Image.new()

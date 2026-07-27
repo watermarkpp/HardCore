@@ -63,9 +63,11 @@
       "sourceSlotDirectionOrder": ["N", "NE", "E", "SE", "S", "SW", "W", "NW"],
       "canonicalRowSourceSlots": [0, 1, 2, 3, 4, 5, 6, 7],
       "outputPrefix": "res://assets/art/items/client/world_wear/helmet/male/bronze_magic_helmet",
+      "calibrationSourceSheet": "res://assets/art/items/client/world_wear/helmet/male/source/bronze_magic_helmet_8dir_transparent.png",
+      "calibrationSourceMatte": "transparent_user_approved_despill_v1",
+      "calibrationResizeFilter": "lanczos_downsample_nearest_runtime_v1",
       "calibrationBaseScalePercent": 83,
       "directionScalePercentOverrides": {"N": 100},
-      "calibrationPreparedSourceRows": [0],
       "matteTolerance": 14
     },
     {

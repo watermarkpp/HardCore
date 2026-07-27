@@ -379,6 +379,71 @@ def concept_cutouts(recipe: dict) -> dict[str, Image.Image]:
     return by_direction
 
 
+def approved_calibration_cutouts(
+    recipe: dict,
+) -> dict[str, Image.Image] | None:
+    """Build the user-approved transparent sheet without dropping components.
+
+    The calibration sheet is deliberately derived from the complete authored
+    source cell. Unlike ``remove_matte``, it does not select only the largest
+    connected component, so detached trim, cheek guards and edge ornaments
+    remain available to both the source buttons and the worn-world bake.
+    """
+    target_value = str(recipe.get("calibrationSourceSheet", "")).strip()
+    if not target_value:
+        return None
+    matte_policy = str(recipe.get("calibrationSourceMatte", ""))
+    if matte_policy != "transparent_user_approved_despill_v1":
+        raise ValueError(
+            f"{recipe['identityId']} has unsupported calibration matte "
+            f"policy: {matte_policy}"
+        )
+    concept = Image.open(disk_path(str(recipe["concept"]))).convert("RGBA")
+    transparent = despill_green_matte(concept)
+    target = disk_path(target_value)
+    save_deterministic_atlas(target, transparent)
+
+    _canonical_slots, slot_order = validated_direction_mapping(recipe)
+    grid = list(recipe["sourceGrid"])
+    by_direction: dict[str, Image.Image] = {}
+    for source_slot, direction in enumerate(slot_order):
+        cell = source_slot_crop(transparent, grid, source_slot)
+        box = cell.getchannel("A").getbbox()
+        if box is None:
+            raise ValueError(
+                f"{recipe['identityId']} calibration source slot "
+                f"{source_slot} is empty"
+            )
+        by_direction[direction] = cell.crop(box)
+    return by_direction
+
+
+def calibration_source_metadata(recipe: dict) -> dict:
+    target_value = str(recipe.get("calibrationSourceSheet", "")).strip()
+    if not target_value:
+        return {}
+    target = disk_path(target_value)
+    if not target.exists():
+        raise FileNotFoundError(
+            f"missing built calibration source sheet: {target}"
+        )
+    return {
+        "calibrationSourceSheet": target_value,
+        "calibrationSourceSheetSha256": file_sha256(target),
+        "calibrationSourceGrid": list(recipe["sourceGrid"]),
+        "calibrationSourceSlotDirectionOrder": list(
+            recipe["sourceSlotDirectionOrder"]
+        ),
+        "calibrationPreparedSourceRows": [],
+        "calibrationSourceMatte": str(
+            recipe["calibrationSourceMatte"]
+        ),
+        "calibrationResizeFilter": str(
+            recipe["calibrationResizeFilter"]
+        ),
+    }
+
+
 def build_direction_acceptance_sheet(
     recipe: dict,
     cutouts: dict[str, Image.Image],
@@ -764,7 +829,9 @@ def build_variants(
     recipe: dict,
     baseline: dict,
 ) -> tuple[dict[str, Image.Image], dict[str, dict], dict]:
-    cutouts = concept_cutouts(recipe)
+    cutouts = approved_calibration_cutouts(recipe)
+    if cutouts is None:
+        cutouts = concept_cutouts(recipe)
     acceptance = build_direction_acceptance_sheet(recipe, cutouts)
     canonical_slots = list(recipe["canonicalRowSourceSlots"])
     variants: dict[str, Image.Image] = {}
@@ -1328,6 +1395,7 @@ def build_contract() -> dict:
             "hairPixelsUsed": False,
             "actions": actions,
         }
+        identities[identity_id].update(calibration_source_metadata(recipe))
 
     existing_catalog = load_json(VISUAL_CATALOG)
     item_recipes = {
@@ -1518,6 +1586,7 @@ def rebuild_generated_identity(identity_id: str) -> dict:
         "hairPixelsUsed": False,
         "actions": actions,
     }
+    identity.update(calibration_source_metadata(recipe))
 
     payload = load_json(CONTRACT)
     payload["recipeFileSha256"] = file_sha256(RECIPES)
@@ -1574,6 +1643,26 @@ def validate_contract(contract: dict) -> None:
             raise AssertionError(f"{identity_id} claims StateItem pixels")
         if set(identity.get("actions", {})) != set(ACTION_SPECS):
             raise AssertionError(f"{identity_id} lacks a physical action")
+        calibration_source = str(
+            identity.get("calibrationSourceSheet", "")
+        )
+        if calibration_source:
+            calibration_path = disk_path(calibration_source)
+            if not calibration_path.exists():
+                raise AssertionError(
+                    f"{identity_id} calibration source is missing"
+                )
+            if file_sha256(calibration_path) != str(
+                identity.get("calibrationSourceSheetSha256", "")
+            ):
+                raise AssertionError(
+                    f"{identity_id} calibration source SHA changed"
+                )
+            if identity.get("calibrationPreparedSourceRows", []) != []:
+                raise AssertionError(
+                    f"{identity_id} calibration source has a low-resolution "
+                    "prepared-row exception"
+                )
         slot_order = list(identity.get("sourceSlotDirectionOrder", []))
         canonical_slots = [
             int(value)

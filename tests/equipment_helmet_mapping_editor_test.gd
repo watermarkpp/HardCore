@@ -258,7 +258,7 @@ func _run() -> void:
 		"calibrationSourceSheet", ""
 	))
 	assert(bronze_sheet_path.ends_with(
-		"source/bronze_magic_helmet_8dir.png"
+		"source/bronze_magic_helmet_8dir_transparent.png"
 	))
 	assert(FileAccess.file_exists(bronze_sheet_path))
 	assert(
@@ -278,7 +278,10 @@ func _run() -> void:
 			"N", "NE", "E", "SE", "S", "SW", "W", "NW",
 		][direction_index])
 	assert(str(bronze_source.get("calibrationSourceMatte", "")) == (
-		"green_chroma_key_despill_v2"
+		"transparent_user_approved_despill_v1"
+	))
+	assert(str(bronze_source.get("calibrationResizeFilter", "")) == (
+		"lanczos_downsample_nearest_runtime_v1"
 	))
 	assert(str(bronze_source.get("calibrationPreviewPolicy", "")) == (
 		"single_authored_source_for_buttons_previews_and_bakes"
@@ -286,12 +289,14 @@ func _run() -> void:
 	var prepared_rows: Array = bronze_source.get(
 		"calibrationPreparedSourceRows", []
 	)
-	assert(prepared_rows.size() == 1)
-	assert(int(prepared_rows[0]) == 0)
-	assert(editor._source_recipe_id().ends_with(".green_despill_v2"))
+	assert(prepared_rows.is_empty())
+	assert(not editor._is_prepared_source_row(0))
+	assert(editor._source_recipe_id().ends_with(
+		".transparent_user_approved_despill_v1"
+		+ ".lanczos_downsample_nearest_runtime_v1"
+	))
 	var authored_hashes: Dictionary = {}
 	var differs_from_runtime := false
-	var differs_from_generated_atlas := false
 	var authored_strip := Image.create(8 * 64, 64, false, Image.FORMAT_RGBA8)
 	authored_strip.fill(Color(0, 0, 0, 0))
 	for row: int in 8:
@@ -305,6 +310,9 @@ func _run() -> void:
 		assert(authored.get_size() == Vector2i(64, 64))
 		assert(_has_opaque_pixel(authored))
 		_assert_no_green_matte(authored)
+		var full_resolution_source: Image = editor._authored_source_cutout(row)
+		assert(full_resolution_source.get_width() >= 174)
+		assert(full_resolution_source.get_height() >= 280)
 		var authored_hash: int = authored.get_data().hex_encode().hash()
 		assert(not authored_hashes.has(authored_hash))
 		authored_hashes[authored_hash] = true
@@ -317,17 +325,9 @@ func _run() -> void:
 		_assert_no_green_matte(runtime)
 		if authored.get_data() != runtime.get_data():
 			differs_from_runtime = true
-		var generated_atlas: Image = editor._generated_atlas_source_cell(
-			"idle", row, 0
-		)
-		if runtime.get_data() != generated_atlas.get_data():
-			differs_from_generated_atlas = true
 	assert(differs_from_runtime)
-	assert(differs_from_generated_atlas)
-	assert(
-		editor.calibration_source_cell("idle", 0, 0).get_data()
-		== editor._generated_atlas_source_cell("idle", 0, 0).get_data()
-	)
+	assert(editor._authored_source_cutout(0).get_width() >= 175)
+	assert(editor._authored_source_cutout(0).get_height() >= 288)
 	assert(authored_strip.save_png(ProjectSettings.globalize_path(
 		"%s/helmet_147_authored_source_8dir.png" % OUTPUT_ROOT
 	)) == OK)
@@ -394,7 +394,10 @@ func _run() -> void:
 	assert(FileAccess.file_exists(bronze_derived_path))
 	assert(str(bronze_override.get("bakePolicy", {}).get(
 		"sourceRecipeId", ""
-	)).ends_with(".green_despill_v2"))
+	)).ends_with(
+		".transparent_user_approved_despill_v1"
+		+ ".lanczos_downsample_nearest_runtime_v1"
+	))
 	var bronze_derived: Image = Image.load_from_file(bronze_derived_path)
 	for row: int in 8:
 		var bronze_cell_rect := Rect2i(
