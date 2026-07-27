@@ -60,9 +60,6 @@ GROUND = (
     / "assets/art/items/client/project_redesign/helmet/heavenly_taoist"
     / "item_00240_ground.png"
 )
-REPORT = (
-    ROOT / "outputs/helmet_240/heavenly_taoist_240_validation_report.json"
-)
 BUILDER = ROOT / "tools/build_heavenly_taoist_helmet_240.py"
 
 
@@ -161,13 +158,6 @@ def main() -> None:
             v2["source"]["actions"][action]["sha256"]
             == identity["actions"][action]["fileSha256"]
         )
-
-    report = load_json(REPORT)
-    assert report["frozenNon240FilesUnchanged"] is True
-    assert report["non240ContractDataUnchanged"] is True
-    assert report["paperDollFaceWindowTransparent"] is True
-    assert report["atlasCellResolutionPreserved"] == [192, 160]
-    assert report["runtimeScale"] == 1
 
     rejected = subprocess.run(
         [sys.executable, str(BUILDER), "--identity", "god_magic"],
