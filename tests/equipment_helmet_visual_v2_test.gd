@@ -98,7 +98,7 @@ func _run() -> void:
 				var delta := HelmetVisualV2.final_position_delta(
 					146, "player.male.cloth_002", action, direction_index, frame_index
 				)
-				assert(delta.x is int and delta.y is int)
+				assert(delta.x == floorf(delta.x) and delta.y == floorf(delta.y))
 		source_rows[int(record.get("source_row", -1))] = true
 	assert(source_rows.size() == 8)
 	assert(str(HelmetVisualV2.direction_record(146, 0).get("openingVisibility", "")) == "none")
@@ -199,6 +199,14 @@ func _run() -> void:
 	))
 	var session_nudge: Array = HelmetVisualV2.direction_record(146, 0).get("nudge", [])
 	assert(Vector2i(int(session_nudge[0]), int(session_nudge[1])) == Vector2i.RIGHT)
+	assert(HelmetVisualV2.set_session_calibration_override(
+		146, 0, {"nudge": [1.5, -0.5]}
+	))
+	session_nudge = HelmetVisualV2.direction_record(146, 0).get("nudge", [])
+	assert(
+		Vector2(float(session_nudge[0]), float(session_nudge[1]))
+		== Vector2(1.5, -0.5)
+	)
 	HelmetVisualV2.reload_data()
 	assert(HelmetVisualV2.set_session_calibration_override(
 		151, 0, {

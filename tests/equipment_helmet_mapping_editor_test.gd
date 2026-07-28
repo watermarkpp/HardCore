@@ -63,6 +63,8 @@ func _run() -> void:
 	assert("window_set_min_size(" not in tool_text)
 	assert("window_set_position(" not in tool_text)
 	assert("screen_get_usable_rect(" not in tool_text)
+	assert("DisplayServer.mouse_get_position()" not in tool_text)
+	assert("get_viewport().get_mouse_position()" in tool_text)
 	assert("NOTIFICATION_WM_CLOSE_REQUEST" in tool_text)
 	assert("KEY_ESCAPE" in tool_text)
 	var startup_status := editor.get_node(
@@ -145,6 +147,18 @@ func _run() -> void:
 	assert(calibration_ui.get_h_scroll_bar().visible)
 	assert(calibration_ui.get_v_scroll_bar().visible)
 	_assert_mouse_only_focus(editor, target_grid, source_grid)
+	assert(
+		editor.popup_position_near_pointer(
+			Vector2(100, 100), Vector2i(180, 112)
+		) == Vector2i(112, 112)
+	)
+	var viewport_size := editor.get_viewport().get_visible_rect().size
+	var edge_popup: Vector2i = editor.popup_position_near_pointer(
+		viewport_size - Vector2.ONE,
+		Vector2i(180, 112)
+	)
+	assert(edge_popup.x <= int(viewport_size.x) - 180)
+	assert(edge_popup.y <= int(viewport_size.y) - 112)
 
 	# Reproduce the real bug with menu controls deliberately made focusable.
 	# Root _input must consume arrows before OptionButton GUI navigation.
@@ -192,6 +206,19 @@ func _run() -> void:
 		) as Sprite2D
 		assert(helmet_layer.texture != null)
 	editor.select_item(146)
+	var paper_before: Dictionary = editor._current_presentation_calibration()
+	var paper_offset_before := _vector(
+		paper_before.get("paperDoll", {}).get("offset", [])
+	)
+	editor._set_active_editor_scope("paperDoll")
+	assert(editor.nudge_paper_doll(Vector2i.RIGHT))
+	var paper_after: Dictionary = editor._current_presentation_calibration()
+	assert(
+		_vector(paper_after.get("paperDoll", {}).get("offset", []))
+		== paper_offset_before + Vector2.RIGHT * 0.5
+	)
+	assert(editor.nudge_paper_doll(Vector2i.LEFT))
+	editor._set_active_editor_scope("world")
 	var menu_state_before := {
 		"item": item_menu.selected,
 		"action": action_menu.selected,
@@ -219,7 +246,7 @@ func _run() -> void:
 	await _dispatch_key(KEY_RIGHT, false, false)
 	assert(
 		_vector(HelmetVisualV2.direction_record(146, 0).get("nudge", []))
-		== nudge_before + Vector2i.UP
+		== nudge_before + Vector2.UP * 0.5
 	)
 	assert(item_menu.selected == int(menu_state_before.item))
 	assert(action_menu.selected == int(menu_state_before.action))
@@ -512,7 +539,7 @@ func _run() -> void:
 		).text)
 	)
 
-	# Keyboard and mouse controls each move exactly one integer pixel.
+	# Keyboard and mouse controls each move by a precise half pixel.
 	var right_event := InputEventKey.new()
 	right_event.keycode = KEY_RIGHT
 	right_event.pressed = true
@@ -523,7 +550,7 @@ func _run() -> void:
 	mapped = HelmetVisualV2.direction_record(146, 1)
 	assert(
 		_vector(mapped.get("nudge", []))
-		== mapped_nudge_before + Vector2i(1, -1)
+		== mapped_nudge_before + Vector2(0.5, -0.5)
 	)
 	assert("DIRTY" in str(editor.get_node(
 		"CalibrationUI/Panel/VBox/MappingStatus/State"
@@ -555,7 +582,7 @@ func _run() -> void:
 	assert(str(mapped.get("source_direction", "")) == "S")
 	assert(
 		_vector(mapped.get("nudge", []))
-		== _vector(formal_ne_before.get("nudge", [0, 0])) + Vector2i.RIGHT
+		== _vector(formal_ne_before.get("nudge", [0, 0])) + Vector2.RIGHT * 0.5
 	)
 	assert(str(mapped.get("status", "")) in ["valid", "locked"])
 	assert(mapped.has("locked"))
@@ -591,12 +618,12 @@ func _run() -> void:
 	assert(int(batch_e.get("source_row", -1)) == 6)
 	assert(
 		_vector(batch_e.get("nudge", []))
-		== batch_e_before + Vector2i.DOWN
+		== batch_e_before + Vector2.DOWN * 0.5
 	)
 	assert(int(batch_se.get("source_row", -1)) == 1)
 	assert(
 		_vector(batch_se.get("nudge", []))
-		== batch_se_before + Vector2i.LEFT
+		== batch_se_before + Vector2.LEFT * 0.5
 	)
 	assert(HelmetVisualV2.saved_direction_override(146, 7) == nw_saved_before)
 
@@ -860,7 +887,7 @@ func _run() -> void:
 	assert(str(saved_151_ne.get("source_slot_id", "")) == "slot_0")
 	assert(
 		_vector(saved_151_ne.get("nudge", []))
-		== initial_151_ne_nudge + Vector2i.LEFT
+		== initial_151_ne_nudge + Vector2.LEFT * 0.5
 	)
 	var trace_151 := _json(
 		"%s/helmet_151_generated_all_actions_trace.json" % OUTPUT_ROOT
@@ -930,10 +957,10 @@ func _run() -> void:
 	get_tree().quit.call_deferred(0)
 
 
-func _vector(value: Variant) -> Vector2i:
+func _vector(value: Variant) -> Vector2:
 	if value is Array and value.size() == 2:
-		return Vector2i(int(value[0]), int(value[1]))
-	return Vector2i.ZERO
+		return Vector2(float(value[0]), float(value[1]))
+	return Vector2.ZERO
 
 
 func _json(path: String) -> Dictionary:

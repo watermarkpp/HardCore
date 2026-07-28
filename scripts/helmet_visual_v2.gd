@@ -237,16 +237,16 @@ static func final_position_delta(
 	action: String,
 	direction_row: int,
 	frame_index: int
-) -> Vector2i:
+) -> Vector2:
 	var record := direction_record(item_id, direction_row)
 	if record.is_empty():
-		return Vector2i.ZERO
+		return Vector2.ZERO
 	var socket := body_head_socket(player_visual_id, action, direction_row, frame_index)
 	if socket == Vector2i.ZERO:
-		return Vector2i.ZERO
+		return Vector2.ZERO
 	var pivot := pivot_for_frame(item_id, action, direction_row, frame_index)
-	var nudge := _integer_vector(record.get("nudge", []))
-	return socket - pivot + nudge
+	var nudge := _numeric_vector(record.get("nudge", []))
+	return Vector2(socket - pivot) + nudge
 
 
 static func pivot_for_frame(
@@ -520,7 +520,7 @@ static func set_session_presentation_calibration(
 ) -> bool:
 	if is_read_only(item_id):
 		return false
-	var normalized := _validated_presentation_calibration(value)
+	var normalized := _validated_presentation_calibration(value, true)
 	if normalized.is_empty():
 		return false
 	var asset_id := visual_asset_id_for_item(item_id)
@@ -540,7 +540,10 @@ static func persist_presentation_calibration(
 ) -> bool:
 	if is_read_only(item_id):
 		return false
-	var normalized := _validated_presentation_calibration(value)
+	var normalized := _validated_presentation_calibration(
+		value,
+		_override_path != OVERRIDE_PATH
+	)
 	if normalized.is_empty():
 		return false
 	var data := calibration_overrides().duplicate(true)
@@ -576,7 +579,11 @@ static func persist_calibration_override(
 	var asset := visual_asset_for_item(item_id)
 	if asset.is_empty() or is_read_only(item_id):
 		return false
-	var allowed := _validated_override_fields(item_id, override_fields)
+	var allowed := _validated_override_fields(
+		item_id,
+		override_fields,
+		_override_path != OVERRIDE_PATH
+	)
 	if allowed.is_empty():
 		return false
 	var data := calibration_overrides().duplicate(true)
@@ -614,7 +621,7 @@ static func set_session_calibration_override(
 	var asset := visual_asset_for_item(item_id)
 	if asset.is_empty() or is_read_only(item_id):
 		return false
-	var allowed := _validated_override_fields(item_id, override_fields)
+	var allowed := _validated_override_fields(item_id, override_fields, true)
 	if allowed.is_empty():
 		return false
 	var calibration_item_id := calibration_item_id_for_item(item_id)
@@ -642,7 +649,8 @@ static func clear_session_calibration_override(
 
 static func _validated_override_fields(
 	item_id: int,
-	override_fields: Dictionary
+	override_fields: Dictionary,
+	allow_half_pixel_nudge: bool = false
 ) -> Dictionary:
 	var allowed: Dictionary = {}
 	for field: String in [
@@ -683,9 +691,21 @@ static func _validated_override_fields(
 		for coordinate: Variant in nudge:
 			if not (coordinate is int or coordinate is float):
 				return {}
-			if float(coordinate) != floorf(float(coordinate)):
+			var scaled_coordinate := float(coordinate) * (
+				2.0 if allow_half_pixel_nudge else 1.0
+			)
+			if not is_finite(float(coordinate)) or not is_equal_approx(
+				scaled_coordinate, roundf(scaled_coordinate)
+			):
 				return {}
-		allowed["nudge"] = [int(nudge[0]), int(nudge[1])]
+		allowed["nudge"] = (
+			[
+				snappedf(float(nudge[0]), 0.5),
+				snappedf(float(nudge[1]), 0.5),
+			]
+			if allow_half_pixel_nudge
+			else [int(nudge[0]), int(nudge[1])]
+		)
 	if allowed.has("status"):
 		var valid_statuses: Variant = contract().get(
 			"policies", {}
@@ -709,7 +729,10 @@ static func _validated_override_fields(
 	return allowed
 
 
-static func _validated_presentation_calibration(value: Dictionary) -> Dictionary:
+static func _validated_presentation_calibration(
+	value: Dictionary,
+	allow_half_pixel_offset: bool = false
+) -> Dictionary:
 	var normalized := {
 		"contractId": "equipment.helmet.presentation_calibration.v1",
 	}
@@ -735,7 +758,24 @@ static func _validated_presentation_calibration(value: Dictionary) -> Dictionary
 				or percent % 5 != 0
 			):
 				return {}
-			record["offset"] = [int(offset[0]), int(offset[1])]
+			for coordinate: Variant in offset:
+				if not (coordinate is int or coordinate is float):
+					return {}
+				var scaled_coordinate := float(coordinate) * (
+					2.0 if allow_half_pixel_offset else 1.0
+				)
+				if not is_finite(float(coordinate)) or not is_equal_approx(
+					scaled_coordinate, roundf(scaled_coordinate)
+				):
+					return {}
+			record["offset"] = (
+				[
+					snappedf(float(offset[0]), 0.5),
+					snappedf(float(offset[1]), 0.5),
+				]
+				if allow_half_pixel_offset
+				else [int(offset[0]), int(offset[1])]
+			)
 			record["scale_percent"] = percent
 		normalized[role] = record
 	return normalized
@@ -775,3 +815,9 @@ static func _integer_vector(value: Variant) -> Vector2i:
 	if value is Array and value.size() == 2:
 		return Vector2i(int(value[0]), int(value[1]))
 	return Vector2i.ZERO
+
+
+static func _numeric_vector(value: Variant) -> Vector2:
+	if value is Array and value.size() == 2:
+		return Vector2(float(value[0]), float(value[1]))
+	return Vector2.ZERO
