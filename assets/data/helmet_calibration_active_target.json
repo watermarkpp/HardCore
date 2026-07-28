@@ -1,47 +1,62 @@
 {
   "contractId": "equipment.world_helmet.calibration.active_target.v1",
-  "itemId": 228,
-  "visualAssetId": "memory",
-  "displayName": "记忆头盔",
-  "sourceSheet": "res://assets/art/items/client/world_wear/helmet/male/source/memory_helmet_8dir.png",
-  "sourceSheetSha256": "770778d6cdb5eee2346eb2b4c873de55a5bf73aa2112a6cefeb5742d5aa5b40a",
+  "itemId": 146,
+  "visualAssetId": "elf_146",
+  "displayName": "精灵头盔",
+  "sourceSheet": "res://assets/art/items/client/world_wear/helmet/male/source/elf_146_helmet_8dir_transparent.png",
+  "sourceSheetSha256": "b0b0594ca0ed66b9c2105134b7e4f97c346555754dca3d678616367248be856f",
   "sourceGrid": [
     4,
     2
   ],
   "sourceDirectionOrder": [
-    "S",
-    "SW",
-    "W",
-    "SE",
     "N",
     "NE",
     "E",
+    "SE",
+    "S",
+    "SW",
+    "W",
     "NW"
   ],
-  "sourceMatte": "#00ff00",
-  "sourceResizeFilter": "nearest",
-  "sourceRevision": "memory_228.full_profiles.v1",
+  "sourceMatte": "transparent_mixed_white_magenta_removed_connected_background_v1",
+  "sourceResizeFilter": "lanczos_downsample_nearest_runtime_v1",
+  "sourceRevision": "elf_146.user_provided_full_8dir.v1",
   "loadPolicy": "single_target_direct_png_hash_validated",
+  "initializeSessionDirectionMapping": true,
+  "preparedDirectionFiles": {
+    "N": "res://assets/art/items/client/world_wear/helmet/male/source/elf_146_directions/n.png",
+    "NE": "res://assets/art/items/client/world_wear/helmet/male/source/elf_146_directions/ne.png",
+    "E": "res://assets/art/items/client/world_wear/helmet/male/source/elf_146_directions/e.png",
+    "SE": "res://assets/art/items/client/world_wear/helmet/male/source/elf_146_directions/se.png",
+    "S": "res://assets/art/items/client/world_wear/helmet/male/source/elf_146_directions/s.png",
+    "SW": "res://assets/art/items/client/world_wear/helmet/male/source/elf_146_directions/sw.png",
+    "W": "res://assets/art/items/client/world_wear/helmet/male/source/elf_146_directions/w.png",
+    "NW": "res://assets/art/items/client/world_wear/helmet/male/source/elf_146_directions/nw.png"
+  },
+  "preparedDirectionSha256": {
+    "N": "a8653767f6c5ce35934c1b3f4ca8b14b07d8d7f611c0ee1beb793d532661a7eb",
+    "NE": "99f917157ab9f5f3567f984af1560a7562ee0a1c2c9b77712f2fedcd5d045fa2",
+    "E": "14e4a75c3e259cc12cc53dcb433d8d84a07cd5c6fe9d415b9c31585d74aaa41b",
+    "SE": "a7f73ba1631ad57285363a6d435e505853534209ec24da3d733253866ec8068f",
+    "S": "c8aa06fb5d90bbb30467691af6c47d07957a29af6099934e0a3f250da92ce028",
+    "SW": "6ce9793461c4dcc000281c074baeaa4bf90d900dca13c38c4736248b6d7805f1",
+    "W": "b48b21e33284176c19c8a967e95746c5f502b0baab4d0b740ba7b8393d1277dd",
+    "NW": "5c9fc5215806fab0f81c1df7e2e2310798a0690f066e3db7b0ee3fcb6f2014e4"
+  },
+  "resolutionPolicy": "retain_original_direction_cutouts_until_one_final_runtime_bake",
   "provenance": {
     "lane": "helmet_world_visuals",
     "tier": "primary",
-    "distribution": "research.mir2_client_raw",
-    "designAuthority": {
-      "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00228_head.png",
-      "sha256": "7c05f80c3567f3f8a520ada3e37b92e112b2b6613b0ededd81ead17f1b321b57"
-    },
-    "supportingEvidence": [
-      {
-        "path": "res://assets/art/items/client/original_paper_doll_stage/stateitem/item_00228_stateitem_00109.png",
-        "sha256": "6e4aa253005018ce6ff06ff604eb424fc0f03dd6cd0edbb3c58ea58f172bdc74"
-      },
-      {
-        "path": "res://assets/art/items/client/inventory/109.png",
-        "sha256": "f6ad5fea1ee29c0def0d9b11a9ddea7bcf8151db1a5df5fcfd203eb471e125d4"
-      }
+    "distribution": "user_authorized_direct_source",
+    "originalSourcePath": "C:/Users/Administrator/Desktop/sucai/装备/ChatGPT Image 2026年7月28日 08_10_15.png",
+    "projectSourcePath": "res://assets/art/items/client/world_wear/helmet/male/source/elf_146_helmet_8dir_user_20260728.png",
+    "originalSourceSha256": "bf2b0c9741e2dfd7545c444996ea0def2cfb40b619a1ef447dce876deebf7b3c",
+    "sourceSize": [
+      1448,
+      1086
     ],
-    "derivation": "user_approved_six_views_plus_generated_true_w_e_profiles",
-    "userAuthorizationDate": "2026-07-27"
+    "derivation": "remove_connected_white_magenta_matte_then_lossless_4x2_direction_cut",
+    "userAuthorizationDate": "2026-07-28"
   }
 }

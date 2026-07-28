@@ -22,7 +22,7 @@ func _run() -> void:
 	assert(active_target_probe._load_active_target_manifest(
 		"res://assets/data/helmet_calibration_active_target.json"
 	))
-	assert(active_target_probe.active_target_item_id() == 228)
+	assert(active_target_probe.active_target_item_id() == 146)
 	active_target_probe.free()
 	var editor: Node = EDITOR_SCENE.instantiate()
 	editor.auto_run = false
@@ -86,18 +86,18 @@ func _run() -> void:
 			"res://assets/data/helmet_calibration_active_target.json"
 		)
 	)
-	assert(int(active_target.get("itemId", -1)) == 228)
+	assert(int(active_target.get("itemId", -1)) == 146)
 	assert(str(active_target.get(
 		"visualAssetId", ""
-	)) == "memory")
+	)) == "elf_146")
 	assert(str(active_target.get("sourceSheet", "")).ends_with(
-		"memory_helmet_8dir.png"
+		"elf_146_helmet_8dir_transparent.png"
 	))
 	assert(str(active_target.get("sourceResizeFilter", "")) == (
-		"nearest"
+		"lanczos_downsample_nearest_runtime_v1"
 	))
 	assert(active_target.get("sourceDirectionOrder", []) == [
-		"S", "SW", "W", "SE", "N", "NE", "E", "NW",
+		"N", "NE", "E", "SE", "S", "SW", "W", "NW",
 	])
 	assert(FileAccess.get_sha256(str(
 		active_target.get("sourceSheet", "")
