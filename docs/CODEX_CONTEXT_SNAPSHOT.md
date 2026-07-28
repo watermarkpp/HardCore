@@ -1,6 +1,6 @@
 # Codex 精简上下文快照
 
-更新时间：2026-07-27 18:49（Asia/Shanghai）
+更新时间：2026-07-27 19:13（Asia/Shanghai）
 
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。
 准确性规则：本文件不是代码或 Git 状态的替代品；只核实本次任务实际触及的分支、文件、接口和专项测试。
@@ -16,8 +16,8 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `80de01b1`（其后的快照提交只改本文档）。
-- tracked 状态：13 个既有头盔 v2 合同/生成素材修改继续保护；本次法神头盔接入前后 SHA-256 逐项不变。
+- 分支/运行时代码基线：`codex/integration` @ `da77aa14`（其后的快照提交只改本文档）。
+- tracked 状态：13 个既有头盔 v2 合同/生成素材修改继续保护；本次天尊头盔接入、构建与复验前后 SHA-256 逐项不变。
 - 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
 - 来源优先级总表为 `assets/data/source_priority_policy.json`；每个 lane 必须先查 `primary`，只有精确目标确实 `missing` 才允许逐级 fallback。主源不可用、不兼容或效果不符合预期时必须修复解析/映射，禁止换用低级来源。
@@ -62,6 +62,7 @@
 
 | 集成提交 | 领域 | 结果 |
 |---|---|---|
+| `54c6222e`、`da77aa14`（专业提交 `5219aff6`、`449a1f6`） | equipment/integration | 天尊头盔 `item_id=240` / `identityId=heavenly_taoist` 使用用户提供的 `1448×1086` 洋红底八方向原图完成单目标替换：上排 `N/NE/E/SE`、下排 `S/SW/W/NW`，源图 SHA-256 `A5E474DA3C081AD2F5DD0926BD9DD1358E4179737E6B8D5614A77CF7B2BA9E8E`。六动作世界 atlas 保持 `192×160px` 单元、nearest/`1x`，实际八方向内容为 `10×16/10×18/14×20/14×23/12×21/15×23/13×20/10×17px`，全部不超过正式客户端方向包围盒；纸娃娃 `32×41px` 画布内内容 `13×24px` 并保留透明脸窗，背包 `36×35px`、地面 `16×17px` 同源单次烘焙。v2 映射、动作 SHA、纸娃娃/背包/地面合同同步；非 240 合同与 224 个冻结素材逐项零变化。Godot 运行时验收 7/7、装备套件 17/17、单目标 Python 回归通过。 |
 | `8506bcef`（专业提交 `b64702b`） | equipment/integration | 圣战头盔 232 从用户确认的 `1536×1024` 高清八方向母图直接以预乘 Alpha + Lanczos 单次烘焙，禁止复用上一版低分辨率成品；八方向高度逐项保持为 `23/21/20/22/23/22/22/23px`，横向直径缩为约 80%，语义 bbox 固定为 `17×23/13×21/12×20/14×22/15×23/13×22/12×22/14×23px`。纸娃娃内容为 `19×29px`，保持全封闭 `no_cutout`、运行时 nearest/`1x`、既有方向映射/pivot/nudge 不变；146/147/149/150/151 只读像素参数审计、非 232 冻结哈希与 Godot 集成专项均通过 |
 | `80de01b1`（专业提交 `e5910aa`） | equipment/integration | 仅将法神头盔 236 世界穿戴层在当前基础上再缩小 10%：原始高清源单次 Lanczos 烘焙，atlas 单帧仍为 `192×160px`，实际头盔最大 `14×17px`，运行时 nearest/`1x`；纸娃娃、擦除遮罩、背包和地面四文件 SHA-256 前后逐项一致，真实角色八方向合成与 Godot 集成专项 6/6 通过 |
 | `0f134e74`（专业提交 `f539c19`） | equipment/integration | 按用户复核从 `1774×887` 原图重新单次烘焙法神头盔 236，不复用上一版小图；在 `443c08c8` 基础上再缩小约 18%，世界八方向为 `13–15×18–19px`，纸娃娃内容 `17×24px`。烘焙使用 Lanczos、运行时 nearest，并清除 `alpha≤3` 的绿幕亚像素残边；真实角色八方向合成与 Godot 集成专项 6/6 通过 |
@@ -182,7 +183,7 @@
 | `HardCore-worktrees/monsters` | `codex/monsters` @ `45781ded` | tracked clean；68 UID | 已集成为 `c88c6277` |
 | `HardCore-worktrees/ui-art` | `codex/ui-art` @ `68c6f6e2` | clean | 烈火 canonical charge UI 已集成为 `d51f4aeb`、`bf8bff64`、`0268128` |
 | `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `be710c6e` | 27 项 tracked 技能视觉在制修改；66 UID 继续保护 | 33技能 runtime 与150条可执行语义合同已集成；当前 fire_wall / summon_skeleton 视觉返修未交付，禁止清理或覆盖 |
-| `HardCore-worktrees/equipment` | `codex/equipment` @ `e5910aa` | 4 个既有 monster import 修改及 UID/生成项继续保护 | 圣战高清重烘焙与法神世界层再缩小 10% 已分别集成为 `8506bcef` / `80de01b1` |
+| `HardCore-worktrees/equipment` | `codex/equipment` @ `449a1f6` | 4 个既有 monster import 修改及 UID/生成项继续保护 | 天尊头盔单目标替换已集成为 `54c6222e` / `da77aa14`；圣战高清重烘焙与法神世界层再缩小 10% 已分别集成为 `8506bcef` / `80de01b1` |
 
 ### maps 保护红线
 
