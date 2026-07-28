@@ -22,7 +22,7 @@ func _run() -> void:
 	assert(active_target_probe._load_active_target_manifest(
 		"res://assets/data/helmet_calibration_active_target.json"
 	))
-	assert(active_target_probe.active_target_item_id() == 146)
+	assert(active_target_probe.active_target_item_id() == 149)
 	active_target_probe.free()
 	var editor: Node = EDITOR_SCENE.instantiate()
 	editor.auto_run = false
@@ -88,12 +88,12 @@ func _run() -> void:
 			"res://assets/data/helmet_calibration_active_target.json"
 		)
 	)
-	assert(int(active_target.get("itemId", -1)) == 146)
+	assert(int(active_target.get("itemId", -1)) == 149)
 	assert(str(active_target.get(
 		"visualAssetId", ""
-	)) == "elf_146")
+	)) == "taoist")
 	assert(str(active_target.get("sourceSheet", "")).ends_with(
-		"elf_146_helmet_8dir_transparent.png"
+		"taoist_149_helmet_8dir_transparent.png"
 	))
 	assert(str(active_target.get("sourceResizeFilter", "")) == (
 		"lanczos_downsample_nearest_runtime_v1"
@@ -104,6 +104,18 @@ func _run() -> void:
 	assert(FileAccess.get_sha256(str(
 		active_target.get("sourceSheet", "")
 	)) == str(active_target.get("sourceSheetSha256", "")))
+	assert(str(active_target.get(
+		"preparedPresentationFiles", {}
+	).get("inventory", "")).ends_with(
+		"taoist_149_presentation/inventory.png"
+	))
+	assert(FileAccess.get_sha256(str(
+		active_target.get(
+			"preparedPresentationFiles", {}
+		).get("inventory", "")
+	)) == str(active_target.get(
+		"preparedPresentationSha256", {}
+	).get("inventory", "")))
 
 	var target_grid := editor.get_node(
 		"CalibrationUI/Panel/VBox/TargetDirections"

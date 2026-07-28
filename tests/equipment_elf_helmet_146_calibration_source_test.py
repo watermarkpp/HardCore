@@ -78,23 +78,6 @@ def main() -> None:
         for record in report["directions"].values()
     )
 
-    target = json.loads(
-        (
-            ROOT / "assets/data/helmet_calibration_active_target.json"
-        ).read_text(encoding="utf-8")
-    )
-    assert target["itemId"] == 146
-    assert target["visualAssetId"] == "elf_146"
-    assert target["sourceDirectionOrder"] == list(DIRECTIONS)
-    assert target["initializeSessionDirectionMapping"] is True
-    assert target["resolutionPolicy"] == (
-        "retain_original_direction_cutouts_until_one_final_runtime_bake"
-    )
-    assert set(target["preparedDirectionFiles"]) == set(DIRECTIONS)
-    for direction in DIRECTIONS:
-        path = ROOT / target["preparedDirectionFiles"][direction][6:]
-        assert file_sha256(path) == target["preparedDirectionSha256"][direction]
-
     for relative, expected in FROZEN_RUNTIME_SHA256.items():
         assert file_sha256(ROOT / relative) == expected, relative
     print("equipment_elf_helmet_146_calibration_source_test: PASS")

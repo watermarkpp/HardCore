@@ -31,6 +31,19 @@ func _run() -> void:
 	var expected_sha := str(target.get("sourceSheetSha256", "")).to_lower()
 	assert(FileAccess.file_exists(source_path))
 	assert(FileAccess.get_sha256(source_path).to_lower() == expected_sha)
+	var prepared_presentation: Dictionary = target.get(
+		"preparedPresentationFiles", {}
+	)
+	var prepared_presentation_sha: Dictionary = target.get(
+		"preparedPresentationSha256", {}
+	)
+	for role: String in prepared_presentation:
+		var presentation_path := str(prepared_presentation.get(role, ""))
+		assert(FileAccess.file_exists(presentation_path))
+		assert(
+			FileAccess.get_sha256(presentation_path).to_lower()
+			== str(prepared_presentation_sha.get(role, "")).to_lower()
+		)
 
 	DirAccess.make_dir_recursive_absolute(
 		ProjectSettings.globalize_path(TEST_ROOT)
@@ -76,6 +89,38 @@ func _run() -> void:
 				str(initialized_record.get("source_direction", ""))
 				== HelmetVisualV2.canonical_direction(direction_index)
 			)
+	if prepared_presentation.has("inventory"):
+		var inventory_control := editor.get_node(
+			"CalibrationUI/Panel/VBox/PresentationCalibration/"
+			+ "Selectors/InventoryDirection"
+		) as OptionButton
+		assert(inventory_control.item_count == 9)
+		assert(inventory_control.selected == 8)
+		assert(inventory_control.get_item_text(8) == "背包专用")
+		var presentation: Dictionary = (
+			editor._current_presentation_calibration()
+		)
+		assert(str(presentation.get(
+			"inventory", {}
+		).get("source_variant", "")) == "dedicated_inventory")
+		var dedicated: Image = editor._authored_presentation_cutout(
+			"inventory"
+		)
+		assert(not dedicated.is_empty())
+		assert(dedicated.get_used_rect().has_area())
+		inventory_control.emit_signal("item_selected", 0)
+		presentation = editor._current_presentation_calibration()
+		assert(not presentation.get(
+			"inventory", {}
+		).has("source_variant"))
+		assert(int(presentation.get(
+			"inventory", {}
+		).get("source_row", -1)) == 0)
+		inventory_control.emit_signal("item_selected", 8)
+		presentation = editor._current_presentation_calibration()
+		assert(str(presentation.get(
+			"inventory", {}
+		).get("source_variant", "")) == "dedicated_inventory")
 
 	for source_row: int in 8:
 		var source_cell: Image = editor._authored_source_cutout(source_row)
