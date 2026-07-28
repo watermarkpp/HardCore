@@ -35,6 +35,9 @@ const FRAME_CANVAS := Vector2i(256, 256)
 const FOOT_POINT := Vector2i(128, 190)
 const HEAD_ZOOM_SOURCE_SIZE := Vector2i(64, 64)
 const SCALE_STEP_PERCENT := 5
+const NUDGE_STEP_PX := 0.5
+const POPUP_CURSOR_OFFSET := Vector2i(12, 12)
+const POPUP_ESTIMATED_SIZE := Vector2i(180, 112)
 const PAPER_DOLL_INITIAL_SCALE_PERCENT := 100
 const PAPER_DOLL_LEGACY_SCALE_PERCENT := 25
 const PAPER_DOLL_LEGACY_OFFSET := [110, 32]
@@ -867,8 +870,32 @@ func _open_direction_scale_popup(direction_index: int) -> void:
 	_scale_popup_direction = direction_index
 	if _scale_popup == null:
 		return
-	_scale_popup.position = DisplayServer.mouse_get_position()
-	_scale_popup.popup()
+	_popup_near_mouse(_scale_popup)
+
+
+func popup_position_near_pointer(
+	pointer: Vector2,
+	popup_size: Vector2i = POPUP_ESTIMATED_SIZE
+) -> Vector2i:
+	var visible_rect := get_viewport().get_visible_rect()
+	var desired := Vector2i(pointer.round()) + POPUP_CURSOR_OFFSET
+	var minimum := Vector2i(visible_rect.position.round())
+	var maximum := Vector2i((
+		visible_rect.end - Vector2(popup_size)
+	).round())
+	maximum.x = maxi(maximum.x, minimum.x)
+	maximum.y = maxi(maximum.y, minimum.y)
+	return Vector2i(
+		clampi(desired.x, minimum.x, maximum.x),
+		clampi(desired.y, minimum.y, maximum.y)
+	)
+
+
+func _popup_near_mouse(popup: PopupMenu) -> void:
+	var anchor := popup_position_near_pointer(
+		get_viewport().get_mouse_position()
+	)
+	popup.popup(Rect2i(anchor, Vector2i.ZERO))
 
 
 func _setup_presentation_ui() -> void:
@@ -978,9 +1005,8 @@ func _on_paper_overlay_input(event: InputEvent) -> void:
 				_refresh_presentation_ui()
 				popup.queue_free()
 			)
-			_paper_doll_overlay.add_child(popup)
-			popup.position = DisplayServer.mouse_get_position()
-			popup.popup()
+			add_child(popup)
+			_popup_near_mouse(popup)
 	elif event is InputEventMouseMotion and _paper_dragging:
 		_paper_doll_overlay.position = (
 			_paper_overlay_origin + event.position - _paper_drag_origin
@@ -1439,11 +1465,12 @@ func nudge_current(delta: Vector2i) -> bool:
 		return false
 	unlock_current_direction_for_session()
 	var record := HelmetVisualV2.direction_record(current_item_id, current_direction)
-	var nudge_value: Array = record.get("nudge", [0, 0])
+	var nudge_value := _array_vector2(record.get("nudge", [0, 0]))
+	var next_nudge := nudge_value + Vector2(delta) * NUDGE_STEP_PX
 	var changed := HelmetVisualV2.set_session_calibration_override(
 		current_item_id,
 		current_direction,
-		{"nudge": [int(nudge_value[0]) + delta.x, int(nudge_value[1]) + delta.y]}
+		{"nudge": _vector2_array(next_nudge)}
 	)
 	if changed:
 		_dirty_directions[
@@ -1466,9 +1493,11 @@ func nudge_paper_doll(delta: Vector2i) -> bool:
 		"offset",
 		_paper_doll_default_offset(source_row, percent)
 	)
+	var current_offset := _array_vector2(offset)
+	var next_offset := current_offset + Vector2(delta) * NUDGE_STEP_PX
 	paper["offset"] = [
-		int(offset[0]) + delta.x,
-		int(offset[1]) + delta.y,
+		next_offset.x,
+		next_offset.y,
 	]
 	presentation["paperDoll"] = paper
 	if not _apply_presentation_session(presentation):
@@ -2300,7 +2329,7 @@ func generate_all_actions_from_idle() -> bool:
 				current_item_id, direction_index
 			)
 			var source_row := int(record.get("source_row", -1))
-			var nudge := _array_vector(record.get("nudge", []))
+			var nudge := _array_vector2(record.get("nudge", []))
 			for frame_index: int in int(ACTIONS[action]):
 				var cell_rect := Rect2i(
 					frame_index * ArtSpec.WARRIOR_FRAME.x,
@@ -2322,7 +2351,7 @@ func generate_all_actions_from_idle() -> bool:
 				var pivot := HelmetVisualV2.pivot_for_frame(
 					current_item_id, action, direction_index, frame_index
 				)
-				var final_position := socket - pivot + nudge
+				var final_position := Vector2(socket - pivot) + nudge
 				var frame_ok: bool = (
 					source_nonempty == derived_nonempty
 					and socket != Vector2i.ZERO
@@ -2340,9 +2369,9 @@ func generate_all_actions_from_idle() -> bool:
 					),
 					"bodyHeadSocket": _vector_array(socket),
 					"helmetLocalPivot": _vector_array(pivot),
-					"savedNudge": _vector_array(nudge),
+					"savedNudge": _vector2_array(nudge),
 					"uniformScalePercent": percent,
-					"finalPosition": _vector_array(final_position),
+					"finalPosition": _vector2_array(final_position),
 					"sourceAtlas": source_path,
 					"derivedAtlas": derived_path,
 					"sourceNonempty": source_nonempty,
@@ -2660,7 +2689,7 @@ func _refresh_mapping_editor_ui() -> void:
 		"source_direction",
 		_calibration_source_direction_for_row(source_row)
 	))
-	var nudge := _array_vector(record.get("nudge", []))
+	var nudge := _array_vector2(record.get("nudge", []))
 	if current_item_id == 151 and not _active_target_applies_to_current_item():
 		get_node("CalibrationUI/Panel/VBox/MappingStatus/Mapping").text = (
 			"人物目标 %s <- 黑铁原始源槽 %d"
@@ -2672,7 +2701,7 @@ func _refresh_mapping_editor_ui() -> void:
 			% [direction, source_direction, source_row]
 		)
 	get_node("CalibrationUI/Panel/VBox/MappingStatus/Nudge").text = (
-		"nudge x=%d y=%d | action=%s frame=%d | direction scale=%d%%"
+		"nudge x=%.1f y=%.1f | action=%s frame=%d | direction scale=%d%%"
 		% [
 			nudge.x,
 			nudge.y,
@@ -3060,7 +3089,9 @@ func _head_preview(
 	)
 	var crop_origin := crop_rect.position
 	var socket_point := (body_top_left + socket - crop_origin) * zoom
-	var pivot_point := (body_top_left + delta + pivot - crop_origin) * zoom
+	var pivot_point := Vector2i(
+		((Vector2(body_top_left + pivot - crop_origin) + delta) * zoom).round()
+	)
 	_draw_x_mark(crop, socket_point, Color(0.2, 0.9, 1.0, 0.95), zoom)
 	_draw_plus_mark(crop, pivot_point, Color(1.0, 0.2, 0.88, 0.95), zoom)
 	return crop
@@ -3391,7 +3422,11 @@ func _validation_report(audit: Dictionary) -> Dictionary:
 	var source_rows: Array[int] = []
 	for record: Dictionary in audit.get("directions", []):
 		source_rows.append(int(record.get("sourceRow", -1)))
-		_add_check(checks, "integer_%s" % record.direction, _record_uses_integer_coordinates(record))
+		_add_check(
+			checks,
+			"calibration_coordinate_step_%s" % record.direction,
+			_record_uses_calibration_coordinates(record)
+		)
 		_add_check(checks, "no_flip_%s" % record.direction, not bool(
 			HelmetVisualV2.direction_record(ITEM_ID, DIRECTIONS.find(record.direction)).get("flip_h", true)
 		))
@@ -3713,8 +3748,8 @@ func _calibration_draft_save_safe() -> bool:
 	)
 	return (
 		saved is Dictionary
-		and _array_vector(saved.get("nudge", []))
-		== _array_vector(expected_nudge)
+		and _array_vector2(saved.get("nudge", []))
+		== _array_vector2(expected_nudge)
 		and not bool(draft.get("runtimeReadable", true))
 		and not bool(draft.get("finalized", true))
 		and bool(draft.get("finalizePolicy", {}).get(
@@ -3725,20 +3760,23 @@ func _calibration_draft_save_safe() -> bool:
 
 func _nudge_roundtrip_safe() -> bool:
 	unlock_current_direction_for_session()
-	var before := _array_vector(
+	var before := _array_vector2(
 		HelmetVisualV2.direction_record(ITEM_ID, current_direction).get("nudge", [])
 	)
 	if not nudge_current(Vector2i.RIGHT):
 		return false
-	var after_right := _array_vector(
+	var after_right := _array_vector2(
 		HelmetVisualV2.direction_record(ITEM_ID, current_direction).get("nudge", [])
 	)
 	if not nudge_current(Vector2i.LEFT):
 		return false
-	var after_left := _array_vector(
+	var after_left := _array_vector2(
 		HelmetVisualV2.direction_record(ITEM_ID, current_direction).get("nudge", [])
 	)
-	return after_right == before + Vector2i.RIGHT and after_left == before
+	return (
+		after_right == before + Vector2.RIGHT * NUDGE_STEP_PX
+		and after_left == before
+	)
 
 
 func _raw_151_source_slots_safe() -> Dictionary:
@@ -3791,14 +3829,24 @@ func _raw_151_source_slots_safe() -> Dictionary:
 	}
 
 
-func _record_uses_integer_coordinates(record: Dictionary) -> bool:
-	for field: String in ["pivot", "nudge"]:
-		var values: Variant = record.get(field, [])
-		if not values is Array or values.size() != 2:
+func _record_uses_calibration_coordinates(record: Dictionary) -> bool:
+	var pivot: Variant = record.get("pivot", [])
+	if not pivot is Array or pivot.size() != 2:
+		return false
+	for value: Variant in pivot:
+		if not (value is int or value is float) or float(value) != floorf(float(value)):
 			return false
-		for value: Variant in values:
-			if not (value is int or value is float) or float(value) != floorf(float(value)):
-				return false
+	var nudge: Variant = record.get("nudge", [])
+	if not nudge is Array or nudge.size() != 2:
+		return false
+	for value: Variant in nudge:
+		if not (value is int or value is float):
+			return false
+		var doubled := float(value) * 2.0
+		if not is_finite(float(value)) or not is_equal_approx(
+			doubled, roundf(doubled)
+		):
+			return false
 	return true
 
 
@@ -3857,7 +3905,17 @@ func _vector_array(value: Vector2i) -> Array[int]:
 	return [value.x, value.y]
 
 
+func _vector2_array(value: Vector2) -> Array[float]:
+	return [snappedf(value.x, NUDGE_STEP_PX), snappedf(value.y, NUDGE_STEP_PX)]
+
+
 func _array_vector(value: Variant) -> Vector2i:
 	if value is Array and value.size() == 2:
 		return Vector2i(int(value[0]), int(value[1]))
 	return Vector2i.ZERO
+
+
+func _array_vector2(value: Variant) -> Vector2:
+	if value is Array and value.size() == 2:
+		return Vector2(float(value[0]), float(value[1]))
+	return Vector2.ZERO
