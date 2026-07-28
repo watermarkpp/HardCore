@@ -105,10 +105,12 @@ func _run() -> void:
 		)
 		if actual.get_data() != expected.get_data():
 			print(
-				"ACTIVE_TARGET_RUNTIME_CELL_MISMATCH "
+				(
+					"ACTIVE_TARGET_RUNTIME_CELL_MISMATCH "
 				+ "direction=%s source_row=%d scale=%d "
 				+ "actual_sha=%s expected_sha=%s "
 				+ "actual_used=%s expected_used=%s"
+				)
 				% [
 					HelmetVisualV2.canonical_direction(direction_index),
 					source_row,
