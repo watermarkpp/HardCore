@@ -1,10 +1,10 @@
 {
   "contractId": "equipment.world_helmet.calibration.active_target.v1",
-  "itemId": 150,
-  "visualAssetId": "skeleton",
-  "displayName": "骷髅头盔",
-  "sourceSheet": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_150_helmet_8dir_transparent.png",
-  "sourceSheetSha256": "f92bd3024d914a7002d5522ae71d3005a060dd6a34aa2d3434735717f403d66d",
+  "itemId": 151,
+  "visualAssetId": "black_iron_golden_151",
+  "displayName": "黑铁头盔",
+  "sourceSheet": "res://assets/art/items/client/world_wear/helmet/male/source/black_iron_151_helmet_8dir_transparent.png",
+  "sourceSheetSha256": "d4adc262a1e60a19ebc5c07e21de2fe9c14e7fc5920b82c52e198335a8147c34",
   "sourceGrid": [
     4,
     2
@@ -21,28 +21,28 @@
   ],
   "sourceMatte": "transparent_user_authored_alpha_preserved_v1",
   "sourceResizeFilter": "display_transform_only_until_final_bake_v1",
-  "sourceRevision": "skeleton_150.user_provided_8dir_hollowed.v1",
+  "sourceRevision": "black_iron_151.user_provided_8dir.v1",
   "loadPolicy": "single_target_direct_png_hash_validated",
   "initializeSessionDirectionMapping": true,
   "preparedDirectionFiles": {
-    "N": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_150_directions/n.png",
-    "NE": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_150_directions/ne.png",
-    "E": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_150_directions/e.png",
-    "SE": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_150_directions/se.png",
-    "S": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_150_directions/s.png",
-    "SW": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_150_directions/sw.png",
-    "W": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_150_directions/w.png",
-    "NW": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_150_directions/nw.png"
+    "N": "res://assets/art/items/client/world_wear/helmet/male/source/black_iron_151_directions/n.png",
+    "NE": "res://assets/art/items/client/world_wear/helmet/male/source/black_iron_151_directions/ne.png",
+    "E": "res://assets/art/items/client/world_wear/helmet/male/source/black_iron_151_directions/e.png",
+    "SE": "res://assets/art/items/client/world_wear/helmet/male/source/black_iron_151_directions/se.png",
+    "S": "res://assets/art/items/client/world_wear/helmet/male/source/black_iron_151_directions/s.png",
+    "SW": "res://assets/art/items/client/world_wear/helmet/male/source/black_iron_151_directions/sw.png",
+    "W": "res://assets/art/items/client/world_wear/helmet/male/source/black_iron_151_directions/w.png",
+    "NW": "res://assets/art/items/client/world_wear/helmet/male/source/black_iron_151_directions/nw.png"
   },
   "preparedDirectionSha256": {
-    "N": "eb094de90a6cf28041e6278e1fc77a9cbcb51bd6ec73307ad645404a62f6cc7f",
-    "NE": "285552f1b9afa37f93e5f685a805513cf5be1eec1a368393ddcae0c65895aa2f",
-    "E": "4916b30ea068698d6867fa4c0d2dc7cee39741fa682c4b7a7f320ced2b6acc61",
-    "SE": "ceb9fcb30511327df1a76871a00a66d27d315957ab183b13113ee0ee79e71eb4",
-    "S": "9f8c525b6a75d39e875b384a97c8cef54499399e61a6aaa584287d731839a479",
-    "SW": "7104c3d76a704a4f02d838ae2c640f78419b23a4a33d032f88ea94be01de020c",
-    "W": "f71134a782e0abe4f47c06b1079342aa77cfe2f9e49612d1f59e960a5a616814",
-    "NW": "58f49304cff588b7329b4f640f85fe1c012ab64e0a223fb259578cc0f03176b3"
+    "N": "d6cd741dd94fb94633d6ed57a6435f0c849f841a5d4940f0f136b669401c3528",
+    "NE": "c1b942536cddc3a5d7e29e957396f1411e76e0357aac2b7e62ffbb8c498f8dc0",
+    "E": "5c939782127e51ddf8a2802f69664e1488fed87471684baaa5e1c6edfc2bf0aa",
+    "SE": "87c00f008eebd65172bc4185d7e1be78b73e81e721b2eeb245b74638b5e4da8f",
+    "S": "a536c2345f8d0d0c3cd8a49f0930317b72ac8dabaaee08d1375b8eb959f52625",
+    "SW": "853c3197826dc926b468bdde1e7d721d04b978e1ba9b40579be7df9258b67efb",
+    "W": "bc3f51cd152fe4d13b3df4e139280b2994357df30fddff072035facace18cd1d",
+    "NW": "a02343fbb1df1717479143dea2d8a19647d06809a5c07bdaffd0ad44e08ef22b"
   },
   "preparedPresentationFiles": {},
   "preparedPresentationSha256": {},
@@ -51,14 +51,14 @@
     "lane": "helmet_world_visuals",
     "tier": "primary",
     "distribution": "user_authorized_direct_source",
-    "originalSourcePath": "C:/Users/Administrator/Desktop/sucai/装备/ChatGPT Image 2026年7月28日 08_55_16.png",
-    "projectSourcePath": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_150_helmet_8dir_user_20260728.png",
-    "originalSourceSha256": "de5753d3b36797d0937967032be238b3cde55582588ff4b99d42794740605c0d",
+    "originalSourcePath": "C:/Users/Administrator/Desktop/sucai/装备/ChatGPT Image 2026年7月27日 21_31_42.png",
+    "projectSourcePath": "res://assets/art/items/client/world_wear/helmet/male/source/black_iron_151_helmet_8dir_user_20260729.png",
+    "originalSourceSha256": "917b2bbfda8463b509b61866ea3e125ad77ffb68288d5f52c199526f5afd79ff",
     "sourceSize": [
       1491,
       1055
     ],
-    "derivation": "alpha_bounds_crop_only_no_matte_removal_no_hollowing_edit_no_resample",
-    "userAuthorizationDate": "2026-07-28"
+    "derivation": "alpha_bounds_crop_only_no_matte_removal_no_resample",
+    "userAuthorizationDate": "2026-07-29"
   }
 }
