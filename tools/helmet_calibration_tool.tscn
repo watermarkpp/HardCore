@@ -84,21 +84,26 @@ max_value = 5.0
 step = 1.0
 
 [node name="ZoomLabel" type="Label" parent="CalibrationUI/Panel/VBox/Inputs"]
+visible = false
 layout_mode = 2
 text = "Head Zoom"
 
 [node name="Zoom" type="OptionButton" parent="CalibrationUI/Panel/VBox/Inputs"]
+visible = false
 layout_mode = 2
 
 [node name="ScaleLabel" type="Label" parent="CalibrationUI/Panel/VBox/Inputs"]
+visible = false
 layout_mode = 2
 text = "Uniform Scale"
 
 [node name="ScaleMinus" type="Button" parent="CalibrationUI/Panel/VBox/Inputs"]
+visible = false
 layout_mode = 2
 text = "−"
 
 [node name="Scale" type="SpinBox" parent="CalibrationUI/Panel/VBox/Inputs"]
+visible = false
 layout_mode = 2
 min_value = 50.0
 max_value = 200.0
@@ -107,6 +112,7 @@ value = 100.0
 suffix = "%"
 
 [node name="ScalePlus" type="Button" parent="CalibrationUI/Panel/VBox/Inputs"]
+visible = false
 layout_mode = 2
 text = "+"
 
@@ -114,7 +120,7 @@ text = "+"
 custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.35, 1, 0.62, 1)
-text = "保存全部改动"
+text = "保存全部无损校准"
 
 [node name="CloseEditor" type="Button" parent="CalibrationUI/Panel/VBox/Inputs"]
 custom_minimum_size = Vector2(140, 0)
@@ -154,7 +160,77 @@ text = "2. Helmet source atlas row (real row thumbnails; click to map)"
 layout_mode = 2
 columns = 8
 
+[node name="PresentationLabel" type="Label" parent="CalibrationUI/Panel/VBox"]
+layout_mode = 2
+text = "3. 纸娃娃 / 背包 / 地面展示校准（全部从原始八方向素材选择）"
+
+[node name="PresentationCalibration" type="HBoxContainer" parent="CalibrationUI/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="PaperDoll" type="VBoxContainer" parent="CalibrationUI/Panel/VBox/PresentationCalibration"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CalibrationUI/Panel/VBox/PresentationCalibration/PaperDoll"]
+layout_mode = 2
+text = "战士赤月套装纸娃娃：左键拖动头盔，右键每次缩放 5%"
+
+[node name="Canvas" type="Control" parent="CalibrationUI/Panel/VBox/PresentationCalibration/PaperDoll"]
+custom_minimum_size = Vector2(300, 340)
+layout_mode = 2
+clip_contents = true
+mouse_filter = 1
+
+[node name="Selectors" type="VBoxContainer" parent="CalibrationUI/Panel/VBox/PresentationCalibration"]
+custom_minimum_size = Vector2(440, 0)
+layout_mode = 2
+
+[node name="PaperDollLabel" type="Label" parent="CalibrationUI/Panel/VBox/PresentationCalibration/Selectors"]
+layout_mode = 2
+text = "纸娃娃头盔方向"
+
+[node name="PaperDollDirection" type="OptionButton" parent="CalibrationUI/Panel/VBox/PresentationCalibration/Selectors"]
+layout_mode = 2
+
+[node name="InventoryLabel" type="Label" parent="CalibrationUI/Panel/VBox/PresentationCalibration/Selectors"]
+layout_mode = 2
+text = "背包展示方向"
+
+[node name="InventoryDirection" type="OptionButton" parent="CalibrationUI/Panel/VBox/PresentationCalibration/Selectors"]
+layout_mode = 2
+
+[node name="GroundLabel" type="Label" parent="CalibrationUI/Panel/VBox/PresentationCalibration/Selectors"]
+layout_mode = 2
+text = "地面掉落展示方向"
+
+[node name="GroundDirection" type="OptionButton" parent="CalibrationUI/Panel/VBox/PresentationCalibration/Selectors"]
+layout_mode = 2
+
+[node name="SelectionPreviews" type="HBoxContainer" parent="CalibrationUI/Panel/VBox/PresentationCalibration/Selectors"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="InventoryPreview" type="TextureRect" parent="CalibrationUI/Panel/VBox/PresentationCalibration/Selectors/SelectionPreviews"]
+custom_minimum_size = Vector2(160, 160)
+layout_mode = 2
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5
+
+[node name="GroundPreview" type="TextureRect" parent="CalibrationUI/Panel/VBox/PresentationCalibration/Selectors/SelectionPreviews"]
+custom_minimum_size = Vector2(160, 160)
+layout_mode = 2
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ResolutionPolicy" type="Label" parent="CalibrationUI/Panel/VBox/PresentationCalibration/Selectors"]
+layout_mode = 2
+text = "保存仅记录参数；全部完成后再从原始切片统一生成游戏素材。"
+autowrap_mode = 2
+
 [node name="Previews" type="HBoxContainer" parent="CalibrationUI/Panel/VBox"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -241,17 +317,18 @@ text = "Undo current"
 
 [node name="Reload" type="Button" parent="CalibrationUI/Panel/VBox/Commands"]
 layout_mode = 2
-text = "Reload formal"
+text = "重新加载校准存档"
 
 [node name="Save" type="Button" parent="CalibrationUI/Panel/VBox/Commands"]
 layout_mode = 2
-text = "Save formal override (S)"
+text = "保存当前无损校准 (S)"
 
 [node name="Lock" type="Button" parent="CalibrationUI/Panel/VBox/Commands"]
 layout_mode = 2
 text = "Lock direction (L)"
 
 [node name="GenerateAllActions" type="Button" parent="CalibrationUI/Panel/VBox/Commands"]
+visible = false
 layout_mode = 2
 disabled = true
 text = "站立基准完成 → 生成全动作"

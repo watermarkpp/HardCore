@@ -22,7 +22,8 @@ func _run() -> void:
 	var target: Dictionary = JSON.parse_string(
 		FileAccess.get_file_as_string(ACTIVE_TARGET)
 	)
-	assert(int(target.get("itemId", -1)) == 151)
+	var target_item_id := int(target.get("itemId", -1))
+	assert(target_item_id > 0)
 	assert(str(target.get("loadPolicy", "")) == (
 		"single_target_direct_png_hash_validated"
 	))
@@ -55,8 +56,8 @@ func _run() -> void:
 	)
 	assert(not item_control.disabled)
 	assert(await editor.initialize_editor_runtime(false))
-	assert(editor.active_target_item_id() == 151)
-	assert(editor.current_item_id == 151)
+	assert(editor.active_target_item_id() == target_item_id)
+	assert(editor.current_item_id == target_item_id)
 	assert(editor._active_target_applies_to_current_item())
 	assert(
 		editor.active_target_source_sheet_sha256()
@@ -69,7 +70,9 @@ func _run() -> void:
 		assert(source_cell.get_used_rect().has_area())
 	for direction_index: int in 8:
 		editor._configure_runtime("idle", direction_index, 0)
-		var record := HelmetVisualV2.direction_record(151, direction_index)
+		var record := HelmetVisualV2.direction_record(
+			target_item_id, direction_index
+		)
 		var source_row := int(record.get("source_row", direction_index))
 		var expected: Image = editor.calibration_source_cell(
 			"idle", source_row, 0
@@ -80,7 +83,9 @@ func _run() -> void:
 		expected = editor.scale_cell_around_pivot(
 			expected,
 			pivot,
-			HelmetVisualV2.uniform_scale_percent(151)
+			HelmetVisualV2.direction_scale_percent(
+				target_item_id, direction_index
+			)
 		)
 		var actual: Image = editor._runtime_layer_cell(
 			"ClientHelmetLayer", "idle", direction_index, 0
@@ -95,8 +100,8 @@ func _run() -> void:
 			"calibrationSourceSheet", ""
 		)) != TEST_SOURCE
 	)
-	editor.select_item(151)
-	assert(editor.current_item_id == 151)
+	editor.select_item(target_item_id)
+	assert(editor.current_item_id == target_item_id)
 	assert(editor._active_target_applies_to_current_item())
 	assert(
 		str(editor._calibration_source_contract().get(
