@@ -34,7 +34,7 @@ const DIRECTION_VECTORS := [
 const FRAME_CANVAS := Vector2i(256, 256)
 const FOOT_POINT := Vector2i(128, 190)
 const HEAD_ZOOM_SOURCE_SIZE := Vector2i(64, 64)
-const SCALE_STEP_PERCENT := 5
+const SCALE_STEP_PERCENT := HelmetVisualV2.WORLD_SCALE_STEP_PERCENT
 const NUDGE_STEP_PX := 0.5
 const AUTHORED_WORLD_DISPLAY_SCALE := 0.08
 const POPUP_CURSOR_OFFSET := Vector2i(12, 12)
@@ -1473,7 +1473,11 @@ func set_head_zoom(scale_factor: int) -> void:
 
 
 func set_uniform_scale_percent(percent: int) -> bool:
-	var safe_percent := clampi(percent, 50, 200)
+	var safe_percent := clampi(
+		percent,
+		HelmetVisualV2.WORLD_SCALE_MIN_PERCENT,
+		HelmetVisualV2.WORLD_SCALE_MAX_PERCENT
+	)
 	if not HelmetVisualV2.set_session_uniform_scale_percent(
 		current_item_id, safe_percent
 	):
@@ -1502,8 +1506,8 @@ func set_direction_scale_percent(
 	var safe_percent := clampi(
 		roundi(float(percent) / float(SCALE_STEP_PERCENT))
 			* SCALE_STEP_PERCENT,
-		50,
-		200
+		HelmetVisualV2.WORLD_SCALE_MIN_PERCENT,
+		HelmetVisualV2.WORLD_SCALE_MAX_PERCENT
 	)
 	if not HelmetVisualV2.set_session_calibration_override(
 		current_item_id,
@@ -3369,7 +3373,10 @@ func scale_cell_around_pivot(
 	pivot: Vector2i,
 	percent: int
 ) -> Image:
-	assert(percent >= 50 and percent <= 200)
+	assert(
+		percent >= HelmetVisualV2.WORLD_SCALE_MIN_PERCENT
+		and percent <= HelmetVisualV2.WORLD_SCALE_MAX_PERCENT
+	)
 	if percent == 100:
 		return cell.duplicate()
 	var factor := float(percent) / 100.0

@@ -7,6 +7,9 @@ const CONTRACT_PATH := "res://assets/data/equipment_helmet_visual_v2.json"
 const HEAD_SOCKET_PATH := "res://assets/data/player_head_socket_db.json"
 const OVERRIDE_PATH := "res://assets/data/equipment_helmet_visual_v2_overrides.json"
 const CANONICAL_DIRECTIONS := ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+const WORLD_SCALE_MIN_PERCENT := 5
+const WORLD_SCALE_MAX_PERCENT := 200
+const WORLD_SCALE_STEP_PERCENT := 5
 
 static var _contract: Dictionary = {}
 static var _head_sockets: Dictionary = {}
@@ -323,20 +326,28 @@ static func base_action_texture_path(
 static func uniform_scale_percent(item_id: int) -> int:
 	return clampi(int(visual_asset_override_for_item(item_id).get(
 		"uniform_scale_percent", 100
-	)), 50, 200)
+	)), WORLD_SCALE_MIN_PERCENT, WORLD_SCALE_MAX_PERCENT)
 
 
 static func direction_scale_percent(item_id: int, direction_row: int) -> int:
 	var record := direction_record(item_id, direction_row)
 	if record.has("scale_percent"):
-		return clampi(int(record.get("scale_percent", 100)), 50, 200)
+		return clampi(
+			int(record.get("scale_percent", 100)),
+			WORLD_SCALE_MIN_PERCENT,
+			WORLD_SCALE_MAX_PERCENT
+		)
 	var directional: Variant = visual_asset_override_for_item(item_id).get(
 		"directionScalePercent", {}
 	)
 	if directional is Dictionary:
 		var direction := canonical_direction(direction_row)
 		if directional.has(direction):
-			return clampi(int(directional.get(direction, 100)), 50, 200)
+			return clampi(
+				int(directional.get(direction, 100)),
+				WORLD_SCALE_MIN_PERCENT,
+				WORLD_SCALE_MAX_PERCENT
+			)
 	return uniform_scale_percent(item_id)
 
 
@@ -353,7 +364,11 @@ static func set_session_uniform_scale_percent(
 	item_id: int,
 	percent: int
 ) -> bool:
-	if is_read_only(item_id) or percent < 50 or percent > 200:
+	if (
+		is_read_only(item_id)
+		or percent < WORLD_SCALE_MIN_PERCENT
+		or percent > WORLD_SCALE_MAX_PERCENT
+	):
 		return false
 	var asset_id := visual_asset_id_for_item(item_id)
 	if asset_id.is_empty():
@@ -378,8 +393,8 @@ static func persist_uniform_scale_bake(
 ) -> bool:
 	if (
 		is_read_only(item_id)
-		or percent < 50
-		or percent > 200
+		or percent < WORLD_SCALE_MIN_PERCENT
+		or percent > WORLD_SCALE_MAX_PERCENT
 		or derived_atlases.is_empty()
 	):
 		return false
@@ -453,7 +468,11 @@ static func persist_directional_scale_bake(
 		if not direction_scale_percent.has(direction):
 			return false
 		var percent := int(direction_scale_percent[direction])
-		if percent < 50 or percent > 200 or percent % 5 != 0:
+		if (
+			percent < WORLD_SCALE_MIN_PERCENT
+			or percent > WORLD_SCALE_MAX_PERCENT
+			or percent % WORLD_SCALE_STEP_PERCENT != 0
+		):
 			return false
 		normalized[direction] = percent
 	var uniform_percent := int(normalized[CANONICAL_DIRECTIONS[0]])
@@ -720,9 +739,9 @@ static func _validated_override_fields(
 		var percent := int(allowed["scale_percent"])
 		if (
 			not (allowed["scale_percent"] is int or allowed["scale_percent"] is float)
-			or percent < 50
-			or percent > 200
-			or percent % 5 != 0
+			or percent < WORLD_SCALE_MIN_PERCENT
+			or percent > WORLD_SCALE_MAX_PERCENT
+			or percent % WORLD_SCALE_STEP_PERCENT != 0
 		):
 			return {}
 		allowed["scale_percent"] = percent
