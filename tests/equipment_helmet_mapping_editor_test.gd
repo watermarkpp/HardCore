@@ -172,7 +172,7 @@ func _run() -> void:
 	var close_editor := editor.get_node(
 		"CalibrationUI/Panel/VBox/Inputs/CloseEditor"
 	) as Button
-	assert(save_all.text == "保存全部改动")
+	assert(save_all.text == "保存全部无损校准")
 	assert(save_all.focus_mode == Control.FOCUS_NONE)
 	assert(close_editor.text == "关闭编辑器")
 	assert(close_editor.focus_mode == Control.FOCUS_NONE)
@@ -582,7 +582,7 @@ func _run() -> void:
 	assert(editor.map_source_row_to_current_target(1))
 	assert(editor.nudge_current(Vector2i.LEFT))
 	save_all.emit_signal("pressed")
-	assert("已保存全部改动" in str(editor.get_node(
+	assert("已保存全部无损校准" in str(editor.get_node(
 		"CalibrationUI/Panel/VBox/MappingStatus/State"
 	).text))
 	editor.reload_formal_data()
@@ -600,25 +600,35 @@ func _run() -> void:
 	)
 	assert(HelmetVisualV2.saved_direction_override(146, 7) == nw_saved_before)
 
-	# Asset-level scale applies once to every direction, bakes all six actions,
-	# uses nearest-neighbour around the local pivot, and survives runtime reload.
+	# Visible keyboard/right-click scaling applies in exact 5% steps to only
+	# the selected direction. The hidden legacy uniform setter remains covered
+	# below for migration of existing saved profiles.
 	var scale_plus := editor.get_node(
 		"CalibrationUI/Panel/VBox/Inputs/ScalePlus"
 	) as Button
-	scale_plus.emit_signal("pressed")
-	assert(HelmetVisualV2.uniform_scale_percent(146) == 101)
+	assert(not scale_plus.visible)
+	assert(editor.set_uniform_scale_percent(100))
+	var selected_scale_direction: int = editor.current_direction
+	var untouched_scale_direction: int = posmod(
+		selected_scale_direction + 1, 8
+	)
 	var keyboard_plus := InputEventKey.new()
 	keyboard_plus.keycode = KEY_EQUAL
 	keyboard_plus.pressed = true
 	editor._input(keyboard_plus)
-	assert(HelmetVisualV2.uniform_scale_percent(146) == 102)
+	assert(HelmetVisualV2.direction_scale_percent(
+		146, selected_scale_direction
+	) == 105)
+	assert(HelmetVisualV2.direction_scale_percent(
+		146, untouched_scale_direction
+	) == 100)
 	var keyboard_minus := InputEventKey.new()
 	keyboard_minus.keycode = KEY_MINUS
 	keyboard_minus.pressed = true
 	editor._input(keyboard_minus)
-	assert(HelmetVisualV2.uniform_scale_percent(146) == 101)
-	for direction_index: int in 8:
-		assert(HelmetVisualV2.uniform_scale_percent(146) == 101)
+	assert(HelmetVisualV2.direction_scale_percent(
+		146, selected_scale_direction
+	) == 100)
 	assert(editor.set_uniform_scale_percent(125))
 	var synthetic := Image.create(9, 9, false, Image.FORMAT_RGBA8)
 	synthetic.fill(Color(0, 0, 0, 0))
@@ -695,9 +705,12 @@ func _run() -> void:
 			).get("runtime_scale", []) == [1.0, 1.0]
 		)
 	var bake_policy: Dictionary = asset_override.get("bakePolicy", {})
-	assert(str(bake_policy.get("filter", "")) == "nearest")
+	assert(str(bake_policy.get("filter", "")) == (
+		"lanczos_from_authored_source_then_nearest_runtime"
+	))
 	assert(bool(bake_policy.get("pivotInvariant", false)))
-	assert(bool(bake_policy.get("castPivotUsesSameFramePrimaryHairEvidence", false)))
+	assert(bool(bake_policy.get("directionIndependent", false)))
+	assert(int(bake_policy.get("scaleStepPercent", 0)) == 5)
 	assert(str(bake_policy.get("sourceRecipeId", "")) == (
 		"elf_146.user_authorized_nw_mirror.v1"
 	))
@@ -970,7 +983,8 @@ func _assert_editor_layout(editor: Node) -> void:
 		"TargetDirections",
 		"SourceLabel",
 		"SourceDirections",
-		"Previews",
+		"PresentationLabel",
+		"PresentationCalibration",
 		"Layers",
 		"Commands",
 		"Legend",
@@ -985,15 +999,7 @@ func _assert_editor_layout(editor: Node) -> void:
 		assert(content_rect.encloses(rect), path)
 		assert(rect.position.y >= previous_end - 0.5, path)
 		previous_end = rect.end.y
-	var full_column := editor.get_node(
-		base + "Previews/FullColumn"
-	) as Control
-	var head_column := editor.get_node(
-		base + "Previews/HeadColumn"
-	) as Control
-	assert(not full_column.get_global_rect().intersects(
-		head_column.get_global_rect()
-	))
+	assert(not (editor.get_node(base + "Previews") as Control).visible)
 	for grid_name: String in ["TargetDirections", "SourceDirections"]:
 		var grid := editor.get_node(base + grid_name) as GridContainer
 		var grid_rect := grid.get_global_rect()
