@@ -51,6 +51,7 @@ var touch_vector := Vector2.ZERO
 var facing := Vector2.DOWN
 var _attack_timer := 0.0
 var _attack_action_timer := 0.0
+var _skill_cooldown_remaining: Dictionary = {}
 var _struck_lock_remaining := 0.0
 var _struck_reaction_lock_remaining := 0.0
 var _queued_struck_reaction := false
@@ -59,8 +60,8 @@ var visual: Node2D
 var health_bar: PlayerHealthBar
 var thrusting_enabled := false
 var half_moon_enabled := false
-# Explicit one-charge presentation state; GameRoot owns expiry and consumption.
-var fire_sword_armed := false
+# Read-only presentation mirror; GameRoot owns charge creation, expiry, and consumption.
+var _fire_sword_charge_expires_at_ms := 0
 var _slaying_cycle_remaining := 0
 var _slaying_trigger_point := -1
 var _slaying_cycle_size := 0
@@ -127,6 +128,15 @@ func _physics_process(delta: float) -> void:
 	var was_struck_locked := _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0
 	_attack_timer = maxf(0.0, _attack_timer - delta)
 	_attack_action_timer = maxf(0.0, _attack_action_timer - delta)
+	for stable_skill_id: Variant in _skill_cooldown_remaining.keys():
+		var remaining := maxf(
+			0.0,
+			float(_skill_cooldown_remaining.get(stable_skill_id, 0.0)) - delta
+		)
+		if remaining <= 0.0:
+			_skill_cooldown_remaining.erase(stable_skill_id)
+		else:
+			_skill_cooldown_remaining[stable_skill_id] = remaining
 	if _attack_action_timer <= 0.0 and _pending_combat_action_active and _pending_combat_action_committed:
 		_finish_combat_action(_pending_combat_action_id)
 	if _attack_action_timer <= 0.0 and _queued_struck_reaction:
@@ -242,6 +252,8 @@ func request_skill(skill_name: String) -> bool:
 	if _attack_timer > 0.0:
 		return false
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
+	if skill_cooldown_remaining_ms(stable_skill_id) > 0:
+		return false
 	var canonical_definition := SkillDataLoaderScript.skill(stable_skill_id)
 	if canonical_definition.is_empty():
 		return false
@@ -254,15 +266,29 @@ func request_skill(skill_name: String) -> bool:
 		"body_cast_ms",
 		roundi(ProfessionRules.CASTER_SPELL_ACTION_DURATION * 1000.0)
 	))
+	var total_action_lock_ms := int(canonical_timing.get(
+		"total_action_lock_ms",
+		body_cast_ms
+	))
 	var cooldown_ms := int(canonical_timing.get(
 		"cooldown_ms",
-		canonical_timing.get("total_action_lock_ms", 780)
+		total_action_lock_ms
 	))
 	var release_ms := int(canonical_timing.get(
 		"effect_resolve_ms_from_cast_start",
 		body_cast_ms
 	))
-	_attack_timer = maxf(0.0, float(cooldown_ms) / 1000.0) / _cast_speed_multiplier
+	var action_lock_seconds := maxf(
+		0.0,
+		float(total_action_lock_ms) / 1000.0
+	) / _cast_speed_multiplier
+	var cooldown_seconds := maxf(
+		0.0,
+		float(cooldown_ms) / 1000.0
+	) / _cast_speed_multiplier
+	_attack_timer = action_lock_seconds
+	if cooldown_seconds > 0.0:
+		_skill_cooldown_remaining[stable_skill_id] = cooldown_seconds
 	var action_duration := maxf(0.0, float(body_cast_ms) / 1000.0)
 	_attack_action_timer = action_duration
 	velocity = Vector2.ZERO
@@ -476,13 +502,29 @@ func set_combat_seed(seed_value: int) -> void:
 	_slaying_cycle_remaining = 0
 
 
+func set_fire_sword_charge_display(expires_at_ms: int) -> void:
+	_fire_sword_charge_expires_at_ms = maxi(0, expires_at_ms)
+
+
+func skill_cooldown_remaining_ms(stable_skill_id: String) -> int:
+	return ceili(maxf(
+		0.0,
+		float(_skill_cooldown_remaining.get(stable_skill_id, 0.0))
+	) * 1000.0)
+
+
 func warrior_state_snapshot() -> Dictionary:
+	var fire_expires_remaining_ms := maxi(
+		0,
+		_fire_sword_charge_expires_at_ms - Time.get_ticks_msec()
+	)
 	return {
 		"contract_id": "gameplay.warrior.skill_runtime.v2",
 		"slaying_auto": PlayerState.learned_skills.has("攻杀剑术"),
 		"thrusting": thrusting_enabled,
 		"half_moon": half_moon_enabled,
-		"fire_armed": fire_sword_armed,
+		"fire_armed": fire_expires_remaining_ms > 0,
+		"fire_expires_remaining_ms": fire_expires_remaining_ms,
 		"slaying_remaining": _slaying_cycle_remaining,
 		"slaying_trigger": _slaying_trigger_point,
 	}
@@ -510,7 +552,7 @@ func restore_warrior_runtime_state(saved_state: Dictionary) -> bool:
 	half_moon_enabled = bool(toggles.get("warrior.half_moon", false))
 	# Legacy fire auto/cooldown fields are intentionally ignored. Fire Sword is
 	# always an explicit cast and an in-flight charge never survives a reload.
-	fire_sword_armed = false
+	set_fire_sword_charge_display(0)
 	return true
 
 

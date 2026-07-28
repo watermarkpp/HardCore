@@ -33,16 +33,17 @@ func _run() -> void:
 	var mp_before_fire := player.current_mp
 	player._attack_timer = 0.0
 	assert(player.request_skill("烈火剑法"), "烈火SOT显式充能无法开始")
-	assert(not player.fire_sword_armed and player.current_mp == mp_before_fire, "烈火不应在Router结果前充能或预扣MP")
-	assert(is_equal_approx(player._attack_action_timer, 0.6) and is_equal_approx(player._attack_timer, 8.0), "烈火600ms身体动作与8秒冷却未隔离")
+	assert(not bool(player.warrior_state_snapshot().fire_armed) and player.current_mp == mp_before_fire, "烈火不应在Router结果前充能或预扣MP")
+	assert(is_equal_approx(player._attack_action_timer, 0.6) and is_equal_approx(player._attack_timer, 0.8), "烈火600ms身体动作与800ms总动作锁未隔离")
+	assert(player.skill_cooldown_remaining_ms("warrior.fire_sword") == 8000, "烈火独立8秒冷却未建立")
 	await get_tree().create_timer(0.65).timeout
 	assert(game._canonical_fire_charge_expires_ms > Time.get_ticks_msec(), "烈火Router结果未建立一次性充能")
+	assert(bool(player.warrior_state_snapshot().fire_armed), "烈火Router结果未同步只读展示状态")
 	assert(player.current_mp == mp_before_fire - 7, "烈火Router未唯一提交7MP")
 	var saved_runtime := player.warrior_runtime_state_for_save()
 	assert(saved_runtime.contract_id == "gameplay.warrior.skill_runtime.v2", "战士技能运行时存档契约不稳定")
 	assert(not saved_runtime.toggles["warrior.fire_sword.auto_enabled"], "烈火旧auto兼容状态未固定为false")
-	game._canonical_fire_charge_expires_ms = 0
-	player.fire_sword_armed = false
+	game._set_canonical_fire_charge_expires_at(0)
 
 	PlayerState.learned_skills = {"攻杀剑术": 3}
 	var ordinary_context := player._build_warrior_attack_context(true)

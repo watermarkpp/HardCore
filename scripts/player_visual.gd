@@ -511,10 +511,17 @@ func _v2_layer_texture(
 	var path := HelmetVisualV2.action_texture_path(
 		item_id, action_name, direction_row, layer_name
 	)
-	if path.is_empty() or not ResourceLoader.exists(path):
+	if path.is_empty():
 		return null
 	if not _v2_layer_texture_cache.has(path):
-		_v2_layer_texture_cache[path] = load(path) as Texture2D
+		if ResourceLoader.exists(path):
+			_v2_layer_texture_cache[path] = load(path) as Texture2D
+		elif FileAccess.file_exists(path) and path.get_extension().to_lower() == "png":
+			var raw_image := Image.load_from_file(path)
+			if not raw_image.is_empty():
+				_v2_layer_texture_cache[path] = ImageTexture.create_from_image(
+					raw_image
+				)
 	return _v2_layer_texture_cache.get(path, null)
 
 

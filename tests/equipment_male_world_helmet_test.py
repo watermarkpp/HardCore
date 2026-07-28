@@ -56,6 +56,15 @@ PRESERVED_BLACK_IRON_FILE_SHA256 = {
     "hit": "605d12ebd303bbc9be5ee3da645145ad53f9077d28e0fff83ac5d95970575cf7",
     "death": "f99492398eadb01b1b7e50f1f7c5bb347b42994054a165e3318922fd5599beec",
 }
+BRONZE_APPROVED_OTHER_DIRECTION_RGBA_SHA256 = {
+    "NE": "38621221e718547c422368f91b57e5ad677a6a4f0901a0d323d43c319a70aaf8",
+    "E": "b9666e04f14e81a30b5366762dc8106ca7e112ca19575476eb5e8061e6be2274",
+    "SE": "96ab5a43913c731603d540996891ca873ef2d41231496aa4891231593e7f6525",
+    "S": "2577794ac10fb80703901371bc65706a5d0f92accffbbc1d0ec00e367031b260",
+    "SW": "38ae1aa08459f79666e237551dc548ab46dd1e58c33c00addc7e6d11ccaa410c",
+    "W": "51ae88f12bc2edf18d9a30bd9d670ce212bb8ced8f329b27f009f5fb09abe0b1",
+    "NW": "51b1f4abe51bab89060ca2a882546c515d3e8ed31f8beb8671487f46d554d249",
+}
 
 sys.path.insert(0, str(ROOT / "tools/vendor"))
 from extract_wil import decode_sprite, read_library  # noqa: E402
@@ -138,13 +147,37 @@ def main() -> None:
         ]
         assert sorted(canonical_slots) == list(range(8))
         assert disk_path(recipe["concept"]).exists()
-    for identity_id in (
-        "prayer",
-        "memory",
-        "holy_war",
-        "god_magic",
-        "heavenly_taoist",
-    ):
+    taoist_diameter_policy = recipe_identities["taoist"][
+        "angleAwareHorizontalDiameter"
+    ]
+    assert taoist_diameter_policy == {
+        "lateralDiameterPercent": 90,
+        "depthDiameterPercent": 90,
+        "depthToWidthRatio": 1.0,
+        "heightPercent": 100,
+        "filter": "nearest",
+        "pivotPolicy": "direction_frame_head_pivot_preserved",
+    }
+    skeleton_body_policy = recipe_identities["skeleton"][
+        "bodyDrivenSizing"
+    ]
+    assert recipe_identities["skeleton"]["despillGreenCutouts"] is True
+    assert skeleton_body_policy == {
+        "method": "central_column_density",
+        "columnDensityThresholdPercent": 30,
+        "maximumColumnGapPercent": 4,
+        "horizontalPaddingPercent": 2.5,
+        "minimumBodyWidthFraction": 0.35,
+        "maximumBodyWidthFraction": 0.65,
+        "scaleBasis": "main_helmet_body_only",
+        "excludedAccessory": "two_long_lateral_horns",
+        "preserveAccessoryToBodyRatio": True,
+        "fullBoundsMayExceedClientEnvelope": True,
+        "sharedBodyTargetHeightPixels": 18,
+        "uniformEditorScaleAcrossDirections": True,
+        "filter": "lanczos_downsample_then_nearest_runtime",
+    }
+    for identity_id in ("prayer",):
         assert (
             recipe_identities[identity_id]["sourceSlotDirectionOrder"]
             == GROUP_B_SOURCE_ORDER
@@ -153,6 +186,34 @@ def main() -> None:
             recipe_identities[identity_id]["canonicalRowSourceSlots"]
             == GROUP_B_CANONICAL_SLOTS
         )
+    for identity_id in ("holy_war", "god_magic", "heavenly_taoist"):
+        assert (
+            recipe_identities[identity_id]["sourceSlotDirectionOrder"]
+            == DIRECTIONS
+        )
+        assert recipe_identities[identity_id][
+            "canonicalRowSourceSlots"
+        ] == list(range(8))
+    assert recipe_identities["memory"]["sourceSlotDirectionOrder"] == [
+        "S",
+        "SW",
+        "W",
+        "SE",
+        "N",
+        "NE",
+        "E",
+        "NW",
+    ]
+    assert recipe_identities["memory"]["canonicalRowSourceSlots"] == [
+        4,
+        5,
+        6,
+        3,
+        0,
+        1,
+        2,
+        7,
+    ]
 
     assert contract["contractId"] == CONTRACT_ID
     assert contract["sex"] == "male"
@@ -197,7 +258,12 @@ def main() -> None:
         assert item["identityId"] == identity_id
         assert item["sex"] == "male"
         assert item["slot"] == "helmet"
-        assert item["status"] == "approved_project_extension"
+        expected_status = (
+            "user_approved_project_redesign"
+            if item_id in (232, 236, 240)
+            else "approved_project_extension"
+        )
+        assert item["status"] == expected_status
         assert item["identityEvidence"]["sourceIndex"] == source_index
         assert item["identityEvidence"]["stateItemPixelsUsed"] is False
         appearance = item["maleAppearance"]
@@ -424,6 +490,127 @@ def main() -> None:
 
     assert len(physical_paths) == 66
     assert total_physical_cells == 2552
+    bronze_idle = Image.open(
+        disk_path(identities["bronze_magic"]["actions"]["idle"]["path"])
+    ).convert("RGBA")
+    bronze_cutouts = identities["bronze_magic"]["directionCutouts"]
+    assert all(
+        record["calibrationBaseScalePercent"] == 83
+        for record in bronze_cutouts.values()
+    )
+    assert bronze_cutouts["N"]["calibrationDirectionScalePercent"] == 100
+    assert bronze_cutouts["N"]["generatedSize"] == [10, 16]
+    assert bronze_cutouts["N"]["preparedPixelPolicy"] == (
+        "concept_direct_resize"
+    )
+    assert all(
+        bronze_cutouts[direction]["calibrationDirectionScalePercent"] == 83
+        for direction in BRONZE_APPROVED_OTHER_DIRECTION_RGBA_SHA256
+    )
+    assert {
+        direction: bronze_cutouts[direction]["generatedRgbaSha256"]
+        for direction in BRONZE_APPROVED_OTHER_DIRECTION_RGBA_SHA256
+    } == BRONZE_APPROVED_OTHER_DIRECTION_RGBA_SHA256
+    assert min(
+        record["generatedSize"][1] for record in bronze_cutouts.values()
+    ) >= 13
+    assert all(
+        record["generatedSize"][1] <= 18
+        for record in bronze_cutouts.values()
+    )
+    assert bronze_cutouts["S"]["generatedSize"][0] >= 8
+    assert identities["bronze_magic"]["calibrationPreparedSourceRows"] == []
+    assert identities["bronze_magic"]["calibrationSourceSheet"].endswith(
+        "bronze_magic_helmet_8dir_transparent.png"
+    )
+    assert identities["bronze_magic"]["calibrationSourceMatte"] == (
+        "transparent_user_approved_despill_v1"
+    )
+    assert identities["bronze_magic"]["calibrationResizeFilter"] == (
+        "lanczos_downsample_nearest_runtime_v1"
+    )
+    bronze_front = cropped_visible(
+        bronze_idle.crop((0, 4 * CELL[1], CELL[0], 5 * CELL[1]))
+    )
+    bronze_rear = cropped_visible(
+        bronze_idle.crop((0, 0, CELL[0], CELL[1]))
+    )
+    face_x = bronze_front.width // 2
+    face_y = bronze_front.height - 3
+    assert bronze_front.getpixel((face_x, face_y))[3] == 0
+    assert bronze_front.getpixel((face_x - 3, face_y))[3] > 0
+    assert bronze_front.getpixel((face_x + 3, face_y))[3] > 0
+    assert bronze_rear.getpixel(
+        (bronze_rear.width // 2, bronze_rear.height - 3)
+    )[3] > 0
+    taoist_cutouts = identities["taoist"]["directionCutouts"]
+    taoist_yaw = {
+        "N": 180.0,
+        "NE": 135.0,
+        "E": 90.0,
+        "SE": 45.0,
+        "S": 0.0,
+        "SW": -45.0,
+        "W": -90.0,
+        "NW": -135.0,
+    }
+    for direction, expected_yaw in taoist_yaw.items():
+        record = taoist_cutouts[direction]
+        projection = record["angleAwareHorizontalDiameter"]
+        assert projection["yawDegrees"] == expected_yaw
+        assert projection["lateralDiameterPercent"] == 90.0
+        assert projection["depthDiameterPercent"] == 90.0
+        assert projection["projectedHorizontalPercent"] == 90.0
+        assert projection["heightPercent"] == 100
+        assert projection["filter"] == "nearest"
+        assert projection["pivotPolicy"] == (
+            "direction_frame_head_pivot_preserved"
+        )
+        assert projection["postProjectionSize"][0] < (
+            projection["preProjectionSize"][0]
+        )
+        assert projection["postProjectionSize"][1] == (
+            projection["preProjectionSize"][1]
+        )
+        assert record["generatedSize"] == projection["postProjectionSize"]
+        assert record["preparedPixelPolicy"].endswith(
+            "_angle_aware_diameter_projection"
+        )
+    skeleton_cutouts = identities["skeleton"]["directionCutouts"]
+    skeleton_body_heights = []
+    for direction in DIRECTIONS:
+        record = skeleton_cutouts[direction]
+        sizing = record["bodyDrivenSizing"]
+        assert sizing["enabled"] is True
+        assert sizing["clientEnvelopeAppliedTo"] == (
+            "main_helmet_body_only"
+        )
+        assert sizing["excludedAccessory"] == (
+            "two_long_lateral_horns"
+        )
+        assert sizing["hornsExcludedFromScaleCalculation"] is True
+        assert sizing["fullBoundsMayExceedClientEnvelope"] is True
+        assert sizing["sharedBodyTargetHeightPixels"] == 18
+        assert sizing["uniformEditorScaleAcrossDirections"] is True
+        skeleton_body_heights.append(sizing["generatedBodySize"][1])
+        assert sizing["fullGeneratedSize"] == record["generatedSize"]
+        assert record["preparedPixelPolicy"] == (
+            "concept_body_driven_resize_horns_excluded_v1"
+            "_source_green_despill"
+        )
+    assert set(skeleton_body_heights) == {18}
+    assert all(
+        skeleton_cutouts[direction]["generatedSize"][0]
+        > skeleton_cutouts[direction]["bodyDrivenSizing"][
+            "generatedBodySize"
+        ][0]
+        for direction in DIRECTIONS
+    )
+    assert any(
+        skeleton_cutouts[direction]["generatedSize"][0]
+        > skeleton_cutouts[direction]["calibrationEnvelope"][0]
+        for direction in DIRECTIONS
+    )
     black_actions = identities["black_iron"]["actions"]
     assert black_actions["cast"]["atlasRgbaSha256"] != (
         black_actions["idle"]["atlasRgbaSha256"]
@@ -435,8 +622,8 @@ def main() -> None:
         for action in PRESERVED_BLACK_IRON_FILE_SHA256
     )
 
-    assert catalog["coverage"]["exactMaleWorldWear"] == 55
-    assert catalog["coverage"]["exactFemaleWorldWear"] == 43
+    assert catalog["coverage"]["exactMaleWorldWear"] == 60
+    assert catalog["coverage"]["exactFemaleWorldWear"] == 12
     print(
         "EQUIPMENT_MALE_WORLD_HELMET_TEST_PASS "
         "items=12 identities=11 physical_atlases=66 "

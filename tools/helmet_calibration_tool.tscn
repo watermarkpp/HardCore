@@ -5,28 +5,49 @@
 [node name="HelmetCalibrationTool" type="Node"]
 script = ExtResource("1")
 
-[node name="CalibrationUI" type="Control" parent="."]
+[node name="EditorBackground" type="ColorRect" parent="."]
+z_index = 100
+layout_mode = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.035, 0.055, 0.078, 1)
+
+[node name="CalibrationUI" type="ScrollContainer" parent="."]
+z_index = 101
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+follow_focus = true
+horizontal_scroll_mode = 1
+vertical_scroll_mode = 1
 
 [node name="Panel" type="PanelContainer" parent="CalibrationUI"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+custom_minimum_size = Vector2(1600, 900)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="VBox" type="VBoxContainer" parent="CalibrationUI/Panel"]
 layout_mode = 2
+theme_override_constants/separation = 3
 
 [node name="Title" type="Label" parent="CalibrationUI/Panel/VBox"]
 layout_mode = 2
 text = "PlayerVisual Helmet V2 — Item 146 Calibration"
+
+[node name="StartupStatus" type="Label" parent="CalibrationUI/Panel/VBox"]
+visible = false
+layout_mode = 2
+modulate = Color(1, 0.42, 0.32, 1)
+text = "初始化状态"
+autowrap_mode = 2
 
 [node name="Inputs" type="HBoxContainer" parent="CalibrationUI/Panel/VBox"]
 layout_mode = 2
@@ -88,6 +109,18 @@ suffix = "%"
 [node name="ScalePlus" type="Button" parent="CalibrationUI/Panel/VBox/Inputs"]
 layout_mode = 2
 text = "+"
+
+[node name="SaveAll" type="Button" parent="CalibrationUI/Panel/VBox/Inputs"]
+custom_minimum_size = Vector2(190, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 1, 0.62, 1)
+text = "保存全部改动"
+
+[node name="CloseEditor" type="Button" parent="CalibrationUI/Panel/VBox/Inputs"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.66, 0.5, 1)
+text = "关闭编辑器"
 
 [node name="MappingStatus" type="HBoxContainer" parent="CalibrationUI/Panel/VBox"]
 layout_mode = 2

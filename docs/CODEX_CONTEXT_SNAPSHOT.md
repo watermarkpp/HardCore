@@ -1,6 +1,6 @@
 # Codex 精简上下文快照
 
-更新时间：2026-07-26 15:32（Asia/Shanghai）
+更新时间：2026-07-27 19:13（Asia/Shanghai）
 
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。
 准确性规则：本文件不是代码或 Git 状态的替代品；只核实本次任务实际触及的分支、文件、接口和专项测试。
@@ -16,8 +16,8 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `cc1edacc`（其后的快照提交只改本文档）。
-- tracked 状态：clean。
+- 分支/运行时代码基线：`codex/integration` @ `da77aa14`（其后的快照提交只改本文档）。
+- tracked 状态：13 个既有头盔 v2 合同/生成素材修改继续保护；本次天尊头盔接入、构建与复验前后 SHA-256 逐项不变。
 - 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
 - 来源优先级总表为 `assets/data/source_priority_policy.json`；每个 lane 必须先查 `primary`，只有精确目标确实 `missing` 才允许逐级 fallback。主源不可用、不兼容或效果不符合预期时必须修复解析/映射，禁止换用低级来源。
@@ -31,7 +31,9 @@
 - `595e485d` 将反向伤害区间明确为 `legacy_clamp_negative_span`：最终跨度 `max-min`，负跨度钳零，绝不交换端点；幸运/诅咒只影响正跨度分布。
 - `fcead306` 新增通用 `roll_primary_stat`：signed 总幸运统一作用于正跨度 DC/MC/SC，`+9/-9` 稳定命中上下限；治愈术使用 SC 掷骰，固定效果与施毒独立成功门不受幸运误影响。
 - `b7d0ad7b` 完成 `equipment.blessing_luck.v2`：祝福油三结果、固定 5% 负面、幸运 7/诅咒 10、逐级抵消、全部装备基础 `luck-curse`、武器实例幸运/诅咒、零耐久停用和存档恢复均接入；跨度因子固定为 `R=max(1,floor(abs(DCmax-DCmin)/5))`，命运之刃幸运 +3 后可继续提升。
-- `d2b8ab8` 将法师/道士施法身体动作固定为主源 `HA.ActSpell` 的 6 帧×60ms=360ms，并在完整动作期间锁定移动；动作、技能释放点和冷却独立，360ms 动作结束后仍须等待技能自身冷却，施法速度不缩短身体动作。
+- 用户授权的 `MIR2_176_33技能唯一真源_Codex_v1.0.1.zip` 已提升为 `skills` lane 唯一主源：ZIP SHA-256 `2DAC78D285DFF8D5F1BA36A8B83E0E8F11C70B76ACE15A34EE7FBFB802862A22`，SOT JSON SHA-256 `275555E9F879969E4BB4BECFC268E0ED0912B7D79EF6DEA89731FE43DB0562F7`。共 33 技能、四 rank、150 条 P1 语义合同；旧 360ms 与烈火自动开关决定已被该显式主源覆盖。
+- `bb0e5c35`、`06e3479b`、`11b62c06` 将 33 技能生产入口统一接入 canonical Router、六类适配器和 v4 熟练度存档。法师/道士身体施法固定为 6 帧×100ms=600ms；释放点、身体动作、总动作锁和技能冷却分离。烈火为显式一次充能：身体动作 600ms、总动作锁 800ms、独立冷却 8s、充能寿命 10s；800ms 后可普通攻击，8s 内不可再次充能，空挥不消耗，有效近战尝试消费，永不自动释放。
+- 技能冷却按稳定 `skill_id` 独立保存于运行时，不再复用共享物理攻击锁；烈火充能只读 UI 快照字段为 `fire_armed`、`fire_expires_remaining_ms`，稳定状态 ID 为 `warrior.fire_sword.charge_armed`，不跨存档恢复。
 - `38592e01` + `b779594c` 修正原客户端装备页纸娃娃：Prguse #376 底图按主源码固定绘制于 `(38,52)`，衣服/武器/头盔继续使用 `(31,96)+Hot`；人物选择与装备页各只保留一个纸娃娃，选中存档装备与实时换装均有专项回归。
 - `1d74fc72` 将地图外圈由旧圆半径净空升级为 `18×9` 等距椭圆脚底的逐边法向支撑距离；比奇四边真实 CharacterBody 脚点误差统一为 `-0.749978px`，内部碰撞、遮挡、地面坐标、相机和裙边未改。
 - `4a52cc54` 与 `b0235f07` 完成最终纸娃娃整改：12 个男性头盔严格由原客户端 StateItem 主资料按原坐标派生透明头部补丁及擦除遮罩，禁止 AI 重绘；人物选择与装备页默认使用高清透明 `classic_avatar`，固定按人物底图→衣服→武器→头盔绘制，完整 Prguse #376 底图、装备槽和矩形背景永不进入玩家界面。三职业×沃玛/祖玛/赤月 9 个独立真实存档、itemId/name-only 旧存档解析、角色选择、装备实时刷新与受控可视截图均通过。
@@ -60,6 +62,19 @@
 
 | 集成提交 | 领域 | 结果 |
 |---|---|---|
+| `54c6222e`、`da77aa14`（专业提交 `5219aff6`、`449a1f6`） | equipment/integration | 天尊头盔 `item_id=240` / `identityId=heavenly_taoist` 使用用户提供的 `1448×1086` 洋红底八方向原图完成单目标替换：上排 `N/NE/E/SE`、下排 `S/SW/W/NW`，源图 SHA-256 `A5E474DA3C081AD2F5DD0926BD9DD1358E4179737E6B8D5614A77CF7B2BA9E8E`。六动作世界 atlas 保持 `192×160px` 单元、nearest/`1x`，实际八方向内容为 `10×16/10×18/14×20/14×23/12×21/15×23/13×20/10×17px`，全部不超过正式客户端方向包围盒；纸娃娃 `32×41px` 画布内内容 `13×24px` 并保留透明脸窗，背包 `36×35px`、地面 `16×17px` 同源单次烘焙。v2 映射、动作 SHA、纸娃娃/背包/地面合同同步；非 240 合同与 224 个冻结素材逐项零变化。Godot 运行时验收 7/7、装备套件 17/17、单目标 Python 回归通过。 |
+| `8506bcef`（专业提交 `b64702b`） | equipment/integration | 圣战头盔 232 从用户确认的 `1536×1024` 高清八方向母图直接以预乘 Alpha + Lanczos 单次烘焙，禁止复用上一版低分辨率成品；八方向高度逐项保持为 `23/21/20/22/23/22/22/23px`，横向直径缩为约 80%，语义 bbox 固定为 `17×23/13×21/12×20/14×22/15×23/13×22/12×22/14×23px`。纸娃娃内容为 `19×29px`，保持全封闭 `no_cutout`、运行时 nearest/`1x`、既有方向映射/pivot/nudge 不变；146/147/149/150/151 只读像素参数审计、非 232 冻结哈希与 Godot 集成专项均通过 |
+| `80de01b1`（专业提交 `e5910aa`） | equipment/integration | 仅将法神头盔 236 世界穿戴层在当前基础上再缩小 10%：原始高清源单次 Lanczos 烘焙，atlas 单帧仍为 `192×160px`，实际头盔最大 `14×17px`，运行时 nearest/`1x`；纸娃娃、擦除遮罩、背包和地面四文件 SHA-256 前后逐项一致，真实角色八方向合成与 Godot 集成专项 6/6 通过 |
+| `0f134e74`（专业提交 `f539c19`） | equipment/integration | 按用户复核从 `1774×887` 原图重新单次烘焙法神头盔 236，不复用上一版小图；在 `443c08c8` 基础上再缩小约 18%，世界八方向为 `13–15×18–19px`，纸娃娃内容 `17×24px`。烘焙使用 Lanczos、运行时 nearest，并清除 `alpha≤3` 的绿幕亚像素残边；真实角色八方向合成与 Godot 集成专项 6/6 通过 |
+| `443c08c8`（专业提交 `bae1d81`） | equipment/integration | 修正法神头盔 236 尺寸漏检：世界八方向由 `24–29×35–36px` 收敛为 `16–19×22–23px`，与当前圣战头盔使用同一 `0.64` 烘焙比例、nearest 像素缩放及运行时 `1x`；纸娃娃内容限制为 `24×29px`，真实角色八方向合成与 Godot 集成专项 6/6 通过 |
+| `165f3500`（专业提交 `c6ac7b01`） | equipment/integration | 法神头盔 `item_id=236` / `identityId=god_magic` 按圣战头盔同类单目标流程完成八方向、六动作、纸娃娃、背包与地面素材替换；用户原图 SHA-256、全遮脸、方向映射与非 236 零变化守卫通过，Godot 集成专项 5/5 通过 |
+| `0268128`、`bf8bff64`、`d51f4aeb` | UI/integration | 烈火 UI 固定显示“主动充能/充能/未充能·就绪”，只读 canonical charge 快照，彻底移除旧开关文案 |
+| `11b62c06` | skills/integration | stable skill ID 独立冷却；烈火 600ms 身体、800ms 动作锁、8s 冷却与10s充能寿命分离 |
+| `06e3479b` | skills/player | 废止烈火自动开关，旧存档 auto 仅迁移为 false，正式状态 ID 改为 `warrior.fire_sword.charge_armed` |
+| `bb0e5c35` | integration/runtime | 33 技能生产入口、六类适配器、法道正式视觉、v4 技能进度存档与中文旧名迁移 |
+| `df7738ec`、`1e427621` | skills/tests | 169 条包合同绑定；150 条 P1 均由真实 Callable 执行语义验证，无缺项或多项 |
+| `da791b22`、`45d10fc2`、`988bb0bc`、`9b4105b6`、`16f442da` | skills | 33技能唯一真源、进度/施法服务及战士/法师/道士 canonical runtime |
+| `49637d0d` | rules | `skills` lane 主源提升为用户授权的 1.0.1 唯一真源包并加入来源守卫 |
 | `cc1edacc` | equipment/player | 旧存档四字段世界穿戴解析；战士赤月天魔神甲 itemId 140 / feature 12 六动作与非透明截图通过 |
 | `b0235f07` | UI | 人物选择/装备页使用透明高清 `classic_avatar`；完整装备页与内置槽位禁入玩家界面；9 个真实存档和 name-only 旧存档均通过 |
 | `4a52cc54` | equipment | 12 个男性头盔由原客户端 StateItem 主资料派生透明头部补丁与擦除遮罩，禁止 AI 生成素材进入运行时 |
@@ -135,7 +150,7 @@
 - monsters：`monster.overhead_anchor.v4`、`monster.overhead_layout.v3`、`monster.ground_contact.v4`、`monster.ground_contact.calibration.v4`；214 个 `monster_id` 各自保存人工复核的脚点、光圈中心、椭圆尺寸和投影策略，贴图异步激活后必须刷新。
 - UI：`ui.hud.resource_orb.hole_fill.v1`、`skill_button_assignment_contract_v2`、`ui.hud.skill_icon.caster.<stable_skill_id>`。
 - equipment：`equipment.attribute.master.v2`、`project.hardcore.equipment_attribute_master.v2`、`equipment.test_loadouts.classic_three_tiers.v1`、`equipment.visual_catalog.formal_wearables.v1`、`equipment.paper_doll.presentation_modes.v1`、`equipment.paper_doll.world_avatar.v1`、`equipment.paper_doll.avatar_only.v1`、`equipment.paper_doll.original_client_stage.v1`、`equipment.paper_doll.classic_flattened_head_patch.v1`、`equipment.world_wear.male_dress.v1`、`equipment.world_wear.male_weapon.v1`、`equipment.world_helmet.male.extension.v1` 与 9 个 `test.loadout.{profession}.{tier}.v1`。
-- skills：`combat.resolution.openmir2.v1`、`physical.hit.random_agility.strict_lt.v1`、`magic.evasion.anti_magic.direct_spell.v1`、`physical.attack_speed.interval_tier.v1`、`player.direct_spell_damage.openmir2.v1`、`caster_skill_animation.v1`、法师/道士主动技能 `action_duration=0.36` / `action_frame_count=6` / `action_frame_time_ms=60` 时序字段、`legacy_clamp_negative_span`、`test.characters.full_skills.v1` 与 9 个 `test.character.{profession}.{woma|zuma|chiyue}.v1`。
+- skills：`skills.runtime_router.cn_mir2_176.v1`、`skills.progression.cn_mir2_176.v1`、`skills.production_adaptation.hardcore.v1`、`warrior.fire_sword.charge_armed`、`combat.resolution.openmir2.v1`、`physical.hit.random_agility.strict_lt.v1`、`magic.evasion.anti_magic.direct_spell.v1`、`physical.attack_speed.interval_tier.v1`、`player.direct_spell_damage.openmir2.v1`、`caster_skill_animation.v1`、法师/道士主动技能 `action_duration=0.60` / `action_frame_count=6` / `action_frame_time_ms=100` 时序字段、`legacy_clamp_negative_span`、`test.characters.full_skills.v1` 与 9 个 `test.character.{profession}.{woma|zuma|chiyue}.v1`。
 
 ## 已通过的必要验收
 
@@ -149,14 +164,14 @@
 - combat resolution：严格物理命中、AntiMagic/AntiPoison 隔离、玩家与怪物默认点数边界、直接法术 AntiMagic→MAC→扣血、tier 物理攻击间隔、GameRoot 稳定技能 ID 和共享运行时转交均通过；最终相关回归 9/9，`SMOKE_TEST_PASS`。
 - blessing/luck：`equipment.blessing_luck.v2`、三结果、5% 负面、幸运 7、诅咒 10、命运之刃 R=0 修正、全部装备 luck/curse、消耗/存档/零耐久、DC/MC/SC 与治愈术专项通过。
 - damage ranges：`legacy_clamp_negative_span`、通用 `roll_primary_stat`、战士公式、攻击时序与法系伤害公式通过；反向区间不会被幸运/诅咒交换端点，恢复正跨度后效果自动恢复。
-- equipment helmets：12 itemId/11 视觉身份、66 物理 atlas、2784 逻辑帧、6 动作×8 方向、透明角、Hair 逐帧锚点/SHA 溯源与 StateItem 世界像素零复用通过；Godot 头盔专项、视觉目录与 smoke 通过。
+- equipment helmets：12 itemId/11 视觉身份、66 物理 atlas、2784 逻辑帧、6 动作×8 方向、透明角、Hair 逐帧锚点/SHA 溯源与 StateItem 世界像素零复用通过；法神头盔 `item_id=236` 使用用户授权原图单次 Lanczos 烘焙，atlas 单帧保持 `192×160px`、世界头盔最大 `14×17px`、纸娃娃内容保持 `17×24px`，运行时保持 nearest/`1x`；背包与地面素材冻结未变，非 236 文件及合同数据零变化。
 - physics：玩家 18×9、普通怪物 16×8、Boss 28×14 的真实物理与软件探针通过；战斗/AI 半径未改。
 - occlusion：11 张已发布地图、52 个交叉、4 类装饰物和 3 个比奇回归点通过；碰撞区、脚底深度点、装饰物遮挡基线已分离。
 - maps：比奇真实源 E2E（180 个阻挡格）；11 张地图真实 `CharacterBody2D` 脚点可达可见边缘且外环阻挡。
 - monsters：真实名字/血条节点覆盖 4 类怪物、8 方向、idle/walk/attack/hit/death 全帧和 Camera2D 缩放；214 种怪物加载通过。
 - UI：2664×1200 HUD 血蓝球尺寸/对称/安全区通过；技能配置与拾取提示专项通过。
 - paper doll：玩家界面透明高清 `classic_avatar`、完整装备页/槽位禁入、12 个原客户端头盔透明补丁及擦除遮罩、三职业三套装 9 个真实存档、itemId/name-only 解析、人物选择、装备实时刷新和非 headless 可视截图全部通过；`world_avatar` 仅保留为地图/兼容回退。
-- skills：快捷槽 v2 换槽、烈火自动开关、战士技能状态机，以及法师/道士360ms施法动作、移动锁、独立冷却和6帧推进通过；法师14项、道士12项主动技能的主资料动画、图标、技能面板、快捷栏和攻击环路由通过，`SMOKE_TEST_PASS`。
+- skills：33 技能唯一真源、四 rank、169 条包合同与150条可执行语义合同全部通过；生产入口、六类适配器、v4进度存档/中文旧名迁移、法师/道士600ms施法动作与移动锁、独立技能冷却、26项正式视觉和图标通过。烈火显式一次充能、600ms身体/800ms动作锁/8s独立冷却/10s寿命、空挥保留、有效攻击消费及 UI 只读状态通过。最终技能/UI专项 20/20，`SMOKE_TEST_PASS`。
 
 只在相关代码再次变化时重跑对应专项；跨域接线或发布前再跑一次 smoke。
 
@@ -166,9 +181,9 @@
 |---|---|---:|---|
 | `HardCore-worktrees/maps` | `codex/maps` @ `2a4d6ccf` | 72 untracked | 用户地图编辑器内容，继续保护；代码等价结果已集成为 `1d74fc72` |
 | `HardCore-worktrees/monsters` | `codex/monsters` @ `45781ded` | tracked clean；68 UID | 已集成为 `c88c6277` |
-| `HardCore-worktrees/ui-art` | `codex/ui-art` @ `2b9255de` | clean | 最终透明原客户端纸娃娃 UI 已集成为 `b0235f07` |
-| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `9547d5f4` | tracked clean；66 UID 继续保护 | 法道主资料技能动画/图标已集成为 `d6b4cec3` |
-| `HardCore-worktrees/equipment` | `codex/equipment` @ `54302137` | 既有 import/UID/生成项继续保护 | 天魔神甲旧存档世界穿戴兼容已集成为 `cc1edacc` |
+| `HardCore-worktrees/ui-art` | `codex/ui-art` @ `68c6f6e2` | clean | 烈火 canonical charge UI 已集成为 `d51f4aeb`、`bf8bff64`、`0268128` |
+| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `be710c6e` | 27 项 tracked 技能视觉在制修改；66 UID 继续保护 | 33技能 runtime 与150条可执行语义合同已集成；当前 fire_wall / summon_skeleton 视觉返修未交付，禁止清理或覆盖 |
+| `HardCore-worktrees/equipment` | `codex/equipment` @ `449a1f6` | 4 个既有 monster import 修改及 UID/生成项继续保护 | 天尊头盔单目标替换已集成为 `54c6222e` / `da77aa14`；圣战高清重烘焙与法神世界层再缩小 10% 已分别集成为 `8506bcef` / `80de01b1` |
 
 ### maps 保护红线
 
@@ -190,6 +205,6 @@ maps 的 72 项未跟踪内容全部视为用户进行中的地图编辑器内�
 4. 待验收：法师、道士不再显示占位符；男性基础形象、正式散件/套装换装、装备界纸娃娃居中和神兽动画正常；禁止重新引入女性角色资产。
 5. 怪物名字固定在血条上方；各体型血条位于各自真实身体顶点上方约 8px，不再统一过高或随动作抖动。
 6. 血球/蓝球恢复孔径尺寸且左右对称。
-7. 拾取提示居中；技能配置弹窗背景不越界；快捷技能可置换；烈火自动开关正常。
+7. 拾取提示居中；技能配置弹窗背景不越界；快捷技能可置换；烈火点击后显示“充能”，800ms 后下一次有效近战消费，空挥保留，8s 内不可重复充能，绝不自动释放。
 
 用户实测结果优先级高于内部测试；若实机失败，先保存截图和 APK 哈希，再按所属专业工作树返修。

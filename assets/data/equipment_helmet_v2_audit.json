@@ -21,8 +21,8 @@
     {
       "id": 2,
       "topic": "helmet_source_direction_order",
-      "result": "Elf concept slot 0 is visibly front and slot 4 back; explicit canonical remap is N..NW = 4,3,2,1,0,7,6,5.",
-      "status": "mapping_error_confirmed"
+      "result": "Elf concept slot 0 is visibly front and slot 4 back; explicit user-calibrated remap is N..NW = 4,5,6,1,0,7,2,3; row 3 NW is a user-authorized baked mirror of row 5 NE.",
+      "status": "user_corrected_and_baked"
     },
     {
       "id": 3,
