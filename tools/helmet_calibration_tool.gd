@@ -2050,13 +2050,16 @@ func _authored_source_runtime_cell(
 		)
 	):
 		resize_filter = Image.INTERPOLATE_LANCZOS
-	fitted.resize(
-		placement_rect.size.x,
-		placement_rect.size.y,
-		resize_filter
-	)
 	if resize_filter == Image.INTERPOLATE_LANCZOS:
-		_sanitize_transparent_downsample(fitted)
+		fitted = _resize_premultiplied_alpha_lanczos(
+			authored_cutout, placement_rect.size
+		)
+	else:
+		fitted.resize(
+			placement_rect.size.x,
+			placement_rect.size.y,
+			resize_filter
+		)
 	var result := Image.create(
 		ArtSpec.WARRIOR_FRAME.x,
 		ArtSpec.WARRIOR_FRAME.y,
@@ -2110,11 +2113,9 @@ func _authored_source_runtime_cell_scaled(
 	)
 	# Resize exactly once from the original transparent cutout. The interactive
 	# preview never becomes the source for a later save/finalize operation.
-	var fitted := authored_cutout.duplicate()
-	fitted.resize(
-		target_size.x, target_size.y, Image.INTERPOLATE_LANCZOS
+	var fitted := _resize_premultiplied_alpha_lanczos(
+		authored_cutout, target_size
 	)
-	_sanitize_transparent_downsample(fitted)
 	var scaled_top_left := pivot + Vector2i(
 		roundi(float(placement_rect.position.x - pivot.x) * factor),
 		roundi(float(placement_rect.position.y - pivot.y) * factor)
@@ -2132,6 +2133,41 @@ func _authored_source_runtime_cell_scaled(
 		scaled_top_left
 	)
 	return result
+
+
+func _resize_premultiplied_alpha_lanczos(
+	source: Image,
+	target_size: Vector2i
+) -> Image:
+	var premultiplied := source.duplicate()
+	premultiplied.convert(Image.FORMAT_RGBA8)
+	for y: int in premultiplied.get_height():
+		for x: int in premultiplied.get_width():
+			var color: Color = premultiplied.get_pixel(x, y)
+			premultiplied.set_pixel(
+				x, y, Color(color.r * color.a, color.g * color.a, color.b * color.a, color.a)
+			)
+	premultiplied.resize(
+		target_size.x, target_size.y, Image.INTERPOLATE_LANCZOS
+	)
+	for y: int in premultiplied.get_height():
+		for x: int in premultiplied.get_width():
+			var color: Color = premultiplied.get_pixel(x, y)
+			if color.a <= 0.004:
+				premultiplied.set_pixel(x, y, Color(0, 0, 0, 0))
+				continue
+			premultiplied.set_pixel(
+				x,
+				y,
+				Color(
+					clampf(color.r / color.a, 0.0, 1.0),
+					clampf(color.g / color.a, 0.0, 1.0),
+					clampf(color.b / color.a, 0.0, 1.0),
+					color.a
+				)
+			)
+	_sanitize_transparent_downsample(premultiplied)
+	return premultiplied
 
 
 func _sanitize_transparent_downsample(image: Image) -> void:

@@ -397,23 +397,24 @@
 				"death": "res://assets/generated/helmet_v2/bronze_magic/scale_100/bronze_magic_death_scale_100.png"
 			},
 			"sourceAtlasSha256": {
-				"idle": "969ae4fc298a19fd82eacd5e7c4a18e6f134fe333223b4a80d6bd11cad887733",
-				"walk": "fc69ebd01be1f05fcddd36598c043e8b4dccb65b11f695ae33f58af1473e1746",
-				"attack": "36c6bc164c5431e2aea7097060e89c545a992cb3ef95de62b8fa1fb7b1a89e16",
-				"cast": "f678fef634fd1a1c4b647225da04dccc41f272e2696fd4e79791168a1b5a1331",
-				"hit": "9b94cce2c4dae10c9b58f881c06619a08435465470be0e393d22e27eb6332964",
-				"death": "d8546b5907dba59b775b808fb7cf6294d61f6b877650f41fd393c2abc70ace59"
+				"idle": "725ba4db91370479dd63cc5425d99a89fe87a3a370b23dd91098b62b7c15d053",
+				"walk": "eb08be22c3dcb2302f7158a1d18572559630ac73e9d525e0d37b866687ae5455",
+				"attack": "bf099428a54ef5743de474147b2759ce3fcb061f18a08f0801b14b4984cf9ca8",
+				"cast": "a32f7377dc21369fbb46a3e5543916cc40fbecdce619afabbf3784337f08cbd1",
+				"hit": "b55e90d7a25e9c091712e6efe8c7a0e28367fcdd67568ace61d6b39408e21b70",
+				"death": "343c0bf95dfb7eb6307cb35a445f70a8d3499e410b3fa0ae31553c11997d52f5"
 			},
 			"derivedAtlasSha256": {
-				"idle": "00d3eea6c7663e7e6d34d66a21a10c64ce2ef069a53bfc88372f6f5fe311f6d4",
-				"walk": "d94623d91f35f5280c2ff2c628d8818777bf11bfecf48b6e99c0fc1c9a4d5f74",
-				"attack": "2048d4641a2b9c17e9f24ea53dd74914e54967a7cce89b0ffc1efed78bc6ddad",
-				"cast": "0d035c52615a9597fd0ab313e35e0c1560e7c1bd8ea087d6a916d47299edf13f",
-				"hit": "d8d8f2197fed7c42e627aac1bd68ec782d5e84ef0047670969e45aeb6ef6673b",
-				"death": "3e2b309ffd0f9469a61e5597960bdd10db13e8466b27ba373df3ded024bea9c7"
+				"idle": "fa3d63f5b86ceb926d0362f61b8c36263f0415d9c273134e4a8d7de45d6d08dd",
+				"walk": "aa0bc59011047f6b49b7fe9567bb64f2479b5ed7de8754a18f14e6931096f336",
+				"attack": "6fc410f77665fee235641e4e858a6b43a86434c9585dbb519a574da22ed2034b",
+				"cast": "eeac665a72ebab8ef3c498c38d1ecaae8710e554322ba429b84f9d338aad4308",
+				"hit": "b6bcb58881b0d3052174f0a10ec81f23f347317ee1463f87d19bfd920578c567",
+				"death": "11fafc3aa31d6f651f8c709e3c08c5fbb05ec5097993b740bc11665b45b5afb9"
 			},
 			"bakePolicy": {
 				"filter": "nearest",
+				"offlineDownsampleFilter": "premultiplied_alpha_lanczos_high_res_single_pass",
 				"pivotInvariant": true,
 				"allActionsDirectionsFrames": true,
 				"requiredActions": [
@@ -431,7 +432,7 @@
 					1.0
 				],
 				"sourceAtlasModified": false,
-				"sourceRecipeId": "authored_source_sheet.a1cb935c1c00f13ae2ccae2c5cea1706f4f549ffef66607574be2c67bd370f82.layout.969ae4fc298a19fd82eacd5e7c4a18e6f134fe333223b4a80d6bd11cad887733.green_despill_v2"
+				"sourceRecipeId": "active_target.bronze_magic.user_approved_transparent.v1.8d5b9b4af6e28947cb4437d5f09ea8f26fd8822b4d589d619a8153eda37504ee.premultiplied_alpha_lanczos_high_res_single_pass_nearest_runtime_v2.direct_png_v3"
 			}
 		},
 		"taoist": {
