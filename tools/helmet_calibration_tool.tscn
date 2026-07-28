@@ -173,7 +173,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="CalibrationUI/Panel/VBox/PresentationCalibration/PaperDoll"]
 layout_mode = 2
-text = "战士赤月套装纸娃娃：左键拖动头盔，右键每次缩放 5%"
+text = "战士赤月套装纸娃娃：点击后方向键移动 1px；左键拖动，右键每次缩放 5%"
 
 [node name="Canvas" type="Control" parent="CalibrationUI/Panel/VBox/PresentationCalibration/PaperDoll"]
 custom_minimum_size = Vector2(300, 340)

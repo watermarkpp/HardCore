@@ -35,7 +35,14 @@ const FRAME_CANVAS := Vector2i(256, 256)
 const FOOT_POINT := Vector2i(128, 190)
 const HEAD_ZOOM_SOURCE_SIZE := Vector2i(64, 64)
 const SCALE_STEP_PERCENT := 5
-const PAPER_DOLL_INITIAL_SCALE_PERCENT := 25
+const PAPER_DOLL_INITIAL_SCALE_PERCENT := 100
+const PAPER_DOLL_LEGACY_SCALE_PERCENT := 25
+const PAPER_DOLL_LEGACY_OFFSET := [110, 32]
+const PAPER_DOLL_FALLBACK_DRAW_OFFSET := Vector2(73, 27)
+const PAPER_DOLL_FALLBACK_SIZE := Vector2(32, 41)
+const CLASSIC_HEAD_PATCHES_PATH := (
+	"res://assets/data/equipment_classic_avatar_head_patches.json"
+)
 
 var current_action := "idle"
 var current_item_id := ITEM_ID
@@ -70,7 +77,8 @@ var _active_target: Dictionary = {}
 var _active_target_load_error := ""
 var _scale_popup: PopupMenu
 var _scale_popup_direction := -1
-var _paper_doll_preview: Control
+var _paper_doll_preview: EquipmentCharacterPreview
+var _paper_doll_canvas: Control
 var _paper_doll_overlay: TextureRect
 var _paper_doll_direction: OptionButton
 var _inventory_direction: OptionButton
@@ -82,6 +90,7 @@ var _paper_drag_origin := Vector2.ZERO
 var _paper_overlay_origin := Vector2.ZERO
 var _loaded_draft_items: Dictionary = {}
 var _test_draft_session_id := ""
+var _active_editor_scope := "world"
 
 
 func _ready() -> void:
@@ -766,6 +775,7 @@ func _build_mapping_buttons() -> void:
 		)
 		target_button.set_meta("target_direction", direction_index)
 		target_button.pressed.connect(func() -> void:
+			_set_active_editor_scope("world")
 			select_target_direction(direction_index)
 		)
 		target_button.gui_input.connect(func(event: InputEvent) -> void:
@@ -774,6 +784,7 @@ func _build_mapping_buttons() -> void:
 				and event.button_index == MOUSE_BUTTON_RIGHT
 				and event.pressed
 			):
+				_set_active_editor_scope("world")
 				select_target_direction(direction_index)
 				_open_direction_scale_popup(direction_index)
 		)
@@ -786,6 +797,7 @@ func _build_mapping_buttons() -> void:
 		)
 		source_button.set_meta("source_row", source_row)
 		source_button.pressed.connect(func() -> void:
+			_set_active_editor_scope("world")
 			map_source_row_to_current_target(source_row)
 		)
 		source_grid.add_child(source_button)
@@ -827,15 +839,19 @@ func _setup_presentation_ui() -> void:
 		"CalibrationUI/Panel/VBox/PresentationCalibration"
 	) as HBoxContainer
 	var paper_canvas := root.get_node("PaperDoll/Canvas") as Control
+	_paper_doll_canvas = paper_canvas
+	_paper_doll_canvas.gui_input.connect(_on_paper_canvas_input)
 	_paper_doll_preview = EquipmentCharacterPreview.new()
 	_paper_doll_preview.name = "WarriorChiyueBase"
-	_paper_doll_preview.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_paper_doll_preview.configure_presentation_mode("classic_avatar")
 	_paper_doll_preview.configure_profile("战士", {
 		"武器": {"item_id": 113, "name": "怒斩"},
 		"衣服": {"item_id": 140, "name": "天魔神甲"},
 	})
 	paper_canvas.add_child(_paper_doll_preview)
+	_paper_doll_preview.set_anchors_and_offsets_preset(
+		Control.PRESET_FULL_RECT
+	)
 	_paper_doll_overlay = TextureRect.new()
 	_paper_doll_overlay.name = "HelmetOverlay"
 	_paper_doll_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -867,6 +883,7 @@ func _setup_presentation_ui() -> void:
 			option.add_item(str(DIRECTIONS[direction_index]), direction_index)
 		option.focus_mode = Control.FOCUS_NONE
 	_paper_doll_direction.item_selected.connect(func(index: int) -> void:
+		_set_active_editor_scope("paperDoll")
 		_update_presentation_selection("paperDoll", index)
 	)
 	_inventory_direction.item_selected.connect(func(index: int) -> void:
@@ -878,8 +895,24 @@ func _setup_presentation_ui() -> void:
 	_load_presentation_controls()
 
 
+func _set_active_editor_scope(scope: String) -> void:
+	assert(scope in ["world", "paperDoll"])
+	_active_editor_scope = scope
+
+
+func _on_paper_canvas_input(event: InputEvent) -> void:
+	if (
+		event is InputEventMouseButton
+		and event.button_index == MOUSE_BUTTON_LEFT
+		and event.pressed
+	):
+		_set_active_editor_scope("paperDoll")
+
+
 func _on_paper_overlay_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
+		if event.pressed:
+			_set_active_editor_scope("paperDoll")
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			_paper_dragging = event.pressed
 			if event.pressed:
@@ -928,11 +961,115 @@ func _commit_paper_overlay_position() -> void:
 	_apply_presentation_session(presentation)
 
 
+func _paper_doll_reference_record() -> Dictionary:
+	if not FileAccess.file_exists(CLASSIC_HEAD_PATCHES_PATH):
+		return {}
+	var parsed: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(CLASSIC_HEAD_PATCHES_PATH)
+	)
+	if not parsed is Dictionary:
+		return {}
+	var item: Variant = parsed.get("itemsById", {}).get(
+		str(current_item_id), {}
+	)
+	if not item is Dictionary:
+		return {}
+	var patch: Variant = item.get("flattenedHeadPatch", {})
+	return patch.duplicate(true) if patch is Dictionary else {}
+
+
+func _paper_doll_reference_rect() -> Rect2:
+	var record := _paper_doll_reference_record()
+	var source_offset := PAPER_DOLL_FALLBACK_DRAW_OFFSET
+	var source_size := PAPER_DOLL_FALLBACK_SIZE
+	if not record.is_empty():
+		var offset_value: Variant = record.get("drawOffset", [])
+		var size_value: Variant = record.get("size", [])
+		if offset_value is Array and offset_value.size() == 2:
+			source_offset = Vector2(
+				float(offset_value[0]), float(offset_value[1])
+			)
+		if size_value is Array and size_value.size() == 2:
+			source_size = Vector2(
+				float(size_value[0]), float(size_value[1])
+			)
+	var preview_scale := (
+		_paper_doll_preview.preview_scale
+		if _paper_doll_preview != null
+		else EquipmentCharacterPreview.DEFAULT_PREVIEW_SCALE
+	)
+	var origin := (
+		_paper_doll_preview.composition_draw_origin()
+		if _paper_doll_preview != null
+		else Vector2.ZERO
+	)
+	return Rect2(
+		origin + source_offset * preview_scale,
+		source_size * preview_scale
+	)
+
+
+func _paper_doll_display_size(
+	paper_cutout: Image,
+	percent: int
+) -> Vector2:
+	var reference_size := _paper_doll_reference_rect().size
+	var factor := float(percent) / 100.0
+	if paper_cutout.is_empty():
+		return reference_size * factor
+	var source_size := Vector2(paper_cutout.get_size())
+	var target_height := reference_size.y * factor
+	return Vector2(
+		target_height * source_size.x / maxf(1.0, source_size.y),
+		target_height
+	)
+
+
+func _paper_doll_default_offset(
+	source_row: int = 4,
+	percent: int = PAPER_DOLL_INITIAL_SCALE_PERCENT
+) -> Array:
+	var paper_cutout := _authored_source_cutout(source_row)
+	if paper_cutout.is_empty():
+		paper_cutout = source_row_thumbnail(source_row)
+	var display_size := _paper_doll_display_size(paper_cutout, percent)
+	var reference_rect := _paper_doll_reference_rect()
+	var position := reference_rect.get_center() - display_size * 0.5
+	return [roundi(position.x), roundi(position.y)]
+
+
+func _migrate_legacy_paper_doll_defaults(
+	presentation: Dictionary
+) -> Dictionary:
+	var migrated := presentation.duplicate(true)
+	var paper: Variant = migrated.get("paperDoll", {})
+	if not paper is Dictionary:
+		return migrated
+	var offset: Variant = paper.get("offset", [])
+	if (
+		int(paper.get("scale_percent", -1))
+			!= PAPER_DOLL_LEGACY_SCALE_PERCENT
+		or not offset is Array
+		or offset.size() != 2
+		or int(offset[0]) != int(PAPER_DOLL_LEGACY_OFFSET[0])
+		or int(offset[1]) != int(PAPER_DOLL_LEGACY_OFFSET[1])
+	):
+		return migrated
+	var row := int(paper.get("source_row", 4))
+	var corrected: Dictionary = paper.duplicate(true)
+	corrected["scale_percent"] = PAPER_DOLL_INITIAL_SCALE_PERCENT
+	corrected["offset"] = _paper_doll_default_offset(
+		row, PAPER_DOLL_INITIAL_SCALE_PERCENT
+	)
+	migrated["paperDoll"] = corrected
+	return migrated
+
+
 func _default_presentation_calibration() -> Dictionary:
 	return {
 		"paperDoll": {
 			"source_row": 4,
-			"offset": [110, 32],
+			"offset": _paper_doll_default_offset(),
 			"scale_percent": PAPER_DOLL_INITIAL_SCALE_PERCENT,
 		},
 		"inventory": {"source_row": 4},
@@ -942,7 +1079,11 @@ func _default_presentation_calibration() -> Dictionary:
 
 func _current_presentation_calibration() -> Dictionary:
 	var value := HelmetVisualV2.presentation_calibration(current_item_id)
-	return _default_presentation_calibration() if value.is_empty() else value
+	return (
+		_default_presentation_calibration()
+		if value.is_empty()
+		else _migrate_legacy_paper_doll_defaults(value)
+	)
 
 
 func _load_presentation_controls() -> void:
@@ -956,7 +1097,10 @@ func _update_presentation_selection(role: String, source_row: int) -> void:
 	var record: Dictionary = presentation.get(role, {})
 	record["source_row"] = source_row
 	if role == "paperDoll":
-		record["offset"] = record.get("offset", [110, 32])
+		record["offset"] = record.get(
+			"offset",
+			_paper_doll_default_offset(source_row)
+		)
 		record["scale_percent"] = record.get(
 			"scale_percent", PAPER_DOLL_INITIAL_SCALE_PERCENT
 		)
@@ -990,10 +1134,13 @@ func _refresh_presentation_ui() -> void:
 	var percent := int(paper.get(
 		"scale_percent", PAPER_DOLL_INITIAL_SCALE_PERCENT
 	))
-	var display_size := Vector2(paper_cutout.get_size()) * float(percent) / 100.0
+	var display_size := _paper_doll_display_size(paper_cutout, percent)
 	_paper_doll_overlay.texture = ImageTexture.create_from_image(paper_cutout)
 	_paper_doll_overlay.size = display_size
-	var offset: Array = paper.get("offset", [110, 32])
+	var offset: Array = paper.get(
+		"offset",
+		_paper_doll_default_offset(paper_row, percent)
+	)
 	_paper_doll_overlay.position = Vector2(float(offset[0]), float(offset[1]))
 	var inventory_row := int(
 		presentation.get("inventory", {}).get("source_row", 4)
@@ -1214,6 +1361,7 @@ func _load_saved_draft_for_item(item_id: int) -> bool:
 			)
 	var presentation: Variant = parsed.get("presentationCalibration", {})
 	if presentation is Dictionary and not presentation.is_empty():
+		presentation = _migrate_legacy_paper_doll_defaults(presentation)
 		HelmetVisualV2.set_session_presentation_calibration(
 			item_id, presentation
 		)
@@ -1265,6 +1413,37 @@ func nudge_current(delta: Vector2i) -> bool:
 			_direction_dirty_key(current_item_id, current_direction)
 		] = true
 	return changed
+
+
+func nudge_paper_doll(delta: Vector2i) -> bool:
+	assert(delta in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT])
+	if HelmetVisualV2.is_read_only(current_item_id):
+		return false
+	var presentation := _current_presentation_calibration()
+	var paper: Dictionary = presentation.get("paperDoll", {})
+	var source_row := int(paper.get("source_row", 4))
+	var percent := int(paper.get(
+		"scale_percent", PAPER_DOLL_INITIAL_SCALE_PERCENT
+	))
+	var offset: Array = paper.get(
+		"offset",
+		_paper_doll_default_offset(source_row, percent)
+	)
+	paper["offset"] = [
+		int(offset[0]) + delta.x,
+		int(offset[1]) + delta.y,
+	]
+	presentation["paperDoll"] = paper
+	if not _apply_presentation_session(presentation):
+		return false
+	_refresh_presentation_ui()
+	return true
+
+
+func nudge_active_editor(delta: Vector2i) -> bool:
+	if _active_editor_scope == "paperDoll":
+		return nudge_paper_doll(delta)
+	return nudge_current(delta)
 
 
 func map_source_row_to_current_target(source_row: int) -> bool:
@@ -2211,7 +2390,7 @@ func _input(event: InputEvent) -> void:
 		# before Control/PopupMenu keyboard navigation can see the arrows.
 		get_viewport().set_input_as_handled()
 		if key_event.pressed:
-			nudge_current(nudge_delta)
+			nudge_active_editor(nudge_delta)
 			_refresh_mapping_editor_ui()
 		return
 	if key_event.keycode not in [

@@ -17,6 +17,36 @@ func _run() -> void:
 	assert(await editor.initialize_editor_runtime(true))
 	editor.select_item(147)
 	await get_tree().process_frame
+	var default_presentation: Dictionary = (
+		editor._default_presentation_calibration()
+	)
+	assert(int(default_presentation.get(
+		"paperDoll", {}
+	).get("scale_percent", -1)) == 100)
+	var baseline_cutout: Image = editor._authored_source_cutout(4)
+	if baseline_cutout.is_empty():
+		baseline_cutout = editor.source_row_thumbnail(4)
+	assert(is_equal_approx(
+		editor._paper_doll_display_size(baseline_cutout, 100).y,
+		editor._paper_doll_reference_rect().size.y
+	))
+	var migrated_legacy: Dictionary = (
+		editor._migrate_legacy_paper_doll_defaults({
+			"paperDoll": {
+				"source_row": 4,
+				"offset": [110, 32],
+				"scale_percent": 25,
+			},
+			"inventory": {"source_row": 4},
+			"ground": {"source_row": 4},
+		})
+	)
+	assert(int(migrated_legacy.get(
+		"paperDoll", {}
+	).get("scale_percent", -1)) == 100)
+	assert(migrated_legacy.get(
+		"paperDoll", {}
+	).get("offset", []) != [110, 32])
 
 	var target_grid := editor.get_node(
 		"CalibrationUI/Panel/VBox/TargetDirections"
@@ -77,6 +107,21 @@ func _run() -> void:
 	assert(editor._paper_doll_overlay.position == Vector2(91, 27))
 	assert(editor._paper_doll_overlay.texture != null)
 	assert(editor._paper_doll_preview.has_renderable_assets())
+	var world_nudge_before: Array = HelmetVisualV2.direction_record(
+		147, editor.current_direction
+	).get("nudge", [0, 0]).duplicate()
+	editor._set_active_editor_scope("paperDoll")
+	var right_key := InputEventKey.new()
+	right_key.keycode = KEY_RIGHT
+	right_key.pressed = true
+	editor._input(right_key)
+	assert(editor._paper_doll_overlay.position == Vector2(92, 27))
+	assert(
+		HelmetVisualV2.direction_record(
+			147, editor.current_direction
+		).get("nudge", [0, 0]) == world_nudge_before,
+		"paper-doll arrow key leaked into the world-direction nudge"
+	)
 
 	assert(editor.save_all_changes())
 	var draft_path: String = editor._draft_path_for_item(147)
