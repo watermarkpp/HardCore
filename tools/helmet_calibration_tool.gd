@@ -38,6 +38,7 @@ const SCALE_STEP_PERCENT := 5
 const NUDGE_STEP_PX := 0.5
 const POPUP_CURSOR_OFFSET := Vector2i(12, 12)
 const POPUP_ESTIMATED_SIZE := Vector2i(180, 112)
+const DEDICATED_INVENTORY_VARIANT := "dedicated_inventory"
 const PAPER_DOLL_INITIAL_SCALE_PERCENT := 100
 const PAPER_DOLL_LEGACY_SCALE_PERCENT := 25
 const PAPER_DOLL_LEGACY_OFFSET := [110, 32]
@@ -276,6 +277,38 @@ func _load_active_target_manifest(path: String) -> bool:
 				return _fail_active_target(
 					"prepared transparent direction is invalid: %s" % direction
 				)
+	var presentation_files: Variant = target.get(
+		"preparedPresentationFiles", {}
+	)
+	if presentation_files is Dictionary and not presentation_files.is_empty():
+		var presentation_sha: Variant = target.get(
+			"preparedPresentationSha256", {}
+		)
+		if not presentation_sha is Dictionary:
+			return _fail_active_target(
+				"preparedPresentationSha256 must accompany preparedPresentationFiles"
+			)
+		for role_value: Variant in presentation_files:
+			var role := str(role_value)
+			if role not in ["inventory"]:
+				return _fail_active_target(
+					"unsupported prepared presentation role: %s" % role
+				)
+			var presentation_path := str(presentation_files.get(role, ""))
+			var presentation_expected_sha := str(
+				presentation_sha.get(role, "")
+			).to_lower()
+			if (
+				presentation_path.is_empty()
+				or presentation_path.get_extension().to_lower() != "png"
+				or not FileAccess.file_exists(presentation_path)
+				or presentation_expected_sha.is_empty()
+				or FileAccess.get_sha256(presentation_path).to_lower()
+					!= presentation_expected_sha
+			):
+				return _fail_active_target(
+					"prepared presentation source is invalid: %s" % role
+				)
 	_active_target_enabled = true
 	_active_target = target.duplicate(true)
 	current_item_id = item_id
@@ -287,6 +320,10 @@ func _load_active_target_manifest(path: String) -> bool:
 			return _fail_active_target(
 				"active target session direction mapping is invalid"
 			)
+	if not _initialize_active_target_presentation(item_id):
+		return _fail_active_target(
+			"active target presentation source is invalid"
+		)
 	return true
 
 
@@ -318,6 +355,22 @@ func _initialize_active_target_session_direction_mapping(
 		):
 			return false
 	return true
+
+
+func _initialize_active_target_presentation(item_id: int) -> bool:
+	if not _has_dedicated_presentation_source("inventory"):
+		return true
+	var presentation := HelmetVisualV2.presentation_calibration(item_id)
+	if presentation.is_empty():
+		presentation = _default_presentation_calibration()
+	var inventory: Dictionary = presentation.get(
+		"inventory", {"source_row": 4}
+	).duplicate(true)
+	inventory["source_variant"] = DEDICATED_INVENTORY_VARIANT
+	presentation["inventory"] = inventory
+	return HelmetVisualV2.set_session_presentation_calibration(
+		item_id, presentation
+	)
 
 
 func _fail_active_target(message: String) -> bool:
@@ -382,6 +435,12 @@ func _calibration_source_contract() -> Dictionary:
 			),
 			"calibrationPreparedDirectionSha256": _active_target.get(
 				"preparedDirectionSha256", {}
+			),
+			"calibrationPreparedPresentationFiles": _active_target.get(
+				"preparedPresentationFiles", {}
+			),
+			"calibrationPreparedPresentationSha256": _active_target.get(
+				"preparedPresentationSha256", {}
 			),
 			"calibrationPreviewPolicy": (
 				"single_active_target_direct_png_hash_validated"
@@ -946,6 +1005,11 @@ func _setup_presentation_ui() -> void:
 		for direction_index: int in DIRECTIONS.size():
 			option.add_item(str(DIRECTIONS[direction_index]), direction_index)
 		option.focus_mode = Control.FOCUS_NONE
+	if _has_dedicated_presentation_source("inventory"):
+		_inventory_direction.add_item(
+			"背包专用",
+			DIRECTIONS.size()
+		)
 	_paper_doll_direction.item_selected.connect(func(index: int) -> void:
 		_set_active_editor_scope("paperDoll")
 		_update_presentation_selection("paperDoll", index)
@@ -1129,7 +1193,7 @@ func _migrate_legacy_paper_doll_defaults(
 
 
 func _default_presentation_calibration() -> Dictionary:
-	return {
+	var presentation := {
 		"paperDoll": {
 			"source_row": 4,
 			"offset": _paper_doll_default_offset(),
@@ -1138,6 +1202,11 @@ func _default_presentation_calibration() -> Dictionary:
 		"inventory": {"source_row": 4},
 		"ground": {"source_row": 4},
 	}
+	if _has_dedicated_presentation_source("inventory"):
+		presentation["inventory"]["source_variant"] = (
+			DEDICATED_INVENTORY_VARIANT
+		)
+	return presentation
 
 
 func _current_presentation_calibration() -> Dictionary:
@@ -1158,7 +1227,11 @@ func _update_presentation_selection(role: String, source_row: int) -> void:
 		return
 	var presentation := _current_presentation_calibration()
 	var record: Dictionary = presentation.get(role, {})
-	record["source_row"] = source_row
+	if role == "inventory" and source_row == DIRECTIONS.size():
+		record["source_variant"] = DEDICATED_INVENTORY_VARIANT
+	else:
+		record["source_row"] = source_row
+		record.erase("source_variant")
 	if role == "paperDoll":
 		record["offset"] = record.get(
 			"offset",
@@ -1208,17 +1281,30 @@ func _refresh_presentation_ui() -> void:
 	var inventory_row := int(
 		presentation.get("inventory", {}).get("source_row", 4)
 	)
+	var inventory_variant := str(
+		presentation.get("inventory", {}).get("source_variant", "")
+	)
 	var ground_row := int(
 		presentation.get("ground", {}).get("source_row", 4)
 	)
 	_updating_ui = true
 	_paper_doll_direction.select(paper_row)
-	_inventory_direction.select(inventory_row)
+	_inventory_direction.select(
+		DIRECTIONS.size()
+		if (
+			inventory_variant == DEDICATED_INVENTORY_VARIANT
+			and _has_dedicated_presentation_source("inventory")
+		)
+		else inventory_row
+	)
 	_ground_direction.select(ground_row)
 	_updating_ui = false
-	_inventory_preview.texture = ImageTexture.create_from_image(
-		source_row_thumbnail(inventory_row)
+	var inventory_cutout := (
+		_authored_presentation_cutout("inventory")
+		if inventory_variant == DEDICATED_INVENTORY_VARIANT
+		else source_row_thumbnail(inventory_row)
 	)
+	_inventory_preview.texture = ImageTexture.create_from_image(inventory_cutout)
 	_ground_preview.texture = ImageTexture.create_from_image(
 		source_row_thumbnail(ground_row)
 	)
@@ -1688,6 +1774,12 @@ func _save_calibration_draft() -> bool:
 			),
 			"preparedDirectionSha256": source.get(
 				"calibrationPreparedDirectionSha256", {}
+			),
+			"preparedPresentationFiles": source.get(
+				"calibrationPreparedPresentationFiles", {}
+			),
+			"preparedPresentationSha256": source.get(
+				"calibrationPreparedPresentationSha256", {}
 			),
 			"recipeId": _source_recipe_id(),
 			"resolutionPolicy": (
@@ -3008,6 +3100,50 @@ func _authored_source_cutout(source_row: int) -> Image:
 	return cell.duplicate()
 
 
+func _has_dedicated_presentation_source(role: String) -> bool:
+	var files: Variant = _calibration_source_contract().get(
+		"calibrationPreparedPresentationFiles", {}
+	)
+	return (
+		files is Dictionary
+		and not str(files.get(role, "")).is_empty()
+	)
+
+
+func _authored_presentation_cutout(role: String) -> Image:
+	var source := _calibration_source_contract()
+	var files: Variant = source.get(
+		"calibrationPreparedPresentationFiles", {}
+	)
+	var hashes: Variant = source.get(
+		"calibrationPreparedPresentationSha256", {}
+	)
+	if not files is Dictionary or not hashes is Dictionary:
+		return Image.new()
+	var path := str(files.get(role, ""))
+	var expected_sha := str(hashes.get(role, "")).to_lower()
+	if (
+		path.is_empty()
+		or not FileAccess.file_exists(path)
+		or expected_sha.is_empty()
+		or FileAccess.get_sha256(path).to_lower() != expected_sha
+	):
+		return Image.new()
+	var cache_key := "presentation:%d:%s:%s" % [
+		current_item_id, role, expected_sha,
+	]
+	if _authored_source_cutout_cache.has(cache_key):
+		return (
+			_authored_source_cutout_cache[cache_key] as Image
+		).duplicate()
+	var image := Image.load_from_file(ProjectSettings.globalize_path(path))
+	if image.is_empty():
+		return Image.new()
+	image.convert(Image.FORMAT_RGBA8)
+	_authored_source_cutout_cache[cache_key] = image
+	return image.duplicate()
+
+
 func scale_cell_around_pivot(
 	cell: Image,
 	pivot: Vector2i,
@@ -3186,6 +3322,9 @@ func _mapping_editor_cpu_preview() -> Image:
 	var inventory_row := int(
 		presentation.get("inventory", {}).get("source_row", 4)
 	)
+	var inventory_variant := str(
+		presentation.get("inventory", {}).get("source_variant", "")
+	)
 	var ground_row := int(
 		presentation.get("ground", {}).get("source_row", 4)
 	)
@@ -3203,8 +3342,15 @@ func _mapping_editor_cpu_preview() -> Image:
 	for card_index: int in card_rects.size():
 		var card: Rect2i = card_rects[card_index]
 		_cpu_border(canvas, card, card_colors[card_index], 3)
-		var cutout := _authored_source_cutout(
-			int(selected_rows[card_index])
+		var cutout := (
+			_authored_presentation_cutout("inventory")
+			if (
+				card_index == 1
+				and inventory_variant == DEDICATED_INVENTORY_VARIANT
+			)
+			else _authored_source_cutout(
+				int(selected_rows[card_index])
+			)
 		)
 		if cutout.is_empty():
 			cutout = source_row_thumbnail(
@@ -3710,7 +3856,9 @@ func _calibration_ui_safe() -> bool:
 		and not get_node("CalibrationUI/Panel/VBox/Previews").visible
 		and _paper_doll_overlay != null
 		and _paper_doll_direction.item_count == 8
-		and _inventory_direction.item_count == 8
+		and _inventory_direction.item_count == (
+			9 if _has_dedicated_presentation_source("inventory") else 8
+		)
 		and _ground_direction.item_count == 8
 		and action_control.item_count == ACTIONS.size()
 		and direction_control.item_count == DIRECTIONS.size()

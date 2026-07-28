@@ -747,6 +747,15 @@ static func _validated_presentation_calibration(
 			"source_row": source_row,
 			"source_direction": canonical_direction(source_row),
 		}
+		var source_variant := str(raw.get("source_variant", ""))
+		if not source_variant.is_empty():
+			if (
+				not allow_half_pixel_offset
+				or role != "inventory"
+				or source_variant != "dedicated_inventory"
+			):
+				return {}
+			record["source_variant"] = source_variant
 		if role == "paperDoll":
 			var offset: Variant = raw.get("offset", [])
 			var percent := int(raw.get("scale_percent", 100))
