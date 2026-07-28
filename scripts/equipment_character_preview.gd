@@ -855,7 +855,14 @@ func _slot_layer_kind(slot: String) -> String:
 func _mapping_offset(layer: Dictionary) -> Vector2:
 	if _uses_original_client_stage:
 		return _original_stage_layer_position(layer)
-	var value: Variant = layer.get("drawOffset", [0, 0])
+	# The avatar-only presentation contract names coordinates stagePosition,
+	# while decoded StateItem records use drawOffset.  Both are coordinates on
+	# the same 168x199 classic canvas.  Ignoring stagePosition placed the hair
+	# at the composition origin and left the actor visibly bald.
+	var value: Variant = layer.get(
+		"drawOffset",
+		layer.get("stagePosition", [0, 0])
+	)
 	return _vector_from_value(value, Vector2.ZERO)
 
 
