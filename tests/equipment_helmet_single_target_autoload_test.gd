@@ -103,6 +103,24 @@ func _run() -> void:
 		var actual: Image = editor._runtime_layer_cell(
 			"ClientHelmetLayer", "idle", direction_index, 0
 		)
+		if actual.get_data() != expected.get_data():
+			print(
+				"ACTIVE_TARGET_RUNTIME_CELL_MISMATCH "
+				+ "direction=%s source_row=%d scale=%d "
+				+ "actual_sha=%s expected_sha=%s "
+				+ "actual_used=%s expected_used=%s"
+				% [
+					HelmetVisualV2.canonical_direction(direction_index),
+					source_row,
+					HelmetVisualV2.direction_scale_percent(
+						target_item_id, direction_index
+					),
+					actual.get_data().hex_encode().sha256_text(),
+					expected.get_data().hex_encode().sha256_text(),
+					str(actual.get_used_rect()),
+					str(expected.get_used_rect()),
+				]
+			)
 		assert(actual.get_data() == expected.get_data())
 
 	editor.select_item(150)
