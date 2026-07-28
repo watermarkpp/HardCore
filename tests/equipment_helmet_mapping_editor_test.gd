@@ -22,7 +22,7 @@ func _run() -> void:
 	assert(active_target_probe._load_active_target_manifest(
 		"res://assets/data/helmet_calibration_active_target.json"
 	))
-	assert(active_target_probe.active_target_item_id() == 150)
+	assert(active_target_probe.active_target_item_id() == 151)
 	active_target_probe.free()
 	var editor: Node = EDITOR_SCENE.instantiate()
 	editor.auto_run = false
@@ -88,12 +88,12 @@ func _run() -> void:
 			"res://assets/data/helmet_calibration_active_target.json"
 		)
 	)
-	assert(int(active_target.get("itemId", -1)) == 150)
+	assert(int(active_target.get("itemId", -1)) == 151)
 	assert(str(active_target.get(
 		"visualAssetId", ""
-	)) == "skeleton")
+	)) == "black_iron_golden_151")
 	assert(str(active_target.get("sourceSheet", "")).ends_with(
-		"skeleton_150_helmet_8dir_transparent.png"
+		"black_iron_151_helmet_8dir_transparent.png"
 	))
 	assert(str(active_target.get("sourceResizeFilter", "")) == (
 		"display_transform_only_until_final_bake_v1"
@@ -142,53 +142,54 @@ func _run() -> void:
 	assert(target_grid.columns == 8)
 	assert(source_grid.columns == 8)
 	_assert_editor_layout(editor)
-	# Active item 150 keeps every original RGBA direction attached to the UI.
+	# Active item 151 keeps every original RGBA direction attached to the UI.
 	# The world card applies only a non-destructive display transform, and the
 	# ground preview uses the selected raw cutout instead of a 64x64 thumbnail.
 	assert(editor._load_active_target_manifest(
 		"res://assets/data/helmet_calibration_active_target.json"
 	))
-	editor.select_item(150)
+	editor.select_item(151)
 	for source_row: int in 8:
-		var raw_150: Image = editor._authored_source_cutout(source_row)
-		var source_button_150 := source_grid.get_node(
+		var raw_151: Image = editor._authored_source_cutout(source_row)
+		var source_button_151 := source_grid.get_node(
 			"Source_Row%d" % source_row
 		) as TextureButton
-		assert(not raw_150.is_empty())
+		assert(not raw_151.is_empty())
 		assert(
-			source_button_150.texture_normal.get_image().get_size()
-			== raw_150.get_size()
+			source_button_151.texture_normal.get_image().get_size()
+			== raw_151.get_size()
 		)
 		assert(
-			source_button_150.stretch_mode
+			source_button_151.stretch_mode
 			== TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 		)
-		var overlay_150: TextureRect = editor._target_authored_overlays[
+		var overlay_151: TextureRect = editor._target_authored_overlays[
 			source_row
 		]
-		assert(overlay_150.texture.get_image().get_size() == raw_150.get_size())
-		var display_size_150: Vector2 = editor.authored_world_display_size(
+		assert(overlay_151.texture.get_image().get_size() == raw_151.get_size())
+		var display_size_151: Vector2 = editor.authored_world_display_size(
 			source_row,
-			HelmetVisualV2.direction_scale_percent(150, source_row)
+			HelmetVisualV2.direction_scale_percent(151, source_row)
 		)
-		assert(overlay_150.size.is_equal_approx(display_size_150))
+		assert(overlay_151.size.is_equal_approx(display_size_151))
 		assert(is_equal_approx(
-			display_size_150.x / display_size_150.y,
-			float(raw_150.get_width()) / float(raw_150.get_height())
+			display_size_151.x / display_size_151.y,
+			float(raw_151.get_width()) / float(raw_151.get_height())
 		))
-	var ground_150: Dictionary = editor._current_presentation_calibration().get(
+	var ground_151: Dictionary = editor._current_presentation_calibration().get(
 		"ground", {}
 	)
-	var ground_row_150 := int(ground_150.get("source_row", 4))
+	var ground_row_151 := int(ground_151.get("source_row", 4))
 	assert(
 		editor._ground_preview.texture.get_image().get_size()
-		== editor._authored_source_cutout(ground_row_150).get_size()
+		== editor._authored_source_cutout(ground_row_151).get_size()
 	)
 	# The remainder of this legacy regression intentionally exercises item 146
 	# reload behavior without an active-target redirect.
 	editor._active_target_enabled = false
 	editor._active_target_manifest_path = ""
 	editor._active_target = {}
+	editor.reload_formal_data()
 	# Reproduce the user's high-DPI effective client area. The 1600x900
 	# workspace must remain reachable through both scroll axes at 802x480.
 	calibration_ui.size = Vector2(802, 480)
