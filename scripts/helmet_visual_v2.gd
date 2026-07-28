@@ -326,6 +326,29 @@ static func uniform_scale_percent(item_id: int) -> int:
 	)), 50, 200)
 
 
+static func direction_scale_percent(item_id: int, direction_row: int) -> int:
+	var record := direction_record(item_id, direction_row)
+	if record.has("scale_percent"):
+		return clampi(int(record.get("scale_percent", 100)), 50, 200)
+	var directional: Variant = visual_asset_override_for_item(item_id).get(
+		"directionScalePercent", {}
+	)
+	if directional is Dictionary:
+		var direction := canonical_direction(direction_row)
+		if directional.has(direction):
+			return clampi(int(directional.get(direction, 100)), 50, 200)
+	return uniform_scale_percent(item_id)
+
+
+static func direction_scale_profile(item_id: int) -> Dictionary:
+	var profile: Dictionary = {}
+	for direction_row: int in CANONICAL_DIRECTIONS.size():
+		profile[canonical_direction(direction_row)] = direction_scale_percent(
+			item_id, direction_row
+		)
+	return profile
+
+
 static func set_session_uniform_scale_percent(
 	item_id: int,
 	percent: int
@@ -376,8 +399,13 @@ static func persist_uniform_scale_bake(
 	var data := calibration_overrides().duplicate(true)
 	var asset_id := visual_asset_id_for_item(item_id)
 	var assets: Dictionary = data.get("visualAssetOverrides", {})
-	assets[asset_id] = {
+	var asset_override: Dictionary = assets.get(asset_id, {}).duplicate(true)
+	asset_override.merge({
 		"uniform_scale_percent": percent,
+		"directionScalePercent": {
+			"N": percent, "NE": percent, "E": percent, "SE": percent,
+			"S": percent, "SW": percent, "W": percent, "NW": percent,
+		},
 		"derivedAtlases": derived_atlases,
 		"sourceAtlasSha256": source_sha256,
 		"derivedAtlasSha256": derived_sha256,
@@ -397,7 +425,8 @@ static func persist_uniform_scale_bake(
 			"sourceAtlasModified": false,
 			"sourceRecipeId": source_recipe_id,
 		},
-	}
+	}, true)
+	assets[asset_id] = asset_override
 	data["visualAssetOverrides"] = assets
 	var file := FileAccess.open(_override_path, FileAccess.WRITE)
 	if file == null:
@@ -406,6 +435,132 @@ static func persist_uniform_scale_bake(
 	file.close()
 	_overrides = data
 	_session_asset_overrides.erase(asset_id)
+	return true
+
+
+static func persist_directional_scale_bake(
+	item_id: int,
+	direction_scale_percent: Dictionary,
+	derived_atlases: Dictionary,
+	source_sha256: Dictionary,
+	derived_sha256: Dictionary,
+	source_recipe_id: String = "primary_source_rows.v1"
+) -> bool:
+	if is_read_only(item_id) or direction_scale_percent.size() != 8:
+		return false
+	var normalized: Dictionary = {}
+	for direction: String in CANONICAL_DIRECTIONS:
+		if not direction_scale_percent.has(direction):
+			return false
+		var percent := int(direction_scale_percent[direction])
+		if percent < 50 or percent > 200 or percent % 5 != 0:
+			return false
+		normalized[direction] = percent
+	var uniform_percent := int(normalized[CANONICAL_DIRECTIONS[0]])
+	for direction: String in CANONICAL_DIRECTIONS:
+		if int(normalized[direction]) != uniform_percent:
+			uniform_percent = 100
+			break
+	for required_action: String in [
+		"idle", "walk", "attack", "cast", "hit", "death",
+	]:
+		if (
+			not derived_atlases.has(required_action)
+			or not source_sha256.has(required_action)
+			or not derived_sha256.has(required_action)
+		):
+			return false
+	for action: String in derived_atlases:
+		var path := str(derived_atlases[action])
+		if path.is_empty() or not FileAccess.file_exists(path):
+			return false
+	var data := calibration_overrides().duplicate(true)
+	var asset_id := visual_asset_id_for_item(item_id)
+	var assets: Dictionary = data.get("visualAssetOverrides", {})
+	var asset_override: Dictionary = assets.get(asset_id, {}).duplicate(true)
+	asset_override.merge({
+		"uniform_scale_percent": uniform_percent,
+		"directionScalePercent": normalized,
+		"derivedAtlases": derived_atlases,
+		"sourceAtlasSha256": source_sha256,
+		"derivedAtlasSha256": derived_sha256,
+		"bakePolicy": {
+			"filter": "lanczos_from_authored_source_then_nearest_runtime",
+			"pivotInvariant": true,
+			"directionIndependent": true,
+			"scaleStepPercent": 5,
+			"allActionsDirectionsFrames": true,
+			"requiredActions": [
+				"idle", "walk", "attack", "cast", "hit", "death",
+			],
+			"runtimeScale": [1, 1],
+			"sourceAtlasModified": false,
+			"sourceRecipeId": source_recipe_id,
+		},
+	}, true)
+	assets[asset_id] = asset_override
+	data["visualAssetOverrides"] = assets
+	if not _write_overrides(data):
+		return false
+	_overrides = data
+	_session_asset_overrides.erase(asset_id)
+	return true
+
+
+static func presentation_calibration(item_id: int) -> Dictionary:
+	var value: Variant = visual_asset_override_for_item(item_id).get(
+		"presentationCalibration", {}
+	)
+	return value.duplicate(true) if value is Dictionary else {}
+
+
+static func set_session_presentation_calibration(
+	item_id: int,
+	value: Dictionary
+) -> bool:
+	if is_read_only(item_id):
+		return false
+	var normalized := _validated_presentation_calibration(value)
+	if normalized.is_empty():
+		return false
+	var asset_id := visual_asset_id_for_item(item_id)
+	if asset_id.is_empty():
+		return false
+	var current: Dictionary = _session_asset_overrides.get(
+		asset_id, {}
+	).duplicate(true)
+	current["presentationCalibration"] = normalized
+	_session_asset_overrides[asset_id] = current
+	return true
+
+
+static func persist_presentation_calibration(
+	item_id: int,
+	value: Dictionary
+) -> bool:
+	if is_read_only(item_id):
+		return false
+	var normalized := _validated_presentation_calibration(value)
+	if normalized.is_empty():
+		return false
+	var data := calibration_overrides().duplicate(true)
+	var asset_id := visual_asset_id_for_item(item_id)
+	var assets: Dictionary = data.get("visualAssetOverrides", {})
+	var asset_override: Dictionary = assets.get(asset_id, {}).duplicate(true)
+	asset_override["presentationCalibration"] = normalized
+	assets[asset_id] = asset_override
+	data["visualAssetOverrides"] = assets
+	if not _write_overrides(data):
+		return false
+	_overrides = data
+	var session: Dictionary = _session_asset_overrides.get(
+		asset_id, {}
+	).duplicate(true)
+	session.erase("presentationCalibration")
+	if session.is_empty():
+		_session_asset_overrides.erase(asset_id)
+	else:
+		_session_asset_overrides[asset_id] = session
 	return true
 
 
@@ -492,7 +647,7 @@ static func _validated_override_fields(
 	var allowed: Dictionary = {}
 	for field: String in [
 		"source_row", "source_slot_id", "source_direction",
-		"nudge", "status", "locked"
+		"nudge", "status", "locked", "scale_percent"
 	]:
 		if override_fields.has(field):
 			allowed[field] = override_fields[field]
@@ -541,7 +696,58 @@ static func _validated_override_fields(
 	if allowed.has("locked"):
 		if not allowed["locked"] is bool:
 			return {}
+	if allowed.has("scale_percent"):
+		var percent := int(allowed["scale_percent"])
+		if (
+			not (allowed["scale_percent"] is int or allowed["scale_percent"] is float)
+			or percent < 50
+			or percent > 200
+			or percent % 5 != 0
+		):
+			return {}
+		allowed["scale_percent"] = percent
 	return allowed
+
+
+static func _validated_presentation_calibration(value: Dictionary) -> Dictionary:
+	var normalized := {
+		"contractId": "equipment.helmet.presentation_calibration.v1",
+	}
+	for role: String in ["paperDoll", "inventory", "ground"]:
+		var raw: Variant = value.get(role, {})
+		if not raw is Dictionary:
+			return {}
+		var source_row := int(raw.get("source_row", -1))
+		if source_row < 0 or source_row > 7:
+			return {}
+		var record: Dictionary = {
+			"source_row": source_row,
+			"source_direction": canonical_direction(source_row),
+		}
+		if role == "paperDoll":
+			var offset: Variant = raw.get("offset", [])
+			var percent := int(raw.get("scale_percent", 100))
+			if (
+				not offset is Array
+				or offset.size() != 2
+				or percent < 10
+				or percent > 300
+				or percent % 5 != 0
+			):
+				return {}
+			record["offset"] = [int(offset[0]), int(offset[1])]
+			record["scale_percent"] = percent
+		normalized[role] = record
+	return normalized
+
+
+static func _write_overrides(data: Dictionary) -> bool:
+	var file := FileAccess.open(_override_path, FileAccess.WRITE)
+	if file == null:
+		return false
+	file.store_string(JSON.stringify(data, "\t", false) + "\n")
+	file.close()
+	return true
 
 
 static func apply_alpha_mask(
