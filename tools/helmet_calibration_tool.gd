@@ -36,6 +36,7 @@ const FOOT_POINT := Vector2i(128, 190)
 const HEAD_ZOOM_SOURCE_SIZE := Vector2i(64, 64)
 const SCALE_STEP_PERCENT := 5
 const NUDGE_STEP_PX := 0.5
+const AUTHORED_WORLD_DISPLAY_SCALE := 0.08
 const POPUP_CURSOR_OFFSET := Vector2i(12, 12)
 const POPUP_ESTIMATED_SIZE := Vector2i(180, 112)
 const DEDICATED_INVENTORY_VARIANT := "dedicated_inventory"
@@ -66,6 +67,7 @@ var _visual: Node2D
 var _formal_override_before := ""
 var _editor_initialized := false
 var _target_buttons: Array[TextureButton] = []
+var _target_authored_overlays: Array[TextureRect] = []
 var _source_buttons: Array[TextureButton] = []
 var _authored_source_cutout_cache: Dictionary = {}
 var _dirty_directions: Dictionary = {}
@@ -93,6 +95,7 @@ var _paper_dragging := false
 var _paper_drag_origin := Vector2.ZERO
 var _paper_overlay_origin := Vector2.ZERO
 var _loaded_draft_items: Dictionary = {}
+var _draft_source_contracts: Dictionary = {}
 var _test_draft_session_id := ""
 var _active_editor_scope := "world"
 
@@ -446,6 +449,11 @@ func _calibration_source_contract() -> Dictionary:
 				"single_active_target_direct_png_hash_validated"
 			),
 		}
+	var draft_key := str(current_item_id)
+	if _draft_source_contracts.has(draft_key):
+		return (
+			_draft_source_contracts[draft_key] as Dictionary
+		).duplicate(true)
 	var source: Variant = HelmetVisualV2.visual_asset_for_item(
 		current_item_id
 	).get("source", {})
@@ -460,8 +468,21 @@ func _calibration_source_direction_for_row(source_row: int) -> String:
 			"sourceDirectionOrder", DIRECTIONS
 		)
 		return str(order[source_row])
+	var draft_key := str(current_item_id)
+	if _draft_source_contracts.has(draft_key):
+		var draft_order: Array = _calibration_source_contract().get(
+			"sourceSlotDirectionOrder", DIRECTIONS
+		)
+		return str(draft_order[source_row])
 	return HelmetVisualV2.source_direction_for_row(
 		current_item_id, source_row
+	)
+
+
+func _uses_direct_authored_direction_order() -> bool:
+	return (
+		_active_target_applies_to_current_item()
+		or _draft_source_contracts.has(str(current_item_id))
 	)
 
 
@@ -470,7 +491,7 @@ func _calibration_pivot_for_source_row(
 	source_row: int,
 	frame_index: int
 ) -> Vector2i:
-	if _active_target_applies_to_current_item():
+	if _uses_direct_authored_direction_order():
 		var direction := _calibration_source_direction_for_row(source_row)
 		var direction_index := DIRECTIONS.find(direction)
 		assert(direction_index >= 0)
@@ -483,7 +504,7 @@ func _calibration_pivot_for_source_row(
 
 
 func _placement_source_row(source_row: int) -> int:
-	if not _active_target_applies_to_current_item():
+	if not _uses_direct_authored_direction_order():
 		return source_row
 	var direction := _calibration_source_direction_for_row(source_row)
 	var record: Variant = HelmetVisualV2.visual_asset_for_item(
@@ -889,11 +910,29 @@ func _build_mapping_buttons() -> void:
 		)
 		target_grid.add_child(target_button)
 		_target_buttons.append(target_button)
+		var authored_overlay := TextureRect.new()
+		authored_overlay.name = "AuthoredHelmetOverlay"
+		authored_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		authored_overlay.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		authored_overlay.stretch_mode = (
+			TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		)
+		authored_overlay.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+		authored_overlay.z_index = 1
+		target_button.add_child(authored_overlay)
+		(target_button.get_node("Label") as Label).z_index = 2
+		_target_authored_overlays.append(authored_overlay)
 	for source_row: int in DIRECTIONS.size():
 		var source_button := _direction_texture_button(
 			"Source_Row%d" % source_row,
 			"row %d" % source_row
 		)
+		# Keep the original high-resolution texture attached to the control.
+		# TextureRect performs a display-only fit; no thumbnail raster is made.
+		source_button.stretch_mode = (
+			TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+		)
+		source_button.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 		source_button.set_meta("source_row", source_row)
 		source_button.pressed.connect(func() -> void:
 			_set_active_editor_scope("world")
@@ -1287,6 +1326,7 @@ func _refresh_presentation_ui() -> void:
 	var ground_row := int(
 		presentation.get("ground", {}).get("source_row", 4)
 	)
+	_refresh_inventory_source_options()
 	_updating_ui = true
 	_paper_doll_direction.select(paper_row)
 	_inventory_direction.select(
@@ -1302,12 +1342,33 @@ func _refresh_presentation_ui() -> void:
 	var inventory_cutout := (
 		_authored_presentation_cutout("inventory")
 		if inventory_variant == DEDICATED_INVENTORY_VARIANT
-		else source_row_thumbnail(inventory_row)
+		else _authored_source_cutout(inventory_row)
 	)
+	if inventory_cutout.is_empty():
+		inventory_cutout = source_row_thumbnail(inventory_row)
 	_inventory_preview.texture = ImageTexture.create_from_image(inventory_cutout)
-	_ground_preview.texture = ImageTexture.create_from_image(
-		source_row_thumbnail(ground_row)
-	)
+	var ground_cutout := _authored_source_cutout(ground_row)
+	if ground_cutout.is_empty():
+		ground_cutout = source_row_thumbnail(ground_row)
+	_ground_preview.texture = ImageTexture.create_from_image(ground_cutout)
+
+
+func _refresh_inventory_source_options() -> void:
+	if _inventory_direction == null:
+		return
+	var has_dedicated := _has_dedicated_presentation_source("inventory")
+	if has_dedicated and _inventory_direction.item_count == DIRECTIONS.size():
+		_inventory_direction.add_item(
+			"背包专用", DIRECTIONS.size()
+		)
+	elif (
+		not has_dedicated
+		and _inventory_direction.item_count > DIRECTIONS.size()
+	):
+		while _inventory_direction.item_count > DIRECTIONS.size():
+			_inventory_direction.remove_item(
+				_inventory_direction.item_count - 1
+			)
 
 
 func _direction_texture_button(
@@ -1498,6 +1559,16 @@ func _load_saved_draft_for_item(item_id: int) -> bool:
 	):
 		push_error("helmet calibration draft source hash changed: %s" % path)
 		return false
+	var draft_source: Variant = parsed.get("source", {})
+	if not draft_source is Dictionary:
+		return false
+	var normalized_source := _validated_draft_source_contract(
+		item_id, draft_source
+	)
+	if normalized_source.is_empty():
+		push_error("invalid helmet calibration draft source: %s" % path)
+		return false
+	_draft_source_contracts[str(item_id)] = normalized_source
 	var direction_records: Variant = parsed.get("directions", {})
 	if not direction_records is Dictionary:
 		return false
@@ -1515,6 +1586,94 @@ func _load_saved_draft_for_item(item_id: int) -> bool:
 			item_id, presentation
 		)
 	return true
+
+
+func _validated_draft_source_contract(
+	item_id: int,
+	draft_source: Dictionary
+) -> Dictionary:
+	var sheet := str(draft_source.get("sheet", ""))
+	var sheet_sha := str(draft_source.get("sheetSha256", "")).to_lower()
+	if (
+		sheet.is_empty()
+		or sheet_sha.is_empty()
+		or not FileAccess.file_exists(sheet)
+		or FileAccess.get_sha256(sheet).to_lower() != sheet_sha
+	):
+		return {}
+	var prepared_files: Variant = draft_source.get(
+		"preparedDirectionFiles", {}
+	)
+	var prepared_hashes: Variant = draft_source.get(
+		"preparedDirectionSha256", {}
+	)
+	if not prepared_files is Dictionary or not prepared_hashes is Dictionary:
+		return {}
+	if not prepared_files.is_empty():
+		for direction: String in DIRECTIONS:
+			var prepared_path := str(prepared_files.get(direction, ""))
+			var prepared_sha := str(
+				prepared_hashes.get(direction, "")
+			).to_lower()
+			if (
+				prepared_path.is_empty()
+				or prepared_sha.is_empty()
+				or not FileAccess.file_exists(prepared_path)
+				or FileAccess.get_sha256(prepared_path).to_lower()
+					!= prepared_sha
+			):
+				return {}
+	var presentation_files: Variant = draft_source.get(
+		"preparedPresentationFiles", {}
+	)
+	var presentation_hashes: Variant = draft_source.get(
+		"preparedPresentationSha256", {}
+	)
+	if (
+		not presentation_files is Dictionary
+		or not presentation_hashes is Dictionary
+	):
+		return {}
+	for role_value: Variant in presentation_files:
+		var role := str(role_value)
+		var presentation_path := str(presentation_files.get(role, ""))
+		var presentation_sha := str(
+			presentation_hashes.get(role, "")
+		).to_lower()
+		if (
+			role != "inventory"
+			or presentation_path.is_empty()
+			or presentation_sha.is_empty()
+			or not FileAccess.file_exists(presentation_path)
+			or FileAccess.get_sha256(presentation_path).to_lower()
+				!= presentation_sha
+		):
+			return {}
+	return {
+		"calibrationSourceSheet": sheet,
+		"calibrationSourceSheetSha256": sheet_sha,
+		"calibrationSourceGrid": draft_source.get("grid", [4, 2]),
+		"sourceSlotDirectionOrder": draft_source.get(
+			"directionOrder", DIRECTIONS
+		),
+		"calibrationSourceMatte": str(draft_source.get(
+			"mattePolicy", "transparent_user_authored_alpha_preserved_v1"
+		)),
+		"calibrationResizeFilter": "display_transform_only_until_final_bake",
+		"calibrationPreparedSourceRows": [],
+		"calibrationPreparedDirectionFiles": prepared_files.duplicate(true),
+		"calibrationPreparedDirectionSha256": prepared_hashes.duplicate(true),
+		"calibrationPreparedPresentationFiles": (
+			presentation_files.duplicate(true)
+		),
+		"calibrationPreparedPresentationSha256": (
+			presentation_hashes.duplicate(true)
+		),
+		"calibrationPreviewPolicy": (
+			"original_rgba_texture_display_transform_only"
+		),
+		"draftItemId": item_id,
+	}
 
 
 func adjust_direction_scale_percent(
@@ -1650,6 +1809,7 @@ func reload_formal_data() -> void:
 	_dirty_scales.clear()
 	_presentation_dirty.clear()
 	_loaded_draft_items.erase(current_item_id)
+	_draft_source_contracts.erase(str(current_item_id))
 	_load_saved_draft_for_item(current_item_id)
 	if _visual != null:
 		_visual._refresh_equipment_visuals()
@@ -1769,6 +1929,14 @@ func _save_calibration_draft() -> bool:
 			"sheetSha256": source.get(
 				"calibrationSourceSheetSha256", ""
 			),
+			"grid": source.get("calibrationSourceGrid", [4, 2]),
+			"directionOrder": source.get(
+				"sourceSlotDirectionOrder", DIRECTIONS
+			),
+			"mattePolicy": source.get(
+				"calibrationSourceMatte",
+				"transparent_user_authored_alpha_preserved_v1"
+			),
 			"preparedDirectionFiles": source.get(
 				"calibrationPreparedDirectionFiles", {}
 			),
@@ -1785,9 +1953,22 @@ func _save_calibration_draft() -> bool:
 			"resolutionPolicy": (
 				"retain_original_direction_cutouts_until_one_final_runtime_bake"
 			),
+			"previewPolicy": (
+				"original_rgba_texture_display_transform_only"
+			),
 		},
 		"directions": directions,
 		"presentationCalibration": _current_presentation_calibration(),
+		"previewPolicy": {
+			"world": "original_rgba_texture_display_transform_only",
+			"sourceDirections": "original_rgba_texture_aspect_fit_only",
+			"paperDoll": "original_rgba_texture_display_transform_only",
+			"inventory": "original_rgba_texture_aspect_fit_only",
+			"ground": "original_rgba_texture_aspect_fit_only",
+			"directionIndependentAnchors": true,
+			"directionIndependentScale": true,
+			"noPreviewRasterDownsample": true,
+		},
 		"finalizePolicy": {
 			"world": "single_high_quality_downsample_from_original_per_direction",
 			"paperDoll": "single_high_quality_downsample_from_original_selection",
@@ -2643,18 +2824,19 @@ func _runtime_frame(
 	action: String,
 	direction_index: int,
 	frame_index: int,
-	include_calibration_overlays: bool = false
+	include_calibration_overlays: bool = false,
+	include_helmet_layers: bool = true
 ) -> Image:
 	_configure_runtime(action, direction_index, frame_index)
 	var frame := Image.create(FRAME_CANVAS.x, FRAME_CANVAS.y, false, Image.FORMAT_RGBA8)
 	frame.fill(Color(0, 0, 0, 0))
 	var layer_names: Array[String] = []
-	if show_helmet_back:
+	if include_helmet_layers and show_helmet_back:
 		layer_names.append("ClientHelmetBackLayer")
 	layer_names.append("BodySprite")
-	if show_helmet_front:
+	if include_helmet_layers and show_helmet_front:
 		layer_names.append("ClientHelmetLayer")
-	if show_head_occlusion_mask:
+	if include_helmet_layers and show_head_occlusion_mask:
 		layer_names.append("HeadOcclusionMaskLayer")
 	for layer_name: String in layer_names:
 		var layer := _visual.get_node(layer_name) as Sprite2D
@@ -2841,9 +3023,14 @@ func _refresh_mapping_editor_ui() -> void:
 	for direction_index: int in _target_buttons.size():
 		var target_button := _target_buttons[direction_index]
 		var target_frame := _runtime_frame(
-			current_action, direction_index, current_frame, false
+			current_action,
+			direction_index,
+			current_frame,
+			false,
+			not _has_authored_source_sheet()
 		)
 		target_button.texture_normal = ImageTexture.create_from_image(target_frame)
+		_refresh_target_authored_overlay(direction_index, target_button)
 		target_button.button_pressed = direction_index == current_direction
 		(target_button.get_node("Label") as Label).text = "%s  %d%%" % [
 			DIRECTIONS[direction_index],
@@ -2907,6 +3094,61 @@ func _refresh_mapping_editor_ui() -> void:
 	_refresh_presentation_ui()
 
 
+func authored_world_display_size(
+	source_row: int,
+	percent: int
+) -> Vector2:
+	var cutout := _authored_source_cutout(source_row)
+	if cutout.is_empty():
+		return Vector2.ZERO
+	var factor := AUTHORED_WORLD_DISPLAY_SCALE * float(percent) / 100.0
+	return Vector2(cutout.get_size()) * factor
+
+
+func _refresh_target_authored_overlay(
+	direction_index: int,
+	target_button: TextureButton
+) -> void:
+	if direction_index < 0 or direction_index >= _target_authored_overlays.size():
+		return
+	var overlay := _target_authored_overlays[direction_index]
+	if not _has_authored_source_sheet():
+		overlay.visible = false
+		overlay.texture = null
+		return
+	var record := HelmetVisualV2.direction_record(
+		current_item_id, direction_index
+	)
+	var source_row := int(record.get("source_row", direction_index))
+	var cutout := _authored_source_cutout(source_row)
+	if cutout.is_empty():
+		overlay.visible = false
+		overlay.texture = null
+		return
+	var percent := HelmetVisualV2.direction_scale_percent(
+		current_item_id, direction_index
+	)
+	var display_size := authored_world_display_size(source_row, percent)
+	var pivot := _calibration_pivot_for_source_row(
+		current_action, source_row, current_frame
+	)
+	var helmet_layer := _visual.get_node("ClientHelmetLayer") as Sprite2D
+	var anchor_in_frame := (
+		Vector2(FOOT_POINT)
+		+ _visual.position
+		+ helmet_layer.position
+		+ Vector2(pivot)
+	)
+	var button_size := target_button.size
+	if button_size.x <= 0.0 or button_size.y <= 0.0:
+		button_size = target_button.custom_minimum_size
+	var frame_origin := (button_size - Vector2(FRAME_CANVAS)) * 0.5
+	overlay.texture = ImageTexture.create_from_image(cutout)
+	overlay.size = display_size
+	overlay.position = frame_origin + anchor_in_frame - display_size * 0.5
+	overlay.visible = true
+
+
 func _duplicate_saved_source_rows(item_id: int) -> Array[Dictionary]:
 	var first_target_by_row: Dictionary = {}
 	var duplicates: Array[Dictionary] = []
@@ -2931,9 +3173,12 @@ func _duplicate_saved_source_rows(item_id: int) -> Array[Dictionary]:
 
 func source_row_thumbnail(source_row: int) -> Image:
 	assert(source_row >= 0 and source_row < DIRECTIONS.size())
-	var authored_thumbnail := _authored_source_sheet_thumbnail(source_row)
-	if not authored_thumbnail.is_empty():
-		return authored_thumbnail
+	var authored_cutout := _authored_source_cutout(source_row)
+	if not authored_cutout.is_empty():
+		# The calibration UI must retain the exact original RGBA cutout. The
+		# button scales this texture only while drawing; save/finalize continues
+		# to reference the untouched source PNG.
+		return authored_cutout
 	var cell := calibration_source_cell(
 		current_action, source_row, current_frame
 	)
@@ -2952,32 +3197,7 @@ func source_row_thumbnail(source_row: int) -> Image:
 
 
 func _authored_source_sheet_thumbnail(source_row: int) -> Image:
-	var cell := _authored_source_cutout(source_row)
-	if cell.is_empty():
-		return Image.new()
-	var available := HEAD_ZOOM_SOURCE_SIZE - Vector2i(4, 4)
-	var fit_scale := minf(
-		float(available.x) / float(cell.get_width()),
-		float(available.y) / float(cell.get_height())
-	)
-	var fitted_size := Vector2i(
-		maxi(1, roundi(float(cell.get_width()) * fit_scale)),
-		maxi(1, roundi(float(cell.get_height()) * fit_scale))
-	)
-	cell.resize(fitted_size.x, fitted_size.y, Image.INTERPOLATE_NEAREST)
-	var thumbnail := Image.create(
-		HEAD_ZOOM_SOURCE_SIZE.x,
-		HEAD_ZOOM_SOURCE_SIZE.y,
-		false,
-		Image.FORMAT_RGBA8
-	)
-	thumbnail.fill(Color(0, 0, 0, 0))
-	thumbnail.blit_rect(
-		cell,
-		Rect2i(Vector2i.ZERO, fitted_size),
-		(HEAD_ZOOM_SOURCE_SIZE - fitted_size) / 2
-	)
-	return thumbnail
+	return _authored_source_cutout(source_row)
 
 
 func _has_authored_source_sheet() -> bool:

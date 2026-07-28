@@ -104,6 +104,14 @@ func _run() -> void:
 	assert(editor._ground_direction.selected == 7)
 	assert(editor._inventory_preview.texture != null)
 	assert(editor._ground_preview.texture != null)
+	assert(
+		editor._inventory_preview.texture.get_image().get_size()
+		== editor._authored_source_cutout(6).get_size()
+	)
+	assert(
+		editor._ground_preview.texture.get_image().get_size()
+		== editor._authored_source_cutout(7).get_size()
+	)
 	assert(editor._paper_doll_overlay.position == Vector2(91, 27))
 	assert(editor._paper_doll_overlay.texture != null)
 	assert(editor._paper_doll_preview.has_renderable_assets())
@@ -115,7 +123,7 @@ func _run() -> void:
 	right_key.keycode = KEY_RIGHT
 	right_key.pressed = true
 	editor._input(right_key)
-	assert(editor._paper_doll_overlay.position == Vector2(92, 27))
+	assert(editor._paper_doll_overlay.position == Vector2(91.5, 27))
 	assert(
 		HelmetVisualV2.direction_record(
 			147, editor.current_direction
@@ -135,6 +143,9 @@ func _run() -> void:
 	))
 	assert(not bool(draft.get("runtimeReadable", true)))
 	assert(not bool(draft.get("finalized", true)))
+	assert(bool(draft.get("previewPolicy", {}).get(
+		"noPreviewRasterDownsample", false
+	)))
 	assert(bool(draft.get("finalizePolicy", {}).get(
 		"noIntermediateResample", false
 	)))

@@ -152,6 +152,53 @@ func _run() -> void:
 	assert(target_grid.columns == 8)
 	assert(source_grid.columns == 8)
 	_assert_editor_layout(editor)
+	# Active item 149 keeps every original RGBA direction attached to the UI.
+	# The world card applies only a non-destructive display transform, and the
+	# ground preview uses the selected raw cutout instead of a 64x64 thumbnail.
+	assert(editor._load_active_target_manifest(
+		"res://assets/data/helmet_calibration_active_target.json"
+	))
+	editor.select_item(149)
+	for source_row: int in 8:
+		var raw_149: Image = editor._authored_source_cutout(source_row)
+		var source_button_149 := source_grid.get_node(
+			"Source_Row%d" % source_row
+		) as TextureButton
+		assert(not raw_149.is_empty())
+		assert(
+			source_button_149.texture_normal.get_image().get_size()
+			== raw_149.get_size()
+		)
+		assert(
+			source_button_149.stretch_mode
+			== TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+		)
+		var overlay_149: TextureRect = editor._target_authored_overlays[
+			source_row
+		]
+		assert(overlay_149.texture.get_image().get_size() == raw_149.get_size())
+		var display_size_149: Vector2 = editor.authored_world_display_size(
+			source_row,
+			HelmetVisualV2.direction_scale_percent(149, source_row)
+		)
+		assert(overlay_149.size.is_equal_approx(display_size_149))
+		assert(is_equal_approx(
+			display_size_149.x / display_size_149.y,
+			float(raw_149.get_width()) / float(raw_149.get_height())
+		))
+	var ground_149: Dictionary = editor._current_presentation_calibration().get(
+		"ground", {}
+	)
+	var ground_row_149 := int(ground_149.get("source_row", 4))
+	assert(
+		editor._ground_preview.texture.get_image().get_size()
+		== editor._authored_source_cutout(ground_row_149).get_size()
+	)
+	# The remainder of this legacy regression intentionally exercises item 146
+	# reload behavior without an active-target redirect.
+	editor._active_target_enabled = false
+	editor._active_target_manifest_path = ""
+	editor._active_target = {}
 	# Reproduce the user's high-DPI effective client area. The 1600x900
 	# workspace must remain reachable through both scroll axes at 802x480.
 	calibration_ui.size = Vector2(802, 480)
@@ -283,7 +330,10 @@ func _run() -> void:
 	for row: int in 8:
 		var button := source_grid.get_node("Source_Row%d" % row) as TextureButton
 		assert(int(button.get_meta("source_row", -1)) == row)
-		assert(button.stretch_mode == TextureButton.STRETCH_KEEP_CENTERED)
+		assert(
+			button.stretch_mode
+			== TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+		)
 		var expected: Image = editor.source_row_thumbnail(row)
 		assert(
 			button.texture_normal.get_image().get_data()
@@ -374,7 +424,9 @@ func _run() -> void:
 	))
 	var authored_hashes: Dictionary = {}
 	var differs_from_runtime := false
-	var authored_strip := Image.create(8 * 64, 64, false, Image.FORMAT_RGBA8)
+	var authored_strip := Image.create(
+		8 * 192, 320, false, Image.FORMAT_RGBA8
+	)
 	authored_strip.fill(Color(0, 0, 0, 0))
 	for row: int in 8:
 		var bronze_button := source_grid.get_node(
@@ -384,19 +436,33 @@ func _run() -> void:
 			(bronze_button.get_node("Label") as Label).text
 		))
 		var authored: Image = editor.source_row_thumbnail(row)
-		assert(authored.get_size() == Vector2i(64, 64))
 		assert(_has_opaque_pixel(authored))
 		_assert_no_green_matte(authored)
 		var full_resolution_source: Image = editor._authored_source_cutout(row)
+		assert(authored.get_size() == full_resolution_source.get_size())
+		assert(authored.get_data() == full_resolution_source.get_data())
 		assert(full_resolution_source.get_width() >= 174)
 		assert(full_resolution_source.get_height() >= 280)
 		var authored_hash: int = authored.get_data().hex_encode().hash()
 		assert(not authored_hashes.has(authored_hash))
 		authored_hashes[authored_hash] = true
-		authored_strip.blit_rect(
-			authored,
-			Rect2i(Vector2i.ZERO, authored.get_size()),
-			Vector2i(row * 64, 0)
+		var preview := authored.duplicate()
+		var preview_factor := minf(
+			180.0 / float(preview.get_width()),
+			300.0 / float(preview.get_height())
+		)
+		preview.resize(
+			maxi(1, roundi(float(preview.get_width()) * preview_factor)),
+			maxi(1, roundi(float(preview.get_height()) * preview_factor)),
+			Image.INTERPOLATE_LANCZOS
+		)
+		authored_strip.blend_rect(
+			preview,
+			Rect2i(Vector2i.ZERO, preview.get_size()),
+			Vector2i(
+				row * 192 + (192 - preview.get_width()) / 2,
+				(320 - preview.get_height()) / 2
+			)
 		)
 		var runtime: Image = editor.calibration_source_cell("idle", row, 0)
 		_assert_no_green_matte(runtime)
@@ -601,7 +667,15 @@ func _run() -> void:
 
 	# An unsaved remap can still be discarded back to the newly saved temp record.
 	assert(editor.map_source_row_to_current_target(1))
-	assert(int(HelmetVisualV2.direction_record(146, 1).get("source_row", -1)) == 1)
+	assert(
+		int(HelmetVisualV2.direction_record(146, 1).get("source_row", -1)) == 1,
+		"current_item=%d current_direction=%d record=%s"
+		% [
+			editor.current_item_id,
+			editor.current_direction,
+			JSON.stringify(HelmetVisualV2.direction_record(146, 1)),
+		]
+	)
 	editor.undo_current_direction()
 	assert(int(HelmetVisualV2.direction_record(146, 1).get("source_row", -1)) == 0)
 
