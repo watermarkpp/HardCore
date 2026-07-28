@@ -124,29 +124,6 @@ def main() -> None:
         ROOT / report["directions"]["S"]["path"]
     ).convert("RGBA").tobytes()
 
-    target = json.loads(
-        (
-            ROOT / "assets/data/helmet_calibration_active_target.json"
-        ).read_text(encoding="utf-8")
-    )
-    assert target["itemId"] == 149
-    assert target["visualAssetId"] == "taoist"
-    assert target["sourceDirectionOrder"] == list(DIRECTIONS)
-    assert target["initializeSessionDirectionMapping"] is True
-    assert set(target["preparedDirectionFiles"]) == set(DIRECTIONS)
-    for direction in DIRECTIONS:
-        path = ROOT / target["preparedDirectionFiles"][direction][6:]
-        assert file_sha256(path) == target["preparedDirectionSha256"][direction]
-    inventory_path = (
-        ROOT / target["preparedPresentationFiles"]["inventory"][6:]
-    )
-    assert file_sha256(inventory_path) == (
-        target["preparedPresentationSha256"]["inventory"]
-    )
-    assert target["provenance"]["derivation"] == (
-        "alpha_bounds_crop_only_no_matte_removal_no_face_window_edit_no_resample"
-    )
-
     for relative, expected in FROZEN_RUNTIME_SHA256.items():
         assert file_sha256(ROOT / relative) == expected, relative
     print("equipment_taoist_helmet_149_calibration_source_test: PASS")

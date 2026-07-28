@@ -1,10 +1,10 @@
 {
   "contractId": "equipment.world_helmet.calibration.active_target.v1",
-  "itemId": 149,
-  "visualAssetId": "taoist",
-  "displayName": "道士头盔",
-  "sourceSheet": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_helmet_8dir_transparent.png",
-  "sourceSheetSha256": "22d4260c7079fffcc279c24eada7b63ee8cee935c4ee8d6d653b48ecdb5fc84e",
+  "itemId": 150,
+  "visualAssetId": "skeleton",
+  "displayName": "骷髅头盔",
+  "sourceSheet": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_150_helmet_8dir_transparent.png",
+  "sourceSheetSha256": "f92bd3024d914a7002d5522ae71d3005a060dd6a34aa2d3434735717f403d66d",
   "sourceGrid": [
     4,
     2
@@ -20,49 +20,45 @@
     "NW"
   ],
   "sourceMatte": "transparent_user_authored_alpha_preserved_v1",
-  "sourceResizeFilter": "lanczos_downsample_nearest_runtime_v1",
-  "sourceRevision": "taoist_149.user_provided_8dir_plus_inventory.v1",
+  "sourceResizeFilter": "display_transform_only_until_final_bake_v1",
+  "sourceRevision": "skeleton_150.user_provided_8dir_hollowed.v1",
   "loadPolicy": "single_target_direct_png_hash_validated",
   "initializeSessionDirectionMapping": true,
   "preparedDirectionFiles": {
-    "N": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_directions/n.png",
-    "NE": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_directions/ne.png",
-    "E": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_directions/e.png",
-    "SE": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_directions/se.png",
-    "S": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_directions/s.png",
-    "SW": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_directions/sw.png",
-    "W": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_directions/w.png",
-    "NW": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_directions/nw.png"
+    "N": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_150_directions/n.png",
+    "NE": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_150_directions/ne.png",
+    "E": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_150_directions/e.png",
+    "SE": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_150_directions/se.png",
+    "S": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_150_directions/s.png",
+    "SW": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_150_directions/sw.png",
+    "W": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_150_directions/w.png",
+    "NW": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_150_directions/nw.png"
   },
   "preparedDirectionSha256": {
-    "N": "51d7204873ecbbc75b1e8227aaa8d89c64b4a0a9d2d33715d6880014a7d2d873",
-    "NE": "9f3c414a4785746546b57b09e6f663256c32956738574e3780e097c6a95da7aa",
-    "E": "8367768c8b27e0d4c3fc67c157fc24416da2255d8ff543eb3fe9ced58409880f",
-    "SE": "946d8847f48fbaa045bf79aaf8876e01096f9eeda11588afae65bac50b8e6ba7",
-    "S": "fefa6b4866adffad4bd0535ba9de6398a5772d3b846e4179a846ea695c06fae3",
-    "SW": "c7b253df559a77681c80f92636f733bfdc243cf23c6ee341fd8759ade75573fd",
-    "W": "29d3383c50fa880f5a450087d220e214dd7b08f84d2fb1a9b6aa12d5a86acd81",
-    "NW": "60958091bc5d31e5948c917962a3fbb68374cbdbc4149ba9d0557a9df94f0fd8"
+    "N": "eb094de90a6cf28041e6278e1fc77a9cbcb51bd6ec73307ad645404a62f6cc7f",
+    "NE": "285552f1b9afa37f93e5f685a805513cf5be1eec1a368393ddcae0c65895aa2f",
+    "E": "4916b30ea068698d6867fa4c0d2dc7cee39741fa682c4b7a7f320ced2b6acc61",
+    "SE": "ceb9fcb30511327df1a76871a00a66d27d315957ab183b13113ee0ee79e71eb4",
+    "S": "9f8c525b6a75d39e875b384a97c8cef54499399e61a6aaa584287d731839a479",
+    "SW": "7104c3d76a704a4f02d838ae2c640f78419b23a4a33d032f88ea94be01de020c",
+    "W": "f71134a782e0abe4f47c06b1079342aa77cfe2f9e49612d1f59e960a5a616814",
+    "NW": "58f49304cff588b7329b4f640f85fe1c012ab64e0a223fb259578cc0f03176b3"
   },
-  "preparedPresentationFiles": {
-    "inventory": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_presentation/inventory.png"
-  },
-  "preparedPresentationSha256": {
-    "inventory": "e7c9c45fe7745e452c9f19dd0dd6ed99e4a67ffc707340a22d3521588b9cace3"
-  },
+  "preparedPresentationFiles": {},
+  "preparedPresentationSha256": {},
   "resolutionPolicy": "retain_original_rgba_cutouts_until_one_final_runtime_bake",
   "provenance": {
     "lane": "helmet_world_visuals",
     "tier": "primary",
     "distribution": "user_authorized_direct_source",
-    "originalSourcePath": "C:/Users/Administrator/Desktop/sucai/装备/ChatGPT Image 2026年7月27日 22_27_18.png",
-    "projectSourcePath": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_helmet_9view_user_20260728.png",
-    "originalSourceSha256": "27a87e2cf4e49d3e6fd093a6330f6ee55921908ed074ab486ea0a72262f41408",
+    "originalSourcePath": "C:/Users/Administrator/Desktop/sucai/装备/ChatGPT Image 2026年7月28日 08_55_16.png",
+    "projectSourcePath": "res://assets/art/items/client/world_wear/helmet/male/source/skeleton_150_helmet_8dir_user_20260728.png",
+    "originalSourceSha256": "de5753d3b36797d0937967032be238b3cde55582588ff4b99d42794740605c0d",
     "sourceSize": [
-      1350,
-      1637
+      1491,
+      1055
     ],
-    "derivation": "alpha_bounds_crop_only_no_matte_removal_no_face_window_edit_no_resample",
+    "derivation": "alpha_bounds_crop_only_no_matte_removal_no_hollowing_edit_no_resample",
     "userAuthorizationDate": "2026-07-28"
   }
 }
