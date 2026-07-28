@@ -87,15 +87,10 @@ func _run() -> void:
 			target_item_id, direction_index
 		)
 		var source_row := int(record.get("source_row", direction_index))
-		var expected: Image = editor.calibration_source_cell(
-			"idle", source_row, 0
-		)
-		var pivot: Vector2i = editor._calibration_pivot_for_source_row(
-			"idle", source_row, 0
-		)
-		expected = editor.scale_cell_around_pivot(
-			expected,
-			pivot,
+		var expected: Image = editor.calibration_source_cell_scaled(
+			"idle",
+			source_row,
+			0,
 			HelmetVisualV2.direction_scale_percent(
 				target_item_id, direction_index
 			)
