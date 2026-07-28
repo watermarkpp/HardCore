@@ -1,6 +1,6 @@
 # Codex 精简上下文快照
 
-更新时间：2026-07-28 20:23（Asia/Shanghai）
+更新时间：2026-07-28 21:25（Asia/Shanghai）
 
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。
 准确性规则：本文件不是代码或 Git 状态的替代品；只核实本次任务实际触及的分支、文件、接口和专项测试。
@@ -16,7 +16,7 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `623e44e`（其后的快照提交只改本文档）。
+- 分支/运行时代码基线：`codex/integration` @ `4fea1e60`（本次快照提交只改本文档）。
 - tracked 状态：13 个既有头盔 v2 合同/生成素材修改继续保护；本次头盔校准工具只修改工具、运行时校准接口和专项测试，未暂存、覆盖或合并上述用户数据。12 个冻结生成图集 SHA-256 与开工记录逐项一致；正式 override 在施工期间由外部在制工作更新，保留其最新用户内容，禁止回退。
 - 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
@@ -62,6 +62,7 @@
 
 | 集成提交 | 领域 | 结果 |
 |---|---|---|
+| `4fea1e60`（装备专业提交 `5d9aec69`） | equipment/integration | 仅重建 147/148 共用的 `identityId=bronze_magic` 世界六动作图集：从 SHA-256 `8D5B9B4AF6E28947CB4437D5F09EA8F26FD8822B4D589D619A8153EDA37504EE` 的 1774×887 透明八方向母图直接进行预乘 Alpha + Lanczos 单次缩放，运行时保持 nearest/`1x`；232 个方向帧单元的有效包围盒与返修前逐项一致，只替换框内像素。新增精确单目标重建器与冻结哈希守卫；147/148 纸娃娃、擦除遮罩、背包、地面及 `item_147` 人工草稿哈希均未变化。Python 单目标回归、Godot 校准工具与共享身份专项通过。 |
 | `623e44e`（UI 专业提交 `a9ef38b0`，装备专业提交 `623e44e`） | UI/equipment/integration | 修复头盔校准纸娃娃：`classic_avatar` 头发现在读取正式 `avatarOnly.stagePosition=[80,44]`，与人物/衣服共用 168×199 画布，不再漂到左上或显示光头；纸娃娃头盔从错误的原图 25% 改为按当前物品正式头部补丁尺寸与位置建立 100% 基准，高分辨率原切片只改变显示矩形、不产生中间重采样；旧 `[110,32] + 25%` 草稿只对该精确旧默认自动迁移，其他人工参数保持不变。点击纸娃娃区域后方向键每次移动头盔 1px，世界方向坐标不受影响；点击世界两排后恢复世界方向微调。集成专项 5/5 通过，正式 override 与冻结生成图集哈希未变。 |
 | `e0110944`（专业提交 `df6fc7da`） | equipment/integration | 头盔校准改为无损两阶段：透明 4×2 原图固定按 `N,NE,E,SE,S,SW,W,NW` 切为 8 张原分辨率 PNG 并逐张保存 SHA-256，不做方向扫描；世界八方向各自支持右键 ±5%，下方放大人偶/头部从可见界面移除；新增战士赤月套装纸娃娃拖放/缩放/八向选择、背包选向和地面选向。保存只写 `equipment.helmet.calibration_draft.v1`（`runtimeReadable=false`、`finalized=false`），正式 override 与运行图集保持不变；最终加载函数未接 UI 按钮，只允许用户全部确认后从原切片单次 Lanczos 生成、运行时 nearest/`1x`。装备工作树与真实集成基线专项均 6/6 通过。 |
 | `54c6222e`、`da77aa14`（专业提交 `5219aff6`、`449a1f6`） | equipment/integration | 天尊头盔 `item_id=240` / `identityId=heavenly_taoist` 使用用户提供的 `1448×1086` 洋红底八方向原图完成单目标替换：上排 `N/NE/E/SE`、下排 `S/SW/W/NW`，源图 SHA-256 `A5E474DA3C081AD2F5DD0926BD9DD1358E4179737E6B8D5614A77CF7B2BA9E8E`。六动作世界 atlas 保持 `192×160px` 单元、nearest/`1x`，实际八方向内容为 `10×16/10×18/14×20/14×23/12×21/15×23/13×20/10×17px`，全部不超过正式客户端方向包围盒；纸娃娃 `32×41px` 画布内内容 `13×24px` 并保留透明脸窗，背包 `36×35px`、地面 `16×17px` 同源单次烘焙。v2 映射、动作 SHA、纸娃娃/背包/地面合同同步；非 240 合同与 224 个冻结素材逐项零变化。Godot 运行时验收 7/7、装备套件 17/17、单目标 Python 回归通过。 |
@@ -186,7 +187,7 @@
 | `HardCore-worktrees/monsters` | `codex/monsters` @ `45781ded` | tracked clean；68 UID | 已集成为 `c88c6277` |
 | `HardCore-worktrees/ui-art` | `codex/ui-art` @ `a9ef38b0` | tracked clean；Godot UID/输出继续保护 | 纸娃娃 `avatarOnly.stagePosition` 头发坐标修复已集成；专项 1/1、集成复验通过 |
 | `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `be710c6e` | 27 项 tracked 技能视觉在制修改；66 UID 继续保护 | 33技能 runtime 与150条可执行语义合同已集成；当前 fire_wall / summon_skeleton 视觉返修未交付，禁止清理或覆盖 |
-| `HardCore-worktrees/equipment` | `codex/equipment` @ `623e44e` | 4 个既有 monster import 修改及 UID/生成项继续保护 | 纸娃娃头盔正式尺寸基准、旧默认草稿迁移及方向键独立微调已集成；装备专项 4/4、集成相关专项 5/5 通过 |
+| `HardCore-worktrees/equipment` | `codex/equipment` @ `5d9aec69` | 4 个既有 monster import 修改及 UID/生成项继续保护 | 147/148 青铜/魔法头盔世界外观高清单次重建已集成；纸娃娃、背包、地面与人工草稿冻结未变；单目标 Python 回归及 Godot 专项通过 |
 
 ### maps 保护红线
 
