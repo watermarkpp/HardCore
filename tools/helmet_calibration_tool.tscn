@@ -213,14 +213,14 @@ theme_override_constants/separation = 18
 [node name="InventoryPreview" type="TextureRect" parent="CalibrationUI/Panel/VBox/PresentationCalibration/Selectors/SelectionPreviews"]
 custom_minimum_size = Vector2(160, 160)
 layout_mode = 2
-texture_filter = 1
+texture_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
 [node name="GroundPreview" type="TextureRect" parent="CalibrationUI/Panel/VBox/PresentationCalibration/Selectors/SelectionPreviews"]
 custom_minimum_size = Vector2(160, 160)
 layout_mode = 2
-texture_filter = 1
+texture_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
