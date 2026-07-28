@@ -63,6 +63,19 @@ func _run() -> void:
 		editor.active_target_source_sheet_sha256()
 		== FileAccess.get_sha256(TEST_SOURCE).to_lower()
 	)
+	if bool(target.get("initializeSessionDirectionMapping", false)):
+		for direction_index: int in 8:
+			var initialized_record := HelmetVisualV2.direction_record(
+				target_item_id, direction_index
+			)
+			assert(
+				int(initialized_record.get("source_row", -1))
+				== direction_index
+			)
+			assert(
+				str(initialized_record.get("source_direction", ""))
+				== HelmetVisualV2.canonical_direction(direction_index)
+			)
 
 	for source_row: int in 8:
 		var source_cell: Image = editor._authored_source_cutout(source_row)
@@ -130,7 +143,12 @@ func _run() -> void:
 		== FileAccess.get_sha256(TEST_SOURCE).to_lower()
 	)
 	var source_after: Image = editor._authored_source_cutout(0)
-	assert(source_after.get_data() != source_before.get_data())
+	if target.get("preparedDirectionFiles", {}).is_empty():
+		assert(source_after.get_data() != source_before.get_data())
+	else:
+		# Prepared full-resolution cuts are the authoritative editor inputs.
+		# Replacing only the presentation sheet must not alter those pixels.
+		assert(source_after.get_data() == source_before.get_data())
 
 	assert(FileAccess.get_file_as_string(FORMAL_OVERRIDE) == override_before)
 	editor.dispose_runtime_for_test()

@@ -277,6 +277,43 @@ func _load_active_target_manifest(path: String) -> bool:
 	_active_target = target.duplicate(true)
 	current_item_id = item_id
 	_authored_source_cutout_cache.clear()
+	if bool(target.get("initializeSessionDirectionMapping", false)):
+		if not _initialize_active_target_session_direction_mapping(
+			item_id, direction_order
+		):
+			return _fail_active_target(
+				"active target session direction mapping is invalid"
+			)
+	return true
+
+
+func _initialize_active_target_session_direction_mapping(
+	item_id: int,
+	direction_order: Array
+) -> bool:
+	for direction_index: int in DIRECTIONS.size():
+		var direction: String = DIRECTIONS[direction_index]
+		var source_row: int = direction_order.find(direction)
+		if source_row < 0:
+			return false
+		var current: Dictionary = HelmetVisualV2.direction_record(
+			item_id, direction_index
+		)
+		var session: Dictionary = {
+			"source_row": source_row,
+			"source_slot_id": "slot_%d" % source_row,
+			"source_direction": direction,
+			"status": "valid",
+			"locked": false,
+		}
+		if current.has("nudge"):
+			session["nudge"] = current["nudge"]
+		if current.has("scale_percent"):
+			session["scale_percent"] = current["scale_percent"]
+		if not HelmetVisualV2.set_session_calibration_override(
+			item_id, direction_index, session
+		):
+			return false
 	return true
 
 
