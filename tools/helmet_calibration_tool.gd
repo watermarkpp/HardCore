@@ -46,9 +46,24 @@ const PAPER_DOLL_LEGACY_SCALE_PERCENT := 25
 const PAPER_DOLL_LEGACY_OFFSET := [110, 32]
 const PAPER_DOLL_FALLBACK_DRAW_OFFSET := Vector2(73, 27)
 const PAPER_DOLL_FALLBACK_SIZE := Vector2(32, 41)
-const CLASSIC_HEAD_PATCHES_PATH := (
-	"res://assets/data/equipment_classic_avatar_head_patches.json"
-)
+# These are the exact paper-doll reference rectangles that were visible while
+# the user authored the accepted calibration drafts. The calibration editor is
+# intentionally independent from later runtime/presentation bakes: replacing a
+# game asset must never change the size or position shown by an accepted draft.
+const PAPER_DOLL_CALIBRATION_REFERENCES := {
+	146: {"drawOffset": [76, 40], "size": [24, 28]},
+	147: {"drawOffset": [73, 27], "size": [32, 41]},
+	148: {"drawOffset": [73, 27], "size": [32, 41]},
+	149: {"drawOffset": [72, 28], "size": [32, 40]},
+	150: {"drawOffset": [62, 26], "size": [52, 42]},
+	151: {"drawOffset": [72, 36], "size": [28, 32]},
+	218: {"drawOffset": [62, 21], "size": [48, 48]},
+	224: {"drawOffset": [73, 28], "size": [32, 40]},
+	228: {"drawOffset": [73, 26], "size": [32, 42]},
+	232: {"drawOffset": [73, 27], "size": [32, 41]},
+	236: {"drawOffset": [73, 27], "size": [32, 41]},
+	240: {"drawOffset": [73, 27], "size": [32, 41]},
+}
 
 var current_action := "idle"
 var current_item_id := ITEM_ID
@@ -1140,20 +1155,10 @@ func _commit_paper_overlay_position() -> void:
 
 
 func _paper_doll_reference_record() -> Dictionary:
-	if not FileAccess.file_exists(CLASSIC_HEAD_PATCHES_PATH):
-		return {}
-	var parsed: Variant = JSON.parse_string(
-		FileAccess.get_file_as_string(CLASSIC_HEAD_PATCHES_PATH)
+	var record: Variant = PAPER_DOLL_CALIBRATION_REFERENCES.get(
+		current_item_id, {}
 	)
-	if not parsed is Dictionary:
-		return {}
-	var item: Variant = parsed.get("itemsById", {}).get(
-		str(current_item_id), {}
-	)
-	if not item is Dictionary:
-		return {}
-	var patch: Variant = item.get("flattenedHeadPatch", {})
-	return patch.duplicate(true) if patch is Dictionary else {}
+	return record.duplicate(true) if record is Dictionary else {}
 
 
 func _paper_doll_reference_rect() -> Rect2:
