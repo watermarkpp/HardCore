@@ -1,9 +1,19 @@
 # Codex 精简上下文快照
 
-更新时间：2026-07-29（Asia/Shanghai）
+更新时间：2026-07-30（Asia/Shanghai）
 
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。
 准确性规则：本文件不是代码或 Git 状态的替代品；只核实本次任务实际触及的分支、文件、接口和专项测试。
+
+## 2026-07-30 v38 无损精简发布
+
+- 集成提交：`5137be3d`（怪物图集改用无损导入）、`a2b29e83`（Android v38 与生产排除规则）、`2bf81def`（APK 资源完整性验证与可选基线变化证明分离）。APK 对应运行时提交为 `a2b29e83`。
+- 最终 APK：`outputs/hardcore/HardCore-slim-v38-debug.apk`；`244,091,990` 字节（232.78 MiB）；SHA-256 `562082FD18DC51ECB65F00F610EDF82295B9A92FDA98BDB0B1D73C5765FA4D43`；`versionCode=38`、`versionName=1.17.2-slim`、包名 `com.personal.mafaoffline`、应用名 `HardCore`，v2/v3 签名均通过。
+- 相比 v37 的 `1,648,238,897` 字节减少 `1,404,146,907` 字节（约 85.2%）。核心收益来自 580 张怪物 PNG 的 Godot 无损压缩导入：编译纹理由约 1,303.12 MiB 降至 78.06 MiB；原 PNG 聚合哈希、580 个 `.uid`、像素和运行时稳定 ID 均未改变。
+- 生产排除仅覆盖确定不参与运行时的地图原始批次、staging `source/rgba_native`、调色板源图、墙体预览及 UI/装备设计源文件；地图运行时 fallback 所需的 174 个 `editor_canvas` 导入全部保留。
+- APK 独立资源探针通过：12 个关键编译脚本、男性 `Hair.wil block 4` 六动作、世界头盔隐藏、纸娃娃 base/hair、12 个头盔 patch、586 帧技能动画、580 个怪物 CTEX 均存在；怪物 CTEX 不含 ETC2/S3TC/VRAM 压缩标记。
+- 当前真实集成基线验证：怪物专项 15/15、地图/怪物定向专项 4/4、完整关键回归 74/74 全部通过。14 份冻结头盔草稿/正式合同、视觉目录与纸娃娃头部 patch 构建前后 SHA-256 零变化。
+- 清理完成：删除所有旧 APK、旧视频/截图/日志/重建预览、未跟踪旧审计快照，以及主树和现存工作树的可再生 `.godot`/`outputs` 缓存；保留最终 v38 APK、`complete_local_mir_sources`、`complete_client_frame_catalog`、永久工作树、所有 dirty/冻结素材和 `dev_art_sources` 只读主资料。
 
 ## 2026-07-29 v37 运行时实证修复
 
@@ -66,12 +76,12 @@
 
 ## 最终 APK
 
-- 状态：最新完整集成 Android 实机测试包，headless import/export 均成功并完成独立 APK 元数据、架构、清单与签名验证。
-- 文件：`C:\Users\Administrator\Documents\HardCore\outputs\hardcore\HardCore-integrated-debug.apk`
-- 构建时间：`2026-07-29 21:52:16`
-- 大小：`1,648,222,396` 字节
-- SHA-256：`B1355959570EF5BA585371C3E6260B12EB9188078D39A3FF0F3891DEC6EB3A5B`
-- 包信息：`com.personal.mafaoffline`，versionCode `36`，versionName `1.17.0-full-integration`，应用名 `HardCore`，compile/target SDK `36`、minSdk `24`、`arm64-v8a`、横屏。
+- 状态：最新完整集成 Android 精简测试包，headless import/export 均成功并完成独立 APK 元数据、架构、清单、运行时资源与签名验证。
+- 文件：`C:\Users\Administrator\Documents\HardCore\outputs\hardcore\HardCore-slim-v38-debug.apk`
+- 构建时间：`2026-07-30`
+- 大小：`244,091,990` 字节
+- SHA-256：`562082FD18DC51ECB65F00F610EDF82295B9A92FDA98BDB0B1D73C5765FA4D43`
+- 包信息：`com.personal.mafaoffline`，versionCode `38`，versionName `1.17.2-slim`，应用名 `HardCore`，`arm64-v8a`、横屏。
 - 签名验证：APK Signature Scheme v2/v3 均通过，签名者 1；证书 SHA-256 `c62d0f8239b926f819038845c302143fd24dcfd75ed8d877ed846c430c6f3fcc`，与上一测试包签名者一致，可覆盖安装并保留兼容存档。
 - 本包包含当前集成分支全部正式运行时工作：33 技能及正式技能动画/图标、硬直与受击中断、完整装备属性和穿戴、纸娃娃/背包/地面头盔展示、世界人物隐藏头盔并使用经典主资料库男性 `Hair.wil block 4` 全动作头发、男性衣服/武器外观、三职业九个满技能测试人物、地图/碰撞/遮挡、怪物外观与 v4 脚下光圈、UI 与角色存档兼容。15 份受保护头盔草稿和正式合同构建前后 SHA-256 全部不变。
 
