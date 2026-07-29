@@ -16,7 +16,7 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `3618db9d`（本次快照提交只改本文档）。
+- 分支/运行时代码基线：`codex/integration` @ `d639aa85`（本次快照提交只改本文档）。
 - tracked 状态：黑铁头盔 151 的旧 `scale_100` 六动作生成图集共 6 个既有在制修改继续保护；本次最终化未暂存、覆盖或提交这些旧图。146/147/149/150/151/218/224/228/232/236/240 共 11 份人工草稿的工作树与 Git 字节哈希逐项一致，禁止回退。
 - 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
@@ -62,6 +62,7 @@
 
 | 集成提交 | 领域 | 结果 |
 |---|---|---|
+| `d639aa85`（装备专业提交 `8545045`） | equipment/integration | 头盔校准工具新增按“动作＋方向＋帧”独立保存的无损姿态参数：方向键每次 0.5px 只调整当前帧，右键菜单支持横向/纵向分别 ±5%、整体 ±5%、向左/向右各 5°、旋转归零和当前帧全部变换重置。动作栏继续完整覆盖 `idle/walk/attack/cast/hit/death`，并新增所有动作帧的直接按钮；death 明确显示 0 起始、1 后仰、2 倒地、3 躺地。可选 `poseTransforms` 向后兼容旧 `equipment.helmet.calibration_draft.v1`，保存只写参数，预览直接变换原始 RGBA，不生成或压缩图片。11 份人工草稿 SHA-256 逐项未变；装备树和集成树无损校准、映射编辑、头盔运行时、男性世界穿戴专项均 4/4 通过。 |
 | `3618db9d`（装备专业提交 `59a98606`） | equipment/integration | 纠正最终化后校准工具错误读取低分辨率运行时纸娃娃合同的问题。编辑器恢复为用户保存时的独立高清校准视图：11 个目标固定使用保存当时的纸娃娃参考矩形，世界八方向、纸娃娃、背包和地面继续直接读取冻结的原始 RGBA 切片；运行时素材替换不得反向改变编辑器中的大小或位置。240 天尊纸娃娃恢复为保存时的 `32×41` 参考矩形、`65%`、位置 `(263,136.5)`，不再使用最终化后 `18×29` 的运行时成品反推。11/11 人工草稿 SHA-256 逐项未变；集成树校准布局与映射编辑器专项 2/2 通过。 |
 | `c2d9048a`、`2c396d7f`（装备专业提交 `8ba485dd`、`02fedb7b`） | equipment/integration | 用户完成的 11 个视觉身份、12 个头盔 ID 已正式最终化并接入游戏主体。每个身份从冻结高清草稿直接生成 `idle/walk/attack/cast/hit/death` 六动作、八方向及全部动作帧；按人物动作逐帧头部枢轴平移，只在动作轮廓确实需要时使用有界二维二阶矩形变，保持每个方向原始长宽比例。世界、纸娃娃、背包、地面均从各自选定原素材直接做一次预乘 Alpha Lanczos 压缩，运行时固定 nearest/`1x`，禁止二次压缩。最终合同为 `equipment.helmet.finalization.v1`，确定性哈希 `344A59D31259810F577E000375C6EB1F7D0989E58A1369CA0C2F00CA434B442B`；Windows 对人工草稿及四份最终合同均禁用行尾转换，首次检出不会产生无意义回写。11/11 人工草稿 SHA-256 前后完全一致。Python 头盔专项 17/17、Godot 头盔专项 10/10、装备套件 17/17、全局冒烟 1/1 通过。 |
 | `2daf3513`（装备专业提交 `1bf2f4ba`） | equipment/integration | 240 天尊头盔进入“只校准、不烘焙”阶段：用户提供的 1774×1333 RGBA 十图原稿（SHA-256 `B82153C7888F258EA783A24BCB43A6302C3C52EF58BC66310A52C6EC2E6B39C7`）是标准 4×3 网格，前8格按 `N/NE/E/SE/S/SW/W/NW` 仅作 Alpha 有效边界裁切，保持 203–239×354–361px 原始长宽，透明世界图集为 956×722px；第三排第1格 208×354px 固定为 `dedicated_inventory`，第2格 214×356px 固定为 `dedicated_ground`，后两格为空且不参与方向映射。校准工具新增对称的“地面专用”第九项、预览与草稿保存合同，背包/地面默认各自选中专用源；全程不清底、不改用户镂空、不改色、不重采样、不提前压缩，当前活动目标切换为 `item_id=240` / `visualAssetId=heavenly_taoist`。旧 240 正式世界六动作、纸娃娃、背包、地面与在制天尊六动作生成图集均保持冻结；146/147/149/150/151/218/224/228/232/236 人工草稿及正式 override 未变。Python 无损/冻结守卫 14/14、Godot 校准专项 4/4 在装备树与集成树均通过。 |
@@ -183,7 +184,7 @@
 - blessing/luck：`equipment.blessing_luck.v2`、三结果、5% 负面、幸运 7、诅咒 10、命运之刃 R=0 修正、全部装备 luck/curse、消耗/存档/零耐久、DC/MC/SC 与治愈术专项通过。
 - damage ranges：`legacy_clamp_negative_span`、通用 `roll_primary_stat`、战士公式、攻击时序与法系伤害公式通过；反向区间不会被幸运/诅咒交换端点，恢复正跨度后效果自动恢复。
 - equipment helmets：12 itemId/11 视觉身份、66 物理 atlas、2784 逻辑帧、6 动作×8 方向、透明角、Hair 逐帧锚点/SHA 溯源与 StateItem 世界像素零复用通过；法神头盔 `item_id=236` 使用用户授权原图单次 Lanczos 烘焙，atlas 单帧保持 `192×160px`、世界头盔最大 `14×17px`、纸娃娃内容保持 `17×24px`，运行时保持 nearest/`1x`；背包与地面素材冻结未变，非 236 文件及合同数据零变化。
-- helmet calibration：无损校准工作流、旧映射编辑回归、240 当前 active target 自动加载、正式纸娃娃头发坐标、头盔正式尺寸基准/旧默认迁移、方向键纸娃娃独立微调和 UI 纸娃娃组件通过；240 世界透明图切割为 8/8 独立原分辨率 PNG，第三排背包/地面专用图分别直出并保存为独立 source variant，集成专项 4/4 通过。
+- helmet calibration：无损校准工作流、旧映射编辑回归、240 当前 active target 自动加载、正式纸娃娃头发坐标、头盔正式尺寸基准/旧默认迁移、方向键纸娃娃独立微调和 UI 纸娃娃组件通过；世界姿态现在按动作/方向/帧独立保存 0.5px 位移、横纵各 5% 缩放和左右各 5° 旋转，death 4 帧可直接逐帧选择；240 世界透明图切割为 8/8 独立原分辨率 PNG，第三排背包/地面专用图分别直出并保存为独立 source variant，集成专项 4/4 通过。
 - physics：玩家 18×9、普通怪物 16×8、Boss 28×14 的真实物理与软件探针通过；战斗/AI 半径未改。
 - occlusion：11 张已发布地图、52 个交叉、4 类装饰物和 3 个比奇回归点通过；碰撞区、脚底深度点、装饰物遮挡基线已分离。
 - maps：比奇真实源 E2E（180 个阻挡格）；11 张地图真实 `CharacterBody2D` 脚点可达可见边缘且外环阻挡。
@@ -202,7 +203,7 @@
 | `HardCore-worktrees/monsters` | `codex/monsters` @ `45781ded` | tracked clean；68 UID | 已集成为 `c88c6277` |
 | `HardCore-worktrees/ui-art` | `codex/ui-art` @ `a9ef38b0` | tracked clean；Godot UID/输出继续保护 | 纸娃娃 `avatarOnly.stagePosition` 头发坐标修复已集成；专项 1/1、集成复验通过 |
 | `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `be710c6e` | 27 项 tracked 技能视觉在制修改；66 UID 继续保护 | 33技能 runtime 与150条可执行语义合同已集成；当前 fire_wall / summon_skeleton 视觉返修未交付，禁止清理或覆盖 |
-| `HardCore-worktrees/equipment` | `codex/equipment` @ `1bf2f4ba` | 4 个既有 monster import 修改及 UID/生成项继续保护 | 240 天尊头八方向、背包专用与地面专用原始 RGBA 已无损载入并成为活动校准目标；工具已支持并保存 `dedicated_ground`。旧 240 正式素材、在制六动作生成图集及 146/147/149/150/151/218/224/228/232/236 人工草稿与正式/在制素材保持冻结，正式游戏素材未烘焙 |
+| `HardCore-worktrees/equipment` | `codex/equipment` @ `8545045` | 4 个既有 monster import 修改、1 个既有试点截图脚本修改及 UID/生成项继续保护 | 逐动作/方向/帧的位移、单向缩放、左右旋转和 death 全帧选择已作为 `d639aa85` 集成；240 天尊头八方向、背包专用与地面专用原始 RGBA 继续作为活动校准目标。11 份人工草稿、旧正式素材和在制六动作生成图集保持冻结，正式游戏素材未重新烘焙 |
 
 ### maps 保护红线
 
