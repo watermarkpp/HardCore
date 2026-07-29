@@ -26,6 +26,7 @@ const SUPPORTED_PROFESSIONS := ["战士", "法师", "道士"]
 
 var actor: PlayerCharacter
 var sprite: Sprite2D
+var worn_hair_sprite: Sprite2D
 var worn_weapon_sprite: Sprite2D
 var worn_helmet_back_sprite: Sprite2D
 var worn_helmet_sprite: Sprite2D
@@ -52,8 +53,10 @@ var _action_name := "attack"
 var _action_audio_played := false
 var _base_action_textures: Dictionary = {}
 var _dress_action_textures: Dictionary = {}
+var _hair_action_textures: Dictionary = {}
 var _weapon_action_textures: Dictionary = {}
 var _helmet_action_textures: Dictionary = {}
+var _appearance_texture_cache: Dictionary = {}
 var _v2_layer_texture_cache: Dictionary = {}
 var _body_action_frame_counts: Dictionary = {}
 var _weapon_action_frame_counts: Dictionary = {}
@@ -93,6 +96,7 @@ func _ready() -> void:
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	sprite.z_index = 0
 	add_child(sprite)
+	worn_hair_sprite = _helmet_sprite_layer("ClientHairLayer")
 	worn_weapon_sprite = Sprite2D.new()
 	worn_weapon_sprite.name = "ClientWeaponLayer"
 	worn_weapon_sprite.region_enabled = true
@@ -173,6 +177,17 @@ func _process(delta: float) -> void:
 		_body_frame_size.x,
 		_body_frame_size.y
 	)
+	var hair_texture: Texture2D = _hair_action_textures.get(
+		action_key, null
+	)
+	worn_hair_sprite.texture = hair_texture
+	worn_hair_sprite.visible = (
+		PlayerState.gender == "男" and hair_texture != null
+	)
+	worn_hair_sprite.position = sprite.position
+	worn_hair_sprite.region_rect = sprite.region_rect
+	worn_hair_sprite.scale = Vector2.ONE
+	worn_hair_sprite.flip_h = false
 	var weapon_texture: Texture2D = _weapon_action_textures.get(action_key, null)
 	worn_weapon_sprite.texture = weapon_texture
 	worn_weapon_sprite.visible = weapon_texture != null
@@ -198,7 +213,10 @@ func _process(delta: float) -> void:
 		else _helmet_action_textures.get(action_key, null)
 	)
 	worn_helmet_sprite.texture = helmet_texture
-	worn_helmet_sprite.visible = helmet_texture != null
+	worn_helmet_sprite.visible = (
+		EquipmentRules.world_helmet_is_visible()
+		and helmet_texture != null
+	)
 	var helmet_delta := HelmetVisualV2.final_position_delta(
 		_helmet_item_id,
 		_helmet_player_visual_id,
@@ -232,7 +250,11 @@ func _process(delta: float) -> void:
 		worn_helmet_sprite,
 		false
 	)
-	if mask_texture != null:
+	if (
+		EquipmentRules.world_helmet_head_mask_enabled()
+		and worn_helmet_sprite.visible
+		and mask_texture != null
+	):
 		_apply_current_head_occlusion_mask(
 			mask_texture, helmet_source_row, helmet_frame, helmet_delta
 		)
@@ -470,8 +492,20 @@ func _load_appearance_actions(source: Variant) -> Dictionary:
 	for action_name: String in actions.keys():
 		var action: Variant = actions[action_name]
 		var path := str(action.get("path", "")) if action is Dictionary else str(action)
-		if not path.is_empty() and ResourceLoader.exists(path):
-			result[action_name] = load(path) as Texture2D
+		if path.is_empty():
+			continue
+		if not _appearance_texture_cache.has(path):
+			if ResourceLoader.exists(path):
+				_appearance_texture_cache[path] = load(path) as Texture2D
+			elif FileAccess.file_exists(path) and path.get_extension().to_lower() == "png":
+				var raw_image := Image.load_from_file(path)
+				if not raw_image.is_empty():
+					_appearance_texture_cache[path] = ImageTexture.create_from_image(
+						raw_image
+					)
+		var texture: Texture2D = _appearance_texture_cache.get(path, null)
+		if texture != null:
+			result[action_name] = texture
 	var fallbacks: Variant = source.get("actionFallbacks", {})
 	if fallbacks is Dictionary:
 		for action_name: String in fallbacks:
@@ -652,6 +686,9 @@ func _refresh_equipment_visuals() -> void:
 	var body_layout := _appearance_layout(body_appearance)
 	_body_frame_size = body_layout.get("cell", ArtSpec.WARRIOR_FRAME)
 	_body_source_anchor = body_layout.get("foot_anchor", ArtSpec.WARRIOR_SOURCE_FOOT_ANCHOR)
+	_hair_action_textures = _load_appearance_actions(
+		EquipmentRules.world_hair_appearance()
+	)
 	# Never draw the old geometric weapon placeholder.  Together with the body
 	# attack frame it formed the unwanted V-shaped default attack artifact.
 	weapon_accent.visible = false
@@ -666,9 +703,17 @@ func _refresh_equipment_visuals() -> void:
 	_helmet_action_frame_counts = _appearance_frame_counts(helmet_appearance)
 	_v2_layer_texture_cache.clear()
 	worn_helmet_sprite.texture = _helmet_action_textures.get("idle", null)
-	worn_helmet_sprite.visible = _record_is_equipped(helmet) and worn_helmet_sprite.texture != null
+	worn_helmet_sprite.visible = (
+		EquipmentRules.world_helmet_is_visible()
+		and _record_is_equipped(helmet)
+		and worn_helmet_sprite.texture != null
+	)
 	worn_helmet_back_sprite.visible = false
 	head_occlusion_mask_sprite.visible = false
+	worn_hair_sprite.texture = _hair_action_textures.get("idle", null)
+	worn_hair_sprite.visible = (
+		PlayerState.gender == "男" and worn_hair_sprite.texture != null
+	)
 	if weapon_accent.visible:
 		weapon_accent.default_color = _equipment_color(weapon)
 	if armor_accent.visible:
@@ -690,6 +735,7 @@ func _update_equipment_layers() -> void:
 	weapon_accent.visible = false
 	if (
 		sprite != null
+		and worn_hair_sprite != null
 		and worn_weapon_sprite != null
 		and worn_helmet_back_sprite != null
 		and worn_helmet_sprite != null
@@ -702,6 +748,7 @@ func _update_equipment_layers() -> void:
 		var layers := {
 			&"helmet_back": worn_helmet_back_sprite,
 			EquipmentRules.ACTOR_VISUAL_BODY_LAYER: sprite,
+			EquipmentRules.ACTOR_VISUAL_HAIR_LAYER: worn_hair_sprite,
 			EquipmentRules.ACTOR_VISUAL_WEAPON_LAYER: worn_weapon_sprite,
 			EquipmentRules.ACTOR_VISUAL_HELMET_LAYER: worn_helmet_sprite,
 			&"head_occlusion_mask": head_occlusion_mask_sprite,
@@ -712,6 +759,7 @@ func _update_equipment_layers() -> void:
 				EquipmentRules.ACTOR_VISUAL_WEAPON_LAYER,
 				&"helmet_back",
 				EquipmentRules.ACTOR_VISUAL_BODY_LAYER,
+				EquipmentRules.ACTOR_VISUAL_HAIR_LAYER,
 				EquipmentRules.ACTOR_VISUAL_HELMET_LAYER,
 				&"head_occlusion_mask",
 			]
@@ -719,6 +767,7 @@ func _update_equipment_layers() -> void:
 			layer_order = [
 				&"helmet_back",
 				EquipmentRules.ACTOR_VISUAL_BODY_LAYER,
+				EquipmentRules.ACTOR_VISUAL_HAIR_LAYER,
 				EquipmentRules.ACTOR_VISUAL_WEAPON_LAYER,
 				EquipmentRules.ACTOR_VISUAL_HELMET_LAYER,
 				&"head_occlusion_mask",

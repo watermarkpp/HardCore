@@ -21,24 +21,32 @@ func _ready() -> void:
 		== EquipmentRules.ACTOR_VISUAL_SORT_CONTRACT_ID
 	)
 	var body := visual.get_node("BodySprite") as Sprite2D
+	var hair := visual.get_node("ClientHairLayer") as Sprite2D
 	var weapon := visual.get_node("ClientWeaponLayer") as Sprite2D
 	var helmet := visual.get_node("ClientHelmetLayer") as Sprite2D
 	var skill_effect := visual.get_node("ClientSkillEffect") as Sprite2D
-	assert(body != null and weapon != null and helmet != null)
+	assert(body != null and hair != null and weapon != null and helmet != null)
 	assert(body.get_parent() == visual)
+	assert(hair.get_parent() == visual)
 	assert(weapon.get_parent() == visual)
 	assert(helmet.get_parent() == visual)
-	assert(body.z_index == 0 and weapon.z_index == 0 and helmet.z_index == 0)
+	assert(
+		body.z_index == 0
+		and hair.z_index == 0
+		and weapon.z_index == 0
+		and helmet.z_index == 0
+	)
 	assert(skill_effect != null and skill_effect.z_index == 0, "skill effect escaped actor wall-sort plane")
 	for direction_row: int in range(8):
 		visual.set("current_direction", direction_row)
 		visual.set("_equipment_layer_direction", -1)
 		visual.call("_update_equipment_layers")
+		assert(body.get_index() < hair.get_index())
 		assert(body.get_index() < helmet.get_index())
 		if EquipmentRules.weapon_draws_behind_actor(direction_row):
 			assert(weapon.get_index() < body.get_index(), "back weapon order wrong for row %d" % direction_row)
 		else:
-			assert(body.get_index() < weapon.get_index(), "front weapon order wrong for row %d" % direction_row)
+			assert(hair.get_index() < weapon.get_index(), "front weapon order wrong for row %d" % direction_row)
 			assert(weapon.get_index() < helmet.get_index(), "helmet must remain frontmost for row %d" % direction_row)
 	for child: Node in visual.get_children():
 		if child is CanvasItem:

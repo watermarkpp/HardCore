@@ -9,7 +9,7 @@ func _ready() -> void:
 	)
 	assert(parsed is Dictionary, "equipment actor sort contract must be valid JSON")
 	var contract: Dictionary = parsed
-	assert(int(contract.get("schemaVersion", 0)) == 2)
+	assert(int(contract.get("schemaVersion", 0)) == 3)
 	assert(str(contract.get("contractId", "")) == EquipmentRules.ACTOR_VISUAL_SORT_CONTRACT_ID)
 	assert(
 		contract.get("worldAppearanceFields", [])
@@ -32,12 +32,14 @@ func _ready() -> void:
 		assert(layer_value is Dictionary)
 		var layer: Dictionary = layer_value
 		layers[str(layer.get("id", ""))] = layer
-	assert(layers.size() == 3)
+	assert(layers.size() == 4)
 	assert(int(layers.body_and_dress.zIndex) == 0)
+	assert(int(layers.hair.zIndex) == 0)
 	assert(int(layers.weapon.zIndex) == 0)
 	assert(int(layers.helmet.zIndex) == 0)
 	assert(str(layers.weapon.node) == "ClientWeaponLayer")
 	assert(str(layers.body_and_dress.node) == "BodySprite")
+	assert(str(layers.hair.node) == "ClientHairLayer")
 	assert(str(layers.helmet.node) == "ClientHelmetLayer")
 
 	var covered_rows := PackedInt32Array()
@@ -59,13 +61,13 @@ func _ready() -> void:
 	assert(covered_rows == PackedInt32Array([0, 1, 2, 3, 4, 5, 6, 7]))
 
 	var invariants: Array = contract.get("invariants", [])
-	assert(invariants.size() == 5)
+	assert(invariants.size() == 6)
 	assert(invariants.any(func(rule: Variant) -> bool:
 		return "occludes body, dress, weapon and helmet together" in str(rule)
 	))
 	print(
 		"EQUIPMENT_ACTOR_SORT_CONTRACT_PASS: one world z plane, "
-		+ "three appearance layers ordered by sibling tree order"
+		+ "four appearance layers ordered by sibling tree order"
 	)
 	get_tree().quit(0)
 
