@@ -68,6 +68,10 @@ func _assert_hud_uses_caster_icon(hud: GameHUD, skill_id: String) -> void:
 	var expected_id := Catalog.source_id_for(skill_name)
 	var expected_path := Catalog.source_path_for(skill_name)
 	PlayerState.quick_slots = [skill_name, "", "", ""]
+	hud.set_skill_button_assignments({
+		"center": [skill_name, "", "", ""],
+		"attack_ring": [skill_name, "", ""],
+	})
 	hud.update_quick_slots()
 	for icon: TextureRect in [hud.quick_slot_icons[0], hud.attack_ring_skill_icons[0]]:
 		assert(icon.texture != null and icon.visible, "%s在HUD快捷栏或攻击环回退为空/物品图标" % skill_id)
@@ -77,6 +81,10 @@ func _assert_hud_uses_caster_icon(hud: GameHUD, skill_id: String) -> void:
 
 func _assert_hud_keeps_warrior_icon(hud: GameHUD, skill_name: String) -> void:
 	PlayerState.quick_slots = [skill_name, "", "", ""]
+	hud.set_skill_button_assignments({
+		"center": [skill_name, "", "", ""],
+		"attack_ring": [skill_name, "", ""],
+	})
 	hud.update_quick_slots()
 	for icon: TextureRect in [hud.quick_slot_icons[0], hud.attack_ring_skill_icons[0]]:
 		assert(icon.texture == Catalog.SKILL_TEXTURES[skill_name], "%s HUD战士图标被caster接线覆盖" % skill_name)

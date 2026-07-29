@@ -18,6 +18,12 @@ const ORIGINAL_CLIENT_STAGE_MANIFEST := "res://assets/data/equipment_original_cl
 const PRESENTATION_MODES_MANIFEST := "res://assets/data/equipment_paper_doll_presentation_modes.json"
 const CLASSIC_HEAD_PATCHES_MANIFEST := "res://assets/data/equipment_classic_avatar_head_patches.json"
 const CLASSIC_HEAD_PATCHES_CONTRACT_ID := "equipment.paper_doll.classic_flattened_head_patch.v1"
+const CLASSIC_BASE_FALLBACK_TEXTURE := preload(
+	"res://assets/art/characters/warrior/paper_doll/classic/base_male_00376_anatomy.png"
+)
+const CLASSIC_HAIR_FALLBACK_TEXTURE := preload(
+	"res://assets/art/characters/warrior/paper_doll/classic/hair_male_00442.png"
+)
 const PROFESSION_IDS := {
 	"战士": "warrior",
 	"法师": "wizard",
@@ -67,6 +73,8 @@ var _equipment_screen_anchor := ORIGINAL_CLIENT_EQUIPMENT_SCREEN_ANCHOR
 var _viewport_origin := Vector2.ZERO
 var _render_revision := 0
 var _presentation_config: Dictionary = {}
+var _used_classic_preload_fallback := false
+var _used_world_avatar_fallback := false
 
 static var _json_cache: Dictionary = {}
 static var _opaque_rect_cache: Dictionary = {}
@@ -331,6 +339,8 @@ func _load_paper_mappings() -> void:
 	_equipment_screen_anchor = ORIGINAL_CLIENT_EQUIPMENT_SCREEN_ANCHOR
 	_viewport_origin = Vector2.ZERO
 	_presentation_config.clear()
+	_used_classic_preload_fallback = false
+	_used_world_avatar_fallback = false
 	preview_scale = DEFAULT_PREVIEW_SCALE
 	var source_document := _resolve_source_document()
 	if source_document.is_empty():
@@ -357,6 +367,14 @@ func _load_paper_mappings() -> void:
 		_load_world_avatar(parsed, source_document)
 		return
 	_load_avatar_only_stage(parsed)
+	if _base_texture == null:
+		# A player-facing preview must never silently become an empty Control.
+		# The formal world avatar is the last-resort visible fallback when an
+		# exported package cannot resolve the classic presentation document.
+		_load_world_avatar(parsed, source_document)
+		_used_world_avatar_fallback = _base_texture != null
+		if _used_world_avatar_fallback:
+			return
 	var mappings: Variant = parsed.get("runtimeMappings", {})
 	if not mappings is Dictionary or mappings.is_empty():
 		mappings = _catalog_paper_mappings(source_document)
@@ -495,7 +513,7 @@ func _load_avatar_only_stage(parsed: Dictionary) -> void:
 	# record.  It is intentionally read before the catalog fallback, but only
 	# accepts the dedicated avatar-only contract; legacyFullPanel is forbidden.
 	var avatar_value: Variant = _presentation_config.get("avatarOnly", {})
-	if not avatar_value is Dictionary:
+	if not avatar_value is Dictionary or avatar_value.is_empty():
 		avatar_value = parsed.get("avatarOnly", {})
 	if not avatar_value is Dictionary or avatar_value.is_empty():
 		return
@@ -505,6 +523,9 @@ func _load_avatar_only_stage(parsed: Dictionary) -> void:
 	var avatar_base: Variant = avatar.get("base", {})
 	if avatar_base is Dictionary:
 		var avatar_base_texture := _texture_from_record(avatar_base)
+		if avatar_base_texture == null:
+			avatar_base_texture = CLASSIC_BASE_FALLBACK_TEXTURE
+			_used_classic_preload_fallback = true
 		if avatar_base_texture != null:
 			_base_texture = avatar_base_texture
 			_base_source_texture = avatar_base_texture
@@ -524,6 +545,9 @@ func _load_avatar_only_stage(parsed: Dictionary) -> void:
 	var avatar_hair: Variant = avatar.get("hair", {})
 	if avatar_hair is Dictionary:
 		var avatar_hair_texture := _texture_from_record(avatar_hair)
+		if avatar_hair_texture == null:
+			avatar_hair_texture = CLASSIC_HAIR_FALLBACK_TEXTURE
+			_used_classic_preload_fallback = true
 		if avatar_hair_texture != null:
 			_hair_layer = avatar_hair.duplicate(true)
 			_hair_layer["texture"] = avatar_hair_texture
@@ -1092,6 +1116,18 @@ func composition_opaque_bounds() -> Rect2:
 
 func has_renderable_assets() -> bool:
 	return _base_texture != null
+
+
+func has_renderable_hair() -> bool:
+	return _hair_layer.get("texture") is Texture2D
+
+
+func used_classic_preload_fallback() -> bool:
+	return _used_classic_preload_fallback
+
+
+func used_world_avatar_fallback() -> bool:
+	return _used_world_avatar_fallback
 
 
 func uses_original_client_stage() -> bool:

@@ -16,17 +16,27 @@ func _load_manifest() -> Dictionary:
 	return parsed
 
 
+func _load_image(path: String, label: String) -> Image:
+	assert(FileAccess.file_exists(path), "%s resource is missing: %s" % [label, path])
+	if ResourceLoader.exists(path):
+		var texture := load(path) as Texture2D
+		assert(texture != null, "%s texture failed to load" % label)
+		var imported_image := texture.get_image()
+		assert(imported_image != null and not imported_image.is_empty(), "%s image is empty" % label)
+		return imported_image
+	var image := Image.load_from_file(ProjectSettings.globalize_path(path))
+	assert(image != null and not image.is_empty(), "%s source PNG failed to decode" % label)
+	return image
+
+
 func _assert_image_record(record: Dictionary, label: String) -> void:
 	var path := str(record.get("path", ""))
 	assert(not path.is_empty(), "%s missing resource path" % label)
-	assert(FileAccess.file_exists(path), "%s resource is missing: %s" % [label, path])
-	assert(ResourceLoader.exists(path), "%s is not an imported Godot resource" % label)
-	var texture := load(path) as Texture2D
-	assert(texture != null, "%s texture failed to load" % label)
+	var image := _load_image(path, label)
 	var size: Array = record.get("size", [])
 	assert(size.size() == 2, "%s size must contain two values" % label)
-	assert(texture.get_width() == int(size[0]), "%s width changed" % label)
-	assert(texture.get_height() == int(size[1]), "%s height changed" % label)
+	assert(image.get_width() == int(size[0]), "%s width changed" % label)
+	assert(image.get_height() == int(size[1]), "%s height changed" % label)
 
 
 func _assert_int_array(actual: Variant, expected: Array, label: String) -> void:

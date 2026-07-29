@@ -57,6 +57,11 @@ func _run() -> void:
 
 	assert(hud.quick_buttons.size() == 4)
 	PlayerState.quick_slots = ["攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"]
+	hud.set_skill_button_assignments({
+		"contract_id": "gameplay.skill.button_assignments.v1",
+		"center": ["攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"],
+		"attack_ring": ["烈火剑法", "半月弯刀", "刺杀剑术"],
+	})
 	hud.update_quick_slots()
 	assert(hud.quick_slot_icons.size() == 4 and hud.attack_ring_skill_icons.size() == 3)
 	for index in range(4):
@@ -82,12 +87,22 @@ func _run() -> void:
 		var ring_skill := root.get_node("AttackRingSkill%d" % (index + 1)) as Button
 		assert(ring_skill != null)
 		var ring_icon := ring_skill.get_node("SkillIcon") as TextureRect
-		assert(ring_icon != null and ring_icon.texture == hud.quick_slot_icons[index].texture)
+		var expected_ring_skill: String = ["烈火剑法", "半月弯刀", "刺杀剑术"][index]
+		assert(ring_icon != null and ring_icon.get_meta("skill_name", "") == expected_ring_skill)
+		assert(ring_icon.texture != hud.quick_slot_icons[index].texture, "攻击环错误镜像中央技能槽 %d" % index)
 		assert(ring_icon.position == Vector2(8, 8) and ring_icon.size == Vector2(56, 56), "环绕技能图必须完整覆盖槽内开口")
 		var art_scale := right_controls_art.size / Vector2(347, 540)
 		var expected_center: Vector2 = right_controls_art.position + ring_source_centers[index] * art_scale
 		var actual_center: Vector2 = ring_skill.position + ring_skill.size * 0.5
 		assert(actual_center.distance_to(expected_center) < 1.5, "环绕技能图没有对准V2美术框圆心")
+	var grouped_presses: Array = []
+	hud.skill_slot_pressed.connect(
+		func(slot_group: String, slot_index: int) -> void:
+			grouped_presses.append([slot_group, slot_index])
+	)
+	(root.get_node("SkillButton2") as Button).pressed.emit()
+	(root.get_node("AttackRingSkill3") as Button).pressed.emit()
+	assert(grouped_presses == [["center", 1], ["attack_ring", 2]], "HUD 技能点击没有保留 slot_group")
 	var attack := root.get_node("AttackButton") as Button
 	assert(attack.size == Vector2(120, 120), "攻击按钮视觉直径应保持缩小后的120px")
 	var joystick := root.get_node("TouchJoystick") as TouchJoystick
