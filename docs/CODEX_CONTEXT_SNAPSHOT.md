@@ -16,10 +16,11 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `28e64994`（本次快照提交只改本文档）。
-- tracked 状态：黑铁头盔 151 的旧 `scale_100` 六动作生成图集共 6 个既有在制修改继续保护；本次最终化未暂存、覆盖或提交这些旧图。146/147/149/150/151/218/224/228/232/236/240 共 11 份人工草稿的工作树与 Git 字节哈希逐项一致，禁止回退。
+- 分支/运行时代码基线：`codex/integration` @ `b4c11258`（本次快照提交只改本文档）。
+- tracked 状态：黑铁头盔 151 的旧 `scale_100` 六动作生成图集共 6 个既有在制修改继续保护；本次最终化未暂存、覆盖或提交这些旧图。146/147/149/150/151/218/224/228/232/236 共 10 份人工草稿的工作树与 Git 字节哈希逐项一致，禁止回退；240 人工草稿是用户当前在制数据，SHA-256 `9A414495AFDBA43DE683498376CC2E4BA6F4B8137848D33D9BE9DB8A23EB0C03`，保持 dirty 并禁止覆盖。
 - 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
+- `b4c11258`（装备提交 `7392602`）修复头盔校准跨行为串改：重置当前帧恢复该动作/方向/帧的最近保存值；键盘 `+/-` 只缩放当前姿态；非 `idle frame 0` 禁止修改公共八方向源映射；非 idle 撤销不会清除 idle 的未保存公共映射。装备工作树和真实集成基线专项均为 2/2 通过，集成测试前后全部头盔草稿 SHA-256 零变化。
 - 来源优先级总表为 `assets/data/source_priority_policy.json`；每个 lane 必须先查 `primary`，只有精确目标确实 `missing` 才允许逐级 fallback。主源不可用、不兼容或效果不符合预期时必须修复解析/映射，禁止换用低级来源。
 - 完整资料扫描记录位于 `outputs/resource_catalog/complete_local_mir_sources/catalog.sqlite`（SHA-256 `3a133f39e9a0bf0b065b29778ff4f40d33aaa009ba1bed0a3213ae3a33233c79`）与 `manifest.json`：58 个 distribution、38,887 文件、14,595,954,010 字节、0 未哈希、SQLite integrity `ok`。
 - 越级使用审计见 `docs/audit/SOURCE_PRECEDENCE_VIOLATION_AUDIT_2026-07-24.md`。未合并装备提交 `7c37b771` 因跳过主库采用未配置 mylgd 数据已拒绝；不得 cherry-pick。
