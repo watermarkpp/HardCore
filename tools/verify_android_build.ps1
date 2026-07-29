@@ -34,7 +34,7 @@ if ($LASTEXITCODE -ne 0) { throw "APK签名校验失败" }
 
 $Badging = (& $Aapt dump badging $ApkPath) -join "`n"
 $Manifest = (& $Aapt dump xmltree $ApkPath AndroidManifest.xml) -join "`n"
-foreach ($Expected in @("name='com.personal.mafaoffline'", "versionCode='35'", "versionName='1.16.0-bich-map-runtime'", "sdkVersion:'24'", "targetSdkVersion:'36'", "application-label:'HardCore'", "native-code: 'arm64-v8a'")) {
+foreach ($Expected in @("name='com.personal.mafaoffline'", "versionCode='36'", "versionName='1.17.0-full-integration'", "sdkVersion:'24'", "targetSdkVersion:'36'", "application-label:'HardCore'", "native-code: 'arm64-v8a'")) {
     if ($Badging -notlike "*$Expected*") { throw "APK元数据缺失：$Expected" }
 }
 if ($Manifest -notlike "*android:screenOrientation*0xb*") { throw "APK未导出为横屏用户旋转模式" }

@@ -73,10 +73,11 @@ func _run() -> void:
 		"slaying_auto": true,
 		"thrusting": true,
 		"half_moon": false,
-		"fire_auto_enabled": true,
+		"fire_armed": true,
+		"fire_expires_remaining_ms": 10_000,
 	})
-	assert("刺杀:开" in game.hud.warrior_state_label.text and "烈火:开" in game.hud.warrior_state_label.text, "HUD没有显示战士与烈火开关状态")
-	assert("[自动]" in game.hud.quick_buttons[0].text and "[开]" in game.hud.quick_buttons[1].text and "[开]" in game.hud.quick_buttons[3].text, "快捷栏没有显示战士开关状态标记")
+	assert("刺杀:开" in game.hud.warrior_state_label.text and "烈火:充能" in game.hud.warrior_state_label.text, "HUD没有显示战士开关与烈火充能状态")
+	assert("[自动]" in game.hud.quick_buttons[0].text and "[开]" in game.hud.quick_buttons[1].text and "[充能]" in game.hud.quick_buttons[3].text, "快捷栏没有显示战士开关与烈火充能状态标记")
 
 	print("WARRIOR_CLIENT_ART_PASS：四套Magic.wil八方向效果、现存武器WAV与HUD状态提示已接入，缺失技能WAV已显式记录")
 	get_tree().quit(0)
