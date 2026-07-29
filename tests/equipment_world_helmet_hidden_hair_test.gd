@@ -43,9 +43,9 @@ func _run() -> void:
 	var hair_appearance := EquipmentRules.world_hair_appearance()
 	assert(str(hair_appearance.get("sex", "")) == "male")
 	assert(int(hair_appearance.get("genderOffset", -1)) == 0)
-	assert(int(hair_appearance.get("appearance", -1)) == 1)
+	assert(int(hair_appearance.get("appearance", -1)) == 2)
 	assert(int(hair_appearance.get("appearanceStride", -1)) == 600)
-	assert(int(hair_appearance.get("sourceBlock", -1)) == 2)
+	assert(int(hair_appearance.get("sourceBlock", -1)) == 4)
 	assert(
 		str(hair_appearance.get("source", {}).get("tier", ""))
 		== "primary"
@@ -58,6 +58,22 @@ func _run() -> void:
 		str(hair_appearance.get("source", {}).get(
 			"distribution", ""
 		)) == "client.classic_raw_complete"
+	)
+	var paired_body: Dictionary = hair_appearance.get(
+		"pairedBodySource", {}
+	)
+	assert(
+		str(paired_body.get("distribution", ""))
+		== str(hair_appearance.get("source", {}).get(
+			"distribution", ""
+		))
+	)
+	assert(str(paired_body.get("library", "")) == "Hum.wil")
+	assert(int(paired_body.get("blockFrames", -1)) == 600)
+	assert(bool(paired_body.get("sameDistributionAndActionTable", false)))
+	assert(
+		paired_body.get("actionTable", {}).keys().size()
+		== ACTIONS.size()
 	)
 	assert(
 		not bool(
@@ -119,7 +135,7 @@ func _run() -> void:
 			assert(
 				str(hair_appearance.get("actions", {}).get(
 					action, {}
-				).get("path", "")).ends_with("hair_001_%s.png" % action)
+				).get("path", "")).ends_with("hair_002_%s.png" % action)
 			)
 			for direction_index: int in DIRECTION_VECTORS.size():
 				for frame_index: int in frame_count:
