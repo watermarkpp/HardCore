@@ -14,46 +14,46 @@ from PIL import Image  # noqa: E402
 
 
 DIRECTIONS = ("N", "NE", "E", "SE", "S", "SW", "W", "NW")
-WORLD_ROW_BANDS = ((0, 450), (450, 900))
-INVENTORY_REGION = (0, 900, 444, 1343)
+WORLD_ROW_BANDS = ((0, 520), (520, 1050))
+INVENTORY_REGION = (0, 1050, 362, 1640)
 FROZEN_RUNTIME_SHA256 = {
     "assets/art/items/client/world_wear/helmet/male/"
-    "mystery_helmet_idle.png": (
-        "b8d9658de50325291fded0e1c31f17a59d5fa3b23915332e0822b2f8aef0c741"
+    "prayer_helmet_idle.png": (
+        "18aab75a74b57b6cf87500f13f07548a3a3bec6e05a337f1a0c72eb0b09aafa4"
     ),
     "assets/art/items/client/world_wear/helmet/male/"
-    "mystery_helmet_walk.png": (
-        "a7988e47368e6f3945c9730a145c26585be72e466491ab72f1fb0e255d27fe94"
+    "prayer_helmet_walk.png": (
+        "1567249f8de1066e683ef007d3148a014021b7cf35687edd0ccab27d4ff1891b"
     ),
     "assets/art/items/client/world_wear/helmet/male/"
-    "mystery_helmet_attack.png": (
-        "942cde53d75cac1234d0797d8c57df7608b7fa65f2b9d21b06078a727d9b8f3e"
+    "prayer_helmet_attack.png": (
+        "e7390493dc9b6830a9d876d7d05fdac362e362fab41af0e3e01b8f0cbbba4421"
     ),
     "assets/art/items/client/world_wear/helmet/male/"
-    "mystery_helmet_cast.png": (
-        "92f9ea8f9cd3c4095320cbc6b9e88ef2a54cee5152178d04cffbe5947f2f37ad"
+    "prayer_helmet_cast.png": (
+        "bb44e65f62f699b58b8a3621582d137138f4b3cde970fefe9edbc6df7be3f741"
     ),
     "assets/art/items/client/world_wear/helmet/male/"
-    "mystery_helmet_hit.png": (
-        "0e6a714ea1fa51dcd82aaaf9ae1c85626c1fb511443fb3bfdbe1edc1c3aa7589"
+    "prayer_helmet_hit.png": (
+        "985eaf3f1308646deac11d2a06ea638f37739b97ecf79f3aedfacda857dc4b10"
     ),
     "assets/art/items/client/world_wear/helmet/male/"
-    "mystery_helmet_death.png": (
-        "2228a5e8f21e8a650ecb431e125334d4646fcb9f339d8e630e70002f82d24ce4"
+    "prayer_helmet_death.png": (
+        "4f8d34ddadb47b60b7c176e32e208bbb9267b9eca49c7f0419f597ffa7de9af6"
     ),
     "assets/art/items/client/paper_doll/classic_flattened_head/"
-    "item_00218_head.png": (
-        "95a76a98bacb9578d6921e64bb863ee6b13a66b4837e6918fae039a1cfa491f4"
+    "item_00224_head.png": (
+        "7935787422e178a99cabf5c7c61016514542eec511ff85bc3e6221638b70624c"
     ),
     "assets/art/items/client/paper_doll/classic_flattened_head/"
-    "item_00218_erase_mask.png": (
-        "9d3d608b0ad92c37feb2527ab1974829a901d6b943998e9559ed05621a112b3c"
+    "item_00224_erase_mask.png": (
+        "5cdca959c1c3c41dcc4b8b090c97ad19409219bed8a9132a11d32e84a6dc0bfb"
     ),
-    "assets/art/items/client/inventory/111.png": (
-        "8deb42b545d76cf9294c90c220bcd5e699c6412d5ecd3502cb9b3580b987baa5"
+    "assets/art/items/client/inventory/110.png": (
+        "54f2bbd0537d7b3c590953ca65f666fc7a7987f9c258058e9fa858dad80e485a"
     ),
-    "assets/art/items/client/ground/111.png": (
-        "ec769c9facec28c468b1ced267fecb03ad877fa44e66a020bf5b80c70f850efc"
+    "assets/art/items/client/ground/110.png": (
+        "94da20509c2e1ef8fb57d00bd47d18efe5b016398e1d448aa3664bb27ebd0531"
     ),
 }
 
@@ -83,7 +83,7 @@ def main() -> None:
             sys.executable,
             str(
                 ROOT
-                / "tools/prepare_mystery_helmet_218_calibration_source.py"
+                / "tools/prepare_prayer_helmet_224_calibration_source.py"
             ),
             "--check",
         ],
@@ -93,22 +93,22 @@ def main() -> None:
         text=True,
     )
     report = json.loads(result.stdout)
-    assert report["itemId"] == 218
-    assert report["visualAssetId"] == "mystery"
+    assert report["itemId"] == 224
+    assert report["visualAssetId"] == "prayer"
     assert report["directionOrder"] == list(DIRECTIONS)
     assert report["sourceAlphaPolicy"] == (
         "user_authored_alpha_preserved_no_matte_removal"
     )
-    assert report["transparentWorldSheet"]["size"] == [1248, 762]
-    assert report["presentation"]["inventory"]["size"] == [281, 376]
+    assert report["transparentWorldSheet"]["size"] == [1148, 822]
+    assert report["presentation"]["inventory"]["size"] == [274, 411]
     assert report["presentation"]["inventory"]["sourceDirection"] == "S"
 
     source = Image.open(
         ROOT
         / "assets/art/items/client/world_wear/helmet/male/source/"
-        "mystery_218_helmet_9view_user_20260729.png"
+        "prayer_224_helmet_9view_user_20260729.png"
     ).convert("RGBA")
-    assert source.size == (1774, 1343)
+    assert source.size == (1448, 1640)
     assert source.getchannel("A").getextrema() == (0, 255)
     for slot, direction in enumerate(DIRECTIONS):
         expected = alpha_crop(world_cell(source, slot))
@@ -129,9 +129,33 @@ def main() -> None:
         ROOT / report["directions"]["S"]["path"]
     ).convert("RGBA").tobytes()
 
+    target = json.loads(
+        (
+            ROOT / "assets/data/helmet_calibration_active_target.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert target["itemId"] == 224
+    assert target["visualAssetId"] == "prayer"
+    assert target["displayName"] == "祈祷头盔"
+    assert target["sourceDirectionOrder"] == list(DIRECTIONS)
+    assert target["initializeSessionDirectionMapping"] is True
+    assert set(target["preparedDirectionFiles"]) == set(DIRECTIONS)
+    for direction in DIRECTIONS:
+        path = ROOT / target["preparedDirectionFiles"][direction][6:]
+        assert file_sha256(path) == target["preparedDirectionSha256"][direction]
+    inventory_path = (
+        ROOT / target["preparedPresentationFiles"]["inventory"][6:]
+    )
+    assert file_sha256(inventory_path) == (
+        target["preparedPresentationSha256"]["inventory"]
+    )
+    assert target["provenance"]["derivation"] == (
+        "alpha_bounds_crop_only_no_matte_removal_no_face_window_edit_no_resample"
+    )
+
     for relative, expected in FROZEN_RUNTIME_SHA256.items():
         assert file_sha256(ROOT / relative) == expected, relative
-    print("equipment_mystery_helmet_218_calibration_source_test: PASS")
+    print("equipment_prayer_helmet_224_calibration_source_test: PASS")
 
 
 if __name__ == "__main__":
