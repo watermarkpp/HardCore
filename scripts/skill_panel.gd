@@ -561,16 +561,35 @@ func _refresh_assignment_slots() -> void:
 
 
 func _assignment_skill_name(slot_group: String, slot_index: int) -> String:
-	var configured: Variant = skill_button_assignments.get(slot_group, [])
-	if configured is Array and slot_index < configured.size():
-		var array_value: Variant = configured[slot_index]
-		return str(array_value.get("skill_name", array_value.get("name", ""))) if array_value is Dictionary else str(array_value)
-	if configured is Dictionary:
-		var dict_value: Variant = configured.get(slot_index, configured.get(str(slot_index), ""))
-		return str(dict_value.get("skill_name", dict_value.get("name", ""))) if dict_value is Dictionary else str(dict_value)
+	if not skill_button_assignments.is_empty():
+		if not skill_button_assignments.has(slot_group):
+			return ""
+		var configured: Variant = skill_button_assignments.get(slot_group)
+		if configured is Array and slot_index >= 0 and slot_index < configured.size():
+			var array_value: Variant = configured[slot_index]
+			return _assignment_value_skill_name(array_value)
+		if configured is Dictionary:
+			var dict_value: Variant = configured.get(slot_index, configured.get(str(slot_index), ""))
+			return _assignment_value_skill_name(dict_value)
+		return ""
+	if PlayerState.has_method("skill_name_for_slot"):
+		return str(PlayerState.call("skill_name_for_slot", slot_group, slot_index))
+	# Compatibility for pre-grouped saves only. A grouped contract with an
+	# empty attack-ring slot is intentionally empty and never mirrors center.
 	if slot_index < PlayerState.quick_slots.size():
 		return PlayerState.quick_slots[slot_index]
 	return ""
+
+
+func _assignment_value_skill_name(value: Variant) -> String:
+	if not value is Dictionary:
+		return str(value)
+	return str(
+		value.get(
+			"skill_name",
+			value.get("skillName", value.get("name", value.get("display_name", value.get("displayName", ""))))
+		)
+	)
 
 
 func _set_assignment_button_content(button: Button, slot_label_text: String, skill_name: String) -> void:

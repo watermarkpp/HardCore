@@ -55,5 +55,27 @@ func _run() -> void:
 		"classic avatar hair is not aligned to the shared head canvas"
 	)
 
+	var fallback_preview := EquipmentCharacterPreview.new()
+	fallback_preview.size = Vector2(230, 286)
+	fallback_preview.configure_presentation_mode("classic_avatar")
+	fallback_preview.configure_source_document({
+		"contractId": "test.classic_avatar.export_failure.v1",
+		"avatarOnly": {
+			"contractId": PreviewScript.AVATAR_ONLY_CONTRACT_ID,
+			"base": {"path": "res://missing/classic_base.png"},
+			"hair": {
+				"path": "res://missing/classic_hair.png",
+				"stagePosition": [80, 44],
+			},
+			"canvasSize": [168, 199],
+			"footAnchor": [84, 186],
+		},
+	})
+	add_child(fallback_preview)
+	await get_tree().process_frame
+	assert(fallback_preview.has_renderable_assets(), "classic export failure silently blanked the paper doll")
+	assert(fallback_preview.has_renderable_hair(), "classic export failure silently removed male hair")
+	assert(fallback_preview.used_classic_preload_fallback(), "classic export failure did not use deterministic preload fallback")
+
 	print("EQUIPMENT_CLASSIC_AVATAR_HAIR_ALIGNMENT_PASS")
 	get_tree().quit(0)

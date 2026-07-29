@@ -25,6 +25,12 @@ func _run() -> void:
 	await get_tree().process_frame
 
 	assert(launcher.theme != null, "正式人物大厅没有使用公共哥特 Theme")
+	assert(launcher.build_fingerprint_label != null and launcher.build_fingerprint_label.visible, "人物大厅缺少玩家可见构建指纹")
+	assert(
+		launcher.build_fingerprint_label.text == launcher._build_fingerprint_text()
+		and launcher.build_fingerprint_label.text.begins_with("HardCore · v"),
+		"构建指纹没有读取 HardCore 版本与修订：%s" % launcher.build_fingerprint_label.text
+	)
 	assert(launcher.content_root.anchor_left == 0.5 and launcher.content_root.anchor_top == 0.5, "人物大厅没有使用宽屏居中内容画布")
 	assert(launcher.get_node("CenteredContent/RosterPanel").theme_type_variation == "GothicInsetFrame", "人物列表没有使用公共内框")
 	assert(launcher.get_node("CenteredContent/CharacterPreviewPanel").theme_type_variation == "GothicInsetFrame", "人物预览没有使用公共内框")

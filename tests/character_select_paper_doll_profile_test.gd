@@ -74,6 +74,7 @@ func _run() -> void:
 
 func _assert_classic_avatar_only(preview: EquipmentCharacterPreview, label: String) -> void:
 	assert(preview.has_renderable_assets(), "%s缺少透明原客户端人物底图" % label)
+	assert(preview.has_renderable_hair(), "%s缺少男性纸娃娃头发" % label)
 	assert(preview.original_stage_draw_commands().is_empty(), "%s错误绘制完整装备页背景或槽位" % label)
 	assert(preview._body_texture != null, "%s没有衣服层" % label)
 	assert(preview._weapon_texture != null, "%s没有武器层" % label)
