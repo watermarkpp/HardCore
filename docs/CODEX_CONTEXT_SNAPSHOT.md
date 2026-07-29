@@ -1,6 +1,6 @@
 # Codex 精简上下文快照
 
-更新时间：2026-07-29 08:58（Asia/Shanghai）
+更新时间：2026-07-29 09:24（Asia/Shanghai）
 
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。
 准确性规则：本文件不是代码或 Git 状态的替代品；只核实本次任务实际触及的分支、文件、接口和专项测试。
@@ -16,8 +16,8 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `694ee5a4`（本次快照提交只改本文档）。
-- tracked 状态：正式头盔 override 与黑铁头盔 151 的六动作生成图集共 7 个既有在制修改继续保护；本次 150 校准源导入未暂存、覆盖或合并这些用户数据。146/147 人工草稿与正式 override SHA-256 在施工前后逐项一致，禁止回退。
+- 分支/运行时代码基线：`codex/integration` @ `17675bfc`（本次快照提交只改本文档）。
+- tracked 状态：正式头盔 override 与黑铁头盔 151 的六动作生成图集共 7 个既有在制修改继续保护；本次 228 校准源导入未暂存、覆盖或合并这些用户数据。146/147/149/150/151/218/224 人工草稿与正式 override SHA-256 在施工前后逐项一致，禁止回退。
 - 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
 - 来源优先级总表为 `assets/data/source_priority_policy.json`；每个 lane 必须先查 `primary`，只有精确目标确实 `missing` 才允许逐级 fallback。主源不可用、不兼容或效果不符合预期时必须修复解析/映射，禁止换用低级来源。
@@ -62,6 +62,7 @@
 
 | 集成提交 | 领域 | 结果 |
 |---|---|---|
+| `17675bfc`（装备专业提交 `c3a9abe9`） | equipment/integration | 228 记忆头盔进入“只校准、不烘焙”阶段：用户提供的 1448×1086 RGBA 八方向原图（SHA-256 `ED3AA3AAE0C106110C24CCBF43A17E71E2D7C418E2ECDBC12E996CF74B3624E6`）按上排 `N/NE/E/SE`、下排 `S/SW/W/NW` 仅作每格 Alpha 有效边界裁切，八张方向图保持各自 270–298×407–417px 原始长宽，透明编辑器图集为 1192×834px；不清底、不重新抠图、不改色、不重采样、不提前压缩，当前活动目标切换为 `item_id=228` / `visualAssetId=memory`。旧 228 正式世界六动作及其东西向修补合同、纸娃娃、背包、地面、正式 override 均保持冻结；146/147/149/150/151/218/224 人工草稿未变。Python 无损/冻结守卫 8/8、Godot 校准专项 4/4 在装备树与集成树均通过。 |
 | `694ee5a4`（装备专业提交 `dedc613a`） | equipment/integration | 224 祈祷头盔进入“只校准、不烘焙”阶段：用户提供的 1448×1640 RGBA 九图原稿（SHA-256 `7BA8D678D6902411E5D1EB25891E3EBD67DDC606A345F2B43ABBD3D172AE3AD5`）前两排按 `N/NE/E/SE/S/SW/W/NW` 仅作 Alpha 有效边界裁切，保持 267–287×387–411px 原始长宽；第三排未扣除面部的 274×411px `S` 单独保存为 `dedicated_inventory` 并作为背包默认第九项，不参与世界方向映射。全程不清底、不重新抠图、不修改脸窗、不改色、不重采样；当前活动目标切换为 `item_id=224` / `visualAssetId=prayer`。正式世界六动作、纸娃娃、背包、地面、正式 override 和主树在制 prayer 图集均未改，146/147/150/151/218 人工草稿保持冻结；Python 无损/冻结守卫 6/6、Godot 校准专项 4/4 在装备树与集成树均通过。 |
 | `c289f93b`（装备专业提交 `f4be0e35`） | equipment/integration | 218 神秘头盔进入“只校准、不烘焙”阶段：用户提供的 1774×1343 RGBA 九图原稿（SHA-256 `8C4990E164B528A09833B55B99D94C51F3D254ECF4BF7A3B3A71815621232063`）前两排按 `N/NE/E/SE/S/SW/W/NW` 仅作 Alpha 有效边界裁切，保持 272–312×376–381px 原始长宽；第三排未扣除面部的 281×376px `S` 单独保存为 `dedicated_inventory` 并作为背包默认第九项，不参与世界方向映射。全程不清底、不重新抠图、不修改脸窗、不改色、不重采样；当前活动目标切换为 `item_id=218` / `visualAssetId=mystery`。正式世界六动作、纸娃娃、背包、地面、正式 override 和主树在制 mystery 图集均未改，146/147/150/151 人工草稿保持冻结；Python 无损/冻结守卫 5/5、Godot 校准专项 4/4 在装备树与集成树均通过。 |
 | `c7a081d9`（装备专业提交 `770c86b8`） | equipment/integration | 151 黑铁头盔进入“只校准、不烘焙”阶段：用户提供的 1491×1055 RGBA 八方向原图（SHA-256 `917B2BBFDA8463B509B61866EA3E125AD77FFB68288D5F52C199526F5AFD79FF`）已经包含真实 Alpha，洋红仅存在于透明像素 RGB；按上排 `N/NE/E/SE`、下排 `S/SW/W/NW` 仅作每格 Alpha 有效边界裁切，不清底、不重新抠图、不改色、不重采样。八张方向图保持各自原始长宽（255–294×367–393px），透明编辑器图集为 1176×786px；当前活动目标切换为 `item_id=151` / `visualAssetId=black_iron_golden_151`。正式世界六动作、纸娃娃、背包、地面、正式 override 及主树中在制黑铁六动作生成图集均未改，146/147/150 人工草稿保持冻结；Python 原图逐像素/冻结守卫 4/4、Godot 校准专项 4/4 在装备树与集成树均通过。 |
@@ -177,7 +178,7 @@
 - blessing/luck：`equipment.blessing_luck.v2`、三结果、5% 负面、幸运 7、诅咒 10、命运之刃 R=0 修正、全部装备 luck/curse、消耗/存档/零耐久、DC/MC/SC 与治愈术专项通过。
 - damage ranges：`legacy_clamp_negative_span`、通用 `roll_primary_stat`、战士公式、攻击时序与法系伤害公式通过；反向区间不会被幸运/诅咒交换端点，恢复正跨度后效果自动恢复。
 - equipment helmets：12 itemId/11 视觉身份、66 物理 atlas、2784 逻辑帧、6 动作×8 方向、透明角、Hair 逐帧锚点/SHA 溯源与 StateItem 世界像素零复用通过；法神头盔 `item_id=236` 使用用户授权原图单次 Lanczos 烘焙，atlas 单帧保持 `192×160px`、世界头盔最大 `14×17px`、纸娃娃内容保持 `17×24px`，运行时保持 nearest/`1x`；背包与地面素材冻结未变，非 236 文件及合同数据零变化。
-- helmet calibration：无损校准工作流、旧映射编辑回归、当前 active target 自动加载、正式纸娃娃头发坐标、头盔正式尺寸基准/旧默认迁移、方向键纸娃娃独立微调和 UI 纸娃娃组件在集成树 5/5 通过；真实透明图切割仍为 8/8 独立 PNG 与哈希清单。
+- helmet calibration：无损校准工作流、旧映射编辑回归、228 当前 active target 自动加载、正式纸娃娃头发坐标、头盔正式尺寸基准/旧默认迁移、方向键纸娃娃独立微调和 UI 纸娃娃组件通过；228 真实透明图切割为 8/8 独立原分辨率 PNG 与哈希清单，集成专项 4/4 通过。
 - physics：玩家 18×9、普通怪物 16×8、Boss 28×14 的真实物理与软件探针通过；战斗/AI 半径未改。
 - occlusion：11 张已发布地图、52 个交叉、4 类装饰物和 3 个比奇回归点通过；碰撞区、脚底深度点、装饰物遮挡基线已分离。
 - maps：比奇真实源 E2E（180 个阻挡格）；11 张地图真实 `CharacterBody2D` 脚点可达可见边缘且外环阻挡。
@@ -196,7 +197,7 @@
 | `HardCore-worktrees/monsters` | `codex/monsters` @ `45781ded` | tracked clean；68 UID | 已集成为 `c88c6277` |
 | `HardCore-worktrees/ui-art` | `codex/ui-art` @ `a9ef38b0` | tracked clean；Godot UID/输出继续保护 | 纸娃娃 `avatarOnly.stagePosition` 头发坐标修复已集成；专项 1/1、集成复验通过 |
 | `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `be710c6e` | 27 项 tracked 技能视觉在制修改；66 UID 继续保护 | 33技能 runtime 与150条可执行语义合同已集成；当前 fire_wall / summon_skeleton 视觉返修未交付，禁止清理或覆盖 |
-| `HardCore-worktrees/equipment` | `codex/equipment` @ `dedc613a` | 4 个既有 monster import 修改及 UID/生成项继续保护 | 224 祈祷头八方向原始 RGBA 与第三排背包专用 S 已无损载入并成为活动校准目标；146/147/150/151/218 人工草稿及正式/在制素材保持冻结，正式游戏素材未烘焙 |
+| `HardCore-worktrees/equipment` | `codex/equipment` @ `c3a9abe9` | 4 个既有 monster import 修改及 UID/生成项继续保护 | 228 记忆头八方向原始 RGBA 已无损载入并成为活动校准目标；旧 228 正式素材及 146/147/149/150/151/218/224 人工草稿与正式/在制素材保持冻结，正式游戏素材未烘焙 |
 
 ### maps 保护红线
 
