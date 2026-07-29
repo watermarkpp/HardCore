@@ -4,6 +4,12 @@ extends Node
 const LOADOUT_PATH := "res://assets/data/equipment_test_loadouts.json"
 const ACTIONS := ["idle", "walk", "attack", "cast", "hit", "death"]
 const PROFESSIONS := ["战士", "法师", "道士"]
+const RESOLVED_WEAPON_PROFESSIONS := {
+	"罗刹": "战士",
+	"嗜魂法杖": "法师",
+	"鹤嘴锄": "战士",
+}
+const UNRESOLVED_WEAPONS := ["落魄神兵"]
 
 
 func _ready() -> void:
@@ -110,7 +116,28 @@ func _run() -> void:
 	live_player.queue_free()
 	await get_tree().process_frame
 
-	for unresolved_name: String in ["罗刹", "落魄神兵", "嗜魂法杖", "鹤嘴锄"]:
+	for resolved_name: String in RESOLVED_WEAPON_PROFESSIONS:
+		var item := GameData.get_item(resolved_name)
+		assert(not item.is_empty(), "缺少正式装备：%s" % resolved_name)
+		var resolved := GameData.item_world_appearance(int(item.get("itemId", -1)), "男")
+		assert(resolved.get("status", "") == "exact_client_animation", "%s 必须使用正式世界动画" % resolved_name)
+		var appearance: Variant = resolved.get("appearance", {})
+		assert(appearance is Dictionary and bool(appearance.get("visible", false)), "%s 必须保持世界外观可见" % resolved_name)
+		var actions: Variant = appearance.get("actions", {})
+		assert(actions is Dictionary and actions.size() == ACTIONS.size(), "%s 必须提供六动作世界外观" % resolved_name)
+		for action: String in ACTIONS:
+			assert(actions.has(action), "%s 缺少正式动作 %s" % [resolved_name, action])
+		var equipment := _equipment_from_profile({})
+		equipment["武器"] = {"name": resolved_name}
+		var spawned := await _spawn_visual(str(RESOLVED_WEAPON_PROFESSIONS[resolved_name]), equipment)
+		var player: PlayerCharacter = spawned[0]
+		var visual: Node = spawned[1]
+		assert(visual.uses_final_art(), "%s 必须保留正式人物底层" % resolved_name)
+		assert(visual._weapon_action_textures.size() == ACTIONS.size(), "%s 必须加载六动作武器层" % resolved_name)
+		player.queue_free()
+		await get_tree().process_frame
+
+	for unresolved_name: String in UNRESOLVED_WEAPONS:
 		var item := GameData.get_item(unresolved_name)
 		assert(not item.is_empty(), "缺少正式装备：%s" % unresolved_name)
 		var resolved := GameData.item_world_appearance(int(item.get("itemId", -1)), "男")
