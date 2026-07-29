@@ -22,6 +22,7 @@ from PIL import Image, ImageChops
 
 DIRECTIONS = ("N", "NE", "E", "SE", "S", "SW", "W", "NW")
 ACTIONS = ("idle", "walk", "attack", "cast", "hit", "death")
+HIDDEN_HELMET_ACTIONS = frozenset({"death"})
 FRAME_SIZE = (192, 160)
 AUTHORED_WORLD_DISPLAY_SCALE = 0.08
 PAPER_PREVIEW_SCALE = 1.22
@@ -605,6 +606,10 @@ def build_world_atlases(
                 "frames": row_frames,
             }
 
+        if action in HIDDEN_HELMET_ACTIONS:
+            output = Image.new("RGBA", evidence.size, (0, 0, 0, 0))
+            for row_record in action_rows.values():
+                row_record["hiddenByPolicy"] = True
         output_path = output_dir / f"{draft['visualAssetId']}_{action}.png"
         result = save_png(output, output_path)
         derived_paths[action] = to_res(root, output_path)
@@ -773,6 +778,12 @@ def build_pose_authored_world_atlases(
                 "frames": row_frames,
             }
 
+        if action in HIDDEN_HELMET_ACTIONS:
+            output = Image.new("RGBA", evidence.size, (0, 0, 0, 0))
+            for row_record in action_rows.values():
+                row_record["hiddenByPolicy"] = True
+                for frame_record in row_record["frames"]:
+                    frame_record["hiddenByPolicy"] = True
         output_path = output_dir / f"{draft['visualAssetId']}_{action}.png"
         result = save_png(output, output_path)
         derived_paths[action] = to_res(root, output_path)
@@ -1037,6 +1048,7 @@ def finalize(root: Path) -> dict[str, Any]:
             "singlePassDownsample": "premultiplied_alpha_lanczos_from_original",
             "runtimeTextureFilter": "nearest",
             "runtimeScale": [1, 1],
+            "hiddenHelmetActions": sorted(HIDDEN_HELMET_ACTIONS),
         },
         "paperCalibrationLayout": {
             "canvasSize": list(PAPER_CALIBRATION_CANVAS),
@@ -1129,6 +1141,7 @@ def finalize(root: Path) -> dict[str, Any]:
                     "runtimeScale": [1, 1],
                     "runtimeTextureFilter": "nearest",
                     "sourceAtlasModified": False,
+                    "hiddenHelmetActions": sorted(HIDDEN_HELMET_ACTIONS),
                     "sourceRecipeId": (
                         f"final_calibration.{asset_id}.{profile_id}."
                         "original_rgba_single_pass_v1"

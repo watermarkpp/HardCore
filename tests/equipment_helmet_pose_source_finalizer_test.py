@@ -20,6 +20,7 @@ SPEC.loader.exec_module(FINALIZER)
 
 
 def verify() -> None:
+    assert FINALIZER.HIDDEN_HELMET_ACTIONS == frozenset({"death"})
     directions = {
         direction: {
             "source_row": index,
