@@ -50379,74 +50379,88 @@
       "gender": "通用",
       "icons": {
         "inventory": {
-          "path": "res://assets/art/items/client/inventory/105.png",
-          "library": "research/mir2_client_raw/Data/Items.wil",
-          "index": 105,
-          "sourceOffset": 76385,
+          "path": "res://assets/generated/helmet_presentation/elf_146/final_69cda4143e9c/item_00146_inventory.png",
+          "library": "project.user_final_helmet_calibration",
+          "index": 146,
           "size": [
-            40,
-            27
+            36,
+            25
           ],
           "drawOffset": [
-            7,
-            -44
-          ],
-          "libraryVersion": 0,
-          "confidence": "A"
-        },
-        "equippedSlot": {
-          "path": "res://assets/art/items/client/equipped/105.png",
-          "library": "research/mir2_client_raw/Data/stateitem.wil",
-          "index": 105,
-          "sourceOffset": 380699,
-          "size": [
-            24,
-            17
-          ],
-          "drawOffset": [
-            83,
+            0,
             0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact",
+          "sourceDirection": "S",
+          "sourceVariant": "direction",
+          "fileSha256": "34a5743023d7e5db27cd04ed4220d5c13b2cbe00e6360ef09f30b38678fa4478",
+          "rgbaSha256": "cde5b7deae1e5b7efe6c3c4fd0f913c097158628e8a99f32d732e77f12709564"
+        },
+        "equippedSlot": {
+          "status": "user_final_helmet_calibration",
+          "slot": "头盔",
+          "gender": "通用",
+          "sourceIndex": 146,
+          "path": "res://assets/generated/helmet_presentation/elf_146/final_69cda4143e9c/item_00146_paper_doll.png",
+          "drawOffset": [
+            77.262,
+            42.262
+          ],
+          "rawDrawOffset": [
+            77.262,
+            42.262
+          ],
+          "size": [
+            18,
+            13
+          ],
+          "source": "user_final_helmet_calibration",
+          "mappingConfidence": "user_approved_exact",
+          "fileSha256": "d2eec90cf2899b3929384526a0cff8bba2f4694c110d3d4e9bfc0dfef91ce2ca",
+          "rgbaSha256": "b857c3a01ea34b08704a1a5fef80c560dec10277e8d0aa3a07d2df9e3e05479c",
+          "confidence": "user_approved_exact"
         },
         "ground": {
-          "path": "res://assets/art/items/client/ground/105.png",
-          "library": "research/mir2_client_raw/Data/DnItems.wil",
-          "index": 105,
-          "sourceOffset": 61609,
+          "path": "res://assets/generated/helmet_presentation/elf_146/final_69cda4143e9c/item_00146_ground.png",
+          "library": "project.user_final_helmet_calibration",
+          "index": 146,
           "size": [
-            16,
-            9
+            18,
+            13
           ],
           "drawOffset": [
-            7,
-            -44
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact",
+          "sourceDirection": "W",
+          "sourceVariant": "direction",
+          "fileSha256": "5f9db5c6b7a29a541448262068c93c190417e2615d95b3991e4abd1d8465e51b",
+          "rgbaSha256": "5bc79bef8a002f54c4f6e27958feadba9524fe0a9ec11ca284050771247f02be"
         }
       },
       "paperDoll": {
-        "status": "exact_client_record",
+        "status": "user_final_helmet_calibration",
         "slot": "头盔",
         "gender": "通用",
-        "sourceIndex": 105,
-        "path": "res://assets/art/items/client/equipped/105.png",
+        "sourceIndex": 146,
+        "path": "res://assets/generated/helmet_presentation/elf_146/final_69cda4143e9c/item_00146_paper_doll.png",
         "drawOffset": [
-          76,
-          44
+          77.262,
+          42.262
         ],
         "rawDrawOffset": [
-          83,
-          0
+          77.262,
+          42.262
         ],
         "size": [
-          24,
-          17
+          18,
+          13
         ],
-        "source": "stateitem.wil",
-        "mappingConfidence": "A"
+        "source": "user_final_helmet_calibration",
+        "mappingConfidence": "user_approved_exact",
+        "fileSha256": "d2eec90cf2899b3929384526a0cff8bba2f4694c110d3d4e9bfc0dfef91ce2ca",
+        "rgbaSha256": "b857c3a01ea34b08704a1a5fef80c560dec10277e8d0aa3a07d2df9e3e05479c"
       },
       "worldWear": {
         "status": "approved_project_extension",
@@ -50570,74 +50584,88 @@
       "gender": "通用",
       "icons": {
         "inventory": {
-          "path": "res://assets/art/items/client/inventory/100.png",
-          "library": "research/mir2_client_raw/Data/Items.wil",
-          "index": 100,
-          "sourceOffset": 70541,
+          "path": "res://assets/generated/helmet_presentation/bronze_magic/final_2753cdd7ba86/item_00147_inventory.png",
+          "library": "project.user_final_helmet_calibration",
+          "index": 147,
           "size": [
-            16,
+            22,
             36
           ],
           "drawOffset": [
-            7,
-            -44
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact",
+          "sourceDirection": "S",
+          "sourceVariant": "direction",
+          "fileSha256": "3b548489f549200da0247f76e2fd4f95191a84e2c1f190f593392cf950464f19",
+          "rgbaSha256": "ff836a2e3a4aa50f5c05d309573f9fc3c0a47b802ead1cffbf3a5150045328b6"
         },
         "equippedSlot": {
-          "path": "res://assets/art/items/client/equipped/100.png",
-          "library": "research/mir2_client_raw/Data/stateitem.wil",
-          "index": 100,
-          "sourceOffset": 374595,
-          "size": [
-            32,
-            40
-          ],
+          "status": "user_final_helmet_calibration",
+          "slot": "头盔",
+          "gender": "通用",
+          "sourceIndex": 147,
+          "path": "res://assets/generated/helmet_presentation/bronze_magic/final_2753cdd7ba86/item_00147_paper_doll.png",
           "drawOffset": [
-            80,
-            -17
+            76.033,
+            36.115
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "rawDrawOffset": [
+            76.033,
+            36.115
+          ],
+          "size": [
+            21,
+            33
+          ],
+          "source": "user_final_helmet_calibration",
+          "mappingConfidence": "user_approved_exact",
+          "fileSha256": "89157b60cfdf90ecd95ac23e2471a24415a384316f84d64daf221b1f926a5cd1",
+          "rgbaSha256": "67373bd6a92997b9d6df65736f0ec30e534a5285e836ae8e38ef1d90b60b1796",
+          "confidence": "user_approved_exact"
         },
         "ground": {
-          "path": "res://assets/art/items/client/ground/100.png",
-          "library": "research/mir2_client_raw/Data/DnItems.wil",
-          "index": 100,
-          "sourceOffset": 60093,
+          "path": "res://assets/generated/helmet_presentation/bronze_magic/final_2753cdd7ba86/item_00147_ground.png",
+          "library": "project.user_final_helmet_calibration",
+          "index": 147,
           "size": [
-            16,
-            22
+            11,
+            18
           ],
           "drawOffset": [
-            7,
-            -44
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact",
+          "sourceDirection": "SW",
+          "sourceVariant": "direction",
+          "fileSha256": "770fe346dc2a5ce94ed49a7e0a3eeb5ac31ebf5bb51e335838d5a88c65b126c3",
+          "rgbaSha256": "9f8eb5f91c16ae645e3b2d50769189dd78c46536dbbf9c6c5fb164eb01c45e4d"
         }
       },
       "paperDoll": {
-        "status": "exact_client_record",
+        "status": "user_final_helmet_calibration",
         "slot": "头盔",
         "gender": "通用",
-        "sourceIndex": 100,
-        "path": "res://assets/art/items/client/equipped/100.png",
+        "sourceIndex": 147,
+        "path": "res://assets/generated/helmet_presentation/bronze_magic/final_2753cdd7ba86/item_00147_paper_doll.png",
         "drawOffset": [
-          73,
-          27
+          76.033,
+          36.115
         ],
         "rawDrawOffset": [
-          80,
-          -17
+          76.033,
+          36.115
         ],
         "size": [
-          32,
-          40
+          21,
+          33
         ],
-        "source": "stateitem.wil",
-        "mappingConfidence": "A"
+        "source": "user_final_helmet_calibration",
+        "mappingConfidence": "user_approved_exact",
+        "fileSha256": "89157b60cfdf90ecd95ac23e2471a24415a384316f84d64daf221b1f926a5cd1",
+        "rgbaSha256": "67373bd6a92997b9d6df65736f0ec30e534a5285e836ae8e38ef1d90b60b1796"
       },
       "worldWear": {
         "status": "approved_project_extension",
@@ -50761,74 +50789,88 @@
       "gender": "通用",
       "icons": {
         "inventory": {
-          "path": "res://assets/art/items/client/inventory/100.png",
-          "library": "research/mir2_client_raw/Data/Items.wil",
-          "index": 100,
-          "sourceOffset": 70541,
+          "path": "res://assets/generated/helmet_presentation/bronze_magic/final_2753cdd7ba86/item_00148_inventory.png",
+          "library": "project.user_final_helmet_calibration",
+          "index": 148,
           "size": [
-            16,
+            22,
             36
           ],
           "drawOffset": [
-            7,
-            -44
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact",
+          "sourceDirection": "S",
+          "sourceVariant": "direction",
+          "fileSha256": "3b548489f549200da0247f76e2fd4f95191a84e2c1f190f593392cf950464f19",
+          "rgbaSha256": "ff836a2e3a4aa50f5c05d309573f9fc3c0a47b802ead1cffbf3a5150045328b6"
         },
         "equippedSlot": {
-          "path": "res://assets/art/items/client/equipped/100.png",
-          "library": "research/mir2_client_raw/Data/stateitem.wil",
-          "index": 100,
-          "sourceOffset": 374595,
-          "size": [
-            32,
-            40
-          ],
+          "status": "user_final_helmet_calibration",
+          "slot": "头盔",
+          "gender": "通用",
+          "sourceIndex": 148,
+          "path": "res://assets/generated/helmet_presentation/bronze_magic/final_2753cdd7ba86/item_00148_paper_doll.png",
           "drawOffset": [
-            80,
-            -17
+            76.033,
+            36.115
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "rawDrawOffset": [
+            76.033,
+            36.115
+          ],
+          "size": [
+            21,
+            33
+          ],
+          "source": "user_final_helmet_calibration",
+          "mappingConfidence": "user_approved_exact",
+          "fileSha256": "89157b60cfdf90ecd95ac23e2471a24415a384316f84d64daf221b1f926a5cd1",
+          "rgbaSha256": "67373bd6a92997b9d6df65736f0ec30e534a5285e836ae8e38ef1d90b60b1796",
+          "confidence": "user_approved_exact"
         },
         "ground": {
-          "path": "res://assets/art/items/client/ground/100.png",
-          "library": "research/mir2_client_raw/Data/DnItems.wil",
-          "index": 100,
-          "sourceOffset": 60093,
+          "path": "res://assets/generated/helmet_presentation/bronze_magic/final_2753cdd7ba86/item_00148_ground.png",
+          "library": "project.user_final_helmet_calibration",
+          "index": 148,
           "size": [
-            16,
-            22
+            11,
+            18
           ],
           "drawOffset": [
-            7,
-            -44
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact",
+          "sourceDirection": "SW",
+          "sourceVariant": "direction",
+          "fileSha256": "770fe346dc2a5ce94ed49a7e0a3eeb5ac31ebf5bb51e335838d5a88c65b126c3",
+          "rgbaSha256": "9f8eb5f91c16ae645e3b2d50769189dd78c46536dbbf9c6c5fb164eb01c45e4d"
         }
       },
       "paperDoll": {
-        "status": "exact_client_record",
+        "status": "user_final_helmet_calibration",
         "slot": "头盔",
         "gender": "通用",
-        "sourceIndex": 100,
-        "path": "res://assets/art/items/client/equipped/100.png",
+        "sourceIndex": 148,
+        "path": "res://assets/generated/helmet_presentation/bronze_magic/final_2753cdd7ba86/item_00148_paper_doll.png",
         "drawOffset": [
-          73,
-          27
+          76.033,
+          36.115
         ],
         "rawDrawOffset": [
-          80,
-          -17
+          76.033,
+          36.115
         ],
         "size": [
-          32,
-          40
+          21,
+          33
         ],
-        "source": "stateitem.wil",
-        "mappingConfidence": "A"
+        "source": "user_final_helmet_calibration",
+        "mappingConfidence": "user_approved_exact",
+        "fileSha256": "89157b60cfdf90ecd95ac23e2471a24415a384316f84d64daf221b1f926a5cd1",
+        "rgbaSha256": "67373bd6a92997b9d6df65736f0ec30e534a5285e836ae8e38ef1d90b60b1796"
       },
       "worldWear": {
         "status": "approved_project_extension",
@@ -50952,74 +50994,88 @@
       "gender": "通用",
       "icons": {
         "inventory": {
-          "path": "res://assets/art/items/client/inventory/106.png",
-          "library": "research/mir2_client_raw/Data/Items.wil",
-          "index": 106,
-          "sourceOffset": 77473,
+          "path": "res://assets/generated/helmet_presentation/taoist/final_6047d7bac6de/item_00149_inventory.png",
+          "library": "project.user_final_helmet_calibration",
+          "index": 149,
           "size": [
-            28,
-            35
+            22,
+            36
           ],
           "drawOffset": [
-            7,
-            -44
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact",
+          "sourceDirection": "S",
+          "sourceVariant": "dedicated_inventory",
+          "fileSha256": "5fd229269241c2320fe4fb5321ad781a4be8b11d64f5d122962934a960d90eeb",
+          "rgbaSha256": "f4bda2ec67f7e0dc070eb4bd66450e57e603c358ccad040d6f2673135d9c5243"
         },
         "equippedSlot": {
-          "path": "res://assets/art/items/client/equipped/106.png",
-          "library": "research/mir2_client_raw/Data/stateitem.wil",
-          "index": 106,
-          "sourceOffset": 381115,
-          "size": [
-            32,
-            39
-          ],
+          "status": "user_final_helmet_calibration",
+          "slot": "头盔",
+          "gender": "通用",
+          "sourceIndex": 149,
+          "path": "res://assets/generated/helmet_presentation/taoist/final_6047d7bac6de/item_00149_paper_doll.png",
           "drawOffset": [
-            79,
-            -16
+            76.033,
+            36.115
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "rawDrawOffset": [
+            76.033,
+            36.115
+          ],
+          "size": [
+            20,
+            32
+          ],
+          "source": "user_final_helmet_calibration",
+          "mappingConfidence": "user_approved_exact",
+          "fileSha256": "3419c43fe21fa7a879d5aa5051af8385f0c5465df55250868eb5067b44e3a821",
+          "rgbaSha256": "d6308be837ce77ac967ddec5b38232de77d14cd5f65ccef8082530bf20c065b7",
+          "confidence": "user_approved_exact"
         },
         "ground": {
-          "path": "res://assets/art/items/client/ground/106.png",
-          "library": "research/mir2_client_raw/Data/DnItems.wil",
-          "index": 106,
-          "sourceOffset": 61761,
+          "path": "res://assets/generated/helmet_presentation/taoist/final_6047d7bac6de/item_00149_ground.png",
+          "library": "project.user_final_helmet_calibration",
+          "index": 149,
           "size": [
             12,
-            16
+            18
           ],
           "drawOffset": [
-            7,
-            -44
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact",
+          "sourceDirection": "E",
+          "sourceVariant": "direction",
+          "fileSha256": "0d9f6581e2ba04e5ad823e7a98b8674f2cee83dcd615f0cb66a625449124d105",
+          "rgbaSha256": "b06e4c5d2fc80746833d338bb9d244d775a1da7adde7219c996d96876c199a61"
         }
       },
       "paperDoll": {
-        "status": "exact_client_record",
+        "status": "user_final_helmet_calibration",
         "slot": "头盔",
         "gender": "通用",
-        "sourceIndex": 106,
-        "path": "res://assets/art/items/client/equipped/106.png",
+        "sourceIndex": 149,
+        "path": "res://assets/generated/helmet_presentation/taoist/final_6047d7bac6de/item_00149_paper_doll.png",
         "drawOffset": [
-          72,
-          28
+          76.033,
+          36.115
         ],
         "rawDrawOffset": [
-          79,
-          -16
+          76.033,
+          36.115
         ],
         "size": [
-          32,
-          39
+          20,
+          32
         ],
-        "source": "stateitem.wil",
-        "mappingConfidence": "A"
+        "source": "user_final_helmet_calibration",
+        "mappingConfidence": "user_approved_exact",
+        "fileSha256": "3419c43fe21fa7a879d5aa5051af8385f0c5465df55250868eb5067b44e3a821",
+        "rgbaSha256": "d6308be837ce77ac967ddec5b38232de77d14cd5f65ccef8082530bf20c065b7"
       },
       "worldWear": {
         "status": "approved_project_extension",
@@ -51143,74 +51199,88 @@
       "gender": "通用",
       "icons": {
         "inventory": {
-          "path": "res://assets/art/items/client/inventory/103.png",
-          "library": "research/mir2_client_raw/Data/Items.wil",
-          "index": 103,
-          "sourceOffset": 73669,
+          "path": "res://assets/generated/helmet_presentation/skeleton/final_29f8f5d4c2c1/item_00150_inventory.png",
+          "library": "project.user_final_helmet_calibration",
+          "index": 150,
           "size": [
-            40,
+            23,
             36
           ],
           "drawOffset": [
-            7,
-            -44
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact",
+          "sourceDirection": "S",
+          "sourceVariant": "direction",
+          "fileSha256": "fa5dae9d76047f32f1a0413b4224307e769e9a3a6d362ebb85550b874e653974",
+          "rgbaSha256": "3a8516fc6702edea5f56323235e9e14320ef18ffa310e375250c5cac1b5ea785"
         },
         "equippedSlot": {
-          "path": "res://assets/art/items/client/equipped/103.png",
-          "library": "research/mir2_client_raw/Data/stateitem.wil",
-          "index": 103,
-          "sourceOffset": 377595,
-          "size": [
-            52,
-            36
-          ],
+          "status": "user_final_helmet_calibration",
+          "slot": "头盔",
+          "gender": "通用",
+          "sourceIndex": 150,
+          "path": "res://assets/generated/helmet_presentation/skeleton/final_29f8f5d4c2c1/item_00150_paper_doll.png",
           "drawOffset": [
-            69,
-            -18
+            77.672,
+            38.574
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "rawDrawOffset": [
+            77.672,
+            38.574
+          ],
+          "size": [
+            17,
+            25
+          ],
+          "source": "user_final_helmet_calibration",
+          "mappingConfidence": "user_approved_exact",
+          "fileSha256": "1c2958d2a495e490ecf68f6fcdec6ee89aa40b7e9332abf26abf48d4441f2e43",
+          "rgbaSha256": "9272e184229b415a55058e3e57c20eddb9949b3051cf25ef30fe970ca595f2c0",
+          "confidence": "user_approved_exact"
         },
         "ground": {
-          "path": "res://assets/art/items/client/ground/103.png",
-          "library": "research/mir2_client_raw/Data/DnItems.wil",
-          "index": 103,
-          "sourceOffset": 60981,
+          "path": "res://assets/generated/helmet_presentation/skeleton/final_29f8f5d4c2c1/item_00150_ground.png",
+          "library": "project.user_final_helmet_calibration",
+          "index": 150,
           "size": [
-            20,
-            17
+            15,
+            18
           ],
           "drawOffset": [
-            7,
-            -44
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact",
+          "sourceDirection": "SW",
+          "sourceVariant": "direction",
+          "fileSha256": "f04040a1d1773f3d8d3d1fde15110eaeddb225f251be85a3f5ec03205a128a2b",
+          "rgbaSha256": "342b5e6c39f52e5ea400ebb5f0db940ff431f297614dafd0ede49d431bbb4a11"
         }
       },
       "paperDoll": {
-        "status": "exact_client_record",
+        "status": "user_final_helmet_calibration",
         "slot": "头盔",
         "gender": "通用",
-        "sourceIndex": 103,
-        "path": "res://assets/art/items/client/equipped/103.png",
+        "sourceIndex": 150,
+        "path": "res://assets/generated/helmet_presentation/skeleton/final_29f8f5d4c2c1/item_00150_paper_doll.png",
         "drawOffset": [
-          62,
-          26
+          77.672,
+          38.574
         ],
         "rawDrawOffset": [
-          69,
-          -18
+          77.672,
+          38.574
         ],
         "size": [
-          52,
-          36
+          17,
+          25
         ],
-        "source": "stateitem.wil",
-        "mappingConfidence": "A"
+        "source": "user_final_helmet_calibration",
+        "mappingConfidence": "user_approved_exact",
+        "fileSha256": "1c2958d2a495e490ecf68f6fcdec6ee89aa40b7e9332abf26abf48d4441f2e43",
+        "rgbaSha256": "9272e184229b415a55058e3e57c20eddb9949b3051cf25ef30fe970ca595f2c0"
       },
       "worldWear": {
         "status": "approved_project_extension",
@@ -51334,74 +51404,88 @@
       "gender": "通用",
       "icons": {
         "inventory": {
-          "path": "res://assets/art/items/client/inventory/344.png",
-          "library": "research/mir2_client_raw/Data/Items.wil",
-          "index": 344,
-          "sourceOffset": 194868,
+          "path": "res://assets/generated/helmet_presentation/black_iron_golden_151/final_24b7774b8724/item_00151_inventory.png",
+          "library": "project.user_final_helmet_calibration",
+          "index": 151,
+          "size": [
+            24,
+            36
+          ],
+          "drawOffset": [
+            0,
+            0
+          ],
+          "confidence": "user_approved_exact",
+          "sourceDirection": "S",
+          "sourceVariant": "direction",
+          "fileSha256": "51bcc268e7a3239afbc83c17793da4ac672354350dcec1d1e92f86867a09a206",
+          "rgbaSha256": "7a5bd58c7836004eedbdfad15ad741a482dccc672fc55189bc088316d4ba768e"
+        },
+        "equippedSlot": {
+          "status": "user_final_helmet_calibration",
+          "slot": "头盔",
+          "gender": "通用",
+          "sourceIndex": 151,
+          "path": "res://assets/generated/helmet_presentation/black_iron_golden_151/final_24b7774b8724/item_00151_paper_doll.png",
+          "drawOffset": [
+            76.033,
+            36.525
+          ],
+          "rawDrawOffset": [
+            76.033,
+            36.525
+          ],
           "size": [
             20,
             29
           ],
-          "drawOffset": [
-            13,
-            -41
-          ],
-          "libraryVersion": 0,
-          "confidence": "A"
-        },
-        "equippedSlot": {
-          "path": "res://assets/art/items/client/equipped/344.png",
-          "library": "research/mir2_client_raw/Data/stateitem.wil",
-          "index": 344,
-          "sourceOffset": 478058,
-          "size": [
-            28,
-            32
-          ],
-          "drawOffset": [
-            79,
-            -8
-          ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "source": "user_final_helmet_calibration",
+          "mappingConfidence": "user_approved_exact",
+          "fileSha256": "e7a2c0d4906efef49e1180d631cbe86f0a578064c62214bfd91073d819250d47",
+          "rgbaSha256": "880814e8923fcbd1b46d335e6b169cdab84fc0f62e9067c9acbe88b51d132f0d",
+          "confidence": "user_approved_exact"
         },
         "ground": {
-          "path": "res://assets/art/items/client/ground/344.png",
-          "library": "research/mir2_client_raw/Data/DnItems.wil",
-          "index": 344,
-          "sourceOffset": 94212,
+          "path": "res://assets/generated/helmet_presentation/black_iron_golden_151/final_24b7774b8724/item_00151_ground.png",
+          "library": "project.user_final_helmet_calibration",
+          "index": 151,
           "size": [
             12,
-            15
+            18
           ],
           "drawOffset": [
-            19,
-            -34
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact",
+          "sourceDirection": "SW",
+          "sourceVariant": "direction",
+          "fileSha256": "3d5f0f86a36f592d4896a76fb09864104e112ca566ab403982925201641f7946",
+          "rgbaSha256": "d411786caea44c03f5cdce1fe95cb61829b0afcb939113502f2b520c437c14f2"
         }
       },
       "paperDoll": {
-        "status": "exact_client_record",
+        "status": "user_final_helmet_calibration",
         "slot": "头盔",
         "gender": "通用",
-        "sourceIndex": 344,
-        "path": "res://assets/art/items/client/equipped/344.png",
+        "sourceIndex": 151,
+        "path": "res://assets/generated/helmet_presentation/black_iron_golden_151/final_24b7774b8724/item_00151_paper_doll.png",
         "drawOffset": [
-          72,
-          36
+          76.033,
+          36.525
         ],
         "rawDrawOffset": [
-          79,
-          -8
+          76.033,
+          36.525
         ],
         "size": [
-          28,
-          32
+          20,
+          29
         ],
-        "source": "stateitem.wil",
-        "mappingConfidence": "A"
+        "source": "user_final_helmet_calibration",
+        "mappingConfidence": "user_approved_exact",
+        "fileSha256": "e7a2c0d4906efef49e1180d631cbe86f0a578064c62214bfd91073d819250d47",
+        "rgbaSha256": "880814e8923fcbd1b46d335e6b169cdab84fc0f62e9067c9acbe88b51d132f0d"
       },
       "worldWear": {
         "status": "approved_project_extension",
@@ -51525,87 +51609,88 @@
       "gender": "通用",
       "icons": {
         "inventory": {
-          "path": "res://assets/art/items/client/inventory/111.png",
-          "library": "user_authorized_redesign",
-          "index": 111,
+          "path": "res://assets/generated/helmet_presentation/mystery/final_8e347ccb67df/item_00218_inventory.png",
+          "library": "project.user_final_helmet_calibration",
+          "index": 218,
           "size": [
-            40,
-            40
+            27,
+            36
           ],
           "drawOffset": [
             0,
             0
           ],
-          "confidence": "user_authorized_exact",
-          "designIdentity": "mystery_japanese_kabuto_218",
-          "sourcePath": "res://assets/art/items/client/source/user_authorized_redesign/mystery_helmet_218/inventory_three_quarter_green.png",
-          "sourceFileSha256": "d6678ce9249f84c465dd0eb38bedfbdcef50b1a7c7737d6add37f807fbcd1740",
-          "sourceRole": "backpack_inventory"
+          "confidence": "user_approved_exact",
+          "sourceDirection": "S",
+          "sourceVariant": "dedicated_inventory",
+          "fileSha256": "d92df8f754e31542a8fe3804f00a739618aa81afb8e987282cdda3d4fbed00e5",
+          "rgbaSha256": "b3e994634b1b1d5f909bf6a59552f70421f834609360f8c448ae1281c5cb9c00"
         },
         "equippedSlot": {
-          "path": "res://assets/art/items/client/equipped/111.png",
-          "library": "user_authorized_redesign",
-          "index": 111,
-          "size": [
-            48,
-            48
-          ],
+          "status": "user_final_helmet_calibration",
+          "slot": "头盔",
+          "gender": "通用",
+          "sourceIndex": 218,
+          "path": "res://assets/generated/helmet_presentation/mystery/final_8e347ccb67df/item_00218_paper_doll.png",
           "drawOffset": [
-            0,
-            0
+            76.443,
+            38.164
           ],
-          "confidence": "user_authorized_exact",
-          "designIdentity": "mystery_japanese_kabuto_218",
-          "sourcePath": "res://assets/art/items/client/source/user_authorized_redesign/mystery_helmet_218/paper_doll_front_green.png",
-          "sourceFileSha256": "293d2496de61c527958fe077695c402d75a2966a19378324fce8809e82143ed8",
-          "sourceRole": "paper_doll_equipped"
+          "rawDrawOffset": [
+            76.443,
+            38.164
+          ],
+          "size": [
+            20,
+            26
+          ],
+          "source": "user_final_helmet_calibration",
+          "mappingConfidence": "user_approved_exact",
+          "fileSha256": "956f6b9403e699a6f0b4a804ae57edb17aea6e8a59cd7733126deeac6ed6e9fe",
+          "rgbaSha256": "6b20acc6d262cbb54a85a5f3dae7b6c178910bc6e5187bcd6846c161a336e87a",
+          "confidence": "user_approved_exact"
         },
         "ground": {
-          "path": "res://assets/art/items/client/ground/111.png",
-          "library": "user_authorized_redesign",
-          "index": 111,
+          "path": "res://assets/generated/helmet_presentation/mystery/final_8e347ccb67df/item_00218_ground.png",
+          "library": "project.user_final_helmet_calibration",
+          "index": 218,
           "size": [
-            18,
+            15,
             18
           ],
           "drawOffset": [
             0,
             0
           ],
-          "confidence": "user_authorized_exact",
-          "designIdentity": "mystery_japanese_kabuto_218",
-          "sourcePath": "res://assets/art/items/client/source/user_authorized_redesign/mystery_helmet_218/ground_drop_green.png",
-          "sourceFileSha256": "b97db3cc4c5a78103b39349d3c4d16ef3d6a99f67631b77ffcc8db5351a9cc64",
-          "sourceRole": "ground_drop"
+          "confidence": "user_approved_exact",
+          "sourceDirection": "E",
+          "sourceVariant": "direction",
+          "fileSha256": "a80d3823af66c50276dc0c925a38101ab793ec565205284ba87d38bdf254577d",
+          "rgbaSha256": "7ee8932ce46b9fde9e143c9fc567fa24d0ebe0d9a5aa110fcb103fab2d4fd30a"
         }
       },
       "paperDoll": {
-        "status": "user_authorized_redesign",
+        "status": "user_final_helmet_calibration",
         "slot": "头盔",
         "gender": "通用",
-        "sourceIndex": 111,
-        "path": "res://assets/art/items/client/equipped/111.png",
+        "sourceIndex": 218,
+        "path": "res://assets/generated/helmet_presentation/mystery/final_8e347ccb67df/item_00218_paper_doll.png",
         "drawOffset": [
-          62,
-          21
+          76.443,
+          38.164
+        ],
+        "rawDrawOffset": [
+          76.443,
+          38.164
         ],
         "size": [
-          48,
-          48
+          20,
+          26
         ],
-        "source": "user_authorized_redesign",
-        "mappingConfidence": "user_authorized_exact",
-        "designIdentity": "mystery_japanese_kabuto_218",
-        "diameterProjection": {
-          "horizontalDiameterPercent": 80,
-          "heightPercent": 100,
-          "canvasPreserved": [
-            48,
-            48
-          ],
-          "centredOnOriginalHeadAnchor": true,
-          "filter": "nearest"
-        }
+        "source": "user_final_helmet_calibration",
+        "mappingConfidence": "user_approved_exact",
+        "fileSha256": "956f6b9403e699a6f0b4a804ae57edb17aea6e8a59cd7733126deeac6ed6e9fe",
+        "rgbaSha256": "6b20acc6d262cbb54a85a5f3dae7b6c178910bc6e5187bcd6846c161a336e87a"
       },
       "worldWear": {
         "status": "approved_project_extension",
@@ -51729,74 +51814,88 @@
       "gender": "通用",
       "icons": {
         "inventory": {
-          "path": "res://assets/art/items/client/inventory/110.png",
-          "library": "research/mir2_client_raw/Data/Items.wil",
-          "index": 110,
-          "sourceOffset": 82029,
+          "path": "res://assets/generated/helmet_presentation/prayer/final_4747c24a259c/item_00224_inventory.png",
+          "library": "project.user_final_helmet_calibration",
+          "index": 224,
           "size": [
             24,
-            28
-          ],
-          "drawOffset": [
-            12,
-            -40
-          ],
-          "libraryVersion": 0,
-          "confidence": "A"
-        },
-        "equippedSlot": {
-          "path": "res://assets/art/items/client/equipped/110.png",
-          "library": "research/mir2_client_raw/Data/stateitem.wil",
-          "index": 110,
-          "sourceOffset": 385851,
-          "size": [
-            32,
             36
           ],
           "drawOffset": [
-            80,
-            -16
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact",
+          "sourceDirection": "S",
+          "sourceVariant": "dedicated_inventory",
+          "fileSha256": "95a177e74626c850c2e09131b7a11904e9f6fad7515f2b0c042c5672686eb8ac",
+          "rgbaSha256": "50bfeb0f50e44735e865d04e869e9394f73649debc98666e41b79908b5bfbfcc"
+        },
+        "equippedSlot": {
+          "status": "user_final_helmet_calibration",
+          "slot": "头盔",
+          "gender": "通用",
+          "sourceIndex": 224,
+          "path": "res://assets/generated/helmet_presentation/prayer/final_4747c24a259c/item_00224_paper_doll.png",
+          "drawOffset": [
+            75.623,
+            40.213
+          ],
+          "rawDrawOffset": [
+            75.623,
+            40.213
+          ],
+          "size": [
+            21,
+            30
+          ],
+          "source": "user_final_helmet_calibration",
+          "mappingConfidence": "user_approved_exact",
+          "fileSha256": "4be52214ce1cc657760d5990ca215ae7a76595185d4495fe781027428c4d8fc2",
+          "rgbaSha256": "947d95794100a0650b034db66f6dd0187611a506758531b11bc8117a5782e3e7",
+          "confidence": "user_approved_exact"
         },
         "ground": {
-          "path": "res://assets/art/items/client/ground/110.png",
-          "library": "research/mir2_client_raw/Data/DnItems.wil",
-          "index": 110,
-          "sourceOffset": 62629,
+          "path": "res://assets/generated/helmet_presentation/prayer/final_4747c24a259c/item_00224_ground.png",
+          "library": "project.user_final_helmet_calibration",
+          "index": 224,
           "size": [
-            12,
-            14
+            13,
+            18
           ],
           "drawOffset": [
-            19,
-            -34
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact",
+          "sourceDirection": "E",
+          "sourceVariant": "direction",
+          "fileSha256": "34efe281ef255fb25c6badac70a5453892b6c8ef5aaff587b0bc4adca5cbafd9",
+          "rgbaSha256": "25dd97ad6a39b1bcbca7859ef7ad59a198559799a975acd57d2691d87355b072"
         }
       },
       "paperDoll": {
-        "status": "exact_client_record",
+        "status": "user_final_helmet_calibration",
         "slot": "头盔",
         "gender": "通用",
-        "sourceIndex": 110,
-        "path": "res://assets/art/items/client/equipped/110.png",
+        "sourceIndex": 224,
+        "path": "res://assets/generated/helmet_presentation/prayer/final_4747c24a259c/item_00224_paper_doll.png",
         "drawOffset": [
-          73,
-          28
+          75.623,
+          40.213
         ],
         "rawDrawOffset": [
-          80,
-          -16
+          75.623,
+          40.213
         ],
         "size": [
-          32,
-          36
+          21,
+          30
         ],
-        "source": "stateitem.wil",
-        "mappingConfidence": "A"
+        "source": "user_final_helmet_calibration",
+        "mappingConfidence": "user_approved_exact",
+        "fileSha256": "4be52214ce1cc657760d5990ca215ae7a76595185d4495fe781027428c4d8fc2",
+        "rgbaSha256": "947d95794100a0650b034db66f6dd0187611a506758531b11bc8117a5782e3e7"
       },
       "worldWear": {
         "status": "approved_project_extension",
@@ -51920,74 +52019,88 @@
       "gender": "通用",
       "icons": {
         "inventory": {
-          "path": "res://assets/art/items/client/inventory/109.png",
-          "library": "research/mir2_client_raw/Data/Items.wil",
-          "index": 109,
-          "sourceOffset": 81277,
+          "path": "res://assets/generated/helmet_presentation/memory/final_b8aa296e7d4b/item_00228_inventory.png",
+          "library": "project.user_final_helmet_calibration",
+          "index": 228,
           "size": [
             24,
-            31
+            36
           ],
           "drawOffset": [
-            13,
-            -42
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact",
+          "sourceDirection": "S",
+          "sourceVariant": "direction",
+          "fileSha256": "61bf093f31a8e6a84072541c483813191bb7faf5474a731d623e38ca61797db4",
+          "rgbaSha256": "90c06542e8652da32b870b1eaa4e13376df8bc687619621ba44e33928e2c1892"
         },
         "equippedSlot": {
-          "path": "res://assets/art/items/client/equipped/109.png",
-          "library": "research/mir2_client_raw/Data/stateitem.wil",
-          "index": 109,
-          "sourceOffset": 384659,
-          "size": [
-            32,
-            37
-          ],
+          "status": "user_final_helmet_calibration",
+          "slot": "头盔",
+          "gender": "通用",
+          "sourceIndex": 228,
+          "path": "res://assets/generated/helmet_presentation/memory/final_b8aa296e7d4b/item_00228_paper_doll.png",
           "drawOffset": [
-            80,
-            -18
+            74.803,
+            36.525
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "rawDrawOffset": [
+            74.803,
+            36.525
+          ],
+          "size": [
+            21,
+            31
+          ],
+          "source": "user_final_helmet_calibration",
+          "mappingConfidence": "user_approved_exact",
+          "fileSha256": "fefa7708388d902d074a7f420842327167b756f2db1370edc390348bfe23cc76",
+          "rgbaSha256": "72701ad586b9a13a08f95ba7af5329ac15a5eb15fc2d8e32d958b4de4f944725",
+          "confidence": "user_approved_exact"
         },
         "ground": {
-          "path": "res://assets/art/items/client/ground/109.png",
-          "library": "research/mir2_client_raw/Data/DnItems.wil",
-          "index": 109,
-          "sourceOffset": 62441,
+          "path": "res://assets/generated/helmet_presentation/memory/final_b8aa296e7d4b/item_00228_ground.png",
+          "library": "project.user_final_helmet_calibration",
+          "index": 228,
           "size": [
             12,
-            15
+            18
           ],
           "drawOffset": [
-            18,
-            -34
+            0,
+            0
           ],
-          "libraryVersion": 0,
-          "confidence": "A"
+          "confidence": "user_approved_exact",
+          "sourceDirection": "SW",
+          "sourceVariant": "direction",
+          "fileSha256": "9c4670cde5af13b30d2f72c825551bf8ed70be29bc23d843a832b933db1745ab",
+          "rgbaSha256": "9b4d26f2b6a94e35618f42d7e9c3c8322d1a77fa54dcc8e4eed01ef12f209bf2"
         }
       },
       "paperDoll": {
-        "status": "exact_client_record",
+        "status": "user_final_helmet_calibration",
         "slot": "头盔",
         "gender": "通用",
-        "sourceIndex": 109,
-        "path": "res://assets/art/items/client/equipped/109.png",
+        "sourceIndex": 228,
+        "path": "res://assets/generated/helmet_presentation/memory/final_b8aa296e7d4b/item_00228_paper_doll.png",
         "drawOffset": [
-          73,
-          26
+          74.803,
+          36.525
         ],
         "rawDrawOffset": [
-          80,
-          -18
+          74.803,
+          36.525
         ],
         "size": [
-          32,
-          37
+          21,
+          31
         ],
-        "source": "stateitem.wil",
-        "mappingConfidence": "A"
+        "source": "user_final_helmet_calibration",
+        "mappingConfidence": "user_approved_exact",
+        "fileSha256": "fefa7708388d902d074a7f420842327167b756f2db1370edc390348bfe23cc76",
+        "rgbaSha256": "72701ad586b9a13a08f95ba7af5329ac15a5eb15fc2d8e32d958b4de4f944725"
       },
       "worldWear": {
         "status": "approved_project_extension",
@@ -52111,80 +52224,88 @@
       "gender": "通用",
       "icons": {
         "inventory": {
-          "path": "res://assets/art/items/client/project_redesign/helmet/holy_war/item_00232_inventory.png",
-          "library": "project.user_approved_redesign",
+          "path": "res://assets/generated/helmet_presentation/holy_war/final_291e39829b96/item_00232_inventory.png",
+          "library": "project.user_final_helmet_calibration",
           "index": 232,
           "size": [
-            36,
-            35
+            27,
+            36
           ],
           "drawOffset": [
             0,
             0
           ],
-          "confidence": "user_approved_exact_design",
+          "confidence": "user_approved_exact",
           "sourceDirection": "S",
-          "faceAperture": "opaque_black_mask_interior",
-          "fileSha256": "bdf5bc691c85a9e79baca8dd6814766bd9a0d65ef3e1d951664f34e04efb8662",
-          "rgbaSha256": "1031f1dbc751e14bee3bcbca0acbd472ed0fd81ad096f6e613cb626dfc7864ce"
+          "sourceVariant": "direction",
+          "fileSha256": "ee43d50be7de0f611aa418fceb0f08e98088f7ff2fdad857079d590318649a7f",
+          "rgbaSha256": "3446dd9fc507de1e9d6dce6540f6e6e1548c8d634c8d155e8ad47856e67d0e0c"
         },
         "equippedSlot": {
-          "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00232_head.png",
-          "library": "project.user_approved_redesign",
-          "index": 232,
-          "size": [
-            32,
-            41
-          ],
+          "status": "user_final_helmet_calibration",
+          "slot": "头盔",
+          "gender": "通用",
+          "sourceIndex": 232,
+          "path": "res://assets/generated/helmet_presentation/holy_war/final_291e39829b96/item_00232_paper_doll.png",
           "drawOffset": [
-            73,
-            27
+            75.213,
+            36.115
           ],
-          "confidence": "user_approved_exact_design",
-          "sourceDirection": "S",
-          "faceAperture": "none_opaque_black_mask",
-          "fileSha256": "3e24c0231e8c1de5d60eeb7a2464d28eba0c9ff9268965ef350ac6bc74b59b9d"
+          "rawDrawOffset": [
+            75.213,
+            36.115
+          ],
+          "size": [
+            22,
+            29
+          ],
+          "source": "user_final_helmet_calibration",
+          "mappingConfidence": "user_approved_exact",
+          "fileSha256": "03cff1a9465377d3e29e1ba2661accfc6029757ea5db4f00ac974c129411af7b",
+          "rgbaSha256": "86fe56ebd169b273e414a577d5152ea274cc4c7983b03a8cfaa3946125f885bf",
+          "confidence": "user_approved_exact"
         },
         "ground": {
-          "path": "res://assets/art/items/client/project_redesign/helmet/holy_war/item_00232_ground.png",
-          "library": "project.user_approved_redesign",
+          "path": "res://assets/generated/helmet_presentation/holy_war/final_291e39829b96/item_00232_ground.png",
+          "library": "project.user_final_helmet_calibration",
           "index": 232,
           "size": [
-            16,
-            17
+            11,
+            18
           ],
           "drawOffset": [
             0,
             0
           ],
-          "confidence": "user_approved_exact_design",
-          "sourceDirection": "S",
-          "faceAperture": "opaque_black_mask_interior",
-          "fileSha256": "3f0a88664a3d129ef85e91c7c9dbf1b8935b017c31412c1fb3ff271cfd4d42dd",
-          "rgbaSha256": "387b57ad2a4e7380412887d88011c5fc9486cc2a6633397234f25bb1ba0c8976"
+          "confidence": "user_approved_exact",
+          "sourceDirection": "SW",
+          "sourceVariant": "direction",
+          "fileSha256": "916c79b72eef4c4ee3918f3d93e5990801599ba97521ce610d73c7c8e348828b",
+          "rgbaSha256": "f21172d87c99298324302861ca3de7a3bba674b77a2300774703ccd7d0388668"
         }
       },
       "paperDoll": {
-        "status": "user_approved_project_redesign",
+        "status": "user_final_helmet_calibration",
         "slot": "头盔",
         "gender": "通用",
-        "sourceIndex": 104,
-        "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00232_head.png",
+        "sourceIndex": 232,
+        "path": "res://assets/generated/helmet_presentation/holy_war/final_291e39829b96/item_00232_paper_doll.png",
         "drawOffset": [
-          73,
-          27
+          75.213,
+          36.115
         ],
         "rawDrawOffset": [
-          73,
-          27
+          75.213,
+          36.115
         ],
         "size": [
-          32,
-          41
+          22,
+          29
         ],
-        "source": "approved item-232 S-direction",
+        "source": "user_final_helmet_calibration",
         "mappingConfidence": "user_approved_exact",
-        "faceWindow": "none_opaque_black_mask"
+        "fileSha256": "03cff1a9465377d3e29e1ba2661accfc6029757ea5db4f00ac974c129411af7b",
+        "rgbaSha256": "86fe56ebd169b273e414a577d5152ea274cc4c7983b03a8cfaa3946125f885bf"
       },
       "worldWear": {
         "status": "user_approved_project_redesign",
@@ -52308,80 +52429,88 @@
       "gender": "通用",
       "icons": {
         "inventory": {
-          "path": "res://assets/art/items/client/project_redesign/helmet/god_magic/item_00236_inventory.png",
-          "library": "project.user_approved_redesign",
+          "path": "res://assets/generated/helmet_presentation/god_magic/final_d89124686256/item_00236_inventory.png",
+          "library": "project.user_final_helmet_calibration",
           "index": 236,
           "size": [
             36,
-            35
+            36
           ],
           "drawOffset": [
             0,
             0
           ],
-          "confidence": "user_approved_exact_design",
+          "confidence": "user_approved_exact",
           "sourceDirection": "S",
-          "faceAperture": "opaque_black_mask_interior",
-          "fileSha256": "36f6ae682386ac1d19d50dc1bac6d63d109ce2b616d0f9d82a4019641fb1eb66",
-          "rgbaSha256": "efd18f1203ecec400da407a49878d3b1f458abc9515eb63d7fb461e842784242"
+          "sourceVariant": "direction",
+          "fileSha256": "a1ec8de1fe902d34d265708e162ce7ae59194ba84a2adb9d8e84a9d110b9a4ea",
+          "rgbaSha256": "eceaa92862d5c887c96d9720d8df25f97b42d674d67f597448ff3ed50a2b2cd1"
         },
         "equippedSlot": {
-          "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00236_head.png",
-          "library": "project.user_approved_redesign",
-          "index": 236,
-          "size": [
-            32,
-            41
-          ],
+          "status": "user_final_helmet_calibration",
+          "slot": "头盔",
+          "gender": "通用",
+          "sourceIndex": 236,
+          "path": "res://assets/generated/helmet_presentation/god_magic/final_d89124686256/item_00236_paper_doll.png",
           "drawOffset": [
-            73,
-            27
+            76.033,
+            38.574
           ],
-          "confidence": "user_approved_exact_design",
-          "sourceDirection": "S",
-          "faceAperture": "none_opaque_black_mask",
-          "fileSha256": "0ee91aa38c22da3de642377566f346ba585a0d1b0c079f7b06596bb9a7b57186"
+          "rawDrawOffset": [
+            76.033,
+            38.574
+          ],
+          "size": [
+            20,
+            20
+          ],
+          "source": "user_final_helmet_calibration",
+          "mappingConfidence": "user_approved_exact",
+          "fileSha256": "3c2c16e73c188627a02f88334198b23a52b339d2b5b86d825672e743a41a6f26",
+          "rgbaSha256": "77684dfdd2aa2b97141d90358ec9cccba8406406fe8ba090300ae6700ba9afdf",
+          "confidence": "user_approved_exact"
         },
         "ground": {
-          "path": "res://assets/art/items/client/project_redesign/helmet/god_magic/item_00236_ground.png",
-          "library": "project.user_approved_redesign",
+          "path": "res://assets/generated/helmet_presentation/god_magic/final_d89124686256/item_00236_ground.png",
+          "library": "project.user_final_helmet_calibration",
           "index": 236,
           "size": [
-            16,
-            17
+            18,
+            18
           ],
           "drawOffset": [
             0,
             0
           ],
-          "confidence": "user_approved_exact_design",
+          "confidence": "user_approved_exact",
           "sourceDirection": "S",
-          "faceAperture": "opaque_black_mask_interior",
-          "fileSha256": "46ae36492bf68154cdd7ebbaf13bbb905f1658dc9e2d04d7f0ded0ae2a8d3301",
-          "rgbaSha256": "9906f9011bc5560ab38f5f84b4d1f459519f3994dacb23472f99167df0257dce"
+          "sourceVariant": "direction",
+          "fileSha256": "5f97634c26b75728291769d6a8c3408f58c11d10fcf4ddac9e2679d40001c841",
+          "rgbaSha256": "674dacc14617e30c45e858b3f8184e9aae862fe639630643a7b039f399a4051e"
         }
       },
       "paperDoll": {
-        "status": "user_approved_project_redesign",
+        "status": "user_final_helmet_calibration",
         "slot": "头盔",
         "gender": "通用",
-        "sourceIndex": 101,
-        "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00236_head.png",
+        "sourceIndex": 236,
+        "path": "res://assets/generated/helmet_presentation/god_magic/final_d89124686256/item_00236_paper_doll.png",
         "drawOffset": [
-          73,
-          27
+          76.033,
+          38.574
         ],
         "rawDrawOffset": [
-          73,
-          27
+          76.033,
+          38.574
         ],
         "size": [
-          32,
-          41
+          20,
+          20
         ],
-        "source": "approved item-236 S-direction",
+        "source": "user_final_helmet_calibration",
         "mappingConfidence": "user_approved_exact",
-        "faceWindow": "none_opaque_black_mask"
+        "fileSha256": "3c2c16e73c188627a02f88334198b23a52b339d2b5b86d825672e743a41a6f26",
+        "rgbaSha256": "77684dfdd2aa2b97141d90358ec9cccba8406406fe8ba090300ae6700ba9afdf"
       },
       "worldWear": {
         "status": "user_approved_project_redesign",
@@ -52505,80 +52634,88 @@
       "gender": "通用",
       "icons": {
         "inventory": {
-          "path": "res://assets/art/items/client/project_redesign/helmet/heavenly_taoist/item_00240_inventory.png",
-          "library": "project.user_approved_redesign",
+          "path": "res://assets/generated/helmet_presentation/heavenly_taoist/final_e114ad10fc5a/item_00240_inventory.png",
+          "library": "project.user_final_helmet_calibration",
           "index": 240,
           "size": [
-            36,
-            35
+            21,
+            36
           ],
           "drawOffset": [
             0,
             0
           ],
-          "confidence": "user_approved_exact_design",
+          "confidence": "user_approved_exact",
           "sourceDirection": "S",
-          "faceAperture": "opaque_dark_interior_for_item_icon",
-          "fileSha256": "748996fde82303b911acf650e254d16d8d79d7da42ab8a1d94dda82e6fbe4a4c",
-          "rgbaSha256": "2a407768a063257d3ee41c4966accb3bcabbc2c9a459e1244ac839616ca4463e"
+          "sourceVariant": "dedicated_inventory",
+          "fileSha256": "91a04ea3f92ea9a0fac9bf1679d48b7896304a8e2e81b98ccb5a4d18ed9180d3",
+          "rgbaSha256": "6deafea867643f048ecb632bd9e2bbe3f93292062650b6c15692d0c4441e814f"
         },
         "equippedSlot": {
-          "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00240_head.png",
-          "library": "project.user_approved_redesign",
-          "index": 240,
-          "size": [
-            32,
-            41
-          ],
+          "status": "user_final_helmet_calibration",
+          "slot": "头盔",
+          "gender": "通用",
+          "sourceIndex": 240,
+          "path": "res://assets/generated/helmet_presentation/heavenly_taoist/final_e114ad10fc5a/item_00240_paper_doll.png",
           "drawOffset": [
-            73,
-            27
+            77.262,
+            36.115
           ],
-          "confidence": "user_approved_exact_design",
-          "sourceDirection": "S",
-          "faceAperture": "open_source_face_aperture",
-          "fileSha256": "bda1b588d5aeaf6a61085c65040e46ac5f0351b44be073e55e32083d298c3ce0"
+          "rawDrawOffset": [
+            77.262,
+            36.115
+          ],
+          "size": [
+            18,
+            29
+          ],
+          "source": "user_final_helmet_calibration",
+          "mappingConfidence": "user_approved_exact",
+          "fileSha256": "55d28d3663ef5cbb0c7bf9f0dce93f8d63e9f7988e784f0b13cc087f7705a3b5",
+          "rgbaSha256": "83f01a0a7c8c9fa06d5f0580a66ebbb7d5a8b80c462a78166edf57694be68d65",
+          "confidence": "user_approved_exact"
         },
         "ground": {
-          "path": "res://assets/art/items/client/project_redesign/helmet/heavenly_taoist/item_00240_ground.png",
-          "library": "project.user_approved_redesign",
+          "path": "res://assets/generated/helmet_presentation/heavenly_taoist/final_e114ad10fc5a/item_00240_ground.png",
+          "library": "project.user_final_helmet_calibration",
           "index": 240,
           "size": [
-            16,
-            17
+            11,
+            18
           ],
           "drawOffset": [
             0,
             0
           ],
-          "confidence": "user_approved_exact_design",
+          "confidence": "user_approved_exact",
           "sourceDirection": "S",
-          "faceAperture": "opaque_dark_interior_for_item_icon",
-          "fileSha256": "332915019c4173e2a48f9d9c1837be003253b62964396234fc1a3b7574f23da0",
-          "rgbaSha256": "a2122a2a5ab5b131c3f8ca77b6f533a82c2cd51e6380f3cd84f53c1f91859775"
+          "sourceVariant": "dedicated_ground",
+          "fileSha256": "1bc294908328ca3f1424da2faf8b60160604e12ffd5f94fbdaad80dbb1674483",
+          "rgbaSha256": "aad147b3e55d130354be0764d021dc3be014e28d0512cc0cf599dff0dc2334ab"
         }
       },
       "paperDoll": {
-        "status": "user_approved_project_redesign",
+        "status": "user_final_helmet_calibration",
         "slot": "头盔",
         "gender": "通用",
-        "sourceIndex": 102,
-        "path": "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00240_head.png",
+        "sourceIndex": 240,
+        "path": "res://assets/generated/helmet_presentation/heavenly_taoist/final_e114ad10fc5a/item_00240_paper_doll.png",
         "drawOffset": [
-          73,
-          27
+          77.262,
+          36.115
         ],
         "rawDrawOffset": [
-          73,
-          27
+          77.262,
+          36.115
         ],
         "size": [
-          32,
-          41
+          18,
+          29
         ],
-        "source": "approved item-240 S-direction",
+        "source": "user_final_helmet_calibration",
         "mappingConfidence": "user_approved_exact",
-        "faceWindow": "open_source_face_aperture"
+        "fileSha256": "55d28d3663ef5cbb0c7bf9f0dce93f8d63e9f7988e784f0b13cc087f7705a3b5",
+        "rgbaSha256": "83f01a0a7c8c9fa06d5f0580a66ebbb7d5a8b80c462a78166edf57694be68d65"
       },
       "worldWear": {
         "status": "user_approved_project_redesign",

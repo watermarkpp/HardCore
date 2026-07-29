@@ -5,7 +5,6 @@ const DIRECTIONS := ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
 const ACTIONS := {
 	"idle": 4, "walk": 6, "attack": 6, "cast": 6, "hit": 3, "death": 4,
 }
-const EXPECTED_ELF_ROWS := [4, 5, 6, 1, 0, 7, 2, 3]
 const EXPECTED_BLACK_ROWS := [0, 1, 7, 2, 4, 3, 6, 5]
 const EXPECTED_CALIBRATION_ITEMS := [
 	146, 147, 149, 150, 151, 218, 224, 228, 232, 236, 240,
@@ -26,7 +25,7 @@ func _run() -> void:
 	assert(sockets.get("canonicalDirections", []) == DIRECTIONS)
 	assert(contract.get("runtimeFormula", "") == (
 		"final_position = body_head_socket - "
-		+ "source_helmet_local_pivot(action,source_row,frame) + integer_nudge"
+		+ "source_helmet_local_pivot(action,source_row,frame) + half_pixel_nudge"
 	))
 	assert(contract.get("policies", {}).get("runtimeScalingForbidden", false))
 	assert(contract.get("policies", {}).get("horizontalFlipForbidden", false))
@@ -72,23 +71,43 @@ func _run() -> void:
 	assert(int(moving_actions.hit) > 15)
 	assert(int(moving_actions.death) > 25)
 
+	var finalized := _json(
+		"res://assets/data/equipment_helmet_finalization_manifest.json"
+	)
+	var final_elf: Dictionary = finalized.get("items", {}).get("146", {})
+	var final_elf_directions: Dictionary = final_elf.get(
+		"directionCalibration", {}
+	)
 	var source_rows: Dictionary = {}
 	for direction_index: int in 8:
 		var record := HelmetVisualV2.direction_record(146, direction_index)
 		assert(not record.is_empty())
-		assert(int(record.get("source_row", -1)) == EXPECTED_ELF_ROWS[direction_index])
+		var expected: Dictionary = final_elf_directions.get(
+			DIRECTIONS[direction_index], {}
+		)
+		assert(int(record.get("source_row", -1)) == int(expected.get(
+			"source_row", -1
+		)))
 		assert(str(record.get("source_direction", "")) == DIRECTIONS[direction_index])
 		assert(str(record.get("face_policy", "")) in ["open_crown", "half_open", "closed"])
 		assert(str(record.get("hair_policy", "")) in ["keep", "clip", "hide"])
 		assert(str(record.get("status", "")) == "valid")
-		assert(bool(record.get("locked", false)))
+		assert(bool(record.get("locked", true)) == bool(expected.get(
+			"locked", false
+		)))
 		assert(record.get("pivotByActionFrame", {}).get("idle", []).size() == 4)
 		assert(record.get("pivotByActionFrame", {}).get("attack", []).size() == 6)
 		assert(record.get("pivotByActionFrame", {}).get("cast", []).size() == 6)
 		var nudge: Variant = record.get("nudge", [])
 		assert(nudge is Array and nudge.size() == 2)
-		assert(float(nudge[0]) == floorf(float(nudge[0])))
-		assert(float(nudge[1]) == floorf(float(nudge[1])))
+		assert(is_equal_approx(
+			float(nudge[0]) * 2.0,
+			roundf(float(nudge[0]) * 2.0)
+		))
+		assert(is_equal_approx(
+			float(nudge[1]) * 2.0,
+			roundf(float(nudge[1]) * 2.0)
+		))
 		assert(record.get("runtime_scale", []) == [1.0, 1.0])
 		assert(not bool(record.get("flip_h", true)))
 		assert(record.get("layers", {}).get("helmet_back", "unexpected") == null)
@@ -98,7 +117,8 @@ func _run() -> void:
 				var delta := HelmetVisualV2.final_position_delta(
 					146, "player.male.cloth_002", action, direction_index, frame_index
 				)
-				assert(delta.x == floorf(delta.x) and delta.y == floorf(delta.y))
+				assert(is_equal_approx(delta.x * 2.0, roundf(delta.x * 2.0)))
+				assert(is_equal_approx(delta.y * 2.0, roundf(delta.y * 2.0)))
 		source_rows[int(record.get("source_row", -1))] = true
 	assert(source_rows.size() == 8)
 	assert(str(HelmetVisualV2.direction_record(146, 0).get("openingVisibility", "")) == "none")
