@@ -242,7 +242,7 @@ func request_attack_toward(direction: Vector2, has_combat_target := false) -> bo
 
 
 func request_skill(skill_name: String) -> bool:
-	if skill_name.is_empty() or not PlayerState.learned_skills.has(skill_name):
+	if skill_name.is_empty() or not PlayerState.is_skill_learned(skill_name):
 		return false
 	if _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0 or control_time > 0.0 or _dead:
 		return false
