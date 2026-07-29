@@ -22,7 +22,7 @@ func _run() -> void:
 	assert(active_target_probe._load_active_target_manifest(
 		"res://assets/data/helmet_calibration_active_target.json"
 	))
-	assert(active_target_probe.active_target_item_id() == 218)
+	assert(active_target_probe.active_target_item_id() == 224)
 	active_target_probe.free()
 	var editor: Node = EDITOR_SCENE.instantiate()
 	editor.auto_run = false
@@ -88,12 +88,12 @@ func _run() -> void:
 			"res://assets/data/helmet_calibration_active_target.json"
 		)
 	)
-	assert(int(active_target.get("itemId", -1)) == 218)
+	assert(int(active_target.get("itemId", -1)) == 224)
 	assert(str(active_target.get(
 		"visualAssetId", ""
-	)) == "mystery")
+	)) == "prayer")
 	assert(str(active_target.get("sourceSheet", "")).ends_with(
-		"mystery_218_helmet_8dir_transparent.png"
+		"prayer_224_helmet_8dir_transparent.png"
 	))
 	assert(str(active_target.get("sourceResizeFilter", "")) == (
 		"display_transform_only_until_final_bake_v1"
@@ -107,7 +107,7 @@ func _run() -> void:
 	assert(str(active_target.get(
 		"preparedPresentationFiles", {}
 	).get("inventory", "")).ends_with(
-		"mystery_218_presentation/inventory.png"
+		"prayer_224_presentation/inventory.png"
 	))
 	assert(FileAccess.get_sha256(str(
 		active_target.get(
@@ -152,59 +152,59 @@ func _run() -> void:
 	assert(target_grid.columns == 8)
 	assert(source_grid.columns == 8)
 	_assert_editor_layout(editor)
-	# Active item 218 keeps every original RGBA direction attached to the UI.
+	# Active item 224 keeps every original RGBA direction attached to the UI.
 	# The world card applies only a non-destructive display transform, and the
 	# ground preview uses the selected raw cutout instead of a 64x64 thumbnail.
 	assert(editor._load_active_target_manifest(
 		"res://assets/data/helmet_calibration_active_target.json"
 	))
-	editor.select_item(218)
+	editor.select_item(224)
 	for source_row: int in 8:
-		var raw_218: Image = editor._authored_source_cutout(source_row)
-		var source_button_218 := source_grid.get_node(
+		var raw_224: Image = editor._authored_source_cutout(source_row)
+		var source_button_224 := source_grid.get_node(
 			"Source_Row%d" % source_row
 		) as TextureButton
-		assert(not raw_218.is_empty())
+		assert(not raw_224.is_empty())
 		assert(
-			source_button_218.texture_normal.get_image().get_size()
-			== raw_218.get_size()
+			source_button_224.texture_normal.get_image().get_size()
+			== raw_224.get_size()
 		)
 		assert(
-			source_button_218.stretch_mode
+			source_button_224.stretch_mode
 			== TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 		)
-		var overlay_218: TextureRect = editor._target_authored_overlays[
+		var overlay_224: TextureRect = editor._target_authored_overlays[
 			source_row
 		]
-		assert(overlay_218.texture.get_image().get_size() == raw_218.get_size())
-		var display_size_218: Vector2 = editor.authored_world_display_size(
+		assert(overlay_224.texture.get_image().get_size() == raw_224.get_size())
+		var display_size_224: Vector2 = editor.authored_world_display_size(
 			source_row,
-			HelmetVisualV2.direction_scale_percent(218, source_row)
+			HelmetVisualV2.direction_scale_percent(224, source_row)
 		)
-		assert(overlay_218.size.is_equal_approx(display_size_218))
+		assert(overlay_224.size.is_equal_approx(display_size_224))
 		assert(is_equal_approx(
-			display_size_218.x / display_size_218.y,
-			float(raw_218.get_width()) / float(raw_218.get_height())
+			display_size_224.x / display_size_224.y,
+			float(raw_224.get_width()) / float(raw_224.get_height())
 		))
-	var ground_218: Dictionary = editor._current_presentation_calibration().get(
+	var ground_224: Dictionary = editor._current_presentation_calibration().get(
 		"ground", {}
 	)
-	var ground_row_218 := int(ground_218.get("source_row", 4))
+	var ground_row_224 := int(ground_224.get("source_row", 4))
 	assert(
 		editor._ground_preview.texture.get_image().get_size()
-		== editor._authored_source_cutout(ground_row_218).get_size()
+		== editor._authored_source_cutout(ground_row_224).get_size()
 	)
-	var dedicated_inventory_218 := Image.load_from_file(
+	var dedicated_inventory_224 := Image.load_from_file(
 		str(active_target.get(
 			"preparedPresentationFiles", {}
 		).get("inventory", ""))
 	)
 	assert(
 		editor._inventory_preview.texture.get_image().get_data()
-		== dedicated_inventory_218.get_data()
+		== dedicated_inventory_224.get_data()
 	)
 	assert(
-		dedicated_inventory_218.get_data()
+		dedicated_inventory_224.get_data()
 		!= editor._authored_source_cutout(4).get_data()
 	)
 	# The remainder of this legacy regression intentionally exercises item 146
