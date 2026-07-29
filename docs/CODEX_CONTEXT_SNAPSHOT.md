@@ -5,6 +5,16 @@
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。
 准确性规则：本文件不是代码或 Git 状态的替代品；只核实本次任务实际触及的分支、文件、接口和专项测试。
 
+## 2026-07-29 v37 运行时实证修复
+
+- 集成运行时提交：`53514548`；Android `versionCode=37`、`versionName=1.17.1-runtime-proof`，角色选择页显示 `release.runtime-proof.v37` 构建指纹。
+- APK：`outputs/hardcore/HardCore-runtime-proof-v37-debug.apk`；SHA-256 `6E12C921D7A234E6C508DEE76AB1331E81D7B16B96865E78F9F8B1D1E4D76456`；大小 `1,648,238,897` 字节；包名继续为 `com.personal.mafaoffline`，签名 v2/v3 通过。
+- 存档升级到 v5：中央技能栏 4 格与攻击环 3 格独立保存和触发；旧四格档只迁移一次。debug APK 首次启动会把旧测试人物移入 `user://test_roster_archives/`，清空活动索引并严格生成 9 个 `test.character.<profession>.<tier>.v2` 人物；战士/法师/道士分别为 6/14/13 个完整技能。
+- 纸娃娃 classic base 与男性头发改为编译期 preload，动态资源失败时再走正式 world-avatar 可见回退，禁止静默空白；角色选择、背包和 HUD 生产入口均有回归。
+- 玩家施法改用 canonical 学习状态；新增真实角色→HUD→Player→GameRoot 技能结算和 Enemy→Player 三帧受击硬直 E2E。世界人物继续隐藏所有头盔层并使用主资料库男性 `Hair.wil block 4` 六动作。
+- 当前集成专项 15/15、完整关键回归 74/74；独立 APK 探针确认 12 个关键编译脚本变化、世界头盔四项 `false`、男性头发六动作、纸娃娃 base/hair 与 12 个头盔 patch、586 帧技能动画。14 份冻结头盔草稿/正式合同 SHA-256 全部零变化。
+- APK 从固定提交的全新工作树和全新 `.godot` 缓存导入、导出；隔离构建临时目录已从 Git 注册表移除并移入 Windows 回收站，可恢复。
+
 ## 30 秒启动顺序
 
 1. 完整读取根目录 `AGENTS.md`。
