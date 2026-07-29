@@ -16,10 +16,13 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `92b3bdba`（本次快照提交只改本文档）。
+- 分支/运行时代码基线：`codex/integration` @ `6827bb7d`（本次快照提交只改本文档）。
 - tracked 状态：黑铁头盔 151 的旧 `scale_100` 六动作生成图集共 6 个既有在制修改继续保护；本次男性头发接入未暂存、覆盖或提交这些旧图。146/147/149/150/151/218/224/228/232 共 9 份已验收人工草稿继续冻结；236/240 最新人工草稿分别为 SHA-256 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`、`81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`，均保持 dirty 并禁止覆盖。
 - 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
+- `52b54608` 完成本轮 Android 集成测试包配置：应用名继续为 `HardCore`，兼容包 ID 继续为 `com.personal.mafaoffline`，versionCode `36`、versionName `1.17.0-full-integration`、目标架构 `arm64-v8a`；导出排除测试、文档、开发原稿、校准草稿、审计输出和高清 `scale_100` 编辑资产，运行时合同与正式成品保留。
+- `35568e45`（装备提交 `26f25e39`）和 `6827bb7d`（职业技能提交 `ce58f7bc`）只修正已经过时的测试期望：正式武器可见性改为罗刹/嗜魂法杖/鹤嘴锄可见且只剩落魄神兵未解析；烈火测试改为 canonical 一次充能语义。两项均未改运行时合同、素材或用户冻结数据。
+- 本轮真实集成基线验收：装备套件 17/17、战士技能套件 18/18、跨领域发布专项 17/17、完整关键套件 74/74 全部通过，`SMOKE_TEST_PASS`。技能主源共 33 项；26 项正式法师/道士主动技能视觉共 586 帧，fallback 为 0。
 - `698482bf`（装备提交 `6249ed86`）按用户指定切换为主资料库经典 `Hair.wil block 4`（男性外观 2）；与同发行版 `Hum.wil` 使用相同 600 帧动作块和 Hot 坐标。idle/walk/attack/cast/hit/death 共 232 个目标帧全部存在且非空，直接组图，无缩放、旋转、插值、补帧或低级来源替换；世界人物继续隐藏全部头盔层。
 - `92b3bdba`（UI 提交 `2e0fba4a`）修正纸娃娃装备头盔时错误隐藏男性头发的问题。`classic_avatar` 现在始终绘制男性头发，随后按衣服、武器、头盔顺序绘制装备，使头盔位于头发之上；可见边界同样始终计入头发。240 用户最终纸娃娃头盔直接加载回归、人物选择、背包刷新、三职业换装专项 7/7 与装备全套 17/17 通过；纸娃娃、背包、地面、11 份人工草稿及四份正式合同共 15/15 哈希不变。
 - `b4c11258`（装备提交 `7392602`）修复头盔校准跨行为串改：重置当前帧恢复该动作/方向/帧的最近保存值；键盘 `+/-` 只缩放当前姿态；非 idle 撤销不会清除 idle 的未保存公共映射。当时对非 idle 源映射采用的禁改保护已由 `d9c3d11a` 升级为逐姿态独立保存。装备工作树和真实集成基线专项均为 2/2 通过，集成测试前后全部头盔草稿 SHA-256 零变化。
@@ -53,14 +56,14 @@
 
 ## 最终 APK
 
-- 状态：下列 APK 是 12:10 的上一版测试包，尚未包含 `4a52cc54` 与 `b0235f07` 的最终纸娃娃整改；用户要求先确认截图，因此当前未重新构建 APK。
-- 文件：`C:\Users\Administrator\Documents\HardCore\outputs\hardcore\HardCore-debug.apk`
-- 构建时间：`2026-07-26 12:10:58`
-- 大小：`1,653,572,428` 字节
-- SHA-256：`1117D14E37960025E0D1C2205E960CA38A8D76B668FE5F295A91C824F6488E8A`
-- 包信息：`com.personal.mafaoffline`，versionCode `35`，versionName `1.16.0-bich-map-runtime`，应用名 `HardCore`，`arm64-v8a`。
-- 签名验证：APK Signature Scheme v2/v3 均通过，签名者 1。
-- 本包包含 214 种怪物逐 ID v4 光圈校准、9 个三职业三套装满技能独立测试人物、男性专用正式人物与装备显示管线、`world_avatar`/`classic_avatar` 双模式纸娃娃、primary-only 世界武器兼容合同、正式装备视觉目录、神兽动画、人物列表触摸滚动、法师/道士360ms施法动作与移动锁、26 个法师/道士主动技能的主资料动画和选帧图标，以及等距椭圆脚底四边地图边界修复；角色存档只补建缺失项，不覆盖后续测试进度。
+- 状态：最新完整集成 Android 实机测试包，headless import/export 均成功并完成独立 APK 元数据、架构、清单与签名验证。
+- 文件：`C:\Users\Administrator\Documents\HardCore\outputs\hardcore\HardCore-integrated-debug.apk`
+- 构建时间：`2026-07-29 21:52:16`
+- 大小：`1,648,222,396` 字节
+- SHA-256：`B1355959570EF5BA585371C3E6260B12EB9188078D39A3FF0F3891DEC6EB3A5B`
+- 包信息：`com.personal.mafaoffline`，versionCode `36`，versionName `1.17.0-full-integration`，应用名 `HardCore`，compile/target SDK `36`、minSdk `24`、`arm64-v8a`、横屏。
+- 签名验证：APK Signature Scheme v2/v3 均通过，签名者 1；证书 SHA-256 `c62d0f8239b926f819038845c302143fd24dcfd75ed8d877ed846c430c6f3fcc`，与上一测试包签名者一致，可覆盖安装并保留兼容存档。
+- 本包包含当前集成分支全部正式运行时工作：33 技能及正式技能动画/图标、硬直与受击中断、完整装备属性和穿戴、纸娃娃/背包/地面头盔展示、世界人物隐藏头盔并使用经典主资料库男性 `Hair.wil block 4` 全动作头发、男性衣服/武器外观、三职业九个满技能测试人物、地图/碰撞/遮挡、怪物外观与 v4 脚下光圈、UI 与角色存档兼容。15 份受保护头盔草稿和正式合同构建前后 SHA-256 全部不变。
 
 ## 最近已集成结果
 
@@ -206,8 +209,8 @@
 | `HardCore-worktrees/maps` | `codex/maps` @ `2a4d6ccf` | 72 untracked | 用户地图编辑器内容，继续保护；代码等价结果已集成为 `1d74fc72` |
 | `HardCore-worktrees/monsters` | `codex/monsters` @ `45781ded` | tracked clean；68 UID | 已集成为 `c88c6277` |
 | `HardCore-worktrees/ui-art` | `codex/ui-art` @ `2e0fba4a` | tracked clean；Godot UID/输出继续保护 | 纸娃娃始终保留男性头发且头盔后绘制；已作为 `92b3bdba` 集成，专项 7/7、装备套件 17/17 通过 |
-| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `be710c6e` | 27 项 tracked 技能视觉在制修改；66 UID 继续保护 | 33技能 runtime 与150条可执行语义合同已集成；当前 fire_wall / summon_skeleton 视觉返修未交付，禁止清理或覆盖 |
-| `HardCore-worktrees/equipment` | `codex/equipment` @ `6249ed86` | 4 个既有 monster import 修改、1 个既有试点截图脚本修改及 UID/生成项继续保护 | 主资料库经典男性 `Hair.wil block 4` 六动作 232 帧与世界头盔隐藏策略已作为 `698482bf` 集成；纸娃娃、背包、地面、11 份人工草稿、旧正式头盔素材和在制生成图集保持冻结 |
+| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `ce58f7bc` | 既有 UID/输出继续保护 | 33 技能 runtime、150 条可执行语义合同和 26 项正式主动技能视觉已集成；`ce58f7bc` 的烈火 canonical 测试修正已作为 `6827bb7d` 集成 |
+| `HardCore-worktrees/equipment` | `codex/equipment` @ `26f25e39` | 既有 monster import、试点截图脚本、UID/生成项继续保护 | 男性 `Hair.wil block 4`、世界头盔隐藏、纸娃娃/背包/地面头盔均已集成；`26f25e39` 的正式武器可见性测试修正已作为 `35568e45` 集成，冻结草稿与生成图继续保护 |
 
 ### maps 保护红线
 
