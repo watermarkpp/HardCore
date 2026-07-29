@@ -33,16 +33,23 @@ func _run() -> void:
 		"slot_id": "hud.attack_ring_skill.2",
 		"skill_id": "warrior.wild_rush",
 	})
-	assert(PlayerState.quick_slots[1] == "野蛮冲撞", "HUD新版请求未将野蛮冲撞置换到快捷槽")
+	assert(PlayerState.attack_ring_slots[1] == "野蛮冲撞", "HUD新版请求未将野蛮冲撞置换到独立攻击环")
+	assert(PlayerState.quick_slots[1] == "刺杀剑术", "攻击环配置错误改写了中央技能栏")
 	assert(_quick_slot_change_count == 1, "快捷槽置换没有发出唯一稳定状态信号")
-	assert(game.hud.quick_buttons[1].text.contains("野蛮冲撞"), "快捷槽置换后HUD没有立即刷新")
-	var slots_after_v2 := PlayerState.quick_slots.duplicate()
+	assert(
+		str(game.hud.attack_ring_skill_icons[1].get_meta("skill_name", "")) == "野蛮冲撞",
+		"攻击环置换后HUD没有立即刷新"
+	)
+	var assignments_after_v2 := PlayerState.skill_button_assignments_snapshot()
 	game.hud.skill_quick_slot_assignment_requested.emit({
 		"contract_id": "ui.skill.quick_slot_assignment.v1",
 		"slot_index": 0,
 		"skill_name": "野蛮冲撞",
 	})
-	assert(PlayerState.quick_slots == slots_after_v2, "GameRoot错误重复接入旧版快捷槽信号")
+	assert(
+		PlayerState.skill_button_assignments_snapshot() == assignments_after_v2,
+		"GameRoot错误重复接入旧版快捷槽信号"
+	)
 
 	var player: PlayerCharacter = game.player
 	player.set_test_combat_time_ms(1000)
@@ -104,7 +111,7 @@ func _run() -> void:
 	assert(player.request_skill("野蛮冲撞"), "烈火独立冷却错误阻塞其他技能")
 
 	PlayerState.quick_slots_changed.disconnect(_on_quick_slots_changed)
-	print("SKILL_RUNTIME_INTEGRATION_PASS：v2换槽、单路信号、HUD刷新及烈火SOT显式充能正常")
+	print("SKILL_RUNTIME_INTEGRATION_PASS：v2独立7槽、单路信号、HUD刷新及烈火SOT显式充能正常")
 	get_tree().quit(0)
 
 

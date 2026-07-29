@@ -93,13 +93,14 @@ func _ready() -> void:
 	hud.attack_pressed.connect(_on_mobile_attack_pressed)
 	hud.attack_released.connect(_on_mobile_attack_released)
 	hud.interact_pressed.connect(_try_interact)
-	hud.skill_pressed.connect(_use_quick_slot)
+	hud.skill_slot_pressed.connect(_use_skill_slot)
 	hud.map_travel_requested.connect(travel_to_map)
 	hud.target_switch_pressed.connect(_cycle_target)
 	hud.auto_target_changed.connect(_set_auto_target_enabled)
 	hud.special_action_pressed.connect(_on_special_action_pressed)
 	hud.skill_button_assignment_requested.connect(_on_skill_button_assignment_requested)
 	add_child(hud)
+	hud.set_skill_button_assignments(PlayerState.skill_button_assignments_snapshot())
 	player.resources_changed.connect(hud.update_resources)
 	# 重登始终从服务端HomeMap出生。该规则不依赖退出回调，Android强杀后同样安全回城。
 	travel_to_service_home(false, true)
@@ -1367,11 +1368,14 @@ func _try_interact() -> void:
 
 
 func _use_quick_slot(index: int) -> void:
-	if index < 0 or index >= PlayerState.quick_slots.size():
-		return
-	var skill_name := PlayerState.quick_slots[index]
+	_use_skill_slot(PlayerState.SKILL_SLOT_GROUP_CENTER, index)
+
+
+func _use_skill_slot(slot_group: String, slot_index: int) -> void:
+	var skill_name := PlayerState.skill_name_for_slot(slot_group, slot_index)
 	if skill_name.is_empty():
-		hud.show_message("快捷栏%d为空" % (index + 1))
+		var group_label := "攻击环" if slot_group == PlayerState.SKILL_SLOT_GROUP_ATTACK_RING else "中央栏"
+		hud.show_message("%s%d为空" % [group_label, slot_index + 1])
 		return
 	var learned_level := PlayerState.effective_skill_level(skill_name)
 	var profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)
@@ -1383,15 +1387,32 @@ func _use_quick_slot(index: int) -> void:
 
 
 func _on_skill_button_assignment_requested(request: Dictionary) -> void:
-	var result := SkillLoadoutRulesScript.assign_quick_slot(PlayerState.quick_slots, PlayerState.learned_skills, request)
+	var result := SkillLoadoutRulesScript.assign_button_slot(
+		PlayerState.skill_button_assignments_snapshot(),
+		PlayerState.learned_skills,
+		request
+	)
 	if not bool(result.get("ok", false)):
 		hud.show_message("技能栏配置失败：%s" % str(result.get("reason", "invalid_request")))
 		return
 	if not PlayerState.apply_quick_slot_assignment(result):
 		hud.show_message("技能栏配置未能保存")
 		return
-	hud.update_quick_slots()
-	hud.show_message("已将%s配置到快捷栏%d" % [str(result.get("change", {}).get("skill_name", "技能")), int(result.get("change", {}).get("slot_index", 0)) + 1], 1.5)
+	hud.set_skill_button_assignments(PlayerState.skill_button_assignments_snapshot())
+	var change: Dictionary = result.get("change", {})
+	var group_label := (
+		"攻击环"
+		if str(change.get("slot_group", "")) == PlayerState.SKILL_SLOT_GROUP_ATTACK_RING
+		else "中央栏"
+	)
+	hud.show_message(
+		"已将%s配置到%s%d" % [
+			str(change.get("skill_name", "技能")),
+			group_label,
+			int(change.get("slot_index", 0)) + 1,
+		],
+		1.5
+	)
 
 
 func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void:
