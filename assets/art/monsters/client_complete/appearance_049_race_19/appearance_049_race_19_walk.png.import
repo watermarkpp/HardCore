@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ctfxalbndx5gn"
-path.s3tc="res://.godot/imported/appearance_049_race_19_walk.png-2d82630ab8b419e0fe5b63f1eae9a4fc.s3tc.ctex"
-path.etc2="res://.godot/imported/appearance_049_race_19_walk.png-2d82630ab8b419e0fe5b63f1eae9a4fc.etc2.ctex"
+path="res://.godot/imported/appearance_049_race_19_walk.png-2d82630ab8b419e0fe5b63f1eae9a4fc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_complete/appearance_049_race_19/appearance_049_race_19_walk.png"
-dest_files=["res://.godot/imported/appearance_049_race_19_walk.png-2d82630ab8b419e0fe5b63f1eae9a4fc.s3tc.ctex", "res://.godot/imported/appearance_049_race_19_walk.png-2d82630ab8b419e0fe5b63f1eae9a4fc.etc2.ctex"]
+dest_files=["res://.godot/imported/appearance_049_race_19_walk.png-2d82630ab8b419e0fe5b63f1eae9a4fc.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

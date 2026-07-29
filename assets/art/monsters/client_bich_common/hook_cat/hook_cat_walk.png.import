@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://chc1lmifw2j7c"
-path.s3tc="res://.godot/imported/hook_cat_walk.png-b296cacb56e59237c532536b5b772ac4.s3tc.ctex"
-path.etc2="res://.godot/imported/hook_cat_walk.png-b296cacb56e59237c532536b5b772ac4.etc2.ctex"
+path="res://.godot/imported/hook_cat_walk.png-b296cacb56e59237c532536b5b772ac4.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_bich_common/hook_cat/hook_cat_walk.png"
-dest_files=["res://.godot/imported/hook_cat_walk.png-b296cacb56e59237c532536b5b772ac4.s3tc.ctex", "res://.godot/imported/hook_cat_walk.png-b296cacb56e59237c532536b5b772ac4.etc2.ctex"]
+dest_files=["res://.godot/imported/hook_cat_walk.png-b296cacb56e59237c532536b5b772ac4.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

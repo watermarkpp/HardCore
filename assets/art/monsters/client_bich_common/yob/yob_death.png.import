@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bcos5gaf1xquf"
-path.s3tc="res://.godot/imported/yob_death.png-2e4d604971d5f37f14de28573fd8c121.s3tc.ctex"
-path.etc2="res://.godot/imported/yob_death.png-2e4d604971d5f37f14de28573fd8c121.etc2.ctex"
+path="res://.godot/imported/yob_death.png-2e4d604971d5f37f14de28573fd8c121.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_bich_common/yob/yob_death.png"
-dest_files=["res://.godot/imported/yob_death.png-2e4d604971d5f37f14de28573fd8c121.s3tc.ctex", "res://.godot/imported/yob_death.png-2e4d604971d5f37f14de28573fd8c121.etc2.ctex"]
+dest_files=["res://.godot/imported/yob_death.png-2e4d604971d5f37f14de28573fd8c121.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

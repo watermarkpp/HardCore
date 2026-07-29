@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c2u55dwwafn1v"
-path.s3tc="res://.godot/imported/axe_skeleton_death.png-cd192630f3bb0a501052ad288b68fb03.s3tc.ctex"
-path.etc2="res://.godot/imported/axe_skeleton_death.png-cd192630f3bb0a501052ad288b68fb03.etc2.ctex"
+path="res://.godot/imported/axe_skeleton_death.png-cd192630f3bb0a501052ad288b68fb03.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_undead/axe_skeleton/axe_skeleton_death.png"
-dest_files=["res://.godot/imported/axe_skeleton_death.png-cd192630f3bb0a501052ad288b68fb03.s3tc.ctex", "res://.godot/imported/axe_skeleton_death.png-cd192630f3bb0a501052ad288b68fb03.etc2.ctex"]
+dest_files=["res://.godot/imported/axe_skeleton_death.png-cd192630f3bb0a501052ad288b68fb03.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

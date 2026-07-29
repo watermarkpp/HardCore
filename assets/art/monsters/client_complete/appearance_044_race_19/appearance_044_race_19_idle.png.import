@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bcq5wdkauruj"
-path.s3tc="res://.godot/imported/appearance_044_race_19_idle.png-19e5fd81ee0faa1d46465ffde23729ec.s3tc.ctex"
-path.etc2="res://.godot/imported/appearance_044_race_19_idle.png-19e5fd81ee0faa1d46465ffde23729ec.etc2.ctex"
+path="res://.godot/imported/appearance_044_race_19_idle.png-19e5fd81ee0faa1d46465ffde23729ec.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_complete/appearance_044_race_19/appearance_044_race_19_idle.png"
-dest_files=["res://.godot/imported/appearance_044_race_19_idle.png-19e5fd81ee0faa1d46465ffde23729ec.s3tc.ctex", "res://.godot/imported/appearance_044_race_19_idle.png-19e5fd81ee0faa1d46465ffde23729ec.etc2.ctex"]
+dest_files=["res://.godot/imported/appearance_044_race_19_idle.png-19e5fd81ee0faa1d46465ffde23729ec.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

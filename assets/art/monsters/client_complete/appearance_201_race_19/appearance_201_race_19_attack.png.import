@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dqes1qlmvpfgv"
-path.s3tc="res://.godot/imported/appearance_201_race_19_attack.png-50e626330c7d436a26ae15b0892a78a0.s3tc.ctex"
-path.etc2="res://.godot/imported/appearance_201_race_19_attack.png-50e626330c7d436a26ae15b0892a78a0.etc2.ctex"
+path="res://.godot/imported/appearance_201_race_19_attack.png-50e626330c7d436a26ae15b0892a78a0.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_complete/appearance_201_race_19/appearance_201_race_19_attack.png"
-dest_files=["res://.godot/imported/appearance_201_race_19_attack.png-50e626330c7d436a26ae15b0892a78a0.s3tc.ctex", "res://.godot/imported/appearance_201_race_19_attack.png-50e626330c7d436a26ae15b0892a78a0.etc2.ctex"]
+dest_files=["res://.godot/imported/appearance_201_race_19_attack.png-50e626330c7d436a26ae15b0892a78a0.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

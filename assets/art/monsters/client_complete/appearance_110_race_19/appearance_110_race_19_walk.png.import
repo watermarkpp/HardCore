@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c7ghqahs46j7l"
-path.s3tc="res://.godot/imported/appearance_110_race_19_walk.png-b5bec217aeb90fad91ede5f8728326cf.s3tc.ctex"
-path.etc2="res://.godot/imported/appearance_110_race_19_walk.png-b5bec217aeb90fad91ede5f8728326cf.etc2.ctex"
+path="res://.godot/imported/appearance_110_race_19_walk.png-b5bec217aeb90fad91ede5f8728326cf.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_complete/appearance_110_race_19/appearance_110_race_19_walk.png"
-dest_files=["res://.godot/imported/appearance_110_race_19_walk.png-b5bec217aeb90fad91ede5f8728326cf.s3tc.ctex", "res://.godot/imported/appearance_110_race_19_walk.png-b5bec217aeb90fad91ede5f8728326cf.etc2.ctex"]
+dest_files=["res://.godot/imported/appearance_110_race_19_walk.png-b5bec217aeb90fad91ede5f8728326cf.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

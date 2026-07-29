@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c4rpe5mbtycfg"
-path.s3tc="res://.godot/imported/oma_fighter_death.png-0a1f302006bfd1caec3a2fbe9ba81ccc.s3tc.ctex"
-path.etc2="res://.godot/imported/oma_fighter_death.png-0a1f302006bfd1caec3a2fbe9ba81ccc.etc2.ctex"
+path="res://.godot/imported/oma_fighter_death.png-0a1f302006bfd1caec3a2fbe9ba81ccc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_bich_common/oma_fighter/oma_fighter_death.png"
-dest_files=["res://.godot/imported/oma_fighter_death.png-0a1f302006bfd1caec3a2fbe9ba81ccc.s3tc.ctex", "res://.godot/imported/oma_fighter_death.png-0a1f302006bfd1caec3a2fbe9ba81ccc.etc2.ctex"]
+dest_files=["res://.godot/imported/oma_fighter_death.png-0a1f302006bfd1caec3a2fbe9ba81ccc.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
