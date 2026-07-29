@@ -40,6 +40,7 @@ const AUTHORED_WORLD_DISPLAY_SCALE := 0.08
 const POPUP_CURSOR_OFFSET := Vector2i(12, 12)
 const POPUP_ESTIMATED_SIZE := Vector2i(180, 112)
 const DEDICATED_INVENTORY_VARIANT := "dedicated_inventory"
+const DEDICATED_GROUND_VARIANT := "dedicated_ground"
 const PAPER_DOLL_INITIAL_SCALE_PERCENT := 100
 const PAPER_DOLL_LEGACY_SCALE_PERCENT := 25
 const PAPER_DOLL_LEGACY_OFFSET := [110, 32]
@@ -293,7 +294,7 @@ func _load_active_target_manifest(path: String) -> bool:
 			)
 		for role_value: Variant in presentation_files:
 			var role := str(role_value)
-			if role not in ["inventory"]:
+			if role not in ["inventory", "ground"]:
 				return _fail_active_target(
 					"unsupported prepared presentation role: %s" % role
 				)
@@ -361,16 +362,25 @@ func _initialize_active_target_session_direction_mapping(
 
 
 func _initialize_active_target_presentation(item_id: int) -> bool:
-	if not _has_dedicated_presentation_source("inventory"):
+	var has_inventory := _has_dedicated_presentation_source("inventory")
+	var has_ground := _has_dedicated_presentation_source("ground")
+	if not has_inventory and not has_ground:
 		return true
 	var presentation := HelmetVisualV2.presentation_calibration(item_id)
 	if presentation.is_empty():
 		presentation = _default_presentation_calibration()
-	var inventory: Dictionary = presentation.get(
-		"inventory", {"source_row": 4}
-	).duplicate(true)
-	inventory["source_variant"] = DEDICATED_INVENTORY_VARIANT
-	presentation["inventory"] = inventory
+	if has_inventory:
+		var inventory: Dictionary = presentation.get(
+			"inventory", {"source_row": 4}
+		).duplicate(true)
+		inventory["source_variant"] = DEDICATED_INVENTORY_VARIANT
+		presentation["inventory"] = inventory
+	if has_ground:
+		var ground: Dictionary = presentation.get(
+			"ground", {"source_row": 4}
+		).duplicate(true)
+		ground["source_variant"] = DEDICATED_GROUND_VARIANT
+		presentation["ground"] = ground
 	return HelmetVisualV2.set_session_presentation_calibration(
 		item_id, presentation
 	)
@@ -1245,6 +1255,8 @@ func _default_presentation_calibration() -> Dictionary:
 		presentation["inventory"]["source_variant"] = (
 			DEDICATED_INVENTORY_VARIANT
 		)
+	if _has_dedicated_presentation_source("ground"):
+		presentation["ground"]["source_variant"] = DEDICATED_GROUND_VARIANT
 	return presentation
 
 
@@ -1266,8 +1278,12 @@ func _update_presentation_selection(role: String, source_row: int) -> void:
 		return
 	var presentation := _current_presentation_calibration()
 	var record: Dictionary = presentation.get(role, {})
-	if role == "inventory" and source_row == DIRECTIONS.size():
-		record["source_variant"] = DEDICATED_INVENTORY_VARIANT
+	if role in ["inventory", "ground"] and source_row == DIRECTIONS.size():
+		record["source_variant"] = (
+			DEDICATED_INVENTORY_VARIANT
+			if role == "inventory"
+			else DEDICATED_GROUND_VARIANT
+		)
 	else:
 		record["source_row"] = source_row
 		record.erase("source_variant")
@@ -1326,7 +1342,11 @@ func _refresh_presentation_ui() -> void:
 	var ground_row := int(
 		presentation.get("ground", {}).get("source_row", 4)
 	)
+	var ground_variant := str(
+		presentation.get("ground", {}).get("source_variant", "")
+	)
 	_refresh_inventory_source_options()
+	_refresh_ground_source_options()
 	_updating_ui = true
 	_paper_doll_direction.select(paper_row)
 	_inventory_direction.select(
@@ -1337,7 +1357,14 @@ func _refresh_presentation_ui() -> void:
 		)
 		else inventory_row
 	)
-	_ground_direction.select(ground_row)
+	_ground_direction.select(
+		DIRECTIONS.size()
+		if (
+			ground_variant == DEDICATED_GROUND_VARIANT
+			and _has_dedicated_presentation_source("ground")
+		)
+		else ground_row
+	)
 	_updating_ui = false
 	var inventory_cutout := (
 		_authored_presentation_cutout("inventory")
@@ -1347,7 +1374,11 @@ func _refresh_presentation_ui() -> void:
 	if inventory_cutout.is_empty():
 		inventory_cutout = source_row_thumbnail(inventory_row)
 	_inventory_preview.texture = ImageTexture.create_from_image(inventory_cutout)
-	var ground_cutout := _authored_source_cutout(ground_row)
+	var ground_cutout := (
+		_authored_presentation_cutout("ground")
+		if ground_variant == DEDICATED_GROUND_VARIANT
+		else _authored_source_cutout(ground_row)
+	)
 	if ground_cutout.is_empty():
 		ground_cutout = source_row_thumbnail(ground_row)
 	_ground_preview.texture = ImageTexture.create_from_image(ground_cutout)
@@ -1368,6 +1399,24 @@ func _refresh_inventory_source_options() -> void:
 		while _inventory_direction.item_count > DIRECTIONS.size():
 			_inventory_direction.remove_item(
 				_inventory_direction.item_count - 1
+			)
+
+
+func _refresh_ground_source_options() -> void:
+	if _ground_direction == null:
+		return
+	var has_dedicated := _has_dedicated_presentation_source("ground")
+	if has_dedicated and _ground_direction.item_count == DIRECTIONS.size():
+		_ground_direction.add_item(
+			"地面专用", DIRECTIONS.size()
+		)
+	elif (
+		not has_dedicated
+		and _ground_direction.item_count > DIRECTIONS.size()
+	):
+		while _ground_direction.item_count > DIRECTIONS.size():
+			_ground_direction.remove_item(
+				_ground_direction.item_count - 1
 			)
 
 
@@ -1645,7 +1694,7 @@ func _validated_draft_source_contract(
 			presentation_hashes.get(role, "")
 		).to_lower()
 		if (
-			role != "inventory"
+			role not in ["inventory", "ground"]
 			or presentation_path.is_empty()
 			or presentation_sha.is_empty()
 			or not FileAccess.file_exists(presentation_path)
@@ -3555,6 +3604,9 @@ func _mapping_editor_cpu_preview() -> Image:
 	var ground_row := int(
 		presentation.get("ground", {}).get("source_row", 4)
 	)
+	var ground_variant := str(
+		presentation.get("ground", {}).get("source_variant", "")
+	)
 	var card_rects := [
 		Rect2i(42, 510, 360, 344),
 		Rect2i(430, 510, 360, 344),
@@ -3569,16 +3621,21 @@ func _mapping_editor_cpu_preview() -> Image:
 	for card_index: int in card_rects.size():
 		var card: Rect2i = card_rects[card_index]
 		_cpu_border(canvas, card, card_colors[card_index], 3)
-		var cutout := (
-			_authored_presentation_cutout("inventory")
-			if (
-				card_index == 1
-				and inventory_variant == DEDICATED_INVENTORY_VARIANT
-			)
-			else _authored_source_cutout(
+		var cutout := Image.new()
+		if (
+			card_index == 1
+			and inventory_variant == DEDICATED_INVENTORY_VARIANT
+		):
+			cutout = _authored_presentation_cutout("inventory")
+		elif (
+			card_index == 2
+			and ground_variant == DEDICATED_GROUND_VARIANT
+		):
+			cutout = _authored_presentation_cutout("ground")
+		else:
+			cutout = _authored_source_cutout(
 				int(selected_rows[card_index])
 			)
-		)
 		if cutout.is_empty():
 			cutout = source_row_thumbnail(
 				int(selected_rows[card_index])
@@ -4083,10 +4140,12 @@ func _calibration_ui_safe() -> bool:
 		and not get_node("CalibrationUI/Panel/VBox/Previews").visible
 		and _paper_doll_overlay != null
 		and _paper_doll_direction.item_count == 8
-		and _inventory_direction.item_count == (
-			9 if _has_dedicated_presentation_source("inventory") else 8
-		)
-		and _ground_direction.item_count == 8
+			and _inventory_direction.item_count == (
+				9 if _has_dedicated_presentation_source("inventory") else 8
+			)
+			and _ground_direction.item_count == (
+				9 if _has_dedicated_presentation_source("ground") else 8
+			)
 		and action_control.item_count == ACTIONS.size()
 		and direction_control.item_count == DIRECTIONS.size()
 	)

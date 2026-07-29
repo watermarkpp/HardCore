@@ -179,30 +179,6 @@ def main() -> None:
             EXPECTED_COMPONENT_COUNTS[direction]
         ), direction
 
-    target = json.loads(
-        (
-            ROOT / "assets/data/helmet_calibration_active_target.json"
-        ).read_text(encoding="utf-8")
-    )
-    assert target["itemId"] == 236
-    assert target["visualAssetId"] == "god_magic"
-    assert target["displayName"] == "法神头盔"
-    assert target["sourceDirectionOrder"] == list(DIRECTIONS)
-    assert target["initializeSessionDirectionMapping"] is True
-    assert set(target["preparedDirectionFiles"]) == set(DIRECTIONS)
-    assert target["preparedPresentationFiles"] == {}
-    assert target["preparedPresentationSha256"] == {}
-    assert target["disconnectedComponentPolicy"] == (
-        "preserve_all_alpha_components_in_each_direction_union_bounds"
-    )
-    for direction in DIRECTIONS:
-        path = ROOT / target["preparedDirectionFiles"][direction][6:]
-        assert file_sha256(path) == target["preparedDirectionSha256"][direction]
-    assert target["provenance"]["derivation"] == (
-        "alpha_union_bounds_crop_only_preserve_disconnected_horns_and_headband_"
-        "no_matte_removal_no_face_window_edit_no_resample"
-    )
-
     for relative, expected in FROZEN_RUNTIME_SHA256.items():
         assert file_sha256(ROOT / relative) == expected, relative
     print("equipment_god_magic_helmet_236_calibration_source_test: PASS")

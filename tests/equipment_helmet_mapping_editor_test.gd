@@ -22,7 +22,7 @@ func _run() -> void:
 	assert(active_target_probe._load_active_target_manifest(
 		"res://assets/data/helmet_calibration_active_target.json"
 	))
-	assert(active_target_probe.active_target_item_id() == 236)
+	assert(active_target_probe.active_target_item_id() == 240)
 	active_target_probe.free()
 	var editor: Node = EDITOR_SCENE.instantiate()
 	editor.auto_run = false
@@ -88,12 +88,12 @@ func _run() -> void:
 			"res://assets/data/helmet_calibration_active_target.json"
 		)
 	)
-	assert(int(active_target.get("itemId", -1)) == 236)
+	assert(int(active_target.get("itemId", -1)) == 240)
 	assert(str(active_target.get(
 		"visualAssetId", ""
-	)) == "god_magic")
+	)) == "heavenly_taoist")
 	assert(str(active_target.get("sourceSheet", "")).ends_with(
-		"god_magic_236_helmet_8dir_transparent.png"
+		"heavenly_taoist_240_helmet_8dir_transparent.png"
 	))
 	assert(str(active_target.get("sourceResizeFilter", "")) == (
 		"display_transform_only_until_final_bake_v1"
@@ -104,8 +104,24 @@ func _run() -> void:
 	assert(FileAccess.get_sha256(str(
 		active_target.get("sourceSheet", "")
 	)) == str(active_target.get("sourceSheetSha256", "")))
-	assert(active_target.get("preparedPresentationFiles", {}).is_empty())
-	assert(active_target.get("preparedPresentationSha256", {}).is_empty())
+	assert(active_target.get(
+		"preparedPresentationFiles", {}
+	).keys().all(func(role: Variant) -> bool:
+		return str(role) in ["inventory", "ground"]
+	))
+	assert(active_target.get("preparedPresentationFiles", {}).size() == 2)
+	for role: String in ["inventory", "ground"]:
+		var presentation_path := str(active_target.get(
+			"preparedPresentationFiles", {}
+		).get(role, ""))
+		assert(presentation_path.ends_with(
+			"heavenly_taoist_240_presentation/%s.png" % role
+		))
+		assert(FileAccess.get_sha256(presentation_path) == str(
+			active_target.get(
+				"preparedPresentationSha256", {}
+			).get(role, "")
+		))
 
 	var target_grid := editor.get_node(
 		"CalibrationUI/Panel/VBox/TargetDirections"
@@ -142,47 +158,74 @@ func _run() -> void:
 	assert(target_grid.columns == 8)
 	assert(source_grid.columns == 8)
 	_assert_editor_layout(editor)
-	# Active item 236 keeps every original RGBA direction attached to the UI.
+	# Active item 240 keeps every original RGBA direction attached to the UI.
 	# The world card applies only a non-destructive display transform, and the
 	# ground preview uses the selected raw cutout instead of a 64x64 thumbnail.
 	assert(editor._load_active_target_manifest(
 		"res://assets/data/helmet_calibration_active_target.json"
 	))
-	editor.select_item(236)
+	editor.select_item(240)
 	for source_row: int in 8:
-		var raw_236: Image = editor._authored_source_cutout(source_row)
-		var source_button_236 := source_grid.get_node(
+		var raw_240: Image = editor._authored_source_cutout(source_row)
+		var source_button_240 := source_grid.get_node(
 			"Source_Row%d" % source_row
 		) as TextureButton
-		assert(not raw_236.is_empty())
+		assert(not raw_240.is_empty())
 		assert(
-			source_button_236.texture_normal.get_image().get_size()
-			== raw_236.get_size()
+			source_button_240.texture_normal.get_image().get_size()
+			== raw_240.get_size()
 		)
 		assert(
-			source_button_236.stretch_mode
+			source_button_240.stretch_mode
 			== TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 		)
-		var overlay_236: TextureRect = editor._target_authored_overlays[
+		var overlay_240: TextureRect = editor._target_authored_overlays[
 			source_row
 		]
-		assert(overlay_236.texture.get_image().get_size() == raw_236.get_size())
-		var display_size_236: Vector2 = editor.authored_world_display_size(
+		assert(overlay_240.texture.get_image().get_size() == raw_240.get_size())
+		var display_size_240: Vector2 = editor.authored_world_display_size(
 			source_row,
-			HelmetVisualV2.direction_scale_percent(236, source_row)
+			HelmetVisualV2.direction_scale_percent(240, source_row)
 		)
-		assert(overlay_236.size.is_equal_approx(display_size_236))
+		assert(overlay_240.size.is_equal_approx(display_size_240))
 		assert(is_equal_approx(
-			display_size_236.x / display_size_236.y,
-			float(raw_236.get_width()) / float(raw_236.get_height())
+			display_size_240.x / display_size_240.y,
+			float(raw_240.get_width()) / float(raw_240.get_height())
 		))
-	var ground_236: Dictionary = editor._current_presentation_calibration().get(
-		"ground", {}
+	var presentation_240: Dictionary = (
+		editor._current_presentation_calibration()
 	)
-	var ground_row_236 := int(ground_236.get("source_row", 4))
+	assert(str(presentation_240.get(
+		"inventory", {}
+	).get("source_variant", "")) == "dedicated_inventory")
+	assert(str(presentation_240.get(
+		"ground", {}
+	).get("source_variant", "")) == "dedicated_ground")
+	assert(editor._inventory_direction.item_count == 9)
+	assert(editor._ground_direction.item_count == 9)
+	assert(editor._inventory_direction.selected == 8)
+	assert(editor._ground_direction.selected == 8)
+	var dedicated_inventory_240: Image = editor._authored_presentation_cutout(
+		"inventory"
+	)
+	var dedicated_ground_240: Image = editor._authored_presentation_cutout(
+		"ground"
+	)
+	assert(
+		editor._inventory_preview.texture.get_image().get_data()
+		== dedicated_inventory_240.get_data()
+	)
 	assert(
 		editor._ground_preview.texture.get_image().get_size()
-		== editor._authored_source_cutout(ground_row_236).get_size()
+		== dedicated_ground_240.get_size()
+	)
+	assert(
+		editor._ground_preview.texture.get_image().get_data()
+		== dedicated_ground_240.get_data()
+	)
+	assert(
+		dedicated_inventory_240.get_data()
+		!= dedicated_ground_240.get_data()
 	)
 	# The remainder of this legacy regression intentionally exercises item 146
 	# reload behavior without an active-target redirect.

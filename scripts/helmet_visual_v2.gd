@@ -770,8 +770,16 @@ static func _validated_presentation_calibration(
 		if not source_variant.is_empty():
 			if (
 				not allow_half_pixel_offset
-				or role != "inventory"
-				or source_variant != "dedicated_inventory"
+				or (
+					not (
+						role == "inventory"
+						and source_variant == "dedicated_inventory"
+					)
+					and not (
+						role == "ground"
+						and source_variant == "dedicated_ground"
+					)
+				)
 			):
 				return {}
 			record["source_variant"] = source_variant
