@@ -62,9 +62,16 @@ func _run() -> void:
 	assert(not (editor.get_node(
 		"CalibrationUI/Panel/VBox/Inputs/Scale"
 	) as Control).visible)
-	assert(editor._scale_popup.item_count == 4)
-	assert(editor._scale_popup.get_item_text(0) == "放大 5%")
-	assert(editor._scale_popup.get_item_text(1) == "缩小 5%")
+	assert(editor._scale_popup.item_count == 13)
+	assert(editor._scale_popup.get_item_text(0) == "整体放大 5%")
+	assert(editor._scale_popup.get_item_text(1) == "整体缩小 5%")
+	assert(editor._scale_popup.get_item_text(3) == "横向放大 5%")
+	assert(editor._scale_popup.get_item_text(4) == "横向缩小 5%")
+	assert(editor._scale_popup.get_item_text(5) == "纵向放大 5%")
+	assert(editor._scale_popup.get_item_text(6) == "纵向缩小 5%")
+	assert(editor._scale_popup.get_item_text(8) == "向左旋转 5°")
+	assert(editor._scale_popup.get_item_text(9) == "向右旋转 5°")
+	assert(editor._scale_popup.get_item_text(11) == "当前帧旋转归零")
 
 	var n_before := HelmetVisualV2.direction_scale_percent(147, 0)
 	var ne_before := HelmetVisualV2.direction_scale_percent(147, 1)
@@ -84,6 +91,63 @@ func _run() -> void:
 	))
 	assert(not editor.adjust_direction_scale_percent(0, 3))
 
+	editor.select_action("hit")
+	editor.select_target_direction(0)
+	editor.select_frame(1)
+	assert(editor.adjust_pose_scale_percent(0, "x", -5))
+	assert(editor.adjust_pose_scale_percent(0, "y", 5))
+	assert(editor.adjust_pose_rotation(0, -5.0))
+	assert(editor.adjust_pose_rotation(0, 5.0))
+	assert(float(editor.current_pose_transform().get(
+		"rotation_degrees", 1.0
+	)) == 0.0)
+	assert(editor.adjust_pose_rotation(0, -5.0))
+	assert(editor.nudge_current(Vector2i.RIGHT))
+	var hit_pose: Dictionary = editor.current_pose_transform()
+	assert(int(hit_pose.get("scale_x_percent", -1)) == n_before)
+	assert(int(hit_pose.get("scale_y_percent", -1)) == n_before + 10)
+	assert(float(hit_pose.get("rotation_degrees", 0.0)) == -5.0)
+	assert(Vector2(hit_pose.get("offset", [0, 0])[0], hit_pose.get(
+		"offset", [0, 0]
+	)[1]) == Vector2(0.5, 0.0))
+	if editor._has_authored_source_sheet():
+		var authored_overlay := editor._target_authored_overlays[0] as TextureRect
+		if authored_overlay.visible:
+			assert(is_equal_approx(editor._normalized_rotation_degrees(
+				authored_overlay.rotation_degrees
+			), -5.0))
+			assert(authored_overlay.size.is_equal_approx(
+				editor.authored_world_display_size_xy(
+				int(HelmetVisualV2.direction_record(147, 0).get("source_row", 0)),
+				n_before,
+				n_before + 10
+				)
+			))
+	editor.select_frame(2)
+	var untouched_hit_pose: Dictionary = editor.current_pose_transform()
+	assert(int(untouched_hit_pose.get(
+		"scale_x_percent", -1
+	)) == n_before + 5)
+	assert(int(untouched_hit_pose.get(
+		"scale_y_percent", -1
+	)) == n_before + 5)
+	assert(float(untouched_hit_pose.get(
+		"rotation_degrees", 1.0
+	)) == 0.0)
+	assert(untouched_hit_pose.get("offset", []) == [0.0, 0.0])
+
+	editor.select_action("death")
+	assert(editor._frame_buttons.size() == 4)
+	assert(editor._frame_buttons[0].text == "0 起始")
+	assert(editor._frame_buttons[1].text == "1 后仰")
+	assert(editor._frame_buttons[2].text == "2 倒地")
+	assert(editor._frame_buttons[3].text == "3 躺地")
+	editor._frame_buttons[3].emit_signal("pressed")
+	assert(editor.current_frame == 3)
+	assert(editor._frame_buttons[3].button_pressed)
+	editor.select_action("hit")
+	editor.select_frame(1)
+
 	var original_once: Image = editor.calibration_source_cell_scaled(
 		"idle", 0, 0, n_before + 5
 	)
@@ -95,7 +159,11 @@ func _run() -> void:
 		intermediate, pivot, n_before + 5
 	)
 	assert(editor._image_has_opaque_pixel(original_once))
-	assert(original_once.get_data() != resampled_intermediate.get_data())
+	assert(editor._image_has_opaque_pixel(resampled_intermediate))
+	assert(
+		editor.calibration_source_cell("idle", 0, 0).get_data()
+		== intermediate.get_data()
+	)
 
 	editor._update_presentation_selection("paperDoll", 2)
 	editor._update_presentation_selection("inventory", 6)
@@ -163,6 +231,15 @@ func _run() -> void:
 	assert(int(draft.get("directions", {}).get(
 		"NE", {}
 	).get("scale_percent", -1)) == ne_before)
+	var saved_hit_pose: Dictionary = draft.get(
+		"poseTransforms", {}
+	).get("hit", {}).get("N", {}).get("1", {})
+	assert(int(saved_hit_pose.get("scale_x_percent", -1)) == n_before)
+	assert(int(saved_hit_pose.get(
+		"scale_y_percent", -1
+	)) == n_before + 10)
+	assert(float(saved_hit_pose.get("rotation_degrees", 0.0)) == -5.0)
+	assert(saved_hit_pose.get("offset", []) == [0.5, 0.0])
 	assert(int(draft.get("presentationCalibration", {}).get(
 		"paperDoll", {}
 	).get("source_row", -1)) == 2)
@@ -172,6 +249,12 @@ func _run() -> void:
 	assert(int(draft.get("presentationCalibration", {}).get(
 		"ground", {}
 	).get("source_row", -1)) == 7)
+	editor.reload_formal_data()
+	editor.select_action("hit")
+	editor.select_target_direction(0)
+	editor.select_frame(1)
+	var reloaded_hit_pose: Dictionary = editor.current_pose_transform()
+	assert(_pose_fields_equal(reloaded_hit_pose, saved_hit_pose))
 	assert(FileAccess.get_file_as_string(FORMAL_OVERRIDE) == formal_before)
 
 	var preparer := FileAccess.get_file_as_string(
@@ -187,7 +270,26 @@ func _run() -> void:
 	HelmetVisualV2.reset_calibration_override_path()
 	print(
 		"EQUIPMENT_HELMET_LOSSLESS_CALIBRATION_WORKFLOW_PASS "
-		+ "world_8dir_5pct=true paper_doll=true inventory=true ground=true "
+		+ "world_8dir_pose_frame=true axis_scale=true rotation_5deg=true "
+		+ "death_frames=4 paper_doll=true inventory=true ground=true "
 		+ "draft_only=true original_once=true"
 	)
 	get_tree().quit()
+
+
+func _pose_fields_equal(left: Dictionary, right: Dictionary) -> bool:
+	return (
+		Vector2(left.get("offset", [0, 0])[0], left.get(
+			"offset", [0, 0]
+		)[1]) == Vector2(right.get("offset", [0, 0])[0], right.get(
+			"offset", [0, 0]
+		)[1])
+		and int(left.get("scale_x_percent", -1))
+			== int(right.get("scale_x_percent", -2))
+		and int(left.get("scale_y_percent", -1))
+			== int(right.get("scale_y_percent", -2))
+		and is_equal_approx(
+			float(left.get("rotation_degrees", 0.0)),
+			float(right.get("rotation_degrees", 1.0))
+		)
+	)

@@ -325,6 +325,9 @@ func _run() -> void:
 	var nudge_before := _vector(
 		HelmetVisualV2.direction_record(146, 0).get("nudge", [])
 	)
+	var pose_offset_before := _vector(
+		editor.current_pose_transform().get("offset", [])
+	)
 	action_menu.focus_mode = Control.FOCUS_ALL
 	action_menu.grab_focus()
 	await _dispatch_key(KEY_UP, true, false)
@@ -339,7 +342,11 @@ func _run() -> void:
 	await _dispatch_key(KEY_RIGHT, false, false)
 	assert(
 		_vector(HelmetVisualV2.direction_record(146, 0).get("nudge", []))
-		== nudge_before + Vector2.UP * 0.5
+		== nudge_before
+	)
+	assert(
+		_vector(editor.current_pose_transform().get("offset", []))
+		== pose_offset_before + Vector2.UP * 0.5
 	)
 	assert(item_menu.selected == int(menu_state_before.item))
 	assert(action_menu.selected == int(menu_state_before.action))
@@ -662,7 +669,11 @@ func _run() -> void:
 	mapped = HelmetVisualV2.direction_record(146, 1)
 	assert(
 		_vector(mapped.get("nudge", []))
-		== mapped_nudge_before + Vector2(0.5, -0.5)
+		== mapped_nudge_before
+	)
+	assert(
+		_vector(editor.current_pose_transform().get("offset", []))
+		== Vector2(0.5, -0.5)
 	)
 	assert("DIRTY" in str(editor.get_node(
 		"CalibrationUI/Panel/VBox/MappingStatus/State"
@@ -681,6 +692,10 @@ func _run() -> void:
 		_vector(mapped.get("nudge", []))
 		== _vector(formal_ne_before.get("nudge", [0, 0]))
 	)
+	assert(
+		_vector(editor.current_pose_transform().get("offset", []))
+		== Vector2.ZERO
+	)
 
 	# Reapply, then save through the visible button and verify reload parity.
 	source_row_zero.emit_signal("pressed")
@@ -694,7 +709,11 @@ func _run() -> void:
 	assert(str(mapped.get("source_direction", "")) == "S")
 	assert(
 		_vector(mapped.get("nudge", []))
-		== _vector(formal_ne_before.get("nudge", [0, 0])) + Vector2.RIGHT * 0.5
+		== _vector(formal_ne_before.get("nudge", [0, 0]))
+	)
+	assert(
+		_vector(editor.current_pose_transform().get("offset", []))
+		== Vector2.RIGHT * 0.5
 	)
 	assert(str(mapped.get("status", "")) in ["valid", "locked"])
 	assert(mapped.has("locked"))
@@ -738,12 +757,22 @@ func _run() -> void:
 	assert(int(batch_e.get("source_row", -1)) == 6)
 	assert(
 		_vector(batch_e.get("nudge", []))
-		== batch_e_before + Vector2.DOWN * 0.5
+		== batch_e_before
+	)
+	assert(
+		_vector(editor.pose_transform(
+			editor.current_action, 2, editor.current_frame
+		).get("offset", [])) == Vector2.DOWN * 0.5
 	)
 	assert(int(batch_se.get("source_row", -1)) == 1)
 	assert(
 		_vector(batch_se.get("nudge", []))
-		== batch_se_before + Vector2.LEFT * 0.5
+		== batch_se_before
+	)
+	assert(
+		_vector(editor.pose_transform(
+			editor.current_action, 3, editor.current_frame
+		).get("offset", [])) == Vector2.LEFT * 0.5
 	)
 	assert(HelmetVisualV2.saved_direction_override(146, 7) == nw_saved_before)
 
@@ -1007,7 +1036,12 @@ func _run() -> void:
 	assert(str(saved_151_ne.get("source_slot_id", "")) == "slot_0")
 	assert(
 		_vector(saved_151_ne.get("nudge", []))
-		== initial_151_ne_nudge + Vector2.LEFT * 0.5
+		== initial_151_ne_nudge
+	)
+	assert(
+		_vector(editor.pose_transform(
+			editor.current_action, 1, editor.current_frame
+		).get("offset", [])) == Vector2.LEFT * 0.5
 	)
 	var trace_151 := _json(
 		"%s/helmet_151_generated_all_actions_trace.json" % OUTPUT_ROOT
