@@ -350,7 +350,7 @@ func _build_combat_controls(root: Control) -> void:
 		skill_button.pressed.connect(_on_skill_button.bind(index))
 		skill_button.set_meta("stable_id", "hud.profession_skill.%d" % (index + 1))
 		skill_button.set_meta("activation_mode_source", "skill.activation_mode")
-		skill_button.set_meta("warrior_policy", "toggle")
+		skill_button.set_meta("warrior_policy", "skill_data_declared")
 		skill_button.set_meta("mage_tao_policy", "instant_or_toggle")
 		root.add_child(skill_button)
 		quick_buttons.append(skill_button)
@@ -883,7 +883,7 @@ func update_warrior_states(snapshot: Dictionary) -> void:
 	warrior_state_label.visible = PlayerState.profession == "战士"
 	if not warrior_state_label.visible:
 		return
-	var fire_text := "开" if bool(snapshot.get("fire_auto_enabled", false)) else "关"
+	var fire_text := _fire_sword_charge_label(snapshot)
 	warrior_state_label.text = "攻杀:%s　刺杀:%s　半月:%s　烈火:%s" % [
 		"自动" if bool(snapshot.get("slaying_auto", false)) else "未学",
 		"开" if bool(snapshot.get("thrusting", false)) else "关",
@@ -893,13 +893,21 @@ func update_warrior_states(snapshot: Dictionary) -> void:
 	update_quick_slots()
 
 
+func _fire_sword_charge_label(snapshot: Dictionary) -> String:
+	# Canonical fire sword is one explicit next-melee charge, never an auto-use toggle.
+	# The runtime snapshot owns these fields; UI only projects its current state.
+	if bool(snapshot.get("fire_armed", false)) and int(snapshot.get("fire_expires_remaining_ms", 0)) > 0:
+		return "充能"
+	return "未充能·就绪"
+
+
 func _warrior_skill_marker(skill_name: String) -> String:
 	match skill_name:
 		"攻杀剑术": return "[自动]" if bool(_warrior_snapshot.get("slaying_auto", false)) else ""
 		"刺杀剑术": return "[开]" if bool(_warrior_snapshot.get("thrusting", false)) else "[关]"
 		"半月弯刀": return "[开]" if bool(_warrior_snapshot.get("half_moon", false)) else "[关]"
 		"烈火剑法":
-			return "[开]" if bool(_warrior_snapshot.get("fire_auto_enabled", false)) else "[关]"
+			return "[%s]" % _fire_sword_charge_label(_warrior_snapshot)
 	return ""
 
 

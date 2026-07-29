@@ -39,7 +39,9 @@ func _ready()->void:
 		assert(weapon_layer.region_rect.position.y==row*ArtSpec.WARRIOR_FRAME.y,"裁决方向图集行错误：row=%d"%row)
 		assert(weapon_layer.z_index==(-1 if row in behind_rows else 1),"裁决方向遮挡层错误：row=%d"%row)
 		assert(visual.get_node("ClientHelmetLayer").region_rect.position.y==row*ArtSpec.WARRIOR_FRAME.y,"头盔方向图集行错误：row=%d"%row)
-	assert(visual.get_node("ClientHelmetLayer").visible and visual.get_node("ClientHelmetLayer").texture.resource_path.ends_with("black_iron_helmet_idle.png"),"黑铁头盔未显示为八方向待机人物层")
+		assert(visual.get_node("ClientHairLayer").region_rect.position.y==row*ArtSpec.WARRIOR_FRAME.y,"头发方向图集行错误：row=%d"%row)
+	assert(not visual.get_node("ClientHelmetLayer").visible,"世界人物不应显示黑铁头盔")
+	assert(visual.get_node("ClientHairLayer").visible and visual.get_node("ClientHairLayer").texture==visual._hair_action_textures.get("idle",null),"世界人物未显示原客户端男性头发")
 	assert(not visual.get_node("HelmetAccent").visible,"头部右侧半透明几何残留仍可见")
 	var preview:=EquipmentCharacterPreview.new();preview.size=Vector2(230,286);add_child(preview);await get_tree().process_frame
 	assert(preview._direction_row==4,"装备预览不是固定正面")

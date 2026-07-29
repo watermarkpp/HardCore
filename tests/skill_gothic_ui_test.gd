@@ -26,6 +26,12 @@ func _run() -> void:
 	assert("Gameplay skill data owns" in str(contract.get("policy", "")), "技能交互模式必须由玩法技能数据负责")
 	# UI runtimeStateDisplay remains owned by codex/ui-art. The production
 	# interaction mode must still come from canonical gameplay data.
+	assert("explicit-charge" in str(contract.get("policy", "")), "技能按钮契约没有声明烈火显式一次充能")
+	var fire_charge_contract: Dictionary = contract.get("runtimeStateDisplay", {}).get("fireSwordCharge", {})
+	assert(fire_charge_contract.get("stableSkillId", "") == "warrior.fire_sword", "烈火 UI 没有绑定稳定技能 ID")
+	assert(fire_charge_contract.get("stableChargeStateId", "") == "warrior.fire_sword.charge_armed", "烈火 UI 没有绑定一次性充能状态 ID")
+	assert(fire_charge_contract.get("armedField", "") == "fire_armed", "烈火 UI 没有绑定一次性充能状态")
+	assert(fire_charge_contract.get("chargeRemainingField", "") == "fire_expires_remaining_ms", "烈火 UI 没有绑定一次性充能有效期")
 	var panel := SkillPanel.new()
 	add_child(panel)
 	await get_tree().process_frame
@@ -86,6 +92,15 @@ func _run() -> void:
 	assert(panel.skill_icon.texture != null, "正式战士技能没有显示技能素材")
 	assert(is_equal_approx(panel._long_press_timer.wait_time, 0.48), "技能长按时间没有遵守触控规范")
 
+	var fire_index := -1
+	for index in range(panel.skill_entries.size()):
+		if str(panel.skill_entries[index].get("skillName", "")) == "烈火剑法":
+			fire_index = index
+			break
+	assert(fire_index >= 0, "技能面板缺少烈火剑法")
+	panel._on_skill_selected(fire_index)
+	assert("交互：主动充能" in panel.detail_label.text, "烈火详情仍显示为开关而非主动充能")
+
 	panel._open_assignment_popup_for(thrusting_index)
 	assert(panel.assignment_popup.visible, "长按技能使用的分配弹窗没有打开")
 	assert(panel.assignment_scrim.visible, "技能配置弹窗打开时没有显示模态遮罩")
@@ -129,6 +144,8 @@ func _run() -> void:
 		panel._assign_selected_to_target("center", slot_index)
 		var request: Dictionary = assignment_requests.back()
 		assert(request.get("skill_name", "") == replacement_skills[slot_index], "中央快捷槽置换丢失弹窗锁定的技能")
+		if replacement_skills[slot_index] == "烈火剑法":
+			assert(request.get("interaction_mode", "") == "click", "烈火快捷槽请求必须保留显式施放模式")
 		assert(request.get("slot_index", -1) == slot_index, "中央快捷槽置换发送了错误槽位")
 		assert(request.get("slot_id", "") == "hud.profession_skill.%d" % (slot_index + 1), "中央快捷槽置换稳定 ID 错误")
 		assert(not panel.assignment_popup.visible and not panel.assignment_scrim.visible, "置换完成后模态弹窗未正确关闭")

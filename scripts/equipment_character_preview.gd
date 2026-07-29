@@ -195,11 +195,9 @@ func _draw() -> void:
 	draw_polyline(back_rim, Color(0.50, 0.31, 0.14, 0.86), 1.0, true)
 
 	draw_texture_rect(_base_texture, Rect2(origin, scaled_canvas), false)
-	# Helmet records now have a clean alpha edge, so suppress the underlying
-	# hair exactly as a paper-doll occlusion layer would.
-	if _helmet_texture == null:
-		_draw_layer(_hair_layer)
-	for layer: Dictionary in _paper_layers:
+	# Hair remains part of the male paper doll when a helmet is equipped.
+	# Equipment layers are appended after it, so the helmet stays above hair.
+	for layer: Dictionary in _classic_avatar_draw_layers():
 		_draw_layer(layer)
 	# The front rim is drawn after the paper doll so the figure stands inside
 	# the stage instead of placing both feet directly on a complete outline.
@@ -208,6 +206,15 @@ func _draw() -> void:
 	draw_polyline(front_rim, Color(0.70, 0.43, 0.19, 0.96), 2.0, true)
 	var inner_front := _ellipse_arc_points(stage_center, stage_radii - Vector2(8, 4), 0.0, PI)
 	draw_polyline(inner_front, Color(0.24, 0.13, 0.055, 0.78), 1.0, true)
+
+
+func _classic_avatar_draw_layers() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	if not _hair_layer.is_empty():
+		result.append(_hair_layer)
+	for layer: Dictionary in _paper_layers:
+		result.append(layer)
+	return result
 
 
 func _draw_original_client_stage() -> void:
@@ -855,7 +862,14 @@ func _slot_layer_kind(slot: String) -> String:
 func _mapping_offset(layer: Dictionary) -> Vector2:
 	if _uses_original_client_stage:
 		return _original_stage_layer_position(layer)
-	var value: Variant = layer.get("drawOffset", [0, 0])
+	# The avatar-only presentation contract names coordinates stagePosition,
+	# while decoded StateItem records use drawOffset.  Both are coordinates on
+	# the same 168x199 classic canvas.  Ignoring stagePosition placed the hair
+	# at the composition origin and left the actor visibly bald.
+	var value: Variant = layer.get(
+		"drawOffset",
+		layer.get("stagePosition", [0, 0])
+	)
 	return _vector_from_value(value, Vector2.ZERO)
 
 
@@ -905,11 +919,10 @@ func _recalculate_composition_opaque_bounds() -> void:
 		if base_bounds.has_area():
 			bounds = base_bounds
 			has_bounds = true
-	if _helmet_texture == null:
-		var hair_bounds := _layer_opaque_rect(_hair_layer)
-		if hair_bounds.has_area():
-			bounds = bounds.merge(hair_bounds) if has_bounds else hair_bounds
-			has_bounds = true
+	var hair_bounds := _layer_opaque_rect(_hair_layer)
+	if hair_bounds.has_area():
+		bounds = bounds.merge(hair_bounds) if has_bounds else hair_bounds
+		has_bounds = true
 	for layer: Dictionary in _paper_layers:
 		var layer_bounds := _layer_opaque_rect(layer)
 		if not layer_bounds.has_area():

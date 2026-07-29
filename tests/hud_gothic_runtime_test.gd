@@ -11,6 +11,7 @@ func _ready() -> void:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
+	PlayerState.profession = "战士"
 	var hud := GameHUD.new()
 	add_child(hud)
 	await get_tree().process_frame
@@ -64,11 +65,16 @@ func _run() -> void:
 		assert(skill_button.get_parent() == root, "四个职业技能槽不得再套公共背景面板")
 		assert(skill_button.get_meta("stable_id") == "hud.profession_skill.%d" % (index + 1))
 		assert(skill_button.get_meta("activation_mode_source") == "skill.activation_mode")
-		assert(skill_button.get_meta("warrior_policy") == "toggle")
+		assert(skill_button.get_meta("warrior_policy") == "skill_data_declared")
 		assert(skill_button.get_meta("mage_tao_policy") == "instant_or_toggle")
 		var icon := skill_button.get_node("SkillDisc/SkillIcon") as TextureRect
 		assert(icon != null and icon.texture != null and icon.visible, "四个职业槽必须显示当前快捷技能素材")
 		assert(str(icon.get_meta("skill_icon_id", "")).begins_with("ui.hud.skill_icon.warrior."))
+	hud.update_warrior_states({"fire_armed": true, "fire_expires_remaining_ms": 10000})
+	assert("烈火:充能" in hud.warrior_state_label.text and "[充能]" in hud.quick_buttons[3].text, "烈火快捷栏没有显示一次性充能")
+	hud.update_warrior_states({"fire_armed": false, "fire_expires_remaining_ms": 0})
+	assert("烈火:未充能·就绪" in hud.warrior_state_label.text and "[未充能·就绪]" in hud.quick_buttons[3].text, "烈火快捷栏没有显示未充能就绪")
+	assert("[开]" not in hud.quick_buttons[3].text and "[关]" not in hud.quick_buttons[3].text, "烈火快捷栏不得再显示开关状态")
 	assert((root.get_node("SkillButton1") as Control).position.y >= 450, "职业技能槽仍然过度侵入战斗区域")
 	var right_controls_art := root.get_node("RightControlsArt") as TextureRect
 	var ring_source_centers: Array[Vector2] = [Vector2(54.5, 445.0), Vector2(79.2, 303.8), Vector2(173.9, 234.9)]

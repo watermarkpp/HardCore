@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 2,
-  "contractId": "equipment_actor_visual_sort_unit_v2",
+  "schemaVersion": 3,
+  "contractId": "equipment_actor_visual_sort_unit_v3",
   "scope": "runtime_equipment_appearance",
   "worldAppearanceFields": [
     "dressAppearance",
@@ -21,21 +21,23 @@
   },
   "worldPlaneLayers": [
     {"id": "body_and_dress", "node": "BodySprite", "zIndex": 0},
+    {"id": "hair", "node": "ClientHairLayer", "zIndex": 0},
     {"id": "weapon", "node": "ClientWeaponLayer", "zIndex": 0},
     {"id": "helmet", "node": "ClientHelmetLayer", "zIndex": 0}
   ],
   "siblingOrderByDirection": [
     {
       "directionRows": [7, 0, 1],
-      "backToFront": ["weapon", "body_and_dress", "helmet"]
+      "backToFront": ["weapon", "body_and_dress", "hair", "helmet"]
     },
     {
       "directionRows": [2, 3, 4, 5, 6],
-      "backToFront": ["body_and_dress", "weapon", "helmet"]
+      "backToFront": ["body_and_dress", "hair", "weapon", "helmet"]
     }
   ],
   "invariants": [
     "Every body and equipment CanvasItem has final world z_index 0, matching actor_y_sort wall fronts.",
+    "Hair follows the body in sibling order and uses the exact matching action, direction and frame.",
     "Equipment front/back order uses sibling tree order, never z_index offsets.",
     "No equipment child is top_level or uses z_as_relative=false.",
     "A wall-front actor_y_sort unit in front of the actor feet occludes body, dress, weapon and helmet together.",

@@ -453,7 +453,7 @@ func _rebuild_skill_cards() -> void:
 		var learned := PlayerState.is_skill_learned(skill_name)
 		var has_book := PlayerState.has_item(skill_name)
 		var level := int(PlayerState.learned_skills.get(skill_name, 0))
-		var interaction_label := _interaction_mode_label(_skill_interaction_mode(skill_name))
+		var interaction_label := _skill_presentation_label(skill_name)
 		var status := "Lv.%d　已学会　[%s]" % [level, interaction_label] if learned else ("可学习" if has_book else "缺少技能书")
 		var button := Button.new()
 		button.name = "SkillCard_%d" % index
@@ -511,7 +511,7 @@ func _show_skill_detail(index: int) -> void:
 		"Lv.%d" % learned_level if learned else "未学习",
 		mastery_text,
 		_cast_type_label(cast_type),
-		_interaction_mode_label(interaction_mode),
+		_skill_presentation_label(skill_name),
 		_target_mode_label(target_mode),
 		int(row.get("manaCost", 0)),
 		cooldown,
@@ -546,7 +546,7 @@ func _refresh_assignment_slots() -> void:
 			assignment_popup_buttons[slot_index].text = "中央 %d\n%s [%s]" % [
 				slot_index + 1,
 				skill_name if not skill_name.is_empty() else "空",
-				_interaction_mode_label(_skill_interaction_mode(skill_name)),
+				_skill_presentation_label(skill_name),
 			]
 	for slot_index in range(attack_ring_assignment_buttons.size()):
 		var skill_name := _assignment_skill_name("attack_ring", slot_index)
@@ -556,7 +556,7 @@ func _refresh_assignment_slots() -> void:
 			assignment_popup_buttons[popup_index].text = "攻击环 %d\n%s [%s]" % [
 				slot_index + 1,
 				skill_name if not skill_name.is_empty() else "空",
-				_interaction_mode_label(_skill_interaction_mode(skill_name)),
+				_skill_presentation_label(skill_name),
 			]
 
 
@@ -618,7 +618,7 @@ func _set_assignment_button_content(button: Button, slot_label_text: String, ski
 	content.add_child(name_label)
 	var mode_label := Label.new()
 	mode_label.name = "InteractionMode"
-	mode_label.text = _interaction_mode_label(_skill_interaction_mode(skill_name))
+	mode_label.text = _skill_presentation_label(skill_name)
 	mode_label.position = Vector2(4, 94) if compact else Vector2(52, 56)
 	mode_label.size = Vector2(button.size.x - 8, 18) if compact else Vector2(button.size.x - 58, 20)
 	mode_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -655,7 +655,7 @@ func _open_assignment_popup_for(index: int) -> void:
 		description_label.text = "[color=#b58b68]请先学习该技能，再配置战斗按钮。[/color]"
 		return
 	_on_skill_selected(index)
-	assignment_popup_title.text = "配置：%s　[%s]" % [skill_name, _interaction_mode_label(_skill_interaction_mode(skill_name))]
+	assignment_popup_title.text = "配置：%s　[%s]" % [skill_name, _skill_presentation_label(skill_name)]
 	assignment_popup.set_meta("skill_name", skill_name)
 	assignment_popup.set_meta("skill_id", ProfessionRules.skill_id(skill_name))
 	assignment_popup.set_meta("interaction_mode", _skill_interaction_mode(skill_name))
@@ -768,6 +768,14 @@ func _skill_interaction_mode(skill_name: String) -> String:
 	if service_mode.begins_with("toggle") or service_mode == "arm_next_hit" or cast_type == "shield":
 		return "toggle"
 	return "click"
+
+
+func _skill_presentation_label(skill_name: String) -> String:
+	# Production mode is the canonical explicit click. Its player-facing label
+	# must still describe the one-shot charge instead of the retired auto toggle.
+	if ProfessionRules.skill_id(skill_name) == "warrior.fire_sword":
+		return "主动充能"
+	return _interaction_mode_label(_skill_interaction_mode(skill_name))
 
 
 func _interaction_mode_label(mode: String) -> String:

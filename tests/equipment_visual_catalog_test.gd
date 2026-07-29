@@ -3,6 +3,15 @@ extends Node
 
 const CATALOG_PATH := "res://assets/data/equipment_visual_catalog.json"
 const LOADOUT_PATH := "res://assets/data/equipment_test_loadouts.json"
+const HOLY_WAR_ITEM_ID := "232"
+const GOD_MAGIC_ITEM_ID := "236"
+const HEAVENLY_TAOIST_ITEM_ID := "240"
+const FINAL_HELMET_ITEM_IDS := [
+	"146", "147", "148", "149", "150", "151",
+	"218", "224", "228", "232", "236", "240",
+]
+const HOLY_WAR_PAPER_PATH := "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00232_head.png"
+const HOLY_WAR_ERASE_MASK_PATH := "res://assets/art/items/client/paper_doll/classic_flattened_head/item_00232_erase_mask.png"
 const VISUAL_CATEGORIES := ["武器", "盔甲", "头盔"]
 const ACTION_FRAMES := {
 	"idle": 4,
@@ -29,6 +38,29 @@ func _resource_exists(mapping: Dictionary, label: String) -> void:
 	var path := str(mapping.get("path", ""))
 	assert(not path.is_empty(), "%s 缺少资源路径" % label)
 	assert(FileAccess.file_exists(path), "%s 资源不存在：%s" % [label, path])
+
+
+func _validate_holy_war_paper_doll(entry: Dictionary) -> void:
+	var paper: Dictionary = entry.get("paperDoll", {})
+	assert(paper.get("status", "") == "user_approved_project_redesign", "item 232 must use the approved project redesign")
+	assert(paper.get("path", "") == HOLY_WAR_PAPER_PATH, "item 232 paper doll must use the approved head patch")
+	assert(paper.get("faceWindow", "") == "none_opaque_black_mask", "item 232 must preserve the no-cutout face mask")
+	assert(paper.get("mappingConfidence", "") == "user_approved_exact", "item 232 paper doll must not be a placeholder")
+	var equipped_slot: Dictionary = entry.get("icons", {}).get("equippedSlot", {})
+	assert(equipped_slot.get("path", "") == HOLY_WAR_PAPER_PATH, "item 232 equipped preview must match its paper doll")
+	assert(equipped_slot.get("faceAperture", "") == "none_opaque_black_mask", "item 232 equipped preview must preserve the no-cutout mask")
+	var head_image := Image.load_from_file(HOLY_WAR_PAPER_PATH)
+	assert(not head_image.is_empty(), "item 232 approved head patch must load")
+	# The 0.8-diameter high-resolution bake keeps the opaque face mask in
+	# this narrower central ROI; Lanczos edge pixels outside it may be partial.
+	for y in range(24, 33):
+		for x in range(13, 20):
+			assert(head_image.get_pixel(x, y).a > 0.99, "item 232 face-mask region must remain opaque")
+	var erase_mask := Image.load_from_file(HOLY_WAR_ERASE_MASK_PATH)
+	assert(not erase_mask.is_empty(), "item 232 erase mask must load")
+	for y in erase_mask.get_height():
+		for x in erase_mask.get_width():
+			assert(erase_mask.get_pixel(x, y).a < 0.01, "item 232 no-cutout erase mask must remain transparent")
 
 
 func _validate_actions(appearance: Dictionary, label: String, require_imported := true) -> void:
@@ -90,7 +122,14 @@ func _run() -> void:
 		_resource_exists(icons.get("ground", {}), "%s 地面图" % entry.get("itemName", ""))
 		if entry.get("category", "") in VISUAL_CATEGORIES:
 			var paper: Dictionary = entry.get("paperDoll", {})
-			assert(paper.get("status", "") == "exact_client_record", "%s 纸娃娃不得占位" % entry.get("itemName", ""))
+			var expected_paper_status := (
+				"user_final_helmet_calibration"
+				if item_id in FINAL_HELMET_ITEM_IDS
+				else "exact_client_record"
+			)
+			assert(paper.get("status", "") == expected_paper_status, "%s 纸娃娃不得占位" % entry.get("itemName", ""))
+			if item_id not in FINAL_HELMET_ITEM_IDS:
+				assert(paper.get("status", "") == "exact_client_record", "%s 纸娃娃不得占位" % entry.get("itemName", ""))
 			_resource_exists(paper, "%s 纸娃娃" % entry.get("itemName", ""))
 		else:
 			assert(entry.get("paperDoll", {}).get("status", "") == "slot_icon_only", "附件只能使用经典装备槽图")
@@ -115,6 +154,8 @@ func _run() -> void:
 				assert(world.get("runtimePolicy", "").contains("hide this item layer"), "无 Shape 装备必须保留人物底图并隐藏物品层")
 			"classic_client_no_world_layer", "approved_project_extension":
 				pass
+			"user_approved_project_redesign":
+				assert(item_id in [HOLY_WAR_ITEM_ID, GOD_MAGIC_ITEM_ID, HEAVENLY_TAOIST_ITEM_ID], "only explicitly approved helmet replacements may use the approved project redesign status")
 			_:
 				assert(false, "%s 世界穿戴策略未声明" % entry.get("itemName", ""))
 	unresolved_names.sort()

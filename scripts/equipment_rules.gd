@@ -28,12 +28,16 @@ const LUCK_POINT_3 := 7
 const LUCK_POINT_2_RATE := 6
 const LUCK_POINT_3_RATE := 40
 const MAX_WEAPON_CURSE := 10
-const ACTOR_VISUAL_SORT_CONTRACT_ID := "equipment_actor_visual_sort_unit_v2"
+const ACTOR_VISUAL_SORT_CONTRACT_ID := "equipment_actor_visual_sort_unit_v3"
 const MALE_WORLD_HELMET_EXTENSION_CONTRACT_ID := "equipment.world_helmet.male.extension.v1"
 const PLAYER_VISUAL_HELMET_V2_CONTRACT_ID := "equipment.world_helmet.player_visual_v2"
+const WORLD_HELMET_RUNTIME_POLICY_CONTRACT_ID := "equipment.world_helmet.runtime_visibility.v1"
+const WORLD_HELMET_RUNTIME_POLICY_PATH := "res://assets/data/equipment_world_helmet_runtime_policy.json"
 const ACTOR_VISUAL_BODY_LAYER := &"body_and_dress"
+const ACTOR_VISUAL_HAIR_LAYER := &"hair"
 const ACTOR_VISUAL_WEAPON_LAYER := &"weapon"
 const ACTOR_VISUAL_HELMET_LAYER := &"helmet"
+static var _world_helmet_runtime_policy: Dictionary = {}
 const SPECIAL_EFFECTS_BY_NAME := {
 	"隐身戒指": {"id": "stealth", "label": "隐身", "source_code": 111, "runtime": true, "confidence": "B"},
 	"传送戒指": {"id": "teleport", "label": "安全传送", "source_code": 112, "runtime": true, "confidence": "B"},
@@ -58,6 +62,42 @@ static func weapon_draws_behind_actor(direction_row: int) -> bool:
 	return posmod(direction_row, 8) in [7, 0, 1]
 
 
+static func world_helmet_runtime_policy() -> Dictionary:
+	if _world_helmet_runtime_policy.is_empty():
+		var parsed: Variant = JSON.parse_string(
+			FileAccess.get_file_as_string(
+				WORLD_HELMET_RUNTIME_POLICY_PATH
+			)
+		)
+		_world_helmet_runtime_policy = (
+			parsed if parsed is Dictionary else {}
+		)
+	return _world_helmet_runtime_policy
+
+
+static func world_helmet_is_visible() -> bool:
+	return bool(
+		world_helmet_runtime_policy().get(
+			"worldHelmet", {}
+		).get("visible", false)
+	)
+
+
+static func world_helmet_head_mask_enabled() -> bool:
+	return bool(
+		world_helmet_runtime_policy().get(
+			"worldHelmet", {}
+		).get("headOcclusionMaskEnabled", false)
+	)
+
+
+static func world_hair_appearance() -> Dictionary:
+	var value: Variant = world_helmet_runtime_policy().get(
+		"hairAppearance", {}
+	)
+	return value if value is Dictionary else {}
+
+
 static func actor_visual_layer_order(direction_row: int) -> Array[StringName]:
 	# Wall fronts and actors only Y-sort when their final z_index matches. Keep
 	# every wear layer on Z=0 and express classic equipment overlap by sibling
@@ -66,10 +106,12 @@ static func actor_visual_layer_order(direction_row: int) -> Array[StringName]:
 		return [
 			ACTOR_VISUAL_WEAPON_LAYER,
 			ACTOR_VISUAL_BODY_LAYER,
+			ACTOR_VISUAL_HAIR_LAYER,
 			ACTOR_VISUAL_HELMET_LAYER,
 		]
 	return [
 		ACTOR_VISUAL_BODY_LAYER,
+		ACTOR_VISUAL_HAIR_LAYER,
 		ACTOR_VISUAL_WEAPON_LAYER,
 		ACTOR_VISUAL_HELMET_LAYER,
 	]

@@ -149,7 +149,14 @@ func _run() -> void:
 		assert(appearance.get("actionFallbacks", {}) == {})
 		assert(appearance.get("actions", {}).keys().size() == 6)
 		var catalog_item: Dictionary = catalog_items.get(item_key, {})
-		assert(int(catalog_item.get("paperDoll", {}).get("sourceIndex", -1)) == int(expected[1]))
+		assert(
+			int(catalog_item.get("paperDoll", {}).get("sourceIndex", -1))
+				== int(item_key)
+		)
+		assert(
+			catalog_item.get("paperDoll", {}).get("status", "")
+				== "user_final_helmet_calibration"
+		)
 		assert(catalog_item.get("worldWear", {}).get("contractId", "") == EquipmentRules.MALE_WORLD_HELMET_EXTENSION_CONTRACT_ID)
 		assert(catalog_item.get("worldWear", {}).get("helmetAppearance", {}) == appearance)
 		assert(catalog_runtime.get(str(expected[0]), {}).get("helmetAppearance", {}) == appearance)
@@ -164,7 +171,7 @@ func _run() -> void:
 		black_actions.get("cast", {}).get("atlasRgbaSha256", "")
 		!= black_actions.get("idle", {}).get("atlasRgbaSha256", "")
 	)
-	assert(int(catalog.get("coverage", {}).get("exactMaleWorldWear", 0)) == 55)
+	assert(int(catalog.get("coverage", {}).get("exactMaleWorldWear", 0)) == 60)
 	print(
 		"EQUIPMENT_MALE_WORLD_HELMET_GODOT_TEST_PASS "
 		+ "items=12 identities=11 atlases=66 logical_cells=2784"
