@@ -94,7 +94,24 @@ func _run() -> void:
 	editor.select_action("hit")
 	editor.select_target_direction(0)
 	editor.select_frame(1)
+	var authored_overlay := editor._target_authored_overlays[0] as TextureRect
+	assert(authored_overlay.stretch_mode == TextureRect.STRETCH_SCALE)
 	assert(editor.adjust_pose_scale_percent(0, "x", -5))
+	var horizontal_only_pose: Dictionary = editor.current_pose_transform()
+	assert(int(horizontal_only_pose.get("scale_x_percent", -1)) == n_before)
+	assert(int(horizontal_only_pose.get(
+		"scale_y_percent", -1
+	)) == n_before + 5)
+	if authored_overlay.visible:
+		assert(authored_overlay.size.is_equal_approx(
+			editor.authored_world_display_size_xy(
+				int(HelmetVisualV2.direction_record(
+					147, 0
+				).get("source_row", 0)),
+				n_before,
+				n_before + 5
+			)
+		))
 	assert(editor.adjust_pose_scale_percent(0, "y", 5))
 	assert(editor.adjust_pose_rotation(0, -5.0))
 	assert(editor.adjust_pose_rotation(0, 5.0))
@@ -111,7 +128,6 @@ func _run() -> void:
 		"offset", [0, 0]
 	)[1]) == Vector2(0.5, 0.0))
 	if editor._has_authored_source_sheet():
-		var authored_overlay := editor._target_authored_overlays[0] as TextureRect
 		if authored_overlay.visible:
 			assert(is_equal_approx(editor._normalized_rotation_degrees(
 				authored_overlay.rotation_degrees

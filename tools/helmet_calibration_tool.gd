@@ -951,9 +951,10 @@ func _build_mapping_buttons() -> void:
 		authored_overlay.name = "AuthoredHelmetOverlay"
 		authored_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		authored_overlay.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		authored_overlay.stretch_mode = (
-			TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		)
+		# Per-pose width and height are independent authoring controls.
+		# Keeping the texture aspect ratio here would silently turn either
+		# single-axis adjustment back into an apparent uniform scale.
+		authored_overlay.stretch_mode = TextureRect.STRETCH_SCALE
 		authored_overlay.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 		authored_overlay.z_index = 1
 		target_button.add_child(authored_overlay)
