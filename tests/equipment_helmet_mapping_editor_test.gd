@@ -828,17 +828,20 @@ func _run() -> void:
 	var idle_pose_before_keyboard: Dictionary = editor.pose_transform(
 		"idle", selected_scale_direction, 0
 	)
-	var hit_pose_before_keyboard: Dictionary = editor.current_pose_transform()
 	var blocked_source_row := posmod(
 		int(selected_direction_before.get("source_row", 0)) + 1, 8
 	)
-	assert(not editor.map_source_row_to_current_target(blocked_source_row))
+	assert(editor.map_source_row_to_current_target(blocked_source_row))
 	assert(
 		HelmetVisualV2.direction_record(146, selected_scale_direction)
 		== selected_direction_before
 	)
+	assert(int(editor.current_pose_transform().get(
+		"source_row", -1
+	)) == blocked_source_row)
+	var hit_pose_before_keyboard: Dictionary = editor.current_pose_transform()
 	for source_row: int in 8:
-		assert((source_grid.get_node(
+		assert(not (source_grid.get_node(
 			"Source_Row%d" % source_row
 		) as TextureButton).disabled)
 	var keyboard_plus := InputEventKey.new()
