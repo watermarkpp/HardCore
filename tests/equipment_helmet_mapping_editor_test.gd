@@ -776,35 +776,107 @@ func _run() -> void:
 	)
 	assert(HelmetVisualV2.saved_direction_override(146, 7) == nw_saved_before)
 
-	# Visible keyboard/right-click scaling applies in exact 5% steps to only
-	# the selected direction. The hidden legacy uniform setter remains covered
-	# below for migration of existing saved profiles.
+	# Keyboard scaling applies in exact 5% steps to only the selected pose
+	# frame. It must not mutate the shared direction baseline or another action.
+	# The hidden legacy uniform setter remains covered below for migration.
 	var scale_plus := editor.get_node(
 		"CalibrationUI/Panel/VBox/Inputs/ScalePlus"
 	) as Button
 	assert(not scale_plus.visible)
+	editor.select_action("idle")
+	editor.select_frame(0)
+	var shared_direction_before_undo := HelmetVisualV2.direction_record(
+		146, editor.current_direction
+	).duplicate(true)
+	var temporary_source_row := posmod(
+		int(shared_direction_before_undo.get("source_row", 0)) + 1, 8
+	)
+	assert(editor.map_source_row_to_current_target(temporary_source_row))
+	var shared_direction_pending := HelmetVisualV2.direction_record(
+		146, editor.current_direction
+	).duplicate(true)
+	editor.select_action("hit")
+	editor.select_frame(1)
+	editor.undo_current_direction()
+	assert(
+		HelmetVisualV2.direction_record(146, editor.current_direction)
+		== shared_direction_pending
+	)
+	editor.select_action("idle")
+	editor.select_frame(0)
+	editor.undo_current_direction()
+	var shared_direction_after_idle_undo := HelmetVisualV2.direction_record(
+		146, editor.current_direction
+	)
+	assert(int(shared_direction_after_idle_undo.get(
+		"source_row", -1
+	)) == int(shared_direction_before_undo.get("source_row", -2)))
+	assert(_vector(shared_direction_after_idle_undo.get(
+		"nudge", []
+	)) == _vector(shared_direction_before_undo.get("nudge", [])))
 	assert(editor.set_uniform_scale_percent(100))
+	editor.select_action("hit")
+	editor.select_frame(1)
+	editor._refresh_mapping_editor_ui()
 	var selected_scale_direction: int = editor.current_direction
 	var untouched_scale_direction: int = posmod(
 		selected_scale_direction + 1, 8
 	)
+	var selected_direction_before := HelmetVisualV2.direction_record(
+		146, selected_scale_direction
+	).duplicate(true)
+	var idle_pose_before_keyboard: Dictionary = editor.pose_transform(
+		"idle", selected_scale_direction, 0
+	)
+	var hit_pose_before_keyboard: Dictionary = editor.current_pose_transform()
+	var blocked_source_row := posmod(
+		int(selected_direction_before.get("source_row", 0)) + 1, 8
+	)
+	assert(not editor.map_source_row_to_current_target(blocked_source_row))
+	assert(
+		HelmetVisualV2.direction_record(146, selected_scale_direction)
+		== selected_direction_before
+	)
+	for source_row: int in 8:
+		assert((source_grid.get_node(
+			"Source_Row%d" % source_row
+		) as TextureButton).disabled)
 	var keyboard_plus := InputEventKey.new()
 	keyboard_plus.keycode = KEY_EQUAL
 	keyboard_plus.pressed = true
 	editor._input(keyboard_plus)
 	assert(HelmetVisualV2.direction_scale_percent(
 		146, selected_scale_direction
-	) == 105)
+	) == 100)
 	assert(HelmetVisualV2.direction_scale_percent(
 		146, untouched_scale_direction
 	) == 100)
+	var hit_pose_after_keyboard: Dictionary = editor.current_pose_transform()
+	assert(int(hit_pose_after_keyboard.get(
+		"scale_x_percent", -1
+	)) == int(hit_pose_before_keyboard.get(
+		"scale_x_percent", -1
+	)) + 5)
+	assert(int(hit_pose_after_keyboard.get(
+		"scale_y_percent", -1
+	)) == int(hit_pose_before_keyboard.get(
+		"scale_y_percent", -1
+	)) + 5)
+	assert(editor.pose_transform(
+		"idle", selected_scale_direction, 0
+	) == idle_pose_before_keyboard)
 	var keyboard_minus := InputEventKey.new()
 	keyboard_minus.keycode = KEY_MINUS
 	keyboard_minus.pressed = true
 	editor._input(keyboard_minus)
-	assert(HelmetVisualV2.direction_scale_percent(
-		146, selected_scale_direction
-	) == 100)
+	assert(editor.current_pose_transform() == hit_pose_before_keyboard)
+	editor.select_action("idle")
+	editor.select_frame(0)
+	editor._refresh_mapping_editor_ui()
+	for source_row: int in 8:
+		assert(not (source_grid.get_node(
+			"Source_Row%d" % source_row
+		) as TextureButton).disabled)
 	assert(editor.set_uniform_scale_percent(125))
 	var synthetic := Image.create(9, 9, false, Image.FORMAT_RGBA8)
 	synthetic.fill(Color(0, 0, 0, 0))
@@ -930,6 +1002,9 @@ func _run() -> void:
 	# Item 151 exposes opaque original source slots. The editor does not assign
 	# N/S semantics, and both mapping/nudge and asset-scale are editable.
 	editor.select_item(151)
+	editor.select_action("idle")
+	editor.select_frame(0)
+	editor._refresh_mapping_editor_ui()
 	assert(not HelmetVisualV2.is_read_only(151))
 	assert((editor.get_node(
 		"CalibrationUI/Panel/VBox/Inputs/Scale"
