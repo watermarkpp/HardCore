@@ -1,10 +1,10 @@
 {
   "contractId": "equipment.world_helmet.calibration.active_target.v1",
-  "itemId": 224,
-  "visualAssetId": "prayer",
-  "displayName": "祈祷头盔",
-  "sourceSheet": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_224_helmet_8dir_transparent.png",
-  "sourceSheetSha256": "21eab7a933c61169abf1e821a758f0387bf04df098ae162a1e9443a5fc0cd0ec",
+  "itemId": 228,
+  "visualAssetId": "memory",
+  "displayName": "记忆头盔",
+  "sourceSheet": "res://assets/art/items/client/world_wear/helmet/male/source/memory_228_helmet_8dir_transparent.png",
+  "sourceSheetSha256": "39686c3c8310e1a9cf9e1f8a5813d7ef694fb83d241fc45e9df632accff3dd79",
   "sourceGrid": [
     4,
     2
@@ -21,46 +21,42 @@
   ],
   "sourceMatte": "transparent_user_authored_alpha_preserved_v1",
   "sourceResizeFilter": "display_transform_only_until_final_bake_v1",
-  "sourceRevision": "prayer_224.user_provided_8dir_plus_inventory_s.v1",
+  "sourceRevision": "memory_228.user_provided_8dir.v1",
   "loadPolicy": "single_target_direct_png_hash_validated",
   "initializeSessionDirectionMapping": true,
   "preparedDirectionFiles": {
-    "N": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_224_directions/n.png",
-    "NE": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_224_directions/ne.png",
-    "E": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_224_directions/e.png",
-    "SE": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_224_directions/se.png",
-    "S": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_224_directions/s.png",
-    "SW": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_224_directions/sw.png",
-    "W": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_224_directions/w.png",
-    "NW": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_224_directions/nw.png"
+    "N": "res://assets/art/items/client/world_wear/helmet/male/source/memory_228_directions/n.png",
+    "NE": "res://assets/art/items/client/world_wear/helmet/male/source/memory_228_directions/ne.png",
+    "E": "res://assets/art/items/client/world_wear/helmet/male/source/memory_228_directions/e.png",
+    "SE": "res://assets/art/items/client/world_wear/helmet/male/source/memory_228_directions/se.png",
+    "S": "res://assets/art/items/client/world_wear/helmet/male/source/memory_228_directions/s.png",
+    "SW": "res://assets/art/items/client/world_wear/helmet/male/source/memory_228_directions/sw.png",
+    "W": "res://assets/art/items/client/world_wear/helmet/male/source/memory_228_directions/w.png",
+    "NW": "res://assets/art/items/client/world_wear/helmet/male/source/memory_228_directions/nw.png"
   },
   "preparedDirectionSha256": {
-    "N": "65b8240dda81642e92b4fbfbbda3663cd52cc2aeb168cb36a0338031b7248a58",
-    "NE": "5dcf51346e309aa87ef6fe359382109af5c6069996944d37358803fcfb4ff289",
-    "E": "c877e23eb839113a046778f790ae71d49b947363eba1209d2ae4a8b072564986",
-    "SE": "415e85f8dc9b3637f9e3e075331a648001af55dee110485991a6073aea51ffe3",
-    "S": "db6aa5ea34a2f8b6b89d1daeb05dcce7c1a23d37599deee1eeca20c00bab36d6",
-    "SW": "d39cde4fd607032d07f097f3f4f7f837fa3f2f6a208c404bef556c09b72b47c8",
-    "W": "3e71cc2e61269b862b831c4e4174c114e30fe5ed637c1521cbc322abb2ed92dd",
-    "NW": "359921a91405e1bc909ce9b4c148de23836171a0f741926226029ef7ae7956d0"
+    "N": "360c75d8785772e7e9dfba32c92d6c723a21db5925b83cb42316f346bdc0d6e5",
+    "NE": "2c459bd2e0271daa63244fe74538bbb6c244a2a889e4595956a303094e81ae05",
+    "E": "32f0e40cc63a28877ad8ba172f99c38c72cb6c4c4bddc720b5a7336b994c114c",
+    "SE": "d5d8ffc63cdb13ccdd5c851d9da3838943572c1e09ab4bb4d9481b2811ff3c31",
+    "S": "936bdcc7ef0a1e8e0e0a0f885acb595c131ecfc1887825ffbea421679a8d9148",
+    "SW": "e29ad28cea7a05fc5ac1b88f2734558c75c792c6cd24e0bee00a22441a39858d",
+    "W": "a65c7d7559b17c0bdf7801e6341aec6a3680cd060e5a3a2d8984e7c54b65108c",
+    "NW": "61942c38c7f4c11835a8c429c8436fc51eb6e34f56ce01f9af42480ad9b20237"
   },
-  "preparedPresentationFiles": {
-    "inventory": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_224_presentation/inventory.png"
-  },
-  "preparedPresentationSha256": {
-    "inventory": "b11ea1d0c0235ac5d289135a8a93582b4a1fe1e31ce3acdc8bccb8ba66811670"
-  },
+  "preparedPresentationFiles": {},
+  "preparedPresentationSha256": {},
   "resolutionPolicy": "retain_original_rgba_cutouts_until_one_final_runtime_bake",
   "provenance": {
     "lane": "helmet_world_visuals",
     "tier": "primary",
     "distribution": "user_authorized_direct_source",
-    "originalSourcePath": "C:/Users/Administrator/Desktop/sucai/装备/ChatGPT Image 2026年7月28日 13_22_21.png",
-    "projectSourcePath": "res://assets/art/items/client/world_wear/helmet/male/source/prayer_224_helmet_9view_user_20260729.png",
-    "originalSourceSha256": "7ba8d678d6902411e5d1eb25891e3ebd67ddc606a345f2b43abbd3d172ae3ad5",
+    "originalSourcePath": "C:/Users/Administrator/Desktop/sucai/装备/ChatGPT Image 2026年7月28日 12_58_46.png",
+    "projectSourcePath": "res://assets/art/items/client/world_wear/helmet/male/source/memory_228_helmet_8dir_user_20260729.png",
+    "originalSourceSha256": "ed3aa3aae0c106110c24ccbf43a17e71e2d7c418e2ecdbc12e996cf74b3624e6",
     "sourceSize": [
       1448,
-      1640
+      1086
     ],
     "derivation": "alpha_bounds_crop_only_no_matte_removal_no_face_window_edit_no_resample",
     "userAuthorizationDate": "2026-07-29"

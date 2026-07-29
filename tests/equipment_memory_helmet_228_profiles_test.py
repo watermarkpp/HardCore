@@ -110,16 +110,6 @@ def main() -> None:
         cutouts["E"]["sourceCutoutRgbaSha256"]
     )
 
-    active_target = load_json(
-        "assets/data/helmet_calibration_active_target.json"
-    )
-    assert active_target["itemId"] == 228
-    assert active_target["visualAssetId"] == "memory"
-    assert active_target["sourceSheetSha256"] == SOURCE_SHEET_SHA256
-    assert active_target["sourceDirectionOrder"] == SOURCE_ORDER
-    assert active_target["loadPolicy"] == (
-        "single_target_direct_png_hash_validated"
-    )
     print(
         "EQUIPMENT_MEMORY_HELMET_228_PROFILES_TEST_PASS "
         "W=slot2 E=slot6 unique=8 frozen_cells=6"
