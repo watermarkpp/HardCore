@@ -1787,12 +1787,33 @@ func reset_pose_transform(
 	direction_index: int,
 	frame_index: int
 ) -> bool:
-	return _set_pose_transform(
+	var item_key := _pose_item_key(current_item_id)
+	var saved_item: Dictionary = _saved_pose_transforms_by_item.get(
+		item_key, {}
+	)
+	var saved_action: Dictionary = saved_item.get(action, {})
+	var saved_direction: Dictionary = saved_action.get(
+		str(DIRECTIONS[direction_index]), {}
+	)
+	var saved_transform: Variant = saved_direction.get(
+		str(frame_index), {}
+	)
+	var restored_transform := _default_pose_transform(direction_index)
+	if saved_transform is Dictionary and not saved_transform.is_empty():
+		restored_transform = saved_transform
+	if not _set_pose_transform(
 		action,
 		direction_index,
 		frame_index,
-		_default_pose_transform(direction_index)
-	)
+		restored_transform,
+		false
+	):
+		return false
+	_dirty_pose_frames.erase(_pose_dirty_key(
+		current_item_id, action, direction_index, frame_index
+	))
+	_refresh_mapping_editor_ui()
+	return true
 
 
 func select_action(action: String) -> void:
@@ -2287,6 +2308,8 @@ func nudge_active_editor(delta: Vector2i) -> bool:
 func map_source_row_to_current_target(source_row: int) -> bool:
 	if HelmetVisualV2.is_read_only(current_item_id):
 		return false
+	if current_action != "idle" or current_frame != 0:
+		return false
 	if source_row < 0 or source_row >= DIRECTIONS.size():
 		return false
 	var source_direction := _calibration_source_direction_for_row(source_row)
@@ -2314,43 +2337,16 @@ func map_source_row_to_current_target(source_row: int) -> bool:
 
 
 func undo_current_direction() -> void:
-	HelmetVisualV2.clear_session_calibration_override(
-		current_item_id, current_direction
-	)
-	_dirty_directions.erase(
-		_direction_dirty_key(current_item_id, current_direction)
-	)
-	var item_key := _pose_item_key(current_item_id)
-	var saved_item: Dictionary = _saved_pose_transforms_by_item.get(
-		item_key, {}
-	)
-	var saved_action: Dictionary = saved_item.get(current_action, {})
-	var saved_direction: Dictionary = saved_action.get(
-		str(DIRECTIONS[current_direction]), {}
-	)
-	var saved_transform: Variant = saved_direction.get(
-		str(current_frame), {}
-	)
-	if saved_transform is Dictionary and not saved_transform.is_empty():
-		_set_pose_transform(
-			current_action,
-			current_direction,
-			current_frame,
-			saved_transform,
-			false
+	if current_action == "idle" and current_frame == 0:
+		HelmetVisualV2.clear_session_calibration_override(
+			current_item_id, current_direction
 		)
-	else:
-		_set_pose_transform(
-			current_action,
-			current_direction,
-			current_frame,
-			_default_pose_transform(current_direction),
-			false
+		_dirty_directions.erase(
+			_direction_dirty_key(current_item_id, current_direction)
 		)
-	_dirty_pose_frames.erase(_pose_dirty_key(
-		current_item_id, current_action, current_direction, current_frame
-	))
-	_refresh_mapping_editor_ui()
+	reset_pose_transform(
+		current_action, current_direction, current_frame
+	)
 
 
 func reload_formal_data() -> void:
@@ -3350,12 +3346,12 @@ func _input(event: InputEvent) -> void:
 		KEY_8: set_head_zoom(8)
 		KEY_0: set_head_zoom(10)
 		KEY_EQUAL, KEY_KP_ADD:
-			adjust_direction_scale_percent(
-				current_direction, SCALE_STEP_PERCENT
+			adjust_pose_scale_percent(
+				current_direction, "uniform", SCALE_STEP_PERCENT
 			)
 		KEY_MINUS, KEY_KP_SUBTRACT:
-			adjust_direction_scale_percent(
-				current_direction, -SCALE_STEP_PERCENT
+			adjust_pose_scale_percent(
+				current_direction, "uniform", -SCALE_STEP_PERCENT
 			)
 		KEY_S: save_current_direction()
 		KEY_L: lock_current_direction()
@@ -3521,6 +3517,11 @@ func _refresh_mapping_editor_ui() -> void:
 		% [current_item_id, _calibration_item_display_name(current_item_id)]
 	)
 	var read_only := HelmetVisualV2.is_read_only(current_item_id)
+	var source_mapping_editable := (
+		not read_only
+		and current_action == "idle"
+		and current_frame == 0
+	)
 	var direction := str(DIRECTIONS[current_direction])
 	var record := HelmetVisualV2.direction_record(
 		current_item_id, current_direction
@@ -3656,7 +3657,7 @@ func _refresh_mapping_editor_ui() -> void:
 			"source_cell_hash",
 			source_image.get_data().hex_encode().hash()
 		)
-		source_button.disabled = read_only
+		source_button.disabled = not source_mapping_editable
 		source_button.button_pressed = row == source_row
 		source_button.modulate = (
 			Color(0.35, 1.0, 0.72)

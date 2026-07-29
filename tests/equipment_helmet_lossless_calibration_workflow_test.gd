@@ -271,6 +271,56 @@ func _run() -> void:
 	editor.select_frame(1)
 	var reloaded_hit_pose: Dictionary = editor.current_pose_transform()
 	assert(_pose_fields_equal(reloaded_hit_pose, saved_hit_pose))
+	var idle_pose_before_reset: Dictionary = editor.pose_transform(
+		"idle", 0, 0
+	)
+	var direction_before_reset: Dictionary = HelmetVisualV2.direction_record(
+		147, 0
+	).duplicate(true)
+	assert(not editor.map_source_row_to_current_target(1))
+	assert(HelmetVisualV2.direction_record(147, 0) == direction_before_reset)
+	var modified_hit_pose := reloaded_hit_pose.duplicate(true)
+	modified_hit_pose["offset"] = [7.5, -4.0]
+	modified_hit_pose["scale_x_percent"] = n_before + 20
+	modified_hit_pose["scale_y_percent"] = n_before - 5
+	modified_hit_pose["rotation_degrees"] = 15.0
+	assert(editor._set_pose_transform("hit", 0, 1, modified_hit_pose))
+	assert(not _pose_fields_equal(
+		editor.current_pose_transform(), saved_hit_pose
+	))
+	assert(editor.reset_pose_transform("hit", 0, 1))
+	assert(_pose_fields_equal(
+		editor.current_pose_transform(), saved_hit_pose
+	))
+	assert(_pose_fields_equal(
+		editor.pose_transform("idle", 0, 0), idle_pose_before_reset
+	))
+	assert(not editor._dirty_pose_frames.has(editor._pose_dirty_key(
+		147, "hit", 0, 1
+	)))
+	var keyboard_plus := InputEventKey.new()
+	keyboard_plus.keycode = KEY_EQUAL
+	keyboard_plus.pressed = true
+	editor._input(keyboard_plus)
+	var keyboard_scaled_hit: Dictionary = editor.current_pose_transform()
+	assert(int(keyboard_scaled_hit.get(
+		"scale_x_percent", -1
+	)) == int(saved_hit_pose.get("scale_x_percent", -1)) + 5)
+	assert(int(keyboard_scaled_hit.get(
+		"scale_y_percent", -1
+	)) == int(saved_hit_pose.get("scale_y_percent", -1)) + 5)
+	assert(HelmetVisualV2.direction_record(147, 0) == direction_before_reset)
+	assert(_pose_fields_equal(
+		editor.pose_transform("idle", 0, 0), idle_pose_before_reset
+	))
+	var keyboard_minus := InputEventKey.new()
+	keyboard_minus.keycode = KEY_MINUS
+	keyboard_minus.pressed = true
+	editor._input(keyboard_minus)
+	assert(_pose_fields_equal(
+		editor.current_pose_transform(), saved_hit_pose
+	))
+	assert(editor.reset_pose_transform("hit", 0, 1))
 	assert(FileAccess.get_file_as_string(FORMAL_OVERRIDE) == formal_before)
 
 	var preparer := FileAccess.get_file_as_string(
@@ -287,6 +337,7 @@ func _run() -> void:
 	print(
 		"EQUIPMENT_HELMET_LOSSLESS_CALIBRATION_WORKFLOW_PASS "
 		+ "world_8dir_pose_frame=true axis_scale=true rotation_5deg=true "
+		+ "action_isolation=true saved_frame_reset=true "
 		+ "death_frames=4 paper_doll=true inventory=true ground=true "
 		+ "draft_only=true original_once=true"
 	)
