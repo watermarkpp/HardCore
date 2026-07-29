@@ -1,10 +1,10 @@
 {
   "contractId": "equipment.world_helmet.calibration.active_target.v1",
-  "itemId": 232,
-  "visualAssetId": "holy_war",
-  "displayName": "圣战头盔",
-  "sourceSheet": "res://assets/art/items/client/world_wear/helmet/male/source/holy_war_232_helmet_8dir_transparent.png",
-  "sourceSheetSha256": "5b63a98e6694aee3eb787e795bece2fc92bb174cda93aa9e780ab2dc74c64363",
+  "itemId": 236,
+  "visualAssetId": "god_magic",
+  "displayName": "法神头盔",
+  "sourceSheet": "res://assets/art/items/client/world_wear/helmet/male/source/god_magic_236_helmet_8dir_transparent.png",
+  "sourceSheetSha256": "b8e38b3485fdee5b8deeddbe4d637323fe8a337b85301e2f7a401f9c58d77cbe",
   "sourceGrid": [
     4,
     2
@@ -21,44 +21,45 @@
   ],
   "sourceMatte": "transparent_user_authored_alpha_preserved_v1",
   "sourceResizeFilter": "display_transform_only_until_final_bake_v1",
-  "sourceRevision": "holy_war_232.user_provided_8dir.v1",
+  "sourceRevision": "god_magic_236.user_provided_8dir_disconnected_components.v1",
   "loadPolicy": "single_target_direct_png_hash_validated",
   "initializeSessionDirectionMapping": true,
   "preparedDirectionFiles": {
-    "N": "res://assets/art/items/client/world_wear/helmet/male/source/holy_war_232_directions/n.png",
-    "NE": "res://assets/art/items/client/world_wear/helmet/male/source/holy_war_232_directions/ne.png",
-    "E": "res://assets/art/items/client/world_wear/helmet/male/source/holy_war_232_directions/e.png",
-    "SE": "res://assets/art/items/client/world_wear/helmet/male/source/holy_war_232_directions/se.png",
-    "S": "res://assets/art/items/client/world_wear/helmet/male/source/holy_war_232_directions/s.png",
-    "SW": "res://assets/art/items/client/world_wear/helmet/male/source/holy_war_232_directions/sw.png",
-    "W": "res://assets/art/items/client/world_wear/helmet/male/source/holy_war_232_directions/w.png",
-    "NW": "res://assets/art/items/client/world_wear/helmet/male/source/holy_war_232_directions/nw.png"
+    "N": "res://assets/art/items/client/world_wear/helmet/male/source/god_magic_236_directions/n.png",
+    "NE": "res://assets/art/items/client/world_wear/helmet/male/source/god_magic_236_directions/ne.png",
+    "E": "res://assets/art/items/client/world_wear/helmet/male/source/god_magic_236_directions/e.png",
+    "SE": "res://assets/art/items/client/world_wear/helmet/male/source/god_magic_236_directions/se.png",
+    "S": "res://assets/art/items/client/world_wear/helmet/male/source/god_magic_236_directions/s.png",
+    "SW": "res://assets/art/items/client/world_wear/helmet/male/source/god_magic_236_directions/sw.png",
+    "W": "res://assets/art/items/client/world_wear/helmet/male/source/god_magic_236_directions/w.png",
+    "NW": "res://assets/art/items/client/world_wear/helmet/male/source/god_magic_236_directions/nw.png"
   },
   "preparedDirectionSha256": {
-    "N": "1ef481937b71d98e6c3c53905f6dc13953a7851ddffd2b7120666db4cfc718e3",
-    "NE": "81cee1c999313c4fb86b077425070323e7fb17129cc67f33d759bc4bb20dd705",
-    "E": "d780966b03118e00881c3877f7a852c31784304d194edc7130e1376e89798b48",
-    "SE": "6027420c79d56fb38f8a1549794757ee115e78c77e42726c794a00790dc263f9",
-    "S": "cb74dee9b97b196c40611b6561beddbfeaed5a5573d10133c3ec432b7d11b488",
-    "SW": "17777eb8146ad7273e6d035d8258eb406f197e0ecad36a47bf09acc77cfe863b",
-    "W": "b95f48ec62b7b5602c2204bada911c25b3489302c659ce19859bbc902897f11c",
-    "NW": "589b9704d5aa070b7630cecbee199ed4069eedb7577f1858e1753915babcf476"
+    "N": "d4370611a542b07de1e4f9c83b8cc17f7c20470a5886055846ae5060adcd0849",
+    "NE": "8196ba46be383ec91d2fd00b7108b384bd734f44fbafa8f320e246902eb25a5c",
+    "E": "46729e9beec2c85a42e678e4b932f368d9cde389472e456cd6bf87cc7a2a5055",
+    "SE": "d419236ed81f1b69bb8c0bfc3360ad1571e62dc89f3ff58a5b829594bd626d22",
+    "S": "3efcce933205fe68152ffde1f4fcd7a1bacc1b3d24ea8660bb616c59917526df",
+    "SW": "d8a975ea536f832269c1e20283cfe16ac98e477033d4e916f3ebaf134b9dedae",
+    "W": "79043c9ed00302052c13df922c5ea97ffb4a6ea6bd92ce32d451d1b63a1b4599",
+    "NW": "7872f2e9b56ab1e44287fe3deb599bcb750620b5c77d9dc6c1a6fa359d033549"
   },
   "preparedPresentationFiles": {},
   "preparedPresentationSha256": {},
   "resolutionPolicy": "retain_original_rgba_cutouts_until_one_final_runtime_bake",
+  "disconnectedComponentPolicy": "preserve_all_alpha_components_in_each_direction_union_bounds",
   "provenance": {
     "lane": "helmet_world_visuals",
     "tier": "primary",
     "distribution": "user_authorized_direct_source",
-    "originalSourcePath": "C:/Users/Administrator/Desktop/sucai/装备/6ec29303-f433-4635-9890-8edc2f98d872.png",
-    "projectSourcePath": "res://assets/art/items/client/world_wear/helmet/male/source/holy_war_232_helmet_8dir_user_20260729.png",
-    "originalSourceSha256": "486b7fb95af5f24b61d0fecfb9bbd22f9b1e3550189c5cedc1b8d264452dbec2",
+    "originalSourcePath": "C:/Users/Administrator/Desktop/sucai/装备/ChatGPT Image 2026年7月28日 20_48_06.png",
+    "projectSourcePath": "res://assets/art/items/client/world_wear/helmet/male/source/god_magic_236_helmet_8dir_user_20260729.png",
+    "originalSourceSha256": "604e257c431c7e963d76d2bc4fdc21ae93bc099c5b114ad7c214b23f482e8efa",
     "sourceSize": [
       1448,
       1086
     ],
-    "derivation": "alpha_bounds_crop_only_no_matte_removal_no_face_window_edit_no_resample",
+    "derivation": "alpha_union_bounds_crop_only_preserve_disconnected_horns_and_headband_no_matte_removal_no_face_window_edit_no_resample",
     "userAuthorizationDate": "2026-07-29"
   }
 }

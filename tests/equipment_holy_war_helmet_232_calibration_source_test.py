@@ -123,26 +123,6 @@ def main() -> None:
         assert output.size == expected.size
         assert output.tobytes() == expected.tobytes(), direction
 
-    target = json.loads(
-        (
-            ROOT / "assets/data/helmet_calibration_active_target.json"
-        ).read_text(encoding="utf-8")
-    )
-    assert target["itemId"] == 232
-    assert target["visualAssetId"] == "holy_war"
-    assert target["displayName"] == "圣战头盔"
-    assert target["sourceDirectionOrder"] == list(DIRECTIONS)
-    assert target["initializeSessionDirectionMapping"] is True
-    assert set(target["preparedDirectionFiles"]) == set(DIRECTIONS)
-    assert target["preparedPresentationFiles"] == {}
-    assert target["preparedPresentationSha256"] == {}
-    for direction in DIRECTIONS:
-        path = ROOT / target["preparedDirectionFiles"][direction][6:]
-        assert file_sha256(path) == target["preparedDirectionSha256"][direction]
-    assert target["provenance"]["derivation"] == (
-        "alpha_bounds_crop_only_no_matte_removal_no_face_window_edit_no_resample"
-    )
-
     for relative, expected in FROZEN_RUNTIME_SHA256.items():
         assert file_sha256(ROOT / relative) == expected, relative
     print("equipment_holy_war_helmet_232_calibration_source_test: PASS")
