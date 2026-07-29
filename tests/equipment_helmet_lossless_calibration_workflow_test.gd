@@ -238,6 +238,9 @@ func _run() -> void:
 	assert(bool(draft.get("previewPolicy", {}).get(
 		"noPreviewRasterDownsample", false
 	)))
+	assert(bool(draft.get("previewPolicy", {}).get(
+		"poseFrameIndependentSource", false
+	)))
 	assert(bool(draft.get("finalizePolicy", {}).get(
 		"noIntermediateResample", false
 	)))
@@ -250,6 +253,7 @@ func _run() -> void:
 	var saved_hit_pose: Dictionary = draft.get(
 		"poseTransforms", {}
 	).get("hit", {}).get("N", {}).get("1", {})
+	assert(int(saved_hit_pose.get("source_row", -1)) == 0)
 	assert(int(saved_hit_pose.get("scale_x_percent", -1)) == n_before)
 	assert(int(saved_hit_pose.get(
 		"scale_y_percent", -1
@@ -277,8 +281,9 @@ func _run() -> void:
 	var direction_before_reset: Dictionary = HelmetVisualV2.direction_record(
 		147, 0
 	).duplicate(true)
-	assert(not editor.map_source_row_to_current_target(1))
+	assert(editor.map_source_row_to_current_target(1))
 	assert(HelmetVisualV2.direction_record(147, 0) == direction_before_reset)
+	assert(int(editor.current_pose_transform().get("source_row", -1)) == 1)
 	var modified_hit_pose := reloaded_hit_pose.duplicate(true)
 	modified_hit_pose["offset"] = [7.5, -4.0]
 	modified_hit_pose["scale_x_percent"] = n_before + 20
@@ -292,6 +297,9 @@ func _run() -> void:
 	assert(_pose_fields_equal(
 		editor.current_pose_transform(), saved_hit_pose
 	))
+	assert(int(editor.current_pose_transform().get(
+		"source_row", -1
+	)) == int(saved_hit_pose.get("source_row", -2)))
 	assert(_pose_fields_equal(
 		editor.pose_transform("idle", 0, 0), idle_pose_before_reset
 	))
@@ -321,6 +329,62 @@ func _run() -> void:
 		editor.current_pose_transform(), saved_hit_pose
 	))
 	assert(editor.reset_pose_transform("hit", 0, 1))
+	assert(editor.map_source_row_to_current_target(4))
+	assert(editor.adjust_pose_rotation(0, 5.0))
+	var north_shared_source_pose: Dictionary = editor.current_pose_transform()
+	assert(int(north_shared_source_pose.get("source_row", -1)) == 4)
+	editor.select_target_direction(6)
+	editor.select_frame(1)
+	assert(editor.map_source_row_to_current_target(4))
+	var west_shared_source_pose: Dictionary = editor.current_pose_transform()
+	west_shared_source_pose["offset"] = [-3.0, 2.5]
+	west_shared_source_pose["rotation_degrees"] = 10.0
+	assert(editor._set_pose_transform(
+		"hit", 6, 1, west_shared_source_pose
+	))
+	assert(int(editor.pose_transform(
+		"hit", 0, 1
+	).get("source_row", -1)) == 4)
+	assert(int(editor.pose_transform(
+		"hit", 6, 1
+	).get("source_row", -1)) == 4)
+	assert(not _pose_fields_equal(
+		editor.pose_transform("hit", 0, 1),
+		editor.pose_transform("hit", 6, 1)
+	))
+	assert(HelmetVisualV2.direction_record(147, 0) == direction_before_reset)
+	assert(editor.save_all_changes())
+	var shared_source_draft: Dictionary = JSON.parse_string(
+		FileAccess.get_file_as_string(draft_path)
+	)
+	var shared_hit: Dictionary = shared_source_draft.get(
+		"poseTransforms", {}
+	).get("hit", {})
+	assert(int(shared_hit.get("N", {}).get(
+		"1", {}
+	).get("source_row", -1)) == 4)
+	assert(int(shared_hit.get("W", {}).get(
+		"1", {}
+	).get("source_row", -1)) == 4)
+	assert(float(shared_hit.get("N", {}).get(
+		"1", {}
+	).get("rotation_degrees", -99.0)) == 0.0)
+	assert(float(shared_hit.get("W", {}).get(
+		"1", {}
+	).get("rotation_degrees", -99.0)) == 10.0)
+	editor.reload_formal_data()
+	editor.select_action("hit")
+	editor.select_target_direction(0)
+	editor.select_frame(1)
+	assert(_pose_fields_equal(
+		editor.current_pose_transform(),
+		shared_hit.get("N", {}).get("1", {})
+	))
+	editor.select_target_direction(6)
+	assert(_pose_fields_equal(
+		editor.current_pose_transform(),
+		shared_hit.get("W", {}).get("1", {})
+	))
 	assert(FileAccess.get_file_as_string(FORMAL_OVERRIDE) == formal_before)
 
 	var preparer := FileAccess.get_file_as_string(
@@ -351,6 +415,8 @@ func _pose_fields_equal(left: Dictionary, right: Dictionary) -> bool:
 		)[1]) == Vector2(right.get("offset", [0, 0])[0], right.get(
 			"offset", [0, 0]
 		)[1])
+		and int(left.get("source_row", -1))
+			== int(right.get("source_row", -2))
 		and int(left.get("scale_x_percent", -1))
 			== int(right.get("scale_x_percent", -2))
 		and int(left.get("scale_y_percent", -1))

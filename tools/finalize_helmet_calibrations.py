@@ -23,6 +23,7 @@ from PIL import Image, ImageChops
 DIRECTIONS = ("N", "NE", "E", "SE", "S", "SW", "W", "NW")
 ACTIONS = ("idle", "walk", "attack", "cast", "hit", "death")
 FRAME_SIZE = (192, 160)
+AUTHORED_WORLD_DISPLAY_SCALE = 0.08
 PAPER_PREVIEW_SCALE = 1.22
 PAPER_COMPOSITION_ORIGIN = (167.519989013672, 91.2200164794922)
 PAPER_CALIBRATION_CANVAS = (540, 340)
@@ -119,6 +120,140 @@ def premultiplied_lanczos_resize(
         )
         output[output_index + 3] = alpha_value
     return Image.frombytes("RGBA", (width, height), bytes(output))
+
+
+def premultiplied_affine_to_cell(
+    source: Image.Image,
+    target_size: tuple[int, int],
+    rotation_degrees: float,
+    center: tuple[float, float],
+) -> Image.Image:
+    """Apply scale, rotation and placement from original pixels in one pass."""
+    source = source.convert("RGBA")
+    target_width = max(1, int(target_size[0]))
+    target_height = max(1, int(target_size[1]))
+    scale_x = target_width / source.width
+    scale_y = target_height / source.height
+    radians = math.radians(rotation_degrees)
+    cosine = math.cos(radians)
+    sine = math.sin(radians)
+    inverse = (
+        cosine / scale_x,
+        sine / scale_x,
+        source.width / 2.0
+        - cosine * center[0] / scale_x
+        - sine * center[1] / scale_x,
+        -sine / scale_y,
+        cosine / scale_y,
+        source.height / 2.0
+        + sine * center[0] / scale_y
+        - cosine * center[1] / scale_y,
+    )
+    red, green, blue, alpha = source.split()
+    premultiplied = [
+        ImageChops.multiply(channel, alpha)
+        for channel in (red, green, blue)
+    ]
+    transformed_rgb = [
+        channel.transform(
+            FRAME_SIZE,
+            Image.Transform.AFFINE,
+            inverse,
+            resample=Image.Resampling.BICUBIC,
+            fillcolor=0,
+        )
+        for channel in premultiplied
+    ]
+    transformed_alpha = alpha.transform(
+        FRAME_SIZE,
+        Image.Transform.AFFINE,
+        inverse,
+        resample=Image.Resampling.BICUBIC,
+        fillcolor=0,
+    )
+    alpha_bytes = transformed_alpha.tobytes()
+    rgb_bytes = [channel.tobytes() for channel in transformed_rgb]
+    output = bytearray(FRAME_SIZE[0] * FRAME_SIZE[1] * 4)
+    for index, alpha_value in enumerate(alpha_bytes):
+        output_index = index * 4
+        if alpha_value <= 5:
+            continue
+        output[output_index] = min(
+            255, int(round(rgb_bytes[0][index] * 255.0 / alpha_value))
+        )
+        output[output_index + 1] = min(
+            255, int(round(rgb_bytes[1][index] * 255.0 / alpha_value))
+        )
+        output[output_index + 2] = min(
+            255, int(round(rgb_bytes[2][index] * 255.0 / alpha_value))
+        )
+        output[output_index + 3] = alpha_value
+    return Image.frombytes("RGBA", FRAME_SIZE, bytes(output))
+
+
+def resolved_pose_transform(
+    draft: dict[str, Any],
+    action: str,
+    target_direction: str,
+    frame: int,
+) -> dict[str, Any]:
+    direction = draft["directions"][target_direction]
+    result: dict[str, Any] = {
+        "source_row": int(direction["source_row"]),
+        "offset": [0.0, 0.0],
+        "scale_x_percent": int(direction["scale_percent"]),
+        "scale_y_percent": int(direction["scale_percent"]),
+        "rotation_degrees": 0.0,
+    }
+    stored = (
+        draft.get("poseTransforms", {})
+        .get(action, {})
+        .get(target_direction, {})
+        .get(str(frame), {})
+    )
+    if isinstance(stored, dict):
+        result.update(stored)
+    source_row = int(result["source_row"])
+    scale_x = int(result["scale_x_percent"])
+    scale_y = int(result["scale_y_percent"])
+    rotation = float(result["rotation_degrees"])
+    offset = result["offset"]
+    if source_row not in range(8):
+        raise ValueError(
+            f"invalid pose source row: {action}/{target_direction}/{frame}"
+        )
+    if (
+        scale_x < 5
+        or scale_x > 400
+        or scale_y < 5
+        or scale_y > 400
+        or scale_x % 5
+        or scale_y % 5
+    ):
+        raise ValueError(
+            f"invalid pose scale: {action}/{target_direction}/{frame}"
+        )
+    if (
+        not math.isfinite(rotation)
+        or not math.isclose(rotation / 5.0, round(rotation / 5.0))
+        or not isinstance(offset, list)
+        or len(offset) < 2
+        or not all(math.isfinite(float(value)) for value in offset[:2])
+        or not all(
+            math.isclose(float(value) * 2.0, round(float(value) * 2.0))
+            for value in offset[:2]
+        )
+    ):
+        raise ValueError(
+            f"invalid pose transform: {action}/{target_direction}/{frame}"
+        )
+    return {
+        "source_row": source_row,
+        "offset": [float(offset[0]), float(offset[1])],
+        "scale_x_percent": scale_x,
+        "scale_y_percent": scale_y,
+        "rotation_degrees": rotation,
+    }
 
 
 @dataclass(frozen=True)
@@ -347,6 +482,14 @@ def build_world_atlases(
     cutouts: dict[int, Image.Image],
     output_dir: Path,
 ) -> tuple[dict[str, str], dict[str, str], dict[str, str], dict[str, Any]]:
+    if bool(
+        draft.get("previewPolicy", {}).get(
+            "poseFrameIndependentSource", False
+        )
+    ):
+        return build_pose_authored_world_atlases(
+            root, draft, visual_asset, cutouts, output_dir
+        )
     mapping_by_row: dict[int, dict[str, Any]] = {}
     for target_direction, record in draft["directions"].items():
         source_row = int(record["source_row"])
@@ -471,6 +614,175 @@ def build_world_atlases(
             "frameCount": frame_count,
             "evidencePath": evidence_path_value,
             "evidenceSha256": source_sha[action],
+            "rows": action_rows,
+        }
+    return derived_paths, source_sha, derived_sha, action_metrics
+
+
+def build_pose_authored_world_atlases(
+    root: Path,
+    draft: dict[str, Any],
+    visual_asset: dict[str, Any],
+    cutouts: dict[int, Image.Image],
+    output_dir: Path,
+) -> tuple[dict[str, str], dict[str, str], dict[str, str], dict[str, Any]]:
+    placement_rows = {
+        direction: int(draft["directions"][direction]["source_row"])
+        for direction in DIRECTIONS
+    }
+    if set(placement_rows.values()) != set(range(8)):
+        raise ValueError(
+            "idle baseline must still map every runtime row exactly once"
+        )
+    direction_order = [
+        str(value) for value in draft["source"]["directionOrder"]
+    ]
+    resized_cache: dict[tuple[int, int, int], Image.Image] = {}
+    derived_paths: dict[str, str] = {}
+    source_sha: dict[str, str] = {}
+    derived_sha: dict[str, str] = {}
+    action_metrics: dict[str, Any] = {}
+
+    for action in ACTIONS:
+        evidence_path_value = visual_asset["directions"]["N"]["layers"][
+            "helmet_front"
+        ][action]
+        evidence_path = res_path(root, evidence_path_value)
+        evidence = rgba(evidence_path)
+        frame_count = evidence.width // FRAME_SIZE[0]
+        if evidence.height != FRAME_SIZE[1] * 8 or frame_count <= 0:
+            raise ValueError(f"invalid base atlas: {evidence_path}")
+        output = Image.new("RGBA", evidence.size, (0, 0, 0, 0))
+        action_rows: dict[str, Any] = {}
+
+        for target_direction in DIRECTIONS:
+            placement_row = placement_rows[target_direction]
+            row_frames: list[dict[str, Any]] = []
+            for frame in range(frame_count):
+                pose = resolved_pose_transform(
+                    draft, action, target_direction, frame
+                )
+                source_row = int(pose["source_row"])
+                source_direction = direction_order[source_row]
+                source_direction_record = visual_asset["directions"][
+                    source_direction
+                ]
+                original = cutouts[source_row]
+                target_size = (
+                    max(
+                        1,
+                        int(
+                            round(
+                                original.width
+                                * AUTHORED_WORLD_DISPLAY_SCALE
+                                * int(pose["scale_x_percent"])
+                                / 100.0
+                            )
+                        ),
+                    ),
+                    max(
+                        1,
+                        int(
+                            round(
+                                original.height
+                                * AUTHORED_WORLD_DISPLAY_SCALE
+                                * int(pose["scale_y_percent"])
+                                / 100.0
+                            )
+                        ),
+                    ),
+                )
+                pivot = pivot_for(
+                    source_direction_record, action, frame
+                )
+                center = (
+                    pivot[0] + float(pose["offset"][0]),
+                    pivot[1] + float(pose["offset"][1]),
+                )
+                rotation = float(pose["rotation_degrees"])
+                if math.isclose(rotation, 0.0):
+                    cache_key = (
+                        source_row, target_size[0], target_size[1]
+                    )
+                    if cache_key not in resized_cache:
+                        resized_cache[cache_key] = (
+                            premultiplied_lanczos_resize(
+                                original, target_size
+                            )
+                        )
+                    sprite = resized_cache[cache_key]
+                    destination_cell = Image.new(
+                        "RGBA", FRAME_SIZE, (0, 0, 0, 0)
+                    )
+                    left = int(round(center[0] - sprite.width / 2.0))
+                    top = int(round(center[1] - sprite.height / 2.0))
+                    destination_cell.alpha_composite(sprite, (left, top))
+                    resample = "premultiplied_alpha_lanczos_original_single_pass"
+                else:
+                    destination_cell = premultiplied_affine_to_cell(
+                        original, target_size, rotation, center
+                    )
+                    bbox = destination_cell.getchannel("A").getbbox()
+                    if bbox is None:
+                        raise ValueError(
+                            "empty rotated pose: "
+                            f"{action}/{target_direction}/{frame}"
+                        )
+                    left, top = bbox[0], bbox[1]
+                    resample = (
+                        "premultiplied_alpha_bicubic_affine_original_single_pass"
+                    )
+                output.alpha_composite(
+                    destination_cell,
+                    (
+                        frame * FRAME_SIZE[0],
+                        placement_row * FRAME_SIZE[1],
+                    ),
+                )
+                row_frames.append(
+                    {
+                        "frame": frame,
+                        "targetDirection": target_direction,
+                        "runtimeRow": placement_row,
+                        "sourceRow": source_row,
+                        "sourceDirection": source_direction,
+                        "size": list(target_size),
+                        "pivot": [
+                            round(pivot[0], 3),
+                            round(pivot[1], 3),
+                        ],
+                        "center": [
+                            round(center[0], 3),
+                            round(center[1], 3),
+                        ],
+                        "topLeft": [left, top],
+                        "offset": list(pose["offset"]),
+                        "scaleXPercent": int(
+                            pose["scale_x_percent"]
+                        ),
+                        "scaleYPercent": int(
+                            pose["scale_y_percent"]
+                        ),
+                        "rotationDegrees": rotation,
+                        "resample": resample,
+                    }
+                )
+            action_rows[str(placement_row)] = {
+                "targetDirection": target_direction,
+                "poseFrameIndependentSource": True,
+                "frames": row_frames,
+            }
+
+        output_path = output_dir / f"{draft['visualAssetId']}_{action}.png"
+        result = save_png(output, output_path)
+        derived_paths[action] = to_res(root, output_path)
+        source_sha[action] = sha256(evidence_path)
+        derived_sha[action] = result["fileSha256"]
+        action_metrics[action] = {
+            "frameCount": frame_count,
+            "evidencePath": evidence_path_value,
+            "evidenceSha256": source_sha[action],
+            "poseFrameIndependentSource": True,
             "rows": action_rows,
         }
     return derived_paths, source_sha, derived_sha, action_metrics
@@ -739,6 +1051,11 @@ def finalize(root: Path) -> dict[str, Any]:
         draft = json.loads(draft_bytes_before)
         item_id = int(draft["itemId"])
         asset_id = str(draft["visualAssetId"])
+        pose_source_enabled = bool(
+            draft.get("previewPolicy", {}).get(
+                "poseFrameIndependentSource", False
+            )
+        )
         visual_asset = helmet_catalog["visualAssets"][asset_id]
         item_ids = [int(value) for value in visual_asset.get("itemIds", [item_id])]
         if item_id not in item_ids:
@@ -821,6 +1138,24 @@ def finalize(root: Path) -> dict[str, Any]:
                 },
             }
         )
+        if pose_source_enabled:
+            asset_override["poseTransforms"] = draft.get(
+                "poseTransforms", {}
+            )
+            asset_override["bakePolicy"].update(
+                {
+                    "poseFrameIndependentSource": True,
+                    "poseFrameIndependentOffset": True,
+                    "poseFrameIndependentAxisScale": True,
+                    "poseFrameIndependentRotation": True,
+                    "nonRotatedResample": (
+                        "premultiplied_alpha_lanczos_original_single_pass"
+                    ),
+                    "rotatedResample": (
+                        "premultiplied_alpha_bicubic_affine_original_single_pass"
+                    ),
+                }
+            )
         manifest["items"][str(item_id)] = {
             "itemId": item_id,
             "sharedItemIds": item_ids,
@@ -838,6 +1173,16 @@ def finalize(root: Path) -> dict[str, Any]:
             "actionMetrics": action_metrics,
             "presentationOutputs": presentation_records,
         }
+        if pose_source_enabled:
+            manifest["items"][str(item_id)]["poseTransforms"] = (
+                draft.get("poseTransforms", {})
+            )
+            manifest["items"][str(item_id)]["worldBakePolicy"] = {
+                "poseFrameIndependentSource": True,
+                "runtimeRowIndependentFromSelectedSourceRow": True,
+                "sharedSourceRowsAllowed": True,
+                "perTargetPoseBakedIndependently": True,
+            }
         if draft_path.read_bytes() != draft_bytes_before:
             raise RuntimeError(f"frozen calibration draft changed: {draft_path}")
 

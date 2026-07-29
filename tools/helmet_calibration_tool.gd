@@ -1610,7 +1610,13 @@ func _default_pose_transform(direction_index: int) -> Dictionary:
 	var base_scale := HelmetVisualV2.direction_scale_percent(
 		current_item_id, direction_index
 	)
+	var direction_record := HelmetVisualV2.direction_record(
+		current_item_id, direction_index
+	)
 	return {
+		"source_row": int(direction_record.get(
+			"source_row", direction_index
+		)),
 		"offset": [0.0, 0.0],
 		"scale_x_percent": base_scale,
 		"scale_y_percent": base_scale,
@@ -1652,7 +1658,9 @@ func _pose_transform_is_default(
 ) -> bool:
 	var default_transform := _default_pose_transform(direction_index)
 	return (
-		_array_vector2(transform.get("offset", [])) == Vector2.ZERO
+		int(transform.get("source_row", -1))
+			== int(default_transform.get("source_row", -2))
+		and _array_vector2(transform.get("offset", [])) == Vector2.ZERO
 		and int(transform.get("scale_x_percent", -1))
 			== int(default_transform.get("scale_x_percent", -2))
 		and int(transform.get("scale_y_percent", -1))
@@ -1965,6 +1973,18 @@ func _normalize_pose_transform(
 	):
 		return null
 	var default_transform := _default_pose_transform(direction_index)
+	var source_row_value: Variant = value.get(
+		"source_row", default_transform.get("source_row", direction_index)
+	)
+	if (
+		not _is_numeric_value(source_row_value)
+		or not is_equal_approx(
+			float(source_row_value), round(float(source_row_value))
+		)
+		or int(source_row_value) < 0
+		or int(source_row_value) >= DIRECTIONS.size()
+	):
+		return null
 	var scale_x_value: Variant = value.get(
 		"scale_x_percent",
 		default_transform.get("scale_x_percent", 100)
@@ -2003,6 +2023,7 @@ func _normalize_pose_transform(
 	):
 		return null
 	return {
+		"source_row": int(source_row_value),
 		"offset": [offset.x, offset.y],
 		"scale_x_percent": scale_x,
 		"scale_y_percent": scale_y,
@@ -2308,10 +2329,17 @@ func nudge_active_editor(delta: Vector2i) -> bool:
 func map_source_row_to_current_target(source_row: int) -> bool:
 	if HelmetVisualV2.is_read_only(current_item_id):
 		return false
-	if current_action != "idle" or current_frame != 0:
-		return false
 	if source_row < 0 or source_row >= DIRECTIONS.size():
 		return false
+	var pose := current_pose_transform()
+	pose["source_row"] = source_row
+	if current_action != "idle" or current_frame != 0:
+		return _set_pose_transform(
+			current_action,
+			current_direction,
+			current_frame,
+			pose
+		)
 	var source_direction := _calibration_source_direction_for_row(source_row)
 	var fields := {
 		"source_row": source_row,
@@ -2329,6 +2357,12 @@ func map_source_row_to_current_target(source_row: int) -> bool:
 		fields
 	)
 	if changed:
+		_set_pose_transform(
+			current_action,
+			current_direction,
+			current_frame,
+			pose
+		)
 		_dirty_directions[
 			_direction_dirty_key(current_item_id, current_direction)
 		] = true
@@ -2551,6 +2585,7 @@ func _save_calibration_draft() -> bool:
 			"ground": "original_rgba_texture_aspect_fit_only",
 			"directionIndependentAnchors": true,
 			"directionIndependentScale": true,
+			"poseFrameIndependentSource": true,
 			"poseFrameIndependentOffset": true,
 			"poseFrameIndependentAxisScale": true,
 			"poseFrameIndependentRotation": true,
@@ -3433,17 +3468,17 @@ func _runtime_layer_cell(
 		and direction_index >= 0
 		and frame_index >= 0
 	):
-		var record := HelmetVisualV2.direction_record(
-			current_item_id, direction_index
+		var transform := pose_transform(
+			action, direction_index, frame_index
 		)
-		var source_row := int(record.get("source_row", direction_index))
+		var source_row := int(transform.get(
+			"source_row", direction_index
+		))
 		return calibration_source_cell_scaled(
 			action,
 			source_row,
 			frame_index,
-			HelmetVisualV2.direction_scale_percent(
-				current_item_id, direction_index
-			)
+			int(transform.get("scale_x_percent", 100))
 		)
 	if (
 		layer_name == "ClientHelmetLayer"
@@ -3517,22 +3552,19 @@ func _refresh_mapping_editor_ui() -> void:
 		% [current_item_id, _calibration_item_display_name(current_item_id)]
 	)
 	var read_only := HelmetVisualV2.is_read_only(current_item_id)
-	var source_mapping_editable := (
-		not read_only
-		and current_action == "idle"
-		and current_frame == 0
-	)
 	var direction := str(DIRECTIONS[current_direction])
 	var record := HelmetVisualV2.direction_record(
 		current_item_id, current_direction
 	)
-	var source_row := int(record.get("source_row", -1))
+	var pose := current_pose_transform()
+	var source_row := int(pose.get(
+		"source_row", record.get("source_row", -1)
+	))
 	var source_direction := str(record.get(
 		"source_direction",
 		_calibration_source_direction_for_row(source_row)
 	))
 	var nudge := _array_vector2(record.get("nudge", []))
-	var pose := current_pose_transform()
 	var pose_offset := _array_vector2(pose.get("offset", []))
 	if current_item_id == 151 and not _active_target_applies_to_current_item():
 		get_node("CalibrationUI/Panel/VBox/MappingStatus/Mapping").text = (
@@ -3657,7 +3689,7 @@ func _refresh_mapping_editor_ui() -> void:
 			"source_cell_hash",
 			source_image.get_data().hex_encode().hash()
 		)
-		source_button.disabled = not source_mapping_editable
+		source_button.disabled = read_only
 		source_button.button_pressed = row == source_row
 		source_button.modulate = (
 			Color(0.35, 1.0, 0.72)
@@ -3714,18 +3746,17 @@ func _refresh_target_authored_overlay(
 		overlay.visible = false
 		overlay.texture = null
 		return
-	var record := HelmetVisualV2.direction_record(
-		current_item_id, direction_index
+	var transform := pose_transform(
+		current_action, direction_index, current_frame
 	)
-	var source_row := int(record.get("source_row", direction_index))
+	var source_row := int(transform.get(
+		"source_row", direction_index
+	))
 	var cutout := _authored_source_cutout(source_row)
 	if cutout.is_empty():
 		overlay.visible = false
 		overlay.texture = null
 		return
-	var transform := pose_transform(
-		current_action, direction_index, current_frame
-	)
 	var display_size := authored_world_display_size_xy(
 		source_row,
 		int(transform.get("scale_x_percent", 100)),
