@@ -16,10 +16,11 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `d9c3d11a`（本次快照提交只改本文档）。
-- tracked 状态：黑铁头盔 151 的旧 `scale_100` 六动作生成图集共 6 个既有在制修改继续保护；本次最终化未暂存、覆盖或提交这些旧图。146/147/149/150/151/218/224/228/232/236 共 10 份人工草稿的工作树与 Git 字节哈希逐项一致，禁止回退；240 人工草稿是用户当前在制数据，SHA-256 `05409DCCB1FA862E0C41319BCE9BBA219E8703F99ACBB56CC57D45798283BE60`，保持 dirty 并禁止覆盖。
+- 分支/运行时代码基线：`codex/integration` @ `eaf6be85`（本次快照提交只改本文档）。
+- tracked 状态：黑铁头盔 151 的旧 `scale_100` 六动作生成图集共 6 个既有在制修改继续保护；本次男性头发接入未暂存、覆盖或提交这些旧图。146/147/149/150/151/218/224/228/232 共 9 份已验收人工草稿继续冻结；236/240 最新人工草稿分别为 SHA-256 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`、`81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`，均保持 dirty 并禁止覆盖。
 - 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
+- `eaf6be85`（装备提交 `2c6dd064`）按用户最终方案隐藏所有世界人物头盔前层、后层与头部擦除遮罩，只在世界人物上显示经典主客户端 `Hair.wil` 的男性发型 1（男性偏移 0、source block 2）。idle/walk/attack/cast/hit/death 共 232 帧直接按主客户端 Hot 坐标组图，无缩放、旋转、插值或补帧；纸娃娃、背包、地面及 11 份人工草稿均保持冻结。集成专项 6/6、装备全套 17/17、冻结文件 15/15 哈希不变。
 - `b4c11258`（装备提交 `7392602`）修复头盔校准跨行为串改：重置当前帧恢复该动作/方向/帧的最近保存值；键盘 `+/-` 只缩放当前姿态；非 idle 撤销不会清除 idle 的未保存公共映射。当时对非 idle 源映射采用的禁改保护已由 `d9c3d11a` 升级为逐姿态独立保存。装备工作树和真实集成基线专项均为 2/2 通过，集成测试前后全部头盔草稿 SHA-256 零变化。
 - `d9c3d11a`（装备提交 `98b2dbe`）新增逐动作/人物方向/帧独立的头盔源方向：多个目标可选择同一个 `source_row`，但各自保存位移、横纵缩放与旋转；idle frame 0 公共基准保持原语义。新版草稿以 `poseFrameIndependentSource=true` 显式启用最终生成的逐目标独立烘焙，旧草稿继续走原生成路径。集成校准专项 2/2、无写入最终生成模拟 1/1 通过，全部正式草稿 SHA-256 零变化。
 - 来源优先级总表为 `assets/data/source_priority_policy.json`；每个 lane 必须先查 `primary`，只有精确目标确实 `missing` 才允许逐级 fallback。主源不可用、不兼容或效果不符合预期时必须修复解析/映射，禁止换用低级来源。
@@ -46,7 +47,7 @@
 - 用户已确认此前截图来自当时最新 APK；不要再次怀疑或重复核验安装版本。用户已实机确认碰撞、装饰物遮挡、地图错位和视角全部解决，四项正式冻结；除非出现新的明确证据，后续任务不得顺带调整。
 - 用户已实机确认 214 个 `monster_id` 逐个、逐姿态人工复核的 v4 怪物脚下光圈正确，正式冻结；除非出现新的明确证据，禁止顺带修改脚点、光圈中心、椭圆尺寸或投影策略。
 - 战士/法师/道士 × 沃玛/祖玛/赤月的 9 个独立满技能测试人物已进入最新 APK；三职业装备外观仍需按原客户端正式素材重新取证，不能再将装备栏缩略图或带窗口背景的 raw stateitem 图当作纸娃娃/世界穿戴层。
-- 装备显示已改为男性专用正式管线：原客户端装备页纸娃娃、男性世界衣服、男性世界武器与 12 个男性世界头盔均已集成；新增或重建世界穿戴资源禁止生成女性资产。
+- 装备显示使用男性专用正式管线：原客户端装备页纸娃娃、男性世界衣服与男性世界武器继续使用正式素材；12 个男性世界头盔素材和校准数据保留但运行时隐藏，世界人物改为经典主客户端男性完整头发动作。新增或重建世界穿戴资源禁止生成女性资产。
 - 头盔概念表的格子顺序不可信。每个视觉身份必须保存显式 `sourceSlotDirectionOrder`，再重排为 `N,NE,E,SE,S,SW,W,NW`；方向重复或缺失必须阻断构建，禁止猜测。
 
 ## 最终 APK
@@ -170,7 +171,7 @@
 - maps：`map_editor_runtime_collision_geometry_v2`、`map_visible_edge_actor_footprint_clearance_v2`、`published_blocked_cells_after_erasure_v1`、`map_editor_runtime_visual_geometry_v5`、`map_actor_occlusion_sort_v5`、`map_diamond_camera_center_constraint_v2`、`player_priority_soft_edge_v1`、`map_runtime_nonwalkable_edge_skirt_v1`。
 - monsters：`monster.overhead_anchor.v4`、`monster.overhead_layout.v3`、`monster.ground_contact.v4`、`monster.ground_contact.calibration.v4`；214 个 `monster_id` 各自保存人工复核的脚点、光圈中心、椭圆尺寸和投影策略，贴图异步激活后必须刷新。
 - UI：`ui.hud.resource_orb.hole_fill.v1`、`skill_button_assignment_contract_v2`、`ui.hud.skill_icon.caster.<stable_skill_id>`。
-- equipment：`equipment.attribute.master.v2`、`project.hardcore.equipment_attribute_master.v2`、`equipment.test_loadouts.classic_three_tiers.v1`、`equipment.visual_catalog.formal_wearables.v1`、`equipment.paper_doll.presentation_modes.v1`、`equipment.paper_doll.world_avatar.v1`、`equipment.paper_doll.avatar_only.v1`、`equipment.paper_doll.original_client_stage.v1`、`equipment.paper_doll.classic_flattened_head_patch.v1`、`equipment.helmet.calibration_draft.v1`、`equipment.helmet.presentation_calibration.v1`、`equipment.world_wear.male_dress.v1`、`equipment.world_wear.male_weapon.v1`、`equipment.world_helmet.male.extension.v1` 与 9 个 `test.loadout.{profession}.{tier}.v1`。
+- equipment：`equipment.attribute.master.v2`、`project.hardcore.equipment_attribute_master.v2`、`equipment.test_loadouts.classic_three_tiers.v1`、`equipment.visual_catalog.formal_wearables.v1`、`equipment.paper_doll.presentation_modes.v1`、`equipment.paper_doll.world_avatar.v1`、`equipment.paper_doll.avatar_only.v1`、`equipment.paper_doll.original_client_stage.v1`、`equipment.paper_doll.classic_flattened_head_patch.v1`、`equipment.helmet.calibration_draft.v1`、`equipment.helmet.presentation_calibration.v1`、`equipment.world_wear.male_dress.v1`、`equipment.world_wear.male_weapon.v1`、`equipment.world_helmet.male.extension.v1`、`equipment.world_helmet.runtime_visibility.v1`、`equipment_actor_visual_sort_unit_v3` 与 9 个 `test.loadout.{profession}.{tier}.v1`。
 - skills：`skills.runtime_router.cn_mir2_176.v1`、`skills.progression.cn_mir2_176.v1`、`skills.production_adaptation.hardcore.v1`、`warrior.fire_sword.charge_armed`、`combat.resolution.openmir2.v1`、`physical.hit.random_agility.strict_lt.v1`、`magic.evasion.anti_magic.direct_spell.v1`、`physical.attack_speed.interval_tier.v1`、`player.direct_spell_damage.openmir2.v1`、`caster_skill_animation.v1`、法师/道士主动技能 `action_duration=0.60` / `action_frame_count=6` / `action_frame_time_ms=100` 时序字段、`legacy_clamp_negative_span`、`test.characters.full_skills.v1` 与 9 个 `test.character.{profession}.{woma|zuma|chiyue}.v1`。
 
 ## 已通过的必要验收
@@ -180,7 +181,7 @@
 - camera：2664×1200 下人物屏幕偏移≤全尺寸 14%，动态缩放为 1.06–1.16；80×80 与 38×38 地图外露均由 1536px 不可行走裙边覆盖。
 - monsters：v4 数据生成检查、214/214 人工复核覆盖、214 种怪物五动作八方向运行时坐标链、214/214 冷激活、完整怪物客户端美术通过。
 - test roster：9 个独立存档、72 个正式装备槽、99 个角色技能加载项、三职业选择恢复和二次启动不覆盖通过。
-- player/equipment：原客户端男性装备页纸娃娃、男性世界衣服、男性世界武器、男性世界头盔、实时换装、正式装备视觉目录、装备纸娃娃居中和战士旧回归通过；天魔神甲真实赤月档及 `item_id`/`itemId`/`itemName` 旧档兼容、六动作全帧非透明与 OpenGL 受控截图通过。
+- player/equipment：原客户端男性装备页纸娃娃、男性世界衣服、男性世界武器、经典男性完整头发动作、实时换装、正式装备视觉目录、装备纸娃娃居中和战士旧回归通过；世界头盔与头部遮罩全动作隐藏，头盔正式素材仍可解析；天魔神甲真实赤月档及 `item_id`/`itemId`/`itemName` 旧档兼容、六动作全帧非透明与 OpenGL 受控截图通过。
 - equipment attributes：163 条唯一正式装备、114 条工作簿覆盖、v2 Schema/来源优先级/幂等构建、魔闪点数拆分、准确/敏捷/攻速档位及 UI 单位均通过。
 - combat resolution：严格物理命中、AntiMagic/AntiPoison 隔离、玩家与怪物默认点数边界、直接法术 AntiMagic→MAC→扣血、tier 物理攻击间隔、GameRoot 稳定技能 ID 和共享运行时转交均通过；最终相关回归 9/9，`SMOKE_TEST_PASS`。
 - blessing/luck：`equipment.blessing_luck.v2`、三结果、5% 负面、幸运 7、诅咒 10、命运之刃 R=0 修正、全部装备 luck/curse、消耗/存档/零耐久、DC/MC/SC 与治愈术专项通过。
@@ -205,7 +206,7 @@
 | `HardCore-worktrees/monsters` | `codex/monsters` @ `45781ded` | tracked clean；68 UID | 已集成为 `c88c6277` |
 | `HardCore-worktrees/ui-art` | `codex/ui-art` @ `a9ef38b0` | tracked clean；Godot UID/输出继续保护 | 纸娃娃 `avatarOnly.stagePosition` 头发坐标修复已集成；专项 1/1、集成复验通过 |
 | `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `be710c6e` | 27 项 tracked 技能视觉在制修改；66 UID 继续保护 | 33技能 runtime 与150条可执行语义合同已集成；当前 fire_wall / summon_skeleton 视觉返修未交付，禁止清理或覆盖 |
-| `HardCore-worktrees/equipment` | `codex/equipment` @ `ad3b1ad` | 4 个既有 monster import 修改、1 个既有试点截图脚本修改及 UID/生成项继续保护 | 逐动作/方向/帧的位移、真正独立的横纵缩放、左右旋转和 death 全帧选择已作为 `d639aa85`、`28e64994` 集成；240 天尊头八方向、背包专用与地面专用原始 RGBA 继续作为活动校准目标。11 份人工草稿、旧正式素材和在制六动作生成图集保持冻结，正式游戏素材未重新烘焙 |
+| `HardCore-worktrees/equipment` | `codex/equipment` @ `2c6dd064` | 4 个既有 monster import 修改、1 个既有试点截图脚本修改及 UID/生成项继续保护 | 经典主客户端男性 Hair.wil 六动作 232 帧与世界头盔隐藏策略已作为 `eaf6be85` 集成；纸娃娃、背包、地面、11 份人工草稿、旧正式头盔素材和在制生成图集保持冻结 |
 
 ### maps 保护红线
 
@@ -224,7 +225,7 @@ maps 的 72 项未跟踪内容全部视为用户进行中的地图编辑器内�
 1. 已冻结：碰撞、装饰物遮挡、地图错位和视角均由用户实机确认通过。
 2. 已冻结：v4 怪物脚下光圈已由用户实机确认正确。
 3. 待验收：角色选择页出现 9 个独立测试人物；三职业各有沃玛、祖玛、赤月三档完整装备并学习本职业全部技能；列表整块区域可直接上下滑动。
-4. 待验收：法师、道士不再显示占位符；男性基础形象、正式散件/套装换装、装备界纸娃娃居中和神兽动画正常；禁止重新引入女性角色资产。
+4. 待验收：法师、道士不再显示占位符；世界人物全动作显示经典男性头发且不显示头盔，纸娃娃/背包/地面仍保留头盔；男性基础形象、正式散件/套装换装、装备界纸娃娃居中和神兽动画正常；禁止重新引入女性角色资产。
 5. 怪物名字固定在血条上方；各体型血条位于各自真实身体顶点上方约 8px，不再统一过高或随动作抖动。
 6. 血球/蓝球恢复孔径尺寸且左右对称。
 7. 拾取提示居中；技能配置弹窗背景不越界；快捷技能可置换；烈火点击后显示“充能”，800ms 后下一次有效近战消费，空挥保留，8s 内不可重复充能，绝不自动释放。
