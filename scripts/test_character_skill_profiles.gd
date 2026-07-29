@@ -1,6 +1,7 @@
 class_name TestCharacterSkillProfiles
 extends RefCounted
 
+const SkillLoadoutRulesScript := preload("res://scripts/skill_loadout_rules.gd")
 const DATA_PATH := "res://assets/data/vanilla_176/test_character_skill_profiles.json"
 const CONTRACT_ID := "test.characters.full_skills.v1"
 const QA_V2_DATA_PATH := "res://assets/data/vanilla_176/qa_test_character_skill_profiles_v2.json"
@@ -107,10 +108,10 @@ static func qa_v2_profile_for_profession(profession_name_or_id: String) -> Dicti
 		"minimum_character_level": int(data.get("minimum_character_level", 40)),
 		"learned_skills": learned_skills,
 		"learned_skill_ids": learned_skill_ids,
-		"button_assignments": SkillLoadoutRules.normalize_assignments({
-			"contract_id": SkillLoadoutRules.BUTTON_ASSIGNMENTS_CONTRACT_ID,
-			SkillLoadoutRules.SLOT_GROUP_CENTER: center_slots,
-			SkillLoadoutRules.SLOT_GROUP_ATTACK_RING: attack_ring_slots,
+		"button_assignments": SkillLoadoutRulesScript.normalize_assignments({
+			"contract_id": SkillLoadoutRulesScript.BUTTON_ASSIGNMENTS_CONTRACT_ID,
+			SkillLoadoutRulesScript.SLOT_GROUP_CENTER: center_slots,
+			SkillLoadoutRulesScript.SLOT_GROUP_ATTACK_RING: attack_ring_slots,
 		}),
 		"center_slot_ids": center_slot_ids,
 		"attack_ring_slot_ids": attack_ring_slot_ids,
