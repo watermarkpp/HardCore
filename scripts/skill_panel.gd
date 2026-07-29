@@ -29,6 +29,7 @@ var center_assignment_buttons: Array[Button] = []
 var attack_ring_assignment_buttons: Array[Button] = []
 var assignment_buttons: Array[Button] = []
 var assignment_popup: Panel
+var assignment_scrim: Panel
 var assignment_popup_title: Label
 var assignment_popup_buttons: Array[Button] = []
 var skill_entries: Array = []
@@ -281,14 +282,36 @@ func _build_assignment_section() -> void:
 
 
 func _build_assignment_popup() -> void:
+	assignment_scrim = Panel.new()
+	assignment_scrim.name = "AssignmentScrim"
+	assignment_scrim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	assignment_scrim.z_index = 100
+	assignment_scrim.mouse_filter = Control.MOUSE_FILTER_STOP
+	# This full-rect node is only an input barrier.  The visible modal background
+	# belongs to PopupSurface and must never expand to the whole skill codex.
+	assignment_scrim.theme_type_variation = "GothicModalScrim"
+	assignment_scrim.visible = false
+	add_child(assignment_scrim)
 	assignment_popup = Panel.new()
 	assignment_popup.name = "SkillAssignmentPopup"
-	assignment_popup.position = Vector2(294, 116)
+	assignment_popup.set_anchors_preset(Control.PRESET_CENTER)
+	assignment_popup.offset_left = -310
+	assignment_popup.offset_top = -212
+	assignment_popup.offset_right = 310
+	assignment_popup.offset_bottom = 212
 	assignment_popup.size = Vector2(620, 424)
-	assignment_popup.z_index = 100
+	assignment_popup.z_index = 1
+	assignment_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	assignment_popup.theme_type_variation = "GothicModalFrame"
 	assignment_popup.visible = false
-	add_child(assignment_popup)
+	assignment_scrim.add_child(assignment_popup)
+	var popup_surface := Panel.new()
+	popup_surface.name = "PopupSurface"
+	popup_surface.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	popup_surface.show_behind_parent = true
+	popup_surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	popup_surface.theme_type_variation = "GothicModalSurface"
+	assignment_popup.add_child(popup_surface)
 	assignment_popup_title = Label.new()
 	assignment_popup_title.name = "PopupTitle"
 	assignment_popup_title.position = Vector2(28, 28)
@@ -349,7 +372,7 @@ func _build_assignment_popup() -> void:
 	cancel_button.position = Vector2(244, 350)
 	cancel_button.size = Vector2(132, 62)
 	cancel_button.theme_type_variation = "GothicComponentButton"
-	cancel_button.pressed.connect(func() -> void: assignment_popup.hide())
+	cancel_button.pressed.connect(_hide_assignment_popup)
 	assignment_popup.add_child(cancel_button)
 
 
@@ -430,7 +453,7 @@ func _rebuild_skill_cards() -> void:
 		var learned := PlayerState.is_skill_learned(skill_name)
 		var has_book := PlayerState.has_item(skill_name)
 		var level := int(PlayerState.learned_skills.get(skill_name, 0))
-		var interaction_label := _interaction_mode_label(_skill_interaction_mode(skill_name))
+		var interaction_label := _skill_presentation_label(skill_name)
 		var status := "Lv.%d　已学会　[%s]" % [level, interaction_label] if learned else ("可学习" if has_book else "缺少技能书")
 		var button := Button.new()
 		button.name = "SkillCard_%d" % index
@@ -482,11 +505,13 @@ func _show_skill_detail(index: int) -> void:
 	skill_name_label.text = skill_name
 	skill_icon.texture = _skill_texture(skill_name)
 	skill_icon.set_meta("skill_id", ProfessionRules.skill_id(skill_name))
+	skill_icon.set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
+	skill_icon.set_meta("skill_icon_path", HUDSkillIconCatalogScript.source_path_for(skill_name))
 	detail_label.text = "[color=#ddc9a9]等级：%s　　熟练度：%s\n类型：%s　　交互：%s\n目标：%s　　消耗：%d MP\n冷却：%.2f 秒　　范围：%.0f\n状态：%s[/color]" % [
 		"Lv.%d" % learned_level if learned else "未学习",
 		mastery_text,
 		_cast_type_label(cast_type),
-		_interaction_mode_label(interaction_mode),
+		_skill_presentation_label(skill_name),
 		_target_mode_label(target_mode),
 		int(row.get("manaCost", 0)),
 		cooldown,
@@ -521,7 +546,7 @@ func _refresh_assignment_slots() -> void:
 			assignment_popup_buttons[slot_index].text = "中央 %d\n%s [%s]" % [
 				slot_index + 1,
 				skill_name if not skill_name.is_empty() else "空",
-				_interaction_mode_label(_skill_interaction_mode(skill_name)),
+				_skill_presentation_label(skill_name),
 			]
 	for slot_index in range(attack_ring_assignment_buttons.size()):
 		var skill_name := _assignment_skill_name("attack_ring", slot_index)
@@ -531,21 +556,40 @@ func _refresh_assignment_slots() -> void:
 			assignment_popup_buttons[popup_index].text = "攻击环 %d\n%s [%s]" % [
 				slot_index + 1,
 				skill_name if not skill_name.is_empty() else "空",
-				_interaction_mode_label(_skill_interaction_mode(skill_name)),
+				_skill_presentation_label(skill_name),
 			]
 
 
 func _assignment_skill_name(slot_group: String, slot_index: int) -> String:
-	var configured: Variant = skill_button_assignments.get(slot_group, [])
-	if configured is Array and slot_index < configured.size():
-		var array_value: Variant = configured[slot_index]
-		return str(array_value.get("skill_name", array_value.get("name", ""))) if array_value is Dictionary else str(array_value)
-	if configured is Dictionary:
-		var dict_value: Variant = configured.get(slot_index, configured.get(str(slot_index), ""))
-		return str(dict_value.get("skill_name", dict_value.get("name", ""))) if dict_value is Dictionary else str(dict_value)
+	if not skill_button_assignments.is_empty():
+		if not skill_button_assignments.has(slot_group):
+			return ""
+		var configured: Variant = skill_button_assignments.get(slot_group)
+		if configured is Array and slot_index >= 0 and slot_index < configured.size():
+			var array_value: Variant = configured[slot_index]
+			return _assignment_value_skill_name(array_value)
+		if configured is Dictionary:
+			var dict_value: Variant = configured.get(slot_index, configured.get(str(slot_index), ""))
+			return _assignment_value_skill_name(dict_value)
+		return ""
+	if PlayerState.has_method("skill_name_for_slot"):
+		return str(PlayerState.call("skill_name_for_slot", slot_group, slot_index))
+	# Compatibility for pre-grouped saves only. A grouped contract with an
+	# empty attack-ring slot is intentionally empty and never mirrors center.
 	if slot_index < PlayerState.quick_slots.size():
 		return PlayerState.quick_slots[slot_index]
 	return ""
+
+
+func _assignment_value_skill_name(value: Variant) -> String:
+	if not value is Dictionary:
+		return str(value)
+	return str(
+		value.get(
+			"skill_name",
+			value.get("skillName", value.get("name", value.get("display_name", value.get("displayName", ""))))
+		)
+	)
 
 
 func _set_assignment_button_content(button: Button, slot_label_text: String, skill_name: String) -> void:
@@ -563,6 +607,8 @@ func _set_assignment_button_content(button: Button, slot_label_text: String, ski
 	icon.position = Vector2((button.size.x - 40.0) * 0.5, 10) if compact else Vector2(8, 22)
 	icon.size = Vector2(40, 40)
 	icon.texture = _skill_texture(skill_name)
+	icon.set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
+	icon.set_meta("skill_icon_path", HUDSkillIconCatalogScript.source_path_for(skill_name))
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -591,7 +637,7 @@ func _set_assignment_button_content(button: Button, slot_label_text: String, ski
 	content.add_child(name_label)
 	var mode_label := Label.new()
 	mode_label.name = "InteractionMode"
-	mode_label.text = _interaction_mode_label(_skill_interaction_mode(skill_name))
+	mode_label.text = _skill_presentation_label(skill_name)
 	mode_label.position = Vector2(4, 94) if compact else Vector2(52, 56)
 	mode_label.size = Vector2(button.size.x - 8, 18) if compact else Vector2(button.size.x - 58, 20)
 	mode_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -628,10 +674,11 @@ func _open_assignment_popup_for(index: int) -> void:
 		description_label.text = "[color=#b58b68]请先学习该技能，再配置战斗按钮。[/color]"
 		return
 	_on_skill_selected(index)
-	assignment_popup_title.text = "配置：%s　[%s]" % [skill_name, _interaction_mode_label(_skill_interaction_mode(skill_name))]
+	assignment_popup_title.text = "配置：%s　[%s]" % [skill_name, _skill_presentation_label(skill_name)]
 	assignment_popup.set_meta("skill_name", skill_name)
 	assignment_popup.set_meta("skill_id", ProfessionRules.skill_id(skill_name))
 	assignment_popup.set_meta("interaction_mode", _skill_interaction_mode(skill_name))
+	assignment_scrim.show()
 	assignment_popup.show()
 
 
@@ -640,9 +687,11 @@ func _assign_selected_to_slot(slot_index: int) -> void:
 
 
 func _assign_selected_to_target(slot_group: String, slot_index: int) -> void:
-	if selected_skill_index < 0 or selected_skill_index >= skill_entries.size():
-		return
-	var skill_name := str(skill_entries[selected_skill_index].get("skillName", ""))
+	var skill_name := ""
+	if assignment_popup.visible:
+		skill_name = str(assignment_popup.get_meta("skill_name", ""))
+	elif selected_skill_index >= 0 and selected_skill_index < skill_entries.size():
+		skill_name = str(skill_entries[selected_skill_index].get("skillName", ""))
 	if not PlayerState.is_skill_learned(skill_name):
 		return
 	var maximum := CENTER_SKILL_SLOT_COUNT if slot_group == "center" else ATTACK_RING_SLOT_COUNT
@@ -674,7 +723,12 @@ func _assign_selected_to_target(slot_group: String, slot_index: int) -> void:
 			"slot_index": slot_index,
 		}
 		quick_slot_assignment_requested.emit(legacy_request)
+	_hide_assignment_popup()
+
+
+func _hide_assignment_popup() -> void:
 	assignment_popup.hide()
+	assignment_scrim.hide()
 
 
 func _skill_card_input(event: InputEvent, index: int) -> void:
@@ -733,6 +787,14 @@ func _skill_interaction_mode(skill_name: String) -> String:
 	if service_mode.begins_with("toggle") or service_mode == "arm_next_hit" or cast_type == "shield":
 		return "toggle"
 	return "click"
+
+
+func _skill_presentation_label(skill_name: String) -> String:
+	# Production mode is the canonical explicit click. Its player-facing label
+	# must still describe the one-shot charge instead of the retired auto toggle.
+	if ProfessionRules.skill_id(skill_name) == "warrior.fire_sword":
+		return "主动充能"
+	return _interaction_mode_label(_skill_interaction_mode(skill_name))
 
 
 func _interaction_mode_label(mode: String) -> String:
@@ -808,6 +870,6 @@ func _section_title(text_value: String, width: float) -> Label:
 
 func _close() -> void:
 	_cancel_skill_long_press()
-	assignment_popup.hide()
+	_hide_assignment_popup()
 	hide()
 	closed.emit()

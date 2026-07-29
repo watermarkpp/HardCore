@@ -1,6 +1,8 @@
 class_name WarriorCombatMath
 extends RefCounted
 
+const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
+
 # 来源：M2Server/M2Share.pas DEFHIT/DEFSPEED 与 ObjBase.pas 战士近战实现。
 const BASE_HIT := 5
 const BASE_AGILITY := 15
@@ -12,6 +14,9 @@ const CLIENT_ATTACK_FRAMES := 6
 const CLIENT_ATTACK_FRAME_MS := 85
 const CLIENT_EFFECT_FRAME := 2
 const WILD_RUSH_COOLDOWN_MS := 3000
+const DAMAGE_RANGE_ROLL_POLICY := "legacy_clamp_negative_span"
+const PHYSICAL_HIT_POLICY_ID := CombatResolutionRules.PHYSICAL_HIT_POLICY_ID
+const PHYSICAL_ATTACK_SPEED_POLICY_ID := CombatResolutionRules.PHYSICAL_ATTACK_SPEED_POLICY_ID
 
 
 static func clamp_skill_level(level_value: int) -> int:
@@ -38,41 +43,51 @@ static func total_accuracy(item_accuracy: int, basic_level := -1, slaying_level 
 
 
 static func hit_succeeds(accuracy: int, target_agility: int, random_roll: int) -> bool:
-	# ObjBase._Attack: if attackerHit < Random(targetSpeed) then miss。
-	var safe_agility := maxi(1, target_agility)
-	return accuracy >= clampi(random_roll, 0, safe_agility - 1)
+	return CombatResolutionRules.physical_hit_succeeds(accuracy, target_agility, random_roll)
 
 
 static func hit_probability(accuracy: int, target_agility: int) -> float:
-	var safe_agility := maxi(1, target_agility)
-	return clampf(float(accuracy + 1) / float(safe_agility), 0.0, 1.0)
+	return CombatResolutionRules.physical_hit_probability(accuracy, target_agility)
 
 
 static func roll_hit(accuracy: int, target_agility: int, rng: RandomNumberGenerator) -> bool:
-	var safe_agility := maxi(1, target_agility)
-	return hit_succeeds(accuracy, safe_agility, rng.randi_range(0, safe_agility - 1))
+	return CombatResolutionRules.roll_physical_hit(accuracy, target_agility, rng)
+
+
+static func physical_attack_interval_ms(attack_speed_tier: int) -> int:
+	return CombatResolutionRules.physical_attack_interval_ms(attack_speed_tier)
+
+
+static func physical_attack_interval_seconds(attack_speed_tier: int) -> float:
+	return CombatResolutionRules.physical_attack_interval_seconds(attack_speed_tier)
 
 
 static func attack_power_for_roll(attack_min: int, attack_max: int, roll: int) -> int:
-	var low := mini(attack_min, attack_max)
-	var high := maxi(attack_min, attack_max)
-	return low + clampi(roll, 0, high - low)
+	var span := maxi(0, attack_max - attack_min)
+	return attack_min + clampi(roll, 0, span)
 
 
-static func roll_attack_power(attack_min: int, attack_max: int, luck: int, rng: RandomNumberGenerator) -> int:
-	var low := mini(attack_min, attack_max)
-	var high := maxi(attack_min, attack_max)
-	var span := high - low
-	if luck > 0:
-		var maximum_gate := maxi(1, 10 - mini(9, luck))
+static func roll_primary_stat(stat_min: int, stat_max: int, total_luck: int, rng: RandomNumberGenerator) -> int:
+	# Primary source: M2Server/ObjBase.pas GetAttackPower receives the final
+	# DC/MC/SC low endpoint as nBasePower and clamps a negative high-low span
+	# to zero. Endpoint order is therefore semantic and must never be normalized.
+	var span := maxi(0, stat_max - stat_min)
+	if span == 0:
+		return stat_min
+	if total_luck > 0:
+		var maximum_gate := maxi(1, 10 - mini(9, total_luck))
 		if rng.randi_range(0, maximum_gate - 1) == 0:
-			return high
-	var result := low + rng.randi_range(0, span)
-	if luck < 0:
-		var minimum_gate := maxi(1, 10 - mini(9, -luck))
+			return stat_min + span
+	var result := stat_min + rng.randi_range(0, span)
+	if total_luck < 0:
+		var minimum_gate := maxi(1, 10 - mini(9, -total_luck))
 		if rng.randi_range(0, minimum_gate - 1) == 0:
-			return low
+			return stat_min
 	return result
+
+
+static func roll_attack_power(attack_min: int, attack_max: int, total_luck: int, rng: RandomNumberGenerator) -> int:
+	return roll_primary_stat(attack_min, attack_max, total_luck, rng)
 
 
 static func slaying_proc_cycle(level_value: int) -> int:

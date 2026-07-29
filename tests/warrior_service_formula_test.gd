@@ -18,8 +18,8 @@ func _run() -> void:
 	assert(WarriorCombatMath.wild_rush_success_threshold(0, 20, 20) == 0, "野蛮不能推动同级目标")
 	assert(WarriorCombatMath.wild_rush_success_threshold(3, 25, 20) == 20, "野蛮成功阈值错误")
 	assert(WarriorCombatMath.wild_rush_max_cells(0) == 3 and WarriorCombatMath.wild_rush_max_cells(3) == 5, "野蛮最大冲撞格数错误")
-	assert(WarriorCombatMath.hit_succeeds(5, 15, 5) and not WarriorCombatMath.hit_succeeds(5, 15, 6), "服务端命中边界错误")
-	assert(is_equal_approx(WarriorCombatMath.hit_probability(5, 15), 0.4), "基础命中概率应为40%")
+	assert(WarriorCombatMath.hit_succeeds(5, 15, 4) and not WarriorCombatMath.hit_succeeds(5, 15, 5), "服务端严格小于命中边界错误")
+	assert(is_equal_approx(WarriorCombatMath.hit_probability(5, 15), 1.0 / 3.0), "基础命中概率应为5/15")
 	assert(is_equal_approx(WarriorCombatMath.client_attack_duration_seconds(), 0.51), "客户端攻击动作应为510ms")
 	assert(is_equal_approx(WarriorCombatMath.client_effect_time_seconds(), 0.17), "客户端技能声效/表现帧应为170ms")
 
@@ -31,7 +31,7 @@ func _run() -> void:
 	assert(int(PlayerState.computed_stats.accuracy) == 5, "0级基本剑术/攻杀不应凭空加准确")
 	PlayerState.learned_skills = {"基本剑术": 3, "攻杀剑术": 3}
 	PlayerState.recalculate_stats()
-	assert(int(PlayerState.computed_stats.accuracy) == 17, "三级基本剑术和攻杀准确结算错误")
+	assert(int(PlayerState.computed_stats.accuracy) == 5, "技能准确仍被旧PlayerState公式提前注入，未交给Router")
 
 	var file := FileAccess.open("res://assets/data/warrior_service_rules.json", FileAccess.READ)
 	assert(file != null, "战士服务端规则数据不存在")

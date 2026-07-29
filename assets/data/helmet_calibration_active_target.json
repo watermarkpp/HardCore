@@ -1,0 +1,70 @@
+{
+  "contractId": "equipment.world_helmet.calibration.active_target.v1",
+  "itemId": 240,
+  "visualAssetId": "heavenly_taoist",
+  "displayName": "天尊头盔",
+  "sourceSheet": "res://assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_240_helmet_8dir_transparent.png",
+  "sourceSheetSha256": "80c575b679ccd9c34649055413285f2b7bb35aa11c3f10f4dfcbe3a3d7191e83",
+  "sourceGrid": [
+    4,
+    2
+  ],
+  "sourceDirectionOrder": [
+    "N",
+    "NE",
+    "E",
+    "SE",
+    "S",
+    "SW",
+    "W",
+    "NW"
+  ],
+  "sourceMatte": "transparent_user_authored_alpha_preserved_v1",
+  "sourceResizeFilter": "display_transform_only_until_final_bake_v1",
+  "sourceRevision": "heavenly_taoist_240.user_provided_8dir_plus_inventory_plus_ground.v1",
+  "loadPolicy": "single_target_direct_png_hash_validated",
+  "initializeSessionDirectionMapping": true,
+  "preparedDirectionFiles": {
+    "N": "res://assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_240_directions/n.png",
+    "NE": "res://assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_240_directions/ne.png",
+    "E": "res://assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_240_directions/e.png",
+    "SE": "res://assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_240_directions/se.png",
+    "S": "res://assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_240_directions/s.png",
+    "SW": "res://assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_240_directions/sw.png",
+    "W": "res://assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_240_directions/w.png",
+    "NW": "res://assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_240_directions/nw.png"
+  },
+  "preparedDirectionSha256": {
+    "N": "c6b6ffa459e20f9abfa1e4681ad9740520ab9528e47f662090b8806536c1963a",
+    "NE": "969012f3aa213c374acc57db68a17fe86f7cddb6f6abd0c53c25b28ab677e816",
+    "E": "fd2fa827fe9316ed8b3197c3054c70afb99277a94465faae339cc3938ebe0777",
+    "SE": "cb5f38cb1e4011037a4f019433a9f751e10caecd05fe81260a2d73ab3644c392",
+    "S": "fa4088ec34e199c1b2ed1c9493da46d8fc0baf9821ba8f449917540fbcd22885",
+    "SW": "7da5292b3b049a44529bbaf4f9ff08fccec696b3efacf290160d63823402e889",
+    "W": "20ec8dfdae6125bd488bdf3276a77aa552debd8da001016f5b6b0dc44cef9560",
+    "NW": "03e9c8e7e462b7b0a7741f2ef53887202066a13dbec4a89ca47f497e44c8102a"
+  },
+  "preparedPresentationFiles": {
+    "inventory": "res://assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_240_presentation/inventory.png",
+    "ground": "res://assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_240_presentation/ground.png"
+  },
+  "preparedPresentationSha256": {
+    "inventory": "e1c92c1911c26704c698c3685f8f8e4c96b3a453a4f3d8f01ed68fd10e4f88ff",
+    "ground": "273cc7971278492efff14c66a722cf0429c3ebe025fbcb0e779482a51f20fa4a"
+  },
+  "resolutionPolicy": "retain_original_rgba_cutouts_until_one_final_runtime_bake",
+  "provenance": {
+    "lane": "helmet_world_visuals",
+    "tier": "primary",
+    "distribution": "user_authorized_direct_source",
+    "originalSourcePath": "C:/Users/Administrator/Desktop/sucai/装备/ChatGPT Image 2026年7月29日 10_45_07.png",
+    "projectSourcePath": "res://assets/art/items/client/world_wear/helmet/male/source/heavenly_taoist_240_helmet_10view_user_20260729.png",
+    "originalSourceSha256": "b82153c7888f258ea783a24bcb43a6302c3c52ef58bc66310a52c6ec2e6b39c7",
+    "sourceSize": [
+      1774,
+      1333
+    ],
+    "derivation": "world_slots_0_to_7_inventory_slot_8_ground_slot_9_alpha_bounds_crop_only_no_matte_removal_no_face_window_edit_no_resample",
+    "userAuthorizationDate": "2026-07-29"
+  }
+}

@@ -1,6 +1,8 @@
 class_name CasterSkillRuntime
 extends RefCounted
 
+const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
+
 const SPECIAL_SKILLS := {
 	"wizard.repulsion_ring": true,
 	"wizard.temptation_light": true,
@@ -24,7 +26,7 @@ const DAMAGE_OPERATIONS := {
 	"wizard.lightning": ["target_damage", "single"],
 	"wizard.great_fireball": ["projectile_damage", "single"],
 	"wizard.exploding_flame": ["area_damage", "target_area"],
-	"wizard.fire_wall": ["ground_dot", "five_cell_cross"],
+	"wizard.fire_wall": ["ground_dot", "square_2x2"],
 	"wizard.laser": ["line_damage", "line"],
 	"wizard.hell_lightning": ["area_damage", "self_area"],
 	"wizard.ice_storm": ["area_damage", "target_area"],
@@ -55,7 +57,12 @@ static func resolve(skill_name_or_id: String, context: Dictionary) -> Dictionary
 		"runtime_contract": "caster_skill_runtime.v1",
 		"formula_source": "source.original_gameofmir.server_suite",
 		"source_priority": {"lane": "server_rules", "tier": "primary", "order": 0, "weight": 100},
+		"evasion_channel": "anti_poison" if skill_id == "taoist.poison" else ("anti_magic" if CombatResolutionRules.anti_magic_eligible(skill_id) else "none"),
+		"anti_magic_eligible": CombatResolutionRules.anti_magic_eligible(skill_id),
+		"anti_magic_checked": false,
+		"magic_evaded": false,
 		"visual": visual_profile,
+		"visual_duration": CasterSkillVisualRegistry.animation_duration(skill_id),
 	}
 	for resource_field: String in ["amulet_cost", "apply_delay_ms"]:
 		if combat_profile.has(resource_field):
@@ -83,9 +90,21 @@ static func resolve(skill_name_or_id: String, context: Dictionary) -> Dictionary
 		result.operation = operation_and_shape[0]
 		result.execution_shape = operation_and_shape[1]
 		result.damage = _damage(skill_id, level, context)
+		result.damage_before_evasion = int(result.damage)
+		if bool(result.anti_magic_eligible) and context.has("anti_magic_roll"):
+			var evasion := CombatResolutionRules.resolve_magic_damage(
+				skill_id,
+				int(result.damage),
+				CombatResolutionRules.anti_magic_points_from_context(context),
+				int(context.anti_magic_roll)
+			)
+			result.merge(evasion, true)
+			result.damage = int(evasion.damage_after_evasion)
+		else:
+			result.enters_magic_defense_stage = int(result.damage) > 0
 		if skill_id == "wizard.fire_wall":
 			result.duration_seconds = WizardCombatMath.fire_wall_duration(level, int(context.get("magic_stat_roll", 0)))
-			result.tick_interval_seconds = 3.0
+			result.tick_interval_seconds = 1.0
 			result.cell_size = int(context.get("cell_size", 48))
 		elif skill_id == "wizard.exploding_flame" or skill_id == "wizard.ice_storm":
 			result.area_radius_cells = 1
@@ -97,23 +116,62 @@ static func resolve(skill_name_or_id: String, context: Dictionary) -> Dictionary
 	return result
 
 
-static func create_visual(plan: Dictionary, position: Vector2, direction := Vector2.DOWN, target: Node2D = null) -> CasterSkillVisualEffect:
+static func create_visual(
+	plan: Dictionary,
+	position: Vector2,
+	direction := Vector2.DOWN,
+	follow_node: Node2D = null,
+	phase_id := ""
+) -> CasterSkillVisualEffect:
+	var skill_id := str(plan.get("skill_id", ""))
+	if not CasterSkillVisualRegistry.is_runtime_ready(skill_id):
+		return null
+	var role := str(plan.get("visual", {}).get("role", ""))
+	if role in [
+		CasterSkillVisualRegistry.ROLE_PROJECTILE,
+		CasterSkillVisualRegistry.ROLE_GROUND_EFFECT,
+		CasterSkillVisualRegistry.ROLE_SUMMON_ACTOR,
+	]:
+		return null
 	var effect := CasterSkillVisualEffect.new()
 	var radius := float(plan.get("area_radius", 72.0))
-	if plan.has("area_radius_cells"):
+	if role == CasterSkillVisualRegistry.ROLE_LINE_EFFECT:
+		var geometry: Dictionary = plan.get("visual", {}).get(
+			"skills_contract", {}
+		).get("geometry", {})
+		var length_tiles := int(geometry.get("length_tiles", 0))
+		radius = (
+			float(length_tiles) * float(plan.get("cell_size", 50))
+			if length_tiles > 0
+			else maxf(radius, float(plan.get("range", 0.0)))
+		)
+	elif plan.has("area_radius_cells"):
 		radius = maxf(radius, float(plan.area_radius_cells) * float(plan.get("cell_size", 48)))
-	effect.setup(position, str(plan.get("skill_id", "")), radius, float(plan.get("visual_duration", 0.8)), direction, target)
+	effect.setup(
+		position,
+		skill_id,
+		radius,
+		float(plan.get("visual_duration", 0.8)),
+		direction,
+		follow_node,
+		phase_id
+	)
 	return effect
 
 
 static func create_projectile(plan: Dictionary, origin: Vector2, direction: Vector2, color := Color.WHITE) -> SkillProjectile:
-	if str(plan.get("operation", "")) != "projectile_damage":
+	if (
+		str(plan.get("operation", "")) != "projectile_damage"
+		or str(plan.get("visual", {}).get("role", ""))
+			!= CasterSkillVisualRegistry.ROLE_PROJECTILE
+		or not CasterSkillVisualRegistry.is_runtime_ready(str(plan.get("skill_id", "")))
+	):
 		return null
 	var projectile := SkillProjectile.new()
 	projectile.setup(
 		origin + direction.normalized() * 24.0,
 		direction,
-		int(plan.get("damage", 0)),
+		int(plan.get("damage_before_evasion", plan.get("damage", 0))),
 		float(plan.get("range", 360.0)),
 		color,
 		"damage",
@@ -124,9 +182,19 @@ static func create_projectile(plan: Dictionary, origin: Vector2, direction: Vect
 	return projectile
 
 
-static func create_ground_effects(plan: Dictionary, center: Vector2, color := Color.WHITE) -> Array[GroundSkillEffect]:
+static func create_ground_effects(
+	plan: Dictionary,
+	center: Vector2,
+	color := Color.WHITE,
+	source_actor: Node2D = null
+) -> Array[GroundSkillEffect]:
 	var effects: Array[GroundSkillEffect] = []
-	if str(plan.get("operation", "")) != "ground_dot":
+	if (
+		str(plan.get("operation", "")) != "ground_dot"
+		or str(plan.get("visual", {}).get("role", ""))
+			!= CasterSkillVisualRegistry.ROLE_GROUND_EFFECT
+		or not CasterSkillVisualRegistry.is_runtime_ready(str(plan.get("skill_id", "")))
+	):
 		return effects
 	var cell_size := int(plan.get("cell_size", 48))
 	var radius := maxf(20.0, float(cell_size) * 0.46)
@@ -141,6 +209,7 @@ static func create_ground_effects(plan: Dictionary, center: Vector2, color := Co
 			str(plan.get("skill_id", "")),
 			float(plan.get("tick_interval_seconds", 0.8))
 		)
+		effect.configure_runtime_source(source_actor)
 		effects.append(effect)
 	return effects
 
@@ -179,23 +248,81 @@ static func create_cast_nodes(
 	owner_level := 1
 ) -> Array[Node2D]:
 	var nodes: Array[Node2D] = []
-	if not bool(plan.get("success", false)) or str(plan.get("operation", "")) == "passive_accuracy":
+	var operation := str(plan.get("operation", ""))
+	if operation == "passive_accuracy":
 		return nodes
-	match str(plan.get("operation", "")):
+	var effect_succeeded := bool(plan.get("success", false))
+	match operation:
 		"projectile_damage":
-			var projectile := create_projectile(plan, origin, direction, color)
-			if projectile != null:
-				nodes.append(projectile)
+			if effect_succeeded:
+				var projectile := create_projectile(plan, origin, direction, color)
+				if projectile != null:
+					nodes.append(projectile)
 		"ground_dot":
-			for effect: GroundSkillEffect in create_ground_effects(plan, target_position, color):
-				nodes.append(effect)
+			if effect_succeeded:
+				for effect: GroundSkillEffect in create_ground_effects(
+					plan, target_position, color, owner
+				):
+					nodes.append(effect)
 		"summon":
 			var summon := create_summon_actor(plan, owner, spiritual_power, owner_level, origin)
 			if summon != null:
 				nodes.append(summon)
 		_:
-			if str(plan.get("visual", {}).get("status", "")) == "formal_primary_client_pixel":
-				nodes.append(create_visual(plan, target_position, direction, target))
+			if (
+				str(plan.get("visual", {}).get("status", ""))
+					== "formal_primary_client_animation"
+				and CasterSkillVisualRegistry.is_runtime_ready(
+					str(plan.get("skill_id", ""))
+				)
+			):
+				var role := str(plan.get("visual", {}).get("role", ""))
+				var attachment := str(
+					CasterSkillVisualRegistry.render_policy(
+						str(plan.get("skill_id", ""))
+					).get("attachment_policy", "world_anchor")
+				)
+				var visual_position := target_position
+				var follow_node: Node2D = null
+				match attachment:
+					"target_actor":
+						follow_node = target
+						visual_position = (
+							target.global_position
+							if is_instance_valid(target)
+							else target_position
+						)
+					"caster_actor":
+						follow_node = owner
+						visual_position = (
+							owner.global_position
+							if is_instance_valid(owner)
+							else origin
+						)
+					"world_anchor":
+						visual_position = (
+							origin
+							if role in [
+								CasterSkillVisualRegistry.ROLE_SELF_EFFECT,
+								CasterSkillVisualRegistry.ROLE_SELF_AREA,
+								CasterSkillVisualRegistry.ROLE_LINE_EFFECT,
+							]
+							else target_position
+						)
+				var visual := create_visual(
+					plan, visual_position, direction, follow_node
+				)
+				if visual != null:
+					nodes.append(visual)
+				if (
+					str(plan.get("skill_id", "")) == "wizard.teleport"
+					and bool(plan.get("teleport_arrival_ready", false))
+				):
+					var arrival := create_visual(
+						plan, target_position, direction, owner, "arrival"
+					)
+					if arrival != null:
+						nodes.append(arrival)
 	return nodes
 
 
@@ -214,6 +341,7 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 		return result
 	var operation := str(plan.get("operation", ""))
 	var operation_adapter := _runtime_adapter(context, operation)
+	var magic_defense_adapter := _callable_context_field(context, "magic_defense_adapter")
 	if operation in ["magic_defense_buff", "physical_defense_buff"] and not context.has("defense_bonus"):
 		result.adapter_required = "defense_bonus"
 		return result
@@ -229,10 +357,20 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 	var direction := context.get("direction", Vector2.DOWN) as Vector2
 	var target_position := context.get(
 		"target_position",
-		primary_target.global_position if primary_target != null else origin + direction * float(plan.get("range", 0.0))
+		context.get(
+			"teleport_destination",
+			primary_target.global_position
+			if primary_target != null
+			else origin + direction * float(plan.get("range", 0.0))
+		)
 	) as Vector2
+	var node_plan := plan.duplicate(true)
+	node_plan["teleport_arrival_ready"] = (
+		str(plan.get("operation", "")) == "random_home_map_move"
+		and context.has("teleport_destination")
+	)
 	var nodes := create_cast_nodes(
-		plan,
+		node_plan,
 		origin,
 		target_position,
 		direction,
@@ -244,18 +382,46 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 	)
 	var parent := context.get("parent") as Node
 	for node: Node2D in nodes:
+		if node is SkillProjectile:
+			node.configure_runtime_resolution(
+				caster,
+				magic_defense_adapter,
+				int(context.get("anti_magic_roll", -1)),
+				int(context.get("anti_poison_random", -1))
+			)
 		if parent != null:
 			parent.add_child(node)
 	result.nodes = nodes
 	result.spawned_count = nodes.size()
+	result["target_resolutions"] = []
+	result["evaded_count"] = 0
 	var targets := _runtime_targets(context, primary_target, "affected_targets")
 	var allies := _runtime_targets(context, caster, "affected_allies")
 	match operation:
 		"target_damage", "line_damage", "area_damage":
 			for target: Node2D in targets:
 				if target is EnemyActor:
-					target.take_damage(int(plan.get("damage", 0)), caster)
-					result.applied_count += 1
+					var raw_damage := int(plan.get("damage_before_evasion", plan.get("damage", 0)))
+					if CombatResolutionRules.anti_magic_eligible(str(plan.get("skill_id", ""))):
+						var anti_magic_roll := int(context.get(
+							"anti_magic_roll",
+							randi_range(0, CombatResolutionRules.ANTI_MAGIC_ROLL_SIDES - 1)
+						))
+						var resolution := CombatResolutionRules.resolve_direct_spell_damage(
+							str(plan.get("skill_id", "")),
+							raw_damage,
+							target.monster_data,
+							anti_magic_roll,
+							magic_defense_adapter
+						)
+						result.target_resolutions.append(resolution)
+						if bool(resolution.magic_evaded):
+							result.evaded_count += 1
+							continue
+						raw_damage = int(resolution.final_damage)
+					if raw_damage > 0:
+						target.take_damage(raw_damage, caster)
+						result.applied_count += 1
 		"heal_target", "heal_area":
 			for ally: Node2D in allies:
 				if ally is PlayerCharacter:
@@ -334,9 +500,8 @@ static func fire_wall_positions(center: Vector2, cell_size := 48) -> Array[Vecto
 	return [
 		center,
 		center + Vector2(cell_size, 0),
-		center + Vector2(-cell_size, 0),
 		center + Vector2(0, cell_size),
-		center + Vector2(0, -cell_size),
+		center + Vector2(cell_size, cell_size),
 	]
 
 
@@ -359,6 +524,11 @@ static func _runtime_adapter(context: Dictionary, operation: String) -> Callable
 		if candidate is Callable:
 			return candidate
 	return Callable()
+
+
+static func _callable_context_field(context: Dictionary, field: String) -> Callable:
+	var candidate: Variant = context.get(field)
+	return candidate if candidate is Callable else Callable()
 
 
 static func _damage(skill_id: String, level: int, context: Dictionary) -> int:

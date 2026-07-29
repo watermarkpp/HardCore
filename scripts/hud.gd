@@ -14,12 +14,16 @@ const HUDUtilityStackTexture := preload("res://assets/ui/gothic_hud/v2/runtime/u
 const HUDJoystickTexture := preload("res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png")
 const HUDChassisTexture := preload("res://assets/ui/gothic_hud/v2/runtime/bottom_chassis_v2.png")
 const HUDRightControlsTexture := preload("res://assets/ui/gothic_hud/v2/runtime/right_controls_v2.png")
+const HUD_RESOURCE_ORB_SIZE := Vector2(110, 110)
+const HUD_HEALTH_ORB_CENTER := Vector2(182, 188)
+const HUD_MANA_ORB_CENTER := Vector2(639, 188)
 
 signal movement_changed(value: Vector2)
 signal attack_pressed
 signal attack_released
 signal interact_pressed
 signal skill_pressed(slot_index: int)
+signal skill_slot_pressed(slot_group: String, slot_index: int)
 signal skill_quick_slot_assignment_requested(request: Dictionary)
 signal skill_button_assignment_requested(request: Dictionary)
 signal map_travel_requested(map_id: int)
@@ -70,6 +74,8 @@ var _warrior_snapshot: Dictionary = {}
 var _special_actions: Array[String] = []
 var _special_action_index := 0
 var _last_target_text := ""
+var _skill_button_assignments: Dictionary = {}
+var _skill_button_modes: Dictionary = {}
 
 
 func _ready() -> void:
@@ -260,18 +266,20 @@ func _build_bottom_chassis(root: Control) -> void:
 
 	health_orb = HUDResourceOrbScript.new()
 	health_orb.name = "HealthOrb"
-	health_orb.position = Vector2(132, 138)
-	health_orb.size = Vector2(100, 100)
+	health_orb.position = HUD_HEALTH_ORB_CENTER - HUD_RESOURCE_ORB_SIZE * 0.5
+	health_orb.size = HUD_RESOURCE_ORB_SIZE
 	health_orb.resource_name = "生命"
 	health_orb.liquid_color = Color("a51422")
+	health_orb.set_meta("stable_id", "ui.hud.resource_orb.hole_fill.v1")
 	chassis_root.add_child(health_orb)
 
 	mana_orb = HUDResourceOrbScript.new()
 	mana_orb.name = "ManaOrb"
-	mana_orb.position = Vector2(589, 138)
-	mana_orb.size = Vector2(100, 100)
+	mana_orb.position = HUD_MANA_ORB_CENTER - HUD_RESOURCE_ORB_SIZE * 0.5
+	mana_orb.size = HUD_RESOURCE_ORB_SIZE
 	mana_orb.resource_name = "魔法"
 	mana_orb.liquid_color = Color("174eaa")
+	mana_orb.set_meta("stable_id", "ui.hud.resource_orb.hole_fill.v1")
 	chassis_root.add_child(mana_orb)
 
 	var chassis := TextureRect.new()
@@ -342,10 +350,10 @@ func _build_combat_controls(root: Control) -> void:
 		skill_button.add_theme_color_override("font_color", Color.TRANSPARENT)
 		skill_button.add_theme_color_override("font_hover_color", Color.TRANSPARENT)
 		skill_button.add_theme_color_override("font_pressed_color", Color.TRANSPARENT)
-		skill_button.pressed.connect(_on_skill_button.bind(index))
+		skill_button.pressed.connect(_on_skill_slot_button.bind("center", index))
 		skill_button.set_meta("stable_id", "hud.profession_skill.%d" % (index + 1))
 		skill_button.set_meta("activation_mode_source", "skill.activation_mode")
-		skill_button.set_meta("warrior_policy", "toggle")
+		skill_button.set_meta("warrior_policy", "skill_data_declared")
 		skill_button.set_meta("mage_tao_policy", "instant_or_toggle")
 		root.add_child(skill_button)
 		quick_buttons.append(skill_button)
@@ -459,7 +467,7 @@ func _build_combat_controls(root: Control) -> void:
 		ring_skill.offset_top = rect.position.y
 		ring_skill.offset_right = rect.end.x
 		ring_skill.offset_bottom = rect.end.y
-		ring_skill.pressed.connect(_on_skill_button.bind(index))
+		ring_skill.pressed.connect(_on_skill_slot_button.bind("attack_ring", index))
 		ring_skill.set_meta("stable_id", "hud.attack_ring_skill.%d" % (index + 1))
 		root.add_child(ring_skill)
 		var ring_backdrop := Panel.new()
@@ -788,8 +796,11 @@ func open_skill_trainer(display_name: String) -> void:
 
 
 func set_skill_button_assignments(assignments: Dictionary, interaction_modes := {}) -> void:
+	_skill_button_assignments = assignments.duplicate(true)
+	_skill_button_modes = interaction_modes.duplicate(true) if interaction_modes is Dictionary else {}
 	if skill_panel != null:
 		skill_panel.set_skill_button_assignments(assignments, interaction_modes)
+	update_quick_slots()
 
 
 func show_death_screen(context := {}) -> void:
@@ -836,9 +847,11 @@ func show_message(message: String, seconds := 2.0) -> void:
 
 func update_quick_slots() -> void:
 	for index in range(quick_buttons.size()):
-		var skill_name := PlayerState.quick_slots[index]
+		var skill_name := _skill_name_for_slot("center", index)
 		var marker := _warrior_skill_marker(skill_name)
 		var skill_texture := HUDSkillIconCatalogScript.texture_for(skill_name)
+		var skill_icon_id := HUDSkillIconCatalogScript.source_id_for(skill_name)
+		var skill_icon_path := HUDSkillIconCatalogScript.source_path_for(skill_name)
 		var display_text := "%d\n%s%s" % [index + 1, skill_name if not skill_name.is_empty() else "空", marker]
 		quick_buttons[index].text = display_text
 		quick_buttons[index].tooltip_text = skill_name if not skill_name.is_empty() else "空技能槽"
@@ -846,17 +859,74 @@ func update_quick_slots() -> void:
 			quick_slot_icons[index].texture = skill_texture
 			quick_slot_icons[index].visible = skill_texture != null
 			quick_slot_icons[index].set_meta("skill_name", skill_name)
-			quick_slot_icons[index].set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
+			quick_slot_icons[index].set_meta("skill_icon_id", skill_icon_id)
+			quick_slot_icons[index].set_meta("skill_icon_path", skill_icon_path)
 		if index < quick_slot_labels.size():
 			quick_slot_labels[index].text = _compact_skill_label(index, skill_name, marker, skill_texture != null)
-		if index < attack_ring_skill_icons.size():
-			attack_ring_skill_icons[index].texture = skill_texture
-			attack_ring_skill_icons[index].visible = skill_texture != null
-			attack_ring_skill_icons[index].set_meta("skill_name", skill_name)
-			attack_ring_skill_icons[index].set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
+	for index in range(attack_ring_skill_icons.size()):
+		var skill_name := _skill_name_for_slot("attack_ring", index)
+		var skill_texture := HUDSkillIconCatalogScript.texture_for(skill_name)
+		var skill_icon_id := HUDSkillIconCatalogScript.source_id_for(skill_name)
+		var skill_icon_path := HUDSkillIconCatalogScript.source_path_for(skill_name)
+		attack_ring_skill_icons[index].texture = skill_texture
+		attack_ring_skill_icons[index].visible = skill_texture != null
+		attack_ring_skill_icons[index].set_meta("skill_name", skill_name)
+		attack_ring_skill_icons[index].set_meta("skill_icon_id", skill_icon_id)
+		attack_ring_skill_icons[index].set_meta("skill_icon_path", skill_icon_path)
 		if index < attack_ring_skill_labels.size():
 			attack_ring_skill_labels[index].text = str(index + 1) if skill_texture != null else "技%d" % (index + 1)
 			attack_ring_skill_labels[index].tooltip_text = skill_name
+
+
+func _skill_name_for_slot(slot_group: String, slot_index: int) -> String:
+	if not _skill_button_assignments.is_empty():
+		if _skill_button_assignments.has(slot_group):
+			return _skill_name_from_group(_skill_button_assignments.get(slot_group), slot_index)
+		return ""
+	if PlayerState.has_method("skill_name_for_slot"):
+		return str(PlayerState.call("skill_name_for_slot", slot_group, slot_index))
+	var assignments := _active_skill_button_assignments()
+	if assignments.has(slot_group):
+		return _skill_name_from_group(assignments.get(slot_group), slot_index)
+	if not assignments.is_empty():
+		return ""
+	# Compatibility for builds predating the grouped center[4] + attack_ring[3]
+	# contract. Once the grouped snapshot exists, an intentionally empty attack
+	# ring slot remains empty and is never mirrored from the center group.
+	if slot_index >= 0 and slot_index < PlayerState.quick_slots.size():
+		return str(PlayerState.quick_slots[slot_index])
+	return ""
+
+
+func _active_skill_button_assignments() -> Dictionary:
+	if not _skill_button_assignments.is_empty():
+		return _skill_button_assignments
+	if PlayerState.has_method("skill_button_assignments_snapshot"):
+		var snapshot: Variant = PlayerState.call("skill_button_assignments_snapshot")
+		if snapshot is Dictionary:
+			return snapshot
+	return {}
+
+
+func _skill_name_from_group(group_value: Variant, slot_index: int) -> String:
+	if group_value is Array and slot_index >= 0 and slot_index < group_value.size():
+		var value: Variant = group_value[slot_index]
+		return _skill_name_from_assignment_value(value)
+	if group_value is Dictionary:
+		var value: Variant = group_value.get(slot_index, group_value.get(str(slot_index), ""))
+		return _skill_name_from_assignment_value(value)
+	return ""
+
+
+func _skill_name_from_assignment_value(value: Variant) -> String:
+	if not value is Dictionary:
+		return str(value)
+	return str(
+		value.get(
+			"skill_name",
+			value.get("skillName", value.get("name", value.get("display_name", value.get("displayName", ""))))
+		)
+	)
 
 
 func _compact_skill_label(index: int, skill_name: String, marker: String, has_icon: bool) -> String:
@@ -874,10 +944,7 @@ func update_warrior_states(snapshot: Dictionary) -> void:
 	warrior_state_label.visible = PlayerState.profession == "战士"
 	if not warrior_state_label.visible:
 		return
-	var fire_text := "蓄力" if bool(snapshot.get("fire_armed", false)) else "就绪"
-	var ready_ms := int(snapshot.get("fire_ready_remaining_ms", 0))
-	if not bool(snapshot.get("fire_armed", false)) and ready_ms > 0:
-		fire_text = "冷却%.1fs" % (float(ready_ms) / 1000.0)
+	var fire_text := _fire_sword_charge_label(snapshot)
 	warrior_state_label.text = "攻杀:%s　刺杀:%s　半月:%s　烈火:%s" % [
 		"自动" if bool(snapshot.get("slaying_auto", false)) else "未学",
 		"开" if bool(snapshot.get("thrusting", false)) else "关",
@@ -887,22 +954,34 @@ func update_warrior_states(snapshot: Dictionary) -> void:
 	update_quick_slots()
 
 
+func _fire_sword_charge_label(snapshot: Dictionary) -> String:
+	# Canonical fire sword is one explicit next-melee charge, never an auto-use toggle.
+	# The runtime snapshot owns these fields; UI only projects its current state.
+	if bool(snapshot.get("fire_armed", false)) and int(snapshot.get("fire_expires_remaining_ms", 0)) > 0:
+		return "充能"
+	return "未充能·就绪"
+
+
 func _warrior_skill_marker(skill_name: String) -> String:
 	match skill_name:
 		"攻杀剑术": return "[自动]" if bool(_warrior_snapshot.get("slaying_auto", false)) else ""
 		"刺杀剑术": return "[开]" if bool(_warrior_snapshot.get("thrusting", false)) else "[关]"
 		"半月弯刀": return "[开]" if bool(_warrior_snapshot.get("half_moon", false)) else "[关]"
 		"烈火剑法":
-			if bool(_warrior_snapshot.get("fire_armed", false)):
-				return "[蓄]"
-			if int(_warrior_snapshot.get("fire_ready_remaining_ms", 0)) > 0:
-				return "[冷]"
-			return "[就绪]"
+			return "[%s]" % _fire_sword_charge_label(_warrior_snapshot)
 	return ""
 
 
+func _on_skill_slot_button(slot_group: String, slot_index: int) -> void:
+	var grouped_connections := skill_slot_pressed.get_connections()
+	skill_slot_pressed.emit(slot_group, slot_index)
+	if grouped_connections.is_empty():
+		skill_pressed.emit(slot_index)
+
+
 func _on_skill_button(index: int) -> void:
-	skill_pressed.emit(index)
+	# Legacy API retained for callers that still expose one four-slot array.
+	_on_skill_slot_button("center", index)
 
 
 func _close_modal_panels() -> void:

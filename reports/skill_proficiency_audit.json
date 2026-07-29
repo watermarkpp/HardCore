@@ -1,0 +1,604 @@
+{
+  "audit_id": "MIR2-HUMAN-SKILL-SYSTEM-AUDIT-V1.0",
+  "audit_date": "2026-07-24",
+  "git_commit": "53c614522f729842746e48a17a89c102351d388b",
+  "scope": "first read-only execution",
+  "runtime": "HardCore offline Godot runtime",
+  "verdict": "missing",
+  "records": [
+    {
+      "skill_id": "taoist.defense",
+      "name": "神圣战甲术",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.entrapment",
+      "name": "困魔咒",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.healing",
+      "name": "治愈术",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.invisibility",
+      "name": "隐身术",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.magic_defense",
+      "name": "幽灵盾",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.mass_healing",
+      "name": "群体治疗术",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.mass_invisibility",
+      "name": "集体隐身术",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.poison",
+      "name": "施毒术",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.revelation",
+      "name": "心灵启示",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.soul_fire_talisman",
+      "name": "灵魂火符",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.spiritual_warfare",
+      "name": "精神力战法",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.summon_divine_beast",
+      "name": "召唤神兽",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.summon_skeleton",
+      "name": "召唤骷髅",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.basic_swordsmanship",
+      "name": "基本剑术",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.fire_sword",
+      "name": "烈火剑法",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.half_moon",
+      "name": "半月弯刀",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.slaying_swordsmanship",
+      "name": "攻杀剑术",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.thrusting",
+      "name": "刺杀剑术",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.wild_rush",
+      "name": "野蛮冲撞",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.exploding_flame",
+      "name": "爆裂火焰",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.fire_wall",
+      "name": "火墙",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.fireball",
+      "name": "火球术",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.great_fireball",
+      "name": "大火球",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.hell_lightning",
+      "name": "地狱雷光",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.hellfire",
+      "name": "地狱火",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.holy_word",
+      "name": "圣言术",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.ice_storm",
+      "name": "冰咆哮",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.laser",
+      "name": "疾光电影",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.lightning",
+      "name": "雷电术",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.magic_shield",
+      "name": "魔法盾",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.repulsion_ring",
+      "name": "抗拒火环",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.teleport",
+      "name": "瞬息移动",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.temptation_light",
+      "name": "诱惑之光",
+      "learning_level": "static level rows exist",
+      "current_skill_level": "integer saved per character",
+      "proficiency": null,
+      "upgrade_threshold": "static trainingPoints exists but runtime does not consume it",
+      "max_level": 3,
+      "increase_condition": null,
+      "failed_cast_increases": false,
+      "hit_only_or_cast": "not implemented",
+      "upgrade_message": null,
+      "persistence": "level only",
+      "errors": [
+        "PROFICIENCY_ERROR",
+        "PERSISTENCE_ERROR"
+      ]
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "policyId": "MIR-SOURCE-PRIORITY-1",
   "catalogManifest": "outputs/resource_catalog/complete_local_mir_sources/manifest.json",
   "weights": {
@@ -14,19 +14,107 @@
     "singleSourceFirst": true,
     "crossDistributionMergeByDefault": false,
     "fallbackRequiresEvidence": true,
-    "fallbackStatuses": ["missing", "unusable", "incompatible"],
+    "fallbackStatuses": ["missing"],
+    "primaryPresenceBlocksFallback": true,
+    "primaryUnusableOrIncompatibleRequiresRepair": true,
     "fallbackMustRejectEveryHigherPrioritySource": true,
     "sameTierMustFollowOrder": true,
     "derivedAssetMustRecordDistributionAndOriginalPath": true,
+    "projectMasterRequiresTrackedContract": true,
+    "userAuthoritativeOverrideMustRecordEvidenceHash": true,
     "quarantineCannotEnterRuntime": true
   },
   "routing": {
     "pixels_frames_maps_audio": "client_assets",
     "client_animation_offsets_rendering_protocol": "client_rules",
+    "equipment_attributes_requirements_weights_affinity": "equipment_attributes",
+    "vanilla_skill_membership_progression_mp_target_material_formula_geometry_timing_proficiency_state_machine": "skills",
     "npc_items_monsters_spawns_shops_quests_server_config": "server_data",
     "combat_movement_ai_timing_protocol": "server_rules"
   },
   "lanes": {
+    "skills": {
+      "description": "HardCore formal CN MIR2 1.76 Vanilla 33-skill membership, progression, MP, targeting, resource, formula identity, geometry, timing, proficiency and state-machine contract",
+      "scopeExclusions": {
+        "server_data": [
+          "vanilla_skill_membership",
+          "vanilla_skill_progression",
+          "vanilla_skill_mp",
+          "vanilla_skill_targeting",
+          "vanilla_skill_resources"
+        ],
+        "server_rules": [
+          "vanilla_skill_formula_identity",
+          "vanilla_skill_geometry",
+          "vanilla_skill_timing",
+          "vanilla_skill_proficiency",
+          "vanilla_skill_state_machine"
+        ]
+      },
+      "sources": [
+        {
+          "distribution": "project.hardcore.mir2_176_skill_sot.v1.0.1",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100,
+          "eligible": true,
+          "catalogRequired": false,
+          "rootPrefix": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+          "contractId": "skills.mir2_176.vanilla_33.v1.0.1",
+          "rulesetId": "cn_mir2_176_vanilla_project_canonical_v1",
+          "authority": "user_authoritative_override",
+          "sourceKind": "explicit_user_primary_override",
+          "originalPath": "user_authorized_attachment/MIR2_176_33技能唯一真源_Codex_v1.0.1.zip",
+          "packageEvidenceSha256": "2DAC78D285DFF8D5F1BA36A8B83E0E8F11C70B76ACE15A34EE7FBFB802862A22",
+          "contractEvidenceSha256": "275555E9F879969E4BB4BECFC268E0ED0912B7D79EF6DEA89731FE43DB0562F7",
+          "eligibleEvidenceStatuses": [
+            "historical_verified",
+            "source_formula_reference",
+            "project_canonical"
+          ],
+          "ineligibleEvidenceStatuses": [
+            "candidate",
+            "unverified",
+            "legacy_project_baseline",
+            "needs_regression_verification",
+            "rejected_version_mismatch",
+            "selected_service_candidate",
+            "project_adapter_C_candidate"
+          ],
+          "reason": "The user supplied, reviewed and explicitly ordered this versioned 33-skill package to become the formal project master. Historical, formula-reference and project-canonical identities remain distinct inside the contract; Crystal, legacy project tables and candidate packages may not override it."
+        }
+      ]
+    },
+    "equipment_attributes": {
+      "description": "HardCore formal equipment attributes, requirements, affinity, gender and weight contract",
+      "scopeExclusions": {
+        "server_data": [
+          "equipment_attributes",
+          "equipment_requirements",
+          "equipment_job_affinity",
+          "equipment_gender_restrictions",
+          "equipment_hand_weight",
+          "equipment_wear_weight"
+        ]
+      },
+      "sources": [
+        {
+          "distribution": "project.hardcore.equipment_attribute_master.v2",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100,
+          "eligible": true,
+          "catalogRequired": false,
+          "rootPrefix": "assets/data/equipment_attribute_master.json",
+          "contractId": "equipment.attribute.master.v2",
+          "authority": "user_authoritative_override",
+          "sourceKind": "explicit_user_primary_override",
+          "originalPath": "user_authorized_attachment/HardCore_装备系统核对清单_审核修正版_2026-07-25.xlsx",
+          "evidenceSha256": "CEEB2E68D07E2FFA112C46A954D04AAB68A95A576634199E05AB98FF23ABF83D",
+          "reason": "The user explicitly reviewed and corrected the 114 accessory/headgear records and ordered this workbook-backed v2 project master to replace the previous equipment attribute source. Crystal remains authoritative for other server_data scopes only."
+        }
+      ]
+    },
     "client_assets": {
       "description": "客户端原始像素、WIL/WIX、MAP与声音",
       "sources": [

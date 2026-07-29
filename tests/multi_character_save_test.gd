@@ -21,15 +21,37 @@ func _run() -> void:
 	var first_id: String = PlayerState.active_profile_id
 	PlayerState.level = 12
 	PlayerState.gold = 3456
+	PlayerState.learned_skills = {"烈火剑法": 3, "野蛮冲撞": 3}
+	var slot_result := SkillLoadoutRules.assign_quick_slot(PlayerState.quick_slots, PlayerState.learned_skills, {
+		"contract_id": "ui.skill.button_assignment.v2",
+		"slot_group": "attack_ring",
+		"slot_index": 2,
+		"skill_id": "warrior.wild_rush",
+	})
+	assert(PlayerState.apply_quick_slot_assignment(slot_result), "玩法层无法应用野蛮冲撞快捷槽置换")
+	assert(PlayerState.apply_warrior_runtime_state({
+		"contract_id": "gameplay.warrior.skill_runtime.v2",
+		"toggles": {
+			"warrior.thrusting": true,
+			"warrior.half_moon": false,
+			"warrior.fire_sword.auto_enabled": true,
+		},
+		"cooldowns": {"warrior.fire_sword.ready_remaining_ms": 4321},
+	}), "战士技能运行时快照无法写入PlayerState")
 	PlayerState.update_world_location(217, Vector2(321.5, -84.0))
 	PlayerState.save_game()
 	assert(PlayerState.create_character("红叶", "战士", "女").is_empty())
 	var second_id: String = PlayerState.active_profile_id
 	assert(first_id != second_id, "多角色档案ID重复")
+	assert(not bool(PlayerState.warrior_runtime_state_for_restore().toggles["warrior.fire_sword.auto_enabled"]), "新角色错误继承烈火旧自动开关")
 	var profiles: Array[Dictionary] = PlayerState.list_characters()
 	assert(profiles.size() == 2, "角色索引未保存两个档案")
 	assert(PlayerState.select_character(first_id), "无法选择第一个角色")
 	assert(PlayerState.character_name == "长风" and PlayerState.level == 12 and PlayerState.gold == 3456, "角色独立数据恢复失败")
+	assert(PlayerState.quick_slots[2] == "野蛮冲撞", "野蛮冲撞快捷槽置换未从存档恢复")
+	var restored_runtime := PlayerState.warrior_runtime_state_for_restore()
+	assert(not bool(restored_runtime.toggles["warrior.fire_sword.auto_enabled"]), "旧存档烈火自动开关未迁移为false")
+	assert(not restored_runtime.cooldowns.has("warrior.fire_sword.ready_remaining_ms"), "旧存档烈火自动冷却被错误恢复")
 	assert(PlayerState.saved_map_id == 217 and PlayerState.saved_position.is_equal_approx(Vector2(321.5, -84.0)), "角色最近活动位置记录失败")
 	var expected_home := MapCoordinateMapper.source_to_world(Vector2(289, 618), Vector2i(700, 700))
 	assert(PlayerState.save_safe_logout(4, expected_home), "安全退出未立即写入存档")

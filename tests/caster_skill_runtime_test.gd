@@ -1,5 +1,12 @@
 extends Node
 
+var _magic_defense_calls: Array[String] = []
+
+
+func _test_magic_defense(skill_id: String, incoming_damage: int, _target_stats: Dictionary) -> int:
+	_magic_defense_calls.append(skill_id)
+	return maxi(0, incoming_damage - 3)
+
 
 func _ready() -> void:
 	var caster_ids := PackedStringArray()
@@ -38,7 +45,8 @@ func _ready() -> void:
 		if skill_id == "taoist.spiritual_warfare":
 			assert(not plan.castable and plan.visual.status == "no_runtime_visual")
 		else:
-			assert(plan.visual.status == "formal_primary_client_pixel", "%s lacks formal visual binding" % skill_id)
+			assert(plan.visual.status == "formal_primary_client_animation", "%s lacks formal visual binding" % skill_id)
+			assert(plan.visual.animation.contract == "caster_skill_animation.v1")
 		var cast_nodes := CasterSkillRuntime.create_cast_nodes(
 			plan,
 			Vector2.ZERO,
@@ -50,7 +58,7 @@ func _ready() -> void:
 			30,
 			40
 		)
-		var expected_node_count := 0 if skill_id == "taoist.spiritual_warfare" else (5 if skill_id == "wizard.fire_wall" else 1)
+		var expected_node_count := 0 if skill_id == "taoist.spiritual_warfare" else (4 if skill_id == "wizard.fire_wall" else 1)
 		assert(cast_nodes.size() == expected_node_count, "%s cast factory returned %d nodes" % [skill_id, cast_nodes.size()])
 		for node: Node2D in cast_nodes:
 			add_child(node)
@@ -68,16 +76,17 @@ func _ready() -> void:
 	var fire_wall := CasterSkillRuntime.resolve("wizard.fire_wall", {
 		"skill_level": 3, "magic_stat_roll": 30, "cell_size": 48,
 	})
-	assert(fire_wall.operation == "ground_dot" and fire_wall.execution_shape == "five_cell_cross")
-	assert(fire_wall.duration_seconds == 28 and fire_wall.tick_interval_seconds == 3.0)
+	assert(fire_wall.operation == "ground_dot" and fire_wall.execution_shape == "square_2x2")
+	assert(fire_wall.duration_seconds == 28 and fire_wall.tick_interval_seconds == 1.0)
 	var fire_cells := CasterSkillRuntime.fire_wall_positions(Vector2(100, 100), 48)
-	assert(fire_cells.size() == 5 and fire_cells.has(Vector2(148, 100)) and fire_cells.has(Vector2(100, 52)))
+	assert(fire_cells.size() == 4 and fire_cells.has(Vector2(148, 100)) and fire_cells.has(Vector2(148, 148)))
 
 	var lightning := CasterSkillRuntime.resolve("wizard.lightning", {
 		"skill_level": 3, "magic_stat_roll": 30, "target_is_undead": true,
 	})
 	assert(lightning.operation == "target_damage" and lightning.damage > 0)
-	assert(lightning.visual.original_path == "Data/Magic2.wil" and lightning.visual.source_index == 10)
+	assert(lightning.visual.original_path == "Data/Magic2.wil")
+	assert(lightning.visual.animation.sequences[0].frames[0].source_index == 10)
 	var lightning_visual := CasterSkillRuntime.create_visual(lightning, Vector2.ZERO)
 	add_child(lightning_visual)
 	assert(lightning_visual.visual_loaded and lightning_visual.visual_role == "target_effect")
@@ -85,6 +94,26 @@ func _ready() -> void:
 	var lightning_target := EnemyActor.new()
 	lightning_target.max_hp = 500
 	lightning_target.current_hp = 500
+	lightning_target.monster_data = {"antiMagic": 1}
+	var lightning_evaded := CasterSkillRuntime.execute_cast(lightning, {
+		"parent": self,
+		"primary_target": lightning_target,
+		"affected_targets": [lightning_target],
+		"origin": Vector2.ZERO,
+		"target_position": Vector2(48, 0),
+		"direction": Vector2.RIGHT,
+		"anti_magic_roll": 0,
+		"magic_defense_adapter": Callable(self, "_test_magic_defense"),
+	})
+	assert(lightning_evaded.evaded_count == 1 and lightning_evaded.applied_count == 0)
+	assert(lightning_target.current_hp == 500 and _magic_defense_calls.is_empty(), "雷电AntiMagic成功后仍进入MAC或伤害")
+	assert(
+		lightning_evaded.target_resolutions[0].stage_order == ["anti_magic", "magic_defense", "take_damage"]
+		and not lightning_evaded.target_resolutions[0].magic_defense_checked,
+		"雷电运行时阶段顺序错误"
+	)
+	for node: Node2D in lightning_evaded.nodes:
+		node.free()
 	var lightning_execution := CasterSkillRuntime.execute_cast(lightning, {
 		"parent": self,
 		"primary_target": lightning_target,
@@ -92,9 +121,13 @@ func _ready() -> void:
 		"origin": Vector2.ZERO,
 		"target_position": Vector2(48, 0),
 		"direction": Vector2.RIGHT,
+		"anti_magic_roll": 1,
+		"magic_defense_adapter": Callable(self, "_test_magic_defense"),
 	})
 	assert(lightning_execution.runtime_contract == "caster_skill_execution.v1")
-	assert(lightning_execution.applied_count == 1 and lightning_target.current_hp == 500 - lightning.damage)
+	assert(lightning_execution.applied_count == 1 and lightning_execution.evaded_count == 0)
+	assert(lightning_target.current_hp == 500 - maxi(0, int(lightning.damage) - 3), "雷电未按AntiMagic→MAC→伤害执行")
+	assert(_magic_defense_calls == ["wizard.lightning"])
 	assert(lightning_execution.nodes.size() == 1 and lightning_execution.nodes[0] is CasterSkillVisualEffect)
 	for node: Node2D in lightning_execution.nodes:
 		node.free()
@@ -142,5 +175,76 @@ func _ready() -> void:
 		add_child(projectile)
 		assert(projectile._sprite != null)
 		projectile.free()
+
+		var projectile_target := EnemyActor.new()
+		projectile_target.max_hp = 500
+		projectile_target.current_hp = 500
+		projectile_target.monster_data = {"antiMagic": 1}
+		var evaded_projectile := CasterSkillRuntime.create_projectile(projectile_plan, Vector2.ZERO, Vector2.RIGHT)
+		evaded_projectile.configure_runtime_resolution(
+			null,
+			Callable(self, "_test_magic_defense"),
+			0
+		)
+		var calls_before_evade := _magic_defense_calls.size()
+		evaded_projectile._apply_hit(projectile_target)
+		assert(
+			projectile_target.current_hp == 500
+			and evaded_projectile.last_resolution.magic_evaded
+			and not evaded_projectile.last_resolution.magic_defense_checked
+			and _magic_defense_calls.size() == calls_before_evade,
+			"%s投射物躲避后仍进入MAC或伤害" % skill_id
+		)
+		evaded_projectile.free()
+		var connected_projectile := CasterSkillRuntime.create_projectile(projectile_plan, Vector2.ZERO, Vector2.RIGHT)
+		connected_projectile.configure_runtime_resolution(
+			null,
+			Callable(self, "_test_magic_defense"),
+			1
+		)
+		connected_projectile._apply_hit(projectile_target)
+		assert(
+			projectile_target.current_hp == 500 - maxi(0, int(projectile_plan.damage) - 3)
+			and connected_projectile.last_resolution.magic_defense_checked
+			and _magic_defense_calls[-1] == skill_id,
+			"%s投射物未按AntiMagic→MAC→伤害执行" % skill_id
+		)
+		connected_projectile.free()
+		projectile_target.free()
+
+	var poison_target := EnemyActor.new()
+	poison_target.max_hp = 100
+	poison_target.current_hp = 100
+	poison_target.anti_poison = 5
+	poison_target.monster_data = {"antiMagic": 10}
+	var resisted_poison_projectile := SkillProjectile.new()
+	resisted_poison_projectile.setup(
+		Vector2.ZERO, Vector2.RIGHT, 30, 100.0, Color.GREEN,
+		"poison", 4, 8.0, "taoist.poison"
+	)
+	resisted_poison_projectile.configure_runtime_resolution(null, Callable(), 0, 7)
+	resisted_poison_projectile._apply_hit(poison_target)
+	assert(
+		poison_target.current_hp == 100
+		and poison_target.poison_time == 0.0
+		and resisted_poison_projectile.last_resolution.evasion_channel == "anti_poison",
+		"施毒投射物错误使用AntiMagic或绕过AntiPoison"
+	)
+	resisted_poison_projectile.free()
+	var applied_poison_projectile := SkillProjectile.new()
+	applied_poison_projectile.setup(
+		Vector2.ZERO, Vector2.RIGHT, 30, 100.0, Color.GREEN,
+		"poison", 4, 8.0, "taoist.poison"
+	)
+	applied_poison_projectile.configure_runtime_resolution(null, Callable(), 0, 6)
+	applied_poison_projectile._apply_hit(poison_target)
+	assert(
+		poison_target.current_hp == 100
+		and poison_target.poison_time == 8.0
+		and applied_poison_projectile.last_resolution.poison_applies,
+		"施毒AntiPoison成功门未应用独立毒状态"
+	)
+	applied_poison_projectile.free()
+	poison_target.free()
 	print("CASTER_SKILL_RUNTIME_PASS: all 27 wizard/taoist skills have stable execution plans and actual visual/node dispatch")
 	get_tree().quit(0)

@@ -4,6 +4,9 @@ extends RefCounted
 const ConnectionPolicyService := preload(
 	"res://scripts/map_editor/map_editor_connection_policy_service.gd"
 )
+const RuntimeCollisionGeometry := preload(
+	"res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd"
+)
 
 const RUNTIME_SCHEMA_VERSION := 1
 const RUNTIME_ROOT := "res://assets/data/runtime/map_editor/"
@@ -106,6 +109,8 @@ static func _compile(document: Dictionary, walkability: Dictionary) -> Dictionar
 		"ground": {"ground_mode": document.ground.ground_mode, "default_fill_asset_id": document.ground.blank_fill_asset_id, "tile_overrides": MapEditorGroundService.tile_overrides(state)},
 		"instances": instances,
 		"collision": {
+			"coordinate_contract_id": RuntimeCollisionGeometry.CONTRACT_ID,
+			"physics_source_id": RuntimeCollisionGeometry.PHYSICS_SOURCE_ID,
 			"blocked_tiles": blocked,
 			"blocked_count": blocked.size(),
 			"manual_shapes": document.layers.get("collision", []).duplicate(true),

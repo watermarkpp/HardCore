@@ -69,12 +69,15 @@ func _run() -> void:
 	visual.play_action("野蛮冲撞", 0.51)
 	visual._process(0.19)
 	assert(not effect_sprite.visible and not effect_line.visible, "无正式素材的技能不应继续显示V形占位特效")
-	game.player.thrusting_enabled = true
-	game.player.half_moon_enabled = false
-	game.player.fire_sword_armed = true
-	game.hud.update_warrior_states(game.player.warrior_state_snapshot())
-	assert("刺杀:开" in game.hud.warrior_state_label.text and "烈火:蓄力" in game.hud.warrior_state_label.text, "HUD没有显示战士开关/蓄力状态")
-	assert("[自动]" in game.hud.quick_buttons[0].text and "[开]" in game.hud.quick_buttons[1].text and "[蓄]" in game.hud.quick_buttons[3].text, "快捷栏没有显示战士状态标记")
+	game.hud.update_warrior_states({
+		"slaying_auto": true,
+		"thrusting": true,
+		"half_moon": false,
+		"fire_armed": true,
+		"fire_expires_remaining_ms": 10_000,
+	})
+	assert("刺杀:开" in game.hud.warrior_state_label.text and "烈火:充能" in game.hud.warrior_state_label.text, "HUD没有显示战士开关与烈火充能状态")
+	assert("[自动]" in game.hud.quick_buttons[0].text and "[开]" in game.hud.quick_buttons[1].text and "[充能]" in game.hud.quick_buttons[3].text, "快捷栏没有显示战士开关与烈火充能状态标记")
 
 	print("WARRIOR_CLIENT_ART_PASS：四套Magic.wil八方向效果、现存武器WAV与HUD状态提示已接入，缺失技能WAV已显式记录")
 	get_tree().quit(0)

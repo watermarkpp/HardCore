@@ -22,7 +22,14 @@ def main() -> None:
     expected_weights = policy["weights"]
     checks: dict[str, bool] = {}
 
-    checks["fourLanesPresent"] = set(policy["lanes"]) == {"client_assets", "client_rules", "server_data", "server_rules"}
+    checks["requiredLanesPresent"] = set(policy["lanes"]) == {
+        "skills",
+        "equipment_attributes",
+        "client_assets",
+        "client_rules",
+        "server_data",
+        "server_rules",
+    }
     checks["strictFallbackRules"] = all([
         policy["rules"].get("singleSourceFirst") is True,
         policy["rules"].get("crossDistributionMergeByDefault") is False,
@@ -36,7 +43,11 @@ def main() -> None:
     order_strict = True
     for lane in policy["lanes"]:
         sources = active_sources(policy, lane)
-        all_cataloged &= all(source["distribution"] in catalog_entries for source in sources)
+        all_cataloged &= all(
+            source.get("catalogRequired", True) is False
+            or source["distribution"] in catalog_entries
+            for source in sources
+        )
         exactly_one_primary &= sum(source["tier"] == "primary" for source in sources) == 1
         weights_match &= all(int(source["weight"]) == int(expected_weights[source["tier"]]) for source in sources)
         orders = [int(source["order"]) for source in sources]
@@ -48,6 +59,55 @@ def main() -> None:
 
     checks["clientPrimaryIsAcceptedClassic"] = active_sources(policy, "client_assets")[0]["distribution"] == "client.classic_raw_complete"
     checks["serverPrimaryIsCleanDatabase"] = active_sources(policy, "server_data")[0]["distribution"] == "server.crystal.cjlaaa"
+    equipment_primary = active_sources(policy, "equipment_attributes")[0]
+    checks["equipmentPrimaryIsProjectMaster"] = (
+        equipment_primary["distribution"] == "project.hardcore.equipment_attribute_master.v2"
+        and equipment_primary.get("catalogRequired") is False
+        and equipment_primary.get("contractId") == "equipment.attribute.master.v2"
+        and equipment_primary.get("sourceKind") == "explicit_user_primary_override"
+        and equipment_primary.get("evidenceSha256")
+        == "CEEB2E68D07E2FFA112C46A954D04AAB68A95A576634199E05AB98FF23ABF83D"
+        and len(str(equipment_primary.get("evidenceSha256", ""))) == 64
+    )
+    checks["equipmentAttributesExcludedFromServerData"] = set(
+        policy["lanes"]["equipment_attributes"]["scopeExclusions"]["server_data"]
+    ) == {
+        "equipment_attributes",
+        "equipment_requirements",
+        "equipment_job_affinity",
+        "equipment_gender_restrictions",
+        "equipment_hand_weight",
+        "equipment_wear_weight",
+    }
+    skill_primary = active_sources(policy, "skills")[0]
+    checks["skillsPrimaryIsUserAuthorizedContract"] = all([
+        skill_primary["distribution"] == "project.hardcore.mir2_176_skill_sot.v1.0.1",
+        skill_primary.get("catalogRequired") is False,
+        skill_primary.get("contractId") == "skills.mir2_176.vanilla_33.v1.0.1",
+        skill_primary.get("sourceKind") == "explicit_user_primary_override",
+        skill_primary.get("packageEvidenceSha256")
+        == "2DAC78D285DFF8D5F1BA36A8B83E0E8F11C70B76ACE15A34EE7FBFB802862A22",
+        skill_primary.get("contractEvidenceSha256")
+        == "275555E9F879969E4BB4BECFC268E0ED0912B7D79EF6DEA89731FE43DB0562F7",
+        len(str(skill_primary.get("packageEvidenceSha256", ""))) == 64,
+        len(str(skill_primary.get("contractEvidenceSha256", ""))) == 64,
+    ])
+    checks["skillsExcludedFromGenericSources"] = all([
+        set(policy["lanes"]["skills"]["scopeExclusions"]["server_data"]) == {
+            "vanilla_skill_membership",
+            "vanilla_skill_progression",
+            "vanilla_skill_mp",
+            "vanilla_skill_targeting",
+            "vanilla_skill_resources",
+        },
+        set(policy["lanes"]["skills"]["scopeExclusions"]["server_rules"]) == {
+            "vanilla_skill_formula_identity",
+            "vanilla_skill_geometry",
+            "vanilla_skill_timing",
+            "vanilla_skill_proficiency",
+            "vanilla_skill_state_machine",
+        },
+    ])
     checks["rulePrimariesAreARated"] = all(
         catalog_entries[active_sources(policy, lane)[0]["distribution"]]["confidence"] == "A-rule-source"
         for lane in ["client_rules", "server_rules"]

@@ -1,0 +1,196 @@
+{
+	"schemaVersion": 1,
+	"contractId": "equipment.helmet.calibration_draft.v1",
+	"runtimeReadable": false,
+	"finalized": false,
+	"itemId": 149,
+	"visualAssetId": "taoist",
+	"source": {
+		"sheet": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_helmet_8dir_transparent.png",
+		"sheetSha256": "22d4260c7079fffcc279c24eada7b63ee8cee935c4ee8d6d653b48ecdb5fc84e",
+		"grid": [
+			4.0,
+			2.0
+		],
+		"directionOrder": [
+			"N",
+			"NE",
+			"E",
+			"SE",
+			"S",
+			"SW",
+			"W",
+			"NW"
+		],
+		"mattePolicy": "transparent_user_authored_alpha_preserved_v1",
+		"preparedDirectionFiles": {
+			"N": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_directions/n.png",
+			"NE": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_directions/ne.png",
+			"E": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_directions/e.png",
+			"SE": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_directions/se.png",
+			"S": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_directions/s.png",
+			"SW": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_directions/sw.png",
+			"W": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_directions/w.png",
+			"NW": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_directions/nw.png"
+		},
+		"preparedDirectionSha256": {
+			"N": "51d7204873ecbbc75b1e8227aaa8d89c64b4a0a9d2d33715d6880014a7d2d873",
+			"NE": "9f3c414a4785746546b57b09e6f663256c32956738574e3780e097c6a95da7aa",
+			"E": "8367768c8b27e0d4c3fc67c157fc24416da2255d8ff543eb3fe9ced58409880f",
+			"SE": "946d8847f48fbaa045bf79aaf8876e01096f9eeda11588afae65bac50b8e6ba7",
+			"S": "fefa6b4866adffad4bd0535ba9de6398a5772d3b846e4179a846ea695c06fae3",
+			"SW": "c7b253df559a77681c80f92636f733bfdc243cf23c6ee341fd8759ade75573fd",
+			"W": "29d3383c50fa880f5a450087d220e214dd7b08f84d2fb1a9b6aa12d5a86acd81",
+			"NW": "60958091bc5d31e5948c917962a3fbb68374cbdbc4149ba9d0557a9df94f0fd8"
+		},
+		"preparedPresentationFiles": {
+			"inventory": "res://assets/art/items/client/world_wear/helmet/male/source/taoist_149_presentation/inventory.png"
+		},
+		"preparedPresentationSha256": {
+			"inventory": "e7c9c45fe7745e452c9f19dd0dd6ed99e4a67ffc707340a22d3521588b9cace3"
+		},
+		"recipeId": "authored_source_sheet.22d4260c7079fffcc279c24eada7b63ee8cee935c4ee8d6d653b48ecdb5fc84e.layout..transparent_user_authored_alpha_preserved_v1.display_transform_only_until_final_bake",
+		"resolutionPolicy": "retain_original_direction_cutouts_until_one_final_runtime_bake",
+		"previewPolicy": "original_rgba_texture_display_transform_only"
+	},
+	"directions": {
+		"N": {
+			"source_row": 0,
+			"source_slot_id": "slot_0",
+			"nudge": [
+				0.5,
+				-4.5
+			],
+			"scale_percent": 60,
+			"status": "valid",
+			"locked": false,
+			"source_direction": "N"
+		},
+		"NE": {
+			"source_row": 1,
+			"source_slot_id": "slot_1",
+			"nudge": [
+				0.5,
+				-1.5
+			],
+			"scale_percent": 60,
+			"status": "valid",
+			"locked": false,
+			"source_direction": "NE"
+		},
+		"E": {
+			"source_row": 2,
+			"source_slot_id": "slot_2",
+			"nudge": [
+				0.0,
+				-1.0
+			],
+			"scale_percent": 60,
+			"status": "valid",
+			"locked": false,
+			"source_direction": "E"
+		},
+		"SE": {
+			"source_row": 3,
+			"source_slot_id": "slot_3",
+			"nudge": [
+				1.0,
+				0.0
+			],
+			"scale_percent": 60,
+			"status": "valid",
+			"locked": false,
+			"source_direction": "SE"
+		},
+		"S": {
+			"source_row": 4,
+			"source_slot_id": "slot_4",
+			"nudge": [
+				1.0,
+				0.5
+			],
+			"scale_percent": 60,
+			"status": "valid",
+			"locked": false,
+			"source_direction": "S"
+		},
+		"SW": {
+			"source_row": 5,
+			"source_slot_id": "slot_5",
+			"nudge": [
+				0.0,
+				0.5
+			],
+			"scale_percent": 60,
+			"status": "valid",
+			"locked": false,
+			"source_direction": "SW"
+		},
+		"W": {
+			"source_row": 6,
+			"source_slot_id": "slot_6",
+			"nudge": [
+				0.0,
+				-1.0
+			],
+			"scale_percent": 60,
+			"status": "valid",
+			"locked": false,
+			"source_direction": "W"
+		},
+		"NW": {
+			"source_row": 7,
+			"source_slot_id": "slot_7",
+			"nudge": [
+				1.0,
+				-3.0
+			],
+			"scale_percent": 60,
+			"status": "valid",
+			"locked": false,
+			"source_direction": "NW"
+		}
+	},
+	"presentationCalibration": {
+		"contractId": "equipment.helmet.presentation_calibration.v1",
+		"paperDoll": {
+			"source_row": 4,
+			"source_direction": "S",
+			"offset": [
+				261.5,
+				136.5
+			],
+			"scale_percent": 75
+		},
+		"inventory": {
+			"source_row": 4,
+			"source_direction": "S",
+			"source_variant": "dedicated_inventory"
+		},
+		"ground": {
+			"source_row": 2,
+			"source_direction": "E"
+		}
+	},
+	"previewPolicy": {
+		"world": "original_rgba_texture_display_transform_only",
+		"sourceDirections": "original_rgba_texture_aspect_fit_only",
+		"paperDoll": "original_rgba_texture_display_transform_only",
+		"inventory": "original_rgba_texture_aspect_fit_only",
+		"ground": "original_rgba_texture_aspect_fit_only",
+		"directionIndependentAnchors": true,
+		"directionIndependentScale": true,
+		"noPreviewRasterDownsample": true
+	},
+	"finalizePolicy": {
+		"world": "single_high_quality_downsample_from_original_per_direction",
+		"paperDoll": "single_high_quality_downsample_from_original_selection",
+		"inventory": "single_high_quality_downsample_from_original_selection",
+		"ground": "single_high_quality_downsample_from_original_selection",
+		"runtimeScale": [
+			1,
+			1
+		],
+		"noIntermediateResample": true
+	}
+}

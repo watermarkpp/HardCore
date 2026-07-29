@@ -2,19 +2,34 @@ extends Node2D
 
 const TargetingSystem := preload("res://scripts/targeting_system.gd")
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
+const CombatResolutionRulesScript := preload("res://scripts/combat_resolution_rules.gd")
 const MapCoordinateMapperScript := preload("res://scripts/map_coordinate_mapper.gd")
 const GothicBichCampBuilderScript := preload("res://scripts/layers/presentation/gothic_bich_camp_builder.gd")
 const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 const MapPortalRuntimeServiceScript := preload("res://scripts/map_editor/map_portal_runtime_service.gd")
 const MapPortalTravelGuardScript := preload("res://scripts/map_editor/map_portal_travel_guard.gd")
+const MapDiamondCameraConstraintScript := preload("res://scripts/map_editor/map_diamond_camera_constraint_service.gd")
 const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const SystemMenuPanelScript := preload("res://scripts/system_menu_panel.gd")
+const SkillLoadoutRulesScript := preload("res://scripts/skill_loadout_rules.gd")
+const SkillRuntimeRouterScript := preload("res://scripts/skills/skill_runtime_router.gd")
+const SkillCastRequestScript := preload("res://scripts/skills/skill_cast_request.gd")
+const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
+const CombatRuntimeServiceScript := preload("res://scripts/layers/runtime/combat_runtime_service.gd")
+const CasterSkillRuntimeScript := preload("res://scripts/caster_skill_runtime.gd")
 const DEFAULT_NORMAL_RESPAWN_SECONDS := 180.0
 const DEFAULT_BOSS_RESPAWN_SECONDS := 3600.0
 const MONSTER_PREFETCH_TIMEOUT_MSEC := 8000
+const CANONICAL_MATERIAL_ITEMS := {
+	"grey_powder": "灰色药粉",
+	"yellow_powder": "黄色药粉",
+	"amulet": "护身符",
+}
+const SKILL_PRODUCTION_ADAPTER_CONTRACT := "skills.production_adaptation.hardcore.v1"
 
 var player: PlayerCharacter
+var _world_camera: Camera2D
 var hud: GameHUD
 var background: WorldBackground
 var current_zone := ""
@@ -39,6 +54,9 @@ var _map_transition_serial := 0
 var _active_map_transition_id := ""
 var _monster_prefetch_enabled := true
 var _last_monster_prefetch_status: Dictionary = {}
+var _combat_runtime: Node = CombatRuntimeServiceScript.new()
+var _canonical_cast_serial := 0
+var _canonical_fire_charge_expires_ms := 0
 
 
 func _ready() -> void:
@@ -61,24 +79,28 @@ func _ready() -> void:
 	PlayerState.consumable_requested.connect(_on_consumable_used)
 	PlayerState.scroll_requested.connect(_on_scroll_used)
 	add_child(player)
+	player.restore_warrior_runtime_state(PlayerState.warrior_runtime_state_for_restore())
 
-	var camera := Camera2D.new()
-	camera.position_smoothing_enabled = true
-	camera.position_smoothing_speed = 7.0
-	camera.zoom = Vector2.ONE * ArtSpec.CAMERA_ZOOM
-	player.add_child(camera)
+	_world_camera = Camera2D.new()
+	_world_camera.name = "WorldCamera"
+	_world_camera.position_smoothing_enabled = true
+	_world_camera.position_smoothing_speed = 7.0
+	_world_camera.zoom = Vector2.ONE * ArtSpec.CAMERA_ZOOM
+	player.add_child(_world_camera)
 
 	hud = GameHUD.new()
 	hud.movement_changed.connect(player.set_touch_vector)
 	hud.attack_pressed.connect(_on_mobile_attack_pressed)
 	hud.attack_released.connect(_on_mobile_attack_released)
 	hud.interact_pressed.connect(_try_interact)
-	hud.skill_pressed.connect(_use_quick_slot)
+	hud.skill_slot_pressed.connect(_use_skill_slot)
 	hud.map_travel_requested.connect(travel_to_map)
 	hud.target_switch_pressed.connect(_cycle_target)
 	hud.auto_target_changed.connect(_set_auto_target_enabled)
 	hud.special_action_pressed.connect(_on_special_action_pressed)
+	hud.skill_button_assignment_requested.connect(_on_skill_button_assignment_requested)
 	add_child(hud)
+	hud.set_skill_button_assignments(PlayerState.skill_button_assignments_snapshot())
 	player.resources_changed.connect(hud.update_resources)
 	# 重登始终从服务端HomeMap出生。该规则不依赖退出回调，Android强杀后同样安全回城。
 	travel_to_service_home(false, true)
@@ -106,7 +128,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _process(delta: float) -> void:
+	_expire_canonical_fire_charge_if_needed()
 	background.set_focus_position(player.global_position)
+	_update_world_camera_constraint(delta)
 	_update_portal_arrival_guard()
 	_enforce_bich_safe_zone()
 	_update_boss_world_mechanics(delta)
@@ -117,6 +141,7 @@ func _process(delta: float) -> void:
 	_movement_target_refresh_remaining = maxf(0.0, _movement_target_refresh_remaining - delta)
 	if _warrior_hud_timer <= 0.0:
 		_warrior_hud_timer = 0.2
+		PlayerState.apply_warrior_runtime_state(player.warrior_runtime_state_for_save())
 		hud.update_warrior_states(player.warrior_state_snapshot())
 	if _mobile_attack_held or Input.is_action_pressed("attack"):
 		_request_mobile_attack()
@@ -125,6 +150,45 @@ func _process(delta: float) -> void:
 	for index in range(4):
 		if Input.is_action_just_pressed("skill_%d" % (index + 1)):
 			_use_quick_slot(index)
+
+
+func _update_world_camera_constraint(delta := 1.0 / 60.0) -> void:
+	if not is_instance_valid(_world_camera) or not is_instance_valid(player):
+		return
+	var base_zoom := Vector2.ONE * ArtSpec.CAMERA_ZOOM
+	if not MapEditorRuntimeBridgeScript.has_runtime_map(current_map_id):
+		_world_camera.zoom = base_zoom
+		_world_camera.position = Vector2.ZERO
+		return
+	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
+	var raw_size: Array = runtime.get("design", {}).get("design_size", [])
+	if raw_size.size() != 2:
+		_world_camera.zoom = base_zoom
+		_world_camera.position = Vector2.ZERO
+		return
+	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
+	var viewport_half := get_viewport().get_visible_rect().size * 0.5
+	var target := MapDiamondCameraConstraintScript.resolve_soft_follow(
+		design_size, viewport_half, base_zoom, player.global_position
+	)
+	var target_zoom: Vector2 = target.get("recommended_zoom", base_zoom)
+	var zoom_alpha := 1.0 - exp(-6.0 * maxf(0.0, delta))
+	var resolved_zoom := _world_camera.zoom.lerp(target_zoom, zoom_alpha)
+	resolved_zoom.x = clampf(
+		resolved_zoom.x, ArtSpec.CAMERA_ZOOM,
+		MapDiamondCameraConstraintScript.DEFAULT_MAXIMUM_ZOOM
+	)
+	resolved_zoom.y = resolved_zoom.x
+	# Re-resolve the position at the zoom actually displayed this frame. This
+	# keeps the player inside the +/-14% screen band even while zoom is easing.
+	var result := MapDiamondCameraConstraintScript.resolve_soft_follow(
+		design_size, viewport_half, resolved_zoom, player.global_position,
+		resolved_zoom.x
+	)
+	_world_camera.zoom = resolved_zoom
+	_world_camera.global_position = Vector2(
+		result.get("center", player.global_position)
+	)
 
 
 func _register_input_actions() -> void:
@@ -199,6 +263,7 @@ func _on_system_menu_audio_setting_changed(request: Dictionary) -> void:
 
 
 func _prepare_safe_logout() -> bool:
+	PlayerState.apply_warrior_runtime_state(player.warrior_runtime_state_for_save())
 	return PlayerState.save_safe_logout(GameData.service_home_runtime_map_id(false), _bich_home_world_position())
 
 
@@ -1027,9 +1092,16 @@ func _request_mobile_attack() -> void:
 		return
 	var target := _ensure_combat_target()
 	if is_instance_valid(target):
-		player.request_attack_toward(player.global_position.direction_to(target.global_position))
+		var target_direction := player.global_position.direction_to(target.global_position)
+		player.request_attack_toward(target_direction, _has_melee_hittable_target(target_direction))
 		return
-	player.request_attack_toward(player.facing)
+	player.request_attack_toward(player.facing, _has_melee_hittable_target(player.facing))
+
+
+func _has_melee_hittable_target(direction: Vector2) -> bool:
+	if direction.length_squared() <= 0.01:
+		return false
+	return _physical_primary_target(player.global_position, direction.normalized(), 105.0) != null
 
 
 func _on_mobile_attack_pressed() -> void:
@@ -1296,11 +1368,14 @@ func _try_interact() -> void:
 
 
 func _use_quick_slot(index: int) -> void:
-	if index < 0 or index >= PlayerState.quick_slots.size():
-		return
-	var skill_name := PlayerState.quick_slots[index]
+	_use_skill_slot(PlayerState.SKILL_SLOT_GROUP_CENTER, index)
+
+
+func _use_skill_slot(slot_group: String, slot_index: int) -> void:
+	var skill_name := PlayerState.skill_name_for_slot(slot_group, slot_index)
 	if skill_name.is_empty():
-		hud.show_message("快捷栏%d为空" % (index + 1))
+		var group_label := "攻击环" if slot_group == PlayerState.SKILL_SLOT_GROUP_ATTACK_RING else "中央栏"
+		hud.show_message("%s%d为空" % [group_label, slot_index + 1])
 		return
 	var learned_level := PlayerState.effective_skill_level(skill_name)
 	var profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)
@@ -1311,26 +1386,55 @@ func _use_quick_slot(index: int) -> void:
 		hud.show_message("技能冷却中或魔法不足")
 
 
+func _on_skill_button_assignment_requested(request: Dictionary) -> void:
+	var result := SkillLoadoutRulesScript.assign_button_slot(
+		PlayerState.skill_button_assignments_snapshot(),
+		PlayerState.learned_skills,
+		request
+	)
+	if not bool(result.get("ok", false)):
+		hud.show_message("技能栏配置失败：%s" % str(result.get("reason", "invalid_request")))
+		return
+	if not PlayerState.apply_quick_slot_assignment(result):
+		hud.show_message("技能栏配置未能保存")
+		return
+	hud.set_skill_button_assignments(PlayerState.skill_button_assignments_snapshot())
+	var change: Dictionary = result.get("change", {})
+	var group_label := (
+		"攻击环"
+		if str(change.get("slot_group", "")) == PlayerState.SKILL_SLOT_GROUP_ATTACK_RING
+		else "中央栏"
+	)
+	hud.show_message(
+		"已将%s配置到%s%d" % [
+			str(change.get("skill_name", "技能")),
+			group_label,
+			int(change.get("slot_index", 0)) + 1,
+		],
+		1.5
+	)
+
+
 func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void:
 	var context := player.consume_attack_context()
 	var mode := str(context.get("mode", "normal"))
-	var level := int(context.get("skill_level", 0))
 	var primary := _physical_primary_target(origin, direction, 105.0)
-	var hit_any := false
-	if primary != null:
-		var primary_damage := damage
-		if mode == "slaying":
-			primary_damage = WarriorCombatMath.slaying_damage(damage, level)
-		elif mode == "fire":
-			primary_damage = WarriorCombatMath.fire_sword_damage(damage, level)
-		hit_any = _apply_physical_hit(primary, primary_damage)
-	if mode == "thrust":
-		var second := _thrust_secondary_target(origin, direction, primary)
-		if second != null:
-			hit_any = _apply_physical_hit(second, WarriorCombatMath.thrust_secondary_damage(damage, level)) or hit_any
-	elif mode == "half_moon":
-		for secondary: EnemyActor in _half_moon_targets(origin, direction, primary):
-			hit_any = _apply_physical_hit(secondary, WarriorCombatMath.half_moon_secondary_damage(damage, level)) or hit_any
+	_expire_canonical_fire_charge_if_needed()
+	if primary != null and Time.get_ticks_msec() < _canonical_fire_charge_expires_ms:
+		mode = "fire"
+		context["skill_name"] = "烈火剑法"
+		context["skill_level"] = PlayerState.effective_skill_level("烈火剑法")
+		_set_canonical_fire_charge_expires_at(0)
+	elif mode == "normal" and PlayerState.is_skill_learned("攻杀剑术"):
+		mode = "slaying"
+	var basic_accuracy_bonus := _canonical_basic_sword_bonus(origin, direction, primary != null)
+	var hit_any := (
+		_execute_canonical_melee(mode, origin, direction, damage, basic_accuracy_bonus)
+		if mode in ["slaying", "thrust", "half_moon", "fire"]
+		else _apply_physical_hit(primary, damage, basic_accuracy_bonus)
+	)
+	if mode == "fire" and hud != null:
+		hud.update_warrior_states(player.warrior_state_snapshot())
 	_show_attack_flash(origin, direction, hit_any, Color(1.0, 0.72, 0.25))
 
 
@@ -1353,7 +1457,17 @@ func _on_special_action_pressed(effect_id: String) -> void:
 				direction = player.facing.normalized()
 			var low := maxi(1, int(PlayerState.computed_stats.get("magic_min", 0)))
 			var high := maxi(low, int(PlayerState.computed_stats.get("magic_max", low)))
-			_spawn_projectile(player.global_position, direction, _rng.randi_range(low, high), 360.0, Color(1.0, 0.30, 0.08))
+			_spawn_projectile(
+				player.global_position,
+				direction,
+				_rng.randi_range(low, high),
+				360.0,
+				Color(1.0, 0.30, 0.08),
+				"damage",
+				0,
+				0.0,
+				"wizard.fireball"
+			)
 			hud.show_message("火焰戒指：火球")
 		"recovery_skill":
 			if not player.spend_mana(5):
@@ -1379,94 +1493,689 @@ func _try_safe_ring_teleport() -> bool:
 
 
 func _on_warrior_skill_state_changed(_skill_name: String, _enabled: bool, message: String) -> void:
+	PlayerState.apply_warrior_runtime_state(player.warrior_runtime_state_for_save(), true)
 	if hud != null:
 		hud.show_message(message, 1.5)
 		hud.update_warrior_states(player.warrior_state_snapshot())
 
 
 func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, damage: int) -> void:
-	var learned_level := PlayerState.effective_skill_level(skill_name)
-	var profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)
-	if profile.is_empty():
-		hud.show_message("技能运行时尚未登记：%s" % skill_name)
+	var execution := _execute_canonical_skill(skill_name, origin, direction, damage)
+	var hit_any := bool(execution.get("effect_success", false))
+	if not bool(execution.get("accepted", false)):
+		hud.show_message("技能释放失败：%s" % str(execution.get("reason", "runtime_rejected")), 1.5)
 		return
-	var cast_type := str(profile.get("cast_type", "melee"))
-	if _skill_needs_target(cast_type):
-		_ensure_combat_target()
-		direction = _face_locked_target()
-	if skill_name == "野蛮冲撞" and PlayerState.profession == "战士":
-		var rushed := _execute_wild_rush(direction, learned_level)
-		_show_attack_flash(origin, direction, rushed, Color(0.96, 0.62, 0.18))
-		hud.show_message("野蛮冲撞" if rushed else "野蛮冲撞受阻", 1.0)
-		return
-	var multiplier := float(profile.get("multiplier", 1.0))
-	var attack_range := float(profile.get("range", 105.0))
-	var radial := cast_type in ["area", "ground_dot"]
 	var effect_color := Color(1.0, 0.22, 0.05) if PlayerState.profession == "战士" else (Color(0.28, 0.62, 1.0) if PlayerState.profession == "法师" else Color(0.45, 0.92, 0.55))
-	var final_damage := WarriorCombatMath.active_skill_damage(skill_name, damage, learned_level) if PlayerState.profession == "战士" else maxi(1, int(round(damage * multiplier)))
-	var hit_any := false
-	match cast_type:
-		"dash": player.global_position += direction * 92.0
-		"teleport": player.global_position += direction * attack_range
-		"heal", "heal_area":
-			player.restore_health(final_damage)
-			multiplier = 0.0
-		"projectile", "execute":
-			_spawn_projectile(origin, direction, final_damage, attack_range, effect_color)
-			multiplier = 0.0
-			hit_any = true
-		"poison":
-			_spawn_projectile(origin, direction, final_damage, attack_range, effect_color, "poison", maxi(1, int(final_damage / 3)), 8.0)
-			multiplier = 0.0
-			hit_any = true
-		"control":
-			_spawn_projectile(origin, direction, 0, attack_range, effect_color, "charm", 0, 6.0)
-			multiplier = 0.0
-			hit_any = true
-		"ground_dot":
-			_spawn_ground_effect(origin + direction * minf(attack_range, 175.0), final_damage, 74.0, 5.0, effect_color)
-			multiplier = 0.0
-			hit_any = true
-		"knockback":
-			for node: Node in get_tree().get_nodes_in_group("enemies"):
-				if node is EnemyActor and node.global_position.distance_to(origin) <= attack_range:
-					node.global_position += (node.global_position - origin).normalized() * 80.0
-			multiplier = 0.0
-		"shield":
-			player.apply_magic_shield(12.0, 0.35)
-			multiplier = 0.0
-		"stealth", "stealth_area":
-			player.apply_stealth(10.0)
-			multiplier = 0.0
-		"magic_defense_buff", "defense_buff":
-			player.apply_defense_buff(15.0, maxi(1, int(PlayerState.level / 8)))
-			multiplier = 0.0
-		"root_area":
-			for node: Node in get_tree().get_nodes_in_group("enemies"):
-				if node is EnemyActor and node.global_position.distance_to(origin + direction * 120.0) <= 115.0:
-					node.apply_control(5.0)
-			multiplier = 0.0
-		"summon":
-			_spawn_summon("神兽" if skill_name == "召唤神兽" else "骷髅", maxi(PlayerState.level, damage))
-			multiplier = 0.0
-		"inspect":
-			var inspected := _nearest_enemy(origin, attack_range)
-			if inspected != null:
-				hud.show_message("%s：生命%d/%d" % [inspected.display_name, inspected.current_hp, inspected.max_hp], 2.0)
-			multiplier = 0.0
-	if multiplier > 0.0:
-		hit_any = _damage_enemies(origin, direction, final_damage, radial, attack_range, PlayerState.profession == "战士")
 	_show_attack_flash(origin, direction, hit_any, effect_color)
+	if skill_name == "烈火剑法":
+		hud.update_warrior_states(player.warrior_state_snapshot())
 	hud.show_message("施放：%s" % skill_name, 1.0)
+
+
+func _execute_canonical_skill(
+	skill_name: String,
+	origin: Vector2,
+	direction: Vector2,
+	client_damage: int,
+	extra_target_context: Dictionary = {},
+	apply_effects := true
+) -> Dictionary:
+	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
+	var definition := SkillDataLoaderScript.skill(stable_skill_id)
+	if definition.is_empty():
+		return {"accepted": false, "effect_success": false, "reason": "unknown_skill"}
+	var rank := PlayerState.effective_skill_level(skill_name)
+	var target_context := _canonical_target_context(definition, origin, direction)
+	target_context.merge(extra_target_context, true)
+	var resource_context := _canonical_resource_context(stable_skill_id)
+	var request := SkillCastRequestScript.create(
+		stable_skill_id,
+		rank,
+		PlayerState.level,
+		_canonical_world_to_tile(origin),
+		_canonical_facing(direction),
+		target_context,
+		resource_context,
+		_next_canonical_seed()
+	)
+	request["client_claimed_damage"] = client_damage
+	var result := SkillRuntimeRouterScript.execute(request)
+	result["adapter_contract"] = SKILL_PRODUCTION_ADAPTER_CONTRACT
+	result["adapter_bindings"] = [
+		"combat_resolution",
+		"inventory_resources",
+		"map_tile_geometry",
+		"target_relations",
+		"buff_runtime",
+		"taoist_main_pet",
+	]
+	if not bool(result.get("accepted", false)):
+		return result
+	if bool(result.get("resource_commit", false)) and not _commit_canonical_resources(result):
+		result["accepted"] = false
+		result["effect_success"] = false
+		result["reason"] = "resource_commit_failed"
+		return result
+	if apply_effects:
+		_apply_canonical_effects(result, origin, direction, target_context)
+	var proficiency_event := str(result.get("proficiency_event", ""))
+	if not proficiency_event.is_empty():
+		PlayerState.apply_skill_proficiency_event(
+			stable_skill_id,
+			proficiency_event,
+			_next_canonical_seed()
+		)
+	return result
+
+
+func _execute_canonical_melee(
+	mode: String,
+	origin: Vector2,
+	direction: Vector2,
+	base_damage: int,
+	accuracy_bonus: int
+) -> bool:
+	var skill_name: String = {
+		"slaying": "攻杀剑术",
+		"thrust": "刺杀剑术",
+		"half_moon": "半月弯刀",
+		"fire": "烈火剑法",
+	}.get(mode, "")
+	if skill_name.is_empty():
+		return false
+	var primary := _physical_primary_target(origin, direction, 105.0)
+	var eligible_target_count := 1 if primary != null else 0
+	if mode == "thrust" and _thrust_secondary_target(origin, direction, primary) != null:
+		eligible_target_count += 1
+	elif mode == "half_moon":
+		eligible_target_count += _half_moon_targets(origin, direction, primary).size()
+	var extra := {
+		"has_target": primary != null,
+		"line_of_sight": primary != null,
+		"valid_melee_swing": primary != null,
+		"eligible_target_count": eligible_target_count,
+		"charge_consumed": mode == "fire" and primary != null,
+	}
+	var result := _execute_canonical_skill(skill_name, origin, direction, base_damage, extra, false)
+	if not bool(result.get("accepted", false)):
+		return false
+	var hit_any := false
+	for raw_effect: Variant in result.get("effects", []):
+		if not raw_effect is Dictionary:
+			continue
+		var effect: Dictionary = raw_effect
+		match str(effect.get("type", "")):
+			"melee_proc_modifier":
+				if primary != null and bool(effect.get("proc", false)):
+					hit_any = _apply_physical_hit(primary, base_damage + int(effect.get("flat_dc_bonus", 0)), accuracy_bonus + int(effect.get("flat_accuracy_bonus", 0)))
+				elif primary != null:
+					hit_any = _apply_physical_hit(primary, base_damage, accuracy_bonus)
+			"melee_hit":
+				var target := primary if int(effect.get("cell", 1)) == 1 else _thrust_secondary_target(origin, direction, primary)
+				if target != null:
+					hit_any = _apply_physical_hit(target, roundi(float(base_damage) * float(effect.get("multiplier", 1.0))), accuracy_bonus) or hit_any
+			"melee_arc":
+				if primary != null:
+					hit_any = _apply_physical_hit(primary, roundi(float(base_damage) * float(effect.get("primary_multiplier", 1.0))), accuracy_bonus)
+				for secondary: EnemyActor in _half_moon_targets(origin, direction, primary):
+					hit_any = _apply_physical_hit(secondary, roundi(float(base_damage) * float(effect.get("side_multiplier", 1.0))), accuracy_bonus) or hit_any
+			"next_melee_charge":
+				if primary != null:
+					hit_any = _apply_physical_hit(primary, roundi(float(base_damage) * float(effect.get("damage_multiplier", 1.0))), accuracy_bonus)
+	return hit_any
+
+
+func _canonical_basic_sword_bonus(origin: Vector2, direction: Vector2, valid_swing: bool) -> int:
+	if not PlayerState.is_skill_learned("基本剑术"):
+		return 0
+	var result := _execute_canonical_skill(
+		"基本剑术",
+		origin,
+		direction,
+		0,
+		{"valid_melee_swing": valid_swing}
+	)
+	for raw_effect: Variant in result.get("effects", []):
+		if raw_effect is Dictionary and str(raw_effect.get("type", "")) == "passive_stat_modifier":
+			return int(raw_effect.get("value", 0))
+	return 0
+
+
+func _canonical_target_context(definition: Dictionary, origin: Vector2, direction: Vector2) -> Dictionary:
+	var target_contract: Dictionary = definition.get("target", {})
+	var target_mode := str(target_contract.get("mode", ""))
+	var target_relation := str(target_contract.get("relation", ""))
+	var friendly_cast := target_relation.contains("friendly") or target_mode in ["self", "self_or_friendly_single"]
+	var profile := ProfessionRules.skill_combat_profile(
+		str(definition.get("display_name", "")),
+		PlayerState.effective_skill_level(str(definition.get("display_name", "")))
+	)
+	var search_range := maxf(105.0, float(profile.get("range", 370.0)))
+	if target_mode.contains("surround") or target_mode.contains("area") or target_mode.contains("ground"):
+		search_range = maxf(search_range, 180.0)
+	if not friendly_cast and target_mode not in ["self", "self_stat", "self_summon", "self_next_melee_charge", "self_random_destination", "caster_surrounding_area", "surrounding_units"]:
+		_ensure_combat_target(null, search_range)
+	var target := locked_target if not friendly_cast and is_instance_valid(locked_target) else null
+	var has_ground_target := target_mode.contains("ground") or target_mode.contains("area") or target_mode == "facing_line"
+	var context := {
+		"has_target": target != null or has_ground_target or friendly_cast,
+		"line_of_sight": target != null or has_ground_target or friendly_cast,
+		"friendly": friendly_cast,
+		"hostile": target != null and not friendly_cast,
+		"target_tile": _canonical_world_to_tile(target.global_position if target != null else origin + direction.normalized() * minf(search_range, 160.0)),
+		"primary_stat_roll": _canonical_primary_stat_roll(str(definition.get("class", ""))),
+		"actual_hp_missing": player.max_hp - player.current_hp,
+		"friendly_missing_hp": [player.max_hp - player.current_hp],
+		"affected_friendly_count": 1,
+		"friendly_targets": [{"level": PlayerState.level}],
+		"map_allows_random_teleport": true,
+		"destination_valid": true,
+		"spawn_tile_valid": true,
+		"has_main_pet": _canonical_main_pet() != null,
+		"current_pet_count": get_tree().get_nodes_in_group("summons").size(),
+		"caster_max_hp": player.max_hp,
+	}
+	var destination := _find_valid_random_teleport_position(origin)
+	context["destination_valid"] = destination != origin
+	context["destination_tile"] = _canonical_world_to_tile(destination)
+	if target != null:
+		var monster_data: Dictionary = target.monster_data
+		context.merge({
+			"target_level": int(monster_data.get("level", target.level)),
+			"target_is_boss": target.is_boss,
+			"target_immovable": target.is_boss,
+			"target_is_monster": true,
+			"target_is_undead": bool(monster_data.get("undead", monster_data.get("isUndead", false))),
+			"target_tameable": not target.is_boss,
+			"target_has_other_master": false,
+			"target_max_hp": target.max_hp,
+			"target_poison_resist": target.anti_poison,
+			"target_is_living": target.current_hp > 0,
+			"actual_hp_missing": target.max_hp - target.current_hp,
+			"path_blocked_after_start": background.is_environment_point_blocked(target.global_position + direction.normalized() * 50.0),
+		}, true)
+	var nearby: Array[Dictionary] = []
+	for node: Node in get_tree().get_nodes_in_group("enemies"):
+		if node is EnemyActor and not node.is_queued_for_deletion() and node.global_position.distance_to(origin) <= search_range:
+			nearby.append({
+				"level": node.level,
+				"is_boss": node.is_boss,
+				"immovable": node.is_boss,
+				"path_blocked": background.is_environment_point_blocked(node.global_position + node.global_position.direction_to(origin) * -50.0),
+				"hostile_monster": true,
+				"control_immune": node.is_boss,
+				"within_level_gate": node.level <= PlayerState.level,
+			})
+	context["targets"] = nearby
+	return context
+
+
+func _canonical_resource_context(stable_skill_id: String) -> Dictionary:
+	var materials := {}
+	for material_id: String in CANONICAL_MATERIAL_ITEMS:
+		materials[material_id] = PlayerState.item_count(str(CANONICAL_MATERIAL_ITEMS[material_id]))
+	var definition := SkillDataLoaderScript.skill(stable_skill_id)
+	var selected_material := str(definition.get("resource", {}).get("item", ""))
+	if stable_skill_id == "taoist.poison":
+		selected_material = "grey_powder" if int(materials.grey_powder) > 0 else "yellow_powder"
+	return {
+		"mana": player.current_mp,
+		"materials": materials,
+		"selected_material": selected_material,
+	}
+
+
+func _commit_canonical_resources(result: Dictionary) -> bool:
+	var quote: Dictionary = result.get("resource_quote", {})
+	var mana_cost := maxi(0, int(quote.get("mp_cost", 0)))
+	var material_id := str(quote.get("material_id", ""))
+	var material_amount := maxi(0, int(quote.get("material_amount", 0)))
+	var item_name := str(CANONICAL_MATERIAL_ITEMS.get(material_id, ""))
+	if player.current_mp < mana_cost:
+		return false
+	if material_amount > 0 and (item_name.is_empty() or PlayerState.item_count(item_name) < material_amount):
+		return false
+	if not player.spend_mana(mana_cost):
+		return false
+	if material_amount > 0 and not PlayerState.remove_item(item_name, material_amount):
+		player.restore_mana(mana_cost)
+		return false
+	return true
+
+
+func _apply_canonical_effects(
+	result: Dictionary,
+	origin: Vector2,
+	direction: Vector2,
+	target_context: Dictionary
+) -> void:
+	var stable_skill_id := str(result.get("skill_id", ""))
+	var target := locked_target if is_instance_valid(locked_target) else null
+	var target_position := _canonical_tile_to_world(
+		target_context.get("target_tile", _canonical_world_to_tile(origin))
+	)
+	_spawn_canonical_cast_visual(
+		stable_skill_id,
+		origin,
+		direction,
+		target,
+		target_position
+	)
+	for raw_effect: Variant in result.get("effects", []):
+		if not raw_effect is Dictionary:
+			continue
+		var effect: Dictionary = raw_effect
+		var effect_type := str(effect.get("type", ""))
+		match effect_type:
+			"projectile_damage", "talisman_projectile_damage":
+				_spawn_projectile(
+					origin,
+					direction,
+					int(effect.get("raw_power", 0)),
+					maxf(120.0, float(ProfessionRules.skill_combat_profile(SkillDataLoaderScript.display_name(stable_skill_id), PlayerState.effective_skill_level(stable_skill_id)).get("range", 370.0))),
+					Color(0.28, 0.62, 1.0) if stable_skill_id.begins_with("wizard.") else Color(0.45, 0.92, 0.55),
+					"damage",
+					0,
+					0.0,
+					stable_skill_id
+				)
+			"targeted_sky_strike", "line_damage", "piercing_line_damage", "area_damage", "caster_centered_area_damage":
+				var raw_power := int(effect.get("raw_power_after_race", effect.get("raw_power", 0)))
+				var damage_origin := (
+					_canonical_tile_to_world(target_context.get("target_tile", Vector2i.ZERO))
+					if effect_type == "area_damage"
+					else origin
+				)
+				_apply_canonical_spell_damage(stable_skill_id, raw_power, damage_origin, direction, effect_type, target)
+			"persistent_ground_damage":
+				_spawn_canonical_ground_field(
+					stable_skill_id,
+					result.get("geometry_cells", []),
+					target_position,
+					effect
+				)
+			"dedicated_heal":
+				player.restore_health(int(effect.get("actual_hp_restored", 0)))
+			"dedicated_area_heal":
+				var restored_by_target: Array = effect.get("actual_hp_restored_by_target", [])
+				if not restored_by_target.is_empty():
+					player.restore_health(int(restored_by_target[0]))
+			"adjacent_push":
+				if target != null and bool(effect.get("displaced", false)):
+					_apply_canonical_displacement(target, target.global_position.direction_to(origin) * -float(effect.get("push_distance_tiles", 1)) * 50.0)
+			"level_gated_push":
+				if target != null and bool(effect.get("displaced", false)):
+					var displacement := direction.normalized() * float(effect.get("push_distance_tiles", 1)) * 50.0
+					_apply_canonical_displacement(target, displacement)
+					_apply_canonical_displacement(player, displacement)
+			"self_damage":
+				_combat_runtime.apply_damage(player, int(effect.get("amount", 1)))
+			"server_random_teleport":
+				if bool(effect.get("moved", false)):
+					var destination := _canonical_tile_to_world(
+						effect.get("destination", Vector2i.ZERO)
+					)
+					if _apply_canonical_player_teleport(destination):
+						_spawn_canonical_teleport_arrival(
+							stable_skill_id,
+							destination,
+							direction
+						)
+			"refreshable_damage_reduction_buff":
+				player.apply_magic_shield(float(effect.get("duration_seconds", 1)), float(effect.get("damage_reduction", 0.0)))
+			"monster_aggro_stealth", "area_monster_aggro_stealth":
+				player.apply_stealth(float(effect.get("duration_seconds", 1)))
+			"friendly_defence_buff":
+				player.apply_defense_buff(float(effect.get("duration_seconds", 1)), int(effect.get("flat_bonus", 1)))
+			"poison_resolution":
+				if target != null and not bool(effect.get("resisted", false)):
+					_apply_canonical_poison(target, effect)
+			"temptation_resolution":
+				if target != null:
+					_apply_canonical_temptation(target, effect)
+			"holy_word_resolution":
+				if target != null and bool(effect.get("instant_kill", false)):
+					_combat_runtime.apply_enemy_physical_damage(target, target.current_hp, player)
+			"hp_information_reveal":
+				if target != null and bool(effect.get("revealed", false)):
+					hud.show_message("%s：生命%d/%d" % [target.display_name, target.current_hp, target.max_hp], 2.0)
+			"monster_boundary_control":
+				if int(effect.get("trapped_count", 0)) > 0:
+					for node: Node in get_tree().get_nodes_in_group("enemies"):
+						if node is EnemyActor and node.global_position.distance_to(_canonical_tile_to_world(target_context.get("target_tile", Vector2i.ZERO))) <= 115.0:
+							node.apply_control(float(effect.get("duration_seconds", 1)))
+			"main_pet_spawn", "recall_existing_main_pet":
+				_apply_canonical_main_pet(effect, stable_skill_id)
+			"next_melee_charge":
+				_set_canonical_fire_charge_expires_at(
+					Time.get_ticks_msec() + maxi(1, int(effect.get("charge_lifetime_ms", 10000)))
+				)
+
+
+func _set_canonical_fire_charge_expires_at(expires_at_ms: int) -> void:
+	_canonical_fire_charge_expires_ms = maxi(0, expires_at_ms)
+	if player != null:
+		player.set_fire_sword_charge_display(_canonical_fire_charge_expires_ms)
+
+
+func _expire_canonical_fire_charge_if_needed() -> void:
+	if (
+		_canonical_fire_charge_expires_ms > 0
+		and Time.get_ticks_msec() >= _canonical_fire_charge_expires_ms
+	):
+		_set_canonical_fire_charge_expires_at(0)
+
+
+func _apply_canonical_spell_damage(
+	stable_skill_id: String,
+	raw_power: int,
+	origin: Vector2,
+	direction: Vector2,
+	effect_type: String,
+	primary: EnemyActor
+) -> bool:
+	var targets: Array[EnemyActor] = []
+	if effect_type == "targeted_sky_strike" and primary != null:
+		targets.append(primary)
+	else:
+		var radial: bool = effect_type in ["area_damage", "caster_centered_area_damage"]
+		var maximum_distance: float = 120.0 if radial else 370.0
+		for node: Node in get_tree().get_nodes_in_group("enemies"):
+			if not node is EnemyActor or node.is_queued_for_deletion():
+				continue
+			var enemy := node as EnemyActor
+			var offset: Vector2 = enemy.global_position - origin
+			var in_arc: bool = offset.length() < 42.0 or offset.normalized().dot(direction.normalized()) > 0.35
+			if offset.length() <= maximum_distance and (radial or in_arc):
+				targets.append(enemy)
+	var hit_any := false
+	for enemy: EnemyActor in targets:
+		var resolution: Dictionary = _combat_runtime.apply_enemy_direct_spell_damage(
+			enemy,
+			stable_skill_id,
+			raw_power,
+			player,
+			_rng,
+			Callable(self, "_resolve_magic_defense")
+		)
+		hit_any = bool(resolution.get("success", false)) or hit_any
+	return hit_any
+
+
+func _spawn_canonical_ground_field(
+	stable_skill_id: String,
+	raw_geometry_cells: Variant,
+	fallback_position: Vector2,
+	effect: Dictionary
+) -> void:
+	var positions: Array[Vector2] = []
+	if raw_geometry_cells is Array:
+		for raw_cell: Variant in raw_geometry_cells:
+			if raw_cell is Vector2i:
+				positions.append(_canonical_tile_to_world(raw_cell))
+	if positions.is_empty():
+		positions.append(fallback_position)
+	for index: int in range(positions.size()):
+		_spawn_canonical_ground_effect(
+			stable_skill_id,
+			positions[index],
+			effect,
+			index == 0
+		)
+
+
+func _spawn_canonical_ground_effect(
+	stable_skill_id: String,
+	position: Vector2,
+	effect: Dictionary,
+	applies_damage := true
+) -> void:
+	var ground_effect := GroundSkillEffect.new()
+	ground_effect.setup(
+		position,
+		maxi(0, int(effect.get("raw_power", 0))),
+		74.0,
+		maxf(0.1, float(effect.get("duration_seconds", 1))),
+		Color(0.45, 0.72, 1.0),
+		stable_skill_id,
+		maxf(0.05, float(effect.get("tick_interval_ms", 1000)) / 1000.0)
+	)
+	ground_effect.configure_runtime_resolution(
+		player,
+		(
+			Callable(self, "_apply_canonical_ground_tick").bind(stable_skill_id)
+			if applies_damage
+			else Callable(self, "_ignore_canonical_ground_visual_tick")
+		)
+	)
+	add_child(ground_effect)
+
+
+func _ignore_canonical_ground_visual_tick(
+	_enemy: EnemyActor,
+	_raw_power: int
+) -> void:
+	pass
+
+
+func _apply_canonical_ground_tick(enemy: EnemyActor, raw_power: int, stable_skill_id: String) -> void:
+	_combat_runtime.apply_enemy_direct_spell_damage(
+		enemy,
+		stable_skill_id,
+		raw_power,
+		player,
+		_rng,
+		Callable(self, "_resolve_magic_defense")
+	)
+
+
+func _apply_canonical_displacement(actor: Node2D, displacement: Vector2) -> bool:
+	if not is_instance_valid(actor):
+		return false
+	var destination := actor.global_position + displacement
+	var collision_radius: float = actor.collision_radius if actor is EnemyActor else ArtSpec.PLAYER_COLLISION_RADIUS
+	if WorldSpatialRulesScript.environment_blocks_actor(background, destination, collision_radius):
+		return false
+	actor.global_position = destination
+	return true
+
+
+func _apply_canonical_player_teleport(destination: Vector2) -> bool:
+	if destination == Vector2.ZERO or WorldSpatialRulesScript.environment_blocks_actor(background, destination, ArtSpec.PLAYER_COLLISION_RADIUS):
+		return false
+	player.global_position = destination
+	player.velocity = Vector2.ZERO
+	player.movement_performed.emit(player.global_position, player.facing)
+	return true
+
+
+func _apply_canonical_poison(target: EnemyActor, effect: Dictionary) -> void:
+	var duration := float(effect.get("duration_seconds", 1))
+	if str(effect.get("poison_type", "")) == "green_poison":
+		target.apply_poison(int(effect.get("damage_per_tick", 1)), duration)
+	else:
+		var reduction := maxi(int(effect.get("flat_ac_reduction", 0)), int(effect.get("flat_mac_reduction", 0)))
+		target.set_meta("canonical_red_poison", {
+			"contract_id": "buff.taoist.red_poison.v1",
+			"flat_reduction": reduction,
+			"expires_at_ms": Time.get_ticks_msec() + roundi(duration * 1000.0),
+		})
+
+
+func _apply_canonical_temptation(target: EnemyActor, effect: Dictionary) -> void:
+	match str(effect.get("outcome", "no_effect")):
+		"rooted":
+			target.apply_control(float(effect.get("duration_seconds", 1)))
+		"confused", "tamed":
+			target.apply_charm(float(effect.get("duration_seconds", float(effect.get("loyalty_duration_ms", 1000)) / 1000.0)))
+		"instant_kill":
+			_combat_runtime.apply_enemy_physical_damage(target, target.current_hp, player)
+
+
+func _canonical_main_pet() -> SummonActor:
+	for node: Node in get_tree().get_nodes_in_group("summons"):
+		if node is SummonActor and node.owner_player == player and bool(node.get_meta("taoist_main_pet", false)):
+			return node
+	return null
+
+
+func _apply_canonical_main_pet(effect: Dictionary, stable_skill_id: String) -> void:
+	var existing := _canonical_main_pet()
+	if str(effect.get("type", "")) == "recall_existing_main_pet" and existing != null:
+		existing.global_position = player.global_position + player.facing.orthogonal() * 42.0
+		return
+	if existing != null or not bool(effect.get("spawned", false)):
+		return
+	var summon_name := "神兽" if str(effect.get("template_id", "")) == "divine_beast" else "骷髅"
+	var summon := SummonActor.new()
+	summon.setup(
+		player,
+		summon_name,
+		maxi(1, _canonical_primary_stat_roll("taoist")),
+		int(effect.get("initial_pet_level", 0)),
+		stable_skill_id,
+		PlayerState.level
+	)
+	summon.set_meta("taoist_main_pet", true)
+	summon.set_meta("taoist_main_pet_contract", "skills.taoist_main_pet.v1")
+	summon.global_position = player.global_position + player.facing.orthogonal() * 42.0
+	add_child(summon)
+
+
+func _spawn_canonical_cast_visual(
+	stable_skill_id: String,
+	origin: Vector2,
+	direction: Vector2,
+	target: EnemyActor,
+	target_position: Vector2
+) -> void:
+	if not stable_skill_id.begins_with("wizard.") and not stable_skill_id.begins_with("taoist."):
+		return
+	var visual_profile := CasterSkillVisualRegistry.profile(stable_skill_id)
+	if (
+		not CasterSkillVisualRegistry.is_runtime_ready(stable_skill_id)
+		or str(visual_profile.get("role", "")) in [
+			CasterSkillVisualRegistry.ROLE_PROJECTILE,
+			CasterSkillVisualRegistry.ROLE_GROUND_EFFECT,
+			CasterSkillVisualRegistry.ROLE_SUMMON_ACTOR,
+		]
+	):
+		return
+	var visual_plan := {
+		"success": true,
+		"skill_id": stable_skill_id,
+		"operation": "canonical_visual_only",
+		"visual": visual_profile,
+		"visual_duration": CasterSkillVisualRegistry.animation_duration(stable_skill_id),
+		"area_radius": 72.0,
+	}
+	for visual_node: Node2D in CasterSkillRuntimeScript.create_cast_nodes(
+		visual_plan,
+		origin,
+		target_position,
+		direction,
+		Color.WHITE,
+		target,
+		player,
+		_canonical_primary_stat_roll("taoist"),
+		PlayerState.level
+	):
+		add_child(visual_node)
+
+
+func _spawn_canonical_teleport_arrival(
+	stable_skill_id: String,
+	destination: Vector2,
+	direction: Vector2
+) -> void:
+	if stable_skill_id != "wizard.teleport":
+		return
+	var visual_profile := CasterSkillVisualRegistry.profile(stable_skill_id)
+	var visual_plan := {
+		"success": true,
+		"skill_id": stable_skill_id,
+		"operation": "canonical_visual_only",
+		"visual": visual_profile,
+		"visual_duration": CasterSkillVisualRegistry.animation_duration(
+			stable_skill_id,
+			"arrival"
+		),
+		"area_radius": 72.0,
+	}
+	var arrival := CasterSkillRuntimeScript.create_visual(
+		visual_plan,
+		destination,
+		direction,
+		player,
+		"arrival"
+	)
+	if arrival != null:
+		add_child(arrival)
+
+
+func _canonical_world_to_tile(world: Vector2) -> Vector2i:
+	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
+	if runtime.is_empty():
+		return Vector2i(roundi(world.x / 48.0), roundi(world.y / 24.0))
+	var tile := MapEditorRuntimeBridgeScript.world_to_tile(runtime, world)
+	return Vector2i(roundi(tile.x), roundi(tile.y))
+
+
+func _canonical_tile_to_world(tile_value: Variant) -> Vector2:
+	var tile := Vector2i(tile_value) if tile_value is Vector2i else Vector2i.ZERO
+	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
+	if runtime.is_empty():
+		return Vector2(float(tile.x) * 48.0, float(tile.y) * 24.0)
+	return MapEditorRuntimeBridgeScript.tile_to_world(runtime, [tile.x, tile.y])
+
+
+func _canonical_facing(direction: Vector2) -> Vector2i:
+	if direction.length_squared() < 0.01:
+		return Vector2i.DOWN
+	return Vector2i(signi(roundi(direction.x)), signi(roundi(direction.y)))
+
+
+func _canonical_primary_stat_roll(profession_id: String) -> int:
+	var minimum_key := "tao_min" if profession_id == "taoist" else ("magic_min" if profession_id == "wizard" else "attack_min")
+	var maximum_key := "tao_max" if profession_id == "taoist" else ("magic_max" if profession_id == "wizard" else "attack_max")
+	var minimum := int(PlayerState.computed_stats.get(minimum_key, 0))
+	var maximum := maxi(minimum, int(PlayerState.computed_stats.get(maximum_key, minimum)))
+	return _rng.randi_range(minimum, maximum)
+
+
+func _next_canonical_seed() -> int:
+	_canonical_cast_serial += 1
+	return hash([Time.get_ticks_msec(), _canonical_cast_serial, PlayerState.active_profile_id])
 
 
 func _skill_needs_target(cast_type: String) -> bool:
 	return cast_type not in ["passive", "heal", "heal_area", "shield", "stealth", "stealth_area", "magic_defense_buff", "defense_buff", "summon", "teleport"]
 
 
-func _spawn_projectile(origin: Vector2, direction: Vector2, damage: int, travel_range: float, color: Color, effect := "damage", effect_strength := 0, effect_duration := 0.0) -> void:
+func _spawn_projectile(
+	origin: Vector2,
+	direction: Vector2,
+	damage: int,
+	travel_range: float,
+	color: Color,
+	effect := "damage",
+	effect_strength := 0,
+	effect_duration := 0.0,
+	source_skill_id := ""
+) -> void:
 	var projectile := SkillProjectile.new()
-	projectile.setup(origin + direction * 24.0, direction, damage, travel_range, color, effect, effect_strength, effect_duration)
+	projectile.setup(
+		origin + direction * 24.0,
+		direction,
+		damage,
+		travel_range,
+		color,
+		effect,
+		effect_strength,
+		effect_duration,
+		source_skill_id
+	)
+	projectile.configure_runtime_resolution(player, Callable(self, "_resolve_magic_defense"))
 	add_child(projectile)
 
 
@@ -1499,7 +2208,15 @@ func _nearest_enemy(origin: Vector2, maximum_distance: float) -> EnemyActor:
 	return nearest
 
 
-func _damage_enemies(origin: Vector2, direction: Vector2, damage: int, radial: bool, attack_range := 105.0, physical_accuracy := false) -> bool:
+func _damage_enemies(
+	origin: Vector2,
+	direction: Vector2,
+	damage: int,
+	radial: bool,
+	attack_range := 105.0,
+	physical_accuracy := false,
+	source_skill_id := ""
+) -> bool:
 	var hit_any := false
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node.is_queued_for_deletion():
@@ -1511,9 +2228,42 @@ func _damage_enemies(origin: Vector2, direction: Vector2, damage: int, radial: b
 				var accuracy := int(PlayerState.computed_stats.get("accuracy", WarriorCombatMath.BASE_HIT))
 				if not WarriorCombatMath.roll_hit(accuracy, node.agility, _rng):
 					continue
-			node.take_damage(damage)
-			hit_any = true
+			var resolved_damage := damage
+			if CombatResolutionRulesScript.anti_magic_eligible(source_skill_id):
+				var resolution: Dictionary = _combat_runtime.apply_enemy_direct_spell_damage(
+					node,
+					source_skill_id,
+					damage,
+					player,
+					_rng,
+					Callable(self, "_resolve_magic_defense")
+				)
+				resolved_damage = int(resolution.get("final_damage", 0))
+				if resolved_damage > 0:
+					hit_any = true
+				continue
+			if resolved_damage <= 0:
+				continue
+			hit_any = _combat_runtime.apply_enemy_physical_damage(node, resolved_damage, player) or hit_any
 	return hit_any
+
+
+func _resolve_magic_defense(_skill_id: String, damage_after_anti_magic: int, target_stats: Dictionary) -> int:
+	var defense_min := int(
+		target_stats.get(
+			"magic_defense_min",
+			target_stats.get("mdefMin", target_stats.get("MinMAC", 0))
+		)
+	)
+	var defense_max := int(
+		target_stats.get(
+			"magic_defense_max",
+			target_stats.get("mdefMax", target_stats.get("MaxMAC", defense_min))
+		)
+	)
+	defense_min = maxi(0, defense_min)
+	defense_max = maxi(defense_min, defense_max)
+	return maxi(0, damage_after_anti_magic - _rng.randi_range(defense_min, defense_max))
 
 
 func _physical_primary_target(origin: Vector2, direction: Vector2, maximum_distance: float) -> EnemyActor:
@@ -1533,14 +2283,15 @@ func _physical_primary_target(origin: Vector2, direction: Vector2, maximum_dista
 	return nearest
 
 
-func _apply_physical_hit(enemy: EnemyActor, damage: int) -> bool:
+func _apply_physical_hit(enemy: EnemyActor, damage: int, accuracy_bonus := 0) -> bool:
 	if enemy == null or enemy.is_queued_for_deletion():
 		return false
 	if not PlayerState.test_mode:
-		var accuracy := int(PlayerState.computed_stats.get("accuracy", WarriorCombatMath.BASE_HIT))
+		var accuracy := int(PlayerState.computed_stats.get("accuracy", WarriorCombatMath.BASE_HIT)) + accuracy_bonus
 		if not WarriorCombatMath.roll_hit(accuracy, enemy.agility, _rng):
 			return false
-	enemy.take_damage(maxi(1, damage), player)
+	if not _combat_runtime.apply_enemy_physical_damage(enemy, maxi(1, damage), player):
+		return false
 	var life_steal_percent := int(PlayerState.computed_stats.get("life_steal_percent", 0))
 	var recovered := int(float(maxi(1, damage)) * float(life_steal_percent) / 100.0)
 	if recovered >= 2:
@@ -1608,7 +2359,7 @@ func _execute_wild_rush(direction: Vector2, skill_level: int) -> bool:
 			blocker.global_position = pushed_position
 			var remaining := maxi(0, max_cells - step - 1)
 			var damage_base := (remaining + 1) * 10
-			blocker.take_damage(damage_base + _rng.randi_range(0, damage_base - 1))
+			_combat_runtime.apply_enemy_physical_damage(blocker, damage_base + _rng.randi_range(0, damage_base - 1), player)
 		player.global_position = next_position
 		moved = true
 	return moved

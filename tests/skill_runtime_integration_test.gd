@@ -1,0 +1,128 @@
+extends Node
+
+var _quick_slot_change_count := 0
+
+
+func _ready() -> void:
+	_run.call_deferred()
+
+
+func _run() -> void:
+	PlayerState.test_mode = true
+	PlayerState.reset_progress()
+	PlayerState.level = 50
+	PlayerState.learned_skills = {
+		"攻杀剑术": 3,
+		"刺杀剑术": 3,
+		"半月弯刀": 3,
+		"烈火剑法": 3,
+		"野蛮冲撞": 3,
+	}
+	PlayerState.quick_slots = ["攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"]
+	PlayerState.recalculate_stats()
+	var game: Node = load("res://scenes/main.tscn").instantiate()
+	add_child(game)
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	PlayerState.quick_slots_changed.connect(_on_quick_slots_changed)
+	game.hud.skill_button_assignment_requested.emit({
+		"contract_id": "ui.skill.button_assignment.v2",
+		"slot_group": "attack_ring",
+		"slot_index": 1,
+		"slot_id": "hud.attack_ring_skill.2",
+		"skill_id": "warrior.wild_rush",
+	})
+	assert(PlayerState.attack_ring_slots[1] == "野蛮冲撞", "HUD新版请求未将野蛮冲撞置换到独立攻击环")
+	assert(PlayerState.quick_slots[1] == "刺杀剑术", "攻击环配置错误改写了中央技能栏")
+	assert(_quick_slot_change_count == 1, "快捷槽置换没有发出唯一稳定状态信号")
+	assert(
+		str(game.hud.attack_ring_skill_icons[1].get_meta("skill_name", "")) == "野蛮冲撞",
+		"攻击环置换后HUD没有立即刷新"
+	)
+	var assignments_after_v2 := PlayerState.skill_button_assignments_snapshot()
+	game.hud.skill_quick_slot_assignment_requested.emit({
+		"contract_id": "ui.skill.quick_slot_assignment.v1",
+		"slot_index": 0,
+		"skill_name": "野蛮冲撞",
+	})
+	assert(
+		PlayerState.skill_button_assignments_snapshot() == assignments_after_v2,
+		"GameRoot错误重复接入旧版快捷槽信号"
+	)
+
+	var player: PlayerCharacter = game.player
+	player.set_test_combat_time_ms(1000)
+	player.restore_warrior_runtime_state(PlayerState.warrior_runtime_state_for_restore())
+	player.current_mp = 40
+	for value: Variant in get_tree().get_nodes_in_group("enemies"):
+		if value is EnemyActor:
+			(value as EnemyActor).global_position = player.global_position + Vector2(2000, 2000)
+	assert(player.request_skill("烈火剑法"), "烈火显式充能无法开始")
+	assert(is_equal_approx(player._attack_action_timer, 0.6), "烈火显式充能未使用SOT 600ms身体动作")
+	assert(is_equal_approx(player._attack_timer, 0.8), "烈火共享动作锁未使用SOT 800ms")
+	assert(player.skill_cooldown_remaining_ms("warrior.fire_sword") == 8000, "烈火独立技能冷却未使用SOT 8秒")
+	await get_tree().create_timer(0.65).timeout
+	var charged_snapshot := player.warrior_state_snapshot()
+	assert(bool(charged_snapshot.fire_armed), "烈火Router结果未同步显式充能状态")
+	assert(int(charged_snapshot.fire_expires_remaining_ms) > 0, "烈火显式充能未导出剩余毫秒")
+	assert(game._canonical_fire_charge_expires_ms > Time.get_ticks_msec(), "烈火canonical结果未建立一次性充能")
+	var mana_after_charge := player.current_mp
+	assert(mana_after_charge == 33, "烈火显式充能未按SOT唯一扣除7点MP")
+	assert(not player.can_start_attack(), "烈火800ms总动作锁错误提前结束")
+	# Advance the remaining lock deterministically; real-time scene actors must
+	# not make this action-lock contract test timing-dependent.
+	player._physics_process(player._attack_timer + 0.01)
+	assert(
+		player.can_start_attack(),
+		"烈火800ms总动作锁结束后仍不能普通攻击：attack=%s action=%s struck=%s reaction=%s control=%s" % [
+			player._attack_timer,
+			player._attack_action_timer,
+			player._struck_lock_remaining,
+			player._struck_reaction_lock_remaining,
+			player.control_time,
+		]
+	)
+	assert(not player.request_skill("烈火剑法"), "烈火独立8秒冷却内错误允许重新充能")
+	assert(player.skill_cooldown_remaining_ms("warrior.wild_rush") == 0, "烈火冷却错误串到其他技能")
+	var far_enemy := _make_enemy(game, player, player.global_position + Vector2(180, 0))
+	game._cancel_target()
+	player.facing = Vector2.RIGHT
+	var mana_before_empty_attack := player.current_mp
+	game._on_player_attack(player.global_position, Vector2.RIGHT, 100)
+	assert(player.current_mp == mana_before_empty_attack, "近战范围内无目标时普通攻击错误消耗烈火")
+	assert(game._canonical_fire_charge_expires_ms > Time.get_ticks_msec(), "空挥后烈火一次性充能被错误清除")
+
+	far_enemy.global_position = player.global_position + Vector2(80, 0)
+	game._on_player_attack(player.global_position, Vector2.RIGHT, 100)
+	assert(player.current_mp == mana_after_charge, "烈火命中时错误二次扣除MP")
+	assert(game._canonical_fire_charge_expires_ms == 0, "烈火命中后一次性充能未消费")
+	var consumed_snapshot := player.warrior_state_snapshot()
+	assert(not bool(consumed_snapshot.fire_armed), "烈火命中消费后展示状态仍为充能")
+	assert(int(consumed_snapshot.fire_expires_remaining_ms) == 0, "烈火命中消费后剩余时间未清零")
+
+	game._set_canonical_fire_charge_expires_at(Time.get_ticks_msec() + 10)
+	assert(bool(player.warrior_state_snapshot().fire_armed), "烈火到期测试未建立展示充能")
+	await get_tree().create_timer(0.03).timeout
+	var expired_snapshot := player.warrior_state_snapshot()
+	assert(game._canonical_fire_charge_expires_ms == 0, "烈火自然到期后GameRoot状态未清零")
+	assert(not bool(expired_snapshot.fire_armed), "烈火自然到期后展示状态仍为充能")
+	assert(int(expired_snapshot.fire_expires_remaining_ms) == 0, "烈火自然到期后剩余时间未清零")
+	assert(player.request_skill("野蛮冲撞"), "烈火独立冷却错误阻塞其他技能")
+
+	PlayerState.quick_slots_changed.disconnect(_on_quick_slots_changed)
+	print("SKILL_RUNTIME_INTEGRATION_PASS：v2独立7槽、单路信号、HUD刷新及烈火SOT显式充能正常")
+	get_tree().quit(0)
+
+
+func _on_quick_slots_changed(_change: Dictionary) -> void:
+	_quick_slot_change_count += 1
+
+
+func _make_enemy(game: Node, player: PlayerCharacter, position: Vector2) -> EnemyActor:
+	var enemy := EnemyActor.new()
+	enemy.setup({"name": "烈火目标", "hp": 9999, "attackMin": 1, "attackMax": 1, "level": 1}, player, false)
+	enemy.global_position = position
+	enemy.control_time = 60.0
+	game.add_child(enemy)
+	return enemy

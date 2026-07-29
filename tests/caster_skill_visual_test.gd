@@ -1,5 +1,7 @@
 extends Node
 
+const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
+
 
 func _ready() -> void:
 	var file := FileAccess.open("res://assets/data/caster_skill_visuals.json", FileAccess.READ)
@@ -10,13 +12,18 @@ func _ready() -> void:
 	assert(manifest.primarySource.source_priority.tier == "primary" and manifest.primarySource.source_priority.weight == 100)
 	assert(manifest.primary_missing_evidence.is_empty())
 	assert(manifest.generated_candidates_retained.is_empty())
-	assert(manifest.assets.size() == 25)
+	assert(manifest.schemaVersion == 4)
+	assert(manifest.animationContract == "caster_skill_animation.v1")
+	assert(manifest.renderContract == "caster_skill_render.v2")
+	assert(manifest.fallbacks_used.is_empty())
+	assert(manifest.primarySource.custom_library_layout == false)
+	assert(manifest.assets.size() == 26)
 	assert(manifest.skillCoverage.size() == 27)
 	assert(manifest.skillCoverage["taoist.spiritual_warfare"].status == "no_runtime_visual")
 	var formal_skill_count := 0
 	for skill_id: String in manifest.skillCoverage:
 		var coverage: Dictionary = manifest.skillCoverage[skill_id]
-		if coverage.status == "formal_primary_client_pixel":
+		if coverage.status == "formal_primary_client_animation":
 			formal_skill_count += 1
 			assert(CasterSkillVisualRegistry.has_formal_visual(skill_id), "%s formal visual is unavailable" % skill_id)
 	assert(formal_skill_count == 26)
@@ -25,12 +32,32 @@ func _ready() -> void:
 		assert(entry.distribution_id == "client.classic_raw_complete")
 		assert(entry.source_priority.tier == "primary")
 		assert(str(entry.original_path).begins_with("Data/"))
-		assert(int(entry.source_index) >= 0 and not str(entry.source_sha256).is_empty())
+		assert(not str(entry.source_sha256).is_empty())
+		assert(entry.animation.contract == "caster_skill_animation.v1")
+		assert(entry.render.contract == "caster_skill_render.v2")
+		assert(int(entry.animation.frame_count) > 0 and int(entry.animation.direction_count) > 0)
+		assert(entry.animation.sequences.size() == int(entry.animation.direction_count))
+		var decoded_frames := 0
+		for sequence: Dictionary in entry.animation.sequences:
+			assert(sequence.frames.size() == int(entry.animation.frame_count))
+			for frame: Dictionary in sequence.frames:
+				decoded_frames += 1
+				assert(int(frame.source_index) >= 0)
+				assert(FileAccess.file_exists("res://%s" % frame.path))
+				assert(not str(frame.png_sha256).is_empty())
+		assert(decoded_frames == int(entry.animation.frame_count) * int(entry.animation.direction_count))
 		var path := "res://%s" % entry.path
-		assert(ResourceLoader.exists(path), "%s was not imported" % path)
-		var texture := load(path) as Texture2D
-		assert(texture != null and texture.get_width() == int(entry.pixel_size[0]) and texture.get_height() == int(entry.pixel_size[1]))
+		assert(FileAccess.file_exists(path), "%s source PNG is missing" % path)
+		var texture := CasterSkillVisualRegistry.load_texture_path(path)
+		assert(texture != null)
 		assert(not texture.get_image().is_empty())
+		assert(entry.icon.derived_only_from_animation_frame)
+		assert(str(entry.icon.selection_rule).contains("luminance_stddev"))
+		assert(str(entry.icon.transform).contains("transparent_96x96_center"))
+		assert(int(entry.icon.selection_metrics.opaque_pixels) > 0)
+		assert(float(entry.icon.selection_metrics.endpoint_filter_ratio) == 0.45)
+		var icon := CasterSkillVisualRegistry.load_texture_path("res://%s" % entry.icon.path)
+		assert(icon != null and icon.get_width() == 96 and icon.get_height() == 96)
 
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
@@ -40,18 +67,45 @@ func _ready() -> void:
 		projectile.setup(Vector2.ZERO, Vector2.RIGHT, 10, 100.0, Color.CYAN, "damage", 0, 0.0, skill_id)
 		add_child(projectile)
 		assert(projectile.skill_id == skill_id and projectile._sprite != null)
+		assert(projectile._sprite.visual_loaded)
 		projectile.queue_free()
 	for skill_id: String in GroundSkillEffect.VISUAL_PATHS:
 		var area := GroundSkillEffect.new()
 		area.setup(Vector2.ZERO, 1, 72.0, 1.0, Color.CYAN, skill_id)
 		add_child(area)
 		assert(area.skill_id == skill_id and area._sprite != null)
+		assert(area._sprite.visual_loaded)
 		area.queue_free()
 	for skill_id: String in CasterSkillVisualRegistry.active_skill_ids():
+		var profile := CasterSkillVisualRegistry.profile(skill_id)
+		if profile.role in ["summon_actor_visual", "projectile", "ground_effect"]:
+			continue
 		var visual := CasterSkillVisualEffect.new()
 		visual.setup(Vector2.ZERO, skill_id, 72.0, 1.0)
 		add_child(visual)
 		assert(visual.skill_id == skill_id and visual.visual_loaded, "%s generic runtime visual did not load" % skill_id)
 		visual.queue_free()
-	print("CASTER_SKILL_VISUAL_PASS: 25 exact primary-client assets cover 26 active caster skills; one passive has no cast visual; zero generated fallbacks; male-only")
+
+	assert(CasterSkillVisualRegistry.direction_index(Vector2.UP) == 0)
+	assert(CasterSkillVisualRegistry.direction_index(Vector2.RIGHT) == 4)
+	assert(CasterSkillVisualRegistry.direction_index(Vector2.DOWN) == 8)
+	assert(CasterSkillVisualRegistry.direction_index(Vector2.LEFT) == 12)
+	assert(CasterSkillVisualRegistry.direction_index(Vector2(4.0, -1.0)) == 4)
+	assert(CasterSkillVisualRegistry.direction_index(Vector2(4.0, -1.01)) == 3)
+	assert(CasterSkillVisualRegistry.direction_index(Vector2(1.0, -4.01)) == 0)
+	var directional := AnimationPlayerScript.new()
+	add_child(directional)
+	assert(directional.configure("wizard.fireball", Vector2.LEFT, 34.0, true))
+	assert(directional.direction_index == 12 and directional.visual_loaded)
+	var original_texture: Texture2D = directional.texture
+	directional._process(0.051)
+	assert(directional.current_frame_index == 1 and directional.texture != original_texture)
+	directional.queue_free()
+	var teleport_arrival := AnimationPlayerScript.new()
+	add_child(teleport_arrival)
+	assert(teleport_arrival.configure("wizard.teleport", Vector2.DOWN, 0.0, null, "arrival"))
+	assert(teleport_arrival.frame_count() == 10)
+	assert(teleport_arrival.texture.get_width() > 0)
+	teleport_arrival.queue_free()
+	print("CASTER_SKILL_VISUAL_PASS: 26 exact primary-client animations/icons cover 26 active caster skills; one passive has no cast visual; zero fallbacks; male-only")
 	get_tree().quit(0)

@@ -1,6 +1,7 @@
-extends CanvasGroup
+extends Node2D
 
-const ACTOR_COMPOSITE_SORT_CONTRACT := "equipment_actor_visual_sort_unit_v1"
+const ACTOR_COMPOSITE_SORT_CONTRACT := EquipmentRules.ACTOR_VISUAL_SORT_CONTRACT_ID
+const HelmetVisualV2 := preload("res://scripts/helmet_visual_v2.gd")
 
 const WARRIOR_SKILL_COLORS := {
 	"攻杀剑术": Color(1.0, 0.82, 0.30, 0.95),
@@ -21,18 +22,15 @@ const CLIENT_EFFECTS := {
 	},
 }
 const CLIENT_EFFECT_ACTOR_OFFSET := Vector2(ArtSpec.WARRIOR_SOURCE_FOOT_ANCHOR - ArtSpec.WARRIOR_FOOT_ANCHOR)
-const BLACK_IRON_HELMET_WORLD_ACTION_PATHS := {
-	"idle": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_idle.png",
-	"walk": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_walk.png",
-	"attack": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_attack.png",
-	"hit": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_hit.png",
-	"death": "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet_death.png",
-}
+const SUPPORTED_PROFESSIONS := ["战士", "法师", "道士"]
 
 var actor: PlayerCharacter
 var sprite: Sprite2D
+var worn_hair_sprite: Sprite2D
 var worn_weapon_sprite: Sprite2D
+var worn_helmet_back_sprite: Sprite2D
 var worn_helmet_sprite: Sprite2D
+var head_occlusion_mask_sprite: Sprite2D
 var hand_r: Marker2D
 var hand_l: Marker2D
 var head: Marker2D
@@ -53,13 +51,25 @@ var _action_duration := 0.0
 var _last_state := ""
 var _action_name := "attack"
 var _action_audio_played := false
+var _base_action_textures: Dictionary = {}
 var _dress_action_textures: Dictionary = {}
+var _hair_action_textures: Dictionary = {}
 var _weapon_action_textures: Dictionary = {}
 var _helmet_action_textures: Dictionary = {}
+var _appearance_texture_cache: Dictionary = {}
+var _v2_layer_texture_cache: Dictionary = {}
+var _body_action_frame_counts: Dictionary = {}
+var _weapon_action_frame_counts: Dictionary = {}
+var _helmet_action_frame_counts: Dictionary = {}
+var _body_frame_size := ArtSpec.WARRIOR_FRAME
+var _body_source_anchor := ArtSpec.WARRIOR_SOURCE_FOOT_ANCHOR
 var _weapon_frame_size := ArtSpec.WARRIOR_FRAME
 var _weapon_source_anchor := ArtSpec.WARRIOR_SOURCE_FOOT_ANCHOR
 var _weapon_attack_source_frames: Array = []
-var _weapon_mapping_known := false
+var _equipment_layer_direction := -1
+var _formal_base_loaded := false
+var _helmet_item_id := -1
+var _helmet_player_visual_id := "player.male.cloth_002"
 
 
 func setup(owner_actor: PlayerCharacter) -> void:
@@ -84,22 +94,27 @@ func _ready() -> void:
 	sprite.centered = false
 	sprite.position = -Vector2(ArtSpec.CHARACTER_FOOT_ANCHOR)
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.z_index = 0
 	add_child(sprite)
+	worn_hair_sprite = _helmet_sprite_layer("ClientHairLayer")
 	worn_weapon_sprite = Sprite2D.new()
 	worn_weapon_sprite.name = "ClientWeaponLayer"
 	worn_weapon_sprite.region_enabled = true
 	worn_weapon_sprite.centered = false
 	worn_weapon_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	worn_weapon_sprite.visible = false
+	worn_weapon_sprite.z_index = 0
 	add_child(worn_weapon_sprite)
+	worn_helmet_back_sprite = _helmet_sprite_layer("ClientHelmetBackLayer")
 	worn_helmet_sprite = Sprite2D.new()
 	worn_helmet_sprite.name = "ClientHelmetLayer"
 	worn_helmet_sprite.region_enabled = true
 	worn_helmet_sprite.centered = false
 	worn_helmet_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	worn_helmet_sprite.visible = false
-	worn_helmet_sprite.z_index = 2
+	worn_helmet_sprite.z_index = 0
 	add_child(worn_helmet_sprite)
+	head_occlusion_mask_sprite = _helmet_sprite_layer("HeadOcclusionMaskLayer")
 	hand_r = _marker("hand_r")
 	hand_l = _marker("hand_l")
 	head = _marker("head")
@@ -115,7 +130,7 @@ func _ready() -> void:
 	skill_effect_sprite.centered = false
 	skill_effect_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	skill_effect_sprite.visible = false
-	skill_effect_sprite.z_index = 1
+	skill_effect_sprite.z_index = 0
 	add_child(skill_effect_sprite)
 	weapon_audio = AudioStreamPlayer2D.new()
 	weapon_audio.name = "WeaponAudio"
@@ -124,6 +139,8 @@ func _ready() -> void:
 	add_child(weapon_audio)
 	if not PlayerState.equipment_changed.is_connected(_refresh_equipment_visuals):
 		PlayerState.equipment_changed.connect(_refresh_equipment_visuals)
+	if not GameData.database_reloaded.is_connected(_on_database_reloaded):
+		GameData.database_reloaded.connect(_on_database_reloaded)
 	_refresh_equipment_visuals()
 	_update_visibility()
 
@@ -137,34 +154,40 @@ func _process(delta: float) -> void:
 	_action_remaining = maxf(0.0, _action_remaining - delta)
 	current_state = "action" if _action_remaining > 0.0 else ("walk" if actor.velocity.length_squared() > 25.0 else "idle")
 	# 移动时以实际速度为最高优先级，避免自动目标/战斗朝向覆盖行走动画方向。
-	var visual_direction: Vector2 = actor.movement_facing if actor.movement_input_active and current_state == "walk" else actor.facing
 	current_direction = _resolved_direction_row()
 	if current_state != _last_state:
 		_elapsed = 0.0
 		_last_state = current_state
 	_elapsed += delta
 	var fps := 12.0 if current_state == "action" else (10.0 if current_state == "walk" else 6.0)
-	var frame_count := _current_frame_count()
-	if current_state == "action":
-		match _action_name:
-			"attack": frame_count = _warrior_or_default_frames(&"attack")
-			"hit": frame_count = _warrior_or_default_frames(&"hit")
-			"death": frame_count = _warrior_or_default_frames(&"death")
-			_: frame_count = _warrior_or_default_frames(&"attack") if _is_warrior_attack_action(_action_name) else _warrior_or_default_frames(&"idle")
+	var action_key := _visual_action_key()
+	var frame_count := _frame_count_for_action(action_key)
 	if current_state == "action":
 		var progress := clampf(_elapsed / maxf(_action_duration, 0.001), 0.0, 0.999)
 		current_frame = mini(frame_count - 1, int(floor(progress * frame_count)))
 	else:
 		current_frame = int(floor(_elapsed * fps)) % frame_count
-	var action_key := _visual_action_key()
 	sprite.texture = _dress_action_textures.get(action_key, _default_body_texture(action_key))
-	var frame_size := ArtSpec.CHARACTER_FRAME
-	var foot_anchor := ArtSpec.CHARACTER_FOOT_ANCHOR
-	if visible:
-		frame_size = ArtSpec.WARRIOR_FRAME
-		foot_anchor = ArtSpec.WARRIOR_FOOT_ANCHOR
-	sprite.position = -Vector2(foot_anchor)
-	sprite.region_rect = Rect2(current_frame * frame_size.x, current_direction * frame_size.y, frame_size.x, frame_size.y)
+	sprite.position = Vector2(
+		ArtSpec.WARRIOR_SOURCE_FOOT_ANCHOR - ArtSpec.WARRIOR_FOOT_ANCHOR - _body_source_anchor
+	)
+	sprite.region_rect = Rect2(
+		current_frame * _body_frame_size.x,
+		current_direction * _body_frame_size.y,
+		_body_frame_size.x,
+		_body_frame_size.y
+	)
+	var hair_texture: Texture2D = _hair_action_textures.get(
+		action_key, null
+	)
+	worn_hair_sprite.texture = hair_texture
+	worn_hair_sprite.visible = (
+		PlayerState.gender == "男" and hair_texture != null
+	)
+	worn_hair_sprite.position = sprite.position
+	worn_hair_sprite.region_rect = sprite.region_rect
+	worn_hair_sprite.scale = Vector2.ONE
+	worn_hair_sprite.flip_h = false
 	var weapon_texture: Texture2D = _weapon_action_textures.get(action_key, null)
 	worn_weapon_sprite.texture = weapon_texture
 	worn_weapon_sprite.visible = weapon_texture != null
@@ -174,16 +197,67 @@ func _process(delta: float) -> void:
 		ArtSpec.WARRIOR_SOURCE_FOOT_ANCHOR - ArtSpec.WARRIOR_FOOT_ANCHOR - _weapon_source_anchor
 	)
 	worn_weapon_sprite.region_rect = Rect2(
-		current_frame * _weapon_frame_size.x,
+		_layer_frame(action_key, _weapon_action_frame_counts) * _weapon_frame_size.x,
 		current_direction * _weapon_frame_size.y,
 		_weapon_frame_size.x,
 		_weapon_frame_size.y
 	)
-	var helmet_texture: Texture2D = _helmet_action_textures.get(action_key, null)
+	var helmet_source_row := HelmetVisualV2.source_direction_row(_helmet_item_id, current_direction)
+	var helmet_frame := _layer_frame(action_key, _helmet_action_frame_counts)
+	var v2_front_texture := _v2_layer_texture(
+		_helmet_item_id, action_key, current_direction, "helmet_front"
+	)
+	var helmet_texture: Texture2D = (
+		v2_front_texture
+		if v2_front_texture != null
+		else _helmet_action_textures.get(action_key, null)
+	)
 	worn_helmet_sprite.texture = helmet_texture
-	worn_helmet_sprite.visible = helmet_texture != null
-	worn_helmet_sprite.position = sprite.position
-	worn_helmet_sprite.region_rect = sprite.region_rect
+	worn_helmet_sprite.visible = (
+		EquipmentRules.world_helmet_is_visible()
+		and helmet_texture != null
+	)
+	var helmet_delta := HelmetVisualV2.final_position_delta(
+		_helmet_item_id,
+		_helmet_player_visual_id,
+		action_key,
+		current_direction,
+		helmet_frame
+	)
+	worn_helmet_sprite.position = sprite.position + Vector2(helmet_delta)
+	worn_helmet_sprite.scale = Vector2.ONE
+	worn_helmet_sprite.flip_h = false
+	worn_helmet_sprite.region_rect = Rect2(
+		helmet_frame * _body_frame_size.x,
+		helmet_source_row * _body_frame_size.y,
+		_body_frame_size.x,
+		_body_frame_size.y
+	)
+	var back_texture := _v2_layer_texture(
+		_helmet_item_id, action_key, current_direction, "helmet_back"
+	)
+	var mask_texture := _v2_layer_texture(
+		_helmet_item_id, action_key, current_direction, "head_occlusion_mask"
+	)
+	_update_optional_helmet_layer(
+		worn_helmet_back_sprite,
+		back_texture,
+		worn_helmet_sprite
+	)
+	_update_optional_helmet_layer(
+		head_occlusion_mask_sprite,
+		mask_texture,
+		worn_helmet_sprite,
+		false
+	)
+	if (
+		EquipmentRules.world_helmet_head_mask_enabled()
+		and worn_helmet_sprite.visible
+		and mask_texture != null
+	):
+		_apply_current_head_occlusion_mask(
+			mask_texture, helmet_source_row, helmet_frame, helmet_delta
+		)
 	_update_markers()
 	_update_equipment_layers()
 	_update_skill_effect()
@@ -224,7 +298,7 @@ func play_death(duration := 0.8) -> void:
 
 
 func uses_final_art() -> bool:
-	return visible and sprite != null and sprite.texture != null
+	return visible and _formal_base_loaded and sprite != null and sprite.texture != null
 
 
 func health_bar_anchor() -> Vector2:
@@ -240,7 +314,7 @@ func refresh_profession() -> void:
 
 
 func _update_visibility() -> void:
-	visible = PlayerState.profession == "战士"
+	visible = PlayerState.profession in SUPPORTED_PROFESSIONS and _formal_base_loaded
 
 
 func _marker(marker_name: String) -> Marker2D:
@@ -248,6 +322,57 @@ func _marker(marker_name: String) -> Marker2D:
 	marker.name = marker_name
 	add_child(marker)
 	return marker
+
+
+func _helmet_sprite_layer(layer_name: String) -> Sprite2D:
+	var layer := Sprite2D.new()
+	layer.name = layer_name
+	layer.region_enabled = true
+	layer.centered = false
+	layer.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	layer.visible = false
+	layer.z_index = 0
+	layer.scale = Vector2.ONE
+	layer.flip_h = false
+	add_child(layer)
+	return layer
+
+
+func _update_optional_helmet_layer(
+	layer: Sprite2D,
+	texture: Texture2D,
+	front_layer: Sprite2D,
+	draw_as_sprite: bool = true
+) -> void:
+	layer.texture = texture
+	# A head-occlusion mask is executable alpha data, never a visible colored
+	# sprite. The layer node remains available for calibration/debug inspection.
+	layer.visible = draw_as_sprite and texture != null and front_layer.visible
+	layer.position = front_layer.position
+	layer.region_rect = front_layer.region_rect
+	layer.scale = Vector2.ONE
+	layer.flip_h = false
+
+
+func _apply_current_head_occlusion_mask(
+	mask_texture: Texture2D,
+	source_row: int,
+	frame_index: int,
+	helmet_delta: Vector2i
+) -> void:
+	if sprite.texture == null:
+		return
+	var body_rect := Rect2i(sprite.region_rect)
+	var body_cell := sprite.texture.get_image().get_region(body_rect)
+	var mask_cell := mask_texture.get_image().get_region(Rect2i(
+		frame_index * _body_frame_size.x,
+		source_row * _body_frame_size.y,
+		_body_frame_size.x,
+		_body_frame_size.y
+	))
+	var masked := HelmetVisualV2.apply_alpha_mask(body_cell, mask_cell, helmet_delta)
+	sprite.texture = ImageTexture.create_from_image(masked)
+	sprite.region_rect = Rect2(Vector2.ZERO, _body_frame_size)
 
 
 func _line_layer(layer_name: String, width: float) -> Line2D:
@@ -291,24 +416,36 @@ func _visual_action_key() -> String:
 		return "hit"
 	if current_state == "action" and _action_name == "death":
 		return "death"
+	if current_state == "action" and _action_name == "cast":
+		return "cast"
 	if current_state == "action" and _is_warrior_attack_action(_action_name):
 		return "attack"
 	return "idle"
 
 
 func _default_body_texture(action_key: String) -> Texture2D:
+	var formal: Texture2D = _base_action_textures.get(action_key, null)
+	if formal != null:
+		return formal
 	match action_key:
 		"walk": return PresentationAssets.player_texture("walk")
 		"attack": return PresentationAssets.player_texture("attack")
+		"cast": return PresentationAssets.player_texture("idle")
 		"hit": return PresentationAssets.player_texture("hit")
 		"death": return PresentationAssets.player_texture("death")
 		_: return PresentationAssets.player_texture("idle")
 
 
 func _current_frame_count() -> int:
-	if current_state == "walk":
-		return _warrior_or_default_frames(&"walk")
-	return _warrior_or_default_frames(&"idle")
+	return _frame_count_for_action("walk" if current_state == "walk" else "idle")
+
+
+func _frame_count_for_action(action_key: String) -> int:
+	return maxi(1, int(_body_action_frame_counts.get(action_key, _warrior_or_default_frames(StringName(action_key)))))
+
+
+func _layer_frame(action_key: String, frame_counts: Dictionary) -> int:
+	return mini(current_frame, maxi(1, int(frame_counts.get(action_key, 1))) - 1)
 
 
 func _warrior_or_default_frames(state: StringName) -> int:
@@ -355,9 +492,71 @@ func _load_appearance_actions(source: Variant) -> Dictionary:
 	for action_name: String in actions.keys():
 		var action: Variant = actions[action_name]
 		var path := str(action.get("path", "")) if action is Dictionary else str(action)
-		if not path.is_empty() and ResourceLoader.exists(path):
-			result[action_name] = load(path) as Texture2D
+		if path.is_empty():
+			continue
+		if not _appearance_texture_cache.has(path):
+			if ResourceLoader.exists(path):
+				_appearance_texture_cache[path] = load(path) as Texture2D
+			elif FileAccess.file_exists(path) and path.get_extension().to_lower() == "png":
+				var raw_image := Image.load_from_file(path)
+				if not raw_image.is_empty():
+					_appearance_texture_cache[path] = ImageTexture.create_from_image(
+						raw_image
+					)
+		var texture: Texture2D = _appearance_texture_cache.get(path, null)
+		if texture != null:
+			result[action_name] = texture
+	var fallbacks: Variant = source.get("actionFallbacks", {})
+	if fallbacks is Dictionary:
+		for action_name: String in fallbacks:
+			var fallback_name := str(fallbacks[action_name])
+			if not result.has(action_name) and result.has(fallback_name):
+				result[action_name] = result[fallback_name]
 	return result
+
+
+func _appearance_frame_counts(source: Variant) -> Dictionary:
+	var result: Dictionary = {}
+	if not source is Dictionary:
+		return result
+	var actions: Variant = source.get("actions", {})
+	if actions is Dictionary:
+		for action_name: String in actions:
+			var action: Variant = actions[action_name]
+			if action is Dictionary:
+				result[action_name] = maxi(1, int(action.get("framesPerDirection", 1)))
+	var fallbacks: Variant = source.get("actionFallbacks", {})
+	if fallbacks is Dictionary:
+		for action_name: String in fallbacks:
+			var fallback_name := str(fallbacks[action_name])
+			if not result.has(action_name) and result.has(fallback_name):
+				result[action_name] = result[fallback_name]
+	return result
+
+
+func _v2_layer_texture(
+	item_id: int,
+	action_name: String,
+	direction_row: int,
+	layer_name: String
+) -> Texture2D:
+	if item_id < 0:
+		return null
+	var path := HelmetVisualV2.action_texture_path(
+		item_id, action_name, direction_row, layer_name
+	)
+	if path.is_empty():
+		return null
+	if not _v2_layer_texture_cache.has(path):
+		if ResourceLoader.exists(path):
+			_v2_layer_texture_cache[path] = load(path) as Texture2D
+		elif FileAccess.file_exists(path) and path.get_extension().to_lower() == "png":
+			var raw_image := Image.load_from_file(path)
+			if not raw_image.is_empty():
+				_v2_layer_texture_cache[path] = ImageTexture.create_from_image(
+					raw_image
+				)
+	return _v2_layer_texture_cache.get(path, null)
 
 
 func _appearance_layout(source: Variant) -> Dictionary:
@@ -384,21 +583,94 @@ func _appearance_layout(source: Variant) -> Dictionary:
 	return fallback
 
 
+func _stable_item_id_for_equipped(record: Dictionary, item: Dictionary) -> int:
+	# Current saves use item_id while older equipment instances may use itemId.
+	# Prefer either stable ID over all display-name fields.
+	for field_name: String in ["item_id", "itemId"]:
+		var raw_id: Variant = record.get(field_name, null)
+		if raw_id is int or raw_id is float:
+			var numeric_id := int(raw_id)
+			if numeric_id >= 0:
+				return numeric_id
+		var text_id := str(raw_id)
+		if text_id.is_valid_int() and text_id.to_int() >= 0:
+			return text_id.to_int()
+	if not item.is_empty():
+		var item_id := int(item.get("itemId", -1))
+		if item_id >= 0:
+			return item_id
+	# Name-only archives are resolved by an exact formal-catalog itemName match.
+	# Never guess from aliases or consult a lower-priority source.
+	var formal_items: Variant = GameData.equipment_visual_catalog.get("itemsById", {})
+	if not formal_items is Dictionary:
+		return -1
+	for field_name: String in ["name", "itemName"]:
+		var exact_name := str(record.get(field_name, ""))
+		if exact_name.is_empty():
+			continue
+		for item_key: Variant in formal_items:
+			var formal_item: Variant = formal_items[item_key]
+			if formal_item is Dictionary and str(formal_item.get("itemName", "")) == exact_name:
+				var item_key_text := str(item_key)
+				if item_key_text.is_valid_int():
+					return item_key_text.to_int()
+	return -1
+
+
+func _item_record_for_equipped(record: Dictionary) -> Dictionary:
+	for field_name: String in ["name", "itemName"]:
+		var exact_name := str(record.get(field_name, ""))
+		if exact_name.is_empty():
+			continue
+		var item := GameData.get_item(exact_name)
+		if not item.is_empty():
+			return item
+	return {}
+
+
+func _resolved_item_appearance(
+	record: Dictionary,
+	item: Dictionary,
+	appearance_type: String,
+	legacy_art: Dictionary
+) -> Dictionary:
+	var stable_item_id := _stable_item_id_for_equipped(record, item)
+	if stable_item_id >= 0:
+		var resolved := GameData.item_world_appearance(stable_item_id, PlayerState.gender)
+		if not resolved.is_empty():
+			if str(resolved.get("appearanceType", "")) == appearance_type:
+				var appearance: Variant = resolved.get("appearance", {})
+				return appearance if appearance is Dictionary else {}
+			return {}
+	var legacy: Variant = legacy_art.get(appearance_type, {})
+	return legacy if legacy is Dictionary else {}
+
+
 func _refresh_equipment_visuals() -> void:
 	if weapon_accent == null:
 		return
+	var base_appearance := GameData.player_base_appearance(PlayerState.profession, PlayerState.gender)
+	_base_action_textures = _load_appearance_actions(base_appearance)
+	_formal_base_loaded = not _base_action_textures.is_empty()
 	var weapon := _equipped_record("武器")
 	var armor := _equipped_record("衣服")
 	var helmet := _equipped_record("头盔")
-	var weapon_item := GameData.get_item(str(weapon.get("name", "")))
-	var armor_item := GameData.get_item(str(armor.get("name", "")))
-	var helmet_item := GameData.get_item(str(helmet.get("name", "")))
+	var weapon_item := _item_record_for_equipped(weapon)
+	var armor_item := _item_record_for_equipped(armor)
+	var helmet_item := _item_record_for_equipped(helmet)
+	var armor_item_id := _stable_item_id_for_equipped(armor, armor_item)
+	_helmet_item_id = _stable_item_id_for_equipped(helmet, helmet_item)
+	# V2's first calibrated player visual is explicitly male Cloth. Other body
+	# visuals retain the established full-cell behavior until they receive their
+	# own action/direction/frame socket database.
+	if armor_item_id != 116 or PlayerState.gender != "男":
+		_helmet_item_id = -1
 	var weapon_art: Dictionary = weapon_item.get("art", {}) if weapon_item is Dictionary else {}
 	var armor_art: Dictionary = armor_item.get("art", {}) if armor_item is Dictionary else {}
 	var helmet_art: Dictionary = helmet_item.get("art", {}) if helmet_item is Dictionary else {}
-	_weapon_mapping_known = weapon_art.has("weaponAppearance")
-	var weapon_appearance: Variant = weapon_art.get("weaponAppearance", {})
+	var weapon_appearance := _resolved_item_appearance(weapon, weapon_item, "weaponAppearance", weapon_art)
 	_weapon_action_textures = _load_appearance_actions(weapon_appearance)
+	_weapon_action_frame_counts = _appearance_frame_counts(weapon_appearance)
 	var weapon_layout := _appearance_layout(weapon_appearance)
 	_weapon_frame_size = weapon_layout.get("cell", ArtSpec.WARRIOR_FRAME)
 	_weapon_source_anchor = weapon_layout.get("foot_anchor", ArtSpec.WARRIOR_SOURCE_FOOT_ANCHOR)
@@ -407,17 +679,41 @@ func _refresh_equipment_visuals() -> void:
 		var attack_action: Variant = weapon_appearance.get("actions", {}).get("attack", {})
 		if attack_action is Dictionary:
 			_weapon_attack_source_frames = attack_action.get("sourceFrames", [])
-	_dress_action_textures = _load_appearance_actions(armor_art.get("dressAppearance", {}))
+	var dress_appearance := _resolved_item_appearance(armor, armor_item, "dressAppearance", armor_art)
+	_dress_action_textures = _load_appearance_actions(dress_appearance)
+	var body_appearance: Dictionary = dress_appearance if not _dress_action_textures.is_empty() else base_appearance
+	_body_action_frame_counts = _appearance_frame_counts(body_appearance)
+	var body_layout := _appearance_layout(body_appearance)
+	_body_frame_size = body_layout.get("cell", ArtSpec.WARRIOR_FRAME)
+	_body_source_anchor = body_layout.get("foot_anchor", ArtSpec.WARRIOR_SOURCE_FOOT_ANCHOR)
+	_hair_action_textures = _load_appearance_actions(
+		EquipmentRules.world_hair_appearance()
+	)
 	# Never draw the old geometric weapon placeholder.  Together with the body
 	# attack frame it formed the unwanted V-shaped default attack artifact.
 	weapon_accent.visible = false
-	armor_accent.visible = _record_is_equipped(armor) and _dress_action_textures.is_empty()
+	# Missing client world layers keep the exact formal body; they never fall
+	# back to geometric armor placeholders.
+	armor_accent.visible = false
 	# The old translucent polygon was prototype feedback and appeared as a
 	# floating blob beside the head/health bar. Use decoded client helmet art.
 	helmet_accent.visible = false
-	_helmet_action_textures = _load_world_helmet_actions(helmet, helmet_art)
+	var helmet_appearance := _resolved_item_appearance(helmet, helmet_item, "helmetAppearance", helmet_art)
+	_helmet_action_textures = _load_appearance_actions(helmet_appearance)
+	_helmet_action_frame_counts = _appearance_frame_counts(helmet_appearance)
+	_v2_layer_texture_cache.clear()
 	worn_helmet_sprite.texture = _helmet_action_textures.get("idle", null)
-	worn_helmet_sprite.visible = _record_is_equipped(helmet) and worn_helmet_sprite.texture != null
+	worn_helmet_sprite.visible = (
+		EquipmentRules.world_helmet_is_visible()
+		and _record_is_equipped(helmet)
+		and worn_helmet_sprite.texture != null
+	)
+	worn_helmet_back_sprite.visible = false
+	head_occlusion_mask_sprite.visible = false
+	worn_hair_sprite.texture = _hair_action_textures.get("idle", null)
+	worn_hair_sprite.visible = (
+		PlayerState.gender == "男" and worn_hair_sprite.texture != null
+	)
 	if weapon_accent.visible:
 		weapon_accent.default_color = _equipment_color(weapon)
 	if armor_accent.visible:
@@ -426,6 +722,7 @@ func _refresh_equipment_visuals() -> void:
 		armor_accent.color = armor_color
 	if worn_helmet_sprite.visible:
 		worn_helmet_sprite.position = head.position
+	_update_visibility()
 
 
 func _update_equipment_layers() -> void:
@@ -436,35 +733,59 @@ func _update_equipment_layers() -> void:
 		direction = Vector2.DOWN
 	weapon_accent.points = PackedVector2Array([hand_r.position, hand_r.position + direction * 42.0])
 	weapon_accent.visible = false
-	if worn_weapon_sprite != null:
-		# MIR2 rows are N, NE, E, SE, S, SW, W, NW. The weapon is behind the
-		# body only while facing away from the camera, including NW (row 7).
-		worn_weapon_sprite.z_index = -1 if weapon_draws_behind(current_direction) else 1
+	if (
+		sprite != null
+		and worn_hair_sprite != null
+		and worn_weapon_sprite != null
+		and worn_helmet_back_sprite != null
+		and worn_helmet_sprite != null
+		and head_occlusion_mask_sprite != null
+		and _equipment_layer_direction != current_direction
+	):
+		# All appearance children must remain on the actor/wall Z=0 plane. Classic
+		# front/back overlap is expressed only by sibling order, otherwise a positive
+		# equipment Z escapes the wall-front Y-sort domain and appears through walls.
+		var layers := {
+			&"helmet_back": worn_helmet_back_sprite,
+			EquipmentRules.ACTOR_VISUAL_BODY_LAYER: sprite,
+			EquipmentRules.ACTOR_VISUAL_HAIR_LAYER: worn_hair_sprite,
+			EquipmentRules.ACTOR_VISUAL_WEAPON_LAYER: worn_weapon_sprite,
+			EquipmentRules.ACTOR_VISUAL_HELMET_LAYER: worn_helmet_sprite,
+			&"head_occlusion_mask": head_occlusion_mask_sprite,
+		}
+		var layer_order: Array[StringName]
+		if EquipmentRules.weapon_draws_behind_actor(current_direction):
+			layer_order = [
+				EquipmentRules.ACTOR_VISUAL_WEAPON_LAYER,
+				&"helmet_back",
+				EquipmentRules.ACTOR_VISUAL_BODY_LAYER,
+				EquipmentRules.ACTOR_VISUAL_HAIR_LAYER,
+				EquipmentRules.ACTOR_VISUAL_HELMET_LAYER,
+				&"head_occlusion_mask",
+			]
+		else:
+			layer_order = [
+				&"helmet_back",
+				EquipmentRules.ACTOR_VISUAL_BODY_LAYER,
+				EquipmentRules.ACTOR_VISUAL_HAIR_LAYER,
+				EquipmentRules.ACTOR_VISUAL_WEAPON_LAYER,
+				EquipmentRules.ACTOR_VISUAL_HELMET_LAYER,
+				&"head_occlusion_mask",
+			]
+		for layer_index: int in range(layer_order.size()):
+			move_child(layers[layer_order[layer_index]], layer_index)
+		_equipment_layer_direction = current_direction
 	# Helmet and body use the same 192x160 directional atlas grid.  Its region
 	# is updated with the body each frame, so it stays on the actual head rather
 	# than becoming an independent icon beside the health bar.
 
 
 func weapon_draws_behind(direction_row: int) -> bool:
-	return direction_row in [7, 0, 1]
+	return EquipmentRules.weapon_draws_behind_actor(direction_row)
 
 
-func _load_world_helmet_actions(record: Dictionary, art: Dictionary) -> Dictionary:
-	# Prefer data-driven mappings when more helmet sets are added. StateItem is
-	# deliberately excluded because it is equipment-window artwork, not world
-	# actor animation data.
-	var mapped := _load_appearance_actions(art.get("helmetAppearance", {}))
-	if not mapped.is_empty():
-		return mapped
-	if str(record.get("name", "")) != "黑铁头盔":
-		return {}
-	var actions: Dictionary = {}
-	for action_name: String in BLACK_IRON_HELMET_WORLD_ACTION_PATHS:
-		var path := str(BLACK_IRON_HELMET_WORLD_ACTION_PATHS[action_name])
-		if not ResourceLoader.exists(path):
-			return {}
-		actions[action_name] = load(path) as Texture2D
-	return actions
+func _on_database_reloaded() -> void:
+	_refresh_equipment_visuals()
 
 
 func _update_skill_effect() -> void:
