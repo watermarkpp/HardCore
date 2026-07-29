@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c43ig8sd215a"
-path.s3tc="res://.godot/imported/wooma_soldier_attack.png-9a18671fa88ac70d47d94db92df93abd.s3tc.ctex"
-path.etc2="res://.godot/imported/wooma_soldier_attack.png-9a18671fa88ac70d47d94db92df93abd.etc2.ctex"
+path="res://.godot/imported/wooma_soldier_attack.png-9a18671fa88ac70d47d94db92df93abd.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_bich_common/wooma_soldier/wooma_soldier_attack.png"
-dest_files=["res://.godot/imported/wooma_soldier_attack.png-9a18671fa88ac70d47d94db92df93abd.s3tc.ctex", "res://.godot/imported/wooma_soldier_attack.png-9a18671fa88ac70d47d94db92df93abd.etc2.ctex"]
+dest_files=["res://.godot/imported/wooma_soldier_attack.png-9a18671fa88ac70d47d94db92df93abd.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

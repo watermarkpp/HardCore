@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bjnaqbnpbfmq2"
-path.s3tc="res://.godot/imported/wooma_warrior_idle.png-9e0c82176bb4d77578adc2b61f5a2b3a.s3tc.ctex"
-path.etc2="res://.godot/imported/wooma_warrior_idle.png-9e0c82176bb4d77578adc2b61f5a2b3a.etc2.ctex"
+path="res://.godot/imported/wooma_warrior_idle.png-9e0c82176bb4d77578adc2b61f5a2b3a.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_bich_common/wooma_warrior/wooma_warrior_idle.png"
-dest_files=["res://.godot/imported/wooma_warrior_idle.png-9e0c82176bb4d77578adc2b61f5a2b3a.s3tc.ctex", "res://.godot/imported/wooma_warrior_idle.png-9e0c82176bb4d77578adc2b61f5a2b3a.etc2.ctex"]
+dest_files=["res://.godot/imported/wooma_warrior_idle.png-9e0c82176bb4d77578adc2b61f5a2b3a.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

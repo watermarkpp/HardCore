@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bxsqymjvjodir"
-path.s3tc="res://.godot/imported/strawman_death.png-57d33974ef3ff1551b54ca9f9d1ee6a0.s3tc.ctex"
-path.etc2="res://.godot/imported/strawman_death.png-57d33974ef3ff1551b54ca9f9d1ee6a0.etc2.ctex"
+path="res://.godot/imported/strawman_death.png-57d33974ef3ff1551b54ca9f9d1ee6a0.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_bich_common/strawman/strawman_death.png"
-dest_files=["res://.godot/imported/strawman_death.png-57d33974ef3ff1551b54ca9f9d1ee6a0.s3tc.ctex", "res://.godot/imported/strawman_death.png-57d33974ef3ff1551b54ca9f9d1ee6a0.etc2.ctex"]
+dest_files=["res://.godot/imported/strawman_death.png-57d33974ef3ff1551b54ca9f9d1ee6a0.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

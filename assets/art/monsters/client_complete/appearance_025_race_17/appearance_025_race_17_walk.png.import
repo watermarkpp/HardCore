@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://v7q0xkm1nsy5"
-path.s3tc="res://.godot/imported/appearance_025_race_17_walk.png-6533f020a4709496a8b85d2bebded6a9.s3tc.ctex"
-path.etc2="res://.godot/imported/appearance_025_race_17_walk.png-6533f020a4709496a8b85d2bebded6a9.etc2.ctex"
+path="res://.godot/imported/appearance_025_race_17_walk.png-6533f020a4709496a8b85d2bebded6a9.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_complete/appearance_025_race_17/appearance_025_race_17_walk.png"
-dest_files=["res://.godot/imported/appearance_025_race_17_walk.png-6533f020a4709496a8b85d2bebded6a9.s3tc.ctex", "res://.godot/imported/appearance_025_race_17_walk.png-6533f020a4709496a8b85d2bebded6a9.etc2.ctex"]
+dest_files=["res://.godot/imported/appearance_025_race_17_walk.png-6533f020a4709496a8b85d2bebded6a9.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

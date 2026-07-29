@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bbu878fjmw4gr"
-path.s3tc="res://.godot/imported/scorpion_walk.png-3ab70fb49bab8cfbe6578ccfce2bc6a6.s3tc.ctex"
-path.etc2="res://.godot/imported/scorpion_walk.png-3ab70fb49bab8cfbe6578ccfce2bc6a6.etc2.ctex"
+path="res://.godot/imported/scorpion_walk.png-3ab70fb49bab8cfbe6578ccfce2bc6a6.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_bich_common/scorpion/scorpion_walk.png"
-dest_files=["res://.godot/imported/scorpion_walk.png-3ab70fb49bab8cfbe6578ccfce2bc6a6.s3tc.ctex", "res://.godot/imported/scorpion_walk.png-3ab70fb49bab8cfbe6578ccfce2bc6a6.etc2.ctex"]
+dest_files=["res://.godot/imported/scorpion_walk.png-3ab70fb49bab8cfbe6578ccfce2bc6a6.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cfuq4huxjxota"
-path.s3tc="res://.godot/imported/dark_warrior_walk.png-5c1905e9259bc1624f71209e0894d4a5.s3tc.ctex"
-path.etc2="res://.godot/imported/dark_warrior_walk.png-5c1905e9259bc1624f71209e0894d4a5.etc2.ctex"
+path="res://.godot/imported/dark_warrior_walk.png-5c1905e9259bc1624f71209e0894d4a5.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_bich_common/dark_warrior/dark_warrior_walk.png"
-dest_files=["res://.godot/imported/dark_warrior_walk.png-5c1905e9259bc1624f71209e0894d4a5.s3tc.ctex", "res://.godot/imported/dark_warrior_walk.png-5c1905e9259bc1624f71209e0894d4a5.etc2.ctex"]
+dest_files=["res://.godot/imported/dark_warrior_walk.png-5c1905e9259bc1624f71209e0894d4a5.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

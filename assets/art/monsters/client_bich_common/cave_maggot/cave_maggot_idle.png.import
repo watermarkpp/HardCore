@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://y1c0l3k4thha"
-path.s3tc="res://.godot/imported/cave_maggot_idle.png-0be54a070d547c71613b81c892709fec.s3tc.ctex"
-path.etc2="res://.godot/imported/cave_maggot_idle.png-0be54a070d547c71613b81c892709fec.etc2.ctex"
+path="res://.godot/imported/cave_maggot_idle.png-0be54a070d547c71613b81c892709fec.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_bich_common/cave_maggot/cave_maggot_idle.png"
-dest_files=["res://.godot/imported/cave_maggot_idle.png-0be54a070d547c71613b81c892709fec.s3tc.ctex", "res://.godot/imported/cave_maggot_idle.png-0be54a070d547c71613b81c892709fec.etc2.ctex"]
+dest_files=["res://.godot/imported/cave_maggot_idle.png-0be54a070d547c71613b81c892709fec.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bpi3t0iejdkmf"
-path.s3tc="res://.godot/imported/skeleton_spirit_idle.png-b63a3f6691e04343b5b48f6bc0214333.s3tc.ctex"
-path.etc2="res://.godot/imported/skeleton_spirit_idle.png-b63a3f6691e04343b5b48f6bc0214333.etc2.ctex"
+path="res://.godot/imported/skeleton_spirit_idle.png-b63a3f6691e04343b5b48f6bc0214333.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_undead/skeleton_spirit/skeleton_spirit_idle.png"
-dest_files=["res://.godot/imported/skeleton_spirit_idle.png-b63a3f6691e04343b5b48f6bc0214333.s3tc.ctex", "res://.godot/imported/skeleton_spirit_idle.png-b63a3f6691e04343b5b48f6bc0214333.etc2.ctex"]
+dest_files=["res://.godot/imported/skeleton_spirit_idle.png-b63a3f6691e04343b5b48f6bc0214333.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

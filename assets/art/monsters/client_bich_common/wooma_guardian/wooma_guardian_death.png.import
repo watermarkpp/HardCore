@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cr10pc4yba3kx"
-path.s3tc="res://.godot/imported/wooma_guardian_death.png-e89e43487f70f97cb8bad935bf27b37e.s3tc.ctex"
-path.etc2="res://.godot/imported/wooma_guardian_death.png-e89e43487f70f97cb8bad935bf27b37e.etc2.ctex"
+path="res://.godot/imported/wooma_guardian_death.png-e89e43487f70f97cb8bad935bf27b37e.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_bich_common/wooma_guardian/wooma_guardian_death.png"
-dest_files=["res://.godot/imported/wooma_guardian_death.png-e89e43487f70f97cb8bad935bf27b37e.s3tc.ctex", "res://.godot/imported/wooma_guardian_death.png-e89e43487f70f97cb8bad935bf27b37e.etc2.ctex"]
+dest_files=["res://.godot/imported/wooma_guardian_death.png-e89e43487f70f97cb8bad935bf27b37e.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
