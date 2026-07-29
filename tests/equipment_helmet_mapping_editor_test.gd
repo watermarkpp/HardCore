@@ -522,12 +522,11 @@ func _run() -> void:
 		var preview_source: Image = editor._runtime_layer_cell(
 			"ClientHelmetLayer", "idle", direction_index, 0
 		)
-		var expected_preview_source: Image = editor.scale_cell_around_pivot(
-			editor.calibration_source_cell("idle", source_row, 0),
-			HelmetVisualV2.pivot_for_source_row(
-				147, "idle", source_row, 0
-			),
-			HelmetVisualV2.uniform_scale_percent(147)
+		var expected_preview_source: Image = editor.calibration_source_cell_scaled(
+			"idle",
+			source_row,
+			0,
+			HelmetVisualV2.direction_scale_percent(147, direction_index)
 		)
 		assert(
 			preview_source.get_data()
@@ -618,8 +617,8 @@ func _run() -> void:
 	)
 	assert(baked_nw.get_data() == expected_nw.get_data())
 
-	# The full-person and enlarged-head previews must use the same baked row 3
-	# as the source thumbnail, never the unchanged row 3 in the primary atlas.
+	# The full-person and enlarged-head previews must use the exact final source
+	# row selected in the immutable draft, never an old hard-coded row.
 	editor._configure_runtime("idle", 7, 0)
 	var runtime_nw: Image = editor._runtime_layer_cell("ClientHelmetLayer")
 	var derived_idle_path := HelmetVisualV2.action_texture_path(
@@ -627,9 +626,10 @@ func _run() -> void:
 	)
 	assert(FileAccess.file_exists(derived_idle_path))
 	var derived_idle: Image = Image.load_from_file(derived_idle_path)
+	var final_nw_row := HelmetVisualV2.source_direction_row(146, 7)
 	var derived_nw: Image = derived_idle.get_region(Rect2i(
 		0,
-		3 * ArtSpec.WARRIOR_FRAME.y,
+		final_nw_row * ArtSpec.WARRIOR_FRAME.y,
 		ArtSpec.WARRIOR_FRAME.x,
 		ArtSpec.WARRIOR_FRAME.y
 	))

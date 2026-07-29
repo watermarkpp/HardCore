@@ -1,0 +1,191 @@
+{
+	"schemaVersion": 1,
+	"contractId": "equipment.helmet.calibration_draft.v1",
+	"runtimeReadable": false,
+	"finalized": false,
+	"itemId": 228,
+	"visualAssetId": "memory",
+	"source": {
+		"sheet": "res://assets/art/items/client/world_wear/helmet/male/source/memory_228_helmet_8dir_transparent.png",
+		"sheetSha256": "39686c3c8310e1a9cf9e1f8a5813d7ef694fb83d241fc45e9df632accff3dd79",
+		"grid": [
+			4.0,
+			2.0
+		],
+		"directionOrder": [
+			"N",
+			"NE",
+			"E",
+			"SE",
+			"S",
+			"SW",
+			"W",
+			"NW"
+		],
+		"mattePolicy": "transparent_user_authored_alpha_preserved_v1",
+		"preparedDirectionFiles": {
+			"N": "res://assets/art/items/client/world_wear/helmet/male/source/memory_228_directions/n.png",
+			"NE": "res://assets/art/items/client/world_wear/helmet/male/source/memory_228_directions/ne.png",
+			"E": "res://assets/art/items/client/world_wear/helmet/male/source/memory_228_directions/e.png",
+			"SE": "res://assets/art/items/client/world_wear/helmet/male/source/memory_228_directions/se.png",
+			"S": "res://assets/art/items/client/world_wear/helmet/male/source/memory_228_directions/s.png",
+			"SW": "res://assets/art/items/client/world_wear/helmet/male/source/memory_228_directions/sw.png",
+			"W": "res://assets/art/items/client/world_wear/helmet/male/source/memory_228_directions/w.png",
+			"NW": "res://assets/art/items/client/world_wear/helmet/male/source/memory_228_directions/nw.png"
+		},
+		"preparedDirectionSha256": {
+			"N": "360c75d8785772e7e9dfba32c92d6c723a21db5925b83cb42316f346bdc0d6e5",
+			"NE": "2c459bd2e0271daa63244fe74538bbb6c244a2a889e4595956a303094e81ae05",
+			"E": "32f0e40cc63a28877ad8ba172f99c38c72cb6c4c4bddc720b5a7336b994c114c",
+			"SE": "d5d8ffc63cdb13ccdd5c851d9da3838943572c1e09ab4bb4d9481b2811ff3c31",
+			"S": "936bdcc7ef0a1e8e0e0a0f885acb595c131ecfc1887825ffbea421679a8d9148",
+			"SW": "e29ad28cea7a05fc5ac1b88f2734558c75c792c6cd24e0bee00a22441a39858d",
+			"W": "a65c7d7559b17c0bdf7801e6341aec6a3680cd060e5a3a2d8984e7c54b65108c",
+			"NW": "61942c38c7f4c11835a8c429c8436fc51eb6e34f56ce01f9af42480ad9b20237"
+		},
+		"preparedPresentationFiles": {},
+		"preparedPresentationSha256": {},
+		"recipeId": "active_target.memory_228.user_provided_8dir.v1.39686c3c8310e1a9cf9e1f8a5813d7ef694fb83d241fc45e9df632accff3dd79.display_transform_only_until_final_bake_v1.direct_png_v2",
+		"resolutionPolicy": "retain_original_direction_cutouts_until_one_final_runtime_bake",
+		"previewPolicy": "original_rgba_texture_display_transform_only"
+	},
+	"directions": {
+		"N": {
+			"source_row": 0,
+			"source_slot_id": "slot_0",
+			"nudge": [
+				0.5,
+				-4.5
+			],
+			"scale_percent": 50,
+			"status": "valid",
+			"locked": false,
+			"source_direction": "N"
+		},
+		"NE": {
+			"source_row": 1,
+			"source_slot_id": "slot_1",
+			"nudge": [
+				1.0,
+				-2.5
+			],
+			"scale_percent": 50,
+			"status": "valid",
+			"locked": false,
+			"source_direction": "NE"
+		},
+		"E": {
+			"source_row": 6,
+			"source_slot_id": "slot_6",
+			"nudge": [
+				1.5,
+				2.5
+			],
+			"scale_percent": 50,
+			"status": "valid",
+			"locked": false,
+			"source_direction": "W"
+		},
+		"SE": {
+			"source_row": 3,
+			"source_slot_id": "slot_3",
+			"nudge": [
+				0.0,
+				-0.5
+			],
+			"scale_percent": 50,
+			"status": "valid",
+			"locked": false,
+			"source_direction": "SE"
+		},
+		"S": {
+			"source_row": 4,
+			"source_slot_id": "slot_4",
+			"nudge": [
+				1.0,
+				0.5
+			],
+			"scale_percent": 50,
+			"status": "valid",
+			"locked": false,
+			"source_direction": "S"
+		},
+		"SW": {
+			"source_row": 5,
+			"source_slot_id": "slot_5",
+			"nudge": [
+				0.5,
+				1.5
+			],
+			"scale_percent": 50,
+			"status": "valid",
+			"locked": false,
+			"source_direction": "SW"
+		},
+		"W": {
+			"source_row": 2,
+			"source_slot_id": "slot_2",
+			"nudge": [
+				-2.0,
+				-0.5
+			],
+			"scale_percent": 50,
+			"status": "valid",
+			"locked": false,
+			"source_direction": "E"
+		},
+		"NW": {
+			"source_row": 7,
+			"source_slot_id": "slot_7",
+			"nudge": [
+				0.5,
+				-1.5
+			],
+			"scale_percent": 50,
+			"status": "valid",
+			"locked": false,
+			"source_direction": "NW"
+		}
+	},
+	"presentationCalibration": {
+		"contractId": "equipment.helmet.presentation_calibration.v1",
+		"paperDoll": {
+			"source_row": 4,
+			"source_direction": "S",
+			"offset": [
+				260.0,
+				137.0
+			],
+			"scale_percent": 70
+		},
+		"inventory": {
+			"source_row": 4,
+			"source_direction": "S"
+		},
+		"ground": {
+			"source_row": 5,
+			"source_direction": "SW"
+		}
+	},
+	"previewPolicy": {
+		"world": "original_rgba_texture_display_transform_only",
+		"sourceDirections": "original_rgba_texture_aspect_fit_only",
+		"paperDoll": "original_rgba_texture_display_transform_only",
+		"inventory": "original_rgba_texture_aspect_fit_only",
+		"ground": "original_rgba_texture_aspect_fit_only",
+		"directionIndependentAnchors": true,
+		"directionIndependentScale": true,
+		"noPreviewRasterDownsample": true
+	},
+	"finalizePolicy": {
+		"world": "single_high_quality_downsample_from_original_per_direction",
+		"paperDoll": "single_high_quality_downsample_from_original_selection",
+		"inventory": "single_high_quality_downsample_from_original_selection",
+		"ground": "single_high_quality_downsample_from_original_selection",
+		"runtimeScale": [
+			1,
+			1
+		],
+		"noIntermediateResample": true
+	}
+}

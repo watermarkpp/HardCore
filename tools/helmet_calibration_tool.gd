@@ -71,6 +71,7 @@ var _target_buttons: Array[TextureButton] = []
 var _target_authored_overlays: Array[TextureRect] = []
 var _source_buttons: Array[TextureButton] = []
 var _authored_source_cutout_cache: Dictionary = {}
+var _authored_runtime_cell_cache: Dictionary = {}
 var _dirty_directions: Dictionary = {}
 var _dirty_scales: Dictionary = {}
 var _presentation_dirty: Dictionary = {}
@@ -317,6 +318,7 @@ func _load_active_target_manifest(path: String) -> bool:
 	_active_target = target.duplicate(true)
 	current_item_id = item_id
 	_authored_source_cutout_cache.clear()
+	_authored_runtime_cell_cache.clear()
 	if bool(target.get("initializeSessionDirectionMapping", false)):
 		if not _initialize_active_target_session_direction_mapping(
 			item_id, direction_order
@@ -1858,6 +1860,7 @@ func reload_formal_data() -> void:
 		return
 	HelmetVisualV2.reload_data()
 	_authored_source_cutout_cache.clear()
+	_authored_runtime_cell_cache.clear()
 	_dirty_directions.clear()
 	_dirty_scales.clear()
 	_presentation_dirty.clear()
@@ -2068,20 +2071,9 @@ func finalize_saved_calibration_for_runtime() -> bool:
 		current_item_id, _current_presentation_calibration()
 	):
 		return false
-	var parsed: Variant = JSON.parse_string(
-		FileAccess.get_file_as_string(draft_path)
-	)
-	if parsed is Dictionary:
-		parsed["finalized"] = true
-		parsed["finalizedSourceRecipeId"] = _source_recipe_id()
-		var override := HelmetVisualV2.visual_asset_override_for_item(
-			current_item_id
-		)
-		parsed["runtimeAtlases"] = override.get("derivedAtlases", {})
-		parsed["runtimeAtlasSha256"] = override.get(
-			"derivedAtlasSha256", {}
-		)
-		_write_json(ProjectSettings.globalize_path(draft_path), parsed)
+	# The user's saved calibration is immutable acceptance input. Runtime
+	# finalization writes derived atlases and formal contracts only; it must
+	# never mark up or rewrite the accepted draft itself.
 	return true
 
 
@@ -2418,53 +2410,9 @@ func _authored_source_runtime_cell(
 ) -> Image:
 	if _is_prepared_source_row(source_row):
 		return _generated_atlas_source_cell(action, source_row, frame_index)
-	var authored_cutout := _authored_source_cutout(source_row)
-	if authored_cutout.is_empty():
-		assert(
-			not _active_target_applies_to_current_item(),
-			"active target source row %d failed to load" % source_row
-		)
-		return _generated_atlas_source_cell(action, source_row, frame_index)
-	# The generated atlas remains the placement envelope. Only its pixels are
-	# replaced. This preserves every action/frame pivot while guaranteeing the
-	# editor previews and later scale bake use the selected authored material.
-	var placement_cell := _generated_atlas_source_cell(
-		action, _placement_source_row(source_row), frame_index
+	return _authored_source_runtime_cell_scaled(
+		action, source_row, frame_index, 100
 	)
-	var placement_rect := placement_cell.get_used_rect()
-	if not placement_rect.has_area():
-		return placement_cell
-	var fitted := authored_cutout.duplicate()
-	var resize_filter := Image.INTERPOLATE_NEAREST
-	if "lanczos_downsample" in str(
-		_calibration_source_contract().get(
-			"calibrationResizeFilter", ""
-		)
-	):
-		resize_filter = Image.INTERPOLATE_LANCZOS
-	if resize_filter == Image.INTERPOLATE_LANCZOS:
-		fitted = _resize_premultiplied_alpha_lanczos(
-			authored_cutout, placement_rect.size
-		)
-	else:
-		fitted.resize(
-			placement_rect.size.x,
-			placement_rect.size.y,
-			resize_filter
-		)
-	var result := Image.create(
-		ArtSpec.WARRIOR_FRAME.x,
-		ArtSpec.WARRIOR_FRAME.y,
-		false,
-		Image.FORMAT_RGBA8
-	)
-	result.fill(Color(0, 0, 0, 0))
-	result.blit_rect(
-		fitted,
-		Rect2i(Vector2i.ZERO, fitted.get_size()),
-		placement_rect.position
-	)
-	return result
 
 
 func _authored_source_runtime_cell_scaled(
@@ -2473,10 +2421,6 @@ func _authored_source_runtime_cell_scaled(
 	frame_index: int,
 	percent: int
 ) -> Image:
-	if percent == 100:
-		return _authored_source_runtime_cell(
-			action, source_row, frame_index
-		)
 	var authored_cutout := _authored_source_cutout(source_row)
 	if authored_cutout.is_empty():
 		var fallback := _generated_atlas_source_cell(
@@ -2498,19 +2442,50 @@ func _authored_source_runtime_cell_scaled(
 	var pivot := _calibration_pivot_for_source_row(
 		action, source_row, frame_index
 	)
+	var runtime_cache_key := "%d:%s:%d:%d:%d:%s:%s:%s" % [
+		current_item_id,
+		action,
+		source_row,
+		frame_index,
+		percent,
+		str(placement_rect),
+		str(pivot),
+		_source_recipe_id(),
+	]
+	if _authored_runtime_cell_cache.has(runtime_cache_key):
+		return (
+			_authored_runtime_cell_cache[runtime_cache_key] as Image
+		).duplicate()
 	var factor := float(percent) / 100.0
+	# Calibration percentages control perceived area, not an arbitrary legacy
+	# rectangle. Keep the user's original silhouette aspect ratio and preserve
+	# the same visual area the old placement envelope would have occupied.
+	var target_area := (
+		float(placement_rect.size.x * placement_rect.size.y)
+		* factor * factor
+	)
+	var source_aspect := (
+		float(authored_cutout.get_width())
+		/ maxf(1.0, float(authored_cutout.get_height()))
+	)
 	var target_size := Vector2i(
-		maxi(1, roundi(float(placement_rect.size.x) * factor)),
-		maxi(1, roundi(float(placement_rect.size.y) * factor))
+		maxi(1, roundi(sqrt(target_area * source_aspect))),
+		maxi(1, roundi(sqrt(target_area / source_aspect)))
 	)
 	# Resize exactly once from the original transparent cutout. The interactive
 	# preview never becomes the source for a later save/finalize operation.
 	var fitted := _resize_premultiplied_alpha_lanczos(
 		authored_cutout, target_size
 	)
-	var scaled_top_left := pivot + Vector2i(
-		roundi(float(placement_rect.position.x - pivot.x) * factor),
-		roundi(float(placement_rect.position.y - pivot.y) * factor)
+	var anchor_fraction := Vector2(
+		float(pivot.x - placement_rect.position.x)
+			/ maxf(1.0, float(placement_rect.size.x)),
+		float(pivot.y - placement_rect.position.y)
+			/ maxf(1.0, float(placement_rect.size.y))
+	)
+	var scaled_top_left := pivot - Vector2i(
+		roundi(anchor_fraction.x * float(target_size.x)),
+		roundi(anchor_fraction.y * float(target_size.y))
 	)
 	var result := Image.create(
 		ArtSpec.WARRIOR_FRAME.x,
@@ -2524,6 +2499,7 @@ func _authored_source_runtime_cell_scaled(
 		Rect2i(Vector2i.ZERO, fitted.get_size()),
 		scaled_top_left
 	)
+	_authored_runtime_cell_cache[runtime_cache_key] = result
 	return result
 
 

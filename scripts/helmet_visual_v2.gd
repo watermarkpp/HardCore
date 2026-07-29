@@ -561,7 +561,7 @@ static func persist_presentation_calibration(
 		return false
 	var normalized := _validated_presentation_calibration(
 		value,
-		_override_path != OVERRIDE_PATH
+		true
 	)
 	if normalized.is_empty():
 		return false
@@ -601,7 +601,7 @@ static func persist_calibration_override(
 	var allowed := _validated_override_fields(
 		item_id,
 		override_fields,
-		_override_path != OVERRIDE_PATH
+		true
 	)
 	if allowed.is_empty():
 		return false

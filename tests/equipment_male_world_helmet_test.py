@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 RECIPES = ROOT / "assets/data/equipment_male_world_helmet_recipes.json"
 CONTRACT = ROOT / "assets/data/equipment_male_world_helmet.json"
 CATALOG = ROOT / "assets/data/equipment_visual_catalog.json"
+FINALIZATION = ROOT / "assets/data/equipment_helmet_finalization_manifest.json"
 BUILDER = ROOT / "tools/build_male_world_helmet_assets.py"
 HAIR = ROOT / "dev_art_sources/external/mir2opensource_full/Data/Hair.wil"
 
@@ -110,6 +111,12 @@ def main() -> None:
     recipes = load_json(RECIPES)
     contract = load_json(CONTRACT)
     catalog = load_json(CATALOG)
+    finalization = load_json(FINALIZATION)
+    final_by_item_id = {
+        int(shared_item_id): final_item
+        for final_item in finalization["items"].values()
+        for shared_item_id in final_item["sharedItemIds"]
+    }
     builder_source = BUILDER.read_text(encoding="utf-8")
     assert_ascii_schema_keys(recipes)
     assert_ascii_schema_keys(contract)
@@ -276,7 +283,14 @@ def main() -> None:
             == appearance
         )
         catalog_item = catalog_items[item_key]
-        assert catalog_item["paperDoll"]["sourceIndex"] == source_index
+        assert catalog_item["paperDoll"]["sourceIndex"] == item_id
+        assert catalog_item["paperDoll"]["status"] == (
+            "user_final_helmet_calibration"
+        )
+        assert catalog_item["paperDoll"]["path"] == (
+            final_by_item_id[item_id]["presentationOutputs"][item_key]
+            ["paperDoll"]["path"]
+        )
         assert catalog_item["worldWear"]["contractId"] == CONTRACT_ID
         assert catalog_item["worldWear"]["identityId"] == identity_id
         assert (
@@ -475,7 +489,10 @@ def main() -> None:
                         cell_bytes[offset] == 0
                         and cell_bytes[offset + 1] == 255
                         and cell_bytes[offset + 2] == 0
-                        and cell_bytes[offset + 3] > 0
+                        # Lanczos may retain fully sub-visible alpha fringes;
+                        # the runtime-visible chroma-key guard starts above
+                        # the finalizer's alpha <= 5 cutoff.
+                        and cell_bytes[offset + 3] > 5
                     )
                     for offset in range(0, len(cell_bytes), 4)
                 )

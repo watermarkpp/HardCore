@@ -123,31 +123,45 @@ def main() -> None:
         assert atlas.size == (192 * frame_count, 160 * 8)
         assert sha256(ROOT / record["path"].removeprefix("res://")) == record["fileSha256"]
 
-    paper = Image.open(HEAD).convert("RGBA")
-    erase = Image.open(ERASE).convert("RGBA")
-    inventory = Image.open(INVENTORY).convert("RGBA")
-    ground = Image.open(GROUND).convert("RGBA")
-    paper_box = paper.getchannel("A").getbbox()
-    assert paper.size == (32, 41) and paper_box is not None
-    assert paper_box[2] - paper_box[0] <= 20
-    assert paper_box[3] - paper_box[1] <= 24
-    assert paper.getpixel((16, 25))[3] == 0
-    assert erase.getpixel((16, 25))[3] == 0
-    assert inventory.size == (36, 35)
-    assert ground.size == (16, 17)
+    head = load_json(HEAD_CONTRACT)["itemsById"]["240"]["flattenedHeadPatch"]
+    assert head["source"] == "user_final_helmet_calibration"
+    assert head["calibrationDraftSha256"] == (
+        "e114ad10fc5ac48492cb932828200712f1aa2de0717436426a7f4b9639beaf70"
+    )
+    assert head["singlePassDownsample"] is True
+    assert head["sourceAspectPreserved"] is True
+    assert head["subjectEvidence"]["sourceVariant"] == "direction"
+    assert head["subjectEvidence"]["sourceDirection"] == "S"
+    assert head["subjectEvidence"]["scalePercent"] == 65
+    paper = Image.open(
+        ROOT / head["path"].removeprefix("res://")
+    ).convert("RGBA")
+    erase = Image.open(
+        ROOT / head["eraseMaskPath"].removeprefix("res://")
+    ).convert("RGBA")
+    assert paper.size == tuple(head["size"]) == (18, 29)
+    assert paper.getchannel("A").getbbox() is not None
+    assert erase.getchannel("A").getbbox() is not None
+    assert sha256(ROOT / head["path"].removeprefix("res://")) == head["fileSha256"]
+    assert sha256(ROOT / head["eraseMaskPath"].removeprefix("res://")) == (
+        head["eraseMaskFileSha256"]
+    )
+
+    catalog = load_json(CATALOG)["itemsById"]["240"]
+    inventory_record = catalog["icons"]["inventory"]
+    ground_record = catalog["icons"]["ground"]
+    assert inventory_record["sourceVariant"] == "dedicated_inventory"
+    assert ground_record["sourceVariant"] == "dedicated_ground"
+    inventory = Image.open(
+        ROOT / inventory_record["path"].removeprefix("res://")
+    ).convert("RGBA")
+    ground = Image.open(
+        ROOT / ground_record["path"].removeprefix("res://")
+    ).convert("RGBA")
+    assert inventory.size == tuple(inventory_record["size"]) == (21, 36)
+    assert ground.size == tuple(ground_record["size"]) == (11, 18)
     assert inventory.getchannel("A").getbbox() is not None
     assert ground.getchannel("A").getbbox() is not None
-
-    head = load_json(HEAD_CONTRACT)["itemsById"]["240"]["flattenedHeadPatch"]
-    assert head["sourceRecordRgbaSha256"] == EXPECTED_SHA
-    assert head["faceWindowPolicy"] == "open_source_face_aperture"
-    catalog = load_json(CATALOG)["itemsById"]["240"]
-    assert catalog["icons"]["inventory"]["path"].endswith(
-        "heavenly_taoist/item_00240_inventory.png"
-    )
-    assert catalog["icons"]["ground"]["path"].endswith(
-        "heavenly_taoist/item_00240_ground.png"
-    )
 
     v2 = load_json(V2)["visualAssets"]["heavenly_taoist"]
     expected_map = {direction: index for index, direction in enumerate(DIRECTIONS)}

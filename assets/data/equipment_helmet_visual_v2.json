@@ -11,7 +11,7 @@
     "W",
     "NW"
   ],
-  "runtimeFormula": "final_position = body_head_socket - source_helmet_local_pivot(action,source_row,frame) + integer_nudge",
+  "runtimeFormula": "final_position = body_head_socket - source_helmet_local_pivot(action,source_row,frame) + half_pixel_nudge",
   "renderPipeline": [
     "helmet_back",
     "body_and_original_face",
