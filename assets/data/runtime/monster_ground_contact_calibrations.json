@@ -2926,78 +2926,6 @@
         }
       }
     },
-    "97": {
-      "projectionStrategy": "flying",
-      "visualFootOffset": [
-        -10,
-        -172
-      ],
-      "ringCenterOffset": [
-        16,
-        0
-      ],
-      "ringEllipseRadii": [
-        22,
-        7
-      ],
-      "ringVerticalSquash": 0.3182,
-      "calibrationSource": "manual_runtime_composite_review_v4",
-      "review": {
-        "status": "approved",
-        "archetype": "airborne",
-        "poses": [
-          "idle:direction0",
-          "walk:direction2",
-          "attack:direction4",
-          "death:direction6"
-        ],
-        "decision": "monsterId=97 independently reviewed: bodyFoot=[-10, -172], ringCenter=[16, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
-      },
-      "visualRootOffset": [
-        0.0,
-        0.0
-      ],
-      "manualAlignmentEvidence": {
-        "status": "preserved_airborne_projection",
-        "reason": "The flying body is intentionally separated from the ground ring and does not use a grounded body-foot alignment draft."
-      }
-    },
-    "98": {
-      "projectionStrategy": "flying",
-      "visualFootOffset": [
-        -10,
-        -172
-      ],
-      "ringCenterOffset": [
-        16,
-        0
-      ],
-      "ringEllipseRadii": [
-        22,
-        7
-      ],
-      "ringVerticalSquash": 0.3182,
-      "calibrationSource": "manual_runtime_composite_review_v4",
-      "review": {
-        "status": "approved",
-        "archetype": "airborne",
-        "poses": [
-          "idle:direction0",
-          "walk:direction2",
-          "attack:direction4",
-          "death:direction6"
-        ],
-        "decision": "monsterId=98 independently reviewed: bodyFoot=[-10, -172], ringCenter=[16, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
-      },
-      "visualRootOffset": [
-        0.0,
-        0.0
-      ],
-      "manualAlignmentEvidence": {
-        "status": "preserved_airborne_projection",
-        "reason": "The flying body is intentionally separated from the ground ring and does not use a grounded body-foot alignment draft."
-      }
-    },
     "100": {
       "projectionStrategy": "grounded",
       "visualFootOffset": [
@@ -8556,6 +8484,78 @@
           "direction": 0,
           "frame": 0
         }
+      }
+    },
+    "97": {
+      "projectionStrategy": "flying",
+      "visualFootOffset": [
+        -10,
+        -172
+      ],
+      "ringCenterOffset": [
+        16,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "airborne",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=97 independently reviewed: bodyFoot=[-10, -172], ringCenter=[16, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      },
+      "visualRootOffset": [
+        0.0,
+        0.0
+      ],
+      "manualAlignmentEvidence": {
+        "status": "preserved_airborne_projection",
+        "reason": "The flying body is intentionally separated from the ground ring and does not use a grounded body-foot alignment draft."
+      }
+    },
+    "98": {
+      "projectionStrategy": "flying",
+      "visualFootOffset": [
+        -10,
+        -172
+      ],
+      "ringCenterOffset": [
+        16,
+        0
+      ],
+      "ringEllipseRadii": [
+        22,
+        7
+      ],
+      "ringVerticalSquash": 0.3182,
+      "calibrationSource": "manual_runtime_composite_review_v4",
+      "review": {
+        "status": "approved",
+        "archetype": "airborne",
+        "poses": [
+          "idle:direction0",
+          "walk:direction2",
+          "attack:direction4",
+          "death:direction6"
+        ],
+        "decision": "monsterId=98 independently reviewed: bodyFoot=[-10, -172], ringCenter=[16, 0], radii=[22, 7]; authored actor-origin ground plane retained and alpha-bottom drift rejected."
+      },
+      "visualRootOffset": [
+        0.0,
+        0.0
+      ],
+      "manualAlignmentEvidence": {
+        "status": "preserved_airborne_projection",
+        "reason": "The flying body is intentionally separated from the ground ring and does not use a grounded body-foot alignment draft."
       }
     }
   }
