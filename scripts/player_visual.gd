@@ -84,8 +84,9 @@ func _ready() -> void:
 	set_as_top_level(false)
 	set_meta("actor_render_domain", "actor_y_sort")
 	set_meta("actor_composite_sort_contract", ACTOR_COMPOSITE_SORT_CONTRACT)
-	# 图集脚掌压入演员原点处的地面阴影，消除手机缩放后的悬空缝隙。
-	position = Vector2(0, 4)
+	# The whole formal visual composite uses the user-approved ground alignment.
+	# Physics, map position and the CharacterBody2D origin remain untouched.
+	position = ArtSpec.PLAYER_VISUAL_RUNTIME_POSITION
 	sprite = Sprite2D.new()
 	sprite.name = "BodySprite"
 	sprite.texture = PresentationAssets.player_texture("idle")

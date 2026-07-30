@@ -8,6 +8,14 @@ const CHARACTER_FOOT_ANCHOR := Vector2i(32, 80)
 const WARRIOR_FRAME := Vector2i(192, 160)
 const WARRIOR_SOURCE_FOOT_ANCHOR := Vector2i(64, 80)
 const WARRIOR_FOOT_ANCHOR := Vector2i(96, 108)
+const PLAYER_VISUAL_ALIGNMENT_CONTRACT_ID := (
+	"player.visual_ground_alignment.manual.v1"
+)
+# User-approved local acceptance-lab result saved on 2026-07-30.  The visual
+# layers move as one unit; the CharacterBody2D origin and collision shape stay
+# at (0, 0).
+const PLAYER_VISUAL_RUNTIME_POSITION := Vector2(7.5, 12.5)
+const PLAYER_VISUAL_FOOT_ANCHOR_ADJUSTMENT := Vector2(-7.5, -12.5)
 const WARRIOR_ATTACK_FRAME := WARRIOR_FRAME
 const WARRIOR_ATTACK_FOOT_ANCHOR := WARRIOR_FOOT_ANCHOR
 const MONSTER_FRAME := Vector2i(64, 64)

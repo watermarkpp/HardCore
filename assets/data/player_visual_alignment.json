@@ -1,0 +1,51 @@
+{
+  "contractId": "player.visual_ground_alignment.manual.v1",
+  "scope": "male_formal_player_visual",
+  "status": "user_approved",
+  "approvedAt": "2026-07-30T10:50:48",
+  "sourceDraft": {
+    "path": "outputs/visual_acceptance/player_visual_alignment_draft.json",
+    "sha256": "5D01E19C509E9C970B928475263E233552EE50A00BE7C04FD3BF6BD1CFD088A4",
+    "contractId": "local.visual_acceptance_lab.player_alignment_draft.v1"
+  },
+  "runtimeVisualOriginBefore": [
+    0.0,
+    4.0
+  ],
+  "visualOffset": [
+    7.5,
+    8.5
+  ],
+  "runtimeVisualPosition": [
+    7.5,
+    12.5
+  ],
+  "visualFootAnchorAdjustment": [
+    -7.5,
+    -12.5
+  ],
+  "canonicalCenters": {
+    "actorGroundOrigin": [
+      0.0,
+      0.0
+    ],
+    "visualFootPoint": [
+      0.0,
+      0.0
+    ],
+    "physicsFootprint": [
+      0.0,
+      0.0
+    ],
+    "mapDiamond": [
+      0.0,
+      0.0
+    ]
+  },
+  "invariants": {
+    "characterBodyPositionChanged": false,
+    "collisionShapeChanged": false,
+    "mapCoordinateChanged": false,
+    "allVisualLayersMoveTogether": true
+  }
+}
