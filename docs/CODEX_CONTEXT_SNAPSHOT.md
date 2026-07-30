@@ -5,6 +5,13 @@
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。
 准确性规则：本文件不是代码或 Git 状态的替代品；只核实本次任务实际触及的分支、文件、接口和专项测试。
 
+## 2026-07-30 Android v39 怪物脚点测试包
+
+- APK 从固定集成提交 `eaf42c0a` 的全新隔离工作树导出：`outputs/hardcore/HardCore-v39-monster-feet-debug.apk`，大小 `244,194,790` 字节，SHA-256 `D347862CCA2E712107E8328AAA12E5EFD0EDB650AF8AE7C774AD3BCAC018809F`。
+- 包信息为 `versionCode=39`、`versionName=1.17.3-boundary-fix`、包名 `com.personal.mafaoffline`、应用名 `HardCore`、`arm64-v8a`、`minSdk=24`、`targetSdk=36`；APK v2/v3 签名、运行时资源探针和横屏/可调整尺寸合同通过。
+- APK 内 `monster_ground_alignment_manual_v1.json`、`monster_ground_contact_calibrations.json`、`monster_ground_contacts.json` 与 `complete_monster_client_art_sources.json` 的 SHA-256 均与构建提交逐字节一致，确认最新 212 份怪物脚点及牛魔碎片素材进入安装包。
+- 已通过 ADB 对连接的 HONOR 90 执行保留数据覆盖安装；手机端回读确认 `versionCode=39`、`versionName=1.17.3-boundary-fix` 和最新更新时间。
+
 ## 2026-07-30 怪物人工脚点正式接入与动画修复
 
 - 最新怪物专业提交 `5f912b41` 已由集成提交 `3312f0ab` 接入；此前怪物专业提交 `19be26ed` / UI 专业提交 `ff707360` 分别由集成提交 `ee09aefd` / `072c1289` 接入。
@@ -55,7 +62,7 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `3312f0ab`（本次快照提交只改本文档）。
+- 分支/运行时代码基线：`codex/integration` @ `eaf42c0a`（本次快照提交只改本文档）。
 - tracked 状态：黑铁头盔 151 的旧 `scale_100` 六动作生成图集共 6 个既有在制修改继续保护；本次男性头发接入未暂存、覆盖或提交这些旧图。146/147/149/150/151/218/224/228/232 共 9 份已验收人工草稿继续冻结；236/240 最新人工草稿分别为 SHA-256 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`、`81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`，均保持 dirty 并禁止覆盖。
 - 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
