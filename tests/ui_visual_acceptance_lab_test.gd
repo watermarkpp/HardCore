@@ -31,6 +31,17 @@ func _ready() -> void:
 		lab._preview_root.scale
 			== Vector2.ONE * float(lab._zoom_slider.value)
 	)
+	if (
+		FileAccess.file_exists(lab.FORMAL_ALIGNMENT_CONTRACT_PATH)
+		and FileAccess.file_exists(lab.ALIGNMENT_DRAFT_PATH)
+	):
+		assert(lab._visual_alignment_offset.is_zero_approx())
+		assert(
+			lab._visual_foot_anchor_adjustment.is_equal_approx(
+				lab._runtime_foot_anchor_adjustment
+			)
+		)
+		assert(lab._visual_foot_origin().is_zero_approx())
 	lab._reset_visual_alignment()
 	var expected_foot_origin: Vector2 = (
 		lab._player.visual.position
