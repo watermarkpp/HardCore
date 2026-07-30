@@ -121,18 +121,100 @@ func _ready() -> void:
 	assert(lab._monster.visual.uses_final_art())
 	assert(lab._active_monster_id == 18)
 	assert(lab._monster.visual.sprite.texture != null)
-	var active_draft := lab.MonsterDraftScript.load_draft(
-		lab._active_monster_id
+	var ground_review := lab.monster_ground_review_snapshot()
+	assert(int(ground_review.get("monsterId", -1)) == 18)
+	assert(
+		ground_review.get("runtimeRingCenter", Vector2.INF)
+		== lab._monster.ground_indicator_center()
 	)
-	if lab.MonsterDraftScript.draft_is_formal(
-		lab._active_monster_id, active_draft
-	):
-		assert(lab._monster_visual_alignment_offset.is_zero_approx())
-		assert(
-			lab._monster_picked_visual_foot_offset.is_equal_approx(
-				lab._monster_formal_visual_foot_offset
+	assert(
+		ground_review.get("runtimeRingRadii", Vector2.INF)
+		== lab._monster.ground_indicator_radii()
+	)
+	assert(
+		ground_review.get("actorGroundOrigin", Vector2.INF)
+		== Vector2.ZERO
+	)
+	assert(
+		ground_review.get("delta", Vector2.INF)
+		== (
+			ground_review.get("runtimeRingCenter", Vector2.ZERO)
+			- ground_review.get("manualFootCenter", Vector2.ZERO)
+		)
+	)
+	assert(
+		bool(ground_review.get("targetMatchesContract", false))
+		== (
+			ground_review.get("runtimeTargetDelta", Vector2.INF).length()
+			<= lab.MONSTER_FOOT_MATCH_EPSILON
+		)
+	)
+	assert(
+		ground_review.get("runtimeRingCenter", Vector2.INF)
+		== ground_review.get("expectedTargetCenter", Vector2.ZERO)
+	)
+	var original_monster_visual_position := lab._monster.visual.position
+	var original_monster_foot_offset := (
+		lab._monster_picked_visual_foot_offset
+	)
+	lab._monster.visual.position += Vector2(8.0, -5.0)
+	lab._monster_picked_visual_foot_offset += Vector2(1.5, 2.5)
+	var isolated_review := lab.monster_ground_review_snapshot()
+	assert(
+		isolated_review.get("runtimeRingCenter", Vector2.INF)
+		== Vector2.ZERO
+	)
+	assert(bool(isolated_review.get("targetMatchesContract", false)))
+	assert(
+		not bool(
+			isolated_review.get("manualFootMatchesActorOrigin", true)
+		)
+	)
+	assert(not bool(isolated_review.get("matches", true)))
+	lab._monster.visual.position = original_monster_visual_position
+	lab._monster_picked_visual_foot_offset = original_monster_foot_offset
+	var replay_draft := {
+		"runtimeVisualOrigin": [2.0, 7.0],
+		"visualOffset": [3.5, -4.5],
+		"pickedVisualFootOffset": [-5.5, -2.5],
+		"selection": {
+			"action": "hit",
+			"direction": 6,
+			"frame": 1,
+		},
+	}
+	lab._restore_monster_alignment_draft(replay_draft)
+	assert(lab._monster_runtime_visual_origin == Vector2(2.0, 7.0))
+	assert(lab._monster_visual_alignment_offset == Vector2(3.5, -4.5))
+	assert(lab._monster_picked_visual_foot_offset == Vector2(-5.5, -2.5))
+	assert(lab._selected_action() == "hit")
+	assert(lab._direction_option.selected == 6)
+	assert(lab._current_frame == 1)
+	var replay_review := lab.monster_ground_review_snapshot()
+	assert(bool(replay_review.get("poseMatchesCalibration", false)))
+	assert(
+		replay_review.get("calibrationSelection", {})
+		== replay_review.get("currentSelection", {})
+	)
+	lab._direction_option.select(5)
+	lab._apply_preview_frame()
+	assert(
+		not bool(
+			lab.monster_ground_review_snapshot().get(
+				"poseMatchesCalibration", true
 			)
 		)
+	)
+	lab._direction_option.select(6)
+	lab._apply_preview_frame()
+	assert(
+		(
+			lab._monster_runtime_visual_origin
+			+ lab._monster_visual_alignment_offset
+			+ lab._monster_picked_visual_foot_offset
+		).is_zero_approx()
+	)
+	lab._rebuild_monster_actor(true)
 	lab._reset_visual_alignment()
 	lab._set_visual_foot_anchor_from_preview(Vector2(3.0, -2.0))
 	assert(lab._visual_foot_origin().is_equal_approx(Vector2(3.0, -2.0)))

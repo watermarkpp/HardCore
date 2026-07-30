@@ -35,6 +35,11 @@ const FORMAL_ALIGNMENT_CONTRACT_PATH := (
 )
 const ALIGNMENT_NUDGE := 0.5
 const PLAYBACK_TICK_SECONDS := 1.0 / 60.0
+const MONSTER_GROUND_REVIEW_ARG := "--monster-ground-review"
+const MONSTER_FOOT_MATCH_EPSILON := 0.01
+const MONSTER_TARGET_RING_COLOR := Color("#ffd54f")
+const MONSTER_FOOT_DELTA_COLOR := Color("#ff6b6b")
+const MONSTER_ACTOR_ORIGIN_COLOR := Color("#ff9f43")
 
 var _old_test_mode := false
 var _player: PlayerCharacter
@@ -77,6 +82,8 @@ var _monster_runtime_visual_origin := Vector2.ZERO
 var _monster_visual_alignment_offset := Vector2.ZERO
 var _monster_picked_visual_foot_offset := Vector2.ZERO
 var _monster_formal_visual_foot_offset := Vector2.ZERO
+var _active_monster_draft_loaded := false
+var _monster_saved_selection: Dictionary = {}
 
 
 func _ready() -> void:
@@ -91,7 +98,13 @@ func _ready() -> void:
 	_build_preview_actor()
 	_load_alignment_draft()
 	_on_zoom_changed(_zoom_slider.value)
-	_apply_selection()
+	if OS.get_cmdline_user_args().has(MONSTER_GROUND_REVIEW_ARG):
+		if DisplayServer.get_name() != "headless":
+			get_window().title = "HardCore 怪物脚点 / 黄色光圈验收"
+		_mode_option.select(1)
+		_on_mode_changed(1)
+	else:
+		_apply_selection()
 	_start_playback_timer()
 
 
@@ -389,9 +402,10 @@ func _build_coordinate_grid() -> void:
 
 func _apply_selection() -> void:
 	if _is_monster_mode():
-		_rebuild_monster_actor()
-		_current_frame = 0
-		_clock = 0.0
+		var rebuilt_from_draft := _rebuild_monster_actor()
+		if not rebuilt_from_draft:
+			_current_frame = 0
+			_clock = 0.0
 		_update_frame_limits()
 		_apply_preview_frame()
 		return
@@ -465,9 +479,9 @@ func _apply_monster_preview_frame() -> void:
 	_update_status()
 
 
-func _rebuild_monster_actor(force := false) -> void:
+func _rebuild_monster_actor(force := false) -> bool:
 	if _monster_rows.is_empty() or _preview_root == null:
-		return
+		return false
 	var row := _monster_rows[
 		clampi(_monster_option.selected, 0, _monster_rows.size() - 1)
 	]
@@ -478,14 +492,14 @@ func _rebuild_monster_actor(force := false) -> void:
 		and _active_monster_id == monster_id
 	):
 		_monster.visible = true
-		return
+		return false
 	if _monster != null:
 		_monster.free()
 		_monster = null
 	var data := GameData.get_monster_by_id(monster_id).duplicate(true)
 	if data.is_empty():
 		_update_status("怪物 #%d 缺少正式运行时数据。" % monster_id)
-		return
+		return false
 	_monster = EnemyActor.new()
 	_monster.name = "AcceptanceMonster_%d" % monster_id
 	_monster.setup(data, _player, _is_boss_monster(monster_id))
@@ -513,11 +527,17 @@ func _rebuild_monster_actor(force := false) -> void:
 		_monster_formal_visual_foot_offset
 	)
 	_monster_visual_alignment_offset = Vector2.ZERO
+	_monster_saved_selection = _normalized_monster_selection(
+		formal.get("selection", {})
+	)
+	_apply_monster_selection(_monster_saved_selection)
+	_clock = 0.0
 	_load_monster_alignment_draft()
 	_monster.visual.position = (
 		_monster_runtime_visual_origin
 		+ _monster_visual_alignment_offset
 	)
+	return true
 
 
 func _is_boss_monster(monster_id: int) -> bool:
@@ -580,16 +600,40 @@ func _update_monster_overlay() -> void:
 	_draw_canonical_ground_overlay(
 		_visual_foot_origin(), _monster.collision_radius
 	)
-	var formal_center := (
-		visual.position + visual.ground_contact_offset()
+	# Mirror the live target-ring contract exactly. The actor owns both the
+	# reviewed-foot center and the collision-radius-derived size.
+	var review := monster_ground_review_snapshot()
+	var actor_origin: Vector2 = review.get(
+		"actorGroundOrigin", Vector2.ZERO
 	)
-	var formal_radii := visual.ground_indicator_radii(Vector2(22, 7))
+	var manual_foot: Vector2 = review.get("manualFootCenter", Vector2.ZERO)
+	var runtime_ring: Vector2 = review.get("runtimeRingCenter", Vector2.ZERO)
+	var runtime_radii: Vector2 = review.get("runtimeRingRadii", Vector2.ZERO)
+	if not bool(review.get("matches", false)):
+		_add_line(
+			_overlay_root,
+			PackedVector2Array([manual_foot, runtime_ring]),
+			MONSTER_FOOT_DELTA_COLOR,
+			2.0,
+		)
+	_add_cross(
+		_overlay_root,
+		actor_origin,
+		MONSTER_ACTOR_ORIGIN_COLOR,
+		4.0,
+	)
+	_add_cross(
+		_overlay_root,
+		runtime_ring,
+		MONSTER_TARGET_RING_COLOR,
+		6.0,
+	)
 	_add_ellipse_line(
 		_overlay_root,
-		formal_center,
-		formal_radii,
-		Color(1.0, 0.62, 0.20, 0.72),
-		1.0,
+		runtime_ring,
+		runtime_radii,
+		MONSTER_TARGET_RING_COLOR,
+		2.5,
 	)
 	var rect := Rect2(
 		visual.position + body_sprite.position,
@@ -639,11 +683,42 @@ func _update_status(message := "") -> void:
 		var row := _selected_monster_row()
 		var monster_name := str(row.get("name", ""))
 		var monster_id := int(row.get("monster_id", -1))
+		var review := monster_ground_review_snapshot()
+		var manual_foot: Vector2 = review.get(
+			"manualFootCenter", Vector2.ZERO
+		)
+		var runtime_ring: Vector2 = review.get(
+			"runtimeRingCenter", Vector2.ZERO
+		)
+		var target_delta: Vector2 = review.get(
+			"runtimeTargetDelta", Vector2.ZERO
+		)
+		var visual_delta: Vector2 = review.get(
+			"manualFootDelta", Vector2.ZERO
+		)
+		var match_text := (
+			"坐标合同一致"
+			if bool(review.get("matches", false))
+			else "坐标合同有差异"
+		)
+		var pose_text := (
+			"当前就是保存校准姿态"
+			if bool(review.get("poseMatchesCalibration", false))
+			else "当前不是保存校准姿态"
+		)
+		var source_text := (
+			"人工草稿"
+			if bool(review.get("draftLoaded", false))
+			else "正式合同（无人工草稿）"
+		)
 		_status.text = (
 			"%s　#%d %s　%s / %s　帧 %d/%d　倍率 %dx\n"
-			+ "黄=怪物逻辑坐标　青十字=你指定的视觉脚点　"
-			+ "粉=真实物理脚印　蓝菱形=64×32地图格\n"
-			+ "橙=当前正式脚下光圈；先点鞋底，再移动整只怪物使青黄重合"
+			+ "橙十字=怪物物理原点　青十字=人工视觉脚点　"
+			+ "黄圈/黄小十字=游戏实时目标光圈\n"
+			+ "来源=%s　保存姿态=%s【%s】\n"
+			+ "人工脚点=(%.1f, %.1f)　实时黄圈=(%.1f, %.1f)　"
+			+ "黄圈-目标=(%+.1f, %+.1f)　脚点-原点=(%+.1f, %+.1f)"
+			+ "【%s】"
 		) % [
 			MONSTER_LAB_CONTRACT_ID,
 			monster_id,
@@ -653,6 +728,20 @@ func _update_status(message := "") -> void:
 			_current_frame + 1,
 			_frame_count(),
 			int(_zoom_slider.value),
+			source_text,
+			_monster_selection_label(
+				review.get("calibrationSelection", {})
+			),
+			pose_text,
+			manual_foot.x,
+			manual_foot.y,
+			runtime_ring.x,
+			runtime_ring.y,
+			target_delta.x,
+			target_delta.y,
+			visual_delta.x,
+			visual_delta.y,
+			match_text,
 		]
 		return
 	var status_template := (
@@ -977,6 +1066,9 @@ func _save_alignment_draft() -> void:
 		var result := MonsterDraftScript.save_draft(
 			monster_alignment_draft_payload()
 		)
+		if bool(result.get("ok", false)):
+			_active_monster_draft_loaded = true
+			_monster_saved_selection = _current_monster_selection()
 		_update_status(
 			"怪物 #%d 对齐草稿已单独保存：%s；尚未写入正式运行时。"
 			% [_active_monster_id, str(result.get("path", ""))]
@@ -1050,14 +1142,75 @@ func _load_alignment_draft() -> void:
 
 
 func _load_monster_alignment_draft() -> void:
+	_active_monster_draft_loaded = false
 	var draft := MonsterDraftScript.load_draft(_active_monster_id)
 	if draft.is_empty():
 		return
-	# Once this exact frozen draft has been promoted into the formal runtime
-	# contract, MonsterVisual already includes its root offset. Reapplying the
-	# local draft here would double the user's saved displacement.
-	if MonsterDraftScript.draft_is_formal(_active_monster_id, draft):
-		return
+	_active_monster_draft_loaded = true
+	_restore_monster_alignment_draft(draft)
+
+
+func monster_ground_review_snapshot() -> Dictionary:
+	if _monster == null or _monster.visual == null:
+		return {}
+	var actor_origin := Vector2.ZERO
+	var manual_foot := _visual_foot_origin()
+	var runtime_ring := _monster.ground_indicator_center()
+	var projection_strategy := _monster.visual.ground_projection_strategy()
+	var expected_target := (
+		_monster.visual.position
+		+ _monster.visual.ground_contact_offset()
+		if projection_strategy in ["flying", "hover"]
+		else actor_origin
+	)
+	var manual_delta := manual_foot - actor_origin
+	var runtime_target_delta := runtime_ring - expected_target
+	var target_matches := (
+		runtime_target_delta.length() <= MONSTER_FOOT_MATCH_EPSILON
+	)
+	var manual_matches := (
+		manual_delta.length() <= MONSTER_FOOT_MATCH_EPSILON
+	)
+	var current_selection := _current_monster_selection()
+	var pose_matches := (
+		current_selection == _monster_saved_selection
+	)
+	return {
+		"monsterId": _active_monster_id,
+		"draftLoaded": _active_monster_draft_loaded,
+		"projectionStrategy": projection_strategy,
+		"actorGroundOrigin": actor_origin,
+		"manualFootCenter": manual_foot,
+		"expectedTargetCenter": expected_target,
+		"runtimeRingCenter": runtime_ring,
+		"runtimeRingRadii": _monster.ground_indicator_radii(),
+		"manualFootDelta": manual_delta,
+		"runtimeTargetDelta": runtime_target_delta,
+		"delta": runtime_ring - manual_foot,
+		"targetMatchesContract": target_matches,
+		"manualFootMatchesActorOrigin": manual_matches,
+		"calibrationSelection": _monster_saved_selection.duplicate(true),
+		"currentSelection": current_selection,
+		"poseMatchesCalibration": pose_matches,
+		"matches": (
+			target_matches
+			and (
+				manual_matches
+				if projection_strategy == "grounded"
+				else true
+			)
+		),
+	}
+
+
+func _restore_monster_alignment_draft(draft: Dictionary) -> void:
+	# A saved draft is the frozen result of the user's manual calibration.
+	# Replay that exact snapshot instead of reconstructing it from a later
+	# runtime composite, including after formal import.
+	_monster_runtime_visual_origin = _vector2_from_array(
+		draft.get("runtimeVisualOrigin", []),
+		_monster_runtime_visual_origin,
+	)
 	_monster_visual_alignment_offset = _vector2_from_array(
 		draft.get("visualOffset", []), Vector2.ZERO
 	)
@@ -1065,6 +1218,53 @@ func _load_monster_alignment_draft() -> void:
 		draft.get("pickedVisualFootOffset", []),
 		_monster_formal_visual_foot_offset,
 	)
+	var selection: Variant = draft.get("selection", {})
+	if not selection is Dictionary:
+		return
+	_monster_saved_selection = _normalized_monster_selection(selection)
+	_apply_monster_selection(_monster_saved_selection)
+	_clock = float(_current_frame) / _action_fps(_selected_action())
+
+
+func _current_monster_selection() -> Dictionary:
+	return {
+		"action": _selected_action(),
+		"direction": _direction_option.selected,
+		"frame": _current_frame,
+	}
+
+
+func _normalized_monster_selection(value: Variant) -> Dictionary:
+	var selection: Dictionary = value if value is Dictionary else {}
+	var action := str(selection.get("action", "idle"))
+	if not action in MONSTER_ACTIONS:
+		action = "idle"
+	return {
+		"action": action,
+		"direction": clampi(
+			int(selection.get("direction", 0)), 0, DIRECTIONS.size() - 1
+		),
+		"frame": maxi(0, int(selection.get("frame", 0))),
+	}
+
+
+func _apply_monster_selection(selection: Dictionary) -> void:
+	var normalized := _normalized_monster_selection(selection)
+	_action_option.select(
+		maxi(0, MONSTER_ACTIONS.find(str(normalized.action)))
+	)
+	_direction_option.select(int(normalized.direction))
+	_current_frame = int(normalized.frame)
+
+
+func _monster_selection_label(value: Variant) -> String:
+	var selection := _normalized_monster_selection(value)
+	var action_index := MONSTER_ACTIONS.find(str(selection.action))
+	return "%s/%s/帧%d" % [
+		MONSTER_ACTION_LABELS[maxi(0, action_index)],
+		DIRECTION_LABELS[int(selection.direction)],
+		int(selection.frame) + 1,
+	]
 
 
 func _vector2_from_array(value: Variant, fallback: Vector2) -> Vector2:
