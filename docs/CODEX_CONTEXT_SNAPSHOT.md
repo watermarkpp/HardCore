@@ -5,6 +5,15 @@
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。
 准确性规则：本文件不是代码或 Git 状态的替代品；只核实本次任务实际触及的分支、文件、接口和专项测试。
 
+## 2026-07-30 怪物人工脚点正式接入与动画修复
+
+- 怪物专业提交 `3a3c00ee` 已由集成提交 `a9128ed1` 接入；UI 专业提交 `ff707360` 已由集成提交 `072c1289` 接入。
+- 用户完成的 212 份 `monster_<id>.json` 校准草稿已只读导入 `monster.ground_alignment.manual.v1`，源文件聚合 SHA-256 为 `424A6908C242741B9F93198045D2E0389940A96BE70BCD143C121E8A594D1BA0`。仅飞行投影的猎鹰 `monster_id=97/98` 保留原有离地关系；其余 212 个怪物的正式视觉脚点均精确落在 canonical `(0,0)`。
+- 正式运行时升级为 `monster.ground_contact.v5` / `monster.ground_contact.calibration.v5`：普通怪/Boss 基础视觉原点、用户 `visualRootOffset`、视觉脚点和光圈中心各只应用一次；验收台识别已正式导入的同哈希草稿，禁止二次叠加偏移。
+- 祖玛教主使用主资料 `Mon7.wil` 中物化前缀之后的正确动作段：idle/walk/attack/hit/death 起始帧为 `1340/1420/1500/1580/1600`，并锁定原 `384×336` 画布与 `[114,237]` 脚点，避免破坏用户坐标。
+- 所有怪物 Sprite2D 启用图集区域过滤裁切，阻止牛魔系列相邻格碎片渗入。触龙神原素材多帧齐全；验收台仅在预览时解除潜伏隐藏以便查看 idle/attack/death，游戏内钻地机制不变。
+- 集成验收：UI/怪物组合专项 9/9、数据生成检查、214 怪物/40,144 帧几何审计全部通过。检测器已从 `tools/visual_acceptance_lab/visual_acceptance_lab.tscn` 重启。98 个冻结头盔文件聚合 SHA-256 仍为 `55EA59D5A8FF3C9D0F7FCACB368857A780D06EB76565873C75963B73499210FF`，本轮零变化。
+
 ## 2026-07-30 本地视觉验收台
 
 - UI 专业提交 `cd168dd4` 已由集成提交 `ff235d1a` 接入。本地入口为 `tools/run_visual_acceptance_lab.ps1`，独立场景为 `tools/visual_acceptance_lab/visual_acceptance_lab.tscn`；不修改 `project.godot`，不写角色存档、校准草稿或正式素材。
@@ -46,7 +55,7 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `6827bb7d`（本次快照提交只改本文档）。
+- 分支/运行时代码基线：`codex/integration` @ `072c1289`（本次快照提交只改本文档）。
 - tracked 状态：黑铁头盔 151 的旧 `scale_100` 六动作生成图集共 6 个既有在制修改继续保护；本次男性头发接入未暂存、覆盖或提交这些旧图。146/147/149/150/151/218/224/228/232 共 9 份已验收人工草稿继续冻结；236/240 最新人工草稿分别为 SHA-256 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`、`81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`，均保持 dirty 并禁止覆盖。
 - 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
@@ -203,7 +212,7 @@
 
 - integration：`world.actor_footprint.iso_ellipse.v1`、`test.character.roster.full_equipment_skills.v1`。
 - maps：`map_editor_runtime_collision_geometry_v2`、`map_visible_edge_actor_footprint_clearance_v2`、`published_blocked_cells_after_erasure_v1`、`map_editor_runtime_visual_geometry_v5`、`map_actor_occlusion_sort_v5`、`map_diamond_camera_center_constraint_v2`、`player_priority_soft_edge_v1`、`map_runtime_nonwalkable_edge_skirt_v1`。
-- monsters：`monster.overhead_anchor.v4`、`monster.overhead_layout.v3`、`monster.ground_contact.v4`、`monster.ground_contact.calibration.v4`；214 个 `monster_id` 各自保存人工复核的脚点、光圈中心、椭圆尺寸和投影策略，贴图异步激活后必须刷新。
+- monsters：`monster.overhead_anchor.v4`、`monster.overhead_layout.v3`、`monster.ground_alignment.manual.v1`、`monster.ground_contact.v5`、`monster.ground_contact.calibration.v5`；212 个 `monster_id` 使用用户冻结草稿，猎鹰 97/98 保留飞行投影，贴图异步激活后必须刷新。
 - UI：`ui.hud.resource_orb.hole_fill.v1`、`skill_button_assignment_contract_v2`、`ui.hud.skill_icon.caster.<stable_skill_id>`。
 - equipment：`equipment.attribute.master.v2`、`project.hardcore.equipment_attribute_master.v2`、`equipment.test_loadouts.classic_three_tiers.v1`、`equipment.visual_catalog.formal_wearables.v1`、`equipment.paper_doll.presentation_modes.v1`、`equipment.paper_doll.world_avatar.v1`、`equipment.paper_doll.avatar_only.v1`、`equipment.paper_doll.original_client_stage.v1`、`equipment.paper_doll.classic_flattened_head_patch.v1`、`equipment.helmet.calibration_draft.v1`、`equipment.helmet.presentation_calibration.v1`、`equipment.world_wear.male_dress.v1`、`equipment.world_wear.male_weapon.v1`、`equipment.world_helmet.male.extension.v1`、`equipment.world_helmet.runtime_visibility.v1`、`equipment_actor_visual_sort_unit_v3` 与 9 个 `test.loadout.{profession}.{tier}.v1`。
 - skills：`skills.runtime_router.cn_mir2_176.v1`、`skills.progression.cn_mir2_176.v1`、`skills.production_adaptation.hardcore.v1`、`warrior.fire_sword.charge_armed`、`combat.resolution.openmir2.v1`、`physical.hit.random_agility.strict_lt.v1`、`magic.evasion.anti_magic.direct_spell.v1`、`physical.attack_speed.interval_tier.v1`、`player.direct_spell_damage.openmir2.v1`、`caster_skill_animation.v1`、法师/道士主动技能 `action_duration=0.60` / `action_frame_count=6` / `action_frame_time_ms=100` 时序字段、`legacy_clamp_negative_span`、`test.characters.full_skills.v1` 与 9 个 `test.character.{profession}.{woma|zuma|chiyue}.v1`。
@@ -237,8 +246,8 @@
 | 工作树 | 分支/HEAD | dirty | 集成状态 |
 |---|---|---:|---|
 | `HardCore-worktrees/maps` | `codex/maps` @ `2a4d6ccf` | 72 untracked | 用户地图编辑器内容，继续保护；代码等价结果已集成为 `1d74fc72` |
-| `HardCore-worktrees/monsters` | `codex/monsters` @ `45781ded` | tracked clean；68 UID | 已集成为 `c88c6277` |
-| `HardCore-worktrees/ui-art` | `codex/ui-art` @ `2e0fba4a` | tracked clean；Godot UID/输出继续保护 | 纸娃娃始终保留男性头发且头盔后绘制；已作为 `92b3bdba` 集成，专项 7/7、装备套件 17/17 通过 |
+| `HardCore-worktrees/monsters` | `codex/monsters` @ `3a3c00ee` | 本轮 tracked clean；既有 UID/报告继续保护 | 212 份人工脚点、祖玛动作段和牛魔图集裁切已作为 `a9128ed1` 集成，怪物专项 8/8 通过 |
+| `HardCore-worktrees/ui-art` | `codex/ui-art` @ `ff707360` | 本轮代码 clean；Godot import/UID/输出继续保护 | 已正式导入的怪物草稿不再二次叠加；触龙神验收预览可见；已作为 `072c1289` 集成，UI/怪物专项 3/3 通过 |
 | `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `ce58f7bc` | 既有 UID/输出继续保护 | 33 技能 runtime、150 条可执行语义合同和 26 项正式主动技能视觉已集成；`ce58f7bc` 的烈火 canonical 测试修正已作为 `6827bb7d` 集成 |
 | `HardCore-worktrees/equipment` | `codex/equipment` @ `26f25e39` | 既有 monster import、试点截图脚本、UID/生成项继续保护 | 男性 `Hair.wil block 4`、世界头盔隐藏、纸娃娃/背包/地面头盔均已集成；`26f25e39` 的正式武器可见性测试修正已作为 `35568e45` 集成，冻结草稿与生成图继续保护 |
 
