@@ -121,6 +121,30 @@ func _ready() -> void:
 	assert(lab._monster.visual.uses_final_art())
 	assert(lab._active_monster_id == 18)
 	assert(lab._monster.visual.sprite.texture != null)
+	var ground_review := lab.monster_ground_review_snapshot()
+	assert(int(ground_review.get("monsterId", -1)) == 18)
+	assert(
+		ground_review.get("runtimeRingCenter", Vector2.INF)
+		== lab._monster.ground_indicator_center()
+	)
+	assert(
+		ground_review.get("runtimeRingRadii", Vector2.INF)
+		== lab._monster.ground_indicator_radii()
+	)
+	assert(
+		ground_review.get("delta", Vector2.INF)
+		== (
+			ground_review.get("runtimeRingCenter", Vector2.ZERO)
+			- ground_review.get("manualFootCenter", Vector2.ZERO)
+		)
+	)
+	assert(
+		bool(ground_review.get("matches", false))
+		== (
+			ground_review.get("delta", Vector2.INF).length()
+			<= lab.MONSTER_FOOT_MATCH_EPSILON
+		)
+	)
 	var replay_draft := {
 		"runtimeVisualOrigin": [2.0, 7.0],
 		"visualOffset": [3.5, -4.5],

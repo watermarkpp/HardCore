@@ -1,4 +1,6 @@
-param()
+param(
+    [switch]$MonsterGroundReview
+)
 
 $ErrorActionPreference = 'Stop'
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
@@ -13,5 +15,10 @@ New-Item -ItemType Directory -Force -Path $AppDataRoot | Out-Null
 $env:APPDATA = $AppDataRoot
 $env:LOCALAPPDATA = $AppDataRoot
 
-& $Godot --path $ProjectRoot --log-file (Join-Path $LogRoot 'visual_acceptance_lab.log') $Scene
+if ($MonsterGroundReview) {
+    & $Godot --path $ProjectRoot --log-file (Join-Path $LogRoot 'visual_acceptance_lab.log') $Scene -- --monster-ground-review
+}
+else {
+    & $Godot --path $ProjectRoot --log-file (Join-Path $LogRoot 'visual_acceptance_lab.log') $Scene
+}
 exit $LASTEXITCODE

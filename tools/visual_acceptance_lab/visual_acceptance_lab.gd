@@ -35,6 +35,10 @@ const FORMAL_ALIGNMENT_CONTRACT_PATH := (
 )
 const ALIGNMENT_NUDGE := 0.5
 const PLAYBACK_TICK_SECONDS := 1.0 / 60.0
+const MONSTER_GROUND_REVIEW_ARG := "--monster-ground-review"
+const MONSTER_FOOT_MATCH_EPSILON := 0.01
+const MONSTER_TARGET_RING_COLOR := Color("#ffd54f")
+const MONSTER_FOOT_DELTA_COLOR := Color("#ff6b6b")
 
 var _old_test_mode := false
 var _player: PlayerCharacter
@@ -77,6 +81,7 @@ var _monster_runtime_visual_origin := Vector2.ZERO
 var _monster_visual_alignment_offset := Vector2.ZERO
 var _monster_picked_visual_foot_offset := Vector2.ZERO
 var _monster_formal_visual_foot_offset := Vector2.ZERO
+var _active_monster_draft_loaded := false
 
 
 func _ready() -> void:
@@ -91,7 +96,11 @@ func _ready() -> void:
 	_build_preview_actor()
 	_load_alignment_draft()
 	_on_zoom_changed(_zoom_slider.value)
-	_apply_selection()
+	if OS.get_cmdline_user_args().has(MONSTER_GROUND_REVIEW_ARG):
+		_mode_option.select(1)
+		_on_mode_changed(1)
+	else:
+		_apply_selection()
 	_start_playback_timer()
 
 
@@ -588,14 +597,29 @@ func _update_monster_overlay() -> void:
 	)
 	# Mirror the live target-ring contract exactly. The actor owns both the
 	# reviewed-foot center and the collision-radius-derived size.
-	var formal_center := _monster.ground_indicator_center()
-	var formal_radii := _monster.ground_indicator_radii()
+	var review := monster_ground_review_snapshot()
+	var manual_foot: Vector2 = review.get("manualFootCenter", Vector2.ZERO)
+	var runtime_ring: Vector2 = review.get("runtimeRingCenter", Vector2.ZERO)
+	var runtime_radii: Vector2 = review.get("runtimeRingRadii", Vector2.ZERO)
+	if not bool(review.get("matches", false)):
+		_add_line(
+			_overlay_root,
+			PackedVector2Array([manual_foot, runtime_ring]),
+			MONSTER_FOOT_DELTA_COLOR,
+			2.0,
+		)
+	_add_cross(
+		_overlay_root,
+		runtime_ring,
+		MONSTER_TARGET_RING_COLOR,
+		6.0,
+	)
 	_add_ellipse_line(
 		_overlay_root,
-		formal_center,
-		formal_radii,
-		Color(1.0, 0.62, 0.20, 0.72),
-		1.0,
+		runtime_ring,
+		runtime_radii,
+		MONSTER_TARGET_RING_COLOR,
+		2.5,
 	)
 	var rect := Rect2(
 		visual.position + body_sprite.position,
@@ -645,11 +669,30 @@ func _update_status(message := "") -> void:
 		var row := _selected_monster_row()
 		var monster_name := str(row.get("name", ""))
 		var monster_id := int(row.get("monster_id", -1))
+		var review := monster_ground_review_snapshot()
+		var manual_foot: Vector2 = review.get(
+			"manualFootCenter", Vector2.ZERO
+		)
+		var runtime_ring: Vector2 = review.get(
+			"runtimeRingCenter", Vector2.ZERO
+		)
+		var delta: Vector2 = review.get("delta", Vector2.ZERO)
+		var match_text := (
+			"一致"
+			if bool(review.get("matches", false))
+			else "有差异"
+		)
+		var source_text := (
+			"人工草稿"
+			if bool(review.get("draftLoaded", false))
+			else "正式合同（无人工草稿）"
+		)
 		_status.text = (
 			"%s　#%d %s　%s / %s　帧 %d/%d　倍率 %dx\n"
-			+ "黄=怪物逻辑坐标　青十字=你指定的视觉脚点　"
+			+ "青十字=已保存脚点　黄圈/黄小十字=游戏实际目标光圈　"
 			+ "粉=真实物理脚印　蓝菱形=64×32地图格\n"
-			+ "橙=当前正式脚下光圈；先点鞋底，再移动整只怪物使青黄重合"
+			+ "来源=%s　脚点=(%.1f, %.1f)　黄圈=(%.1f, %.1f)　"
+			+ "差值=(%+.1f, %+.1f)【%s】"
 		) % [
 			MONSTER_LAB_CONTRACT_ID,
 			monster_id,
@@ -659,6 +702,14 @@ func _update_status(message := "") -> void:
 			_current_frame + 1,
 			_frame_count(),
 			int(_zoom_slider.value),
+			source_text,
+			manual_foot.x,
+			manual_foot.y,
+			runtime_ring.x,
+			runtime_ring.y,
+			delta.x,
+			delta.y,
+			match_text,
 		]
 		return
 	var status_template := (
@@ -1056,10 +1107,29 @@ func _load_alignment_draft() -> void:
 
 
 func _load_monster_alignment_draft() -> void:
+	_active_monster_draft_loaded = false
 	var draft := MonsterDraftScript.load_draft(_active_monster_id)
 	if draft.is_empty():
 		return
+	_active_monster_draft_loaded = true
 	_restore_monster_alignment_draft(draft)
+
+
+func monster_ground_review_snapshot() -> Dictionary:
+	if _monster == null or _monster.visual == null:
+		return {}
+	var manual_foot := _visual_foot_origin()
+	var runtime_ring := _monster.ground_indicator_center()
+	var delta := runtime_ring - manual_foot
+	return {
+		"monsterId": _active_monster_id,
+		"draftLoaded": _active_monster_draft_loaded,
+		"manualFootCenter": manual_foot,
+		"runtimeRingCenter": runtime_ring,
+		"runtimeRingRadii": _monster.ground_indicator_radii(),
+		"delta": delta,
+		"matches": delta.length() <= MONSTER_FOOT_MATCH_EPSILON,
+	}
 
 
 func _restore_monster_alignment_draft(draft: Dictionary) -> void:
