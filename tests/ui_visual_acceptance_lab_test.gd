@@ -24,10 +24,49 @@ func _ready() -> void:
 	assert(lab._direction_option.item_count == 8)
 	assert(lab._speed_option.item_count == 4)
 	assert(lab._background_option.item_count == 3)
+	assert(lab._foot_pick_button != null)
+	assert(lab._alignment_button != null)
+	assert(lab._alignment_offset_label != null)
 	assert(
 		lab._preview_root.scale
 			== Vector2.ONE * float(lab._zoom_slider.value)
 	)
+	lab._reset_visual_alignment()
+	var expected_foot_origin: Vector2 = (
+		lab._player.visual.position
+		+ lab._player.visual.sprite.position
+		+ Vector2(ArtSpec.WARRIOR_FOOT_ANCHOR)
+	)
+	assert(lab._visual_foot_origin() == expected_foot_origin)
+	var original_visual_position: Vector2 = lab._player.visual.position
+	lab._nudge_visual_foot_anchor(Vector2(1.0, -1.0))
+	assert(lab._visual_foot_anchor_adjustment == Vector2(1.0, -1.0))
+	assert(lab._player.visual.position == original_visual_position)
+	assert(
+		lab._visual_foot_origin()
+			== expected_foot_origin + Vector2(1.0, -1.0)
+	)
+	lab._nudge_visual_alignment(Vector2(0.5, -0.5))
+	assert(lab._visual_alignment_offset == Vector2(0.5, -0.5))
+	assert(
+		lab._player.visual.position
+			== original_visual_position + Vector2(0.5, -0.5)
+	)
+	lab._align_visual_foot_to_standard()
+	assert(lab._visual_foot_origin().is_zero_approx())
+	var alignment_payload: Dictionary = lab.alignment_draft_payload()
+	assert(not bool(alignment_payload.get("formalRuntimeWritten", true)))
+	assert(
+		alignment_payload.get("visualFootAnchorAdjustment", [])
+			== [1.0, -1.0]
+	)
+	var canonical_centers: Dictionary = alignment_payload.get(
+		"canonicalCenters", {}
+	)
+	assert(canonical_centers.get("actorGroundOrigin", []) == [0.0, 0.0])
+	assert(canonical_centers.get("physicsFootprint", []) == [0.0, 0.0])
+	assert(canonical_centers.get("mapDiamond", []) == [0.0, 0.0])
+	lab._reset_visual_alignment()
 	lab._action_option.select(lab.ACTIONS.find("walk"))
 	lab._direction_option.select(0)
 	lab._apply_selection()
