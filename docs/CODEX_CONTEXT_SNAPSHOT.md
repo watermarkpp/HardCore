@@ -5,6 +5,14 @@
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。
 准确性规则：本文件不是代码或 Git 状态的替代品；只核实本次任务实际触及的分支、文件、接口和专项测试。
 
+## 2026-07-30 Android v42 坐标隔离测试包
+
+- Android 版本提交为 `aa0914bf`：`versionCode=42`、`versionName=1.17.6-target-coordinate-isolation`，包名继续为 `com.personal.mafaoffline`，应用名继续为 `HardCore`。
+- APK 从固定提交 `aa0914bf788728294ad1e2a7d0f85488bb00f878` 的全新隔离工作树导出：`outputs/hardcore/HardCore-v42-target-coordinate-isolation-debug.apk`，大小 `244,198,886` 字节，SHA-256 `6FEA504954E52019E5A6415829000CDC7823F002F8B03990690191D68383CB4E`。
+- APK v2/v3 签名、arm64-v8a、minSdk 24、targetSdk 36、横屏/可调整窗口和运行时资源探针通过；12 个关键编译脚本、男性 `Hair.wil block 4`、纸娃娃 base/hair/head patch、世界头盔隐藏和 586 帧施法资源均在包内。
+- 已通过项目内 ADB 对连接的 HONOR 90（REA-AN00）执行保留数据覆盖安装并启动。手机端回读为 v42，`GodotAppLauncher` 位于前台，应用进程正常，近期日志未发现崩溃或 Godot 脚本错误。
+- 构建前后人物脚点草稿、两份抽检怪物草稿和三份怪物正式脚点合同 SHA-256 保持不变。
+
 ## 2026-07-30 怪物黄圈坐标链最终解耦
 
 - 本节覆盖下方早期“地面黄圈直接采用人工视觉脚点”的实现记录。怪物专业提交 `f195a961` 已作为集成提交 `1fc2dfa5` 接入：地面怪物的实时目标黄圈中心固定为怪物 `CharacterBody2D` / 碰撞脚印的本地物理原点 `(0,0)`；`visualRootOffset`、`visualFootOffset`、Sprite 锚点、动作、方向和帧只能移动外观，禁止再推动目标黄圈。飞行/悬浮怪物继续使用明确的地面投影。
