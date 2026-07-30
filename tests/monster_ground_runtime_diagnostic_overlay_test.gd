@@ -27,6 +27,8 @@ func _run() -> void:
 	var overlay := OverlayScript.new()
 	overlay.setup(enemy)
 	add_child(overlay)
+	overlay._process(0.0)
+	assert(overlay.visible, "all living monsters must expose the Android debug probe")
 	var snapshot := overlay.coordinate_snapshot()
 	assert(int(snapshot.monsterId) == 24)
 	assert(snapshot.action == "idle")

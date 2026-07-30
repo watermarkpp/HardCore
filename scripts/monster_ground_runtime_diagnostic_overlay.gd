@@ -36,7 +36,7 @@ func _process(_delta: float) -> void:
 	if not is_instance_valid(actor):
 		visible = false
 		return
-	visible = actor.is_targeted and not actor._dying
+	visible = not actor._dying
 	if visible:
 		queue_redraw()
 
@@ -101,46 +101,68 @@ func _draw() -> void:
 	_draw_cross(manual_foot, MANUAL_FOOT_COLOR, 10.0, 3.0)
 	_draw_cross(runtime_ring, TARGET_RING_COLOR, 6.0, 2.0)
 
-	var text := (
-		"#%d %s  %s/%s src%d f%d\n"
-		+ "O=(%.1f,%.1f) F=(%.1f,%.1f) R=(%.1f,%.1f)\n"
-		+ "F-O=(%+.1f,%+.1f) R-O=(%+.1f,%+.1f) R-F=(%+.1f,%+.1f)"
-	) % [
+	var compact_text := "#%d %s/%s f%d" % [
 		int(snapshot.monsterId),
-		str(snapshot.monsterName),
 		str(snapshot.action),
 		str(snapshot.directionLabel),
-		int(snapshot.sourceDirectionRow),
 		int(snapshot.frame),
-		actor_origin.x,
-		actor_origin.y,
-		manual_foot.x,
-		manual_foot.y,
-		runtime_ring.x,
-		runtime_ring.y,
-		manual_minus_actor.x,
-		manual_minus_actor.y,
-		ring_minus_actor.x,
-		ring_minus_actor.y,
-		ring_minus_manual.x,
-		ring_minus_manual.y,
 	]
-	var text_origin := Vector2(-122.0, -132.0)
+	var compact_origin := Vector2(-54.0, actor.health_bar_anchor_y() - 32.0)
 	draw_rect(
-		Rect2(text_origin + Vector2(-5.0, -17.0), Vector2(244.0, 58.0)),
-		Color(0.02, 0.03, 0.04, 0.82),
+		Rect2(compact_origin + Vector2(-4.0, -14.0), Vector2(108.0, 19.0)),
+		Color(0.02, 0.03, 0.04, 0.72),
 		true,
 	)
-	draw_multiline_string(
+	draw_string(
 		ThemeDB.fallback_font,
-		text_origin,
-		text,
+		compact_origin,
+		compact_text,
 		HORIZONTAL_ALIGNMENT_LEFT,
-		-1.0,
-		13,
-		-1,
+		104.0,
+		11,
 		Color("#f4e2bd"),
 	)
+	if actor.is_targeted:
+		var detail_text := (
+			"#%d %s  %s/%s src%d f%d\n"
+			+ "O=(%.1f,%.1f) F=(%.1f,%.1f) R=(%.1f,%.1f)\n"
+			+ "F-O=(%+.1f,%+.1f) R-O=(%+.1f,%+.1f) R-F=(%+.1f,%+.1f)"
+		) % [
+			int(snapshot.monsterId),
+			str(snapshot.monsterName),
+			str(snapshot.action),
+			str(snapshot.directionLabel),
+			int(snapshot.sourceDirectionRow),
+			int(snapshot.frame),
+			actor_origin.x,
+			actor_origin.y,
+			manual_foot.x,
+			manual_foot.y,
+			runtime_ring.x,
+			runtime_ring.y,
+			manual_minus_actor.x,
+			manual_minus_actor.y,
+			ring_minus_actor.x,
+			ring_minus_actor.y,
+			ring_minus_manual.x,
+			ring_minus_manual.y,
+		]
+		var detail_origin := Vector2(-122.0, -132.0)
+		draw_rect(
+			Rect2(detail_origin + Vector2(-5.0, -17.0), Vector2(244.0, 58.0)),
+			Color(0.02, 0.03, 0.04, 0.88),
+			true,
+		)
+		draw_multiline_string(
+			ThemeDB.fallback_font,
+			detail_origin,
+			detail_text,
+			HORIZONTAL_ALIGNMENT_LEFT,
+			-1.0,
+			13,
+			-1,
+			Color("#f4e2bd"),
+		)
 
 
 func _draw_cross(
