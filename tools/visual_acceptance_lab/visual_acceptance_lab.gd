@@ -22,6 +22,9 @@ const ALIGNMENT_DRAFT_CONTRACT_ID := (
 const ALIGNMENT_DRAFT_PATH := (
 	"res://outputs/visual_acceptance/player_visual_alignment_draft.json"
 )
+const FORMAL_ALIGNMENT_CONTRACT_PATH := (
+	"res://assets/data/player_visual_alignment.json"
+)
 const ALIGNMENT_NUDGE := 0.5
 const PLAYBACK_TICK_SECONDS := 1.0 / 60.0
 
@@ -54,6 +57,7 @@ var _foot_pick_mode := false
 var _alignment_mode := false
 var _dragging_visual := false
 var _runtime_visual_origin := Vector2.ZERO
+var _runtime_foot_anchor_adjustment := Vector2.ZERO
 var _visual_alignment_offset := Vector2.ZERO
 var _visual_foot_anchor_adjustment := Vector2.ZERO
 
@@ -332,6 +336,7 @@ func _build_preview_actor() -> void:
 		_player.health_bar.visible = false
 	_player.visual.set_process(false)
 	_runtime_visual_origin = _player.visual.position
+	_load_formal_alignment_contract()
 	_overlay_root = Node2D.new()
 	_overlay_root.name = "DiagnosticsOverlay"
 	_overlay_root.z_index = 100
@@ -594,7 +599,7 @@ func _align_visual_foot_to_standard() -> void:
 
 
 func _reset_visual_alignment() -> void:
-	_visual_foot_anchor_adjustment = Vector2.ZERO
+	_visual_foot_anchor_adjustment = _runtime_foot_anchor_adjustment
 	_set_visual_alignment_offset(Vector2.ZERO)
 
 
@@ -639,8 +644,37 @@ func alignment_draft_payload() -> Dictionary:
 			"physicsFootprint": [0.0, 0.0],
 			"mapDiamond": [0.0, 0.0],
 		},
-		"formalRuntimeWritten": false,
+		"formalRuntimeWritten": _current_alignment_matches_formal(),
+		"formalContractPath": FORMAL_ALIGNMENT_CONTRACT_PATH,
 	}
+
+
+func _current_alignment_matches_formal() -> bool:
+	return (
+		_visual_alignment_offset.is_zero_approx()
+		and _visual_foot_anchor_adjustment.is_equal_approx(
+			_runtime_foot_anchor_adjustment
+		)
+	)
+
+
+func _load_formal_alignment_contract() -> void:
+	_runtime_foot_anchor_adjustment = Vector2.ZERO
+	if not FileAccess.file_exists(FORMAL_ALIGNMENT_CONTRACT_PATH):
+		return
+	var file := FileAccess.open(FORMAL_ALIGNMENT_CONTRACT_PATH, FileAccess.READ)
+	var parsed: Variant = (
+		JSON.parse_string(file.get_as_text()) if file != null else null
+	)
+	if not parsed is Dictionary:
+		return
+	var adjustment: Variant = parsed.get(
+		"visualFootAnchorAdjustment", []
+	)
+	if adjustment is Array and adjustment.size() == 2:
+		_runtime_foot_anchor_adjustment = Vector2(
+			float(adjustment[0]), float(adjustment[1])
+		)
 
 
 func _save_alignment_draft() -> void:
@@ -660,7 +694,11 @@ func _save_alignment_draft() -> void:
 	file.store_string(JSON.stringify(alignment_draft_payload(), "\t") + "\n")
 	file.close()
 	_update_status(
-		"对齐草稿已保存：%s；尚未写入正式运行时。"
+		(
+			"对齐草稿已保存：%s；当前参数已匹配正式运行时。"
+			if _current_alignment_matches_formal()
+			else "对齐草稿已保存：%s；等待接入正式运行时。"
+		)
 		% ALIGNMENT_DRAFT_PATH
 	)
 
@@ -668,7 +706,7 @@ func _save_alignment_draft() -> void:
 func _load_alignment_draft() -> void:
 	var path := ProjectSettings.globalize_path(ALIGNMENT_DRAFT_PATH)
 	if not FileAccess.file_exists(path):
-		_set_visual_alignment_offset(Vector2.ZERO)
+		_reset_visual_alignment()
 		return
 	var file := FileAccess.open(path, FileAccess.READ)
 	var parsed: Variant = (
@@ -678,24 +716,37 @@ func _load_alignment_draft() -> void:
 		not parsed is Dictionary
 		or str(parsed.get("contractId", "")) != ALIGNMENT_DRAFT_CONTRACT_ID
 	):
-		_set_visual_alignment_offset(Vector2.ZERO)
+		_reset_visual_alignment()
 		return
-	var offset: Variant = parsed.get("visualOffset", [])
-	var foot_adjustment: Variant = parsed.get(
-		"visualFootAnchorAdjustment", []
+	var draft_origin := _vector2_from_array(
+		parsed.get("runtimeVisualOrigin", []), _runtime_visual_origin
 	)
-	if foot_adjustment is Array and foot_adjustment.size() == 2:
-		_visual_foot_anchor_adjustment = Vector2(
-			float(foot_adjustment[0]), float(foot_adjustment[1])
+	var draft_offset := _vector2_from_array(
+		parsed.get("visualOffset", []), Vector2.ZERO
+	)
+	var draft_foot_adjustment := _vector2_from_array(
+		parsed.get("visualFootAnchorAdjustment", []),
+		_runtime_foot_anchor_adjustment
+	)
+	var draft_already_formal := (
+		(draft_origin + draft_offset).is_equal_approx(
+			_runtime_visual_origin
 		)
-	else:
-		_visual_foot_anchor_adjustment = Vector2.ZERO
-	if offset is Array and offset.size() == 2:
-		_set_visual_alignment_offset(
-			Vector2(float(offset[0]), float(offset[1]))
+		and draft_foot_adjustment.is_equal_approx(
+			_runtime_foot_anchor_adjustment
 		)
+	)
+	if draft_already_formal:
+		_reset_visual_alignment()
 	else:
-		_set_visual_alignment_offset(Vector2.ZERO)
+		_visual_foot_anchor_adjustment = draft_foot_adjustment
+		_set_visual_alignment_offset(draft_offset)
+
+
+func _vector2_from_array(value: Variant, fallback: Vector2) -> Vector2:
+	if value is Array and value.size() == 2:
+		return Vector2(float(value[0]), float(value[1]))
+	return fallback
 
 
 func _reload_runtime_art() -> void:
