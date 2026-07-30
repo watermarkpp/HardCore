@@ -586,10 +586,10 @@ func _update_monster_overlay() -> void:
 	_draw_canonical_ground_overlay(
 		_visual_foot_origin(), _monster.collision_radius
 	)
-	var formal_center := (
-		visual.position + visual.ground_contact_offset()
-	)
-	var formal_radii := visual.ground_indicator_radii(Vector2(22, 7))
+	# Mirror the live target-ring contract exactly. The actor owns both the
+	# reviewed-foot center and the collision-radius-derived size.
+	var formal_center := _monster.ground_indicator_center()
+	var formal_radii := _monster.ground_indicator_radii()
 	_add_ellipse_line(
 		_overlay_root,
 		formal_center,
