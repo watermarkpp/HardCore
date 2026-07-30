@@ -1,6 +1,9 @@
 class_name PlayerCharacter
 extends CharacterBody2D
 
+const PlayerGroundRuntimeDiagnosticOverlayScript := preload(
+	"res://scripts/player_ground_runtime_diagnostic_overlay.gd"
+)
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
 
 const PlayerVisualScript := preload("res://scripts/player_visual.gd")
@@ -83,6 +86,7 @@ var movement_input_active := false
 var movement_facing := Vector2.DOWN
 var actual_motion_facing := Vector2.DOWN
 var environment_blocker: Node
+var ground_runtime_diagnostic_overlay: Node2D
 
 const FACING_DIRECTIONS: Array[Vector2] = [
 	Vector2.DOWN, Vector2(-0.70710678, 0.70710678), Vector2.LEFT, Vector2(-0.70710678, -0.70710678),
@@ -111,6 +115,13 @@ func _ready() -> void:
 	visual.name = "PlayerVisual"
 	visual.setup(self)
 	add_child(visual)
+	if PlayerGroundRuntimeDiagnosticOverlayScript.enabled_for_runtime():
+		ground_runtime_diagnostic_overlay = (
+			PlayerGroundRuntimeDiagnosticOverlayScript.new()
+		)
+		ground_runtime_diagnostic_overlay.name = "GroundRuntimeDiagnosticOverlay"
+		ground_runtime_diagnostic_overlay.setup(self)
+		add_child(ground_runtime_diagnostic_overlay)
 	health_bar = PlayerHealthBarScript.new()
 	health_bar.name = "HealthBar"
 	health_bar.position = ArtSpec.PLAYER_HEALTH_BAR_OFFSET
