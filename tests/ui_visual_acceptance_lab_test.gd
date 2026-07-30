@@ -24,6 +24,10 @@ func _ready() -> void:
 	assert(lab._direction_option.item_count == 8)
 	assert(lab._speed_option.item_count == 4)
 	assert(lab._background_option.item_count == 3)
+	assert(
+		lab._preview_root.scale
+			== Vector2.ONE * float(lab._zoom_slider.value)
+	)
 	lab._action_option.select(lab.ACTIONS.find("walk"))
 	lab._direction_option.select(0)
 	lab._apply_selection()
@@ -31,10 +35,12 @@ func _ready() -> void:
 	assert(playback_frame_count > 1)
 	var initial_lab_frame: int = lab._current_frame
 	var initial_visual_frame: int = lab._player.visual.current_frame
+	var initial_body_region: Rect2 = lab._player.visual.sprite.region_rect
 	for tick in 20:
 		await get_tree().process_frame
 	assert(lab._current_frame != initial_lab_frame)
 	assert(lab._player.visual.current_frame != initial_visual_frame)
+	assert(lab._player.visual.sprite.region_rect != initial_body_region)
 	for action_index in lab.ACTIONS.size():
 		lab._action_option.select(action_index)
 		lab._direction_option.select(action_index % 8)
