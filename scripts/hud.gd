@@ -380,6 +380,9 @@ func _build_combat_controls(root: Control) -> void:
 		skill_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		skill_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		skill_label.add_theme_font_size_override("font_size", 12)
+		skill_label.add_theme_color_override("font_color", Color("f4e2bd"))
+		skill_label.add_theme_color_override("font_outline_color", Color("120d0a"))
+		skill_label.add_theme_constant_override("outline_size", 3)
 		skill_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		disc.add_child(skill_label)
 		quick_slot_labels.append(skill_label)
@@ -852,9 +855,19 @@ func update_quick_slots() -> void:
 		var skill_texture := HUDSkillIconCatalogScript.texture_for(skill_name)
 		var skill_icon_id := HUDSkillIconCatalogScript.source_id_for(skill_name)
 		var skill_icon_path := HUDSkillIconCatalogScript.source_path_for(skill_name)
-		var display_text := "%d\n%s%s" % [index + 1, skill_name if not skill_name.is_empty() else "空", marker]
-		quick_buttons[index].text = display_text
+		# The child SkillLabel is the only visible text layer. Keeping a second
+		# full skill name on the transparent Button leaks black text whenever a
+		# mobile theme state (focus/disabled/hover-pressed) overrides its color.
+		quick_buttons[index].text = ""
 		quick_buttons[index].tooltip_text = skill_name if not skill_name.is_empty() else "空技能槽"
+		quick_buttons[index].set_meta(
+			"display_text",
+			"%d\n%s%s" % [
+				index + 1,
+				skill_name if not skill_name.is_empty() else "空",
+				marker,
+			],
+		)
 		if index < quick_slot_icons.size():
 			quick_slot_icons[index].texture = skill_texture
 			quick_slot_icons[index].visible = skill_texture != null
