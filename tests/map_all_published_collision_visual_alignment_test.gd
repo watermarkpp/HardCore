@@ -94,10 +94,9 @@ func _ready() -> void:
 			var erased_world := CollisionGeometry.cell_center_world(
 				cell, design_size
 			)
-			# A last-row logical cell can have its center exactly on the packaged
-			# canvas edge (size - 0.5). That point is intentionally outside the
-			# visible-ground contract and must remain boundary-blocked even though
-			# the authored cell itself was erased.
+			# Cell centers remain inside the logical 0..size visible diamond.
+			# The packaged canvas adds transparent half-cell padding and must not
+			# redefine whether an authored cell is walkable.
 			if CollisionGeometry.visible_ground_contains_tile(
 				MapEditorCoordinate.world_to_tile(erased_world, design_size),
 				design_size
@@ -185,13 +184,13 @@ func _assert_ground_origin(
 		visible_top_world.is_equal_approx(MapEditorCoordinate.tile_to_world(
 			Vector2(-0.5, -0.5), design_size
 		)),
-		"%s visible canvas top does not match physical boundary" % map_key
+		"%s transparent canvas top padding mismatch" % map_key
 	)
 	assert(
 		visible_bottom_world.is_equal_approx(MapEditorCoordinate.tile_to_world(
 			Vector2(design_size) - Vector2(0.5, 0.5), design_size
 		)),
-		"%s visible canvas bottom does not match physical boundary" % map_key
+		"%s transparent canvas bottom padding mismatch" % map_key
 	)
 	var background := WorldBackgroundScript.new()
 	var runtime_fill := background.editor_runtime_ground_boundary_world(
@@ -202,13 +201,17 @@ func _assert_ground_origin(
 		"%s runtime base fill/guard diverged from chunk and collision edge"
 			% map_key
 	)
-	var old_shifted_top := MapEditorCoordinate.tile_to_world(
+	var logical_top := MapEditorCoordinate.tile_to_world(
 		Vector2.ZERO, design_size
 	)
 	assert(
-		is_equal_approx(old_shifted_top.y - runtime_fill[0].y, 16.0),
-		"%s regression probe no longer measures the historical +16px shift"
+		logical_top.is_equal_approx(runtime_fill[0]),
+		"%s physical boundary does not use the visible logical diamond tip"
 			% map_key
+	)
+	assert(
+		is_equal_approx(logical_top.y - visible_top_world.y, 16.0),
+		"%s canvas padding was incorrectly promoted to walkable ground" % map_key
 	)
 	background.free()
 
@@ -221,30 +224,23 @@ func _assert_boundary_contract(
 		design_size
 	)
 	var expected := PackedVector2Array([
-		Vector2(-0.5, -0.5),
-		Vector2(float(design_size.x) - 0.5, -0.5),
-		Vector2(design_size) - Vector2(0.5, 0.5),
-		Vector2(-0.5, float(design_size.y) - 0.5),
+		Vector2.ZERO,
+		Vector2(float(design_size.x), 0.0),
+		Vector2(design_size),
+		Vector2(0.0, float(design_size.y)),
 	])
 	assert(tile_boundary == expected, "map %d visible edge mismatch" % runtime_map_id)
 	var top_vertex := MapEditorCoordinate.tile_to_world(
-		Vector2(-0.5, -0.5), design_size
-	)
-	var logical_top := MapEditorCoordinate.tile_to_world(
 		Vector2.ZERO, design_size
-	)
-	assert(
-		is_equal_approx(logical_top.y - top_vertex.y, 16.0),
-		"map %d half-cell boundary must remove collision_y=+16" % runtime_map_id
 	)
 	var empty_collision := {"blocked_tiles": []}
 	var visual_edge := MapEditorCoordinate.tile_to_world(
-		Vector2(float(design_size.x) * 0.5 - 0.5, -0.5),
+		Vector2(float(design_size.x) * 0.5, 0.0),
 		design_size
 	)
 	var edge_direction := (
 		MapEditorCoordinate.tile_to_world(
-			Vector2(float(design_size.x) - 0.5, -0.5), design_size
+			Vector2(float(design_size.x), 0.0), design_size
 		) - top_vertex
 	)
 	var outward := Vector2(edge_direction.y, -edge_direction.x).normalized()
@@ -398,7 +394,7 @@ func _assert_bich_runtime_physics() -> void:
 	assert(background._editor_runtime_blocks_world(blocked_center))
 	assert(not _physics_hits(blocked_center).is_empty())
 	var visual_edge := MapEditorCoordinate.tile_to_world(
-		Vector2(float(design_size.x) * 0.5 - 0.5, -0.5),
+		Vector2(float(design_size.x) * 0.5, 0.0),
 		design_size
 	)
 	var visual_boundary := CollisionGeometry.map_inner_boundary_world(design_size)
