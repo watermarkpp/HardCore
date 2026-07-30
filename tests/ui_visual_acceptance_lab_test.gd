@@ -121,6 +121,18 @@ func _ready() -> void:
 	assert(lab._monster.visual.uses_final_art())
 	assert(lab._active_monster_id == 18)
 	assert(lab._monster.visual.sprite.texture != null)
+	var active_draft := lab.MonsterDraftScript.load_draft(
+		lab._active_monster_id
+	)
+	if lab.MonsterDraftScript.draft_is_formal(
+		lab._active_monster_id, active_draft
+	):
+		assert(lab._monster_visual_alignment_offset.is_zero_approx())
+		assert(
+			lab._monster_picked_visual_foot_offset.is_equal_approx(
+				lab._monster_formal_visual_foot_offset
+			)
+		)
 	lab._reset_visual_alignment()
 	lab._set_visual_foot_anchor_from_preview(Vector2(3.0, -2.0))
 	assert(lab._visual_foot_origin().is_equal_approx(Vector2(3.0, -2.0)))
@@ -143,6 +155,22 @@ func _ready() -> void:
 			lab._monster.visual.current_state
 			== lab.MONSTER_ACTIONS[action_index]
 		)
+	var touch_dragon_index := -1
+	for row_index in lab._monster_rows.size():
+		if int(lab._monster_rows[row_index].get("monster_id", -1)) == 124:
+			touch_dragon_index = row_index
+			break
+	assert(touch_dragon_index >= 0)
+	lab._monster_option.select(touch_dragon_index)
+	lab._rebuild_monster_actor(true)
+	assert(lab._active_monster_id == 124)
+	assert(not lab._monster._burrowed)
+	assert(lab._monster.visual.visible)
+	for action_name in ["idle", "attack", "death"]:
+		lab._action_option.select(lab.MONSTER_ACTIONS.find(action_name))
+		lab._apply_selection()
+		assert(lab._frame_count() > 1)
+		assert(lab._monster.visual.sprite.texture != null)
 	lab._mode_option.select(0)
 	lab._on_mode_changed(0)
 	assert(not lab._is_monster_mode())
