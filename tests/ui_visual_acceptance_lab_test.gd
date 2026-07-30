@@ -36,11 +36,18 @@ func _ready() -> void:
 		lab._player.visual.position
 		+ lab._player.visual.sprite.position
 		+ Vector2(ArtSpec.WARRIOR_FOOT_ANCHOR)
+		+ lab._runtime_foot_anchor_adjustment
 	)
 	assert(lab._visual_foot_origin() == expected_foot_origin)
 	var original_visual_position: Vector2 = lab._player.visual.position
+	var original_foot_adjustment: Vector2 = (
+		lab._runtime_foot_anchor_adjustment
+	)
 	lab._nudge_visual_foot_anchor(Vector2(1.0, -1.0))
-	assert(lab._visual_foot_anchor_adjustment == Vector2(1.0, -1.0))
+	assert(
+		lab._visual_foot_anchor_adjustment
+			== original_foot_adjustment + Vector2(1.0, -1.0)
+	)
 	assert(lab._player.visual.position == original_visual_position)
 	assert(
 		lab._visual_foot_origin()
@@ -58,7 +65,10 @@ func _ready() -> void:
 	assert(not bool(alignment_payload.get("formalRuntimeWritten", true)))
 	assert(
 		alignment_payload.get("visualFootAnchorAdjustment", [])
-			== [1.0, -1.0]
+			== [
+				original_foot_adjustment.x + 1.0,
+				original_foot_adjustment.y - 1.0,
+			]
 	)
 	var canonical_centers: Dictionary = alignment_payload.get(
 		"canonicalCenters", {}
