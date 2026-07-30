@@ -10,6 +10,7 @@
 - UI 专业提交 `cd168dd4` 已由集成提交 `ff235d1a` 接入。本地入口为 `tools/run_visual_acceptance_lab.ps1`，独立场景为 `tools/visual_acceptance_lab/visual_acceptance_lab.tscn`；不修改 `project.godot`，不写角色存档、校准草稿或正式素材。
 - 当前最小版本直接实例化正式 `PlayerCharacter` / `PlayerVisual` 运行时合成，覆盖战士、法师、道士，`idle/walk/attack/cast/hit/death` 六动作与八方向；支持 25%/50%/100%/200% 播放、逐帧、1–4 倍显示、三种背景、一键重载正式素材和截图。
 - 播放驱动修复已由 UI 提交 `1d86eba5` / `05731bbf`、集成提交 `677ae9d6` / `f8a11079` 接入：使用 `PROCESS_MODE_ALWAYS` 的独立 60 Hz 计时器驱动正式视觉帧，初始 3× 显示倍率真实应用，并由真实 SceneTree 时间推进、正式身体贴图区域切换和预览缩放回归覆盖“按钮切换但人物不动”。
+- 人物脚点手动对齐由 UI 提交 `7855c2a9`、集成提交 `60348875` 接入：黄色角色地面原点、粉色 `36×18` 物理脚印和蓝色 `64×32` 地图菱形中心固定为同一 `(0,0)`；用户先点击鞋底中点定义蓝色视觉脚点，再拖动整套人物视觉或用方向键按 `0.5px` 微调使蓝黄重合。草稿仅保存到 `outputs/visual_acceptance/player_visual_alignment_draft.json` 并自动重载，未确认前不写正式人物运行时。
 - 辅助层同时显示角色坐标、正式视觉脚点、`18×9` 物理脚印、64×32 地面菱形与当前帧边界，用于直接暴露外观锚点和物理坐标漂移。截图只写入 `outputs/visual_acceptance/**`。
 - UI 工作树与真实集成基线专项均为 3/3 通过：`ui_visual_acceptance_lab_test`、`player_three_profession_visual_catalog_test`、`equipment_world_helmet_hidden_hair_test`。
 - `item_236.json` / `item_240.json` 冻结 SHA-256 仍分别为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC` 与 `81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`，本任务未修改任何头盔草稿或生成图。
