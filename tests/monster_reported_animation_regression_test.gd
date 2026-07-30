@@ -70,6 +70,36 @@ func _run() -> void:
 			"触龙神 %s 没有可播放的不同动画帧" % action_name,
 		)
 
+	var complete_manifest := _load_json(
+		"res://assets/data/complete_monster_client_art_sources.json"
+	)
+	var cow_general: Dictionary = complete_manifest.get(
+		"runtimeMappingsByMonsterId", {}
+	).get("218", {})
+	assert(cow_general.get("frameSize", []) == [272.0, 272.0])
+	assert(cow_general.get("footAnchor", []) == [84.0, 143.0])
+	assert(
+		int(cow_general.get("alphaIslandCleanup", {}).get(
+			"maxPixels", 0
+		)) == 48
+	)
+	for action_name: String in REQUIRED_ACTIONS:
+		var cleanup: Dictionary = cow_general.get(
+			"actions", {}
+		).get(action_name, {}).get("alphaIslandCleanup", {})
+		assert(int(cleanup.get("removedComponents", 0)) > 0)
+		assert(int(cleanup.get("removedPixels", 0)) > 0)
+	var cow_attack := Image.load_from_file(
+		ProjectSettings.globalize_path(
+			str(cow_general.actions.attack.path)
+		)
+	)
+	assert(not cow_attack.is_empty())
+	# attack S frame 0 previously showed a detached dark vertical bar and a
+	# red/green control-color dash at these exact local coordinates.
+	assert(cow_attack.get_pixel(63, 4 * 272 + 140).a == 0.0)
+	assert(cow_attack.get_pixel(63, 4 * 272 + 180).a == 0.0)
+
 	var player := PlayerCharacter.new()
 	add_child(player)
 	player.set_physics_process(false)
@@ -91,7 +121,7 @@ func _run() -> void:
 	print(
 		"MONSTER_REPORTED_ANIMATION_REGRESSION_PASS "
 		+ "zuma_sources=correct touch_dragon_frames=present "
-		+ "cow_region_isolation=14"
+		+ "cow_region_isolation=14 cow_general_fragments=removed"
 	)
 	get_tree().quit(0)
 

@@ -16,6 +16,7 @@ they are never substituted with another monster's artwork.
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import re
@@ -45,6 +46,24 @@ OUTPUT_DIR = ROOT / "assets/art/monsters/client_complete"
 MANIFEST_PATH = ROOT / "assets/data/complete_monster_client_art_sources.json"
 
 PADDING = 8
+ALPHA_ISLAND_CLEANUP = {
+    # 牛魔将军 / 牛魔将军0 share this exact visual profile. The source WIL
+    # contains isolated control-color/dark islands (for example a 37-pixel
+    # vertical bar and a 3-pixel red/green dash in attack S frame 0). They are
+    # not connected to the authored body, weapon, or shadow.
+    (204, 19): {
+        "maxPixels": 48,
+        "method": "remove_disconnected_alpha_islands_8_connected_v1",
+    },
+}
+LOCKED_PROFILE_GEOMETRY = {
+    # Keep the exact canvas and foot coordinate system used by the user's
+    # approved monsterId 218/219 ground-alignment drafts.
+    (204, 19): {
+        "frameSize": [272, 272],
+        "footAnchor": [84, 143],
+    },
+}
 REQUIRED_ACTIONS = {
     "idle": "ActStand",
     "walk": "ActWalk",
@@ -52,6 +71,53 @@ REQUIRED_ACTIONS = {
     "hit": "ActStruck",
     "death": "ActDie",
 }
+
+
+def remove_small_alpha_islands(
+    image: Image.Image,
+    max_pixels: int,
+) -> tuple[Image.Image, int, int]:
+    alpha = image.getchannel("A")
+    pixels = alpha.load()
+    width, height = alpha.size
+    visited: set[tuple[int, int]] = set()
+    removed_components = 0
+    removed_pixels = 0
+    for y in range(height):
+        for x in range(width):
+            if pixels[x, y] == 0 or (x, y) in visited:
+                continue
+            component = [(x, y)]
+            visited.add((x, y))
+            cursor = 0
+            while cursor < len(component):
+                current_x, current_y = component[cursor]
+                cursor += 1
+                for delta_y in (-1, 0, 1):
+                    for delta_x in (-1, 0, 1):
+                        neighbor = (
+                            current_x + delta_x,
+                            current_y + delta_y,
+                        )
+                        if (
+                            0 <= neighbor[0] < width
+                            and 0 <= neighbor[1] < height
+                            and neighbor not in visited
+                            and pixels[neighbor[0], neighbor[1]] > 0
+                        ):
+                            visited.add(neighbor)
+                            component.append(neighbor)
+            if len(component) > max_pixels:
+                continue
+            removed_components += 1
+            removed_pixels += len(component)
+            for component_x, component_y in component:
+                pixels[component_x, component_y] = 0
+    if removed_components == 0:
+        return image, 0, 0
+    cleaned = image.copy()
+    cleaned.putalpha(alpha)
+    return cleaned, removed_components, removed_pixels
 
 # Active GetRaceByPM cases in the version-bound original client. RaceImg 13 is
 # intentionally absent here because its already-bound 食人花 profile has a
@@ -394,6 +460,7 @@ def build_profile(
     table = tables[action_table]
     decoded: dict[str, dict[str, Any]] = {}
     bounds: list[tuple[int, int, int, int]] = []
+    cleanup_spec = ALPHA_ISLAND_CLEANUP.get((appearance, race_img), {})
 
     for action_name in REQUIRED_ACTIONS:
         source_override = ACTION_SOURCE_OVERRIDES.get((action_table, action_name), "")
@@ -414,6 +481,8 @@ def build_profile(
         )
         action_frames: dict[tuple[int, int], tuple[Image.Image, dict[str, int], int]] = {}
         missing: list[int] = []
+        removed_components = 0
+        removed_pixels = 0
         for direction in range(8):
             for frame in range(frame_count):
                 source_direction = 0 if repeat_fixed_body else direction
@@ -432,6 +501,15 @@ def build_profile(
                     missing.append(index)
                     continue
                 image = image.convert("RGBA")
+                if cleanup_spec:
+                    image, frame_components, frame_pixels = (
+                        remove_small_alpha_islands(
+                            image,
+                            int(cleanup_spec["maxPixels"]),
+                        )
+                    )
+                    removed_components += frame_components
+                    removed_pixels += frame_pixels
                 alpha_bounds = image.getchannel("A").getbbox()
                 if alpha_bounds is None:
                     missing.append(index)
@@ -461,6 +539,8 @@ def build_profile(
                 if repeat_fixed_body
                 else ""
             ),
+            "removedAlphaIslandComponents": removed_components,
+            "removedAlphaIslandPixels": removed_pixels,
             "frames": action_frames,
         }
 
@@ -472,9 +552,28 @@ def build_profile(
     min_y = min(0, min(row[1] for row in bounds))
     max_x = max(0, max(row[2] for row in bounds))
     max_y = max(0, max(row[3] for row in bounds))
-    cell_width = ((max_x - min_x + PADDING * 2 + 15) // 16) * 16
-    cell_height = ((max_y - min_y + PADDING * 2 + 15) // 16) * 16
-    foot_anchor = (-min_x + PADDING, -min_y + PADDING)
+    locked_geometry = LOCKED_PROFILE_GEOMETRY.get(
+        (appearance, race_img), {}
+    )
+    if locked_geometry:
+        cell_width, cell_height = map(
+            int, locked_geometry["frameSize"]
+        )
+        foot_anchor = tuple(map(int, locked_geometry["footAnchor"]))
+        if any(
+            row[0] + foot_anchor[0] < 0
+            or row[1] + foot_anchor[1] < 0
+            or row[2] + foot_anchor[0] > cell_width
+            or row[3] + foot_anchor[1] > cell_height
+            for row in bounds
+        ):
+            raise ValueError(
+                "cleaned profile frames do not fit the locked user geometry"
+            )
+    else:
+        cell_width = ((max_x - min_x + PADDING * 2 + 15) // 16) * 16
+        cell_height = ((max_y - min_y + PADDING * 2 + 15) // 16) * 16
+        foot_anchor = (-min_x + PADDING, -min_y + PADDING)
 
     slug = f"appearance_{appearance:03d}_race_{race_img:02d}"
     output_dir = OUTPUT_DIR / slug
@@ -537,12 +636,20 @@ def build_profile(
             action_record["directionProjectionReason"] = action[
                 "directionProjectionReason"
             ]
+        if cleanup_spec:
+            action_record["alphaIslandCleanup"] = {
+                **cleanup_spec,
+                "removedComponents": int(
+                    action["removedAlphaIslandComponents"]
+                ),
+                "removedPixels": int(action["removedAlphaIslandPixels"]),
+            }
         actions[action_name] = action_record
 
     client_library = (
         f"dev_art_sources/{library.relative_to(ROOT / 'dev_art_sources').as_posix()}"
     )
-    return {
+    profile = {
         "appearance": appearance,
         "raceImg": race_img,
         "actionTable": action_table,
@@ -561,9 +668,31 @@ def build_profile(
         "directions": 8,
         "actions": actions,
     }
+    if cleanup_spec:
+        profile["alphaIslandCleanup"] = deepcopy(cleanup_spec)
+        profile["lockedUserGeometry"] = deepcopy(locked_geometry)
+    return profile
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--profile",
+        action="append",
+        default=[],
+        help=(
+            "rebuild only appearance:raceImg:actionTable and update only its "
+            "existing manifest records; repeat for multiple exact profiles"
+        ),
+    )
+    args = parser.parse_args()
+    requested_profiles: set[tuple[int, int, str]] = set()
+    for value in args.profile:
+        parts = str(value).split(":")
+        if len(parts) != 3:
+            raise ValueError(f"invalid --profile value: {value}")
+        requested_profiles.add((int(parts[0]), int(parts[1]), parts[2]))
+
     project_monsters = json.loads(MONSTERS_PATH.read_text(encoding="utf-8"))[
         "monsters"
     ]
@@ -647,6 +776,62 @@ def main() -> None:
             "appearance": appearance,
             "actionTable": action_table,
         }
+
+    if requested_profiles:
+        resolved_profiles = {
+            (
+                int(resolution["appearance"]),
+                int(resolution["raceImg"]),
+                str(resolution["actionTable"]),
+            )
+            for resolution in resolutions.values()
+        }
+        missing_profiles = requested_profiles - resolved_profiles
+        if missing_profiles:
+            raise ValueError(
+                f"requested profiles are not formally resolved: {missing_profiles}"
+            )
+        payload = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+        runtime_by_id = payload["runtimeMappingsByMonsterId"]
+        runtime_by_name = payload["runtimeMappings"]
+        rebuilt_profiles = {
+            key: build_profile(*key, action_tables)
+            for key in sorted(requested_profiles)
+        }
+        updated_ids: list[int] = []
+        for monster_id, resolution in sorted(resolutions.items()):
+            key = (
+                int(resolution["appearance"]),
+                int(resolution["raceImg"]),
+                str(resolution["actionTable"]),
+            )
+            if key not in rebuilt_profiles:
+                continue
+            record = deepcopy(rebuilt_profiles[key])
+            monster = resolution["monster"]
+            record.update(
+                {
+                    "monsterId": monster_id,
+                    "name": str(monster["name"]),
+                    "baseName": str(monster["baseName"]),
+                    "monsterIds": [monster_id],
+                    "databaseName": resolution["databaseName"],
+                    "resolutionStatus": resolution["resolutionStatus"],
+                    "serviceRace": int(resolution["serviceRace"]),
+                }
+            )
+            runtime_by_id[str(monster_id)] = record
+            runtime_by_name[str(monster["name"])] = deepcopy(record)
+            updated_ids.append(monster_id)
+        MANIFEST_PATH.write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        print(
+            "COMPLETE_MONSTER_CLIENT_ART_TARGETED "
+            f"profiles={len(rebuilt_profiles)} ids={updated_ids}"
+        )
+        return
 
     profiles: dict[tuple[int, int, str], dict[str, Any]] = {}
     failed_profiles: set[tuple[int, int, str]] = set()
