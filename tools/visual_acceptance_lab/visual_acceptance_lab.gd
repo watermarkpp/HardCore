@@ -50,6 +50,7 @@ func _ready() -> void:
 		get_window().size = Vector2i(1280, 720)
 	_build_ui()
 	_build_preview_actor()
+	_on_zoom_changed(_zoom_slider.value)
 	_apply_selection()
 	_start_playback_timer()
 
