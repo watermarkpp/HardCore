@@ -945,11 +945,12 @@ func poison_indicator_anchor_y() -> float:
 
 
 func ground_indicator_center() -> Vector2:
-	# Actor-local (0, 0) is the canonical reviewed foot point. The legacy
-	# radius-based south shift predates manual foot alignment and moves both the
-	# fallback ring and its circular shadow away from that standard.
+	# Targeting geometry owns an actor-local coordinate contract. Grounded
+	# monsters always target the physics origin; visual alignment data may move
+	# the sprite around that origin but must never move gameplay/UI targeting.
+	# Flying/hovering profiles keep their explicit ground projection.
 	var fallback := Vector2.ZERO
-	return visual.ground_contact_position(fallback) if visual != null else fallback
+	return visual.target_ring_position(fallback) if visual != null else fallback
 
 
 func should_draw_synthetic_ground_shadow() -> bool:

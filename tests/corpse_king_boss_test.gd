@@ -60,6 +60,6 @@ func _run() -> void:
 	assert(not boss._boss_phase_two and boss.move_speed == speed_before and boss._boss_warning <= 0.0, "尸王仍触发无来源狂暴或震地")
 	boss.set_targeted(true)
 	assert(boss.is_targeted, "尸王选中状态没有生效")
-	assert(boss.ground_indicator_center().is_equal_approx(visual.position + visual.visual_foot_offset()), "尸王锁定光圈未使用人工视觉脚点")
+	assert(boss.ground_indicator_center().is_zero_approx(), "尸王地面锁定光圈未固定在怪物物理原点")
 	print("CORPSE_KING_BOSS_PASS：Race81/TATMonster、2.8秒攻击、命中帧、持续朝向、无伪技能与脚底选中正常")
 	get_tree().quit(0)
