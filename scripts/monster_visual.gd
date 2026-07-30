@@ -21,7 +21,7 @@ const MAX_CONCURRENT_PROFILE_LOADS := 2
 const ACTOR_Y_SORT_RENDER_DOMAIN := "actor_y_sort"
 const ACTOR_Y_SORT_RENDER_CONTRACT := "monster.actor_y_sort.v1"
 const OVERHEAD_ANCHOR_CONTRACT := "monster.overhead_anchor.v4"
-const GROUND_CONTACT_CONTRACT := "monster.ground_contact.v4"
+const GROUND_CONTACT_CONTRACT := "monster.ground_contact.v5"
 
 static var _boss_art: Dictionary = {}
 static var _complete_art: Dictionary = {}
@@ -89,12 +89,13 @@ func _ready() -> void:
 	configure_actor_y_sort_item(self, "visual_root")
 	_has_authored_client_art = not _client_mapping_for(actor.monster_data).is_empty()
 	# 普通怪下沉4px，Boss下沉6px，使脚底与阴影中心实际重叠。
-	position = Vector2(0, 6 if actor.is_boss else 4)
+	position = _runtime_visual_origin()
 	visible = false
 	sprite = Sprite2D.new()
 	sprite.name = "BodySprite"
 	configure_actor_y_sort_item(sprite, "body_sprite")
 	sprite.region_enabled = true
+	sprite.region_filter_clip_enabled = true
 	sprite.region_rect = Rect2(Vector2.ZERO, frame_size)
 	sprite.centered = false
 	sprite.position = -Vector2(foot_anchor + actor_ground_offset)
@@ -172,6 +173,7 @@ func _activate_resources() -> void:
 	actor_ground_offset = resources.get("actor_ground_offset", Vector2i.ZERO)
 	health_bar_top_by_direction = resources.get("health_bar_top_by_direction", [])
 	ground_contact_profile = _ground_contact_profile_for_actor()
+	position = _runtime_visual_origin() + visual_root_offset()
 	sprite.region_rect = Rect2(Vector2.ZERO, frame_size)
 	sprite.position = -Vector2(foot_anchor + actor_ground_offset)
 	_fixed_health_bar_y = _stable_overhead_anchor_y()
@@ -194,6 +196,7 @@ func _release_resources() -> void:
 	sprite.texture = null
 	active_resources = {}
 	ground_contact_profile = {}
+	position = _runtime_visual_origin()
 	_refresh_actor_ground_indicator()
 
 
@@ -273,6 +276,19 @@ func ground_contact_offset() -> Vector2:
 	if not values is Array or values.size() < 2:
 		return Vector2.ZERO
 	return Vector2(float(values[0]), float(values[1]))
+
+
+func visual_root_offset() -> Vector2:
+	var values: Variant = ground_contact_profile.get("visualRootOffset", [])
+	if not values is Array or values.size() < 2:
+		return Vector2.ZERO
+	return Vector2(float(values[0]), float(values[1]))
+
+
+func _runtime_visual_origin() -> Vector2:
+	if not is_instance_valid(actor):
+		return Vector2.ZERO
+	return Vector2(0.0, 6.0 if actor.is_boss else 4.0)
 
 
 func ground_contact_position(fallback: Vector2) -> Vector2:

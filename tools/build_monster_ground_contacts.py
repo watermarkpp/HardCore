@@ -35,11 +35,14 @@ CALIBRATION_PATH = (
     ROOT / "assets/data/runtime/monster_ground_contact_calibrations.json"
 )
 DEFAULT_REVIEW_OUTPUT = (
-    ROOT / "outputs/test_visuals/monster_ground_contact_calibration_v4.png"
+    ROOT / "outputs/test_visuals/monster_ground_contact_calibration_v5.png"
 )
-CONTRACT = "monster.ground_contact.v4"
-CALIBRATION_CONTRACT = "monster.ground_contact.calibration.v4"
-MANUAL_CALIBRATION_SOURCE = "manual_runtime_composite_review_v4"
+CONTRACT = "monster.ground_contact.v5"
+CALIBRATION_CONTRACT = "monster.ground_contact.calibration.v5"
+USER_CALIBRATION_SOURCE = "user_visual_acceptance_lab_v1"
+PRESERVED_CALIBRATION_SOURCE = "manual_runtime_composite_review_v4"
+MANUAL_ALIGNMENT_CONTRACT = "monster.ground_alignment.manual.v1"
+PRESERVED_AIRBORNE_IDS = {"97", "98"}
 CLIENT_ACTOR_GROUND_OFFSET = (32, 28)
 ALPHA_THRESHOLD = 16
 NEUTRAL_ACTIONS = ("idle", "walk")
@@ -312,15 +315,29 @@ def load_calibrations(initials: dict[str, dict[str, Any]]) -> dict[str, Any]:
     calibrations = load_json(CALIBRATION_PATH)
     if calibrations.get("contract") != CALIBRATION_CONTRACT:
         raise ValueError("monster ground calibration contract mismatch")
+    if calibrations.get("manualAlignmentContract") != MANUAL_ALIGNMENT_CONTRACT:
+        raise ValueError("monster manual alignment contract mismatch")
+    aggregate = str(calibrations.get("manualAlignmentAggregateSha256", ""))
+    if len(aggregate) != 64:
+        raise ValueError("monster manual alignment aggregate hash missing")
     entries = calibrations.get("entriesByMonsterId", {})
     if not isinstance(entries, dict) or set(entries) != set(initials):
         raise ValueError(
             "monster ground calibrations must explicitly cover exactly 214 monsterIds"
         )
+    source_counts = {
+        USER_CALIBRATION_SOURCE: 0,
+        PRESERVED_CALIBRATION_SOURCE: 0,
+    }
     for monster_id, entry in entries.items():
         if entry.get("projectionStrategy") not in PROJECTION_STRATEGIES:
             raise ValueError(f"monsterId={monster_id} projection strategy invalid")
-        for field in ("visualFootOffset", "ringCenterOffset", "ringEllipseRadii"):
+        for field in (
+            "visualRootOffset",
+            "visualFootOffset",
+            "ringCenterOffset",
+            "ringEllipseRadii",
+        ):
             values = entry.get(field)
             if not isinstance(values, list) or len(values) != 2:
                 raise ValueError(f"monsterId={monster_id} {field} invalid")
@@ -337,25 +354,55 @@ def load_calibrations(initials: dict[str, dict[str, Any]]) -> dict[str, Any]:
             raise ValueError(
                 f"monsterId={monster_id} ringVerticalSquash disagrees with radii"
             )
-        if entry.get("calibrationSource") != MANUAL_CALIBRATION_SOURCE:
+        source = str(entry.get("calibrationSource", ""))
+        if source not in source_counts:
             raise ValueError(
                 f"monsterId={monster_id} is not manually runtime-reviewed"
             )
+        source_counts[source] += 1
         review = entry.get("review")
         if not isinstance(review, dict):
             raise ValueError(f"monsterId={monster_id} review record missing")
         if review.get("status") != "approved":
             raise ValueError(f"monsterId={monster_id} review is not approved")
-        if review.get("poses") != [
-            f"{action}:direction{direction}" for action, direction in REVIEW_POSES
-        ]:
-            raise ValueError(f"monsterId={monster_id} review poses incomplete")
+        poses = review.get("poses")
+        if not isinstance(poses, list) or not poses:
+            raise ValueError(f"monsterId={monster_id} review poses missing")
         if not str(review.get("archetype", "")):
             raise ValueError(f"monsterId={monster_id} review archetype missing")
         if str(monster_id) not in str(review.get("decision", "")):
             raise ValueError(
                 f"monsterId={monster_id} decision is not independently attributable"
             )
+        evidence = entry.get("manualAlignmentEvidence")
+        if not isinstance(evidence, dict):
+            raise ValueError(
+                f"monsterId={monster_id} manual alignment evidence missing"
+            )
+        if source == USER_CALIBRATION_SOURCE:
+            if str(evidence.get("contractId", "")) != (
+                "local.visual_acceptance_lab.monster_ground_alignment_draft.v1"
+            ):
+                raise ValueError(
+                    f"monsterId={monster_id} user draft evidence mismatch"
+                )
+            if len(str(evidence.get("sourceDraftSha256", ""))) != 64:
+                raise ValueError(
+                    f"monsterId={monster_id} user draft hash missing"
+                )
+        elif (
+            monster_id not in PRESERVED_AIRBORNE_IDS
+            or entry.get("projectionStrategy") != "flying"
+            or list(entry.get("visualRootOffset", [])) != [0.0, 0.0]
+        ):
+            raise ValueError(
+                f"monsterId={monster_id} is not an allowed preserved airborne profile"
+            )
+    if source_counts != {
+        USER_CALIBRATION_SOURCE: 212,
+        PRESERVED_CALIBRATION_SOURCE: 2,
+    }:
+        raise ValueError(f"unexpected calibration source counts: {source_counts}")
     return entries
 
 
@@ -372,8 +419,9 @@ def build() -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
         calibration = calibrations[key]
         strategy = str(calibration["projectionStrategy"])
         strategy_counts[strategy] += 1
-        visual_foot = [int(round(value)) for value in calibration["visualFootOffset"]]
-        ring_center = [int(round(value)) for value in calibration["ringCenterOffset"]]
+        visual_root = [float(value) for value in calibration["visualRootOffset"]]
+        visual_foot = [float(value) for value in calibration["visualFootOffset"]]
+        ring_center = [float(value) for value in calibration["ringCenterOffset"]]
         ring_radii = [int(round(value)) for value in calibration["ringEllipseRadii"]]
         review = dict(calibration["review"])
         entries[key] = {
@@ -381,6 +429,7 @@ def build() -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
             "name": str(row["name"]),
             "sourceLookup": initial["sourceLookup"],
             "projectionStrategy": strategy,
+            "visualRootOffset": visual_root,
             "visualFootOffset": visual_foot,
             "ringCenterOffset": ring_center,
             "ringEllipseRadii": ring_radii,
@@ -390,6 +439,9 @@ def build() -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
             "stableAcrossDirections": 8,
             "calibrationSource": str(calibration["calibrationSource"]),
             "review": review,
+            "manualAlignmentEvidence": dict(
+                calibration["manualAlignmentEvidence"]
+            ),
             "automaticInitial": {
                 "visualFootOffset": initial["visualFootOffset"],
                 "ringCenterOffset": initial["ringCenterOffset"],
@@ -403,13 +455,15 @@ def build() -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
             if legacy_name and legacy_name not in legacy_name_to_monster_id:
                 legacy_name_to_monster_id[legacy_name] = monster_id
     output = {
-        "schemaVersion": 4,
+        "schemaVersion": 5,
         "contract": CONTRACT,
         "calibrationContract": CALIBRATION_CONTRACT,
+        "manualAlignmentContract": MANUAL_ALIGNMENT_CONTRACT,
         "identityKey": "monsterId",
         "coordinateSpace": (
-            "MonsterVisual-local offsets; runtime adds MonsterVisual.position "
-            "exactly once. Ellipse radii are unscaled screen pixels."
+            "Runtime starts from the normal/boss MonsterVisual origin, adds "
+            "visualRootOffset exactly once, then adds ringCenterOffset exactly "
+            "once. Ellipse radii are unscaled screen pixels."
         ),
         "clientActorGroundOffset": list(CLIENT_ACTOR_GROUND_OFFSET),
         "measurementPolicy": (
@@ -424,10 +478,16 @@ def build() -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
         "summary": {
             "monsterCount": len(entries),
             "explicitCalibrationCount": len(calibrations),
-            "manualReviewCount": sum(
+            "userAlignmentCount": sum(
                 1
                 for entry in calibrations.values()
-                if entry.get("calibrationSource") == MANUAL_CALIBRATION_SOURCE
+                if entry.get("calibrationSource") == USER_CALIBRATION_SOURCE
+            ),
+            "preservedAirborneCount": sum(
+                1
+                for entry in calibrations.values()
+                if entry.get("calibrationSource")
+                == PRESERVED_CALIBRATION_SOURCE
             ),
             "requiredActions": list(REQUIRED_ACTIONS),
             "requiredDirections": 8,
@@ -548,7 +608,7 @@ def render_review_atlas(
     review_manifest_path.write_text(
         json.dumps(
             {
-                "contract": "monster.ground_contact.runtime_review.v4",
+                "contract": "monster.ground_contact.runtime_review.v5",
                 "monsterCount": len(entries),
                 "poses": [
                     f"{action}:direction{direction}"
@@ -599,7 +659,7 @@ def main() -> None:
             )
         print(
             "MONSTER_GROUND_CONTACT_DATA_PASS "
-            "contract=v4 monsters=214 explicit_calibrations=214 manual_reviews=214"
+            "contract=v5 monsters=214 user_alignments=212 preserved_airborne=2"
         )
     else:
         OUTPUT_PATH.write_text(generated, encoding="utf-8")

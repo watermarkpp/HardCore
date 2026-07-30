@@ -48,6 +48,31 @@ static func load_draft(monster_id: int, root_override := "") -> Dictionary:
 	return parsed
 
 
+static func draft_is_formal(
+	monster_id: int,
+	draft: Dictionary,
+	root_override := "",
+) -> bool:
+	if (
+		str(draft.get("contractId", "")) != CONTRACT_ID
+		or int(draft.get("monsterId", -1)) != monster_id
+	):
+		return false
+	var evidence: Variant = formal_entry(monster_id).get(
+		"manualAlignmentEvidence", {}
+	)
+	if not evidence is Dictionary:
+		return false
+	var expected_hash := str(evidence.get("sourceDraftSha256", ""))
+	if expected_hash.is_empty():
+		return false
+	var path := draft_path(monster_id, root_override)
+	return (
+		FileAccess.file_exists(path)
+		and FileAccess.get_sha256(path) == expected_hash
+	)
+
+
 static func build_payload(
 	monster_id: int,
 	selection: Dictionary,
