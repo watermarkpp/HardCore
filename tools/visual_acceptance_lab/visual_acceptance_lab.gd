@@ -39,6 +39,7 @@ const MONSTER_GROUND_REVIEW_ARG := "--monster-ground-review"
 const MONSTER_FOOT_MATCH_EPSILON := 0.01
 const MONSTER_TARGET_RING_COLOR := Color("#ffd54f")
 const MONSTER_FOOT_DELTA_COLOR := Color("#ff6b6b")
+const MONSTER_ACTOR_ORIGIN_COLOR := Color("#ff9f43")
 
 var _old_test_mode := false
 var _player: PlayerCharacter
@@ -82,6 +83,7 @@ var _monster_visual_alignment_offset := Vector2.ZERO
 var _monster_picked_visual_foot_offset := Vector2.ZERO
 var _monster_formal_visual_foot_offset := Vector2.ZERO
 var _active_monster_draft_loaded := false
+var _monster_saved_selection: Dictionary = {}
 
 
 func _ready() -> void:
@@ -525,9 +527,10 @@ func _rebuild_monster_actor(force := false) -> bool:
 		_monster_formal_visual_foot_offset
 	)
 	_monster_visual_alignment_offset = Vector2.ZERO
-	_action_option.select(0)
-	_direction_option.select(0)
-	_current_frame = 0
+	_monster_saved_selection = _normalized_monster_selection(
+		formal.get("selection", {})
+	)
+	_apply_monster_selection(_monster_saved_selection)
 	_clock = 0.0
 	_load_monster_alignment_draft()
 	_monster.visual.position = (
@@ -600,6 +603,9 @@ func _update_monster_overlay() -> void:
 	# Mirror the live target-ring contract exactly. The actor owns both the
 	# reviewed-foot center and the collision-radius-derived size.
 	var review := monster_ground_review_snapshot()
+	var actor_origin: Vector2 = review.get(
+		"actorGroundOrigin", Vector2.ZERO
+	)
 	var manual_foot: Vector2 = review.get("manualFootCenter", Vector2.ZERO)
 	var runtime_ring: Vector2 = review.get("runtimeRingCenter", Vector2.ZERO)
 	var runtime_radii: Vector2 = review.get("runtimeRingRadii", Vector2.ZERO)
@@ -610,6 +616,12 @@ func _update_monster_overlay() -> void:
 			MONSTER_FOOT_DELTA_COLOR,
 			2.0,
 		)
+	_add_cross(
+		_overlay_root,
+		actor_origin,
+		MONSTER_ACTOR_ORIGIN_COLOR,
+		4.0,
+	)
 	_add_cross(
 		_overlay_root,
 		runtime_ring,
@@ -678,11 +690,21 @@ func _update_status(message := "") -> void:
 		var runtime_ring: Vector2 = review.get(
 			"runtimeRingCenter", Vector2.ZERO
 		)
-		var delta: Vector2 = review.get("delta", Vector2.ZERO)
+		var target_delta: Vector2 = review.get(
+			"runtimeTargetDelta", Vector2.ZERO
+		)
+		var visual_delta: Vector2 = review.get(
+			"manualFootDelta", Vector2.ZERO
+		)
 		var match_text := (
-			"一致"
+			"坐标合同一致"
 			if bool(review.get("matches", false))
-			else "有差异"
+			else "坐标合同有差异"
+		)
+		var pose_text := (
+			"当前就是保存校准姿态"
+			if bool(review.get("poseMatchesCalibration", false))
+			else "当前不是保存校准姿态"
 		)
 		var source_text := (
 			"人工草稿"
@@ -691,10 +713,12 @@ func _update_status(message := "") -> void:
 		)
 		_status.text = (
 			"%s　#%d %s　%s / %s　帧 %d/%d　倍率 %dx\n"
-			+ "青十字=已保存脚点　黄圈/黄小十字=游戏实际目标光圈　"
-			+ "粉=真实物理脚印　蓝菱形=64×32地图格\n"
-			+ "来源=%s　脚点=(%.1f, %.1f)　黄圈=(%.1f, %.1f)　"
-			+ "差值=(%+.1f, %+.1f)【%s】"
+			+ "橙十字=怪物物理原点　青十字=人工视觉脚点　"
+			+ "黄圈/黄小十字=游戏实时目标光圈\n"
+			+ "来源=%s　保存姿态=%s【%s】\n"
+			+ "人工脚点=(%.1f, %.1f)　实时黄圈=(%.1f, %.1f)　"
+			+ "黄圈-目标=(%+.1f, %+.1f)　脚点-原点=(%+.1f, %+.1f)"
+			+ "【%s】"
 		) % [
 			MONSTER_LAB_CONTRACT_ID,
 			monster_id,
@@ -705,12 +729,18 @@ func _update_status(message := "") -> void:
 			_frame_count(),
 			int(_zoom_slider.value),
 			source_text,
+			_monster_selection_label(
+				review.get("calibrationSelection", {})
+			),
+			pose_text,
 			manual_foot.x,
 			manual_foot.y,
 			runtime_ring.x,
 			runtime_ring.y,
-			delta.x,
-			delta.y,
+			target_delta.x,
+			target_delta.y,
+			visual_delta.x,
+			visual_delta.y,
 			match_text,
 		]
 		return
@@ -1036,6 +1066,9 @@ func _save_alignment_draft() -> void:
 		var result := MonsterDraftScript.save_draft(
 			monster_alignment_draft_payload()
 		)
+		if bool(result.get("ok", false)):
+			_active_monster_draft_loaded = true
+			_monster_saved_selection = _current_monster_selection()
 		_update_status(
 			"怪物 #%d 对齐草稿已单独保存：%s；尚未写入正式运行时。"
 			% [_active_monster_id, str(result.get("path", ""))]
@@ -1120,17 +1153,53 @@ func _load_monster_alignment_draft() -> void:
 func monster_ground_review_snapshot() -> Dictionary:
 	if _monster == null or _monster.visual == null:
 		return {}
+	var actor_origin := Vector2.ZERO
 	var manual_foot := _visual_foot_origin()
 	var runtime_ring := _monster.ground_indicator_center()
-	var delta := runtime_ring - manual_foot
+	var projection_strategy := _monster.visual.ground_projection_strategy()
+	var expected_target := (
+		_monster.visual.position
+		+ _monster.visual.ground_contact_offset()
+		if projection_strategy in ["flying", "hover"]
+		else actor_origin
+	)
+	var manual_delta := manual_foot - actor_origin
+	var runtime_target_delta := runtime_ring - expected_target
+	var target_matches := (
+		runtime_target_delta.length() <= MONSTER_FOOT_MATCH_EPSILON
+	)
+	var manual_matches := (
+		manual_delta.length() <= MONSTER_FOOT_MATCH_EPSILON
+	)
+	var current_selection := _current_monster_selection()
+	var pose_matches := (
+		current_selection == _monster_saved_selection
+	)
 	return {
 		"monsterId": _active_monster_id,
 		"draftLoaded": _active_monster_draft_loaded,
+		"projectionStrategy": projection_strategy,
+		"actorGroundOrigin": actor_origin,
 		"manualFootCenter": manual_foot,
+		"expectedTargetCenter": expected_target,
 		"runtimeRingCenter": runtime_ring,
 		"runtimeRingRadii": _monster.ground_indicator_radii(),
-		"delta": delta,
-		"matches": delta.length() <= MONSTER_FOOT_MATCH_EPSILON,
+		"manualFootDelta": manual_delta,
+		"runtimeTargetDelta": runtime_target_delta,
+		"delta": runtime_ring - manual_foot,
+		"targetMatchesContract": target_matches,
+		"manualFootMatchesActorOrigin": manual_matches,
+		"calibrationSelection": _monster_saved_selection.duplicate(true),
+		"currentSelection": current_selection,
+		"poseMatchesCalibration": pose_matches,
+		"matches": (
+			target_matches
+			and (
+				manual_matches
+				if projection_strategy == "grounded"
+				else true
+			)
+		),
 	}
 
 
@@ -1152,15 +1221,50 @@ func _restore_monster_alignment_draft(draft: Dictionary) -> void:
 	var selection: Variant = draft.get("selection", {})
 	if not selection is Dictionary:
 		return
-	var action_index := MONSTER_ACTIONS.find(
-		str(selection.get("action", "idle"))
-	)
-	_action_option.select(maxi(0, action_index))
-	_direction_option.select(
-		clampi(int(selection.get("direction", 0)), 0, DIRECTIONS.size() - 1)
-	)
-	_current_frame = maxi(0, int(selection.get("frame", 0)))
+	_monster_saved_selection = _normalized_monster_selection(selection)
+	_apply_monster_selection(_monster_saved_selection)
 	_clock = float(_current_frame) / _action_fps(_selected_action())
+
+
+func _current_monster_selection() -> Dictionary:
+	return {
+		"action": _selected_action(),
+		"direction": _direction_option.selected,
+		"frame": _current_frame,
+	}
+
+
+func _normalized_monster_selection(value: Variant) -> Dictionary:
+	var selection: Dictionary = value if value is Dictionary else {}
+	var action := str(selection.get("action", "idle"))
+	if not action in MONSTER_ACTIONS:
+		action = "idle"
+	return {
+		"action": action,
+		"direction": clampi(
+			int(selection.get("direction", 0)), 0, DIRECTIONS.size() - 1
+		),
+		"frame": maxi(0, int(selection.get("frame", 0))),
+	}
+
+
+func _apply_monster_selection(selection: Dictionary) -> void:
+	var normalized := _normalized_monster_selection(selection)
+	_action_option.select(
+		maxi(0, MONSTER_ACTIONS.find(str(normalized.action)))
+	)
+	_direction_option.select(int(normalized.direction))
+	_current_frame = int(normalized.frame)
+
+
+func _monster_selection_label(value: Variant) -> String:
+	var selection := _normalized_monster_selection(value)
+	var action_index := MONSTER_ACTIONS.find(str(selection.action))
+	return "%s/%s/帧%d" % [
+		MONSTER_ACTION_LABELS[maxi(0, action_index)],
+		DIRECTION_LABELS[int(selection.direction)],
+		int(selection.frame) + 1,
+	]
 
 
 func _vector2_from_array(value: Variant, fallback: Vector2) -> Vector2:
