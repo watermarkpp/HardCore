@@ -7,8 +7,8 @@
 
 ## 2026-07-30 怪物人工脚点正式接入与动画修复
 
-- 最新怪物专业提交 `19be26ed` 已由集成提交 `ee09aefd` 接入；此前怪物专业提交 `3a3c00ee` / UI 专业提交 `ff707360` 分别由集成提交 `a9128ed1` / `072c1289` 接入。
-- 用户完成的 212 份 `monster_<id>.json` 校准草稿已只读导入 `monster.ground_alignment.manual.v1`，最新源文件聚合 SHA-256 为 `47F242DF49D3403B32D3C1050A7F7EAF8B0B5386CDC9FBC10B0EE5F966BE75BD`。本轮精确更新 `monster_id=124` 触龙神、`160` 祖玛教主和同家族 `161` 祖玛教主9；其余 209 份正式人工数据逐条不变。仅飞行投影的猎鹰 `monster_id=97/98` 保留原有离地关系。
+- 最新怪物专业提交 `5f912b41` 已由集成提交 `3312f0ab` 接入；此前怪物专业提交 `19be26ed` / UI 专业提交 `ff707360` 分别由集成提交 `ee09aefd` / `072c1289` 接入。
+- 用户完成的 212 份 `monster_<id>.json` 校准草稿已只读导入 `monster.ground_alignment.manual.v1`，最新源文件聚合 SHA-256 为 `B5229D08E7C1DFBC36D3C50C45A14A81AE46CAE8C84EFEBB42204EA38408FE00`。最新精确更新牛头魔 `210/211`、牛魔侍卫 `216/217`、牛魔将军 `218/219`、牛魔法师 `220/221`；其余 204 份正式人工数据逐条不变。其他牛系列未重新保存的草稿继续使用已加载正式值；仅飞行投影的猎鹰 `monster_id=97/98` 保留原有离地关系。
 - 正式运行时升级为 `monster.ground_contact.v5` / `monster.ground_contact.calibration.v5`：普通怪/Boss 基础视觉原点、用户 `visualRootOffset`、视觉脚点和光圈中心各只应用一次；验收台识别已正式导入的同哈希草稿，禁止二次叠加偏移。
 - 祖玛教主使用主资料 `Mon7.wil` 中物化前缀之后的正确动作段：idle/walk/attack/hit/death 起始帧为 `1340/1420/1500/1580/1600`，并锁定原 `384×336` 画布与 `[114,237]` 脚点，避免破坏用户坐标。
 - 所有怪物 Sprite2D 启用图集区域过滤裁切，阻止牛魔系列相邻格碎片渗入。牛魔将军 `monster_id=218/219` 共用的 `appearance=204/raceImg=19/MA19` 五动作图集进一步仅移除不超过 48 像素的 8 连通孤立碎片，共 962 块/3813 像素；原 `272×272` 单帧画布、`[84,143]` 脚点、人工脚点参数和全部缩放策略保持不变。触龙神原素材多帧齐全；验收台仅在预览时解除潜伏隐藏以便查看 idle/attack/death，游戏内钻地机制不变。
@@ -55,7 +55,7 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `ee09aefd`（本次快照提交只改本文档）。
+- 分支/运行时代码基线：`codex/integration` @ `3312f0ab`（本次快照提交只改本文档）。
 - tracked 状态：黑铁头盔 151 的旧 `scale_100` 六动作生成图集共 6 个既有在制修改继续保护；本次男性头发接入未暂存、覆盖或提交这些旧图。146/147/149/150/151/218/224/228/232 共 9 份已验收人工草稿继续冻结；236/240 最新人工草稿分别为 SHA-256 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`、`81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`，均保持 dirty 并禁止覆盖。
 - 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
@@ -246,7 +246,7 @@
 | 工作树 | 分支/HEAD | dirty | 集成状态 |
 |---|---|---:|---|
 | `HardCore-worktrees/maps` | `codex/maps` @ `2a4d6ccf` | 72 untracked | 用户地图编辑器内容，继续保护；代码等价结果已集成为 `1d74fc72` |
-| `HardCore-worktrees/monsters` | `codex/monsters` @ `19be26ed` | 本轮任务文件 clean；既有 UID/报告继续保护 | 124/160/161 最新脚点和 218/219 牛魔将军碎片清理已作为 `ee09aefd` 集成，怪物专项 8/8 通过 |
+| `HardCore-worktrees/monsters` | `codex/monsters` @ `5f912b41` | 本轮任务文件 clean；既有 UID/报告继续保护 | 8 份最新牛系列脚点已作为 `3312f0ab` 集成；其余 204 份人工数据零变化，怪物专项 8/8 通过 |
 | `HardCore-worktrees/ui-art` | `codex/ui-art` @ `ff707360` | 本轮代码 clean；Godot import/UID/输出继续保护 | 已正式导入的怪物草稿不再二次叠加；触龙神验收预览可见；已作为 `072c1289` 集成，UI/怪物专项 3/3 通过 |
 | `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `ce58f7bc` | 既有 UID/输出继续保护 | 33 技能 runtime、150 条可执行语义合同和 26 项正式主动技能视觉已集成；`ce58f7bc` 的烈火 canonical 测试修正已作为 `6827bb7d` 集成 |
 | `HardCore-worktrees/equipment` | `codex/equipment` @ `26f25e39` | 既有 monster import、试点截图脚本、UID/生成项继续保护 | 男性 `Hair.wil block 4`、世界头盔隐藏、纸娃娃/背包/地面头盔均已集成；`26f25e39` 的正式武器可见性测试修正已作为 `35568e45` 集成，冻结草稿与生成图继续保护 |
