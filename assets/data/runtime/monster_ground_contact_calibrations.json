@@ -3,7 +3,7 @@
   "contract": "monster.ground_contact.calibration.v5",
   "identityKey": "monsterId",
   "manualAlignmentContract": "monster.ground_alignment.manual.v1",
-  "manualAlignmentAggregateSha256": "b5229d08e7c1dfbc36d3c50c45a14a81ae46cae8c84efebb42204ea38408fe00",
+  "manualAlignmentAggregateSha256": "0993dd6600091b584f247cda02b0afeabb164e73952feb87c57a886aad515e7a",
   "policy": "Each grounded/hover monster uses the exact user-saved visual root and body-foot offsets. The two airborne falcons retain the prior reviewed separation between flying body and ground projection.",
   "entriesByMonsterId": {
     "18": {
@@ -49,12 +49,12 @@
     "19": {
       "projectionStrategy": "grounded",
       "visualFootOffset": [
-        -9.0,
-        9.5
+        -8.5,
+        -3.0
       ],
       "ringCenterOffset": [
-        -9.0,
-        9.5
+        -8.5,
+        -3.0
       ],
       "ringEllipseRadii": [
         20,
@@ -66,23 +66,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "walk:direction0:frame2"
         ],
         "decision": "monsterId=19 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
-        9.0,
-        -13.5
+        8.5,
+        -1.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_19.json",
-        "sourceDraftSha256": "119cebd5c2d64189973464ac086b92bc227da66bab5858a1a96786b1745df510",
-        "savedAt": "2026-07-30T11:57:03",
+        "sourceDraftSha256": "ea6c93264bc54479ed4d4102642cd28db04356433817dab4729e8586e69a332d",
+        "savedAt": "2026-07-30T17:53:31",
         "selection": {
-          "action": "idle",
+          "action": "walk",
           "direction": 0,
-          "frame": 0
+          "frame": 2
         }
       }
     },
@@ -90,11 +90,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -7.5,
-        3.0
+        4.5
       ],
       "ringCenterOffset": [
         -7.5,
-        3.0
+        4.5
       ],
       "ringEllipseRadii": [
         24,
@@ -106,23 +106,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "walk:direction0:frame0"
+          "idle:direction7:frame2"
         ],
         "decision": "monsterId=21 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         7.5,
-        -7.0
+        -8.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_21.json",
-        "sourceDraftSha256": "581dd3c1c7f29a33b8c4170a81519ed235bf093f902933bcf5e95a98e26b527d",
-        "savedAt": "2026-07-30T11:58:35",
+        "sourceDraftSha256": "c531c41c914261766626be87e7bc2741d72531cd9893f7c599e5141f65adb32e",
+        "savedAt": "2026-07-30T17:54:46",
         "selection": {
-          "action": "walk",
-          "direction": 0,
-          "frame": 0
+          "action": "idle",
+          "direction": 7,
+          "frame": 2
         }
       }
     },
@@ -170,11 +170,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.5,
-        6.5
+        8.0
       ],
       "ringCenterOffset": [
         -8.5,
-        6.5
+        8.0
       ],
       "ringEllipseRadii": [
         20,
@@ -186,23 +186,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction3:frame2"
         ],
         "decision": "monsterId=24 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         8.5,
-        -10.5
+        -12.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_24.json",
-        "sourceDraftSha256": "a9fbe377781ac79b841457aa737d0437769a3c2ea160db70ef9bff5f88d1e189",
-        "savedAt": "2026-07-30T11:59:29",
+        "sourceDraftSha256": "88a9da8de8cd82a29006e006b597fec7c638c5102133578034f660ce168ac4ab",
+        "savedAt": "2026-07-30T17:56:07",
         "selection": {
           "action": "idle",
-          "direction": 0,
-          "frame": 0
+          "direction": 3,
+          "frame": 2
         }
       }
     },
@@ -210,11 +210,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.5,
-        5.5
+        8.5
       ],
       "ringCenterOffset": [
         -8.5,
-        5.5
+        8.5
       ],
       "ringEllipseRadii": [
         20,
@@ -226,23 +226,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction7:frame2"
         ],
         "decision": "monsterId=25 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         8.5,
-        -9.5
+        -12.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_25.json",
-        "sourceDraftSha256": "033f613b36d32bcbd1acadd5930508f04d0f0a383f0d1c10434bbb83883ae7cd",
-        "savedAt": "2026-07-30T11:59:39",
+        "sourceDraftSha256": "5d0bd59415764d580219f0965a5d399cb442586c96e810435c74352286f3103a",
+        "savedAt": "2026-07-30T17:57:03",
         "selection": {
           "action": "idle",
-          "direction": 0,
-          "frame": 0
+          "direction": 7,
+          "frame": 2
         }
       }
     },
@@ -250,11 +250,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.5,
-        5.0
+        9.0
       ],
       "ringCenterOffset": [
         -8.5,
-        5.0
+        9.0
       ],
       "ringEllipseRadii": [
         22,
@@ -266,23 +266,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction2:frame2"
         ],
         "decision": "monsterId=26 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         8.5,
-        -9.0
+        -13.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_26.json",
-        "sourceDraftSha256": "a478a6ec4850f9fc36d4e7b3b956b2f9b6c9ca00a6131c4047fa5b08b8427a7e",
-        "savedAt": "2026-07-30T11:59:51",
+        "sourceDraftSha256": "501f4384904b91859d514978dd08bebf1a515d2d55a04c33d6d786bbeb89b240",
+        "savedAt": "2026-07-30T17:57:41",
         "selection": {
           "action": "idle",
-          "direction": 0,
-          "frame": 0
+          "direction": 2,
+          "frame": 2
         }
       }
     },
@@ -290,11 +290,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.0,
-        5.0
+        9.0
       ],
       "ringCenterOffset": [
         -8.0,
-        5.0
+        9.0
       ],
       "ringEllipseRadii": [
         22,
@@ -306,23 +306,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame3"
         ],
         "decision": "monsterId=27 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         8.0,
-        -9.0
+        -13.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_27.json",
-        "sourceDraftSha256": "aa1410facb353ffa70a236b2697fe0e57535bf17644f65b495a6c88cfb875078",
-        "savedAt": "2026-07-30T12:00:04",
+        "sourceDraftSha256": "cd4038e90a29b881c108521828ba57742a0668e3748bcd8b9c712984c5b36cfc",
+        "savedAt": "2026-07-30T17:58:00",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 3
         }
       }
     },
@@ -330,11 +330,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.0,
-        0.5
+        4.5
       ],
       "ringCenterOffset": [
         -9.0,
-        0.5
+        4.5
       ],
       "ringEllipseRadii": [
         20,
@@ -346,23 +346,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame1"
         ],
         "decision": "monsterId=28 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         9.0,
-        -4.5
+        -8.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_28.json",
-        "sourceDraftSha256": "31c651db41d2c93766d5eaf5c5db53b8ea9ddc180a8a33b0c8459ebcb2e0b57c",
-        "savedAt": "2026-07-30T12:00:21",
+        "sourceDraftSha256": "4968b2469fccf76852f66998aacb4e50759c1b9cea2296dcaefedc020d54fe64",
+        "savedAt": "2026-07-30T17:58:15",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 1
         }
       }
     },
@@ -370,11 +370,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.0,
-        0.5
+        4.0
       ],
       "ringCenterOffset": [
         -8.0,
-        0.5
+        4.0
       ],
       "ringEllipseRadii": [
         20,
@@ -386,23 +386,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame3"
         ],
         "decision": "monsterId=29 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         8.0,
-        -4.5
+        -8.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_29.json",
-        "sourceDraftSha256": "9cedf0069e0f72437f617f916d079d6570e484db0a834f2f397249236ad57eee",
-        "savedAt": "2026-07-30T12:00:39",
+        "sourceDraftSha256": "bc20a14181b26bc01907495b736f99330eb2410f8612ee83d939426d1d69b428",
+        "savedAt": "2026-07-30T18:10:00",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 3
         }
       }
     },
@@ -410,11 +410,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.5,
-        -1.0
+        3.0
       ],
       "ringCenterOffset": [
         -8.5,
-        -1.0
+        3.0
       ],
       "ringEllipseRadii": [
         28,
@@ -426,23 +426,23 @@
         "status": "approved",
         "archetype": "rooted_or_stationary",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame1"
         ],
         "decision": "monsterId=30 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         8.5,
-        -3.0
+        -7.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_30.json",
-        "sourceDraftSha256": "076976c771fcaa6b55bc3eb6c69bcbcdb52e9293424b8bef15819050fe0bae90",
-        "savedAt": "2026-07-30T12:00:55",
+        "sourceDraftSha256": "525ab40f5a3c5edd982936283c171b72b5011463f4354d2893799abba24e63a8",
+        "savedAt": "2026-07-30T18:10:13",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 1
         }
       }
     },
@@ -450,11 +450,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.0,
-        4.5
+        8.0
       ],
       "ringCenterOffset": [
         -8.0,
-        4.5
+        8.0
       ],
       "ringEllipseRadii": [
         20,
@@ -466,23 +466,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame2"
         ],
         "decision": "monsterId=31 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         8.0,
-        -8.5
+        -12.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_31.json",
-        "sourceDraftSha256": "eafd12b3521ba6ab6ce3b38e85e0c84a5baa115229169b74917fc99977cf44f3",
-        "savedAt": "2026-07-30T12:01:06",
+        "sourceDraftSha256": "d0a13e167c2134f63f6220250cddb58fc242be94ca8b5826c43cb3585c87f04c",
+        "savedAt": "2026-07-30T18:10:28",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 2
         }
       }
     },
@@ -490,11 +490,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.0,
-        5.0
+        11.0
       ],
       "ringCenterOffset": [
         -8.0,
-        5.0
+        11.0
       ],
       "ringEllipseRadii": [
         22,
@@ -506,23 +506,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame1"
         ],
         "decision": "monsterId=32 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         8.0,
-        -9.0
+        -15.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_32.json",
-        "sourceDraftSha256": "2f50c4f00d5f51cea093700b9b4583d8bd03e54c20b9e97deeeaa179ea2dabca",
-        "savedAt": "2026-07-30T12:01:18",
+        "sourceDraftSha256": "878c408b191623d6c453589b3a172b0921b1715b295dce71c5bb872517391349",
+        "savedAt": "2026-07-30T18:10:37",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 1
         }
       }
     },
@@ -530,11 +530,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.0,
-        -1.0
+        4.0
       ],
       "ringCenterOffset": [
         -9.0,
-        -1.0
+        4.0
       ],
       "ringEllipseRadii": [
         20,
@@ -546,23 +546,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "attack:direction0:frame1"
         ],
         "decision": "monsterId=33 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         9.0,
-        -3.0
+        -8.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_33.json",
-        "sourceDraftSha256": "84c5d0ec84b7b3687d1d5611d8ae7fabebc14ffe2150f93aa2c685bc59492216",
-        "savedAt": "2026-07-30T12:01:29",
+        "sourceDraftSha256": "453962848e489b901551ee68b2852f1f2022e903cc60f19c2a61c38f48c4a2b6",
+        "savedAt": "2026-07-30T18:11:32",
         "selection": {
-          "action": "idle",
+          "action": "attack",
           "direction": 0,
-          "frame": 0
+          "frame": 1
         }
       }
     },
@@ -570,11 +570,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -7.5,
-        0.0
+        5.5
       ],
       "ringCenterOffset": [
         -7.5,
-        0.0
+        5.5
       ],
       "ringEllipseRadii": [
         20,
@@ -592,13 +592,13 @@
       },
       "visualRootOffset": [
         7.5,
-        -4.0
+        -9.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_34.json",
-        "sourceDraftSha256": "4c3e228ab779e595d6adb92d4b7b436879894f3e80d0b31292116edab9cb7f1a",
-        "savedAt": "2026-07-30T12:01:39",
+        "sourceDraftSha256": "bbf161ae454d0c5e65b1a0af59dbe14bb5fcff00cfc192436e951928dd9d4d4f",
+        "savedAt": "2026-07-30T18:11:45",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -610,11 +610,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -7.0,
-        2.0
+        7.5
       ],
       "ringCenterOffset": [
         -7.0,
-        2.0
+        7.5
       ],
       "ringEllipseRadii": [
         20,
@@ -626,23 +626,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame3"
         ],
         "decision": "monsterId=35 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         7.0,
-        -6.0
+        -11.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_35.json",
-        "sourceDraftSha256": "5bb0c97c709a4f5497e248ed9b79d4fd83c0e9d5b9047b1882d30bd34c0498f8",
-        "savedAt": "2026-07-30T12:37:48",
+        "sourceDraftSha256": "3b1a05374d16b9399977af548075ce511a4b810f2d5f9051d6c9ea4d810e171b",
+        "savedAt": "2026-07-30T18:12:15",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 3
         }
       }
     },
@@ -650,11 +650,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -7.0,
-        2.0
+        7.5
       ],
       "ringCenterOffset": [
         -7.0,
-        2.0
+        7.5
       ],
       "ringEllipseRadii": [
         22,
@@ -672,13 +672,13 @@
       },
       "visualRootOffset": [
         7.0,
-        -6.0
+        -11.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_36.json",
-        "sourceDraftSha256": "bbfd30d87d3b67f669889d6dc8e1b348967a3dfc6ea7c61e6d316a983556a7cd",
-        "savedAt": "2026-07-30T12:37:59",
+        "sourceDraftSha256": "923fe7aac350cdd16a38da8973539453baeabd4a4521b7149bf08a6b8fa1b8e4",
+        "savedAt": "2026-07-30T18:12:24",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -690,11 +690,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -6.0,
-        2.0
+        8.5
       ],
       "ringCenterOffset": [
         -6.0,
-        2.0
+        8.5
       ],
       "ringEllipseRadii": [
         22,
@@ -706,23 +706,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame2"
         ],
         "decision": "monsterId=37 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         6.0,
-        -6.0
+        -12.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_37.json",
-        "sourceDraftSha256": "c3414ea6e4052a83b7cd1554da90cbfc1f53e67da748aa2b16935143e41f5773",
-        "savedAt": "2026-07-30T12:38:09",
+        "sourceDraftSha256": "3859694ebd1bdfbb1effab0a73bf38c2bdb316a2cd10cc8db7732eed880db89b",
+        "savedAt": "2026-07-30T18:12:39",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 2
         }
       }
     },
@@ -730,11 +730,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -5.5,
-        1.0
+        7.0
       ],
       "ringCenterOffset": [
         -5.5,
-        1.0
+        7.0
       ],
       "ringEllipseRadii": [
         24,
@@ -746,23 +746,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame1"
         ],
         "decision": "monsterId=38 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         5.5,
-        -5.0
+        -11.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_38.json",
-        "sourceDraftSha256": "e5cf250e32a531dab4d83e0a09f07dbff2ca20ad3cec91a9b3badb57de5d8097",
-        "savedAt": "2026-07-30T12:38:24",
+        "sourceDraftSha256": "737986b38df74d9c285f11ee0b8144273702005c9a812dca9493f47a6d390f40",
+        "savedAt": "2026-07-30T18:12:52",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 1
         }
       }
     },
@@ -770,11 +770,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -6.0,
-        2.0
+        7.0
       ],
       "ringCenterOffset": [
         -6.0,
-        2.0
+        7.0
       ],
       "ringEllipseRadii": [
         24,
@@ -792,13 +792,13 @@
       },
       "visualRootOffset": [
         6.0,
-        -8.0
+        -13.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_39.json",
-        "sourceDraftSha256": "9d74a019532f0e4362cf000b32b98861b30613ca50958c93289883951abd36ed",
-        "savedAt": "2026-07-30T12:38:37",
+        "sourceDraftSha256": "c1481ec5477f53a103883afd76a39534f5f99f27544fa392440070e502985f0c",
+        "savedAt": "2026-07-30T18:13:03",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -810,11 +810,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -5.5,
-        1.5
+        8.0
       ],
       "ringCenterOffset": [
         -5.5,
-        1.5
+        8.0
       ],
       "ringEllipseRadii": [
         24,
@@ -832,13 +832,13 @@
       },
       "visualRootOffset": [
         5.5,
-        -7.5
+        -14.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_41.json",
-        "sourceDraftSha256": "1d035dd361b49b420622c6ea731d7553e6057612d9ec1710d67af8f7792b0d05",
-        "savedAt": "2026-07-30T12:47:21",
+        "sourceDraftSha256": "f909e0a6d272b131f0aacd71b8771bab452f4eef874af21b0d5084c5515d5ed4",
+        "savedAt": "2026-07-30T18:13:15",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -850,11 +850,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -5.5,
-        1.0
+        6.0
       ],
       "ringCenterOffset": [
         -5.5,
-        1.0
+        6.0
       ],
       "ringEllipseRadii": [
         24,
@@ -872,13 +872,13 @@
       },
       "visualRootOffset": [
         5.5,
-        -5.0
+        -10.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_42.json",
-        "sourceDraftSha256": "2dc1c3922ede30a18d6f35a5bd497aeee546ae51b3cae1b58c98516f50040d11",
-        "savedAt": "2026-07-30T12:47:43",
+        "sourceDraftSha256": "87387fb58745048633b04cc8d980a58a90806247a4d1c6050d723fa0c413aa2a",
+        "savedAt": "2026-07-30T18:13:23",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -890,11 +890,11 @@
       "projectionStrategy": "flying",
       "visualFootOffset": [
         -6.0,
-        -6.5
+        -3.5
       ],
       "ringCenterOffset": [
         -6.0,
-        -6.5
+        -3.5
       ],
       "ringEllipseRadii": [
         20,
@@ -912,13 +912,13 @@
       },
       "visualRootOffset": [
         6.0,
-        2.5
+        -0.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_43.json",
-        "sourceDraftSha256": "6641c2bff636dd2346046dce0407851c733c6c8d7bdf077b0c5141e7cfb85efb",
-        "savedAt": "2026-07-30T12:47:55",
+        "sourceDraftSha256": "10e2255f8741d9191f7c3f0da11cf6970375086312da062252315a636a8873d3",
+        "savedAt": "2026-07-30T18:13:39",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -930,11 +930,11 @@
       "projectionStrategy": "flying",
       "visualFootOffset": [
         -8.0,
-        -7.5
+        -4.0
       ],
       "ringCenterOffset": [
         -8.0,
-        -7.5
+        -4.0
       ],
       "ringEllipseRadii": [
         20,
@@ -952,13 +952,13 @@
       },
       "visualRootOffset": [
         8.0,
-        3.5
+        0.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_44.json",
-        "sourceDraftSha256": "dee099ca6dc86d429e79716744d073d607d40140b002404af56ec74a2fe7a120",
-        "savedAt": "2026-07-30T12:48:12",
+        "sourceDraftSha256": "81b0dd458a8889a5ca8524a139250d6052f1f387c020547facdee0c6a06352e6",
+        "savedAt": "2026-07-30T18:13:47",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1050,11 +1050,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.5,
-        1.0
+        5.0
       ],
       "ringCenterOffset": [
         -8.5,
-        1.0
+        5.0
       ],
       "ringEllipseRadii": [
         20,
@@ -1072,13 +1072,13 @@
       },
       "visualRootOffset": [
         8.5,
-        -5.0
+        -9.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_47.json",
-        "sourceDraftSha256": "5b42b3e404f855e0d07a423d2991252d016b24a9f49817879bb04fad34417917",
-        "savedAt": "2026-07-30T12:48:44",
+        "sourceDraftSha256": "9ecec8dd6eeed8df7af1d7b39c0c5ca463a93af0677ca87946dd6619ddebe1eb",
+        "savedAt": "2026-07-30T18:14:31",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1090,11 +1090,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -7.5,
-        0.0
+        5.0
       ],
       "ringCenterOffset": [
         -7.5,
-        0.0
+        5.0
       ],
       "ringEllipseRadii": [
         20,
@@ -1112,13 +1112,13 @@
       },
       "visualRootOffset": [
         7.5,
-        -4.0
+        -9.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_48.json",
-        "sourceDraftSha256": "35ca66c5aeb34eeea7bd400bdabd0352c0a790d670a425fbde3bbca778bf889c",
-        "savedAt": "2026-07-30T12:48:52",
+        "sourceDraftSha256": "a77870637c9db5bf55c8867627273b98a8e1cbcc3816d1485bd9b288acb363c9",
+        "savedAt": "2026-07-30T18:14:39",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1130,11 +1130,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.0,
-        -1.0
+        4.5
       ],
       "ringCenterOffset": [
         -8.0,
-        -1.0
+        4.5
       ],
       "ringEllipseRadii": [
         20,
@@ -1152,13 +1152,13 @@
       },
       "visualRootOffset": [
         8.0,
-        -3.0
+        -8.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_49.json",
-        "sourceDraftSha256": "bdba67b4fac486ee3f92dced6f31871224abae70dcb53e8459842bbd73cc4095",
-        "savedAt": "2026-07-30T12:49:01",
+        "sourceDraftSha256": "3095b0ffc79d2fd6406a81c4178a2269557e3f783e301d8496f7046551c5f352",
+        "savedAt": "2026-07-30T18:14:48",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1170,11 +1170,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.0,
-        -1.0
+        4.5
       ],
       "ringCenterOffset": [
         -8.0,
-        -1.0
+        4.5
       ],
       "ringEllipseRadii": [
         20,
@@ -1192,13 +1192,13 @@
       },
       "visualRootOffset": [
         8.0,
-        -3.0
+        -8.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_50.json",
-        "sourceDraftSha256": "6af30e0ef9e042da52aab81c5fc685cd91a357b74e2f2f5761fff18990d61419",
-        "savedAt": "2026-07-30T12:49:09",
+        "sourceDraftSha256": "63f0bcc1bb1963d222ac3f16953ff362a4b8364e4078a0a8525c070fd4ac161a",
+        "savedAt": "2026-07-30T18:14:54",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1209,12 +1209,12 @@
     "51": {
       "projectionStrategy": "grounded",
       "visualFootOffset": [
-        -8.0,
-        -0.5
+        -8.5,
+        5.5
       ],
       "ringCenterOffset": [
-        -8.0,
-        -0.5
+        -8.5,
+        5.5
       ],
       "ringEllipseRadii": [
         20,
@@ -1231,14 +1231,14 @@
         "decision": "monsterId=51 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
-        8.0,
-        -3.5
+        8.5,
+        -9.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_51.json",
-        "sourceDraftSha256": "7c6ae07de38f323642aaa0de116508cff1b6a6dda63df3e8d2be6d7362b5087b",
-        "savedAt": "2026-07-30T12:49:16",
+        "sourceDraftSha256": "201ec7b738a9e63dc02a5586aa34c7091bcfba27ce3001710f7b60efe6bbe44b",
+        "savedAt": "2026-07-30T18:15:01",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1250,11 +1250,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.0,
-        -0.5
+        5.0
       ],
       "ringCenterOffset": [
         -8.0,
-        -0.5
+        5.0
       ],
       "ringEllipseRadii": [
         20,
@@ -1272,13 +1272,13 @@
       },
       "visualRootOffset": [
         8.0,
-        -3.5
+        -9.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_52.json",
-        "sourceDraftSha256": "aff078036ce2e831e4d1c218455eba1c8be9833a11d0c511ee47049ff64d2b6e",
-        "savedAt": "2026-07-30T12:49:24",
+        "sourceDraftSha256": "8c6b32d92936a3f0baa1026d651c88e1b6b182a44d8d71803203c2a586f7c432",
+        "savedAt": "2026-07-30T18:15:07",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1290,11 +1290,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -7.5,
-        0.0
+        5.5
       ],
       "ringCenterOffset": [
         -7.5,
-        0.0
+        5.5
       ],
       "ringEllipseRadii": [
         20,
@@ -1312,13 +1312,13 @@
       },
       "visualRootOffset": [
         7.5,
-        -4.0
+        -9.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_53.json",
-        "sourceDraftSha256": "18c5d1f122afab6c5efbf75bab8b67518d690edc490fc38928b82c26e4d81797",
-        "savedAt": "2026-07-30T12:49:31",
+        "sourceDraftSha256": "70c35b2825be22cef4562bb20cfa349d3803268eeba40f377e9b9c8ce40137cb",
+        "savedAt": "2026-07-30T18:15:13",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1330,11 +1330,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.0,
-        0.5
+        5.0
       ],
       "ringCenterOffset": [
         -8.0,
-        0.5
+        5.0
       ],
       "ringEllipseRadii": [
         20,
@@ -1352,13 +1352,13 @@
       },
       "visualRootOffset": [
         8.0,
-        -4.5
+        -9.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_54.json",
-        "sourceDraftSha256": "09d5959a64833cf9cfa017a8a00cba613759f069720b1921bd20305447e16608",
-        "savedAt": "2026-07-30T12:49:41",
+        "sourceDraftSha256": "bbd1e949dd0aeaaeb54b39350deb816c08d9be92d630b0e019b5574dd867dfb6",
+        "savedAt": "2026-07-30T18:15:20",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1370,11 +1370,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.0,
-        0.0
+        5.5
       ],
       "ringCenterOffset": [
         -8.0,
-        0.0
+        5.5
       ],
       "ringEllipseRadii": [
         20,
@@ -1392,13 +1392,13 @@
       },
       "visualRootOffset": [
         8.0,
-        -4.0
+        -9.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_55.json",
-        "sourceDraftSha256": "f8e20c3f10d8e99a0da81b99e08cc8431134861d92e3acc8fc775f22deedc104",
-        "savedAt": "2026-07-30T12:49:49",
+        "sourceDraftSha256": "c79380c1adcc9f3af114a10ad1aa519043111c24800df9443f20ca13da2de4e1",
+        "savedAt": "2026-07-30T18:15:26",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1410,11 +1410,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.0,
-        6.5
+        16.5
       ],
       "ringCenterOffset": [
         -9.0,
-        6.5
+        16.5
       ],
       "ringEllipseRadii": [
         24,
@@ -1432,13 +1432,13 @@
       },
       "visualRootOffset": [
         9.0,
-        -12.5
+        -22.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_56.json",
-        "sourceDraftSha256": "6324d4130f5321abc32c28f8e6137eeef33ed5f26274d3a913d3a048b808dc80",
-        "savedAt": "2026-07-30T12:50:01",
+        "sourceDraftSha256": "4a86444e8ecd021b4515de9c3edaf58fa00b9487475c51212f1c641a04f1ffcc",
+        "savedAt": "2026-07-30T18:15:37",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1450,11 +1450,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.0,
-        8.0
+        16.5
       ],
       "ringCenterOffset": [
         -9.0,
-        8.0
+        16.5
       ],
       "ringEllipseRadii": [
         24,
@@ -1472,13 +1472,13 @@
       },
       "visualRootOffset": [
         9.0,
-        -14.0
+        -22.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_57.json",
-        "sourceDraftSha256": "31d712da80bab0e56c2d9d5133e19d655845f4b4339192076dbe431e1c924b3d",
-        "savedAt": "2026-07-30T12:50:08",
+        "sourceDraftSha256": "9a36c53a4c5f80e205f54d4984fb9fd555cceeb05d0dc3630e9a5fe71096ad11",
+        "savedAt": "2026-07-30T18:15:53",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1489,12 +1489,12 @@
     "59": {
       "projectionStrategy": "grounded",
       "visualFootOffset": [
-        -8.5,
-        6.5
+        -8.0,
+        16.5
       ],
       "ringCenterOffset": [
-        -8.5,
-        6.5
+        -8.0,
+        16.5
       ],
       "ringEllipseRadii": [
         24,
@@ -1511,14 +1511,14 @@
         "decision": "monsterId=59 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
-        8.5,
-        -12.5
+        8.0,
+        -22.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_59.json",
-        "sourceDraftSha256": "1cdfd512346a7e5416ee2bf56ae26753598c4423affd9273d482651381042a83",
-        "savedAt": "2026-07-30T12:50:16",
+        "sourceDraftSha256": "7100f82f59dec29e5fc46da4db1226d0a2d51ea47fe2c7a36cf4a6516286f0a2",
+        "savedAt": "2026-07-30T18:16:05",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1650,11 +1650,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.5,
-        7.5
+        16.0
       ],
       "ringCenterOffset": [
         -9.5,
-        7.5
+        16.0
       ],
       "ringEllipseRadii": [
         22,
@@ -1672,13 +1672,13 @@
       },
       "visualRootOffset": [
         9.5,
-        -11.5
+        -20.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_64.json",
-        "sourceDraftSha256": "3d5d13819decf7178f021fccf4c01fe5683f9918e3a4e8ac56b14618bd0b8fc9",
-        "savedAt": "2026-07-30T12:50:53",
+        "sourceDraftSha256": "f1987ab471ea0b153de6de3f763d4ad217e259af6fba945346bc51aa61331e6a",
+        "savedAt": "2026-07-30T18:16:35",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1689,12 +1689,12 @@
     "65": {
       "projectionStrategy": "grounded",
       "visualFootOffset": [
-        -9.0,
-        7.0
+        -9.5,
+        16.5
       ],
       "ringCenterOffset": [
-        -9.0,
-        7.0
+        -9.5,
+        16.5
       ],
       "ringEllipseRadii": [
         22,
@@ -1711,14 +1711,14 @@
         "decision": "monsterId=65 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
-        9.0,
-        -11.0
+        9.5,
+        -20.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_65.json",
-        "sourceDraftSha256": "5fe06711d2845e7a24c020dae4a9425f6b3d684ecde062b6ea71988f402d7250",
-        "savedAt": "2026-07-30T12:51:00",
+        "sourceDraftSha256": "8dbb3b0a10019e183d5c1fbbd410e80f5ed92a0c8393ce5278cd9be35b26aec4",
+        "savedAt": "2026-07-30T18:16:46",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1729,12 +1729,12 @@
     "66": {
       "projectionStrategy": "grounded",
       "visualFootOffset": [
-        -9.0,
-        9.0
+        -8.5,
+        18.0
       ],
       "ringCenterOffset": [
-        -9.0,
-        9.0
+        -8.5,
+        18.0
       ],
       "ringEllipseRadii": [
         24,
@@ -1751,14 +1751,14 @@
         "decision": "monsterId=66 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
-        9.0,
-        -13.0
+        8.5,
+        -22.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_66.json",
-        "sourceDraftSha256": "e60de43396a95f25ebd9df3b832387e5c94fcf508b94bd414e8d5ceb770ddef7",
-        "savedAt": "2026-07-30T12:51:09",
+        "sourceDraftSha256": "46dbfde38d34daadd102f70d16e88bdc73d58231ac7853207f592b182eeb2df1",
+        "savedAt": "2026-07-30T18:16:53",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1770,11 +1770,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.0,
-        10.0
+        19.5
       ],
       "ringCenterOffset": [
         -9.0,
-        10.0
+        19.5
       ],
       "ringEllipseRadii": [
         24,
@@ -1792,13 +1792,13 @@
       },
       "visualRootOffset": [
         9.0,
-        -14.0
+        -23.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_67.json",
-        "sourceDraftSha256": "ada4d4cba6e951e15dc7f73525b304d6154e7b8497329af392df7b953c101df7",
-        "savedAt": "2026-07-30T12:51:17",
+        "sourceDraftSha256": "292954eedbfa93b9ece1fc4ca828e2167fa16015361680fef1cb3c6bbdbd7679",
+        "savedAt": "2026-07-30T18:17:01",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1810,11 +1810,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.5,
-        9.0
+        20.0
       ],
       "ringCenterOffset": [
         -9.5,
-        9.0
+        20.0
       ],
       "ringEllipseRadii": [
         24,
@@ -1832,13 +1832,13 @@
       },
       "visualRootOffset": [
         9.5,
-        -13.0
+        -24.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_68.json",
-        "sourceDraftSha256": "628f38bb37201e2066bc03fb5d218e89a82aa9af904991530b4c2526edbe7bc5",
-        "savedAt": "2026-07-30T12:51:25",
+        "sourceDraftSha256": "ba96804bf6bdee7c8bec860dbf98aee4e4a01cb1727f6f5980aa4a1bec3954d1",
+        "savedAt": "2026-07-30T18:17:14",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1850,11 +1850,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.0,
-        10.0
+        20.5
       ],
       "ringCenterOffset": [
         -9.0,
-        10.0
+        20.5
       ],
       "ringEllipseRadii": [
         24,
@@ -1872,13 +1872,13 @@
       },
       "visualRootOffset": [
         9.0,
-        -14.0
+        -24.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_69.json",
-        "sourceDraftSha256": "351d98a12c257d9c3dbc81f2f2a236deb161d20fd3fa8c50495f2ee6a829837e",
-        "savedAt": "2026-07-30T12:51:31",
+        "sourceDraftSha256": "e9322f0d60fb7fac6478864ace9e5a874be18a0fa8a6d09427eec4ba97c5e89a",
+        "savedAt": "2026-07-30T18:17:20",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1890,11 +1890,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.0,
-        8.5
+        18.5
       ],
       "ringCenterOffset": [
         -9.0,
-        8.5
+        18.5
       ],
       "ringEllipseRadii": [
         28,
@@ -1912,13 +1912,13 @@
       },
       "visualRootOffset": [
         9.0,
-        -12.5
+        -22.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_70.json",
-        "sourceDraftSha256": "4f9d812b2f52147f1d651873a733773230e5dd0599b7ce383f38b52f2bb73ec7",
-        "savedAt": "2026-07-30T12:51:39",
+        "sourceDraftSha256": "29144ed49cc54302df2034b62731938b1332bb29eb40c07ec44079fed06d18d9",
+        "savedAt": "2026-07-30T18:17:31",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1930,11 +1930,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.5,
-        8.0
+        19.0
       ],
       "ringCenterOffset": [
         -9.5,
-        8.0
+        19.0
       ],
       "ringEllipseRadii": [
         28,
@@ -1952,13 +1952,13 @@
       },
       "visualRootOffset": [
         9.5,
-        -12.0
+        -23.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_71.json",
-        "sourceDraftSha256": "26cb4ccd714752b1dec9c63efa08d2fe7cfa1f7fdbcde52581739ab5076ad79e",
-        "savedAt": "2026-07-30T12:51:46",
+        "sourceDraftSha256": "d1afd2578df2a122862636dd10a1f2280c12eea0a277294b02770de6537ced2e",
+        "savedAt": "2026-07-30T18:17:41",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -1970,11 +1970,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.0,
-        3.0
+        13.0
       ],
       "ringCenterOffset": [
         -9.0,
-        3.0
+        13.0
       ],
       "ringEllipseRadii": [
         24,
@@ -1992,13 +1992,13 @@
       },
       "visualRootOffset": [
         9.0,
-        -7.0
+        -17.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_73.json",
-        "sourceDraftSha256": "a47c6fd79216c02ce46f454a464fc57b96d89158683dc9f31b9199600b2961c9",
-        "savedAt": "2026-07-30T12:51:55",
+        "sourceDraftSha256": "c7471dae77a43679ff9e1e15763f7bd0177cd59f26cad9065cff3f8517d429ac",
+        "savedAt": "2026-07-30T18:17:52",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -2010,11 +2010,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.5,
-        3.0
+        11.5
       ],
       "ringCenterOffset": [
         -8.5,
-        3.0
+        11.5
       ],
       "ringEllipseRadii": [
         24,
@@ -2032,13 +2032,13 @@
       },
       "visualRootOffset": [
         8.5,
-        -7.0
+        -15.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_74.json",
-        "sourceDraftSha256": "a0c5c01f5e1d5e63fe0c152fb466da481a38430c5ae926dd4bcc49da01ac4fa3",
-        "savedAt": "2026-07-30T12:52:01",
+        "sourceDraftSha256": "16bf3f65a422d7f45264c4383e940ca71d7c85a67c4a231cf1620131b25a6526",
+        "savedAt": "2026-07-30T18:17:59",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -2050,11 +2050,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.0,
-        3.5
+        12.5
       ],
       "ringCenterOffset": [
         -9.0,
-        3.5
+        12.5
       ],
       "ringEllipseRadii": [
         24,
@@ -2072,13 +2072,13 @@
       },
       "visualRootOffset": [
         9.0,
-        -7.5
+        -16.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_75.json",
-        "sourceDraftSha256": "24702afa357255f6e4eb60be721740e257c72ee25dacdabeffaff906e7fc50d2",
-        "savedAt": "2026-07-30T12:52:08",
+        "sourceDraftSha256": "bd3b6baa2a65434056024a9ed2bb1fbfbb36bef301631c245562b5bf9f580632",
+        "savedAt": "2026-07-30T18:18:05",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -2090,11 +2090,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.0,
-        10.0
+        20.5
       ],
       "ringCenterOffset": [
         -9.0,
-        10.0
+        20.5
       ],
       "ringEllipseRadii": [
         32,
@@ -2112,13 +2112,13 @@
       },
       "visualRootOffset": [
         9.0,
-        -16.0
+        -26.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_76.json",
-        "sourceDraftSha256": "8845d03fc209fa5b298a852c8ef6658b0293b88804aa3816d33b104e71a6b879",
-        "savedAt": "2026-07-30T12:52:16",
+        "sourceDraftSha256": "45ff75a9146e27b4c5245e65ba93707ed89fd74508f72b4d0e5dc8f0a8092a1c",
+        "savedAt": "2026-07-30T18:18:18",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -2130,11 +2130,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.0,
-        11.0
+        21.5
       ],
       "ringCenterOffset": [
         -9.0,
-        11.0
+        21.5
       ],
       "ringEllipseRadii": [
         32,
@@ -2152,13 +2152,13 @@
       },
       "visualRootOffset": [
         9.0,
-        -17.0
+        -27.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_77.json",
-        "sourceDraftSha256": "78cf282aaedcb48311c1835921196abfce83c973d5600906700e493a708ceef8",
-        "savedAt": "2026-07-30T12:52:22",
+        "sourceDraftSha256": "4cbfd6ece87b6d38c24933a2f0a78d68ed5f7844d76a136408874ce85a5f79ed",
+        "savedAt": "2026-07-30T18:18:24",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -2170,11 +2170,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.0,
-        10.0
+        21.5
       ],
       "ringCenterOffset": [
         -8.0,
-        10.0
+        21.5
       ],
       "ringEllipseRadii": [
         32,
@@ -2192,13 +2192,13 @@
       },
       "visualRootOffset": [
         8.0,
-        -16.0
+        -27.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_78.json",
-        "sourceDraftSha256": "4380825331c17c30593f2d7e1eb3a814ffe1ab10a84f73afc41340145fb0d674",
-        "savedAt": "2026-07-30T12:52:29",
+        "sourceDraftSha256": "863f79187f41bb56645ed53230da2e3b6b16a1b07818bb0c6480ff8dfdff8df4",
+        "savedAt": "2026-07-30T18:18:33",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -2210,11 +2210,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -7.5,
-        4.5
+        10.0
       ],
       "ringCenterOffset": [
         -7.5,
-        4.5
+        10.0
       ],
       "ringEllipseRadii": [
         20,
@@ -2232,13 +2232,13 @@
       },
       "visualRootOffset": [
         7.5,
-        -8.5
+        -14.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_79.json",
-        "sourceDraftSha256": "a23d6aadd7fb90c1698bde7429f122c2c27a96739e5b69d2a876dbfe540abc27",
-        "savedAt": "2026-07-30T12:52:39",
+        "sourceDraftSha256": "c083ae5a1a81f1462e33a140982095e9b781d7616af04620cc102aa39a1ca563",
+        "savedAt": "2026-07-30T18:18:42",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -2249,12 +2249,12 @@
     "80": {
       "projectionStrategy": "grounded",
       "visualFootOffset": [
-        -7.5,
-        4.5
+        -7.0,
+        9.5
       ],
       "ringCenterOffset": [
-        -7.5,
-        4.5
+        -7.0,
+        9.5
       ],
       "ringEllipseRadii": [
         20,
@@ -2271,14 +2271,14 @@
         "decision": "monsterId=80 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
-        7.5,
-        -8.5
+        7.0,
+        -13.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_80.json",
-        "sourceDraftSha256": "86d97679d9d4f30912ff3dead13cc0f165a1d27bd66ef5cf31a50f097f81c58e",
-        "savedAt": "2026-07-30T12:52:45",
+        "sourceDraftSha256": "879f430efe502a53e5741e4474b80c71d6161354dba30a4444e3df7c10260a2a",
+        "savedAt": "2026-07-30T18:18:49",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -2289,12 +2289,12 @@
     "81": {
       "projectionStrategy": "grounded",
       "visualFootOffset": [
-        -10.0,
-        1.5
+        -9.5,
+        8.0
       ],
       "ringCenterOffset": [
-        -10.0,
-        1.5
+        -9.5,
+        8.0
       ],
       "ringEllipseRadii": [
         20,
@@ -2311,14 +2311,14 @@
         "decision": "monsterId=81 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
-        10.0,
-        -5.5
+        9.5,
+        -12.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_81.json",
-        "sourceDraftSha256": "e9536fa5abbd500734db18e48af01086bd60dbbc71a5620945f08f2e3125d000",
-        "savedAt": "2026-07-30T12:52:52",
+        "sourceDraftSha256": "e85d890525ea2d0b154a44bed1e62e812933a7a2ada7b96daa7911c7d42320ed",
+        "savedAt": "2026-07-30T18:18:58",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -2330,11 +2330,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -10.0,
-        2.0
+        10.5
       ],
       "ringCenterOffset": [
         -10.0,
-        2.0
+        10.5
       ],
       "ringEllipseRadii": [
         20,
@@ -2352,13 +2352,13 @@
       },
       "visualRootOffset": [
         10.0,
-        -6.0
+        -14.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_82.json",
-        "sourceDraftSha256": "ca426fd0f44fab06b3ecf81f5fd88b11e459d0d10b786e6643c7fa42c9374341",
-        "savedAt": "2026-07-30T12:52:59",
+        "sourceDraftSha256": "c3fa5ae9d2c0941455de45ce42b21a3979d7ab8d6725888bd6ba2fa3fb5dcdb1",
+        "savedAt": "2026-07-30T18:19:05",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -2370,11 +2370,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -10.5,
-        2.5
+        10.5
       ],
       "ringCenterOffset": [
         -10.5,
-        2.5
+        10.5
       ],
       "ringEllipseRadii": [
         20,
@@ -2392,13 +2392,13 @@
       },
       "visualRootOffset": [
         10.5,
-        -6.5
+        -14.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_83.json",
-        "sourceDraftSha256": "9e53bdd7e9bb24c7ef710218b8577ba169fc403ab3669c7fe4a83eb2750fa25c",
-        "savedAt": "2026-07-30T12:53:07",
+        "sourceDraftSha256": "30b266474598155c60ddea6adf8a111ce69da4ed057281fda582224a71689b0e",
+        "savedAt": "2026-07-30T18:19:16",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -2410,11 +2410,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -11.0,
-        2.5
+        9.0
       ],
       "ringCenterOffset": [
         -11.0,
-        2.5
+        9.0
       ],
       "ringEllipseRadii": [
         20,
@@ -2432,13 +2432,13 @@
       },
       "visualRootOffset": [
         11.0,
-        -6.5
+        -13.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_84.json",
-        "sourceDraftSha256": "5cc1c8b9b3753b12a8749455b95bb4ebf5c4f0a8ca77e9fdd0341d6728d485a8",
-        "savedAt": "2026-07-30T12:53:13",
+        "sourceDraftSha256": "d51cc5007872a7754cf03d9a5c6888be57634e60ebcc1020c798cffb0617e562",
+        "savedAt": "2026-07-30T18:19:25",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -2450,11 +2450,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -11.0,
-        3.0
+        10.5
       ],
       "ringCenterOffset": [
         -11.0,
-        3.0
+        10.5
       ],
       "ringEllipseRadii": [
         20,
@@ -2472,13 +2472,13 @@
       },
       "visualRootOffset": [
         11.0,
-        -7.0
+        -14.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_85.json",
-        "sourceDraftSha256": "de9ddabc8ff21a7d819ea1a3a85e52622e7b06c4670a9ed93991ccd23b2a10c1",
-        "savedAt": "2026-07-30T12:53:20",
+        "sourceDraftSha256": "76b77bd46ca4ca46f5d2d0ca168e89c16c4d758ae5e898648a727a83a84ab523",
+        "savedAt": "2026-07-30T18:19:30",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -2490,11 +2490,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -10.5,
-        3.0
+        12.0
       ],
       "ringCenterOffset": [
         -10.5,
-        3.0
+        12.0
       ],
       "ringEllipseRadii": [
         20,
@@ -2512,13 +2512,13 @@
       },
       "visualRootOffset": [
         10.5,
-        -7.0
+        -16.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_86.json",
-        "sourceDraftSha256": "3c149c353a08ba96e6a4d802e8c24a037b19183d48e1509297a5d26532002011",
-        "savedAt": "2026-07-30T12:53:25",
+        "sourceDraftSha256": "492f2bad7bc6a8b1d81ddabfc3ee0d0e09b7ed912fb8b7bda9dbba5328cbc74a",
+        "savedAt": "2026-07-30T18:19:38",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -2609,12 +2609,12 @@
     "89": {
       "projectionStrategy": "grounded",
       "visualFootOffset": [
-        -10.0,
-        4.0
+        -9.5,
+        12.5
       ],
       "ringCenterOffset": [
-        -10.0,
-        4.0
+        -9.5,
+        12.5
       ],
       "ringEllipseRadii": [
         28,
@@ -2631,14 +2631,14 @@
         "decision": "monsterId=89 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
-        10.0,
-        -10.0
+        9.5,
+        -18.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_89.json",
-        "sourceDraftSha256": "72eb5ffba648df9d8b0fd15eb1188a083822ed5ccc4f38ed9a566153a6578eef",
-        "savedAt": "2026-07-30T12:53:54",
+        "sourceDraftSha256": "327d026212acf0b1278dc08ee74dc643a7943f11e66fb8a8eb80e38b7961f617",
+        "savedAt": "2026-07-30T18:19:56",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -2650,11 +2650,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -11.0,
-        4.0
+        13.0
       ],
       "ringCenterOffset": [
         -11.0,
-        4.0
+        13.0
       ],
       "ringEllipseRadii": [
         28,
@@ -2672,13 +2672,13 @@
       },
       "visualRootOffset": [
         11.0,
-        -10.0
+        -19.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_90.json",
-        "sourceDraftSha256": "2a23936ea1e90d193c406e3a250bf54fdfa826fb5ee704fe85b1ba4f8f2b9d7a",
-        "savedAt": "2026-07-30T12:54:04",
+        "sourceDraftSha256": "f2735fbbc7e0be18eca541b85abd86f26c5909e7a4d25cd385fe3572fa66808b",
+        "savedAt": "2026-07-30T18:20:03",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -2690,11 +2690,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -10.0,
-        4.5
+        13.0
       ],
       "ringCenterOffset": [
         -10.0,
-        4.5
+        13.0
       ],
       "ringEllipseRadii": [
         28,
@@ -2712,13 +2712,13 @@
       },
       "visualRootOffset": [
         10.0,
-        -10.5
+        -19.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_91.json",
-        "sourceDraftSha256": "934978477c14797b455898c769c80569d92b9bebbba28c430b04dcd7c1f9e7a1",
-        "savedAt": "2026-07-30T12:54:10",
+        "sourceDraftSha256": "7b0f0753b127034e17c6f09102b774d231177a3de0a5c096d100f47332d12ce1",
+        "savedAt": "2026-07-30T18:20:11",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -3849,12 +3849,12 @@
     "124": {
       "projectionStrategy": "grounded",
       "visualFootOffset": [
-        -16.0,
-        9.0
+        -13.0,
+        4.5
       ],
       "ringCenterOffset": [
-        -16.0,
-        9.0
+        -13.0,
+        4.5
       ],
       "ringEllipseRadii": [
         44,
@@ -3871,14 +3871,14 @@
         "decision": "monsterId=124 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
-        15.5,
-        9.0
+        12.5,
+        13.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_124.json",
-        "sourceDraftSha256": "abf4ed08e51c4c8c127ff5c8acf57f90a728696e2bd9759217eaf16835f6679c",
-        "savedAt": "2026-07-30T14:24:03",
+        "sourceDraftSha256": "1ad06846539b2747c713ac4253b02012db867cb41e7f893c0de9f34b0a639276",
+        "savedAt": "2026-07-30T18:21:42",
         "selection": {
           "action": "attack",
           "direction": 0,
@@ -4010,11 +4010,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.5,
-        1.5
+        3.0
       ],
       "ringCenterOffset": [
         -8.5,
-        1.5
+        3.0
       ],
       "ringEllipseRadii": [
         22,
@@ -4032,13 +4032,13 @@
       },
       "visualRootOffset": [
         8.5,
-        -5.5
+        -7.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_129.json",
-        "sourceDraftSha256": "bf2124a719319c7ca5fa7adeb1fb9c4c92122b0df11533fedd367fcf90b6403e",
-        "savedAt": "2026-07-30T12:58:23",
+        "sourceDraftSha256": "e0b5530722845a44745ae5297ecea0325dce412cead0d51c86bdd2cc7c04f21a",
+        "savedAt": "2026-07-30T18:22:38",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -4049,12 +4049,12 @@
     "130": {
       "projectionStrategy": "grounded",
       "visualFootOffset": [
-        -8.5,
-        0.0
+        -9.0,
+        3.0
       ],
       "ringCenterOffset": [
-        -8.5,
-        0.0
+        -9.0,
+        3.0
       ],
       "ringEllipseRadii": [
         22,
@@ -4071,14 +4071,14 @@
         "decision": "monsterId=130 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
-        8.5,
-        -4.0
+        9.0,
+        -7.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_130.json",
-        "sourceDraftSha256": "8f366d73f69738973d10ff6334876669c5d983c1bd621ed4c2a80fedb7c8dd5a",
-        "savedAt": "2026-07-30T12:58:28",
+        "sourceDraftSha256": "8dfc84910f7b76a9e2ec4c0421114abaa76c86dc6692b546e8e3730d36c422f8",
+        "savedAt": "2026-07-30T18:22:44",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -4090,11 +4090,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.5,
-        2.0
+        4.0
       ],
       "ringCenterOffset": [
         -8.5,
-        2.0
+        4.0
       ],
       "ringEllipseRadii": [
         22,
@@ -4112,13 +4112,13 @@
       },
       "visualRootOffset": [
         8.5,
-        -6.0
+        -8.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_131.json",
-        "sourceDraftSha256": "3d77c40fe8609521a89ecff7231728f2e75928e6705f75fd7f8f305207004f89",
-        "savedAt": "2026-07-30T12:58:33",
+        "sourceDraftSha256": "b962fb837d4a96f6de41a5cea8a4df7cee5d72845852782af811849791ad546a",
+        "savedAt": "2026-07-30T18:22:51",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -4130,11 +4130,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.0,
-        0.5
+        3.5
       ],
       "ringCenterOffset": [
         -8.0,
-        0.5
+        3.5
       ],
       "ringEllipseRadii": [
         22,
@@ -4152,13 +4152,13 @@
       },
       "visualRootOffset": [
         8.0,
-        -4.5
+        -7.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_132.json",
-        "sourceDraftSha256": "1f9baca72b25d121dd44efb437c862dc645a348867dbd54641fcb1f4c4e64e3c",
-        "savedAt": "2026-07-30T12:58:38",
+        "sourceDraftSha256": "b80a50813efd0d2d905ce34960d4a476cf9563c15b3ece51180edfa9691ec8e4",
+        "savedAt": "2026-07-30T18:22:58",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -4170,11 +4170,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.0,
-        0.0
+        3.0
       ],
       "ringCenterOffset": [
         -8.0,
-        0.0
+        3.0
       ],
       "ringEllipseRadii": [
         22,
@@ -4192,13 +4192,13 @@
       },
       "visualRootOffset": [
         8.0,
-        -4.0
+        -7.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_133.json",
-        "sourceDraftSha256": "96835bb2e2b962461a2362d428dd4966ae7f293301be6c7ca0afa166f1b39a26",
-        "savedAt": "2026-07-30T12:58:44",
+        "sourceDraftSha256": "76ff0a1e31a14ce558bdd2adf7c5ec6382f2cb57b4856dfe35582962ec116ffd",
+        "savedAt": "2026-07-30T18:23:05",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -4210,11 +4210,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.0,
-        0.0
+        3.0
       ],
       "ringCenterOffset": [
         -8.0,
-        0.0
+        3.0
       ],
       "ringEllipseRadii": [
         22,
@@ -4232,13 +4232,13 @@
       },
       "visualRootOffset": [
         8.0,
-        -4.0
+        -7.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_134.json",
-        "sourceDraftSha256": "c006af6fea6ba2536d370a0804782b8954b0b62da302e189908cd271c3194bb9",
-        "savedAt": "2026-07-30T12:58:49",
+        "sourceDraftSha256": "cfa4b5c6b5bff837edd1068e7caf082ab6cdd17dc30c22cfdb26e11adc312dd4",
+        "savedAt": "2026-07-30T18:23:10",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -4250,11 +4250,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.0,
-        4.0
+        13.5
       ],
       "ringCenterOffset": [
         -9.0,
-        4.0
+        13.5
       ],
       "ringEllipseRadii": [
         24,
@@ -4272,13 +4272,13 @@
       },
       "visualRootOffset": [
         9.0,
-        -10.0
+        -19.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_135.json",
-        "sourceDraftSha256": "51e2983185e77fa8151246e47b7abd24917dad75e81a54a8d2ab1b29900a6723",
-        "savedAt": "2026-07-30T12:58:55",
+        "sourceDraftSha256": "d73e16aaaccddc383a1c57a1acbbc3b9812c21b1d8e28ebaccdcba2510c9f9b7",
+        "savedAt": "2026-07-30T18:23:29",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -4290,11 +4290,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -10.0,
-        2.5
+        12.0
       ],
       "ringCenterOffset": [
         -10.0,
-        2.5
+        12.0
       ],
       "ringEllipseRadii": [
         24,
@@ -4312,13 +4312,13 @@
       },
       "visualRootOffset": [
         10.0,
-        -8.5
+        -18.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_136.json",
-        "sourceDraftSha256": "e3d429ddd06d48f8d1db1c2bde13decebd4123928a81edf6cc0cb5a9e1bac782",
-        "savedAt": "2026-07-30T12:59:01",
+        "sourceDraftSha256": "42518dca4120d9941dc856bf50b13f425c293a2c1210fdf3c1c701fb8e812360",
+        "savedAt": "2026-07-30T18:23:46",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -4330,11 +4330,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.5,
-        5.5
+        12.5
       ],
       "ringCenterOffset": [
         -9.5,
-        5.5
+        12.5
       ],
       "ringEllipseRadii": [
         24,
@@ -4352,13 +4352,13 @@
       },
       "visualRootOffset": [
         9.5,
-        -11.5
+        -18.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_137.json",
-        "sourceDraftSha256": "390b7f0f936726eb4c1bf5d2b40ae9696adf10544099a756d6baa28d20cb5f5f",
-        "savedAt": "2026-07-30T12:59:07",
+        "sourceDraftSha256": "8327937d433888f3a5ea211390ac0f3d8328ef5175e871e7240293396baed654",
+        "savedAt": "2026-07-30T18:23:58",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -4570,11 +4570,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.0,
-        4.0
+        11.5
       ],
       "ringCenterOffset": [
         -9.0,
-        4.0
+        11.5
       ],
       "ringEllipseRadii": [
         20,
@@ -4592,13 +4592,13 @@
       },
       "visualRootOffset": [
         9.0,
-        -10.0
+        -17.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_143.json",
-        "sourceDraftSha256": "8dec028b9ef084b334443ff93fa93741f7d3f37211642e97ba9ef235fb3f7e05",
-        "savedAt": "2026-07-30T12:59:43",
+        "sourceDraftSha256": "1fd4c6c26a0fb1ecf43ddcc989b0811492ca15a79ba7891fb11f86ac977b618a",
+        "savedAt": "2026-07-30T18:24:21",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -4650,11 +4650,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.5,
-        0.0
+        4.5
       ],
       "ringCenterOffset": [
         -8.5,
-        0.0
+        4.5
       ],
       "ringEllipseRadii": [
         20,
@@ -4672,13 +4672,13 @@
       },
       "visualRootOffset": [
         8.5,
-        -4.0
+        -8.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_145.json",
-        "sourceDraftSha256": "fdda665aab78da7fdaa3b658629c71998f4f23358393b9f32a78bf219855ceda",
-        "savedAt": "2026-07-30T12:59:54",
+        "sourceDraftSha256": "fd9a79d39cebb9081466fe2092d8cfdea017ccd22013683c62568a0085007504",
+        "savedAt": "2026-07-30T18:24:33",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -4690,11 +4690,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.0,
-        1.0
+        7.0
       ],
       "ringCenterOffset": [
         -9.0,
-        1.0
+        7.0
       ],
       "ringEllipseRadii": [
         24,
@@ -4712,13 +4712,13 @@
       },
       "visualRootOffset": [
         9.0,
-        -5.0
+        -11.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_146.json",
-        "sourceDraftSha256": "889b95e37787373af6ea4ca702446018e3db33b9238f652a66d83c4cea5a03d4",
-        "savedAt": "2026-07-30T13:00:00",
+        "sourceDraftSha256": "141a906f25be96f38a1ef7f1bd7a220a792fb1744f19d1d4ab76096f9fcef369",
+        "savedAt": "2026-07-30T18:25:04",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -4730,11 +4730,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.5,
-        0.0
+        6.0
       ],
       "ringCenterOffset": [
         -8.5,
-        0.0
+        6.0
       ],
       "ringEllipseRadii": [
         24,
@@ -4752,13 +4752,13 @@
       },
       "visualRootOffset": [
         8.5,
-        -4.0
+        -10.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_147.json",
-        "sourceDraftSha256": "a357023ba9ccbb1c0a17dcbe0221d9827a1cb987b4e8adc4ea2994dbb2873a6d",
-        "savedAt": "2026-07-30T13:00:06",
+        "sourceDraftSha256": "d38dbaa8bf9117c564a49005b5417c489400bd13cf4e039f11a655e58fcf9bbe",
+        "savedAt": "2026-07-30T18:24:57",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -4850,11 +4850,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.5,
-        0.0
+        5.0
       ],
       "ringCenterOffset": [
         -8.5,
-        0.0
+        5.0
       ],
       "ringEllipseRadii": [
         20,
@@ -4872,13 +4872,13 @@
       },
       "visualRootOffset": [
         8.5,
-        -4.0
+        -9.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_150.json",
-        "sourceDraftSha256": "226f7085b782daf9ccee188ad4bafb8ede1559ae9e28f9a8ca8cc440f384834f",
-        "savedAt": "2026-07-30T13:00:21",
+        "sourceDraftSha256": "74f66c3192ba3c018698d33a0c4df695767c41529d9b241dfe105491787bf15d",
+        "savedAt": "2026-07-30T18:25:15",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -4890,11 +4890,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.5,
-        0.0
+        5.5
       ],
       "ringCenterOffset": [
         -9.5,
-        0.0
+        5.5
       ],
       "ringEllipseRadii": [
         20,
@@ -4912,13 +4912,13 @@
       },
       "visualRootOffset": [
         9.5,
-        -4.0
+        -9.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_151.json",
-        "sourceDraftSha256": "4dfe50d6c5405a7cef03b46c4feb320a76e2f533c388a36affd1806f120ed35e",
-        "savedAt": "2026-07-30T13:00:27",
+        "sourceDraftSha256": "dbfb15ffdb81ee828fa480ef67057e906ba3f53a2c4206445c5b72e469b59f8b",
+        "savedAt": "2026-07-30T18:25:21",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -4930,11 +4930,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.0,
-        0.0
+        5.5
       ],
       "ringCenterOffset": [
         -8.0,
-        0.0
+        5.5
       ],
       "ringEllipseRadii": [
         20,
@@ -4952,13 +4952,13 @@
       },
       "visualRootOffset": [
         8.0,
-        -4.0
+        -9.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_152.json",
-        "sourceDraftSha256": "4ab82c6f1d53e126fa96f6e80c020730e740cb2b95b8a7f9bc2ccad4516626dd",
-        "savedAt": "2026-07-30T13:00:35",
+        "sourceDraftSha256": "944210b05177354a5f76e66be581828514129999c6c5e3880ac21f29e2f12efe",
+        "savedAt": "2026-07-30T18:25:28",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -4970,11 +4970,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.5,
-        2.0
+        5.5
       ],
       "ringCenterOffset": [
         -8.5,
-        2.0
+        5.5
       ],
       "ringEllipseRadii": [
         20,
@@ -4992,13 +4992,13 @@
       },
       "visualRootOffset": [
         8.5,
-        -6.0
+        -9.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_153.json",
-        "sourceDraftSha256": "9f36b21e1df3ef77f03351fdf26ade7cba35f2ce4b1be9a354ca28873734dcd4",
-        "savedAt": "2026-07-30T13:00:41",
+        "sourceDraftSha256": "0fb700dd9bb97f91fa4bfc27f352f5f2764b362fd9766996947dfa6dc63a1e25",
+        "savedAt": "2026-07-30T18:25:36",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -5010,11 +5010,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.0,
-        1.5
+        5.5
       ],
       "ringCenterOffset": [
         -9.0,
-        1.5
+        5.5
       ],
       "ringEllipseRadii": [
         20,
@@ -5032,13 +5032,13 @@
       },
       "visualRootOffset": [
         9.0,
-        -5.5
+        -9.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_154.json",
-        "sourceDraftSha256": "38996efb1dfc87054d7dc3502503b1da7e9f42cd6856ced0ea0165b440792e1d",
-        "savedAt": "2026-07-30T13:00:48",
+        "sourceDraftSha256": "b25bd74f29f4f921d8ba826cc7a3628b07945c8876faa14b027384c189ccb305",
+        "savedAt": "2026-07-30T18:25:42",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -5050,11 +5050,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.5,
-        1.5
+        6.5
       ],
       "ringCenterOffset": [
         -8.5,
-        1.5
+        6.5
       ],
       "ringEllipseRadii": [
         20,
@@ -5072,13 +5072,13 @@
       },
       "visualRootOffset": [
         8.5,
-        -5.5
+        -10.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_155.json",
-        "sourceDraftSha256": "9e97d378544e2694548bd993ff2e7bd95b943530403adf40783e8ebc6ef1c5bd",
-        "savedAt": "2026-07-30T13:00:54",
+        "sourceDraftSha256": "e5c26e2d2053123c13136c9d5eb2e04a5358cdd38359747b3b51240a1e80cfc0",
+        "savedAt": "2026-07-30T18:25:48",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -5090,11 +5090,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.5,
-        0.5
+        5.0
       ],
       "ringCenterOffset": [
         -8.5,
-        0.5
+        5.0
       ],
       "ringEllipseRadii": [
         20,
@@ -5112,13 +5112,13 @@
       },
       "visualRootOffset": [
         8.5,
-        -4.5
+        -9.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_156.json",
-        "sourceDraftSha256": "2de908ddb9da3a7714e382359f776105b54ea55f64a229e1c78cbc49f4b54df6",
-        "savedAt": "2026-07-30T13:00:59",
+        "sourceDraftSha256": "7f2983968735e81bb3abb38af2d715cadcd973adc4ae3b9146f182c2cec8464d",
+        "savedAt": "2026-07-30T18:25:59",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -5130,11 +5130,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.5,
-        0.5
+        6.0
       ],
       "ringCenterOffset": [
         -8.5,
-        0.5
+        6.0
       ],
       "ringEllipseRadii": [
         20,
@@ -5152,13 +5152,13 @@
       },
       "visualRootOffset": [
         8.5,
-        -4.5
+        -10.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_157.json",
-        "sourceDraftSha256": "ce39235790416ac4de73821f090dd889ac5149c3c59d1ef075bc876a90a5457d",
-        "savedAt": "2026-07-30T13:01:04",
+        "sourceDraftSha256": "0b042751fbfdfedc06f82b9a44e39b3f3e5613febcc77f09ba0fa4cb502756ed",
+        "savedAt": "2026-07-30T18:26:04",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -5170,11 +5170,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.5,
-        1.0
+        6.0
       ],
       "ringCenterOffset": [
         -8.5,
-        1.0
+        6.0
       ],
       "ringEllipseRadii": [
         20,
@@ -5192,13 +5192,13 @@
       },
       "visualRootOffset": [
         8.5,
-        -5.0
+        -10.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_158.json",
-        "sourceDraftSha256": "a87ace077d48ffa66e4c02e5a7c01c249d378741288882a054fb1d1dd25b2391",
-        "savedAt": "2026-07-30T13:01:10",
+        "sourceDraftSha256": "f530a4f9b198e970e4b9cfbc78689313e6491fdc3ca8e69927b13d58e8acfc72",
+        "savedAt": "2026-07-30T18:26:10",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -5210,11 +5210,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.0,
-        4.5
+        10.5
       ],
       "ringCenterOffset": [
         -8.0,
-        4.5
+        10.5
       ],
       "ringEllipseRadii": [
         20,
@@ -5232,13 +5232,13 @@
       },
       "visualRootOffset": [
         8.0,
-        -10.5
+        -16.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_159.json",
-        "sourceDraftSha256": "fd1fd4fdfb237cd4b8785883136cb1363c636a8314e3efd9f3f7952b596a646a",
-        "savedAt": "2026-07-30T13:01:15",
+        "sourceDraftSha256": "e6b25501ab6bae1c6d0f836ecdba7b92369aeb0c0ac73c653735319da64c4362",
+        "savedAt": "2026-07-30T18:26:20",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -5250,11 +5250,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -6.0,
-        8.5
+        10.5
       ],
       "ringCenterOffset": [
         -6.0,
-        8.5
+        10.5
       ],
       "ringEllipseRadii": [
         32,
@@ -5272,13 +5272,13 @@
       },
       "visualRootOffset": [
         1.0,
-        -8.0
+        -10.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_160.json",
-        "sourceDraftSha256": "bc30e8b361cb2a55d5265ec886434e3e3244de93553bf90b40288018cb757ea0",
-        "savedAt": "2026-07-30T14:23:20",
+        "sourceDraftSha256": "f4f69e566661bc9e178572833a8d45dbca4582846961cf436e735cfb1754dc90",
+        "savedAt": "2026-07-30T18:26:37",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -5290,11 +5290,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.0,
-        9.5
+        11.5
       ],
       "ringCenterOffset": [
         -9.0,
-        9.5
+        11.5
       ],
       "ringEllipseRadii": [
         32,
@@ -5312,13 +5312,13 @@
       },
       "visualRootOffset": [
         6.5,
-        -7.0
+        -9.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_161.json",
-        "sourceDraftSha256": "7306ad683ae76fd2d039e1286449b80998d5208b0826978fc74ae575f5175a12",
-        "savedAt": "2026-07-30T14:23:38",
+        "sourceDraftSha256": "95bc9a4fa821c269870a6eda90c5b92dee7c812db4e2d89df8cfc4a1e33ef0ae",
+        "savedAt": "2026-07-30T18:26:45",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -5330,11 +5330,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.0,
-        -0.5
+        9.0
       ],
       "ringCenterOffset": [
         -8.0,
-        -0.5
+        9.0
       ],
       "ringEllipseRadii": [
         28,
@@ -5352,13 +5352,13 @@
       },
       "visualRootOffset": [
         8.0,
-        -5.5
+        -15.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_162.json",
-        "sourceDraftSha256": "116b9c745f3a0d8cd1cfdecf2b321f76be87ab08695d46dd5230bdbecf86f1bc",
-        "savedAt": "2026-07-30T13:01:59",
+        "sourceDraftSha256": "4c08f9dad8168848c607007dece4b44dd169cb1b796b17942646f7e57954ba16",
+        "savedAt": "2026-07-30T18:26:58",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -5370,11 +5370,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.5,
-        1.5
+        9.5
       ],
       "ringCenterOffset": [
         -8.5,
-        1.5
+        9.5
       ],
       "ringEllipseRadii": [
         28,
@@ -5392,13 +5392,13 @@
       },
       "visualRootOffset": [
         8.5,
-        -7.5
+        -15.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_163.json",
-        "sourceDraftSha256": "cfe607aebcb7a115bcb14140b6dc4d36a69d3363850bd9c5a358d94bb937bcbf",
-        "savedAt": "2026-07-30T13:02:05",
+        "sourceDraftSha256": "58796482e1f12dea59b642cc09700e34676de455545f55ffe05fbe7ca301fdb4",
+        "savedAt": "2026-07-30T18:27:23",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -5410,11 +5410,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.5,
-        4.0
+        12.0
       ],
       "ringCenterOffset": [
         -8.5,
-        4.0
+        12.0
       ],
       "ringEllipseRadii": [
         24,
@@ -5432,13 +5432,13 @@
       },
       "visualRootOffset": [
         8.5,
-        -10.0
+        -18.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_164.json",
-        "sourceDraftSha256": "0a8490b71f229d894d6beb549fef191973e587530633764796e0ef02022cfe8f",
-        "savedAt": "2026-07-30T13:02:11",
+        "sourceDraftSha256": "6007b7b60f7d37ef2465eaec52417804a161d976b0d335b08394e8de0e2aabcc",
+        "savedAt": "2026-07-30T18:27:35",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -5450,11 +5450,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.5,
-        5.5
+        13.5
       ],
       "ringCenterOffset": [
         -8.5,
-        5.5
+        13.5
       ],
       "ringEllipseRadii": [
         24,
@@ -5472,13 +5472,13 @@
       },
       "visualRootOffset": [
         8.5,
-        -11.5
+        -19.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_165.json",
-        "sourceDraftSha256": "ee0f39b76a8c3536aa245405e4c57687851a4b5e119fbd0c89ec1934b983646b",
-        "savedAt": "2026-07-30T13:02:19",
+        "sourceDraftSha256": "c1055a70648d33ddaac8f4f622c729f047868b089d92b4c49c02903b248eb679",
+        "savedAt": "2026-07-30T18:27:40",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -5490,11 +5490,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.5,
-        3.5
+        12.0
       ],
       "ringCenterOffset": [
         -9.5,
-        3.5
+        12.0
       ],
       "ringEllipseRadii": [
         24,
@@ -5512,13 +5512,13 @@
       },
       "visualRootOffset": [
         9.5,
-        -7.5
+        -16.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_166.json",
-        "sourceDraftSha256": "0f292a216e766e13779587082fef33d7968ea18bbc8ed967075d9fc2749b9045",
-        "savedAt": "2026-07-30T13:02:27",
+        "sourceDraftSha256": "8b28e75fbef455471a604d54d824c6b7322b1756f0c26a33e087b1154d00834c",
+        "savedAt": "2026-07-30T18:27:50",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -5530,11 +5530,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.0,
-        5.5
+        12.0
       ],
       "ringCenterOffset": [
         -9.0,
-        5.5
+        12.0
       ],
       "ringEllipseRadii": [
         24,
@@ -5552,13 +5552,13 @@
       },
       "visualRootOffset": [
         9.0,
-        -9.5
+        -16.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_167.json",
-        "sourceDraftSha256": "95147b6e2c92a5fde21bec8296d2c8e1b2c751f4e66237076a12d4c361aa37fd",
-        "savedAt": "2026-07-30T13:02:32",
+        "sourceDraftSha256": "39ba4c984e2ceea18b7e352bb98a9fb3d34fdb55c60ad1481ac6923dcd0b02d5",
+        "savedAt": "2026-07-30T18:27:59",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -6049,12 +6049,12 @@
     "180": {
       "projectionStrategy": "grounded",
       "visualFootOffset": [
-        -32.0,
-        0.0
+        -38.0,
+        5.5
       ],
       "ringCenterOffset": [
-        -32.0,
-        0.0
+        -38.0,
+        5.5
       ],
       "ringEllipseRadii": [
         46,
@@ -6071,14 +6071,14 @@
         "decision": "monsterId=180 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
-        32.0,
-        -6.0
+        38.0,
+        -11.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_180.json",
-        "sourceDraftSha256": "70c7df13650a5ff56930a82a5c3ccce213e9a296c7e0e120df08a37a1a017f05",
-        "savedAt": "2026-07-30T13:03:58",
+        "sourceDraftSha256": "65ad94c618b42b7b449a657246f65462a463e3294261dfebabfd95db7c2a6a7d",
+        "savedAt": "2026-07-30T18:29:26",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -6250,11 +6250,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -12.0,
-        -2.5
+        5.5
       ],
       "ringCenterOffset": [
         -12.0,
-        -2.5
+        5.5
       ],
       "ringEllipseRadii": [
         20,
@@ -6272,13 +6272,13 @@
       },
       "visualRootOffset": [
         12.0,
-        -1.5
+        -9.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_186.json",
-        "sourceDraftSha256": "b535af4fcaca27995cb17b510e5ffa813efd35cee13e41808826ea62d243841c",
-        "savedAt": "2026-07-30T13:04:39",
+        "sourceDraftSha256": "e9d28eecf5528034ab4b653020befc8e12fdd76f034c0445c54980b262e05ff7",
+        "savedAt": "2026-07-30T18:30:33",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -6290,11 +6290,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.0,
-        -1.0
+        3.5
       ],
       "ringCenterOffset": [
         -8.0,
-        -1.0
+        3.5
       ],
       "ringEllipseRadii": [
         20,
@@ -6312,13 +6312,13 @@
       },
       "visualRootOffset": [
         8.0,
-        -3.0
+        -7.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_187.json",
-        "sourceDraftSha256": "2dcb1dd5f9798983b3bd2651877b9411be6c6674bb6285462b9110170a216ac7",
-        "savedAt": "2026-07-30T13:04:46",
+        "sourceDraftSha256": "4709a9c0daf8fbf8177d26fe250b9f03d75377d338d278187c327f7d2aa2615d",
+        "savedAt": "2026-07-30T18:30:44",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -6330,11 +6330,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.5,
-        1.5
+        4.0
       ],
       "ringCenterOffset": [
         -9.5,
-        1.5
+        4.0
       ],
       "ringEllipseRadii": [
         22,
@@ -6346,23 +6346,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "walk:direction0:frame1"
         ],
         "decision": "monsterId=188 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         9.5,
-        -5.5
+        -8.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_188.json",
-        "sourceDraftSha256": "383194040f434a1c8085e72bff3ab53171189566cb9ad055070f4fb82c406a7b",
-        "savedAt": "2026-07-30T13:04:55",
+        "sourceDraftSha256": "34c039e32aa659813eb49110b0fc33988fa29688f4c2f172fa07ad3627628fc5",
+        "savedAt": "2026-07-30T18:31:13",
         "selection": {
-          "action": "idle",
+          "action": "walk",
           "direction": 0,
-          "frame": 0
+          "frame": 1
         }
       }
     },
@@ -6370,11 +6370,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.0,
-        -0.5
+        2.0
       ],
       "ringCenterOffset": [
         -8.0,
-        -0.5
+        2.0
       ],
       "ringEllipseRadii": [
         22,
@@ -6386,23 +6386,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame2"
         ],
         "decision": "monsterId=189 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         8.0,
-        -3.5
+        -6.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_189.json",
-        "sourceDraftSha256": "25da83be3f5baea90d52312f80e00eca86ed9de8602ccf0f0158f8b0205e9451",
-        "savedAt": "2026-07-30T13:05:01",
+        "sourceDraftSha256": "85ddae5d8fc7ecd8d905145c253912a4e88635a833ff9a435c0ecda321f543e0",
+        "savedAt": "2026-07-30T18:31:21",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 2
         }
       }
     },
@@ -6410,11 +6410,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -11.5,
-        -1.5
+        1.5
       ],
       "ringCenterOffset": [
         -11.5,
-        -1.5
+        1.5
       ],
       "ringEllipseRadii": [
         22,
@@ -6432,13 +6432,13 @@
       },
       "visualRootOffset": [
         11.5,
-        -2.5
+        -5.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_190.json",
-        "sourceDraftSha256": "35724fb106dc80061fd296f17fa1c5a17d5b2f4f040a85e28d2d8cb95577437b",
-        "savedAt": "2026-07-30T13:05:06",
+        "sourceDraftSha256": "8b3adf52c109299f60cfc82df1876b041da010f8430cdbe3a9d14355e6965eb4",
+        "savedAt": "2026-07-30T18:31:27",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -6529,12 +6529,12 @@
     "193": {
       "projectionStrategy": "grounded",
       "visualFootOffset": [
-        -4.0,
-        -0.5
+        -3.5,
+        10.0
       ],
       "ringCenterOffset": [
-        -4.0,
-        -0.5
+        -3.5,
+        10.0
       ],
       "ringEllipseRadii": [
         32,
@@ -6546,22 +6546,22 @@
         "status": "approved",
         "archetype": "large_or_boss",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction6:frame0"
         ],
         "decision": "monsterId=193 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
-        4.0,
-        -5.5
+        3.5,
+        -16.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_193.json",
-        "sourceDraftSha256": "fdb7de482cf4b896530603ce13c86b17c68b96b4a4e8259fdcada98ba1efb98e",
-        "savedAt": "2026-07-30T13:05:37",
+        "sourceDraftSha256": "6736222c642ecb7d2c60fa08458d37f01addf467cf45934e81137da7ca3937b0",
+        "savedAt": "2026-07-30T18:31:50",
         "selection": {
           "action": "idle",
-          "direction": 0,
+          "direction": 6,
           "frame": 0
         }
       }
@@ -6569,12 +6569,12 @@
     "194": {
       "projectionStrategy": "grounded",
       "visualFootOffset": [
-        -8.0,
-        -2.0
+        -8.5,
+        2.0
       ],
       "ringCenterOffset": [
-        -8.0,
-        -2.0
+        -8.5,
+        2.0
       ],
       "ringEllipseRadii": [
         20,
@@ -6586,23 +6586,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame1"
         ],
         "decision": "monsterId=194 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
-        8.0,
-        -2.0
+        8.5,
+        -6.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_194.json",
-        "sourceDraftSha256": "68cd66744e0f3ab3cdbca8844ead0a3659d57e5fc0a185ca8ed6d2fa78e41160",
-        "savedAt": "2026-07-30T13:05:43",
+        "sourceDraftSha256": "0ad1a1e948b6e33152a387edecdf98bd03d026eb6868a77afb7a4095f2e7e43e",
+        "savedAt": "2026-07-30T18:31:57",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 1
         }
       }
     },
@@ -6650,11 +6650,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -1.5,
-        5.0
+        8.5
       ],
       "ringCenterOffset": [
         -1.5,
-        5.0
+        8.5
       ],
       "ringEllipseRadii": [
         20,
@@ -6666,23 +6666,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame2"
         ],
         "decision": "monsterId=196 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         1.5,
-        -9.0
+        -12.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_196.json",
-        "sourceDraftSha256": "a1bb56563d732bc4a769bddbaf05af6da83fd3ffa7a0ef4af8a21c446befcd78",
-        "savedAt": "2026-07-30T13:06:02",
+        "sourceDraftSha256": "90ad9fad02898120b3244c3560a417650cdbba792d8c844ea82ce29ecf49d4a9",
+        "savedAt": "2026-07-30T18:32:12",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 2
         }
       }
     },
@@ -6690,11 +6690,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -1.5,
-        3.0
+        8.0
       ],
       "ringCenterOffset": [
         -1.5,
-        3.0
+        8.0
       ],
       "ringEllipseRadii": [
         20,
@@ -6706,23 +6706,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame1"
         ],
         "decision": "monsterId=197 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         1.5,
-        -7.0
+        -12.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_197.json",
-        "sourceDraftSha256": "36574ebba01a0f0c0c0ced8a91f6de354903f63c0a0c00fd3f967eed71ad841b",
-        "savedAt": "2026-07-30T13:06:07",
+        "sourceDraftSha256": "3db10ae1245435bfcd57f859c3fb5da30b85233222f37b1b5e1e79a80dea244c",
+        "savedAt": "2026-07-30T18:32:21",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 1
         }
       }
     },
@@ -6730,11 +6730,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -2.0,
-        9.0
+        16.0
       ],
       "ringCenterOffset": [
         -2.0,
-        9.0
+        16.0
       ],
       "ringEllipseRadii": [
         20,
@@ -6746,23 +6746,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame2"
         ],
         "decision": "monsterId=198 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         2.0,
-        -13.0
+        -20.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_198.json",
-        "sourceDraftSha256": "64df2e29ebe2c0a5e83b7bee71828de3b98ca176035da08a958c33b5b1702d25",
-        "savedAt": "2026-07-30T13:06:15",
+        "sourceDraftSha256": "336f562f87078ed9d0744657a1455b9d6bdcac98250c0ece9bf7803b3f74c005",
+        "savedAt": "2026-07-30T18:32:30",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 2
         }
       }
     },
@@ -6770,11 +6770,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -2.0,
-        9.5
+        16.5
       ],
       "ringCenterOffset": [
         -2.0,
-        9.5
+        16.5
       ],
       "ringEllipseRadii": [
         20,
@@ -6786,23 +6786,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame3"
         ],
         "decision": "monsterId=199 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         2.0,
-        -13.5
+        -20.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_199.json",
-        "sourceDraftSha256": "389f85cf3c4d0c69b962b0d79510970473b572e4e0fc8b091bddb155010a54a4",
-        "savedAt": "2026-07-30T13:06:20",
+        "sourceDraftSha256": "ed8263181e13b5988e9274338c87a1821dbe595052c533df63fa2a3d72e5b9b3",
+        "savedAt": "2026-07-30T18:32:36",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 3
         }
       }
     },
@@ -6810,11 +6810,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         0.0,
-        0.0
+        7.5
       ],
       "ringCenterOffset": [
         0.0,
-        0.0
+        7.5
       ],
       "ringEllipseRadii": [
         22,
@@ -6826,35 +6826,35 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction7:frame2"
         ],
         "decision": "monsterId=200 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         0.0,
-        -4.0
+        -11.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_200.json",
-        "sourceDraftSha256": "91ca54860130ed47393fca0ebc0375b03351a7a48870c2d2889dbe7f7ef3fcf5",
-        "savedAt": "2026-07-30T13:06:31",
+        "sourceDraftSha256": "560c153b10b003c8e27da5361cc68b7c1bb1df1aafa4ecdff6f87df7fa51f040",
+        "savedAt": "2026-07-30T18:32:56",
         "selection": {
           "action": "idle",
-          "direction": 0,
-          "frame": 0
+          "direction": 7,
+          "frame": 2
         }
       }
     },
     "201": {
       "projectionStrategy": "grounded",
       "visualFootOffset": [
-        0.0,
-        0.0
+        -0.5,
+        6.5
       ],
       "ringCenterOffset": [
-        0.0,
-        0.0
+        -0.5,
+        6.5
       ],
       "ringEllipseRadii": [
         22,
@@ -6866,23 +6866,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame2"
         ],
         "decision": "monsterId=201 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
-        0.0,
-        -4.0
+        0.5,
+        -10.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_201.json",
-        "sourceDraftSha256": "de1fcd13c8a5170abc8e6baac4d70e447ddf968e9c7a0a0f6d3a325c46408f81",
-        "savedAt": "2026-07-30T13:06:35",
+        "sourceDraftSha256": "7a40532e171298847c9f1b7de048257dbf7cc9fedb2e9bcb51edc3b0cc04d922",
+        "savedAt": "2026-07-30T18:33:16",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 2
         }
       }
     },
@@ -6890,11 +6890,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -5.0,
-        -2.5
+        1.5
       ],
       "ringCenterOffset": [
         -5.0,
-        -2.5
+        1.5
       ],
       "ringEllipseRadii": [
         20,
@@ -6906,23 +6906,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame2"
         ],
         "decision": "monsterId=202 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         5.0,
-        -1.5
+        -5.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_202.json",
-        "sourceDraftSha256": "e47a63c61dfac2f5ed946858a3f34c549075ae0a0395b3f358198ead685ada35",
-        "savedAt": "2026-07-30T13:06:42",
+        "sourceDraftSha256": "ef40879e557a3cc3c63105a3e46d28287da1bb674220d6ea41cda793c522b25d",
+        "savedAt": "2026-07-30T18:33:25",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 2
         }
       }
     },
@@ -6930,11 +6930,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -4.0,
-        -2.0
+        4.0
       ],
       "ringCenterOffset": [
         -4.0,
-        -2.0
+        4.0
       ],
       "ringEllipseRadii": [
         20,
@@ -6946,23 +6946,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame1"
         ],
         "decision": "monsterId=203 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         4.0,
-        -2.0
+        -8.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_203.json",
-        "sourceDraftSha256": "ae2560e68c2fdf674b76e872eb58b239ec85d7423dfde0b7840b0cf6c84031c0",
-        "savedAt": "2026-07-30T13:06:47",
+        "sourceDraftSha256": "311f9681a306f98cd5c60b879ad3551b2d9ccd80384fca579236ddd0e0f78704",
+        "savedAt": "2026-07-30T18:33:31",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 1
         }
       }
     },
@@ -6970,11 +6970,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -6.0,
-        -0.5
+        5.0
       ],
       "ringCenterOffset": [
         -6.0,
-        -0.5
+        5.0
       ],
       "ringEllipseRadii": [
         20,
@@ -6986,23 +6986,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame2"
         ],
         "decision": "monsterId=204 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         6.0,
-        -3.5
+        -9.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_204.json",
-        "sourceDraftSha256": "336791e78d100aa9251c74eed9753ff2a08164a35ddf087c6f33e955687d3c4f",
-        "savedAt": "2026-07-30T13:06:55",
+        "sourceDraftSha256": "19c2e834526c69c002133f39698174e8531272eb7261dfb26111a3d9cc693bfb",
+        "savedAt": "2026-07-30T18:33:38",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 2
         }
       }
     },
@@ -7010,11 +7010,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -6.0,
-        -1.5
+        4.5
       ],
       "ringCenterOffset": [
         -6.0,
-        -1.5
+        4.5
       ],
       "ringEllipseRadii": [
         20,
@@ -7026,23 +7026,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame1"
         ],
         "decision": "monsterId=205 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         6.0,
-        -2.5
+        -8.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_205.json",
-        "sourceDraftSha256": "1d6bcf982c4b52408b43724e02265b67a752ee0d9a3a8707d9f46879eb4e774a",
-        "savedAt": "2026-07-30T13:07:00",
+        "sourceDraftSha256": "d7b718c201580f60560c9e9cbcd531c2081fafef1da0c968912372ee8e5b5f65",
+        "savedAt": "2026-07-30T18:33:44",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 1
         }
       }
     },
@@ -7050,11 +7050,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -5.5,
-        -1.0
+        5.5
       ],
       "ringCenterOffset": [
         -5.5,
-        -1.0
+        5.5
       ],
       "ringEllipseRadii": [
         20,
@@ -7066,23 +7066,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame3"
         ],
         "decision": "monsterId=206 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         5.5,
-        -3.0
+        -9.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_206.json",
-        "sourceDraftSha256": "facbf8cbe8489df99d6d00b5ff51fc0bdc0d38b9da444c8b9fbd93d5ed048f84",
-        "savedAt": "2026-07-30T13:07:05",
+        "sourceDraftSha256": "a39173853d2eb9170eeccad3a122040e8f8f4633cd71884894bbadfc0daed896",
+        "savedAt": "2026-07-30T18:33:51",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 3
         }
       }
     },
@@ -7090,11 +7090,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -5.5,
-        0.5
+        7.0
       ],
       "ringCenterOffset": [
         -5.5,
-        0.5
+        7.0
       ],
       "ringEllipseRadii": [
         20,
@@ -7112,13 +7112,13 @@
       },
       "visualRootOffset": [
         5.5,
-        -4.5
+        -11.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_207.json",
-        "sourceDraftSha256": "d4ce6f5541d4a3ef9b33f2f03d5b56075883e9fc4f6145d082a64a66e2c47f0e",
-        "savedAt": "2026-07-30T13:07:11",
+        "sourceDraftSha256": "11936e7b9c024ddad3c94d82893a36e85194d4ad055765acf729237d75ee0768",
+        "savedAt": "2026-07-30T18:33:58",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -7130,11 +7130,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -4.5,
-        -1.0
+        6.0
       ],
       "ringCenterOffset": [
         -4.5,
-        -1.0
+        6.0
       ],
       "ringEllipseRadii": [
         40,
@@ -7146,23 +7146,23 @@
         "status": "approved",
         "archetype": "large_or_boss",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame3"
         ],
         "decision": "monsterId=208 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         4.5,
-        -5.0
+        -12.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_208.json",
-        "sourceDraftSha256": "0a9fa2999978a30eb2ed1d022543aa7f7c4f655c90d7aae0291cad04bde0f40d",
-        "savedAt": "2026-07-30T13:07:18",
+        "sourceDraftSha256": "a3cc66101c3ec734d6546e73b7c55a9aa95dc3b1d213fdd384803008c700cb51",
+        "savedAt": "2026-07-30T18:34:35",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 3
         }
       }
     },
@@ -7170,11 +7170,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -5.5,
-        -0.5
+        7.0
       ],
       "ringCenterOffset": [
         -5.5,
-        -0.5
+        7.0
       ],
       "ringEllipseRadii": [
         40,
@@ -7192,13 +7192,13 @@
       },
       "visualRootOffset": [
         5.5,
-        -5.5
+        -13.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_209.json",
-        "sourceDraftSha256": "fedd4ffac4da11deb3894fb5ce48c096bb44505c4bfe369cd3da2322f683070d",
-        "savedAt": "2026-07-30T13:07:25",
+        "sourceDraftSha256": "b83787f4e4a9912dae62130656812651877e62051a48fc5c128109a43a4554e2",
+        "savedAt": "2026-07-30T18:34:45",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -7210,11 +7210,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -4.5,
-        3.5
+        5.5
       ],
       "ringCenterOffset": [
         -4.5,
-        3.5
+        5.5
       ],
       "ringEllipseRadii": [
         20,
@@ -7226,23 +7226,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame3"
         ],
         "decision": "monsterId=210 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         0.0,
-        -4.5
+        -6.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_210.json",
-        "sourceDraftSha256": "595ee9de38f511e8e435d08d63ab11ba70fa1eb1cee6645b3123ddee7976cd32",
-        "savedAt": "2026-07-30T14:52:24",
+        "sourceDraftSha256": "dd0817b3b780f32dd61e28f8158f843669aeae4321bf8fbce5bfb0898dde9964",
+        "savedAt": "2026-07-30T18:34:57",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 3
         }
       }
     },
@@ -7250,11 +7250,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -4.0,
-        4.0
+        6.5
       ],
       "ringCenterOffset": [
         -4.0,
-        4.0
+        6.5
       ],
       "ringEllipseRadii": [
         20,
@@ -7266,23 +7266,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame1"
         ],
         "decision": "monsterId=211 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         0.0,
-        -4.5
+        -7.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_211.json",
-        "sourceDraftSha256": "7702e58c7e1d40b948bd812f600c4df5e516b075482e4329389597834dff9458",
-        "savedAt": "2026-07-30T14:52:31",
+        "sourceDraftSha256": "96ff0888eb7ce76bc42c5c896fe358fffbda289cf96ea13f170c9c6b79fa277c",
+        "savedAt": "2026-07-30T18:35:03",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 1
         }
       }
     },
@@ -7290,11 +7290,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -5.5,
-        -1.5
+        4.0
       ],
       "ringCenterOffset": [
         -5.5,
-        -1.5
+        4.0
       ],
       "ringEllipseRadii": [
         24,
@@ -7306,23 +7306,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame3"
         ],
         "decision": "monsterId=212 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         5.5,
-        -2.5
+        -8.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_212.json",
-        "sourceDraftSha256": "39603a32cebd8e4096c02c8b8c8f43eeb896867b0a6bd038cf47c235812adbba",
-        "savedAt": "2026-07-30T13:07:44",
+        "sourceDraftSha256": "9a453e8beab925902b8b082bc8fe026c7d7b7c6749075a03ae9998c5c4fec11e",
+        "savedAt": "2026-07-30T18:35:19",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 3
         }
       }
     },
@@ -7330,11 +7330,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -5.5,
-        -2.0
+        3.5
       ],
       "ringCenterOffset": [
         -5.5,
-        -2.0
+        3.5
       ],
       "ringEllipseRadii": [
         24,
@@ -7346,23 +7346,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame1"
         ],
         "decision": "monsterId=213 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         5.5,
-        -2.0
+        -7.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_213.json",
-        "sourceDraftSha256": "7f660ae11a760242a65127d003b2217fcfc55e80eb3af0c53ccf88147fd76e63",
-        "savedAt": "2026-07-30T13:07:51",
+        "sourceDraftSha256": "58380a60081b34680ec205d0ebd043cc0e5daa3ea16b84901e378f6f45988ce0",
+        "savedAt": "2026-07-30T18:35:25",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 1
         }
       }
     },
@@ -7370,11 +7370,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -5.5,
-        0.0
+        4.0
       ],
       "ringCenterOffset": [
         -5.5,
-        0.0
+        4.0
       ],
       "ringEllipseRadii": [
         28,
@@ -7386,23 +7386,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame2"
         ],
         "decision": "monsterId=214 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         5.5,
-        -4.0
+        -8.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_214.json",
-        "sourceDraftSha256": "3f09f81a8cff3c53d54aba2589104af4e9ff9acbf7af4ddcb324493900f970fe",
-        "savedAt": "2026-07-30T13:07:58",
+        "sourceDraftSha256": "a7ec3efe856ebab2019da621a67ed07989542521af7c43a0b1cfe0bc1d24355a",
+        "savedAt": "2026-07-30T18:35:32",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 2
         }
       }
     },
@@ -7410,11 +7410,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -5.0,
-        -1.5
+        2.5
       ],
       "ringCenterOffset": [
         -5.0,
-        -1.5
+        2.5
       ],
       "ringEllipseRadii": [
         28,
@@ -7426,23 +7426,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame1"
         ],
         "decision": "monsterId=215 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         5.0,
-        -2.5
+        -6.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_215.json",
-        "sourceDraftSha256": "946b940bbaca81baa8ae32094e4ab8506039cc498bdc31adacda8ccbf6ac25ff",
-        "savedAt": "2026-07-30T13:08:03",
+        "sourceDraftSha256": "baa2ad59df1895b2acfdae81319f77e1e9290cfe8aca3ae50af5284ac1047c9a",
+        "savedAt": "2026-07-30T18:35:37",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 1
         }
       }
     },
@@ -7450,11 +7450,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -4.5,
-        2.5
+        6.5
       ],
       "ringCenterOffset": [
         -4.5,
-        2.5
+        6.5
       ],
       "ringEllipseRadii": [
         24,
@@ -7466,23 +7466,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame2"
         ],
         "decision": "monsterId=216 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         0.0,
-        -6.0
+        -10.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_216.json",
-        "sourceDraftSha256": "a22234dd204576ed834e50cf3e651234e07a30ec6eae4e6a7ffb6e4cbb73641d",
-        "savedAt": "2026-07-30T14:52:05",
+        "sourceDraftSha256": "d3a4952c7bd60e1af49cfb3dedf1c208f60ac007ecb618d13bf76f6d1d51f5b2",
+        "savedAt": "2026-07-30T18:35:42",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 2
         }
       }
     },
@@ -7490,11 +7490,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -5.0,
-        1.0
+        4.5
       ],
       "ringCenterOffset": [
         -5.0,
-        1.0
+        4.5
       ],
       "ringEllipseRadii": [
         24,
@@ -7506,23 +7506,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame3"
         ],
         "decision": "monsterId=217 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         0.0,
-        -6.0
+        -9.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_217.json",
-        "sourceDraftSha256": "ea0021943a1535faedc55e8e60bb5b763058d2878bc84720a4f36e6a2aaa8f2c",
-        "savedAt": "2026-07-30T14:52:13",
+        "sourceDraftSha256": "4712c009febbd92f33ca208485af8c6ff17fddea21fa314663f8b6390131bd68",
+        "savedAt": "2026-07-30T18:35:49",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 3
         }
       }
     },
@@ -7610,11 +7610,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -3.5,
-        6.5
+        9.0
       ],
       "ringCenterOffset": [
         -3.5,
-        6.5
+        9.0
       ],
       "ringEllipseRadii": [
         28,
@@ -7626,23 +7626,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame1"
         ],
         "decision": "monsterId=220 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         0.5,
-        -4.0
+        -6.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_220.json",
-        "sourceDraftSha256": "afa8575a082748de4913d6ebf9dc19fa5dfa5b80b79ac5d2cd7947144ff3d161",
-        "savedAt": "2026-07-30T14:51:53",
+        "sourceDraftSha256": "95969e1f8b093c471739ee531fdd78649fac1a1b3c6591831e4348c31752ee01",
+        "savedAt": "2026-07-30T18:36:05",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 1
         }
       }
     },
@@ -7650,11 +7650,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -4.5,
-        5.5
+        10.5
       ],
       "ringCenterOffset": [
         -4.5,
-        5.5
+        10.5
       ],
       "ringEllipseRadii": [
         28,
@@ -7672,13 +7672,13 @@
       },
       "visualRootOffset": [
         0.0,
-        -3.5
+        -8.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_221.json",
-        "sourceDraftSha256": "58f51d6621066ba09a28fdfd209d67154fd6f7374be0aa590bc959119ace5bed",
-        "savedAt": "2026-07-30T14:51:44",
+        "sourceDraftSha256": "5a59c090f9a57be49a55a1a87b0cc92eb1afd02fd927574dc6c28a1ebe050d55",
+        "savedAt": "2026-07-30T18:36:16",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -7690,11 +7690,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -4.0,
-        2.0
+        7.5
       ],
       "ringCenterOffset": [
         -4.0,
-        2.0
+        7.5
       ],
       "ringEllipseRadii": [
         28,
@@ -7706,23 +7706,23 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame1"
         ],
         "decision": "monsterId=222 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         4.0,
-        -6.0
+        -11.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_222.json",
-        "sourceDraftSha256": "b81419b1ce33cc27994f655c2e255466216e17171b7b9ca3de78d4261fe78e2f",
-        "savedAt": "2026-07-30T13:08:56",
+        "sourceDraftSha256": "ad57ac6dd3990ee4e496844aaa98fe17a271315406b2d76dfba8dcbdaeb35b97",
+        "savedAt": "2026-07-30T18:36:27",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 1
         }
       }
     },
@@ -7730,11 +7730,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -4.5,
-        2.0
+        9.0
       ],
       "ringCenterOffset": [
         -4.5,
-        2.0
+        9.0
       ],
       "ringEllipseRadii": [
         28,
@@ -7746,35 +7746,35 @@
         "status": "approved",
         "archetype": "grounded_mobile",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame1"
         ],
         "decision": "monsterId=223 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         4.5,
-        -6.0
+        -13.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_223.json",
-        "sourceDraftSha256": "909808c9acc1ac7771331edde64e5e4373da9979356668a4789435418582ebc8",
-        "savedAt": "2026-07-30T13:09:01",
+        "sourceDraftSha256": "3f9bc3171ddf617dede5862853879c1ebad622f15d70fe5f5abad7f321f67393",
+        "savedAt": "2026-07-30T18:36:45",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 1
         }
       }
     },
     "224": {
       "projectionStrategy": "grounded",
       "visualFootOffset": [
-        -3.5,
-        8.0
+        -4.0,
+        14.0
       ],
       "ringCenterOffset": [
-        -3.5,
-        8.0
+        -4.0,
+        14.0
       ],
       "ringEllipseRadii": [
         40,
@@ -7786,23 +7786,23 @@
         "status": "approved",
         "archetype": "large_or_boss",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction7:frame2"
         ],
         "decision": "monsterId=224 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
-        3.5,
-        -14.0
+        4.0,
+        -20.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_224.json",
-        "sourceDraftSha256": "d98b8d00dc266a4be4420e570ae6dc1b847df6f66eff47bae707197f93f0ffd2",
-        "savedAt": "2026-07-30T13:09:08",
+        "sourceDraftSha256": "e9fa903750b978e239c50b42d35ea53400412b62cf3822bb869bc8bc81604e70",
+        "savedAt": "2026-07-30T18:37:02",
         "selection": {
           "action": "idle",
-          "direction": 0,
-          "frame": 0
+          "direction": 7,
+          "frame": 2
         }
       }
     },
@@ -7810,11 +7810,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -4.0,
-        8.5
+        13.0
       ],
       "ringCenterOffset": [
         -4.0,
-        8.5
+        13.0
       ],
       "ringEllipseRadii": [
         40,
@@ -7826,23 +7826,23 @@
         "status": "approved",
         "archetype": "large_or_boss",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame3"
         ],
         "decision": "monsterId=225 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         4.0,
-        -14.5
+        -19.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_225.json",
-        "sourceDraftSha256": "9bc318f32489a64547c93a908d2ac9318466ffa4ed9023b3406c8600a0577d0a",
-        "savedAt": "2026-07-30T13:09:14",
+        "sourceDraftSha256": "bac8688075e598cfdfbc283af9989338628e15b891979c69a819da260c3a0697",
+        "savedAt": "2026-07-30T18:37:13",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 3
         }
       }
     },
@@ -8210,11 +8210,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.0,
-        5.5
+        12.0
       ],
       "ringCenterOffset": [
         -9.0,
-        5.5
+        12.0
       ],
       "ringEllipseRadii": [
         28,
@@ -8226,23 +8226,23 @@
         "status": "approved",
         "archetype": "large_or_boss",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction7:frame3"
         ],
         "decision": "monsterId=235 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         9.0,
-        -11.5
+        -18.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_235.json",
-        "sourceDraftSha256": "ccf377e0cd54d19997cbf885f40062381f5236974b93cbf62ff18b3a1840aeca",
-        "savedAt": "2026-07-30T13:10:19",
+        "sourceDraftSha256": "91290d00dea3497a2b6bda4abe17cb3c00d484d6a14ba147e1fa7d8e2ff5512a",
+        "savedAt": "2026-07-30T18:37:26",
         "selection": {
           "action": "idle",
-          "direction": 0,
-          "frame": 0
+          "direction": 7,
+          "frame": 3
         }
       }
     },
@@ -8250,11 +8250,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.0,
-        1.0
+        7.5
       ],
       "ringCenterOffset": [
         -9.0,
-        1.0
+        7.5
       ],
       "ringEllipseRadii": [
         28,
@@ -8266,23 +8266,23 @@
         "status": "approved",
         "archetype": "large_or_boss",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame2"
         ],
         "decision": "monsterId=236 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         9.0,
-        -7.0
+        -13.5
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_236.json",
-        "sourceDraftSha256": "ce3a63c5f61dee2e725b8e61a06ca4da10a288b98ca719a4a13ebee8e48aad39",
-        "savedAt": "2026-07-30T13:10:24",
+        "sourceDraftSha256": "879c94fdfc8871da10b86a27902f3bc125f1d0c239720d8a575793c78e09563c",
+        "savedAt": "2026-07-30T18:37:34",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 2
         }
       }
     },
@@ -8290,11 +8290,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -5.0,
-        0.0
+        7.0
       ],
       "ringCenterOffset": [
         -5.0,
-        0.0
+        7.0
       ],
       "ringEllipseRadii": [
         40,
@@ -8306,23 +8306,23 @@
         "status": "approved",
         "archetype": "large_or_boss",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame3"
         ],
         "decision": "monsterId=237 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         5.0,
-        -6.0
+        -13.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_237.json",
-        "sourceDraftSha256": "f260e0c9cd4cfd822c15acf084dad7fc65cc11cf571effe3ccf9aa45a6a84814",
-        "savedAt": "2026-07-30T13:10:30",
+        "sourceDraftSha256": "ed0dfb6f49813b15217959e6a5aadcf40fb48792baa11dee8887b3a8b55ede63",
+        "savedAt": "2026-07-30T18:37:42",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 3
         }
       }
     },
@@ -8330,11 +8330,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -8.0,
-        6.0
+        15.0
       ],
       "ringCenterOffset": [
         -8.0,
-        6.0
+        15.0
       ],
       "ringEllipseRadii": [
         24,
@@ -8352,13 +8352,13 @@
       },
       "visualRootOffset": [
         8.0,
-        -12.0
+        -21.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_238.json",
-        "sourceDraftSha256": "6006a95ec0f6687ae77602046c7a097aa7a64f51ca45342c929caff911fa3770",
-        "savedAt": "2026-07-30T13:10:37",
+        "sourceDraftSha256": "f694fdfd03ac02e551354faa54b18f17420965f29607ae13bc1118337748a4ba",
+        "savedAt": "2026-07-30T18:37:53",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -8370,11 +8370,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -9.0,
-        13.0
+        22.0
       ],
       "ringCenterOffset": [
         -9.0,
-        13.0
+        22.0
       ],
       "ringEllipseRadii": [
         32,
@@ -8386,23 +8386,23 @@
         "status": "approved",
         "archetype": "large_or_boss",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame3"
         ],
         "decision": "monsterId=239 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         9.0,
-        -19.0
+        -28.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_239.json",
-        "sourceDraftSha256": "e6e9d2d918ea6cf08780cbed88481323dbdc2af098432fe45d848e5e138fac41",
-        "savedAt": "2026-07-30T13:10:43",
+        "sourceDraftSha256": "e66c15ed01e38a254872b1ec9a1e592b43bceb230ce503172b6989e2820316c6",
+        "savedAt": "2026-07-30T18:38:05",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 3
         }
       }
     },
@@ -8410,11 +8410,11 @@
       "projectionStrategy": "grounded",
       "visualFootOffset": [
         -4.5,
-        3.5
+        8.0
       ],
       "ringCenterOffset": [
         -4.5,
-        3.5
+        8.0
       ],
       "ringEllipseRadii": [
         32,
@@ -8426,23 +8426,23 @@
         "status": "approved",
         "archetype": "large_or_boss",
         "poses": [
-          "idle:direction0:frame0"
+          "idle:direction0:frame3"
         ],
         "decision": "monsterId=240 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
         4.5,
-        -9.5
+        -14.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_240.json",
-        "sourceDraftSha256": "07040f3c4b8a3295a95fcfdac8539329c70c720b17c459a7e829522e5d29ecbc",
-        "savedAt": "2026-07-30T13:10:48",
+        "sourceDraftSha256": "c4b54873e37020c9c78c94869580e7adc20bcb2e5c5af924959001a3af83134d",
+        "savedAt": "2026-07-30T18:38:44",
         "selection": {
           "action": "idle",
           "direction": 0,
-          "frame": 0
+          "frame": 3
         }
       }
     },

@@ -19,6 +19,7 @@ const ENEMY_MOTION_MASK := WorldSpatialRulesScript.WORLD_LAYER | WorldSpatialRul
 const POISON_INDICATOR_STYLE := "overhead_three_diamonds"
 const NAME_LABEL_SIZE := MonsterOverheadScript.NAME_LABEL_SIZE
 const NAME_LABEL_HEALTH_BAR_GAP := MonsterOverheadScript.NAME_LABEL_HEALTH_BAR_GAP
+const TARGET_RING_FOOTPRINT_SCALE := 1.25
 
 static var _crowd_grid_physics_frame := -1
 static var _crowd_grid: Dictionary = {}
@@ -956,10 +957,14 @@ func should_draw_synthetic_ground_shadow() -> bool:
 
 
 func ground_indicator_radii() -> Vector2:
-	var radius := 27.0 if is_boss else 16.0
-	var fallback_radius := radius + 6.0
-	var fallback := Vector2(fallback_radius, fallback_radius * 0.30)
-	return visual.ground_indicator_radii(fallback) if visual != null else fallback
+	# The targeting ring is the physics footprint enlarged uniformly around the
+	# same foot point. Per-monster collision radii therefore keep small monsters
+	# small and large monsters/Bosses large without inventing another body-size
+	# or vertical-squash coordinate system.
+	return (
+		WorldSpatialRulesScript.actor_footprint_radii(collision_radius)
+		* TARGET_RING_FOOTPRINT_SCALE
+	)
 
 
 func _draw_ground_indicator_ellipse(
