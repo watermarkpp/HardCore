@@ -3,6 +3,9 @@ extends CharacterBody2D
 
 const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
 const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
+const MonsterGroundRuntimeDiagnosticOverlayScript := preload(
+	"res://scripts/monster_ground_runtime_diagnostic_overlay.gd"
+)
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const CROWD_GRID_CELL_SIZE := 96.0
@@ -70,6 +73,7 @@ var movement_facing := Vector2.DOWN
 var visual: MonsterVisual
 var name_label: Label
 var overhead: Variant
+var ground_runtime_diagnostic_overlay: Node2D
 var collision_radius := ArtSpec.MONSTER_COLLISION_RADIUS
 var environment_blocker: Node
 var _dying := false
@@ -231,6 +235,13 @@ func _ready() -> void:
 	name_label = overhead.name_label
 	MonsterVisualScript.configure_actor_y_sort_item(name_label, "name_label")
 	refresh_name_label_position()
+	if MonsterGroundRuntimeDiagnosticOverlayScript.enabled_for_runtime():
+		ground_runtime_diagnostic_overlay = (
+			MonsterGroundRuntimeDiagnosticOverlayScript.new()
+		)
+		ground_runtime_diagnostic_overlay.name = "GroundRuntimeDiagnosticOverlay"
+		ground_runtime_diagnostic_overlay.setup(self)
+		add_child(ground_runtime_diagnostic_overlay)
 	if _burrowed:
 		visual.visible = false
 		overhead.visible = false
