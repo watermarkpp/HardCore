@@ -1,7 +1,12 @@
 extends Control
 
+const MonsterDraftScript := preload(
+	"res://scripts/monster_ground_alignment_draft.gd"
+)
 const ACTIONS := ["idle", "walk", "attack", "cast", "hit", "death"]
 const ACTION_LABELS := ["站立", "行走", "攻击", "施法", "受击", "死亡"]
+const MONSTER_ACTIONS := ["idle", "walk", "attack", "hit", "death"]
+const MONSTER_ACTION_LABELS := ["站立", "行走", "攻击", "受击", "死亡"]
 const DIRECTION_LABELS := ["S", "SW", "W", "NW", "N", "NE", "E", "SE"]
 const DIRECTIONS: Array[Vector2] = [
 	Vector2.DOWN,
@@ -16,6 +21,9 @@ const DIRECTIONS: Array[Vector2] = [
 const SPEEDS := [0.25, 0.5, 1.0, 2.0]
 const SPEED_LABELS := ["25%", "50%", "100%", "200%"]
 const LAB_CONTRACT_ID := "local.visual_acceptance_lab.player_runtime.v1"
+const MONSTER_LAB_CONTRACT_ID := (
+	"local.visual_acceptance_lab.monster_runtime.v1"
+)
 const ALIGNMENT_DRAFT_CONTRACT_ID := (
 	"local.visual_acceptance_lab.player_alignment_draft.v1"
 )
@@ -30,15 +38,20 @@ const PLAYBACK_TICK_SECONDS := 1.0 / 60.0
 
 var _old_test_mode := false
 var _player: PlayerCharacter
+var _monster: EnemyActor
+var _monster_rows: Array[Dictionary] = []
+var _active_monster_id := -1
 var _preview_root: Node2D
 var _viewport_container: SubViewportContainer
 var _viewport: SubViewport
 var _background: ColorRect
 var _grid_root: Node2D
 var _overlay_root: Node2D
+var _mode_option: OptionButton
 var _action_option: OptionButton
 var _direction_option: OptionButton
 var _profession_option: OptionButton
+var _monster_option: OptionButton
 var _speed_option: OptionButton
 var _background_option: OptionButton
 var _frame_spin: SpinBox
@@ -60,12 +73,17 @@ var _runtime_visual_origin := Vector2.ZERO
 var _runtime_foot_anchor_adjustment := Vector2.ZERO
 var _visual_alignment_offset := Vector2.ZERO
 var _visual_foot_anchor_adjustment := Vector2.ZERO
+var _monster_runtime_visual_origin := Vector2.ZERO
+var _monster_visual_alignment_offset := Vector2.ZERO
+var _monster_picked_visual_foot_offset := Vector2.ZERO
+var _monster_formal_visual_foot_offset := Vector2.ZERO
 
 
 func _ready() -> void:
 	_old_test_mode = PlayerState.test_mode
 	PlayerState.test_mode = true
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_monster_rows = MonsterDraftScript.catalog_rows()
 	if DisplayServer.get_name() != "headless":
 		get_window().min_size = Vector2i(1100, 650)
 		get_window().size = Vector2i(1280, 720)
@@ -94,7 +112,7 @@ func _start_playback_timer() -> void:
 
 
 func _advance_playback(delta: float) -> void:
-	if not _playing or _player == null or _player.visual == null:
+	if not _playing or not _active_visual_available():
 		return
 	var frame_count := _frame_count()
 	if frame_count <= 1:
@@ -188,9 +206,16 @@ func _build_ui() -> void:
 	controls.add_child(subtitle)
 	controls.add_child(HSeparator.new())
 
+	_mode_option = _add_option(controls, "检测对象", [
+		"人物", "怪物",
+	])
 	_profession_option = _add_option(controls, "职业", [
 		"战士", "法师", "道士",
 	])
+	_monster_option = _add_option(
+		controls, "怪物", _monster_option_labels()
+	)
+	_monster_option.get_parent().visible = false
 	_action_option = _add_option(controls, "动作", ACTION_LABELS)
 	_direction_option = _add_option(controls, "方向", DIRECTION_LABELS)
 	_speed_option = _add_option(controls, "播放速度", SPEED_LABELS)
@@ -239,7 +264,7 @@ func _build_ui() -> void:
 	_foot_pick_button.text = "① 点击鞋底中点设置蓝色脚点"
 	controls.add_child(_foot_pick_button)
 	_alignment_button = CheckButton.new()
-	_alignment_button.text = "② 移动人物视觉（拖动 / 方向键 0.5px）"
+	_alignment_button.text = "② 移动整个视觉（拖动 / 方向键 0.5px）"
 	controls.add_child(_alignment_button)
 	_alignment_offset_label = Label.new()
 	_alignment_offset_label.modulate = Color("#9fd8ff")
@@ -268,7 +293,7 @@ func _build_ui() -> void:
 	shortcuts.text = (
 		"快捷键：空格 播放/暂停\n"
 		+ "普通：←/→ 逐帧　↑/↓ 换方向\n"
-		+ "对齐：拖动人物或方向键 0.5px\n"
+		+ "对齐：拖动视觉或方向键 0.5px\n"
 		+ "F 辅助线　S 截图"
 	)
 	shortcuts.modulate = Color("#9fb0bf")
@@ -314,7 +339,9 @@ func _build_ui() -> void:
 	_preview_root.position = Vector2(450, 380)
 	_viewport.add_child(_preview_root)
 
+	_mode_option.item_selected.connect(_on_mode_changed)
 	_profession_option.item_selected.connect(_on_selection_changed)
+	_monster_option.item_selected.connect(_on_monster_changed)
 	_action_option.item_selected.connect(_on_selection_changed)
 	_direction_option.item_selected.connect(_on_selection_changed)
 	_speed_option.item_selected.connect(_on_speed_changed)
@@ -361,6 +388,13 @@ func _build_coordinate_grid() -> void:
 
 
 func _apply_selection() -> void:
+	if _is_monster_mode():
+		_rebuild_monster_actor()
+		_current_frame = 0
+		_clock = 0.0
+		_update_frame_limits()
+		_apply_preview_frame()
+		return
 	PlayerState.profession = ProfessionRules.PROFESSION_CATALOG.values()[
 		_profession_option.selected
 	]
@@ -372,6 +406,9 @@ func _apply_selection() -> void:
 
 
 func _apply_preview_frame() -> void:
+	if _is_monster_mode():
+		_apply_monster_preview_frame()
+		return
 	if _player == null or _player.visual == null:
 		return
 	var action := _selected_action()
@@ -399,6 +436,94 @@ func _apply_preview_frame() -> void:
 	_update_status()
 
 
+func _apply_monster_preview_frame() -> void:
+	if (
+		_monster == null
+		or _monster.visual == null
+		or _monster.visual.sprite == null
+	):
+		return
+	var action := _selected_action()
+	var visual := _monster.visual
+	var frame_count := _frame_count()
+	_current_frame = clampi(
+		_current_frame, 0, maxi(0, frame_count - 1)
+	)
+	visual.current_state = action
+	visual.current_direction = visual._direction_row(
+		DIRECTIONS[_direction_option.selected]
+	)
+	visual.current_frame = _current_frame
+	visual.sprite.texture = visual.active_resources.get(action)
+	visual.sprite.region_rect = Rect2(
+		_current_frame * visual.frame_size.x,
+		visual.current_direction * visual.frame_size.y,
+		visual.frame_size.x,
+		visual.frame_size.y,
+	)
+	_update_overlay()
+	_update_status()
+
+
+func _rebuild_monster_actor(force := false) -> void:
+	if _monster_rows.is_empty() or _preview_root == null:
+		return
+	var row := _monster_rows[
+		clampi(_monster_option.selected, 0, _monster_rows.size() - 1)
+	]
+	var monster_id := int(row.get("monster_id", -1))
+	if (
+		not force
+		and _monster != null
+		and _active_monster_id == monster_id
+	):
+		_monster.visible = true
+		return
+	if _monster != null:
+		_monster.free()
+		_monster = null
+	var data := GameData.get_monster_by_id(monster_id).duplicate(true)
+	if data.is_empty():
+		_update_status("怪物 #%d 缺少正式运行时数据。" % monster_id)
+		return
+	_monster = EnemyActor.new()
+	_monster.name = "AcceptanceMonster_%d" % monster_id
+	_monster.setup(data, _player, _is_boss_monster(monster_id))
+	_preview_root.add_child(_monster)
+	_monster.set_process(false)
+	_monster.set_physics_process(false)
+	_monster.velocity = Vector2.ZERO
+	if _monster.visual != null:
+		_monster.visual.set_process(false)
+	if _monster.overhead != null:
+		_monster.overhead.visible = false
+	_active_monster_id = monster_id
+	_monster_runtime_visual_origin = _monster.visual.position
+	var formal := MonsterDraftScript.formal_entry(monster_id)
+	_monster_formal_visual_foot_offset = _vector2_from_array(
+		formal.get("visualFootOffset", []), Vector2.ZERO
+	)
+	_monster_picked_visual_foot_offset = (
+		_monster_formal_visual_foot_offset
+	)
+	_monster_visual_alignment_offset = Vector2.ZERO
+	_load_monster_alignment_draft()
+	_monster.visual.position = (
+		_monster_runtime_visual_origin
+		+ _monster_visual_alignment_offset
+	)
+
+
+func _is_boss_monster(monster_id: int) -> bool:
+	for value: Variant in GameData.bosses:
+		if (
+			value is Dictionary
+			and int(value.get("monsterId", -1)) == monster_id
+		):
+			return true
+	return false
+
+
 func _update_frame_limits() -> void:
 	var count := _frame_count()
 	_frame_spin.max_value = maxi(0, count - 1)
@@ -411,11 +536,71 @@ func _update_overlay() -> void:
 	for child: Node in _overlay_root.get_children():
 		child.queue_free()
 	_overlay_root.visible = _overlay_button.button_pressed
-	if not _overlay_root.visible or _player == null or _player.visual == null:
+	if not _overlay_root.visible:
+		return
+	if _is_monster_mode():
+		_update_monster_overlay()
+		return
+	if _player == null or _player.visual == null:
 		return
 	var visual := _player.visual
 	var body_sprite: Sprite2D = visual.sprite
 	var foot_origin := _visual_foot_origin()
+	_draw_canonical_ground_overlay(
+		foot_origin, ArtSpec.PLAYER_COLLISION_RADIUS
+	)
+	if body_sprite != null:
+		var rect := Rect2(
+			visual.position + body_sprite.position,
+			Vector2(body_sprite.region_rect.size)
+		)
+		_add_rect_line(
+			_overlay_root,
+			rect,
+			Color(0.55, 1.0, 0.52, 0.75),
+			1.0
+		)
+
+
+func _update_monster_overlay() -> void:
+	if (
+		_monster == null
+		or _monster.visual == null
+		or _monster.visual.sprite == null
+	):
+		return
+	var visual := _monster.visual
+	var body_sprite: Sprite2D = visual.sprite
+	_draw_canonical_ground_overlay(
+		_visual_foot_origin(), _monster.collision_radius
+	)
+	var formal_center := (
+		visual.position + visual.ground_contact_offset()
+	)
+	var formal_radii := visual.ground_indicator_radii(Vector2(22, 7))
+	_add_ellipse_line(
+		_overlay_root,
+		formal_center,
+		formal_radii,
+		Color(1.0, 0.62, 0.20, 0.72),
+		1.0,
+	)
+	var rect := Rect2(
+		visual.position + body_sprite.position,
+		Vector2(body_sprite.region_rect.size)
+	)
+	_add_rect_line(
+		_overlay_root,
+		rect,
+		Color(0.55, 1.0, 0.52, 0.75),
+		1.0
+	)
+
+
+func _draw_canonical_ground_overlay(
+	foot_origin: Vector2,
+	collision_radius: float,
+) -> void:
 	_add_line(
 		_overlay_root,
 		PackedVector2Array([Vector2(-24, 0), Vector2(24, 0)]),
@@ -430,25 +615,39 @@ func _update_overlay() -> void:
 	)
 	_add_cross(_overlay_root, foot_origin, Color("#4de1ff"), 9.0)
 	var footprint := WorldSpatialRules.actor_footprint_polygon(
-		ArtSpec.PLAYER_COLLISION_RADIUS, 32
+		collision_radius, 32
 	)
 	_add_closed_line(_overlay_root, footprint, Color("#ff5c78"), 1.5)
 	var diamond := PackedVector2Array([
 		Vector2(0, -16), Vector2(32, 0), Vector2(0, 16), Vector2(-32, 0),
 	])
 	_add_closed_line(_overlay_root, diamond, Color(0.55, 0.75, 1.0, 0.65), 1.0)
-	if body_sprite != null:
-		var rect := Rect2(
-			visual.position + body_sprite.position,
-			Vector2(body_sprite.region_rect.size)
-		)
-		_add_rect_line(_overlay_root, rect, Color(0.55, 1.0, 0.52, 0.75), 1.0)
 
 
 func _update_status(message := "") -> void:
 	_update_alignment_offset_label()
 	if not message.is_empty():
 		_status.text = message
+		return
+	if _is_monster_mode():
+		var row := _selected_monster_row()
+		var monster_name := str(row.get("name", ""))
+		var monster_id := int(row.get("monster_id", -1))
+		_status.text = (
+			"%s　#%d %s　%s / %s　帧 %d/%d　倍率 %dx\n"
+			+ "黄=怪物逻辑坐标　青十字=你指定的视觉脚点　"
+			+ "粉=真实物理脚印　蓝菱形=64×32地图格\n"
+			+ "橙=当前正式脚下光圈；先点鞋底，再移动整只怪物使青黄重合"
+		) % [
+			MONSTER_LAB_CONTRACT_ID,
+			monster_id,
+			monster_name,
+			MONSTER_ACTION_LABELS[_action_option.selected],
+			DIRECTION_LABELS[_direction_option.selected],
+			_current_frame + 1,
+			_frame_count(),
+			int(_zoom_slider.value),
+		]
 		return
 	var status_template := (
 		"%s　%s / %s　帧 %d/%d　倍率 %dx\n"
@@ -490,6 +689,13 @@ func _toggle_playback() -> void:
 
 
 func _visual_foot_origin() -> Vector2:
+	if _is_monster_mode():
+		if _monster == null or _monster.visual == null:
+			return Vector2.ZERO
+		return (
+			_monster.visual.position
+			+ _monster_picked_visual_foot_offset
+		)
 	if _player == null or _player.visual == null:
 		return Vector2.ZERO
 	var visual := _player.visual
@@ -557,18 +763,35 @@ func _preview_local_from_container(point: Vector2) -> Vector2:
 
 
 func _set_visual_foot_anchor_from_preview(point: Vector2) -> void:
+	if _is_monster_mode():
+		if _monster == null or _monster.visual == null:
+			return
+		_set_visual_foot_anchor_adjustment(
+			point - _monster.visual.position
+		)
+		return
 	_set_visual_foot_anchor_adjustment(
 		_visual_foot_anchor_adjustment + point - _visual_foot_origin()
 	)
 
 
 func _nudge_visual_foot_anchor(delta: Vector2) -> void:
+	if _is_monster_mode():
+		_set_visual_foot_anchor_adjustment(
+			_monster_picked_visual_foot_offset + delta
+		)
+		return
 	_set_visual_foot_anchor_adjustment(
 		_visual_foot_anchor_adjustment + delta
 	)
 
 
 func _set_visual_foot_anchor_adjustment(value: Vector2) -> void:
+	if _is_monster_mode():
+		_monster_picked_visual_foot_offset = _snapped_alignment(value)
+		_update_overlay()
+		_update_status()
+		return
 	_visual_foot_anchor_adjustment = Vector2(
 		roundf(value.x / ALIGNMENT_NUDGE) * ALIGNMENT_NUDGE,
 		roundf(value.y / ALIGNMENT_NUDGE) * ALIGNMENT_NUDGE
@@ -578,10 +801,25 @@ func _set_visual_foot_anchor_adjustment(value: Vector2) -> void:
 
 
 func _nudge_visual_alignment(delta: Vector2) -> void:
+	if _is_monster_mode():
+		_set_visual_alignment_offset(
+			_monster_visual_alignment_offset + delta
+		)
+		return
 	_set_visual_alignment_offset(_visual_alignment_offset + delta)
 
 
 func _set_visual_alignment_offset(value: Vector2) -> void:
+	if _is_monster_mode():
+		_monster_visual_alignment_offset = _snapped_alignment(value)
+		if _monster == null or _monster.visual == null:
+			return
+		_monster.visual.position = (
+			_monster_runtime_visual_origin
+			+ _monster_visual_alignment_offset
+		)
+		_apply_preview_frame()
+		return
 	_visual_alignment_offset = Vector2(
 		roundf(value.x / ALIGNMENT_NUDGE) * ALIGNMENT_NUDGE,
 		roundf(value.y / ALIGNMENT_NUDGE) * ALIGNMENT_NUDGE
@@ -593,12 +831,23 @@ func _set_visual_alignment_offset(value: Vector2) -> void:
 
 
 func _align_visual_foot_to_standard() -> void:
+	if _is_monster_mode():
+		_set_visual_alignment_offset(
+			_monster_visual_alignment_offset - _visual_foot_origin()
+		)
+		return
 	_set_visual_alignment_offset(
 		_visual_alignment_offset - _visual_foot_origin()
 	)
 
 
 func _reset_visual_alignment() -> void:
+	if _is_monster_mode():
+		_monster_picked_visual_foot_offset = (
+			_monster_formal_visual_foot_offset
+		)
+		_set_visual_alignment_offset(Vector2.ZERO)
+		return
 	_visual_foot_anchor_adjustment = _runtime_foot_anchor_adjustment
 	_set_visual_alignment_offset(Vector2.ZERO)
 
@@ -607,6 +856,19 @@ func _update_alignment_offset_label() -> void:
 	if _alignment_offset_label == null:
 		return
 	var foot := _visual_foot_origin()
+	if _is_monster_mode():
+		_alignment_offset_label.text = (
+			"怪物整体 X %+.1f/Y %+.1f　局部脚点 X %+.1f/Y %+.1f\n"
+			+ "青色脚点坐标 X %+.1f/Y %+.1f"
+		) % [
+			_monster_visual_alignment_offset.x,
+			_monster_visual_alignment_offset.y,
+			_monster_picked_visual_foot_offset.x,
+			_monster_picked_visual_foot_offset.y,
+			foot.x,
+			foot.y,
+		]
+		return
 	var offset_template := (
 		"人物 X %+.1f/Y %+.1f　脚点修正 X %+.1f/Y %+.1f\n"
 		+ "蓝色脚点坐标 X %+.1f/Y %+.1f"
@@ -619,6 +881,13 @@ func _update_alignment_offset_label() -> void:
 		foot.x,
 		foot.y,
 	]
+
+
+func _snapped_alignment(value: Vector2) -> Vector2:
+	return Vector2(
+		roundf(value.x / ALIGNMENT_NUDGE) * ALIGNMENT_NUDGE,
+		roundf(value.y / ALIGNMENT_NUDGE) * ALIGNMENT_NUDGE
+	)
 
 
 func alignment_draft_payload() -> Dictionary:
@@ -647,6 +916,26 @@ func alignment_draft_payload() -> Dictionary:
 		"formalRuntimeWritten": _current_alignment_matches_formal(),
 		"formalContractPath": FORMAL_ALIGNMENT_CONTRACT_PATH,
 	}
+
+
+func monster_alignment_draft_payload() -> Dictionary:
+	if _monster == null or _monster.visual == null:
+		return {}
+	return MonsterDraftScript.build_payload(
+		_active_monster_id,
+		{
+			"action": _selected_action(),
+			"direction": _direction_option.selected,
+			"frame": _current_frame,
+		},
+		_monster_runtime_visual_origin,
+		_monster_visual_alignment_offset,
+		_monster_picked_visual_foot_offset,
+		Vector2(
+			_monster.collision_radius,
+			_monster.collision_radius * 0.5,
+		),
+	)
 
 
 func _current_alignment_matches_formal() -> bool:
@@ -678,6 +967,17 @@ func _load_formal_alignment_contract() -> void:
 
 
 func _save_alignment_draft() -> void:
+	if _is_monster_mode():
+		var result := MonsterDraftScript.save_draft(
+			monster_alignment_draft_payload()
+		)
+		_update_status(
+			"怪物 #%d 对齐草稿已单独保存：%s；尚未写入正式运行时。"
+			% [_active_monster_id, str(result.get("path", ""))]
+			if bool(result.get("ok", false))
+			else "怪物对齐草稿保存失败：%s" % str(result.get("error", ""))
+		)
+		return
 	var path := ProjectSettings.globalize_path(ALIGNMENT_DRAFT_PATH)
 	var directory_error := DirAccess.make_dir_recursive_absolute(
 		path.get_base_dir()
@@ -743,6 +1043,19 @@ func _load_alignment_draft() -> void:
 		_set_visual_alignment_offset(draft_offset)
 
 
+func _load_monster_alignment_draft() -> void:
+	var draft := MonsterDraftScript.load_draft(_active_monster_id)
+	if draft.is_empty():
+		return
+	_monster_visual_alignment_offset = _vector2_from_array(
+		draft.get("visualOffset", []), Vector2.ZERO
+	)
+	_monster_picked_visual_foot_offset = _vector2_from_array(
+		draft.get("pickedVisualFootOffset", []),
+		_monster_formal_visual_foot_offset,
+	)
+
+
 func _vector2_from_array(value: Variant, fallback: Vector2) -> Vector2:
 	if value is Array and value.size() == 2:
 		return Vector2(float(value[0]), float(value[1]))
@@ -750,6 +1063,15 @@ func _vector2_from_array(value: Variant, fallback: Vector2) -> Vector2:
 
 
 func _reload_runtime_art() -> void:
+	if _is_monster_mode():
+		MonsterVisual.reset_client_resource_cache()
+		_rebuild_monster_actor(true)
+		_update_frame_limits()
+		_apply_preview_frame()
+		_update_status(
+			"已重新读取当前怪物正式素材，并恢复该 monster_id 的独立草稿。"
+		)
+		return
 	_player.visual._refresh_equipment_visuals()
 	_apply_preview_frame()
 	_update_status("已重新读取正式运行时素材；未写入任何校准或存档数据。")
@@ -776,7 +1098,13 @@ func save_current_preview(path_override := "") -> Dictionary:
 			"error": "截图目录创建失败：%s" % error_string(error),
 		}
 	var timestamp := Time.get_datetime_string_from_system().replace(":", "-")
-	var file_name := "player_%s_%s_f%02d_%s.png" % [
+	var subject := (
+		"monster_%d" % _active_monster_id
+		if _is_monster_mode()
+		else "player"
+	)
+	var file_name := "%s_%s_%s_f%02d_%s.png" % [
+		subject,
 		_selected_action(),
 		DIRECTION_LABELS[_direction_option.selected].to_lower(),
 		_current_frame,
@@ -803,13 +1131,27 @@ func save_current_preview(path_override := "") -> Dictionary:
 
 
 func _frame_count() -> int:
+	if _is_monster_mode():
+		if _monster == null or _monster.visual == null:
+			return 1
+		return maxi(
+			1,
+			MonsterAnimationPolicy.frame_count(
+				_monster.visual.active_resources,
+				StringName(_selected_action()),
+			),
+		)
 	if _player == null or _player.visual == null:
 		return 1
 	return maxi(1, _player.visual._frame_count_for_action(_selected_action()))
 
 
 func _selected_action() -> String:
-	return ACTIONS[_action_option.selected]
+	return (
+		MONSTER_ACTIONS[_action_option.selected]
+		if _is_monster_mode()
+		else ACTIONS[_action_option.selected]
+	)
 
 
 func _selected_speed() -> float:
@@ -823,6 +1165,32 @@ func _action_fps(action: String) -> float:
 
 
 func _on_selection_changed(_index: int) -> void:
+	_apply_selection()
+
+
+func _on_mode_changed(_index: int) -> void:
+	_current_frame = 0
+	_clock = 0.0
+	_foot_pick_button.set_pressed_no_signal(false)
+	_alignment_button.set_pressed_no_signal(false)
+	_foot_pick_mode = false
+	_alignment_mode = false
+	_profession_option.get_parent().visible = not _is_monster_mode()
+	_monster_option.get_parent().visible = _is_monster_mode()
+	_replace_action_options(
+		MONSTER_ACTION_LABELS if _is_monster_mode() else ACTION_LABELS
+	)
+	if _player != null:
+		_player.visible = not _is_monster_mode()
+	if _monster != null:
+		_monster.visible = _is_monster_mode()
+	_apply_selection()
+
+
+func _on_monster_changed(_index: int) -> void:
+	if not _is_monster_mode():
+		return
+	_active_monster_id = -1
 	_apply_selection()
 
 
@@ -851,6 +1219,43 @@ func _on_zoom_changed(value: float) -> void:
 
 func _on_overlay_toggled(_pressed: bool) -> void:
 	_update_overlay()
+
+
+func _is_monster_mode() -> bool:
+	return _mode_option != null and _mode_option.selected == 1
+
+
+func _active_visual_available() -> bool:
+	if _is_monster_mode():
+		return _monster != null and _monster.visual != null
+	return _player != null and _player.visual != null
+
+
+func _selected_monster_row() -> Dictionary:
+	if _monster_rows.is_empty() or _monster_option == null:
+		return {}
+	return _monster_rows[
+		clampi(_monster_option.selected, 0, _monster_rows.size() - 1)
+	]
+
+
+func _monster_option_labels() -> Array:
+	var labels: Array = []
+	for row: Dictionary in _monster_rows:
+		labels.append(
+			"#%d　%s" % [
+				int(row.get("monster_id", -1)),
+				str(row.get("name", "")),
+			]
+		)
+	return labels
+
+
+func _replace_action_options(labels: Array) -> void:
+	_action_option.clear()
+	for label: Variant in labels:
+		_action_option.add_item(str(label))
+	_action_option.select(0)
 
 
 func _add_option(parent: VBoxContainer, label_text: String, items: Array) -> OptionButton:
@@ -912,6 +1317,26 @@ func _add_rect_line(
 		rect.end,
 		Vector2(rect.position.x, rect.end.y),
 	]), color, width)
+
+
+func _add_ellipse_line(
+	parent: Node2D,
+	center: Vector2,
+	radii: Vector2,
+	color: Color,
+	width: float,
+) -> void:
+	var points := PackedVector2Array()
+	for index in range(49):
+		var angle := TAU * float(index) / 48.0
+		points.append(
+			center
+			+ Vector2(
+				cos(angle) * radii.x,
+				sin(angle) * radii.y,
+			)
+		)
+	_add_closed_line(parent, points, color, width)
 
 
 func _add_closed_line(

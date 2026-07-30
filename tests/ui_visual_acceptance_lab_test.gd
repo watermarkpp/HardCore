@@ -21,6 +21,9 @@ func _ready() -> void:
 	assert(not lab._player.is_physics_processing())
 	assert(not lab._player.visual.is_processing())
 	assert(lab._action_option.item_count == 6)
+	assert(lab._mode_option.item_count == 2)
+	assert(lab._mode_option.selected == 0)
+	assert(lab._monster_option.item_count == 214)
 	assert(lab._direction_option.item_count == 8)
 	assert(lab._speed_option.item_count == 4)
 	assert(lab._background_option.item_count == 3)
@@ -107,11 +110,51 @@ func _ready() -> void:
 		lab._apply_selection()
 		assert(lab._frame_count() >= 1)
 		assert(lab._player.visual.current_animation_name() == lab.ACTIONS[action_index])
+	lab._mode_option.select(1)
+	lab._on_mode_changed(1)
+	await get_tree().process_frame
+	assert(lab._is_monster_mode())
+	assert(lab._action_option.item_count == 5)
+	assert(not lab._profession_option.get_parent().visible)
+	assert(lab._monster_option.get_parent().visible)
+	assert(lab._monster != null and lab._monster.visual != null)
+	assert(lab._monster.visual.uses_final_art())
+	assert(lab._active_monster_id == 18)
+	assert(lab._monster.visual.sprite.texture != null)
+	lab._reset_visual_alignment()
+	lab._set_visual_foot_anchor_from_preview(Vector2(3.0, -2.0))
+	assert(lab._visual_foot_origin().is_equal_approx(Vector2(3.0, -2.0)))
+	lab._align_visual_foot_to_standard()
+	assert(lab._visual_foot_origin().is_zero_approx())
+	var monster_payload := lab.monster_alignment_draft_payload()
+	assert(
+		monster_payload.get("contractId", "")
+		== lab.MonsterDraftScript.CONTRACT_ID
+	)
+	assert(int(monster_payload.get("monsterId", -1)) == 18)
+	assert(monster_payload.get("finalVisualFootPoint", []) == [0.0, 0.0])
+	assert(not bool(monster_payload.get("formalRuntimeWritten", true)))
+	for action_index in lab.MONSTER_ACTIONS.size():
+		lab._action_option.select(action_index)
+		lab._direction_option.select(action_index % 8)
+		lab._apply_selection()
+		assert(lab._frame_count() >= 1)
+		assert(
+			lab._monster.visual.current_state
+			== lab.MONSTER_ACTIONS[action_index]
+		)
+	lab._mode_option.select(0)
+	lab._on_mode_changed(0)
+	assert(not lab._is_monster_mode())
+	assert(lab._action_option.item_count == 6)
+	assert(lab._player.visible)
+	assert(not lab._monster.visible)
 	lab.queue_free()
 	await get_tree().process_frame
 	assert(PlayerState.test_mode == original_test_mode)
 	print(
-		"UI_VISUAL_ACCEPTANCE_LAB_PASS actions=6 directions=8 "
-		+ "readonly=true runtime_composite=true"
+		"UI_VISUAL_ACCEPTANCE_LAB_PASS player_actions=6 "
+		+ "monster_actions=5 monsters=214 directions=8 "
+		+ "single_target_drafts=true runtime_composite=true"
 	)
 	get_tree().quit(0)
