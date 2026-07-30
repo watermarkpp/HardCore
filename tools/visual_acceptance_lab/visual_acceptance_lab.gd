@@ -493,8 +493,14 @@ func _rebuild_monster_actor(force := false) -> void:
 	_monster.set_process(false)
 	_monster.set_physics_process(false)
 	_monster.velocity = Vector2.ZERO
+	# The acceptance lab previews authored frames directly. Boss emergence and
+	# burrow mechanics remain active in the game, but must not hide those frames
+	# while the user is inspecting animation and ground alignment.
+	_monster._burrowed = false
+	_monster.dormant = false
 	if _monster.visual != null:
 		_monster.visual.set_process(false)
+		_monster.visual.visible = true
 	if _monster.overhead != null:
 		_monster.overhead.visible = false
 	_active_monster_id = monster_id
@@ -1046,6 +1052,11 @@ func _load_alignment_draft() -> void:
 func _load_monster_alignment_draft() -> void:
 	var draft := MonsterDraftScript.load_draft(_active_monster_id)
 	if draft.is_empty():
+		return
+	# Once this exact frozen draft has been promoted into the formal runtime
+	# contract, MonsterVisual already includes its root offset. Reapplying the
+	# local draft here would double the user's saved displacement.
+	if MonsterDraftScript.draft_is_formal(_active_monster_id, draft):
 		return
 	_monster_visual_alignment_offset = _vector2_from_array(
 		draft.get("visualOffset", []), Vector2.ZERO
