@@ -34,7 +34,7 @@ func _run() -> void:
 		assert(visual.active_resources.get("animation_source", "") == "classic_client_wil", "%s 仍在使用程序变形动画" % monster_name)
 		assert(visual.actor_ground_offset == Vector2i(32, 28), "%s 旧名称入口未采用经典客户端角色原点迁移量" % monster_name)
 		enemy.set_targeted(true)
-		assert(enemy.ground_indicator_center().is_equal_approx(visual.position + visual.visual_foot_offset()), "%s 锁定光圈未使用人工视觉脚点" % monster_name)
+		assert(enemy.ground_indicator_center().is_zero_approx(), "%s 地面锁定光圈未固定在怪物物理原点" % monster_name)
 		assert(
 			enemy.ground_indicator_radii().is_equal_approx(
 				WorldSpatialRules.actor_footprint_radii(enemy.collision_radius)

@@ -72,9 +72,15 @@ func _run() -> void:
 		var final_radii := enemy.ground_indicator_radii()
 		assert(
 			final_contact.is_equal_approx(
-				enemy.visual.ground_contact_position(Vector2.ZERO)
+				enemy.visual.target_ring_position(Vector2.ZERO)
 			)
 		)
+		if enemy.visual.ground_projection_strategy() == "grounded":
+			assert(
+				final_contact.is_zero_approx(),
+				"monsterId=%d grounded final-art activation moved the target ring off actor origin"
+				% monster_id,
+			)
 		assert(
 			final_radii.is_equal_approx(fallback_radii),
 			"monsterId=%d ring size changed while final art activated"
@@ -87,5 +93,5 @@ func _run() -> void:
 
 	MonsterVisual.reset_client_resource_cache()
 	assert(verified_count == 214)
-	print("MONSTER_GROUND_CONTACT_COLD_ACTIVATION_PASS 214 per-ID cold profiles preserve reviewed feet and footprint-sized rings")
+	print("MONSTER_GROUND_CONTACT_COLD_ACTIVATION_PASS 214 cold profiles preserve canonical targeting origins and footprint-sized rings")
 	get_tree().quit(0)

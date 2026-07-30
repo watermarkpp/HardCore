@@ -301,6 +301,20 @@ func ground_contact_position(fallback: Vector2) -> Vector2:
 	return position + visual_foot_offset()
 
 
+func target_ring_position(fallback: Vector2) -> Vector2:
+	# This is intentionally separate from ground_contact_position(). The latter
+	# describes a reviewed point on the rendered sprite and therefore depends on
+	# visualRootOffset/visualFootOffset. Grounded targeting belongs to the actor
+	# and collision coordinate system, whose canonical foot is local (0, 0).
+	# Only airborne actors need an authored projection from their visual body
+	# down to the ground.
+	if not uses_final_art() or ground_contact_profile.is_empty():
+		return fallback
+	if ground_projection_strategy() in ["flying", "hover"]:
+		return ground_contact_position(fallback)
+	return fallback
+
+
 func ground_indicator_radii(fallback: Vector2) -> Vector2:
 	if is_instance_valid(actor):
 		return actor.ground_indicator_radii()
