@@ -389,9 +389,10 @@ func _build_coordinate_grid() -> void:
 
 func _apply_selection() -> void:
 	if _is_monster_mode():
-		_rebuild_monster_actor()
-		_current_frame = 0
-		_clock = 0.0
+		var rebuilt_from_draft := _rebuild_monster_actor()
+		if not rebuilt_from_draft:
+			_current_frame = 0
+			_clock = 0.0
 		_update_frame_limits()
 		_apply_preview_frame()
 		return
@@ -465,9 +466,9 @@ func _apply_monster_preview_frame() -> void:
 	_update_status()
 
 
-func _rebuild_monster_actor(force := false) -> void:
+func _rebuild_monster_actor(force := false) -> bool:
 	if _monster_rows.is_empty() or _preview_root == null:
-		return
+		return false
 	var row := _monster_rows[
 		clampi(_monster_option.selected, 0, _monster_rows.size() - 1)
 	]
@@ -478,14 +479,14 @@ func _rebuild_monster_actor(force := false) -> void:
 		and _active_monster_id == monster_id
 	):
 		_monster.visible = true
-		return
+		return false
 	if _monster != null:
 		_monster.free()
 		_monster = null
 	var data := GameData.get_monster_by_id(monster_id).duplicate(true)
 	if data.is_empty():
 		_update_status("怪物 #%d 缺少正式运行时数据。" % monster_id)
-		return
+		return false
 	_monster = EnemyActor.new()
 	_monster.name = "AcceptanceMonster_%d" % monster_id
 	_monster.setup(data, _player, _is_boss_monster(monster_id))
@@ -513,11 +514,16 @@ func _rebuild_monster_actor(force := false) -> void:
 		_monster_formal_visual_foot_offset
 	)
 	_monster_visual_alignment_offset = Vector2.ZERO
+	_action_option.select(0)
+	_direction_option.select(0)
+	_current_frame = 0
+	_clock = 0.0
 	_load_monster_alignment_draft()
 	_monster.visual.position = (
 		_monster_runtime_visual_origin
 		+ _monster_visual_alignment_offset
 	)
+	return true
 
 
 func _is_boss_monster(monster_id: int) -> bool:
@@ -1053,11 +1059,17 @@ func _load_monster_alignment_draft() -> void:
 	var draft := MonsterDraftScript.load_draft(_active_monster_id)
 	if draft.is_empty():
 		return
-	# Once this exact frozen draft has been promoted into the formal runtime
-	# contract, MonsterVisual already includes its root offset. Reapplying the
-	# local draft here would double the user's saved displacement.
-	if MonsterDraftScript.draft_is_formal(_active_monster_id, draft):
-		return
+	_restore_monster_alignment_draft(draft)
+
+
+func _restore_monster_alignment_draft(draft: Dictionary) -> void:
+	# A saved draft is the frozen result of the user's manual calibration.
+	# Replay that exact snapshot instead of reconstructing it from a later
+	# runtime composite, including after formal import.
+	_monster_runtime_visual_origin = _vector2_from_array(
+		draft.get("runtimeVisualOrigin", []),
+		_monster_runtime_visual_origin,
+	)
 	_monster_visual_alignment_offset = _vector2_from_array(
 		draft.get("visualOffset", []), Vector2.ZERO
 	)
@@ -1065,6 +1077,18 @@ func _load_monster_alignment_draft() -> void:
 		draft.get("pickedVisualFootOffset", []),
 		_monster_formal_visual_foot_offset,
 	)
+	var selection: Variant = draft.get("selection", {})
+	if not selection is Dictionary:
+		return
+	var action_index := MONSTER_ACTIONS.find(
+		str(selection.get("action", "idle"))
+	)
+	_action_option.select(maxi(0, action_index))
+	_direction_option.select(
+		clampi(int(selection.get("direction", 0)), 0, DIRECTIONS.size() - 1)
+	)
+	_current_frame = maxi(0, int(selection.get("frame", 0)))
+	_clock = float(_current_frame) / _action_fps(_selected_action())
 
 
 func _vector2_from_array(value: Variant, fallback: Vector2) -> Vector2:

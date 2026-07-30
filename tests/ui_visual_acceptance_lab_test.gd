@@ -121,18 +121,31 @@ func _ready() -> void:
 	assert(lab._monster.visual.uses_final_art())
 	assert(lab._active_monster_id == 18)
 	assert(lab._monster.visual.sprite.texture != null)
-	var active_draft := lab.MonsterDraftScript.load_draft(
-		lab._active_monster_id
+	var replay_draft := {
+		"runtimeVisualOrigin": [2.0, 7.0],
+		"visualOffset": [3.5, -4.5],
+		"pickedVisualFootOffset": [-5.5, -2.5],
+		"selection": {
+			"action": "hit",
+			"direction": 6,
+			"frame": 1,
+		},
+	}
+	lab._restore_monster_alignment_draft(replay_draft)
+	assert(lab._monster_runtime_visual_origin == Vector2(2.0, 7.0))
+	assert(lab._monster_visual_alignment_offset == Vector2(3.5, -4.5))
+	assert(lab._monster_picked_visual_foot_offset == Vector2(-5.5, -2.5))
+	assert(lab._selected_action() == "hit")
+	assert(lab._direction_option.selected == 6)
+	assert(lab._current_frame == 1)
+	assert(
+		(
+			lab._monster_runtime_visual_origin
+			+ lab._monster_visual_alignment_offset
+			+ lab._monster_picked_visual_foot_offset
+		).is_zero_approx()
 	)
-	if lab.MonsterDraftScript.draft_is_formal(
-		lab._active_monster_id, active_draft
-	):
-		assert(lab._monster_visual_alignment_offset.is_zero_approx())
-		assert(
-			lab._monster_picked_visual_foot_offset.is_equal_approx(
-				lab._monster_formal_visual_foot_offset
-			)
-		)
+	lab._rebuild_monster_actor(true)
 	lab._reset_visual_alignment()
 	lab._set_visual_foot_anchor_from_preview(Vector2(3.0, -2.0))
 	assert(lab._visual_foot_origin().is_equal_approx(Vector2(3.0, -2.0)))
