@@ -4,7 +4,7 @@
   "sourceContract": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
   "identityKey": "monsterId",
   "sourceDraftRootRole": "User-owned local calibration output; imported as immutable evidence.",
-  "sourceAggregateSha256": "424a6908c242741b9f93198045d2e0389940a96be70bcd143c121e8a594d1ba0",
+  "sourceAggregateSha256": "47f242df49d3403b32d3c1050a7f7eaf8b0b5386cdc9fbc10b0ee5f966be75bd",
   "summary": {
     "catalogMonsterCount": 214,
     "userDraftCount": 212,
@@ -5784,28 +5784,28 @@
       "monsterName": "触龙神",
       "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
       "sourceDraftFile": "monster_124.json",
-      "sourceDraftSha256": "e21f1518ba9cbbcce2ba3a4223d0f0a4bbd1894aec974e4c98c3a8c091a63ae8",
-      "savedAt": "2026-07-30T12:57:49",
+      "sourceDraftSha256": "abf4ed08e51c4c8c127ff5c8acf57f90a728696e2bd9759217eaf16835f6679c",
+      "savedAt": "2026-07-30T14:24:03",
       "selection": {
-        "action": "idle",
+        "action": "attack",
         "direction": 0,
         "frame": 0
       },
       "runtimeVisualOrigin": [
-        0.0,
-        6.0
+        0.5,
+        -18.0
       ],
       "visualRootOffset": [
-        0.5,
-        -24.0
+        15.5,
+        9.0
       ],
       "visualFootOffset": [
-        -0.5,
-        18.0
+        -16.0,
+        9.0
       ],
       "ringCenterOffset": [
-        -0.5,
-        18.0
+        -16.0,
+        9.0
       ],
       "finalVisualFootPoint": [
         0.0,
@@ -5818,25 +5818,25 @@
       "formalSnapshot": {
         "projectionStrategy": "grounded",
         "ringCenterOffset": [
-          16.0,
-          0.0
+          -0.5,
+          18.0
         ],
         "ringEllipseRadii": [
           44.0,
           13.0
         ],
         "visualFootOffset": [
-          16.0,
-          0.0
+          -0.5,
+          18.0
         ]
       },
       "sourceEvidence": {
         "animationCatalogPath": "res://assets/data/runtime/monster_animation_catalog.json",
-        "animationCatalogSha256": "562de4a3103fc3c9c63b19e5c5fc8dc61d6e2e95e9dd482f1b5029dbbab098b8",
+        "animationCatalogSha256": "e237518efa86faa2a0372b0820df809ff339a85512cd05aec41a0ea4f28a839d",
         "formalCalibrationPath": "res://assets/data/runtime/monster_ground_contact_calibrations.json",
-        "formalCalibrationSha256": "8c6bd242f05029ae82a5c12291891028b242ba53dce0b106ccf2699176809ad6",
+        "formalCalibrationSha256": "d020e547569a7a1ae3cc2a8ec7138ffbf5eab69cc36361b44584b08f695aa59c",
         "formalContactPath": "res://assets/data/runtime/monster_ground_contacts.json",
-        "formalContactSha256": "0f22365cd495d25e0c2e60c4632d00eb7940f4cb3f86651721f23ba9afb2adec"
+        "formalContactSha256": "90aaecab4027f503cd51d5e6c60c537fc316b45b7da937598c8b0a40232a7cc7"
       }
     },
     "126": {
@@ -7884,28 +7884,28 @@
       "monsterName": "祖玛教主",
       "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
       "sourceDraftFile": "monster_160.json",
-      "sourceDraftSha256": "dbf25981a24d79cdc6922e47ffa0f5fdc605bc8039c813291146d5475a19653b",
-      "savedAt": "2026-07-30T13:01:45",
+      "sourceDraftSha256": "bc30e8b361cb2a55d5265ec886434e3e3244de93553bf90b40288018cb757ea0",
+      "savedAt": "2026-07-30T14:23:20",
       "selection": {
         "action": "idle",
         "direction": 0,
         "frame": 0
       },
       "runtimeVisualOrigin": [
-        0.0,
-        6.0
+        5.0,
+        -0.5
       ],
       "visualRootOffset": [
-        5.0,
-        -6.5
+        1.0,
+        -8.0
       ],
       "visualFootOffset": [
-        -5.0,
-        0.5
+        -6.0,
+        8.5
       ],
       "ringCenterOffset": [
-        -5.0,
-        0.5
+        -6.0,
+        8.5
       ],
       "finalVisualFootPoint": [
         0.0,
@@ -7918,25 +7918,25 @@
       "formalSnapshot": {
         "projectionStrategy": "grounded",
         "ringCenterOffset": [
-          7.0,
-          0.0
+          -5.0,
+          0.5
         ],
         "ringEllipseRadii": [
           32.0,
           10.0
         ],
         "visualFootOffset": [
-          7.0,
-          0.0
+          -5.0,
+          0.5
         ]
       },
       "sourceEvidence": {
         "animationCatalogPath": "res://assets/data/runtime/monster_animation_catalog.json",
-        "animationCatalogSha256": "562de4a3103fc3c9c63b19e5c5fc8dc61d6e2e95e9dd482f1b5029dbbab098b8",
+        "animationCatalogSha256": "e237518efa86faa2a0372b0820df809ff339a85512cd05aec41a0ea4f28a839d",
         "formalCalibrationPath": "res://assets/data/runtime/monster_ground_contact_calibrations.json",
-        "formalCalibrationSha256": "8c6bd242f05029ae82a5c12291891028b242ba53dce0b106ccf2699176809ad6",
+        "formalCalibrationSha256": "d020e547569a7a1ae3cc2a8ec7138ffbf5eab69cc36361b44584b08f695aa59c",
         "formalContactPath": "res://assets/data/runtime/monster_ground_contacts.json",
-        "formalContactSha256": "0f22365cd495d25e0c2e60c4632d00eb7940f4cb3f86651721f23ba9afb2adec"
+        "formalContactSha256": "90aaecab4027f503cd51d5e6c60c537fc316b45b7da937598c8b0a40232a7cc7"
       }
     },
     "161": {
@@ -7944,28 +7944,28 @@
       "monsterName": "祖玛教主9",
       "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
       "sourceDraftFile": "monster_161.json",
-      "sourceDraftSha256": "a1ef89dc52659a6a51cd95af7a0d7d44879fa9b61a7d527a3ab65385d1836839",
-      "savedAt": "2026-07-30T13:01:51",
+      "sourceDraftSha256": "7306ad683ae76fd2d039e1286449b80998d5208b0826978fc74ae575f5175a12",
+      "savedAt": "2026-07-30T14:23:38",
       "selection": {
         "action": "idle",
         "direction": 0,
         "frame": 0
       },
       "runtimeVisualOrigin": [
-        0.0,
-        6.0
+        2.5,
+        -2.5
       ],
       "visualRootOffset": [
-        2.5,
-        -8.5
+        6.5,
+        -7.0
       ],
       "visualFootOffset": [
-        -2.5,
-        2.5
+        -9.0,
+        9.5
       ],
       "ringCenterOffset": [
-        -2.5,
-        2.5
+        -9.0,
+        9.5
       ],
       "finalVisualFootPoint": [
         0.0,
@@ -7978,25 +7978,25 @@
       "formalSnapshot": {
         "projectionStrategy": "grounded",
         "ringCenterOffset": [
-          7.0,
-          0.0
+          -2.5,
+          2.5
         ],
         "ringEllipseRadii": [
           32.0,
           10.0
         ],
         "visualFootOffset": [
-          7.0,
-          0.0
+          -2.5,
+          2.5
         ]
       },
       "sourceEvidence": {
         "animationCatalogPath": "res://assets/data/runtime/monster_animation_catalog.json",
-        "animationCatalogSha256": "562de4a3103fc3c9c63b19e5c5fc8dc61d6e2e95e9dd482f1b5029dbbab098b8",
+        "animationCatalogSha256": "e237518efa86faa2a0372b0820df809ff339a85512cd05aec41a0ea4f28a839d",
         "formalCalibrationPath": "res://assets/data/runtime/monster_ground_contact_calibrations.json",
-        "formalCalibrationSha256": "8c6bd242f05029ae82a5c12291891028b242ba53dce0b106ccf2699176809ad6",
+        "formalCalibrationSha256": "d020e547569a7a1ae3cc2a8ec7138ffbf5eab69cc36361b44584b08f695aa59c",
         "formalContactPath": "res://assets/data/runtime/monster_ground_contacts.json",
-        "formalContactSha256": "0f22365cd495d25e0c2e60c4632d00eb7940f4cb3f86651721f23ba9afb2adec"
+        "formalContactSha256": "90aaecab4027f503cd51d5e6c60c537fc316b45b7da937598c8b0a40232a7cc7"
       }
     },
     "162": {

@@ -153,6 +153,16 @@ def main() -> None:
         required=True,
         help="directory containing the user's frozen monster_<id>.json drafts",
     )
+    parser.add_argument(
+        "--monster-id",
+        action="append",
+        type=int,
+        default=[],
+        help=(
+            "promote only this monsterId; repeat for multiple explicitly "
+            "authorized drafts. Unselected formal entries must remain unchanged"
+        ),
+    )
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
     draft_root = args.draft_root.resolve()
@@ -195,33 +205,65 @@ def main() -> None:
             f"{sorted(preserved_ids)}"
         )
 
-    manual_entries: dict[str, Any] = {}
-    calibration_entries: dict[str, Any] = {}
-    source_hash_rows: list[tuple[str, str]] = []
-    for monster_id in sorted(catalog_rows):
+    requested_ids = set(args.monster_id)
+    if not requested_ids:
+        requested_ids = set(source_by_id)
+    invalid_requested_ids = requested_ids - set(source_by_id)
+    if invalid_requested_ids:
+        raise ValueError(
+            "requested monsterIds do not have grounded/hover drafts: "
+            f"{sorted(invalid_requested_ids)}"
+        )
+
+    existing_manual = (
+        load_json(MANUAL_CONTRACT_PATH)
+        if MANUAL_CONTRACT_PATH.exists()
+        else {}
+    )
+    existing_manual_entries = existing_manual.get("entriesByMonsterId", {})
+    targeted_update = bool(args.monster_id)
+    if targeted_update and (
+        not isinstance(existing_manual_entries, dict)
+        or set(existing_manual_entries) != {
+            str(monster_id) for monster_id in source_by_id
+        }
+    ):
+        raise ValueError(
+            "targeted update requires a complete existing manual contract"
+        )
+
+    manual_entries: dict[str, Any] = (
+        deepcopy(existing_manual_entries) if targeted_update else {}
+    )
+    calibration_entries: dict[str, Any] = (
+        deepcopy(old_entries) if targeted_update else {}
+    )
+    source_hash_rows = [
+        (path.name, sha256(path)) for path in source_files
+    ]
+    source_hashes = {
+        monster_id: sha256(path) for monster_id, path in source_by_id.items()
+    }
+    if targeted_update:
+        for monster_id in sorted(set(source_by_id) - requested_ids):
+            expected_hash = str(
+                existing_manual_entries[str(monster_id)].get(
+                    "sourceDraftSha256", ""
+                )
+            )
+            if source_hashes[monster_id] != expected_hash:
+                raise ValueError(
+                    f"unselected monsterId={monster_id} draft changed; "
+                    "refusing to touch it during a targeted update"
+                )
+
+    for monster_id in sorted(requested_ids):
         key = str(monster_id)
         row = catalog_rows[monster_id]
         previous = deepcopy(old_entries[key])
-        if monster_id in preserved_ids:
-            if previous.get("projectionStrategy") != "flying":
-                raise ValueError(
-                    f"preserved monsterId={monster_id} is not an airborne projection"
-                )
-            previous["visualRootOffset"] = [0.0, 0.0]
-            previous["manualAlignmentEvidence"] = {
-                "status": "preserved_airborne_projection",
-                "reason": (
-                    "The flying body is intentionally separated from the ground "
-                    "ring and does not use a grounded body-foot alignment draft."
-                ),
-            }
-            calibration_entries[key] = previous
-            continue
-
         path = source_by_id[monster_id]
         draft = validate_draft(path, monster_id, str(row["name"]))
-        digest = sha256(path)
-        source_hash_rows.append((path.name, digest))
+        digest = source_hashes[monster_id]
         recommended = draft["recommendedRuntime"]
         selection = draft["selection"]
         evidence = {
@@ -269,6 +311,24 @@ def main() -> None:
             ),
         }
         calibration_entries[key] = previous
+
+    if not targeted_update:
+        for monster_id in sorted(preserved_ids):
+            key = str(monster_id)
+            previous = deepcopy(old_entries[key])
+            if previous.get("projectionStrategy") != "flying":
+                raise ValueError(
+                    f"preserved monsterId={monster_id} is not an airborne projection"
+                )
+            previous["visualRootOffset"] = [0.0, 0.0]
+            previous["manualAlignmentEvidence"] = {
+                "status": "preserved_airborne_projection",
+                "reason": (
+                    "The flying body is intentionally separated from the ground "
+                    "ring and does not use a grounded body-foot alignment draft."
+                ),
+            }
+            calibration_entries[key] = previous
 
     aggregate = aggregate_hash(source_hash_rows)
     manual_contract = {
@@ -331,6 +391,7 @@ def main() -> None:
     print(
         "MONSTER_GROUND_ALIGNMENT_IMPORT_PASS "
         f"drafts={len(manual_entries)} preserved_airborne={len(preserved_ids)} "
+        f"updated={','.join(str(value) for value in sorted(requested_ids))} "
         f"aggregate_sha256={aggregate}"
     )
 

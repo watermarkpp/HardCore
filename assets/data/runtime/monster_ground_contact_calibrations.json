@@ -3,7 +3,7 @@
   "contract": "monster.ground_contact.calibration.v5",
   "identityKey": "monsterId",
   "manualAlignmentContract": "monster.ground_alignment.manual.v1",
-  "manualAlignmentAggregateSha256": "424a6908c242741b9f93198045d2e0389940a96be70bcd143c121e8a594d1ba0",
+  "manualAlignmentAggregateSha256": "47f242df49d3403b32d3c1050a7f7eaf8b0b5386cdc9fbc10b0ee5f966be75bd",
   "policy": "Each grounded/hover monster uses the exact user-saved visual root and body-foot offsets. The two airborne falcons retain the prior reviewed separation between flying body and ground projection.",
   "entriesByMonsterId": {
     "18": {
@@ -3921,12 +3921,12 @@
     "124": {
       "projectionStrategy": "grounded",
       "visualFootOffset": [
-        -0.5,
-        18.0
+        -16.0,
+        9.0
       ],
       "ringCenterOffset": [
-        -0.5,
-        18.0
+        -16.0,
+        9.0
       ],
       "ringEllipseRadii": [
         44,
@@ -3938,21 +3938,21 @@
         "status": "approved",
         "archetype": "rooted_or_stationary",
         "poses": [
-          "idle:direction0:frame0"
+          "attack:direction0:frame0"
         ],
         "decision": "monsterId=124 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
-        0.5,
-        -24.0
+        15.5,
+        9.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_124.json",
-        "sourceDraftSha256": "e21f1518ba9cbbcce2ba3a4223d0f0a4bbd1894aec974e4c98c3a8c091a63ae8",
-        "savedAt": "2026-07-30T12:57:49",
+        "sourceDraftSha256": "abf4ed08e51c4c8c127ff5c8acf57f90a728696e2bd9759217eaf16835f6679c",
+        "savedAt": "2026-07-30T14:24:03",
         "selection": {
-          "action": "idle",
+          "action": "attack",
           "direction": 0,
           "frame": 0
         }
@@ -5321,12 +5321,12 @@
     "160": {
       "projectionStrategy": "grounded",
       "visualFootOffset": [
-        -5.0,
-        0.5
+        -6.0,
+        8.5
       ],
       "ringCenterOffset": [
-        -5.0,
-        0.5
+        -6.0,
+        8.5
       ],
       "ringEllipseRadii": [
         32,
@@ -5343,14 +5343,14 @@
         "decision": "monsterId=160 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
-        5.0,
-        -6.5
+        1.0,
+        -8.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_160.json",
-        "sourceDraftSha256": "dbf25981a24d79cdc6922e47ffa0f5fdc605bc8039c813291146d5475a19653b",
-        "savedAt": "2026-07-30T13:01:45",
+        "sourceDraftSha256": "bc30e8b361cb2a55d5265ec886434e3e3244de93553bf90b40288018cb757ea0",
+        "savedAt": "2026-07-30T14:23:20",
         "selection": {
           "action": "idle",
           "direction": 0,
@@ -5361,12 +5361,12 @@
     "161": {
       "projectionStrategy": "grounded",
       "visualFootOffset": [
-        -2.5,
-        2.5
+        -9.0,
+        9.5
       ],
       "ringCenterOffset": [
-        -2.5,
-        2.5
+        -9.0,
+        9.5
       ],
       "ringEllipseRadii": [
         32,
@@ -5383,14 +5383,14 @@
         "decision": "monsterId=161 user-aligned in the visual acceptance lab; the saved body foot and visual root resolve exactly to the canonical actor/map/physics origin."
       },
       "visualRootOffset": [
-        2.5,
-        -8.5
+        6.5,
+        -7.0
       ],
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_161.json",
-        "sourceDraftSha256": "a1ef89dc52659a6a51cd95af7a0d7d44879fa9b61a7d527a3ab65385d1836839",
-        "savedAt": "2026-07-30T13:01:51",
+        "sourceDraftSha256": "7306ad683ae76fd2d039e1286449b80998d5208b0826978fc74ae575f5175a12",
+        "savedAt": "2026-07-30T14:23:38",
         "selection": {
           "action": "idle",
           "direction": 0,
