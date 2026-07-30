@@ -72,8 +72,11 @@ func _run() -> void:
 		enemy.set_targeted(true)
 		var fixed_contact := enemy.ground_indicator_center()
 		var fixed_radii := enemy.ground_indicator_radii()
-		var expected_offset := _vector2(entry.ringCenterOffset)
-		var expected_radii := _vector2(entry.ringEllipseRadii)
+		var expected_projection_offset := _vector2(entry.ringCenterOffset)
+		var expected_radii := (
+			WorldSpatialRules.actor_footprint_radii(enemy.collision_radius)
+			* EnemyActor.TARGET_RING_FOOTPRINT_SCALE
+		)
 		var expected_root := (
 			Vector2(0.0, 4.0)
 			+ _vector2(entry.visualRootOffset)
@@ -90,22 +93,31 @@ func _run() -> void:
 			"monsterId=%d runtime profile changed the user visual root offset"
 			% monster_id,
 		)
-		var expected_contact := visual.position + expected_offset
-		assert(
-			fixed_contact.is_equal_approx(expected_contact),
-			"monsterId=%d runtime chain must be MonsterVisual.position + ringCenterOffset" % monster_id,
+		var expected_contact := (
+			visual.position + expected_projection_offset
+			if visual.ground_projection_strategy() in ["flying", "hover"]
+			else Vector2.ZERO
 		)
 		assert(
-			visual.ground_contact_offset().is_equal_approx(expected_offset),
-			"monsterId=%d runtime profile changed reviewed center" % monster_id,
+			fixed_contact.is_equal_approx(expected_contact),
+			"monsterId=%d ring center left the canonical targeting coordinate" % monster_id,
+		)
+		assert(
+			visual.ground_contact_offset().is_equal_approx(
+				expected_projection_offset
+			),
+			"monsterId=%d runtime profile changed stored projection center"
+			% monster_id,
 		)
 		assert(
 			fixed_radii.is_equal_approx(expected_radii),
-			"monsterId=%d runtime profile changed reviewed ellipse" % monster_id,
+			"monsterId=%d target ring is not the enlarged physics footprint"
+			% monster_id,
 		)
 		assert(
-			absf(float(entry.ringVerticalSquash) - fixed_radii.y / fixed_radii.x) <= 0.0001,
-			"monsterId=%d runtime ellipse changed reviewed squash" % monster_id,
+			absf(fixed_radii.y / fixed_radii.x - 0.5) <= 0.0001,
+			"monsterId=%d target ring lost the 2:1 footprint ratio"
+			% monster_id,
 		)
 		if monster_id in [97, 98]:
 			assert(
@@ -152,15 +164,36 @@ func _run() -> void:
 					)
 					assert(
 						enemy.ground_indicator_center().is_equal_approx(
-							visual.position + visual.ground_contact_offset(),
+							visual.target_ring_position(Vector2.ZERO),
 						),
-						"monsterId=%d %s direction=%d frame=%d duplicated or lost an origin offset" % [
+						"monsterId=%d %s direction=%d frame=%d duplicated or lost a targeting origin offset" % [
 							monster_id,
 							action_name,
 							direction,
 							frame,
 						],
 					)
+		if visual.ground_projection_strategy() == "grounded":
+			var original_visual_position := visual.position
+			var original_sprite_position := sprite.position
+			var original_profile := visual.ground_contact_profile
+			visual.position += Vector2(13.5, -17.25)
+			sprite.position += Vector2(-9.0, 11.0)
+			visual.ground_contact_profile = original_profile.duplicate(true)
+			visual.ground_contact_profile["visualFootOffset"] = [41.0, -37.0]
+			assert(
+				enemy.ground_indicator_center().is_zero_approx(),
+				"monsterId=%d grounded ring was coupled to visual position, sprite anchor, or visual foot data"
+				% monster_id,
+			)
+			assert(
+				not visual.ground_contact_position(Vector2.ZERO).is_zero_approx(),
+				"monsterId=%d visual-foot isolation fixture did not move its visual point"
+				% monster_id,
+			)
+			visual.position = original_visual_position
+			sprite.position = original_sprite_position
+			visual.ground_contact_profile = original_profile
 		enemy.queue_free()
 		await get_tree().process_frame
 		verified_count += 1
@@ -181,13 +214,14 @@ func _run() -> void:
 		)
 		assert(
 			enemy.ground_indicator_center().is_equal_approx(
-				enemy.visual.position + _vector2(entry.ringCenterOffset),
+				Vector2.ZERO,
 			),
-			"boss monsterId=%d lost the Boss visual-root offset" % monster_id,
+			"boss monsterId=%d grounded target ring inherited the Boss visual-root offset"
+			% monster_id,
 		)
 		enemy.queue_free()
 		await get_tree().process_frame
-	print("MONSTER_GROUND_CONTACT_RUNTIME_PASS 214 per-ID rings keep reviewed center/ellipse across five actions, eight directions and representative frames")
+	print("MONSTER_GROUND_CONTACT_RUNTIME_PASS 214 grounded rings stay at actor origin, airborne rings keep authored projection, and all rings use 1.25x physics footprints")
 	get_tree().quit(0)
 
 

@@ -294,16 +294,31 @@ func _runtime_visual_origin() -> Vector2:
 func ground_contact_position(fallback: Vector2) -> Vector2:
 	if not uses_final_art() or ground_contact_profile.is_empty():
 		return fallback
-	return position + ground_contact_offset()
+	if ground_projection_strategy() in ["flying", "hover"]:
+		return position + ground_contact_offset()
+	# Grounded monsters use the user's picked visual foot directly. The formal
+	# visual root may move, but root + picked foot remains the actor origin.
+	return position + visual_foot_offset()
+
+
+func target_ring_position(fallback: Vector2) -> Vector2:
+	# This is intentionally separate from ground_contact_position(). The latter
+	# describes a reviewed point on the rendered sprite and therefore depends on
+	# visualRootOffset/visualFootOffset. Grounded targeting belongs to the actor
+	# and collision coordinate system, whose canonical foot is local (0, 0).
+	# Only airborne actors need an authored projection from their visual body
+	# down to the ground.
+	if not uses_final_art() or ground_contact_profile.is_empty():
+		return fallback
+	if ground_projection_strategy() in ["flying", "hover"]:
+		return ground_contact_position(fallback)
+	return fallback
 
 
 func ground_indicator_radii(fallback: Vector2) -> Vector2:
-	if not uses_final_art() or ground_contact_profile.is_empty():
-		return fallback
-	var values: Variant = ground_contact_profile.get("ringEllipseRadii", [])
-	if not values is Array or values.size() < 2:
-		return fallback
-	return Vector2(float(values[0]), float(values[1]))
+	if is_instance_valid(actor):
+		return actor.ground_indicator_radii()
+	return fallback
 
 
 func visual_foot_offset() -> Vector2:
@@ -345,13 +360,8 @@ static func _ground_contact_manifest() -> Dictionary:
 func _refresh_actor_ground_indicator() -> void:
 	if not is_instance_valid(actor):
 		return
-	var next_position := ground_contact_position(
-		Vector2(0.0, (27.0 if actor.is_boss else 16.0) * 0.28)
-	)
-	var fallback_radius := (27.0 if actor.is_boss else 16.0) + 6.0
-	var next_radii := ground_indicator_radii(
-		Vector2(fallback_radius, fallback_radius * 0.30)
-	)
+	var next_position := actor.ground_indicator_center()
+	var next_radii := actor.ground_indicator_radii()
 	if (
 		_last_ground_contact_position.is_equal_approx(next_position)
 		and _last_ground_indicator_radii.is_equal_approx(next_radii)
@@ -359,8 +369,11 @@ func _refresh_actor_ground_indicator() -> void:
 		return
 	_last_ground_contact_position = next_position
 	_last_ground_indicator_radii = next_radii
-	if actor.is_targeted:
-		actor.queue_redraw()
+	# CanvasItem retains the previous _draw command list until queue_redraw().
+	# Resource activation/release changes whether the procedural ground shadow
+	# is legal even for an unselected actor, so every transition must invalidate
+	# that cached list.
+	actor.queue_redraw()
 
 
 func health_bar_anchor_y(fallback_y: float) -> float:
