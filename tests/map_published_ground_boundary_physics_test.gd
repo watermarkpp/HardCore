@@ -66,26 +66,12 @@ func _assert_canvas_edge(
 	var canvas_bottom_world := Vector2(center.x, pixel_size.y) - center
 	assert(canvas_top_world.is_equal_approx(
 		MapEditorCoordinate.tile_to_world(Vector2(-0.5, -0.5), design_size)
-	), "%s transparent top canvas padding mismatch" % map_key)
+	), "%s top canvas edge mismatch" % map_key)
 	assert(canvas_bottom_world.is_equal_approx(
 		MapEditorCoordinate.tile_to_world(
 			Vector2(design_size) - Vector2(0.5, 0.5), design_size
 		)
-	), "%s transparent bottom canvas padding mismatch" % map_key)
-	var visible_top := MapEditorCoordinate.tile_to_world(
-		Vector2.ZERO, design_size
-	)
-	var visible_bottom := MapEditorCoordinate.tile_to_world(
-		Vector2(design_size), design_size
-	)
-	assert(
-		is_equal_approx(visible_top.y - canvas_top_world.y, 16.0),
-		"%s top canvas must preserve one transparent half-cell" % map_key
-	)
-	assert(
-		is_equal_approx(canvas_bottom_world.y - visible_bottom.y, 16.0),
-		"%s bottom canvas must preserve one transparent half-cell" % map_key
-	)
+	), "%s bottom canvas edge mismatch" % map_key)
 
 
 func _assert_physics_edge(
@@ -107,9 +93,9 @@ func _assert_physics_edge(
 		body.add_child(collision)
 	add_child(body)
 	await get_tree().physics_frame
-	var tile_x := float(design_size.x) * 0.5
+	var tile_x := float(design_size.x) * 0.5 - 0.5
 	var visual_edge := MapEditorCoordinate.tile_to_world(
-		Vector2(tile_x, 0.0), design_size
+		Vector2(tile_x, -0.5), design_size
 	)
 	var visual_polygon := CollisionGeometry.map_inner_boundary_world(design_size)
 	var edge_direction := visual_polygon[1] - visual_polygon[0]
