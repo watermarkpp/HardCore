@@ -16,6 +16,7 @@ const DIRECTIONS: Array[Vector2] = [
 const SPEEDS := [0.25, 0.5, 1.0, 2.0]
 const SPEED_LABELS := ["25%", "50%", "100%", "200%"]
 const LAB_CONTRACT_ID := "local.visual_acceptance_lab.player_runtime.v1"
+const PLAYBACK_TICK_SECONDS := 1.0 / 60.0
 
 var _old_test_mode := false
 var _player: PlayerCharacter
@@ -34,6 +35,7 @@ var _zoom_slider: HSlider
 var _play_button: Button
 var _overlay_button: CheckButton
 var _status: Label
+var _playback_timer: Timer
 var _playing := true
 var _clock := 0.0
 var _current_frame := 0
@@ -42,20 +44,33 @@ var _current_frame := 0
 func _ready() -> void:
 	_old_test_mode = PlayerState.test_mode
 	PlayerState.test_mode = true
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	if DisplayServer.get_name() != "headless":
 		get_window().min_size = Vector2i(1100, 650)
 		get_window().size = Vector2i(1280, 720)
-	set_process(true)
 	_build_ui()
 	_build_preview_actor()
 	_apply_selection()
+	_start_playback_timer()
 
 
 func _exit_tree() -> void:
 	PlayerState.test_mode = _old_test_mode
 
 
-func _process(delta: float) -> void:
+func _start_playback_timer() -> void:
+	_playback_timer = Timer.new()
+	_playback_timer.name = "PlaybackTimer"
+	_playback_timer.wait_time = PLAYBACK_TICK_SECONDS
+	_playback_timer.one_shot = false
+	_playback_timer.autostart = true
+	_playback_timer.process_callback = Timer.TIMER_PROCESS_IDLE
+	_playback_timer.process_mode = Node.PROCESS_MODE_ALWAYS
+	_playback_timer.timeout.connect(_advance_playback.bind(PLAYBACK_TICK_SECONDS))
+	add_child(_playback_timer)
+
+
+func _advance_playback(delta: float) -> void:
 	if not _playing or _player == null or _player.visual == null:
 		return
 	var frame_count := _frame_count()
