@@ -101,6 +101,7 @@ func _run() -> void:
 	assert(not prefetched_actor.visual.uses_final_art(), "proximity actor bypassed async fallback before prefetch completed")
 	assert(prefetched_actor.visual.has_authored_client_art(), "stable monsterId lost its authored-client-art contract")
 	assert(not prefetched_actor.visual.should_draw_procedural_fallback(), "authored monster exposed the green procedural circle while atlases were pending")
+	assert(not prefetched_actor.should_draw_synthetic_ground_shadow(), "authored monster exposed the legacy circular shadow while atlases were pending")
 	var deadline_msec := Time.get_ticks_msec() + 15000
 	var poll_count := 0
 	while not bool(prefetch.complete) and Time.get_ticks_msec() < deadline_msec:
@@ -118,6 +119,7 @@ func _run() -> void:
 	prefetched_actor.visual._resource_residency_timer = 0.0
 	prefetched_actor.visual._process(0.13)
 	assert(prefetched_actor.visual.uses_final_art(), "fallback MonsterVisual did not automatically retry after async completion")
+	assert(not prefetched_actor.should_draw_synthetic_ground_shadow(), "final WIL monster retained the legacy circular shadow")
 	assert(MonsterVisual.client_texture_load_request_count() == 0, "approaching a prefetched monster blocked on synchronous loading")
 	prefetched_actor.queue_free()
 	MonsterVisual.release_map_pins()

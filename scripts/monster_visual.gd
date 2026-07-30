@@ -345,9 +345,7 @@ static func _ground_contact_manifest() -> Dictionary:
 func _refresh_actor_ground_indicator() -> void:
 	if not is_instance_valid(actor):
 		return
-	var next_position := ground_contact_position(
-		Vector2(0.0, (27.0 if actor.is_boss else 16.0) * 0.28)
-	)
+	var next_position := ground_contact_position(Vector2.ZERO)
 	var fallback_radius := (27.0 if actor.is_boss else 16.0) + 6.0
 	var next_radii := ground_indicator_radii(
 		Vector2(fallback_radius, fallback_radius * 0.30)
@@ -359,8 +357,11 @@ func _refresh_actor_ground_indicator() -> void:
 		return
 	_last_ground_contact_position = next_position
 	_last_ground_indicator_radii = next_radii
-	if actor.is_targeted:
-		actor.queue_redraw()
+	# CanvasItem retains the previous _draw command list until queue_redraw().
+	# Resource activation/release changes whether the procedural ground shadow
+	# is legal even for an unselected actor, so every transition must invalidate
+	# that cached list.
+	actor.queue_redraw()
 
 
 func health_bar_anchor_y(fallback_y: float) -> float:
