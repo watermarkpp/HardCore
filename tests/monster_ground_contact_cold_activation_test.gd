@@ -70,13 +70,16 @@ func _run() -> void:
 		)
 		var final_contact := enemy.ground_indicator_center()
 		var final_radii := enemy.ground_indicator_radii()
-		assert(final_contact.is_equal_approx(enemy.visual.position + enemy.visual.ground_contact_offset()))
 		assert(
-			not final_contact.is_equal_approx(fallback_contact)
-			or not final_radii.is_equal_approx(fallback_radii),
-			"monsterId=%d retained both fallback center and fallback ellipse" % monster_id,
+			final_contact.is_equal_approx(
+				enemy.visual.ground_contact_position(Vector2.ZERO)
+			)
 		)
-
+		assert(
+			final_radii.is_equal_approx(fallback_radii),
+			"monsterId=%d ring size changed while final art activated"
+			% monster_id,
+		)
 		enemy.queue_free()
 		await get_tree().process_frame
 		MonsterVisual.release_map_pins()
@@ -84,5 +87,5 @@ func _run() -> void:
 
 	MonsterVisual.reset_client_resource_cache()
 	assert(verified_count == 214)
-	print("MONSTER_GROUND_CONTACT_COLD_ACTIVATION_PASS 214 per-ID cold profiles activate and refresh reviewed center/ellipse")
+	print("MONSTER_GROUND_CONTACT_COLD_ACTIVATION_PASS 214 per-ID cold profiles preserve reviewed feet and footprint-sized rings")
 	get_tree().quit(0)
