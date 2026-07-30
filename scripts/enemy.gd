@@ -855,11 +855,12 @@ func _return_to_spawn()->void:
 
 func _draw() -> void:
 	var radius := 27.0 if is_boss else 16.0
-	var uses_final_art := visual != null and visual.uses_final_art()
 	var ground_center := ground_indicator_center()
-	# Final WIL frames already contain their direction-aware source shadow.
-	# A second ellipse creates a detached double shadow below the actor.
-	if not uses_final_art:
+	var draw_procedural_fallback := should_draw_synthetic_ground_shadow()
+	# Authored WIL actors may briefly wait for their asynchronously loaded
+	# atlases. They already own a direction-aware source shadow, so that waiting
+	# window must not leave a cached procedural ellipse under the final sprite.
+	if draw_procedural_fallback:
 		draw_ellipse_shadow(radius, ground_center)
 	if _dying:
 		return
@@ -871,7 +872,6 @@ func _draw() -> void:
 			Color(1.0, 0.78, 0.18, 0.78),
 			2.0,
 		)
-	var draw_procedural_fallback := visual == null or visual.should_draw_procedural_fallback()
 	var fallback_attacking := draw_procedural_fallback and visual != null and visual.is_fallback_attacking()
 	var body_center := Vector2(0, -5) + (visual.fallback_lunge_offset(facing) if fallback_attacking else Vector2.ZERO)
 	if draw_procedural_fallback:
@@ -944,9 +944,15 @@ func poison_indicator_anchor_y() -> float:
 
 
 func ground_indicator_center() -> Vector2:
-	var radius := 27.0 if is_boss else 16.0
-	var fallback := Vector2(0, radius * 0.28)
+	# Actor-local (0, 0) is the canonical reviewed foot point. The legacy
+	# radius-based south shift predates manual foot alignment and moves both the
+	# fallback ring and its circular shadow away from that standard.
+	var fallback := Vector2.ZERO
 	return visual.ground_contact_position(fallback) if visual != null else fallback
+
+
+func should_draw_synthetic_ground_shadow() -> bool:
+	return visual == null or visual.should_draw_procedural_fallback()
 
 
 func ground_indicator_radii() -> Vector2:
