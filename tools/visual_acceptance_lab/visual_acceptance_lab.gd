@@ -16,11 +16,19 @@ const DIRECTIONS: Array[Vector2] = [
 const SPEEDS := [0.25, 0.5, 1.0, 2.0]
 const SPEED_LABELS := ["25%", "50%", "100%", "200%"]
 const LAB_CONTRACT_ID := "local.visual_acceptance_lab.player_runtime.v1"
+const ALIGNMENT_DRAFT_CONTRACT_ID := (
+	"local.visual_acceptance_lab.player_alignment_draft.v1"
+)
+const ALIGNMENT_DRAFT_PATH := (
+	"res://outputs/visual_acceptance/player_visual_alignment_draft.json"
+)
+const ALIGNMENT_NUDGE := 0.5
 const PLAYBACK_TICK_SECONDS := 1.0 / 60.0
 
 var _old_test_mode := false
 var _player: PlayerCharacter
 var _preview_root: Node2D
+var _viewport_container: SubViewportContainer
 var _viewport: SubViewport
 var _background: ColorRect
 var _grid_root: Node2D
@@ -34,11 +42,20 @@ var _frame_spin: SpinBox
 var _zoom_slider: HSlider
 var _play_button: Button
 var _overlay_button: CheckButton
+var _foot_pick_button: CheckButton
+var _alignment_button: CheckButton
+var _alignment_offset_label: Label
 var _status: Label
 var _playback_timer: Timer
 var _playing := true
 var _clock := 0.0
 var _current_frame := 0
+var _foot_pick_mode := false
+var _alignment_mode := false
+var _dragging_visual := false
+var _runtime_visual_origin := Vector2.ZERO
+var _visual_alignment_offset := Vector2.ZERO
+var _visual_foot_anchor_adjustment := Vector2.ZERO
 
 
 func _ready() -> void:
@@ -50,6 +67,7 @@ func _ready() -> void:
 		get_window().size = Vector2i(1280, 720)
 	_build_ui()
 	_build_preview_actor()
+	_load_alignment_draft()
 	_on_zoom_changed(_zoom_slider.value)
 	_apply_selection()
 	_start_playback_timer()
@@ -88,6 +106,25 @@ func _advance_playback(delta: float) -> void:
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if not event is InputEventKey or not event.pressed or event.echo:
+		return
+	if (_alignment_mode or _foot_pick_mode) and event.keycode in [
+		KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN,
+	]:
+		var nudge := Vector2.ZERO
+		match event.keycode:
+			KEY_LEFT:
+				nudge.x = -ALIGNMENT_NUDGE
+			KEY_RIGHT:
+				nudge.x = ALIGNMENT_NUDGE
+			KEY_UP:
+				nudge.y = -ALIGNMENT_NUDGE
+			KEY_DOWN:
+				nudge.y = ALIGNMENT_NUDGE
+		if _foot_pick_mode:
+			_nudge_visual_foot_anchor(nudge)
+		else:
+			_nudge_visual_alignment(nudge)
+		get_viewport().set_input_as_handled()
 		return
 	match event.keycode:
 		KEY_SPACE:
@@ -129,15 +166,20 @@ func _build_ui() -> void:
 	sidebar.add_theme_stylebox_override("panel", sidebar_style)
 	layout.add_child(sidebar)
 
+	var sidebar_scroll := ScrollContainer.new()
+	sidebar_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	sidebar.add_child(sidebar_scroll)
 	var controls := VBoxContainer.new()
+	controls.custom_minimum_size = Vector2(310, 0)
+	controls.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	controls.add_theme_constant_override("separation", 10)
-	sidebar.add_child(controls)
+	sidebar_scroll.add_child(controls)
 	var title := Label.new()
 	title.text = "HardCore 本地视觉验收台"
 	title.add_theme_font_size_override("font_size", 24)
 	controls.add_child(title)
 	var subtitle := Label.new()
-	subtitle.text = "只读正式运行时素材，不写入校准数据"
+	subtitle.text = "正式运行时只读；仅保存 outputs 对齐草稿"
 	subtitle.modulate = Color("#9fb0bf")
 	controls.add_child(subtitle)
 	controls.add_child(HSeparator.new())
@@ -189,6 +231,27 @@ func _build_ui() -> void:
 	_overlay_button.text = "显示锚点 / 碰撞脚印 / 帧边界"
 	_overlay_button.button_pressed = true
 	controls.add_child(_overlay_button)
+	_foot_pick_button = CheckButton.new()
+	_foot_pick_button.text = "① 点击鞋底中点设置蓝色脚点"
+	controls.add_child(_foot_pick_button)
+	_alignment_button = CheckButton.new()
+	_alignment_button.text = "② 移动人物视觉（拖动 / 方向键 0.5px）"
+	controls.add_child(_alignment_button)
+	_alignment_offset_label = Label.new()
+	_alignment_offset_label.modulate = Color("#9fd8ff")
+	controls.add_child(_alignment_offset_label)
+	var alignment_actions := HBoxContainer.new()
+	alignment_actions.add_theme_constant_override("separation", 8)
+	controls.add_child(alignment_actions)
+	var align_center := _button("脚点对齐中心")
+	align_center.pressed.connect(_align_visual_foot_to_standard)
+	alignment_actions.add_child(align_center)
+	var reset_alignment := _button("恢复运行时")
+	reset_alignment.pressed.connect(_reset_visual_alignment)
+	alignment_actions.add_child(reset_alignment)
+	var save_alignment := _button("保存对齐草稿")
+	save_alignment.pressed.connect(_save_alignment_draft)
+	controls.add_child(save_alignment)
 	var screenshot := _button("保存当前截图")
 	screenshot.pressed.connect(_save_screenshot)
 	controls.add_child(screenshot)
@@ -198,7 +261,12 @@ func _build_ui() -> void:
 	controls.add_spacer(false)
 
 	var shortcuts := Label.new()
-	shortcuts.text = "快捷键：空格 播放/暂停\n←/→ 逐帧　↑/↓ 换方向\nF 辅助线　S 截图"
+	shortcuts.text = (
+		"快捷键：空格 播放/暂停\n"
+		+ "普通：←/→ 逐帧　↑/↓ 换方向\n"
+		+ "对齐：拖动人物或方向键 0.5px\n"
+		+ "F 辅助线　S 截图"
+	)
 	shortcuts.modulate = Color("#9fb0bf")
 	controls.add_child(shortcuts)
 	_status = Label.new()
@@ -217,17 +285,18 @@ func _build_ui() -> void:
 	stage_panel.add_theme_stylebox_override("panel", stage_style)
 	layout.add_child(stage_panel)
 
-	var viewport_container := SubViewportContainer.new()
-	viewport_container.stretch = true
-	viewport_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	viewport_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	stage_panel.add_child(viewport_container)
+	_viewport_container = SubViewportContainer.new()
+	_viewport_container.stretch = true
+	_viewport_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_viewport_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_viewport_container.gui_input.connect(_on_preview_gui_input)
+	stage_panel.add_child(_viewport_container)
 	_viewport = SubViewport.new()
 	_viewport.name = "AcceptanceViewport"
 	_viewport.size = Vector2i(900, 680)
 	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	_viewport.transparent_bg = false
-	viewport_container.add_child(_viewport)
+	_viewport_container.add_child(_viewport)
 	_background = ColorRect.new()
 	_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_background.color = Color("#161c22")
@@ -249,6 +318,8 @@ func _build_ui() -> void:
 	_frame_spin.value_changed.connect(_on_frame_changed)
 	_zoom_slider.value_changed.connect(_on_zoom_changed)
 	_overlay_button.toggled.connect(_on_overlay_toggled)
+	_foot_pick_button.toggled.connect(_on_foot_pick_toggled)
+	_alignment_button.toggled.connect(_on_alignment_toggled)
 
 
 func _build_preview_actor() -> void:
@@ -260,6 +331,7 @@ func _build_preview_actor() -> void:
 	if _player.health_bar != null:
 		_player.health_bar.visible = false
 	_player.visual.set_process(false)
+	_runtime_visual_origin = _player.visual.position
 	_overlay_root = Node2D.new()
 	_overlay_root.name = "DiagnosticsOverlay"
 	_overlay_root.z_index = 100
@@ -338,11 +410,7 @@ func _update_overlay() -> void:
 		return
 	var visual := _player.visual
 	var body_sprite: Sprite2D = visual.sprite
-	var foot_origin := (
-		visual.position
-		+ body_sprite.position
-		+ Vector2(ArtSpec.WARRIOR_SOURCE_FOOT_ANCHOR)
-	)
+	var foot_origin := _visual_foot_origin()
 	_add_line(
 		_overlay_root,
 		PackedVector2Array([Vector2(-24, 0), Vector2(24, 0)]),
@@ -373,20 +441,25 @@ func _update_overlay() -> void:
 
 
 func _update_status(message := "") -> void:
+	_update_alignment_offset_label()
 	if not message.is_empty():
 		_status.text = message
 		return
-	_status.text = (
-		"%s　%s / %s　帧 %d/%d　倍率 %dx\n黄=角色坐标　蓝=视觉脚点　红=物理脚印　绿=当前帧边界"
-		% [
-			LAB_CONTRACT_ID,
-			ACTION_LABELS[_action_option.selected],
-			DIRECTION_LABELS[_direction_option.selected],
-			_current_frame + 1,
-			_frame_count(),
-			int(_zoom_slider.value),
-		]
+	var status_template := (
+		"%s　%s / %s　帧 %d/%d　倍率 %dx\n"
+		+ "黄=角色地面原点　蓝十字=视觉脚点　粉=物理脚印　"
+		+ "蓝菱形=64×32地图格\n"
+		+ "①蓝点放鞋底中点　②移动人物使蓝黄重合；"
+		+ "粉/蓝菱形中心锁定"
 	)
+	_status.text = status_template % [
+		LAB_CONTRACT_ID,
+		ACTION_LABELS[_action_option.selected],
+		DIRECTION_LABELS[_direction_option.selected],
+		_current_frame + 1,
+		_frame_count(),
+		int(_zoom_slider.value),
+	]
 
 
 func _step_frame(delta: int) -> void:
@@ -409,6 +482,220 @@ func _toggle_playback() -> void:
 	_playing = not _playing
 	_play_button.text = "暂停" if _playing else "播放"
 	_clock = float(_current_frame) / _action_fps(_selected_action())
+
+
+func _visual_foot_origin() -> Vector2:
+	if _player == null or _player.visual == null:
+		return Vector2.ZERO
+	var visual := _player.visual
+	if visual.sprite == null:
+		return Vector2.ZERO
+	return (
+		visual.position
+		+ visual.sprite.position
+		+ Vector2(ArtSpec.WARRIOR_FOOT_ANCHOR)
+		+ _visual_foot_anchor_adjustment
+	)
+
+
+func _on_foot_pick_toggled(pressed: bool) -> void:
+	_foot_pick_mode = pressed
+	_dragging_visual = false
+	if _foot_pick_mode:
+		_alignment_button.set_pressed_no_signal(false)
+		_alignment_mode = false
+		_playing = false
+		_play_button.text = "播放"
+	_update_status()
+
+
+func _on_alignment_toggled(pressed: bool) -> void:
+	_alignment_mode = pressed
+	_dragging_visual = false
+	if _alignment_mode:
+		_foot_pick_button.set_pressed_no_signal(false)
+		_foot_pick_mode = false
+		_playing = false
+		_play_button.text = "播放"
+	_update_status()
+
+
+func _on_preview_gui_input(event: InputEvent) -> void:
+	if not _alignment_mode and not _foot_pick_mode:
+		return
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if _foot_pick_mode and event.pressed:
+			_set_visual_foot_anchor_from_preview(
+				_preview_local_from_container(event.position)
+			)
+			_viewport_container.accept_event()
+			return
+		_dragging_visual = event.pressed
+		_viewport_container.accept_event()
+	elif event is InputEventMouseMotion and _dragging_visual:
+		var zoom := maxf(1.0, float(_zoom_slider.value))
+		_nudge_visual_alignment(event.relative / zoom)
+		_viewport_container.accept_event()
+
+
+func _preview_local_from_container(point: Vector2) -> Vector2:
+	var container_size := _viewport_container.size
+	if container_size.x <= 0.0 or container_size.y <= 0.0:
+		return Vector2.ZERO
+	var viewport_point := Vector2(
+		point.x * float(_viewport.size.x) / container_size.x,
+		point.y * float(_viewport.size.y) / container_size.y
+	)
+	return (
+		viewport_point - _preview_root.position
+	) / _preview_root.scale
+
+
+func _set_visual_foot_anchor_from_preview(point: Vector2) -> void:
+	_set_visual_foot_anchor_adjustment(
+		_visual_foot_anchor_adjustment + point - _visual_foot_origin()
+	)
+
+
+func _nudge_visual_foot_anchor(delta: Vector2) -> void:
+	_set_visual_foot_anchor_adjustment(
+		_visual_foot_anchor_adjustment + delta
+	)
+
+
+func _set_visual_foot_anchor_adjustment(value: Vector2) -> void:
+	_visual_foot_anchor_adjustment = Vector2(
+		roundf(value.x / ALIGNMENT_NUDGE) * ALIGNMENT_NUDGE,
+		roundf(value.y / ALIGNMENT_NUDGE) * ALIGNMENT_NUDGE
+	)
+	_update_overlay()
+	_update_status()
+
+
+func _nudge_visual_alignment(delta: Vector2) -> void:
+	_set_visual_alignment_offset(_visual_alignment_offset + delta)
+
+
+func _set_visual_alignment_offset(value: Vector2) -> void:
+	_visual_alignment_offset = Vector2(
+		roundf(value.x / ALIGNMENT_NUDGE) * ALIGNMENT_NUDGE,
+		roundf(value.y / ALIGNMENT_NUDGE) * ALIGNMENT_NUDGE
+	)
+	if _player == null or _player.visual == null:
+		return
+	_player.visual.position = _runtime_visual_origin + _visual_alignment_offset
+	_apply_preview_frame()
+
+
+func _align_visual_foot_to_standard() -> void:
+	_set_visual_alignment_offset(
+		_visual_alignment_offset - _visual_foot_origin()
+	)
+
+
+func _reset_visual_alignment() -> void:
+	_visual_foot_anchor_adjustment = Vector2.ZERO
+	_set_visual_alignment_offset(Vector2.ZERO)
+
+
+func _update_alignment_offset_label() -> void:
+	if _alignment_offset_label == null:
+		return
+	var foot := _visual_foot_origin()
+	var offset_template := (
+		"人物 X %+.1f/Y %+.1f　脚点修正 X %+.1f/Y %+.1f\n"
+		+ "蓝色脚点坐标 X %+.1f/Y %+.1f"
+	)
+	_alignment_offset_label.text = offset_template % [
+		_visual_alignment_offset.x,
+		_visual_alignment_offset.y,
+		_visual_foot_anchor_adjustment.x,
+		_visual_foot_anchor_adjustment.y,
+		foot.x,
+		foot.y,
+	]
+
+
+func alignment_draft_payload() -> Dictionary:
+	var foot := _visual_foot_origin()
+	return {
+		"contractId": ALIGNMENT_DRAFT_CONTRACT_ID,
+		"savedAt": Time.get_datetime_string_from_system(),
+		"scope": "male_formal_player_visual",
+		"profession": str(PlayerState.profession),
+		"visualOffset": [
+			_visual_alignment_offset.x, _visual_alignment_offset.y,
+		],
+		"visualFootAnchorAdjustment": [
+			_visual_foot_anchor_adjustment.x,
+			_visual_foot_anchor_adjustment.y,
+		],
+		"runtimeVisualOrigin": [
+			_runtime_visual_origin.x, _runtime_visual_origin.y,
+		],
+		"visualFootPoint": [foot.x, foot.y],
+		"canonicalCenters": {
+			"actorGroundOrigin": [0.0, 0.0],
+			"physicsFootprint": [0.0, 0.0],
+			"mapDiamond": [0.0, 0.0],
+		},
+		"formalRuntimeWritten": false,
+	}
+
+
+func _save_alignment_draft() -> void:
+	var path := ProjectSettings.globalize_path(ALIGNMENT_DRAFT_PATH)
+	var directory_error := DirAccess.make_dir_recursive_absolute(
+		path.get_base_dir()
+	)
+	if directory_error != OK:
+		_update_status(
+			"对齐草稿目录创建失败：%s" % error_string(directory_error)
+		)
+		return
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	if file == null:
+		_update_status("对齐草稿保存失败：%s" % FileAccess.get_open_error())
+		return
+	file.store_string(JSON.stringify(alignment_draft_payload(), "\t") + "\n")
+	file.close()
+	_update_status(
+		"对齐草稿已保存：%s；尚未写入正式运行时。"
+		% ALIGNMENT_DRAFT_PATH
+	)
+
+
+func _load_alignment_draft() -> void:
+	var path := ProjectSettings.globalize_path(ALIGNMENT_DRAFT_PATH)
+	if not FileAccess.file_exists(path):
+		_set_visual_alignment_offset(Vector2.ZERO)
+		return
+	var file := FileAccess.open(path, FileAccess.READ)
+	var parsed: Variant = (
+		JSON.parse_string(file.get_as_text()) if file != null else null
+	)
+	if (
+		not parsed is Dictionary
+		or str(parsed.get("contractId", "")) != ALIGNMENT_DRAFT_CONTRACT_ID
+	):
+		_set_visual_alignment_offset(Vector2.ZERO)
+		return
+	var offset: Variant = parsed.get("visualOffset", [])
+	var foot_adjustment: Variant = parsed.get(
+		"visualFootAnchorAdjustment", []
+	)
+	if foot_adjustment is Array and foot_adjustment.size() == 2:
+		_visual_foot_anchor_adjustment = Vector2(
+			float(foot_adjustment[0]), float(foot_adjustment[1])
+		)
+	else:
+		_visual_foot_anchor_adjustment = Vector2.ZERO
+	if offset is Array and offset.size() == 2:
+		_set_visual_alignment_offset(
+			Vector2(float(offset[0]), float(offset[1]))
+		)
+	else:
+		_set_visual_alignment_offset(Vector2.ZERO)
 
 
 func _reload_runtime_art() -> void:
