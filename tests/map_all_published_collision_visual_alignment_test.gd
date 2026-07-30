@@ -419,8 +419,8 @@ func _assert_bich_runtime_physics() -> void:
 		"Bich black area immediately outside visual edge accepted by software collision"
 	)
 	assert(
-		not _physics_hits(hard_outside).is_empty(),
-		"Bich exterior past actor clearance accepted by Physics2D"
+		not _physics_hits(just_outside).is_empty(),
+		"Bich black area immediately outside visual edge accepted by Physics2D"
 	)
 	var erased_checked := 0
 	var blocked_set := CollisionGeometry.blocked_cell_set(runtime.collision)
