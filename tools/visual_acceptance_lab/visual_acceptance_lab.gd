@@ -97,6 +97,8 @@ func _ready() -> void:
 	_load_alignment_draft()
 	_on_zoom_changed(_zoom_slider.value)
 	if OS.get_cmdline_user_args().has(MONSTER_GROUND_REVIEW_ARG):
+		if DisplayServer.get_name() != "headless":
+			get_window().title = "HardCore 怪物脚点 / 黄色光圈验收"
 		_mode_option.select(1)
 		_on_mode_changed(1)
 	else:
