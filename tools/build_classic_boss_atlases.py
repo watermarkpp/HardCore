@@ -12,7 +12,10 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 CLIENT_DATA = ROOT / "dev_art_sources/reference/mir2_client_raw/Data"
-CLIENT_ACTOR = ROOT / "dev_art_sources/reference/original_gameofmir/Client/Actor.pas"
+CLIENT_ACTOR = (
+    ROOT
+    / "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas"
+)
 OUTPUT = ROOT / "assets/art/monsters/client_classic_bosses"
 MANIFEST = ROOT / "assets/data/classic_boss_client_art_sources.json"
 
@@ -33,11 +36,15 @@ TABLES = {
         "death": (260, 10, 140, 10),
     },
     "ZUMA_TAURUS": {
-		"idle": (0, 4, 200, 10),
-		"walk": (80, 4, 200, 10),
-		"attack": (160, 6, 120, 10),
-		"hit": (400, 2, 100, 0),
-		"death": (420, 8, 200, 0),
+        # The appearance-63 block starts with a 20-frame materialization
+        # sequence.  Its five ordinary actor states begin at block offset 20;
+        # using MA34's unshifted starts reads materialization/effect frames as
+        # directions and creates the previously visible body fragments.
+        "idle": (20, 4, 200, 10),
+        "walk": (100, 6, 200, 10),
+        "attack": (180, 6, 120, 10),
+        "hit": (260, 2, 100, 2),
+        "death": (280, 10, 200, 10),
     },
     # TCentipedeKing is immobile. This block is directionless in the bundled
     # WIL: its visible ranges are 0..3, 10..15, 50..51 and 60..89.
@@ -74,7 +81,16 @@ BOSSES = {
         "appearance": 63,
         "actionTable": "ZUMA_TAURUS",
         "mappingConfidence": "B",
-        "mappingNote": "Mon7的440帧外观块与Actor.pas RaceImg 63/MA34主动作范围一致；按WIL实际可见帧裁掉空白帧。",
+        "mappingNote": (
+            "Mon7 appearance-63 contains a 20-frame materialization prefix. "
+            "Primary MirClient Actor.pas establishes MA34 timing/direction "
+            "semantics; drawable primary WIL evidence fixes the five body "
+            "sequences at offsets 20/100/180/260/280."
+        ),
+        # Keep the exact visual coordinate system used by the user's approved
+        # monster-foot draft while replacing only the wrongly selected frames.
+        "lockedFrameSize": [384, 336],
+        "lockedFootAnchor": [114, 237],
     },
 }
 
@@ -136,9 +152,22 @@ def build_boss(name: str, spec: dict) -> dict:
     min_y = min(row[1] for row in bounds)
     max_x = max(row[2] for row in bounds)
     max_y = max(row[3] for row in bounds)
-    cell_w = ((max_x - min_x + PADDING * 2 + 15) // 16) * 16
-    cell_h = ((max_y - min_y + PADDING * 2 + 15) // 16) * 16
-    foot = (-min_x + PADDING, -min_y + PADDING)
+    if "lockedFrameSize" in spec:
+        cell_w, cell_h = map(int, spec["lockedFrameSize"])
+        foot = tuple(map(int, spec["lockedFootAnchor"]))
+        if (
+            min_x + foot[0] < 0
+            or min_y + foot[1] < 0
+            or max_x + foot[0] > cell_w
+            or max_y + foot[1] > cell_h
+        ):
+            raise ValueError(
+                f"{name} corrected frames do not fit the locked user canvas"
+            )
+    else:
+        cell_w = ((max_x - min_x + PADDING * 2 + 15) // 16) * 16
+        cell_h = ((max_y - min_y + PADDING * 2 + 15) // 16) * 16
+        foot = (-min_x + PADDING, -min_y + PADDING)
     actions = {}
 
     for action_name, action in decoded.items():
@@ -170,13 +199,21 @@ def build_boss(name: str, spec: dict) -> dict:
         "mappingConfidence": spec["mappingConfidence"],
 		"mappingNote": spec["mappingNote"],
 		"renderScale": float(spec.get("renderScale", 1.0)),
-        "mappingSource": "bundled client WIL pixels + Client/Actor.pas GetOffset/TMonsterAction",
+        "mappingSource": (
+            "primary classic client WIL pixels + primary "
+            "MirClient/Actor.pas GetOffset/TMonsterAction"
+        ),
+        "clientRuleDistribution": "source.original_gameofmir.mirclient",
+        "clientRulePath": (
+            "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas"
+        ),
         "clientLibrary": f"dev_art_sources/reference/mir2_client_raw/Data/{library_name}",
         "clientLibraryImageCount": info["image_count"],
         "blockBase": base,
         "frameSize": [cell_w, cell_h],
         "footAnchor": [foot[0], foot[1]],
         "directions": 8,
+        "atlasCellIsolation": "per_frame",
         "actions": actions,
     }
 

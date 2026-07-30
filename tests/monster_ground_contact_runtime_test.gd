@@ -74,6 +74,22 @@ func _run() -> void:
 		var fixed_radii := enemy.ground_indicator_radii()
 		var expected_offset := _vector2(entry.ringCenterOffset)
 		var expected_radii := _vector2(entry.ringEllipseRadii)
+		var expected_root := (
+			Vector2(0.0, 4.0)
+			+ _vector2(entry.visualRootOffset)
+		)
+		assert(
+			visual.position.is_equal_approx(expected_root),
+			"monsterId=%d runtime visual root did not apply the user alignment exactly once"
+			% monster_id,
+		)
+		assert(
+			visual.visual_root_offset().is_equal_approx(
+				_vector2(entry.visualRootOffset)
+			),
+			"monsterId=%d runtime profile changed the user visual root offset"
+			% monster_id,
+		)
 		var expected_contact := visual.position + expected_offset
 		assert(
 			fixed_contact.is_equal_approx(expected_contact),
@@ -91,7 +107,7 @@ func _run() -> void:
 			absf(float(entry.ringVerticalSquash) - fixed_radii.y / fixed_radii.x) <= 0.0001,
 			"monsterId=%d runtime ellipse changed reviewed squash" % monster_id,
 		)
-		if visual.ground_projection_strategy() in ["flying", "hover"]:
+		if monster_id in [97, 98]:
 			assert(
 				not visual.visual_foot_offset().is_equal_approx(visual.ground_contact_offset()),
 				"monsterId=%d airborne body was not separated from ground projection" % monster_id,
@@ -158,7 +174,11 @@ func _run() -> void:
 		await get_tree().process_frame
 		var entry: Dictionary = entries[str(monster_id)]
 		assert(enemy.visual.uses_final_art(), "boss monsterId=%d final art missing" % monster_id)
-		assert(enemy.visual.position.is_equal_approx(Vector2(0.0, 6.0)))
+		assert(
+			enemy.visual.position.is_equal_approx(
+				Vector2(0.0, 6.0) + _vector2(entry.visualRootOffset)
+			)
+		)
 		assert(
 			enemy.ground_indicator_center().is_equal_approx(
 				enemy.visual.position + _vector2(entry.ringCenterOffset),

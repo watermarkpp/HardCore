@@ -17,7 +17,9 @@
       "mappingConfidence": "B",
       "mappingNote": "外观块和动作范围由WIL像素确认；缺失1.76 Monster.DB，RaceImg仅按块结构采用MA19。",
       "renderScale": 1.0,
-      "mappingSource": "bundled client WIL pixels + Client/Actor.pas GetOffset/TMonsterAction",
+      "mappingSource": "primary classic client WIL pixels + primary MirClient/Actor.pas GetOffset/TMonsterAction",
+      "clientRuleDistribution": "source.original_gameofmir.mirclient",
+      "clientRulePath": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
       "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon4.wil",
       "clientLibraryImageCount": 3670,
       "blockBase": 1440,
@@ -30,6 +32,7 @@
         139
       ],
       "directions": 8,
+      "atlasCellIsolation": "per_frame",
       "actions": {
         "idle": {
           "path": "res://assets/art/monsters/client_classic_bosses/wooma_taurus/wooma_taurus_idle.png",
@@ -1211,7 +1214,9 @@
       "mappingConfidence": "B",
       "mappingNote": "Mon15固定体可见像素范围已确认；缺失1.76 Monster.DB动作绑定，固定体动作复制到八个逻辑朝向。",
       "renderScale": 0.5,
-      "mappingSource": "bundled client WIL pixels + Client/Actor.pas GetOffset/TMonsterAction",
+      "mappingSource": "primary classic client WIL pixels + primary MirClient/Actor.pas GetOffset/TMonsterAction",
+      "clientRuleDistribution": "source.original_gameofmir.mirclient",
+      "clientRulePath": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
       "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon15.wil",
       "clientLibraryImageCount": 3269,
       "blockBase": 0,
@@ -1224,6 +1229,7 @@
         124
       ],
       "directions": 8,
+      "atlasCellIsolation": "per_frame",
       "actions": {
         "idle": {
           "path": "res://assets/art/monsters/client_classic_bosses/evil_centipede/evil_centipede_idle.png",
@@ -2243,9 +2249,11 @@
       "appearance": 63,
       "actionTable": "ZUMA_TAURUS",
       "mappingConfidence": "B",
-      "mappingNote": "Mon7的440帧外观块与Actor.pas RaceImg 63/MA34主动作范围一致；按WIL实际可见帧裁掉空白帧。",
+      "mappingNote": "Mon7 appearance-63 contains a 20-frame materialization prefix. Primary MirClient Actor.pas establishes MA34 timing/direction semantics; drawable primary WIL evidence fixes the five body sequences at offsets 20/100/180/260/280.",
       "renderScale": 1.0,
-      "mappingSource": "bundled client WIL pixels + Client/Actor.pas GetOffset/TMonsterAction",
+      "mappingSource": "primary classic client WIL pixels + primary MirClient/Actor.pas GetOffset/TMonsterAction",
+      "clientRuleDistribution": "source.original_gameofmir.mirclient",
+      "clientRulePath": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
       "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon7.wil",
       "clientLibraryImageCount": 1770,
       "blockBase": 1320,
@@ -2258,171 +2266,172 @@
         237
       ],
       "directions": 8,
+      "atlasCellIsolation": "per_frame",
       "actions": {
         "idle": {
           "path": "res://assets/art/monsters/client_classic_bosses/zuma_taurus/zuma_taurus_idle.png",
           "framesPerDirection": 4,
           "frameMs": 200,
-          "sourceStart": 1320,
+          "sourceStart": 1340,
           "sourceDirectionStride": 10,
           "sourceFrames": [
             {
-              "index": 1320,
-              "direction": 0,
-              "frame": 0
-            },
-            {
-              "index": 1321,
-              "direction": 0,
-              "frame": 1
-            },
-            {
-              "index": 1322,
-              "direction": 0,
-              "frame": 2
-            },
-            {
-              "index": 1323,
-              "direction": 0,
-              "frame": 3
-            },
-            {
-              "index": 1330,
-              "direction": 1,
-              "frame": 0
-            },
-            {
-              "index": 1331,
-              "direction": 1,
-              "frame": 1
-            },
-            {
-              "index": 1332,
-              "direction": 1,
-              "frame": 2
-            },
-            {
-              "index": 1333,
-              "direction": 1,
-              "frame": 3
-            },
-            {
               "index": 1340,
-              "direction": 2,
+              "direction": 0,
               "frame": 0
             },
             {
               "index": 1341,
-              "direction": 2,
+              "direction": 0,
               "frame": 1
             },
             {
               "index": 1342,
-              "direction": 2,
+              "direction": 0,
               "frame": 2
             },
             {
               "index": 1343,
-              "direction": 2,
+              "direction": 0,
               "frame": 3
             },
             {
               "index": 1350,
-              "direction": 3,
+              "direction": 1,
               "frame": 0
             },
             {
               "index": 1351,
-              "direction": 3,
+              "direction": 1,
               "frame": 1
             },
             {
               "index": 1352,
-              "direction": 3,
+              "direction": 1,
               "frame": 2
             },
             {
               "index": 1353,
-              "direction": 3,
+              "direction": 1,
               "frame": 3
             },
             {
               "index": 1360,
-              "direction": 4,
+              "direction": 2,
               "frame": 0
             },
             {
               "index": 1361,
-              "direction": 4,
+              "direction": 2,
               "frame": 1
             },
             {
               "index": 1362,
-              "direction": 4,
+              "direction": 2,
               "frame": 2
             },
             {
               "index": 1363,
-              "direction": 4,
+              "direction": 2,
               "frame": 3
             },
             {
               "index": 1370,
-              "direction": 5,
+              "direction": 3,
               "frame": 0
             },
             {
               "index": 1371,
-              "direction": 5,
+              "direction": 3,
               "frame": 1
             },
             {
               "index": 1372,
-              "direction": 5,
+              "direction": 3,
               "frame": 2
             },
             {
               "index": 1373,
-              "direction": 5,
+              "direction": 3,
               "frame": 3
             },
             {
               "index": 1380,
-              "direction": 6,
+              "direction": 4,
               "frame": 0
             },
             {
               "index": 1381,
-              "direction": 6,
+              "direction": 4,
               "frame": 1
             },
             {
               "index": 1382,
-              "direction": 6,
+              "direction": 4,
               "frame": 2
             },
             {
               "index": 1383,
-              "direction": 6,
+              "direction": 4,
               "frame": 3
             },
             {
               "index": 1390,
-              "direction": 7,
+              "direction": 5,
               "frame": 0
             },
             {
               "index": 1391,
-              "direction": 7,
+              "direction": 5,
               "frame": 1
             },
             {
               "index": 1392,
-              "direction": 7,
+              "direction": 5,
               "frame": 2
             },
             {
               "index": 1393,
+              "direction": 5,
+              "frame": 3
+            },
+            {
+              "index": 1400,
+              "direction": 6,
+              "frame": 0
+            },
+            {
+              "index": 1401,
+              "direction": 6,
+              "frame": 1
+            },
+            {
+              "index": 1402,
+              "direction": 6,
+              "frame": 2
+            },
+            {
+              "index": 1403,
+              "direction": 6,
+              "frame": 3
+            },
+            {
+              "index": 1410,
+              "direction": 7,
+              "frame": 0
+            },
+            {
+              "index": 1411,
+              "direction": 7,
+              "frame": 1
+            },
+            {
+              "index": 1412,
+              "direction": 7,
+              "frame": 2
+            },
+            {
+              "index": 1413,
               "direction": 7,
               "frame": 3
             }
@@ -2431,170 +2440,250 @@
         },
         "walk": {
           "path": "res://assets/art/monsters/client_classic_bosses/zuma_taurus/zuma_taurus_walk.png",
-          "framesPerDirection": 4,
+          "framesPerDirection": 6,
           "frameMs": 200,
-          "sourceStart": 1400,
+          "sourceStart": 1420,
           "sourceDirectionStride": 10,
           "sourceFrames": [
             {
-              "index": 1400,
-              "direction": 0,
-              "frame": 0
-            },
-            {
-              "index": 1401,
-              "direction": 0,
-              "frame": 1
-            },
-            {
-              "index": 1402,
-              "direction": 0,
-              "frame": 2
-            },
-            {
-              "index": 1403,
-              "direction": 0,
-              "frame": 3
-            },
-            {
-              "index": 1410,
-              "direction": 1,
-              "frame": 0
-            },
-            {
-              "index": 1411,
-              "direction": 1,
-              "frame": 1
-            },
-            {
-              "index": 1412,
-              "direction": 1,
-              "frame": 2
-            },
-            {
-              "index": 1413,
-              "direction": 1,
-              "frame": 3
-            },
-            {
               "index": 1420,
-              "direction": 2,
+              "direction": 0,
               "frame": 0
             },
             {
               "index": 1421,
-              "direction": 2,
+              "direction": 0,
               "frame": 1
             },
             {
               "index": 1422,
-              "direction": 2,
+              "direction": 0,
               "frame": 2
             },
             {
               "index": 1423,
-              "direction": 2,
+              "direction": 0,
               "frame": 3
             },
             {
+              "index": 1424,
+              "direction": 0,
+              "frame": 4
+            },
+            {
+              "index": 1425,
+              "direction": 0,
+              "frame": 5
+            },
+            {
               "index": 1430,
-              "direction": 3,
+              "direction": 1,
               "frame": 0
             },
             {
               "index": 1431,
-              "direction": 3,
+              "direction": 1,
               "frame": 1
             },
             {
               "index": 1432,
-              "direction": 3,
+              "direction": 1,
               "frame": 2
             },
             {
               "index": 1433,
-              "direction": 3,
+              "direction": 1,
               "frame": 3
             },
             {
+              "index": 1434,
+              "direction": 1,
+              "frame": 4
+            },
+            {
+              "index": 1435,
+              "direction": 1,
+              "frame": 5
+            },
+            {
               "index": 1440,
-              "direction": 4,
+              "direction": 2,
               "frame": 0
             },
             {
               "index": 1441,
-              "direction": 4,
+              "direction": 2,
               "frame": 1
             },
             {
               "index": 1442,
-              "direction": 4,
+              "direction": 2,
               "frame": 2
             },
             {
               "index": 1443,
-              "direction": 4,
+              "direction": 2,
               "frame": 3
             },
             {
+              "index": 1444,
+              "direction": 2,
+              "frame": 4
+            },
+            {
+              "index": 1445,
+              "direction": 2,
+              "frame": 5
+            },
+            {
               "index": 1450,
-              "direction": 5,
+              "direction": 3,
               "frame": 0
             },
             {
               "index": 1451,
-              "direction": 5,
+              "direction": 3,
               "frame": 1
             },
             {
               "index": 1452,
-              "direction": 5,
+              "direction": 3,
               "frame": 2
             },
             {
               "index": 1453,
-              "direction": 5,
+              "direction": 3,
               "frame": 3
             },
             {
+              "index": 1454,
+              "direction": 3,
+              "frame": 4
+            },
+            {
+              "index": 1455,
+              "direction": 3,
+              "frame": 5
+            },
+            {
               "index": 1460,
-              "direction": 6,
+              "direction": 4,
               "frame": 0
             },
             {
               "index": 1461,
-              "direction": 6,
+              "direction": 4,
               "frame": 1
             },
             {
               "index": 1462,
-              "direction": 6,
+              "direction": 4,
               "frame": 2
             },
             {
               "index": 1463,
-              "direction": 6,
+              "direction": 4,
               "frame": 3
             },
             {
+              "index": 1464,
+              "direction": 4,
+              "frame": 4
+            },
+            {
+              "index": 1465,
+              "direction": 4,
+              "frame": 5
+            },
+            {
               "index": 1470,
-              "direction": 7,
+              "direction": 5,
               "frame": 0
             },
             {
               "index": 1471,
-              "direction": 7,
+              "direction": 5,
               "frame": 1
             },
             {
               "index": 1472,
-              "direction": 7,
+              "direction": 5,
               "frame": 2
             },
             {
               "index": 1473,
+              "direction": 5,
+              "frame": 3
+            },
+            {
+              "index": 1474,
+              "direction": 5,
+              "frame": 4
+            },
+            {
+              "index": 1475,
+              "direction": 5,
+              "frame": 5
+            },
+            {
+              "index": 1480,
+              "direction": 6,
+              "frame": 0
+            },
+            {
+              "index": 1481,
+              "direction": 6,
+              "frame": 1
+            },
+            {
+              "index": 1482,
+              "direction": 6,
+              "frame": 2
+            },
+            {
+              "index": 1483,
+              "direction": 6,
+              "frame": 3
+            },
+            {
+              "index": 1484,
+              "direction": 6,
+              "frame": 4
+            },
+            {
+              "index": 1485,
+              "direction": 6,
+              "frame": 5
+            },
+            {
+              "index": 1490,
+              "direction": 7,
+              "frame": 0
+            },
+            {
+              "index": 1491,
+              "direction": 7,
+              "frame": 1
+            },
+            {
+              "index": 1492,
+              "direction": 7,
+              "frame": 2
+            },
+            {
+              "index": 1493,
               "direction": 7,
               "frame": 3
+            },
+            {
+              "index": 1494,
+              "direction": 7,
+              "frame": 4
+            },
+            {
+              "index": 1495,
+              "direction": 7,
+              "frame": 5
             }
           ],
           "confidence": "B"
@@ -2603,246 +2692,246 @@
           "path": "res://assets/art/monsters/client_classic_bosses/zuma_taurus/zuma_taurus_attack.png",
           "framesPerDirection": 6,
           "frameMs": 120,
-          "sourceStart": 1480,
+          "sourceStart": 1500,
           "sourceDirectionStride": 10,
           "sourceFrames": [
             {
-              "index": 1480,
-              "direction": 0,
-              "frame": 0
-            },
-            {
-              "index": 1481,
-              "direction": 0,
-              "frame": 1
-            },
-            {
-              "index": 1482,
-              "direction": 0,
-              "frame": 2
-            },
-            {
-              "index": 1483,
-              "direction": 0,
-              "frame": 3
-            },
-            {
-              "index": 1484,
-              "direction": 0,
-              "frame": 4
-            },
-            {
-              "index": 1485,
-              "direction": 0,
-              "frame": 5
-            },
-            {
-              "index": 1490,
-              "direction": 1,
-              "frame": 0
-            },
-            {
-              "index": 1491,
-              "direction": 1,
-              "frame": 1
-            },
-            {
-              "index": 1492,
-              "direction": 1,
-              "frame": 2
-            },
-            {
-              "index": 1493,
-              "direction": 1,
-              "frame": 3
-            },
-            {
-              "index": 1494,
-              "direction": 1,
-              "frame": 4
-            },
-            {
-              "index": 1495,
-              "direction": 1,
-              "frame": 5
-            },
-            {
               "index": 1500,
-              "direction": 2,
+              "direction": 0,
               "frame": 0
             },
             {
               "index": 1501,
-              "direction": 2,
+              "direction": 0,
               "frame": 1
             },
             {
               "index": 1502,
-              "direction": 2,
+              "direction": 0,
               "frame": 2
             },
             {
               "index": 1503,
-              "direction": 2,
+              "direction": 0,
               "frame": 3
             },
             {
               "index": 1504,
-              "direction": 2,
+              "direction": 0,
               "frame": 4
             },
             {
               "index": 1505,
-              "direction": 2,
+              "direction": 0,
               "frame": 5
             },
             {
               "index": 1510,
-              "direction": 3,
+              "direction": 1,
               "frame": 0
             },
             {
               "index": 1511,
-              "direction": 3,
+              "direction": 1,
               "frame": 1
             },
             {
               "index": 1512,
-              "direction": 3,
+              "direction": 1,
               "frame": 2
             },
             {
               "index": 1513,
-              "direction": 3,
+              "direction": 1,
               "frame": 3
             },
             {
               "index": 1514,
-              "direction": 3,
+              "direction": 1,
               "frame": 4
             },
             {
               "index": 1515,
-              "direction": 3,
+              "direction": 1,
               "frame": 5
             },
             {
               "index": 1520,
-              "direction": 4,
+              "direction": 2,
               "frame": 0
             },
             {
               "index": 1521,
-              "direction": 4,
+              "direction": 2,
               "frame": 1
             },
             {
               "index": 1522,
-              "direction": 4,
+              "direction": 2,
               "frame": 2
             },
             {
               "index": 1523,
-              "direction": 4,
+              "direction": 2,
               "frame": 3
             },
             {
               "index": 1524,
-              "direction": 4,
+              "direction": 2,
               "frame": 4
             },
             {
               "index": 1525,
-              "direction": 4,
+              "direction": 2,
               "frame": 5
             },
             {
               "index": 1530,
-              "direction": 5,
+              "direction": 3,
               "frame": 0
             },
             {
               "index": 1531,
-              "direction": 5,
+              "direction": 3,
               "frame": 1
             },
             {
               "index": 1532,
-              "direction": 5,
+              "direction": 3,
               "frame": 2
             },
             {
               "index": 1533,
-              "direction": 5,
+              "direction": 3,
               "frame": 3
             },
             {
               "index": 1534,
-              "direction": 5,
+              "direction": 3,
               "frame": 4
             },
             {
               "index": 1535,
-              "direction": 5,
+              "direction": 3,
               "frame": 5
             },
             {
               "index": 1540,
-              "direction": 6,
+              "direction": 4,
               "frame": 0
             },
             {
               "index": 1541,
-              "direction": 6,
+              "direction": 4,
               "frame": 1
             },
             {
               "index": 1542,
-              "direction": 6,
+              "direction": 4,
               "frame": 2
             },
             {
               "index": 1543,
-              "direction": 6,
+              "direction": 4,
               "frame": 3
             },
             {
               "index": 1544,
-              "direction": 6,
+              "direction": 4,
               "frame": 4
             },
             {
               "index": 1545,
-              "direction": 6,
+              "direction": 4,
               "frame": 5
             },
             {
               "index": 1550,
-              "direction": 7,
+              "direction": 5,
               "frame": 0
             },
             {
               "index": 1551,
-              "direction": 7,
+              "direction": 5,
               "frame": 1
             },
             {
               "index": 1552,
-              "direction": 7,
+              "direction": 5,
               "frame": 2
             },
             {
               "index": 1553,
-              "direction": 7,
+              "direction": 5,
               "frame": 3
             },
             {
               "index": 1554,
-              "direction": 7,
+              "direction": 5,
               "frame": 4
             },
             {
               "index": 1555,
+              "direction": 5,
+              "frame": 5
+            },
+            {
+              "index": 1560,
+              "direction": 6,
+              "frame": 0
+            },
+            {
+              "index": 1561,
+              "direction": 6,
+              "frame": 1
+            },
+            {
+              "index": 1562,
+              "direction": 6,
+              "frame": 2
+            },
+            {
+              "index": 1563,
+              "direction": 6,
+              "frame": 3
+            },
+            {
+              "index": 1564,
+              "direction": 6,
+              "frame": 4
+            },
+            {
+              "index": 1565,
+              "direction": 6,
+              "frame": 5
+            },
+            {
+              "index": 1570,
+              "direction": 7,
+              "frame": 0
+            },
+            {
+              "index": 1571,
+              "direction": 7,
+              "frame": 1
+            },
+            {
+              "index": 1572,
+              "direction": 7,
+              "frame": 2
+            },
+            {
+              "index": 1573,
+              "direction": 7,
+              "frame": 3
+            },
+            {
+              "index": 1574,
+              "direction": 7,
+              "frame": 4
+            },
+            {
+              "index": 1575,
               "direction": 7,
               "frame": 5
             }
@@ -2853,86 +2942,86 @@
           "path": "res://assets/art/monsters/client_classic_bosses/zuma_taurus/zuma_taurus_hit.png",
           "framesPerDirection": 2,
           "frameMs": 100,
-          "sourceStart": 1720,
-          "sourceDirectionStride": 0,
+          "sourceStart": 1580,
+          "sourceDirectionStride": 2,
           "sourceFrames": [
             {
-              "index": 1720,
+              "index": 1580,
               "direction": 0,
               "frame": 0
             },
             {
-              "index": 1721,
+              "index": 1581,
               "direction": 0,
               "frame": 1
             },
             {
-              "index": 1720,
+              "index": 1582,
               "direction": 1,
               "frame": 0
             },
             {
-              "index": 1721,
+              "index": 1583,
               "direction": 1,
               "frame": 1
             },
             {
-              "index": 1720,
+              "index": 1584,
               "direction": 2,
               "frame": 0
             },
             {
-              "index": 1721,
+              "index": 1585,
               "direction": 2,
               "frame": 1
             },
             {
-              "index": 1720,
+              "index": 1586,
               "direction": 3,
               "frame": 0
             },
             {
-              "index": 1721,
+              "index": 1587,
               "direction": 3,
               "frame": 1
             },
             {
-              "index": 1720,
+              "index": 1588,
               "direction": 4,
               "frame": 0
             },
             {
-              "index": 1721,
+              "index": 1589,
               "direction": 4,
               "frame": 1
             },
             {
-              "index": 1720,
+              "index": 1590,
               "direction": 5,
               "frame": 0
             },
             {
-              "index": 1721,
+              "index": 1591,
               "direction": 5,
               "frame": 1
             },
             {
-              "index": 1720,
+              "index": 1592,
               "direction": 6,
               "frame": 0
             },
             {
-              "index": 1721,
+              "index": 1593,
               "direction": 6,
               "frame": 1
             },
             {
-              "index": 1720,
+              "index": 1594,
               "direction": 7,
               "frame": 0
             },
             {
-              "index": 1721,
+              "index": 1595,
               "direction": 7,
               "frame": 1
             }
@@ -2941,330 +3030,410 @@
         },
         "death": {
           "path": "res://assets/art/monsters/client_classic_bosses/zuma_taurus/zuma_taurus_death.png",
-          "framesPerDirection": 8,
+          "framesPerDirection": 10,
           "frameMs": 200,
-          "sourceStart": 1740,
-          "sourceDirectionStride": 0,
+          "sourceStart": 1600,
+          "sourceDirectionStride": 10,
           "sourceFrames": [
             {
-              "index": 1740,
+              "index": 1600,
               "direction": 0,
               "frame": 0
             },
             {
-              "index": 1741,
+              "index": 1601,
               "direction": 0,
               "frame": 1
             },
             {
-              "index": 1742,
+              "index": 1602,
               "direction": 0,
               "frame": 2
             },
             {
-              "index": 1743,
+              "index": 1603,
               "direction": 0,
               "frame": 3
             },
             {
-              "index": 1744,
+              "index": 1604,
               "direction": 0,
               "frame": 4
             },
             {
-              "index": 1745,
+              "index": 1605,
               "direction": 0,
               "frame": 5
             },
             {
-              "index": 1746,
+              "index": 1606,
               "direction": 0,
               "frame": 6
             },
             {
-              "index": 1747,
+              "index": 1607,
               "direction": 0,
               "frame": 7
             },
             {
-              "index": 1740,
+              "index": 1608,
+              "direction": 0,
+              "frame": 8
+            },
+            {
+              "index": 1609,
+              "direction": 0,
+              "frame": 9
+            },
+            {
+              "index": 1610,
               "direction": 1,
               "frame": 0
             },
             {
-              "index": 1741,
+              "index": 1611,
               "direction": 1,
               "frame": 1
             },
             {
-              "index": 1742,
+              "index": 1612,
               "direction": 1,
               "frame": 2
             },
             {
-              "index": 1743,
+              "index": 1613,
               "direction": 1,
               "frame": 3
             },
             {
-              "index": 1744,
+              "index": 1614,
               "direction": 1,
               "frame": 4
             },
             {
-              "index": 1745,
+              "index": 1615,
               "direction": 1,
               "frame": 5
             },
             {
-              "index": 1746,
+              "index": 1616,
               "direction": 1,
               "frame": 6
             },
             {
-              "index": 1747,
+              "index": 1617,
               "direction": 1,
               "frame": 7
             },
             {
-              "index": 1740,
+              "index": 1618,
+              "direction": 1,
+              "frame": 8
+            },
+            {
+              "index": 1619,
+              "direction": 1,
+              "frame": 9
+            },
+            {
+              "index": 1620,
               "direction": 2,
               "frame": 0
             },
             {
-              "index": 1741,
+              "index": 1621,
               "direction": 2,
               "frame": 1
             },
             {
-              "index": 1742,
+              "index": 1622,
               "direction": 2,
               "frame": 2
             },
             {
-              "index": 1743,
+              "index": 1623,
               "direction": 2,
               "frame": 3
             },
             {
-              "index": 1744,
+              "index": 1624,
               "direction": 2,
               "frame": 4
             },
             {
-              "index": 1745,
+              "index": 1625,
               "direction": 2,
               "frame": 5
             },
             {
-              "index": 1746,
+              "index": 1626,
               "direction": 2,
               "frame": 6
             },
             {
-              "index": 1747,
+              "index": 1627,
               "direction": 2,
               "frame": 7
             },
             {
-              "index": 1740,
+              "index": 1628,
+              "direction": 2,
+              "frame": 8
+            },
+            {
+              "index": 1629,
+              "direction": 2,
+              "frame": 9
+            },
+            {
+              "index": 1630,
               "direction": 3,
               "frame": 0
             },
             {
-              "index": 1741,
+              "index": 1631,
               "direction": 3,
               "frame": 1
             },
             {
-              "index": 1742,
+              "index": 1632,
               "direction": 3,
               "frame": 2
             },
             {
-              "index": 1743,
+              "index": 1633,
               "direction": 3,
               "frame": 3
             },
             {
-              "index": 1744,
+              "index": 1634,
               "direction": 3,
               "frame": 4
             },
             {
-              "index": 1745,
+              "index": 1635,
               "direction": 3,
               "frame": 5
             },
             {
-              "index": 1746,
+              "index": 1636,
               "direction": 3,
               "frame": 6
             },
             {
-              "index": 1747,
+              "index": 1637,
               "direction": 3,
               "frame": 7
             },
             {
-              "index": 1740,
+              "index": 1638,
+              "direction": 3,
+              "frame": 8
+            },
+            {
+              "index": 1639,
+              "direction": 3,
+              "frame": 9
+            },
+            {
+              "index": 1640,
               "direction": 4,
               "frame": 0
             },
             {
-              "index": 1741,
+              "index": 1641,
               "direction": 4,
               "frame": 1
             },
             {
-              "index": 1742,
+              "index": 1642,
               "direction": 4,
               "frame": 2
             },
             {
-              "index": 1743,
+              "index": 1643,
               "direction": 4,
               "frame": 3
             },
             {
-              "index": 1744,
+              "index": 1644,
               "direction": 4,
               "frame": 4
             },
             {
-              "index": 1745,
+              "index": 1645,
               "direction": 4,
               "frame": 5
             },
             {
-              "index": 1746,
+              "index": 1646,
               "direction": 4,
               "frame": 6
             },
             {
-              "index": 1747,
+              "index": 1647,
               "direction": 4,
               "frame": 7
             },
             {
-              "index": 1740,
+              "index": 1648,
+              "direction": 4,
+              "frame": 8
+            },
+            {
+              "index": 1649,
+              "direction": 4,
+              "frame": 9
+            },
+            {
+              "index": 1650,
               "direction": 5,
               "frame": 0
             },
             {
-              "index": 1741,
+              "index": 1651,
               "direction": 5,
               "frame": 1
             },
             {
-              "index": 1742,
+              "index": 1652,
               "direction": 5,
               "frame": 2
             },
             {
-              "index": 1743,
+              "index": 1653,
               "direction": 5,
               "frame": 3
             },
             {
-              "index": 1744,
+              "index": 1654,
               "direction": 5,
               "frame": 4
             },
             {
-              "index": 1745,
+              "index": 1655,
               "direction": 5,
               "frame": 5
             },
             {
-              "index": 1746,
+              "index": 1656,
               "direction": 5,
               "frame": 6
             },
             {
-              "index": 1747,
+              "index": 1657,
               "direction": 5,
               "frame": 7
             },
             {
-              "index": 1740,
+              "index": 1658,
+              "direction": 5,
+              "frame": 8
+            },
+            {
+              "index": 1659,
+              "direction": 5,
+              "frame": 9
+            },
+            {
+              "index": 1660,
               "direction": 6,
               "frame": 0
             },
             {
-              "index": 1741,
+              "index": 1661,
               "direction": 6,
               "frame": 1
             },
             {
-              "index": 1742,
+              "index": 1662,
               "direction": 6,
               "frame": 2
             },
             {
-              "index": 1743,
+              "index": 1663,
               "direction": 6,
               "frame": 3
             },
             {
-              "index": 1744,
+              "index": 1664,
               "direction": 6,
               "frame": 4
             },
             {
-              "index": 1745,
+              "index": 1665,
               "direction": 6,
               "frame": 5
             },
             {
-              "index": 1746,
+              "index": 1666,
               "direction": 6,
               "frame": 6
             },
             {
-              "index": 1747,
+              "index": 1667,
               "direction": 6,
               "frame": 7
             },
             {
-              "index": 1740,
+              "index": 1668,
+              "direction": 6,
+              "frame": 8
+            },
+            {
+              "index": 1669,
+              "direction": 6,
+              "frame": 9
+            },
+            {
+              "index": 1670,
               "direction": 7,
               "frame": 0
             },
             {
-              "index": 1741,
+              "index": 1671,
               "direction": 7,
               "frame": 1
             },
             {
-              "index": 1742,
+              "index": 1672,
               "direction": 7,
               "frame": 2
             },
             {
-              "index": 1743,
+              "index": 1673,
               "direction": 7,
               "frame": 3
             },
             {
-              "index": 1744,
+              "index": 1674,
               "direction": 7,
               "frame": 4
             },
             {
-              "index": 1745,
+              "index": 1675,
               "direction": 7,
               "frame": 5
             },
             {
-              "index": 1746,
+              "index": 1676,
               "direction": 7,
               "frame": 6
             },
             {
-              "index": 1747,
+              "index": 1677,
               "direction": 7,
               "frame": 7
+            },
+            {
+              "index": 1678,
+              "direction": 7,
+              "frame": 8
+            },
+            {
+              "index": 1679,
+              "direction": 7,
+              "frame": 9
             }
           ],
           "confidence": "B"
@@ -3281,7 +3450,9 @@
       "mappingConfidence": "B",
       "mappingNote": "外观块和动作范围由WIL像素确认；缺失1.76 Monster.DB，RaceImg仅按块结构采用MA19。",
       "renderScale": 1.0,
-      "mappingSource": "bundled client WIL pixels + Client/Actor.pas GetOffset/TMonsterAction",
+      "mappingSource": "primary classic client WIL pixels + primary MirClient/Actor.pas GetOffset/TMonsterAction",
+      "clientRuleDistribution": "source.original_gameofmir.mirclient",
+      "clientRulePath": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
       "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon4.wil",
       "clientLibraryImageCount": 3670,
       "blockBase": 1440,
@@ -3294,6 +3465,7 @@
         139
       ],
       "directions": 8,
+      "atlasCellIsolation": "per_frame",
       "actions": {
         "idle": {
           "path": "res://assets/art/monsters/client_classic_bosses/wooma_taurus/wooma_taurus_idle.png",
@@ -4475,7 +4647,9 @@
       "mappingConfidence": "B",
       "mappingNote": "Mon15固定体可见像素范围已确认；缺失1.76 Monster.DB动作绑定，固定体动作复制到八个逻辑朝向。",
       "renderScale": 0.5,
-      "mappingSource": "bundled client WIL pixels + Client/Actor.pas GetOffset/TMonsterAction",
+      "mappingSource": "primary classic client WIL pixels + primary MirClient/Actor.pas GetOffset/TMonsterAction",
+      "clientRuleDistribution": "source.original_gameofmir.mirclient",
+      "clientRulePath": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
       "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon15.wil",
       "clientLibraryImageCount": 3269,
       "blockBase": 0,
@@ -4488,6 +4662,7 @@
         124
       ],
       "directions": 8,
+      "atlasCellIsolation": "per_frame",
       "actions": {
         "idle": {
           "path": "res://assets/art/monsters/client_classic_bosses/evil_centipede/evil_centipede_idle.png",
@@ -5507,9 +5682,11 @@
       "appearance": 63,
       "actionTable": "ZUMA_TAURUS",
       "mappingConfidence": "B",
-      "mappingNote": "Mon7的440帧外观块与Actor.pas RaceImg 63/MA34主动作范围一致；按WIL实际可见帧裁掉空白帧。",
+      "mappingNote": "Mon7 appearance-63 contains a 20-frame materialization prefix. Primary MirClient Actor.pas establishes MA34 timing/direction semantics; drawable primary WIL evidence fixes the five body sequences at offsets 20/100/180/260/280.",
       "renderScale": 1.0,
-      "mappingSource": "bundled client WIL pixels + Client/Actor.pas GetOffset/TMonsterAction",
+      "mappingSource": "primary classic client WIL pixels + primary MirClient/Actor.pas GetOffset/TMonsterAction",
+      "clientRuleDistribution": "source.original_gameofmir.mirclient",
+      "clientRulePath": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
       "clientLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Mon7.wil",
       "clientLibraryImageCount": 1770,
       "blockBase": 1320,
@@ -5522,171 +5699,172 @@
         237
       ],
       "directions": 8,
+      "atlasCellIsolation": "per_frame",
       "actions": {
         "idle": {
           "path": "res://assets/art/monsters/client_classic_bosses/zuma_taurus/zuma_taurus_idle.png",
           "framesPerDirection": 4,
           "frameMs": 200,
-          "sourceStart": 1320,
+          "sourceStart": 1340,
           "sourceDirectionStride": 10,
           "sourceFrames": [
             {
-              "index": 1320,
-              "direction": 0,
-              "frame": 0
-            },
-            {
-              "index": 1321,
-              "direction": 0,
-              "frame": 1
-            },
-            {
-              "index": 1322,
-              "direction": 0,
-              "frame": 2
-            },
-            {
-              "index": 1323,
-              "direction": 0,
-              "frame": 3
-            },
-            {
-              "index": 1330,
-              "direction": 1,
-              "frame": 0
-            },
-            {
-              "index": 1331,
-              "direction": 1,
-              "frame": 1
-            },
-            {
-              "index": 1332,
-              "direction": 1,
-              "frame": 2
-            },
-            {
-              "index": 1333,
-              "direction": 1,
-              "frame": 3
-            },
-            {
               "index": 1340,
-              "direction": 2,
+              "direction": 0,
               "frame": 0
             },
             {
               "index": 1341,
-              "direction": 2,
+              "direction": 0,
               "frame": 1
             },
             {
               "index": 1342,
-              "direction": 2,
+              "direction": 0,
               "frame": 2
             },
             {
               "index": 1343,
-              "direction": 2,
+              "direction": 0,
               "frame": 3
             },
             {
               "index": 1350,
-              "direction": 3,
+              "direction": 1,
               "frame": 0
             },
             {
               "index": 1351,
-              "direction": 3,
+              "direction": 1,
               "frame": 1
             },
             {
               "index": 1352,
-              "direction": 3,
+              "direction": 1,
               "frame": 2
             },
             {
               "index": 1353,
-              "direction": 3,
+              "direction": 1,
               "frame": 3
             },
             {
               "index": 1360,
-              "direction": 4,
+              "direction": 2,
               "frame": 0
             },
             {
               "index": 1361,
-              "direction": 4,
+              "direction": 2,
               "frame": 1
             },
             {
               "index": 1362,
-              "direction": 4,
+              "direction": 2,
               "frame": 2
             },
             {
               "index": 1363,
-              "direction": 4,
+              "direction": 2,
               "frame": 3
             },
             {
               "index": 1370,
-              "direction": 5,
+              "direction": 3,
               "frame": 0
             },
             {
               "index": 1371,
-              "direction": 5,
+              "direction": 3,
               "frame": 1
             },
             {
               "index": 1372,
-              "direction": 5,
+              "direction": 3,
               "frame": 2
             },
             {
               "index": 1373,
-              "direction": 5,
+              "direction": 3,
               "frame": 3
             },
             {
               "index": 1380,
-              "direction": 6,
+              "direction": 4,
               "frame": 0
             },
             {
               "index": 1381,
-              "direction": 6,
+              "direction": 4,
               "frame": 1
             },
             {
               "index": 1382,
-              "direction": 6,
+              "direction": 4,
               "frame": 2
             },
             {
               "index": 1383,
-              "direction": 6,
+              "direction": 4,
               "frame": 3
             },
             {
               "index": 1390,
-              "direction": 7,
+              "direction": 5,
               "frame": 0
             },
             {
               "index": 1391,
-              "direction": 7,
+              "direction": 5,
               "frame": 1
             },
             {
               "index": 1392,
-              "direction": 7,
+              "direction": 5,
               "frame": 2
             },
             {
               "index": 1393,
+              "direction": 5,
+              "frame": 3
+            },
+            {
+              "index": 1400,
+              "direction": 6,
+              "frame": 0
+            },
+            {
+              "index": 1401,
+              "direction": 6,
+              "frame": 1
+            },
+            {
+              "index": 1402,
+              "direction": 6,
+              "frame": 2
+            },
+            {
+              "index": 1403,
+              "direction": 6,
+              "frame": 3
+            },
+            {
+              "index": 1410,
+              "direction": 7,
+              "frame": 0
+            },
+            {
+              "index": 1411,
+              "direction": 7,
+              "frame": 1
+            },
+            {
+              "index": 1412,
+              "direction": 7,
+              "frame": 2
+            },
+            {
+              "index": 1413,
               "direction": 7,
               "frame": 3
             }
@@ -5695,170 +5873,250 @@
         },
         "walk": {
           "path": "res://assets/art/monsters/client_classic_bosses/zuma_taurus/zuma_taurus_walk.png",
-          "framesPerDirection": 4,
+          "framesPerDirection": 6,
           "frameMs": 200,
-          "sourceStart": 1400,
+          "sourceStart": 1420,
           "sourceDirectionStride": 10,
           "sourceFrames": [
             {
-              "index": 1400,
-              "direction": 0,
-              "frame": 0
-            },
-            {
-              "index": 1401,
-              "direction": 0,
-              "frame": 1
-            },
-            {
-              "index": 1402,
-              "direction": 0,
-              "frame": 2
-            },
-            {
-              "index": 1403,
-              "direction": 0,
-              "frame": 3
-            },
-            {
-              "index": 1410,
-              "direction": 1,
-              "frame": 0
-            },
-            {
-              "index": 1411,
-              "direction": 1,
-              "frame": 1
-            },
-            {
-              "index": 1412,
-              "direction": 1,
-              "frame": 2
-            },
-            {
-              "index": 1413,
-              "direction": 1,
-              "frame": 3
-            },
-            {
               "index": 1420,
-              "direction": 2,
+              "direction": 0,
               "frame": 0
             },
             {
               "index": 1421,
-              "direction": 2,
+              "direction": 0,
               "frame": 1
             },
             {
               "index": 1422,
-              "direction": 2,
+              "direction": 0,
               "frame": 2
             },
             {
               "index": 1423,
-              "direction": 2,
+              "direction": 0,
               "frame": 3
             },
             {
+              "index": 1424,
+              "direction": 0,
+              "frame": 4
+            },
+            {
+              "index": 1425,
+              "direction": 0,
+              "frame": 5
+            },
+            {
               "index": 1430,
-              "direction": 3,
+              "direction": 1,
               "frame": 0
             },
             {
               "index": 1431,
-              "direction": 3,
+              "direction": 1,
               "frame": 1
             },
             {
               "index": 1432,
-              "direction": 3,
+              "direction": 1,
               "frame": 2
             },
             {
               "index": 1433,
-              "direction": 3,
+              "direction": 1,
               "frame": 3
             },
             {
+              "index": 1434,
+              "direction": 1,
+              "frame": 4
+            },
+            {
+              "index": 1435,
+              "direction": 1,
+              "frame": 5
+            },
+            {
               "index": 1440,
-              "direction": 4,
+              "direction": 2,
               "frame": 0
             },
             {
               "index": 1441,
-              "direction": 4,
+              "direction": 2,
               "frame": 1
             },
             {
               "index": 1442,
-              "direction": 4,
+              "direction": 2,
               "frame": 2
             },
             {
               "index": 1443,
-              "direction": 4,
+              "direction": 2,
               "frame": 3
             },
             {
+              "index": 1444,
+              "direction": 2,
+              "frame": 4
+            },
+            {
+              "index": 1445,
+              "direction": 2,
+              "frame": 5
+            },
+            {
               "index": 1450,
-              "direction": 5,
+              "direction": 3,
               "frame": 0
             },
             {
               "index": 1451,
-              "direction": 5,
+              "direction": 3,
               "frame": 1
             },
             {
               "index": 1452,
-              "direction": 5,
+              "direction": 3,
               "frame": 2
             },
             {
               "index": 1453,
-              "direction": 5,
+              "direction": 3,
               "frame": 3
             },
             {
+              "index": 1454,
+              "direction": 3,
+              "frame": 4
+            },
+            {
+              "index": 1455,
+              "direction": 3,
+              "frame": 5
+            },
+            {
               "index": 1460,
-              "direction": 6,
+              "direction": 4,
               "frame": 0
             },
             {
               "index": 1461,
-              "direction": 6,
+              "direction": 4,
               "frame": 1
             },
             {
               "index": 1462,
-              "direction": 6,
+              "direction": 4,
               "frame": 2
             },
             {
               "index": 1463,
-              "direction": 6,
+              "direction": 4,
               "frame": 3
             },
             {
+              "index": 1464,
+              "direction": 4,
+              "frame": 4
+            },
+            {
+              "index": 1465,
+              "direction": 4,
+              "frame": 5
+            },
+            {
               "index": 1470,
-              "direction": 7,
+              "direction": 5,
               "frame": 0
             },
             {
               "index": 1471,
-              "direction": 7,
+              "direction": 5,
               "frame": 1
             },
             {
               "index": 1472,
-              "direction": 7,
+              "direction": 5,
               "frame": 2
             },
             {
               "index": 1473,
+              "direction": 5,
+              "frame": 3
+            },
+            {
+              "index": 1474,
+              "direction": 5,
+              "frame": 4
+            },
+            {
+              "index": 1475,
+              "direction": 5,
+              "frame": 5
+            },
+            {
+              "index": 1480,
+              "direction": 6,
+              "frame": 0
+            },
+            {
+              "index": 1481,
+              "direction": 6,
+              "frame": 1
+            },
+            {
+              "index": 1482,
+              "direction": 6,
+              "frame": 2
+            },
+            {
+              "index": 1483,
+              "direction": 6,
+              "frame": 3
+            },
+            {
+              "index": 1484,
+              "direction": 6,
+              "frame": 4
+            },
+            {
+              "index": 1485,
+              "direction": 6,
+              "frame": 5
+            },
+            {
+              "index": 1490,
+              "direction": 7,
+              "frame": 0
+            },
+            {
+              "index": 1491,
+              "direction": 7,
+              "frame": 1
+            },
+            {
+              "index": 1492,
+              "direction": 7,
+              "frame": 2
+            },
+            {
+              "index": 1493,
               "direction": 7,
               "frame": 3
+            },
+            {
+              "index": 1494,
+              "direction": 7,
+              "frame": 4
+            },
+            {
+              "index": 1495,
+              "direction": 7,
+              "frame": 5
             }
           ],
           "confidence": "B"
@@ -5867,246 +6125,246 @@
           "path": "res://assets/art/monsters/client_classic_bosses/zuma_taurus/zuma_taurus_attack.png",
           "framesPerDirection": 6,
           "frameMs": 120,
-          "sourceStart": 1480,
+          "sourceStart": 1500,
           "sourceDirectionStride": 10,
           "sourceFrames": [
             {
-              "index": 1480,
-              "direction": 0,
-              "frame": 0
-            },
-            {
-              "index": 1481,
-              "direction": 0,
-              "frame": 1
-            },
-            {
-              "index": 1482,
-              "direction": 0,
-              "frame": 2
-            },
-            {
-              "index": 1483,
-              "direction": 0,
-              "frame": 3
-            },
-            {
-              "index": 1484,
-              "direction": 0,
-              "frame": 4
-            },
-            {
-              "index": 1485,
-              "direction": 0,
-              "frame": 5
-            },
-            {
-              "index": 1490,
-              "direction": 1,
-              "frame": 0
-            },
-            {
-              "index": 1491,
-              "direction": 1,
-              "frame": 1
-            },
-            {
-              "index": 1492,
-              "direction": 1,
-              "frame": 2
-            },
-            {
-              "index": 1493,
-              "direction": 1,
-              "frame": 3
-            },
-            {
-              "index": 1494,
-              "direction": 1,
-              "frame": 4
-            },
-            {
-              "index": 1495,
-              "direction": 1,
-              "frame": 5
-            },
-            {
               "index": 1500,
-              "direction": 2,
+              "direction": 0,
               "frame": 0
             },
             {
               "index": 1501,
-              "direction": 2,
+              "direction": 0,
               "frame": 1
             },
             {
               "index": 1502,
-              "direction": 2,
+              "direction": 0,
               "frame": 2
             },
             {
               "index": 1503,
-              "direction": 2,
+              "direction": 0,
               "frame": 3
             },
             {
               "index": 1504,
-              "direction": 2,
+              "direction": 0,
               "frame": 4
             },
             {
               "index": 1505,
-              "direction": 2,
+              "direction": 0,
               "frame": 5
             },
             {
               "index": 1510,
-              "direction": 3,
+              "direction": 1,
               "frame": 0
             },
             {
               "index": 1511,
-              "direction": 3,
+              "direction": 1,
               "frame": 1
             },
             {
               "index": 1512,
-              "direction": 3,
+              "direction": 1,
               "frame": 2
             },
             {
               "index": 1513,
-              "direction": 3,
+              "direction": 1,
               "frame": 3
             },
             {
               "index": 1514,
-              "direction": 3,
+              "direction": 1,
               "frame": 4
             },
             {
               "index": 1515,
-              "direction": 3,
+              "direction": 1,
               "frame": 5
             },
             {
               "index": 1520,
-              "direction": 4,
+              "direction": 2,
               "frame": 0
             },
             {
               "index": 1521,
-              "direction": 4,
+              "direction": 2,
               "frame": 1
             },
             {
               "index": 1522,
-              "direction": 4,
+              "direction": 2,
               "frame": 2
             },
             {
               "index": 1523,
-              "direction": 4,
+              "direction": 2,
               "frame": 3
             },
             {
               "index": 1524,
-              "direction": 4,
+              "direction": 2,
               "frame": 4
             },
             {
               "index": 1525,
-              "direction": 4,
+              "direction": 2,
               "frame": 5
             },
             {
               "index": 1530,
-              "direction": 5,
+              "direction": 3,
               "frame": 0
             },
             {
               "index": 1531,
-              "direction": 5,
+              "direction": 3,
               "frame": 1
             },
             {
               "index": 1532,
-              "direction": 5,
+              "direction": 3,
               "frame": 2
             },
             {
               "index": 1533,
-              "direction": 5,
+              "direction": 3,
               "frame": 3
             },
             {
               "index": 1534,
-              "direction": 5,
+              "direction": 3,
               "frame": 4
             },
             {
               "index": 1535,
-              "direction": 5,
+              "direction": 3,
               "frame": 5
             },
             {
               "index": 1540,
-              "direction": 6,
+              "direction": 4,
               "frame": 0
             },
             {
               "index": 1541,
-              "direction": 6,
+              "direction": 4,
               "frame": 1
             },
             {
               "index": 1542,
-              "direction": 6,
+              "direction": 4,
               "frame": 2
             },
             {
               "index": 1543,
-              "direction": 6,
+              "direction": 4,
               "frame": 3
             },
             {
               "index": 1544,
-              "direction": 6,
+              "direction": 4,
               "frame": 4
             },
             {
               "index": 1545,
-              "direction": 6,
+              "direction": 4,
               "frame": 5
             },
             {
               "index": 1550,
-              "direction": 7,
+              "direction": 5,
               "frame": 0
             },
             {
               "index": 1551,
-              "direction": 7,
+              "direction": 5,
               "frame": 1
             },
             {
               "index": 1552,
-              "direction": 7,
+              "direction": 5,
               "frame": 2
             },
             {
               "index": 1553,
-              "direction": 7,
+              "direction": 5,
               "frame": 3
             },
             {
               "index": 1554,
-              "direction": 7,
+              "direction": 5,
               "frame": 4
             },
             {
               "index": 1555,
+              "direction": 5,
+              "frame": 5
+            },
+            {
+              "index": 1560,
+              "direction": 6,
+              "frame": 0
+            },
+            {
+              "index": 1561,
+              "direction": 6,
+              "frame": 1
+            },
+            {
+              "index": 1562,
+              "direction": 6,
+              "frame": 2
+            },
+            {
+              "index": 1563,
+              "direction": 6,
+              "frame": 3
+            },
+            {
+              "index": 1564,
+              "direction": 6,
+              "frame": 4
+            },
+            {
+              "index": 1565,
+              "direction": 6,
+              "frame": 5
+            },
+            {
+              "index": 1570,
+              "direction": 7,
+              "frame": 0
+            },
+            {
+              "index": 1571,
+              "direction": 7,
+              "frame": 1
+            },
+            {
+              "index": 1572,
+              "direction": 7,
+              "frame": 2
+            },
+            {
+              "index": 1573,
+              "direction": 7,
+              "frame": 3
+            },
+            {
+              "index": 1574,
+              "direction": 7,
+              "frame": 4
+            },
+            {
+              "index": 1575,
               "direction": 7,
               "frame": 5
             }
@@ -6117,86 +6375,86 @@
           "path": "res://assets/art/monsters/client_classic_bosses/zuma_taurus/zuma_taurus_hit.png",
           "framesPerDirection": 2,
           "frameMs": 100,
-          "sourceStart": 1720,
-          "sourceDirectionStride": 0,
+          "sourceStart": 1580,
+          "sourceDirectionStride": 2,
           "sourceFrames": [
             {
-              "index": 1720,
+              "index": 1580,
               "direction": 0,
               "frame": 0
             },
             {
-              "index": 1721,
+              "index": 1581,
               "direction": 0,
               "frame": 1
             },
             {
-              "index": 1720,
+              "index": 1582,
               "direction": 1,
               "frame": 0
             },
             {
-              "index": 1721,
+              "index": 1583,
               "direction": 1,
               "frame": 1
             },
             {
-              "index": 1720,
+              "index": 1584,
               "direction": 2,
               "frame": 0
             },
             {
-              "index": 1721,
+              "index": 1585,
               "direction": 2,
               "frame": 1
             },
             {
-              "index": 1720,
+              "index": 1586,
               "direction": 3,
               "frame": 0
             },
             {
-              "index": 1721,
+              "index": 1587,
               "direction": 3,
               "frame": 1
             },
             {
-              "index": 1720,
+              "index": 1588,
               "direction": 4,
               "frame": 0
             },
             {
-              "index": 1721,
+              "index": 1589,
               "direction": 4,
               "frame": 1
             },
             {
-              "index": 1720,
+              "index": 1590,
               "direction": 5,
               "frame": 0
             },
             {
-              "index": 1721,
+              "index": 1591,
               "direction": 5,
               "frame": 1
             },
             {
-              "index": 1720,
+              "index": 1592,
               "direction": 6,
               "frame": 0
             },
             {
-              "index": 1721,
+              "index": 1593,
               "direction": 6,
               "frame": 1
             },
             {
-              "index": 1720,
+              "index": 1594,
               "direction": 7,
               "frame": 0
             },
             {
-              "index": 1721,
+              "index": 1595,
               "direction": 7,
               "frame": 1
             }
@@ -6205,330 +6463,410 @@
         },
         "death": {
           "path": "res://assets/art/monsters/client_classic_bosses/zuma_taurus/zuma_taurus_death.png",
-          "framesPerDirection": 8,
+          "framesPerDirection": 10,
           "frameMs": 200,
-          "sourceStart": 1740,
-          "sourceDirectionStride": 0,
+          "sourceStart": 1600,
+          "sourceDirectionStride": 10,
           "sourceFrames": [
             {
-              "index": 1740,
+              "index": 1600,
               "direction": 0,
               "frame": 0
             },
             {
-              "index": 1741,
+              "index": 1601,
               "direction": 0,
               "frame": 1
             },
             {
-              "index": 1742,
+              "index": 1602,
               "direction": 0,
               "frame": 2
             },
             {
-              "index": 1743,
+              "index": 1603,
               "direction": 0,
               "frame": 3
             },
             {
-              "index": 1744,
+              "index": 1604,
               "direction": 0,
               "frame": 4
             },
             {
-              "index": 1745,
+              "index": 1605,
               "direction": 0,
               "frame": 5
             },
             {
-              "index": 1746,
+              "index": 1606,
               "direction": 0,
               "frame": 6
             },
             {
-              "index": 1747,
+              "index": 1607,
               "direction": 0,
               "frame": 7
             },
             {
-              "index": 1740,
+              "index": 1608,
+              "direction": 0,
+              "frame": 8
+            },
+            {
+              "index": 1609,
+              "direction": 0,
+              "frame": 9
+            },
+            {
+              "index": 1610,
               "direction": 1,
               "frame": 0
             },
             {
-              "index": 1741,
+              "index": 1611,
               "direction": 1,
               "frame": 1
             },
             {
-              "index": 1742,
+              "index": 1612,
               "direction": 1,
               "frame": 2
             },
             {
-              "index": 1743,
+              "index": 1613,
               "direction": 1,
               "frame": 3
             },
             {
-              "index": 1744,
+              "index": 1614,
               "direction": 1,
               "frame": 4
             },
             {
-              "index": 1745,
+              "index": 1615,
               "direction": 1,
               "frame": 5
             },
             {
-              "index": 1746,
+              "index": 1616,
               "direction": 1,
               "frame": 6
             },
             {
-              "index": 1747,
+              "index": 1617,
               "direction": 1,
               "frame": 7
             },
             {
-              "index": 1740,
+              "index": 1618,
+              "direction": 1,
+              "frame": 8
+            },
+            {
+              "index": 1619,
+              "direction": 1,
+              "frame": 9
+            },
+            {
+              "index": 1620,
               "direction": 2,
               "frame": 0
             },
             {
-              "index": 1741,
+              "index": 1621,
               "direction": 2,
               "frame": 1
             },
             {
-              "index": 1742,
+              "index": 1622,
               "direction": 2,
               "frame": 2
             },
             {
-              "index": 1743,
+              "index": 1623,
               "direction": 2,
               "frame": 3
             },
             {
-              "index": 1744,
+              "index": 1624,
               "direction": 2,
               "frame": 4
             },
             {
-              "index": 1745,
+              "index": 1625,
               "direction": 2,
               "frame": 5
             },
             {
-              "index": 1746,
+              "index": 1626,
               "direction": 2,
               "frame": 6
             },
             {
-              "index": 1747,
+              "index": 1627,
               "direction": 2,
               "frame": 7
             },
             {
-              "index": 1740,
+              "index": 1628,
+              "direction": 2,
+              "frame": 8
+            },
+            {
+              "index": 1629,
+              "direction": 2,
+              "frame": 9
+            },
+            {
+              "index": 1630,
               "direction": 3,
               "frame": 0
             },
             {
-              "index": 1741,
+              "index": 1631,
               "direction": 3,
               "frame": 1
             },
             {
-              "index": 1742,
+              "index": 1632,
               "direction": 3,
               "frame": 2
             },
             {
-              "index": 1743,
+              "index": 1633,
               "direction": 3,
               "frame": 3
             },
             {
-              "index": 1744,
+              "index": 1634,
               "direction": 3,
               "frame": 4
             },
             {
-              "index": 1745,
+              "index": 1635,
               "direction": 3,
               "frame": 5
             },
             {
-              "index": 1746,
+              "index": 1636,
               "direction": 3,
               "frame": 6
             },
             {
-              "index": 1747,
+              "index": 1637,
               "direction": 3,
               "frame": 7
             },
             {
-              "index": 1740,
+              "index": 1638,
+              "direction": 3,
+              "frame": 8
+            },
+            {
+              "index": 1639,
+              "direction": 3,
+              "frame": 9
+            },
+            {
+              "index": 1640,
               "direction": 4,
               "frame": 0
             },
             {
-              "index": 1741,
+              "index": 1641,
               "direction": 4,
               "frame": 1
             },
             {
-              "index": 1742,
+              "index": 1642,
               "direction": 4,
               "frame": 2
             },
             {
-              "index": 1743,
+              "index": 1643,
               "direction": 4,
               "frame": 3
             },
             {
-              "index": 1744,
+              "index": 1644,
               "direction": 4,
               "frame": 4
             },
             {
-              "index": 1745,
+              "index": 1645,
               "direction": 4,
               "frame": 5
             },
             {
-              "index": 1746,
+              "index": 1646,
               "direction": 4,
               "frame": 6
             },
             {
-              "index": 1747,
+              "index": 1647,
               "direction": 4,
               "frame": 7
             },
             {
-              "index": 1740,
+              "index": 1648,
+              "direction": 4,
+              "frame": 8
+            },
+            {
+              "index": 1649,
+              "direction": 4,
+              "frame": 9
+            },
+            {
+              "index": 1650,
               "direction": 5,
               "frame": 0
             },
             {
-              "index": 1741,
+              "index": 1651,
               "direction": 5,
               "frame": 1
             },
             {
-              "index": 1742,
+              "index": 1652,
               "direction": 5,
               "frame": 2
             },
             {
-              "index": 1743,
+              "index": 1653,
               "direction": 5,
               "frame": 3
             },
             {
-              "index": 1744,
+              "index": 1654,
               "direction": 5,
               "frame": 4
             },
             {
-              "index": 1745,
+              "index": 1655,
               "direction": 5,
               "frame": 5
             },
             {
-              "index": 1746,
+              "index": 1656,
               "direction": 5,
               "frame": 6
             },
             {
-              "index": 1747,
+              "index": 1657,
               "direction": 5,
               "frame": 7
             },
             {
-              "index": 1740,
+              "index": 1658,
+              "direction": 5,
+              "frame": 8
+            },
+            {
+              "index": 1659,
+              "direction": 5,
+              "frame": 9
+            },
+            {
+              "index": 1660,
               "direction": 6,
               "frame": 0
             },
             {
-              "index": 1741,
+              "index": 1661,
               "direction": 6,
               "frame": 1
             },
             {
-              "index": 1742,
+              "index": 1662,
               "direction": 6,
               "frame": 2
             },
             {
-              "index": 1743,
+              "index": 1663,
               "direction": 6,
               "frame": 3
             },
             {
-              "index": 1744,
+              "index": 1664,
               "direction": 6,
               "frame": 4
             },
             {
-              "index": 1745,
+              "index": 1665,
               "direction": 6,
               "frame": 5
             },
             {
-              "index": 1746,
+              "index": 1666,
               "direction": 6,
               "frame": 6
             },
             {
-              "index": 1747,
+              "index": 1667,
               "direction": 6,
               "frame": 7
             },
             {
-              "index": 1740,
+              "index": 1668,
+              "direction": 6,
+              "frame": 8
+            },
+            {
+              "index": 1669,
+              "direction": 6,
+              "frame": 9
+            },
+            {
+              "index": 1670,
               "direction": 7,
               "frame": 0
             },
             {
-              "index": 1741,
+              "index": 1671,
               "direction": 7,
               "frame": 1
             },
             {
-              "index": 1742,
+              "index": 1672,
               "direction": 7,
               "frame": 2
             },
             {
-              "index": 1743,
+              "index": 1673,
               "direction": 7,
               "frame": 3
             },
             {
-              "index": 1744,
+              "index": 1674,
               "direction": 7,
               "frame": 4
             },
             {
-              "index": 1745,
+              "index": 1675,
               "direction": 7,
               "frame": 5
             },
             {
-              "index": 1746,
+              "index": 1676,
               "direction": 7,
               "frame": 6
             },
             {
-              "index": 1747,
+              "index": 1677,
               "direction": 7,
               "frame": 7
+            },
+            {
+              "index": 1678,
+              "direction": 7,
+              "frame": 8
+            },
+            {
+              "index": 1679,
+              "direction": 7,
+              "frame": 9
             }
           ],
           "confidence": "B"
