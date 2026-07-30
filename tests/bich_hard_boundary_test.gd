@@ -17,7 +17,9 @@ func _ready() -> void:
 
 	var raw_size: Array = runtime.design.design_size
 	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
-	var edge := MapEditorCoordinate.tile_to_world(Vector2(float(size.x) * 0.5 - 0.5, -0.5), size)
+	var edge := MapEditorCoordinate.tile_to_world(
+		Vector2(float(size.x) * 0.5, 0.0), size
+	)
 	var visual_boundary := CollisionGeometry.map_inner_boundary_world(size)
 	var edge_direction := visual_boundary[1] - visual_boundary[0]
 	var outward := Vector2(edge_direction.y, -edge_direction.x).normalized()
