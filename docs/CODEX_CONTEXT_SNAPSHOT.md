@@ -1,9 +1,29 @@
 # Codex 精简上下文快照
 
-更新时间：2026-07-29（Asia/Shanghai）
+更新时间：2026-07-30（Asia/Shanghai）
 
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。
 准确性规则：本文件不是代码或 Git 状态的替代品；只核实本次任务实际触及的分支、文件、接口和专项测试。
+
+## 2026-07-30 本地视觉验收台
+
+- UI 专业提交 `cd168dd4` 已由集成提交 `ff235d1a` 接入。本地入口为 `tools/run_visual_acceptance_lab.ps1`，独立场景为 `tools/visual_acceptance_lab/visual_acceptance_lab.tscn`；不修改 `project.godot`，不写角色存档、校准草稿或正式素材。
+- 当前最小版本直接实例化正式 `PlayerCharacter` / `PlayerVisual` 运行时合成，覆盖战士、法师、道士，`idle/walk/attack/cast/hit/death` 六动作与八方向；支持 25%/50%/100%/200% 播放、逐帧、1–4 倍显示、三种背景、一键重载正式素材和截图。
+- 播放驱动修复已由 UI 提交 `1d86eba5` / `05731bbf`、集成提交 `677ae9d6` / `f8a11079` 接入：使用 `PROCESS_MODE_ALWAYS` 的独立 60 Hz 计时器驱动正式视觉帧，初始 3× 显示倍率真实应用，并由真实 SceneTree 时间推进、正式身体贴图区域切换和预览缩放回归覆盖“按钮切换但人物不动”。
+- 人物脚点手动对齐由 UI 提交 `7855c2a9`、集成提交 `60348875` 接入：黄色角色地面原点、粉色 `36×18` 物理脚印和蓝色 `64×32` 地图菱形中心固定为同一 `(0,0)`；用户先点击鞋底中点定义蓝色视觉脚点，再拖动整套人物视觉或用方向键按 `0.5px` 微调使蓝黄重合。用户最终草稿 SHA-256 `5D01E19C509E9C970B928475263E233552EE50A00BE7C04FD3BF6BD1CFD088A4` 已由正式合同 `player.visual_ground_alignment.manual.v1` 和集成提交 `7de58783` 接入：人物视觉偏移 `(+7.5,+8.5)`、脚点修正 `(-7.5,-12.5)`，最终视觉脚点为 `(0,0)`；UI 提交 `52910b19` / `c8674538` 与集成提交 `db6b93a3` / `f874b275` 保证重开工具不会二次叠加该偏移。
+- 辅助层同时显示角色坐标、正式视觉脚点、`18×9` 物理脚印、64×32 地面菱形与当前帧边界，用于直接暴露外观锚点和物理坐标漂移。截图只写入 `outputs/visual_acceptance/**`。
+- UI 工作树与真实集成基线专项通过；正式接入最终回归 6/6：`player_visual_ground_alignment_test`、两项等距物理/脚印合同、`ui_visual_acceptance_lab_test`、`player_three_profession_visual_catalog_test`、`equipment_world_helmet_hidden_hair_test`。
+- `item_236.json` / `item_240.json` 冻结 SHA-256 仍分别为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC` 与 `81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`，本任务未修改任何头盔草稿或生成图。
+
+## 2026-07-30 v38 无损精简发布
+
+- 集成提交：`5137be3d`（怪物图集改用无损导入）、`a2b29e83`（Android v38 与生产排除规则）、`2bf81def`（APK 资源完整性验证与可选基线变化证明分离）。APK 对应运行时提交为 `a2b29e83`。
+- 最终 APK：`outputs/hardcore/HardCore-slim-v38-debug.apk`；`244,091,990` 字节（232.78 MiB）；SHA-256 `562082FD18DC51ECB65F00F610EDF82295B9A92FDA98BDB0B1D73C5765FA4D43`；`versionCode=38`、`versionName=1.17.2-slim`、包名 `com.personal.mafaoffline`、应用名 `HardCore`，v2/v3 签名均通过。
+- 相比 v37 的 `1,648,238,897` 字节减少 `1,404,146,907` 字节（约 85.2%）。核心收益来自 580 张怪物 PNG 的 Godot 无损压缩导入：编译纹理由约 1,303.12 MiB 降至 78.06 MiB；原 PNG 聚合哈希、580 个 `.uid`、像素和运行时稳定 ID 均未改变。
+- 生产排除仅覆盖确定不参与运行时的地图原始批次、staging `source/rgba_native`、调色板源图、墙体预览及 UI/装备设计源文件；地图运行时 fallback 所需的 174 个 `editor_canvas` 导入全部保留。
+- APK 独立资源探针通过：12 个关键编译脚本、男性 `Hair.wil block 4` 六动作、世界头盔隐藏、纸娃娃 base/hair、12 个头盔 patch、586 帧技能动画、580 个怪物 CTEX 均存在；怪物 CTEX 不含 ETC2/S3TC/VRAM 压缩标记。
+- 当前真实集成基线验证：怪物专项 15/15、地图/怪物定向专项 4/4、完整关键回归 74/74 全部通过。14 份冻结头盔草稿/正式合同、视觉目录与纸娃娃头部 patch 构建前后 SHA-256 零变化。
+- 清理完成：删除所有旧 APK、旧视频/截图/日志/重建预览、未跟踪旧审计快照，以及主树和现存工作树的可再生 `.godot`/`outputs` 缓存；保留最终 v38 APK、`complete_local_mir_sources`、`complete_client_frame_catalog`、永久工作树、所有 dirty/冻结素材和 `dev_art_sources` 只读主资料。
 
 ## 2026-07-29 v37 运行时实证修复
 
@@ -66,12 +86,12 @@
 
 ## 最终 APK
 
-- 状态：最新完整集成 Android 实机测试包，headless import/export 均成功并完成独立 APK 元数据、架构、清单与签名验证。
-- 文件：`C:\Users\Administrator\Documents\HardCore\outputs\hardcore\HardCore-integrated-debug.apk`
-- 构建时间：`2026-07-29 21:52:16`
-- 大小：`1,648,222,396` 字节
-- SHA-256：`B1355959570EF5BA585371C3E6260B12EB9188078D39A3FF0F3891DEC6EB3A5B`
-- 包信息：`com.personal.mafaoffline`，versionCode `36`，versionName `1.17.0-full-integration`，应用名 `HardCore`，compile/target SDK `36`、minSdk `24`、`arm64-v8a`、横屏。
+- 状态：最新完整集成 Android 精简测试包，headless import/export 均成功并完成独立 APK 元数据、架构、清单、运行时资源与签名验证。
+- 文件：`C:\Users\Administrator\Documents\HardCore\outputs\hardcore\HardCore-slim-v38-debug.apk`
+- 构建时间：`2026-07-30`
+- 大小：`244,091,990` 字节
+- SHA-256：`562082FD18DC51ECB65F00F610EDF82295B9A92FDA98BDB0B1D73C5765FA4D43`
+- 包信息：`com.personal.mafaoffline`，versionCode `38`，versionName `1.17.2-slim`，应用名 `HardCore`，`arm64-v8a`、横屏。
 - 签名验证：APK Signature Scheme v2/v3 均通过，签名者 1；证书 SHA-256 `c62d0f8239b926f819038845c302143fd24dcfd75ed8d877ed846c430c6f3fcc`，与上一测试包签名者一致，可覆盖安装并保留兼容存档。
 - 本包包含当前集成分支全部正式运行时工作：33 技能及正式技能动画/图标、硬直与受击中断、完整装备属性和穿戴、纸娃娃/背包/地面头盔展示、世界人物隐藏头盔并使用经典主资料库男性 `Hair.wil block 4` 全动作头发、男性衣服/武器外观、三职业九个满技能测试人物、地图/碰撞/遮挡、怪物外观与 v4 脚下光圈、UI 与角色存档兼容。15 份受保护头盔草稿和正式合同构建前后 SHA-256 全部不变。
 

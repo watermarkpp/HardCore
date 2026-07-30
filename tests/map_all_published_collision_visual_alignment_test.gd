@@ -248,12 +248,7 @@ func _assert_boundary_contract(
 		) - top_vertex
 	)
 	var outward := Vector2(edge_direction.y, -edge_direction.x).normalized()
-	var padded_outside := visual_edge + outward * (
-		CollisionGeometry.DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD * 0.5
-	)
-	var hard_outside := visual_edge + outward * (
-		CollisionGeometry.DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD + 2.0
-	)
+	var just_outside := visual_edge + outward * 0.5
 	assert(
 		not CollisionGeometry.runtime_collision_contains_world(
 			empty_collision, visual_edge, design_size
@@ -261,16 +256,11 @@ func _assert_boundary_contract(
 		"map %d visible ground edge blocked" % runtime_map_id
 	)
 	assert(
-		not CollisionGeometry.runtime_collision_contains_world(
-			empty_collision, padded_outside, design_size
-		),
-		"map %d actor clearance missing outside visual edge" % runtime_map_id
-	)
-	assert(
 		CollisionGeometry.runtime_collision_contains_world(
-			empty_collision, hard_outside, design_size
+			empty_collision, just_outside, design_size
 		),
-		"map %d exterior past actor clearance not blocked" % runtime_map_id
+		"map %d black area immediately outside visual edge not blocked"
+			% runtime_map_id
 	)
 	var world_boundary := CollisionGeometry.map_inner_boundary_world(design_size)
 	for index in expected.size():
@@ -414,24 +404,23 @@ func _assert_bich_runtime_physics() -> void:
 	var visual_boundary := CollisionGeometry.map_inner_boundary_world(design_size)
 	var edge_direction := visual_boundary[1] - visual_boundary[0]
 	var outward := Vector2(edge_direction.y, -edge_direction.x).normalized()
-	var hard_outside := visual_edge + outward * (
-		CollisionGeometry.DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD + 2.0
-	)
+	var just_inside := visual_edge - outward * 0.5
+	var just_outside := visual_edge + outward * 0.5
 	assert(
 		not background._editor_runtime_blocks_world(visual_edge),
 		"Bich visible edge rejected by software collision"
 	)
 	assert(
-		_physics_hits(visual_edge).is_empty(),
-		"Bich visible edge rejected by Physics2D"
+		_physics_hits(just_inside).is_empty(),
+		"Bich Physics2D boundary starts inside visible ground"
 	)
 	assert(
-		background._editor_runtime_blocks_world(hard_outside),
-		"Bich exterior past actor clearance accepted by software collision"
+		background._editor_runtime_blocks_world(just_outside),
+		"Bich black area immediately outside visual edge accepted by software collision"
 	)
 	assert(
-		not _physics_hits(hard_outside).is_empty(),
-		"Bich exterior past actor clearance accepted by Physics2D"
+		not _physics_hits(just_outside).is_empty(),
+		"Bich black area immediately outside visual edge accepted by Physics2D"
 	)
 	var erased_checked := 0
 	var blocked_set := CollisionGeometry.blocked_cell_set(runtime.collision)

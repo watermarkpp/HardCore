@@ -21,16 +21,25 @@ func _ready() -> void:
 	var visual_boundary := CollisionGeometry.map_inner_boundary_world(size)
 	var edge_direction := visual_boundary[1] - visual_boundary[0]
 	var outward := Vector2(edge_direction.y, -edge_direction.x).normalized()
-	var boundary_clearance := CollisionGeometry.DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD
-
 	var player := PlayerCharacter.new()
 	add_child(player)
 	await get_tree().physics_frame
 	player.global_position = edge - outward * (ArtSpec.PLAYER_COLLISION_RADIUS + 4.0)
 	var player_collision := player.move_and_collide(outward * 160.0)
 	assert(player_collision != null, "玩家可越过地图外部黑区硬边界")
-	assert(absf((player.global_position - edge).dot(outward)) <= 1.5,
-		"玩家脚点未到达可见地面边缘")
+	var expected_player_position := (
+		CollisionGeometry.project_player_foot_inside_boundary(edge, size)
+	)
+	assert(
+		player.global_position.distance_to(expected_player_position) <= 1.5,
+		"玩家物理坐标与脚底边界投影不一致"
+	)
+	assert(
+		CollisionGeometry.player_foot_inside_boundary(
+			player.global_position, size
+		),
+		"玩家脚底仍可进入地图外部黑区"
+	)
 	player.queue_free()
 	await get_tree().process_frame
 
@@ -41,10 +50,20 @@ func _ready() -> void:
 	enemy.global_position = edge - outward * (enemy.collision_radius + 4.0)
 	var enemy_collision := enemy.move_and_collide(outward * 160.0)
 	assert(enemy_collision != null, "怪物可越过地图外部黑区硬边界")
-	var enemy_limit := maxf(0.0, boundary_clearance - enemy.collision_radius) + 1.5
-	assert((enemy.global_position - edge).dot(outward) <= enemy_limit,
-		"怪物脚点越过外沿净空")
-	print("BICH_HARD_BOUNDARY_PASS：角色脚点到达可见边缘且玩家与怪物均被硬边界阻挡")
+	var expected_enemy_position := (
+		CollisionGeometry.project_world_envelope_inside_visible_boundary(
+			edge,
+			size,
+			WorldSpatialRules.actor_footprint_polygon(
+				enemy.collision_radius
+			)
+		)
+	)
+	assert(
+		enemy.global_position.distance_to(expected_enemy_position) <= 1.5,
+		"怪物物理坐标与脚底边界投影不一致"
+	)
+	print("BICH_HARD_BOUNDARY_PASS：玩家与怪物完整脚底均被同一可见地面边界阻挡")
 	get_tree().quit(0)
 
 

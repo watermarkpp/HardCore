@@ -10,7 +10,7 @@ const SIDE_NAMES := [
 	"lower_left",
 	"upper_left",
 ]
-const EDGE_ERROR_LIMIT_PX := 1.5
+const PROJECTION_MATCH_LIMIT_PX := 1.5
 
 
 func _ready() -> void:
@@ -63,15 +63,28 @@ func _ready() -> void:
 		)
 		var collision := player.move_and_collide(outward * 160.0)
 		assert(collision != null, "%s boundary allowed player escape" % SIDE_NAMES[side])
+		var projected_edge := (
+			CollisionGeometry.project_player_foot_inside_boundary(
+				edge_midpoint, design_size
+			)
+		)
+		assert(
+			player.global_position.distance_to(projected_edge)
+				<= PROJECTION_MATCH_LIMIT_PX,
+			"%s Physics2D and foot projection differ: physics=%s projected=%s"
+				% [SIDE_NAMES[side], player.global_position, projected_edge]
+		)
+		assert(
+			CollisionGeometry.player_foot_inside_boundary(
+				player.global_position, design_size
+			),
+			"%s boundary left part of the player foot ellipse in black"
+				% SIDE_NAMES[side]
+		)
 		var signed_error := (
 			player.global_position - edge_midpoint
 		).dot(outward)
 		measured_errors[SIDE_NAMES[side]] = signed_error
-		assert(
-			absf(signed_error) <= EDGE_ERROR_LIMIT_PX,
-			"%s foot point differs from visible edge by %.3fpx"
-				% [SIDE_NAMES[side], signed_error]
-		)
 		player.queue_free()
 		await get_tree().process_frame
 
@@ -91,11 +104,11 @@ func _ready() -> void:
 	)
 	assert(
 		left_difference <= 0.05,
-		"left edge foot-point errors are asymmetric: %s" % measured_errors
+		"left edge foot-envelope offsets are asymmetric: %s" % measured_errors
 	)
 	assert(
 		opposite_max_difference <= 0.05,
-		"opposite edge foot-point errors are asymmetric: %s" % measured_errors
+		"opposite edge foot-envelope offsets are asymmetric: %s" % measured_errors
 	)
 	print(
 		"BICH_FOUR_SIDE_ACTOR_BOUNDARY_PASS "

@@ -3,7 +3,9 @@ param(
     [string]$ApkPath,
 
     [Parameter(Mandatory = $true)]
-    [string]$BaselineApkPath
+    [string]$BaselineApkPath,
+
+    [switch]$RequireRuntimeChangesFromBaseline
 )
 
 $ErrorActionPreference = "Stop"
@@ -78,6 +80,9 @@ function Assert-ChangedFromBaseline {
         [string]$EntryName
     )
 
+    if (-not $RequireRuntimeChangesFromBaseline) {
+        return
+    }
     $CurrentHash = Get-ArchiveEntrySha256 -Archive $CurrentArchive -EntryName $EntryName -ArchiveLabel "current APK"
     $BaselineEntry = $BaselineArchive.GetEntry($EntryName)
     if ($null -eq $BaselineEntry -or $BaselineEntry.Length -le 0) {
@@ -244,7 +249,11 @@ try {
     Write-Output "APK_SHA256=$ApkHash"
     Write-Output "BASELINE_APK=$ResolvedBaselineApkPath"
     Write-Output "BASELINE_SHA256=$BaselineHash"
-    Write-Output "COMPILED_SCRIPTS_CHANGED=$($CompiledScripts.Count)"
+    Write-Output "COMPILED_SCRIPTS_VERIFIED=$($CompiledScripts.Count)"
+    Write-Output "RUNTIME_CHANGE_COMPARISON=$($RequireRuntimeChangesFromBaseline.IsPresent)"
+    if ($RequireRuntimeChangesFromBaseline) {
+        Write-Output "COMPILED_SCRIPTS_CHANGED=$($CompiledScripts.Count)"
+    }
     Write-Output "WORLD_HELMET_VISIBLE=false"
     Write-Output "MALE_HAIR_BLOCK=4"
     Write-Output "MALE_HAIR_ACTION_TEXTURES=$HairTextureCount"

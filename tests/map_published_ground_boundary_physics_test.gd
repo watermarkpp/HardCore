@@ -102,23 +102,19 @@ func _assert_physics_edge(
 	var outward := Vector2(edge_direction.y, -edge_direction.x).normalized()
 	var clearance := CollisionGeometry.DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD
 	var footprint := WorldSpatialRules.actor_footprint_polygon(clearance)
-	var footprint_support := _support(footprint, outward)
-	var padded_outside := visual_edge + outward * (footprint_support * 0.5)
-	var hard_outside := visual_edge + outward * (footprint_support + 2.0)
+	var just_inside := visual_edge - outward * 0.5
+	var just_outside := visual_edge + outward * 0.5
 	var empty_collision := {"blocked_tiles": []}
 	assert(not CollisionGeometry.runtime_collision_contains_world(
 		empty_collision, visual_edge, design_size
 	), "map %d software blocks rendered feet at ground edge" % runtime_map_id)
-	assert(not CollisionGeometry.runtime_collision_contains_world(
-		empty_collision, padded_outside, design_size
-	), "map %d software boundary omitted actor clearance" % runtime_map_id)
 	assert(CollisionGeometry.runtime_collision_contains_world(
-		empty_collision, hard_outside, design_size
-	), "map %d software accepted exterior past actor clearance" % runtime_map_id)
-	assert(_physics_hits(visual_edge).is_empty(),
-		"map %d Physics2D blocks foot point before visible edge" % runtime_map_id)
-	assert(not _physics_hits(hard_outside).is_empty(),
-		"map %d Physics2D accepted exterior past actor clearance" % runtime_map_id)
+		empty_collision, just_outside, design_size
+	), "map %d software accepted black area outside rendered ground" % runtime_map_id)
+	assert(_physics_hits(just_inside).is_empty(),
+		"map %d Physics2D starts inside rendered ground" % runtime_map_id)
+	assert(not _physics_hits(just_outside).is_empty(),
+		"map %d Physics2D accepted black area outside rendered ground" % runtime_map_id)
 
 	var actor := CharacterBody2D.new()
 	actor.collision_layer = 2
@@ -131,21 +127,25 @@ func _assert_physics_edge(
 	await get_tree().physics_frame
 	var collision := actor.move_and_collide(outward * (clearance * 3.0))
 	assert(collision != null, "map %d actor escaped hard boundary" % runtime_map_id)
-	var edge_error := absf((actor.global_position - visual_edge).dot(outward))
-	assert(edge_error <= 1.5,
-		"map %d feet stop %.2f px before visual edge" % [runtime_map_id, edge_error])
+	var projected := (
+		CollisionGeometry.project_world_envelope_inside_visible_boundary(
+			visual_edge, design_size, footprint
+		)
+	)
+	assert(
+		actor.global_position.distance_to(projected) <= 1.5,
+		"map %d physics/projection coordinate drift: physics=%s projected=%s"
+			% [runtime_map_id, actor.global_position, projected]
+	)
+	assert(
+		CollisionGeometry.world_envelope_inside_visible_boundary(
+			actor.global_position, design_size, footprint
+		),
+		"map %d actor feet overlap black area" % runtime_map_id
+	)
 	actor.queue_free()
 	body.queue_free()
 	await get_tree().process_frame
-
-
-func _support(points: PackedVector2Array, normal: Vector2) -> float:
-	var result := 0.0
-	for point: Vector2 in points:
-		result = maxf(result, point.dot(normal))
-	return result
-
-
 func _physics_hits(world_position: Vector2) -> Array[Dictionary]:
 	var query := PhysicsPointQueryParameters2D.new()
 	query.position = world_position

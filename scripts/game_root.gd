@@ -9,6 +9,9 @@ const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_
 const MapPortalRuntimeServiceScript := preload("res://scripts/map_editor/map_portal_runtime_service.gd")
 const MapPortalTravelGuardScript := preload("res://scripts/map_editor/map_portal_travel_guard.gd")
 const MapDiamondCameraConstraintScript := preload("res://scripts/map_editor/map_diamond_camera_constraint_service.gd")
+const MapRuntimeCollisionGeometryScript := preload(
+	"res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd"
+)
 const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const SystemMenuPanelScript := preload("res://scripts/system_menu_panel.gd")
@@ -129,6 +132,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	_expire_canonical_fire_charge_if_needed()
+	_constrain_player_foot_to_runtime_ground()
 	background.set_focus_position(player.global_position)
 	_update_world_camera_constraint(delta)
 	_update_portal_arrival_guard()
@@ -150,6 +154,30 @@ func _process(delta: float) -> void:
 	for index in range(4):
 		if Input.is_action_just_pressed("skill_%d" % (index + 1)):
 			_use_quick_slot(index)
+
+
+func _constrain_player_foot_to_runtime_ground() -> bool:
+	if (
+		not is_instance_valid(player)
+		or not MapEditorRuntimeBridgeScript.has_runtime_map(current_map_id)
+	):
+		return false
+	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
+	var raw_size: Array = runtime.get("design", {}).get("design_size", [])
+	if raw_size.size() != 2:
+		return false
+	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
+	var corrected := (
+		MapRuntimeCollisionGeometryScript.project_player_foot_inside_boundary(
+			player.global_position, design_size
+		)
+	)
+	if corrected.is_equal_approx(player.global_position):
+		return false
+	player.global_position = corrected
+	player.velocity = Vector2.ZERO
+	PlayerState.update_world_location(current_map_id, corrected)
+	return true
 
 
 func _update_world_camera_constraint(delta := 1.0 / 60.0) -> void:
