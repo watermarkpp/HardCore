@@ -6,6 +6,9 @@ const PlayerGroundRuntimeDiagnosticOverlayScript := preload(
 )
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
 const SkillInputPolicyScript := preload("res://scripts/skill_input_policy.gd")
+const CombatReleaseGeometryScript := preload(
+	"res://scripts/skills/combat_release_geometry.gd"
+)
 
 const PlayerVisualScript := preload("res://scripts/player_visual.gd")
 const PlayerHealthBarScript := preload("res://scripts/player_health_bar.gd")
@@ -68,6 +71,7 @@ var fire_sword_enabled := false
 # Read-only presentation mirror; GameRoot owns charge creation, expiry, and consumption.
 var _fire_sword_charge_expires_at_ms := 0
 var _pending_attack_context: Dictionary = {}
+var _pending_skill_context: Dictionary = {}
 var _combat_action_sequence := 0
 var _pending_combat_action_id := 0
 var _pending_combat_action_active := false
@@ -223,7 +227,7 @@ func can_start_attack() -> bool:
 	return _attack_timer <= 0.0 and _attack_action_timer <= 0.0 and _struck_lock_remaining <= 0.0 and _struck_reaction_lock_remaining <= 0.0 and control_time <= 0.0
 
 
-func request_attack(has_combat_target := false) -> bool:
+func request_attack(has_combat_target := false, locked_target_instance_id := 0) -> bool:
 	if not can_start_attack():
 		return false
 	var context := _build_warrior_attack_context(has_combat_target)
@@ -250,20 +254,31 @@ func request_attack(has_combat_target := false) -> bool:
 	var critical_chance := float(PlayerState.computed_stats.get("critical_chance", 0.0))
 	if critical_chance > 0.0 and EquipmentRulesScript.critical_succeeds(critical_chance, _rng.randf()):
 		damage = EquipmentRulesScript.critical_damage(damage, float(PlayerState.computed_stats.get("critical_damage_multiplier", 1.5)))
-	_emit_attack_after_windup(global_position, facing.normalized(), damage, attack_hit_windup, context, action_id)
+	_emit_attack_after_windup(
+		damage,
+		attack_hit_windup,
+		context,
+		action_id,
+		facing.normalized(),
+		locked_target_instance_id
+	)
 	if _rng.randi_range(1, 25) == 1:
 		PlayerState.damage_equipment_durability("武器")
 	return true
 
 
-func request_attack_toward(direction: Vector2, has_combat_target := false) -> bool:
+func request_attack_toward(
+	direction: Vector2,
+	has_combat_target := false,
+	locked_target_instance_id := 0
+) -> bool:
 	if not can_start_attack() or direction.length_squared() <= 0.01:
 		return false
 	set_combat_facing(direction)
-	return request_attack(has_combat_target)
+	return request_attack(has_combat_target, locked_target_instance_id)
 
 
-func request_skill(skill_name: String) -> bool:
+func request_skill(skill_name: String, locked_target_instance_id := 0) -> bool:
 	if skill_name.is_empty() or not PlayerState.is_skill_learned(skill_name):
 		return false
 	if _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0 or control_time > 0.0 or _dead:
@@ -271,10 +286,10 @@ func request_skill(skill_name: String) -> bool:
 	var learned_level := PlayerState.effective_skill_level(skill_name)
 	if PlayerState.profession == "战士" and skill_name in ["基本剑术", "攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"]:
 		return _request_warrior_state_skill(skill_name, learned_level)
-	return _request_active_skill(skill_name)
+	return _request_active_skill(skill_name, locked_target_instance_id)
 
 
-func _request_active_skill(skill_name: String) -> bool:
+func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -> bool:
 	var learned_level := PlayerState.effective_skill_level(skill_name)
 	if _attack_timer > 0.0:
 		return false
@@ -289,6 +304,10 @@ func _request_active_skill(skill_name: String) -> bool:
 	if current_mp < mana_cost:
 		return false
 	var canonical_timing: Dictionary = canonical_definition.get("timing", {})
+	var combat_profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)
+	var track_locked_target := CombatReleaseGeometryScript.tracks_locked_target(
+		str(combat_profile.get("target_mode", "self"))
+	)
 	var body_cast_ms := int(canonical_timing.get(
 		"body_cast_ms",
 		roundi(ProfessionRules.CASTER_SPELL_ACTION_DURATION * 1000.0)
@@ -324,11 +343,12 @@ func _request_active_skill(skill_name: String) -> bool:
 	visual.play_action(skill_name if PlayerState.profession == "战士" else "cast", action_duration)
 	_emit_skill_after_windup(
 		skill_name,
-		global_position,
-		facing.normalized(),
 		0,
 		maxf(0.0, float(release_ms) / 1000.0),
-		action_id
+		action_id,
+		facing.normalized(),
+		locked_target_instance_id,
+		track_locked_target
 	)
 	if _rng.randi_range(1, 30) == 1:
 		PlayerState.damage_equipment_durability("武器")
@@ -448,20 +468,79 @@ func _apply_resolved_damage(amount: int, causes_struck: bool) -> void:
 		resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
 
 
-func _emit_attack_after_windup(origin: Vector2, direction: Vector2, damage: int, windup: float, context: Dictionary, action_id: int) -> void:
+func _emit_attack_after_windup(
+	damage: int,
+	windup: float,
+	context: Dictionary,
+	action_id: int,
+	input_direction: Vector2,
+	locked_target_instance_id: int
+) -> void:
 	if windup > 0.0:
 		await get_tree().create_timer(windup).timeout
 	if is_inside_tree() and _commit_combat_action(action_id):
+		var release_geometry := _resolve_combat_release_geometry(
+			input_direction,
+			locked_target_instance_id,
+			true
+		)
 		_pending_attack_context = context.duplicate(true)
-		attack_requested.emit(origin, direction, damage)
+		_pending_attack_context["release_geometry"] = release_geometry
+		attack_requested.emit(
+			release_geometry.origin_world,
+			release_geometry.direction_world,
+			damage
+		)
 		_pending_attack_context.clear()
 
 
-func _emit_skill_after_windup(skill_name: String, origin: Vector2, direction: Vector2, damage: int, windup: float, action_id: int) -> void:
+func _emit_skill_after_windup(
+	skill_name: String,
+	damage: int,
+	windup: float,
+	action_id: int,
+	input_direction: Vector2,
+	locked_target_instance_id: int,
+	track_locked_target: bool
+) -> void:
 	if windup > 0.0:
 		await get_tree().create_timer(windup).timeout
 	if is_inside_tree() and _commit_combat_action(action_id):
-		skill_requested.emit(skill_name, origin, direction, damage)
+		var release_geometry := _resolve_combat_release_geometry(
+			input_direction,
+			locked_target_instance_id,
+			track_locked_target
+		)
+		_pending_skill_context = {"release_geometry": release_geometry}
+		skill_requested.emit(
+			skill_name,
+			release_geometry.origin_world,
+			release_geometry.direction_world,
+			damage
+		)
+		_pending_skill_context.clear()
+
+
+func _resolve_combat_release_geometry(
+	input_direction: Vector2,
+	locked_target_instance_id: int,
+	track_locked_target: bool
+) -> Dictionary:
+	var target_position := Vector2.ZERO
+	var target_valid := false
+	if track_locked_target and locked_target_instance_id > 0:
+		var candidate := instance_from_id(locked_target_instance_id)
+		if candidate is Node2D and is_instance_valid(candidate) and candidate.is_inside_tree():
+			target_position = candidate.global_position
+			target_valid = true
+	return CombatReleaseGeometryScript.resolve(
+		global_position,
+		input_direction,
+		locked_target_instance_id,
+		target_position,
+		target_valid,
+		track_locked_target
+	)
 
 
 func _begin_combat_action(action_kind: String) -> int:
@@ -518,6 +597,10 @@ func struck_reaction_snapshot() -> Dictionary:
 
 func consume_attack_context() -> Dictionary:
 	return _pending_attack_context.duplicate(true)
+
+
+func consume_skill_context() -> Dictionary:
+	return _pending_skill_context.duplicate(true)
 
 
 func set_test_combat_time_ms(value: int) -> void:
