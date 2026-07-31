@@ -504,6 +504,12 @@ func _rebuild_monster_actor(force := false) -> bool:
 	_monster.name = "AcceptanceMonster_%d" % monster_id
 	_monster.setup(data, _player, _is_boss_monster(monster_id))
 	_preview_root.add_child(_monster)
+	# The lab owns its diagnostic overlays. A runtime-selected MonsterVisual can
+	# now draw the game's yellow target ring itself, which would duplicate the
+	# saved-draft overlay and make sub-pixel differences look like changed user
+	# data. Keep the preview actor unselected so draft review remains a single,
+	# read-only coordinate presentation.
+	_monster.set_targeted(false)
 	_monster.set_process(false)
 	_monster.set_physics_process(false)
 	_monster.velocity = Vector2.ZERO
