@@ -23,6 +23,15 @@ const POISON_INDICATOR_STYLE := "overhead_three_diamonds"
 const NAME_LABEL_SIZE := MonsterOverheadScript.NAME_LABEL_SIZE
 const NAME_LABEL_HEALTH_BAR_GAP := MonsterOverheadScript.NAME_LABEL_HEALTH_BAR_GAP
 const TARGET_RING_FOOTPRINT_SCALE := 1.25
+const PLAYER_MELEE_CONTACT_CONTRACT_ID := (
+	"monster.melee_player_contact.iso_footprint_fractional_tile.v1"
+)
+const PLAYER_MELEE_CONTACT_REACH_TILES := 1.5
+const PLAYER_MELEE_CONTACT_GAP_PIXELS := 14.0
+# Existing ranged profiles start at 155px. This guard only selects the moving
+# contact attackers whose stop point must be compatible with the player's
+# formal 1.5-tile melee geometry; it never shortens or expands ranged attacks.
+const RANGED_ATTACK_RANGE_FLOOR_PIXELS := 128.0
 
 static var _crowd_grid_physics_frame := -1
 static var _crowd_grid: Dictionary = {}
@@ -346,8 +355,20 @@ func _physics_process(delta: float) -> void:
 		else:
 			velocity = Vector2.ZERO
 			return
-	var contact_distance := collision_radius + _target_collision_radius(target) + 14.0
+	var contact_distance := _contact_distance_to_target(target, offset)
 	var engagement_distance := maxf(attack_range, contact_distance)
+	var engagement_ready := distance <= engagement_distance
+	if _uses_player_melee_contact_contract(target):
+		# The primary Mir source measures proximity in logical tiles with
+		# MAX(abs(dx), abs(dy)). This project intentionally extends ordinary
+		# player melee reach from the source's one tile to the approved 1.5-tile
+		# contract. Screen-space distance may decide when bodies look in contact,
+		# but it may never stop a pursuing melee monster outside that geometry.
+		engagement_ready = (
+			engagement_ready
+			and logical_tile_distance_for_world_offset(offset)
+			<= PLAYER_MELEE_CONTACT_REACH_TILES + 0.0001
+		)
 	if offset.length_squared() > 0.001:
 		facing = offset.normalized()
 	if _pending_attack_time >= 0.0:
@@ -372,7 +393,7 @@ func _physics_process(delta: float) -> void:
 	if move_speed > 0.0 and distance < contact_distance - 3.0 and distance > 0.01 and not target is PlayerCharacter:
 		# 怪物和召唤物重叠时可以自行分离；玩家普通移动不能迫使怪物后退。
 		velocity = -offset.normalized() * move_speed * 0.72
-	elif distance <= engagement_distance:
+	elif engagement_ready:
 		velocity = Vector2.ZERO
 		if _attack_timer <= 0.0:
 			_attack_timer = _current_attack_interval()
@@ -560,6 +581,64 @@ func _target_collision_radius(target_node: Node2D) -> float:
 	if target_node is SummonActor:
 		return target_node.collision_radius
 	return 16.0
+
+
+func _contact_distance_to_target(target_node: Node2D, offset: Vector2) -> float:
+	var target_radius := _target_collision_radius(target_node)
+	if target_node is PlayerCharacter:
+		return directional_footprint_contact_distance(
+			collision_radius,
+			target_radius,
+			offset,
+			PLAYER_MELEE_CONTACT_GAP_PIXELS,
+		)
+	return collision_radius + target_radius + PLAYER_MELEE_CONTACT_GAP_PIXELS
+
+
+func _uses_player_melee_contact_contract(target_node: Node2D) -> bool:
+	return (
+		target_node is PlayerCharacter
+		and move_speed > 0.0
+		and attack_range < RANGED_ATTACK_RANGE_FLOOR_PIXELS
+	)
+
+
+static func world_offset_to_fractional_tile_delta(offset: Vector2) -> Vector2:
+	# Inverse of the formal 64x32 MapEditorCoordinate projection. Translation by
+	# the current map center cancels for a delta, so no map-specific origin or
+	# fallback pixel grid is allowed into contact geometry.
+	var horizontal := offset.x / MapEditorCoordinate.HALF_TILE_W
+	var vertical := offset.y / MapEditorCoordinate.HALF_TILE_H
+	return Vector2(
+		(horizontal + vertical) * 0.5,
+		(vertical - horizontal) * 0.5,
+	)
+
+
+static func logical_tile_distance_for_world_offset(offset: Vector2) -> float:
+	var tile_delta := world_offset_to_fractional_tile_delta(offset)
+	return maxf(absf(tile_delta.x), absf(tile_delta.y))
+
+
+static func directional_footprint_contact_distance(
+	source_radius: float,
+	target_radius: float,
+	offset: Vector2,
+	gap_pixels := PLAYER_MELEE_CONTACT_GAP_PIXELS,
+) -> float:
+	var direction := offset.normalized() if offset.length_squared() > 0.0001 else Vector2.DOWN
+	return (
+		_footprint_support(source_radius, direction)
+		+ _footprint_support(target_radius, -direction)
+		+ maxf(0.0, gap_pixels)
+	)
+
+
+static func _footprint_support(radius: float, direction: Vector2) -> float:
+	var result := 0.0
+	for point: Vector2 in WorldSpatialRulesScript.actor_footprint_polygon(radius):
+		result = maxf(result, point.dot(direction))
+	return result
 
 
 func _crowd_separation() -> Vector2:
