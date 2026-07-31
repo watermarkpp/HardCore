@@ -1,9 +1,17 @@
 # Codex 精简上下文快照
 
-更新时间：2026-07-30（Asia/Shanghai）
+更新时间：2026-07-31（Asia/Shanghai）
 
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。
 准确性规则：本文件不是代码或 Git 状态的替代品；只核实本次任务实际触及的分支、文件、接口和专项测试。
+
+## 2026-07-31 Android v46 怪物人工脚点坐标归一化
+
+- 怪物专业提交 `97734d8a` 在只读加载阶段重放历史校准台的 S 向预览位移，并在视觉脚点向量中等量抵消；怪物实体、碰撞、攻击判定和目标黄圈继续以 actor-local `(0,0)` 为唯一脚点。UI 专业提交 `14984c0c` 已作为 `bb3d682f` 集成，使验收台和游戏使用完全相同的变换链。
+- 人物没有接入怪物历史位移重放。正式人物常量继续为 `runtimeVisualPosition=(7.5,12.5)`、`visualFootAnchorAdjustment=(-7.5,-12.5)`，最终脚点仍为 `(0,0)`；人物脚点、比奇边界、通用边界、等距碰撞、投射物命中链和移动目标选择回归与怪物/UI 联动合计 12/12 通过。
+- 212 份人工怪物草稿及三份正式怪物脚点合同未被重写；三份正式合同 SHA-256 继续为 `DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。人物人工草稿 SHA-256 继续为 `5D01E19C509E9C970B928475263E233552EE50A00BE7C04FD3BF6BD1CFD088A4`。
+- APK 从固定提交 `6a983c60da2dd29388ffe25048f1d6f443a7a300` 的全新隔离工作树导出：`outputs/hardcore/HardCore-v46-monster-foot-normalized-debug.apk`，大小 `244,215,702` 字节，SHA-256 `C3C1BB1CD768AE217A053F7427A178C5DC04424BB968673E6385A095A7058444`。
+- 包信息为 `versionCode=46`、`versionName=1.17.10-monster-foot-normalized`、`com.personal.mafaoffline`、`HardCore`；APK v2/v3 签名和运行时资源探针通过，包内三份怪物脚点合同与源文件逐字节同哈希，人物脚点合同语义逐字段一致。已对连接的 HONOR 90 保留数据覆盖安装并成功启动，前台活动为 `GodotAppLauncher`，近期日志无 Godot 脚本错误或崩溃。
 
 ## 2026-07-30 Android v42 坐标隔离测试包
 
