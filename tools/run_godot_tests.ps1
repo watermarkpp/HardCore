@@ -42,6 +42,7 @@ $Suites = @{
 		'tests/skeleton_spirit_boss_test.tscn',
 		'tests/corpse_king_boss_test.tscn',
 		'tests/crowd_grounding_test.tscn',
+		'tests/monster_melee_contact_geometry_test.tscn',
 		'tests/placeholder_attack_animation_test.tscn'
 	)
     warrior = @(

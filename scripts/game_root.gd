@@ -1154,7 +1154,8 @@ func _request_mobile_attack() -> bool:
 		target_instance_id,
 		target.global_position if is_instance_valid(target) else Vector2.ZERO,
 		is_instance_valid(target),
-		true
+		true,
+		CombatReleaseGeometryScript.FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION
 	)
 	var accepted := player.request_attack_toward(
 		attack_direction,
@@ -1165,9 +1166,7 @@ func _request_mobile_attack() -> bool:
 		),
 		target_instance_id
 	)
-	# A ready input that is rejected by the fire policy is handled, not queued:
-	# retrying it later would turn a no-target press into an unintended cast.
-	return true if melee_mode == WarriorMeleeGeometryScript.SKILL_FIRE else accepted
+	return accepted
 
 
 func _request_primary_attack_action() -> void:
@@ -1964,8 +1963,9 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 	)
 	var accuracy_bonus := int(melee_modifiers.get("flat_accuracy_bonus", 0))
 	var hit_any := false
+	var canonical_resolution := "rejected"
 	if effect_mode in ["thrust", "half_moon", "fire"]:
-		hit_any = _execute_canonical_melee(
+		var melee_resolution := _execute_canonical_melee(
 			effect_mode,
 			origin,
 			direction,
@@ -1974,6 +1974,8 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			bool(body_selection.get("direct_toggle_release", false)),
 			release_geometry
 		)
+		hit_any = bool(melee_resolution.get("hit_any", false))
+		canonical_resolution = str(melee_resolution.get("resolution", "rejected"))
 	elif effect_mode == "normal":
 		if not primary_targets.is_empty():
 			var target := primary_targets[0]
@@ -1982,6 +1984,13 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 				modified_base_damage,
 				accuracy_bonus
 			)
+			canonical_resolution = "hit" if hit_any else "miss"
+	if SkillInputPolicyScript.fire_direct_release_consumes_cooldown(
+		body_selection,
+		hit_effect,
+		canonical_resolution
+	):
+		player.commit_fire_sword_cooldown()
 	_commit_warrior_melee_modifier_events(melee_modifiers)
 	if (
 		bool(melee_modifiers.get("slaying_proc", false))
@@ -2182,14 +2191,14 @@ func _execute_canonical_melee(
 	accuracy_bonus: int,
 	direct_toggle_release := false,
 	release_geometry: Dictionary = {}
-) -> bool:
+) -> Dictionary:
 	var skill_name: String = {
 		"thrust": "刺杀剑术",
 		"half_moon": "半月弯刀",
 		"fire": "烈火剑法",
 	}.get(mode, "")
 	if skill_name.is_empty():
-		return false
+		return {"accepted": false, "hit_any": false, "resolution": "rejected"}
 	var primary_targets := _physical_primary_targets(
 		origin,
 		direction,
@@ -2229,7 +2238,7 @@ func _execute_canonical_melee(
 	}
 	var result := _execute_canonical_skill(skill_name, origin, direction, base_damage, extra, false)
 	if not bool(result.get("accepted", false)):
-		return false
+		return {"accepted": false, "hit_any": false, "resolution": "rejected"}
 	var hit_any := false
 	for raw_effect: Variant in result.get("effects", []):
 		if not raw_effect is Dictionary:
@@ -2265,7 +2274,11 @@ func _execute_canonical_melee(
 						roundi(float(base_damage) * float(effect.get("damage_multiplier", 1.0))),
 						accuracy_bonus
 					)
-	return hit_any
+	return {
+		"accepted": true,
+		"hit_any": hit_any,
+		"resolution": "hit" if hit_any else "miss",
+	}
 
 
 func _canonical_basic_sword_bonus(origin: Vector2, direction: Vector2, valid_swing: bool) -> int:
