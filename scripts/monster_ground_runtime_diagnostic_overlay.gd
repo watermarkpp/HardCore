@@ -7,6 +7,7 @@ const MANUAL_FOOT_COLOR := Color("#4de1ff")
 const TARGET_RING_COLOR := Color("#ffd54f")
 const FOOTPRINT_COLOR := Color("#ff5c78")
 const MAP_DIAMOND_COLOR := Color(0.55, 0.75, 1.0, 0.90)
+const COORDINATE_FINGERPRINT_CONTRACT := "monster.coordinate_fingerprint.v1"
 
 var actor: Node2D
 
@@ -45,14 +46,47 @@ func coordinate_snapshot() -> Dictionary:
 	if not is_instance_valid(actor) or actor.visual == null:
 		return {}
 	var visual: MonsterVisual = actor.visual
+	var body_sprite: Sprite2D = visual.sprite
 	var actor_origin := Vector2.ZERO
 	var manual_foot := visual.position + visual.visual_foot_offset()
 	var runtime_ring: Vector2 = actor.ground_indicator_center()
+	var sprite_position := (
+		body_sprite.position
+		if body_sprite != null
+		else Vector2.ZERO
+	)
+	var source_actor_origin := (
+		visual.position
+		+ sprite_position
+		+ Vector2(visual.foot_anchor)
+	)
+	var migrated_actor_foot := (
+		source_actor_origin
+		+ Vector2(visual.actor_ground_offset)
+	)
+	var actor_canvas_origin := actor.get_global_transform_with_canvas().origin
+	var visual_canvas_origin := visual.get_global_transform_with_canvas().origin
+	var sprite_canvas_origin := (
+		body_sprite.get_global_transform_with_canvas().origin
+		if body_sprite != null
+		else visual_canvas_origin
+	)
+	var texture_size := (
+		body_sprite.texture.get_size()
+		if body_sprite != null and body_sprite.texture != null
+		else Vector2.ZERO
+	)
+	var texture_path := (
+		body_sprite.texture.resource_path
+		if body_sprite != null and body_sprite.texture != null
+		else ""
+	)
 	var logical_direction := _logical_direction_index(
 		visual.current_direction,
 		str(visual.active_resources.get("direction_mode", "")),
 	)
 	return {
+		"contract": COORDINATE_FINGERPRINT_CONTRACT,
 		"monsterId": actor.monster_id,
 		"monsterName": actor.display_name,
 		"action": visual.current_state,
@@ -67,12 +101,34 @@ func coordinate_snapshot() -> Dictionary:
 		"ringMinusActor": runtime_ring - actor_origin,
 		"ringMinusManual": runtime_ring - manual_foot,
 		"visualPosition": visual.position,
-		"spritePosition": (
-			visual.sprite.position
-			if visual.sprite != null
+		"spritePosition": sprite_position,
+		"footAnchor": Vector2(visual.foot_anchor),
+		"actorGroundOffset": Vector2(visual.actor_ground_offset),
+		"sourceActorOrigin": source_actor_origin,
+		"migratedActorFoot": migrated_actor_foot,
+		"visualFootOffset": visual.visual_foot_offset(),
+		"actorCanvasOrigin": actor_canvas_origin,
+		"visualCanvasDelta": visual_canvas_origin - actor_canvas_origin,
+		"spriteCanvasDelta": sprite_canvas_origin - actor_canvas_origin,
+		"visualGlobalScale": visual.global_scale,
+		"spriteGlobalScale": (
+			body_sprite.global_scale
+			if body_sprite != null
+			else Vector2.ONE
+		),
+		"frameSize": Vector2(visual.frame_size),
+		"regionPosition": (
+			body_sprite.region_rect.position
+			if body_sprite != null
 			else Vector2.ZERO
 		),
-		"visualFootOffset": visual.visual_foot_offset(),
+		"regionSize": (
+			body_sprite.region_rect.size
+			if body_sprite != null
+			else Vector2.ZERO
+		),
+		"textureSize": texture_size,
+		"texturePath": texture_path,
 	}
 
 
@@ -83,9 +139,6 @@ func _draw() -> void:
 	var actor_origin: Vector2 = snapshot.actorOrigin
 	var manual_foot: Vector2 = snapshot.manualVisualFoot
 	var runtime_ring: Vector2 = snapshot.runtimeTargetRing
-	var manual_minus_actor: Vector2 = snapshot.manualMinusActor
-	var ring_minus_actor: Vector2 = snapshot.ringMinusActor
-	var ring_minus_manual: Vector2 = snapshot.ringMinusManual
 	var physics_radii := Vector2(
 		actor.collision_radius,
 		actor.collision_radius * 0.5,
@@ -126,7 +179,10 @@ func _draw() -> void:
 		var detail_text := (
 			"#%d %s  %s/%s src%d f%d\n"
 			+ "O=(%.1f,%.1f) F=(%.1f,%.1f) R=(%.1f,%.1f)\n"
-			+ "F-O=(%+.1f,%+.1f) R-O=(%+.1f,%+.1f) R-F=(%+.1f,%+.1f)"
+			+ "V=(%+.1f,%+.1f) S=(%+.1f,%+.1f) A=(%.0f,%.0f) G=(%.0f,%.0f)\n"
+			+ "SRC=(%+.1f,%+.1f) MIG=(%+.1f,%+.1f)\n"
+			+ "CV=(%+.1f,%+.1f) CS=(%+.1f,%+.1f) scale=(%.2f,%.2f)\n"
+			+ "tex=%dx%d region=(%.0f,%.0f %.0fx%.0f)"
 		) % [
 			int(snapshot.monsterId),
 			str(snapshot.monsterName),
@@ -140,16 +196,34 @@ func _draw() -> void:
 			manual_foot.y,
 			runtime_ring.x,
 			runtime_ring.y,
-			manual_minus_actor.x,
-			manual_minus_actor.y,
-			ring_minus_actor.x,
-			ring_minus_actor.y,
-			ring_minus_manual.x,
-			ring_minus_manual.y,
+			snapshot.visualPosition.x,
+			snapshot.visualPosition.y,
+			snapshot.spritePosition.x,
+			snapshot.spritePosition.y,
+			snapshot.footAnchor.x,
+			snapshot.footAnchor.y,
+			snapshot.actorGroundOffset.x,
+			snapshot.actorGroundOffset.y,
+			snapshot.sourceActorOrigin.x,
+			snapshot.sourceActorOrigin.y,
+			snapshot.migratedActorFoot.x,
+			snapshot.migratedActorFoot.y,
+			snapshot.visualCanvasDelta.x,
+			snapshot.visualCanvasDelta.y,
+			snapshot.spriteCanvasDelta.x,
+			snapshot.spriteCanvasDelta.y,
+			snapshot.spriteGlobalScale.x,
+			snapshot.spriteGlobalScale.y,
+			int(snapshot.textureSize.x),
+			int(snapshot.textureSize.y),
+			snapshot.regionPosition.x,
+			snapshot.regionPosition.y,
+			snapshot.regionSize.x,
+			snapshot.regionSize.y,
 		]
-		var detail_origin := Vector2(-122.0, -132.0)
+		var detail_origin := Vector2(-158.0, -180.0)
 		draw_rect(
-			Rect2(detail_origin + Vector2(-5.0, -17.0), Vector2(244.0, 58.0)),
+			Rect2(detail_origin + Vector2(-5.0, -17.0), Vector2(316.0, 106.0)),
 			Color(0.02, 0.03, 0.04, 0.88),
 			true,
 		)
