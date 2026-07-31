@@ -13,11 +13,14 @@ var actor: Node2D
 
 
 static func enabled_for_runtime() -> bool:
-	# This overlay is intentionally limited to Android debug exports. It never
-	# enters release builds, desktop tests, normal editor sessions, or gameplay
-	# data. The current diagnostic APK therefore observes production rendering
-	# without changing targeting, collision, animation, AI, or saved state.
-	return OS.get_name() == "Android" and OS.is_debug_build()
+	# Per-monster text, crosses and ellipses are intentionally expensive. Keep
+	# the probe available for an explicitly launched coordinate session, but do
+	# not make every Android debug build redraw it for every living monster.
+	return (
+		OS.get_name() == "Android"
+		and OS.is_debug_build()
+		and OS.get_cmdline_user_args().has("--monster-coordinate-probe")
+	)
 
 
 func setup(owner_actor: Node2D) -> void:

@@ -76,8 +76,10 @@ func _run() -> void:
 	enemy.visual.position += Vector2(2.5, 6.0)
 	var separated := overlay.coordinate_snapshot()
 	assert(Vector2(separated.manualVisualFoot).is_equal_approx(Vector2(2.5, 6.0)))
-	assert(Vector2(separated.runtimeTargetRing).is_zero_approx())
-	assert(Vector2(separated.ringMinusManual).is_equal_approx(Vector2(-2.5, -6.0)))
+	assert(
+		Vector2(separated.runtimeTargetRing).is_equal_approx(Vector2(2.5, 6.0))
+	)
+	assert(Vector2(separated.ringMinusManual).is_zero_approx())
 	print(
 		"MONSTER_GROUND_RUNTIME_DIAGNOSTIC_OVERLAY_PASS "
 		+ "production actor/manual-foot/ring coordinates remain independently observable"

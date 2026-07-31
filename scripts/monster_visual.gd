@@ -7,6 +7,9 @@ const BOSS_ART_PATH := "res://assets/data/classic_boss_client_art_sources.json"
 const COMPLETE_ART_PATH := "res://assets/data/complete_monster_client_art_sources.json"
 const OVERHEAD_ANCHOR_DATA_PATH := "res://assets/data/runtime/monster_overhead_anchors.json"
 const GROUND_CONTACT_DATA_PATH := "res://assets/data/runtime/monster_ground_contacts.json"
+const MANUAL_ALIGNMENT_DATA_PATH := (
+	"res://assets/data/runtime/monster_ground_alignment_manual_v1.json"
+)
 # WIL px/py values are relative to the classic DrawChr origin, not to the
 # actor's ground point. The player client-art path already migrates this same
 # origin by (+32,+28); monsters must use the identical coordinate conversion.
@@ -27,6 +30,7 @@ static var _boss_art: Dictionary = {}
 static var _complete_art: Dictionary = {}
 static var _overhead_anchor_data: Dictionary = {}
 static var _ground_contact_data: Dictionary = {}
+static var _manual_alignment_data: Dictionary = {}
 static var _client_resource_profiles: Dictionary = {}
 static var _client_resource_profile_lru: Array[String] = []
 static var _client_resource_profile_bytes: Dictionary = {}
@@ -173,7 +177,7 @@ func _activate_resources() -> void:
 	actor_ground_offset = resources.get("actor_ground_offset", Vector2i.ZERO)
 	health_bar_top_by_direction = resources.get("health_bar_top_by_direction", [])
 	ground_contact_profile = _ground_contact_profile_for_actor()
-	position = _runtime_visual_origin() + visual_root_offset()
+	position = reviewed_visual_origin()
 	sprite.region_rect = Rect2(Vector2.ZERO, frame_size)
 	sprite.position = -Vector2(foot_anchor + actor_ground_offset)
 	_fixed_health_bar_y = _stable_overhead_anchor_y()
@@ -285,6 +289,29 @@ func visual_root_offset() -> Vector2:
 	return Vector2(float(values[0]), float(values[1]))
 
 
+func reviewed_visual_origin() -> Vector2:
+	# The user's draft stores both the runtime origin that was visible while
+	# calibrating and the additional drag offset. The generated contact table
+	# previously retained only the latter, which silently changed the final
+	# sprite origin for drafts whose starting origin was not the generic
+	# (0,4)/(0,6). Recompose the immutable manual values directly so the game
+	# renders exactly the same origin as the acceptance lab.
+	var manual := _manual_alignment_profile_for_actor()
+	var runtime_values: Variant = manual.get("runtimeVisualOrigin", [])
+	var root_values: Variant = manual.get("visualRootOffset", [])
+	if (
+		runtime_values is Array
+		and runtime_values.size() >= 2
+		and root_values is Array
+		and root_values.size() >= 2
+	):
+		return Vector2(
+			float(runtime_values[0]) + float(root_values[0]),
+			float(runtime_values[1]) + float(root_values[1]),
+		)
+	return _runtime_visual_origin() + visual_root_offset()
+
+
 func _runtime_visual_origin() -> Vector2:
 	if not is_instance_valid(actor):
 		return Vector2.ZERO
@@ -302,17 +329,10 @@ func ground_contact_position(fallback: Vector2) -> Vector2:
 
 
 func target_ring_position(fallback: Vector2) -> Vector2:
-	# This is intentionally separate from ground_contact_position(). The latter
-	# describes a reviewed point on the rendered sprite and therefore depends on
-	# visualRootOffset/visualFootOffset. Grounded targeting belongs to the actor
-	# and collision coordinate system, whose canonical foot is local (0, 0).
-	# Only airborne actors need an authored projection from their visual body
-	# down to the ground.
-	if not uses_final_art() or ground_contact_profile.is_empty():
-		return fallback
-	if ground_projection_strategy() in ["flying", "hover"]:
-		return ground_contact_position(fallback)
-	return fallback
+	# The yellow ring is a presentation of the user's reviewed visual foot.
+	# Grounded manual drafts resolve that point to actor-local (0,0), while
+	# flying/hovering profiles retain their authored ground projection.
+	return ground_contact_position(fallback)
 
 
 func ground_indicator_radii(fallback: Vector2) -> Vector2:
@@ -322,7 +342,11 @@ func ground_indicator_radii(fallback: Vector2) -> Vector2:
 
 
 func visual_foot_offset() -> Vector2:
-	var values: Variant = ground_contact_profile.get("visualFootOffset", [])
+	var manual := _manual_alignment_profile_for_actor()
+	var values: Variant = manual.get(
+		"visualFootOffset",
+		ground_contact_profile.get("visualFootOffset", []),
+	)
 	if not values is Array or values.size() < 2:
 		return Vector2.ZERO
 	return Vector2(float(values[0]), float(values[1]))
@@ -349,12 +373,34 @@ func _ground_contact_profile_for_actor() -> Dictionary:
 	return profile if profile is Dictionary else {}
 
 
+func _manual_alignment_profile_for_actor() -> Dictionary:
+	if not is_instance_valid(actor):
+		return {}
+	var value: Variant = _manual_alignment_manifest().get(
+		"entriesByMonsterId", {}
+	).get(str(actor.monster_id), {})
+	return value if value is Dictionary else {}
+
+
 static func _ground_contact_manifest() -> Dictionary:
 	if _ground_contact_data.is_empty() and FileAccess.file_exists(GROUND_CONTACT_DATA_PATH):
 		var file := FileAccess.open(GROUND_CONTACT_DATA_PATH, FileAccess.READ)
 		var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
 		_ground_contact_data = parsed if parsed is Dictionary else {}
 	return _ground_contact_data
+
+
+static func _manual_alignment_manifest() -> Dictionary:
+	if (
+		_manual_alignment_data.is_empty()
+		and FileAccess.file_exists(MANUAL_ALIGNMENT_DATA_PATH)
+	):
+		var file := FileAccess.open(MANUAL_ALIGNMENT_DATA_PATH, FileAccess.READ)
+		var parsed: Variant = (
+			JSON.parse_string(file.get_as_text()) if file != null else null
+		)
+		_manual_alignment_data = parsed if parsed is Dictionary else {}
+	return _manual_alignment_data
 
 
 func _refresh_actor_ground_indicator() -> void:
