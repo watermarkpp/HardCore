@@ -5,6 +5,7 @@ const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.g
 
 const INPUT_METADATA_CONTRACT_ID := "gameplay.skill.input_metadata.v1"
 const WARRIOR_ATTACK_POLICY_ID := "gameplay.warrior.attack_priority.v1"
+const WARRIOR_HIT_EFFECT_POLICY_ID := "gameplay.warrior.hit_effect_fallback.v1"
 const FIRE_TOGGLE_OVERRIDE_ID := "gameplay.warrior.fire_sword.attack_toggle.user_override.v1"
 const SLAYING_LAYER_OVERRIDE_ID := "gameplay.warrior.slaying.layered_proc.user_override.v1"
 
@@ -69,6 +70,7 @@ static func metadata(skill_name_or_id: String) -> Dictionary:
 			"can_combine_with_higher_attack_mode": true,
 			"body_mode_priority": 0,
 			"proc_rolls_per_melee_action": 1,
+			"proc_roll_eligibility": "canonical_hit_frame_valid_melee_swing",
 			"modifier_timing": "before_body_skill_formula",
 			"modifier_scope": "all_hits_of_selected_melee_action",
 			"preserves_body_action_and_effect": true,
@@ -133,30 +135,30 @@ static func resolve_warrior_attack(context: Dictionary) -> Dictionary:
 	if bool(toggles.get("warrior.half_moon", false)):
 		if not _is_learned(learned, "warrior.half_moon"):
 			trace.append(_blocked("warrior.half_moon", "not_learned"))
-		elif not has_target:
-			trace.append(_blocked("warrior.half_moon", "no_eligible_target"))
-		elif current_mp < _mana_cost("warrior.half_moon", int(context.get("half_moon_rank", 0))):
-			trace.append(_blocked("warrior.half_moon", "insufficient_mana"))
 		else:
-			return _with_slaying_layer(
+			var half_moon := _with_slaying_layer(
 				_selection("attack", "half_moon", "warrior.half_moon", trace),
 				context,
 				learned,
 				has_target
 			)
+			half_moon["effect_validation"] = "canonical_hit_frame"
+			half_moon["target_available_at_input"] = has_target
+			return half_moon
 
 	if bool(toggles.get("warrior.thrusting", false)):
 		if not _is_learned(learned, "warrior.thrusting"):
 			trace.append(_blocked("warrior.thrusting", "not_learned"))
-		elif not has_target:
-			trace.append(_blocked("warrior.thrusting", "no_eligible_target"))
 		else:
-			return _with_slaying_layer(
+			var thrust := _with_slaying_layer(
 				_selection("attack", "thrust", "warrior.thrusting", trace),
 				context,
 				learned,
 				has_target
 			)
+			thrust["effect_validation"] = "canonical_hit_frame"
+			thrust["target_available_at_input"] = has_target
+			return thrust
 
 	return _with_slaying_layer(
 		_selection("attack", "normal", "", trace),
@@ -166,15 +168,120 @@ static func resolve_warrior_attack(context: Dictionary) -> Dictionary:
 	)
 
 
+static func resolve_warrior_hit_effect(
+	body_selection: Dictionary,
+	runtime_context: Dictionary
+) -> Dictionary:
+	var selected_body_mode := str(body_selection.get("mode", "normal"))
+	var learned: Dictionary = runtime_context.get("learned_skills", {})
+	var toggles: Dictionary = runtime_context.get("toggles", {})
+	var has_target := bool(runtime_context.get("has_combat_target", false))
+	var current_mp := maxi(0, int(runtime_context.get("current_mp", 0)))
+	var trace: Array[Dictionary] = []
+	if not has_target:
+		return _effect_selection(selected_body_mode, "", "", "no_valid_melee_target", trace)
+
+	if selected_body_mode == "fire":
+		var charged_fire := not bool(body_selection.get("direct_toggle_release", false))
+		var fire_cost := (
+			0
+			if charged_fire
+			else _mana_cost(
+				"warrior.fire_sword",
+				int(runtime_context.get("fire_rank", 0))
+			)
+		)
+		if current_mp >= fire_cost:
+			return _effect_selection(
+				selected_body_mode,
+				"fire",
+				"warrior.fire_sword",
+				"",
+				trace
+			)
+		trace.append(_blocked("warrior.fire_sword", "insufficient_mana_at_hit_frame"))
+
+	if selected_body_mode in ["fire", "half_moon"]:
+		if (
+			bool(toggles.get("warrior.half_moon", false))
+			and _is_learned(learned, "warrior.half_moon")
+		):
+			var half_cost := _mana_cost(
+				"warrior.half_moon",
+				int(runtime_context.get("half_moon_rank", 0))
+			)
+			if current_mp >= half_cost:
+				return _effect_selection(
+					selected_body_mode,
+					"half_moon",
+					"warrior.half_moon",
+					"",
+					trace
+				)
+			trace.append(_blocked("warrior.half_moon", "insufficient_mana_at_hit_frame"))
+
+	if (
+		selected_body_mode in ["fire", "half_moon", "thrust"]
+		and bool(toggles.get("warrior.thrusting", false))
+		and _is_learned(learned, "warrior.thrusting")
+	):
+		return _effect_selection(
+			selected_body_mode,
+			"thrust",
+			"warrior.thrusting",
+			"",
+			trace
+		)
+	return _effect_selection(selected_body_mode, "normal", "", "", trace)
+
+
 static func _selection(action: String, mode: String, skill_id: String, trace: Array[Dictionary]) -> Dictionary:
 	return {
 		"policy_id": WARRIOR_ATTACK_POLICY_ID,
 		"action": action,
 		"mode": mode,
+		"selected_body_mode": mode,
+		"body_action_locked": true,
 		"skill_id": skill_id,
 		"skill_name": SkillDataLoaderScript.display_name(skill_id) if not skill_id.is_empty() else "attack",
 		"attack_priority": int(ATTACK_PRIORITY.get(skill_id, 0)),
 		"fallback_trace": trace,
+	}
+
+
+static func _effect_selection(
+	selected_body_mode: String,
+	effect_mode: String,
+	skill_id: String,
+	reason: String,
+	trace: Array[Dictionary]
+) -> Dictionary:
+	var resource_reason := ""
+	for entry: Dictionary in trace:
+		var entry_reason := str(entry.get("reason", ""))
+		if entry_reason.contains("mana") or entry_reason.contains("resource"):
+			resource_reason = entry_reason
+			break
+	return {
+		"policy_id": WARRIOR_HIT_EFFECT_POLICY_ID,
+		"visual_mode": selected_body_mode,
+		"selected_body_mode": selected_body_mode,
+		"body_mode_immutable": true,
+		"effect_mode": effect_mode,
+		"effect_skill_id": skill_id,
+		"effect_skill_name": (
+			SkillDataLoaderScript.display_name(skill_id)
+			if not skill_id.is_empty()
+			else ("attack" if effect_mode == "normal" else "")
+		),
+		"effect_available": not effect_mode.is_empty(),
+		"preserve_selected_body_action": true,
+		"effect_mode_can_override_visual": false,
+		"reason": reason,
+		"resource_reason": resource_reason,
+		"fallback_trace": trace,
+		"proc_rolls_performed": 0,
+		"uses_existing_melee_modifier_resolution": true,
 	}
 
 
@@ -185,12 +292,14 @@ static func _with_slaying_layer(
 	has_target: bool
 ) -> Dictionary:
 	selection["passive_proc_layers"] = []
-	if not has_target or not _is_learned(learned, "warrior.slaying_swordsmanship"):
+	if not _is_learned(learned, "warrior.slaying_swordsmanship"):
 		return selection
 	var layer := {
 		"skill_id": "warrior.slaying_swordsmanship",
 		"rank": clampi(int(context.get("slaying_rank", 0)), 0, 3),
 		"rolls_per_melee_action": 1,
+		"roll_eligibility": "canonical_hit_frame_valid_melee_swing",
+		"target_available_at_input": has_target,
 		"modifier_timing": "before_body_skill_formula",
 		"modifier_scope": "all_hits_of_selected_melee_action",
 		"does_not_replace_body_mode": true,
