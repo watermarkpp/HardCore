@@ -1,5 +1,13 @@
 # Codex 精简上下文快照
 
+## 2026-07-31 v47 后续：战士动作稳定与 HUD 精确孔径修正
+
+- 职业技能提交 `4d50549e` 已作为集成提交 `5d2bd904` 接入；跨系统命中帧接线为 `c8505925`。刺杀/半月的主体动作在攻击输入时锁定，不再因瞬时 `has_combat_target` 或半月 MP 检测降为普通攻击；实际目标资格、MP 与效果降级改由 `SkillInputPolicy.resolve_warrior_hit_effect` 在命中帧决定。攻杀剑法仍只在一次有效近战命中事务中判定一次，永远不成为独立主体动作或特效。
+- UI 提交 `36f720ce` 与合并后的修正树 `2d09b896` 已作为集成提交 `ea0d6c50` / `050f9a22` 接入。旧四技能圆框、红菱形和直横连接条不再用大矩形粗擦，而由 `ui.hud.chassis.legacy_skill_alpha_mask.v2` 精确移除；中央徽章、向上尖头和下方正式弧形金属横梁逐像素保留。
+- `round_action_frame_v3` 的 `128×128` 源框内孔实测约 `73.01px`：攻击红底与攻击技能图使用 `74px`，`72px` 六环框同比例使用 `42px`，均圆形裁切且不越框。无技能槽隐藏黑色底和图标，框内透明，只在中心显示“空”。攻击/摇杆向屏幕中心内移，六技能采用同圆心、同半径、固定角步的平滑半环；战士状态行下移。
+- 集成回归：Warrior 完整套件 `18/18` 通过；HUD/Android 布局/触摸滚动/技能图标专项 `6/6` 通过。验收图为 `HardCore-worktrees/ui-art/outputs/visual_acceptance/hud_runtime/hud_precise_mask_fill_2664x1200.png`，底盘与按钮放大图分别为 `hud_precise_mask_chassis_detail_2x.png` / `hud_action_ring_detail_2x.png`。
+- 用户冻结对象零变化：`item_236.json` / `item_240.json` SHA-256 仍为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC` / `81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`；三份怪物脚点合同仍为 `DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+
 ## 2026-07-31 Android v47 六环技能与战士近战整合
 
 - 专业交付已按工作树依次集成：装备 `5da60808`（集成 `b2ff4858`）、职业技能 `4fac69b6`（集成 `8f9b34a8`）、UI `f45c2a68`（集成 `9db42247`）；跨系统接线提交为 `64de7041`，Android 固定构建提交为 `74109c5c`。
