@@ -147,8 +147,15 @@ func _process(delta: float) -> void:
 		_warrior_hud_timer = 0.2
 		PlayerState.apply_warrior_runtime_state(player.warrior_runtime_state_for_save())
 		hud.update_warrior_states(player.warrior_state_snapshot())
-	if _mobile_attack_held or Input.is_action_pressed("attack"):
-		_request_mobile_attack()
+	var bound_attack_skill := PlayerState.skill_name_for_slot(
+		PlayerState.SKILL_SLOT_GROUP_ATTACK,
+		0
+	)
+	if bound_attack_skill.is_empty():
+		if _mobile_attack_held or Input.is_action_pressed("attack"):
+			_request_mobile_attack()
+	elif Input.is_action_just_pressed("attack"):
+		_request_primary_attack_action()
 	if Input.is_action_just_pressed("interact"):
 		_try_interact()
 	for index in range(4):
@@ -1126,6 +1133,17 @@ func _request_mobile_attack() -> void:
 	player.request_attack_toward(player.facing, _has_melee_hittable_target(player.facing))
 
 
+func _request_primary_attack_action() -> void:
+	var bound_skill := PlayerState.skill_name_for_slot(
+		PlayerState.SKILL_SLOT_GROUP_ATTACK,
+		0
+	)
+	if bound_skill.is_empty():
+		_request_mobile_attack()
+		return
+	_use_skill_slot(PlayerState.SKILL_SLOT_GROUP_ATTACK, 0)
+
+
 func _has_melee_hittable_target(direction: Vector2) -> bool:
 	if direction.length_squared() <= 0.01:
 		return false
@@ -1133,8 +1151,11 @@ func _has_melee_hittable_target(direction: Vector2) -> bool:
 
 
 func _on_mobile_attack_pressed() -> void:
-	_mobile_attack_held = true
-	_request_mobile_attack()
+	_mobile_attack_held = PlayerState.skill_name_for_slot(
+		PlayerState.SKILL_SLOT_GROUP_ATTACK,
+		0
+	).is_empty()
+	_request_primary_attack_action()
 
 
 func _on_mobile_attack_released() -> void:
@@ -1396,14 +1417,18 @@ func _try_interact() -> void:
 
 
 func _use_quick_slot(index: int) -> void:
-	_use_skill_slot(PlayerState.SKILL_SLOT_GROUP_CENTER, index)
+	_use_skill_slot(PlayerState.SKILL_SLOT_GROUP_ATTACK_RING, index)
 
 
 func _use_skill_slot(slot_group: String, slot_index: int) -> void:
 	var skill_name := PlayerState.skill_name_for_slot(slot_group, slot_index)
 	if skill_name.is_empty():
-		var group_label := "攻击环" if slot_group == PlayerState.SKILL_SLOT_GROUP_ATTACK_RING else "中央栏"
-		hud.show_message("%s%d为空" % [group_label, slot_index + 1])
+		var group_label := (
+			"攻击键"
+			if slot_group == PlayerState.SKILL_SLOT_GROUP_ATTACK
+			else "攻击环%d" % (slot_index + 1)
+		)
+		hud.show_message("%s为空" % group_label)
 		return
 	var learned_level := PlayerState.effective_skill_level(skill_name)
 	var profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)
@@ -1415,32 +1440,46 @@ func _use_skill_slot(slot_group: String, slot_index: int) -> void:
 
 
 func _on_skill_button_assignment_requested(request: Dictionary) -> void:
-	var result := SkillLoadoutRulesScript.assign_button_slot(
-		PlayerState.skill_button_assignments_snapshot(),
-		PlayerState.learned_skills,
-		request
+	var result := (
+		SkillLoadoutRulesScript.clear_button_slot(
+			PlayerState.skill_button_assignments_snapshot(),
+			request
+		)
+		if bool(request.get("clear", false))
+		else SkillLoadoutRulesScript.assign_button_slot(
+			PlayerState.skill_button_assignments_snapshot(),
+			PlayerState.learned_skills,
+			request
+		)
 	)
 	if not bool(result.get("ok", false)):
 		hud.show_message("技能栏配置失败：%s" % str(result.get("reason", "invalid_request")))
 		return
-	if not PlayerState.apply_quick_slot_assignment(result):
+	if not PlayerState.apply_skill_button_assignment(result):
 		hud.show_message("技能栏配置未能保存")
 		return
 	hud.set_skill_button_assignments(PlayerState.skill_button_assignments_snapshot())
 	var change: Dictionary = result.get("change", {})
 	var group_label := (
-		"攻击环"
-		if str(change.get("slot_group", "")) == PlayerState.SKILL_SLOT_GROUP_ATTACK_RING
-		else "中央栏"
+		"攻击键"
+		if str(change.get("slot_group", "")) == PlayerState.SKILL_SLOT_GROUP_ATTACK
+		else "攻击环%d" % (int(change.get("slot_index", 0)) + 1)
 	)
-	hud.show_message(
-		"已将%s配置到%s%d" % [
-			str(change.get("skill_name", "技能")),
-			group_label,
-			int(change.get("slot_index", 0)) + 1,
-		],
-		1.5
-	)
+	if str(change.get("operation", "")) == "clear":
+		hud.show_message(
+			"%s已恢复普通攻击" % group_label
+			if group_label == "攻击键"
+			else "%s已清空" % group_label,
+			1.5
+		)
+	else:
+		hud.show_message(
+			"已将%s配置到%s" % [
+				str(change.get("skill_name", "技能")),
+				group_label,
+			],
+			1.5
+		)
 
 
 func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void:
@@ -1452,18 +1491,60 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 		mode = "fire"
 		context["skill_name"] = "烈火剑法"
 		context["skill_level"] = PlayerState.effective_skill_level("烈火剑法")
+		context["direct_toggle_release"] = false
 		_set_canonical_fire_charge_expires_at(0)
-	elif mode == "normal" and PlayerState.is_skill_learned("攻杀剑术"):
-		mode = "slaying"
-	var basic_accuracy_bonus := _canonical_basic_sword_bonus(origin, direction, primary != null)
-	var hit_any := (
-		_execute_canonical_melee(mode, origin, direction, damage, basic_accuracy_bonus)
-		if mode in ["slaying", "thrust", "half_moon", "fire"]
-		else _apply_physical_hit(primary, damage, basic_accuracy_bonus)
+	var melee_modifiers := SkillRuntimeRouterScript.resolve_warrior_melee_modifiers({
+		"body_mode": mode,
+		"basic_sword_learned": PlayerState.is_skill_learned("基本剑术"),
+		"basic_sword_rank": PlayerState.effective_skill_level("基本剑术"),
+		"slaying_learned": PlayerState.is_skill_learned("攻杀剑术"),
+		"slaying_rank": PlayerState.effective_skill_level("攻杀剑术"),
+		"valid_melee_swing": primary != null,
+		"seed": _next_canonical_seed(),
+	})
+	var modified_base_damage := (
+		damage
+		+ int(melee_modifiers.get("flat_dc_bonus_before_body_formula", 0))
 	)
+	var accuracy_bonus := int(melee_modifiers.get("flat_accuracy_bonus", 0))
+	var hit_any := (
+		_execute_canonical_melee(
+			mode,
+			origin,
+			direction,
+			modified_base_damage,
+			accuracy_bonus,
+			bool(context.get("direct_toggle_release", false))
+		)
+		if mode in ["thrust", "half_moon", "fire"]
+		else _apply_physical_hit(primary, modified_base_damage, accuracy_bonus)
+	)
+	_commit_warrior_melee_modifier_events(melee_modifiers)
+	if (
+		bool(melee_modifiers.get("slaying_proc", false))
+		and player.visual != null
+		and player.visual.has_method("play_passive_proc_effect")
+	):
+		player.visual.call("play_passive_proc_effect", "攻杀剑术", 0.24)
 	if mode == "fire" and hud != null:
 		hud.update_warrior_states(player.warrior_state_snapshot())
 	_show_attack_flash(origin, direction, hit_any, Color(1.0, 0.72, 0.25))
+
+
+func _commit_warrior_melee_modifier_events(modifiers: Dictionary) -> void:
+	for raw_event: Variant in modifiers.get("proficiency_events", []):
+		if not raw_event is Dictionary:
+			continue
+		var event: Dictionary = raw_event
+		var skill_id := str(event.get("skill_id", ""))
+		var event_id := str(event.get("event", ""))
+		if skill_id.is_empty() or event_id.is_empty():
+			continue
+		PlayerState.apply_skill_proficiency_event(
+			skill_id,
+			event_id,
+			_next_canonical_seed()
+		)
 
 
 func _on_special_action_pressed(effect_id: String) -> void:
@@ -1601,10 +1682,10 @@ func _execute_canonical_melee(
 	origin: Vector2,
 	direction: Vector2,
 	base_damage: int,
-	accuracy_bonus: int
+	accuracy_bonus: int,
+	direct_toggle_release := false
 ) -> bool:
 	var skill_name: String = {
-		"slaying": "攻杀剑术",
 		"thrust": "刺杀剑术",
 		"half_moon": "半月弯刀",
 		"fire": "烈火剑法",
@@ -1623,6 +1704,11 @@ func _execute_canonical_melee(
 		"valid_melee_swing": primary != null,
 		"eligible_target_count": eligible_target_count,
 		"charge_consumed": mode == "fire" and primary != null,
+		"direct_toggle_release": (
+			mode == "fire"
+			and primary != null
+			and direct_toggle_release
+		),
 	}
 	var result := _execute_canonical_skill(skill_name, origin, direction, base_damage, extra, false)
 	if not bool(result.get("accepted", false)):
@@ -1633,11 +1719,6 @@ func _execute_canonical_melee(
 			continue
 		var effect: Dictionary = raw_effect
 		match str(effect.get("type", "")):
-			"melee_proc_modifier":
-				if primary != null and bool(effect.get("proc", false)):
-					hit_any = _apply_physical_hit(primary, base_damage + int(effect.get("flat_dc_bonus", 0)), accuracy_bonus + int(effect.get("flat_accuracy_bonus", 0)))
-				elif primary != null:
-					hit_any = _apply_physical_hit(primary, base_damage, accuracy_bonus)
 			"melee_hit":
 				var target := primary if int(effect.get("cell", 1)) == 1 else _thrust_secondary_target(origin, direction, primary)
 				if target != null:

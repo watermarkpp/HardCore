@@ -41,6 +41,7 @@ var armor_accent: Polygon2D
 var helmet_accent: Polygon2D
 var skill_effect: Line2D
 var skill_effect_sprite: Sprite2D
+var passive_proc_effect_sprite: Sprite2D
 var weapon_audio: AudioStreamPlayer2D
 var current_state := "idle"
 var current_direction := 0
@@ -51,6 +52,9 @@ var _action_duration := 0.0
 var _last_state := ""
 var _action_name := "attack"
 var _action_audio_played := false
+var _passive_proc_effect_name := ""
+var _passive_proc_effect_remaining := 0.0
+var _passive_proc_effect_duration := 0.0
 var _base_action_textures: Dictionary = {}
 var _dress_action_textures: Dictionary = {}
 var _hair_action_textures: Dictionary = {}
@@ -133,6 +137,14 @@ func _ready() -> void:
 	skill_effect_sprite.visible = false
 	skill_effect_sprite.z_index = 0
 	add_child(skill_effect_sprite)
+	passive_proc_effect_sprite = Sprite2D.new()
+	passive_proc_effect_sprite.name = "PassiveProcSkillEffect"
+	passive_proc_effect_sprite.region_enabled = true
+	passive_proc_effect_sprite.centered = false
+	passive_proc_effect_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	passive_proc_effect_sprite.visible = false
+	passive_proc_effect_sprite.z_index = 1
+	add_child(passive_proc_effect_sprite)
 	weapon_audio = AudioStreamPlayer2D.new()
 	weapon_audio.name = "WeaponAudio"
 	weapon_audio.max_distance = 700.0
@@ -262,6 +274,7 @@ func _process(delta: float) -> void:
 	_update_markers()
 	_update_equipment_layers()
 	_update_skill_effect()
+	_update_passive_proc_effect(delta)
 	_update_action_audio()
 
 
@@ -277,6 +290,14 @@ func play_action(animation_name: String, duration: float) -> void:
 		_action_duration = maxf(_action_duration, duration)
 	_elapsed = 0.0
 	_action_audio_played = false
+
+
+func play_passive_proc_effect(effect_name: String, duration := 0.24) -> void:
+	if not CLIENT_EFFECTS.has(effect_name):
+		return
+	_passive_proc_effect_name = effect_name
+	_passive_proc_effect_duration = maxf(0.01, duration)
+	_passive_proc_effect_remaining = _passive_proc_effect_duration
 
 
 func _resolved_direction_row() -> int:
@@ -825,6 +846,47 @@ func _update_skill_effect() -> void:
 			skill_effect_sprite.position += _fire_weapon_head_alignment()
 		skill_effect_sprite.modulate = Color.WHITE
 		return
+
+
+func _update_passive_proc_effect(delta: float) -> void:
+	if passive_proc_effect_sprite == null:
+		return
+	_passive_proc_effect_remaining = maxf(
+		0.0,
+		_passive_proc_effect_remaining - delta
+	)
+	var active := (
+		_passive_proc_effect_remaining > 0.0
+		and CLIENT_EFFECTS.has(_passive_proc_effect_name)
+	)
+	passive_proc_effect_sprite.visible = active
+	if not active:
+		_passive_proc_effect_name = ""
+		return
+	var effect: Dictionary = CLIENT_EFFECTS[_passive_proc_effect_name]
+	var cell: Vector2i = effect.get("cell", Vector2i.ZERO)
+	if cell == Vector2i.ZERO or effect.get("assets", []).size() > 0:
+		passive_proc_effect_sprite.visible = false
+		return
+	var progress := clampf(
+		1.0 - _passive_proc_effect_remaining / _passive_proc_effect_duration,
+		0.0,
+		0.999
+	)
+	var frame_count := 6
+	var effect_frame := mini(frame_count - 1, int(floor(progress * frame_count)))
+	passive_proc_effect_sprite.texture = PresentationAssets.effect_texture(
+		str(effect.get("asset", ""))
+	)
+	passive_proc_effect_sprite.region_rect = Rect2(
+		Vector2(effect_frame * cell.x, current_direction * cell.y),
+		Vector2(cell)
+	)
+	passive_proc_effect_sprite.position = (
+		-Vector2(effect.get("origin", Vector2i.ZERO))
+		+ CLIENT_EFFECT_ACTOR_OFFSET
+	)
+	passive_proc_effect_sprite.modulate = Color.WHITE
 
 
 func _fire_weapon_head_alignment() -> Vector2:
