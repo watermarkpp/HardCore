@@ -35,10 +35,11 @@ const HUD_ATTACK_RING_RADIUS := 125.0
 const HUD_ATTACK_RING_START_DEGREES := 180.0
 const HUD_ATTACK_RING_STEP_DEGREES := 36.0
 const HUD_ATTACK_RING_BUTTON_SIZE := Vector2(72, 72)
-const HUD_ATTACK_RING_BACKDROP_SIZE := Vector2(40, 40)
-const HUD_ATTACK_RING_ICON_SIZE := Vector2(36, 36)
-const HUD_ATTACK_FILL_SIZE := Vector2(72, 72)
-const HUD_ATTACK_ICON_SIZE := Vector2(64, 64)
+const HUD_ACTION_FRAME_INNER_DIAMETER_SOURCE := 74.0
+const HUD_ATTACK_RING_BACKDROP_SIZE := Vector2(42, 42)
+const HUD_ATTACK_RING_ICON_SIZE := Vector2(42, 42)
+const HUD_ATTACK_FILL_SIZE := Vector2(74, 74)
+const HUD_ATTACK_ICON_SIZE := Vector2(74, 74)
 const HUD_JOYSTICK_RECT := Rect2(70, -210, 152, 152)
 
 signal movement_changed(value: Vector2)
@@ -87,6 +88,7 @@ var hud_item_buttons: Array[Button] = []
 var quick_slot_labels: Array[Label] = []
 var quick_slot_icons: Array[TextureRect] = []
 var attack_ring_skill_icons: Array[TextureRect] = []
+var attack_ring_skill_backdrops: Array[Panel] = []
 var attack_ring_skill_labels: Array[Label] = []
 var attack_slot_icon: TextureRect
 var attack_slot_label: Label
@@ -497,6 +499,7 @@ func _build_combat_controls(root: Control) -> void:
 		ring_backdrop.size = HUD_ATTACK_RING_BACKDROP_SIZE
 		ring_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		ring_skill.add_child(ring_backdrop)
+		attack_ring_skill_backdrops.append(ring_backdrop)
 		var ring_icon := TextureRect.new()
 		ring_icon.name = "SkillIcon"
 		ring_icon.position = (HUD_ATTACK_RING_BUTTON_SIZE - HUD_ATTACK_RING_ICON_SIZE) * 0.5
@@ -983,8 +986,15 @@ func update_quick_slots() -> void:
 		attack_ring_skill_icons[index].set_meta("skill_name", skill_name)
 		attack_ring_skill_icons[index].set_meta("skill_icon_id", skill_icon_id)
 		attack_ring_skill_icons[index].set_meta("skill_icon_path", skill_icon_path)
+		if index < attack_ring_skill_backdrops.size():
+			attack_ring_skill_backdrops[index].visible = not skill_name.is_empty()
 		if index < attack_ring_skill_labels.size():
-			attack_ring_skill_labels[index].text = str(index + 1) if skill_texture != null else "技%d" % (index + 1)
+			if skill_name.is_empty():
+				attack_ring_skill_labels[index].text = "空"
+				attack_ring_skill_labels[index].vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			else:
+				attack_ring_skill_labels[index].text = str(index + 1) if skill_texture != null else skill_name.left(2)
+				attack_ring_skill_labels[index].vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
 			attack_ring_skill_labels[index].tooltip_text = skill_name
 
 
