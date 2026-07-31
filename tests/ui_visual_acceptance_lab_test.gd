@@ -120,6 +120,10 @@ func _ready() -> void:
 	assert(lab._monster != null and lab._monster.visual != null)
 	assert(lab._monster.visual.uses_final_art())
 	assert(
+		lab._monster.position.is_zero_approx(),
+		"acceptance monster must not retain runtime spawn-overlap displacement",
+	)
+	assert(
 		not lab._monster.is_targeted,
 		"acceptance lab must suppress the runtime-owned target ring",
 	)
@@ -219,6 +223,10 @@ func _ready() -> void:
 		).is_zero_approx()
 	)
 	lab._rebuild_monster_actor(true)
+	assert(
+		lab._monster.position.is_zero_approx(),
+		"forced rebuild must preserve the deterministic preview origin",
+	)
 	lab._reset_visual_alignment()
 	lab._set_visual_foot_anchor_from_preview(Vector2(3.0, -2.0))
 	assert(lab._visual_foot_origin().is_equal_approx(Vector2(3.0, -2.0)))
