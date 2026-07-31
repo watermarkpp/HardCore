@@ -299,6 +299,7 @@ func _assert_single_slaying_layer(selection: Dictionary) -> void:
 	assert(layer.skill_id == "warrior.slaying_swordsmanship")
 	assert(layer.rank == 3 and layer.rolls_per_melee_action == 1)
 	assert(layer.roll_eligibility == "canonical_hit_frame_valid_melee_swing")
-	assert(layer.modifier_timing == "before_body_skill_formula")
+	assert(layer.accuracy_timing == "before_each_target_hit_check")
+	assert(layer.modifier_timing == "after_body_skill_formula_before_target_damage_commit")
 	assert(layer.modifier_scope == "all_hits_of_selected_melee_action")
 	assert(layer.does_not_replace_body_mode)

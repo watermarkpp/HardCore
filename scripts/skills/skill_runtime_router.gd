@@ -14,7 +14,7 @@ const TaoistRuntimeScript := preload("res://scripts/skills/runtimes/taoist_skill
 
 const RUNTIME_CONTRACT_ID := "skills.runtime_router.cn_mir2_176.v1"
 const CANONICAL_PRODUCTION_DEFAULT := true
-const WARRIOR_MELEE_MODIFIER_CONTRACT_ID := "gameplay.warrior.melee_modifiers.v1"
+const WARRIOR_MELEE_MODIFIER_CONTRACT_ID := "gameplay.warrior.melee_modifiers.v2"
 
 
 static func execute(request: Variant) -> Dictionary:
@@ -86,11 +86,14 @@ static func resolve_warrior_melee_modifiers(request: Dictionary) -> Dictionary:
 	var slaying_rank := clampi(int(request.get("slaying_rank", 0)), 0, 3)
 	var rng := SkillRngScript.new(int(request.get("seed", 0)))
 	var flat_dc_bonus := 0
+	var flat_damage_bonus_after_body_formula := 0
 	var flat_accuracy_bonus := 0
 	var proficiency_events: Array[Dictionary] = []
 	var effects: Array[Dictionary] = []
 	var slaying_proc := false
 	var slaying_proc_roll_count := 0
+	var slaying_proc_denominator := 0
+	var slaying_proc_roll := -1
 
 	if basic_learned:
 		var basic_definition := SkillDataLoaderScript.skill("warrior.basic_swordsmanship")
@@ -115,37 +118,48 @@ static func resolve_warrior_melee_modifiers(request: Dictionary) -> Dictionary:
 				"event": basic_event,
 			})
 
-	if slaying_learned and valid_melee_swing:
-		slaying_proc_roll_count = 1
+	if slaying_learned:
 		var slaying_definition := SkillDataLoaderScript.skill("warrior.slaying_swordsmanship")
-		var slaying_context := {
-			"valid_melee_swing": true,
-			"has_target": true,
-			"force_proc": bool(request.get("force_slaying_proc", false)),
-			"force_no_proc": bool(request.get("force_no_slaying_proc", false)),
-		}
-		var slaying_plan := WarriorRuntimeScript.execute(
-			slaying_definition,
-			{"rank": slaying_rank, "target_context": slaying_context},
-			rng
-		)
-		for raw_effect: Variant in slaying_plan.get("effects", []):
-			if not raw_effect is Dictionary:
-				continue
-			var effect: Dictionary = raw_effect
-			effects.append(effect.duplicate(true))
-			if str(effect.get("type", "")) != "melee_proc_modifier":
-				continue
-			slaying_proc = bool(effect.get("proc", false))
-			if slaying_proc:
-				flat_dc_bonus += int(effect.get("flat_dc_bonus", 0))
-				flat_accuracy_bonus += int(effect.get("flat_accuracy_bonus", 0))
-		var slaying_event := str(slaying_plan.get("proficiency_event", ""))
-		if not slaying_event.is_empty():
-			proficiency_events.append({
-				"skill_id": "warrior.slaying_swordsmanship",
-				"event": slaying_event,
-			})
+		var mechanics: Dictionary = slaying_definition.get("mechanics", {})
+		var accuracy_values: Array = mechanics.get("flat_accuracy_bonus_by_rank", [0, 1, 2, 3])
+		var denominator_values: Array = mechanics.get("proc_denominator_by_rank", [7, 6, 5, 4])
+		flat_accuracy_bonus += int(accuracy_values[slaying_rank])
+		slaying_proc_denominator = int(denominator_values[slaying_rank])
+		if valid_melee_swing:
+			slaying_proc_roll_count = 1
+			var slaying_context := {
+				"valid_melee_swing": true,
+				"has_target": true,
+				"force_proc": bool(request.get("force_slaying_proc", false)),
+				"force_no_proc": bool(request.get("force_no_slaying_proc", false)),
+			}
+			if request.has("slaying_proc_roll"):
+				slaying_context["proc_roll"] = int(request.get("slaying_proc_roll", 0))
+			var slaying_plan := WarriorRuntimeScript.execute(
+				slaying_definition,
+				{"rank": slaying_rank, "target_context": slaying_context},
+				rng
+			)
+			for raw_effect: Variant in slaying_plan.get("effects", []):
+				if not raw_effect is Dictionary:
+					continue
+				var effect: Dictionary = raw_effect
+				effects.append(effect.duplicate(true))
+				if str(effect.get("type", "")) != "melee_proc_modifier":
+					continue
+				slaying_proc = bool(effect.get("proc", false))
+				slaying_proc_denominator = int(effect.get("proc_denominator", slaying_proc_denominator))
+				slaying_proc_roll = int(effect.get("proc_roll", -1))
+				if slaying_proc:
+					flat_damage_bonus_after_body_formula = int(
+						effect.get("flat_damage_bonus", 0)
+					)
+			var slaying_event := str(slaying_plan.get("proficiency_event", ""))
+			if not slaying_event.is_empty():
+				proficiency_events.append({
+					"skill_id": "warrior.slaying_swordsmanship",
+					"event": slaying_event,
+				})
 
 	return {
 		"contract_id": WARRIOR_MELEE_MODIFIER_CONTRACT_ID,
@@ -153,18 +167,22 @@ static func resolve_warrior_melee_modifiers(request: Dictionary) -> Dictionary:
 		"valid_melee_swing": valid_melee_swing,
 		"body_mode": body_mode,
 		"flat_dc_bonus_before_body_formula": flat_dc_bonus,
+		"flat_damage_bonus_after_body_formula": flat_damage_bonus_after_body_formula,
 		"flat_accuracy_bonus": flat_accuracy_bonus,
 		"slaying_proc": slaying_proc,
 		"slaying_proc_roll_count": slaying_proc_roll_count,
+		"slaying_proc_denominator": slaying_proc_denominator,
+		"slaying_proc_roll": slaying_proc_roll,
 		"slaying_effect_skill_id": (
 			"warrior.slaying_swordsmanship" if slaying_proc else ""
 		),
 		"modifier_order": [
 			"base_damage",
-			"flat_dc_bonus_before_body_formula",
 			"selected_body_skill_formula",
+			"flat_damage_bonus_after_body_formula",
 		],
 		"scope": "all_hits_of_selected_melee_action",
+		"requires_one_call_per_action": true,
 		"body_mode_agnostic": true,
 		"effects": effects,
 		"proficiency_events": proficiency_events,

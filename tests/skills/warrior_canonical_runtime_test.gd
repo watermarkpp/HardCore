@@ -27,47 +27,65 @@ func _ready() -> void:
 	assert(passive.proficiency_event == "valid_basic_melee_attack_resolved")
 	var slaying := _execute("warrior.slaying_swordsmanship", 3, {
 		"has_target": true,
+		"valid_melee_swing": true,
 		"force_proc": true,
 	})
-	assert(slaying.effects[0].flat_dc_bonus == 8)
+	assert(slaying.effects[0].flat_damage_bonus == 8)
 	assert(slaying.effects[0].flat_accuracy_bonus == 3)
+	assert(slaying.effects[0].proc_denominator == 4 and slaying.effects[0].proc_roll == 0)
 	assert(slaying.proficiency_event == "successful_slaying_proc_on_valid_melee_swing")
+	var slaying_definition := Loader.skill("warrior.slaying_swordsmanship")
+	assert(slaying_definition.ranks.map(func(rank: Dictionary) -> int:
+		return int(rank.player_level_required)
+	) == [19, 19, 22, 24])
+	assert(slaying_definition.ranks.map(func(rank: Dictionary) -> int:
+		return int(rank.proficiency_required_to_reach_rank)
+	) == [0, 4000, 8000, 16000])
+	var denominators := [7, 6, 5, 4]
+	var damage_bonuses := [2, 4, 6, 8]
 	for body_mode: String in ["normal", "thrust", "half_moon", "fire"]:
-		var layered_proc := Router.resolve_warrior_melee_modifiers({
-			"body_mode": body_mode,
-			"basic_sword_learned": true,
-			"basic_sword_rank": 3,
-			"slaying_learned": true,
-			"slaying_rank": 3,
-			"valid_melee_swing": true,
-			"force_slaying_proc": true,
-			"seed": 176,
-		})
-		assert(layered_proc.contract_id == Router.WARRIOR_MELEE_MODIFIER_CONTRACT_ID)
-		assert(layered_proc.body_mode == body_mode)
-		assert(layered_proc.body_mode_agnostic and layered_proc.scope == "all_hits_of_selected_melee_action")
-		assert(layered_proc.slaying_proc and layered_proc.slaying_proc_roll_count == 1)
-		assert(layered_proc.flat_dc_bonus_before_body_formula == 8)
-		assert(layered_proc.flat_accuracy_bonus == 12, "基本+9与攻杀+3准确必须叠加")
-		assert(
-			_body_damage(body_mode, 100 + layered_proc.flat_dc_bonus_before_body_formula)
-			== _expected_proc_damage(body_mode)
-		)
-		assert(layered_proc.proficiency_events.size() == 2)
-		var no_proc := Router.resolve_warrior_melee_modifiers({
-			"body_mode": body_mode,
-			"basic_sword_learned": true,
-			"basic_sword_rank": 3,
-			"slaying_learned": true,
-			"slaying_rank": 3,
-			"valid_melee_swing": true,
-			"force_no_slaying_proc": true,
-			"seed": 176,
-		})
-		assert(not no_proc.slaying_proc and no_proc.slaying_proc_roll_count == 1)
-		assert(no_proc.flat_dc_bonus_before_body_formula == 0)
-		assert(no_proc.flat_accuracy_bonus == 9)
-		assert(no_proc.proficiency_events.size() == 1)
+		for rank in range(4):
+			var layered_proc := Router.resolve_warrior_melee_modifiers({
+				"body_mode": body_mode,
+				"basic_sword_learned": true,
+				"basic_sword_rank": 3,
+				"slaying_learned": true,
+				"slaying_rank": rank,
+				"valid_melee_swing": true,
+				"slaying_proc_roll": 0,
+			})
+			assert(layered_proc.contract_id == Router.WARRIOR_MELEE_MODIFIER_CONTRACT_ID)
+			assert(layered_proc.body_mode == body_mode)
+			assert(layered_proc.body_mode_agnostic)
+			assert(layered_proc.scope == "all_hits_of_selected_melee_action")
+			assert(layered_proc.requires_one_call_per_action)
+			assert(layered_proc.slaying_proc and layered_proc.slaying_proc_roll_count == 1)
+			assert(layered_proc.slaying_proc_denominator == denominators[rank])
+			assert(layered_proc.slaying_proc_roll == 0)
+			assert(layered_proc.flat_dc_bonus_before_body_formula == 0)
+			assert(layered_proc.flat_damage_bonus_after_body_formula == damage_bonuses[rank])
+			assert(layered_proc.flat_accuracy_bonus == 9 + rank, "攻杀准确必须常驻进入每个目标命中检查")
+			assert(
+				_body_damage(body_mode, 100) + layered_proc.flat_damage_bonus_after_body_formula
+				== _expected_proc_damage(body_mode, rank)
+			)
+			assert(layered_proc.proficiency_events.size() == 2)
+			var no_proc := Router.resolve_warrior_melee_modifiers({
+				"body_mode": body_mode,
+				"basic_sword_learned": true,
+				"basic_sword_rank": 3,
+				"slaying_learned": true,
+				"slaying_rank": rank,
+				"valid_melee_swing": true,
+				"slaying_proc_roll": denominators[rank] - 1,
+			})
+			assert(not no_proc.slaying_proc and no_proc.slaying_proc_roll_count == 1)
+			assert(no_proc.slaying_proc_roll == denominators[rank] - 1)
+			assert(no_proc.flat_damage_bonus_after_body_formula == 0)
+			assert(no_proc.flat_accuracy_bonus == 9 + rank, "未触发攻杀仍必须保留常驻准确")
+			assert(no_proc.proficiency_events.size() == 1)
+	_verify_multi_target_shared_action_layer("thrust")
+	_verify_multi_target_shared_action_layer("half_moon")
 	var empty_swing := Router.resolve_warrior_melee_modifiers({
 		"basic_sword_learned": true,
 		"basic_sword_rank": 3,
@@ -77,6 +95,7 @@ func _ready() -> void:
 		"force_slaying_proc": true,
 	})
 	assert(empty_swing.slaying_proc_roll_count == 0 and not empty_swing.slaying_proc)
+	assert(empty_swing.flat_accuracy_bonus == 12, "空挥不掷骰，但攻杀准确仍是常驻被动")
 	assert(empty_swing.proficiency_events.is_empty())
 	var thrust := _execute("warrior.thrusting", 3, {"has_target": true, "eligible_target_count": 2})
 	assert(thrust.effects[1].multiplier == 1.0 and thrust.effects[1].ignore_ac)
@@ -159,10 +178,28 @@ func _body_damage(body_mode: String, augmented_base_damage: int) -> int:
 	return augmented_base_damage
 
 
-func _expected_proc_damage(body_mode: String) -> int:
-	return {
-		"normal": 108,
-		"thrust": 108,
-		"half_moon": 42,
-		"fire": 281,
-	}[body_mode]
+func _expected_proc_damage(body_mode: String, rank: int) -> int:
+	return _body_damage(body_mode, 100) + 2 * (rank + 1)
+
+
+func _verify_multi_target_shared_action_layer(body_mode: String) -> void:
+	var action_layer := Router.resolve_warrior_melee_modifiers({
+		"body_mode": body_mode,
+		"basic_sword_learned": false,
+		"slaying_learned": true,
+		"slaying_rank": 2,
+		"valid_melee_swing": true,
+		"slaying_proc_roll": 0,
+	})
+	assert(action_layer.slaying_proc and action_layer.slaying_proc_roll_count == 1)
+	assert(action_layer.slaying_proc_denominator == 5 and action_layer.slaying_proc_roll == 0)
+	assert(action_layer.flat_accuracy_bonus == 2)
+	assert(action_layer.flat_damage_bonus_after_body_formula == 6)
+	for target_index in range(3):
+		var damage_without_proc: int = _body_damage(body_mode, 100 + target_index)
+		var damage_with_proc: int = (
+			damage_without_proc
+			+ int(action_layer.flat_damage_bonus_after_body_formula)
+		)
+		assert(damage_with_proc - damage_without_proc == 6)
+	assert(action_layer.slaying_proc_roll_count == 1, "半月/刺杀多目标不得重复掷攻杀")
