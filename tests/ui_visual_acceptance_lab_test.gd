@@ -119,6 +119,10 @@ func _ready() -> void:
 	assert(lab._monster_option.get_parent().visible)
 	assert(lab._monster != null and lab._monster.visual != null)
 	assert(lab._monster.visual.uses_final_art())
+	assert(
+		not lab._monster.is_targeted,
+		"acceptance lab must suppress the runtime-owned target ring",
+	)
 	assert(lab._active_monster_id == 18)
 	assert(lab._monster.visual.sprite.texture != null)
 	var ground_review := lab.monster_ground_review_snapshot()
