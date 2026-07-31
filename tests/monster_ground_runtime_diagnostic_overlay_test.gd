@@ -30,6 +30,7 @@ func _run() -> void:
 	overlay._process(0.0)
 	assert(overlay.visible, "all living monsters must expose the Android debug probe")
 	var snapshot := overlay.coordinate_snapshot()
+	assert(snapshot.contract == OverlayScript.COORDINATE_FINGERPRINT_CONTRACT)
 	assert(int(snapshot.monsterId) == 24)
 	assert(snapshot.action == "idle")
 	assert(snapshot.directionLabel == "S")
@@ -42,6 +43,35 @@ func _run() -> void:
 	assert(Vector2(snapshot.ringMinusManual).is_zero_approx())
 	assert(Vector2(snapshot.visualPosition).is_equal_approx(Vector2(8.5, -8.0)))
 	assert(Vector2(snapshot.visualFootOffset).is_equal_approx(Vector2(-8.5, 8.0)))
+	assert(Vector2(snapshot.footAnchor) == Vector2(enemy.visual.foot_anchor))
+	assert(Vector2(snapshot.actorGroundOffset) == Vector2(32.0, 28.0))
+	assert(
+		Vector2(snapshot.sourceActorOrigin).is_equal_approx(
+			Vector2(snapshot.visualPosition) - Vector2(snapshot.actorGroundOffset)
+		)
+	)
+	assert(
+		Vector2(snapshot.migratedActorFoot).is_equal_approx(
+			Vector2(snapshot.visualPosition)
+		),
+		"the monster client-origin migration must be algebraically identical to the accurate player path",
+	)
+	assert(
+		Vector2(snapshot.visualCanvasDelta).is_equal_approx(
+			Vector2(snapshot.visualPosition)
+		)
+	)
+	assert(
+		Vector2(snapshot.spriteCanvasDelta).is_equal_approx(
+			Vector2(snapshot.visualPosition) + Vector2(snapshot.spritePosition)
+		)
+	)
+	assert(Vector2(snapshot.visualGlobalScale).is_equal_approx(Vector2.ONE))
+	assert(Vector2(snapshot.spriteGlobalScale).is_equal_approx(Vector2.ONE))
+	assert(Vector2(snapshot.frameSize) == Vector2(enemy.visual.frame_size))
+	assert(Vector2(snapshot.regionSize) == Vector2(enemy.visual.frame_size))
+	assert(Vector2(snapshot.textureSize).x > 0.0)
+	assert(not str(snapshot.texturePath).is_empty())
 
 	enemy.visual.position += Vector2(2.5, 6.0)
 	var separated := overlay.coordinate_snapshot()
