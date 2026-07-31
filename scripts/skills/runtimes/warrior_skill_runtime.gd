@@ -24,24 +24,38 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 			if bool(context.get("valid_melee_swing", false)):
 				plan.proficiency_event = trigger
 		"warrior.slaying_swordsmanship":
-			var probabilities: Array = mechanics.get("proc_chance_by_rank", [0.1, 0.125, 1.0 / 6.0, 0.25])
+			var denominators: Array = mechanics.get("proc_denominator_by_rank", [7, 6, 5, 4])
+			var denominator := maxi(1, int(denominators[rank]))
+			var valid_melee_action := bool(context.get("valid_melee_swing", false))
+			var force_proc := bool(context.get("force_proc", false))
+			var force_no_proc := bool(context.get("force_no_proc", false))
+			var proc_roll := -1
+			if context.has("proc_roll"):
+				proc_roll = clampi(int(context.get("proc_roll", 0)), 0, denominator - 1)
+			elif force_proc:
+				proc_roll = 0
+			elif valid_melee_action and not force_no_proc:
+				proc_roll = int(rng.call("pascal_random_exclusive", denominator))
 			var proc: bool = (
-				not bool(context.get("force_no_proc", false))
-				and (
-					bool(context.get("force_proc", false))
-					or bool(rng.call("chance", float(probabilities[rank])))
-				)
+				valid_melee_action
+				and not force_no_proc
+				and (force_proc or proc_roll == 0)
 			)
 			plan.effect_success = proc
 			plan.effects = [{
 				"type": "melee_proc_modifier",
 				"proc": proc,
-				"success_probability": float(probabilities[rank]),
-				"flat_dc_bonus": int(mechanics.get("flat_dc_bonus_by_rank", [5, 6, 7, 8])[rank]),
+				"success_probability": 1.0 / float(denominator),
+				"proc_denominator": denominator,
+				"proc_roll": proc_roll,
+				"flat_damage_bonus": int(mechanics.get("flat_damage_bonus_by_rank", [2, 4, 6, 8])[rank]),
 				"flat_accuracy_bonus": int(mechanics.get("flat_accuracy_bonus_by_rank", [0, 1, 2, 3])[rank]),
+				"accuracy_always_applies": true,
+				"damage_bonus_applies_after_body_formula": true,
+				"valid_melee_action": valid_melee_action,
 				"defence_type": "AC",
 			}]
-			if proc and bool(context.get("valid_melee_swing", true)):
+			if proc and valid_melee_action:
 				plan.proficiency_event = trigger
 		"warrior.thrusting":
 			var first: Dictionary = mechanics.get("first_cell", {})

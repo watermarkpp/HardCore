@@ -71,12 +71,12 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 		"slaying_proc_table_exact":
 			return _floats_equal(
 				_support.rank_effect_values(skill_id, "success_probability"),
-				[0.1, 0.125, 1.0 / 6.0, 0.25]
+				[1.0 / 7.0, 1.0 / 6.0, 1.0 / 5.0, 1.0 / 4.0]
 			) and _support.seeded_effect_outcomes(
 				skill_id, 0, {"force_proc": false, "force_no_proc": false}
 			)
 		"slaying_dc_bonus_exact":
-			return _support.rank_effect_values(skill_id, "flat_dc_bonus") == [5, 6, 7, 8]
+			return _support.rank_effect_values(skill_id, "flat_damage_bonus") == [2, 4, 6, 8]
 		"slaying_accuracy_bonus_exact":
 			return _support.rank_effect_values(skill_id, "flat_accuracy_bonus") == [0, 1, 2, 3]
 		"slaying_training_only_on_proc":
