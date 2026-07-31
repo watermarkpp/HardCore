@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://0qljtekr1pbd"
-path.s3tc="res://.godot/imported/cave_maggot_walk.png-4e6e9d1417b8ead24d63623e21955437.s3tc.ctex"
-path.etc2="res://.godot/imported/cave_maggot_walk.png-4e6e9d1417b8ead24d63623e21955437.etc2.ctex"
+path="res://.godot/imported/cave_maggot_walk.png-4e6e9d1417b8ead24d63623e21955437.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_bich_common/cave_maggot/cave_maggot_walk.png"
-dest_files=["res://.godot/imported/cave_maggot_walk.png-4e6e9d1417b8ead24d63623e21955437.s3tc.ctex", "res://.godot/imported/cave_maggot_walk.png-4e6e9d1417b8ead24d63623e21955437.etc2.ctex"]
+dest_files=["res://.godot/imported/cave_maggot_walk.png-4e6e9d1417b8ead24d63623e21955437.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

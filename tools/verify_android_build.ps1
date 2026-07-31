@@ -2,7 +2,7 @@ param(
     [string]$ApkPath = "",
     [string]$AndroidRoot = "",
     [string]$BaselineApkPath = "",
-    [int]$ExpectedVersionCode = 37,
+    [int]$ExpectedVersionCode = 38,
     [string]$ExpectedVersionName = ""
 )
 
@@ -11,13 +11,13 @@ Set-StrictMode -Version 2.0
 $ProjectRoot = Split-Path $PSScriptRoot -Parent
 
 if ([string]::IsNullOrWhiteSpace($ApkPath)) {
-    $ApkPath = Join-Path $ProjectRoot "outputs\hardcore\HardCore-integrated-v37-debug.apk"
+    $ApkPath = Join-Path $ProjectRoot "outputs\hardcore\HardCore-candidate-debug.apk"
 }
 if (-not (Test-Path -LiteralPath $ApkPath)) {
     throw "APK does not exist: $ApkPath"
 }
 if ([string]::IsNullOrWhiteSpace($BaselineApkPath)) {
-    $BaselineApkPath = Join-Path $ProjectRoot "outputs\hardcore\HardCore-debug.apk"
+    $BaselineApkPath = Join-Path $ProjectRoot "outputs\hardcore\HardCore-slim-v38-debug.apk"
 }
 if (-not (Test-Path -LiteralPath $BaselineApkPath)) {
     throw "Baseline APK does not exist: $BaselineApkPath"

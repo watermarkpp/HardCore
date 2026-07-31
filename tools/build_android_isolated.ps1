@@ -4,7 +4,7 @@ param(
     [string]$GodotConsole = "",
     [string]$AndroidRoot = "",
     [string]$BaselineApkPath = "",
-    [int]$ExpectedVersionCode = 37,
+    [int]$ExpectedVersionCode = 38,
     [string]$ExpectedVersionName = "",
     [switch]$PreflightOnly,
     [switch]$KeepStage
@@ -17,7 +17,7 @@ $ProjectRoot = Split-Path $PSScriptRoot -Parent
 $ProjectRoot = (Resolve-Path -LiteralPath $ProjectRoot).Path
 
 if ([string]::IsNullOrWhiteSpace($OutputApk)) {
-    $OutputApk = Join-Path $ProjectRoot "outputs\hardcore\HardCore-integrated-v37-debug.apk"
+    $OutputApk = Join-Path $ProjectRoot "outputs\hardcore\HardCore-candidate-debug.apk"
 }
 if ([string]::IsNullOrWhiteSpace($GodotConsole)) {
     $GodotConsole = Join-Path $ProjectRoot "tools\godot-4.7\Godot_v4.7-stable_win64_console.exe"
@@ -29,7 +29,7 @@ if ([string]::IsNullOrWhiteSpace($AndroidRoot)) {
     $AndroidRoot = Join-Path $ProjectRoot "tools\android-build"
 }
 if ([string]::IsNullOrWhiteSpace($BaselineApkPath)) {
-    $BaselineApkPath = Join-Path $ProjectRoot "outputs\hardcore\HardCore-debug.apk"
+    $BaselineApkPath = Join-Path $ProjectRoot "outputs\hardcore\HardCore-slim-v38-debug.apk"
 }
 
 foreach ($RequiredFile in @($GodotConsole, $BaselineApkPath)) {

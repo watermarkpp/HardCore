@@ -38,7 +38,18 @@ func _run() -> void:
 	assert(visual.uses_final_art() and visual.frame_size == expected_frame, "骷髅精灵Boss客户端资源未启用")
 	assert(visual.actor_ground_offset == Vector2i(32, 28), "骷髅精灵未采用经典客户端角色原点迁移量")
 	assert(sprite.texture.get_size() == Vector2(expected_frame.x * 4, expected_frame.y * 8) and sprite.position == -Vector2(expected_foot + visual.actor_ground_offset), "骷髅精灵图集或绘制原点迁移错误")
-	assert(visual.position.y == 6.0 and is_equal_approx(boss.overhead.position.y, boss.health_bar_anchor_y()), "骷髅精灵脚底/头顶层高度错误")
+	assert(
+		visual.position.is_equal_approx(visual.reviewed_visual_origin())
+		and (
+			visual.position
+			+ visual.visual_foot_offset()
+		).is_zero_approx()
+		and visual.manual_alignment_replay_displacement().y > 0.0
+		and is_equal_approx(
+			boss.overhead.position.y, boss.health_bar_anchor_y()
+		),
+		"骷髅精灵脚底/头顶层高度错误",
+	)
 	assert(boss.overhead.name_global_bottom_y() < boss.overhead.bar_global_top_y(), "骷髅精灵名称没有固定在血条上方")
 	assert(boss.max_hp == 500 and boss.attack_min == 7 and boss.attack_max == 24, "骷髅精灵2003候选属性未采用")
 	assert(is_equal_approx(boss._attack_interval, 2.0) and is_equal_approx(boss._attack_animation_duration, 0.6) and is_equal_approx(boss._attack_hit_delay, 0.3), "骷髅精灵速度或命中帧错误")

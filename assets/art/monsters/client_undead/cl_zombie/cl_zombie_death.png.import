@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://1fxo4l86qk2b"
-path.s3tc="res://.godot/imported/cl_zombie_death.png-d1f6a088b51a2a57a0b3bb3d681984be.s3tc.ctex"
-path.etc2="res://.godot/imported/cl_zombie_death.png-d1f6a088b51a2a57a0b3bb3d681984be.etc2.ctex"
+path="res://.godot/imported/cl_zombie_death.png-d1f6a088b51a2a57a0b3bb3d681984be.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_undead/cl_zombie/cl_zombie_death.png"
-dest_files=["res://.godot/imported/cl_zombie_death.png-d1f6a088b51a2a57a0b3bb3d681984be.s3tc.ctex", "res://.godot/imported/cl_zombie_death.png-d1f6a088b51a2a57a0b3bb3d681984be.etc2.ctex"]
+dest_files=["res://.godot/imported/cl_zombie_death.png-d1f6a088b51a2a57a0b3bb3d681984be.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

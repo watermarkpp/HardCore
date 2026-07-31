@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://7bb8db0qvkds"
-path.s3tc="res://.godot/imported/cannibal_flower_walk.png-56ed3f9c667d0f0d865f5b37fe1ee01e.s3tc.ctex"
-path.etc2="res://.godot/imported/cannibal_flower_walk.png-56ed3f9c667d0f0d865f5b37fe1ee01e.etc2.ctex"
+path="res://.godot/imported/cannibal_flower_walk.png-56ed3f9c667d0f0d865f5b37fe1ee01e.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/bich/cannibal_flower/cannibal_flower_walk.png"
-dest_files=["res://.godot/imported/cannibal_flower_walk.png-56ed3f9c667d0f0d865f5b37fe1ee01e.s3tc.ctex", "res://.godot/imported/cannibal_flower_walk.png-56ed3f9c667d0f0d865f5b37fe1ee01e.etc2.ctex"]
+dest_files=["res://.godot/imported/cannibal_flower_walk.png-56ed3f9c667d0f0d865f5b37fe1ee01e.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

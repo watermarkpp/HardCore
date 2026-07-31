@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://tllb16s22nj0"
-path.s3tc="res://.godot/imported/digout_zombie_death.png-9155245fdca92699a25e99d73c03150c.s3tc.ctex"
-path.etc2="res://.godot/imported/digout_zombie_death.png-9155245fdca92699a25e99d73c03150c.etc2.ctex"
+path="res://.godot/imported/digout_zombie_death.png-9155245fdca92699a25e99d73c03150c.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_undead/digout_zombie/digout_zombie_death.png"
-dest_files=["res://.godot/imported/digout_zombie_death.png-9155245fdca92699a25e99d73c03150c.s3tc.ctex", "res://.godot/imported/digout_zombie_death.png-9155245fdca92699a25e99d73c03150c.etc2.ctex"]
+dest_files=["res://.godot/imported/digout_zombie_death.png-9155245fdca92699a25e99d73c03150c.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

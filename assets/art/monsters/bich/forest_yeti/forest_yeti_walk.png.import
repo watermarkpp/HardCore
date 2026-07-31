@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dvg3vuvnurq04"
-path.s3tc="res://.godot/imported/forest_yeti_walk.png-fda7226d43e6ccf8f563f7ff9c7ad13d.s3tc.ctex"
-path.etc2="res://.godot/imported/forest_yeti_walk.png-fda7226d43e6ccf8f563f7ff9c7ad13d.etc2.ctex"
+path="res://.godot/imported/forest_yeti_walk.png-fda7226d43e6ccf8f563f7ff9c7ad13d.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/bich/forest_yeti/forest_yeti_walk.png"
-dest_files=["res://.godot/imported/forest_yeti_walk.png-fda7226d43e6ccf8f563f7ff9c7ad13d.s3tc.ctex", "res://.godot/imported/forest_yeti_walk.png-fda7226d43e6ccf8f563f7ff9c7ad13d.etc2.ctex"]
+dest_files=["res://.godot/imported/forest_yeti_walk.png-fda7226d43e6ccf8f563f7ff9c7ad13d.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

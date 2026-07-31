@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ct5f6dwvu2men"
-path.s3tc="res://.godot/imported/oma_fighter_idle.png-63c7cdd7b12d07b911cd7d0afca9dddb.s3tc.ctex"
-path.etc2="res://.godot/imported/oma_fighter_idle.png-63c7cdd7b12d07b911cd7d0afca9dddb.etc2.ctex"
+path="res://.godot/imported/oma_fighter_idle.png-63c7cdd7b12d07b911cd7d0afca9dddb.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_bich_common/oma_fighter/oma_fighter_idle.png"
-dest_files=["res://.godot/imported/oma_fighter_idle.png-63c7cdd7b12d07b911cd7d0afca9dddb.s3tc.ctex", "res://.godot/imported/oma_fighter_idle.png-63c7cdd7b12d07b911cd7d0afca9dddb.etc2.ctex"]
+dest_files=["res://.godot/imported/oma_fighter_idle.png-63c7cdd7b12d07b911cd7d0afca9dddb.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

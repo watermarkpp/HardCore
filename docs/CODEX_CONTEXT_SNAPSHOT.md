@@ -1,9 +1,88 @@
 # Codex 精简上下文快照
 
-更新时间：2026-07-29（Asia/Shanghai）
+更新时间：2026-07-31（Asia/Shanghai）
 
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。
 准确性规则：本文件不是代码或 Git 状态的替代品；只核实本次任务实际触及的分支、文件、接口和专项测试。
+
+## 2026-07-31 Android v46 怪物人工脚点坐标归一化
+
+- 怪物专业提交 `97734d8a` 在只读加载阶段重放历史校准台的 S 向预览位移，并在视觉脚点向量中等量抵消；怪物实体、碰撞、攻击判定和目标黄圈继续以 actor-local `(0,0)` 为唯一脚点。UI 专业提交 `14984c0c` 已作为 `bb3d682f` 集成，使验收台和游戏使用完全相同的变换链。
+- 人物没有接入怪物历史位移重放。正式人物常量继续为 `runtimeVisualPosition=(7.5,12.5)`、`visualFootAnchorAdjustment=(-7.5,-12.5)`，最终脚点仍为 `(0,0)`；人物脚点、比奇边界、通用边界、等距碰撞、投射物命中链和移动目标选择回归与怪物/UI 联动合计 12/12 通过。
+- 212 份人工怪物草稿及三份正式怪物脚点合同未被重写；三份正式合同 SHA-256 继续为 `DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。人物人工草稿 SHA-256 继续为 `5D01E19C509E9C970B928475263E233552EE50A00BE7C04FD3BF6BD1CFD088A4`。
+- APK 从固定提交 `6a983c60da2dd29388ffe25048f1d6f443a7a300` 的全新隔离工作树导出：`outputs/hardcore/HardCore-v46-monster-foot-normalized-debug.apk`，大小 `244,215,702` 字节，SHA-256 `C3C1BB1CD768AE217A053F7427A178C5DC04424BB968673E6385A095A7058444`。
+- 包信息为 `versionCode=46`、`versionName=1.17.10-monster-foot-normalized`、`com.personal.mafaoffline`、`HardCore`；APK v2/v3 签名和运行时资源探针通过，包内三份怪物脚点合同与源文件逐字节同哈希，人物脚点合同语义逐字段一致。已对连接的 HONOR 90 保留数据覆盖安装并成功启动，前台活动为 `GodotAppLauncher`，近期日志无 Godot 脚本错误或崩溃。
+
+## 2026-07-30 Android v42 坐标隔离测试包
+
+- Android 版本提交为 `aa0914bf`：`versionCode=42`、`versionName=1.17.6-target-coordinate-isolation`，包名继续为 `com.personal.mafaoffline`，应用名继续为 `HardCore`。
+- APK 从固定提交 `aa0914bf788728294ad1e2a7d0f85488bb00f878` 的全新隔离工作树导出：`outputs/hardcore/HardCore-v42-target-coordinate-isolation-debug.apk`，大小 `244,198,886` 字节，SHA-256 `6FEA504954E52019E5A6415829000CDC7823F002F8B03990690191D68383CB4E`。
+- APK v2/v3 签名、arm64-v8a、minSdk 24、targetSdk 36、横屏/可调整窗口和运行时资源探针通过；12 个关键编译脚本、男性 `Hair.wil block 4`、纸娃娃 base/hair/head patch、世界头盔隐藏和 586 帧施法资源均在包内。
+- 已通过项目内 ADB 对连接的 HONOR 90（REA-AN00）执行保留数据覆盖安装并启动。手机端回读为 v42，`GodotAppLauncher` 位于前台，应用进程正常，近期日志未发现崩溃或 Godot 脚本错误。
+- 构建前后人物脚点草稿、两份抽检怪物草稿和三份怪物正式脚点合同 SHA-256 保持不变。
+
+## 2026-07-30 怪物黄圈坐标链最终解耦
+
+- 本节覆盖下方早期“地面黄圈直接采用人工视觉脚点”的实现记录。怪物专业提交 `f195a961` 已作为集成提交 `1fc2dfa5` 接入：地面怪物的实时目标黄圈中心固定为怪物 `CharacterBody2D` / 碰撞脚印的本地物理原点 `(0,0)`；`visualRootOffset`、`visualFootOffset`、Sprite 锚点、动作、方向和帧只能移动外观，禁止再推动目标黄圈。飞行/悬浮怪物继续使用明确的地面投影。
+- 黄圈大小规则未变：仍为对应怪物 2:1 物理脚印半径的 `1.25` 倍，所以体型差异只影响半径，不影响中心。怪物专项会主动扰动视觉根位置、Sprite 锚点和视觉脚点，证明地面黄圈仍保持 `(0,0)`。
+- UI 专业提交 `a971ad44` 已作为集成提交 `56ae1fb8` 接入。视觉验收台现在分别显示并报告：人工视觉脚点、怪物物理原点、游戏实时目标黄圈；状态区独立给出“黄圈-目标”和“脚点-原点”差值，并标明当前动作/方向/帧是否等于保存时的校准姿态，不再用同一份人工偏移同时构造参考值与实际值。
+- 真实集成回归 10/10 通过：验收台、214 怪物冷热加载、五动作八方向、比奇普通怪、亡灵、完整客户端美术、尸王、怪物等距脚印、比奇地面坐标和共享角色脚印合同。
+- 冻结数据零变化：`monster_21.json` / `monster_23.json` SHA-256 仍为 `C531C41C914261766626BE87E7BC2741D72531CD9893F7C599E5141F65ADB32E` / `DCAC46EB2688458F33516AD1C37685D8F83C7CAD96FE86A3FBD36C5B284E0FCE`；三份正式合同仍为 `DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+
+## 2026-07-30 怪物人工脚点二次冻结与目标光圈同心
+
+- 用户重新完成的 212 份怪物脚点草稿已成为唯一最新人工基线，源草稿聚合 SHA-256 为 `0993DD6600091B584F247CDA02B0AFEABB164E73952FEB87C57A886AAD515E7A`；只读导入前后聚合哈希一致。后续生成器、校准器、缓存和旧合同均禁止覆盖这些人工值。
+- 怪物专业提交 `90f3f716` 已作为集成提交 `b478b7cc` 接入：地面怪物的黄色目标光圈中心直接采用人工视觉脚点；飞行/悬浮怪物继续保留已有投影关系。黄色目标光圈半径固定为对应怪物 2:1 物理脚印半径的 `1.25` 倍，因此中心完全相同、长宽同比放大，并随每只怪物的碰撞体积自然变化。
+- UI 专业提交 `dabd8872` 已作为集成提交 `ed3d850e` 接入：视觉验收台橙色正式光圈直接读取游戏运行时目标光圈的中心与半径，不再维护第二套诊断坐标。
+- 真实集成基线检查通过：精确草稿导入、v5 合同生成、怪物专项 10/10，以及 UI/怪物联动 2/2。人物脚点草稿 SHA-256 仍为 `5D01E19C509E9C970B928475263E233552EE50A00BE7C04FD3BF6BD1CFD088A4`；236/240 头盔草稿继续冻结且未被暂存。
+- Android v41 测试包从固定提交 `233d4539` 的全新隔离工作树导出：`outputs/hardcore/HardCore-v41-monster-ring-foot-debug.apk`，大小 `244,198,886` 字节，SHA-256 `F668B92EECF0A071E14E08C3912DD7BF98AC582C378118B010DB4A638BC92FA6`；`versionCode=41`、`versionName=1.17.5-monster-ring-foot`。APK v2/v3 签名和运行时资源探针通过，已对连接的 HONOR 90 保留数据覆盖安装并成功启动。
+- 最新人工脚点已完整备份到 `outputs/visual_acceptance/backups/monster_feet_20260730_191500.zip`：包含 212 份原始草稿、3 份正式运行时合同和逐文件哈希清单，ZIP SHA-256 为 `DB9276E4E12AB4F4D8DD0EAF56BDFC9EE6690092EEB6A15F49E87B8CDE212D91`。
+- UI 专业提交 `f248cdf6` / `8d5c82cd` 已作为集成提交 `4a8b5d75` / `5ee31695` 接入。验收台专用启动参数 `-MonsterGroundReview` 会直接进入怪物模式：青十字显示人工保存脚点，黄色椭圆与黄色小十字显示游戏实际目标光圈；两者不一致时绘制红色连接线，并在状态区显示 X/Y 差值。214 个怪物均可切换，212 个读取人工草稿，2 个读取正式飞行投影合同。
+
+## 2026-07-30 Android v40 怪物地面层修复包
+
+- 怪物专业提交 `5c1436ab` 已由集成提交 `8a803ce2` 接入；Android 版本提交为 `7d75f307`。正式 WIL 素材等待异步加载时不再生成旧程序圆影，临时光圈中心统一使用标准脚点 `(0,0)`，贴图激活/释放会为未选中怪物无条件刷新缓存的地面绘制层。
+- APK 从固定提交 `7d75f307` 的全新隔离工作树导出：`outputs/hardcore/HardCore-v40-ground-layer-fix-debug.apk`，大小 `244,194,790` 字节，SHA-256 `BAAE73D036AF2F67ADC38D9095AB2BDA044D80FF30C53ED7DFD78BDE52113AFA`。
+- 包信息为 `versionCode=40`、`versionName=1.17.4-ground-layer-fix`、包名 `com.personal.mafaoffline`、应用名 `HardCore`、`arm64-v8a`、`minSdk=24`、`targetSdk=36`；APK v2/v3 签名、12 个编译脚本与运行时资源探针通过。
+- 集成专项 9/9 通过：214 怪物冷激活/正式脚点/覆盖、等距物理、比奇普通怪/亡灵、兽人古墓运行画面和地图怪物预取。完整怪物套件中的3个旧失败已在未修改的 v39 基线复现，属于旧 Boss/人物下沉断言，不是本次回归。
+- 212 份人工怪物脚点及两份正式地面合同保持冻结，三份相关 JSON 的 SHA-256 分别保持 `9A3144C27546F61FFB1723880106C965987D7689A78C83CC883EB358E0F01BEF`、`FDBB233ED951C969CB35C950E8D682AB69C97BE2466262A0BE257A2BD6A89152`、`04477F070BBFD0D89048AD11459338BF53CFECF1F7282899061261C6EACDD909`。
+- 已通过 ADB 对连接的 HONOR 90 执行保留数据覆盖安装并启动；手机端回读确认 `versionCode=40`、`versionName=1.17.4-ground-layer-fix`。
+
+## 2026-07-30 Android v39 怪物脚点测试包
+
+- APK 从固定集成提交 `eaf42c0a` 的全新隔离工作树导出：`outputs/hardcore/HardCore-v39-monster-feet-debug.apk`，大小 `244,194,790` 字节，SHA-256 `D347862CCA2E712107E8328AAA12E5EFD0EDB650AF8AE7C774AD3BCAC018809F`。
+- 包信息为 `versionCode=39`、`versionName=1.17.3-boundary-fix`、包名 `com.personal.mafaoffline`、应用名 `HardCore`、`arm64-v8a`、`minSdk=24`、`targetSdk=36`；APK v2/v3 签名、运行时资源探针和横屏/可调整尺寸合同通过。
+- APK 内 `monster_ground_alignment_manual_v1.json`、`monster_ground_contact_calibrations.json`、`monster_ground_contacts.json` 与 `complete_monster_client_art_sources.json` 的 SHA-256 均与构建提交逐字节一致，确认最新 212 份怪物脚点及牛魔碎片素材进入安装包。
+- 已通过 ADB 对连接的 HONOR 90 执行保留数据覆盖安装；手机端回读确认 `versionCode=39`、`versionName=1.17.3-boundary-fix` 和最新更新时间。
+
+## 2026-07-30 怪物人工脚点正式接入与动画修复
+
+- 最新怪物专业提交 `5f912b41` 已由集成提交 `3312f0ab` 接入；此前怪物专业提交 `19be26ed` / UI 专业提交 `ff707360` 分别由集成提交 `ee09aefd` / `072c1289` 接入。
+- 用户完成的 212 份 `monster_<id>.json` 校准草稿已只读导入 `monster.ground_alignment.manual.v1`，最新源文件聚合 SHA-256 为 `B5229D08E7C1DFBC36D3C50C45A14A81AE46CAE8C84EFEBB42204EA38408FE00`。最新精确更新牛头魔 `210/211`、牛魔侍卫 `216/217`、牛魔将军 `218/219`、牛魔法师 `220/221`；其余 204 份正式人工数据逐条不变。其他牛系列未重新保存的草稿继续使用已加载正式值；仅飞行投影的猎鹰 `monster_id=97/98` 保留原有离地关系。
+- 正式运行时升级为 `monster.ground_contact.v5` / `monster.ground_contact.calibration.v5`：普通怪/Boss 基础视觉原点、用户 `visualRootOffset`、视觉脚点和光圈中心各只应用一次；验收台识别已正式导入的同哈希草稿，禁止二次叠加偏移。
+- 祖玛教主使用主资料 `Mon7.wil` 中物化前缀之后的正确动作段：idle/walk/attack/hit/death 起始帧为 `1340/1420/1500/1580/1600`，并锁定原 `384×336` 画布与 `[114,237]` 脚点，避免破坏用户坐标。
+- 所有怪物 Sprite2D 启用图集区域过滤裁切，阻止牛魔系列相邻格碎片渗入。牛魔将军 `monster_id=218/219` 共用的 `appearance=204/raceImg=19/MA19` 五动作图集进一步仅移除不超过 48 像素的 8 连通孤立碎片，共 962 块/3813 像素；原 `272×272` 单帧画布、`[84,143]` 脚点、人工脚点参数和全部缩放策略保持不变。触龙神原素材多帧齐全；验收台仅在预览时解除潜伏隐藏以便查看 idle/attack/death，游戏内钻地机制不变。
+- 最新集成验收：精确草稿导入检查、v5 数据生成检查、214 怪物/40,144 帧几何审计和怪物运行时专项 8/8 全部通过。98 个冻结头盔文件在本轮没有被暂存或修改。
+
+## 2026-07-30 本地视觉验收台
+
+- UI 专业提交 `cd168dd4` 已由集成提交 `ff235d1a` 接入。本地入口为 `tools/run_visual_acceptance_lab.ps1`，独立场景为 `tools/visual_acceptance_lab/visual_acceptance_lab.tscn`；不修改 `project.godot`，不写角色存档、校准草稿或正式素材。
+- 当前最小版本直接实例化正式 `PlayerCharacter` / `PlayerVisual` 运行时合成，覆盖战士、法师、道士，`idle/walk/attack/cast/hit/death` 六动作与八方向；支持 25%/50%/100%/200% 播放、逐帧、1–4 倍显示、三种背景、一键重载正式素材和截图。
+- 播放驱动修复已由 UI 提交 `1d86eba5` / `05731bbf`、集成提交 `677ae9d6` / `f8a11079` 接入：使用 `PROCESS_MODE_ALWAYS` 的独立 60 Hz 计时器驱动正式视觉帧，初始 3× 显示倍率真实应用，并由真实 SceneTree 时间推进、正式身体贴图区域切换和预览缩放回归覆盖“按钮切换但人物不动”。
+- 人物脚点手动对齐由 UI 提交 `7855c2a9`、集成提交 `60348875` 接入：黄色角色地面原点、粉色 `36×18` 物理脚印和蓝色 `64×32` 地图菱形中心固定为同一 `(0,0)`；用户先点击鞋底中点定义蓝色视觉脚点，再拖动整套人物视觉或用方向键按 `0.5px` 微调使蓝黄重合。用户最终草稿 SHA-256 `5D01E19C509E9C970B928475263E233552EE50A00BE7C04FD3BF6BD1CFD088A4` 已由正式合同 `player.visual_ground_alignment.manual.v1` 和集成提交 `7de58783` 接入：人物视觉偏移 `(+7.5,+8.5)`、脚点修正 `(-7.5,-12.5)`，最终视觉脚点为 `(0,0)`；UI 提交 `52910b19` / `c8674538` 与集成提交 `db6b93a3` / `f874b275` 保证重开工具不会二次叠加该偏移。
+- 辅助层同时显示角色坐标、正式视觉脚点、`18×9` 物理脚印、64×32 地面菱形与当前帧边界，用于直接暴露外观锚点和物理坐标漂移。截图只写入 `outputs/visual_acceptance/**`。
+- UI 工作树与真实集成基线专项通过；正式接入最终回归 6/6：`player_visual_ground_alignment_test`、两项等距物理/脚印合同、`ui_visual_acceptance_lab_test`、`player_three_profession_visual_catalog_test`、`equipment_world_helmet_hidden_hair_test`。
+- `item_236.json` / `item_240.json` 冻结 SHA-256 仍分别为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC` 与 `81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`，本任务未修改任何头盔草稿或生成图。
+
+## 2026-07-30 v38 无损精简发布
+
+- 集成提交：`5137be3d`（怪物图集改用无损导入）、`a2b29e83`（Android v38 与生产排除规则）、`2bf81def`（APK 资源完整性验证与可选基线变化证明分离）。APK 对应运行时提交为 `a2b29e83`。
+- 最终 APK：`outputs/hardcore/HardCore-slim-v38-debug.apk`；`244,091,990` 字节（232.78 MiB）；SHA-256 `562082FD18DC51ECB65F00F610EDF82295B9A92FDA98BDB0B1D73C5765FA4D43`；`versionCode=38`、`versionName=1.17.2-slim`、包名 `com.personal.mafaoffline`、应用名 `HardCore`，v2/v3 签名均通过。
+- 相比 v37 的 `1,648,238,897` 字节减少 `1,404,146,907` 字节（约 85.2%）。核心收益来自 580 张怪物 PNG 的 Godot 无损压缩导入：编译纹理由约 1,303.12 MiB 降至 78.06 MiB；原 PNG 聚合哈希、580 个 `.uid`、像素和运行时稳定 ID 均未改变。
+- 生产排除仅覆盖确定不参与运行时的地图原始批次、staging `source/rgba_native`、调色板源图、墙体预览及 UI/装备设计源文件；地图运行时 fallback 所需的 174 个 `editor_canvas` 导入全部保留。
+- APK 独立资源探针通过：12 个关键编译脚本、男性 `Hair.wil block 4` 六动作、世界头盔隐藏、纸娃娃 base/hair、12 个头盔 patch、586 帧技能动画、580 个怪物 CTEX 均存在；怪物 CTEX 不含 ETC2/S3TC/VRAM 压缩标记。
+- 当前真实集成基线验证：怪物专项 15/15、地图/怪物定向专项 4/4、完整关键回归 74/74 全部通过。14 份冻结头盔草稿/正式合同、视觉目录与纸娃娃头部 patch 构建前后 SHA-256 零变化。
+- 清理完成：删除所有旧 APK、旧视频/截图/日志/重建预览、未跟踪旧审计快照，以及主树和现存工作树的可再生 `.godot`/`outputs` 缓存；保留最终 v38 APK、`complete_local_mir_sources`、`complete_client_frame_catalog`、永久工作树、所有 dirty/冻结素材和 `dev_art_sources` 只读主资料。
 
 ## 2026-07-29 v37 运行时实证修复
 
@@ -26,7 +105,7 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `6827bb7d`（本次快照提交只改本文档）。
+- 分支/运行时代码基线：`codex/integration` @ `5ee31695`（本次快照提交只改本文档）。
 - tracked 状态：黑铁头盔 151 的旧 `scale_100` 六动作生成图集共 6 个既有在制修改继续保护；本次男性头发接入未暂存、覆盖或提交这些旧图。146/147/149/150/151/218/224/228/232 共 9 份已验收人工草稿继续冻结；236/240 最新人工草稿分别为 SHA-256 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`、`81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`，均保持 dirty 并禁止覆盖。
 - 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
@@ -66,12 +145,12 @@
 
 ## 最终 APK
 
-- 状态：最新完整集成 Android 实机测试包，headless import/export 均成功并完成独立 APK 元数据、架构、清单与签名验证。
-- 文件：`C:\Users\Administrator\Documents\HardCore\outputs\hardcore\HardCore-integrated-debug.apk`
-- 构建时间：`2026-07-29 21:52:16`
-- 大小：`1,648,222,396` 字节
-- SHA-256：`B1355959570EF5BA585371C3E6260B12EB9188078D39A3FF0F3891DEC6EB3A5B`
-- 包信息：`com.personal.mafaoffline`，versionCode `36`，versionName `1.17.0-full-integration`，应用名 `HardCore`，compile/target SDK `36`、minSdk `24`、`arm64-v8a`、横屏。
+- 状态：最新完整集成 Android 精简测试包，headless import/export 均成功并完成独立 APK 元数据、架构、清单、运行时资源与签名验证。
+- 文件：`C:\Users\Administrator\Documents\HardCore\outputs\hardcore\HardCore-slim-v38-debug.apk`
+- 构建时间：`2026-07-30`
+- 大小：`244,091,990` 字节
+- SHA-256：`562082FD18DC51ECB65F00F610EDF82295B9A92FDA98BDB0B1D73C5765FA4D43`
+- 包信息：`com.personal.mafaoffline`，versionCode `38`，versionName `1.17.2-slim`，应用名 `HardCore`，`arm64-v8a`、横屏。
 - 签名验证：APK Signature Scheme v2/v3 均通过，签名者 1；证书 SHA-256 `c62d0f8239b926f819038845c302143fd24dcfd75ed8d877ed846c430c6f3fcc`，与上一测试包签名者一致，可覆盖安装并保留兼容存档。
 - 本包包含当前集成分支全部正式运行时工作：33 技能及正式技能动画/图标、硬直与受击中断、完整装备属性和穿戴、纸娃娃/背包/地面头盔展示、世界人物隐藏头盔并使用经典主资料库男性 `Hair.wil block 4` 全动作头发、男性衣服/武器外观、三职业九个满技能测试人物、地图/碰撞/遮挡、怪物外观与 v4 脚下光圈、UI 与角色存档兼容。15 份受保护头盔草稿和正式合同构建前后 SHA-256 全部不变。
 
@@ -183,7 +262,7 @@
 
 - integration：`world.actor_footprint.iso_ellipse.v1`、`test.character.roster.full_equipment_skills.v1`。
 - maps：`map_editor_runtime_collision_geometry_v2`、`map_visible_edge_actor_footprint_clearance_v2`、`published_blocked_cells_after_erasure_v1`、`map_editor_runtime_visual_geometry_v5`、`map_actor_occlusion_sort_v5`、`map_diamond_camera_center_constraint_v2`、`player_priority_soft_edge_v1`、`map_runtime_nonwalkable_edge_skirt_v1`。
-- monsters：`monster.overhead_anchor.v4`、`monster.overhead_layout.v3`、`monster.ground_contact.v4`、`monster.ground_contact.calibration.v4`；214 个 `monster_id` 各自保存人工复核的脚点、光圈中心、椭圆尺寸和投影策略，贴图异步激活后必须刷新。
+- monsters：`monster.overhead_anchor.v4`、`monster.overhead_layout.v3`、`monster.ground_alignment.manual.v1`、`monster.ground_contact.v5`、`monster.ground_contact.calibration.v5`；212 个 `monster_id` 使用用户冻结草稿，猎鹰 97/98 保留飞行投影，贴图异步激活后必须刷新。
 - UI：`ui.hud.resource_orb.hole_fill.v1`、`skill_button_assignment_contract_v2`、`ui.hud.skill_icon.caster.<stable_skill_id>`。
 - equipment：`equipment.attribute.master.v2`、`project.hardcore.equipment_attribute_master.v2`、`equipment.test_loadouts.classic_three_tiers.v1`、`equipment.visual_catalog.formal_wearables.v1`、`equipment.paper_doll.presentation_modes.v1`、`equipment.paper_doll.world_avatar.v1`、`equipment.paper_doll.avatar_only.v1`、`equipment.paper_doll.original_client_stage.v1`、`equipment.paper_doll.classic_flattened_head_patch.v1`、`equipment.helmet.calibration_draft.v1`、`equipment.helmet.presentation_calibration.v1`、`equipment.world_wear.male_dress.v1`、`equipment.world_wear.male_weapon.v1`、`equipment.world_helmet.male.extension.v1`、`equipment.world_helmet.runtime_visibility.v1`、`equipment_actor_visual_sort_unit_v3` 与 9 个 `test.loadout.{profession}.{tier}.v1`。
 - skills：`skills.runtime_router.cn_mir2_176.v1`、`skills.progression.cn_mir2_176.v1`、`skills.production_adaptation.hardcore.v1`、`warrior.fire_sword.charge_armed`、`combat.resolution.openmir2.v1`、`physical.hit.random_agility.strict_lt.v1`、`magic.evasion.anti_magic.direct_spell.v1`、`physical.attack_speed.interval_tier.v1`、`player.direct_spell_damage.openmir2.v1`、`caster_skill_animation.v1`、法师/道士主动技能 `action_duration=0.60` / `action_frame_count=6` / `action_frame_time_ms=100` 时序字段、`legacy_clamp_negative_span`、`test.characters.full_skills.v1` 与 9 个 `test.character.{profession}.{woma|zuma|chiyue}.v1`。
@@ -217,8 +296,8 @@
 | 工作树 | 分支/HEAD | dirty | 集成状态 |
 |---|---|---:|---|
 | `HardCore-worktrees/maps` | `codex/maps` @ `2a4d6ccf` | 72 untracked | 用户地图编辑器内容，继续保护；代码等价结果已集成为 `1d74fc72` |
-| `HardCore-worktrees/monsters` | `codex/monsters` @ `45781ded` | tracked clean；68 UID | 已集成为 `c88c6277` |
-| `HardCore-worktrees/ui-art` | `codex/ui-art` @ `2e0fba4a` | tracked clean；Godot UID/输出继续保护 | 纸娃娃始终保留男性头发且头盔后绘制；已作为 `92b3bdba` 集成，专项 7/7、装备套件 17/17 通过 |
+| `HardCore-worktrees/monsters` | `codex/monsters` @ `90f3f716` | 本轮任务文件 clean；既有 UID/报告继续保护 | 最新 212 份人工脚点已冻结导入；黄色目标光圈以人工脚点为圆心、按对应怪物物理脚印 `1.25×` 同比放大，已作为 `b478b7cc` 集成；专项 10/10 通过 |
+| `HardCore-worktrees/ui-art` | `codex/ui-art` @ `dabd8872` | 本轮代码 clean；Godot import/UID/输出继续保护 | 验收台橙色正式光圈改为直接读取游戏运行时目标光圈几何，已作为 `ed3d850e` 集成；UI/怪物联动 2/2 通过 |
 | `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `ce58f7bc` | 既有 UID/输出继续保护 | 33 技能 runtime、150 条可执行语义合同和 26 项正式主动技能视觉已集成；`ce58f7bc` 的烈火 canonical 测试修正已作为 `6827bb7d` 集成 |
 | `HardCore-worktrees/equipment` | `codex/equipment` @ `26f25e39` | 既有 monster import、试点截图脚本、UID/生成项继续保护 | 男性 `Hair.wil block 4`、世界头盔隐藏、纸娃娃/背包/地面头盔均已集成；`26f25e39` 的正式武器可见性测试修正已作为 `35568e45` 集成，冻结草稿与生成图继续保护 |
 
@@ -237,7 +316,7 @@ maps 的 72 项未跟踪内容全部视为用户进行中的地图编辑器内�
 ## 下次实机验收清单
 
 1. 已冻结：碰撞、装饰物遮挡、地图错位和视角均由用户实机确认通过。
-2. 已冻结：v4 怪物脚下光圈已由用户实机确认正确。
+2. 待复验：下一版 APK 中比奇省、兽人古墓的黄色选中光圈必须以最新人工脚点为中心，大小随怪物体积变化；正式 WIL 长条阴影保持原样。
 3. 待验收：角色选择页出现 9 个独立测试人物；三职业各有沃玛、祖玛、赤月三档完整装备并学习本职业全部技能；列表整块区域可直接上下滑动。
 4. 待验收：法师、道士不再显示占位符；世界人物全动作显示经典男性头发且不显示头盔，纸娃娃/背包/地面仍保留头盔；男性基础形象、正式散件/套装换装、装备界纸娃娃居中和神兽动画正常；禁止重新引入女性角色资产。
 5. 怪物名字固定在血条上方；各体型血条位于各自真实身体顶点上方约 8px，不再统一过高或随动作抖动。

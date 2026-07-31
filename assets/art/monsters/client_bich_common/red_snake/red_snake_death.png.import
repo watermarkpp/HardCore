@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c8qrgg8rdgvp2"
-path.s3tc="res://.godot/imported/red_snake_death.png-0ddaa25f1639e8f717641dec661a5aef.s3tc.ctex"
-path.etc2="res://.godot/imported/red_snake_death.png-0ddaa25f1639e8f717641dec661a5aef.etc2.ctex"
+path="res://.godot/imported/red_snake_death.png-0ddaa25f1639e8f717641dec661a5aef.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_bich_common/red_snake/red_snake_death.png"
-dest_files=["res://.godot/imported/red_snake_death.png-0ddaa25f1639e8f717641dec661a5aef.s3tc.ctex", "res://.godot/imported/red_snake_death.png-0ddaa25f1639e8f717641dec661a5aef.etc2.ctex"]
+dest_files=["res://.godot/imported/red_snake_death.png-0ddaa25f1639e8f717641dec661a5aef.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

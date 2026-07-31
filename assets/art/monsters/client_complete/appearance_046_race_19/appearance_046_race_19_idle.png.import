@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://jk0o8iuvfwcw"
-path.s3tc="res://.godot/imported/appearance_046_race_19_idle.png-cec75fc6c731d3efe81e433c7b6e2fc3.s3tc.ctex"
-path.etc2="res://.godot/imported/appearance_046_race_19_idle.png-cec75fc6c731d3efe81e433c7b6e2fc3.etc2.ctex"
+path="res://.godot/imported/appearance_046_race_19_idle.png-cec75fc6c731d3efe81e433c7b6e2fc3.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_complete/appearance_046_race_19/appearance_046_race_19_idle.png"
-dest_files=["res://.godot/imported/appearance_046_race_19_idle.png-cec75fc6c731d3efe81e433c7b6e2fc3.s3tc.ctex", "res://.godot/imported/appearance_046_race_19_idle.png-cec75fc6c731d3efe81e433c7b6e2fc3.etc2.ctex"]
+dest_files=["res://.godot/imported/appearance_046_race_19_idle.png-cec75fc6c731d3efe81e433c7b6e2fc3.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
