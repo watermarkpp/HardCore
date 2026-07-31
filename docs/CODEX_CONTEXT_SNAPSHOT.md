@@ -1,5 +1,12 @@
 # Codex 精简上下文快照
 
+## 2026-07-31 Android v51：近战锁定与实际受击对象解耦
+
+- 集成运行时提交 `23fb3961` 新增稳定策略 `combat.melee_lock.facing_priority_nonexclusive.v1`：攻击锁定只负责自动朝向和目标优先级，不再独占伤害许可。普通攻击与烈火仍为单目标；锁定目标在当前攻击几何内时优先命中，锁定目标在范围外时改为命中当前刀锋范围内最近的怪物。烈火仍禁止真正空放。
+- 职业技能提交 `40a3ce3c` 已作为集成提交 `bc0486e3` 接入，稳定合同 `gameplay.warrior.melee_target_count.v1` 明确普通攻击/烈火最多 1 个目标，刺杀/半月不设目标数上限；每只进入既定刺杀直线或半月扇区的怪物独立执行命中、MISS 与伤害判定，范围、宽度、角度和伤害公式均未扩大。技能 SOT 运行时合同 SHA-256 为 `DF2199E337F4EDD087CC060C0B59DE1C5839C309FC953EB0DCBD77FAC0ED4FBC`，来源优先级审计已授权且通过。
+- 当前集成 Warrior 完整套件 `21/21` 通过，包含新增远端锁定目标与近端实际受击对象回退、移动释放、普通/烈火单体及刺杀/半月多目标回归。三份怪物脚点合同、236/240 头盔人工草稿与冻结 HUD 的 SHA-256 均保持不变。
+- APK 从固定提交 `1571db9d0ee7ed0d80b7cb48d7fb12de2c18f673` 的全新隔离工作树导出：`outputs/hardcore/HardCore-v51-melee-lock-impact-debug.apk`，大小 `244,327,964` 字节，SHA-256 `FF44C801ADF50D74638D54A6FF450AAEA87AB8CDF071B774A9A78628F3CE0137`。包信息为 `versionCode=51`、`versionName=1.17.15-melee-lock-impact`；签名、包名、架构和运行时资源自动验证通过。构建后手机在 ADB 大包传输期间断开，覆盖安装待设备重新枚举后继续。
+
 ## 2026-07-31 Android v50：全职业实时命中/发射几何
 
 - 职业技能提交 `5d383b4b` 已作为集成提交 `9ba353cf` 接入，跨系统运行时接线为 `461df415`，Android 固定构建提交为 `d7717832`。新增稳定合同 `gameplay.professions.combat_release_geometry.live_footpoint.v1`：攻击或技能在输入时只保存原目标实例 ID 与自动转向后的动画方向，在实际命中/发射帧读取人物和原目标的实时脚点；动画中途不切方向，动作结束后仍恢复移动输入。
