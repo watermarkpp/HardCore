@@ -59,7 +59,7 @@ const SKILL_PROFILES := {
 	"攻杀剑术": {"profession": "战士", "cast_type": "melee", "multiplier": 1.0, "range": 105.0, "service_magic_id": 7, "service_mode": "automatic_proc"},
 	"刺杀剑术": {"profession": "战士", "cast_type": "line", "multiplier": 1.0, "range": 175.0, "service_magic_id": 12, "service_mode": "toggle_second_cell"},
 	"半月弯刀": {"profession": "战士", "cast_type": "area", "multiplier": 1.0, "range": 125.0, "service_magic_id": 25, "service_mode": "toggle_three_directions"},
-	"野蛮冲撞": {"profession": "战士", "cast_type": "dash", "multiplier": 0.8, "range": 115.0, "service_magic_id": 27, "service_mode": "rush"},
+	"野蛮冲撞": {"profession": "战士", "cast_type": "dash", "multiplier": 0.0, "range": 115.0, "service_magic_id": 27, "service_mode": "atomic_tile_push", "runtime_override_id": "gameplay.warrior.wild_rush.atomic_tile_push.v1"},
 	"烈火剑法": {"profession": "战士", "cast_type": "melee", "multiplier": 1.0, "range": 105.0, "service_magic_id": 26, "service_mode": "arm_next_hit", "ui_interaction_mode": "toggle", "runtime_activation_mode": "single_attack_input_direct_melee", "runtime_override_id": "gameplay.warrior.fire_sword.attack_toggle.user_override.v1", "charge_state_id": "warrior.fire_sword.charge_armed"},
 	"火球术": {"profession": "法师", "cast_type": "projectile", "multiplier": 1.0, "range": 360.0},
 	"抗拒火环": {"profession": "法师", "cast_type": "knockback", "multiplier": 0.0, "range": 115.0},

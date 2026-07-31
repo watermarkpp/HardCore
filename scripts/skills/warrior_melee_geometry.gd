@@ -6,6 +6,7 @@ extends RefCounted
 ## canonical tile coordinates. Screen pixels are deliberately not accepted.
 
 const CONTRACT_ID := "gameplay.warrior.melee_geometry.fractional_tile.v1"
+const WILD_RUSH_CONTRACT_ID := "gameplay.warrior.wild_rush.atomic_tile_push.v1"
 
 const SKILL_NORMAL := "normal"
 const SKILL_FIRE := "fire"
@@ -34,6 +35,8 @@ const MAXIMUM_TARGETS := {
 const THRUST_PRIMARY_REACH_TILES := 1.5
 const THRUST_WIDTH_TILES := 1.0
 const HALF_MOON_RELATIVE_DIRECTION_OFFSETS: Array[int] = [7, 0, 1, 2]
+const WILD_RUSH_TARGET_REACH_TILES := 1.5
+const WILD_RUSH_PUSH_DISTANCE_TILES := 3
 const EPSILON := 0.0001
 
 # ArtSpec/screen-facing order: S, SW, W, NW, N, NE, E, SE. The values are
@@ -145,3 +148,24 @@ static func fire_consumes_charge(resolution: String) -> bool:
 	# A legal physical hit attempt consumes the charge whether it lands or MISSes.
 	# Input rejection and pre-hit cancellation never consume it.
 	return resolution in ["hit", "miss"]
+
+
+static func wild_rush_target_is_adjacent(origin: Vector2, target: Vector2) -> bool:
+	var distance := chebyshev_distance(origin, target)
+	return distance > EPSILON and distance <= WILD_RUSH_TARGET_REACH_TILES + EPSILON
+
+
+static func wild_rush_direction_step(origin: Vector2, target: Vector2) -> Vector2i:
+	return facing_tile_step(direction_index_for_tile_delta(target - origin))
+
+
+static func wild_rush_resolved_distance(
+	static_clear_distance_tiles: int,
+	dynamic_blocker_in_corridor: bool
+) -> int:
+	# Another monster anywhere in the complete three-tile corridor cancels the
+	# whole displacement. Static geometry instead truncates the coupled movement
+	# at the final valid tile before the obstacle.
+	if dynamic_blocker_in_corridor:
+		return 0
+	return clampi(static_clear_distance_tiles, 0, WILD_RUSH_PUSH_DISTANCE_TILES)

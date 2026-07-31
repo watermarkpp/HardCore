@@ -75,18 +75,26 @@ func _ready() -> void:
 		"has_target": true,
 		"target_level": 30,
 		"target_is_boss": false,
-		"force_success": true,
+		"resolved_push_distance_tiles": 3,
 	}, 100, 40)
 	assert(rush.effect_success and rush.effects[0].push_distance_tiles == 3)
+	assert(rush.effects[0].resolved_push_distance_tiles == 3)
+	assert(rush.effects[0].damage_amount == 0 and rush.effects[0].self_damage_amount == 0)
 	var blocked_rush := _execute("warrior.wild_rush", 3, {
 		"has_target": true,
 		"target_level": 30,
-		"force_success": true,
-		"path_blocked_after_start": true,
-		"caster_max_hp": 1000,
+		"resolved_push_distance_tiles": 3,
+		"dynamic_blocker_in_corridor": true,
 	}, 100, 40)
-	assert(not blocked_rush.effect_success and blocked_rush.effects[1].amount == 10)
+	assert(blocked_rush.accepted and not blocked_rush.effect_success)
+	assert(blocked_rush.effects.size() == 1 and blocked_rush.effects[0].resolved_push_distance_tiles == 0)
 	assert(blocked_rush.proficiency_event.is_empty())
+	var partial_rush := _execute("warrior.wild_rush", 0, {
+		"has_target": true,
+		"target_level": 30,
+		"resolved_push_distance_tiles": 2,
+	}, 100, 40)
+	assert(partial_rush.effect_success and partial_rush.effects[0].resolved_push_distance_tiles == 2)
 	var boss_rush := _execute("warrior.wild_rush", 3, {
 		"has_target": true, "target_level": 1, "target_is_boss": true,
 	}, 100, 40)
@@ -98,7 +106,7 @@ func _ready() -> void:
 	assert(consumed_fire.proficiency_event == "charged_fire_sword_is_consumed_by_valid_melee_attack")
 	assert(consumed_fire.timing.body_cast_ms == 600)
 	assert(consumed_fire.timing.cooldown_ms == 8000)
-	print("WARRIOR_CANONICAL_RUNTIME_PASS: six skills, active fire charge, tile geometry and proficiency events")
+	print("WARRIOR_CANONICAL_RUNTIME_PASS: six skills, deterministic atomic wild rush, active fire charge and proficiency events")
 	get_tree().quit()
 
 
