@@ -121,9 +121,9 @@ static func fire_sword_damage(base_damage: int, level_value: int) -> int:
 
 
 static func wild_rush_success_threshold(skill_level: int, player_level: int, target_level: int) -> int:
-	if player_level <= target_level:
-		return 0
-	return clampi(clamp_skill_level(skill_level) * 4 + 6 + player_level - target_level, 0, 20)
+	# Compatibility helper: the user-approved runtime is deterministic after the
+	# strict lower-level gate. Skill rank no longer changes the success roll.
+	return 20 if player_level > target_level else 0
 
 
 static func wild_rush_success_probability(skill_level: int, player_level: int, target_level: int) -> float:
@@ -131,8 +131,7 @@ static func wild_rush_success_probability(skill_level: int, player_level: int, t
 
 
 static func wild_rush_max_cells(skill_level: int) -> int:
-	# Pascal for 0 to Max(2, level+1) 为包含上界循环。
-	return maxi(2, clamp_skill_level(skill_level) + 1) + 1
+	return 3
 
 
 static func client_attack_duration_seconds() -> float:
@@ -152,6 +151,5 @@ static func active_skill_damage(skill_name: String, base_damage: int, level_valu
 		"刺杀剑术": return thrust_secondary_damage(base_damage, level_value)
 		"半月弯刀": return half_moon_secondary_damage(base_damage, level_value)
 		"烈火剑法": return fire_sword_damage(base_damage, level_value)
-		# 野蛮伤害取决于冲撞剩余步数，专属机制任务再接入；当前不伪称为服务端精确值。
-		"野蛮冲撞": return maxi(1, roundi(float(base_damage) * 0.8))
+		"野蛮冲撞": return 0
 	return maxi(1, base_damage)

@@ -72,34 +72,30 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 			)
 			if not eligible:
 				return _failed_resolution(plan, "ineligible_push_target")
-			var probability := clampf(
-				(6.0 + 6.0 * float(rank) + float(caster_level - target_level)) / 20.0,
-				0.0,
-				1.0
+			var maximum_distance := int(mechanics.get("fixed_push_distance_tiles", 3))
+			var dynamic_blocked := bool(context.get("dynamic_blocker_in_corridor", false))
+			var resolved_distance := clampi(
+				int(context.get("resolved_push_distance_tiles", maximum_distance)),
+				0,
+				maximum_distance
 			)
-			var roll_success: bool = (
-				not bool(context.get("force_failure", false))
-				and (
-					bool(context.get("force_success", false))
-					or bool(rng.call("chance", probability))
-				)
-			)
-			var path_blocked := bool(context.get("path_blocked_after_start", false))
-			var displaced: bool = roll_success and not path_blocked
+			if dynamic_blocked:
+				resolved_distance = 0
+			var displaced := resolved_distance > 0
 			plan.effect_success = displaced
 			plan.effects = [{
 				"type": "level_gated_push",
-				"success_probability": probability,
-				"push_distance_tiles": int(mechanics.get("push_distance_by_rank", [1, 1, 2, 3])[rank]),
+				"success_probability": 1.0,
+				"push_distance_tiles": maximum_distance,
+				"resolved_push_distance_tiles": resolved_distance,
 				"displaced": displaced,
 				"caster_moves_into_vacated_path": true,
+				"atomic_path_preflight_required": true,
+				"dynamic_blocker_cancels_all_displacement": true,
+				"static_obstacle_stops_before_blocker": true,
+				"damage_amount": 0,
+				"self_damage_amount": 0,
 			}]
-			if path_blocked:
-				plan.effects.append({
-					"type": "self_damage",
-					"amount": maxi(1, int(floor(float(context.get("caster_max_hp", 1)) * 0.01))),
-					"reason": "rush_path_collision",
-				})
 			if displaced:
 				plan.proficiency_event = trigger
 		"warrior.fire_sword":
