@@ -11,8 +11,8 @@ signal skill_button_assignment_requested(request: Dictionary)
 
 const PANEL_SIZE := Vector2(1208, 650)
 const LONG_PRESS_SECONDS := 0.48
-const CENTER_SKILL_SLOT_COUNT := 4
-const ATTACK_RING_SLOT_COUNT := 3
+const ATTACK_SLOT_COUNT := 1
+const ATTACK_RING_SLOT_COUNT := 6
 
 var trainer_title: Label
 var trainer_context_label: Label
@@ -26,6 +26,7 @@ var description_label: RichTextLabel
 var learn_button: Button
 var assign_button: Button
 var center_assignment_buttons: Array[Button] = []
+var attack_assignment_buttons: Array[Button] = []
 var attack_ring_assignment_buttons: Array[Button] = []
 var assignment_buttons: Array[Button] = []
 var assignment_popup: Panel
@@ -223,33 +224,42 @@ func _build_skill_detail_section() -> void:
 func _build_assignment_section() -> void:
 	var panel := _section_panel("AssignmentPanel", Rect2(854, 76, 334, 548))
 	panel.add_child(_section_title("技能按钮配置", 334))
-	var center_title := Label.new()
-	center_title.name = "CenterSlotsTitle"
-	center_title.text = "中央技能槽 1–4"
-	center_title.position = Vector2(22, 50)
-	center_title.size = Vector2(290, 26)
-	center_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	center_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	center_title.theme_type_variation = "GothicMutedLabel"
-	panel.add_child(center_title)
-	for slot_index in range(CENTER_SKILL_SLOT_COUNT):
-		var button := Button.new()
-		button.name = "CenterSkillSlot_%d" % (slot_index + 1)
-		button.position = Vector2(18 + (slot_index % 2) * 150, 80 + floori(float(slot_index) / 2.0) * 94)
-		button.size = Vector2(140, 86)
-		button.text = ""
-		button.theme_type_variation = "GothicComponentButton"
-		button.pressed.connect(_assign_selected_to_target.bind("center", slot_index))
-		button.set_meta("slot_group", "center")
-		button.set_meta("slot_index", slot_index)
-		button.set_meta("stable_slot_id", "hud.profession_skill.%d" % (slot_index + 1))
-		panel.add_child(button)
-		center_assignment_buttons.append(button)
-		assignment_buttons.append(button)
+	var attack_title := Label.new()
+	attack_title.name = "AttackSlotTitle"
+	attack_title.text = "攻击主键"
+	attack_title.position = Vector2(22, 50)
+	attack_title.size = Vector2(290, 26)
+	attack_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	attack_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	attack_title.theme_type_variation = "GothicMutedLabel"
+	panel.add_child(attack_title)
+	var attack_slot := Button.new()
+	attack_slot.name = "AttackSkillSlot"
+	attack_slot.position = Vector2(18, 80)
+	attack_slot.size = Vector2(190, 82)
+	attack_slot.text = ""
+	attack_slot.theme_type_variation = "GothicComponentSelectedButton"
+	attack_slot.pressed.connect(_assign_selected_to_target.bind("attack", 0))
+	attack_slot.set_meta("slot_group", "attack")
+	attack_slot.set_meta("slot_index", 0)
+	attack_slot.set_meta("stable_slot_id", "hud.attack.primary")
+	panel.add_child(attack_slot)
+	attack_assignment_buttons.append(attack_slot)
+	assignment_buttons.append(attack_slot)
+	var clear_attack := Button.new()
+	clear_attack.name = "ClearAttackSkillSlot"
+	clear_attack.text = "恢复\n普通攻击"
+	clear_attack.position = Vector2(212, 80)
+	clear_attack.size = Vector2(104, 82)
+	clear_attack.theme_type_variation = "GothicComponentButton"
+	clear_attack.pressed.connect(_request_clear_target.bind("attack", 0))
+	clear_attack.set_meta("stable_slot_id", "hud.attack.primary")
+	clear_attack.set_meta("assignment_action", "clear")
+	panel.add_child(clear_attack)
 	var ring_title := Label.new()
 	ring_title.name = "AttackRingSlotsTitle"
-	ring_title.text = "攻击环技能槽 1–3"
-	ring_title.position = Vector2(22, 272)
+	ring_title.text = "攻击环技能槽 1–6"
+	ring_title.position = Vector2(22, 176)
 	ring_title.size = Vector2(290, 26)
 	ring_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ring_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -258,8 +268,8 @@ func _build_assignment_section() -> void:
 	for slot_index in range(ATTACK_RING_SLOT_COUNT):
 		var button := Button.new()
 		button.name = "AttackRingSkillSlot_%d" % (slot_index + 1)
-		button.position = Vector2(18 + slot_index * 100, 304)
-		button.size = Vector2(94, 116)
+		button.position = Vector2(18 + (slot_index % 3) * 100, 208 + floori(float(slot_index) / 3.0) * 112)
+		button.size = Vector2(94, 60)
 		button.text = ""
 		button.theme_type_variation = "GothicComponentButton"
 		button.pressed.connect(_assign_selected_to_target.bind("attack_ring", slot_index))
@@ -269,11 +279,21 @@ func _build_assignment_section() -> void:
 		panel.add_child(button)
 		attack_ring_assignment_buttons.append(button)
 		assignment_buttons.append(button)
+		var clear_button := Button.new()
+		clear_button.name = "ClearAttackRingSkillSlot_%d" % (slot_index + 1)
+		clear_button.text = "清空 %d" % (slot_index + 1)
+		clear_button.position = button.position + Vector2(0, 64)
+		clear_button.size = Vector2(94, 40)
+		clear_button.theme_type_variation = "GothicComponentButton"
+		clear_button.pressed.connect(_request_clear_target.bind("attack_ring", slot_index))
+		clear_button.set_meta("stable_slot_id", "hud.attack_ring_skill.%d" % (slot_index + 1))
+		clear_button.set_meta("assignment_action", "clear")
+		panel.add_child(clear_button)
 	var hint := Label.new()
 	hint.name = "AssignmentHint"
-	hint.text = "长按左侧已学技能\n再选择中央或攻击环槽位"
-	hint.position = Vector2(24, 448)
-	hint.size = Vector2(286, 66)
+	hint.text = "主动技能可配置到攻击主键或六个环形技能位\n被动技能仅在技能列表中展示"
+	hint.position = Vector2(24, 442)
+	hint.size = Vector2(286, 72)
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	hint.autowrap_mode = TextServer.AUTOWRAP_OFF
@@ -322,34 +342,26 @@ func _build_assignment_popup() -> void:
 	assignment_popup_title.add_theme_color_override("font_color", Color("f1cc88"))
 	assignment_popup.add_child(assignment_popup_title)
 	var hint := Label.new()
-	hint.text = "选择要替换的中央技能槽或攻击环技能槽"
+	hint.text = "选择攻击主键或六个攻击环技能槽"
 	hint.position = Vector2(28, 74)
 	hint.size = Vector2(564, 30)
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.theme_type_variation = "GothicMutedLabel"
 	assignment_popup.add_child(hint)
-	var center_title := Label.new()
-	center_title.text = "中央技能槽"
-	center_title.position = Vector2(28, 110)
-	center_title.size = Vector2(564, 26)
-	center_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	center_title.theme_type_variation = "GothicSectionTitle"
-	assignment_popup.add_child(center_title)
-	for slot_index in range(CENTER_SKILL_SLOT_COUNT):
-		var button := Button.new()
-		button.name = "PopupCenterSlot_%d" % (slot_index + 1)
-		button.text = "中央 %d" % (slot_index + 1)
-		button.position = Vector2(28 + slot_index * 142, 142)
-		button.size = Vector2(128, 76)
-		button.theme_type_variation = "GothicComponentButton"
-		button.pressed.connect(_assign_selected_to_target.bind("center", slot_index))
-		button.set_meta("slot_group", "center")
-		button.set_meta("slot_index", slot_index)
-		assignment_popup.add_child(button)
-		assignment_popup_buttons.append(button)
+	var attack_slot := Button.new()
+	attack_slot.name = "PopupAttackSlot"
+	attack_slot.text = "攻击主键"
+	attack_slot.position = Vector2(28, 108)
+	attack_slot.size = Vector2(564, 62)
+	attack_slot.theme_type_variation = "GothicComponentSelectedButton"
+	attack_slot.pressed.connect(_assign_selected_to_target.bind("attack", 0))
+	attack_slot.set_meta("slot_group", "attack")
+	attack_slot.set_meta("slot_index", 0)
+	assignment_popup.add_child(attack_slot)
+	assignment_popup_buttons.append(attack_slot)
 	var ring_title := Label.new()
 	ring_title.text = "攻击环技能槽"
-	ring_title.position = Vector2(28, 232)
+	ring_title.position = Vector2(28, 178)
 	ring_title.size = Vector2(564, 26)
 	ring_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ring_title.theme_type_variation = "GothicSectionTitle"
@@ -358,8 +370,8 @@ func _build_assignment_popup() -> void:
 		var button := Button.new()
 		button.name = "PopupAttackRingSlot_%d" % (slot_index + 1)
 		button.text = "攻击环 %d" % (slot_index + 1)
-		button.position = Vector2(92 + slot_index * 150, 264)
-		button.size = Vector2(136, 76)
+		button.position = Vector2(28 + (slot_index % 3) * 188, 208 + floori(float(slot_index) / 3.0) * 70)
+		button.size = Vector2(176, 62)
 		button.theme_type_variation = "GothicComponentButton"
 		button.pressed.connect(_assign_selected_to_target.bind("attack_ring", slot_index))
 		button.set_meta("slot_group", "attack_ring")
@@ -468,6 +480,7 @@ func _rebuild_skill_cards() -> void:
 		button.gui_input.connect(_skill_card_input.bind(index))
 		button.set_meta("skill_id", ProfessionRules.skill_id(skill_name))
 		button.set_meta("learned", learned)
+		button.set_meta("assignment_eligible", _skill_interaction_mode(skill_name) != "passive")
 		skill_list_container.add_child(button)
 		skill_buttons.append(button)
 
@@ -526,7 +539,10 @@ func _show_skill_detail(index: int) -> void:
 	]
 	learn_button.disabled = learned
 	learn_button.text = "已学会" if learned else ("使用技能书学习" if PlayerState.has_item(skill_name) else "缺少同名技能书")
-	assign_button.disabled = not learned
+	var assignment_eligible := interaction_mode != "passive"
+	assign_button.disabled = not learned or not assignment_eligible
+	assign_button.text = "被动技能仅展示" if not assignment_eligible else "配置技能按钮"
+	assign_button.set_meta("assignment_eligible", assignment_eligible)
 
 
 func _clear_skill_detail() -> void:
@@ -536,22 +552,22 @@ func _clear_skill_detail() -> void:
 	description_label.text = ""
 	learn_button.disabled = true
 	assign_button.disabled = true
+	assign_button.text = "配置技能按钮"
 
 
 func _refresh_assignment_slots() -> void:
-	for slot_index in range(center_assignment_buttons.size()):
-		var skill_name := _assignment_skill_name("center", slot_index)
-		_set_assignment_button_content(center_assignment_buttons[slot_index], "中央 %d" % (slot_index + 1), skill_name)
+	for slot_index in range(attack_assignment_buttons.size()):
+		var skill_name := _assignment_skill_name("attack", slot_index)
+		_set_assignment_button_content(attack_assignment_buttons[slot_index], "攻击主键", skill_name)
 		if slot_index < assignment_popup_buttons.size():
-			assignment_popup_buttons[slot_index].text = "中央 %d\n%s [%s]" % [
-				slot_index + 1,
-				skill_name if not skill_name.is_empty() else "空",
+			assignment_popup_buttons[slot_index].text = "攻击主键\n%s [%s]" % [
+				skill_name if not skill_name.is_empty() else "普通攻击",
 				_skill_presentation_label(skill_name),
 			]
 	for slot_index in range(attack_ring_assignment_buttons.size()):
 		var skill_name := _assignment_skill_name("attack_ring", slot_index)
 		_set_assignment_button_content(attack_ring_assignment_buttons[slot_index], "环 %d" % (slot_index + 1), skill_name)
-		var popup_index := CENTER_SKILL_SLOT_COUNT + slot_index
+		var popup_index := ATTACK_SLOT_COUNT + slot_index
 		if popup_index < assignment_popup_buttons.size():
 			assignment_popup_buttons[popup_index].text = "攻击环 %d\n%s [%s]" % [
 				slot_index + 1,
@@ -673,6 +689,9 @@ func _open_assignment_popup_for(index: int) -> void:
 	if not PlayerState.is_skill_learned(skill_name):
 		description_label.text = "[color=#b58b68]请先学习该技能，再配置战斗按钮。[/color]"
 		return
+	if _skill_interaction_mode(skill_name) == "passive":
+		description_label.text = "[color=#b58b68]被动技能始终生效，只在技能列表中展示，不能配置到战斗按钮。[/color]"
+		return
 	_on_skill_selected(index)
 	assignment_popup_title.text = "配置：%s　[%s]" % [skill_name, _skill_presentation_label(skill_name)]
 	assignment_popup.set_meta("skill_name", skill_name)
@@ -694,17 +713,19 @@ func _assign_selected_to_target(slot_group: String, slot_index: int) -> void:
 		skill_name = str(skill_entries[selected_skill_index].get("skillName", ""))
 	if not PlayerState.is_skill_learned(skill_name):
 		return
-	var maximum := CENTER_SKILL_SLOT_COUNT if slot_group == "center" else ATTACK_RING_SLOT_COUNT
-	if slot_group not in ["center", "attack_ring"] or slot_index < 0 or slot_index >= maximum:
+	if _skill_interaction_mode(skill_name) == "passive":
+		return
+	var maximum := ATTACK_SLOT_COUNT if slot_group == "attack" else ATTACK_RING_SLOT_COUNT
+	if slot_group not in ["attack", "attack_ring"] or slot_index < 0 or slot_index >= maximum:
 		return
 	var stable_slot_id := (
-		"hud.profession_skill.%d" % (slot_index + 1)
-		if slot_group == "center"
+		"hud.attack.primary"
+		if slot_group == "attack"
 		else "hud.attack_ring_skill.%d" % (slot_index + 1)
 	)
 	var interaction_mode := _skill_interaction_mode(skill_name)
 	var request := {
-		"contract_id": "ui.skill.button_assignment.v2",
+		"contract_id": "ui.skill.button_assignment.v3",
 		"profession_id": ProfessionRules.profession_id(PlayerState.profession),
 		"skill_id": ProfessionRules.skill_id(skill_name),
 		"skill_name": skill_name,
@@ -714,16 +735,29 @@ func _assign_selected_to_target(slot_group: String, slot_index: int) -> void:
 		"interaction_mode": interaction_mode,
 	}
 	skill_button_assignment_requested.emit(request.duplicate(true))
-	if slot_group == "attack_ring":
-		var legacy_request := {
-			"contract_id": "ui.skill.quick_slot_assignment.v1",
-			"profession_id": request.profession_id,
-			"skill_id": request.skill_id,
-			"skill_name": request.skill_name,
-			"slot_index": slot_index,
-		}
-		quick_slot_assignment_requested.emit(legacy_request)
 	_hide_assignment_popup()
+
+
+func _request_clear_target(slot_group: String, slot_index: int) -> void:
+	var maximum := ATTACK_SLOT_COUNT if slot_group == "attack" else ATTACK_RING_SLOT_COUNT
+	if slot_group not in ["attack", "attack_ring"] or slot_index < 0 or slot_index >= maximum:
+		return
+	var stable_slot_id := (
+		"hud.attack.primary"
+		if slot_group == "attack"
+		else "hud.attack_ring_skill.%d" % (slot_index + 1)
+	)
+	skill_button_assignment_requested.emit({
+		"contract_id": "ui.skill.button_assignment.v3",
+		"profession_id": ProfessionRules.profession_id(PlayerState.profession),
+		"skill_id": "",
+		"skill_name": "",
+		"slot_group": slot_group,
+		"slot_index": slot_index,
+		"slot_id": stable_slot_id,
+		"interaction_mode": "empty",
+		"clear": true,
+	})
 
 
 func _hide_assignment_popup() -> void:

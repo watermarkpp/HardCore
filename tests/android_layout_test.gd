@@ -30,11 +30,12 @@ func _run() -> void:
 	var auto_target := root.get_node("AutoTargetButton") as Button
 	_assert_touch_target(joystick, Vector2(150, 150), "虚拟摇杆")
 	_assert_touch_target(attack, Vector2(120, 120), "攻击按钮")
-	_assert_touch_target(interact, Vector2(110, 90), "交互按钮")
-	_assert_touch_target(switch_target, Vector2(110, 52), "换敌按钮")
+	_assert_touch_target(interact, Vector2(110, 76), "交互按钮")
+	_assert_touch_target(switch_target, Vector2(110, 76), "换敌按钮")
 	_assert_touch_target(auto_target, Vector2(120, 48), "自动选怪开关")
-	for index in range(4):
-		_assert_touch_target(root.get_node("SkillButton%d" % (index + 1)) as Button, Vector2(100, 56), "技能按钮%d" % (index + 1))
+	for index in range(6):
+		_assert_touch_target(root.get_node("AttackRingSkill%d" % (index + 1)) as Button, Vector2(72, 72), "环形技能按钮%d" % (index + 1))
+		assert(root.get_node_or_null("SkillButton%d" % (index + 1)) == null, "旧中央技能按钮仍在Android HUD")
 
 	var received := {
 		"movement": Vector2.ZERO,
@@ -63,12 +64,12 @@ func _run() -> void:
 	interact.button_down.emit()
 	switch_target.pressed.emit()
 	auto_target.toggled.emit(false)
-	(root.get_node("SkillButton1") as Button).pressed.emit()
+	(root.get_node("AttackRingSkill6") as Button).pressed.emit()
 	assert((received.movement as Vector2).is_equal_approx(Vector2(0.75, -0.25)), "摇杆信号没有接入角色移动")
 	assert(int(received.attack) == 1 and int(received.attack_release) == 1 and int(received.interact) == 1, "攻击按下、松开或交互触控接线失败")
 	assert(int(received.switch) == 1 and not bool(received.auto), "换敌或自动选怪开关接线失败")
 	assert(
-		str(received.skill_group) == "center" and int(received.skill_index) == 0,
+		str(received.skill_group) == "attack_ring" and int(received.skill_index) == 5,
 		"技能触控槽位分组接线失败"
 	)
 

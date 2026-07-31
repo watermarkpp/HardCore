@@ -2,6 +2,7 @@ extends Control
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const EquipmentCharacterPreviewScript := preload("res://scripts/equipment_character_preview.gd")
+const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 
 signal character_creation_requested(request: Dictionary)
 signal character_launch_requested(request: Dictionary)
@@ -76,10 +77,13 @@ func _ready() -> void:
 	_build_preview_panel()
 	_build_creation_panel()
 	_refresh_profiles()
+	TouchScrollSupportScript.attach_tree(self)
 
 
 func _input(event: InputEvent) -> void:
 	if profile_scroll == null or not is_instance_valid(profile_scroll):
+		return
+	if str(profile_scroll.get_meta("touch_scroll_policy", "")) == TouchScrollSupportScript.STABLE_ID:
 		return
 	if event is InputEventScreenTouch:
 		if event.pressed and profile_scroll.get_global_rect().has_point(event.position):
