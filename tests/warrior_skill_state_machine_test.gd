@@ -78,6 +78,12 @@ func _run() -> void:
 	player._attack_action_timer = 0.0
 	assert(player.request_skill("烈火剑法") and player.fire_sword_enabled, "烈火开关无法开启")
 	assert(player.current_mp == mp_before_fire and is_zero_approx(player._attack_timer), "开启烈火开关不得预扣MP或占用动作")
+	var fire_visual_before_rejection: String = str(player.visual._action_name)
+	assert(not player.request_attack(false), "烈火没有合法目标时不得开始攻击动作")
+	assert(is_zero_approx(player._attack_timer) and is_zero_approx(player._attack_action_timer))
+	assert(player.skill_cooldown_remaining_ms("warrior.fire_sword") == 0)
+	assert(player.current_mp == mp_before_fire)
+	assert(player.visual._action_name == fire_visual_before_rejection)
 	var direct_fire_context := player._build_warrior_attack_context(true)
 	assert(direct_fire_context.mode == "fire" and direct_fire_context.direct_toggle_release, "烈火没有在同一次攻击输入直接进入攻击模式")
 	assert(player.request_attack(true), "烈火开关开启后攻击键未接受")

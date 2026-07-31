@@ -27,6 +27,9 @@ func _ready() -> void:
 	assert(half_moon.toggle and half_moon.attack_priority == 300)
 	assert(fire.toggle and fire.attack_priority == 400)
 	assert(fire.runtime_override_id == Policy.FIRE_TOGGLE_OVERRIDE_ID)
+	assert(not fire.fallback_when_unavailable)
+	assert(fire.requires_valid_target_at_input)
+	assert(fire.empty_swing_policy == "physical_miss_only")
 	assert(wild_rush.click_release and wild_rush.bindable_to_skill_slot)
 	assert(wild_rush.bindable_to_attack_slot, "主动技能必须支持未来绑定攻击键")
 
