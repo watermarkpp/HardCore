@@ -44,6 +44,27 @@ PAPER_REFERENCE_SIZES = {
     236: (32, 41),
     240: (32, 41),
 }
+HELMET_ICON_SCALE_RULE = (
+    "classic_content_area_equivalent_aspect_preserved_v1"
+)
+# These integer content sizes are the reviewed result of applying the scale
+# rule to each user-authored source and the matching classic-client Looks
+# entry.  Keeping the final integer decision in the contract prevents a
+# future Pillow/platform rounding change from silently altering accepted art.
+HELMET_ICON_TARGET_CONTENT_SIZES = {
+    146: {"inventory": (33, 23), "ground": (10, 7)},
+    147: {"inventory": (18, 29), "ground": (14, 22)},
+    148: {"inventory": (18, 29), "ground": (14, 22)},
+    149: {"inventory": (23, 37), "ground": (11, 16)},
+    150: {"inventory": (28, 43), "ground": (14, 18)},
+    151: {"inventory": (20, 29), "ground": (9, 14)},
+    218: {"inventory": (23, 31), "ground": (10, 12)},
+    224: {"inventory": (20, 30), "ground": (10, 13)},
+    228: {"inventory": (21, 31), "ground": (10, 16)},
+    232: {"inventory": (28, 37), "ground": (12, 20)},
+    236: {"inventory": (28, 28), "ground": (13, 13)},
+    240: {"inventory": (22, 38), "ground": (11, 18)},
+}
 
 
 def sha256(path: Path) -> str:
@@ -476,6 +497,49 @@ def transparent_safe_border(image: Image.Image, pixels: int = 1) -> Image.Image:
     return bordered
 
 
+def build_final_helmet_icon(
+    root: Path,
+    source: Image.Image,
+    source_provenance: dict[str, Any],
+    classic_mapping: dict[str, Any],
+    item_id: int,
+    role: str,
+) -> tuple[Image.Image, dict[str, Any]]:
+    """Build one runtime icon directly from its accepted high-res source."""
+    if role not in ("inventory", "ground"):
+        raise ValueError(f"unsupported helmet icon role: {role}")
+    classic_field = "inventoryIcon" if role == "inventory" else "groundIcon"
+    classic_record = classic_mapping[classic_field]
+    classic_path = res_path(root, str(classic_record["path"]))
+    classic_image = crop_alpha(rgba(classic_path))
+    source_image = crop_alpha(source)
+    target_size = HELMET_ICON_TARGET_CONTENT_SIZES[item_id][role]
+    resized = premultiplied_lanczos_resize(source_image, target_size)
+    output = transparent_safe_border(resized)
+    metadata = {
+        "sourceContentSize": [source_image.width, source_image.height],
+        "targetContentSize": list(target_size),
+        "classicReferenceLooks": int(classic_mapping["looks"]),
+        "classicReferencePath": str(classic_record["path"]),
+        "classicReferenceContentSize": [
+            classic_image.width,
+            classic_image.height,
+        ],
+        "classicReferenceFileSha256": sha256(classic_path),
+        "classicReferenceLane": "client_assets",
+        "classicReferenceDistribution": "client.classic_raw_complete",
+        "userSourceLane": "user_authorized_direct_source",
+        "scaleRule": HELMET_ICON_SCALE_RULE,
+        "displaySize": [output.width, output.height],
+        "runtimeScale": [1, 1],
+        "runtimeTextureFilter": "nearest",
+        "singlePassDownsample": True,
+        "sourceAspectPreserved": True,
+        "sourceEvidence": dict(source_provenance),
+    }
+    return output, metadata
+
+
 def build_world_atlases(
     root: Path,
     draft: dict[str, Any],
@@ -806,6 +870,7 @@ def replace_presentation_records(
     output_dir: Path,
     visual_catalog: dict[str, Any],
     head_manifest: dict[str, Any],
+    client_art_sources: dict[str, Any],
     item_ids: list[int],
 ) -> dict[str, Any]:
     primary_item_id = int(draft["itemId"])
@@ -834,14 +899,8 @@ def replace_presentation_records(
     inventory_source, inventory_provenance = presentation_source(
         root, draft, cutouts, "inventory"
     )
-    inventory_image = premultiplied_lanczos_resize(
-        inventory_source, fit_inside(inventory_source, (36, 36))
-    )
     ground_source, ground_provenance = presentation_source(
         root, draft, cutouts, "ground"
-    )
-    ground_image = premultiplied_lanczos_resize(
-        ground_source, fit_inside(ground_source, (18, 18))
     )
 
     records: dict[str, Any] = {}
@@ -849,6 +908,23 @@ def replace_presentation_records(
         item_key = str(item_id)
         item = visual_catalog["itemsById"][item_key]
         item_name = str(item["itemName"])
+        classic_mapping = client_art_sources["runtimeMappings"][item_name]
+        inventory_image, inventory_metadata = build_final_helmet_icon(
+            root,
+            inventory_source,
+            inventory_provenance,
+            classic_mapping,
+            item_id,
+            "inventory",
+        )
+        ground_image, ground_metadata = build_final_helmet_icon(
+            root,
+            ground_source,
+            ground_provenance,
+            classic_mapping,
+            item_id,
+            "ground",
+        )
         suffix = f"item_{item_id:05d}"
         paper_result = save_png(
             paper_image, output_dir / f"{suffix}_paper_doll.png"
@@ -952,6 +1028,7 @@ def replace_presentation_records(
             ),
             "fileSha256": inventory_result["fileSha256"],
             "rgbaSha256": inventory_result["rgbaSha256"],
+            **inventory_metadata,
         }
         ground_record = {
             "path": to_res(root, ground_result["path"]),
@@ -970,6 +1047,7 @@ def replace_presentation_records(
             ),
             "fileSha256": ground_result["fileSha256"],
             "rgbaSha256": ground_result["rgbaSha256"],
+            **ground_metadata,
         }
         item["paperDoll"] = paper_catalog
         item["icons"]["equippedSlot"] = {
@@ -981,9 +1059,23 @@ def replace_presentation_records(
         # Name-only legacy saves still resolve world appearance through this
         # compatibility map. Presentation calibration belongs on the item
         # record and must never replace its helmetAppearance mapping.
-        visual_catalog["runtimeMappings"][item_name] = {
-            "helmetAppearance": item["worldWear"]["helmetAppearance"]
-        }
+        # GameData applies inventory/drop presentation through the legacy
+        # name-keyed runtimeMappings table.  Paper-doll rendering reads
+        # itemsById directly, so omitting these two routes made the accepted
+        # helmet paper dolls visible while inventory and ground pickup views
+        # silently retained their older client icons.
+        #
+        # Keep the world appearance immutable and route the already-finalized
+        # presentation PNGs verbatim.  These records only contain paths and
+        # provenance; no additional image resize or resample occurs here.
+        runtime_mapping = visual_catalog["runtimeMappings"].setdefault(
+            item_name, {}
+        )
+        runtime_mapping["helmetAppearance"] = item["worldWear"][
+            "helmetAppearance"
+        ]
+        runtime_mapping["inventoryIcon"] = dict(inventory_record)
+        runtime_mapping["groundIcon"] = dict(ground_record)
         records[item_key] = {
             "paperDoll": paper_record,
             "inventory": {**inventory_record, "provenance": inventory_provenance},
@@ -1011,11 +1103,17 @@ def finalize(root: Path) -> dict[str, Any]:
     visual_catalog_path = root / "assets/data/equipment_visual_catalog.json"
     head_manifest_path = root / "assets/data/equipment_classic_avatar_head_patches.json"
     final_manifest_path = root / "assets/data/equipment_helmet_finalization_manifest.json"
+    client_art_sources_path = (
+        root / "assets/data/equipment_client_art_sources.json"
+    )
 
     helmet_catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
     overrides = json.loads(override_path.read_text(encoding="utf-8"))
     visual_catalog = json.loads(visual_catalog_path.read_text(encoding="utf-8"))
     head_manifest = json.loads(head_manifest_path.read_text(encoding="utf-8"))
+    client_art_sources = json.loads(
+        client_art_sources_path.read_text(encoding="utf-8")
+    )
 
     draft_paths = sorted(
         drafts_dir.glob("item_*.json"),
@@ -1101,6 +1199,7 @@ def finalize(root: Path) -> dict[str, Any]:
             presentation_dir,
             visual_catalog,
             head_manifest,
+            client_art_sources,
             item_ids,
         )
 
