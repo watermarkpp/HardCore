@@ -124,6 +124,7 @@ func _run() -> void:
 	var half_a := _make_enemy(game, player, "半月左前", Vector2(52, -52), 1)
 	var half_b := _make_enemy(game, player, "半月右前", Vector2(52, 52), 1)
 	var half_c := _make_enemy(game, player, "半月右侧", Vector2(0, 74), 1)
+	player.half_moon_enabled = true
 	player._pending_attack_context = {"mode": "half_moon", "skill_level": 3}
 	game._on_player_attack(Vector2.ZERO, Vector2.RIGHT, 130)
 	for secondary: EnemyActor in [half_a, half_b, half_c]:
@@ -146,8 +147,11 @@ func _make_enemy(game: Node, player: PlayerCharacter, display_name: String, posi
 	var enemy := EnemyActor.new()
 	enemy.setup({"name": display_name, "hp": 9999, "attackMin": 1, "attackMax": 1, "level": enemy_level}, player, false)
 	enemy.global_position = position
-	enemy.control_time = 60.0
 	game.add_child(enemy)
+	# EnemyActor._ready() initializes its runtime control state. Freeze the
+	# fixture after it enters the tree so hit-frame assertions use the intended
+	# fixed geometry.
+	enemy.control_time = 60.0
 	return enemy
 
 

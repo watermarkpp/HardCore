@@ -1,5 +1,21 @@
 # Codex 精简上下文快照
 
+## 2026-07-31 独立攻击锁定与逐次攻击输入
+
+- 集成运行时新增 `combat.attack_lock.tile_radius.v1`：攻击锁定只使用正式地图格坐标，按八方向网格的 Chebyshev 距离限制在角色周围 `10` 格。自动锁定默认开启；无锁定时，点击或按住普通攻击会从四周合法怪物中选择最近目标；已有目标时，即使出现更近怪物也保持原锁定，并在每次攻击输入时强制转向。目标死亡、失效或越过 `10` 格才释放。
+- 换敌键与攻击共用同一组 `10` 格候选：没有目标时从最近怪物开始，有目标时按格距离循环到下一只；不再限制人物正面，也不再要求先关闭自动选怪。攻击锁定和技能临时选敌已经拆开，技能施放不会覆盖攻击目标；持久魔法锁定尚未实现，留待后续独立设计。
+- 普通攻击输入改为逐次登记：每次快速或慢速点击都对应一次攻击，发生在上一刀动作/冷却期间的点击不会丢失；长按继续按攻击间隔连续触发，松开只停止继续追加。攻击动作结束后继续使用未被清除的摇杆/键盘方向，人物恢复该方向并继续移动。
+- `mobile_targeting_test` 覆盖 10/11 格边界、背后最近目标、持续锁定、强制转向、点击队列、长按、松开恢复移动、换敌循环及技能目标隔离；当前集成 Warrior 完整套件 `18/18` 通过。冻结 HUD、236/240 头盔草稿和三份怪物脚点合同 SHA-256 均保持不变。
+
+## 2026-07-31 Android v48：战士动作稳定与 HUD 可视金属内沿填充
+
+- 职业技能提交 `4d50549e` 已作为集成提交 `5d2bd904` 接入；跨系统命中帧接线为 `c8505925`。刺杀/半月的主体动作在攻击输入时锁定，不再因瞬时 `has_combat_target` 或半月 MP 检测降为普通攻击；实际目标资格、MP 与效果降级改由 `SkillInputPolicy.resolve_warrior_hit_effect` 在命中帧决定。攻杀剑法仍只在一次有效近战命中事务中判定一次，永远不成为独立主体动作或特效。
+- UI 提交 `36f720ce`、合并修正树 `2d09b896` 与最终内衬修正 `7945fe97` 已作为集成提交 `ea0d6c50` / `050f9a22` / `633113fb` 接入。旧四技能圆框、红菱形和直横连接条由 `ui.hud.chassis.legacy_skill_alpha_mask.v2` 精确移除；中央徽章、向上尖头和下方正式弧形金属横梁逐像素保留。
+- `round_action_frame_v3.png` 原图保持不变。运行时 `ui.hud.action_frame.inner_dark_rim_mask.v1` 按 360 个方向逐径向寻找第一枚亮金属像素，只清除其内侧深色/半透明衬圈，亮金属与外侧四尖角保持原 RGBA；攻击内容使用 `90px`，六环技能内容使用 `50px`，frame 最后绘制遮边。无技能槽隐藏底色和图标、透出地图，只居中显示“空”。该视觉已由用户根据 4× 放大图明确验收通过并冻结。
+- 集成回归：Warrior 完整套件 `18/18` 通过；HUD/Android 布局/触摸滚动/技能图标专项 `6/6` 通过，新增 360 向内容覆盖、内衬清零、亮金属原值和绘制层级断言。最终验收图为 `HardCore-worktrees/ui-art/outputs/visual_acceptance/hud_runtime/hud_visible_inner_rim_2664x1200.png`，4× 按钮图为 `hud_visible_inner_rim_action_detail_4x.png`。
+- 用户冻结对象零变化：`item_236.json` / `item_240.json` SHA-256 仍为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC` / `81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`；三份怪物脚点合同仍为 `DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+- APK 从固定提交 `e12bf11d25ba61f674f94446375faad90031231c` 的全新隔离工作树导出：`outputs/hardcore/HardCore-v48-action-frame-fill-debug.apk`，大小 `244,294,808` 字节，SHA-256 `6ED212D5E1EB098267F06DB5E407EA19883347A50220A302A6E485DDB3FEED61`。包信息为 `versionCode=48`、`versionName=1.17.12-action-frame-fill`、`com.personal.mafaoffline`、`HardCore`；结构验证通过。已对连接的 HONOR 90 保留数据覆盖安装并启动，前台活动为 `GodotAppLauncher`，启动后近期日志未发现 Godot 脚本错误或 Android 崩溃。
+
 ## 2026-07-31 Android v47 六环技能与战士近战整合
 
 - 专业交付已按工作树依次集成：装备 `5da60808`（集成 `b2ff4858`）、职业技能 `4fac69b6`（集成 `8f9b34a8`）、UI `f45c2a68`（集成 `9db42247`）；跨系统接线提交为 `64de7041`，Android 固定构建提交为 `74109c5c`。

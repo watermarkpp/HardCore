@@ -16,12 +16,19 @@ static func attach_tree(root: Node) -> Node:
 		return null
 	var scene_root := root.get_tree().root
 	var support := scene_root.get_node_or_null("TouchScrollSupport")
+	if support == null and scene_root.has_meta("_touch_scroll_support_pending"):
+		support = scene_root.get_meta("_touch_scroll_support_pending") as Node
 	if support == null:
 		var support_script := load("res://scripts/touch_scroll_support.gd") as GDScript
 		support = support_script.new()
 		support.name = "TouchScrollSupport"
 		support.set_meta("stable_id", STABLE_ID)
-		scene_root.add_child(support)
+		# HUD and character-select can request this singleton while SceneTree root
+		# is still attaching their scene. Register controls immediately, but
+		# defer only the singleton's parent insertion so it never fails with
+		# "parent node is busy setting up children".
+		scene_root.set_meta("_touch_scroll_support_pending", support)
+		scene_root.add_child.call_deferred(support)
 	support.register_tree(root)
 	return support
 
