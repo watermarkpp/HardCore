@@ -20,6 +20,7 @@ const SkillInputPolicyScript := preload("res://scripts/skill_input_policy.gd")
 const SkillRuntimeRouterScript := preload("res://scripts/skills/skill_runtime_router.gd")
 const SkillCastRequestScript := preload("res://scripts/skills/skill_cast_request.gd")
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
+const CombatReleaseGeometryScript := preload("res://scripts/skills/combat_release_geometry.gd")
 const WarriorMeleeGeometryScript := preload("res://scripts/skills/warrior_melee_geometry.gd")
 const CombatRuntimeServiceScript := preload("res://scripts/layers/runtime/combat_runtime_service.gd")
 const CasterSkillRuntimeScript := preload("res://scripts/caster_skill_runtime.gd")
@@ -1145,9 +1146,23 @@ func _request_mobile_attack() -> bool:
 	if not player.can_start_attack():
 		return false
 	var melee_mode := _selected_warrior_melee_mode()
+	var target_instance_id := target.get_instance_id() if is_instance_valid(target) else 0
+	var input_release_geometry := CombatReleaseGeometryScript.resolve(
+		player.global_position,
+		attack_direction,
+		target_instance_id,
+		target.global_position if is_instance_valid(target) else Vector2.ZERO,
+		is_instance_valid(target),
+		true
+	)
 	var accepted := player.request_attack_toward(
 		attack_direction,
-		_has_melee_hittable_target(attack_direction, melee_mode)
+		_has_melee_hittable_target(
+			attack_direction,
+			melee_mode,
+			input_release_geometry
+		),
+		target_instance_id
 	)
 	# A ready input that is rejected by the fire policy is handled, not queued:
 	# retrying it later would turn a no-target press into an unintended cast.
@@ -1175,15 +1190,30 @@ func _selected_warrior_melee_mode() -> String:
 	return WarriorMeleeGeometryScript.SKILL_NORMAL
 
 
-func _has_melee_hittable_target(direction: Vector2, mode := "") -> bool:
+func _has_melee_hittable_target(
+	direction: Vector2,
+	mode := "",
+	release_geometry: Dictionary = {}
+) -> bool:
 	if direction.length_squared() <= 0.01:
 		return false
 	var resolved_mode := mode if not mode.is_empty() else _selected_warrior_melee_mode()
-	var primary := _physical_primary_target(player.global_position, direction.normalized(), resolved_mode)
+	var primary := _physical_primary_target(
+		player.global_position,
+		direction.normalized(),
+		resolved_mode,
+		release_geometry
+	)
 	if primary != null:
 		return true
 	if resolved_mode == WarriorMeleeGeometryScript.SKILL_THRUST:
-		return _thrust_secondary_target(player.global_position, direction.normalized(), null) != null
+		return _thrust_secondary_target(
+			player.global_position,
+			direction.normalized(),
+			null,
+			_combat_release_target(release_geometry),
+			int(release_geometry.get("locked_target_instance_id", 0)) > 0
+		) != null
 	if resolved_mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
 		return not _half_moon_targets(player.global_position, direction.normalized(), null).is_empty()
 	return false
@@ -1799,7 +1829,12 @@ func _use_skill_slot(slot_group: String, slot_index: int) -> void:
 			float(profile.get("search_range", TargetingSystem.DEFAULT_SEARCH_RADIUS))
 		)
 		_face_skill_cast_target()
-	if not player.request_skill(skill_name):
+	var locked_skill_target_id := (
+		_skill_cast_target.get_instance_id()
+		if is_instance_valid(_skill_cast_target)
+		else 0
+	)
+	if not player.request_skill(skill_name, locked_skill_target_id):
 		_skill_cast_target = null
 		hud.show_message("技能冷却中或魔法不足")
 	elif skill_name in ["基本剑术", "攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"]:
@@ -1851,15 +1886,34 @@ func _on_skill_button_assignment_requested(request: Dictionary) -> void:
 
 func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void:
 	var context := player.consume_attack_context()
+	var release_geometry: Dictionary = context.get("release_geometry", {})
+	if not release_geometry.is_empty():
+		origin = release_geometry.get("origin_world", origin)
+		direction = release_geometry.get("direction_world", direction)
+	var authoritative_target := _combat_release_target(release_geometry)
+	var has_authoritative_target := int(
+		release_geometry.get("locked_target_instance_id", 0)
+	) > 0
 	_expire_canonical_fire_charge_if_needed()
 	var body_selection := context.duplicate(true)
 	var selection_mode := str(body_selection.get("mode", WarriorMeleeGeometryScript.SKILL_NORMAL))
 	if Time.get_ticks_msec() < _canonical_fire_charge_expires_ms:
 		selection_mode = WarriorMeleeGeometryScript.SKILL_FIRE
-	var primary := _physical_primary_target(origin, direction, selection_mode)
+	var primary := _physical_primary_target(
+		origin,
+		direction,
+		selection_mode,
+		release_geometry
+	)
 	var eligible_target_count := 1 if primary != null else 0
 	if selection_mode == WarriorMeleeGeometryScript.SKILL_THRUST:
-		eligible_target_count += 1 if _thrust_secondary_target(origin, direction, primary) != null else 0
+		eligible_target_count += 1 if _thrust_secondary_target(
+			origin,
+			direction,
+			primary,
+			authoritative_target,
+			has_authoritative_target
+		) != null else 0
 	elif selection_mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
 		eligible_target_count += _half_moon_targets(origin, direction, primary).size()
 	var has_eligible_target := eligible_target_count > 0
@@ -1911,7 +1965,8 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			direction,
 			modified_base_damage,
 			accuracy_bonus,
-			bool(body_selection.get("direct_toggle_release", false))
+			bool(body_selection.get("direct_toggle_release", false)),
+			release_geometry
 		)
 		if effect_mode in ["thrust", "half_moon", "fire"]
 		else (
@@ -2013,7 +2068,21 @@ func _on_warrior_skill_state_changed(_skill_name: String, _enabled: bool, messag
 
 
 func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, damage: int) -> void:
-	var execution := _execute_canonical_skill(skill_name, origin, direction, damage)
+	var skill_context := player.consume_skill_context()
+	var release_geometry: Dictionary = skill_context.get("release_geometry", {})
+	if not release_geometry.is_empty():
+		origin = release_geometry.get("origin_world", origin)
+		direction = release_geometry.get("direction_world", direction)
+	_skill_cast_target = _combat_release_target(release_geometry)
+	var execution := _execute_canonical_skill(
+		skill_name,
+		origin,
+		direction,
+		damage,
+		{},
+		true,
+		not release_geometry.is_empty()
+	)
 	var hit_any := bool(execution.get("effect_success", false))
 	if not bool(execution.get("accepted", false)):
 		hud.show_message("技能释放失败：%s" % str(execution.get("reason", "runtime_rejected")), 1.5)
@@ -2031,7 +2100,8 @@ func _execute_canonical_skill(
 	direction: Vector2,
 	client_damage: int,
 	extra_target_context: Dictionary = {},
-	apply_effects := true
+	apply_effects := true,
+	authoritative_cast_target := false
 ) -> Dictionary:
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
 	var definition := SkillDataLoaderScript.skill(stable_skill_id)
@@ -2039,7 +2109,12 @@ func _execute_canonical_skill(
 		_skill_cast_target = null
 		return {"accepted": false, "effect_success": false, "reason": "unknown_skill"}
 	var rank := PlayerState.effective_skill_level(skill_name)
-	var target_context := _canonical_target_context(definition, origin, direction)
+	var target_context := _canonical_target_context(
+		definition,
+		origin,
+		direction,
+		not authoritative_cast_target
+	)
 	target_context.merge(extra_target_context, true)
 	var cast_target := _skill_cast_target
 	var request_facing := _canonical_facing_for_skill(stable_skill_id, direction)
@@ -2098,7 +2173,8 @@ func _execute_canonical_melee(
 	direction: Vector2,
 	base_damage: int,
 	accuracy_bonus: int,
-	direct_toggle_release := false
+	direct_toggle_release := false,
+	release_geometry: Dictionary = {}
 ) -> bool:
 	var skill_name: String = {
 		"thrust": "刺杀剑术",
@@ -2107,12 +2183,27 @@ func _execute_canonical_melee(
 	}.get(mode, "")
 	if skill_name.is_empty():
 		return false
-	var primary := _physical_primary_target(origin, direction, mode)
+	var primary := _physical_primary_target(
+		origin,
+		direction,
+		mode,
+		release_geometry
+	)
+	var authoritative_target := _combat_release_target(release_geometry)
+	var has_authoritative_target := int(
+		release_geometry.get("locked_target_instance_id", 0)
+	) > 0
 	var thrust_secondary: EnemyActor
 	var half_moon_secondaries: Array[EnemyActor] = []
 	var eligible_target_count := 1 if primary != null else 0
 	if mode == "thrust":
-		thrust_secondary = _thrust_secondary_target(origin, direction, primary)
+		thrust_secondary = _thrust_secondary_target(
+			origin,
+			direction,
+			primary,
+			authoritative_target,
+			has_authoritative_target
+		)
 		eligible_target_count += 1 if thrust_secondary != null else 0
 	elif mode == "half_moon":
 		half_moon_secondaries = _half_moon_targets(origin, direction, primary)
@@ -2169,7 +2260,12 @@ func _canonical_basic_sword_bonus(origin: Vector2, direction: Vector2, valid_swi
 	return 0
 
 
-func _canonical_target_context(definition: Dictionary, origin: Vector2, direction: Vector2) -> Dictionary:
+func _canonical_target_context(
+	definition: Dictionary,
+	origin: Vector2,
+	direction: Vector2,
+	allow_auto_target := true
+) -> Dictionary:
 	var target_contract: Dictionary = definition.get("target", {})
 	var target_mode := str(target_contract.get("mode", ""))
 	var target_relation := str(target_contract.get("relation", ""))
@@ -2181,7 +2277,7 @@ func _canonical_target_context(definition: Dictionary, origin: Vector2, directio
 	var search_range := maxf(105.0, float(profile.get("range", 370.0)))
 	if target_mode.contains("surround") or target_mode.contains("area") or target_mode.contains("ground"):
 		search_range = maxf(search_range, 180.0)
-	if not friendly_cast and target_mode not in ["self", "self_stat", "self_summon", "self_next_melee_charge", "self_random_destination", "caster_surrounding_area", "surrounding_units"]:
+	if allow_auto_target and not friendly_cast and target_mode not in ["self", "self_stat", "self_summon", "self_next_melee_charge", "self_random_destination", "caster_surrounding_area", "surrounding_units"]:
 		_ensure_skill_cast_target(null, search_range)
 	var target := _skill_cast_target if not friendly_cast and is_instance_valid(_skill_cast_target) else null
 	var has_ground_target := target_mode.contains("ground") or target_mode.contains("area") or target_mode == "facing_line"
@@ -2818,9 +2914,48 @@ func _resolve_magic_defense(_skill_id: String, damage_after_anti_magic: int, tar
 	return maxi(0, damage_after_anti_magic - _rng.randi_range(defense_min, defense_max))
 
 
-func _physical_primary_target(origin: Vector2, direction: Vector2, mode := "normal") -> EnemyActor:
+func _combat_release_target(release_geometry: Dictionary) -> EnemyActor:
+	var target_instance_id := int(release_geometry.get("locked_target_instance_id", 0))
+	if target_instance_id <= 0 or not bool(
+		release_geometry.get("locked_target_valid_at_release", false)
+	):
+		return null
+	var candidate := instance_from_id(target_instance_id)
+	if (
+		not candidate is EnemyActor
+		or not is_instance_valid(candidate)
+		or candidate.is_queued_for_deletion()
+		or candidate.current_hp <= 0
+	):
+		return null
+	return candidate as EnemyActor
+
+
+func _physical_primary_target(
+	origin: Vector2,
+	direction: Vector2,
+	mode := "normal",
+	release_geometry: Dictionary = {}
+) -> EnemyActor:
 	var origin_tile := _canonical_world_to_fractional_tile(origin)
 	var direction_index := ArtSpec.direction_index(direction)
+	var locked_instance_id := int(release_geometry.get("locked_target_instance_id", 0))
+	if locked_instance_id > 0:
+		var authoritative_target := _combat_release_target(release_geometry)
+		if _is_primary_melee_candidate(
+			authoritative_target,
+			origin_tile,
+			direction_index,
+			mode
+		) and CombatReleaseGeometryScript.candidate_allowed(
+			release_geometry,
+			authoritative_target.get_instance_id()
+		):
+			return authoritative_target
+		# A locked attack must either hit its original target under the selected
+		# geometry or legitimately whiff. It may never become an attack against a
+		# different nearby monster during the windup.
+		return null
 	if _is_attack_target_in_range(locked_target) and _is_primary_melee_candidate(
 		locked_target,
 		origin_tile,
@@ -2834,6 +2969,11 @@ func _physical_primary_target(origin: Vector2, direction: Vector2, mode := "norm
 		if not node is EnemyActor or node.is_queued_for_deletion() or node.current_hp <= 0:
 			continue
 		var enemy := node as EnemyActor
+		if not CombatReleaseGeometryScript.candidate_allowed(
+			release_geometry,
+			enemy.get_instance_id()
+		):
+			continue
 		if not _is_primary_melee_candidate(enemy, origin_tile, direction_index, mode):
 			continue
 		var target_tile := _canonical_world_to_fractional_tile(enemy.global_position)
@@ -2894,10 +3034,29 @@ func _apply_physical_hit(enemy: EnemyActor, damage: int, accuracy_bonus := 0) ->
 	return true
 
 
-func _thrust_secondary_target(origin: Vector2, direction: Vector2, excluded: EnemyActor) -> EnemyActor:
+func _thrust_secondary_target(
+	origin: Vector2,
+	direction: Vector2,
+	excluded: EnemyActor,
+	authoritative_target: EnemyActor = null,
+	has_authoritative_target := false
+) -> EnemyActor:
 	var origin_tile := _canonical_world_to_fractional_tile(origin)
 	var direction_index := ArtSpec.direction_index(direction)
-	if (
+	if has_authoritative_target and authoritative_target != excluded:
+		if (
+			is_instance_valid(authoritative_target)
+			and not authoritative_target.is_queued_for_deletion()
+			and authoritative_target.current_hp > 0
+			and WarriorMeleeGeometryScript.thrust_slot(
+				origin_tile,
+				_canonical_world_to_fractional_tile(authoritative_target.global_position),
+				direction_index
+			) == 2
+		):
+			return authoritative_target
+		return null
+	if not has_authoritative_target and (
 		_is_attack_target_in_range(locked_target)
 		and locked_target != excluded
 		and WarriorMeleeGeometryScript.thrust_slot(
