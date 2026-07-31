@@ -35,6 +35,7 @@ const CANONICAL_MATERIAL_ITEMS := {
 const SKILL_PRODUCTION_ADAPTER_CONTRACT := "skills.production_adaptation.hardcore.v1"
 const ATTACK_LOCK_CONTRACT := "combat.attack_lock.tile_radius.v1"
 const ATTACK_LOCK_RANGE_TILES := 10
+const MELEE_LOCK_IMPACT_POLICY_ID := "combat.melee_lock.facing_priority_nonexclusive.v1"
 const WILD_RUSH_SKILL_ID := "warrior.wild_rush"
 
 var player: PlayerCharacter
@@ -1198,24 +1199,28 @@ func _has_melee_hittable_target(
 	if direction.length_squared() <= 0.01:
 		return false
 	var resolved_mode := mode if not mode.is_empty() else _selected_warrior_melee_mode()
-	var primary := _physical_primary_target(
+	var primary_targets := _physical_primary_targets(
 		player.global_position,
 		direction.normalized(),
 		resolved_mode,
 		release_geometry
 	)
-	if primary != null:
+	if not primary_targets.is_empty():
 		return true
 	if resolved_mode == WarriorMeleeGeometryScript.SKILL_THRUST:
-		return _thrust_secondary_target(
+		return not _thrust_secondary_targets(
 			player.global_position,
 			direction.normalized(),
-			null,
-			_combat_release_target(release_geometry),
-			int(release_geometry.get("locked_target_instance_id", 0)) > 0
-		) != null
+			primary_targets,
+			release_geometry
+		).is_empty()
 	if resolved_mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
-		return not _half_moon_targets(player.global_position, direction.normalized(), null).is_empty()
+		return not _half_moon_secondary_targets(
+			player.global_position,
+			direction.normalized(),
+			primary_targets,
+			release_geometry
+		).is_empty()
 	return false
 
 
@@ -1890,35 +1895,35 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 	if not release_geometry.is_empty():
 		origin = release_geometry.get("origin_world", origin)
 		direction = release_geometry.get("direction_world", direction)
-	var authoritative_target := _combat_release_target(release_geometry)
-	var has_authoritative_target := int(
-		release_geometry.get("locked_target_instance_id", 0)
-	) > 0
 	_expire_canonical_fire_charge_if_needed()
 	var body_selection := context.duplicate(true)
 	var selection_mode := str(body_selection.get("mode", WarriorMeleeGeometryScript.SKILL_NORMAL))
 	if Time.get_ticks_msec() < _canonical_fire_charge_expires_ms:
 		selection_mode = WarriorMeleeGeometryScript.SKILL_FIRE
-	var primary := _physical_primary_target(
+	var primary_targets := _physical_primary_targets(
 		origin,
 		direction,
 		selection_mode,
 		release_geometry
 	)
-	var eligible_target_count := 1 if primary != null else 0
+	var eligible_target_count := primary_targets.size()
 	if selection_mode == WarriorMeleeGeometryScript.SKILL_THRUST:
-		eligible_target_count += 1 if _thrust_secondary_target(
+		eligible_target_count += _thrust_secondary_targets(
 			origin,
 			direction,
-			primary,
-			authoritative_target,
-			has_authoritative_target
-		) != null else 0
+			primary_targets,
+			release_geometry
+		).size()
 	elif selection_mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
-		eligible_target_count += _half_moon_targets(origin, direction, primary).size()
+		eligible_target_count += _half_moon_secondary_targets(
+			origin,
+			direction,
+			primary_targets,
+			release_geometry
+		).size()
 	var has_eligible_target := eligible_target_count > 0
 	var consumes_armed_fire := false
-	if primary != null and Time.get_ticks_msec() < _canonical_fire_charge_expires_ms:
+	if not primary_targets.is_empty() and Time.get_ticks_msec() < _canonical_fire_charge_expires_ms:
 		body_selection["mode"] = "fire"
 		body_selection["selected_body_mode"] = "fire"
 		body_selection["skill_name"] = "烈火剑法"
@@ -1958,8 +1963,9 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 		+ int(melee_modifiers.get("flat_dc_bonus_before_body_formula", 0))
 	)
 	var accuracy_bonus := int(melee_modifiers.get("flat_accuracy_bonus", 0))
-	var hit_any := (
-		_execute_canonical_melee(
+	var hit_any := false
+	if effect_mode in ["thrust", "half_moon", "fire"]:
+		hit_any = _execute_canonical_melee(
 			effect_mode,
 			origin,
 			direction,
@@ -1968,13 +1974,14 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			bool(body_selection.get("direct_toggle_release", false)),
 			release_geometry
 		)
-		if effect_mode in ["thrust", "half_moon", "fire"]
-		else (
-			_apply_physical_hit(primary, modified_base_damage, accuracy_bonus)
-			if effect_mode == "normal"
-			else false
-		)
-	)
+	elif effect_mode == "normal":
+		if not primary_targets.is_empty():
+			var target := primary_targets[0]
+			hit_any = _apply_physical_hit(
+				target,
+				modified_base_damage,
+				accuracy_bonus
+			)
 	_commit_warrior_melee_modifier_events(melee_modifiers)
 	if (
 		bool(melee_modifiers.get("slaying_proc", false))
@@ -2183,40 +2190,40 @@ func _execute_canonical_melee(
 	}.get(mode, "")
 	if skill_name.is_empty():
 		return false
-	var primary := _physical_primary_target(
+	var primary_targets := _physical_primary_targets(
 		origin,
 		direction,
 		mode,
 		release_geometry
 	)
-	var authoritative_target := _combat_release_target(release_geometry)
-	var has_authoritative_target := int(
-		release_geometry.get("locked_target_instance_id", 0)
-	) > 0
-	var thrust_secondary: EnemyActor
+	var thrust_secondaries: Array[EnemyActor] = []
 	var half_moon_secondaries: Array[EnemyActor] = []
-	var eligible_target_count := 1 if primary != null else 0
+	var eligible_target_count := primary_targets.size()
 	if mode == "thrust":
-		thrust_secondary = _thrust_secondary_target(
+		thrust_secondaries = _thrust_secondary_targets(
 			origin,
 			direction,
-			primary,
-			authoritative_target,
-			has_authoritative_target
+			primary_targets,
+			release_geometry
 		)
-		eligible_target_count += 1 if thrust_secondary != null else 0
+		eligible_target_count += thrust_secondaries.size()
 	elif mode == "half_moon":
-		half_moon_secondaries = _half_moon_targets(origin, direction, primary)
+		half_moon_secondaries = _half_moon_secondary_targets(
+			origin,
+			direction,
+			primary_targets,
+			release_geometry
+		)
 		eligible_target_count += half_moon_secondaries.size()
 	var extra := {
 		"has_target": eligible_target_count > 0,
 		"line_of_sight": eligible_target_count > 0,
 		"valid_melee_swing": eligible_target_count > 0,
 		"eligible_target_count": eligible_target_count,
-		"charge_consumed": mode == "fire" and primary != null,
+		"charge_consumed": mode == "fire" and not primary_targets.is_empty(),
 		"direct_toggle_release": (
 			mode == "fire"
-			and primary != null
+			and not primary_targets.is_empty()
 			and direct_toggle_release
 		),
 	}
@@ -2230,17 +2237,34 @@ func _execute_canonical_melee(
 		var effect: Dictionary = raw_effect
 		match str(effect.get("type", "")):
 			"melee_hit":
-				var target := primary if int(effect.get("cell", 1)) == 1 else thrust_secondary
-				if target != null:
-					hit_any = _apply_physical_hit(target, roundi(float(base_damage) * float(effect.get("multiplier", 1.0))), accuracy_bonus) or hit_any
+				var targets: Array[EnemyActor] = (
+					primary_targets
+					if int(effect.get("cell", 1)) == 1
+					else thrust_secondaries
+				)
+				for target: EnemyActor in targets:
+					hit_any = _apply_physical_hit(
+						target,
+						roundi(float(base_damage) * float(effect.get("multiplier", 1.0))),
+						accuracy_bonus
+					) or hit_any
 			"melee_arc":
-				if primary != null:
-					hit_any = _apply_physical_hit(primary, roundi(float(base_damage) * float(effect.get("primary_multiplier", 1.0))), accuracy_bonus)
+				for primary: EnemyActor in primary_targets:
+					hit_any = _apply_physical_hit(
+						primary,
+						roundi(float(base_damage) * float(effect.get("primary_multiplier", 1.0))),
+						accuracy_bonus
+					) or hit_any
 				for secondary: EnemyActor in half_moon_secondaries:
 					hit_any = _apply_physical_hit(secondary, roundi(float(base_damage) * float(effect.get("side_multiplier", 1.0))), accuracy_bonus) or hit_any
 			"next_melee_charge":
-				if primary != null:
-					hit_any = _apply_physical_hit(primary, roundi(float(base_damage) * float(effect.get("damage_multiplier", 1.0))), accuracy_bonus)
+				if not primary_targets.is_empty():
+					var target := primary_targets[0]
+					hit_any = _apply_physical_hit(
+						target,
+						roundi(float(base_damage) * float(effect.get("damage_multiplier", 1.0))),
+						accuracy_bonus
+					)
 	return hit_any
 
 
@@ -2937,51 +2961,59 @@ func _physical_primary_target(
 	mode := "normal",
 	release_geometry: Dictionary = {}
 ) -> EnemyActor:
+	var targets := _physical_primary_targets(origin, direction, mode, release_geometry)
+	return targets[0] if not targets.is_empty() else null
+
+
+func _physical_primary_targets(
+	origin: Vector2,
+	direction: Vector2,
+	mode := "normal",
+	release_geometry: Dictionary = {}
+) -> Array[EnemyActor]:
+	# The attack lock owns facing and priority only. Actual damage rights are
+	# rebuilt from live footpoints and the selected melee geometry at release.
+	# This deliberately overrides the single-target candidate filter used by
+	# caster projectiles without changing their shared release contract.
+	var result: Array[EnemyActor] = []
 	var origin_tile := _canonical_world_to_fractional_tile(origin)
 	var direction_index := ArtSpec.direction_index(direction)
-	var locked_instance_id := int(release_geometry.get("locked_target_instance_id", 0))
-	if locked_instance_id > 0:
-		var authoritative_target := _combat_release_target(release_geometry)
-		if _is_primary_melee_candidate(
-			authoritative_target,
-			origin_tile,
-			direction_index,
-			mode
-		) and CombatReleaseGeometryScript.candidate_allowed(
-			release_geometry,
-			authoritative_target.get_instance_id()
-		):
-			return authoritative_target
-		# A locked attack must either hit its original target under the selected
-		# geometry or legitimately whiff. It may never become an attack against a
-		# different nearby monster during the windup.
-		return null
-	if _is_attack_target_in_range(locked_target) and _is_primary_melee_candidate(
-		locked_target,
-		origin_tile,
-		direction_index,
-		mode
-	):
-		return locked_target
-	var nearest: EnemyActor
-	var nearest_distance := INF
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node.is_queued_for_deletion() or node.current_hp <= 0:
 			continue
 		var enemy := node as EnemyActor
-		if not CombatReleaseGeometryScript.candidate_allowed(
-			release_geometry,
-			enemy.get_instance_id()
-		):
-			continue
 		if not _is_primary_melee_candidate(enemy, origin_tile, direction_index, mode):
 			continue
-		var target_tile := _canonical_world_to_fractional_tile(enemy.global_position)
-		var distance := WarriorMeleeGeometryScript.chebyshev_distance(origin_tile, target_tile)
-		if distance < nearest_distance:
-			nearest = enemy
-			nearest_distance = distance
-	return nearest
+		result.append(enemy)
+	_sort_melee_targets(result, origin_tile, release_geometry)
+	return result
+
+
+func _sort_melee_targets(
+	targets: Array[EnemyActor],
+	origin_tile: Vector2,
+	release_geometry: Dictionary
+) -> void:
+	var locked_instance_id := int(release_geometry.get("locked_target_instance_id", 0))
+	if locked_instance_id <= 0 and _is_attack_target_in_range(locked_target):
+		locked_instance_id = locked_target.get_instance_id()
+	targets.sort_custom(func(a: EnemyActor, b: EnemyActor) -> bool:
+		var a_locked := a.get_instance_id() == locked_instance_id
+		var b_locked := b.get_instance_id() == locked_instance_id
+		if a_locked != b_locked:
+			return a_locked
+		var a_distance := WarriorMeleeGeometryScript.chebyshev_distance(
+			origin_tile,
+			_canonical_world_to_fractional_tile(a.global_position)
+		)
+		var b_distance := WarriorMeleeGeometryScript.chebyshev_distance(
+			origin_tile,
+			_canonical_world_to_fractional_tile(b.global_position)
+		)
+		if not is_equal_approx(a_distance, b_distance):
+			return a_distance < b_distance
+		return a.get_instance_id() < b.get_instance_id()
+	)
 
 
 func _is_primary_melee_candidate(
@@ -3034,42 +3066,17 @@ func _apply_physical_hit(enemy: EnemyActor, damage: int, accuracy_bonus := 0) ->
 	return true
 
 
-func _thrust_secondary_target(
+func _thrust_secondary_targets(
 	origin: Vector2,
 	direction: Vector2,
-	excluded: EnemyActor,
-	authoritative_target: EnemyActor = null,
-	has_authoritative_target := false
-) -> EnemyActor:
+	excluded_targets: Array[EnemyActor],
+	release_geometry: Dictionary = {}
+) -> Array[EnemyActor]:
+	var result: Array[EnemyActor] = []
 	var origin_tile := _canonical_world_to_fractional_tile(origin)
 	var direction_index := ArtSpec.direction_index(direction)
-	if has_authoritative_target and authoritative_target != excluded:
-		if (
-			is_instance_valid(authoritative_target)
-			and not authoritative_target.is_queued_for_deletion()
-			and authoritative_target.current_hp > 0
-			and WarriorMeleeGeometryScript.thrust_slot(
-				origin_tile,
-				_canonical_world_to_fractional_tile(authoritative_target.global_position),
-				direction_index
-			) == 2
-		):
-			return authoritative_target
-		return null
-	if not has_authoritative_target and (
-		_is_attack_target_in_range(locked_target)
-		and locked_target != excluded
-		and WarriorMeleeGeometryScript.thrust_slot(
-			origin_tile,
-			_canonical_world_to_fractional_tile(locked_target.global_position),
-			direction_index
-		) == 2
-	):
-		return locked_target
-	var result: EnemyActor
-	var nearest_projection := INF
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor or node == excluded or node.is_queued_for_deletion() or node.current_hp <= 0:
+		if not node is EnemyActor or node in excluded_targets or node.is_queued_for_deletion() or node.current_hp <= 0:
 			continue
 		var enemy := node as EnemyActor
 		var target_tile := _canonical_world_to_fractional_tile(enemy.global_position)
@@ -3077,46 +3084,38 @@ func _thrust_secondary_target(
 			origin_tile, target_tile, direction_index
 		) != 2:
 			continue
-		var projection := WarriorMeleeGeometryScript.line_coordinates(
-			target_tile - origin_tile, direction_index
-		).x
-		if projection < nearest_projection:
-			result = enemy
-			nearest_projection = projection
+		result.append(enemy)
+	_sort_melee_targets(result, origin_tile, release_geometry)
 	return result
 
 
-func _half_moon_targets(origin: Vector2, direction: Vector2, excluded: EnemyActor) -> Array[EnemyActor]:
+func _half_moon_secondary_targets(
+	origin: Vector2,
+	direction: Vector2,
+	excluded_targets: Array[EnemyActor],
+	release_geometry: Dictionary = {}
+) -> Array[EnemyActor]:
 	var result: Array[EnemyActor] = []
 	var origin_tile := _canonical_world_to_fractional_tile(origin)
 	var direction_index := ArtSpec.direction_index(direction)
-	for relative_sector: int in [7, 1, 2]:
-		var best: EnemyActor
-		var best_distance := INF
-		for node: Node in get_tree().get_nodes_in_group("enemies"):
-			if not node is EnemyActor or node == excluded or node in result or node.is_queued_for_deletion() or node.current_hp <= 0:
-				continue
-			var enemy := node as EnemyActor
-			var target_tile := _canonical_world_to_fractional_tile(enemy.global_position)
-			if not WarriorMeleeGeometryScript.is_in_half_moon_arc(
-				origin_tile, target_tile, direction_index
-			):
-				continue
-			var target_direction := WarriorMeleeGeometryScript.direction_index_for_tile_delta(
-				target_tile - origin_tile
-			)
-			if WarriorMeleeGeometryScript.half_moon_relative_sector(
-				direction_index, target_direction
-			) != relative_sector:
-				continue
-			var distance := WarriorMeleeGeometryScript.chebyshev_distance(
-				origin_tile, target_tile
-			)
-			if distance < best_distance:
-				best = enemy
-				best_distance = distance
-		if best != null:
-			result.append(best)
+	for node: Node in get_tree().get_nodes_in_group("enemies"):
+		if not node is EnemyActor or node in excluded_targets or node.is_queued_for_deletion() or node.current_hp <= 0:
+			continue
+		var enemy := node as EnemyActor
+		var target_tile := _canonical_world_to_fractional_tile(enemy.global_position)
+		if not WarriorMeleeGeometryScript.is_in_half_moon_arc(
+			origin_tile, target_tile, direction_index
+		):
+			continue
+		var target_direction := WarriorMeleeGeometryScript.direction_index_for_tile_delta(
+			target_tile - origin_tile
+		)
+		if WarriorMeleeGeometryScript.half_moon_relative_sector(
+			direction_index, target_direction
+		) == 0:
+			continue
+		result.append(enemy)
+	_sort_melee_targets(result, origin_tile, release_geometry)
 	return result
 
 

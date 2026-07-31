@@ -59,6 +59,7 @@ $Suites = @{
         'tests/warrior_attack_timing_test.tscn',
 		'tests/combat_release_geometry_test.tscn',
 		'tests/live_attack_resolution_test.tscn',
+		'tests/melee_lock_fallback_test.tscn',
         'tests/warrior_visual_test.tscn',
         'tests/class_combat_test.tscn',
         'tests/mobile_targeting_test.tscn',

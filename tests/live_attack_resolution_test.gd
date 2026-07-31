@@ -48,8 +48,9 @@ func _run() -> void:
 	assert(intended.current_hp == intended_hp - 20, "命中帧没有使用原锁定目标的实时脚点")
 	assert(decoy.current_hp == decoy_hp, "原锁定目标转向后攻击被偷换给附近怪物")
 
-	# A genuinely out-of-reach original target must whiff. Even a closer monster
-	# on the live facing line cannot replace it.
+	# Locking controls release facing and priority, not exclusive damage rights.
+	# If the original target moves out of reach, the nearest monster actually
+	# covered by the live melee geometry receives the single-target attack.
 	intended.current_hp = intended.max_hp
 	intended.global_position = game.player.global_position + Vector2(0, 100)
 	decoy.global_position = game.player.global_position + Vector2(0, 32)
@@ -69,7 +70,7 @@ func _run() -> void:
 	decoy_hp = decoy.current_hp
 	game._on_player_attack(origin_at_input, Vector2.RIGHT, 20)
 	assert(intended.current_hp == intended_hp, "真正超距的原锁定目标被错误命中")
-	assert(decoy.current_hp == decoy_hp, "超距锁定攻击被错误改打近处怪物")
+	assert(decoy.current_hp == decoy_hp - 20, "超距锁定阻断了近处刀锋范围内目标")
 
 	# The same resolver is shared by all professions' accepted active skills.
 	# It must update both caster origin and target direction at release time.
