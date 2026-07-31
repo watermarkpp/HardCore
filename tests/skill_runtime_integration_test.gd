@@ -92,6 +92,10 @@ func _run() -> void:
 	)
 
 	var player: PlayerCharacter = game.player
+	game.current_map_id = -1
+	player.set_physics_process(false)
+	player.global_position = Vector2.ZERO
+	player.velocity = Vector2.ZERO
 	player.set_test_combat_time_ms(1000)
 	player.restore_warrior_runtime_state(PlayerState.warrior_runtime_state_for_restore())
 	player.current_mp = 40
@@ -136,6 +140,12 @@ func _make_enemy(game: Node, player: PlayerCharacter, position: Vector2) -> Enem
 		false
 	)
 	enemy.global_position = position
-	enemy.control_time = 60.0
 	game.add_child(enemy)
+	# EnemyActor._ready() initializes its runtime control state. Freeze the
+	# fixture after it enters the tree so the target cannot leave melee range
+	# during the player's wind-up.
+	enemy.process_mode = Node.PROCESS_MODE_DISABLED
+	enemy.global_position = position
+	enemy.velocity = Vector2.ZERO
+	enemy.control_time = 60.0
 	return enemy

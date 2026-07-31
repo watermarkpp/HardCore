@@ -16,6 +16,7 @@ const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const SystemMenuPanelScript := preload("res://scripts/system_menu_panel.gd")
 const SkillLoadoutRulesScript := preload("res://scripts/skill_loadout_rules.gd")
+const SkillInputPolicyScript := preload("res://scripts/skill_input_policy.gd")
 const SkillRuntimeRouterScript := preload("res://scripts/skills/skill_runtime_router.gd")
 const SkillCastRequestScript := preload("res://scripts/skills/skill_cast_request.gd")
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
@@ -1484,17 +1485,38 @@ func _on_skill_button_assignment_requested(request: Dictionary) -> void:
 
 func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void:
 	var context := player.consume_attack_context()
-	var mode := str(context.get("mode", "normal"))
 	var primary := _physical_primary_target(origin, direction, 105.0)
 	_expire_canonical_fire_charge_if_needed()
+	var body_selection := context.duplicate(true)
+	var consumes_armed_fire := false
 	if primary != null and Time.get_ticks_msec() < _canonical_fire_charge_expires_ms:
-		mode = "fire"
-		context["skill_name"] = "烈火剑法"
-		context["skill_level"] = PlayerState.effective_skill_level("烈火剑法")
-		context["direct_toggle_release"] = false
+		body_selection["mode"] = "fire"
+		body_selection["selected_body_mode"] = "fire"
+		body_selection["skill_name"] = "烈火剑法"
+		body_selection["skill_level"] = PlayerState.effective_skill_level("烈火剑法")
+		body_selection["direct_toggle_release"] = false
+		consumes_armed_fire = true
+
+	var hit_effect := SkillInputPolicyScript.resolve_warrior_hit_effect(
+		body_selection,
+		{
+			"learned_skills": PlayerState.learned_skills,
+			"toggles": {
+				"warrior.fire_sword": player.fire_sword_enabled,
+				"warrior.half_moon": player.half_moon_enabled,
+				"warrior.thrusting": player.thrusting_enabled,
+			},
+			"has_combat_target": primary != null,
+			"current_mp": player.current_mp,
+			"fire_rank": PlayerState.effective_skill_level("烈火剑法"),
+			"half_moon_rank": PlayerState.effective_skill_level("半月弯刀"),
+		}
+	)
+	var effect_mode := str(hit_effect.get("effect_mode", ""))
+	if consumes_armed_fire and effect_mode == "fire":
 		_set_canonical_fire_charge_expires_at(0)
 	var melee_modifiers := SkillRuntimeRouterScript.resolve_warrior_melee_modifiers({
-		"body_mode": mode,
+		"body_mode": effect_mode,
 		"basic_sword_learned": PlayerState.is_skill_learned("基本剑术"),
 		"basic_sword_rank": PlayerState.effective_skill_level("基本剑术"),
 		"slaying_learned": PlayerState.is_skill_learned("攻杀剑术"),
@@ -1509,15 +1531,19 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 	var accuracy_bonus := int(melee_modifiers.get("flat_accuracy_bonus", 0))
 	var hit_any := (
 		_execute_canonical_melee(
-			mode,
+			effect_mode,
 			origin,
 			direction,
 			modified_base_damage,
 			accuracy_bonus,
-			bool(context.get("direct_toggle_release", false))
+			bool(body_selection.get("direct_toggle_release", false))
 		)
-		if mode in ["thrust", "half_moon", "fire"]
-		else _apply_physical_hit(primary, modified_base_damage, accuracy_bonus)
+		if effect_mode in ["thrust", "half_moon", "fire"]
+		else (
+			_apply_physical_hit(primary, modified_base_damage, accuracy_bonus)
+			if effect_mode == "normal"
+			else false
+		)
 	)
 	_commit_warrior_melee_modifier_events(melee_modifiers)
 	if (
@@ -1526,7 +1552,7 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 		and player.visual.has_method("play_passive_proc_effect")
 	):
 		player.visual.call("play_passive_proc_effect", "攻杀剑术", 0.24)
-	if mode == "fire" and hud != null:
+	if effect_mode == "fire" and hud != null:
 		hud.update_warrior_states(player.warrior_state_snapshot())
 	_show_attack_flash(origin, direction, hit_any, Color(1.0, 0.72, 0.25))
 
