@@ -24,7 +24,14 @@ func _ready() -> void:
 			for right_index in range(left_index + 1, touch_targets.size()):
 				var left := touch_targets[left_index] as Control
 				var right := touch_targets[right_index] as Control
-				assert(not left.get_global_rect().intersects(right.get_global_rect()), "%s触控区域发生重叠：%s / %s" % [mode, left.name, right.name])
+				if left.get_meta("circular_touch", false) and right.get_meta("circular_touch", false):
+					var required_distance := float(left.get_meta("touch_radius")) + float(right.get_meta("touch_radius"))
+					assert(
+						left.get_global_rect().get_center().distance_to(right.get_global_rect().get_center()) >= required_distance,
+						"%s圆形触控区域发生重叠：%s / %s" % [mode, left.name, right.name]
+					)
+				else:
+					assert(not left.get_global_rect().intersects(right.get_global_rect()), "%s触控区域发生重叠：%s / %s" % [mode, left.name, right.name])
 		if mode == "hud":
 			assert(get_tree().get_nodes_in_group("hud_profession_skill_slot").is_empty(), "HUD中间4个技能槽必须取消")
 			assert(get_tree().get_nodes_in_group("hud_item_slot").size() == 4, "一体式底框必须包含4个物品槽")
@@ -41,7 +48,10 @@ func _ready() -> void:
 			assert(preview.get_node_or_null("CombatConsole") == null, "4物品和4职业技能槽不得再使用矩形控制台背景")
 			var attack := preview.get_node("AttackButton") as Control
 			assert(str(attack.get_meta("stable_id", "")) == "hud.attack.primary", "攻击主键稳定ID缺失")
-			assert(attack.get_global_rect().end.x >= 1219.0 and attack.get_global_rect().end.y >= 679.0, "攻击按钮没有固定到右下角")
+			assert(attack.get_global_rect().get_center().is_equal_approx(Vector2(1095, 610)), "攻击按钮没有按统一圆心向屏幕内部移动")
+			for index in range(ring_slots.size()):
+				var ring := ring_slots[index] as Control
+				assert(is_equal_approx(ring.get_global_rect().get_center().distance_to(attack.get_global_rect().get_center()), 125.0), "六技能环半径不统一")
 		if mode != "hud":
 			assert(get_tree().get_nodes_in_group("wireframe_modal").size() == 1, "%s必须有且只有一个主模态面板" % mode)
 		preview.queue_free()

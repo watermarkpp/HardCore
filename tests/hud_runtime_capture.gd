@@ -22,6 +22,19 @@ func _ready() -> void:
 	hud.set_zone_name("比奇省 · 恶魔营地")
 	hud.update_resources(93, 120, 31, 60)
 	hud.update_target("半兽勇士", 386, 520, false, true)
+	hud.set_skill_button_assignments({
+		"contract_id": "gameplay.skill.button_assignments.v3",
+		"attack": [""],
+		"attack_ring": ["野蛮冲撞", "烈火剑法", "半月弯刀", "刺杀剑术", "", ""],
+	})
+	hud.update_warrior_states({
+		"slaying_auto": true,
+		"thrusting": true,
+		"half_moon": true,
+		"fire_enabled": true,
+		"fire_armed": true,
+		"fire_expires_remaining_ms": 8000,
+	})
 	await get_tree().process_frame
 	await get_tree().process_frame
 	var output_dir := ProjectSettings.globalize_path("res://outputs/visual_acceptance/hud_runtime")

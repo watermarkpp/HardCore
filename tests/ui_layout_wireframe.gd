@@ -87,7 +87,7 @@ func _build_hud() -> void:
 	_add_touch(self, "BagButton", Rect2(1006, 249, 116, 56), "背包", COLOR_ORANGE)
 	_add_touch(self, "SkillBookButton", Rect2(1134, 249, 116, 56), "技能", COLOR_ORANGE)
 
-	_add_touch(self, "Joystick", Rect2(42, 548, 138, 138), "移动摇杆", COLOR_BLUE)
+	_add_touch(self, "Joystick", Rect2(70, 510, 152, 152), "移动摇杆", COLOR_BLUE)
 	_add_panel(self, "LootNotice", Rect2(460, 390, 360, 56), "拾取与战斗反馈", COLOR_SECTION)
 
 	var integrated_frame := _add_outline(self, "IntegratedResourceItemFrame", Rect2(310, 574, 690, 124), Color(0.45, 0.92, 0.78, 0.88), 3)
@@ -99,29 +99,28 @@ func _build_hud() -> void:
 	_add_touch(self, "ManaOrb", Rect2(813, 579, 110, 110), "魔法球", COLOR_BLUE)
 	var item_centers := [Vector2(514, 638), Vector2(597, 638), Vector2(684, 638), Vector2(768, 638)]
 	for index in range(4):
-		var item_slot := _add_touch(self, "ItemSlot%d" % (index + 1), Rect2(item_centers[index] - Vector2(35, 35), Vector2(70, 70)), "物品%d" % (index + 1), COLOR_GOLD)
+		var item_slot := _add_touch(self, "ItemSlot%d" % (index + 1), Rect2(item_centers[index] - Vector2(36, 36), Vector2(72, 72)), "物品%d" % (index + 1), COLOR_GOLD)
 		item_slot.add_to_group("hud_item_slot")
 
-	var ring_centers := [
-		Vector2(1019, 650),
-		Vector2(1019, 578),
-		Vector2(1019, 506),
-		Vector2(1091, 434),
-		Vector2(1163, 434),
-		Vector2(1220, 506),
-	]
-	for index in range(ring_centers.size()):
+	var attack_center := Vector2(1095, 610)
+	for index in range(6):
+		var angle := deg_to_rad(180.0 + 36.0 * index)
+		var ring_center := attack_center + Vector2.from_angle(angle) * 125.0
 		var ring_skill := _add_touch(
 			self,
 			"AttackRingSkill%d" % (index + 1),
-			Rect2(ring_centers[index] - Vector2(36, 36), Vector2(72, 72)),
+			Rect2(ring_center - Vector2(36, 36), Vector2(72, 72)),
 			"技能%d" % (index + 1),
 			COLOR_GOLD
 		)
 		ring_skill.add_to_group("hud_attack_ring_skill")
 		ring_skill.set_meta("stable_id", "hud.attack_ring_skill.%d" % (index + 1))
-	var attack_button := _add_touch(self, "AttackButton", Rect2(1099, 559, 120, 120), "攻击", COLOR_RED)
+		ring_skill.set_meta("circular_touch", true)
+		ring_skill.set_meta("touch_radius", 36.0)
+	var attack_button := _add_touch(self, "AttackButton", Rect2(attack_center - Vector2(60, 60), Vector2(120, 120)), "攻击", COLOR_RED)
 	attack_button.set_meta("stable_id", "hud.attack.primary")
+	attack_button.set_meta("circular_touch", true)
+	attack_button.set_meta("touch_radius", 60.0)
 	_add_touch(self, "InteractButton", Rect2(1010, 305, 110, 76), "交互", COLOR_GREEN)
 	_add_touch(self, "SwitchTarget", Rect2(1140, 305, 110, 76), "切换敌人", COLOR_BLUE)
 
