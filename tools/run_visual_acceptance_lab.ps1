@@ -1,5 +1,6 @@
 param(
-    [switch]$MonsterGroundReview
+    [switch]$MonsterGroundReview,
+    [switch]$WarriorSkillReview
 )
 
 $ErrorActionPreference = 'Stop'
@@ -17,6 +18,9 @@ $env:LOCALAPPDATA = $AppDataRoot
 
 if ($MonsterGroundReview) {
     & $Godot --path $ProjectRoot --log-file (Join-Path $LogRoot 'visual_acceptance_lab.log') $Scene -- --monster-ground-review
+}
+elseif ($WarriorSkillReview) {
+    & $Godot --path $ProjectRoot --log-file (Join-Path $LogRoot 'visual_acceptance_lab.log') $Scene -- --warrior-skill-review
 }
 else {
     & $Godot --path $ProjectRoot --log-file (Join-Path $LogRoot 'visual_acceptance_lab.log') $Scene
