@@ -1,6 +1,7 @@
 extends Node
 
 const Geometry := preload("res://scripts/skills/warrior_melee_geometry.gd")
+const ReleaseGeometry := preload("res://scripts/skills/combat_release_geometry.gd")
 
 
 func _ready() -> void:
@@ -43,5 +44,50 @@ func _ready() -> void:
 	assert(Geometry.fire_consumes_charge("miss"))
 	assert(not Geometry.fire_consumes_charge("invalid_target"))
 	assert(not Geometry.fire_consumes_charge("cancelled_before_hit_test"))
+
+	assert(
+		ReleaseGeometry.CONTRACT_ID
+		== "gameplay.professions.combat_release_geometry.live_footpoint.v1"
+	)
+	assert(ReleaseGeometry.tracks_locked_target("single"))
+	for spatial_mode: String in ["direction", "target_area", "self", "self_area"]:
+		assert(not ReleaseGeometry.tracks_locked_target(spatial_mode))
+	var moving_target := ReleaseGeometry.resolve(
+		Vector2(4.0, 5.0),
+		Vector2.RIGHT,
+		77,
+		Vector2(1.0, 9.0),
+		true,
+		true
+	)
+	assert(moving_target.origin_world == Vector2(4.0, 5.0))
+	assert(moving_target.direction_world.is_equal_approx(Vector2(-3.0, 4.0).normalized()))
+	assert(moving_target.locked_target_instance_id == 77)
+	assert(not moving_target.allow_target_retarget and not moving_target.allow_directional_scan)
+	assert(ReleaseGeometry.candidate_allowed(moving_target, 77))
+	assert(not ReleaseGeometry.candidate_allowed(moving_target, 88))
+	var vanished_target := ReleaseGeometry.resolve(
+		Vector2(4.0, 5.0), Vector2.RIGHT, 77, Vector2.ZERO, false, true
+	)
+	assert(not vanished_target.locked_target_valid_at_release)
+	assert(vanished_target.direction_world == Vector2.RIGHT)
+	assert(not vanished_target.allow_target_retarget)
+	assert(not ReleaseGeometry.candidate_allowed(vanished_target, 77))
+	assert(not ReleaseGeometry.candidate_allowed(vanished_target, 88))
+	var directional_area := ReleaseGeometry.resolve(
+		Vector2(4.0, 5.0), Vector2.RIGHT, 77, Vector2(4.0, 20.0), true, false
+	)
+	assert(directional_area.direction_world == Vector2.RIGHT)
+	assert(directional_area.locked_target_instance_id == 0)
+	assert(directional_area.allow_directional_scan)
+	assert(ReleaseGeometry.candidate_allowed(directional_area, 88))
+
+	# Live hit-frame coordinates retain the existing fractional-tile reach
+	# contract: a moved target outside the real range must remain a clean miss.
+	for mode: String in ["normal", "fire", "half_moon", "thrust"]:
+		var just_outside := Geometry.reach_tiles(mode) + 0.001
+		assert(not Geometry.is_single_target_in_reach(
+			Vector2.ZERO, Vector2(just_outside, 0.0), mode
+		))
 	print("WARRIOR_MELEE_GEOMETRY_PASS: fractional tiles, capped bonuses, arc/lane and fire MISS policy")
 	get_tree().quit()

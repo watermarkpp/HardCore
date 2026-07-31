@@ -1,0 +1,158 @@
+extends Node
+
+const ReleaseGeometry := preload("res://scripts/skills/combat_release_geometry.gd")
+
+
+func _ready() -> void:
+	_run.call_deferred()
+
+
+func _run() -> void:
+	for action: StringName in [&"move_left", &"move_right", &"move_up", &"move_down"]:
+		if not InputMap.has_action(action):
+			InputMap.add_action(action)
+	await _verify_all_warrior_modes_use_live_locked_geometry()
+	await _verify_vanished_lock_never_allows_retarget()
+	await _verify_caster_single_target_and_spatial_cast_policies()
+	print("COMBAT_RELEASE_GEOMETRY_PASS: live actor/target footpoints, stable lock, no accidental AOE homing")
+	get_tree().quit(0)
+
+
+func _prepare_warrior() -> void:
+	PlayerState.test_mode = true
+	PlayerState.reset_progress()
+	PlayerState.select_profession("战士")
+	PlayerState.level = 50
+	PlayerState.learned_skills = {
+		"基本剑术": 3,
+		"攻杀剑术": 3,
+		"刺杀剑术": 3,
+		"半月弯刀": 3,
+		"烈火剑法": 3,
+	}
+	PlayerState.recalculate_stats()
+
+
+func _verify_all_warrior_modes_use_live_locked_geometry() -> void:
+	_prepare_warrior()
+	for mode: String in ["normal", "thrust", "half_moon", "fire"]:
+		var player := PlayerCharacter.new()
+		add_child(player)
+		player.set_physics_process(false)
+		player.attack_hit_windup = 0.04
+		player.current_mp = 999
+		player.thrusting_enabled = mode == "thrust"
+		player.half_moon_enabled = mode == "half_moon"
+		player.fire_sword_enabled = mode == "fire"
+		player.global_position = Vector2(100.0, 100.0)
+		var target := Node2D.new()
+		add_child(target)
+		target.global_position = Vector2(180.0, 100.0)
+		var emission: Array = []
+		player.attack_requested.connect(func(origin: Vector2, direction: Vector2, _damage: int) -> void:
+			emission.append({
+				"origin": origin,
+				"direction": direction,
+				"context": player.consume_attack_context(),
+			})
+		)
+		assert(player.request_attack_toward(Vector2.RIGHT, true, target.get_instance_id()))
+		# Both operands move after input acceptance and before the hit frame.
+		player.global_position = Vector2(120.0, 130.0)
+		target.global_position = Vector2(70.0, 210.0)
+		await get_tree().create_timer(0.07).timeout
+		assert(emission.size() == 1, "%s did not emit exactly once" % mode)
+		var event: Dictionary = emission[0]
+		var geometry: Dictionary = event.context.get("release_geometry", {})
+		assert(event.origin == Vector2(120.0, 130.0), "%s retained stale actor origin" % mode)
+		assert(event.direction.is_equal_approx(Vector2(-50.0, 80.0).normalized()))
+		assert(str(event.context.get("mode", "normal")) == mode)
+		assert(geometry.locked_target_instance_id == target.get_instance_id())
+		assert(geometry.locked_target_valid_at_release)
+		assert(not geometry.allow_target_retarget)
+		assert(ReleaseGeometry.candidate_allowed(geometry, target.get_instance_id()))
+		var unrelated_target := Node2D.new()
+		add_child(unrelated_target)
+		assert(not ReleaseGeometry.candidate_allowed(
+			geometry, unrelated_target.get_instance_id()
+		), "%s may silently switch to another target" % mode)
+		unrelated_target.free()
+		player.free()
+		target.free()
+
+
+func _verify_vanished_lock_never_allows_retarget() -> void:
+	_prepare_warrior()
+	var player := PlayerCharacter.new()
+	add_child(player)
+	player.set_physics_process(false)
+	player.attack_hit_windup = 0.04
+	var target := Node2D.new()
+	add_child(target)
+	var target_id := target.get_instance_id()
+	var captured: Array[Dictionary] = []
+	player.attack_requested.connect(func(_origin: Vector2, _direction: Vector2, _damage: int) -> void:
+		captured.append(player.consume_attack_context())
+	)
+	assert(player.request_attack_toward(Vector2.RIGHT, true, target_id))
+	target.free()
+	await get_tree().create_timer(0.07).timeout
+	assert(captured.size() == 1)
+	var geometry: Dictionary = captured[0].get("release_geometry", {})
+	assert(geometry.locked_target_instance_id == target_id)
+	assert(not geometry.locked_target_valid_at_release)
+	assert(not geometry.allow_target_retarget and not geometry.allow_directional_scan)
+	player.free()
+
+
+func _verify_caster_single_target_and_spatial_cast_policies() -> void:
+	PlayerState.reset_progress()
+	PlayerState.select_profession("法师")
+	PlayerState.level = 50
+	PlayerState.learned_skills = {"火球术": 3, "火墙": 3, "雷电术": 3}
+	PlayerState.recalculate_stats()
+	assert(str(ProfessionRules.skill_combat_profile("火球术", 3).target_mode) == "single")
+	assert(str(ProfessionRules.skill_combat_profile("雷电术", 3).target_mode) == "single")
+	assert(str(ProfessionRules.skill_combat_profile("火墙", 3).target_mode) == "target_area")
+
+	var projectile := await _cast_and_capture("火球术", true)
+	assert(projectile.origin == Vector2(120.0, 130.0))
+	assert(projectile.direction.is_equal_approx(Vector2(-50.0, 80.0).normalized()))
+	assert(projectile.geometry.policy == ReleaseGeometry.POLICY_LOCKED_SINGLE_TARGET)
+	assert(not projectile.geometry.allow_target_retarget)
+
+	var area := await _cast_and_capture("火墙", false)
+	assert(area.origin == Vector2(120.0, 130.0))
+	assert(area.direction == Vector2.RIGHT)
+	assert(area.geometry.policy == ReleaseGeometry.POLICY_INPUT_DIRECTION)
+	assert(area.geometry.locked_target_instance_id == 0)
+
+
+func _cast_and_capture(skill_name: String, expects_tracking: bool) -> Dictionary:
+	var player := PlayerCharacter.new()
+	add_child(player)
+	player.set_physics_process(false)
+	player.current_mp = 999
+	player.global_position = Vector2(100.0, 100.0)
+	player.facing = Vector2.RIGHT
+	var target := Node2D.new()
+	add_child(target)
+	target.global_position = Vector2(180.0, 100.0)
+	var emission: Array[Dictionary] = []
+	player.skill_requested.connect(func(_name: String, origin: Vector2, direction: Vector2, _damage: int) -> void:
+		emission.append({
+			"origin": origin,
+			"direction": direction,
+			"geometry": player.consume_skill_context().get("release_geometry", {}),
+		})
+	)
+	assert(player.request_skill(skill_name, target.get_instance_id()))
+	player.global_position = Vector2(120.0, 130.0)
+	target.global_position = Vector2(70.0, 210.0)
+	await get_tree().create_timer(0.72).timeout
+	assert(emission.size() == 1, "%s did not release exactly once" % skill_name)
+	assert(bool(emission[0].geometry.locked_target_valid_at_release) == expects_tracking)
+	var result := emission[0].duplicate(true)
+	player.free()
+	target.free()
+	return result
