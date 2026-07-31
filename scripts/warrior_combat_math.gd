@@ -144,6 +144,9 @@ static func client_effect_time_seconds() -> float:
 
 
 static func active_skill_damage(skill_name: String, base_damage: int, level_value: int) -> int:
+	# Legacy formula-only compatibility helper. Production action selection is
+	# owned by SkillInputPolicy, where Slaying Swordsmanship can never be a
+	# selected body mode; its modifier is resolved once by SkillRuntimeRouter.
 	match skill_name:
 		"攻杀剑术": return slaying_damage(base_damage, level_value)
 		"刺杀剑术": return thrust_secondary_damage(base_damage, level_value)

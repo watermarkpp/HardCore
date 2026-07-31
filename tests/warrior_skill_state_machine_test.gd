@@ -32,14 +32,50 @@ func _run() -> void:
 	assert(player.request_skill("刺杀剑术") and player.thrusting_enabled, "刺杀开关没有开启")
 	var thrust_context := player._build_warrior_attack_context(true)
 	assert(thrust_context.mode == "thrust", "刺杀开启后普通攻击没有进入第二格模式")
+	var thrust_edge_context := player._build_warrior_attack_context(false)
+	assert(
+		thrust_edge_context.mode == "thrust"
+		and thrust_edge_context.skill_name == "刺杀剑术",
+		"刺杀主体动作被瞬时无目标检测降级"
+	)
 	assert(player.request_skill("半月弯刀") and player.half_moon_enabled, "半月开关没有开启")
 	var mp_before_half := player.current_mp
 	var half_context := player._build_warrior_attack_context(true)
 	assert(half_context.mode == "half_moon" and player.current_mp == mp_before_half, "半月开关不应在Router执行前预扣MP")
+	var half_edge_context := player._build_warrior_attack_context(false)
+	assert(
+		half_edge_context.mode == "half_moon"
+		and half_edge_context.skill_name == "半月弯刀",
+		"半月主体动作被瞬时无目标检测降级"
+	)
+	for existing: Node in get_tree().get_nodes_in_group("enemies"):
+		if existing is EnemyActor:
+			existing.global_position = Vector2(3000, 3000) + Vector2(
+				existing.get_instance_id() % 200,
+				0
+			)
+	var no_target_half_mp := player.current_mp
+	for _attack_index in range(6):
+		player._attack_timer = 0.0
+		player._attack_action_timer = 0.0
+		assert(player.request_attack(false))
+		assert(player.visual._action_name == "半月弯刀")
+		await get_tree().create_timer(0.2).timeout
+	assert(
+		player.current_mp == no_target_half_mp,
+		"半月空挥被错误提交MP"
+	)
 	assert(player.request_skill("半月弯刀") and not player.half_moon_enabled, "半月开关没有关闭")
+	for _attack_index in range(6):
+		player._attack_timer = 0.0
+		player._attack_action_timer = 0.0
+		assert(player.request_attack(false))
+		assert(player.visual._action_name == "刺杀剑术")
+		await get_tree().create_timer(0.2).timeout
 
 	var mp_before_fire := player.current_mp
 	player._attack_timer = 0.0
+	player._attack_action_timer = 0.0
 	assert(player.request_skill("烈火剑法") and player.fire_sword_enabled, "烈火开关无法开启")
 	assert(player.current_mp == mp_before_fire and is_zero_approx(player._attack_timer), "开启烈火开关不得预扣MP或占用动作")
 	var direct_fire_context := player._build_warrior_attack_context(true)
@@ -59,8 +95,11 @@ func _run() -> void:
 	PlayerState.learned_skills = {"攻杀剑术": 3}
 	var ordinary_context := player._build_warrior_attack_context(true)
 	assert(ordinary_context.mode == "normal", "Player仍在Router之前用旧攻杀周期门控普通攻击")
+	assert(ordinary_context.skill_name == "attack", "攻杀错误替换了普通主体动作")
 	assert(ordinary_context.passive_proc_layers.size() == 1)
 	assert(ordinary_context.passive_proc_layers[0].rolls_per_melee_action == 1)
+	player.visual.play_action(ordinary_context.skill_name, 0.51)
+	assert(player.visual._action_name == "attack", "攻杀错误进入独立人物动作")
 
 	PlayerState.learned_skills = {"刺杀剑术": 3, "半月弯刀": 3, "野蛮冲撞": 3}
 	player.thrusting_enabled = true

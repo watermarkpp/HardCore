@@ -19,6 +19,7 @@ func _ready() -> void:
 	assert(slaying.runtime_override_id == Policy.SLAYING_LAYER_OVERRIDE_ID)
 	assert(slaying.can_combine_with_higher_attack_mode and slaying.body_mode_priority == 0)
 	assert(slaying.proc_rolls_per_melee_action == 1)
+	assert(slaying.proc_roll_eligibility == "canonical_hit_frame_valid_melee_swing")
 	assert(slaying.modifier_timing == "before_body_skill_formula")
 	assert(slaying.modifier_scope == "all_hits_of_selected_melee_action")
 	assert(slaying.preserves_body_action_and_effect)
