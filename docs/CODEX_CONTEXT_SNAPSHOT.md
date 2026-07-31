@@ -1,5 +1,10 @@
 # Codex 精简上下文快照
 
+## 2026-07-31 Android v49：野蛮冲撞原子推移测试包
+
+- Android 版本提交为 `975eb257e990ce1866643d44a8ae70908d040ad5`：`versionCode=49`、`versionName=1.17.13-wild-rush-atomic`，包名继续为 `com.personal.mafaoffline`，应用名继续为 `HardCore`。APK 从该固定提交的全新隔离工作树导出为 `outputs/hardcore/HardCore-v49-wild-rush-atomic-debug.apk`，大小 `244,319,577` 字节，SHA-256 `58BBE5FDF78CB01B97B61CA34A5AAAA8D3B652386F6B6AB4F472B4DE1DCF3975`。
+- APK v2/v3 签名、`arm64-v8a`、minSdk 24、targetSdk 36、12 个编译脚本和运行时资源探针通过。已对连接的 HONOR 90（REA-AN00）执行保留数据覆盖安装并启动；手机端回读版本正确，前台活动为 `GodotAppLauncher`，启动后日志未发现 Godot 脚本错误或 Android 崩溃。
+
 ## 2026-07-31 野蛮冲撞三格原子推移
 
 - 职业技能永久工作树提交 `c3efe96c` 已作为集成提交 `c917963a` 接入，跨系统游戏运行时接线提交为 `9038b225`。稳定合同为 `gameplay.warrior.wild_rush.atomic_tile_push.v1`；技能 SOT 运行时合同 SHA-256 更新为 `34634C4ED2A3519A98F32CF35D8299D3A86A668430061BD220E1F80A900F4024`，原始授权 ZIP 证据哈希不变，来源优先级审计通过。
