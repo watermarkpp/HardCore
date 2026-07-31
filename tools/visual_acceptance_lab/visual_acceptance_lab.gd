@@ -505,12 +505,21 @@ func _rebuild_monster_actor(force := false) -> bool:
 	_monster.setup(data, _player, _is_boss_monster(monster_id))
 	_preview_root.add_child(_monster)
 	# EnemyActor protects the game from invalid overlapping spawns by moving a
-	# newly created monster away from its target. The acceptance lab deliberately
-	# places both preview actors at the same origin, so that runtime safeguard
-	# would otherwise introduce an instance-id-dependent offset between the
-	# monster sprite and this tool's sibling overlay. Preview coordinates must be
-	# deterministic: actor origin, physics origin and overlay origin are all zero.
-	_monster.position = Vector2.ZERO
+	# newly created monster away from its target. The original calibration lab
+	# created both actors at the same point and, for the user's frozen drafts,
+	# consistently resolved that overlap toward S. Later node-count changes made
+	# the instance-id-derived direction vary, so replayed sprites drifted while
+	# the sibling overlay stayed fixed. Preserve the authored S displacement
+	# deterministically; never let instance allocation choose the review result.
+	var authored_spawn_distance := (
+		_monster.collision_radius
+		+ ArtSpec.PLAYER_COLLISION_RADIUS
+		+ 14.0
+	)
+	_monster.global_position = (
+		_player.global_position
+		+ Vector2.DOWN * authored_spawn_distance
+	)
 	# The lab owns its diagnostic overlays. A runtime-selected MonsterVisual can
 	# now draw the game's yellow target ring itself, which would duplicate the
 	# saved-draft overlay and make sub-pixel differences look like changed user
