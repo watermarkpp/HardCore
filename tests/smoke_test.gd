@@ -97,7 +97,10 @@ func _run() -> void:
 	game.hud.skill_panel.skill_list.select(0)
 	game.hud.skill_panel._learn_selected()
 	assert(PlayerState.is_skill_learned("基本剑术"), "技能学习失败")
-	assert(PlayerState.quick_slots[0] == "基本剑术", "技能未进入快捷栏")
+	assert(
+		PlayerState.attack_ring_slots.all(func(value: String) -> bool: return value.is_empty()),
+		"被动技能不应进入攻击键或六环主动技能槽"
+	)
 	veteran.interact(game)
 	game.hud.quest_panel._act()
 	for count in range(3):

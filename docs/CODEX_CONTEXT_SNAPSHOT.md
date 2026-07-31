@@ -1,5 +1,14 @@
 # Codex 精简上下文快照
 
+## 2026-07-31 Android v47 六环技能与战士近战整合
+
+- 专业交付已按工作树依次集成：装备 `5da60808`（集成 `b2ff4858`）、职业技能 `4fac69b6`（集成 `8f9b34a8`）、UI `f45c2a68`（集成 `9db42247`）；跨系统接线提交为 `64de7041`，Android 固定构建提交为 `74109c5c`。
+- HUD 取消屏幕中间四个技能按钮，保留下方四个物品槽；攻击键周围改为六个独立主动技能槽，攻击键本身支持配置主动技能与一键清空恢复普通攻击。被动技能只在技能列表展示，禁止配置到攻击键或六环。所有相关存档升级为 `save_version=6` / `gameplay.skill.button_assignments.v3`，旧四槽迁移到六环前四槽，攻击键保持独立。
+- 战士攻击优先级固定为烈火 > 半月 > 刺杀 > 普通；烈火、半月、刺杀是开关，野蛮冲撞仍为点击释放。基本剑术继续提供所有近战常驻命中加成。攻杀剑术不再抢占攻击动作：每次有效近战动作只进行一次原始概率判定，触发后先叠加攻杀 DC/命中，再进入普通、刺杀、半月或烈火本体公式；半月多目标与刺杀双格共享同一次判定，主体动画与技能效果不被替换。
+- 12 个正式头盔的背包图与地面图全部改用用户在校准工具中保存的独立来源，运行时保持 `1x` / nearest，禁止二次缩放。纸娃娃和世界图集未重建。`item_236.json` / `item_240.json` SHA-256 继续为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC` / `81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`。
+- UI、技能与装备专项分别通过 14/14、warrior 18/18、equipment 17/17；最终 `critical` 74/74 全部通过。三份冻结怪物脚点合同 SHA-256 继续为 `DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+- APK 从固定提交 `74109c5ceb809f2648a534d820f308756546b714` 的全新隔离工作树导出：`outputs/hardcore/HardCore-v47-six-ring-warrior-ui-debug.apk`，大小 `244,282,231` 字节，SHA-256 `ECEC7AE5F2DBB24176B96D9BA6C60B994D044B389A33FAAACFDC30AA30B2D4B0`。包信息为 `versionCode=47`、`versionName=1.17.11-six-ring-warrior-ui`、`com.personal.mafaoffline`、`HardCore`；APK v2/v3 签名、arm64-v8a、minSdk 24、targetSdk 36 和运行时资源探针通过。构建完成时 ADB 设备列表为空，尚未覆盖安装。
+
 更新时间：2026-07-31（Asia/Shanghai）
 
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。

@@ -550,6 +550,9 @@ func warrior_state_snapshot() -> Dictionary:
 		"fire_enabled": fire_sword_enabled,
 		"fire_armed": fire_expires_remaining_ms > 0,
 		"fire_expires_remaining_ms": fire_expires_remaining_ms,
+		"fire_cooldown_remaining_ms": skill_cooldown_remaining_ms(
+			"warrior.fire_sword"
+		),
 		# Compatibility keys only. Proc state is resolved exactly once by the
 		# canonical melee-modifier API and is never pre-rolled in Player.
 		"slaying_remaining": 0,

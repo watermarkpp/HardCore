@@ -6,6 +6,8 @@ const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const HUDResourceOrbScript := preload("res://scripts/hud_resource_orb.gd")
 const HUDSkillIconCatalogScript := preload("res://scripts/hud_skill_icon_catalog.gd")
+const HUDAssetSanitizerScript := preload("res://scripts/hud_asset_sanitizer.gd")
+const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 const DeathRevivalPanelScript := preload("res://scripts/death_revival_panel.gd")
 const LootFeedbackLayerScript := preload("res://scripts/loot_feedback_layer.gd")
 const LoadingTransitionOverlayScript := preload("res://scripts/loading_transition_overlay.gd")
@@ -13,10 +15,25 @@ const HUDTargetBarTexture := preload("res://assets/ui/gothic_hud/v2/runtime/targ
 const HUDUtilityStackTexture := preload("res://assets/ui/gothic_hud/v2/runtime/utility_stack_v2.png")
 const HUDJoystickTexture := preload("res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png")
 const HUDChassisTexture := preload("res://assets/ui/gothic_hud/v2/runtime/bottom_chassis_v2.png")
-const HUDRightControlsTexture := preload("res://assets/ui/gothic_hud/v2/runtime/right_controls_v2.png")
+const HUDRoundActionFrameTexture := preload("res://assets/ui/gothic_hud/v2/runtime/round_action_frame_v3.png")
+const HUD_CHASSIS_SIZE := Vector2(820, 273)
 const HUD_RESOURCE_ORB_SIZE := Vector2(110, 110)
-const HUD_HEALTH_ORB_CENTER := Vector2(182, 188)
-const HUD_MANA_ORB_CENTER := Vector2(639, 188)
+const HUD_HEALTH_ORB_SOURCE_CENTER := Vector2(223.5, 230.5)
+const HUD_MANA_ORB_SOURCE_CENTER := Vector2(785.5, 230.5)
+const HUD_ITEM_SLOT_SOURCE_CENTERS: Array[Vector2] = [
+	Vector2(349.5, 235.0),
+	Vector2(452.0, 234.5),
+	Vector2(558.5, 234.5),
+	Vector2(662.0, 234.5),
+]
+const HUD_ATTACK_RING_CENTERS: Array[Vector2] = [
+	Vector2(-261, -70),
+	Vector2(-261, -142),
+	Vector2(-261, -214),
+	Vector2(-189, -286),
+	Vector2(-117, -286),
+	Vector2(-60, -214),
+]
 
 signal movement_changed(value: Vector2)
 signal attack_pressed
@@ -45,6 +62,7 @@ var target_label: Label
 var target_health_fill: ColorRect
 var auto_target_button: Button
 var special_action_button: Button
+var attack_button: Button
 var warrior_state_label: Label
 var inventory_panel: InventoryPanel
 var shop_panel: ShopPanel
@@ -64,6 +82,8 @@ var quick_slot_labels: Array[Label] = []
 var quick_slot_icons: Array[TextureRect] = []
 var attack_ring_skill_icons: Array[TextureRect] = []
 var attack_ring_skill_labels: Array[Label] = []
+var attack_slot_icon: TextureRect
+var attack_slot_label: Label
 var current_zone_name := "比奇郊外"
 var _last_hp := 120
 var _last_max_hp := 120
@@ -99,6 +119,7 @@ func _build_approved_hud() -> void:
 	_build_bottom_chassis(root)
 	_build_combat_controls(root)
 	_build_modal_panels(root)
+	TouchScrollSupportScript.attach_tree(root)
 	_build_loading_transition()
 
 	PlayerState.profile_changed.connect(update_profile)
@@ -260,13 +281,15 @@ func _build_bottom_chassis(root: Control) -> void:
 	chassis_root.offset_top = -273
 	chassis_root.offset_right = 410
 	chassis_root.offset_bottom = 0
+	chassis_root.custom_minimum_size = HUD_CHASSIS_SIZE
 	chassis_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	chassis_root.set_meta("contents", ["health_orb", "four_item_slots", "mana_orb"])
+	chassis_root.set_meta("geometry_policy", "source_pixel_to_display_fit.v1")
 	root.add_child(chassis_root)
 
 	health_orb = HUDResourceOrbScript.new()
 	health_orb.name = "HealthOrb"
-	health_orb.position = HUD_HEALTH_ORB_CENTER - HUD_RESOURCE_ORB_SIZE * 0.5
+	health_orb.position = _chassis_source_to_local(HUD_HEALTH_ORB_SOURCE_CENTER) - HUD_RESOURCE_ORB_SIZE * 0.5
 	health_orb.size = HUD_RESOURCE_ORB_SIZE
 	health_orb.resource_name = "生命"
 	health_orb.liquid_color = Color("a51422")
@@ -275,7 +298,7 @@ func _build_bottom_chassis(root: Control) -> void:
 
 	mana_orb = HUDResourceOrbScript.new()
 	mana_orb.name = "ManaOrb"
-	mana_orb.position = HUD_MANA_ORB_CENTER - HUD_RESOURCE_ORB_SIZE * 0.5
+	mana_orb.position = _chassis_source_to_local(HUD_MANA_ORB_SOURCE_CENTER) - HUD_RESOURCE_ORB_SIZE * 0.5
 	mana_orb.size = HUD_RESOURCE_ORB_SIZE
 	mana_orb.resource_name = "魔法"
 	mana_orb.liquid_color = Color("174eaa")
@@ -285,20 +308,20 @@ func _build_bottom_chassis(root: Control) -> void:
 	var chassis := TextureRect.new()
 	chassis.name = "DemonChassisArt"
 	chassis.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	chassis.texture = HUDChassisTexture
+	chassis.texture = HUDAssetSanitizerScript.without_alpha_component(HUDChassisTexture, Vector2i(1008, 260))
 	chassis.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	chassis.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	chassis.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	chassis.set_meta("stable_id", "ui.hud.gothic.v2.bottom_chassis")
+	chassis.set_meta("source_artifact_removed", "right_edge_alpha_component_1008_260")
 	chassis_root.add_child(chassis)
 
-	var item_x := [255.0, 337.0, 424.0, 508.0]
 	for index in range(4):
 		var item_button := Button.new()
 		item_button.name = "ItemSlot%d" % (index + 1)
 		item_button.theme_type_variation = "GothicItemButton"
-		item_button.position = Vector2(item_x[index], 162)
 		item_button.size = Vector2(62, 62)
+		item_button.position = _chassis_source_to_local(HUD_ITEM_SLOT_SOURCE_CENTERS[index]) - item_button.size * 0.5
 		item_button.text = str(index + 1)
 		item_button.tooltip_text = "快捷物品 %d" % (index + 1)
 		item_button.add_theme_font_size_override("font_size", 15)
@@ -335,58 +358,6 @@ func _build_combat_controls(root: Control) -> void:
 	joystick.vector_changed.connect(func(value: Vector2) -> void: movement_changed.emit(value))
 	root.add_child(joystick)
 
-	for index in range(4):
-		var skill_button := Button.new()
-		skill_button.name = "SkillButton%d" % (index + 1)
-		skill_button.theme_type_variation = "GothicTransparentButton"
-		skill_button.anchor_left = 0.5
-		skill_button.anchor_top = 1.0
-		skill_button.anchor_right = 0.5
-		skill_button.anchor_bottom = 1.0
-		skill_button.offset_left = -209 + index * 108
-		skill_button.offset_top = -252
-		skill_button.offset_right = -109 + index * 108
-		skill_button.offset_bottom = -180
-		skill_button.add_theme_color_override("font_color", Color.TRANSPARENT)
-		skill_button.add_theme_color_override("font_hover_color", Color.TRANSPARENT)
-		skill_button.add_theme_color_override("font_pressed_color", Color.TRANSPARENT)
-		skill_button.pressed.connect(_on_skill_slot_button.bind("center", index))
-		skill_button.set_meta("stable_id", "hud.profession_skill.%d" % (index + 1))
-		skill_button.set_meta("activation_mode_source", "skill.activation_mode")
-		skill_button.set_meta("warrior_policy", "skill_data_declared")
-		skill_button.set_meta("mage_tao_policy", "instant_or_toggle")
-		root.add_child(skill_button)
-		quick_buttons.append(skill_button)
-		var disc := Panel.new()
-		disc.name = "SkillDisc"
-		disc.theme_type_variation = "GothicSkillDisc"
-		disc.position = Vector2(14, 0)
-		disc.size = Vector2(72, 72)
-		disc.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		skill_button.add_child(disc)
-		var skill_icon := TextureRect.new()
-		skill_icon.name = "SkillIcon"
-		skill_icon.position = Vector2(6, 6)
-		skill_icon.size = Vector2(60, 60)
-		skill_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		skill_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		skill_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		skill_icon.set_meta("icon_source", "quick_slot")
-		disc.add_child(skill_icon)
-		quick_slot_icons.append(skill_icon)
-		var skill_label := Label.new()
-		skill_label.name = "SkillLabel"
-		skill_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 5)
-		skill_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		skill_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		skill_label.add_theme_font_size_override("font_size", 12)
-		skill_label.add_theme_color_override("font_color", Color("f4e2bd"))
-		skill_label.add_theme_color_override("font_outline_color", Color("120d0a"))
-		skill_label.add_theme_constant_override("outline_size", 3)
-		skill_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		disc.add_child(skill_label)
-		quick_slot_labels.append(skill_label)
-
 	warrior_state_label = Label.new()
 	warrior_state_label.name = "WarriorStateLabel"
 	warrior_state_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
@@ -399,32 +370,22 @@ func _build_combat_controls(root: Control) -> void:
 	warrior_state_label.add_theme_color_override("font_color", Color("efbd70"))
 	root.add_child(warrior_state_label)
 
-	_add_bottom_right_fill(root, "InteractFill", Rect2(-100, -385, 52, 52), "GothicArtCircleFill")
-	_add_bottom_right_fill(root, "SwitchTargetFill", Rect2(-100, -307, 52, 52), "GothicArtCircleFill")
+	_add_bottom_right_fill(root, "InteractFill", Rect2(-241, -403, 52, 52), "GothicArtCircleFill")
+	_add_bottom_right_fill(root, "SwitchTargetFill", Rect2(-111, -403, 52, 52), "GothicArtCircleFill")
 	_add_bottom_right_fill(root, "AttackFill", Rect2(-181, -161, 120, 120), "GothicArtAttackFill")
-	var right_controls_art := TextureRect.new()
-	right_controls_art.name = "RightControlsArt"
-	right_controls_art.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	right_controls_art.offset_left = -277
-	right_controls_art.offset_top = -400
-	right_controls_art.offset_right = -20
-	right_controls_art.offset_bottom = 0
-	right_controls_art.texture = HUDRightControlsTexture
-	right_controls_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	right_controls_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	right_controls_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	right_controls_art.set_meta("stable_id", "ui.hud.gothic.v2.right_controls")
-	root.add_child(right_controls_art)
+	_add_bottom_right_action_frame(root, "InteractFrame", Rect2(-253, -415, 76, 76), "ui.hud.gothic.v3.interact_frame")
+	_add_bottom_right_action_frame(root, "SwitchTargetFrame", Rect2(-123, -415, 76, 76), "ui.hud.gothic.v3.switch_target_frame")
+	_add_bottom_right_action_frame(root, "AttackFrame", Rect2(-185, -165, 128, 128), "ui.hud.gothic.v3.attack_frame")
 
 	var interact_button := Button.new()
 	interact_button.name = "InteractButton"
 	interact_button.theme_type_variation = "GothicTransparentButton"
 	interact_button.text = "交互"
 	interact_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	interact_button.offset_left = -129
-	interact_button.offset_top = -404
-	interact_button.offset_right = -19
-	interact_button.offset_bottom = -314
+	interact_button.offset_left = -270
+	interact_button.offset_top = -415
+	interact_button.offset_right = -160
+	interact_button.offset_bottom = -339
 	interact_button.add_theme_font_size_override("font_size", 17)
 	interact_button.button_down.connect(func() -> void: interact_pressed.emit())
 	root.add_child(interact_button)
@@ -434,15 +395,15 @@ func _build_combat_controls(root: Control) -> void:
 	switch_target_button.theme_type_variation = "GothicTransparentButton"
 	switch_target_button.text = "换敌"
 	switch_target_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	switch_target_button.offset_left = -129
-	switch_target_button.offset_top = -326
-	switch_target_button.offset_right = -19
-	switch_target_button.offset_bottom = -236
+	switch_target_button.offset_left = -140
+	switch_target_button.offset_top = -415
+	switch_target_button.offset_right = -30
+	switch_target_button.offset_bottom = -339
 	switch_target_button.add_theme_font_size_override("font_size", 16)
 	switch_target_button.pressed.connect(func() -> void: target_switch_pressed.emit())
 	root.add_child(switch_target_button)
 
-	var attack_button := Button.new()
+	attack_button = Button.new()
 	attack_button.name = "AttackButton"
 	attack_button.theme_type_variation = "GothicTransparentButton"
 	attack_button.text = "攻击"
@@ -452,27 +413,58 @@ func _build_combat_controls(root: Control) -> void:
 	attack_button.offset_right = -61
 	attack_button.offset_bottom = -41
 	attack_button.add_theme_font_size_override("font_size", 24)
+	attack_button.text = ""
 	attack_button.button_down.connect(func() -> void: attack_pressed.emit())
 	attack_button.button_up.connect(func() -> void: attack_released.emit())
+	attack_button.set_meta("stable_id", "hud.attack.primary")
+	attack_button.set_meta("assignment_group", "attack")
+	attack_button.set_meta("assignment_contract", "ui.skill.button_assignment.v3")
 	root.add_child(attack_button)
+	attack_slot_icon = TextureRect.new()
+	attack_slot_icon.name = "AssignedSkillIcon"
+	attack_slot_icon.position = Vector2(20, 14)
+	attack_slot_icon.size = Vector2(80, 80)
+	attack_slot_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	attack_slot_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	attack_slot_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	attack_slot_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	attack_button.add_child(attack_slot_icon)
+	attack_slot_label = Label.new()
+	attack_slot_label.name = "AssignedSkillLabel"
+	attack_slot_label.position = Vector2(4, 88)
+	attack_slot_label.size = Vector2(112, 26)
+	attack_slot_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	attack_slot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	attack_slot_label.add_theme_font_size_override("font_size", 13)
+	attack_slot_label.add_theme_color_override("font_color", Color("f4e2bd"))
+	attack_slot_label.add_theme_color_override("font_outline_color", Color("120d0a"))
+	attack_slot_label.add_theme_constant_override("outline_size", 3)
+	attack_slot_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	attack_button.add_child(attack_slot_label)
 
-	# The three generated apertures share a consistent -11/-10 correction
-	# relative to the original touch mockup. Keep the 72px hit areas intact.
-	var ring_positions := [Rect2(-273, -107, 72, 72), Rect2(-255, -211, 72, 72), Rect2(-184, -262, 72, 72)]
-	for index in range(3):
+	for index in range(HUD_ATTACK_RING_CENTERS.size()):
 		var ring_skill := Button.new()
 		ring_skill.name = "AttackRingSkill%d" % (index + 1)
 		ring_skill.theme_type_variation = "GothicTransparentButton"
 		ring_skill.text = ""
 		ring_skill.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-		var rect: Rect2 = ring_positions[index]
+		var rect := Rect2(HUD_ATTACK_RING_CENTERS[index] - Vector2(36, 36), Vector2(72, 72))
 		ring_skill.offset_left = rect.position.x
 		ring_skill.offset_top = rect.position.y
 		ring_skill.offset_right = rect.end.x
 		ring_skill.offset_bottom = rect.end.y
 		ring_skill.pressed.connect(_on_skill_slot_button.bind("attack_ring", index))
 		ring_skill.set_meta("stable_id", "hud.attack_ring_skill.%d" % (index + 1))
+		ring_skill.set_meta("assignment_contract", "ui.skill.button_assignment.v3")
 		root.add_child(ring_skill)
+		var ring_frame := TextureRect.new()
+		ring_frame.name = "RoundActionFrame"
+		ring_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		ring_frame.texture = HUDRoundActionFrameTexture
+		ring_frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		ring_frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		ring_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ring_skill.add_child(ring_frame)
 		var ring_backdrop := Panel.new()
 		ring_backdrop.name = "SkillBackdrop"
 		ring_backdrop.theme_type_variation = "GothicArtCircleFill"
@@ -553,6 +545,36 @@ func _build_modal_panels(root: Control) -> void:
 		func(request: Dictionary) -> void: revival_requested.emit(request)
 	)
 	root.add_child(death_revival_panel)
+
+
+func _chassis_source_to_local(source_point: Vector2) -> Vector2:
+	var source_size := Vector2(HUDChassisTexture.get_width(), HUDChassisTexture.get_height())
+	var scale := minf(HUD_CHASSIS_SIZE.x / source_size.x, HUD_CHASSIS_SIZE.y / source_size.y)
+	var render_size := source_size * scale
+	var render_origin := (HUD_CHASSIS_SIZE - render_size) * 0.5
+	return render_origin + source_point * scale
+
+
+func _add_bottom_right_action_frame(
+	root: Control,
+	node_name: String,
+	rect: Rect2,
+	stable_id: String,
+) -> TextureRect:
+	var frame := TextureRect.new()
+	frame.name = node_name
+	frame.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	frame.offset_left = rect.position.x
+	frame.offset_top = rect.position.y
+	frame.offset_right = rect.end.x
+	frame.offset_bottom = rect.end.y
+	frame.texture = HUDRoundActionFrameTexture
+	frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame.set_meta("stable_id", stable_id)
+	root.add_child(frame)
+	return frame
 
 
 func _add_utility_button(root: Control, node_name: String, label_text: String, rect: Rect2) -> Button:
@@ -876,6 +898,19 @@ func update_quick_slots() -> void:
 			quick_slot_icons[index].set_meta("skill_icon_path", skill_icon_path)
 		if index < quick_slot_labels.size():
 			quick_slot_labels[index].text = _compact_skill_label(index, skill_name, marker, skill_texture != null)
+	var attack_skill_name := _skill_name_for_slot("attack", 0)
+	var attack_skill_texture := HUDSkillIconCatalogScript.texture_for(attack_skill_name)
+	if attack_slot_icon != null:
+		attack_slot_icon.texture = attack_skill_texture
+		attack_slot_icon.visible = attack_skill_texture != null
+		attack_slot_icon.set_meta("skill_name", attack_skill_name)
+		attack_slot_icon.set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(attack_skill_name))
+		attack_slot_icon.set_meta("skill_icon_path", HUDSkillIconCatalogScript.source_path_for(attack_skill_name))
+	if attack_slot_label != null:
+		attack_slot_label.text = "攻击" if attack_skill_name.is_empty() else attack_skill_name.left(4)
+	if attack_button != null:
+		attack_button.tooltip_text = "普通攻击" if attack_skill_name.is_empty() else "攻击键：%s" % attack_skill_name
+		attack_button.set_meta("bound_skill_name", attack_skill_name)
 	for index in range(attack_ring_skill_icons.size()):
 		var skill_name := _skill_name_for_slot("attack_ring", index)
 		var skill_texture := HUDSkillIconCatalogScript.texture_for(skill_name)
@@ -959,7 +994,7 @@ func update_warrior_states(snapshot: Dictionary) -> void:
 		return
 	var fire_text := _fire_sword_charge_label(snapshot)
 	warrior_state_label.text = "攻杀:%s　刺杀:%s　半月:%s　烈火:%s" % [
-		"自动" if bool(snapshot.get("slaying_auto", false)) else "未学",
+		"几率" if bool(snapshot.get("slaying_auto", false)) else "未学",
 		"开" if bool(snapshot.get("thrusting", false)) else "关",
 		"开" if bool(snapshot.get("half_moon", false)) else "关",
 		fire_text,
@@ -968,16 +1003,18 @@ func update_warrior_states(snapshot: Dictionary) -> void:
 
 
 func _fire_sword_charge_label(snapshot: Dictionary) -> String:
-	# Canonical fire sword is one explicit next-melee charge, never an auto-use toggle.
-	# The runtime snapshot owns these fields; UI only projects its current state.
+	if not bool(snapshot.get("fire_enabled", false)):
+		return "关"
 	if bool(snapshot.get("fire_armed", false)) and int(snapshot.get("fire_expires_remaining_ms", 0)) > 0:
-		return "充能"
-	return "未充能·就绪"
+		return "开·充能"
+	if int(snapshot.get("fire_cooldown_remaining_ms", 0)) > 0:
+		return "开·冷却"
+	return "开·就绪"
 
 
 func _warrior_skill_marker(skill_name: String) -> String:
 	match skill_name:
-		"攻杀剑术": return "[自动]" if bool(_warrior_snapshot.get("slaying_auto", false)) else ""
+		"攻杀剑术": return "[几率]" if bool(_warrior_snapshot.get("slaying_auto", false)) else ""
 		"刺杀剑术": return "[开]" if bool(_warrior_snapshot.get("thrusting", false)) else "[关]"
 		"半月弯刀": return "[开]" if bool(_warrior_snapshot.get("half_moon", false)) else "[关]"
 		"烈火剑法":

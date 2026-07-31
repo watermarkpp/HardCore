@@ -22,13 +22,13 @@ func _run() -> void:
 	PlayerState.level = 12
 	PlayerState.gold = 3456
 	PlayerState.learned_skills = {"烈火剑法": 3, "野蛮冲撞": 3}
-	var slot_result := SkillLoadoutRules.assign_quick_slot(PlayerState.quick_slots, PlayerState.learned_skills, {
-		"contract_id": "ui.skill.button_assignment.v2",
+	var slot_result := SkillLoadoutRules.assign_button_slot(PlayerState.skill_button_assignments_snapshot(), PlayerState.learned_skills, {
+		"contract_id": "ui.skill.button_assignment.v3",
 		"slot_group": "attack_ring",
 		"slot_index": 2,
 		"skill_id": "warrior.wild_rush",
 	})
-	assert(PlayerState.apply_quick_slot_assignment(slot_result), "玩法层无法应用野蛮冲撞快捷槽置换")
+	assert(PlayerState.apply_skill_button_assignment(slot_result), "玩法层无法应用野蛮冲撞六环槽置换")
 	assert(PlayerState.apply_warrior_runtime_state({
 		"contract_id": "gameplay.warrior.skill_runtime.v2",
 		"toggles": {
@@ -48,9 +48,10 @@ func _run() -> void:
 	assert(profiles.size() == 2, "角色索引未保存两个档案")
 	assert(PlayerState.select_character(first_id), "无法选择第一个角色")
 	assert(PlayerState.character_name == "长风" and PlayerState.level == 12 and PlayerState.gold == 3456, "角色独立数据恢复失败")
+	assert(PlayerState.attack_ring_slots[2] == "野蛮冲撞", "野蛮冲撞六环槽未从存档恢复")
 	assert(PlayerState.quick_slots[2] == "野蛮冲撞", "野蛮冲撞快捷槽置换未从存档恢复")
 	var restored_runtime := PlayerState.warrior_runtime_state_for_restore()
-	assert(not bool(restored_runtime.toggles["warrior.fire_sword.auto_enabled"]), "旧存档烈火自动开关未迁移为false")
+	assert(bool(restored_runtime.toggles["warrior.fire_sword.auto_enabled"]), "烈火开关未随角色存档恢复")
 	assert(not restored_runtime.cooldowns.has("warrior.fire_sword.ready_remaining_ms"), "旧存档烈火自动冷却被错误恢复")
 	assert(PlayerState.saved_map_id == 217 and PlayerState.saved_position.is_equal_approx(Vector2(321.5, -84.0)), "角色最近活动位置记录失败")
 	var expected_home := MapCoordinateMapper.source_to_world(Vector2(289, 618), Vector2i(700, 700))

@@ -21,7 +21,7 @@ signal scroll_requested(item_name: String)
 signal quests_changed
 signal profession_changed(profession: String)
 
-const SAVE_VERSION := 5
+const SAVE_VERSION := 6
 const SAVE_PATH := "user://player_save_v03.json"
 const LEGACY_SAVE_PATH := "user://player_save_v02.json"
 const PROFILE_INDEX_PATH := "user://character_profiles.json"
@@ -32,11 +32,13 @@ const WARRIOR_RUNTIME_CONTRACT_ID := "gameplay.warrior.skill_runtime.v2"
 const TEST_CHARACTER_ROSTER_CONTRACT_ID := "test.character.roster.full_equipment_skills.v2"
 const TEST_ROSTER_RESET_CONTRACT_ID := "test.character.roster.reset.v2"
 const CURRENT_CONTENT_SCHEMA_VERSION := 2
-const SKILL_BUTTON_ASSIGNMENTS_CONTRACT_ID := "gameplay.skill.button_assignments.v2"
+const SKILL_BUTTON_ASSIGNMENTS_CONTRACT_ID := "gameplay.skill.button_assignments.v3"
 const SKILL_SLOT_GROUP_CENTER := "center"
+const SKILL_SLOT_GROUP_ATTACK := "attack"
 const SKILL_SLOT_GROUP_ATTACK_RING := "attack_ring"
 const CENTER_SKILL_SLOT_COUNT := 4
-const ATTACK_RING_SKILL_SLOT_COUNT := 3
+const ATTACK_SKILL_SLOT_COUNT := 1
+const ATTACK_RING_SKILL_SLOT_COUNT := 6
 const EQUIPMENT_SLOTS: Array[String] = ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指"]
 const VERIFIED_EXPERIENCE_1_TO_22 := {
 	1: 100, 2: 200, 3: 300, 4: 400, 5: 600, 6: 900, 7: 1200, 8: 1700, 9: 2500,
@@ -60,7 +62,8 @@ var equipment: Dictionary = {
 var learned_skills: Dictionary = {}
 var _skill_progression: RefCounted = SkillProgressionServiceScript.new()
 var quick_slots: Array[String] = ["", "", "", ""]
-var attack_ring_slots: Array[String] = ["", "", ""]
+var attack_skill_slots: Array[String] = [""]
+var attack_ring_slots: Array[String] = ["", "", "", "", "", ""]
 var warrior_runtime_state: Dictionary = {}
 var quest_states: Dictionary = {}
 var saved_map_id := 4
@@ -113,7 +116,8 @@ func reset_progress(emit_updates := true) -> void:
 	learned_skills = {}
 	_skill_progression.load_snapshot({})
 	quick_slots = ["", "", "", ""]
-	attack_ring_slots = ["", "", ""]
+	attack_skill_slots = [""]
+	attack_ring_slots = ["", "", "", "", "", ""]
 	warrior_runtime_state = _default_warrior_runtime_state()
 	quest_states = {}
 	saved_map_id = 4
@@ -143,9 +147,13 @@ func select_profession(value: String) -> String:
 	for index in range(quick_slots.size()):
 		if not learned_skills.has(quick_slots[index]):
 			quick_slots[index] = ""
+	for index in range(attack_skill_slots.size()):
+		if not is_skill_learned(attack_skill_slots[index]):
+			attack_skill_slots[index] = ""
 	for index in range(attack_ring_slots.size()):
-		if not learned_skills.has(attack_ring_slots[index]):
+		if not is_skill_learned(attack_ring_slots[index]):
 			attack_ring_slots[index] = ""
+	_sync_legacy_quick_slots_from_ring()
 	if profession != "战士":
 		warrior_runtime_state = _default_warrior_runtime_state()
 	var returned_items: Array[String] = []
@@ -476,10 +484,15 @@ func learn_skill(skill_name: String) -> String:
 		return "技能学习失败：%s" % str(learn_result.get("reason", "unknown"))
 	remove_item(skill_name)
 	learned_skills[skill_name] = 0
-	for index in range(quick_slots.size()):
-		if quick_slots[index].is_empty():
-			quick_slots[index] = skill_name
-			break
+	if SkillLoadoutRulesScript.assignment_candidate(stable_skill_id).get(
+		"bindable_to_skill_slot",
+		false
+	):
+		for index in range(attack_ring_slots.size()):
+			if attack_ring_slots[index].is_empty():
+				attack_ring_slots[index] = skill_name
+				break
+		_sync_legacy_quick_slots_from_ring()
 	recalculate_stats()
 	skills_changed.emit()
 	skill_progression_changed.emit(_skill_progression.snapshot())
@@ -1100,6 +1113,12 @@ func load_save() -> void:
 		load_path == LEGACY_SAVE_PATH
 		or not parsed.has("skill_progression")
 		or not parsed.has("skill_button_assignments")
+		or int(parsed.get("save_version", 0)) < SAVE_VERSION
+		or str(
+			parsed.get("skill_button_assignments", {}).get("contract_id", "")
+			if parsed.get("skill_button_assignments", {}) is Dictionary
+			else ""
+		) != SKILL_BUTTON_ASSIGNMENTS_CONTRACT_ID
 		or int(parsed.get("content_schema_version", 0)) < CURRENT_CONTENT_SCHEMA_VERSION
 	):
 		_commit_save()
@@ -1123,7 +1142,16 @@ func apply_quick_slot_assignment(result: Dictionary) -> bool:
 		if not skill_name.is_empty() and not learned_skills.has(skill_name):
 			return false
 		next_slots.append(skill_name)
-	quick_slots = next_slots
+	var migrated := SkillLoadoutRulesScript.normalize_assignments({}, next_slots)
+	attack_skill_slots = _normalized_skill_slot_array(
+		migrated.get(SKILL_SLOT_GROUP_ATTACK, []),
+		ATTACK_SKILL_SLOT_COUNT
+	)
+	attack_ring_slots = _normalized_skill_slot_array(
+		migrated.get(SKILL_SLOT_GROUP_ATTACK_RING, []),
+		ATTACK_RING_SKILL_SLOT_COUNT
+	)
+	_sync_legacy_quick_slots_from_ring()
 	quick_slots_changed.emit(change.duplicate(true))
 	skills_changed.emit()
 	profile_changed.emit()
@@ -1141,19 +1169,20 @@ func apply_skill_button_assignment(result: Dictionary) -> bool:
 	if not assignments_value is Dictionary:
 		return false
 	var normalized := _normalized_skill_button_assignments(assignments_value, quick_slots)
-	var next_center := _normalized_skill_slot_array(
-		normalized.get(SKILL_SLOT_GROUP_CENTER, []),
-		CENTER_SKILL_SLOT_COUNT
+	var next_attack := _normalized_skill_slot_array(
+		normalized.get(SKILL_SLOT_GROUP_ATTACK, []),
+		ATTACK_SKILL_SLOT_COUNT
 	)
 	var next_ring := _normalized_skill_slot_array(
 		normalized.get(SKILL_SLOT_GROUP_ATTACK_RING, []),
 		ATTACK_RING_SKILL_SLOT_COUNT
 	)
-	for skill_name: String in next_center + next_ring:
+	for skill_name: String in next_attack + next_ring:
 		if not skill_name.is_empty() and not is_skill_learned(skill_name):
 			return false
-	quick_slots = next_center
+	attack_skill_slots = next_attack
 	attack_ring_slots = next_ring
+	_sync_legacy_quick_slots_from_ring()
 	quick_slots_changed.emit(change.duplicate(true))
 	skills_changed.emit()
 	profile_changed.emit()
@@ -1164,14 +1193,18 @@ func apply_skill_button_assignment(result: Dictionary) -> bool:
 func skill_button_assignments_snapshot() -> Dictionary:
 	return {
 		"contract_id": SKILL_BUTTON_ASSIGNMENTS_CONTRACT_ID,
-		SKILL_SLOT_GROUP_CENTER: quick_slots.duplicate(),
+		SKILL_SLOT_GROUP_ATTACK: attack_skill_slots.duplicate(),
 		SKILL_SLOT_GROUP_ATTACK_RING: attack_ring_slots.duplicate(),
+		"migration": "native_v3",
 	}
 
 
 func skill_slots_for_group(slot_group: String) -> Array[String]:
+	if slot_group == SKILL_SLOT_GROUP_ATTACK:
+		return attack_skill_slots.duplicate()
 	if slot_group == SKILL_SLOT_GROUP_ATTACK_RING:
 		return attack_ring_slots.duplicate()
+	# Read-only compatibility for old keyboard skill_1..skill_4 callers.
 	return quick_slots.duplicate()
 
 
@@ -1184,29 +1217,30 @@ func skill_name_for_slot(slot_group: String, slot_index: int) -> String:
 
 func _restore_skill_button_assignments(assignments_value: Variant, legacy_center: Array) -> void:
 	var normalized := _normalized_skill_button_assignments(assignments_value, legacy_center)
-	quick_slots = _normalized_skill_slot_array(
-		normalized.get(SKILL_SLOT_GROUP_CENTER, []),
-		CENTER_SKILL_SLOT_COUNT
+	attack_skill_slots = _normalized_skill_slot_array(
+		normalized.get(SKILL_SLOT_GROUP_ATTACK, []),
+		ATTACK_SKILL_SLOT_COUNT
 	)
 	attack_ring_slots = _normalized_skill_slot_array(
 		normalized.get(SKILL_SLOT_GROUP_ATTACK_RING, []),
 		ATTACK_RING_SKILL_SLOT_COUNT
 	)
+	_sync_legacy_quick_slots_from_ring()
 
 
 func _normalized_skill_button_assignments(assignments_value: Variant, legacy_center: Array) -> Dictionary:
 	var source := SkillLoadoutRulesScript.normalize_assignments(assignments_value, legacy_center)
-	var center_value: Variant = source.get(SKILL_SLOT_GROUP_CENTER, legacy_center)
-	var ring_value: Variant = source.get(SKILL_SLOT_GROUP_ATTACK_RING, legacy_center)
 	return {
-		SKILL_SLOT_GROUP_CENTER: _normalized_skill_slot_array(
-			center_value,
-			CENTER_SKILL_SLOT_COUNT
+		"contract_id": SKILL_BUTTON_ASSIGNMENTS_CONTRACT_ID,
+		SKILL_SLOT_GROUP_ATTACK: _normalized_skill_slot_array(
+			source.get(SKILL_SLOT_GROUP_ATTACK, []),
+			ATTACK_SKILL_SLOT_COUNT
 		),
 		SKILL_SLOT_GROUP_ATTACK_RING: _normalized_skill_slot_array(
-			ring_value,
+			source.get(SKILL_SLOT_GROUP_ATTACK_RING, []),
 			ATTACK_RING_SKILL_SLOT_COUNT
 		),
+		"migration": str(source.get("migration", "native_v3")),
 	}
 
 
@@ -1216,6 +1250,12 @@ func _normalized_skill_slot_array(value: Variant, expected_size: int) -> Array[S
 	for index in range(expected_size):
 		result.append(str(source[index]) if index < source.size() else "")
 	return result
+
+
+func _sync_legacy_quick_slots_from_ring() -> void:
+	quick_slots = ["", "", "", ""]
+	for index in range(mini(quick_slots.size(), attack_ring_slots.size())):
+		quick_slots[index] = attack_ring_slots[index]
 
 
 func apply_warrior_runtime_state(snapshot: Dictionary, persist := false) -> bool:
@@ -1243,10 +1283,12 @@ func _normalized_warrior_runtime_state(snapshot: Variant) -> Dictionary:
 		"toggles": {
 			"warrior.thrusting": bool(toggles.get("warrior.thrusting", false)),
 			"warrior.half_moon": bool(toggles.get("warrior.half_moon", false)),
-			"warrior.fire_sword.auto_enabled": false,
+			"warrior.fire_sword.auto_enabled": bool(
+				toggles.get("warrior.fire_sword.auto_enabled", false)
+			),
 		},
-		# Legacy Fire Sword auto input is normalized to false and its cooldown is
-		# discarded. Neither field can restore an active charge.
+		# Only the user's toggle is persisted. An in-flight charge and cooldown
+		# are still discarded so loading never creates a free prepared hit.
 		"cooldowns": {},
 	}
 
@@ -1439,7 +1481,10 @@ func _test_character_payload(loadout: Dictionary, skill_profile: Dictionary, pro
 	var assignments := SkillLoadoutRulesScript.normalize_assignments(
 		skill_profile.get("button_assignments", {})
 	)
-	var center_slots: Array = assignments.get(SKILL_SLOT_GROUP_CENTER, [])
+	var ring_slots: Array = assignments.get(SKILL_SLOT_GROUP_ATTACK_RING, [])
+	var legacy_slots: Array = []
+	for index in range(CENTER_SKILL_SLOT_COUNT):
+		legacy_slots.append(str(ring_slots[index]) if index < ring_slots.size() else "")
 	return {
 		"save_version": SAVE_VERSION,
 		"profile_id": str(profile_entry.get("id", "")),
@@ -1459,7 +1504,7 @@ func _test_character_payload(loadout: Dictionary, skill_profile: Dictionary, pro
 		"warehouse_inventory": [],
 		"equipment": equipment_data,
 		"learned_skills": skill_profile.get("learned_skills", {}).duplicate(true),
-		"quick_slots": center_slots.duplicate(),
+		"quick_slots": legacy_slots,
 		"skill_button_assignments": assignments.duplicate(true),
 		"warrior_runtime_state": warrior_state,
 		"test_runtime_defaults": runtime_defaults.duplicate(true),

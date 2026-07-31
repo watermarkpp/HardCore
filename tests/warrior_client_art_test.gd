@@ -53,6 +53,21 @@ func _run() -> void:
 	assert(effect_sprite.region_rect.position == Vector2(visual.current_frame * 224, visual.current_direction * 224), "攻杀帧/方向区域错误")
 	assert(effect_sprite.position == -Vector2(86, 130) + Vector2(-32, -28), "技能特效没有与迁移后的战士脚点保持同一演员原点")
 	assert(audio.stream != null and audio.stream.resource_path.ends_with("57.wav"), "空手攻击没有使用客户端57号挥击声")
+	visual.play_action("半月弯刀", 0.51)
+	visual.play_passive_proc_effect("攻杀剑术", 0.24)
+	visual._process(0.05)
+	var passive_proc_sprite := visual.get_node("PassiveProcSkillEffect") as Sprite2D
+	assert(
+		effect_sprite.visible
+		and effect_sprite.texture.resource_path.ends_with("wide_hit.png"),
+		"攻杀触发错误覆盖了半月主体特效"
+	)
+	assert(
+		passive_proc_sprite.visible
+		and passive_proc_sprite.texture.resource_path.ends_with("power_hit.png"),
+		"攻杀没有作为独立概率附加层显示"
+	)
+	assert(visual._action_name == "半月弯刀", "攻杀附加层错误替换主体动作")
 
 	PlayerState.equipment["武器"] = {"name": "裁决之杖", "durability": 30, "max_durability": 30}
 	PlayerState.equipment_changed.emit()
@@ -73,11 +88,17 @@ func _run() -> void:
 		"slaying_auto": true,
 		"thrusting": true,
 		"half_moon": false,
+		"fire_enabled": true,
 		"fire_armed": true,
 		"fire_expires_remaining_ms": 10_000,
 	})
-	assert("刺杀:开" in game.hud.warrior_state_label.text and "烈火:充能" in game.hud.warrior_state_label.text, "HUD没有显示战士开关与烈火充能状态")
-	assert("[自动]" in game.hud.quick_buttons[0].text and "[开]" in game.hud.quick_buttons[1].text and "[充能]" in game.hud.quick_buttons[3].text, "快捷栏没有显示战士开关与烈火充能状态标记")
+	assert(
+		"攻杀:几率" in game.hud.warrior_state_label.text
+		and "刺杀:开" in game.hud.warrior_state_label.text
+		and "烈火:开·充能" in game.hud.warrior_state_label.text,
+		"HUD没有显示攻杀概率层、战士开关与烈火充能状态"
+	)
+	assert(game.hud.quick_buttons.is_empty(), "已取消的中央四技能按钮不应恢复")
 
 	print("WARRIOR_CLIENT_ART_PASS：四套Magic.wil八方向效果、现存武器WAV与HUD状态提示已接入，缺失技能WAV已显式记录")
 	get_tree().quit(0)
