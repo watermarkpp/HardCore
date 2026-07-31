@@ -178,9 +178,9 @@ func _ready() -> void:
 	var isolated_review := lab.monster_ground_review_snapshot()
 	assert(
 		isolated_review.get("runtimeRingCenter", Vector2.INF)
-		== Vector2.ZERO
+		== Vector2(8.0, -5.0)
 	)
-	assert(bool(isolated_review.get("targetMatchesContract", false)))
+	assert(not bool(isolated_review.get("targetMatchesContract", true)))
 	assert(
 		not bool(
 			isolated_review.get("manualFootMatchesActorOrigin", true)

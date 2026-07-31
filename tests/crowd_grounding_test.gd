@@ -45,9 +45,31 @@ func _run() -> void:
 	var player_shadow_top := 4.0 - 23.0 * 0.36
 	var monster_shadow_top := ArtSpec.MONSTER_COLLISION_RADIUS * 0.28 - ArtSpec.MONSTER_COLLISION_RADIUS * 0.36
 	assert(player_shadow_top < 0.0 and monster_shadow_top < 0.0, "接地阴影上缘没有覆盖脚底锚点")
-	assert(player.visual.position.y == 4.0, "人物视觉层没有压入地面阴影")
+	assert(
+		player.visual.position.is_equal_approx(
+			ArtSpec.PLAYER_VISUAL_RUNTIME_POSITION
+		)
+		and (
+			player.visual.position
+			+ ArtSpec.PLAYER_VISUAL_FOOT_ANCHOR_ADJUSTMENT
+		).is_zero_approx(),
+		"人物视觉层没有使用已验收的人工脚点",
+	)
 	for enemy: EnemyActor in enemies:
-		assert(enemy.visual.position.y == 4.0, "普通怪物视觉层没有压入地面阴影")
+		assert(
+			enemy.visual.position.is_equal_approx(
+				enemy.visual.reviewed_visual_origin()
+			)
+			and (
+				enemy.visual.position
+				+ enemy.visual.visual_foot_offset()
+			).is_zero_approx()
+			and (
+				enemy.visual.manual_alignment_replay_displacement().y
+				> 0.0
+			),
+			"普通怪物没有复现人工接地位置并保持物理脚点",
+		)
 	assert(y_sort_enabled, "战斗场景没有启用Y轴渲染排序")
 	print("CROWD_GROUNDING_PASS：8怪拥挤无穿模、碰撞层隔离、Y轴排序与脚底阴影接地正常")
 	get_tree().quit(0)

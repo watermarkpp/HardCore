@@ -3,6 +3,9 @@ extends CharacterBody2D
 
 const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
 const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
+const MonsterGroundRuntimeDiagnosticOverlayScript := preload(
+	"res://scripts/monster_ground_runtime_diagnostic_overlay.gd"
+)
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const CROWD_GRID_CELL_SIZE := 96.0
@@ -70,6 +73,7 @@ var movement_facing := Vector2.DOWN
 var visual: MonsterVisual
 var name_label: Label
 var overhead: Variant
+var ground_runtime_diagnostic_overlay: Node2D
 var collision_radius := ArtSpec.MONSTER_COLLISION_RADIUS
 var environment_blocker: Node
 var _dying := false
@@ -231,6 +235,13 @@ func _ready() -> void:
 	name_label = overhead.name_label
 	MonsterVisualScript.configure_actor_y_sort_item(name_label, "name_label")
 	refresh_name_label_position()
+	if MonsterGroundRuntimeDiagnosticOverlayScript.enabled_for_runtime():
+		ground_runtime_diagnostic_overlay = (
+			MonsterGroundRuntimeDiagnosticOverlayScript.new()
+		)
+		ground_runtime_diagnostic_overlay.name = "GroundRuntimeDiagnosticOverlay"
+		ground_runtime_diagnostic_overlay.setup(self)
+		add_child(ground_runtime_diagnostic_overlay)
 	if _burrowed:
 		visual.visible = false
 		overhead.visible = false
@@ -257,6 +268,8 @@ func _resolve_invalid_spawn_overlap() -> void:
 func set_targeted(value: bool) -> void:
 	is_targeted = value
 	queue_redraw()
+	if visual != null:
+		visual.refresh_target_ring()
 
 
 func _input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
@@ -865,7 +878,7 @@ func _draw() -> void:
 		draw_ellipse_shadow(radius, ground_center)
 	if _dying:
 		return
-	if is_targeted:
+	if is_targeted and (visual == null or not visual.uses_final_art()):
 		# 细线选中圈与脚底接触阴影共面，避免形成托起Boss的发光平台。
 		_draw_ground_indicator_ellipse(
 			ground_center,
