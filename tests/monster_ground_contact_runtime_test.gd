@@ -90,14 +90,46 @@ func _run() -> void:
 		var expected_root := (
 			_vector2(manual_entry.runtimeVisualOrigin)
 			+ _vector2(manual_entry.visualRootOffset)
+			+ _manual_replay_displacement(enemy)
 			if not manual_entry.is_empty()
 			else Vector2(0.0, 4.0) + _vector2(entry.visualRootOffset)
 		)
 		var expected_visual_foot_offset := (
-			_vector2(manual_entry.visualFootOffset)
+			(
+				_vector2(manual_entry.visualFootOffset)
+				- _manual_replay_displacement(enemy)
+			)
 			if not manual_entry.is_empty()
 			else _vector2(entry.visualFootOffset)
 		)
+		var expected_runtime_projection_offset := (
+			expected_projection_offset
+			- _manual_replay_displacement(enemy)
+			if (
+				not manual_entry.is_empty()
+				and visual.ground_projection_strategy() in ["flying", "hover"]
+			)
+			else expected_projection_offset
+		)
+		var replay_displacement := (
+			visual.manual_alignment_replay_displacement()
+		)
+		assert(
+			replay_displacement.is_equal_approx(
+				_manual_replay_displacement(enemy)
+				if not manual_entry.is_empty()
+				else Vector2.ZERO
+			),
+			"monsterId=%d manual replay displacement is not collision-derived"
+			% monster_id,
+		)
+		if not manual_entry.is_empty():
+			assert(
+				is_zero_approx(replay_displacement.x)
+				and replay_displacement.y > 0.0,
+				"monsterId=%d manual replay displacement must be S-only"
+				% monster_id,
+			)
 		assert(
 			visual.position.is_equal_approx(expected_root),
 			"monsterId=%d runtime visual root did not apply the user alignment exactly once"
@@ -111,7 +143,7 @@ func _run() -> void:
 			% monster_id,
 		)
 		var expected_contact := (
-			visual.position + expected_projection_offset
+			visual.position + expected_runtime_projection_offset
 			if visual.ground_projection_strategy() in ["flying", "hover"]
 			else expected_root + expected_visual_foot_offset
 		)
@@ -121,9 +153,9 @@ func _run() -> void:
 		)
 		assert(
 			visual.ground_contact_offset().is_equal_approx(
-				expected_projection_offset
+				expected_runtime_projection_offset
 			),
-			"monsterId=%d runtime profile changed stored projection center"
+			"monsterId=%d runtime projection did not normalize the authored S displacement"
 			% monster_id,
 		)
 		if visual.ground_projection_strategy() == "grounded":
@@ -250,6 +282,7 @@ func _run() -> void:
 		var expected_root := (
 			_vector2(manual_entry.runtimeVisualOrigin)
 			+ _vector2(manual_entry.visualRootOffset)
+			+ _manual_replay_displacement(enemy)
 			if not manual_entry.is_empty()
 			else Vector2(0.0, 6.0) + _vector2(entry.visualRootOffset)
 		)
@@ -275,6 +308,14 @@ func _run() -> void:
 func _vector2(values: Array) -> Vector2:
 	assert(values.size() == 2)
 	return Vector2(float(values[0]), float(values[1]))
+
+
+func _manual_replay_displacement(enemy: EnemyActor) -> Vector2:
+	return Vector2.DOWN * (
+		enemy.collision_radius
+		+ ArtSpec.PLAYER_COLLISION_RADIUS
+		+ MonsterVisual.MANUAL_ALIGNMENT_SPAWN_GAP
+	) / MonsterVisual.MANUAL_ALIGNMENT_PREVIEW_ZOOM
 
 
 func _representative_frames(frame_count: int) -> Array[int]:

@@ -10,6 +10,15 @@ const GROUND_CONTACT_DATA_PATH := "res://assets/data/runtime/monster_ground_cont
 const MANUAL_ALIGNMENT_DATA_PATH := (
 	"res://assets/data/runtime/monster_ground_alignment_manual_v1.json"
 )
+# The frozen manual drafts were authored in the original acceptance lab at its
+# default 3x preview zoom. EnemyActor's overlap guard moved the co-located
+# preview monster toward S by one collision-safe distance in global pixels; the
+# scaled preview root converted that into this smaller local visual offset.
+# Reapply that historical presentation displacement at runtime, then remove it
+# from the visual-foot vector, so the sprite matches the authored preview while
+# the canonical actor/targeting foot remains exactly (0,0).
+const MANUAL_ALIGNMENT_PREVIEW_ZOOM := 3.0
+const MANUAL_ALIGNMENT_SPAWN_GAP := 14.0
 # WIL px/py values are relative to the classic DrawChr origin, not to the
 # actor's ground point. The player client-art path already migrates this same
 # origin by (+32,+28); monsters must use the identical coordinate conversion.
@@ -25,6 +34,9 @@ const ACTOR_Y_SORT_RENDER_DOMAIN := "actor_y_sort"
 const ACTOR_Y_SORT_RENDER_CONTRACT := "monster.actor_y_sort.v1"
 const OVERHEAD_ANCHOR_CONTRACT := "monster.overhead_anchor.v4"
 const GROUND_CONTACT_CONTRACT := "monster.ground_contact.v5"
+const MANUAL_ALIGNMENT_REPLAY_CONTRACT := (
+	"monster.ground_alignment.manual_replay.v1"
+)
 
 static var _boss_art: Dictionary = {}
 static var _complete_art: Dictionary = {}
@@ -301,7 +313,13 @@ func ground_contact_offset() -> Vector2:
 	var values: Variant = ground_contact_profile.get("ringCenterOffset", [])
 	if not values is Array or values.size() < 2:
 		return Vector2.ZERO
-	return Vector2(float(values[0]), float(values[1]))
+	var result := Vector2(float(values[0]), float(values[1]))
+	if (
+		ground_projection_strategy() in ["flying", "hover"]
+		and not _manual_alignment_profile_for_actor().is_empty()
+	):
+		result -= manual_alignment_replay_displacement()
+	return result
 
 
 func visual_root_offset() -> Vector2:
@@ -316,8 +334,9 @@ func reviewed_visual_origin() -> Vector2:
 	# calibrating and the additional drag offset. The generated contact table
 	# previously retained only the latter, which silently changed the final
 	# sprite origin for drafts whose starting origin was not the generic
-	# (0,4)/(0,6). Recompose the immutable manual values directly so the game
-	# renders exactly the same origin as the acceptance lab.
+	# (0,4)/(0,6). The historical lab also applied a deterministic S overlap
+	# displacement to the preview actor. Recompose both immutable manual values
+	# and that read-time-only displacement so the game matches what was authored.
 	var manual := _manual_alignment_profile_for_actor()
 	var runtime_values: Variant = manual.get("runtimeVisualOrigin", [])
 	var root_values: Variant = manual.get("visualRootOffset", [])
@@ -330,8 +349,26 @@ func reviewed_visual_origin() -> Vector2:
 		return Vector2(
 			float(runtime_values[0]) + float(root_values[0]),
 			float(runtime_values[1]) + float(root_values[1]),
-		)
+		) + manual_alignment_replay_displacement()
 	return _runtime_visual_origin() + visual_root_offset()
+
+
+func manual_alignment_replay_displacement() -> Vector2:
+	if (
+		not is_instance_valid(actor)
+		or _manual_alignment_profile_for_actor().is_empty()
+	):
+		return Vector2.ZERO
+	var authored_spawn_distance := (
+		actor.collision_radius
+		+ ArtSpec.PLAYER_COLLISION_RADIUS
+		+ MANUAL_ALIGNMENT_SPAWN_GAP
+	)
+	return (
+		Vector2.DOWN
+		* authored_spawn_distance
+		/ MANUAL_ALIGNMENT_PREVIEW_ZOOM
+	)
 
 
 func _runtime_visual_origin() -> Vector2:
@@ -371,13 +408,18 @@ func ground_indicator_radii(fallback: Vector2) -> Vector2:
 
 func visual_foot_offset() -> Vector2:
 	var manual := _manual_alignment_profile_for_actor()
-	var values: Variant = manual.get(
-		"visualFootOffset",
-		ground_contact_profile.get("visualFootOffset", []),
+	var has_manual := not manual.is_empty()
+	var values: Variant = (
+		manual.get("visualFootOffset", [])
+		if has_manual
+		else ground_contact_profile.get("visualFootOffset", [])
 	)
 	if not values is Array or values.size() < 2:
 		return Vector2.ZERO
-	return Vector2(float(values[0]), float(values[1]))
+	var result := Vector2(float(values[0]), float(values[1]))
+	if has_manual:
+		result -= manual_alignment_replay_displacement()
+	return result
 
 
 func ground_projection_strategy() -> String:

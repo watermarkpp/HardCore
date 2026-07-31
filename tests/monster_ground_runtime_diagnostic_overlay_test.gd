@@ -41,8 +41,23 @@ func _run() -> void:
 	assert(Vector2(snapshot.manualMinusActor).is_zero_approx())
 	assert(Vector2(snapshot.ringMinusActor).is_zero_approx())
 	assert(Vector2(snapshot.ringMinusManual).is_zero_approx())
-	assert(Vector2(snapshot.visualPosition).is_equal_approx(Vector2(8.5, -8.0)))
-	assert(Vector2(snapshot.visualFootOffset).is_equal_approx(Vector2(-8.5, 8.0)))
+	var replay_displacement := enemy.visual.manual_alignment_replay_displacement()
+	var expected_replay_displacement := Vector2.DOWN * (
+		enemy.collision_radius
+		+ ArtSpec.PLAYER_COLLISION_RADIUS
+		+ MonsterVisual.MANUAL_ALIGNMENT_SPAWN_GAP
+	) / MonsterVisual.MANUAL_ALIGNMENT_PREVIEW_ZOOM
+	assert(replay_displacement.is_equal_approx(expected_replay_displacement))
+	assert(
+		Vector2(snapshot.visualPosition).is_equal_approx(
+			Vector2(8.5, -8.0) + replay_displacement
+		)
+	)
+	assert(
+		Vector2(snapshot.visualFootOffset).is_equal_approx(
+			Vector2(-8.5, 8.0) - replay_displacement
+		)
+	)
 	assert(Vector2(snapshot.footAnchor) == Vector2(enemy.visual.foot_anchor))
 	assert(Vector2(snapshot.actorGroundOffset) == Vector2(32.0, 28.0))
 	assert(
