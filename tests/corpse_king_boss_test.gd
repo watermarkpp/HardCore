@@ -35,7 +35,13 @@ func _run() -> void:
 	var expected_foot := Vector2i(int(art.footAnchor[0]), int(art.footAnchor[1]))
 	assert(visual.uses_final_art() and visual.frame_size == expected_frame, "尸王客户端资源未启用")
 	assert(visual.actor_ground_offset == Vector2i(32, 28), "尸王未采用经典客户端角色原点迁移量")
-	assert(sprite.position == -Vector2(expected_foot + visual.actor_ground_offset) and visual.position.y == 6.0, "尸王绘制原点迁移与地面原点不一致")
+	assert(
+		sprite.position == -Vector2(expected_foot + visual.actor_ground_offset)
+		and (
+			visual.position + visual.visual_foot_offset()
+		).is_zero_approx(),
+		"尸王绘制原点或人工脚点不在怪物逻辑原点",
+	)
 	assert(is_equal_approx(boss.overhead.position.y, boss.health_bar_anchor_y()), "尸王头顶层未按固定动画帧锚点定位")
 	assert(boss.overhead.name_global_bottom_y() < boss.overhead.bar_global_top_y(), "尸王名称没有固定在血条上方")
 	assert(boss.max_hp == 500 and boss.attack_min == 18 and boss.attack_max == 36, "尸王2003候选属性未采用")
@@ -53,7 +59,7 @@ func _run() -> void:
 	boss.take_damage(251)
 	assert(not boss._boss_phase_two and boss.move_speed == speed_before and boss._boss_warning <= 0.0, "尸王仍触发无来源狂暴或震地")
 	boss.set_targeted(true)
-	assert(boss.is_targeted and visual.position.y == 6.0, "尸王选中状态改变了脚底高度")
-	assert(boss.ground_indicator_center().is_equal_approx(visual.position + visual.ground_contact_offset()), "尸王锁定光圈未使用真实素材落地点")
+	assert(boss.is_targeted, "尸王选中状态没有生效")
+	assert(boss.ground_indicator_center().is_zero_approx(), "尸王地面锁定光圈未固定在怪物物理原点")
 	print("CORPSE_KING_BOSS_PASS：Race81/TATMonster、2.8秒攻击、命中帧、持续朝向、无伪技能与脚底选中正常")
 	get_tree().quit(0)

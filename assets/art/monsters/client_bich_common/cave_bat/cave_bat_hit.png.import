@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b02fnb0wloodf"
-path.s3tc="res://.godot/imported/cave_bat_hit.png-cc76e8b2573363f74099fe3a544c8010.s3tc.ctex"
-path.etc2="res://.godot/imported/cave_bat_hit.png-cc76e8b2573363f74099fe3a544c8010.etc2.ctex"
+path="res://.godot/imported/cave_bat_hit.png-cc76e8b2573363f74099fe3a544c8010.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_bich_common/cave_bat/cave_bat_hit.png"
-dest_files=["res://.godot/imported/cave_bat_hit.png-cc76e8b2573363f74099fe3a544c8010.s3tc.ctex", "res://.godot/imported/cave_bat_hit.png-cc76e8b2573363f74099fe3a544c8010.etc2.ctex"]
+dest_files=["res://.godot/imported/cave_bat_hit.png-cc76e8b2573363f74099fe3a544c8010.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

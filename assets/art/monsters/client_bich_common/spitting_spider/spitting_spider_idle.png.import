@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b610almvp2r7a"
-path.s3tc="res://.godot/imported/spitting_spider_idle.png-b70a5ec565372474efff549faf72b232.s3tc.ctex"
-path.etc2="res://.godot/imported/spitting_spider_idle.png-b70a5ec565372474efff549faf72b232.etc2.ctex"
+path="res://.godot/imported/spitting_spider_idle.png-b70a5ec565372474efff549faf72b232.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_bich_common/spitting_spider/spitting_spider_idle.png"
-dest_files=["res://.godot/imported/spitting_spider_idle.png-b70a5ec565372474efff549faf72b232.s3tc.ctex", "res://.godot/imported/spitting_spider_idle.png-b70a5ec565372474efff549faf72b232.etc2.ctex"]
+dest_files=["res://.godot/imported/spitting_spider_idle.png-b70a5ec565372474efff549faf72b232.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

@@ -7,6 +7,18 @@ const BOSS_ART_PATH := "res://assets/data/classic_boss_client_art_sources.json"
 const COMPLETE_ART_PATH := "res://assets/data/complete_monster_client_art_sources.json"
 const OVERHEAD_ANCHOR_DATA_PATH := "res://assets/data/runtime/monster_overhead_anchors.json"
 const GROUND_CONTACT_DATA_PATH := "res://assets/data/runtime/monster_ground_contacts.json"
+const MANUAL_ALIGNMENT_DATA_PATH := (
+	"res://assets/data/runtime/monster_ground_alignment_manual_v1.json"
+)
+# The frozen manual drafts were authored in the original acceptance lab at its
+# default 3x preview zoom. EnemyActor's overlap guard moved the co-located
+# preview monster toward S by one collision-safe distance in global pixels; the
+# scaled preview root converted that into this smaller local visual offset.
+# Reapply that historical presentation displacement at runtime, then remove it
+# from the visual-foot vector, so the sprite matches the authored preview while
+# the canonical actor/targeting foot remains exactly (0,0).
+const MANUAL_ALIGNMENT_PREVIEW_ZOOM := 3.0
+const MANUAL_ALIGNMENT_SPAWN_GAP := 14.0
 # WIL px/py values are relative to the classic DrawChr origin, not to the
 # actor's ground point. The player client-art path already migrates this same
 # origin by (+32,+28); monsters must use the identical coordinate conversion.
@@ -21,12 +33,16 @@ const MAX_CONCURRENT_PROFILE_LOADS := 2
 const ACTOR_Y_SORT_RENDER_DOMAIN := "actor_y_sort"
 const ACTOR_Y_SORT_RENDER_CONTRACT := "monster.actor_y_sort.v1"
 const OVERHEAD_ANCHOR_CONTRACT := "monster.overhead_anchor.v4"
-const GROUND_CONTACT_CONTRACT := "monster.ground_contact.v4"
+const GROUND_CONTACT_CONTRACT := "monster.ground_contact.v5"
+const MANUAL_ALIGNMENT_REPLAY_CONTRACT := (
+	"monster.ground_alignment.manual_replay.v1"
+)
 
 static var _boss_art: Dictionary = {}
 static var _complete_art: Dictionary = {}
 static var _overhead_anchor_data: Dictionary = {}
 static var _ground_contact_data: Dictionary = {}
+static var _manual_alignment_data: Dictionary = {}
 static var _client_resource_profiles: Dictionary = {}
 static var _client_resource_profile_lru: Array[String] = []
 static var _client_resource_profile_bytes: Dictionary = {}
@@ -89,12 +105,13 @@ func _ready() -> void:
 	configure_actor_y_sort_item(self, "visual_root")
 	_has_authored_client_art = not _client_mapping_for(actor.monster_data).is_empty()
 	# 普通怪下沉4px，Boss下沉6px，使脚底与阴影中心实际重叠。
-	position = Vector2(0, 6 if actor.is_boss else 4)
+	position = _runtime_visual_origin()
 	visible = false
 	sprite = Sprite2D.new()
 	sprite.name = "BodySprite"
 	configure_actor_y_sort_item(sprite, "body_sprite")
 	sprite.region_enabled = true
+	sprite.region_filter_clip_enabled = true
 	sprite.region_rect = Rect2(Vector2.ZERO, frame_size)
 	sprite.centered = false
 	sprite.position = -Vector2(foot_anchor + actor_ground_offset)
@@ -107,6 +124,28 @@ func _ready() -> void:
 	_resource_residency_timer = RESOURCE_RESIDENCY_CHECK_SECONDS * float(posmod(get_instance_id(), 7)) / 7.0
 	if _inside_visual_distance(VISUAL_ACTIVATION_DISTANCE):
 		_activate_resources()
+
+
+func _draw() -> void:
+	# Keep the saved foot point and its target ring in one CanvasItem transform
+	# chain so Android cannot round the actor and visual positions separately.
+	if (
+		not is_instance_valid(actor)
+		or actor._dying
+		or not actor.is_targeted
+		or not uses_final_art()
+	):
+		return
+	var center := target_ring_local_position()
+	var radii := ground_indicator_radii(Vector2.ZERO)
+	var points := PackedVector2Array()
+	for index in range(49):
+		var angle := TAU * float(index) / 48.0
+		points.append(
+			center
+			+ Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+		)
+	draw_polyline(points, Color(1.0, 0.78, 0.18, 0.78), 2.0, true)
 
 
 func _process(delta: float) -> void:
@@ -172,6 +211,7 @@ func _activate_resources() -> void:
 	actor_ground_offset = resources.get("actor_ground_offset", Vector2i.ZERO)
 	health_bar_top_by_direction = resources.get("health_bar_top_by_direction", [])
 	ground_contact_profile = _ground_contact_profile_for_actor()
+	position = reviewed_visual_origin()
 	sprite.region_rect = Rect2(Vector2.ZERO, frame_size)
 	sprite.position = -Vector2(foot_anchor + actor_ground_offset)
 	_fixed_health_bar_y = _stable_overhead_anchor_y()
@@ -194,6 +234,7 @@ func _release_resources() -> void:
 	sprite.texture = null
 	active_resources = {}
 	ground_contact_profile = {}
+	position = _runtime_visual_origin()
 	_refresh_actor_ground_indicator()
 
 
@@ -272,29 +313,113 @@ func ground_contact_offset() -> Vector2:
 	var values: Variant = ground_contact_profile.get("ringCenterOffset", [])
 	if not values is Array or values.size() < 2:
 		return Vector2.ZERO
+	var result := Vector2(float(values[0]), float(values[1]))
+	if (
+		ground_projection_strategy() in ["flying", "hover"]
+		and not _manual_alignment_profile_for_actor().is_empty()
+	):
+		result -= manual_alignment_replay_displacement()
+	return result
+
+
+func visual_root_offset() -> Vector2:
+	var values: Variant = ground_contact_profile.get("visualRootOffset", [])
+	if not values is Array or values.size() < 2:
+		return Vector2.ZERO
 	return Vector2(float(values[0]), float(values[1]))
+
+
+func reviewed_visual_origin() -> Vector2:
+	# The user's draft stores both the runtime origin that was visible while
+	# calibrating and the additional drag offset. The generated contact table
+	# previously retained only the latter, which silently changed the final
+	# sprite origin for drafts whose starting origin was not the generic
+	# (0,4)/(0,6). The historical lab also applied a deterministic S overlap
+	# displacement to the preview actor. Recompose both immutable manual values
+	# and that read-time-only displacement so the game matches what was authored.
+	var manual := _manual_alignment_profile_for_actor()
+	var runtime_values: Variant = manual.get("runtimeVisualOrigin", [])
+	var root_values: Variant = manual.get("visualRootOffset", [])
+	if (
+		runtime_values is Array
+		and runtime_values.size() >= 2
+		and root_values is Array
+		and root_values.size() >= 2
+	):
+		return Vector2(
+			float(runtime_values[0]) + float(root_values[0]),
+			float(runtime_values[1]) + float(root_values[1]),
+		) + manual_alignment_replay_displacement()
+	return _runtime_visual_origin() + visual_root_offset()
+
+
+func manual_alignment_replay_displacement() -> Vector2:
+	if (
+		not is_instance_valid(actor)
+		or _manual_alignment_profile_for_actor().is_empty()
+	):
+		return Vector2.ZERO
+	var authored_spawn_distance := (
+		actor.collision_radius
+		+ ArtSpec.PLAYER_COLLISION_RADIUS
+		+ MANUAL_ALIGNMENT_SPAWN_GAP
+	)
+	return (
+		Vector2.DOWN
+		* authored_spawn_distance
+		/ MANUAL_ALIGNMENT_PREVIEW_ZOOM
+	)
+
+
+func _runtime_visual_origin() -> Vector2:
+	if not is_instance_valid(actor):
+		return Vector2.ZERO
+	return Vector2(0.0, 6.0 if actor.is_boss else 4.0)
 
 
 func ground_contact_position(fallback: Vector2) -> Vector2:
 	if not uses_final_art() or ground_contact_profile.is_empty():
 		return fallback
-	return position + ground_contact_offset()
+	if ground_projection_strategy() in ["flying", "hover"]:
+		return position + ground_contact_offset()
+	# Grounded monsters use the user's picked visual foot directly. The formal
+	# visual root may move, but root + picked foot remains the actor origin.
+	return position + visual_foot_offset()
+
+
+func target_ring_position(fallback: Vector2) -> Vector2:
+	# The yellow ring is a presentation of the user's reviewed visual foot.
+	# Grounded manual drafts resolve that point to actor-local (0,0), while
+	# flying/hovering profiles retain their authored ground projection.
+	return ground_contact_position(fallback)
+
+
+func target_ring_local_position() -> Vector2:
+	if ground_projection_strategy() in ["flying", "hover"]:
+		return ground_contact_offset()
+	return visual_foot_offset()
 
 
 func ground_indicator_radii(fallback: Vector2) -> Vector2:
-	if not uses_final_art() or ground_contact_profile.is_empty():
-		return fallback
-	var values: Variant = ground_contact_profile.get("ringEllipseRadii", [])
-	if not values is Array or values.size() < 2:
-		return fallback
-	return Vector2(float(values[0]), float(values[1]))
+	if is_instance_valid(actor):
+		return actor.ground_indicator_radii()
+	return fallback
 
 
 func visual_foot_offset() -> Vector2:
-	var values: Variant = ground_contact_profile.get("visualFootOffset", [])
+	var manual := _manual_alignment_profile_for_actor()
+	var has_manual := not manual.is_empty()
+	var values: Variant = (
+		manual.get("visualFootOffset", [])
+		if has_manual
+		else ground_contact_profile.get("visualFootOffset", [])
+	)
 	if not values is Array or values.size() < 2:
 		return Vector2.ZERO
-	return Vector2(float(values[0]), float(values[1]))
+	var result := Vector2(float(values[0]), float(values[1]))
+	if has_manual:
+		result -= manual_alignment_replay_displacement()
+	return result
 
 
 func ground_projection_strategy() -> String:
@@ -318,6 +443,15 @@ func _ground_contact_profile_for_actor() -> Dictionary:
 	return profile if profile is Dictionary else {}
 
 
+func _manual_alignment_profile_for_actor() -> Dictionary:
+	if not is_instance_valid(actor):
+		return {}
+	var value: Variant = _manual_alignment_manifest().get(
+		"entriesByMonsterId", {}
+	).get(str(actor.monster_id), {})
+	return value if value is Dictionary else {}
+
+
 static func _ground_contact_manifest() -> Dictionary:
 	if _ground_contact_data.is_empty() and FileAccess.file_exists(GROUND_CONTACT_DATA_PATH):
 		var file := FileAccess.open(GROUND_CONTACT_DATA_PATH, FileAccess.READ)
@@ -326,16 +460,24 @@ static func _ground_contact_manifest() -> Dictionary:
 	return _ground_contact_data
 
 
+static func _manual_alignment_manifest() -> Dictionary:
+	if (
+		_manual_alignment_data.is_empty()
+		and FileAccess.file_exists(MANUAL_ALIGNMENT_DATA_PATH)
+	):
+		var file := FileAccess.open(MANUAL_ALIGNMENT_DATA_PATH, FileAccess.READ)
+		var parsed: Variant = (
+			JSON.parse_string(file.get_as_text()) if file != null else null
+		)
+		_manual_alignment_data = parsed if parsed is Dictionary else {}
+	return _manual_alignment_data
+
+
 func _refresh_actor_ground_indicator() -> void:
 	if not is_instance_valid(actor):
 		return
-	var next_position := ground_contact_position(
-		Vector2(0.0, (27.0 if actor.is_boss else 16.0) * 0.28)
-	)
-	var fallback_radius := (27.0 if actor.is_boss else 16.0) + 6.0
-	var next_radii := ground_indicator_radii(
-		Vector2(fallback_radius, fallback_radius * 0.30)
-	)
+	var next_position := actor.ground_indicator_center()
+	var next_radii := actor.ground_indicator_radii()
 	if (
 		_last_ground_contact_position.is_equal_approx(next_position)
 		and _last_ground_indicator_radii.is_equal_approx(next_radii)
@@ -343,8 +485,16 @@ func _refresh_actor_ground_indicator() -> void:
 		return
 	_last_ground_contact_position = next_position
 	_last_ground_indicator_radii = next_radii
-	if actor.is_targeted:
-		actor.queue_redraw()
+	# CanvasItem retains the previous _draw command list until queue_redraw().
+	# Resource activation/release changes whether the procedural ground shadow
+	# is legal even for an unselected actor, so every transition must invalidate
+	# that cached list.
+	actor.queue_redraw()
+	queue_redraw()
+
+
+func refresh_target_ring() -> void:
+	queue_redraw()
 
 
 func health_bar_anchor_y(fallback_y: float) -> float:

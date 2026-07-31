@@ -40,6 +40,39 @@ def row_digest(image: Image.Image, frame_height: int, direction: int) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+def alpha_component_sizes(alpha: Image.Image) -> list[int]:
+    pixels = alpha.load()
+    width, height = alpha.size
+    visited: set[tuple[int, int]] = set()
+    sizes: list[int] = []
+    for y in range(height):
+        for x in range(width):
+            if pixels[x, y] == 0 or (x, y) in visited:
+                continue
+            component = [(x, y)]
+            visited.add((x, y))
+            cursor = 0
+            while cursor < len(component):
+                current_x, current_y = component[cursor]
+                cursor += 1
+                for delta_y in (-1, 0, 1):
+                    for delta_x in (-1, 0, 1):
+                        neighbor = (
+                            current_x + delta_x,
+                            current_y + delta_y,
+                        )
+                        if (
+                            0 <= neighbor[0] < width
+                            and 0 <= neighbor[1] < height
+                            and neighbor not in visited
+                            and pixels[neighbor[0], neighbor[1]] > 0
+                        ):
+                            visited.add(neighbor)
+                            component.append(neighbor)
+            sizes.append(len(component))
+    return sizes
+
+
 def main() -> None:
     profiles: dict[str, dict] = {}
     for path in MANIFESTS:
@@ -61,6 +94,7 @@ def main() -> None:
     action_count = 0
     frame_count = 0
     fixed_profiles: set[str] = set()
+    cleaned_profiles: set[str] = set()
     geometry_anomalies: list[str] = []
     for name, profile in profiles.items():
         frame_width, frame_height = map(int, profile["frameSize"])
@@ -68,6 +102,12 @@ def main() -> None:
         assert set(actions) == REQUIRED_ACTIONS, f"{name} does not expose the formal five actions"
         fixed_profile = profile.get("directionPolicy") == "fixed_source_direction"
         content_padding = int(profile.get("contentPadding", 0))
+        cleanup = profile.get("alphaIslandCleanup", {})
+        cleanup_max_pixels = int(cleanup.get("maxPixels", 0))
+        if cleanup_max_pixels:
+            assert profile.get("frameSize") == [272, 272]
+            assert profile.get("footAnchor") == [84, 143]
+            cleaned_profiles.add(name)
         if content_padding:
             assert profile.get("atlasCellIsolation") == "per_frame", (
                 f"{name} declares content padding without per-frame atlas isolation"
@@ -92,6 +132,17 @@ def main() -> None:
                     assert alpha_bounds is not None, (
                         f"{name}/{action_name} direction={direction} frame={frame} is empty"
                     )
+                    if cleanup_max_pixels:
+                        remaining_islands = [
+                            size
+                            for size in alpha_component_sizes(alpha)
+                            if size <= cleanup_max_pixels
+                        ]
+                        assert not remaining_islands, (
+                            f"{name}/{action_name} direction={direction} "
+                            f"frame={frame} still contains isolated fragments "
+                            f"up to {cleanup_max_pixels}px: {remaining_islands}"
+                        )
                     if content_padding:
                         assert (
                             alpha_bounds[0] >= content_padding
@@ -136,7 +187,8 @@ def main() -> None:
     print(
         "MONSTER_ANIMATION_GEOMETRY_AUDIT_PASS "
         f"catalog=214 profiles={len(profiles)} actions={action_count} "
-        f"frames={frame_count} fixed_profiles={len(fixed_profiles)}"
+        f"frames={frame_count} fixed_profiles={len(fixed_profiles)} "
+        f"cleaned_profiles={len(cleaned_profiles)}"
     )
 
 

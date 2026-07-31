@@ -23,6 +23,7 @@ signal attack_pressed
 signal attack_released
 signal interact_pressed
 signal skill_pressed(slot_index: int)
+signal skill_slot_pressed(slot_group: String, slot_index: int)
 signal skill_quick_slot_assignment_requested(request: Dictionary)
 signal skill_button_assignment_requested(request: Dictionary)
 signal map_travel_requested(map_id: int)
@@ -73,6 +74,8 @@ var _warrior_snapshot: Dictionary = {}
 var _special_actions: Array[String] = []
 var _special_action_index := 0
 var _last_target_text := ""
+var _skill_button_assignments: Dictionary = {}
+var _skill_button_modes: Dictionary = {}
 
 
 func _ready() -> void:
@@ -347,7 +350,7 @@ func _build_combat_controls(root: Control) -> void:
 		skill_button.add_theme_color_override("font_color", Color.TRANSPARENT)
 		skill_button.add_theme_color_override("font_hover_color", Color.TRANSPARENT)
 		skill_button.add_theme_color_override("font_pressed_color", Color.TRANSPARENT)
-		skill_button.pressed.connect(_on_skill_button.bind(index))
+		skill_button.pressed.connect(_on_skill_slot_button.bind("center", index))
 		skill_button.set_meta("stable_id", "hud.profession_skill.%d" % (index + 1))
 		skill_button.set_meta("activation_mode_source", "skill.activation_mode")
 		skill_button.set_meta("warrior_policy", "skill_data_declared")
@@ -377,6 +380,9 @@ func _build_combat_controls(root: Control) -> void:
 		skill_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		skill_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		skill_label.add_theme_font_size_override("font_size", 12)
+		skill_label.add_theme_color_override("font_color", Color("f4e2bd"))
+		skill_label.add_theme_color_override("font_outline_color", Color("120d0a"))
+		skill_label.add_theme_constant_override("outline_size", 3)
 		skill_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		disc.add_child(skill_label)
 		quick_slot_labels.append(skill_label)
@@ -464,7 +470,7 @@ func _build_combat_controls(root: Control) -> void:
 		ring_skill.offset_top = rect.position.y
 		ring_skill.offset_right = rect.end.x
 		ring_skill.offset_bottom = rect.end.y
-		ring_skill.pressed.connect(_on_skill_button.bind(index))
+		ring_skill.pressed.connect(_on_skill_slot_button.bind("attack_ring", index))
 		ring_skill.set_meta("stable_id", "hud.attack_ring_skill.%d" % (index + 1))
 		root.add_child(ring_skill)
 		var ring_backdrop := Panel.new()
@@ -793,8 +799,11 @@ func open_skill_trainer(display_name: String) -> void:
 
 
 func set_skill_button_assignments(assignments: Dictionary, interaction_modes := {}) -> void:
+	_skill_button_assignments = assignments.duplicate(true)
+	_skill_button_modes = interaction_modes.duplicate(true) if interaction_modes is Dictionary else {}
 	if skill_panel != null:
 		skill_panel.set_skill_button_assignments(assignments, interaction_modes)
+	update_quick_slots()
 
 
 func show_death_screen(context := {}) -> void:
@@ -841,14 +850,24 @@ func show_message(message: String, seconds := 2.0) -> void:
 
 func update_quick_slots() -> void:
 	for index in range(quick_buttons.size()):
-		var skill_name := PlayerState.quick_slots[index]
+		var skill_name := _skill_name_for_slot("center", index)
 		var marker := _warrior_skill_marker(skill_name)
 		var skill_texture := HUDSkillIconCatalogScript.texture_for(skill_name)
 		var skill_icon_id := HUDSkillIconCatalogScript.source_id_for(skill_name)
 		var skill_icon_path := HUDSkillIconCatalogScript.source_path_for(skill_name)
-		var display_text := "%d\n%s%s" % [index + 1, skill_name if not skill_name.is_empty() else "空", marker]
-		quick_buttons[index].text = display_text
+		# The child SkillLabel is the only visible text layer. Keeping a second
+		# full skill name on the transparent Button leaks black text whenever a
+		# mobile theme state (focus/disabled/hover-pressed) overrides its color.
+		quick_buttons[index].text = ""
 		quick_buttons[index].tooltip_text = skill_name if not skill_name.is_empty() else "空技能槽"
+		quick_buttons[index].set_meta(
+			"display_text",
+			"%d\n%s%s" % [
+				index + 1,
+				skill_name if not skill_name.is_empty() else "空",
+				marker,
+			],
+		)
 		if index < quick_slot_icons.size():
 			quick_slot_icons[index].texture = skill_texture
 			quick_slot_icons[index].visible = skill_texture != null
@@ -857,15 +876,70 @@ func update_quick_slots() -> void:
 			quick_slot_icons[index].set_meta("skill_icon_path", skill_icon_path)
 		if index < quick_slot_labels.size():
 			quick_slot_labels[index].text = _compact_skill_label(index, skill_name, marker, skill_texture != null)
-		if index < attack_ring_skill_icons.size():
-			attack_ring_skill_icons[index].texture = skill_texture
-			attack_ring_skill_icons[index].visible = skill_texture != null
-			attack_ring_skill_icons[index].set_meta("skill_name", skill_name)
-			attack_ring_skill_icons[index].set_meta("skill_icon_id", skill_icon_id)
-			attack_ring_skill_icons[index].set_meta("skill_icon_path", skill_icon_path)
+	for index in range(attack_ring_skill_icons.size()):
+		var skill_name := _skill_name_for_slot("attack_ring", index)
+		var skill_texture := HUDSkillIconCatalogScript.texture_for(skill_name)
+		var skill_icon_id := HUDSkillIconCatalogScript.source_id_for(skill_name)
+		var skill_icon_path := HUDSkillIconCatalogScript.source_path_for(skill_name)
+		attack_ring_skill_icons[index].texture = skill_texture
+		attack_ring_skill_icons[index].visible = skill_texture != null
+		attack_ring_skill_icons[index].set_meta("skill_name", skill_name)
+		attack_ring_skill_icons[index].set_meta("skill_icon_id", skill_icon_id)
+		attack_ring_skill_icons[index].set_meta("skill_icon_path", skill_icon_path)
 		if index < attack_ring_skill_labels.size():
 			attack_ring_skill_labels[index].text = str(index + 1) if skill_texture != null else "技%d" % (index + 1)
 			attack_ring_skill_labels[index].tooltip_text = skill_name
+
+
+func _skill_name_for_slot(slot_group: String, slot_index: int) -> String:
+	if not _skill_button_assignments.is_empty():
+		if _skill_button_assignments.has(slot_group):
+			return _skill_name_from_group(_skill_button_assignments.get(slot_group), slot_index)
+		return ""
+	if PlayerState.has_method("skill_name_for_slot"):
+		return str(PlayerState.call("skill_name_for_slot", slot_group, slot_index))
+	var assignments := _active_skill_button_assignments()
+	if assignments.has(slot_group):
+		return _skill_name_from_group(assignments.get(slot_group), slot_index)
+	if not assignments.is_empty():
+		return ""
+	# Compatibility for builds predating the grouped center[4] + attack_ring[3]
+	# contract. Once the grouped snapshot exists, an intentionally empty attack
+	# ring slot remains empty and is never mirrored from the center group.
+	if slot_index >= 0 and slot_index < PlayerState.quick_slots.size():
+		return str(PlayerState.quick_slots[slot_index])
+	return ""
+
+
+func _active_skill_button_assignments() -> Dictionary:
+	if not _skill_button_assignments.is_empty():
+		return _skill_button_assignments
+	if PlayerState.has_method("skill_button_assignments_snapshot"):
+		var snapshot: Variant = PlayerState.call("skill_button_assignments_snapshot")
+		if snapshot is Dictionary:
+			return snapshot
+	return {}
+
+
+func _skill_name_from_group(group_value: Variant, slot_index: int) -> String:
+	if group_value is Array and slot_index >= 0 and slot_index < group_value.size():
+		var value: Variant = group_value[slot_index]
+		return _skill_name_from_assignment_value(value)
+	if group_value is Dictionary:
+		var value: Variant = group_value.get(slot_index, group_value.get(str(slot_index), ""))
+		return _skill_name_from_assignment_value(value)
+	return ""
+
+
+func _skill_name_from_assignment_value(value: Variant) -> String:
+	if not value is Dictionary:
+		return str(value)
+	return str(
+		value.get(
+			"skill_name",
+			value.get("skillName", value.get("name", value.get("display_name", value.get("displayName", ""))))
+		)
+	)
 
 
 func _compact_skill_label(index: int, skill_name: String, marker: String, has_icon: bool) -> String:
@@ -911,8 +985,16 @@ func _warrior_skill_marker(skill_name: String) -> String:
 	return ""
 
 
+func _on_skill_slot_button(slot_group: String, slot_index: int) -> void:
+	var grouped_connections := skill_slot_pressed.get_connections()
+	skill_slot_pressed.emit(slot_group, slot_index)
+	if grouped_connections.is_empty():
+		skill_pressed.emit(slot_index)
+
+
 func _on_skill_button(index: int) -> void:
-	skill_pressed.emit(index)
+	# Legacy API retained for callers that still expose one four-slot array.
+	_on_skill_slot_button("center", index)
 
 
 func _close_modal_panels() -> void:

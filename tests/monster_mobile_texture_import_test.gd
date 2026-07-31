@@ -13,11 +13,14 @@ func _ready() -> void:
 		var file := FileAccess.open(path, FileAccess.READ)
 		assert(file != null, "cannot read monster texture import policy: %s" % path)
 		var content := file.get_as_text()
-		assert(content.contains("compress/mode=2"), "monster atlas is not VRAM-compressed: %s" % path)
-		assert(content.contains("path.etc2="), "monster atlas has no ETC2 mobile payload: %s" % path)
-		assert(content.contains("\"vram_texture\": true"), "monster atlas is still a CPU texture: %s" % path)
+		assert(content.contains("compress/mode=0"), "monster atlas is not lossless-compressed: %s" % path)
+		assert(content.contains("path=\"res://.godot/imported/"), "monster atlas has no lossless payload: %s" % path)
+		assert(content.contains("\"vram_texture\": false"), "monster atlas still requests fixed-block VRAM compression: %s" % path)
+		assert(not content.contains("path.s3tc="), "monster atlas still has a desktop VRAM variant: %s" % path)
+		assert(not content.contains("path.etc2="), "monster atlas still has an Android ETC2 variant: %s" % path)
+		assert(not content.contains("\"imported_formats\":"), "monster atlas still declares VRAM formats: %s" % path)
 		assert(content.contains("mipmaps/generate=false"), "pixel-art atlas unexpectedly enables mipmaps: %s" % path)
-	print("MONSTER_MOBILE_TEXTURE_IMPORT_PASS %d atlases use VRAM ETC2 without mipmaps" % import_paths.size())
+	print("MONSTER_LOSSLESS_TEXTURE_IMPORT_PASS %d atlases preserve source resolution without fixed-block padding" % import_paths.size())
 	get_tree().quit(0)
 
 

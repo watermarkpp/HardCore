@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://1as6lff0rmyq"
-path.s3tc="res://.godot/imported/forest_yeti_hit.png-13bf9b45312b370b44977731c0270e64.s3tc.ctex"
-path.etc2="res://.godot/imported/forest_yeti_hit.png-13bf9b45312b370b44977731c0270e64.etc2.ctex"
+path="res://.godot/imported/forest_yeti_hit.png-13bf9b45312b370b44977731c0270e64.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/bich/forest_yeti/forest_yeti_hit.png"
-dest_files=["res://.godot/imported/forest_yeti_hit.png-13bf9b45312b370b44977731c0270e64.s3tc.ctex", "res://.godot/imported/forest_yeti_hit.png-13bf9b45312b370b44977731c0270e64.etc2.ctex"]
+dest_files=["res://.godot/imported/forest_yeti_hit.png-13bf9b45312b370b44977731c0270e64.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

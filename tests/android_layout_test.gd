@@ -36,25 +36,41 @@ func _run() -> void:
 	for index in range(4):
 		_assert_touch_target(root.get_node("SkillButton%d" % (index + 1)) as Button, Vector2(100, 56), "技能按钮%d" % (index + 1))
 
-	var received := {"movement": Vector2.ZERO, "attack": 0, "attack_release": 0, "interact": 0, "switch": 0, "auto": true, "skill": -1}
+	var received := {
+		"movement": Vector2.ZERO,
+		"attack": 0,
+		"attack_release": 0,
+		"interact": 0,
+		"switch": 0,
+		"auto": true,
+		"skill_group": "",
+		"skill_index": -1,
+	}
 	hud.movement_changed.connect(func(value: Vector2) -> void: received.movement = value)
 	hud.attack_pressed.connect(func() -> void: received.attack = int(received.attack) + 1)
 	hud.attack_released.connect(func() -> void: received.attack_release = int(received.attack_release) + 1)
 	hud.interact_pressed.connect(func() -> void: received.interact = int(received.interact) + 1)
 	hud.target_switch_pressed.connect(func() -> void: received.switch = int(received.switch) + 1)
 	hud.auto_target_changed.connect(func(enabled: bool) -> void: received.auto = enabled)
-	hud.skill_pressed.connect(func(index: int) -> void: received.skill = index)
+	hud.skill_slot_pressed.connect(
+		func(slot_group: String, slot_index: int) -> void:
+			received.skill_group = slot_group
+			received.skill_index = slot_index
+	)
 	(joystick as TouchJoystick).vector_changed.emit(Vector2(0.75, -0.25))
 	attack.button_down.emit()
 	attack.button_up.emit()
 	interact.button_down.emit()
 	switch_target.pressed.emit()
 	auto_target.toggled.emit(false)
-	(root.get_node("SkillButton3") as Button).pressed.emit()
+	(root.get_node("SkillButton1") as Button).pressed.emit()
 	assert((received.movement as Vector2).is_equal_approx(Vector2(0.75, -0.25)), "摇杆信号没有接入角色移动")
 	assert(int(received.attack) == 1 and int(received.attack_release) == 1 and int(received.interact) == 1, "攻击按下、松开或交互触控接线失败")
 	assert(int(received.switch) == 1 and not bool(received.auto), "换敌或自动选怪开关接线失败")
-	assert(int(received.skill) == 2, "技能触控槽位接线失败")
+	assert(
+		str(received.skill_group) == "center" and int(received.skill_index) == 0,
+		"技能触控槽位分组接线失败"
+	)
 
 	PlayerState._notification(NOTIFICATION_APPLICATION_PAUSED)
 	PlayerState._notification(NOTIFICATION_APPLICATION_FOCUS_OUT)

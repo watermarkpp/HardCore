@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cktwe1edq5bug"
-path.s3tc="res://.godot/imported/appearance_204_race_19_hit.png-4fe3f155740b9d3d974bd6918cf4a3cd.s3tc.ctex"
-path.etc2="res://.godot/imported/appearance_204_race_19_hit.png-4fe3f155740b9d3d974bd6918cf4a3cd.etc2.ctex"
+path="res://.godot/imported/appearance_204_race_19_hit.png-4fe3f155740b9d3d974bd6918cf4a3cd.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_hit.png"
-dest_files=["res://.godot/imported/appearance_204_race_19_hit.png-4fe3f155740b9d3d974bd6918cf4a3cd.s3tc.ctex", "res://.godot/imported/appearance_204_race_19_hit.png-4fe3f155740b9d3d974bd6918cf4a3cd.etc2.ctex"]
+dest_files=["res://.godot/imported/appearance_204_race_19_hit.png-4fe3f155740b9d3d974bd6918cf4a3cd.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

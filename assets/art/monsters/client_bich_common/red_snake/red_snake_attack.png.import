@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cb6te0gyhdts2"
-path.s3tc="res://.godot/imported/red_snake_attack.png-bafdf2168a246eedd7ce60af12ac1b97.s3tc.ctex"
-path.etc2="res://.godot/imported/red_snake_attack.png-bafdf2168a246eedd7ce60af12ac1b97.etc2.ctex"
+path="res://.godot/imported/red_snake_attack.png-bafdf2168a246eedd7ce60af12ac1b97.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_bich_common/red_snake/red_snake_attack.png"
-dest_files=["res://.godot/imported/red_snake_attack.png-bafdf2168a246eedd7ce60af12ac1b97.s3tc.ctex", "res://.godot/imported/red_snake_attack.png-bafdf2168a246eedd7ce60af12ac1b97.etc2.ctex"]
+dest_files=["res://.godot/imported/red_snake_attack.png-bafdf2168a246eedd7ce60af12ac1b97.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

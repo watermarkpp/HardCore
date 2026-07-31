@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://8dgjw3uler2c"
-path.s3tc="res://.godot/imported/skeleton_warrior_hit.png-3a9184218dc4e57bab3e6ed287d5e218.s3tc.ctex"
-path.etc2="res://.godot/imported/skeleton_warrior_hit.png-3a9184218dc4e57bab3e6ed287d5e218.etc2.ctex"
+path="res://.godot/imported/skeleton_warrior_hit.png-3a9184218dc4e57bab3e6ed287d5e218.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_undead/skeleton_warrior/skeleton_warrior_hit.png"
-dest_files=["res://.godot/imported/skeleton_warrior_hit.png-3a9184218dc4e57bab3e6ed287d5e218.s3tc.ctex", "res://.godot/imported/skeleton_warrior_hit.png-3a9184218dc4e57bab3e6ed287d5e218.etc2.ctex"]
+dest_files=["res://.godot/imported/skeleton_warrior_hit.png-3a9184218dc4e57bab3e6ed287d5e218.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

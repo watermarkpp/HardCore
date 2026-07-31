@@ -33,10 +33,15 @@ func _run() -> void:
 		add_child(enemy)
 		enemy.set_physics_process(false)
 		await get_tree().process_frame
-		enemy.set_targeted(true)
 		var fallback_contact := enemy.ground_indicator_center()
 		var fallback_radii := enemy.ground_indicator_radii()
 		assert(enemy.visual.active_resources.is_empty(), "monsterId=%d did not start cold" % monster_id)
+		assert(not enemy.is_targeted, "monsterId=%d cold redraw fixture must remain unselected" % monster_id)
+		assert(fallback_contact.is_zero_approx(), "monsterId=%d fallback ground center drifted south of the canonical foot" % monster_id)
+		assert(
+			not enemy.should_draw_synthetic_ground_shadow(),
+			"monsterId=%d authored cold profile exposed a procedural circular shadow" % monster_id,
+		)
 
 		var prefetch := MonsterVisual.begin_map_prefetch([monster_id])
 		var deadline_msec := Time.get_ticks_msec() + ASYNC_DEADLINE_MSEC
@@ -59,15 +64,28 @@ func _run() -> void:
 		assert(not enemy.visual.active_resources.is_empty(), "monsterId=%d cold art never activated" % monster_id)
 		assert(enemy.visual.uses_final_art(), "monsterId=%d final texture is not visible" % monster_id)
 		assert(not enemy.visual.ground_contact_profile.is_empty(), "monsterId=%d cold ground profile missing" % monster_id)
+		assert(
+			not enemy.should_draw_synthetic_ground_shadow(),
+			"monsterId=%d final WIL profile retained a procedural circular shadow" % monster_id,
+		)
 		var final_contact := enemy.ground_indicator_center()
 		var final_radii := enemy.ground_indicator_radii()
-		assert(final_contact.is_equal_approx(enemy.visual.position + enemy.visual.ground_contact_offset()))
 		assert(
-			not final_contact.is_equal_approx(fallback_contact)
-			or not final_radii.is_equal_approx(fallback_radii),
-			"monsterId=%d retained both fallback center and fallback ellipse" % monster_id,
+			final_contact.is_equal_approx(
+				enemy.visual.target_ring_position(Vector2.ZERO)
+			)
 		)
-
+		if enemy.visual.ground_projection_strategy() == "grounded":
+			assert(
+				final_contact.is_zero_approx(),
+				"monsterId=%d grounded final-art activation moved the target ring off actor origin"
+				% monster_id,
+			)
+		assert(
+			final_radii.is_equal_approx(fallback_radii),
+			"monsterId=%d ring size changed while final art activated"
+			% monster_id,
+		)
 		enemy.queue_free()
 		await get_tree().process_frame
 		MonsterVisual.release_map_pins()
@@ -75,5 +93,5 @@ func _run() -> void:
 
 	MonsterVisual.reset_client_resource_cache()
 	assert(verified_count == 214)
-	print("MONSTER_GROUND_CONTACT_COLD_ACTIVATION_PASS 214 per-ID cold profiles activate and refresh reviewed center/ellipse")
+	print("MONSTER_GROUND_CONTACT_COLD_ACTIVATION_PASS 214 cold profiles preserve canonical targeting origins and footprint-sized rings")
 	get_tree().quit(0)

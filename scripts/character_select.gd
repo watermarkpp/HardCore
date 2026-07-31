@@ -48,6 +48,7 @@ var preview_name_label: Label
 var preview_detail_label: Label
 var teammate_status_label: Label
 var roster_count_label: Label
+var build_fingerprint_label: Label
 var selected_main_profile_id := ""
 var selected_ai_profile_id := ""
 var selected_creation_profession := "战士"
@@ -196,6 +197,32 @@ func _build_header() -> void:
 	archive.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	archive.theme_type_variation = "GothicMutedLabel"
 	content_root.add_child(archive)
+	build_fingerprint_label = Label.new()
+	build_fingerprint_label.name = "BuildFingerprint"
+	build_fingerprint_label.text = _build_fingerprint_text()
+	build_fingerprint_label.position = Vector2(760, 56)
+	build_fingerprint_label.size = Vector2(470, 20)
+	build_fingerprint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	build_fingerprint_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	build_fingerprint_label.theme_type_variation = "GothicMutedLabel"
+	build_fingerprint_label.add_theme_font_size_override("font_size", 11)
+	build_fingerprint_label.add_theme_color_override("font_color", Color("8f7a60"))
+	build_fingerprint_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	build_fingerprint_label.set_meta("build_fingerprint", true)
+	content_root.add_child(build_fingerprint_label)
+
+
+func _build_fingerprint_text() -> String:
+	var app_name := str(ProjectSettings.get_setting("application/config/name", "HardCore"))
+	if app_name.is_empty():
+		app_name = "HardCore"
+	var version := str(ProjectSettings.get_setting("application/config/version", "dev"))
+	if version.is_empty():
+		version = "dev"
+	var revision := str(ProjectSettings.get_setting("application/config/build_revision", "local"))
+	if revision.is_empty():
+		revision = "local"
+	return "%s · v%s · %s" % [app_name, version, revision.left(12)]
 
 
 func _build_roster_panel() -> void:

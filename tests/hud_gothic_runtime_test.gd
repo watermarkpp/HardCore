@@ -57,6 +57,11 @@ func _run() -> void:
 
 	assert(hud.quick_buttons.size() == 4)
 	PlayerState.quick_slots = ["攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"]
+	hud.set_skill_button_assignments({
+		"contract_id": "gameplay.skill.button_assignments.v1",
+		"center": ["攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"],
+		"attack_ring": ["烈火剑法", "半月弯刀", "刺杀剑术"],
+	})
 	hud.update_quick_slots()
 	assert(hud.quick_slot_icons.size() == 4 and hud.attack_ring_skill_icons.size() == 3)
 	for index in range(4):
@@ -67,14 +72,18 @@ func _run() -> void:
 		assert(skill_button.get_meta("activation_mode_source") == "skill.activation_mode")
 		assert(skill_button.get_meta("warrior_policy") == "skill_data_declared")
 		assert(skill_button.get_meta("mage_tao_policy") == "instant_or_toggle")
+		assert(skill_button.text.is_empty(), "职业技能按钮本体不得重复绘制完整技能名")
+		assert(not str(skill_button.get_meta("display_text", "")).is_empty(), "职业技能按钮缺少无障碍/诊断显示文本")
 		var icon := skill_button.get_node("SkillDisc/SkillIcon") as TextureRect
+		var label := skill_button.get_node("SkillDisc/SkillLabel") as Label
 		assert(icon != null and icon.texture != null and icon.visible, "四个职业槽必须显示当前快捷技能素材")
+		assert(label != null and not label.text.is_empty(), "职业技能槽缺少唯一可见的短标签")
 		assert(str(icon.get_meta("skill_icon_id", "")).begins_with("ui.hud.skill_icon.warrior."))
 	hud.update_warrior_states({"fire_armed": true, "fire_expires_remaining_ms": 10000})
-	assert("烈火:充能" in hud.warrior_state_label.text and "[充能]" in hud.quick_buttons[3].text, "烈火快捷栏没有显示一次性充能")
+	assert("烈火:充能" in hud.warrior_state_label.text and "充能" in hud.quick_slot_labels[3].text, "烈火快捷栏没有显示一次性充能")
 	hud.update_warrior_states({"fire_armed": false, "fire_expires_remaining_ms": 0})
-	assert("烈火:未充能·就绪" in hud.warrior_state_label.text and "[未充能·就绪]" in hud.quick_buttons[3].text, "烈火快捷栏没有显示未充能就绪")
-	assert("[开]" not in hud.quick_buttons[3].text and "[关]" not in hud.quick_buttons[3].text, "烈火快捷栏不得再显示开关状态")
+	assert("烈火:未充能·就绪" in hud.warrior_state_label.text and "未充能·就绪" in hud.quick_slot_labels[3].text, "烈火快捷栏没有显示未充能就绪")
+	assert("开" not in hud.quick_slot_labels[3].text and "关" not in hud.quick_slot_labels[3].text, "烈火快捷栏不得再显示开关状态")
 	assert((root.get_node("SkillButton1") as Control).position.y >= 450, "职业技能槽仍然过度侵入战斗区域")
 	var right_controls_art := root.get_node("RightControlsArt") as TextureRect
 	var ring_source_centers: Array[Vector2] = [Vector2(54.5, 445.0), Vector2(79.2, 303.8), Vector2(173.9, 234.9)]
@@ -82,12 +91,22 @@ func _run() -> void:
 		var ring_skill := root.get_node("AttackRingSkill%d" % (index + 1)) as Button
 		assert(ring_skill != null)
 		var ring_icon := ring_skill.get_node("SkillIcon") as TextureRect
-		assert(ring_icon != null and ring_icon.texture == hud.quick_slot_icons[index].texture)
+		var expected_ring_skill: String = ["烈火剑法", "半月弯刀", "刺杀剑术"][index]
+		assert(ring_icon != null and ring_icon.get_meta("skill_name", "") == expected_ring_skill)
+		assert(ring_icon.texture != hud.quick_slot_icons[index].texture, "攻击环错误镜像中央技能槽 %d" % index)
 		assert(ring_icon.position == Vector2(8, 8) and ring_icon.size == Vector2(56, 56), "环绕技能图必须完整覆盖槽内开口")
 		var art_scale := right_controls_art.size / Vector2(347, 540)
 		var expected_center: Vector2 = right_controls_art.position + ring_source_centers[index] * art_scale
 		var actual_center: Vector2 = ring_skill.position + ring_skill.size * 0.5
 		assert(actual_center.distance_to(expected_center) < 1.5, "环绕技能图没有对准V2美术框圆心")
+	var grouped_presses: Array = []
+	hud.skill_slot_pressed.connect(
+		func(slot_group: String, slot_index: int) -> void:
+			grouped_presses.append([slot_group, slot_index])
+	)
+	(root.get_node("SkillButton2") as Button).pressed.emit()
+	(root.get_node("AttackRingSkill3") as Button).pressed.emit()
+	assert(grouped_presses == [["center", 1], ["attack_ring", 2]], "HUD 技能点击没有保留 slot_group")
 	var attack := root.get_node("AttackButton") as Button
 	assert(attack.size == Vector2(120, 120), "攻击按钮视觉直径应保持缩小后的120px")
 	var joystick := root.get_node("TouchJoystick") as TouchJoystick

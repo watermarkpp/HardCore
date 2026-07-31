@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://h1umt3p2c5g7"
-path.s3tc="res://.godot/imported/zuma_taurus_attack.png-5f4efd2d02e0d49fed7bb2c49a9ecf81.s3tc.ctex"
-path.etc2="res://.godot/imported/zuma_taurus_attack.png-5f4efd2d02e0d49fed7bb2c49a9ecf81.etc2.ctex"
+path="res://.godot/imported/zuma_taurus_attack.png-5f4efd2d02e0d49fed7bb2c49a9ecf81.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_classic_bosses/zuma_taurus/zuma_taurus_attack.png"
-dest_files=["res://.godot/imported/zuma_taurus_attack.png-5f4efd2d02e0d49fed7bb2c49a9ecf81.s3tc.ctex", "res://.godot/imported/zuma_taurus_attack.png-5f4efd2d02e0d49fed7bb2c49a9ecf81.etc2.ctex"]
+dest_files=["res://.godot/imported/zuma_taurus_attack.png-5f4efd2d02e0d49fed7bb2c49a9ecf81.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

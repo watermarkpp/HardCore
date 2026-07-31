@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://blbetjurhyd8d"
-path.s3tc="res://.godot/imported/half_orc_walk.png-66431572982bcbd2d3c6d529c987306b.s3tc.ctex"
-path.etc2="res://.godot/imported/half_orc_walk.png-66431572982bcbd2d3c6d529c987306b.etc2.ctex"
+path="res://.godot/imported/half_orc_walk.png-66431572982bcbd2d3c6d529c987306b.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_bich_common/half_orc/half_orc_walk.png"
-dest_files=["res://.godot/imported/half_orc_walk.png-66431572982bcbd2d3c6d529c987306b.s3tc.ctex", "res://.godot/imported/half_orc_walk.png-66431572982bcbd2d3c6d529c987306b.etc2.ctex"]
+dest_files=["res://.godot/imported/half_orc_walk.png-66431572982bcbd2d3c6d529c987306b.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

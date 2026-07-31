@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://f2dblnft0vwg"
-path.s3tc="res://.godot/imported/dung_attack.png-323ec95fc24d65a534c8e10087a60cf5.s3tc.ctex"
-path.etc2="res://.godot/imported/dung_attack.png-323ec95fc24d65a534c8e10087a60cf5.etc2.ctex"
+path="res://.godot/imported/dung_attack.png-323ec95fc24d65a534c8e10087a60cf5.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/art/monsters/client_bich_common/dung/dung_attack.png"
-dest_files=["res://.godot/imported/dung_attack.png-323ec95fc24d65a534c8e10087a60cf5.s3tc.ctex", "res://.godot/imported/dung_attack.png-323ec95fc24d65a534c8e10087a60cf5.etc2.ctex"]
+dest_files=["res://.godot/imported/dung_attack.png-323ec95fc24d65a534c8e10087a60cf5.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

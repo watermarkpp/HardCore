@@ -16,12 +16,21 @@ func _load_json(path: String) -> Dictionary:
 	return parsed
 
 
+func _load_image(path: String, label: String) -> Image:
+	assert(FileAccess.file_exists(path), "%s resource missing: %s" % [label, path])
+	if ResourceLoader.exists(path):
+		var texture := load(path) as Texture2D
+		assert(texture != null, "%s texture failed to load" % label)
+		var imported_image := texture.get_image()
+		assert(imported_image != null and not imported_image.is_empty(), "%s image is empty" % label)
+		return imported_image
+	var image := Image.load_from_file(ProjectSettings.globalize_path(path))
+	assert(image != null and not image.is_empty(), "%s source PNG failed to decode" % label)
+	return image
+
+
 func _assert_transparent_corners(path: String, label: String) -> Image:
-	assert(ResourceLoader.exists(path), "%s resource missing: %s" % [label, path])
-	var texture := load(path) as Texture2D
-	assert(texture != null, "%s texture failed to load" % label)
-	var image := texture.get_image()
-	assert(image != null and not image.is_empty(), "%s image is empty" % label)
+	var image := _load_image(path, label)
 	var corners := [
 		image.get_pixel(0, 0).a,
 		image.get_pixel(image.get_width() - 1, 0).a,
@@ -34,10 +43,7 @@ func _assert_transparent_corners(path: String, label: String) -> Image:
 
 
 func _assert_alpha_layer(path: String, label: String) -> void:
-	assert(ResourceLoader.exists(path), "%s resource missing: %s" % [label, path])
-	var texture := load(path) as Texture2D
-	assert(texture != null, "%s texture failed to load" % label)
-	var image := texture.get_image()
+	var image := _load_image(path, label)
 	var has_transparent := false
 	var has_opaque := false
 	for y: int in image.get_height():

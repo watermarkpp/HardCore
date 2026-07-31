@@ -3,6 +3,7 @@ extends Node
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const EquipmentTestLoadoutCatalogScript = preload("res://scripts/equipment_test_loadout_catalog.gd")
 const TestCharacterSkillProfilesScript = preload("res://scripts/test_character_skill_profiles.gd")
+const SkillLoadoutRulesScript = preload("res://scripts/skill_loadout_rules.gd")
 const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
 const SkillProgressionServiceScript := preload("res://scripts/skills/skill_progression_service.gd")
@@ -20,14 +21,22 @@ signal scroll_requested(item_name: String)
 signal quests_changed
 signal profession_changed(profession: String)
 
-const SAVE_VERSION := 4
+const SAVE_VERSION := 5
 const SAVE_PATH := "user://player_save_v03.json"
 const LEGACY_SAVE_PATH := "user://player_save_v02.json"
 const PROFILE_INDEX_PATH := "user://character_profiles.json"
 const PROFILE_DIRECTORY := "user://characters"
+const TEST_ROSTER_RESET_MARKER_PATH := "user://test_roster_v2_reset.json"
 const AUTOSAVE_INTERVAL := 30.0
 const WARRIOR_RUNTIME_CONTRACT_ID := "gameplay.warrior.skill_runtime.v2"
-const TEST_CHARACTER_ROSTER_CONTRACT_ID := "test.character.roster.full_equipment_skills.v1"
+const TEST_CHARACTER_ROSTER_CONTRACT_ID := "test.character.roster.full_equipment_skills.v2"
+const TEST_ROSTER_RESET_CONTRACT_ID := "test.character.roster.reset.v2"
+const CURRENT_CONTENT_SCHEMA_VERSION := 2
+const SKILL_BUTTON_ASSIGNMENTS_CONTRACT_ID := "gameplay.skill.button_assignments.v2"
+const SKILL_SLOT_GROUP_CENTER := "center"
+const SKILL_SLOT_GROUP_ATTACK_RING := "attack_ring"
+const CENTER_SKILL_SLOT_COUNT := 4
+const ATTACK_RING_SKILL_SLOT_COUNT := 3
 const EQUIPMENT_SLOTS: Array[String] = ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指"]
 const VERIFIED_EXPERIENCE_1_TO_22 := {
 	1: 100, 2: 200, 3: 300, 4: 400, 5: 600, 6: 900, 7: 1200, 8: 1700, 9: 2500,
@@ -51,6 +60,7 @@ var equipment: Dictionary = {
 var learned_skills: Dictionary = {}
 var _skill_progression: RefCounted = SkillProgressionServiceScript.new()
 var quick_slots: Array[String] = ["", "", "", ""]
+var attack_ring_slots: Array[String] = ["", "", ""]
 var warrior_runtime_state: Dictionary = {}
 var quest_states: Dictionary = {}
 var saved_map_id := 4
@@ -63,6 +73,7 @@ var character_name := ""
 var _autosave_elapsed := 0.0
 var profile_index_path := PROFILE_INDEX_PATH
 var profile_directory := PROFILE_DIRECTORY
+var test_roster_reset_marker_path := TEST_ROSTER_RESET_MARKER_PATH
 
 
 func _notification(what: int) -> void:
@@ -83,7 +94,7 @@ func _ready() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(PROFILE_DIRECTORY))
 	_migrate_single_save_to_profile()
 	if OS.is_debug_build() and DisplayServer.get_name() != "headless":
-		ensure_equipment_skill_test_roster()
+		prepare_qa_test_roster_v2()
 	reset_progress(false)
 	recalculate_stats()
 
@@ -102,6 +113,7 @@ func reset_progress(emit_updates := true) -> void:
 	learned_skills = {}
 	_skill_progression.load_snapshot({})
 	quick_slots = ["", "", "", ""]
+	attack_ring_slots = ["", "", ""]
 	warrior_runtime_state = _default_warrior_runtime_state()
 	quest_states = {}
 	saved_map_id = 4
@@ -131,6 +143,9 @@ func select_profession(value: String) -> String:
 	for index in range(quick_slots.size()):
 		if not learned_skills.has(quick_slots[index]):
 			quick_slots[index] = ""
+	for index in range(attack_ring_slots.size()):
+		if not learned_skills.has(attack_ring_slots[index]):
+			attack_ring_slots[index] = ""
 	if profession != "战士":
 		warrior_runtime_state = _default_warrior_runtime_state()
 	var returned_items: Array[String] = []
@@ -1022,10 +1037,11 @@ func save_game() -> void:
 		"learned_skills": learned_skills,
 		"skill_progression": _skill_progression.snapshot(),
 		"quick_slots": quick_slots,
+		"skill_button_assignments": skill_button_assignments_snapshot(),
 		"warrior_runtime_state": warrior_runtime_state,
 		"quest_states": quest_states,
 		"content_packages": ContentLayers.enabled_package_ids(),
-		"content_schema_version": 1,
+		"content_schema_version": CURRENT_CONTENT_SCHEMA_VERSION,
 		"map_id": saved_map_id,
 		"position": [saved_position.x, saved_position.y],
 	}):
@@ -1069,9 +1085,7 @@ func load_save() -> void:
 	if bool(progression_load.get("migrated_legacy", false)) or not parsed.has("skill_progression"):
 		_sync_legacy_learned_skills_from_progression()
 	var saved_slots: Array = parsed.get("quick_slots", ["", "", "", ""])
-	quick_slots = ["", "", "", ""]
-	for index in range(mini(4, saved_slots.size())):
-		quick_slots[index] = str(saved_slots[index])
+	_restore_skill_button_assignments(parsed.get("skill_button_assignments", {}), saved_slots)
 	warrior_runtime_state = _normalized_warrior_runtime_state(parsed.get("warrior_runtime_state", {}))
 	quest_states = parsed.get("quest_states", {})
 	saved_map_id = int(parsed.get("map_id", 4))
@@ -1082,7 +1096,12 @@ func load_save() -> void:
 		saved_position = Vector2.ZERO
 	character_name = str(parsed.get("character_name", character_name))
 	_migrate_quest_states()
-	if load_path == LEGACY_SAVE_PATH or not parsed.has("skill_progression"):
+	if (
+		load_path == LEGACY_SAVE_PATH
+		or not parsed.has("skill_progression")
+		or not parsed.has("skill_button_assignments")
+		or int(parsed.get("content_schema_version", 0)) < CURRENT_CONTENT_SCHEMA_VERSION
+	):
 		_commit_save()
 	recalculate_stats()
 
@@ -1090,6 +1109,8 @@ func load_save() -> void:
 func apply_quick_slot_assignment(result: Dictionary) -> bool:
 	if not bool(result.get("ok", false)):
 		return false
+	if result.get("assignments", null) is Dictionary:
+		return apply_skill_button_assignment(result)
 	var change: Dictionary = result.get("change", {})
 	if str(change.get("contract_id", "")) != "gameplay.skill.quick_slot_assignment.v1":
 		return false
@@ -1108,6 +1129,93 @@ func apply_quick_slot_assignment(result: Dictionary) -> bool:
 	profile_changed.emit()
 	_commit_save()
 	return true
+
+
+func apply_skill_button_assignment(result: Dictionary) -> bool:
+	if not bool(result.get("ok", false)):
+		return false
+	var change: Dictionary = result.get("change", {})
+	if str(change.get("contract_id", "")) != SKILL_BUTTON_ASSIGNMENTS_CONTRACT_ID:
+		return false
+	var assignments_value: Variant = result.get("assignments", {})
+	if not assignments_value is Dictionary:
+		return false
+	var normalized := _normalized_skill_button_assignments(assignments_value, quick_slots)
+	var next_center := _normalized_skill_slot_array(
+		normalized.get(SKILL_SLOT_GROUP_CENTER, []),
+		CENTER_SKILL_SLOT_COUNT
+	)
+	var next_ring := _normalized_skill_slot_array(
+		normalized.get(SKILL_SLOT_GROUP_ATTACK_RING, []),
+		ATTACK_RING_SKILL_SLOT_COUNT
+	)
+	for skill_name: String in next_center + next_ring:
+		if not skill_name.is_empty() and not is_skill_learned(skill_name):
+			return false
+	quick_slots = next_center
+	attack_ring_slots = next_ring
+	quick_slots_changed.emit(change.duplicate(true))
+	skills_changed.emit()
+	profile_changed.emit()
+	_commit_save()
+	return true
+
+
+func skill_button_assignments_snapshot() -> Dictionary:
+	return {
+		"contract_id": SKILL_BUTTON_ASSIGNMENTS_CONTRACT_ID,
+		SKILL_SLOT_GROUP_CENTER: quick_slots.duplicate(),
+		SKILL_SLOT_GROUP_ATTACK_RING: attack_ring_slots.duplicate(),
+	}
+
+
+func skill_slots_for_group(slot_group: String) -> Array[String]:
+	if slot_group == SKILL_SLOT_GROUP_ATTACK_RING:
+		return attack_ring_slots.duplicate()
+	return quick_slots.duplicate()
+
+
+func skill_name_for_slot(slot_group: String, slot_index: int) -> String:
+	var slots := skill_slots_for_group(slot_group)
+	if slot_index < 0 or slot_index >= slots.size():
+		return ""
+	return slots[slot_index]
+
+
+func _restore_skill_button_assignments(assignments_value: Variant, legacy_center: Array) -> void:
+	var normalized := _normalized_skill_button_assignments(assignments_value, legacy_center)
+	quick_slots = _normalized_skill_slot_array(
+		normalized.get(SKILL_SLOT_GROUP_CENTER, []),
+		CENTER_SKILL_SLOT_COUNT
+	)
+	attack_ring_slots = _normalized_skill_slot_array(
+		normalized.get(SKILL_SLOT_GROUP_ATTACK_RING, []),
+		ATTACK_RING_SKILL_SLOT_COUNT
+	)
+
+
+func _normalized_skill_button_assignments(assignments_value: Variant, legacy_center: Array) -> Dictionary:
+	var source := SkillLoadoutRulesScript.normalize_assignments(assignments_value, legacy_center)
+	var center_value: Variant = source.get(SKILL_SLOT_GROUP_CENTER, legacy_center)
+	var ring_value: Variant = source.get(SKILL_SLOT_GROUP_ATTACK_RING, legacy_center)
+	return {
+		SKILL_SLOT_GROUP_CENTER: _normalized_skill_slot_array(
+			center_value,
+			CENTER_SKILL_SLOT_COUNT
+		),
+		SKILL_SLOT_GROUP_ATTACK_RING: _normalized_skill_slot_array(
+			ring_value,
+			ATTACK_RING_SKILL_SLOT_COUNT
+		),
+	}
+
+
+func _normalized_skill_slot_array(value: Variant, expected_size: int) -> Array[String]:
+	var result: Array[String] = []
+	var source: Array = value if value is Array else []
+	for index in range(expected_size):
+		result.append(str(source[index]) if index < source.size() else "")
+	return result
 
 
 func apply_warrior_runtime_state(snapshot: Dictionary, persist := false) -> bool:
@@ -1181,6 +1289,81 @@ func list_characters() -> Array[Dictionary]:
 	return result
 
 
+func prepare_qa_test_roster_v2() -> Dictionary:
+	var marker := _read_json(test_roster_reset_marker_path)
+	var reset_performed := false
+	var archive_path := ""
+	if str(marker.get("contract_id", "")) != TEST_ROSTER_RESET_CONTRACT_ID:
+		var archive_result := _archive_current_test_profiles()
+		if not bool(archive_result.get("ok", false)):
+			return {
+				"ok": false,
+				"contract_id": TEST_CHARACTER_ROSTER_CONTRACT_ID,
+				"reason": str(archive_result.get("reason", "archive_failed")),
+			}
+		reset_performed = true
+		archive_path = str(archive_result.get("archive_path", ""))
+	var roster_result := ensure_equipment_skill_test_roster()
+	var profiles := list_characters()
+	var ready := profiles.size() == 9 and int(roster_result.get("total", 0)) == 9
+	if ready:
+		_write_json_atomic(test_roster_reset_marker_path, {
+			"contract_id": TEST_ROSTER_RESET_CONTRACT_ID,
+			"roster_contract_id": TEST_CHARACTER_ROSTER_CONTRACT_ID,
+			"reset_at": int(Time.get_unix_time_from_system()),
+			"archive_path": archive_path if reset_performed else str(marker.get("archive_path", "")),
+			"profile_count": profiles.size(),
+		})
+	roster_result["ok"] = ready
+	roster_result["reset_performed"] = reset_performed
+	roster_result["archive_path"] = archive_path
+	return roster_result
+
+
+func _archive_current_test_profiles() -> Dictionary:
+	var timestamp := "%d_%d" % [int(Time.get_unix_time_from_system()), Time.get_ticks_usec()]
+	var archive_root := profile_directory.get_base_dir().path_join("test_roster_archives").path_join(timestamp)
+	var archive_characters := archive_root.path_join("characters")
+	var archive_absolute := ProjectSettings.globalize_path(archive_characters)
+	if DirAccess.make_dir_recursive_absolute(archive_absolute) != OK:
+		return {"ok": false, "reason": "archive_directory_failed"}
+	var source_absolute := ProjectSettings.globalize_path(profile_directory)
+	if DirAccess.dir_exists_absolute(source_absolute):
+		var source_directory := DirAccess.open(profile_directory)
+		if source_directory == null:
+			return {"ok": false, "reason": "profile_directory_open_failed"}
+		for file_name: String in source_directory.get_files():
+			var source_path := source_absolute.path_join(file_name)
+			var target_path := archive_absolute.path_join(file_name)
+			if DirAccess.rename_absolute(source_path, target_path) != OK:
+				return {"ok": false, "reason": "profile_archive_failed", "file": file_name}
+		DirAccess.remove_absolute(source_absolute)
+	for root_path: String in [
+		profile_index_path,
+		profile_index_path + ".bak",
+		profile_index_path + ".tmp",
+		SAVE_PATH,
+		SAVE_PATH + ".bak",
+		SAVE_PATH + ".tmp",
+		LEGACY_SAVE_PATH,
+		LEGACY_SAVE_PATH + ".bak",
+		LEGACY_SAVE_PATH + ".tmp",
+	]:
+		if not FileAccess.file_exists(root_path):
+			continue
+		var target_name := root_path.get_file()
+		var target_path := ProjectSettings.globalize_path(archive_root.path_join(target_name))
+		if DirAccess.rename_absolute(ProjectSettings.globalize_path(root_path), target_path) != OK:
+			return {"ok": false, "reason": "root_save_archive_failed", "file": root_path}
+	DirAccess.make_dir_recursive_absolute(source_absolute)
+	active_profile_id = ""
+	character_name = ""
+	return {
+		"ok": true,
+		"archive_path": archive_root,
+	}
+
+
 func ensure_equipment_skill_test_roster() -> Dictionary:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(profile_directory))
 	var index := _read_json(profile_index_path)
@@ -1197,7 +1380,7 @@ func ensure_equipment_skill_test_roster() -> Dictionary:
 			continue
 		var loadout: Dictionary = loadout_value
 		var skill_tier := _skill_tier_for_equipment_tier(str(loadout.get("tierId", "")))
-		var skill_profile := TestCharacterSkillProfilesScript.profile_for_character(
+		var skill_profile := TestCharacterSkillProfilesScript.qa_v2_profile_for_character(
 			str(loadout.get("profession", "")),
 			skill_tier
 		)
@@ -1212,7 +1395,7 @@ func ensure_equipment_skill_test_roster() -> Dictionary:
 		)
 		var profile_entry := {
 			"id": profile_id,
-			"name": str(loadout.get("characterName", profile_id)),
+			"name": str(skill_profile.get("character_name", profile_id)),
 			"profession": str(loadout.get("profession", "")),
 			"gender": str(loadout.get("gender", "男")),
 			"level": character_level,
@@ -1253,6 +1436,10 @@ func _test_character_payload(loadout: Dictionary, skill_profile: Dictionary, pro
 	var warrior_state := _default_warrior_runtime_state()
 	if str(runtime_defaults.get("contract_id", "")) == WARRIOR_RUNTIME_CONTRACT_ID:
 		warrior_state = _normalized_warrior_runtime_state(runtime_defaults)
+	var assignments := SkillLoadoutRulesScript.normalize_assignments(
+		skill_profile.get("button_assignments", {})
+	)
+	var center_slots: Array = assignments.get(SKILL_SLOT_GROUP_CENTER, [])
 	return {
 		"save_version": SAVE_VERSION,
 		"profile_id": str(profile_entry.get("id", "")),
@@ -1272,7 +1459,8 @@ func _test_character_payload(loadout: Dictionary, skill_profile: Dictionary, pro
 		"warehouse_inventory": [],
 		"equipment": equipment_data,
 		"learned_skills": skill_profile.get("learned_skills", {}).duplicate(true),
-		"quick_slots": skill_profile.get("quick_slots", []).duplicate(),
+		"quick_slots": center_slots.duplicate(),
+		"skill_button_assignments": assignments.duplicate(true),
 		"warrior_runtime_state": warrior_state,
 		"test_runtime_defaults": runtime_defaults.duplicate(true),
 		"test_contracts": {
@@ -1282,7 +1470,7 @@ func _test_character_payload(loadout: Dictionary, skill_profile: Dictionary, pro
 		},
 		"quest_states": {},
 		"content_packages": ContentLayers.enabled_package_ids(),
-		"content_schema_version": 1,
+		"content_schema_version": CURRENT_CONTENT_SCHEMA_VERSION,
 		"map_id": 4,
 		"position": [0.0, 0.0],
 	}
@@ -1302,7 +1490,7 @@ func ensure_developer_test_character()->void:
 		if skill is Dictionary:all_skills[str(skill.get("skillName",""))]=3
 	var slots:Array[String]=["攻杀剑术","刺杀剑术","半月弯刀","烈火剑法"]
 	var now:=int(Time.get_unix_time_from_system())
-	var payload:={"save_version":SAVE_VERSION,"profile_id":profile_id,"character_name":"测试战士30级","updated_at":now,"level":30,"profession":"战士","gender":"男","later_content_enabled":false,"game_mode_id":"classic_176","experience":0,"gold":100000,"inventory":[],"warehouse_inventory":[],"equipment":equipment_data,"learned_skills":all_skills,"quick_slots":slots,"quest_states":{},"content_packages":ContentLayers.enabled_package_ids(),"content_schema_version":1,"map_id":4,"position":[0.0,0.0]}
+	var payload:={"save_version":SAVE_VERSION,"profile_id":profile_id,"character_name":"测试战士30级","updated_at":now,"level":30,"profession":"战士","gender":"男","later_content_enabled":false,"game_mode_id":"classic_176","experience":0,"gold":100000,"inventory":[],"warehouse_inventory":[],"equipment":equipment_data,"learned_skills":all_skills,"quick_slots":slots,"quest_states":{},"content_packages":ContentLayers.enabled_package_ids(),"content_schema_version":CURRENT_CONTENT_SCHEMA_VERSION,"map_id":4,"position":[0.0,0.0]}
 	if not _write_json_atomic(_profile_path(profile_id),payload):return
 	var index:=_read_json(profile_index_path);var profiles:Array=index.get("profiles",[])
 	var replaced:=false
@@ -1344,7 +1532,7 @@ func ensure_zuma_test_character() -> void:
 		"gold": 100000, "inventory": [{"name": "太阳水", "count": 10}], "warehouse_inventory": [],
 		"equipment": equipment_data, "learned_skills": all_skills,
 		"quick_slots": ["攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"], "quest_states": {},
-		"content_packages": ContentLayers.enabled_package_ids(), "content_schema_version": 1,
+		"content_packages": ContentLayers.enabled_package_ids(), "content_schema_version": CURRENT_CONTENT_SCHEMA_VERSION,
 		"map_id": 4, "position": [0.0, 0.0],
 	}
 	if not _write_json_atomic(_profile_path(profile_id), payload):

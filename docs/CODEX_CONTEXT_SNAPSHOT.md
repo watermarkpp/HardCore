@@ -1,9 +1,98 @@
 # Codex 精简上下文快照
 
-更新时间：2026-07-28 21:25（Asia/Shanghai）
+更新时间：2026-07-31（Asia/Shanghai）
 
 用途：给主任务和专业工作树提供快速、可核实的启动索引，减少重复扫描和重复测试。
 准确性规则：本文件不是代码或 Git 状态的替代品；只核实本次任务实际触及的分支、文件、接口和专项测试。
+
+## 2026-07-31 Android v46 怪物人工脚点坐标归一化
+
+- 怪物专业提交 `97734d8a` 在只读加载阶段重放历史校准台的 S 向预览位移，并在视觉脚点向量中等量抵消；怪物实体、碰撞、攻击判定和目标黄圈继续以 actor-local `(0,0)` 为唯一脚点。UI 专业提交 `14984c0c` 已作为 `bb3d682f` 集成，使验收台和游戏使用完全相同的变换链。
+- 人物没有接入怪物历史位移重放。正式人物常量继续为 `runtimeVisualPosition=(7.5,12.5)`、`visualFootAnchorAdjustment=(-7.5,-12.5)`，最终脚点仍为 `(0,0)`；人物脚点、比奇边界、通用边界、等距碰撞、投射物命中链和移动目标选择回归与怪物/UI 联动合计 12/12 通过。
+- 212 份人工怪物草稿及三份正式怪物脚点合同未被重写；三份正式合同 SHA-256 继续为 `DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。人物人工草稿 SHA-256 继续为 `5D01E19C509E9C970B928475263E233552EE50A00BE7C04FD3BF6BD1CFD088A4`。
+- APK 从固定提交 `6a983c60da2dd29388ffe25048f1d6f443a7a300` 的全新隔离工作树导出：`outputs/hardcore/HardCore-v46-monster-foot-normalized-debug.apk`，大小 `244,215,702` 字节，SHA-256 `C3C1BB1CD768AE217A053F7427A178C5DC04424BB968673E6385A095A7058444`。
+- 包信息为 `versionCode=46`、`versionName=1.17.10-monster-foot-normalized`、`com.personal.mafaoffline`、`HardCore`；APK v2/v3 签名和运行时资源探针通过，包内三份怪物脚点合同与源文件逐字节同哈希，人物脚点合同语义逐字段一致。已对连接的 HONOR 90 保留数据覆盖安装并成功启动，前台活动为 `GodotAppLauncher`，近期日志无 Godot 脚本错误或崩溃。
+
+## 2026-07-30 Android v42 坐标隔离测试包
+
+- Android 版本提交为 `aa0914bf`：`versionCode=42`、`versionName=1.17.6-target-coordinate-isolation`，包名继续为 `com.personal.mafaoffline`，应用名继续为 `HardCore`。
+- APK 从固定提交 `aa0914bf788728294ad1e2a7d0f85488bb00f878` 的全新隔离工作树导出：`outputs/hardcore/HardCore-v42-target-coordinate-isolation-debug.apk`，大小 `244,198,886` 字节，SHA-256 `6FEA504954E52019E5A6415829000CDC7823F002F8B03990690191D68383CB4E`。
+- APK v2/v3 签名、arm64-v8a、minSdk 24、targetSdk 36、横屏/可调整窗口和运行时资源探针通过；12 个关键编译脚本、男性 `Hair.wil block 4`、纸娃娃 base/hair/head patch、世界头盔隐藏和 586 帧施法资源均在包内。
+- 已通过项目内 ADB 对连接的 HONOR 90（REA-AN00）执行保留数据覆盖安装并启动。手机端回读为 v42，`GodotAppLauncher` 位于前台，应用进程正常，近期日志未发现崩溃或 Godot 脚本错误。
+- 构建前后人物脚点草稿、两份抽检怪物草稿和三份怪物正式脚点合同 SHA-256 保持不变。
+
+## 2026-07-30 怪物黄圈坐标链最终解耦
+
+- 本节覆盖下方早期“地面黄圈直接采用人工视觉脚点”的实现记录。怪物专业提交 `f195a961` 已作为集成提交 `1fc2dfa5` 接入：地面怪物的实时目标黄圈中心固定为怪物 `CharacterBody2D` / 碰撞脚印的本地物理原点 `(0,0)`；`visualRootOffset`、`visualFootOffset`、Sprite 锚点、动作、方向和帧只能移动外观，禁止再推动目标黄圈。飞行/悬浮怪物继续使用明确的地面投影。
+- 黄圈大小规则未变：仍为对应怪物 2:1 物理脚印半径的 `1.25` 倍，所以体型差异只影响半径，不影响中心。怪物专项会主动扰动视觉根位置、Sprite 锚点和视觉脚点，证明地面黄圈仍保持 `(0,0)`。
+- UI 专业提交 `a971ad44` 已作为集成提交 `56ae1fb8` 接入。视觉验收台现在分别显示并报告：人工视觉脚点、怪物物理原点、游戏实时目标黄圈；状态区独立给出“黄圈-目标”和“脚点-原点”差值，并标明当前动作/方向/帧是否等于保存时的校准姿态，不再用同一份人工偏移同时构造参考值与实际值。
+- 真实集成回归 10/10 通过：验收台、214 怪物冷热加载、五动作八方向、比奇普通怪、亡灵、完整客户端美术、尸王、怪物等距脚印、比奇地面坐标和共享角色脚印合同。
+- 冻结数据零变化：`monster_21.json` / `monster_23.json` SHA-256 仍为 `C531C41C914261766626BE87E7BC2741D72531CD9893F7C599E5141F65ADB32E` / `DCAC46EB2688458F33516AD1C37685D8F83C7CAD96FE86A3FBD36C5B284E0FCE`；三份正式合同仍为 `DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+
+## 2026-07-30 怪物人工脚点二次冻结与目标光圈同心
+
+- 用户重新完成的 212 份怪物脚点草稿已成为唯一最新人工基线，源草稿聚合 SHA-256 为 `0993DD6600091B584F247CDA02B0AFEABB164E73952FEB87C57A886AAD515E7A`；只读导入前后聚合哈希一致。后续生成器、校准器、缓存和旧合同均禁止覆盖这些人工值。
+- 怪物专业提交 `90f3f716` 已作为集成提交 `b478b7cc` 接入：地面怪物的黄色目标光圈中心直接采用人工视觉脚点；飞行/悬浮怪物继续保留已有投影关系。黄色目标光圈半径固定为对应怪物 2:1 物理脚印半径的 `1.25` 倍，因此中心完全相同、长宽同比放大，并随每只怪物的碰撞体积自然变化。
+- UI 专业提交 `dabd8872` 已作为集成提交 `ed3d850e` 接入：视觉验收台橙色正式光圈直接读取游戏运行时目标光圈的中心与半径，不再维护第二套诊断坐标。
+- 真实集成基线检查通过：精确草稿导入、v5 合同生成、怪物专项 10/10，以及 UI/怪物联动 2/2。人物脚点草稿 SHA-256 仍为 `5D01E19C509E9C970B928475263E233552EE50A00BE7C04FD3BF6BD1CFD088A4`；236/240 头盔草稿继续冻结且未被暂存。
+- Android v41 测试包从固定提交 `233d4539` 的全新隔离工作树导出：`outputs/hardcore/HardCore-v41-monster-ring-foot-debug.apk`，大小 `244,198,886` 字节，SHA-256 `F668B92EECF0A071E14E08C3912DD7BF98AC582C378118B010DB4A638BC92FA6`；`versionCode=41`、`versionName=1.17.5-monster-ring-foot`。APK v2/v3 签名和运行时资源探针通过，已对连接的 HONOR 90 保留数据覆盖安装并成功启动。
+- 最新人工脚点已完整备份到 `outputs/visual_acceptance/backups/monster_feet_20260730_191500.zip`：包含 212 份原始草稿、3 份正式运行时合同和逐文件哈希清单，ZIP SHA-256 为 `DB9276E4E12AB4F4D8DD0EAF56BDFC9EE6690092EEB6A15F49E87B8CDE212D91`。
+- UI 专业提交 `f248cdf6` / `8d5c82cd` 已作为集成提交 `4a8b5d75` / `5ee31695` 接入。验收台专用启动参数 `-MonsterGroundReview` 会直接进入怪物模式：青十字显示人工保存脚点，黄色椭圆与黄色小十字显示游戏实际目标光圈；两者不一致时绘制红色连接线，并在状态区显示 X/Y 差值。214 个怪物均可切换，212 个读取人工草稿，2 个读取正式飞行投影合同。
+
+## 2026-07-30 Android v40 怪物地面层修复包
+
+- 怪物专业提交 `5c1436ab` 已由集成提交 `8a803ce2` 接入；Android 版本提交为 `7d75f307`。正式 WIL 素材等待异步加载时不再生成旧程序圆影，临时光圈中心统一使用标准脚点 `(0,0)`，贴图激活/释放会为未选中怪物无条件刷新缓存的地面绘制层。
+- APK 从固定提交 `7d75f307` 的全新隔离工作树导出：`outputs/hardcore/HardCore-v40-ground-layer-fix-debug.apk`，大小 `244,194,790` 字节，SHA-256 `BAAE73D036AF2F67ADC38D9095AB2BDA044D80FF30C53ED7DFD78BDE52113AFA`。
+- 包信息为 `versionCode=40`、`versionName=1.17.4-ground-layer-fix`、包名 `com.personal.mafaoffline`、应用名 `HardCore`、`arm64-v8a`、`minSdk=24`、`targetSdk=36`；APK v2/v3 签名、12 个编译脚本与运行时资源探针通过。
+- 集成专项 9/9 通过：214 怪物冷激活/正式脚点/覆盖、等距物理、比奇普通怪/亡灵、兽人古墓运行画面和地图怪物预取。完整怪物套件中的3个旧失败已在未修改的 v39 基线复现，属于旧 Boss/人物下沉断言，不是本次回归。
+- 212 份人工怪物脚点及两份正式地面合同保持冻结，三份相关 JSON 的 SHA-256 分别保持 `9A3144C27546F61FFB1723880106C965987D7689A78C83CC883EB358E0F01BEF`、`FDBB233ED951C969CB35C950E8D682AB69C97BE2466262A0BE257A2BD6A89152`、`04477F070BBFD0D89048AD11459338BF53CFECF1F7282899061261C6EACDD909`。
+- 已通过 ADB 对连接的 HONOR 90 执行保留数据覆盖安装并启动；手机端回读确认 `versionCode=40`、`versionName=1.17.4-ground-layer-fix`。
+
+## 2026-07-30 Android v39 怪物脚点测试包
+
+- APK 从固定集成提交 `eaf42c0a` 的全新隔离工作树导出：`outputs/hardcore/HardCore-v39-monster-feet-debug.apk`，大小 `244,194,790` 字节，SHA-256 `D347862CCA2E712107E8328AAA12E5EFD0EDB650AF8AE7C774AD3BCAC018809F`。
+- 包信息为 `versionCode=39`、`versionName=1.17.3-boundary-fix`、包名 `com.personal.mafaoffline`、应用名 `HardCore`、`arm64-v8a`、`minSdk=24`、`targetSdk=36`；APK v2/v3 签名、运行时资源探针和横屏/可调整尺寸合同通过。
+- APK 内 `monster_ground_alignment_manual_v1.json`、`monster_ground_contact_calibrations.json`、`monster_ground_contacts.json` 与 `complete_monster_client_art_sources.json` 的 SHA-256 均与构建提交逐字节一致，确认最新 212 份怪物脚点及牛魔碎片素材进入安装包。
+- 已通过 ADB 对连接的 HONOR 90 执行保留数据覆盖安装；手机端回读确认 `versionCode=39`、`versionName=1.17.3-boundary-fix` 和最新更新时间。
+
+## 2026-07-30 怪物人工脚点正式接入与动画修复
+
+- 最新怪物专业提交 `5f912b41` 已由集成提交 `3312f0ab` 接入；此前怪物专业提交 `19be26ed` / UI 专业提交 `ff707360` 分别由集成提交 `ee09aefd` / `072c1289` 接入。
+- 用户完成的 212 份 `monster_<id>.json` 校准草稿已只读导入 `monster.ground_alignment.manual.v1`，最新源文件聚合 SHA-256 为 `B5229D08E7C1DFBC36D3C50C45A14A81AE46CAE8C84EFEBB42204EA38408FE00`。最新精确更新牛头魔 `210/211`、牛魔侍卫 `216/217`、牛魔将军 `218/219`、牛魔法师 `220/221`；其余 204 份正式人工数据逐条不变。其他牛系列未重新保存的草稿继续使用已加载正式值；仅飞行投影的猎鹰 `monster_id=97/98` 保留原有离地关系。
+- 正式运行时升级为 `monster.ground_contact.v5` / `monster.ground_contact.calibration.v5`：普通怪/Boss 基础视觉原点、用户 `visualRootOffset`、视觉脚点和光圈中心各只应用一次；验收台识别已正式导入的同哈希草稿，禁止二次叠加偏移。
+- 祖玛教主使用主资料 `Mon7.wil` 中物化前缀之后的正确动作段：idle/walk/attack/hit/death 起始帧为 `1340/1420/1500/1580/1600`，并锁定原 `384×336` 画布与 `[114,237]` 脚点，避免破坏用户坐标。
+- 所有怪物 Sprite2D 启用图集区域过滤裁切，阻止牛魔系列相邻格碎片渗入。牛魔将军 `monster_id=218/219` 共用的 `appearance=204/raceImg=19/MA19` 五动作图集进一步仅移除不超过 48 像素的 8 连通孤立碎片，共 962 块/3813 像素；原 `272×272` 单帧画布、`[84,143]` 脚点、人工脚点参数和全部缩放策略保持不变。触龙神原素材多帧齐全；验收台仅在预览时解除潜伏隐藏以便查看 idle/attack/death，游戏内钻地机制不变。
+- 最新集成验收：精确草稿导入检查、v5 数据生成检查、214 怪物/40,144 帧几何审计和怪物运行时专项 8/8 全部通过。98 个冻结头盔文件在本轮没有被暂存或修改。
+
+## 2026-07-30 本地视觉验收台
+
+- UI 专业提交 `cd168dd4` 已由集成提交 `ff235d1a` 接入。本地入口为 `tools/run_visual_acceptance_lab.ps1`，独立场景为 `tools/visual_acceptance_lab/visual_acceptance_lab.tscn`；不修改 `project.godot`，不写角色存档、校准草稿或正式素材。
+- 当前最小版本直接实例化正式 `PlayerCharacter` / `PlayerVisual` 运行时合成，覆盖战士、法师、道士，`idle/walk/attack/cast/hit/death` 六动作与八方向；支持 25%/50%/100%/200% 播放、逐帧、1–4 倍显示、三种背景、一键重载正式素材和截图。
+- 播放驱动修复已由 UI 提交 `1d86eba5` / `05731bbf`、集成提交 `677ae9d6` / `f8a11079` 接入：使用 `PROCESS_MODE_ALWAYS` 的独立 60 Hz 计时器驱动正式视觉帧，初始 3× 显示倍率真实应用，并由真实 SceneTree 时间推进、正式身体贴图区域切换和预览缩放回归覆盖“按钮切换但人物不动”。
+- 人物脚点手动对齐由 UI 提交 `7855c2a9`、集成提交 `60348875` 接入：黄色角色地面原点、粉色 `36×18` 物理脚印和蓝色 `64×32` 地图菱形中心固定为同一 `(0,0)`；用户先点击鞋底中点定义蓝色视觉脚点，再拖动整套人物视觉或用方向键按 `0.5px` 微调使蓝黄重合。用户最终草稿 SHA-256 `5D01E19C509E9C970B928475263E233552EE50A00BE7C04FD3BF6BD1CFD088A4` 已由正式合同 `player.visual_ground_alignment.manual.v1` 和集成提交 `7de58783` 接入：人物视觉偏移 `(+7.5,+8.5)`、脚点修正 `(-7.5,-12.5)`，最终视觉脚点为 `(0,0)`；UI 提交 `52910b19` / `c8674538` 与集成提交 `db6b93a3` / `f874b275` 保证重开工具不会二次叠加该偏移。
+- 辅助层同时显示角色坐标、正式视觉脚点、`18×9` 物理脚印、64×32 地面菱形与当前帧边界，用于直接暴露外观锚点和物理坐标漂移。截图只写入 `outputs/visual_acceptance/**`。
+- UI 工作树与真实集成基线专项通过；正式接入最终回归 6/6：`player_visual_ground_alignment_test`、两项等距物理/脚印合同、`ui_visual_acceptance_lab_test`、`player_three_profession_visual_catalog_test`、`equipment_world_helmet_hidden_hair_test`。
+- `item_236.json` / `item_240.json` 冻结 SHA-256 仍分别为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC` 与 `81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`，本任务未修改任何头盔草稿或生成图。
+
+## 2026-07-30 v38 无损精简发布
+
+- 集成提交：`5137be3d`（怪物图集改用无损导入）、`a2b29e83`（Android v38 与生产排除规则）、`2bf81def`（APK 资源完整性验证与可选基线变化证明分离）。APK 对应运行时提交为 `a2b29e83`。
+- 最终 APK：`outputs/hardcore/HardCore-slim-v38-debug.apk`；`244,091,990` 字节（232.78 MiB）；SHA-256 `562082FD18DC51ECB65F00F610EDF82295B9A92FDA98BDB0B1D73C5765FA4D43`；`versionCode=38`、`versionName=1.17.2-slim`、包名 `com.personal.mafaoffline`、应用名 `HardCore`，v2/v3 签名均通过。
+- 相比 v37 的 `1,648,238,897` 字节减少 `1,404,146,907` 字节（约 85.2%）。核心收益来自 580 张怪物 PNG 的 Godot 无损压缩导入：编译纹理由约 1,303.12 MiB 降至 78.06 MiB；原 PNG 聚合哈希、580 个 `.uid`、像素和运行时稳定 ID 均未改变。
+- 生产排除仅覆盖确定不参与运行时的地图原始批次、staging `source/rgba_native`、调色板源图、墙体预览及 UI/装备设计源文件；地图运行时 fallback 所需的 174 个 `editor_canvas` 导入全部保留。
+- APK 独立资源探针通过：12 个关键编译脚本、男性 `Hair.wil block 4` 六动作、世界头盔隐藏、纸娃娃 base/hair、12 个头盔 patch、586 帧技能动画、580 个怪物 CTEX 均存在；怪物 CTEX 不含 ETC2/S3TC/VRAM 压缩标记。
+- 当前真实集成基线验证：怪物专项 15/15、地图/怪物定向专项 4/4、完整关键回归 74/74 全部通过。14 份冻结头盔草稿/正式合同、视觉目录与纸娃娃头部 patch 构建前后 SHA-256 零变化。
+- 清理完成：删除所有旧 APK、旧视频/截图/日志/重建预览、未跟踪旧审计快照，以及主树和现存工作树的可再生 `.godot`/`outputs` 缓存；保留最终 v38 APK、`complete_local_mir_sources`、`complete_client_frame_catalog`、永久工作树、所有 dirty/冻结素材和 `dev_art_sources` 只读主资料。
+
+## 2026-07-29 v37 运行时实证修复
+
+- 集成运行时提交：`53514548`；Android `versionCode=37`、`versionName=1.17.1-runtime-proof`，角色选择页显示 `release.runtime-proof.v37` 构建指纹。
+- APK：`outputs/hardcore/HardCore-runtime-proof-v37-debug.apk`；SHA-256 `6E12C921D7A234E6C508DEE76AB1331E81D7B16B96865E78F9F8B1D1E4D76456`；大小 `1,648,238,897` 字节；包名继续为 `com.personal.mafaoffline`，签名 v2/v3 通过。
+- 存档升级到 v5：中央技能栏 4 格与攻击环 3 格独立保存和触发；旧四格档只迁移一次。debug APK 首次启动会把旧测试人物移入 `user://test_roster_archives/`，清空活动索引并严格生成 9 个 `test.character.<profession>.<tier>.v2` 人物；战士/法师/道士分别为 6/14/13 个完整技能。
+- 纸娃娃 classic base 与男性头发改为编译期 preload，动态资源失败时再走正式 world-avatar 可见回退，禁止静默空白；角色选择、背包和 HUD 生产入口均有回归。
+- 玩家施法改用 canonical 学习状态；新增真实角色→HUD→Player→GameRoot 技能结算和 Enemy→Player 三帧受击硬直 E2E。世界人物继续隐藏所有头盔层并使用主资料库男性 `Hair.wil block 4` 六动作。
+- 当前集成专项 15/15、完整关键回归 74/74；独立 APK 探针确认 12 个关键编译脚本变化、世界头盔四项 `false`、男性头发六动作、纸娃娃 base/hair 与 12 个头盔 patch、586 帧技能动画。14 份冻结头盔草稿/正式合同 SHA-256 全部零变化。
+- APK 从固定提交的全新工作树和全新 `.godot` 缓存导入、导出；隔离构建临时目录已从 Git 注册表移除并移入 Windows 回收站，可恢复。
 
 ## 30 秒启动顺序
 
@@ -16,10 +105,17 @@
 ## 当前集成基线
 
 - 主目录：`C:\Users\Administrator\Documents\HardCore`
-- 分支/运行时代码基线：`codex/integration` @ `4fea1e60`（本次快照提交只改本文档）。
-- tracked 状态：13 个既有头盔 v2 合同/生成素材修改继续保护；本次头盔校准工具只修改工具、运行时校准接口和专项测试，未暂存、覆盖或合并上述用户数据。12 个冻结生成图集 SHA-256 与开工记录逐项一致；正式 override 在施工期间由外部在制工作更新，保留其最新用户内容，禁止回退。
+- 分支/运行时代码基线：`codex/integration` @ `5ee31695`（本次快照提交只改本文档）。
+- tracked 状态：黑铁头盔 151 的旧 `scale_100` 六动作生成图集共 6 个既有在制修改继续保护；本次男性头发接入未暂存、覆盖或提交这些旧图。146/147/149/150/151/218/224/228/232 共 9 份已验收人工草稿继续冻结；236/240 最新人工草稿分别为 SHA-256 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`、`81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`，均保持 dirty 并禁止覆盖。
 - 未跟踪状态：既有审计/报告输出与 Godot 生成的 `*.gd.uid` 继续保护，不得顺带清理或提交。
 - 当前无待合并专业提交。
+- `52b54608` 完成本轮 Android 集成测试包配置：应用名继续为 `HardCore`，兼容包 ID 继续为 `com.personal.mafaoffline`，versionCode `36`、versionName `1.17.0-full-integration`、目标架构 `arm64-v8a`；导出排除测试、文档、开发原稿、校准草稿、审计输出和高清 `scale_100` 编辑资产，运行时合同与正式成品保留。
+- `35568e45`（装备提交 `26f25e39`）和 `6827bb7d`（职业技能提交 `ce58f7bc`）只修正已经过时的测试期望：正式武器可见性改为罗刹/嗜魂法杖/鹤嘴锄可见且只剩落魄神兵未解析；烈火测试改为 canonical 一次充能语义。两项均未改运行时合同、素材或用户冻结数据。
+- 本轮真实集成基线验收：装备套件 17/17、战士技能套件 18/18、跨领域发布专项 17/17、完整关键套件 74/74 全部通过，`SMOKE_TEST_PASS`。技能主源共 33 项；26 项正式法师/道士主动技能视觉共 586 帧，fallback 为 0。
+- `698482bf`（装备提交 `6249ed86`）按用户指定切换为主资料库经典 `Hair.wil block 4`（男性外观 2）；与同发行版 `Hum.wil` 使用相同 600 帧动作块和 Hot 坐标。idle/walk/attack/cast/hit/death 共 232 个目标帧全部存在且非空，直接组图，无缩放、旋转、插值、补帧或低级来源替换；世界人物继续隐藏全部头盔层。
+- `92b3bdba`（UI 提交 `2e0fba4a`）修正纸娃娃装备头盔时错误隐藏男性头发的问题。`classic_avatar` 现在始终绘制男性头发，随后按衣服、武器、头盔顺序绘制装备，使头盔位于头发之上；可见边界同样始终计入头发。240 用户最终纸娃娃头盔直接加载回归、人物选择、背包刷新、三职业换装专项 7/7 与装备全套 17/17 通过；纸娃娃、背包、地面、11 份人工草稿及四份正式合同共 15/15 哈希不变。
+- `b4c11258`（装备提交 `7392602`）修复头盔校准跨行为串改：重置当前帧恢复该动作/方向/帧的最近保存值；键盘 `+/-` 只缩放当前姿态；非 idle 撤销不会清除 idle 的未保存公共映射。当时对非 idle 源映射采用的禁改保护已由 `d9c3d11a` 升级为逐姿态独立保存。装备工作树和真实集成基线专项均为 2/2 通过，集成测试前后全部头盔草稿 SHA-256 零变化。
+- `d9c3d11a`（装备提交 `98b2dbe`）新增逐动作/人物方向/帧独立的头盔源方向：多个目标可选择同一个 `source_row`，但各自保存位移、横纵缩放与旋转；idle frame 0 公共基准保持原语义。新版草稿以 `poseFrameIndependentSource=true` 显式启用最终生成的逐目标独立烘焙，旧草稿继续走原生成路径。集成校准专项 2/2、无写入最终生成模拟 1/1 通过，全部正式草稿 SHA-256 零变化。
 - 来源优先级总表为 `assets/data/source_priority_policy.json`；每个 lane 必须先查 `primary`，只有精确目标确实 `missing` 才允许逐级 fallback。主源不可用、不兼容或效果不符合预期时必须修复解析/映射，禁止换用低级来源。
 - 完整资料扫描记录位于 `outputs/resource_catalog/complete_local_mir_sources/catalog.sqlite`（SHA-256 `3a133f39e9a0bf0b065b29778ff4f40d33aaa009ba1bed0a3213ae3a33233c79`）与 `manifest.json`：58 个 distribution、38,887 文件、14,595,954,010 字节、0 未哈希、SQLite integrity `ok`。
 - 越级使用审计见 `docs/audit/SOURCE_PRECEDENCE_VIOLATION_AUDIT_2026-07-24.md`。未合并装备提交 `7c37b771` 因跳过主库采用未配置 mylgd 数据已拒绝；不得 cherry-pick。
@@ -36,7 +132,7 @@
 - 技能冷却按稳定 `skill_id` 独立保存于运行时，不再复用共享物理攻击锁；烈火充能只读 UI 快照字段为 `fire_armed`、`fire_expires_remaining_ms`，稳定状态 ID 为 `warrior.fire_sword.charge_armed`，不跨存档恢复。
 - `38592e01` + `b779594c` 修正原客户端装备页纸娃娃：Prguse #376 底图按主源码固定绘制于 `(38,52)`，衣服/武器/头盔继续使用 `(31,96)+Hot`；人物选择与装备页各只保留一个纸娃娃，选中存档装备与实时换装均有专项回归。
 - `1d74fc72` 将地图外圈由旧圆半径净空升级为 `18×9` 等距椭圆脚底的逐边法向支撑距离；比奇四边真实 CharacterBody 脚点误差统一为 `-0.749978px`，内部碰撞、遮挡、地面坐标、相机和裙边未改。
-- `4a52cc54` 与 `b0235f07` 完成最终纸娃娃整改：12 个男性头盔严格由原客户端 StateItem 主资料按原坐标派生透明头部补丁及擦除遮罩，禁止 AI 重绘；人物选择与装备页默认使用高清透明 `classic_avatar`，固定按人物底图→衣服→武器→头盔绘制，完整 Prguse #376 底图、装备槽和矩形背景永不进入玩家界面。三职业×沃玛/祖玛/赤月 9 个独立真实存档、itemId/name-only 旧存档解析、角色选择、装备实时刷新与受控可视截图均通过。
+- `4a52cc54` 与 `b0235f07` 完成最终纸娃娃整改：12 个男性头盔严格由原客户端 StateItem 主资料按原坐标派生透明头部补丁及擦除遮罩，禁止 AI 重绘；人物选择与装备页默认使用高清透明 `classic_avatar`，当前固定按人物底图→男性头发→衣服→武器→头盔绘制，头盔在头发之上，完整 Prguse #376 底图、装备槽和矩形背景永不进入玩家界面。三职业×沃玛/祖玛/赤月 9 个独立真实存档、itemId/name-only 旧存档解析、角色选择、装备实时刷新与受控可视截图均通过。
 - `cc1edacc` 修复旧/设备存档的世界穿戴身份解析：地图人物现在与纸娃娃统一支持 `item_id`、`itemId`、`itemName`、`name`，稳定 ID 优先，名称只在正式 `equipment_visual_catalog.itemsById` 中精确反查。战士赤月档 itemId 140「天魔神甲」固定加载男性 feature 12 的六动作；ID-only、itemName-only、真实九角色档和 OpenGL 受控截图均通过，不再出现纸娃娃/属性正常但世界衣服退回或消失。
 - `d6b4cec3` 按战士技能系统的动作状态机模板接入法师 14 项、道士 12 项主动技能的正式主资料动画与选帧图标；来源只使用 `Magic.wil`、`Magic2.wil`、`Mon3.wil`、`Mon18.wil` 及原客户端规则代码，没有分级库 fallback。道士被动 `taoist.spiritual_warfare` 的主源没有施法事件，保持 `no_runtime_visual`，禁止伪造动画。
 - `841c3e57` 将上述 26 个法师/道士主动技能图标接入技能面板、HUD 快捷栏和攻击环；4 个战士既有图标及优先级保持不变，所有法道主动技能禁止回退为背包物品缩略图。
@@ -44,24 +140,40 @@
 - 用户已确认此前截图来自当时最新 APK；不要再次怀疑或重复核验安装版本。用户已实机确认碰撞、装饰物遮挡、地图错位和视角全部解决，四项正式冻结；除非出现新的明确证据，后续任务不得顺带调整。
 - 用户已实机确认 214 个 `monster_id` 逐个、逐姿态人工复核的 v4 怪物脚下光圈正确，正式冻结；除非出现新的明确证据，禁止顺带修改脚点、光圈中心、椭圆尺寸或投影策略。
 - 战士/法师/道士 × 沃玛/祖玛/赤月的 9 个独立满技能测试人物已进入最新 APK；三职业装备外观仍需按原客户端正式素材重新取证，不能再将装备栏缩略图或带窗口背景的 raw stateitem 图当作纸娃娃/世界穿戴层。
-- 装备显示已改为男性专用正式管线：原客户端装备页纸娃娃、男性世界衣服、男性世界武器与 12 个男性世界头盔均已集成；新增或重建世界穿戴资源禁止生成女性资产。
+- 装备显示使用男性专用正式管线：原客户端装备页纸娃娃、男性世界衣服与男性世界武器继续使用正式素材；12 个男性世界头盔素材和校准数据保留但运行时隐藏，世界人物改为经典主客户端男性完整头发动作。新增或重建世界穿戴资源禁止生成女性资产。
 - 头盔概念表的格子顺序不可信。每个视觉身份必须保存显式 `sourceSlotDirectionOrder`，再重排为 `N,NE,E,SE,S,SW,W,NW`；方向重复或缺失必须阻断构建，禁止猜测。
 
 ## 最终 APK
 
-- 状态：下列 APK 是 12:10 的上一版测试包，尚未包含 `4a52cc54` 与 `b0235f07` 的最终纸娃娃整改；用户要求先确认截图，因此当前未重新构建 APK。
-- 文件：`C:\Users\Administrator\Documents\HardCore\outputs\hardcore\HardCore-debug.apk`
-- 构建时间：`2026-07-26 12:10:58`
-- 大小：`1,653,572,428` 字节
-- SHA-256：`1117D14E37960025E0D1C2205E960CA38A8D76B668FE5F295A91C824F6488E8A`
-- 包信息：`com.personal.mafaoffline`，versionCode `35`，versionName `1.16.0-bich-map-runtime`，应用名 `HardCore`，`arm64-v8a`。
-- 签名验证：APK Signature Scheme v2/v3 均通过，签名者 1。
-- 本包包含 214 种怪物逐 ID v4 光圈校准、9 个三职业三套装满技能独立测试人物、男性专用正式人物与装备显示管线、`world_avatar`/`classic_avatar` 双模式纸娃娃、primary-only 世界武器兼容合同、正式装备视觉目录、神兽动画、人物列表触摸滚动、法师/道士360ms施法动作与移动锁、26 个法师/道士主动技能的主资料动画和选帧图标，以及等距椭圆脚底四边地图边界修复；角色存档只补建缺失项，不覆盖后续测试进度。
+- 状态：最新完整集成 Android 精简测试包，headless import/export 均成功并完成独立 APK 元数据、架构、清单、运行时资源与签名验证。
+- 文件：`C:\Users\Administrator\Documents\HardCore\outputs\hardcore\HardCore-slim-v38-debug.apk`
+- 构建时间：`2026-07-30`
+- 大小：`244,091,990` 字节
+- SHA-256：`562082FD18DC51ECB65F00F610EDF82295B9A92FDA98BDB0B1D73C5765FA4D43`
+- 包信息：`com.personal.mafaoffline`，versionCode `38`，versionName `1.17.2-slim`，应用名 `HardCore`，`arm64-v8a`、横屏。
+- 签名验证：APK Signature Scheme v2/v3 均通过，签名者 1；证书 SHA-256 `c62d0f8239b926f819038845c302143fd24dcfd75ed8d877ed846c430c6f3fcc`，与上一测试包签名者一致，可覆盖安装并保留兼容存档。
+- 本包包含当前集成分支全部正式运行时工作：33 技能及正式技能动画/图标、硬直与受击中断、完整装备属性和穿戴、纸娃娃/背包/地面头盔展示、世界人物隐藏头盔并使用经典主资料库男性 `Hair.wil block 4` 全动作头发、男性衣服/武器外观、三职业九个满技能测试人物、地图/碰撞/遮挡、怪物外观与 v4 脚下光圈、UI 与角色存档兼容。15 份受保护头盔草稿和正式合同构建前后 SHA-256 全部不变。
 
 ## 最近已集成结果
 
 | 集成提交 | 领域 | 结果 |
 |---|---|---|
+| `d639aa85`、`28e64994`（装备专业提交 `8545045`、`ad3b1ad`） | equipment/integration | 头盔校准工具新增按“动作＋方向＋帧”独立保存的无损姿态参数：方向键每次 0.5px 只调整当前帧，右键菜单支持横向/纵向分别 ±5%、整体 ±5%、向左/向右各 5°、旋转归零和当前帧全部变换重置。高清覆盖层使用真正的非等比显示变换，横向调整只改变宽度、纵向调整只改变高度，不再被保持宽高比模式重新等比适配。动作栏继续完整覆盖 `idle/walk/attack/cast/hit/death`，并新增所有动作帧的直接按钮；death 明确显示 0 起始、1 后仰、2 倒地、3 躺地。可选 `poseTransforms` 向后兼容旧 `equipment.helmet.calibration_draft.v1`，保存只写参数，预览直接变换原始 RGBA，不生成或压缩图片。11 份人工草稿 SHA-256 逐项未变；装备树和集成树无损校准、映射编辑、头盔运行时、男性世界穿戴专项均通过。 |
+| `3618db9d`（装备专业提交 `59a98606`） | equipment/integration | 纠正最终化后校准工具错误读取低分辨率运行时纸娃娃合同的问题。编辑器恢复为用户保存时的独立高清校准视图：11 个目标固定使用保存当时的纸娃娃参考矩形，世界八方向、纸娃娃、背包和地面继续直接读取冻结的原始 RGBA 切片；运行时素材替换不得反向改变编辑器中的大小或位置。240 天尊纸娃娃恢复为保存时的 `32×41` 参考矩形、`65%`、位置 `(263,136.5)`，不再使用最终化后 `18×29` 的运行时成品反推。11/11 人工草稿 SHA-256 逐项未变；集成树校准布局与映射编辑器专项 2/2 通过。 |
+| `c2d9048a`、`2c396d7f`（装备专业提交 `8ba485dd`、`02fedb7b`） | equipment/integration | 用户完成的 11 个视觉身份、12 个头盔 ID 已正式最终化并接入游戏主体。每个身份从冻结高清草稿直接生成 `idle/walk/attack/cast/hit/death` 六动作、八方向及全部动作帧；按人物动作逐帧头部枢轴平移，只在动作轮廓确实需要时使用有界二维二阶矩形变，保持每个方向原始长宽比例。世界、纸娃娃、背包、地面均从各自选定原素材直接做一次预乘 Alpha Lanczos 压缩，运行时固定 nearest/`1x`，禁止二次压缩。最终合同为 `equipment.helmet.finalization.v1`，确定性哈希 `344A59D31259810F577E000375C6EB1F7D0989E58A1369CA0C2F00CA434B442B`；Windows 对人工草稿及四份最终合同均禁用行尾转换，首次检出不会产生无意义回写。11/11 人工草稿 SHA-256 前后完全一致。Python 头盔专项 17/17、Godot 头盔专项 10/10、装备套件 17/17、全局冒烟 1/1 通过。 |
+| `2daf3513`（装备专业提交 `1bf2f4ba`） | equipment/integration | 240 天尊头盔进入“只校准、不烘焙”阶段：用户提供的 1774×1333 RGBA 十图原稿（SHA-256 `B82153C7888F258EA783A24BCB43A6302C3C52EF58BC66310A52C6EC2E6B39C7`）是标准 4×3 网格，前8格按 `N/NE/E/SE/S/SW/W/NW` 仅作 Alpha 有效边界裁切，保持 203–239×354–361px 原始长宽，透明世界图集为 956×722px；第三排第1格 208×354px 固定为 `dedicated_inventory`，第2格 214×356px 固定为 `dedicated_ground`，后两格为空且不参与方向映射。校准工具新增对称的“地面专用”第九项、预览与草稿保存合同，背包/地面默认各自选中专用源；全程不清底、不改用户镂空、不改色、不重采样、不提前压缩，当前活动目标切换为 `item_id=240` / `visualAssetId=heavenly_taoist`。旧 240 正式世界六动作、纸娃娃、背包、地面与在制天尊六动作生成图集均保持冻结；146/147/149/150/151/218/224/228/232/236 人工草稿及正式 override 未变。Python 无损/冻结守卫 14/14、Godot 校准专项 4/4 在装备树与集成树均通过。 |
+| `c3326ece`（装备专业提交 `5973dbd3`） | equipment/integration | 236 法神头盔进入“只校准、不烘焙”阶段：用户提供的 1448×1086 RGBA 八方向原图（SHA-256 `604E257C431C7E963D76D2BC4FDC21AE93BC099C5B114AD7C214B23F482E8EFA`）按上排 `N/NE/E/SE`、下排 `S/SW/W/NW` 使用每格完整 Alpha 并集边界裁切，八张方向图保持各自 287–346×291–312px 原始长宽，透明编辑器图集为 1384×624px；`N/NE/NW` 的左右角与头环主体分别保持 3 个独立 Alpha 连通部件及原始间距，未按单部件裁切、未重新拼接。全程不清底、不改用户镂空、不改色、不重采样、不提前压缩，当前活动目标切换为 `item_id=236` / `visualAssetId=god_magic`。旧 236 正式世界六动作、纸娃娃、背包、地面与在制法神六动作生成图集均保持冻结；146/147/149/150/151/218/224/228/232 人工草稿及正式 override 未变。Python 无损/冻结守卫 12/12、Godot 校准专项 4/4 在装备树与集成树均通过。 |
+| `ede3c10f`（装备专业提交 `a0cb7d28`） | equipment/integration | 232 圣战头盔进入“只校准、不烘焙”阶段：用户提供的 1448×1086 RGBA 八方向原图（SHA-256 `486B7FB95AF5F24B61D0FECFB9BBD22F9B1E3550189C5CEDC1B8D264452DBEC2`）按上排 `N/NE/E/SE`、下排 `S/SW/W/NW` 仅作每格 Alpha 有效边界裁切，八张方向图保持各自 227–316×363–405px 原始长宽，透明编辑器图集为 1264×810px；灰色仅存在于透明像素 RGB，未清底、未重新抠图、未改色、未重采样、未提前压缩，当前活动目标切换为 `item_id=232` / `visualAssetId=holy_war`。旧 232 正式世界六动作、纸娃娃、背包、地面与在制圣战六动作生成图集均保持冻结；146/147/149/150/151/218/224/228 人工草稿及正式 override 未变。Python 无损/冻结守卫 10/10、Godot 校准专项 4/4 在装备树与集成树均通过。 |
+| `17675bfc`（装备专业提交 `c3a9abe9`） | equipment/integration | 228 记忆头盔进入“只校准、不烘焙”阶段：用户提供的 1448×1086 RGBA 八方向原图（SHA-256 `ED3AA3AAE0C106110C24CCBF43A17E71E2D7C418E2ECDBC12E996CF74B3624E6`）按上排 `N/NE/E/SE`、下排 `S/SW/W/NW` 仅作每格 Alpha 有效边界裁切，八张方向图保持各自 270–298×407–417px 原始长宽，透明编辑器图集为 1192×834px；不清底、不重新抠图、不改色、不重采样、不提前压缩，当前活动目标切换为 `item_id=228` / `visualAssetId=memory`。旧 228 正式世界六动作及其东西向修补合同、纸娃娃、背包、地面、正式 override 均保持冻结；146/147/149/150/151/218/224 人工草稿未变。Python 无损/冻结守卫 8/8、Godot 校准专项 4/4 在装备树与集成树均通过。 |
+| `694ee5a4`（装备专业提交 `dedc613a`） | equipment/integration | 224 祈祷头盔进入“只校准、不烘焙”阶段：用户提供的 1448×1640 RGBA 九图原稿（SHA-256 `7BA8D678D6902411E5D1EB25891E3EBD67DDC606A345F2B43ABBD3D172AE3AD5`）前两排按 `N/NE/E/SE/S/SW/W/NW` 仅作 Alpha 有效边界裁切，保持 267–287×387–411px 原始长宽；第三排未扣除面部的 274×411px `S` 单独保存为 `dedicated_inventory` 并作为背包默认第九项，不参与世界方向映射。全程不清底、不重新抠图、不修改脸窗、不改色、不重采样；当前活动目标切换为 `item_id=224` / `visualAssetId=prayer`。正式世界六动作、纸娃娃、背包、地面、正式 override 和主树在制 prayer 图集均未改，146/147/150/151/218 人工草稿保持冻结；Python 无损/冻结守卫 6/6、Godot 校准专项 4/4 在装备树与集成树均通过。 |
+| `c289f93b`（装备专业提交 `f4be0e35`） | equipment/integration | 218 神秘头盔进入“只校准、不烘焙”阶段：用户提供的 1774×1343 RGBA 九图原稿（SHA-256 `8C4990E164B528A09833B55B99D94C51F3D254ECF4BF7A3B3A71815621232063`）前两排按 `N/NE/E/SE/S/SW/W/NW` 仅作 Alpha 有效边界裁切，保持 272–312×376–381px 原始长宽；第三排未扣除面部的 281×376px `S` 单独保存为 `dedicated_inventory` 并作为背包默认第九项，不参与世界方向映射。全程不清底、不重新抠图、不修改脸窗、不改色、不重采样；当前活动目标切换为 `item_id=218` / `visualAssetId=mystery`。正式世界六动作、纸娃娃、背包、地面、正式 override 和主树在制 mystery 图集均未改，146/147/150/151 人工草稿保持冻结；Python 无损/冻结守卫 5/5、Godot 校准专项 4/4 在装备树与集成树均通过。 |
+| `c7a081d9`（装备专业提交 `770c86b8`） | equipment/integration | 151 黑铁头盔进入“只校准、不烘焙”阶段：用户提供的 1491×1055 RGBA 八方向原图（SHA-256 `917B2BBFDA8463B509B61866EA3E125AD77FFB68288D5F52C199526F5AFD79FF`）已经包含真实 Alpha，洋红仅存在于透明像素 RGB；按上排 `N/NE/E/SE`、下排 `S/SW/W/NW` 仅作每格 Alpha 有效边界裁切，不清底、不重新抠图、不改色、不重采样。八张方向图保持各自原始长宽（255–294×367–393px），透明编辑器图集为 1176×786px；当前活动目标切换为 `item_id=151` / `visualAssetId=black_iron_golden_151`。正式世界六动作、纸娃娃、背包、地面、正式 override 及主树中在制黑铁六动作生成图集均未改，146/147/150 人工草稿保持冻结；Python 原图逐像素/冻结守卫 4/4、Godot 校准专项 4/4 在装备树与集成树均通过。 |
+| `55651fe4`（装备专业提交 `394715a7`） | equipment/integration | 头盔校准工具的世界外观缩放下限由 50% 放宽为 5%，继续保持每次 5% 的右键/快捷键步长；界面控件、会话覆盖、草稿校验和最终单次烘焙校验统一使用 `WORLD_SCALE_MIN_PERCENT=5`，避免只改按钮后保存被拒绝。纸娃娃缩放范围未改；146/147/150 人工草稿与正式 override 哈希保持不变。装备树与集成树 Godot 校准专项均 4/4 通过。 |
+| `b387172c`（装备专业提交 `0a58a866`） | equipment/integration | 150 骷髅头盔进入“只校准、不烘焙”阶段：用户提供的 1491×1055 RGBA 八方向原图（SHA-256 `DE5753D3B36797D0937967032BE238B3CDE55582588FF4B99D42794740605C0D`）按上排 `N/NE/E/SE`、下排 `S/SW/W/NW` 仅作每格 Alpha 有效边界裁切；保留用户已有透明像素、半透明边缘和脸部镂空，不清底、不补洞、不改色、不重采样。八张方向图保持各自原始长宽（279–364×403–431px），透明编辑器图集为 1456×862px；当前活动目标切换为 `item_id=150` / `identityId=skeleton`。正式世界六动作、纸娃娃、背包、地面与 override 均未改，146/147 人工草稿哈希保持不变；Python 原图逐像素/冻结守卫 3/3、Godot 校准专项 4/4 在装备树与集成树均通过。 |
+| `50e10061`（装备专业提交 `ac743c73`） | equipment/integration | 146 精灵、147 青铜与149 道士头盔的校准预览统一改为“原始RGBA纹理+非破坏显示变换”：世界人物卡不再先把头盔压进低分辨率人物帧，而是按每方向自己的原始宽高、人物头部锚点、独立位移与独立5%比例挂载高清纹理层；八方向源图、纸娃娃、背包与地面均直接使用原始纹理，地面不再复用64×64方向缩略图。保存仍只写参数，正式游戏图集必须等用户明确要求加载时才从原图统一单次压缩。草稿加载链现以最新草稿中的源路径/哈希为优先，使当前149目标下重新选择146/147时仍恢复各自原切片；146/147草稿和正式override哈希均未改变。Python原图/冻结守卫2/2、Godot校准专项4/4通过。 |
+| `f6cec727`（装备专业提交 `5be70aa5`） | equipment/integration | 149 道士头盔进入“只校准、不烘焙”阶段：用户提供的 1350×1637 PNG（SHA-256 `27A87E2CF4E49D3E6FD093A6330F6EE55921908ED074AB486EA0A72262F41408`）已经包含完整 Alpha，严格禁止清底、重新抠图、修改脸窗或重采样；仅按 Alpha 有效边界逐像素裁出 `N/NE/E/SE/S/SW/W/NW` 八张 225–245×365–385px 原始 RGBA 世界方向图，以及第九张 232×378px 黑色脸内层正面图。第九张作为独立 `dedicated_inventory` 进入背包下拉第九项“背包专用”并默认选中，不参与八方向映射；纸娃娃与地面仍从八方向选择。正式世界六动作、纸娃娃、背包、地面与 override 均未改，146/147 用户草稿哈希保持不变；Python 逐像素裁切/冻结守卫 2/2、Godot 校准专项 3/3 通过。 |
+| `12601d14`（装备专业主提交 `ce60df1a`，测试跟进至 `b027ed66`） | equipment/integration | 头盔校准工具的世界外观与纸娃娃方向键微调由每次 1px 降为每次 0.5px；半像素只允许进入校准会话、未最终化草稿和隔离测试 override，正式运行时 override 继续执行整数像素合同，等待最终高清单次烘焙。世界方向与纸娃娃右键缩放菜单统一使用工具视口鼠标坐标，并在鼠标旁 12px 显示、受视口边界约束，不再混用桌面全局坐标。真实 `item_146` 用户草稿 SHA-256 `F7130C45C2837AD2819D57BBED939710A1FE25C2784A44A23368F9E4183DEC40` 及正式 override/在制图集均未改；测试同时修正为验证原高清切片直接单次缩放，禁止用二次缩放结果作预期。装备树及集成树校准专项最终 3/3 通过。 |
+| `d47b5a50`（装备专业提交 `16f25289`） | equipment/integration | 146 精灵头盔进入“只校准、不烘焙”阶段：用户提供的 1448×1086 原图按 `N/NE/E/SE/S/SW/W/NW` 清除连通白色/洋红背景并无缩放切成八张约 294–301×204–242px 的透明原分辨率方向图；校准工具启动后自动选中 `item_id=146`，只在会话中建立八方向一一对应映射，可正常切换、微调和保存草稿。正式世界六动作、纸娃娃、背包、地面与运行时 override 均未改；最终单次压缩和游戏接入留到用户完成全部校准后统一执行。Python 单目标回归及 Godot 校准工具专项 2/2 通过。 |
 | `4fea1e60`（装备专业提交 `5d9aec69`） | equipment/integration | 仅重建 147/148 共用的 `identityId=bronze_magic` 世界六动作图集：从 SHA-256 `8D5B9B4AF6E28947CB4437D5F09EA8F26FD8822B4D589D619A8153EDA37504EE` 的 1774×887 透明八方向母图直接进行预乘 Alpha + Lanczos 单次缩放，运行时保持 nearest/`1x`；232 个方向帧单元的有效包围盒与返修前逐项一致，只替换框内像素。新增精确单目标重建器与冻结哈希守卫；147/148 纸娃娃、擦除遮罩、背包、地面及 `item_147` 人工草稿哈希均未变化。Python 单目标回归、Godot 校准工具与共享身份专项通过。 |
 | `623e44e`（UI 专业提交 `a9ef38b0`，装备专业提交 `623e44e`） | UI/equipment/integration | 修复头盔校准纸娃娃：`classic_avatar` 头发现在读取正式 `avatarOnly.stagePosition=[80,44]`，与人物/衣服共用 168×199 画布，不再漂到左上或显示光头；纸娃娃头盔从错误的原图 25% 改为按当前物品正式头部补丁尺寸与位置建立 100% 基准，高分辨率原切片只改变显示矩形、不产生中间重采样；旧 `[110,32] + 25%` 草稿只对该精确旧默认自动迁移，其他人工参数保持不变。点击纸娃娃区域后方向键每次移动头盔 1px，世界方向坐标不受影响；点击世界两排后恢复世界方向微调。集成专项 5/5 通过，正式 override 与冻结生成图集哈希未变。 |
 | `e0110944`（专业提交 `df6fc7da`） | equipment/integration | 头盔校准改为无损两阶段：透明 4×2 原图固定按 `N,NE,E,SE,S,SW,W,NW` 切为 8 张原分辨率 PNG 并逐张保存 SHA-256，不做方向扫描；世界八方向各自支持右键 ±5%，下方放大人偶/头部从可见界面移除；新增战士赤月套装纸娃娃拖放/缩放/八向选择、背包选向和地面选向。保存只写 `equipment.helmet.calibration_draft.v1`（`runtimeReadable=false`、`finalized=false`），正式 override 与运行图集保持不变；最终加载函数未接 UI 按钮，只允许用户全部确认后从原切片单次 Lanczos 生成、运行时 nearest/`1x`。装备工作树与真实集成基线专项均 6/6 通过。 |
@@ -150,9 +262,9 @@
 
 - integration：`world.actor_footprint.iso_ellipse.v1`、`test.character.roster.full_equipment_skills.v1`。
 - maps：`map_editor_runtime_collision_geometry_v2`、`map_visible_edge_actor_footprint_clearance_v2`、`published_blocked_cells_after_erasure_v1`、`map_editor_runtime_visual_geometry_v5`、`map_actor_occlusion_sort_v5`、`map_diamond_camera_center_constraint_v2`、`player_priority_soft_edge_v1`、`map_runtime_nonwalkable_edge_skirt_v1`。
-- monsters：`monster.overhead_anchor.v4`、`monster.overhead_layout.v3`、`monster.ground_contact.v4`、`monster.ground_contact.calibration.v4`；214 个 `monster_id` 各自保存人工复核的脚点、光圈中心、椭圆尺寸和投影策略，贴图异步激活后必须刷新。
+- monsters：`monster.overhead_anchor.v4`、`monster.overhead_layout.v3`、`monster.ground_alignment.manual.v1`、`monster.ground_contact.v5`、`monster.ground_contact.calibration.v5`；212 个 `monster_id` 使用用户冻结草稿，猎鹰 97/98 保留飞行投影，贴图异步激活后必须刷新。
 - UI：`ui.hud.resource_orb.hole_fill.v1`、`skill_button_assignment_contract_v2`、`ui.hud.skill_icon.caster.<stable_skill_id>`。
-- equipment：`equipment.attribute.master.v2`、`project.hardcore.equipment_attribute_master.v2`、`equipment.test_loadouts.classic_three_tiers.v1`、`equipment.visual_catalog.formal_wearables.v1`、`equipment.paper_doll.presentation_modes.v1`、`equipment.paper_doll.world_avatar.v1`、`equipment.paper_doll.avatar_only.v1`、`equipment.paper_doll.original_client_stage.v1`、`equipment.paper_doll.classic_flattened_head_patch.v1`、`equipment.helmet.calibration_draft.v1`、`equipment.helmet.presentation_calibration.v1`、`equipment.world_wear.male_dress.v1`、`equipment.world_wear.male_weapon.v1`、`equipment.world_helmet.male.extension.v1` 与 9 个 `test.loadout.{profession}.{tier}.v1`。
+- equipment：`equipment.attribute.master.v2`、`project.hardcore.equipment_attribute_master.v2`、`equipment.test_loadouts.classic_three_tiers.v1`、`equipment.visual_catalog.formal_wearables.v1`、`equipment.paper_doll.presentation_modes.v1`、`equipment.paper_doll.world_avatar.v1`、`equipment.paper_doll.avatar_only.v1`、`equipment.paper_doll.original_client_stage.v1`、`equipment.paper_doll.classic_flattened_head_patch.v1`、`equipment.helmet.calibration_draft.v1`、`equipment.helmet.presentation_calibration.v1`、`equipment.world_wear.male_dress.v1`、`equipment.world_wear.male_weapon.v1`、`equipment.world_helmet.male.extension.v1`、`equipment.world_helmet.runtime_visibility.v1`、`equipment_actor_visual_sort_unit_v3` 与 9 个 `test.loadout.{profession}.{tier}.v1`。
 - skills：`skills.runtime_router.cn_mir2_176.v1`、`skills.progression.cn_mir2_176.v1`、`skills.production_adaptation.hardcore.v1`、`warrior.fire_sword.charge_armed`、`combat.resolution.openmir2.v1`、`physical.hit.random_agility.strict_lt.v1`、`magic.evasion.anti_magic.direct_spell.v1`、`physical.attack_speed.interval_tier.v1`、`player.direct_spell_damage.openmir2.v1`、`caster_skill_animation.v1`、法师/道士主动技能 `action_duration=0.60` / `action_frame_count=6` / `action_frame_time_ms=100` 时序字段、`legacy_clamp_negative_span`、`test.characters.full_skills.v1` 与 9 个 `test.character.{profession}.{woma|zuma|chiyue}.v1`。
 
 ## 已通过的必要验收
@@ -162,13 +274,13 @@
 - camera：2664×1200 下人物屏幕偏移≤全尺寸 14%，动态缩放为 1.06–1.16；80×80 与 38×38 地图外露均由 1536px 不可行走裙边覆盖。
 - monsters：v4 数据生成检查、214/214 人工复核覆盖、214 种怪物五动作八方向运行时坐标链、214/214 冷激活、完整怪物客户端美术通过。
 - test roster：9 个独立存档、72 个正式装备槽、99 个角色技能加载项、三职业选择恢复和二次启动不覆盖通过。
-- player/equipment：原客户端男性装备页纸娃娃、男性世界衣服、男性世界武器、男性世界头盔、实时换装、正式装备视觉目录、装备纸娃娃居中和战士旧回归通过；天魔神甲真实赤月档及 `item_id`/`itemId`/`itemName` 旧档兼容、六动作全帧非透明与 OpenGL 受控截图通过。
+- player/equipment：原客户端男性装备页纸娃娃、男性世界衣服、男性世界武器、经典男性完整头发动作、实时换装、正式装备视觉目录、装备纸娃娃居中和战士旧回归通过；世界头盔与头部遮罩全动作隐藏，头盔正式素材仍可解析；天魔神甲真实赤月档及 `item_id`/`itemId`/`itemName` 旧档兼容、六动作全帧非透明与 OpenGL 受控截图通过。
 - equipment attributes：163 条唯一正式装备、114 条工作簿覆盖、v2 Schema/来源优先级/幂等构建、魔闪点数拆分、准确/敏捷/攻速档位及 UI 单位均通过。
 - combat resolution：严格物理命中、AntiMagic/AntiPoison 隔离、玩家与怪物默认点数边界、直接法术 AntiMagic→MAC→扣血、tier 物理攻击间隔、GameRoot 稳定技能 ID 和共享运行时转交均通过；最终相关回归 9/9，`SMOKE_TEST_PASS`。
 - blessing/luck：`equipment.blessing_luck.v2`、三结果、5% 负面、幸运 7、诅咒 10、命运之刃 R=0 修正、全部装备 luck/curse、消耗/存档/零耐久、DC/MC/SC 与治愈术专项通过。
 - damage ranges：`legacy_clamp_negative_span`、通用 `roll_primary_stat`、战士公式、攻击时序与法系伤害公式通过；反向区间不会被幸运/诅咒交换端点，恢复正跨度后效果自动恢复。
 - equipment helmets：12 itemId/11 视觉身份、66 物理 atlas、2784 逻辑帧、6 动作×8 方向、透明角、Hair 逐帧锚点/SHA 溯源与 StateItem 世界像素零复用通过；法神头盔 `item_id=236` 使用用户授权原图单次 Lanczos 烘焙，atlas 单帧保持 `192×160px`、世界头盔最大 `14×17px`、纸娃娃内容保持 `17×24px`，运行时保持 nearest/`1x`；背包与地面素材冻结未变，非 236 文件及合同数据零变化。
-- helmet calibration：无损校准工作流、旧映射编辑回归、当前 active target 自动加载、正式纸娃娃头发坐标、头盔正式尺寸基准/旧默认迁移、方向键纸娃娃独立微调和 UI 纸娃娃组件在集成树 5/5 通过；真实透明图切割仍为 8/8 独立 PNG 与哈希清单。
+- helmet calibration：无损校准工作流、旧映射编辑回归、240 当前 active target 自动加载、正式纸娃娃头发坐标、头盔正式尺寸基准/旧默认迁移、方向键纸娃娃独立微调和 UI 纸娃娃组件通过；世界姿态现在按动作/方向/帧独立保存 0.5px 位移、横纵各 5% 缩放和左右各 5° 旋转，death 4 帧可直接逐帧选择；240 世界透明图切割为 8/8 独立原分辨率 PNG，第三排背包/地面专用图分别直出并保存为独立 source variant，集成专项 4/4 通过。
 - physics：玩家 18×9、普通怪物 16×8、Boss 28×14 的真实物理与软件探针通过；战斗/AI 半径未改。
 - occlusion：11 张已发布地图、52 个交叉、4 类装饰物和 3 个比奇回归点通过；碰撞区、脚底深度点、装饰物遮挡基线已分离。
 - maps：比奇真实源 E2E（180 个阻挡格）；11 张地图真实 `CharacterBody2D` 脚点可达可见边缘且外环阻挡。
@@ -184,10 +296,10 @@
 | 工作树 | 分支/HEAD | dirty | 集成状态 |
 |---|---|---:|---|
 | `HardCore-worktrees/maps` | `codex/maps` @ `2a4d6ccf` | 72 untracked | 用户地图编辑器内容，继续保护；代码等价结果已集成为 `1d74fc72` |
-| `HardCore-worktrees/monsters` | `codex/monsters` @ `45781ded` | tracked clean；68 UID | 已集成为 `c88c6277` |
-| `HardCore-worktrees/ui-art` | `codex/ui-art` @ `a9ef38b0` | tracked clean；Godot UID/输出继续保护 | 纸娃娃 `avatarOnly.stagePosition` 头发坐标修复已集成；专项 1/1、集成复验通过 |
-| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `be710c6e` | 27 项 tracked 技能视觉在制修改；66 UID 继续保护 | 33技能 runtime 与150条可执行语义合同已集成；当前 fire_wall / summon_skeleton 视觉返修未交付，禁止清理或覆盖 |
-| `HardCore-worktrees/equipment` | `codex/equipment` @ `5d9aec69` | 4 个既有 monster import 修改及 UID/生成项继续保护 | 147/148 青铜/魔法头盔世界外观高清单次重建已集成；纸娃娃、背包、地面与人工草稿冻结未变；单目标 Python 回归及 Godot 专项通过 |
+| `HardCore-worktrees/monsters` | `codex/monsters` @ `90f3f716` | 本轮任务文件 clean；既有 UID/报告继续保护 | 最新 212 份人工脚点已冻结导入；黄色目标光圈以人工脚点为圆心、按对应怪物物理脚印 `1.25×` 同比放大，已作为 `b478b7cc` 集成；专项 10/10 通过 |
+| `HardCore-worktrees/ui-art` | `codex/ui-art` @ `dabd8872` | 本轮代码 clean；Godot import/UID/输出继续保护 | 验收台橙色正式光圈改为直接读取游戏运行时目标光圈几何，已作为 `ed3d850e` 集成；UI/怪物联动 2/2 通过 |
+| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `ce58f7bc` | 既有 UID/输出继续保护 | 33 技能 runtime、150 条可执行语义合同和 26 项正式主动技能视觉已集成；`ce58f7bc` 的烈火 canonical 测试修正已作为 `6827bb7d` 集成 |
+| `HardCore-worktrees/equipment` | `codex/equipment` @ `26f25e39` | 既有 monster import、试点截图脚本、UID/生成项继续保护 | 男性 `Hair.wil block 4`、世界头盔隐藏、纸娃娃/背包/地面头盔均已集成；`26f25e39` 的正式武器可见性测试修正已作为 `35568e45` 集成，冻结草稿与生成图继续保护 |
 
 ### maps 保护红线
 
@@ -204,9 +316,9 @@ maps 的 72 项未跟踪内容全部视为用户进行中的地图编辑器内�
 ## 下次实机验收清单
 
 1. 已冻结：碰撞、装饰物遮挡、地图错位和视角均由用户实机确认通过。
-2. 已冻结：v4 怪物脚下光圈已由用户实机确认正确。
+2. 待复验：下一版 APK 中比奇省、兽人古墓的黄色选中光圈必须以最新人工脚点为中心，大小随怪物体积变化；正式 WIL 长条阴影保持原样。
 3. 待验收：角色选择页出现 9 个独立测试人物；三职业各有沃玛、祖玛、赤月三档完整装备并学习本职业全部技能；列表整块区域可直接上下滑动。
-4. 待验收：法师、道士不再显示占位符；男性基础形象、正式散件/套装换装、装备界纸娃娃居中和神兽动画正常；禁止重新引入女性角色资产。
+4. 待验收：法师、道士不再显示占位符；世界人物全动作显示经典男性头发且不显示头盔，纸娃娃/背包/地面仍保留头盔；男性基础形象、正式散件/套装换装、装备界纸娃娃居中和神兽动画正常；禁止重新引入女性角色资产。
 5. 怪物名字固定在血条上方；各体型血条位于各自真实身体顶点上方约 8px，不再统一过高或随动作抖动。
 6. 血球/蓝球恢复孔径尺寸且左右对称。
 7. 拾取提示居中；技能配置弹窗背景不越界；快捷技能可置换；烈火点击后显示“充能”，800ms 后下一次有效近战消费，空挥保留，8s 内不可重复充能，绝不自动释放。

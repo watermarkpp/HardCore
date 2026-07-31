@@ -3,10 +3,13 @@ extends RefCounted
 
 const CONTRACT_ID := "map_editor_runtime_collision_geometry_v2"
 const PHYSICS_SOURCE_ID := "published_blocked_cells_after_erasure_v1"
-const ACTOR_BOUNDARY_CONTRACT_ID := "map_visible_edge_actor_footprint_clearance_v2"
+const ACTOR_BOUNDARY_CONTRACT_ID := "map_visible_ground_footprint_boundary_v3"
+const PLAYER_FOOT_BOUNDARY_CONTRACT_ID := "map_player_foot_inside_visible_ground_v1"
 const ELLIPSE_SEGMENTS := 32
 const DEFAULT_BOUNDARY_MARGIN_TILES := 8.0
 const DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD := 18.0
+const VISIBLE_BOUNDARY_PROJECTION_ITERATIONS := 32
+const VISIBLE_BOUNDARY_EPSILON := 0.01
 
 
 static func map_inner_boundary_tile_polygon(
@@ -63,20 +66,13 @@ static func map_inner_boundary_world(
 
 static func map_actor_boundary_world(
 	design_size: Vector2i,
-	clearance_world := DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD
+	_clearance_world := DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD
 ) -> PackedVector2Array:
-	# CharacterBody2D uses a foot-centred circle.  If the hard boundary is put
-	# directly on the last visible ground pixel, the circle centre (and thus the
-	# rendered feet) stops one apparent mobile tile before that pixel.  Expand
-	# only the artificial outer boundary by the actor radius; authored blocked
-	# cells remain exact and retain their normal body clearance.
-	var visual_boundary := map_inner_boundary_world(design_size)
-	return _expand_convex_polygon_by_footprint(
-		visual_boundary,
-		WorldSpatialRules.actor_footprint_polygon(
-			maxf(0.0, clearance_world)
-		)
-	)
+	# The collision ring starts on the exact rendered-ground edge. CharacterBody2D
+	# contributes its own foot ellipse, so the resulting contact position keeps
+	# that complete ellipse on visible ground. Expanding this polygon by the
+	# actor radius created a second coordinate system and allowed feet into black.
+	return map_inner_boundary_world(design_size)
 
 
 static func map_outer_boundary_world(
@@ -98,6 +94,90 @@ static func runtime_boundary_contains_world(
 	return Geometry2D.is_point_in_polygon(
 		world, map_actor_boundary_world(design_size, clearance_world)
 	)
+
+
+static func default_player_foot_envelope_world() -> PackedVector2Array:
+	# Only the foot contact ellipse is constrained to visible ground. The body,
+	# hair, weapon and health bar may naturally overhang a sloped map edge.
+	return WorldSpatialRules.actor_footprint_polygon(
+		DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD
+	)
+
+
+static func project_player_foot_inside_boundary(
+	world: Vector2,
+	design_size: Vector2i
+) -> Vector2:
+	return project_world_envelope_inside_visible_boundary(
+		world, design_size, default_player_foot_envelope_world()
+	)
+
+
+static func project_world_envelope_inside_visible_boundary(
+	world: Vector2,
+	design_size: Vector2i,
+	envelope: PackedVector2Array
+) -> Vector2:
+	var boundary := map_inner_boundary_world(design_size)
+	if boundary.size() < 3 or envelope.is_empty():
+		return world
+	var signed_area := _signed_area(boundary)
+	var result := world
+	for _iteration in VISIBLE_BOUNDARY_PROJECTION_ITERATIONS:
+		var changed := false
+		for edge_index in boundary.size():
+			var following := (edge_index + 1) % boundary.size()
+			var edge := boundary[following] - boundary[edge_index]
+			var inward := Vector2(-edge.y, edge.x).normalized()
+			if signed_area < 0.0:
+				inward = -inward
+			var minimum_margin := INF
+			for offset: Vector2 in envelope:
+				minimum_margin = minf(
+					minimum_margin,
+					inward.dot(result + offset - boundary[edge_index])
+				)
+			if minimum_margin < -VISIBLE_BOUNDARY_EPSILON:
+				result += inward * (
+					-minimum_margin + VISIBLE_BOUNDARY_EPSILON
+				)
+				changed = true
+		if not changed:
+			break
+	return result
+
+
+static func player_foot_inside_boundary(
+	world: Vector2,
+	design_size: Vector2i
+) -> bool:
+	return world_envelope_inside_visible_boundary(
+		world, design_size, default_player_foot_envelope_world()
+	)
+
+
+static func world_envelope_inside_visible_boundary(
+	world: Vector2,
+	design_size: Vector2i,
+	envelope: PackedVector2Array
+) -> bool:
+	var boundary := map_inner_boundary_world(design_size)
+	if boundary.size() < 3 or envelope.is_empty():
+		return true
+	var signed_area := _signed_area(boundary)
+	for edge_index in boundary.size():
+		var following := (edge_index + 1) % boundary.size()
+		var edge := boundary[following] - boundary[edge_index]
+		var inward := Vector2(-edge.y, edge.x).normalized()
+		if signed_area < 0.0:
+			inward = -inward
+		for offset: Vector2 in envelope:
+			if (
+				inward.dot(world + offset - boundary[edge_index])
+				< -VISIBLE_BOUNDARY_EPSILON
+			):
+				return false
+	return true
 
 
 static func _expand_convex_polygon(
@@ -134,63 +214,18 @@ static func _expand_convex_polygon(
 	return result
 
 
-static func _expand_convex_polygon_by_footprint(
-	polygon: PackedVector2Array,
-	footprint: PackedVector2Array
-) -> PackedVector2Array:
-	if polygon.size() < 3 or footprint.is_empty():
-		return polygon
-	var signed_area := 0.0
-	for index in polygon.size():
-		var following := (index + 1) % polygon.size()
-		signed_area += _cross(polygon[index], polygon[following])
-	var result := PackedVector2Array()
-	for index in polygon.size():
-		var previous := (index - 1 + polygon.size()) % polygon.size()
-		var following := (index + 1) % polygon.size()
-		var previous_edge := polygon[index] - polygon[previous]
-		var next_edge := polygon[following] - polygon[index]
-		var previous_normal := Vector2(
-			previous_edge.y, -previous_edge.x
-		).normalized()
-		var next_normal := Vector2(next_edge.y, -next_edge.x).normalized()
-		if signed_area < 0.0:
-			previous_normal = -previous_normal
-			next_normal = -next_normal
-		var previous_line := (
-			polygon[index]
-			+ previous_normal * _footprint_support(
-				footprint, previous_normal
-			)
-		)
-		var next_line := (
-			polygon[index]
-			+ next_normal * _footprint_support(footprint, next_normal)
-		)
-		var denominator := _cross(previous_edge, next_edge)
-		if absf(denominator) <= 0.0001:
-			result.append(next_line)
-			continue
-		var ratio := (
-			_cross(next_line - previous_line, next_edge)
-			/ denominator
-		)
-		result.append(previous_line + previous_edge * ratio)
-	return result
-
-
-static func _footprint_support(
-	footprint: PackedVector2Array,
-	normal: Vector2
-) -> float:
-	var support := 0.0
-	for point: Vector2 in footprint:
-		support = maxf(support, point.dot(normal))
-	return support
-
-
 static func _cross(a: Vector2, b: Vector2) -> float:
 	return a.x * b.y - a.y * b.x
+
+
+static func _signed_area(polygon: PackedVector2Array) -> float:
+	var result := 0.0
+	for index in polygon.size():
+		result += _cross(
+			polygon[index],
+			polygon[(index + 1) % polygon.size()]
+		)
+	return result
 
 
 static func cell_center_world(cell: Vector2i, design_size: Vector2i) -> Vector2:
