@@ -88,7 +88,7 @@ def main() -> None:
         skill_primary.get("packageEvidenceSha256")
         == "2DAC78D285DFF8D5F1BA36A8B83E0E8F11C70B76ACE15A34EE7FBFB802862A22",
         skill_primary.get("contractEvidenceSha256")
-        == "34634C4ED2A3519A98F32CF35D8299D3A86A668430061BD220E1F80A900F4024",
+        == "DF2199E337F4EDD087CC060C0B59DE1C5839C309FC953EB0DCBD77FAC0ED4FBC",
         len(str(skill_primary.get("packageEvidenceSha256", ""))) == 64,
         len(str(skill_primary.get("contractEvidenceSha256", ""))) == 64,
     ])
