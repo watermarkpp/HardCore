@@ -78,16 +78,17 @@ func _run() -> void:
 	player._attack_action_timer = 0.0
 	assert(player.request_skill("烈火剑法") and player.fire_sword_enabled, "烈火开关无法开启")
 	assert(player.current_mp == mp_before_fire and is_zero_approx(player._attack_timer), "开启烈火开关不得预扣MP或占用动作")
-	var fire_visual_before_rejection: String = str(player.visual._action_name)
-	var queued_before_fire_rejection: int = game._queued_mobile_attacks
+	var queued_before_fire_fallback: int = game._queued_mobile_attacks
 	game._on_mobile_attack_pressed()
 	game._on_mobile_attack_released()
-	assert(game._queued_mobile_attacks == queued_before_fire_rejection)
-	assert(not player.request_attack(false), "烈火没有合法目标时不得开始攻击动作")
-	assert(is_zero_approx(player._attack_timer) and is_zero_approx(player._attack_action_timer))
+	assert(game._queued_mobile_attacks == queued_before_fire_fallback)
+	assert(player._attack_timer > 0.0 and player._attack_action_timer > 0.0)
+	assert(player.visual._action_name == "刺杀剑术", "烈火无合法目标时没有回退到刺杀")
 	assert(player.skill_cooldown_remaining_ms("warrior.fire_sword") == 0)
 	assert(player.current_mp == mp_before_fire)
-	assert(player.visual._action_name == fire_visual_before_rejection)
+	await get_tree().create_timer(player.attack_hit_windup + 0.04).timeout
+	player._attack_timer = 0.0
+	player._attack_action_timer = 0.0
 	var direct_fire_context := player._build_warrior_attack_context(true)
 	assert(direct_fire_context.mode == "fire" and direct_fire_context.direct_toggle_release, "烈火没有在同一次攻击输入直接进入攻击模式")
 	assert(player.request_attack(true), "烈火开关开启后攻击键未接受")

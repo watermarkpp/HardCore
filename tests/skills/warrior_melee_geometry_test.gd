@@ -81,7 +81,8 @@ func _ready() -> void:
 		77,
 		Vector2(1.0, 9.0),
 		true,
-		true
+		true,
+		ReleaseGeometry.FACING_POLICY_LIVE_LOCKED_TARGET
 	)
 	assert(moving_target.origin_world == Vector2(4.0, 5.0))
 	assert(moving_target.direction_world.is_equal_approx(Vector2(-3.0, 4.0).normalized()))
@@ -89,6 +90,26 @@ func _ready() -> void:
 	assert(not moving_target.allow_target_retarget and not moving_target.allow_directional_scan)
 	assert(ReleaseGeometry.candidate_allowed(moving_target, 77))
 	assert(not ReleaseGeometry.candidate_allowed(moving_target, 88))
+	var locked_melee_facing := ReleaseGeometry.resolve(
+		Vector2(4.0, 5.0),
+		Vector2.RIGHT,
+		77,
+		Vector2(1.0, 9.0),
+		true,
+		true,
+		ReleaseGeometry.FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION
+	)
+	assert(locked_melee_facing.origin_world == Vector2(4.0, 5.0))
+	assert(locked_melee_facing.direction_world.is_equal_approx(Vector2.RIGHT))
+	assert(locked_melee_facing.locked_target_valid_at_release)
+	assert(locked_melee_facing.refresh_actor_footpoint_at_release)
+	assert(locked_melee_facing.refresh_locked_target_footpoint_at_release)
+	assert(locked_melee_facing.direction_locked_for_action)
+	assert(
+		locked_melee_facing.release_facing_policy_id
+		== ReleaseGeometry.MELEE_RELEASE_FACING_POLICY_ID
+	)
+	assert(ReleaseGeometry.candidate_allowed(locked_melee_facing, 77))
 	var vanished_target := ReleaseGeometry.resolve(
 		Vector2(4.0, 5.0), Vector2.RIGHT, 77, Vector2.ZERO, false, true
 	)
