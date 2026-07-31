@@ -1,6 +1,7 @@
 extends Node
 
 const CHASSIS_PATH := "res://assets/ui/gothic_hud/v2/runtime/bottom_chassis_v2.png"
+const ACTION_FRAME_PATH := "res://assets/ui/gothic_hud/v2/runtime/round_action_frame_v3.png"
 const MobileLayout := preload("res://scripts/mobile_layout.gd")
 
 
@@ -99,6 +100,14 @@ func _run() -> void:
 	assert("烈火:开·就绪" in hud.warrior_state_label.text, "烈火状态没有显示开启就绪")
 	var attack_center := (root.get_node("AttackButton") as Control).position + Vector2(60, 60)
 	assert(attack_center == root.size + GameHUD.HUD_ATTACK_CENTER, "攻击键没有使用统一内移圆心")
+	var frame_image := Image.load_from_file(ProjectSettings.globalize_path(ACTION_FRAME_PATH))
+	var measured_inner_diameter := _measure_action_frame_inner_diameter(frame_image)
+	var expected_attack_inner_size := ceilf(measured_inner_diameter)
+	var expected_ring_inner_size := ceilf(
+		measured_inner_diameter * GameHUD.HUD_ATTACK_RING_BUTTON_SIZE.x / float(frame_image.get_width())
+	)
+	assert(expected_attack_inner_size == 74.0 and expected_ring_inner_size == 42.0, "圆框透明内孔测量结果发生漂移")
+	assert(GameHUD.HUD_ACTION_FRAME_INNER_DIAMETER_SOURCE == expected_attack_inner_size, "HUD 未使用圆框实测内孔")
 	var previous_ring_center := Vector2.ZERO
 	for index in range(6):
 		var ring_skill := root.get_node("AttackRingSkill%d" % (index + 1)) as Button
@@ -108,8 +117,8 @@ func _run() -> void:
 		var ring_frame := ring_skill.get_node("RoundActionFrame") as TextureRect
 		var expected_ring_skill: String = ["野蛮冲撞", "烈火剑法", "半月弯刀", "刺杀剑术", "", ""][index]
 		assert(ring_icon != null and ring_icon.get_meta("skill_name", "") == expected_ring_skill)
-		assert(ring_icon.position == Vector2(18, 18) and ring_icon.size == Vector2(36, 36), "环绕技能图没有内切于圆框")
-		assert(ring_backdrop.position == Vector2(16, 16) and ring_backdrop.size == Vector2(40, 40), "环绕技能底色没有按圆框内孔收口")
+		assert(ring_icon.position == Vector2(15, 15) and ring_icon.size == Vector2(expected_ring_inner_size, expected_ring_inner_size), "环绕技能图没有贴合圆框实测内孔")
+		assert(ring_backdrop.position == Vector2(15, 15) and ring_backdrop.size == Vector2(expected_ring_inner_size, expected_ring_inner_size), "环绕技能底色没有贴合圆框实测内孔")
 		assert(ring_icon.material is ShaderMaterial and ring_icon.get_meta("circular_clip", false), "环绕技能图没有圆形裁切")
 		assert(ring_frame != null and ring_frame.get_index() > ring_icon.get_index(), "环形技能金属框没有覆盖在图标之上")
 		var actual_center := ring_skill.position + ring_skill.size * 0.5
@@ -121,6 +130,12 @@ func _run() -> void:
 		if index > 0:
 			assert(actual_center.distance_to(previous_ring_center) > 72.0, "相邻环形技能圆形触控区重叠")
 		previous_ring_center = actual_center
+		if expected_ring_skill.is_empty():
+			assert(not ring_backdrop.visible and not ring_icon.visible and ring_icon.texture == null, "空技能槽仍显示黑底或图标")
+			assert((ring_skill.get_node("SkillLabel") as Label).text == "空", "空技能槽中心没有只显示“空”")
+			assert((ring_skill.get_node("SkillLabel") as Label).vertical_alignment == VERTICAL_ALIGNMENT_CENTER, "空技能槽文字没有居中")
+		else:
+			assert(ring_backdrop.visible, "已配置技能槽的内孔底色被隐藏")
 	var grouped_presses: Array = []
 	hud.skill_slot_pressed.connect(
 		func(slot_group: String, slot_index: int) -> void:
@@ -133,10 +148,10 @@ func _run() -> void:
 	assert(bool(attack.call("_has_point", Vector2(60, 60))) and not bool(attack.call("_has_point", Vector2.ZERO)), "攻击键仍使用方形触控判定")
 	var attack_fill := root.get_node("AttackFill") as Control
 	var attack_frame := root.get_node("AttackFrame") as Control
-	assert(attack_fill.size == Vector2(72, 72), "攻击键红色填充溢出金属内孔")
+	assert(attack_fill.size == Vector2(expected_attack_inner_size, expected_attack_inner_size), "攻击键红色填充没有贴合实测金属内孔")
 	assert(attack_fill.get_global_rect().get_center().is_equal_approx(attack.get_global_rect().get_center()), "攻击键红色填充没有对准圆心")
 	assert(attack_frame.get_global_rect().get_center().is_equal_approx(attack.get_global_rect().get_center()), "攻击键金属框没有对准圆心")
-	assert(hud.attack_slot_icon.size == Vector2(64, 64) and hud.attack_slot_icon.material is ShaderMaterial, "攻击键技能图没有圆形内切")
+	assert(hud.attack_slot_icon.size == Vector2(expected_attack_inner_size, expected_attack_inner_size) and hud.attack_slot_icon.material is ShaderMaterial, "攻击键技能图没有贴合圆框实测内孔")
 	var joystick := root.get_node("TouchJoystick") as TouchJoystick
 	assert(joystick.size.x >= 150 and is_equal_approx(joystick.radius, 58.0), "摇杆触控区和缩小后的可视半径不匹配")
 	assert(joystick.position == Vector2(70, root.size.y - 210), "摇杆没有向安全区内部移动")
@@ -161,18 +176,75 @@ func _run() -> void:
 	assert(root.get_node_or_null("RightControlsArt") == null, "含左边缘污染碎片的旧右侧合成图仍在运行时")
 	assert(root.get_node("AttackFrame").get_meta("stable_id") == "ui.hud.gothic.v3.attack_frame")
 	assert(chassis_art.get_meta("stable_id") == "ui.hud.gothic.v2.bottom_chassis")
-	assert(chassis_art.get_meta("legacy_center_skill_art_removed") == GameHUD.HUD_LEGACY_CENTER_SKILL_ART_SOURCE_RECT)
+	assert(
+		chassis_art.get_meta("legacy_skill_art_mask") == HUDAssetSanitizer.CHASSIS_LEGACY_SKILL_MASK_ID,
+		"底盘没有使用精确旧技能框 alpha mask",
+	)
 	var cleaned_image := chassis_art.texture.get_image()
 	assert(cleaned_image.get_pixel(1008, 260).a <= 0.01, "底框右侧污染连通碎片没有从源像素层清除")
-	for point: Vector2i in [Vector2i(310, 40), Vector2i(440, 40), Vector2i(575, 40), Vector2i(705, 40)]:
-		assert(cleaned_image.get_pixelv(point).a <= 0.01, "底盘上方旧技能圆环没有清除：%s" % point)
-	assert(cleaned_image.get_pixel(500, 145).a > 0.01, "清理旧技能圆环时误删了正式底盘金属")
+	var legacy_points: Array[Vector2i] = [
+		Vector2i(309, 10),
+		Vector2i(254, 60),
+		Vector2i(441, 20),
+		Vector2i(574, 20),
+		Vector2i(707, 20),
+		Vector2i(204, 135),
+		Vector2i(806, 138),
+		Vector2i(380, 138),
+		Vector2i(630, 138),
+		Vector2i(309, 137),
+		Vector2i(309, 150),
+		Vector2i(707, 150),
+	]
+	for point in legacy_points:
+		assert(image.get_pixelv(point).a > 0.01, "旧技能框样本点在原图中不存在：%s" % point)
+		assert(HUDAssetSanitizer.is_chassis_legacy_skill_pixel(point), "旧技能框样本点未进入精确 mask：%s" % point)
+		assert(cleaned_image.get_pixelv(point).a <= 0.01, "旧圆框、红菱形或连接条没有清除：%s" % point)
+	var protected_crest_points: Array[Vector2i] = [
+		Vector2i(505, 115),
+		Vector2i(505, 122),
+		Vector2i(505, 130),
+		Vector2i(492, 135),
+		Vector2i(520, 145),
+		Vector2i(505, 155),
+	]
+	for point in protected_crest_points:
+		assert(image.get_pixelv(point).a > 0.01, "中央徽章保护样本点在原图中不存在：%s" % point)
+		assert(HUDAssetSanitizer.is_chassis_center_crest_protected(point), "中央徽章样本点未进入硬保护区：%s" % point)
+		assert(cleaned_image.get_pixelv(point) == image.get_pixelv(point), "中央尖头或徽章原像素被修改：%s" % point)
+	for unchanged_point: Vector2i in [Vector2i(245, 145), Vector2i(400, 158), Vector2i(505, 165), Vector2i(715, 160)]:
+		assert(cleaned_image.get_pixelv(unchanged_point) == image.get_pixelv(unchanged_point), "正式底盘或恶魔装饰像素被修改：%s" % unchanged_point)
+	var isolated_component_cleaned := HUDAssetSanitizer.without_alpha_component(
+		load(CHASSIS_PATH) as Texture2D,
+		Vector2i(1008, 260),
+	).get_image()
+	for y in range(0, 160):
+		for x in range(204, 808):
+			var point := Vector2i(x, y)
+			if HUDAssetSanitizer.is_chassis_legacy_skill_pixel(point):
+				assert(cleaned_image.get_pixelv(point).a <= 0.01, "alpha mask 内仍有旧技能框像素：%s" % point)
+			else:
+				assert(cleaned_image.get_pixelv(point) == isolated_component_cleaned.get_pixelv(point), "alpha mask 外的底盘原像素被改动：%s" % point)
 	assert(FileAccess.file_exists("res://assets/ui/gothic_hud/v2/hud_asset_manifest.json"))
 	var hud_source := FileAccess.get_file_as_string("res://scripts/hud.gd")
 	assert("gothic_hud/v1" not in hud_source and "gothic_preview" not in hud_source, "正式HUD不得继续引用旧素材")
 	await _assert_2664x1200_landscape_layout(root, chassis, health_orb, mana_orb)
 	print("HUD_GOTHIC_RUNTIME_PASS：统一V2透明框体、动态血蓝球、4物品槽、攻击主键、6环绕技能与触控尺寸均通过")
 	get_tree().quit(0)
+
+
+func _measure_action_frame_inner_diameter(image: Image) -> float:
+	assert(not image.is_empty(), "无法读取攻击圆框源图")
+	var center := Vector2(image.get_size()) * 0.5
+	var nearest_alpha_radius := INF
+	for y in range(image.get_height()):
+		for x in range(image.get_width()):
+			if image.get_pixel(x, y).a <= 0.05:
+				continue
+			var pixel_center := Vector2(x + 0.5, y + 0.5)
+			nearest_alpha_radius = minf(nearest_alpha_radius, pixel_center.distance_to(center))
+	assert(nearest_alpha_radius < INF, "攻击圆框源图没有有效 alpha")
+	return nearest_alpha_radius * 2.0
 
 
 func _assert_2664x1200_landscape_layout(root: Control, chassis: Control, health_orb: Control, mana_orb: Control) -> void:
