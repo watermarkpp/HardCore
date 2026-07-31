@@ -7,6 +7,8 @@ extends RefCounted
 
 const CONTRACT_ID := "gameplay.warrior.melee_geometry.fractional_tile.v1"
 const WILD_RUSH_CONTRACT_ID := "gameplay.warrior.wild_rush.atomic_tile_push.v1"
+const TARGET_COUNT_POLICY_ID := "gameplay.warrior.melee_target_count.v1"
+const UNLIMITED_TARGETS := -1
 
 const SKILL_NORMAL := "normal"
 const SKILL_FIRE := "fire"
@@ -28,8 +30,8 @@ const RANGE_BONUS_CAP_TILES := {
 const MAXIMUM_TARGETS := {
 	SKILL_NORMAL: 1,
 	SKILL_FIRE: 1,
-	SKILL_HALF_MOON: 4,
-	SKILL_THRUST: 2,
+	SKILL_HALF_MOON: UNLIMITED_TARGETS,
+	SKILL_THRUST: UNLIMITED_TARGETS,
 }
 
 const THRUST_PRIMARY_REACH_TILES := 1.5
@@ -61,6 +63,20 @@ static func reach_tiles(mode: String, range_bonus_tiles := 0.0) -> float:
 
 static func maximum_targets(mode: String) -> int:
 	return int(MAXIMUM_TARGETS.get(mode, 1))
+
+
+static func has_finite_target_limit(mode: String) -> bool:
+	return maximum_targets(mode) != UNLIMITED_TARGETS
+
+
+static func target_count_policy(mode: String) -> Dictionary:
+	var limit := maximum_targets(mode)
+	return {
+		"contract_id": TARGET_COUNT_POLICY_ID,
+		"mode": mode,
+		"maximum_targets": limit,
+		"unlimited_within_geometry": limit == UNLIMITED_TARGETS,
+	}
 
 
 static func facing_tile_step(direction_index: int) -> Vector2i:
