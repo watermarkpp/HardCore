@@ -34,6 +34,7 @@ const CANONICAL_MATERIAL_ITEMS := {
 const SKILL_PRODUCTION_ADAPTER_CONTRACT := "skills.production_adaptation.hardcore.v1"
 const ATTACK_LOCK_CONTRACT := "combat.attack_lock.tile_radius.v1"
 const ATTACK_LOCK_RANGE_TILES := 10
+const WILD_RUSH_SKILL_ID := "warrior.wild_rush"
 
 var player: PlayerCharacter
 var _world_camera: Camera2D
@@ -1559,6 +1560,191 @@ func _face_skill_cast_target() -> Vector2:
 	return direction
 
 
+func _select_wild_rush_target() -> EnemyActor:
+	if TargetingSystem.is_valid_target(locked_target, player.global_position):
+		# A live lock is authoritative. An ineligible, over-level, boss, or
+		# out-of-reach lock must make this cast invalid instead of silently
+		# redirecting the charge to a different nearby monster.
+		return locked_target if _wild_rush_target_is_eligible(locked_target) else null
+	var player_tile := _canonical_world_to_fractional_tile(player.global_position)
+	var best: EnemyActor
+	var best_distance := INF
+	for node: Node in get_tree().get_nodes_in_group("enemies"):
+		if not node is EnemyActor:
+			continue
+		var enemy: EnemyActor = node
+		if not _wild_rush_target_is_eligible(enemy):
+			continue
+		var enemy_tile := _canonical_world_to_fractional_tile(enemy.global_position)
+		var distance := WarriorMeleeGeometryScript.chebyshev_distance(player_tile, enemy_tile)
+		if distance < best_distance:
+			best = enemy
+			best_distance = distance
+	return best
+
+
+func _wild_rush_target_is_eligible(target: EnemyActor) -> bool:
+	if (
+		not is_instance_valid(target)
+		or target.is_queued_for_deletion()
+		or target.current_hp <= 0
+		or target.is_boss
+		or bool(target.get_meta("immovable", false))
+		or int(target.monster_data.get("level", target.level)) >= PlayerState.level
+	):
+		return false
+	if (
+		WorldSpatialRulesScript.point_inside_safe_zones(player.global_position, _active_safe_zones)
+		or WorldSpatialRulesScript.point_inside_safe_zones(target.global_position, _active_safe_zones)
+	):
+		return false
+	return WarriorMeleeGeometryScript.wild_rush_target_is_adjacent(
+		_canonical_world_to_fractional_tile(player.global_position),
+		_canonical_world_to_fractional_tile(target.global_position)
+	)
+
+
+func _build_wild_rush_path_plan(target: EnemyActor) -> Dictionary:
+	var result := {
+		"contract_id": WarriorMeleeGeometryScript.WILD_RUSH_CONTRACT_ID,
+		"eligible": false,
+		"dynamic_blocker_in_corridor": false,
+		"static_clear_distance_tiles": 0,
+		"resolved_push_distance_tiles": 0,
+	}
+	if not _wild_rush_target_is_eligible(target):
+		return result
+	var player_tile := _canonical_world_to_fractional_tile(player.global_position)
+	var target_tile := _canonical_world_to_fractional_tile(target.global_position)
+	var direction_index := WarriorMeleeGeometryScript.direction_index_for_tile_delta(
+		target_tile - player_tile
+	)
+	var direction_step := WarriorMeleeGeometryScript.facing_tile_step(direction_index)
+	var dynamic_blocked := _wild_rush_has_dynamic_blocker(
+		target,
+		target_tile,
+		direction_index
+	)
+	var static_clear := _wild_rush_static_clear_distance(
+		target,
+		player_tile,
+		target_tile,
+		direction_step
+	)
+	result.merge({
+		"eligible": true,
+		"direction_index": direction_index,
+		"direction_step": direction_step,
+		"player_origin_tile": player_tile,
+		"target_origin_tile": target_tile,
+		"dynamic_blocker_in_corridor": dynamic_blocked,
+		"static_clear_distance_tiles": static_clear,
+		"resolved_push_distance_tiles": WarriorMeleeGeometryScript.wild_rush_resolved_distance(
+			static_clear,
+			dynamic_blocked
+		),
+	}, true)
+	return result
+
+
+func _wild_rush_has_dynamic_blocker(
+	target: EnemyActor,
+	target_tile: Vector2,
+	direction_index: int
+) -> bool:
+	for node: Node in get_tree().get_nodes_in_group("enemies"):
+		if not node is EnemyActor or node == target:
+			continue
+		var other: EnemyActor = node
+		if other.is_queued_for_deletion() or other.current_hp <= 0:
+			continue
+		var coordinates := WarriorMeleeGeometryScript.line_coordinates(
+			_canonical_world_to_fractional_tile(other.global_position) - target_tile,
+			direction_index
+		)
+		if (
+			coordinates.x > WarriorMeleeGeometryScript.EPSILON
+			and coordinates.x <= float(WarriorMeleeGeometryScript.WILD_RUSH_PUSH_DISTANCE_TILES) + WarriorMeleeGeometryScript.EPSILON
+			and absf(coordinates.y) <= 0.5 + WarriorMeleeGeometryScript.EPSILON
+		):
+			return true
+	return false
+
+
+func _wild_rush_static_clear_distance(
+	target: EnemyActor,
+	player_tile: Vector2,
+	target_tile: Vector2,
+	direction_step: Vector2i
+) -> int:
+	var step := Vector2(direction_step)
+	for distance in range(1, WarriorMeleeGeometryScript.WILD_RUSH_PUSH_DISTANCE_TILES + 1):
+		var player_destination := _canonical_fractional_tile_to_world(
+			player_tile + step * float(distance)
+		)
+		var target_destination := _canonical_fractional_tile_to_world(
+			target_tile + step * float(distance)
+		)
+		if (
+			WorldSpatialRulesScript.environment_blocks_actor(
+				background,
+				player_destination,
+				ArtSpec.PLAYER_COLLISION_RADIUS
+			)
+			or WorldSpatialRulesScript.environment_blocks_actor(
+				background,
+				target_destination,
+				target.collision_radius
+			)
+		):
+			return distance - 1
+	return WarriorMeleeGeometryScript.WILD_RUSH_PUSH_DISTANCE_TILES
+
+
+func _apply_wild_rush_displacement(
+	target: EnemyActor,
+	effect: Dictionary,
+	target_context: Dictionary
+) -> bool:
+	var distance := clampi(
+		int(effect.get("resolved_push_distance_tiles", 0)),
+		0,
+		WarriorMeleeGeometryScript.WILD_RUSH_PUSH_DISTANCE_TILES
+	)
+	if distance <= 0 or bool(target_context.get("dynamic_blocker_in_corridor", false)):
+		return false
+	var direction_step: Vector2i = target_context.get("direction_step", Vector2i.ZERO)
+	if direction_step == Vector2i.ZERO:
+		return false
+	var step := Vector2(direction_step) * float(distance)
+	var player_destination := _canonical_fractional_tile_to_world(
+		_canonical_world_to_fractional_tile(player.global_position) + step
+	)
+	var target_destination := _canonical_fractional_tile_to_world(
+		_canonical_world_to_fractional_tile(target.global_position) + step
+	)
+	if (
+		WorldSpatialRulesScript.environment_blocks_actor(
+			background,
+			player_destination,
+			ArtSpec.PLAYER_COLLISION_RADIUS
+		)
+		or WorldSpatialRulesScript.environment_blocks_actor(
+			background,
+			target_destination,
+			target.collision_radius
+		)
+	):
+		return false
+	# Both destinations were preflighted before either actor is mutated. This is
+	# one coupled transaction: partial single-actor movement is forbidden.
+	target.global_position = target_destination
+	player.global_position = player_destination
+	player.velocity = Vector2.ZERO
+	player.movement_performed.emit(player.global_position, player.facing)
+	return true
+
+
 func _update_target_hud() -> void:
 	if not is_instance_valid(hud):
 		return
@@ -1601,7 +1787,13 @@ func _use_skill_slot(slot_group: String, slot_index: int) -> void:
 	var learned_level := PlayerState.effective_skill_level(skill_name)
 	var profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)
 	_skill_cast_target = null
-	if _skill_needs_target(str(profile.get("cast_type", "melee"))):
+	if skill_name == "野蛮冲撞":
+		_skill_cast_target = _select_wild_rush_target()
+		if _skill_cast_target == null:
+			hud.show_message("附近没有可冲撞的低级普通怪物")
+			return
+		_face_skill_cast_target()
+	elif _skill_needs_target(str(profile.get("cast_type", "melee"))):
 		_ensure_skill_cast_target(
 			null,
 			float(profile.get("search_range", TargetingSystem.DEFAULT_SEARCH_RADIUS))
@@ -1848,15 +2040,21 @@ func _execute_canonical_skill(
 		return {"accepted": false, "effect_success": false, "reason": "unknown_skill"}
 	var rank := PlayerState.effective_skill_level(skill_name)
 	var target_context := _canonical_target_context(definition, origin, direction)
-	var cast_target := _skill_cast_target
 	target_context.merge(extra_target_context, true)
+	var cast_target := _skill_cast_target
+	var request_facing := _canonical_facing_for_skill(stable_skill_id, direction)
+	if stable_skill_id == WILD_RUSH_SKILL_ID and cast_target != null:
+		var rush_plan := _build_wild_rush_path_plan(cast_target)
+		if bool(rush_plan.get("eligible", false)):
+			target_context.merge(rush_plan, true)
+			request_facing = rush_plan.get("direction_step", request_facing)
 	var resource_context := _canonical_resource_context(stable_skill_id)
 	var request := SkillCastRequestScript.create(
 		stable_skill_id,
 		rank,
 		PlayerState.level,
 		_canonical_world_to_tile(origin),
-		_canonical_facing_for_skill(stable_skill_id, direction),
+		request_facing,
 		target_context,
 		resource_context,
 		_next_canonical_seed()
@@ -2022,7 +2220,6 @@ func _canonical_target_context(definition: Dictionary, origin: Vector2, directio
 			"target_poison_resist": target.anti_poison,
 			"target_is_living": target.current_hp > 0,
 			"actual_hp_missing": target.max_hp - target.current_hp,
-			"path_blocked_after_start": background.is_environment_point_blocked(target.global_position + direction.normalized() * 50.0),
 		}, true)
 	var nearby: Array[Dictionary] = []
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
@@ -2137,9 +2334,7 @@ func _apply_canonical_effects(
 					_apply_canonical_displacement(target, target.global_position.direction_to(origin) * -float(effect.get("push_distance_tiles", 1)) * 50.0)
 			"level_gated_push":
 				if target != null and bool(effect.get("displaced", false)):
-					var displacement := direction.normalized() * float(effect.get("push_distance_tiles", 1)) * 50.0
-					_apply_canonical_displacement(target, displacement)
-					_apply_canonical_displacement(player, displacement)
+					_apply_wild_rush_displacement(target, effect, target_context)
 			"self_damage":
 				_combat_runtime.apply_damage(player, int(effect.get("amount", 1)))
 			"server_random_teleport":
@@ -2465,6 +2660,13 @@ func _canonical_world_to_fractional_tile(world: Vector2) -> Vector2:
 	)
 
 
+func _canonical_fractional_tile_to_world(tile: Vector2) -> Vector2:
+	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
+	if not runtime.is_empty():
+		return MapEditorRuntimeBridgeScript.tile_to_world(runtime, [tile.x, tile.y])
+	return Vector2((tile.x - tile.y) * 16.0, (tile.x + tile.y) * 8.0)
+
+
 func _canonical_tile_to_world(tile_value: Variant) -> Vector2:
 	var tile := Vector2i(tile_value) if tile_value is Vector2i else Vector2i.ZERO
 	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
@@ -2759,41 +2961,22 @@ func _half_moon_targets(origin: Vector2, direction: Vector2, excluded: EnemyActo
 	return result
 
 
-func _execute_wild_rush(direction: Vector2, skill_level: int) -> bool:
-	if direction.length_squared() < 0.01:
+func _execute_wild_rush(_direction: Vector2, _skill_level: int) -> bool:
+	# Compatibility/test entrypoint. Production reaches the same planner through
+	# the canonical skill router; input direction and rank cannot alter geometry.
+	var target := _select_wild_rush_target()
+	if target == null:
 		return false
-	var normalized := direction.normalized()
-	var cell_distance := 50.0
-	var max_cells := WarriorCombatMath.wild_rush_max_cells(skill_level)
-	var moved := false
-	for step in range(max_cells):
-		var next_position := player.global_position + normalized * cell_distance
-		if background.is_environment_point_blocked(next_position):
-			break
-		var blocker := _enemy_at_position(next_position, null)
-		if blocker != null:
-			var target_level := int(blocker.monster_data.get("level", blocker.level))
-			var threshold := WarriorCombatMath.wild_rush_success_threshold(skill_level, PlayerState.level, target_level)
-			if blocker.is_boss or threshold <= 0 or _rng.randi_range(0, 19) >= threshold:
-				break
-			var pushed_position := blocker.global_position + normalized * cell_distance
-			if background.is_environment_point_blocked(pushed_position) or _enemy_at_position(pushed_position, blocker) != null:
-				break
-			blocker.global_position = pushed_position
-			var remaining := maxi(0, max_cells - step - 1)
-			var damage_base := (remaining + 1) * 10
-			_combat_runtime.apply_enemy_physical_damage(blocker, damage_base + _rng.randi_range(0, damage_base - 1), player)
-		player.global_position = next_position
-		moved = true
-	return moved
-
-
-func _enemy_at_position(position: Vector2, excluded: EnemyActor) -> EnemyActor:
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if node is EnemyActor and node != excluded and not node.is_queued_for_deletion():
-			if node.global_position.distance_to(position) <= node.collision_radius + ArtSpec.PLAYER_COLLISION_RADIUS:
-				return node
-	return null
+	var plan := _build_wild_rush_path_plan(target)
+	var resolved_distance := int(plan.get("resolved_push_distance_tiles", 0))
+	return _apply_wild_rush_displacement(
+		target,
+		{
+			"resolved_push_distance_tiles": resolved_distance,
+			"displaced": resolved_distance > 0,
+		},
+		plan
+	)
 
 
 func _show_attack_flash(origin: Vector2, direction: Vector2, hit: bool, color: Color) -> void:
