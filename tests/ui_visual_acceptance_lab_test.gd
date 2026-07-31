@@ -21,7 +21,7 @@ func _ready() -> void:
 	assert(not lab._player.is_physics_processing())
 	assert(not lab._player.visual.is_processing())
 	assert(lab._action_option.item_count == 6)
-	assert(lab._mode_option.item_count == 2)
+	assert(lab._mode_option.item_count == 3)
 	assert(lab._mode_option.selected == 0)
 	assert(lab._monster_option.item_count == 214)
 	assert(lab._direction_option.item_count == 8)
@@ -110,6 +110,126 @@ func _ready() -> void:
 		lab._apply_selection()
 		assert(lab._frame_count() >= 1)
 		assert(lab._player.visual.current_animation_name() == lab.ACTIONS[action_index])
+	lab._mode_option.select(2)
+	lab._on_mode_changed(2)
+	assert(lab._is_warrior_skill_mode())
+	assert(not lab._is_monster_mode())
+	assert(lab._action_option.item_count == 6)
+	assert(lab._profession_option.get_parent().visible)
+	assert(lab._profession_option.disabled)
+	assert(lab._profession_option.selected == 0)
+	assert(lab._warrior_skill_controls.visible)
+	assert(not lab._foot_pick_button.visible)
+	assert(not lab._alignment_button.visible)
+	assert(not lab._alignment_actions.visible)
+	assert(not lab._save_alignment_button.visible)
+	assert(lab._player.visible)
+	assert(lab._monster == null or not lab._monster.visible)
+	assert(lab._frame_count() == lab.WARRIOR_SKILL_EXPECTED_FRAMES)
+	var contact_layout := lab.warrior_contact_sheet_layout()
+	assert(int(contact_layout.get("columns", 0)) == 8)
+	assert(int(contact_layout.get("rows", 0)) == 6)
+	assert(
+		contact_layout.get("columnOrder", [])
+		== lab.DIRECTION_LABELS
+	)
+	assert(
+		contact_layout.get("imageSize", Vector2i.ZERO)
+		== Vector2i(
+			lab.WARRIOR_CONTACT_CELL_SIZE.x * 8,
+			lab.WARRIOR_CONTACT_CELL_SIZE.y * 6,
+		)
+	)
+	for skill_index in lab.WARRIOR_SKILL_ACTIONS.size():
+		lab._action_option.select(skill_index)
+		lab._direction_option.select(skill_index % 8)
+		lab._apply_selection()
+		var skill_action: String = lab.WARRIOR_SKILL_ACTIONS[
+			skill_index
+		]
+		var skill_audit := lab.warrior_skill_audit_snapshot()
+		assert(
+			skill_audit.get("contractId", "")
+			== lab.WARRIOR_SKILL_LAB_CONTRACT_ID
+		)
+		assert(skill_audit.get("skillAction", "") == skill_action)
+		assert(skill_audit.get("bodyAction", "") == "attack")
+		assert(int(skill_audit.get("frameCount", 0)) == 6)
+		assert(
+			lab._player.visual.current_animation_name()
+			== skill_action
+		)
+		var expects_effect := skill_action in [
+			"攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法",
+		]
+		assert(
+			bool(skill_audit.get("mainEffectSupported", false))
+			== expects_effect
+		)
+		assert(
+			bool(skill_audit.get("mainEffectVisible", false))
+			== expects_effect
+		)
+		assert(not bool(skill_audit.get("passiveEffectVisible", true)))
+		if expects_effect:
+			assert(int(skill_audit.get("sourceIndex", -1)) >= 0)
+	lab._action_option.select(
+		lab.WARRIOR_SKILL_ACTIONS.find("半月弯刀")
+	)
+	lab._direction_option.select(3)
+	lab._current_frame = 4
+	lab._frame_spin.set_value_no_signal(4)
+	lab._apply_preview_frame()
+	var half_moon_main_region: Rect2 = (
+		lab._player.visual.skill_effect_sprite.region_rect
+	)
+	lab._passive_effect_layer_button.set_pressed_no_signal(true)
+	lab._apply_preview_frame()
+	var layered_audit := lab.warrior_skill_audit_snapshot()
+	assert(layered_audit.get("skillAction", "") == "半月弯刀")
+	assert(bool(layered_audit.get("mainEffectVisible", false)))
+	assert(bool(layered_audit.get("passiveEffectVisible", false)))
+	assert(
+		lab._player.visual.skill_effect_sprite.region_rect
+		== half_moon_main_region
+	)
+	assert(lab._player.visual._action_name == "半月弯刀")
+	lab._body_layer_button.set_pressed_no_signal(false)
+	lab._weapon_layer_button.set_pressed_no_signal(false)
+	lab._main_effect_layer_button.set_pressed_no_signal(false)
+	lab._apply_preview_frame()
+	assert(not lab._player.visual.sprite.visible)
+	assert(not lab._player.visual.worn_hair_sprite.visible)
+	assert(not lab._player.visual.worn_weapon_sprite.visible)
+	assert(not lab._player.visual.skill_effect_sprite.visible)
+	assert(lab._player.visual.passive_proc_effect_sprite.visible)
+	assert(lab._player.visual._action_name == "半月弯刀")
+	lab._body_layer_button.set_pressed_no_signal(true)
+	lab._weapon_layer_button.set_pressed_no_signal(true)
+	lab._main_effect_layer_button.set_pressed_no_signal(true)
+	lab._passive_effect_layer_button.set_pressed_no_signal(false)
+	lab._action_option.select(
+		lab.WARRIOR_SKILL_ACTIONS.find("烈火剑法")
+	)
+	for direction_index in 8:
+		for frame_index in 6:
+			lab._direction_option.select(direction_index)
+			lab._current_frame = frame_index
+			lab._frame_spin.set_value_no_signal(frame_index)
+			lab._apply_preview_frame()
+			var fire_audit := lab.warrior_skill_audit_snapshot()
+			assert(
+				int(fire_audit.get("direction", -1))
+				== direction_index
+			)
+			assert(int(fire_audit.get("frame", -1)) == frame_index)
+			assert(bool(fire_audit.get("mainEffectVisible", false)))
+			assert(
+				not str(
+					fire_audit.get("mainEffectAsset", "")
+				).is_empty()
+			)
+			assert(int(fire_audit.get("sourceIndex", -1)) >= 0)
 	lab._mode_option.select(1)
 	lab._on_mode_changed(1)
 	await get_tree().process_frame
@@ -292,7 +412,8 @@ func _ready() -> void:
 	assert(PlayerState.test_mode == original_test_mode)
 	print(
 		"UI_VISUAL_ACCEPTANCE_LAB_PASS player_actions=6 "
-		+ "monster_actions=5 monsters=214 directions=8 "
+		+ "monster_actions=5 monsters=214 warrior_skills=6 "
+		+ "directions=8 frames=6 passive_layer_isolated=true "
 		+ "single_target_drafts=true runtime_composite=true"
 	)
 	get_tree().quit(0)
