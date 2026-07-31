@@ -1,5 +1,12 @@
 # Codex 精简上下文快照
 
+## 2026-07-31 Android v50：全职业实时命中/发射几何
+
+- 职业技能提交 `5d383b4b` 已作为集成提交 `9ba353cf` 接入，跨系统运行时接线为 `461df415`，Android 固定构建提交为 `d7717832`。新增稳定合同 `gameplay.professions.combat_release_geometry.live_footpoint.v1`：攻击或技能在输入时只保存原目标实例 ID 与自动转向后的动画方向，在实际命中/发射帧读取人物和原目标的实时脚点；动画中途不切方向，动作结束后仍恢复移动输入。
+- 普通攻击、刺杀、半月和烈火的主目标禁止在前摇期间静默换成附近怪物；原目标实时越出既有合法范围才真正挥空。法师、道士的单体直伤与投射物沿用相同原目标/实时脚点规则；方向、目标区域与自身区域技能保留输入方向，不会被改造成追踪技能。既有命中率、脚点、范围、伤害、投射物碰撞和技能资源规则均未改动。
+- 完整关键回归 `76/76` 通过；覆盖目标跨八方向边界、人物/目标同时移动、原目标消失、旁边存在诱饵目标、真实超距、战士四种近战模式以及法师/道士释放几何。236/240 头盔草稿、三份怪物脚点合同与 `scripts/hud.gd` 的 SHA-256 均与施工前一致。
+- Android 包为 `versionCode=50`、`versionName=1.17.14-live-hit-geometry`、包名 `com.personal.mafaoffline`、应用名 `HardCore`。APK 从固定提交的全新隔离工作树导出为 `outputs/hardcore/HardCore-v50-live-hit-geometry-debug.apk`，大小 `244,327,964` 字节，SHA-256 `81567059C29FEBD47039292332C00C0C65E0EFB0F6465991F8F585968616D648`；结构与签名验证通过。已对 HONOR 90（REA-AN00）执行保留数据覆盖安装并启动，手机端回读版本正确，进程与前台活动正常，启动日志无 Godot 脚本错误或 Android 崩溃。
+
 ## 2026-07-31 Android v49：野蛮冲撞原子推移测试包
 
 - Android 版本提交为 `975eb257e990ce1866643d44a8ae70908d040ad5`：`versionCode=49`、`versionName=1.17.13-wild-rush-atomic`，包名继续为 `com.personal.mafaoffline`，应用名继续为 `HardCore`。APK 从该固定提交的全新隔离工作树导出为 `outputs/hardcore/HardCore-v49-wild-rush-atomic-debug.apk`，大小 `244,319,577` 字节，SHA-256 `58BBE5FDF78CB01B97B61CA34A5AAAA8D3B652386F6B6AB4F472B4DE1DCF3975`。
