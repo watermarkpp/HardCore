@@ -1,6 +1,8 @@
 class_name ProfessionRules
 extends RefCounted
 
+const SkillInputPolicyScript := preload("res://scripts/skill_input_policy.gd")
+
 const PROFESSIONS: Array[String] = ["战士", "法师", "道士"]
 const PROFESSION_CATALOG := {
 	"warrior": "战士",
@@ -58,7 +60,7 @@ const SKILL_PROFILES := {
 	"刺杀剑术": {"profession": "战士", "cast_type": "line", "multiplier": 1.0, "range": 175.0, "service_magic_id": 12, "service_mode": "toggle_second_cell"},
 	"半月弯刀": {"profession": "战士", "cast_type": "area", "multiplier": 1.0, "range": 125.0, "service_magic_id": 25, "service_mode": "toggle_three_directions"},
 	"野蛮冲撞": {"profession": "战士", "cast_type": "dash", "multiplier": 0.8, "range": 115.0, "service_magic_id": 27, "service_mode": "rush"},
-	"烈火剑法": {"profession": "战士", "cast_type": "melee", "multiplier": 1.0, "range": 105.0, "service_magic_id": 26, "service_mode": "arm_next_hit", "ui_interaction_mode": "click", "runtime_activation_mode": "explicit_charge", "charge_state_id": "warrior.fire_sword.charge_armed"},
+	"烈火剑法": {"profession": "战士", "cast_type": "melee", "multiplier": 1.0, "range": 105.0, "service_magic_id": 26, "service_mode": "arm_next_hit", "ui_interaction_mode": "toggle", "runtime_activation_mode": "single_attack_input_direct_melee", "runtime_override_id": "gameplay.warrior.fire_sword.attack_toggle.user_override.v1", "charge_state_id": "warrior.fire_sword.charge_armed"},
 	"火球术": {"profession": "法师", "cast_type": "projectile", "multiplier": 1.0, "range": 360.0},
 	"抗拒火环": {"profession": "法师", "cast_type": "knockback", "multiplier": 0.0, "range": 115.0},
 	"诱惑之光": {"profession": "法师", "cast_type": "control", "multiplier": 0.0, "range": 300.0},
@@ -198,6 +200,10 @@ static func skill_display_name(value: String) -> String:
 	return str(SKILL_CATALOG.get(value, value if skill_id(value) != "" else ""))
 
 
+static func skill_input_metadata(skill_name_or_id: String) -> Dictionary:
+	return SkillInputPolicyScript.metadata(skill_name_or_id)
+
+
 static func stats_for_level(profession: String, level: int) -> Dictionary:
 	var resolved_profession := profession_display_name(profession)
 	var selected := resolved_profession if is_valid_profession(resolved_profession) else "战士"
@@ -224,6 +230,17 @@ static func skill_profile(skill_name_or_id: String) -> Dictionary:
 	profile["skill_id"] = stable_id
 	profile["display_name"] = display_name
 	profile["profession_id"] = profession_id(str(profile.get("profession", "")))
+	var input_metadata := skill_input_metadata(stable_id)
+	profile.merge(input_metadata, true)
+	# Preserve legacy field names for existing UI consumers while routing both
+	# through the stable input metadata contract.
+	var interaction_mode := str(input_metadata.get("interaction_mode", "click_release"))
+	profile["ui_interaction_mode"] = (
+		"click"
+		if interaction_mode == SkillInputPolicyScript.INTERACTION_CLICK_RELEASE
+		else interaction_mode
+	)
+	profile["runtime_activation_mode"] = str(input_metadata.get("runtime_activation", "press_to_release"))
 	return profile
 
 

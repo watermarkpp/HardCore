@@ -18,6 +18,52 @@ func _ready() -> void:
 	assert(slaying.effects[0].flat_dc_bonus == 8)
 	assert(slaying.effects[0].flat_accuracy_bonus == 3)
 	assert(slaying.proficiency_event == "successful_slaying_proc_on_valid_melee_swing")
+	for body_mode: String in ["normal", "thrust", "half_moon", "fire"]:
+		var layered_proc := Router.resolve_warrior_melee_modifiers({
+			"body_mode": body_mode,
+			"basic_sword_learned": true,
+			"basic_sword_rank": 3,
+			"slaying_learned": true,
+			"slaying_rank": 3,
+			"valid_melee_swing": true,
+			"force_slaying_proc": true,
+			"seed": 176,
+		})
+		assert(layered_proc.contract_id == Router.WARRIOR_MELEE_MODIFIER_CONTRACT_ID)
+		assert(layered_proc.body_mode == body_mode)
+		assert(layered_proc.body_mode_agnostic and layered_proc.scope == "all_hits_of_selected_melee_action")
+		assert(layered_proc.slaying_proc and layered_proc.slaying_proc_roll_count == 1)
+		assert(layered_proc.flat_dc_bonus_before_body_formula == 8)
+		assert(layered_proc.flat_accuracy_bonus == 12, "基本+9与攻杀+3准确必须叠加")
+		assert(
+			_body_damage(body_mode, 100 + layered_proc.flat_dc_bonus_before_body_formula)
+			== _expected_proc_damage(body_mode)
+		)
+		assert(layered_proc.proficiency_events.size() == 2)
+		var no_proc := Router.resolve_warrior_melee_modifiers({
+			"body_mode": body_mode,
+			"basic_sword_learned": true,
+			"basic_sword_rank": 3,
+			"slaying_learned": true,
+			"slaying_rank": 3,
+			"valid_melee_swing": true,
+			"force_no_slaying_proc": true,
+			"seed": 176,
+		})
+		assert(not no_proc.slaying_proc and no_proc.slaying_proc_roll_count == 1)
+		assert(no_proc.flat_dc_bonus_before_body_formula == 0)
+		assert(no_proc.flat_accuracy_bonus == 9)
+		assert(no_proc.proficiency_events.size() == 1)
+	var empty_swing := Router.resolve_warrior_melee_modifiers({
+		"basic_sword_learned": true,
+		"basic_sword_rank": 3,
+		"slaying_learned": true,
+		"slaying_rank": 3,
+		"valid_melee_swing": false,
+		"force_slaying_proc": true,
+	})
+	assert(empty_swing.slaying_proc_roll_count == 0 and not empty_swing.slaying_proc)
+	assert(empty_swing.proficiency_events.is_empty())
 	var thrust := _execute("warrior.thrusting", 3, {"has_target": true, "eligible_target_count": 2})
 	assert(thrust.effects[1].multiplier == 1.0 and thrust.effects[1].ignore_ac)
 	assert(thrust.geometry.length_tiles == 2)
@@ -76,3 +122,21 @@ func _execute(
 		11
 	)
 	return Router.execute(request)
+
+
+func _body_damage(body_mode: String, augmented_base_damage: int) -> int:
+	match body_mode:
+		"half_moon":
+			return roundi(float(augmented_base_damage) * (5.0 / 13.0))
+		"fire":
+			return roundi(float(augmented_base_damage) * 2.6)
+	return augmented_base_damage
+
+
+func _expected_proc_damage(body_mode: String) -> int:
+	return {
+		"normal": 108,
+		"thrust": 108,
+		"half_moon": 42,
+		"fire": 281,
+	}[body_mode]

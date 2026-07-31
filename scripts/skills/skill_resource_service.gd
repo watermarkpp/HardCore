@@ -14,6 +14,7 @@ static func quote(
 	if (
 		str(definition.get("mechanics", {}).get("runtime_family", "")) == "next_melee_charge"
 		and bool(cast_context.get("charge_consumed", false))
+		and not bool(cast_context.get("direct_toggle_release", false))
 	):
 		mp_cost = 0
 	var resource: Dictionary = definition.get("resource", {})

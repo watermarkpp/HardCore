@@ -76,10 +76,19 @@ func _run() -> void:
 	assert(hud.attack_ring_skill_icons.size() == 6 and hud.attack_ring_skill_labels.size() == 6)
 	assert(hud.attack_slot_icon.texture != null and hud.attack_slot_icon.get_meta("skill_name", "") == "烈火剑法")
 	assert((root.get_node("AttackButton") as Button).get_meta("bound_skill_name", "") == "烈火剑法")
-	hud.update_warrior_states({"fire_armed": true, "fire_expires_remaining_ms": 10000})
-	assert("烈火:充能" in hud.warrior_state_label.text, "烈火状态没有显示一次性充能")
-	hud.update_warrior_states({"fire_armed": false, "fire_expires_remaining_ms": 0})
-	assert("烈火:未充能·就绪" in hud.warrior_state_label.text, "烈火状态没有显示未充能就绪")
+	hud.update_warrior_states({
+		"fire_enabled": true,
+		"fire_armed": true,
+		"fire_expires_remaining_ms": 10000,
+	})
+	assert("烈火:开·充能" in hud.warrior_state_label.text, "烈火状态没有显示开启和充能")
+	hud.update_warrior_states({
+		"fire_enabled": true,
+		"fire_armed": false,
+		"fire_expires_remaining_ms": 0,
+		"fire_cooldown_remaining_ms": 0,
+	})
+	assert("烈火:开·就绪" in hud.warrior_state_label.text, "烈火状态没有显示开启就绪")
 	var ring_centers := [
 		Vector2(-261, -70),
 		Vector2(-261, -142),

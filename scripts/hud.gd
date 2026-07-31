@@ -994,7 +994,7 @@ func update_warrior_states(snapshot: Dictionary) -> void:
 		return
 	var fire_text := _fire_sword_charge_label(snapshot)
 	warrior_state_label.text = "攻杀:%s　刺杀:%s　半月:%s　烈火:%s" % [
-		"自动" if bool(snapshot.get("slaying_auto", false)) else "未学",
+		"几率" if bool(snapshot.get("slaying_auto", false)) else "未学",
 		"开" if bool(snapshot.get("thrusting", false)) else "关",
 		"开" if bool(snapshot.get("half_moon", false)) else "关",
 		fire_text,
@@ -1003,16 +1003,18 @@ func update_warrior_states(snapshot: Dictionary) -> void:
 
 
 func _fire_sword_charge_label(snapshot: Dictionary) -> String:
-	# Canonical fire sword is one explicit next-melee charge, never an auto-use toggle.
-	# The runtime snapshot owns these fields; UI only projects its current state.
+	if not bool(snapshot.get("fire_enabled", false)):
+		return "关"
 	if bool(snapshot.get("fire_armed", false)) and int(snapshot.get("fire_expires_remaining_ms", 0)) > 0:
-		return "充能"
-	return "未充能·就绪"
+		return "开·充能"
+	if int(snapshot.get("fire_cooldown_remaining_ms", 0)) > 0:
+		return "开·冷却"
+	return "开·就绪"
 
 
 func _warrior_skill_marker(skill_name: String) -> String:
 	match skill_name:
-		"攻杀剑术": return "[自动]" if bool(_warrior_snapshot.get("slaying_auto", false)) else ""
+		"攻杀剑术": return "[几率]" if bool(_warrior_snapshot.get("slaying_auto", false)) else ""
 		"刺杀剑术": return "[开]" if bool(_warrior_snapshot.get("thrusting", false)) else "[关]"
 		"半月弯刀": return "[开]" if bool(_warrior_snapshot.get("half_moon", false)) else "[关]"
 		"烈火剑法":

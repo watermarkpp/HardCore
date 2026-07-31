@@ -20,34 +20,47 @@ func _run() -> void:
 	var player: PlayerCharacter = game.player
 	player.set_combat_seed(176)
 	player.current_mp = 40
+	assert(
+		game._canonical_basic_sword_bonus(
+			player.global_position,
+			player.facing.normalized(),
+			true
+		) == 9,
+		"三级基本剑术没有持续提供主源+9近战准确"
+	)
 
 	assert(player.request_skill("刺杀剑术") and player.thrusting_enabled, "刺杀开关没有开启")
-	var thrust_context := player._build_warrior_attack_context()
+	var thrust_context := player._build_warrior_attack_context(true)
 	assert(thrust_context.mode == "thrust", "刺杀开启后普通攻击没有进入第二格模式")
 	assert(player.request_skill("半月弯刀") and player.half_moon_enabled, "半月开关没有开启")
 	var mp_before_half := player.current_mp
-	var half_context := player._build_warrior_attack_context()
+	var half_context := player._build_warrior_attack_context(true)
 	assert(half_context.mode == "half_moon" and player.current_mp == mp_before_half, "半月开关不应在Router执行前预扣MP")
 	assert(player.request_skill("半月弯刀") and not player.half_moon_enabled, "半月开关没有关闭")
 
 	var mp_before_fire := player.current_mp
 	player._attack_timer = 0.0
-	assert(player.request_skill("烈火剑法"), "烈火SOT显式充能无法开始")
-	assert(not bool(player.warrior_state_snapshot().fire_armed) and player.current_mp == mp_before_fire, "烈火不应在Router结果前充能或预扣MP")
-	assert(is_equal_approx(player._attack_action_timer, 0.6) and is_equal_approx(player._attack_timer, 0.8), "烈火600ms身体动作与800ms总动作锁未隔离")
+	assert(player.request_skill("烈火剑法") and player.fire_sword_enabled, "烈火开关无法开启")
+	assert(player.current_mp == mp_before_fire and is_zero_approx(player._attack_timer), "开启烈火开关不得预扣MP或占用动作")
+	var direct_fire_context := player._build_warrior_attack_context(true)
+	assert(direct_fire_context.mode == "fire" and direct_fire_context.direct_toggle_release, "烈火没有在同一次攻击输入直接进入攻击模式")
+	assert(player.request_attack(true), "烈火开关开启后攻击键未接受")
 	assert(player.skill_cooldown_remaining_ms("warrior.fire_sword") == 8000, "烈火独立8秒冷却未建立")
-	await get_tree().create_timer(0.65).timeout
-	assert(game._canonical_fire_charge_expires_ms > Time.get_ticks_msec(), "烈火Router结果未建立一次性充能")
-	assert(bool(player.warrior_state_snapshot().fire_armed), "烈火Router结果未同步只读展示状态")
-	assert(player.current_mp == mp_before_fire - 7, "烈火Router未唯一提交7MP")
+	assert(player.current_mp == mp_before_fire, "MP必须由GameRoot canonical结果唯一提交，Player不得预扣")
 	var saved_runtime := player.warrior_runtime_state_for_save()
 	assert(saved_runtime.contract_id == "gameplay.warrior.skill_runtime.v2", "战士技能运行时存档契约不稳定")
-	assert(not saved_runtime.toggles["warrior.fire_sword.auto_enabled"], "烈火旧auto兼容状态未固定为false")
+	assert(saved_runtime.toggles["warrior.fire_sword.auto_enabled"], "烈火开关没有复用既有v2字段")
+	player._attack_timer = 0.0
+	player._attack_action_timer = 0.0
+	player._skill_cooldown_remaining.clear()
+	assert(player.request_skill("烈火剑法") and not player.fire_sword_enabled, "烈火开关无法关闭")
 	game._set_canonical_fire_charge_expires_at(0)
 
 	PlayerState.learned_skills = {"攻杀剑术": 3}
 	var ordinary_context := player._build_warrior_attack_context(true)
 	assert(ordinary_context.mode == "normal", "Player仍在Router之前用旧攻杀周期门控普通攻击")
+	assert(ordinary_context.passive_proc_layers.size() == 1)
+	assert(ordinary_context.passive_proc_layers[0].rolls_per_melee_action == 1)
 
 	PlayerState.learned_skills = {"刺杀剑术": 3, "半月弯刀": 3, "野蛮冲撞": 3}
 	player.thrusting_enabled = true
@@ -86,7 +99,7 @@ func _run() -> void:
 	assert(game._execute_wild_rush(Vector2.RIGHT, 3), "三级野蛮在开阔地没有移动")
 	assert(player.global_position.x > player_rush_origin.x and rush_target.global_position.x > rush_origin.x, "野蛮没有同时推进玩家和低级目标")
 
-	print("WARRIOR_SKILL_STATE_MACHINE_PASS：攻杀Router、刺杀/半月开关、烈火SOT显式充能与野蛮冲撞正常")
+	print("WARRIOR_SKILL_STATE_MACHINE_PASS：攻杀Router、三技能开关、烈火单次攻击直释与野蛮点击释放正常")
 	get_tree().quit(0)
 
 

@@ -5,6 +5,7 @@ const PlayerGroundRuntimeDiagnosticOverlayScript := preload(
 	"res://scripts/player_ground_runtime_diagnostic_overlay.gd"
 )
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
+const SkillInputPolicyScript := preload("res://scripts/skill_input_policy.gd")
 
 const PlayerVisualScript := preload("res://scripts/player_visual.gd")
 const PlayerHealthBarScript := preload("res://scripts/player_health_bar.gd")
@@ -63,11 +64,9 @@ var visual: Node2D
 var health_bar: PlayerHealthBar
 var thrusting_enabled := false
 var half_moon_enabled := false
+var fire_sword_enabled := false
 # Read-only presentation mirror; GameRoot owns charge creation, expiry, and consumption.
 var _fire_sword_charge_expires_at_ms := 0
-var _slaying_cycle_remaining := 0
-var _slaying_trigger_point := -1
-var _slaying_cycle_size := 0
 var _pending_attack_context: Dictionary = {}
 var _combat_action_sequence := 0
 var _pending_combat_action_id := 0
@@ -227,11 +226,21 @@ func can_start_attack() -> bool:
 func request_attack(has_combat_target := false) -> bool:
 	if not can_start_attack():
 		return false
+	var context := _build_warrior_attack_context(has_combat_target)
+	if bool(context.get("direct_toggle_release", false)):
+		# Resource consumption remains in GameRoot's canonical result commit.
+		# Lock the independent cooldown at input acceptance so repeated attack
+		# presses cannot queue duplicate direct releases before the hit frame.
+		var fire_definition := SkillDataLoaderScript.skill("warrior.fire_sword")
+		var fire_cooldown_ms := int(fire_definition.get("timing", {}).get("cooldown_ms", 8000))
+		_skill_cooldown_remaining["warrior.fire_sword"] = (
+			maxf(0.0, float(fire_cooldown_ms) / 1000.0)
+			/ _cast_speed_multiplier
+		)
 	var action_duration := attack_animation_duration
 	_attack_timer = attack_cooldown
 	_attack_action_timer = action_duration
 	velocity = Vector2.ZERO
-	var context := _build_warrior_attack_context(has_combat_target)
 	var action_id := _begin_combat_action("attack")
 	var animation_name := str(context.get("skill_name", "attack"))
 	visual.play_action(animation_name, action_duration)
@@ -258,8 +267,13 @@ func request_skill(skill_name: String) -> bool:
 	if _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0 or control_time > 0.0 or _dead:
 		return false
 	var learned_level := PlayerState.effective_skill_level(skill_name)
-	if PlayerState.profession == "战士" and skill_name in ["基本剑术", "攻杀剑术", "刺杀剑术", "半月弯刀"]:
+	if PlayerState.profession == "战士" and skill_name in ["基本剑术", "攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"]:
 		return _request_warrior_state_skill(skill_name, learned_level)
+	return _request_active_skill(skill_name)
+
+
+func _request_active_skill(skill_name: String) -> bool:
+	var learned_level := PlayerState.effective_skill_level(skill_name)
 	if _attack_timer > 0.0:
 		return false
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
@@ -510,7 +524,6 @@ func set_test_combat_time_ms(value: int) -> void:
 
 func set_combat_seed(seed_value: int) -> void:
 	_rng.seed = seed_value
-	_slaying_cycle_remaining = 0
 
 
 func set_fire_sword_charge_display(expires_at_ms: int) -> void:
@@ -534,10 +547,16 @@ func warrior_state_snapshot() -> Dictionary:
 		"slaying_auto": PlayerState.learned_skills.has("攻杀剑术"),
 		"thrusting": thrusting_enabled,
 		"half_moon": half_moon_enabled,
+		"fire_enabled": fire_sword_enabled,
 		"fire_armed": fire_expires_remaining_ms > 0,
 		"fire_expires_remaining_ms": fire_expires_remaining_ms,
-		"slaying_remaining": _slaying_cycle_remaining,
-		"slaying_trigger": _slaying_trigger_point,
+		"fire_cooldown_remaining_ms": skill_cooldown_remaining_ms(
+			"warrior.fire_sword"
+		),
+		# Compatibility keys only. Proc state is resolved exactly once by the
+		# canonical melee-modifier API and is never pre-rolled in Player.
+		"slaying_remaining": 0,
+		"slaying_trigger": -1,
 	}
 
 
@@ -547,9 +566,9 @@ func warrior_runtime_state_for_save() -> Dictionary:
 		"toggles": {
 			"warrior.thrusting": thrusting_enabled,
 			"warrior.half_moon": half_moon_enabled,
-			# Read-only legacy compatibility. This value can never be restored
-			# or toggled true under the canonical explicit-charge contract.
-			"warrior.fire_sword.auto_enabled": false,
+			# Existing v2 field is re-used, so this interaction update does not
+			# change the persisted contract shape.
+			"warrior.fire_sword.auto_enabled": fire_sword_enabled,
 		},
 		"cooldowns": {},
 	}
@@ -561,8 +580,8 @@ func restore_warrior_runtime_state(saved_state: Dictionary) -> bool:
 	var toggles: Dictionary = saved_state.get("toggles", {})
 	thrusting_enabled = bool(toggles.get("warrior.thrusting", false))
 	half_moon_enabled = bool(toggles.get("warrior.half_moon", false))
-	# Legacy fire auto/cooldown fields are intentionally ignored. Fire Sword is
-	# always an explicit cast and an in-flight charge never survives a reload.
+	fire_sword_enabled = bool(toggles.get("warrior.fire_sword.auto_enabled", false))
+	# An in-flight charge never survives a reload; only the input toggle does.
 	set_fire_sword_charge_display(0)
 	return true
 
@@ -587,31 +606,46 @@ func _request_warrior_state_skill(skill_name: String, _level: int) -> bool:
 			half_moon_enabled = not half_moon_enabled
 			warrior_skill_state_changed.emit(skill_name, half_moon_enabled, "半月弯刀：%s" % ("开启" if half_moon_enabled else "关闭"))
 			return true
+		"烈火剑法":
+			fire_sword_enabled = not fire_sword_enabled
+			warrior_skill_state_changed.emit(skill_name, fire_sword_enabled, "烈火剑法：%s" % ("开启" if fire_sword_enabled else "关闭"))
+			return true
 	return false
 
 
 func _build_warrior_attack_context(has_combat_target := false) -> Dictionary:
-	var context := {"mode": "normal", "skill_name": "attack", "skill_level": 0}
+	var context := {
+		"policy_id": SkillInputPolicyScript.WARRIOR_ATTACK_POLICY_ID,
+		"action": "attack",
+		"mode": "normal",
+		"skill_name": "attack",
+		"skill_level": 0,
+	}
 	if PlayerState.profession != "战士":
 		return context
-	if half_moon_enabled and PlayerState.learned_skills.has("半月弯刀"):
-		return {"mode": "half_moon", "skill_name": "半月弯刀", "skill_level": PlayerState.effective_skill_level("半月弯刀")}
-	if thrusting_enabled and PlayerState.learned_skills.has("刺杀剑术"):
-		return {"mode": "thrust", "skill_name": "刺杀剑术", "skill_level": PlayerState.effective_skill_level("刺杀剑术")}
-	return context
-
-
-func _next_slaying_proc() -> bool:
-	if not PlayerState.learned_skills.has("攻杀剑术"):
-		return false
-	var level := PlayerState.effective_skill_level("攻杀剑术")
-	var cycle := WarriorCombatMath.slaying_proc_cycle(level)
-	if _slaying_cycle_remaining <= 0 or _slaying_cycle_size != cycle:
-		_slaying_cycle_size = cycle
-		_slaying_cycle_remaining = cycle
-		_slaying_trigger_point = _rng.randi_range(0, cycle - 1)
-	_slaying_cycle_remaining -= 1
-	return _slaying_trigger_point == _slaying_cycle_remaining
+	var fire_remaining_ms := maxi(0, _fire_sword_charge_expires_at_ms - Time.get_ticks_msec())
+	var resolution := SkillInputPolicyScript.resolve_warrior_attack({
+		"learned_skills": PlayerState.learned_skills,
+		"toggles": {
+			"warrior.fire_sword": fire_sword_enabled,
+			"warrior.half_moon": half_moon_enabled,
+			"warrior.thrusting": thrusting_enabled,
+		},
+		"has_combat_target": has_combat_target,
+		"current_mp": current_mp,
+		"fire_armed": fire_remaining_ms > 0,
+		"fire_cooldown_remaining_ms": skill_cooldown_remaining_ms("warrior.fire_sword"),
+		"fire_rank": PlayerState.effective_skill_level("烈火剑法"),
+		"half_moon_rank": PlayerState.effective_skill_level("半月弯刀"),
+		"slaying_rank": PlayerState.effective_skill_level("攻杀剑术"),
+	})
+	var selected_id := str(resolution.get("skill_id", ""))
+	resolution["skill_level"] = (
+		PlayerState.effective_skill_level(selected_id)
+		if not selected_id.is_empty()
+		else 0
+	)
+	return resolution
 
 
 func restore_health(amount: int) -> void:
