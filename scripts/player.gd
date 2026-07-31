@@ -227,6 +227,8 @@ func request_attack(has_combat_target := false) -> bool:
 	if not can_start_attack():
 		return false
 	var context := _build_warrior_attack_context(has_combat_target)
+	if str(context.get("action", "attack")) != "attack":
+		return false
 	if bool(context.get("direct_toggle_release", false)):
 		# Resource consumption remains in GameRoot's canonical result commit.
 		# Lock the independent cooldown at input acceptance so repeated attack

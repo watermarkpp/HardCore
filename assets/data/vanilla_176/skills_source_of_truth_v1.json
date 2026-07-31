@@ -515,6 +515,13 @@
         "shape": "line",
         "length_tiles": 2,
         "width_tiles": 1,
+		"maximum_reach_tiles": 2.5,
+		"endpoint_tolerance_tiles": 0.5,
+		"primary_segment_reach_tiles": 1.5,
+		"maximum_targets": 2,
+		"range_bonus_cap_tiles": 1.0,
+		"coordinate_space": "fractional_canonical_map_tiles_from_footpoints",
+		"raw_pixel_geometry_forbidden": true,
         "stop_on_terrain": true
       },
       "timing": {
@@ -651,6 +658,11 @@
         "shape": "project_canonical_four_target_arc",
         "primary_cell": "front_1",
         "side_cells": "three cells defined by HalfMoonArcResolver; resolver must rotate with 8-direction facing",
+		"relative_direction_offsets": [7, 0, 1, 2],
+		"base_reach_tiles": 1.5,
+		"endpoint_tolerance_tiles": 0.5,
+		"range_bonus_cap_tiles": 0.5,
+		"coordinate_space": "fractional_canonical_map_tiles_from_footpoints",
         "maximum_targets": 4,
         "raw_pixel_geometry_forbidden": true
       },
@@ -926,7 +938,15 @@
         "relation": "self"
       },
       "geometry": {
-        "shape": "none_until_next_melee_hit"
+        "shape": "none_until_next_melee_hit",
+		"runtime_melee_reach_tiles": 1.5,
+		"maximum_targets": 1,
+		"range_bonus_cap_tiles": 1.0,
+		"coordinate_space": "fractional_canonical_map_tiles_from_footpoints",
+		"requires_valid_target_at_input": true,
+		"empty_swing_policy": "physical_miss_only",
+		"fallback_to_other_melee_modes": false,
+		"raw_pixel_geometry_forbidden": true
       },
       "timing": {
         "body_action": "cast_or_weapon_charge",
