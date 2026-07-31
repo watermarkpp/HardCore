@@ -518,7 +518,9 @@
 		"maximum_reach_tiles": 2.5,
 		"endpoint_tolerance_tiles": 0.5,
 		"primary_segment_reach_tiles": 1.5,
-		"maximum_targets": 2,
+        "maximum_targets": -1,
+        "maximum_targets_semantics": "unlimited_within_valid_geometry",
+        "target_count_policy_id": "gameplay.warrior.melee_target_count.v1",
 		"range_bonus_cap_tiles": 1.0,
 		"coordinate_space": "fractional_canonical_map_tiles_from_footpoints",
 		"raw_pixel_geometry_forbidden": true,
@@ -663,7 +665,9 @@
 		"endpoint_tolerance_tiles": 0.5,
 		"range_bonus_cap_tiles": 0.5,
 		"coordinate_space": "fractional_canonical_map_tiles_from_footpoints",
-        "maximum_targets": 4,
+        "maximum_targets": -1,
+        "maximum_targets_semantics": "unlimited_within_valid_geometry",
+        "target_count_policy_id": "gameplay.warrior.melee_target_count.v1",
         "raw_pixel_geometry_forbidden": true
       },
       "timing": {

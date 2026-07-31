@@ -1,6 +1,10 @@
 class_name WarriorSkillRuntime
 extends RefCounted
 
+const WarriorMeleeGeometryScript := preload(
+	"res://scripts/skills/warrior_melee_geometry.gd"
+)
+
 
 static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted) -> Dictionary:
 	var skill_id := str(definition.get("skill_id", ""))
@@ -42,10 +46,29 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 		"warrior.thrusting":
 			var first: Dictionary = mechanics.get("first_cell", {})
 			var second: Dictionary = mechanics.get("second_cell", {})
+			var thrust_limit := WarriorMeleeGeometryScript.maximum_targets(
+				WarriorMeleeGeometryScript.SKILL_THRUST
+			)
 			plan.effect_success = bool(context.get("eligible_target_count", 1) > 0)
 			plan.effects = [
-				{"type": "melee_hit", "cell": 1, "multiplier": float(first.get("damage_multiplier", 1.0)), "ignore_ac": false},
-				{"type": "melee_hit", "cell": 2, "multiplier": float(second.get("damage_multiplier_by_rank", [0.4, 0.6, 0.8, 1.0])[rank]), "ignore_ac": bool(second.get("ignore_ac", true))},
+				{
+					"type": "melee_hit",
+					"cell": 1,
+					"multiplier": float(first.get("damage_multiplier", 1.0)),
+					"ignore_ac": false,
+					"maximum_targets": thrust_limit,
+					"target_count_policy_id": WarriorMeleeGeometryScript.TARGET_COUNT_POLICY_ID,
+				},
+				{
+					"type": "melee_hit",
+					"cell": 2,
+					"multiplier": float(second.get(
+						"damage_multiplier_by_rank", [0.4, 0.6, 0.8, 1.0]
+					)[rank]),
+					"ignore_ac": bool(second.get("ignore_ac", true)),
+					"maximum_targets": thrust_limit,
+					"target_count_policy_id": WarriorMeleeGeometryScript.TARGET_COUNT_POLICY_ID,
+				},
 			]
 			if plan.effect_success:
 				plan.proficiency_event = trigger
@@ -53,7 +76,10 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 			plan.effect_success = bool(context.get("eligible_target_count", 1) > 0)
 			plan.effects = [{
 				"type": "melee_arc",
-				"maximum_targets": int(definition.get("geometry", {}).get("maximum_targets", 4)),
+				"maximum_targets": WarriorMeleeGeometryScript.maximum_targets(
+					WarriorMeleeGeometryScript.SKILL_HALF_MOON
+				),
+				"target_count_policy_id": WarriorMeleeGeometryScript.TARGET_COUNT_POLICY_ID,
 				"primary_multiplier": float(mechanics.get("primary_damage_multiplier", 1.0)),
 				"side_multiplier": float(mechanics.get("side_damage_multiplier_by_rank", [0.15, 0.23, 0.31, 5.0 / 13.0])[rank]),
 				"max_resource_commits": 1,

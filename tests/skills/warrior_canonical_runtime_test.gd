@@ -8,6 +8,20 @@ const Router := preload("res://scripts/skills/skill_runtime_router.gd")
 func _ready() -> void:
 	assert(Loader.reload_data().valid)
 	assert(Router.CANONICAL_PRODUCTION_DEFAULT)
+	var thrust_definition := Loader.skill("warrior.thrusting")
+	var half_definition := Loader.skill("warrior.half_moon")
+	var fire_definition := Loader.skill("warrior.fire_sword")
+	assert(thrust_definition.geometry.maximum_targets == -1)
+	assert(half_definition.geometry.maximum_targets == -1)
+	assert(fire_definition.geometry.maximum_targets == 1)
+	assert(
+		thrust_definition.geometry.target_count_policy_id
+		== "gameplay.warrior.melee_target_count.v1"
+	)
+	assert(
+		half_definition.geometry.target_count_policy_id
+		== "gameplay.warrior.melee_target_count.v1"
+	)
 	var passive := _execute("warrior.basic_swordsmanship", 3, {"valid_melee_swing": true})
 	assert(passive.accepted and passive.effects[0].value == 9)
 	assert(passive.proficiency_event == "valid_basic_melee_attack_resolved")
@@ -66,9 +80,13 @@ func _ready() -> void:
 	assert(empty_swing.proficiency_events.is_empty())
 	var thrust := _execute("warrior.thrusting", 3, {"has_target": true, "eligible_target_count": 2})
 	assert(thrust.effects[1].multiplier == 1.0 and thrust.effects[1].ignore_ac)
+	assert(thrust.effects[0].maximum_targets == -1)
+	assert(thrust.effects[1].maximum_targets == -1)
+	assert(thrust.effects[0].target_count_policy_id == "gameplay.warrior.melee_target_count.v1")
 	assert(thrust.geometry.length_tiles == 2)
 	var half := _execute("warrior.half_moon", 3, {"has_target": true, "eligible_target_count": 4}, 100)
-	assert(half.effects[0].maximum_targets == 4)
+	assert(half.effects[0].maximum_targets == -1)
+	assert(half.effects[0].target_count_policy_id == "gameplay.warrior.melee_target_count.v1")
 	assert(is_equal_approx(float(half.effects[0].side_multiplier), 5.0 / 13.0))
 	assert(half.effects[0].max_resource_commits == 1)
 	var rush := _execute("warrior.wild_rush", 3, {

@@ -14,8 +14,21 @@ func _ready() -> void:
 	assert(is_equal_approx(Geometry.reach_tiles("thrust", 99.0), 3.5))
 	assert(Geometry.maximum_targets("normal") == 1)
 	assert(Geometry.maximum_targets("fire") == 1)
-	assert(Geometry.maximum_targets("half_moon") == 4)
-	assert(Geometry.maximum_targets("thrust") == 2)
+	assert(Geometry.maximum_targets("half_moon") == Geometry.UNLIMITED_TARGETS)
+	assert(Geometry.maximum_targets("thrust") == Geometry.UNLIMITED_TARGETS)
+	assert(Geometry.has_finite_target_limit("normal"))
+	assert(Geometry.has_finite_target_limit("fire"))
+	assert(not Geometry.has_finite_target_limit("half_moon"))
+	assert(not Geometry.has_finite_target_limit("thrust"))
+	for unlimited_mode: String in ["thrust", "half_moon"]:
+		var policy := Geometry.target_count_policy(unlimited_mode)
+		assert(policy.contract_id == "gameplay.warrior.melee_target_count.v1")
+		assert(policy.maximum_targets == Geometry.UNLIMITED_TARGETS)
+		assert(policy.unlimited_within_geometry)
+	for single_mode: String in ["normal", "fire"]:
+		var policy := Geometry.target_count_policy(single_mode)
+		assert(policy.maximum_targets == 1)
+		assert(not policy.unlimited_within_geometry)
 
 	# S faces tile step (1, 1); the first 1.5 tiles are primary and the
 	# endpoint-tolerance segment through 2.5 tiles is the second target slot.
@@ -24,6 +37,10 @@ func _ready() -> void:
 	assert(Geometry.thrust_slot(Vector2.ZERO, Vector2(2.5, 2.5), 0) == 2)
 	assert(Geometry.thrust_slot(Vector2.ZERO, Vector2(2.5002, 2.5002), 0) == 0)
 	assert(Geometry.thrust_slot(Vector2.ZERO, Vector2(2.0, 0.9), 0) == 0)
+	# Target count never alters the accepted line/arc. Multiple targets can
+	# occupy the same valid segment or sector; callers must enumerate them all.
+	for same_segment_target: Vector2 in [Vector2(1.0, 1.0), Vector2(1.2, 1.2), Vector2(1.4, 1.4)]:
+		assert(Geometry.thrust_slot(Vector2.ZERO, same_segment_target, 0) == 1)
 	# Fractional tile positions must quantize exactly like the sprite-facing
 	# system after the 64x32 isometric projection, not in unprojected tile space.
 	assert(Geometry.direction_index_for_tile_delta(Vector2(1.0, 0.5)) == 7)
@@ -37,6 +54,12 @@ func _ready() -> void:
 		var target := Vector2(Geometry.facing_tile_step(rejected_direction))
 		assert(not Geometry.is_in_half_moon_arc(Vector2.ZERO, target, 4))
 	assert(not Geometry.is_in_half_moon_arc(Vector2.ZERO, Vector2(-1.5002, -1.5002), 4))
+	for same_sector_distance: float in [0.25, 0.5, 0.75, 1.0, 1.25, 1.5]:
+		assert(Geometry.is_in_half_moon_arc(
+			Vector2.ZERO,
+			Vector2(Geometry.facing_tile_step(4)) * same_sector_distance,
+			4
+		))
 
 	assert(not Geometry.fire_can_begin(false))
 	assert(Geometry.fire_can_begin(true))
