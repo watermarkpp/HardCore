@@ -196,6 +196,20 @@ func _run() -> void:
 							frame,
 						],
 					)
+					assert(
+						(
+							visual.position
+							+ visual.target_ring_local_position()
+						).is_equal_approx(
+							enemy.ground_indicator_center()
+						),
+						"monsterId=%d %s direction=%d frame=%d visual-owned ring diverged from target point" % [
+							monster_id,
+							action_name,
+							direction,
+							frame,
+						],
+					)
 		if visual.ground_projection_strategy() == "grounded":
 			var original_visual_position := visual.position
 			var original_sprite_position := sprite.position

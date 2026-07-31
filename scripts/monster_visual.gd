@@ -114,6 +114,28 @@ func _ready() -> void:
 		_activate_resources()
 
 
+func _draw() -> void:
+	# Keep the saved foot point and its target ring in one CanvasItem transform
+	# chain so Android cannot round the actor and visual positions separately.
+	if (
+		not is_instance_valid(actor)
+		or actor._dying
+		or not actor.is_targeted
+		or not uses_final_art()
+	):
+		return
+	var center := target_ring_local_position()
+	var radii := ground_indicator_radii(Vector2.ZERO)
+	var points := PackedVector2Array()
+	for index in range(49):
+		var angle := TAU * float(index) / 48.0
+		points.append(
+			center
+			+ Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+		)
+	draw_polyline(points, Color(1.0, 0.78, 0.18, 0.78), 2.0, true)
+
+
 func _process(delta: float) -> void:
 	if not is_instance_valid(actor):
 		return
@@ -335,6 +357,12 @@ func target_ring_position(fallback: Vector2) -> Vector2:
 	return ground_contact_position(fallback)
 
 
+func target_ring_local_position() -> Vector2:
+	if ground_projection_strategy() in ["flying", "hover"]:
+		return ground_contact_offset()
+	return visual_foot_offset()
+
+
 func ground_indicator_radii(fallback: Vector2) -> Vector2:
 	if is_instance_valid(actor):
 		return actor.ground_indicator_radii()
@@ -420,6 +448,11 @@ func _refresh_actor_ground_indicator() -> void:
 	# is legal even for an unselected actor, so every transition must invalidate
 	# that cached list.
 	actor.queue_redraw()
+	queue_redraw()
+
+
+func refresh_target_ring() -> void:
+	queue_redraw()
 
 
 func health_bar_anchor_y(fallback_y: float) -> float:
