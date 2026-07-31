@@ -107,15 +107,18 @@ static func thrust_slot(
 static func direction_index_for_tile_delta(delta: Vector2) -> int:
 	if delta.length_squared() <= EPSILON * EPSILON:
 		return 0
-	var normalized_delta := delta.normalized()
-	var best_index := 0
-	var best_dot := -INF
-	for index in range(FACING_TILE_STEPS.size()):
-		var score := normalized_delta.dot(Vector2(FACING_TILE_STEPS[index]).normalized())
-		if score > best_dot:
-			best_dot = score
-			best_index = index
-	return best_index
+	# Quantize in the same 64x32 isometric projection used by the character
+	# visual. The common 16px factor is cancelled, leaving only the 2:1 aspect;
+	# no screen distance enters gameplay geometry.
+	var projected_direction := Vector2(
+		(delta.x - delta.y) * 2.0,
+		delta.x + delta.y
+	)
+	return wrapi(
+		int(round((projected_direction.angle() - PI / 2.0) / (TAU / 8.0))),
+		0,
+		8
+	)
 
 
 static func half_moon_relative_sector(attack_direction_index: int, target_direction_index: int) -> int:

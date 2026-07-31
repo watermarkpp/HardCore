@@ -23,6 +23,10 @@ func _ready() -> void:
 	assert(Geometry.thrust_slot(Vector2.ZERO, Vector2(2.5, 2.5), 0) == 2)
 	assert(Geometry.thrust_slot(Vector2.ZERO, Vector2(2.5002, 2.5002), 0) == 0)
 	assert(Geometry.thrust_slot(Vector2.ZERO, Vector2(2.0, 0.9), 0) == 0)
+	# Fractional tile positions must quantize exactly like the sprite-facing
+	# system after the 64x32 isometric projection, not in unprojected tile space.
+	assert(Geometry.direction_index_for_tile_delta(Vector2(1.0, 0.5)) == 7)
+	assert(Geometry.direction_index_for_tile_delta(Vector2(0.5, 1.0)) == 1)
 
 	# Facing N (index 4) sweeps NW,N,NE,E: relative offsets 7,0,1,2.
 	for allowed_direction: int in [3, 4, 5, 6]:
