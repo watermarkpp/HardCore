@@ -14,7 +14,8 @@ func _run() -> void:
 	await _verify_all_warrior_modes_use_live_locked_geometry()
 	await _verify_vanished_lock_never_allows_retarget()
 	await _verify_caster_single_target_and_spatial_cast_policies()
-	print("COMBAT_RELEASE_GEOMETRY_PASS: live actor/target footpoints, stable lock, no accidental AOE homing")
+	_verify_locked_melee_facing_contract()
+	print("COMBAT_RELEASE_GEOMETRY_PASS: live footpoints, locked melee facing, caster tracking unchanged")
 	get_tree().quit(0)
 
 
@@ -126,6 +127,27 @@ func _verify_caster_single_target_and_spatial_cast_policies() -> void:
 	assert(area.direction == Vector2.RIGHT)
 	assert(area.geometry.policy == ReleaseGeometry.POLICY_INPUT_DIRECTION)
 	assert(area.geometry.locked_target_instance_id == 0)
+
+
+func _verify_locked_melee_facing_contract() -> void:
+	var geometry := ReleaseGeometry.resolve(
+		Vector2(120.0, 130.0),
+		Vector2.RIGHT,
+		77,
+		Vector2(70.0, 210.0),
+		true,
+		true,
+		ReleaseGeometry.FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION
+	)
+	assert(geometry.origin_world == Vector2(120.0, 130.0))
+	assert(geometry.direction_world.is_equal_approx(Vector2.RIGHT))
+	assert(geometry.locked_target_valid_at_release)
+	assert(geometry.direction_locked_for_action)
+	assert(geometry.refresh_actor_footpoint_at_release)
+	assert(geometry.refresh_locked_target_footpoint_at_release)
+	assert(geometry.release_facing_policy_id == ReleaseGeometry.MELEE_RELEASE_FACING_POLICY_ID)
+	assert(ReleaseGeometry.candidate_allowed(geometry, 77))
+	assert(not ReleaseGeometry.candidate_allowed(geometry, 88))
 
 
 func _cast_and_capture(skill_name: String, expects_tracking: bool) -> Dictionary:

@@ -7,6 +7,7 @@ const INPUT_METADATA_CONTRACT_ID := "gameplay.skill.input_metadata.v1"
 const WARRIOR_ATTACK_POLICY_ID := "gameplay.warrior.attack_priority.v1"
 const WARRIOR_HIT_EFFECT_POLICY_ID := "gameplay.warrior.hit_effect_fallback.v1"
 const FIRE_TOGGLE_OVERRIDE_ID := "gameplay.warrior.fire_sword.attack_toggle.user_override.v1"
+const FIRE_COOLDOWN_COMMIT_POLICY_ID := "gameplay.warrior.fire_sword.cooldown_on_legal_resolution.v1"
 const SLAYING_LAYER_OVERRIDE_ID := "gameplay.warrior.slaying.layered_proc.user_override.v1"
 
 const INTERACTION_PASSIVE := "passive"
@@ -53,8 +54,14 @@ static func metadata(skill_name_or_id: String) -> Dictionary:
 	if skill_id == "warrior.fire_sword":
 		result.merge({
 			"runtime_override_id": FIRE_TOGGLE_OVERRIDE_ID,
+			"cooldown_commit_policy_id": FIRE_COOLDOWN_COMMIT_POLICY_ID,
 			"runtime_activation": "single_attack_input_direct_melee",
-			"fallback_when_unavailable": false,
+			"fallback_when_unavailable": true,
+			"fallback_priority_order": [
+				"warrior.half_moon",
+				"warrior.thrusting",
+				"normal",
+			],
 			"requires_valid_target_at_input": true,
 			"empty_swing_policy": "physical_miss_only",
 		}, true)
@@ -109,10 +116,8 @@ static func resolve_warrior_attack(context: Dictionary) -> Dictionary:
 	if bool(toggles.get("warrior.fire_sword", false)):
 		if not _is_learned(learned, "warrior.fire_sword"):
 			trace.append(_blocked("warrior.fire_sword", "not_learned"))
-			return _blocked_attack("fire", "warrior.fire_sword", "not_learned", trace)
 		elif not has_target:
 			trace.append(_blocked("warrior.fire_sword", "no_valid_melee_target"))
-			return _blocked_attack("fire", "warrior.fire_sword", "no_valid_melee_target", trace)
 		elif bool(context.get("fire_armed", false)):
 			var charged_fire := _selection(
 				"attack",
@@ -124,10 +129,8 @@ static func resolve_warrior_attack(context: Dictionary) -> Dictionary:
 			return _with_slaying_layer(charged_fire, context, learned, has_target)
 		elif int(context.get("fire_cooldown_remaining_ms", 0)) > 0:
 			trace.append(_blocked("warrior.fire_sword", "cooldown"))
-			return _blocked_attack("fire", "warrior.fire_sword", "cooldown", trace)
 		elif current_mp < _mana_cost("warrior.fire_sword", int(context.get("fire_rank", 0))):
 			trace.append(_blocked("warrior.fire_sword", "insufficient_mana"))
-			return _blocked_attack("fire", "warrior.fire_sword", "insufficient_mana", trace)
 		else:
 			var direct_fire := _selection(
 				"attack",
@@ -206,15 +209,8 @@ static func resolve_warrior_hit_effect(
 				trace
 			)
 		trace.append(_blocked("warrior.fire_sword", "insufficient_mana_at_hit_frame"))
-		return _effect_selection(
-			selected_body_mode,
-			"",
-			"",
-			"insufficient_mana_at_hit_frame",
-			trace
-		)
 
-	if selected_body_mode == "half_moon":
+	if selected_body_mode in ["fire", "half_moon"]:
 		if (
 			bool(toggles.get("warrior.half_moon", false))
 			and _is_learned(learned, "warrior.half_moon")
@@ -246,6 +242,20 @@ static func resolve_warrior_hit_effect(
 			trace
 		)
 	return _effect_selection(selected_body_mode, "normal", "", "", trace)
+
+
+static func fire_direct_release_consumes_cooldown(
+	body_selection: Dictionary,
+	hit_effect: Dictionary,
+	canonical_resolution: String
+) -> bool:
+	return (
+		bool(body_selection.get("direct_toggle_release", false))
+		and str(body_selection.get("mode", "")) == "fire"
+		and bool(hit_effect.get("effect_available", false))
+		and str(hit_effect.get("effect_mode", "")) == "fire"
+		and canonical_resolution in ["hit", "miss"]
+	)
 
 
 static func _selection(action: String, mode: String, skill_id: String, trace: Array[Dictionary]) -> Dictionary:

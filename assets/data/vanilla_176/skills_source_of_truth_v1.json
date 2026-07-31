@@ -954,7 +954,12 @@
 		"coordinate_space": "fractional_canonical_map_tiles_from_footpoints",
 		"requires_valid_target_at_input": true,
 		"empty_swing_policy": "physical_miss_only",
-		"fallback_to_other_melee_modes": false,
+		"fallback_to_other_melee_modes": true,
+		"fallback_priority_order": [
+		  "warrior.half_moon",
+		  "warrior.thrusting",
+		  "normal"
+		],
 		"raw_pixel_geometry_forbidden": true
       },
       "timing": {
@@ -985,7 +990,8 @@
           2.2,
           2.6
         ],
-        "consume_on": "next_valid_melee_damage_attempt",
+		"consume_on": "next_valid_melee_damage_attempt",
+		"direct_toggle_cooldown_commit": "only_after_legal_hit_or_miss_resolution",
         "auto_cast": false,
         "refresh_existing_charge": "replace_and_restart_duration",
         "stack_count_max": 1,

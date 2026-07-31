@@ -33,6 +33,22 @@ func _ready() -> void:
 	assert(direct_fire.action == "attack" and direct_fire.mode == "fire")
 	assert(direct_fire.direct_toggle_release, "烈火开关必须在同一次攻击输入直接释放")
 	_assert_single_slaying_layer(direct_fire)
+	var direct_fire_effect := Policy.resolve_warrior_hit_effect(
+		direct_fire,
+		{
+			"learned_skills": LEARNED,
+			"toggles": ALL_TOGGLES,
+			"has_combat_target": true,
+			"current_mp": 40,
+			"fire_rank": 3,
+			"half_moon_rank": 3,
+		}
+	)
+	assert(Policy.fire_direct_release_consumes_cooldown(direct_fire, direct_fire_effect, "hit"))
+	assert(Policy.fire_direct_release_consumes_cooldown(direct_fire, direct_fire_effect, "miss"))
+	assert(not Policy.fire_direct_release_consumes_cooldown(
+		direct_fire, direct_fire_effect, "invalid_target"
+	))
 	var direct_quote := ResourceService.quote(
 		Loader.skill("warrior.fire_sword"),
 		3,
@@ -53,19 +69,37 @@ func _ready() -> void:
 		"fire_armed": false,
 		"fire_cooldown_remaining_ms": 5000,
 	})
-	assert(fire_cooldown.action == "blocked" and fire_cooldown.mode == "fire")
-	assert(fire_cooldown.attack_priority == 400 and fire_cooldown.reason == "cooldown")
+	assert(fire_cooldown.action == "attack" and fire_cooldown.mode == "half_moon")
+	assert(fire_cooldown.attack_priority == 300)
 	assert(fire_cooldown.fallback_trace[0].reason == "cooldown")
-	assert(fire_cooldown.passive_proc_layers.is_empty())
+	_assert_single_slaying_layer(fire_cooldown)
+
+	var cooldown_to_thrust := _resolve({
+		"toggles": {"warrior.fire_sword": true, "warrior.thrusting": true},
+		"fire_cooldown_remaining_ms": 5000,
+	})
+	assert(cooldown_to_thrust.mode == "thrust")
+	assert(cooldown_to_thrust.fallback_trace[0].reason == "cooldown")
+
+	var cooldown_to_normal := _resolve({
+		"toggles": {"warrior.fire_sword": true},
+		"fire_cooldown_remaining_ms": 5000,
+	})
+	assert(cooldown_to_normal.mode == "normal")
+	assert(cooldown_to_normal.fallback_trace[0].reason == "cooldown")
+
+	var fire_ready_again := _resolve({
+		"fire_cooldown_remaining_ms": 0,
+	})
+	assert(fire_ready_again.mode == "fire" and fire_ready_again.direct_toggle_release)
 
 	var fire_no_mana := _resolve({
 		"current_mp": 5,
 		"fire_armed": false,
 	})
-	assert(fire_no_mana.action == "blocked" and fire_no_mana.mode == "fire")
-	assert(fire_no_mana.reason == "insufficient_mana")
+	assert(fire_no_mana.action == "attack" and fire_no_mana.mode == "half_moon")
 	assert(fire_no_mana.fallback_trace[0].reason == "insufficient_mana")
-	assert(fire_no_mana.passive_proc_layers.is_empty())
+	_assert_single_slaying_layer(fire_no_mana)
 
 	var half_no_mana := _resolve({
 		"toggles": {"warrior.half_moon": true, "warrior.thrusting": true},
@@ -145,21 +179,38 @@ func _ready() -> void:
 		}
 	)
 	assert(fire_late_resource_fallback.selected_body_mode == "fire")
-	assert(fire_late_resource_fallback.effect_mode.is_empty())
-	assert(not fire_late_resource_fallback.effect_available)
-	assert(fire_late_resource_fallback.reason == "insufficient_mana_at_hit_frame")
+	assert(fire_late_resource_fallback.visual_mode == "fire")
+	assert(fire_late_resource_fallback.effect_mode == "half_moon")
+	assert(fire_late_resource_fallback.effect_available)
+	assert(fire_late_resource_fallback.resource_reason == "insufficient_mana_at_hit_frame")
 	assert(fire_late_resource_fallback.preserve_selected_body_action)
+	assert(not Policy.fire_direct_release_consumes_cooldown(
+		direct_fire, fire_late_resource_fallback, "hit"
+	))
+	var charged_fire_effect := Policy.resolve_warrior_hit_effect(
+		ready_fire,
+		{
+			"learned_skills": LEARNED,
+			"toggles": ALL_TOGGLES,
+			"has_combat_target": true,
+			"current_mp": 0,
+			"fire_rank": 3,
+		}
+	)
+	assert(not Policy.fire_direct_release_consumes_cooldown(
+		ready_fire, charged_fire_effect, "hit"
+	))
 
 	var no_target := _resolve({
 		"current_mp": 40,
 		"fire_armed": true,
 		"has_combat_target": false,
 	})
-	assert(no_target.action == "blocked" and no_target.mode == "fire")
-	assert(no_target.skill_name == "烈火剑法")
-	assert(no_target.reason == "no_valid_melee_target")
+	assert(no_target.action == "attack" and no_target.mode == "half_moon")
+	assert(no_target.skill_name == "半月弯刀")
+	assert(no_target.fallback_trace[0].reason == "no_valid_melee_target")
 	assert(not no_target.target_available_at_input)
-	assert(no_target.passive_proc_layers.is_empty())
+	_assert_single_slaying_layer(no_target)
 	var no_target_effect := Policy.resolve_warrior_hit_effect(
 		no_target,
 		{
@@ -170,8 +221,8 @@ func _ready() -> void:
 		}
 	)
 	assert(not no_target_effect.effect_available)
-	assert(no_target_effect.visual_mode == "fire")
-	assert(no_target_effect.selected_body_mode == "fire")
+	assert(no_target_effect.visual_mode == "half_moon")
+	assert(no_target_effect.selected_body_mode == "half_moon")
 	assert(no_target_effect.reason == "no_valid_melee_target")
 	assert(no_target_effect.resource_reason.is_empty())
 	assert(no_target_effect.proc_rolls_performed == 0)
