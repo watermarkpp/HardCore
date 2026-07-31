@@ -79,6 +79,10 @@ func _run() -> void:
 	assert(player.request_skill("烈火剑法") and player.fire_sword_enabled, "烈火开关无法开启")
 	assert(player.current_mp == mp_before_fire and is_zero_approx(player._attack_timer), "开启烈火开关不得预扣MP或占用动作")
 	var fire_visual_before_rejection: String = str(player.visual._action_name)
+	var queued_before_fire_rejection: int = game._queued_mobile_attacks
+	game._on_mobile_attack_pressed()
+	game._on_mobile_attack_released()
+	assert(game._queued_mobile_attacks == queued_before_fire_rejection)
 	assert(not player.request_attack(false), "烈火没有合法目标时不得开始攻击动作")
 	assert(is_zero_approx(player._attack_timer) and is_zero_approx(player._attack_action_timer))
 	assert(player.skill_cooldown_remaining_ms("warrior.fire_sword") == 0)
@@ -127,9 +131,11 @@ func _run() -> void:
 	assert(unrelated.current_hp == unrelated_hp, "刺杀错误命中背后目标")
 
 	primary.current_hp = primary.max_hp
-	var half_a := _make_enemy(game, player, "半月左前", Vector2(52, -52), 1)
-	var half_b := _make_enemy(game, player, "半月右前", Vector2(52, 52), 1)
-	var half_c := _make_enemy(game, player, "半月右侧", Vector2(0, 74), 1)
+	# Facing screen-E maps to canonical tile step (1,-1). The three classic
+	# secondary sectors are NE, SE and S, each exactly one logical tile away.
+	var half_a := _make_enemy(game, player, "半月左前", Vector2(32, -16), 1)
+	var half_b := _make_enemy(game, player, "半月右前", Vector2(32, 16), 1)
+	var half_c := _make_enemy(game, player, "半月右侧", Vector2(0, 32), 1)
 	player.half_moon_enabled = true
 	player._pending_attack_context = {"mode": "half_moon", "skill_level": 3}
 	game._on_player_attack(Vector2.ZERO, Vector2.RIGHT, 130)
