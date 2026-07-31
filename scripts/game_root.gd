@@ -31,6 +31,8 @@ const CANONICAL_MATERIAL_ITEMS := {
 	"amulet": "护身符",
 }
 const SKILL_PRODUCTION_ADAPTER_CONTRACT := "skills.production_adaptation.hardcore.v1"
+const ATTACK_LOCK_CONTRACT := "combat.attack_lock.tile_radius.v1"
+const ATTACK_LOCK_RANGE_TILES := 10
 
 var player: PlayerCharacter
 var _world_camera: Camera2D
@@ -45,6 +47,7 @@ var locked_target: EnemyActor
 var manual_target_lock := false
 var auto_target_enabled := true
 var _mobile_attack_held := false
+var _queued_mobile_attacks := 0
 var _warrior_hud_timer := 0.0
 var _system_menu_layer: CanvasLayer
 var _system_menu_panel: Control
@@ -61,6 +64,7 @@ var _last_monster_prefetch_status: Dictionary = {}
 var _combat_runtime: Node = CombatRuntimeServiceScript.new()
 var _canonical_cast_serial := 0
 var _canonical_fire_charge_expires_ms := 0
+var _skill_cast_target: EnemyActor
 
 
 func _ready() -> void:
@@ -153,10 +157,18 @@ func _process(delta: float) -> void:
 		0
 	)
 	if bound_attack_skill.is_empty():
-		if _mobile_attack_held or Input.is_action_pressed("attack"):
+		if Input.is_action_just_pressed("attack"):
+			if not _request_mobile_attack():
+				_queued_mobile_attacks += 1
+		elif _queued_mobile_attacks > 0:
+			if _request_mobile_attack():
+				_queued_mobile_attacks -= 1
+		elif _mobile_attack_held or Input.is_action_pressed("attack"):
 			_request_mobile_attack()
-	elif Input.is_action_just_pressed("attack"):
-		_request_primary_attack_action()
+	else:
+		_queued_mobile_attacks = 0
+		if Input.is_action_just_pressed("attack"):
+			_request_primary_attack_action()
 	if Input.is_action_just_pressed("interact"):
 		_try_interact()
 	for index in range(4):
@@ -1123,15 +1135,17 @@ func _spawn_enemy(
 	return enemy
 
 
-func _request_mobile_attack() -> void:
-	if not player.can_start_attack():
-		return
-	var target := _ensure_combat_target()
+func _request_mobile_attack() -> bool:
+	var target := _ensure_attack_locked_target()
+	var attack_direction := player.facing.normalized()
 	if is_instance_valid(target):
-		var target_direction := player.global_position.direction_to(target.global_position)
-		player.request_attack_toward(target_direction, _has_melee_hittable_target(target_direction))
-		return
-	player.request_attack_toward(player.facing, _has_melee_hittable_target(player.facing))
+		attack_direction = _face_locked_target()
+	if not player.can_start_attack():
+		return false
+	return player.request_attack_toward(
+		attack_direction,
+		_has_melee_hittable_target(attack_direction)
+	)
 
 
 func _request_primary_attack_action() -> void:
@@ -1156,6 +1170,11 @@ func _on_mobile_attack_pressed() -> void:
 		PlayerState.SKILL_SLOT_GROUP_ATTACK,
 		0
 	).is_empty()
+	if _mobile_attack_held:
+		if not _request_mobile_attack():
+			_queued_mobile_attacks += 1
+		return
+	_queued_mobile_attacks = 0
 	_request_primary_attack_action()
 
 
@@ -1163,21 +1182,43 @@ func _on_mobile_attack_released() -> void:
 	_mobile_attack_held = false
 
 
-func _ensure_combat_target(excluded: EnemyActor = null, maximum_distance := TargetingSystem.DEFAULT_SEARCH_RADIUS) -> EnemyActor:
-	if auto_target_enabled:
-		return _refresh_auto_target(maximum_distance, excluded)
-	if not TargetingSystem.is_valid_target(locked_target, player.global_position) or locked_target == excluded:
+func _ensure_attack_locked_target(excluded: EnemyActor = null) -> EnemyActor:
+	if _is_attack_target_in_range(locked_target) and locked_target != excluded:
+		return locked_target
+	if locked_target != null:
+		_cancel_target()
+	if not auto_target_enabled:
 		return null
+	var candidates := _attack_lock_candidates(excluded)
+	_set_attack_locked_target(
+		candidates[0] if not candidates.is_empty() else null,
+		false
+	)
 	return locked_target
 
 
-func _refresh_auto_target(maximum_distance := TargetingSystem.DEFAULT_SEARCH_RADIUS, excluded: EnemyActor = null) -> EnemyActor:
-	var selected := TargetingRuntime.select_auto(get_tree().get_nodes_in_group("enemies"), player.global_position, player.facing, excluded, maximum_distance) as EnemyActor
-	_set_locked_target(selected, false)
+func _ensure_combat_target(
+	excluded: EnemyActor = null,
+	_maximum_distance := TargetingSystem.DEFAULT_SEARCH_RADIUS
+) -> EnemyActor:
+	return _ensure_attack_locked_target(excluded)
+
+
+func _refresh_auto_target(
+	_maximum_distance := TargetingSystem.DEFAULT_SEARCH_RADIUS,
+	excluded: EnemyActor = null
+) -> EnemyActor:
+	var candidates := _attack_lock_candidates(excluded)
+	_set_attack_locked_target(
+		candidates[0] if not candidates.is_empty() else null,
+		false
+	)
 	return locked_target
 
 
-func _set_locked_target(target: EnemyActor, manual := false) -> void:
+func _set_attack_locked_target(target: EnemyActor, manual := false) -> void:
+	if target != null and not _is_attack_target_in_range(target):
+		target = null
 	if is_instance_valid(locked_target) and locked_target != target:
 		locked_target.set_targeted(false)
 	locked_target = target
@@ -1187,9 +1228,81 @@ func _set_locked_target(target: EnemyActor, manual := false) -> void:
 	_update_target_hud()
 
 
+func _set_locked_target(target: EnemyActor, manual := false) -> void:
+	_set_attack_locked_target(target, manual)
+
+
+func _attack_lock_candidates(excluded: EnemyActor = null) -> Array[EnemyActor]:
+	var ranked: Array[Dictionary] = []
+	var player_tile := _attack_lock_tile(player.global_position)
+	for value: Variant in get_tree().get_nodes_in_group("enemies"):
+		if not value is EnemyActor:
+			continue
+		var enemy := value as EnemyActor
+		if enemy == excluded or not _is_attack_target_in_range(enemy):
+			continue
+		var target_tile := _attack_lock_tile(enemy.global_position)
+		var tile_delta := target_tile - player_tile
+		ranked.append({
+			"target": enemy,
+			"tile_steps": maxi(absi(tile_delta.x), absi(tile_delta.y)),
+			"tile_distance_squared": tile_delta.length_squared(),
+			"world_distance_squared": player.global_position.distance_squared_to(enemy.global_position),
+			"instance_id": enemy.get_instance_id(),
+		})
+	ranked.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		var a_steps := int(a.get("tile_steps", 0))
+		var b_steps := int(b.get("tile_steps", 0))
+		if a_steps != b_steps:
+			return a_steps < b_steps
+		var a_tile_distance := float(a.get("tile_distance_squared", 0.0))
+		var b_tile_distance := float(b.get("tile_distance_squared", 0.0))
+		if not is_equal_approx(a_tile_distance, b_tile_distance):
+			return a_tile_distance < b_tile_distance
+		var a_world_distance := float(a.get("world_distance_squared", 0.0))
+		var b_world_distance := float(b.get("world_distance_squared", 0.0))
+		if not is_equal_approx(a_world_distance, b_world_distance):
+			return a_world_distance < b_world_distance
+		return int(a.get("instance_id", 0)) < int(b.get("instance_id", 0))
+	)
+	var result: Array[EnemyActor] = []
+	for entry: Dictionary in ranked:
+		result.append(entry.get("target") as EnemyActor)
+	return result
+
+
+func _attack_lock_tile(world_position: Vector2) -> Vector2i:
+	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
+	if not runtime.is_empty():
+		var tile := MapEditorRuntimeBridgeScript.world_to_tile(runtime, world_position)
+		return Vector2i(roundi(tile.x), roundi(tile.y))
+	var horizontal := world_position.x / 32.0
+	var vertical := world_position.y / 16.0
+	return Vector2i(
+		roundi((horizontal + vertical) * 0.5),
+		roundi((vertical - horizontal) * 0.5)
+	)
+
+
+func _attack_lock_tile_distance(target: EnemyActor) -> int:
+	if not is_instance_valid(target):
+		return ATTACK_LOCK_RANGE_TILES + 1
+	var tile_delta := _attack_lock_tile(target.global_position) - _attack_lock_tile(player.global_position)
+	return maxi(absi(tile_delta.x), absi(tile_delta.y))
+
+
+func _is_attack_target_in_range(target: EnemyActor) -> bool:
+	return (
+		is_instance_valid(target)
+		and not target.is_queued_for_deletion()
+		and target.current_hp > 0
+		and _attack_lock_tile_distance(target) <= ATTACK_LOCK_RANGE_TILES
+	)
+
+
 func _on_enemy_target_requested(enemy: EnemyActor) -> void:
-	if TargetingSystem.is_valid_target(enemy, player.global_position):
-		_set_locked_target(enemy, not auto_target_enabled)
+	if _is_attack_target_in_range(enemy):
+		_set_attack_locked_target(enemy, true)
 		_face_locked_target()
 
 
@@ -1316,18 +1429,17 @@ func _find_valid_enemy_landing(
 
 
 func _cycle_target() -> void:
-	if auto_target_enabled:
-		hud.show_message("关闭自动选怪后才能手动换敌")
-		return
-	var candidates := TargetingRuntime.front_targets(get_tree().get_nodes_in_group("enemies"), player.global_position, player.facing)
+	_validate_locked_target()
+	var candidates := _attack_lock_candidates()
 	if candidates.is_empty():
-		hud.show_message("人物正面没有可切换目标")
+		_cancel_target()
+		hud.show_message("周围10格内没有可锁定目标")
 		return
 	var next_index := 0
 	var current_index := candidates.find(locked_target)
 	if current_index >= 0:
 		next_index = (current_index + 1) % candidates.size()
-	_set_locked_target(candidates[next_index] as EnemyActor, true)
+	_set_attack_locked_target(candidates[next_index], true)
 	_face_locked_target()
 
 
@@ -1342,13 +1454,13 @@ func _set_auto_target_enabled(enabled: bool) -> void:
 
 
 func _on_player_moved(_position: Vector2, _facing: Vector2) -> void:
-	# 自动模式只在攻击/攻击技能按下时选怪；移动立即释放自动锁定。
-	if auto_target_enabled and is_instance_valid(locked_target):
-		_cancel_target()
+	_validate_locked_target()
 
 
 func _on_player_death_requested() -> void:
 	_cancel_target()
+	_mobile_attack_held = false
+	_queued_mobile_attacks = 0
 	var accepted := travel_to_service_home(
 		false,
 		false,
@@ -1379,12 +1491,12 @@ func _cancel_target() -> void:
 
 
 func _validate_locked_target() -> void:
-	if locked_target != null and not TargetingSystem.is_valid_target(locked_target, player.global_position):
+	if locked_target != null and not _is_attack_target_in_range(locked_target):
 		_cancel_target()
 
 
 func _face_locked_target() -> Vector2:
-	if not TargetingSystem.is_valid_target(locked_target, player.global_position):
+	if not _is_attack_target_in_range(locked_target):
 		return player.facing.normalized()
 	var direction := player.global_position.direction_to(locked_target.global_position)
 	if direction.length_squared() > 0.01:
@@ -1392,10 +1504,42 @@ func _face_locked_target() -> Vector2:
 	return direction
 
 
+func _ensure_skill_cast_target(
+	excluded: EnemyActor = null,
+	maximum_distance := TargetingSystem.DEFAULT_SEARCH_RADIUS
+) -> EnemyActor:
+	if (
+		TargetingSystem.is_valid_target(
+			_skill_cast_target,
+			player.global_position,
+			maximum_distance
+		)
+		and _skill_cast_target != excluded
+	):
+		return _skill_cast_target
+	_skill_cast_target = TargetingRuntime.select_auto(
+		get_tree().get_nodes_in_group("enemies"),
+		player.global_position,
+		player.facing,
+		excluded,
+		maximum_distance
+	) as EnemyActor
+	return _skill_cast_target
+
+
+func _face_skill_cast_target() -> Vector2:
+	if not TargetingSystem.is_valid_target(_skill_cast_target, player.global_position):
+		return player.facing.normalized()
+	var direction := player.global_position.direction_to(_skill_cast_target.global_position)
+	if direction.length_squared() > 0.01:
+		direction = CombatRuntime.face_target(player, _skill_cast_target)
+	return direction
+
+
 func _update_target_hud() -> void:
 	if not is_instance_valid(hud):
 		return
-	if TargetingSystem.is_valid_target(locked_target, player.global_position):
+	if _is_attack_target_in_range(locked_target):
 		hud.update_target(locked_target.display_name, locked_target.current_hp, locked_target.max_hp, manual_target_lock, auto_target_enabled)
 	else:
 		hud.update_target("", 0, 0, false, auto_target_enabled)
@@ -1433,11 +1577,18 @@ func _use_skill_slot(slot_group: String, slot_index: int) -> void:
 		return
 	var learned_level := PlayerState.effective_skill_level(skill_name)
 	var profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)
+	_skill_cast_target = null
 	if _skill_needs_target(str(profile.get("cast_type", "melee"))):
-		_ensure_combat_target(null, float(profile.get("search_range", TargetingSystem.DEFAULT_SEARCH_RADIUS)))
-		_face_locked_target()
+		_ensure_skill_cast_target(
+			null,
+			float(profile.get("search_range", TargetingSystem.DEFAULT_SEARCH_RADIUS))
+		)
+		_face_skill_cast_target()
 	if not player.request_skill(skill_name):
+		_skill_cast_target = null
 		hud.show_message("技能冷却中或魔法不足")
+	elif skill_name in ["基本剑术", "攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"]:
+		_skill_cast_target = null
 
 
 func _on_skill_button_assignment_requested(request: Dictionary) -> void:
@@ -1587,7 +1738,9 @@ func _on_special_action_pressed(effect_id: String) -> void:
 			if not player.spend_mana(5):
 				hud.show_message("火球需要5点魔法")
 				return
-			var direction := _face_locked_target()
+			_skill_cast_target = null
+			_ensure_skill_cast_target(null, 360.0)
+			var direction := _face_skill_cast_target()
 			if direction == Vector2.ZERO:
 				direction = player.facing.normalized()
 			var low := maxi(1, int(PlayerState.computed_stats.get("magic_min", 0)))
@@ -1603,6 +1756,7 @@ func _on_special_action_pressed(effect_id: String) -> void:
 				0.0,
 				"wizard.fireball"
 			)
+			_skill_cast_target = null
 			hud.show_message("火焰戒指：火球")
 		"recovery_skill":
 			if not player.spend_mana(5):
@@ -1658,9 +1812,11 @@ func _execute_canonical_skill(
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
 	var definition := SkillDataLoaderScript.skill(stable_skill_id)
 	if definition.is_empty():
+		_skill_cast_target = null
 		return {"accepted": false, "effect_success": false, "reason": "unknown_skill"}
 	var rank := PlayerState.effective_skill_level(skill_name)
 	var target_context := _canonical_target_context(definition, origin, direction)
+	var cast_target := _skill_cast_target
 	target_context.merge(extra_target_context, true)
 	var resource_context := _canonical_resource_context(stable_skill_id)
 	var request := SkillCastRequestScript.create(
@@ -1685,14 +1841,16 @@ func _execute_canonical_skill(
 		"taoist_main_pet",
 	]
 	if not bool(result.get("accepted", false)):
+		_skill_cast_target = null
 		return result
 	if bool(result.get("resource_commit", false)) and not _commit_canonical_resources(result):
 		result["accepted"] = false
 		result["effect_success"] = false
 		result["reason"] = "resource_commit_failed"
+		_skill_cast_target = null
 		return result
 	if apply_effects:
-		_apply_canonical_effects(result, origin, direction, target_context)
+		_apply_canonical_effects(result, origin, direction, target_context, cast_target)
 	var proficiency_event := str(result.get("proficiency_event", ""))
 	if not proficiency_event.is_empty():
 		PlayerState.apply_skill_proficiency_event(
@@ -1700,6 +1858,7 @@ func _execute_canonical_skill(
 			proficiency_event,
 			_next_canonical_seed()
 		)
+	_skill_cast_target = null
 	return result
 
 
@@ -1789,8 +1948,8 @@ func _canonical_target_context(definition: Dictionary, origin: Vector2, directio
 	if target_mode.contains("surround") or target_mode.contains("area") or target_mode.contains("ground"):
 		search_range = maxf(search_range, 180.0)
 	if not friendly_cast and target_mode not in ["self", "self_stat", "self_summon", "self_next_melee_charge", "self_random_destination", "caster_surrounding_area", "surrounding_units"]:
-		_ensure_combat_target(null, search_range)
-	var target := locked_target if not friendly_cast and is_instance_valid(locked_target) else null
+		_ensure_skill_cast_target(null, search_range)
+	var target := _skill_cast_target if not friendly_cast and is_instance_valid(_skill_cast_target) else null
 	var has_ground_target := target_mode.contains("ground") or target_mode.contains("area") or target_mode == "facing_line"
 	var context := {
 		"has_target": target != null or has_ground_target or friendly_cast,
@@ -1882,10 +2041,12 @@ func _apply_canonical_effects(
 	result: Dictionary,
 	origin: Vector2,
 	direction: Vector2,
-	target_context: Dictionary
+	target_context: Dictionary,
+	target: EnemyActor = null
 ) -> void:
 	var stable_skill_id := str(result.get("skill_id", ""))
-	var target := locked_target if is_instance_valid(locked_target) else null
+	if not is_instance_valid(target):
+		target = null
 	var target_position := _canonical_tile_to_world(
 		target_context.get("target_tile", _canonical_world_to_tile(origin))
 	)
@@ -2402,7 +2563,7 @@ func _resolve_magic_defense(_skill_id: String, damage_after_anti_magic: int, tar
 
 
 func _physical_primary_target(origin: Vector2, direction: Vector2, maximum_distance: float) -> EnemyActor:
-	if TargetingSystem.is_valid_target(locked_target, origin):
+	if _is_attack_target_in_range(locked_target):
 		var locked_offset := locked_target.global_position - origin
 		if locked_offset.length() <= maximum_distance and (locked_offset.normalized().dot(direction) > -0.05 or locked_offset.length() < 42.0):
 			return locked_target
@@ -2517,9 +2678,9 @@ func _show_attack_flash(origin: Vector2, direction: Vector2, hit: bool, color: C
 
 func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 	if enemy == locked_target:
-		locked_target = null
-		manual_target_lock = false
-		_update_target_hud()
+		_cancel_target()
+	if enemy == _skill_cast_target:
+		_skill_cast_target = null
 	var death_position := enemy.global_position
 	var spawn_position: Vector2 = enemy.get_meta("spawn_position", death_position)
 	var was_boss: bool = enemy.get_meta("spawn_is_boss", false)

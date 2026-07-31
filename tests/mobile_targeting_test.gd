@@ -28,63 +28,131 @@ func _run() -> void:
 	for index in range(4, enemies.size()):
 		(enemies[index] as EnemyActor).global_position = Vector2(3000 + index * 80, 3000)
 
-	game.player.global_position = Vector2.ZERO
+	var player_tile: Vector2i = game._attack_lock_tile(game.player.global_position)
+	game.player.global_position = game._canonical_tile_to_world(player_tile)
 	game.player.velocity = Vector2.ZERO
 	game.player.facing = Vector2.RIGHT
-	first.global_position = Vector2(80, 0)
-	second.global_position = Vector2(160, 10)
-	side.global_position = Vector2(0, 55)
-	behind.global_position = Vector2(-45, 0)
+	_place_at_tile_offset(game, first, player_tile, Vector2i(2, 0))
+	_place_at_tile_offset(game, second, player_tile, Vector2i(-3, 0))
+	_place_at_tile_offset(game, side, player_tile, Vector2i(0, 4))
+	_place_at_tile_offset(game, behind, player_tile, Vector2i(-5, -5))
 	game._request_mobile_attack()
-	assert(game.locked_target == first and first.is_targeted, "自动普攻没有选择最近正面目标")
+	assert(game.locked_target == first and first.is_targeted, "无攻击锁定时没有从周围10格选择最近怪物")
 
-	first.global_position = Vector2(0, 70)
+	_place_at_tile_offset(game, first, player_tile, Vector2i(5, 0))
+	_place_at_tile_offset(game, second, player_tile, Vector2i(1, 0))
 	game.player._attack_timer = 0.0
 	game.player._attack_action_timer = 0.0
 	game._request_mobile_attack()
-	assert(game.locked_target == second, "怪物位置改变后普攻没有重新选择正面目标")
-	first.global_position = Vector2(70, 0)
+	assert(game.locked_target == first, "已有攻击锁定时因更近怪物出现而擅自换敌")
 	game.player.movement_performed.emit(game.player.global_position, game.player.facing)
-	assert(game.locked_target == null, "自动模式在人物移动时仍持续锁定怪物")
+	assert(game.locked_target == first, "人物移动后丢失了仍在10格内的攻击锁定")
+
+	_place_at_tile_offset(game, first, player_tile, Vector2i(-4, -2))
 	game.player._attack_timer = 0.0
 	game.player._attack_action_timer = 0.0
 	game._request_mobile_attack()
-	assert(game.locked_target == first and game.player.facing.dot(game.player.global_position.direction_to(first.global_position)) > 0.999, "攻击时没有重新选怪并强制面向目标")
+	assert(
+		game.locked_target == first
+		and ArtSpec.direction_index(game.player.facing) == ArtSpec.direction_index(
+			game.player.global_position.direction_to(first.global_position)
+		),
+		"点击或按住攻击时没有强制转向已有攻击锁定"
+	)
 	game.player.visual._process(0.01)
-	assert(game.player.visual.current_direction == ArtSpec.mir2_client_direction_row(game.player.global_position.direction_to(first.global_position)), "攻击动作画面没有同步转向目标")
+	assert(
+		game.player.visual.current_direction == ArtSpec.mir2_client_direction_row(
+			game.player.global_position.direction_to(first.global_position)
+		),
+		"攻击动作画面没有同步转向攻击锁定"
+	)
 
-	game._set_auto_target_enabled(false)
-	assert(not game.auto_target_enabled and game.hud.auto_target_button.text.contains("关"), "自动选怪开关没有关闭")
-	first.global_position = Vector2(-60, 0)
-	second.global_position = Vector2(90, 0)
-	side.global_position = Vector2(150, 20)
-	behind.global_position = Vector2(-35, 0)
-	game.player.movement_performed.emit(game.player.global_position, game.player.facing)
-	assert(game.locked_target == first, "手动模式在人物移动后擅自更换了目标")
+	_place_at_tile_offset(game, first, player_tile, Vector2i(3, 3))
+	game.player._attack_timer = 0.0
+	game.player._attack_action_timer = 0.0
+	game._mobile_attack_held = true
+	game._process(0.0)
+	assert(
+		game.locked_target == first
+		and ArtSpec.direction_index(game.player.facing) == ArtSpec.direction_index(
+			game.player.global_position.direction_to(first.global_position)
+		),
+		"按住攻击的重复输入没有保持锁定并持续转向目标"
+	)
+	game._on_mobile_attack_released()
+
+	game._on_mobile_attack_pressed()
+	game._on_mobile_attack_released()
+	game._on_mobile_attack_pressed()
+	game._on_mobile_attack_released()
+	assert(game._queued_mobile_attacks == 2, "快速点击发生在攻击动作中时没有逐次登记")
+	game.player._attack_timer = 0.0
+	game.player._attack_action_timer = 0.0
+	game._process(0.0)
+	assert(
+		game._queued_mobile_attacks == 1 and game.player._attack_action_timer > 0.0,
+		"第一笔快速点击没有在人物可攻击时完成一次攻击"
+	)
+	game.player._attack_timer = 0.0
+	game.player._attack_action_timer = 0.0
+	game._process(0.0)
+	assert(
+		game._queued_mobile_attacks == 0 and game.player._attack_action_timer > 0.0,
+		"第二笔快速点击没有独立完成一次攻击"
+	)
+	var movement_position_before: Vector2 = game.player.global_position
+	game.player.set_touch_vector(Vector2.RIGHT)
+	game.player._physics_process(game.player._attack_action_timer + 0.01)
+	assert(
+		game.player.movement_input_active
+		and ArtSpec.direction_index(game.player.facing) == ArtSpec.direction_index(Vector2.RIGHT)
+		and game.player.global_position.x > movement_position_before.x,
+		"松开攻击后没有在动作完成时恢复摇杆方向并继续移动"
+	)
+	game.player.set_touch_vector(Vector2.ZERO)
+	player_tile = game._attack_lock_tile(game.player.global_position)
+
+	_place_at_tile_offset(game, first, player_tile, Vector2i(11, 0))
+	game._validate_locked_target()
+	assert(game.locked_target == null and not first.is_targeted, "怪物离开角色周围10格后没有取消攻击锁定")
+	_place_at_tile_offset(game, first, player_tile, Vector2i(11, 0))
+	_place_at_tile_offset(game, second, player_tile, Vector2i(-2, 0))
+	_place_at_tile_offset(game, side, player_tile, Vector2i(0, 3))
+	_place_at_tile_offset(game, behind, player_tile, Vector2i(4, 4))
+	game.player._attack_timer = 0.0
+	game.player._attack_action_timer = 0.0
+	game._request_mobile_attack()
+	assert(game.locked_target == second, "攻击重新选敌时选中了10格外怪物或未选择最近怪物")
+
+	game._cancel_target()
 	game._cycle_target()
-	assert(game.locked_target == second, "手动换敌没有从最近的正面目标开始")
+	assert(game.locked_target == second, "无目标时换敌没有从周围最近怪物开始")
 	game._cycle_target()
-	assert(game.locked_target == side, "手动换敌没有按距离切到更远的正面目标")
+	assert(game.locked_target == side, "换敌没有按周围10格内的距离切到下一只怪物")
 	game._cycle_target()
-	assert(game.locked_target == second and game.locked_target != behind, "手动换敌切到了人物背后或没有循环")
+	assert(game.locked_target == behind, "换敌没有覆盖人物四周的合法怪物")
+	game._cycle_target()
+	assert(
+		game.locked_target == second and game.locked_target != first,
+		"换敌没有循环或切到了10格外怪物"
+	)
+
+	game._skill_cast_target = side
+	game.player.facing = game.player.global_position.direction_to(side.global_position)
+	assert(
+		game._ensure_skill_cast_target(second, 180.0) == side,
+		"技能临时目标没有保持自己的独立目标"
+	)
+	assert(game.locked_target == second, "技能临时选敌覆盖了独立的攻击锁定")
+	game._skill_cast_target = null
 
 	await _assert_player_cannot_push_enemy(game, first, second, side, behind)
 	await _assert_boss_faces_player(game, enemies)
 
 	for index in range(enemies.size()):
 		(enemies[index] as EnemyActor).global_position = Vector2(3000 + index * 80, 3000)
-	second.global_position = game.player.global_position + Vector2(90, 0)
-	side.global_position = game.player.global_position + Vector2(150, 20)
-	game.player.facing = Vector2.RIGHT
-	game._set_auto_target_enabled(true)
-	assert(game.auto_target_enabled and game.locked_target == null, "开启自动选怪后不应在攻击前持续锁定")
-	game.player._attack_timer = 0.0
-	game.player._attack_action_timer = 0.0
-	game._request_mobile_attack()
-	assert(game.locked_target == second, "攻击发生时没有选择最近正面目标")
-	for index in range(enemies.size()):
-		(enemies[index] as EnemyActor).global_position = Vector2(3000 + index * 80, 3000)
-	second.global_position = game.player.global_position + Vector2(0, -90)
+	player_tile = game._attack_lock_tile(game.player.global_position)
+	_place_at_tile_offset(game, second, player_tile, Vector2i(-2, -2))
 	game._cancel_target()
 	game.player.facing = Vector2.DOWN
 	game.player._attack_timer = 0.0
@@ -100,8 +168,17 @@ func _run() -> void:
 	await get_tree().process_frame
 	assert(flying.collision_layer == 0 and flying.collision_mask == 1, "飞行怪仍阻挡人物移动")
 	flying.queue_free()
-	print("MOBILE_TARGETING_PASS：仅攻击时自动锁定、攻击转向、正侧背优先、手动换敌与Boss朝向正常")
+	print("MOBILE_TARGETING_PASS：攻击锁定10格、持续锁定、强制转向、全方向换敌及技能目标隔离正常")
 	get_tree().quit(0)
+
+
+func _place_at_tile_offset(
+	game: Node,
+	enemy: EnemyActor,
+	origin_tile: Vector2i,
+	offset: Vector2i
+) -> void:
+	enemy.global_position = game._canonical_tile_to_world(origin_tile + offset)
 
 
 func _assert_direction_priority() -> void:
@@ -146,24 +223,22 @@ func _assert_player_cannot_push_enemy(game: Node, blocker: EnemyActor, second: E
 	assert(game.player.global_position.distance_to(blocker.global_position) >= ArtSpec.PLAYER_COLLISION_RADIUS + blocker.collision_radius - 1.0, "人物移动穿进了怪物碰撞体")
 
 
-func _assert_boss_faces_player(game: Node, enemies: Array) -> void:
-	var boss: EnemyActor
-	for enemy: EnemyActor in enemies:
-		if enemy.is_boss:
-			boss = enemy
-			break
-	if boss == null:
-		# 测试自行创建固定Boss，不再依赖默认出生地图是否包含Boss。
-		boss = EnemyActor.new()
-		boss.setup({"name": "测试Boss", "hp": 9999, "attackMin": 1, "attackMax": 1}, game.player, true)
-		game.add_child(boss)
-		await get_tree().process_frame
+func _assert_boss_faces_player(game: Node, _enemies: Array) -> void:
+	# 使用隔离 Boss，避免默认地图中已有 Boss 的仇恨表影响朝向断言。
+	var boss := EnemyActor.new()
+	boss.setup(
+		{"name": "测试Boss", "hp": 9999, "attackMin": 1, "attackMax": 1},
+		game.player,
+		true
+	)
+	game.add_child(boss)
+	await get_tree().process_frame
 	boss.control_time = 0.0
 	boss.global_position = game.player.global_position + Vector2(-180, -40)
 	boss.velocity = Vector2.ZERO
+	boss.target = game.player
 	for _frame in range(5):
 		await get_tree().physics_frame
 	var expected := boss.global_position.direction_to(game.player.global_position)
 	assert(boss.facing.dot(expected) > 0.995, "Boss追击时没有持续面对玩家")
-	if boss.display_name == "测试Boss":
-		boss.queue_free()
+	boss.queue_free()
