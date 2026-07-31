@@ -101,13 +101,20 @@ func _run() -> void:
 	var attack_center := (root.get_node("AttackButton") as Control).position + Vector2(60, 60)
 	assert(attack_center == root.size + GameHUD.HUD_ATTACK_CENTER, "攻击键没有使用统一内移圆心")
 	var frame_image := Image.load_from_file(ProjectSettings.globalize_path(ACTION_FRAME_PATH))
-	var measured_inner_diameter := _measure_action_frame_inner_diameter(frame_image)
-	var expected_attack_inner_size := ceilf(measured_inner_diameter)
-	var expected_ring_inner_size := ceilf(
-		measured_inner_diameter * GameHUD.HUD_ATTACK_RING_BUTTON_SIZE.x / float(frame_image.get_width())
+	var visible_inner_radius_max := _measure_action_frame_visible_inner_radius_max(frame_image)
+	assert(visible_inner_radius_max == 44.0, "圆框可视亮金属内沿测量结果发生漂移")
+	assert(
+		GameHUD.HUD_ACTION_FRAME_VISIBLE_INNER_MAX_RADIUS_SOURCE == visible_inner_radius_max,
+		"HUD 未使用圆框逐方向实测的可视亮金属内沿",
 	)
-	assert(expected_attack_inner_size == 74.0 and expected_ring_inner_size == 42.0, "圆框透明内孔测量结果发生漂移")
-	assert(GameHUD.HUD_ACTION_FRAME_INNER_DIAMETER_SOURCE == expected_attack_inner_size, "HUD 未使用圆框实测内孔")
+	var expected_attack_content_size := Vector2(90, 90)
+	var expected_ring_content_size := Vector2(50, 50)
+	_assert_action_frame_content_reaches_visible_inner_edge(
+		frame_image,
+		expected_attack_content_size.x * 0.5,
+		expected_ring_content_size.x * 0.5 * float(frame_image.get_width())
+			/ GameHUD.HUD_ATTACK_RING_BUTTON_SIZE.x,
+	)
 	var previous_ring_center := Vector2.ZERO
 	for index in range(6):
 		var ring_skill := root.get_node("AttackRingSkill%d" % (index + 1)) as Button
@@ -117,10 +124,15 @@ func _run() -> void:
 		var ring_frame := ring_skill.get_node("RoundActionFrame") as TextureRect
 		var expected_ring_skill: String = ["野蛮冲撞", "烈火剑法", "半月弯刀", "刺杀剑术", "", ""][index]
 		assert(ring_icon != null and ring_icon.get_meta("skill_name", "") == expected_ring_skill)
-		assert(ring_icon.position == Vector2(15, 15) and ring_icon.size == Vector2(expected_ring_inner_size, expected_ring_inner_size), "环绕技能图没有贴合圆框实测内孔")
-		assert(ring_backdrop.position == Vector2(15, 15) and ring_backdrop.size == Vector2(expected_ring_inner_size, expected_ring_inner_size), "环绕技能底色没有贴合圆框实测内孔")
+		assert(ring_icon.position == Vector2(11, 11) and ring_icon.size == expected_ring_content_size, "环绕技能图没有延伸到可视金属内沿下方")
+		assert(ring_backdrop.position == Vector2(11, 11) and ring_backdrop.size == expected_ring_content_size, "环绕技能底色没有延伸到可视金属内沿下方")
 		assert(ring_icon.material is ShaderMaterial and ring_icon.get_meta("circular_clip", false), "环绕技能图没有圆形裁切")
 		assert(ring_frame != null and ring_frame.get_index() > ring_icon.get_index(), "环形技能金属框没有覆盖在图标之上")
+		assert(
+			ring_frame.get_meta("visual_inner_rim_mask", "")
+				== HUDAssetSanitizer.ACTION_FRAME_INNER_DARK_RIM_MASK_ID,
+			"环形技能框没有清除可视内沿以内的深色空圈",
+		)
 		var actual_center := ring_skill.position + ring_skill.size * 0.5
 		var expected_angle := GameHUD.HUD_ATTACK_RING_START_DEGREES + GameHUD.HUD_ATTACK_RING_STEP_DEGREES * index
 		var expected_center := root.size + GameHUD.HUD_ATTACK_CENTER + Vector2.from_angle(deg_to_rad(expected_angle)) * GameHUD.HUD_ATTACK_RING_RADIUS
@@ -148,10 +160,16 @@ func _run() -> void:
 	assert(bool(attack.call("_has_point", Vector2(60, 60))) and not bool(attack.call("_has_point", Vector2.ZERO)), "攻击键仍使用方形触控判定")
 	var attack_fill := root.get_node("AttackFill") as Control
 	var attack_frame := root.get_node("AttackFrame") as Control
-	assert(attack_fill.size == Vector2(expected_attack_inner_size, expected_attack_inner_size), "攻击键红色填充没有贴合实测金属内孔")
+	assert(attack_fill.size == expected_attack_content_size, "攻击键红色填充没有延伸到可视金属内沿下方")
 	assert(attack_fill.get_global_rect().get_center().is_equal_approx(attack.get_global_rect().get_center()), "攻击键红色填充没有对准圆心")
 	assert(attack_frame.get_global_rect().get_center().is_equal_approx(attack.get_global_rect().get_center()), "攻击键金属框没有对准圆心")
-	assert(hud.attack_slot_icon.size == Vector2(expected_attack_inner_size, expected_attack_inner_size) and hud.attack_slot_icon.material is ShaderMaterial, "攻击键技能图没有贴合圆框实测内孔")
+	assert(hud.attack_slot_icon.size == expected_attack_content_size and hud.attack_slot_icon.material is ShaderMaterial, "攻击键技能图没有延伸到可视金属内沿下方")
+	assert(attack_frame.get_index() > attack.get_index(), "攻击键金属框没有最后绘制遮住扩大的内容")
+	assert(
+		attack_frame.get_meta("visual_inner_rim_mask", "")
+			== HUDAssetSanitizer.ACTION_FRAME_INNER_DARK_RIM_MASK_ID,
+		"攻击键框没有清除可视内沿以内的深色空圈",
+	)
 	var joystick := root.get_node("TouchJoystick") as TouchJoystick
 	assert(joystick.size.x >= 150 and is_equal_approx(joystick.radius, 58.0), "摇杆触控区和缩小后的可视半径不匹配")
 	assert(joystick.position == Vector2(70, root.size.y - 210), "摇杆没有向安全区内部移动")
@@ -233,18 +251,81 @@ func _run() -> void:
 	get_tree().quit(0)
 
 
-func _measure_action_frame_inner_diameter(image: Image) -> float:
+func _measure_action_frame_visible_inner_radius_max(image: Image) -> float:
 	assert(not image.is_empty(), "无法读取攻击圆框源图")
 	var center := Vector2(image.get_size()) * 0.5
-	var nearest_alpha_radius := INF
+	var maximum_inner_radius := 0.0
+	for direction_index in range(360):
+		var radius := _measure_action_frame_visible_inner_radius(
+			image,
+			center,
+			Vector2.from_angle(deg_to_rad(float(direction_index))),
+		)
+		maximum_inner_radius = maxf(maximum_inner_radius, radius)
+	return maximum_inner_radius
+
+
+func _measure_action_frame_visible_inner_radius(
+	image: Image,
+	center: Vector2,
+	direction: Vector2,
+) -> float:
+	for step_index in range(37):
+		var radius := 30.0 + float(step_index) * 0.5
+		var point := Vector2i((center + direction * radius).round())
+		var color := image.get_pixelv(point)
+		if color.a >= 0.5 and color.get_luminance() >= 0.20:
+			return radius
+	assert(false, "攻击圆框方向上没有找到可视亮金属内沿")
+	return 48.0
+
+
+func _assert_action_frame_content_reaches_visible_inner_edge(
+	image: Image,
+	attack_content_radius: float,
+	ring_content_radius_in_source_pixels: float,
+) -> void:
+	var center := Vector2(image.get_size()) * 0.5
+	var sanitized := HUDAssetSanitizer.without_action_frame_inner_dark_rim(
+		load(ACTION_FRAME_PATH) as Texture2D
+	).get_image()
+	var inner_radii := PackedFloat32Array()
+	inner_radii.resize(360)
+	for direction_index in range(360):
+		var direction := Vector2.from_angle(deg_to_rad(float(direction_index)))
+		var inner_radius := _measure_action_frame_visible_inner_radius(image, center, direction)
+		inner_radii[direction_index] = inner_radius
+		assert(attack_content_radius > inner_radius, "攻击底色没有压入亮金属内沿下方")
+		assert(ring_content_radius_in_source_pixels > inner_radius, "技能底色没有压入亮金属内沿下方")
+		var bright_point := Vector2i((center + direction * inner_radius).round())
+		assert(
+			sanitized.get_pixelv(bright_point) == image.get_pixelv(bright_point),
+			"可视亮金属内沿被清理：方向 %d" % direction_index,
+		)
 	for y in range(image.get_height()):
 		for x in range(image.get_width()):
-			if image.get_pixel(x, y).a <= 0.05:
+			var offset := Vector2(x + 0.5, y + 0.5) - center
+			if offset.length() <= 0.0 or offset.length() > 48.0:
 				continue
-			var pixel_center := Vector2(x + 0.5, y + 0.5)
-			nearest_alpha_radius = minf(nearest_alpha_radius, pixel_center.distance_to(center))
-	assert(nearest_alpha_radius < INF, "攻击圆框源图没有有效 alpha")
-	return nearest_alpha_radius * 2.0
+			var direction_index := posmod(roundi(rad_to_deg(offset.angle())), 360)
+			if offset.length() >= inner_radii[direction_index] + 1.0:
+				continue
+			var source_color := image.get_pixel(x, y)
+			var source_is_bright_metal := (
+				source_color.a >= HUDAssetSanitizer.ACTION_FRAME_VISUAL_METAL_MIN_ALPHA
+				and source_color.get_luminance()
+					>= HUDAssetSanitizer.ACTION_FRAME_VISUAL_METAL_MIN_LUMINANCE
+			)
+			if source_is_bright_metal:
+				assert(
+					sanitized.get_pixel(x, y) == source_color,
+					"亮金属或四尖角像素被改变：%s" % Vector2i(x, y),
+				)
+			elif source_color.a > 0.0:
+				assert(
+					sanitized.get_pixel(x, y).a <= 0.01,
+					"背景到亮金属内沿之间仍残留深色 alpha 间隙：%s" % Vector2i(x, y),
+				)
 
 
 func _assert_2664x1200_landscape_layout(root: Control, chassis: Control, health_orb: Control, mana_orb: Control) -> void:

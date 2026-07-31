@@ -4,6 +4,13 @@ extends RefCounted
 ## Removes one isolated alpha-connected artifact without resampling any source
 ## pixels.  The seed must point inside the unwanted component.
 const CHASSIS_LEGACY_SKILL_MASK_ID := "ui.hud.chassis.legacy_skill_alpha_mask.v2"
+const ACTION_FRAME_INNER_DARK_RIM_MASK_ID := "ui.hud.action_frame.inner_dark_rim_mask.v1"
+const ACTION_FRAME_VISUAL_METAL_MIN_LUMINANCE := 0.20
+const ACTION_FRAME_VISUAL_METAL_MIN_ALPHA := 0.50
+const ACTION_FRAME_VISUAL_SCAN_MIN_RADIUS := 30.0
+const ACTION_FRAME_VISUAL_SCAN_MAX_RADIUS := 48.0
+const ACTION_FRAME_VISUAL_SCAN_STEP := 0.5
+const ACTION_FRAME_VISUAL_SCAN_DIRECTIONS := 360
 const _LEGACY_RING_TOP_BOUNDS := Rect2i(239, 0, 539, 133)
 const _LEGACY_CONNECTOR_X_RANGE := Vector2i(204, 808)
 const _LEGACY_CONNECTOR_Y_RANGE := Vector2i(125, 160)
@@ -89,6 +96,80 @@ static func without_chassis_legacy_skill_art(source: Texture2D) -> Texture2D:
 	var cleaned := ImageTexture.create_from_image(image)
 	_cache[cache_key] = cleaned
 	return cleaned
+
+
+## Clears the dark, semi-opaque band on the inside of the action frame while
+## preserving the first bright metal pixel and every source pixel outside it.
+## The bright inner edge is measured independently in every radial direction,
+## so the pointed ornaments and asymmetric hand-painted rim are not flattened.
+static func without_action_frame_inner_dark_rim(source: Texture2D) -> Texture2D:
+	if source == null:
+		return null
+	var cache_key := "action_frame_inner_dark_rim:%d" % source.get_instance_id()
+	if _cache.has(cache_key):
+		return _cache[cache_key]
+	var image := source.get_image()
+	if image == null or image.is_empty():
+		return source
+	image = image.duplicate()
+	var center := Vector2(image.get_size()) * 0.5
+	var bright_inner_radii := _measure_action_frame_bright_inner_radii(image, center)
+	for y in range(image.get_height()):
+		for x in range(image.get_width()):
+			var offset := Vector2(x + 0.5, y + 0.5) - center
+			var radius := offset.length()
+			if radius <= 0.0 or radius > ACTION_FRAME_VISUAL_SCAN_MAX_RADIUS:
+				continue
+			var direction_index := posmod(
+				roundi(rad_to_deg(offset.angle())),
+				ACTION_FRAME_VISUAL_SCAN_DIRECTIONS,
+			)
+			# One source-pixel tolerance absorbs nearest-neighbour angle/pixel
+			# quantization. Bright metal itself is protected below.
+			if radius >= bright_inner_radii[direction_index] + 1.0:
+				continue
+			var color := image.get_pixel(x, y)
+			if color.a <= 0.0:
+				continue
+			if (
+				color.a >= ACTION_FRAME_VISUAL_METAL_MIN_ALPHA
+				and color.get_luminance() >= ACTION_FRAME_VISUAL_METAL_MIN_LUMINANCE
+			):
+				continue
+			color.a = 0.0
+			image.set_pixel(x, y, color)
+	var cleaned := ImageTexture.create_from_image(image)
+	_cache[cache_key] = cleaned
+	return cleaned
+
+
+static func _measure_action_frame_bright_inner_radii(image: Image, center: Vector2) -> PackedFloat32Array:
+	var result := PackedFloat32Array()
+	result.resize(ACTION_FRAME_VISUAL_SCAN_DIRECTIONS)
+	for direction_index in range(ACTION_FRAME_VISUAL_SCAN_DIRECTIONS):
+		var direction := Vector2.from_angle(deg_to_rad(float(direction_index)))
+		var bright_radius := ACTION_FRAME_VISUAL_SCAN_MAX_RADIUS
+		var step_count := int(
+			(ACTION_FRAME_VISUAL_SCAN_MAX_RADIUS - ACTION_FRAME_VISUAL_SCAN_MIN_RADIUS)
+			/ ACTION_FRAME_VISUAL_SCAN_STEP
+		)
+		for step_index in range(step_count + 1):
+			var radius := (
+				ACTION_FRAME_VISUAL_SCAN_MIN_RADIUS
+				+ float(step_index) * ACTION_FRAME_VISUAL_SCAN_STEP
+			)
+			var sample := Vector2i((center + direction * radius).round())
+			if sample.x < 0 or sample.y < 0 or sample.x >= image.get_width() or sample.y >= image.get_height():
+				continue
+			var color := image.get_pixelv(sample)
+			if (
+				color.a >= ACTION_FRAME_VISUAL_METAL_MIN_ALPHA
+				and color.get_luminance() >= ACTION_FRAME_VISUAL_METAL_MIN_LUMINANCE
+			):
+				bright_radius = radius
+				break
+		result[direction_index] = bright_radius
+	return result
 
 
 static func is_chassis_legacy_skill_pixel(point: Vector2i) -> bool:

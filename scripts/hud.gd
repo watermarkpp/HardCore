@@ -35,11 +35,11 @@ const HUD_ATTACK_RING_RADIUS := 125.0
 const HUD_ATTACK_RING_START_DEGREES := 180.0
 const HUD_ATTACK_RING_STEP_DEGREES := 36.0
 const HUD_ATTACK_RING_BUTTON_SIZE := Vector2(72, 72)
-const HUD_ACTION_FRAME_INNER_DIAMETER_SOURCE := 74.0
-const HUD_ATTACK_RING_BACKDROP_SIZE := Vector2(42, 42)
-const HUD_ATTACK_RING_ICON_SIZE := Vector2(42, 42)
-const HUD_ATTACK_FILL_SIZE := Vector2(74, 74)
-const HUD_ATTACK_ICON_SIZE := Vector2(74, 74)
+const HUD_ACTION_FRAME_VISIBLE_INNER_MAX_RADIUS_SOURCE := 44.0
+const HUD_ATTACK_RING_BACKDROP_SIZE := Vector2(50, 50)
+const HUD_ATTACK_RING_ICON_SIZE := Vector2(50, 50)
+const HUD_ATTACK_FILL_SIZE := Vector2(90, 90)
+const HUD_ATTACK_ICON_SIZE := Vector2(90, 90)
 const HUD_JOYSTICK_RECT := Rect2(70, -210, 152, 152)
 
 signal movement_changed(value: Vector2)
@@ -516,10 +516,16 @@ func _build_combat_controls(root: Control) -> void:
 		var ring_frame := TextureRect.new()
 		ring_frame.name = "RoundActionFrame"
 		ring_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		ring_frame.texture = HUDRoundActionFrameTexture
+		ring_frame.texture = HUDAssetSanitizer.without_action_frame_inner_dark_rim(
+			HUDRoundActionFrameTexture
+		)
 		ring_frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		ring_frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		ring_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ring_frame.set_meta(
+			"visual_inner_rim_mask",
+			HUDAssetSanitizer.ACTION_FRAME_INNER_DARK_RIM_MASK_ID,
+		)
 		ring_skill.add_child(ring_frame)
 		var ring_label := Label.new()
 		ring_label.name = "SkillLabel"
@@ -625,11 +631,17 @@ func _add_bottom_right_action_frame(
 	frame.offset_top = rect.position.y
 	frame.offset_right = rect.end.x
 	frame.offset_bottom = rect.end.y
-	frame.texture = HUDRoundActionFrameTexture
+	frame.texture = HUDAssetSanitizer.without_action_frame_inner_dark_rim(
+		HUDRoundActionFrameTexture
+	)
 	frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	frame.set_meta("stable_id", stable_id)
+	frame.set_meta(
+		"visual_inner_rim_mask",
+		HUDAssetSanitizer.ACTION_FRAME_INNER_DARK_RIM_MASK_ID,
+	)
 	root.add_child(frame)
 	return frame
 
