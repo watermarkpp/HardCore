@@ -9,7 +9,7 @@ static var _cache: Dictionary = {}
 static func without_alpha_component(source: Texture2D, seed: Vector2i) -> Texture2D:
 	if source == null:
 		return null
-	var cache_key := "%s@%d,%d" % [source.resource_path, seed.x, seed.y]
+	var cache_key := "component:%d@%d,%d" % [source.get_instance_id(), seed.x, seed.y]
 	if _cache.has(cache_key):
 		return _cache[cache_key]
 	var image := source.get_image()
@@ -40,6 +40,39 @@ static func without_alpha_component(source: Texture2D, seed: Vector2i) -> Textur
 			Vector2i(-1, 1), Vector2i(0, 1), Vector2i(1, 1),
 		]:
 			pending.append(point + offset)
+	var cleaned := ImageTexture.create_from_image(image)
+	_cache[cache_key] = cleaned
+	return cleaned
+
+
+## Clears a precisely bounded source-art rectangle without resampling anything
+## outside that rectangle. This is used when obsolete artwork was baked into the
+## same atlas as artwork that must be preserved.
+static func without_alpha_rect(source: Texture2D, source_rect: Rect2i) -> Texture2D:
+	if source == null:
+		return null
+	var cache_key := "rect:%d@%d,%d,%d,%d" % [
+		source.get_instance_id(),
+		source_rect.position.x,
+		source_rect.position.y,
+		source_rect.size.x,
+		source_rect.size.y,
+	]
+	if _cache.has(cache_key):
+		return _cache[cache_key]
+	var image := source.get_image()
+	if image == null or image.is_empty():
+		return source
+	var image_rect := Rect2i(Vector2i.ZERO, image.get_size())
+	var clipped := source_rect.intersection(image_rect)
+	if clipped.size.x <= 0 or clipped.size.y <= 0:
+		return source
+	image = image.duplicate()
+	for y in range(clipped.position.y, clipped.end.y):
+		for x in range(clipped.position.x, clipped.end.x):
+			var color := image.get_pixel(x, y)
+			color.a = 0.0
+			image.set_pixel(x, y, color)
 	var cleaned := ImageTexture.create_from_image(image)
 	_cache[cache_key] = cleaned
 	return cleaned

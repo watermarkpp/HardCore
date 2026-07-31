@@ -7,6 +7,7 @@ const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const HUDResourceOrbScript := preload("res://scripts/hud_resource_orb.gd")
 const HUDSkillIconCatalogScript := preload("res://scripts/hud_skill_icon_catalog.gd")
 const HUDAssetSanitizerScript := preload("res://scripts/hud_asset_sanitizer.gd")
+const CircularTouchButtonScript := preload("res://scripts/circular_touch_button.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 const DeathRevivalPanelScript := preload("res://scripts/death_revival_panel.gd")
 const LootFeedbackLayerScript := preload("res://scripts/loot_feedback_layer.gd")
@@ -16,8 +17,11 @@ const HUDUtilityStackTexture := preload("res://assets/ui/gothic_hud/v2/runtime/u
 const HUDJoystickTexture := preload("res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png")
 const HUDChassisTexture := preload("res://assets/ui/gothic_hud/v2/runtime/bottom_chassis_v2.png")
 const HUDRoundActionFrameTexture := preload("res://assets/ui/gothic_hud/v2/runtime/round_action_frame_v3.png")
+const HUDCircularIconMaskShader := preload("res://assets/ui/gothic_hud/v2/runtime/circular_icon_mask.gdshader")
 const HUD_CHASSIS_SIZE := Vector2(820, 273)
 const HUD_RESOURCE_ORB_SIZE := Vector2(110, 110)
+const HUD_ITEM_SLOT_FILL_SIZE := Vector2(72, 72)
+const HUD_LEGACY_CENTER_SKILL_ART_SOURCE_RECT := Rect2i(232, 0, 552, 138)
 const HUD_HEALTH_ORB_SOURCE_CENTER := Vector2(223.5, 230.5)
 const HUD_MANA_ORB_SOURCE_CENTER := Vector2(785.5, 230.5)
 const HUD_ITEM_SLOT_SOURCE_CENTERS: Array[Vector2] = [
@@ -26,14 +30,17 @@ const HUD_ITEM_SLOT_SOURCE_CENTERS: Array[Vector2] = [
 	Vector2(558.5, 234.5),
 	Vector2(662.0, 234.5),
 ]
-const HUD_ATTACK_RING_CENTERS: Array[Vector2] = [
-	Vector2(-261, -70),
-	Vector2(-261, -142),
-	Vector2(-261, -214),
-	Vector2(-189, -286),
-	Vector2(-117, -286),
-	Vector2(-60, -214),
-]
+const HUD_ATTACK_CENTER := Vector2(-185, -110)
+const HUD_ATTACK_RING_COUNT := 6
+const HUD_ATTACK_RING_RADIUS := 125.0
+const HUD_ATTACK_RING_START_DEGREES := 180.0
+const HUD_ATTACK_RING_STEP_DEGREES := 36.0
+const HUD_ATTACK_RING_BUTTON_SIZE := Vector2(72, 72)
+const HUD_ATTACK_RING_BACKDROP_SIZE := Vector2(40, 40)
+const HUD_ATTACK_RING_ICON_SIZE := Vector2(36, 36)
+const HUD_ATTACK_FILL_SIZE := Vector2(72, 72)
+const HUD_ATTACK_ICON_SIZE := Vector2(64, 64)
+const HUD_JOYSTICK_RECT := Rect2(70, -210, 152, 152)
 
 signal movement_changed(value: Vector2)
 signal attack_pressed
@@ -293,7 +300,6 @@ func _build_bottom_chassis(root: Control) -> void:
 	health_orb.size = HUD_RESOURCE_ORB_SIZE
 	health_orb.resource_name = "生命"
 	health_orb.liquid_color = Color("a51422")
-	health_orb.set_meta("stable_id", "ui.hud.resource_orb.hole_fill.v1")
 	chassis_root.add_child(health_orb)
 
 	mana_orb = HUDResourceOrbScript.new()
@@ -302,30 +308,51 @@ func _build_bottom_chassis(root: Control) -> void:
 	mana_orb.size = HUD_RESOURCE_ORB_SIZE
 	mana_orb.resource_name = "魔法"
 	mana_orb.liquid_color = Color("174eaa")
-	mana_orb.set_meta("stable_id", "ui.hud.resource_orb.hole_fill.v1")
 	chassis_root.add_child(mana_orb)
 
+	for index in range(HUD_ITEM_SLOT_SOURCE_CENTERS.size()):
+		var item_fill := Panel.new()
+		item_fill.name = "ItemSlotFill%d" % (index + 1)
+		item_fill.theme_type_variation = "GothicArtItemFill"
+		item_fill.size = HUD_ITEM_SLOT_FILL_SIZE
+		item_fill.position = _chassis_source_to_local(HUD_ITEM_SLOT_SOURCE_CENTERS[index]) - item_fill.size * 0.5
+		item_fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		item_fill.set_meta("stable_id", "ui.hud.item_slot.metal_mask_fill.%d" % (index + 1))
+		item_fill.set_meta("geometry_policy", "source_pixel_center_metal_mask.v1")
+		chassis_root.add_child(item_fill)
+
+	var cleaned_chassis := HUDAssetSanitizerScript.without_alpha_component(
+		HUDChassisTexture,
+		Vector2i(1008, 260),
+	)
+	cleaned_chassis = HUDAssetSanitizerScript.without_alpha_rect(
+		cleaned_chassis,
+		HUD_LEGACY_CENTER_SKILL_ART_SOURCE_RECT,
+	)
 	var chassis := TextureRect.new()
 	chassis.name = "DemonChassisArt"
 	chassis.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	chassis.texture = HUDAssetSanitizerScript.without_alpha_component(HUDChassisTexture, Vector2i(1008, 260))
+	chassis.texture = cleaned_chassis
 	chassis.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	chassis.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	chassis.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	chassis.set_meta("stable_id", "ui.hud.gothic.v2.bottom_chassis")
 	chassis.set_meta("source_artifact_removed", "right_edge_alpha_component_1008_260")
+	chassis.set_meta("legacy_center_skill_art_removed", HUD_LEGACY_CENTER_SKILL_ART_SOURCE_RECT)
 	chassis_root.add_child(chassis)
 
 	for index in range(4):
 		var item_button := Button.new()
 		item_button.name = "ItemSlot%d" % (index + 1)
-		item_button.theme_type_variation = "GothicItemButton"
-		item_button.size = Vector2(62, 62)
+		item_button.theme_type_variation = "GothicHUDItemHitButton"
+		item_button.size = HUD_ITEM_SLOT_FILL_SIZE
 		item_button.position = _chassis_source_to_local(HUD_ITEM_SLOT_SOURCE_CENTERS[index]) - item_button.size * 0.5
 		item_button.text = str(index + 1)
 		item_button.tooltip_text = "快捷物品 %d" % (index + 1)
 		item_button.add_theme_font_size_override("font_size", 15)
 		item_button.set_meta("stable_id", "hud.item_slot.%d" % (index + 1))
+		item_button.set_meta("metal_masked", true)
+		item_button.set_meta("geometry_policy", "source_pixel_center_metal_mask.v1")
 		chassis_root.add_child(item_button)
 		hud_item_buttons.append(item_button)
 
@@ -334,10 +361,7 @@ func _build_combat_controls(root: Control) -> void:
 	var joystick_art := TextureRect.new()
 	joystick_art.name = "JoystickArt"
 	joystick_art.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
-	joystick_art.offset_left = 34
-	joystick_art.offset_top = -186
-	joystick_art.offset_right = 186
-	joystick_art.offset_bottom = -34
+	_apply_control_rect(joystick_art, HUD_JOYSTICK_RECT)
 	joystick_art.texture = HUDJoystickTexture
 	joystick_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	joystick_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -351,10 +375,7 @@ func _build_combat_controls(root: Control) -> void:
 	joystick.knob_radius = 24.0
 	joystick.external_frame = true
 	joystick.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
-	joystick.offset_left = 34
-	joystick.offset_top = -186
-	joystick.offset_right = 186
-	joystick.offset_bottom = -34
+	_apply_control_rect(joystick, HUD_JOYSTICK_RECT)
 	joystick.vector_changed.connect(func(value: Vector2) -> void: movement_changed.emit(value))
 	root.add_child(joystick)
 
@@ -362,9 +383,9 @@ func _build_combat_controls(root: Control) -> void:
 	warrior_state_label.name = "WarriorStateLabel"
 	warrior_state_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
 	warrior_state_label.offset_left = 350
-	warrior_state_label.offset_top = -294
+	warrior_state_label.offset_top = -250
 	warrior_state_label.offset_right = -350
-	warrior_state_label.offset_bottom = -266
+	warrior_state_label.offset_bottom = -222
 	warrior_state_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	warrior_state_label.add_theme_font_size_override("font_size", 15)
 	warrior_state_label.add_theme_color_override("font_color", Color("efbd70"))
@@ -372,10 +393,14 @@ func _build_combat_controls(root: Control) -> void:
 
 	_add_bottom_right_fill(root, "InteractFill", Rect2(-241, -403, 52, 52), "GothicArtCircleFill")
 	_add_bottom_right_fill(root, "SwitchTargetFill", Rect2(-111, -403, 52, 52), "GothicArtCircleFill")
-	_add_bottom_right_fill(root, "AttackFill", Rect2(-181, -161, 120, 120), "GothicArtAttackFill")
+	_add_bottom_right_fill(
+		root,
+		"AttackFill",
+		Rect2(HUD_ATTACK_CENTER - HUD_ATTACK_FILL_SIZE * 0.5, HUD_ATTACK_FILL_SIZE),
+		"GothicArtAttackFill",
+	)
 	_add_bottom_right_action_frame(root, "InteractFrame", Rect2(-253, -415, 76, 76), "ui.hud.gothic.v3.interact_frame")
 	_add_bottom_right_action_frame(root, "SwitchTargetFrame", Rect2(-123, -415, 76, 76), "ui.hud.gothic.v3.switch_target_frame")
-	_add_bottom_right_action_frame(root, "AttackFrame", Rect2(-185, -165, 128, 128), "ui.hud.gothic.v3.attack_frame")
 
 	var interact_button := Button.new()
 	interact_button.name = "InteractButton"
@@ -403,15 +428,12 @@ func _build_combat_controls(root: Control) -> void:
 	switch_target_button.pressed.connect(func() -> void: target_switch_pressed.emit())
 	root.add_child(switch_target_button)
 
-	attack_button = Button.new()
+	attack_button = CircularTouchButtonScript.new()
 	attack_button.name = "AttackButton"
 	attack_button.theme_type_variation = "GothicTransparentButton"
 	attack_button.text = "攻击"
 	attack_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	attack_button.offset_left = -181
-	attack_button.offset_top = -161
-	attack_button.offset_right = -61
-	attack_button.offset_bottom = -41
+	_apply_control_rect(attack_button, Rect2(HUD_ATTACK_CENTER - Vector2(60, 60), Vector2(120, 120)))
 	attack_button.add_theme_font_size_override("font_size", 24)
 	attack_button.text = ""
 	attack_button.button_down.connect(func() -> void: attack_pressed.emit())
@@ -419,20 +441,25 @@ func _build_combat_controls(root: Control) -> void:
 	attack_button.set_meta("stable_id", "hud.attack.primary")
 	attack_button.set_meta("assignment_group", "attack")
 	attack_button.set_meta("assignment_contract", "ui.skill.button_assignment.v3")
+	attack_button.set_meta("circular_touch", true)
+	attack_button.set_meta("touch_radius", 60.0)
+	attack_button.set_meta("center_offset", HUD_ATTACK_CENTER)
 	root.add_child(attack_button)
 	attack_slot_icon = TextureRect.new()
 	attack_slot_icon.name = "AssignedSkillIcon"
-	attack_slot_icon.position = Vector2(20, 14)
-	attack_slot_icon.size = Vector2(80, 80)
+	attack_slot_icon.position = (attack_button.size - HUD_ATTACK_ICON_SIZE) * 0.5
+	attack_slot_icon.size = HUD_ATTACK_ICON_SIZE
 	attack_slot_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	attack_slot_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	attack_slot_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	attack_slot_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	attack_slot_icon.material = _circular_icon_material()
+	attack_slot_icon.set_meta("circular_clip", true)
 	attack_button.add_child(attack_slot_icon)
 	attack_slot_label = Label.new()
 	attack_slot_label.name = "AssignedSkillLabel"
-	attack_slot_label.position = Vector2(4, 88)
-	attack_slot_label.size = Vector2(112, 26)
+	attack_slot_label.position = Vector2.ZERO
+	attack_slot_label.size = attack_button.size
 	attack_slot_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	attack_slot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	attack_slot_label.add_theme_font_size_override("font_size", 13)
@@ -442,21 +469,51 @@ func _build_combat_controls(root: Control) -> void:
 	attack_slot_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	attack_button.add_child(attack_slot_label)
 
-	for index in range(HUD_ATTACK_RING_CENTERS.size()):
-		var ring_skill := Button.new()
+	_add_bottom_right_action_frame(
+		root,
+		"AttackFrame",
+		Rect2(HUD_ATTACK_CENTER - Vector2(64, 64), Vector2(128, 128)),
+		"ui.hud.gothic.v3.attack_frame",
+	)
+
+	for index in range(HUD_ATTACK_RING_COUNT):
+		var ring_skill := CircularTouchButtonScript.new()
 		ring_skill.name = "AttackRingSkill%d" % (index + 1)
 		ring_skill.theme_type_variation = "GothicTransparentButton"
 		ring_skill.text = ""
 		ring_skill.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-		var rect := Rect2(HUD_ATTACK_RING_CENTERS[index] - Vector2(36, 36), Vector2(72, 72))
-		ring_skill.offset_left = rect.position.x
-		ring_skill.offset_top = rect.position.y
-		ring_skill.offset_right = rect.end.x
-		ring_skill.offset_bottom = rect.end.y
+		var ring_center := _attack_ring_center(index)
+		var rect := Rect2(ring_center - HUD_ATTACK_RING_BUTTON_SIZE * 0.5, HUD_ATTACK_RING_BUTTON_SIZE)
+		_apply_control_rect(ring_skill, rect)
 		ring_skill.pressed.connect(_on_skill_slot_button.bind("attack_ring", index))
 		ring_skill.set_meta("stable_id", "hud.attack_ring_skill.%d" % (index + 1))
 		ring_skill.set_meta("assignment_contract", "ui.skill.button_assignment.v3")
+		ring_skill.set_meta("circular_touch", true)
+		ring_skill.set_meta("touch_radius", HUD_ATTACK_RING_BUTTON_SIZE.x * 0.5)
+		ring_skill.set_meta("ring_radius", HUD_ATTACK_RING_RADIUS)
+		ring_skill.set_meta("ring_angle_degrees", HUD_ATTACK_RING_START_DEGREES + HUD_ATTACK_RING_STEP_DEGREES * index)
+		ring_skill.set_meta("center_offset", ring_center)
 		root.add_child(ring_skill)
+		var ring_backdrop := Panel.new()
+		ring_backdrop.name = "SkillBackdrop"
+		ring_backdrop.theme_type_variation = "GothicArtCircleFill"
+		ring_backdrop.position = (HUD_ATTACK_RING_BUTTON_SIZE - HUD_ATTACK_RING_BACKDROP_SIZE) * 0.5
+		ring_backdrop.size = HUD_ATTACK_RING_BACKDROP_SIZE
+		ring_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ring_skill.add_child(ring_backdrop)
+		var ring_icon := TextureRect.new()
+		ring_icon.name = "SkillIcon"
+		ring_icon.position = (HUD_ATTACK_RING_BUTTON_SIZE - HUD_ATTACK_RING_ICON_SIZE) * 0.5
+		ring_icon.size = HUD_ATTACK_RING_ICON_SIZE
+		ring_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		ring_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		ring_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		ring_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ring_icon.material = _circular_icon_material()
+		ring_icon.set_meta("icon_source", "quick_slot")
+		ring_icon.set_meta("circular_clip", true)
+		ring_skill.add_child(ring_icon)
+		attack_ring_skill_icons.append(ring_icon)
 		var ring_frame := TextureRect.new()
 		ring_frame.name = "RoundActionFrame"
 		ring_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -465,23 +522,6 @@ func _build_combat_controls(root: Control) -> void:
 		ring_frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		ring_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		ring_skill.add_child(ring_frame)
-		var ring_backdrop := Panel.new()
-		ring_backdrop.name = "SkillBackdrop"
-		ring_backdrop.theme_type_variation = "GothicArtCircleFill"
-		ring_backdrop.position = Vector2(10, 10)
-		ring_backdrop.size = Vector2(52, 52)
-		ring_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		ring_skill.add_child(ring_backdrop)
-		var ring_icon := TextureRect.new()
-		ring_icon.name = "SkillIcon"
-		ring_icon.position = Vector2(8, 8)
-		ring_icon.size = Vector2(56, 56)
-		ring_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		ring_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		ring_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		ring_icon.set_meta("icon_source", "quick_slot")
-		ring_skill.add_child(ring_icon)
-		attack_ring_skill_icons.append(ring_icon)
 		var ring_label := Label.new()
 		ring_label.name = "SkillLabel"
 		ring_label.position = Vector2(4, 4)
@@ -553,6 +593,24 @@ func _chassis_source_to_local(source_point: Vector2) -> Vector2:
 	var render_size := source_size * scale
 	var render_origin := (HUD_CHASSIS_SIZE - render_size) * 0.5
 	return render_origin + source_point * scale
+
+
+func _apply_control_rect(control: Control, rect: Rect2) -> void:
+	control.offset_left = rect.position.x
+	control.offset_top = rect.position.y
+	control.offset_right = rect.end.x
+	control.offset_bottom = rect.end.y
+
+
+func _attack_ring_center(index: int) -> Vector2:
+	var angle := deg_to_rad(HUD_ATTACK_RING_START_DEGREES + HUD_ATTACK_RING_STEP_DEGREES * index)
+	return HUD_ATTACK_CENTER + Vector2(cos(angle), sin(angle)) * HUD_ATTACK_RING_RADIUS
+
+
+func _circular_icon_material() -> ShaderMaterial:
+	var result := ShaderMaterial.new()
+	result.shader = HUDCircularIconMaskShader
+	return result
 
 
 func _add_bottom_right_action_frame(
@@ -908,6 +966,14 @@ func update_quick_slots() -> void:
 		attack_slot_icon.set_meta("skill_icon_path", HUDSkillIconCatalogScript.source_path_for(attack_skill_name))
 	if attack_slot_label != null:
 		attack_slot_label.text = "攻击" if attack_skill_name.is_empty() else attack_skill_name.left(4)
+		if attack_skill_name.is_empty():
+			attack_slot_label.position = Vector2.ZERO
+			attack_slot_label.size = attack_button.size if attack_button != null else Vector2(120, 120)
+			attack_slot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		else:
+			attack_slot_label.position = Vector2(4, 88)
+			attack_slot_label.size = Vector2(112, 26)
+			attack_slot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	if attack_button != null:
 		attack_button.tooltip_text = "普通攻击" if attack_skill_name.is_empty() else "攻击键：%s" % attack_skill_name
 		attack_button.set_meta("bound_skill_name", attack_skill_name)

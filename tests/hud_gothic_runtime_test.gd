@@ -47,7 +47,9 @@ func _run() -> void:
 	var mana_orb := chassis.get_node("ManaOrb") as Control
 	assert(health_orb != null and mana_orb != null)
 	assert(health_orb.size == Vector2(110, 110) and mana_orb.size == Vector2(110, 110), "血蓝球没有恢复为与框体透明孔匹配的既定尺寸")
-	assert(health_orb.get_meta("stable_id") == "ui.hud.resource_orb.hole_fill.v1" and mana_orb.get_meta("stable_id") == "ui.hud.resource_orb.hole_fill.v1")
+	assert(health_orb.get_meta("stable_id") == "ui.hud.resource_orb.metal_mask_fit.v2" and mana_orb.get_meta("stable_id") == "ui.hud.resource_orb.metal_mask_fit.v2")
+	assert(is_equal_approx(float(health_orb.get_meta("liquid_radius_ratio")), 0.49), "血球没有扩大到金属内孔")
+	assert(is_equal_approx(float(mana_orb.get_meta("liquid_radius_ratio")), 0.49), "蓝球没有扩大到金属内孔")
 	assert(is_equal_approx(health_orb.position.x + health_orb.size.x * 0.5, 181.6875), "生命球圆心偏离框体透明孔")
 	assert(is_equal_approx(mana_orb.position.x + mana_orb.size.x * 0.5, 638.3125), "魔法球圆心偏离框体透明孔")
 	assert(is_equal_approx(health_orb.position.y + health_orb.size.y * 0.5, mana_orb.position.y + mana_orb.size.y * 0.5), "血蓝球纵向不对称")
@@ -58,10 +60,16 @@ func _run() -> void:
 		Vector2(453.875, 190.53125),
 		Vector2(537.96875, 190.53125),
 	]
+	var chassis_art := chassis.get_node("DemonChassisArt") as TextureRect
 	for index in range(4):
+		var item_fill := chassis.get_node("ItemSlotFill%d" % (index + 1)) as Panel
 		var item_slot := chassis.get_node("ItemSlot%d" % (index + 1)) as Button
 		assert(item_slot != null and item_slot.get_meta("stable_id") == "hud.item_slot.%d" % (index + 1))
+		assert(item_fill != null and item_fill.size == Vector2(72, 72), "物品框底色没有填满金属内孔")
+		assert(item_slot.size == Vector2(72, 72) and item_slot.get_meta("metal_masked", false), "物品框触控层没有按金属内孔建立")
+		assert(item_fill.position + item_fill.size * 0.5 == expected_item_centers[index], "物品框底色没有使用底框源像素坐标")
 		assert(item_slot.position + item_slot.size * 0.5 == expected_item_centers[index], "物品框没有使用底框源像素坐标")
+		assert(item_fill.get_index() < chassis_art.get_index() and chassis_art.get_index() < item_slot.get_index(), "物品填充、金属框与触控层次序错误")
 
 	assert(hud.quick_buttons.is_empty() and hud.quick_slot_icons.is_empty(), "底框上方旧四个中央技能按钮仍然存在")
 	for index in range(4):
@@ -89,26 +97,30 @@ func _run() -> void:
 		"fire_cooldown_remaining_ms": 0,
 	})
 	assert("烈火:开·就绪" in hud.warrior_state_label.text, "烈火状态没有显示开启就绪")
-	var ring_centers := [
-		Vector2(-261, -70),
-		Vector2(-261, -142),
-		Vector2(-261, -214),
-		Vector2(-189, -286),
-		Vector2(-117, -286),
-		Vector2(-60, -214),
-	]
 	var attack_center := (root.get_node("AttackButton") as Control).position + Vector2(60, 60)
+	assert(attack_center == root.size + GameHUD.HUD_ATTACK_CENTER, "攻击键没有使用统一内移圆心")
+	var previous_ring_center := Vector2.ZERO
 	for index in range(6):
 		var ring_skill := root.get_node("AttackRingSkill%d" % (index + 1)) as Button
 		assert(ring_skill != null)
 		var ring_icon := ring_skill.get_node("SkillIcon") as TextureRect
+		var ring_backdrop := ring_skill.get_node("SkillBackdrop") as Panel
+		var ring_frame := ring_skill.get_node("RoundActionFrame") as TextureRect
 		var expected_ring_skill: String = ["野蛮冲撞", "烈火剑法", "半月弯刀", "刺杀剑术", "", ""][index]
 		assert(ring_icon != null and ring_icon.get_meta("skill_name", "") == expected_ring_skill)
-		assert(ring_icon.position == Vector2(8, 8) and ring_icon.size == Vector2(56, 56), "环绕技能图必须完整覆盖槽内开口")
-		assert(ring_skill.get_node_or_null("RoundActionFrame") != null, "环形技能缺少独立无污染圆框")
+		assert(ring_icon.position == Vector2(18, 18) and ring_icon.size == Vector2(36, 36), "环绕技能图没有内切于圆框")
+		assert(ring_backdrop.position == Vector2(16, 16) and ring_backdrop.size == Vector2(40, 40), "环绕技能底色没有按圆框内孔收口")
+		assert(ring_icon.material is ShaderMaterial and ring_icon.get_meta("circular_clip", false), "环绕技能图没有圆形裁切")
+		assert(ring_frame != null and ring_frame.get_index() > ring_icon.get_index(), "环形技能金属框没有覆盖在图标之上")
 		var actual_center := ring_skill.position + ring_skill.size * 0.5
-		assert(actual_center == root.size + ring_centers[index], "六个技能按钮没有使用稳定攻击环坐标")
-		assert(actual_center.distance_to(attack_center) >= 96.0, "环形技能与攻击主键重叠")
+		var expected_angle := GameHUD.HUD_ATTACK_RING_START_DEGREES + GameHUD.HUD_ATTACK_RING_STEP_DEGREES * index
+		var expected_center := root.size + GameHUD.HUD_ATTACK_CENTER + Vector2.from_angle(deg_to_rad(expected_angle)) * GameHUD.HUD_ATTACK_RING_RADIUS
+		assert(actual_center.is_equal_approx(expected_center), "六个技能按钮没有使用等角等半径攻击环")
+		assert(is_equal_approx(actual_center.distance_to(attack_center), 125.0), "环形技能半径不统一")
+		assert(bool(ring_skill.call("_has_point", Vector2(36, 36))) and not bool(ring_skill.call("_has_point", Vector2.ZERO)), "环形技能仍使用方形触控判定")
+		if index > 0:
+			assert(actual_center.distance_to(previous_ring_center) > 72.0, "相邻环形技能圆形触控区重叠")
+		previous_ring_center = actual_center
 	var grouped_presses: Array = []
 	hud.skill_slot_pressed.connect(
 		func(slot_group: String, slot_index: int) -> void:
@@ -118,8 +130,17 @@ func _run() -> void:
 	assert(grouped_presses == [["attack_ring", 5]], "HUD 六环技能点击没有保留 slot_group")
 	var attack := root.get_node("AttackButton") as Button
 	assert(attack.size == Vector2(120, 120), "攻击按钮视觉直径应保持缩小后的120px")
+	assert(bool(attack.call("_has_point", Vector2(60, 60))) and not bool(attack.call("_has_point", Vector2.ZERO)), "攻击键仍使用方形触控判定")
+	var attack_fill := root.get_node("AttackFill") as Control
+	var attack_frame := root.get_node("AttackFrame") as Control
+	assert(attack_fill.size == Vector2(72, 72), "攻击键红色填充溢出金属内孔")
+	assert(attack_fill.get_global_rect().get_center().is_equal_approx(attack.get_global_rect().get_center()), "攻击键红色填充没有对准圆心")
+	assert(attack_frame.get_global_rect().get_center().is_equal_approx(attack.get_global_rect().get_center()), "攻击键金属框没有对准圆心")
+	assert(hud.attack_slot_icon.size == Vector2(64, 64) and hud.attack_slot_icon.material is ShaderMaterial, "攻击键技能图没有圆形内切")
 	var joystick := root.get_node("TouchJoystick") as TouchJoystick
 	assert(joystick.size.x >= 150 and is_equal_approx(joystick.radius, 58.0), "摇杆触控区和缩小后的可视半径不匹配")
+	assert(joystick.position == Vector2(70, root.size.y - 210), "摇杆没有向安全区内部移动")
+	assert(hud.warrior_state_label.offset_top == -250 and hud.warrior_state_label.offset_bottom == -222, "战士状态行没有下移到清理后的底盘上方")
 	assert((root.get_node("InventoryButton") as Control).position.y > (root.get_node("MapButton") as Control).position.y)
 	assert((root.get_node("SkillBookButton") as Control).position.y > (root.get_node("MenuButton") as Control).position.y)
 	assert((root.get_node("SwitchTargetButton") as Control).position.x > (root.get_node("InteractButton") as Control).position.x)
@@ -139,9 +160,13 @@ func _run() -> void:
 	assert(root.get_node("JoystickArt").get_meta("stable_id") == "ui.hud.gothic.v2.joystick")
 	assert(root.get_node_or_null("RightControlsArt") == null, "含左边缘污染碎片的旧右侧合成图仍在运行时")
 	assert(root.get_node("AttackFrame").get_meta("stable_id") == "ui.hud.gothic.v3.attack_frame")
-	assert(chassis.get_node("DemonChassisArt").get_meta("stable_id") == "ui.hud.gothic.v2.bottom_chassis")
-	var cleaned_image := (chassis.get_node("DemonChassisArt") as TextureRect).texture.get_image()
+	assert(chassis_art.get_meta("stable_id") == "ui.hud.gothic.v2.bottom_chassis")
+	assert(chassis_art.get_meta("legacy_center_skill_art_removed") == GameHUD.HUD_LEGACY_CENTER_SKILL_ART_SOURCE_RECT)
+	var cleaned_image := chassis_art.texture.get_image()
 	assert(cleaned_image.get_pixel(1008, 260).a <= 0.01, "底框右侧污染连通碎片没有从源像素层清除")
+	for point: Vector2i in [Vector2i(310, 40), Vector2i(440, 40), Vector2i(575, 40), Vector2i(705, 40)]:
+		assert(cleaned_image.get_pixelv(point).a <= 0.01, "底盘上方旧技能圆环没有清除：%s" % point)
+	assert(cleaned_image.get_pixel(500, 145).a > 0.01, "清理旧技能圆环时误删了正式底盘金属")
 	assert(FileAccess.file_exists("res://assets/ui/gothic_hud/v2/hud_asset_manifest.json"))
 	var hud_source := FileAccess.get_file_as_string("res://scripts/hud.gd")
 	assert("gothic_hud/v1" not in hud_source and "gothic_preview" not in hud_source, "正式HUD不得继续引用旧素材")

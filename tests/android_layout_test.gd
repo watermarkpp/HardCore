@@ -33,9 +33,20 @@ func _run() -> void:
 	_assert_touch_target(interact, Vector2(110, 76), "交互按钮")
 	_assert_touch_target(switch_target, Vector2(110, 76), "换敌按钮")
 	_assert_touch_target(auto_target, Vector2(120, 48), "自动选怪开关")
+	assert(attack.position + attack.size * 0.5 == root.size + GameHUD.HUD_ATTACK_CENTER, "攻击键没有按统一圆心向屏幕内部移动")
+	assert(joystick.position == Vector2(70, root.size.y - 210), "摇杆没有按统一矩形向屏幕内部移动")
+	assert(bool(attack.call("_has_point", attack.size * 0.5)) and not bool(attack.call("_has_point", Vector2.ZERO)), "攻击键触控仍为方形")
+	var previous_ring_center := Vector2.ZERO
 	for index in range(6):
-		_assert_touch_target(root.get_node("AttackRingSkill%d" % (index + 1)) as Button, Vector2(72, 72), "环形技能按钮%d" % (index + 1))
+		var ring := root.get_node("AttackRingSkill%d" % (index + 1)) as Button
+		_assert_touch_target(ring, Vector2(72, 72), "环形技能按钮%d" % (index + 1))
 		assert(root.get_node_or_null("SkillButton%d" % (index + 1)) == null, "旧中央技能按钮仍在Android HUD")
+		var ring_center := ring.position + ring.size * 0.5
+		assert(is_equal_approx(ring_center.distance_to(attack.position + attack.size * 0.5), GameHUD.HUD_ATTACK_RING_RADIUS), "六技能环半径不统一")
+		assert(bool(ring.call("_has_point", ring.size * 0.5)) and not bool(ring.call("_has_point", Vector2.ZERO)), "六技能环仍使用方形触控")
+		if index > 0:
+			assert(ring_center.distance_to(previous_ring_center) > ring.size.x, "相邻六技能环圆形触控区重叠")
+		previous_ring_center = ring_center
 
 	var received := {
 		"movement": Vector2.ZERO,
@@ -94,4 +105,4 @@ func _assert_resolution_matrix() -> void:
 
 func _assert_touch_target(control: Control, minimum: Vector2, label: String) -> void:
 	assert(control != null, "%s不存在" % label)
-	assert(control.size.x >= minimum.x and control.size.y >= minimum.y, "%s触控面积不足：%s" % [label, control.size])
+	assert(control.size.x + 0.01 >= minimum.x and control.size.y + 0.01 >= minimum.y, "%s触控面积不足：%s" % [label, control.size])
