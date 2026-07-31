@@ -161,12 +161,55 @@ func _run() -> void:
 	assert(root.get_node_or_null("RightControlsArt") == null, "含左边缘污染碎片的旧右侧合成图仍在运行时")
 	assert(root.get_node("AttackFrame").get_meta("stable_id") == "ui.hud.gothic.v3.attack_frame")
 	assert(chassis_art.get_meta("stable_id") == "ui.hud.gothic.v2.bottom_chassis")
-	assert(chassis_art.get_meta("legacy_center_skill_art_removed") == GameHUD.HUD_LEGACY_CENTER_SKILL_ART_SOURCE_RECT)
+	assert(
+		chassis_art.get_meta("legacy_skill_art_mask") == HUDAssetSanitizer.CHASSIS_LEGACY_SKILL_MASK_ID,
+		"底盘没有使用精确旧技能框 alpha mask",
+	)
 	var cleaned_image := chassis_art.texture.get_image()
 	assert(cleaned_image.get_pixel(1008, 260).a <= 0.01, "底框右侧污染连通碎片没有从源像素层清除")
-	for point: Vector2i in [Vector2i(310, 40), Vector2i(440, 40), Vector2i(575, 40), Vector2i(705, 40)]:
-		assert(cleaned_image.get_pixelv(point).a <= 0.01, "底盘上方旧技能圆环没有清除：%s" % point)
-	assert(cleaned_image.get_pixel(500, 145).a > 0.01, "清理旧技能圆环时误删了正式底盘金属")
+	var legacy_points: Array[Vector2i] = [
+		Vector2i(309, 10),
+		Vector2i(254, 60),
+		Vector2i(441, 20),
+		Vector2i(574, 20),
+		Vector2i(707, 20),
+		Vector2i(204, 135),
+		Vector2i(806, 138),
+		Vector2i(380, 138),
+		Vector2i(630, 138),
+		Vector2i(309, 137),
+		Vector2i(309, 150),
+		Vector2i(707, 150),
+	]
+	for point in legacy_points:
+		assert(image.get_pixelv(point).a > 0.01, "旧技能框样本点在原图中不存在：%s" % point)
+		assert(HUDAssetSanitizer.is_chassis_legacy_skill_pixel(point), "旧技能框样本点未进入精确 mask：%s" % point)
+		assert(cleaned_image.get_pixelv(point).a <= 0.01, "旧圆框、红菱形或连接条没有清除：%s" % point)
+	var protected_crest_points: Array[Vector2i] = [
+		Vector2i(505, 115),
+		Vector2i(505, 122),
+		Vector2i(505, 130),
+		Vector2i(492, 135),
+		Vector2i(520, 145),
+		Vector2i(505, 155),
+	]
+	for point in protected_crest_points:
+		assert(image.get_pixelv(point).a > 0.01, "中央徽章保护样本点在原图中不存在：%s" % point)
+		assert(HUDAssetSanitizer.is_chassis_center_crest_protected(point), "中央徽章样本点未进入硬保护区：%s" % point)
+		assert(cleaned_image.get_pixelv(point) == image.get_pixelv(point), "中央尖头或徽章原像素被修改：%s" % point)
+	for unchanged_point: Vector2i in [Vector2i(245, 145), Vector2i(400, 158), Vector2i(505, 165), Vector2i(715, 160)]:
+		assert(cleaned_image.get_pixelv(unchanged_point) == image.get_pixelv(unchanged_point), "正式底盘或恶魔装饰像素被修改：%s" % unchanged_point)
+	var isolated_component_cleaned := HUDAssetSanitizer.without_alpha_component(
+		load(CHASSIS_PATH) as Texture2D,
+		Vector2i(1008, 260),
+	).get_image()
+	for y in range(0, 160):
+		for x in range(204, 808):
+			var point := Vector2i(x, y)
+			if HUDAssetSanitizer.is_chassis_legacy_skill_pixel(point):
+				assert(cleaned_image.get_pixelv(point).a <= 0.01, "alpha mask 内仍有旧技能框像素：%s" % point)
+			else:
+				assert(cleaned_image.get_pixelv(point) == isolated_component_cleaned.get_pixelv(point), "alpha mask 外的底盘原像素被改动：%s" % point)
 	assert(FileAccess.file_exists("res://assets/ui/gothic_hud/v2/hud_asset_manifest.json"))
 	var hud_source := FileAccess.get_file_as_string("res://scripts/hud.gd")
 	assert("gothic_hud/v1" not in hud_source and "gothic_preview" not in hud_source, "正式HUD不得继续引用旧素材")

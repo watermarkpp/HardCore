@@ -21,7 +21,6 @@ const HUDCircularIconMaskShader := preload("res://assets/ui/gothic_hud/v2/runtim
 const HUD_CHASSIS_SIZE := Vector2(820, 273)
 const HUD_RESOURCE_ORB_SIZE := Vector2(110, 110)
 const HUD_ITEM_SLOT_FILL_SIZE := Vector2(72, 72)
-const HUD_LEGACY_CENTER_SKILL_ART_SOURCE_RECT := Rect2i(232, 0, 552, 138)
 const HUD_HEALTH_ORB_SOURCE_CENTER := Vector2(223.5, 230.5)
 const HUD_MANA_ORB_SOURCE_CENTER := Vector2(785.5, 230.5)
 const HUD_ITEM_SLOT_SOURCE_CENTERS: Array[Vector2] = [
@@ -325,10 +324,7 @@ func _build_bottom_chassis(root: Control) -> void:
 		HUDChassisTexture,
 		Vector2i(1008, 260),
 	)
-	cleaned_chassis = HUDAssetSanitizerScript.without_alpha_rect(
-		cleaned_chassis,
-		HUD_LEGACY_CENTER_SKILL_ART_SOURCE_RECT,
-	)
+	cleaned_chassis = HUDAssetSanitizerScript.without_chassis_legacy_skill_art(cleaned_chassis)
 	var chassis := TextureRect.new()
 	chassis.name = "DemonChassisArt"
 	chassis.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -338,7 +334,7 @@ func _build_bottom_chassis(root: Control) -> void:
 	chassis.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	chassis.set_meta("stable_id", "ui.hud.gothic.v2.bottom_chassis")
 	chassis.set_meta("source_artifact_removed", "right_edge_alpha_component_1008_260")
-	chassis.set_meta("legacy_center_skill_art_removed", HUD_LEGACY_CENTER_SKILL_ART_SOURCE_RECT)
+	chassis.set_meta("legacy_skill_art_mask", HUDAssetSanitizerScript.CHASSIS_LEGACY_SKILL_MASK_ID)
 	chassis_root.add_child(chassis)
 
 	for index in range(4):
