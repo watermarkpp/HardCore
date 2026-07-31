@@ -606,40 +606,16 @@ func _update_monster_overlay() -> void:
 	_draw_canonical_ground_overlay(
 		_visual_foot_origin(), _monster.collision_radius
 	)
-	# Mirror the live target-ring contract exactly. The actor owns both the
-	# reviewed-foot center and the collision-radius-derived size.
-	var review := monster_ground_review_snapshot()
-	var actor_origin: Vector2 = review.get(
-		"actorGroundOrigin", Vector2.ZERO
+	var formal_center := (
+		visual.position + visual.ground_contact_offset()
 	)
-	var manual_foot: Vector2 = review.get("manualFootCenter", Vector2.ZERO)
-	var runtime_ring: Vector2 = review.get("runtimeRingCenter", Vector2.ZERO)
-	var runtime_radii: Vector2 = review.get("runtimeRingRadii", Vector2.ZERO)
-	if not bool(review.get("matches", false)):
-		_add_line(
-			_overlay_root,
-			PackedVector2Array([manual_foot, runtime_ring]),
-			MONSTER_FOOT_DELTA_COLOR,
-			2.0,
-		)
-	_add_cross(
-		_overlay_root,
-		actor_origin,
-		MONSTER_ACTOR_ORIGIN_COLOR,
-		4.0,
-	)
-	_add_cross(
-		_overlay_root,
-		runtime_ring,
-		MONSTER_TARGET_RING_COLOR,
-		6.0,
-	)
+	var formal_radii := visual.ground_indicator_radii(Vector2(22, 7))
 	_add_ellipse_line(
 		_overlay_root,
-		runtime_ring,
-		runtime_radii,
-		MONSTER_TARGET_RING_COLOR,
-		2.5,
+		formal_center,
+		formal_radii,
+		Color(1.0, 0.62, 0.20, 0.72),
+		1.0,
 	)
 	var rect := Rect2(
 		visual.position + body_sprite.position,
