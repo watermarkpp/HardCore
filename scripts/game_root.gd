@@ -1961,6 +1961,9 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 		damage
 		+ int(melee_modifiers.get("flat_dc_bonus_before_body_formula", 0))
 	)
+	var post_body_damage_bonus := int(
+		melee_modifiers.get("flat_damage_bonus_after_body_formula", 0)
+	)
 	var accuracy_bonus := int(melee_modifiers.get("flat_accuracy_bonus", 0))
 	var hit_any := false
 	var canonical_resolution := "rejected"
@@ -1970,6 +1973,7 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			origin,
 			direction,
 			modified_base_damage,
+			post_body_damage_bonus,
 			accuracy_bonus,
 			bool(body_selection.get("direct_toggle_release", false)),
 			release_geometry
@@ -1981,7 +1985,7 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			var target := primary_targets[0]
 			hit_any = _apply_physical_hit(
 				target,
-				modified_base_damage,
+				modified_base_damage + post_body_damage_bonus,
 				accuracy_bonus
 			)
 			canonical_resolution = "hit" if hit_any else "miss"
@@ -2188,6 +2192,7 @@ func _execute_canonical_melee(
 	origin: Vector2,
 	direction: Vector2,
 	base_damage: int,
+	post_body_damage_bonus: int,
 	accuracy_bonus: int,
 	direct_toggle_release := false,
 	release_geometry: Dictionary = {}
@@ -2254,24 +2259,32 @@ func _execute_canonical_melee(
 				for target: EnemyActor in targets:
 					hit_any = _apply_physical_hit(
 						target,
-						roundi(float(base_damage) * float(effect.get("multiplier", 1.0))),
+						roundi(float(base_damage) * float(effect.get("multiplier", 1.0)))
+						+ post_body_damage_bonus,
 						accuracy_bonus
 					) or hit_any
 			"melee_arc":
 				for primary: EnemyActor in primary_targets:
 					hit_any = _apply_physical_hit(
 						primary,
-						roundi(float(base_damage) * float(effect.get("primary_multiplier", 1.0))),
+						roundi(float(base_damage) * float(effect.get("primary_multiplier", 1.0)))
+						+ post_body_damage_bonus,
 						accuracy_bonus
 					) or hit_any
 				for secondary: EnemyActor in half_moon_secondaries:
-					hit_any = _apply_physical_hit(secondary, roundi(float(base_damage) * float(effect.get("side_multiplier", 1.0))), accuracy_bonus) or hit_any
+					hit_any = _apply_physical_hit(
+						secondary,
+						roundi(float(base_damage) * float(effect.get("side_multiplier", 1.0)))
+						+ post_body_damage_bonus,
+						accuracy_bonus
+					) or hit_any
 			"next_melee_charge":
 				if not primary_targets.is_empty():
 					var target := primary_targets[0]
 					hit_any = _apply_physical_hit(
 						target,
-						roundi(float(base_damage) * float(effect.get("damage_multiplier", 1.0))),
+						roundi(float(base_damage) * float(effect.get("damage_multiplier", 1.0)))
+						+ post_body_damage_bonus,
 						accuracy_bonus
 					)
 	return {
