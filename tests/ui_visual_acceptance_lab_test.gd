@@ -119,17 +119,17 @@ func _ready() -> void:
 	assert(lab._monster_option.get_parent().visible)
 	assert(lab._monster != null and lab._monster.visual != null)
 	assert(lab._monster.visual.uses_final_art())
-	var expected_authored_spawn_delta: Vector2 = Vector2.DOWN * (
-		lab._monster.collision_radius
-		+ ArtSpec.PLAYER_COLLISION_RADIUS
-		+ 14.0
+	assert(
+		lab._monster.position.is_zero_approx(),
+		"acceptance monster must use the game's actor-local origin",
 	)
 	assert(
-		(
-			lab._monster.global_position
-			- lab._player.global_position
-		).is_equal_approx(expected_authored_spawn_delta),
-		"acceptance monster must replay the frozen draft's S displacement",
+		lab._monster.visual.position.is_equal_approx(
+			lab._monster_runtime_visual_origin
+			+ lab._monster_visual_alignment_offset
+			+ lab._monster_manual_replay_displacement()
+		),
+		"acceptance lab must use the same normalized visual transform as runtime",
 	)
 	assert(
 		not lab._monster.is_targeted,
@@ -231,17 +231,17 @@ func _ready() -> void:
 		).is_zero_approx()
 	)
 	lab._rebuild_monster_actor(true)
-	expected_authored_spawn_delta = Vector2.DOWN * (
-		lab._monster.collision_radius
-		+ ArtSpec.PLAYER_COLLISION_RADIUS
-		+ 14.0
+	assert(
+		lab._monster.position.is_zero_approx(),
+		"forced rebuild must preserve the game's actor-local origin",
 	)
 	assert(
-		(
-			lab._monster.global_position
-			- lab._player.global_position
-		).is_equal_approx(expected_authored_spawn_delta),
-		"forced rebuild must preserve the authored S displacement",
+		lab._monster.visual.position.is_equal_approx(
+			lab._monster_runtime_visual_origin
+			+ lab._monster_visual_alignment_offset
+			+ lab._monster_manual_replay_displacement()
+		),
+		"forced rebuild must preserve the normalized visual transform",
 	)
 	lab._reset_visual_alignment()
 	lab._set_visual_foot_anchor_from_preview(Vector2(3.0, -2.0))

@@ -505,21 +505,12 @@ func _rebuild_monster_actor(force := false) -> bool:
 	_monster.setup(data, _player, _is_boss_monster(monster_id))
 	_preview_root.add_child(_monster)
 	# EnemyActor protects the game from invalid overlapping spawns by moving a
-	# newly created monster away from its target. The original calibration lab
-	# created both actors at the same point and, for the user's frozen drafts,
-	# consistently resolved that overlap toward S. Later node-count changes made
-	# the instance-id-derived direction vary, so replayed sprites drifted while
-	# the sibling overlay stayed fixed. Preserve the authored S displacement
-	# deterministically; never let instance allocation choose the review result.
-	var authored_spawn_distance := (
-		_monster.collision_radius
-		+ ArtSpec.PLAYER_COLLISION_RADIUS
-		+ 14.0
-	)
-	_monster.global_position = (
-		_player.global_position
-		+ Vector2.DOWN * authored_spawn_distance
-	)
+	# newly created monster away from its target. The original calibration lab's
+	# deterministic S displacement is now normalized inside MonsterVisual:
+	# preview the real actor at (0,0), add that displacement to the visual root,
+	# and subtract it from the visual-foot vector. This preserves every frozen
+	# draft field while making the lab and the game use the same transform chain.
+	_monster.position = Vector2.ZERO
 	# The lab owns its diagnostic overlays. A runtime-selected MonsterVisual can
 	# now draw the game's yellow target ring itself, which would duplicate the
 	# saved-draft overlay and make sub-pixel differences look like changed user
@@ -540,7 +531,10 @@ func _rebuild_monster_actor(force := false) -> bool:
 	if _monster.overhead != null:
 		_monster.overhead.visible = false
 	_active_monster_id = monster_id
-	_monster_runtime_visual_origin = _monster.visual.position
+	_monster_runtime_visual_origin = (
+		_monster.visual.position
+		- _monster_manual_replay_displacement()
+	)
 	var formal := MonsterDraftScript.formal_entry(monster_id)
 	_monster_formal_visual_foot_offset = _vector2_from_array(
 		formal.get("visualFootOffset", []), Vector2.ZERO
@@ -555,10 +549,7 @@ func _rebuild_monster_actor(force := false) -> bool:
 	_apply_monster_selection(_monster_saved_selection)
 	_clock = 0.0
 	_load_monster_alignment_draft()
-	_monster.visual.position = (
-		_monster_runtime_visual_origin
-		+ _monster_visual_alignment_offset
-	)
+	_apply_monster_visual_position()
 	return true
 
 
@@ -788,6 +779,7 @@ func _visual_foot_origin() -> Vector2:
 		return (
 			_monster.visual.position
 			+ _monster_picked_visual_foot_offset
+			- _monster_manual_replay_displacement()
 		)
 	if _player == null or _player.visual == null:
 		return Vector2.ZERO
@@ -860,7 +852,9 @@ func _set_visual_foot_anchor_from_preview(point: Vector2) -> void:
 		if _monster == null or _monster.visual == null:
 			return
 		_set_visual_foot_anchor_adjustment(
-			point - _monster.visual.position
+			point
+			- _monster.visual.position
+			+ _monster_manual_replay_displacement()
 		)
 		return
 	_set_visual_foot_anchor_adjustment(
@@ -907,10 +901,7 @@ func _set_visual_alignment_offset(value: Vector2) -> void:
 		_monster_visual_alignment_offset = _snapped_alignment(value)
 		if _monster == null or _monster.visual == null:
 			return
-		_monster.visual.position = (
-			_monster_runtime_visual_origin
-			+ _monster_visual_alignment_offset
-		)
+		_apply_monster_visual_position()
 		_apply_preview_frame()
 		return
 	_visual_alignment_offset = Vector2(
@@ -980,6 +971,22 @@ func _snapped_alignment(value: Vector2) -> Vector2:
 	return Vector2(
 		roundf(value.x / ALIGNMENT_NUDGE) * ALIGNMENT_NUDGE,
 		roundf(value.y / ALIGNMENT_NUDGE) * ALIGNMENT_NUDGE
+	)
+
+
+func _monster_manual_replay_displacement() -> Vector2:
+	if _monster == null or _monster.visual == null:
+		return Vector2.ZERO
+	return _monster.visual.manual_alignment_replay_displacement()
+
+
+func _apply_monster_visual_position() -> void:
+	if _monster == null or _monster.visual == null:
+		return
+	_monster.visual.position = (
+		_monster_runtime_visual_origin
+		+ _monster_visual_alignment_offset
+		+ _monster_manual_replay_displacement()
 	)
 
 
