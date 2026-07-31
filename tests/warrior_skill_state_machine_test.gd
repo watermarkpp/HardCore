@@ -144,20 +144,112 @@ func _run() -> void:
 
 	for enemy: EnemyActor in [primary, second, unrelated, half_a, half_b, half_c]:
 		enemy.global_position = Vector2(3000, 3000) + Vector2(enemy.get_instance_id() % 200, 0)
-	player.global_position = _find_open_rush_origin(game)
+	var rush_step := Vector2i(1, -1)
+	player.global_position = _find_open_rush_origin(game, rush_step)
+	var player_rush_tile: Vector2 = game._canonical_world_to_fractional_tile(player.global_position)
 	var player_rush_origin := player.global_position
-	var rush_target := _make_enemy(game, player, "低级冲撞目标", player.global_position + Vector2(50, 0), 1)
+	var rush_target := _make_enemy(
+		game,
+		player,
+		"低级冲撞目标",
+		game._canonical_fractional_tile_to_world(player_rush_tile + Vector2(rush_step)),
+		1
+	)
 	var rush_origin := rush_target.global_position
-	assert(game._execute_wild_rush(Vector2.RIGHT, 3), "三级野蛮在开阔地没有移动")
-	assert(player.global_position.x > player_rush_origin.x and rush_target.global_position.x > rush_origin.x, "野蛮没有同时推进玩家和低级目标")
+	var rush_hp := rush_target.current_hp
+	game.locked_target = rush_target
+	assert(game._execute_wild_rush(Vector2.LEFT, 0), "野蛮在开阔地没有移动")
+	assert(
+		game._canonical_world_to_fractional_tile(player.global_position).is_equal_approx(
+			player_rush_tile + Vector2(rush_step) * 3.0
+		),
+		"人物没有沿人物脚点到怪物脚点的八方向连线固定推进三格"
+	)
+	assert(
+		game._canonical_world_to_fractional_tile(rush_target.global_position).is_equal_approx(
+			game._canonical_world_to_fractional_tile(rush_origin) + Vector2(rush_step) * 3.0
+		),
+		"低级普通怪物没有固定推进三格"
+	)
+	assert(rush_target.current_hp == rush_hp, "野蛮冲撞错误造成伤害")
 
-	print("WARRIOR_SKILL_STATE_MACHINE_PASS：攻杀Router、三技能开关、烈火单次攻击直释与野蛮点击释放正常")
+	# Any second monster inside the complete three-tile corridor cancels the
+	# whole coupled displacement; neither actor may move partially.
+	player.global_position = player_rush_origin
+	rush_target.global_position = rush_origin
+	var blocker := _make_enemy(
+		game,
+		player,
+		"冲撞路径阻挡怪物",
+		game._canonical_fractional_tile_to_world(
+			game._canonical_world_to_fractional_tile(rush_origin) + Vector2(rush_step) * 2.0
+		),
+		1
+	)
+	var blocked_player_origin := player.global_position
+	var blocked_target_origin := rush_target.global_position
+	assert(not game._execute_wild_rush(Vector2.RIGHT, 3), "怪物阻挡时不应产生位移")
+	assert(
+		player.global_position.is_equal_approx(blocked_player_origin)
+		and rush_target.global_position.is_equal_approx(blocked_target_origin),
+		"怪物阻挡没有原子取消人物与目标的全部位移"
+	)
+	blocker.global_position = Vector2(3000, 3000)
+	# A live lock remains authoritative: an out-of-reach locked monster must not
+	# redirect Wild Rush onto another eligible adjacent monster.
+	rush_target.global_position = game._canonical_fractional_tile_to_world(
+		player_rush_tile + Vector2(rush_step) * 2.0
+	)
+	var adjacent_fallback := _make_enemy(
+		game,
+		player,
+		"冲撞不可偷换的邻近目标",
+		game._canonical_fractional_tile_to_world(player_rush_tile - Vector2(rush_step)),
+		1
+	)
+	game.locked_target = rush_target
+	assert(game._select_wild_rush_target() == null, "野蛮冲撞错误偷换了超距锁定目标")
+	adjacent_fallback.global_position = Vector2(3050, 3000)
+	rush_target.global_position = Vector2(3100, 3000)
+	var equal_level_target := _make_enemy(
+		game,
+		player,
+		"同级免疫目标",
+		game._canonical_fractional_tile_to_world(player_rush_tile + Vector2(rush_step)),
+		PlayerState.level
+	)
+	game.locked_target = equal_level_target
+	assert(game._select_wild_rush_target() == null, "野蛮错误选择了同级目标")
+	equal_level_target.global_position = Vector2(3200, 3000)
+	var boss_target := _make_enemy(
+		game,
+		player,
+		"Boss免疫目标",
+		game._canonical_fractional_tile_to_world(player_rush_tile + Vector2(rush_step)),
+		1,
+		true
+	)
+	game.locked_target = boss_target
+	assert(game._select_wild_rush_target() == null, "野蛮错误选择了Boss目标")
+
+	print("WARRIOR_SKILL_STATE_MACHINE_PASS：攻杀Router、三技能开关、烈火单次攻击直释与野蛮原子三格推动正常")
 	get_tree().quit(0)
 
 
-func _make_enemy(game: Node, player: PlayerCharacter, display_name: String, position: Vector2, enemy_level: int) -> EnemyActor:
+func _make_enemy(
+	game: Node,
+	player: PlayerCharacter,
+	display_name: String,
+	position: Vector2,
+	enemy_level: int,
+	is_boss := false
+) -> EnemyActor:
 	var enemy := EnemyActor.new()
-	enemy.setup({"name": display_name, "hp": 9999, "attackMin": 1, "attackMax": 1, "level": enemy_level}, player, false)
+	enemy.setup(
+		{"name": display_name, "hp": 9999, "attackMin": 1, "attackMax": 1, "level": enemy_level},
+		player,
+		is_boss
+	)
 	enemy.global_position = position
 	game.add_child(enemy)
 	# EnemyActor._ready() initializes its runtime control state. Freeze the
@@ -167,16 +259,20 @@ func _make_enemy(game: Node, player: PlayerCharacter, display_name: String, posi
 	return enemy
 
 
-func _find_open_rush_origin(game: Node) -> Vector2:
-	for y in range(-1200, 1201, 100):
-		for x in range(-1200, 1201, 100):
-			var origin := Vector2(x, y)
+func _find_open_rush_origin(game: Node, direction_step: Vector2i) -> Vector2:
+	var center_tile: Vector2 = game._canonical_world_to_fractional_tile(game.player.global_position)
+	for y in range(-24, 25):
+		for x in range(-24, 25):
+			var origin_tile := center_tile + Vector2(x, y)
 			var clear := true
-			for offset in [Vector2.ZERO, Vector2(50, 0), Vector2(100, 0), Vector2(150, 0), Vector2(200, 0)]:
-				if game.background.is_environment_point_blocked(origin + offset):
+			for distance in range(5):
+				var sample: Vector2 = game._canonical_fractional_tile_to_world(
+					origin_tile + Vector2(direction_step) * float(distance)
+				)
+				if game.background.is_environment_point_blocked(sample):
 					clear = false
 					break
 			if clear:
-				return origin
+				return game._canonical_fractional_tile_to_world(origin_tile)
 	assert(false, "测试地图中找不到野蛮冲撞开阔夹具")
 	return Vector2.ZERO
