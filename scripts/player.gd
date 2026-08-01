@@ -938,9 +938,6 @@ func _draw() -> void:
 		var profession_color: Color = {"战士": Color(0.24, 0.34, 0.48), "法师": Color(0.20, 0.28, 0.56), "道士": Color(0.36, 0.42, 0.24)}.get(PlayerState.profession, Color(0.24, 0.34, 0.48))
 		draw_colored_polygon(PackedVector2Array([Vector2(-17, -5), Vector2(17, -5), Vector2(13, 23), Vector2(-13, 23)]), profession_color)
 		draw_line(Vector2(0, 7), facing * 27.0 + Vector2(0, 7), Color(0.92, 0.86, 0.65), 5.0)
-	if shield_time > 0.0:
-		draw_circle(Vector2(0, -4), 30.0, Color(0.25, 0.62, 1.0, 0.22))
-		draw_circle(Vector2(0, -4), 30.0, Color(0.48, 0.82, 1.0, 0.85), false, 3.0)
 	if stealth_time > 0.0:
 		draw_circle(Vector2(0, -4), 34.0, Color(0.55, 0.9, 0.7, 0.16), false, 3.0)
 	if control_time > 0.0:

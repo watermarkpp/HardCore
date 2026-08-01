@@ -4,6 +4,11 @@ extends Node2D
 const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
 
 const COMPLETION_GRACE_SECONDS := 0.05
+const MAGIC_SHIELD_SKILL_ID := "wizard.magic_shield"
+const MAGIC_SHIELD_VISUAL_GROUP := "wizard_magic_shield_persistent_visual"
+const MAGIC_SHIELD_VISUAL_CONTRACT_ID := (
+	"skills.wizard.magic_shield.cast_then_hold_final_frame.v1"
+)
 
 var skill_id := ""
 var phase_id := ""
@@ -64,6 +69,10 @@ func setup(
 
 func _ready() -> void:
 	add_to_group("zone_content")
+	if skill_id == MAGIC_SHIELD_SKILL_ID:
+		_replace_existing_magic_shield_visual()
+		add_to_group(MAGIC_SHIELD_VISUAL_GROUP)
+		set_meta("magic_shield_visual_contract", MAGIC_SHIELD_VISUAL_CONTRACT_ID)
 	var entry := CasterSkillVisualRegistry.profile(skill_id)
 	visual_role = str(entry.get("role", ""))
 	if not CasterSkillVisualRegistry.is_runtime_ready(skill_id):
@@ -106,6 +115,15 @@ func _process(delta: float) -> void:
 	_elapsed += delta
 	if is_instance_valid(target_node):
 		global_position = target_node.global_position.round()
+	if _is_persistent_magic_shield_visual():
+		if not _magic_shield_state_is_active():
+			queue_free()
+			return
+		# The source sequence is the shield forming. Play it once, then retain its
+		# complete final frame until either duration or absorption capacity ends.
+		# Re-looping the formation frames makes the shield repeatedly collapse.
+		if visual_loaded and _all_playback_complete():
+			return
 	if _playback_strategy == "firegun_trail" and visual_loaded:
 		_process_hellfire(delta)
 		if _hellfire_finished:
@@ -118,6 +136,36 @@ func _process(delta: float) -> void:
 			return
 	if _elapsed >= lifetime + 0.5:
 		queue_free()
+
+
+func is_persistent_magic_shield_visual() -> bool:
+	return _is_persistent_magic_shield_visual()
+
+
+func _is_persistent_magic_shield_visual() -> bool:
+	return skill_id == MAGIC_SHIELD_SKILL_ID and is_instance_valid(target_node)
+
+
+func _magic_shield_state_is_active() -> bool:
+	if not is_instance_valid(target_node) or not target_node.has_method("magic_shield_snapshot"):
+		return false
+	var snapshot: Variant = target_node.call("magic_shield_snapshot")
+	return snapshot is Dictionary and bool(snapshot.get("active", false))
+
+
+func _replace_existing_magic_shield_visual() -> void:
+	if not is_instance_valid(target_node) or get_tree() == null:
+		return
+	for existing: Node in get_tree().get_nodes_in_group(MAGIC_SHIELD_VISUAL_GROUP):
+		if (
+			existing == self
+			or not existing is CasterSkillVisualEffect
+			or existing.target_node != target_node
+		):
+			continue
+		if existing is CanvasItem:
+			existing.visible = false
+		existing.queue_free()
 
 
 func _install_single() -> void:
