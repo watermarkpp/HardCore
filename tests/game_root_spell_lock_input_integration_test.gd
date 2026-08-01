@@ -40,6 +40,7 @@ func _run() -> void:
 	_test_idle_cycle_and_lock_range(game, origin_tile, near_target, far_target)
 	_test_spell_range_is_not_lock_range(game, near_target, far_target)
 	_test_fire_wall_uses_locked_footpoint_only(game, near_target)
+	_test_target_centered_release_rejects_lost_lock(game, origin_tile, near_target)
 	_test_footprint_geometry_contact(game, origin_tile)
 	_test_spell_click_hold_and_cancel(game, near_target)
 	_test_attack_button_bound_spell_uses_same_lifecycle(game, near_target)
@@ -165,6 +166,45 @@ func _test_fire_wall_uses_locked_footpoint_only(
 	assert(
 		not unlocked_context.has_target,
 		"fire wall silently fell back to an arbitrary ground point without a lock"
+	)
+	game._set_magic_locked_target(near_target, true)
+
+
+func _test_target_centered_release_rejects_lost_lock(
+	game: Node,
+	origin_tile: Vector2,
+	near_target: EnemyActor
+) -> void:
+	var exploding_flame := SkillDataLoader.skill("wizard.exploding_flame")
+	assert(not exploding_flame.is_empty())
+	var release_geometry := {
+		"origin_world": game.player.global_position,
+		"direction_world": Vector2.RIGHT,
+		"locked_target_instance_id": near_target.get_instance_id(),
+		"locked_target_valid_at_release": true,
+	}
+	near_target.global_position = game._canonical_fractional_tile_to_world(
+		origin_tile + Vector2(12.01, 0.0)
+	)
+	assert(game._combat_release_target(release_geometry) == near_target)
+	assert(not game._is_magic_target_in_range(near_target))
+	var serial_before: int = game._canonical_cast_serial
+	var mana_before: int = game.player.current_mp
+	game.player._pending_skill_context = {"release_geometry": release_geometry}
+	game._on_player_skill(
+		str(exploding_flame.get("display_name", "爆裂火焰")),
+		game.player.global_position,
+		Vector2.RIGHT,
+		0
+	)
+	assert(
+		game._canonical_cast_serial == serial_before,
+		"target-centred spell fell back to a ground cast after its lock left 12 tiles"
+	)
+	assert(game.player.current_mp == mana_before)
+	assert(game._skill_cast_target == null)
+	near_target.global_position = game._canonical_fractional_tile_to_world(
+		origin_tile + Vector2(2, 0)
 	)
 	game._set_magic_locked_target(near_target, true)
 

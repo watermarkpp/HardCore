@@ -2947,7 +2947,23 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 	if not release_geometry.is_empty():
 		origin = release_geometry.get("origin_world", origin)
 		direction = release_geometry.get("direction_world", direction)
-	_skill_cast_target = _combat_release_target(release_geometry)
+		var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
+		var release_target := _combat_release_target(release_geometry)
+		if (
+			not CombatReleaseGeometryScript.target_centered_spatial_policy_id(
+				stable_skill_id
+			).is_empty()
+			and not _is_magic_target_in_range(release_target)
+		):
+			# Target-centred area spells retain the selected monster identity only
+			# so its live, manually calibrated footpoint can be sampled here. If
+			# that exact instance dies, despawns or leaves the 12-tile spell-lock
+			# domain during windup, reject the cast instead of degrading to the
+			# generic ground/direction fallback used by untargeted area spells.
+			_skill_cast_target = null
+			hud.show_message("锁定目标已失效，技能未释放", 1.5)
+			return
+		_skill_cast_target = release_target
 	var execution := _execute_canonical_skill(
 		skill_name,
 		origin,
