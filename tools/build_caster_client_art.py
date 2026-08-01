@@ -315,6 +315,20 @@ def render_policy(asset_id: str, role: str) -> dict[str, object]:
         "playback_strategy": "firegun_trail" if asset_id == "hellfire" else "frame_sequence",
         "pixel_snap": True,
     }
+    if asset_id == "lightning":
+        # Magic2's primary six-frame sky strike is almost 1000 px tall, while
+        # its lateral branches/glow reach 316 px. Preserve every source pixel
+        # and the original vertical reach, but present the strike with a
+        # narrower horizontal axis around its world anchor. This is a runtime
+        # presentation transform only; source frames and combat geometry stay
+        # byte-identical.
+        result.update(
+            {
+                "presentation_contract": "skills.wizard.lightning.slender_axis.v1",
+                "source_scale_x": 0.62,
+                "source_scale_y": 1.0,
+            }
+        )
     if asset_id == "hellfire":
         result.update(
             {
