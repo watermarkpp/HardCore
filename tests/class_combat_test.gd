@@ -42,6 +42,16 @@ func _run() -> void:
 	assert(game.player.shield_time > 0.0 and game.player.damage_reduction > 0.0, "魔法盾未生效")
 	enemy.global_position = game.player.global_position + Vector2(175, 0)
 	enemy.apply_control(10.0)
+	# Fire Wall is target-centred in the mobile spell-lock contract. This direct
+	# production-entry test bypasses the HUD input path, so install the same
+	# explicit lock/selected target that the real input path supplies.
+	game._set_magic_locked_target(enemy, true)
+	game._skill_cast_target = enemy
+	assert(
+		game._canonical_world_to_tile(enemy.global_position)
+		== Vector2i(round(game._canonical_world_to_fractional_tile(enemy.global_position))),
+		"旧区域整数技能格与怪物浮点脚点格使用了不同坐标系"
+	)
 	var hp_before_firewall := enemy.current_hp
 	game._on_player_skill("火墙", game.player.global_position, Vector2.RIGHT, 10)
 	await get_tree().physics_frame

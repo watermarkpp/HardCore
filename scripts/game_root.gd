@@ -3943,7 +3943,16 @@ func _spawn_canonical_teleport_arrival(
 func _canonical_world_to_tile(world: Vector2) -> Vector2i:
 	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
 	if runtime.is_empty():
-		return Vector2i(roundi(world.x / 48.0), roundi(world.y / 24.0))
+		# Legacy/no-runtime maps must use the same 64x32 isometric basis as
+		# fractional actor footpoints. The old 48x24 orthogonal fallback made one
+		# world position resolve to two different tiles, separating target-centred
+		# spell geometry from the monster footprint that selected it.
+		var horizontal := world.x / 32.0
+		var vertical := world.y / 16.0
+		return Vector2i(
+			roundi((horizontal + vertical) * 0.5),
+			roundi((vertical - horizontal) * 0.5)
+		)
 	var tile := MapEditorRuntimeBridgeScript.world_to_tile(runtime, world)
 	return Vector2i(roundi(tile.x), roundi(tile.y))
 
@@ -3971,7 +3980,10 @@ func _canonical_tile_to_world(tile_value: Variant) -> Vector2:
 	var tile := Vector2i(tile_value) if tile_value is Vector2i else Vector2i.ZERO
 	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
 	if runtime.is_empty():
-		return Vector2(float(tile.x) * 48.0, float(tile.y) * 24.0)
+		return Vector2(
+			float(tile.x - tile.y) * 16.0,
+			float(tile.x + tile.y) * 8.0
+		)
 	return MapEditorRuntimeBridgeScript.tile_to_world(runtime, [tile.x, tile.y])
 
 
