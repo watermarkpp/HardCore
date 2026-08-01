@@ -9,6 +9,7 @@ extends RefCounted
 const Geometry := preload("res://scripts/skills/warrior_melee_geometry.gd")
 
 const CONTRACT_ID := "diagnostic.warrior.melee_candidate.v1"
+const FOOTPRINT_CONTRACT_ID := "diagnostic.warrior.melee_footprint_candidate.v1"
 const DIRECTION_AUDIT_CONTRACT_ID := "diagnostic.warrior.melee_direction_loop.v1"
 const ANGLE_QUANTIZATION_AUDIT_CONTRACT_ID := (
 	"diagnostic.warrior.melee_angle_quantization.v1"
@@ -103,6 +104,99 @@ static func explain_candidate(
 			resolved_mode
 		),
 	}
+
+
+static func explain_footprint_candidate(
+	origin_fractional_tile: Vector2,
+	target_fractional_tile: Vector2,
+	target_collision_radius_world: float,
+	attack_direction_index: int,
+	mode: String,
+	range_bonus_tiles := 0.0
+) -> Dictionary:
+	## Reports the historical footpoint-only decision beside the authoritative
+	## footprint-area intersection. Runtime instrumentation can therefore prove
+	## when an unchanged attack area reaches a monster body even though its centre
+	## footpoint remains just outside the old point test.
+	var point_result := explain_candidate(
+		origin_fractional_tile,
+		target_fractional_tile,
+		attack_direction_index,
+		mode,
+		range_bonus_tiles
+	)
+	var resolved_mode := str(point_result.get("mode", Geometry.SKILL_NORMAL))
+	var normalized_attack_direction := posmod(attack_direction_index, 8)
+	var footprint_accepted := Geometry.footprint_intersects_mode(
+		origin_fractional_tile,
+		target_fractional_tile,
+		target_collision_radius_world,
+		normalized_attack_direction,
+		resolved_mode,
+		range_bonus_tiles
+	)
+	var footprint_slot := (
+		Geometry.thrust_footprint_slot(
+			origin_fractional_tile,
+			target_fractional_tile,
+			target_collision_radius_world,
+			normalized_attack_direction,
+			range_bonus_tiles
+		)
+		if resolved_mode == Geometry.SKILL_THRUST
+		else 0
+	)
+	var footprint_half_moon_relative_sector := (
+		Geometry.half_moon_footprint_relative_sector(
+			origin_fractional_tile,
+			target_fractional_tile,
+			target_collision_radius_world,
+			normalized_attack_direction,
+			range_bonus_tiles
+		)
+		if resolved_mode == Geometry.SKILL_HALF_MOON
+		else -1
+	)
+	var target_polygon := Geometry.target_footprint_polygon_fractional_tile(
+		target_fractional_tile,
+		target_collision_radius_world
+	)
+	var attack_polygons := Geometry.attack_region_polygons(
+		origin_fractional_tile,
+		normalized_attack_direction,
+		resolved_mode,
+		range_bonus_tiles
+	)
+	var result := point_result.duplicate(true)
+	result.merge({
+		"contract_id": FOOTPRINT_CONTRACT_ID,
+		"footprint_intersection_contract_id": Geometry.FOOTPRINT_INTERSECTION_CONTRACT_ID,
+		"target_footprint_contract_id": Geometry.TARGET_FOOTPRINT_CONTRACT_ID,
+		"point_candidate_contract_id": CONTRACT_ID,
+		"point_result_code": str(point_result.get("result_code", "")),
+		"point_accepted": bool(point_result.get("accepted", false)),
+		"footprint_result_code": (
+			RESULT_OK
+			if footprint_accepted
+			else str(point_result.get("result_code", RESULT_OUT_OF_RANGE))
+		),
+		"footprint_accepted": footprint_accepted,
+		"accepted": footprint_accepted,
+		"result_code": (
+			RESULT_OK
+			if footprint_accepted
+			else str(point_result.get("result_code", RESULT_OUT_OF_RANGE))
+		),
+		"point_thrust_slot": int(point_result.get("thrust_slot", 0)),
+		"footprint_thrust_slot": footprint_slot,
+		"footprint_half_moon_relative_sector": footprint_half_moon_relative_sector,
+		"target_collision_radius_world": maxf(0.0, target_collision_radius_world),
+		"target_footprint_vertex_count": target_polygon.size(),
+		"target_footprint_polygon_fractional_tile": _polygon_json(target_polygon),
+		"attack_region_polygon_count": attack_polygons.size(),
+		"attack_region_polygons_fractional_tile": _polygons_json(attack_polygons),
+	}, true)
+	return result
 
 
 static func audit_direction(screen_direction_index: int) -> Dictionary:
@@ -238,3 +332,17 @@ static func _vector2_json(value: Vector2) -> Dictionary:
 
 static func _vector2i_json(value: Vector2i) -> Dictionary:
 	return {"x": value.x, "y": value.y}
+
+
+static func _polygon_json(polygon: PackedVector2Array) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for point: Vector2 in polygon:
+		result.append(_vector2_json(point))
+	return result
+
+
+static func _polygons_json(polygons: Array[PackedVector2Array]) -> Array:
+	var result: Array = []
+	for polygon: PackedVector2Array in polygons:
+		result.append(_polygon_json(polygon))
+	return result
