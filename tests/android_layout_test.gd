@@ -64,8 +64,8 @@ func _run() -> void:
 	hud.interact_pressed.connect(func() -> void: received.interact = int(received.interact) + 1)
 	hud.target_switch_pressed.connect(func() -> void: received.switch = int(received.switch) + 1)
 	hud.auto_target_changed.connect(func(enabled: bool) -> void: received.auto = enabled)
-	hud.skill_slot_pressed.connect(
-		func(slot_group: String, slot_index: int) -> void:
+	hud.skill_input_started.connect(
+		func(slot_group: String, slot_index: int, _token: int, _touch_id: int, _source: StringName) -> void:
 			received.skill_group = slot_group
 			received.skill_index = slot_index
 	)
@@ -80,7 +80,13 @@ func _run() -> void:
 	interact.button_down.emit()
 	switch_target.pressed.emit()
 	auto_target.toggled.emit(false)
-	(root.get_node("AttackRingSkill6") as Button).pressed.emit()
+	var ring_touch := InputEventScreenTouch.new()
+	ring_touch.index = 6
+	ring_touch.position = Vector2(36, 36)
+	ring_touch.pressed = true
+	(root.get_node("AttackRingSkill6") as Button).call("_gui_input", ring_touch)
+	ring_touch.pressed = false
+	(root.get_node("AttackRingSkill6") as Button).call("_gui_input", ring_touch)
 	assert((received.movement as Vector2).is_equal_approx(Vector2(0.75, -0.25)), "摇杆信号没有接入角色移动")
 	assert(int(received.attack) == 1 and int(received.attack_release) == 1 and int(received.interact) == 1, "攻击按下、松开或交互触控接线失败")
 	assert(int(received.switch) == 1 and not bool(received.auto), "换敌或自动选怪开关接线失败")

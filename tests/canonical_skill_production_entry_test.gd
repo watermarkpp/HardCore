@@ -63,6 +63,9 @@ func _run() -> void:
 		"瞬息移动canonical真实入口未创建主库离场/到达两阶段动画"
 	)
 
+	target.global_position = caster.global_position + Vector2(80, 0)
+	game._set_magic_locked_target(target, true)
+	game._skill_cast_target = target
 	var fire_wall: Dictionary = game._execute_canonical_skill(
 		"火墙",
 		caster.global_position,

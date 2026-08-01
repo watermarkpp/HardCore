@@ -54,6 +54,8 @@ $Suites = @{
         'tests/caster_spell_action_timing_test.tscn',
 		'tests/wizard_geometry_visual_alignment_test.tscn',
 		'tests/game_root_wizard_geometry_integration_test.tscn',
+		'tests/game_root_spell_lock_input_integration_test.tscn',
+		'tests/fire_wall_runtime_overlap_test.tscn',
         'tests/skill_runtime_integration_test.tscn',
         'tests/canonical_skill_production_entry_test.tscn',
         'tests/skill_progression_save_integration_test.tscn',
@@ -139,10 +141,21 @@ New-Item -ItemType Directory -Path $LogRoot -Force | Out-Null
 
 function Get-WorktreeGodotProcesses {
     return @(Get-Process -ErrorAction SilentlyContinue | Where-Object {
-        if ($_.ProcessName -notlike 'Godot*' -or -not $_.Path) {
+        if ($_.ProcessName -notlike 'Godot*') {
             return $false
         }
-        return (Split-Path -Parent $_.Path) -eq $GodotDirectory
+        # A process can exit between enumeration and Path access. Snapshot the
+        # value once so Split-Path never receives a raced null value.
+        $candidatePath = $null
+        try {
+            $candidatePath = $_.Path
+        } catch {
+            return $false
+        }
+        if ([string]::IsNullOrWhiteSpace($candidatePath)) {
+            return $false
+        }
+        return [System.IO.Path]::GetDirectoryName($candidatePath) -eq $GodotDirectory
     })
 }
 
