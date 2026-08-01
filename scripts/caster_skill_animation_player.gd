@@ -66,6 +66,14 @@ func configure(
 		if _anchor_policy == "center_sequence_bounds_on_geometry_origin"
 		else Vector2.ZERO
 	)
+	var explicit_anchor_rebase: Array = render.get(
+		"anchor_rebase_pixels", [0.0, 0.0]
+	)
+	if explicit_anchor_rebase.size() >= 2:
+		_sequence_anchor_rebase += Vector2(
+			float(explicit_anchor_rebase[0]),
+			float(explicit_anchor_rebase[1])
+		)
 	_native_extent = maxf(
 		1.0,
 		maxf(_sequence_bounds.size.x, _sequence_bounds.size.y)

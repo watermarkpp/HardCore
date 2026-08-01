@@ -130,8 +130,19 @@ func _ready() -> void:
 	assert(shield_visual.is_persistent_magic_shield_visual())
 	assert(shield_visual.get_meta(
 		"magic_shield_visual_contract", ""
-	) == "skills.wizard.magic_shield.cast_then_hold_final_frame.v1")
+	) == "skills.wizard.magic_shield.primary_actor_footpoint_centered_behind_body.v1")
 	var shield_sprite: CasterSkillAnimationPlayer = shield_visual._sprites[0]
+	var shield_render := CasterSkillVisualRegistry.render_policy(
+		"wizard.magic_shield"
+	)
+	assert(shield_render.anchor_policy == "top_left_from_world_anchor")
+	assert(shield_render.anchor_rebase_pixels == [7.5, 0.0])
+	assert(shield_render.attachment_draw_order == "behind_attached_actor_same_footpoint")
+	assert(shield_sprite.fitted_visual_bounds().position == Vector2(-34.5, -80.0))
+	shield_owner.global_position = Vector2(123.4, 77.6)
+	shield_visual._process(0.0)
+	assert(is_equal_approx(shield_visual.global_position.x, 123.0))
+	assert(is_equal_approx(shield_visual.global_position.y, 78.0 - 0.001))
 	shield_sprite._process(shield_sprite.animation_duration() + 0.01)
 	shield_visual._process(0.1)
 	assert(shield_sprite.playback_complete)

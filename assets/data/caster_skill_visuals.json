@@ -10215,7 +10215,13 @@
         "anchor_policy": "top_left_from_world_anchor",
         "attachment_policy": "caster_actor",
         "playback_strategy": "frame_sequence",
-        "pixel_snap": true
+        "pixel_snap": true,
+        "presentation_contract": "skills.wizard.magic_shield.primary_actor_footpoint_centered_behind_body.v1",
+        "anchor_rebase_pixels": [
+          7.5,
+          0.0
+        ],
+        "attachment_draw_order": "behind_attached_actor_same_footpoint"
       },
       "distribution_id": "client.classic_raw_complete",
       "source_priority": {

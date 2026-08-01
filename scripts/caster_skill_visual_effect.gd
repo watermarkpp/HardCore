@@ -7,8 +7,10 @@ const COMPLETION_GRACE_SECONDS := 0.05
 const MAGIC_SHIELD_SKILL_ID := "wizard.magic_shield"
 const MAGIC_SHIELD_VISUAL_GROUP := "wizard_magic_shield_persistent_visual"
 const MAGIC_SHIELD_VISUAL_CONTRACT_ID := (
-	"skills.wizard.magic_shield.cast_then_hold_final_frame.v1"
+	"skills.wizard.magic_shield.primary_actor_footpoint_centered_behind_body.v1"
 )
+const ATTACHMENT_DRAW_ORDER_BEHIND_ACTOR := "behind_attached_actor_same_footpoint"
+const BEHIND_ACTOR_SORT_EPSILON := 0.001
 
 var skill_id := ""
 var phase_id := ""
@@ -24,6 +26,7 @@ var _completion_elapsed := 0.0
 var _sprites: Array[Sprite2D] = []
 var _playback_strategy := "frame_sequence"
 var _attachment_policy := "world_anchor"
+var _attachment_draw_order := ""
 var _hellfire_records: Array[Dictionary] = []
 var _hellfire_tick_elapsed := 0.0
 var _hellfire_emissions := 0
@@ -94,6 +97,7 @@ func _ready() -> void:
 		return
 	var render := CasterSkillVisualRegistry.render_policy(skill_id, phase_id)
 	_attachment_policy = str(render.get("attachment_policy", "world_anchor"))
+	_attachment_draw_order = str(render.get("attachment_draw_order", ""))
 	if _attachment_policy not in ["target_actor", "caster_actor"]:
 		target_node = null
 	_playback_strategy = str(render.get("playback_strategy", "frame_sequence"))
@@ -114,7 +118,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_elapsed += delta
 	if is_instance_valid(target_node):
-		global_position = target_node.global_position.round()
+		_sync_actor_attachment_position()
 	if _is_persistent_magic_shield_visual():
 		if not _magic_shield_state_is_active():
 			queue_free()
@@ -136,6 +140,16 @@ func _process(delta: float) -> void:
 			return
 	if _elapsed >= lifetime + 0.5:
 		queue_free()
+
+
+func _sync_actor_attachment_position() -> void:
+	var attached_footpoint := target_node.global_position.round()
+	# The shared world is y-sorted. A tiny negative sort-key offset keeps the
+	# shield behind the body without changing its raster-visible footpoint or
+	# placing it below the map layer through a global negative z-index.
+	if _attachment_draw_order == ATTACHMENT_DRAW_ORDER_BEHIND_ACTOR:
+		attached_footpoint.y -= BEHIND_ACTOR_SORT_EPSILON
+	global_position = attached_footpoint
 
 
 func is_persistent_magic_shield_visual() -> bool:

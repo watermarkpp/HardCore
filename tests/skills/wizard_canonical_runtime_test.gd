@@ -52,6 +52,12 @@ func _ready() -> void:
 	})
 	assert(hellfire.effects[0].length_tiles == 5)
 	assert(not hellfire.effects[0].pierces_units and hellfire.geometry_cells.size() == 5)
+	assert(hellfire.effects[0].maximum_targets == 0)
+	assert(hellfire.effects[0].target_limit_policy == "all_intersecting_effect_cells")
+	assert(
+		hellfire.effects[0].target_selection_contract
+		== "skills.wizard.hellfire.all_intersecting_5x1_line.v1"
+	)
 	assert(hellfire.proficiency_event == "valid_cast_releases_line")
 
 	var lightning := _execute("wizard.lightning", {
