@@ -6,6 +6,7 @@ const Geometry := preload("res://scripts/skills/warrior_melee_geometry.gd")
 
 func _ready() -> void:
 	_test_direction_round_trip()
+	_test_fractional_angle_quantization_audit()
 	_test_normal_and_fire_boundaries()
 	_test_thrust_lane_boundaries()
 	_test_half_moon_arc_boundaries()
@@ -30,6 +31,50 @@ func _test_direction_round_trip() -> void:
 		var expected_step := Geometry.facing_tile_step(direction_index)
 		assert(audit.canonical_tile_step.x == expected_step.x)
 		assert(audit.canonical_tile_step.y == expected_step.y)
+
+
+func _test_fractional_angle_quantization_audit() -> void:
+	# Every exact canonical step is a closed direction in both coordinate
+	# interpretations. This proves the disagreement is not an index-order bug.
+	for direction_index in range(8):
+		var delta := Vector2(Geometry.facing_tile_step(direction_index))
+		var exact := Diagnostic.audit_fractional_tile_delta(delta)
+		assert(
+			exact.contract_id
+			== "diagnostic.warrior.melee_angle_quantization.v1"
+		)
+		assert(exact.has_direction)
+		assert(exact.projected_screen_45_direction_index == direction_index)
+		assert(exact.tile_space_45_direction_index == direction_index)
+		assert(exact.quantizers_match)
+		assert(exact.projected_screen_canonical_tile_step.x == int(delta.x))
+		assert(exact.projected_screen_canonical_tile_step.y == int(delta.y))
+		assert(exact.tile_space_canonical_tile_step.x == int(delta.x))
+		assert(exact.tile_space_canonical_tile_step.y == int(delta.y))
+
+	# Fractional deltas expose the actual policy difference: in a 2:1 screen
+	# projection (1,0.5) appears closer to SE, while direct tile-space 45-degree
+	# quantization classifies it as S.
+	var asymmetric := Diagnostic.audit_fractional_tile_delta(Vector2(1.0, 0.5))
+	assert(asymmetric.projected_screen_45_direction_index == 7)
+	assert(asymmetric.tile_space_45_direction_index == 0)
+	assert(not asymmetric.quantizers_match)
+	assert(asymmetric.projected_screen_canonical_tile_step.x == 1)
+	assert(asymmetric.projected_screen_canonical_tile_step.y == 0)
+	assert(asymmetric.tile_space_canonical_tile_step.x == 1)
+	assert(asymmetric.tile_space_canonical_tile_step.y == 1)
+	assert(is_equal_approx(asymmetric.projected_world_vector.x, 1.0))
+	assert(is_equal_approx(asymmetric.projected_world_vector.y, 1.5))
+	var normalized_length := sqrt(
+		pow(float(asymmetric.projected_world_direction.x), 2.0)
+		+ pow(float(asymmetric.projected_world_direction.y), 2.0)
+	)
+	assert(is_equal_approx(normalized_length, 1.0))
+
+	var mirrored := Diagnostic.audit_fractional_tile_delta(Vector2(0.5, 1.0))
+	assert(mirrored.projected_screen_45_direction_index == 1)
+	assert(mirrored.tile_space_45_direction_index == 0)
+	assert(not mirrored.quantizers_match)
 
 
 func _test_normal_and_fire_boundaries() -> void:
