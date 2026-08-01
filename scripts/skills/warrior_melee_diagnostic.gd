@@ -9,6 +9,7 @@ extends RefCounted
 const Geometry := preload("res://scripts/skills/warrior_melee_geometry.gd")
 
 const CONTRACT_ID := "diagnostic.warrior.melee_candidate.v1"
+const FOOTPRINT_CONTRACT_ID := "diagnostic.warrior.melee_footprint_candidate.v1"
 const DIRECTION_AUDIT_CONTRACT_ID := "diagnostic.warrior.melee_direction_loop.v1"
 const ANGLE_QUANTIZATION_AUDIT_CONTRACT_ID := (
 	"diagnostic.warrior.melee_angle_quantization.v1"
@@ -70,6 +71,7 @@ static func explain_candidate(
 	return {
 		"contract_id": CONTRACT_ID,
 		"geometry_contract_id": Geometry.CONTRACT_ID,
+		"direction_space_contract_id": Geometry.DIRECTION_SPACE_CONTRACT_ID,
 		"target_count_policy_id": Geometry.TARGET_COUNT_POLICY_ID,
 		"result_code": result_code,
 		"accepted": result_code == RESULT_OK,
@@ -104,6 +106,99 @@ static func explain_candidate(
 	}
 
 
+static func explain_footprint_candidate(
+	origin_fractional_tile: Vector2,
+	target_fractional_tile: Vector2,
+	target_collision_radius_world: float,
+	attack_direction_index: int,
+	mode: String,
+	range_bonus_tiles := 0.0
+) -> Dictionary:
+	## Reports the historical footpoint-only decision beside the authoritative
+	## footprint-area intersection. Runtime instrumentation can therefore prove
+	## when an unchanged attack area reaches a monster body even though its centre
+	## footpoint remains just outside the old point test.
+	var point_result := explain_candidate(
+		origin_fractional_tile,
+		target_fractional_tile,
+		attack_direction_index,
+		mode,
+		range_bonus_tiles
+	)
+	var resolved_mode := str(point_result.get("mode", Geometry.SKILL_NORMAL))
+	var normalized_attack_direction := posmod(attack_direction_index, 8)
+	var footprint_accepted := Geometry.footprint_intersects_mode(
+		origin_fractional_tile,
+		target_fractional_tile,
+		target_collision_radius_world,
+		normalized_attack_direction,
+		resolved_mode,
+		range_bonus_tiles
+	)
+	var footprint_slot := (
+		Geometry.thrust_footprint_slot(
+			origin_fractional_tile,
+			target_fractional_tile,
+			target_collision_radius_world,
+			normalized_attack_direction,
+			range_bonus_tiles
+		)
+		if resolved_mode == Geometry.SKILL_THRUST
+		else 0
+	)
+	var footprint_half_moon_relative_sector := (
+		Geometry.half_moon_footprint_relative_sector(
+			origin_fractional_tile,
+			target_fractional_tile,
+			target_collision_radius_world,
+			normalized_attack_direction,
+			range_bonus_tiles
+		)
+		if resolved_mode == Geometry.SKILL_HALF_MOON
+		else -1
+	)
+	var target_polygon := Geometry.target_footprint_polygon_fractional_tile(
+		target_fractional_tile,
+		target_collision_radius_world
+	)
+	var attack_polygons := Geometry.attack_region_polygons(
+		origin_fractional_tile,
+		normalized_attack_direction,
+		resolved_mode,
+		range_bonus_tiles
+	)
+	var result := point_result.duplicate(true)
+	result.merge({
+		"contract_id": FOOTPRINT_CONTRACT_ID,
+		"footprint_intersection_contract_id": Geometry.FOOTPRINT_INTERSECTION_CONTRACT_ID,
+		"target_footprint_contract_id": Geometry.TARGET_FOOTPRINT_CONTRACT_ID,
+		"point_candidate_contract_id": CONTRACT_ID,
+		"point_result_code": str(point_result.get("result_code", "")),
+		"point_accepted": bool(point_result.get("accepted", false)),
+		"footprint_result_code": (
+			RESULT_OK
+			if footprint_accepted
+			else str(point_result.get("result_code", RESULT_OUT_OF_RANGE))
+		),
+		"footprint_accepted": footprint_accepted,
+		"accepted": footprint_accepted,
+		"result_code": (
+			RESULT_OK
+			if footprint_accepted
+			else str(point_result.get("result_code", RESULT_OUT_OF_RANGE))
+		),
+		"point_thrust_slot": int(point_result.get("thrust_slot", 0)),
+		"footprint_thrust_slot": footprint_slot,
+		"footprint_half_moon_relative_sector": footprint_half_moon_relative_sector,
+		"target_collision_radius_world": maxf(0.0, target_collision_radius_world),
+		"target_footprint_vertex_count": target_polygon.size(),
+		"target_footprint_polygon_fractional_tile": _polygon_json(target_polygon),
+		"attack_region_polygon_count": attack_polygons.size(),
+		"attack_region_polygons_fractional_tile": _polygons_json(attack_polygons),
+	}, true)
+	return result
+
+
 static func audit_direction(screen_direction_index: int) -> Dictionary:
 	var normalized_screen_direction := posmod(screen_direction_index, 8)
 	var tile_step := Geometry.facing_tile_step(normalized_screen_direction)
@@ -120,6 +215,7 @@ static func audit_direction(screen_direction_index: int) -> Dictionary:
 	return {
 		"contract_id": DIRECTION_AUDIT_CONTRACT_ID,
 		"geometry_contract_id": Geometry.CONTRACT_ID,
+		"direction_space_contract_id": Geometry.DIRECTION_SPACE_CONTRACT_ID,
 		"requested_screen_direction_index": screen_direction_index,
 		"screen_direction_index": normalized_screen_direction,
 		"world_direction_index": world_direction,
@@ -152,12 +248,10 @@ static func audit_fractional_tile_delta(fractional_tile_delta: Vector2) -> Dicti
 	## the alternative 45-degree quantizer measured directly in canonical tile
 	## space. It is deliberately read-only: neither result is selected here.
 	var projected_world_vector := _project_tile_delta(fractional_tile_delta)
-	var projected_screen_direction := Geometry.direction_index_for_tile_delta(
-		fractional_tile_delta
+	var projected_screen_direction := _direction_index_for_projected_screen_delta(
+		projected_world_vector
 	)
-	var tile_space_direction := _direction_index_for_tile_space_delta(
-		fractional_tile_delta
-	)
+	var tile_space_direction := Geometry.direction_index_for_tile_delta(fractional_tile_delta)
 	var matches := projected_screen_direction == tile_space_direction
 	var projected_world_direction := (
 		projected_world_vector.normalized()
@@ -167,6 +261,7 @@ static func audit_fractional_tile_delta(fractional_tile_delta: Vector2) -> Dicti
 	return {
 		"contract_id": ANGLE_QUANTIZATION_AUDIT_CONTRACT_ID,
 		"geometry_contract_id": Geometry.CONTRACT_ID,
+		"active_direction_space_contract_id": Geometry.DIRECTION_SPACE_CONTRACT_ID,
 		"fractional_tile_delta": _vector2_json(fractional_tile_delta),
 		"has_direction": (
 			fractional_tile_delta.length_squared()
@@ -231,21 +326,23 @@ static func _direction_index_for_projected_screen_delta(screen_delta: Vector2) -
 	)
 
 
-static func _direction_index_for_tile_space_delta(tile_delta: Vector2) -> int:
-	if tile_delta.length_squared() <= Geometry.EPSILON * Geometry.EPSILON:
-		return 0
-	# Canonical tile-space steps start at S=(1,1), then advance clockwise in
-	# the project's S,SW,W,NW,N,NE,E,SE index order at exact 45-degree steps.
-	return wrapi(
-		int(round((tile_delta.angle() - PI / 4.0) / (TAU / 8.0))),
-		0,
-		8
-	)
-
-
 static func _vector2_json(value: Vector2) -> Dictionary:
 	return {"x": value.x, "y": value.y}
 
 
 static func _vector2i_json(value: Vector2i) -> Dictionary:
 	return {"x": value.x, "y": value.y}
+
+
+static func _polygon_json(polygon: PackedVector2Array) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for point: Vector2 in polygon:
+		result.append(_vector2_json(point))
+	return result
+
+
+static func _polygons_json(polygons: Array[PackedVector2Array]) -> Array:
+	var result: Array = []
+	for polygon: PackedVector2Array in polygons:
+		result.append(_polygon_json(polygon))
+	return result

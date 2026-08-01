@@ -233,16 +233,6 @@ func request_attack(has_combat_target := false, locked_target_instance_id := 0) 
 	var context := _build_warrior_attack_context(has_combat_target)
 	if str(context.get("action", "attack")) != "attack":
 		return false
-	if bool(context.get("direct_toggle_release", false)):
-		# Resource consumption remains in GameRoot's canonical result commit.
-		# Lock the independent cooldown at input acceptance so repeated attack
-		# presses cannot queue duplicate direct releases before the hit frame.
-		var fire_definition := SkillDataLoaderScript.skill("warrior.fire_sword")
-		var fire_cooldown_ms := int(fire_definition.get("timing", {}).get("cooldown_ms", 8000))
-		_skill_cooldown_remaining["warrior.fire_sword"] = (
-			maxf(0.0, float(fire_cooldown_ms) / 1000.0)
-			/ _cast_speed_multiplier
-		)
 	var action_duration := attack_animation_duration
 	_attack_timer = attack_cooldown
 	_attack_action_timer = action_duration
@@ -482,7 +472,8 @@ func _emit_attack_after_windup(
 		var release_geometry := _resolve_combat_release_geometry(
 			input_direction,
 			locked_target_instance_id,
-			true
+			true,
+			CombatReleaseGeometryScript.FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION
 		)
 		_pending_attack_context = context.duplicate(true)
 		_pending_attack_context["release_geometry"] = release_geometry
@@ -524,7 +515,8 @@ func _emit_skill_after_windup(
 func _resolve_combat_release_geometry(
 	input_direction: Vector2,
 	locked_target_instance_id: int,
-	track_locked_target: bool
+	track_locked_target: bool,
+	release_facing_policy := CombatReleaseGeometryScript.FACING_POLICY_LIVE_LOCKED_TARGET
 ) -> Dictionary:
 	var target_position := Vector2.ZERO
 	var target_valid := false
@@ -539,7 +531,8 @@ func _resolve_combat_release_geometry(
 		locked_target_instance_id,
 		target_position,
 		target_valid,
-		track_locked_target
+		track_locked_target,
+		release_facing_policy
 	)
 
 
@@ -620,6 +613,17 @@ func skill_cooldown_remaining_ms(stable_skill_id: String) -> int:
 		0.0,
 		float(_skill_cooldown_remaining.get(stable_skill_id, 0.0))
 	) * 1000.0)
+
+
+func commit_fire_sword_cooldown() -> void:
+	var fire_definition := SkillDataLoaderScript.skill("warrior.fire_sword")
+	var fire_cooldown_ms := int(
+		fire_definition.get("timing", {}).get("cooldown_ms", 8000)
+	)
+	_skill_cooldown_remaining["warrior.fire_sword"] = (
+		maxf(0.0, float(fire_cooldown_ms) / 1000.0)
+		/ _cast_speed_multiplier
+	)
 
 
 func warrior_state_snapshot() -> Dictionary:

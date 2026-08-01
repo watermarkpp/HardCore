@@ -92,7 +92,7 @@ func _run() -> void:
 	var direct_fire_context := player._build_warrior_attack_context(true)
 	assert(direct_fire_context.mode == "fire" and direct_fire_context.direct_toggle_release, "烈火没有在同一次攻击输入直接进入攻击模式")
 	assert(player.request_attack(true), "烈火开关开启后攻击键未接受")
-	assert(player.skill_cooldown_remaining_ms("warrior.fire_sword") == 8000, "烈火独立8秒冷却未建立")
+	assert(player.skill_cooldown_remaining_ms("warrior.fire_sword") == 0, "烈火冷却不得在命中判定前提前建立")
 	assert(player.current_mp == mp_before_fire, "MP必须由GameRoot canonical结果唯一提交，Player不得预扣")
 	var saved_runtime := player.warrior_runtime_state_for_save()
 	assert(saved_runtime.contract_id == "gameplay.warrior.skill_runtime.v2", "战士技能运行时存档契约不稳定")
