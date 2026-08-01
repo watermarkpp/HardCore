@@ -80,6 +80,40 @@ func _ready() -> void:
 	assert(fire_wall.duration_seconds == 28 and fire_wall.tick_interval_seconds == 1.0)
 	var fire_cells := CasterSkillRuntime.fire_wall_positions(Vector2(100, 100), 48)
 	assert(fire_cells.size() == 4 and fire_cells.has(Vector2(148, 100)) and fire_cells.has(Vector2(148, 148)))
+	GroundSkillEffect.reset_runtime_tick_claims_for_tests()
+	var fire_wall_caster := Node2D.new()
+	var second_fire_wall_caster := Node2D.new()
+	var fire_wall_target := Node.new()
+	var first_runtime_field := GroundSkillEffect.new()
+	first_runtime_field.setup(
+		Vector2.ZERO, 37, 74.0, 12.0, Color.WHITE, "wizard.fire_wall", 1.0
+	)
+	first_runtime_field.configure_runtime_source(fire_wall_caster)
+	var overlapping_runtime_field := GroundSkillEffect.new()
+	overlapping_runtime_field.setup(
+		Vector2.ZERO, 91, 74.0, 12.0, Color.WHITE, "wizard.fire_wall", 1.0
+	)
+	overlapping_runtime_field.configure_runtime_source(fire_wall_caster)
+	assert(first_runtime_field.claim_runtime_tick(fire_wall_target))
+	assert(
+		not overlapping_runtime_field.claim_runtime_tick(fire_wall_target),
+		"overlapping fire walls from one caster stacked a second tick"
+	)
+	assert(
+		first_runtime_field.damage == 37
+		and overlapping_runtime_field.damage == 91,
+		"fire wall overlap protection changed either field's canonical tick power"
+	)
+	overlapping_runtime_field.configure_runtime_source(second_fire_wall_caster)
+	assert(
+		overlapping_runtime_field.claim_runtime_tick(fire_wall_target),
+		"different casters incorrectly shared one fire wall tick claim"
+	)
+	first_runtime_field.free()
+	overlapping_runtime_field.free()
+	fire_wall_target.free()
+	fire_wall_caster.free()
+	second_fire_wall_caster.free()
 
 	var lightning := CasterSkillRuntime.resolve("wizard.lightning", {
 		"skill_level": 3, "magic_stat_roll": 30, "target_is_undead": true,
