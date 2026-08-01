@@ -40,6 +40,8 @@ const ATTACK_LOCK_CONTRACT := "combat.attack_lock.tile_radius.v1"
 const ATTACK_LOCK_RANGE_TILES := 10
 const MELEE_LOCK_IMPACT_POLICY_ID := "combat.melee_lock.facing_priority_nonexclusive.v1"
 const WILD_RUSH_SKILL_ID := "warrior.wild_rush"
+const ATTACK_INPUT_TICKET_CONTRACT_ID := "combat.input.attack_ticket.touch_lifecycle.v1"
+const MAX_BUFFERED_MOBILE_ATTACK_TICKETS := 32
 
 var player: PlayerCharacter
 var _world_camera: Camera2D
@@ -54,7 +56,13 @@ var locked_target: EnemyActor
 var manual_target_lock := false
 var auto_target_enabled := true
 var _mobile_attack_held := false
-var _queued_mobile_attacks := 0
+var _queued_mobile_attack_tickets: Array[int] = []
+var _active_mobile_attack_tokens: Dictionary = {}
+var _legacy_mobile_attack_token := 0
+var _next_synthetic_attack_token := -1
+var _queued_mobile_attacks: int:
+	get:
+		return _queued_mobile_attack_tickets.size()
 var _warrior_hud_timer := 0.0
 var _system_menu_layer: CanvasLayer
 var _system_menu_panel: Control
@@ -108,8 +116,9 @@ func _ready() -> void:
 
 	hud = GameHUD.new()
 	hud.movement_changed.connect(player.set_touch_vector)
-	hud.attack_pressed.connect(_on_mobile_attack_pressed)
-	hud.attack_released.connect(_on_mobile_attack_released)
+	hud.attack_input_started.connect(_on_mobile_attack_input_started)
+	hud.attack_input_ended.connect(_on_mobile_attack_input_ended)
+	hud.attack_input_cancelled.connect(_on_mobile_attack_input_cancelled)
 	hud.interact_pressed.connect(_try_interact)
 	hud.skill_slot_pressed.connect(_use_skill_slot)
 	hud.map_travel_requested.connect(travel_to_map)
@@ -131,7 +140,12 @@ func _ready() -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
 		call_deferred("_show_system_menu")
+	elif what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT]:
+		if is_instance_valid(hud):
+			hud.cancel_attack_inputs(&"application_interrupted")
+		_cancel_all_mobile_attack_inputs(true)
 	elif what == NOTIFICATION_WM_CLOSE_REQUEST:
+		_cancel_all_mobile_attack_inputs(true)
 		_prepare_safe_logout()
 		get_tree().quit()
 
@@ -168,15 +182,13 @@ func _process(delta: float) -> void:
 	)
 	if bound_attack_skill.is_empty():
 		if Input.is_action_just_pressed("attack"):
-			if not _request_mobile_attack():
-				_queued_mobile_attacks += 1
-		elif _queued_mobile_attacks > 0:
-			if _request_mobile_attack():
-				_queued_mobile_attacks -= 1
+			_submit_mobile_attack_ticket(_allocate_synthetic_attack_token())
+		if not _queued_mobile_attack_tickets.is_empty():
+			_drain_next_mobile_attack_ticket()
 		elif _mobile_attack_held or Input.is_action_pressed("attack"):
 			_request_mobile_attack()
 	else:
-		_queued_mobile_attacks = 0
+		_queued_mobile_attack_tickets.clear()
 		if Input.is_action_just_pressed("attack"):
 			_request_primary_attack_action()
 	if Input.is_action_just_pressed("interact"):
@@ -1330,21 +1342,105 @@ func _has_melee_hittable_target(
 	return false
 
 
-func _on_mobile_attack_pressed() -> void:
-	_mobile_attack_held = PlayerState.skill_name_for_slot(
+func _allocate_synthetic_attack_token() -> int:
+	var token := _next_synthetic_attack_token
+	_next_synthetic_attack_token -= 1
+	return token
+
+
+func _submit_mobile_attack_ticket(press_token: int) -> void:
+	if press_token == 0 or press_token in _queued_mobile_attack_tickets:
+		return
+	if _queued_mobile_attack_tickets.is_empty() and _request_mobile_attack():
+		return
+	if _queued_mobile_attack_tickets.size() >= MAX_BUFFERED_MOBILE_ATTACK_TICKETS:
+		return
+	_queued_mobile_attack_tickets.append(press_token)
+
+
+func _drain_next_mobile_attack_ticket() -> bool:
+	if _queued_mobile_attack_tickets.is_empty():
+		return false
+	if not _request_mobile_attack():
+		return false
+	_queued_mobile_attack_tickets.pop_front()
+	return true
+
+
+func _refresh_mobile_attack_held() -> void:
+	_mobile_attack_held = false
+	for value in _active_mobile_attack_tokens.values():
+		if bool(value):
+			_mobile_attack_held = true
+			return
+
+
+func _on_mobile_attack_input_started(
+	press_token: int,
+	_touch_id: int,
+	_source: StringName
+) -> void:
+	if press_token == 0 or _active_mobile_attack_tokens.has(press_token):
+		return
+	var ordinary_attack := PlayerState.skill_name_for_slot(
 		PlayerState.SKILL_SLOT_GROUP_ATTACK,
 		0
 	).is_empty()
-	if _mobile_attack_held:
-		if not _request_mobile_attack():
-			_queued_mobile_attacks += 1
+	_active_mobile_attack_tokens[press_token] = ordinary_attack
+	_refresh_mobile_attack_held()
+	if ordinary_attack:
+		_submit_mobile_attack_ticket(press_token)
 		return
-	_queued_mobile_attacks = 0
+	_queued_mobile_attack_tickets.clear()
 	_request_primary_attack_action()
 
 
-func _on_mobile_attack_released() -> void:
+func _on_mobile_attack_input_ended(
+	press_token: int,
+	_touch_id: int,
+	_source: StringName
+) -> void:
+	_active_mobile_attack_tokens.erase(press_token)
+	_refresh_mobile_attack_held()
+
+
+func _on_mobile_attack_input_cancelled(
+	press_token: int,
+	_touch_id: int,
+	_source: StringName,
+	_reason: StringName
+) -> void:
+	_active_mobile_attack_tokens.erase(press_token)
+	_queued_mobile_attack_tickets.erase(press_token)
+	_refresh_mobile_attack_held()
+
+
+func _cancel_all_mobile_attack_inputs(clear_tickets := false) -> void:
+	_active_mobile_attack_tokens.clear()
 	_mobile_attack_held = false
+	_legacy_mobile_attack_token = 0
+	if clear_tickets:
+		_queued_mobile_attack_tickets.clear()
+
+
+func _on_mobile_attack_pressed() -> void:
+	if _legacy_mobile_attack_token != 0:
+		return
+	_legacy_mobile_attack_token = _allocate_synthetic_attack_token()
+	_on_mobile_attack_input_started(
+		_legacy_mobile_attack_token,
+		-3,
+		&"legacy"
+	)
+
+
+func _on_mobile_attack_released() -> void:
+	if _legacy_mobile_attack_token == 0:
+		_cancel_all_mobile_attack_inputs(false)
+		return
+	var press_token := _legacy_mobile_attack_token
+	_legacy_mobile_attack_token = 0
+	_on_mobile_attack_input_ended(press_token, -3, &"legacy")
 
 
 func _ensure_attack_locked_target(excluded: EnemyActor = null) -> EnemyActor:
@@ -1624,8 +1720,9 @@ func _on_player_moved(_position: Vector2, _facing: Vector2) -> void:
 
 func _on_player_death_requested() -> void:
 	_cancel_target()
-	_mobile_attack_held = false
-	_queued_mobile_attacks = 0
+	if is_instance_valid(hud):
+		hud.cancel_attack_inputs(&"player_death")
+	_cancel_all_mobile_attack_inputs(true)
 	var accepted := travel_to_service_home(
 		false,
 		false,
