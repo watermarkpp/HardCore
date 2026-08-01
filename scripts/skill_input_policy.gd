@@ -9,6 +9,8 @@ const WARRIOR_HIT_EFFECT_POLICY_ID := "gameplay.warrior.hit_effect_fallback.v1"
 const FIRE_TOGGLE_OVERRIDE_ID := "gameplay.warrior.fire_sword.attack_toggle.user_override.v1"
 const FIRE_COOLDOWN_COMMIT_POLICY_ID := "gameplay.warrior.fire_sword.cooldown_on_legal_resolution.v1"
 const SLAYING_LAYER_OVERRIDE_ID := "gameplay.warrior.slaying.layered_proc.user_override.v1"
+const OFFENSIVE_SPELL_HOLD_POLICY_ID := "gameplay.caster.offensive_spell.press_hold_repeat.v1"
+const MAGIC_SHIELD_TOGGLE_POLICY_ID := "gameplay.wizard.magic_shield.auto_refresh_toggle.v1"
 
 const INTERACTION_PASSIVE := "passive"
 const INTERACTION_TOGGLE := "toggle"
@@ -30,9 +32,19 @@ static func metadata(skill_name_or_id: String) -> Dictionary:
 	var interaction_mode := INTERACTION_CLICK_RELEASE
 	if activation in ["passive", "passive_proc"]:
 		interaction_mode = INTERACTION_PASSIVE
-	elif activation == "toggle_attack_mode" or skill_id == "warrior.fire_sword":
+	elif activation == "toggle_attack_mode" or skill_id in [
+		"warrior.fire_sword",
+		"wizard.magic_shield",
+	]:
 		interaction_mode = INTERACTION_TOGGLE
 	var passive := interaction_mode == INTERACTION_PASSIVE
+	var target: Dictionary = definition.get("target", {})
+	var hostile_relation := str(target.get("relation", "")).contains("hostile")
+	var repeatable_offensive_spell := (
+		interaction_mode == INTERACTION_CLICK_RELEASE
+		and str(definition.get("class", "")) in ["wizard", "taoist"]
+		and hostile_relation
+	)
 	var result := {
 		"contract_id": INPUT_METADATA_CONTRACT_ID,
 		"skill_id": skill_id,
@@ -48,10 +60,22 @@ static func metadata(skill_name_or_id: String) -> Dictionary:
 		# generic so future wizard/taoist active skills need no warrior special
 		# case in UI code.
 		"bindable_to_attack_slot": not passive,
+		"repeatable_offensive_spell": repeatable_offensive_spell,
+		"press_hold_repeat": repeatable_offensive_spell,
 		"attack_priority": int(ATTACK_PRIORITY.get(skill_id, 0)),
 		"source_contract": SkillDataLoaderScript.RULESET_ID,
 	}
-	if skill_id == "warrior.fire_sword":
+	if skill_id == "wizard.magic_shield":
+		result.merge({
+			"runtime_override_id": MAGIC_SHIELD_TOGGLE_POLICY_ID,
+			"runtime_activation": "toggle_auto_refresh",
+			"auto_refresh_capacity_ratio": 0.20,
+			"auto_refresh_before_expiry": true,
+			"auto_refresh_uses_normal_cast_pipeline": true,
+			"repeatable_offensive_spell": false,
+			"press_hold_repeat": false,
+		}, true)
+	elif skill_id == "warrior.fire_sword":
 		result.merge({
 			"runtime_override_id": FIRE_TOGGLE_OVERRIDE_ID,
 			"cooldown_commit_policy_id": FIRE_COOLDOWN_COMMIT_POLICY_ID,
@@ -89,7 +113,11 @@ static func metadata(skill_name_or_id: String) -> Dictionary:
 	elif interaction_mode == INTERACTION_TOGGLE:
 		result["runtime_activation"] = "attack_button_melee_mode"
 	elif interaction_mode == INTERACTION_CLICK_RELEASE:
-		result["runtime_activation"] = "press_to_release"
+		result["runtime_activation"] = (
+			"press_or_hold_repeat"
+			if repeatable_offensive_spell
+			else "press_to_release"
+		)
 	else:
 		result["runtime_activation"] = "always_on"
 	return result

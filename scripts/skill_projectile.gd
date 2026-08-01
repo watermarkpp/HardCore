@@ -3,6 +3,14 @@ extends Node2D
 
 const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
 const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
+const CombatDirectionSpaceScript := preload(
+	"res://scripts/skills/combat_direction_space.gd"
+)
+const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+
+const FOOTPRINT_HIT_CONTRACT_ID := (
+	"skills.projectile.actor_footprint_contact.v1"
+)
 
 const VISUAL_PATHS := {
 	"wizard.fireball": "res://assets/art/characters/wizard/effects/fireball.png",
@@ -13,6 +21,8 @@ const VISUAL_PATHS := {
 var direction := Vector2.RIGHT
 var speed := 520.0
 var remaining_range := 360.0
+var maximum_range_tiles := -1.0
+var traveled_range_tiles := 0.0
 var damage := 1
 var effect := "damage"
 var effect_strength := 0
@@ -61,6 +71,11 @@ func configure_runtime_resolution(
 	anti_poison_roll_override = anti_poison_roll
 
 
+func configure_maximum_range_tiles(value: float) -> void:
+	maximum_range_tiles = value if value > 0.0 else -1.0
+	traveled_range_tiles = 0.0
+
+
 func _ready() -> void:
 	add_to_group("zone_content")
 	_install_visual()
@@ -94,18 +109,48 @@ func _physics_process(delta: float) -> void:
 	if not skill_id.is_empty() and not _projectile_role_valid:
 		return
 	var travel := minf(speed * delta, remaining_range)
-	global_position += direction * travel
+	var motion := direction * travel
+	global_position += motion
 	remaining_range -= travel
+	if maximum_range_tiles > 0.0:
+		var tile_motion := (
+			CombatDirectionSpaceScript.world_delta_to_fractional_tile_delta(motion)
+		)
+		traveled_range_tiles += maxf(absf(tile_motion.x), absf(tile_motion.y))
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node.is_queued_for_deletion():
 			continue
-		if global_position.distance_to(node.global_position) > hit_radius:
+		if not _intersects_enemy_footprint(node):
 			continue
 		_apply_hit(node)
 		queue_free()
 		return
-	if remaining_range <= 0.0:
+	if (
+		remaining_range <= 0.0
+		or (
+			maximum_range_tiles > 0.0
+			and traveled_range_tiles >= maximum_range_tiles - 0.0001
+		)
+	):
 		queue_free()
+
+
+func _intersects_enemy_footprint(enemy: EnemyActor) -> bool:
+	var target_radii := WorldSpatialRulesScript.actor_footprint_radii(
+		enemy.collision_radius
+	)
+	# Projectiles retain their established circular hit radius. Adding it to the
+	# monster's exact 2:1 actor footprint is a conservative Minkowski contact
+	# test: the monster is no longer reduced to a single foot point.
+	var contact_radii := target_radii + Vector2.ONE * maxf(0.0, hit_radius)
+	if contact_radii.x <= 0.0 or contact_radii.y <= 0.0:
+		return global_position.is_equal_approx(enemy.global_position)
+	var offset := global_position - enemy.global_position
+	var normalized := Vector2(
+		offset.x / contact_radii.x,
+		offset.y / contact_radii.y
+	)
+	return normalized.length_squared() <= 1.0 + 0.0001
 
 
 func _apply_hit(enemy: EnemyActor) -> void:
