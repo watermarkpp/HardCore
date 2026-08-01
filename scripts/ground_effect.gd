@@ -17,6 +17,7 @@ var effect_color := Color(1.0, 0.25, 0.05)
 var skill_id := ""
 var source_actor: Node2D
 var runtime_tick_adapter := Callable()
+var runtime_target_filter := Callable()
 var runtime_damage_enabled := true
 var visual_rejection_reason := ""
 var _tick_timer := 0.0
@@ -46,15 +47,25 @@ func _ready() -> void:
 func configure_runtime_resolution(
 	caster: Node2D,
 	tick_adapter: Callable,
-	applies_damage := true
+	applies_damage := true,
+	target_filter := Callable()
 ) -> void:
 	source_actor = caster
 	runtime_tick_adapter = tick_adapter
 	runtime_damage_enabled = applies_damage
+	runtime_target_filter = target_filter
 
 
 func configure_runtime_source(caster: Node2D) -> void:
 	source_actor = caster
+
+
+func runtime_target_is_inside(target: Node2D) -> bool:
+	if not is_instance_valid(target):
+		return false
+	if runtime_target_filter.is_valid():
+		return bool(runtime_target_filter.call(target))
+	return global_position.distance_to(target.global_position) <= radius
 
 
 func claim_runtime_tick(target: Node) -> bool:
@@ -123,13 +134,18 @@ func _physics_process(delta: float) -> void:
 	if _tick_timer <= 0.0:
 		_tick_timer = tick_interval
 		for node: Node in get_tree().get_nodes_in_group("enemies"):
-			if node is EnemyActor and not node.is_queued_for_deletion() and global_position.distance_to(node.global_position) <= radius:
-				if runtime_damage_enabled and not claim_runtime_tick(node):
-					continue
-				if runtime_tick_adapter.is_valid():
-					runtime_tick_adapter.call(node, damage)
-				else:
-					node.take_damage(damage, source_actor)
+			if (
+				not node is EnemyActor
+				or node.is_queued_for_deletion()
+				or not runtime_target_is_inside(node)
+			):
+				continue
+			if runtime_damage_enabled and not claim_runtime_tick(node):
+				continue
+			if runtime_tick_adapter.is_valid():
+				runtime_tick_adapter.call(node, damage)
+			else:
+				node.take_damage(damage, source_actor)
 	if duration <= 0.0:
 		queue_free()
 	queue_redraw()

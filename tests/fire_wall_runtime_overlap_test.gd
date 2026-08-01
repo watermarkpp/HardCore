@@ -54,6 +54,20 @@ func _run() -> void:
 		_recorded_tick_powers[1] == _recorded_tick_powers[0],
 		"the next legal fire wall tick changed the selected field's raw power"
 	)
+	var filtered_field := _make_field(caster, 123)
+	filtered_field.global_position = Vector2(5000, 5000)
+	filtered_field.runtime_target_filter = func(candidate: Node2D) -> bool:
+		return candidate == target
+	assert(
+		filtered_field.runtime_target_is_inside(target),
+		"formal target filter was ignored in favor of the legacy pixel radius"
+	)
+	filtered_field.runtime_target_filter = func(_candidate: Node2D) -> bool:
+		return false
+	assert(
+		not filtered_field.runtime_target_is_inside(target),
+		"formal target filter rejection did not override the legacy pixel radius"
+	)
 	print(
 		"FIRE_WALL_RUNTIME_OVERLAP_PASS: independent overlapping fields preserve raw power while one caster deals at most one tick per target per second"
 	)
