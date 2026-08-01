@@ -27,6 +27,7 @@ const WarriorMeleeDiagnosticScript := preload("res://scripts/skills/warrior_mele
 const CombatRuntimeServiceScript := preload("res://scripts/layers/runtime/combat_runtime_service.gd")
 const CombatDiagnosticLogScript := preload("res://scripts/layers/runtime/combat_diagnostic_log.gd")
 const CasterSkillRuntimeScript := preload("res://scripts/caster_skill_runtime.gd")
+const CasterSpellGeometryScript := preload("res://scripts/skills/caster_spell_geometry.gd")
 const DEFAULT_NORMAL_RESPAWN_SECONDS := 180.0
 const DEFAULT_BOSS_RESPAWN_SECONDS := 3600.0
 const MONSTER_PREFETCH_TIMEOUT_MSEC := 8000
@@ -42,6 +43,12 @@ const MELEE_LOCK_IMPACT_POLICY_ID := "combat.melee_lock.facing_priority_nonexclu
 const WILD_RUSH_SKILL_ID := "warrior.wild_rush"
 const ATTACK_INPUT_TICKET_CONTRACT_ID := "combat.input.attack_ticket.touch_lifecycle.v1"
 const MAX_BUFFERED_MOBILE_ATTACK_TICKETS := 32
+const CASTER_GEOMETRY_VISUAL_CONTRACT_ID := "skills.visual.geometry_cells.world_projection.v1"
+const CANONICAL_WIZARD_GEOMETRY_SKILLS := [
+	"wizard.hellfire",
+	"wizard.hell_lightning",
+	"wizard.laser",
+]
 
 var player: PlayerCharacter
 var _world_camera: Camera2D
@@ -2833,12 +2840,19 @@ func _apply_canonical_effects(
 	var target_position := _canonical_tile_to_world(
 		target_context.get("target_tile", _canonical_world_to_tile(origin))
 	)
+	var geometry_effect := _canonical_primary_damage_effect(result)
+	var effective_geometry_cells := _canonical_effective_spell_geometry_cells(
+		stable_skill_id,
+		result.get("geometry_cells", []),
+		geometry_effect
+	)
 	_spawn_canonical_cast_visual(
 		stable_skill_id,
 		origin,
 		direction,
 		target,
-		target_position
+		target_position,
+		effective_geometry_cells
 	)
 	for raw_effect: Variant in result.get("effects", []):
 		if not raw_effect is Dictionary:
@@ -2865,7 +2879,16 @@ func _apply_canonical_effects(
 					if effect_type == "area_damage"
 					else origin
 				)
-				_apply_canonical_spell_damage(stable_skill_id, raw_power, damage_origin, direction, effect_type, target)
+				_apply_canonical_spell_damage(
+					stable_skill_id,
+					raw_power,
+					damage_origin,
+					direction,
+					effect_type,
+					target,
+					effective_geometry_cells,
+					effect
+				)
 			"persistent_ground_damage":
 				_spawn_canonical_ground_field(
 					stable_skill_id,
@@ -2949,10 +2972,18 @@ func _apply_canonical_spell_damage(
 	origin: Vector2,
 	direction: Vector2,
 	effect_type: String,
-	primary: EnemyActor
+	primary: EnemyActor,
+	raw_geometry_cells: Variant = [],
+	effect: Dictionary = {}
 ) -> bool:
 	var targets: Array[EnemyActor] = []
-	if effect_type == "targeted_sky_strike" and primary != null:
+	if stable_skill_id in CANONICAL_WIZARD_GEOMETRY_SKILLS:
+		targets = _canonical_spell_geometry_targets(
+			stable_skill_id,
+			raw_geometry_cells,
+			effect
+		)
+	elif effect_type == "targeted_sky_strike" and primary != null:
 		targets.append(primary)
 	else:
 		var radial: bool = effect_type in ["area_damage", "caster_centered_area_damage"]
@@ -2977,6 +3008,90 @@ func _apply_canonical_spell_damage(
 		)
 		hit_any = bool(resolution.get("success", false)) or hit_any
 	return hit_any
+
+
+func _canonical_primary_damage_effect(result: Dictionary) -> Dictionary:
+	for raw_effect: Variant in result.get("effects", []):
+		if not raw_effect is Dictionary:
+			continue
+		var effect: Dictionary = raw_effect
+		if str(effect.get("type", "")) in [
+			"line_damage",
+			"piercing_line_damage",
+			"area_damage",
+			"caster_centered_area_damage",
+		]:
+			return effect
+	return {}
+
+
+func _canonical_effective_spell_geometry_cells(
+	stable_skill_id: String,
+	raw_geometry_cells: Variant,
+	effect: Dictionary
+) -> Array[Vector2i]:
+	var definition := SkillDataLoaderScript.skill(stable_skill_id)
+	var geometry: Dictionary = definition.get("geometry", {}).duplicate(true)
+	if effect.has("stops_on_terrain"):
+		geometry["stops_on_terrain"] = bool(effect.stops_on_terrain)
+	return CasterSpellGeometryScript.effective_cells(
+		stable_skill_id,
+		geometry,
+		raw_geometry_cells,
+		Callable(self, "_canonical_spell_cell_is_terrain_blocked")
+	)
+
+
+func _canonical_spell_cell_is_terrain_blocked(cell: Vector2i) -> bool:
+	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
+	if not runtime.is_empty():
+		return runtime.get("collision", {}).get("blocked_tiles", []).has(
+			"%d,%d" % [cell.x, cell.y]
+		)
+	return (
+		background != null
+		and background.has_method("is_environment_point_blocked")
+		and bool(background.call(
+			"is_environment_point_blocked",
+			_canonical_tile_to_world(cell)
+		))
+	)
+
+
+func _canonical_spell_geometry_targets(
+	stable_skill_id: String,
+	raw_geometry_cells: Variant,
+	effect: Dictionary
+) -> Array[EnemyActor]:
+	var geometry_cells: Array[Vector2i] = []
+	if raw_geometry_cells is Array:
+		for raw_cell: Variant in raw_geometry_cells:
+			if raw_cell is Vector2i:
+				geometry_cells.append(raw_cell)
+	var targets: Array[EnemyActor] = []
+	var maximum_targets := (
+		1
+		if stable_skill_id == "wizard.hellfire" and not bool(effect.get("pierces_units", false))
+		else maxi(0, int(effect.get("maximum_targets", geometry_cells.size())))
+	)
+	if maximum_targets <= 0:
+		return targets
+	for cell: Vector2i in geometry_cells:
+		var cell_targets: Array[EnemyActor] = []
+		for node: Node in get_tree().get_nodes_in_group("enemies"):
+			if not node is EnemyActor or node.is_queued_for_deletion():
+				continue
+			var enemy := node as EnemyActor
+			if _canonical_world_to_tile(enemy.global_position) == cell:
+				cell_targets.append(enemy)
+		cell_targets.sort_custom(func(a: EnemyActor, b: EnemyActor) -> bool:
+			return a.get_instance_id() < b.get_instance_id()
+		)
+		for enemy: EnemyActor in cell_targets:
+			targets.append(enemy)
+			if targets.size() >= maximum_targets:
+				return targets
+	return targets
 
 
 func _spawn_canonical_ground_field(
@@ -3124,7 +3239,8 @@ func _spawn_canonical_cast_visual(
 	origin: Vector2,
 	direction: Vector2,
 	target: EnemyActor,
-	target_position: Vector2
+	target_position: Vector2,
+	raw_geometry_cells: Variant = []
 ) -> void:
 	if not stable_skill_id.begins_with("wizard.") and not stable_skill_id.begins_with("taoist."):
 		return
@@ -3138,6 +3254,13 @@ func _spawn_canonical_cast_visual(
 		]
 	):
 		return
+	var geometry_tile_points: Array[Vector2i] = []
+	var geometry_world_points: Array[Vector2] = []
+	if raw_geometry_cells is Array:
+		for raw_cell: Variant in raw_geometry_cells:
+			if raw_cell is Vector2i:
+				geometry_tile_points.append(raw_cell)
+				geometry_world_points.append(_canonical_tile_to_world(raw_cell))
 	var visual_plan := {
 		"success": true,
 		"skill_id": stable_skill_id,
@@ -3145,6 +3268,10 @@ func _spawn_canonical_cast_visual(
 		"visual": visual_profile,
 		"visual_duration": CasterSkillVisualRegistry.animation_duration(stable_skill_id),
 		"area_radius": 72.0,
+		"canonical_geometry_contract": CASTER_GEOMETRY_VISUAL_CONTRACT_ID,
+		"geometry_origin_world": origin,
+		"geometry_tile_points": geometry_tile_points,
+		"geometry_world_points": geometry_world_points,
 	}
 	for visual_node: Node2D in CasterSkillRuntimeScript.create_cast_nodes(
 		visual_plan,
@@ -3234,6 +3361,8 @@ func _canonical_facing(direction: Vector2) -> Vector2i:
 func _canonical_facing_for_skill(skill_id: String, direction: Vector2) -> Vector2i:
 	if skill_id in ["warrior.thrusting", "warrior.half_moon", "warrior.fire_sword"]:
 		return WarriorMeleeGeometryScript.facing_tile_step(ArtSpec.direction_index(direction))
+	if skill_id in CANONICAL_WIZARD_GEOMETRY_SKILLS:
+		return CasterSpellGeometryScript.canonical_facing_from_world_direction(direction)
 	return _canonical_facing(direction)
 
 

@@ -52,6 +52,8 @@ $Suites = @{
         'tests/warrior_service_formula_test.tscn',
         'tests/warrior_skill_state_machine_test.tscn',
         'tests/caster_spell_action_timing_test.tscn',
+		'tests/wizard_geometry_visual_alignment_test.tscn',
+		'tests/game_root_wizard_geometry_integration_test.tscn',
         'tests/skill_runtime_integration_test.tscn',
         'tests/canonical_skill_production_entry_test.tscn',
         'tests/skill_progression_save_integration_test.tscn',
