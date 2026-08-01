@@ -7,6 +7,7 @@ const INPUT_METADATA_CONTRACT_ID := "gameplay.skill.input_metadata.v1"
 const WARRIOR_ATTACK_POLICY_ID := "gameplay.warrior.attack_priority.v1"
 const WARRIOR_HIT_EFFECT_POLICY_ID := "gameplay.warrior.hit_effect_fallback.v1"
 const FIRE_TOGGLE_OVERRIDE_ID := "gameplay.warrior.fire_sword.attack_toggle.user_override.v1"
+const FIRE_COOLDOWN_COMMIT_POLICY_ID := "gameplay.warrior.fire_sword.cooldown_on_legal_resolution.v1"
 const SLAYING_LAYER_OVERRIDE_ID := "gameplay.warrior.slaying.layered_proc.user_override.v1"
 
 const INTERACTION_PASSIVE := "passive"
@@ -53,8 +54,16 @@ static func metadata(skill_name_or_id: String) -> Dictionary:
 	if skill_id == "warrior.fire_sword":
 		result.merge({
 			"runtime_override_id": FIRE_TOGGLE_OVERRIDE_ID,
+			"cooldown_commit_policy_id": FIRE_COOLDOWN_COMMIT_POLICY_ID,
 			"runtime_activation": "single_attack_input_direct_melee",
 			"fallback_when_unavailable": true,
+			"fallback_priority_order": [
+				"warrior.half_moon",
+				"warrior.thrusting",
+				"normal",
+			],
+			"requires_valid_target_at_input": true,
+			"empty_swing_policy": "physical_miss_only",
 		}, true)
 	elif skill_id == "warrior.slaying_swordsmanship":
 		result.merge({
@@ -71,7 +80,8 @@ static func metadata(skill_name_or_id: String) -> Dictionary:
 			"body_mode_priority": 0,
 			"proc_rolls_per_melee_action": 1,
 			"proc_roll_eligibility": "canonical_hit_frame_valid_melee_swing",
-			"modifier_timing": "before_body_skill_formula",
+			"accuracy_timing": "before_each_target_hit_check",
+			"modifier_timing": "after_body_skill_formula_before_target_damage_commit",
 			"modifier_scope": "all_hits_of_selected_melee_action",
 			"preserves_body_action_and_effect": true,
 			"proficiency_event": "successful_slaying_proc_on_valid_melee_swing",
@@ -135,6 +145,14 @@ static func resolve_warrior_attack(context: Dictionary) -> Dictionary:
 	if bool(toggles.get("warrior.half_moon", false)):
 		if not _is_learned(learned, "warrior.half_moon"):
 			trace.append(_blocked("warrior.half_moon", "not_learned"))
+		elif current_mp < _mana_cost(
+			"warrior.half_moon",
+			int(context.get("half_moon_rank", 0))
+		):
+			# Resource state is already authoritative at input time, so do not start
+			# a half-moon body/visual that can never legally resolve. Continue the
+			# existing priority chain to thrust or normal without spending MP.
+			trace.append(_blocked("warrior.half_moon", "insufficient_mana"))
 		else:
 			var half_moon := _with_slaying_layer(
 				_selection("attack", "half_moon", "warrior.half_moon", trace),
@@ -235,6 +253,20 @@ static func resolve_warrior_hit_effect(
 	return _effect_selection(selected_body_mode, "normal", "", "", trace)
 
 
+static func fire_direct_release_consumes_cooldown(
+	body_selection: Dictionary,
+	hit_effect: Dictionary,
+	canonical_resolution: String
+) -> bool:
+	return (
+		bool(body_selection.get("direct_toggle_release", false))
+		and str(body_selection.get("mode", "")) == "fire"
+		and bool(hit_effect.get("effect_available", false))
+		and str(hit_effect.get("effect_mode", "")) == "fire"
+		and canonical_resolution in ["hit", "miss"]
+	)
+
+
 static func _selection(action: String, mode: String, skill_id: String, trace: Array[Dictionary]) -> Dictionary:
 	return {
 		"policy_id": WARRIOR_ATTACK_POLICY_ID,
@@ -247,6 +279,20 @@ static func _selection(action: String, mode: String, skill_id: String, trace: Ar
 		"attack_priority": int(ATTACK_PRIORITY.get(skill_id, 0)),
 		"fallback_trace": trace,
 	}
+
+
+static func _blocked_attack(
+	mode: String,
+	skill_id: String,
+	reason: String,
+	trace: Array[Dictionary]
+) -> Dictionary:
+	var result := _selection("blocked", mode, skill_id, trace)
+	result["reason"] = reason
+	result["effect_validation"] = "rejected_before_body_action"
+	result["target_available_at_input"] = false
+	result["passive_proc_layers"] = []
+	return result
 
 
 static func _effect_selection(
@@ -300,7 +346,8 @@ static func _with_slaying_layer(
 		"rolls_per_melee_action": 1,
 		"roll_eligibility": "canonical_hit_frame_valid_melee_swing",
 		"target_available_at_input": has_target,
-		"modifier_timing": "before_body_skill_formula",
+		"accuracy_timing": "before_each_target_hit_check",
+		"modifier_timing": "after_body_skill_formula_before_target_damage_commit",
 		"modifier_scope": "all_hits_of_selected_melee_action",
 		"does_not_replace_body_mode": true,
 		"runtime_override_id": SLAYING_LAYER_OVERRIDE_ID,

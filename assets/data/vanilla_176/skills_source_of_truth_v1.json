@@ -397,15 +397,22 @@
       "mechanics": {
         "runtime_family": "melee_proc_modifier",
         "proc_chance_by_rank": [
-          0.1,
-          0.125,
-          0.1666666667,
+          0.14285714285714285,
+          0.16666666666666666,
+          0.2,
           0.25
         ],
-        "flat_dc_bonus_by_rank": [
-          5,
-          6,
+        "proc_denominator_by_rank": [
           7,
+          6,
+          5,
+          4
+        ],
+        "proc_roll_model": "pascal_random_exclusive(denominator) == 0 once per valid melee attack action",
+        "flat_damage_bonus_by_rank": [
+          2,
+          4,
+          6,
           8
         ],
         "flat_accuracy_bonus_by_rank": [
@@ -416,9 +423,13 @@
         ],
         "damage_type": "physical",
         "defence_type": "AC",
-        "trigger_order": "after_valid_swing_before_damage_roll",
+        "accuracy_timing": "always_before_each_physical_melee_hit_check",
+        "proc_timing": "once_per_valid_melee_action_before_target_damage_commits",
+        "damage_bonus_timing": "after_each_selected_body_skill_formula",
+        "modifier_scope": "one_shared_proc_result_applies_to_all_hits_of_normal_thrust_half_moon_or_fire_action",
         "status": "project_canonical",
-        "evidence_note": "CN 1.76文字确认命中率与破坏力随等级提升；具体四档数值按项目表冻结。"
+        "source_status": "explicit_user_primary_override",
+        "evidence_note": "用户定稿表为唯一验收基准：准确常驻；每次近战攻击动作独立按1/7、1/6、1/5、1/4判定一次。触发后，该动作的每个实际命中在主体技能公式之后固定增加+2、+4、+6、+8物理伤害。"
       },
       "proficiency_trigger": {
         "event": "successful_slaying_proc_on_valid_melee_swing",
@@ -446,11 +457,12 @@
         "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
       },
       "migration_from_4b6ea4e0": {
-        "current_behavior": "数据表触发1/10、1/8、1/6、1/4；实际代码1/(7-rank)，且说明/汇总未完整体现准确加成。",
+        "current_behavior": "旧实现数值前三档错误、准确仅在触发时加入且伤害在主体倍率前叠加；已改为每动作一次判定、常驻准确及主体公式后固定增伤。",
         "issue_codes": [
           "P0_NO_PROFICIENCY_PIPELINE",
           "P1_PROC_FORMULA_CONFLICT",
-          "P1_ACCURACY_BONUS_MISSING"
+          "P1_ACCURACY_BONUS_MISSING",
+          "P1_DAMAGE_BONUS_BEFORE_BODY_FORMULA"
         ]
       },
       "required_tests": [
@@ -515,6 +527,15 @@
         "shape": "line",
         "length_tiles": 2,
         "width_tiles": 1,
+		"maximum_reach_tiles": 2.5,
+		"endpoint_tolerance_tiles": 0.5,
+		"primary_segment_reach_tiles": 1.5,
+        "maximum_targets": -1,
+        "maximum_targets_semantics": "unlimited_within_valid_geometry",
+        "target_count_policy_id": "gameplay.warrior.melee_target_count.v1",
+		"range_bonus_cap_tiles": 1.0,
+		"coordinate_space": "fractional_canonical_map_tiles_from_footpoints",
+		"raw_pixel_geometry_forbidden": true,
         "stop_on_terrain": true
       },
       "timing": {
@@ -651,7 +672,14 @@
         "shape": "project_canonical_four_target_arc",
         "primary_cell": "front_1",
         "side_cells": "three cells defined by HalfMoonArcResolver; resolver must rotate with 8-direction facing",
-        "maximum_targets": 4,
+		"relative_direction_offsets": [7, 0, 1, 2],
+		"base_reach_tiles": 1.5,
+		"endpoint_tolerance_tiles": 0.5,
+		"range_bonus_cap_tiles": 0.5,
+		"coordinate_space": "fractional_canonical_map_tiles_from_footpoints",
+        "maximum_targets": -1,
+        "maximum_targets_semantics": "unlimited_within_valid_geometry",
+        "target_count_policy_id": "gameplay.warrior.melee_target_count.v1",
         "raw_pixel_geometry_forbidden": true
       },
       "timing": {
@@ -782,11 +810,14 @@
         "shape": "line_push",
         "start_distance_tiles": 1,
         "push_distance_by_rank": [
-          1,
-          1,
-          2,
+          3,
+          3,
+          3,
           3
         ],
+        "fixed_push_distance_tiles": 3,
+        "target_reach_tiles": 1.5,
+        "direction_source": "caster_foot_to_target_foot_quantized_8",
         "stop_on_first_blocker": true
       },
       "timing": {
@@ -806,30 +837,32 @@
           0,
           0
         ],
-        "mp_consume_timing": "after_eligibility_before_push_roll"
+        "mp_consume_timing": "after_eligibility_before_atomic_path_resolution"
       },
       "mechanics": {
         "runtime_family": "level_gated_push",
+        "runtime_override_id": "gameplay.warrior.wild_rush.atomic_tile_push.v1",
         "eligibility": {
           "caster_level_must_exceed_target_level": true,
           "boss_immune": true,
           "immovable_immune": true,
           "safe_zone_forbidden": true
         },
-        "success_probability": "clamp((6 + 6 * rank + caster_level - target_level) / 20.0, 0.0, 1.0)",
+        "success_probability": "1.0_after_eligibility",
         "push_distance_by_rank": [
-          1,
-          1,
-          2,
+          3,
+          3,
+          3,
           3
         ],
+        "fixed_push_distance_tiles": 3,
         "caster_moves_into_vacated_path": true,
-        "collision_self_damage": {
-          "expression": "max(1, floor(caster.max_hp * 0.01))",
-          "status": "project_canonical",
-          "trigger": "dash path blocked after movement begins"
-        },
-        "status": "mixed_source_and_project_canonical"
+        "atomic_path_preflight_required": true,
+        "dynamic_blocker_policy": "any_other_monster_in_three_tile_corridor_cancels_all_displacement",
+        "static_obstacle_policy": "move_to_last_valid_tile_before_first_obstacle",
+        "damage_amount": 0,
+        "self_damage_amount": 0,
+        "status": "user_authorized_project_canonical_override"
       },
       "proficiency_trigger": {
         "event": "target_successfully_displaced_at_least_one_tile",
@@ -857,12 +890,12 @@
         "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
       },
       "migration_from_4b6ea4e0": {
-        "current_behavior": "当前距离3/3/4/5格、成功率(rank*4+6+等级差)/20；与经典源码参考的1/1/2/3和rank*6冲突，且缺撞墙自伤。",
+        "current_behavior": "用户于2026-07-31明确覆盖旧随机与撞墙伤害：严格低等级且非Boss目标固定推3逻辑格；其他怪物阻挡整次取消，静态障碍截停于前一合法格；人物与目标原子同步推进；技能零伤害、零自伤。",
         "issue_codes": [
-          "P0_NO_PROFICIENCY_PIPELINE",
-          "P1_WRONG_SUCCESS_FORMULA",
-          "P1_DISTANCE_OFF_BY_TWO",
-          "P1_COLLISION_SELF_DAMAGE_MISSING"
+          "USER_OVERRIDE_DETERMINISTIC_PUSH",
+          "USER_OVERRIDE_FIXED_THREE_TILE_DISTANCE",
+          "USER_OVERRIDE_ATOMIC_PATH_PREFLIGHT",
+          "USER_OVERRIDE_ZERO_DAMAGE"
         ]
       },
       "required_tests": [
@@ -926,7 +959,20 @@
         "relation": "self"
       },
       "geometry": {
-        "shape": "none_until_next_melee_hit"
+        "shape": "none_until_next_melee_hit",
+		"runtime_melee_reach_tiles": 1.5,
+		"maximum_targets": 1,
+		"range_bonus_cap_tiles": 1.0,
+		"coordinate_space": "fractional_canonical_map_tiles_from_footpoints",
+		"requires_valid_target_at_input": true,
+		"empty_swing_policy": "physical_miss_only",
+		"fallback_to_other_melee_modes": true,
+		"fallback_priority_order": [
+		  "warrior.half_moon",
+		  "warrior.thrusting",
+		  "normal"
+		],
+		"raw_pixel_geometry_forbidden": true
       },
       "timing": {
         "body_action": "cast_or_weapon_charge",
@@ -956,7 +1002,8 @@
           2.2,
           2.6
         ],
-        "consume_on": "next_valid_melee_damage_attempt",
+		"consume_on": "next_valid_melee_damage_attempt",
+		"direct_toggle_cooldown_commit": "only_after_legal_hit_or_miss_resolution",
         "auto_cast": false,
         "refresh_existing_charge": "replace_and_restart_duration",
         "stack_count_max": 1,

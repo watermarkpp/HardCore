@@ -43,8 +43,9 @@ static func cells(definition: Dictionary, origin: Vector2i, facing: Vector2i, ta
 				for x in range(-radius, radius + 1):
 					result.append(center + Vector2i(x, y))
 		"project_canonical_four_target_arc":
-			var left := Vector2i(direction.y, -direction.x)
-			result = [origin + direction, origin + left, origin - left, origin - direction]
+			var direction_index := _direction_index(direction)
+			for relative_offset: int in [7, 0, 1, 2]:
+				result.append(origin + _direction_step(direction_index + relative_offset))
 		"hexagon_boundary_approximated_on_8dir_grid":
 			for y in range(-1, 2):
 				for x in range(-1, 2):
@@ -54,3 +55,21 @@ static func cells(definition: Dictionary, origin: Vector2i, facing: Vector2i, ta
 			if shape not in ["none", "none_until_next_melee_hit", "targeted", "targeted_light", "projectile", "sky_strike_targeted", "random_valid_map_destination", "nearest_valid_adjacent_tile", "line_push"]:
 				push_warning("未实现的技能几何形状：%s" % shape)
 	return result
+
+
+static func _direction_index(direction: Vector2i) -> int:
+	var steps: Array[Vector2i] = [
+		Vector2i.DOWN, Vector2i(-1, 1), Vector2i.LEFT, Vector2i(-1, -1),
+		Vector2i.UP, Vector2i(1, -1), Vector2i.RIGHT, Vector2i(1, 1),
+	]
+	var normalized := normalized_facing(direction)
+	var index := steps.find(normalized)
+	return index if index >= 0 else 0
+
+
+static func _direction_step(direction_index: int) -> Vector2i:
+	var steps: Array[Vector2i] = [
+		Vector2i.DOWN, Vector2i(-1, 1), Vector2i.LEFT, Vector2i(-1, -1),
+		Vector2i.UP, Vector2i(1, -1), Vector2i.RIGHT, Vector2i(1, 1),
+	]
+	return steps[posmod(direction_index, steps.size())]

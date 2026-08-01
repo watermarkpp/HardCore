@@ -35,8 +35,22 @@ func _run() -> void:
 
 	for enemy: EnemyActor in enemies:
 		assert(enemy.collision_layer == 4 and enemy.collision_mask == 3, "怪物必须保留world/player硬碰撞并关闭enemy互撞")
-		var minimum_player_distance := ArtSpec.PLAYER_COLLISION_RADIUS + enemy.collision_radius + 10.0
-		assert(enemy.global_position.distance_to(player.global_position) >= minimum_player_distance, "怪物进入玩家近战安全环")
+		var player_offset := player.global_position - enemy.global_position
+		var minimum_player_distance := EnemyActor.directional_footprint_contact_distance(
+			enemy.collision_radius,
+			ArtSpec.PLAYER_COLLISION_RADIUS,
+			player_offset,
+			10.0,
+		)
+		assert(
+			player_offset.length() >= minimum_player_distance - 0.75,
+			"怪物进入玩家2:1脚印安全间隙",
+		)
+		assert(
+			EnemyActor.logical_tile_distance_for_world_offset(player_offset)
+			<= EnemyActor.PLAYER_MELEE_CONTACT_REACH_TILES + 0.0001,
+			"普通怪物停在玩家1.5格近战合同之外",
+		)
 	for first in range(enemies.size()):
 		for second in range(first + 1, enemies.size()):
 			var minimum_enemy_distance := enemies[first].collision_radius + enemies[second].collision_radius - 0.75

@@ -1,5 +1,77 @@
 # Codex 精简上下文快照
 
+## 2026-08-01 Android v56：半月蓝量门槛与野蛮冲撞目标释放
+
+- 职业技能提交 `76a977ee` 已作为集成提交 `5b68dfa9` 接入。半月在攻击输入时 MP 已不足，会沿既有优先级直接降级到刺杀或普通攻击，主体动作、视觉、范围与效果保持一致且不扣半月 MP；若输入后才耗尽 MP，则保留已启动动作并使用既有命中帧晚期降级。
+- 新增稳定合同 `gameplay.warrior.wild_rush.original_locked_target_release.v1`：野蛮冲撞虽为方向技能，释放快照仍保留输入阶段已验证的原目标实例 ID，使现有 GameRoot 目标链能实际执行冲撞；其他方向/区域技能仍不追踪目标。集成定向相关链 `8/8`、完整 Warrior 套件 `21/21` 通过。236/240 头盔人工稿、三份怪物脚点合同及 HUD 哈希均保持冻结值不变。
+- Android 固定构建提交为 `a33a6572`，APK 为 `outputs/hardcore/HardCore-v56-warrior-mana-rush-target-debug.apk`，大小 `244,365,425` 字节，SHA-256 `AF7C445EDC9978A5A5C1DC24A2C3B08D9FA23DE5EBC4C63FA9796C0666BE8731`。包信息为 `versionCode=56`、`versionName=1.17.20-warrior-mana-rush-target`、`HardCore`、`arm64-v8a`，v2/v3 签名与运行时资源探针通过；已在 HONOR 90（REA-AN00）保留数据覆盖安装并启动，手机回读版本、进程与前台 Activity 正常，启动日志无 Godot 脚本错误或 Android 崩溃。
+
+## 2026-08-01 Android v55：怪物占位面积近战命中
+
+- 用户确认近战采用“中心负责瞄准、面积负责命中”：自动锁定与强制转向仍瞄准怪物人工脚点；最终资格不再要求技能区域覆盖脚点中心，只要固定技能面积与怪物现有 2:1 物理占位椭圆接触或重叠即进入准确/伤害判定。普通怪与 Boss 直接复用各自 `collision_radius`，未修改人工脚点、碰撞半径、技能距离/宽度、目标数量、伤害、准确、动画或 UI。
+- 职业技能提交 `716263321313b34f3d1986a023042888e681a17c` 已作为集成提交 `3f4bd4f1` 接入，新增稳定合同 `gameplay.warrior.melee_footprint_intersection.iso_polygon_sat.v1` 与 `diagnostic.warrior.melee_footprint_candidate.v1`，复用 `world.actor_footprint.iso_ellipse.v1`。面积相交使用确定性凸多边形 SAT，边缘接触算命中；半月跨主/侧扇区与刺杀跨 1.5 格主/次段时均主区优先且只归类一次。
+- 集成接线提交 `6ba697ce` 使普通、烈火、半月与刺杀的主/次候选全部读取怪物实时脚点和 `collision_radius`；逐刀日志同时保留旧中心点判定与最终面积判定。新增真实移动输入保持用例：刺杀目标中心超过 2.5 格、仅身体边缘接触末端时，旧点判定拒绝、新面积判定接受并成功扣血。两组定向回归 `14/14`、完整 Warrior 套件 `21/21` 通过。
+- 冻结对象零变化：`item_236.json` / `item_240.json` SHA-256 仍为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC` / `81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`；三份怪物脚点合同仍为 `DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`；冻结 HUD 仍为 `5944EE47CCA2C262DEC08FB8213FF505993B60FF2AC13BC924069E4DF38EF3D7`。
+- Android 固定构建提交为 `6c405c84`，APK 为 `outputs/hardcore/HardCore-v55-melee-footprint-hitbox-debug.apk`，大小 `244,361,329` 字节，SHA-256 `2D9129134330AC819F16333A32E73C1A8F195AEC18A24238CBA61353BAD7BFC4`。包信息为 `versionCode=55`、`versionName=1.17.19-melee-footprint-hitbox`、`HardCore`、`arm64-v8a`，v2/v3 签名与运行时资源探针通过；已在 HONOR 90（REA-AN00）保留数据覆盖安装并启动，手机回读版本、进程与前台 Activity 正常，启动日志无 Godot 脚本错误或 Android 崩溃。
+
+## 2026-08-01 Android v54：近战地图格八方向统一修正
+
+- 手机 v53 逐刀诊断已锁定根因：复现角度中人物到目标的浮点地图格差值约为 `(-0.56,-1.31)`、距离 `1.31` 格；旧 screen/projected 45° 量化错误选为 index 5，导致刺杀横向值 `0.56 > 0.50` 而连续 `12/12` 被 `OUTSIDE_ATTACK_LANE` 拒绝。按方案 A 的地图格坐标量化应为 index 4，前向约 `0.935`、横向约 `-0.375`，属于合法第一格；该证据排除了准确 MISS 与扣血提交失败。
+- 职业技能修正 `7bef5aedd852a7563fcaf6ed0e6bd0c0160ecfec` 已作为集成提交 `f1a69a4c` 接入，新增 `gameplay.professions.combat_direction_space.iso_64x32_tile_8dir.v1` 与 `gameplay.warrior.melee_release_facing.canonical_tile_8dir.v2`。运行时现在固定使用“世界脚点差→浮点地图格差→地图格八方向→视觉/世界投影”的唯一链路；旧 screen/projected 量化仅保留为诊断对照。
+- 集成接线提交 `082c93fd` 使输入自动转向、攻击请求、释放帧几何、普通/刺杀/半月/烈火候选筛选及诊断全部复用同一个 authoritative `direction_index`；攻击动作已开始时的拒绝输入不再改写人物朝向。法师/道士的魔法锁定路径未改。
+- 手机固定死角已加入非 test mode 的端到端回归；近战方向/诊断/几何/移动锁定/状态机/正式技能入口等相关回归两组共 `14/14` 通过。236/240 头盔人工草稿、三份怪物脚点合同与冻结 HUD 的 SHA-256 均保持开工值不变。
+- APK 从固定提交 `082c93fd` 的隔离工作树导出为 `outputs/hardcore/HardCore-v54-melee-tile-direction-fix-debug.apk`，大小 `244,357,233` 字节，SHA-256 `F5C67BA082BA223A53E5C9A12686A81D70AFE47307842C92291CA87B218869AA`。包信息为 `versionCode=54`、`versionName=1.17.18-melee-tile-direction-fix`、`HardCore`、`arm64-v8a`；v2/v3 签名通过。已对 HONOR 90（REA-AN00）执行保留数据覆盖安装并启动，手机回读版本正确、进程与前台 Activity 正常，启动日志无 Godot 脚本错误或 Android 崩溃。
+
+## 2026-08-01 Android v53：方案 A 近战逐刀诊断与角度边界证据
+
+- 职业技能永久工作树提交 `ad910399` / `4f2d2f20` 已分别作为集成提交 `58c03259` / `6b76ed85` 接入；新增只读稳定合同 `diagnostic.warrior.melee_candidate.v1`、`diagnostic.warrior.melee_direction_loop.v1`、`diagnostic.warrior.melee_angle_quantization.v1`。精确八方向的编号与投影闭环全部一致，但 fractional tile 边界存在已证明的策略差异：`delta=(1,0.5)` 当前投影后 screen-45 量化为 SE/index 7，方案 A 的 tile-space-45 量化为 S/index 0；运行时会逐刀同时记录两种结果，不提前改变游戏判定。
+- 集成接线提交 `b643c215` 新增 `combat.melee.runtime_diagnostic.jsonl.v1`：每次真实近战从输入、锁定、人物/目标实时脚点、输入/释放八向、动画行、候选逐项拒绝码、准确/敏捷/随机点、正式扣血提交到最终结果共用一个 `action_id`。结果明确区分 `GEOMETRY_NO_ELIGIBLE_TARGET`、`CANONICAL_SKILL_REJECTED`、`ACCURACY_MISS`、`DAMAGE_COMMIT_FAILED` 与 `HIT_COMMITTED`；只增加观测，不改范围、伤害、命中率或冻结数据。
+- 近战定向、锁定回退、移动攻击、攻击时序、战士状态机、正式技能运行时、八方向/边界角度及非 test mode 的真实命中随机链回归 `13/13` 通过。236/240 头盔草稿、三份怪物脚点合同与冻结 HUD 的 SHA-256 继续分别为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`、`81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`、`DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`、`5944EE47CCA2C262DEC08FB8213FF505993B60FF2AC13BC924069E4DF38EF3D7`，与本轮开工记录一致。
+- APK 从固定提交 `b643c215e71542fe71725259663e30edcf448ea4` 的全新隔离工作树导出为 `outputs/hardcore/HardCore-v53-melee-diagnostic-a-debug.apk`，大小 `244,352,944` 字节，SHA-256 `A36D719BC2C5AB4501D6355F7ED74506BBA94CBE809678A6D34379D449FD399A`。包信息为 `versionCode=53`、`versionName=1.17.17-melee-diagnostic-a`；v2/v3 签名、包名、应用名、arm64 与运行时资源探针通过。构建完成时 ADB 未枚举到设备，尚未覆盖安装。
+
+## 2026-07-31 Android v52：移动近战同一坐标系与攻杀定稿表
+
+- 怪物工作树提交 `2c300b25` 已作为集成提交 `d747e675` 接入，稳定合同 `monster.melee_player_contact.iso_footprint_fractional_tile.v1` 取消普通近战怪物用统一屏幕欧氏圆停止追击的旧逻辑。旧 48px 接敌距离换算正式 64×32 等距格后为 S/N `1.5`、E/W `0.75`、四斜向 `1.590990`，会让斜向怪物停在玩家 1.5 格攻击范围外；新逻辑按正式浮点地图格与 2:1 脚印共同约束。八方向真实追击最终距离 S/N 约 `1.1603`、E/W 约 `0.7459`、四斜向约 `1.3267`，均不超过 1.5 格，至少保留 10px 脚印间隙且稳定后连续 8 帧零抖动。155px 远程怪物未进入该合同；人工怪物脚点、碰撞外形和 AI 数值未改。
+- 职业提交 `1ac5bf64` 与集成接线 `4ffb5c4b` 新增 `gameplay.warrior.melee_release_facing.locked_input_8dir.v1`：玩家输入帧完成自动转向后，近战动画与命中扇区在整次动作中共用同一八方向；命中帧仍刷新人物/怪物实时脚点，但不会只让伤害代码暗中转向。法师、道士单体投射物继续按释放帧实时追踪。烈火冷却、MP不足或目标失效时按烈火→半月→刺杀→普通降级，冷却只在合法烈火 HIT/MISS 后建立，冷却期间不再锁死攻击键。
+- 攻杀定稿提交 `c91a82b4` 已作为集成提交 `a07ce8d9` 接入，跨系统伤害接线为 `2d8a64db`，稳定合同升级为 `gameplay.warrior.melee_modifiers.v2`。0/1/2/3 级分别要求人物等级 `19/19/22/24`、本级修炼值 `0/4000/8000/16000`；常驻准确 `+0/+1/+2/+3`；每次合法近战动作只掷一次 `1/7、1/6、1/5、1/4`，触发后在普通/刺杀/半月/烈火各自公式和取整完成后，对该动作内每个实际命中固定追加 `+2/+4/+6/+8`，多目标循环不得重新掷骰。技能 SOT SHA-256 为 `1FDF28D3C575D18D2E7E0F875B008EB4F6F719752E4974CBCA399C66C62C7C2C`，来源优先级审计全部通过。
+- 集成回归结果：攻杀/释放/烈火定向 `10/10`、Warrior `21/21`、Monster `16/16`、最终跨系统 Critical `78/78`。三份怪物脚点合同哈希仍为 `DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`；236/240 头盔草稿与冻结 HUD 哈希保持开工值不变。
+- APK 从固定提交 `61765d516981e89dead20f27edbbd8c616e8c1b0` 的全新隔离工作树导出为 `outputs/hardcore/HardCore-v52-moving-melee-slaying-debug.apk`，大小 `244,332,060` 字节，SHA-256 `CB1A30BD47D421D3E5A24FEDEB010F4769649EAA42CCD96D208149E5FDCBF679`。包信息为 `versionCode=52`、`versionName=1.17.16-moving-melee-slaying`；v2/v3 签名、包名、应用名、arm64 架构及运行时资源探针通过。构建时 ADB 未枚举到设备，因此尚未覆盖安装。
+
+## 2026-07-31 Android v51：近战锁定与实际受击对象解耦
+
+- 集成运行时提交 `23fb3961` 新增稳定策略 `combat.melee_lock.facing_priority_nonexclusive.v1`：攻击锁定只负责自动朝向和目标优先级，不再独占伤害许可。普通攻击与烈火仍为单目标；锁定目标在当前攻击几何内时优先命中，锁定目标在范围外时改为命中当前刀锋范围内最近的怪物。烈火仍禁止真正空放。
+- 职业技能提交 `40a3ce3c` 已作为集成提交 `bc0486e3` 接入，稳定合同 `gameplay.warrior.melee_target_count.v1` 明确普通攻击/烈火最多 1 个目标，刺杀/半月不设目标数上限；每只进入既定刺杀直线或半月扇区的怪物独立执行命中、MISS 与伤害判定，范围、宽度、角度和伤害公式均未扩大。技能 SOT 运行时合同 SHA-256 为 `DF2199E337F4EDD087CC060C0B59DE1C5839C309FC953EB0DCBD77FAC0ED4FBC`，来源优先级审计已授权且通过。
+- 当前集成 Warrior 完整套件 `21/21` 通过，包含新增远端锁定目标与近端实际受击对象回退、移动释放、普通/烈火单体及刺杀/半月多目标回归。三份怪物脚点合同、236/240 头盔人工草稿与冻结 HUD 的 SHA-256 均保持不变。
+- APK 从固定提交 `1571db9d0ee7ed0d80b7cb48d7fb12de2c18f673` 的全新隔离工作树导出：`outputs/hardcore/HardCore-v51-melee-lock-impact-debug.apk`，大小 `244,327,964` 字节，SHA-256 `FF44C801ADF50D74638D54A6FF450AAEA87AB8CDF071B774A9A78628F3CE0137`。包信息为 `versionCode=51`、`versionName=1.17.15-melee-lock-impact`；签名、包名、架构和运行时资源自动验证通过。构建后手机在 ADB 大包传输期间断开，覆盖安装待设备重新枚举后继续。
+
+## 2026-07-31 Android v50：全职业实时命中/发射几何
+
+- 职业技能提交 `5d383b4b` 已作为集成提交 `9ba353cf` 接入，跨系统运行时接线为 `461df415`，Android 固定构建提交为 `d7717832`。新增稳定合同 `gameplay.professions.combat_release_geometry.live_footpoint.v1`：攻击或技能在输入时只保存原目标实例 ID 与自动转向后的动画方向，在实际命中/发射帧读取人物和原目标的实时脚点；动画中途不切方向，动作结束后仍恢复移动输入。
+- 普通攻击、刺杀、半月和烈火的主目标禁止在前摇期间静默换成附近怪物；原目标实时越出既有合法范围才真正挥空。法师、道士的单体直伤与投射物沿用相同原目标/实时脚点规则；方向、目标区域与自身区域技能保留输入方向，不会被改造成追踪技能。既有命中率、脚点、范围、伤害、投射物碰撞和技能资源规则均未改动。
+- 完整关键回归 `76/76` 通过；覆盖目标跨八方向边界、人物/目标同时移动、原目标消失、旁边存在诱饵目标、真实超距、战士四种近战模式以及法师/道士释放几何。236/240 头盔草稿、三份怪物脚点合同与 `scripts/hud.gd` 的 SHA-256 均与施工前一致。
+- Android 包为 `versionCode=50`、`versionName=1.17.14-live-hit-geometry`、包名 `com.personal.mafaoffline`、应用名 `HardCore`。APK 从固定提交的全新隔离工作树导出为 `outputs/hardcore/HardCore-v50-live-hit-geometry-debug.apk`，大小 `244,327,964` 字节，SHA-256 `81567059C29FEBD47039292332C00C0C65E0EFB0F6465991F8F585968616D648`；结构与签名验证通过。已对 HONOR 90（REA-AN00）执行保留数据覆盖安装并启动，手机端回读版本正确，进程与前台活动正常，启动日志无 Godot 脚本错误或 Android 崩溃。
+
+## 2026-07-31 Android v49：野蛮冲撞原子推移测试包
+
+- Android 版本提交为 `975eb257e990ce1866643d44a8ae70908d040ad5`：`versionCode=49`、`versionName=1.17.13-wild-rush-atomic`，包名继续为 `com.personal.mafaoffline`，应用名继续为 `HardCore`。APK 从该固定提交的全新隔离工作树导出为 `outputs/hardcore/HardCore-v49-wild-rush-atomic-debug.apk`，大小 `244,319,577` 字节，SHA-256 `58BBE5FDF78CB01B97B61CA34A5AAAA8D3B652386F6B6AB4F472B4DE1DCF3975`。
+- APK v2/v3 签名、`arm64-v8a`、minSdk 24、targetSdk 36、12 个编译脚本和运行时资源探针通过。已对连接的 HONOR 90（REA-AN00）执行保留数据覆盖安装并启动；手机端回读版本正确，前台活动为 `GodotAppLauncher`，启动后日志未发现 Godot 脚本错误或 Android 崩溃。
+
+## 2026-07-31 野蛮冲撞三格原子推移
+
+- 职业技能永久工作树提交 `c3efe96c` 已作为集成提交 `c917963a` 接入，跨系统游戏运行时接线提交为 `9038b225`。稳定合同为 `gameplay.warrior.wild_rush.atomic_tile_push.v1`；技能 SOT 运行时合同 SHA-256 更新为 `34634C4ED2A3519A98F32CF35D8299D3A86A668430061BD220E1F80A900F4024`，原始授权 ZIP 证据哈希不变，来源优先级审计通过。
+- 目标必须是人物 `1.5` 逻辑格内、等级严格低于人物的存活普通怪物；Boss、不可移动、同级/高级、安全区内或超距目标均拒绝。已有锁定目标时禁止静默换成邻近怪物；无合法目标不启动动作、不扣 MP、不进入冷却。资格通过后不再掷随机成功率。
+- 推动方向只由人物脚点到怪物脚点的真实浮点地图格连线量化为八方向，忽略输入朝向；人物和怪物保持原间距同步移动最多固定 `3` 格。完整三格走廊内存在第二只存活怪物时技能照常发动但双方零位移；静态障碍位于第 1/2/3 格时分别移动 0/1/2 格，无障碍移动 3 格。双方完整碰撞脚印会在写入位置前统一预检，禁止只移动其中一方。
+- 野蛮冲撞不造成目标伤害或自身伤害；被动态/静态阻挡时仍按有效发动提交资源与冷却，但只有实际移动至少 1 格才增加熟练度。旧 `50px` 位移、随机成功率及 `path_blocked_after_start` 像素阻挡字段已退出该技能链。
+- 集成 Warrior 完整套件 `18/18`、最终定向回归 `3/3`、来源优先级审计全部通过。冻结对象零变化：236/240 头盔草稿、三份怪物脚点合同及人物脚点合同 SHA-256 均与开工记录一致。
+
+## 2026-07-31 战士近战浮点逻辑格范围
+
+- 职业技能提交 `dac5da83`、等距朝向修正 `3379036b` 已分别作为集成提交 `dbd0adba`、`c92d2b43` 接入；游戏主体接线提交为 `bb7dc7e5`。新增稳定合同 `gameplay.warrior.melee_geometry.fractional_tile.v1`，所有近战资格只读取人物/怪物实体脚点并转换为浮点正式地图格，不再用屏幕像素距离判定。
+- 正式范围为：普通攻击与烈火 `1.5` 格单目标；半月 `1.5` 格、相对方向 `[7,0,1,2]` 四扇区、最多 4 目标；刺杀 `2.5` 格、宽 1 格直线、前段/末段各最多 1 目标。0.5 格只作为长度容错，不增加刺杀第三目标格、半月第二圈、宽度、角度或最大目标数。未来范围加成采用加法并封顶：普通/烈火/刺杀最多 `+1.0` 格，半月最多 `+0.5` 格。
+- 烈火开启后不再降级为半月、刺杀或普通攻击。无合法 `1.5` 格目标、冷却中或资源不足时，输入在动作前拒绝，不播放、不扣费、不新增冷却、不训练且不进入攻击队列；只有已经进入合法物理命中判定的 HIT 或 MISS 才消费烈火。攻杀仍是一刀一次的全局近战概率层。
+- 技能 SOT 运行时合同 SHA-256 更新为 `8AFF4FBC23E3DD2A72732F29825B78B2EE2A4A374B6A0F2AB93ED378ED59B63E`，原始授权 ZIP 证据哈希保持不变。职业技能专项 9/9、集成 Warrior 完整套件 18/18 通过。
+- 冻结对象零变化：`item_236.json` / `item_240.json` 仍为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC` / `81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`；三份怪物脚点合同仍为 `DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+
 ## 2026-07-31 独立攻击锁定与逐次攻击输入
 
 - 集成运行时新增 `combat.attack_lock.tile_radius.v1`：攻击锁定只使用正式地图格坐标，按八方向网格的 Chebyshev 距离限制在角色周围 `10` 格。自动锁定默认开启；无锁定时，点击或按住普通攻击会从四周合法怪物中选择最近目标；已有目标时，即使出现更近怪物也保持原锁定，并在每次攻击输入时强制转向。目标死亡、失效或越过 `10` 格才释放。

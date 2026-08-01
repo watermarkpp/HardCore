@@ -71,12 +71,12 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 		"slaying_proc_table_exact":
 			return _floats_equal(
 				_support.rank_effect_values(skill_id, "success_probability"),
-				[0.1, 0.125, 1.0 / 6.0, 0.25]
+				[1.0 / 7.0, 1.0 / 6.0, 1.0 / 5.0, 1.0 / 4.0]
 			) and _support.seeded_effect_outcomes(
 				skill_id, 0, {"force_proc": false, "force_no_proc": false}
 			)
 		"slaying_dc_bonus_exact":
-			return _support.rank_effect_values(skill_id, "flat_dc_bonus") == [5, 6, 7, 8]
+			return _support.rank_effect_values(skill_id, "flat_damage_bonus") == [2, 4, 6, 8]
 		"slaying_accuracy_bonus_exact":
 			return _support.rank_effect_values(skill_id, "flat_accuracy_bonus") == [0, 1, 2, 3]
 		"slaying_training_only_on_proc":
@@ -120,28 +120,47 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 			var equal := _support.execute(skill_id, 3, {"caster_level": 40, "target_level": 40})
 			return lower.accepted and not equal.accepted
 		"wild_rush_probability_formula":
-			var rush := _support.execute(skill_id, 2, {"caster_level": 40, "target_level": 35})
-			return (
-				is_equal_approx(float(rush.effects[0].success_probability), 1.0)
-				and _support.seeded_effect_outcomes(skill_id, 0, {
-					"caster_level": 40, "target_level": 39,
-					"force_success": false, "force_failure": false,
+			for rank in range(4):
+				var rush := _support.execute(skill_id, rank, {
+					"caster_level": 40,
+					"target_level": 39,
+					"force_failure": true,
 				})
-			)
+				if not rush.effect_success or not is_equal_approx(
+					float(rush.effects[0].success_probability), 1.0
+				):
+					return false
+			return true
 		"wild_rush_distance_by_rank":
 			return _support.rank_effect_values(
 				skill_id, "push_distance_tiles", {"caster_level": 40, "target_level": 1}
-			) == [1, 1, 2, 3]
+			) == [3, 3, 3, 3]
 		"wild_rush_collision_self_damage":
-			var collision := _support.execute(skill_id, 3, {
-				"path_blocked_after_start": true, "caster_max_hp": 1000,
+			var immediate_wall := _support.execute(skill_id, 3, {
+				"resolved_push_distance_tiles": 0,
 			})
-			return not collision.effect_success and collision.effects[1].amount == 10
+			var partial_wall := _support.execute(skill_id, 3, {
+				"resolved_push_distance_tiles": 2,
+			})
+			var monster_blocked := _support.execute(skill_id, 3, {
+				"resolved_push_distance_tiles": 3,
+				"dynamic_blocker_in_corridor": true,
+			})
+			return (
+				immediate_wall.accepted
+				and not immediate_wall.effect_success
+				and immediate_wall.effects.size() == 1
+				and immediate_wall.effects[0].self_damage_amount == 0
+				and partial_wall.effect_success
+				and partial_wall.effects[0].resolved_push_distance_tiles == 2
+				and not monster_blocked.effect_success
+				and monster_blocked.effects[0].resolved_push_distance_tiles == 0
+			)
 		"wild_rush_boss_immune":
 			return not _support.execute(skill_id, 3, {"target_is_boss": true}).accepted
 		"wild_rush_training_only_on_displacement":
-			var moved := _support.execute(skill_id, 3, {"force_success": true})
-			var failed := _support.execute(skill_id, 3, {"force_success": false, "force_failure": true})
+			var moved := _support.execute(skill_id, 3, {"resolved_push_distance_tiles": 1})
+			var failed := _support.execute(skill_id, 3, {"resolved_push_distance_tiles": 0})
 			return not moved.proficiency_event.is_empty() and failed.proficiency_event.is_empty()
 		"fire_sword_never_auto_casts":
 			return not bool(_support.execute(skill_id, 3).effects[0].auto_cast)

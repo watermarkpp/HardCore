@@ -42,6 +42,7 @@ $Suites = @{
 		'tests/skeleton_spirit_boss_test.tscn',
 		'tests/corpse_king_boss_test.tscn',
 		'tests/crowd_grounding_test.tscn',
+		'tests/monster_melee_contact_geometry_test.tscn',
 		'tests/placeholder_attack_animation_test.tscn'
 	)
     warrior = @(
@@ -57,6 +58,9 @@ $Suites = @{
         'tests/warrior_client_art_test.tscn',
         'tests/skill_combat_profile_test.tscn',
         'tests/warrior_attack_timing_test.tscn',
+		'tests/combat_release_geometry_test.tscn',
+		'tests/live_attack_resolution_test.tscn',
+		'tests/melee_lock_fallback_test.tscn',
         'tests/warrior_visual_test.tscn',
         'tests/class_combat_test.tscn',
         'tests/mobile_targeting_test.tscn',
