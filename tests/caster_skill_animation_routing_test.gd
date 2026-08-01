@@ -40,8 +40,17 @@ func _ready() -> void:
 	var lightning_player := AnimationPlayerScript.new()
 	add_child(lightning_player)
 	assert(lightning_player.configure("wizard.lightning"))
-	assert(lightning_player.scale == Vector2.ONE)
+	var lightning_render := CasterSkillVisualRegistry.render_policy(
+		"wizard.lightning"
+	)
+	assert(
+		lightning_render.get("presentation_contract", "")
+		== "skills.wizard.lightning.slender_axis.v1"
+	)
+	assert(lightning_player.scale.is_equal_approx(Vector2(0.62, 1.0)))
 	assert(lightning_player.frame_count() == 6)
+	assert(lightning_player.fitted_visual_bounds().size.x <= 316.0 * 0.62 + 0.001)
+	assert(lightning_player.fitted_visual_bounds().size.y == 997.0)
 	lightning_player.free()
 
 	var invalid_projectile := SkillProjectile.new()
@@ -151,7 +160,7 @@ func _ready() -> void:
 	target.free()
 	print(
 		"CASTER_SKILL_ANIMATION_ROUTING_PASS: exact direction thresholds, "
-		+ "source-pixel rendering, specialized roles, fixed lightning, "
+		+ "primary-pixel rendering, slender-axis lightning, specialized roles, "
 		+ "five-tile hellfire, primary fire wall and two-phase teleport"
 	)
 	get_tree().quit(0)

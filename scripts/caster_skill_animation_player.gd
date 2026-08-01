@@ -89,7 +89,11 @@ func configure(
 	elif _desired_extent > 0.0:
 		scale = Vector2.ONE * (_desired_extent / _native_extent)
 	else:
-		scale = Vector2.ONE * maxf(0.001, float(render.get("source_scale", 1.0)))
+		var source_scale := maxf(0.001, float(render.get("source_scale", 1.0)))
+		scale = Vector2(
+			source_scale * maxf(0.001, float(render.get("source_scale_x", 1.0))),
+			source_scale * maxf(0.001, float(render.get("source_scale_y", 1.0)))
+		)
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	current_frame_index = 0
 	_elapsed = 0.0
