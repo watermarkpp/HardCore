@@ -27,6 +27,10 @@ var _hellfire_frame_count := 0
 var _hellfire_finished := false
 var _hellfire_step_seconds := 0.05
 var _hellfire_step_distance := 25.0
+var _geometry_world_offsets: Array[Vector2] = []
+var _hellfire_emission_offsets: Array[Vector2] = []
+var _desired_sprite_extent := 0.0
+var _desired_sprite_footprint := Vector2.ZERO
 
 
 func setup(
@@ -36,7 +40,8 @@ func setup(
 	lifetime_value := 0.8,
 	direction_value := Vector2.DOWN,
 	target: Node2D = null,
-	requested_phase_id := ""
+	requested_phase_id := "",
+	visual_geometry_context: Dictionary = {}
 ) -> void:
 	global_position = position_value.round()
 	skill_id = ProfessionRules.skill_id(source_skill_id)
@@ -45,6 +50,16 @@ func setup(
 	lifetime = maxf(0.1, lifetime_value)
 	direction = direction_value.normalized() if direction_value.length_squared() > 0.0 else Vector2.DOWN
 	target_node = target
+	_desired_sprite_extent = maxf(
+		0.0,
+		float(visual_geometry_context.get("desired_sprite_extent", 0.0))
+	)
+	_desired_sprite_footprint = visual_geometry_context.get(
+		"desired_sprite_footprint", Vector2.ZERO
+	)
+	for raw_offset: Variant in visual_geometry_context.get("geometry_world_offsets", []):
+		if raw_offset is Vector2:
+			_geometry_world_offsets.append(raw_offset)
 
 
 func _ready() -> void:
@@ -107,7 +122,14 @@ func _process(delta: float) -> void:
 
 func _install_single() -> void:
 	var sprite := AnimationPlayerScript.new()
-	if not sprite.configure(skill_id, direction, 0.0, null, phase_id):
+	if not sprite.configure(
+		skill_id,
+		direction,
+		_desired_sprite_extent,
+		null,
+		phase_id,
+		_desired_sprite_footprint
+	):
 		sprite.queue_free()
 		return
 	add_child(sprite)
@@ -123,14 +145,41 @@ func _install_hellfire_trail(render: Dictionary) -> void:
 		0.001,
 		float(render.get("trajectory_step_ms", 50)) / 1000.0
 	)
-	_hellfire_step_distance = (
-		float(render.get("trajectory_dominant_axis_pixels_per_second", 500.0 / 0.9))
-		* _hellfire_step_seconds
-	)
-	_hellfire_total_emissions = maxi(1, ceili(radius / _hellfire_step_distance))
+	if not _geometry_world_offsets.is_empty():
+		_hellfire_step_distance = maxf(
+			0.001,
+			float(render.get(
+				"trajectory_dominant_axis_pixels_per_second", 500.0 / 0.9
+			)) * _hellfire_step_seconds
+		)
+		var endpoint: Vector2 = _geometry_world_offsets.back()
+		var dominant_distance := maxf(absf(endpoint.x), absf(endpoint.y))
+		_hellfire_total_emissions = maxi(
+			1,
+			ceili(dominant_distance / _hellfire_step_distance)
+		)
+		for sample_index: int in range(_hellfire_total_emissions):
+			_hellfire_emission_offsets.append(
+				endpoint * (
+					float(sample_index + 1) / float(_hellfire_total_emissions)
+				)
+			)
+	else:
+		_hellfire_step_distance = (
+			float(render.get("trajectory_dominant_axis_pixels_per_second", 500.0 / 0.9))
+			* _hellfire_step_seconds
+		)
+		_hellfire_total_emissions = maxi(1, ceili(radius / _hellfire_step_distance))
 	for frame_index: int in range(_hellfire_frame_count):
 		var sprite := AnimationPlayerScript.new()
-		if not sprite.configure(skill_id, direction, 0.0, false, phase_id):
+		if not sprite.configure(
+			skill_id,
+			direction,
+			_desired_sprite_extent,
+			false,
+			phase_id,
+			_desired_sprite_footprint
+		):
 			sprite.queue_free()
 			continue
 		sprite.set_manual_frame(frame_index)
@@ -159,8 +208,15 @@ func _advance_hellfire_trail() -> void:
 		if int(_hellfire_records[index].get("age", 0)) >= _hellfire_frame_count:
 			_hellfire_records.remove_at(index)
 	if _hellfire_emissions < _hellfire_total_emissions:
-		var travelled := minf(radius, float(_hellfire_emissions + 1) * _hellfire_step_distance)
-		_hellfire_records.push_front({"position": direction * travelled, "age": 0})
+		var emission_position := (
+			_hellfire_emission_offsets[_hellfire_emissions]
+			if _hellfire_emissions < _hellfire_emission_offsets.size()
+			else direction * minf(
+				radius,
+				float(_hellfire_emissions + 1) * _hellfire_step_distance
+			)
+		)
+		_hellfire_records.push_front({"position": emission_position, "age": 0})
 		_hellfire_emissions += 1
 	_update_hellfire_sprites()
 	_hellfire_finished = (

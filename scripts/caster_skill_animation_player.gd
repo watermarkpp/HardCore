@@ -18,6 +18,10 @@ var _loop := false
 var _manual_mode := false
 var _native_extent := 1.0
 var _desired_extent := 0.0
+var _desired_footprint := Vector2.ZERO
+var _anchor_policy := "top_left_from_world_anchor"
+var _sequence_bounds := Rect2()
+var _sequence_anchor_rebase := Vector2.ZERO
 
 
 func configure(
@@ -25,7 +29,8 @@ func configure(
 	direction := Vector2.DOWN,
 	desired_extent := 0.0,
 	loop_override: Variant = null,
-	requested_phase_id := ""
+	requested_phase_id := "",
+	desired_footprint := Vector2.ZERO
 ) -> bool:
 	skill_id = ProfessionRules.skill_id(source_skill_id)
 	phase_id = requested_phase_id
@@ -53,11 +58,35 @@ func configure(
 	_loop = bool(animation.get("playback", "once") == "loop")
 	if loop_override is bool:
 		_loop = bool(loop_override)
-	var native: Array = animation.get("native_extent", [1, 1])
-	_native_extent = maxf(1.0, float(maxi(int(native[0]), int(native[1]))))
 	var render := CasterSkillVisualRegistry.render_policy(skill_id, phase_id)
+	_anchor_policy = str(render.get("anchor_policy", "top_left_from_world_anchor"))
+	_sequence_bounds = _visual_bounds_for_frames(_frames, _anchor_policy)
+	_sequence_anchor_rebase = (
+		-_sequence_bounds.get_center()
+		if _anchor_policy == "center_sequence_bounds_on_geometry_origin"
+		else Vector2.ZERO
+	)
+	_native_extent = maxf(
+		1.0,
+		maxf(_sequence_bounds.size.x, _sequence_bounds.size.y)
+	)
 	_desired_extent = maxf(0.0, desired_extent)
-	if _desired_extent > 0.0:
+	_desired_footprint = Vector2(
+		maxf(0.0, desired_footprint.x),
+		maxf(0.0, desired_footprint.y)
+	)
+	if (
+		_desired_footprint.x > 0.0
+		and _desired_footprint.y > 0.0
+		and _sequence_bounds.size.x > 0.0
+		and _sequence_bounds.size.y > 0.0
+	):
+		var contain_scale := minf(
+			_desired_footprint.x / _sequence_bounds.size.x,
+			_desired_footprint.y / _sequence_bounds.size.y
+		)
+		scale = Vector2.ONE * maxf(0.001, contain_scale)
+	elif _desired_extent > 0.0:
 		scale = Vector2.ONE * (_desired_extent / _native_extent)
 	else:
 		scale = Vector2.ONE * maxf(0.001, float(render.get("source_scale", 1.0)))
@@ -109,6 +138,17 @@ func frame_count() -> int:
 	return _frames.size()
 
 
+func visual_bounds_center() -> Vector2:
+	return (_sequence_bounds.get_center() + _sequence_anchor_rebase) * scale
+
+
+func fitted_visual_bounds() -> Rect2:
+	return Rect2(
+		(_sequence_bounds.position + _sequence_anchor_rebase) * scale,
+		_sequence_bounds.size * scale
+	)
+
+
 func _apply_frame(frame_index: int) -> bool:
 	if frame_index < 0 or frame_index >= _frames.size():
 		return false
@@ -118,10 +158,39 @@ func _apply_frame(frame_index: int) -> bool:
 	if loaded == null:
 		return false
 	texture = loaded
-	var top_left: Array = frame.get("top_left_from_world_anchor", [0, 0])
+	var anchor_field := (
+		"source_draw_offset"
+		if _anchor_policy == "source_draw_offset_from_actor_foot"
+		else "top_left_from_world_anchor"
+	)
+	var top_left: Array = frame.get(anchor_field, [0, 0])
 	offset = Vector2(
 		float(top_left[0]) + float(loaded.get_width()) * 0.5,
 		float(top_left[1]) + float(loaded.get_height()) * 0.5
-	)
+	) + _sequence_anchor_rebase
 	skill_frame_changed.emit(frame_index)
 	return true
+
+
+func _visual_bounds_for_frames(frames: Array[Dictionary], anchor_policy: String) -> Rect2:
+	var anchor_field := (
+		"source_draw_offset"
+		if anchor_policy == "source_draw_offset_from_actor_foot"
+		else "top_left_from_world_anchor"
+	)
+	var minimum := Vector2(INF, INF)
+	var maximum := Vector2(-INF, -INF)
+	for frame: Dictionary in frames:
+		var top_left: Array = frame.get(anchor_field, [0, 0])
+		var pixel_size: Array = frame.get("pixel_size", [0, 0])
+		var frame_minimum := Vector2(float(top_left[0]), float(top_left[1]))
+		var frame_maximum := frame_minimum + Vector2(
+			float(pixel_size[0]), float(pixel_size[1])
+		)
+		minimum.x = minf(minimum.x, frame_minimum.x)
+		minimum.y = minf(minimum.y, frame_minimum.y)
+		maximum.x = maxf(maximum.x, frame_maximum.x)
+		maximum.y = maxf(maximum.y, frame_maximum.y)
+	if frames.is_empty():
+		return Rect2(Vector2.ZERO, Vector2.ONE)
+	return Rect2(minimum, maximum - minimum)

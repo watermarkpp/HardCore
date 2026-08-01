@@ -28,7 +28,7 @@
     },
     "contract_id": "skills.mir2_176.vanilla_33.v1.0.1",
     "original_path": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
-    "sha256": "275555e9f879969e4bb4becfc268e0ed0912b7d79ef6dea89731fe43db0562f7"
+    "sha256": "1fdf28d3c575d18d2e7e0f875b008eb4f6f719752e4974cbca399c66c62c7c2c"
   },
   "mappingSources": [
     {
@@ -3996,7 +3996,12 @@
         "trajectory_length_tiles": 5,
         "trajectory_step_ms": 50,
         "trajectory_dominant_axis_pixels_per_second": 555.5555555555555,
-        "trail_frame_count": 6
+        "trajectory_max_dominant_axis_pixels": 320,
+        "trail_frame_count": 6,
+        "geometry_alignment_contract": "skills.caster.geometry_visual_alignment.v1",
+        "trail_emission_policy": "resample_to_canonical_geometry_endpoint",
+        "fit_mode": "contain_canonical_cell_footprint",
+        "movement_lock_to_primary_visual": true
       },
       "distribution_id": "client.classic_raw_complete",
       "source_priority": {
@@ -9644,7 +9649,10 @@
         "anchor_policy": "top_left_from_world_anchor",
         "attachment_policy": "caster_actor",
         "playback_strategy": "frame_sequence",
-        "pixel_snap": true
+        "pixel_snap": true,
+        "geometry_alignment_contract": "skills.caster.geometry_visual_alignment.v1",
+        "fit_mode": "contain_canonical_geometry_footprint",
+        "movement_lock_to_primary_visual": true
       },
       "distribution_id": "client.classic_raw_complete",
       "source_priority": {
@@ -9919,10 +9927,14 @@
         "scale_mode": "source_pixels",
         "source_scale": 1.0,
         "fit_extent": 0.0,
-        "anchor_policy": "top_left_from_world_anchor",
+        "anchor_policy": "center_sequence_bounds_on_geometry_origin",
         "attachment_policy": "caster_actor",
         "playback_strategy": "frame_sequence",
-        "pixel_snap": true
+        "pixel_snap": true,
+        "geometry_alignment_contract": "skills.caster.geometry_visual_alignment.v1",
+        "fit_to_canonical_geometry_footprint": true,
+        "fit_mode": "contain_canonical_geometry_footprint",
+        "movement_lock_to_primary_visual": true
       },
       "distribution_id": "client.classic_raw_complete",
       "source_priority": {
