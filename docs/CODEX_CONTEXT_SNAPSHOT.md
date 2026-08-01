@@ -1,5 +1,12 @@
 # Codex 精简上下文快照
 
+## 2026-08-01 Android v53：方案 A 近战逐刀诊断与角度边界证据
+
+- 职业技能永久工作树提交 `ad910399` / `4f2d2f20` 已分别作为集成提交 `58c03259` / `6b76ed85` 接入；新增只读稳定合同 `diagnostic.warrior.melee_candidate.v1`、`diagnostic.warrior.melee_direction_loop.v1`、`diagnostic.warrior.melee_angle_quantization.v1`。精确八方向的编号与投影闭环全部一致，但 fractional tile 边界存在已证明的策略差异：`delta=(1,0.5)` 当前投影后 screen-45 量化为 SE/index 7，方案 A 的 tile-space-45 量化为 S/index 0；运行时会逐刀同时记录两种结果，不提前改变游戏判定。
+- 集成接线提交 `b643c215` 新增 `combat.melee.runtime_diagnostic.jsonl.v1`：每次真实近战从输入、锁定、人物/目标实时脚点、输入/释放八向、动画行、候选逐项拒绝码、准确/敏捷/随机点、正式扣血提交到最终结果共用一个 `action_id`。结果明确区分 `GEOMETRY_NO_ELIGIBLE_TARGET`、`CANONICAL_SKILL_REJECTED`、`ACCURACY_MISS`、`DAMAGE_COMMIT_FAILED` 与 `HIT_COMMITTED`；只增加观测，不改范围、伤害、命中率或冻结数据。
+- 近战定向、锁定回退、移动攻击、攻击时序、战士状态机、正式技能运行时、八方向/边界角度及非 test mode 的真实命中随机链回归 `13/13` 通过。236/240 头盔草稿、三份怪物脚点合同与冻结 HUD 的 SHA-256 继续分别为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`、`81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`、`DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`、`5944EE47CCA2C262DEC08FB8213FF505993B60FF2AC13BC924069E4DF38EF3D7`，与本轮开工记录一致。
+- APK 从固定提交 `b643c215e71542fe71725259663e30edcf448ea4` 的全新隔离工作树导出为 `outputs/hardcore/HardCore-v53-melee-diagnostic-a-debug.apk`，大小 `244,352,944` 字节，SHA-256 `A36D719BC2C5AB4501D6355F7ED74506BBA94CBE809678A6D34379D449FD399A`。包信息为 `versionCode=53`、`versionName=1.17.17-melee-diagnostic-a`；v2/v3 签名、包名、应用名、arm64 与运行时资源探针通过。构建完成时 ADB 未枚举到设备，尚未覆盖安装。
+
 ## 2026-07-31 Android v52：移动近战同一坐标系与攻杀定稿表
 
 - 怪物工作树提交 `2c300b25` 已作为集成提交 `d747e675` 接入，稳定合同 `monster.melee_player_contact.iso_footprint_fractional_tile.v1` 取消普通近战怪物用统一屏幕欧氏圆停止追击的旧逻辑。旧 48px 接敌距离换算正式 64×32 等距格后为 S/N `1.5`、E/W `0.75`、四斜向 `1.590990`，会让斜向怪物停在玩家 1.5 格攻击范围外；新逻辑按正式浮点地图格与 2:1 脚印共同约束。八方向真实追击最终距离 S/N 约 `1.1603`、E/W 约 `0.7459`、四斜向约 `1.3267`，均不超过 1.5 格，至少保留 10px 脚印间隙且稳定后连续 8 帧零抖动。155px 远程怪物未进入该合同；人工怪物脚点、碰撞外形和 AI 数值未改。
