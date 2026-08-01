@@ -145,6 +145,14 @@ static func resolve_warrior_attack(context: Dictionary) -> Dictionary:
 	if bool(toggles.get("warrior.half_moon", false)):
 		if not _is_learned(learned, "warrior.half_moon"):
 			trace.append(_blocked("warrior.half_moon", "not_learned"))
+		elif current_mp < _mana_cost(
+			"warrior.half_moon",
+			int(context.get("half_moon_rank", 0))
+		):
+			# Resource state is already authoritative at input time, so do not start
+			# a half-moon body/visual that can never legally resolve. Continue the
+			# existing priority chain to thrust or normal without spending MP.
+			trace.append(_blocked("warrior.half_moon", "insufficient_mana"))
 		else:
 			var half_moon := _with_slaying_layer(
 				_selection("attack", "half_moon", "warrior.half_moon", trace),

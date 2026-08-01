@@ -295,7 +295,8 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 		return false
 	var canonical_timing: Dictionary = canonical_definition.get("timing", {})
 	var combat_profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)
-	var track_locked_target := CombatReleaseGeometryScript.tracks_locked_target(
+	var track_locked_target := CombatReleaseGeometryScript.tracks_locked_target_for_skill(
+		stable_skill_id,
 		str(combat_profile.get("target_mode", "self"))
 	)
 	var body_cast_ms := int(canonical_timing.get(

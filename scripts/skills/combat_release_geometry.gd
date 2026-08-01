@@ -13,6 +13,9 @@ const CONTRACT_ID := "gameplay.professions.combat_release_geometry.live_footpoin
 const MELEE_RELEASE_FACING_POLICY_ID := (
 	"gameplay.warrior.melee_release_facing.canonical_tile_8dir.v2"
 )
+const WILD_RUSH_RELEASE_TARGET_POLICY_ID := (
+	"gameplay.warrior.wild_rush.original_locked_target_release.v1"
+)
 const POLICY_LOCKED_SINGLE_TARGET := "locked_single_target"
 const POLICY_INPUT_DIRECTION := "input_direction"
 const FACING_POLICY_LIVE_LOCKED_TARGET := "live_locked_target_direction"
@@ -25,6 +28,20 @@ static func tracks_locked_target(target_mode: String) -> bool:
 	# target. Direction, target-area and self-area skills remain spatial casts;
 	# they must never become homing attacks merely because a target was present.
 	return target_mode == "single"
+
+
+static func tracks_locked_target_for_skill(
+	stable_skill_id: String,
+	target_mode: String
+) -> bool:
+	# Wild Rush is spatially a direction skill, but its direction and corridor
+	# are derived from the one eligible monster chosen before the body action.
+	# Preserve only that original instance through the release frame; all other
+	# direction/area skills retain their non-homing input-direction policy.
+	return (
+		stable_skill_id == "warrior.wild_rush"
+		or tracks_locked_target(target_mode)
+	)
 
 
 static func resolve(
