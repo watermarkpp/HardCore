@@ -1,5 +1,11 @@
 # Codex 精简上下文快照
 
+## 2026-08-01 Android v56：半月蓝量门槛与野蛮冲撞目标释放
+
+- 职业技能提交 `76a977ee` 已作为集成提交 `5b68dfa9` 接入。半月在攻击输入时 MP 已不足，会沿既有优先级直接降级到刺杀或普通攻击，主体动作、视觉、范围与效果保持一致且不扣半月 MP；若输入后才耗尽 MP，则保留已启动动作并使用既有命中帧晚期降级。
+- 新增稳定合同 `gameplay.warrior.wild_rush.original_locked_target_release.v1`：野蛮冲撞虽为方向技能，释放快照仍保留输入阶段已验证的原目标实例 ID，使现有 GameRoot 目标链能实际执行冲撞；其他方向/区域技能仍不追踪目标。集成定向相关链 `8/8`、完整 Warrior 套件 `21/21` 通过。236/240 头盔人工稿、三份怪物脚点合同及 HUD 哈希均保持冻结值不变。
+- Android 固定构建提交为 `a33a6572`，APK 为 `outputs/hardcore/HardCore-v56-warrior-mana-rush-target-debug.apk`，大小 `244,365,425` 字节，SHA-256 `AF7C445EDC9978A5A5C1DC24A2C3B08D9FA23DE5EBC4C63FA9796C0666BE8731`。包信息为 `versionCode=56`、`versionName=1.17.20-warrior-mana-rush-target`、`HardCore`、`arm64-v8a`，v2/v3 签名与运行时资源探针通过；已在 HONOR 90（REA-AN00）保留数据覆盖安装并启动，手机回读版本、进程与前台 Activity 正常，启动日志无 Godot 脚本错误或 Android 崩溃。
+
 ## 2026-08-01 Android v55：怪物占位面积近战命中
 
 - 用户确认近战采用“中心负责瞄准、面积负责命中”：自动锁定与强制转向仍瞄准怪物人工脚点；最终资格不再要求技能区域覆盖脚点中心，只要固定技能面积与怪物现有 2:1 物理占位椭圆接触或重叠即进入准确/伤害判定。普通怪与 Boss 直接复用各自 `collision_radius`，未修改人工脚点、碰撞半径、技能距离/宽度、目标数量、伤害、准确、动画或 UI。
