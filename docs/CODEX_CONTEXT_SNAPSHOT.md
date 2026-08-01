@@ -1,5 +1,10 @@
 # Codex 精简上下文快照
 
+## 2026-08-01 Android v58：法师范围几何、魔法盾常驻与火墙审计
+
+- Android 固定构建提交为 `1a18f14bbbd88281af950fb01e250d3079dbe055`；APK 为 `outputs/hardcore/HardCore-v58-wizard-geometry-alignment-debug.apk`，大小 `244,410,869` 字节，SHA-256 `87272359792837C6BE33CC2E352BCC30803F905246879B9EFE7C328DDE6B364C`。包信息为 `versionCode=58`、`versionName=1.17.22-wizard-geometry-alignment`、`HardCore`、`arm64-v8a`，v2/v3 签名、运行时资源探针与 586 个法师技能帧导入均通过。
+- 已在 HONOR 90（REA-AN00）使用 `adb install -r` 保留存档覆盖安装并启动；手机回读版本、进程与前台 `GodotAppLauncher` 正常，启动日志无 Godot 脚本错误、解析错误或 Android 崩溃。236/240 人工头盔与三份怪物脚点合同 SHA-256 在构建安装后仍为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`、`81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`、`DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+
 ## 2026-08-01：魔法盾常驻正式视觉与法师技能全链审计（未构建 APK）
 
 - 职业技能提交 `92ae4e28` 已作为集成提交 `298bd6a2` 接入稳定合同 `skills.wizard.magic_shield.cast_then_hold_final_frame.v1`：魔法盾使用主资料库 `Data/Magic.wil` indices `3880..3889` 的十帧成形动画，播放一次后保留完整第十帧；只要 `magic_shield_snapshot.active` 同时满足剩余持续时间和剩余容量，正式盾形持续跟随人物，任一归零后立即移除。旧 `player._draw()` 蓝色占位圆已删除；重复补盾替换同一人物的旧视觉，不叠加多层。
