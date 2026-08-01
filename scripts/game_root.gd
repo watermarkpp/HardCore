@@ -27,6 +27,7 @@ const WarriorMeleeDiagnosticScript := preload("res://scripts/skills/warrior_mele
 const CombatRuntimeServiceScript := preload("res://scripts/layers/runtime/combat_runtime_service.gd")
 const CombatDiagnosticLogScript := preload("res://scripts/layers/runtime/combat_diagnostic_log.gd")
 const CasterSkillRuntimeScript := preload("res://scripts/caster_skill_runtime.gd")
+const CasterSpellGeometryScript := preload("res://scripts/skills/caster_spell_geometry.gd")
 const DEFAULT_NORMAL_RESPAWN_SECONDS := 180.0
 const DEFAULT_BOSS_RESPAWN_SECONDS := 3600.0
 const MONSTER_PREFETCH_TIMEOUT_MSEC := 8000
@@ -40,6 +41,14 @@ const ATTACK_LOCK_CONTRACT := "combat.attack_lock.tile_radius.v1"
 const ATTACK_LOCK_RANGE_TILES := 10
 const MELEE_LOCK_IMPACT_POLICY_ID := "combat.melee_lock.facing_priority_nonexclusive.v1"
 const WILD_RUSH_SKILL_ID := "warrior.wild_rush"
+const ATTACK_INPUT_TICKET_CONTRACT_ID := "combat.input.attack_ticket.touch_lifecycle.v1"
+const MAX_BUFFERED_MOBILE_ATTACK_TICKETS := 32
+const CASTER_GEOMETRY_VISUAL_CONTRACT_ID := "skills.visual.geometry_cells.world_projection.v1"
+const CANONICAL_WIZARD_GEOMETRY_SKILLS := [
+	"wizard.hellfire",
+	"wizard.hell_lightning",
+	"wizard.laser",
+]
 
 var player: PlayerCharacter
 var _world_camera: Camera2D
@@ -54,7 +63,13 @@ var locked_target: EnemyActor
 var manual_target_lock := false
 var auto_target_enabled := true
 var _mobile_attack_held := false
-var _queued_mobile_attacks := 0
+var _queued_mobile_attack_tickets: Array[int] = []
+var _active_mobile_attack_tokens: Dictionary = {}
+var _legacy_mobile_attack_token := 0
+var _next_synthetic_attack_token := -1
+var _queued_mobile_attacks: int:
+	get:
+		return _queued_mobile_attack_tickets.size()
 var _warrior_hud_timer := 0.0
 var _system_menu_layer: CanvasLayer
 var _system_menu_panel: Control
@@ -108,8 +123,9 @@ func _ready() -> void:
 
 	hud = GameHUD.new()
 	hud.movement_changed.connect(player.set_touch_vector)
-	hud.attack_pressed.connect(_on_mobile_attack_pressed)
-	hud.attack_released.connect(_on_mobile_attack_released)
+	hud.attack_input_started.connect(_on_mobile_attack_input_started)
+	hud.attack_input_ended.connect(_on_mobile_attack_input_ended)
+	hud.attack_input_cancelled.connect(_on_mobile_attack_input_cancelled)
 	hud.interact_pressed.connect(_try_interact)
 	hud.skill_slot_pressed.connect(_use_skill_slot)
 	hud.map_travel_requested.connect(travel_to_map)
@@ -131,7 +147,12 @@ func _ready() -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
 		call_deferred("_show_system_menu")
+	elif what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT]:
+		if is_instance_valid(hud):
+			hud.cancel_attack_inputs(&"application_interrupted")
+		_cancel_all_mobile_attack_inputs(true)
 	elif what == NOTIFICATION_WM_CLOSE_REQUEST:
+		_cancel_all_mobile_attack_inputs(true)
 		_prepare_safe_logout()
 		get_tree().quit()
 
@@ -168,15 +189,13 @@ func _process(delta: float) -> void:
 	)
 	if bound_attack_skill.is_empty():
 		if Input.is_action_just_pressed("attack"):
-			if not _request_mobile_attack():
-				_queued_mobile_attacks += 1
-		elif _queued_mobile_attacks > 0:
-			if _request_mobile_attack():
-				_queued_mobile_attacks -= 1
+			_submit_mobile_attack_ticket(_allocate_synthetic_attack_token())
+		if not _queued_mobile_attack_tickets.is_empty():
+			_drain_next_mobile_attack_ticket()
 		elif _mobile_attack_held or Input.is_action_pressed("attack"):
 			_request_mobile_attack()
 	else:
-		_queued_mobile_attacks = 0
+		_queued_mobile_attack_tickets.clear()
 		if Input.is_action_just_pressed("attack"):
 			_request_primary_attack_action()
 	if Input.is_action_just_pressed("interact"):
@@ -1330,21 +1349,105 @@ func _has_melee_hittable_target(
 	return false
 
 
-func _on_mobile_attack_pressed() -> void:
-	_mobile_attack_held = PlayerState.skill_name_for_slot(
+func _allocate_synthetic_attack_token() -> int:
+	var token := _next_synthetic_attack_token
+	_next_synthetic_attack_token -= 1
+	return token
+
+
+func _submit_mobile_attack_ticket(press_token: int) -> void:
+	if press_token == 0 or press_token in _queued_mobile_attack_tickets:
+		return
+	if _queued_mobile_attack_tickets.is_empty() and _request_mobile_attack():
+		return
+	if _queued_mobile_attack_tickets.size() >= MAX_BUFFERED_MOBILE_ATTACK_TICKETS:
+		return
+	_queued_mobile_attack_tickets.append(press_token)
+
+
+func _drain_next_mobile_attack_ticket() -> bool:
+	if _queued_mobile_attack_tickets.is_empty():
+		return false
+	if not _request_mobile_attack():
+		return false
+	_queued_mobile_attack_tickets.pop_front()
+	return true
+
+
+func _refresh_mobile_attack_held() -> void:
+	_mobile_attack_held = false
+	for value in _active_mobile_attack_tokens.values():
+		if bool(value):
+			_mobile_attack_held = true
+			return
+
+
+func _on_mobile_attack_input_started(
+	press_token: int,
+	_touch_id: int,
+	_source: StringName
+) -> void:
+	if press_token == 0 or _active_mobile_attack_tokens.has(press_token):
+		return
+	var ordinary_attack := PlayerState.skill_name_for_slot(
 		PlayerState.SKILL_SLOT_GROUP_ATTACK,
 		0
 	).is_empty()
-	if _mobile_attack_held:
-		if not _request_mobile_attack():
-			_queued_mobile_attacks += 1
+	_active_mobile_attack_tokens[press_token] = ordinary_attack
+	_refresh_mobile_attack_held()
+	if ordinary_attack:
+		_submit_mobile_attack_ticket(press_token)
 		return
-	_queued_mobile_attacks = 0
+	_queued_mobile_attack_tickets.clear()
 	_request_primary_attack_action()
 
 
-func _on_mobile_attack_released() -> void:
+func _on_mobile_attack_input_ended(
+	press_token: int,
+	_touch_id: int,
+	_source: StringName
+) -> void:
+	_active_mobile_attack_tokens.erase(press_token)
+	_refresh_mobile_attack_held()
+
+
+func _on_mobile_attack_input_cancelled(
+	press_token: int,
+	_touch_id: int,
+	_source: StringName,
+	_reason: StringName
+) -> void:
+	_active_mobile_attack_tokens.erase(press_token)
+	_queued_mobile_attack_tickets.erase(press_token)
+	_refresh_mobile_attack_held()
+
+
+func _cancel_all_mobile_attack_inputs(clear_tickets := false) -> void:
+	_active_mobile_attack_tokens.clear()
 	_mobile_attack_held = false
+	_legacy_mobile_attack_token = 0
+	if clear_tickets:
+		_queued_mobile_attack_tickets.clear()
+
+
+func _on_mobile_attack_pressed() -> void:
+	if _legacy_mobile_attack_token != 0:
+		return
+	_legacy_mobile_attack_token = _allocate_synthetic_attack_token()
+	_on_mobile_attack_input_started(
+		_legacy_mobile_attack_token,
+		-3,
+		&"legacy"
+	)
+
+
+func _on_mobile_attack_released() -> void:
+	if _legacy_mobile_attack_token == 0:
+		_cancel_all_mobile_attack_inputs(false)
+		return
+	var press_token := _legacy_mobile_attack_token
+	_legacy_mobile_attack_token = 0
+	_on_mobile_attack_input_ended(press_token, -3, &"legacy")
 
 
 func _ensure_attack_locked_target(excluded: EnemyActor = null) -> EnemyActor:
@@ -1624,8 +1727,9 @@ func _on_player_moved(_position: Vector2, _facing: Vector2) -> void:
 
 func _on_player_death_requested() -> void:
 	_cancel_target()
-	_mobile_attack_held = false
-	_queued_mobile_attacks = 0
+	if is_instance_valid(hud):
+		hud.cancel_attack_inputs(&"player_death")
+	_cancel_all_mobile_attack_inputs(true)
 	var accepted := travel_to_service_home(
 		false,
 		false,
@@ -2736,12 +2840,19 @@ func _apply_canonical_effects(
 	var target_position := _canonical_tile_to_world(
 		target_context.get("target_tile", _canonical_world_to_tile(origin))
 	)
+	var geometry_effect := _canonical_primary_damage_effect(result)
+	var effective_geometry_cells := _canonical_effective_spell_geometry_cells(
+		stable_skill_id,
+		result.get("geometry_cells", []),
+		geometry_effect
+	)
 	_spawn_canonical_cast_visual(
 		stable_skill_id,
 		origin,
 		direction,
 		target,
-		target_position
+		target_position,
+		effective_geometry_cells
 	)
 	for raw_effect: Variant in result.get("effects", []):
 		if not raw_effect is Dictionary:
@@ -2768,7 +2879,16 @@ func _apply_canonical_effects(
 					if effect_type == "area_damage"
 					else origin
 				)
-				_apply_canonical_spell_damage(stable_skill_id, raw_power, damage_origin, direction, effect_type, target)
+				_apply_canonical_spell_damage(
+					stable_skill_id,
+					raw_power,
+					damage_origin,
+					direction,
+					effect_type,
+					target,
+					effective_geometry_cells,
+					effect
+				)
 			"persistent_ground_damage":
 				_spawn_canonical_ground_field(
 					stable_skill_id,
@@ -2852,10 +2972,18 @@ func _apply_canonical_spell_damage(
 	origin: Vector2,
 	direction: Vector2,
 	effect_type: String,
-	primary: EnemyActor
+	primary: EnemyActor,
+	raw_geometry_cells: Variant = [],
+	effect: Dictionary = {}
 ) -> bool:
 	var targets: Array[EnemyActor] = []
-	if effect_type == "targeted_sky_strike" and primary != null:
+	if stable_skill_id in CANONICAL_WIZARD_GEOMETRY_SKILLS:
+		targets = _canonical_spell_geometry_targets(
+			stable_skill_id,
+			raw_geometry_cells,
+			effect
+		)
+	elif effect_type == "targeted_sky_strike" and primary != null:
 		targets.append(primary)
 	else:
 		var radial: bool = effect_type in ["area_damage", "caster_centered_area_damage"]
@@ -2880,6 +3008,90 @@ func _apply_canonical_spell_damage(
 		)
 		hit_any = bool(resolution.get("success", false)) or hit_any
 	return hit_any
+
+
+func _canonical_primary_damage_effect(result: Dictionary) -> Dictionary:
+	for raw_effect: Variant in result.get("effects", []):
+		if not raw_effect is Dictionary:
+			continue
+		var effect: Dictionary = raw_effect
+		if str(effect.get("type", "")) in [
+			"line_damage",
+			"piercing_line_damage",
+			"area_damage",
+			"caster_centered_area_damage",
+		]:
+			return effect
+	return {}
+
+
+func _canonical_effective_spell_geometry_cells(
+	stable_skill_id: String,
+	raw_geometry_cells: Variant,
+	effect: Dictionary
+) -> Array[Vector2i]:
+	var definition := SkillDataLoaderScript.skill(stable_skill_id)
+	var geometry: Dictionary = definition.get("geometry", {}).duplicate(true)
+	if effect.has("stops_on_terrain"):
+		geometry["stops_on_terrain"] = bool(effect.stops_on_terrain)
+	return CasterSpellGeometryScript.effective_cells(
+		stable_skill_id,
+		geometry,
+		raw_geometry_cells,
+		Callable(self, "_canonical_spell_cell_is_terrain_blocked")
+	)
+
+
+func _canonical_spell_cell_is_terrain_blocked(cell: Vector2i) -> bool:
+	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
+	if not runtime.is_empty():
+		return runtime.get("collision", {}).get("blocked_tiles", []).has(
+			"%d,%d" % [cell.x, cell.y]
+		)
+	return (
+		background != null
+		and background.has_method("is_environment_point_blocked")
+		and bool(background.call(
+			"is_environment_point_blocked",
+			_canonical_tile_to_world(cell)
+		))
+	)
+
+
+func _canonical_spell_geometry_targets(
+	stable_skill_id: String,
+	raw_geometry_cells: Variant,
+	effect: Dictionary
+) -> Array[EnemyActor]:
+	var geometry_cells: Array[Vector2i] = []
+	if raw_geometry_cells is Array:
+		for raw_cell: Variant in raw_geometry_cells:
+			if raw_cell is Vector2i:
+				geometry_cells.append(raw_cell)
+	var targets: Array[EnemyActor] = []
+	var maximum_targets := (
+		1
+		if stable_skill_id == "wizard.hellfire" and not bool(effect.get("pierces_units", false))
+		else maxi(0, int(effect.get("maximum_targets", geometry_cells.size())))
+	)
+	if maximum_targets <= 0:
+		return targets
+	for cell: Vector2i in geometry_cells:
+		var cell_targets: Array[EnemyActor] = []
+		for node: Node in get_tree().get_nodes_in_group("enemies"):
+			if not node is EnemyActor or node.is_queued_for_deletion():
+				continue
+			var enemy := node as EnemyActor
+			if _canonical_world_to_tile(enemy.global_position) == cell:
+				cell_targets.append(enemy)
+		cell_targets.sort_custom(func(a: EnemyActor, b: EnemyActor) -> bool:
+			return a.get_instance_id() < b.get_instance_id()
+		)
+		for enemy: EnemyActor in cell_targets:
+			targets.append(enemy)
+			if targets.size() >= maximum_targets:
+				return targets
+	return targets
 
 
 func _spawn_canonical_ground_field(
@@ -3027,7 +3239,8 @@ func _spawn_canonical_cast_visual(
 	origin: Vector2,
 	direction: Vector2,
 	target: EnemyActor,
-	target_position: Vector2
+	target_position: Vector2,
+	raw_geometry_cells: Variant = []
 ) -> void:
 	if not stable_skill_id.begins_with("wizard.") and not stable_skill_id.begins_with("taoist."):
 		return
@@ -3041,6 +3254,13 @@ func _spawn_canonical_cast_visual(
 		]
 	):
 		return
+	var geometry_tile_points: Array[Vector2i] = []
+	var geometry_world_points: Array[Vector2] = []
+	if raw_geometry_cells is Array:
+		for raw_cell: Variant in raw_geometry_cells:
+			if raw_cell is Vector2i:
+				geometry_tile_points.append(raw_cell)
+				geometry_world_points.append(_canonical_tile_to_world(raw_cell))
 	var visual_plan := {
 		"success": true,
 		"skill_id": stable_skill_id,
@@ -3048,6 +3268,10 @@ func _spawn_canonical_cast_visual(
 		"visual": visual_profile,
 		"visual_duration": CasterSkillVisualRegistry.animation_duration(stable_skill_id),
 		"area_radius": 72.0,
+		"canonical_geometry_contract": CASTER_GEOMETRY_VISUAL_CONTRACT_ID,
+		"geometry_origin_world": origin,
+		"geometry_tile_points": geometry_tile_points,
+		"geometry_world_points": geometry_world_points,
 	}
 	for visual_node: Node2D in CasterSkillRuntimeScript.create_cast_nodes(
 		visual_plan,
@@ -3137,6 +3361,8 @@ func _canonical_facing(direction: Vector2) -> Vector2i:
 func _canonical_facing_for_skill(skill_id: String, direction: Vector2) -> Vector2i:
 	if skill_id in ["warrior.thrusting", "warrior.half_moon", "warrior.fire_sword"]:
 		return WarriorMeleeGeometryScript.facing_tile_step(ArtSpec.direction_index(direction))
+	if skill_id in CANONICAL_WIZARD_GEOMETRY_SKILLS:
+		return CasterSpellGeometryScript.canonical_facing_from_world_direction(direction)
 	return _canonical_facing(direction)
 
 
