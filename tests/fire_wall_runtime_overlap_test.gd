@@ -50,6 +50,10 @@ func _run() -> void:
 		"fire wall overlap protection did not preserve exactly one next tick: %s"
 		% str(_recorded_tick_powers)
 	)
+	assert(
+		_recorded_tick_powers[1] == _recorded_tick_powers[0],
+		"the next legal fire wall tick changed the selected field's raw power"
+	)
 	print(
 		"FIRE_WALL_RUNTIME_OVERLAP_PASS: independent overlapping fields preserve raw power while one caster deals at most one tick per target per second"
 	)
