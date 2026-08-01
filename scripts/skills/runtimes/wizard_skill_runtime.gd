@@ -25,6 +25,15 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 			hellfire["length_tiles"] = int(definition.get("geometry", {}).get("length_tiles", 5))
 			hellfire["width_tiles"] = int(definition.get("geometry", {}).get("width_tiles", 1))
 			hellfire["pierces_units"] = false
+			# The 1.76 geometry and target-count contracts are independent. The
+			# client flag above describes the line effect's movement semantics; it
+			# must not be adapted into a one-monster damage cap. Every monster whose
+			# formal footprint intersects one of the five effect cells is eligible.
+			hellfire["maximum_targets"] = 0
+			hellfire["target_limit_policy"] = "all_intersecting_effect_cells"
+			hellfire["target_selection_contract"] = (
+				"skills.wizard.hellfire.all_intersecting_5x1_line.v1"
+			)
 			hellfire["stops_on_terrain"] = bool(definition.get("geometry", {}).get("stops_on_terrain", true))
 			plan.effects = [hellfire]
 			plan.proficiency_event = trigger

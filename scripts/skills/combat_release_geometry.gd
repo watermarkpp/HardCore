@@ -16,6 +16,14 @@ const MELEE_RELEASE_FACING_POLICY_ID := (
 const WILD_RUSH_RELEASE_TARGET_POLICY_ID := (
 	"gameplay.warrior.wild_rush.original_locked_target_release.v1"
 )
+const TARGET_CENTERED_SPATIAL_RELEASE_POLICY_ID := (
+	"gameplay.wizard.target_centered_spatial.release_live_footpoint.v1"
+)
+const TARGET_CENTERED_SPATIAL_SKILL_IDS := {
+	"wizard.exploding_flame": true,
+	"wizard.fire_wall": true,
+	"wizard.ice_storm": true,
+}
 const POLICY_LOCKED_SINGLE_TARGET := "locked_single_target"
 const POLICY_INPUT_DIRECTION := "input_direction"
 const FACING_POLICY_LIVE_LOCKED_TARGET := "live_locked_target_direction"
@@ -36,12 +44,23 @@ static func tracks_locked_target_for_skill(
 ) -> bool:
 	# Wild Rush is spatially a direction skill, but its direction and corridor
 	# are derived from the one eligible monster chosen before the body action.
-	# Preserve only that original instance through the release frame; all other
-	# direction/area skills retain their non-homing input-direction policy.
+	# Preserve only that original instance through the release frame. The three
+	# canonical target-centred spatial spells are also bound to the selected
+	# monster identity, but never to an input-time coordinate snapshot: resolve()
+	# receives the monster's live manually-authored footpoint at release. This
+	# keeps their ground geometry spatial while preventing a delayed cast from
+	# silently degrading to the caster's facing point.
 	return (
 		stable_skill_id == "warrior.wild_rush"
+		or TARGET_CENTERED_SPATIAL_SKILL_IDS.has(stable_skill_id)
 		or tracks_locked_target(target_mode)
 	)
+
+
+static func target_centered_spatial_policy_id(stable_skill_id: String) -> String:
+	if TARGET_CENTERED_SPATIAL_SKILL_IDS.has(stable_skill_id):
+		return TARGET_CENTERED_SPATIAL_RELEASE_POLICY_ID
+	return ""
 
 
 static func resolve(

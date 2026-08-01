@@ -14,9 +14,9 @@ func _run() -> void:
 	await _verify_all_warrior_modes_use_live_locked_geometry()
 	await _verify_vanished_lock_never_allows_retarget()
 	await _verify_wild_rush_preserves_original_selected_target()
-	await _verify_caster_single_target_and_spatial_cast_policies()
+	await _verify_target_centered_spatial_cast_policies()
 	_verify_locked_melee_facing_contract()
-	print("COMBAT_RELEASE_GEOMETRY_PASS: live footpoints, locked melee facing, caster tracking unchanged")
+	print("COMBAT_RELEASE_GEOMETRY_PASS: live footpoints, locked melee facing, target-centred casts retain only live targets")
 	get_tree().quit(0)
 
 
@@ -120,7 +120,7 @@ func _verify_wild_rush_preserves_original_selected_target() -> void:
 		"warrior.wild_rush",
 		"direction"
 	))
-	assert(not ReleaseGeometry.tracks_locked_target_for_skill(
+	assert(ReleaseGeometry.tracks_locked_target_for_skill(
 		"wizard.fire_wall",
 		"target_area"
 	))
@@ -152,6 +152,53 @@ func _verify_caster_single_target_and_spatial_cast_policies() -> void:
 	assert(area.direction == Vector2.RIGHT)
 	assert(area.geometry.policy == ReleaseGeometry.POLICY_INPUT_DIRECTION)
 	assert(area.geometry.locked_target_instance_id == 0)
+
+
+func _verify_target_centered_spatial_cast_policies() -> void:
+	for stable_skill_id: String in [
+		"wizard.fire_wall",
+		"wizard.exploding_flame",
+		"wizard.ice_storm",
+	]:
+		assert(ReleaseGeometry.tracks_locked_target_for_skill(
+			stable_skill_id,
+			"target_area"
+		))
+		assert(
+			ReleaseGeometry.target_centered_spatial_policy_id(stable_skill_id)
+			== ReleaseGeometry.TARGET_CENTERED_SPATIAL_RELEASE_POLICY_ID
+		)
+
+	# A valid target identity survives the windup, while its position is sampled
+	# live at release. The old input direction must not become a ground fallback.
+	var live := ReleaseGeometry.resolve(
+		Vector2(120.0, 130.0),
+		Vector2.RIGHT,
+		77,
+		Vector2(70.0, 210.0),
+		true,
+		true
+	)
+	assert(live.policy == ReleaseGeometry.POLICY_LOCKED_SINGLE_TARGET)
+	assert(live.locked_target_instance_id == 77)
+	assert(live.locked_target_valid_at_release)
+	assert(live.refresh_locked_target_footpoint_at_release)
+	assert(live.direction_world.is_equal_approx(Vector2(-50.0, 80.0).normalized()))
+	assert(not live.allow_target_retarget and not live.allow_directional_scan)
+
+	# Death/despawn/range invalidation keeps the original identity but formally
+	# rejects it; the release may not retarget or fall back to a direction tile.
+	var vanished := ReleaseGeometry.resolve(
+		Vector2(120.0, 130.0),
+		Vector2.RIGHT,
+		77,
+		Vector2.ZERO,
+		false,
+		true
+	)
+	assert(vanished.locked_target_instance_id == 77)
+	assert(not vanished.locked_target_valid_at_release)
+	assert(not vanished.allow_target_retarget and not vanished.allow_directional_scan)
 
 
 func _verify_locked_melee_facing_contract() -> void:

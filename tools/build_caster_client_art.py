@@ -329,6 +329,20 @@ def render_policy(asset_id: str, role: str) -> dict[str, object]:
                 "source_scale_y": 1.0,
             }
         )
+    if asset_id == "magic_shield":
+        # The exact primary Magic.wil bounds are x=-42..27 relative to the
+        # actor footpoint: their horizontal centre is -7.5. Rebase only that
+        # proven half-pixel centre error while retaining the source vertical
+        # baseline, then render behind the player body at the same sort row.
+        result.update(
+            {
+                "presentation_contract": (
+                    "skills.wizard.magic_shield.primary_actor_footpoint_centered_behind_body.v1"
+                ),
+                "anchor_rebase_pixels": [7.5, 0.0],
+                "attachment_draw_order": "behind_attached_actor_same_footpoint",
+            }
+        )
     if asset_id == "hellfire":
         result.update(
             {
