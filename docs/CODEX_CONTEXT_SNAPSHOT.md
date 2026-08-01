@@ -1,5 +1,13 @@
 # Codex 精简上下文快照
 
+## 2026-08-01 Android v55：怪物占位面积近战命中
+
+- 用户确认近战采用“中心负责瞄准、面积负责命中”：自动锁定与强制转向仍瞄准怪物人工脚点；最终资格不再要求技能区域覆盖脚点中心，只要固定技能面积与怪物现有 2:1 物理占位椭圆接触或重叠即进入准确/伤害判定。普通怪与 Boss 直接复用各自 `collision_radius`，未修改人工脚点、碰撞半径、技能距离/宽度、目标数量、伤害、准确、动画或 UI。
+- 职业技能提交 `716263321313b34f3d1986a023042888e681a17c` 已作为集成提交 `3f4bd4f1` 接入，新增稳定合同 `gameplay.warrior.melee_footprint_intersection.iso_polygon_sat.v1` 与 `diagnostic.warrior.melee_footprint_candidate.v1`，复用 `world.actor_footprint.iso_ellipse.v1`。面积相交使用确定性凸多边形 SAT，边缘接触算命中；半月跨主/侧扇区与刺杀跨 1.5 格主/次段时均主区优先且只归类一次。
+- 集成接线提交 `6ba697ce` 使普通、烈火、半月与刺杀的主/次候选全部读取怪物实时脚点和 `collision_radius`；逐刀日志同时保留旧中心点判定与最终面积判定。新增真实移动输入保持用例：刺杀目标中心超过 2.5 格、仅身体边缘接触末端时，旧点判定拒绝、新面积判定接受并成功扣血。两组定向回归 `14/14`、完整 Warrior 套件 `21/21` 通过。
+- 冻结对象零变化：`item_236.json` / `item_240.json` SHA-256 仍为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC` / `81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`；三份怪物脚点合同仍为 `DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`；冻结 HUD 仍为 `5944EE47CCA2C262DEC08FB8213FF505993B60FF2AC13BC924069E4DF38EF3D7`。
+- Android 固定构建提交为 `6c405c84`，APK 为 `outputs/hardcore/HardCore-v55-melee-footprint-hitbox-debug.apk`，大小 `244,361,329` 字节，SHA-256 `2D9129134330AC819F16333A32E73C1A8F195AEC18A24238CBA61353BAD7BFC4`。包信息为 `versionCode=55`、`versionName=1.17.19-melee-footprint-hitbox`、`HardCore`、`arm64-v8a`，v2/v3 签名与运行时资源探针通过；已在 HONOR 90（REA-AN00）保留数据覆盖安装并启动，手机回读版本、进程与前台 Activity 正常，启动日志无 Godot 脚本错误或 Android 崩溃。
+
 ## 2026-08-01 Android v54：近战地图格八方向统一修正
 
 - 手机 v53 逐刀诊断已锁定根因：复现角度中人物到目标的浮点地图格差值约为 `(-0.56,-1.31)`、距离 `1.31` 格；旧 screen/projected 45° 量化错误选为 index 5，导致刺杀横向值 `0.56 > 0.50` 而连续 `12/12` 被 `OUTSIDE_ATTACK_LANE` 拒绝。按方案 A 的地图格坐标量化应为 index 4，前向约 `0.935`、横向约 `-0.375`，属于合法第一格；该证据排除了准确 MISS 与扣血提交失败。
