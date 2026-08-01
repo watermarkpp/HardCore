@@ -146,6 +146,108 @@ func _run() -> void:
 	assert(far_laser_target.current_hp < far_laser_hp, "穿透疾光电影未命中八格直线远端目标")
 	assert(off_laser_target.current_hp == off_laser_hp, "宽一格疾光电影错误命中正式直线外单位")
 
+	near_laser_target.queue_free()
+	far_laser_target.queue_free()
+	off_laser_target.queue_free()
+	await get_tree().process_frame
+
+	var adjacent_repulsion_target := _make_enemy(
+		game,
+		game.player,
+		origin_tile + Vector2i(1, 0),
+		"抗拒火环相邻目标"
+	)
+	var outside_repulsion_target := _make_enemy(
+		game,
+		game.player,
+		origin_tile + Vector2i(2, 0),
+		"抗拒火环范围外目标"
+	)
+	var repulsion_definition: Dictionary = SkillDataLoader.skill(
+		"wizard.repulsion_ring"
+	)
+	var repulsion_context: Dictionary = game._canonical_target_context(
+		repulsion_definition,
+		game.player.global_position,
+		Vector2.DOWN,
+		false
+	)
+	var repulsion_ids: Array[int] = []
+	for repulsion_entry: Dictionary in repulsion_context.get("targets", []):
+		repulsion_ids.append(int(repulsion_entry.get("instance_id", 0)))
+	assert(
+		repulsion_ids.has(adjacent_repulsion_target.get_instance_id()),
+		"抗拒火环没有选中与相邻一格接触的怪物占位"
+	)
+	assert(
+		not repulsion_ids.has(outside_repulsion_target.get_instance_id()),
+		"抗拒火环错误选中相邻一圈以外的怪物"
+	)
+	assert(
+		game._canonical_effect_enemy({
+			"target_instance_id": adjacent_repulsion_target.get_instance_id(),
+		}) == adjacent_repulsion_target,
+		"抗拒火环效果没有映射回其各自的真实怪物实例"
+	)
+	adjacent_repulsion_target.queue_free()
+	outside_repulsion_target.queue_free()
+	await get_tree().process_frame
+
+	var fire_wall_cells: Array[Vector2i] = [
+		origin_tile,
+		origin_tile + Vector2i.RIGHT,
+		origin_tile + Vector2i.DOWN,
+		origin_tile + Vector2i.ONE,
+	]
+	var fire_wall_inside := _make_enemy(
+		game,
+		game.player,
+		origin_tile + Vector2i.ONE,
+		"火墙四格内目标"
+	)
+	var fire_wall_outside := _make_enemy(
+		game,
+		game.player,
+		origin_tile + Vector2i(4, 4),
+		"火墙四格外目标"
+	)
+	assert(
+		game._canonical_ground_cell_contains_enemy(
+			fire_wall_inside,
+			origin_tile + Vector2i.ONE
+		),
+		"火墙正式格没有按怪物占位接触判定目标"
+	)
+	var outside_touches_any := false
+	for fire_wall_cell: Vector2i in fire_wall_cells:
+		outside_touches_any = (
+			outside_touches_any
+			or game._canonical_ground_cell_contains_enemy(
+				fire_wall_outside,
+				fire_wall_cell
+			)
+		)
+	assert(not outside_touches_any, "火墙仍使用越出正式2×2的圆形像素范围")
+	game._spawn_canonical_ground_field(
+		"wizard.fire_wall",
+		fire_wall_cells,
+		game.player.global_position,
+		{
+			"raw_power": 37,
+			"duration_seconds": 3,
+			"tick_interval_ms": 1000,
+		}
+	)
+	var formal_cell_fields := 0
+	for child: Node in game.get_children():
+		if child is GroundSkillEffect and child.skill_id == "wizard.fire_wall":
+			if child.runtime_target_filter.is_valid():
+				formal_cell_fields += 1
+	assert(
+		formal_cell_fields >= 4,
+		"火墙没有让四个正式格分别承担占位接触判定"
+	)
+
 	game.queue_free()
 	await get_tree().process_frame
 	print("GAME_ROOT_WIZARD_GEOMETRY_INTEGRATION_PASS")
