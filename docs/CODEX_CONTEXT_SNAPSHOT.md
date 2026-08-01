@@ -1,5 +1,18 @@
 # Codex 精简上下文快照
 
+## 2026-08-01 Android v57：攻击触摸票据与可靠释放
+
+- UI 永久工作树提交 `aefec7aa` 已作为集成提交 `4d82edc8` 接入，新增稳定合同 `ui.input.circular_touch.lifecycle.v1`：每次真实 touch/mouse/ui_accept 按下生成唯一 token；同一 touch_id 的重复 DOWN 不再重复发起；按钮外松手由全局 release-only 兜底结束；触摸取消、隐藏、退树、应用/窗口失焦均可靠取消；Android 触摸产生的模拟鼠标事件不再双发。HUD 保留旧信号兼容，但 GameRoot 只接 token 信号，HUD 布局、尺寸、图片、文字和视觉常量未改。
+- 集成提交 `34753ed0` 新增 `combat.input.attack_ticket.touch_lifecycle.v1`：真实点击票据、长按续攻和技能按钮触发彻底分离；同一 token 最多产生一张票据，不同快速点击各自保留；松手只停止续攻，cancel/失焦/死亡清除幽灵输入；队列上限 32；战士、法师、道士共用同一调度合同。旧的无上限计数累加与只清 held、不清输入生命周期的路径已移除。
+- 回归结果：触摸/UI/三职业定向专项 `6/6`、完整 Warrior 套件 `21/21`、最终 Critical 套件 `78/78` 全部通过。236/240 头盔人工稿及三份怪物脚点合同 SHA-256 仍分别为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`、`81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`、`DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+- Android 固定构建提交为 `85205bb8`，APK 为 `outputs/hardcore/HardCore-v57-attack-touch-tickets-debug.apk`，大小 `244,369,521` 字节，SHA-256 `5666E45DB6FD21E3BE574AB98D04D752F20D76529D70C17975A057DBB76CFED0`。包信息为 `versionCode=57`、`versionName=1.17.21-attack-touch-tickets`；已在 HONOR 90（REA-AN00）保留存档覆盖安装并启动，手机回读版本、进程和前台 Activity 正常，启动日志无 Godot 脚本错误或 Android 崩溃。
+
+## 2026-08-01 Android v56：半月蓝量门槛与野蛮冲撞目标释放
+
+- 职业技能提交 `76a977ee` 已作为集成提交 `5b68dfa9` 接入。半月在攻击输入时 MP 已不足，会沿既有优先级直接降级到刺杀或普通攻击，主体动作、视觉、范围与效果保持一致且不扣半月 MP；若输入后才耗尽 MP，则保留已启动动作并使用既有命中帧晚期降级。
+- 新增稳定合同 `gameplay.warrior.wild_rush.original_locked_target_release.v1`：野蛮冲撞虽为方向技能，释放快照仍保留输入阶段已验证的原目标实例 ID，使现有 GameRoot 目标链能实际执行冲撞；其他方向/区域技能仍不追踪目标。集成定向相关链 `8/8`、完整 Warrior 套件 `21/21` 通过。236/240 头盔人工稿、三份怪物脚点合同及 HUD 哈希均保持冻结值不变。
+- Android 固定构建提交为 `a33a6572`，APK 为 `outputs/hardcore/HardCore-v56-warrior-mana-rush-target-debug.apk`，大小 `244,365,425` 字节，SHA-256 `AF7C445EDC9978A5A5C1DC24A2C3B08D9FA23DE5EBC4C63FA9796C0666BE8731`。包信息为 `versionCode=56`、`versionName=1.17.20-warrior-mana-rush-target`、`HardCore`、`arm64-v8a`，v2/v3 签名与运行时资源探针通过；已在 HONOR 90（REA-AN00）保留数据覆盖安装并启动，手机回读版本、进程与前台 Activity 正常，启动日志无 Godot 脚本错误或 Android 崩溃。
+
 ## 2026-08-01 Android v55：怪物占位面积近战命中
 
 - 用户确认近战采用“中心负责瞄准、面积负责命中”：自动锁定与强制转向仍瞄准怪物人工脚点；最终资格不再要求技能区域覆盖脚点中心，只要固定技能面积与怪物现有 2:1 物理占位椭圆接触或重叠即进入准确/伤害判定。普通怪与 Boss 直接复用各自 `collision_radius`，未修改人工脚点、碰撞半径、技能距离/宽度、目标数量、伤害、准确、动画或 UI。

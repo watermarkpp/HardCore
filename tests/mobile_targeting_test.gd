@@ -101,6 +101,23 @@ func _run() -> void:
 		game._queued_mobile_attacks == 0 and game.player._attack_action_timer > 0.0,
 		"第二笔快速点击没有独立完成一次攻击"
 	)
+	var repeated_press_token := 9001
+	game._on_mobile_attack_input_started(repeated_press_token, 17, &"touch")
+	game._on_mobile_attack_input_started(repeated_press_token, 17, &"touch")
+	assert(
+		game._queued_mobile_attacks == 1,
+		"repeated DOWN for one physical touch created more than one attack ticket"
+	)
+	game._on_mobile_attack_input_cancelled(
+		repeated_press_token,
+		17,
+		&"touch",
+		&"test_cancel"
+	)
+	assert(
+		game._queued_mobile_attacks == 0 and not game._mobile_attack_held,
+		"touch cancel left a ghost attack ticket or held-repeat state"
+	)
 	var movement_position_before: Vector2 = game.player.global_position
 	game.player.set_touch_vector(Vector2.RIGHT)
 	game.player._physics_process(game.player._attack_action_timer + 0.01)
@@ -169,8 +186,40 @@ func _run() -> void:
 	await get_tree().process_frame
 	assert(flying.collision_layer == 0 and flying.collision_mask == 1, "飞行怪仍阻挡人物移动")
 	flying.queue_free()
+	_assert_attack_ticket_contract_for_all_professions(game)
 	print("MOBILE_TARGETING_PASS：攻击锁定10格、持续锁定、强制转向、全方向换敌及技能目标隔离正常")
 	get_tree().quit(0)
+
+
+func _assert_attack_ticket_contract_for_all_professions(game: Node) -> void:
+	var original_profession: String = PlayerState.profession
+	var original_attack_slots: Array[String] = PlayerState.attack_skill_slots.duplicate()
+	var token_seed := 12000
+	for profession_name: String in ["战士", "法师", "道士"]:
+		PlayerState.select_profession(profession_name)
+		PlayerState.attack_skill_slots = [""]
+		game._cancel_all_mobile_attack_inputs(true)
+		game.player._attack_timer = 1.0
+		game.player._attack_action_timer = 1.0
+		var first_token := token_seed
+		var second_token := token_seed + 1
+		token_seed += 10
+		game._on_mobile_attack_input_started(first_token, 1, &"touch")
+		game._on_mobile_attack_input_started(first_token, 1, &"touch")
+		game._on_mobile_attack_input_started(second_token, 2, &"touch")
+		assert(
+			game._queued_mobile_attacks == 2,
+			"%s attack input did not keep one ticket per unique physical touch" % profession_name
+		)
+		game._on_mobile_attack_input_ended(first_token, 1, &"touch")
+		game._on_mobile_attack_input_ended(second_token, 2, &"touch")
+		assert(
+			not game._mobile_attack_held and game._queued_mobile_attacks == 2,
+			"%s release did not stop held repeat or lost legitimate buffered taps" % profession_name
+		)
+		game._cancel_all_mobile_attack_inputs(true)
+	PlayerState.select_profession(original_profession)
+	PlayerState.attack_skill_slots = original_attack_slots
 
 
 func _place_at_tile_offset(
