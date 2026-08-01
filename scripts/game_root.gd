@@ -3272,17 +3272,40 @@ func _canonical_target_context(
 			"actual_hp_missing": target.max_hp - target.current_hp,
 		}, true)
 	var nearby: Array[Dictionary] = []
+	var adjacent_ring_cells: Array[Vector2i] = []
+	if str(definition.get("geometry", {}).get("shape", "")) == "adjacent_ring":
+		var caster_tile := _canonical_world_to_tile(origin)
+		for ring_y: int in range(-1, 2):
+			for ring_x: int in range(-1, 2):
+				if ring_x != 0 or ring_y != 0:
+					adjacent_ring_cells.append(
+						caster_tile + Vector2i(ring_x, ring_y)
+					)
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if node is EnemyActor and not node.is_queued_for_deletion() and node.global_position.distance_to(origin) <= search_range:
-			nearby.append({
-				"level": node.level,
-				"is_boss": node.is_boss,
-				"immovable": node.is_boss,
-				"path_blocked": background.is_environment_point_blocked(node.global_position + node.global_position.direction_to(origin) * -50.0),
-				"hostile_monster": true,
-				"control_immune": node.is_boss,
-				"within_level_gate": node.level <= PlayerState.level,
-			})
+		if (
+			not node is EnemyActor
+			or node.is_queued_for_deletion()
+			or node.global_position.distance_to(origin) > search_range
+		):
+			continue
+		if (
+			not adjacent_ring_cells.is_empty()
+			and not CasterSpellGeometryScript.target_footprint_intersects_cells(
+				adjacent_ring_cells,
+				_enemy_footprint_tile_polygon(node)
+			)
+		):
+			continue
+		nearby.append({
+			"instance_id": node.get_instance_id(),
+			"level": node.level,
+			"is_boss": node.is_boss,
+			"immovable": node.is_boss,
+			"path_blocked": background.is_environment_point_blocked(node.global_position + node.global_position.direction_to(origin) * -50.0),
+			"hostile_monster": true,
+			"control_immune": node.is_boss,
+			"within_level_gate": node.level <= PlayerState.level,
+		})
 	context["targets"] = nearby
 	return context
 
@@ -3396,8 +3419,14 @@ func _apply_canonical_effects(
 				if not restored_by_target.is_empty():
 					player.restore_health(int(restored_by_target[0]))
 			"adjacent_push":
-				if target != null and bool(effect.get("displaced", false)):
-					_apply_canonical_displacement(target, target.global_position.direction_to(origin) * -float(effect.get("push_distance_tiles", 1)) * 50.0)
+				var repulsion_target := _canonical_effect_enemy(effect)
+				if repulsion_target != null and bool(effect.get("displaced", false)):
+					_apply_canonical_displacement(
+						repulsion_target,
+						repulsion_target.global_position.direction_to(origin)
+						* -float(effect.get("push_distance_tiles", 1))
+						* 50.0
+					)
 			"level_gated_push":
 				if target != null and bool(effect.get("displaced", false)):
 					_apply_wild_rush_displacement(target, effect, target_context)
@@ -3443,6 +3472,21 @@ func _apply_canonical_effects(
 				_set_canonical_fire_charge_expires_at(
 					Time.get_ticks_msec() + maxi(1, int(effect.get("charge_lifetime_ms", 10000)))
 				)
+
+
+func _canonical_effect_enemy(effect: Dictionary) -> EnemyActor:
+	var instance_id := int(effect.get("target_instance_id", 0))
+	if instance_id <= 0:
+		return null
+	var candidate := instance_from_id(instance_id)
+	if (
+		candidate is EnemyActor
+		and is_instance_valid(candidate)
+		and candidate.is_inside_tree()
+		and not candidate.is_queued_for_deletion()
+	):
+		return candidate as EnemyActor
+	return null
 
 
 func _set_canonical_fire_charge_expires_at(expires_at_ms: int) -> void:
@@ -3644,10 +3688,12 @@ func _spawn_canonical_ground_field(
 	effect: Dictionary
 ) -> void:
 	var positions: Array[Vector2] = []
+	var coverage_cells: Array[Vector2i] = []
 	if raw_geometry_cells is Array:
 		for raw_cell: Variant in raw_geometry_cells:
 			if raw_cell is Vector2i:
 				positions.append(_canonical_tile_to_world(raw_cell))
+				coverage_cells.append(raw_cell)
 	if positions.is_empty():
 		positions.append(fallback_position)
 	for index: int in range(positions.size()):
@@ -3655,7 +3701,8 @@ func _spawn_canonical_ground_field(
 			stable_skill_id,
 			positions[index],
 			effect,
-			index == 0
+			true,
+			coverage_cells[index] if index < coverage_cells.size() else null
 		)
 
 
@@ -3663,7 +3710,8 @@ func _spawn_canonical_ground_effect(
 	stable_skill_id: String,
 	position: Vector2,
 	effect: Dictionary,
-	applies_damage := true
+	applies_damage := true,
+	coverage_cell: Variant = null
 ) -> void:
 	var ground_effect := GroundSkillEffect.new()
 	ground_effect.setup(
@@ -3682,9 +3730,29 @@ func _spawn_canonical_ground_effect(
 			if applies_damage
 			else Callable(self, "_ignore_canonical_ground_visual_tick")
 		),
-		applies_damage
+		applies_damage,
+		(
+			Callable(self, "_canonical_ground_cell_contains_enemy").bind(
+				coverage_cell
+			)
+			if coverage_cell is Vector2i
+			else Callable()
+		)
 	)
 	add_child(ground_effect)
+
+
+func _canonical_ground_cell_contains_enemy(
+	enemy: EnemyActor,
+	coverage_cell: Vector2i
+) -> bool:
+	return (
+		is_instance_valid(enemy)
+		and CasterSpellGeometryScript.target_footprint_intersects_cell(
+			_enemy_footprint_tile_polygon(enemy),
+			coverage_cell
+		)
+	)
 
 
 func _ignore_canonical_ground_visual_tick(

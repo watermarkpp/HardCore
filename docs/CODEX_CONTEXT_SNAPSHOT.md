@@ -1,5 +1,18 @@
 # Codex 精简上下文快照
 
+## 2026-08-01 Android v58：法师范围几何、魔法盾常驻与火墙审计
+
+- Android 固定构建提交为 `1a18f14bbbd88281af950fb01e250d3079dbe055`；APK 为 `outputs/hardcore/HardCore-v58-wizard-geometry-alignment-debug.apk`，大小 `244,410,869` 字节，SHA-256 `87272359792837C6BE33CC2E352BCC30803F905246879B9EFE7C328DDE6B364C`。包信息为 `versionCode=58`、`versionName=1.17.22-wizard-geometry-alignment`、`HardCore`、`arm64-v8a`，v2/v3 签名、运行时资源探针与 586 个法师技能帧导入均通过。
+- 已在 HONOR 90（REA-AN00）使用 `adb install -r` 保留存档覆盖安装并启动；手机回读版本、进程与前台 `GodotAppLauncher` 正常，启动日志无 Godot 脚本错误、解析错误或 Android 崩溃。236/240 人工头盔与三份怪物脚点合同 SHA-256 在构建安装后仍为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`、`81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`、`DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+
+## 2026-08-01：魔法盾常驻正式视觉与法师技能全链审计（未构建 APK）
+
+- 职业技能提交 `92ae4e28` 已作为集成提交 `298bd6a2` 接入稳定合同 `skills.wizard.magic_shield.cast_then_hold_final_frame.v1`：魔法盾使用主资料库 `Data/Magic.wil` indices `3880..3889` 的十帧成形动画，播放一次后保留完整第十帧；只要 `magic_shield_snapshot.active` 同时满足剩余持续时间和剩余容量，正式盾形持续跟随人物，任一归零后立即移除。旧 `player._draw()` 蓝色占位圆已删除；重复补盾替换同一人物的旧视觉，不叠加多层。
+- 审计发现并修正抗拒火环真实目标映射：正式范围仍是人物周围相邻一圈八格，怪物使用现有 2:1 脚底占位与技能格接触判定；每个运行时结果携带稳定怪物实例 ID，实际推送各自对应怪物，不再把全部效果错误施加给一个锁定目标或在无锁定时失效。该接线由集成提交 `3e99079f` 完成。
+- 职业技能提交 `0929efa3` 已作为集成提交 `1bfe0872` 接入，集成提交 `3e99079f` 完成火墙正式 2×2 伤害接线：四个格子均以怪物占位接触判定，不再用第一格圆心半径 `74px` 的圆形近似；同一施法者/同一怪物每个结算周期仍最多一次伤害。正式原始威力、MAC、持续时间与 `tick_interval_ms=1000` 均未改变。
+- 法师十四技能审计以唯一主源 `assets/data/vanilla_176/skills_source_of_truth_v1.json` 为准：单体技能自身最大范围 9 格，法术锁定保持独立 12 格；地狱火 5×1 不穿透直线、疾光电影 8×1 穿透直线、地狱雷光半径二格外环最多 24 目标、爆裂火焰/冰咆哮精确 3×3、火墙精确 2×2，均按怪物占位接触判定。两轮定向回归 `16/16` 全部通过，覆盖真源/公式、目标与锁定、几何、直接法伤、火墙不叠加、施法动作锁、正式动画和生产入口。
+- 本轮未构建 APK。236/240 人工头盔与三份怪物脚点合同 SHA-256 仍为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`、`81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`、`DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+
 ## 2026-08-01：法术锁定、火墙不叠加与雷电术细化（未构建 APK）
 
 - 职业技能提交 `6df25c26` 已作为集成提交 `a61cc99c` 接入，UI 提交 `8b6c2be1` 已作为集成提交 `b30e256e` 接入：法术锁定与物理攻击锁定分离；法师/道士使用 12 个逻辑地图格的独立锁定，换敌键可在不施法时循环选择，目标死亡或离开 12 格才解除；每个法术仍使用自身正式范围。范围技能使用怪物 2:1 脚底占位与技能格 SAT 相交判定。攻击法术支持点击一次、按住连续释放并遵守动作/冷却门；魔法盾为开关，容量不高于 20% 或接近结束时通过原 MP、冷却和动作管线自动补盾。
@@ -409,7 +422,7 @@
 | `HardCore-worktrees/maps` | `codex/maps` @ `2a4d6ccf` | 72 untracked | 用户地图编辑器内容，继续保护；代码等价结果已集成为 `1d74fc72` |
 | `HardCore-worktrees/monsters` | `codex/monsters` @ `90f3f716` | 本轮任务文件 clean；既有 UID/报告继续保护 | 最新 212 份人工脚点已冻结导入；黄色目标光圈以人工脚点为圆心、按对应怪物物理脚印 `1.25×` 同比放大，已作为 `b478b7cc` 集成；专项 10/10 通过 |
 | `HardCore-worktrees/ui-art` | `codex/ui-art` @ `dabd8872` | 本轮代码 clean；Godot import/UID/输出继续保护 | 验收台橙色正式光圈改为直接读取游戏运行时目标光圈几何，已作为 `ed3d850e` 集成；UI/怪物联动 2/2 通过 |
-| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `ce58f7bc` | 既有 UID/输出继续保护 | 33 技能 runtime、150 条可执行语义合同和 26 项正式主动技能视觉已集成；`ce58f7bc` 的烈火 canonical 测试修正已作为 `6827bb7d` 集成 |
+| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `0929efa3` | 既有 UID/输出继续保护 | 33 技能 runtime、150 条可执行语义合同和 26 项正式主动技能视觉已集成；魔法盾常驻正式末帧、抗拒火环逐目标实例映射和火墙精确四格判定已分别作为 `298bd6a2`、`1bfe0872`、`3e99079f` 集成 |
 | `HardCore-worktrees/equipment` | `codex/equipment` @ `26f25e39` | 既有 monster import、试点截图脚本、UID/生成项继续保护 | 男性 `Hair.wil block 4`、世界头盔隐藏、纸娃娃/背包/地面头盔均已集成；`26f25e39` 的正式武器可见性测试修正已作为 `35568e45` 集成，冻结草稿与生成图继续保护 |
 
 ### maps 保护红线
