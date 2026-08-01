@@ -10,6 +10,9 @@ const Geometry := preload("res://scripts/skills/warrior_melee_geometry.gd")
 
 const CONTRACT_ID := "diagnostic.warrior.melee_candidate.v1"
 const DIRECTION_AUDIT_CONTRACT_ID := "diagnostic.warrior.melee_direction_loop.v1"
+const ANGLE_QUANTIZATION_AUDIT_CONTRACT_ID := (
+	"diagnostic.warrior.melee_angle_quantization.v1"
+)
 
 const RESULT_OK := "OK"
 const RESULT_SAME_FOOTPOINT := "SAME_FOOTPOINT"
@@ -144,6 +147,45 @@ static func audit_all_directions() -> Dictionary:
 	}
 
 
+static func audit_fractional_tile_delta(fractional_tile_delta: Vector2) -> Dictionary:
+	## Compares the current project's 2:1-projected screen-angle quantizer with
+	## the alternative 45-degree quantizer measured directly in canonical tile
+	## space. It is deliberately read-only: neither result is selected here.
+	var projected_world_vector := _project_tile_delta(fractional_tile_delta)
+	var projected_screen_direction := Geometry.direction_index_for_tile_delta(
+		fractional_tile_delta
+	)
+	var tile_space_direction := _direction_index_for_tile_space_delta(
+		fractional_tile_delta
+	)
+	var matches := projected_screen_direction == tile_space_direction
+	var projected_world_direction := (
+		projected_world_vector.normalized()
+		if projected_world_vector.length_squared() > Geometry.EPSILON * Geometry.EPSILON
+		else Vector2.ZERO
+	)
+	return {
+		"contract_id": ANGLE_QUANTIZATION_AUDIT_CONTRACT_ID,
+		"geometry_contract_id": Geometry.CONTRACT_ID,
+		"fractional_tile_delta": _vector2_json(fractional_tile_delta),
+		"has_direction": (
+			fractional_tile_delta.length_squared()
+			> Geometry.EPSILON * Geometry.EPSILON
+		),
+		"projected_screen_45_direction_index": projected_screen_direction,
+		"tile_space_45_direction_index": tile_space_direction,
+		"quantizers_match": matches,
+		"projected_screen_canonical_tile_step": _vector2i_json(
+			Geometry.facing_tile_step(projected_screen_direction)
+		),
+		"tile_space_canonical_tile_step": _vector2i_json(
+			Geometry.facing_tile_step(tile_space_direction)
+		),
+		"projected_world_vector": _vector2_json(projected_world_vector),
+		"projected_world_direction": _vector2_json(projected_world_direction),
+	}
+
+
 static func _result_code(
 	mode: String,
 	distance: float,
@@ -184,6 +226,18 @@ static func _direction_index_for_projected_screen_delta(screen_delta: Vector2) -
 		return 0
 	return wrapi(
 		int(round((screen_delta.angle() - PI / 2.0) / (TAU / 8.0))),
+		0,
+		8
+	)
+
+
+static func _direction_index_for_tile_space_delta(tile_delta: Vector2) -> int:
+	if tile_delta.length_squared() <= Geometry.EPSILON * Geometry.EPSILON:
+		return 0
+	# Canonical tile-space steps start at S=(1,1), then advance clockwise in
+	# the project's S,SW,W,NW,N,NE,E,SE index order at exact 45-degree steps.
+	return wrapi(
+		int(round((tile_delta.angle() - PI / 4.0) / (TAU / 8.0))),
 		0,
 		8
 	)
