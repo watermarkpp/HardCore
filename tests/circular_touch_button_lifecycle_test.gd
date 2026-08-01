@@ -222,6 +222,41 @@ func _test_hud_bridge_and_visual_freeze() -> void:
 		and int(counts.legacy_released) == 2
 	)
 
+	var skill_counts := {"started": 0, "ended": 0, "cancelled": 0}
+	hud.skill_input_started.connect(
+		func(group: String, index: int, _token: int, _touch_id: int, _source: StringName) -> void:
+			assert(group == "attack_ring" and index == 0)
+			skill_counts.started = int(skill_counts.started) + 1
+	)
+	hud.skill_input_ended.connect(
+		func(group: String, index: int, _token: int, _touch_id: int, _source: StringName) -> void:
+			assert(group == "attack_ring" and index == 0)
+			skill_counts.ended = int(skill_counts.ended) + 1
+	)
+	hud.skill_input_cancelled.connect(
+		func(group: String, index: int, _token: int, _touch_id: int, _source: StringName, reason: StringName) -> void:
+			assert(group == "attack_ring" and index == 0 and reason == &"hud_test_cancel")
+			skill_counts.cancelled = int(skill_counts.cancelled) + 1
+	)
+	var ring := root.get_node("AttackRingSkill1") as Button
+	assert(
+		str(ring.get_meta("input_lifecycle_contract", ""))
+		== CircularTouchButtonScript.INPUT_LIFECYCLE_CONTRACT_ID
+	)
+	var ring_touch := _touch(31, true)
+	ring_touch.position = Vector2(36, 36)
+	ring.call("_gui_input", ring_touch)
+	ring.call("_gui_input", ring_touch)
+	assert(int(skill_counts.started) == 1)
+	ring_touch.pressed = false
+	ring.call("_gui_input", ring_touch)
+	assert(int(skill_counts.ended) == 1)
+	ring_touch = _touch(32, true)
+	ring_touch.position = Vector2(36, 36)
+	ring.call("_gui_input", ring_touch)
+	hud.cancel_skill_inputs(&"hud_test_cancel")
+	assert(int(skill_counts.started) == 2 and int(skill_counts.cancelled) == 1)
+
 	hud.queue_free()
 	await get_tree().process_frame
 
