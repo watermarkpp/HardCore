@@ -1,5 +1,13 @@
 # Codex 精简上下文快照
 
+## 2026-08-01 Android v54：近战地图格八方向统一修正
+
+- 手机 v53 逐刀诊断已锁定根因：复现角度中人物到目标的浮点地图格差值约为 `(-0.56,-1.31)`、距离 `1.31` 格；旧 screen/projected 45° 量化错误选为 index 5，导致刺杀横向值 `0.56 > 0.50` 而连续 `12/12` 被 `OUTSIDE_ATTACK_LANE` 拒绝。按方案 A 的地图格坐标量化应为 index 4，前向约 `0.935`、横向约 `-0.375`，属于合法第一格；该证据排除了准确 MISS 与扣血提交失败。
+- 职业技能修正 `7bef5aedd852a7563fcaf6ed0e6bd0c0160ecfec` 已作为集成提交 `f1a69a4c` 接入，新增 `gameplay.professions.combat_direction_space.iso_64x32_tile_8dir.v1` 与 `gameplay.warrior.melee_release_facing.canonical_tile_8dir.v2`。运行时现在固定使用“世界脚点差→浮点地图格差→地图格八方向→视觉/世界投影”的唯一链路；旧 screen/projected 量化仅保留为诊断对照。
+- 集成接线提交 `082c93fd` 使输入自动转向、攻击请求、释放帧几何、普通/刺杀/半月/烈火候选筛选及诊断全部复用同一个 authoritative `direction_index`；攻击动作已开始时的拒绝输入不再改写人物朝向。法师/道士的魔法锁定路径未改。
+- 手机固定死角已加入非 test mode 的端到端回归；近战方向/诊断/几何/移动锁定/状态机/正式技能入口等相关回归两组共 `14/14` 通过。236/240 头盔人工草稿、三份怪物脚点合同与冻结 HUD 的 SHA-256 均保持开工值不变。
+- APK 从固定提交 `082c93fd` 的隔离工作树导出为 `outputs/hardcore/HardCore-v54-melee-tile-direction-fix-debug.apk`，大小 `244,357,233` 字节，SHA-256 `F5C67BA082BA223A53E5C9A12686A81D70AFE47307842C92291CA87B218869AA`。包信息为 `versionCode=54`、`versionName=1.17.18-melee-tile-direction-fix`、`HardCore`、`arm64-v8a`；v2/v3 签名通过。已对 HONOR 90（REA-AN00）执行保留数据覆盖安装并启动，手机回读版本正确、进程与前台 Activity 正常，启动日志无 Godot 脚本错误或 Android 崩溃。
+
 ## 2026-08-01 Android v53：方案 A 近战逐刀诊断与角度边界证据
 
 - 职业技能永久工作树提交 `ad910399` / `4f2d2f20` 已分别作为集成提交 `58c03259` / `6b76ed85` 接入；新增只读稳定合同 `diagnostic.warrior.melee_candidate.v1`、`diagnostic.warrior.melee_direction_loop.v1`、`diagnostic.warrior.melee_angle_quantization.v1`。精确八方向的编号与投影闭环全部一致，但 fractional tile 边界存在已证明的策略差异：`delta=(1,0.5)` 当前投影后 screen-45 量化为 SE/index 7，方案 A 的 tile-space-45 量化为 S/index 0；运行时会逐刀同时记录两种结果，不提前改变游戏判定。
