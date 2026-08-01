@@ -1,12 +1,18 @@
 class_name CombatReleaseGeometry
 extends RefCounted
 
+const CombatDirectionSpaceScript := preload(
+	"res://scripts/skills/combat_direction_space.gd"
+)
+
 ## Stable profession-level contract for resolving combat geometry at the
 ## actual hit/projectile release frame. Input acceptance may remember a target
 ## identity, but world positions are deliberately sampled only at release.
 
 const CONTRACT_ID := "gameplay.professions.combat_release_geometry.live_footpoint.v1"
-const MELEE_RELEASE_FACING_POLICY_ID := "gameplay.warrior.melee_release_facing.locked_input_8dir.v1"
+const MELEE_RELEASE_FACING_POLICY_ID := (
+	"gameplay.warrior.melee_release_facing.canonical_tile_8dir.v2"
+)
 const POLICY_LOCKED_SINGLE_TARGET := "locked_single_target"
 const POLICY_INPUT_DIRECTION := "input_direction"
 const FACING_POLICY_LIVE_LOCKED_TARGET := "live_locked_target_direction"
@@ -37,8 +43,15 @@ static func resolve(
 		FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION,
 	]:
 		effective_facing_policy = FACING_POLICY_LIVE_LOCKED_TARGET
+	var direction_resolution: Dictionary = {}
 	if effective_facing_policy == FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION:
-		normalized_input = _quantized_eight_direction(normalized_input)
+		# Preserve the input-facing snapshot for the whole action. The input world
+		# vector is converted to fractional tile space before quantization, then
+		# projected back to the matching world/visual direction.
+		direction_resolution = CombatDirectionSpaceScript.resolve_world_delta(
+			input_direction
+		)
+		normalized_input = direction_resolution.projected_world_direction
 	var had_locked_target := track_locked_target and locked_target_instance_id > 0
 	var valid_original_target := had_locked_target and locked_target_valid_at_release
 	var release_direction := normalized_input
@@ -67,6 +80,22 @@ static func resolve(
 		"direction_locked_for_action": (
 			effective_facing_policy == FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION
 		),
+		"direction_space_contract_id": str(
+			direction_resolution.get("contract_id", "")
+		),
+		"direction_index": int(direction_resolution.get("direction_index", -1)),
+		"visual_direction_index": int(
+			direction_resolution.get("visual_direction_index", -1)
+		),
+		"direction_source_world_delta": direction_resolution.get(
+			"source_world_delta", Vector2.ZERO
+		),
+		"direction_source_fractional_tile_delta": direction_resolution.get(
+			"fractional_tile_delta", Vector2.ZERO
+		),
+		"direction_canonical_tile_step": direction_resolution.get(
+			"canonical_tile_step", Vector2i.ZERO
+		),
 		"refresh_actor_footpoint_at_release": true,
 		"refresh_locked_target_footpoint_at_release": valid_original_target,
 		"locked_target_instance_id": locked_target_instance_id if had_locked_target else 0,
@@ -80,16 +109,6 @@ static func _normalized_input_direction(input_direction: Vector2) -> Vector2:
 	if input_direction.length_squared() <= EPSILON * EPSILON:
 		return Vector2.DOWN
 	return input_direction.normalized()
-
-
-static func _quantized_eight_direction(input_direction: Vector2) -> Vector2:
-	var direction_index := wrapi(
-		int(round((input_direction.angle() - PI / 2.0) / (TAU / 8.0))),
-		0,
-		8
-	)
-	var locked_angle := PI / 2.0 + float(direction_index) * TAU / 8.0
-	return Vector2(cos(locked_angle), sin(locked_angle)).normalized()
 
 
 static func candidate_allowed(release_geometry: Dictionary, candidate_instance_id: int) -> bool:
