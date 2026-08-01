@@ -45,6 +45,14 @@ const HUD_JOYSTICK_RECT := Rect2(70, -210, 152, 152)
 signal movement_changed(value: Vector2)
 signal attack_pressed
 signal attack_released
+signal attack_input_started(press_token: int, touch_id: int, source: StringName)
+signal attack_input_ended(press_token: int, touch_id: int, source: StringName)
+signal attack_input_cancelled(
+	press_token: int,
+	touch_id: int,
+	source: StringName,
+	reason: StringName
+)
 signal interact_pressed
 signal skill_pressed(slot_index: int)
 signal skill_slot_pressed(slot_group: String, slot_index: int)
@@ -434,9 +442,15 @@ func _build_combat_controls(root: Control) -> void:
 	_apply_control_rect(attack_button, Rect2(HUD_ATTACK_CENTER - Vector2(60, 60), Vector2(120, 120)))
 	attack_button.add_theme_font_size_override("font_size", 24)
 	attack_button.text = ""
-	attack_button.button_down.connect(func() -> void: attack_pressed.emit())
-	attack_button.button_up.connect(func() -> void: attack_released.emit())
+	attack_button.set("lifecycle_enabled", true)
+	attack_button.connect("input_started", _on_attack_input_started)
+	attack_button.connect("input_ended", _on_attack_input_ended)
+	attack_button.connect("input_cancelled", _on_attack_input_cancelled)
 	attack_button.set_meta("stable_id", "hud.attack.primary")
+	attack_button.set_meta(
+		"input_lifecycle_contract",
+		CircularTouchButtonScript.INPUT_LIFECYCLE_CONTRACT_ID,
+	)
 	attack_button.set_meta("assignment_group", "attack")
 	attack_button.set_meta("assignment_contract", "ui.skill.button_assignment.v3")
 	attack_button.set_meta("circular_touch", true)
@@ -549,6 +563,41 @@ func _build_combat_controls(root: Control) -> void:
 	special_action_button.visible = false
 	special_action_button.pressed.connect(_on_special_action_button)
 	root.add_child(special_action_button)
+
+
+func cancel_attack_inputs(reason: StringName = &"hud_cancel") -> void:
+	if attack_button != null:
+		attack_button.call("cancel_all_inputs", reason)
+
+
+func _on_attack_input_started(
+	press_token: int,
+	touch_id: int,
+	source: StringName
+) -> void:
+	attack_input_started.emit(press_token, touch_id, source)
+	attack_pressed.emit()
+
+
+func _on_attack_input_ended(
+	press_token: int,
+	touch_id: int,
+	source: StringName
+) -> void:
+	attack_input_ended.emit(press_token, touch_id, source)
+	attack_released.emit()
+
+
+func _on_attack_input_cancelled(
+	press_token: int,
+	touch_id: int,
+	source: StringName,
+	reason: StringName
+) -> void:
+	attack_input_cancelled.emit(press_token, touch_id, source, reason)
+	# The legacy release signal remains the safety boundary for callers that have
+	# not migrated to token-aware cancellation yet.
+	attack_released.emit()
 
 
 func _build_modal_panels(root: Control) -> void:

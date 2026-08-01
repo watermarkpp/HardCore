@@ -70,8 +70,13 @@ func _run() -> void:
 			received.skill_index = slot_index
 	)
 	(joystick as TouchJoystick).vector_changed.emit(Vector2(0.75, -0.25))
-	attack.button_down.emit()
-	attack.button_up.emit()
+	var attack_touch := InputEventScreenTouch.new()
+	attack_touch.index = 0
+	attack_touch.position = attack.size * 0.5
+	attack_touch.pressed = true
+	attack.call("_gui_input", attack_touch)
+	attack_touch.pressed = false
+	attack.call("_gui_input", attack_touch)
 	interact.button_down.emit()
 	switch_target.pressed.emit()
 	auto_target.toggled.emit(false)
