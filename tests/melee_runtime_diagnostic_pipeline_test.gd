@@ -2,6 +2,7 @@ extends Node
 
 const DiagnosticLog := preload("res://scripts/layers/runtime/combat_diagnostic_log.gd")
 const DirectionSpace := preload("res://scripts/skills/combat_direction_space.gd")
+const MeleeGeometry := preload("res://scripts/skills/warrior_melee_geometry.gd")
 
 
 func _ready() -> void:
@@ -106,12 +107,66 @@ func _run() -> void:
 		== "gameplay.professions.combat_direction_space.iso_64x32_tile_8dir.v1"
 	)
 
+	# Hit-and-run footprint regression: movement input remains held when the
+	# attack begins, and the monster centre is beyond the 2.5-tile thrust end.
+	# Its unchanged physics ellipse only touches the fixed attack rectangle.
+	# The historical point test must reject it while the production resolver
+	# accepts the area contact and commits damage.
+	game.player._attack_timer = 0.0
+	game.player._attack_action_timer = 0.0
+	game.player.thrusting_enabled = true
+	PlayerState.learned_skills["warrior.thrusting"] = 3
+	game.player.set_touch_vector(Vector2.DOWN)
+	# Reproduce the exact input-frame state before request_attack_toward() starts
+	# the action lock; the following physics frame would intentionally zero the
+	# runtime movement flag once the attack action begins.
+	game.player.movement_input_active = true
+	assert(game.player.touch_vector.length() > 0.08)
+	origin_tile = game._canonical_world_to_fractional_tile(game.player.global_position)
+	var footprint_direction_index := 7
+	var footprint_step := Vector2(MeleeGeometry.facing_tile_step(footprint_direction_index))
+	var forward_support := 0.0
+	for point: Vector2 in MeleeGeometry.target_footprint_polygon_fractional_tile(
+		Vector2.ZERO,
+		enemy.collision_radius
+	):
+		forward_support = maxf(
+			forward_support,
+			absf(MeleeGeometry.line_coordinates(point, footprint_direction_index).x)
+		)
+	enemy.global_position = game._canonical_fractional_tile_to_world(
+		origin_tile
+		+ footprint_step * (
+			MeleeGeometry.reach_tiles(MeleeGeometry.SKILL_THRUST) + forward_support
+		)
+	)
+	enemy.velocity = Vector2.ZERO
+	enemy.apply_control(60.0)
+	enemy.current_hp = enemy.max_hp
+	game.locked_target = enemy
+	hp_before = enemy.current_hp
+	assert(game._request_mobile_attack(), "footprint edge contact was rejected at input")
+	await get_tree().create_timer(game.player.attack_hit_windup + 0.08).timeout
+	assert(enemy.current_hp < hp_before, "footprint edge contact still produced an empty swing")
+	release_event = _last_release_event()
+	assert(release_event.result_code == "HIT_COMMITTED")
+	assert(bool(release_event.get("movement_input_active_at_input", false)))
+	var footprint_decision := _candidate_for_target(
+		release_event.get("selection_candidate_decisions", []),
+		enemy.get_instance_id()
+	)
+	assert(not footprint_decision.is_empty(), "footprint target was omitted from diagnostics")
+	assert(not bool(footprint_decision.get("point_accepted", true)))
+	assert(bool(footprint_decision.get("footprint_accepted", false)))
+	assert(int(footprint_decision.get("footprint_thrust_slot", 0)) == 2)
+	game.player.set_touch_vector(Vector2.ZERO)
+
 	game.queue_free()
 	await get_tree().process_frame
 	DiagnosticLog.clear_recent_events()
 	DiagnosticLog.enabled = previous_log_enabled
 	PlayerState.test_mode = previous_test_mode
-	print("MELEE_RUNTIME_DIAGNOSTIC_PIPELINE_PASS: production accuracy and angle evidence are observable")
+	print("MELEE_RUNTIME_DIAGNOSTIC_PIPELINE_PASS: accuracy, angle, and footprint-area evidence are observable")
 	get_tree().quit(0)
 
 
@@ -121,6 +176,13 @@ func _last_release_event() -> Dictionary:
 		var event: Dictionary = events[index]
 		if str(event.get("event", "")) == "attack_release_resolved":
 			return event
+	return {}
+
+
+func _candidate_for_target(candidates: Array, target_id: int) -> Dictionary:
+	for candidate: Dictionary in candidates:
+		if int(candidate.get("target_id", 0)) == target_id:
+			return candidate
 	return {}
 
 

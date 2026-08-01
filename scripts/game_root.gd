@@ -1226,9 +1226,10 @@ func _build_melee_input_diagnostic(
 	)
 	var actor_tile := _canonical_world_to_fractional_tile(player.global_position)
 	var target_candidate := (
-		WarriorMeleeDiagnosticScript.explain_candidate(
+		WarriorMeleeDiagnosticScript.explain_footprint_candidate(
 			actor_tile,
 			target_tile,
+			target.collision_radius,
 			input_direction_index,
 			mode
 		)
@@ -2247,9 +2248,10 @@ func _melee_candidate_diagnostics(
 		if not node is EnemyActor or node.is_queued_for_deletion() or node.current_hp <= 0:
 			continue
 		var enemy := node as EnemyActor
-		var explanation := WarriorMeleeDiagnosticScript.explain_candidate(
+		var explanation := WarriorMeleeDiagnosticScript.explain_footprint_candidate(
 			origin_tile,
 			_canonical_world_to_fractional_tile(enemy.global_position),
+			enemy.collision_radius,
 			direction_index,
 			resolved_mode
 		)
@@ -2264,7 +2266,8 @@ func _melee_candidate_diagnostics(
 		explanation["selected_as_primary"] = enemy in primary_targets
 		if (
 			float(explanation.get("chebyshev_distance_tiles", INF))
-			> float(explanation.get("effective_reach_tiles", 0.0)) + 0.25
+			> float(explanation.get("effective_reach_tiles", 0.0)) + 1.0
+			and not bool(explanation.get("footprint_accepted", false))
 			and not bool(explanation["selected_as_primary"])
 		):
 			continue
@@ -3356,26 +3359,26 @@ func _is_primary_melee_candidate(
 		return false
 	var target_tile := _canonical_world_to_fractional_tile(enemy.global_position)
 	if mode == WarriorMeleeGeometryScript.SKILL_THRUST:
-		return WarriorMeleeGeometryScript.thrust_slot(
-			origin_tile, target_tile, direction_index
+		return WarriorMeleeGeometryScript.thrust_footprint_slot(
+			origin_tile,
+			target_tile,
+			enemy.collision_radius,
+			direction_index
 		) == 1
 	if mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
-		return (
-			WarriorMeleeGeometryScript.is_in_half_moon_arc(
-				origin_tile, target_tile, direction_index
-			)
-			and WarriorMeleeGeometryScript.half_moon_relative_sector(
-				direction_index,
-				WarriorMeleeGeometryScript.direction_index_for_tile_delta(target_tile - origin_tile)
-			) == 0
-		)
-	if not WarriorMeleeGeometryScript.is_single_target_in_reach(
-		origin_tile, target_tile, mode
-	):
-		return false
-	return WarriorMeleeGeometryScript.direction_index_for_tile_delta(
-		target_tile - origin_tile
-	) == direction_index
+		return WarriorMeleeGeometryScript.half_moon_footprint_relative_sector(
+			origin_tile,
+			target_tile,
+			enemy.collision_radius,
+			direction_index
+		) == 0
+	return WarriorMeleeGeometryScript.footprint_intersects_mode(
+		origin_tile,
+		target_tile,
+		enemy.collision_radius,
+		direction_index,
+		mode
+	)
 
 
 func _apply_physical_hit(enemy: EnemyActor, damage: int, accuracy_bonus := 0) -> bool:
@@ -3458,8 +3461,11 @@ func _thrust_secondary_targets(
 			continue
 		var enemy := node as EnemyActor
 		var target_tile := _canonical_world_to_fractional_tile(enemy.global_position)
-		if WarriorMeleeGeometryScript.thrust_slot(
-			origin_tile, target_tile, direction_index
+		if WarriorMeleeGeometryScript.thrust_footprint_slot(
+			origin_tile,
+			target_tile,
+			enemy.collision_radius,
+			direction_index
 		) != 2:
 			continue
 		result.append(enemy)
@@ -3481,16 +3487,13 @@ func _half_moon_secondary_targets(
 			continue
 		var enemy := node as EnemyActor
 		var target_tile := _canonical_world_to_fractional_tile(enemy.global_position)
-		if not WarriorMeleeGeometryScript.is_in_half_moon_arc(
-			origin_tile, target_tile, direction_index
-		):
-			continue
-		var target_direction := WarriorMeleeGeometryScript.direction_index_for_tile_delta(
-			target_tile - origin_tile
+		var relative_sector := WarriorMeleeGeometryScript.half_moon_footprint_relative_sector(
+			origin_tile,
+			target_tile,
+			enemy.collision_radius,
+			direction_index
 		)
-		if WarriorMeleeGeometryScript.half_moon_relative_sector(
-			direction_index, target_direction
-		) == 0:
+		if relative_sector == -1 or relative_sector == 0:
 			continue
 		result.append(enemy)
 	_sort_melee_targets(result, origin_tile, release_geometry)
