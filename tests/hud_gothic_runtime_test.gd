@@ -149,11 +149,17 @@ func _run() -> void:
 		else:
 			assert(ring_backdrop.visible, "已配置技能槽的内孔底色被隐藏")
 	var grouped_presses: Array = []
-	hud.skill_slot_pressed.connect(
-		func(slot_group: String, slot_index: int) -> void:
+	hud.skill_input_started.connect(
+		func(slot_group: String, slot_index: int, _token: int, _touch_id: int, _source: StringName) -> void:
 			grouped_presses.append([slot_group, slot_index])
 	)
-	(root.get_node("AttackRingSkill6") as Button).pressed.emit()
+	var ring_touch := InputEventScreenTouch.new()
+	ring_touch.index = 6
+	ring_touch.position = Vector2(36, 36)
+	ring_touch.pressed = true
+	(root.get_node("AttackRingSkill6") as Button).call("_gui_input", ring_touch)
+	ring_touch.pressed = false
+	(root.get_node("AttackRingSkill6") as Button).call("_gui_input", ring_touch)
 	assert(grouped_presses == [["attack_ring", 5]], "HUD 六环技能点击没有保留 slot_group")
 	var attack := root.get_node("AttackButton") as Button
 	assert(attack.size == Vector2(120, 120), "攻击按钮视觉直径应保持缩小后的120px")

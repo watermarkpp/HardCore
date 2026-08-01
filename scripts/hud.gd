@@ -56,6 +56,28 @@ signal attack_input_cancelled(
 signal interact_pressed
 signal skill_pressed(slot_index: int)
 signal skill_slot_pressed(slot_group: String, slot_index: int)
+signal skill_input_started(
+	slot_group: String,
+	slot_index: int,
+	press_token: int,
+	touch_id: int,
+	source: StringName
+)
+signal skill_input_ended(
+	slot_group: String,
+	slot_index: int,
+	press_token: int,
+	touch_id: int,
+	source: StringName
+)
+signal skill_input_cancelled(
+	slot_group: String,
+	slot_index: int,
+	press_token: int,
+	touch_id: int,
+	source: StringName,
+	reason: StringName
+)
 signal skill_quick_slot_assignment_requested(request: Dictionary)
 signal skill_button_assignment_requested(request: Dictionary)
 signal map_travel_requested(map_id: int)
@@ -98,6 +120,7 @@ var quick_slot_icons: Array[TextureRect] = []
 var attack_ring_skill_icons: Array[TextureRect] = []
 var attack_ring_skill_backdrops: Array[Panel] = []
 var attack_ring_skill_labels: Array[Label] = []
+var attack_ring_skill_buttons: Array[Button] = []
 var attack_slot_icon: TextureRect
 var attack_slot_label: Label
 var current_zone_name := "比奇郊外"
@@ -497,8 +520,24 @@ func _build_combat_controls(root: Control) -> void:
 		var ring_center := _attack_ring_center(index)
 		var rect := Rect2(ring_center - HUD_ATTACK_RING_BUTTON_SIZE * 0.5, HUD_ATTACK_RING_BUTTON_SIZE)
 		_apply_control_rect(ring_skill, rect)
-		ring_skill.pressed.connect(_on_skill_slot_button.bind("attack_ring", index))
+		ring_skill.set("lifecycle_enabled", true)
+		ring_skill.connect(
+			"input_started",
+			_on_skill_input_started.bind("attack_ring", index)
+		)
+		ring_skill.connect(
+			"input_ended",
+			_on_skill_input_ended.bind("attack_ring", index)
+		)
+		ring_skill.connect(
+			"input_cancelled",
+			_on_skill_input_cancelled.bind("attack_ring", index)
+		)
 		ring_skill.set_meta("stable_id", "hud.attack_ring_skill.%d" % (index + 1))
+		ring_skill.set_meta(
+			"input_lifecycle_contract",
+			CircularTouchButtonScript.INPUT_LIFECYCLE_CONTRACT_ID,
+		)
 		ring_skill.set_meta("assignment_contract", "ui.skill.button_assignment.v3")
 		ring_skill.set_meta("circular_touch", true)
 		ring_skill.set_meta("touch_radius", HUD_ATTACK_RING_BUTTON_SIZE.x * 0.5)
@@ -506,6 +545,7 @@ func _build_combat_controls(root: Control) -> void:
 		ring_skill.set_meta("ring_angle_degrees", HUD_ATTACK_RING_START_DEGREES + HUD_ATTACK_RING_STEP_DEGREES * index)
 		ring_skill.set_meta("center_offset", ring_center)
 		root.add_child(ring_skill)
+		attack_ring_skill_buttons.append(ring_skill)
 		var ring_backdrop := Panel.new()
 		ring_backdrop.name = "SkillBackdrop"
 		ring_backdrop.theme_type_variation = "GothicArtCircleFill"
@@ -570,6 +610,12 @@ func cancel_attack_inputs(reason: StringName = &"hud_cancel") -> void:
 		attack_button.call("cancel_all_inputs", reason)
 
 
+func cancel_skill_inputs(reason: StringName = &"hud_cancel") -> void:
+	for button: Button in attack_ring_skill_buttons:
+		if is_instance_valid(button) and button.has_method("cancel_all_inputs"):
+			button.call("cancel_all_inputs", reason)
+
+
 func _on_attack_input_started(
 	press_token: int,
 	touch_id: int,
@@ -598,6 +644,56 @@ func _on_attack_input_cancelled(
 	# The legacy release signal remains the safety boundary for callers that have
 	# not migrated to token-aware cancellation yet.
 	attack_released.emit()
+
+
+func _on_skill_input_started(
+	press_token: int,
+	touch_id: int,
+	source: StringName,
+	slot_group: String,
+	slot_index: int
+) -> void:
+	skill_input_started.emit(
+		slot_group,
+		slot_index,
+		press_token,
+		touch_id,
+		source
+	)
+
+
+func _on_skill_input_ended(
+	press_token: int,
+	touch_id: int,
+	source: StringName,
+	slot_group: String,
+	slot_index: int
+) -> void:
+	skill_input_ended.emit(
+		slot_group,
+		slot_index,
+		press_token,
+		touch_id,
+		source
+	)
+
+
+func _on_skill_input_cancelled(
+	press_token: int,
+	touch_id: int,
+	source: StringName,
+	reason: StringName,
+	slot_group: String,
+	slot_index: int
+) -> void:
+	skill_input_cancelled.emit(
+		slot_group,
+		slot_index,
+		press_token,
+		touch_id,
+		source,
+		reason
+	)
 
 
 func _build_modal_panels(root: Control) -> void:
