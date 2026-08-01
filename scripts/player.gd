@@ -9,6 +9,9 @@ const SkillInputPolicyScript := preload("res://scripts/skill_input_policy.gd")
 const CombatReleaseGeometryScript := preload(
 	"res://scripts/skills/combat_release_geometry.gd"
 )
+const CasterSkillVisualRegistryScript := preload(
+	"res://scripts/caster_skill_visual_registry.gd"
+)
 
 const PlayerVisualScript := preload("res://scripts/player_visual.gd")
 const PlayerHealthBarScript := preload("res://scripts/player_health_bar.gd")
@@ -58,6 +61,7 @@ var touch_vector := Vector2.ZERO
 var facing := Vector2.DOWN
 var _attack_timer := 0.0
 var _attack_action_timer := 0.0
+var _movement_visual_lock_timer := 0.0
 var _skill_cooldown_remaining: Dictionary = {}
 var _struck_lock_remaining := 0.0
 var _struck_reaction_lock_remaining := 0.0
@@ -142,6 +146,10 @@ func _physics_process(delta: float) -> void:
 	var was_struck_locked := _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0
 	_attack_timer = maxf(0.0, _attack_timer - delta)
 	_attack_action_timer = maxf(0.0, _attack_action_timer - delta)
+	_movement_visual_lock_timer = maxf(
+		0.0,
+		_movement_visual_lock_timer - delta
+	)
 	for stable_skill_id: Variant in _skill_cooldown_remaining.keys():
 		var remaining := maxf(
 			0.0,
@@ -177,10 +185,15 @@ func _physics_process(delta: float) -> void:
 		defense_buff = 0
 	var keyboard := _keyboard_movement_vector()
 	var direction := touch_vector if touch_vector.length() > keyboard.length() else keyboard
-	if _dead or control_time > 0.0 or _attack_action_timer > 0.0 or was_struck_locked:
+	var movement_locked := (
+		_attack_action_timer > 0.0
+		or _movement_visual_lock_timer > 0.0
+		or was_struck_locked
+	)
+	if _dead or control_time > 0.0 or movement_locked:
 		direction = Vector2.ZERO
 	movement_input_active = direction.length() > 0.08
-	if _attack_action_timer > 0.0 or was_struck_locked:
+	if movement_locked:
 		velocity = Vector2.ZERO
 	elif direction.length() > 0.08:
 		direction = direction.normalized()
@@ -328,6 +341,24 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 		_skill_cooldown_remaining[stable_skill_id] = cooldown_seconds
 	var action_duration := maxf(0.0, float(body_cast_ms) / 1000.0)
 	_attack_action_timer = action_duration
+	var primary_visual_duration := (
+		CasterSkillVisualRegistryScript.primary_action_completion_seconds(
+			stable_skill_id
+		)
+	)
+	if primary_visual_duration > 0.0:
+		var release_seconds := maxf(0.0, float(release_ms) / 1000.0)
+		var movement_contract_seconds := maxf(
+			action_duration,
+			float(total_action_lock_ms) / 1000.0
+		)
+		_movement_visual_lock_timer = maxf(
+			_movement_visual_lock_timer,
+			minf(
+				movement_contract_seconds,
+				release_seconds + primary_visual_duration
+			)
+		)
 	velocity = Vector2.ZERO
 	movement_input_active = false
 	var action_id := _begin_combat_action("skill:%s" % skill_name)

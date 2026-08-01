@@ -2,6 +2,9 @@ class_name CasterSkillRuntime
 extends RefCounted
 
 const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
+const CasterSpellGeometryScript := preload(
+	"res://scripts/skills/caster_spell_geometry.gd"
+)
 
 const SPECIAL_SKILLS := {
 	"wizard.repulsion_ring": true,
@@ -134,17 +137,32 @@ static func create_visual(
 	]:
 		return null
 	var effect := CasterSkillVisualEffect.new()
+	var visual_geometry_context := CasterSpellGeometryScript.visual_context_from_plan(
+		skill_id,
+		plan,
+		position
+	)
 	var radius := float(plan.get("area_radius", 72.0))
 	if role == CasterSkillVisualRegistry.ROLE_LINE_EFFECT:
-		var geometry: Dictionary = plan.get("visual", {}).get(
-			"skills_contract", {}
-		).get("geometry", {})
-		var length_tiles := int(geometry.get("length_tiles", 0))
-		radius = (
-			float(length_tiles) * float(plan.get("cell_size", 50))
-			if length_tiles > 0
-			else maxf(radius, float(plan.get("range", 0.0)))
+		var geometry_offsets: Array = visual_geometry_context.get(
+			"geometry_world_offsets", []
 		)
+		if not geometry_offsets.is_empty():
+			radius = 0.0
+			for raw_offset: Variant in geometry_offsets:
+				if raw_offset is Vector2:
+					var geometry_offset: Vector2 = raw_offset
+					radius = maxf(radius, geometry_offset.length())
+		else:
+			var geometry: Dictionary = plan.get("visual", {}).get(
+				"skills_contract", {}
+			).get("geometry", {})
+			var length_tiles := int(geometry.get("length_tiles", 0))
+			radius = (
+				float(length_tiles) * float(plan.get("cell_size", 50))
+				if length_tiles > 0
+				else maxf(radius, float(plan.get("range", 0.0)))
+			)
 	elif plan.has("area_radius_cells"):
 		radius = maxf(radius, float(plan.area_radius_cells) * float(plan.get("cell_size", 48)))
 	effect.setup(
@@ -154,7 +172,8 @@ static func create_visual(
 		float(plan.get("visual_duration", 0.8)),
 		direction,
 		follow_node,
-		phase_id
+		phase_id,
+		visual_geometry_context
 	)
 	return effect
 

@@ -1,0 +1,290 @@
+extends Node
+
+const Loader := preload("res://scripts/skills/skill_data_loader.gd")
+const GeometryService := preload("res://scripts/skills/skill_geometry_service.gd")
+const SpellGeometry := preload("res://scripts/skills/caster_spell_geometry.gd")
+const DirectionSpace := preload("res://scripts/skills/combat_direction_space.gd")
+
+const MAP_WORLD_ORIGIN := Vector2(137.25, -91.5)
+const MAX_PIXEL_ROUNDING_ERROR := 0.5
+
+
+func _ready() -> void:
+	assert(Loader.reload_data().valid)
+	_verify_primary_geometry_and_timing()
+	_verify_all_eight_direction_angles()
+	_verify_terrain_truncation()
+	_verify_geometry_aware_visuals()
+	_verify_release_relative_movement_locks()
+	print(
+		"WIZARD_GEOMETRY_VISUAL_ALIGNMENT_PASS: exact 5/8/24-cell geometry, "
+		+ "eight canonical angles, terrain truncation, contained visuals, "
+		+ "footpoint-centered hell lightning and release-relative movement locks"
+	)
+	get_tree().quit(0)
+
+
+func _verify_primary_geometry_and_timing() -> void:
+	var hellfire := Loader.skill("wizard.hellfire")
+	assert(hellfire.geometry.shape == "line")
+	assert(hellfire.geometry.length_tiles == 5)
+	assert(hellfire.geometry.width_tiles == 1)
+	assert(not hellfire.geometry.pierces_units)
+	assert(hellfire.geometry.stops_on_terrain)
+	_assert_cast_timing(hellfire)
+
+	var laser := Loader.skill("wizard.laser")
+	assert(laser.geometry.shape == "line")
+	assert(laser.geometry.length_tiles == 8)
+	assert(laser.geometry.width_tiles == 1)
+	assert(laser.geometry.pierces_units)
+	assert(laser.geometry.stops_on_terrain)
+	_assert_cast_timing(laser)
+
+	var hell_lightning := Loader.skill("wizard.hell_lightning")
+	assert(hell_lightning.geometry.shape == "chebyshev_ring")
+	assert(hell_lightning.geometry.radius_tiles == 2)
+	assert(hell_lightning.geometry.exclude_center)
+	assert(hell_lightning.geometry.maximum_targets == 24)
+	var ring := GeometryService.cells(
+		hell_lightning, Vector2i.ZERO, Vector2i.DOWN
+	)
+	assert(ring.size() == 24)
+	assert(not ring.has(Vector2i.ZERO))
+	assert(SpellGeometry.maximum_targets(
+		hell_lightning.geometry, hell_lightning.mechanics
+	) == 24)
+	_assert_cast_timing(hell_lightning)
+
+
+func _assert_cast_timing(definition: Dictionary) -> void:
+	assert(int(definition.timing.body_cast_ms) == 600)
+	assert(int(definition.timing.release_frame_index) == 5)
+	assert(int(definition.timing.recovery_ms) == 900)
+	assert(int(definition.timing.total_action_lock_ms) == 1500)
+
+
+func _verify_all_eight_direction_angles() -> void:
+	var hellfire := Loader.skill("wizard.hellfire")
+	var laser := Loader.skill("wizard.laser")
+	for direction_index: int in range(8):
+		var world_direction := DirectionSpace.projected_world_direction(
+			direction_index
+		)
+		var expected_tile_step := DirectionSpace.canonical_tile_step(
+			direction_index
+		)
+		var actual_tile_step := SpellGeometry.canonical_facing_from_world_direction(
+			world_direction
+		)
+		assert(actual_tile_step == expected_tile_step)
+		var hellfire_cells := GeometryService.cells(
+			hellfire, Vector2i.ZERO, actual_tile_step
+		)
+		var laser_cells := GeometryService.cells(
+			laser, Vector2i.ZERO, actual_tile_step
+		)
+		assert(hellfire_cells.back() == expected_tile_step * 5)
+		assert(laser_cells.back() == expected_tile_step * 8)
+	# This is the historical bug in one line: screen-down is tile (1, 1),
+	# never sign(screen-down) == tile (0, 1).
+	assert(
+		SpellGeometry.canonical_facing_from_world_direction(Vector2.DOWN)
+		== Vector2i(1, 1)
+	)
+
+
+func _verify_terrain_truncation() -> void:
+	for skill_id: String in ["wizard.hellfire", "wizard.laser"]:
+		var definition := Loader.skill(skill_id)
+		var cells := GeometryService.cells(
+			definition, Vector2i.ZERO, Vector2i.RIGHT
+		)
+		var blocked_cell: Vector2i = cells[2]
+		var effective := SpellGeometry.effective_cells(
+			skill_id,
+			definition.geometry,
+			cells,
+			func(cell: Vector2i) -> bool: return cell == blocked_cell
+		)
+		assert(effective == [cells[0], cells[1]])
+
+
+func _verify_geometry_aware_visuals() -> void:
+	var origin_tile := Vector2i(9, 11)
+	var origin_world := _tile_to_world(origin_tile)
+	var owner := Node2D.new()
+	owner.global_position = origin_world
+	add_child(owner)
+
+	var hellfire_facing := SpellGeometry.canonical_facing_from_world_direction(
+		Vector2.DOWN
+	)
+	var hellfire_plan := _plan_with_world_geometry(
+		"wizard.hellfire", origin_tile, origin_world, hellfire_facing
+	)
+	var hellfire := CasterSkillRuntime.create_visual(
+		hellfire_plan, origin_world, Vector2.DOWN, owner
+	)
+	assert(hellfire != null)
+	add_child(hellfire)
+	assert(hellfire._geometry_world_offsets.size() == 5)
+	assert(hellfire._geometry_world_offsets.back() == Vector2(0.0, 160.0))
+	assert(is_equal_approx(hellfire.radius, 160.0))
+	assert(hellfire._hellfire_total_emissions == 6)
+	assert(hellfire._hellfire_emission_offsets.back() == Vector2(0.0, 160.0))
+	for offset: Vector2 in hellfire._hellfire_emission_offsets:
+		assert(is_zero_approx(offset.x))
+		assert(offset.y > 0.0 and offset.y <= 160.0)
+	_assert_effect_contained(hellfire, Vector2(64.0, 32.0))
+	hellfire.free()
+
+	var laser_plan := _plan_with_world_geometry(
+		"wizard.laser", origin_tile, origin_world, hellfire_facing
+	)
+	var laser := CasterSkillRuntime.create_visual(
+		laser_plan, origin_world, Vector2.DOWN, owner
+	)
+	assert(laser != null)
+	add_child(laser)
+	assert(laser._geometry_world_offsets.size() == 8)
+	assert(laser._geometry_world_offsets.back() == Vector2(0.0, 256.0))
+	assert(is_equal_approx(laser.radius, 256.0))
+	_assert_effect_contained(laser, Vector2(64.0, 288.0))
+	laser.free()
+
+	var lightning_plan := _plan_with_world_geometry(
+		"wizard.hell_lightning",
+		origin_tile,
+		origin_world,
+		Vector2i.DOWN
+	)
+	var lightning := CasterSkillRuntime.create_visual(
+		lightning_plan, origin_world, Vector2.DOWN, owner
+	)
+	assert(lightning != null)
+	add_child(lightning)
+	assert(lightning._geometry_world_offsets.size() == 24)
+	assert(_within_pixel_rounding(lightning.global_position, owner.global_position))
+	var lightning_sprite := lightning._sprites[0] as CasterSkillAnimationPlayer
+	assert(lightning_sprite != null)
+	assert(lightning_sprite.visual_bounds_center().length() <= 0.001)
+	var lightning_bounds := lightning_sprite.fitted_visual_bounds()
+	assert(lightning_bounds.size.x <= 320.001)
+	assert(lightning_bounds.size.y <= 160.001)
+	assert(lightning_sprite.scale.x < 1.0)
+	assert(_within_pixel_rounding(
+		lightning.global_position + lightning_sprite.visual_bounds_center(),
+		owner.global_position
+	))
+	lightning.free()
+	owner.free()
+
+
+func _assert_effect_contained(
+	effect: CasterSkillVisualEffect,
+	expected_footprint: Vector2
+) -> void:
+	assert(effect._desired_sprite_footprint == expected_footprint)
+	assert(not effect._sprites.is_empty())
+	for raw_sprite: Sprite2D in effect._sprites:
+		var sprite := raw_sprite as CasterSkillAnimationPlayer
+		var bounds := sprite.fitted_visual_bounds()
+		assert(bounds.size.x <= expected_footprint.x + 0.001)
+		assert(bounds.size.y <= expected_footprint.y + 0.001)
+
+
+func _verify_release_relative_movement_locks() -> void:
+	assert(is_equal_approx(
+		CasterSkillVisualRegistry.primary_action_completion_seconds(
+			"wizard.hellfire"
+		),
+		0.85
+	))
+	assert(is_equal_approx(
+		CasterSkillVisualRegistry.primary_action_completion_seconds(
+			"wizard.hell_lightning"
+		),
+		0.65
+	))
+	assert(is_equal_approx(
+		CasterSkillVisualRegistry.primary_action_completion_seconds(
+			"wizard.laser"
+		),
+		0.35
+	))
+	assert(is_zero_approx(
+		CasterSkillVisualRegistry.primary_action_completion_seconds(
+			"wizard.fireball"
+		)
+	))
+	_verify_player_movement_lock("wizard.hellfire", 1.45)
+	_verify_player_movement_lock("wizard.hell_lightning", 1.25)
+	_verify_player_movement_lock("wizard.laser", 0.95)
+
+
+func _verify_player_movement_lock(skill_id: String, expected: float) -> void:
+	PlayerState.test_mode = true
+	PlayerState.reset_progress()
+	PlayerState.profession = "法师"
+	PlayerState.learned_skills = {skill_id: 0}
+	var player := PlayerCharacter.new()
+	add_child(player)
+	player.current_mp = 999
+	assert(player.request_skill(skill_id))
+	assert(is_equal_approx(player._attack_action_timer, 0.6))
+	assert(is_equal_approx(player._movement_visual_lock_timer, expected))
+	if skill_id == "wizard.hell_lightning":
+		player.set_touch_vector(Vector2.RIGHT)
+		player._physics_process(0.61)
+		assert(player._attack_action_timer <= 0.0)
+		assert(player._movement_visual_lock_timer > 0.0)
+		assert(not player.movement_input_active)
+		assert(player.velocity.is_zero_approx())
+		player._physics_process(expected - 0.60)
+		assert(player._movement_visual_lock_timer <= 0.0)
+		assert(player.movement_input_active)
+		assert(player.velocity.x > 0.0)
+	player.free()
+
+
+func _plan_with_world_geometry(
+	skill_id: String,
+	origin_tile: Vector2i,
+	origin_world: Vector2,
+	facing: Vector2i
+) -> Dictionary:
+	var plan := CasterSkillRuntime.resolve(skill_id, {
+		"skill_level": 3,
+		"caster_level": 40,
+		"owner_level": 40,
+		"target_level": 20,
+		"target_max_hp": 500,
+		"magic_stat_roll": 30,
+		"random_0_to_10": 0,
+	})
+	var cells := GeometryService.cells(
+		Loader.skill(skill_id), origin_tile, facing
+	)
+	var world_points: Array[Vector2] = []
+	for cell: Vector2i in cells:
+		world_points.append(_tile_to_world(cell))
+	plan["canonical_geometry_contract"] = SpellGeometry.CONTRACT_ID
+	plan["geometry_origin_world"] = origin_world
+	plan["geometry_tile_points"] = cells
+	plan["geometry_world_points"] = world_points
+	return plan
+
+
+func _tile_to_world(tile: Vector2i) -> Vector2:
+	return MAP_WORLD_ORIGIN + (
+		DirectionSpace.fractional_tile_delta_to_world_delta(Vector2(tile))
+	)
+
+
+func _within_pixel_rounding(left: Vector2, right: Vector2) -> bool:
+	var difference := (left - right).abs()
+	return (
+		difference.x <= MAX_PIXEL_ROUNDING_ERROR + 0.0001
+		and difference.y <= MAX_PIXEL_ROUNDING_ERROR + 0.0001
+	)
