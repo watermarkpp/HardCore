@@ -20,6 +20,7 @@ const SkillInputPolicyScript := preload("res://scripts/skill_input_policy.gd")
 const SkillRuntimeRouterScript := preload("res://scripts/skills/skill_runtime_router.gd")
 const SkillCastRequestScript := preload("res://scripts/skills/skill_cast_request.gd")
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
+const CombatDirectionSpaceScript := preload("res://scripts/skills/combat_direction_space.gd")
 const CombatReleaseGeometryScript := preload("res://scripts/skills/combat_release_geometry.gd")
 const WarriorMeleeGeometryScript := preload("res://scripts/skills/warrior_melee_geometry.gd")
 const WarriorMeleeDiagnosticScript := preload("res://scripts/skills/warrior_melee_diagnostic.gd")
@@ -1149,11 +1150,11 @@ func _request_mobile_attack() -> bool:
 	var facing_before := player.facing
 	var touch_before := player.touch_vector
 	var movement_was_active := player.movement_input_active
+	if not player.can_start_attack():
+		return false
 	var attack_direction := player.facing.normalized()
 	if is_instance_valid(target):
 		attack_direction = _face_locked_target()
-	if not player.can_start_attack():
-		return false
 	var melee_mode := _selected_warrior_melee_mode()
 	var target_instance_id := target.get_instance_id() if is_instance_valid(target) else 0
 	var input_release_geometry := CombatReleaseGeometryScript.resolve(
@@ -1165,6 +1166,9 @@ func _request_mobile_attack() -> bool:
 		true,
 		CombatReleaseGeometryScript.FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION
 	)
+	attack_direction = Vector2(
+		input_release_geometry.get("direction_world", attack_direction)
+	).normalized()
 	var input_has_hittable_target := _has_melee_hittable_target(
 		attack_direction,
 		melee_mode,
@@ -1216,7 +1220,10 @@ func _build_melee_input_diagnostic(
 		if target_valid
 		else Vector2.ZERO
 	)
-	var input_direction_index := ArtSpec.direction_index(attack_direction)
+	var input_direction_index := _melee_direction_index(
+		attack_direction,
+		release_geometry
+	)
 	var actor_tile := _canonical_world_to_fractional_tile(player.global_position)
 	var target_candidate := (
 		WarriorMeleeDiagnosticScript.explain_candidate(
@@ -1655,9 +1662,14 @@ func _validate_locked_target() -> void:
 func _face_locked_target() -> Vector2:
 	if not _is_attack_target_in_range(locked_target):
 		return player.facing.normalized()
-	var direction := player.global_position.direction_to(locked_target.global_position)
+	var direction_resolution := CombatDirectionSpaceScript.resolve_world_delta(
+		locked_target.global_position - player.global_position
+	)
+	var direction := Vector2(
+		direction_resolution.get("projected_world_direction", player.facing)
+	).normalized()
 	if direction.length_squared() > 0.01:
-		direction = CombatRuntime.face_target(player, locked_target)
+		player.set_combat_facing(direction)
 	return direction
 
 
@@ -2153,7 +2165,10 @@ func _record_melee_release_diagnostic(
 			"map_id": current_map_id,
 			"trace_origin": "release_without_input_trace",
 		}
-	var release_direction_index := ArtSpec.direction_index(direction)
+	var release_direction_index := _melee_direction_index(
+		direction,
+		release_geometry
+	)
 	diagnostic["event"] = "attack_release_resolved"
 	diagnostic["body_context"] = context.duplicate(true)
 	diagnostic["release_geometry"] = release_geometry.duplicate(true)
@@ -2263,6 +2278,16 @@ func _enemy_instance_ids(enemies: Array[EnemyActor]) -> Array[int]:
 		if is_instance_valid(enemy):
 			result.append(enemy.get_instance_id())
 	return result
+
+
+func _melee_direction_index(
+	direction: Vector2,
+	release_geometry: Dictionary = {}
+) -> int:
+	var resolved_index := int(release_geometry.get("direction_index", -1))
+	if resolved_index >= 0 and resolved_index < 8:
+		return resolved_index
+	return ArtSpec.direction_index(direction)
 
 
 func _melee_diagnostic_result_code(
@@ -3282,7 +3307,7 @@ func _physical_primary_targets(
 	# caster projectiles without changing their shared release contract.
 	var result: Array[EnemyActor] = []
 	var origin_tile := _canonical_world_to_fractional_tile(origin)
-	var direction_index := ArtSpec.direction_index(direction)
+	var direction_index := _melee_direction_index(direction, release_geometry)
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node.is_queued_for_deletion() or node.current_hp <= 0:
 			continue
@@ -3427,7 +3452,7 @@ func _thrust_secondary_targets(
 ) -> Array[EnemyActor]:
 	var result: Array[EnemyActor] = []
 	var origin_tile := _canonical_world_to_fractional_tile(origin)
-	var direction_index := ArtSpec.direction_index(direction)
+	var direction_index := _melee_direction_index(direction, release_geometry)
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node in excluded_targets or node.is_queued_for_deletion() or node.current_hp <= 0:
 			continue
@@ -3450,7 +3475,7 @@ func _half_moon_secondary_targets(
 ) -> Array[EnemyActor]:
 	var result: Array[EnemyActor] = []
 	var origin_tile := _canonical_world_to_fractional_tile(origin)
-	var direction_index := ArtSpec.direction_index(direction)
+	var direction_index := _melee_direction_index(direction, release_geometry)
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node in excluded_targets or node.is_queued_for_deletion() or node.current_hp <= 0:
 			continue

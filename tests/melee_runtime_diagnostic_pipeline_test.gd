@@ -1,6 +1,7 @@
 extends Node
 
 const DiagnosticLog := preload("res://scripts/layers/runtime/combat_diagnostic_log.gd")
+const DirectionSpace := preload("res://scripts/skills/combat_direction_space.gd")
 
 
 func _ready() -> void:
@@ -66,6 +67,43 @@ func _run() -> void:
 		hit_attempts.size() == 1
 		and str((hit_attempts[0] as Dictionary).get("result_code", "")) == "ACCURACY_MISS",
 		"physical accuracy roll was not captured exactly once"
+	)
+
+	# Phone reproduction melee:205-216. The target is only 1.31 tiles away,
+	# but the former screen-angle quantizer selected direction 5 and rejected
+	# all twelve attacks. The canonical 64x32 tile quantizer selects direction 4.
+	game.player._attack_timer = 0.0
+	game.player._attack_action_timer = 0.0
+	game.player.velocity = Vector2.ZERO
+	game.player.set_touch_vector(Vector2.ZERO)
+	PlayerState.test_mode = true
+	origin_tile = game._canonical_world_to_fractional_tile(game.player.global_position)
+	game._active_safe_zones.clear()
+	enemy.velocity = Vector2.ZERO
+	enemy.control_time = 0.0
+	enemy.global_position = game.player.global_position + (
+		DirectionSpace.fractional_tile_delta_to_world_delta(Vector2(-0.56, -1.31))
+	)
+	enemy.apply_control(60.0)
+	var measured_delta: Vector2 = (
+		game._canonical_world_to_fractional_tile(enemy.global_position) - origin_tile
+	)
+	assert(measured_delta.is_equal_approx(Vector2(-0.56, -1.31)))
+	hp_before = enemy.current_hp
+	assert(game._request_mobile_attack(), "phone angle regression input was rejected")
+	await get_tree().create_timer(game.player.attack_hit_windup + 0.08).timeout
+	assert(enemy.current_hp < hp_before, "phone angle regression still produced an empty swing")
+	release_event = _last_release_event()
+	assert(release_event.result_code == "HIT_COMMITTED")
+	assert(release_event.attack_direction_index_at_input == 4)
+	assert(release_event.release_direction_index == 4)
+	assert(release_event.input_release_direction_match)
+	assert(release_event.actual_visual_row_at_release == 0)
+	assert(release_event.expected_visual_row_at_release == 0)
+	assert(release_event.visual_geometry_direction_match)
+	assert(
+		str(release_event.release_geometry.get("direction_space_contract_id", ""))
+		== "gameplay.professions.combat_direction_space.iso_64x32_tile_8dir.v1"
 	)
 
 	game.queue_free()

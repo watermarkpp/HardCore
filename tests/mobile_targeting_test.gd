@@ -1,6 +1,7 @@
 extends Node
 
 const TargetingSystem := preload("res://scripts/targeting_system.gd")
+const DirectionSpace := preload("res://scripts/skills/combat_direction_space.gd")
 
 
 func _ready() -> void:
@@ -55,14 +56,14 @@ func _run() -> void:
 	assert(
 		game.locked_target == first
 		and ArtSpec.direction_index(game.player.facing) == ArtSpec.direction_index(
-			game.player.global_position.direction_to(first.global_position)
+			_expected_melee_facing(game.player, first)
 		),
 		"点击或按住攻击时没有强制转向已有攻击锁定"
 	)
 	game.player.visual._process(0.01)
 	assert(
 		game.player.visual.current_direction == ArtSpec.mir2_client_direction_row(
-			game.player.global_position.direction_to(first.global_position)
+			_expected_melee_facing(game.player, first)
 		),
 		"攻击动作画面没有同步转向攻击锁定"
 	)
@@ -75,7 +76,7 @@ func _run() -> void:
 	assert(
 		game.locked_target == first
 		and ArtSpec.direction_index(game.player.facing) == ArtSpec.direction_index(
-			game.player.global_position.direction_to(first.global_position)
+			_expected_melee_facing(game.player, first)
 		),
 		"按住攻击的重复输入没有保持锁定并持续转向目标"
 	)
@@ -179,6 +180,13 @@ func _place_at_tile_offset(
 	offset: Vector2i
 ) -> void:
 	enemy.global_position = game._canonical_tile_to_world(origin_tile + offset)
+
+
+func _expected_melee_facing(actor: Node2D, target: Node2D) -> Vector2:
+	var direction_index := DirectionSpace.direction_index_for_world_delta(
+		target.global_position - actor.global_position
+	)
+	return DirectionSpace.projected_world_direction(direction_index)
 
 
 func _assert_direction_priority() -> void:
