@@ -7,6 +7,10 @@ const CombatDirectionSpaceScript := preload(
 
 const CONTRACT_ID := "skills.visual.geometry_cells.world_projection.v1"
 const VISUAL_CONTRACT_ID := "skills.caster.geometry_visual_alignment.v1"
+const FOOTPRINT_INTERSECTION_CONTRACT_ID := (
+	"skills.caster.area_footprint_intersection.tile_polygon_sat.v1"
+)
+const CONTACT_EPSILON := 0.0001
 
 
 static func canonical_facing_from_world_direction(world_direction: Vector2) -> Vector2i:
@@ -45,6 +49,62 @@ static func target_cell_is_affected(
 	target_cell: Vector2i
 ) -> bool:
 	return effective_geometry_cells.has(target_cell)
+
+
+static func target_footprint_intersects_cell(
+	target_footprint_tile_polygon: PackedVector2Array,
+	cell: Vector2i
+) -> bool:
+	if target_footprint_tile_polygon.size() < 3:
+		return false
+	var center := Vector2(cell)
+	var cell_polygon := PackedVector2Array([
+		center + Vector2(-0.5, -0.5),
+		center + Vector2(0.5, -0.5),
+		center + Vector2(0.5, 0.5),
+		center + Vector2(-0.5, 0.5),
+	])
+	return _convex_polygons_intersect(target_footprint_tile_polygon, cell_polygon)
+
+
+static func target_footprint_intersects_cells(
+	effective_geometry_cells: Array[Vector2i],
+	target_footprint_tile_polygon: PackedVector2Array
+) -> bool:
+	for cell: Vector2i in effective_geometry_cells:
+		if target_footprint_intersects_cell(target_footprint_tile_polygon, cell):
+			return true
+	return false
+
+
+static func _convex_polygons_intersect(
+	left: PackedVector2Array,
+	right: PackedVector2Array
+) -> bool:
+	for polygon: PackedVector2Array in [left, right]:
+		for index: int in range(polygon.size()):
+			var edge := polygon[(index + 1) % polygon.size()] - polygon[index]
+			if edge.length_squared() <= CONTACT_EPSILON * CONTACT_EPSILON:
+				continue
+			var axis := Vector2(-edge.y, edge.x).normalized()
+			var left_projection := _project_polygon(left, axis)
+			var right_projection := _project_polygon(right, axis)
+			if (
+				left_projection.y < right_projection.x - CONTACT_EPSILON
+				or right_projection.y < left_projection.x - CONTACT_EPSILON
+			):
+				return false
+	return true
+
+
+static func _project_polygon(polygon: PackedVector2Array, axis: Vector2) -> Vector2:
+	var minimum := INF
+	var maximum := -INF
+	for point: Vector2 in polygon:
+		var projected := point.dot(axis)
+		minimum = minf(minimum, projected)
+		maximum = maxf(maximum, projected)
+	return Vector2(minimum, maximum)
 
 
 static func maximum_targets(geometry: Dictionary, mechanics: Dictionary) -> int:

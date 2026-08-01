@@ -12,6 +12,10 @@ func _ready() -> void:
 	var half_moon := Policy.metadata("warrior.half_moon")
 	var fire := Policy.metadata("warrior.fire_sword")
 	var wild_rush := Policy.metadata("warrior.wild_rush")
+	var fireball := Policy.metadata("wizard.fireball")
+	var magic_shield := Policy.metadata("wizard.magic_shield")
+	var healing := Policy.metadata("taoist.healing")
+	var soul_fire := Policy.metadata("taoist.soul_fire_talisman")
 	assert(basic.passive and not basic.bindable_to_skill_slot and not basic.bindable_to_attack_slot)
 	assert(slaying.passive and slaying.hit_effect_only and slaying.player_body_action == "attack")
 	assert(not slaying.uses_independent_player_body_action)
@@ -36,12 +40,22 @@ func _ready() -> void:
 	assert(wild_rush.click_release and wild_rush.bindable_to_skill_slot)
 	assert(wild_rush.bindable_to_attack_slot, "主动技能必须支持未来绑定攻击键")
 
+	assert(fireball.press_hold_repeat and fireball.repeatable_offensive_spell)
+	assert(fireball.runtime_activation == "press_or_hold_repeat")
+	assert(soul_fire.press_hold_repeat and soul_fire.repeatable_offensive_spell)
+	assert(not healing.press_hold_repeat and not healing.repeatable_offensive_spell)
+	assert(magic_shield.toggle and not magic_shield.press_hold_repeat)
+	assert(magic_shield.runtime_override_id == Policy.MAGIC_SHIELD_TOGGLE_POLICY_ID)
+	assert(magic_shield.auto_refresh_capacity_ratio == 0.20)
+	assert(magic_shield.auto_refresh_uses_normal_cast_pipeline)
+
 	for skill_id: String in Loader.skill_ids():
 		var input := Policy.metadata(skill_id)
 		assert(input.contract_id == Policy.INPUT_METADATA_CONTRACT_ID)
 		assert(input.has("passive") and input.has("toggle") and input.has("click_release"))
 		assert(input.has("bindable_to_skill_slot") and input.has("bindable_to_attack_slot"))
 		assert(input.has("attack_priority"))
+		assert(input.has("repeatable_offensive_spell") and input.has("press_hold_repeat"))
 
 	var slots: Array[String] = ["野蛮冲撞", "", "", ""]
 	var learned := {"基本剑术": 3, "攻杀剑术": 3, "野蛮冲撞": 3}

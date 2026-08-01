@@ -89,6 +89,16 @@ func _ready() -> void:
 		"直接法术没有复用现有魔法盾减伤管线或发生双算: input=%d applied=%d hp=%d"
 		% [shielded.player_pipeline_input, shielded.applied_damage, player.current_hp]
 	)
+	var shield_snapshot := player.magic_shield_snapshot()
+	assert(shield_snapshot.contract_id == PlayerCharacter.MAGIC_SHIELD_CAPACITY_CONTRACT_ID)
+	assert(shield_snapshot.capacity_max == 100.0 and shield_snapshot.capacity == 78.0)
+	assert(not player.magic_shield_requires_refresh())
+	player.shield_capacity = 20.0
+	assert(player.magic_shield_requires_refresh(), "magic shield must refresh at 20 percent capacity")
+	player.apply_magic_shield(10.0, 0.5)
+	assert(player.shield_capacity == 100.0, "a legal shield refresh must restore capacity")
+	player.shield_time = 0.5
+	assert(player.magic_shield_requires_refresh(), "magic shield must refresh before expiry")
 
 	player.free()
 	print("PLAYER_DIRECT_SPELL_DAMAGE_PASS: AntiMagic→MAC→shield/hit pipeline bypasses physical defense")

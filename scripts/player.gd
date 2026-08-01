@@ -19,6 +19,10 @@ const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
 const DIRECT_SPELL_DAMAGE_RUNTIME_ID := "player.direct_spell_damage.openmir2.v1"
+const MAGIC_SHIELD_CAPACITY_CONTRACT_ID := (
+	"skills.wizard.magic_shield.absorption_capacity.v1"
+)
+const MAGIC_SHIELD_AUTO_REFRESH_RATIO := 0.20
 
 # GameOfMir server evidence:
 # - M2Server/ObjBase.pas RM_STRUCK only records m_dwStruckTick when nPower > 0.
@@ -51,6 +55,9 @@ var defense_min := 0
 var defense_max := 0
 var damage_reduction := 0.0
 var shield_time := 0.0
+var shield_initial_duration := 0.0
+var shield_capacity := 0.0
+var shield_capacity_max := 0.0
 var stealth_time := 0.0
 var defense_buff := 0
 var defense_buff_time := 0.0
@@ -181,6 +188,8 @@ func _physics_process(delta: float) -> void:
 		take_damage(poison_damage, false)
 	if shield_time == 0.0:
 		damage_reduction = 0.0
+		shield_capacity = 0.0
+		shield_initial_duration = 0.0
 	if defense_buff_time == 0.0:
 		defense_buff = 0
 	var keyboard := _keyboard_movement_vector()
@@ -437,8 +446,31 @@ func _resolve_direct_spell_magic_defense(
 
 
 func _apply_resolved_damage(amount: int, causes_struck: bool) -> void:
-	var reduced_amount := int(round(maxi(1, amount) * (1.0 - clampf(damage_reduction, 0.0, 0.8))))
-	var final_damage := maxi(1, reduced_amount)
+	var incoming_damage := maxi(1, amount)
+	var final_damage := incoming_damage
+	if (
+		shield_time > 0.0
+		and shield_capacity > 0.0
+		and damage_reduction > 0.0
+	):
+		var reduced_amount := maxi(
+			1,
+			int(round(
+				float(incoming_damage)
+				* (1.0 - clampf(damage_reduction, 0.0, 0.8))
+			))
+		)
+		var desired_absorption := maxi(0, incoming_damage - reduced_amount)
+		var absorbed_damage := mini(
+			desired_absorption,
+			maxi(0, int(floor(shield_capacity + 0.0001)))
+		)
+		shield_capacity = maxf(0.0, shield_capacity - float(absorbed_damage))
+		final_damage = maxi(1, incoming_damage - absorbed_damage)
+		if shield_capacity <= 0.0001:
+			shield_time = 0.0
+			damage_reduction = 0.0
+			shield_initial_duration = 0.0
 	if PlayerState.has_special_effect("magic_shield") and current_mp > 0:
 		var shield_mp_cost := int(round(final_damage * 1.5))
 		if current_mp >= shield_mp_cost:
@@ -821,9 +853,50 @@ func spend_mana(amount: int) -> bool:
 
 
 func apply_magic_shield(seconds: float, reduction: float) -> void:
-	shield_time = maxf(shield_time, seconds)
+	var applied_duration := maxf(0.0, seconds)
+	shield_time = maxf(shield_time, applied_duration)
+	shield_initial_duration = maxf(shield_initial_duration, applied_duration)
 	damage_reduction = maxf(damage_reduction, clampf(reduction, 0.0, 0.8))
+	shield_capacity_max = maxf(1.0, float(max_mp))
+	shield_capacity = shield_capacity_max
 	queue_redraw()
+
+
+func magic_shield_snapshot() -> Dictionary:
+	var capacity_ratio := (
+		shield_capacity / shield_capacity_max
+		if shield_capacity_max > 0.0
+		else 0.0
+	)
+	return {
+		"contract_id": MAGIC_SHIELD_CAPACITY_CONTRACT_ID,
+		"active": shield_time > 0.0 and shield_capacity > 0.0,
+		"remaining_seconds": shield_time,
+		"initial_duration_seconds": shield_initial_duration,
+		"capacity": shield_capacity,
+		"capacity_max": shield_capacity_max,
+		"capacity_ratio": clampf(capacity_ratio, 0.0, 1.0),
+		"auto_refresh_capacity_ratio": MAGIC_SHIELD_AUTO_REFRESH_RATIO,
+	}
+
+
+func magic_shield_requires_refresh(
+	capacity_ratio_threshold := MAGIC_SHIELD_AUTO_REFRESH_RATIO,
+	expiry_lead_seconds := 0.6
+) -> bool:
+	if shield_time <= 0.0 or shield_capacity <= 0.0:
+		return true
+	var capacity_ratio := (
+		shield_capacity / shield_capacity_max
+		if shield_capacity_max > 0.0
+		else 0.0
+	)
+	var duration_relative_lead := maxf(0.1, shield_initial_duration * 0.2)
+	var refresh_lead := minf(maxf(0.0, expiry_lead_seconds), duration_relative_lead)
+	return (
+		capacity_ratio <= clampf(capacity_ratio_threshold, 0.0, 1.0) + 0.0001
+		or shield_time <= refresh_lead + 0.0001
+	)
 
 
 func apply_stealth(seconds: float) -> void:
