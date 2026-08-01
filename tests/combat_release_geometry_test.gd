@@ -145,6 +145,13 @@ func _verify_locked_melee_facing_contract() -> void:
 	assert(geometry.direction_world.is_equal_approx(Vector2.RIGHT))
 	assert(geometry.locked_target_valid_at_release)
 	assert(geometry.direction_locked_for_action)
+	assert(
+		geometry.direction_space_contract_id
+		== "gameplay.professions.combat_direction_space.iso_64x32_tile_8dir.v1"
+	)
+	assert(geometry.direction_index == 6)
+	assert(geometry.visual_direction_index == 6)
+	assert(geometry.direction_canonical_tile_step == Vector2i(1, -1))
 	assert(geometry.refresh_actor_footpoint_at_release)
 	assert(geometry.refresh_locked_target_footpoint_at_release)
 	assert(geometry.release_facing_policy_id == ReleaseGeometry.MELEE_RELEASE_FACING_POLICY_ID)

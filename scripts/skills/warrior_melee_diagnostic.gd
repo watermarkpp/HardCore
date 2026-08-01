@@ -70,6 +70,7 @@ static func explain_candidate(
 	return {
 		"contract_id": CONTRACT_ID,
 		"geometry_contract_id": Geometry.CONTRACT_ID,
+		"direction_space_contract_id": Geometry.DIRECTION_SPACE_CONTRACT_ID,
 		"target_count_policy_id": Geometry.TARGET_COUNT_POLICY_ID,
 		"result_code": result_code,
 		"accepted": result_code == RESULT_OK,
@@ -120,6 +121,7 @@ static func audit_direction(screen_direction_index: int) -> Dictionary:
 	return {
 		"contract_id": DIRECTION_AUDIT_CONTRACT_ID,
 		"geometry_contract_id": Geometry.CONTRACT_ID,
+		"direction_space_contract_id": Geometry.DIRECTION_SPACE_CONTRACT_ID,
 		"requested_screen_direction_index": screen_direction_index,
 		"screen_direction_index": normalized_screen_direction,
 		"world_direction_index": world_direction,
@@ -152,12 +154,10 @@ static func audit_fractional_tile_delta(fractional_tile_delta: Vector2) -> Dicti
 	## the alternative 45-degree quantizer measured directly in canonical tile
 	## space. It is deliberately read-only: neither result is selected here.
 	var projected_world_vector := _project_tile_delta(fractional_tile_delta)
-	var projected_screen_direction := Geometry.direction_index_for_tile_delta(
-		fractional_tile_delta
+	var projected_screen_direction := _direction_index_for_projected_screen_delta(
+		projected_world_vector
 	)
-	var tile_space_direction := _direction_index_for_tile_space_delta(
-		fractional_tile_delta
-	)
+	var tile_space_direction := Geometry.direction_index_for_tile_delta(fractional_tile_delta)
 	var matches := projected_screen_direction == tile_space_direction
 	var projected_world_direction := (
 		projected_world_vector.normalized()
@@ -167,6 +167,7 @@ static func audit_fractional_tile_delta(fractional_tile_delta: Vector2) -> Dicti
 	return {
 		"contract_id": ANGLE_QUANTIZATION_AUDIT_CONTRACT_ID,
 		"geometry_contract_id": Geometry.CONTRACT_ID,
+		"active_direction_space_contract_id": Geometry.DIRECTION_SPACE_CONTRACT_ID,
 		"fractional_tile_delta": _vector2_json(fractional_tile_delta),
 		"has_direction": (
 			fractional_tile_delta.length_squared()
@@ -226,18 +227,6 @@ static func _direction_index_for_projected_screen_delta(screen_delta: Vector2) -
 		return 0
 	return wrapi(
 		int(round((screen_delta.angle() - PI / 2.0) / (TAU / 8.0))),
-		0,
-		8
-	)
-
-
-static func _direction_index_for_tile_space_delta(tile_delta: Vector2) -> int:
-	if tile_delta.length_squared() <= Geometry.EPSILON * Geometry.EPSILON:
-		return 0
-	# Canonical tile-space steps start at S=(1,1), then advance clockwise in
-	# the project's S,SW,W,NW,N,NE,E,SE index order at exact 45-degree steps.
-	return wrapi(
-		int(round((tile_delta.angle() - PI / 4.0) / (TAU / 8.0))),
 		0,
 		8
 	)

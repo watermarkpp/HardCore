@@ -1,6 +1,10 @@
 class_name WarriorMeleeGeometry
 extends RefCounted
 
+const CombatDirectionSpaceScript := preload(
+	"res://scripts/skills/combat_direction_space.gd"
+)
+
 ## Canonical warrior melee geometry. Every value is expressed in logical map
 ## tiles after the actor/enemy footpoints have been converted to fractional
 ## canonical tile coordinates. Screen pixels are deliberately not accepted.
@@ -8,6 +12,7 @@ extends RefCounted
 const CONTRACT_ID := "gameplay.warrior.melee_geometry.fractional_tile.v1"
 const WILD_RUSH_CONTRACT_ID := "gameplay.warrior.wild_rush.atomic_tile_push.v1"
 const TARGET_COUNT_POLICY_ID := "gameplay.warrior.melee_target_count.v1"
+const DIRECTION_SPACE_CONTRACT_ID := CombatDirectionSpaceScript.CONTRACT_ID
 const UNLIMITED_TARGETS := -1
 
 const SKILL_NORMAL := "normal"
@@ -80,7 +85,7 @@ static func target_count_policy(mode: String) -> Dictionary:
 
 
 static func facing_tile_step(direction_index: int) -> Vector2i:
-	return FACING_TILE_STEPS[posmod(direction_index, FACING_TILE_STEPS.size())]
+	return CombatDirectionSpaceScript.canonical_tile_step(direction_index)
 
 
 static func chebyshev_distance(origin: Vector2, target: Vector2) -> float:
@@ -124,20 +129,7 @@ static func thrust_slot(
 
 
 static func direction_index_for_tile_delta(delta: Vector2) -> int:
-	if delta.length_squared() <= EPSILON * EPSILON:
-		return 0
-	# Quantize in the same 64x32 isometric projection used by the character
-	# visual. The common 16px factor is cancelled, leaving only the 2:1 aspect;
-	# no screen distance enters gameplay geometry.
-	var projected_direction := Vector2(
-		(delta.x - delta.y) * 2.0,
-		delta.x + delta.y
-	)
-	return wrapi(
-		int(round((projected_direction.angle() - PI / 2.0) / (TAU / 8.0))),
-		0,
-		8
-	)
+	return CombatDirectionSpaceScript.direction_index_for_fractional_tile_delta(delta)
 
 
 static func half_moon_relative_sector(attack_direction_index: int, target_direction_index: int) -> int:
