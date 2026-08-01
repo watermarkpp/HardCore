@@ -13,6 +13,7 @@ func _run() -> void:
 			InputMap.add_action(action)
 	await _verify_all_warrior_modes_use_live_locked_geometry()
 	await _verify_vanished_lock_never_allows_retarget()
+	await _verify_wild_rush_preserves_original_selected_target()
 	await _verify_caster_single_target_and_spatial_cast_policies()
 	_verify_locked_melee_facing_contract()
 	print("COMBAT_RELEASE_GEOMETRY_PASS: live footpoints, locked melee facing, caster tracking unchanged")
@@ -106,6 +107,28 @@ func _verify_vanished_lock_never_allows_retarget() -> void:
 	assert(not geometry.locked_target_valid_at_release)
 	assert(not geometry.allow_target_retarget and not geometry.allow_directional_scan)
 	player.free()
+
+
+func _verify_wild_rush_preserves_original_selected_target() -> void:
+	_prepare_warrior()
+	PlayerState.learned_skills["warrior.wild_rush"] = 3
+	assert(
+		ReleaseGeometry.WILD_RUSH_RELEASE_TARGET_POLICY_ID
+		== "gameplay.warrior.wild_rush.original_locked_target_release.v1"
+	)
+	assert(ReleaseGeometry.tracks_locked_target_for_skill(
+		"warrior.wild_rush",
+		"direction"
+	))
+	assert(not ReleaseGeometry.tracks_locked_target_for_skill(
+		"wizard.fire_wall",
+		"target_area"
+	))
+	var rush := await _cast_and_capture("warrior.wild_rush", true)
+	assert(rush.geometry.policy == ReleaseGeometry.POLICY_LOCKED_SINGLE_TARGET)
+	assert(int(rush.geometry.locked_target_instance_id) > 0)
+	assert(not rush.geometry.allow_target_retarget)
+	assert(rush.direction.is_equal_approx(Vector2(rush.geometry.direction_world)))
 
 
 func _verify_caster_single_target_and_spatial_cast_policies() -> void:

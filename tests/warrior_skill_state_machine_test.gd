@@ -48,6 +48,16 @@ func _run() -> void:
 		and half_edge_context.skill_name == "半月弯刀",
 		"半月主体动作被瞬时无目标检测降级"
 	)
+	player.current_mp = 0
+	var half_zero_mp_context := player._build_warrior_attack_context(true)
+	assert(
+		half_zero_mp_context.mode == "thrust"
+		and half_zero_mp_context.skill_name == "刺杀剑术",
+		"输入时MP不足仍错误启动半月主体、范围或效果"
+	)
+	assert(half_zero_mp_context.fallback_trace[0].reason == "insufficient_mana")
+	assert(player.current_mp == 0, "半月MP不足降级不得预扣任何MP")
+	player.current_mp = mp_before_half
 	for existing: Node in get_tree().get_nodes_in_group("enemies"):
 		if existing is EnemyActor:
 			existing.global_position = Vector2(3000, 3000) + Vector2(
