@@ -3,6 +3,14 @@ extends Node
 const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
 
 
+class ShieldOwner:
+	extends Node2D
+	var shield_active := true
+
+	func magic_shield_snapshot() -> Dictionary:
+		return {"active": shield_active}
+
+
 func _ready() -> void:
 	var file := FileAccess.open("res://assets/data/caster_skill_visuals.json", FileAccess.READ)
 	var manifest: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
@@ -107,5 +115,31 @@ func _ready() -> void:
 	assert(teleport_arrival.frame_count() == 10)
 	assert(teleport_arrival.texture.get_width() > 0)
 	teleport_arrival.queue_free()
+	var shield_owner := ShieldOwner.new()
+	add_child(shield_owner)
+	var shield_visual := CasterSkillVisualEffect.new()
+	shield_visual.setup(
+		Vector2.ZERO,
+		"wizard.magic_shield",
+		72.0,
+		1.0,
+		Vector2.DOWN,
+		shield_owner
+	)
+	add_child(shield_visual)
+	assert(shield_visual.is_persistent_magic_shield_visual())
+	assert(shield_visual.get_meta(
+		"magic_shield_visual_contract", ""
+	) == "skills.wizard.magic_shield.cast_then_hold_final_frame.v1")
+	var shield_sprite: CasterSkillAnimationPlayer = shield_visual._sprites[0]
+	shield_sprite._process(shield_sprite.animation_duration() + 0.01)
+	shield_visual._process(0.1)
+	assert(shield_sprite.playback_complete)
+	assert(shield_sprite.current_frame_index == shield_sprite.frame_count() - 1)
+	assert(not shield_visual.is_queued_for_deletion())
+	shield_owner.shield_active = false
+	shield_visual._process(0.01)
+	assert(shield_visual.is_queued_for_deletion())
+	shield_owner.queue_free()
 	print("CASTER_SKILL_VISUAL_PASS: 26 exact primary-client animations/icons cover 26 active caster skills; one passive has no cast visual; zero fallbacks; male-only")
 	get_tree().quit(0)

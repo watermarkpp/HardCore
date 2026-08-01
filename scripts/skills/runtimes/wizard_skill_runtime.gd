@@ -154,6 +154,7 @@ static func _resolve_repulsion(
 			displaced_count += 1
 		resolutions.append({
 			"type": "adjacent_push",
+			"target_instance_id": int(target.get("instance_id", 0)),
 			"eligible": eligible,
 			"success_probability": probability,
 			"push_distance_tiles": 1 + maxi(0, rank - 1) + int(rng.call("pascal_random_exclusive", 2)),

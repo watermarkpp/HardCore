@@ -16,10 +16,11 @@ func _ready() -> void:
 
 	var repulsion := _execute("wizard.repulsion_ring", {
 		"force_success": true,
-		"targets": [{"level": 30}],
+		"targets": [{"level": 30, "instance_id": 417}],
 	})
 	assert(repulsion.effects.size() == 1 and repulsion.effects[0].displaced)
 	assert(repulsion.effects[0].damage == 0)
+	assert(repulsion.effects[0].target_instance_id == 417)
 	assert(repulsion.proficiency_event == "at_least_one_target_displaced")
 	var boss_repulsion := _execute("wizard.repulsion_ring", {
 		"targets": [{"level": 1, "is_boss": true, "force_success": true}],
