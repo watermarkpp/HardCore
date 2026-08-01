@@ -212,37 +212,56 @@ func _test_spell_click_hold_and_cancel(game: Node, near_target: EnemyActor) -> v
 
 	game.player._attack_timer = 1.0
 	game.player._attack_action_timer = 1.0
-	game._on_skill_input_started(
-		PlayerState.SKILL_SLOT_GROUP_ATTACK_RING, 0, 101, 2, &"touch"
-	)
-	assert(game._queued_skill_input_tickets.size() == 1)
-	game._on_skill_input_ended(
-		PlayerState.SKILL_SLOT_GROUP_ATTACK_RING, 0, 101, 2, &"touch"
-	)
+	sequence_before = game.player._combat_action_sequence
+	for token: int in [101, 102, 103]:
+		game._on_skill_input_started(
+			PlayerState.SKILL_SLOT_GROUP_ATTACK_RING,
+			0,
+			token,
+			token,
+			&"touch"
+		)
+		game._on_skill_input_ended(
+			PlayerState.SKILL_SLOT_GROUP_ATTACK_RING,
+			0,
+			token,
+			token,
+			&"touch"
+		)
+	_reset_cast_gate(game)
+	game._process_skill_input_actions(1.0)
 	assert(
-		game._active_skill_inputs.is_empty()
-		and game._queued_skill_input_tickets.size() == 1,
-		"a released click lost its single buffered cast ticket"
+		game.player._combat_action_sequence == sequence_before,
+		"rapid taps during one cast interval were buffered into forced casts"
+	)
+
+	_reset_cast_gate(game)
+	game._on_skill_input_started(
+		PlayerState.SKILL_SLOT_GROUP_ATTACK_RING, 0, 104, 3, &"touch"
 	)
 	sequence_before = game.player._combat_action_sequence
 	_reset_cast_gate(game)
 	game._process_skill_input_actions(1.0)
-	assert(game._queued_skill_input_tickets.is_empty())
-	assert(game.player._combat_action_sequence == sequence_before + 1)
-
-	_reset_cast_gate(game)
-	game._on_skill_input_started(
-		PlayerState.SKILL_SLOT_GROUP_ATTACK_RING, 0, 102, 3, &"touch"
+	assert(
+		game.player._combat_action_sequence == sequence_before,
+		"a fresh click was misclassified as a continuous hold"
 	)
-	sequence_before = game.player._combat_action_sequence
 	_reset_cast_gate(game)
+	var held_key: String = game._skill_input_key(
+		PlayerState.SKILL_SLOT_GROUP_ATTACK_RING, 0, 104, 3
+	)
+	var held_entry: Dictionary = game._active_skill_inputs[held_key]
+	held_entry["started_at_ms"] = (
+		Time.get_ticks_msec() - game.SKILL_HOLD_REPEAT_THRESHOLD_MS
+	)
+	game._active_skill_inputs[held_key] = held_entry
 	game._process_skill_input_actions(1.0)
 	assert(
 		game.player._combat_action_sequence == sequence_before + 1,
 		"held offensive spell did not repeat after the normal cast gate reopened"
 	)
 	game._on_skill_input_ended(
-		PlayerState.SKILL_SLOT_GROUP_ATTACK_RING, 0, 102, 3, &"touch"
+		PlayerState.SKILL_SLOT_GROUP_ATTACK_RING, 0, 104, 3, &"touch"
 	)
 	sequence_before = game.player._combat_action_sequence
 	_reset_cast_gate(game)
@@ -255,19 +274,17 @@ func _test_spell_click_hold_and_cancel(game: Node, near_target: EnemyActor) -> v
 	game.player._attack_timer = 1.0
 	game.player._attack_action_timer = 1.0
 	game._on_skill_input_started(
-		PlayerState.SKILL_SLOT_GROUP_ATTACK_RING, 0, 103, 4, &"touch"
+		PlayerState.SKILL_SLOT_GROUP_ATTACK_RING, 0, 105, 4, &"touch"
 	)
-	assert(game._queued_skill_input_tickets.size() == 1)
 	game._on_skill_input_cancelled(
 		PlayerState.SKILL_SLOT_GROUP_ATTACK_RING,
 		0,
-		103,
+		105,
 		4,
 		&"touch",
 		&"test_cancel"
 	)
 	assert(game._active_skill_inputs.is_empty())
-	assert(game._queued_skill_input_tickets.is_empty())
 
 
 func _test_magic_shield_toggle_and_auto_refresh(game: Node) -> void:

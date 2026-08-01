@@ -47,8 +47,10 @@ const WILD_RUSH_SKILL_ID := "warrior.wild_rush"
 const FIRE_WALL_SKILL_ID := "wizard.fire_wall"
 const ATTACK_INPUT_TICKET_CONTRACT_ID := "combat.input.attack_ticket.touch_lifecycle.v1"
 const MAX_BUFFERED_MOBILE_ATTACK_TICKETS := 32
-const SKILL_INPUT_TICKET_CONTRACT_ID := "combat.input.skill_ticket.touch_lifecycle.v1"
-const MAX_BUFFERED_SKILL_INPUT_TICKETS := 32
+const SKILL_INPUT_TICKET_CONTRACT_ID := (
+	"combat.input.skill_ticket.cooldown_coalesce_hold_repeat.v2"
+)
+const SKILL_HOLD_REPEAT_THRESHOLD_MS := 300
 const MAGIC_SHIELD_AUTO_REFRESH_CHECK_SECONDS := 0.10
 const MAGIC_SHIELD_AUTO_REFRESH_EXPIRY_LEAD_SECONDS := 0.60
 const CASTER_GEOMETRY_VISUAL_CONTRACT_ID := "skills.visual.geometry_cells.world_projection.v1"
@@ -78,7 +80,6 @@ var _active_mobile_attack_tokens: Dictionary = {}
 var _legacy_mobile_attack_token := 0
 var _next_synthetic_attack_token := -1
 var _active_skill_inputs: Dictionary = {}
-var _queued_skill_input_tickets: Array[Dictionary] = []
 var _next_skill_input_sequence := 1
 var _skill_input_retry_remaining := 0.0
 var _keyboard_bound_skill_token := 0
@@ -1540,6 +1541,7 @@ func _on_skill_input_started(
 		"skill_name": skill_name,
 		"skill_id": str(metadata.get("skill_id", "")),
 		"repeatable": bool(metadata.get("repeatable_offensive_spell", false)),
+		"started_at_ms": Time.get_ticks_msec(),
 		"sequence": _next_skill_input_sequence,
 	}
 	_next_skill_input_sequence += 1
@@ -1576,33 +1578,24 @@ func _on_skill_input_cancelled(
 		slot_group, slot_index, press_token, touch_id
 	)
 	_active_skill_inputs.erase(input_key)
-	_remove_queued_skill_input(input_key)
 
 
 func _cancel_all_skill_inputs(clear_tickets := false) -> void:
 	_active_skill_inputs.clear()
 	_keyboard_bound_skill_token = 0
+	# Kept as an API-compatible argument for callers that clear attack and skill
+	# input together. Skill clicks are no longer buffered past their physical
+	# lifetime, so there are no deferred skill tickets to clear.
 	if clear_tickets:
-		_queued_skill_input_tickets.clear()
+		_skill_input_retry_remaining = 0.0
 
 
 func _submit_skill_input_ticket(entry: Dictionary) -> void:
-	var status := _try_release_skill(str(entry.get("skill_name", "")), true)
-	if status != &"busy":
-		return
-	if _queued_skill_input_tickets.size() >= MAX_BUFFERED_SKILL_INPUT_TICKETS:
-		return
-	var input_key := str(entry.get("input_key", ""))
-	for queued: Dictionary in _queued_skill_input_tickets:
-		if str(queued.get("input_key", "")) == input_key:
-			return
-	_queued_skill_input_tickets.append(entry.duplicate(true))
-
-
-func _remove_queued_skill_input(input_key: String) -> void:
-	for index: int in range(_queued_skill_input_tickets.size() - 1, -1, -1):
-		if str(_queued_skill_input_tickets[index].get("input_key", "")) == input_key:
-			_queued_skill_input_tickets.remove_at(index)
+	# One physical DOWN makes exactly one immediate attempt. A busy cast gate
+	# coalesces all additional taps during that interval instead of storing them
+	# for forced release later. Continuous casting is owned exclusively by the
+	# still-active press in _process_skill_input_actions().
+	_try_release_skill(str(entry.get("skill_name", "")), true)
 
 
 func _process_skill_input_actions(delta: float) -> void:
@@ -1612,20 +1605,18 @@ func _process_skill_input_actions(delta: float) -> void:
 	if _skill_input_retry_remaining > 0.0:
 		return
 	_skill_input_retry_remaining = 0.05
-	if not _queued_skill_input_tickets.is_empty():
-		var queued: Dictionary = _queued_skill_input_tickets[0]
-		var queued_status := _try_release_skill(
-			str(queued.get("skill_name", "")), false
-		)
-		if queued_status != &"busy":
-			_queued_skill_input_tickets.pop_front()
-		return
 	var repeat_entry: Dictionary = {}
+	var now_ms := Time.get_ticks_msec()
 	for raw_entry: Variant in _active_skill_inputs.values():
 		if not raw_entry is Dictionary:
 			continue
 		var entry: Dictionary = raw_entry
 		if not bool(entry.get("repeatable", false)):
+			continue
+		if (
+			now_ms - int(entry.get("started_at_ms", now_ms))
+			< SKILL_HOLD_REPEAT_THRESHOLD_MS
+		):
 			continue
 		if (
 			repeat_entry.is_empty()
