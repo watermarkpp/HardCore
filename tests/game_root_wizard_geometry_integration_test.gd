@@ -57,10 +57,10 @@ func _run() -> void:
 	for distance: int in range(1, 6):
 		line_cells.append(origin_tile + Vector2i(1, 1) * distance)
 	var first_line_target := _make_enemy(game, game.player, line_cells[0], "地狱火首个目标")
-	var blocked_by_unit_target := _make_enemy(game, game.player, line_cells[2], "地狱火后方目标")
+	var rear_line_target := _make_enemy(game, game.player, line_cells[2], "地狱火后方目标")
 	var off_line_target := _make_enemy(game, game.player, origin_tile + Vector2i(1, 0), "地狱火线外目标")
 	var first_hp := first_line_target.current_hp
-	var blocked_hp := blocked_by_unit_target.current_hp
+	var rear_hp := rear_line_target.current_hp
 	var off_line_hp := off_line_target.current_hp
 	var hellfire_hit: bool = game._apply_canonical_spell_damage(
 		"wizard.hellfire",
@@ -73,11 +73,11 @@ func _run() -> void:
 		{"pierces_units": false, "stops_on_terrain": true}
 	)
 	assert(hellfire_hit and first_line_target.current_hp < first_hp, "地狱火未命中正式五格直线内首个目标")
-	assert(blocked_by_unit_target.current_hp == blocked_hp, "不穿透地狱火错误命中首个目标后方单位")
+	assert(rear_line_target.current_hp < rear_hp, "地狱火未命中正式五格直线内后方目标")
 	assert(off_line_target.current_hp == off_line_hp, "宽一格地狱火错误命中正式直线外单位")
 
 	first_line_target.queue_free()
-	blocked_by_unit_target.queue_free()
+	rear_line_target.queue_free()
 	off_line_target.queue_free()
 	await get_tree().process_frame
 

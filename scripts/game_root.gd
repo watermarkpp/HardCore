@@ -3604,12 +3604,16 @@ func _canonical_spell_geometry_targets(
 			if raw_cell is Vector2i:
 				geometry_cells.append(raw_cell)
 	var targets: Array[EnemyActor] = []
+	# Hellfire is a five-tile, one-tile-wide area line. `pierces_units` controls
+	# whether units stop the visual/line traversal; it must not turn the area
+	# damage into a single-target spell. A negative limit means every hostile
+	# footprint intersecting the formal geometry is selected.
 	var maximum_targets := (
-		1
-		if stable_skill_id == "wizard.hellfire" and not bool(effect.get("pierces_units", false))
+		-1
+		if stable_skill_id == "wizard.hellfire"
 		else maxi(0, int(effect.get("maximum_targets", geometry_cells.size())))
 	)
-	if maximum_targets <= 0:
+	if maximum_targets == 0:
 		return targets
 	var selected_instance_ids := {}
 	for cell: Vector2i in geometry_cells:
@@ -3631,7 +3635,7 @@ func _canonical_spell_geometry_targets(
 		for enemy: EnemyActor in cell_targets:
 			targets.append(enemy)
 			selected_instance_ids[enemy.get_instance_id()] = true
-			if targets.size() >= maximum_targets:
+			if maximum_targets > 0 and targets.size() >= maximum_targets:
 				return targets
 	return targets
 
