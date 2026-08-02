@@ -84,7 +84,7 @@ func _travel_mine_route_to_corpse_hall(game: Node) -> void:
 		assert(game.travel_via_portal(portal, true), "mine travel failed:%d" % target_map_id)
 		await get_tree().process_frame
 		assert(game.current_map_id == target_map_id)
-		var expected_arrival := MapEditorRuntimeBridge.portal_position(
+		var expected_arrival := MapEditorRuntimeBridge.portal_screen_position_px(
 			target_map_id, target_portal_id
 		)
 		assert(game.player.global_position.is_equal_approx(expected_arrival))

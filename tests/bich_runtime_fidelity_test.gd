@@ -30,7 +30,7 @@ func _ready()->void:
 			assert(node.visual.uses_final_art(), "比奇怪物仍在使用占位外观：%s" % node.display_name)
 			node.visual.play_attack(0.62);node.visual._process(0.05)
 			assert(node.visual.current_state=="attack", "怪物攻击动作未进入播放状态：%s" % node.display_name)
-	assert(MapEditorRuntimeBridge.home_position().is_equal_approx(MapEditorRuntimeBridge.grid_cell_to_screen_position_px(runtime,[33,37])))
+	assert(MapEditorRuntimeBridge.home_screen_position_px().is_equal_approx(MapEditorRuntimeBridge.grid_cell_to_screen_position_px(runtime,[33,37])))
 	var sample:EnemyActor=get_tree().get_nodes_in_group("enemies")[0];sample.facing=Vector2.RIGHT;sample.visual._process(0.01)
 	var expected_row:=ArtSpec.mir2_client_direction_row(Vector2.RIGHT) if str(sample.visual.active_resources.get("direction_mode",""))=="mir2_north_first" else ArtSpec.direction_index(Vector2.RIGHT)
 	assert(sample.visual.current_direction==expected_row)
