@@ -176,7 +176,7 @@ func _run() -> void:
 	game._skill_cast_target = side
 	game.player.facing = game.player.global_position.direction_to(side.global_position)
 	assert(
-		game._ensure_skill_cast_target(second, 180.0) == side,
+		game._ensure_skill_cast_target(second) == side,
 		"技能临时目标没有保持自己的独立目标"
 	)
 	assert(game.locked_target == second, "技能临时选敌覆盖了独立的攻击锁定")

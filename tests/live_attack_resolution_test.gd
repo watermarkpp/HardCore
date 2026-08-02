@@ -170,6 +170,6 @@ func _verify_caster_projectile_release(
 		"%s projectile muzzle offset escaped PX presentation space" % profession
 	)
 	assert(
-		projectile.direction.is_equal_approx(live_origin.direction_to(target.global_position)),
+		projectile.direction_screen_px.is_equal_approx(live_origin.direction_to(target.global_position)),
 		"%s投射物仍瞄准旧方向" % profession
 	)
