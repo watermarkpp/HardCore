@@ -128,7 +128,12 @@ $Suites = @{
         'tests/android_layout_test.tscn'
     )
 }
-$Suites.critical = @($Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster | Select-Object -Unique)
+$Suites.critical = @(
+    'tests/combat_unit_runtime_static_audit_test.tscn'
+) + @(
+    $Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster |
+        Select-Object -Unique
+)
 
 function Stop-TestProcessTree([int]$ProcessId) {
     $children = @(Get-CimInstance Win32_Process -Filter "ParentProcessId=$ProcessId" -ErrorAction SilentlyContinue)

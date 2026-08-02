@@ -1,5 +1,14 @@
 # Codex 精简上下文快照
 
+## 2026-08-03 COMBAT-UNIT-V1.0 全项目 GU/GS/PX 迁移完成
+
+- 正式单位合同为 `combat.unit.gu_gs_px.v1`：玩法距离、方向、速度和占地使用地面欧氏 `GU`；`GS` 只表示离散拓扑步数；`PX` 只用于投影、物理呈现、素材和 UI。
+- 玩家与怪物移动/AI、攻击和法术锁定、战士近战、地狱火/疾光电影、投射物扫掠、地图安全区与刷新、运行时地图输出已完成迁移。正式运行时无旧无单位兼容别名，旧数据字段只在版本化单向适配入口转换一次。
+- 技能基线保持：普通/烈火/半月 `1.5 GU`，刺杀 `2.5 GU`，地狱火 `5×1 GU`，疾光电影 `8×1 GU`，攻击/法术锁定 `10/12 GU`。人工脚点、怪物占地、释放帧重读、准确判定顺序、技能原始像素和已验收视觉均保留。
+- 地图运行时稳定合同新增 `map.editor.runtime.output_units.v1`；职业空间合同升级为 `skills.profession_combat_profile.ground_units.v2`、`caster_skill_runtime.ground_units.v2` 与 `gameplay.professions.combat_direction_space.ground_gu_8dir.v3`。UI 技能详情只读 `maximum_range_gu`。
+- 验证：静态单位审计 `1/1`、职业技能 `16/16`、UI `5/5`、战士/法师 `25/25`、地图 `32/32`、怪物 `18/18`、装备 `17/17`、最终关键套件 `86/86` 全部通过。完整审计见 `docs/combat/combat_geometry_audit.md`。
+- 用户冻结对象零变化：`item_236.json` / `item_240.json` SHA-256 为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC` / `81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`；三份怪物脚点合同仍为 `DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+
 ## 2026-08-02 Android v62：疾光电影逐方向逐帧恒定粗细
 
 - v61 仍把逻辑一格宽的等距投影直接用于视觉横向宽度。16 向目标宽度为 `29.564/32/45.255/59.128/64px`，再叠加六帧各自非透明像素包围差异后，96 帧运行时可见横向范围为 `26.64..61.05px`，最大相差 `2.292x`；这是“整体变细但仍有粗有细”的根因。
