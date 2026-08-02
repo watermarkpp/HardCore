@@ -73,7 +73,7 @@ func _run() -> void:
 		"pierces_units": false,
 		"stops_on_terrain": false,
 	}
-	var hellfire_strip: Dictionary = game._canonical_continuous_line_strip(
+	var hellfire_strip: Dictionary = game._canonical_continuous_line_strip_ground_gu(
 		"wizard.hellfire",
 		hellfire_effect,
 		game.player.global_position,
@@ -179,7 +179,7 @@ func _run() -> void:
 		"pierces_units": true,
 		"stops_on_terrain": false,
 	}
-	var laser_strip: Dictionary = game._canonical_continuous_line_strip(
+	var laser_strip: Dictionary = game._canonical_continuous_line_strip_ground_gu(
 		"wizard.laser",
 		laser_effect,
 		game.player.global_position,

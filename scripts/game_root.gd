@@ -2267,11 +2267,11 @@ func _validate_locked_target() -> void:
 func _face_locked_target() -> Vector2:
 	if not _is_attack_target_in_range(locked_target):
 		return player.facing.normalized()
-	var direction_resolution := CombatDirectionSpaceScript.resolve_world_delta(
+	var direction_resolution := CombatDirectionSpaceScript.resolve_screen_delta_px(
 		locked_target.global_position - player.global_position
 	)
 	var direction := Vector2(
-		direction_resolution.get("projected_world_direction", player.facing)
+		direction_resolution.get("projected_screen_direction_px", player.facing)
 	).normalized()
 	if direction.length_squared() > 0.01:
 		player.set_combat_facing(direction)
@@ -3595,7 +3595,7 @@ func _apply_canonical_effects(
 		result.get("geometry_cells", []),
 		geometry_effect
 	)
-	var continuous_line_strip := _canonical_continuous_line_strip(
+	var continuous_line_strip_ground_gu := _canonical_continuous_line_strip_ground_gu(
 		stable_skill_id,
 		geometry_effect,
 		origin,
@@ -3608,7 +3608,7 @@ func _apply_canonical_effects(
 		target,
 		target_position,
 		effective_geometry_cells,
-		continuous_line_strip
+		continuous_line_strip_ground_gu
 	)
 	for raw_effect: Variant in result.get("effects", []):
 		if not raw_effect is Dictionary:
@@ -3649,7 +3649,7 @@ func _apply_canonical_effects(
 					target,
 					effective_geometry_cells,
 					effect,
-					continuous_line_strip
+					continuous_line_strip_ground_gu
 				)
 			"persistent_ground_damage":
 				_spawn_canonical_ground_field(
@@ -3780,7 +3780,7 @@ func _apply_canonical_spell_damage(
 	primary: EnemyActor,
 	raw_geometry_cells: Variant = [],
 	effect: Dictionary = {},
-	continuous_line_strip: Dictionary = {}
+	continuous_line_strip_ground_gu: Dictionary = {}
 ) -> bool:
 	var targets: Array[EnemyActor] = []
 	var has_declared_geometry_cells := (
@@ -3792,7 +3792,7 @@ func _apply_canonical_spell_damage(
 			stable_skill_id,
 			raw_geometry_cells,
 			effect,
-			continuous_line_strip
+			continuous_line_strip_ground_gu
 		)
 	elif effect_type == "targeted_sky_strike" and primary != null:
 		targets.append(primary)
@@ -3859,7 +3859,7 @@ func _canonical_effective_spell_geometry_cells(
 	)
 
 
-func _canonical_continuous_line_strip(
+func _canonical_continuous_line_strip_ground_gu(
 	stable_skill_id: String,
 	effect: Dictionary,
 	origin_screen_px: Vector2,
@@ -3887,7 +3887,7 @@ func _canonical_continuous_line_strip(
 			direction_screen_px
 		).normalized()
 	)
-	var strip := CasterSpellGeometryScript.continuous_line_strip(
+	var strip_ground_gu := CasterSpellGeometryScript.continuous_line_strip_ground_gu(
 		origin_ground_gu,
 		origin_ground_gu + direction_ground_gu,
 		direction_screen_px,
@@ -3895,36 +3895,38 @@ func _canonical_continuous_line_strip(
 		effect_width_gu
 	)
 	if bool(effect.get("stops_on_terrain", geometry.get("stops_on_terrain", false))):
-		var unblocked_length_gu := _canonical_continuous_line_unblocked_length_gu(strip)
+		var unblocked_length_gu := _canonical_continuous_line_unblocked_length_gu(
+			strip_ground_gu
+		)
 		if unblocked_length_gu < effect_length_gu:
-			strip = CasterSpellGeometryScript.continuous_line_strip(
+			strip_ground_gu = CasterSpellGeometryScript.continuous_line_strip_ground_gu(
 				origin_ground_gu,
 				origin_ground_gu + direction_ground_gu,
 				direction_screen_px,
 				unblocked_length_gu,
 				effect_width_gu
 			)
-			strip["terrain_truncated"] = true
-			strip["source_effect_length_gu"] = effect_length_gu
-	strip["integration_contract_id"] = (
+			strip_ground_gu["terrain_truncated"] = true
+			strip_ground_gu["source_effect_length_gu"] = effect_length_gu
+	strip_ground_gu["integration_contract_id"] = (
 		"gameplay.wizard.continuous_line.damage_visual_terrain_shared.v1"
 	)
-	return strip
+	return strip_ground_gu
 
 
 func _canonical_continuous_line_unblocked_length_gu(
-	line_strip: Dictionary
+	line_strip_ground_gu: Dictionary
 ) -> float:
 	var effect_length_gu := maxf(
 		0.0,
-		float(line_strip.get("effect_length_gu", 0.0))
+		float(line_strip_ground_gu.get("effect_length_gu", 0.0))
 	)
 	if effect_length_gu <= 0.0:
 		return 0.0
-	var origin_ground_gu: Vector2 = line_strip.get(
+	var origin_ground_gu: Vector2 = line_strip_ground_gu.get(
 		"origin_ground_gu", Vector2.ZERO
 	)
-	var direction_ground_gu: Vector2 = line_strip.get(
+	var direction_ground_gu: Vector2 = line_strip_ground_gu.get(
 		"direction_ground_gu", Vector2.DOWN
 	)
 	# Quarter-step centreline sampling is a deterministic supercover for the
@@ -3971,7 +3973,7 @@ func _canonical_spell_geometry_targets(
 	stable_skill_id: String,
 	raw_geometry_cells: Variant,
 	effect: Dictionary,
-	continuous_line_strip: Dictionary = {}
+	continuous_line_strip_ground_gu: Dictionary = {}
 ) -> Array[EnemyActor]:
 	var geometry_cells: Array[Vector2i] = []
 	if raw_geometry_cells is Array:
@@ -3995,13 +3997,13 @@ func _canonical_spell_geometry_targets(
 		return targets
 	if (
 		stable_skill_id in CONTINUOUS_WIZARD_LINE_SKILLS
-		and str(continuous_line_strip.get("contract_id", ""))
+		and str(continuous_line_strip_ground_gu.get("contract_id", ""))
 		== CasterSpellGeometryScript.CONTINUOUS_AIM_LINE_CONTRACT_ID
 	):
-		var origin_ground_gu: Vector2 = continuous_line_strip.get(
+		var origin_ground_gu: Vector2 = continuous_line_strip_ground_gu.get(
 			"origin_ground_gu", Vector2.ZERO
 		)
-		var direction_ground_gu: Vector2 = continuous_line_strip.get(
+		var direction_ground_gu: Vector2 = continuous_line_strip_ground_gu.get(
 			"direction_ground_gu", Vector2.DOWN
 		)
 		var candidates: Array[Dictionary] = []
@@ -4013,8 +4015,8 @@ func _canonical_spell_geometry_targets(
 			):
 				continue
 			var enemy := node as EnemyActor
-			if not CasterSpellGeometryScript.target_footprint_intersects_continuous_line(
-				continuous_line_strip,
+			if not CasterSpellGeometryScript.target_footprint_intersects_continuous_line_ground_gu(
+				continuous_line_strip_ground_gu,
 				_enemy_footprint_polygon_ground_gu(enemy)
 			):
 				continue
@@ -4312,7 +4314,7 @@ func _spawn_canonical_cast_visual(
 	target: EnemyActor,
 	target_position: Vector2,
 	raw_geometry_cells: Variant = [],
-	continuous_line_strip: Dictionary = {}
+	continuous_line_strip_ground_gu: Dictionary = {}
 ) -> void:
 	if not stable_skill_id.begins_with("wizard.") and not stable_skill_id.begins_with("taoist."):
 		return
@@ -4329,12 +4331,12 @@ func _spawn_canonical_cast_visual(
 	var geometry_grid_cells: Array[Vector2i] = []
 	var geometry_screen_points_px: Array[Vector2] = []
 	if (
-		str(continuous_line_strip.get("contract_id", ""))
+		str(continuous_line_strip_ground_gu.get("contract_id", ""))
 		== CasterSpellGeometryScript.CONTINUOUS_AIM_LINE_CONTRACT_ID
 	):
 		geometry_screen_points_px = (
-			CasterSpellGeometryScript.continuous_line_world_points(
-				continuous_line_strip,
+			CasterSpellGeometryScript.continuous_line_screen_points_px(
+				continuous_line_strip_ground_gu,
 				Callable(self, "_canonical_ground_gu_to_screen_px")
 			)
 		)
@@ -4349,7 +4351,7 @@ func _spawn_canonical_cast_visual(
 		"operation": "canonical_visual_only",
 		"visual": visual_profile,
 		"visual_duration": CasterSkillVisualRegistry.animation_duration(stable_skill_id),
-		"area_radius": 72.0,
+		"visual_radius_px": 72.0,
 		"canonical_geometry_contract": CASTER_GEOMETRY_VISUAL_CONTRACT_ID,
 		"geometry_origin_screen_px": origin,
 		"geometry_grid_cells": geometry_grid_cells,
@@ -4386,7 +4388,7 @@ func _spawn_canonical_teleport_arrival(
 			stable_skill_id,
 			"arrival"
 		),
-		"area_radius": 72.0,
+		"visual_radius_px": 72.0,
 	}
 	var arrival := CasterSkillRuntimeScript.create_visual(
 		visual_plan,
@@ -4499,7 +4501,9 @@ func _canonical_facing_for_skill(skill_id: String, direction: Vector2) -> Vector
 	if skill_id in ["warrior.thrusting", "warrior.half_moon", "warrior.fire_sword"]:
 		return WarriorMeleeGeometryScript.facing_tile_step(ArtSpec.direction_index(direction))
 	if skill_id in CANONICAL_WIZARD_GEOMETRY_SKILLS:
-		return CasterSpellGeometryScript.canonical_facing_from_world_direction(direction)
+		return CasterSpellGeometryScript.canonical_facing_grid_step_from_screen_direction_px(
+			direction
+		)
 	return _canonical_facing(direction)
 
 

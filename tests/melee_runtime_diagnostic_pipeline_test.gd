@@ -104,11 +104,11 @@ func _run() -> void:
 	assert(release_event.visual_geometry_direction_match)
 	assert(
 		str(release_event.release_geometry.get("direction_space_contract_id", ""))
-		== "gameplay.professions.combat_direction_space.ground_gu_8dir.v2"
+		== "gameplay.professions.combat_direction_space.ground_gu_8dir.v3"
 	)
 
 	# Hit-and-run footprint regression: movement input remains held when the
-	# attack begins, and the monster centre is beyond the 2.5-tile thrust end.
+	# attack begins, and the monster centre is beyond the 2.5 GU thrust end.
 	# Its unchanged physics ellipse only touches the fixed attack rectangle.
 	# The historical point test must reject it while the production resolver
 	# accepts the area contact and commits damage.
