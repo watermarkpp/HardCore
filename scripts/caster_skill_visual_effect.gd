@@ -39,13 +39,13 @@ var _hellfire_frame_count := 0
 var _hellfire_finished := false
 var _hellfire_step_seconds := 0.05
 var _hellfire_step_distance := 25.0
-var _geometry_world_offsets: Array[Vector2] = []
+var _geometry_screen_offsets_px: Array[Vector2] = []
 var _hellfire_emission_offsets: Array[Vector2] = []
-var _desired_sprite_extent := 0.0
-var _desired_sprite_footprint := Vector2.ZERO
-var _desired_sprite_axis_extent := 0.0
-var _desired_sprite_cross_axis_extent := 0.0
-var _visual_axis_world := Vector2.ZERO
+var _desired_sprite_extent_px := 0.0
+var _desired_sprite_footprint_px := Vector2.ZERO
+var _desired_sprite_axis_extent_px := 0.0
+var _desired_sprite_cross_axis_extent_px := 0.0
+var _visual_axis_screen := Vector2.ZERO
 
 
 func setup(
@@ -65,27 +65,27 @@ func setup(
 	lifetime = maxf(0.1, lifetime_value)
 	direction = direction_value.normalized() if direction_value.length_squared() > 0.0 else Vector2.DOWN
 	target_node = target
-	_desired_sprite_extent = maxf(
+	_desired_sprite_extent_px = maxf(
 		0.0,
-		float(visual_geometry_context.get("desired_sprite_extent", 0.0))
+		float(visual_geometry_context.get("desired_sprite_extent_px", 0.0))
 	)
-	_desired_sprite_footprint = visual_geometry_context.get(
-		"desired_sprite_footprint", Vector2.ZERO
+	_desired_sprite_footprint_px = visual_geometry_context.get(
+		"desired_sprite_footprint_px", Vector2.ZERO
 	)
-	_desired_sprite_axis_extent = maxf(
+	_desired_sprite_axis_extent_px = maxf(
 		0.0,
-		float(visual_geometry_context.get("desired_sprite_axis_extent", 0.0))
+		float(visual_geometry_context.get("desired_sprite_axis_extent_px", 0.0))
 	)
-	_desired_sprite_cross_axis_extent = maxf(
+	_desired_sprite_cross_axis_extent_px = maxf(
 		0.0,
 		float(visual_geometry_context.get(
-			"desired_sprite_cross_axis_extent", 0.0
+			"desired_sprite_cross_axis_extent_px", 0.0
 		))
 	)
-	_visual_axis_world = visual_geometry_context.get("visual_axis_world", Vector2.ZERO)
-	for raw_offset: Variant in visual_geometry_context.get("geometry_world_offsets", []):
+	_visual_axis_screen = visual_geometry_context.get("visual_axis_screen", Vector2.ZERO)
+	for raw_offset: Variant in visual_geometry_context.get("geometry_screen_offsets_px", []):
 		if raw_offset is Vector2:
-			_geometry_world_offsets.append(raw_offset)
+			_geometry_screen_offsets_px.append(raw_offset)
 
 
 func _ready() -> void:
@@ -237,13 +237,13 @@ func _install_single() -> void:
 	if not sprite.configure(
 		skill_id,
 		direction,
-		_desired_sprite_extent,
+		_desired_sprite_extent_px,
 		null,
 		phase_id,
-		_desired_sprite_footprint,
-		_desired_sprite_axis_extent,
-		_visual_axis_world,
-		_desired_sprite_cross_axis_extent
+		_desired_sprite_footprint_px,
+		_desired_sprite_axis_extent_px,
+		_visual_axis_screen,
+		_desired_sprite_cross_axis_extent_px
 	):
 		sprite.queue_free()
 		return
@@ -260,14 +260,14 @@ func _install_hellfire_trail(render: Dictionary) -> void:
 		0.001,
 		float(render.get("trajectory_step_ms", 50)) / 1000.0
 	)
-	if not _geometry_world_offsets.is_empty():
+	if not _geometry_screen_offsets_px.is_empty():
 		_hellfire_step_distance = maxf(
 			0.001,
 			float(render.get(
 				"trajectory_dominant_axis_pixels_per_second", 500.0 / 0.9
 			)) * _hellfire_step_seconds
 		)
-		var endpoint: Vector2 = _geometry_world_offsets.back()
+		var endpoint: Vector2 = _geometry_screen_offsets_px.back()
 		var dominant_distance := maxf(absf(endpoint.x), absf(endpoint.y))
 		_hellfire_total_emissions = maxi(
 			1,
@@ -290,13 +290,13 @@ func _install_hellfire_trail(render: Dictionary) -> void:
 		if not sprite.configure(
 			skill_id,
 			direction,
-			_desired_sprite_extent,
+			_desired_sprite_extent_px,
 			false,
 			phase_id,
-			_desired_sprite_footprint,
-			_desired_sprite_axis_extent,
-			_visual_axis_world,
-			_desired_sprite_cross_axis_extent
+			_desired_sprite_footprint_px,
+			_desired_sprite_axis_extent_px,
+			_visual_axis_screen,
+			_desired_sprite_cross_axis_extent_px
 		):
 			sprite.queue_free()
 			continue

@@ -24,7 +24,7 @@ func _ready() -> void:
 	var player := PlayerCharacter.new()
 	add_child(player)
 	await get_tree().physics_frame
-	player.global_position = edge - outward * (ArtSpec.PLAYER_COLLISION_RADIUS + 4.0)
+	player.global_position = edge - outward * (ArtSpec.PLAYER_COLLISION_RADIUS_PX + 4.0)
 	var player_collision := player.move_and_collide(outward * 160.0)
 	assert(player_collision != null, "玩家可越过地图外部黑区硬边界")
 	var expected_player_position := (
@@ -47,15 +47,15 @@ func _ready() -> void:
 	enemy.setup(GameData.get_monster("稻草人"), null, false)
 	add_child(enemy)
 	await get_tree().physics_frame
-	enemy.global_position = edge - outward * (enemy.collision_radius + 4.0)
+	enemy.global_position = edge - outward * (enemy.collision_radius_px + 4.0)
 	var enemy_collision := enemy.move_and_collide(outward * 160.0)
 	assert(enemy_collision != null, "怪物可越过地图外部黑区硬边界")
 	var expected_enemy_position := (
 		CollisionGeometry.project_world_envelope_inside_visible_boundary(
 			edge,
 			size,
-			WorldSpatialRules.actor_footprint_polygon(
-				enemy.collision_radius
+			WorldSpatialRules.actor_footprint_polygon_px(
+				enemy.collision_radius_px
 			)
 		)
 	)

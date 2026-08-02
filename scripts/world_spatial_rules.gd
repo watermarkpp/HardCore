@@ -24,20 +24,6 @@ const SCREEN_HORIZONTAL_RADIUS_PX_PER_COMBAT_RADIUS_GU := (
 )
 
 
-static func point_inside_safe_zone(point: Vector2, zone: Dictionary) -> bool:
-	var polygon: PackedVector2Array = zone.get("polygon", PackedVector2Array())
-	if str(zone.get("shape", "circle")) == "polygon" and polygon.size() >= 3:
-		return Geometry2D.is_point_in_polygon(point, polygon)
-	return point.distance_to(zone.get("center", Vector2.ZERO)) <= float(zone.get("radius", 0.0))
-
-
-static func point_inside_safe_zones(point: Vector2, zones: Array) -> bool:
-	for zone: Variant in zones:
-		if zone is Dictionary and point_inside_safe_zone(point, zone):
-			return true
-	return false
-
-
 static func point_inside_safe_zone_ground_gu(
 	point_ground_gu: Vector2,
 	zone: Dictionary
@@ -80,22 +66,6 @@ static func point_inside_safe_zones_ground_gu(
 	return false
 
 
-static func project_outside_safe_zones(point: Vector2, zones: Array, padding := 0.0) -> Vector2:
-	var projected := point
-	for zone: Variant in zones:
-		if not zone is Dictionary or not point_inside_safe_zone(projected, zone):
-			continue
-		# Runtime combat safe areas are circles.  Polygon support remains a
-		# conservative fallback for imported maps, but never invents a second
-		# gameplay radius.
-		if str(zone.get("shape", "circle")) == "circle":
-			var center: Vector2 = zone.get("center", Vector2.ZERO)
-			var offset := projected - center
-			var direction := offset.normalized() if offset.length_squared() > 0.0001 else Vector2.DOWN
-			projected = center + direction * (float(zone.get("radius", 0.0)) + padding)
-	return projected
-
-
 static func project_outside_safe_zones_ground_gu(
 	point_ground_gu: Vector2,
 	zones: Array,
@@ -128,26 +98,36 @@ static func project_outside_safe_zones_ground_gu(
 	return projected_ground_gu
 
 
-static func environment_blocks_actor(provider: Node, position: Vector2, radius: float) -> bool:
+static func environment_blocks_actor_screen_px(
+	provider: Node,
+	position_screen_px: Vector2,
+	collision_radius_px: float
+) -> bool:
 	if not is_instance_valid(provider) or not provider.has_method("is_environment_point_blocked"):
 		return false
-	if bool(provider.call("is_environment_point_blocked", position)):
+	if bool(provider.call("is_environment_point_blocked", position_screen_px)):
 		return true
 	# Physics remains authoritative for sliding.  These samples are the common
 	# deterministic fallback used by both player and monsters when collision
 	# chunks are rebuilt or a spawn/teleport bypasses move_and_slide().
-	var sample_radius := maxf(0.0, radius - 1.0)
-	if sample_radius <= 0.0:
+	var sample_radius_px := maxf(0.0, collision_radius_px - 1.0)
+	if sample_radius_px <= 0.0:
 		return false
-	for offset: Vector2 in actor_footprint_polygon(sample_radius):
-		if bool(provider.call("is_environment_point_blocked", position + offset)):
+	for offset_px: Vector2 in actor_footprint_polygon_px(sample_radius_px):
+		if bool(provider.call(
+			"is_environment_point_blocked",
+			position_screen_px + offset_px
+		)):
 			return true
 	return false
 
 
-static func actor_footprint_radii(radius: float) -> Vector2:
-	var horizontal := maxf(0.0, radius)
-	return Vector2(horizontal, horizontal * ACTOR_FOOTPRINT_Y_RATIO)
+static func actor_footprint_radii_px(collision_radius_px: float) -> Vector2:
+	var horizontal_radius_px := maxf(0.0, collision_radius_px)
+	return Vector2(
+		horizontal_radius_px,
+		horizontal_radius_px * ACTOR_FOOTPRINT_Y_RATIO
+	)
 
 
 static func actor_combat_radius_gu_from_screen_radius_px(
@@ -200,20 +180,25 @@ static func actor_footprint_screen_polygon_px_from_combat_radius_gu(
 	return points_screen_px
 
 
-static func actor_footprint_polygon(
-	radius: float,
+static func actor_footprint_polygon_px(
+	collision_radius_px: float,
 	segments := ACTOR_FOOTPRINT_SEGMENTS
 ) -> PackedVector2Array:
-	var radii := actor_footprint_radii(radius)
+	var radii_px := actor_footprint_radii_px(collision_radius_px)
 	var count := maxi(8, segments)
-	var points := PackedVector2Array()
+	var points_px := PackedVector2Array()
 	for index in range(count):
 		var angle := TAU * float(index) / float(count)
-		points.append(Vector2(cos(angle) * radii.x, sin(angle) * radii.y))
-	return points
+		points_px.append(Vector2(
+			cos(angle) * radii_px.x,
+			sin(angle) * radii_px.y
+		))
+	return points_px
 
 
-static func actor_footprint_shape(radius: float) -> ConvexPolygonShape2D:
+static func actor_footprint_shape_px(
+	collision_radius_px: float
+) -> ConvexPolygonShape2D:
 	var shape := ConvexPolygonShape2D.new()
-	shape.points = actor_footprint_polygon(radius)
+	shape.points = actor_footprint_polygon_px(collision_radius_px)
 	return shape

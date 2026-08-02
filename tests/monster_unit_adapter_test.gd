@@ -64,7 +64,7 @@ func _verify_frozen_footprint_round_trip() -> void:
 			WorldSpatialRulesScript.actor_screen_radius_px_from_combat_radius_gu(combat_radius_gu),
 			radius_px,
 		))
-		for frozen_vertex_px: Vector2 in WorldSpatialRulesScript.actor_footprint_polygon(radius_px, 32):
+		for frozen_vertex_px: Vector2 in WorldSpatialRulesScript.actor_footprint_polygon_px(radius_px, 32):
 			var vertex_ground_gu := (
 				GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(frozen_vertex_px)
 			)

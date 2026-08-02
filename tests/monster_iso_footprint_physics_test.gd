@@ -54,7 +54,7 @@ func _ready() -> void:
 	var diamond_edge_support := diamond_points[1].dot(edge_normal)
 	var physics_edge_support := _support((footprint as ConvexPolygonShape2D).points, edge_normal)
 	var software_edge_support := _support(
-		WorldSpatialRules.actor_footprint_polygon(enemy.collision_radius_px - 1.0),
+		WorldSpatialRules.actor_footprint_polygon_px(enemy.collision_radius_px - 1.0),
 		edge_normal
 	)
 	var probes := {
@@ -78,7 +78,7 @@ func _ready() -> void:
 	for probe_name: String in probes:
 		var position: Vector2 = probes[probe_name]
 		var physics_blocked := _physics_blocks(footprint, position)
-		var software_blocked := WorldSpatialRules.environment_blocks_actor(
+		var software_blocked := WorldSpatialRules.environment_blocks_actor_screen_px(
 			blocker,
 			position,
 			enemy.collision_radius_px

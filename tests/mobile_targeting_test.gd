@@ -298,7 +298,7 @@ func _assert_player_cannot_push_enemy(game: Node, blocker: EnemyActor, second: E
 		await get_tree().physics_frame
 	game.player.set_touch_vector(Vector2.ZERO)
 	assert(blocker.global_position.distance_to(blocker_origin) < 0.5, "人物普通移动推动了怪物：origin=%s end=%s delta=%.3f" % [blocker_origin, blocker.global_position, blocker.global_position.distance_to(blocker_origin)])
-	assert(game.player.global_position.distance_to(blocker.global_position) >= ArtSpec.PLAYER_COLLISION_RADIUS + blocker.collision_radius - 1.0, "人物移动穿进了怪物碰撞体")
+	assert(game.player.global_position.distance_to(blocker.global_position) >= ArtSpec.PLAYER_COLLISION_RADIUS_PX + blocker.collision_radius_px - 1.0, "人物移动穿进了怪物碰撞体")
 
 
 func _assert_boss_faces_player(game: Node, _enemies: Array) -> void:

@@ -617,8 +617,14 @@ func _complete_portal_travel(
 	if current_map_id != target_map_id:
 		_portal_guard_state["travel_in_flight"] = false
 		return false
-	var arrival_position := MapEditorRuntimeBridgeScript.cell_to_world(
-		target_runtime, [target_tile.x, target_tile.y]
+	var arrival_ground_gu := MapEditorRuntimeBridgeScript.cell_to_ground_position_gu(
+		[target_tile.x, target_tile.y]
+	)
+	var arrival_position := (
+		MapEditorRuntimeBridgeScript.ground_position_gu_to_screen_position_px(
+			target_runtime,
+			arrival_ground_gu
+		)
 	)
 	player.global_position = arrival_position
 	player.velocity = Vector2.ZERO
@@ -1380,7 +1386,7 @@ func _build_melee_input_diagnostic(
 		WarriorMeleeDiagnosticScript.explain_footprint_candidate(
 			actor_ground_gu,
 			target_ground_gu,
-			target.collision_radius,
+			target.combat_radius_gu,
 			input_direction_index,
 			mode
 		)
@@ -2040,7 +2046,7 @@ func _on_boss_summon_requested(enemy: EnemyActor, monster_ids: Array, count: int
 			1.5,
 			6.0,
 			WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-				ArtSpec.MONSTER_COLLISION_RADIUS
+				ArtSpec.MONSTER_COLLISION_RADIUS_PX
 			),
 			null
 		)
@@ -2107,7 +2113,7 @@ func _find_valid_enemy_landing(
 		var candidate_screen_px := _canonical_ground_gu_to_screen_px(
 			candidate_ground_gu
 		)
-		if WorldSpatialRulesScript.environment_blocks_actor(
+		if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
 			background,
 			candidate_screen_px,
 			footprint_radius_px
@@ -2115,7 +2121,7 @@ func _find_valid_enemy_landing(
 			continue
 		var player_combat_radius_gu := (
 			WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-				ArtSpec.PLAYER_COLLISION_RADIUS
+				ArtSpec.PLAYER_COLLISION_RADIUS_PX
 			)
 		)
 		if (
@@ -2412,11 +2418,7 @@ func _wild_rush_has_dynamic_blocker(
 ) -> bool:
 	var forward_ground_gu := direction_ground_gu.normalized()
 	var side_ground_gu := Vector2(-forward_ground_gu.y, forward_ground_gu.x)
-	var target_radius_gu := (
-		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-			target.collision_radius
-		)
-	)
+	var target_radius_gu := target.combat_radius_gu
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node == target:
 			continue
@@ -2429,11 +2431,7 @@ func _wild_rush_has_dynamic_blocker(
 		)
 		var forward_distance_gu := delta_ground_gu.dot(forward_ground_gu)
 		var lateral_distance_gu := absf(delta_ground_gu.dot(side_ground_gu))
-		var other_radius_gu := (
-			WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-				other.collision_radius
-			)
-		)
+		var other_radius_gu := other.combat_radius_gu
 		if (
 			forward_distance_gu > WarriorMeleeGeometryScript.EPSILON
 			and forward_distance_gu - other_radius_gu
@@ -2469,15 +2467,15 @@ func _wild_rush_static_clear_distance_gu(
 			target_ground_gu + motion_ground_gu
 		)
 		if (
-			WorldSpatialRulesScript.environment_blocks_actor(
+			WorldSpatialRulesScript.environment_blocks_actor_screen_px(
 				background,
 				player_destination,
-				ArtSpec.PLAYER_COLLISION_RADIUS
+				ArtSpec.PLAYER_COLLISION_RADIUS_PX
 			)
-			or WorldSpatialRulesScript.environment_blocks_actor(
+			or WorldSpatialRulesScript.environment_blocks_actor_screen_px(
 				background,
 				target_destination,
-				target.collision_radius
+				target.collision_radius_px
 			)
 		):
 			return last_clear_distance_gu
@@ -2515,15 +2513,15 @@ func _apply_wild_rush_displacement(
 		+ motion_ground_gu
 	)
 	if (
-		WorldSpatialRulesScript.environment_blocks_actor(
+		WorldSpatialRulesScript.environment_blocks_actor_screen_px(
 			background,
 			player_destination,
-			ArtSpec.PLAYER_COLLISION_RADIUS
+			ArtSpec.PLAYER_COLLISION_RADIUS_PX
 		)
-		or WorldSpatialRulesScript.environment_blocks_actor(
+		or WorldSpatialRulesScript.environment_blocks_actor_screen_px(
 			background,
 			target_destination,
-			target.collision_radius
+			target.collision_radius_px
 		)
 	):
 		return false
@@ -2992,7 +2990,7 @@ func _melee_candidate_diagnostics(
 		var explanation := WarriorMeleeDiagnosticScript.explain_footprint_candidate(
 			origin_ground_gu,
 			_canonical_screen_px_to_ground_gu(enemy.global_position),
-			enemy.collision_radius,
+			enemy.combat_radius_gu,
 			direction_index,
 			resolved_mode
 		)
@@ -3519,7 +3517,7 @@ func _canonical_target_context(
 			and not bool(CasterSpellGeometryScript.declared_cells_intersect_actor_footprint(
 				adjacent_ring_cells,
 				_canonical_screen_px_to_ground_gu(node.global_position),
-				node.collision_radius
+				node.combat_radius_gu
 			).get("intersects", false))
 		):
 			continue
@@ -4058,7 +4056,7 @@ func _canonical_spell_geometry_targets(
 			var contact := CasterSpellGeometryScript.declared_cells_intersect_actor_footprint(
 				[cell],
 				_canonical_screen_px_to_ground_gu(enemy.global_position),
-				enemy.collision_radius
+				enemy.combat_radius_gu
 			)
 			if bool(contact.get("intersects", false)):
 				cell_targets.append(enemy)
@@ -4078,7 +4076,7 @@ func _enemy_footprint_polygon_ground_gu(enemy: EnemyActor) -> PackedVector2Array
 		return PackedVector2Array()
 	return CasterSpellGeometryScript.actor_footprint_polygon_ground_gu(
 		_canonical_screen_px_to_ground_gu(enemy.global_position),
-		enemy.collision_radius
+		enemy.combat_radius_gu
 	)
 
 
@@ -4093,11 +4091,7 @@ func _ground_circle_intersects_enemy_footprint_gu(
 	var enemy_center_ground_gu := _canonical_screen_px_to_ground_gu(
 		enemy.global_position
 	)
-	var enemy_radius_gu := (
-		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-			enemy.collision_radius
-		)
-	)
+	var enemy_radius_gu := enemy.combat_radius_gu
 	return GroundUnitSpaceScript.is_within_range_gu(
 		center_ground_gu,
 		enemy_center_ground_gu,
@@ -4138,14 +4132,15 @@ func _spawn_canonical_ground_effect(
 	coverage_cell: Variant = null
 ) -> void:
 	var ground_effect := GroundSkillEffect.new()
-	ground_effect.setup(
+	ground_effect.setup_ground_unit_effect(
 		position,
 		maxi(0, int(effect.get("raw_power", 0))),
-		74.0,
+		maxf(0.0, float(effect.get("radius_gu", 0.5))),
 		maxf(0.1, float(effect.get("duration_seconds", 1))),
 		Color(0.45, 0.72, 1.0),
 		stable_skill_id,
-		maxf(0.05, float(effect.get("tick_interval_ms", 1000)) / 1000.0)
+		maxf(0.05, float(effect.get("tick_interval_ms", 1000)) / 1000.0),
+		74.0
 	)
 	ground_effect.configure_runtime_resolution(
 		player,
@@ -4175,7 +4170,7 @@ func _canonical_ground_cell_contains_enemy(
 		and bool(CasterSpellGeometryScript.declared_cells_intersect_actor_footprint(
 			[coverage_cell],
 			_canonical_screen_px_to_ground_gu(enemy.global_position),
-			enemy.collision_radius
+			enemy.combat_radius_gu
 		).get("intersects", false))
 	)
 
@@ -4208,9 +4203,9 @@ func _apply_canonical_displacement_screen_px(
 	var collision_radius_px: float = (
 		actor.collision_radius_px
 		if actor is EnemyActor
-		else ArtSpec.PLAYER_COLLISION_RADIUS
+		else ArtSpec.PLAYER_COLLISION_RADIUS_PX
 	)
-	if WorldSpatialRulesScript.environment_blocks_actor(
+	if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
 		background,
 		destination_screen_px,
 		collision_radius_px
@@ -4221,7 +4216,7 @@ func _apply_canonical_displacement_screen_px(
 
 
 func _apply_canonical_player_teleport(destination: Vector2) -> bool:
-	if destination == Vector2.ZERO or WorldSpatialRulesScript.environment_blocks_actor(background, destination, ArtSpec.PLAYER_COLLISION_RADIUS):
+	if destination == Vector2.ZERO or WorldSpatialRulesScript.environment_blocks_actor_screen_px(background, destination, ArtSpec.PLAYER_COLLISION_RADIUS_PX):
 		return false
 	player.global_position = destination
 	player.velocity = Vector2.ZERO
@@ -4331,13 +4326,13 @@ func _spawn_canonical_cast_visual(
 		]
 	):
 		return
-	var geometry_tile_points: Array[Vector2i] = []
-	var geometry_world_points: Array[Vector2] = []
+	var geometry_grid_cells: Array[Vector2i] = []
+	var geometry_screen_points_px: Array[Vector2] = []
 	if (
 		str(continuous_line_strip.get("contract_id", ""))
 		== CasterSpellGeometryScript.CONTINUOUS_AIM_LINE_CONTRACT_ID
 	):
-		geometry_world_points = (
+		geometry_screen_points_px = (
 			CasterSpellGeometryScript.continuous_line_world_points(
 				continuous_line_strip,
 				Callable(self, "_canonical_ground_gu_to_screen_px")
@@ -4346,8 +4341,8 @@ func _spawn_canonical_cast_visual(
 	elif raw_geometry_cells is Array:
 		for raw_cell: Variant in raw_geometry_cells:
 			if raw_cell is Vector2i:
-				geometry_tile_points.append(raw_cell)
-				geometry_world_points.append(_canonical_grid_cell_to_screen_px(raw_cell))
+				geometry_grid_cells.append(raw_cell)
+				geometry_screen_points_px.append(_canonical_grid_cell_to_screen_px(raw_cell))
 	var visual_plan := {
 		"success": true,
 		"skill_id": stable_skill_id,
@@ -4357,8 +4352,8 @@ func _spawn_canonical_cast_visual(
 		"area_radius": 72.0,
 		"canonical_geometry_contract": CASTER_GEOMETRY_VISUAL_CONTRACT_ID,
 		"geometry_origin_screen_px": origin,
-		"geometry_tile_points": geometry_tile_points,
-		"geometry_world_points": geometry_world_points,
+		"geometry_grid_cells": geometry_grid_cells,
+		"geometry_screen_points_px": geometry_screen_points_px,
 	}
 	for visual_node: Node2D in CasterSkillRuntimeScript.create_cast_nodes(
 		visual_plan,
@@ -4750,20 +4745,20 @@ func _is_primary_melee_candidate(
 		return WarriorMeleeGeometryScript.thrust_footprint_slot_gu(
 			origin_ground_gu,
 			target_ground_gu,
-			enemy.collision_radius,
+			enemy.combat_radius_gu,
 			direction_index
 		) == 1
 	if mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
 		return WarriorMeleeGeometryScript.half_moon_footprint_relative_sector_gu(
 			origin_ground_gu,
 			target_ground_gu,
-			enemy.collision_radius,
+			enemy.combat_radius_gu,
 			direction_index
 		) == 0
 	return WarriorMeleeGeometryScript.footprint_intersects_mode_gu(
 		origin_ground_gu,
 		target_ground_gu,
-		enemy.collision_radius,
+		enemy.combat_radius_gu,
 		direction_index,
 		mode
 	)
@@ -4852,7 +4847,7 @@ func _thrust_secondary_targets(
 		if WarriorMeleeGeometryScript.thrust_footprint_slot_gu(
 			origin_ground_gu,
 			target_ground_gu,
-			enemy.collision_radius,
+			enemy.combat_radius_gu,
 			direction_index
 		) != 2:
 			continue
@@ -4878,7 +4873,7 @@ func _half_moon_secondary_targets(
 		var relative_sector := WarriorMeleeGeometryScript.half_moon_footprint_relative_sector_gu(
 			origin_ground_gu,
 			target_ground_gu,
-			enemy.collision_radius,
+			enemy.combat_radius_gu,
 			direction_index
 		)
 		if relative_sector == -1 or relative_sector == 0:
@@ -5036,7 +5031,7 @@ func _find_valid_random_teleport_position(origin_screen_px: Vector2) -> Vector2:
 	)
 	var player_combat_radius_gu := (
 		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-			ArtSpec.PLAYER_COLLISION_RADIUS
+			ArtSpec.PLAYER_COLLISION_RADIUS_PX
 		)
 	)
 	for _attempt in range(96):
@@ -5051,10 +5046,10 @@ func _find_valid_random_teleport_position(origin_screen_px: Vector2) -> Vector2:
 		var candidate_screen_px := _canonical_ground_gu_to_screen_px(
 			candidate_ground_gu
 		)
-		if WorldSpatialRulesScript.environment_blocks_actor(
+		if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
 			background,
 			candidate_screen_px,
-			ArtSpec.PLAYER_COLLISION_RADIUS
+			ArtSpec.PLAYER_COLLISION_RADIUS_PX
 		):
 			continue
 		var occupied := false

@@ -45,7 +45,7 @@ func _run() -> void:
 		var minimum_player_distance_gu := (
 			enemy.combat_radius_gu
 			+ WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-				ArtSpec.PLAYER_COLLISION_RADIUS
+				ArtSpec.PLAYER_COLLISION_RADIUS_PX
 			)
 		)
 		assert(
@@ -69,7 +69,7 @@ func _run() -> void:
 			assert(enemy_delta_ground_gu.length() >= minimum_enemy_distance_gu - 0.02, "怪物之间发生实体重叠")
 
 	var player_shadow_top := 4.0 - 23.0 * 0.36
-	var monster_shadow_top := ArtSpec.MONSTER_COLLISION_RADIUS * 0.28 - ArtSpec.MONSTER_COLLISION_RADIUS * 0.36
+	var monster_shadow_top := ArtSpec.MONSTER_COLLISION_RADIUS_PX * 0.28 - ArtSpec.MONSTER_COLLISION_RADIUS_PX * 0.36
 	assert(player_shadow_top < 0.0 and monster_shadow_top < 0.0, "接地阴影上缘没有覆盖脚底锚点")
 	assert(
 		player.visual.position.is_equal_approx(

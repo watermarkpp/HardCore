@@ -372,7 +372,7 @@ func manual_alignment_replay_displacement() -> Vector2:
 		return Vector2.ZERO
 	var authored_spawn_distance_px := (
 		actor.collision_radius_px
-		+ ArtSpec.PLAYER_COLLISION_RADIUS
+		+ ArtSpec.PLAYER_COLLISION_RADIUS_PX
 		+ MANUAL_ALIGNMENT_SPAWN_GAP
 	)
 	return (

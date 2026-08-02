@@ -250,148 +250,156 @@ static func maximum_targets(geometry: Dictionary, mechanics: Dictionary) -> int:
 
 static func build_visual_context(
 	skill_id: String,
-	origin_tile: Vector2i,
-	origin_world: Vector2,
-	effective_geometry_cells: Array[Vector2i],
-	tile_to_world: Callable
+	origin_grid_cell: Vector2i,
+	origin_screen_px: Vector2,
+	effective_geometry_grid_cells: Array[Vector2i],
+	grid_cell_to_screen_position_px: Callable
 ) -> Dictionary:
 	var context := {
 		"contract_id": VISUAL_CONTRACT_ID,
 		"skill_id": skill_id,
-		"origin_tile": origin_tile,
-		"origin_world": origin_world,
-		"geometry_cells": effective_geometry_cells.duplicate(),
-		"geometry_world_points": [],
-		"geometry_world_offsets": [],
-		"cell_world_extent": Vector2.ZERO,
-		"geometry_centerline_world_extent": Vector2.ZERO,
-		"footprint_world_extent": Vector2.ZERO,
-		"desired_sprite_extent": 0.0,
-		"desired_sprite_footprint": Vector2.ZERO,
-		"desired_sprite_axis_extent": 0.0,
-		"desired_sprite_cross_axis_extent": 0.0,
-		"visual_axis_world": Vector2.ZERO,
+		"origin_grid_cell": origin_grid_cell,
+		"origin_screen_px": origin_screen_px,
+		"geometry_grid_cells": effective_geometry_grid_cells.duplicate(),
+		"geometry_screen_points_px": [],
+		"geometry_screen_offsets_px": [],
+		"grid_cell_screen_extent_px": Vector2.ZERO,
+		"geometry_centerline_screen_extent_px": Vector2.ZERO,
+		"footprint_screen_extent_px": Vector2.ZERO,
+		"desired_sprite_extent_px": 0.0,
+		"desired_sprite_footprint_px": Vector2.ZERO,
+		"desired_sprite_axis_extent_px": 0.0,
+		"desired_sprite_cross_axis_extent_px": 0.0,
+		"visual_axis_screen": Vector2.ZERO,
 	}
-	if not tile_to_world.is_valid():
+	if not grid_cell_to_screen_position_px.is_valid():
 		return context
-	var snapped_origin_world: Vector2 = tile_to_world.call(origin_tile)
-	var basis_x: Vector2 = tile_to_world.call(origin_tile + Vector2i.RIGHT) - snapped_origin_world
-	var basis_y: Vector2 = tile_to_world.call(origin_tile + Vector2i.DOWN) - snapped_origin_world
+	var snapped_origin_screen_px: Vector2 = grid_cell_to_screen_position_px.call(origin_grid_cell)
+	var basis_x_screen_px: Vector2 = (
+		grid_cell_to_screen_position_px.call(origin_grid_cell + Vector2i.RIGHT)
+		- snapped_origin_screen_px
+	)
+	var basis_y_screen_px: Vector2 = (
+		grid_cell_to_screen_position_px.call(origin_grid_cell + Vector2i.DOWN)
+		- snapped_origin_screen_px
+	)
 	var cell_extent := Vector2(
-		absf(basis_x.x) + absf(basis_y.x),
-		absf(basis_x.y) + absf(basis_y.y)
+		absf(basis_x_screen_px.x) + absf(basis_y_screen_px.x),
+		absf(basis_x_screen_px.y) + absf(basis_y_screen_px.y)
 	)
 	var half_cell_extent := cell_extent * 0.5
 	var minimum := -half_cell_extent
 	var maximum := half_cell_extent
 	var centerline_minimum := Vector2.ZERO
 	var centerline_maximum := Vector2.ZERO
-	var world_points: Array[Vector2] = []
-	var world_offsets: Array[Vector2] = []
-	for cell: Vector2i in effective_geometry_cells:
+	var screen_points_px: Array[Vector2] = []
+	var screen_offsets_px: Array[Vector2] = []
+	for cell: Vector2i in effective_geometry_grid_cells:
 		# Preserve the actor's fractional footpoint while projecting the formal
 		# integer-cell delta through the active map coordinate system.
-		var world_offset: Vector2 = tile_to_world.call(cell) - snapped_origin_world
-		var world_point := origin_world + world_offset
-		world_points.append(world_point)
-		world_offsets.append(world_offset)
-		centerline_minimum.x = minf(centerline_minimum.x, world_offset.x)
-		centerline_minimum.y = minf(centerline_minimum.y, world_offset.y)
-		centerline_maximum.x = maxf(centerline_maximum.x, world_offset.x)
-		centerline_maximum.y = maxf(centerline_maximum.y, world_offset.y)
-		minimum.x = minf(minimum.x, world_offset.x - half_cell_extent.x)
-		minimum.y = minf(minimum.y, world_offset.y - half_cell_extent.y)
-		maximum.x = maxf(maximum.x, world_offset.x + half_cell_extent.x)
-		maximum.y = maxf(maximum.y, world_offset.y + half_cell_extent.y)
+		var screen_offset_px: Vector2 = (
+			grid_cell_to_screen_position_px.call(cell) - snapped_origin_screen_px
+		)
+		var screen_point_px := origin_screen_px + screen_offset_px
+		screen_points_px.append(screen_point_px)
+		screen_offsets_px.append(screen_offset_px)
+		centerline_minimum.x = minf(centerline_minimum.x, screen_offset_px.x)
+		centerline_minimum.y = minf(centerline_minimum.y, screen_offset_px.y)
+		centerline_maximum.x = maxf(centerline_maximum.x, screen_offset_px.x)
+		centerline_maximum.y = maxf(centerline_maximum.y, screen_offset_px.y)
+		minimum.x = minf(minimum.x, screen_offset_px.x - half_cell_extent.x)
+		minimum.y = minf(minimum.y, screen_offset_px.y - half_cell_extent.y)
+		maximum.x = maxf(maximum.x, screen_offset_px.x + half_cell_extent.x)
+		maximum.y = maxf(maximum.y, screen_offset_px.y + half_cell_extent.y)
 	var footprint_extent := Vector2.ZERO
-	if not world_offsets.is_empty():
+	if not screen_offsets_px.is_empty():
 		footprint_extent = maximum - minimum
-	context["geometry_world_points"] = world_points
-	context["geometry_world_offsets"] = world_offsets
-	context["tile_basis_x_world"] = basis_x
-	context["tile_basis_y_world"] = basis_y
-	context["cell_world_extent"] = cell_extent
-	context["geometry_centerline_world_extent"] = (
+	context["geometry_screen_points_px"] = screen_points_px
+	context["geometry_screen_offsets_px"] = screen_offsets_px
+	context["grid_basis_x_screen_px"] = basis_x_screen_px
+	context["grid_basis_y_screen_px"] = basis_y_screen_px
+	context["grid_cell_screen_extent_px"] = cell_extent
+	context["geometry_centerline_screen_extent_px"] = (
 		centerline_maximum - centerline_minimum
 	)
-	context["footprint_world_extent"] = footprint_extent
+	context["footprint_screen_extent_px"] = footprint_extent
 	if skill_id == "wizard.hellfire":
 		# FireGun uses one source-direction flame node and moves copies of it along
 		# the canonical line. Fitting that one node against the cast direction made
 		# the same source pixels scale by a different amount in every direction.
-		# Keep node pixels fixed; geometry_world_offsets alone owns the five-cell
+		# Keep node pixels fixed; geometry_screen_offsets_px alone owns the five-cell
 		# trail length.
 		pass
 	elif skill_id == "wizard.hell_lightning":
-		context["desired_sprite_extent"] = maxf(
+		context["desired_sprite_extent_px"] = maxf(
 			centerline_maximum.x - centerline_minimum.x,
 			centerline_maximum.y - centerline_minimum.y
 		)
-		context["desired_sprite_footprint"] = footprint_extent
+		context["desired_sprite_footprint_px"] = footprint_extent
 	elif skill_id == "wizard.laser":
-		context["desired_sprite_extent"] = maxf(
+		context["desired_sprite_extent_px"] = maxf(
 			centerline_maximum.x - centerline_minimum.x,
 			centerline_maximum.y - centerline_minimum.y
 		)
-		context["desired_sprite_footprint"] = footprint_extent
-		if not world_offsets.is_empty():
-			var visual_axis: Vector2 = world_offsets.back().normalized()
-			context["desired_sprite_axis_extent"] = world_offsets.back().length()
-			context["desired_sprite_cross_axis_extent"] = (
+		context["desired_sprite_footprint_px"] = footprint_extent
+		if not screen_offsets_px.is_empty():
+			var visual_axis_screen: Vector2 = screen_offsets_px.back().normalized()
+			context["desired_sprite_axis_extent_px"] = screen_offsets_px.back().length()
+			context["desired_sprite_cross_axis_extent_px"] = (
 				_stable_laser_visual_cross_extent(cell_extent)
 			)
-			context["visual_axis_world"] = visual_axis
+			context["visual_axis_screen"] = visual_axis_screen
 	return context
 
 
 static func visual_context_from_plan(
 	skill_id: String,
 	plan: Dictionary,
-	fallback_origin_world: Vector2
+	fallback_origin_screen_px: Vector2
 ) -> Dictionary:
 	var declared_contract := str(plan.get("canonical_geometry_contract", ""))
 	if declared_contract != CONTRACT_ID:
 		return plan.get("visual_geometry_context", {}).duplicate(true)
-	var origin_world: Vector2 = plan.get(
-		"geometry_origin_screen_px", fallback_origin_world
+	var origin_screen_px: Vector2 = plan.get(
+		"geometry_origin_screen_px", fallback_origin_screen_px
 	)
-	var raw_world_points: Variant = plan.get("geometry_world_points", [])
-	var raw_tile_points: Variant = plan.get("geometry_tile_points", [])
-	var world_points: Array[Vector2] = []
-	var world_offsets: Array[Vector2] = []
-	if raw_world_points is Array:
-		for raw_point: Variant in raw_world_points:
+	var raw_screen_points_px: Variant = plan.get("geometry_screen_points_px", [])
+	var raw_grid_cells: Variant = plan.get("geometry_grid_cells", [])
+	var screen_points_px: Array[Vector2] = []
+	var screen_offsets_px: Array[Vector2] = []
+	if raw_screen_points_px is Array:
+		for raw_point: Variant in raw_screen_points_px:
 			if raw_point is Vector2:
 				var point: Vector2 = raw_point
-				world_points.append(point)
-				world_offsets.append(point - origin_world)
-	var tile_points: Array[Vector2i] = []
-	if raw_tile_points is Array:
-		for raw_tile: Variant in raw_tile_points:
-			if raw_tile is Vector2i:
-				tile_points.append(raw_tile)
+				screen_points_px.append(point)
+				screen_offsets_px.append(point - origin_screen_px)
+	var grid_cells: Array[Vector2i] = []
+	if raw_grid_cells is Array:
+		for raw_grid_cell: Variant in raw_grid_cells:
+			if raw_grid_cell is Vector2i:
+				grid_cells.append(raw_grid_cell)
 	var basis_x := Vector2.ZERO
 	var basis_y := Vector2.ZERO
 	var canonical_projection_scale := 0.0
-	if tile_points.size() == world_points.size():
-		for left_index: int in range(tile_points.size()):
-			for right_index: int in range(left_index + 1, tile_points.size()):
-				var tile_delta := tile_points[right_index] - tile_points[left_index]
-				var world_delta := world_points[right_index] - world_points[left_index]
-				if canonical_projection_scale <= 0.0 and tile_delta != Vector2i.ZERO:
-					var canonical_world_delta := (
+	if grid_cells.size() == screen_points_px.size():
+		for left_index: int in range(grid_cells.size()):
+			for right_index: int in range(left_index + 1, grid_cells.size()):
+				var grid_delta := grid_cells[right_index] - grid_cells[left_index]
+				var screen_delta_px := screen_points_px[right_index] - screen_points_px[left_index]
+				if canonical_projection_scale <= 0.0 and grid_delta != Vector2i.ZERO:
+					var canonical_screen_delta_px := (
 						CombatDirectionSpaceScript.fractional_tile_delta_to_world_delta(
-							Vector2(tile_delta)
+							Vector2(grid_delta)
 						)
 					)
-					if canonical_world_delta.length() > 0.001:
+					if canonical_screen_delta_px.length() > 0.001:
 						canonical_projection_scale = (
-							world_delta.length() / canonical_world_delta.length()
+							screen_delta_px.length() / canonical_screen_delta_px.length()
 						)
-				if basis_x.is_zero_approx() and abs(tile_delta.x) == 1 and tile_delta.y == 0:
-					basis_x = world_delta * float(tile_delta.x)
-				if basis_y.is_zero_approx() and tile_delta.x == 0 and abs(tile_delta.y) == 1:
-					basis_y = world_delta * float(tile_delta.y)
+				if basis_x.is_zero_approx() and abs(grid_delta.x) == 1 and grid_delta.y == 0:
+					basis_x = screen_delta_px * float(grid_delta.x)
+				if basis_y.is_zero_approx() and grid_delta.x == 0 and abs(grid_delta.y) == 1:
+					basis_y = screen_delta_px * float(grid_delta.y)
 				if not basis_x.is_zero_approx() and not basis_y.is_zero_approx():
 					break
 			if not basis_x.is_zero_approx() and not basis_y.is_zero_approx():
@@ -416,7 +424,7 @@ static func visual_context_from_plan(
 				)
 				* canonical_projection_scale
 			)
-	elif not world_offsets.is_empty():
+	elif not screen_offsets_px.is_empty():
 		# Continuous line plans intentionally carry fractional world points rather
 		# than integer tile cells. Their contract is the shared 64x32 isometric
 		# plane, so recover its two one-tile basis vectors for the formal one-cell
@@ -436,8 +444,8 @@ static func visual_context_from_plan(
 		absf(basis_x.y) + absf(basis_y.y)
 	)
 	var minimum_step := INF
-	for index: int in range(1, world_points.size()):
-		var distance := world_points[index].distance_to(world_points[index - 1])
+	for index: int in range(1, screen_points_px.size()):
+		var distance := screen_points_px[index].distance_to(screen_points_px[index - 1])
 		if distance > 0.001:
 			minimum_step = minf(minimum_step, distance)
 	var half_cell_extent := cell_extent * 0.5
@@ -445,7 +453,7 @@ static func visual_context_from_plan(
 	var maximum := half_cell_extent
 	var centerline_minimum := Vector2.ZERO
 	var centerline_maximum := Vector2.ZERO
-	for offset: Vector2 in world_offsets:
+	for offset: Vector2 in screen_offsets_px:
 		centerline_minimum.x = minf(centerline_minimum.x, offset.x)
 		centerline_minimum.y = minf(centerline_minimum.y, offset.y)
 		centerline_maximum.x = maxf(centerline_maximum.x, offset.x)
@@ -456,14 +464,14 @@ static func visual_context_from_plan(
 		maximum.y = maxf(maximum.y, offset.y + half_cell_extent.y)
 	var footprint_extent := (
 		maximum - minimum
-		if not world_offsets.is_empty()
+		if not screen_offsets_px.is_empty()
 		else Vector2.ZERO
 	)
 	var desired_extent := 0.0
 	var desired_footprint := Vector2.ZERO
 	var desired_axis_extent := 0.0
 	var desired_cross_axis_extent := 0.0
-	var visual_axis_world := Vector2.ZERO
+	var visual_axis_screen := Vector2.ZERO
 	if skill_id == "wizard.hellfire":
 		# The primary FireGun node is not a direction-specific full-line image.
 		# Its fixed source-pixel scale is independent from target distance and cast
@@ -475,9 +483,9 @@ static func visual_context_from_plan(
 			centerline_maximum.y - centerline_minimum.y
 		)
 		desired_footprint = footprint_extent
-		if skill_id == "wizard.laser" and not world_offsets.is_empty():
-			desired_axis_extent = world_offsets.back().length()
-			visual_axis_world = world_offsets.back().normalized()
+		if skill_id == "wizard.laser" and not screen_offsets_px.is_empty():
+			desired_axis_extent = screen_offsets_px.back().length()
+			visual_axis_screen = screen_offsets_px.back().normalized()
 			desired_cross_axis_extent = (
 				_stable_laser_visual_cross_extent(cell_extent)
 			)
@@ -485,22 +493,22 @@ static func visual_context_from_plan(
 		"contract_id": VISUAL_CONTRACT_ID,
 		"canonical_geometry_contract": declared_contract,
 		"skill_id": skill_id,
-		"origin_world": origin_world,
-		"geometry_cells": tile_points,
-		"geometry_world_points": world_points,
-		"geometry_world_offsets": world_offsets,
-		"tile_basis_x_world": basis_x,
-		"tile_basis_y_world": basis_y,
-		"cell_world_extent": cell_extent,
-		"geometry_centerline_world_extent": (
+		"origin_screen_px": origin_screen_px,
+		"geometry_grid_cells": grid_cells,
+		"geometry_screen_points_px": screen_points_px,
+		"geometry_screen_offsets_px": screen_offsets_px,
+		"grid_basis_x_screen_px": basis_x,
+		"grid_basis_y_screen_px": basis_y,
+		"grid_cell_screen_extent_px": cell_extent,
+		"geometry_centerline_screen_extent_px": (
 			centerline_maximum - centerline_minimum
 		),
-		"footprint_world_extent": footprint_extent,
-		"desired_sprite_extent": desired_extent,
-		"desired_sprite_footprint": desired_footprint,
-		"desired_sprite_axis_extent": desired_axis_extent,
-		"desired_sprite_cross_axis_extent": desired_cross_axis_extent,
-		"visual_axis_world": visual_axis_world,
+		"footprint_screen_extent_px": footprint_extent,
+		"desired_sprite_extent_px": desired_extent,
+		"desired_sprite_footprint_px": desired_footprint,
+		"desired_sprite_axis_extent_px": desired_axis_extent,
+		"desired_sprite_cross_axis_extent_px": desired_cross_axis_extent,
+		"visual_axis_screen": visual_axis_screen,
 	}
 
 
