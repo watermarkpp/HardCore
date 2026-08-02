@@ -44,8 +44,7 @@ func _verify_contract_and_legacy_scalar_boundary() -> void:
 		return entry.get("contractId", "") == "monster.boss.warning.ground_projection.v1"
 	))
 	var aliases: Array = parsed.get("compatibilityAliases", [])
-	assert(aliases.size() == 1 and aliases[0].get("field", "") == "collision_radius")
-	assert(int(aliases[0].get("monsterRuntimeReads", -1)) == 0)
+	assert(aliases.is_empty(), "monster runtime still publishes an unsuffixed unit alias")
 
 
 func _verify_frozen_footprint_round_trip() -> void:

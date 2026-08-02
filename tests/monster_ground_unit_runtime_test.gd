@@ -236,6 +236,15 @@ func _verify_safe_zone_uses_relative_ground_reference(enemy: EnemyActor) -> void
 		),
 		"formal polygon accepted a point beyond its ground edge",
 	)
+	enemy.set_meta("safe_zones", [{
+		"shape": "circle",
+		"center": center_screen_px,
+		"radius": 99999.0,
+	}])
+	assert(
+		not enemy._point_inside_safe_zone(center_screen_px),
+		"incomplete screen-only safe zone re-entered formal monster gameplay",
+	)
 	enemy.set_meta("safe_zones", [])
 
 
@@ -301,10 +310,15 @@ func _verify_runtime_source_has_no_screen_distance_fallback() -> void:
 		"monster relocation signal does not expose a formal GU radius",
 	)
 	assert(not source.contains("target_node.collision_radius\n"), "monster contact still reads summon PX radius")
+	assert(not source.contains("var collision_radius:"), "monster runtime still exposes an unsuffixed collision alias")
 	assert(not source.contains("var move_speed:"), "monster runtime still exposes an unsuffixed movement alias")
 	assert(not source.contains("var attack_range:"), "monster runtime still exposes an unsuffixed attack-range alias")
 	assert(not source.contains("var aggro_radius:"), "monster runtime still exposes an unsuffixed aggro alias")
 	assert(not source.contains("special.get(\"radius\", 155.0)"), "boss warning bypasses the GU range adapter")
+	assert(
+		not source.contains("WorldSpatialRulesScript.point_inside_safe_zone(point_screen_px, zone)"),
+		"monster safe-zone gameplay still falls back to a screen-pixel shape",
+	)
 	assert(not visual_source.contains("actor.velocity.length_squared()"), "monster walk state still uses screen velocity")
 	assert(visual_source.contains("actor.ground_velocity_gu_per_sec()"), "monster walk state lacks formal GU velocity")
 	assert(visual_source.contains("func _inside_visual_distance_px(distance_px: float)"), "render residency PX boundary is not explicit")

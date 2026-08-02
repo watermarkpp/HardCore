@@ -94,17 +94,6 @@ var combat_radius_gu := MonsterUnitAdapterScript.footprint_radius_px_to_combat_r
 	ArtSpec.MONSTER_COLLISION_RADIUS
 )
 var collision_radius_px := float(ArtSpec.MONSTER_COLLISION_RADIUS)
-# Temporary cross-tree PX compatibility boundary. Monster gameplay and visuals
-# use collision_radius_px/combat_radius_gu directly; external consumers remove
-# this alias once their own unit migrations land.
-var collision_radius: float:
-	get:
-		return collision_radius_px
-	set(value):
-		collision_radius_px = maxf(0.0, value)
-		combat_radius_gu = MonsterUnitAdapterScript.footprint_radius_px_to_combat_radius_gu(
-			collision_radius_px
-		)
 var environment_blocker: Node
 var _dying := false
 var boss_rule: Dictionary = {}
@@ -614,18 +603,15 @@ func _point_inside_safe_zone(point_screen_px: Vector2) -> bool:
 				_packed_vector2_array_from_variant(zone.get("polygon_ground_gu", [])).size()
 				>= 3
 			)
-		if point_ground_gu != Vector2.INF and has_formal_shape:
-			var formal_zone := zone
-			if str(zone.get("shape", "circle")) == "polygon":
-				formal_zone = zone.duplicate(false)
-				formal_zone["polygon_ground_gu"] = _packed_vector2_array_from_variant(
-					zone.get("polygon_ground_gu", [])
-				)
-			if WorldSpatialRulesScript.point_inside_safe_zone_ground_gu(point_ground_gu, formal_zone):
-				return true
-		elif WorldSpatialRulesScript.point_inside_safe_zone(point_screen_px, zone):
-			# Compatibility is isolated per incomplete zone; one legacy entry can no
-			# longer force all formal zones back to screen-space distance checks.
+		if point_ground_gu == Vector2.INF or not has_formal_shape:
+			continue
+		var formal_zone := zone
+		if str(zone.get("shape", "circle")) == "polygon":
+			formal_zone = zone.duplicate(false)
+			formal_zone["polygon_ground_gu"] = _packed_vector2_array_from_variant(
+				zone.get("polygon_ground_gu", [])
+			)
+		if WorldSpatialRulesScript.point_inside_safe_zone_ground_gu(point_ground_gu, formal_zone):
 			return true
 	return false
 
