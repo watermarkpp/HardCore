@@ -5,7 +5,7 @@ const FORWARD_ENDPOINT_FIT_CONTRACT_ID := (
 	"skills.caster.line_visual.forward_endpoint_uniform.v1"
 )
 const AXIS_CROSS_FIT_CONTRACT_ID := (
-	"skills.caster.line_visual.axis_cross_affine.v2"
+	"skills.caster.line_visual.frame_alpha_cross_affine.v3"
 )
 
 signal animation_finished(skill_id: String)
@@ -34,6 +34,9 @@ var _source_cross_axis_local := Vector2.RIGHT
 var _anchor_policy := "top_left_from_world_anchor"
 var _sequence_bounds := Rect2()
 var _sequence_anchor_rebase := Vector2.ZERO
+var _axis_cross_fit_active := false
+var _longitudinal_scale := 1.0
+var _target_cross_axis := Vector2.RIGHT
 
 
 func configure(
@@ -54,6 +57,9 @@ func configure(
 	texture = null
 	transform = Transform2D.IDENTITY
 	offset = Vector2.ZERO
+	_axis_cross_fit_active = false
+	_longitudinal_scale = 1.0
+	_target_cross_axis = Vector2.RIGHT
 	set_process(false)
 	if not CasterSkillVisualRegistry.is_runtime_ready(skill_id):
 		return false
@@ -120,31 +126,20 @@ func configure(
 	):
 		# Each primary Laser sequence already owns a correct 16-way source
 		# orientation. Map its longitudinal source axis onto the exact continuous
-		# aim axis, and fit length and one-cell width independently. A uniform fit
-		# measured the same isometric source rectangle against different screen
-		# axes and changed the whole effect by about 2x between directions.
+		# aim axis, then fit the visual thickness independently from the damage
+		# strip. A direction-dependent isometric projection changed apparent width
+		# by about 2x, before per-frame alpha-envelope variance was considered.
 		var native_forward_extent := _rect_forward_projection_extent(
 			_sequence_bounds, _sequence_anchor_rebase, _source_axis_local
 		)
-		var native_cross_extent := _rect_projection_extent(
-			_sequence_bounds, _source_cross_axis_local
-		)
-		var longitudinal_scale := (
+		_longitudinal_scale = (
 			_desired_axis_extent / maxf(0.001, native_forward_extent)
 		)
-		var cross_scale := (
-			_desired_cross_axis_extent / maxf(0.001, native_cross_extent)
-		)
-		var target_cross_axis := Vector2(-_fit_axis_world.y, _fit_axis_world.x)
-		var basis_x := (
-			_fit_axis_world * (_source_axis_local.x * longitudinal_scale)
-			+ target_cross_axis * (_source_cross_axis_local.x * cross_scale)
-		)
-		var basis_y := (
-			_fit_axis_world * (_source_axis_local.y * longitudinal_scale)
-			+ target_cross_axis * (_source_cross_axis_local.y * cross_scale)
-		)
-		transform = Transform2D(basis_x, basis_y, Vector2.ZERO)
+		_target_cross_axis = Vector2(-_fit_axis_world.y, _fit_axis_world.x)
+		_axis_cross_fit_active = true
+		# Length uses one sequence-stable mapping. Only the cross component is
+		# recomputed per formal frame from its alpha envelope.
+		_apply_axis_cross_transform(_frames[0])
 	elif (
 		_desired_axis_extent > 0.0
 		and not _fit_axis_world.is_zero_approx()
@@ -278,6 +273,17 @@ func current_frame_visual_forward_extent(axis_world: Vector2) -> float:
 	)
 
 
+func current_frame_visible_cross_extent(axis_world: Vector2) -> float:
+	if (
+		axis_world.length_squared() <= 0.000001
+		or current_frame_index < 0
+		or current_frame_index >= _frames.size()
+	):
+		return 0.0
+	var native_extent := _frame_visible_cross_extent(_frames[current_frame_index])
+	return native_extent * transform.basis_xform(_source_cross_axis_local).length()
+
+
 func _apply_frame(frame_index: int) -> bool:
 	if frame_index < 0 or frame_index >= _frames.size():
 		return false
@@ -287,6 +293,8 @@ func _apply_frame(frame_index: int) -> bool:
 	if loaded == null:
 		return false
 	texture = loaded
+	if _axis_cross_fit_active:
+		_apply_axis_cross_transform(frame)
 	var anchor_field := (
 		"source_draw_offset"
 		if _anchor_policy == "source_draw_offset_from_actor_foot"
@@ -299,6 +307,32 @@ func _apply_frame(frame_index: int) -> bool:
 	) + _sequence_anchor_rebase
 	skill_frame_changed.emit(frame_index)
 	return true
+
+
+func _apply_axis_cross_transform(frame: Dictionary) -> void:
+	var native_cross_extent := _frame_visible_cross_extent(frame)
+	var cross_scale := (
+		_desired_cross_axis_extent / maxf(0.001, native_cross_extent)
+	)
+	var basis_x := (
+		_fit_axis_world * (_source_axis_local.x * _longitudinal_scale)
+		+ _target_cross_axis * (_source_cross_axis_local.x * cross_scale)
+	)
+	var basis_y := (
+		_fit_axis_world * (_source_axis_local.y * _longitudinal_scale)
+		+ _target_cross_axis * (_source_cross_axis_local.y * cross_scale)
+	)
+	transform = Transform2D(basis_x, basis_y, Vector2.ZERO)
+
+
+func _frame_visible_cross_extent(frame: Dictionary) -> float:
+	var formal_alpha_extent := float(frame.get("visible_cross_extent_pixels", 0.0))
+	if formal_alpha_extent > 0.0:
+		return formal_alpha_extent
+	return _rect_projection_extent(
+		_visual_rect_for_frame(frame, _anchor_policy),
+		_source_cross_axis_local
+	)
 
 
 func _visual_rect_for_frame(frame: Dictionary, anchor_policy: String) -> Rect2:

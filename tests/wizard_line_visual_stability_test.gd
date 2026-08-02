@@ -11,8 +11,8 @@ func _ready() -> void:
 	_verify_laser_target_distance_direction_and_replay_stability()
 	print(
 		"WIZARD_LINE_VISUAL_STABILITY_PASS: hellfire fixed source nodes, "
-		+ "laser 16-way fixed 8x1 affine envelope, target-distance independence, "
-		+ "fixed per-sequence transform and single active visual"
+		+ "laser 16-way fixed 8x1 longitudinal envelope, 96 alpha-normalized "
+		+ "cross envelopes, target-distance independence and single active visual"
 	)
 	get_tree().quit(0)
 
@@ -61,7 +61,7 @@ func _verify_laser_target_distance_direction_and_replay_stability() -> void:
 			endpoint.length()
 		))
 		assert(is_equal_approx(
-			close_sprite.fitted_visual_cross_extent(aim_axis),
+			close_sprite.current_frame_visible_cross_extent(aim_axis),
 			close_effect._desired_sprite_cross_axis_extent
 		))
 
@@ -77,11 +77,33 @@ func _verify_laser_target_distance_direction_and_replay_stability() -> void:
 		_assert_rect_equal(far_sprite.fitted_visual_bounds(), expected_bounds)
 		assert(not close_effect.visible)
 
-		# All six primary frames retain their original offsets and share exactly
-		# one transform; playback cannot multiply scale or gradually grow.
+		# All six primary frames retain one longitudinal transform. Their cross
+		# scales differ only enough to normalize each formal alpha envelope.
+		var expected_longitudinal := far_sprite.transform.basis_xform(
+			far_sprite._source_axis_local
+		)
 		for frame_index: int in range(far_sprite.frame_count()):
 			assert(far_sprite.set_manual_frame(frame_index))
-			assert(far_sprite.transform.is_equal_approx(expected_transform))
+			var declared_alpha_extent := float(
+				far_sprite._frames[frame_index].get(
+					"visible_cross_extent_pixels", 0.0
+				)
+			)
+			assert(declared_alpha_extent > 0.0)
+			assert(is_equal_approx(
+				declared_alpha_extent,
+				_texture_visible_cross_extent(
+					far_sprite.texture,
+					far_sprite._source_cross_axis_local
+				),
+			))
+			assert(far_sprite.transform.basis_xform(
+				far_sprite._source_axis_local
+			).is_equal_approx(expected_longitudinal))
+			assert(is_equal_approx(
+				far_sprite.current_frame_visible_cross_extent(aim_axis),
+				far_effect._desired_sprite_cross_axis_extent
+			))
 		assert(far_sprite.configure(
 			"wizard.laser",
 			aim_axis,
@@ -100,6 +122,30 @@ func _verify_laser_target_distance_direction_and_replay_stability() -> void:
 		if is_instance_valid(far_effect):
 			far_effect.free()
 	owner.free()
+
+
+func _texture_visible_cross_extent(
+	frame_texture: Texture2D,
+	cross_axis: Vector2
+) -> float:
+	var image := frame_texture.get_image()
+	var minimum := INF
+	var maximum := -INF
+	for y: int in range(image.get_height()):
+		for x: int in range(image.get_width()):
+			if image.get_pixel(x, y).a <= 0.0:
+				continue
+			var projection := Vector2(
+				float(x) + 0.5, float(y) + 0.5
+			).dot(cross_axis)
+			minimum = minf(minimum, projection)
+			maximum = maxf(maximum, projection)
+	assert(is_finite(minimum) and is_finite(maximum))
+	return (
+		maximum - minimum
+		+ absf(cross_axis.x)
+		+ absf(cross_axis.y)
+	)
 
 
 func _visual_from_cast_nodes(

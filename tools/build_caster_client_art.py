@@ -244,6 +244,26 @@ def icon_metrics(image: Image.Image) -> dict[str, float | int]:
     }
 
 
+def visible_cross_extent(image: Image.Image, direction_index: int) -> float:
+    """Measure the non-transparent pixel-square envelope across a Mir16 axis."""
+    angle = direction_index * math.tau / 16.0
+    cross_x = math.cos(angle)
+    cross_y = math.sin(angle)
+    minimum = math.inf
+    maximum = -math.inf
+    alpha = image.getchannel("A")
+    for y in range(image.height):
+        for x in range(image.width):
+            if alpha.getpixel((x, y)) <= 0:
+                continue
+            projection = (x + 0.5) * cross_x + (y + 0.5) * cross_y
+            minimum = min(minimum, projection)
+            maximum = max(maximum, projection)
+    if not math.isfinite(minimum):
+        return 1.0
+    return maximum - minimum + abs(cross_x) + abs(cross_y)
+
+
 def icon_score(
     metrics: dict[str, float | int],
     maximum_opaque: int,
@@ -351,6 +371,16 @@ def render_policy(asset_id: str, role: str) -> dict[str, object]:
                 "trajectory_step_ms": 50,
                 "trajectory_dominant_axis_pixels_per_second": 500.0 / 0.9,
                 "trail_frame_count": 6,
+            }
+        )
+    if asset_id == "laser":
+        result.update(
+            {
+                "geometry_alignment_contract": "skills.caster.geometry_visual_alignment.v1",
+                "axis_fit_contract": "skills.caster.line_visual.frame_alpha_cross_affine.v3",
+                "fit_mode": "sequence_longitudinal_and_per_frame_alpha_cross_extent",
+                "visual_cross_extent_contract": "sqrt_iso_cell_screen_area_direction_invariant",
+                "movement_lock_to_primary_visual": True,
             }
         )
     return result
@@ -475,6 +505,15 @@ def main() -> None:
                     "source_draw_offset": [sprite["x"], sprite["y"]],
                     "top_left_from_world_anchor": top_left,
                     "pixel_size": [sprite["width"], sprite["height"]],
+                    **(
+                        {
+                            "visible_cross_extent_pixels": round(
+                                visible_cross_extent(image, canonical_direction), 6
+                            )
+                        }
+                        if asset_id == "laser"
+                        else {}
+                    ),
                     "path": rel(frame_path),
                     "png_sha256": digest(frame_path),
                 }

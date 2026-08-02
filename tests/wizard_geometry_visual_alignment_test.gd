@@ -215,18 +215,22 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 			else:
 				for raw_sprite: Sprite2D in effect._sprites:
 					var sprite := raw_sprite as CasterSkillAnimationPlayer
-					var fixed_transform := sprite.transform
+					var fixed_longitudinal := sprite.transform.basis_xform(
+						sprite._source_axis_local
+					)
 					assert(is_equal_approx(
 						sprite.fitted_visual_forward_extent(endpoint_world),
 						endpoint_world.length()
 					))
-					assert(is_equal_approx(
-						sprite.fitted_visual_cross_extent(endpoint_world),
-						effect._desired_sprite_cross_axis_extent
-					))
 					for frame_index: int in range(sprite.frame_count()):
 						assert(sprite.set_manual_frame(frame_index))
-						assert(sprite.transform.is_equal_approx(fixed_transform))
+						assert(sprite.transform.basis_xform(
+							sprite._source_axis_local
+						).is_equal_approx(fixed_longitudinal))
+						assert(is_equal_approx(
+							sprite.current_frame_visible_cross_extent(endpoint_world),
+							effect._desired_sprite_cross_axis_extent
+						))
 					assert(sprite.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST)
 			effect.free()
 
@@ -301,7 +305,7 @@ func _verify_geometry_aware_visuals() -> void:
 	assert(laser._geometry_world_offsets.size() == 8)
 	assert(laser._geometry_world_offsets.back() == Vector2(0.0, 256.0))
 	assert(is_equal_approx(laser.radius, 256.0))
-	_assert_effect_axis_fitted(laser, Vector2.DOWN, 256.0, 64.0)
+	_assert_effect_axis_fitted(laser, Vector2.DOWN, 256.0, sqrt(64.0 * 32.0))
 	laser.free()
 
 	var lightning_plan := _plan_with_world_geometry(
@@ -370,7 +374,7 @@ func _assert_effect_axis_fitted(
 		))
 		if expected_cross_axis_extent > 0.0:
 			assert(is_equal_approx(
-				sprite.fitted_visual_cross_extent(axis_world),
+				sprite.current_frame_visible_cross_extent(axis_world),
 				expected_cross_axis_extent
 			))
 
@@ -415,7 +419,23 @@ func _verify_player_movement_lock(skill_id: String, expected: float) -> void:
 	assert(player.request_skill(skill_id))
 	assert(is_equal_approx(player._attack_action_timer, 0.6))
 	assert(is_equal_approx(player._movement_visual_lock_timer, expected))
+	if skill_id in ["wizard.hellfire", "wizard.hell_lightning"]:
+		assert(is_equal_approx(player._attack_timer, 1.5))
+		player._physics_process(expected + 0.01)
+		assert(player._movement_visual_lock_timer <= 0.0)
+		assert(player._attack_timer > 0.0)
+		assert(not player.request_skill(skill_id))
+		player._physics_process(1.51 - expected)
+		assert(player._attack_timer <= 0.0)
+		assert(player.request_skill(skill_id))
 	if skill_id == "wizard.hell_lightning":
+		# Start a fresh instance for the movement-only presentation assertion;
+		# the recast-gate proof above intentionally consumed a second cast.
+		player.free()
+		player = PlayerCharacter.new()
+		add_child(player)
+		player.current_mp = 999
+		assert(player.request_skill(skill_id))
 		player.set_touch_vector(Vector2.RIGHT)
 		player._physics_process(0.61)
 		assert(player._attack_action_timer <= 0.0)

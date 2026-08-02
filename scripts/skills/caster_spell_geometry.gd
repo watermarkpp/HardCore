@@ -296,11 +296,9 @@ static func build_visual_context(
 		context["desired_sprite_footprint"] = footprint_extent
 		if not world_offsets.is_empty():
 			var visual_axis: Vector2 = world_offsets.back().normalized()
-			var visual_cross_axis := Vector2(-visual_axis.y, visual_axis.x)
 			context["desired_sprite_axis_extent"] = world_offsets.back().length()
 			context["desired_sprite_cross_axis_extent"] = (
-				absf(basis_x.dot(visual_cross_axis))
-				+ absf(basis_y.dot(visual_cross_axis))
+				_stable_laser_visual_cross_extent(cell_extent)
 			)
 			context["visual_axis_world"] = visual_axis
 	return context
@@ -440,12 +438,8 @@ static func visual_context_from_plan(
 		if skill_id == "wizard.laser" and not world_offsets.is_empty():
 			desired_axis_extent = world_offsets.back().length()
 			visual_axis_world = world_offsets.back().normalized()
-			var visual_cross_axis := Vector2(
-				-visual_axis_world.y, visual_axis_world.x
-			)
 			desired_cross_axis_extent = (
-				absf(basis_x.dot(visual_cross_axis))
-				+ absf(basis_y.dot(visual_cross_axis))
+				_stable_laser_visual_cross_extent(cell_extent)
 			)
 	return {
 		"contract_id": VISUAL_CONTRACT_ID,
@@ -468,3 +462,10 @@ static func visual_context_from_plan(
 		"desired_sprite_cross_axis_extent": desired_cross_axis_extent,
 		"visual_axis_world": visual_axis_world,
 	}
+
+
+static func _stable_laser_visual_cross_extent(cell_extent: Vector2) -> float:
+	# The damage strip remains one isometric cell wide. Presentation uses the
+	# area-equivalent screen width of that cell, which is direction invariant:
+	# sqrt(64 * 32) = 45.2548 px for the canonical map projection.
+	return sqrt(maxf(0.001, cell_extent.x * cell_extent.y))
