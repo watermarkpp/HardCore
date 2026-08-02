@@ -106,7 +106,7 @@ func _assert_editor_runtime_collision(game: Node, map_id: int) -> void:
 	assert(not blocked_tiles.is_empty(), "地图%d缺少编辑器阻挡网格" % map_id)
 	var parts := str(blocked_tiles[0]).split(",")
 	assert(parts.size() == 2)
-	var blocked_world := MapEditorRuntimeBridge.cell_to_world(
+	var blocked_world := MapEditorRuntimeBridge.grid_cell_to_screen_position_px(
 		runtime, [float(parts[0]), float(parts[1])]
 	)
 	assert(game.background.is_environment_point_blocked(blocked_world), "地图%d阻挡网格未接入主体游戏" % map_id)

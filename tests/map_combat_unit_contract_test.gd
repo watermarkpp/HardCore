@@ -12,6 +12,7 @@ func _ready() -> void:
 	_test_32_direction_projection_roundtrip()
 	_test_editor_v4_unit_adapter()
 	_test_legacy_unit_names_are_confined_to_adapter()
+	_test_formal_map_coordinate_apis()
 	_test_all_runtime_maps_use_read_only_v1_adapter()
 	_test_runtime_bridge_gu_fields()
 	_test_portal_gu_distance_contract()
@@ -97,6 +98,57 @@ func _test_legacy_unit_names_are_confined_to_adapter() -> void:
 		assert(adapter_source.contains(legacy_name))
 
 
+func _test_formal_map_coordinate_apis() -> void:
+	var bridge_source := _read_text(
+		"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
+	)
+	for removed_signature: String in [
+		"static func tile_to_world(",
+		"static func world_to_tile(",
+		"static func cell_to_world(",
+	]:
+		assert(not bridge_source.contains(removed_signature))
+	assert(bridge_source.contains(
+		"static func grid_cell_to_screen_position_px("
+	))
+	var coordinate_source := _read_text(
+		"res://scripts/map_editor/map_editor_coordinate.gd"
+	)
+	for removed_signature: String in [
+		"static func tile_to_world(",
+		"static func world_to_tile(",
+		"static func cell_center_to_world(",
+		"static func cell_polygon_world(",
+		"static func world_to_cell(",
+	]:
+		assert(not coordinate_source.contains(removed_signature))
+	for formal_signature: String in [
+		"static func ground_position_gu_to_screen_position_px(",
+		"static func screen_position_px_to_ground_position_gu(",
+		"static func grid_cell_to_screen_position_px(",
+		"static func grid_cell_polygon_screen_px(",
+		"static func screen_position_px_to_grid_cell(",
+	]:
+		assert(coordinate_source.contains(formal_signature))
+	for runtime_source_path: String in [
+		"res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd",
+		"res://scripts/map_editor/map_editor_runtime_visual_geometry_service.gd",
+	]:
+		var runtime_source := _read_text(runtime_source_path)
+		for forbidden_call: String in [
+			"MapEditorCoordinate.tile_to_world(",
+			"MapEditorCoordinate.world_to_tile(",
+			"MapEditorCoordinate.cell_center_to_world(",
+			"MapEditorCoordinate.cell_polygon_world(",
+			"MapEditorCoordinate.world_to_cell(",
+		]:
+			assert(
+				not runtime_source.contains(forbidden_call),
+				"ambiguous coordinate bypass in %s: %s"
+				% [runtime_source_path, forbidden_call]
+			)
+
+
 func _test_32_direction_projection_roundtrip() -> void:
 	var design_size := Vector2i(257, 193)
 	var center := (Vector2(design_size) - Vector2.ONE) * 0.5
@@ -125,7 +177,7 @@ func _test_32_direction_projection_roundtrip() -> void:
 		assert(MapCoordinateMapper.source_to_world(
 			ground_position_gu, design_size
 		).distance_to(position_px) <= EPSILON)
-		assert(MapEditorCoordinate.tile_to_world(
+		assert(MapEditorCoordinate.ground_position_gu_to_screen_position_px(
 			ground_position_gu, design_size
 		).distance_to(position_px) <= EPSILON)
 		var restored_position_gu := MapCoordinateMapper.screen_position_px_to_ground_position_gu(

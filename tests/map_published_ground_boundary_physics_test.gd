@@ -65,10 +65,10 @@ func _assert_canvas_edge(
 	var canvas_top_world := Vector2(center.x, 0.0) - center
 	var canvas_bottom_world := Vector2(center.x, pixel_size.y) - center
 	assert(canvas_top_world.is_equal_approx(
-		MapEditorCoordinate.tile_to_world(Vector2(-0.5, -0.5), design_size)
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(Vector2(-0.5, -0.5), design_size)
 	), "%s top canvas edge mismatch" % map_key)
 	assert(canvas_bottom_world.is_equal_approx(
-		MapEditorCoordinate.tile_to_world(
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
 			Vector2(design_size) - Vector2(0.5, 0.5), design_size
 		)
 	), "%s bottom canvas edge mismatch" % map_key)
@@ -94,7 +94,7 @@ func _assert_physics_edge(
 	add_child(body)
 	await get_tree().physics_frame
 	var tile_x := float(design_size.x) * 0.5 - 0.5
-	var visual_edge := MapEditorCoordinate.tile_to_world(
+	var visual_edge := MapEditorCoordinate.ground_position_gu_to_screen_position_px(
 		Vector2(tile_x, -0.5), design_size
 	)
 	var visual_polygon := CollisionGeometry.map_inner_boundary_world(design_size)

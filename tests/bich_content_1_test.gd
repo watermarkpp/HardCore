@@ -5,7 +5,7 @@ func _ready()->void:
 	assert(runtime.semantics.safe_area.size()==1)
 	var safe:Dictionary=runtime.semantics.safe_area[0]
 	assert(bool(safe.runtime_export))
-	var expected_home:=MapEditorRuntimeBridge.cell_to_world(runtime,safe.get("return_tile",safe.get("tile",[32,32])))
+	var expected_home:=MapEditorRuntimeBridge.grid_cell_to_screen_position_px(runtime,safe.get("return_tile",safe.get("tile",[32,32])))
 	assert(MapEditorRuntimeBridge.home_position().is_equal_approx(expected_home))
 	var content:=MapEditorRuntimeBridge.game_content()
 	assert(content.safe_areas.size()==1 and content.spawns.size()==runtime.semantics.monster_spawn.size() and content.npcs.size()==7)

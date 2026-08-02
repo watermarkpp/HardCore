@@ -123,7 +123,7 @@ static func runtime_instance_geometry(
 ) -> Dictionary:
 	var offset_px: Array = instance.get("offset_px", [0, 0])
 	var world_center := (
-		MapEditorCoordinate.tile_to_world(
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
 			instance_foot_tile(instance, asset), design_size
 		)
 		+ Vector2(float(offset_px[0]), float(offset_px[1]))
@@ -496,7 +496,9 @@ static func command_actor_sort_world(
 		"sort_baseline_offset_px", Vector2.ZERO
 	)
 	return (
-		MapEditorCoordinate.tile_to_world(baseline_tile, design_size)
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+			baseline_tile, design_size
+		)
 		+ Vector2(raw_offset)
 	)
 
