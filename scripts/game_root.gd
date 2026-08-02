@@ -2272,10 +2272,7 @@ func _face_locked_target() -> Vector2:
 	return direction
 
 
-func _ensure_skill_cast_target(
-	excluded: EnemyActor = null,
-	_maximum_range_gu := 12.0
-) -> EnemyActor:
+func _ensure_skill_cast_target(excluded: EnemyActor = null) -> EnemyActor:
 	if _is_magic_target_in_range(magic_locked_target) and magic_locked_target != excluded:
 		_skill_cast_target = magic_locked_target
 		return _skill_cast_target
@@ -2296,10 +2293,15 @@ func _ensure_skill_cast_target(
 func _face_skill_cast_target() -> Vector2:
 	if not _is_magic_target_in_range(_skill_cast_target):
 		return player.facing.normalized()
-	var direction := player.global_position.direction_to(_skill_cast_target.global_position)
-	if direction.length_squared() > 0.01:
-		direction = CombatRuntime.face_target(player, _skill_cast_target)
-	return direction
+	var direction_screen_px := player.global_position.direction_to(
+		_skill_cast_target.global_position
+	)
+	if direction_screen_px.length_squared() > 0.01:
+		direction_screen_px = CombatRuntime.face_target_screen_px(
+			player,
+			_skill_cast_target
+		)
+	return direction_screen_px
 
 
 func _select_wild_rush_target() -> EnemyActor:
@@ -3084,7 +3086,7 @@ func _on_special_action_pressed(effect_id: String) -> void:
 				hud.show_message("火球需要5点魔法")
 				return
 			_skill_cast_target = null
-			_ensure_skill_cast_target(null, 360.0)
+			_ensure_skill_cast_target(null)
 			var direction := _face_skill_cast_target()
 			if direction == Vector2.ZERO:
 				direction = player.facing.normalized()
@@ -3397,7 +3399,7 @@ func _canonical_target_context(
 	var friendly_cast := target_relation.contains("friendly") or target_mode in ["self", "self_or_friendly_single"]
 	var search_range_gu := SpellTargetLockPolicyScript.LOCK_RANGE_GU
 	if allow_auto_target and not friendly_cast and target_mode not in ["self", "self_stat", "self_summon", "self_next_melee_charge", "self_random_destination", "caster_surrounding_area", "surrounding_units"]:
-		_ensure_skill_cast_target(null, search_range_gu)
+		_ensure_skill_cast_target(null)
 	var target := _skill_cast_target if not friendly_cast and is_instance_valid(_skill_cast_target) else null
 	var target_within_skill_range := (
 		target != null and _spell_definition_allows_target(definition, target)
