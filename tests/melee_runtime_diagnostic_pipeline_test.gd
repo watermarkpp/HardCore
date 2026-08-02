@@ -29,12 +29,12 @@ func _run() -> void:
 			(value as EnemyActor).global_position = game.player.global_position + Vector2(3000, 3000)
 
 	game.player.global_position = game._bich_home_world_position() + Vector2(600, 0)
-	var origin_tile: Vector2 = game._canonical_world_to_fractional_tile(
+	var origin_tile: Vector2 = game._canonical_screen_px_to_ground_gu(
 		game.player.global_position
 	)
 	var enemy := _make_enemy(
 		game,
-		game._canonical_fractional_tile_to_world(origin_tile + Vector2(1, 1))
+		game._canonical_ground_gu_to_screen_px(origin_tile + Vector2(1, 1))
 	)
 	game.locked_target = enemy
 	game.player._attack_timer = 0.0
@@ -78,7 +78,7 @@ func _run() -> void:
 	game.player.velocity = Vector2.ZERO
 	game.player.set_touch_vector(Vector2.ZERO)
 	PlayerState.test_mode = true
-	origin_tile = game._canonical_world_to_fractional_tile(game.player.global_position)
+	origin_tile = game._canonical_screen_px_to_ground_gu(game.player.global_position)
 	game._active_safe_zones.clear()
 	enemy.velocity = Vector2.ZERO
 	enemy.control_time = 0.0
@@ -87,7 +87,7 @@ func _run() -> void:
 	)
 	enemy.apply_control(60.0)
 	var measured_delta: Vector2 = (
-		game._canonical_world_to_fractional_tile(enemy.global_position) - origin_tile
+		game._canonical_screen_px_to_ground_gu(enemy.global_position) - origin_tile
 	)
 	assert(measured_delta.is_equal_approx(Vector2(-0.56, -1.31)))
 	hp_before = enemy.current_hp
@@ -104,7 +104,7 @@ func _run() -> void:
 	assert(release_event.visual_geometry_direction_match)
 	assert(
 		str(release_event.release_geometry.get("direction_space_contract_id", ""))
-		== "gameplay.professions.combat_direction_space.iso_64x32_tile_8dir.v1"
+		== "gameplay.professions.combat_direction_space.ground_gu_8dir.v2"
 	)
 
 	# Hit-and-run footprint regression: movement input remains held when the
@@ -122,7 +122,7 @@ func _run() -> void:
 	# runtime movement flag once the attack action begins.
 	game.player.movement_input_active = true
 	assert(game.player.touch_vector.length() > 0.08)
-	origin_tile = game._canonical_world_to_fractional_tile(game.player.global_position)
+	origin_tile = game._canonical_screen_px_to_ground_gu(game.player.global_position)
 	var footprint_direction_index := 7
 	var footprint_step := Vector2(MeleeGeometry.facing_tile_step(footprint_direction_index))
 	var forward_support := 0.0
@@ -134,7 +134,7 @@ func _run() -> void:
 			forward_support,
 			absf(MeleeGeometry.line_coordinates(point, footprint_direction_index).x)
 		)
-	enemy.global_position = game._canonical_fractional_tile_to_world(
+	enemy.global_position = game._canonical_ground_gu_to_screen_px(
 		origin_tile
 		+ footprint_step * (
 			MeleeGeometry.reach_tiles(MeleeGeometry.SKILL_THRUST) + forward_support

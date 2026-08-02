@@ -48,8 +48,8 @@ func _run() -> void:
 	game._set_magic_locked_target(enemy, true)
 	game._skill_cast_target = enemy
 	assert(
-		game._canonical_world_to_tile(enemy.global_position)
-		== Vector2i(round(game._canonical_world_to_fractional_tile(enemy.global_position))),
+		game._canonical_screen_px_to_grid_cell(enemy.global_position)
+		== Vector2i(round(game._canonical_screen_px_to_ground_gu(enemy.global_position))),
 		"旧区域整数技能格与怪物浮点脚点格使用了不同坐标系"
 	)
 	var hp_before_firewall := enemy.current_hp

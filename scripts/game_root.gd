@@ -21,6 +21,9 @@ const SkillRuntimeRouterScript := preload("res://scripts/skills/skill_runtime_ro
 const SkillCastRequestScript := preload("res://scripts/skills/skill_cast_request.gd")
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
 const CombatDirectionSpaceScript := preload("res://scripts/skills/combat_direction_space.gd")
+const CombatUnitLegacyAdapterScript := preload(
+	"res://scripts/skills/combat_unit_legacy_adapter.gd"
+)
 const CombatReleaseGeometryScript := preload("res://scripts/skills/combat_release_geometry.gd")
 const WarriorMeleeGeometryScript := preload("res://scripts/skills/warrior_melee_geometry.gd")
 const WarriorMeleeDiagnosticScript := preload("res://scripts/skills/warrior_melee_diagnostic.gd")
@@ -42,9 +45,6 @@ const CANONICAL_MATERIAL_ITEMS := {
 const SKILL_PRODUCTION_ADAPTER_CONTRACT := "skills.production_adaptation.hardcore.v1"
 const ATTACK_LOCK_CONTRACT := "combat.attack_lock.euclidean_gu.v2"
 const ATTACK_LOCK_RANGE_GU := 10.0
-# Deprecated compatibility alias for tests/tools that have not yet migrated.
-# Formal target selection never reads this legacy name.
-const ATTACK_LOCK_RANGE_TILES := ATTACK_LOCK_RANGE_GU
 const MELEE_LOCK_IMPACT_POLICY_ID := "combat.melee_lock.facing_priority_nonexclusive.v1"
 const WILD_RUSH_SKILL_ID := "warrior.wild_rush"
 const FIRE_WALL_SKILL_ID := "wizard.fire_wall"
@@ -291,7 +291,7 @@ func _constrain_player_foot_to_runtime_ground() -> bool:
 	PlayerState.update_world_location(
 		current_map_id,
 		corrected,
-		_canonical_world_to_fractional_tile(corrected)
+		_canonical_screen_px_to_ground_gu(corrected)
 	)
 	return true
 
@@ -1091,7 +1091,7 @@ func _enforce_bich_safe_zone() -> void:
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or not is_instance_valid(node):
 			continue
-		var current_ground_gu := _canonical_world_to_fractional_tile(
+		var current_ground_gu := _canonical_screen_px_to_ground_gu(
 			node.global_position
 		)
 		var padding_gu: float = (
@@ -1105,7 +1105,7 @@ func _enforce_bich_safe_zone() -> void:
 			)
 		)
 		if not legal_ground_gu.is_equal_approx(current_ground_gu):
-			node.global_position = _canonical_fractional_tile_to_world(
+			node.global_position = _canonical_ground_gu_to_screen_px(
 				legal_ground_gu
 			)
 			node.velocity = Vector2.ZERO
@@ -1288,7 +1288,7 @@ func _request_mobile_attack() -> bool:
 		CombatReleaseGeometryScript.FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION
 	)
 	attack_direction = Vector2(
-		input_release_geometry.get("direction_world", attack_direction)
+		input_release_geometry.get("direction_screen_px", attack_direction)
 	).normalized()
 	var input_has_hittable_target := _has_melee_hittable_target(
 		attack_direction,
@@ -1336,8 +1336,8 @@ func _build_melee_input_diagnostic(
 	_melee_diagnostic_serial += 1
 	var target_valid := is_instance_valid(target)
 	var target_world := target.global_position if target_valid else Vector2.ZERO
-	var target_tile := (
-		_canonical_world_to_fractional_tile(target_world)
+	var target_ground_gu := (
+		_canonical_screen_px_to_ground_gu(target_world)
 		if target_valid
 		else Vector2.ZERO
 	)
@@ -1345,11 +1345,11 @@ func _build_melee_input_diagnostic(
 		attack_direction,
 		release_geometry
 	)
-	var actor_tile := _canonical_world_to_fractional_tile(player.global_position)
+	var actor_ground_gu := _canonical_screen_px_to_ground_gu(player.global_position)
 	var target_candidate := (
 		WarriorMeleeDiagnosticScript.explain_footprint_candidate(
-			actor_tile,
-			target_tile,
+			actor_ground_gu,
+			target_ground_gu,
 			target.collision_radius,
 			input_direction_index,
 			mode
@@ -1359,8 +1359,8 @@ func _build_melee_input_diagnostic(
 	)
 	if target_valid:
 		target_candidate["angle_quantization_audit"] = (
-			WarriorMeleeDiagnosticScript.audit_fractional_tile_delta(
-				target_tile - actor_tile
+			WarriorMeleeDiagnosticScript.audit_ground_delta_gu(
+				target_ground_gu - actor_ground_gu
 			)
 		)
 	return {
@@ -1371,17 +1371,17 @@ func _build_melee_input_diagnostic(
 		"map_id": current_map_id,
 		"requested_mode": mode,
 		"actor_id": player.get_instance_id(),
-		"actor_world_at_input": player.global_position,
-		"actor_tile_at_input": actor_tile,
+		"actor_screen_px_at_input": player.global_position,
+		"actor_ground_gu_at_input": actor_ground_gu,
 		"locked_target_id": target.get_instance_id() if target_valid else 0,
 		"locked_target_name": str(target.display_name) if target_valid else "",
-		"target_world_at_input": target_world,
-		"target_tile_at_input": target_tile,
+		"target_screen_px_at_input": target_world,
+		"target_ground_gu_at_input": target_ground_gu,
 		"facing_before_input": facing_before,
 		"facing_before_input_index": ArtSpec.direction_index(facing_before),
 		"touch_vector_at_input": touch_before,
 		"movement_input_active_at_input": movement_was_active,
-		"attack_direction_world_at_input": attack_direction,
+		"attack_direction_screen_px_at_input": attack_direction,
 		"attack_direction_index_at_input": input_direction_index,
 		"attack_direction_tile_step_at_input": (
 			WarriorMeleeGeometryScript.facing_tile_step(input_direction_index)
@@ -1793,7 +1793,7 @@ func _set_locked_target(target: EnemyActor, manual := false) -> void:
 
 func _attack_lock_candidates(excluded: EnemyActor = null) -> Array[EnemyActor]:
 	var ranked: Array[Dictionary] = []
-	var origin_ground_gu := _canonical_world_to_fractional_tile(
+	var origin_ground_gu := _canonical_screen_px_to_ground_gu(
 		player.global_position
 	)
 	for value: Variant in get_tree().get_nodes_in_group("enemies"):
@@ -1802,7 +1802,7 @@ func _attack_lock_candidates(excluded: EnemyActor = null) -> Array[EnemyActor]:
 		var enemy := value as EnemyActor
 		if enemy == excluded or not _is_attack_target_in_range(enemy):
 			continue
-		var target_ground_gu := _canonical_world_to_fractional_tile(
+		var target_ground_gu := _canonical_screen_px_to_ground_gu(
 			enemy.global_position
 		)
 		ranked.append({
@@ -1833,19 +1833,6 @@ func _attack_lock_candidates(excluded: EnemyActor = null) -> Array[EnemyActor]:
 	return result
 
 
-func _attack_lock_tile(world_position: Vector2) -> Vector2i:
-	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
-	if not runtime.is_empty():
-		var tile := MapEditorRuntimeBridgeScript.world_to_tile(runtime, world_position)
-		return Vector2i(roundi(tile.x), roundi(tile.y))
-	var horizontal := world_position.x / 32.0
-	var vertical := world_position.y / 16.0
-	return Vector2i(
-		roundi((horizontal + vertical) * 0.5),
-		roundi((vertical - horizontal) * 0.5)
-	)
-
-
 func _uses_magic_lock_domain() -> bool:
 	return ProfessionRules.profession_id(PlayerState.profession) in [
 		"wizard",
@@ -1853,16 +1840,16 @@ func _uses_magic_lock_domain() -> bool:
 	]
 
 
-func _spell_lock_tile(world_position: Vector2) -> Vector2:
-	return _canonical_world_to_fractional_tile(world_position)
+func _spell_lock_ground_gu(screen_position_px: Vector2) -> Vector2:
+	return _canonical_screen_px_to_ground_gu(screen_position_px)
 
 
-func _spell_lock_tile_distance(target: EnemyActor) -> float:
+func _spell_lock_distance_gu(target: EnemyActor) -> float:
 	if not is_instance_valid(target):
-		return SpellTargetLockPolicyScript.LOCK_RANGE_TILES + 1.0
-	return SpellTargetLockPolicyScript.chebyshev_distance(
-		_spell_lock_tile(player.global_position),
-		_spell_lock_tile(target.global_position)
+		return SpellTargetLockPolicyScript.LOCK_RANGE_GU + 1.0
+	return SpellTargetLockPolicyScript.distance_gu(
+		_spell_lock_ground_gu(player.global_position),
+		_spell_lock_ground_gu(target.global_position)
 	)
 
 
@@ -1871,14 +1858,16 @@ func _is_magic_target_in_range(target: EnemyActor) -> bool:
 		is_instance_valid(target)
 		and not target.is_queued_for_deletion()
 		and target.current_hp > 0
-		and _spell_lock_tile_distance(target)
-		<= SpellTargetLockPolicyScript.LOCK_RANGE_TILES + 0.0001
+		and SpellTargetLockPolicyScript.is_within_lock_range(
+			_spell_lock_ground_gu(player.global_position),
+			_spell_lock_ground_gu(target.global_position)
+		)
 	)
 
 
 func _spell_lock_candidates(excluded: EnemyActor = null) -> Array[EnemyActor]:
 	var raw_candidates: Array[Dictionary] = []
-	var origin_tile := _spell_lock_tile(player.global_position)
+	var origin_ground_gu := _spell_lock_ground_gu(player.global_position)
 	for value: Variant in get_tree().get_nodes_in_group("enemies"):
 		if not value is EnemyActor:
 			continue
@@ -1887,11 +1876,8 @@ func _spell_lock_candidates(excluded: EnemyActor = null) -> Array[EnemyActor]:
 			continue
 		raw_candidates.append({
 			"target": enemy,
-			"origin_tile": origin_tile,
-			"target_tile": _spell_lock_tile(enemy.global_position),
-			"world_distance_squared": (
-				player.global_position.distance_squared_to(enemy.global_position)
-			),
+			"origin_ground_gu": origin_ground_gu,
+			"target_ground_gu": _spell_lock_ground_gu(enemy.global_position),
 			"instance_id": enemy.get_instance_id(),
 		})
 	var result: Array[EnemyActor] = []
@@ -1926,8 +1912,8 @@ func _attack_lock_distance_gu(target: EnemyActor) -> float:
 	if not is_instance_valid(target):
 		return ATTACK_LOCK_RANGE_GU + 1.0
 	return GroundUnitSpaceScript.distance_gu(
-		_canonical_world_to_fractional_tile(player.global_position),
-		_canonical_world_to_fractional_tile(target.global_position)
+		_canonical_screen_px_to_ground_gu(player.global_position),
+		_canonical_screen_px_to_ground_gu(target.global_position)
 	)
 
 
@@ -1976,7 +1962,7 @@ func _blocking_neighbor_count(enemy: EnemyActor) -> int:
 		BOSS_SURROUNDED_NEIGHBOR_RADIUS_GU,
 		enemy.combat_radius_gu * 2.5
 	)
-	var enemy_ground_gu := _canonical_world_to_fractional_tile(
+	var enemy_ground_gu := _canonical_screen_px_to_ground_gu(
 		enemy.global_position
 	)
 	var candidates: Array = get_tree().get_nodes_in_group("enemies") + get_tree().get_nodes_in_group("combat_targets")
@@ -1988,7 +1974,7 @@ func _blocking_neighbor_count(enemy: EnemyActor) -> int:
 		var instance_key := str(node.get_instance_id())
 		if seen.has(instance_key):
 			continue
-		var node_ground_gu := _canonical_world_to_fractional_tile(
+		var node_ground_gu := _canonical_screen_px_to_ground_gu(
 			node.global_position
 		)
 		if not GroundUnitSpaceScript.is_within_range_gu(
@@ -2069,7 +2055,7 @@ func _find_valid_enemy_landing(
 	combat_radius_gu: float,
 	ignored_enemy: EnemyActor
 ) -> Vector2:
-	var origin_ground_gu := _canonical_world_to_fractional_tile(
+	var origin_ground_gu := _canonical_screen_px_to_ground_gu(
 		origin_screen_px
 	)
 	var footprint_radius_px := (
@@ -2088,7 +2074,7 @@ func _find_valid_enemy_landing(
 			_active_safe_zones
 		):
 			continue
-		var candidate_screen_px := _canonical_fractional_tile_to_world(
+		var candidate_screen_px := _canonical_ground_gu_to_screen_px(
 			candidate_ground_gu
 		)
 		if WorldSpatialRulesScript.environment_blocks_actor(
@@ -2105,7 +2091,7 @@ func _find_valid_enemy_landing(
 		if (
 			is_instance_valid(player)
 			and GroundUnitSpaceScript.distance_gu(
-				_canonical_world_to_fractional_tile(player.global_position),
+				_canonical_screen_px_to_ground_gu(player.global_position),
 				candidate_ground_gu
 			)
 			< combat_radius_gu
@@ -2119,7 +2105,7 @@ func _find_valid_enemy_landing(
 				continue
 			var other := value as EnemyActor
 			if GroundUnitSpaceScript.distance_gu(
-				_canonical_world_to_fractional_tile(other.global_position),
+				_canonical_screen_px_to_ground_gu(other.global_position),
 				candidate_ground_gu
 			) < combat_radius_gu + other.combat_radius_gu + ENEMY_LANDING_CLEARANCE_GU:
 				occupied = true
@@ -2292,20 +2278,23 @@ func _select_wild_rush_target() -> EnemyActor:
 		# out-of-reach lock must make this cast invalid instead of silently
 		# redirecting the charge to a different nearby monster.
 		return locked_target if _wild_rush_target_is_eligible(locked_target) else null
-	var player_tile := _canonical_world_to_fractional_tile(player.global_position)
+	var player_ground_gu := _canonical_screen_px_to_ground_gu(player.global_position)
 	var best: EnemyActor
-	var best_distance := INF
+	var best_distance_gu := INF
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor:
 			continue
 		var enemy: EnemyActor = node
 		if not _wild_rush_target_is_eligible(enemy):
 			continue
-		var enemy_tile := _canonical_world_to_fractional_tile(enemy.global_position)
-		var distance := WarriorMeleeGeometryScript.chebyshev_distance(player_tile, enemy_tile)
-		if distance < best_distance:
+		var enemy_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
+		var distance_gu := GroundUnitSpaceScript.distance_gu(
+			player_ground_gu,
+			enemy_ground_gu
+		)
+		if distance_gu < best_distance_gu:
 			best = enemy
-			best_distance = distance
+			best_distance_gu = distance_gu
 	return best
 
 
@@ -2320,54 +2309,65 @@ func _wild_rush_target_is_eligible(target: EnemyActor) -> bool:
 	):
 		return false
 	if (
-		WorldSpatialRulesScript.point_inside_safe_zones(player.global_position, _active_safe_zones)
-		or WorldSpatialRulesScript.point_inside_safe_zones(target.global_position, _active_safe_zones)
+		WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(
+			_canonical_screen_px_to_ground_gu(player.global_position),
+			_active_safe_zones
+		)
+		or WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(
+			_canonical_screen_px_to_ground_gu(target.global_position),
+			_active_safe_zones
+		)
 	):
 		return false
 	return WarriorMeleeGeometryScript.wild_rush_target_is_adjacent(
-		_canonical_world_to_fractional_tile(player.global_position),
-		_canonical_world_to_fractional_tile(target.global_position)
+		_canonical_screen_px_to_ground_gu(player.global_position),
+		_canonical_screen_px_to_ground_gu(target.global_position)
 	)
 
 
 func _build_wild_rush_path_plan(target: EnemyActor) -> Dictionary:
 	var result := {
 		"contract_id": WarriorMeleeGeometryScript.WILD_RUSH_CONTRACT_ID,
+		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
 		"eligible": false,
 		"dynamic_blocker_in_corridor": false,
-		"static_clear_distance_tiles": 0,
-		"resolved_push_distance_tiles": 0,
+		"static_clear_distance_gu": 0.0,
+		"resolved_push_distance_gu": 0.0,
 	}
 	if not _wild_rush_target_is_eligible(target):
 		return result
-	var player_tile := _canonical_world_to_fractional_tile(player.global_position)
-	var target_tile := _canonical_world_to_fractional_tile(target.global_position)
-	var direction_index := WarriorMeleeGeometryScript.direction_index_for_tile_delta(
-		target_tile - player_tile
+	var player_ground_gu := _canonical_screen_px_to_ground_gu(player.global_position)
+	var target_ground_gu := _canonical_screen_px_to_ground_gu(target.global_position)
+	var direction_ground_gu := WarriorMeleeGeometryScript.wild_rush_direction_ground_gu(
+		player_ground_gu,
+		target_ground_gu
+	)
+	var direction_index := WarriorMeleeGeometryScript.direction_index_for_ground_delta_gu(
+		direction_ground_gu
 	)
 	var direction_step := WarriorMeleeGeometryScript.facing_tile_step(direction_index)
 	var dynamic_blocked := _wild_rush_has_dynamic_blocker(
 		target,
-		target_tile,
-		direction_index
+		target_ground_gu,
+		direction_ground_gu
 	)
-	var static_clear := _wild_rush_static_clear_distance(
+	var static_clear_distance_gu := _wild_rush_static_clear_distance_gu(
 		target,
-		player_tile,
-		target_tile,
-		direction_step
+		player_ground_gu,
+		target_ground_gu,
+		direction_ground_gu
 	)
 	result.merge({
 		"eligible": true,
 		"direction_index": direction_index,
 		"direction_step": direction_step,
-		"player_origin_tile": player_tile,
-		"target_origin_tile": target_tile,
+		"direction_ground_gu": direction_ground_gu,
+		"player_origin_ground_gu": player_ground_gu,
+		"target_origin_ground_gu": target_ground_gu,
 		"dynamic_blocker_in_corridor": dynamic_blocked,
-		"static_clear_distance_tiles": static_clear,
-		"resolved_push_distance_tiles": WarriorMeleeGeometryScript.wild_rush_resolved_distance(
-			static_clear,
-			dynamic_blocked
+		"static_clear_distance_gu": static_clear_distance_gu,
+		"resolved_push_distance_gu": (
+			0.0 if dynamic_blocked else static_clear_distance_gu
 		),
 	}, true)
 	return result
@@ -2375,41 +2375,66 @@ func _build_wild_rush_path_plan(target: EnemyActor) -> Dictionary:
 
 func _wild_rush_has_dynamic_blocker(
 	target: EnemyActor,
-	target_tile: Vector2,
-	direction_index: int
+	target_ground_gu: Vector2,
+	direction_ground_gu: Vector2
 ) -> bool:
+	var forward_ground_gu := direction_ground_gu.normalized()
+	var side_ground_gu := Vector2(-forward_ground_gu.y, forward_ground_gu.x)
+	var target_radius_gu := (
+		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
+			target.collision_radius
+		)
+	)
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node == target:
 			continue
 		var other: EnemyActor = node
 		if other.is_queued_for_deletion() or other.current_hp <= 0:
 			continue
-		var coordinates := WarriorMeleeGeometryScript.line_coordinates(
-			_canonical_world_to_fractional_tile(other.global_position) - target_tile,
-			direction_index
+		var delta_ground_gu := (
+			_canonical_screen_px_to_ground_gu(other.global_position)
+			- target_ground_gu
+		)
+		var forward_distance_gu := delta_ground_gu.dot(forward_ground_gu)
+		var lateral_distance_gu := absf(delta_ground_gu.dot(side_ground_gu))
+		var other_radius_gu := (
+			WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
+				other.collision_radius
+			)
 		)
 		if (
-			coordinates.x > WarriorMeleeGeometryScript.EPSILON
-			and coordinates.x <= float(WarriorMeleeGeometryScript.WILD_RUSH_PUSH_DISTANCE_TILES) + WarriorMeleeGeometryScript.EPSILON
-			and absf(coordinates.y) <= 0.5 + WarriorMeleeGeometryScript.EPSILON
+			forward_distance_gu > WarriorMeleeGeometryScript.EPSILON
+			and forward_distance_gu - other_radius_gu
+			<= WarriorMeleeGeometryScript.WILD_RUSH_PUSH_DISTANCE_GU
+				+ WarriorMeleeGeometryScript.EPSILON
+			and lateral_distance_gu
+			<= target_radius_gu + other_radius_gu + WarriorMeleeGeometryScript.EPSILON
 		):
 			return true
 	return false
 
 
-func _wild_rush_static_clear_distance(
+func _wild_rush_static_clear_distance_gu(
 	target: EnemyActor,
-	player_tile: Vector2,
-	target_tile: Vector2,
-	direction_step: Vector2i
-) -> int:
-	var step := Vector2(direction_step)
-	for distance in range(1, WarriorMeleeGeometryScript.WILD_RUSH_PUSH_DISTANCE_TILES + 1):
-		var player_destination := _canonical_fractional_tile_to_world(
-			player_tile + step * float(distance)
+	player_ground_gu: Vector2,
+	target_ground_gu: Vector2,
+	direction_ground_gu: Vector2
+) -> float:
+	const SAMPLE_STEP_GU := 0.25
+	var maximum_distance_gu := WarriorMeleeGeometryScript.WILD_RUSH_PUSH_DISTANCE_GU
+	var sample_count := ceili(maximum_distance_gu / SAMPLE_STEP_GU)
+	var last_clear_distance_gu := 0.0
+	for sample_index: int in range(1, sample_count + 1):
+		var distance_gu := minf(
+			float(sample_index) * SAMPLE_STEP_GU,
+			maximum_distance_gu
 		)
-		var target_destination := _canonical_fractional_tile_to_world(
-			target_tile + step * float(distance)
+		var motion_ground_gu := direction_ground_gu * distance_gu
+		var player_destination := _canonical_ground_gu_to_screen_px(
+			player_ground_gu + motion_ground_gu
+		)
+		var target_destination := _canonical_ground_gu_to_screen_px(
+			target_ground_gu + motion_ground_gu
 		)
 		if (
 			WorldSpatialRulesScript.environment_blocks_actor(
@@ -2423,8 +2448,9 @@ func _wild_rush_static_clear_distance(
 				target.collision_radius
 			)
 		):
-			return distance - 1
-	return WarriorMeleeGeometryScript.WILD_RUSH_PUSH_DISTANCE_TILES
+			return last_clear_distance_gu
+		last_clear_distance_gu = distance_gu
+	return last_clear_distance_gu
 
 
 func _apply_wild_rush_displacement(
@@ -2432,22 +2458,26 @@ func _apply_wild_rush_displacement(
 	effect: Dictionary,
 	target_context: Dictionary
 ) -> bool:
-	var distance := clampi(
-		int(effect.get("resolved_push_distance_tiles", 0)),
-		0,
-		WarriorMeleeGeometryScript.WILD_RUSH_PUSH_DISTANCE_TILES
+	var distance_gu := clampf(
+		float(effect.get("resolved_push_distance_gu", 0.0)),
+		0.0,
+		WarriorMeleeGeometryScript.WILD_RUSH_PUSH_DISTANCE_GU
 	)
-	if distance <= 0 or bool(target_context.get("dynamic_blocker_in_corridor", false)):
+	if distance_gu <= 0.0 or bool(target_context.get("dynamic_blocker_in_corridor", false)):
 		return false
-	var direction_step: Vector2i = target_context.get("direction_step", Vector2i.ZERO)
-	if direction_step == Vector2i.ZERO:
-		return false
-	var step := Vector2(direction_step) * float(distance)
-	var player_destination := _canonical_fractional_tile_to_world(
-		_canonical_world_to_fractional_tile(player.global_position) + step
+	var direction_ground_gu: Vector2 = target_context.get(
+		"direction_ground_gu", Vector2.ZERO
 	)
-	var target_destination := _canonical_fractional_tile_to_world(
-		_canonical_world_to_fractional_tile(target.global_position) + step
+	if direction_ground_gu.length_squared() <= GroundUnitSpaceScript.EPSILON_GU:
+		return false
+	var motion_ground_gu := direction_ground_gu.normalized() * distance_gu
+	var player_destination := _canonical_ground_gu_to_screen_px(
+		_canonical_screen_px_to_ground_gu(player.global_position)
+		+ motion_ground_gu
+	)
+	var target_destination := _canonical_ground_gu_to_screen_px(
+		_canonical_screen_px_to_ground_gu(target.global_position)
+		+ motion_ground_gu
 	)
 	if (
 		WorldSpatialRulesScript.environment_blocks_actor(
@@ -2495,14 +2525,24 @@ func _update_target_hud() -> void:
 
 func _try_interact() -> void:
 	var nearest: Node2D
-	var nearest_distance := 105.0
+	var origin_ground_gu := _canonical_screen_px_to_ground_gu(
+		player.global_position
+	)
+	var nearest_distance_gu := (
+		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
+			105.0
+		)
+	)
 	for node: Node in get_tree().get_nodes_in_group("interactable"):
 		if not node is Node2D:
 			continue
-		var distance := player.global_position.distance_to(node.global_position)
-		if distance < nearest_distance:
+		var distance_gu := GroundUnitSpaceScript.distance_gu(
+			origin_ground_gu,
+			_canonical_screen_px_to_ground_gu(node.global_position)
+		)
+		if distance_gu < nearest_distance_gu:
 			nearest = node
-			nearest_distance = distance
+			nearest_distance_gu = distance_gu
 	if nearest == null:
 		hud.show_message("附近没有可交互目标")
 		return
@@ -2608,13 +2648,13 @@ func _spell_definition_allows_target(
 	if not _is_magic_target_in_range(target):
 		return false
 	var geometry: Dictionary = definition.get("geometry", {})
-	var maximum_range_tiles := float(
-		geometry.get("maximum_range_tiles", 0.0)
+	var maximum_range_gu := float(
+		geometry.get("maximum_range_gu", 0.0)
 	)
 	return SpellTargetLockPolicyScript.spell_range_allows_target(
-		_spell_lock_tile(player.global_position),
-		_spell_lock_tile(target.global_position),
-		maximum_range_tiles
+		_spell_lock_ground_gu(player.global_position),
+		_spell_lock_ground_gu(target.global_position),
+		maximum_range_gu
 	)
 
 
@@ -2673,8 +2713,8 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 	_active_physical_hit_diagnostics.clear()
 	var release_geometry: Dictionary = context.get("release_geometry", {})
 	if not release_geometry.is_empty():
-		origin = release_geometry.get("origin_world", origin)
-		direction = release_geometry.get("direction_world", direction)
+		origin = release_geometry.get("origin_screen_px", origin)
+		direction = release_geometry.get("direction_screen_px", direction)
 	_expire_canonical_fire_charge_if_needed()
 	var body_selection := context.duplicate(true)
 	var selection_mode := str(body_selection.get("mode", WarriorMeleeGeometryScript.SKILL_NORMAL))
@@ -2839,9 +2879,9 @@ func _record_melee_release_diagnostic(
 	diagnostic["event"] = "attack_release_resolved"
 	diagnostic["body_context"] = context.duplicate(true)
 	diagnostic["release_geometry"] = release_geometry.duplicate(true)
-	diagnostic["actor_world_at_release"] = origin
-	diagnostic["actor_tile_at_release"] = _canonical_world_to_fractional_tile(origin)
-	diagnostic["release_direction_world"] = direction
+	diagnostic["actor_screen_px_at_release"] = origin
+	diagnostic["actor_ground_gu_at_release"] = _canonical_screen_px_to_ground_gu(origin)
+	diagnostic["release_direction_screen_px"] = direction
 	diagnostic["release_direction_index"] = release_direction_index
 	diagnostic["release_direction_tile_step"] = (
 		WarriorMeleeGeometryScript.facing_tile_step(release_direction_index)
@@ -2899,7 +2939,7 @@ func _melee_candidate_diagnostics(
 	primary_targets: Array[EnemyActor]
 ) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
-	var origin_tile := _canonical_world_to_fractional_tile(origin)
+	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin)
 	var resolved_mode := (
 		mode
 		if mode in [
@@ -2915,15 +2955,15 @@ func _melee_candidate_diagnostics(
 			continue
 		var enemy := node as EnemyActor
 		var explanation := WarriorMeleeDiagnosticScript.explain_footprint_candidate(
-			origin_tile,
-			_canonical_world_to_fractional_tile(enemy.global_position),
+			origin_ground_gu,
+			_canonical_screen_px_to_ground_gu(enemy.global_position),
 			enemy.collision_radius,
 			direction_index,
 			resolved_mode
 		)
 		explanation["angle_quantization_audit"] = (
-			WarriorMeleeDiagnosticScript.audit_fractional_tile_delta(
-				_canonical_world_to_fractional_tile(enemy.global_position) - origin_tile
+			WarriorMeleeDiagnosticScript.audit_ground_delta_gu(
+				_canonical_screen_px_to_ground_gu(enemy.global_position) - origin_ground_gu
 			)
 		)
 		explanation["target_id"] = enemy.get_instance_id()
@@ -2931,8 +2971,8 @@ func _melee_candidate_diagnostics(
 		explanation["target_world"] = enemy.global_position
 		explanation["selected_as_primary"] = enemy in primary_targets
 		if (
-			float(explanation.get("chebyshev_distance_tiles", INF))
-			> float(explanation.get("effective_reach_tiles", 0.0)) + 1.0
+			float(explanation.get("distance_gu", INF))
+			> float(explanation.get("effective_reach_gu", 0.0)) + 1.0
 			and not bool(explanation.get("footprint_accepted", false))
 			and not bool(explanation["selected_as_primary"])
 		):
@@ -3021,7 +3061,11 @@ func _on_special_action_pressed(effect_id: String) -> void:
 				player.global_position,
 				direction,
 				_rng.randi_range(low, high),
-				360.0,
+				float(
+					SkillDataLoaderScript.skill("wizard.fireball")
+					.get("geometry", {})
+					.get("maximum_range_gu", 0.0)
+				),
 				Color(1.0, 0.30, 0.08),
 				"damage",
 				0,
@@ -3073,8 +3117,8 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 	var skill_context := player.consume_skill_context()
 	var release_geometry: Dictionary = skill_context.get("release_geometry", {})
 	if not release_geometry.is_empty():
-		origin = release_geometry.get("origin_world", origin)
-		direction = release_geometry.get("direction_world", direction)
+		origin = release_geometry.get("origin_screen_px", origin)
+		direction = release_geometry.get("direction_screen_px", direction)
 		var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
 		var release_target := _combat_release_target(release_geometry)
 		if (
@@ -3146,7 +3190,7 @@ func _execute_canonical_skill(
 		stable_skill_id,
 		rank,
 		PlayerState.level,
-		_canonical_world_to_tile(origin),
+		_canonical_screen_px_to_grid_cell(origin),
 		request_facing,
 		target_context,
 		resource_context,
@@ -3318,15 +3362,9 @@ func _canonical_target_context(
 	var target_mode := str(target_contract.get("mode", ""))
 	var target_relation := str(target_contract.get("relation", ""))
 	var friendly_cast := target_relation.contains("friendly") or target_mode in ["self", "self_or_friendly_single"]
-	var profile := ProfessionRules.skill_combat_profile(
-		str(definition.get("display_name", "")),
-		PlayerState.effective_skill_level(str(definition.get("display_name", "")))
-	)
-	var search_range := maxf(105.0, float(profile.get("range", 370.0)))
-	if target_mode.contains("surround") or target_mode.contains("area") or target_mode.contains("ground"):
-		search_range = maxf(search_range, 180.0)
+	var search_range_gu := SpellTargetLockPolicyScript.LOCK_RANGE_GU
 	if allow_auto_target and not friendly_cast and target_mode not in ["self", "self_stat", "self_summon", "self_next_melee_charge", "self_random_destination", "caster_surrounding_area", "surrounding_units"]:
-		_ensure_skill_cast_target(null, search_range)
+		_ensure_skill_cast_target(null, search_range_gu)
 	var target := _skill_cast_target if not friendly_cast and is_instance_valid(_skill_cast_target) else null
 	var target_within_skill_range := (
 		target != null and _spell_definition_allows_target(definition, target)
@@ -3345,23 +3383,34 @@ func _canonical_target_context(
 		target != null
 		and (not target_relation.contains("hostile") or target_within_skill_range)
 	)
-	var fallback_target_tile := _canonical_world_to_tile(
-		origin + direction.normalized() * minf(search_range, 160.0)
+	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin)
+	var direction_ground_gu := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		direction
 	)
-	var maximum_range_tiles := float(
-		definition.get("geometry", {}).get("maximum_range_tiles", 0.0)
-	)
-	if maximum_range_tiles > 0.0:
-		var fallback_direction := (
-			CasterSpellGeometryScript.canonical_facing_from_world_direction(
-				direction
-			)
+	if direction_ground_gu.length_squared() <= GroundUnitSpaceScript.EPSILON_GU:
+		direction_ground_gu = GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			player.facing
 		)
+	direction_ground_gu = direction_ground_gu.normalized()
+	var maximum_range_gu := float(
+		definition.get("geometry", {}).get("maximum_range_gu", 0.0)
+	)
+	var fallback_distance_gu := (
+		maximum_range_gu
+		if maximum_range_gu > 0.0
+		else search_range_gu
+	)
+	var fallback_target_ground_gu := (
+		origin_ground_gu + direction_ground_gu * fallback_distance_gu
+	)
+	var fallback_target_tile := Vector2i(
+		roundi(fallback_target_ground_gu.x),
+		roundi(fallback_target_ground_gu.y)
+	)
+	if maximum_range_gu > 0.0:
 		fallback_target_tile = Vector2i(
-			round(
-				_spell_lock_tile(origin)
-				+ Vector2(fallback_direction) * maximum_range_tiles
-			)
+			roundi(fallback_target_ground_gu.x),
+			roundi(fallback_target_ground_gu.y)
 		)
 	var context := {
 		"has_target": usable_target or independent_geometry_target or friendly_cast,
@@ -3369,12 +3418,12 @@ func _canonical_target_context(
 		"friendly": friendly_cast,
 		"hostile": usable_target and not friendly_cast,
 		"spell_lock_contract": SpellTargetLockPolicyScript.CONTRACT_ID,
-		"spell_lock_range_tiles": SpellTargetLockPolicyScript.LOCK_RANGE_TILES,
+		"spell_lock_range_gu": SpellTargetLockPolicyScript.LOCK_RANGE_GU,
 		"target_within_skill_range": target_within_skill_range,
-		"target_tile": _canonical_world_to_tile(
+		"target_tile": _canonical_screen_px_to_grid_cell(
 			target.global_position
 			if usable_target
-			else _canonical_tile_to_world(fallback_target_tile)
+			else _canonical_grid_cell_to_screen_px(fallback_target_tile)
 		),
 		"primary_stat_roll": _canonical_primary_stat_roll(str(definition.get("class", ""))),
 		"actual_hp_missing": player.max_hp - player.current_hp,
@@ -3390,7 +3439,7 @@ func _canonical_target_context(
 	}
 	var destination := _find_valid_random_teleport_position(origin)
 	context["destination_valid"] = destination != origin
-	context["destination_tile"] = _canonical_world_to_tile(destination)
+	context["destination_tile"] = _canonical_screen_px_to_grid_cell(destination)
 	if target != null:
 		var monster_data: Dictionary = target.monster_data
 		context.merge({
@@ -3409,7 +3458,7 @@ func _canonical_target_context(
 	var nearby: Array[Dictionary] = []
 	var adjacent_ring_cells: Array[Vector2i] = []
 	if str(definition.get("geometry", {}).get("shape", "")) == "adjacent_ring":
-		var caster_tile := _canonical_world_to_tile(origin)
+		var caster_tile := _canonical_screen_px_to_grid_cell(origin)
 		for ring_y: int in range(-1, 2):
 			for ring_x: int in range(-1, 2):
 				if ring_x != 0 or ring_y != 0:
@@ -3420,15 +3469,20 @@ func _canonical_target_context(
 		if (
 			not node is EnemyActor
 			or node.is_queued_for_deletion()
-			or node.global_position.distance_to(origin) > search_range
+			or not GroundUnitSpaceScript.is_within_range_gu(
+				origin_ground_gu,
+				_canonical_screen_px_to_ground_gu(node.global_position),
+				search_range_gu
+			)
 		):
 			continue
 		if (
 			not adjacent_ring_cells.is_empty()
-			and not CasterSpellGeometryScript.target_footprint_intersects_cells(
+			and not bool(CasterSpellGeometryScript.declared_cells_intersect_actor_footprint(
 				adjacent_ring_cells,
-				_enemy_footprint_tile_polygon(node)
-			)
+				_canonical_screen_px_to_ground_gu(node.global_position),
+				node.collision_radius
+			).get("intersects", false))
 		):
 			continue
 		nearby.append({
@@ -3436,7 +3490,15 @@ func _canonical_target_context(
 			"level": node.level,
 			"is_boss": node.is_boss,
 			"immovable": node.is_boss,
-			"path_blocked": background.is_environment_point_blocked(node.global_position + node.global_position.direction_to(origin) * -50.0),
+			"path_blocked": background.is_environment_point_blocked(
+				_canonical_ground_gu_to_screen_px(
+					_canonical_screen_px_to_ground_gu(node.global_position)
+					+ (
+						_canonical_screen_px_to_ground_gu(node.global_position)
+						- origin_ground_gu
+					).normalized()
+				)
+			),
 			"hostile_monster": true,
 			"control_immune": node.is_boss,
 			"within_level_gate": node.level <= PlayerState.level,
@@ -3488,8 +3550,8 @@ func _apply_canonical_effects(
 	var stable_skill_id := str(result.get("skill_id", ""))
 	if not is_instance_valid(target):
 		target = null
-	var target_position := _canonical_tile_to_world(
-		target_context.get("target_tile", _canonical_world_to_tile(origin))
+	var target_position := _canonical_grid_cell_to_screen_px(
+		target_context.get("target_tile", _canonical_screen_px_to_grid_cell(origin))
 	)
 	var geometry_effect := _canonical_primary_damage_effect(result)
 	var effective_geometry_cells := _canonical_effective_spell_geometry_cells(
@@ -3519,11 +3581,16 @@ func _apply_canonical_effects(
 		var effect_type := str(effect.get("type", ""))
 		match effect_type:
 			"projectile_damage", "talisman_projectile_damage":
+				var projectile_maximum_distance_gu := float(
+					SkillDataLoaderScript.skill(stable_skill_id)
+					.get("geometry", {})
+					.get("maximum_range_gu", 0.0)
+				)
 				_spawn_projectile(
 					origin,
 					direction,
 					int(effect.get("raw_power", 0)),
-					maxf(120.0, float(ProfessionRules.skill_combat_profile(SkillDataLoaderScript.display_name(stable_skill_id), PlayerState.effective_skill_level(stable_skill_id)).get("range", 370.0))),
+					projectile_maximum_distance_gu,
 					Color(0.28, 0.62, 1.0) if stable_skill_id.begins_with("wizard.") else Color(0.45, 0.92, 0.55),
 					"damage",
 					0,
@@ -3533,7 +3600,7 @@ func _apply_canonical_effects(
 			"targeted_sky_strike", "line_damage", "piercing_line_damage", "area_damage", "caster_centered_area_damage":
 				var raw_power := int(effect.get("raw_power_after_race", effect.get("raw_power", 0)))
 				var damage_origin := (
-					_canonical_tile_to_world(target_context.get("target_tile", Vector2i.ZERO))
+					_canonical_grid_cell_to_screen_px(target_context.get("target_tile", Vector2i.ZERO))
 					if effect_type == "area_damage"
 					else origin
 				)
@@ -3564,11 +3631,19 @@ func _apply_canonical_effects(
 			"adjacent_push":
 				var repulsion_target := _canonical_effect_enemy(effect)
 				if repulsion_target != null and bool(effect.get("displaced", false)):
+					var source_ground_gu := _canonical_screen_px_to_ground_gu(origin)
+					var target_ground_gu := _canonical_screen_px_to_ground_gu(
+						repulsion_target.global_position
+					)
+					var push_direction_ground_gu := (
+						target_ground_gu - source_ground_gu
+					).normalized()
 					_apply_canonical_displacement(
 						repulsion_target,
-						repulsion_target.global_position.direction_to(origin)
-						* -float(effect.get("push_distance_tiles", 1))
-						* 50.0
+						GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+							push_direction_ground_gu
+							* float(effect.get("push_distance_gu", 1.0))
+						)
 					)
 			"level_gated_push":
 				if target != null and bool(effect.get("displaced", false)):
@@ -3577,7 +3652,7 @@ func _apply_canonical_effects(
 				_combat_runtime.apply_damage(player, int(effect.get("amount", 1)))
 			"server_random_teleport":
 				if bool(effect.get("moved", false)):
-					var destination := _canonical_tile_to_world(
+					var destination := _canonical_grid_cell_to_screen_px(
 						effect.get("destination", Vector2i.ZERO)
 					)
 					if _apply_canonical_player_teleport(destination):
@@ -3606,8 +3681,22 @@ func _apply_canonical_effects(
 					hud.show_message("%s：生命%d/%d" % [target.display_name, target.current_hp, target.max_hp], 2.0)
 			"monster_boundary_control":
 				if int(effect.get("trapped_count", 0)) > 0:
+					var boundary_center_screen_px := _canonical_grid_cell_to_screen_px(
+						target_context.get("target_tile", Vector2i.ZERO)
+					)
+					var boundary_radius_gu := maxf(
+						0.0,
+						float(effect.get("radius_gu", 0.0))
+					)
 					for node: Node in get_tree().get_nodes_in_group("enemies"):
-						if node is EnemyActor and node.global_position.distance_to(_canonical_tile_to_world(target_context.get("target_tile", Vector2i.ZERO))) <= 115.0:
+						if (
+							node is EnemyActor
+							and _ground_circle_intersects_enemy_footprint_gu(
+								boundary_center_screen_px,
+								boundary_radius_gu,
+								node
+							)
+						):
 							node.apply_control(float(effect.get("duration_seconds", 1)))
 			"main_pet_spawn", "recall_existing_main_pet":
 				_apply_canonical_main_pet(effect, stable_skill_id)
@@ -3658,7 +3747,11 @@ func _apply_canonical_spell_damage(
 	continuous_line_strip: Dictionary = {}
 ) -> bool:
 	var targets: Array[EnemyActor] = []
-	if stable_skill_id in CANONICAL_WIZARD_GEOMETRY_SKILLS:
+	var has_declared_geometry_cells := (
+		raw_geometry_cells is Array
+		and not (raw_geometry_cells as Array).is_empty()
+	)
+	if stable_skill_id in CANONICAL_WIZARD_GEOMETRY_SKILLS or has_declared_geometry_cells:
 		targets = _canonical_spell_geometry_targets(
 			stable_skill_id,
 			raw_geometry_cells,
@@ -3667,22 +3760,21 @@ func _apply_canonical_spell_damage(
 		)
 	elif effect_type == "targeted_sky_strike" and primary != null:
 		targets.append(primary)
+	elif primary != null and effect_type not in ["area_damage", "caster_centered_area_damage"]:
+		targets.append(primary)
 	else:
 		var radial: bool = effect_type in ["area_damage", "caster_centered_area_damage"]
-		var maximum_distance: float = 120.0 if radial else 370.0
+		var radius_gu := maxf(0.0, float(effect.get("radius_gu", 0.0)))
+		if not radial or radius_gu <= 0.0:
+			return false
 		for node: Node in get_tree().get_nodes_in_group("enemies"):
 			if not node is EnemyActor or node.is_queued_for_deletion():
 				continue
 			var enemy := node as EnemyActor
-			var offset: Vector2 = enemy.global_position - origin
-			var in_arc: bool = offset.length() < 42.0 or offset.normalized().dot(direction.normalized()) > 0.35
-			if (
-				_world_circle_intersects_enemy_footprint(
-					origin,
-					maximum_distance,
-					enemy
-				)
-				and (radial or in_arc)
+			if _ground_circle_intersects_enemy_footprint_gu(
+				origin,
+				radius_gu,
+				enemy
 			):
 				targets.append(enemy)
 	var hit_any := false
@@ -3734,8 +3826,8 @@ func _canonical_effective_spell_geometry_cells(
 func _canonical_continuous_line_strip(
 	stable_skill_id: String,
 	effect: Dictionary,
-	origin_world: Vector2,
-	direction_world: Vector2
+	origin_screen_px: Vector2,
+	direction_screen_px: Vector2
 ) -> Dictionary:
 	if (
 		stable_skill_id not in CONTINUOUS_WIZARD_LINE_SKILLS
@@ -3745,78 +3837,82 @@ func _canonical_continuous_line_strip(
 		return {}
 	var definition := SkillDataLoaderScript.skill(stable_skill_id)
 	var geometry: Dictionary = definition.get("geometry", {})
-	var length_tiles := maxf(
+	var effect_length_gu := maxf(
 		0.0,
-		float(effect.get("length_tiles", geometry.get("length_tiles", 0.0)))
+		float(effect.get("effect_length_gu", geometry.get("effect_length_gu", 0.0)))
 	)
-	var width_tiles := maxf(
+	var effect_width_gu := maxf(
 		0.0001,
-		float(effect.get("width_tiles", geometry.get("width_tiles", 1.0)))
+		float(effect.get("effect_width_gu", geometry.get("effect_width_gu", 1.0)))
 	)
-	var origin_tile := _canonical_world_to_fractional_tile(origin_world)
-	var direction_tile := (
-		CombatDirectionSpaceScript.world_delta_to_fractional_tile_delta(
-			direction_world
-		)
+	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin_screen_px)
+	var direction_ground_gu := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			direction_screen_px
+		).normalized()
 	)
 	var strip := CasterSpellGeometryScript.continuous_line_strip(
-		origin_tile,
-		origin_tile + direction_tile,
-		direction_world,
-		length_tiles,
-		width_tiles
+		origin_ground_gu,
+		origin_ground_gu + direction_ground_gu,
+		direction_screen_px,
+		effect_length_gu,
+		effect_width_gu
 	)
 	if bool(effect.get("stops_on_terrain", geometry.get("stops_on_terrain", false))):
-		var unblocked_length := _canonical_continuous_line_unblocked_length(strip)
-		if unblocked_length < length_tiles:
+		var unblocked_length_gu := _canonical_continuous_line_unblocked_length_gu(strip)
+		if unblocked_length_gu < effect_length_gu:
 			strip = CasterSpellGeometryScript.continuous_line_strip(
-				origin_tile,
-				origin_tile + direction_tile,
-				direction_world,
-				unblocked_length,
-				width_tiles
+				origin_ground_gu,
+				origin_ground_gu + direction_ground_gu,
+				direction_screen_px,
+				unblocked_length_gu,
+				effect_width_gu
 			)
 			strip["terrain_truncated"] = true
-			strip["source_length_tiles"] = length_tiles
+			strip["source_effect_length_gu"] = effect_length_gu
 	strip["integration_contract_id"] = (
 		"gameplay.wizard.continuous_line.damage_visual_terrain_shared.v1"
 	)
 	return strip
 
 
-func _canonical_continuous_line_unblocked_length(
+func _canonical_continuous_line_unblocked_length_gu(
 	line_strip: Dictionary
 ) -> float:
-	var length_tiles := maxf(
+	var effect_length_gu := maxf(
 		0.0,
-		float(line_strip.get("length_tiles", 0.0))
+		float(line_strip.get("effect_length_gu", 0.0))
 	)
-	if length_tiles <= 0.0:
+	if effect_length_gu <= 0.0:
 		return 0.0
-	var origin_tile: Vector2 = line_strip.get(
-		"origin_fractional_tile", Vector2.ZERO
+	var origin_ground_gu: Vector2 = line_strip.get(
+		"origin_ground_gu", Vector2.ZERO
 	)
-	var axis: Vector2 = line_strip.get(
-		"axis_fractional_tile", Vector2.DOWN
+	var direction_ground_gu: Vector2 = line_strip.get(
+		"direction_ground_gu", Vector2.DOWN
 	)
 	# Quarter-step centreline sampling is a deterministic supercover for the
 	# continuous ray. It catches cells crossed between integer sample points,
 	# while the damage width remains independent from terrain traversal.
-	var sample_count := ceili((length_tiles + 0.5) * 4.0)
-	for sample_index: int in range(2, sample_count + 1):
-		var distance_tiles := float(sample_index) * 0.25
-		var sample_tile := origin_tile + axis * distance_tiles
+	const SAMPLE_STEP_GU := 0.25
+	var sample_count := ceili(effect_length_gu / SAMPLE_STEP_GU)
+	var last_clear_distance_gu := 0.0
+	for sample_index: int in range(1, sample_count + 1):
+		var distance_gu := minf(
+			float(sample_index) * SAMPLE_STEP_GU,
+			effect_length_gu
+		)
+		var sample_ground_gu := (
+			origin_ground_gu + direction_ground_gu * distance_gu
+		)
 		var sample_cell := Vector2i(
-			roundi(sample_tile.x),
-			roundi(sample_tile.y)
+			roundi(sample_ground_gu.x),
+			roundi(sample_ground_gu.y)
 		)
 		if _canonical_spell_cell_is_terrain_blocked(sample_cell):
-			return clampf(
-				floorf(distance_tiles - 0.5),
-				0.0,
-				length_tiles
-			)
-	return length_tiles
+			return last_clear_distance_gu
+		last_clear_distance_gu = distance_gu
+	return last_clear_distance_gu
 
 
 func _canonical_spell_cell_is_terrain_blocked(cell: Vector2i) -> bool:
@@ -3830,7 +3926,7 @@ func _canonical_spell_cell_is_terrain_blocked(cell: Vector2i) -> bool:
 		and background.has_method("is_environment_point_blocked")
 		and bool(background.call(
 			"is_environment_point_blocked",
-			_canonical_tile_to_world(cell)
+			_canonical_grid_cell_to_screen_px(cell)
 		))
 	)
 
@@ -3866,13 +3962,12 @@ func _canonical_spell_geometry_targets(
 		and str(continuous_line_strip.get("contract_id", ""))
 		== CasterSpellGeometryScript.CONTINUOUS_AIM_LINE_CONTRACT_ID
 	):
-		var origin_tile: Vector2 = continuous_line_strip.get(
-			"origin_fractional_tile", Vector2.ZERO
+		var origin_ground_gu: Vector2 = continuous_line_strip.get(
+			"origin_ground_gu", Vector2.ZERO
 		)
-		var axis: Vector2 = continuous_line_strip.get(
-			"axis_fractional_tile", Vector2.DOWN
+		var direction_ground_gu: Vector2 = continuous_line_strip.get(
+			"direction_ground_gu", Vector2.DOWN
 		)
-		var axis_length_squared := maxf(0.0001, axis.length_squared())
 		var candidates: Array[Dictionary] = []
 		for node: Node in get_tree().get_nodes_in_group("enemies"):
 			if (
@@ -3884,22 +3979,23 @@ func _canonical_spell_geometry_targets(
 			var enemy := node as EnemyActor
 			if not CasterSpellGeometryScript.target_footprint_intersects_continuous_line(
 				continuous_line_strip,
-				_enemy_footprint_tile_polygon(enemy)
+				_enemy_footprint_polygon_ground_gu(enemy)
 			):
 				continue
-			var enemy_tile := _canonical_world_to_fractional_tile(
+			var enemy_ground_gu := _canonical_screen_px_to_ground_gu(
 				enemy.global_position
 			)
 			candidates.append({
 				"enemy": enemy,
-				"distance_along_line": (
-					(enemy_tile - origin_tile).dot(axis)
-					/ axis_length_squared
+				"distance_along_line_gu": (
+					(enemy_ground_gu - origin_ground_gu).dot(
+						direction_ground_gu
+					)
 				),
 			})
 		candidates.sort_custom(func(left: Dictionary, right: Dictionary) -> bool:
-			var left_distance := float(left.get("distance_along_line", INF))
-			var right_distance := float(right.get("distance_along_line", INF))
+			var left_distance := float(left.get("distance_along_line_gu", INF))
+			var right_distance := float(right.get("distance_along_line_gu", INF))
 			if not is_equal_approx(left_distance, right_distance):
 				return left_distance < right_distance
 			return (
@@ -3921,10 +4017,12 @@ func _canonical_spell_geometry_targets(
 			var enemy := node as EnemyActor
 			if selected_instance_ids.has(enemy.get_instance_id()):
 				continue
-			if CasterSpellGeometryScript.target_footprint_intersects_cell(
-				_enemy_footprint_tile_polygon(enemy),
-				cell
-			):
+			var contact := CasterSpellGeometryScript.declared_cells_intersect_actor_footprint(
+				[cell],
+				_canonical_screen_px_to_ground_gu(enemy.global_position),
+				enemy.collision_radius
+			)
+			if bool(contact.get("intersects", false)):
 				cell_targets.append(enemy)
 		cell_targets.sort_custom(func(a: EnemyActor, b: EnemyActor) -> bool:
 			return a.get_instance_id() < b.get_instance_id()
@@ -3937,40 +4035,36 @@ func _canonical_spell_geometry_targets(
 	return targets
 
 
-func _enemy_footprint_tile_polygon(enemy: EnemyActor) -> PackedVector2Array:
-	var polygon := PackedVector2Array()
+func _enemy_footprint_polygon_ground_gu(enemy: EnemyActor) -> PackedVector2Array:
 	if not is_instance_valid(enemy):
-		return polygon
-	for world_offset: Vector2 in WorldSpatialRulesScript.actor_footprint_polygon(
+		return PackedVector2Array()
+	return CasterSpellGeometryScript.actor_footprint_polygon_ground_gu(
+		_canonical_screen_px_to_ground_gu(enemy.global_position),
 		enemy.collision_radius
-	):
-		polygon.append(
-			_canonical_world_to_fractional_tile(
-				enemy.global_position + world_offset
-			)
-		)
-	return polygon
+	)
 
 
-func _world_circle_intersects_enemy_footprint(
-	center: Vector2,
-	radius: float,
+func _ground_circle_intersects_enemy_footprint_gu(
+	center_screen_px: Vector2,
+	radius_gu: float,
 	enemy: EnemyActor
 ) -> bool:
 	if not is_instance_valid(enemy):
 		return false
-	var footprint_radii := WorldSpatialRulesScript.actor_footprint_radii(
-		enemy.collision_radius
+	var center_ground_gu := _canonical_screen_px_to_ground_gu(center_screen_px)
+	var enemy_center_ground_gu := _canonical_screen_px_to_ground_gu(
+		enemy.global_position
 	)
-	var contact_radii := footprint_radii + Vector2.ONE * maxf(0.0, radius)
-	if contact_radii.x <= 0.0 or contact_radii.y <= 0.0:
-		return center.is_equal_approx(enemy.global_position)
-	var offset := enemy.global_position - center
-	var normalized := Vector2(
-		offset.x / contact_radii.x,
-		offset.y / contact_radii.y
+	var enemy_radius_gu := (
+		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
+			enemy.collision_radius
+		)
 	)
-	return normalized.length_squared() <= 1.0 + 0.0001
+	return GroundUnitSpaceScript.is_within_range_gu(
+		center_ground_gu,
+		enemy_center_ground_gu,
+		maxf(0.0, radius_gu) + enemy_radius_gu
+	)
 
 
 func _spawn_canonical_ground_field(
@@ -3984,7 +4078,7 @@ func _spawn_canonical_ground_field(
 	if raw_geometry_cells is Array:
 		for raw_cell: Variant in raw_geometry_cells:
 			if raw_cell is Vector2i:
-				positions.append(_canonical_tile_to_world(raw_cell))
+				positions.append(_canonical_grid_cell_to_screen_px(raw_cell))
 				coverage_cells.append(raw_cell)
 	if positions.is_empty():
 		positions.append(fallback_position)
@@ -4040,10 +4134,11 @@ func _canonical_ground_cell_contains_enemy(
 ) -> bool:
 	return (
 		is_instance_valid(enemy)
-		and CasterSpellGeometryScript.target_footprint_intersects_cell(
-			_enemy_footprint_tile_polygon(enemy),
-			coverage_cell
-		)
+		and bool(CasterSpellGeometryScript.declared_cells_intersect_actor_footprint(
+			[coverage_cell],
+			_canonical_screen_px_to_ground_gu(enemy.global_position),
+			enemy.collision_radius
+		).get("intersects", false))
 	)
 
 
@@ -4168,14 +4263,14 @@ func _spawn_canonical_cast_visual(
 		geometry_world_points = (
 			CasterSpellGeometryScript.continuous_line_world_points(
 				continuous_line_strip,
-				Callable(self, "_canonical_fractional_tile_to_world")
+				Callable(self, "_canonical_ground_gu_to_screen_px")
 			)
 		)
 	elif raw_geometry_cells is Array:
 		for raw_cell: Variant in raw_geometry_cells:
 			if raw_cell is Vector2i:
 				geometry_tile_points.append(raw_cell)
-				geometry_world_points.append(_canonical_tile_to_world(raw_cell))
+				geometry_world_points.append(_canonical_grid_cell_to_screen_px(raw_cell))
 	var visual_plan := {
 		"success": true,
 		"skill_id": stable_skill_id,
@@ -4184,7 +4279,7 @@ func _spawn_canonical_cast_visual(
 		"visual_duration": CasterSkillVisualRegistry.animation_duration(stable_skill_id),
 		"area_radius": 72.0,
 		"canonical_geometry_contract": CASTER_GEOMETRY_VISUAL_CONTRACT_ID,
-		"geometry_origin_world": origin,
+		"geometry_origin_screen_px": origin,
 		"geometry_tile_points": geometry_tile_points,
 		"geometry_world_points": geometry_world_points,
 	}
@@ -4257,44 +4352,49 @@ func _ground_position_gu_for_map(
 	)
 
 
-func _canonical_world_to_tile(world: Vector2) -> Vector2i:
+func _canonical_screen_px_to_grid_cell(screen_position_px: Vector2) -> Vector2i:
 	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
 	if runtime.is_empty():
 		# Legacy/no-runtime maps must use the same 64x32 isometric basis as
 		# fractional actor footpoints. The old 48x24 orthogonal fallback made one
 		# world position resolve to two different tiles, separating target-centred
 		# spell geometry from the monster footprint that selected it.
-		var horizontal := world.x / 32.0
-		var vertical := world.y / 16.0
-		return Vector2i(
-			roundi((horizontal + vertical) * 0.5),
-			roundi((vertical - horizontal) * 0.5)
+		var ground_position_gu := (
+			GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+				screen_position_px
+			)
 		)
-	var tile := MapEditorRuntimeBridgeScript.world_to_tile(runtime, world)
+		return Vector2i(
+			roundi(ground_position_gu.x),
+			roundi(ground_position_gu.y)
+		)
+	var tile := MapEditorRuntimeBridgeScript.world_to_tile(runtime, screen_position_px)
 	return Vector2i(roundi(tile.x), roundi(tile.y))
 
 
-func _canonical_world_to_fractional_tile(world: Vector2) -> Vector2:
+func _canonical_screen_px_to_ground_gu(screen_position_px: Vector2) -> Vector2:
 	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
 	if not runtime.is_empty():
-		return MapEditorRuntimeBridgeScript.world_to_tile(runtime, world)
-	var horizontal := world.x / 32.0
-	var vertical := world.y / 16.0
-	return Vector2(
-		(horizontal + vertical) * 0.5,
-		(vertical - horizontal) * 0.5
+		return MapEditorRuntimeBridgeScript.world_to_tile(runtime, screen_position_px)
+	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		screen_position_px
 	)
 
 
-func _canonical_fractional_tile_to_world(tile: Vector2) -> Vector2:
+func _canonical_ground_gu_to_screen_px(ground_position_gu: Vector2) -> Vector2:
 	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
 	if not runtime.is_empty():
-		return MapEditorRuntimeBridgeScript.tile_to_world(runtime, [tile.x, tile.y])
-	return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(tile)
+		return MapEditorRuntimeBridgeScript.tile_to_world(
+			runtime,
+			[ground_position_gu.x, ground_position_gu.y]
+		)
+	return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		ground_position_gu
+	)
 
 
-func _canonical_tile_to_world(tile_value: Variant) -> Vector2:
-	var tile := Vector2i(tile_value) if tile_value is Vector2i else Vector2i.ZERO
+func _canonical_grid_cell_to_screen_px(grid_cell: Variant) -> Vector2:
+	var tile := Vector2i(grid_cell) if grid_cell is Vector2i else Vector2i.ZERO
 	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
 	if runtime.is_empty():
 		return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
@@ -4335,85 +4435,93 @@ func _skill_needs_target(cast_type: String) -> bool:
 
 
 func _spawn_projectile(
-	origin: Vector2,
-	direction: Vector2,
+	origin_screen_px: Vector2,
+	direction_screen_px: Vector2,
 	damage: int,
-	travel_range: float,
+	maximum_distance_gu: float,
 	color: Color,
 	effect := "damage",
 	effect_strength := 0,
 	effect_duration := 0.0,
 	source_skill_id := ""
 ) -> void:
+	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(source_skill_id)
+	var formal_maximum_distance_gu := maxf(0.0, maximum_distance_gu)
+	if not stable_skill_id.is_empty():
+		var definition := SkillDataLoaderScript.skill(stable_skill_id)
+		var configured_maximum_distance_gu := float(
+			definition.get("geometry", {}).get("maximum_range_gu", 0.0)
+		)
+		if configured_maximum_distance_gu > 0.0:
+			formal_maximum_distance_gu = configured_maximum_distance_gu
+	var direction_ground_gu := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			direction_screen_px
+		).normalized()
+	)
+	if direction_ground_gu.length_squared() <= GroundUnitSpaceScript.EPSILON_GU:
+		direction_ground_gu = Vector2(1.0, -1.0).normalized()
+	var visual_direction_screen_px := direction_screen_px.normalized()
+	if visual_direction_screen_px.length_squared() <= 0.000001:
+		visual_direction_screen_px = (
+			GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+				direction_ground_gu
+			).normalized()
+		)
 	var projectile := SkillProjectile.new()
-	projectile.setup(
-		origin + direction * 24.0,
-		direction,
+	projectile.setup_ground_unit_projectile(
+		origin_screen_px,
+		direction_ground_gu,
+		formal_maximum_distance_gu,
 		damage,
-		travel_range,
+		CombatUnitLegacyAdapterScript.PROJECTILE_SPEED_GU_PER_SEC,
+		CombatUnitLegacyAdapterScript.PROJECTILE_RADIUS_GU,
+		visual_direction_screen_px * 24.0,
 		color,
 		effect,
 		effect_strength,
 		effect_duration,
 		source_skill_id
 	)
-	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(source_skill_id)
-	if not stable_skill_id.is_empty():
-		var definition := SkillDataLoaderScript.skill(stable_skill_id)
-		var maximum_range_tiles := float(
-			definition.get("geometry", {}).get("maximum_range_tiles", 0.0)
-		)
-		if maximum_range_tiles > 0.0:
-			projectile.configure_maximum_range_tiles(maximum_range_tiles)
 	projectile.configure_runtime_resolution(player, Callable(self, "_resolve_magic_defense"))
 	add_child(projectile)
 
 
-func _spawn_ground_effect(position: Vector2, damage: int, radius: float, duration: float, color: Color) -> void:
-	var ground_effect := GroundSkillEffect.new()
-	ground_effect.setup(position, damage, radius, duration, color)
-	add_child(ground_effect)
-
-
-func _spawn_summon(summon_name: String, power: int) -> void:
-	for node: Node in get_tree().get_nodes_in_group("summons"):
-		if node is SummonActor and node.owner_player == player:
-			node.queue_free()
-	var summon := SummonActor.new()
-	summon.setup(player, summon_name, power)
-	summon.global_position = player.global_position + player.facing.orthogonal() * 42.0
-	add_child(summon)
-
-
-func _nearest_enemy(origin: Vector2, maximum_distance: float) -> EnemyActor:
-	var nearest: EnemyActor
-	var nearest_distance := maximum_distance
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor or node.is_queued_for_deletion():
-			continue
-		var distance := origin.distance_to(node.global_position)
-		if distance < nearest_distance:
-			nearest = node
-			nearest_distance = distance
-	return nearest
-
-
 func _damage_enemies(
-	origin: Vector2,
-	direction: Vector2,
+	origin_screen_px: Vector2,
+	direction_screen_px: Vector2,
 	damage: int,
 	radial: bool,
-	attack_range := 105.0,
+	attack_range_gu := 1.5,
 	physical_accuracy := false,
 	source_skill_id := ""
 ) -> bool:
 	var hit_any := false
+	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin_screen_px)
+	var direction_ground_gu := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			direction_screen_px
+		).normalized()
+	)
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node.is_queued_for_deletion():
 			continue
-		var offset: Vector2 = node.global_position - origin
-		var in_arc := offset.normalized().dot(direction) > -0.05 or offset.length() < 42.0
-		if offset.length() <= attack_range and (radial or in_arc):
+		var target_ground_gu := _canonical_screen_px_to_ground_gu(
+			node.global_position
+		)
+		var offset_ground_gu := target_ground_gu - origin_ground_gu
+		var in_arc := (
+			offset_ground_gu.length_squared() <= GroundUnitSpaceScript.EPSILON_GU
+			or offset_ground_gu.normalized().dot(direction_ground_gu) > -0.05
+		)
+		if (
+			_ground_circle_intersects_enemy_footprint_gu(
+				origin_screen_px,
+				attack_range_gu,
+				node
+			)
+			and (radial or in_arc)
+		):
 			if physical_accuracy and not PlayerState.test_mode:
 				var accuracy := int(PlayerState.computed_stats.get("accuracy", WarriorCombatMath.BASE_HIT))
 				if not WarriorCombatMath.roll_hit(accuracy, node.agility, _rng):
@@ -4494,22 +4602,22 @@ func _physical_primary_targets(
 	# This deliberately overrides the single-target candidate filter used by
 	# caster projectiles without changing their shared release contract.
 	var result: Array[EnemyActor] = []
-	var origin_tile := _canonical_world_to_fractional_tile(origin)
+	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin)
 	var direction_index := _melee_direction_index(direction, release_geometry)
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node.is_queued_for_deletion() or node.current_hp <= 0:
 			continue
 		var enemy := node as EnemyActor
-		if not _is_primary_melee_candidate(enemy, origin_tile, direction_index, mode):
+		if not _is_primary_melee_candidate(enemy, origin_ground_gu, direction_index, mode):
 			continue
 		result.append(enemy)
-	_sort_melee_targets(result, origin_tile, release_geometry)
+	_sort_melee_targets(result, origin_ground_gu, release_geometry)
 	return result
 
 
 func _sort_melee_targets(
 	targets: Array[EnemyActor],
-	origin_tile: Vector2,
+	origin_ground_gu: Vector2,
 	release_geometry: Dictionary
 ) -> void:
 	var locked_instance_id := int(release_geometry.get("locked_target_instance_id", 0))
@@ -4520,46 +4628,46 @@ func _sort_melee_targets(
 		var b_locked := b.get_instance_id() == locked_instance_id
 		if a_locked != b_locked:
 			return a_locked
-		var a_distance := WarriorMeleeGeometryScript.chebyshev_distance(
-			origin_tile,
-			_canonical_world_to_fractional_tile(a.global_position)
+		var a_distance_gu := GroundUnitSpaceScript.distance_gu(
+			origin_ground_gu,
+			_canonical_screen_px_to_ground_gu(a.global_position)
 		)
-		var b_distance := WarriorMeleeGeometryScript.chebyshev_distance(
-			origin_tile,
-			_canonical_world_to_fractional_tile(b.global_position)
+		var b_distance_gu := GroundUnitSpaceScript.distance_gu(
+			origin_ground_gu,
+			_canonical_screen_px_to_ground_gu(b.global_position)
 		)
-		if not is_equal_approx(a_distance, b_distance):
-			return a_distance < b_distance
+		if not is_equal_approx(a_distance_gu, b_distance_gu):
+			return a_distance_gu < b_distance_gu
 		return a.get_instance_id() < b.get_instance_id()
 	)
 
 
 func _is_primary_melee_candidate(
 	enemy: EnemyActor,
-	origin_tile: Vector2,
+	origin_ground_gu: Vector2,
 	direction_index: int,
 	mode: String
 ) -> bool:
 	if not is_instance_valid(enemy) or enemy.is_queued_for_deletion() or enemy.current_hp <= 0:
 		return false
-	var target_tile := _canonical_world_to_fractional_tile(enemy.global_position)
+	var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
 	if mode == WarriorMeleeGeometryScript.SKILL_THRUST:
-		return WarriorMeleeGeometryScript.thrust_footprint_slot(
-			origin_tile,
-			target_tile,
+		return WarriorMeleeGeometryScript.thrust_footprint_slot_gu(
+			origin_ground_gu,
+			target_ground_gu,
 			enemy.collision_radius,
 			direction_index
 		) == 1
 	if mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
-		return WarriorMeleeGeometryScript.half_moon_footprint_relative_sector(
-			origin_tile,
-			target_tile,
+		return WarriorMeleeGeometryScript.half_moon_footprint_relative_sector_gu(
+			origin_ground_gu,
+			target_ground_gu,
 			enemy.collision_radius,
 			direction_index
 		) == 0
-	return WarriorMeleeGeometryScript.footprint_intersects_mode(
-		origin_tile,
-		target_tile,
+	return WarriorMeleeGeometryScript.footprint_intersects_mode_gu(
+		origin_ground_gu,
+		target_ground_gu,
 		enemy.collision_radius,
 		direction_index,
 		mode
@@ -4639,22 +4747,22 @@ func _thrust_secondary_targets(
 	release_geometry: Dictionary = {}
 ) -> Array[EnemyActor]:
 	var result: Array[EnemyActor] = []
-	var origin_tile := _canonical_world_to_fractional_tile(origin)
+	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin)
 	var direction_index := _melee_direction_index(direction, release_geometry)
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node in excluded_targets or node.is_queued_for_deletion() or node.current_hp <= 0:
 			continue
 		var enemy := node as EnemyActor
-		var target_tile := _canonical_world_to_fractional_tile(enemy.global_position)
-		if WarriorMeleeGeometryScript.thrust_footprint_slot(
-			origin_tile,
-			target_tile,
+		var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
+		if WarriorMeleeGeometryScript.thrust_footprint_slot_gu(
+			origin_ground_gu,
+			target_ground_gu,
 			enemy.collision_radius,
 			direction_index
 		) != 2:
 			continue
 		result.append(enemy)
-	_sort_melee_targets(result, origin_tile, release_geometry)
+	_sort_melee_targets(result, origin_ground_gu, release_geometry)
 	return result
 
 
@@ -4665,23 +4773,23 @@ func _half_moon_secondary_targets(
 	release_geometry: Dictionary = {}
 ) -> Array[EnemyActor]:
 	var result: Array[EnemyActor] = []
-	var origin_tile := _canonical_world_to_fractional_tile(origin)
+	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin)
 	var direction_index := _melee_direction_index(direction, release_geometry)
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node in excluded_targets or node.is_queued_for_deletion() or node.current_hp <= 0:
 			continue
 		var enemy := node as EnemyActor
-		var target_tile := _canonical_world_to_fractional_tile(enemy.global_position)
-		var relative_sector := WarriorMeleeGeometryScript.half_moon_footprint_relative_sector(
-			origin_tile,
-			target_tile,
+		var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
+		var relative_sector := WarriorMeleeGeometryScript.half_moon_footprint_relative_sector_gu(
+			origin_ground_gu,
+			target_ground_gu,
 			enemy.collision_radius,
 			direction_index
 		)
 		if relative_sector == -1 or relative_sector == 0:
 			continue
 		result.append(enemy)
-	_sort_melee_targets(result, origin_tile, release_geometry)
+	_sort_melee_targets(result, origin_ground_gu, release_geometry)
 	return result
 
 
@@ -4692,12 +4800,12 @@ func _execute_wild_rush(_direction: Vector2, _skill_level: int) -> bool:
 	if target == null:
 		return false
 	var plan := _build_wild_rush_path_plan(target)
-	var resolved_distance := int(plan.get("resolved_push_distance_tiles", 0))
+	var resolved_distance_gu := float(plan.get("resolved_push_distance_gu", 0.0))
 	return _apply_wild_rush_displacement(
 		target,
 		{
-			"resolved_push_distance_tiles": resolved_distance,
-			"displaced": resolved_distance > 0,
+			"resolved_push_distance_gu": resolved_distance_gu,
+			"displaced": resolved_distance_gu > 0.0,
 		},
 		plan
 	)
@@ -4828,7 +4936,7 @@ func _on_scroll_used(item_name: String) -> void:
 func _find_valid_random_teleport_position(origin_screen_px: Vector2) -> Vector2:
 	# Every candidate goes through the same world boundary/obstacle contract as
 	# movement and monster spawning.  A scroll can never bypass black borders.
-	var origin_ground_gu := _canonical_world_to_fractional_tile(
+	var origin_ground_gu := _canonical_screen_px_to_ground_gu(
 		origin_screen_px
 	)
 	var player_combat_radius_gu := (
@@ -4845,7 +4953,7 @@ func _find_valid_random_teleport_position(origin_screen_px: Vector2) -> Vector2:
 		var candidate_ground_gu := (
 			origin_ground_gu + Vector2.from_angle(angle) * distance_gu
 		)
-		var candidate_screen_px := _canonical_fractional_tile_to_world(
+		var candidate_screen_px := _canonical_ground_gu_to_screen_px(
 			candidate_ground_gu
 		)
 		if WorldSpatialRulesScript.environment_blocks_actor(
@@ -4860,7 +4968,7 @@ func _find_valid_random_teleport_position(origin_screen_px: Vector2) -> Vector2:
 				continue
 			var enemy := enemy_value as EnemyActor
 			if GroundUnitSpaceScript.distance_gu(
-				_canonical_world_to_fractional_tile(enemy.global_position),
+				_canonical_screen_px_to_ground_gu(enemy.global_position),
 				candidate_ground_gu
 			) < (
 				player_combat_radius_gu

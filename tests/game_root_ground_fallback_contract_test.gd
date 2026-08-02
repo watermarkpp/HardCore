@@ -16,7 +16,7 @@ func _ready() -> void:
 		Vector2(2.0, -3.0),
 		Vector2(-4.75, 8.125),
 	]:
-		var screen_position_px: Vector2 = game._canonical_fractional_tile_to_world(
+		var screen_position_px: Vector2 = game._canonical_ground_gu_to_screen_px(
 			sample_ground_gu
 		)
 		assert(screen_position_px.is_equal_approx(
@@ -24,18 +24,18 @@ func _ready() -> void:
 				sample_ground_gu
 			)
 		))
-		assert(game._canonical_world_to_fractional_tile(
+		assert(game._canonical_screen_px_to_ground_gu(
 			screen_position_px
 		).is_equal_approx(sample_ground_gu))
 	for direction_index: int in range(32):
 		var delta_ground_gu := Vector2.from_angle(
 			TAU * float(direction_index) / 32.0
 		) * 8.0
-		var delta_screen_px: Vector2 = game._canonical_fractional_tile_to_world(
+		var delta_screen_px: Vector2 = game._canonical_ground_gu_to_screen_px(
 			delta_ground_gu
 		)
 		assert(is_equal_approx(
-			game._canonical_world_to_fractional_tile(delta_screen_px).length(),
+			game._canonical_screen_px_to_ground_gu(delta_screen_px).length(),
 			8.0
 		))
 	for distance_gu: float in game.SAFE_RING_TELEPORT_DISTANCES_GU:
@@ -54,7 +54,7 @@ func _ready() -> void:
 				).length(),
 				distance_gu
 			))
-	assert(game._canonical_tile_to_world(Vector2i(2, -3)) == Vector2(160.0, -16.0))
+	assert(game._canonical_grid_cell_to_screen_px(Vector2i(2, -3)) == Vector2(160.0, -16.0))
 	game.free()
 	print("GAME_ROOT_GROUND_FALLBACK_PASS: no-runtime 64x32 projection is symmetric")
 	get_tree().quit(0)

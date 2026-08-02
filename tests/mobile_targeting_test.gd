@@ -32,8 +32,8 @@ func _run() -> void:
 	for index in range(4, enemies.size()):
 		(enemies[index] as EnemyActor).global_position = Vector2(3000 + index * 80, 3000)
 
-	var player_tile: Vector2i = game._attack_lock_tile(game.player.global_position)
-	game.player.global_position = game._canonical_tile_to_world(player_tile)
+	var player_tile: Vector2i = game._canonical_screen_px_to_grid_cell(game.player.global_position)
+	game.player.global_position = game._canonical_grid_cell_to_screen_px(player_tile)
 	game.player.velocity = Vector2.ZERO
 	game.player.facing = Vector2.RIGHT
 	_place_at_tile_offset(game, first, player_tile, Vector2i(2, 0))
@@ -131,7 +131,7 @@ func _run() -> void:
 		"松开攻击后没有在动作完成时恢复摇杆方向并继续移动"
 	)
 	game.player.set_touch_vector(Vector2.ZERO)
-	player_tile = game._attack_lock_tile(game.player.global_position)
+	player_tile = game._canonical_screen_px_to_grid_cell(game.player.global_position)
 	assert(game.ATTACK_LOCK_CONTRACT == "combat.attack_lock.euclidean_gu.v2")
 	assert(is_equal_approx(game.ATTACK_LOCK_RANGE_GU, 10.0))
 	_place_at_tile_offset(game, first, player_tile, Vector2i(8, 8))
@@ -187,7 +187,7 @@ func _run() -> void:
 
 	for index in range(enemies.size()):
 		(enemies[index] as EnemyActor).global_position = Vector2(3000 + index * 80, 3000)
-	player_tile = game._attack_lock_tile(game.player.global_position)
+	player_tile = game._canonical_screen_px_to_grid_cell(game.player.global_position)
 	_place_at_tile_offset(game, second, player_tile, Vector2i(-2, -2))
 	game._cancel_target()
 	game.player.facing = Vector2.DOWN
@@ -246,7 +246,7 @@ func _place_at_tile_offset(
 	origin_tile: Vector2i,
 	offset: Vector2i
 ) -> void:
-	enemy.global_position = game._canonical_tile_to_world(origin_tile + offset)
+	enemy.global_position = game._canonical_grid_cell_to_screen_px(origin_tile + offset)
 
 
 func _expected_melee_facing(actor: Node2D, target: Node2D) -> Vector2:

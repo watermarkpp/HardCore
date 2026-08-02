@@ -47,7 +47,7 @@ func _run() -> void:
 		Vector2.RIGHT,
 		10,
 		true,
-		120.0,
+		2.0,
 		false,
 		"wizard.lightning"
 	)
@@ -59,7 +59,7 @@ func _run() -> void:
 		Vector2.RIGHT,
 		10,
 		true,
-		120.0,
+		2.0,
 		false,
 		"wizard.lightning"
 	)
@@ -69,7 +69,7 @@ func _run() -> void:
 		game.player.global_position,
 		Vector2.RIGHT,
 		10,
-		120.0,
+		9.0,
 		Color.WHITE,
 		"damage",
 		0,
@@ -85,6 +85,9 @@ func _run() -> void:
 	assert(projectile.resolution_skill_id == "wizard.fireball", "GameRoot未传递稳定 source_skill_id")
 	assert(projectile.source_actor == game.player, "投射物未保留施法者")
 	assert(projectile.magic_defense_adapter.is_valid(), "投射物未接入共享MAC适配器")
+
+	assert(is_equal_approx(projectile.max_travel_distance_gu, 9.0))
+	assert(projectile.global_position.is_equal_approx(game.player.global_position))
 
 	var combat_runtime: Node = load(
 		"res://scripts/layers/runtime/combat_runtime_service.gd"
