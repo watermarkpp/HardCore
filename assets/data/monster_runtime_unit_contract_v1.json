@@ -52,6 +52,13 @@
     "screenRadiusFormula": "radius_px = combat_radius_gu * 32 * sqrt(2)",
     "reason": "Inverse-projecting every point of the frozen 2:1 screen ellipse produces one Euclidean ground circle."
   },
+  "legacyGridRadiusConversion": {
+    "inputField": "radiusCells",
+    "outputField": "radius_gu",
+    "axisNeighborGroundUnitsPerCell": 1.0,
+    "formalMetric": "euclidean_ground_radius",
+    "policy": "read_only_adapter_boundary"
+  },
   "formalRuntimeFields": [
     "move_speed_gu_per_sec",
     "attack_range_gu",

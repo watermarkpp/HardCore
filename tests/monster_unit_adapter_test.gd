@@ -86,3 +86,15 @@ func _verify_projection_adapter_is_read_only() -> void:
 		"formal runtime projection leaked an untyped field",
 	)
 	assert(JSON.stringify(legacy) == before, "legacy source profile was rewritten")
+
+	var relocation_legacy := {"radiusCells": 4}
+	var relocation_before := JSON.stringify(relocation_legacy)
+	assert(is_equal_approx(
+		MonsterUnitAdapterScript.relocation_radius_gu(relocation_legacy, 0.0),
+		4.0,
+	))
+	assert(JSON.stringify(relocation_legacy) == relocation_before, "legacy relocation profile was rewritten")
+	assert(is_equal_approx(
+		MonsterUnitAdapterScript.relocation_radius_gu({"radius_gu": 5.5}, 0.0),
+		5.5,
+	))
