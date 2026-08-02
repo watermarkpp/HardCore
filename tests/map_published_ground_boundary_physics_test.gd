@@ -100,8 +100,8 @@ func _assert_physics_edge(
 	var visual_polygon := CollisionGeometry.map_inner_boundary_world(design_size)
 	var edge_direction := visual_polygon[1] - visual_polygon[0]
 	var outward := Vector2(edge_direction.y, -edge_direction.x).normalized()
-	var clearance := CollisionGeometry.DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD
-	var footprint := WorldSpatialRules.actor_footprint_polygon(clearance)
+	var clearance := CollisionGeometry.DEFAULT_ACTOR_BOUNDARY_CLEARANCE_PX
+	var footprint := WorldSpatialRules.actor_footprint_polygon_px(clearance)
 	var just_inside := visual_edge - outward * 0.5
 	var just_outside := visual_edge + outward * 0.5
 	var empty_collision := {"blocked_tiles": []}
@@ -120,7 +120,7 @@ func _assert_physics_edge(
 	actor.collision_layer = 2
 	actor.collision_mask = 1
 	var actor_shape := CollisionShape2D.new()
-	actor_shape.shape = WorldSpatialRules.actor_footprint_shape(clearance)
+	actor_shape.shape = WorldSpatialRules.actor_footprint_shape_px(clearance)
 	actor.add_child(actor_shape)
 	add_child(actor)
 	actor.global_position = visual_edge - outward * (clearance + 4.0)

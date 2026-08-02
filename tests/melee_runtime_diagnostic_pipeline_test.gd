@@ -128,7 +128,7 @@ func _run() -> void:
 	var forward_support := 0.0
 	for point: Vector2 in MeleeGeometry.target_footprint_polygon_fractional_tile(
 		Vector2.ZERO,
-		enemy.collision_radius
+		enemy.combat_radius_gu
 	):
 		forward_support = maxf(
 			forward_support,

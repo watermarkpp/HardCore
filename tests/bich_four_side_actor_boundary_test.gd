@@ -59,7 +59,7 @@ func _ready() -> void:
 		await get_tree().physics_frame
 		player.global_position = (
 			edge_midpoint
-			- outward * (ArtSpec.PLAYER_COLLISION_RADIUS + 4.0)
+			- outward * (ArtSpec.PLAYER_COLLISION_RADIUS_PX + 4.0)
 		)
 		var collision := player.move_and_collide(outward * 160.0)
 		assert(collision != null, "%s boundary allowed player escape" % SIDE_NAMES[side])

@@ -37,7 +37,7 @@ func _run() -> void:
 		assert(enemy.ground_indicator_center().is_zero_approx(), "%s 地面锁定光圈未固定在怪物物理原点" % monster_name)
 		assert(
 			enemy.ground_indicator_radii().is_equal_approx(
-				WorldSpatialRules.actor_footprint_radii(enemy.collision_radius_px)
+				WorldSpatialRules.actor_footprint_radii_px(enemy.collision_radius_px)
 				* EnemyActor.TARGET_RING_FOOTPRINT_SCALE
 			),
 			"%s 锁定光圈未按怪物物理体积缩放" % monster_name,

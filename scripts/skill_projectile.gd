@@ -212,11 +212,7 @@ func _swept_segment_intersects_enemy_footprint(
 			segment_end_screen_px - enemy.global_position
 		)
 	)
-	var enemy_radius_gu := (
-		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-			enemy.collision_radius
-		)
-	)
+	var enemy_radius_gu := enemy.combat_radius_gu
 	var contact_radius_gu := enemy_radius_gu + maxf(0.0, projectile_radius_gu)
 	return swept_segment_intersects_footprint_gu(
 		segment_start_ground_relative,

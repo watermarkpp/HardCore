@@ -3,6 +3,9 @@ extends Node2D
 
 signal collected(item_name: String)
 
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const COLLECTION_RADIUS_GU := 0.75
+
 var item_name := "金币"
 var target: PlayerCharacter
 var _bob_time := 0.0
@@ -56,9 +59,30 @@ func _process(delta: float) -> void:
 	if icon_sprite != null:
 		icon_sprite.position.y = -5.0 + sin(_bob_time * 3.0) * 2.0
 	queue_redraw()
-	if is_instance_valid(target) and global_position.distance_to(target.global_position) < 34.0:
+	if (
+		is_instance_valid(target)
+		and target_is_within_collection_range_screen_px(
+			global_position,
+			target.global_position
+		)
+	):
 		collected.emit(item_name)
 		queue_free()
+
+
+static func target_is_within_collection_range_screen_px(
+	pickup_screen_position_px: Vector2,
+	target_screen_position_px: Vector2
+) -> bool:
+	var target_delta_ground_gu := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			target_screen_position_px - pickup_screen_position_px
+		)
+	)
+	return (
+		target_delta_ground_gu.length_squared()
+		< COLLECTION_RADIUS_GU * COLLECTION_RADIUS_GU
+	)
 
 
 func _draw() -> void:

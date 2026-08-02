@@ -133,7 +133,9 @@ func _ready() -> void:
 	current_mp = max_mp
 	var collision := CollisionShape2D.new()
 	collision.name = "CollisionShape2D"
-	collision.shape = WorldSpatialRulesScript.actor_footprint_shape(ArtSpec.PLAYER_COLLISION_RADIUS)
+	collision.shape = WorldSpatialRulesScript.actor_footprint_shape_px(
+		ArtSpec.PLAYER_COLLISION_RADIUS_PX
+	)
 	add_child(collision)
 	visual = PlayerVisualScript.new()
 	visual.name = "PlayerVisual"
@@ -235,7 +237,11 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity = Vector2.ZERO
 	move_and_slide()
-	if WorldSpatialRulesScript.environment_blocks_actor(environment_blocker, global_position, ArtSpec.PLAYER_COLLISION_RADIUS):
+	if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
+		environment_blocker,
+		global_position,
+		ArtSpec.PLAYER_COLLISION_RADIUS_PX
+	):
 		global_position = position_before_move
 		velocity = Vector2.ZERO
 	var actual_motion := global_position - position_before_move

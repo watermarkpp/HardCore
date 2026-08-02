@@ -32,8 +32,8 @@ func _run() -> void:
 	assert(zones.size() == 1, "Bich must expose one authoritative safe area")
 	var safe_zone: Dictionary = zones[0]
 	assert(safe_zone.get("shape") == "circle", "Bich safe area must be circular")
-	assert(safe_zone.get("center") == MapEditorRuntimeBridge.home_position(), "Safe area center differs from the resurrection point")
-	assert(is_equal_approx(float(safe_zone.get("radius")), 9.0 * ArtSpec.TILE_SIZE), "Safe area radius is not nine logical cells")
+	assert(safe_zone.get("center_ground_gu") == MapEditorRuntimeBridge.home_position_ground_gu(), "Safe area center differs from the resurrection point")
+	assert(is_equal_approx(float(safe_zone.get("radius_gu")), 9.0), "Safe area radius is not nine GU")
 
 	var runtime := MapEditorRuntimeBridge.load_bich()
 	var outside := MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(runtime, Vector2(-1.0, 0.0))
@@ -43,10 +43,17 @@ func _run() -> void:
 	assert(game.background.is_environment_point_blocked(obstacle), "Editor obstacle is not part of unified occupancy")
 
 	var probe := enemies[0] as EnemyActor
-	probe.global_position = safe_zone.center
+	probe.global_position = MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(
+		runtime,
+		safe_zone.center_ground_gu
+	)
 	game._enforce_bich_safe_zone()
-	assert(not SpatialRules.point_inside_safe_zones(probe.global_position, zones), "Monster remained inside the safe area")
-	assert(probe.global_position.distance_to(safe_zone.center) >= float(safe_zone.radius) + probe.collision_radius, "Safe-area ejection ignored actor radius")
+	var probe_ground_gu := MapEditorRuntimeBridge.screen_position_px_to_ground_position_gu(
+		runtime,
+		probe.global_position
+	)
+	assert(not SpatialRules.point_inside_safe_zones_ground_gu(probe_ground_gu, zones), "Monster remained inside the safe area")
+	assert(probe_ground_gu.distance_to(safe_zone.center_ground_gu) >= float(safe_zone.radius_gu) + probe.combat_radius_gu - 0.001, "Safe-area ejection ignored actor radius")
 
 	print("WORLD_SPATIAL_CONTRACT_PASS: movement, occupancy, safe area and hard boundary use one contract")
 	get_tree().quit(0)

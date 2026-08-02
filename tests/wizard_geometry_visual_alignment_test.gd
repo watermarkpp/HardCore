@@ -197,8 +197,8 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 			})
 			plan["canonical_geometry_contract"] = SpellGeometry.CONTRACT_ID
 			plan["geometry_origin_screen_px"] = Vector2.ZERO
-			plan["geometry_tile_points"] = []
-			plan["geometry_world_points"] = world_points
+			plan["geometry_grid_cells"] = []
+			plan["geometry_screen_points_px"] = world_points
 			var effect := CasterSkillRuntime.create_visual(
 				plan,
 				Vector2.ZERO,
@@ -206,7 +206,7 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 			)
 			assert(effect != null)
 			add_child(effect)
-			assert(effect._geometry_world_offsets.back().is_equal_approx(endpoint_world))
+			assert(effect._geometry_screen_offsets_px.back().is_equal_approx(endpoint_world))
 			if str(skill_case.skill_id) == "wizard.hellfire":
 				assert(effect._hellfire_emission_offsets.back().is_equal_approx(endpoint_world))
 				for raw_sprite: Sprite2D in effect._sprites:
@@ -231,7 +231,7 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 						).is_equal_approx(fixed_longitudinal))
 						assert(is_equal_approx(
 							sprite.current_frame_visible_cross_extent(endpoint_world),
-							effect._desired_sprite_cross_axis_extent
+							effect._desired_sprite_cross_axis_extent_px
 						))
 					assert(sprite.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST)
 			effect.free()
@@ -280,16 +280,16 @@ func _verify_geometry_aware_visuals() -> void:
 	)
 	assert(hellfire != null)
 	add_child(hellfire)
-	assert(hellfire._geometry_world_offsets.size() == 5)
-	assert(hellfire._geometry_world_offsets.back() == Vector2(0.0, 160.0))
+	assert(hellfire._geometry_screen_offsets_px.size() == 5)
+	assert(hellfire._geometry_screen_offsets_px.back() == Vector2(0.0, 160.0))
 	assert(is_equal_approx(hellfire.radius, 160.0))
 	assert(hellfire._hellfire_total_emissions == 6)
 	assert(hellfire._hellfire_emission_offsets.back() == Vector2(0.0, 160.0))
 	for offset: Vector2 in hellfire._hellfire_emission_offsets:
 		assert(is_zero_approx(offset.x))
 		assert(offset.y > 0.0 and offset.y <= 160.0)
-	assert(is_zero_approx(hellfire._desired_sprite_axis_extent))
-	assert(is_zero_approx(hellfire._desired_sprite_cross_axis_extent))
+	assert(is_zero_approx(hellfire._desired_sprite_axis_extent_px))
+	assert(is_zero_approx(hellfire._desired_sprite_cross_axis_extent_px))
 	for raw_sprite: Sprite2D in hellfire._sprites:
 		assert(_transform_basis_equal(
 			raw_sprite.transform, Transform2D.IDENTITY
@@ -304,8 +304,8 @@ func _verify_geometry_aware_visuals() -> void:
 	)
 	assert(laser != null)
 	add_child(laser)
-	assert(laser._geometry_world_offsets.size() == 8)
-	assert(laser._geometry_world_offsets.back() == Vector2(0.0, 256.0))
+	assert(laser._geometry_screen_offsets_px.size() == 8)
+	assert(laser._geometry_screen_offsets_px.back() == Vector2(0.0, 256.0))
 	assert(is_equal_approx(laser.radius, 256.0))
 	_assert_effect_axis_fitted(laser, Vector2.DOWN, 256.0, sqrt(64.0 * 32.0))
 	laser.free()
@@ -321,7 +321,7 @@ func _verify_geometry_aware_visuals() -> void:
 	)
 	assert(lightning != null)
 	add_child(lightning)
-	assert(lightning._geometry_world_offsets.size() == 24)
+	assert(lightning._geometry_screen_offsets_px.size() == 24)
 	assert(_within_pixel_rounding(lightning.global_position, owner.global_position))
 	var lightning_sprite := lightning._sprites[0] as CasterSkillAnimationPlayer
 	assert(lightning_sprite != null)
@@ -342,7 +342,7 @@ func _assert_effect_contained(
 	effect: CasterSkillVisualEffect,
 	expected_footprint: Vector2
 ) -> void:
-	assert(effect._desired_sprite_footprint == expected_footprint)
+	assert(effect._desired_sprite_footprint_px == expected_footprint)
 	assert(not effect._sprites.is_empty())
 	for raw_sprite: Sprite2D in effect._sprites:
 		var sprite := raw_sprite as CasterSkillAnimationPlayer
@@ -358,13 +358,13 @@ func _assert_effect_axis_fitted(
 	expected_cross_axis_extent := 0.0
 ) -> void:
 	assert(is_equal_approx(
-		effect._desired_sprite_axis_extent,
+		effect._desired_sprite_axis_extent_px,
 		expected_axis_extent
 	))
-	assert(effect._visual_axis_world.is_equal_approx(axis_world.normalized()))
+	assert(effect._visual_axis_screen.is_equal_approx(axis_world.normalized()))
 	if expected_cross_axis_extent > 0.0:
 		assert(is_equal_approx(
-			effect._desired_sprite_cross_axis_extent,
+			effect._desired_sprite_cross_axis_extent_px,
 			expected_cross_axis_extent
 		))
 	assert(not effect._sprites.is_empty())
@@ -474,8 +474,8 @@ func _plan_with_world_geometry(
 		world_points.append(_tile_to_world(cell))
 	plan["canonical_geometry_contract"] = SpellGeometry.CONTRACT_ID
 	plan["geometry_origin_screen_px"] = origin_world
-	plan["geometry_tile_points"] = cells
-	plan["geometry_world_points"] = world_points
+	plan["geometry_grid_cells"] = cells
+	plan["geometry_screen_points_px"] = world_points
 	return plan
 
 

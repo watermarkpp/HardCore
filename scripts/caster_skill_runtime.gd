@@ -152,7 +152,7 @@ static func create_visual(
 	var radius := float(plan.get("area_radius", 72.0))
 	if role == CasterSkillVisualRegistry.ROLE_LINE_EFFECT:
 		var geometry_offsets: Array = visual_geometry_context.get(
-			"geometry_world_offsets", []
+			"geometry_screen_offsets_px", []
 		)
 		if not geometry_offsets.is_empty():
 			radius = 0.0

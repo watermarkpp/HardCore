@@ -78,13 +78,13 @@ func _run() -> void:
 	assert(wooma.global_position != original_position, "地图落点服务没有处理 Boss 瞬移信号")
 	assert(
 		not WorldSpatialRules.point_inside_safe_zones_ground_gu(
-			game._canonical_world_to_fractional_tile(wooma.global_position),
+			game._canonical_screen_px_to_ground_gu(wooma.global_position),
 			game._active_safe_zones,
 		),
 		"Boss 瞬移进入安全区"
 	)
 	assert(
-		not WorldSpatialRules.environment_blocks_actor(game.background, wooma.global_position, wooma.collision_radius_px),
+		not WorldSpatialRules.environment_blocks_actor_screen_px(game.background, wooma.global_position, wooma.collision_radius_px),
 		"Boss 瞬移进入地图阻挡"
 	)
 

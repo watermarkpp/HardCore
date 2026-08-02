@@ -26,10 +26,10 @@ func _verify_hellfire_fixed_source_pixels() -> void:
 		add_child(effect)
 		assert(effect._hellfire_emission_offsets.size() > 0)
 		assert(effect._hellfire_emission_offsets.back().is_equal_approx(
-			effect._geometry_world_offsets.back()
+			effect._geometry_screen_offsets_px.back()
 		))
-		assert(is_zero_approx(effect._desired_sprite_axis_extent))
-		assert(is_zero_approx(effect._desired_sprite_cross_axis_extent))
+		assert(is_zero_approx(effect._desired_sprite_axis_extent_px))
+		assert(is_zero_approx(effect._desired_sprite_cross_axis_extent_px))
 		for raw_sprite: Sprite2D in effect._sprites:
 			var sprite := raw_sprite as CasterSkillAnimationPlayer
 			assert(_transform_basis_equal(
@@ -44,7 +44,7 @@ func _verify_laser_target_distance_direction_and_replay_stability() -> void:
 	for sample_index: int in range(16):
 		var plan := _line_plan("wizard.laser", 8.0, sample_index)
 		var endpoint: Vector2 = (
-			plan.geometry_world_points as Array
+			plan.geometry_screen_points_px as Array
 		).back()
 		var aim_axis := endpoint.normalized()
 		var close_effect := _visual_from_cast_nodes(
@@ -62,7 +62,7 @@ func _verify_laser_target_distance_direction_and_replay_stability() -> void:
 		))
 		assert(is_equal_approx(
 			close_sprite.current_frame_visible_cross_extent(aim_axis),
-			close_effect._desired_sprite_cross_axis_extent
+			close_effect._desired_sprite_cross_axis_extent_px
 		))
 
 		# Target distance is deliberately changed by two orders of magnitude while
@@ -102,18 +102,18 @@ func _verify_laser_target_distance_direction_and_replay_stability() -> void:
 			).is_equal_approx(expected_longitudinal))
 			assert(is_equal_approx(
 				far_sprite.current_frame_visible_cross_extent(aim_axis),
-				far_effect._desired_sprite_cross_axis_extent
+				far_effect._desired_sprite_cross_axis_extent_px
 			))
 		assert(far_sprite.configure(
 			"wizard.laser",
 			aim_axis,
-			far_effect._desired_sprite_extent,
+			far_effect._desired_sprite_extent_px,
 			null,
 			"",
-			far_effect._desired_sprite_footprint,
-			far_effect._desired_sprite_axis_extent,
-			far_effect._visual_axis_world,
-			far_effect._desired_sprite_cross_axis_extent
+			far_effect._desired_sprite_footprint_px,
+			far_effect._desired_sprite_axis_extent_px,
+			far_effect._visual_axis_screen,
+			far_effect._desired_sprite_cross_axis_extent_px
 		))
 		assert(far_sprite.transform.is_equal_approx(expected_transform))
 
@@ -176,7 +176,7 @@ func _create_line_effect(
 	target_position: Vector2
 ) -> CasterSkillVisualEffect:
 	var plan := _line_plan(skill_id, length_tiles, sample_index)
-	var endpoint: Vector2 = (plan.geometry_world_points as Array).back()
+	var endpoint: Vector2 = (plan.geometry_screen_points_px as Array).back()
 	# create_visual intentionally has no target-position input. Keep this
 	# parameter to document that an arbitrarily distant target cannot affect the
 	# geometry-owned visual size.
@@ -215,8 +215,8 @@ func _line_plan(
 	})
 	plan["canonical_geometry_contract"] = SpellGeometry.CONTRACT_ID
 	plan["geometry_origin_screen_px"] = Vector2.ZERO
-	plan["geometry_tile_points"] = []
-	plan["geometry_world_points"] = world_points
+	plan["geometry_grid_cells"] = []
+	plan["geometry_screen_points_px"] = world_points
 	return plan
 
 

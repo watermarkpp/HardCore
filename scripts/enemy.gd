@@ -91,9 +91,9 @@ var name_label: Label
 var overhead: Variant
 var ground_runtime_diagnostic_overlay: Node2D
 var combat_radius_gu := MonsterUnitAdapterScript.footprint_radius_px_to_combat_radius_gu(
-	ArtSpec.MONSTER_COLLISION_RADIUS
+	ArtSpec.MONSTER_COLLISION_RADIUS_PX
 )
-var collision_radius_px := float(ArtSpec.MONSTER_COLLISION_RADIUS)
+var collision_radius_px := float(ArtSpec.MONSTER_COLLISION_RADIUS_PX)
 var environment_blocker: Node
 var _dying := false
 var boss_rule: Dictionary = {}
@@ -250,18 +250,18 @@ func _ready() -> void:
 	collision.name = "CollisionShape2D"
 	combat_radius_gu = (
 		MonsterUnitAdapterScript.footprint_radius_px_to_combat_radius_gu(
-			ArtSpec.BOSS_COLLISION_RADIUS
+			ArtSpec.BOSS_COLLISION_RADIUS_PX
 		)
 		if is_boss
 		else MonsterUnitAdapterScript.collision_radius_gu(
 			behavior_profile,
-			ArtSpec.MONSTER_COLLISION_RADIUS,
+			ArtSpec.MONSTER_COLLISION_RADIUS_PX,
 		)
 	)
 	collision_radius_px = MonsterUnitAdapterScript.combat_radius_gu_to_footprint_radius_px(
 		combat_radius_gu
 	)
-	collision.shape = WorldSpatialRules.actor_footprint_shape(collision_radius_px)
+	collision.shape = WorldSpatialRules.actor_footprint_shape_px(collision_radius_px)
 	add_child(collision)
 	_resolve_invalid_spawn_overlap()
 	_last_environment_safe_position_px = global_position
@@ -649,7 +649,7 @@ func _move_with_spatial_rules(delta := 1.0 / 60.0) -> void:
 		return
 	_environment_guard_timer = ENVIRONMENT_GUARD_INTERVAL_SECONDS
 	_environment_guard_check_count += 1
-	if WorldSpatialRulesScript.environment_blocks_actor(
+	if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
 		environment_blocker,
 		global_position,
 		collision_radius_px,
@@ -792,7 +792,7 @@ func _update_behavior_summon(delta: float) -> bool:
 func _target_combat_radius_gu(target_node: Node2D) -> float:
 	if target_node is PlayerCharacter:
 		return WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-			ArtSpec.PLAYER_COLLISION_RADIUS
+			ArtSpec.PLAYER_COLLISION_RADIUS_PX
 		)
 	if target_node is EnemyActor:
 		return target_node.combat_radius_gu
@@ -1317,7 +1317,7 @@ func ground_indicator_radii() -> Vector2:
 	# small and large monsters/Bosses large without inventing another body-size
 	# or vertical-squash coordinate system.
 	return (
-		WorldSpatialRulesScript.actor_footprint_radii(collision_radius_px)
+		WorldSpatialRulesScript.actor_footprint_radii_px(collision_radius_px)
 		* TARGET_RING_FOOTPRINT_SCALE
 	)
 

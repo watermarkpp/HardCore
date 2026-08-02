@@ -103,7 +103,7 @@ static func runtime_boundary_contains_world(
 static func default_player_foot_envelope_world() -> PackedVector2Array:
 	# Only the foot contact ellipse is constrained to visible ground. The body,
 	# hair, weapon and health bar may naturally overhang a sloped map edge.
-	return WorldSpatialRules.actor_footprint_polygon(
+	return WorldSpatialRules.actor_footprint_polygon_px(
 		DEFAULT_ACTOR_BOUNDARY_CLEARANCE_PX
 	)
 

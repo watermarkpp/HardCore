@@ -22,13 +22,14 @@ const MONSTER_FRAME := Vector2i(64, 64)
 const MONSTER_FOOT_ANCHOR := Vector2i(32, 52)
 const BOSS_FRAME := Vector2i(128, 128)
 const BOSS_FOOT_ANCHOR := Vector2i(64, 108)
-const PLAYER_COLLISION_RADIUS := 18.0
+const PLAYER_COLLISION_RADIUS_PX := 18.0
 # The classic warrior's visible body/head centre is eight pixels left of the
 # CharacterBody2D origin because of the source WIL draw offset.  Anchor the bar
 # to that visible centre; keeping x=0 made it appear consistently to the right.
 const PLAYER_HEALTH_BAR_OFFSET := Vector2(-8.0, -95.0)
-const MONSTER_COLLISION_RADIUS := 16.0
-const BOSS_COLLISION_RADIUS := 28.0
+const MONSTER_COLLISION_RADIUS_PX := 16.0
+const BOSS_COLLISION_RADIUS_PX := 28.0
+
 const MAX_ATLAS_SIZE := 2048
 
 const DIRECTIONS := [&"s", &"sw", &"w", &"nw", &"n", &"ne", &"e", &"se"]
