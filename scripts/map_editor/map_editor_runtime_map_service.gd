@@ -4,6 +4,7 @@ extends RefCounted
 const PortalRuntimeService := preload(
 	"res://scripts/map_editor/map_portal_runtime_service.gd"
 )
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 
 
 static func load_runtime(path: String) -> Dictionary:
@@ -21,15 +22,30 @@ static func load_runtime(path: String) -> Dictionary:
 	var parsed: Variant = JSON.parse_string(raw)
 	if not parsed is Dictionary:
 		return {"ok": false, "errors": ["runtime_json_invalid"]}
-	var runtime: Dictionary = parsed
-	var errors := validate_runtime(runtime, raw)
+	var raw_runtime: Dictionary = parsed
+	var errors := validate_runtime(raw_runtime, raw)
+	var runtime := raw_runtime
+	if errors.is_empty() and int(raw_runtime.get(
+		"runtime_schema_version", -1
+	)) == MapEditorBuildRuntimeService.LEGACY_RUNTIME_SCHEMA_VERSION:
+		runtime = adapt_legacy_runtime_v1(raw_runtime)
 	return {"ok": errors.is_empty(), "runtime": runtime, "errors": errors, "path": path}
 
 
 static func validate_runtime(runtime: Dictionary, raw_text := "") -> Array[String]:
 	var errors: Array[String] = []
-	if int(runtime.get("runtime_schema_version", -1)) != MapEditorBuildRuntimeService.RUNTIME_SCHEMA_VERSION:
+	var schema_version := int(runtime.get("runtime_schema_version", -1))
+	if schema_version not in [
+		MapEditorBuildRuntimeService.LEGACY_RUNTIME_SCHEMA_VERSION,
+		MapEditorBuildRuntimeService.RUNTIME_SCHEMA_VERSION,
+	]:
 		errors.append("unsupported_runtime_schema")
+	if schema_version == MapEditorBuildRuntimeService.RUNTIME_SCHEMA_VERSION:
+		if str(runtime.get("unit_contract_id", "")) != GroundUnitSpaceScript.CONTRACT_ID:
+			errors.append("runtime_unit_contract_invalid")
+		if str(runtime.get("projection_contract_id", "")) != GroundUnitSpaceScript.PROJECTION_CONTRACT_ID:
+			errors.append("runtime_projection_contract_invalid")
+		_validate_v2_semantic_units(runtime, errors)
 	for field: String in ["source", "design", "ground", "instances", "collision", "semantics", "build_sha256"]:
 		if not runtime.has(field): errors.append("runtime_missing_%s" % field)
 	var size: Array = runtime.get("design", {}).get("design_size", [])
@@ -68,6 +84,71 @@ static func validate_runtime(runtime: Dictionary, raw_text := "") -> Array[Strin
 			if not bool(map_exit.get("travel_request_single_flight", false)):
 				errors.append("runtime_portal_single_flight_required")
 	return errors
+
+
+static func _validate_v2_semantic_units(
+	runtime: Dictionary,
+	errors: Array[String]
+) -> void:
+	for layer_name: String in runtime.get("semantics", {}):
+		for entry: Dictionary in runtime.semantics.get(layer_name, []):
+			var kind := str(entry.get("kind", ""))
+			var semantic_id := str(entry.get("semantic_id", kind))
+			if kind in ["monster_spawn", "boss_spawn", "safe_area", "light", "region_trigger"]:
+				if not entry.has("radius_gu"):
+					errors.append("runtime_radius_gu_missing:%s" % semantic_id)
+				if entry.has("radius_tiles"):
+					errors.append("runtime_legacy_radius_forbidden:%s" % semantic_id)
+			if kind in ["safe_area", "light", "region_trigger"]:
+				if not entry.has("polygon_ground_gu"):
+					errors.append("runtime_polygon_ground_gu_missing:%s" % semantic_id)
+				if entry.has("polygon_tiles"):
+					errors.append("runtime_legacy_polygon_forbidden:%s" % semantic_id)
+			if kind in ["door", "map_exit"]:
+				if not entry.has("return_unlock_distance_gu"):
+					errors.append("runtime_portal_distance_gu_missing:%s" % semantic_id)
+				if entry.has("return_unlock_distance_tiles"):
+					errors.append("runtime_legacy_portal_distance_forbidden:%s" % semantic_id)
+
+
+static func adapt_legacy_runtime_v1(raw_runtime: Dictionary) -> Dictionary:
+	var runtime := raw_runtime.duplicate(true)
+	runtime["source_runtime_schema_version"] = (
+		MapEditorBuildRuntimeService.LEGACY_RUNTIME_SCHEMA_VERSION
+	)
+	runtime["runtime_schema_version"] = MapEditorBuildRuntimeService.RUNTIME_SCHEMA_VERSION
+	runtime["unit_contract_id"] = GroundUnitSpaceScript.CONTRACT_ID
+	runtime["projection_contract_id"] = GroundUnitSpaceScript.PROJECTION_CONTRACT_ID
+	var semantics: Dictionary = runtime.get("semantics", {})
+	for layer_name: String in semantics:
+		var adapted_entries: Array = []
+		for source_entry: Dictionary in semantics.get(layer_name, []):
+			adapted_entries.append(_adapt_legacy_semantic_entry(source_entry))
+		semantics[layer_name] = adapted_entries
+	runtime["semantics"] = semantics
+	return runtime
+
+
+static func _adapt_legacy_semantic_entry(source_entry: Dictionary) -> Dictionary:
+	var entry := source_entry.duplicate(true)
+	var kind := str(entry.get("kind", ""))
+	if kind in ["monster_spawn", "boss_spawn", "safe_area", "light", "region_trigger"]:
+		entry["radius_gu"] = float(entry.get(
+			"radius_gu", entry.get("radius_tiles", 0.0)
+		))
+		entry.erase("radius_tiles")
+	if kind in ["safe_area", "light", "region_trigger"]:
+		entry["polygon_ground_gu"] = entry.get(
+			"polygon_ground_gu", entry.get("polygon_tiles", [])
+		).duplicate(true)
+		entry.erase("polygon_tiles")
+	if kind in ["door", "map_exit"]:
+		entry["return_unlock_distance_gu"] = float(entry.get(
+			"return_unlock_distance_gu",
+			entry.get("return_unlock_distance_tiles", 0.0)
+		))
+		entry.erase("return_unlock_distance_tiles")
+	return entry
 
 
 static func is_blocked(runtime: Dictionary, tile: Vector2i) -> bool:

@@ -42,9 +42,17 @@ static func travel_request(endpoint: Dictionary) -> Dictionary:
 		"return_minimum_seconds": float(
 			endpoint.get("return_minimum_seconds", 0.0)
 		),
-		"return_unlock_distance_tiles": float(
-			endpoint.get("return_unlock_distance_tiles", 0.0)
+		"return_unlock_distance_gu": float(
+			endpoint.get(
+				"return_unlock_distance_gu",
+				endpoint.get("return_unlock_distance_tiles", 0.0)
+			)
 		),
+		# Transitional alias until integration migrates game_root.
+		"return_unlock_distance_tiles": float(endpoint.get(
+			"return_unlock_distance_gu",
+			endpoint.get("return_unlock_distance_tiles", 0.0)
+		)),
 		"single_flight": bool(
 			endpoint.get("travel_request_single_flight", false)
 		),
