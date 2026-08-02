@@ -1,38 +1,71 @@
 class_name MapCoordinateMapper
 extends RefCounted
 
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+
 # 经典客户端地砖采用64×32菱形；每个MAP逻辑格对应一个固定等距步长。
 const CELL_HALF_WIDTH := 32.0
 const CELL_HALF_HEIGHT := 16.0
 
 
 static func source_to_world(source_coordinate: Vector2, source_size: Vector2i) -> Vector2:
+	return ground_position_gu_to_screen_position_px(
+		source_coordinate, source_size
+	)
+
+
+static func ground_position_gu_to_screen_position_px(
+	ground_position_gu: Vector2,
+	source_size: Vector2i
+) -> Vector2:
 	var center := (Vector2(source_size) - Vector2.ONE) * 0.5
-	var local := source_coordinate - center
-	return Vector2(
-		(local.x - local.y) * CELL_HALF_WIDTH,
-		(local.x + local.y) * CELL_HALF_HEIGHT,
+	return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		ground_position_gu - center
 	)
 
 
 static func world_to_source(world_position: Vector2, source_size: Vector2i) -> Vector2:
-	var horizontal := world_position.x / CELL_HALF_WIDTH
-	var vertical := world_position.y / CELL_HALF_HEIGHT
+	return screen_position_px_to_ground_position_gu(
+		world_position, source_size
+	)
+
+
+static func screen_position_px_to_ground_position_gu(
+	screen_position_px: Vector2,
+	source_size: Vector2i
+) -> Vector2:
 	var center := (Vector2(source_size) - Vector2.ONE) * 0.5
-	return center + Vector2((horizontal + vertical) * 0.5, (vertical - horizontal) * 0.5)
+	return center + GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		screen_position_px
+	)
 
 
 static func source_delta_to_world(source_delta: Vector2) -> Vector2:
-	return Vector2(
-		(source_delta.x - source_delta.y) * CELL_HALF_WIDTH,
-		(source_delta.x + source_delta.y) * CELL_HALF_HEIGHT,
+	return ground_delta_gu_to_screen_delta_px(source_delta)
+
+
+static func ground_delta_gu_to_screen_delta_px(
+	ground_delta_gu: Vector2
+) -> Vector2:
+	return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		ground_delta_gu
 	)
 
 
 static func world_delta_to_source(world_delta: Vector2) -> Vector2:
-	var horizontal := world_delta.x / CELL_HALF_WIDTH
-	var vertical := world_delta.y / CELL_HALF_HEIGHT
-	return Vector2((horizontal + vertical) * 0.5, (vertical - horizontal) * 0.5)
+	return screen_delta_px_to_ground_delta_gu(world_delta)
+
+
+static func screen_delta_px_to_ground_delta_gu(
+	screen_delta_px: Vector2
+) -> Vector2:
+	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		screen_delta_px
+	)
+
+
+static func path_step_cost_gu(step: Vector2i) -> float:
+	return GroundUnitSpaceScript.path_step_cost_gu(step)
 
 
 static func contains_source(source_coordinate: Vector2, source_size: Vector2i) -> bool:

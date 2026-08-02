@@ -1,5 +1,7 @@
 extends Node
 
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+
 
 func _ready() -> void:
 	var document := MapEditorTypes.new_map("stage7_runtime", 990007, "Stage 7", Vector2i(32, 32))
@@ -29,7 +31,23 @@ func _ready() -> void:
 	assert(built.runtime.semantics.map_entrance_points.size() == 1)
 	assert(built.runtime.semantics.map_exit_points[0].target_entrance_id == str(entrance.entry.semantic_id))
 	assert(built.runtime.semantics.respawn_points[0].is_birth_point)
-	assert(built.runtime.semantics.safe_area[0].polygon_tiles.size() == 4)
+	assert(built.runtime.runtime_schema_version == MapEditorBuildRuntimeService.RUNTIME_SCHEMA_VERSION)
+	assert(built.runtime.unit_contract_id == GroundUnitSpaceScript.CONTRACT_ID)
+	assert(built.runtime.projection_contract_id == GroundUnitSpaceScript.PROJECTION_CONTRACT_ID)
+	assert(built.runtime.semantics.safe_area[0].polygon_ground_gu.size() == 4)
+	assert(not built.runtime.semantics.safe_area[0].has("polygon_tiles"))
+	assert(not built.runtime.semantics.safe_area[0].has("radius_tiles"))
+	assert(is_zero_approx(float(built.runtime.semantics.safe_area[0].radius_gu)))
+	assert(MapEditorRuntimeMapService.validate_runtime(built.runtime).is_empty())
+	var wrong_contract: Dictionary = built.runtime.duplicate(true)
+	wrong_contract["unit_contract_id"] = "wrong"
+	assert("runtime_unit_contract_invalid" in MapEditorRuntimeMapService.validate_runtime(wrong_contract))
+	var legacy_field: Dictionary = built.runtime.duplicate(true)
+	legacy_field.semantics.safe_area[0]["radius_tiles"] = 0.0
+	assert(
+		"runtime_legacy_radius_forbidden:%s" % str(safe_polygon.entry.semantic_id)
+		in MapEditorRuntimeMapService.validate_runtime(legacy_field)
+	)
 	assert(not MapEditorJsonCodec.encode(built.runtime).contains("map_editor_workspace"))
 	var paint := MapEditorGroundService.record_tile_paint(document, Vector2i(1, 1), "ground.dark_grass.001")
 	assert(paint.ok)

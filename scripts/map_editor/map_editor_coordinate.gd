@@ -1,6 +1,8 @@
 class_name MapEditorCoordinate
 extends RefCounted
 
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+
 const HALF_TILE_W := 32.0
 const HALF_TILE_H := 16.0
 const GROUND_COORDINATE_CONTRACT_ID := "isometric_cell_center_64x32_v1"
@@ -63,9 +65,17 @@ static func contains_grid_vertex(vertex: Vector2i, design_size: Vector2i) -> boo
 
 
 static func tile_to_world(tile: Vector2, design_size: Vector2i) -> Vector2:
+	return ground_position_gu_to_screen_position_px(tile, design_size)
+
+
+static func ground_position_gu_to_screen_position_px(
+	ground_position_gu: Vector2,
+	design_size: Vector2i
+) -> Vector2:
 	var center := (Vector2(design_size) - Vector2.ONE) * 0.5
-	var local := tile - center
-	return Vector2((local.x - local.y) * HALF_TILE_W, (local.x + local.y) * HALF_TILE_H)
+	return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		ground_position_gu - center
+	)
 
 
 static func cell_center_to_world(cell: Vector2, design_size: Vector2i) -> Vector2:
@@ -85,10 +95,37 @@ static func cell_polygon_world(
 
 
 static func world_to_tile(world: Vector2, design_size: Vector2i) -> Vector2:
-	var horizontal := world.x / HALF_TILE_W
-	var vertical := world.y / HALF_TILE_H
+	return screen_position_px_to_ground_position_gu(world, design_size)
+
+
+static func screen_position_px_to_ground_position_gu(
+	screen_position_px: Vector2,
+	design_size: Vector2i
+) -> Vector2:
 	var center := (Vector2(design_size) - Vector2.ONE) * 0.5
-	return center + Vector2((horizontal + vertical) * 0.5, (vertical - horizontal) * 0.5)
+	return center + GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		screen_position_px
+	)
+
+
+static func ground_delta_gu_to_screen_delta_px(
+	ground_delta_gu: Vector2
+) -> Vector2:
+	return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		ground_delta_gu
+	)
+
+
+static func screen_delta_px_to_ground_delta_gu(
+	screen_delta_px: Vector2
+) -> Vector2:
+	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		screen_delta_px
+	)
+
+
+static func path_step_cost_gu(step: Vector2i) -> float:
+	return GroundUnitSpaceScript.path_step_cost_gu(step)
 
 
 static func world_to_cell(world: Vector2, design_size: Vector2i) -> Vector2i:
