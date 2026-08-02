@@ -102,7 +102,7 @@ func _ready() -> void:
 	assert(thrust.effects[0].maximum_targets == -1)
 	assert(thrust.effects[1].maximum_targets == -1)
 	assert(thrust.effects[0].target_count_policy_id == "gameplay.warrior.melee_target_count.v1")
-	assert(thrust.geometry.length_tiles == 2)
+	assert(is_equal_approx(float(thrust.geometry.effect_length_gu), 2.0))
 	var half := _execute("warrior.half_moon", 3, {"has_target": true, "eligible_target_count": 4}, 100)
 	assert(half.effects[0].maximum_targets == -1)
 	assert(half.effects[0].target_count_policy_id == "gameplay.warrior.melee_target_count.v1")
@@ -112,26 +112,26 @@ func _ready() -> void:
 		"has_target": true,
 		"target_level": 30,
 		"target_is_boss": false,
-		"resolved_push_distance_tiles": 3,
+		"resolved_push_distance_gu": 3.0,
 	}, 100, 40)
-	assert(rush.effect_success and rush.effects[0].push_distance_tiles == 3)
-	assert(rush.effects[0].resolved_push_distance_tiles == 3)
+	assert(rush.effect_success and rush.effects[0].push_distance_gu == 3.0)
+	assert(rush.effects[0].resolved_push_distance_gu == 3.0)
 	assert(rush.effects[0].damage_amount == 0 and rush.effects[0].self_damage_amount == 0)
 	var blocked_rush := _execute("warrior.wild_rush", 3, {
 		"has_target": true,
 		"target_level": 30,
-		"resolved_push_distance_tiles": 3,
+		"resolved_push_distance_gu": 3.0,
 		"dynamic_blocker_in_corridor": true,
 	}, 100, 40)
 	assert(blocked_rush.accepted and not blocked_rush.effect_success)
-	assert(blocked_rush.effects.size() == 1 and blocked_rush.effects[0].resolved_push_distance_tiles == 0)
+	assert(blocked_rush.effects.size() == 1 and blocked_rush.effects[0].resolved_push_distance_gu == 0.0)
 	assert(blocked_rush.proficiency_event.is_empty())
 	var partial_rush := _execute("warrior.wild_rush", 0, {
 		"has_target": true,
 		"target_level": 30,
-		"resolved_push_distance_tiles": 2,
+		"resolved_push_distance_gu": 2.0,
 	}, 100, 40)
-	assert(partial_rush.effect_success and partial_rush.effects[0].resolved_push_distance_tiles == 2)
+	assert(partial_rush.effect_success and partial_rush.effects[0].resolved_push_distance_gu == 2.0)
 	var boss_rush := _execute("warrior.wild_rush", 3, {
 		"has_target": true, "target_level": 1, "target_is_boss": true,
 	}, 100, 40)

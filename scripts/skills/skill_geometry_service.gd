@@ -40,11 +40,11 @@ static func cells(definition: Dictionary, origin: Vector2i, facing: Vector2i, ta
 	var result: Array[Vector2i] = []
 	match shape:
 		"line":
-			for distance in range(1, int(geometry.get("length_tiles", 1)) + 1):
+			for distance in range(1, int(geometry.get("effect_length_gu", 1.0)) + 1):
 				result.append(origin + direction * distance)
 		"square":
-			var width := int(geometry.get("width_tiles", 1))
-			var height := int(geometry.get("height_tiles", 1))
+			var width := int(geometry.get("width_grid_steps", 1.0))
+			var height := int(geometry.get("height_grid_steps", 1.0))
 			var min_x := -int(floor(float(width - 1) / 2.0))
 			var min_y := -int(floor(float(height - 1) / 2.0))
 			for y in range(min_y, min_y + height):
@@ -56,13 +56,13 @@ static func cells(definition: Dictionary, origin: Vector2i, facing: Vector2i, ta
 					if x != 0 or y != 0:
 						result.append(origin + Vector2i(x, y))
 		"chebyshev_ring":
-			var radius := int(geometry.get("radius_tiles", 1))
+			var radius := int(geometry.get("radius_grid_steps", 1.0))
 			for y in range(-radius, radius + 1):
 				for x in range(-radius, radius + 1):
 					if x != 0 or y != 0:
 						result.append(origin + Vector2i(x, y))
 		"chebyshev_area":
-			var radius := int(geometry.get("radius_tiles", 1))
+			var radius := int(geometry.get("radius_grid_steps", 1.0))
 			for y in range(-radius, radius + 1):
 				for x in range(-radius, radius + 1):
 					result.append(center + Vector2i(x, y))

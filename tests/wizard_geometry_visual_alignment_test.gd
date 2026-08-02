@@ -33,8 +33,8 @@ func _verify_primary_geometry_and_timing() -> void:
 	)
 	var hellfire := Loader.skill("wizard.hellfire")
 	assert(hellfire.geometry.shape == "line")
-	assert(hellfire.geometry.length_tiles == 5)
-	assert(is_equal_approx(float(hellfire.geometry.width_tiles), 1.0))
+	assert(is_equal_approx(float(hellfire.geometry.effect_length_gu), 5.0))
+	assert(is_equal_approx(float(hellfire.geometry.effect_width_gu), 1.0))
 	assert(not hellfire.geometry.has("geometry_override_contract"))
 	assert(not hellfire.geometry.pierces_units)
 	assert(hellfire.geometry.stops_on_terrain)
@@ -46,8 +46,8 @@ func _verify_primary_geometry_and_timing() -> void:
 
 	var laser := Loader.skill("wizard.laser")
 	assert(laser.geometry.shape == "line")
-	assert(laser.geometry.length_tiles == 8)
-	assert(laser.geometry.width_tiles == 1)
+	assert(is_equal_approx(float(laser.geometry.effect_length_gu), 8.0))
+	assert(is_equal_approx(float(laser.geometry.effect_width_gu), 1.0))
 	assert(laser.geometry.pierces_units)
 	assert(laser.geometry.stops_on_terrain)
 	assert(
@@ -58,7 +58,7 @@ func _verify_primary_geometry_and_timing() -> void:
 
 	var hell_lightning := Loader.skill("wizard.hell_lightning")
 	assert(hell_lightning.geometry.shape == "chebyshev_ring")
-	assert(hell_lightning.geometry.radius_tiles == 2)
+	assert(hell_lightning.geometry.radius_grid_steps == 2)
 	assert(hell_lightning.geometry.exclude_center)
 	assert(hell_lightning.geometry.maximum_targets == 24)
 	var ring := GeometryService.cells(
@@ -196,7 +196,7 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 				"random_0_to_10": 0,
 			})
 			plan["canonical_geometry_contract"] = SpellGeometry.CONTRACT_ID
-			plan["geometry_origin_world"] = Vector2.ZERO
+			plan["geometry_origin_screen_px"] = Vector2.ZERO
 			plan["geometry_tile_points"] = []
 			plan["geometry_world_points"] = world_points
 			var effect := CasterSkillRuntime.create_visual(
@@ -473,7 +473,7 @@ func _plan_with_world_geometry(
 	for cell: Vector2i in cells:
 		world_points.append(_tile_to_world(cell))
 	plan["canonical_geometry_contract"] = SpellGeometry.CONTRACT_ID
-	plan["geometry_origin_world"] = origin_world
+	plan["geometry_origin_screen_px"] = origin_world
 	plan["geometry_tile_points"] = cells
 	plan["geometry_world_points"] = world_points
 	return plan

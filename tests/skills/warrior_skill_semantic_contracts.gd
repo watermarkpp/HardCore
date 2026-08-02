@@ -133,17 +133,17 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 			return true
 		"wild_rush_distance_by_rank":
 			return _support.rank_effect_values(
-				skill_id, "push_distance_tiles", {"caster_level": 40, "target_level": 1}
-			) == [3, 3, 3, 3]
+				skill_id, "push_distance_gu", {"caster_level": 40, "target_level": 1}
+			) == [3.0, 3.0, 3.0, 3.0]
 		"wild_rush_collision_self_damage":
 			var immediate_wall := _support.execute(skill_id, 3, {
-				"resolved_push_distance_tiles": 0,
+				"resolved_push_distance_gu": 0.0,
 			})
 			var partial_wall := _support.execute(skill_id, 3, {
-				"resolved_push_distance_tiles": 2,
+				"resolved_push_distance_gu": 2.0,
 			})
 			var monster_blocked := _support.execute(skill_id, 3, {
-				"resolved_push_distance_tiles": 3,
+				"resolved_push_distance_gu": 3.0,
 				"dynamic_blocker_in_corridor": true,
 			})
 			return (
@@ -152,15 +152,15 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 				and immediate_wall.effects.size() == 1
 				and immediate_wall.effects[0].self_damage_amount == 0
 				and partial_wall.effect_success
-				and partial_wall.effects[0].resolved_push_distance_tiles == 2
+				and partial_wall.effects[0].resolved_push_distance_gu == 2.0
 				and not monster_blocked.effect_success
-				and monster_blocked.effects[0].resolved_push_distance_tiles == 0
+				and monster_blocked.effects[0].resolved_push_distance_gu == 0.0
 			)
 		"wild_rush_boss_immune":
 			return not _support.execute(skill_id, 3, {"target_is_boss": true}).accepted
 		"wild_rush_training_only_on_displacement":
-			var moved := _support.execute(skill_id, 3, {"resolved_push_distance_tiles": 1})
-			var failed := _support.execute(skill_id, 3, {"resolved_push_distance_tiles": 0})
+			var moved := _support.execute(skill_id, 3, {"resolved_push_distance_gu": 1.0})
+			var failed := _support.execute(skill_id, 3, {"resolved_push_distance_gu": 0.0})
 			return not moved.proficiency_event.is_empty() and failed.proficiency_event.is_empty()
 		"fire_sword_never_auto_casts":
 			return not bool(_support.execute(skill_id, 3).effects[0].auto_cast)

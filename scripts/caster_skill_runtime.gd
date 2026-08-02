@@ -5,6 +5,13 @@ const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd
 const CasterSpellGeometryScript := preload(
 	"res://scripts/skills/caster_spell_geometry.gd"
 )
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const SkillDataLoaderScript := preload(
+	"res://scripts/skills/skill_data_loader.gd"
+)
+const CombatUnitLegacyAdapterScript := preload(
+	"res://scripts/skills/combat_unit_legacy_adapter.gd"
+)
 
 const SPECIAL_SKILLS := {
 	"wizard.repulsion_ring": true,
@@ -154,15 +161,23 @@ static func create_visual(
 					var geometry_offset: Vector2 = raw_offset
 					radius = maxf(radius, geometry_offset.length())
 		else:
-			var geometry: Dictionary = plan.get("visual", {}).get(
-				"skills_contract", {}
+			var geometry: Dictionary = SkillDataLoaderScript.skill(
+				skill_id
 			).get("geometry", {})
-			var length_tiles := int(geometry.get("length_tiles", 0))
-			radius = (
-				float(length_tiles) * float(plan.get("cell_size", 50))
-				if length_tiles > 0
-				else maxf(radius, float(plan.get("range", 0.0)))
-			)
+			var effect_length_gu := float(geometry.get("effect_length_gu", 0.0))
+			if effect_length_gu > 0.0:
+				var direction_ground_gu := (
+					GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+						direction
+					).normalized()
+				)
+				radius = (
+					GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+						direction_ground_gu * effect_length_gu
+					).length()
+				)
+			else:
+				radius = maxf(radius, float(plan.get("range", 0.0)))
 	elif plan.has("area_radius_cells"):
 		radius = maxf(radius, float(plan.area_radius_cells) * float(plan.get("cell_size", 48)))
 	effect.setup(
@@ -187,11 +202,21 @@ static func create_projectile(plan: Dictionary, origin: Vector2, direction: Vect
 	):
 		return null
 	var projectile := SkillProjectile.new()
-	projectile.setup(
-		origin + direction.normalized() * 24.0,
-		direction,
+	var direction_ground_gu := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(direction)
+		.normalized()
+	)
+	var formal_geometry: Dictionary = SkillDataLoaderScript.skill(
+		str(plan.get("skill_id", ""))
+	).get("geometry", {})
+	projectile.setup_ground_unit_projectile(
+		origin,
+		direction_ground_gu,
+		float(formal_geometry.get("maximum_range_gu", 0.0)),
 		int(plan.get("damage_before_evasion", plan.get("damage", 0))),
-		float(plan.get("range", 360.0)),
+		CombatUnitLegacyAdapterScript.PROJECTILE_SPEED_GU_PER_SEC,
+		CombatUnitLegacyAdapterScript.PROJECTILE_RADIUS_GU,
+		direction.normalized() * 24.0,
 		color,
 		"damage",
 		0,

@@ -1,6 +1,7 @@
 extends Node
 
 const ReleaseGeometry := preload("res://scripts/skills/combat_release_geometry.gd")
+const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
 
 
 func _ready() -> void:
@@ -235,6 +236,12 @@ func _verify_locked_melee_facing_contract() -> void:
 		ReleaseGeometry.FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION
 	)
 	assert(geometry.origin_world == Vector2(120.0, 130.0))
+	assert(geometry.origin_screen_px == Vector2(120.0, 130.0))
+	assert(geometry.origin_ground_gu.is_equal_approx(
+		GroundUnitSpace.screen_delta_px_to_ground_delta_gu(
+			Vector2(120.0, 130.0)
+		)
+	))
 	assert(geometry.direction_world.is_equal_approx(Vector2.RIGHT))
 	assert(geometry.locked_target_valid_at_release)
 	assert(geometry.direction_locked_for_action)

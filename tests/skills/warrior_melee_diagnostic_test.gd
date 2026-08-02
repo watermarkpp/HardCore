@@ -21,9 +21,17 @@ func _test_direction_round_trip() -> void:
 	assert(all_directions.contract_id == "diagnostic.warrior.melee_direction_loop.v1")
 	assert(all_directions.direction_count == 8)
 	assert(all_directions.consistent)
+	assert(
+		all_directions.direction_space_contract_id
+		== "gameplay.professions.combat_direction_space.ground_gu_8dir.v2"
+	)
 	for direction_index in range(8):
 		var audit: Dictionary = all_directions.directions[direction_index]
 		assert(audit.result_code == Diagnostic.RESULT_OK)
+		assert(
+			audit.direction_space_contract_id
+			== "gameplay.professions.combat_direction_space.ground_gu_8dir.v2"
+		)
 		assert(audit.screen_direction_index == direction_index)
 		assert(audit.world_direction_index == direction_index)
 		assert(audit.projected_screen_direction_index == direction_index)

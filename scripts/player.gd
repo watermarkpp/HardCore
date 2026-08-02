@@ -581,9 +581,12 @@ func _emit_attack_after_windup(
 		)
 		_pending_attack_context = context.duplicate(true)
 		_pending_attack_context["release_geometry"] = release_geometry
+		var release_signal_payload := combat_release_signal_payload(
+			release_geometry
+		)
 		attack_requested.emit(
-			release_geometry.origin_world,
-			release_geometry.direction_world,
+			release_signal_payload.origin_screen_px,
+			release_signal_payload.direction_screen_px,
 			damage
 		)
 		_pending_attack_context.clear()
@@ -607,13 +610,31 @@ func _emit_skill_after_windup(
 			track_locked_target
 		)
 		_pending_skill_context = {"release_geometry": release_geometry}
+		var release_signal_payload := combat_release_signal_payload(
+			release_geometry
+		)
 		skill_requested.emit(
 			skill_name,
-			release_geometry.origin_world,
-			release_geometry.direction_world,
+			release_signal_payload.origin_screen_px,
+			release_signal_payload.direction_screen_px,
 			damage
 		)
 		_pending_skill_context.clear()
+
+
+static func combat_release_signal_payload(
+	release_geometry: Dictionary
+) -> Dictionary:
+	## The player signal boundary is screen-space only. Compatibility aliases in
+	## CombatReleaseGeometry never participate in the formal runtime path.
+	return {
+		"origin_screen_px": release_geometry.get(
+			"origin_screen_px", Vector2.ZERO
+		),
+		"direction_screen_px": release_geometry.get(
+			"direction_screen_px", Vector2.DOWN
+		),
+	}
 
 
 func _resolve_combat_release_geometry(

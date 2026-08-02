@@ -1,6 +1,7 @@
 extends Node
 
 const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
+const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
 
 
 func _context() -> Dictionary:
@@ -105,7 +106,18 @@ func _ready() -> void:
 	assert(hellfire_nodes.size() == 1)
 	var trail := hellfire_nodes[0] as CasterSkillVisualEffect
 	add_child(trail)
-	assert(trail.radius == 250.0, "formal five-tile hellfire radius was not authoritative")
+	var hellfire_direction_ground_gu := (
+		GroundUnitSpace.screen_delta_px_to_ground_delta_gu(Vector2.RIGHT)
+		.normalized()
+	)
+	var expected_hellfire_radius_px := (
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			hellfire_direction_ground_gu * 5.0
+		).length()
+	)
+	assert(is_equal_approx(
+		trail.radius, expected_hellfire_radius_px
+	), "formal five-GU hellfire radius was not authoritative")
 	assert(trail._hellfire_frame_count == 6)
 	assert(trail._hellfire_step_seconds == 0.05)
 	assert(is_equal_approx(trail._hellfire_step_distance, (500.0 / 0.9) * 0.05))

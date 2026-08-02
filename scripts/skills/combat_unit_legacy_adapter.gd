@@ -5,6 +5,43 @@ extends RefCounted
 ## combat.unit.gu_gs_px.v1.  No untyped legacy value may leave this class.
 
 const CONTRACT_ID := "combat.unit.legacy_primary_source_adapter.v1"
+const COMBAT_UNIT_CONTRACT_ID := "combat.unit.gu_gs_px.v1"
+const LEGACY_SKILL_SPATIAL_ADAPTER_CONTRACT_ID := (
+	"combat.unit.legacy_primary_skill_spatial_to_gu_once.v1"
+)
+const LEGACY_SKILL_GEOMETRY_SOURCE_EVIDENCE := {
+	"lane": "skills",
+	"source_tier": "primary",
+	"distribution": "project_formal_contract",
+	"path": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+	"sha256": "883359E2CF191A196F749653067F2030130FC11FD59A033A89EE557CAB7607E2",
+	"source_contract_id": "skills.mir2_176.vanilla_33.v1.0.1",
+	"adapter_semantics": "legacy_primary_numeric_semantics_as_gu_once",
+	"topology_semantics": "legacy_declared_grid_topology_as_gs_once",
+	"fallback_used": false,
+}
+const LEGACY_SKILL_SPATIAL_FIELD_MAP := {
+	"geometry": {
+		"maximum_range_tiles": "maximum_range_gu",
+		"range_tiles": "reach_gu",
+		"length_tiles": "effect_length_gu",
+		"maximum_reach_tiles": "maximum_reach_gu",
+		"endpoint_tolerance_tiles": "endpoint_tolerance_gu",
+		"primary_segment_reach_tiles": "primary_segment_reach_gu",
+		"range_bonus_cap_tiles": "range_bonus_cap_gu",
+		"base_reach_tiles": "base_reach_gu",
+		"start_distance_tiles": "start_distance_gu",
+		"fixed_push_distance_tiles": "fixed_push_distance_gu",
+		"target_reach_tiles": "target_reach_gu",
+		"runtime_melee_reach_tiles": "runtime_melee_reach_gu",
+		"height_tiles": "height_grid_steps",
+		"radius_tiles": "radius_grid_steps",
+		"search_radius_tiles": "search_radius_grid_steps",
+	},
+	"mechanics": {
+		"fixed_push_distance_tiles": "fixed_push_distance_gu",
+	},
+}
 
 const PLAYER_MOVE_SOURCE_EVIDENCE := {
 	"lane": "server_rules+client_rules",
@@ -111,3 +148,67 @@ static func legacy_isometric_screen_scalar_px_to_gu(value_px: float) -> float:
 	## For old directionless radii/speeds only. The area-equivalent scale avoids
 	## choosing one isometric screen axis as the hidden gameplay direction.
 	return maxf(0.0, value_px) / ISO_AREA_EQUIVALENT_PX_PER_GU
+
+
+static func adapt_primary_skill_definition_once_to_gu(
+	legacy_primary_definition: Dictionary
+) -> Dictionary:
+	## This is the only boundary allowed to read the historical primary skill
+	## spatial field names. Approved gameplay distances become GU while declared
+	## cell topology becomes GS; both are renamed once without numeric scaling.
+	var definition_gu := legacy_primary_definition.duplicate(true)
+	var result := {
+		"contract_id": LEGACY_SKILL_SPATIAL_ADAPTER_CONTRACT_ID,
+		"unit_contract_id": COMBAT_UNIT_CONTRACT_ID,
+		"source_contract_id": str(
+			LEGACY_SKILL_GEOMETRY_SOURCE_EVIDENCE.source_contract_id
+		),
+		"adapter_semantics": str(
+			LEGACY_SKILL_GEOMETRY_SOURCE_EVIDENCE.adapter_semantics
+		),
+		"topology_semantics": str(
+			LEGACY_SKILL_GEOMETRY_SOURCE_EVIDENCE.topology_semantics
+		),
+		"valid": true,
+		"consumed_legacy_fields": [],
+		"errors": [],
+		"definition_gu": definition_gu,
+	}
+	for section_name: String in LEGACY_SKILL_SPATIAL_FIELD_MAP:
+		var section: Dictionary = definition_gu.get(section_name, {})
+		if section.is_empty():
+			continue
+		var field_map: Dictionary = LEGACY_SKILL_SPATIAL_FIELD_MAP[section_name]
+		for legacy_field: String in field_map:
+			if not section.has(legacy_field):
+				continue
+			var qualified_field := "%s.%s" % [section_name, legacy_field]
+			result.consumed_legacy_fields.append(qualified_field)
+			var raw_value: Variant = section[legacy_field]
+			section.erase(legacy_field)
+			if not (raw_value is int or raw_value is float):
+				result.valid = false
+				result.errors.append("%s:not_numeric" % qualified_field)
+				continue
+			section[str(field_map[legacy_field])] = float(raw_value)
+		if section_name == "geometry" and section.has("width_tiles"):
+			var width_value: Variant = section["width_tiles"]
+			section.erase("width_tiles")
+			result.consumed_legacy_fields.append("geometry.width_tiles")
+			if not (width_value is int or width_value is float):
+				result.valid = false
+				result.errors.append("geometry.width_tiles:not_numeric")
+			else:
+				var formal_width_field := (
+					"effect_width_gu"
+					if str(section.get("shape", "")) == "line"
+					else "width_grid_steps"
+				)
+				section[formal_width_field] = float(width_value)
+		if section_name == "geometry" and section.has("footprint_tiles"):
+			var footprint_description: Variant = section["footprint_tiles"]
+			section.erase("footprint_tiles")
+			result.consumed_legacy_fields.append("geometry.footprint_tiles")
+			section["footprint_grid_steps_description"] = footprint_description
+		definition_gu[section_name] = section
+	return result

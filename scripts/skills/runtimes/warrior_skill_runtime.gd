@@ -112,22 +112,26 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 			)
 			if not eligible:
 				return _failed_resolution(plan, "ineligible_push_target")
-			var maximum_distance := int(mechanics.get("fixed_push_distance_tiles", 3))
+			var maximum_distance_gu := float(
+				mechanics.get("fixed_push_distance_gu", 3.0)
+			)
 			var dynamic_blocked := bool(context.get("dynamic_blocker_in_corridor", false))
-			var resolved_distance := clampi(
-				int(context.get("resolved_push_distance_tiles", maximum_distance)),
-				0,
-				maximum_distance
+			var resolved_distance_gu := clampf(
+				float(context.get(
+					"resolved_push_distance_gu", maximum_distance_gu
+				)),
+				0.0,
+				maximum_distance_gu
 			)
 			if dynamic_blocked:
-				resolved_distance = 0
-			var displaced := resolved_distance > 0
+				resolved_distance_gu = 0.0
+			var displaced := resolved_distance_gu > 0.0
 			plan.effect_success = displaced
 			plan.effects = [{
 				"type": "level_gated_push",
 				"success_probability": 1.0,
-				"push_distance_tiles": maximum_distance,
-				"resolved_push_distance_tiles": resolved_distance,
+				"push_distance_gu": maximum_distance_gu,
+				"resolved_push_distance_gu": resolved_distance_gu,
 				"displaced": displaced,
 				"caster_moves_into_vacated_path": true,
 				"atomic_path_preflight_required": true,
