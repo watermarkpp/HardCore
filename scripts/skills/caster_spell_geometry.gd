@@ -372,7 +372,7 @@ static func visual_context_from_plan(
 	if declared_contract != CONTRACT_ID:
 		return plan.get("visual_geometry_context", {}).duplicate(true)
 	var origin_world: Vector2 = plan.get(
-		"geometry_origin_world", fallback_origin_world
+		"geometry_origin_screen_px", fallback_origin_world
 	)
 	var raw_world_points: Variant = plan.get("geometry_world_points", [])
 	var raw_tile_points: Variant = plan.get("geometry_tile_points", [])

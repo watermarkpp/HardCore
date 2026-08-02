@@ -50,8 +50,8 @@ func _ready() -> void:
 	var hellfire := _execute("wizard.hellfire", {
 		"has_target": true, "primary_stat_roll": 10,
 	})
-	assert(hellfire.effects[0].length_tiles == 5)
-	assert(is_equal_approx(float(hellfire.effects[0].width_tiles), 1.0))
+	assert(is_equal_approx(float(hellfire.effects[0].effect_length_gu), 5.0))
+	assert(is_equal_approx(float(hellfire.effects[0].effect_width_gu), 1.0))
 	assert(not hellfire.effects[0].pierces_units and hellfire.geometry_cells.size() == 5)
 	assert(hellfire.effects[0].maximum_targets == 0)
 	assert(hellfire.effects[0].target_limit_policy == "all_intersecting_effect_cells")
@@ -104,7 +104,7 @@ func _ready() -> void:
 	var exploding := _execute("wizard.exploding_flame", {
 		"has_target": true, "target_tile": Vector2i(10, 10), "primary_stat_roll": 9,
 	})
-	assert(exploding.effects[0].width_tiles == 3)
+	assert(exploding.effects[0].width_grid_steps == 3)
 	assert(exploding.geometry_cells.size() == 9)
 	assert(exploding.proficiency_event == "valid_area_cast_created")
 
@@ -119,7 +119,10 @@ func _ready() -> void:
 	var laser := _execute("wizard.laser", {
 		"has_target": true, "primary_stat_roll": 11,
 	})
-	assert(laser.effects[0].pierces_units and laser.effects[0].length_tiles == 8)
+	assert(
+		laser.effects[0].pierces_units
+		and is_equal_approx(float(laser.effects[0].effect_length_gu), 8.0)
+	)
 	assert(
 		laser.effects[0].line_geometry_contract
 		== "skills.wizard.line.continuous_tile_axis_footprint_sat.v1"

@@ -119,6 +119,11 @@ static func resolve(
 			release_direction_ground_gu
 		).normalized()
 	)
+	var origin_ground_gu := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			actor_position_at_release
+		)
+	)
 	return {
 		"contract_id": CONTRACT_ID,
 		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
@@ -129,6 +134,7 @@ static func resolve(
 		),
 		"origin_world": actor_position_at_release,
 		"origin_screen_px": actor_position_at_release,
+		"origin_ground_gu": origin_ground_gu,
 		"direction_ground_gu": release_direction_ground_gu,
 		"direction_screen_px": release_direction_screen_px,
 		# Compatibility for integration call sites not migrated in this commit.

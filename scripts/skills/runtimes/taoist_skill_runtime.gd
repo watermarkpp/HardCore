@@ -232,8 +232,8 @@ static func _resolve_mass_invisibility(
 	var effect := _stealth_effect(rank, context, rng, "buff.taoist.mass_invisibility")
 	effect["type"] = "area_monster_aggro_stealth"
 	effect["affected_count"] = affected_count
-	effect["width_tiles"] = 3
-	effect["height_tiles"] = 3
+	effect["width_grid_steps"] = 3
+	effect["height_grid_steps"] = 3
 	plan.effects = [effect]
 	plan.effect_success = affected_count > 0
 	plan.resource_commit = affected_count > 0
@@ -370,8 +370,8 @@ static func _resolve_mass_heal(
 		"raw_heal_per_target": raw_heal,
 		"actual_hp_restored_by_target": actual_by_target,
 		"total_actual_hp_restored": total_restored,
-		"width_tiles": 3,
-		"height_tiles": 3,
+		"width_grid_steps": 3,
+		"height_grid_steps": 3,
 		"negative_damage": false,
 	}]
 	plan.effect_success = total_restored > 0

@@ -120,7 +120,7 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 				var result := _support.execute(skill_id, rank, {
 					"targets": [{"level": 1, "force_success": true}],
 				}, {}, 7)
-				distances.append(int(result.effects[0].push_distance_tiles))
+				distances.append(int(result.effects[0].push_distance_gu))
 			return distances[0] in [1, 2] and distances[1] in [1, 2] and distances[2] in [2, 3] and distances[3] in [3, 4]
 		"repulsion_collision":
 			var blocked := _support.execute(skill_id, 3, {
@@ -160,7 +160,7 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 			return _support.execute(skill_id, 3).geometry_cells.size() == 5
 		"hellfire_width_one":
 			return is_equal_approx(
-				float(_support.execute(skill_id, 3).effects[0].width_tiles), 1.0
+				float(_support.execute(skill_id, 3).effects[0].effect_width_gu), 1.0
 			)
 		"hellfire_stops_on_terrain":
 			return bool(_support.execute(skill_id, 3).effects[0].stops_on_terrain)
@@ -229,7 +229,7 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 		"laser_exact_eight_tile_line":
 			return _support.execute(skill_id, 3).geometry_cells.size() == 8
 		"laser_width_one":
-			return _support.execute(skill_id, 3).effects[0].width_tiles == 1
+			return _support.execute(skill_id, 3).effects[0].effect_width_gu == 1.0
 		"laser_pierces_units":
 			return bool(_support.execute(skill_id, 3).effects[0].pierces_units)
 		"laser_stops_on_terrain":
@@ -242,7 +242,7 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 			return _support.execute(skill_id, 3).effects[0].maximum_targets == 24
 		"hell_lightning_caster_centered_radius_2":
 			var ring := _support.execute(skill_id, 3)
-			return ring.effects[0].radius_tiles == 2 and ring.geometry_cells.size() == 24
+			return ring.effects[0].radius_grid_steps == 2 and ring.geometry_cells.size() == 24
 		"hell_lightning_excludes_center":
 			return not _support.execute(skill_id, 3).geometry_cells.has(Vector2i.ZERO)
 		"hell_lightning_power_formula":

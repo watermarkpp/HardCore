@@ -12,6 +12,9 @@ const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const FOOTPRINT_HIT_CONTRACT_ID := (
 	"skills.projectile.ground_gu_swept_footprint_contact.v2"
 )
+const GROUND_UNIT_SETUP_CONTRACT_ID := (
+	"skills.projectile.setup_ground_unit_projectile.v1"
+)
 
 const VISUAL_PATHS := {
 	"wizard.fireball": "res://assets/art/characters/wizard/effects/fireball.png",
@@ -97,6 +100,53 @@ func setup_ground_unit_motion(
 	speed_gu_per_sec = maxf(0.0, speed_value_gu_per_sec)
 	projectile_radius_gu = maxf(0.0, radius_gu)
 	visual_muzzle_offset_px = muzzle_offset_px
+	configure_maximum_travel_distance_gu(maximum_distance_gu)
+
+
+func setup_ground_unit_projectile(
+	start_screen_position_px: Vector2,
+	cast_direction_ground_gu: Vector2,
+	maximum_distance_gu: float,
+	value: int,
+	speed_value_gu_per_sec := CombatUnitLegacyAdapterScript.PROJECTILE_SPEED_GU_PER_SEC,
+	radius_gu := CombatUnitLegacyAdapterScript.PROJECTILE_RADIUS_GU,
+	muzzle_offset_px := Vector2.ZERO,
+	color := Color.WHITE,
+	status_effect := "damage",
+	status_strength := 0,
+	status_duration := 0.0,
+	source_skill_id := ""
+) -> void:
+	## The sole production setup boundary. All gameplay motion arrives in GU;
+	## screen PX is retained only for presentation origin and muzzle offset.
+	global_position = start_screen_position_px
+	direction_ground_gu = (
+		cast_direction_ground_gu.normalized()
+		if cast_direction_ground_gu.length_squared() > 0.000001
+		else Vector2(1.0, -1.0).normalized()
+	)
+	direction = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		direction_ground_gu
+	).normalized()
+	speed_gu_per_sec = maxf(0.0, float(speed_value_gu_per_sec))
+	projectile_radius_gu = maxf(0.0, float(radius_gu))
+	visual_muzzle_offset_px = muzzle_offset_px
+	damage = maxi(0, value)
+	projectile_color = color
+	effect = status_effect
+	effect_strength = status_strength
+	effect_duration = status_duration
+	resolution_skill_id = (
+		ProfessionRules.skill_id(source_skill_id)
+		if not source_skill_id.is_empty()
+		else ""
+	)
+	skill_id = resolution_skill_id
+	if skill_id.is_empty() and PlayerState != null:
+		if PlayerState.profession == "法师":
+			skill_id = "wizard.fireball"
+		elif PlayerState.profession == "道士":
+			skill_id = "taoist.soul_fire_talisman"
 	configure_maximum_travel_distance_gu(maximum_distance_gu)
 
 

@@ -242,6 +242,9 @@ static func audit_all_directions() -> Dictionary:
 		consistent = consistent and bool(audit["round_trip_matches"])
 	return {
 		"contract_id": DIRECTION_AUDIT_CONTRACT_ID,
+		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
+		"geometry_contract_id": Geometry.CONTRACT_ID,
+		"direction_space_contract_id": Geometry.DIRECTION_SPACE_CONTRACT_ID,
 		"direction_order": ["S", "SW", "W", "NW", "N", "NE", "E", "SE"],
 		"direction_count": directions.size(),
 		"consistent": consistent,

@@ -1,5 +1,7 @@
 extends Node
 
+const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+
 
 func _ready() -> void:
 	_run.call_deferred()
@@ -130,9 +132,37 @@ func _run() -> void:
 	for existing: Node in get_tree().get_nodes_in_group("enemies"):
 		if existing is EnemyActor:
 			existing.global_position = Vector2(3000, 3000) + Vector2(existing.get_instance_id() % 200, 0)
-	var primary := _make_enemy(game, player, "主目标", Vector2(80, 0), 1)
-	var second := _make_enemy(game, player, "第二格目标", Vector2(155, 5), 1)
-	var unrelated := _make_enemy(game, player, "侧后目标", Vector2(-70, 0), 1)
+	var attack_direction_gu := (
+		GroundUnitSpace.screen_delta_px_to_ground_delta_gu(Vector2.RIGHT)
+		.normalized()
+	)
+	var primary := _make_enemy(
+		game,
+		player,
+		"主目标",
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			attack_direction_gu * 1.25
+		),
+		1
+	)
+	var second := _make_enemy(
+		game,
+		player,
+		"第二格目标",
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			attack_direction_gu * 2.25
+		),
+		1
+	)
+	var unrelated := _make_enemy(
+		game,
+		player,
+		"侧后目标",
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			-attack_direction_gu * 1.0
+		),
+		1
+	)
 	game.locked_target = primary
 	var second_hp := second.current_hp
 	var unrelated_hp := unrelated.current_hp
@@ -144,9 +174,29 @@ func _run() -> void:
 	primary.current_hp = primary.max_hp
 	# Facing screen-E maps to canonical tile step (1,-1). The three classic
 	# secondary sectors are NE, SE and S, each exactly one logical tile away.
-	var half_a := _make_enemy(game, player, "半月左前", Vector2(32, -16), 1)
-	var half_b := _make_enemy(game, player, "半月右前", Vector2(32, 16), 1)
-	var half_c := _make_enemy(game, player, "半月右侧", Vector2(0, 32), 1)
+	var half_a := _make_enemy(
+		game,
+		player,
+		"半月左前",
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(Vector2(0.0, -1.0)),
+		1
+	)
+	var half_b := _make_enemy(
+		game,
+		player,
+		"半月右前",
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(Vector2(1.0, 0.0)),
+		1
+	)
+	var half_c := _make_enemy(
+		game,
+		player,
+		"半月右侧",
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			Vector2(1.0, 1.0).normalized()
+		),
+		1
+	)
 	player.half_moon_enabled = true
 	player._pending_attack_context = {"mode": "half_moon", "skill_level": 3}
 	game._on_player_attack(Vector2.ZERO, Vector2.RIGHT, 130)

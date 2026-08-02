@@ -159,12 +159,31 @@ func _test_g_projectile_gu_sweep() -> void:
 		Vector2.ZERO, Vector2(8, 0), Vector2(4, 0.6), 0.5
 	))
 	var projectile := Projectile.new()
-	projectile.setup_ground_unit_motion(
-		Vector2(100, 200), Vector2(3, 4), 7.5, 12.0, 0.25, Vector2(9, -3)
+	projectile.setup_ground_unit_projectile(
+		Vector2(100, 200),
+		Vector2(3, 4),
+		7.5,
+		37,
+		12.0,
+		0.25,
+		Vector2(9, -3),
+		Color.CYAN,
+		"slow",
+		2,
+		1.5,
+		"wizard.fireball"
+	)
+	assert(
+		Projectile.GROUND_UNIT_SETUP_CONTRACT_ID
+		== "skills.projectile.setup_ground_unit_projectile.v1"
 	)
 	assert(is_equal_approx(projectile.direction_ground_gu.length(), 1.0))
 	assert(is_equal_approx(projectile.max_travel_distance_gu, 7.5))
 	assert(projectile.visual_muzzle_offset_px == Vector2(9, -3))
+	assert(projectile.damage == 37 and projectile.effect == "slow")
+	assert(projectile.effect_strength == 2)
+	assert(is_equal_approx(projectile.effect_duration, 1.5))
+	assert(projectile.skill_id == "wizard.fireball")
 	projectile.free()
 
 

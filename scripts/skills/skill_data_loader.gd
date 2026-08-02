@@ -1,6 +1,10 @@
 class_name SkillDataLoader
 extends RefCounted
 
+const CombatUnitLegacyAdapter := preload(
+	"res://scripts/skills/combat_unit_legacy_adapter.gd"
+)
+
 const SOURCE_OF_TRUTH_PATH := "res://assets/data/vanilla_176/skills_source_of_truth_v1.json"
 const PACKAGE_ROOT := "res://assets/data/vanilla_176/skill_source_package_v1_0_1"
 const PACKAGE_MANIFEST_PATH := PACKAGE_ROOT + "/manifest.json"
@@ -63,7 +67,30 @@ static func skill_ids() -> PackedStringArray:
 static func skill(skill_name_or_id: String) -> Dictionary:
 	document()
 	var stable_id := stable_skill_id(skill_name_or_id)
-	return _skills_by_id.get(stable_id, {}).duplicate(true)
+	var raw_definition: Dictionary = _skills_by_id.get(stable_id, {})
+	if raw_definition.is_empty():
+		return {}
+	var adapted := (
+		CombatUnitLegacyAdapter.adapt_primary_skill_definition_once_to_gu(
+			raw_definition
+		)
+	)
+	if not bool(adapted.get("valid", false)):
+		push_error(
+			"Primary skill spatial GU adapter failed: %s"
+			% "; ".join(adapted.get("errors", []))
+		)
+		return {}
+	var definition_gu: Dictionary = adapted.definition_gu
+	definition_gu["combat_unit_adapter"] = {
+		"contract_id": adapted.contract_id,
+		"unit_contract_id": adapted.unit_contract_id,
+		"source_contract_id": adapted.source_contract_id,
+		"adapter_semantics": adapted.adapter_semantics,
+		"topology_semantics": adapted.topology_semantics,
+		"consumed_legacy_fields": adapted.consumed_legacy_fields.duplicate(),
+	}
+	return definition_gu
 
 
 static func stable_skill_id(skill_name_or_id: String) -> String:

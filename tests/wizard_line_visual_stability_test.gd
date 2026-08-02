@@ -214,7 +214,7 @@ func _line_plan(
 		"random_0_to_10": 0,
 	})
 	plan["canonical_geometry_contract"] = SpellGeometry.CONTRACT_ID
-	plan["geometry_origin_world"] = Vector2.ZERO
+	plan["geometry_origin_screen_px"] = Vector2.ZERO
 	plan["geometry_tile_points"] = []
 	plan["geometry_world_points"] = world_points
 	return plan

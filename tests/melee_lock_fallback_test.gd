@@ -1,6 +1,7 @@
 extends Node
 
 const ReleaseGeometry := preload("res://scripts/skills/combat_release_geometry.gd")
+const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
 
 
 func _ready() -> void:
@@ -30,14 +31,33 @@ func _run() -> void:
 			(value as EnemyActor).global_position = game.player.global_position + Vector2(3000, 3000)
 
 	var origin: Vector2 = game.player.global_position
-	var locked_far := _make_enemy(game, "超距锁定", origin + Vector2(0, 112))
-	var near_a := _make_enemy(game, "近距A", origin + Vector2(0, 32))
-	var near_b := _make_enemy(game, "近距B", origin + Vector2(0, 32))
-	var thrust_far_a := _make_enemy(game, "刺杀远段A", origin + Vector2(0, 64))
-	var thrust_far_b := _make_enemy(game, "刺杀远段B", origin + Vector2(0, 64))
-	var half_side_a := _make_enemy(game, "半月侧面A", origin + Vector2(32, 16))
-	var half_side_b := _make_enemy(game, "半月侧面B", origin + Vector2(-32, 16))
-	var half_side_c := _make_enemy(game, "半月侧面C", origin + Vector2(-64, 0))
+	var south_gu := Vector2(1.0, 1.0).normalized()
+	var locked_far := _make_enemy(
+		game, "超距锁定", origin + _screen_offset_gu(south_gu * 4.0)
+	)
+	var near_a := _make_enemy(
+		game, "近距A", origin + _screen_offset_gu(south_gu * 1.0)
+	)
+	var near_b := _make_enemy(
+		game, "近距B", origin + _screen_offset_gu(south_gu * 1.0)
+	)
+	var thrust_far_a := _make_enemy(
+		game, "刺杀远段A", origin + _screen_offset_gu(south_gu * 2.25)
+	)
+	var thrust_far_b := _make_enemy(
+		game, "刺杀远段B", origin + _screen_offset_gu(south_gu * 2.25)
+	)
+	var half_side_a := _make_enemy(
+		game, "半月侧面A", origin + _screen_offset_gu(Vector2(1.0, 0.0))
+	)
+	var half_side_b := _make_enemy(
+		game, "半月侧面B", origin + _screen_offset_gu(Vector2(0.0, 1.0))
+	)
+	var half_side_c := _make_enemy(
+		game,
+		"半月侧面C",
+		origin + _screen_offset_gu(Vector2(-1.0, 1.0).normalized())
+	)
 	game.locked_target = locked_far
 
 	var release_geometry: Dictionary = ReleaseGeometry.resolve(
@@ -96,7 +116,11 @@ func _run() -> void:
 	game.player.fire_sword_enabled = false
 	var moved_origin := origin + Vector2(18, -11)
 	game.player.global_position = moved_origin
-	locked_far.global_position = moved_origin + Vector2(0, 48)
+	locked_far.global_position = moved_origin + (
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			Vector2(1.0, 1.0).normalized() * 1.25
+		)
+	)
 	locked_far.current_hp = locked_far.max_hp
 	game.locked_target = locked_far
 	var moving_release_geometry: Dictionary = ReleaseGeometry.resolve(
@@ -137,6 +161,10 @@ func _set_attack_context(
 func _reset_hp(targets: Array) -> void:
 	for target: EnemyActor in targets:
 		target.current_hp = target.max_hp
+
+
+func _screen_offset_gu(delta_ground_gu: Vector2) -> Vector2:
+	return GroundUnitSpace.ground_delta_gu_to_screen_delta_px(delta_ground_gu)
 
 
 func _make_enemy(game: Node, display_name: String, position: Vector2) -> EnemyActor:
