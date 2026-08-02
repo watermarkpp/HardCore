@@ -38,6 +38,22 @@ func _ready() -> void:
 			game._canonical_world_to_fractional_tile(delta_screen_px).length(),
 			8.0
 		))
+	for distance_gu: float in game.SAFE_RING_TELEPORT_DISTANCES_GU:
+		for direction_index: int in range(8):
+			var direction_ground := Vector2.from_angle(
+				TAU * float(direction_index) / 8.0
+			)
+			var motion_screen_px := (
+				GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+					direction_ground * distance_gu
+				)
+			)
+			assert(is_equal_approx(
+				GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+					motion_screen_px
+				).length(),
+				distance_gu
+			))
 	assert(game._canonical_tile_to_world(Vector2i(2, -3)) == Vector2(160.0, -16.0))
 	game.free()
 	print("GAME_ROOT_GROUND_FALLBACK_PASS: no-runtime 64x32 projection is symmetric")

@@ -61,6 +61,16 @@ const SAFE_ZONE_ACTOR_PADDING_GU := 0.05
 const BOSS_SURROUNDED_NEIGHBOR_RADIUS_GU := 1.65
 const ACTOR_LANDING_CLEARANCE_GU := 0.25
 const ENEMY_LANDING_CLEARANCE_GU := 0.125
+const SAFE_RING_TELEPORT_DISTANCES_GU := [
+	5.625,
+	4.5,
+	3.375,
+	2.25,
+	1.125,
+]
+const RANDOM_TELEPORT_MIN_DISTANCE_GU := 3.0
+const RANDOM_TELEPORT_MAX_DISTANCE_GU := 16.25
+const RANDOM_TELEPORT_ACTOR_CLEARANCE_GU := 0.25
 const CASTER_GEOMETRY_VISUAL_CONTRACT_ID := "skills.visual.geometry_cells.world_projection.v1"
 const CANONICAL_WIZARD_GEOMETRY_SKILLS := [
 	"wizard.hellfire",
@@ -3034,13 +3044,22 @@ func _on_special_action_pressed(effect_id: String) -> void:
 
 
 func _try_safe_ring_teleport() -> bool:
-	var direction := player.facing.normalized()
-	if direction == Vector2.ZERO:
-		direction = Vector2.DOWN
-	for distance: float in [180.0, 144.0, 108.0, 72.0, 36.0]:
-		var motion := direction * distance
-		if not player.test_move(player.global_transform, motion):
-			player.global_position += motion
+	var direction_screen_px := player.facing.normalized()
+	if direction_screen_px == Vector2.ZERO:
+		direction_screen_px = Vector2.DOWN
+	var direction_ground := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			direction_screen_px
+		).normalized()
+	)
+	for distance_gu: float in SAFE_RING_TELEPORT_DISTANCES_GU:
+		var motion_screen_px := (
+			GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+				direction_ground * distance_gu
+			)
+		)
+		if not player.test_move(player.global_transform, motion_screen_px):
+			player.global_position += motion_screen_px
 			player.velocity = Vector2.ZERO
 			player.movement_performed.emit(player.global_position, player.facing)
 			return true
@@ -4810,23 +4829,53 @@ func _on_scroll_used(item_name: String) -> void:
 	hud.show_message("使用了%s" % item_name)
 
 
-func _find_valid_random_teleport_position(origin: Vector2) -> Vector2:
+func _find_valid_random_teleport_position(origin_screen_px: Vector2) -> Vector2:
 	# Every candidate goes through the same world boundary/obstacle contract as
 	# movement and monster spawning.  A scroll can never bypass black borders.
+	var origin_ground_gu := _canonical_world_to_fractional_tile(
+		origin_screen_px
+	)
+	var player_combat_radius_gu := (
+		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
+			ArtSpec.PLAYER_COLLISION_RADIUS
+		)
+	)
 	for _attempt in range(96):
 		var angle := _rng.randf_range(0.0, TAU)
-		var distance := _rng.randf_range(96.0, 520.0)
-		var candidate := origin + Vector2.from_angle(angle) * distance
-		if WorldSpatialRulesScript.environment_blocks_actor(background, candidate, ArtSpec.PLAYER_COLLISION_RADIUS):
+		var distance_gu := _rng.randf_range(
+			RANDOM_TELEPORT_MIN_DISTANCE_GU,
+			RANDOM_TELEPORT_MAX_DISTANCE_GU
+		)
+		var candidate_ground_gu := (
+			origin_ground_gu + Vector2.from_angle(angle) * distance_gu
+		)
+		var candidate_screen_px := _canonical_fractional_tile_to_world(
+			candidate_ground_gu
+		)
+		if WorldSpatialRulesScript.environment_blocks_actor(
+			background,
+			candidate_screen_px,
+			ArtSpec.PLAYER_COLLISION_RADIUS
+		):
 			continue
 		var occupied := false
 		for enemy_value: Variant in get_tree().get_nodes_in_group("enemies"):
-			if enemy_value is Node2D and (enemy_value as Node2D).global_position.distance_to(candidate) < 34.0:
+			if not enemy_value is EnemyActor:
+				continue
+			var enemy := enemy_value as EnemyActor
+			if GroundUnitSpaceScript.distance_gu(
+				_canonical_world_to_fractional_tile(enemy.global_position),
+				candidate_ground_gu
+			) < (
+				player_combat_radius_gu
+				+ enemy.combat_radius_gu
+				+ RANDOM_TELEPORT_ACTOR_CLEARANCE_GU
+			):
 				occupied = true
 				break
 		if not occupied:
-			return candidate
-	return origin
+			return candidate_screen_px
+	return origin_screen_px
 
 
 func _respawn_later(
