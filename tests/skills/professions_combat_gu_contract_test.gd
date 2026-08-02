@@ -6,6 +6,7 @@ const LockPolicy := preload("res://scripts/skills/spell_target_lock_policy.gd")
 const Melee := preload("res://scripts/skills/warrior_melee_geometry.gd")
 const CasterGeometry := preload("res://scripts/skills/caster_spell_geometry.gd")
 const Projectile := preload("res://scripts/skill_projectile.gd")
+const GroundEffect := preload("res://scripts/ground_effect.gd")
 const LegacyAdapter := preload("res://scripts/skills/combat_unit_legacy_adapter.gd")
 const GeometryService := preload("res://scripts/skills/skill_geometry_service.gd")
 
@@ -20,7 +21,8 @@ func _ready() -> void:
 	_test_g_projectile_gu_sweep()
 	_test_h_primary_source_adapters_and_units()
 	_test_i_frozen_visual_contracts()
-	print("PROFESSIONS_COMBAT_GU_CONTRACT_PASS: audits A-I")
+	_test_j_ground_effect_radius_gu()
+	print("PROFESSIONS_COMBAT_GU_CONTRACT_PASS: audits A-J")
 	get_tree().quit(0)
 
 
@@ -80,6 +82,7 @@ func _test_c_euclidean_lock_and_stable_order() -> void:
 	var ordered := LockPolicy.ordered_candidates([
 		{"origin_ground_gu": Vector2.ZERO, "target_ground_gu": Vector2(3, 4), "instance_id": 9},
 		{"origin_ground_gu": Vector2.ZERO, "target_ground_gu": Vector2(-3, -4), "instance_id": 2},
+		{"origin_tile": Vector2.ZERO, "target_tile": Vector2.ONE, "instance_id": 1},
 	])
 	assert(ordered.size() == 2)
 	assert(ordered[0].instance_id == 2 and ordered[1].instance_id == 9)
@@ -132,6 +135,16 @@ func _test_e_continuous_line_gu_geometry() -> void:
 			))
 			assert(is_equal_approx(float(strip.effect_width_gu), 1.0))
 			assert(is_equal_approx(float(strip.half_width_gu), 0.5))
+			for legacy_key: String in [
+				"origin_fractional_tile",
+				"aim_fractional_tile",
+				"axis_fractional_tile",
+				"length_tiles",
+				"width_tiles",
+				"strip_polygon_fractional_tile",
+				"centerline_points_fractional_tile",
+			]:
+				assert(not strip.has(legacy_key))
 
 
 func _test_f_discrete_cell_footprint_resolver() -> void:
@@ -207,3 +220,33 @@ func _test_i_frozen_visual_contracts() -> void:
 		var domain := GeometryService.geometry_domain({"skill_id": skill_id})
 		assert(domain.domain == GeometryService.DOMAIN_CONTINUOUS_GROUND_GU)
 		assert(domain.unit_contract_id == GroundUnit.CONTRACT_ID)
+
+
+func _test_j_ground_effect_radius_gu() -> void:
+	assert(
+		GroundEffect.GROUND_UNIT_SETUP_CONTRACT_ID
+		== "skills.ground_effect.setup_ground_unit_effect.v1"
+	)
+	var effect := GroundEffect.new()
+	effect.setup_ground_unit_effect(
+		Vector2(320.0, 180.0), 1, 1.25, 1.0, Color.WHITE
+	)
+	var target := Node2D.new()
+	for sample_index: int in range(32):
+		var direction_ground_gu := Vector2.from_angle(
+			TAU * float(sample_index) / 32.0
+		)
+		target.global_position = effect.global_position + (
+			GroundUnit.ground_delta_gu_to_screen_delta_px(
+				direction_ground_gu * 1.25
+			)
+		)
+		assert(effect.runtime_target_is_inside(target))
+		target.global_position = effect.global_position + (
+			GroundUnit.ground_delta_gu_to_screen_delta_px(
+				direction_ground_gu * 1.251
+			)
+		)
+		assert(not effect.runtime_target_is_inside(target))
+	target.free()
+	effect.free()

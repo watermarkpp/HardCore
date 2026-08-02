@@ -35,7 +35,10 @@ func _ready() -> void:
 	assert(skeleton.attack_type == "physical" and divine_beast.attack_type == "fire")
 	assert(skeleton.summon_level == 3 and skeleton.summon_exp_level == 3 and skeleton.summon_count == 1)
 	assert(skeleton.amulet_cost == 1 and divine_beast.amulet_cost == 5)
-	assert(divine_beast.max_hp > skeleton.max_hp and divine_beast.attack_range > skeleton.attack_range)
+	assert(
+		divine_beast.max_hp > skeleton.max_hp
+		and divine_beast.attack_range_gu > skeleton.attack_range_gu
+	)
 	assert(skeleton.lifetime_seconds == 864000.0 and divine_beast.lifetime_seconds == 864000.0)
 	assert(skeleton.reject_when_owner_has_slave and divine_beast.recall_existing_on_create_failure)
 

@@ -113,7 +113,7 @@ static func explain_candidate(
 static func explain_footprint_candidate(
 	origin_ground_gu: Vector2,
 	target_ground_gu: Vector2,
-	target_collision_radius_px: float,
+	target_combat_radius_gu: float,
 	attack_direction_index: int,
 	mode: String,
 	range_bonus_gu := 0.0
@@ -131,19 +131,19 @@ static func explain_footprint_candidate(
 	)
 	var resolved_mode := str(point_result.get("mode", Geometry.SKILL_NORMAL))
 	var normalized_attack_direction := posmod(attack_direction_index, 8)
-	var footprint_accepted := Geometry.footprint_intersects_mode(
+	var footprint_accepted := Geometry.footprint_intersects_mode_gu(
 		origin_ground_gu,
 		target_ground_gu,
-		target_collision_radius_px,
+		target_combat_radius_gu,
 		normalized_attack_direction,
 		resolved_mode,
 		range_bonus_gu
 	)
 	var footprint_slot := (
-		Geometry.thrust_footprint_slot(
+		Geometry.thrust_footprint_slot_gu(
 			origin_ground_gu,
 			target_ground_gu,
-			target_collision_radius_px,
+			target_combat_radius_gu,
 			normalized_attack_direction,
 			range_bonus_gu
 		)
@@ -151,10 +151,10 @@ static func explain_footprint_candidate(
 		else 0
 	)
 	var footprint_half_moon_relative_sector := (
-		Geometry.half_moon_footprint_relative_sector(
+		Geometry.half_moon_footprint_relative_sector_gu(
 			origin_ground_gu,
 			target_ground_gu,
-			target_collision_radius_px,
+			target_combat_radius_gu,
 			normalized_attack_direction,
 			range_bonus_gu
 		)
@@ -163,9 +163,9 @@ static func explain_footprint_candidate(
 	)
 	var target_polygon := Geometry.target_footprint_polygon_ground_gu(
 		target_ground_gu,
-		target_collision_radius_px
+		target_combat_radius_gu
 	)
-	var attack_polygons := Geometry.attack_region_polygons(
+	var attack_polygons := Geometry.attack_region_polygons_ground_gu(
 		origin_ground_gu,
 		normalized_attack_direction,
 		resolved_mode,
@@ -194,7 +194,7 @@ static func explain_footprint_candidate(
 		"point_thrust_slot": int(point_result.get("thrust_slot", 0)),
 		"footprint_thrust_slot": footprint_slot,
 		"footprint_half_moon_relative_sector": footprint_half_moon_relative_sector,
-		"target_collision_radius_px": maxf(0.0, target_collision_radius_px),
+		"target_combat_radius_gu": maxf(0.0, target_combat_radius_gu),
 		"target_footprint_vertex_count": target_polygon.size(),
 		"target_footprint_polygon_ground_gu": _polygon_json(target_polygon),
 		"attack_region_polygon_count": attack_polygons.size(),

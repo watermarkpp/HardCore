@@ -69,7 +69,7 @@ func _ready() -> void:
 	assert(beast.activate_visual_resources(), "冷缓存重激活失败")
 	assert(beast._sprite.texture == beast._animation_resources.idle, "资源激活后没有刷新当前显示")
 
-	beast.velocity = Vector2.RIGHT * beast.move_speed
+	beast.velocity = beast._screen_velocity_toward_delta_px(Vector2.RIGHT)
 	beast._process(0.17)
 	assert(beast._visual_state == "walk", "移动没有进入walk循环")
 	beast.velocity = Vector2.ZERO

@@ -22,6 +22,7 @@ func _test_lock_range_and_order() -> void:
 		{"origin_ground_gu": Vector2.ZERO, "target_ground_gu": Vector2(4, 4), "instance_id": 3},
 		{"origin_ground_gu": Vector2.ZERO, "target_ground_gu": Vector2(2, 0), "instance_id": 2},
 		{"origin_ground_gu": Vector2.ZERO, "target_ground_gu": Vector2(20, 0), "instance_id": 1},
+		{"origin_tile": Vector2.ZERO, "target_tile": Vector2.ONE, "instance_id": 4},
 	])
 	assert(ordered.size() == 2)
 	assert(ordered[0].instance_id == 2 and ordered[1].instance_id == 3)

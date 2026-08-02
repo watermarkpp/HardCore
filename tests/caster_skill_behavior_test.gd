@@ -4,9 +4,10 @@ extends Node
 func _ready() -> void:
 	var repulsion := CasterSkillBehavior.resolve("wizard.repulsion_ring", {
 		"skill_level": 3, "caster_level": 30, "target_level": 28,
-		"random_0_to_19": 16, "random_0_or_1": 1, "cell_size": 48,
+		"random_0_to_19": 16, "random_0_or_1": 1,
 	})
-	assert(repulsion.success and repulsion.push_cells == 4 and repulsion.push_distance == 192)
+	assert(repulsion.success and repulsion.push_distance_gu == 4.0)
+	assert(not repulsion.has("push_cells") and not repulsion.has("push_distance"))
 	var repulsion_fail := CasterSkillBehavior.resolve("wizard.repulsion_ring", {
 		"skill_level": 3, "caster_level": 30, "target_level": 28, "random_0_to_19": 17,
 	})

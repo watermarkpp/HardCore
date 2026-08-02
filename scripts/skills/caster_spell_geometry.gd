@@ -87,17 +87,12 @@ static func target_footprint_intersects_cells(
 
 static func actor_footprint_polygon_ground_gu(
 	target_center_ground_gu: Vector2,
-	target_collision_radius_px: float
+	target_combat_radius_gu: float
 ) -> PackedVector2Array:
-	var combat_radius_gu := (
-		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-			target_collision_radius_px
-		)
-	)
 	var result := PackedVector2Array()
 	for offset_ground_gu: Vector2 in (
 		WorldSpatialRulesScript.actor_footprint_ground_polygon_gu(
-			combat_radius_gu
+			target_combat_radius_gu
 		)
 	):
 		result.append(target_center_ground_gu + offset_ground_gu)
@@ -107,11 +102,11 @@ static func actor_footprint_polygon_ground_gu(
 static func declared_cells_intersect_actor_footprint(
 	effective_geometry_cells: Array[Vector2i],
 	target_center_ground_gu: Vector2,
-	target_collision_radius_px: float
+	target_combat_radius_gu: float
 ) -> Dictionary:
 	var footprint_ground_gu := actor_footprint_polygon_ground_gu(
 		target_center_ground_gu,
-		target_collision_radius_px
+		target_combat_radius_gu
 	)
 	return {
 		"contract_id": DISCRETE_CELL_FOOTPRINT_RESOLVER_CONTRACT_ID,
@@ -176,16 +171,6 @@ static func continuous_line_strip(
 		"strip_end_ground_gu": strip_end_ground_gu,
 		"strip_polygon_ground_gu": polygon,
 		"centerline_points_ground_gu": centerline_points,
-		# Compatibility keys for integration until the GU rename is merged.
-		"origin_fractional_tile": origin_ground_gu,
-		"aim_fractional_tile": aim_ground_gu,
-		"axis_fractional_tile": direction_ground_gu,
-		"length_tiles": safe_length_gu,
-		"width_tiles": safe_width_gu,
-		"strip_start_fractional_tile": strip_start_ground_gu,
-		"strip_end_fractional_tile": strip_end_ground_gu,
-		"strip_polygon_fractional_tile": polygon,
-		"centerline_points_fractional_tile": centerline_points,
 		"visual_direction_index": (
 			CombatDirectionSpaceScript.direction_index_for_fractional_tile_delta(
 				direction_ground_gu
@@ -203,8 +188,7 @@ static func target_footprint_intersects_continuous_line(
 	if target_footprint_tile_polygon.size() < 3:
 		return false
 	var raw_polygon: Variant = line_strip.get(
-		"strip_polygon_ground_gu",
-		line_strip.get("strip_polygon_fractional_tile", PackedVector2Array())
+		"strip_polygon_ground_gu", PackedVector2Array()
 	)
 	if not raw_polygon is PackedVector2Array:
 		return false
@@ -221,10 +205,7 @@ static func continuous_line_world_points(
 	var result: Array[Vector2] = []
 	if not fractional_tile_to_world.is_valid():
 		return result
-	for raw_point: Variant in line_strip.get(
-		"centerline_points_ground_gu",
-		line_strip.get("centerline_points_fractional_tile", [])
-	):
+	for raw_point: Variant in line_strip.get("centerline_points_ground_gu", []):
 		if raw_point is Vector2:
 			result.append(fractional_tile_to_world.call(raw_point))
 	return result

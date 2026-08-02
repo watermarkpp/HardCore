@@ -125,10 +125,10 @@ func _verify_continuous_line_axes_and_footprint_contact() -> void:
 				1.0
 			)
 			var expected_step: Vector2 = (test_case.expected_step as Vector2).normalized()
-			assert((strip.axis_fractional_tile as Vector2).is_equal_approx(
+			assert((strip.direction_ground_gu as Vector2).is_equal_approx(
 				expected_step
 			))
-			var endpoint: Vector2 = strip.centerline_points_fractional_tile.back()
+			var endpoint: Vector2 = strip.centerline_points_ground_gu.back()
 			assert(endpoint.is_equal_approx(expected_step * length_tiles))
 			assert(is_equal_approx(
 				endpoint.length(),
@@ -173,7 +173,7 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 				float(skill_case.length_tiles),
 				1.0
 			)
-			var endpoint_tile: Vector2 = strip.centerline_points_fractional_tile.back()
+			var endpoint_tile: Vector2 = strip.centerline_points_ground_gu.back()
 			assert(is_equal_approx(
 				endpoint_tile.length(),
 				float(skill_case.length_tiles)

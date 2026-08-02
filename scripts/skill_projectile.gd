@@ -22,9 +22,9 @@ const VISUAL_PATHS := {
 	"taoist.soul_fire_talisman": "res://assets/art/characters/taoist/effects/soul_fire_talisman.png",
 }
 
-var direction := Vector2.RIGHT
-# Formal gameplay motion. The unsuffixed fields below are compatibility mirrors
-# only and are never read by the physics path.
+var direction_screen_px := Vector2.RIGHT
+# Formal gameplay motion. Screen PX is presentation-only; all range, speed and
+# collision state is expressed in ground units.
 var direction_ground_gu := Vector2(1.0, -1.0).normalized()
 var speed_gu_per_sec := CombatUnitLegacyAdapterScript.PROJECTILE_SPEED_GU_PER_SEC
 var max_travel_distance_gu := -1.0
@@ -32,16 +32,11 @@ var traveled_distance_gu := 0.0
 var remaining_travel_distance_gu := -1.0
 var projectile_radius_gu := CombatUnitLegacyAdapterScript.PROJECTILE_RADIUS_GU
 var visual_muzzle_offset_px := Vector2.ZERO
-var speed := 520.0
-var remaining_range := 360.0
-var maximum_range_tiles := -1.0
-var traveled_range_tiles := 0.0
 var damage := 1
 var effect := "damage"
 var effect_strength := 0
 var effect_duration := 0.0
 var projectile_color := Color(0.35, 0.7, 1.0)
-var hit_radius := 24.0
 var skill_id := ""
 var resolution_skill_id := ""
 var source_actor: Node2D
@@ -52,55 +47,6 @@ var last_resolution: Dictionary = {}
 var _sprite: Sprite2D
 var visual_rejection_reason := ""
 var _projectile_role_valid := false
-
-
-func setup(start: Vector2, cast_direction: Vector2, value: int, travel_range: float, color: Color, status_effect := "damage", status_strength := 0, status_duration := 0.0, source_skill_id := "") -> void:
-	global_position = start
-	direction = cast_direction.normalized() if cast_direction.length() > 0.0 else Vector2.RIGHT
-	direction_ground_gu = GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-		direction
-	).normalized()
-	damage = maxi(0, value)
-	remaining_range = maxf(40.0, travel_range)
-	remaining_travel_distance_gu = (
-		CombatUnitLegacyAdapterScript.legacy_screen_distance_px_to_gu(
-			remaining_range
-		)
-	)
-	projectile_color = color
-	effect = status_effect
-	effect_strength = status_strength
-	effect_duration = status_duration
-	resolution_skill_id = ProfessionRules.skill_id(source_skill_id) if not source_skill_id.is_empty() else ""
-	skill_id = resolution_skill_id
-	if skill_id.is_empty() and PlayerState != null:
-		if PlayerState.profession == "法师":
-			skill_id = "wizard.fireball"
-		elif PlayerState.profession == "道士":
-			skill_id = "taoist.soul_fire_talisman"
-
-
-func setup_ground_unit_motion(
-	start_screen_position_px: Vector2,
-	cast_direction_ground_gu: Vector2,
-	maximum_distance_gu: float,
-	speed_value_gu_per_sec := CombatUnitLegacyAdapterScript.PROJECTILE_SPEED_GU_PER_SEC,
-	radius_gu := CombatUnitLegacyAdapterScript.PROJECTILE_RADIUS_GU,
-	muzzle_offset_px := Vector2.ZERO
-) -> void:
-	global_position = start_screen_position_px
-	direction_ground_gu = (
-		cast_direction_ground_gu.normalized()
-		if cast_direction_ground_gu.length_squared() > 0.000001
-		else Vector2(1.0, -1.0).normalized()
-	)
-	direction = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
-		direction_ground_gu
-	).normalized()
-	speed_gu_per_sec = maxf(0.0, speed_value_gu_per_sec)
-	projectile_radius_gu = maxf(0.0, radius_gu)
-	visual_muzzle_offset_px = muzzle_offset_px
-	configure_maximum_travel_distance_gu(maximum_distance_gu)
 
 
 func setup_ground_unit_projectile(
@@ -125,7 +71,7 @@ func setup_ground_unit_projectile(
 		if cast_direction_ground_gu.length_squared() > 0.000001
 		else Vector2(1.0, -1.0).normalized()
 	)
-	direction = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+	direction_screen_px = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
 		direction_ground_gu
 	).normalized()
 	speed_gu_per_sec = maxf(0.0, float(speed_value_gu_per_sec))
@@ -162,16 +108,9 @@ func configure_runtime_resolution(
 	anti_poison_roll_override = anti_poison_roll
 
 
-func configure_maximum_range_tiles(value: float) -> void:
-	# Legacy field is numerically GU under the versioned combat-unit adapter.
-	configure_maximum_travel_distance_gu(value)
-
-
 func configure_maximum_travel_distance_gu(value_gu: float) -> void:
 	max_travel_distance_gu = value_gu if value_gu > 0.0 else -1.0
-	maximum_range_tiles = max_travel_distance_gu
 	traveled_distance_gu = 0.0
-	traveled_range_tiles = 0.0
 	if max_travel_distance_gu > 0.0:
 		remaining_travel_distance_gu = max_travel_distance_gu
 
@@ -197,7 +136,7 @@ func _install_visual() -> void:
 	var render := CasterSkillVisualRegistry.render_policy(skill_id)
 	var desired_extent := maxf(1.0, float(render.get("fit_extent", 34.0)))
 	var candidate := AnimationPlayerScript.new()
-	if not candidate.configure(skill_id, direction, desired_extent):
+	if not candidate.configure(skill_id, direction_screen_px, desired_extent):
 		visual_rejection_reason = "projectile_animation_failed"
 		candidate.queue_free()
 		return
@@ -226,15 +165,10 @@ func _physics_process(delta: float) -> void:
 	var segment_end_screen_px := global_position + motion_screen_px
 	global_position = segment_end_screen_px
 	traveled_distance_gu += travel_distance_gu
-	traveled_range_tiles = traveled_distance_gu
 	if remaining_travel_distance_gu >= 0.0:
 		remaining_travel_distance_gu = maxf(
 			0.0,
 			remaining_travel_distance_gu - travel_distance_gu
-		)
-		remaining_range = (
-			remaining_travel_distance_gu
-			* CombatUnitLegacyAdapterScript.CANONICAL_SOUTH_AXIS_PX_PER_GU
 		)
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node.is_queued_for_deletion():
@@ -364,7 +298,7 @@ func _draw() -> void:
 		return
 	if _sprite != null:
 		return
-	draw_line(-direction * 30.0, Vector2.ZERO, Color(projectile_color, 0.25), 10.0)
+	draw_line(-direction_screen_px * 30.0, Vector2.ZERO, Color(projectile_color, 0.25), 10.0)
 	if _sprite == null:
 		draw_circle(Vector2.ZERO, 9.0, projectile_color)
 	draw_circle(Vector2.ZERO, 14.0, Color(projectile_color, 0.22), false, 4.0)

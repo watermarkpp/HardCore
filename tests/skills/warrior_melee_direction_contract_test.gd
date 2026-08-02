@@ -111,7 +111,7 @@ func _test_phone_failure_coordinate_regression() -> void:
 	assert(release.direction_index == 4)
 	assert(release.visual_direction_index == 4)
 	assert(release.direction_canonical_tile_step == Vector2i(-1, -1))
-	assert(release.direction_world.is_equal_approx(Vector2.UP))
+	assert(release.direction_screen_px.is_equal_approx(Vector2.UP))
 	assert(release.direction_locked_for_action)
 
 

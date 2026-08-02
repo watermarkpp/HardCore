@@ -44,18 +44,9 @@ var max_hp := 80
 var current_hp := 80
 var attack_min := 3
 var attack_max := 6
-# Legacy profile mirrors. Runtime movement/range logic reads only the formal GU
-# fields below after setup's one-time adapter conversion.
-var move_speed := 135.0
-var attack_range := 48.0
-var aggro_radius := 330.0
-var collision_radius := 15.0
 var attack_interval := 1.25
 var lifetime_seconds := 864000.0
 var remaining_lifetime := 864000.0
-var leash_range := 560.0
-var teleport_range := 900.0
-var follow_distance := 75.0
 var move_speed_gu_per_sec := (
 	CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(135.0)
 )
@@ -68,6 +59,7 @@ var aggro_radius_gu := (
 var combat_radius_gu := (
 	CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(15.0)
 )
+var collision_radius_px := 15.0
 var leash_range_gu := (
 	CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(560.0)
 )
@@ -123,48 +115,43 @@ func setup(player: PlayerCharacter, display_name: String, power: int, learned_le
 	current_hp = max_hp
 	attack_min = int(profile.get("attack_min", maxi(1, int(power / 2))))
 	attack_max = int(profile.get("attack_max", maxi(attack_min, power)))
-	move_speed = float(profile.get("move_speed", 155.0 if summon_name == "神兽" else 135.0))
-	attack_range = float(profile.get("attack_range", 48.0))
 	attack_interval = float(profile.get("attack_interval", 1.25))
-	aggro_radius = float(profile.get("aggro_radius", 330.0))
 	lifetime_seconds = float(profile.get("lifetime_seconds", 864000.0))
 	remaining_lifetime = lifetime_seconds
-	leash_range = float(profile.get("leash_range", 560.0))
-	teleport_range = float(profile.get("teleport_range", 900.0))
 	move_speed_gu_per_sec = float(profile.get(
 		"move_speed_gu_per_sec",
 		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
-			move_speed
+			155.0 if summon_id == "divine_beast" else 135.0
 		)
 	))
 	attack_range_gu = float(profile.get(
 		"attack_range_gu",
 		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
-			attack_range
+			72.0 if summon_id == "divine_beast" else 48.0
 		)
 	))
 	aggro_radius_gu = float(profile.get(
 		"aggro_radius_gu",
 		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
-			aggro_radius
+			380.0 if summon_id == "divine_beast" else 330.0
 		)
 	))
 	leash_range_gu = float(profile.get(
 		"leash_range_gu",
 		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
-			leash_range
+			560.0
 		)
 	))
 	teleport_range_gu = float(profile.get(
 		"teleport_range_gu",
 		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
-			teleport_range
+			900.0
 		)
 	))
 	follow_distance_gu = float(profile.get(
 		"follow_distance_gu",
 		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
-			follow_distance
+			75.0
 		)
 	))
 	owner_death_rule = str(profile.get("owner_death_rule", "expire"))
@@ -188,13 +175,13 @@ func _ready() -> void:
 	_rng.randomize()
 	var collision := CollisionShape2D.new()
 	var shape := CircleShape2D.new()
-	collision_radius = 15.0 if summon_name == "骷髅" else 21.0
+	collision_radius_px = 15.0 if summon_id == "skeleton" else 21.0
 	combat_radius_gu = (
 		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-			collision_radius
+			collision_radius_px
 		)
 	)
-	shape.radius = collision_radius
+	shape.radius = collision_radius_px
 	collision.shape = shape
 	add_child(collision)
 	_install_visual()
@@ -303,7 +290,7 @@ func _physics_process(delta: float) -> void:
 		var offset_screen_px := enemy.global_position - global_position
 		if target_footprint_surface_distance_gu(
 			enemy.global_position,
-			enemy.collision_radius
+			_target_combat_radius_gu(enemy)
 		) <= attack_range_gu + GroundUnitSpaceScript.EPSILON_GU:
 			_set_state(SummonState.ATTACK_TARGET)
 			velocity = Vector2.ZERO
@@ -361,7 +348,7 @@ func _nearest_enemy() -> EnemyActor:
 			continue
 		var distance_gu := target_footprint_surface_distance_gu(
 			node.global_position,
-			node.collision_radius
+			_target_combat_radius_gu(node)
 		)
 		if distance_gu > aggro_radius_gu + GroundUnitSpaceScript.EPSILON_GU:
 			continue
@@ -402,19 +389,23 @@ func distance_gu_to_screen_position_px(target_screen_position_px: Vector2) -> fl
 
 func target_footprint_surface_distance_gu(
 	target_screen_position_px: Vector2,
-	target_collision_radius_px: float
+	target_combat_radius_gu: float
 ) -> float:
-	var target_radius_gu := (
-		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-			target_collision_radius_px
-		)
-	)
 	return maxf(
 		0.0,
 		distance_gu_to_screen_position_px(target_screen_position_px)
 		- combat_radius_gu
-		- target_radius_gu
+		- maxf(0.0, target_combat_radius_gu)
 	)
+
+
+static func _target_combat_radius_gu(target: Node) -> float:
+	if not is_instance_valid(target):
+		return 0.0
+	for property: Dictionary in target.get_property_list():
+		if str(property.get("name", "")) == "combat_radius_gu":
+			return maxf(0.0, float(target.get("combat_radius_gu")))
+	return 0.0
 
 
 func _screen_velocity_toward_delta_px(delta_screen_px: Vector2) -> Vector2:

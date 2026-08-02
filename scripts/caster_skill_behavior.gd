@@ -51,8 +51,12 @@ static func _repulsion(level: int, context: Dictionary) -> Dictionary:
 	var success := WizardCombatMath.repulsion_succeeds(level, caster_level, target_level, random_roll)
 	var result := _base("wizard.repulsion_ring", "knockback", level)
 	result.success = success
-	result.push_cells = WizardCombatMath.repulsion_push_cells(level, int(context.get("random_0_or_1", 0))) if success else 0
-	result.push_distance = int(result.push_cells) * int(context.get("cell_size", 48))
+	result.push_distance_gu = float(
+		WizardCombatMath.repulsion_push_cells(
+			level,
+			int(context.get("random_0_or_1", 0))
+		)
+	) if success else 0.0
 	result.failure_reason = "" if success else "level_random_gate"
 	return result
 

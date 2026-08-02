@@ -188,34 +188,18 @@ static func thrust_slot_gu(
 	)
 
 
-static func target_footprint_polygon_fractional_tile(
-	target_center: Vector2,
-	collision_radius_world: float
-) -> PackedVector2Array:
-	## Compatibility call-shape: center is GU; the old horizontal screen radius is
-	## converted once by WorldSpatialRules into the formal circular GU footprint.
-	var polygon := PackedVector2Array()
-	var combat_radius_gu := (
-		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-			collision_radius_world
-		)
-	)
-	for offset_ground_gu: Vector2 in (
-		WorldSpatialRulesScript.actor_footprint_ground_polygon_gu(
-			combat_radius_gu
-		)
-	):
-		polygon.append(target_center + offset_ground_gu)
-	return polygon
-
-
 static func target_footprint_polygon_ground_gu(
 	target_center_ground_gu: Vector2,
-	target_collision_radius_px: float
+	target_combat_radius_gu: float
 ) -> PackedVector2Array:
-	return target_footprint_polygon_fractional_tile(
-		target_center_ground_gu, target_collision_radius_px
-	)
+	var polygon := PackedVector2Array()
+	for offset_ground_gu: Vector2 in (
+		WorldSpatialRulesScript.actor_footprint_ground_polygon_gu(
+			target_combat_radius_gu
+		)
+	):
+		polygon.append(target_center_ground_gu + offset_ground_gu)
+	return polygon
 
 
 static func attack_region_polygons(
@@ -261,128 +245,92 @@ static func attack_region_polygons_ground_gu(
 	)
 
 
-static func footprint_intersects_mode(
-	origin: Vector2,
-	target_center: Vector2,
-	target_collision_radius_world: float,
+static func footprint_intersects_mode_gu(
+	origin_ground_gu: Vector2,
+	target_center_ground_gu: Vector2,
+	target_combat_radius_gu: float,
 	direction_index: int,
 	mode: String,
-	range_bonus_tiles := 0.0
+	range_bonus_gu := 0.0
 ) -> bool:
-	var target_polygon := target_footprint_polygon_fractional_tile(
-		target_center,
-		target_collision_radius_world
+	var target_polygon := target_footprint_polygon_ground_gu(
+		target_center_ground_gu,
+		target_combat_radius_gu
 	)
-	for attack_polygon: PackedVector2Array in attack_region_polygons(
-		origin,
+	for attack_polygon: PackedVector2Array in attack_region_polygons_ground_gu(
+		origin_ground_gu,
 		direction_index,
 		mode,
-		range_bonus_tiles
+		range_bonus_gu
 	):
 		if convex_polygons_intersect_inclusive(attack_polygon, target_polygon):
 			return true
 	return false
 
 
-static func footprint_intersects_mode_gu(
+static func footprint_intersects_direction_sector_gu(
 	origin_ground_gu: Vector2,
 	target_center_ground_gu: Vector2,
-	target_collision_radius_px: float,
+	target_combat_radius_gu: float,
 	direction_index: int,
-	mode: String,
-	range_bonus_gu := 0.0
-) -> bool:
-	return footprint_intersects_mode(
-		origin_ground_gu,
-		target_center_ground_gu,
-		target_collision_radius_px,
-		direction_index,
-		mode,
-		range_bonus_gu
-	)
-
-
-static func footprint_intersects_direction_sector(
-	origin: Vector2,
-	target_center: Vector2,
-	target_collision_radius_world: float,
-	direction_index: int,
-	reach: float
+	reach_gu: float
 ) -> bool:
 	return convex_polygons_intersect_inclusive(
-		direction_sector_polygon(origin, direction_index, reach),
-		target_footprint_polygon_fractional_tile(
-			target_center,
-			target_collision_radius_world
+		direction_sector_polygon(origin_ground_gu, direction_index, reach_gu),
+		target_footprint_polygon_ground_gu(
+			target_center_ground_gu,
+			target_combat_radius_gu
 		)
 	)
-
-
-static func half_moon_footprint_relative_sector(
-	origin: Vector2,
-	target_center: Vector2,
-	target_collision_radius_world: float,
-	attack_direction_index: int,
-	range_bonus_tiles := 0.0
-) -> int:
-	var reach := reach_tiles(SKILL_HALF_MOON, range_bonus_tiles)
-	# Primary damage remains the facing sector. If an ellipse straddles the
-	# primary/secondary boundary, primary wins deterministically and the caller
-	# must not add the same target to a secondary list.
-	if footprint_intersects_direction_sector(
-		origin,
-		target_center,
-		target_collision_radius_world,
-		attack_direction_index,
-		reach
-	):
-		return 0
-	for relative_direction: int in HALF_MOON_RELATIVE_DIRECTION_OFFSETS:
-		if relative_direction == 0:
-			continue
-		if footprint_intersects_direction_sector(
-			origin,
-			target_center,
-			target_collision_radius_world,
-			posmod(attack_direction_index + relative_direction, 8),
-			reach
-		):
-			return relative_direction
-	return -1
 
 
 static func half_moon_footprint_relative_sector_gu(
 	origin_ground_gu: Vector2,
 	target_center_ground_gu: Vector2,
-	target_collision_radius_px: float,
+	target_combat_radius_gu: float,
 	attack_direction_index: int,
 	range_bonus_gu := 0.0
 ) -> int:
-	return half_moon_footprint_relative_sector(
+	var effective_reach_gu := reach_gu(SKILL_HALF_MOON, range_bonus_gu)
+	# Primary damage remains the facing sector. If an ellipse straddles the
+	# primary/secondary boundary, primary wins deterministically and the caller
+	# must not add the same target to a secondary list.
+	if footprint_intersects_direction_sector_gu(
 		origin_ground_gu,
 		target_center_ground_gu,
-		target_collision_radius_px,
+		target_combat_radius_gu,
 		attack_direction_index,
-		range_bonus_gu
-	)
-
-
-static func thrust_footprint_slot(
-	origin: Vector2,
-	target_center: Vector2,
-	target_collision_radius_world: float,
+		effective_reach_gu
+	):
+		return 0
+	for relative_direction: int in HALF_MOON_RELATIVE_DIRECTION_OFFSETS:
+		if relative_direction == 0:
+			continue
+		if footprint_intersects_direction_sector_gu(
+			origin_ground_gu,
+			target_center_ground_gu,
+			target_combat_radius_gu,
+			posmod(attack_direction_index + relative_direction, 8),
+			effective_reach_gu
+		):
+			return relative_direction
+	return -1
+static func thrust_footprint_slot_gu(
+	origin_ground_gu: Vector2,
+	target_center_ground_gu: Vector2,
+	target_combat_radius_gu: float,
 	direction_index: int,
-	range_bonus_tiles := 0.0
+	range_bonus_gu := 0.0
 ) -> int:
-	var target_polygon := target_footprint_polygon_fractional_tile(
-		target_center,
-		target_collision_radius_world
+	var target_polygon := target_footprint_polygon_ground_gu(
+		target_center_ground_gu,
+		target_combat_radius_gu
 	)
 	# Test the primary segment first. A body straddling the 1.5-tile boundary is
 	# assigned once to slot 1, so integration cannot apply both damage bands.
 	if convex_polygons_intersect_inclusive(
 		_thrust_region_polygon(
-			origin,
+			origin_ground_gu,
 			direction_index,
 			0.0,
 			THRUST_PRIMARY_REACH_GU
@@ -392,33 +340,15 @@ static func thrust_footprint_slot(
 		return 1
 	if convex_polygons_intersect_inclusive(
 		_thrust_region_polygon(
-			origin,
+			origin_ground_gu,
 			direction_index,
 			THRUST_PRIMARY_REACH_GU,
-			reach_tiles(SKILL_THRUST, range_bonus_tiles)
+			reach_gu(SKILL_THRUST, range_bonus_gu)
 		),
 		target_polygon
 	):
 		return 2
 	return 0
-
-
-static func thrust_footprint_slot_gu(
-	origin_ground_gu: Vector2,
-	target_center_ground_gu: Vector2,
-	target_collision_radius_px: float,
-	direction_index: int,
-	range_bonus_gu := 0.0
-) -> int:
-	return thrust_footprint_slot(
-		origin_ground_gu,
-		target_center_ground_gu,
-		target_collision_radius_px,
-		direction_index,
-		range_bonus_gu
-	)
-
-
 static func convex_polygons_intersect_inclusive(
 	first: PackedVector2Array,
 	second: PackedVector2Array
