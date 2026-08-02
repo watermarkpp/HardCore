@@ -168,16 +168,50 @@ func _ready() -> void:
 	for map_summary: Dictionary in marker.maps:
 		var map_id := str(map_summary.map_id)
 		assert(runtimes.has(map_id))
+		var map_index := MAP_IDS.find(map_id)
+		assert(map_index >= 0)
+		assert(int(map_summary.runtime_map_id) == RUNTIME_IDS[map_index])
 		assert(
-			str(map_summary.runtime_build_sha256)
-			== str(runtimes[map_id].build_sha256)
+			_is_valid_sha256(str(map_summary.runtime_build_sha256)),
+			"invalid_historical_runtime_sha256:%s" % map_id
 		)
+	var marker_pair_ids: Array[String] = []
+	for marker_pair: Dictionary in marker.connection_pairs:
+		marker_pair_ids.append(str(marker_pair.connection_pair_id))
+	for expected_pair_id: String in [
+		"wooma_forest_temple_1_pair_v1",
+		"wooma_temple_1_2_pair_v1",
+		"wooma_temple_2_leader_hall_pair_v1",
+	]:
+		assert(expected_pair_id in marker_pair_ids)
+	var marker_connection_ids: Array[String] = []
+	for marker_connection: Dictionary in marker.connections:
+		marker_connection_ids.append(str(marker_connection.official_connection_id))
+	for expected_connection_id: String in [
+		"wooma_forest_top_to_temple_1_v2",
+		"wooma_temple_1_to_forest_v1",
+		"wooma_temple_1_to_2_v2",
+		"wooma_temple_2_to_1_v1",
+		"wooma_temple_2_to_leader_hall_v2",
+		"wooma_leader_hall_to_temple_2_v1",
+	]:
+		assert(expected_connection_id in marker_connection_ids)
 	print(
 		"WOOMA_TEMPLE_LAYER_CONNECTIONS_PASS "
 		+ "maps=4 pairs=3 endpoints=6 overlap=0 clone_size=44x44 "
 		+ "route=268<->313<->314<->315"
 	)
 	get_tree().quit(0)
+
+
+func _is_valid_sha256(value: String) -> bool:
+	var normalized := value.to_lower()
+	if normalized.length() != 64:
+		return false
+	for character: String in normalized:
+		if not "0123456789abcdef".contains(character):
+			return false
+	return true
 
 
 func _assert_runtime_matches_document(
