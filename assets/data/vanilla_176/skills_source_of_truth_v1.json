@@ -1567,14 +1567,11 @@
       },
       "geometry": {
         "shape": "line",
-        "length_tiles": 4,
-        "width_tiles": 1.5,
+        "length_tiles": 5,
+        "width_tiles": 1,
         "pierces_units": false,
         "stops_on_terrain": true,
-        "primary_source_length_tiles": 5,
-        "primary_source_width_tiles": 1,
-        "geometry_override_contract": "skills.wizard.hellfire.geometry_4x1_5_user_override.v1",
-        "status": "project_canonical_user_override"
+        "status": "project_canonical"
       },
       "timing": {
         "body_action": "cast_8dir_6f",

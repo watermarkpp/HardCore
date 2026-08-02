@@ -40,7 +40,7 @@ func _ready() -> void:
 	)
 	assert(hellfire_cells == [
 		Vector2i(1, 0), Vector2i(2, 0), Vector2i(3, 0),
-		Vector2i(4, 0),
+		Vector2i(4, 0), Vector2i(5, 0),
 	])
 	var exploding_cells := GeometryService.cells(
 		Loader.skill("wizard.exploding_flame"),

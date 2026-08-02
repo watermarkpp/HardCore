@@ -28,7 +28,7 @@
     },
     "contract_id": "skills.mir2_176.vanilla_33.v1.0.1",
     "original_path": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
-    "sha256": "803c1f96418a1d7d77dadfab2b4fb2c79899dafd06da2f88fd1d20a8d903891a"
+    "sha256": "883359e2cf191a196f749653067f2030130fc11fd59a033a89ee557cab7607e2"
   },
   "mappingSources": [
     {
@@ -804,14 +804,11 @@
         },
         "geometry": {
           "shape": "line",
-          "length_tiles": 4,
-          "width_tiles": 1.5,
+          "length_tiles": 5,
+          "width_tiles": 1,
           "pierces_units": false,
           "stops_on_terrain": true,
-          "primary_source_length_tiles": 5,
-          "primary_source_width_tiles": 1,
-          "geometry_override_contract": "skills.wizard.hellfire.geometry_4x1_5_user_override.v1",
-          "status": "project_canonical_user_override"
+          "status": "project_canonical"
         },
         "timing": {
           "body_action": "cast_8dir_6f",
@@ -4006,8 +4003,9 @@
         "trajectory_max_dominant_axis_pixels": 320,
         "trail_frame_count": 6,
         "geometry_alignment_contract": "skills.caster.geometry_visual_alignment.v1",
+        "axis_fit_contract": "skills.caster.line_visual.forward_endpoint_uniform.v1",
         "trail_emission_policy": "resample_to_canonical_geometry_endpoint",
-        "fit_mode": "contain_canonical_cell_footprint",
+        "fit_mode": "caster_anchor_forward_projection_uniform_per_trail_cell",
         "movement_lock_to_primary_visual": true
       },
       "distribution_id": "client.classic_raw_complete",
@@ -9661,7 +9659,8 @@
         "playback_strategy": "frame_sequence",
         "pixel_snap": true,
         "geometry_alignment_contract": "skills.caster.geometry_visual_alignment.v1",
-        "fit_mode": "contain_canonical_geometry_footprint",
+        "axis_fit_contract": "skills.caster.line_visual.forward_endpoint_uniform.v1",
+        "fit_mode": "caster_anchor_forward_projection_uniform",
         "movement_lock_to_primary_visual": true
       },
       "distribution_id": "client.classic_raw_complete",

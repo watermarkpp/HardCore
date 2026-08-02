@@ -50,14 +50,14 @@ func _ready() -> void:
 	var hellfire := _execute("wizard.hellfire", {
 		"has_target": true, "primary_stat_roll": 10,
 	})
-	assert(hellfire.effects[0].length_tiles == 4)
-	assert(is_equal_approx(float(hellfire.effects[0].width_tiles), 1.5))
-	assert(not hellfire.effects[0].pierces_units and hellfire.geometry_cells.size() == 4)
+	assert(hellfire.effects[0].length_tiles == 5)
+	assert(is_equal_approx(float(hellfire.effects[0].width_tiles), 1.0))
+	assert(not hellfire.effects[0].pierces_units and hellfire.geometry_cells.size() == 5)
 	assert(hellfire.effects[0].maximum_targets == 0)
 	assert(hellfire.effects[0].target_limit_policy == "all_intersecting_effect_cells")
 	assert(
 		hellfire.effects[0].target_selection_contract
-		== "skills.wizard.hellfire.all_intersecting_4x1_5_user_override.v1"
+		== "skills.wizard.hellfire.all_intersecting_5x1.v1"
 	)
 	assert(
 		hellfire.effects[0].line_geometry_contract

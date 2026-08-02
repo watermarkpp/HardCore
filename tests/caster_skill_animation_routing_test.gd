@@ -105,7 +105,7 @@ func _ready() -> void:
 	assert(hellfire_nodes.size() == 1)
 	var trail := hellfire_nodes[0] as CasterSkillVisualEffect
 	add_child(trail)
-	assert(trail.radius == 200.0, "user four-tile hellfire radius was not authoritative")
+	assert(trail.radius == 250.0, "formal five-tile hellfire radius was not authoritative")
 	assert(trail._hellfire_frame_count == 6)
 	assert(trail._hellfire_step_seconds == 0.05)
 	assert(is_equal_approx(trail._hellfire_step_distance, (500.0 / 0.9) * 0.05))
@@ -161,6 +161,6 @@ func _ready() -> void:
 	print(
 		"CASTER_SKILL_ANIMATION_ROUTING_PASS: exact direction thresholds, "
 		+ "primary-pixel rendering, slender-axis lightning, specialized roles, "
-		+ "four-tile user-override hellfire, primary fire wall and two-phase teleport"
+		+ "formal five-tile hellfire, primary fire wall and two-phase teleport"
 	)
 	get_tree().quit(0)
