@@ -1,6 +1,5 @@
 extends Node
 
-const TargetingSystem := preload("res://scripts/targeting_system.gd")
 
 
 func _ready() -> void:
@@ -128,7 +127,12 @@ func _assert_mobile_target_available(game: Node, message: String) -> void:
 	game.player.global_position = (enemies[0] as EnemyActor).global_position + Vector2(-100, 0)
 	game.player.facing = Vector2.RIGHT
 	var target: EnemyActor = game._ensure_combat_target()
-	assert(target != null and target.global_position.distance_to(game.player.global_position) <= TargetingSystem.DEFAULT_SEARCH_RADIUS, message)
+	assert(
+		target != null
+		and game._attack_lock_distance_gu(target)
+		<= game.ATTACK_LOCK_RANGE_GU + 0.0001,
+		message
+	)
 
 
 func _run_reentry_stability(game: Node) -> void:

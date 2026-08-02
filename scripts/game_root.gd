@@ -1,6 +1,5 @@
 extends Node2D
 
-const TargetingSystem := preload("res://scripts/targeting_system.gd")
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const CombatResolutionRulesScript := preload("res://scripts/combat_resolution_rules.gd")
 const MapCoordinateMapperScript := preload("res://scripts/map_coordinate_mapper.gd")
@@ -1762,13 +1761,13 @@ func _ensure_attack_locked_target(excluded: EnemyActor = null) -> EnemyActor:
 
 func _ensure_combat_target(
 	excluded: EnemyActor = null,
-	_maximum_distance := TargetingSystem.DEFAULT_SEARCH_RADIUS
+	_maximum_range_gu := ATTACK_LOCK_RANGE_GU
 ) -> EnemyActor:
 	return _ensure_attack_locked_target(excluded)
 
 
 func _refresh_auto_target(
-	_maximum_distance := TargetingSystem.DEFAULT_SEARCH_RADIUS,
+	_maximum_range_gu := ATTACK_LOCK_RANGE_GU,
 	excluded: EnemyActor = null
 ) -> EnemyActor:
 	var candidates := _attack_lock_candidates(excluded)
@@ -2259,7 +2258,7 @@ func _face_locked_target() -> Vector2:
 
 func _ensure_skill_cast_target(
 	excluded: EnemyActor = null,
-	_maximum_distance := TargetingSystem.DEFAULT_SEARCH_RADIUS
+	_maximum_range_gu := 12.0
 ) -> EnemyActor:
 	if _is_magic_target_in_range(magic_locked_target) and magic_locked_target != excluded:
 		_skill_cast_target = magic_locked_target
@@ -2288,7 +2287,7 @@ func _face_skill_cast_target() -> Vector2:
 
 
 func _select_wild_rush_target() -> EnemyActor:
-	if TargetingSystem.is_valid_target(locked_target, player.global_position):
+	if _is_attack_target_in_range(locked_target):
 		# A live lock is authoritative. An ineligible, over-level, boss, or
 		# out-of-reach lock must make this cast invalid instead of silently
 		# redirecting the charge to a different nearby monster.
@@ -2561,10 +2560,7 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 			return &"rejected"
 		_face_skill_cast_target()
 	elif _skill_needs_target(str(profile.get("cast_type", "melee"))):
-		_ensure_skill_cast_target(
-			null,
-			float(profile.get("search_range", TargetingSystem.DEFAULT_SEARCH_RADIUS))
-		)
+		_ensure_skill_cast_target(null)
 		_face_skill_cast_target()
 	if _definition_requires_hostile_target(definition):
 		if not is_instance_valid(_skill_cast_target):

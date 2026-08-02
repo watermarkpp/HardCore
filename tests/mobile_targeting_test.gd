@@ -258,19 +258,22 @@ func _expected_melee_facing(actor: Node2D, target: Node2D) -> Vector2:
 
 func _assert_direction_priority() -> void:
 	var front_near := Node2D.new()
-	front_near.position = Vector2(90, 20)
 	var front_far := Node2D.new()
-	front_far.position = Vector2(180, 0)
 	var side := Node2D.new()
-	side.position = Vector2(0, 35)
 	var behind := Node2D.new()
-	behind.position = Vector2(-25, 0)
 	for node: Node2D in [front_near, front_far, side, behind]:
 		add_child(node)
-	assert(TargetingSystem.select_target([behind, side, front_far, front_near], Vector2.ZERO, Vector2.RIGHT) == front_near, "自动选敌没有优先最近正面目标")
-	assert(TargetingSystem.select_target([behind, side], Vector2.ZERO, Vector2.RIGHT) == side, "正面无怪时没有选择侧面目标")
-	assert(TargetingSystem.select_target([behind], Vector2.ZERO, Vector2.RIGHT) == behind, "仅背面有怪时没有选择背面目标")
-	var ordered := TargetingSystem.front_targets([front_far, behind, front_near], Vector2.ZERO, Vector2.RIGHT)
+	var candidates: Array[Dictionary] = [
+		{"target": behind, "ground_position_gu": Vector2(-1.0, 0.0)},
+		{"target": side, "ground_position_gu": Vector2(0.0, 1.0)},
+		{"target": front_far, "ground_position_gu": Vector2(4.0, 0.0)},
+		{"target": front_near, "ground_position_gu": Vector2(2.0, 0.25)},
+	]
+	assert(TargetingSystem.CONTRACT_ID == "combat.targeting.euclidean_gu.v2")
+	assert(TargetingSystem.select_target_ground_gu(candidates, Vector2.ZERO, Vector2.RIGHT) == front_near, "自动选敌没有优先最近正面目标")
+	assert(TargetingSystem.select_target_ground_gu(candidates.slice(0, 2), Vector2.ZERO, Vector2.RIGHT) == side, "正面无怪时没有选择侧面目标")
+	assert(TargetingSystem.select_target_ground_gu([candidates[0]], Vector2.ZERO, Vector2.RIGHT) == behind, "仅背面有怪时没有选择背面目标")
+	var ordered := TargetingSystem.front_targets_ground_gu([candidates[2], candidates[0], candidates[3]], Vector2.ZERO, Vector2.RIGHT)
 	assert(ordered.size() == 2 and ordered[0] == front_near and ordered[1] == front_far, "手动正面目标没有按距离排序")
 	for node: Node2D in [front_near, front_far, side, behind]:
 		node.queue_free()
