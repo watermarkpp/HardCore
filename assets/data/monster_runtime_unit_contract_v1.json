@@ -98,16 +98,7 @@
       "allowedScope": "rendering_only"
     }
   ],
-  "compatibilityAliases": [
-    {
-      "field": "collision_radius",
-      "formalOwnerField": "collision_radius_px",
-      "unit": "PX",
-      "monsterRuntimeReads": 0,
-      "reason": "Temporary cross-domain collision/render boundary for integration and skill consumers outside the monster worktree.",
-      "removalPrerequisite": "Migrate game_root, player targeting, projectile and shared world-spatial consumers to collision_radius_px or combat_radius_gu according to their boundary."
-    }
-  ],
+  "compatibilityAliases": [],
   "legacyPolicy": {
     "readOnly": true,
     "rewriteSourceProfiles": false,
