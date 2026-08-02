@@ -124,7 +124,6 @@ func _configure_exit(
 	target_entrance: Dictionary,
 	connection_id: String
 ) -> void:
-	map_exit.erase("radius_tiles")
 	map_exit["display_name"] = display_name
 	map_exit["target_configured"] = true
 	map_exit["target_map_id"] = target_runtime_map_id

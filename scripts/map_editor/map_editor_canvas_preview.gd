@@ -792,14 +792,30 @@ func _draw_semantics(design_size: Vector2i, offset: Vector2, scale_factor: float
 		var radius := maxf(8.0, 11.0 * scale_factor)
 		if kind=="safe_area" and str(entry.get("shape","circle"))=="polygon":
 			var safe_polygon:=PackedVector2Array()
-			for point:Variant in entry.get("polygon_tiles",[]):
+			for point:Variant in entry.get("polygon_ground_gu",[]):
 				if point is Array and point.size()==2:safe_polygon.append(offset+MapEditorCoordinate.tile_to_ground_px(Vector2(float(point[0]),float(point[1])),design_size)*scale_factor)
 			if safe_polygon.size()>=3:
 				draw_colored_polygon(safe_polygon,Color(color,0.16));draw_polyline(PackedVector2Array(Array(safe_polygon)+[safe_polygon[0]]),color,2.0)
 		if kind in ["safe_area", "light", "region_trigger", "monster_spawn", "boss_spawn"]:
 			if not (kind=="safe_area" and str(entry.get("shape","circle"))=="polygon"):
-				var area_radius := maxf(radius, float(entry.get("radius_tiles", 1)) * 24.0 * scale_factor)
-				draw_arc(center, area_radius, 0.0, TAU, 32, Color(color, 0.9), 2.0)
+				var area_radius_gu := maxf(0.0, float(entry.get("radius_gu", 0.0)))
+				if area_radius_gu > 0.0:
+					var center_ground_gu := Vector2(
+						float(raw_tile[0]) + 0.5,
+						float(raw_tile[1]) + 0.5
+					)
+					var projected_circle := PackedVector2Array()
+					for direction_index in range(33):
+						var angle := TAU * float(direction_index) / 32.0
+						var point_ground_gu := center_ground_gu + Vector2(
+							cos(angle), sin(angle)
+						) * area_radius_gu
+						projected_circle.append(
+							offset + MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+								point_ground_gu, design_size
+							) * scale_factor
+						)
+					draw_polyline(projected_circle, Color(color, 0.9), 2.0)
 		if kind == "npc":
 			draw_circle(center + Vector2(0,-radius*.45), radius*.38, Color(color,0.95))
 			draw_rect(Rect2(center+Vector2(-radius*.45,-radius*.05),Vector2(radius*.9,radius)),Color(color,0.9),true)
@@ -884,7 +900,7 @@ func _draw_clipboard_paste_preview(
 		var kind := str(snapshot.get("kind", ""))
 		if kind == "safe_area" and str(snapshot.get("shape", "circle")) == "polygon":
 			var translated_polygon := PackedVector2Array()
-			for raw_point: Variant in snapshot.get("polygon_tiles", []):
+			for raw_point: Variant in snapshot.get("polygon_ground_gu", []):
 				if raw_point is Array and raw_point.size() == 2:
 					translated_polygon.append(
 						offset + MapEditorCoordinate.tile_to_ground_px(

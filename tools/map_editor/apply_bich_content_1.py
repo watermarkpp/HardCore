@@ -11,8 +11,8 @@ for map_id,file_name in [("bich_province","bich_province.editor.json"),("sandbox
     def shifted(point): return [point[0]+offset,point[1]+offset]
     doc["layers"]["safe_area"]=[{
         "semantic_id":"safe_area_000001","kind":"safe_area","area_id":"safe.bich_city",
-        "display_name":"比奇城五边形安全区","tile":shifted([32,32]),"return_tile":shifted([25,29]),"radius_tiles":5,
-        "shape":"polygon","polygon_tiles":[shifted(p) for p in [[11,32],[15,17],[34,16],[35,42],[24,44]]],
+        "display_name":"比奇城五边形安全区","tile":shifted([32,32]),"return_tile":shifted([25,29]),"radius_gu":5,
+        "shape":"polygon","polygon_ground_gu":[shifted(p) for p in [[11,32],[15,17],[34,16],[35,42],[24,44]]],
         "npc_hull_tiles":[shifted(p) for p in [[16,31],[18,21],[31,20],[32,38],[24,39]]],
         "expansion_tiles":5,"minimum_monster_clearance_tiles":3,"measured_monster_clearance_tiles":5.14,
         "blocks_pvp":True,"blocks_monster_damage":True,"blocks_monster_entry":True,

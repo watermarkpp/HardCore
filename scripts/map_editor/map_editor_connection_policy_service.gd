@@ -9,8 +9,6 @@ const PORTAL_CONTRACT_ID := "unified_map_portal_endpoint_v1"
 const ARRIVAL_REENTRY_POLICY_ID := "portal_arrival_guard_v2"
 const RETURN_MINIMUM_SECONDS := 3.0
 const RETURN_UNLOCK_DISTANCE_GU := 1.5
-# Deprecated compatibility alias for callers not yet migrated by integration.
-const RETURN_UNLOCK_DISTANCE_TILES := RETURN_UNLOCK_DISTANCE_GU
 
 
 static func new_exit_defaults() -> Dictionary:
@@ -372,8 +370,6 @@ static func _configure_endpoint(
 	connection_id: String
 ) -> void:
 	endpoint.merge(new_exit_defaults(), true)
-	endpoint.erase("radius_tiles")
-	endpoint.erase("return_unlock_distance_tiles")
 	endpoint.erase("explicit_one_way_reason")
 	endpoint.erase("shared_with_entrance_id")
 	endpoint["display_name"] = display_name
@@ -429,10 +425,7 @@ static func _validate_bidirectional(
 		errors.append("leave_before_retrigger_required:%s" % semantic_id)
 	if float(endpoint.get("return_minimum_seconds", 0.0)) < RETURN_MINIMUM_SECONDS:
 		errors.append("return_minimum_seconds_required:%s" % semantic_id)
-	if float(endpoint.get(
-		"return_unlock_distance_gu",
-		endpoint.get("return_unlock_distance_tiles", 0.0)
-	)) < RETURN_UNLOCK_DISTANCE_GU:
+	if float(endpoint.get("return_unlock_distance_gu", 0.0)) < RETURN_UNLOCK_DISTANCE_GU:
 		errors.append("return_unlock_distance_required:%s" % semantic_id)
 	if not bool(endpoint.get("return_requires_fresh_activation", false)):
 		errors.append("fresh_activation_required:%s" % semantic_id)

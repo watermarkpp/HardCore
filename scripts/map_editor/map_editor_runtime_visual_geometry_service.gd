@@ -601,7 +601,7 @@ static func editor_layout_sha256(document: Dictionary) -> String:
 				"semantic_id": str(entry.get("semantic_id", "")),
 				"kind": str(entry.get("kind", "")),
 				"tile": entry.get("tile", []).duplicate(),
-				"radius_tiles": entry.get("radius_tiles", 0),
+				"radius_gu": entry.get("radius_gu", 0.0),
 				"display_name": str(entry.get("display_name", "")),
 			})
 	semantics.sort_custom(

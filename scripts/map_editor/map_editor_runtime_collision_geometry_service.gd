@@ -6,10 +6,10 @@ const PHYSICS_SOURCE_ID := "published_blocked_cells_after_erasure_v1"
 const ACTOR_BOUNDARY_CONTRACT_ID := "map_visible_ground_footprint_boundary_v3"
 const PLAYER_FOOT_BOUNDARY_CONTRACT_ID := "map_player_foot_inside_visible_ground_v1"
 const ELLIPSE_SEGMENTS := 32
-const DEFAULT_BOUNDARY_MARGIN_TILES := 8.0
-const DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD := 18.0
+const DEFAULT_BOUNDARY_MARGIN_GRID_STEPS := 8.0
+const DEFAULT_ACTOR_BOUNDARY_CLEARANCE_PX := 18.0
 const VISIBLE_BOUNDARY_PROJECTION_ITERATIONS := 32
-const VISIBLE_BOUNDARY_EPSILON := 0.01
+const VISIBLE_BOUNDARY_EPSILON_PX := 0.01
 
 
 static func map_inner_boundary_tile_polygon(
@@ -30,9 +30,9 @@ static func map_inner_boundary_tile_polygon(
 
 static func map_outer_boundary_tile_polygon(
 	design_size: Vector2i,
-	margin_tiles := DEFAULT_BOUNDARY_MARGIN_TILES
+	margin_grid_steps := DEFAULT_BOUNDARY_MARGIN_GRID_STEPS
 ) -> PackedVector2Array:
-	var margin := maxf(0.0, margin_tiles)
+	var margin := maxf(0.0, margin_grid_steps)
 	var minimum := Vector2(-0.5, -0.5) - Vector2.ONE * margin
 	var maximum := (
 		Vector2(design_size) - Vector2(0.5, 0.5)
@@ -66,7 +66,7 @@ static func map_inner_boundary_world(
 
 static func map_actor_boundary_world(
 	design_size: Vector2i,
-	_clearance_world := DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD
+	_clearance_px := DEFAULT_ACTOR_BOUNDARY_CLEARANCE_PX
 ) -> PackedVector2Array:
 	# The collision ring starts on the exact rendered-ground edge. CharacterBody2D
 	# contributes its own foot ellipse, so the resulting contact position keeps
@@ -77,22 +77,22 @@ static func map_actor_boundary_world(
 
 static func map_outer_boundary_world(
 	design_size: Vector2i,
-	clearance_world := DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD
+	clearance_px := DEFAULT_ACTOR_BOUNDARY_CLEARANCE_PX
 ) -> PackedVector2Array:
-	var actor_boundary := map_actor_boundary_world(design_size, clearance_world)
+	var actor_boundary := map_actor_boundary_world(design_size, clearance_px)
 	return _expand_convex_polygon(
 		actor_boundary,
-		DEFAULT_BOUNDARY_MARGIN_TILES * MapEditorCoordinate.GROUND_TILE_SIZE_PX.y
+		DEFAULT_BOUNDARY_MARGIN_GRID_STEPS * MapEditorCoordinate.GROUND_TILE_SIZE_PX.y
 	)
 
 
 static func runtime_boundary_contains_world(
 	world: Vector2,
 	design_size: Vector2i,
-	clearance_world := DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD
+	clearance_px := DEFAULT_ACTOR_BOUNDARY_CLEARANCE_PX
 ) -> bool:
 	return Geometry2D.is_point_in_polygon(
-		world, map_actor_boundary_world(design_size, clearance_world)
+		world, map_actor_boundary_world(design_size, clearance_px)
 	)
 
 
@@ -100,7 +100,7 @@ static func default_player_foot_envelope_world() -> PackedVector2Array:
 	# Only the foot contact ellipse is constrained to visible ground. The body,
 	# hair, weapon and health bar may naturally overhang a sloped map edge.
 	return WorldSpatialRules.actor_footprint_polygon(
-		DEFAULT_ACTOR_BOUNDARY_CLEARANCE_WORLD
+		DEFAULT_ACTOR_BOUNDARY_CLEARANCE_PX
 	)
 
 
@@ -137,9 +137,9 @@ static func project_world_envelope_inside_visible_boundary(
 					minimum_margin,
 					inward.dot(result + offset - boundary[edge_index])
 				)
-			if minimum_margin < -VISIBLE_BOUNDARY_EPSILON:
+			if minimum_margin < -VISIBLE_BOUNDARY_EPSILON_PX:
 				result += inward * (
-					-minimum_margin + VISIBLE_BOUNDARY_EPSILON
+					-minimum_margin + VISIBLE_BOUNDARY_EPSILON_PX
 				)
 				changed = true
 		if not changed:
@@ -174,7 +174,7 @@ static func world_envelope_inside_visible_boundary(
 		for offset: Vector2 in envelope:
 			if (
 				inward.dot(world + offset - boundary[edge_index])
-				< -VISIBLE_BOUNDARY_EPSILON
+				< -VISIBLE_BOUNDARY_EPSILON_PX
 			):
 				return false
 	return true

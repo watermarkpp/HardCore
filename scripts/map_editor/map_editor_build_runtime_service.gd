@@ -8,9 +8,12 @@ const RuntimeCollisionGeometry := preload(
 	"res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd"
 )
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const UnitLegacyAdapter := preload(
+	"res://scripts/map_editor/map_editor_unit_legacy_adapter.gd"
+)
 
-const LEGACY_RUNTIME_SCHEMA_VERSION := 1
-const RUNTIME_SCHEMA_VERSION := 2
+const LEGACY_RUNTIME_SCHEMA_VERSION := UnitLegacyAdapter.LEGACY_RUNTIME_SCHEMA_VERSION
+const RUNTIME_SCHEMA_VERSION := UnitLegacyAdapter.RUNTIME_SCHEMA_VERSION
 const RUNTIME_ROOT := "res://assets/data/runtime/map_editor/"
 
 
@@ -94,7 +97,7 @@ static func _compile(document: Dictionary, walkability: Dictionary) -> Dictionar
 	]:
 		var runtime_entries:Array=[]
 		for source_entry:Dictionary in document.layers.get(layer,[]):
-			var entry:=_runtime_semantic_entry(source_entry)
+			var entry:=UnitLegacyAdapter.editor_semantic_to_runtime_v2(source_entry)
 			for editor_key:String in ["placeholder_instance_id","editor_visual_asset_id","editor_visual_only","selection_shape","selectable","movable"]:entry.erase(editor_key)
 			runtime_entries.append(entry)
 		semantic_layers[layer] = runtime_entries
@@ -124,28 +127,6 @@ static func _compile(document: Dictionary, walkability: Dictionary) -> Dictionar
 	}
 	output["build_sha256"] = ""
 	return output
-
-
-static func _runtime_semantic_entry(source_entry: Dictionary) -> Dictionary:
-	var entry := source_entry.duplicate(true)
-	var kind := str(entry.get("kind", ""))
-	if kind in ["monster_spawn", "boss_spawn", "safe_area", "light", "region_trigger"]:
-		entry["radius_gu"] = float(entry.get(
-			"radius_gu", entry.get("radius_tiles", 0.0)
-		))
-		entry.erase("radius_tiles")
-	if kind in ["safe_area", "light", "region_trigger"]:
-		entry["polygon_ground_gu"] = entry.get(
-			"polygon_ground_gu", entry.get("polygon_tiles", [])
-		).duplicate(true)
-		entry.erase("polygon_tiles")
-	if kind in ["door", "map_exit"]:
-		entry["return_unlock_distance_gu"] = float(entry.get(
-			"return_unlock_distance_gu",
-			entry.get("return_unlock_distance_tiles", 0.0)
-		))
-		entry.erase("return_unlock_distance_tiles")
-	return entry
 
 
 static func _write_atomic(path: String, value: Dictionary) -> Dictionary:
