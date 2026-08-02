@@ -30,7 +30,7 @@ func _run() -> void:
 	assert(not GameData.get_drops_for_boss(191).is_empty() and not GameData.get_drops_for_boss(193).is_empty(), "虹魔蝎卫或虹魔教主掉落未接入")
 	var tree := EnemyActor.new()
 	tree.setup(GameData.get_monster("千年树妖"), game.player, true)
-	assert(tree.move_speed == 0.0 and tree.attack_range >= 230.0, "千年树妖固定远程行为失效")
+	assert(tree.move_speed_gu_per_sec == 0.0 and tree.attack_range_gu >= 230.0 / 32.0, "千年树妖固定远程行为失效")
 	tree.free()
 	var leader := EnemyActor.new()
 	leader.setup(GameData.get_monster("虹魔教主"), game.player, true)

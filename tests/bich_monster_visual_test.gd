@@ -37,7 +37,7 @@ func _run() -> void:
 		assert(enemy.ground_indicator_center().is_zero_approx(), "%s 地面锁定光圈未固定在怪物物理原点" % monster_name)
 		assert(
 			enemy.ground_indicator_radii().is_equal_approx(
-				WorldSpatialRules.actor_footprint_radii(enemy.collision_radius)
+				WorldSpatialRules.actor_footprint_radii(enemy.collision_radius_px)
 				* EnemyActor.TARGET_RING_FOOTPRINT_SCALE
 			),
 			"%s 锁定光圈未按怪物物理体积缩放" % monster_name,
@@ -46,7 +46,7 @@ func _run() -> void:
 		enemy.facing = Vector2.RIGHT
 		enemy.movement_facing = Vector2.RIGHT
 		if monster_name == "食人花":
-			assert(enemy.move_speed == 0.0 and enemy.attack_range == 78.0, "食人花固定怪参数错误")
+			assert(enemy.move_speed_gu_per_sec == 0.0 and is_equal_approx(enemy.attack_range_gu, 78.0 / 32.0), "食人花固定怪参数错误")
 			visual._process(0.12)
 			assert(visual.active_resources.get("direction_policy", "") == "fixed_source_direction", "食人花未加载固定源方向策略")
 			assert(visual.current_state == "idle" and visual.current_direction == 0, "食人花仍被玩家方向带偏到相邻状态帧")

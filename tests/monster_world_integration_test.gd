@@ -81,7 +81,7 @@ func _run() -> void:
 		"Boss 瞬移进入安全区"
 	)
 	assert(
-		not WorldSpatialRules.environment_blocks_actor(game.background, wooma.global_position, wooma.collision_radius),
+		not WorldSpatialRules.environment_blocks_actor(game.background, wooma.global_position, wooma.collision_radius_px),
 		"Boss 瞬移进入地图阻挡"
 	)
 

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "contractId": "monster.runtime.units.gu.v1",
   "parentContractId": "combat.unit.gu_gs_px.v1",
   "authority": {
@@ -65,10 +65,55 @@
     "aggro_radius_gu",
     "combat_radius_gu"
   ],
+  "coordinateReferences": [
+    {
+      "contractId": "monster.safe_zone.relative_ground_reference.v1",
+      "screenInput": "point_screen_px",
+      "screenAnchor": "center or polygon[0]",
+      "groundAnchor": "center_ground_gu or polygon_ground_gu[0]",
+      "policy": "inverse_project_screen_delta_then_add_matching_ground_anchor",
+      "reason": "Absolute screen positions include the map design-centre translation; GroundUnitSpace converts deltas and therefore must not inverse-project an absolute position from a zero origin."
+    }
+  ],
+  "renderBoundaries": [
+    {
+      "contractId": "monster.visual.resource_residency.screen_px.v1",
+      "fields": [
+        "VISUAL_ACTIVATION_DISTANCE_PX",
+        "VISUAL_RELEASE_DISTANCE_PX"
+      ],
+      "allowedScope": "render_asset_residency_only",
+      "forbiddenEffects": [
+        "attack_state",
+        "hit_state",
+        "death_state",
+        "combat_geometry",
+        "ai"
+      ]
+    },
+    {
+      "contractId": "monster.boss.warning.ground_projection.v1",
+      "gameplaySource": "radius_gu and direction_ground",
+      "screenOutput": "warning_polygon_px",
+      "allowedScope": "rendering_only"
+    }
+  ],
+  "compatibilityAliases": [
+    {
+      "field": "collision_radius",
+      "formalOwnerField": "collision_radius_px",
+      "unit": "PX",
+      "monsterRuntimeReads": 0,
+      "reason": "Temporary cross-domain collision/render boundary for integration and skill consumers outside the monster worktree.",
+      "removalPrerequisite": "Migrate game_root, player targeting, projectile and shared world-spatial consumers to collision_radius_px or combat_radius_gu according to their boundary."
+    }
+  ],
   "legacyPolicy": {
     "readOnly": true,
     "rewriteSourceProfiles": false,
     "untypedValuesAllowedAfterAdapter": false,
+    "formalRuntimeAccess": "MonsterUnitAdapter only",
+    "retainedLegacyFieldReason": "Primary monster source JSON remains a hash-traceable read-only input. Unsuffixed values are permitted only before the adapter and cannot be read directly by formal gameplay.",
     "fallbackStatus": "not_applicable_primary_contract_adapter",
     "fallbackEvidence": "COMBAT-UNIT-V1 is the primary lane authority; legacy monster values are converted at the versioned adapter boundary and do not select a lower-priority distance contract."
   },

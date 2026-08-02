@@ -31,6 +31,21 @@ func _verify_contract_and_legacy_scalar_boundary() -> void:
 	assert(is_equal_approx(MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(384.0), 12.0))
 	assert(is_equal_approx(MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(512.0), 16.0))
 	assert(is_equal_approx(MonsterUnitAdapterScript.gu_to_legacy_screen_scalar_px(4.84375), 155.0))
+	assert(parsed.get("schemaVersion", 0) == 2)
+	var coordinate_references: Array = parsed.get("coordinateReferences", [])
+	assert(coordinate_references.any(func(entry: Dictionary) -> bool:
+		return entry.get("contractId", "") == "monster.safe_zone.relative_ground_reference.v1"
+	))
+	var render_boundaries: Array = parsed.get("renderBoundaries", [])
+	assert(render_boundaries.any(func(entry: Dictionary) -> bool:
+		return entry.get("contractId", "") == "monster.visual.resource_residency.screen_px.v1"
+	))
+	assert(render_boundaries.any(func(entry: Dictionary) -> bool:
+		return entry.get("contractId", "") == "monster.boss.warning.ground_projection.v1"
+	))
+	var aliases: Array = parsed.get("compatibilityAliases", [])
+	assert(aliases.size() == 1 and aliases[0].get("field", "") == "collision_radius")
+	assert(int(aliases[0].get("monsterRuntimeReads", -1)) == 0)
 
 
 func _verify_frozen_footprint_round_trip() -> void:

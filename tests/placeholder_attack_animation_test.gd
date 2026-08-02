@@ -31,7 +31,7 @@ func _run() -> void:
 	placeholder.visual.play_attack(0.46)
 	await get_tree().create_timer(0.12).timeout
 	assert(placeholder.visual.is_fallback_attacking(), "占位怪攻击前摇未启动")
-	assert(placeholder.visual.fallback_lunge_offset(placeholder.facing).length() >= 7.0, "占位怪扑击位移不可见")
+	assert(placeholder.visual.fallback_lunge_offset_px(placeholder.facing).length() >= 7.0, "占位怪扑击位移不可见")
 	assert(placeholder.visual.fallback_attack_progress() > 0.0, "占位怪攻击进度未推进")
 	await get_tree().create_timer(0.40).timeout
 	assert(not placeholder.visual.is_fallback_attacking(), "占位怪攻击动作没有按时结束")
