@@ -52,7 +52,7 @@ static var _environment_guard_check_count := 0
 signal died(enemy: EnemyActor, monster_data: Dictionary)
 signal target_requested(enemy: EnemyActor)
 signal summon_requested(enemy: EnemyActor, monster_ids: Array, count: int, max_active: int)
-signal relocation_requested(enemy: EnemyActor, radius_cells: int)
+signal relocation_requested(enemy: EnemyActor, radius_gu: float)
 
 var monster_data: Dictionary = {}
 var monster_id := -1
@@ -1397,5 +1397,8 @@ func request_surrounded_relocation(blocking_neighbor_count: int) -> bool:
 	var relocation: Dictionary = boss_rule.get("mechanics", {}).get("surroundedRelocation", {})
 	if not bool(relocation.get("enabled", false)) or blocking_neighbor_count < int(relocation.get("blockingNeighbors", 5)):
 		return false
-	relocation_requested.emit(self, int(relocation.get("radiusCells", 4)))
+	relocation_requested.emit(
+		self,
+		MonsterUnitAdapterScript.relocation_radius_gu(relocation, 4.0),
+	)
 	return true

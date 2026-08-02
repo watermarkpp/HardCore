@@ -142,6 +142,11 @@ func _verify_runtime_source_has_no_screen_distance_fallback() -> void:
 	assert(not source.contains("logical_tile_distance_for_world_offset"), "monster runtime still contains old logical-tile distance")
 	assert(not source.contains("world_offset_to_fractional_tile_delta"), "monster runtime still contains old screen-to-tile fallback")
 	assert(not source.contains("max(abs("), "monster runtime still contains Chebyshev distance")
+	assert(not source.contains("radius_cells"), "monster runtime still exposes relocation radius in cells")
+	assert(
+		source.contains("signal relocation_requested(enemy: EnemyActor, radius_gu: float)"),
+		"monster relocation signal does not expose a formal GU radius",
+	)
 	for formal_field in [
 		"move_speed_gu_per_sec",
 		"attack_range_gu",

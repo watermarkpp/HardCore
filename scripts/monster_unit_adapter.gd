@@ -3,6 +3,7 @@ extends RefCounted
 
 
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 
 ## Versioned, read-only boundary from the historical monster projection fields
 ## into COMBAT-UNIT-V1 ground units. Legacy source dictionaries are never
@@ -81,6 +82,20 @@ static func range_gu(
 		legacy_px_key,
 		default_gu,
 	)
+
+
+static func relocation_radius_gu(record: Dictionary, default_radius_gu: float) -> float:
+	if record.has("radius_gu"):
+		return maxf(0.0, float(record.get("radius_gu", default_radius_gu)))
+	if record.has("radiusCells"):
+		# Historical project data labels this as a cell radius. One coordinate-axis
+		# neighbor is 1 GU; the formal relocation radius is Euclidean, so the value
+		# is converted once here and never exposed as an untyped/GS runtime field.
+		return (
+			maxf(0.0, float(record.get("radiusCells", 0.0)))
+			* GroundUnitSpaceScript.AXIS_NEIGHBOR_COST_GU
+		)
+	return maxf(0.0, default_radius_gu)
 
 
 static func _formal_or_legacy_scalar_gu(
