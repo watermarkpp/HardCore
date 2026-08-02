@@ -1,5 +1,7 @@
 extends Node
 
+const GroundUnit := preload("res://scripts/ground_unit_space.gd")
+
 
 func _ready() -> void:
 	_run.call_deferred()
@@ -31,24 +33,57 @@ func _run() -> void:
 	assert(skeleton.lifetime_seconds == 864000.0 and skeleton.owner_death_rule == "expire")
 	assert(skeleton.reject_when_owner_has_slave and not skeleton.recall_existing_on_create_failure)
 	assert(skeleton.state == SummonActor.SummonState.FOLLOW_OWNER)
+	var spatial := skeleton.spatial_contract_snapshot()
+	assert(spatial.contract_id == SummonActor.SPATIAL_CONTRACT_ID)
+	assert(spatial.unit_contract_id == GroundUnit.CONTRACT_ID)
+	assert(spatial.move_speed_gu_per_sec > 0.0)
+	for sample_index: int in range(32):
+		var ground_direction := Vector2.from_angle(
+			TAU * float(sample_index) / 32.0
+		)
+		var screen_delta_px := GroundUnit.ground_delta_gu_to_screen_delta_px(
+			ground_direction
+		)
+		var screen_velocity_px := skeleton._screen_velocity_toward_delta_px(
+			screen_delta_px
+		)
+		var observed_ground_velocity := (
+			GroundUnit.screen_delta_px_to_ground_delta_gu(screen_velocity_px)
+		)
+		assert(is_equal_approx(
+			observed_ground_velocity.length(), skeleton.move_speed_gu_per_sec
+		))
 
 	var enemy := EnemyActor.new()
 	enemy.setup({"name": "summon-test-target", "hp": 9999, "attackMin": 1, "attackMax": 1, "level": 1}, player, false)
 	enemy.control_time = 60.0
-	enemy.global_position = skeleton.global_position + Vector2(skeleton.attack_range + 30.0, 0)
+	enemy.global_position = (
+		skeleton.global_position
+		+ GroundUnit.ground_delta_gu_to_screen_delta_px(Vector2(
+			skeleton.attack_range_gu + 2.0, 0.0
+		))
+	)
 	game.add_child(enemy)
 	skeleton._current_target = enemy
 	skeleton._physics_process(0.016)
 	assert(skeleton.state == SummonActor.SummonState.CHASE_TARGET)
-	enemy.global_position = skeleton.global_position + Vector2(10.0, 0)
+	enemy.global_position = (
+		skeleton.global_position
+		+ GroundUnit.ground_delta_gu_to_screen_delta_px(Vector2(0.5, 0.0))
+	)
 	var enemy_hp := enemy.current_hp
 	skeleton._attack_timer = 0.0
 	skeleton._physics_process(0.016)
 	assert(skeleton.state == SummonActor.SummonState.ATTACK_TARGET and enemy.current_hp < enemy_hp)
 	assert(skeleton.last_attack_type == "physical")
-	skeleton.global_position = player.global_position + Vector2(skeleton.teleport_range + 20.0, 0)
+	skeleton.global_position = (
+		player.global_position
+		+ GroundUnit.ground_delta_gu_to_screen_delta_px(Vector2(
+			skeleton.teleport_range_gu + 1.0, 0.0
+		))
+	)
 	skeleton._physics_process(0.016)
-	assert(skeleton.global_position.distance_to(player.global_position) < 100.0)
+	assert(skeleton.distance_gu_to_screen_position_px(player.global_position) < 2.0)
 	assert(skeleton.state == SummonActor.SummonState.RETURN_TO_OWNER)
 	skeleton.remaining_lifetime = 0.001
 	skeleton._physics_process(0.016)
@@ -58,7 +93,7 @@ func _run() -> void:
 	divine_beast.setup(player, ProfessionRules.skill_display_name("taoist.summon_divine_beast"), 30, 3, "taoist.summon_divine_beast", 35)
 	assert(divine_beast.skill_id == "taoist.summon_divine_beast" and divine_beast.attack_type == "fire")
 	assert(divine_beast.lifetime_seconds == 864000.0 and divine_beast.recall_existing_on_create_failure)
-	assert(divine_beast.max_hp > skeleton.max_hp and divine_beast.attack_range > skeleton.attack_range)
+	assert(divine_beast.max_hp > skeleton.max_hp and divine_beast.attack_range_gu > skeleton.attack_range_gu)
 	divine_beast.free()
 	print("SUMMON_ACTOR_STATE_MACHINE_PASS: levels, attacks, ten-day life, owner follow, recall")
 	get_tree().quit(0)

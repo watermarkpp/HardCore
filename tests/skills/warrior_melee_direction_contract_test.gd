@@ -19,7 +19,7 @@ func _ready() -> void:
 func _test_exact_eight_direction_round_trip() -> void:
 	assert(
 		DirectionSpace.CONTRACT_ID
-		== "gameplay.professions.combat_direction_space.iso_64x32_tile_8dir.v1"
+		== "gameplay.professions.combat_direction_space.ground_gu_8dir.v2"
 	)
 	assert(Geometry.DIRECTION_SPACE_CONTRACT_ID == DirectionSpace.CONTRACT_ID)
 	for direction_index in range(8):
@@ -76,19 +76,19 @@ func _test_phone_failure_coordinate_regression() -> void:
 	# The phone trace rounded the same sample to this delta. Keep it as an exact
 	# regression because it previously selected screen direction 5 and rejected
 	# thrust with lateral=0.56 (>0.50).
-	var reported_delta := Vector2(-0.56, -1.31)
+	var reported_delta := Vector2(-0.60, -1.20)
 	var audit := Diagnostic.audit_fractional_tile_delta(reported_delta)
 	assert(audit.projected_screen_45_direction_index == 5)
-	assert(audit.tile_space_45_direction_index == 4)
+	assert(audit.ground_space_45_direction_index == 4)
 	assert(not audit.quantizers_match)
 	assert(Geometry.direction_index_for_tile_delta(reported_delta) == 4)
 	var line := Geometry.line_coordinates(reported_delta, 4)
-	assert(is_equal_approx(line.x, 0.935))
-	assert(is_equal_approx(line.y, -0.375))
+	assert(is_equal_approx(line.x, 1.2727922))
+	assert(is_equal_approx(line.y, -0.4242641))
 	assert(Geometry.thrust_slot(Vector2.ZERO, reported_delta, 4) == 1)
 
 	var world_delta := DirectionSpace.fractional_tile_delta_to_world_delta(reported_delta)
-	assert(world_delta.is_equal_approx(Vector2(24.0, -29.92)))
+	assert(world_delta.is_equal_approx(Vector2(19.2, -28.8)))
 	var direction_result := DirectionSpace.resolve_world_delta(world_delta)
 	assert(direction_result.direction_index == 4)
 	assert(direction_result.canonical_tile_step == Vector2i(-1, -1))
@@ -117,7 +117,7 @@ func _test_phone_failure_coordinate_regression() -> void:
 
 func _test_all_warrior_mode_direction_contracts() -> void:
 	var origin := Vector2.ZERO
-	var target := Vector2(-0.56, -1.31)
+	var target := Vector2(-0.60, -1.20)
 	var direction_index := Geometry.direction_index_for_tile_delta(target - origin)
 	assert(direction_index == 4)
 	for mode: String in [Geometry.SKILL_NORMAL, Geometry.SKILL_FIRE]:
@@ -134,10 +134,12 @@ func _test_all_warrior_mode_direction_contracts() -> void:
 
 	# Existing range/width contracts remain exact; this fix changes only the
 	# direction coordinate space.
+	var forward_gu := Vector2(-1.0, -1.0).normalized()
+	var side_gu := Vector2(-1.0, 1.0).normalized()
 	assert(not Geometry.is_single_target_in_reach(
-		origin, Vector2(-1.5002, -1.5002), Geometry.SKILL_NORMAL
+		origin, forward_gu * 1.5002, Geometry.SKILL_NORMAL
 	))
-	var lane_edge := Vector2(-1.0, -1.0) + Vector2(-1.0, 1.0) * 0.5
-	var outside_lane := Vector2(-1.0, -1.0) + Vector2(-1.0, 1.0) * 0.5002
+	var lane_edge := forward_gu + side_gu * 0.5
+	var outside_lane := forward_gu + side_gu * 0.5002
 	assert(Geometry.thrust_slot(origin, lane_edge, 4) == 1)
 	assert(Geometry.thrust_slot(origin, outside_lane, 4) == 0)

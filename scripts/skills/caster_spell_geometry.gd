@@ -4,14 +4,19 @@ extends RefCounted
 const CombatDirectionSpaceScript := preload(
 	"res://scripts/skills/combat_direction_space.gd"
 )
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 
 const CONTRACT_ID := "skills.visual.geometry_cells.world_projection.v1"
 const VISUAL_CONTRACT_ID := "skills.caster.geometry_visual_alignment.v1"
 const FOOTPRINT_INTERSECTION_CONTRACT_ID := (
-	"skills.caster.area_footprint_intersection.tile_polygon_sat.v1"
+	"skills.caster.area_footprint_intersection.ground_gu_sat.v2"
 )
 const CONTINUOUS_AIM_LINE_CONTRACT_ID := (
-	"skills.wizard.line.continuous_tile_axis_footprint_sat.v1"
+	"skills.wizard.line.continuous_ground_gu_footprint_sat.v2"
+)
+const DISCRETE_CELL_FOOTPRINT_RESOLVER_CONTRACT_ID := (
+	"skills.caster.discrete_cells.actor_footprint_resolver_gu.v1"
 )
 const CONTACT_EPSILON := 0.0001
 
@@ -80,59 +85,111 @@ static func target_footprint_intersects_cells(
 	return false
 
 
-static func continuous_line_strip(
-	origin_fractional_tile: Vector2,
-	aim_fractional_tile: Vector2,
-	fallback_world_direction: Vector2,
-	length_tiles: float,
-	width_tiles: float
-) -> Dictionary:
-	var axis := aim_fractional_tile - origin_fractional_tile
-	if axis.length_squared() <= CONTACT_EPSILON * CONTACT_EPSILON:
-		axis = CombatDirectionSpaceScript.world_delta_to_fractional_tile_delta(
-			fallback_world_direction
+static func actor_footprint_polygon_ground_gu(
+	target_center_ground_gu: Vector2,
+	target_collision_radius_px: float
+) -> PackedVector2Array:
+	var combat_radius_gu := (
+		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
+			target_collision_radius_px
 		)
-	if axis.length_squared() <= CONTACT_EPSILON * CONTACT_EPSILON:
-		axis = Vector2(1.0, 1.0)
-	# Skill length is measured in 8-neighbour map steps, not Euclidean tile
-	# distance. Chebyshev normalization keeps an exact diagonal at (1, 1): a
-	# five-tile diagonal must end at (5, 5), never (3.536, 3.536).
-	var dominant_component := maxf(absf(axis.x), absf(axis.y))
-	axis /= maxf(CONTACT_EPSILON, dominant_component)
-	var safe_length := maxf(0.0, length_tiles)
-	var safe_width := maxf(CONTACT_EPSILON, width_tiles)
-	# A canonical N-cell line owns cells whose centres are at distances 1..N.
-	# Its continuous equivalent therefore spans 0.5..N+0.5 along the aim axis.
-	# This preserves contact tolerance without adding another damage cell.
-	var strip_start := origin_fractional_tile + axis * 0.5
-	var strip_end := origin_fractional_tile + axis * (safe_length + 0.5)
-	var axis_unit := axis.normalized()
-	var perpendicular := Vector2(-axis_unit.y, axis_unit.x)
-	var half_width := safe_width * 0.5
+	)
+	var result := PackedVector2Array()
+	for offset_ground_gu: Vector2 in (
+		WorldSpatialRulesScript.actor_footprint_ground_polygon_gu(
+			combat_radius_gu
+		)
+	):
+		result.append(target_center_ground_gu + offset_ground_gu)
+	return result
+
+
+static func declared_cells_intersect_actor_footprint(
+	effective_geometry_cells: Array[Vector2i],
+	target_center_ground_gu: Vector2,
+	target_collision_radius_px: float
+) -> Dictionary:
+	var footprint_ground_gu := actor_footprint_polygon_ground_gu(
+		target_center_ground_gu,
+		target_collision_radius_px
+	)
+	return {
+		"contract_id": DISCRETE_CELL_FOOTPRINT_RESOLVER_CONTRACT_ID,
+		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
+		"intersects": target_footprint_intersects_cells(
+			effective_geometry_cells,
+			footprint_ground_gu
+		),
+		"target_center_ground_gu": target_center_ground_gu,
+		"target_footprint_ground_gu": footprint_ground_gu,
+		"geometry_cells_grid_steps": effective_geometry_cells.duplicate(),
+	}
+
+
+static func continuous_line_strip(
+	origin_ground_gu: Vector2,
+	aim_ground_gu: Vector2,
+	fallback_screen_direction_px: Vector2,
+	effect_length_gu: float,
+	effect_width_gu: float
+) -> Dictionary:
+	var axis_ground_gu := aim_ground_gu - origin_ground_gu
+	if axis_ground_gu.length_squared() <= CONTACT_EPSILON * CONTACT_EPSILON:
+		axis_ground_gu = GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			fallback_screen_direction_px
+		)
+	if axis_ground_gu.length_squared() <= CONTACT_EPSILON * CONTACT_EPSILON:
+		axis_ground_gu = Vector2(1.0, 1.0)
+	var direction_ground_gu := axis_ground_gu.normalized()
+	var safe_length_gu := maxf(0.0, effect_length_gu)
+	var safe_width_gu := maxf(CONTACT_EPSILON, effect_width_gu)
+	var strip_start_ground_gu := origin_ground_gu
+	var strip_end_ground_gu := GroundUnitSpaceScript.endpoint_ground_gu(
+		origin_ground_gu,
+		direction_ground_gu,
+		safe_length_gu
+	)
+	var perpendicular := Vector2(-direction_ground_gu.y, direction_ground_gu.x)
+	var half_width := safe_width_gu * 0.5
 	var polygon := PackedVector2Array([
-		strip_start + perpendicular * half_width,
-		strip_end + perpendicular * half_width,
-		strip_end - perpendicular * half_width,
-		strip_start - perpendicular * half_width,
+		strip_start_ground_gu + perpendicular * half_width,
+		strip_end_ground_gu + perpendicular * half_width,
+		strip_end_ground_gu - perpendicular * half_width,
+		strip_start_ground_gu - perpendicular * half_width,
 	])
 	var centerline_points: Array[Vector2] = []
-	for distance: int in range(1, ceili(safe_length) + 1):
+	for distance: int in range(1, ceili(safe_length_gu) + 1):
 		centerline_points.append(
-			origin_fractional_tile + axis * minf(float(distance), safe_length)
+			origin_ground_gu
+			+ direction_ground_gu * minf(float(distance), safe_length_gu)
 		)
 	return {
 		"contract_id": CONTINUOUS_AIM_LINE_CONTRACT_ID,
-		"origin_fractional_tile": origin_fractional_tile,
-		"aim_fractional_tile": aim_fractional_tile,
-		"axis_fractional_tile": axis,
-		"length_tiles": safe_length,
-		"width_tiles": safe_width,
-		"strip_start_fractional_tile": strip_start,
-		"strip_end_fractional_tile": strip_end,
+		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
+		"origin_ground_gu": origin_ground_gu,
+		"aim_ground_gu": aim_ground_gu,
+		"direction_ground_gu": direction_ground_gu,
+		"effect_length_gu": safe_length_gu,
+		"effect_width_gu": safe_width_gu,
+		"half_width_gu": half_width,
+		"strip_start_ground_gu": strip_start_ground_gu,
+		"strip_end_ground_gu": strip_end_ground_gu,
+		"strip_polygon_ground_gu": polygon,
+		"centerline_points_ground_gu": centerline_points,
+		# Compatibility keys for integration until the GU rename is merged.
+		"origin_fractional_tile": origin_ground_gu,
+		"aim_fractional_tile": aim_ground_gu,
+		"axis_fractional_tile": direction_ground_gu,
+		"length_tiles": safe_length_gu,
+		"width_tiles": safe_width_gu,
+		"strip_start_fractional_tile": strip_start_ground_gu,
+		"strip_end_fractional_tile": strip_end_ground_gu,
 		"strip_polygon_fractional_tile": polygon,
 		"centerline_points_fractional_tile": centerline_points,
 		"visual_direction_index": (
-			CombatDirectionSpaceScript.direction_index_for_fractional_tile_delta(axis)
+			CombatDirectionSpaceScript.direction_index_for_fractional_tile_delta(
+				direction_ground_gu
+			)
 		),
 		"damage_axis_quantized": false,
 		"visual_axis_quantized_to_nearest_8dir": true,
@@ -146,7 +203,8 @@ static func target_footprint_intersects_continuous_line(
 	if target_footprint_tile_polygon.size() < 3:
 		return false
 	var raw_polygon: Variant = line_strip.get(
-		"strip_polygon_fractional_tile", PackedVector2Array()
+		"strip_polygon_ground_gu",
+		line_strip.get("strip_polygon_fractional_tile", PackedVector2Array())
 	)
 	if not raw_polygon is PackedVector2Array:
 		return false
@@ -164,7 +222,8 @@ static func continuous_line_world_points(
 	if not fractional_tile_to_world.is_valid():
 		return result
 	for raw_point: Variant in line_strip.get(
-		"centerline_points_fractional_tile", []
+		"centerline_points_ground_gu",
+		line_strip.get("centerline_points_fractional_tile", [])
 	):
 		if raw_point is Vector2:
 			result.append(fractional_tile_to_world.call(raw_point))

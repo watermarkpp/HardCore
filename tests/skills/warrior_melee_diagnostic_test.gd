@@ -29,8 +29,8 @@ func _test_direction_round_trip() -> void:
 		assert(audit.projected_screen_direction_index == direction_index)
 		assert(audit.round_trip_matches)
 		var expected_step := Geometry.facing_tile_step(direction_index)
-		assert(audit.canonical_tile_step.x == expected_step.x)
-		assert(audit.canonical_tile_step.y == expected_step.y)
+		assert(audit.canonical_grid_step.x == expected_step.x)
+		assert(audit.canonical_grid_step.y == expected_step.y)
 
 
 func _test_fractional_angle_quantization_audit() -> void:
@@ -45,45 +45,46 @@ func _test_fractional_angle_quantization_audit() -> void:
 		)
 		assert(exact.has_direction)
 		assert(exact.projected_screen_45_direction_index == direction_index)
-		assert(exact.tile_space_45_direction_index == direction_index)
+		assert(exact.ground_space_45_direction_index == direction_index)
 		assert(exact.quantizers_match)
-		assert(exact.projected_screen_canonical_tile_step.x == int(delta.x))
-		assert(exact.projected_screen_canonical_tile_step.y == int(delta.y))
-		assert(exact.tile_space_canonical_tile_step.x == int(delta.x))
-		assert(exact.tile_space_canonical_tile_step.y == int(delta.y))
+		assert(exact.projected_screen_canonical_grid_step.x == int(delta.x))
+		assert(exact.projected_screen_canonical_grid_step.y == int(delta.y))
+		assert(exact.ground_space_canonical_grid_step.x == int(delta.x))
+		assert(exact.ground_space_canonical_grid_step.y == int(delta.y))
 
 	# Fractional deltas expose the actual policy difference: in a 2:1 screen
 	# projection (1,0.5) appears closer to SE, while direct tile-space 45-degree
 	# quantization classifies it as S.
 	var asymmetric := Diagnostic.audit_fractional_tile_delta(Vector2(1.0, 0.5))
 	assert(asymmetric.projected_screen_45_direction_index == 7)
-	assert(asymmetric.tile_space_45_direction_index == 0)
+	assert(asymmetric.ground_space_45_direction_index == 0)
 	assert(not asymmetric.quantizers_match)
-	assert(asymmetric.projected_screen_canonical_tile_step.x == 1)
-	assert(asymmetric.projected_screen_canonical_tile_step.y == 0)
-	assert(asymmetric.tile_space_canonical_tile_step.x == 1)
-	assert(asymmetric.tile_space_canonical_tile_step.y == 1)
-	assert(is_equal_approx(asymmetric.projected_world_vector.x, 1.0))
-	assert(is_equal_approx(asymmetric.projected_world_vector.y, 1.5))
+	assert(asymmetric.projected_screen_canonical_grid_step.x == 1)
+	assert(asymmetric.projected_screen_canonical_grid_step.y == 0)
+	assert(asymmetric.ground_space_canonical_grid_step.x == 1)
+	assert(asymmetric.ground_space_canonical_grid_step.y == 1)
+	assert(is_equal_approx(asymmetric.projected_screen_vector_px.x, 16.0))
+	assert(is_equal_approx(asymmetric.projected_screen_vector_px.y, 24.0))
 	var normalized_length := sqrt(
-		pow(float(asymmetric.projected_world_direction.x), 2.0)
-		+ pow(float(asymmetric.projected_world_direction.y), 2.0)
+		pow(float(asymmetric.projected_screen_direction_px.x), 2.0)
+		+ pow(float(asymmetric.projected_screen_direction_px.y), 2.0)
 	)
 	assert(is_equal_approx(normalized_length, 1.0))
 
 	var mirrored := Diagnostic.audit_fractional_tile_delta(Vector2(0.5, 1.0))
 	assert(mirrored.projected_screen_45_direction_index == 1)
-	assert(mirrored.tile_space_45_direction_index == 0)
+	assert(mirrored.ground_space_45_direction_index == 0)
 	assert(not mirrored.quantizers_match)
 
 
 func _test_normal_and_fire_boundaries() -> void:
+	var south_gu := Vector2(1.0, 1.0).normalized()
 	for mode: String in [Geometry.SKILL_NORMAL, Geometry.SKILL_FIRE]:
 		var accepted := Diagnostic.explain_candidate(
-			Vector2.ZERO, Vector2(1.5, 1.5), 0, mode
+			Vector2.ZERO, south_gu * 1.5, 0, mode
 		)
 		assert(accepted.accepted and accepted.result_code == Diagnostic.RESULT_OK)
-		assert(is_equal_approx(accepted.effective_reach_tiles, 1.5))
+		assert(is_equal_approx(accepted.effective_reach_gu, 1.5))
 		assert(accepted.maximum_targets == 1)
 		assert(not accepted.unlimited_targets_within_geometry)
 		var wrong_facing := Diagnostic.explain_candidate(
@@ -92,7 +93,7 @@ func _test_normal_and_fire_boundaries() -> void:
 		assert(not wrong_facing.accepted)
 		assert(wrong_facing.result_code == Diagnostic.RESULT_WRONG_FACING)
 		var outside := Diagnostic.explain_candidate(
-			Vector2.ZERO, Vector2(1.5002, 1.5002), 0, mode
+			Vector2.ZERO, south_gu * 1.5002, 0, mode
 		)
 		assert(outside.result_code == Diagnostic.RESULT_OUT_OF_RANGE)
 	var same_footpoint := Diagnostic.explain_candidate(
@@ -103,20 +104,22 @@ func _test_normal_and_fire_boundaries() -> void:
 
 
 func _test_thrust_lane_boundaries() -> void:
+	var south_gu := Vector2(1.0, 1.0).normalized()
+	var side_gu := Vector2(1.0, -1.0).normalized()
 	var primary := Diagnostic.explain_candidate(
-		Vector2.ZERO, Vector2(1.5, 1.5), 0, Geometry.SKILL_THRUST
+		Vector2.ZERO, south_gu * 1.5, 0, Geometry.SKILL_THRUST
 	)
 	assert(primary.accepted and primary.thrust_slot == 1)
-	assert(is_equal_approx(primary.effective_reach_tiles, 2.5))
-	assert(is_equal_approx(primary.attack_lane_width_tiles, 1.0))
+	assert(is_equal_approx(primary.effective_reach_gu, 2.5))
+	assert(is_equal_approx(primary.attack_lane_width_gu, 1.0))
 	assert(primary.maximum_targets == Geometry.UNLIMITED_TARGETS)
 	assert(primary.unlimited_targets_within_geometry)
 	var endpoint := Diagnostic.explain_candidate(
-		Vector2.ZERO, Vector2(2.5, 2.5), 0, Geometry.SKILL_THRUST
+		Vector2.ZERO, south_gu * 2.5, 0, Geometry.SKILL_THRUST
 	)
 	assert(endpoint.accepted and endpoint.thrust_slot == 2)
 	var outside_lane := Diagnostic.explain_candidate(
-		Vector2.ZERO, Vector2(1.6, 0.4), 0, Geometry.SKILL_THRUST
+		Vector2.ZERO, south_gu * 1.0 + side_gu * 0.6, 0, Geometry.SKILL_THRUST
 	)
 	assert(outside_lane.result_code == Diagnostic.RESULT_OUTSIDE_ATTACK_LANE)
 	var behind := Diagnostic.explain_candidate(
@@ -124,7 +127,7 @@ func _test_thrust_lane_boundaries() -> void:
 	)
 	assert(behind.result_code == Diagnostic.RESULT_WRONG_FACING)
 	var outside := Diagnostic.explain_candidate(
-		Vector2.ZERO, Vector2(2.5002, 2.5002), 0, Geometry.SKILL_THRUST
+		Vector2.ZERO, south_gu * 2.5002, 0, Geometry.SKILL_THRUST
 	)
 	assert(outside.result_code == Diagnostic.RESULT_OUT_OF_RANGE)
 
@@ -133,7 +136,7 @@ func _test_half_moon_arc_boundaries() -> void:
 	for attack_direction in range(8):
 		for relative_sector: int in Geometry.HALF_MOON_RELATIVE_DIRECTION_OFFSETS:
 			var target_direction := posmod(attack_direction + relative_sector, 8)
-			var target := Vector2(Geometry.facing_tile_step(target_direction)) * 1.5
+			var target := Vector2(Geometry.facing_tile_step(target_direction)).normalized() * 1.5
 			var accepted := Diagnostic.explain_candidate(
 				Vector2.ZERO, target, attack_direction, Geometry.SKILL_HALF_MOON
 			)
@@ -146,7 +149,7 @@ func _test_half_moon_arc_boundaries() -> void:
 	)
 	assert(rejected.result_code == Diagnostic.RESULT_OUTSIDE_HALF_MOON_ARC)
 	var outside := Diagnostic.explain_candidate(
-		Vector2.ZERO, Vector2(1.5002, 1.5002), 0, Geometry.SKILL_HALF_MOON
+		Vector2.ZERO, Vector2(1.0, 1.0).normalized() * 1.5002, 0, Geometry.SKILL_HALF_MOON
 	)
 	assert(outside.result_code == Diagnostic.RESULT_OUT_OF_RANGE)
 
@@ -198,7 +201,7 @@ func _test_json_serialization() -> void:
 	assert(not encoded.is_empty())
 	var decoded = JSON.parse_string(encoded)
 	assert(decoded is Dictionary)
-	assert(decoded.candidate.contract_id == "diagnostic.warrior.melee_candidate.v1")
+	assert(decoded.candidate.contract_id == "diagnostic.warrior.melee_candidate.ground_gu.v2")
 	assert(decoded.direction_loop.direction_count == 8.0)
 	_assert_json_safe(report)
 

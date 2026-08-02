@@ -5,6 +5,16 @@ signal summon_state_changed(previous_state: int, current_state: int)
 
 const SummonVisualRegistryScript := preload("res://scripts/summon_visual_registry.gd")
 const CasterAnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const CombatUnitLegacyAdapterScript := preload(
+	"res://scripts/skills/combat_unit_legacy_adapter.gd"
+)
+
+const SPATIAL_CONTRACT_ID := "skills.summon_actor.spatial_ground_gu.v1"
+const RECALL_OFFSET_GU := (
+	42.0 / CombatUnitLegacyAdapterScript.ISO_AREA_EQUIVALENT_PX_PER_GU
+)
 
 enum SummonState {
 	FOLLOW_OWNER,
@@ -34,6 +44,8 @@ var max_hp := 80
 var current_hp := 80
 var attack_min := 3
 var attack_max := 6
+# Legacy profile mirrors. Runtime movement/range logic reads only the formal GU
+# fields below after setup's one-time adapter conversion.
 var move_speed := 135.0
 var attack_range := 48.0
 var aggro_radius := 330.0
@@ -44,6 +56,28 @@ var remaining_lifetime := 864000.0
 var leash_range := 560.0
 var teleport_range := 900.0
 var follow_distance := 75.0
+var move_speed_gu_per_sec := (
+	CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(135.0)
+)
+var attack_range_gu := (
+	CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(48.0)
+)
+var aggro_radius_gu := (
+	CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(330.0)
+)
+var combat_radius_gu := (
+	CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(15.0)
+)
+var leash_range_gu := (
+	CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(560.0)
+)
+var teleport_range_gu := (
+	CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(900.0)
+)
+var follow_distance_gu := (
+	CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(75.0)
+)
+var actual_ground_motion_gu := Vector2.ZERO
 var owner_death_rule := "expire"
 var reject_when_owner_has_slave := true
 var recall_existing_on_create_failure := false
@@ -97,6 +131,42 @@ func setup(player: PlayerCharacter, display_name: String, power: int, learned_le
 	remaining_lifetime = lifetime_seconds
 	leash_range = float(profile.get("leash_range", 560.0))
 	teleport_range = float(profile.get("teleport_range", 900.0))
+	move_speed_gu_per_sec = float(profile.get(
+		"move_speed_gu_per_sec",
+		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
+			move_speed
+		)
+	))
+	attack_range_gu = float(profile.get(
+		"attack_range_gu",
+		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
+			attack_range
+		)
+	))
+	aggro_radius_gu = float(profile.get(
+		"aggro_radius_gu",
+		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
+			aggro_radius
+		)
+	))
+	leash_range_gu = float(profile.get(
+		"leash_range_gu",
+		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
+			leash_range
+		)
+	))
+	teleport_range_gu = float(profile.get(
+		"teleport_range_gu",
+		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
+			teleport_range
+		)
+	))
+	follow_distance_gu = float(profile.get(
+		"follow_distance_gu",
+		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
+			follow_distance
+		)
+	))
 	owner_death_rule = str(profile.get("owner_death_rule", "expire"))
 	reject_when_owner_has_slave = bool(profile.get("reject_when_owner_has_slave", true))
 	recall_existing_on_create_failure = bool(profile.get("recall_existing_on_create_failure", false))
@@ -107,8 +177,11 @@ func _ready() -> void:
 	add_to_group("summons")
 	add_to_group("combat_targets")
 	add_to_group("zone_content")
-	collision_layer = 2
-	collision_mask = 1 | 4
+	collision_layer = WorldSpatialRulesScript.PLAYER_LAYER
+	collision_mask = (
+		WorldSpatialRulesScript.WORLD_LAYER
+		| WorldSpatialRulesScript.ENEMY_LAYER
+	)
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	safe_margin = 0.35
 	max_slides = 6
@@ -116,6 +189,11 @@ func _ready() -> void:
 	var collision := CollisionShape2D.new()
 	var shape := CircleShape2D.new()
 	collision_radius = 15.0 if summon_name == "骷髅" else 21.0
+	combat_radius_gu = (
+		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
+			collision_radius
+		)
+	)
 	shape.radius = collision_radius
 	collision.shape = shape
 	add_child(collision)
@@ -174,6 +252,7 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if state == SummonState.DEAD:
 		velocity = Vector2.ZERO
+		actual_ground_motion_gu = Vector2.ZERO
 		return
 	_attack_timer = maxf(0.0, _attack_timer - delta)
 	remaining_lifetime = maxf(0.0, remaining_lifetime - delta)
@@ -183,11 +262,28 @@ func _physics_process(delta: float) -> void:
 	if not is_instance_valid(owner_player) or owner_player.current_hp <= 0:
 		_expire()
 		return
-	var owner_distance := global_position.distance_to(owner_player.global_position)
-	if owner_distance >= teleport_range:
+	var owner_distance_gu := distance_gu_to_screen_position_px(
+		owner_player.global_position
+	)
+	if owner_distance_gu >= teleport_range_gu:
 		_set_state(SummonState.RETURN_TO_OWNER)
-		global_position = owner_player.global_position + owner_player.facing.orthogonal() * 42.0
+		var owner_facing_ground_gu := (
+			GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+				owner_player.facing
+			).normalized()
+		)
+		var recall_offset_ground_gu := Vector2(
+			-owner_facing_ground_gu.y,
+			owner_facing_ground_gu.x
+		) * RECALL_OFFSET_GU
+		global_position = (
+			owner_player.global_position
+			+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+				recall_offset_ground_gu
+			)
+		)
 		velocity = Vector2.ZERO
+		actual_ground_motion_gu = Vector2.ZERO
 		queue_redraw()
 		return
 	if not is_instance_valid(_current_target) or _current_target.is_queued_for_deletion():
@@ -195,12 +291,20 @@ func _physics_process(delta: float) -> void:
 			_set_state(SummonState.ACQUIRE_TARGET)
 		_current_target = _nearest_enemy()
 	var enemy := _current_target
-	if enemy != null and enemy.global_position.distance_to(owner_player.global_position) > leash_range:
+	if (
+		enemy != null
+		and _distance_gu_between_screen_positions_px(
+			enemy.global_position, owner_player.global_position
+		) > leash_range_gu
+	):
 		_current_target = null
 		enemy = null
 	if enemy != null:
-		var offset := enemy.global_position - global_position
-		if offset.length() <= attack_range:
+		var offset_screen_px := enemy.global_position - global_position
+		if target_footprint_surface_distance_gu(
+			enemy.global_position,
+			enemy.collision_radius
+		) <= attack_range_gu + GroundUnitSpaceScript.EPSILON_GU:
 			_set_state(SummonState.ATTACK_TARGET)
 			velocity = Vector2.ZERO
 			if _attack_timer <= 0.0:
@@ -210,16 +314,25 @@ func _physics_process(delta: float) -> void:
 				enemy.take_damage(_rng.randi_range(attack_min, attack_max), self)
 		else:
 			_set_state(SummonState.CHASE_TARGET)
-			velocity = offset.normalized() * move_speed
+			velocity = _screen_velocity_toward_delta_px(offset_screen_px)
 	else:
-		var owner_offset := owner_player.global_position - global_position
-		if owner_offset.length() > follow_distance:
+		var owner_offset_screen_px := owner_player.global_position - global_position
+		if owner_distance_gu > follow_distance_gu:
 			_set_state(SummonState.RETURN_TO_OWNER)
-			velocity = owner_offset.normalized() * move_speed
+			velocity = _screen_velocity_toward_delta_px(
+				owner_offset_screen_px
+			)
 		else:
 			_set_state(SummonState.FOLLOW_OWNER)
 			velocity = Vector2.ZERO
+	var position_before_move_px := global_position
 	move_and_slide()
+	actual_ground_motion_gu = (
+		GroundUnitSpaceScript.actual_ground_motion_gu_from_screen_positions(
+			position_before_move_px,
+			global_position
+		)
+	)
 	queue_redraw()
 
 
@@ -241,15 +354,88 @@ func _set_state(next_state: int) -> void:
 
 func _nearest_enemy() -> EnemyActor:
 	var nearest: EnemyActor
-	var nearest_distance := aggro_radius
+	var nearest_distance_gu := INF
+	var nearest_instance_id := 0
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node.is_queued_for_deletion():
 			continue
-		var distance := global_position.distance_to(node.global_position)
-		if distance < nearest_distance:
+		var distance_gu := target_footprint_surface_distance_gu(
+			node.global_position,
+			node.collision_radius
+		)
+		if distance_gu > aggro_radius_gu + GroundUnitSpaceScript.EPSILON_GU:
+			continue
+		var instance_id := int(node.get_instance_id())
+		if (
+			distance_gu < nearest_distance_gu - GroundUnitSpaceScript.EPSILON_GU
+			or (
+				is_equal_approx(distance_gu, nearest_distance_gu)
+				and (nearest == null or instance_id < nearest_instance_id)
+			)
+		):
 			nearest = node
-			nearest_distance = distance
+			nearest_distance_gu = distance_gu
+			nearest_instance_id = instance_id
 	return nearest
+
+
+func spatial_contract_snapshot() -> Dictionary:
+	return {
+		"contract_id": SPATIAL_CONTRACT_ID,
+		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
+		"move_speed_gu_per_sec": move_speed_gu_per_sec,
+		"attack_range_gu": attack_range_gu,
+		"aggro_radius_gu": aggro_radius_gu,
+		"combat_radius_gu": combat_radius_gu,
+		"leash_range_gu": leash_range_gu,
+		"teleport_range_gu": teleport_range_gu,
+		"follow_distance_gu": follow_distance_gu,
+	}
+
+
+func distance_gu_to_screen_position_px(target_screen_position_px: Vector2) -> float:
+	return _distance_gu_between_screen_positions_px(
+		global_position,
+		target_screen_position_px
+	)
+
+
+func target_footprint_surface_distance_gu(
+	target_screen_position_px: Vector2,
+	target_collision_radius_px: float
+) -> float:
+	var target_radius_gu := (
+		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
+			target_collision_radius_px
+		)
+	)
+	return maxf(
+		0.0,
+		distance_gu_to_screen_position_px(target_screen_position_px)
+		- combat_radius_gu
+		- target_radius_gu
+	)
+
+
+func _screen_velocity_toward_delta_px(delta_screen_px: Vector2) -> Vector2:
+	var direction_ground_gu := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			delta_screen_px
+		)
+	)
+	return GroundUnitSpaceScript.desired_screen_velocity_px_per_sec(
+		direction_ground_gu,
+		move_speed_gu_per_sec
+	)
+
+
+static func _distance_gu_between_screen_positions_px(
+	first_screen_position_px: Vector2,
+	second_screen_position_px: Vector2
+) -> float:
+	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		second_screen_position_px - first_screen_position_px
+	).length()
 
 
 func take_damage(amount: int) -> void:

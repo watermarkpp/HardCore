@@ -27,32 +27,33 @@ func _ready() -> void:
 func _test_contract_and_exact_physics_footprints() -> void:
 	assert(
 		Geometry.FOOTPRINT_INTERSECTION_CONTRACT_ID
-		== "gameplay.warrior.melee_footprint_intersection.iso_polygon_sat.v1"
+		== "gameplay.warrior.melee_footprint_intersection.ground_gu_sat.v2"
 	)
-	assert(Geometry.TARGET_FOOTPRINT_CONTRACT_ID == "world.actor_footprint.iso_ellipse.v1")
+	assert(Geometry.TARGET_FOOTPRINT_CONTRACT_ID == "world.actor_footprint.ground_circle_gu.v1")
 	for radius: float in [NORMAL_RADIUS, BOSS_RADIUS]:
 		var polygon := Geometry.target_footprint_polygon_fractional_tile(
 			Vector2.ZERO,
 			radius
 		)
 		assert(polygon.size() == 16)
-		var source_polygon := WorldSpatialRules.actor_footprint_polygon(radius)
+		var expected_gu_radius := (
+			WorldSpatialRules.actor_combat_radius_gu_from_screen_radius_px(radius)
+		)
+		var source_polygon := WorldSpatialRules.actor_footprint_ground_polygon_gu(
+			expected_gu_radius
+		)
 		for index in range(source_polygon.size()):
-			var expected := DirectionSpace.world_delta_to_fractional_tile_delta(
-				source_polygon[index]
-			)
-			assert(polygon[index].is_equal_approx(expected))
-		var expected_tile_radius := radius / (32.0 * sqrt(2.0))
+			assert(polygon[index].is_equal_approx(source_polygon[index]))
 		var measured_radius := 0.0
 		for point: Vector2 in polygon:
 			measured_radius = maxf(measured_radius, point.length())
-		assert(is_equal_approx(measured_radius, expected_tile_radius))
+		assert(is_equal_approx(measured_radius, expected_gu_radius))
 
 
 func _test_thrust_lane_contact_all_directions() -> void:
 	for radius: float in [NORMAL_RADIUS, BOSS_RADIUS]:
 		for direction_index in range(8):
-			var step := Vector2(Geometry.facing_tile_step(direction_index))
+			var step := Vector2(Geometry.facing_tile_step(direction_index)).normalized()
 			var side := Vector2(step.y, -step.x)
 			var lateral_support := _line_support(radius, direction_index, false)
 			for forward: float in [0.75, 2.5]:
@@ -89,7 +90,7 @@ func _test_thrust_lane_contact_all_directions() -> void:
 func _test_thrust_primary_secondary_priority() -> void:
 	for radius: float in [NORMAL_RADIUS, BOSS_RADIUS]:
 		for direction_index in range(8):
-			var step := Vector2(Geometry.facing_tile_step(direction_index))
+			var step := Vector2(Geometry.facing_tile_step(direction_index)).normalized()
 			var forward_support := _line_support(radius, direction_index, true)
 			# Exact boundary contact belongs to the primary segment.
 			var touching_boundary := step * (
@@ -113,7 +114,7 @@ func _test_thrust_primary_secondary_priority() -> void:
 func _test_thrust_endpoint_contact_all_directions() -> void:
 	for radius: float in [NORMAL_RADIUS, BOSS_RADIUS]:
 		for direction_index in range(8):
-			var step := Vector2(Geometry.facing_tile_step(direction_index))
+			var step := Vector2(Geometry.facing_tile_step(direction_index)).normalized()
 			var forward_support := _line_support(radius, direction_index, true)
 			var touching_center := step * (
 				Geometry.reach_tiles(Geometry.SKILL_THRUST) + forward_support
@@ -140,7 +141,7 @@ func _test_thrust_endpoint_contact_all_directions() -> void:
 func _test_normal_fire_and_half_moon_contact_all_directions() -> void:
 	for radius: float in [NORMAL_RADIUS, BOSS_RADIUS]:
 		for direction_index in range(8):
-			var step := Vector2(Geometry.facing_tile_step(direction_index))
+			var step := Vector2(Geometry.facing_tile_step(direction_index)).normalized()
 			var forward_support := _line_support(radius, direction_index, true)
 			for mode: String in [
 				Geometry.SKILL_NORMAL,
@@ -182,8 +183,8 @@ func _test_normal_fire_and_half_moon_contact_all_directions() -> void:
 
 func _test_half_moon_primary_secondary_priority() -> void:
 	for attack_direction in range(8):
-		var primary_step := Vector2(Geometry.facing_tile_step(attack_direction))
-		var side_step := Vector2(Geometry.facing_tile_step(posmod(attack_direction + 1, 8)))
+		var primary_step := Vector2(Geometry.facing_tile_step(attack_direction)).normalized()
+		var side_step := Vector2(Geometry.facing_tile_step(posmod(attack_direction + 1, 8))).normalized()
 		assert(
 			Geometry.half_moon_footprint_relative_sector(
 				Vector2.ZERO,
@@ -234,7 +235,7 @@ func _test_half_moon_primary_secondary_priority() -> void:
 
 func _test_diagnostic_reports_point_and_footprint_results() -> void:
 	var direction_index := 7
-	var step := Vector2(Geometry.facing_tile_step(direction_index))
+	var step := Vector2(Geometry.facing_tile_step(direction_index)).normalized()
 	var side := Vector2(step.y, -step.x)
 	var lateral_support := _line_support(NORMAL_RADIUS, direction_index, false)
 	var target := step * 2.0 + side * (
@@ -247,7 +248,7 @@ func _test_diagnostic_reports_point_and_footprint_results() -> void:
 		direction_index,
 		Geometry.SKILL_THRUST
 	)
-	assert(report.contract_id == "diagnostic.warrior.melee_footprint_candidate.v1")
+	assert(report.contract_id == "diagnostic.warrior.melee_footprint_candidate.ground_gu.v2")
 	assert(report.point_candidate_contract_id == Diagnostic.CONTRACT_ID)
 	assert(report.point_result_code == Diagnostic.RESULT_OUTSIDE_ATTACK_LANE)
 	assert(not report.point_accepted)
@@ -255,7 +256,7 @@ func _test_diagnostic_reports_point_and_footprint_results() -> void:
 	assert(report.footprint_accepted and report.accepted)
 	assert(report.point_thrust_slot == 0)
 	assert(report.footprint_thrust_slot == 2)
-	assert(report.target_collision_radius_world == NORMAL_RADIUS)
+	assert(report.target_collision_radius_px == NORMAL_RADIUS)
 	assert(report.target_footprint_vertex_count == 16)
 	assert(report.attack_region_polygon_count == 1)
 	assert(report.footprint_intersection_contract_id == Geometry.FOOTPRINT_INTERSECTION_CONTRACT_ID)
@@ -264,7 +265,7 @@ func _test_diagnostic_reports_point_and_footprint_results() -> void:
 
 
 func _test_v53_angle_and_movement_snapshot_regression() -> void:
-	var reported_delta := Vector2(-0.56, -1.31)
+	var reported_delta := Vector2(-0.60, -1.20)
 	assert(Geometry.direction_index_for_tile_delta(reported_delta) == 4)
 	assert(Geometry.thrust_slot(Vector2.ZERO, reported_delta, 4) == 1)
 	assert(Geometry.thrust_footprint_slot(

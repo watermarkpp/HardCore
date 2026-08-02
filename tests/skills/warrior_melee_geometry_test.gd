@@ -5,7 +5,7 @@ const ReleaseGeometry := preload("res://scripts/skills/combat_release_geometry.g
 
 
 func _ready() -> void:
-	assert(Geometry.CONTRACT_ID == "gameplay.warrior.melee_geometry.fractional_tile.v1")
+	assert(Geometry.CONTRACT_ID == "gameplay.warrior.melee_geometry.ground_gu.v2")
 	assert(is_equal_approx(Geometry.reach_tiles("normal"), 1.5))
 	assert(is_equal_approx(Geometry.reach_tiles("fire"), 1.5))
 	assert(is_equal_approx(Geometry.reach_tiles("half_moon"), 1.5))
@@ -30,16 +30,16 @@ func _ready() -> void:
 		assert(policy.maximum_targets == 1)
 		assert(not policy.unlimited_within_geometry)
 
-	# S faces tile step (1, 1); the first 1.5 tiles are primary and the
-	# endpoint-tolerance segment through 2.5 tiles is the second target slot.
+	# S faces ground direction normalize(1, 1); formal lengths are Euclidean GU.
 	assert(Geometry.facing_tile_step(0) == Vector2i(1, 1))
-	assert(Geometry.thrust_slot(Vector2.ZERO, Vector2(1.5, 1.5), 0) == 1)
-	assert(Geometry.thrust_slot(Vector2.ZERO, Vector2(2.5, 2.5), 0) == 2)
-	assert(Geometry.thrust_slot(Vector2.ZERO, Vector2(2.5002, 2.5002), 0) == 0)
+	var south_gu := Vector2(1.0, 1.0).normalized()
+	assert(Geometry.thrust_slot(Vector2.ZERO, south_gu * 1.5, 0) == 1)
+	assert(Geometry.thrust_slot(Vector2.ZERO, south_gu * 2.5, 0) == 2)
+	assert(Geometry.thrust_slot(Vector2.ZERO, south_gu * 2.5002, 0) == 0)
 	assert(Geometry.thrust_slot(Vector2.ZERO, Vector2(2.0, 0.9), 0) == 0)
 	# Target count never alters the accepted line/arc. Multiple targets can
 	# occupy the same valid segment or sector; callers must enumerate them all.
-	for same_segment_target: Vector2 in [Vector2(1.0, 1.0), Vector2(1.2, 1.2), Vector2(1.4, 1.4)]:
+	for same_segment_target: Vector2 in [south_gu, south_gu * 1.2, south_gu * 1.4]:
 		assert(Geometry.thrust_slot(Vector2.ZERO, same_segment_target, 0) == 1)
 	# Fractional tile positions are quantized in canonical tile space. World
 	# projection happens only after direction selection.
@@ -48,7 +48,7 @@ func _ready() -> void:
 
 	# Facing N (index 4) sweeps NW,N,NE,E: relative offsets 7,0,1,2.
 	for allowed_direction: int in [3, 4, 5, 6]:
-		var target := Vector2(Geometry.facing_tile_step(allowed_direction)) * 1.5
+		var target := Vector2(Geometry.facing_tile_step(allowed_direction)).normalized() * 1.5
 		assert(Geometry.is_in_half_moon_arc(Vector2.ZERO, target, 4))
 	for rejected_direction: int in [0, 1, 2, 7]:
 		var target := Vector2(Geometry.facing_tile_step(rejected_direction))
@@ -57,7 +57,7 @@ func _ready() -> void:
 	for same_sector_distance: float in [0.25, 0.5, 0.75, 1.0, 1.25, 1.5]:
 		assert(Geometry.is_in_half_moon_arc(
 			Vector2.ZERO,
-			Vector2(Geometry.facing_tile_step(4)) * same_sector_distance,
+			Vector2(Geometry.facing_tile_step(4)).normalized() * same_sector_distance,
 			4
 		))
 
@@ -70,7 +70,7 @@ func _ready() -> void:
 
 	assert(
 		ReleaseGeometry.CONTRACT_ID
-		== "gameplay.professions.combat_release_geometry.live_footpoint.v1"
+		== "gameplay.professions.combat_release_geometry.live_footpoint_gu.v2"
 	)
 	assert(ReleaseGeometry.tracks_locked_target("single"))
 	for spatial_mode: String in ["direction", "target_area", "self", "self_area"]:
@@ -133,5 +133,5 @@ func _ready() -> void:
 		assert(not Geometry.is_single_target_in_reach(
 			Vector2.ZERO, Vector2(just_outside, 0.0), mode
 		))
-	print("WARRIOR_MELEE_GEOMETRY_PASS: fractional tiles, capped bonuses, arc/lane and fire MISS policy")
+	print("WARRIOR_MELEE_GEOMETRY_PASS: Euclidean GU, capped bonuses, arc/lane and fire MISS policy")
 	get_tree().quit()
