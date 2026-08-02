@@ -250,10 +250,10 @@ func _place_at_tile_offset(
 
 
 func _expected_melee_facing(actor: Node2D, target: Node2D) -> Vector2:
-	var direction_index := DirectionSpace.direction_index_for_world_delta(
+	var direction_index := DirectionSpace.direction_index_for_screen_delta_px(
 		target.global_position - actor.global_position
 	)
-	return DirectionSpace.projected_world_direction(direction_index)
+	return DirectionSpace.projected_screen_direction_px(direction_index)
 
 
 func _assert_direction_priority() -> void:

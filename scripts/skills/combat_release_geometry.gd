@@ -11,7 +11,6 @@ const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 ## identity, but world positions are deliberately sampled only at release.
 
 const CONTRACT_ID := "gameplay.professions.combat_release_geometry.live_footpoint_gu.v2"
-const LEGACY_CONTRACT_ID := "gameplay.professions.combat_release_geometry.live_footpoint.v1"
 const MELEE_RELEASE_FACING_POLICY_ID := (
 	"gameplay.warrior.melee_release_facing.canonical_tile_8dir.v2"
 )
@@ -89,10 +88,10 @@ static func resolve(
 		effective_facing_policy = FACING_POLICY_LIVE_LOCKED_TARGET
 	var direction_resolution: Dictionary = {}
 	if effective_facing_policy == FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION:
-		# Preserve the input-facing snapshot for the whole action. The input world
-		# vector is converted to fractional tile space before quantization, then
-		# projected back to the matching world/visual direction.
-		direction_resolution = CombatDirectionSpaceScript.resolve_world_delta(
+		# Preserve the input-facing snapshot for the whole action. The screen PX
+		# vector is converted to GU before quantization and then projected back to
+		# the matching screen/visual direction.
+		direction_resolution = CombatDirectionSpaceScript.resolve_screen_delta_px(
 			input_direction
 		)
 		release_direction_ground_gu = direction_resolution.get(
@@ -153,13 +152,13 @@ static func resolve(
 			direction_resolution.get("visual_direction_index", -1)
 		),
 		"direction_source_screen_delta_px": direction_resolution.get(
-			"source_world_delta", Vector2.ZERO
+			"source_screen_delta_px", Vector2.ZERO
 		),
 		"direction_source_ground_delta_gu": direction_resolution.get(
 			"ground_delta_gu", Vector2.ZERO
 		),
-		"direction_canonical_tile_step": direction_resolution.get(
-			"canonical_tile_step", Vector2i.ZERO
+		"direction_canonical_grid_step": direction_resolution.get(
+			"canonical_grid_step", Vector2i.ZERO
 		),
 		"refresh_actor_footpoint_at_release": true,
 		"refresh_locked_target_footpoint_at_release": valid_original_target,

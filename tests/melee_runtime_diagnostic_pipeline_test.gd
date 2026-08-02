@@ -83,7 +83,7 @@ func _run() -> void:
 	enemy.velocity = Vector2.ZERO
 	enemy.control_time = 0.0
 	enemy.global_position = game.player.global_position + (
-		DirectionSpace.fractional_tile_delta_to_world_delta(Vector2(-0.56, -1.31))
+		DirectionSpace.ground_delta_gu_to_screen_delta_px(Vector2(-0.56, -1.31))
 	)
 	enemy.apply_control(60.0)
 	var measured_delta: Vector2 = (
@@ -126,7 +126,7 @@ func _run() -> void:
 	var footprint_direction_index := 7
 	var footprint_step := Vector2(MeleeGeometry.facing_tile_step(footprint_direction_index))
 	var forward_support := 0.0
-	for point: Vector2 in MeleeGeometry.target_footprint_polygon_fractional_tile(
+	for point: Vector2 in MeleeGeometry.target_footprint_polygon_ground_gu(
 		Vector2.ZERO,
 		enemy.combat_radius_gu
 	):

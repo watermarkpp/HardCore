@@ -263,7 +263,7 @@ func _test_diagnostic_reports_point_and_footprint_results() -> void:
 
 func _test_v53_angle_and_movement_snapshot_regression() -> void:
 	var reported_delta := Vector2(-0.60, -1.20)
-	assert(Geometry.direction_index_for_tile_delta(reported_delta) == 4)
+	assert(Geometry.direction_index_for_ground_delta_gu(reported_delta) == 4)
 	assert(Geometry.thrust_slot(Vector2.ZERO, reported_delta, 4) == 1)
 	assert(Geometry.thrust_footprint_slot_gu(
 		Vector2.ZERO,
@@ -271,7 +271,7 @@ func _test_v53_angle_and_movement_snapshot_regression() -> void:
 		NORMAL_COMBAT_RADIUS_GU,
 		4
 	) == 1)
-	var input_world_direction := DirectionSpace.fractional_tile_delta_to_world_delta(
+	var input_world_direction := DirectionSpace.ground_delta_gu_to_screen_delta_px(
 		reported_delta
 	)
 	var release := ReleaseGeometry.resolve(
@@ -285,7 +285,7 @@ func _test_v53_angle_and_movement_snapshot_regression() -> void:
 	)
 	assert(release.direction_locked_for_action)
 	assert(release.direction_index == 4)
-	assert(release.direction_canonical_tile_step == Vector2i(-1, -1))
+	assert(release.direction_canonical_grid_step == Vector2i(-1, -1))
 	assert(release.direction_screen_px.is_equal_approx(Vector2.UP))
 
 

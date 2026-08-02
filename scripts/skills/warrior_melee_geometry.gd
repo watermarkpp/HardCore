@@ -106,7 +106,7 @@ static func target_count_policy(mode: String) -> Dictionary:
 
 
 static func facing_tile_step(direction_index: int) -> Vector2i:
-	return CombatDirectionSpaceScript.canonical_tile_step(direction_index)
+	return CombatDirectionSpaceScript.canonical_grid_step(direction_index)
 
 
 static func canonical_ground_direction_gu(direction_index: int) -> Vector2:
@@ -449,12 +449,8 @@ static func _project_polygon(polygon: PackedVector2Array, axis: Vector2) -> Vect
 	return Vector2(minimum, maximum)
 
 
-static func direction_index_for_tile_delta(delta: Vector2) -> int:
-	return CombatDirectionSpaceScript.direction_index_for_fractional_tile_delta(delta)
-
-
 static func direction_index_for_ground_delta_gu(delta_ground_gu: Vector2) -> int:
-	return CombatDirectionSpaceScript.direction_index_for_fractional_tile_delta(
+	return CombatDirectionSpaceScript.direction_index_for_ground_delta_gu(
 		delta_ground_gu
 	)
 
@@ -471,7 +467,7 @@ static func is_in_half_moon_arc(
 ) -> bool:
 	if not is_single_target_in_reach(origin, target, SKILL_HALF_MOON, range_bonus_tiles):
 		return false
-	var target_direction := direction_index_for_tile_delta(target - origin)
+	var target_direction := direction_index_for_ground_delta_gu(target - origin)
 	return half_moon_relative_sector(attack_direction_index, target_direction) in HALF_MOON_RELATIVE_DIRECTION_OFFSETS
 
 
@@ -522,7 +518,7 @@ static func wild_rush_direction_ground_gu(
 
 
 static func wild_rush_direction_step(origin: Vector2, target: Vector2) -> Vector2i:
-	return facing_tile_step(direction_index_for_tile_delta(target - origin))
+	return facing_tile_step(direction_index_for_ground_delta_gu(target - origin))
 
 
 static func wild_rush_resolved_distance(

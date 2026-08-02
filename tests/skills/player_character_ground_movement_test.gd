@@ -9,7 +9,6 @@ func _ready() -> void:
 	var player := PlayerCharacter.new()
 	add_child(player)
 	await get_tree().process_frame
-	player.move_speed = 1.0
 	var delta_seconds := 1.0 / float(Engine.physics_ticks_per_second)
 	for sample_index: int in range(32):
 		var input_ground_gu := Vector2.from_angle(
@@ -47,5 +46,5 @@ func _ready() -> void:
 			str(player.global_position),
 		])
 	player.free()
-	print("PLAYER_CHARACTER_GROUND_MOVEMENT_PASS: 32 directions use equal GU speed and ignore legacy PX move_speed")
+	print("PLAYER_CHARACTER_GROUND_MOVEMENT_PASS: 32 directions use equal GU speed with no PX movement alias")
 	get_tree().quit(0)

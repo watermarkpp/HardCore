@@ -56,7 +56,7 @@ func _ready() -> void:
 					"magic_stat_roll": 30,
 					"spiritual_stat_roll": 30,
 				})
-				assert(plan.runtime_contract == "caster_skill_runtime.v1", "%s不能进入职业状态机" % skill_id)
+				assert(plan.runtime_contract == CasterSkillRuntime.RUNTIME_CONTRACT_ID, "%s不能进入职业状态机" % skill_id)
 				assert(plan.get("failure_reason", "") != "missing_runtime_operation", "%s缺少运行时操作" % skill_id)
 		for quick_skill_id: String in template.quick_slot_ids:
 			assert(template.learned_skill_ids.has(quick_skill_id), "%s快捷槽技能未学习" % quick_skill_id)

@@ -22,7 +22,8 @@ func _ready() -> void:
 	_test_h_primary_source_adapters_and_units()
 	_test_i_frozen_visual_contracts()
 	_test_j_ground_effect_radius_gu()
-	print("PROFESSIONS_COMBAT_GU_CONTRACT_PASS: audits A-J")
+	_test_k_formal_runtime_spatial_fields()
+	print("PROFESSIONS_COMBAT_GU_CONTRACT_PASS: audits A-K")
 	get_tree().quit(0)
 
 
@@ -123,7 +124,7 @@ func _test_e_continuous_line_gu_geometry() -> void:
 			var aim_ground_gu := Vector2.from_angle(
 				TAU * float(sample_index) / 32.0
 			)
-			var strip := CasterGeometry.continuous_line_strip(
+			var strip := CasterGeometry.continuous_line_strip_ground_gu(
 				Vector2.ZERO,
 				aim_ground_gu,
 				Vector2.RIGHT,
@@ -208,7 +209,7 @@ func _test_h_primary_source_adapters_and_units() -> void:
 	assert(is_equal_approx(LegacyAdapter.PLAYER_MOVE_SPEED_GU_PER_SEC, 2.0 / 0.6))
 	assert(LegacyAdapter.PROJECTILE_SPEED_GU_PER_SEC > 0.0)
 	assert(LegacyAdapter.PROJECTILE_RADIUS_GU > 0.0)
-	assert(DirectionSpace.CONTRACT_ID == "gameplay.professions.combat_direction_space.ground_gu_8dir.v2")
+	assert(DirectionSpace.CONTRACT_ID == "gameplay.professions.combat_direction_space.ground_gu_8dir.v3")
 
 
 func _test_i_frozen_visual_contracts() -> void:
@@ -250,3 +251,64 @@ func _test_j_ground_effect_radius_gu() -> void:
 		assert(not effect.runtime_target_is_inside(target))
 	target.free()
 	effect.free()
+
+
+func _test_k_formal_runtime_spatial_fields() -> void:
+	const FORBIDDEN_FIELDS := [
+		"range", "search_range", "area_radius", "area_radius_cells", "cell_size",
+	]
+	for skill_id: String in ProfessionRules.SKILL_CATALOG:
+		var profile := ProfessionRules.skill_combat_profile(skill_id)
+		assert(profile.spatial_contract_id == ProfessionRules.COMBAT_SPATIAL_PROFILE_CONTRACT_ID)
+		for required_field in [
+			"maximum_range_gu", "search_range_gu", "area_radius_gu", "visual_radius_px",
+		]:
+			assert(profile.has(required_field), "%s missing %s" % [skill_id, required_field])
+		for forbidden_field: String in FORBIDDEN_FIELDS:
+			assert(not profile.has(forbidden_field), "%s exposes %s" % [skill_id, forbidden_field])
+	for skill_id: String in ProfessionRules.SKILL_CATALOG:
+		if not skill_id.begins_with("wizard.") and not skill_id.begins_with("taoist."):
+			continue
+		var plan := CasterSkillRuntime.resolve(skill_id, {
+			"skill_level": 3,
+			"caster_level": 40,
+			"owner_level": 40,
+			"target_level": 1,
+			"target_max_hp": 1,
+			"target_is_undead": true,
+			"magic_stat_roll": 1,
+			"spiritual_stat_roll": 1,
+			"outer_random": 0,
+			"coin_random": 0,
+			"level_random": 0,
+			"hp_random": 0,
+			"random_0_to_19": 0,
+			"random_0_or_1": 0,
+			"random_0_to_10": 0,
+			"random_0_to_99": 0,
+			"random_0_to_5": 0,
+			"anti_poison_random": 0,
+			"owner_slave_count": 0,
+		})
+		assert(plan.runtime_contract == CasterSkillRuntime.RUNTIME_CONTRACT_ID)
+		for forbidden_field: String in FORBIDDEN_FIELDS:
+			assert(not plan.has(forbidden_field), "%s runtime exposes %s" % [skill_id, forbidden_field])
+	var player_source := FileAccess.get_file_as_string("res://scripts/player.gd")
+	assert(not player_source.contains("@export var move_speed :="))
+	assert(not player_source.contains("var move_speed :="))
+	var direction_source := FileAccess.get_file_as_string(
+		"res://scripts/skills/combat_direction_space.gd"
+	)
+	for forbidden_api in [
+		"world_delta_to_fractional_tile_delta",
+		"fractional_tile_delta_to_world_delta",
+		"direction_index_for_fractional_tile_delta",
+		"direction_index_for_world_delta",
+		"projected_world_direction",
+		"resolve_world_delta",
+	]:
+		assert(not direction_source.contains(forbidden_api), "old direction API remains: %s" % forbidden_api)
+	var caster_geometry_source := FileAccess.get_file_as_string(
+		"res://scripts/skills/caster_spell_geometry.gd"
+	)
+	assert(not caster_geometry_source.contains("continuous_line_world_points"))

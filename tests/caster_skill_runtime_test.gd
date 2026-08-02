@@ -44,7 +44,15 @@ func _ready() -> void:
 		if skill_id == "wizard.holy_word":
 			context.target_is_undead = true
 		var plan := CasterSkillRuntime.resolve(skill_id, context)
-		assert(plan.runtime_contract == "caster_skill_runtime.v1", "%s lacks runtime contract" % skill_id)
+		assert(plan.runtime_contract == CasterSkillRuntime.RUNTIME_CONTRACT_ID, "%s lacks runtime contract" % skill_id)
+		for formal_field in [
+			"maximum_range_gu", "search_range_gu", "area_radius_gu", "visual_radius_px",
+		]:
+			assert(plan.has(formal_field), "%s lacks %s" % [skill_id, formal_field])
+		for forbidden_field in [
+			"range", "search_range", "area_radius", "area_radius_cells", "cell_size",
+		]:
+			assert(not plan.has(forbidden_field), "%s exposes %s" % [skill_id, forbidden_field])
 		assert(not str(plan.get("operation", "")).is_empty(), "%s lacks runtime operation" % skill_id)
 		assert(plan.get("failure_reason", "") != "missing_runtime_operation", "%s is not executable" % skill_id)
 		if skill_id == "taoist.spiritual_warfare":
@@ -79,12 +87,19 @@ func _ready() -> void:
 	summon_owner.free()
 
 	var fire_wall := CasterSkillRuntime.resolve("wizard.fire_wall", {
-		"skill_level": 3, "magic_stat_roll": 30, "cell_size": 48,
+		"skill_level": 3, "magic_stat_roll": 30,
 	})
 	assert(fire_wall.operation == "ground_dot" and fire_wall.execution_shape == "square_2x2")
 	assert(fire_wall.duration_seconds == 28 and fire_wall.tick_interval_seconds == 1.0)
-	var fire_cells := CasterSkillRuntime.fire_wall_positions(Vector2(100, 100), 48)
-	assert(fire_cells.size() == 4 and fire_cells.has(Vector2(148, 100)) and fire_cells.has(Vector2(148, 148)))
+	assert(is_equal_approx(float(fire_wall.cell_spacing_gu), 1.0))
+	assert(is_equal_approx(float(fire_wall.ground_effect_radius_gu), 0.5))
+	var fire_cells := CasterSkillRuntime.fire_wall_positions_ground_gu(
+		Vector2(100, 100), 1.0
+	)
+	assert(fire_cells == [
+		Vector2(100, 100), Vector2(132, 116),
+		Vector2(68, 116), Vector2(100, 132),
+	])
 	GroundSkillEffect.reset_runtime_tick_claims_for_tests()
 	var fire_wall_caster := Node2D.new()
 	var second_fire_wall_caster := Node2D.new()

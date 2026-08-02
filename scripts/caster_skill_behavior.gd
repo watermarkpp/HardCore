@@ -148,7 +148,7 @@ static func _poison(level: int, context: Dictionary) -> Dictionary:
 static func _invisibility(skill_id: String, level: int, context: Dictionary) -> Dictionary:
 	var result := _base(skill_id, "stealth_area" if skill_id.ends_with("mass_invisibility") else "stealth", level)
 	result.duration_seconds = TaoistCombatMath.status_duration(skill_id, level, int(context.get("spiritual_stat_roll", 0)))
-	result.area_radius_cells = 1 if skill_id.ends_with("mass_invisibility") else 0
+	result.area_radius_grid_steps = 1.0 if skill_id.ends_with("mass_invisibility") else 0.0
 	result.amulet_cost = 1
 	return result
 
@@ -157,7 +157,7 @@ static func _defense(skill_id: String, level: int, context: Dictionary) -> Dicti
 	var result := _base(skill_id, "magic_defense_buff" if skill_id.ends_with("magic_defense") else "physical_defense_buff", level)
 	result.buff_power = TaoistCombatMath.buff_power(skill_id, level, int(context.get("spiritual_stat_roll", 0)))
 	result.duration_seconds = int(result.buff_power)
-	result.area_radius_cells = 3
+	result.area_radius_grid_steps = 3.0
 	result.amulet_cost = 1
 	return result
 

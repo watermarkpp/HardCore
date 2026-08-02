@@ -44,9 +44,6 @@ signal resources_changed(current_hp: int, max_hp: int, current_mp: int, max_mp: 
 signal movement_performed(position: Vector2, facing: Vector2)
 signal death_requested
 
-# Compatibility-only presentation value retained for old scenes/tests. Runtime
-# movement uses the formal GU scalar below and never consumes this PX field.
-@export var move_speed := 190.0
 @export var move_speed_gu_per_sec := (
 	CombatUnitLegacyAdapterScript.PLAYER_MOVE_SPEED_GU_PER_SEC
 )
