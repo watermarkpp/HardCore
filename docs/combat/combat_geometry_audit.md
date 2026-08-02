@@ -58,3 +58,12 @@
 ## 已知非本次回归
 
 额外旧场景 `gothic_bich_camp_test` 的 GU 安全区断言已经通过，随后失败于既存的“仓库管理员”NPC 缺失。该断言不属于单位系统，也不在标准比奇 32 项或最终关键 86 项套件中；本次未越权修改地图内容。
+
+## Android 交付
+
+- 固定构建提交：`665c21beb894297617fdac6bccc342b4c052c4b1`
+- APK：`outputs/hardcore/HardCore-v63-combat-unit-gu-debug.apk`
+- 版本：`63 / 1.18.0-combat-unit-gu`
+- 大小：`244,485,554` 字节
+- SHA-256：`C380B2F050E8053D282B9740162A8D8C39D6A1CB4341DF6AB0ECCEA24ABC7F63`
+- 验证：HardCore / arm64-v8a / minSdk 24 / targetSdk 36 / 横屏 / 可调整窗口 / APK v2、v3 签名 / 运行时资源探针全部通过。

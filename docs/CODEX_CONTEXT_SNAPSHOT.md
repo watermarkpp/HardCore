@@ -2,6 +2,7 @@
 
 ## 2026-08-03 COMBAT-UNIT-V1.0 全项目 GU/GS/PX 迁移完成
 
+- Android 固定构建提交为 `665c21beb894297617fdac6bccc342b4c052c4b1`；APK 为 `outputs/hardcore/HardCore-v63-combat-unit-gu-debug.apk`，大小 `244,485,554` 字节，SHA-256 `C380B2F050E8053D282B9740162A8D8C39D6A1CB4341DF6AB0ECCEA24ABC7F63`。包信息为 `versionCode=63`、`versionName=1.18.0-combat-unit-gu`、`HardCore`、`arm64-v8a`、`minSdk=24`、`targetSdk=36`，APK v2/v3 签名与运行时资源探针通过。
 - 正式单位合同为 `combat.unit.gu_gs_px.v1`：玩法距离、方向、速度和占地使用地面欧氏 `GU`；`GS` 只表示离散拓扑步数；`PX` 只用于投影、物理呈现、素材和 UI。
 - 玩家与怪物移动/AI、攻击和法术锁定、战士近战、地狱火/疾光电影、投射物扫掠、地图安全区与刷新、运行时地图输出已完成迁移。正式运行时无旧无单位兼容别名，旧数据字段只在版本化单向适配入口转换一次。
 - 技能基线保持：普通/烈火/半月 `1.5 GU`，刺杀 `2.5 GU`，地狱火 `5×1 GU`，疾光电影 `8×1 GU`，攻击/法术锁定 `10/12 GU`。人工脚点、怪物占地、释放帧重读、准确判定顺序、技能原始像素和已验收视觉均保留。

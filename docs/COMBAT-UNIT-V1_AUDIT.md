@@ -6,6 +6,8 @@
 
 最终证据见 `docs/combat/combat_geometry_audit.md`。集成回归结果为：职业技能 `16/16`、UI 接口 `5/5`、战士/法师 `25/25`、地图 `32/32`、怪物 `18/18`、装备 `17/17`、最终去重关键套件 `86/86`，全部通过。五份用户冻结数据的 SHA-256 与施工前完全一致。
 
+Android v63 从固定提交 `665c21beb894297617fdac6bccc342b4c052c4b1` 隔离构建。APK 为 `outputs/hardcore/HardCore-v63-combat-unit-gu-debug.apk`，大小 `244,485,554` 字节，SHA-256 `C380B2F050E8053D282B9740162A8D8C39D6A1CB4341DF6AB0ECCEA24ABC7F63`；版本、包名、HardCore 应用名、arm64、SDK、横屏、可调整窗口、v2/v3 签名和运行时资源探针均通过。
+
 ## 1. 审计身份与保护边界
 
 - 初始集成基线：`967d7981625c79fb7c5c4e67a583337f1a510a25`
