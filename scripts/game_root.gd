@@ -164,7 +164,7 @@ func _ready() -> void:
 	player.resources_changed.connect(hud.update_resources)
 	# 重登始终从服务端HomeMap出生。该规则不依赖退出回调，Android强杀后同样安全回城。
 	travel_to_service_home(false, true)
-	PlayerState.update_world_location(current_map_id, player.global_position)
+	_record_player_world_location()
 	_on_player_stats_changed(player.current_hp, player.max_hp)
 	hud.update_warrior_states(player.warrior_state_snapshot())
 	_build_system_menu()
@@ -203,7 +203,7 @@ func _process(delta: float) -> void:
 	_update_portal_arrival_guard()
 	_enforce_bich_safe_zone()
 	_update_boss_world_mechanics(delta)
-	PlayerState.update_world_location(current_map_id, player.global_position)
+	_record_player_world_location()
 	_validate_locked_target()
 	_update_target_hud()
 	_process_skill_input_actions(delta)
@@ -272,7 +272,11 @@ func _constrain_player_foot_to_runtime_ground() -> bool:
 		return false
 	player.global_position = corrected
 	player.velocity = Vector2.ZERO
-	PlayerState.update_world_location(current_map_id, corrected)
+	PlayerState.update_world_location(
+		current_map_id,
+		corrected,
+		_canonical_world_to_fractional_tile(corrected)
+	)
 	return true
 
 
@@ -388,7 +392,13 @@ func _on_system_menu_audio_setting_changed(request: Dictionary) -> void:
 
 func _prepare_safe_logout() -> bool:
 	PlayerState.apply_warrior_runtime_state(player.warrior_runtime_state_for_save())
-	return PlayerState.save_safe_logout(GameData.service_home_runtime_map_id(false), _bich_home_world_position())
+	var home_map_id := GameData.service_home_runtime_map_id(false)
+	var home_screen_position_px := _bich_home_world_position()
+	return PlayerState.save_safe_logout(
+		home_map_id,
+		home_screen_position_px,
+		_ground_position_gu_for_map(home_map_id, home_screen_position_px)
+	)
 
 
 func _return_to_character_select() -> void:
@@ -2087,7 +2097,7 @@ func _finish_death_revival() -> void:
 	player.global_position = _bich_home_world_position()
 	player.velocity = Vector2.ZERO
 	background.set_focus_position(player.global_position)
-	PlayerState.update_world_location(current_map_id, player.global_position)
+	_record_player_world_location()
 	PlayerState.save_game()
 	if hud != null:
 		hud.show_message("你已在最近的城镇复活", 2.0)
@@ -4107,6 +4117,31 @@ func _spawn_canonical_teleport_arrival(
 	)
 	if arrival != null:
 		add_child(arrival)
+
+
+func _record_player_world_location() -> void:
+	if not is_instance_valid(player):
+		return
+	PlayerState.update_world_location(
+		current_map_id,
+		player.global_position,
+		_ground_position_gu_for_map(current_map_id, player.global_position)
+	)
+
+
+func _ground_position_gu_for_map(
+	map_id: int,
+	screen_position_px: Vector2
+) -> Vector2:
+	var runtime := MapEditorRuntimeBridgeScript.load_map(map_id)
+	if not runtime.is_empty():
+		return MapEditorRuntimeBridgeScript.world_to_tile(
+			runtime,
+			screen_position_px
+		)
+	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		screen_position_px
+	)
 
 
 func _canonical_world_to_tile(world: Vector2) -> Vector2i:
