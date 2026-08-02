@@ -4003,9 +4003,9 @@
         "trajectory_max_dominant_axis_pixels": 320,
         "trail_frame_count": 6,
         "geometry_alignment_contract": "skills.caster.geometry_visual_alignment.v1",
-        "axis_fit_contract": "skills.caster.line_visual.forward_endpoint_uniform.v1",
+        "axis_fit_contract": "skills.wizard.hellfire.firegun_trail.fixed_source_pixels.v1",
         "trail_emission_policy": "resample_to_canonical_geometry_endpoint",
-        "fit_mode": "caster_anchor_forward_projection_uniform_per_trail_cell",
+        "fit_mode": "fixed_source_pixels_with_canonical_trail_offsets",
         "movement_lock_to_primary_visual": true
       },
       "distribution_id": "client.classic_raw_complete",
@@ -9659,8 +9659,8 @@
         "playback_strategy": "frame_sequence",
         "pixel_snap": true,
         "geometry_alignment_contract": "skills.caster.geometry_visual_alignment.v1",
-        "axis_fit_contract": "skills.caster.line_visual.forward_endpoint_uniform.v1",
-        "fit_mode": "caster_anchor_forward_projection_uniform",
+        "axis_fit_contract": "skills.caster.line_visual.axis_cross_affine.v2",
+        "fit_mode": "selected_source_axis_to_continuous_aim_axis_length_and_one_cell_width",
         "movement_lock_to_primary_visual": true
       },
       "distribution_id": "client.classic_raw_complete",

@@ -11,6 +11,10 @@ const MAGIC_SHIELD_VISUAL_CONTRACT_ID := (
 )
 const ATTACHMENT_DRAW_ORDER_BEHIND_ACTOR := "behind_attached_actor_same_footpoint"
 const BEHIND_ACTOR_SORT_EPSILON := 0.001
+const SINGLE_ACTIVE_LASER_VISUAL_GROUP := "wizard_laser_single_active_visual"
+const SINGLE_ACTIVE_LASER_VISUAL_CONTRACT_ID := (
+	"skills.wizard.laser.single_active_visual_per_caster.v1"
+)
 
 var skill_id := ""
 var phase_id := ""
@@ -40,6 +44,7 @@ var _hellfire_emission_offsets: Array[Vector2] = []
 var _desired_sprite_extent := 0.0
 var _desired_sprite_footprint := Vector2.ZERO
 var _desired_sprite_axis_extent := 0.0
+var _desired_sprite_cross_axis_extent := 0.0
 var _visual_axis_world := Vector2.ZERO
 
 
@@ -71,6 +76,12 @@ func setup(
 		0.0,
 		float(visual_geometry_context.get("desired_sprite_axis_extent", 0.0))
 	)
+	_desired_sprite_cross_axis_extent = maxf(
+		0.0,
+		float(visual_geometry_context.get(
+			"desired_sprite_cross_axis_extent", 0.0
+		))
+	)
 	_visual_axis_world = visual_geometry_context.get("visual_axis_world", Vector2.ZERO)
 	for raw_offset: Variant in visual_geometry_context.get("geometry_world_offsets", []):
 		if raw_offset is Vector2:
@@ -79,6 +90,13 @@ func setup(
 
 func _ready() -> void:
 	add_to_group("zone_content")
+	if skill_id == "wizard.laser" and is_instance_valid(target_node):
+		_replace_existing_laser_visual()
+		add_to_group(SINGLE_ACTIVE_LASER_VISUAL_GROUP)
+		set_meta(
+			"single_active_visual_contract",
+			SINGLE_ACTIVE_LASER_VISUAL_CONTRACT_ID
+		)
 	if skill_id == MAGIC_SHIELD_SKILL_ID:
 		_replace_existing_magic_shield_visual()
 		add_to_group(MAGIC_SHIELD_VISUAL_GROUP)
@@ -195,6 +213,22 @@ func _replace_existing_magic_shield_visual() -> void:
 			continue
 		if existing is CanvasItem:
 			existing.visible = false
+
+
+func _replace_existing_laser_visual() -> void:
+	if not is_instance_valid(target_node) or get_tree() == null:
+		return
+	for existing: Node in get_tree().get_nodes_in_group(
+		SINGLE_ACTIVE_LASER_VISUAL_GROUP
+	):
+		if (
+			existing == self
+			or not existing is CasterSkillVisualEffect
+			or existing.skill_id != skill_id
+			or existing.target_node != target_node
+		):
+			continue
+		existing.visible = false
 		existing.queue_free()
 
 
@@ -208,7 +242,8 @@ func _install_single() -> void:
 		phase_id,
 		_desired_sprite_footprint,
 		_desired_sprite_axis_extent,
-		_visual_axis_world
+		_visual_axis_world,
+		_desired_sprite_cross_axis_extent
 	):
 		sprite.queue_free()
 		return
@@ -260,7 +295,8 @@ func _install_hellfire_trail(render: Dictionary) -> void:
 			phase_id,
 			_desired_sprite_footprint,
 			_desired_sprite_axis_extent,
-			_visual_axis_world
+			_visual_axis_world,
+			_desired_sprite_cross_axis_extent
 		):
 			sprite.queue_free()
 			continue

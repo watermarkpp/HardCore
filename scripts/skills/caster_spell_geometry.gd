@@ -229,6 +229,7 @@ static func build_visual_context(
 		"desired_sprite_extent": 0.0,
 		"desired_sprite_footprint": Vector2.ZERO,
 		"desired_sprite_axis_extent": 0.0,
+		"desired_sprite_cross_axis_extent": 0.0,
 		"visual_axis_world": Vector2.ZERO,
 	}
 	if not tile_to_world.is_valid():
@@ -275,11 +276,12 @@ static func build_visual_context(
 	)
 	context["footprint_world_extent"] = footprint_extent
 	if skill_id == "wizard.hellfire":
-		context["desired_sprite_extent"] = maxf(cell_extent.x, cell_extent.y)
-		context["desired_sprite_footprint"] = cell_extent
-		if not world_offsets.is_empty():
-			context["desired_sprite_axis_extent"] = world_offsets[0].length()
-			context["visual_axis_world"] = world_offsets.back().normalized()
+		# FireGun uses one source-direction flame node and moves copies of it along
+		# the canonical line. Fitting that one node against the cast direction made
+		# the same source pixels scale by a different amount in every direction.
+		# Keep node pixels fixed; geometry_world_offsets alone owns the five-cell
+		# trail length.
+		pass
 	elif skill_id == "wizard.hell_lightning":
 		context["desired_sprite_extent"] = maxf(
 			centerline_maximum.x - centerline_minimum.x,
@@ -293,8 +295,14 @@ static func build_visual_context(
 		)
 		context["desired_sprite_footprint"] = footprint_extent
 		if not world_offsets.is_empty():
+			var visual_axis: Vector2 = world_offsets.back().normalized()
+			var visual_cross_axis := Vector2(-visual_axis.y, visual_axis.x)
 			context["desired_sprite_axis_extent"] = world_offsets.back().length()
-			context["visual_axis_world"] = world_offsets.back().normalized()
+			context["desired_sprite_cross_axis_extent"] = (
+				absf(basis_x.dot(visual_cross_axis))
+				+ absf(basis_y.dot(visual_cross_axis))
+			)
+			context["visual_axis_world"] = visual_axis
 	return context
 
 
@@ -370,6 +378,21 @@ static func visual_context_from_plan(
 				)
 				* canonical_projection_scale
 			)
+	elif not world_offsets.is_empty():
+		# Continuous line plans intentionally carry fractional world points rather
+		# than integer tile cells. Their contract is the shared 64x32 isometric
+		# plane, so recover its two one-tile basis vectors for the formal one-cell
+		# visual width instead of falling back to uniform screen-space scaling.
+		basis_x = (
+			CombatDirectionSpaceScript.fractional_tile_delta_to_world_delta(
+				Vector2.RIGHT
+			)
+		)
+		basis_y = (
+			CombatDirectionSpaceScript.fractional_tile_delta_to_world_delta(
+				Vector2.DOWN
+			)
+		)
 	var cell_extent := Vector2(
 		absf(basis_x.x) + absf(basis_y.x),
 		absf(basis_x.y) + absf(basis_y.y)
@@ -401,15 +424,13 @@ static func visual_context_from_plan(
 	var desired_extent := 0.0
 	var desired_footprint := Vector2.ZERO
 	var desired_axis_extent := 0.0
+	var desired_cross_axis_extent := 0.0
 	var visual_axis_world := Vector2.ZERO
 	if skill_id == "wizard.hellfire":
-		desired_extent = maxf(cell_extent.x, cell_extent.y)
-		desired_footprint = cell_extent
-		if desired_extent <= 0.0 and minimum_step < INF:
-			desired_extent = minimum_step
-		if not world_offsets.is_empty():
-			desired_axis_extent = world_offsets[0].length()
-			visual_axis_world = world_offsets.back().normalized()
+		# The primary FireGun node is not a direction-specific full-line image.
+		# Its fixed source-pixel scale is independent from target distance and cast
+		# direction; only the shared geometry offsets determine trail placement.
+		pass
 	elif skill_id in ["wizard.hell_lightning", "wizard.laser"]:
 		desired_extent = maxf(
 			centerline_maximum.x - centerline_minimum.x,
@@ -419,6 +440,13 @@ static func visual_context_from_plan(
 		if skill_id == "wizard.laser" and not world_offsets.is_empty():
 			desired_axis_extent = world_offsets.back().length()
 			visual_axis_world = world_offsets.back().normalized()
+			var visual_cross_axis := Vector2(
+				-visual_axis_world.y, visual_axis_world.x
+			)
+			desired_cross_axis_extent = (
+				absf(basis_x.dot(visual_cross_axis))
+				+ absf(basis_y.dot(visual_cross_axis))
+			)
 	return {
 		"contract_id": VISUAL_CONTRACT_ID,
 		"canonical_geometry_contract": declared_contract,
@@ -437,5 +465,6 @@ static func visual_context_from_plan(
 		"desired_sprite_extent": desired_extent,
 		"desired_sprite_footprint": desired_footprint,
 		"desired_sprite_axis_extent": desired_axis_extent,
+		"desired_sprite_cross_axis_extent": desired_cross_axis_extent,
 		"visual_axis_world": visual_axis_world,
 	}

@@ -40,7 +40,7 @@ func _verify_primary_geometry_and_timing() -> void:
 	assert(hellfire.geometry.stops_on_terrain)
 	assert(
 		CasterSkillVisualRegistry.render_policy("wizard.hellfire").axis_fit_contract
-		== CasterSkillAnimationPlayer.FORWARD_ENDPOINT_FIT_CONTRACT_ID
+		== "skills.wizard.hellfire.firegun_trail.fixed_source_pixels.v1"
 	)
 	_assert_cast_timing(hellfire)
 
@@ -52,7 +52,7 @@ func _verify_primary_geometry_and_timing() -> void:
 	assert(laser.geometry.stops_on_terrain)
 	assert(
 		CasterSkillVisualRegistry.render_policy("wizard.laser").axis_fit_contract
-		== CasterSkillAnimationPlayer.FORWARD_ENDPOINT_FIT_CONTRACT_ID
+		== CasterSkillAnimationPlayer.AXIS_CROSS_FIT_CONTRACT_ID
 	)
 	_assert_cast_timing(laser)
 
@@ -207,14 +207,26 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 			assert(effect._geometry_world_offsets.back().is_equal_approx(endpoint_world))
 			if str(skill_case.skill_id) == "wizard.hellfire":
 				assert(effect._hellfire_emission_offsets.back().is_equal_approx(endpoint_world))
+				for raw_sprite: Sprite2D in effect._sprites:
+					var hellfire_sprite := raw_sprite as CasterSkillAnimationPlayer
+					assert(_transform_basis_equal(
+						hellfire_sprite.transform, Transform2D.IDENTITY
+					))
 			else:
 				for raw_sprite: Sprite2D in effect._sprites:
 					var sprite := raw_sprite as CasterSkillAnimationPlayer
+					var fixed_transform := sprite.transform
 					assert(is_equal_approx(
 						sprite.fitted_visual_forward_extent(endpoint_world),
 						endpoint_world.length()
 					))
-					assert(is_equal_approx(sprite.scale.x, sprite.scale.y))
+					assert(is_equal_approx(
+						sprite.fitted_visual_cross_extent(endpoint_world),
+						effect._desired_sprite_cross_axis_extent
+					))
+					for frame_index: int in range(sprite.frame_count()):
+						assert(sprite.set_manual_frame(frame_index))
+						assert(sprite.transform.is_equal_approx(fixed_transform))
 					assert(sprite.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST)
 			effect.free()
 
@@ -270,7 +282,12 @@ func _verify_geometry_aware_visuals() -> void:
 	for offset: Vector2 in hellfire._hellfire_emission_offsets:
 		assert(is_zero_approx(offset.x))
 		assert(offset.y > 0.0 and offset.y <= 160.0)
-	_assert_effect_axis_fitted(hellfire, Vector2.DOWN, 32.0)
+	assert(is_zero_approx(hellfire._desired_sprite_axis_extent))
+	assert(is_zero_approx(hellfire._desired_sprite_cross_axis_extent))
+	for raw_sprite: Sprite2D in hellfire._sprites:
+		assert(_transform_basis_equal(
+			raw_sprite.transform, Transform2D.IDENTITY
+		))
 	hellfire.free()
 
 	var laser_plan := _plan_with_world_geometry(
@@ -284,7 +301,7 @@ func _verify_geometry_aware_visuals() -> void:
 	assert(laser._geometry_world_offsets.size() == 8)
 	assert(laser._geometry_world_offsets.back() == Vector2(0.0, 256.0))
 	assert(is_equal_approx(laser.radius, 256.0))
-	_assert_effect_axis_fitted(laser, Vector2.DOWN, 256.0)
+	_assert_effect_axis_fitted(laser, Vector2.DOWN, 256.0, 64.0)
 	laser.free()
 
 	var lightning_plan := _plan_with_world_geometry(
@@ -331,13 +348,19 @@ func _assert_effect_contained(
 func _assert_effect_axis_fitted(
 	effect: CasterSkillVisualEffect,
 	axis_world: Vector2,
-	expected_axis_extent: float
+	expected_axis_extent: float,
+	expected_cross_axis_extent := 0.0
 ) -> void:
 	assert(is_equal_approx(
 		effect._desired_sprite_axis_extent,
 		expected_axis_extent
 	))
 	assert(effect._visual_axis_world.is_equal_approx(axis_world.normalized()))
+	if expected_cross_axis_extent > 0.0:
+		assert(is_equal_approx(
+			effect._desired_sprite_cross_axis_extent,
+			expected_cross_axis_extent
+		))
 	assert(not effect._sprites.is_empty())
 	for raw_sprite: Sprite2D in effect._sprites:
 		var sprite := raw_sprite as CasterSkillAnimationPlayer
@@ -345,6 +368,11 @@ func _assert_effect_axis_fitted(
 			sprite.fitted_visual_forward_extent(axis_world),
 			expected_axis_extent
 		))
+		if expected_cross_axis_extent > 0.0:
+			assert(is_equal_approx(
+				sprite.fitted_visual_cross_extent(axis_world),
+				expected_cross_axis_extent
+			))
 
 
 func _verify_release_relative_movement_locks() -> void:
@@ -440,4 +468,11 @@ func _within_pixel_rounding(left: Vector2, right: Vector2) -> bool:
 	return (
 		difference.x <= MAX_PIXEL_ROUNDING_ERROR + 0.0001
 		and difference.y <= MAX_PIXEL_ROUNDING_ERROR + 0.0001
+	)
+
+
+func _transform_basis_equal(left: Transform2D, right: Transform2D) -> bool:
+	return (
+		left.x.is_equal_approx(right.x)
+		and left.y.is_equal_approx(right.y)
 	)

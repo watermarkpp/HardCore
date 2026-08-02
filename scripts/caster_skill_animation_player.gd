@@ -4,6 +4,9 @@ extends Sprite2D
 const FORWARD_ENDPOINT_FIT_CONTRACT_ID := (
 	"skills.caster.line_visual.forward_endpoint_uniform.v1"
 )
+const AXIS_CROSS_FIT_CONTRACT_ID := (
+	"skills.caster.line_visual.axis_cross_affine.v2"
+)
 
 signal animation_finished(skill_id: String)
 signal skill_frame_changed(frame_index: int)
@@ -24,7 +27,10 @@ var _native_extent := 1.0
 var _desired_extent := 0.0
 var _desired_footprint := Vector2.ZERO
 var _desired_axis_extent := 0.0
+var _desired_cross_axis_extent := 0.0
 var _fit_axis_world := Vector2.ZERO
+var _source_axis_local := Vector2.UP
+var _source_cross_axis_local := Vector2.RIGHT
 var _anchor_policy := "top_left_from_world_anchor"
 var _sequence_bounds := Rect2()
 var _sequence_anchor_rebase := Vector2.ZERO
@@ -38,13 +44,16 @@ func configure(
 	requested_phase_id := "",
 	desired_footprint := Vector2.ZERO,
 	desired_axis_extent := 0.0,
-	fit_axis_world := Vector2.ZERO
+	fit_axis_world := Vector2.ZERO,
+	desired_cross_axis_extent := 0.0
 ) -> bool:
 	skill_id = ProfessionRules.skill_id(source_skill_id)
 	phase_id = requested_phase_id
 	visual_loaded = false
 	playback_complete = false
 	texture = null
+	transform = Transform2D.IDENTITY
+	offset = Vector2.ZERO
 	set_process(false)
 	if not CasterSkillVisualRegistry.is_runtime_ready(skill_id):
 		return false
@@ -92,26 +101,59 @@ func configure(
 		maxf(0.0, desired_footprint.y)
 	)
 	_desired_axis_extent = maxf(0.0, desired_axis_extent)
+	_desired_cross_axis_extent = maxf(0.0, desired_cross_axis_extent)
 	_fit_axis_world = (
 		fit_axis_world.normalized()
 		if fit_axis_world.length_squared() > 0.000001
 		else Vector2.ZERO
 	)
+	_source_axis_local = Vector2.UP.rotated(
+		float(direction_index) * TAU / 16.0
+	).normalized()
+	_source_cross_axis_local = Vector2(
+		-_source_axis_local.y, _source_axis_local.x
+	)
 	if (
 		_desired_axis_extent > 0.0
 		and not _fit_axis_world.is_zero_approx()
+		and _desired_cross_axis_extent > 0.0
 	):
-		# Fit the source's forward endpoint from the caster anchor, not its full
-		# front-to-back bounding-box extent. Source pixels may extend behind the
-		# caster by a direction-dependent amount; counting that rear overhang in
-		# the N-cell budget made the visible front stop short. One uniform scale
-		# preserves source pixels/aspect ratio while putting every direction's
-		# furthest forward pixel on the shared map-line endpoint.
+		# Each primary Laser sequence already owns a correct 16-way source
+		# orientation. Map its longitudinal source axis onto the exact continuous
+		# aim axis, and fit length and one-cell width independently. A uniform fit
+		# measured the same isometric source rectangle against different screen
+		# axes and changed the whole effect by about 2x between directions.
 		var native_forward_extent := _rect_forward_projection_extent(
-			_sequence_bounds, _sequence_anchor_rebase, _fit_axis_world
+			_sequence_bounds, _sequence_anchor_rebase, _source_axis_local
+		)
+		var native_cross_extent := _rect_projection_extent(
+			_sequence_bounds, _source_cross_axis_local
+		)
+		var longitudinal_scale := (
+			_desired_axis_extent / maxf(0.001, native_forward_extent)
+		)
+		var cross_scale := (
+			_desired_cross_axis_extent / maxf(0.001, native_cross_extent)
+		)
+		var target_cross_axis := Vector2(-_fit_axis_world.y, _fit_axis_world.x)
+		var basis_x := (
+			_fit_axis_world * (_source_axis_local.x * longitudinal_scale)
+			+ target_cross_axis * (_source_cross_axis_local.x * cross_scale)
+		)
+		var basis_y := (
+			_fit_axis_world * (_source_axis_local.y * longitudinal_scale)
+			+ target_cross_axis * (_source_cross_axis_local.y * cross_scale)
+		)
+		transform = Transform2D(basis_x, basis_y, Vector2.ZERO)
+	elif (
+		_desired_axis_extent > 0.0
+		and not _fit_axis_world.is_zero_approx()
+	):
+		var fallback_native_forward_extent := _rect_forward_projection_extent(
+			_sequence_bounds, _sequence_anchor_rebase, _source_axis_local
 		)
 		scale = Vector2.ONE * (
-			_desired_axis_extent / maxf(0.001, native_forward_extent)
+			_desired_axis_extent / maxf(0.001, fallback_native_forward_extent)
 		)
 	elif (
 		_desired_footprint.x > 0.0
@@ -181,32 +223,59 @@ func frame_count() -> int:
 
 
 func visual_bounds_center() -> Vector2:
-	return (_sequence_bounds.get_center() + _sequence_anchor_rebase) * scale
+	return transform.basis_xform(
+		_sequence_bounds.get_center() + _sequence_anchor_rebase
+	)
 
 
 func fitted_visual_bounds() -> Rect2:
-	return Rect2(
-		(_sequence_bounds.position + _sequence_anchor_rebase) * scale,
-		_sequence_bounds.size * scale
-	)
+	return _transformed_rect_bounds(_sequence_bounds, _sequence_anchor_rebase)
 
 
 func fitted_visual_axis_extent(axis_world: Vector2) -> float:
 	if axis_world.length_squared() <= 0.000001:
 		return 0.0
-	return _rect_projection_extent(
-		_sequence_bounds, axis_world.normalized()
-	) * absf(scale.x)
+	return _transformed_rect_projection_extent(
+		_sequence_bounds, _sequence_anchor_rebase, axis_world.normalized()
+	)
 
 
 func fitted_visual_forward_extent(axis_world: Vector2) -> float:
 	if axis_world.length_squared() <= 0.000001:
 		return 0.0
-	return _rect_forward_projection_extent(
+	return _transformed_rect_forward_projection_extent(
 		_sequence_bounds,
 		_sequence_anchor_rebase,
 		axis_world.normalized()
-	) * absf(scale.x)
+	)
+
+
+func fitted_visual_cross_extent(axis_world: Vector2) -> float:
+	if axis_world.length_squared() <= 0.000001:
+		return 0.0
+	var normalized_axis := axis_world.normalized()
+	return _transformed_rect_projection_extent(
+		_sequence_bounds,
+		_sequence_anchor_rebase,
+		Vector2(-normalized_axis.y, normalized_axis.x)
+	)
+
+
+func current_frame_visual_forward_extent(axis_world: Vector2) -> float:
+	if (
+		axis_world.length_squared() <= 0.000001
+		or current_frame_index < 0
+		or current_frame_index >= _frames.size()
+	):
+		return 0.0
+	var frame_rect := _visual_rect_for_frame(
+		_frames[current_frame_index], _anchor_policy
+	)
+	return _transformed_rect_forward_projection_extent(
+		frame_rect,
+		_sequence_anchor_rebase,
+		axis_world.normalized()
+	)
 
 
 func _apply_frame(frame_index: int) -> bool:
@@ -230,6 +299,20 @@ func _apply_frame(frame_index: int) -> bool:
 	) + _sequence_anchor_rebase
 	skill_frame_changed.emit(frame_index)
 	return true
+
+
+func _visual_rect_for_frame(frame: Dictionary, anchor_policy: String) -> Rect2:
+	var anchor_field := (
+		"source_draw_offset"
+		if anchor_policy == "source_draw_offset_from_actor_foot"
+		else "top_left_from_world_anchor"
+	)
+	var top_left: Array = frame.get(anchor_field, [0, 0])
+	var pixel_size: Array = frame.get("pixel_size", [0, 0])
+	return Rect2(
+		Vector2(float(top_left[0]), float(top_left[1])),
+		Vector2(float(pixel_size[0]), float(pixel_size[1]))
+	)
 
 
 func _visual_bounds_for_frames(frames: Array[Dictionary], anchor_policy: String) -> Rect2:
@@ -281,3 +364,56 @@ func _rect_forward_projection_extent(
 	]:
 		forward_extent = maxf(forward_extent, corner.dot(normalized_axis))
 	return maxf(0.001, forward_extent)
+
+
+func _transformed_rect_bounds(rect: Rect2, anchor_rebase: Vector2) -> Rect2:
+	var minimum := Vector2(INF, INF)
+	var maximum := Vector2(-INF, -INF)
+	for point: Vector2 in _rect_corners(rect, anchor_rebase):
+		var transformed := transform.basis_xform(point)
+		minimum.x = minf(minimum.x, transformed.x)
+		minimum.y = minf(minimum.y, transformed.y)
+		maximum.x = maxf(maximum.x, transformed.x)
+		maximum.y = maxf(maximum.y, transformed.y)
+	return Rect2(minimum, maximum - minimum)
+
+
+func _transformed_rect_projection_extent(
+	rect: Rect2,
+	anchor_rebase: Vector2,
+	axis: Vector2
+) -> float:
+	var minimum := INF
+	var maximum := -INF
+	var normalized_axis := axis.normalized()
+	for point: Vector2 in _rect_corners(rect, anchor_rebase):
+		var projection := transform.basis_xform(point).dot(normalized_axis)
+		minimum = minf(minimum, projection)
+		maximum = maxf(maximum, projection)
+	return maxf(0.001, maximum - minimum)
+
+
+func _transformed_rect_forward_projection_extent(
+	rect: Rect2,
+	anchor_rebase: Vector2,
+	axis: Vector2
+) -> float:
+	var forward_extent := -INF
+	var normalized_axis := axis.normalized()
+	for point: Vector2 in _rect_corners(rect, anchor_rebase):
+		forward_extent = maxf(
+			forward_extent,
+			transform.basis_xform(point).dot(normalized_axis)
+		)
+	return maxf(0.001, forward_extent)
+
+
+func _rect_corners(rect: Rect2, anchor_rebase: Vector2) -> Array[Vector2]:
+	var minimum := rect.position + anchor_rebase
+	var maximum := rect.end + anchor_rebase
+	return [
+		minimum,
+		Vector2(maximum.x, minimum.y),
+		maximum,
+		Vector2(minimum.x, maximum.y),
+	]
