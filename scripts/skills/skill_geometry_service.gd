@@ -1,6 +1,30 @@
 class_name SkillGeometryService
 extends RefCounted
 
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+
+const GEOMETRY_DOMAIN_CONTRACT_ID := "skills.geometry.domain.gu_gs.v1"
+const DOMAIN_DISCRETE_GRID_CELLS := "discrete_grid_cells_gs"
+const DOMAIN_CONTINUOUS_GROUND_GU := "continuous_ground_gu"
+
+
+static func geometry_domain(definition: Dictionary) -> Dictionary:
+	var geometry: Dictionary = definition.get("geometry", {})
+	var shape := str(geometry.get("shape", "none"))
+	var domain := (
+		DOMAIN_CONTINUOUS_GROUND_GU
+		if str(definition.get("skill_id", "")) in [
+			"wizard.hellfire", "wizard.laser"
+		]
+		else DOMAIN_DISCRETE_GRID_CELLS
+	)
+	return {
+		"contract_id": GEOMETRY_DOMAIN_CONTRACT_ID,
+		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
+		"domain": domain,
+		"shape": shape,
+	}
+
 
 static func normalized_facing(value: Vector2i) -> Vector2i:
 	if value == Vector2i.ZERO:

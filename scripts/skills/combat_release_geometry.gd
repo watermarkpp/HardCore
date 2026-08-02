@@ -4,12 +4,14 @@ extends RefCounted
 const CombatDirectionSpaceScript := preload(
 	"res://scripts/skills/combat_direction_space.gd"
 )
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 
 ## Stable profession-level contract for resolving combat geometry at the
 ## actual hit/projectile release frame. Input acceptance may remember a target
 ## identity, but world positions are deliberately sampled only at release.
 
-const CONTRACT_ID := "gameplay.professions.combat_release_geometry.live_footpoint.v1"
+const CONTRACT_ID := "gameplay.professions.combat_release_geometry.live_footpoint_gu.v2"
+const LEGACY_CONTRACT_ID := "gameplay.professions.combat_release_geometry.live_footpoint.v1"
 const MELEE_RELEASE_FACING_POLICY_ID := (
 	"gameplay.warrior.melee_release_facing.canonical_tile_8dir.v2"
 )
@@ -77,7 +79,8 @@ static func resolve(
 	track_locked_target := true,
 	release_facing_policy := FACING_POLICY_LIVE_LOCKED_TARGET
 ) -> Dictionary:
-	var normalized_input := _normalized_input_direction(input_direction)
+	var input_direction_ground_gu := _normalized_input_ground_direction(input_direction)
+	var release_direction_ground_gu := input_direction_ground_gu
 	var effective_facing_policy := release_facing_policy
 	if effective_facing_policy not in [
 		FACING_POLICY_LIVE_LOCKED_TARGET,
@@ -92,26 +95,44 @@ static func resolve(
 		direction_resolution = CombatDirectionSpaceScript.resolve_world_delta(
 			input_direction
 		)
-		normalized_input = direction_resolution.projected_world_direction
+		release_direction_ground_gu = direction_resolution.get(
+			"canonical_ground_direction_gu", input_direction_ground_gu
+		)
 	var had_locked_target := track_locked_target and locked_target_instance_id > 0
 	var valid_original_target := had_locked_target and locked_target_valid_at_release
-	var release_direction := normalized_input
 	if (
 		valid_original_target
 		and effective_facing_policy == FACING_POLICY_LIVE_LOCKED_TARGET
 	):
-		var live_delta := locked_target_position_at_release - actor_position_at_release
-		if live_delta.length_squared() > EPSILON * EPSILON:
-			release_direction = live_delta.normalized()
+		var live_delta_screen_px := (
+			locked_target_position_at_release - actor_position_at_release
+		)
+		var live_delta_ground_gu := (
+			GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+				live_delta_screen_px
+			)
+		)
+		if live_delta_ground_gu.length_squared() > EPSILON * EPSILON:
+			release_direction_ground_gu = live_delta_ground_gu.normalized()
+	var release_direction_screen_px := (
+		GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+			release_direction_ground_gu
+		).normalized()
+	)
 	return {
 		"contract_id": CONTRACT_ID,
+		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
 		"policy": (
 			POLICY_LOCKED_SINGLE_TARGET
 			if had_locked_target
 			else POLICY_INPUT_DIRECTION
 		),
 		"origin_world": actor_position_at_release,
-		"direction_world": release_direction,
+		"origin_screen_px": actor_position_at_release,
+		"direction_ground_gu": release_direction_ground_gu,
+		"direction_screen_px": release_direction_screen_px,
+		# Compatibility for integration call sites not migrated in this commit.
+		"direction_world": release_direction_screen_px,
 		"release_facing_policy": effective_facing_policy,
 		"release_facing_policy_id": (
 			MELEE_RELEASE_FACING_POLICY_ID
@@ -134,6 +155,9 @@ static func resolve(
 		"direction_source_fractional_tile_delta": direction_resolution.get(
 			"fractional_tile_delta", Vector2.ZERO
 		),
+		"direction_source_ground_delta_gu": direction_resolution.get(
+			"ground_delta_gu", Vector2.ZERO
+		),
 		"direction_canonical_tile_step": direction_resolution.get(
 			"canonical_tile_step", Vector2i.ZERO
 		),
@@ -146,10 +170,13 @@ static func resolve(
 	}
 
 
-static func _normalized_input_direction(input_direction: Vector2) -> Vector2:
-	if input_direction.length_squared() <= EPSILON * EPSILON:
-		return Vector2.DOWN
-	return input_direction.normalized()
+static func _normalized_input_ground_direction(input_direction_screen_px: Vector2) -> Vector2:
+	var ground_direction := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		input_direction_screen_px
+	)
+	if ground_direction.length_squared() <= EPSILON * EPSILON:
+		return Vector2(1.0, 1.0).normalized()
+	return ground_direction.normalized()
 
 
 static func candidate_allowed(release_geometry: Dictionary, candidate_instance_id: int) -> bool:

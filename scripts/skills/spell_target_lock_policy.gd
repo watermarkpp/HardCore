@@ -1,55 +1,90 @@
 class_name SpellTargetLockPolicy
 extends RefCounted
 
-const CONTRACT_ID := "combat.spell_lock.chebyshev_tiles.v1"
-const LOCK_RANGE_TILES := 12.0
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+
+const CONTRACT_ID := "combat.spell_lock.euclidean_gu.v2"
+const LOCK_RANGE_GU := 12.0
+# Compatibility alias for old integration code. Its value is now GU, never GS
+# or a Chebyshev radius.
+const LOCK_RANGE_TILES := LOCK_RANGE_GU
+
+
+static func distance_gu(origin_ground_gu: Vector2, target_ground_gu: Vector2) -> float:
+	return GroundUnitSpaceScript.distance_gu(origin_ground_gu, target_ground_gu)
 
 
 static func chebyshev_distance(origin_tile: Vector2, target_tile: Vector2) -> float:
-	var delta := target_tile - origin_tile
-	return maxf(absf(delta.x), absf(delta.y))
+	## Deprecated call-shape retained for the integration migration. Inputs are
+	## formal GU coordinates and the result is Euclidean GU.
+	return distance_gu(origin_tile, target_tile)
 
 
-static func is_within_lock_range(origin_tile: Vector2, target_tile: Vector2) -> bool:
-	return chebyshev_distance(origin_tile, target_tile) <= LOCK_RANGE_TILES + 0.0001
+static func is_within_lock_range(
+	origin_ground_gu: Vector2,
+	target_ground_gu: Vector2
+) -> bool:
+	return GroundUnitSpaceScript.is_within_range_gu(
+		origin_ground_gu,
+		target_ground_gu,
+		LOCK_RANGE_GU
+	)
 
 
 static func ordered_candidates(raw_candidates: Array[Dictionary]) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for raw_candidate: Dictionary in raw_candidates:
 		var candidate := raw_candidate.duplicate(true)
-		var origin_tile: Vector2 = candidate.get("origin_tile", Vector2.ZERO)
-		var target_tile: Vector2 = candidate.get("target_tile", Vector2.ZERO)
-		var tile_distance := chebyshev_distance(origin_tile, target_tile)
-		if tile_distance > LOCK_RANGE_TILES + 0.0001:
+		var origin_ground_gu: Vector2 = candidate.get(
+			"origin_ground_gu", candidate.get("origin_tile", Vector2.ZERO)
+		)
+		var target_ground_gu: Vector2 = candidate.get(
+			"target_ground_gu", candidate.get("target_tile", Vector2.ZERO)
+		)
+		var distance_squared_gu := GroundUnitSpaceScript.distance_squared_gu(
+			origin_ground_gu,
+			target_ground_gu
+		)
+		if not is_within_lock_range(origin_ground_gu, target_ground_gu):
 			continue
 		candidate["contract_id"] = CONTRACT_ID
-		candidate["tile_distance"] = tile_distance
-		candidate["tile_distance_squared"] = origin_tile.distance_squared_to(target_tile)
+		candidate["unit_contract_id"] = GroundUnitSpaceScript.CONTRACT_ID
+		candidate["origin_ground_gu"] = origin_ground_gu
+		candidate["target_ground_gu"] = target_ground_gu
+		candidate["distance_squared_gu"] = distance_squared_gu
+		candidate["distance_gu"] = sqrt(distance_squared_gu)
 		result.append(candidate)
 	result.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		var a_distance := float(a.get("tile_distance", INF))
-		var b_distance := float(b.get("tile_distance", INF))
-		if not is_equal_approx(a_distance, b_distance):
-			return a_distance < b_distance
-		var a_tile_squared := float(a.get("tile_distance_squared", INF))
-		var b_tile_squared := float(b.get("tile_distance_squared", INF))
-		if not is_equal_approx(a_tile_squared, b_tile_squared):
-			return a_tile_squared < b_tile_squared
-		var a_world_squared := float(a.get("world_distance_squared", INF))
-		var b_world_squared := float(b.get("world_distance_squared", INF))
-		if not is_equal_approx(a_world_squared, b_world_squared):
-			return a_world_squared < b_world_squared
+		var a_distance_squared_gu := float(a.get("distance_squared_gu", INF))
+		var b_distance_squared_gu := float(b.get("distance_squared_gu", INF))
+		if not is_equal_approx(a_distance_squared_gu, b_distance_squared_gu):
+			return a_distance_squared_gu < b_distance_squared_gu
 		return int(a.get("instance_id", 0)) < int(b.get("instance_id", 0))
 	)
 	return result
 
 
 static func spell_range_allows_target(
-	origin_tile: Vector2,
-	target_tile: Vector2,
-	maximum_range_tiles: float
+	origin_ground_gu: Vector2,
+	target_ground_gu: Vector2,
+	maximum_range_gu: float
 ) -> bool:
-	if maximum_range_tiles <= 0.0:
+	if maximum_range_gu <= 0.0:
 		return true
-	return chebyshev_distance(origin_tile, target_tile) <= maximum_range_tiles + 0.0001
+	return GroundUnitSpaceScript.is_within_range_gu(
+		origin_ground_gu,
+		target_ground_gu,
+		maximum_range_gu
+	)
+
+
+static func attack_range_allows_target(
+	origin_ground_gu: Vector2,
+	target_ground_gu: Vector2,
+	maximum_range_gu := 10.0
+) -> bool:
+	return GroundUnitSpaceScript.is_within_range_gu(
+		origin_ground_gu,
+		target_ground_gu,
+		maximum_range_gu
+	)

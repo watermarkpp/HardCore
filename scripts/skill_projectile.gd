@@ -3,13 +3,14 @@ extends Node2D
 
 const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
 const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
-const CombatDirectionSpaceScript := preload(
-	"res://scripts/skills/combat_direction_space.gd"
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const CombatUnitLegacyAdapterScript := preload(
+	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 
 const FOOTPRINT_HIT_CONTRACT_ID := (
-	"skills.projectile.actor_footprint_contact.v1"
+	"skills.projectile.ground_gu_swept_footprint_contact.v2"
 )
 
 const VISUAL_PATHS := {
@@ -19,6 +20,15 @@ const VISUAL_PATHS := {
 }
 
 var direction := Vector2.RIGHT
+# Formal gameplay motion. The unsuffixed fields below are compatibility mirrors
+# only and are never read by the physics path.
+var direction_ground_gu := Vector2(1.0, -1.0).normalized()
+var speed_gu_per_sec := CombatUnitLegacyAdapterScript.PROJECTILE_SPEED_GU_PER_SEC
+var max_travel_distance_gu := -1.0
+var traveled_distance_gu := 0.0
+var remaining_travel_distance_gu := -1.0
+var projectile_radius_gu := CombatUnitLegacyAdapterScript.PROJECTILE_RADIUS_GU
+var visual_muzzle_offset_px := Vector2.ZERO
 var speed := 520.0
 var remaining_range := 360.0
 var maximum_range_tiles := -1.0
@@ -44,8 +54,16 @@ var _projectile_role_valid := false
 func setup(start: Vector2, cast_direction: Vector2, value: int, travel_range: float, color: Color, status_effect := "damage", status_strength := 0, status_duration := 0.0, source_skill_id := "") -> void:
 	global_position = start
 	direction = cast_direction.normalized() if cast_direction.length() > 0.0 else Vector2.RIGHT
+	direction_ground_gu = GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		direction
+	).normalized()
 	damage = maxi(0, value)
 	remaining_range = maxf(40.0, travel_range)
+	remaining_travel_distance_gu = (
+		CombatUnitLegacyAdapterScript.legacy_screen_distance_px_to_gu(
+			remaining_range
+		)
+	)
 	projectile_color = color
 	effect = status_effect
 	effect_strength = status_strength
@@ -57,6 +75,29 @@ func setup(start: Vector2, cast_direction: Vector2, value: int, travel_range: fl
 			skill_id = "wizard.fireball"
 		elif PlayerState.profession == "道士":
 			skill_id = "taoist.soul_fire_talisman"
+
+
+func setup_ground_unit_motion(
+	start_screen_position_px: Vector2,
+	cast_direction_ground_gu: Vector2,
+	maximum_distance_gu: float,
+	speed_value_gu_per_sec := CombatUnitLegacyAdapterScript.PROJECTILE_SPEED_GU_PER_SEC,
+	radius_gu := CombatUnitLegacyAdapterScript.PROJECTILE_RADIUS_GU,
+	muzzle_offset_px := Vector2.ZERO
+) -> void:
+	global_position = start_screen_position_px
+	direction_ground_gu = (
+		cast_direction_ground_gu.normalized()
+		if cast_direction_ground_gu.length_squared() > 0.000001
+		else Vector2(1.0, -1.0).normalized()
+	)
+	direction = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		direction_ground_gu
+	).normalized()
+	speed_gu_per_sec = maxf(0.0, speed_value_gu_per_sec)
+	projectile_radius_gu = maxf(0.0, radius_gu)
+	visual_muzzle_offset_px = muzzle_offset_px
+	configure_maximum_travel_distance_gu(maximum_distance_gu)
 
 
 func configure_runtime_resolution(
@@ -72,8 +113,17 @@ func configure_runtime_resolution(
 
 
 func configure_maximum_range_tiles(value: float) -> void:
-	maximum_range_tiles = value if value > 0.0 else -1.0
+	# Legacy field is numerically GU under the versioned combat-unit adapter.
+	configure_maximum_travel_distance_gu(value)
+
+
+func configure_maximum_travel_distance_gu(value_gu: float) -> void:
+	max_travel_distance_gu = value_gu if value_gu > 0.0 else -1.0
+	maximum_range_tiles = max_travel_distance_gu
+	traveled_distance_gu = 0.0
 	traveled_range_tiles = 0.0
+	if max_travel_distance_gu > 0.0:
+		remaining_travel_distance_gu = max_travel_distance_gu
 
 
 func _ready() -> void:
@@ -103,54 +153,123 @@ func _install_visual() -> void:
 		return
 	_sprite = candidate
 	add_child(_sprite)
+	_sprite.position = visual_muzzle_offset_px
 
 
 func _physics_process(delta: float) -> void:
 	if not skill_id.is_empty() and not _projectile_role_valid:
 		return
-	var travel := minf(speed * delta, remaining_range)
-	var motion := direction * travel
-	global_position += motion
-	remaining_range -= travel
-	if maximum_range_tiles > 0.0:
-		var tile_motion := (
-			CombatDirectionSpaceScript.world_delta_to_fractional_tile_delta(motion)
+	var available_distance_gu := (
+		remaining_travel_distance_gu
+		if remaining_travel_distance_gu >= 0.0
+		else INF
+	)
+	var travel_distance_gu := minf(
+		maxf(0.0, speed_gu_per_sec) * maxf(0.0, delta),
+		available_distance_gu
+	)
+	var motion_ground_gu := direction_ground_gu * travel_distance_gu
+	var motion_screen_px := (
+		GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(motion_ground_gu)
+	)
+	var segment_start_screen_px := global_position
+	var segment_end_screen_px := global_position + motion_screen_px
+	global_position = segment_end_screen_px
+	traveled_distance_gu += travel_distance_gu
+	traveled_range_tiles = traveled_distance_gu
+	if remaining_travel_distance_gu >= 0.0:
+		remaining_travel_distance_gu = maxf(
+			0.0,
+			remaining_travel_distance_gu - travel_distance_gu
 		)
-		traveled_range_tiles += maxf(absf(tile_motion.x), absf(tile_motion.y))
+		remaining_range = (
+			remaining_travel_distance_gu
+			* CombatUnitLegacyAdapterScript.CANONICAL_SOUTH_AXIS_PX_PER_GU
+		)
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node.is_queued_for_deletion():
 			continue
-		if not _intersects_enemy_footprint(node):
+		if not _swept_segment_intersects_enemy_footprint(
+			segment_start_screen_px,
+			segment_end_screen_px,
+			node
+		):
 			continue
 		_apply_hit(node)
 		queue_free()
 		return
 	if (
-		remaining_range <= 0.0
-		or (
-			maximum_range_tiles > 0.0
-			and traveled_range_tiles >= maximum_range_tiles - 0.0001
-		)
+		remaining_travel_distance_gu >= 0.0
+		and remaining_travel_distance_gu <= GroundUnitSpaceScript.EPSILON_GU
 	):
 		queue_free()
 
 
 func _intersects_enemy_footprint(enemy: EnemyActor) -> bool:
-	var target_radii := WorldSpatialRulesScript.actor_footprint_radii(
-		enemy.collision_radius
+	return _swept_segment_intersects_enemy_footprint(
+		global_position,
+		global_position,
+		enemy
 	)
-	# Projectiles retain their established circular hit radius. Adding it to the
-	# monster's exact 2:1 actor footprint is a conservative Minkowski contact
-	# test: the monster is no longer reduced to a single foot point.
-	var contact_radii := target_radii + Vector2.ONE * maxf(0.0, hit_radius)
-	if contact_radii.x <= 0.0 or contact_radii.y <= 0.0:
-		return global_position.is_equal_approx(enemy.global_position)
-	var offset := global_position - enemy.global_position
-	var normalized := Vector2(
-		offset.x / contact_radii.x,
-		offset.y / contact_radii.y
+
+
+func _swept_segment_intersects_enemy_footprint(
+	segment_start_screen_px: Vector2,
+	segment_end_screen_px: Vector2,
+	enemy: EnemyActor
+) -> bool:
+	var segment_start_ground_relative := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			segment_start_screen_px - enemy.global_position
+		)
 	)
-	return normalized.length_squared() <= 1.0 + 0.0001
+	var segment_end_ground_relative := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			segment_end_screen_px - enemy.global_position
+		)
+	)
+	var enemy_radius_gu := (
+		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
+			enemy.collision_radius
+		)
+	)
+	var contact_radius_gu := enemy_radius_gu + maxf(0.0, projectile_radius_gu)
+	return swept_segment_intersects_footprint_gu(
+		segment_start_ground_relative,
+		segment_end_ground_relative,
+		Vector2.ZERO,
+		contact_radius_gu
+	)
+
+
+static func swept_segment_intersects_footprint_gu(
+	segment_start_ground_gu: Vector2,
+	segment_end_ground_gu: Vector2,
+	target_center_ground_gu: Vector2,
+	combined_contact_radius_gu: float
+) -> bool:
+	## Pure deterministic helper used by the runtime every physics frame and by
+	## contract tests. This prevents a fast projectile from tunnelling between
+	## its previous and current GU positions.
+	var start_relative_gu := segment_start_ground_gu - target_center_ground_gu
+	var segment_ground_gu := segment_end_ground_gu - segment_start_ground_gu
+	var closest_relative_gu := start_relative_gu
+	if segment_ground_gu.length_squared() > 0.0000001:
+		var weight := clampf(
+			-start_relative_gu.dot(segment_ground_gu)
+			/ segment_ground_gu.length_squared(),
+			0.0,
+			1.0
+		)
+		closest_relative_gu += segment_ground_gu * weight
+	var inclusive_radius_gu := (
+		maxf(0.0, combined_contact_radius_gu)
+		+ GroundUnitSpaceScript.EPSILON_GU
+	)
+	return (
+		closest_relative_gu.length_squared()
+		<= inclusive_radius_gu * inclusive_radius_gu
+	)
 
 
 func _apply_hit(enemy: EnemyActor) -> void:

@@ -9,6 +9,10 @@ const SkillInputPolicyScript := preload("res://scripts/skill_input_policy.gd")
 const CombatReleaseGeometryScript := preload(
 	"res://scripts/skills/combat_release_geometry.gd"
 )
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const CombatUnitLegacyAdapterScript := preload(
+	"res://scripts/skills/combat_unit_legacy_adapter.gd"
+)
 const CasterSkillVisualRegistryScript := preload(
 	"res://scripts/caster_skill_visual_registry.gd"
 )
@@ -40,7 +44,12 @@ signal resources_changed(current_hp: int, max_hp: int, current_mp: int, max_mp: 
 signal movement_performed(position: Vector2, facing: Vector2)
 signal death_requested
 
+# Compatibility-only presentation value retained for old scenes/tests. Runtime
+# movement uses the formal GU scalar below and never consumes this PX field.
 @export var move_speed := 190.0
+@export var move_speed_gu_per_sec := (
+	CombatUnitLegacyAdapterScript.PLAYER_MOVE_SPEED_GU_PER_SEC
+)
 @export var max_hp := 120
 @export var attack_min := 2
 @export var attack_max := 5
@@ -99,6 +108,7 @@ var _dead := false
 var movement_input_active := false
 var movement_facing := Vector2.DOWN
 var actual_motion_facing := Vector2.DOWN
+var actual_ground_motion_gu := Vector2.ZERO
 var environment_blocker: Node
 var ground_runtime_diagnostic_overlay: Node2D
 
@@ -205,17 +215,36 @@ func _physics_process(delta: float) -> void:
 	if movement_locked:
 		velocity = Vector2.ZERO
 	elif direction.length() > 0.08:
-		direction = direction.normalized()
-		facing = FACING_DIRECTIONS[ArtSpec.direction_index(direction)]
+		var direction_ground_gu := (
+			GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(direction)
+		)
+		if direction_ground_gu.length_squared() <= 0.000001:
+			direction_ground_gu = Vector2(1.0, 1.0)
+		direction_ground_gu = direction_ground_gu.normalized()
+		var direction_screen_px := (
+			GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+				direction_ground_gu
+			).normalized()
+		)
+		facing = FACING_DIRECTIONS[ArtSpec.direction_index(direction_screen_px)]
 		movement_facing = facing
-		velocity = direction * move_speed
+		velocity = GroundUnitSpaceScript.desired_screen_velocity_px_per_sec(
+			direction_ground_gu,
+			move_speed_gu_per_sec
+		)
 	else:
-		velocity = velocity.move_toward(Vector2.ZERO, move_speed * 8.0 * delta)
+		velocity = Vector2.ZERO
 	move_and_slide()
 	if WorldSpatialRulesScript.environment_blocks_actor(environment_blocker, global_position, ArtSpec.PLAYER_COLLISION_RADIUS):
 		global_position = position_before_move
 		velocity = Vector2.ZERO
 	var actual_motion := global_position - position_before_move
+	actual_ground_motion_gu = (
+		GroundUnitSpaceScript.actual_ground_motion_gu_from_screen_positions(
+			position_before_move,
+			global_position
+		)
+	)
 	if actual_motion.length_squared() > 0.01:
 		# Walking art follows displacement that really happened on screen. This
 		# cannot be overwritten by targeting, stale input, or collision sliding.
