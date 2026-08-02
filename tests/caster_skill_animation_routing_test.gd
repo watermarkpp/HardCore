@@ -2,6 +2,9 @@ extends Node
 
 const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
 const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+const CombatUnitLegacyAdapter := preload(
+	"res://scripts/skills/combat_unit_legacy_adapter.gd"
+)
 
 
 func _context() -> Dictionary:
@@ -55,9 +58,19 @@ func _ready() -> void:
 	lightning_player.free()
 
 	var invalid_projectile := SkillProjectile.new()
-	invalid_projectile.setup(
-		Vector2.ZERO, Vector2.RIGHT, 10, 100.0, Color.WHITE,
-		"damage", 0, 0.0, "wizard.lightning"
+	invalid_projectile.setup_ground_unit_projectile(
+		Vector2.ZERO,
+		GroundUnitSpace.screen_delta_px_to_ground_delta_gu(Vector2.RIGHT),
+		3.125,
+		10,
+		CombatUnitLegacyAdapter.PROJECTILE_SPEED_GU_PER_SEC,
+		CombatUnitLegacyAdapter.PROJECTILE_RADIUS_GU,
+		Vector2.ZERO,
+		Color.WHITE,
+		"damage",
+		0,
+		0.0,
+		"wizard.lightning"
 	)
 	add_child(invalid_projectile)
 	assert(invalid_projectile._sprite == null)

@@ -2,7 +2,11 @@ class_name GroundSkillEffect
 extends Node2D
 
 const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const FIRE_WALL_SKILL_ID := "wizard.fire_wall"
+const GROUND_UNIT_SETUP_CONTRACT_ID := (
+	"skills.ground_effect.setup_ground_unit_effect.v1"
+)
 const RUNTIME_TICK_CLAIM_RETENTION_MSEC := 60000
 
 const VISUAL_PATHS := {
@@ -10,7 +14,8 @@ const VISUAL_PATHS := {
 }
 
 var damage := 1
-var radius := 72.0
+var radius_gu := 0.5
+var visual_radius_px := 72.0
 var duration := 4.0
 var tick_interval := 0.8
 var effect_color := Color(1.0, 0.25, 0.05)
@@ -26,10 +31,22 @@ var _sprite: Sprite2D
 static var _runtime_tick_claims: Dictionary = {}
 
 
-func setup(position_value: Vector2, damage_value: int, radius_value: float, duration_value: float, color: Color, source_skill_id := "", tick_interval_value := 0.8) -> void:
-	global_position = position_value
+func setup_ground_unit_effect(
+	position_screen_px: Vector2,
+	damage_value: int,
+	radius_value_gu: float,
+	duration_value: float,
+	color: Color,
+	source_skill_id := "",
+	tick_interval_value := 0.8,
+	visual_radius_value_px := 72.0
+) -> void:
+	## Sole production setup boundary: gameplay radius arrives in GU while the
+	## screen-space origin and optional visual radius remain explicitly PX.
+	global_position = position_screen_px
 	damage = maxi(0, damage_value)
-	radius = maxf(20.0, radius_value)
+	radius_gu = maxf(0.0, radius_value_gu)
+	visual_radius_px = maxf(1.0, visual_radius_value_px)
 	duration = maxf(0.1, duration_value)
 	tick_interval = maxf(0.05, tick_interval_value)
 	effect_color = color
@@ -65,7 +82,17 @@ func runtime_target_is_inside(target: Node2D) -> bool:
 		return false
 	if runtime_target_filter.is_valid():
 		return bool(runtime_target_filter.call(target))
-	return global_position.distance_to(target.global_position) <= radius
+	var effect_ground_gu := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		global_position
+	)
+	var target_ground_gu := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		target.global_position
+	)
+	return GroundUnitSpaceScript.is_within_range_gu(
+		effect_ground_gu,
+		target_ground_gu,
+		radius_gu
+	)
 
 
 func claim_runtime_tick(target: Node) -> bool:
@@ -155,5 +182,5 @@ func _draw() -> void:
 	if _sprite != null or not skill_id.is_empty():
 		return
 	var pulse := 0.78 + sin(Time.get_ticks_msec() * 0.01) * 0.12
-	draw_circle(Vector2.ZERO, radius * pulse, Color(effect_color, 0.16))
-	draw_circle(Vector2.ZERO, radius * pulse, Color(effect_color, 0.70), false, 4.0)
+	draw_circle(Vector2.ZERO, visual_radius_px * pulse, Color(effect_color, 0.16))
+	draw_circle(Vector2.ZERO, visual_radius_px * pulse, Color(effect_color, 0.70), false, 4.0)

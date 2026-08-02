@@ -135,7 +135,7 @@ func _verify_wild_rush_preserves_original_selected_target() -> void:
 	assert(rush.geometry.policy == ReleaseGeometry.POLICY_LOCKED_SINGLE_TARGET)
 	assert(int(rush.geometry.locked_target_instance_id) > 0)
 	assert(not rush.geometry.allow_target_retarget)
-	assert(rush.direction.is_equal_approx(Vector2(rush.geometry.direction_world)))
+	assert(rush.direction.is_equal_approx(Vector2(rush.geometry.direction_screen_px)))
 
 
 func _verify_caster_single_target_and_spatial_cast_policies() -> void:
@@ -190,7 +190,7 @@ func _verify_target_centered_spatial_cast_policies() -> void:
 	assert(live.locked_target_instance_id == 77)
 	assert(live.locked_target_valid_at_release)
 	assert(live.refresh_locked_target_footpoint_at_release)
-	assert(live.direction_world.is_equal_approx(Vector2(-50.0, 80.0).normalized()))
+	assert(live.direction_screen_px.is_equal_approx(Vector2(-50.0, 80.0).normalized()))
 	assert(not live.allow_target_retarget and not live.allow_directional_scan)
 
 	# Death/despawn/range invalidation keeps the original identity but formally
@@ -235,14 +235,15 @@ func _verify_locked_melee_facing_contract() -> void:
 		true,
 		ReleaseGeometry.FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION
 	)
-	assert(geometry.origin_world == Vector2(120.0, 130.0))
 	assert(geometry.origin_screen_px == Vector2(120.0, 130.0))
+	assert(not geometry.has("origin_world"))
 	assert(geometry.origin_ground_gu.is_equal_approx(
 		GroundUnitSpace.screen_delta_px_to_ground_delta_gu(
 			Vector2(120.0, 130.0)
 		)
 	))
-	assert(geometry.direction_world.is_equal_approx(Vector2.RIGHT))
+	assert(geometry.direction_screen_px.is_equal_approx(Vector2.RIGHT))
+	assert(not geometry.has("direction_world"))
 	assert(geometry.locked_target_valid_at_release)
 	assert(geometry.direction_locked_for_action)
 	assert(

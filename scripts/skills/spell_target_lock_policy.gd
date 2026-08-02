@@ -5,19 +5,10 @@ const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 
 const CONTRACT_ID := "combat.spell_lock.euclidean_gu.v2"
 const LOCK_RANGE_GU := 12.0
-# Compatibility alias for old integration code. Its value is now GU, never GS
-# or a Chebyshev radius.
-const LOCK_RANGE_TILES := LOCK_RANGE_GU
 
 
 static func distance_gu(origin_ground_gu: Vector2, target_ground_gu: Vector2) -> float:
 	return GroundUnitSpaceScript.distance_gu(origin_ground_gu, target_ground_gu)
-
-
-static func chebyshev_distance(origin_tile: Vector2, target_tile: Vector2) -> float:
-	## Deprecated call-shape retained for the integration migration. Inputs are
-	## formal GU coordinates and the result is Euclidean GU.
-	return distance_gu(origin_tile, target_tile)
 
 
 static func is_within_lock_range(
@@ -34,13 +25,19 @@ static func is_within_lock_range(
 static func ordered_candidates(raw_candidates: Array[Dictionary]) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for raw_candidate: Dictionary in raw_candidates:
+		if (
+			not raw_candidate.has("origin_ground_gu")
+			or not raw_candidate.has("target_ground_gu")
+		):
+			continue
+		if (
+			not raw_candidate["origin_ground_gu"] is Vector2
+			or not raw_candidate["target_ground_gu"] is Vector2
+		):
+			continue
 		var candidate := raw_candidate.duplicate(true)
-		var origin_ground_gu: Vector2 = candidate.get(
-			"origin_ground_gu", candidate.get("origin_tile", Vector2.ZERO)
-		)
-		var target_ground_gu: Vector2 = candidate.get(
-			"target_ground_gu", candidate.get("target_tile", Vector2.ZERO)
-		)
+		var origin_ground_gu: Vector2 = candidate["origin_ground_gu"]
+		var target_ground_gu: Vector2 = candidate["target_ground_gu"]
 		var distance_squared_gu := GroundUnitSpaceScript.distance_squared_gu(
 			origin_ground_gu,
 			target_ground_gu

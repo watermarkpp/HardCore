@@ -84,8 +84,15 @@ func _ready() -> void:
 		true,
 		ReleaseGeometry.FACING_POLICY_LIVE_LOCKED_TARGET
 	)
-	assert(moving_target.origin_world == Vector2(4.0, 5.0))
-	assert(moving_target.direction_world.is_equal_approx(Vector2(-3.0, 4.0).normalized()))
+	assert(moving_target.origin_screen_px == Vector2(4.0, 5.0))
+	assert(moving_target.direction_screen_px.is_equal_approx(Vector2(-3.0, 4.0).normalized()))
+	for legacy_key: String in [
+		"origin_world",
+		"direction_world",
+		"direction_source_world_delta",
+		"direction_source_fractional_tile_delta",
+	]:
+		assert(not moving_target.has(legacy_key))
 	assert(moving_target.locked_target_instance_id == 77)
 	assert(not moving_target.allow_target_retarget and not moving_target.allow_directional_scan)
 	assert(ReleaseGeometry.candidate_allowed(moving_target, 77))
@@ -99,8 +106,8 @@ func _ready() -> void:
 		true,
 		ReleaseGeometry.FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION
 	)
-	assert(locked_melee_facing.origin_world == Vector2(4.0, 5.0))
-	assert(locked_melee_facing.direction_world.is_equal_approx(Vector2.RIGHT))
+	assert(locked_melee_facing.origin_screen_px == Vector2(4.0, 5.0))
+	assert(locked_melee_facing.direction_screen_px.is_equal_approx(Vector2.RIGHT))
 	assert(locked_melee_facing.locked_target_valid_at_release)
 	assert(locked_melee_facing.refresh_actor_footpoint_at_release)
 	assert(locked_melee_facing.refresh_locked_target_footpoint_at_release)
@@ -114,14 +121,14 @@ func _ready() -> void:
 		Vector2(4.0, 5.0), Vector2.RIGHT, 77, Vector2.ZERO, false, true
 	)
 	assert(not vanished_target.locked_target_valid_at_release)
-	assert(vanished_target.direction_world == Vector2.RIGHT)
+	assert(vanished_target.direction_screen_px == Vector2.RIGHT)
 	assert(not vanished_target.allow_target_retarget)
 	assert(not ReleaseGeometry.candidate_allowed(vanished_target, 77))
 	assert(not ReleaseGeometry.candidate_allowed(vanished_target, 88))
 	var directional_area := ReleaseGeometry.resolve(
 		Vector2(4.0, 5.0), Vector2.RIGHT, 77, Vector2(4.0, 20.0), true, false
 	)
-	assert(directional_area.direction_world == Vector2.RIGHT)
+	assert(directional_area.direction_screen_px == Vector2.RIGHT)
 	assert(directional_area.locked_target_instance_id == 0)
 	assert(directional_area.allow_directional_scan)
 	assert(ReleaseGeometry.candidate_allowed(directional_area, 88))

@@ -241,17 +241,23 @@ static func create_ground_effects(
 	):
 		return effects
 	var cell_size := int(plan.get("cell_size", 48))
-	var radius := maxf(20.0, float(cell_size) * 0.46)
+	var visual_radius_px := maxf(20.0, float(cell_size) * 0.46)
+	var radius_gu := (
+		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
+			visual_radius_px
+		)
+	)
 	for effect_position: Vector2 in fire_wall_positions(center, cell_size):
 		var effect := GroundSkillEffect.new()
-		effect.setup(
+		effect.setup_ground_unit_effect(
 			effect_position,
 			int(plan.get("damage", 0)),
-			radius,
+			radius_gu,
 			float(plan.get("duration_seconds", 0.1)),
 			color,
 			str(plan.get("skill_id", "")),
-			float(plan.get("tick_interval_seconds", 0.8))
+			float(plan.get("tick_interval_seconds", 0.8)),
+			visual_radius_px
 		)
 		effect.configure_runtime_source(source_actor)
 		effects.append(effect)
@@ -473,10 +479,30 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 					result.applied_count += 1
 		"knockback":
 			for target: Node2D in targets:
-				var push_direction := (target.global_position - origin).normalized()
-				if push_direction.length_squared() <= 0.0:
-					push_direction = direction.normalized()
-				target.global_position += push_direction * float(plan.get("push_distance", 0.0))
+				var target_delta_ground_gu := (
+					GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+						target.global_position - origin
+					)
+				)
+				var fallback_direction_ground_gu := (
+					GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(direction)
+				)
+				var push_direction_ground_gu := (
+					GroundUnitSpaceScript.normalized_ground_direction(
+						Vector2.ZERO,
+						target_delta_ground_gu,
+						fallback_direction_ground_gu
+					)
+				)
+				var push_delta_ground_gu := (
+					push_direction_ground_gu
+					* maxf(0.0, float(plan.get("push_distance_gu", 0.0)))
+				)
+				target.global_position += (
+					GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+						push_delta_ground_gu
+					)
+				)
 				result.applied_count += 1
 		"tame_monster":
 			if primary_target is EnemyActor:

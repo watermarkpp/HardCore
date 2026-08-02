@@ -1,6 +1,10 @@
 class_name TaoistCombatMath
 extends RefCounted
 
+const CombatUnitLegacyAdapterScript := preload(
+	"res://scripts/skills/combat_unit_legacy_adapter.gd"
+)
+
 const RULES_PATH := "res://assets/data/vanilla_176/profession_combat_rules.json"
 const MAX_SKILL_LEVEL := 3
 
@@ -99,13 +103,13 @@ static func summon_profile(skill_id: String, skill_level_value: int, owner_level
 		"max_hp": hp,
 		"attack_min": attack_min,
 		"attack_max": attack_max,
-		"move_speed": 155.0 if divine_beast else 135.0,
-		"attack_range": 72.0 if divine_beast else 48.0,
+		"move_speed_gu_per_sec": CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(155.0 if divine_beast else 135.0),
+		"attack_range_gu": CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(72.0 if divine_beast else 48.0),
 		"attack_interval": 1.0 if divine_beast else 1.25,
-		"aggro_radius": 380.0 if divine_beast else 330.0,
+		"aggro_radius_gu": CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(380.0 if divine_beast else 330.0),
 		"lifetime_seconds": float(_level_value(rule.get("lifetime_seconds_by_level", [864000]), level)),
-		"leash_range": float(rule.get("leash_range", 560.0)),
-		"teleport_range": float(rule.get("teleport_range", 900.0)),
+		"leash_range_gu": CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(float(rule.get("leash_range", 560.0))),
+		"teleport_range_gu": CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(float(rule.get("teleport_range", 900.0))),
 		"reject_when_owner_has_slave": bool(rule.get("reject_when_owner_has_slave", true)),
 		"recall_existing_on_create_failure": bool(rule.get("recall_existing_on_create_failure", false)),
 		"owner_death_rule": "expire",

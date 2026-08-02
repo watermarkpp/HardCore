@@ -132,13 +132,10 @@ static func resolve(
 			if had_locked_target
 			else POLICY_INPUT_DIRECTION
 		),
-		"origin_world": actor_position_at_release,
 		"origin_screen_px": actor_position_at_release,
 		"origin_ground_gu": origin_ground_gu,
 		"direction_ground_gu": release_direction_ground_gu,
 		"direction_screen_px": release_direction_screen_px,
-		# Compatibility for integration call sites not migrated in this commit.
-		"direction_world": release_direction_screen_px,
 		"release_facing_policy": effective_facing_policy,
 		"release_facing_policy_id": (
 			MELEE_RELEASE_FACING_POLICY_ID
@@ -155,11 +152,8 @@ static func resolve(
 		"visual_direction_index": int(
 			direction_resolution.get("visual_direction_index", -1)
 		),
-		"direction_source_world_delta": direction_resolution.get(
+		"direction_source_screen_delta_px": direction_resolution.get(
 			"source_world_delta", Vector2.ZERO
-		),
-		"direction_source_fractional_tile_delta": direction_resolution.get(
-			"fractional_tile_delta", Vector2.ZERO
 		),
 		"direction_source_ground_delta_gu": direction_resolution.get(
 			"ground_delta_gu", Vector2.ZERO

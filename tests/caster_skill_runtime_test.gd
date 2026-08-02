@@ -1,5 +1,10 @@
 extends Node
 
+const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+const CombatUnitLegacyAdapter := preload(
+	"res://scripts/skills/combat_unit_legacy_adapter.gd"
+)
+
 var _magic_defense_calls: Array[String] = []
 
 
@@ -85,13 +90,13 @@ func _ready() -> void:
 	var second_fire_wall_caster := Node2D.new()
 	var fire_wall_target := Node.new()
 	var first_runtime_field := GroundSkillEffect.new()
-	first_runtime_field.setup(
-		Vector2.ZERO, 37, 74.0, 12.0, Color.WHITE, "wizard.fire_wall", 1.0
+	first_runtime_field.setup_ground_unit_effect(
+		Vector2.ZERO, 37, 0.5, 12.0, Color.WHITE, "wizard.fire_wall", 1.0, 74.0
 	)
 	first_runtime_field.configure_runtime_source(fire_wall_caster)
 	var overlapping_runtime_field := GroundSkillEffect.new()
-	overlapping_runtime_field.setup(
-		Vector2.ZERO, 91, 74.0, 12.0, Color.WHITE, "wizard.fire_wall", 1.0
+	overlapping_runtime_field.setup_ground_unit_effect(
+		Vector2.ZERO, 91, 0.5, 12.0, Color.WHITE, "wizard.fire_wall", 1.0, 74.0
 	)
 	overlapping_runtime_field.configure_runtime_source(fire_wall_caster)
 	assert(first_runtime_field.claim_runtime_tick(fire_wall_target))
@@ -114,6 +119,31 @@ func _ready() -> void:
 	fire_wall_target.free()
 	fire_wall_caster.free()
 	second_fire_wall_caster.free()
+
+	var repulsion_target := Node2D.new()
+	var repulsion_origin_screen_px := Vector2(100.0, 100.0)
+	repulsion_target.global_position = (
+		repulsion_origin_screen_px
+		+ GroundUnitSpace.ground_delta_gu_to_screen_delta_px(Vector2.RIGHT)
+	)
+	var repulsion_result := CasterSkillRuntime.execute_cast({
+		"skill_id": "wizard.repulsion_ring",
+		"success": true,
+		"operation": "knockback",
+		"push_distance_gu": 1.0,
+	}, {
+		"origin": repulsion_origin_screen_px,
+		"direction": Vector2.RIGHT,
+		"affected_targets": [repulsion_target],
+	})
+	assert(repulsion_result.applied_count == 1)
+	assert(repulsion_target.global_position.is_equal_approx(
+		repulsion_origin_screen_px
+		+ GroundUnitSpace.ground_delta_gu_to_screen_delta_px(Vector2.RIGHT * 2.0)
+	))
+	for repulsion_node: Node2D in repulsion_result.nodes:
+		repulsion_node.free()
+	repulsion_target.free()
 
 	var lightning := CasterSkillRuntime.resolve("wizard.lightning", {
 		"skill_level": 3, "magic_stat_roll": 30, "target_is_undead": true,
@@ -252,9 +282,19 @@ func _ready() -> void:
 	poison_target.anti_poison = 5
 	poison_target.monster_data = {"antiMagic": 10}
 	var resisted_poison_projectile := SkillProjectile.new()
-	resisted_poison_projectile.setup(
-		Vector2.ZERO, Vector2.RIGHT, 30, 100.0, Color.GREEN,
-		"poison", 4, 8.0, "taoist.poison"
+	resisted_poison_projectile.setup_ground_unit_projectile(
+		Vector2.ZERO,
+		GroundUnitSpace.screen_delta_px_to_ground_delta_gu(Vector2.RIGHT),
+		3.125,
+		30,
+		CombatUnitLegacyAdapter.PROJECTILE_SPEED_GU_PER_SEC,
+		CombatUnitLegacyAdapter.PROJECTILE_RADIUS_GU,
+		Vector2.ZERO,
+		Color.GREEN,
+		"poison",
+		4,
+		8.0,
+		"taoist.poison"
 	)
 	resisted_poison_projectile.configure_runtime_resolution(null, Callable(), 0, 7)
 	resisted_poison_projectile._apply_hit(poison_target)
@@ -266,9 +306,19 @@ func _ready() -> void:
 	)
 	resisted_poison_projectile.free()
 	var applied_poison_projectile := SkillProjectile.new()
-	applied_poison_projectile.setup(
-		Vector2.ZERO, Vector2.RIGHT, 30, 100.0, Color.GREEN,
-		"poison", 4, 8.0, "taoist.poison"
+	applied_poison_projectile.setup_ground_unit_projectile(
+		Vector2.ZERO,
+		GroundUnitSpace.screen_delta_px_to_ground_delta_gu(Vector2.RIGHT),
+		3.125,
+		30,
+		CombatUnitLegacyAdapter.PROJECTILE_SPEED_GU_PER_SEC,
+		CombatUnitLegacyAdapter.PROJECTILE_RADIUS_GU,
+		Vector2.ZERO,
+		Color.GREEN,
+		"poison",
+		4,
+		8.0,
+		"taoist.poison"
 	)
 	applied_poison_projectile.configure_runtime_resolution(null, Callable(), 0, 6)
 	applied_poison_projectile._apply_hit(poison_target)

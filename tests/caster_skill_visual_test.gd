@@ -1,6 +1,10 @@
 extends Node
 
 const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
+const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+const CombatUnitLegacyAdapter := preload(
+	"res://scripts/skills/combat_unit_legacy_adapter.gd"
+)
 
 
 class ShieldOwner:
@@ -72,14 +76,29 @@ func _ready() -> void:
 	PlayerState.select_profession(ProfessionRules.profession_display_name("wizard"))
 	for skill_id: String in SkillProjectile.VISUAL_PATHS:
 		var projectile := SkillProjectile.new()
-		projectile.setup(Vector2.ZERO, Vector2.RIGHT, 10, 100.0, Color.CYAN, "damage", 0, 0.0, skill_id)
+		projectile.setup_ground_unit_projectile(
+			Vector2.ZERO,
+			GroundUnitSpace.screen_delta_px_to_ground_delta_gu(Vector2.RIGHT),
+			3.125,
+			10,
+			CombatUnitLegacyAdapter.PROJECTILE_SPEED_GU_PER_SEC,
+			CombatUnitLegacyAdapter.PROJECTILE_RADIUS_GU,
+			Vector2.ZERO,
+			Color.CYAN,
+			"damage",
+			0,
+			0.0,
+			skill_id
+		)
 		add_child(projectile)
 		assert(projectile.skill_id == skill_id and projectile._sprite != null)
 		assert(projectile._sprite.visual_loaded)
 		projectile.queue_free()
 	for skill_id: String in GroundSkillEffect.VISUAL_PATHS:
 		var area := GroundSkillEffect.new()
-		area.setup(Vector2.ZERO, 1, 72.0, 1.0, Color.CYAN, skill_id)
+		area.setup_ground_unit_effect(
+			Vector2.ZERO, 1, 0.5, 1.0, Color.CYAN, skill_id, 0.8, 72.0
+		)
 		add_child(area)
 		assert(area.skill_id == skill_id and area._sprite != null)
 		assert(area._sprite.visual_loaded)
