@@ -1,6 +1,7 @@
 extends Node
 
 const RuntimeBridge := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
+const SpellGeometry := preload("res://scripts/skills/caster_spell_geometry.gd")
 
 
 func _ready() -> void:
@@ -53,12 +54,49 @@ func _run() -> void:
 			"疾光电影正式直线没有在首个阻挡格前截断"
 		)
 
-	var line_cells: Array[Vector2i] = []
-	for distance: int in range(1, 6):
-		line_cells.append(origin_tile + Vector2i(1, 1) * distance)
-	var first_line_target := _make_enemy(game, game.player, line_cells[0], "地狱火首个目标")
-	var rear_line_target := _make_enemy(game, game.player, line_cells[2], "地狱火后方目标")
-	var off_line_target := _make_enemy(game, game.player, origin_tile + Vector2i(1, 0), "地狱火线外目标")
+	var origin_fractional_tile: Vector2 = game._canonical_world_to_fractional_tile(
+		game.player.global_position
+	)
+	var free_aim_step := Vector2(1.0, 0.45)
+	var free_aim_world: Vector2 = (
+		game._canonical_fractional_tile_to_world(
+			origin_fractional_tile + free_aim_step
+		)
+		- game.player.global_position
+	)
+	var hellfire_effect := {
+		"line_geometry_contract": SpellGeometry.CONTINUOUS_AIM_LINE_CONTRACT_ID,
+		"length_tiles": 5.0,
+		"width_tiles": 1.0,
+		"pierces_units": false,
+		"stops_on_terrain": false,
+	}
+	var hellfire_strip: Dictionary = game._canonical_continuous_line_strip(
+		"wizard.hellfire",
+		hellfire_effect,
+		game.player.global_position,
+		free_aim_world
+	)
+	assert((hellfire_strip.axis_fractional_tile as Vector2).is_equal_approx(
+		free_aim_step
+	))
+	assert(is_equal_approx(float(hellfire_strip.length_tiles), 5.0))
+	assert(is_equal_approx(float(hellfire_strip.width_tiles), 1.0))
+	var first_line_target := _make_enemy_at_fractional_tile(
+		game, game.player, origin_fractional_tile + free_aim_step, "地狱火首个目标"
+	)
+	var rear_line_target := _make_enemy_at_fractional_tile(
+		game,
+		game.player,
+		origin_fractional_tile + free_aim_step * 4.5,
+		"地狱火后方目标"
+	)
+	var off_line_target := _make_enemy_at_fractional_tile(
+		game,
+		game.player,
+		origin_fractional_tile + free_aim_step * 2.0 + Vector2(-0.45, 1.0) * 2.0,
+		"地狱火线外目标"
+	)
 	var first_hp := first_line_target.current_hp
 	var rear_hp := rear_line_target.current_hp
 	var off_line_hp := off_line_target.current_hp
@@ -66,15 +104,16 @@ func _run() -> void:
 		"wizard.hellfire",
 		20,
 		game.player.global_position,
-		Vector2.DOWN,
+		free_aim_world,
 		"line_damage",
 		null,
-		line_cells,
-		{"pierces_units": false, "stops_on_terrain": true}
+		[],
+		hellfire_effect,
+		hellfire_strip
 	)
-	assert(hellfire_hit and first_line_target.current_hp < first_hp, "地狱火未命中正式五格直线内首个目标")
-	assert(rear_line_target.current_hp < rear_hp, "地狱火未命中正式五格直线内后方目标")
-	assert(off_line_target.current_hp == off_line_hp, "宽一格地狱火错误命中正式直线外单位")
+	assert(hellfire_hit and first_line_target.current_hp < first_hp, "地狱火未命中连续五格直线内首个目标")
+	assert(rear_line_target.current_hp < rear_hp, "地狱火未命中连续五格直线内后方目标")
+	assert(off_line_target.current_hp == off_line_hp, "宽一格地狱火错误命中正式条带外单位")
 
 	first_line_target.queue_free()
 	rear_line_target.queue_free()
@@ -122,12 +161,59 @@ func _run() -> void:
 	outside_target.queue_free()
 	await get_tree().process_frame
 
-	var laser_cells: Array[Vector2i] = []
-	for distance: int in range(1, 9):
-		laser_cells.append(origin_tile + Vector2i(1, -1) * distance)
-	var near_laser_target := _make_enemy(game, game.player, laser_cells[0], "疾光近端目标")
-	var far_laser_target := _make_enemy(game, game.player, laser_cells[6], "疾光远端目标")
-	var off_laser_target := _make_enemy(game, game.player, origin_tile + Vector2i(1, 0), "疾光线外目标")
+	var laser_aim_step := Vector2(0.35, -1.0)
+	var laser_aim_world: Vector2 = (
+		game._canonical_fractional_tile_to_world(
+			origin_fractional_tile + laser_aim_step
+		)
+		- game.player.global_position
+	)
+	var laser_effect := {
+		"line_geometry_contract": SpellGeometry.CONTINUOUS_AIM_LINE_CONTRACT_ID,
+		"length_tiles": 8.0,
+		"width_tiles": 1.0,
+		"pierces_units": true,
+		"stops_on_terrain": false,
+	}
+	var laser_strip: Dictionary = game._canonical_continuous_line_strip(
+		"wizard.laser",
+		laser_effect,
+		game.player.global_position,
+		laser_aim_world
+	)
+	assert((laser_strip.axis_fractional_tile as Vector2).is_equal_approx(
+		laser_aim_step
+	))
+	assert(is_equal_approx(float(laser_strip.length_tiles), 8.0))
+	var near_laser_target := _make_enemy_at_fractional_tile(
+		game,
+		game.player,
+		origin_fractional_tile + laser_aim_step,
+		"疾光近端目标"
+	)
+	var far_laser_target := _make_enemy_at_fractional_tile(
+		game,
+		game.player,
+		origin_fractional_tile + laser_aim_step * 7.5,
+		"疾光远端目标"
+	)
+	var off_laser_target := _make_enemy_at_fractional_tile(
+		game,
+		game.player,
+		origin_fractional_tile + laser_aim_step * 4.0 + Vector2(1.0, 0.35) * 2.0,
+		"疾光线外目标"
+	)
+	var stacked_laser_targets: Array[EnemyActor] = []
+	var stacked_laser_hp: Array[int] = []
+	for stacked_index: int in range(7):
+		var stacked_target := _make_enemy_at_fractional_tile(
+			game,
+			game.player,
+			origin_fractional_tile + laser_aim_step * (2.0 + float(stacked_index) * 0.5),
+			"疾光穿透目标%d" % stacked_index
+		)
+		stacked_laser_targets.append(stacked_target)
+		stacked_laser_hp.append(stacked_target.current_hp)
 	var near_laser_hp := near_laser_target.current_hp
 	var far_laser_hp := far_laser_target.current_hp
 	var off_laser_hp := off_laser_target.current_hp
@@ -135,20 +221,28 @@ func _run() -> void:
 		"wizard.laser",
 		20,
 		game.player.global_position,
-		Vector2.RIGHT,
+		laser_aim_world,
 		"piercing_line_damage",
 		null,
-		laser_cells,
-		{"pierces_units": true, "stops_on_terrain": true}
+		[],
+		laser_effect,
+		laser_strip
 	)
-	assert(laser_hit, "疾光电影正式八格直线没有产生命中")
-	assert(near_laser_target.current_hp < near_laser_hp, "疾光电影未命中八格直线近端目标")
-	assert(far_laser_target.current_hp < far_laser_hp, "穿透疾光电影未命中八格直线远端目标")
-	assert(off_laser_target.current_hp == off_laser_hp, "宽一格疾光电影错误命中正式直线外单位")
+	assert(laser_hit, "疾光电影连续八格直线没有产生命中")
+	assert(near_laser_target.current_hp < near_laser_hp, "疾光电影未命中连续八格近端目标")
+	assert(far_laser_target.current_hp < far_laser_hp, "穿透疾光电影未命中连续八格远端目标")
+	assert(off_laser_target.current_hp == off_laser_hp, "宽一格疾光电影错误命中连续条带外单位")
+	for stacked_index: int in range(stacked_laser_targets.size()):
+		assert(
+			stacked_laser_targets[stacked_index].current_hp < stacked_laser_hp[stacked_index],
+			"疾光电影错误保留八目标上限：第%d个附加目标未受伤" % stacked_index
+		)
 
 	near_laser_target.queue_free()
 	far_laser_target.queue_free()
 	off_laser_target.queue_free()
+	for stacked_target: EnemyActor in stacked_laser_targets:
+		stacked_target.queue_free()
 	await get_tree().process_frame
 
 	var adjacent_repulsion_target := _make_enemy(
@@ -277,4 +371,20 @@ func _make_enemy(
 	# exact footpoints after that one-time repair and then freeze AI movement.
 	enemy.global_position = game._canonical_tile_to_world(tile)
 	enemy.set_physics_process(false)
+	return enemy
+
+
+func _make_enemy_at_fractional_tile(
+	game: Node,
+	caster: PlayerCharacter,
+	tile: Vector2,
+	display_name: String
+) -> EnemyActor:
+	var enemy := _make_enemy(
+		game,
+		caster,
+		Vector2i(roundi(tile.x), roundi(tile.y)),
+		display_name
+	)
+	enemy.global_position = game._canonical_fractional_tile_to_world(tile)
 	return enemy

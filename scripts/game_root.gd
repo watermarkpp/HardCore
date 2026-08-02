@@ -59,6 +59,10 @@ const CANONICAL_WIZARD_GEOMETRY_SKILLS := [
 	"wizard.hell_lightning",
 	"wizard.laser",
 ]
+const CONTINUOUS_WIZARD_LINE_SKILLS := [
+	"wizard.hellfire",
+	"wizard.laser",
+]
 
 var player: PlayerCharacter
 var _world_camera: Camera2D
@@ -3369,13 +3373,20 @@ func _apply_canonical_effects(
 		result.get("geometry_cells", []),
 		geometry_effect
 	)
+	var continuous_line_strip := _canonical_continuous_line_strip(
+		stable_skill_id,
+		geometry_effect,
+		origin,
+		direction
+	)
 	_spawn_canonical_cast_visual(
 		stable_skill_id,
 		origin,
 		direction,
 		target,
 		target_position,
-		effective_geometry_cells
+		effective_geometry_cells,
+		continuous_line_strip
 	)
 	for raw_effect: Variant in result.get("effects", []):
 		if not raw_effect is Dictionary:
@@ -3410,7 +3421,8 @@ func _apply_canonical_effects(
 					effect_type,
 					target,
 					effective_geometry_cells,
-					effect
+					effect,
+					continuous_line_strip
 				)
 			"persistent_ground_damage":
 				_spawn_canonical_ground_field(
@@ -3518,14 +3530,16 @@ func _apply_canonical_spell_damage(
 	effect_type: String,
 	primary: EnemyActor,
 	raw_geometry_cells: Variant = [],
-	effect: Dictionary = {}
+	effect: Dictionary = {},
+	continuous_line_strip: Dictionary = {}
 ) -> bool:
 	var targets: Array[EnemyActor] = []
 	if stable_skill_id in CANONICAL_WIZARD_GEOMETRY_SKILLS:
 		targets = _canonical_spell_geometry_targets(
 			stable_skill_id,
 			raw_geometry_cells,
-			effect
+			effect,
+			continuous_line_strip
 		)
 	elif effect_type == "targeted_sky_strike" and primary != null:
 		targets.append(primary)
@@ -3593,6 +3607,94 @@ func _canonical_effective_spell_geometry_cells(
 	)
 
 
+func _canonical_continuous_line_strip(
+	stable_skill_id: String,
+	effect: Dictionary,
+	origin_world: Vector2,
+	direction_world: Vector2
+) -> Dictionary:
+	if (
+		stable_skill_id not in CONTINUOUS_WIZARD_LINE_SKILLS
+		or str(effect.get("line_geometry_contract", ""))
+		!= CasterSpellGeometryScript.CONTINUOUS_AIM_LINE_CONTRACT_ID
+	):
+		return {}
+	var definition := SkillDataLoaderScript.skill(stable_skill_id)
+	var geometry: Dictionary = definition.get("geometry", {})
+	var length_tiles := maxf(
+		0.0,
+		float(effect.get("length_tiles", geometry.get("length_tiles", 0.0)))
+	)
+	var width_tiles := maxf(
+		0.0001,
+		float(effect.get("width_tiles", geometry.get("width_tiles", 1.0)))
+	)
+	var origin_tile := _canonical_world_to_fractional_tile(origin_world)
+	var direction_tile := (
+		CombatDirectionSpaceScript.world_delta_to_fractional_tile_delta(
+			direction_world
+		)
+	)
+	var strip := CasterSpellGeometryScript.continuous_line_strip(
+		origin_tile,
+		origin_tile + direction_tile,
+		direction_world,
+		length_tiles,
+		width_tiles
+	)
+	if bool(effect.get("stops_on_terrain", geometry.get("stops_on_terrain", false))):
+		var unblocked_length := _canonical_continuous_line_unblocked_length(strip)
+		if unblocked_length < length_tiles:
+			strip = CasterSpellGeometryScript.continuous_line_strip(
+				origin_tile,
+				origin_tile + direction_tile,
+				direction_world,
+				unblocked_length,
+				width_tiles
+			)
+			strip["terrain_truncated"] = true
+			strip["source_length_tiles"] = length_tiles
+	strip["integration_contract_id"] = (
+		"gameplay.wizard.continuous_line.damage_visual_terrain_shared.v1"
+	)
+	return strip
+
+
+func _canonical_continuous_line_unblocked_length(
+	line_strip: Dictionary
+) -> float:
+	var length_tiles := maxf(
+		0.0,
+		float(line_strip.get("length_tiles", 0.0))
+	)
+	if length_tiles <= 0.0:
+		return 0.0
+	var origin_tile: Vector2 = line_strip.get(
+		"origin_fractional_tile", Vector2.ZERO
+	)
+	var axis: Vector2 = line_strip.get(
+		"axis_fractional_tile", Vector2.DOWN
+	)
+	# Quarter-step centreline sampling is a deterministic supercover for the
+	# continuous ray. It catches cells crossed between integer sample points,
+	# while the damage width remains independent from terrain traversal.
+	var sample_count := ceili((length_tiles + 0.5) * 4.0)
+	for sample_index: int in range(2, sample_count + 1):
+		var distance_tiles := float(sample_index) * 0.25
+		var sample_tile := origin_tile + axis * distance_tiles
+		var sample_cell := Vector2i(
+			roundi(sample_tile.x),
+			roundi(sample_tile.y)
+		)
+		if _canonical_spell_cell_is_terrain_blocked(sample_cell):
+			return clampf(
+				floorf(distance_tiles - 0.5),
+				0.0,
+				length_tiles
+			)
+	return length_tiles
+
+
 func _canonical_spell_cell_is_terrain_blocked(cell: Vector2i) -> bool:
 	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
 	if not runtime.is_empty():
@@ -3612,7 +3714,8 @@ func _canonical_spell_cell_is_terrain_blocked(cell: Vector2i) -> bool:
 func _canonical_spell_geometry_targets(
 	stable_skill_id: String,
 	raw_geometry_cells: Variant,
-	effect: Dictionary
+	effect: Dictionary,
+	continuous_line_strip: Dictionary = {}
 ) -> Array[EnemyActor]:
 	var geometry_cells: Array[Vector2i] = []
 	if raw_geometry_cells is Array:
@@ -3624,12 +3727,66 @@ func _canonical_spell_geometry_targets(
 	# whether units stop the visual/line traversal; it must not turn the area
 	# damage into a single-target spell. A negative limit means every hostile
 	# footprint intersecting the formal geometry is selected.
+	# Both canonical line spells affect every intersecting monster. Limiting the
+	# result to the nominal number of cells makes stacked or large-footprint
+	# monsters visually intersect the line without receiving damage.
 	var maximum_targets := (
 		-1
-		if stable_skill_id == "wizard.hellfire"
+		if stable_skill_id in CONTINUOUS_WIZARD_LINE_SKILLS
 		else maxi(0, int(effect.get("maximum_targets", geometry_cells.size())))
 	)
 	if maximum_targets == 0:
+		return targets
+	if (
+		stable_skill_id in CONTINUOUS_WIZARD_LINE_SKILLS
+		and str(continuous_line_strip.get("contract_id", ""))
+		== CasterSpellGeometryScript.CONTINUOUS_AIM_LINE_CONTRACT_ID
+	):
+		var origin_tile: Vector2 = continuous_line_strip.get(
+			"origin_fractional_tile", Vector2.ZERO
+		)
+		var axis: Vector2 = continuous_line_strip.get(
+			"axis_fractional_tile", Vector2.DOWN
+		)
+		var axis_length_squared := maxf(0.0001, axis.length_squared())
+		var candidates: Array[Dictionary] = []
+		for node: Node in get_tree().get_nodes_in_group("enemies"):
+			if (
+				not node is EnemyActor
+				or node.is_queued_for_deletion()
+				or (node as EnemyActor).current_hp <= 0
+			):
+				continue
+			var enemy := node as EnemyActor
+			if not CasterSpellGeometryScript.target_footprint_intersects_continuous_line(
+				continuous_line_strip,
+				_enemy_footprint_tile_polygon(enemy)
+			):
+				continue
+			var enemy_tile := _canonical_world_to_fractional_tile(
+				enemy.global_position
+			)
+			candidates.append({
+				"enemy": enemy,
+				"distance_along_line": (
+					(enemy_tile - origin_tile).dot(axis)
+					/ axis_length_squared
+				),
+			})
+		candidates.sort_custom(func(left: Dictionary, right: Dictionary) -> bool:
+			var left_distance := float(left.get("distance_along_line", INF))
+			var right_distance := float(right.get("distance_along_line", INF))
+			if not is_equal_approx(left_distance, right_distance):
+				return left_distance < right_distance
+			return (
+				(left.get("enemy") as EnemyActor).get_instance_id()
+				< (right.get("enemy") as EnemyActor).get_instance_id()
+			)
+		)
+		for candidate: Dictionary in candidates:
+			targets.append(candidate.get("enemy") as EnemyActor)
+			if maximum_targets > 0 and targets.size() >= maximum_targets:
+				break
 		return targets
 	var selected_instance_ids := {}
 	for cell: Vector2i in geometry_cells:
@@ -3863,7 +4020,8 @@ func _spawn_canonical_cast_visual(
 	direction: Vector2,
 	target: EnemyActor,
 	target_position: Vector2,
-	raw_geometry_cells: Variant = []
+	raw_geometry_cells: Variant = [],
+	continuous_line_strip: Dictionary = {}
 ) -> void:
 	if not stable_skill_id.begins_with("wizard.") and not stable_skill_id.begins_with("taoist."):
 		return
@@ -3879,7 +4037,17 @@ func _spawn_canonical_cast_visual(
 		return
 	var geometry_tile_points: Array[Vector2i] = []
 	var geometry_world_points: Array[Vector2] = []
-	if raw_geometry_cells is Array:
+	if (
+		str(continuous_line_strip.get("contract_id", ""))
+		== CasterSpellGeometryScript.CONTINUOUS_AIM_LINE_CONTRACT_ID
+	):
+		geometry_world_points = (
+			CasterSpellGeometryScript.continuous_line_world_points(
+				continuous_line_strip,
+				Callable(self, "_canonical_fractional_tile_to_world")
+			)
+		)
+	elif raw_geometry_cells is Array:
 		for raw_cell: Variant in raw_geometry_cells:
 			if raw_cell is Vector2i:
 				geometry_tile_points.append(raw_cell)
