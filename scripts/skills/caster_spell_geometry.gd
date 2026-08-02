@@ -10,6 +10,9 @@ const VISUAL_CONTRACT_ID := "skills.caster.geometry_visual_alignment.v1"
 const FOOTPRINT_INTERSECTION_CONTRACT_ID := (
 	"skills.caster.area_footprint_intersection.tile_polygon_sat.v1"
 )
+const CONTINUOUS_AIM_LINE_CONTRACT_ID := (
+	"skills.wizard.line.continuous_tile_axis_footprint_sat.v1"
+)
 const CONTACT_EPSILON := 0.0001
 
 
@@ -77,6 +80,97 @@ static func target_footprint_intersects_cells(
 	return false
 
 
+static func continuous_line_strip(
+	origin_fractional_tile: Vector2,
+	aim_fractional_tile: Vector2,
+	fallback_world_direction: Vector2,
+	length_tiles: float,
+	width_tiles: float
+) -> Dictionary:
+	var axis := aim_fractional_tile - origin_fractional_tile
+	if axis.length_squared() <= CONTACT_EPSILON * CONTACT_EPSILON:
+		axis = CombatDirectionSpaceScript.world_delta_to_fractional_tile_delta(
+			fallback_world_direction
+		)
+	if axis.length_squared() <= CONTACT_EPSILON * CONTACT_EPSILON:
+		axis = Vector2(1.0, 1.0)
+	# Skill length is measured in 8-neighbour map steps, not Euclidean tile
+	# distance. Chebyshev normalization keeps an exact diagonal at (1, 1): a
+	# four-tile diagonal must end at (4, 4), never (2.828, 2.828).
+	var dominant_component := maxf(absf(axis.x), absf(axis.y))
+	axis /= maxf(CONTACT_EPSILON, dominant_component)
+	var safe_length := maxf(0.0, length_tiles)
+	var safe_width := maxf(CONTACT_EPSILON, width_tiles)
+	# A canonical N-cell line owns cells whose centres are at distances 1..N.
+	# Its continuous equivalent therefore spans 0.5..N+0.5 along the aim axis.
+	# This preserves contact tolerance without adding another damage cell.
+	var strip_start := origin_fractional_tile + axis * 0.5
+	var strip_end := origin_fractional_tile + axis * (safe_length + 0.5)
+	var axis_unit := axis.normalized()
+	var perpendicular := Vector2(-axis_unit.y, axis_unit.x)
+	var half_width := safe_width * 0.5
+	var polygon := PackedVector2Array([
+		strip_start + perpendicular * half_width,
+		strip_end + perpendicular * half_width,
+		strip_end - perpendicular * half_width,
+		strip_start - perpendicular * half_width,
+	])
+	var centerline_points: Array[Vector2] = []
+	for distance: int in range(1, ceili(safe_length) + 1):
+		centerline_points.append(
+			origin_fractional_tile + axis * minf(float(distance), safe_length)
+		)
+	return {
+		"contract_id": CONTINUOUS_AIM_LINE_CONTRACT_ID,
+		"origin_fractional_tile": origin_fractional_tile,
+		"aim_fractional_tile": aim_fractional_tile,
+		"axis_fractional_tile": axis,
+		"length_tiles": safe_length,
+		"width_tiles": safe_width,
+		"strip_start_fractional_tile": strip_start,
+		"strip_end_fractional_tile": strip_end,
+		"strip_polygon_fractional_tile": polygon,
+		"centerline_points_fractional_tile": centerline_points,
+		"visual_direction_index": (
+			CombatDirectionSpaceScript.direction_index_for_fractional_tile_delta(axis)
+		),
+		"damage_axis_quantized": false,
+		"visual_axis_quantized_to_nearest_8dir": true,
+	}
+
+
+static func target_footprint_intersects_continuous_line(
+	line_strip: Dictionary,
+	target_footprint_tile_polygon: PackedVector2Array
+) -> bool:
+	if target_footprint_tile_polygon.size() < 3:
+		return false
+	var raw_polygon: Variant = line_strip.get(
+		"strip_polygon_fractional_tile", PackedVector2Array()
+	)
+	if not raw_polygon is PackedVector2Array:
+		return false
+	var strip_polygon := raw_polygon as PackedVector2Array
+	if strip_polygon.size() < 3:
+		return false
+	return _convex_polygons_intersect(target_footprint_tile_polygon, strip_polygon)
+
+
+static func continuous_line_world_points(
+	line_strip: Dictionary,
+	fractional_tile_to_world: Callable
+) -> Array[Vector2]:
+	var result: Array[Vector2] = []
+	if not fractional_tile_to_world.is_valid():
+		return result
+	for raw_point: Variant in line_strip.get(
+		"centerline_points_fractional_tile", []
+	):
+		if raw_point is Vector2:
+			result.append(fractional_tile_to_world.call(raw_point))
+	return result
+
+
 static func _convex_polygons_intersect(
 	left: PackedVector2Array,
 	right: PackedVector2Array
@@ -134,6 +228,8 @@ static func build_visual_context(
 		"footprint_world_extent": Vector2.ZERO,
 		"desired_sprite_extent": 0.0,
 		"desired_sprite_footprint": Vector2.ZERO,
+		"desired_sprite_axis_extent": 0.0,
+		"visual_axis_world": Vector2.ZERO,
 	}
 	if not tile_to_world.is_valid():
 		return context
@@ -181,6 +277,9 @@ static func build_visual_context(
 	if skill_id == "wizard.hellfire":
 		context["desired_sprite_extent"] = maxf(cell_extent.x, cell_extent.y)
 		context["desired_sprite_footprint"] = cell_extent
+		if not world_offsets.is_empty():
+			context["desired_sprite_axis_extent"] = world_offsets[0].length()
+			context["visual_axis_world"] = world_offsets.back().normalized()
 	elif skill_id == "wizard.hell_lightning":
 		context["desired_sprite_extent"] = maxf(
 			centerline_maximum.x - centerline_minimum.x,
@@ -193,6 +292,9 @@ static func build_visual_context(
 			centerline_maximum.y - centerline_minimum.y
 		)
 		context["desired_sprite_footprint"] = footprint_extent
+		if not world_offsets.is_empty():
+			context["desired_sprite_axis_extent"] = world_offsets.back().length()
+			context["visual_axis_world"] = world_offsets.back().normalized()
 	return context
 
 
@@ -298,17 +400,25 @@ static func visual_context_from_plan(
 	)
 	var desired_extent := 0.0
 	var desired_footprint := Vector2.ZERO
+	var desired_axis_extent := 0.0
+	var visual_axis_world := Vector2.ZERO
 	if skill_id == "wizard.hellfire":
 		desired_extent = maxf(cell_extent.x, cell_extent.y)
 		desired_footprint = cell_extent
 		if desired_extent <= 0.0 and minimum_step < INF:
 			desired_extent = minimum_step
+		if not world_offsets.is_empty():
+			desired_axis_extent = world_offsets[0].length()
+			visual_axis_world = world_offsets.back().normalized()
 	elif skill_id in ["wizard.hell_lightning", "wizard.laser"]:
 		desired_extent = maxf(
 			centerline_maximum.x - centerline_minimum.x,
 			centerline_maximum.y - centerline_minimum.y
 		)
 		desired_footprint = footprint_extent
+		if skill_id == "wizard.laser" and not world_offsets.is_empty():
+			desired_axis_extent = world_offsets.back().length()
+			visual_axis_world = world_offsets.back().normalized()
 	return {
 		"contract_id": VISUAL_CONTRACT_ID,
 		"canonical_geometry_contract": declared_contract,
@@ -326,4 +436,6 @@ static func visual_context_from_plan(
 		"footprint_world_extent": footprint_extent,
 		"desired_sprite_extent": desired_extent,
 		"desired_sprite_footprint": desired_footprint,
+		"desired_sprite_axis_extent": desired_axis_extent,
+		"visual_axis_world": visual_axis_world,
 	}

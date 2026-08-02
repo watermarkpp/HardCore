@@ -24,6 +24,10 @@ const TARGET_CENTERED_SPATIAL_SKILL_IDS := {
 	"wizard.fire_wall": true,
 	"wizard.ice_storm": true,
 }
+const CONTINUOUS_AIM_LINE_SKILL_IDS := {
+	"wizard.hellfire": true,
+	"wizard.laser": true,
+}
 const POLICY_LOCKED_SINGLE_TARGET := "locked_single_target"
 const POLICY_INPUT_DIRECTION := "input_direction"
 const FACING_POLICY_LIVE_LOCKED_TARGET := "live_locked_target_direction"
@@ -53,6 +57,7 @@ static func tracks_locked_target_for_skill(
 	return (
 		stable_skill_id == "warrior.wild_rush"
 		or TARGET_CENTERED_SPATIAL_SKILL_IDS.has(stable_skill_id)
+		or CONTINUOUS_AIM_LINE_SKILL_IDS.has(stable_skill_id)
 		or tracks_locked_target(target_mode)
 	)
 

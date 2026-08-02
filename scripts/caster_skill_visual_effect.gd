@@ -39,6 +39,8 @@ var _geometry_world_offsets: Array[Vector2] = []
 var _hellfire_emission_offsets: Array[Vector2] = []
 var _desired_sprite_extent := 0.0
 var _desired_sprite_footprint := Vector2.ZERO
+var _desired_sprite_axis_extent := 0.0
+var _visual_axis_world := Vector2.ZERO
 
 
 func setup(
@@ -65,6 +67,11 @@ func setup(
 	_desired_sprite_footprint = visual_geometry_context.get(
 		"desired_sprite_footprint", Vector2.ZERO
 	)
+	_desired_sprite_axis_extent = maxf(
+		0.0,
+		float(visual_geometry_context.get("desired_sprite_axis_extent", 0.0))
+	)
+	_visual_axis_world = visual_geometry_context.get("visual_axis_world", Vector2.ZERO)
 	for raw_offset: Variant in visual_geometry_context.get("geometry_world_offsets", []):
 		if raw_offset is Vector2:
 			_geometry_world_offsets.append(raw_offset)
@@ -100,6 +107,10 @@ func _ready() -> void:
 	_attachment_draw_order = str(render.get("attachment_draw_order", ""))
 	if _attachment_policy not in ["target_actor", "caster_actor"]:
 		target_node = null
+	elif is_instance_valid(target_node):
+		# Establish the exact sort key before the first drawable frame. Waiting for
+		# _process() left one rounded frame that could briefly cover the actor.
+		_sync_actor_attachment_position()
 	_playback_strategy = str(render.get("playback_strategy", "frame_sequence"))
 	lifetime = maxf(
 		lifetime,
@@ -143,10 +154,15 @@ func _process(delta: float) -> void:
 
 
 func _sync_actor_attachment_position() -> void:
-	var attached_footpoint := target_node.global_position.round()
+	# Keep the exact same fractional footpoint as the actor. Rounding only the
+	# shield made its sort key jump from one side of the player to the other when
+	# the actor crossed a half pixel: at y=77.4 it sorted behind, while y=77.6
+	# rounded to 78 and sorted in front. That explains both the stationary body
+	# being fully covered and the moving body flicker.
+	var attached_footpoint := target_node.global_position
 	# The shared world is y-sorted. A tiny negative sort-key offset keeps the
-	# shield behind the body without changing its raster-visible footpoint or
-	# placing it below the map layer through a global negative z-index.
+	# shield deterministically behind the body without changing its raster-visible
+	# footpoint or placing it below the map layer through a global negative z-index.
 	if _attachment_draw_order == ATTACHMENT_DRAW_ORDER_BEHIND_ACTOR:
 		attached_footpoint.y -= BEHIND_ACTOR_SORT_EPSILON
 	global_position = attached_footpoint
@@ -190,7 +206,9 @@ func _install_single() -> void:
 		_desired_sprite_extent,
 		null,
 		phase_id,
-		_desired_sprite_footprint
+		_desired_sprite_footprint,
+		_desired_sprite_axis_extent,
+		_visual_axis_world
 	):
 		sprite.queue_free()
 		return
@@ -240,7 +258,9 @@ func _install_hellfire_trail(render: Dictionary) -> void:
 			_desired_sprite_extent,
 			false,
 			phase_id,
-			_desired_sprite_footprint
+			_desired_sprite_footprint,
+			_desired_sprite_axis_extent,
+			_visual_axis_world
 		):
 			sprite.queue_free()
 			continue

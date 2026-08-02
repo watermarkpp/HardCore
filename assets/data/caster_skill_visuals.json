@@ -28,7 +28,7 @@
     },
     "contract_id": "skills.mir2_176.vanilla_33.v1.0.1",
     "original_path": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
-    "sha256": "1fdf28d3c575d18d2e7e0f875b008eb4f6f719752e4974cbca399c66c62c7c2c"
+    "sha256": "803c1f96418a1d7d77dadfab2b4fb2c79899dafd06da2f88fd1d20a8d903891a"
   },
   "mappingSources": [
     {
@@ -804,10 +804,14 @@
         },
         "geometry": {
           "shape": "line",
-          "length_tiles": 5,
-          "width_tiles": 1,
+          "length_tiles": 4,
+          "width_tiles": 1.5,
           "pierces_units": false,
-          "stops_on_terrain": true
+          "stops_on_terrain": true,
+          "primary_source_length_tiles": 5,
+          "primary_source_width_tiles": 1,
+          "geometry_override_contract": "skills.wizard.hellfire.geometry_4x1_5_user_override.v1",
+          "status": "project_canonical_user_override"
         },
         "timing": {
           "body_action": "cast_8dir_6f",
@@ -816,6 +820,9 @@
           "recovery_ms": 900,
           "total_action_lock_ms": 1500,
           "cooldown_policy": "total_action_lock",
+          "movement_lock_ms": 600,
+          "recast_gate_ms": 900,
+          "timing_contract": "skills.wizard.hellfire.body_600_recast_gate_900_discrete.v1",
           "status": "project_canonical"
         }
       }
