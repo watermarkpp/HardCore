@@ -126,12 +126,6 @@ static func load_bich() -> Dictionary:
 	return load_map(BICH_MAP_ID)
 
 
-static func tile_to_world(runtime: Dictionary, raw_tile: Array) -> Vector2:
-	return ground_position_gu_to_screen_position_px(
-		runtime, _array_to_vector2(raw_tile)
-	)
-
-
 static func ground_position_gu_to_screen_position_px(
 	runtime: Dictionary,
 	ground_position_gu: Vector2
@@ -145,14 +139,13 @@ static func ground_position_gu_to_screen_position_px(
 	)
 
 
-static func cell_to_world(runtime: Dictionary, raw_cell: Array) -> Vector2:
+static func grid_cell_to_screen_position_px(
+	runtime: Dictionary,
+	raw_cell: Array
+) -> Vector2:
 	return ground_position_gu_to_screen_position_px(
 		runtime, cell_to_ground_position_gu(raw_cell)
 	)
-
-
-static func world_to_tile(runtime: Dictionary, world: Vector2) -> Vector2:
-	return screen_position_px_to_ground_position_gu(runtime, world)
 
 
 static func screen_position_px_to_ground_position_gu(
@@ -328,7 +321,9 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 		}.get(npc_id, ""))
 		result.npcs.append({
 			"name": entry.get("display_name", "NPC"),
-			"position": cell_to_world(runtime, entry.get("tile", [0, 0])),
+			"position": grid_cell_to_screen_position_px(
+				runtime, entry.get("tile", [0, 0])
+			),
 			"position_ground_gu": cell_to_ground_position_gu(
 				entry.get("tile", [0, 0])
 			),
@@ -387,7 +382,9 @@ static func _combat_spawn(
 	return {
 		"name": entry.get("display_name", ""),
 		"monster_id": int(monster_key.trim_prefix("monster.")),
-		"position": cell_to_world(runtime, entry.get("tile", [0, 0])),
+		"position": grid_cell_to_screen_position_px(
+			runtime, entry.get("tile", [0, 0])
+		),
 		"position_ground_gu": cell_to_ground_position_gu(
 			entry.get("tile", [0, 0])
 		),
@@ -405,7 +402,9 @@ static func _portal_record(
 	entry: Dictionary
 ) -> Dictionary:
 	return {
-		"position": cell_to_world(runtime, entry.get("tile", [0, 0])),
+		"position": grid_cell_to_screen_position_px(
+			runtime, entry.get("tile", [0, 0])
+		),
 		"position_ground_gu": cell_to_ground_position_gu(
 			entry.get("tile", [0, 0])
 		),

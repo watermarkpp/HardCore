@@ -64,10 +64,6 @@ static func contains_grid_vertex(vertex: Vector2i, design_size: Vector2i) -> boo
 	return vertex.x >= 0 and vertex.y >= 0 and vertex.x <= design_size.x and vertex.y <= design_size.y
 
 
-static func tile_to_world(tile: Vector2, design_size: Vector2i) -> Vector2:
-	return ground_position_gu_to_screen_position_px(tile, design_size)
-
-
 static func ground_position_gu_to_screen_position_px(
 	ground_position_gu: Vector2,
 	design_size: Vector2i
@@ -78,24 +74,31 @@ static func ground_position_gu_to_screen_position_px(
 	)
 
 
-static func cell_center_to_world(cell: Vector2, design_size: Vector2i) -> Vector2:
-	return tile_to_world(cell + Vector2(0.5, 0.5), design_size)
+static func grid_cell_to_screen_position_px(
+	cell: Vector2,
+	design_size: Vector2i
+) -> Vector2:
+	return ground_position_gu_to_screen_position_px(
+		cell + Vector2(0.5, 0.5), design_size
+	)
 
 
-static func cell_polygon_world(
+static func grid_cell_polygon_screen_px(
 	cell: Vector2i,
 	design_size: Vector2i
 ) -> PackedVector2Array:
 	return PackedVector2Array([
-		tile_to_world(Vector2(cell), design_size),
-		tile_to_world(Vector2(cell + Vector2i(1, 0)), design_size),
-		tile_to_world(Vector2(cell + Vector2i(1, 1)), design_size),
-		tile_to_world(Vector2(cell + Vector2i(0, 1)), design_size),
+		ground_position_gu_to_screen_position_px(Vector2(cell), design_size),
+		ground_position_gu_to_screen_position_px(
+			Vector2(cell + Vector2i(1, 0)), design_size
+		),
+		ground_position_gu_to_screen_position_px(
+			Vector2(cell + Vector2i(1, 1)), design_size
+		),
+		ground_position_gu_to_screen_position_px(
+			Vector2(cell + Vector2i(0, 1)), design_size
+		),
 	])
-
-
-static func world_to_tile(world: Vector2, design_size: Vector2i) -> Vector2:
-	return screen_position_px_to_ground_position_gu(world, design_size)
 
 
 static func screen_position_px_to_ground_position_gu(
@@ -128,9 +131,16 @@ static func path_step_cost_gu(step: Vector2i) -> float:
 	return GroundUnitSpaceScript.path_step_cost_gu(step)
 
 
-static func world_to_cell(world: Vector2, design_size: Vector2i) -> Vector2i:
-	var tile := world_to_tile(world, design_size)
-	return Vector2i(floori(tile.x), floori(tile.y))
+static func screen_position_px_to_grid_cell(
+	screen_position_px: Vector2,
+	design_size: Vector2i
+) -> Vector2i:
+	var ground_position_gu := screen_position_px_to_ground_position_gu(
+		screen_position_px, design_size
+	)
+	return Vector2i(
+		floori(ground_position_gu.x), floori(ground_position_gu.y)
+	)
 
 
 static func contains_tile(tile: Vector2, design_size: Vector2i) -> bool:

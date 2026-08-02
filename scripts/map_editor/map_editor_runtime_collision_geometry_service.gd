@@ -52,7 +52,11 @@ static func tile_polygon_world(
 ) -> PackedVector2Array:
 	var result := PackedVector2Array()
 	for tile_point: Vector2 in tile_polygon:
-		result.append(MapEditorCoordinate.tile_to_world(tile_point, design_size))
+		result.append(
+			MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+				tile_point, design_size
+			)
+		)
 	return result
 
 
@@ -229,7 +233,9 @@ static func _signed_area(polygon: PackedVector2Array) -> float:
 
 
 static func cell_center_world(cell: Vector2i, design_size: Vector2i) -> Vector2:
-	return MapEditorCoordinate.cell_center_to_world(Vector2(cell), design_size)
+	return MapEditorCoordinate.grid_cell_to_screen_position_px(
+		Vector2(cell), design_size
+	)
 
 
 static func blocked_cell_set(runtime_collision: Dictionary) -> Dictionary:
@@ -306,14 +312,16 @@ static func visible_ground_contains_tile(
 
 
 static func world_cell(world: Vector2, design_size: Vector2i) -> Vector2i:
-	return MapEditorCoordinate.world_to_cell(world, design_size)
+	return MapEditorCoordinate.screen_position_px_to_grid_cell(
+		world, design_size
+	)
 
 
 static func cell_polygon_world(
 	cell: Vector2i,
 	design_size: Vector2i
 ) -> PackedVector2Array:
-	return MapEditorCoordinate.cell_polygon_world(cell, design_size)
+	return MapEditorCoordinate.grid_cell_polygon_screen_px(cell, design_size)
 
 
 static func rect_tile_bounds(rect: Array) -> Rect2:
@@ -334,12 +342,16 @@ static func rect_polygon_world(
 	var minimum := bounds.position
 	var maximum := bounds.end
 	return PackedVector2Array([
-		MapEditorCoordinate.tile_to_world(minimum, design_size),
-		MapEditorCoordinate.tile_to_world(
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+			minimum, design_size
+		),
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
 			Vector2(maximum.x, minimum.y), design_size
 		),
-		MapEditorCoordinate.tile_to_world(maximum, design_size),
-		MapEditorCoordinate.tile_to_world(
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+			maximum, design_size
+		),
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
 			Vector2(minimum.x, maximum.y), design_size
 		),
 	])
@@ -352,9 +364,11 @@ static func polygon_world(
 	var result := PackedVector2Array()
 	for raw: Variant in points:
 		if raw is Array and raw.size() == 2:
-			result.append(MapEditorCoordinate.tile_to_world(
-				Vector2(float(raw[0]), float(raw[1])), design_size
-			))
+			result.append(
+				MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+					Vector2(float(raw[0]), float(raw[1])), design_size
+				)
+			)
 	return result
 
 
@@ -374,7 +388,11 @@ static func ellipse_polygon_world(
 		var tile_point := center + Vector2(
 			cos(angle) * radius.x, sin(angle) * radius.y
 		)
-		result.append(MapEditorCoordinate.tile_to_world(tile_point, design_size))
+		result.append(
+			MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+				tile_point, design_size
+			)
+		)
 	return result
 
 
@@ -404,7 +422,9 @@ static func tile_shape_contains_world(
 	world: Vector2,
 	design_size: Vector2i
 ) -> bool:
-	var tile := MapEditorCoordinate.world_to_tile(world, design_size)
+	var tile := MapEditorCoordinate.screen_position_px_to_ground_position_gu(
+		world, design_size
+	)
 	var data: Dictionary = manual.get("data", {})
 	match str(manual.get("shape", "")):
 		"cell":

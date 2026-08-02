@@ -36,10 +36,10 @@ func _run() -> void:
 	assert(is_equal_approx(float(safe_zone.get("radius")), 9.0 * ArtSpec.TILE_SIZE), "Safe area radius is not nine logical cells")
 
 	var runtime := MapEditorRuntimeBridge.load_bich()
-	var outside := MapEditorRuntimeBridge.tile_to_world(runtime, [-1.0, 0.0])
+	var outside := MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(runtime, Vector2(-1.0, 0.0))
 	assert(game.background.is_environment_point_blocked(outside), "Map exterior is not part of unified occupancy")
 	var first_blocked := str(runtime.get("collision", {}).get("blocked_tiles", [])[0]).split(",")
-	var obstacle := MapEditorRuntimeBridge.cell_to_world(runtime, [float(first_blocked[0]), float(first_blocked[1])])
+	var obstacle := MapEditorRuntimeBridge.grid_cell_to_screen_position_px(runtime, [float(first_blocked[0]), float(first_blocked[1])])
 	assert(game.background.is_environment_point_blocked(obstacle), "Editor obstacle is not part of unified occupancy")
 
 	var probe := enemies[0] as EnemyActor
