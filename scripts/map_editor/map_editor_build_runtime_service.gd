@@ -7,8 +7,13 @@ const ConnectionPolicyService := preload(
 const RuntimeCollisionGeometry := preload(
 	"res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd"
 )
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const UnitLegacyAdapter := preload(
+	"res://scripts/map_editor/map_editor_unit_legacy_adapter.gd"
+)
 
-const RUNTIME_SCHEMA_VERSION := 1
+const LEGACY_RUNTIME_SCHEMA_VERSION := UnitLegacyAdapter.LEGACY_RUNTIME_SCHEMA_VERSION
+const RUNTIME_SCHEMA_VERSION := UnitLegacyAdapter.RUNTIME_SCHEMA_VERSION
 const RUNTIME_ROOT := "res://assets/data/runtime/map_editor/"
 
 
@@ -92,7 +97,7 @@ static func _compile(document: Dictionary, walkability: Dictionary) -> Dictionar
 	]:
 		var runtime_entries:Array=[]
 		for source_entry:Dictionary in document.layers.get(layer,[]):
-			var entry:=source_entry.duplicate(true)
+			var entry:=UnitLegacyAdapter.editor_semantic_to_runtime_v2(source_entry)
 			for editor_key:String in ["placeholder_instance_id","editor_visual_asset_id","editor_visual_only","selection_shape","selectable","movable"]:entry.erase(editor_key)
 			runtime_entries.append(entry)
 		semantic_layers[layer] = runtime_entries
@@ -104,6 +109,8 @@ static func _compile(document: Dictionary, walkability: Dictionary) -> Dictionar
 	blocked.sort()
 	var output := {
 		"runtime_schema_version": RUNTIME_SCHEMA_VERSION,
+		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
+		"projection_contract_id": GroundUnitSpaceScript.PROJECTION_CONTRACT_ID,
 		"source": {"map_id": document.map_id, "editor_schema_version": document.schema_version, "revision": document.editor_meta.get("revision", 1), "content_layer": document.content_layer},
 		"design": document.design.duplicate(true),
 		"ground": {"ground_mode": document.ground.ground_mode, "default_fill_asset_id": document.ground.blank_fill_asset_id, "tile_overrides": MapEditorGroundService.tile_overrides(state)},

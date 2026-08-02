@@ -70,7 +70,7 @@ func _run() -> void:
 			)
 		)
 		var expected_world := (
-			MapEditorCoordinate.tile_to_world(expected_tile, design_size)
+			MapEditorCoordinate.ground_position_gu_to_screen_position_px(expected_tile, design_size)
 			+ expected_offset
 		)
 		assert(baseline_world.is_equal_approx(expected_world),
@@ -225,7 +225,7 @@ func _assert_bich_family_baselines() -> void:
 		)
 		assert(Vector2(command.sort_baseline_tile).is_equal_approx(foot),
 			"%s did not use its independent visual foot" % instance_id)
-		var old_far_corner_world := MapEditorCoordinate.tile_to_world(
+		var old_far_corner_world := MapEditorCoordinate.ground_position_gu_to_screen_position_px(
 			Vector2(command.sort_tile), Vector2i(80, 80)
 		)
 		var new_baseline_world := VisualGeometry.command_actor_sort_world(

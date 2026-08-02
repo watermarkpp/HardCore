@@ -29,7 +29,7 @@ func _ready() -> void:
 				wall_fronts += 1
 				assert(domain == VisualGeometry.RENDER_DOMAIN_ACTOR_Y_SORT)
 				var sort_world := VisualGeometry.command_actor_sort_world(command, size)
-				assert(MapEditorCoordinate.world_to_cell(sort_world, size) == command.sort_tile)
+				assert(MapEditorCoordinate.screen_position_px_to_grid_cell(sort_world, size) == command.sort_tile)
 			else:
 				wall_backgrounds += 1
 				assert(domain == VisualGeometry.RENDER_DOMAIN_STATIC_BACKGROUND)

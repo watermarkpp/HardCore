@@ -6,7 +6,7 @@ func _ready() -> void:
 	var npc := MapEditorGameplaySemanticService.add_entry(document, "npc", Vector2i(4, 5), {"content_id": "npc.bich_guard", "npc_id": "npc.bich_guard"})
 	assert(npc.ok)
 	assert(npc.entry.service_role == "dialogue")
-	var spawn := MapEditorGameplaySemanticService.add_entry(document, "monster_spawn", Vector2i(10, 10), {"content_id": "monster.strawman", "monster_id": "monster.strawman", "radius_tiles": 4})
+	var spawn := MapEditorGameplaySemanticService.add_entry(document, "monster_spawn", Vector2i(10, 10), {"content_id": "monster.strawman", "monster_id": "monster.strawman", "radius_gu": 4.0})
 	assert(spawn.ok)
 	assert(spawn.entry.respawn_seconds == 60)
 	var boss := MapEditorGameplaySemanticService.add_entry(document, "boss_spawn", Vector2i(20, 20), {"content_id": "boss.skeleton_elite", "boss_id": "boss.skeleton_elite"})
@@ -17,9 +17,9 @@ func _ready() -> void:
 	assert("door_target_map_required" in invalid_door.errors)
 	var door := MapEditorGameplaySemanticService.add_entry(document, "door", Vector2i(2, 2), {"target_map_id": "bich_province", "target_tile": [33, 40]})
 	assert(door.ok)
-	var safe := MapEditorGameplaySemanticService.add_entry(document, "safe_area", Vector2i(5, 5), {"radius_tiles": 6})
-	var light := MapEditorGameplaySemanticService.add_entry(document, "light", Vector2i(6, 6), {"radius_tiles": 3, "flicker": true})
-	var trigger := MapEditorGameplaySemanticService.add_entry(document, "region_trigger", Vector2i(7, 7), {"radius_tiles": 2, "action": "enter_bich_gate"})
+	var safe := MapEditorGameplaySemanticService.add_entry(document, "safe_area", Vector2i(5, 5), {"radius_gu": 6.0})
+	var light := MapEditorGameplaySemanticService.add_entry(document, "light", Vector2i(6, 6), {"radius_gu": 3.0, "flicker": true})
+	var trigger := MapEditorGameplaySemanticService.add_entry(document, "region_trigger", Vector2i(7, 7), {"radius_gu": 2.0, "action": "enter_bich_gate"})
 	assert(safe.ok and light.ok and trigger.ok)
 	var entrance := MapEditorGameplaySemanticService.add_entry(document, "map_entrance", Vector2i(8, 8), {"display_name": "古墓一层入口"})
 	var exit := MapEditorGameplaySemanticService.add_entry(document, "map_exit", Vector2i(9, 9), {"display_name": "返回森林的门"})
@@ -31,17 +31,17 @@ func _ready() -> void:
 	assert(respawn_a.ok and respawn_b.ok)
 	assert(not bool(document.layers.respawn_points[0].is_default))
 	assert(bool(document.layers.respawn_points[1].is_default))
-	var invalid_polygon := MapEditorGameplaySemanticService.add_entry(document, "safe_area", Vector2i(14, 14), {"shape": "polygon", "polygon_tiles": [[13, 13], [15, 13]]})
+	var invalid_polygon := MapEditorGameplaySemanticService.add_entry(document, "safe_area", Vector2i(14, 14), {"shape": "polygon", "polygon_ground_gu": [[13, 13], [15, 13]]})
 	assert(not invalid_polygon.ok)
 	var safe_polygon := MapEditorGameplaySemanticService.add_entry(document, "safe_area", Vector2i(15, 15), {
 		"shape": "polygon",
-		"polygon_tiles": [[13, 13], [17, 13], [17, 17], [13, 17]],
-		"radius_tiles": 0,
+		"polygon_ground_gu": [[13, 13], [17, 13], [17, 17], [13, 17]],
+		"radius_gu": 0.0,
 	})
 	assert(safe_polygon.ok)
 	var moved_polygon := MapEditorGameplaySemanticService.move_entry(document, str(safe_polygon.entry.semantic_id), Vector2i(1, 2))
 	assert(moved_polygon.ok)
-	assert(moved_polygon.entry.polygon_tiles[0] == [14, 15])
+	assert(moved_polygon.entry.polygon_ground_gu[0] == [14, 15])
 	var copied_polygon := MapEditorGameplaySemanticService.duplicate_entry_snapshot(
 		document,
 		moved_polygon.entry,
@@ -50,7 +50,7 @@ func _ready() -> void:
 	assert(copied_polygon.ok, str(copied_polygon.get("errors", [])))
 	assert(str(copied_polygon.entry.semantic_id) != str(moved_polygon.entry.semantic_id))
 	assert(copied_polygon.entry.tile == [25, 25])
-	assert(copied_polygon.entry.polygon_tiles[0] == [23, 23])
+	assert(copied_polygon.entry.polygon_ground_gu[0] == [23, 23])
 	assert(MapEditorGameplaySemanticService.all_entries(document).size() == 13)
 	var disconnected_validation := MapEditorBuildRuntimeService.validate_for_runtime(document)
 	assert("map_exit_target_map_required:%s" % exit.entry.semantic_id in disconnected_validation.errors)

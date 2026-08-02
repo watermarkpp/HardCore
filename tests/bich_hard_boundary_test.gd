@@ -17,14 +17,14 @@ func _ready() -> void:
 
 	var raw_size: Array = runtime.design.design_size
 	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
-	var edge := MapEditorCoordinate.tile_to_world(Vector2(float(size.x) * 0.5 - 0.5, -0.5), size)
+	var edge := MapEditorCoordinate.ground_position_gu_to_screen_position_px(Vector2(float(size.x) * 0.5 - 0.5, -0.5), size)
 	var visual_boundary := CollisionGeometry.map_inner_boundary_world(size)
 	var edge_direction := visual_boundary[1] - visual_boundary[0]
 	var outward := Vector2(edge_direction.y, -edge_direction.x).normalized()
 	var player := PlayerCharacter.new()
 	add_child(player)
 	await get_tree().physics_frame
-	player.global_position = edge - outward * (ArtSpec.PLAYER_COLLISION_RADIUS + 4.0)
+	player.global_position = edge - outward * (ArtSpec.PLAYER_COLLISION_RADIUS_PX + 4.0)
 	var player_collision := player.move_and_collide(outward * 160.0)
 	assert(player_collision != null, "玩家可越过地图外部黑区硬边界")
 	var expected_player_position := (
@@ -47,15 +47,15 @@ func _ready() -> void:
 	enemy.setup(GameData.get_monster("稻草人"), null, false)
 	add_child(enemy)
 	await get_tree().physics_frame
-	enemy.global_position = edge - outward * (enemy.collision_radius + 4.0)
+	enemy.global_position = edge - outward * (enemy.collision_radius_px + 4.0)
 	var enemy_collision := enemy.move_and_collide(outward * 160.0)
 	assert(enemy_collision != null, "怪物可越过地图外部黑区硬边界")
 	var expected_enemy_position := (
 		CollisionGeometry.project_world_envelope_inside_visible_boundary(
 			edge,
 			size,
-			WorldSpatialRules.actor_footprint_polygon(
-				enemy.collision_radius
+			WorldSpatialRules.actor_footprint_polygon_px(
+				enemy.collision_radius_px
 			)
 		)
 	)

@@ -3,8 +3,7 @@ extends Node
 func _ready()->void:
 	var player:=PlayerCharacter.new();player.global_position=Vector2(300,0);add_child(player)
 	var enemy:=EnemyActor.new();enemy.setup(GameData.get_monster("多钩猫"),player,false);enemy.global_position=Vector2.ZERO;enemy.set_meta("spawn_position",Vector2.ZERO);enemy.set_meta("safe_zones",[]);add_child(enemy)
-	assert(is_equal_approx(enemy.aggro_radius,384.0))
-	assert(enemy.aggro_radius/32.0==12.0)
+	assert(is_equal_approx(enemy.aggro_radius_gu, 12.0))
 	enemy._add_threat(player,100.0);assert(enemy._threat_for(player)>=100.0)
 	enemy._decay_threat(1.0);assert(enemy._threat_for(player)<100.0)
 	var visual:=enemy.visual;visual.play_attack(0.46)

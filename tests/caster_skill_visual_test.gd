@@ -1,6 +1,18 @@
 extends Node
 
 const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
+const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+const CombatUnitLegacyAdapter := preload(
+	"res://scripts/skills/combat_unit_legacy_adapter.gd"
+)
+
+
+class ShieldOwner:
+	extends Node2D
+	var shield_active := true
+
+	func magic_shield_snapshot() -> Dictionary:
+		return {"active": shield_active}
 
 
 func _ready() -> void:
@@ -64,14 +76,29 @@ func _ready() -> void:
 	PlayerState.select_profession(ProfessionRules.profession_display_name("wizard"))
 	for skill_id: String in SkillProjectile.VISUAL_PATHS:
 		var projectile := SkillProjectile.new()
-		projectile.setup(Vector2.ZERO, Vector2.RIGHT, 10, 100.0, Color.CYAN, "damage", 0, 0.0, skill_id)
+		projectile.setup_ground_unit_projectile(
+			Vector2.ZERO,
+			GroundUnitSpace.screen_delta_px_to_ground_delta_gu(Vector2.RIGHT),
+			3.125,
+			10,
+			CombatUnitLegacyAdapter.PROJECTILE_SPEED_GU_PER_SEC,
+			CombatUnitLegacyAdapter.PROJECTILE_RADIUS_GU,
+			Vector2.ZERO,
+			Color.CYAN,
+			"damage",
+			0,
+			0.0,
+			skill_id
+		)
 		add_child(projectile)
 		assert(projectile.skill_id == skill_id and projectile._sprite != null)
 		assert(projectile._sprite.visual_loaded)
 		projectile.queue_free()
 	for skill_id: String in GroundSkillEffect.VISUAL_PATHS:
 		var area := GroundSkillEffect.new()
-		area.setup(Vector2.ZERO, 1, 72.0, 1.0, Color.CYAN, skill_id)
+		area.setup_ground_unit_effect(
+			Vector2.ZERO, 1, 0.5, 1.0, Color.CYAN, skill_id, 0.8, 72.0
+		)
 		add_child(area)
 		assert(area.skill_id == skill_id and area._sprite != null)
 		assert(area._sprite.visual_loaded)
@@ -107,5 +134,57 @@ func _ready() -> void:
 	assert(teleport_arrival.frame_count() == 10)
 	assert(teleport_arrival.texture.get_width() > 0)
 	teleport_arrival.queue_free()
+	var shield_owner := ShieldOwner.new()
+	add_child(shield_owner)
+	shield_owner.global_position = Vector2(123.4, 77.6)
+	var shield_visual := CasterSkillVisualEffect.new()
+	shield_visual.setup(
+		Vector2.ZERO,
+		"wizard.magic_shield",
+		72.0,
+		1.0,
+		Vector2.DOWN,
+		shield_owner
+	)
+	add_child(shield_visual)
+	assert(is_equal_approx(shield_visual.global_position.x, 123.4))
+	assert(is_equal_approx(shield_visual.global_position.y, 77.6 - 0.001))
+	assert(shield_visual.is_persistent_magic_shield_visual())
+	assert(shield_visual.get_meta(
+		"magic_shield_visual_contract", ""
+	) == "skills.wizard.magic_shield.primary_actor_footpoint_centered_behind_body.v1")
+	var shield_sprite: CasterSkillAnimationPlayer = shield_visual._sprites[0]
+	var shield_render := CasterSkillVisualRegistry.render_policy(
+		"wizard.magic_shield"
+	)
+	assert(shield_render.anchor_policy == "top_left_from_world_anchor")
+	assert(shield_render.anchor_rebase_pixels == [7.5, 0.0])
+	assert(shield_render.attachment_draw_order == "behind_attached_actor_same_footpoint")
+	assert(shield_sprite.fitted_visual_bounds().position == Vector2(-34.5, -80.0))
+	# Both sides of a half-pixel boundary must keep exactly the same ordering.
+	# The old rounded shield key sorted behind at .4 and in front at .6, which
+	# made the actor disappear while stationary and flicker while moving.
+	for owner_position: Vector2 in [
+		Vector2(123.4, 77.4),
+		Vector2(123.4, 77.6),
+		Vector2(123.4, 78.1),
+	]:
+		shield_owner.global_position = owner_position
+		shield_visual._process(0.0)
+		assert(is_equal_approx(shield_visual.global_position.x, owner_position.x))
+		assert(is_equal_approx(
+			shield_visual.global_position.y,
+			owner_position.y - 0.001
+		))
+		assert(shield_visual.global_position.y < shield_owner.global_position.y)
+	shield_sprite._process(shield_sprite.animation_duration() + 0.01)
+	shield_visual._process(0.1)
+	assert(shield_sprite.playback_complete)
+	assert(shield_sprite.current_frame_index == shield_sprite.frame_count() - 1)
+	assert(not shield_visual.is_queued_for_deletion())
+	shield_owner.shield_active = false
+	shield_visual._process(0.01)
+	assert(shield_visual.is_queued_for_deletion())
+	shield_owner.queue_free()
 	print("CASTER_SKILL_VISUAL_PASS: 26 exact primary-client animations/icons cover 26 active caster skills; one passive has no cast visual; zero fallbacks; male-only")
 	get_tree().quit(0)

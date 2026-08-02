@@ -1,6 +1,9 @@
 extends Node
 
 
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+
+
 func _ready() -> void:
 	_run.call_deferred()
 
@@ -24,7 +27,7 @@ func _run() -> void:
 	player.current_mp = 0
 	player.defense_min = 0
 	player.defense_max = 0
-	player.global_position = Vector2(58, 0)
+	player.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.RIGHT * 1.5)
 	var boss := EnemyActor.new()
 	boss.setup(GameData.get_monster("骷髅精灵"), player, true)
 	add_child(boss)
@@ -59,7 +62,8 @@ func _run() -> void:
 	boss._attack_timer = 0.0
 	boss._physics_process(0.01)
 	assert(boss._pending_attack_time > 0.0 and player.current_hp == hp_before, "骷髅精灵伤害没有等待客户端命中帧")
-	assert(boss.facing.dot(Vector2.RIGHT) > 0.99 and boss.velocity == Vector2.ZERO, "骷髅精灵攻击时未面对目标或仍在移动")
+	var expected_attack_facing_px := GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.RIGHT).normalized()
+	assert(boss.facing.dot(expected_attack_facing_px) > 0.99 and boss.velocity == Vector2.ZERO, "骷髅精灵攻击时未面对目标或仍在移动")
 	visual._process(0.05)
 	assert(visual.current_state == "attack" and sprite.texture.get_size() == Vector2(expected_frame.x * 6, expected_frame.y * 8), "骷髅精灵攻击动画未触发")
 	boss._physics_process(0.28)
@@ -68,9 +72,9 @@ func _run() -> void:
 	assert(player.current_hp < hp_before and boss._pending_attack_time < 0.0, "骷髅精灵命中帧没有结算伤害")
 	assert(boss._retarget_timer > 7.0, "TATMonster八秒重新寻敌节奏未接入")
 
-	var speed_before := boss.move_speed
+	var speed_before := boss.move_speed_gu_per_sec
 	boss.take_damage(251)
-	assert(not boss._boss_phase_two and boss.move_speed == speed_before, "骷髅精灵仍触发无来源半血狂暴")
+	assert(not boss._boss_phase_two and boss.move_speed_gu_per_sec == speed_before, "骷髅精灵仍触发无来源半血狂暴")
 	boss.take_damage(999)
 	visual._process(0.02)
 	assert(boss._dying and visual.current_state == "death", "骷髅精灵死亡动画未触发")

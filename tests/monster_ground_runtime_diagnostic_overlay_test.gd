@@ -43,8 +43,8 @@ func _run() -> void:
 	assert(Vector2(snapshot.ringMinusManual).is_zero_approx())
 	var replay_displacement := enemy.visual.manual_alignment_replay_displacement()
 	var expected_replay_displacement := Vector2.DOWN * (
-		enemy.collision_radius
-		+ ArtSpec.PLAYER_COLLISION_RADIUS
+		enemy.collision_radius_px
+		+ ArtSpec.PLAYER_COLLISION_RADIUS_PX
 		+ MonsterVisual.MANUAL_ALIGNMENT_SPAWN_GAP
 	) / MonsterVisual.MANUAL_ALIGNMENT_PREVIEW_ZOOM
 	assert(replay_displacement.is_equal_approx(expected_replay_displacement))

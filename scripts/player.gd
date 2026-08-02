@@ -9,6 +9,10 @@ const SkillInputPolicyScript := preload("res://scripts/skill_input_policy.gd")
 const CombatReleaseGeometryScript := preload(
 	"res://scripts/skills/combat_release_geometry.gd"
 )
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const CombatUnitLegacyAdapterScript := preload(
+	"res://scripts/skills/combat_unit_legacy_adapter.gd"
+)
 const CasterSkillVisualRegistryScript := preload(
 	"res://scripts/caster_skill_visual_registry.gd"
 )
@@ -19,6 +23,10 @@ const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
 const DIRECT_SPELL_DAMAGE_RUNTIME_ID := "player.direct_spell_damage.openmir2.v1"
+const MAGIC_SHIELD_CAPACITY_CONTRACT_ID := (
+	"skills.wizard.magic_shield.absorption_capacity.v1"
+)
+const MAGIC_SHIELD_AUTO_REFRESH_RATIO := 0.20
 
 # GameOfMir server evidence:
 # - M2Server/ObjBase.pas RM_STRUCK only records m_dwStruckTick when nPower > 0.
@@ -36,7 +44,9 @@ signal resources_changed(current_hp: int, max_hp: int, current_mp: int, max_mp: 
 signal movement_performed(position: Vector2, facing: Vector2)
 signal death_requested
 
-@export var move_speed := 190.0
+@export var move_speed_gu_per_sec := (
+	CombatUnitLegacyAdapterScript.PLAYER_MOVE_SPEED_GU_PER_SEC
+)
 @export var max_hp := 120
 @export var attack_min := 2
 @export var attack_max := 5
@@ -51,6 +61,9 @@ var defense_min := 0
 var defense_max := 0
 var damage_reduction := 0.0
 var shield_time := 0.0
+var shield_initial_duration := 0.0
+var shield_capacity := 0.0
+var shield_capacity_max := 0.0
 var stealth_time := 0.0
 var defense_buff := 0
 var defense_buff_time := 0.0
@@ -92,6 +105,7 @@ var _dead := false
 var movement_input_active := false
 var movement_facing := Vector2.DOWN
 var actual_motion_facing := Vector2.DOWN
+var actual_ground_motion_gu := Vector2.ZERO
 var environment_blocker: Node
 var ground_runtime_diagnostic_overlay: Node2D
 
@@ -116,7 +130,9 @@ func _ready() -> void:
 	current_mp = max_mp
 	var collision := CollisionShape2D.new()
 	collision.name = "CollisionShape2D"
-	collision.shape = WorldSpatialRulesScript.actor_footprint_shape(ArtSpec.PLAYER_COLLISION_RADIUS)
+	collision.shape = WorldSpatialRulesScript.actor_footprint_shape_px(
+		ArtSpec.PLAYER_COLLISION_RADIUS_PX
+	)
 	add_child(collision)
 	visual = PlayerVisualScript.new()
 	visual.name = "PlayerVisual"
@@ -181,6 +197,8 @@ func _physics_process(delta: float) -> void:
 		take_damage(poison_damage, false)
 	if shield_time == 0.0:
 		damage_reduction = 0.0
+		shield_capacity = 0.0
+		shield_initial_duration = 0.0
 	if defense_buff_time == 0.0:
 		defense_buff = 0
 	var keyboard := _keyboard_movement_vector()
@@ -196,17 +214,40 @@ func _physics_process(delta: float) -> void:
 	if movement_locked:
 		velocity = Vector2.ZERO
 	elif direction.length() > 0.08:
-		direction = direction.normalized()
-		facing = FACING_DIRECTIONS[ArtSpec.direction_index(direction)]
+		var direction_ground_gu := (
+			GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(direction)
+		)
+		if direction_ground_gu.length_squared() <= 0.000001:
+			direction_ground_gu = Vector2(1.0, 1.0)
+		direction_ground_gu = direction_ground_gu.normalized()
+		var direction_screen_px := (
+			GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+				direction_ground_gu
+			).normalized()
+		)
+		facing = FACING_DIRECTIONS[ArtSpec.direction_index(direction_screen_px)]
 		movement_facing = facing
-		velocity = direction * move_speed
+		velocity = GroundUnitSpaceScript.desired_screen_velocity_px_per_sec(
+			direction_ground_gu,
+			move_speed_gu_per_sec
+		)
 	else:
-		velocity = velocity.move_toward(Vector2.ZERO, move_speed * 8.0 * delta)
+		velocity = Vector2.ZERO
 	move_and_slide()
-	if WorldSpatialRulesScript.environment_blocks_actor(environment_blocker, global_position, ArtSpec.PLAYER_COLLISION_RADIUS):
+	if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
+		environment_blocker,
+		global_position,
+		ArtSpec.PLAYER_COLLISION_RADIUS_PX
+	):
 		global_position = position_before_move
 		velocity = Vector2.ZERO
 	var actual_motion := global_position - position_before_move
+	actual_ground_motion_gu = (
+		GroundUnitSpaceScript.actual_ground_motion_gu_from_screen_positions(
+			position_before_move,
+			global_position
+		)
+	)
 	if actual_motion.length_squared() > 0.01:
 		# Walking art follows displacement that really happened on screen. This
 		# cannot be overwritten by targeting, stale input, or collision sliding.
@@ -346,7 +387,18 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 			stable_skill_id
 		)
 	)
-	if primary_visual_duration > 0.0:
+	var explicit_movement_lock_ms := int(canonical_timing.get(
+		"movement_lock_ms", -1
+	))
+	if explicit_movement_lock_ms >= 0:
+		# A long-lived/travelling effect is not automatically a channeled cast.
+		# Hellfire releases once after its six-frame body action; its remaining
+		# FireGun trail and 900ms recast gate do not hold the actor in place.
+		_movement_visual_lock_timer = maxf(
+			_movement_visual_lock_timer,
+			float(explicit_movement_lock_ms) / 1000.0
+		)
+	elif primary_visual_duration > 0.0:
 		var release_seconds := maxf(0.0, float(release_ms) / 1000.0)
 		var movement_contract_seconds := maxf(
 			action_duration,
@@ -437,8 +489,31 @@ func _resolve_direct_spell_magic_defense(
 
 
 func _apply_resolved_damage(amount: int, causes_struck: bool) -> void:
-	var reduced_amount := int(round(maxi(1, amount) * (1.0 - clampf(damage_reduction, 0.0, 0.8))))
-	var final_damage := maxi(1, reduced_amount)
+	var incoming_damage := maxi(1, amount)
+	var final_damage := incoming_damage
+	if (
+		shield_time > 0.0
+		and shield_capacity > 0.0
+		and damage_reduction > 0.0
+	):
+		var reduced_amount := maxi(
+			1,
+			int(round(
+				float(incoming_damage)
+				* (1.0 - clampf(damage_reduction, 0.0, 0.8))
+			))
+		)
+		var desired_absorption := maxi(0, incoming_damage - reduced_amount)
+		var absorbed_damage := mini(
+			desired_absorption,
+			maxi(0, int(floor(shield_capacity + 0.0001)))
+		)
+		shield_capacity = maxf(0.0, shield_capacity - float(absorbed_damage))
+		final_damage = maxi(1, incoming_damage - absorbed_damage)
+		if shield_capacity <= 0.0001:
+			shield_time = 0.0
+			damage_reduction = 0.0
+			shield_initial_duration = 0.0
 	if PlayerState.has_special_effect("magic_shield") and current_mp > 0:
 		var shield_mp_cost := int(round(final_damage * 1.5))
 		if current_mp >= shield_mp_cost:
@@ -509,9 +584,12 @@ func _emit_attack_after_windup(
 		)
 		_pending_attack_context = context.duplicate(true)
 		_pending_attack_context["release_geometry"] = release_geometry
+		var release_signal_payload := combat_release_signal_payload(
+			release_geometry
+		)
 		attack_requested.emit(
-			release_geometry.origin_world,
-			release_geometry.direction_world,
+			release_signal_payload.origin_screen_px,
+			release_signal_payload.direction_screen_px,
 			damage
 		)
 		_pending_attack_context.clear()
@@ -535,13 +613,31 @@ func _emit_skill_after_windup(
 			track_locked_target
 		)
 		_pending_skill_context = {"release_geometry": release_geometry}
+		var release_signal_payload := combat_release_signal_payload(
+			release_geometry
+		)
 		skill_requested.emit(
 			skill_name,
-			release_geometry.origin_world,
-			release_geometry.direction_world,
+			release_signal_payload.origin_screen_px,
+			release_signal_payload.direction_screen_px,
 			damage
 		)
 		_pending_skill_context.clear()
+
+
+static func combat_release_signal_payload(
+	release_geometry: Dictionary
+) -> Dictionary:
+	## The player signal boundary is screen-space only. Compatibility aliases in
+	## CombatReleaseGeometry never participate in the formal runtime path.
+	return {
+		"origin_screen_px": release_geometry.get(
+			"origin_screen_px", Vector2.ZERO
+		),
+		"direction_screen_px": release_geometry.get(
+			"direction_screen_px", Vector2.DOWN
+		),
+	}
 
 
 func _resolve_combat_release_geometry(
@@ -821,9 +917,50 @@ func spend_mana(amount: int) -> bool:
 
 
 func apply_magic_shield(seconds: float, reduction: float) -> void:
-	shield_time = maxf(shield_time, seconds)
+	var applied_duration := maxf(0.0, seconds)
+	shield_time = maxf(shield_time, applied_duration)
+	shield_initial_duration = maxf(shield_initial_duration, applied_duration)
 	damage_reduction = maxf(damage_reduction, clampf(reduction, 0.0, 0.8))
+	shield_capacity_max = maxf(1.0, float(max_mp))
+	shield_capacity = shield_capacity_max
 	queue_redraw()
+
+
+func magic_shield_snapshot() -> Dictionary:
+	var capacity_ratio := (
+		shield_capacity / shield_capacity_max
+		if shield_capacity_max > 0.0
+		else 0.0
+	)
+	return {
+		"contract_id": MAGIC_SHIELD_CAPACITY_CONTRACT_ID,
+		"active": shield_time > 0.0 and shield_capacity > 0.0,
+		"remaining_seconds": shield_time,
+		"initial_duration_seconds": shield_initial_duration,
+		"capacity": shield_capacity,
+		"capacity_max": shield_capacity_max,
+		"capacity_ratio": clampf(capacity_ratio, 0.0, 1.0),
+		"auto_refresh_capacity_ratio": MAGIC_SHIELD_AUTO_REFRESH_RATIO,
+	}
+
+
+func magic_shield_requires_refresh(
+	capacity_ratio_threshold := MAGIC_SHIELD_AUTO_REFRESH_RATIO,
+	expiry_lead_seconds := 0.6
+) -> bool:
+	if shield_time <= 0.0 or shield_capacity <= 0.0:
+		return true
+	var capacity_ratio := (
+		shield_capacity / shield_capacity_max
+		if shield_capacity_max > 0.0
+		else 0.0
+	)
+	var duration_relative_lead := maxf(0.1, shield_initial_duration * 0.2)
+	var refresh_lead := minf(maxf(0.0, expiry_lead_seconds), duration_relative_lead)
+	return (
+		capacity_ratio <= clampf(capacity_ratio_threshold, 0.0, 1.0) + 0.0001
+		or shield_time <= refresh_lead + 0.0001
+	)
 
 
 func apply_stealth(seconds: float) -> void:
@@ -865,9 +1002,6 @@ func _draw() -> void:
 		var profession_color: Color = {"战士": Color(0.24, 0.34, 0.48), "法师": Color(0.20, 0.28, 0.56), "道士": Color(0.36, 0.42, 0.24)}.get(PlayerState.profession, Color(0.24, 0.34, 0.48))
 		draw_colored_polygon(PackedVector2Array([Vector2(-17, -5), Vector2(17, -5), Vector2(13, 23), Vector2(-13, 23)]), profession_color)
 		draw_line(Vector2(0, 7), facing * 27.0 + Vector2(0, 7), Color(0.92, 0.86, 0.65), 5.0)
-	if shield_time > 0.0:
-		draw_circle(Vector2(0, -4), 30.0, Color(0.25, 0.62, 1.0, 0.22))
-		draw_circle(Vector2(0, -4), 30.0, Color(0.48, 0.82, 1.0, 0.85), false, 3.0)
 	if stealth_time > 0.0:
 		draw_circle(Vector2(0, -4), 34.0, Color(0.55, 0.9, 0.7, 0.16), false, 3.0)
 	if control_time > 0.0:

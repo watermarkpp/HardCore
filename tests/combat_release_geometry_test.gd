@@ -1,6 +1,7 @@
 extends Node
 
 const ReleaseGeometry := preload("res://scripts/skills/combat_release_geometry.gd")
+const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
 
 
 func _ready() -> void:
@@ -14,9 +15,10 @@ func _run() -> void:
 	await _verify_all_warrior_modes_use_live_locked_geometry()
 	await _verify_vanished_lock_never_allows_retarget()
 	await _verify_wild_rush_preserves_original_selected_target()
-	await _verify_caster_single_target_and_spatial_cast_policies()
+	await _verify_target_centered_spatial_cast_policies()
+	await _verify_continuous_line_releases_use_live_target_axis()
 	_verify_locked_melee_facing_contract()
-	print("COMBAT_RELEASE_GEOMETRY_PASS: live footpoints, locked melee facing, caster tracking unchanged")
+	print("COMBAT_RELEASE_GEOMETRY_PASS: live footpoints, locked melee facing, target-centred casts retain only live targets")
 	get_tree().quit(0)
 
 
@@ -120,15 +122,20 @@ func _verify_wild_rush_preserves_original_selected_target() -> void:
 		"warrior.wild_rush",
 		"direction"
 	))
-	assert(not ReleaseGeometry.tracks_locked_target_for_skill(
+	assert(ReleaseGeometry.tracks_locked_target_for_skill(
 		"wizard.fire_wall",
 		"target_area"
 	))
+	for line_skill_id: String in ["wizard.hellfire", "wizard.laser"]:
+		assert(ReleaseGeometry.tracks_locked_target_for_skill(
+			line_skill_id,
+			"direction"
+		), "%s lost the release-frame target axis" % line_skill_id)
 	var rush := await _cast_and_capture("warrior.wild_rush", true)
 	assert(rush.geometry.policy == ReleaseGeometry.POLICY_LOCKED_SINGLE_TARGET)
 	assert(int(rush.geometry.locked_target_instance_id) > 0)
 	assert(not rush.geometry.allow_target_retarget)
-	assert(rush.direction.is_equal_approx(Vector2(rush.geometry.direction_world)))
+	assert(rush.direction.is_equal_approx(Vector2(rush.geometry.direction_screen_px)))
 
 
 func _verify_caster_single_target_and_spatial_cast_policies() -> void:
@@ -154,6 +161,70 @@ func _verify_caster_single_target_and_spatial_cast_policies() -> void:
 	assert(area.geometry.locked_target_instance_id == 0)
 
 
+func _verify_target_centered_spatial_cast_policies() -> void:
+	for stable_skill_id: String in [
+		"wizard.fire_wall",
+		"wizard.exploding_flame",
+		"wizard.ice_storm",
+	]:
+		assert(ReleaseGeometry.tracks_locked_target_for_skill(
+			stable_skill_id,
+			"target_area"
+		))
+		assert(
+			ReleaseGeometry.target_centered_spatial_policy_id(stable_skill_id)
+			== ReleaseGeometry.TARGET_CENTERED_SPATIAL_RELEASE_POLICY_ID
+		)
+
+	# A valid target identity survives the windup, while its position is sampled
+	# live at release. The old input direction must not become a ground fallback.
+	var live := ReleaseGeometry.resolve(
+		Vector2(120.0, 130.0),
+		Vector2.RIGHT,
+		77,
+		Vector2(70.0, 210.0),
+		true,
+		true
+	)
+	assert(live.policy == ReleaseGeometry.POLICY_LOCKED_SINGLE_TARGET)
+	assert(live.locked_target_instance_id == 77)
+	assert(live.locked_target_valid_at_release)
+	assert(live.refresh_locked_target_footpoint_at_release)
+	assert(live.direction_screen_px.is_equal_approx(Vector2(-50.0, 80.0).normalized()))
+	assert(not live.allow_target_retarget and not live.allow_directional_scan)
+
+	# Death/despawn/range invalidation keeps the original identity but formally
+	# rejects it; the release may not retarget or fall back to a direction tile.
+	var vanished := ReleaseGeometry.resolve(
+		Vector2(120.0, 130.0),
+		Vector2.RIGHT,
+		77,
+		Vector2.ZERO,
+		false,
+		true
+	)
+	assert(vanished.locked_target_instance_id == 77)
+	assert(not vanished.locked_target_valid_at_release)
+	assert(not vanished.allow_target_retarget and not vanished.allow_directional_scan)
+
+
+func _verify_continuous_line_releases_use_live_target_axis() -> void:
+	PlayerState.reset_progress()
+	PlayerState.select_profession("法师")
+	PlayerState.level = 50
+	PlayerState.learned_skills = {"wizard.hellfire": 3, "wizard.laser": 3}
+	PlayerState.recalculate_stats()
+	for stable_skill_id: String in ["wizard.hellfire", "wizard.laser"]:
+		var cast := await _cast_and_capture(stable_skill_id, true)
+		assert(cast.origin == Vector2(120.0, 130.0))
+		assert(cast.direction.is_equal_approx(
+			Vector2(-50.0, 80.0).normalized()
+		), "%s used an input-time/8-way axis instead of the live target" % stable_skill_id)
+		assert(cast.geometry.policy == ReleaseGeometry.POLICY_LOCKED_SINGLE_TARGET)
+		assert(cast.geometry.refresh_locked_target_footpoint_at_release)
+		assert(not cast.geometry.allow_target_retarget)
+
+
 func _verify_locked_melee_facing_contract() -> void:
 	var geometry := ReleaseGeometry.resolve(
 		Vector2(120.0, 130.0),
@@ -164,17 +235,24 @@ func _verify_locked_melee_facing_contract() -> void:
 		true,
 		ReleaseGeometry.FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION
 	)
-	assert(geometry.origin_world == Vector2(120.0, 130.0))
-	assert(geometry.direction_world.is_equal_approx(Vector2.RIGHT))
+	assert(geometry.origin_screen_px == Vector2(120.0, 130.0))
+	assert(not geometry.has("origin_world"))
+	assert(geometry.origin_ground_gu.is_equal_approx(
+		GroundUnitSpace.screen_delta_px_to_ground_delta_gu(
+			Vector2(120.0, 130.0)
+		)
+	))
+	assert(geometry.direction_screen_px.is_equal_approx(Vector2.RIGHT))
+	assert(not geometry.has("direction_world"))
 	assert(geometry.locked_target_valid_at_release)
 	assert(geometry.direction_locked_for_action)
 	assert(
 		geometry.direction_space_contract_id
-		== "gameplay.professions.combat_direction_space.iso_64x32_tile_8dir.v1"
+		== "gameplay.professions.combat_direction_space.ground_gu_8dir.v3"
 	)
 	assert(geometry.direction_index == 6)
 	assert(geometry.visual_direction_index == 6)
-	assert(geometry.direction_canonical_tile_step == Vector2i(1, -1))
+	assert(geometry.direction_canonical_grid_step == Vector2i(1, -1))
 	assert(geometry.refresh_actor_footpoint_at_release)
 	assert(geometry.refresh_locked_target_footpoint_at_release)
 	assert(geometry.release_facing_policy_id == ReleaseGeometry.MELEE_RELEASE_FACING_POLICY_ID)

@@ -49,7 +49,7 @@ func _run() -> void:
 		MapEditorCoordinate.tile_to_ground_px(foot_tile, design_size)
 		- ground_center
 	)
-	var runtime_foot_world := MapEditorCoordinate.tile_to_world(
+	var runtime_foot_world := MapEditorCoordinate.ground_position_gu_to_screen_position_px(
 		foot_tile, design_size
 	)
 	assert(editor_foot_world.is_equal_approx(runtime_foot_world),

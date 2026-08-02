@@ -1,11 +1,15 @@
 class_name SkillDataLoader
 extends RefCounted
 
+const CombatUnitLegacyAdapter := preload(
+	"res://scripts/skills/combat_unit_legacy_adapter.gd"
+)
+
 const SOURCE_OF_TRUTH_PATH := "res://assets/data/vanilla_176/skills_source_of_truth_v1.json"
 const PACKAGE_ROOT := "res://assets/data/vanilla_176/skill_source_package_v1_0_1"
 const PACKAGE_MANIFEST_PATH := PACKAGE_ROOT + "/manifest.json"
 const PACKAGE_TEST_MANIFEST_PATH := PACKAGE_ROOT + "/mir2_176_skill_test_manifest_v1.json"
-const SOURCE_OF_TRUTH_SHA256 := "1fdf28d3c575d18d2e7e0f875b008eb4f6f719752e4974cbca399c66c62c7c2c"
+const SOURCE_OF_TRUTH_SHA256 := "883359e2cf191a196f749653067f2030130fc11fd59a033a89ee557cab7607e2"
 const PACKAGE_ZIP_SHA256 := "2dac78d285dff8d5f1ba36a8b83e0e8f11c70b76ace15a34ee7fbfb802862a22"
 const RULESET_ID := "cn_mir2_176_vanilla_project_canonical_v1"
 const CLASS_COUNTS := {"warrior": 6, "wizard": 14, "taoist": 13}
@@ -63,7 +67,30 @@ static func skill_ids() -> PackedStringArray:
 static func skill(skill_name_or_id: String) -> Dictionary:
 	document()
 	var stable_id := stable_skill_id(skill_name_or_id)
-	return _skills_by_id.get(stable_id, {}).duplicate(true)
+	var raw_definition: Dictionary = _skills_by_id.get(stable_id, {})
+	if raw_definition.is_empty():
+		return {}
+	var adapted := (
+		CombatUnitLegacyAdapter.adapt_primary_skill_definition_once_to_gu(
+			raw_definition
+		)
+	)
+	if not bool(adapted.get("valid", false)):
+		push_error(
+			"Primary skill spatial GU adapter failed: %s"
+			% "; ".join(adapted.get("errors", []))
+		)
+		return {}
+	var definition_gu: Dictionary = adapted.definition_gu
+	definition_gu["combat_unit_adapter"] = {
+		"contract_id": adapted.contract_id,
+		"unit_contract_id": adapted.unit_contract_id,
+		"source_contract_id": adapted.source_contract_id,
+		"adapter_semantics": adapted.adapter_semantics,
+		"topology_semantics": adapted.topology_semantics,
+		"consumed_legacy_fields": adapted.consumed_legacy_fields.duplicate(),
+	}
+	return definition_gu
 
 
 static func stable_skill_id(skill_name_or_id: String) -> String:

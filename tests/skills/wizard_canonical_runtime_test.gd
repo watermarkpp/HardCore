@@ -16,10 +16,11 @@ func _ready() -> void:
 
 	var repulsion := _execute("wizard.repulsion_ring", {
 		"force_success": true,
-		"targets": [{"level": 30}],
+		"targets": [{"level": 30, "instance_id": 417}],
 	})
 	assert(repulsion.effects.size() == 1 and repulsion.effects[0].displaced)
 	assert(repulsion.effects[0].damage == 0)
+	assert(repulsion.effects[0].target_instance_id == 417)
 	assert(repulsion.proficiency_event == "at_least_one_target_displaced")
 	var boss_repulsion := _execute("wizard.repulsion_ring", {
 		"targets": [{"level": 1, "is_boss": true, "force_success": true}],
@@ -49,8 +50,24 @@ func _ready() -> void:
 	var hellfire := _execute("wizard.hellfire", {
 		"has_target": true, "primary_stat_roll": 10,
 	})
-	assert(hellfire.effects[0].length_tiles == 5)
+	assert(is_equal_approx(float(hellfire.effects[0].effect_length_gu), 5.0))
+	assert(is_equal_approx(float(hellfire.effects[0].effect_width_gu), 1.0))
 	assert(not hellfire.effects[0].pierces_units and hellfire.geometry_cells.size() == 5)
+	assert(hellfire.effects[0].maximum_targets == 0)
+	assert(hellfire.effects[0].target_limit_policy == "all_intersecting_effect_cells")
+	assert(
+		hellfire.effects[0].target_selection_contract
+		== "skills.wizard.hellfire.all_intersecting_5x1.v1"
+	)
+	assert(
+		hellfire.effects[0].line_geometry_contract
+		== "skills.wizard.line.continuous_tile_axis_footprint_sat.v1"
+	)
+	assert(not hellfire.effects[0].channeled)
+	assert(
+		hellfire.effects[0].cast_input_contract
+		== "skills.wizard.hellfire.discrete_cast_hold_repeats_after_recast_gate.v1"
+	)
 	assert(hellfire.proficiency_event == "valid_cast_releases_line")
 
 	var lightning := _execute("wizard.lightning", {
@@ -87,7 +104,7 @@ func _ready() -> void:
 	var exploding := _execute("wizard.exploding_flame", {
 		"has_target": true, "target_tile": Vector2i(10, 10), "primary_stat_roll": 9,
 	})
-	assert(exploding.effects[0].width_tiles == 3)
+	assert(exploding.effects[0].width_grid_steps == 3)
 	assert(exploding.geometry_cells.size() == 9)
 	assert(exploding.proficiency_event == "valid_area_cast_created")
 
@@ -102,7 +119,14 @@ func _ready() -> void:
 	var laser := _execute("wizard.laser", {
 		"has_target": true, "primary_stat_roll": 11,
 	})
-	assert(laser.effects[0].pierces_units and laser.effects[0].length_tiles == 8)
+	assert(
+		laser.effects[0].pierces_units
+		and is_equal_approx(float(laser.effects[0].effect_length_gu), 8.0)
+	)
+	assert(
+		laser.effects[0].line_geometry_contract
+		== "skills.wizard.line.continuous_tile_axis_footprint_sat.v1"
+	)
 	assert(laser.geometry_cells.size() == 8)
 	assert(laser.proficiency_event == "valid_line_cast_released")
 

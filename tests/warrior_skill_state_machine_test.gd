@@ -1,5 +1,7 @@
 extends Node
 
+const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+
 
 func _ready() -> void:
 	_run.call_deferred()
@@ -130,9 +132,37 @@ func _run() -> void:
 	for existing: Node in get_tree().get_nodes_in_group("enemies"):
 		if existing is EnemyActor:
 			existing.global_position = Vector2(3000, 3000) + Vector2(existing.get_instance_id() % 200, 0)
-	var primary := _make_enemy(game, player, "主目标", Vector2(80, 0), 1)
-	var second := _make_enemy(game, player, "第二格目标", Vector2(155, 5), 1)
-	var unrelated := _make_enemy(game, player, "侧后目标", Vector2(-70, 0), 1)
+	var attack_direction_gu := (
+		GroundUnitSpace.screen_delta_px_to_ground_delta_gu(Vector2.RIGHT)
+		.normalized()
+	)
+	var primary := _make_enemy(
+		game,
+		player,
+		"主目标",
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			attack_direction_gu * 1.25
+		),
+		1
+	)
+	var second := _make_enemy(
+		game,
+		player,
+		"第二格目标",
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			attack_direction_gu * 2.25
+		),
+		1
+	)
+	var unrelated := _make_enemy(
+		game,
+		player,
+		"侧后目标",
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			-attack_direction_gu * 1.0
+		),
+		1
+	)
 	game.locked_target = primary
 	var second_hp := second.current_hp
 	var unrelated_hp := unrelated.current_hp
@@ -144,9 +174,29 @@ func _run() -> void:
 	primary.current_hp = primary.max_hp
 	# Facing screen-E maps to canonical tile step (1,-1). The three classic
 	# secondary sectors are NE, SE and S, each exactly one logical tile away.
-	var half_a := _make_enemy(game, player, "半月左前", Vector2(32, -16), 1)
-	var half_b := _make_enemy(game, player, "半月右前", Vector2(32, 16), 1)
-	var half_c := _make_enemy(game, player, "半月右侧", Vector2(0, 32), 1)
+	var half_a := _make_enemy(
+		game,
+		player,
+		"半月左前",
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(Vector2(0.0, -1.0)),
+		1
+	)
+	var half_b := _make_enemy(
+		game,
+		player,
+		"半月右前",
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(Vector2(1.0, 0.0)),
+		1
+	)
+	var half_c := _make_enemy(
+		game,
+		player,
+		"半月右侧",
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			Vector2(1.0, 1.0).normalized()
+		),
+		1
+	)
 	player.half_moon_enabled = true
 	player._pending_attack_context = {"mode": "half_moon", "skill_level": 3}
 	game._on_player_attack(Vector2.ZERO, Vector2.RIGHT, 130)
@@ -156,14 +206,15 @@ func _run() -> void:
 	for enemy: EnemyActor in [primary, second, unrelated, half_a, half_b, half_c]:
 		enemy.global_position = Vector2(3000, 3000) + Vector2(enemy.get_instance_id() % 200, 0)
 	var rush_step := Vector2i(1, -1)
+	var rush_direction_ground_gu := Vector2(rush_step).normalized()
 	player.global_position = _find_open_rush_origin(game, rush_step)
-	var player_rush_tile: Vector2 = game._canonical_world_to_fractional_tile(player.global_position)
+	var player_rush_tile: Vector2 = game._canonical_screen_px_to_ground_gu(player.global_position)
 	var player_rush_origin := player.global_position
 	var rush_target := _make_enemy(
 		game,
 		player,
 		"低级冲撞目标",
-		game._canonical_fractional_tile_to_world(player_rush_tile + Vector2(rush_step)),
+		game._canonical_ground_gu_to_screen_px(player_rush_tile + Vector2(rush_step)),
 		1
 	)
 	var rush_origin := rush_target.global_position
@@ -171,14 +222,15 @@ func _run() -> void:
 	game.locked_target = rush_target
 	assert(game._execute_wild_rush(Vector2.LEFT, 0), "野蛮在开阔地没有移动")
 	assert(
-		game._canonical_world_to_fractional_tile(player.global_position).is_equal_approx(
-			player_rush_tile + Vector2(rush_step) * 3.0
+		game._canonical_screen_px_to_ground_gu(player.global_position).is_equal_approx(
+			player_rush_tile + rush_direction_ground_gu * 3.0
 		),
 		"人物没有沿人物脚点到怪物脚点的八方向连线固定推进三格"
 	)
 	assert(
-		game._canonical_world_to_fractional_tile(rush_target.global_position).is_equal_approx(
-			game._canonical_world_to_fractional_tile(rush_origin) + Vector2(rush_step) * 3.0
+		game._canonical_screen_px_to_ground_gu(rush_target.global_position).is_equal_approx(
+			game._canonical_screen_px_to_ground_gu(rush_origin)
+			+ rush_direction_ground_gu * 3.0
 		),
 		"低级普通怪物没有固定推进三格"
 	)
@@ -192,8 +244,9 @@ func _run() -> void:
 		game,
 		player,
 		"冲撞路径阻挡怪物",
-		game._canonical_fractional_tile_to_world(
-			game._canonical_world_to_fractional_tile(rush_origin) + Vector2(rush_step) * 2.0
+		game._canonical_ground_gu_to_screen_px(
+			game._canonical_screen_px_to_ground_gu(rush_origin)
+			+ rush_direction_ground_gu * 2.0
 		),
 		1
 	)
@@ -208,14 +261,14 @@ func _run() -> void:
 	blocker.global_position = Vector2(3000, 3000)
 	# A live lock remains authoritative: an out-of-reach locked monster must not
 	# redirect Wild Rush onto another eligible adjacent monster.
-	rush_target.global_position = game._canonical_fractional_tile_to_world(
+	rush_target.global_position = game._canonical_ground_gu_to_screen_px(
 		player_rush_tile + Vector2(rush_step) * 2.0
 	)
 	var adjacent_fallback := _make_enemy(
 		game,
 		player,
 		"冲撞不可偷换的邻近目标",
-		game._canonical_fractional_tile_to_world(player_rush_tile - Vector2(rush_step)),
+		game._canonical_ground_gu_to_screen_px(player_rush_tile - Vector2(rush_step)),
 		1
 	)
 	game.locked_target = rush_target
@@ -226,7 +279,7 @@ func _run() -> void:
 		game,
 		player,
 		"同级免疫目标",
-		game._canonical_fractional_tile_to_world(player_rush_tile + Vector2(rush_step)),
+		game._canonical_ground_gu_to_screen_px(player_rush_tile + Vector2(rush_step)),
 		PlayerState.level
 	)
 	game.locked_target = equal_level_target
@@ -236,7 +289,7 @@ func _run() -> void:
 		game,
 		player,
 		"Boss免疫目标",
-		game._canonical_fractional_tile_to_world(player_rush_tile + Vector2(rush_step)),
+		game._canonical_ground_gu_to_screen_px(player_rush_tile + Vector2(rush_step)),
 		1,
 		true
 	)
@@ -271,19 +324,19 @@ func _make_enemy(
 
 
 func _find_open_rush_origin(game: Node, direction_step: Vector2i) -> Vector2:
-	var center_tile: Vector2 = game._canonical_world_to_fractional_tile(game.player.global_position)
+	var center_tile: Vector2 = game._canonical_screen_px_to_ground_gu(game.player.global_position)
 	for y in range(-24, 25):
 		for x in range(-24, 25):
 			var origin_tile := center_tile + Vector2(x, y)
 			var clear := true
 			for distance in range(5):
-				var sample: Vector2 = game._canonical_fractional_tile_to_world(
+				var sample: Vector2 = game._canonical_ground_gu_to_screen_px(
 					origin_tile + Vector2(direction_step) * float(distance)
 				)
 				if game.background.is_environment_point_blocked(sample):
 					clear = false
 					break
 			if clear:
-				return game._canonical_fractional_tile_to_world(origin_tile)
+				return game._canonical_ground_gu_to_screen_px(origin_tile)
 	assert(false, "测试地图中找不到野蛮冲撞开阔夹具")
 	return Vector2.ZERO

@@ -1,5 +1,59 @@
 # Codex 精简上下文快照
 
+## 2026-08-02 Android v62：疾光电影逐方向逐帧恒定粗细
+
+- v61 仍把逻辑一格宽的等距投影直接用于视觉横向宽度。16 向目标宽度为 `29.564/32/45.255/59.128/64px`，再叠加六帧各自非透明像素包围差异后，96 帧运行时可见横向范围为 `26.64..61.05px`，最大相差 `2.292x`；这是“整体变细但仍有粗有细”的根因。
+- 职业技能提交 `31bd4c13c8cb48cd9c2978095d3885edde2b173f` 已作为集成提交 `724068b3` 接入。视觉宽度改用一格等距单元的面积等效屏幕宽 `sqrt(64*32)=45.2548px`，与方向无关；每一帧从正式 PNG 的 alpha 像素包围独立计算横向比例，只修横向，纵向序列变换仍严格对应 8 格。稳定合同升级为 `skills.caster.line_visual.frame_alpha_cross_affine.v3`，visual cross contract 为 `sqrt_iso_cell_screen_area_direction_invariant`。
+- 独立测试直接读取 16方向 x 6帧共 96 张正式 PNG 的 alpha，验证生成指标与像素事实一致，并证明运行时 96 帧均为 `45.2548px`；伤害仍为连续 `8x1` 几何，正式 PNG、素材索引、命中、耗蓝、锁定和施法时序未变。定向/技能回归 `21/21`、完整 Warrior/资源目录回归 `25/25`，法师素材审计 `26` 项、`586` 帧、`0 fallback`。
+- 地狱火按用户确认“动画正常”冻结，代码、素材和时序均未修改。正式机制仍是人物 6 帧/`600ms` 施法动作后可以移动，剩余世界火焰轨迹可继续播放；地狱火与雷电术都必须等总计 `1500ms` 才可再次施法，其中地狱火是单击一次、按住过门槛后重复下一次离散施法，不是引导技能。
+- Android 固定构建提交为 `39d1a5bc4d29664f062eb352886ddac81da57df1`；APK 为 `outputs/hardcore/HardCore-v62-laser-frame-thickness-debug.apk`，大小 `244,427,253` 字节，SHA-256 `37B9E67CBD850A578E1251ACBFE56C76D99A1E4DC2D5AA65FAA49478CE3F1635`。包信息为 `versionCode=62`、`versionName=1.17.26-laser-frame-thickness`，APK v2/v3 签名通过。
+- 已在 HONOR 90（REA-AN00）使用 `adb install -r` 保留存档覆盖安装并冷启动；版本、前台 `GodotAppLauncher` 和进程回读正常，日志未发现 Godot 脚本错误、解析错误、ANR 或 Android 崩溃。
+- 用户冻结对象零变化：`item_236.json` / `item_240.json` SHA-256 仍为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC` / `81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`；三份怪物脚点合同仍为 `DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+
+## 2026-08-02 Android v61：地狱火/疾光电影视觉尺寸稳定修复
+
+- 根因已量化：旧实现把整张方向帧按“目标轴向长度 / 当前源帧前向包围长度”统一缩放。地狱火实际是沿轨迹重复发射的单个火焰块，却被当成整条 5 格直线缩放，16 方向比例约为 `0.243..1.524`（最大相差 `6.27x`）；疾光电影不同方向源序列的整图比例约为 `0.489..0.990`（最大相差 `2.02x`）。近距离目标的瞄准角变化更大，容易跨越缩放档位；重复疾光电影还会与旧视觉短暂叠加，因此形成“贴脸变大、方向大小不同、越放越大”的实机观感。
+- 职业技能提交 `064f2482bbaa26f1f268b0d5763e8b6caf97ad05` 已作为集成提交 `3199e26b` 接入。地狱火的每个 FireGun 火焰块固定使用原始像素变换，5 格长度只由正式轨迹发射位置控制，新增合同 `skills.wizard.hellfire.firegun_trail.fixed_source_pixels.v1`。疾光电影按所选 16 向源序列的本地纵轴/横轴分别拟合到 8 格长度与 1 格投影宽度，6 帧共享同一个固定变换且每次配置先清零，新增合同 `skills.caster.line_visual.axis_cross_affine.v2`。同一施法者的新疾光电影会替换尚未结束的旧视觉，新增合同 `skills.wizard.laser.single_active_visual_per_caster.v1`。
+- 伤害、耗蓝、锁定、施法时序、5x1/8x1 连续命中几何和正式 PNG 均未改变。定向稳定/动画/输入/技能回归 `21/21`，完整 Warrior/资源目录回归 `25/25`；正式法师素材审计 `26` 项、`586` 帧、`0 fallback`。
+- Android 固定构建提交为 `af15fff9fa9aff123b3c87a5c37afbadd6db6396`；APK 为 `outputs/hardcore/HardCore-v61-wizard-line-visual-stability-debug.apk`，大小 `244,423,157` 字节，SHA-256 `BDD3F11CF565497BE249BC2C768E3FE536784E74AC92B3DA9374F21D3776552F`。包信息为 `versionCode=61`、`versionName=1.17.25-wizard-line-visual-stability`、`HardCore`、`arm64-v8a`、`minSdk=24`、`targetSdk=36`，APK v2/v3 签名通过。
+- 已在 HONOR 90（REA-AN00）使用 `adb install -r` 保留存档覆盖安装并冷启动；手机回读版本、前台 `GodotAppLauncher` 和进程正常，日志未发现 Godot 脚本错误、解析错误、ANR 或 Android 崩溃。
+- 用户冻结对象零变化：`item_236.json` / `item_240.json` SHA-256 仍为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC` / `81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`；三份怪物脚点合同仍为 `DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+
+## 2026-08-02 Android v60：地狱火/疾光电影连续直线实机测试包
+
+- Android 固定构建提交为 `91fec0c7e0517987f4233850b7ac2d59eca61e74`；APK 为 `outputs/hardcore/HardCore-v60-wizard-line-geometry-debug.apk`，大小 `244,419,061` 字节，SHA-256 `BBEED12ADD412A1587BCC788CC30DBB462D724B6E1F201A72E5484E9C5831CA0`。
+- 包信息为 `versionCode=60`、`versionName=1.17.24-wizard-line-geometry`、包名 `com.personal.mafaoffline`、应用名 `HardCore`、`arm64-v8a`、`minSdk=24`、`targetSdk=36`；APK v2/v3 签名与固定运行时资源探针通过。
+- 已对连接的 HONOR 90（REA-AN00）执行保留存档的 `adb install -r` 覆盖安装并冷启动；手机回读版本、进程与前台 `GodotAppLauncher` 正常，进程专属日志未发现 Godot 脚本、解析、Android 崩溃或信号错误。
+- 构建安装后，236/240 人工头盔与三份怪物脚点合同 SHA-256 仍分别为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`、`81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`、`DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+
+## 2026-08-02：地狱火/疾光电影连续直线几何定稿（未构建 APK）
+
+- 用户最终确认地狱火为宽 `1` 格、长 `5` 格，疾光电影为宽 `1` 格、长 `8` 格；伤害、耗蓝、锁定、素材与 `600ms` 施法 / 第 `5` 帧释放 / `900ms` 恢复均未改变。
+- 职业技能提交 `58c03672` 已由合并提交 `5affc023` 接入；视觉缩放改为按“施法者锚点到前向端点”的投影长度统一拟合，16 个连续方向的直向与斜向端点分别严格落在 `5` / `8` 格，保留原始纵横比与 nearest 采样。稳定合同新增 `skills.caster.line_visual.forward_endpoint_uniform.v1` 与 `skills.wizard.hellfire.all_intersecting_5x1.v1`。
+- 集成提交 `546c3a70` 让地狱火和疾光电影的视觉、伤害与地形截断共用同一条浮点地图格连续条带；命中以怪物现有脚底占位多边形和条带 SAT 相交为准，不再只判断脚点中心，也不再保留疾光电影的隐藏 8 目标上限。视觉碰到的所有合法怪物都会进入伤害判定。
+- 验证：法师/技能定向专项 `21/21`、完整 Warrior 回归 `25/25`；正式法师素材审计 `26` 项资产、`586` 帧、`0 fallback`。16 方向端点、自由角度、近端/远端/边缘接触、9 个同线目标与地形截断均通过。
+- 冻结数据未变：`item_236.json=21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`，`item_240.json=81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`；三份怪物脚点合同仍为 `DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+
+## 2026-08-01 Android v58：法师范围几何、魔法盾常驻与火墙审计
+
+- Android 固定构建提交为 `1a18f14bbbd88281af950fb01e250d3079dbe055`；APK 为 `outputs/hardcore/HardCore-v58-wizard-geometry-alignment-debug.apk`，大小 `244,410,869` 字节，SHA-256 `87272359792837C6BE33CC2E352BCC30803F905246879B9EFE7C328DDE6B364C`。包信息为 `versionCode=58`、`versionName=1.17.22-wizard-geometry-alignment`、`HardCore`、`arm64-v8a`，v2/v3 签名、运行时资源探针与 586 个法师技能帧导入均通过。
+- 已在 HONOR 90（REA-AN00）使用 `adb install -r` 保留存档覆盖安装并启动；手机回读版本、进程与前台 `GodotAppLauncher` 正常，启动日志无 Godot 脚本错误、解析错误或 Android 崩溃。236/240 人工头盔与三份怪物脚点合同 SHA-256 在构建安装后仍为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`、`81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`、`DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+
+## 2026-08-01：魔法盾常驻正式视觉与法师技能全链审计（未构建 APK）
+
+- 职业技能提交 `92ae4e28` 已作为集成提交 `298bd6a2` 接入稳定合同 `skills.wizard.magic_shield.cast_then_hold_final_frame.v1`：魔法盾使用主资料库 `Data/Magic.wil` indices `3880..3889` 的十帧成形动画，播放一次后保留完整第十帧；只要 `magic_shield_snapshot.active` 同时满足剩余持续时间和剩余容量，正式盾形持续跟随人物，任一归零后立即移除。旧 `player._draw()` 蓝色占位圆已删除；重复补盾替换同一人物的旧视觉，不叠加多层。
+- 审计发现并修正抗拒火环真实目标映射：正式范围仍是人物周围相邻一圈八格，怪物使用现有 2:1 脚底占位与技能格接触判定；每个运行时结果携带稳定怪物实例 ID，实际推送各自对应怪物，不再把全部效果错误施加给一个锁定目标或在无锁定时失效。该接线由集成提交 `3e99079f` 完成。
+- 职业技能提交 `0929efa3` 已作为集成提交 `1bfe0872` 接入，集成提交 `3e99079f` 完成火墙正式 2×2 伤害接线：四个格子均以怪物占位接触判定，不再用第一格圆心半径 `74px` 的圆形近似；同一施法者/同一怪物每个结算周期仍最多一次伤害。正式原始威力、MAC、持续时间与 `tick_interval_ms=1000` 均未改变。
+- 法师十四技能审计以唯一主源 `assets/data/vanilla_176/skills_source_of_truth_v1.json` 为准：单体技能自身最大范围 9 格，法术锁定保持独立 12 格；地狱火 5×1 不穿透直线、疾光电影 8×1 穿透直线、地狱雷光半径二格外环最多 24 目标、爆裂火焰/冰咆哮精确 3×3、火墙精确 2×2，均按怪物占位接触判定。两轮定向回归 `16/16` 全部通过，覆盖真源/公式、目标与锁定、几何、直接法伤、火墙不叠加、施法动作锁、正式动画和生产入口。
+- 本轮未构建 APK。236/240 人工头盔与三份怪物脚点合同 SHA-256 仍为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`、`81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`、`DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+
+## 2026-08-01：法术锁定、火墙不叠加与雷电术细化（未构建 APK）
+
+- 职业技能提交 `6df25c26` 已作为集成提交 `a61cc99c` 接入，UI 提交 `8b6c2be1` 已作为集成提交 `b30e256e` 接入：法术锁定与物理攻击锁定分离；法师/道士使用 12 个逻辑地图格的独立锁定，换敌键可在不施法时循环选择，目标死亡或离开 12 格才解除；每个法术仍使用自身正式范围。范围技能使用怪物 2:1 脚底占位与技能格 SAT 相交判定。攻击法术支持点击一次、按住连续释放并遵守动作/冷却门；魔法盾为开关，容量不高于 20% 或接近结束时通过原 MP、冷却和动作管线自动补盾。
+- 火墙现在必须有 12 格内有效法术锁定，2×2 中心严格使用锁定怪物脚点；无锁定时拒绝释放，不再退化到朝向地面点。正式 `tick_interval_ms=1000`、技能等级/MC 原始威力、MAC 和持续时间公式均未改。职业技能提交 `0f1336cd` 已作为集成提交 `a852967f` 接入：不同火墙仍独立存在，不识别、合并或刷新区域；同一施法者的多个火墙无论完全、二分之一或四分之一覆盖同一怪物，每个 1 秒结算周期最多造成一次该施法者的火墙伤害。真实运行回归验证首个周期只记一次、0.25 秒内无额外 tick、约 1 秒后下一次合法 tick 正常，两个火墙各自原始伤害值未被改写。
+- 雷电术确认继续使用主资料库 `Data/Magic2.wil` indices `10..15` 六帧和原锚点；职业技能提交 `53cd5657` 已作为集成提交 `ee9887e8` 接入稳定呈现合同 `skills.wizard.lightning.slender_axis.v1`：仅运行时 X 轴缩放为 `0.62`、Y 轴保持 `1.0`，原 PNG、纵向高度、帧数、时序、伤害、范围和锁定均未改。审图位于 `HardCore-worktrees/professions-skills/outputs/visual_acceptance/lightning_slender/wizard_lightning_slender_6_frames.png`。
+- 验证结果：法术/火墙/雷电定向 `5/5`，完整 Warrior 套件 `25/25`；关键回归连续通过前 72 项后，测试入口遇到一个已退出进程的空 `Path`，修复进程清理竞态后剩余 Monster 套件 `16/16` 通过，游戏测试零失败。236/240 人工头盔与三份怪物脚点合同 SHA-256 仍为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`、`81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`、`DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+
 ## 2026-08-01 Android v57：攻击触摸票据与可靠释放
 
 - UI 永久工作树提交 `aefec7aa` 已作为集成提交 `4d82edc8` 接入，新增稳定合同 `ui.input.circular_touch.lifecycle.v1`：每次真实 touch/mouse/ui_accept 按下生成唯一 token；同一 touch_id 的重复 DOWN 不再重复发起；按钮外松手由全局 release-only 兜底结束；触摸取消、隐藏、退树、应用/窗口失焦均可靠取消；Android 触摸产生的模拟鼠标事件不再双发。HUD 保留旧信号兼容，但 GameRoot 只接 token 信号，HUD 布局、尺寸、图片、文字和视觉常量未改。
@@ -402,7 +456,7 @@
 | `HardCore-worktrees/maps` | `codex/maps` @ `2a4d6ccf` | 72 untracked | 用户地图编辑器内容，继续保护；代码等价结果已集成为 `1d74fc72` |
 | `HardCore-worktrees/monsters` | `codex/monsters` @ `90f3f716` | 本轮任务文件 clean；既有 UID/报告继续保护 | 最新 212 份人工脚点已冻结导入；黄色目标光圈以人工脚点为圆心、按对应怪物物理脚印 `1.25×` 同比放大，已作为 `b478b7cc` 集成；专项 10/10 通过 |
 | `HardCore-worktrees/ui-art` | `codex/ui-art` @ `dabd8872` | 本轮代码 clean；Godot import/UID/输出继续保护 | 验收台橙色正式光圈改为直接读取游戏运行时目标光圈几何，已作为 `ed3d850e` 集成；UI/怪物联动 2/2 通过 |
-| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `ce58f7bc` | 既有 UID/输出继续保护 | 33 技能 runtime、150 条可执行语义合同和 26 项正式主动技能视觉已集成；`ce58f7bc` 的烈火 canonical 测试修正已作为 `6827bb7d` 集成 |
+| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `58c03672` | 既有 UID/输出继续保护 | 地狱火 5×1、疾光电影 8×1 的连续直线几何与前向端点视觉拟合已作为 `5affc023` 集成；33 技能 runtime、150 条可执行语义合同和 26 项正式主动技能视觉继续有效 |
 | `HardCore-worktrees/equipment` | `codex/equipment` @ `26f25e39` | 既有 monster import、试点截图脚本、UID/生成项继续保护 | 男性 `Hair.wil block 4`、世界头盔隐藏、纸娃娃/背包/地面头盔均已集成；`26f25e39` 的正式武器可见性测试修正已作为 `35568e45` 集成，冻结草稿与生成图继续保护 |
 
 ### maps 保护红线
@@ -428,3 +482,16 @@ maps 的 72 项未跟踪内容全部视为用户进行中的地图编辑器内�
 7. 拾取提示居中；技能配置弹窗背景不越界；快捷技能可置换；烈火点击后显示“充能”，800ms 后下一次有效近战消费，空挥保留，8s 内不可重复充能，绝不自动释放。
 
 用户实测结果优先级高于内部测试；若实机失败，先保存截图和 APK 哈希，再按所属专业工作树返修。
+
+## 2026-08-01 Android v59 法师锁定与技能表现里程碑
+
+- APK 构建提交：`795b0b6b9e4abc2ef8c7e4cec257c21687d48860`；应用名 `HardCore`，包名 `com.personal.mafaoffline`，`versionCode=59`，`versionName=1.17.23-wizard-targeting-shield`。
+- 快速点击在一次施法门限内合并为一次输入；只有持续按住超过 300ms 才会在门限重新开放后连续施法，松手不再遗留攻击或施法队列。
+- 火墙、爆裂火焰、冰咆哮保留锁定怪物实例并在正式释放帧读取其最新脚点；目标死亡、移除或离开 12 格时整次技能拒绝，禁止回退为空地释放，也不消费魔法。
+- 地狱火采用正式 `5×1` 直线几何，对范围内所有相交怪物结算，不再被单目标上限截断。
+- 魔法盾继续使用主资料库 `Magic.wil` 3880–3889 帧，只执行 `+7.5px` 水平中心校正，脚点垂直基线不变，绘制在人物后方；施法形成后在护盾有效期保留末帧。
+- 无地图运行时合同的兼容坐标换算已统一到 `64×32` 等距格基准，整数脚点与浮点脚点不再使用两套坐标系。
+- 专业工作树提交 `6f803b7a65fd06905380a536d2871864995021d4` 已通过集成合并提交 `fbf10229` 接入。
+- 验证：法师定向集成 9/9、战士完整回归 25/25、`tests/skills` 13/13、坐标影响回归 6/6 均通过；正式法师视觉源审计为 26 项技能资产、586 帧、0 fallback。
+- 冻结数据未变：`item_236.json=21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`；`item_240.json=81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`；怪物人工脚点 `monster_ground_alignment_manual_v1.json=DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`。
+- 正式测试 APK：`outputs/hardcore/HardCore-v59-wizard-targeting-shield-debug.apk`，大小 `244410869` 字节（233.09 MiB），SHA-256 `CF0BA0D715D9B56E0A93A81675F6F96C08DC0A59A771B98FB136B2B03E17D158`；独立 Android 验证通过并已复制到桌面同名文件，源文件与副本哈希一致。

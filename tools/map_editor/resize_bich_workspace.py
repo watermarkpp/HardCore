@@ -55,7 +55,7 @@ def migrate_document(document: dict, amount: int) -> None:
             for key in ("tile", "tile_anchor", "return_tile"):
                 if key in entry:
                     entry[key] = shift_pair(entry[key], amount)
-            for key in ("npc_hull_tiles", "polygon_tiles"):
+            for key in ("npc_hull_tiles", "polygon_ground_gu"):
                 if key in entry:
                     entry[key] = [shift_pair(point, amount) for point in entry[key]]
 

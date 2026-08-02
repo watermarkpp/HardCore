@@ -2,7 +2,8 @@ class_name MapEditorRuntimeBridge
 extends RefCounted
 
 const BICH_MAP_ID := 4
-const SAFE_RADIUS_TILES := 9.0
+const SAFE_RADIUS_GU := 9.0
+const RUNTIME_OUTPUT_CONTRACT_ID := "map.editor.runtime.output_units.v1"
 const BOSS_RESPAWN_OVERRIDES := {
 	218: 3600.0,
 	221: 3600.0,
@@ -126,37 +127,59 @@ static func load_bich() -> Dictionary:
 	return load_map(BICH_MAP_ID)
 
 
-static func tile_to_world(runtime: Dictionary, raw_tile: Array) -> Vector2:
+static func ground_position_gu_to_screen_position_px(
+	runtime: Dictionary,
+	ground_position_gu: Vector2
+) -> Vector2:
 	var raw_size: Array = runtime.get("design", {}).get(
 		"design_size", [256, 256]
 	)
-	return MapEditorCoordinate.tile_to_world(
-		Vector2(float(raw_tile[0]), float(raw_tile[1])),
+	return MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+		ground_position_gu,
 		Vector2i(int(raw_size[0]), int(raw_size[1]))
 	)
 
 
-static func cell_to_world(runtime: Dictionary, raw_cell: Array) -> Vector2:
+static func grid_cell_to_screen_position_px(
+	runtime: Dictionary,
+	raw_cell: Array
+) -> Vector2:
+	return ground_position_gu_to_screen_position_px(
+		runtime, cell_to_ground_position_gu(raw_cell)
+	)
+
+
+static func screen_position_px_to_ground_position_gu(
+	runtime: Dictionary,
+	screen_position_px: Vector2
+) -> Vector2:
 	var raw_size: Array = runtime.get("design", {}).get(
 		"design_size", [256, 256]
 	)
-	return MapEditorCoordinate.cell_center_to_world(
-		Vector2(float(raw_cell[0]), float(raw_cell[1])),
+	return MapEditorCoordinate.screen_position_px_to_ground_position_gu(
+		screen_position_px,
 		Vector2i(int(raw_size[0]), int(raw_size[1]))
 	)
 
 
-static func world_to_tile(runtime: Dictionary, world: Vector2) -> Vector2:
-	var raw_size: Array = runtime.get("design", {}).get(
-		"design_size", [256, 256]
-	)
-	return MapEditorCoordinate.world_to_tile(
-		world,
-		Vector2i(int(raw_size[0]), int(raw_size[1]))
-	)
+static func cell_to_ground_position_gu(raw_cell: Array) -> Vector2:
+	return _array_to_vector2(raw_cell) + Vector2(0.5, 0.5)
 
 
-static func portal_position(
+static func ground_polygon_gu_to_screen_polygon_px(
+	runtime: Dictionary,
+	raw_polygon_ground_gu: Array
+) -> PackedVector2Array:
+	var projected := PackedVector2Array()
+	for raw_point: Variant in raw_polygon_ground_gu:
+		if raw_point is Array and raw_point.size() == 2:
+			projected.append(ground_position_gu_to_screen_position_px(
+				runtime, _array_to_vector2(raw_point)
+			))
+	return projected
+
+
+static func portal_screen_position_px(
 	runtime_map_id: int,
 	portal_id: String,
 	source_map_id := -1
@@ -164,29 +187,76 @@ static func portal_position(
 	var runtime := load_map(runtime_map_id)
 	if runtime.is_empty():
 		return Vector2.ZERO
+	var found := _portal_ground_position_result(
+		runtime, portal_id, source_map_id
+	)
+	if not bool(found.get("ok", false)):
+		return Vector2.ZERO
+	return ground_position_gu_to_screen_position_px(
+		runtime, found.position_ground_gu
+	)
+
+
+static func portal_position_ground_gu(
+	runtime_map_id: int,
+	portal_id: String,
+	source_map_id := -1
+) -> Vector2:
+	var runtime := load_map(runtime_map_id)
+	if runtime.is_empty():
+		return Vector2.ZERO
+	var found := _portal_ground_position_result(
+		runtime, portal_id, source_map_id
+	)
+	return found.get("position_ground_gu", Vector2.ZERO)
+
+
+static func _portal_ground_position_result(
+	runtime: Dictionary,
+	portal_id: String,
+	source_map_id: int
+) -> Dictionary:
 	for endpoint: Dictionary in runtime.get("semantics", {}).get(
 		"map_exit_points", []
 	):
 		if not portal_id.is_empty() and str(
 			endpoint.get("semantic_id", "")
 		) == portal_id:
-			return cell_to_world(runtime, endpoint.get("tile", [0, 0]))
+			return {
+				"ok": true,
+				"position_ground_gu": cell_to_ground_position_gu(
+					endpoint.get("tile", [0, 0])
+				),
+			}
 		if (
 			portal_id.is_empty()
 			and source_map_id >= 0
 			and int(endpoint.get("target_map_id", -1)) == source_map_id
 		):
-			return cell_to_world(runtime, endpoint.get("tile", [0, 0]))
-	return Vector2.ZERO
+			return {
+				"ok": true,
+				"position_ground_gu": cell_to_ground_position_gu(
+					endpoint.get("tile", [0, 0])
+				),
+			}
+	return {"ok": false}
 
 
-static func home_position() -> Vector2:
+static func home_screen_position_px() -> Vector2:
+	var runtime := load_bich()
+	if runtime.is_empty():
+		return Vector2.ZERO
+	return ground_position_gu_to_screen_position_px(
+		runtime, home_position_ground_gu()
+	)
+
+
+static func home_position_ground_gu() -> Vector2:
 	var runtime := load_bich()
 	var safe_areas: Array = runtime.get("semantics", {}).get("safe_area", [])
 	for safe: Dictionary in safe_areas:
 		if bool(safe.get("return_anchor", false)):
-			return cell_to_world(
-				runtime,
+			return cell_to_ground_position_gu(
 				safe.get("return_tile", safe.get("tile", [128, 128]))
 			)
 	# Final editor maps can publish one authoritative safe area without the
@@ -194,8 +264,7 @@ static func home_position() -> Vector2:
 	# playable runtime by using that safe area's anchor tile.
 	if not safe_areas.is_empty():
 		var safe: Dictionary = safe_areas[0]
-		return cell_to_world(
-			runtime,
+		return cell_to_ground_position_gu(
 			safe.get("return_tile", safe.get("tile", [128, 128]))
 		)
 	return Vector2.ZERO
@@ -212,17 +281,23 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 	var raw_size: Array = runtime.get("design", {}).get(
 		"design_size", [256, 256]
 	)
-	var map_center_world := tile_to_world(
-		runtime,
-		[(float(raw_size[0]) - 1.0) * 0.5, (float(raw_size[1]) - 1.0) * 0.5]
+	var map_center_ground_gu := Vector2(
+		(float(raw_size[0]) - 1.0) * 0.5,
+		(float(raw_size[1]) - 1.0) * 0.5
+	)
+	var map_center_screen_position_px := ground_position_gu_to_screen_position_px(
+		runtime, map_center_ground_gu
 	)
 	var config: Dictionary = MAP_CONFIG.get(runtime_map_id, {})
 	var result := {
 		"name": str(config.get("display_name", "地图")),
 		"runtime_map_id": runtime_map_id,
 		"runtime_map_key": str(config.get("map_key", "")),
-		"runtime_home_position": home_position() if runtime_map_id == BICH_MAP_ID else Vector2.ZERO,
-		"map_center_world": map_center_world,
+		"runtime_output_contract_id": RUNTIME_OUTPUT_CONTRACT_ID,
+		"runtime_home_screen_position_px": home_screen_position_px() if runtime_map_id == BICH_MAP_ID else Vector2.ZERO,
+		"runtime_home_position_ground_gu": home_position_ground_gu() if runtime_map_id == BICH_MAP_ID else Vector2.ZERO,
+		"map_center_screen_position_px": map_center_screen_position_px,
+		"map_center_ground_gu": map_center_ground_gu,
 		"spawns": [],
 		"bosses": [],
 		"npcs": [],
@@ -248,7 +323,12 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 		}.get(npc_id, ""))
 		result.npcs.append({
 			"name": entry.get("display_name", "NPC"),
-			"position": cell_to_world(runtime, entry.get("tile", [0, 0])),
+			"screen_position_px": grid_cell_to_screen_position_px(
+				runtime, entry.get("tile", [0, 0])
+			),
+			"position_ground_gu": cell_to_ground_position_gu(
+				entry.get("tile", [0, 0])
+			),
 			"kind": entry.get("service_role", "dialogue"),
 			"npc_id": npc_id,
 			"stock": stock_key,
@@ -267,22 +347,27 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 			continue
 		result.portals.append(_portal_record(runtime_map_id, runtime, entry))
 	if runtime_map_id == BICH_MAP_ID:
+		var home_ground_gu := home_position_ground_gu()
 		result.safe_areas.append({
-			"center": home_position(),
-			"radius": SAFE_RADIUS_TILES * ArtSpec.TILE_SIZE,
-			"radius_tiles": SAFE_RADIUS_TILES,
+			"center_ground_gu": home_ground_gu,
+			"radius_gu": SAFE_RADIUS_GU,
 			"shape": "circle",
-			"polygon": PackedVector2Array(),
+			"polygon_ground_gu": PackedVector2Array(),
 			"blocks_monster_damage": true,
 			"blocks_monster_entry": true,
-			"policy_override": "single_player_respawn_circle_9_tiles",
+			"policy_override": "single_player_respawn_circle_9_gu",
 		})
 	else:
 		for safe: Dictionary in semantics.get("safe_area", []):
 			var converted := safe.duplicate(true)
-			converted["center"] = cell_to_world(
-				runtime, safe.get("tile", [0, 0])
+			var center_ground_gu := cell_to_ground_position_gu(
+				safe.get("tile", [0, 0])
 			)
+			converted["center_ground_gu"] = center_ground_gu
+			converted["radius_gu"] = float(safe.get("radius_gu", 0.0))
+			converted["polygon_ground_gu"] = safe.get(
+				"polygon_ground_gu", []
+			).duplicate(true)
 			result.safe_areas.append(converted)
 	return result
 
@@ -299,11 +384,16 @@ static func _combat_spawn(
 	return {
 		"name": entry.get("display_name", ""),
 		"monster_id": int(monster_key.trim_prefix("monster.")),
-		"position": cell_to_world(runtime, entry.get("tile", [0, 0])),
+		"screen_position_px": grid_cell_to_screen_position_px(
+			runtime, entry.get("tile", [0, 0])
+		),
+		"position_ground_gu": cell_to_ground_position_gu(
+			entry.get("tile", [0, 0])
+		),
 		"respawn_seconds": respawn_seconds,
 		"count": int(entry.get("count", 1)),
 		"max_alive": int(entry.get("max_alive", 1)),
-		"radius_tiles": float(entry.get("radius_tiles", 0.0)),
+		"radius_gu": float(entry.get("radius_gu", 0.0)),
 		"spawn_group": entry.duplicate(true),
 	}
 
@@ -314,7 +404,12 @@ static func _portal_record(
 	entry: Dictionary
 ) -> Dictionary:
 	return {
-		"position": cell_to_world(runtime, entry.get("tile", [0, 0])),
+		"screen_position_px": grid_cell_to_screen_position_px(
+			runtime, entry.get("tile", [0, 0])
+		),
+		"position_ground_gu": cell_to_ground_position_gu(
+			entry.get("tile", [0, 0])
+		),
 		"source_map_id": source_map_id,
 		"source_portal_id": str(entry.get("semantic_id", "")),
 		"target_map_id": int(entry.get("target_map_id", -1)),
@@ -326,6 +421,14 @@ static func _portal_record(
 		"portal_contract_id": str(entry.get("portal_contract_id", "")),
 		"arrival_reentry_policy_id": str(entry.get("arrival_reentry_policy_id", "")),
 		"return_minimum_seconds": float(entry.get("return_minimum_seconds", 0.0)),
-		"return_unlock_distance_tiles": float(entry.get("return_unlock_distance_tiles", 0.0)),
+		"return_unlock_distance_gu": float(entry.get(
+			"return_unlock_distance_gu", 0.0
+		)),
 		"travel_request_single_flight": bool(entry.get("travel_request_single_flight", false)),
 	}
+
+
+static func _array_to_vector2(raw: Array) -> Vector2:
+	if raw.size() != 2:
+		return Vector2.ZERO
+	return Vector2(float(raw[0]), float(raw[1]))

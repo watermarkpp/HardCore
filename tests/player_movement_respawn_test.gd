@@ -32,7 +32,7 @@ func _run() -> void:
 	assert(player._dead and player.global_position == Vector2(900, 700), "死亡动作期间人物被传送到未知世界原点")
 	await get_tree().create_timer(0.9).timeout
 	assert(game.current_map_id == GameData.service_home_runtime_map_id(false), "人物死亡后没有回到服务端HomeMap")
-	assert(player.global_position.is_equal_approx(game._bich_home_world_position()), "人物死亡后复活坐标不是比奇城镇出生点")
+	assert(player.global_position.is_equal_approx(game._bich_home_screen_position_px()), "人物死亡后复活坐标不是比奇城镇出生点")
 	assert(player.current_hp == player.max_hp and not player._dead, "城镇复活后人物状态没有恢复")
 	print("PLAYER_MOVEMENT_RESPAWN_PASS：移动朝向稳定、死亡动作和HomeMap复活正常")
 	get_tree().quit(0)

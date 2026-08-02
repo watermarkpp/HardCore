@@ -120,8 +120,8 @@ func _init() -> void:
 		"return_minimum_seconds": (
 			ConnectionPolicyService.RETURN_MINIMUM_SECONDS
 		),
-		"return_unlock_distance_tiles": (
-			ConnectionPolicyService.RETURN_UNLOCK_DISTANCE_TILES
+		"return_unlock_distance_gu": (
+			ConnectionPolicyService.RETURN_UNLOCK_DISTANCE_GU
 		),
 		"return_requires_fresh_activation": true,
 		"travel_request_single_flight": true,
@@ -211,8 +211,8 @@ func _connection_summary(
 		"return_minimum_seconds": float(
 			map_exit.return_minimum_seconds
 		),
-		"return_unlock_distance_tiles": float(
-			map_exit.return_unlock_distance_tiles
+		"return_unlock_distance_gu": float(
+			map_exit.return_unlock_distance_gu
 		),
 	}
 

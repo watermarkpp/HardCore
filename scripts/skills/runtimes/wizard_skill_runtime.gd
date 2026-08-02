@@ -22,9 +22,24 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 			_resolve_temptation(plan, rank, caster_level, context, rng, trigger)
 		"wizard.hellfire":
 			var hellfire := _damage_effect(definition, request, rng, "line_damage")
-			hellfire["length_tiles"] = int(definition.get("geometry", {}).get("length_tiles", 5))
-			hellfire["width_tiles"] = int(definition.get("geometry", {}).get("width_tiles", 1))
+			hellfire["effect_length_gu"] = float(definition.get("geometry", {}).get("effect_length_gu", 5.0))
+			hellfire["effect_width_gu"] = float(definition.get("geometry", {}).get("effect_width_gu", 1.0))
 			hellfire["pierces_units"] = false
+			# Hellfire is a five-cell by one-cell strip. The client movement flag
+			# describes the line effect's travel semantics; it must not be adapted
+			# into a one-monster damage cap.
+			hellfire["maximum_targets"] = 0
+			hellfire["target_limit_policy"] = "all_intersecting_effect_cells"
+			hellfire["target_selection_contract"] = (
+				"skills.wizard.hellfire.all_intersecting_5x1.v1"
+			)
+			hellfire["line_geometry_contract"] = (
+				"skills.wizard.line.continuous_tile_axis_footprint_sat.v1"
+			)
+			hellfire["cast_input_contract"] = (
+				"skills.wizard.hellfire.discrete_cast_hold_repeats_after_recast_gate.v1"
+			)
+			hellfire["channeled"] = false
 			hellfire["stops_on_terrain"] = bool(definition.get("geometry", {}).get("stops_on_terrain", true))
 			plan.effects = [hellfire]
 			plan.proficiency_event = trigger
@@ -40,15 +55,15 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 			_resolve_teleport(plan, rank, context, rng, trigger)
 		"wizard.exploding_flame", "wizard.ice_storm":
 			var area := _damage_effect(definition, request, rng, "area_damage")
-			area["width_tiles"] = int(definition.get("geometry", {}).get("width_tiles", 3))
-			area["height_tiles"] = int(definition.get("geometry", {}).get("height_tiles", 3))
+			area["width_grid_steps"] = int(definition.get("geometry", {}).get("width_grid_steps", 3.0))
+			area["height_grid_steps"] = int(definition.get("geometry", {}).get("height_grid_steps", 3.0))
 			plan.effects = [area]
 			plan.proficiency_event = trigger
 		"wizard.fire_wall":
 			var primary_stat_roll := int(context.get("primary_stat_roll", 0))
 			var field := _damage_effect(definition, request, rng, "persistent_ground_damage")
-			field["width_tiles"] = 2
-			field["height_tiles"] = 2
+			field["width_grid_steps"] = 2
+			field["height_grid_steps"] = 2
 			field["tick_interval_ms"] = int(definition.get("timing", {}).get("tick_interval_ms", 1000))
 			field["max_ticks_per_target_per_caster"] = 1
 			field["duration_seconds"] = maxi(
@@ -60,15 +75,18 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 			plan.proficiency_event = trigger
 		"wizard.laser":
 			var laser := _damage_effect(definition, request, rng, "piercing_line_damage")
-			laser["length_tiles"] = int(definition.get("geometry", {}).get("length_tiles", 8))
-			laser["width_tiles"] = int(definition.get("geometry", {}).get("width_tiles", 1))
+			laser["effect_length_gu"] = float(definition.get("geometry", {}).get("effect_length_gu", 8.0))
+			laser["effect_width_gu"] = float(definition.get("geometry", {}).get("effect_width_gu", 1.0))
 			laser["pierces_units"] = true
+			laser["line_geometry_contract"] = (
+				"skills.wizard.line.continuous_tile_axis_footprint_sat.v1"
+			)
 			laser["stops_on_terrain"] = bool(definition.get("geometry", {}).get("stops_on_terrain", true))
 			plan.effects = [laser]
 			plan.proficiency_event = trigger
 		"wizard.hell_lightning":
 			var ring := _damage_effect(definition, request, rng, "caster_centered_area_damage")
-			ring["radius_tiles"] = int(definition.get("geometry", {}).get("radius_tiles", 2))
+			ring["radius_grid_steps"] = int(definition.get("geometry", {}).get("radius_grid_steps", 2.0))
 			ring["exclude_center"] = true
 			ring["maximum_targets"] = int(mechanics.get("maximum_targets", 24))
 			plan.effects = [ring]
@@ -154,9 +172,13 @@ static func _resolve_repulsion(
 			displaced_count += 1
 		resolutions.append({
 			"type": "adjacent_push",
+			"target_instance_id": int(target.get("instance_id", 0)),
 			"eligible": eligible,
 			"success_probability": probability,
-			"push_distance_tiles": 1 + maxi(0, rank - 1) + int(rng.call("pascal_random_exclusive", 2)),
+			"push_distance_gu": float(
+				1 + maxi(0, rank - 1)
+				+ int(rng.call("pascal_random_exclusive", 2))
+			),
 			"displaced": displaced,
 			"damage": 0,
 		})

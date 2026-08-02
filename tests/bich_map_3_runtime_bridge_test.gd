@@ -18,8 +18,8 @@ func _ready() -> void:
 	var safe: Dictionary = runtime.semantics.safe_area[0]
 	assert(not bool(safe.get("return_anchor", false)))
 	assert(
-		MapEditorRuntimeBridge.home_position().is_equal_approx(
-			MapEditorRuntimeBridge.cell_to_world(runtime, safe.tile)
+		MapEditorRuntimeBridge.home_screen_position_px().is_equal_approx(
+			MapEditorRuntimeBridge.grid_cell_to_screen_position_px(runtime, safe.tile)
 		)
 	)
 	var background := WorldBackground.new(); add_child(background)

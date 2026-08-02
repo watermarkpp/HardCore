@@ -21,7 +21,7 @@ signal scroll_requested(item_name: String)
 signal quests_changed
 signal profession_changed(profession: String)
 
-const SAVE_VERSION := 6
+const SAVE_VERSION := 7
 const SAVE_PATH := "user://player_save_v03.json"
 const LEGACY_SAVE_PATH := "user://player_save_v02.json"
 const PROFILE_INDEX_PATH := "user://character_profiles.json"
@@ -33,6 +33,9 @@ const TEST_CHARACTER_ROSTER_CONTRACT_ID := "test.character.roster.full_equipment
 const TEST_ROSTER_RESET_CONTRACT_ID := "test.character.roster.reset.v2"
 const CURRENT_CONTENT_SCHEMA_VERSION := 2
 const SKILL_BUTTON_ASSIGNMENTS_CONTRACT_ID := "gameplay.skill.button_assignments.v3"
+const WORLD_POSITION_CONTRACT_ID := (
+	"save.world_position.screen_px_with_ground_gu.v1"
+)
 const SKILL_SLOT_GROUP_CENTER := "center"
 const SKILL_SLOT_GROUP_ATTACK := "attack"
 const SKILL_SLOT_GROUP_ATTACK_RING := "attack_ring"
@@ -68,6 +71,8 @@ var warrior_runtime_state: Dictionary = {}
 var quest_states: Dictionary = {}
 var saved_map_id := 4
 var saved_position := Vector2.ZERO
+var saved_ground_position_gu := Vector2.ZERO
+var saved_ground_position_gu_valid := false
 var computed_stats: Dictionary = {}
 var computed_special_effects: Dictionary = {}
 var test_mode := false
@@ -122,6 +127,8 @@ func reset_progress(emit_updates := true) -> void:
 	quest_states = {}
 	saved_map_id = 4
 	saved_position = Vector2.ZERO
+	saved_ground_position_gu = Vector2.ZERO
+	saved_ground_position_gu_valid = false
 	recalculate_stats()
 	if emit_updates:
 		profession_changed.emit(profession)
@@ -1057,6 +1064,13 @@ func save_game() -> void:
 		"content_schema_version": CURRENT_CONTENT_SCHEMA_VERSION,
 		"map_id": saved_map_id,
 		"position": [saved_position.x, saved_position.y],
+		"position_space_contract_id": WORLD_POSITION_CONTRACT_ID,
+		"position_screen_px": [saved_position.x, saved_position.y],
+		"position_ground_gu": (
+			[saved_ground_position_gu.x, saved_ground_position_gu.y]
+			if saved_ground_position_gu_valid
+			else []
+		),
 	}):
 		push_warning("无法安全写入角色存档：%s" % active_profile_id)
 	_update_profile_index()
@@ -1068,7 +1082,12 @@ func load_save() -> void:
 		reset_progress(false)
 		return
 	var file := FileAccess.open(load_path, FileAccess.READ)
-	var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
+	var serialized := file.get_as_text() if file != null else ""
+	if file != null:
+		# Windows keeps the source file locked while FileAccess is alive. Close it
+		# before a version migration atomically renames the same profile to .bak.
+		file.close()
+	var parsed: Variant = JSON.parse_string(serialized)
 	if not parsed is Dictionary:
 		reset_progress(false)
 		return
@@ -1102,11 +1121,31 @@ func load_save() -> void:
 	warrior_runtime_state = _normalized_warrior_runtime_state(parsed.get("warrior_runtime_state", {}))
 	quest_states = parsed.get("quest_states", {})
 	saved_map_id = int(parsed.get("map_id", 4))
-	var position_data: Variant = parsed.get("position", [0.0, 0.0])
+	var position_data: Variant = parsed.get(
+		"position_screen_px",
+		parsed.get("position", [0.0, 0.0])
+	)
 	if position_data is Array and position_data.size() >= 2:
 		saved_position = Vector2(float(position_data[0]), float(position_data[1]))
 	else:
 		saved_position = Vector2.ZERO
+	var ground_position_data: Variant = parsed.get("position_ground_gu", [])
+	saved_ground_position_gu_valid = (
+		str(parsed.get("position_space_contract_id", ""))
+		== WORLD_POSITION_CONTRACT_ID
+		and ground_position_data is Array
+		and ground_position_data.size() >= 2
+	)
+	if saved_ground_position_gu_valid:
+		saved_ground_position_gu = Vector2(
+			float(ground_position_data[0]),
+			float(ground_position_data[1])
+		)
+	else:
+		# Version 6 and older store only screen PX. Their value remains valid for
+		# rendering and map restoration; GameRoot supplies the matching absolute
+		# ground GU coordinate after the map runtime is loaded.
+		saved_ground_position_gu = Vector2.ZERO
 	character_name = str(parsed.get("character_name", character_name))
 	_migrate_quest_states()
 	if (
@@ -1305,18 +1344,38 @@ func _default_warrior_runtime_state() -> Dictionary:
 	}
 
 
-func update_world_location(map_id: int, position: Vector2) -> void:
+func update_world_location(
+	map_id: int,
+	screen_position_px: Vector2,
+	ground_position_gu: Variant = null
+) -> void:
 	if active_profile_id.is_empty():
 		return
 	saved_map_id = map_id
-	saved_position = position
+	saved_position = screen_position_px
+	if ground_position_gu is Vector2:
+		saved_ground_position_gu = ground_position_gu
+		saved_ground_position_gu_valid = true
+	else:
+		saved_ground_position_gu = Vector2.ZERO
+		saved_ground_position_gu_valid = false
 
 
-func save_safe_logout(home_map_id: int, home_position: Vector2) -> bool:
+func save_safe_logout(
+	home_map_id: int,
+	home_screen_position_px: Vector2,
+	home_ground_position_gu: Variant = null
+) -> bool:
 	if active_profile_id.is_empty():
 		return false
 	saved_map_id = home_map_id
-	saved_position = home_position
+	saved_position = home_screen_position_px
+	if home_ground_position_gu is Vector2:
+		saved_ground_position_gu = home_ground_position_gu
+		saved_ground_position_gu_valid = true
+	else:
+		saved_ground_position_gu = Vector2.ZERO
+		saved_ground_position_gu_valid = false
 	save_game()
 	return FileAccess.file_exists(_profile_path(active_profile_id))
 
@@ -1518,6 +1577,9 @@ func _test_character_payload(loadout: Dictionary, skill_profile: Dictionary, pro
 		"content_schema_version": CURRENT_CONTENT_SCHEMA_VERSION,
 		"map_id": 4,
 		"position": [0.0, 0.0],
+		"position_space_contract_id": WORLD_POSITION_CONTRACT_ID,
+		"position_screen_px": [0.0, 0.0],
+		"position_ground_gu": [],
 	}
 
 
@@ -1536,6 +1598,7 @@ func ensure_developer_test_character()->void:
 	var slots:Array[String]=["攻杀剑术","刺杀剑术","半月弯刀","烈火剑法"]
 	var now:=int(Time.get_unix_time_from_system())
 	var payload:={"save_version":SAVE_VERSION,"profile_id":profile_id,"character_name":"测试战士30级","updated_at":now,"level":30,"profession":"战士","gender":"男","later_content_enabled":false,"game_mode_id":"classic_176","experience":0,"gold":100000,"inventory":[],"warehouse_inventory":[],"equipment":equipment_data,"learned_skills":all_skills,"quick_slots":slots,"quest_states":{},"content_packages":ContentLayers.enabled_package_ids(),"content_schema_version":CURRENT_CONTENT_SCHEMA_VERSION,"map_id":4,"position":[0.0,0.0]}
+	payload.merge(_default_world_position_fields(), true)
 	if not _write_json_atomic(_profile_path(profile_id),payload):return
 	var index:=_read_json(profile_index_path);var profiles:Array=index.get("profiles",[])
 	var replaced:=false
@@ -1580,6 +1643,7 @@ func ensure_zuma_test_character() -> void:
 		"content_packages": ContentLayers.enabled_package_ids(), "content_schema_version": CURRENT_CONTENT_SCHEMA_VERSION,
 		"map_id": 4, "position": [0.0, 0.0],
 	}
+	payload.merge(_default_world_position_fields(), true)
 	if not _write_json_atomic(_profile_path(profile_id), payload):
 		return
 	var index := _read_json(profile_index_path)
@@ -1594,6 +1658,15 @@ func ensure_zuma_test_character() -> void:
 	if not replaced:
 		profiles.append(entry)
 	_write_json_atomic(profile_index_path, {"version": 1, "profiles": profiles})
+
+
+func _default_world_position_fields() -> Dictionary:
+	return {
+		"position": [0.0, 0.0],
+		"position_space_contract_id": WORLD_POSITION_CONTRACT_ID,
+		"position_screen_px": [0.0, 0.0],
+		"position_ground_gu": [],
+	}
 
 
 func create_character(new_name: String, new_profession := "战士", new_gender := "男") -> String:

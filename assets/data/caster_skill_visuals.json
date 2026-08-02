@@ -28,7 +28,7 @@
     },
     "contract_id": "skills.mir2_176.vanilla_33.v1.0.1",
     "original_path": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
-    "sha256": "1fdf28d3c575d18d2e7e0f875b008eb4f6f719752e4974cbca399c66c62c7c2c"
+    "sha256": "883359e2cf191a196f749653067f2030130fc11fd59a033a89ee557cab7607e2"
   },
   "mappingSources": [
     {
@@ -807,7 +807,8 @@
           "length_tiles": 5,
           "width_tiles": 1,
           "pierces_units": false,
-          "stops_on_terrain": true
+          "stops_on_terrain": true,
+          "status": "project_canonical"
         },
         "timing": {
           "body_action": "cast_8dir_6f",
@@ -816,6 +817,9 @@
           "recovery_ms": 900,
           "total_action_lock_ms": 1500,
           "cooldown_policy": "total_action_lock",
+          "movement_lock_ms": 600,
+          "recast_gate_ms": 900,
+          "timing_contract": "skills.wizard.hellfire.body_600_recast_gate_900_discrete.v1",
           "status": "project_canonical"
         }
       }
@@ -3999,8 +4003,9 @@
         "trajectory_max_dominant_axis_pixels": 320,
         "trail_frame_count": 6,
         "geometry_alignment_contract": "skills.caster.geometry_visual_alignment.v1",
+        "axis_fit_contract": "skills.wizard.hellfire.firegun_trail.fixed_source_pixels.v1",
         "trail_emission_policy": "resample_to_canonical_geometry_endpoint",
-        "fit_mode": "contain_canonical_cell_footprint",
+        "fit_mode": "fixed_source_pixels_with_canonical_trail_offsets",
         "movement_lock_to_primary_visual": true
       },
       "distribution_id": "client.classic_raw_complete",
@@ -4199,6 +4204,9 @@
         "contract": "caster_skill_render.v2",
         "scale_mode": "source_pixels",
         "source_scale": 1.0,
+        "presentation_contract": "skills.wizard.lightning.slender_axis.v1",
+        "source_scale_x": 0.62,
+        "source_scale_y": 1.0,
         "fit_extent": 0.0,
         "anchor_policy": "top_left_from_world_anchor",
         "attachment_policy": "world_anchor",
@@ -7739,6 +7747,7 @@
                   124,
                   386
                 ],
+                "visible_cross_extent_pixels": 121.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_00/frame_00.png",
                 "png_sha256": "fca5c7715f6c870b96e38017894eb77f29ca316d5b0a32adc1f9f5db5f48b576"
               },
@@ -7758,6 +7767,7 @@
                   120,
                   395
                 ],
+                "visible_cross_extent_pixels": 119.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_00/frame_01.png",
                 "png_sha256": "5a67f9b6cefe98fc50d7c99a9ee7e383785f28cac05004e52946b961e57009c0"
               },
@@ -7777,6 +7787,7 @@
                   124,
                   392
                 ],
+                "visible_cross_extent_pixels": 122.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_00/frame_02.png",
                 "png_sha256": "7dd0820dfa334dd936632ca26ca5ccf8ae40fc3322ffd9477a9daf838c7fdc90"
               },
@@ -7796,6 +7807,7 @@
                   124,
                   400
                 ],
+                "visible_cross_extent_pixels": 121.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_00/frame_03.png",
                 "png_sha256": "b29638a3f50bc9665d377a0772c80e4bf06eca3f09f1826bb0a11e3acf416ced"
               },
@@ -7815,6 +7827,7 @@
                   124,
                   392
                 ],
+                "visible_cross_extent_pixels": 121.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_00/frame_04.png",
                 "png_sha256": "a1b1c1d068615a370ab97593e16ab5bd223e463cd0fb50049bcac381a012b294"
               },
@@ -7834,6 +7847,7 @@
                   124,
                   411
                 ],
+                "visible_cross_extent_pixels": 123.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_00/frame_05.png",
                 "png_sha256": "9ef18c97651bf3fc40a0aaa44147f530c62d77e710d86a2aa2482d2ff3e42a2e"
               }
@@ -7859,6 +7873,7 @@
                   256,
                   367
                 ],
+                "visible_cross_extent_pixels": 155.073846,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_01/frame_00.png",
                 "png_sha256": "d34ade8cb77f0b499d906d1cbdcfb47bdff3775107e3b2c175fc3c734c229481"
               },
@@ -7878,6 +7893,7 @@
                   264,
                   378
                 ],
+                "visible_cross_extent_pixels": 148.928381,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_01/frame_01.png",
                 "png_sha256": "4c8e9eb14e2b376ac6f63b28070a1bdac0a8aa89fb9cb617efac997f07c423e6"
               },
@@ -7897,6 +7913,7 @@
                   264,
                   371
                 ],
+                "visible_cross_extent_pixels": 150.159954,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_01/frame_02.png",
                 "png_sha256": "4524bac0ce8c2f4d82500b62fd16c8f5494f7e6513ffe73fafe1779ffbf63379"
               },
@@ -7916,6 +7933,7 @@
                   256,
                   385
                 ],
+                "visible_cross_extent_pixels": 152.897797,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_01/frame_03.png",
                 "png_sha256": "aacde04de005ae95fb4aa0a58e51befe7f913ab5593c1ddea79ac90bb2cb949d"
               },
@@ -7935,6 +7953,7 @@
                   272,
                   372
                 ],
+                "visible_cross_extent_pixels": 164.530213,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_01/frame_04.png",
                 "png_sha256": "c06fc5ee9160a01c7a298beb3df532a33f592d545bac7fb15b589d999f55b986"
               },
@@ -7954,6 +7973,7 @@
                   256,
                   392
                 ],
+                "visible_cross_extent_pixels": 145.921307,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_01/frame_05.png",
                 "png_sha256": "9c050b3e6f14ffb64bb7a3cbfbbf9d645000c828c8f80f0ad844a1b72e23e651"
               }
@@ -7979,6 +7999,7 @@
                   400,
                   309
                 ],
+                "visible_cross_extent_pixels": 172.534055,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_02/frame_00.png",
                 "png_sha256": "015cd604820ef288c71853ac7a66b52f3487c52c2cf9eb4b92608d20f87e5f52"
               },
@@ -7998,6 +8019,7 @@
                   412,
                   315
                 ],
+                "visible_cross_extent_pixels": 168.998521,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_02/frame_01.png",
                 "png_sha256": "b31fd584c42ddf4f8c419a90ec9d74c321f2d33bb691e19a59a7c020e01d9455"
               },
@@ -8017,6 +8039,7 @@
                   408,
                   308
                 ],
+                "visible_cross_extent_pixels": 166.8772,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_02/frame_02.png",
                 "png_sha256": "ea292e14e01416f6980c55de87cb12242e7fbbf4089ac05f0cc1ad223feaf636"
               },
@@ -8036,6 +8059,7 @@
                   408,
                   324
                 ],
+                "visible_cross_extent_pixels": 167.584307,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_02/frame_03.png",
                 "png_sha256": "a1b3e5a828701fa5b2f564dcf9f695e14d17689477b1d62931a50e655d78b4d8"
               },
@@ -8055,6 +8079,7 @@
                   416,
                   314
                 ],
+                "visible_cross_extent_pixels": 190.211724,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_02/frame_04.png",
                 "png_sha256": "b0b608c7a5ef459868c1cb0bdcf7732e17e32a8aa78829cc7b22e18a5f8b8397"
               },
@@ -8074,6 +8099,7 @@
                   408,
                   327
                 ],
+                "visible_cross_extent_pixels": 169.705627,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_02/frame_05.png",
                 "png_sha256": "b53b2d8b5fac0cadc78b8f14f3cc78b9b5cb3f0d470bf3c4d1b5b0faeaec0284"
               }
@@ -8099,6 +8125,7 @@
                   500,
                   214
                 ],
+                "visible_cross_extent_pixels": 159.522666,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_03/frame_00.png",
                 "png_sha256": "403763e2623bcf2f40a3a70c50f1669582c7dc643d5d475a32454a079a1fcafe"
               },
@@ -8118,6 +8145,7 @@
                   516,
                   219
                 ],
+                "visible_cross_extent_pixels": 145.922439,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_03/frame_01.png",
                 "png_sha256": "e5bf158782279d9da5cd40b72457e8300d70052a33d1cdb10b83e7826e216c90"
               },
@@ -8137,6 +8165,7 @@
                   508,
                   213
                 ],
+                "visible_cross_extent_pixels": 146.024626,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_03/frame_02.png",
                 "png_sha256": "154e94c315f05b00be05aebd45d2dee907f39aa602caeb216289881e762bd180"
               },
@@ -8156,6 +8185,7 @@
                   508,
                   230
                 ],
+                "visible_cross_extent_pixels": 153.039578,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_03/frame_03.png",
                 "png_sha256": "1f4bf2f2d3a3814b147d4db381c8661a22ca810177269accfe755f8552a4bacd"
               },
@@ -8175,6 +8205,7 @@
                   516,
                   220
                 ],
+                "visible_cross_extent_pixels": 167.866711,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_03/frame_04.png",
                 "png_sha256": "1b44ebcf3e0370071b07004eeb71798b7780b743e6d03968d0d0104b7f3c8c0e"
               },
@@ -8194,6 +8225,7 @@
                   520,
                   225
                 ],
+                "visible_cross_extent_pixels": 146.710336,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_03/frame_05.png",
                 "png_sha256": "6a3bb822bed1200553ec2e191bb883ca50caea432ede7aa2c9937e4b7e989345"
               }
@@ -8219,6 +8251,7 @@
                   540,
                   133
                 ],
+                "visible_cross_extent_pixels": 133.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_04/frame_00.png",
                 "png_sha256": "4c28b68080703c97566270f0ab6d988589f366d3a08765e0c258a30587cc5ad0"
               },
@@ -8238,6 +8271,7 @@
                   552,
                   138
                 ],
+                "visible_cross_extent_pixels": 138.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_04/frame_01.png",
                 "png_sha256": "7c61adb01810dd439fe2f6d1e3bbbebff796fa4a4f2a13aba1d7e78e1ac26c7f"
               },
@@ -8257,6 +8291,7 @@
                   540,
                   138
                 ],
+                "visible_cross_extent_pixels": 138.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_04/frame_02.png",
                 "png_sha256": "1f5ab21b9d56f01d893f96fb89c3e73da63a798c2f6a7f82f9a756ef506b6310"
               },
@@ -8276,6 +8311,7 @@
                   548,
                   134
                 ],
+                "visible_cross_extent_pixels": 134.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_04/frame_03.png",
                 "png_sha256": "c5f2a7ef1d5fafe7337b48da535b585736f057181f9b2c2affad8536f64ff967"
               },
@@ -8295,6 +8331,7 @@
                   548,
                   130
                 ],
+                "visible_cross_extent_pixels": 130.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_04/frame_04.png",
                 "png_sha256": "384b832bed34169aa896ba267a20f288f08df04f906fb12f3dace915a361213e"
               },
@@ -8314,6 +8351,7 @@
                   564,
                   133
                 ],
+                "visible_cross_extent_pixels": 133.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_04/frame_05.png",
                 "png_sha256": "fc1dd74ce777bbf8c2a9e701cb689d65f2119c77dbcd124e5af76693abd3cb47"
               }
@@ -8339,6 +8377,7 @@
                   508,
                   201
                 ],
+                "visible_cross_extent_pixels": 156.091713,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_05/frame_00.png",
                 "png_sha256": "566da73a09df1dceca8bc895a15c9a8775c2ae3fe195944e2fd026239cfd084d"
               },
@@ -8358,6 +8397,7 @@
                   520,
                   201
                 ],
+                "visible_cross_extent_pixels": 159.911948,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_05/frame_01.png",
                 "png_sha256": "63c5c05990ee256237e9af257f9be52968067f4ee67ccaf2d5ce2b592a1822ca"
               },
@@ -8377,6 +8417,7 @@
                   504,
                   199
                 ],
+                "visible_cross_extent_pixels": 159.151247,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_05/frame_02.png",
                 "png_sha256": "5b3e6fb339d5735027ed64530556fdd5bd4e98ae31cc38406e2b1e6c9e8c69a4"
               },
@@ -8396,6 +8437,7 @@
                   520,
                   197
                 ],
+                "visible_cross_extent_pixels": 175.509114,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_05/frame_03.png",
                 "png_sha256": "f8ad1f6ec23aa5542edaab5578e48e9275f54c5910cc891c6a19ac42a9b7b549"
               },
@@ -8415,6 +8457,7 @@
                   508,
                   223
                 ],
+                "visible_cross_extent_pixels": 163.247313,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_05/frame_04.png",
                 "png_sha256": "0df37df5953bad1ee69b105afebbc92a2104132cd1b377e3e4fd1ee8dd0c7ab7"
               },
@@ -8434,6 +8477,7 @@
                   532,
                   203
                 ],
+                "visible_cross_extent_pixels": 159.798496,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_05/frame_05.png",
                 "png_sha256": "7c1fa2ac1ba806c8d7352bb993fc6bb60084a324f9561f2fdaa3f91ec66d6e3d"
               }
@@ -8459,6 +8503,7 @@
                   416,
                   293
                 ],
+                "visible_cross_extent_pixels": 180.312229,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_06/frame_00.png",
                 "png_sha256": "c6d9eabc99061d74910e924df181d5f71829c0d44f1b37aa02df3e7f7a288c94"
               },
@@ -8478,6 +8523,7 @@
                   420,
                   297
                 ],
+                "visible_cross_extent_pixels": 183.140656,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_06/frame_01.png",
                 "png_sha256": "fde0fe73b53cb4a4171bf77a24ded7b8c14279b74974c9387c278d4f3c40117b"
               },
@@ -8497,6 +8543,7 @@
                   404,
                   293
                 ],
+                "visible_cross_extent_pixels": 176.069589,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_06/frame_02.png",
                 "png_sha256": "2a6541008c8a17a1e14d977554c90e9e3bdded326de91fb8d61d68ee569d5ad4"
               },
@@ -8516,6 +8563,7 @@
                   424,
                   293
                 ],
+                "visible_cross_extent_pixels": 195.868578,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_06/frame_03.png",
                 "png_sha256": "8687596a5f3e2bdc1dd17a5bac28374a03dcfc070026a1eb50ffe97b3b0bfd20"
               },
@@ -8535,6 +8583,7 @@
                   416,
                   317
                 ],
+                "visible_cross_extent_pixels": 185.261977,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_06/frame_04.png",
                 "png_sha256": "3c81ad4a49648e8aaae30a4f190f0f3614606d2bb3a17be03fc89cab304ede57"
               },
@@ -8554,6 +8603,7 @@
                   432,
                   296
                 ],
+                "visible_cross_extent_pixels": 184.55487,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_06/frame_05.png",
                 "png_sha256": "04d8021ecbfb59c910cb5778caad4672f709884d2cdfd5fcfe06c9e5e6c34a2f"
               }
@@ -8579,6 +8629,7 @@
                   268,
                   354
                 ],
+                "visible_cross_extent_pixels": 154.236222,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_07/frame_00.png",
                 "png_sha256": "567b9b2859441615731ee90bef80da6d324220647bdc36561f067e15ee61d567"
               },
@@ -8598,6 +8649,7 @@
                   272,
                   360
                 ],
+                "visible_cross_extent_pixels": 158.260031,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_07/frame_01.png",
                 "png_sha256": "154fc4ef72e0370d9cae0139c3b70d35fda4b2d6e9dc0313e902d1dc561b25bd"
               },
@@ -8617,6 +8669,7 @@
                   264,
                   358
                 ],
+                "visible_cross_extent_pixels": 157.714169,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_07/frame_02.png",
                 "png_sha256": "54a13effb373b7ce932ca6bcc5daca0a02d77c5ab949d2ba87b944e62e018fd7"
               },
@@ -8636,6 +8689,7 @@
                   276,
                   353
                 ],
+                "visible_cross_extent_pixels": 170.625952,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_07/frame_03.png",
                 "png_sha256": "83b274fea3c94b37950643327266fd3878d58eee441ca45ed233f9c8c2341a60"
               },
@@ -8655,6 +8709,7 @@
                   268,
                   376
                 ],
+                "visible_cross_extent_pixels": 161.283037,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_07/frame_04.png",
                 "png_sha256": "2430bb78aa5f9e8e3ebd9ad6bd2e3933fbde38d0843f2c4303d5656adc8400e4"
               },
@@ -8674,6 +8729,7 @@
                   280,
                   362
                 ],
+                "visible_cross_extent_pixels": 160.123721,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_07/frame_05.png",
                 "png_sha256": "0b74c02e4d91c075ec8afcae72748b7c46924bfee6f5100ebf067ff18405f76f"
               }
@@ -8699,6 +8755,7 @@
                   124,
                   374
                 ],
+                "visible_cross_extent_pixels": 121.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_08/frame_00.png",
                 "png_sha256": "ace2354dfe73c5dcaad2b74dad5f01c124a5015dbaa40343cfc03dbb1cea1f29"
               },
@@ -8718,6 +8775,7 @@
                   116,
                   381
                 ],
+                "visible_cross_extent_pixels": 116.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_08/frame_01.png",
                 "png_sha256": "36cc3e61e8c8fb4b4674fb10094e40ff23cab5d1f73f07a0fa5d9e27a9d4d2da"
               },
@@ -8737,6 +8795,7 @@
                   124,
                   379
                 ],
+                "visible_cross_extent_pixels": 123.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_08/frame_02.png",
                 "png_sha256": "a86fc8b8fb6f464964868bdfdd47e9f0e032be17e2276511586867c0fe693af1"
               },
@@ -8756,6 +8815,7 @@
                   124,
                   379
                 ],
+                "visible_cross_extent_pixels": 122.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_08/frame_03.png",
                 "png_sha256": "0bfd3500da496289dad7d3b073c268254caaf65f207a2c34efed31f569b1d8ff"
               },
@@ -8775,6 +8835,7 @@
                   120,
                   392
                 ],
+                "visible_cross_extent_pixels": 119.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_08/frame_04.png",
                 "png_sha256": "9ef067ed6ca31f951c45bf6fb6c07c783f3a1a4785f226b4573c31b01ae8c567"
               },
@@ -8794,6 +8855,7 @@
                   124,
                   389
                 ],
+                "visible_cross_extent_pixels": 121.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_08/frame_05.png",
                 "png_sha256": "537e6018985ac70d018aa687ec250c271b2003bfd47cd7a5fe78b0cb2f71b6dd"
               }
@@ -8819,6 +8881,7 @@
                   268,
                   354
                 ],
+                "visible_cross_extent_pixels": 154.236222,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_09/frame_00.png",
                 "png_sha256": "e9bc6ea06c9feabc9cc3b0915bf07b724af9d9fdec989496eb704108245c54f8"
               },
@@ -8838,6 +8901,7 @@
                   272,
                   360
                 ],
+                "visible_cross_extent_pixels": 158.260031,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_09/frame_01.png",
                 "png_sha256": "12e9feaff84eb3eea7e72d218c773922bbfdcb7f7016339c8105001330347e75"
               },
@@ -8857,6 +8921,7 @@
                   264,
                   358
                 ],
+                "visible_cross_extent_pixels": 157.714169,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_09/frame_02.png",
                 "png_sha256": "d8fd014a212546c793763c0d445df97cb0cbbf9a83c6354c1ed6d0991295d5ba"
               },
@@ -8876,6 +8941,7 @@
                   276,
                   353
                 ],
+                "visible_cross_extent_pixels": 170.625952,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_09/frame_03.png",
                 "png_sha256": "274a73ca1f0794a69fccc3cc43d0a1ad407753d4756706af7807cd628995d68f"
               },
@@ -8895,6 +8961,7 @@
                   268,
                   376
                 ],
+                "visible_cross_extent_pixels": 161.283037,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_09/frame_04.png",
                 "png_sha256": "86f9e3170a21fff4737d44dc83d35986d193483523ad24e331ce7ef76ef4a343"
               },
@@ -8914,6 +8981,7 @@
                   280,
                   362
                 ],
+                "visible_cross_extent_pixels": 160.123721,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_09/frame_05.png",
                 "png_sha256": "fa54405bc4e5ca367d1715e5e399d2480edf0af372572c2758286719b214d1d0"
               }
@@ -8939,6 +9007,7 @@
                   416,
                   293
                 ],
+                "visible_cross_extent_pixels": 180.312229,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_10/frame_00.png",
                 "png_sha256": "0a12d81a7df94ea8dfa9387f048f11b7bdcf070576303f90726af85be8628c85"
               },
@@ -8958,6 +9027,7 @@
                   420,
                   297
                 ],
+                "visible_cross_extent_pixels": 183.140656,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_10/frame_01.png",
                 "png_sha256": "45c970e5c408e9c11aa1d36f9261b0fcddb2cbc991cd080d862b160b3474272b"
               },
@@ -8977,6 +9047,7 @@
                   404,
                   293
                 ],
+                "visible_cross_extent_pixels": 176.069589,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_10/frame_02.png",
                 "png_sha256": "6d6cb3bb5ebf036aff1af15651f1f9c93f88a7995d22fc5598b580f44d69dc0c"
               },
@@ -8996,6 +9067,7 @@
                   424,
                   293
                 ],
+                "visible_cross_extent_pixels": 195.868578,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_10/frame_03.png",
                 "png_sha256": "0cb5f7ae73ccdfe518eb27e4289ed928fc3acaa87ca1604cffd159b3a6f0cf4f"
               },
@@ -9015,6 +9087,7 @@
                   416,
                   317
                 ],
+                "visible_cross_extent_pixels": 185.261977,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_10/frame_04.png",
                 "png_sha256": "c768aed12bd37b837f8998346f83bf2df05084ecea9edb5e68c9f8efc453d0c5"
               },
@@ -9034,6 +9107,7 @@
                   432,
                   296
                 ],
+                "visible_cross_extent_pixels": 184.55487,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_10/frame_05.png",
                 "png_sha256": "e942e0ff5a1d5e2798a9146f929f909d874f4d73d77fb0361cdeb3407fbdf887"
               }
@@ -9059,6 +9133,7 @@
                   508,
                   201
                 ],
+                "visible_cross_extent_pixels": 156.091713,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_11/frame_00.png",
                 "png_sha256": "c11e553c5dfcbd6338797eb0636d4969ac6996928fe3687b0ffff06aaeabbbfb"
               },
@@ -9078,6 +9153,7 @@
                   520,
                   201
                 ],
+                "visible_cross_extent_pixels": 159.911948,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_11/frame_01.png",
                 "png_sha256": "fba19cf943655c633ec64f40eeec1a6d8170af0a0dc745ceceb970e09e0265d8"
               },
@@ -9097,6 +9173,7 @@
                   504,
                   199
                 ],
+                "visible_cross_extent_pixels": 159.151247,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_11/frame_02.png",
                 "png_sha256": "c99d4b926375f00ff9abfd02c23b145b74553a674d609ecc944ce8fa2b2e7f21"
               },
@@ -9116,6 +9193,7 @@
                   520,
                   197
                 ],
+                "visible_cross_extent_pixels": 175.509114,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_11/frame_03.png",
                 "png_sha256": "34ec66c6630b2672e1f335ec32386c271352127a53692fe81b4964268ea057be"
               },
@@ -9135,6 +9213,7 @@
                   508,
                   223
                 ],
+                "visible_cross_extent_pixels": 163.247313,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_11/frame_04.png",
                 "png_sha256": "4c548ccbced7a27426a24b4896ef8a3e6b3c9ccb60f54d11b32591a977dc071c"
               },
@@ -9154,6 +9233,7 @@
                   532,
                   203
                 ],
+                "visible_cross_extent_pixels": 159.798496,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_11/frame_05.png",
                 "png_sha256": "66d45b11ed5cc216005de0904cf0b09af0142999134dbba2982de437abb3a62b"
               }
@@ -9179,6 +9259,7 @@
                   540,
                   133
                 ],
+                "visible_cross_extent_pixels": 133.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_12/frame_00.png",
                 "png_sha256": "8c4e72968261d36a920692cf5ddbe98fd795038802b6f4c0a086ddc7030c5861"
               },
@@ -9198,6 +9279,7 @@
                   552,
                   138
                 ],
+                "visible_cross_extent_pixels": 138.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_12/frame_01.png",
                 "png_sha256": "5db784541a3787de0b453fcc630c498d0b1f830b653640effa03fe3f1fcd543a"
               },
@@ -9217,6 +9299,7 @@
                   540,
                   138
                 ],
+                "visible_cross_extent_pixels": 138.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_12/frame_02.png",
                 "png_sha256": "a5692b209b3b7f3ac9564841b68f17e58ef1bd449022efac9ddd92540ed2e401"
               },
@@ -9236,6 +9319,7 @@
                   548,
                   134
                 ],
+                "visible_cross_extent_pixels": 134.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_12/frame_03.png",
                 "png_sha256": "9bce115872cb08d9abd84cc0dc5019bf96f17150609f34d0c86abf6da5138a22"
               },
@@ -9255,6 +9339,7 @@
                   548,
                   130
                 ],
+                "visible_cross_extent_pixels": 130.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_12/frame_04.png",
                 "png_sha256": "304e71e59dd57c0fbf73991c86da6ecbb13dbd4a33531073d53b46240649cf51"
               },
@@ -9274,6 +9359,7 @@
                   564,
                   133
                 ],
+                "visible_cross_extent_pixels": 133.0,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_12/frame_05.png",
                 "png_sha256": "db08b9f48c48704c2e772d6490228ec85910430b3359b8d47b320cd44cc660a4"
               }
@@ -9299,6 +9385,7 @@
                   500,
                   214
                 ],
+                "visible_cross_extent_pixels": 159.522666,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_13/frame_00.png",
                 "png_sha256": "00c0e8588f097dff7766d65eae45d575ce6344b8cafa4c2ebeeb945c185983f7"
               },
@@ -9318,6 +9405,7 @@
                   516,
                   219
                 ],
+                "visible_cross_extent_pixels": 145.922439,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_13/frame_01.png",
                 "png_sha256": "ec95735dd63a6340c84584173166aead432b335df67a21dcc0d11d0e8306f0b9"
               },
@@ -9337,6 +9425,7 @@
                   508,
                   213
                 ],
+                "visible_cross_extent_pixels": 146.024626,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_13/frame_02.png",
                 "png_sha256": "5dca5a8428dd30297a4d447d730aced06fb663413db5ac105023c5485bbee4b0"
               },
@@ -9356,6 +9445,7 @@
                   508,
                   230
                 ],
+                "visible_cross_extent_pixels": 153.039578,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_13/frame_03.png",
                 "png_sha256": "babb6a45bf33cd06fed447410f83e690b5ec802cbe292790585b752507f87315"
               },
@@ -9375,6 +9465,7 @@
                   516,
                   220
                 ],
+                "visible_cross_extent_pixels": 167.866711,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_13/frame_04.png",
                 "png_sha256": "8c2dc65d052646cf09c2e7c77f63e0670c3403fbe5fe3bf1e166ddd71375d9b6"
               },
@@ -9394,6 +9485,7 @@
                   520,
                   225
                 ],
+                "visible_cross_extent_pixels": 146.710336,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_13/frame_05.png",
                 "png_sha256": "f72b27718d404f4cc985d48f5487e9548ae3dd49c8d2f9135efc9bfb6aa01694"
               }
@@ -9419,6 +9511,7 @@
                   400,
                   309
                 ],
+                "visible_cross_extent_pixels": 172.534055,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_14/frame_00.png",
                 "png_sha256": "ebef1950ef6dd6b49f20928a452808d81f4416b93907c45503f152ec2e852dff"
               },
@@ -9438,6 +9531,7 @@
                   412,
                   315
                 ],
+                "visible_cross_extent_pixels": 168.998521,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_14/frame_01.png",
                 "png_sha256": "3c3a1b2d3dc544dd5ed7707d9134c48935d61b5873360a9c9bb7bd195f6fea13"
               },
@@ -9457,6 +9551,7 @@
                   408,
                   308
                 ],
+                "visible_cross_extent_pixels": 166.8772,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_14/frame_02.png",
                 "png_sha256": "3be705339a1ba870a2271c77ed750eb672e74795e35075ddf3daa8f82e01da8e"
               },
@@ -9476,6 +9571,7 @@
                   408,
                   324
                 ],
+                "visible_cross_extent_pixels": 167.584307,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_14/frame_03.png",
                 "png_sha256": "8bc4daa7cce21368a1e9057619eb61024b555841104dc34a97d92a8968364e3f"
               },
@@ -9495,6 +9591,7 @@
                   416,
                   314
                 ],
+                "visible_cross_extent_pixels": 190.211724,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_14/frame_04.png",
                 "png_sha256": "7f6a3355e5026e6bbe52bef62a36f39061c19284582d1fb338a0fa74b33b4217"
               },
@@ -9514,6 +9611,7 @@
                   408,
                   327
                 ],
+                "visible_cross_extent_pixels": 169.705627,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_14/frame_05.png",
                 "png_sha256": "eec1ac724e20743093686d19cc898fecd1347655e535cc313cc06c275d8c34f9"
               }
@@ -9539,6 +9637,7 @@
                   256,
                   367
                 ],
+                "visible_cross_extent_pixels": 155.073846,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_15/frame_00.png",
                 "png_sha256": "0c1d278767374629fbee4848f13fdbbe9cfcc7ca0d687cdae73dc137842588da"
               },
@@ -9558,6 +9657,7 @@
                   264,
                   378
                 ],
+                "visible_cross_extent_pixels": 148.928381,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_15/frame_01.png",
                 "png_sha256": "3b2b3ee0204e47f6548bada4bb36a3984c8dca18ed311600e7802d4f0404b284"
               },
@@ -9577,6 +9677,7 @@
                   264,
                   371
                 ],
+                "visible_cross_extent_pixels": 150.159954,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_15/frame_02.png",
                 "png_sha256": "f2225af3eedf18acfc0e134eaf0a3dd9ab27ba730f354716cd6ba9c889b7f457"
               },
@@ -9596,6 +9697,7 @@
                   256,
                   385
                 ],
+                "visible_cross_extent_pixels": 152.897797,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_15/frame_03.png",
                 "png_sha256": "ebf25abff12980c2ed1d3d67404f5ac794f26b6e18f71ab36f44ccf558874114"
               },
@@ -9615,6 +9717,7 @@
                   272,
                   372
                 ],
+                "visible_cross_extent_pixels": 164.530213,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_15/frame_04.png",
                 "png_sha256": "9b27f6ac9a577dcd82c063ba5f2910458a5e420509f30bdc23bdb7fee9eb8a2f"
               },
@@ -9634,6 +9737,7 @@
                   256,
                   392
                 ],
+                "visible_cross_extent_pixels": 145.921307,
                 "path": "assets/art/characters/caster_skill_frames/laser/direction_15/frame_05.png",
                 "png_sha256": "c7eef1b7b1cefafb313041e73899e9bf753e30b75470300270ba313db634ff62"
               }
@@ -9651,7 +9755,9 @@
         "playback_strategy": "frame_sequence",
         "pixel_snap": true,
         "geometry_alignment_contract": "skills.caster.geometry_visual_alignment.v1",
-        "fit_mode": "contain_canonical_geometry_footprint",
+        "axis_fit_contract": "skills.caster.line_visual.frame_alpha_cross_affine.v3",
+        "fit_mode": "sequence_longitudinal_and_per_frame_alpha_cross_extent",
+        "visual_cross_extent_contract": "sqrt_iso_cell_screen_area_direction_invariant",
         "movement_lock_to_primary_visual": true
       },
       "distribution_id": "client.classic_raw_complete",
@@ -10212,7 +10318,13 @@
         "anchor_policy": "top_left_from_world_anchor",
         "attachment_policy": "caster_actor",
         "playback_strategy": "frame_sequence",
-        "pixel_snap": true
+        "pixel_snap": true,
+        "presentation_contract": "skills.wizard.magic_shield.primary_actor_footpoint_centered_behind_body.v1",
+        "anchor_rebase_pixels": [
+          7.5,
+          0.0
+        ],
+        "attachment_draw_order": "behind_attached_actor_same_footpoint"
       },
       "distribution_id": "client.classic_raw_complete",
       "source_priority": {

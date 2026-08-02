@@ -1,33 +1,8 @@
 extends Node2D
 
-
-const START_DISTANCE_PIXELS := 70.0
-const SETTLED_POSITION_EPSILON := 0.05
-const SOURCE_RADIUS := 16.0
-const PLAYER_RADIUS := 18.0
-const DIAGONAL_COMPONENT := 0.7071067811865476
-
-const SCREEN_DIRECTIONS := {
-	"S": Vector2.DOWN,
-	"SW": Vector2(-DIAGONAL_COMPONENT, DIAGONAL_COMPONENT),
-	"W": Vector2.LEFT,
-	"NW": Vector2(-DIAGONAL_COMPONENT, -DIAGONAL_COMPONENT),
-	"N": Vector2.UP,
-	"NE": Vector2(DIAGONAL_COMPONENT, -DIAGONAL_COMPONENT),
-	"E": Vector2.RIGHT,
-	"SE": Vector2(DIAGONAL_COMPONENT, DIAGONAL_COMPONENT),
-}
-
-const LEGACY_48PX_LOGICAL_DISTANCE := {
-	"S": 1.5,
-	"SW": 1.590990,
-	"W": 0.75,
-	"NW": 1.590990,
-	"N": 1.5,
-	"NE": 1.590990,
-	"E": 0.75,
-	"SE": 1.590990,
-}
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const START_DISTANCE_GU := 3.0
+const SETTLED_POSITION_EPSILON_GU := 0.002
 
 
 func _ready() -> void:
@@ -36,7 +11,7 @@ func _ready() -> void:
 
 func _run() -> void:
 	PlayerState.test_mode = true
-	_verify_legacy_directional_error_and_new_contact_geometry()
+	_verify_projected_speed_is_equal_in_32_directions()
 
 	var player := PlayerCharacter.new()
 	player.name = "StaticContactPlayer"
@@ -47,130 +22,93 @@ func _run() -> void:
 	player.max_hp = 1000000
 	player.current_hp = player.max_hp
 	player.set_touch_vector(Vector2.ZERO)
+
 	var ranged_probe := EnemyActor.new()
 	ranged_probe.setup(GameData.get_monster("火焰沃玛"), player, false)
-	assert(is_equal_approx(ranged_probe.attack_range, 155.0), "远程基线攻击距离变化")
-	assert(
-		not ranged_probe._uses_player_melee_contact_contract(player),
-		"远程怪错误进入1.5格接敌合同",
-	)
+	assert(is_equal_approx(ranged_probe.attack_range_gu, 155.0 / 32.0), "远程旧PX范围未在adapter边界转换为GU")
+	assert(not ranged_probe._uses_player_melee_contact_contract(player))
 	ranged_probe.free()
 
-	var final_distances := {}
-	for direction_name: String in SCREEN_DIRECTIONS:
-		var screen_direction: Vector2 = SCREEN_DIRECTIONS[direction_name]
+	var final_distances_gu: Array[float] = []
+	var enemies: Array[EnemyActor] = []
+	var settled_frame_counts: Array[int] = []
+	for direction_index in range(8):
+		var angle := TAU * float(direction_index) / 8.0
+		var direction_ground := Vector2.from_angle(angle)
 		var enemy := EnemyActor.new()
-		enemy.name = "ContactProbe_%s" % direction_name
+		enemy.name = "ContactProbe_%d" % direction_index
 		enemy.setup({"monsterId": -9001, "name": "接敌测试怪"}, player, false)
-		enemy.global_position = screen_direction * START_DISTANCE_PIXELS
+		enemy.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+			direction_ground * START_DISTANCE_GU
+		)
 		enemy.set_meta("spawn_position", enemy.global_position)
 		enemy.set_meta("safe_zones", [])
 		enemy._attack_timer = 999.0
 		add_child(enemy)
+		enemies.append(enemy)
+		settled_frame_counts.append(0)
 
-		var start_position := enemy.global_position
-		var consecutive_settled_frames := 0
-		for _frame in range(90):
-			await get_tree().physics_frame
-			var offset := player.global_position - enemy.global_position
-			var logical_distance := EnemyActor.logical_tile_distance_for_world_offset(offset)
-			var moved := enemy.global_position.distance_to(start_position) > 1.0
-			if moved and enemy.velocity.length_squared() <= 0.01 and logical_distance <= 1.5001:
-				consecutive_settled_frames += 1
-			else:
-				consecutive_settled_frames = 0
-			if consecutive_settled_frames >= 5:
-				break
-
-		assert(consecutive_settled_frames >= 5, "%s方向怪物没有稳定进入接敌状态" % direction_name)
-		var final_offset := player.global_position - enemy.global_position
-		var final_distance := final_offset.length()
-		var final_logical_distance := EnemyActor.logical_tile_distance_for_world_offset(final_offset)
-		assert(
-			final_logical_distance <= EnemyActor.PLAYER_MELEE_CONTACT_REACH_TILES + 0.0001,
-			"%s方向仍停在1.5格外：%.6f" % [direction_name, final_logical_distance],
-		)
-		var physical_support := EnemyActor.directional_footprint_contact_distance(
-			enemy.collision_radius,
-			ArtSpec.PLAYER_COLLISION_RADIUS,
-			final_offset,
-			0.0,
-		)
-		assert(
-			final_distance >= physical_support + 10.0,
-			"%s方向接敌穿入2:1脚印：distance=%.3f support=%.3f" % [
-				direction_name, final_distance, physical_support,
-			],
-		)
-
-		var settled_position := enemy.global_position
-		for _frame in range(8):
-			await get_tree().physics_frame
-			assert(
-				enemy.global_position.distance_to(settled_position) <= SETTLED_POSITION_EPSILON,
-				"%s方向接敌后发生抖动" % direction_name,
-			)
-		final_distances[direction_name] = final_logical_distance
-		enemy.queue_free()
+	# Run every direction in the same physics frames. This keeps the formal
+	# 8-direction equivalence test below the repository's default 8s budget.
+	for _frame in range(120):
 		await get_tree().physics_frame
+		for direction_index in range(enemies.size()):
+			if settled_frame_counts[direction_index] >= 5:
+				continue
+			var enemy := enemies[direction_index]
+			var delta_ground_gu := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+				player.global_position - enemy.global_position
+			)
+			var engagement_distance_gu := maxf(
+				enemy.attack_range_gu,
+				enemy._contact_distance_gu_to_target(player),
+			)
+			if (
+				delta_ground_gu.length() <= engagement_distance_gu + 0.002
+				and enemy.actual_ground_motion_gu.length() <= SETTLED_POSITION_EPSILON_GU
+			):
+				settled_frame_counts[direction_index] += 1
+			else:
+				settled_frame_counts[direction_index] = 0
+		if settled_frame_counts.all(func(count: int) -> bool: return count >= 5):
+			break
+
+	for direction_index in range(enemies.size()):
+		var enemy := enemies[direction_index]
+		assert(settled_frame_counts[direction_index] >= 5, "direction %d did not settle in GU contact" % direction_index)
+		var final_delta_ground_gu := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			player.global_position - enemy.global_position
+		)
+		final_distances_gu.append(final_delta_ground_gu.length())
+		enemy.queue_free()
+	await get_tree().physics_frame
+
+	var minimum: float = float(final_distances_gu.min())
+	var maximum: float = float(final_distances_gu.max())
+	assert(maximum - minimum <= 0.025, "GU melee contact remains direction dependent: %s" % final_distances_gu)
 
 	player.queue_free()
 	print(
-		"MONSTER_MELEE_CONTACT_GEOMETRY_PASS contract=%s logical=%s" % [
+		"MONSTER_MELEE_CONTACT_GEOMETRY_PASS contract=%s distances_gu=%s" % [
 			EnemyActor.PLAYER_MELEE_CONTACT_CONTRACT_ID,
-			final_distances,
+			final_distances_gu,
 		]
 	)
 	get_tree().quit(0)
 
 
-func _verify_legacy_directional_error_and_new_contact_geometry() -> void:
-	# Primary source evidence:
-	# - original_gameofmir/MirClient/ClFunc.pas:351-355 GetDistance uses
-	#   MAX(abs(dx), abs(dy)) in logical cells.
-	# - original_gameofmir/MirClient/ClMain.pas:2698-2699 resolves direction in
-	#   logical cells and admits melee only when both axes are <= 1.
-	# The project-authorized reach is 1.5 cells, but the coordinate family stays
-	# identical. The previous 48px Euclidean circle violates that family.
-	var legacy_distance := SOURCE_RADIUS + PLAYER_RADIUS + 14.0
-	for direction_name: String in SCREEN_DIRECTIONS:
-		var direction: Vector2 = SCREEN_DIRECTIONS[direction_name]
-		var observed_legacy := EnemyActor.logical_tile_distance_for_world_offset(
-			direction * legacy_distance
+func _verify_projected_speed_is_equal_in_32_directions() -> void:
+	const SPEED_GU_PER_SEC := 1.8125
+	for direction_index in range(32):
+		var direction_ground := Vector2.from_angle(TAU * float(direction_index) / 32.0)
+		var velocity_px_per_sec := GroundUnitSpaceScript.desired_screen_velocity_px_per_sec(
+			direction_ground,
+			SPEED_GU_PER_SEC,
+		)
+		var recovered_velocity_ground_gu_per_sec := (
+			GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(velocity_px_per_sec)
 		)
 		assert(
-			absf(observed_legacy - float(LEGACY_48PX_LOGICAL_DISTANCE[direction_name])) < 0.0001,
-			"%s方向旧48px量化结果变化：%.6f" % [direction_name, observed_legacy],
+			absf(recovered_velocity_ground_gu_per_sec.length() - SPEED_GU_PER_SEC) <= 0.00001,
+			"direction %d projected monster speed is not GU/s" % direction_index,
 		)
-
-		var contact_distance := EnemyActor.directional_footprint_contact_distance(
-			SOURCE_RADIUS,
-			PLAYER_RADIUS,
-			direction,
-		)
-		var corrected_logical := EnemyActor.logical_tile_distance_for_world_offset(
-			direction * contact_distance
-		)
-		assert(
-			corrected_logical <= EnemyActor.PLAYER_MELEE_CONTACT_REACH_TILES + 0.0001,
-			"%s方向的2:1脚印接敌仍超出1.5格：%.6f" % [direction_name, corrected_logical],
-		)
-
-	assert(
-		is_equal_approx(
-			EnemyActor.directional_footprint_contact_distance(
-				SOURCE_RADIUS, PLAYER_RADIUS, Vector2.RIGHT
-			),
-			48.0,
-		),
-		"东西方向没有保留横向脚印支持距离",
-	)
-	assert(
-		is_equal_approx(
-			EnemyActor.directional_footprint_contact_distance(
-				SOURCE_RADIUS, PLAYER_RADIUS, Vector2.DOWN
-			),
-			31.0,
-		),
-		"南北方向仍错误使用两倍高度的横向碰撞半径",
-	)

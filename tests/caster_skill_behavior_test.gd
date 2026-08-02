@@ -4,9 +4,10 @@ extends Node
 func _ready() -> void:
 	var repulsion := CasterSkillBehavior.resolve("wizard.repulsion_ring", {
 		"skill_level": 3, "caster_level": 30, "target_level": 28,
-		"random_0_to_19": 16, "random_0_or_1": 1, "cell_size": 48,
+		"random_0_to_19": 16, "random_0_or_1": 1,
 	})
-	assert(repulsion.success and repulsion.push_cells == 4 and repulsion.push_distance == 192)
+	assert(repulsion.success and repulsion.push_distance_gu == 4.0)
+	assert(not repulsion.has("push_cells") and not repulsion.has("push_distance"))
 	var repulsion_fail := CasterSkillBehavior.resolve("wizard.repulsion_ring", {
 		"skill_level": 3, "caster_level": 30, "target_level": 28, "random_0_to_19": 17,
 	})
@@ -64,8 +65,8 @@ func _ready() -> void:
 
 	var invisibility := CasterSkillBehavior.resolve("taoist.invisibility", {"skill_level": 3, "spiritual_stat_roll": 20})
 	var mass_invisibility := CasterSkillBehavior.resolve("taoist.mass_invisibility", {"skill_level": 3, "spiritual_stat_roll": 20})
-	assert(invisibility.duration_seconds == 90 and invisibility.area_radius_cells == 0)
-	assert(mass_invisibility.duration_seconds == 90 and mass_invisibility.area_radius_cells == 1)
+	assert(invisibility.duration_seconds == 90 and invisibility.area_radius_grid_steps == 0)
+	assert(mass_invisibility.duration_seconds == 90 and mass_invisibility.area_radius_grid_steps == 1)
 	var magic_defense := CasterSkillBehavior.resolve("taoist.magic_defense", {"skill_level": 3, "spiritual_stat_roll": 20})
 	var defense := CasterSkillBehavior.resolve("taoist.defense", {"skill_level": 3, "spiritual_stat_roll": 20})
 	assert(magic_defense.operation == "magic_defense_buff" and magic_defense.buff_power == 260)

@@ -58,7 +58,7 @@ func _init() -> void:
 	for tile: Vector2i in [Vector2i(126,94),Vector2i(126,160),Vector2i(94,126),Vector2i(160,126)]:
 		_place(document, "v1_5.b012_01", tile, "terrain")
 
-	assert(MapEditorGameplaySemanticService.add_entry(document, "safe_area", Vector2i(128,128), {"area_id":"safe.bich_city", "radius_tiles":16, "return_anchor":true}).ok)
+	assert(MapEditorGameplaySemanticService.add_entry(document, "safe_area", Vector2i(128,128), {"area_id":"safe.bich_city", "radius_gu":16, "return_anchor":true}).ok)
 	_add_door(document, Vector2i(128,1), "exit.wooma_forest", "268", "沃玛森林")
 	_add_door(document, Vector2i(254,128), "exit.orc_tomb", "217", "兽人古墓")
 	_add_door(document, Vector2i(128,254), "exit.snake_valley", "338", "毒蛇山谷")

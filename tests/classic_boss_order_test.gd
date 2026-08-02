@@ -37,12 +37,12 @@ func _run() -> void:
 	await get_tree().process_frame
 	assert(wooma.visual.uses_final_art() and int(wooma.boss_rule.get("monsterId", -1)) == 76, "沃玛教主未按monsterId读取动画/规则")
 	var relocation_result := {"radius": 0}
-	wooma.relocation_requested.connect(func(_enemy: EnemyActor, radius: int) -> void:
-		relocation_result.radius = radius
+	wooma.relocation_requested.connect(func(_enemy: EnemyActor, radius_gu: float) -> void:
+		relocation_result.radius = radius_gu
 	)
 	wooma.take_damage(int(ceil(float(wooma.max_hp) / 7.0)) + 1)
 	assert(wooma._boss_rage_time > 7.9 and wooma._attack_interval == 0.5, "沃玛教主七段临时狂暴未触发")
-	assert(wooma.request_surrounded_relocation(5) and int(relocation_result.radius) == 4, "沃玛教主受困传送接口未发出稳定请求")
+	assert(wooma.request_surrounded_relocation(5) and is_equal_approx(float(relocation_result.radius), 4.0), "沃玛教主受困传送接口未发出稳定请求")
 
 	var dragon := _boss(124, "本地化触龙首领", player)
 	await get_tree().process_frame

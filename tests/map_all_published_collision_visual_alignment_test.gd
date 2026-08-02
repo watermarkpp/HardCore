@@ -58,7 +58,7 @@ func _ready() -> void:
 			assert(cell.x >= 0, "%s invalid blocked key %s" % [map_key, raw_key])
 			var polygon := CollisionGeometry.cell_polygon_world(cell, design_size)
 			var polygon_center := _polygon_center(polygon)
-			var visual_center := MapEditorCoordinate.cell_center_to_world(
+			var visual_center := MapEditorCoordinate.grid_cell_to_screen_position_px(
 				Vector2(cell), design_size
 			)
 			assert(
@@ -99,7 +99,7 @@ func _ready() -> void:
 			# visible-ground contract and must remain boundary-blocked even though
 			# the authored cell itself was erased.
 			if CollisionGeometry.visible_ground_contains_tile(
-				MapEditorCoordinate.world_to_tile(erased_world, design_size),
+				MapEditorCoordinate.screen_position_px_to_ground_position_gu(erased_world, design_size),
 				design_size
 			):
 				assert(
@@ -170,7 +170,7 @@ func _assert_ground_origin(
 			MapEditorCoordinate.cell_center_to_ground_px(cell, design_size)
 			- ground_center
 		)
-		var world_cell_center := MapEditorCoordinate.cell_center_to_world(
+		var world_cell_center := MapEditorCoordinate.grid_cell_to_screen_position_px(
 			cell, design_size
 		)
 		assert(
@@ -182,13 +182,13 @@ func _assert_ground_origin(
 		Vector2(ground_center.x, ground_pixel_size.y) - ground_center
 	)
 	assert(
-		visible_top_world.is_equal_approx(MapEditorCoordinate.tile_to_world(
+		visible_top_world.is_equal_approx(MapEditorCoordinate.ground_position_gu_to_screen_position_px(
 			Vector2(-0.5, -0.5), design_size
 		)),
 		"%s visible canvas top does not match physical boundary" % map_key
 	)
 	assert(
-		visible_bottom_world.is_equal_approx(MapEditorCoordinate.tile_to_world(
+		visible_bottom_world.is_equal_approx(MapEditorCoordinate.ground_position_gu_to_screen_position_px(
 			Vector2(design_size) - Vector2(0.5, 0.5), design_size
 		)),
 		"%s visible canvas bottom does not match physical boundary" % map_key
@@ -202,7 +202,7 @@ func _assert_ground_origin(
 		"%s runtime base fill/guard diverged from chunk and collision edge"
 			% map_key
 	)
-	var old_shifted_top := MapEditorCoordinate.tile_to_world(
+	var old_shifted_top := MapEditorCoordinate.ground_position_gu_to_screen_position_px(
 		Vector2.ZERO, design_size
 	)
 	assert(
@@ -227,10 +227,10 @@ func _assert_boundary_contract(
 		Vector2(-0.5, float(design_size.y) - 0.5),
 	])
 	assert(tile_boundary == expected, "map %d visible edge mismatch" % runtime_map_id)
-	var top_vertex := MapEditorCoordinate.tile_to_world(
+	var top_vertex := MapEditorCoordinate.ground_position_gu_to_screen_position_px(
 		Vector2(-0.5, -0.5), design_size
 	)
-	var logical_top := MapEditorCoordinate.tile_to_world(
+	var logical_top := MapEditorCoordinate.ground_position_gu_to_screen_position_px(
 		Vector2.ZERO, design_size
 	)
 	assert(
@@ -238,12 +238,12 @@ func _assert_boundary_contract(
 		"map %d half-cell boundary must remove collision_y=+16" % runtime_map_id
 	)
 	var empty_collision := {"blocked_tiles": []}
-	var visual_edge := MapEditorCoordinate.tile_to_world(
+	var visual_edge := MapEditorCoordinate.ground_position_gu_to_screen_position_px(
 		Vector2(float(design_size.x) * 0.5 - 0.5, -0.5),
 		design_size
 	)
 	var edge_direction := (
-		MapEditorCoordinate.tile_to_world(
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
 			Vector2(float(design_size.x) - 0.5, -0.5), design_size
 		) - top_vertex
 	)
@@ -266,7 +266,7 @@ func _assert_boundary_contract(
 	for index in expected.size():
 		assert(
 			world_boundary[index].is_equal_approx(
-				MapEditorCoordinate.tile_to_world(expected[index], design_size)
+				MapEditorCoordinate.ground_position_gu_to_screen_position_px(expected[index], design_size)
 			),
 			"map %d boundary world mismatch at %d" % [runtime_map_id, index]
 		)
@@ -397,7 +397,7 @@ func _assert_bich_runtime_physics() -> void:
 	)
 	assert(background._editor_runtime_blocks_world(blocked_center))
 	assert(not _physics_hits(blocked_center).is_empty())
-	var visual_edge := MapEditorCoordinate.tile_to_world(
+	var visual_edge := MapEditorCoordinate.ground_position_gu_to_screen_position_px(
 		Vector2(float(design_size.x) * 0.5 - 0.5, -0.5),
 		design_size
 	)

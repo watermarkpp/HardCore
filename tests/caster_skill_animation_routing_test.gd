@@ -1,6 +1,10 @@
 extends Node
 
 const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
+const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+const CombatUnitLegacyAdapter := preload(
+	"res://scripts/skills/combat_unit_legacy_adapter.gd"
+)
 
 
 func _context() -> Dictionary:
@@ -40,14 +44,33 @@ func _ready() -> void:
 	var lightning_player := AnimationPlayerScript.new()
 	add_child(lightning_player)
 	assert(lightning_player.configure("wizard.lightning"))
-	assert(lightning_player.scale == Vector2.ONE)
+	var lightning_render := CasterSkillVisualRegistry.render_policy(
+		"wizard.lightning"
+	)
+	assert(
+		lightning_render.get("presentation_contract", "")
+		== "skills.wizard.lightning.slender_axis.v1"
+	)
+	assert(lightning_player.scale.is_equal_approx(Vector2(0.62, 1.0)))
 	assert(lightning_player.frame_count() == 6)
+	assert(lightning_player.fitted_visual_bounds().size.x <= 316.0 * 0.62 + 0.001)
+	assert(lightning_player.fitted_visual_bounds().size.y == 997.0)
 	lightning_player.free()
 
 	var invalid_projectile := SkillProjectile.new()
-	invalid_projectile.setup(
-		Vector2.ZERO, Vector2.RIGHT, 10, 100.0, Color.WHITE,
-		"damage", 0, 0.0, "wizard.lightning"
+	invalid_projectile.setup_ground_unit_projectile(
+		Vector2.ZERO,
+		GroundUnitSpace.screen_delta_px_to_ground_delta_gu(Vector2.RIGHT),
+		3.125,
+		10,
+		CombatUnitLegacyAdapter.PROJECTILE_SPEED_GU_PER_SEC,
+		CombatUnitLegacyAdapter.PROJECTILE_RADIUS_GU,
+		Vector2.ZERO,
+		Color.WHITE,
+		"damage",
+		0,
+		0.0,
+		"wizard.lightning"
 	)
 	add_child(invalid_projectile)
 	assert(invalid_projectile._sprite == null)
@@ -96,7 +119,18 @@ func _ready() -> void:
 	assert(hellfire_nodes.size() == 1)
 	var trail := hellfire_nodes[0] as CasterSkillVisualEffect
 	add_child(trail)
-	assert(trail.radius == 250.0)
+	var hellfire_direction_ground_gu := (
+		GroundUnitSpace.screen_delta_px_to_ground_delta_gu(Vector2.RIGHT)
+		.normalized()
+	)
+	var expected_hellfire_radius_px := (
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			hellfire_direction_ground_gu * 5.0
+		).length()
+	)
+	assert(is_equal_approx(
+		trail.radius, expected_hellfire_radius_px
+	), "formal five-GU hellfire radius was not authoritative")
 	assert(trail._hellfire_frame_count == 6)
 	assert(trail._hellfire_step_seconds == 0.05)
 	assert(is_equal_approx(trail._hellfire_step_distance, (500.0 / 0.9) * 0.05))
@@ -151,7 +185,7 @@ func _ready() -> void:
 	target.free()
 	print(
 		"CASTER_SKILL_ANIMATION_ROUTING_PASS: exact direction thresholds, "
-		+ "source-pixel rendering, specialized roles, fixed lightning, "
-		+ "five-tile hellfire, primary fire wall and two-phase teleport"
+		+ "primary-pixel rendering, slender-axis lightning, specialized roles, "
+		+ "formal five-tile hellfire, primary fire wall and two-phase teleport"
 	)
 	get_tree().quit(0)
