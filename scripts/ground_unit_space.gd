@@ -44,9 +44,10 @@ static func is_within_range_gu(
 	range_gu: float
 ) -> bool:
 	var safe_range_gu := maxf(0.0, range_gu)
+	var inclusive_range_gu := safe_range_gu + EPSILON_GU
 	return (
 		distance_squared_gu(origin_ground_gu, target_ground_gu)
-		<= safe_range_gu * safe_range_gu + EPSILON_GU * EPSILON_GU
+		<= inclusive_range_gu * inclusive_range_gu
 	)
 
 
