@@ -14,6 +14,7 @@ const MapRuntimeCollisionGeometryScript := preload(
 )
 const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const SystemMenuPanelScript := preload("res://scripts/system_menu_panel.gd")
 const SkillLoadoutRulesScript := preload("res://scripts/skill_loadout_rules.gd")
 const SkillInputPolicyScript := preload("res://scripts/skill_input_policy.gd")
@@ -4141,16 +4142,15 @@ func _canonical_fractional_tile_to_world(tile: Vector2) -> Vector2:
 	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
 	if not runtime.is_empty():
 		return MapEditorRuntimeBridgeScript.tile_to_world(runtime, [tile.x, tile.y])
-	return Vector2((tile.x - tile.y) * 16.0, (tile.x + tile.y) * 8.0)
+	return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(tile)
 
 
 func _canonical_tile_to_world(tile_value: Variant) -> Vector2:
 	var tile := Vector2i(tile_value) if tile_value is Vector2i else Vector2i.ZERO
 	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
 	if runtime.is_empty():
-		return Vector2(
-			float(tile.x - tile.y) * 16.0,
-			float(tile.x + tile.y) * 8.0
+		return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+			Vector2(tile)
 		)
 	return MapEditorRuntimeBridgeScript.tile_to_world(runtime, [tile.x, tile.y])
 
