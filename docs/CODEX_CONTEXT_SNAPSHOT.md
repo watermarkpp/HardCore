@@ -1,5 +1,14 @@
 # Codex 精简上下文快照
 
+## 2026-08-02 Android v61：地狱火/疾光电影视觉尺寸稳定修复
+
+- 根因已量化：旧实现把整张方向帧按“目标轴向长度 / 当前源帧前向包围长度”统一缩放。地狱火实际是沿轨迹重复发射的单个火焰块，却被当成整条 5 格直线缩放，16 方向比例约为 `0.243..1.524`（最大相差 `6.27x`）；疾光电影不同方向源序列的整图比例约为 `0.489..0.990`（最大相差 `2.02x`）。近距离目标的瞄准角变化更大，容易跨越缩放档位；重复疾光电影还会与旧视觉短暂叠加，因此形成“贴脸变大、方向大小不同、越放越大”的实机观感。
+- 职业技能提交 `064f2482bbaa26f1f268b0d5763e8b6caf97ad05` 已作为集成提交 `3199e26b` 接入。地狱火的每个 FireGun 火焰块固定使用原始像素变换，5 格长度只由正式轨迹发射位置控制，新增合同 `skills.wizard.hellfire.firegun_trail.fixed_source_pixels.v1`。疾光电影按所选 16 向源序列的本地纵轴/横轴分别拟合到 8 格长度与 1 格投影宽度，6 帧共享同一个固定变换且每次配置先清零，新增合同 `skills.caster.line_visual.axis_cross_affine.v2`。同一施法者的新疾光电影会替换尚未结束的旧视觉，新增合同 `skills.wizard.laser.single_active_visual_per_caster.v1`。
+- 伤害、耗蓝、锁定、施法时序、5x1/8x1 连续命中几何和正式 PNG 均未改变。定向稳定/动画/输入/技能回归 `21/21`，完整 Warrior/资源目录回归 `25/25`；正式法师素材审计 `26` 项、`586` 帧、`0 fallback`。
+- Android 固定构建提交为 `af15fff9fa9aff123b3c87a5c37afbadd6db6396`；APK 为 `outputs/hardcore/HardCore-v61-wizard-line-visual-stability-debug.apk`，大小 `244,423,157` 字节，SHA-256 `BDD3F11CF565497BE249BC2C768E3FE536784E74AC92B3DA9374F21D3776552F`。包信息为 `versionCode=61`、`versionName=1.17.25-wizard-line-visual-stability`、`HardCore`、`arm64-v8a`、`minSdk=24`、`targetSdk=36`，APK v2/v3 签名通过。
+- 已在 HONOR 90（REA-AN00）使用 `adb install -r` 保留存档覆盖安装并冷启动；手机回读版本、前台 `GodotAppLauncher` 和进程正常，日志未发现 Godot 脚本错误、解析错误、ANR 或 Android 崩溃。
+- 用户冻结对象零变化：`item_236.json` / `item_240.json` SHA-256 仍为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC` / `81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`；三份怪物脚点合同仍为 `DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+
 ## 2026-08-02 Android v60：地狱火/疾光电影连续直线实机测试包
 
 - Android 固定构建提交为 `91fec0c7e0517987f4233850b7ac2d59eca61e74`；APK 为 `outputs/hardcore/HardCore-v60-wizard-line-geometry-debug.apk`，大小 `244,419,061` 字节，SHA-256 `BBEED12ADD412A1587BCC788CC30DBB462D724B6E1F201A72E5484E9C5831CA0`。
