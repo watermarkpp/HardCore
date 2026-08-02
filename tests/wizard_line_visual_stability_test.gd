@@ -112,7 +112,7 @@ func _verify_laser_target_distance_direction_and_replay_stability() -> void:
 			"",
 			far_effect._desired_sprite_footprint_px,
 			far_effect._desired_sprite_axis_extent_px,
-			far_effect._visual_axis_screen,
+			far_effect._visual_axis_screen_px,
 			far_effect._desired_sprite_cross_axis_extent_px
 		))
 		assert(far_sprite.transform.is_equal_approx(expected_transform))
@@ -192,17 +192,17 @@ func _line_plan(
 	sample_index: int
 ) -> Dictionary:
 	var tile_aim := Vector2.from_angle(TAU * float(sample_index) / 16.0)
-	var strip := SpellGeometry.continuous_line_strip(
+	var strip := SpellGeometry.continuous_line_strip_ground_gu(
 		Vector2.ZERO,
 		tile_aim,
 		Vector2.RIGHT,
 		length_tiles,
 		1.0
 	)
-	var world_points := SpellGeometry.continuous_line_world_points(
+	var world_points := SpellGeometry.continuous_line_screen_points_px(
 		strip,
 		func(tile: Vector2) -> Vector2:
-			return DirectionSpace.fractional_tile_delta_to_world_delta(tile)
+			return DirectionSpace.ground_delta_gu_to_screen_delta_px(tile)
 	)
 	var plan := CasterSkillRuntime.resolve(skill_id, {
 		"skill_level": 3,

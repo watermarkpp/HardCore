@@ -65,8 +65,8 @@ func _ready() -> void:
 
 	var invisibility := CasterSkillBehavior.resolve("taoist.invisibility", {"skill_level": 3, "spiritual_stat_roll": 20})
 	var mass_invisibility := CasterSkillBehavior.resolve("taoist.mass_invisibility", {"skill_level": 3, "spiritual_stat_roll": 20})
-	assert(invisibility.duration_seconds == 90 and invisibility.area_radius_cells == 0)
-	assert(mass_invisibility.duration_seconds == 90 and mass_invisibility.area_radius_cells == 1)
+	assert(invisibility.duration_seconds == 90 and invisibility.area_radius_grid_steps == 0)
+	assert(mass_invisibility.duration_seconds == 90 and mass_invisibility.area_radius_grid_steps == 1)
 	var magic_defense := CasterSkillBehavior.resolve("taoist.magic_defense", {"skill_level": 3, "spiritual_stat_roll": 20})
 	var defense := CasterSkillBehavior.resolve("taoist.defense", {"skill_level": 3, "spiritual_stat_roll": 20})
 	assert(magic_defense.operation == "magic_defense_buff" and magic_defense.buff_power == 260)

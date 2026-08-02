@@ -23,14 +23,14 @@ func _test_direction_round_trip() -> void:
 	assert(all_directions.consistent)
 	assert(
 		all_directions.direction_space_contract_id
-		== "gameplay.professions.combat_direction_space.ground_gu_8dir.v2"
+		== "gameplay.professions.combat_direction_space.ground_gu_8dir.v3"
 	)
 	for direction_index in range(8):
 		var audit: Dictionary = all_directions.directions[direction_index]
 		assert(audit.result_code == Diagnostic.RESULT_OK)
 		assert(
 			audit.direction_space_contract_id
-			== "gameplay.professions.combat_direction_space.ground_gu_8dir.v2"
+			== "gameplay.professions.combat_direction_space.ground_gu_8dir.v3"
 		)
 		assert(audit.screen_direction_index == direction_index)
 		assert(audit.world_direction_index == direction_index)
@@ -46,7 +46,7 @@ func _test_fractional_angle_quantization_audit() -> void:
 	# interpretations. This proves the disagreement is not an index-order bug.
 	for direction_index in range(8):
 		var delta := Vector2(Geometry.facing_tile_step(direction_index))
-		var exact := Diagnostic.audit_fractional_tile_delta(delta)
+		var exact := Diagnostic.audit_ground_delta_gu(delta)
 		assert(
 			exact.contract_id
 			== "diagnostic.warrior.melee_angle_quantization.v1"
@@ -63,7 +63,7 @@ func _test_fractional_angle_quantization_audit() -> void:
 	# Fractional deltas expose the actual policy difference: in a 2:1 screen
 	# projection (1,0.5) appears closer to SE, while direct tile-space 45-degree
 	# quantization classifies it as S.
-	var asymmetric := Diagnostic.audit_fractional_tile_delta(Vector2(1.0, 0.5))
+	var asymmetric := Diagnostic.audit_ground_delta_gu(Vector2(1.0, 0.5))
 	assert(asymmetric.projected_screen_45_direction_index == 7)
 	assert(asymmetric.ground_space_45_direction_index == 0)
 	assert(not asymmetric.quantizers_match)
@@ -79,7 +79,7 @@ func _test_fractional_angle_quantization_audit() -> void:
 	)
 	assert(is_equal_approx(normalized_length, 1.0))
 
-	var mirrored := Diagnostic.audit_fractional_tile_delta(Vector2(0.5, 1.0))
+	var mirrored := Diagnostic.audit_ground_delta_gu(Vector2(0.5, 1.0))
 	assert(mirrored.projected_screen_45_direction_index == 1)
 	assert(mirrored.ground_space_45_direction_index == 0)
 	assert(not mirrored.quantizers_match)
@@ -192,7 +192,7 @@ func _test_mirrors_canonical_geometry() -> void:
 								Geometry.is_single_target_in_reach(
 									Vector2.ZERO, target, mode
 								)
-								and Geometry.direction_index_for_tile_delta(target)
+								and Geometry.direction_index_for_ground_delta_gu(target)
 								== attack_direction
 							)
 					assert(explained.accepted == expected)

@@ -83,13 +83,13 @@ func _verify_all_eight_direction_angles() -> void:
 	var hellfire := Loader.skill("wizard.hellfire")
 	var laser := Loader.skill("wizard.laser")
 	for direction_index: int in range(8):
-		var world_direction := DirectionSpace.projected_world_direction(
+		var world_direction := DirectionSpace.projected_screen_direction_px(
 			direction_index
 		)
-		var expected_tile_step := DirectionSpace.canonical_tile_step(
+		var expected_tile_step := DirectionSpace.canonical_grid_step(
 			direction_index
 		)
-		var actual_tile_step := SpellGeometry.canonical_facing_from_world_direction(
+		var actual_tile_step := SpellGeometry.canonical_facing_grid_step_from_screen_direction_px(
 			world_direction
 		)
 		assert(actual_tile_step == expected_tile_step)
@@ -104,7 +104,7 @@ func _verify_all_eight_direction_angles() -> void:
 	# This is the historical bug in one line: screen-down is tile (1, 1),
 	# never sign(screen-down) == tile (0, 1).
 	assert(
-		SpellGeometry.canonical_facing_from_world_direction(Vector2.DOWN)
+		SpellGeometry.canonical_facing_grid_step_from_screen_direction_px(Vector2.DOWN)
 		== Vector2i(1, 1)
 	)
 
@@ -117,7 +117,7 @@ func _verify_continuous_line_axes_and_footprint_contact() -> void:
 	]
 	for length_tiles: float in [5.0, 8.0]:
 		for test_case: Dictionary in cases:
-			var strip := SpellGeometry.continuous_line_strip(
+			var strip := SpellGeometry.continuous_line_strip_ground_gu(
 				Vector2.ZERO,
 				test_case.aim,
 				Vector2.RIGHT,
@@ -135,25 +135,25 @@ func _verify_continuous_line_axes_and_footprint_contact() -> void:
 				length_tiles
 			), "GU line length changed with direction: %s" % test_case)
 
-	var free_aim := SpellGeometry.continuous_line_strip(
+	var free_aim := SpellGeometry.continuous_line_strip_ground_gu(
 		Vector2.ZERO, Vector2(10.0, 5.0), Vector2.RIGHT, 5.0, 1.0
 	)
 	var on_axis_footprint := _tile_box(Vector2(3.0, 1.5), Vector2(0.4, 0.4))
 	var off_axis_footprint := _tile_box(Vector2(3.0, 3.0), Vector2(0.4, 0.4))
-	assert(SpellGeometry.target_footprint_intersects_continuous_line(
+	assert(SpellGeometry.target_footprint_intersects_continuous_line_ground_gu(
 		free_aim, on_axis_footprint
 	))
-	assert(not SpellGeometry.target_footprint_intersects_continuous_line(
+	assert(not SpellGeometry.target_footprint_intersects_continuous_line_ground_gu(
 		free_aim, off_axis_footprint
 	))
-	var world_points := SpellGeometry.continuous_line_world_points(
+	var world_points := SpellGeometry.continuous_line_screen_points_px(
 		free_aim,
 		func(tile: Vector2) -> Vector2:
-			return DirectionSpace.fractional_tile_delta_to_world_delta(tile)
+			return DirectionSpace.ground_delta_gu_to_screen_delta_px(tile)
 	)
 	assert(world_points.size() == 5)
 	assert(world_points.back().is_equal_approx(
-		DirectionSpace.fractional_tile_delta_to_world_delta(
+		DirectionSpace.ground_delta_gu_to_screen_delta_px(
 			Vector2(1.0, 0.5).normalized() * 5.0
 		)
 	))
@@ -166,7 +166,7 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 	]:
 		for sample_index: int in range(16):
 			var tile_aim := Vector2.from_angle(TAU * float(sample_index) / 16.0)
-			var strip := SpellGeometry.continuous_line_strip(
+			var strip := SpellGeometry.continuous_line_strip_ground_gu(
 				Vector2.ZERO,
 				tile_aim,
 				Vector2.RIGHT,
@@ -178,13 +178,13 @@ func _verify_sixteen_direction_visual_forward_endpoints() -> void:
 				endpoint_tile.length(),
 				float(skill_case.length_tiles)
 			))
-			var endpoint_world := DirectionSpace.fractional_tile_delta_to_world_delta(
+			var endpoint_world := DirectionSpace.ground_delta_gu_to_screen_delta_px(
 				endpoint_tile
 			)
-			var world_points := SpellGeometry.continuous_line_world_points(
+			var world_points := SpellGeometry.continuous_line_screen_points_px(
 				strip,
 				func(tile: Vector2) -> Vector2:
-					return DirectionSpace.fractional_tile_delta_to_world_delta(tile)
+					return DirectionSpace.ground_delta_gu_to_screen_delta_px(tile)
 			)
 			var plan := CasterSkillRuntime.resolve(str(skill_case.skill_id), {
 				"skill_level": 3,
@@ -269,7 +269,7 @@ func _verify_geometry_aware_visuals() -> void:
 	owner.global_position = origin_world
 	add_child(owner)
 
-	var hellfire_facing := SpellGeometry.canonical_facing_from_world_direction(
+	var hellfire_facing := SpellGeometry.canonical_facing_grid_step_from_screen_direction_px(
 		Vector2.DOWN
 	)
 	var hellfire_plan := _plan_with_world_geometry(
@@ -361,7 +361,7 @@ func _assert_effect_axis_fitted(
 		effect._desired_sprite_axis_extent_px,
 		expected_axis_extent
 	))
-	assert(effect._visual_axis_screen.is_equal_approx(axis_world.normalized()))
+	assert(effect._visual_axis_screen_px.is_equal_approx(axis_world.normalized()))
 	if expected_cross_axis_extent > 0.0:
 		assert(is_equal_approx(
 			effect._desired_sprite_cross_axis_extent_px,
@@ -481,7 +481,7 @@ func _plan_with_world_geometry(
 
 func _tile_to_world(tile: Vector2i) -> Vector2:
 	return MAP_WORLD_ORIGIN + (
-		DirectionSpace.fractional_tile_delta_to_world_delta(Vector2(tile))
+		DirectionSpace.ground_delta_gu_to_screen_delta_px(Vector2(tile))
 	)
 
 

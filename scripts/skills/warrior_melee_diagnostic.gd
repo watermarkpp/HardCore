@@ -208,7 +208,7 @@ static func audit_direction(screen_direction_index: int) -> Dictionary:
 	var grid_step := Geometry.facing_tile_step(normalized_screen_direction)
 	var ground_delta_gu := Vector2(grid_step).normalized()
 	var projected_screen_vector_px := _project_ground_delta_gu(ground_delta_gu)
-	var world_direction := Geometry.direction_index_for_tile_delta(ground_delta_gu)
+	var world_direction := Geometry.direction_index_for_ground_delta_gu(ground_delta_gu)
 	var projected_screen_direction := _direction_index_for_projected_screen_delta(
 		projected_screen_vector_px
 	)
@@ -260,7 +260,9 @@ static func audit_ground_delta_gu(ground_delta_gu: Vector2) -> Dictionary:
 	var projected_screen_direction := _direction_index_for_projected_screen_delta(
 		projected_screen_vector_px
 	)
-	var ground_space_direction := Geometry.direction_index_for_tile_delta(ground_delta_gu)
+	var ground_space_direction := Geometry.direction_index_for_ground_delta_gu(
+		ground_delta_gu
+	)
 	var matches := projected_screen_direction == ground_space_direction
 	var projected_screen_direction_px := (
 		projected_screen_vector_px.normalized()
@@ -289,12 +291,6 @@ static func audit_ground_delta_gu(ground_delta_gu: Vector2) -> Dictionary:
 		"projected_screen_vector_px": _vector2_json(projected_screen_vector_px),
 		"projected_screen_direction_px": _vector2_json(projected_screen_direction_px),
 	}
-
-
-static func audit_fractional_tile_delta(legacy_ground_delta: Vector2) -> Dictionary:
-	## Explicit legacy call adapter. The value was always a continuous ground
-	## delta numerically; the returned contract now uses formal GU field names.
-	return audit_ground_delta_gu(legacy_ground_delta)
 
 
 static func _result_code(

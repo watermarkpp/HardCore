@@ -31,7 +31,7 @@ func _ready() -> void:
 				"target_is_undead": skill_id == "wizard.holy_word",
 			}
 			var plan := CasterSkillRuntime.resolve(skill_id, context)
-			assert(plan.runtime_contract == "caster_skill_runtime.v1", "%s运行时入口缺失" % skill_id)
+			assert(plan.runtime_contract == CasterSkillRuntime.RUNTIME_CONTRACT_ID, "%s运行时入口缺失" % skill_id)
 			assert(plan.get("failure_reason", "") != "missing_runtime_operation", "%s没有技能运行时操作" % skill_id)
 			if skill_id == "taoist.spiritual_warfare":
 				assert(not plan.castable, "被动技能不应生成主动施法节点")

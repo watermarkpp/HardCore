@@ -45,7 +45,7 @@ var _desired_sprite_extent_px := 0.0
 var _desired_sprite_footprint_px := Vector2.ZERO
 var _desired_sprite_axis_extent_px := 0.0
 var _desired_sprite_cross_axis_extent_px := 0.0
-var _visual_axis_screen := Vector2.ZERO
+var _visual_axis_screen_px := Vector2.ZERO
 
 
 func setup(
@@ -82,7 +82,9 @@ func setup(
 			"desired_sprite_cross_axis_extent_px", 0.0
 		))
 	)
-	_visual_axis_screen = visual_geometry_context.get("visual_axis_screen", Vector2.ZERO)
+	_visual_axis_screen_px = visual_geometry_context.get(
+		"visual_axis_screen_px", Vector2.ZERO
+	)
 	for raw_offset: Variant in visual_geometry_context.get("geometry_screen_offsets_px", []):
 		if raw_offset is Vector2:
 			_geometry_screen_offsets_px.append(raw_offset)
@@ -242,7 +244,7 @@ func _install_single() -> void:
 		phase_id,
 		_desired_sprite_footprint_px,
 		_desired_sprite_axis_extent_px,
-		_visual_axis_screen,
+		_visual_axis_screen_px,
 		_desired_sprite_cross_axis_extent_px
 	):
 		sprite.queue_free()
@@ -295,7 +297,7 @@ func _install_hellfire_trail(render: Dictionary) -> void:
 			phase_id,
 			_desired_sprite_footprint_px,
 			_desired_sprite_axis_extent_px,
-			_visual_axis_screen,
+			_visual_axis_screen_px,
 			_desired_sprite_cross_axis_extent_px
 		):
 			sprite.queue_free()

@@ -2,6 +2,18 @@ class_name ProfessionRules
 extends RefCounted
 
 const SkillInputPolicyScript := preload("res://scripts/skill_input_policy.gd")
+const CombatUnitLegacyAdapterScript := preload(
+	"res://scripts/skills/combat_unit_legacy_adapter.gd"
+)
+
+const COMBAT_SPATIAL_PROFILE_CONTRACT_ID := (
+	"skills.profession_combat_profile.ground_units.v2"
+)
+const LEGACY_PROFILE_SPATIAL_ADAPTER_CONTRACT_ID := (
+	"skills.profession_profile.legacy_px_to_gu_once.v1"
+)
+const LEGACY_MINIMUM_SEARCH_RANGE_PX := 280.0
+const LEGACY_SEARCH_RANGE_MARGIN_PX := 110.0
 
 const PROFESSIONS: Array[String] = ["战士", "法师", "道士"]
 const PROFESSION_CATALOG := {
@@ -230,10 +242,11 @@ static func skill_profile(skill_name_or_id: String) -> Dictionary:
 	profile["skill_id"] = stable_id
 	profile["display_name"] = display_name
 	profile["profession_id"] = profession_id(str(profile.get("profession", "")))
+	profile = _formalize_spatial_profile(profile, false)
 	var input_metadata := skill_input_metadata(stable_id)
 	profile.merge(input_metadata, true)
-	# Preserve legacy field names for existing UI consumers while routing both
-	# through the stable input metadata contract.
+	# UI interaction names remain an explicit presentation adapter; spatial
+	# values above already use the formal GU/PX contract.
 	var interaction_mode := str(input_metadata.get("interaction_mode", "click_release"))
 	profile["ui_interaction_mode"] = (
 		"click"
@@ -255,7 +268,6 @@ static func skill_combat_profile(skill_name: String, learned_level := -1) -> Dic
 	var timing_overrides: Dictionary = _data().get("skillTimingOverrides", SKILL_TIMING_OVERRIDES)
 	profile.merge(cast_defaults.get(cast_type, cast_defaults["melee"]), false)
 	profile.merge(timing_overrides.get(display_name, {}), true)
-	profile["search_range"] = maxf(280.0, float(profile.get("range", 0.0)) + 110.0) if str(profile.get("target_mode", "self")) not in ["self", "self_area"] else 0.0
 	var stable_profession_id := str(profile.get("profession_id", profession_id(str(profile.get("profession", "")))))
 	if stable_profession_id == "warrior":
 		var level := WarriorCombatMath.clamp_skill_level(maxi(0, learned_level))
@@ -277,6 +289,74 @@ static func skill_combat_profile(skill_name: String, learned_level := -1) -> Dic
 		profile["action_duration"] = CASTER_SPELL_ACTION_DURATION
 		profile["action_frame_count"] = 6
 		profile["action_frame_time_ms"] = 100
+	return _formalize_spatial_profile(profile, true)
+
+
+static func _formalize_spatial_profile(
+	legacy_profile: Dictionary,
+	include_search_range: bool
+) -> Dictionary:
+	## `profession_growth.json` is an older project contract whose spatial
+	## scalars were authored in screen PX without suffixes. Consume those names
+	## only here, once, and never expose them from the formal runtime profile.
+	var profile := legacy_profile.duplicate(true)
+	var maximum_range_gu := maxf(0.0, float(profile.get("maximum_range_gu", 0.0)))
+	var legacy_range_px: Variant = profile.get(
+		"legacy_maximum_range_px",
+		profile.get("range", null)
+	)
+	if legacy_range_px is int or legacy_range_px is float:
+		maximum_range_gu = (
+			CombatUnitLegacyAdapterScript.legacy_screen_distance_px_to_gu(
+				float(legacy_range_px)
+			)
+		)
+	profile.erase("range")
+	profile.erase("legacy_maximum_range_px")
+	profile["maximum_range_gu"] = maximum_range_gu
+
+	var area_radius_gu := maxf(0.0, float(profile.get("area_radius_gu", 0.0)))
+	var visual_radius_px := maxf(0.0, float(profile.get("visual_radius_px", 0.0)))
+	var legacy_area_radius_px: Variant = profile.get(
+		"legacy_area_radius_px",
+		profile.get("area_radius", null)
+	)
+	if legacy_area_radius_px is int or legacy_area_radius_px is float:
+		visual_radius_px = maxf(0.0, float(legacy_area_radius_px))
+		area_radius_gu = (
+			CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
+				visual_radius_px
+			)
+		)
+	profile.erase("area_radius")
+	profile.erase("legacy_area_radius_px")
+	profile["area_radius_gu"] = area_radius_gu
+	profile["visual_radius_px"] = visual_radius_px
+
+	if profile.has("area_radius_cells"):
+		profile["area_radius_grid_steps"] = maxf(
+			0.0,
+			float(profile.get("area_radius_cells", 0.0))
+		)
+		profile.erase("area_radius_cells")
+	if include_search_range:
+		var target_mode := str(profile.get("target_mode", "self"))
+		var search_range_gu := 0.0
+		if target_mode not in ["self", "self_area"]:
+			search_range_gu = maxf(
+				CombatUnitLegacyAdapterScript.legacy_screen_distance_px_to_gu(
+					LEGACY_MINIMUM_SEARCH_RANGE_PX
+				),
+				maximum_range_gu
+				+ CombatUnitLegacyAdapterScript.legacy_screen_distance_px_to_gu(
+					LEGACY_SEARCH_RANGE_MARGIN_PX
+				)
+			)
+		profile["search_range_gu"] = search_range_gu
+	profile["spatial_contract_id"] = COMBAT_SPATIAL_PROFILE_CONTRACT_ID
+	profile["spatial_adapter_contract_id"] = (
+		LEGACY_PROFILE_SPATIAL_ADAPTER_CONTRACT_ID
+	)
 	return profile
 
 

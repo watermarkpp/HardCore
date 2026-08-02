@@ -7,8 +7,8 @@ const CombatDirectionSpaceScript := preload(
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 
-const CONTRACT_ID := "skills.visual.geometry_cells.world_projection.v1"
-const VISUAL_CONTRACT_ID := "skills.caster.geometry_visual_alignment.v1"
+const CONTRACT_ID := "skills.visual.geometry_grid_steps.screen_px_projection.v2"
+const VISUAL_CONTRACT_ID := "skills.caster.geometry_visual_alignment.screen_px.v2"
 const FOOTPRINT_INTERSECTION_CONTRACT_ID := (
 	"skills.caster.area_footprint_intersection.ground_gu_sat.v2"
 )
@@ -21,11 +21,15 @@ const DISCRETE_CELL_FOOTPRINT_RESOLVER_CONTRACT_ID := (
 const CONTACT_EPSILON := 0.0001
 
 
-static func canonical_facing_from_world_direction(world_direction: Vector2) -> Vector2i:
-	var direction_index := CombatDirectionSpaceScript.direction_index_for_world_delta(
-		world_direction
+static func canonical_facing_grid_step_from_screen_direction_px(
+	screen_direction_px: Vector2
+) -> Vector2i:
+	var direction_index := (
+		CombatDirectionSpaceScript.direction_index_for_screen_delta_px(
+			screen_direction_px
+		)
 	)
-	return CombatDirectionSpaceScript.canonical_tile_step(direction_index)
+	return CombatDirectionSpaceScript.canonical_grid_step(direction_index)
 
 
 static func effective_cells(
@@ -121,7 +125,7 @@ static func declared_cells_intersect_actor_footprint(
 	}
 
 
-static func continuous_line_strip(
+static func continuous_line_strip_ground_gu(
 	origin_ground_gu: Vector2,
 	aim_ground_gu: Vector2,
 	fallback_screen_direction_px: Vector2,
@@ -172,7 +176,7 @@ static func continuous_line_strip(
 		"strip_polygon_ground_gu": polygon,
 		"centerline_points_ground_gu": centerline_points,
 		"visual_direction_index": (
-			CombatDirectionSpaceScript.direction_index_for_fractional_tile_delta(
+			CombatDirectionSpaceScript.direction_index_for_ground_delta_gu(
 				direction_ground_gu
 			)
 		),
@@ -181,7 +185,7 @@ static func continuous_line_strip(
 	}
 
 
-static func target_footprint_intersects_continuous_line(
+static func target_footprint_intersects_continuous_line_ground_gu(
 	line_strip: Dictionary,
 	target_footprint_tile_polygon: PackedVector2Array
 ) -> bool:
@@ -198,16 +202,16 @@ static func target_footprint_intersects_continuous_line(
 	return _convex_polygons_intersect(target_footprint_tile_polygon, strip_polygon)
 
 
-static func continuous_line_world_points(
+static func continuous_line_screen_points_px(
 	line_strip: Dictionary,
-	fractional_tile_to_world: Callable
+	ground_gu_to_screen_position_px: Callable
 ) -> Array[Vector2]:
 	var result: Array[Vector2] = []
-	if not fractional_tile_to_world.is_valid():
+	if not ground_gu_to_screen_position_px.is_valid():
 		return result
 	for raw_point: Variant in line_strip.get("centerline_points_ground_gu", []):
 		if raw_point is Vector2:
-			result.append(fractional_tile_to_world.call(raw_point))
+			result.append(ground_gu_to_screen_position_px.call(raw_point))
 	return result
 
 
@@ -270,7 +274,7 @@ static func build_visual_context(
 		"desired_sprite_footprint_px": Vector2.ZERO,
 		"desired_sprite_axis_extent_px": 0.0,
 		"desired_sprite_cross_axis_extent_px": 0.0,
-		"visual_axis_screen": Vector2.ZERO,
+		"visual_axis_screen_px": Vector2.ZERO,
 	}
 	if not grid_cell_to_screen_position_px.is_valid():
 		return context
@@ -343,12 +347,12 @@ static func build_visual_context(
 		)
 		context["desired_sprite_footprint_px"] = footprint_extent
 		if not screen_offsets_px.is_empty():
-			var visual_axis_screen: Vector2 = screen_offsets_px.back().normalized()
+			var visual_axis_screen_px: Vector2 = screen_offsets_px.back().normalized()
 			context["desired_sprite_axis_extent_px"] = screen_offsets_px.back().length()
 			context["desired_sprite_cross_axis_extent_px"] = (
 				_stable_laser_visual_cross_extent(cell_extent)
 			)
-			context["visual_axis_screen"] = visual_axis_screen
+			context["visual_axis_screen_px"] = visual_axis_screen_px
 	return context
 
 
@@ -388,7 +392,7 @@ static func visual_context_from_plan(
 				var screen_delta_px := screen_points_px[right_index] - screen_points_px[left_index]
 				if canonical_projection_scale <= 0.0 and grid_delta != Vector2i.ZERO:
 					var canonical_screen_delta_px := (
-						CombatDirectionSpaceScript.fractional_tile_delta_to_world_delta(
+						CombatDirectionSpaceScript.ground_delta_gu_to_screen_delta_px(
 							Vector2(grid_delta)
 						)
 					)
@@ -412,30 +416,30 @@ static func visual_context_from_plan(
 	if canonical_projection_scale > 0.0:
 		if basis_x.is_zero_approx():
 			basis_x = (
-				CombatDirectionSpaceScript.fractional_tile_delta_to_world_delta(
+				CombatDirectionSpaceScript.ground_delta_gu_to_screen_delta_px(
 					Vector2.RIGHT
 				)
 				* canonical_projection_scale
 			)
 		if basis_y.is_zero_approx():
 			basis_y = (
-				CombatDirectionSpaceScript.fractional_tile_delta_to_world_delta(
+				CombatDirectionSpaceScript.ground_delta_gu_to_screen_delta_px(
 					Vector2.DOWN
 				)
 				* canonical_projection_scale
 			)
 	elif not screen_offsets_px.is_empty():
-		# Continuous line plans intentionally carry fractional world points rather
-		# than integer tile cells. Their contract is the shared 64x32 isometric
-		# plane, so recover its two one-tile basis vectors for the formal one-cell
+		# Continuous line plans intentionally carry fractional GU points rather
+		# than integer grid steps. Their contract is the shared 64x32 isometric
+		# plane, so recover its two one-GU basis vectors for the formal one-step
 		# visual width instead of falling back to uniform screen-space scaling.
 		basis_x = (
-			CombatDirectionSpaceScript.fractional_tile_delta_to_world_delta(
+			CombatDirectionSpaceScript.ground_delta_gu_to_screen_delta_px(
 				Vector2.RIGHT
 			)
 		)
 		basis_y = (
-			CombatDirectionSpaceScript.fractional_tile_delta_to_world_delta(
+			CombatDirectionSpaceScript.ground_delta_gu_to_screen_delta_px(
 				Vector2.DOWN
 			)
 		)
@@ -471,7 +475,7 @@ static func visual_context_from_plan(
 	var desired_footprint := Vector2.ZERO
 	var desired_axis_extent := 0.0
 	var desired_cross_axis_extent := 0.0
-	var visual_axis_screen := Vector2.ZERO
+	var visual_axis_screen_px := Vector2.ZERO
 	if skill_id == "wizard.hellfire":
 		# The primary FireGun node is not a direction-specific full-line image.
 		# Its fixed source-pixel scale is independent from target distance and cast
@@ -485,7 +489,7 @@ static func visual_context_from_plan(
 		desired_footprint = footprint_extent
 		if skill_id == "wizard.laser" and not screen_offsets_px.is_empty():
 			desired_axis_extent = screen_offsets_px.back().length()
-			visual_axis_screen = screen_offsets_px.back().normalized()
+			visual_axis_screen_px = screen_offsets_px.back().normalized()
 			desired_cross_axis_extent = (
 				_stable_laser_visual_cross_extent(cell_extent)
 			)
@@ -508,7 +512,7 @@ static func visual_context_from_plan(
 		"desired_sprite_footprint_px": desired_footprint,
 		"desired_sprite_axis_extent_px": desired_axis_extent,
 		"desired_sprite_cross_axis_extent_px": desired_cross_axis_extent,
-		"visual_axis_screen": visual_axis_screen,
+		"visual_axis_screen_px": visual_axis_screen_px,
 	}
 
 

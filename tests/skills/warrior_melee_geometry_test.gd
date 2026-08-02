@@ -43,8 +43,8 @@ func _ready() -> void:
 		assert(Geometry.thrust_slot(Vector2.ZERO, same_segment_target, 0) == 1)
 	# Fractional tile positions are quantized in canonical tile space. World
 	# projection happens only after direction selection.
-	assert(Geometry.direction_index_for_tile_delta(Vector2(1.0, 0.5)) == 0)
-	assert(Geometry.direction_index_for_tile_delta(Vector2(0.5, 1.0)) == 0)
+	assert(Geometry.direction_index_for_ground_delta_gu(Vector2(1.0, 0.5)) == 0)
+	assert(Geometry.direction_index_for_ground_delta_gu(Vector2(0.5, 1.0)) == 0)
 
 	# Facing N (index 4) sweeps NW,N,NE,E: relative offsets 7,0,1,2.
 	for allowed_direction: int in [3, 4, 5, 6]:
