@@ -142,15 +142,15 @@ func _draw() -> void:
 	var actor_origin: Vector2 = snapshot.actorOrigin
 	var manual_foot: Vector2 = snapshot.manualVisualFoot
 	var runtime_ring: Vector2 = snapshot.runtimeTargetRing
-	var physics_radii := Vector2(
-		actor.collision_radius,
-		actor.collision_radius * 0.5,
+	var physics_radii_px := Vector2(
+		actor.collision_radius_px,
+		actor.collision_radius_px * 0.5,
 	)
-	var target_radii: Vector2 = actor.ground_indicator_radii()
+	var target_radii_px: Vector2 = actor.ground_indicator_radii()
 
 	_draw_diamond(actor_origin, Vector2(32.0, 16.0), MAP_DIAMOND_COLOR, 1.5)
-	_draw_ellipse(actor_origin, physics_radii, FOOTPRINT_COLOR, 2.0)
-	_draw_ellipse(runtime_ring, target_radii, TARGET_RING_COLOR, 2.5)
+	_draw_ellipse(actor_origin, physics_radii_px, FOOTPRINT_COLOR, 2.0)
+	_draw_ellipse(runtime_ring, target_radii_px, TARGET_RING_COLOR, 2.5)
 	if not manual_foot.is_equal_approx(runtime_ring):
 		draw_line(manual_foot, runtime_ring, Color("#ff6b6b"), 2.0, true)
 	_draw_cross(actor_origin, ACTOR_ORIGIN_COLOR, 14.0, 4.0)
@@ -243,58 +243,58 @@ func _draw() -> void:
 
 
 func _draw_cross(
-	center: Vector2,
+	center_px: Vector2,
 	color: Color,
-	half_size: float,
-	width: float,
+	half_size_px: float,
+	width_px: float,
 ) -> void:
 	draw_line(
-		center + Vector2(-half_size, 0.0),
-		center + Vector2(half_size, 0.0),
+		center_px + Vector2(-half_size_px, 0.0),
+		center_px + Vector2(half_size_px, 0.0),
 		color,
-		width,
+		width_px,
 		true,
 	)
 	draw_line(
-		center + Vector2(0.0, -half_size),
-		center + Vector2(0.0, half_size),
+		center_px + Vector2(0.0, -half_size_px),
+		center_px + Vector2(0.0, half_size_px),
 		color,
-		width,
+		width_px,
 		true,
 	)
 
 
 func _draw_ellipse(
-	center: Vector2,
-	radii: Vector2,
+	center_px: Vector2,
+	radii_px: Vector2,
 	color: Color,
-	width: float,
+	width_px: float,
 ) -> void:
 	var points := PackedVector2Array()
 	for index in range(49):
 		var angle := TAU * float(index) / 48.0
 		points.append(
-			center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+			center_px + Vector2(cos(angle) * radii_px.x, sin(angle) * radii_px.y)
 		)
-	draw_polyline(points, color, width, true)
+	draw_polyline(points, color, width_px, true)
 
 
 func _draw_diamond(
-	center: Vector2,
-	radii: Vector2,
+	center_px: Vector2,
+	radii_px: Vector2,
 	color: Color,
-	width: float,
+	width_px: float,
 ) -> void:
 	draw_polyline(
 		PackedVector2Array([
-			center + Vector2(0.0, -radii.y),
-			center + Vector2(radii.x, 0.0),
-			center + Vector2(0.0, radii.y),
-			center + Vector2(-radii.x, 0.0),
-			center + Vector2(0.0, -radii.y),
+			center_px + Vector2(0.0, -radii_px.y),
+			center_px + Vector2(radii_px.x, 0.0),
+			center_px + Vector2(0.0, radii_px.y),
+			center_px + Vector2(-radii_px.x, 0.0),
+			center_px + Vector2(0.0, -radii_px.y),
 		]),
 		color,
-		width,
+		width_px,
 		true,
 	)
 

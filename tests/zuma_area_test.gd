@@ -36,7 +36,7 @@ func _run() -> void:
 	assert(avatar_found and GameData.get_item_kind("祖玛头像") == "quest_item", "祖玛头像掉落闭环失败")
 	var archer := EnemyActor.new()
 	archer.setup(GameData.get_monster("祖玛弓箭手"), game.player, false)
-	assert(archer.attack_range >= 200.0, "祖玛弓箭手远程配置未生效")
+	assert(archer.attack_range_gu >= 200.0 / 32.0, "祖玛弓箭手远程配置未生效")
 	archer.free()
 	var statue := EnemyActor.new()
 	statue.setup(GameData.get_monster("祖玛雕像"), game.player, false)

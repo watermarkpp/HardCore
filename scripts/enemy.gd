@@ -26,6 +26,8 @@ const NAME_LABEL_SIZE := MonsterOverheadScript.NAME_LABEL_SIZE
 const NAME_LABEL_HEALTH_BAR_GAP := MonsterOverheadScript.NAME_LABEL_HEALTH_BAR_GAP
 const TARGET_RING_FOOTPRINT_SCALE := 1.25
 const PLAYER_MELEE_CONTACT_CONTRACT_ID := "monster.melee_player_contact.ground_gu.v2"
+const BOSS_WARNING_PROJECTION_CONTRACT_ID := "monster.boss.warning.ground_projection.v1"
+const SAFE_ZONE_REFERENCE_CONTRACT_ID := "monster.safe_zone.relative_ground_reference.v1"
 const PLAYER_MELEE_CONTACT_GAP_GU := 0.4375
 const DELAYED_HIT_TOLERANCE_GU := 0.25
 # Existing ranged profiles start at 155px. This guard only selects the moving
@@ -92,24 +94,9 @@ var combat_radius_gu := MonsterUnitAdapterScript.footprint_radius_px_to_combat_r
 	ArtSpec.MONSTER_COLLISION_RADIUS
 )
 var collision_radius_px := float(ArtSpec.MONSTER_COLLISION_RADIUS)
-# Versioned cross-tree compatibility aliases. Formal monster gameplay never
-# reads these untyped PX values; integration consumers migrate to the suffixed
-# fields before this adapter surface is removed.
-var move_speed: float:
-	get:
-		return MonsterUnitAdapterScript.gu_to_legacy_screen_scalar_px(move_speed_gu_per_sec)
-	set(value):
-		move_speed_gu_per_sec = MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(value)
-var aggro_radius: float:
-	get:
-		return MonsterUnitAdapterScript.gu_to_legacy_screen_scalar_px(aggro_radius_gu)
-	set(value):
-		aggro_radius_gu = MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(value)
-var attack_range: float:
-	get:
-		return MonsterUnitAdapterScript.gu_to_legacy_screen_scalar_px(attack_range_gu)
-	set(value):
-		attack_range_gu = MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(value)
+# Temporary cross-tree PX compatibility boundary. Monster gameplay and visuals
+# use collision_radius_px/combat_radius_gu directly; external consumers remove
+# this alias once their own unit migrations land.
 var collision_radius: float:
 	get:
 		return collision_radius_px
@@ -144,7 +131,6 @@ var _boss_warning := 0.0
 var _boss_phase_two := false
 var _boss_phase_enabled := true
 var _boss_skill_enabled := true
-var _boss_skill_direction := Vector2.DOWN
 var _boss_skill_direction_ground := Vector2.DOWN
 var _last_boss_skill_hit := false
 var _boss_health_stage := -1
@@ -569,30 +555,79 @@ static func _screen_facing_for_ground_direction(direction_ground: Vector2) -> Ve
 	).normalized()
 
 
-static func _safe_zones_have_ground_contract(zones: Array) -> bool:
-	if zones.is_empty():
-		return true
-	for zone: Variant in zones:
-		if not zone is Dictionary:
-			return false
-		if str(zone.get("shape", "circle")) == "polygon":
-			if not zone.has("polygon_ground_gu"):
-				return false
-		elif not zone.has("center_ground_gu") or not zone.has("radius_gu"):
-			return false
-	return true
+func ground_velocity_gu_per_sec() -> Vector2:
+	# CharacterBody2D owns a PX/s velocity at the physics boundary. Any gameplay
+	# or animation-state consumer must cross back through the formal GU service.
+	return GroundUnitSpace.screen_delta_px_to_ground_delta_gu(velocity)
 
 
-func _point_inside_safe_zone(point:Vector2)->bool:
-	var zones: Array = get_meta("safe_zones", [])
-	if _safe_zones_have_ground_contract(zones):
-		return WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(
-			_screen_position_px_to_ground_position_gu(point),
-			zones,
+static func _safe_zone_point_ground_gu_from_screen_reference(
+	point_screen_px: Vector2,
+	zone: Dictionary,
+) -> Vector2:
+	# Absolute screen positions include the map design-centre projection, while
+	# GroundUnitSpace only converts deltas. Anchor the conversion to the same
+	# formal safe-zone point in both spaces so the design-centre translation
+	# cancels before any GU geometry is evaluated.
+	if zone.has("center") and zone.has("center_ground_gu"):
+		var center_screen_px: Vector2 = zone.get("center", Vector2.ZERO)
+		var center_ground_gu: Vector2 = zone.get("center_ground_gu", Vector2.ZERO)
+		return center_ground_gu + GroundUnitSpace.screen_delta_px_to_ground_delta_gu(
+			point_screen_px - center_screen_px
 		)
-	# Temporary cross-tree compatibility until GameRoot publishes
-	# center_ground_gu/radius_gu or polygon_ground_gu for every active safe zone.
-	return WorldSpatialRulesScript.point_inside_safe_zones(point, zones)
+	var polygon_screen_px := _packed_vector2_array_from_variant(zone.get("polygon", []))
+	var polygon_ground_gu := _packed_vector2_array_from_variant(zone.get("polygon_ground_gu", []))
+	if not polygon_screen_px.is_empty() and polygon_screen_px.size() == polygon_ground_gu.size():
+		return polygon_ground_gu[0] + GroundUnitSpace.screen_delta_px_to_ground_delta_gu(
+			point_screen_px - polygon_screen_px[0]
+		)
+	return Vector2.INF
+
+
+static func _packed_vector2_array_from_variant(raw_points: Variant) -> PackedVector2Array:
+	if raw_points is PackedVector2Array:
+		return raw_points as PackedVector2Array
+	var result := PackedVector2Array()
+	if not raw_points is Array:
+		return result
+	for raw_point: Variant in raw_points:
+		if raw_point is Vector2:
+			result.append(raw_point)
+		elif raw_point is Array and raw_point.size() >= 2:
+			result.append(Vector2(float(raw_point[0]), float(raw_point[1])))
+	return result
+
+
+func _point_inside_safe_zone(point_screen_px: Vector2) -> bool:
+	var zones: Array = get_meta("safe_zones", [])
+	for zone_variant: Variant in zones:
+		if not zone_variant is Dictionary:
+			continue
+		var zone := zone_variant as Dictionary
+		var point_ground_gu := _safe_zone_point_ground_gu_from_screen_reference(
+			point_screen_px,
+			zone,
+		)
+		var has_formal_shape := zone.has("radius_gu")
+		if str(zone.get("shape", "circle")) == "polygon":
+			has_formal_shape = (
+				_packed_vector2_array_from_variant(zone.get("polygon_ground_gu", [])).size()
+				>= 3
+			)
+		if point_ground_gu != Vector2.INF and has_formal_shape:
+			var formal_zone := zone
+			if str(zone.get("shape", "circle")) == "polygon":
+				formal_zone = zone.duplicate(false)
+				formal_zone["polygon_ground_gu"] = _packed_vector2_array_from_variant(
+					zone.get("polygon_ground_gu", [])
+				)
+			if WorldSpatialRulesScript.point_inside_safe_zone_ground_gu(point_ground_gu, formal_zone):
+				return true
+		elif WorldSpatialRulesScript.point_inside_safe_zone(point_screen_px, zone):
+			# Compatibility is isolated per incomplete zone; one legacy entry can no
+			# longer force all formal zones back to screen-space distance checks.
+			return true
+	return false
 
 
 func _move_with_spatial_rules(delta := 1.0 / 60.0) -> void:
@@ -776,12 +811,7 @@ func _target_combat_radius_gu(target_node: Node2D) -> float:
 	if target_node is EnemyActor:
 		return target_node.combat_radius_gu
 	if target_node is SummonActor:
-		# Cross-tree compatibility: SummonActor migrates its formal radius in the
-		# professions worktree. Until integration wires that field, convert its
-		# frozen physics PX radius at this explicit boundary.
-		return WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-			target_node.collision_radius
-		)
+		return target_node.combat_radius_gu
 	return WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(16.0)
 
 
@@ -1154,40 +1184,40 @@ func _return_to_spawn()->void:
 
 
 func _draw() -> void:
-	var radius := 27.0 if is_boss else 16.0
-	var ground_center := ground_indicator_center()
+	var radius_px := 27.0 if is_boss else 16.0
+	var ground_center_px := ground_indicator_center()
 	var draw_procedural_fallback := should_draw_synthetic_ground_shadow()
 	# Authored WIL actors may briefly wait for their asynchronously loaded
 	# atlases. They already own a direction-aware source shadow, so that waiting
 	# window must not leave a cached procedural ellipse under the final sprite.
 	if draw_procedural_fallback:
-		draw_ellipse_shadow(radius, ground_center)
+		draw_ellipse_shadow(radius_px, ground_center_px)
 	if _dying:
 		return
 	if is_targeted and (visual == null or not visual.uses_final_art()):
 		# 细线选中圈与脚底接触阴影共面，避免形成托起Boss的发光平台。
 		_draw_ground_indicator_ellipse(
-			ground_center,
+			ground_center_px,
 			ground_indicator_radii(),
 			Color(1.0, 0.78, 0.18, 0.78),
 			2.0,
 		)
 	var fallback_attacking := draw_procedural_fallback and visual != null and visual.is_fallback_attacking()
-	var body_center := Vector2(0, -5) + (visual.fallback_lunge_offset(facing) if fallback_attacking else Vector2.ZERO)
+	var body_center_px := Vector2(0, -5) + (visual.fallback_lunge_offset_px(facing) if fallback_attacking else Vector2.ZERO)
 	if draw_procedural_fallback:
 		var body_color := Color(0.55, 0.11, 0.09) if is_boss else Color(0.30, 0.48, 0.18)
 		var attack_scale:=visual.fallback_attack_scale() if visual!=null else Vector2.ONE
 		var attack_angle:=visual.fallback_attack_angle(facing) if visual!=null else 0.0
-		draw_set_transform(body_center,attack_angle,attack_scale)
-		draw_circle(Vector2.ZERO, radius, body_color.lightened(0.18) if fallback_attacking else body_color)
+		draw_set_transform(body_center_px,attack_angle,attack_scale)
+		draw_circle(Vector2.ZERO, radius_px, body_color.lightened(0.18) if fallback_attacking else body_color)
 		draw_set_transform(Vector2.ZERO,0.0,Vector2.ONE)
 		if fallback_attacking:
 			var strike_angle := facing.angle()
-			var progress:=visual.fallback_attack_progress();var tip:=body_center+facing.normalized()*(radius+6.0+sin(progress*PI)*10.0)
-			draw_arc(tip, radius + 8.0, strike_angle - 0.82, strike_angle + 0.82, 12, Color(1.0, 0.78, 0.26, 0.90), 4.0)
-			draw_circle(tip,4.0+sin(progress*PI)*3.0,Color(1.0,0.9,0.5,0.82))
+			var progress:=visual.fallback_attack_progress();var tip_px:=body_center_px+facing.normalized()*(radius_px+6.0+sin(progress*PI)*10.0)
+			draw_arc(tip_px, radius_px + 8.0, strike_angle - 0.82, strike_angle + 0.82, 12, Color(1.0, 0.78, 0.26, 0.90), 4.0)
+			draw_circle(tip_px,4.0+sin(progress*PI)*3.0,Color(1.0,0.9,0.5,0.82))
 	if is_boss and _boss_phase_two:
-		draw_circle(Vector2(0, -5), radius + 7.0, Color(0.90, 0.15, 0.05, 0.22), false, 4.0)
+		draw_circle(Vector2(0, -5), radius_px + 7.0, Color(0.90, 0.15, 0.05, 0.22), false, 4.0)
 	if poison_time > 0.0:
 		# Poison is an overhead three-diamond badge. It stays readable without
 		# creating a green ground ring that can be mistaken for a portal marker.
@@ -1199,29 +1229,68 @@ func _draw() -> void:
 				center + Vector2(0, 3), center + Vector2(-3, 0),
 			]), Color(0.36, 0.92, 0.28, 0.90))
 	if control_time > 0.0 or charm_time > 0.0:
-		draw_circle(Vector2(0, -5), radius + 8.0, Color(0.35, 0.65, 1.0, 0.55), false, 3.0)
+		draw_circle(Vector2(0, -5), radius_px + 8.0, Color(0.35, 0.65, 1.0, 0.55), false, 3.0)
 	if dormant:
-		draw_circle(Vector2(0, -5), radius + 3.0, Color(0.52, 0.50, 0.46, 0.72))
+		draw_circle(Vector2(0, -5), radius_px + 3.0, Color(0.52, 0.50, 0.46, 0.72))
 	if _boss_warning > 0.0:
-		var special: Dictionary = boss_rule.get("specialSkill", {})
-		var warning_radius := float(special.get("radius", 155.0))
-		if str(special.get("shape", "circle")) == "cone":
-			var half_angle := float(special.get("coneHalfAngleRadians", 0.68))
-			var sector := PackedVector2Array([Vector2.ZERO])
-			for index in range(15):
-				var angle := _boss_skill_direction.angle() - half_angle + half_angle * 2.0 * float(index) / 14.0
-				sector.append(Vector2.from_angle(angle) * warning_radius)
-			draw_colored_polygon(sector, Color(0.95, 0.12, 0.04, 0.22))
-			draw_arc(Vector2.ZERO, warning_radius, _boss_skill_direction.angle() - half_angle, _boss_skill_direction.angle() + half_angle, 24, Color(1.0, 0.34, 0.08, 0.92), 5.0)
-		else:
-			draw_circle(Vector2.ZERO, warning_radius, Color(0.95, 0.18, 0.06, 0.16))
-			draw_circle(Vector2.ZERO, warning_radius, Color(1.0, 0.36, 0.12, 0.85), false, 5.0)
+		_draw_boss_warning_ground_projection()
 	if draw_procedural_fallback:
-		draw_circle(body_center + Vector2(-radius * 0.35, -3), 3.0, Color(0.95, 0.75, 0.25))
-		draw_circle(body_center + Vector2(radius * 0.35, -3), 3.0, Color(0.95, 0.75, 0.25))
+		draw_circle(body_center_px + Vector2(-radius_px * 0.35, -3), 3.0, Color(0.95, 0.75, 0.25))
+		draw_circle(body_center_px + Vector2(radius_px * 0.35, -3), 3.0, Color(0.95, 0.75, 0.25))
+
+
+func _draw_boss_warning_ground_projection() -> void:
+	var special: Dictionary = boss_rule.get("specialSkill", {})
+	var warning_polygon_px := boss_warning_polygon_px(special)
+	if warning_polygon_px.size() < 3:
+		return
+	var is_cone := str(special.get("shape", "circle")) == "cone"
+	draw_colored_polygon(
+		warning_polygon_px,
+		Color(0.95, 0.12, 0.04, 0.22) if is_cone else Color(0.95, 0.18, 0.06, 0.16),
+	)
+	var outline_px := warning_polygon_px.duplicate()
+	outline_px.append(warning_polygon_px[0])
+	draw_polyline(
+		outline_px,
+		Color(1.0, 0.34, 0.08, 0.92) if is_cone else Color(1.0, 0.36, 0.12, 0.85),
+		5.0,
+		true,
+	)
+
+
+func boss_warning_polygon_px(special: Dictionary) -> PackedVector2Array:
+	var radius_gu := MonsterUnitAdapterScript.range_gu(
+		special,
+		"radius_gu",
+		"radius",
+		MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(155.0),
+	)
+	var result_px := PackedVector2Array()
+	if str(special.get("shape", "circle")) == "cone":
+		var half_angle := float(special.get("coneHalfAngleRadians", 0.68))
+		result_px.append(Vector2.ZERO)
+		for index in range(25):
+			var ground_angle := (
+				_boss_skill_direction_ground.angle()
+				- half_angle
+				+ half_angle * 2.0 * float(index) / 24.0
+			)
+			result_px.append(GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+				Vector2.from_angle(ground_angle) * radius_gu
+			))
+		return result_px
+	for index in range(48):
+		var ground_angle := TAU * float(index) / 48.0
+		result_px.append(GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			Vector2.from_angle(ground_angle) * radius_gu
+		))
+	return result_px
+
+
 func health_bar_anchor_y() -> float:
-	var radius := 27.0 if is_boss else 16.0
-	var fallback_y := -92.0 if bool(behavior_profile.get("largeClientBoss", false)) else -radius - 24.0
+	var radius_px := 27.0 if is_boss else 16.0
+	var fallback_y := -92.0 if bool(behavior_profile.get("largeClientBoss", false)) else -radius_px - 24.0
 	return visual.health_bar_anchor_y(fallback_y) if visual != null else fallback_y
 
 
@@ -1268,24 +1337,24 @@ func ground_indicator_radii() -> Vector2:
 
 
 func _draw_ground_indicator_ellipse(
-	center: Vector2,
-	radii: Vector2,
+	center_px: Vector2,
+	radii_px: Vector2,
 	color: Color,
-	width: float,
+	width_px: float,
 ) -> void:
 	var points := PackedVector2Array()
 	for index in range(49):
 		var angle := TAU * float(index) / 48.0
 		points.append(
-			center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+			center_px + Vector2(cos(angle) * radii_px.x, sin(angle) * radii_px.y)
 		)
-	draw_polyline(points, color, width, true)
+	draw_polyline(points, color, width_px, true)
 
 
-func draw_ellipse_shadow(radius: float, center := Vector2.ZERO) -> void:
-	draw_set_transform(center, 0.0, Vector2(1.0, 0.36))
-	draw_circle(Vector2.ZERO, radius, Color(0, 0, 0, 0.30))
-	draw_circle(Vector2(0, -radius * 0.08), radius * 0.56, Color(0, 0, 0, 0.58))
+func draw_ellipse_shadow(radius_px: float, center_px := Vector2.ZERO) -> void:
+	draw_set_transform(center_px, 0.0, Vector2(1.0, 0.36))
+	draw_circle(Vector2.ZERO, radius_px, Color(0, 0, 0, 0.30))
+	draw_circle(Vector2(0, -radius_px * 0.08), radius_px * 0.56, Color(0, 0, 0, 0.58))
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
@@ -1348,9 +1417,6 @@ func _update_boss_skill(delta: float, distance_gu: float) -> void:
 			_ground_delta_gu_between_screen_positions(global_position, target.global_position).normalized()
 			if is_instance_valid(target)
 			else GroundUnitSpace.screen_delta_px_to_ground_delta_gu(facing).normalized()
-		)
-		_boss_skill_direction = _screen_facing_for_ground_direction(
-			_boss_skill_direction_ground
 		)
 		_boss_warning = maxf(0.001, float(special.get("warningSeconds", 0.85)))
 		if visual != null:

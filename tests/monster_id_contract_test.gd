@@ -28,18 +28,18 @@ func _run() -> void:
 	renamed_yeti.set_physics_process(false)
 	await get_tree().process_frame
 	assert(renamed_yeti.monster_id == 28, "EnemyActor没有保存稳定monsterId")
-	assert(is_equal_approx(renamed_yeti.move_speed, 52.0) and is_equal_approx(renamed_yeti.attack_range, 44.0), "行为没有优先按monsterId解析")
+	assert(is_equal_approx(renamed_yeti.move_speed_gu_per_sec, 52.0 / 32.0) and is_equal_approx(renamed_yeti.attack_range_gu, 44.0 / 32.0), "行为没有优先按monsterId解析")
 	assert(renamed_yeti.visual.uses_final_art(), "改名怪物没有通过monsterId找到正式动画")
 	assert(renamed_yeti.visual.active_resources.get("animation_source", "") == "classic_client_wil", "monsterId动画没有使用客户端原帧")
 
 	var conflicting_name := EnemyActor.new()
 	conflicting_name.setup({"monsterId": 28, "name": "食人花", "hp": 36, "attackMin": 7, "attackMax": 10}, player)
-	assert(is_equal_approx(conflicting_name.move_speed, 52.0), "名称覆盖了monsterId主键行为")
+	assert(is_equal_approx(conflicting_name.move_speed_gu_per_sec, 52.0 / 32.0), "名称覆盖了monsterId主键行为")
 	conflicting_name.free()
 
 	var legacy_flower := EnemyActor.new()
 	legacy_flower.setup({"name": "食人花", "hp": 20, "attackMin": 1, "attackMax": 2}, player)
-	assert(legacy_flower.monster_id == -1 and legacy_flower.move_speed == 0.0 and legacy_flower.attack_range == 78.0, "旧名称行为兼容入口失效")
+	assert(legacy_flower.monster_id == -1 and legacy_flower.move_speed_gu_per_sec == 0.0 and is_equal_approx(legacy_flower.attack_range_gu, 78.0 / 32.0), "旧名称行为兼容入口失效")
 	legacy_flower.free()
 
 	var renamed_boss := EnemyActor.new()
