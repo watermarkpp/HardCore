@@ -76,14 +76,15 @@ func _run() -> void:
 
 func _make_field(caster: Node2D, raw_power: int) -> GroundSkillEffect:
 	var field := GroundSkillEffect.new()
-	field.setup(
+	field.setup_ground_unit_effect(
 		Vector2.ZERO,
 		raw_power,
-		74.0,
+		0.5,
 		3.0,
 		Color.WHITE,
 		"wizard.fire_wall",
-		1.0
+		1.0,
+		74.0
 	)
 	field.configure_runtime_resolution(
 		caster,

@@ -29,7 +29,7 @@ func _run() -> void:
 	var outside_world := MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(runtime, Vector2(-1.0, 0.0))
 	assert(background.is_environment_point_blocked(outside_world), "Black area outside the map is not a hard boundary")
 
-	var required_portals: Array = MapEditorRuntimeBridge.game_content().get("portals", []).map(func(portal: Dictionary) -> Vector2: return portal.position)
+	var required_portals: Array = MapEditorRuntimeBridge.game_content().get("portals", []).map(func(portal: Dictionary) -> Vector2: return portal.screen_position_px)
 	for portal_position: Vector2 in required_portals:
 		assert(not background.is_environment_point_blocked(portal_position), "Portal is blocked: %s" % portal_position)
 

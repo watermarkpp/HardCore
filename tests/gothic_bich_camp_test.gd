@@ -18,9 +18,16 @@ func _run() -> void:
 	if not _check(game.current_map_id == 4, "启动未进入比奇主城地图"): return
 	if not _check(game.background.environment_node_count() >= 40, "哥特主城物件没有完成构建"): return
 	if not _check(game.background.environment_light_count() <= 5, "主城灯光超过移动端上限"): return
-	var home: Vector2 = game._bich_home_world_position()
+	var home_ground_gu: Vector2 = MapEditorRuntimeBridge.home_position_ground_gu()
 	for enemy: Node in get_tree().get_nodes_in_group("enemies"):
-		if not _check(enemy.global_position.distance_to(home) >= float(layout.safeRadius), "怪物刷新在安全区内"): return
+		var enemy_ground_gu: Vector2 = game._canonical_screen_px_to_ground_gu(
+			enemy.global_position
+		)
+		if not _check(
+			enemy_ground_gu.distance_to(home_ground_gu)
+			>= 9.0 + enemy.combat_radius_gu - 0.001,
+			"怪物刷新在安全区内"
+		): return
 	var expected_names := ["比奇杂货商", "比奇武器店", "书店老板", "武馆教头", "比奇老兵", "仓库管理员"]
 	var actual_names: Array[String] = []
 	for node: Node in get_tree().get_nodes_in_group("interactable"):

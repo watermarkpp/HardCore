@@ -73,7 +73,7 @@ func _run() -> void:
 	await _wait_for_transition(game)
 	assert(game.current_map_id == GameData.service_runtime_map_id(0))
 	assert(
-		game.player.global_position.is_equal_approx(game._bich_home_world_position()),
+		game.player.global_position.is_equal_approx(game._bich_home_screen_position_px()),
 		"death revival did not finish at the service-home anchor"
 	)
 

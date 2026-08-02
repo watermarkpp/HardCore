@@ -409,7 +409,7 @@ func _on_system_menu_audio_setting_changed(request: Dictionary) -> void:
 func _prepare_safe_logout() -> bool:
 	PlayerState.apply_warrior_runtime_state(player.warrior_runtime_state_for_save())
 	var home_map_id := GameData.service_home_runtime_map_id(false)
-	var home_screen_position_px := _bich_home_world_position()
+	var home_screen_position_px := _bich_home_screen_position_px()
 	return PlayerState.save_safe_logout(
 		home_map_id,
 		home_screen_position_px,
@@ -443,7 +443,7 @@ func _change_zone_immediate(zone_name: String, initial := false) -> void:
 		# 保留旧调用兼容，但统一进入服务端地图0所映射的运行地图4。
 		var bich_map := GameData.get_map_by_id(GameData.service_runtime_map_id(0))
 		_load_zone(str(bich_map.get("name", "比奇省")), initial, bich_map)
-		player.global_position = _bich_home_world_position()
+		player.global_position = _bich_home_screen_position_px()
 		player.velocity = Vector2.ZERO
 		background.set_focus_position(player.global_position)
 		return
@@ -491,7 +491,7 @@ func _travel_to_service_home_immediate(
 		_load_zone(str(map_data.get("name", "比奇省")), initial, map_data)
 		if not red_name and service_map_id == 0:
 			# 服务端(289,618)直接进入700×700原MAP统一坐标，不再压缩到场景中心。
-			player.global_position = _bich_home_world_position()
+			player.global_position = _bich_home_screen_position_px()
 			player.velocity = Vector2.ZERO
 			background.set_focus_position(player.global_position)
 	else:
@@ -786,7 +786,7 @@ func _update_portal_arrival_guard() -> void:
 
 func route_arrival_position(destination_map_id: int, source_map_id: int) -> Vector2:
 	if MapEditorRuntimeBridgeScript.has_runtime_map(destination_map_id):
-		return MapEditorRuntimeBridgeScript.portal_position(
+		return MapEditorRuntimeBridgeScript.portal_screen_position_px(
 			destination_map_id, "", source_map_id
 		)
 	var content := RegionContent.get_map_content(destination_map_id)
@@ -794,7 +794,7 @@ func route_arrival_position(destination_map_id: int, source_map_id: int) -> Vect
 		if int(portal.get("target_map_id", -1)) == source_map_id:
 			var portal_screen_px: Vector2 = portal.get("position", Vector2.ZERO)
 			var interior_target_screen_px := (
-				_bich_home_world_position()
+				_bich_home_screen_position_px()
 				if destination_map_id == 4
 				else Vector2.ZERO
 			)
@@ -822,7 +822,7 @@ func route_arrival_position(destination_map_id: int, source_map_id: int) -> Vect
 			return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
 				portal_ground_gu + inward_direction_ground_gu * arrival_offset_gu
 			)
-	return _bich_home_world_position() if destination_map_id == 4 else Vector2.ZERO
+	return _bich_home_screen_position_px() if destination_map_id == 4 else Vector2.ZERO
 
 
 func route_next_target(map_id: int) -> Dictionary:
@@ -836,19 +836,19 @@ func route_next_target(map_id: int) -> Dictionary:
 	return {}
 
 
-func _bich_home_world_position() -> Vector2:
-	var editor_home := MapEditorRuntimeBridgeScript.home_position()
+func _bich_home_screen_position_px() -> Vector2:
+	var editor_home := MapEditorRuntimeBridgeScript.home_screen_position_px()
 	if editor_home != Vector2.ZERO:
 		return editor_home
 	var content := RegionContent.get_map_content(4)
 	return content.get("runtime_home_position", MapCoordinateMapperScript.source_to_world(Vector2(289, 618), Vector2i(700, 700)))
 
 
-func _bich_portal_position_to(target_map_id: int) -> Vector2:
+func _bich_portal_screen_position_px_to(target_map_id: int) -> Vector2:
 	for portal: Dictionary in RegionContent.get_map_content(4).get("portals", []):
 		if int(portal.get("target_map_id", -1)) == target_map_id:
-			return portal.get("position", _bich_home_world_position())
-	return _bich_home_world_position()
+			return portal.get("position", _bich_home_screen_position_px())
+	return _bich_home_screen_position_px()
 
 
 func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
@@ -873,7 +873,7 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 		player.global_position = Vector2.ZERO
 		_spawn_outskirts_content()
 	else:
-		player.global_position = _bich_home_world_position() if current_map_id == 4 else Vector2.ZERO
+		player.global_position = _bich_home_screen_position_px() if current_map_id == 4 else Vector2.ZERO
 		_spawn_database_zone_content(current_map_data)
 	player.velocity = Vector2.ZERO
 	background.set_focus_position(player.global_position)
@@ -953,7 +953,7 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 		if monster.is_empty():monster=GameData.get_monster(str(spawn.get("name","")))
 		if not monster.is_empty():
 			var count:=mini(int(spawn.get("count",1)),int(spawn.get("max_alive",spawn.get("count",1))))
-			var center_screen_px: Vector2 = spawn.get("position", Vector2.ZERO)
+			var center_screen_px: Vector2 = spawn.get("screen_position_px", Vector2.ZERO)
 			var radius_gu := maxf(0.0, float(spawn.get("radius_gu", 0.0)))
 			for copy_index in maxi(1,count):
 				var offset_ground_gu := Vector2.ZERO
@@ -1006,7 +1006,7 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 		))
 		_spawn_enemy(
 			boss,
-			spawn.get("position", Vector2.ZERO),
+			spawn.get("screen_position_px", Vector2.ZERO),
 			true,
 			float(spawn.get("respawn_seconds", DEFAULT_BOSS_RESPAWN_SECONDS)),
 			{
@@ -1026,10 +1026,10 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 			"general": stock = _general_shop_stock()
 			"starter_gear": stock = _starter_gear_stock()
 			"books": stock = _build_skill_book_stock(PlayerState.profession)
-		_spawn_npc(npc_data.get("position", Vector2.ZERO), name, role, stock, stock_key, int(npc_data.get("appearance", -1)), content.get("map_center_world", _current_map_center_world()))
+		_spawn_npc(npc_data.get("screen_position_px", Vector2.ZERO), name, role, stock, stock_key, int(npc_data.get("appearance", -1)), content.get("map_center_screen_position_px", _current_map_center_screen_position_px()))
 	for portal: Dictionary in content.get("portals", []):
 		_spawn_map_portal(
-			portal.get("position", Vector2.ZERO),
+			portal.get("screen_position_px", Vector2.ZERO),
 			int(portal.get("target_map_id", -1)),
 			str(portal.get("label", "地图入口")),
 			portal
@@ -1038,7 +1038,7 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 
 func _spawn_authored_map_content(content: Dictionary) -> void:
 	var camp_layout := _bich_camp_layout if current_map_id == 4 else {}
-	var camp_home := _bich_home_world_position()
+	var camp_home := _bich_home_screen_position_px()
 	for spawn: Variant in content.get("spawns", []):
 		if not spawn is Dictionary:
 			continue
@@ -1224,13 +1224,13 @@ func _build_skill_book_stock(profession: String) -> Array:
 
 func _spawn_npc(position: Vector2, display_name: String, kind: String, stock: Array = [], stock_key := "", appearance := -1, map_center_override: Variant = null) -> void:
 	var npc := NPCActor.new()
-	var map_center := _current_map_center_world() if map_center_override == null else Vector2(map_center_override)
+	var map_center := _current_map_center_screen_position_px() if map_center_override == null else Vector2(map_center_override)
 	npc.setup(display_name, kind, stock, stock_key, appearance, map_center)
 	npc.global_position = position
 	add_child(npc)
 
 
-func _current_map_center_world() -> Vector2:
+func _current_map_center_screen_position_px() -> Vector2:
 	var source_size := Vector2i.ZERO
 	if current_map_data.has("source_size"):
 		source_size = Vector2i(current_map_data.get("source_size", Vector2i.ZERO))
@@ -2223,7 +2223,7 @@ func _on_player_death_requested() -> void:
 
 
 func _finish_death_revival() -> void:
-	player.global_position = _bich_home_world_position()
+	player.global_position = _bich_home_screen_position_px()
 	player.velocity = Vector2.ZERO
 	background.set_focus_position(player.global_position)
 	_record_player_world_location()

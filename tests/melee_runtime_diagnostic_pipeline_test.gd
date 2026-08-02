@@ -28,7 +28,7 @@ func _run() -> void:
 		if value is EnemyActor:
 			(value as EnemyActor).global_position = game.player.global_position + Vector2(3000, 3000)
 
-	game.player.global_position = game._bich_home_world_position() + Vector2(600, 0)
+	game.player.global_position = game._bich_home_screen_position_px() + Vector2(600, 0)
 	var origin_tile: Vector2 = game._canonical_screen_px_to_ground_gu(
 		game.player.global_position
 	)

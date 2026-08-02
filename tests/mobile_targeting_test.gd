@@ -176,7 +176,7 @@ func _run() -> void:
 	game._skill_cast_target = side
 	game.player.facing = game.player.global_position.direction_to(side.global_position)
 	assert(
-		game._ensure_skill_cast_target(second, 180.0) == side,
+		game._ensure_skill_cast_target(second) == side,
 		"技能临时目标没有保持自己的独立目标"
 	)
 	assert(game.locked_target == second, "技能临时选敌覆盖了独立的攻击锁定")
@@ -282,7 +282,7 @@ func _assert_direction_priority() -> void:
 func _assert_player_cannot_push_enemy(game: Node, blocker: EnemyActor, second: EnemyActor, side: EnemyActor, behind: EnemyActor) -> void:
 	# Keep this collision-only check outside the real nine-tile safe zone; enemies
 	# inside that circle are intentionally expelled by GameRoot every frame.
-	var arena_origin: Vector2 = game._bich_home_world_position() + Vector2(600, 0)
+	var arena_origin: Vector2 = game._bich_home_screen_position_px() + Vector2(600, 0)
 	for enemy: EnemyActor in [second, side, behind]:
 		enemy.global_position = arena_origin + Vector2(700, 300) + Vector2(enemy.get_instance_id() % 100, 0)
 	game.player.global_position = arena_origin
