@@ -544,8 +544,8 @@ func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
 	if endpoint.is_empty():
 		hud.show_message("传送节点端点不存在", 1.5)
 		return false
-	var current_tile := (
-		MapEditorRuntimeBridgeScript.world_to_tile(
+	var current_ground_gu := (
+		MapEditorRuntimeBridgeScript.screen_position_px_to_ground_position_gu(
 			current_runtime, player.global_position
 		)
 		if not current_runtime.is_empty()
@@ -555,7 +555,7 @@ func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
 		_portal_guard_state,
 		_portal_guard_key(current_map_id, portal_id),
 		Time.get_ticks_msec(),
-		current_tile,
+		current_ground_gu,
 		fresh_activation
 	):
 		hud.show_message("传送节点尚未稳定，请稍候或先离开入口", 1.5)
@@ -771,7 +771,10 @@ func _update_portal_arrival_guard() -> void:
 	MapPortalTravelGuardScript.clear_lock_after_departure(
 		_portal_guard_state,
 		locked_key,
-		MapEditorRuntimeBridgeScript.world_to_tile(runtime, player.global_position)
+		MapEditorRuntimeBridgeScript.screen_position_px_to_ground_position_gu(
+			runtime,
+			player.global_position
+		)
 	)
 
 
@@ -783,9 +786,36 @@ func route_arrival_position(destination_map_id: int, source_map_id: int) -> Vect
 	var content := RegionContent.get_map_content(destination_map_id)
 	for portal: Dictionary in content.get("portals", []):
 		if int(portal.get("target_map_id", -1)) == source_map_id:
-			var portal_position: Vector2 = portal.get("position", Vector2.ZERO)
-			var interior_target := _bich_home_world_position() if destination_map_id == 4 else Vector2.ZERO
-			return portal_position + portal_position.direction_to(interior_target) * 140.0
+			var portal_screen_px: Vector2 = portal.get("position", Vector2.ZERO)
+			var interior_target_screen_px := (
+				_bich_home_world_position()
+				if destination_map_id == 4
+				else Vector2.ZERO
+			)
+			var portal_ground_gu := (
+				GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+					portal_screen_px
+				)
+			)
+			var interior_target_ground_gu := (
+				GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+					interior_target_screen_px
+				)
+			)
+			var inward_direction_ground_gu := (
+				GroundUnitSpaceScript.normalized_ground_direction(
+					portal_ground_gu,
+					interior_target_ground_gu
+				)
+			)
+			var arrival_offset_gu := (
+				CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
+					140.0
+				)
+			)
+			return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+				portal_ground_gu + inward_direction_ground_gu * arrival_offset_gu
+			)
 	return _bich_home_world_position() if destination_map_id == 4 else Vector2.ZERO
 
 
@@ -2468,7 +2498,10 @@ func _apply_wild_rush_displacement(
 	var direction_ground_gu: Vector2 = target_context.get(
 		"direction_ground_gu", Vector2.ZERO
 	)
-	if direction_ground_gu.length_squared() <= GroundUnitSpaceScript.EPSILON_GU:
+	if (
+		direction_ground_gu.length_squared()
+		<= GroundUnitSpaceScript.EPSILON_GU * GroundUnitSpaceScript.EPSILON_GU
+	):
 		return false
 	var motion_ground_gu := direction_ground_gu.normalized() * distance_gu
 	var player_destination := _canonical_ground_gu_to_screen_px(
@@ -3387,7 +3420,10 @@ func _canonical_target_context(
 	var direction_ground_gu := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
 		direction
 	)
-	if direction_ground_gu.length_squared() <= GroundUnitSpaceScript.EPSILON_GU:
+	if (
+		direction_ground_gu.length_squared()
+		<= GroundUnitSpaceScript.EPSILON_GU * GroundUnitSpaceScript.EPSILON_GU
+	):
 		direction_ground_gu = GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
 			player.facing
 		)
@@ -3638,7 +3674,7 @@ func _apply_canonical_effects(
 					var push_direction_ground_gu := (
 						target_ground_gu - source_ground_gu
 					).normalized()
-					_apply_canonical_displacement(
+					_apply_canonical_displacement_screen_px(
 						repulsion_target,
 						GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
 							push_direction_ground_gu
@@ -4160,14 +4196,25 @@ func _apply_canonical_ground_tick(enemy: EnemyActor, raw_power: int, stable_skil
 	)
 
 
-func _apply_canonical_displacement(actor: Node2D, displacement: Vector2) -> bool:
+func _apply_canonical_displacement_screen_px(
+	actor: Node2D,
+	displacement_screen_px: Vector2
+) -> bool:
 	if not is_instance_valid(actor):
 		return false
-	var destination := actor.global_position + displacement
-	var collision_radius: float = actor.collision_radius if actor is EnemyActor else ArtSpec.PLAYER_COLLISION_RADIUS
-	if WorldSpatialRulesScript.environment_blocks_actor(background, destination, collision_radius):
+	var destination_screen_px := actor.global_position + displacement_screen_px
+	var collision_radius_px: float = (
+		actor.collision_radius_px
+		if actor is EnemyActor
+		else ArtSpec.PLAYER_COLLISION_RADIUS
+	)
+	if WorldSpatialRulesScript.environment_blocks_actor(
+		background,
+		destination_screen_px,
+		collision_radius_px
+	):
 		return false
-	actor.global_position = destination
+	actor.global_position = destination_screen_px
 	return true
 
 
@@ -4213,7 +4260,7 @@ func _canonical_main_pet() -> SummonActor:
 func _apply_canonical_main_pet(effect: Dictionary, stable_skill_id: String) -> void:
 	var existing := _canonical_main_pet()
 	if str(effect.get("type", "")) == "recall_existing_main_pet" and existing != null:
-		existing.global_position = player.global_position + player.facing.orthogonal() * 42.0
+		existing.global_position = _summon_spawn_screen_position_px()
 		return
 	if existing != null or not bool(effect.get("spawned", false)):
 		return
@@ -4229,8 +4276,36 @@ func _apply_canonical_main_pet(effect: Dictionary, stable_skill_id: String) -> v
 	)
 	summon.set_meta("taoist_main_pet", true)
 	summon.set_meta("taoist_main_pet_contract", "skills.taoist_main_pet.v1")
-	summon.global_position = player.global_position + player.facing.orthogonal() * 42.0
+	summon.global_position = _summon_spawn_screen_position_px()
 	add_child(summon)
+
+
+func _summon_spawn_screen_position_px() -> Vector2:
+	var player_ground_gu := _canonical_screen_px_to_ground_gu(
+		player.global_position
+	)
+	var facing_ground_gu := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			player.facing
+		).normalized()
+	)
+	if (
+		facing_ground_gu.length_squared()
+		<= GroundUnitSpaceScript.EPSILON_GU * GroundUnitSpaceScript.EPSILON_GU
+	):
+		facing_ground_gu = Vector2(1.0, 1.0).normalized()
+	var side_direction_ground_gu := Vector2(
+		-facing_ground_gu.y,
+		facing_ground_gu.x
+	)
+	var summon_offset_gu := (
+		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
+			42.0
+		)
+	)
+	return _canonical_ground_gu_to_screen_px(
+		player_ground_gu + side_direction_ground_gu * summon_offset_gu
+	)
 
 
 func _spawn_canonical_cast_visual(
@@ -4343,7 +4418,7 @@ func _ground_position_gu_for_map(
 ) -> Vector2:
 	var runtime := MapEditorRuntimeBridgeScript.load_map(map_id)
 	if not runtime.is_empty():
-		return MapEditorRuntimeBridgeScript.world_to_tile(
+		return MapEditorRuntimeBridgeScript.screen_position_px_to_ground_position_gu(
 			runtime,
 			screen_position_px
 		)
@@ -4368,14 +4443,25 @@ func _canonical_screen_px_to_grid_cell(screen_position_px: Vector2) -> Vector2i:
 			roundi(ground_position_gu.x),
 			roundi(ground_position_gu.y)
 		)
-	var tile := MapEditorRuntimeBridgeScript.world_to_tile(runtime, screen_position_px)
-	return Vector2i(roundi(tile.x), roundi(tile.y))
+	var ground_position_gu := (
+		MapEditorRuntimeBridgeScript.screen_position_px_to_ground_position_gu(
+			runtime,
+			screen_position_px
+		)
+	)
+	return Vector2i(
+		roundi(ground_position_gu.x),
+		roundi(ground_position_gu.y)
+	)
 
 
 func _canonical_screen_px_to_ground_gu(screen_position_px: Vector2) -> Vector2:
 	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
 	if not runtime.is_empty():
-		return MapEditorRuntimeBridgeScript.world_to_tile(runtime, screen_position_px)
+		return MapEditorRuntimeBridgeScript.screen_position_px_to_ground_position_gu(
+			runtime,
+			screen_position_px
+		)
 	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
 		screen_position_px
 	)
@@ -4384,9 +4470,9 @@ func _canonical_screen_px_to_ground_gu(screen_position_px: Vector2) -> Vector2:
 func _canonical_ground_gu_to_screen_px(ground_position_gu: Vector2) -> Vector2:
 	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
 	if not runtime.is_empty():
-		return MapEditorRuntimeBridgeScript.tile_to_world(
+		return MapEditorRuntimeBridgeScript.ground_position_gu_to_screen_position_px(
 			runtime,
-			[ground_position_gu.x, ground_position_gu.y]
+			ground_position_gu
 		)
 	return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
 		ground_position_gu
@@ -4400,7 +4486,10 @@ func _canonical_grid_cell_to_screen_px(grid_cell: Variant) -> Vector2:
 		return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
 			Vector2(tile)
 		)
-	return MapEditorRuntimeBridgeScript.tile_to_world(runtime, [tile.x, tile.y])
+	return MapEditorRuntimeBridgeScript.ground_position_gu_to_screen_position_px(
+		runtime,
+		Vector2(tile)
+	)
 
 
 func _canonical_facing(direction: Vector2) -> Vector2i:
@@ -4459,7 +4548,10 @@ func _spawn_projectile(
 			direction_screen_px
 		).normalized()
 	)
-	if direction_ground_gu.length_squared() <= GroundUnitSpaceScript.EPSILON_GU:
+	if (
+		direction_ground_gu.length_squared()
+		<= GroundUnitSpaceScript.EPSILON_GU * GroundUnitSpaceScript.EPSILON_GU
+	):
 		direction_ground_gu = Vector2(1.0, -1.0).normalized()
 	var visual_direction_screen_px := direction_screen_px.normalized()
 	if visual_direction_screen_px.length_squared() <= 0.000001:
@@ -4511,7 +4603,8 @@ func _damage_enemies(
 		)
 		var offset_ground_gu := target_ground_gu - origin_ground_gu
 		var in_arc := (
-			offset_ground_gu.length_squared() <= GroundUnitSpaceScript.EPSILON_GU
+			offset_ground_gu.length_squared()
+			<= GroundUnitSpaceScript.EPSILON_GU * GroundUnitSpaceScript.EPSILON_GU
 			or offset_ground_gu.normalized().dot(direction_ground_gu) > -0.05
 		)
 		if (
