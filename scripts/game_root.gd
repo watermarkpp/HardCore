@@ -718,8 +718,8 @@ func _valid_portal_request(request: Dictionary) -> bool:
 		and str(request.get("arrival_guard_policy_id", "")) == MapPortalTravelGuardScript.POLICY_ID
 		and is_equal_approx(float(request.get("return_minimum_seconds", 0.0)), 3.0)
 		and is_equal_approx(
-			float(request.get("return_unlock_distance_tiles", 0.0)),
-			MapPortalTravelGuardScript.UNLOCK_DISTANCE_TILES
+			float(request.get("return_unlock_distance_gu", -1.0)),
+			MapPortalTravelGuardScript.UNLOCK_DISTANCE_GU
 		)
 		and bool(request.get("single_flight", false))
 	)
@@ -901,9 +901,24 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 		if monster.is_empty():monster=GameData.get_monster(str(spawn.get("name","")))
 		if not monster.is_empty():
 			var count:=mini(int(spawn.get("count",1)),int(spawn.get("max_alive",spawn.get("count",1))))
-			var center:Vector2=spawn.get("position",Vector2.ZERO);var radius:=float(spawn.get("radius_tiles",0))*20.0
+			var center_screen_px: Vector2 = spawn.get("position", Vector2.ZERO)
+			var radius_gu := maxf(0.0, float(spawn.get("radius_gu", 0.0)))
 			for copy_index in maxi(1,count):
-				var offset:=Vector2.ZERO if count<=1 else Vector2.from_angle(float(copy_index)*TAU/float(count))*minf(radius,32.0+float(copy_index)*12.0)
+				var offset_ground_gu := Vector2.ZERO
+				if count > 1 and radius_gu > 0.0:
+					var radial_fraction := sqrt(
+						float(copy_index + 1) / float(count)
+					)
+					offset_ground_gu = (
+						Vector2.from_angle(float(copy_index) * TAU / float(count))
+						* radius_gu
+						* radial_fraction
+					)
+				var offset_screen_px := (
+					GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+						offset_ground_gu
+					)
+				)
 				var raw_group: Dictionary = spawn.get("spawn_group", {})
 				var group_id := str(spawn.get(
 					"spawnGroupId",
@@ -911,7 +926,7 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 				))
 				_spawn_enemy(
 					monster,
-					center + offset,
+					center_screen_px + offset_screen_px,
 					false,
 					float(spawn.get("respawn_seconds", 60)),
 					{
