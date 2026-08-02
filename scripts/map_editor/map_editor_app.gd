@@ -202,7 +202,7 @@ func _build_ui() -> void:
 	semantic_display_name = _field(sidebar, "标注名称", "")
 	semantic_target_map = _field(sidebar, "传送点连接的目标地图 ID（由连接工具配置）", "")
 	semantic_target_entrance = _field(sidebar, "目标传送点 ID（由连接工具配置）", "")
-	semantic_radius = _spin_field(sidebar, "刷新/区域半径（格；Boss 可为 0）", 0, 64); semantic_radius.value = 3
+	semantic_radius = _spin_field(sidebar, "刷新/区域半径（GU；Boss 可为 0）", 0, 64); semantic_radius.value = 3
 	semantic_count = _spin_field(sidebar, "刷新数量", 1, 200); semantic_count.value = 1
 	semantic_respawn = _spin_field(sidebar, "刷新间隔（秒）", 1, 86400); semantic_respawn.value = 60
 	semantic_max_alive = _spin_field(sidebar, "最大存活数", 1, 200); semantic_max_alive.value = 1
@@ -1174,7 +1174,7 @@ func _sync_semantic_editor_fields(entry: Dictionary) -> void:
 		if metadata is Dictionary and str(metadata.get("content_id", "")) == content_id:
 			semantic_content_option.select(index)
 			break
-	semantic_radius.value = int(entry.get("radius_tiles", semantic_radius.value))
+	semantic_radius.value = float(entry.get("radius_gu", semantic_radius.value))
 	semantic_count.value = int(entry.get("count", semantic_count.value))
 	semantic_respawn.value = int(entry.get("respawn_seconds", semantic_respawn.value))
 	semantic_max_alive.value = int(entry.get("max_alive", semantic_max_alive.value))
@@ -1586,7 +1586,7 @@ func _on_semantic_tile_clicked(tile: Vector2i) -> void:
 		return
 	var properties := {}
 	if kind in ["monster_spawn", "boss_spawn", "light", "region_trigger"]:
-		properties["radius_tiles"] = int(semantic_radius.value)
+		properties["radius_gu"] = float(semantic_radius.value)
 	var content_id := semantic_content_id.text.strip_edges()
 	var marker_name := semantic_display_name.text.strip_edges()
 	if not marker_name.is_empty():
@@ -1650,8 +1650,8 @@ func _commit_safe_area_polygon() -> void:
 	var center := _polygon_tile_center(safe_polygon_points)
 	var properties := {
 		"shape": "polygon",
-		"polygon_tiles": points,
-		"radius_tiles": 0,
+		"polygon_ground_gu": points,
+		"radius_gu": 0.0,
 		"display_name": semantic_display_name.text.strip_edges() if not semantic_display_name.text.strip_edges().is_empty() else "安全区",
 	}
 	var result := MapEditorGameplaySemanticService.add_entry(current_document, "safe_area", center, properties)

@@ -28,13 +28,13 @@ func _init() -> void:
 	_npc(document, "npc.expansion.bich_blacksmith", "比奇铁匠", "repair", Vector2i(137,151), "north", "personal_expansion_001")
 
 	var safe := MapEditorGameplaySemanticService.add_entry(document, "safe_area", Vector2i(128,128), {
-		"area_id":"safe.bich_city", "display_name":"比奇主城安全区", "radius_tiles":16,
+		"area_id":"safe.bich_city", "display_name":"比奇主城安全区", "radius_gu":16,
 		"blocks_pvp":true, "blocks_monster_damage":true, "return_anchor":true,
 		"return_tile":[128,128], "forced_return_on_exit":true, "forced_return_on_process_loss":true,
 	})
 	assert(safe.ok)
 	assert(MapEditorGameplaySemanticService.add_entry(document, "region_trigger", Vector2i(128,128), {
-		"trigger_id":"trigger.bich_set_home", "radius_tiles":16, "trigger_type":"enter",
+		"trigger_id":"trigger.bich_set_home", "radius_gu":16, "trigger_type":"enter",
 		"action":"set_nearest_town_return_anchor", "once":false,
 	}).ok)
 
@@ -70,7 +70,7 @@ func _spawn_many(document: Dictionary, monster_id: String, display_name: String,
 	for point: Vector2i in points:
 		var result := MapEditorGameplaySemanticService.add_entry(document, "monster_spawn", point, {
 			"content_id":monster_id, "monster_id":monster_id, "display_name":display_name,
-			"count":count, "max_alive":max_alive, "respawn_seconds":respawn, "radius_tiles":radius,
+			"count":count, "max_alive":max_alive, "respawn_seconds":respawn, "radius_gu":radius,
 			"spawn_rule":"ambient_cluster", "source":"vanilla_176_recomposed", "road_clearance_tiles":5,
 		})
 		assert(result.ok, str(result.get("errors", [])))

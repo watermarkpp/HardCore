@@ -52,7 +52,7 @@ func _run() -> void:
 		{
 			"force_success": true,
 			"destination_valid": true,
-			"destination_tile": game._canonical_world_to_tile(teleport_destination),
+			"destination_tile": game._canonical_screen_px_to_grid_cell(teleport_destination),
 		}
 	)
 	assert(bool(teleport.get("effect_success", false)), "瞬息移动canonical真实入口未完成移动")

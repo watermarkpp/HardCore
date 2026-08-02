@@ -38,7 +38,12 @@ func _run() -> void:
 		},
 		"cooldowns": {"warrior.fire_sword.ready_remaining_ms": 4321},
 	}), "战士技能运行时快照无法写入PlayerState")
-	PlayerState.update_world_location(217, Vector2(321.5, -84.0))
+	var field_ground_position_gu := Vector2(17.25, 8.5)
+	PlayerState.update_world_location(
+		217,
+		Vector2(321.5, -84.0),
+		field_ground_position_gu
+	)
 	PlayerState.save_game()
 	assert(PlayerState.create_character("红叶", "战士", "女").is_empty())
 	var second_id: String = PlayerState.active_profile_id
@@ -54,12 +59,33 @@ func _run() -> void:
 	assert(bool(restored_runtime.toggles["warrior.fire_sword.auto_enabled"]), "烈火开关未随角色存档恢复")
 	assert(not restored_runtime.cooldowns.has("warrior.fire_sword.ready_remaining_ms"), "旧存档烈火自动冷却被错误恢复")
 	assert(PlayerState.saved_map_id == 217 and PlayerState.saved_position.is_equal_approx(Vector2(321.5, -84.0)), "角色最近活动位置记录失败")
+	assert(
+		PlayerState.saved_ground_position_gu_valid
+		and PlayerState.saved_ground_position_gu.is_equal_approx(
+			field_ground_position_gu
+		),
+		"角色最近活动地面GU坐标未独立保存"
+	)
 	var expected_home := MapCoordinateMapper.source_to_world(Vector2(289, 618), Vector2i(700, 700))
-	assert(PlayerState.save_safe_logout(4, expected_home), "安全退出未立即写入存档")
+	var expected_home_ground_gu := Vector2(289, 618)
+	assert(PlayerState.save_safe_logout(
+		4,
+		expected_home,
+		expected_home_ground_gu
+	), "安全退出未立即写入存档")
 	PlayerState.saved_map_id = 217
 	PlayerState.saved_position = Vector2.ZERO
+	PlayerState.saved_ground_position_gu = Vector2.ZERO
+	PlayerState.saved_ground_position_gu_valid = false
 	assert(PlayerState.select_character(first_id), "安全退出后无法重载角色")
 	assert(PlayerState.saved_map_id == 4 and PlayerState.saved_position.is_equal_approx(expected_home), "退出后没有强制回到最近城镇")
+	assert(
+		PlayerState.saved_ground_position_gu_valid
+		and PlayerState.saved_ground_position_gu.is_equal_approx(
+			expected_home_ground_gu
+		),
+		"退出后的地面GU坐标未恢复"
+	)
 	assert(FileAccess.file_exists(TEST_DIRECTORY + "/" + first_id + ".json.bak"), "原子存档备份未生成")
 	var launcher: Node = load("res://scenes/character_select.tscn").instantiate()
 	add_child(launcher)

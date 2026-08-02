@@ -42,6 +42,8 @@ $Suites = @{
 		'tests/skeleton_spirit_boss_test.tscn',
 		'tests/corpse_king_boss_test.tscn',
 		'tests/crowd_grounding_test.tscn',
+		'tests/monster_unit_adapter_test.tscn',
+		'tests/monster_ground_unit_runtime_test.tscn',
 		'tests/monster_melee_contact_geometry_test.tscn',
 		'tests/placeholder_attack_animation_test.tscn'
 	)
@@ -89,6 +91,8 @@ $Suites = @{
 		'tests/five_layer_architecture_test.tscn',
 		'tests/bich_community_baseline_test.tscn',
 		'tests/map_coordinate_mapping_test.tscn',
+		'tests/map_combat_unit_contract_test.tscn',
+		'tests/game_root_map_unit_integration_test.tscn',
 		'tests/source_collision_chunk_test.tscn',
 		'tests/bich_content_closure_test.tscn',
 		'tests/corpse_king_boss_test.tscn',

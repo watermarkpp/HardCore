@@ -88,9 +88,9 @@ func _run() -> void:
 		true,
 		true
 	)
-	assert((live_geometry.origin_world as Vector2).is_equal_approx(moved_origin), "职业技能发射帧仍使用旧施法者脚点")
+	assert((live_geometry.origin_screen_px as Vector2).is_equal_approx(moved_origin), "职业技能发射帧仍使用旧施法者脚点")
 	assert(
-		(live_geometry.direction_world as Vector2).is_equal_approx(
+		(live_geometry.direction_screen_px as Vector2).is_equal_approx(
 			moved_origin.direction_to(intended.global_position)
 		),
 		"职业技能发射帧仍使用旧目标方向"
@@ -160,10 +160,14 @@ func _verify_caster_projectile_release(
 			break
 	assert(projectile != null, "%s没有在释放帧创建正式投射物" % profession)
 	assert(
-		projectile.global_position.is_equal_approx(
-			live_origin + (release_geometry.direction_world as Vector2) * 24.0
-		),
+		projectile.global_position.is_equal_approx(live_origin),
 		"%s投射物仍从旧脚点生成" % profession
+	)
+	assert(
+		projectile.visual_muzzle_offset_px.is_equal_approx(
+			(release_geometry.direction_screen_px as Vector2).normalized() * 24.0
+		),
+		"%s projectile muzzle offset escaped PX presentation space" % profession
 	)
 	assert(
 		projectile.direction.is_equal_approx(live_origin.direction_to(target.global_position)),

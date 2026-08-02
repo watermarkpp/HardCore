@@ -23,7 +23,9 @@ func _run() -> void:
 		if value is EnemyActor:
 			(value as EnemyActor).global_position = game.player.global_position + Vector2(4000, 4000)
 
-	var origin_tile: Vector2i = game._canonical_world_to_tile(game.player.global_position)
+	var origin_tile: Vector2i = game._canonical_screen_px_to_grid_cell(
+		game.player.global_position
+	)
 	assert(
 		game._canonical_facing_for_skill("wizard.hellfire", Vector2.DOWN) == Vector2i(1, 1),
 		"地狱火屏幕S方向未转换为64x32地图格S方向"
@@ -54,20 +56,20 @@ func _run() -> void:
 			"疾光电影正式直线没有在首个阻挡格前截断"
 		)
 
-	var origin_fractional_tile: Vector2 = game._canonical_world_to_fractional_tile(
+	var origin_ground_gu: Vector2 = game._canonical_screen_px_to_ground_gu(
 		game.player.global_position
 	)
-	var free_aim_step := Vector2(1.0, 0.45)
-	var free_aim_world: Vector2 = (
-		game._canonical_fractional_tile_to_world(
-			origin_fractional_tile + free_aim_step
+	var free_aim_direction_ground_gu := Vector2(1.0, 0.45).normalized()
+	var free_aim_screen_px: Vector2 = (
+		game._canonical_ground_gu_to_screen_px(
+			origin_ground_gu + free_aim_direction_ground_gu
 		)
 		- game.player.global_position
 	)
 	var hellfire_effect := {
 		"line_geometry_contract": SpellGeometry.CONTINUOUS_AIM_LINE_CONTRACT_ID,
-		"length_tiles": 5.0,
-		"width_tiles": 1.0,
+		"effect_length_gu": 5.0,
+		"effect_width_gu": 1.0,
 		"pierces_units": false,
 		"stops_on_terrain": false,
 	}
@@ -75,26 +77,28 @@ func _run() -> void:
 		"wizard.hellfire",
 		hellfire_effect,
 		game.player.global_position,
-		free_aim_world
+		free_aim_screen_px
 	)
-	assert((hellfire_strip.axis_fractional_tile as Vector2).is_equal_approx(
-		free_aim_step
+	assert((hellfire_strip.direction_ground_gu as Vector2).is_equal_approx(
+		free_aim_direction_ground_gu
 	))
-	assert(is_equal_approx(float(hellfire_strip.length_tiles), 5.0))
-	assert(is_equal_approx(float(hellfire_strip.width_tiles), 1.0))
+	assert(is_equal_approx(float(hellfire_strip.effect_length_gu), 5.0))
+	assert(is_equal_approx(float(hellfire_strip.effect_width_gu), 1.0))
 	var first_line_target := _make_enemy_at_fractional_tile(
-		game, game.player, origin_fractional_tile + free_aim_step, "地狱火首个目标"
+		game, game.player, origin_ground_gu + free_aim_direction_ground_gu, "地狱火首个目标"
 	)
 	var rear_line_target := _make_enemy_at_fractional_tile(
 		game,
 		game.player,
-		origin_fractional_tile + free_aim_step * 4.5,
+		origin_ground_gu + free_aim_direction_ground_gu * 4.5,
 		"地狱火后方目标"
 	)
 	var off_line_target := _make_enemy_at_fractional_tile(
 		game,
 		game.player,
-		origin_fractional_tile + free_aim_step * 2.0 + Vector2(-0.45, 1.0) * 2.0,
+		origin_ground_gu
+		+ free_aim_direction_ground_gu * 2.0
+		+ Vector2(-free_aim_direction_ground_gu.y, free_aim_direction_ground_gu.x) * 2.0,
 		"地狱火线外目标"
 	)
 	var first_hp := first_line_target.current_hp
@@ -104,7 +108,7 @@ func _run() -> void:
 		"wizard.hellfire",
 		20,
 		game.player.global_position,
-		free_aim_world,
+		free_aim_screen_px,
 		"line_damage",
 		null,
 		[],
@@ -132,13 +136,13 @@ func _run() -> void:
 	var ring_hp := ring_target.current_hp
 	var center_hp := center_target.current_hp
 	var outside_hp := outside_target.current_hp
-	assert(game._canonical_world_to_tile(ring_target.global_position) == origin_tile + Vector2i(2, 0))
-	assert(game._canonical_world_to_tile(center_target.global_position) == origin_tile)
-	assert(game._canonical_world_to_tile(outside_target.global_position) == origin_tile + Vector2i(3, 0))
+	assert(game._canonical_screen_px_to_grid_cell(ring_target.global_position) == origin_tile + Vector2i(2, 0))
+	assert(game._canonical_screen_px_to_grid_cell(center_target.global_position) == origin_tile)
+	assert(game._canonical_screen_px_to_grid_cell(outside_target.global_position) == origin_tile + Vector2i(3, 0))
 	var ring_targets: Array[EnemyActor] = game._canonical_spell_geometry_targets(
 		"wizard.hell_lightning",
 		ring_cells,
-		{"maximum_targets": 24, "exclude_center": true, "radius_tiles": 2}
+		{"maximum_targets": 24, "exclude_center": true, "radius_grid_steps": 2}
 	)
 	assert(ring_targets.has(ring_target), "地狱雷光正式外环未选择环内目标")
 	assert(not ring_targets.has(center_target), "地狱雷光正式外环错误选择中心目标")
@@ -151,7 +155,7 @@ func _run() -> void:
 		"caster_centered_area_damage",
 		null,
 		ring_cells,
-		{"maximum_targets": 24, "exclude_center": true, "radius_tiles": 2}
+		{"maximum_targets": 24, "exclude_center": true, "radius_grid_steps": 2}
 	)
 	assert(lightning_hit and ring_target.current_hp < ring_hp, "地狱雷光未命中正式半径二格外环目标")
 	assert(center_target.current_hp == center_hp, "地狱雷光错误命中施法者脚下中心格")
@@ -161,17 +165,17 @@ func _run() -> void:
 	outside_target.queue_free()
 	await get_tree().process_frame
 
-	var laser_aim_step := Vector2(0.35, -1.0)
-	var laser_aim_world: Vector2 = (
-		game._canonical_fractional_tile_to_world(
-			origin_fractional_tile + laser_aim_step
+	var laser_aim_direction_ground_gu := Vector2(0.35, -1.0).normalized()
+	var laser_aim_screen_px: Vector2 = (
+		game._canonical_ground_gu_to_screen_px(
+			origin_ground_gu + laser_aim_direction_ground_gu
 		)
 		- game.player.global_position
 	)
 	var laser_effect := {
 		"line_geometry_contract": SpellGeometry.CONTINUOUS_AIM_LINE_CONTRACT_ID,
-		"length_tiles": 8.0,
-		"width_tiles": 1.0,
+		"effect_length_gu": 8.0,
+		"effect_width_gu": 1.0,
 		"pierces_units": true,
 		"stops_on_terrain": false,
 	}
@@ -179,28 +183,30 @@ func _run() -> void:
 		"wizard.laser",
 		laser_effect,
 		game.player.global_position,
-		laser_aim_world
+		laser_aim_screen_px
 	)
-	assert((laser_strip.axis_fractional_tile as Vector2).is_equal_approx(
-		laser_aim_step
+	assert((laser_strip.direction_ground_gu as Vector2).is_equal_approx(
+		laser_aim_direction_ground_gu
 	))
-	assert(is_equal_approx(float(laser_strip.length_tiles), 8.0))
+	assert(is_equal_approx(float(laser_strip.effect_length_gu), 8.0))
 	var near_laser_target := _make_enemy_at_fractional_tile(
 		game,
 		game.player,
-		origin_fractional_tile + laser_aim_step,
+		origin_ground_gu + laser_aim_direction_ground_gu,
 		"疾光近端目标"
 	)
 	var far_laser_target := _make_enemy_at_fractional_tile(
 		game,
 		game.player,
-		origin_fractional_tile + laser_aim_step * 7.5,
+		origin_ground_gu + laser_aim_direction_ground_gu * 7.5,
 		"疾光远端目标"
 	)
 	var off_laser_target := _make_enemy_at_fractional_tile(
 		game,
 		game.player,
-		origin_fractional_tile + laser_aim_step * 4.0 + Vector2(1.0, 0.35) * 2.0,
+		origin_ground_gu
+		+ laser_aim_direction_ground_gu * 4.0
+		+ Vector2(-laser_aim_direction_ground_gu.y, laser_aim_direction_ground_gu.x) * 2.0,
 		"疾光线外目标"
 	)
 	var stacked_laser_targets: Array[EnemyActor] = []
@@ -209,7 +215,8 @@ func _run() -> void:
 		var stacked_target := _make_enemy_at_fractional_tile(
 			game,
 			game.player,
-			origin_fractional_tile + laser_aim_step * (2.0 + float(stacked_index) * 0.5),
+			origin_ground_gu
+			+ laser_aim_direction_ground_gu * (2.0 + float(stacked_index) * 0.5),
 			"疾光穿透目标%d" % stacked_index
 		)
 		stacked_laser_targets.append(stacked_target)
@@ -221,7 +228,7 @@ func _run() -> void:
 		"wizard.laser",
 		20,
 		game.player.global_position,
-		laser_aim_world,
+		laser_aim_screen_px,
 		"piercing_line_damage",
 		null,
 		[],
@@ -369,7 +376,7 @@ func _make_enemy(
 	game.add_child(enemy)
 	# Enemy._ready() repairs player overlap for production spawns. Tests place
 	# exact footpoints after that one-time repair and then freeze AI movement.
-	enemy.global_position = game._canonical_tile_to_world(tile)
+	enemy.global_position = game._canonical_grid_cell_to_screen_px(tile)
 	enemy.set_physics_process(false)
 	return enemy
 
@@ -386,5 +393,5 @@ func _make_enemy_at_fractional_tile(
 		Vector2i(roundi(tile.x), roundi(tile.y)),
 		display_name
 	)
-	enemy.global_position = game._canonical_fractional_tile_to_world(tile)
+	enemy.global_position = game._canonical_ground_gu_to_screen_px(tile)
 	return enemy

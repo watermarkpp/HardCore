@@ -142,7 +142,7 @@ func _spawn_sample(player: PlayerCharacter, expect_final_art := true) -> EnemyAc
 	add_child(enemy)
 	enemy.set_physics_process(false)
 	await get_tree().process_frame
-	if expect_final_art and enemy.global_position.distance_to(player.global_position) <= MonsterVisual.VISUAL_ACTIVATION_DISTANCE:
+	if expect_final_art and enemy.global_position.distance_to(player.global_position) <= MonsterVisual.VISUAL_ACTIVATION_DISTANCE_PX:
 		assert(enemy.visual.uses_final_art(), "cache fixture did not resolve final client art")
 	return enemy
 

@@ -54,7 +54,7 @@ func _run() -> void:
 		await get_tree().process_frame
 
 		var position_before := enemy.global_position
-		assert(enemy.stationary and is_zero_approx(enemy.move_speed), "monsterId=%d 运行时仍可移动" % monster_id)
+		assert(enemy.stationary and is_zero_approx(enemy.move_speed_gu_per_sec), "monsterId=%d 运行时仍可移动" % monster_id)
 		assert(enemy.area_attack_rule.get("targetMode", "") == "all_combat_targets", "monsterId=%d 未启用全屏多目标攻击" % monster_id)
 		enemy._physics_process(0.01)
 		enemy._physics_process(0.21)
@@ -81,7 +81,7 @@ func _run() -> void:
 		_last_summon.clear()
 		summoner._physics_process(0.01)
 		summoner._physics_process(0.51)
-		assert(is_zero_approx(summoner.move_speed), "monsterId=%d 固定召唤怪发生移动" % summoner_id)
+		assert(is_zero_approx(summoner.move_speed_gu_per_sec), "monsterId=%d 固定召唤怪发生移动" % summoner_id)
 		assert(int(_last_summon.get("sourceId", -1)) == summoner_id, "monsterId=%d 未通过通用召唤信号输出机制" % summoner_id)
 		assert(not _last_summon.get("monsterIds", []).is_empty(), "monsterId=%d 召唤规则没有稳定子怪ID" % summoner_id)
 		summoner.queue_free()

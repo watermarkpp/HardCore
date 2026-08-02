@@ -61,7 +61,7 @@ func _run() -> void:
 	await get_tree().process_frame
 	assert(renamed.monster_id == 36 and renamed.visual.uses_final_art(), "改名怪物未通过monsterId读取正式动画")
 	assert(is_equal_approx(renamed._attack_interval, 2.0) and renamed.service_move_interval_ms == 1500, "EnemyActor未应用monsterId时序")
-	assert(is_equal_approx(renamed.move_speed, 40.0) and renamed.service_ai_code == 0, "EnemyActor未应用monsterId移动/AI档案")
+	assert(is_equal_approx(renamed.move_speed_gu_per_sec, 40.0 / 32.0) and renamed.service_ai_code == 0, "EnemyActor未应用monsterId移动/AI档案")
 
 	var legacy := EnemyActor.new()
 	legacy.setup({"name": "沃玛护卫", "hp": 100, "attackMin": 1, "attackMax": 2}, player, false)

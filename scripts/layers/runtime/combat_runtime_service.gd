@@ -2,16 +2,18 @@ extends Node
 
 const CombatResolutionRulesScript := preload("res://scripts/combat_resolution_rules.gd")
 
-func face_target(actor: Node2D, target: Node2D) -> Vector2:
+func face_target_screen_px(actor: Node2D, target: Node2D) -> Vector2:
 	if not is_instance_valid(actor) or not is_instance_valid(target):
 		return Vector2.ZERO
-	var direction := actor.global_position.direction_to(target.global_position)
-	if direction.length_squared() > 0.01:
+	# This vector only selects the actor's eight-direction presentation row.
+	# Gameplay range and hit geometry are resolved independently in ground GU.
+	var direction_screen_px := actor.global_position.direction_to(target.global_position)
+	if direction_screen_px.length_squared() > 0.01:
 		if actor.has_method("set_combat_facing"):
-			actor.call("set_combat_facing", direction)
+			actor.call("set_combat_facing", direction_screen_px)
 		else:
-			actor.set("facing", direction)
-	return direction
+			actor.set("facing", direction_screen_px)
+	return direction_screen_px
 
 
 func apply_damage(target: Node, amount: int) -> bool:

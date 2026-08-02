@@ -47,23 +47,23 @@ func _ready() -> void:
 	var footprint: Shape2D = enemy.get_node("CollisionShape2D").shape
 	assert(footprint is ConvexPolygonShape2D, "runtime monster did not build the shared isometric footprint")
 	var bounds := _bounds((footprint as ConvexPolygonShape2D).points)
-	assert(is_equal_approx(bounds.size.x, enemy.collision_radius * 2.0), "monster footprint lost its authored horizontal radius")
-	assert(is_equal_approx(bounds.size.y, enemy.collision_radius), "monster footprint is not 2:1 in world space")
+	assert(is_equal_approx(bounds.size.x, enemy.collision_radius_px * 2.0), "monster footprint lost its authored horizontal radius")
+	assert(is_equal_approx(bounds.size.y, enemy.collision_radius_px), "monster footprint is not 2:1 in world space")
 
 	var edge_normal := Vector2(1.0, 2.0).normalized()
 	var diamond_edge_support := diamond_points[1].dot(edge_normal)
 	var physics_edge_support := _support((footprint as ConvexPolygonShape2D).points, edge_normal)
 	var software_edge_support := _support(
-		WorldSpatialRules.actor_footprint_polygon(enemy.collision_radius - 1.0),
+		WorldSpatialRules.actor_footprint_polygon(enemy.collision_radius_px - 1.0),
 		edge_normal
 	)
 	var probes := {
 		"center": Vector2.ZERO,
-		"horizontal_overlap": Vector2(TILE_HALF_WIDTH + enemy.collision_radius - 2.0, 0.0),
-		"vertical_overlap": Vector2(0.0, TILE_HALF_HEIGHT + enemy.collision_radius * 0.5 - 2.0),
+		"horizontal_overlap": Vector2(TILE_HALF_WIDTH + enemy.collision_radius_px - 2.0, 0.0),
+		"vertical_overlap": Vector2(0.0, TILE_HALF_HEIGHT + enemy.collision_radius_px * 0.5 - 2.0),
 		"diagonal_overlap": edge_normal * (diamond_edge_support + software_edge_support - 2.0),
-		"horizontal_clear": Vector2(TILE_HALF_WIDTH + enemy.collision_radius + 2.0, 0.0),
-		"vertical_clear": Vector2(0.0, TILE_HALF_HEIGHT + enemy.collision_radius * 0.5 + 2.0),
+		"horizontal_clear": Vector2(TILE_HALF_WIDTH + enemy.collision_radius_px + 2.0, 0.0),
+		"vertical_clear": Vector2(0.0, TILE_HALF_HEIGHT + enemy.collision_radius_px * 0.5 + 2.0),
 		"diagonal_clear": edge_normal * (diamond_edge_support + physics_edge_support + 2.0),
 	}
 	var expected := {
@@ -81,7 +81,7 @@ func _ready() -> void:
 		var software_blocked := WorldSpatialRules.environment_blocks_actor(
 			blocker,
 			position,
-			enemy.collision_radius
+			enemy.collision_radius_px
 		)
 		assert(physics_blocked == expected[probe_name], "Physics2D mismatch at %s: %s" % [probe_name, physics_blocked])
 		assert(software_blocked == expected[probe_name], "software mismatch at %s: %s" % [probe_name, software_blocked])

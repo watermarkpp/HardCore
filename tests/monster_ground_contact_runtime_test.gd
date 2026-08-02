@@ -83,7 +83,7 @@ func _run() -> void:
 		var fixed_radii := enemy.ground_indicator_radii()
 		var expected_projection_offset := _vector2(entry.ringCenterOffset)
 		var expected_radii := (
-			WorldSpatialRules.actor_footprint_radii(enemy.collision_radius)
+			WorldSpatialRules.actor_footprint_radii(enemy.collision_radius_px)
 			* EnemyActor.TARGET_RING_FOOTPRINT_SCALE
 		)
 		var manual_entry: Dictionary = manual_entries.get(monster_key, {})
@@ -312,7 +312,7 @@ func _vector2(values: Array) -> Vector2:
 
 func _manual_replay_displacement(enemy: EnemyActor) -> Vector2:
 	return Vector2.DOWN * (
-		enemy.collision_radius
+		enemy.collision_radius_px
 		+ ArtSpec.PLAYER_COLLISION_RADIUS
 		+ MonsterVisual.MANUAL_ALIGNMENT_SPAWN_GAP
 	) / MonsterVisual.MANUAL_ALIGNMENT_PREVIEW_ZOOM

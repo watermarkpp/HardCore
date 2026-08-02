@@ -2,6 +2,7 @@ extends Node
 
 const SpellLockPolicy := preload("res://scripts/skills/spell_target_lock_policy.gd")
 const SkillDataLoader := preload("res://scripts/skills/skill_data_loader.gd")
+const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
 
 
 func _ready() -> void:
@@ -31,7 +32,7 @@ func _run() -> void:
 
 	game.player.max_mp = 999
 	game.player.current_mp = 999
-	var origin_tile: Vector2 = game._canonical_world_to_fractional_tile(
+	var origin_tile: Vector2 = game._canonical_screen_px_to_ground_gu(
 		game.player.global_position
 	)
 	var near_target := _make_enemy(game, origin_tile + Vector2(2, 0), "spell-lock-near")
@@ -45,7 +46,7 @@ func _run() -> void:
 	_test_spell_click_hold_and_cancel(game, near_target)
 	_test_attack_button_bound_spell_uses_same_lifecycle(game, near_target)
 	_test_magic_shield_toggle_and_auto_refresh(game)
-	_test_projectile_exact_tile_range(game)
+	_test_projectile_exact_gu_range(game)
 
 	game.queue_free()
 	await get_tree().process_frame
@@ -71,18 +72,18 @@ func _test_idle_cycle_and_lock_range(
 	assert(game.player.current_mp == mana_before)
 	assert(game.player._combat_action_sequence == action_sequence_before)
 
-	far_target.global_position = game._canonical_fractional_tile_to_world(
+	far_target.global_position = game._canonical_ground_gu_to_screen_px(
 		origin_tile + Vector2(12.0, 0.0)
 	)
 	game._validate_locked_target()
 	assert(game.magic_locked_target == far_target)
-	far_target.global_position = game._canonical_fractional_tile_to_world(
+	far_target.global_position = game._canonical_ground_gu_to_screen_px(
 		origin_tile + Vector2(12.01, 0.0)
 	)
 	game._validate_locked_target()
 	assert(game.magic_locked_target == null)
-	assert(SpellLockPolicy.LOCK_RANGE_TILES == 12.0)
-	far_target.global_position = game._canonical_fractional_tile_to_world(
+	assert(SpellLockPolicy.LOCK_RANGE_GU == 12.0)
+	far_target.global_position = game._canonical_ground_gu_to_screen_px(
 		origin_tile + Vector2(8, 0)
 	)
 
@@ -95,7 +96,7 @@ func _test_spell_range_is_not_lock_range(
 	game._set_magic_locked_target(far_target, true)
 	var short_spell := {
 		"target": {"relation": "hostile", "mode": "single"},
-		"geometry": {"maximum_range_tiles": 4.0},
+		"geometry": {"maximum_range_gu": 4.0},
 	}
 	assert(game._is_magic_target_in_range(far_target))
 	assert(not game._spell_definition_allows_target(short_spell, far_target))
@@ -116,7 +117,7 @@ func _test_spell_range_is_not_lock_range(
 	assert(game.magic_locked_target == far_target)
 	var ground_spell := {
 		"target": {"relation": "hostile_area", "mode": "ground_point"},
-		"geometry": {"maximum_range_tiles": 4.0},
+		"geometry": {"maximum_range_gu": 4.0},
 	}
 	var ground_context: Dictionary = game._canonical_target_context(
 		ground_spell,
@@ -128,7 +129,7 @@ func _test_spell_range_is_not_lock_range(
 	assert(not ground_context.target_within_skill_range)
 	assert(
 		ground_context.target_tile
-		!= game._canonical_world_to_tile(far_target.global_position),
+		!= game._canonical_screen_px_to_grid_cell(far_target.global_position),
 		"a ground spell inherited an out-of-spell-range persistent lock point"
 	)
 	assert(game.magic_locked_target == far_target)
@@ -151,7 +152,7 @@ func _test_fire_wall_uses_locked_footpoint_only(
 	assert(locked_context.has_target)
 	assert(
 		locked_context.target_tile
-		== game._canonical_world_to_tile(near_target.global_position),
+		== game._canonical_screen_px_to_grid_cell(near_target.global_position),
 		"fire wall did not use the locked monster footpoint"
 	)
 
@@ -178,12 +179,18 @@ func _test_target_centered_release_rejects_lost_lock(
 	var exploding_flame := SkillDataLoader.skill("wizard.exploding_flame")
 	assert(not exploding_flame.is_empty())
 	var release_geometry := {
-		"origin_world": game.player.global_position,
-		"direction_world": Vector2.RIGHT,
+		"origin_screen_px": game.player.global_position,
+		"origin_ground_gu": game._canonical_screen_px_to_ground_gu(
+			game.player.global_position
+		),
+		"direction_screen_px": Vector2.RIGHT,
+		"direction_ground_gu": GroundUnitSpace.screen_delta_px_to_ground_delta_gu(
+			Vector2.RIGHT
+		).normalized(),
 		"locked_target_instance_id": near_target.get_instance_id(),
 		"locked_target_valid_at_release": true,
 	}
-	near_target.global_position = game._canonical_fractional_tile_to_world(
+	near_target.global_position = game._canonical_ground_gu_to_screen_px(
 		origin_tile + Vector2(12.01, 0.0)
 	)
 	assert(game._combat_release_target(release_geometry) == near_target)
@@ -203,7 +210,7 @@ func _test_target_centered_release_rejects_lost_lock(
 	)
 	assert(game.player.current_mp == mana_before)
 	assert(game._skill_cast_target == null)
-	near_target.global_position = game._canonical_fractional_tile_to_world(
+	near_target.global_position = game._canonical_ground_gu_to_screen_px(
 		origin_tile + Vector2(2, 0)
 	)
 	game._set_magic_locked_target(near_target, true)
@@ -217,7 +224,7 @@ func _test_footprint_geometry_contact(game: Node, origin_tile: Vector2) -> void:
 		"footprint-edge-contact"
 	)
 	assert(
-		game._canonical_world_to_tile(edge_target.global_position) != affected_cell,
+		game._canonical_screen_px_to_grid_cell(edge_target.global_position) != affected_cell,
 		"fixture center must stay outside the affected cell"
 	)
 	assert(
@@ -392,10 +399,10 @@ func _test_attack_button_bound_spell_uses_same_lifecycle(
 	PlayerState.attack_skill_slots = [""]
 
 
-func _test_projectile_exact_tile_range(game: Node) -> void:
+func _test_projectile_exact_gu_range(game: Node) -> void:
 	var definition := SkillDataLoader.skill("wizard.fireball")
 	var expected_range := float(
-		definition.get("geometry", {}).get("maximum_range_tiles", 0.0)
+		definition.get("geometry", {}).get("maximum_range_gu", 0.0)
 	)
 	assert(expected_range > 0.0)
 	game._spawn_projectile(
@@ -414,7 +421,7 @@ func _test_projectile_exact_tile_range(game: Node) -> void:
 		if child is SkillProjectile:
 			projectile = child as SkillProjectile
 	assert(projectile != null)
-	assert(is_equal_approx(projectile.maximum_range_tiles, expected_range))
+	assert(is_equal_approx(projectile.max_travel_distance_gu, expected_range))
 	projectile.queue_free()
 
 
@@ -439,6 +446,6 @@ func _make_enemy(game: Node, tile: Vector2, display_name: String) -> EnemyActor:
 	}, game.player, false)
 	enemy.control_time = 60.0
 	game.add_child(enemy)
-	enemy.global_position = game._canonical_fractional_tile_to_world(tile)
+	enemy.global_position = game._canonical_ground_gu_to_screen_px(tile)
 	enemy.set_physics_process(false)
 	return enemy

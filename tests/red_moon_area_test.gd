@@ -39,11 +39,17 @@ func _run() -> void:
 	moon_spider.free()
 	var illusion_spider := EnemyActor.new()
 	illusion_spider.setup(GameData.get_monster("幻影蜘蛛"), game.player, false)
-	assert(illusion_spider.move_speed == 0.0 and illusion_spider.attack_range >= 200.0, "幻影蜘蛛固定远程行为失效")
+	assert(
+		illusion_spider.stationary
+		and illusion_spider.move_speed_gu_per_sec == 0.0
+		and illusion_spider.attack_range_gu == 0.0
+		and bool(illusion_spider.summon_rule.get("enabled", false)),
+		"幻影蜘蛛固定召唤行为失效",
+	)
 	illusion_spider.free()
 	var demon := EnemyActor.new()
 	demon.setup(GameData.get_monster("赤月恶魔"), game.player, true)
-	assert(demon.move_speed == 0.0 and demon.attack_range >= 250.0, "赤月恶魔固定范围攻击失效")
+	assert(demon.move_speed_gu_per_sec == 0.0 and demon.attack_range_gu >= 250.0 / 32.0, "赤月恶魔固定范围攻击失效")
 	demon.free()
 	assert(RegionContent.MAPS.size() + RegionContent.CENTIPEDE_MAPS.size() + RegionContent.ZUMA_MAPS.size() + RegionContent.UNKNOWN_DARK_MAPS.size() + RegionContent.FENGMO_MAPS.size() + RegionContent.RED_MOON_MAPS.size() == 103, "固定区域地图总数应为103")
 	print("RED_MOON_AREA_PASS：白日门赤月13图、蜘蛛行为、祭坛双Boss和赤月恶魔正常")

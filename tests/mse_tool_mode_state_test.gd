@@ -232,7 +232,7 @@ func _ready() -> void:
 	assert(editor.current_document.layers.map_exit_points.size() == 1)
 	assert(
 		not editor.current_document.layers.map_exit_points[0].has(
-			"radius_tiles"
+			"radius_gu"
 		)
 	)
 	var exit_id := str(editor.current_document.layers.map_exit_points[0].semantic_id)
@@ -262,7 +262,7 @@ func _ready() -> void:
 	editor._unhandled_key_input(finish_polygon)
 	assert(editor.current_document.layers.safe_area.size() == 1)
 	assert(str(editor.current_document.layers.safe_area[0].shape) == "polygon")
-	assert(editor.current_document.layers.safe_area[0].polygon_tiles.size() == 4)
+	assert(editor.current_document.layers.safe_area[0].polygon_ground_gu.size() == 4)
 	assert(editor.preview.selected_selectable_id == str(editor.current_document.layers.safe_area[0].semantic_id))
 	editor.preview._gui_input(delete_selected)
 	assert(editor.current_document.layers.safe_area.is_empty())

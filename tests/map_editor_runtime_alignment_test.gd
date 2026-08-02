@@ -21,7 +21,7 @@ func _run() -> void:
 		assert(not blocked.is_empty(), "map %d has no blocked cells" % map_id)
 		var parts := str(blocked[0]).split(",")
 		var raw_cell := [float(parts[0]), float(parts[1])]
-		var blocked_center := RuntimeBridge.cell_to_world(runtime, raw_cell)
+		var blocked_center := RuntimeBridge.grid_cell_to_screen_position_px(runtime, raw_cell)
 		assert(game.background.is_environment_point_blocked(blocked_center), "software collision offset map %d" % map_id)
 		var query := PhysicsPointQueryParameters2D.new()
 		query.position = blocked_center
@@ -36,7 +36,7 @@ func _run() -> void:
 		if not authored_spawns.is_empty():
 			assert(not content.spawns.is_empty())
 			assert((content.spawns[0].position as Vector2).is_equal_approx(
-				RuntimeBridge.cell_to_world(runtime, authored_spawns[0].tile)
+				RuntimeBridge.grid_cell_to_screen_position_px(runtime, authored_spawns[0].tile)
 			), "spawn cell center offset map %d" % map_id)
 	if game.current_map_id != 217:
 		game.travel_to_map(217)

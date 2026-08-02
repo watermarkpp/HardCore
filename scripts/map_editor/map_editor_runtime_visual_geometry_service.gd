@@ -123,7 +123,7 @@ static func runtime_instance_geometry(
 ) -> Dictionary:
 	var offset_px: Array = instance.get("offset_px", [0, 0])
 	var world_center := (
-		MapEditorCoordinate.tile_to_world(
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
 			instance_foot_tile(instance, asset), design_size
 		)
 		+ Vector2(float(offset_px[0]), float(offset_px[1]))
@@ -496,7 +496,9 @@ static func command_actor_sort_world(
 		"sort_baseline_offset_px", Vector2.ZERO
 	)
 	return (
-		MapEditorCoordinate.tile_to_world(baseline_tile, design_size)
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+			baseline_tile, design_size
+		)
 		+ Vector2(raw_offset)
 	)
 
@@ -601,7 +603,7 @@ static func editor_layout_sha256(document: Dictionary) -> String:
 				"semantic_id": str(entry.get("semantic_id", "")),
 				"kind": str(entry.get("kind", "")),
 				"tile": entry.get("tile", []).duplicate(),
-				"radius_tiles": entry.get("radius_tiles", 0),
+				"radius_gu": entry.get("radius_gu", 0.0),
 				"display_name": str(entry.get("display_name", "")),
 			})
 	semantics.sort_custom(
