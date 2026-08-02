@@ -1,5 +1,12 @@
 # Codex 精简上下文快照
 
+## 2026-08-02 Android v60：地狱火/疾光电影连续直线实机测试包
+
+- Android 固定构建提交为 `91fec0c7e0517987f4233850b7ac2d59eca61e74`；APK 为 `outputs/hardcore/HardCore-v60-wizard-line-geometry-debug.apk`，大小 `244,419,061` 字节，SHA-256 `BBEED12ADD412A1587BCC788CC30DBB462D724B6E1F201A72E5484E9C5831CA0`。
+- 包信息为 `versionCode=60`、`versionName=1.17.24-wizard-line-geometry`、包名 `com.personal.mafaoffline`、应用名 `HardCore`、`arm64-v8a`、`minSdk=24`、`targetSdk=36`；APK v2/v3 签名与固定运行时资源探针通过。
+- 已对连接的 HONOR 90（REA-AN00）执行保留存档的 `adb install -r` 覆盖安装并冷启动；手机回读版本、进程与前台 `GodotAppLauncher` 正常，进程专属日志未发现 Godot 脚本、解析、Android 崩溃或信号错误。
+- 构建安装后，236/240 人工头盔与三份怪物脚点合同 SHA-256 仍分别为 `21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`、`81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`、`DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+
 ## 2026-08-02：地狱火/疾光电影连续直线几何定稿（未构建 APK）
 
 - 用户最终确认地狱火为宽 `1` 格、长 `5` 格，疾光电影为宽 `1` 格、长 `8` 格；伤害、耗蓝、锁定、素材与 `600ms` 施法 / 第 `5` 帧释放 / `900ms` 恢复均未改变。
