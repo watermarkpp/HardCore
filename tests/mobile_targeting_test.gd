@@ -16,6 +16,9 @@ func _run() -> void:
 	add_child(game)
 	await get_tree().process_frame
 	await get_tree().process_frame
+	# Targeting is isolated from the Bich safe-zone displacement policy here.
+	# Safe-zone GU projection has its own contract tests.
+	game._active_safe_zones = []
 	var enemies := get_tree().get_nodes_in_group("enemies")
 	assert(enemies.size() >= 4, "选敌规则测试缺少怪物")
 	var first := enemies[0] as EnemyActor
@@ -129,6 +132,21 @@ func _run() -> void:
 	)
 	game.player.set_touch_vector(Vector2.ZERO)
 	player_tile = game._attack_lock_tile(game.player.global_position)
+	assert(game.ATTACK_LOCK_CONTRACT == "combat.attack_lock.euclidean_gu.v2")
+	assert(is_equal_approx(game.ATTACK_LOCK_RANGE_GU, 10.0))
+	_place_at_tile_offset(game, first, player_tile, Vector2i(8, 8))
+	game._set_attack_locked_target(first, true)
+	assert(
+		game.locked_target == null,
+		"8×8 ground delta is 11.314 GU and must be outside the 10 GU lock circle"
+	)
+	_place_at_tile_offset(game, first, player_tile, Vector2i(7, 7))
+	game._set_attack_locked_target(first, true)
+	assert(
+		game.locked_target == first,
+		"7×7 ground delta is 9.899 GU and must remain inside the 10 GU lock circle"
+	)
+	game._cancel_target()
 
 	_place_at_tile_offset(game, first, player_tile, Vector2i(11, 0))
 	game._validate_locked_target()

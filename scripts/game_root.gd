@@ -41,8 +41,11 @@ const CANONICAL_MATERIAL_ITEMS := {
 	"amulet": "护身符",
 }
 const SKILL_PRODUCTION_ADAPTER_CONTRACT := "skills.production_adaptation.hardcore.v1"
-const ATTACK_LOCK_CONTRACT := "combat.attack_lock.tile_radius.v1"
-const ATTACK_LOCK_RANGE_TILES := 10
+const ATTACK_LOCK_CONTRACT := "combat.attack_lock.euclidean_gu.v2"
+const ATTACK_LOCK_RANGE_GU := 10.0
+# Deprecated compatibility alias for tests/tools that have not yet migrated.
+# Formal target selection never reads this legacy name.
+const ATTACK_LOCK_RANGE_TILES := ATTACK_LOCK_RANGE_GU
 const MELEE_LOCK_IMPACT_POLICY_ID := "combat.melee_lock.facing_priority_nonexclusive.v1"
 const WILD_RUSH_SKILL_ID := "warrior.wild_rush"
 const FIRE_WALL_SKILL_ID := "wizard.fire_wall"
@@ -1075,9 +1078,25 @@ func _enforce_bich_safe_zone() -> void:
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or not is_instance_valid(node):
 			continue
-		var legal_position := WorldSpatialRulesScript.project_outside_safe_zones(node.global_position, _active_safe_zones, node.collision_radius + 2.0)
-		if legal_position != node.global_position:
-			node.global_position = legal_position
+		var current_ground_gu := _canonical_world_to_fractional_tile(
+			node.global_position
+		)
+		var padding_gu := (
+			WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
+				node.collision_radius + 2.0
+			)
+		)
+		var legal_ground_gu := (
+			WorldSpatialRulesScript.project_outside_safe_zones_ground_gu(
+				current_ground_gu,
+				_active_safe_zones,
+				padding_gu
+			)
+		)
+		if not legal_ground_gu.is_equal_approx(current_ground_gu):
+			node.global_position = _canonical_fractional_tile_to_world(
+				legal_ground_gu
+			)
 			node.velocity = Vector2.ZERO
 
 
@@ -1763,35 +1782,38 @@ func _set_locked_target(target: EnemyActor, manual := false) -> void:
 
 func _attack_lock_candidates(excluded: EnemyActor = null) -> Array[EnemyActor]:
 	var ranked: Array[Dictionary] = []
-	var player_tile := _attack_lock_tile(player.global_position)
+	var origin_ground_gu := _canonical_world_to_fractional_tile(
+		player.global_position
+	)
 	for value: Variant in get_tree().get_nodes_in_group("enemies"):
 		if not value is EnemyActor:
 			continue
 		var enemy := value as EnemyActor
 		if enemy == excluded or not _is_attack_target_in_range(enemy):
 			continue
-		var target_tile := _attack_lock_tile(enemy.global_position)
-		var tile_delta := target_tile - player_tile
+		var target_ground_gu := _canonical_world_to_fractional_tile(
+			enemy.global_position
+		)
 		ranked.append({
 			"target": enemy,
-			"tile_steps": maxi(absi(tile_delta.x), absi(tile_delta.y)),
-			"tile_distance_squared": tile_delta.length_squared(),
-			"world_distance_squared": player.global_position.distance_squared_to(enemy.global_position),
+			"contract_id": ATTACK_LOCK_CONTRACT,
+			"origin_ground_gu": origin_ground_gu,
+			"target_ground_gu": target_ground_gu,
+			"distance_squared_gu": GroundUnitSpaceScript.distance_squared_gu(
+				origin_ground_gu,
+				target_ground_gu
+			),
 			"instance_id": enemy.get_instance_id(),
 		})
 	ranked.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		var a_steps := int(a.get("tile_steps", 0))
-		var b_steps := int(b.get("tile_steps", 0))
-		if a_steps != b_steps:
-			return a_steps < b_steps
-		var a_tile_distance := float(a.get("tile_distance_squared", 0.0))
-		var b_tile_distance := float(b.get("tile_distance_squared", 0.0))
-		if not is_equal_approx(a_tile_distance, b_tile_distance):
-			return a_tile_distance < b_tile_distance
-		var a_world_distance := float(a.get("world_distance_squared", 0.0))
-		var b_world_distance := float(b.get("world_distance_squared", 0.0))
-		if not is_equal_approx(a_world_distance, b_world_distance):
-			return a_world_distance < b_world_distance
+		var a_distance_squared_gu := float(
+			a.get("distance_squared_gu", INF)
+		)
+		var b_distance_squared_gu := float(
+			b.get("distance_squared_gu", INF)
+		)
+		if not is_equal_approx(a_distance_squared_gu, b_distance_squared_gu):
+			return a_distance_squared_gu < b_distance_squared_gu
 		return int(a.get("instance_id", 0)) < int(b.get("instance_id", 0))
 	)
 	var result: Array[EnemyActor] = []
@@ -1889,11 +1911,13 @@ func _refresh_target_highlights() -> void:
 			(value as EnemyActor).set_targeted(value == active_target)
 
 
-func _attack_lock_tile_distance(target: EnemyActor) -> int:
+func _attack_lock_distance_gu(target: EnemyActor) -> float:
 	if not is_instance_valid(target):
-		return ATTACK_LOCK_RANGE_TILES + 1
-	var tile_delta := _attack_lock_tile(target.global_position) - _attack_lock_tile(player.global_position)
-	return maxi(absi(tile_delta.x), absi(tile_delta.y))
+		return ATTACK_LOCK_RANGE_GU + 1.0
+	return GroundUnitSpaceScript.distance_gu(
+		_canonical_world_to_fractional_tile(player.global_position),
+		_canonical_world_to_fractional_tile(target.global_position)
+	)
 
 
 func _is_attack_target_in_range(target: EnemyActor) -> bool:
@@ -1901,7 +1925,8 @@ func _is_attack_target_in_range(target: EnemyActor) -> bool:
 		is_instance_valid(target)
 		and not target.is_queued_for_deletion()
 		and target.current_hp > 0
-		and _attack_lock_tile_distance(target) <= ATTACK_LOCK_RANGE_TILES
+		and _attack_lock_distance_gu(target)
+		<= ATTACK_LOCK_RANGE_GU + GroundUnitSpaceScript.EPSILON_GU
 	)
 
 
