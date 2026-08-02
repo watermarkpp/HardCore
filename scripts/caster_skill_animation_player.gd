@@ -19,6 +19,8 @@ var _manual_mode := false
 var _native_extent := 1.0
 var _desired_extent := 0.0
 var _desired_footprint := Vector2.ZERO
+var _desired_axis_extent := 0.0
+var _fit_axis_world := Vector2.ZERO
 var _anchor_policy := "top_left_from_world_anchor"
 var _sequence_bounds := Rect2()
 var _sequence_anchor_rebase := Vector2.ZERO
@@ -30,7 +32,9 @@ func configure(
 	desired_extent := 0.0,
 	loop_override: Variant = null,
 	requested_phase_id := "",
-	desired_footprint := Vector2.ZERO
+	desired_footprint := Vector2.ZERO,
+	desired_axis_extent := 0.0,
+	fit_axis_world := Vector2.ZERO
 ) -> bool:
 	skill_id = ProfessionRules.skill_id(source_skill_id)
 	phase_id = requested_phase_id
@@ -83,7 +87,29 @@ func configure(
 		maxf(0.0, desired_footprint.x),
 		maxf(0.0, desired_footprint.y)
 	)
+	_desired_axis_extent = maxf(0.0, desired_axis_extent)
+	_fit_axis_world = (
+		fit_axis_world.normalized()
+		if fit_axis_world.length_squared() > 0.000001
+		else Vector2.ZERO
+	)
 	if (
+		_desired_axis_extent > 0.0
+		and not _fit_axis_world.is_zero_approx()
+	):
+		# Directional line art must be fitted by its projection along the cast
+		# axis. Bounding-box contain fitting used the short side of diagonal
+		# frames, shrinking them to roughly two tiles, while cardinal frames were
+		# stretched by a different screen-space box. One uniform scale preserves
+		# source pixels/aspect ratio and makes every direction cover the same map
+		# line represented by the shared geometry axis.
+		var native_axis_extent := _rect_projection_extent(
+			_sequence_bounds, _fit_axis_world
+		)
+		scale = Vector2.ONE * (
+			_desired_axis_extent / maxf(0.001, native_axis_extent)
+		)
+	elif (
 		_desired_footprint.x > 0.0
 		and _desired_footprint.y > 0.0
 		and _sequence_bounds.size.x > 0.0
@@ -161,6 +187,14 @@ func fitted_visual_bounds() -> Rect2:
 	)
 
 
+func fitted_visual_axis_extent(axis_world: Vector2) -> float:
+	if axis_world.length_squared() <= 0.000001:
+		return 0.0
+	return _rect_projection_extent(
+		_sequence_bounds, axis_world.normalized()
+	) * absf(scale.x)
+
+
 func _apply_frame(frame_index: int) -> bool:
 	if frame_index < 0 or frame_index >= _frames.size():
 		return false
@@ -206,3 +240,11 @@ func _visual_bounds_for_frames(frames: Array[Dictionary], anchor_policy: String)
 	if frames.is_empty():
 		return Rect2(Vector2.ZERO, Vector2.ONE)
 	return Rect2(minimum, maximum - minimum)
+
+
+func _rect_projection_extent(rect: Rect2, axis: Vector2) -> float:
+	var normalized_axis := axis.normalized()
+	return (
+		absf(normalized_axis.x) * rect.size.x
+		+ absf(normalized_axis.y) * rect.size.y
+	)

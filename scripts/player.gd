@@ -355,7 +355,18 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 			stable_skill_id
 		)
 	)
-	if primary_visual_duration > 0.0:
+	var explicit_movement_lock_ms := int(canonical_timing.get(
+		"movement_lock_ms", -1
+	))
+	if explicit_movement_lock_ms >= 0:
+		# A long-lived/travelling effect is not automatically a channeled cast.
+		# Hellfire releases once after its six-frame body action; its remaining
+		# FireGun trail and 900ms recast gate do not hold the actor in place.
+		_movement_visual_lock_timer = maxf(
+			_movement_visual_lock_timer,
+			float(explicit_movement_lock_ms) / 1000.0
+		)
+	elif primary_visual_duration > 0.0:
 		var release_seconds := maxf(0.0, float(release_ms) / 1000.0)
 		var movement_contract_seconds := maxf(
 			action_duration,

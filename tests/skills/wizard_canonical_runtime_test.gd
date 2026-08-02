@@ -50,13 +50,23 @@ func _ready() -> void:
 	var hellfire := _execute("wizard.hellfire", {
 		"has_target": true, "primary_stat_roll": 10,
 	})
-	assert(hellfire.effects[0].length_tiles == 5)
-	assert(not hellfire.effects[0].pierces_units and hellfire.geometry_cells.size() == 5)
+	assert(hellfire.effects[0].length_tiles == 4)
+	assert(is_equal_approx(float(hellfire.effects[0].width_tiles), 1.5))
+	assert(not hellfire.effects[0].pierces_units and hellfire.geometry_cells.size() == 4)
 	assert(hellfire.effects[0].maximum_targets == 0)
 	assert(hellfire.effects[0].target_limit_policy == "all_intersecting_effect_cells")
 	assert(
 		hellfire.effects[0].target_selection_contract
-		== "skills.wizard.hellfire.all_intersecting_5x1_line.v1"
+		== "skills.wizard.hellfire.all_intersecting_4x1_5_user_override.v1"
+	)
+	assert(
+		hellfire.effects[0].line_geometry_contract
+		== "skills.wizard.line.continuous_tile_axis_footprint_sat.v1"
+	)
+	assert(not hellfire.effects[0].channeled)
+	assert(
+		hellfire.effects[0].cast_input_contract
+		== "skills.wizard.hellfire.discrete_cast_hold_repeats_after_recast_gate.v1"
 	)
 	assert(hellfire.proficiency_event == "valid_cast_releases_line")
 
@@ -110,6 +120,10 @@ func _ready() -> void:
 		"has_target": true, "primary_stat_roll": 11,
 	})
 	assert(laser.effects[0].pierces_units and laser.effects[0].length_tiles == 8)
+	assert(
+		laser.effects[0].line_geometry_contract
+		== "skills.wizard.line.continuous_tile_axis_footprint_sat.v1"
+	)
 	assert(laser.geometry_cells.size() == 8)
 	assert(laser.proficiency_event == "valid_line_cast_released")
 

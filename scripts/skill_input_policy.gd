@@ -11,6 +11,9 @@ const FIRE_COOLDOWN_COMMIT_POLICY_ID := "gameplay.warrior.fire_sword.cooldown_on
 const SLAYING_LAYER_OVERRIDE_ID := "gameplay.warrior.slaying.layered_proc.user_override.v1"
 const OFFENSIVE_SPELL_HOLD_POLICY_ID := "gameplay.caster.offensive_spell.press_hold_repeat.v1"
 const MAGIC_SHIELD_TOGGLE_POLICY_ID := "gameplay.wizard.magic_shield.auto_refresh_toggle.v1"
+const HELLFIRE_DISCRETE_CAST_POLICY_ID := (
+	"skills.wizard.hellfire.discrete_cast_hold_repeats_after_recast_gate.v1"
+)
 
 const INTERACTION_PASSIVE := "passive"
 const INTERACTION_TOGGLE := "toggle"
@@ -74,6 +77,15 @@ static func metadata(skill_name_or_id: String) -> Dictionary:
 			"auto_refresh_uses_normal_cast_pipeline": true,
 			"repeatable_offensive_spell": false,
 			"press_hold_repeat": false,
+		}, true)
+	elif skill_id == "wizard.hellfire":
+		result.merge({
+			"runtime_override_id": HELLFIRE_DISCRETE_CAST_POLICY_ID,
+			"runtime_activation": "single_press_once_hold_repeats_after_recast_gate",
+			"channeled": false,
+			"single_press_casts_once": true,
+			"hold_repeat_after_recast_gate": true,
+			"press_hold_repeat": true,
 		}, true)
 	elif skill_id == "warrior.fire_sword":
 		result.merge({

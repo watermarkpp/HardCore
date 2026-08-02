@@ -14,6 +14,7 @@ func _ready() -> void:
 	var wild_rush := Policy.metadata("warrior.wild_rush")
 	var fireball := Policy.metadata("wizard.fireball")
 	var magic_shield := Policy.metadata("wizard.magic_shield")
+	var hellfire := Policy.metadata("wizard.hellfire")
 	var healing := Policy.metadata("taoist.healing")
 	var soul_fire := Policy.metadata("taoist.soul_fire_talisman")
 	assert(basic.passive and not basic.bindable_to_skill_slot and not basic.bindable_to_attack_slot)
@@ -48,6 +49,10 @@ func _ready() -> void:
 	assert(magic_shield.runtime_override_id == Policy.MAGIC_SHIELD_TOGGLE_POLICY_ID)
 	assert(magic_shield.auto_refresh_capacity_ratio == 0.20)
 	assert(magic_shield.auto_refresh_uses_normal_cast_pipeline)
+	assert(hellfire.runtime_override_id == Policy.HELLFIRE_DISCRETE_CAST_POLICY_ID)
+	assert(hellfire.single_press_casts_once)
+	assert(hellfire.hold_repeat_after_recast_gate and hellfire.press_hold_repeat)
+	assert(not hellfire.channeled)
 
 	for skill_id: String in Loader.skill_ids():
 		var input := Policy.metadata(skill_id)

@@ -15,6 +15,7 @@ func _run() -> void:
 	await _verify_vanished_lock_never_allows_retarget()
 	await _verify_wild_rush_preserves_original_selected_target()
 	await _verify_target_centered_spatial_cast_policies()
+	await _verify_continuous_line_releases_use_live_target_axis()
 	_verify_locked_melee_facing_contract()
 	print("COMBAT_RELEASE_GEOMETRY_PASS: live footpoints, locked melee facing, target-centred casts retain only live targets")
 	get_tree().quit(0)
@@ -124,6 +125,11 @@ func _verify_wild_rush_preserves_original_selected_target() -> void:
 		"wizard.fire_wall",
 		"target_area"
 	))
+	for line_skill_id: String in ["wizard.hellfire", "wizard.laser"]:
+		assert(ReleaseGeometry.tracks_locked_target_for_skill(
+			line_skill_id,
+			"direction"
+		), "%s lost the release-frame target axis" % line_skill_id)
 	var rush := await _cast_and_capture("warrior.wild_rush", true)
 	assert(rush.geometry.policy == ReleaseGeometry.POLICY_LOCKED_SINGLE_TARGET)
 	assert(int(rush.geometry.locked_target_instance_id) > 0)
@@ -199,6 +205,23 @@ func _verify_target_centered_spatial_cast_policies() -> void:
 	assert(vanished.locked_target_instance_id == 77)
 	assert(not vanished.locked_target_valid_at_release)
 	assert(not vanished.allow_target_retarget and not vanished.allow_directional_scan)
+
+
+func _verify_continuous_line_releases_use_live_target_axis() -> void:
+	PlayerState.reset_progress()
+	PlayerState.select_profession("法师")
+	PlayerState.level = 50
+	PlayerState.learned_skills = {"wizard.hellfire": 3, "wizard.laser": 3}
+	PlayerState.recalculate_stats()
+	for stable_skill_id: String in ["wizard.hellfire", "wizard.laser"]:
+		var cast := await _cast_and_capture(stable_skill_id, true)
+		assert(cast.origin == Vector2(120.0, 130.0))
+		assert(cast.direction.is_equal_approx(
+			Vector2(-50.0, 80.0).normalized()
+		), "%s used an input-time/8-way axis instead of the live target" % stable_skill_id)
+		assert(cast.geometry.policy == ReleaseGeometry.POLICY_LOCKED_SINGLE_TARGET)
+		assert(cast.geometry.refresh_locked_target_footpoint_at_release)
+		assert(not cast.geometry.allow_target_retarget)
 
 
 func _verify_locked_melee_facing_contract() -> void:
