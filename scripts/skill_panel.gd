@@ -510,7 +510,7 @@ func _show_skill_detail(index: int) -> void:
 	var cast_type := str(combat.get("cast_type", "unknown"))
 	var target_mode := str(combat.get("target_mode", "unknown"))
 	var cooldown := float(combat.get("cooldown", 0.0))
-	var range_value := float(combat.get("range", 0.0))
+	var maximum_range_gu := float(combat.get("maximum_range_gu", 0.0))
 	var interaction_mode := _skill_interaction_mode(skill_name)
 	var training_points: Variant = row.get("trainingPoints", null)
 	var mastery_text := "—" if training_points == null else "下级需求 %s" % training_points
@@ -520,7 +520,7 @@ func _show_skill_detail(index: int) -> void:
 	skill_icon.set_meta("skill_id", ProfessionRules.skill_id(skill_name))
 	skill_icon.set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
 	skill_icon.set_meta("skill_icon_path", HUDSkillIconCatalogScript.source_path_for(skill_name))
-	detail_label.text = "[color=#ddc9a9]等级：%s　　熟练度：%s\n类型：%s　　交互：%s\n目标：%s　　消耗：%d MP\n冷却：%.2f 秒　　范围：%.0f\n状态：%s[/color]" % [
+	detail_label.text = "[color=#ddc9a9]等级：%s　　熟练度：%s\n类型：%s　　交互：%s\n目标：%s　　消耗：%d MP\n冷却：%.2f 秒　　范围：%.1f GU\n状态：%s[/color]" % [
 		"Lv.%d" % learned_level if learned else "未学习",
 		mastery_text,
 		_cast_type_label(cast_type),
@@ -528,7 +528,7 @@ func _show_skill_detail(index: int) -> void:
 		_target_mode_label(target_mode),
 		int(row.get("manaCost", 0)),
 		cooldown,
-		range_value,
+		maximum_range_gu,
 		state_text,
 	]
 	description_label.text = "[color=#d7c3a3]%s[/color]\n\n[color=#8f7d6a]技能ID：%s\n来源：%s　可信度：%s[/color]" % [
