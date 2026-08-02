@@ -1,5 +1,13 @@
 # Codex 精简上下文快照
 
+## 2026-08-02：地狱火/疾光电影连续直线几何定稿（未构建 APK）
+
+- 用户最终确认地狱火为宽 `1` 格、长 `5` 格，疾光电影为宽 `1` 格、长 `8` 格；伤害、耗蓝、锁定、素材与 `600ms` 施法 / 第 `5` 帧释放 / `900ms` 恢复均未改变。
+- 职业技能提交 `58c03672` 已由合并提交 `5affc023` 接入；视觉缩放改为按“施法者锚点到前向端点”的投影长度统一拟合，16 个连续方向的直向与斜向端点分别严格落在 `5` / `8` 格，保留原始纵横比与 nearest 采样。稳定合同新增 `skills.caster.line_visual.forward_endpoint_uniform.v1` 与 `skills.wizard.hellfire.all_intersecting_5x1.v1`。
+- 集成提交 `546c3a70` 让地狱火和疾光电影的视觉、伤害与地形截断共用同一条浮点地图格连续条带；命中以怪物现有脚底占位多边形和条带 SAT 相交为准，不再只判断脚点中心，也不再保留疾光电影的隐藏 8 目标上限。视觉碰到的所有合法怪物都会进入伤害判定。
+- 验证：法师/技能定向专项 `21/21`、完整 Warrior 回归 `25/25`；正式法师素材审计 `26` 项资产、`586` 帧、`0 fallback`。16 方向端点、自由角度、近端/远端/边缘接触、9 个同线目标与地形截断均通过。
+- 冻结数据未变：`item_236.json=21B622C0461A81D3C98122864DABB84F14A9C10A9CA4AF7225E1EA8CFECE4BEC`，`item_240.json=81BBFE246C76D734434529BBFDA674264E4980CCFC5ECE05EA24065BF462A457`；三份怪物脚点合同仍为 `DD8BB683A59F280B3F0FAF5E399ABDF69634C0EB9CC469659414A6FEA6C501A7`、`AC70A9D821F64D0EB1D8388415D0F469E97F7F417F616B127448C40A438CA597`、`36955BAB6FF77AAEE6B32656EEC933410C9D09FB81F227304F21AADEC3D3DC75`。
+
 ## 2026-08-01 Android v58：法师范围几何、魔法盾常驻与火墙审计
 
 - Android 固定构建提交为 `1a18f14bbbd88281af950fb01e250d3079dbe055`；APK 为 `outputs/hardcore/HardCore-v58-wizard-geometry-alignment-debug.apk`，大小 `244,410,869` 字节，SHA-256 `87272359792837C6BE33CC2E352BCC30803F905246879B9EFE7C328DDE6B364C`。包信息为 `versionCode=58`、`versionName=1.17.22-wizard-geometry-alignment`、`HardCore`、`arm64-v8a`，v2/v3 签名、运行时资源探针与 586 个法师技能帧导入均通过。
@@ -422,7 +430,7 @@
 | `HardCore-worktrees/maps` | `codex/maps` @ `2a4d6ccf` | 72 untracked | 用户地图编辑器内容，继续保护；代码等价结果已集成为 `1d74fc72` |
 | `HardCore-worktrees/monsters` | `codex/monsters` @ `90f3f716` | 本轮任务文件 clean；既有 UID/报告继续保护 | 最新 212 份人工脚点已冻结导入；黄色目标光圈以人工脚点为圆心、按对应怪物物理脚印 `1.25×` 同比放大，已作为 `b478b7cc` 集成；专项 10/10 通过 |
 | `HardCore-worktrees/ui-art` | `codex/ui-art` @ `dabd8872` | 本轮代码 clean；Godot import/UID/输出继续保护 | 验收台橙色正式光圈改为直接读取游戏运行时目标光圈几何，已作为 `ed3d850e` 集成；UI/怪物联动 2/2 通过 |
-| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `0929efa3` | 既有 UID/输出继续保护 | 33 技能 runtime、150 条可执行语义合同和 26 项正式主动技能视觉已集成；魔法盾常驻正式末帧、抗拒火环逐目标实例映射和火墙精确四格判定已分别作为 `298bd6a2`、`1bfe0872`、`3e99079f` 集成 |
+| `HardCore-worktrees/professions-skills` | `codex/professions-skills` @ `58c03672` | 既有 UID/输出继续保护 | 地狱火 5×1、疾光电影 8×1 的连续直线几何与前向端点视觉拟合已作为 `5affc023` 集成；33 技能 runtime、150 条可执行语义合同和 26 项正式主动技能视觉继续有效 |
 | `HardCore-worktrees/equipment` | `codex/equipment` @ `26f25e39` | 既有 monster import、试点截图脚本、UID/生成项继续保护 | 男性 `Hair.wil block 4`、世界头盔隐藏、纸娃娃/背包/地面头盔均已集成；`26f25e39` 的正式武器可见性测试修正已作为 `35568e45` 集成，冻结草稿与生成图继续保护 |
 
 ### maps 保护红线
