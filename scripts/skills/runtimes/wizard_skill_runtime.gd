@@ -22,19 +22,16 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 			_resolve_temptation(plan, rank, caster_level, context, rng, trigger)
 		"wizard.hellfire":
 			var hellfire := _damage_effect(definition, request, rng, "line_damage")
-			hellfire["length_tiles"] = int(definition.get("geometry", {}).get("length_tiles", 4))
-			hellfire["width_tiles"] = float(definition.get("geometry", {}).get("width_tiles", 1.5))
+			hellfire["length_tiles"] = int(definition.get("geometry", {}).get("length_tiles", 5))
+			hellfire["width_tiles"] = float(definition.get("geometry", {}).get("width_tiles", 1.0))
 			hellfire["pierces_units"] = false
-			# The primary 1.76 geometry and target-count contracts are independent.
-			# This project's user-authoritative presentation override shortens the
-			# formal five-cell source line to four cells without changing its width,
-			# power formula, terrain blocking or all-intersecting target semantics.
-			# client flag above describes the line effect's movement semantics; it
-			# must not be adapted into a one-monster damage cap.
+			# Hellfire is a five-cell by one-cell strip. The client movement flag
+			# describes the line effect's travel semantics; it must not be adapted
+			# into a one-monster damage cap.
 			hellfire["maximum_targets"] = 0
 			hellfire["target_limit_policy"] = "all_intersecting_effect_cells"
 			hellfire["target_selection_contract"] = (
-				"skills.wizard.hellfire.all_intersecting_4x1_5_user_override.v1"
+				"skills.wizard.hellfire.all_intersecting_5x1.v1"
 			)
 			hellfire["line_geometry_contract"] = (
 				"skills.wizard.line.continuous_tile_axis_footprint_sat.v1"

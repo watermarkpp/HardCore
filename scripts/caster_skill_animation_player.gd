@@ -1,6 +1,10 @@
 class_name CasterSkillAnimationPlayer
 extends Sprite2D
 
+const FORWARD_ENDPOINT_FIT_CONTRACT_ID := (
+	"skills.caster.line_visual.forward_endpoint_uniform.v1"
+)
+
 signal animation_finished(skill_id: String)
 signal skill_frame_changed(frame_index: int)
 
@@ -97,17 +101,17 @@ func configure(
 		_desired_axis_extent > 0.0
 		and not _fit_axis_world.is_zero_approx()
 	):
-		# Directional line art must be fitted by its projection along the cast
-		# axis. Bounding-box contain fitting used the short side of diagonal
-		# frames, shrinking them to roughly two tiles, while cardinal frames were
-		# stretched by a different screen-space box. One uniform scale preserves
-		# source pixels/aspect ratio and makes every direction cover the same map
-		# line represented by the shared geometry axis.
-		var native_axis_extent := _rect_projection_extent(
-			_sequence_bounds, _fit_axis_world
+		# Fit the source's forward endpoint from the caster anchor, not its full
+		# front-to-back bounding-box extent. Source pixels may extend behind the
+		# caster by a direction-dependent amount; counting that rear overhang in
+		# the N-cell budget made the visible front stop short. One uniform scale
+		# preserves source pixels/aspect ratio while putting every direction's
+		# furthest forward pixel on the shared map-line endpoint.
+		var native_forward_extent := _rect_forward_projection_extent(
+			_sequence_bounds, _sequence_anchor_rebase, _fit_axis_world
 		)
 		scale = Vector2.ONE * (
-			_desired_axis_extent / maxf(0.001, native_axis_extent)
+			_desired_axis_extent / maxf(0.001, native_forward_extent)
 		)
 	elif (
 		_desired_footprint.x > 0.0
@@ -195,6 +199,16 @@ func fitted_visual_axis_extent(axis_world: Vector2) -> float:
 	) * absf(scale.x)
 
 
+func fitted_visual_forward_extent(axis_world: Vector2) -> float:
+	if axis_world.length_squared() <= 0.000001:
+		return 0.0
+	return _rect_forward_projection_extent(
+		_sequence_bounds,
+		_sequence_anchor_rebase,
+		axis_world.normalized()
+	) * absf(scale.x)
+
+
 func _apply_frame(frame_index: int) -> bool:
 	if frame_index < 0 or frame_index >= _frames.size():
 		return false
@@ -248,3 +262,22 @@ func _rect_projection_extent(rect: Rect2, axis: Vector2) -> float:
 		absf(normalized_axis.x) * rect.size.x
 		+ absf(normalized_axis.y) * rect.size.y
 	)
+
+
+func _rect_forward_projection_extent(
+	rect: Rect2,
+	anchor_rebase: Vector2,
+	axis: Vector2
+) -> float:
+	var normalized_axis := axis.normalized()
+	var minimum := rect.position + anchor_rebase
+	var maximum := rect.end + anchor_rebase
+	var forward_extent := -INF
+	for corner: Vector2 in [
+		minimum,
+		Vector2(maximum.x, minimum.y),
+		maximum,
+		Vector2(minimum.x, maximum.y),
+	]:
+		forward_extent = maxf(forward_extent, corner.dot(normalized_axis))
+	return maxf(0.001, forward_extent)

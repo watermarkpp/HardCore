@@ -96,7 +96,7 @@ static func continuous_line_strip(
 		axis = Vector2(1.0, 1.0)
 	# Skill length is measured in 8-neighbour map steps, not Euclidean tile
 	# distance. Chebyshev normalization keeps an exact diagonal at (1, 1): a
-	# four-tile diagonal must end at (4, 4), never (2.828, 2.828).
+	# five-tile diagonal must end at (5, 5), never (3.536, 3.536).
 	var dominant_component := maxf(absf(axis.x), absf(axis.y))
 	axis /= maxf(CONTACT_EPSILON, dominant_component)
 	var safe_length := maxf(0.0, length_tiles)

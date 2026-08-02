@@ -157,12 +157,10 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 			var tamed := _support.execute(skill_id, 3, {"forced_temptation_outcome": "tamed"})
 			return tamed.effects[0].outcome == "tamed" and not tamed.effects[0].has("generic_charm_seconds")
 		"hellfire_exact_five_tile_line":
-			# The immutable 1.76 package keeps this historical manifest key. Runtime
-			# uses the explicit user override: primary 5x1 becomes 4x1.5.
-			return _support.execute(skill_id, 3).geometry_cells.size() == 4
+			return _support.execute(skill_id, 3).geometry_cells.size() == 5
 		"hellfire_width_one":
 			return is_equal_approx(
-				float(_support.execute(skill_id, 3).effects[0].width_tiles), 1.5
+				float(_support.execute(skill_id, 3).effects[0].width_tiles), 1.0
 			)
 		"hellfire_stops_on_terrain":
 			return bool(_support.execute(skill_id, 3).effects[0].stops_on_terrain)

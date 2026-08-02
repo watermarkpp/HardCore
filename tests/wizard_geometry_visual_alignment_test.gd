@@ -14,30 +14,34 @@ func _ready() -> void:
 	_verify_primary_geometry_and_timing()
 	_verify_all_eight_direction_angles()
 	_verify_continuous_line_axes_and_footprint_contact()
+	_verify_sixteen_direction_visual_forward_endpoints()
 	_verify_terrain_truncation()
 	_verify_geometry_aware_visuals()
 	_verify_release_relative_movement_locks()
 	print(
-		"WIZARD_GEOMETRY_VISUAL_ALIGNMENT_PASS: user 4x1.5 hellfire, primary 8/24 geometry, "
-		+ "eight visual rows plus continuous cardinal/diagonal/free aim, terrain truncation, axis-fitted visuals, "
+		"WIZARD_GEOMETRY_VISUAL_ALIGNMENT_PASS: formal 5x1 hellfire, 8x1 laser and 24-target ring, "
+		+ "eight visual rows plus sixteen continuous directions, terrain truncation, forward-endpoint-fitted visuals, "
 		+ "footpoint-centered hell lightning and release-relative movement locks"
 	)
 	get_tree().quit(0)
 
 
 func _verify_primary_geometry_and_timing() -> void:
+	assert(
+		CasterSkillAnimationPlayer.FORWARD_ENDPOINT_FIT_CONTRACT_ID
+		== "skills.caster.line_visual.forward_endpoint_uniform.v1"
+	)
 	var hellfire := Loader.skill("wizard.hellfire")
 	assert(hellfire.geometry.shape == "line")
-	assert(hellfire.geometry.length_tiles == 4)
-	assert(is_equal_approx(float(hellfire.geometry.width_tiles), 1.5))
-	assert(hellfire.geometry.primary_source_length_tiles == 5)
-	assert(hellfire.geometry.primary_source_width_tiles == 1)
-	assert(
-		hellfire.geometry.geometry_override_contract
-		== "skills.wizard.hellfire.geometry_4x1_5_user_override.v1"
-	)
+	assert(hellfire.geometry.length_tiles == 5)
+	assert(is_equal_approx(float(hellfire.geometry.width_tiles), 1.0))
+	assert(not hellfire.geometry.has("geometry_override_contract"))
 	assert(not hellfire.geometry.pierces_units)
 	assert(hellfire.geometry.stops_on_terrain)
+	assert(
+		CasterSkillVisualRegistry.render_policy("wizard.hellfire").axis_fit_contract
+		== CasterSkillAnimationPlayer.FORWARD_ENDPOINT_FIT_CONTRACT_ID
+	)
 	_assert_cast_timing(hellfire)
 
 	var laser := Loader.skill("wizard.laser")
@@ -46,6 +50,10 @@ func _verify_primary_geometry_and_timing() -> void:
 	assert(laser.geometry.width_tiles == 1)
 	assert(laser.geometry.pierces_units)
 	assert(laser.geometry.stops_on_terrain)
+	assert(
+		CasterSkillVisualRegistry.render_policy("wizard.laser").axis_fit_contract
+		== CasterSkillAnimationPlayer.FORWARD_ENDPOINT_FIT_CONTRACT_ID
+	)
 	_assert_cast_timing(laser)
 
 	var hell_lightning := Loader.skill("wizard.hell_lightning")
@@ -91,7 +99,7 @@ func _verify_all_eight_direction_angles() -> void:
 		var laser_cells := GeometryService.cells(
 			laser, Vector2i.ZERO, actual_tile_step
 		)
-		assert(hellfire_cells.back() == expected_tile_step * 4)
+		assert(hellfire_cells.back() == expected_tile_step * 5)
 		assert(laser_cells.back() == expected_tile_step * 8)
 	# This is the historical bug in one line: screen-down is tile (1, 1),
 	# never sign(screen-down) == tile (0, 1).
@@ -107,7 +115,7 @@ func _verify_continuous_line_axes_and_footprint_contact() -> void:
 		{"aim": Vector2(10.0, 10.0), "expected_step": Vector2(1.0, 1.0)},
 		{"aim": Vector2(10.0, 5.0), "expected_step": Vector2(1.0, 0.5)},
 	]
-	for length_tiles: float in [4.0, 8.0]:
+	for length_tiles: float in [5.0, 8.0]:
 		for test_case: Dictionary in cases:
 			var strip := SpellGeometry.continuous_line_strip(
 				Vector2.ZERO,
@@ -128,7 +136,7 @@ func _verify_continuous_line_axes_and_footprint_contact() -> void:
 			), "line length changed with direction: %s" % test_case)
 
 	var free_aim := SpellGeometry.continuous_line_strip(
-		Vector2.ZERO, Vector2(10.0, 5.0), Vector2.RIGHT, 4.0, 1.5
+		Vector2.ZERO, Vector2(10.0, 5.0), Vector2.RIGHT, 5.0, 1.0
 	)
 	var on_axis_footprint := _tile_box(Vector2(3.0, 1.5), Vector2(0.4, 0.4))
 	var off_axis_footprint := _tile_box(Vector2(3.0, 3.0), Vector2(0.4, 0.4))
@@ -143,10 +151,72 @@ func _verify_continuous_line_axes_and_footprint_contact() -> void:
 		func(tile: Vector2) -> Vector2:
 			return DirectionSpace.fractional_tile_delta_to_world_delta(tile)
 	)
-	assert(world_points.size() == 4)
+	assert(world_points.size() == 5)
 	assert(world_points.back().is_equal_approx(
-		DirectionSpace.fractional_tile_delta_to_world_delta(Vector2(4.0, 2.0))
+		DirectionSpace.fractional_tile_delta_to_world_delta(Vector2(5.0, 2.5))
 	))
+
+
+func _verify_sixteen_direction_visual_forward_endpoints() -> void:
+	for skill_case: Dictionary in [
+		{"skill_id": "wizard.hellfire", "length_tiles": 5.0},
+		{"skill_id": "wizard.laser", "length_tiles": 8.0},
+	]:
+		for sample_index: int in range(16):
+			var tile_aim := Vector2.from_angle(TAU * float(sample_index) / 16.0)
+			var strip := SpellGeometry.continuous_line_strip(
+				Vector2.ZERO,
+				tile_aim,
+				Vector2.RIGHT,
+				float(skill_case.length_tiles),
+				1.0
+			)
+			var endpoint_tile: Vector2 = strip.centerline_points_fractional_tile.back()
+			assert(is_equal_approx(
+				maxf(absf(endpoint_tile.x), absf(endpoint_tile.y)),
+				float(skill_case.length_tiles)
+			))
+			var endpoint_world := DirectionSpace.fractional_tile_delta_to_world_delta(
+				endpoint_tile
+			)
+			var world_points := SpellGeometry.continuous_line_world_points(
+				strip,
+				func(tile: Vector2) -> Vector2:
+					return DirectionSpace.fractional_tile_delta_to_world_delta(tile)
+			)
+			var plan := CasterSkillRuntime.resolve(str(skill_case.skill_id), {
+				"skill_level": 3,
+				"caster_level": 40,
+				"owner_level": 40,
+				"target_level": 20,
+				"target_max_hp": 500,
+				"magic_stat_roll": 30,
+				"random_0_to_10": 0,
+			})
+			plan["canonical_geometry_contract"] = SpellGeometry.CONTRACT_ID
+			plan["geometry_origin_world"] = Vector2.ZERO
+			plan["geometry_tile_points"] = []
+			plan["geometry_world_points"] = world_points
+			var effect := CasterSkillRuntime.create_visual(
+				plan,
+				Vector2.ZERO,
+				endpoint_world.normalized()
+			)
+			assert(effect != null)
+			add_child(effect)
+			assert(effect._geometry_world_offsets.back().is_equal_approx(endpoint_world))
+			if str(skill_case.skill_id) == "wizard.hellfire":
+				assert(effect._hellfire_emission_offsets.back().is_equal_approx(endpoint_world))
+			else:
+				for raw_sprite: Sprite2D in effect._sprites:
+					var sprite := raw_sprite as CasterSkillAnimationPlayer
+					assert(is_equal_approx(
+						sprite.fitted_visual_forward_extent(endpoint_world),
+						endpoint_world.length()
+					))
+					assert(is_equal_approx(sprite.scale.x, sprite.scale.y))
+					assert(sprite.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST)
+			effect.free()
 
 
 func _tile_box(center: Vector2, half_extent: Vector2) -> PackedVector2Array:
@@ -192,14 +262,14 @@ func _verify_geometry_aware_visuals() -> void:
 	)
 	assert(hellfire != null)
 	add_child(hellfire)
-	assert(hellfire._geometry_world_offsets.size() == 4)
-	assert(hellfire._geometry_world_offsets.back() == Vector2(0.0, 128.0))
-	assert(is_equal_approx(hellfire.radius, 128.0))
-	assert(hellfire._hellfire_total_emissions == 5)
-	assert(hellfire._hellfire_emission_offsets.back() == Vector2(0.0, 128.0))
+	assert(hellfire._geometry_world_offsets.size() == 5)
+	assert(hellfire._geometry_world_offsets.back() == Vector2(0.0, 160.0))
+	assert(is_equal_approx(hellfire.radius, 160.0))
+	assert(hellfire._hellfire_total_emissions == 6)
+	assert(hellfire._hellfire_emission_offsets.back() == Vector2(0.0, 160.0))
 	for offset: Vector2 in hellfire._hellfire_emission_offsets:
 		assert(is_zero_approx(offset.x))
-		assert(offset.y > 0.0 and offset.y <= 128.0)
+		assert(offset.y > 0.0 and offset.y <= 160.0)
 	_assert_effect_axis_fitted(hellfire, Vector2.DOWN, 32.0)
 	hellfire.free()
 
@@ -272,7 +342,7 @@ func _assert_effect_axis_fitted(
 	for raw_sprite: Sprite2D in effect._sprites:
 		var sprite := raw_sprite as CasterSkillAnimationPlayer
 		assert(is_equal_approx(
-			sprite.fitted_visual_axis_extent(axis_world),
+			sprite.fitted_visual_forward_extent(axis_world),
 			expected_axis_extent
 		))
 
