@@ -32,7 +32,7 @@ func _run() -> void:
 	assert(zones.size() == 1, "Bich must expose one authoritative safe area")
 	var safe_zone: Dictionary = zones[0]
 	assert(safe_zone.get("shape") == "circle", "Bich safe area must be circular")
-	assert(safe_zone.get("center") == MapEditorRuntimeBridge.home_position(), "Safe area center differs from the resurrection point")
+	assert(safe_zone.get("center") == MapEditorRuntimeBridge.home_screen_position_px(), "Safe area center differs from the resurrection point")
 	assert(is_equal_approx(float(safe_zone.get("radius")), 9.0 * ArtSpec.TILE_SIZE), "Safe area radius is not nine logical cells")
 
 	var runtime := MapEditorRuntimeBridge.load_bich()

@@ -35,7 +35,7 @@ func _run() -> void:
 		var authored_spawns: Array = runtime.semantics.monster_spawn
 		if not authored_spawns.is_empty():
 			assert(not content.spawns.is_empty())
-			assert((content.spawns[0].position as Vector2).is_equal_approx(
+			assert((content.spawns[0].screen_position_px as Vector2).is_equal_approx(
 				RuntimeBridge.grid_cell_to_screen_position_px(runtime, authored_spawns[0].tile)
 			), "spawn cell center offset map %d" % map_id)
 	if game.current_map_id != 217:

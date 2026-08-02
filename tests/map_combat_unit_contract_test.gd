@@ -111,6 +111,24 @@ func _test_formal_map_coordinate_apis() -> void:
 	assert(bridge_source.contains(
 		"static func grid_cell_to_screen_position_px("
 	))
+	for removed_signature: String in [
+		"static func home_position(",
+		"static func portal_position(",
+	]:
+		assert(not bridge_source.contains(removed_signature))
+	for formal_signature: String in [
+		"static func home_screen_position_px(",
+		"static func home_position_ground_gu(",
+		"static func portal_screen_position_px(",
+		"static func portal_position_ground_gu(",
+	]:
+		assert(bridge_source.contains(formal_signature))
+	for removed_output_fragment: String in [
+		"\"runtime_home_position\":",
+		"\"map_center_world\":",
+		"\"position\": grid_cell_to_screen_position_px(",
+	]:
+		assert(not bridge_source.contains(removed_output_fragment))
 	var coordinate_source := _read_text(
 		"res://scripts/map_editor/map_editor_coordinate.gd"
 	)
@@ -238,6 +256,8 @@ func _assert_runtime_semantics_use_formal_units(runtime: Dictionary) -> void:
 
 func _test_runtime_bridge_gu_fields() -> void:
 	MapEditorRuntimeBridge._runtime_cache.clear()
+	for runtime_map_id: int in RUNTIME_MAP_IDS:
+		_assert_runtime_bridge_output_units(runtime_map_id)
 	var runtime := MapEditorRuntimeBridge.load_map(MapEditorRuntimeBridge.BICH_MAP_ID)
 	assert(not runtime.is_empty())
 	var content := MapEditorRuntimeBridge.game_content_for_map(
@@ -252,17 +272,18 @@ func _test_runtime_bridge_gu_fields() -> void:
 	assert(content.runtime_home_position_ground_gu is Vector2)
 	assert(MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(
 		runtime, content.runtime_home_position_ground_gu
-	).distance_to(content.runtime_home_position) <= EPSILON)
+	).distance_to(content.runtime_home_screen_position_px) <= EPSILON)
 	assert(MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(
 		runtime, content.map_center_ground_gu
-	).distance_to(content.map_center_world) <= EPSILON)
+	).distance_to(content.map_center_screen_position_px) <= EPSILON)
 	var spawn: Dictionary = content.spawns[0]
 	assert(spawn.has("position_ground_gu"))
+	assert(spawn.has("screen_position_px"))
 	assert(spawn.has("radius_gu"))
 	assert(not spawn.has("radius_tiles"))
 	assert(MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(
 		runtime, spawn.position_ground_gu
-	).distance_to(spawn.position) <= EPSILON)
+	).distance_to(spawn.screen_position_px) <= EPSILON)
 	var synthetic_polygon := [[2.0, 3.0], [5.0, 3.0], [5.0, 7.0]]
 	var projected := MapEditorRuntimeBridge.ground_polygon_gu_to_screen_polygon_px(
 		runtime, synthetic_polygon
@@ -274,6 +295,36 @@ func _test_runtime_bridge_gu_fields() -> void:
 			Vector2(synthetic_polygon[index][0], synthetic_polygon[index][1])
 		)
 		assert(projected[index].distance_to(expected) <= EPSILON)
+
+
+func _assert_runtime_bridge_output_units(runtime_map_id: int) -> void:
+	var runtime := MapEditorRuntimeBridge.load_map(runtime_map_id)
+	var content := MapEditorRuntimeBridge.game_content_for_map(runtime_map_id)
+	assert(not runtime.is_empty(), "runtime map %d" % runtime_map_id)
+	assert(
+		content.runtime_output_contract_id
+		== MapEditorRuntimeBridge.RUNTIME_OUTPUT_CONTRACT_ID
+	)
+	assert(content.runtime_home_position_ground_gu is Vector2)
+	assert(content.runtime_home_screen_position_px is Vector2)
+	assert(content.map_center_ground_gu is Vector2)
+	assert(content.map_center_screen_position_px is Vector2)
+	assert(MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(
+		runtime, content.map_center_ground_gu
+	).distance_to(content.map_center_screen_position_px) <= EPSILON)
+	for forbidden_key: String in [
+		"runtime_home_position",
+		"map_center_world",
+	]:
+		assert(not content.has(forbidden_key))
+	for group_name: String in ["spawns", "bosses", "npcs", "portals"]:
+		for entry: Dictionary in content[group_name]:
+			assert(entry.has("position_ground_gu"), "%d/%s GU position" % [runtime_map_id, group_name])
+			assert(entry.has("screen_position_px"), "%d/%s PX position" % [runtime_map_id, group_name])
+			assert(not entry.has("position"), "%d/%s ambiguous position" % [runtime_map_id, group_name])
+			assert(MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(
+				runtime, entry.position_ground_gu
+			).distance_to(entry.screen_position_px) <= EPSILON)
 
 
 func _test_portal_gu_distance_contract() -> void:

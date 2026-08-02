@@ -56,7 +56,7 @@ func _run() -> void:
 		await get_tree().process_frame
 		assert(game.current_map_id == target_map_id)
 		assert(game.background.editor_runtime_chunk_texture_count() > 0)
-		var expected_arrival := MapEditorRuntimeBridge.portal_position(
+		var expected_arrival := MapEditorRuntimeBridge.portal_screen_position_px(
 			target_map_id, target_portal_id
 		)
 		assert(game.player.global_position.is_equal_approx(expected_arrival))

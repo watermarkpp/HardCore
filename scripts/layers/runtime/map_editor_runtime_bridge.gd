@@ -3,6 +3,7 @@ extends RefCounted
 
 const BICH_MAP_ID := 4
 const SAFE_RADIUS_GU := 9.0
+const RUNTIME_OUTPUT_CONTRACT_ID := "map.editor.runtime.output_units.v1"
 const BOSS_RESPAWN_OVERRIDES := {
 	218: 3600.0,
 	221: 3600.0,
@@ -178,7 +179,7 @@ static func ground_polygon_gu_to_screen_polygon_px(
 	return projected
 
 
-static func portal_position(
+static func portal_screen_position_px(
 	runtime_map_id: int,
 	portal_id: String,
 	source_map_id := -1
@@ -241,7 +242,7 @@ static func _portal_ground_position_result(
 	return {"ok": false}
 
 
-static func home_position() -> Vector2:
+static func home_screen_position_px() -> Vector2:
 	var runtime := load_bich()
 	if runtime.is_empty():
 		return Vector2.ZERO
@@ -284,7 +285,7 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 		(float(raw_size[0]) - 1.0) * 0.5,
 		(float(raw_size[1]) - 1.0) * 0.5
 	)
-	var map_center_world := ground_position_gu_to_screen_position_px(
+	var map_center_screen_position_px := ground_position_gu_to_screen_position_px(
 		runtime, map_center_ground_gu
 	)
 	var config: Dictionary = MAP_CONFIG.get(runtime_map_id, {})
@@ -292,9 +293,10 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 		"name": str(config.get("display_name", "地图")),
 		"runtime_map_id": runtime_map_id,
 		"runtime_map_key": str(config.get("map_key", "")),
-		"runtime_home_position": home_position() if runtime_map_id == BICH_MAP_ID else Vector2.ZERO,
+		"runtime_output_contract_id": RUNTIME_OUTPUT_CONTRACT_ID,
+		"runtime_home_screen_position_px": home_screen_position_px() if runtime_map_id == BICH_MAP_ID else Vector2.ZERO,
 		"runtime_home_position_ground_gu": home_position_ground_gu() if runtime_map_id == BICH_MAP_ID else Vector2.ZERO,
-		"map_center_world": map_center_world,
+		"map_center_screen_position_px": map_center_screen_position_px,
 		"map_center_ground_gu": map_center_ground_gu,
 		"spawns": [],
 		"bosses": [],
@@ -321,7 +323,7 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 		}.get(npc_id, ""))
 		result.npcs.append({
 			"name": entry.get("display_name", "NPC"),
-			"position": grid_cell_to_screen_position_px(
+			"screen_position_px": grid_cell_to_screen_position_px(
 				runtime, entry.get("tile", [0, 0])
 			),
 			"position_ground_gu": cell_to_ground_position_gu(
@@ -382,7 +384,7 @@ static func _combat_spawn(
 	return {
 		"name": entry.get("display_name", ""),
 		"monster_id": int(monster_key.trim_prefix("monster.")),
-		"position": grid_cell_to_screen_position_px(
+		"screen_position_px": grid_cell_to_screen_position_px(
 			runtime, entry.get("tile", [0, 0])
 		),
 		"position_ground_gu": cell_to_ground_position_gu(
@@ -402,7 +404,7 @@ static func _portal_record(
 	entry: Dictionary
 ) -> Dictionary:
 	return {
-		"position": grid_cell_to_screen_position_px(
+		"screen_position_px": grid_cell_to_screen_position_px(
 			runtime, entry.get("tile", [0, 0])
 		),
 		"position_ground_gu": cell_to_ground_position_gu(
