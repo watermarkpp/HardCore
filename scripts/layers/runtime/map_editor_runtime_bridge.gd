@@ -3,8 +3,6 @@ extends RefCounted
 
 const BICH_MAP_ID := 4
 const SAFE_RADIUS_GU := 9.0
-# Deprecated compatibility alias. Runtime geometry uses SAFE_RADIUS_GU.
-const SAFE_RADIUS_TILES := SAFE_RADIUS_GU
 const BOSS_RESPAWN_OVERRIDES := {
 	218: 3600.0,
 	221: 3600.0,
@@ -352,19 +350,15 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 			continue
 		result.portals.append(_portal_record(runtime_map_id, runtime, entry))
 	if runtime_map_id == BICH_MAP_ID:
-		var home_screen_px := home_position()
 		var home_ground_gu := home_position_ground_gu()
 		result.safe_areas.append({
-			"center": home_screen_px,
 			"center_ground_gu": home_ground_gu,
-			"radius": SAFE_RADIUS_GU * ArtSpec.TILE_SIZE,
 			"radius_gu": SAFE_RADIUS_GU,
-			"radius_tiles": SAFE_RADIUS_TILES,
 			"shape": "circle",
-			"polygon": PackedVector2Array(),
+			"polygon_ground_gu": PackedVector2Array(),
 			"blocks_monster_damage": true,
 			"blocks_monster_entry": true,
-			"policy_override": "single_player_respawn_circle_9_tiles",
+			"policy_override": "single_player_respawn_circle_9_gu",
 		})
 	else:
 		for safe: Dictionary in semantics.get("safe_area", []):
@@ -373,17 +367,10 @@ static func game_content_for_map(runtime_map_id: int) -> Dictionary:
 				safe.get("tile", [0, 0])
 			)
 			converted["center_ground_gu"] = center_ground_gu
-			converted["center"] = cell_to_world(
-				runtime, safe.get("tile", [0, 0])
-			)
 			converted["radius_gu"] = float(safe.get("radius_gu", 0.0))
-			converted["radius_tiles"] = float(converted.radius_gu)
 			converted["polygon_ground_gu"] = safe.get(
 				"polygon_ground_gu", []
 			).duplicate(true)
-			converted["polygon"] = ground_polygon_gu_to_screen_polygon_px(
-				runtime, converted.polygon_ground_gu
-			)
 			result.safe_areas.append(converted)
 	return result
 
@@ -408,8 +395,6 @@ static func _combat_spawn(
 		"count": int(entry.get("count", 1)),
 		"max_alive": int(entry.get("max_alive", 1)),
 		"radius_gu": float(entry.get("radius_gu", 0.0)),
-		# Transitional alias for game_root until integration switches readers.
-		"radius_tiles": float(entry.get("radius_gu", 0.0)),
 		"spawn_group": entry.duplicate(true),
 	}
 
@@ -436,10 +421,6 @@ static func _portal_record(
 		"arrival_reentry_policy_id": str(entry.get("arrival_reentry_policy_id", "")),
 		"return_minimum_seconds": float(entry.get("return_minimum_seconds", 0.0)),
 		"return_unlock_distance_gu": float(entry.get(
-			"return_unlock_distance_gu", 0.0
-		)),
-		# Transitional alias for game_root until integration switches readers.
-		"return_unlock_distance_tiles": float(entry.get(
 			"return_unlock_distance_gu", 0.0
 		)),
 		"travel_request_single_flight": bool(entry.get("travel_request_single_flight", false)),

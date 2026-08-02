@@ -3,16 +3,98 @@ extends Node
 const RUNTIME_MAP_IDS := [4, 217, 218, 221, 268, 313, 314, 315, 406, 408, 1578]
 const EPSILON := 0.0001
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const UnitLegacyAdapter := preload(
+	"res://scripts/map_editor/map_editor_unit_legacy_adapter.gd"
+)
 
 
 func _ready() -> void:
 	_test_32_direction_projection_roundtrip()
+	_test_editor_v4_unit_adapter()
+	_test_legacy_unit_names_are_confined_to_adapter()
 	_test_all_runtime_maps_use_read_only_v1_adapter()
 	_test_runtime_bridge_gu_fields()
 	_test_portal_gu_distance_contract()
 	_test_path_step_cost_gu()
 	print("MAP_COMBAT_UNIT_CONTRACT_PASS")
 	get_tree().quit()
+
+
+func _test_editor_v4_unit_adapter() -> void:
+	var legacy_document := MapEditorTypes.new_map(
+		"legacy_unit_adapter", 990050, "Legacy", Vector2i(32, 32)
+	)
+	legacy_document["schema_version"] = 4
+	legacy_document.layers.monster_spawn = [{
+		"kind": "monster_spawn",
+		"semantic_id": "monster_spawn_000001",
+		"tile": [4, 5],
+		"radius_tiles": 3,
+	}]
+	legacy_document.layers.safe_area = [{
+		"kind": "safe_area",
+		"semantic_id": "safe_area_000001",
+		"tile": [8, 8],
+		"shape": "polygon",
+		"radius_tiles": 0,
+		"polygon_tiles": [[7, 7], [9, 7], [9, 9], [7, 9]],
+	}]
+	legacy_document.layers.map_exit_points = [{
+		"kind": "map_exit",
+		"semantic_id": "map_exit_000001",
+		"tile": [10, 10],
+		"return_unlock_distance_tiles": 1.5,
+	}]
+	var upgraded := MapEditorTypes.upgrade_document(legacy_document)
+	assert(upgraded.schema_version == MapEditorTypes.SCHEMA_VERSION)
+	assert(upgraded.editor_meta.source_editor_schema_version == 4)
+	assert(upgraded.editor_meta.unit_legacy_adapter_id == UnitLegacyAdapter.CONTRACT_ID)
+	assert(is_equal_approx(float(upgraded.layers.monster_spawn[0].radius_gu), 3.0))
+	assert(not upgraded.layers.monster_spawn[0].has("radius_tiles"))
+	assert(upgraded.layers.safe_area[0].polygon_ground_gu.size() == 4)
+	assert(not upgraded.layers.safe_area[0].has("polygon_tiles"))
+	assert(is_equal_approx(
+		float(upgraded.layers.map_exit_points[0].return_unlock_distance_gu),
+		1.5
+	))
+	assert(not upgraded.layers.map_exit_points[0].has(
+		"return_unlock_distance_tiles"
+	))
+
+
+func _test_legacy_unit_names_are_confined_to_adapter() -> void:
+	var formal_runtime_sources := [
+		"res://scripts/layers/runtime/map_editor_runtime_bridge.gd",
+		"res://scripts/map_editor/map_editor_build_runtime_service.gd",
+		"res://scripts/map_editor/map_editor_connection_policy_service.gd",
+		"res://scripts/map_editor/map_editor_runtime_map_service.gd",
+		"res://scripts/map_editor/map_portal_runtime_service.gd",
+		"res://scripts/map_editor/map_portal_travel_guard.gd",
+		"res://tools/map_editor/apply_bich_content_1.py",
+		"res://tools/map_editor/build_bich_map_1.gd",
+		"res://tools/map_editor/build_bich_map_2.gd",
+		"res://tools/map_editor/clone_wooma_temple_layers.gd",
+		"res://tools/map_editor/finalize_bich_wooma_connection.gd",
+		"res://tools/map_editor/make_wooma_temple_route_bidirectional.gd",
+		"res://tools/map_editor/resize_bich_workspace.py",
+	]
+	var legacy_unit_names := [
+		"radius_tiles",
+		"polygon_tiles",
+		"return_unlock_distance_tiles",
+	]
+	for source_path: String in formal_runtime_sources:
+		var source := _read_text(source_path)
+		for legacy_name: String in legacy_unit_names:
+			assert(
+				not source.contains(legacy_name),
+				"legacy unit bypass in %s: %s" % [source_path, legacy_name]
+			)
+	var adapter_source := _read_text(
+		"res://scripts/map_editor/map_editor_unit_legacy_adapter.gd"
+	)
+	for legacy_name: String in legacy_unit_names:
+		assert(adapter_source.contains(legacy_name))
 
 
 func _test_32_direction_projection_roundtrip() -> void:
@@ -65,6 +147,7 @@ func _test_all_runtime_maps_use_read_only_v1_adapter() -> void:
 		var runtime: Dictionary = loaded.runtime
 		assert(runtime.runtime_schema_version == MapEditorBuildRuntimeService.RUNTIME_SCHEMA_VERSION)
 		assert(runtime.source_runtime_schema_version == 1)
+		assert(runtime.unit_legacy_adapter_id == UnitLegacyAdapter.CONTRACT_ID)
 		assert(runtime.unit_contract_id == GroundUnitSpaceScript.CONTRACT_ID)
 		assert(runtime.projection_contract_id == GroundUnitSpaceScript.PROJECTION_CONTRACT_ID)
 		var raw_size: Array = runtime.design.design_size
@@ -112,10 +195,7 @@ func _test_runtime_bridge_gu_fields() -> void:
 	var safe: Dictionary = content.safe_areas[0]
 	assert(is_equal_approx(float(safe.radius_gu), 9.0))
 	assert(safe.center_ground_gu is Vector2)
-	assert(safe.center is Vector2)
-	assert(MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(
-		runtime, safe.center_ground_gu
-	).distance_to(safe.center) <= EPSILON)
+	assert(not safe.has("center") and not safe.has("radius") and not safe.has("radius_tiles"))
 	assert(not content.spawns.is_empty())
 	assert(content.runtime_home_position_ground_gu is Vector2)
 	assert(MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(
@@ -127,7 +207,7 @@ func _test_runtime_bridge_gu_fields() -> void:
 	var spawn: Dictionary = content.spawns[0]
 	assert(spawn.has("position_ground_gu"))
 	assert(spawn.has("radius_gu"))
-	assert(is_equal_approx(float(spawn.radius_gu), float(spawn.radius_tiles)))
+	assert(not spawn.has("radius_tiles"))
 	assert(MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(
 		runtime, spawn.position_ground_gu
 	).distance_to(spawn.position) <= EPSILON)
@@ -157,7 +237,7 @@ func _test_portal_gu_distance_contract() -> void:
 	var request := MapPortalRuntimeService.travel_request(endpoint)
 	assert(request.ok)
 	assert(is_equal_approx(float(request.return_unlock_distance_gu), 1.5))
-	assert(is_equal_approx(float(request.return_unlock_distance_tiles), 1.5))
+	assert(not request.has("return_unlock_distance_tiles"))
 	var state := MapPortalTravelGuard.new_state()
 	MapPortalTravelGuard.finish_arrival(state, "portal.a", 1000, Vector2.ZERO)
 	assert(not MapPortalTravelGuard.can_activate(

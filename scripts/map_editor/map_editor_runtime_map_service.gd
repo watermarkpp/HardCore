@@ -5,6 +5,9 @@ const PortalRuntimeService := preload(
 	"res://scripts/map_editor/map_portal_runtime_service.gd"
 )
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const UnitLegacyAdapter := preload(
+	"res://scripts/map_editor/map_editor_unit_legacy_adapter.gd"
+)
 
 
 static func load_runtime(path: String) -> Dictionary:
@@ -28,7 +31,7 @@ static func load_runtime(path: String) -> Dictionary:
 	if errors.is_empty() and int(raw_runtime.get(
 		"runtime_schema_version", -1
 	)) == MapEditorBuildRuntimeService.LEGACY_RUNTIME_SCHEMA_VERSION:
-		runtime = adapt_legacy_runtime_v1(raw_runtime)
+		runtime = UnitLegacyAdapter.adapt_runtime_v1_to_v2(raw_runtime)
 	return {"ok": errors.is_empty(), "runtime": runtime, "errors": errors, "path": path}
 
 
@@ -45,6 +48,11 @@ static func validate_runtime(runtime: Dictionary, raw_text := "") -> Array[Strin
 			errors.append("runtime_unit_contract_invalid")
 		if str(runtime.get("projection_contract_id", "")) != GroundUnitSpaceScript.PROJECTION_CONTRACT_ID:
 			errors.append("runtime_projection_contract_invalid")
+		errors.append_array(
+			UnitLegacyAdapter.validate_runtime_v2_has_no_legacy_unit_fields(
+				runtime
+			)
+		)
 		_validate_v2_semantic_units(runtime, errors)
 	for field: String in ["source", "design", "ground", "instances", "collision", "semantics", "build_sha256"]:
 		if not runtime.has(field): errors.append("runtime_missing_%s" % field)
@@ -97,58 +105,12 @@ static func _validate_v2_semantic_units(
 			if kind in ["monster_spawn", "boss_spawn", "safe_area", "light", "region_trigger"]:
 				if not entry.has("radius_gu"):
 					errors.append("runtime_radius_gu_missing:%s" % semantic_id)
-				if entry.has("radius_tiles"):
-					errors.append("runtime_legacy_radius_forbidden:%s" % semantic_id)
 			if kind in ["safe_area", "light", "region_trigger"]:
 				if not entry.has("polygon_ground_gu"):
 					errors.append("runtime_polygon_ground_gu_missing:%s" % semantic_id)
-				if entry.has("polygon_tiles"):
-					errors.append("runtime_legacy_polygon_forbidden:%s" % semantic_id)
 			if kind in ["door", "map_exit"]:
 				if not entry.has("return_unlock_distance_gu"):
 					errors.append("runtime_portal_distance_gu_missing:%s" % semantic_id)
-				if entry.has("return_unlock_distance_tiles"):
-					errors.append("runtime_legacy_portal_distance_forbidden:%s" % semantic_id)
-
-
-static func adapt_legacy_runtime_v1(raw_runtime: Dictionary) -> Dictionary:
-	var runtime := raw_runtime.duplicate(true)
-	runtime["source_runtime_schema_version"] = (
-		MapEditorBuildRuntimeService.LEGACY_RUNTIME_SCHEMA_VERSION
-	)
-	runtime["runtime_schema_version"] = MapEditorBuildRuntimeService.RUNTIME_SCHEMA_VERSION
-	runtime["unit_contract_id"] = GroundUnitSpaceScript.CONTRACT_ID
-	runtime["projection_contract_id"] = GroundUnitSpaceScript.PROJECTION_CONTRACT_ID
-	var semantics: Dictionary = runtime.get("semantics", {})
-	for layer_name: String in semantics:
-		var adapted_entries: Array = []
-		for source_entry: Dictionary in semantics.get(layer_name, []):
-			adapted_entries.append(_adapt_legacy_semantic_entry(source_entry))
-		semantics[layer_name] = adapted_entries
-	runtime["semantics"] = semantics
-	return runtime
-
-
-static func _adapt_legacy_semantic_entry(source_entry: Dictionary) -> Dictionary:
-	var entry := source_entry.duplicate(true)
-	var kind := str(entry.get("kind", ""))
-	if kind in ["monster_spawn", "boss_spawn", "safe_area", "light", "region_trigger"]:
-		entry["radius_gu"] = float(entry.get(
-			"radius_gu", entry.get("radius_tiles", 0.0)
-		))
-		entry.erase("radius_tiles")
-	if kind in ["safe_area", "light", "region_trigger"]:
-		entry["polygon_ground_gu"] = entry.get(
-			"polygon_ground_gu", entry.get("polygon_tiles", [])
-		).duplicate(true)
-		entry.erase("polygon_tiles")
-	if kind in ["door", "map_exit"]:
-		entry["return_unlock_distance_gu"] = float(entry.get(
-			"return_unlock_distance_gu",
-			entry.get("return_unlock_distance_tiles", 0.0)
-		))
-		entry.erase("return_unlock_distance_tiles")
-	return entry
 
 
 static func is_blocked(runtime: Dictionary, tile: Vector2i) -> bool:

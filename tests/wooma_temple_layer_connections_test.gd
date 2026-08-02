@@ -265,7 +265,7 @@ func _assert_link(
 	assert(not bool(map_exit.one_way))
 	assert(bool(map_exit.requires_leave_before_retrigger))
 	assert(float(map_exit.return_minimum_seconds) == 3.0)
-	assert(float(map_exit.return_unlock_distance_tiles) == 1.5)
+	assert(float(map_exit.return_unlock_distance_gu) == 1.5)
 
 
 func _assert_reciprocal_pair(

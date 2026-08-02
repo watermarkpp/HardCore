@@ -12,7 +12,7 @@ func _ready() -> void:
 	var spawn := MapEditorGameplaySemanticService.add_entry(document, "monster_spawn", Vector2i(20, 20), {
 		"content_id": monsters[0].content_id, "monster_id": monsters[0].content_id,
 		"display_name": monsters[0].display_name, "count": 8, "max_alive": 6,
-		"respawn_seconds": 90, "radius_tiles": 5,
+		"respawn_seconds": 90, "radius_gu": 5.0,
 	})
 	assert(spawn.ok and spawn.entry.count == 8 and spawn.entry.max_alive == 6 and spawn.entry.respawn_seconds == 90)
 	print("MSE_CONTENT_1_CATALOG_PASS monsters=%d bosses=%d npcs=%d" % [monsters.size(), bosses.size(), npcs.size()])

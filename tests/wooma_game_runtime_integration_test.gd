@@ -94,13 +94,13 @@ func _portal_to(target_map_id: int) -> ZonePortal:
 
 func _move_from_arrival(game: Node, map_id: int) -> void:
 	var runtime := MapEditorRuntimeBridge.load_map(map_id)
-	var arrival_tile := MapEditorRuntimeBridge.world_to_tile(
+	var arrival_ground_gu := MapEditorRuntimeBridge.screen_position_px_to_ground_position_gu(
 		runtime, game.player.global_position
 	)
-	var departed_tile := arrival_tile + Vector2(
-		MapPortalTravelGuard.UNLOCK_DISTANCE_TILES, 0.0
+	var departed_ground_gu := arrival_ground_gu + Vector2(
+		MapPortalTravelGuard.UNLOCK_DISTANCE_GU, 0.0
 	)
-	game.player.global_position = MapEditorRuntimeBridge.tile_to_world(
-		runtime, [departed_tile.x, departed_tile.y]
+	game.player.global_position = MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(
+		runtime, departed_ground_gu
 	)
 	game._update_portal_arrival_guard()

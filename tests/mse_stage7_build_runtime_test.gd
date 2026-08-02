@@ -14,7 +14,7 @@ func _ready() -> void:
 	var map_exit := MapEditorGameplaySemanticService.add_entry(document, "map_exit", Vector2i(6, 5), {"target_map_id": "bich_province", "target_entrance_id": str(entrance.entry.semantic_id)})
 	var respawn := MapEditorGameplaySemanticService.add_entry(document, "respawn_point", Vector2i(7, 7), {"display_name": "出生复活点"})
 	var safe_polygon := MapEditorGameplaySemanticService.add_entry(document, "safe_area", Vector2i(7, 7), {
-		"shape": "polygon", "polygon_tiles": [[5, 5], [9, 5], [9, 9], [5, 9]], "radius_tiles": 0,
+		"shape": "polygon", "polygon_ground_gu": [[5, 5], [9, 5], [9, 9], [5, 9]], "radius_gu": 0.0,
 	})
 	var wall := MapEditorInstanceService.create_instance(document, "terrain.palisade_wall_01", "terrain", Vector2i(10, 10), "terrain_base")
 	assert(npc.ok and door.ok and entrance.ok and map_exit.ok and respawn.ok and safe_polygon.ok and wall.ok)
@@ -38,7 +38,8 @@ func _ready() -> void:
 	assert(not built.runtime.semantics.safe_area[0].has("polygon_tiles"))
 	assert(not built.runtime.semantics.safe_area[0].has("radius_tiles"))
 	assert(is_zero_approx(float(built.runtime.semantics.safe_area[0].radius_gu)))
-	assert(MapEditorRuntimeMapService.validate_runtime(built.runtime).is_empty())
+	var runtime_errors := MapEditorRuntimeMapService.validate_runtime(built.runtime)
+	assert(runtime_errors.is_empty(), str(runtime_errors))
 	var wrong_contract: Dictionary = built.runtime.duplicate(true)
 	wrong_contract["unit_contract_id"] = "wrong"
 	assert("runtime_unit_contract_invalid" in MapEditorRuntimeMapService.validate_runtime(wrong_contract))
