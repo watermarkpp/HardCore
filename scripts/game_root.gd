@@ -57,6 +57,10 @@ const SKILL_INPUT_TICKET_CONTRACT_ID := (
 const SKILL_HOLD_REPEAT_THRESHOLD_MS := 300
 const MAGIC_SHIELD_AUTO_REFRESH_CHECK_SECONDS := 0.10
 const MAGIC_SHIELD_AUTO_REFRESH_EXPIRY_LEAD_SECONDS := 0.60
+const SAFE_ZONE_ACTOR_PADDING_GU := 0.05
+const BOSS_SURROUNDED_NEIGHBOR_RADIUS_GU := 1.65
+const ACTOR_LANDING_CLEARANCE_GU := 0.25
+const ENEMY_LANDING_CLEARANCE_GU := 0.125
 const CASTER_GEOMETRY_VISUAL_CONTRACT_ID := "skills.visual.geometry_cells.world_projection.v1"
 const CANONICAL_WIZARD_GEOMETRY_SKILLS := [
 	"wizard.hellfire",
@@ -1081,10 +1085,8 @@ func _enforce_bich_safe_zone() -> void:
 		var current_ground_gu := _canonical_world_to_fractional_tile(
 			node.global_position
 		)
-		var padding_gu := (
-			WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-				node.collision_radius + 2.0
-			)
+		var padding_gu: float = (
+			float(node.combat_radius_gu) + SAFE_ZONE_ACTOR_PADDING_GU
 		)
 		var legal_ground_gu := (
 			WorldSpatialRulesScript.project_outside_safe_zones_ground_gu(
@@ -1961,7 +1963,13 @@ func _update_boss_world_mechanics(delta: float) -> void:
 func _blocking_neighbor_count(enemy: EnemyActor) -> int:
 	var seen: Dictionary = {}
 	var count := 0
-	var blocking_radius := maxf(ArtSpec.TILE_SIZE * 1.65, enemy.collision_radius * 2.5)
+	var blocking_radius_gu := maxf(
+		BOSS_SURROUNDED_NEIGHBOR_RADIUS_GU,
+		enemy.combat_radius_gu * 2.5
+	)
+	var enemy_ground_gu := _canonical_world_to_fractional_tile(
+		enemy.global_position
+	)
 	var candidates: Array = get_tree().get_nodes_in_group("enemies") + get_tree().get_nodes_in_group("combat_targets")
 	candidates.append(player)
 	for value: Variant in candidates:
@@ -1969,7 +1977,16 @@ func _blocking_neighbor_count(enemy: EnemyActor) -> int:
 			continue
 		var node := value as Node2D
 		var instance_key := str(node.get_instance_id())
-		if seen.has(instance_key) or node.global_position.distance_to(enemy.global_position) > blocking_radius:
+		if seen.has(instance_key):
+			continue
+		var node_ground_gu := _canonical_world_to_fractional_tile(
+			node.global_position
+		)
+		if not GroundUnitSpaceScript.is_within_range_gu(
+			enemy_ground_gu,
+			node_ground_gu,
+			blocking_radius_gu
+		):
 			continue
 		seen[instance_key] = true
 		count += 1
@@ -1995,9 +2012,11 @@ func _on_boss_summon_requested(enemy: EnemyActor, monster_ids: Array, count: int
 			continue
 		var landing := _find_valid_enemy_landing(
 			enemy.global_position,
-			ArtSpec.TILE_SIZE * 1.5,
-			ArtSpec.TILE_SIZE * 6.0,
-			ArtSpec.MONSTER_COLLISION_RADIUS,
+			1.5,
+			6.0,
+			WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
+				ArtSpec.MONSTER_COLLISION_RADIUS
+			),
 			null
 		)
 		if landing == enemy.global_position:
@@ -2016,16 +2035,16 @@ func _on_boss_summon_requested(enemy: EnemyActor, monster_ids: Array, count: int
 		)
 
 
-func _on_boss_relocation_requested(enemy: EnemyActor, radius_cells: int) -> void:
+func _on_boss_relocation_requested(enemy: EnemyActor, radius_gu: float) -> void:
 	if not is_instance_valid(enemy) or enemy.is_queued_for_deletion():
 		return
 	if int(enemy.get_meta("zone_generation", -1)) != _zone_generation:
 		return
 	var destination := _find_valid_enemy_landing(
 		enemy.global_position,
-		ArtSpec.TILE_SIZE * 1.5,
-		maxf(ArtSpec.TILE_SIZE * 1.5, float(radius_cells) * ArtSpec.TILE_SIZE),
-		enemy.collision_radius,
+		1.5,
+		maxf(1.5, radius_gu),
+		enemy.combat_radius_gu,
 		enemy
 	)
 	if destination == enemy.global_position:
@@ -2035,31 +2054,70 @@ func _on_boss_relocation_requested(enemy: EnemyActor, radius_cells: int) -> void
 
 
 func _find_valid_enemy_landing(
-	origin: Vector2,
-	minimum_distance: float,
-	maximum_distance: float,
-	radius: float,
+	origin_screen_px: Vector2,
+	minimum_distance_gu: float,
+	maximum_distance_gu: float,
+	combat_radius_gu: float,
 	ignored_enemy: EnemyActor
 ) -> Vector2:
+	var origin_ground_gu := _canonical_world_to_fractional_tile(
+		origin_screen_px
+	)
+	var footprint_radius_px := (
+		WorldSpatialRulesScript.actor_screen_radius_px_from_combat_radius_gu(
+			combat_radius_gu
+		)
+	)
 	for _attempt in range(96):
-		var candidate := origin + Vector2.from_angle(_rng.randf_range(0.0, TAU)) * _rng.randf_range(minimum_distance, maximum_distance)
-		if WorldSpatialRulesScript.point_inside_safe_zones(candidate, _active_safe_zones):
+		var candidate_ground_gu := (
+			origin_ground_gu
+			+ Vector2.from_angle(_rng.randf_range(0.0, TAU))
+			* _rng.randf_range(minimum_distance_gu, maximum_distance_gu)
+		)
+		if WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(
+			candidate_ground_gu,
+			_active_safe_zones
+		):
 			continue
-		if WorldSpatialRulesScript.environment_blocks_actor(background, candidate, radius):
+		var candidate_screen_px := _canonical_fractional_tile_to_world(
+			candidate_ground_gu
+		)
+		if WorldSpatialRulesScript.environment_blocks_actor(
+			background,
+			candidate_screen_px,
+			footprint_radius_px
+		):
 			continue
-		if is_instance_valid(player) and player.global_position.distance_to(candidate) < radius + ArtSpec.PLAYER_COLLISION_RADIUS + 12.0:
+		var player_combat_radius_gu := (
+			WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
+				ArtSpec.PLAYER_COLLISION_RADIUS
+			)
+		)
+		if (
+			is_instance_valid(player)
+			and GroundUnitSpaceScript.distance_gu(
+				_canonical_world_to_fractional_tile(player.global_position),
+				candidate_ground_gu
+			)
+			< combat_radius_gu
+			+ player_combat_radius_gu
+			+ ACTOR_LANDING_CLEARANCE_GU
+		):
 			continue
 		var occupied := false
 		for value: Variant in get_tree().get_nodes_in_group("enemies"):
 			if not value is EnemyActor or value == ignored_enemy or value.is_queued_for_deletion():
 				continue
 			var other := value as EnemyActor
-			if other.global_position.distance_to(candidate) < radius + other.collision_radius + 6.0:
+			if GroundUnitSpaceScript.distance_gu(
+				_canonical_world_to_fractional_tile(other.global_position),
+				candidate_ground_gu
+			) < combat_radius_gu + other.combat_radius_gu + ENEMY_LANDING_CLEARANCE_GU:
 				occupied = true
 				break
 		if not occupied:
-			return candidate
-	return origin
+			return candidate_screen_px
+	return origin_screen_px
 
 
 func _cycle_target() -> void:
