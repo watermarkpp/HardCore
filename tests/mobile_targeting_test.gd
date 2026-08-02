@@ -282,7 +282,7 @@ func _assert_direction_priority() -> void:
 func _assert_player_cannot_push_enemy(game: Node, blocker: EnemyActor, second: EnemyActor, side: EnemyActor, behind: EnemyActor) -> void:
 	# Keep this collision-only check outside the real nine-tile safe zone; enemies
 	# inside that circle are intentionally expelled by GameRoot every frame.
-	var arena_origin: Vector2 = game._bich_home_world_position() + Vector2(600, 0)
+	var arena_origin: Vector2 = game._bich_home_screen_position_px() + Vector2(600, 0)
 	for enemy: EnemyActor in [second, side, behind]:
 		enemy.global_position = arena_origin + Vector2(700, 300) + Vector2(enemy.get_instance_id() % 100, 0)
 	game.player.global_position = arena_origin

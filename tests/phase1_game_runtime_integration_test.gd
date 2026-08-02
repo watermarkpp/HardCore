@@ -34,7 +34,7 @@ func _run() -> void:
 	game._on_scroll_used("回城卷")
 	await get_tree().process_frame
 	assert(game.current_map_id == GameData.service_home_runtime_map_id(false))
-	assert(game.player.global_position.is_equal_approx(game._bich_home_world_position()))
+	assert(game.player.global_position.is_equal_approx(game._bich_home_screen_position_px()))
 
 	await _travel_mine_route_to_corpse_hall(game)
 	game.player.defense_min = 0
@@ -42,7 +42,7 @@ func _run() -> void:
 	game.player.take_damage(999999)
 	await get_tree().create_timer(0.9).timeout
 	assert(game.current_map_id == GameData.service_home_runtime_map_id(false))
-	assert(game.player.global_position.is_equal_approx(game._bich_home_world_position()))
+	assert(game.player.global_position.is_equal_approx(game._bich_home_screen_position_px()))
 	assert(game.player.current_hp == game.player.max_hp and not game.player._dead)
 
 	await _travel_orc_tomb_round_trip(game)
