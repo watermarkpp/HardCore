@@ -24,6 +24,9 @@ const SINGLE_ACTIVE_LASER_VISUAL_CONTRACT_ID := (
 const FORMAL_LINE_VISUAL_CORE_CONTRACT_ID := (
 	"skills.caster.line_visual.projected_footprint_core.v1"
 )
+const DEBUG_SKILL_VISUAL_GEOMETRY_CONTRACT_ID := (
+	"skills.visual_geometry.debug_overlay.opt_in.v1"
+)
 const LASER_DECORATION_ALPHA := 0.46
 const HELLFIRE_DECORATION_ALPHA := 1.0
 
@@ -62,6 +65,10 @@ var _formal_core_polygon_screen_offset_px := PackedVector2Array()
 var _formal_core_axis_screen_offset_px := Vector2.ZERO
 var _formal_core_polygon: Polygon2D
 var _formal_core_glow_layers: Array[Polygon2D] = []
+var debug_skill_visual_geometry := false
+var _debug_geometry_overlay: Node2D
+var _debug_geometry_lines: Array[Line2D] = []
+var _debug_geometry_metadata: Dictionary = {}
 
 
 func setup(
@@ -116,6 +123,9 @@ func setup(
 	_formal_core_axis_screen_offset_px = visual_geometry_context.get(
 		"formal_core_axis_screen_offset_px", Vector2.ZERO
 	)
+	debug_skill_visual_geometry = bool(visual_geometry_context.get(
+		"debug_skill_visual_geometry", false
+	))
 	for raw_offset: Variant in visual_geometry_context.get("geometry_screen_offsets_px", []):
 		if raw_offset is Vector2:
 			_geometry_screen_offsets_px.append(raw_offset)
@@ -176,6 +186,7 @@ func _ready() -> void:
 		_sync_actor_attachment_position()
 	_playback_strategy = str(render.get("playback_strategy", "frame_sequence"))
 	_install_formal_line_visual_core()
+	_install_debug_skill_visual_geometry_overlay()
 	lifetime = maxf(
 		lifetime,
 		CasterSkillVisualRegistry.animation_duration(skill_id, phase_id)
@@ -412,6 +423,10 @@ func formal_core_axis_screen_offset_px() -> Vector2:
 	return _formal_core_axis_screen_offset_px
 
 
+func skill_visual_geometry_debug_metadata() -> Dictionary:
+	return _debug_geometry_metadata.duplicate(true)
+
+
 func _install_formal_line_visual_core() -> void:
 	if (
 		skill_id not in ["wizard.hellfire", "wizard.laser"]
@@ -475,6 +490,133 @@ func _apply_line_decoration_policy(sprite: Sprite2D) -> void:
 	)
 	sprite.modulate = decoration_modulate
 	sprite.set_meta("formal_boundary_role", "decoration_only")
+
+
+func _install_debug_skill_visual_geometry_overlay() -> void:
+	if (
+		not debug_skill_visual_geometry
+		or not SkillFootprintSnapshotScript.is_valid(
+			_skill_footprint_snapshot
+		)
+		or _formal_core_polygon == null
+	):
+		return
+	var expected_polygon_px := (
+		SkillFootprintSnapshotScript.projected_polygon_screen_offset_px(
+			_skill_footprint_snapshot
+		)
+	)
+	var actual_polygon_px := _formal_core_polygon.polygon.duplicate()
+	if expected_polygon_px.size() != 4 or actual_polygon_px.size() != 4:
+		return
+	var expected_axis_start_px: Vector2 = _skill_footprint_snapshot.get(
+		"axis_start_screen_offset_px", Vector2.ZERO
+	)
+	var expected_axis_end_px: Vector2 = _skill_footprint_snapshot.get(
+		"axis_screen_offset_px", Vector2.ZERO
+	)
+	var actual_axis_start_px := (
+		actual_polygon_px[0] + actual_polygon_px[3]
+	) * 0.5
+	var actual_axis_end_px := (
+		actual_polygon_px[1] + actual_polygon_px[2]
+	) * 0.5
+
+	_debug_geometry_overlay = Node2D.new()
+	_debug_geometry_overlay.name = "SkillVisualGeometryDebugOverlay"
+	add_child(_debug_geometry_overlay)
+	# Wide expected lines stay visible below the thinner actual lines when both
+	# geometries agree exactly. These colors never exist unless the plan opts in.
+	_add_debug_geometry_line(
+		_closed_polygon_points(expected_polygon_px),
+		Color(0.20, 1.0, 0.25, 0.95),
+		6.0,
+		"expected_formal_range_ground_gu_projected_px"
+	)
+	_add_debug_geometry_line(
+		_closed_polygon_points(actual_polygon_px),
+		Color(0.18, 0.62, 1.0, 0.98),
+		3.0,
+		"actual_visual_core_px"
+	)
+	_add_debug_geometry_line(
+		PackedVector2Array([expected_axis_start_px, expected_axis_end_px]),
+		Color(0.78, 0.28, 1.0, 0.98),
+		4.0,
+		"expected_snapshot_axis_px"
+	)
+	_add_debug_geometry_line(
+		PackedVector2Array([actual_axis_start_px, actual_axis_end_px]),
+		Color(0.72, 0.72, 0.72, 0.98),
+		2.0,
+		"actual_visual_axis_px"
+	)
+
+	var corner_error_px := PackedFloat32Array()
+	var maximum_corner_error_px := 0.0
+	for corner_index: int in range(4):
+		var error_px := expected_polygon_px[corner_index].distance_to(
+			actual_polygon_px[corner_index]
+		)
+		corner_error_px.append(error_px)
+		maximum_corner_error_px = maxf(maximum_corner_error_px, error_px)
+	_debug_geometry_metadata = {
+		"contract_id": DEBUG_SKILL_VISUAL_GEOMETRY_CONTRACT_ID,
+		"snapshot_id": str(_skill_footprint_snapshot.get("snapshot_id", "")),
+		"skill_id": str(_skill_footprint_snapshot.get("skill_id", skill_id)),
+		"release_id": str(_skill_footprint_snapshot.get("release_id", "")),
+		"expected_polygon_screen_offset_px": expected_polygon_px,
+		"actual_polygon_screen_offset_px": actual_polygon_px,
+		"expected_axis_start_screen_offset_px": expected_axis_start_px,
+		"expected_axis_end_screen_offset_px": expected_axis_end_px,
+		"actual_axis_start_screen_offset_px": actual_axis_start_px,
+		"actual_axis_end_screen_offset_px": actual_axis_end_px,
+		"expected_actual_corner_error_px": corner_error_px,
+		"maximum_corner_error_px": maximum_corner_error_px,
+	}
+	for metadata_key: String in [
+		"snapshot_id",
+		"skill_id",
+		"release_id",
+		"expected_actual_corner_error_px",
+		"maximum_corner_error_px",
+	]:
+		set_meta(metadata_key, _debug_geometry_metadata[metadata_key])
+		_debug_geometry_overlay.set_meta(
+			metadata_key, _debug_geometry_metadata[metadata_key]
+		)
+	set_meta(
+		"debug_skill_visual_geometry_contract",
+		DEBUG_SKILL_VISUAL_GEOMETRY_CONTRACT_ID
+	)
+	_debug_geometry_overlay.set_meta(
+		"contract_id", DEBUG_SKILL_VISUAL_GEOMETRY_CONTRACT_ID
+	)
+
+
+func _add_debug_geometry_line(
+	points_px: PackedVector2Array,
+	color: Color,
+	width_px: float,
+	role: String
+) -> void:
+	var line := Line2D.new()
+	line.points = points_px
+	line.default_color = color
+	line.width = width_px
+	line.antialiased = true
+	line.set_meta("debug_geometry_role", role)
+	_debug_geometry_overlay.add_child(line)
+	_debug_geometry_lines.append(line)
+
+
+func _closed_polygon_points(
+	polygon_px: PackedVector2Array
+) -> PackedVector2Array:
+	var result := polygon_px.duplicate()
+	if not result.is_empty():
+		result.append(result[0])
+	return result
 
 
 func _inset_directed_quad(

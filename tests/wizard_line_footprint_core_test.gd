@@ -10,6 +10,7 @@ func _ready() -> void:
 	assert(Loader.reload_data().valid)
 	_verify_six_frames_and_angle_samples()
 	_verify_twenty_repeated_casts()
+	_verify_debug_overlay_is_explicit_and_reports_zero_error()
 	_verify_runtime_has_no_image_readback()
 	print(
 		"WIZARD_LINE_FOOTPRINT_CORE_PASS: 5x1/8x1 GU damage and projected "
@@ -103,6 +104,60 @@ func _verify_runtime_has_no_image_readback() -> void:
 		var source := FileAccess.get_file_as_string(script_path)
 		assert(not source.contains("get_image("))
 		assert(not source.contains("get_pixel("))
+
+
+func _verify_debug_overlay_is_explicit_and_reports_zero_error() -> void:
+	var production_plan := _line_plan("wizard.laser", 8.0, 5, "production")
+	var direction_screen_px := (
+		production_plan.skill_footprint_snapshot.axis_screen_offset_px as Vector2
+	).normalized()
+	var production_effect := CasterSkillRuntime.create_visual(
+		production_plan,
+		Vector2.ZERO,
+		direction_screen_px
+	)
+	assert(production_effect != null)
+	add_child(production_effect)
+	assert(not production_effect.debug_skill_visual_geometry)
+	assert(production_effect._debug_geometry_overlay == null)
+	assert(production_effect._debug_geometry_lines.is_empty())
+	assert(not production_effect.has_meta("snapshot_id"))
+	var production_core_px := (
+		production_effect.formal_core_polygon_screen_offset_px()
+	)
+
+	var debug_plan := _line_plan("wizard.laser", 8.0, 5, "debug")
+	debug_plan["debug_skill_visual_geometry"] = true
+	var debug_effect := CasterSkillRuntime.create_visual(
+		debug_plan,
+		Vector2.ZERO,
+		direction_screen_px
+	)
+	assert(debug_effect != null)
+	add_child(debug_effect)
+	assert(debug_effect.debug_skill_visual_geometry)
+	assert(debug_effect._debug_geometry_overlay != null)
+	assert(debug_effect._debug_geometry_lines.size() == 4)
+	assert(debug_effect.formal_core_polygon_screen_offset_px() == production_core_px)
+	var metadata := debug_effect.skill_visual_geometry_debug_metadata()
+	var snapshot: Dictionary = debug_plan.skill_footprint_snapshot
+	assert(metadata.contract_id
+		== CasterSkillVisualEffect.DEBUG_SKILL_VISUAL_GEOMETRY_CONTRACT_ID)
+	assert(metadata.snapshot_id == snapshot.snapshot_id)
+	assert(metadata.skill_id == snapshot.skill_id)
+	assert(metadata.release_id == snapshot.release_id)
+	assert(is_zero_approx(float(metadata.maximum_corner_error_px)))
+	var corner_errors: PackedFloat32Array = (
+		metadata.expected_actual_corner_error_px
+	)
+	assert(corner_errors.size() == 4)
+	for error_px: float in corner_errors:
+		assert(is_zero_approx(error_px))
+	assert(debug_effect.get_meta("snapshot_id", "") == snapshot.snapshot_id)
+	assert(debug_effect.get_meta("skill_id", "") == snapshot.skill_id)
+	assert(debug_effect.get_meta("release_id", "") == snapshot.release_id)
+	production_effect.free()
+	debug_effect.free()
 
 
 func _line_plan(
