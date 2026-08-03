@@ -46,6 +46,7 @@ var projectile_color := Color(0.35, 0.7, 1.0)
 var skill_id := ""
 var release_id := ""
 var skill_footprint_snapshot: Dictionary = {}
+var last_segment_footprint_snapshot: Dictionary = {}
 var resolution_skill_id := ""
 var source_actor: Node2D
 var magic_defense_adapter := Callable()
@@ -55,6 +56,7 @@ var last_resolution: Dictionary = {}
 var _sprite: Sprite2D
 var visual_rejection_reason := ""
 var _projectile_role_valid := false
+var _physics_segment_index := 0
 
 
 func setup_ground_unit_projectile(
@@ -200,6 +202,29 @@ func _physics_process(delta: float) -> void:
 	)
 	var segment_start_screen_px := global_position
 	var segment_end_screen_px := global_position + motion_screen_px
+	var segment_start_ground_gu := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			segment_start_screen_px
+		)
+	)
+	var segment_end_ground_gu := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			segment_end_screen_px
+		)
+	)
+	last_segment_footprint_snapshot = (
+		SkillFootprintSnapshotScript.create_swept_capsule_path(
+			skill_id if not skill_id.is_empty() else "unbound.projectile",
+			"%s:segment:%d" % [release_id, _physics_segment_index],
+			segment_start_ground_gu,
+			segment_end_ground_gu,
+			projectile_radius_gu,
+			SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS / 2,
+			str(skill_footprint_snapshot.get("snapshot_id", "")),
+			_physics_segment_index
+		)
+	)
+	_physics_segment_index += 1
 	global_position = segment_end_screen_px
 	traveled_distance_gu += travel_distance_gu
 	if remaining_travel_distance_gu >= 0.0:
@@ -253,6 +278,12 @@ func _swept_segment_intersects_enemy_footprint(
 		)
 	):
 		return false
+	if SkillFootprintSnapshotScript.is_valid(last_segment_footprint_snapshot):
+		return SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
+			last_segment_footprint_snapshot,
+			enemy_center_ground_gu,
+			enemy.combat_radius_gu
+		)
 	var segment_start_ground_relative := (
 		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
 			segment_start_screen_px - enemy.global_position
