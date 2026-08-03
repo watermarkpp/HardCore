@@ -1,5 +1,13 @@
 # Codex 精简上下文快照
 
+## 2026-08-03：全攻击/技能地面投影统一与 Android v64
+
+- 固定构建提交为 `551b21d8b19c1e62ac24b28d4dd8dc1ed6f780e0`；隔离构建 APK 为 `outputs/hardcore/HardCore-v64-spatial-projection-debug.apk`，桌面同字节副本为 `C:/Users/Administrator/Desktop/HardCore-v64-spatial-projection-debug.apk`，大小 `244,568,111` 字节，SHA-256 `D4CB03DA88EAA2FD41F41E31FB575DE9EE8A9BCEB7F6BF134C0CA8F077D351E5`。包信息：`versionCode=64`、`versionName=1.18.1-spatial-projection`、`HardCore`、`com.personal.mafaoffline`、`arm64-v8a`、`minSdk=24`、`targetSdk=36`；APK v2/v3 签名和运行时资源探针通过。构建完成时 ADB 没有枚举到设备，因此未覆盖安装。
+- 33 个正式职业技能由机器合同 `skills.spatial_projection.relationship_matrix.v1` 唯一分类。正式空间执行由 `caster_skill_execution.spatial_snapshot_gate.v1` 门禁：缺少同一技能/释放 ID 的只读投影快照时禁止进入生产结算。玩家普通/烈火/半月/刺杀、野蛮冲撞、精确地面技能、单体技能、传送目的地、召唤出生与后续召唤物攻击均已接入。
+- 投射物没有遗漏：小火球、大火球、灵魂火符在释放帧生成完整 GU 飞行走廊母快照；每个物理帧生成带 `parent_snapshot_id` 和递增 `segment_index` 的实际扫掠子快照。命中使用弹体半径与目标战斗脚印的连续相交，防止高速穿透，视觉装饰不参与伤害。
+- 怪物普通近战、远程、固定区域、Boss 扇形/圆形和延迟预警攻击使用各自释放帧脚点与同一冻结快照；骷髅/神兽使用自身脚点，不复用玩家脚点。道士群体效果使用稳定目标实例 ID，不依赖数组顺序。
+- 验证：职业技能目录 `27/27`、怪物 `18/18`、Warrior/法师集成 `25/25`、最终关键套件 `87/87` 全通过。冻结的 236/240 头盔草稿与三份怪物脚点合同 SHA-256 逐项保持原值。
+
 ## 2026-08-03：远端直线技能命中合同与人物遮挡修复（Android 实机测试包）
 
 - 当前 Android 实机测试包由提交 `151c27a331d2dd3eca78e8a214d21de8f3f188ba` 隔离构建：`outputs/hardcore/HardCore-v63-caster-thrust-alignment-debug.apk`，大小 `244,489,650` 字节，SHA-256 `56F952EC1AB519C3A087438383B599E01809995EAA587A52CC75215C542016F0`。签名、包名、版本、横屏配置与运行时资源探针通过；已在 HONOR 90（REA-AN00）使用 `adb install -r` 保留数据覆盖安装并冷启动，回读 `versionCode=63`、`versionName=1.18.0-combat-unit-gu`、前台 `GodotAppLauncher` 与进程正常，启动日志无脚本错误、解析错误、Android 崩溃或 ANR。
