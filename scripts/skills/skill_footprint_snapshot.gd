@@ -547,6 +547,24 @@ static func intersects_target_combat_footprint_ground_gu(
 			target_center_ground_gu,
 			safe_target_radius_gu
 		)
+	if str(snapshot.get("shape_type", "")) == SHAPE_DIRECTED_RECTANGLE:
+		return _directed_rectangle_intersects_circle_inclusive_ground_gu(
+			snapshot,
+			target_center_ground_gu,
+			safe_target_radius_gu
+		)
+	if str(snapshot.get("shape_type", "")) == SHAPE_SECTOR_ARC:
+		return _sector_intersects_circle_inclusive_ground_gu(
+			snapshot,
+			target_center_ground_gu,
+			safe_target_radius_gu
+		)
+	if str(snapshot.get("shape_type", "")) == SHAPE_CELL_UNION:
+		return _cell_union_intersects_circle_inclusive_ground_gu(
+			snapshot,
+			target_center_ground_gu,
+			safe_target_radius_gu
+		)
 	var target_polygon_ground_gu := PackedVector2Array()
 	for offset_ground_gu: Vector2 in (
 		WorldSpatialRulesScript.actor_footprint_ground_polygon_gu(
@@ -729,6 +747,146 @@ static func _circles_intersect_inclusive_ground_gu(
 	return (
 		left_center_ground_gu.distance_squared_to(right_center_ground_gu)
 		<= inclusive_radius_gu * inclusive_radius_gu
+	)
+
+
+static func _directed_rectangle_intersects_circle_inclusive_ground_gu(
+	snapshot: Dictionary,
+	target_center_ground_gu: Vector2,
+	target_radius_gu: float
+) -> bool:
+	var start_ground_gu: Vector2 = snapshot.get(
+		"start_ground_gu", snapshot.get("origin_ground_gu", Vector2.ZERO)
+	)
+	var direction_ground_gu := _normalized_direction_ground_gu(
+		snapshot.get("direction_ground_gu", Vector2.ZERO)
+	)
+	var perpendicular_ground_gu: Vector2 = snapshot.get(
+		"perpendicular_ground_gu",
+		Vector2(-direction_ground_gu.y, direction_ground_gu.x)
+	)
+	var relative_ground_gu := target_center_ground_gu - start_ground_gu
+	var closest_ground_gu := (
+		start_ground_gu
+		+ direction_ground_gu * clampf(
+			relative_ground_gu.dot(direction_ground_gu),
+			0.0,
+			maxf(0.0, float(snapshot.get("effect_length_gu", 0.0)))
+		)
+		+ perpendicular_ground_gu * clampf(
+			relative_ground_gu.dot(perpendicular_ground_gu),
+			-maxf(0.0, float(snapshot.get("half_width_gu", 0.0))),
+			maxf(0.0, float(snapshot.get("half_width_gu", 0.0)))
+		)
+	)
+	var inclusive_radius_gu := maxf(0.0, target_radius_gu) + CONTACT_EPSILON_GU
+	return (
+		closest_ground_gu.distance_squared_to(target_center_ground_gu)
+		<= inclusive_radius_gu * inclusive_radius_gu
+	)
+
+
+static func _sector_intersects_circle_inclusive_ground_gu(
+	snapshot: Dictionary,
+	target_center_ground_gu: Vector2,
+	target_radius_gu: float
+) -> bool:
+	var origin_ground_gu: Vector2 = snapshot.get(
+		"origin_ground_gu", Vector2.ZERO
+	)
+	var direction_ground_gu := _normalized_direction_ground_gu(
+		snapshot.get("direction_ground_gu", Vector2.ZERO)
+	)
+	var radius_gu := maxf(0.0, float(snapshot.get("radius_gu", 0.0)))
+	var half_angle_radians := clampf(
+		absf(float(snapshot.get("half_angle_radians", 0.0))),
+		0.0,
+		PI * 0.5
+	)
+	var safe_target_radius_gu := maxf(0.0, target_radius_gu)
+	var relative_ground_gu := target_center_ground_gu - origin_ground_gu
+	var distance_gu := relative_ground_gu.length()
+	if distance_gu <= safe_target_radius_gu + CONTACT_EPSILON_GU:
+		return true
+	if distance_gu > radius_gu + safe_target_radius_gu + CONTACT_EPSILON_GU:
+		return false
+	var angle_delta_radians := absf(wrapf(
+		relative_ground_gu.angle() - direction_ground_gu.angle(),
+		-PI,
+		PI
+	))
+	if angle_delta_radians <= half_angle_radians + CONTACT_EPSILON_GU:
+		return true
+	var left_edge_end_ground_gu := (
+		origin_ground_gu
+		+ direction_ground_gu.rotated(-half_angle_radians) * radius_gu
+	)
+	var right_edge_end_ground_gu := (
+		origin_ground_gu
+		+ direction_ground_gu.rotated(half_angle_radians) * radius_gu
+	)
+	var inclusive_radius_squared_gu := pow(
+		safe_target_radius_gu + CONTACT_EPSILON_GU,
+		2.0
+	)
+	return (
+		_point_segment_distance_squared_ground_gu(
+			target_center_ground_gu,
+			origin_ground_gu,
+			left_edge_end_ground_gu
+		) <= inclusive_radius_squared_gu
+		or _point_segment_distance_squared_ground_gu(
+			target_center_ground_gu,
+			origin_ground_gu,
+			right_edge_end_ground_gu
+		) <= inclusive_radius_squared_gu
+	)
+
+
+static func _cell_union_intersects_circle_inclusive_ground_gu(
+	snapshot: Dictionary,
+	target_center_ground_gu: Vector2,
+	target_radius_gu: float
+) -> bool:
+	var raw_cells: Variant = snapshot.get("geometry_cells_grid_steps", [])
+	if not raw_cells is Array:
+		return false
+	var inclusive_radius_gu := maxf(0.0, target_radius_gu) + CONTACT_EPSILON_GU
+	var inclusive_radius_squared_gu := inclusive_radius_gu * inclusive_radius_gu
+	for raw_cell: Variant in raw_cells:
+		if not raw_cell is Vector2i:
+			continue
+		var delta_ground_gu := target_center_ground_gu - Vector2(raw_cell)
+		var nearest_delta_ground_gu := Vector2(
+			maxf(absf(delta_ground_gu.x) - 0.5, 0.0),
+			maxf(absf(delta_ground_gu.y) - 0.5, 0.0)
+		)
+		if nearest_delta_ground_gu.length_squared() <= inclusive_radius_squared_gu:
+			return true
+	return false
+
+
+static func _point_segment_distance_squared_ground_gu(
+	point_ground_gu: Vector2,
+	segment_start_ground_gu: Vector2,
+	segment_end_ground_gu: Vector2
+) -> float:
+	var segment_ground_gu := (
+		segment_end_ground_gu - segment_start_ground_gu
+	)
+	if (
+		segment_ground_gu.length_squared()
+		<= CONTACT_EPSILON_GU * CONTACT_EPSILON_GU
+	):
+		return point_ground_gu.distance_squared_to(segment_start_ground_gu)
+	var weight := clampf(
+		(point_ground_gu - segment_start_ground_gu).dot(segment_ground_gu)
+		/ segment_ground_gu.length_squared(),
+		0.0,
+		1.0
+	)
+	return point_ground_gu.distance_squared_to(
+		segment_start_ground_gu + segment_ground_gu * weight
 	)
 
 
