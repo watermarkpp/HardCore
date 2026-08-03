@@ -62,6 +62,18 @@ const TARGET_FOOTPRINT_SKILL_IDS := {
 const TARGET_FOOTPRINT_RELEASE_CONTRACT_ID := (
 	"skills.caster.target_single.release_footprint_snapshot.v1"
 )
+const GROUND_EXACT_SKILL_IDS := {
+	"wizard.repulsion_ring": true,
+	"wizard.exploding_flame": true,
+	"wizard.fire_wall": true,
+	"wizard.hell_lightning": true,
+	"wizard.ice_storm": true,
+	"taoist.mass_invisibility": true,
+	"taoist.magic_defense": true,
+	"taoist.defense": true,
+	"taoist.entrapment": true,
+	"taoist.mass_healing": true,
+}
 
 
 static func resolve(skill_name_or_id: String, context: Dictionary) -> Dictionary:
@@ -302,10 +314,36 @@ static func create_ground_effects(
 		1.0,
 		float(plan.get("visual_radius_px", FIRE_WALL_VISUAL_RADIUS_PX))
 	)
-	for effect_position: Vector2 in fire_wall_positions_ground_gu(
+	var release_id := str(plan.get("release_id", ""))
+	if release_id.is_empty():
+		release_id = "%s:ground:%d" % [
+			str(plan.get("skill_id", "wizard.fire_wall")),
+			Time.get_ticks_usec(),
+		]
+	var release_snapshot: Dictionary = plan.get(
+		"skill_footprint_snapshot", {}
+	)
+	var effect_positions := fire_wall_positions_ground_gu(
 		center,
 		cell_spacing_gu
-	):
+	)
+	if not SkillFootprintSnapshotScript.is_valid(release_snapshot):
+		var inferred_cells_grid_steps: Array[Vector2i] = []
+		for effect_position: Vector2 in effect_positions:
+			inferred_cells_grid_steps.append(Vector2i(
+				GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+					effect_position
+				).round()
+			))
+		release_snapshot = (
+			CasterSpellGeometryScript.create_exact_cell_union_release_snapshot(
+				str(plan.get("skill_id", "wizard.fire_wall")),
+				release_id,
+				GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(center),
+				inferred_cells_grid_steps
+			)
+		)
+	for effect_position: Vector2 in effect_positions:
 		var effect := GroundSkillEffect.new()
 		effect.setup_ground_unit_effect(
 			effect_position,
@@ -315,7 +353,9 @@ static func create_ground_effects(
 			color,
 			str(plan.get("skill_id", "")),
 			float(plan.get("tick_interval_seconds", 0.8)),
-			visual_radius_px
+			visual_radius_px,
+			release_id,
+			release_snapshot
 		)
 		effect.configure_runtime_source(source_actor)
 		effects.append(effect)
@@ -482,6 +522,19 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 			)
 		)
 	var origin := context.get("origin", caster.global_position if caster != null else Vector2.ZERO) as Vector2
+	var geometry_cells_grid_steps := _geometry_cells_grid_steps(plan)
+	if (
+		GROUND_EXACT_SKILL_IDS.has(str(plan.get("skill_id", "")))
+		and not geometry_cells_grid_steps.is_empty()
+	):
+		result.skill_footprint_snapshot = (
+			CasterSpellGeometryScript.create_exact_cell_union_release_snapshot(
+				str(plan.get("skill_id", "")),
+				release_id,
+				GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(origin),
+				geometry_cells_grid_steps
+			)
+		)
 	var direction := context.get("direction", Vector2.DOWN) as Vector2
 	var fallback_direction_ground_gu := (
 		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(direction)
@@ -505,6 +558,7 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 	) as Vector2
 	var node_plan := plan.duplicate(true)
 	node_plan["release_id"] = release_id
+	node_plan["skill_footprint_snapshot"] = result.skill_footprint_snapshot
 	node_plan["teleport_arrival_ready"] = (
 		str(plan.get("operation", "")) == "random_home_map_move"
 		and context.has("teleport_destination")
@@ -558,7 +612,15 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 					)
 		"line_damage", "area_damage":
 			for target: Node2D in targets:
-				if target is EnemyActor:
+				if (
+					target is EnemyActor
+					and (
+						operation != "area_damage"
+						or _target_intersects_ground_exact_snapshot(
+							result.skill_footprint_snapshot, target
+						)
+					)
+				):
 					_apply_direct_spell_damage(
 						plan,
 						context,
@@ -708,6 +770,33 @@ static func _release_id(plan: Dictionary, context: Dictionary) -> String:
 		str(plan.get("skill_id", "unbound.caster")),
 		Time.get_ticks_usec(),
 	]
+
+
+static func _geometry_cells_grid_steps(plan: Dictionary) -> Array[Vector2i]:
+	var result: Array[Vector2i] = []
+	var raw_cells: Variant = plan.get("geometry_cells", [])
+	if raw_cells is Array:
+		for raw_cell: Variant in raw_cells:
+			if raw_cell is Vector2i:
+				result.append(raw_cell)
+	return result
+
+
+static func _target_intersects_ground_exact_snapshot(
+	skill_footprint_snapshot: Dictionary,
+	target: Node2D
+) -> bool:
+	if not SkillFootprintSnapshotScript.is_valid(skill_footprint_snapshot):
+		# Compatibility callers that have not supplied formal geometry remain an
+		# explicit adapter path. The production gate is enforced separately.
+		return true
+	return SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
+		skill_footprint_snapshot,
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			target.global_position
+		),
+		_target_combat_radius_gu(target)
+	)
 
 
 static func _create_target_footprint_snapshot(

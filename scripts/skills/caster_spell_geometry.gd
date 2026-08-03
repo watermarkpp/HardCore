@@ -28,6 +28,9 @@ const CONTINUOUS_AIM_LINE_CONTRACT_ID := (
 const DISCRETE_CELL_FOOTPRINT_RESOLVER_CONTRACT_ID := (
 	"skills.caster.discrete_cells.actor_footprint_resolver_gu.v1"
 )
+const EXACT_CELL_UNION_RELEASE_CONTRACT_ID := (
+	"skills.caster.ground_exact.cell_union_release_snapshot.v1"
+)
 const CONTACT_EPSILON := 0.0001
 
 
@@ -116,23 +119,56 @@ static func actor_footprint_polygon_ground_gu(
 static func declared_cells_intersect_actor_footprint(
 	effective_geometry_cells: Array[Vector2i],
 	target_center_ground_gu: Vector2,
-	target_combat_radius_gu: float
+	target_combat_radius_gu: float,
+	skill_footprint_snapshot: Dictionary = {}
 ) -> Dictionary:
 	var footprint_ground_gu := actor_footprint_polygon_ground_gu(
 		target_center_ground_gu,
 		target_combat_radius_gu
 	)
+	var valid_union_snapshot := (
+		SkillFootprintSnapshotScript.is_valid(skill_footprint_snapshot)
+		and str(skill_footprint_snapshot.get("shape_type", ""))
+		== SkillFootprintSnapshotScript.SHAPE_CELL_UNION
+	)
+	var intersects := (
+		SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
+			skill_footprint_snapshot,
+			target_center_ground_gu,
+			target_combat_radius_gu
+		)
+		if valid_union_snapshot
+		else target_footprint_intersects_cells(
+			effective_geometry_cells,
+			footprint_ground_gu
+		)
+	)
 	return {
 		"contract_id": DISCRETE_CELL_FOOTPRINT_RESOLVER_CONTRACT_ID,
 		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
-		"intersects": target_footprint_intersects_cells(
-			effective_geometry_cells,
-			footprint_ground_gu
-		),
+		"intersects": intersects,
 		"target_center_ground_gu": target_center_ground_gu,
 		"target_footprint_ground_gu": footprint_ground_gu,
 		"geometry_cells_grid_steps": effective_geometry_cells.duplicate(),
+		"skill_footprint_snapshot": (
+			skill_footprint_snapshot if valid_union_snapshot else {}
+		),
+		"snapshot_consumed": valid_union_snapshot,
 	}
+
+
+static func create_exact_cell_union_release_snapshot(
+	skill_id: String,
+	release_id: String,
+	origin_ground_gu: Vector2,
+	effective_geometry_cells: Array[Vector2i]
+) -> Dictionary:
+	return SkillFootprintSnapshotScript.create_cell_union(
+		skill_id,
+		release_id,
+		origin_ground_gu,
+		effective_geometry_cells
+	)
 
 
 static func continuous_line_strip_ground_gu(
