@@ -381,6 +381,7 @@ static func create_summon_actor(
 		str(plan.get("skill_id", "")),
 		maxi(1, owner_level)
 	)
+	summon.configure_spawn_release_footprint(str(plan.get("release_id", "")))
 	return summon
 
 

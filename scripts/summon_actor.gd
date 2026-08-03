@@ -6,12 +6,21 @@ signal summon_state_changed(previous_state: int, current_state: int)
 const SummonVisualRegistryScript := preload("res://scripts/summon_visual_registry.gd")
 const CasterAnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const SkillFootprintSnapshotScript := preload(
+	"res://scripts/skills/skill_footprint_snapshot.gd"
+)
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const CombatUnitLegacyAdapterScript := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
 
 const SPATIAL_CONTRACT_ID := "skills.summon_actor.spatial_ground_gu.v1"
+const SPAWN_FOOTPRINT_CONTRACT_ID := (
+	"skills.summon.spawn_destination_footprint_snapshot.v1"
+)
+const ATTACK_FOOTPRINT_CONTRACT_ID := (
+	"skills.summon.attack_release_footprint_snapshot.v1"
+)
 const RECALL_OFFSET_GU := (
 	42.0 / CombatUnitLegacyAdapterScript.ISO_AREA_EQUIVALENT_PX_PER_GU
 )
@@ -75,7 +84,12 @@ var reject_when_owner_has_slave := true
 var recall_existing_on_create_failure := false
 var state := SummonState.FOLLOW_OWNER
 var last_attack_type := ""
+var summon_release_id := ""
+var summon_spawn_footprint_snapshot: Dictionary = {}
+var last_attack_footprint_snapshot: Dictionary = {}
+var last_attack_relation := ""
 var _attack_timer := 0.0
+var _attack_release_sequence := 0
 var _rng := RandomNumberGenerator.new()
 var _sprite: Sprite2D
 var _current_target: EnemyActor
@@ -158,6 +172,31 @@ func setup(player: PlayerCharacter, display_name: String, power: int, learned_le
 	reject_when_owner_has_slave = bool(profile.get("reject_when_owner_has_slave", true))
 	recall_existing_on_create_failure = bool(profile.get("recall_existing_on_create_failure", false))
 	state = SummonState.FOLLOW_OWNER
+
+
+func configure_spawn_release_footprint(source_release_id: String) -> void:
+	summon_release_id = (
+		source_release_id
+		if not source_release_id.is_empty()
+		else "%s:summon:%d" % [skill_id, get_instance_id()]
+	)
+	var spawn_combat_radius_gu := (
+		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
+			21.0 if summon_id == "divine_beast" else 15.0
+		)
+	)
+	var spawn_center_ground_gu := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(global_position)
+	)
+	summon_spawn_footprint_snapshot = (
+		SkillFootprintSnapshotScript.create_target_footprint(
+			skill_id,
+			summon_release_id,
+			spawn_center_ground_gu,
+			spawn_combat_radius_gu,
+			get_instance_id()
+		)
+	)
 
 
 func _ready() -> void:
@@ -298,7 +337,15 @@ func _physics_process(delta: float) -> void:
 				_attack_timer = attack_interval
 				last_attack_type = attack_type
 				_attack_visual_remaining = _visual_action_duration("attack")
-				enemy.take_damage(_rng.randi_range(attack_min, attack_max), self)
+				last_attack_footprint_snapshot = (
+					create_attack_release_footprint_snapshot(enemy)
+				)
+				if attack_release_snapshot_intersects_target(
+					last_attack_footprint_snapshot, enemy
+				):
+					enemy.take_damage(
+						_rng.randi_range(attack_min, attack_max), self
+					)
 		else:
 			_set_state(SummonState.CHASE_TARGET)
 			velocity = _screen_velocity_toward_delta_px(offset_screen_px)
@@ -378,6 +425,60 @@ func spatial_contract_snapshot() -> Dictionary:
 		"teleport_range_gu": teleport_range_gu,
 		"follow_distance_gu": follow_distance_gu,
 	}
+
+
+func create_attack_release_footprint_snapshot(target: Node2D) -> Dictionary:
+	if not is_instance_valid(target):
+		return {}
+	var origin_ground_gu := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(global_position)
+	)
+	var target_ground_gu := (
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			target.global_position
+		)
+	)
+	var release_id := "%s:attack:%d:%d" % [
+		skill_id,
+		get_instance_id(),
+		_attack_release_sequence,
+	]
+	_attack_release_sequence += 1
+	var reach_from_center_gu := combat_radius_gu + attack_range_gu
+	if summon_id == "divine_beast":
+		last_attack_relation = "directed_core"
+		return SkillFootprintSnapshotScript.create_directed_rectangle(
+			skill_id,
+			release_id,
+			origin_ground_gu,
+			GroundUnitSpaceScript.normalized_ground_direction(
+				origin_ground_gu, target_ground_gu
+			),
+			reach_from_center_gu,
+			combat_radius_gu * 2.0
+		)
+	last_attack_relation = "release_contact"
+	return SkillFootprintSnapshotScript.create_circle(
+		skill_id,
+		release_id,
+		origin_ground_gu,
+		reach_from_center_gu
+	)
+
+
+func attack_release_snapshot_intersects_target(
+	attack_snapshot: Dictionary,
+	target: Node2D
+) -> bool:
+	if not SkillFootprintSnapshotScript.is_valid(attack_snapshot):
+		return false
+	return SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
+		attack_snapshot,
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			target.global_position
+		),
+		_target_combat_radius_gu(target)
+	)
 
 
 func distance_gu_to_screen_position_px(target_screen_position_px: Vector2) -> float:
