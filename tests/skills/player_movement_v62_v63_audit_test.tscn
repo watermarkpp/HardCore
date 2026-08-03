@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/skills/player_movement_v62_v63_audit_test.gd" type="Script" id="1"]
+
+[node name="PlayerMovementV62V63AuditTest" type="Node"]
+script = ExtResource("1")

@@ -54,6 +54,11 @@ func _verify_laser_target_distance_direction_and_replay_stability() -> void:
 		add_child(close_effect)
 		var close_sprite := close_effect._sprites[0] as CasterSkillAnimationPlayer
 		assert(close_sprite != null)
+		assert(close_sprite.frame_count() == 6 and not close_sprite._loop)
+		assert(is_equal_approx(
+			close_effect._desired_sprite_cross_axis_extent_px,
+			sqrt(64.0 * 32.0)
+		))
 		var expected_transform := close_sprite.transform
 		var expected_bounds := close_sprite.fitted_visual_bounds()
 		assert(is_equal_approx(
@@ -104,6 +109,22 @@ func _verify_laser_target_distance_direction_and_replay_stability() -> void:
 				far_sprite.current_frame_visible_cross_extent(aim_axis),
 				far_effect._desired_sprite_cross_axis_extent_px
 			))
+			var forward_interval := _texture_visible_forward_interval(
+				far_sprite,
+				aim_axis
+			)
+			assert(float(forward_interval.maximum) <= endpoint.length() + 0.01)
+			if frame_index == far_sprite.frame_count() - 1:
+				assert(
+					endpoint.length() - float(forward_interval.maximum) <= 18.0
+				)
+				_verify_named_direction_forward_fact(
+					sample_index,
+					far_sprite.direction_index,
+					endpoint,
+					endpoint.length(),
+					forward_interval
+				)
 		assert(far_sprite.configure(
 			"wizard.laser",
 			aim_axis,
@@ -146,6 +167,64 @@ func _texture_visible_cross_extent(
 		+ absf(cross_axis.x)
 		+ absf(cross_axis.y)
 	)
+
+
+func _texture_visible_forward_interval(
+	sprite: CasterSkillAnimationPlayer,
+	forward_axis: Vector2
+) -> Dictionary:
+	var image := sprite.texture.get_image()
+	var minimum := INF
+	var maximum := -INF
+	var normalized_axis := forward_axis.normalized()
+	var half_texture := Vector2(
+		float(image.get_width()) * 0.5,
+		float(image.get_height()) * 0.5
+	)
+	for y: int in range(image.get_height()):
+		for x: int in range(image.get_width()):
+			if image.get_pixel(x, y).a <= 0.0:
+				continue
+			var local_center := (
+				sprite.offset
+				+ Vector2(float(x) + 0.5, float(y) + 0.5)
+				- half_texture
+			)
+			var projection := sprite.transform.basis_xform(
+				local_center
+			).dot(normalized_axis)
+			minimum = minf(minimum, projection)
+			maximum = maxf(maximum, projection)
+	assert(is_finite(minimum) and is_finite(maximum))
+	var pixel_support := 0.5 * (
+		absf(sprite.transform.x.dot(normalized_axis))
+		+ absf(sprite.transform.y.dot(normalized_axis))
+	)
+	return {
+		"minimum": minimum - pixel_support,
+		"maximum": maximum + pixel_support,
+	}
+
+
+func _verify_named_direction_forward_fact(
+	sample_index: int,
+	_source_direction_index: int,
+	endpoint: Vector2,
+	endpoint_length: float,
+	forward_interval: Dictionary
+) -> void:
+	var direction_ground_gu := Vector2.from_angle(
+		TAU * float(sample_index) / 16.0
+	)
+	var expected_endpoint_px := DirectionSpace.ground_delta_gu_to_screen_delta_px(
+		direction_ground_gu * 8.0
+	)
+	assert(endpoint.is_equal_approx(expected_endpoint_px))
+	assert(is_equal_approx(endpoint_length, expected_endpoint_px.length()))
+	# These values intentionally differ by projected direction: 8 GU is about
+	# 362.04 PX east/west, 181.02 PX north/south, and 286.22 PX on ground axes.
+	# Reintroducing 512/256 would restore the old 8-GS direction imbalance.
+	assert(float(forward_interval.maximum) <= endpoint_length + 0.01)
 
 
 func _visual_from_cast_nodes(
@@ -213,7 +292,11 @@ func _line_plan(
 		"magic_stat_roll": 30,
 		"random_0_to_10": 0,
 	})
-	plan["canonical_geometry_contract"] = SpellGeometry.CONTRACT_ID
+	# Exercise the exact wire ID emitted by GameRoot. It carries continuous GU
+	# screen points and must not fall back to native/radius-sized visuals.
+	plan["canonical_geometry_contract"] = (
+		SpellGeometry.GAME_ROOT_SCREEN_POINT_CONTRACT_ID
+	)
 	plan["geometry_origin_screen_px"] = Vector2.ZERO
 	plan["geometry_grid_cells"] = []
 	plan["geometry_screen_points_px"] = world_points

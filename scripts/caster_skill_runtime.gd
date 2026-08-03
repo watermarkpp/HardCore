@@ -163,6 +163,18 @@ static func create_visual(
 		var geometry_offsets: Array = visual_geometry_context.get(
 			"geometry_screen_offsets_px", []
 		)
+		# A canonical line may be truncated to zero GU by terrain.  Its explicit
+		# empty point list is authoritative and must not fall through to the full
+		# 5/8-GU definition radius: that produced a full visible line while the
+		# shared damage strip contained no area and therefore could hit nothing.
+		var canonical_geometry_was_supplied := (
+			CasterSpellGeometryScript.canonical_geometry_contract_is_supported(
+				str(plan.get("canonical_geometry_contract", ""))
+			)
+			and plan.has("geometry_screen_points_px")
+		)
+		if canonical_geometry_was_supplied and geometry_offsets.is_empty():
+			return null
 		if not geometry_offsets.is_empty():
 			visual_radius_px = 0.0
 			for raw_offset: Variant in geometry_offsets:

@@ -8,6 +8,13 @@ const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 
 const CONTRACT_ID := "skills.visual.geometry_grid_steps.screen_px_projection.v2"
+## GameRoot's cross-system boundary predates CONTRACT_ID but carries the same
+## authoritative screen-point payload. Keep the wire ID accepted until the
+## integration owner migrates its constant; rejecting it silently detached the
+## runtime visual from the formal continuous GU damage strip.
+const GAME_ROOT_SCREEN_POINT_CONTRACT_ID := (
+	"skills.visual.geometry_cells.world_projection.v1"
+)
 const VISUAL_CONTRACT_ID := "skills.caster.geometry_visual_alignment.screen_px.v2"
 const FOOTPRINT_INTERSECTION_CONTRACT_ID := (
 	"skills.caster.area_footprint_intersection.ground_gu_sat.v2"
@@ -362,7 +369,7 @@ static func visual_context_from_plan(
 	fallback_origin_screen_px: Vector2
 ) -> Dictionary:
 	var declared_contract := str(plan.get("canonical_geometry_contract", ""))
-	if declared_contract != CONTRACT_ID:
+	if not canonical_geometry_contract_is_supported(declared_contract):
 		return plan.get("visual_geometry_context", {}).duplicate(true)
 	var origin_screen_px: Vector2 = plan.get(
 		"geometry_origin_screen_px", fallback_origin_screen_px
@@ -495,7 +502,8 @@ static func visual_context_from_plan(
 			)
 	return {
 		"contract_id": VISUAL_CONTRACT_ID,
-		"canonical_geometry_contract": declared_contract,
+		"canonical_geometry_contract": CONTRACT_ID,
+		"canonical_geometry_source_wire_contract": declared_contract,
 		"skill_id": skill_id,
 		"origin_screen_px": origin_screen_px,
 		"geometry_grid_cells": grid_cells,
@@ -514,6 +522,10 @@ static func visual_context_from_plan(
 		"desired_sprite_cross_axis_extent_px": desired_cross_axis_extent,
 		"visual_axis_screen_px": visual_axis_screen_px,
 	}
+
+
+static func canonical_geometry_contract_is_supported(contract_id: String) -> bool:
+	return contract_id in [CONTRACT_ID, GAME_ROOT_SCREEN_POINT_CONTRACT_ID]
 
 
 static func _stable_laser_visual_cross_extent(cell_extent: Vector2) -> float:

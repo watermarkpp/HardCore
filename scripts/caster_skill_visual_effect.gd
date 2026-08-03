@@ -9,8 +9,11 @@ const MAGIC_SHIELD_VISUAL_GROUP := "wizard_magic_shield_persistent_visual"
 const MAGIC_SHIELD_VISUAL_CONTRACT_ID := (
 	"skills.wizard.magic_shield.primary_actor_footpoint_centered_behind_body.v1"
 )
+const ACTOR_VISIBILITY_RENDER_CONTRACT_ID := (
+	"skills.caster.effect.actor_visibility_negative_one_render_lane.v1"
+)
+const ACTOR_VISIBILITY_Z_INDEX := -1
 const ATTACHMENT_DRAW_ORDER_BEHIND_ACTOR := "behind_attached_actor_same_footpoint"
-const BEHIND_ACTOR_SORT_EPSILON := 0.001
 const SINGLE_ACTIVE_LASER_VISUAL_GROUP := "wizard_laser_single_active_visual"
 const SINGLE_ACTIVE_LASER_VISUAL_CONTRACT_ID := (
 	"skills.wizard.laser.single_active_visual_per_caster.v1"
@@ -105,6 +108,18 @@ func _ready() -> void:
 		set_meta("magic_shield_visual_contract", MAGIC_SHIELD_VISUAL_CONTRACT_ID)
 	var entry := CasterSkillVisualRegistry.profile(skill_id)
 	visual_role = str(entry.get("role", ""))
+	# Generic spell visuals live in the actor-composited world, while projectiles,
+	# ground fields and summons have dedicated runtimes.  A fixed z=-1 lane keeps
+	# every generic effect below z=0 actors without lifting the player above map
+	# occluders or monsters.  Relying on a tiny y-sort offset was not a draw-order
+	# contract: equal/near-equal footpoints could still make a full-frame effect
+	# cover the actor, and the result changed while the actor moved.
+	z_as_relative = true
+	z_index = ACTOR_VISIBILITY_Z_INDEX
+	set_meta(
+		"actor_visibility_render_contract",
+		ACTOR_VISIBILITY_RENDER_CONTRACT_ID
+	)
 	if not CasterSkillVisualRegistry.is_runtime_ready(skill_id):
 		rejection_reason = CasterSkillVisualRegistry.runtime_readiness_reason(skill_id)
 		target_node = null
@@ -174,18 +189,10 @@ func _process(delta: float) -> void:
 
 
 func _sync_actor_attachment_position() -> void:
-	# Keep the exact same fractional footpoint as the actor. Rounding only the
-	# shield made its sort key jump from one side of the player to the other when
-	# the actor crossed a half pixel: at y=77.4 it sorted behind, while y=77.6
-	# rounded to 78 and sorted in front. That explains both the stationary body
-	# being fully covered and the moving body flicker.
-	var attached_footpoint := target_node.global_position
-	# The shared world is y-sorted. A tiny negative sort-key offset keeps the
-	# shield deterministically behind the body without changing its raster-visible
-	# footpoint or placing it below the map layer through a global negative z-index.
-	if _attachment_draw_order == ATTACHMENT_DRAW_ORDER_BEHIND_ACTOR:
-		attached_footpoint.y -= BEHIND_ACTOR_SORT_EPSILON
-	global_position = attached_footpoint
+	# Preserve the exact fractional actor footpoint. Draw order is owned by the
+	# explicit actor-visibility z lane above; position is never perturbed to fake
+	# sorting, so attached effects cannot flicker across half-pixel boundaries.
+	global_position = target_node.global_position
 
 
 func is_persistent_magic_shield_visual() -> bool:
