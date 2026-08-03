@@ -66,6 +66,20 @@ func _verify_projectile_release_sweeps() -> void:
 		assert(not projectile.release_snapshot_intersects_target_footprint_ground_gu(
 			middle_ground_gu + side_ground_gu * 0.501, 0.25
 		))
+		add_child(projectile)
+		projectile._physics_process(0.10)
+		var segment_snapshot: Dictionary = (
+			projectile.last_segment_footprint_snapshot
+		)
+		assert(Snapshot.is_valid(segment_snapshot))
+		assert(segment_snapshot.is_read_only())
+		assert(segment_snapshot.parent_snapshot_id == snapshot.snapshot_id)
+		assert(segment_snapshot.segment_index == 0)
+		assert(segment_snapshot.release_id.ends_with(":segment:0"))
+		assert(is_equal_approx(
+			float(segment_snapshot.effect_length_gu),
+			projectile.speed_gu_per_sec * 0.10
+		))
 		projectile.free()
 
 

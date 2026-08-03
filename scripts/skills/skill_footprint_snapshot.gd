@@ -228,7 +228,9 @@ static func create_swept_capsule_path(
 	segment_start_ground_gu: Vector2,
 	segment_end_ground_gu: Vector2,
 	path_radius_gu: float,
-	cap_segments := DEFAULT_CURVE_SEGMENTS / 2
+	cap_segments := DEFAULT_CURVE_SEGMENTS / 2,
+	parent_snapshot_id := "",
+	segment_index := -1
 ) -> Dictionary:
 	var safe_radius_gu := maxf(0.0, path_radius_gu)
 	var segment_ground_gu := (
@@ -288,6 +290,8 @@ static func create_swept_capsule_path(
 			"effect_length_gu": segment_ground_gu.length(),
 			"effect_width_gu": safe_radius_gu * 2.0,
 			"cap_segments": safe_cap_segments,
+			"parent_snapshot_id": parent_snapshot_id,
+			"segment_index": segment_index,
 		}
 	)
 
