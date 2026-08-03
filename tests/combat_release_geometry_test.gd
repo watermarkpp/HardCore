@@ -17,6 +17,7 @@ func _run() -> void:
 	await _verify_wild_rush_preserves_original_selected_target()
 	await _verify_target_centered_spatial_cast_policies()
 	await _verify_continuous_line_releases_use_live_target_axis()
+	_verify_attack_and_skill_release_ids_are_unique_and_stable()
 	_verify_locked_melee_facing_contract()
 	print("COMBAT_RELEASE_GEOMETRY_PASS: live footpoints, locked melee facing, target-centred casts retain only live targets")
 	get_tree().quit(0)
@@ -258,6 +259,91 @@ func _verify_locked_melee_facing_contract() -> void:
 	assert(geometry.release_facing_policy_id == ReleaseGeometry.MELEE_RELEASE_FACING_POLICY_ID)
 	assert(ReleaseGeometry.candidate_allowed(geometry, 77))
 	assert(not ReleaseGeometry.candidate_allowed(geometry, 88))
+
+
+func _verify_attack_and_skill_release_ids_are_unique_and_stable() -> void:
+	var player := PlayerCharacter.new()
+	add_child(player)
+	player.set_physics_process(false)
+	var attack_release_ids: Array[String] = []
+	var skill_release_ids: Array[String] = []
+	player.attack_requested.connect(func(
+		_origin: Vector2,
+		_direction: Vector2,
+		_damage: int
+	) -> void:
+		var context := player.consume_attack_context()
+		attack_release_ids.append(str(
+			context.get("release_geometry", {}).get("release_id", "")
+		))
+	)
+	player.skill_requested.connect(func(
+		_skill_name: String,
+		_origin: Vector2,
+		_direction: Vector2,
+		_damage: int
+	) -> void:
+		var context := player.consume_skill_context()
+		skill_release_ids.append(str(
+			context.get("release_geometry", {}).get("release_id", "")
+		))
+	)
+
+	var first_attack_action_id: int = player._begin_combat_action("test_attack_1")
+	player._emit_attack_after_windup(
+		1,
+		0.0,
+		{"mode": "normal"},
+		first_attack_action_id,
+		Vector2.RIGHT,
+		0
+	)
+	assert(attack_release_ids.size() == 1)
+	var expected_first_attack_id := "player:%d:action:%d" % [
+		player.get_instance_id(),
+		first_attack_action_id,
+	]
+	assert(attack_release_ids[0] == expected_first_attack_id)
+	player._finish_combat_action(first_attack_action_id)
+
+	var skill_action_id: int = player._begin_combat_action("test_skill")
+	player._emit_skill_after_windup(
+		"wizard.laser",
+		1,
+		0.0,
+		skill_action_id,
+		Vector2.RIGHT,
+		0,
+		false
+	)
+	assert(skill_release_ids.size() == 1)
+	var expected_skill_id := "player:%d:action:%d" % [
+		player.get_instance_id(),
+		skill_action_id,
+	]
+	assert(skill_release_ids[0] == expected_skill_id)
+	assert(skill_release_ids[0] != attack_release_ids[0])
+	player._finish_combat_action(skill_action_id)
+
+	var second_attack_action_id: int = player._begin_combat_action("test_attack_2")
+	player._emit_attack_after_windup(
+		1,
+		0.0,
+		{"mode": "normal"},
+		second_attack_action_id,
+		Vector2.RIGHT,
+		0
+	)
+	assert(attack_release_ids.size() == 2)
+	assert(attack_release_ids[1] == "player:%d:action:%d" % [
+		player.get_instance_id(),
+		second_attack_action_id,
+	])
+	assert(attack_release_ids[1] != attack_release_ids[0])
+	assert(attack_release_ids[1] != skill_release_ids[0])
+	assert(attack_release_ids[0] == expected_first_attack_id)
+	assert(skill_release_ids[0] == expected_skill_id)
+	player.free()
 
 
 func _cast_and_capture(skill_name: String, expects_tracking: bool) -> Dictionary:
