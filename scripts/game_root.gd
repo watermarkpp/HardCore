@@ -3665,7 +3665,8 @@ func _apply_canonical_effects(
 					"damage",
 					0,
 					0.0,
-					stable_skill_id
+					stable_skill_id,
+					str(target_context.get("release_id", ""))
 				)
 			"targeted_sky_strike", "line_damage", "piercing_line_damage", "area_damage", "caster_centered_area_damage":
 				var raw_power := int(effect.get("raw_power_after_race", effect.get("raw_power", 0)))
@@ -4654,7 +4655,8 @@ func _spawn_projectile(
 	effect := "damage",
 	effect_strength := 0,
 	effect_duration := 0.0,
-	source_skill_id := ""
+	source_skill_id := "",
+	source_release_id := ""
 ) -> void:
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(source_skill_id)
 	var formal_maximum_distance_gu := maxf(0.0, maximum_distance_gu)
@@ -4695,7 +4697,8 @@ func _spawn_projectile(
 		effect,
 		effect_strength,
 		effect_duration,
-		source_skill_id
+		source_skill_id,
+		source_release_id
 	)
 	projectile.configure_runtime_resolution(player, Callable(self, "_resolve_magic_defense"))
 	add_child(projectile)
