@@ -1,6 +1,8 @@
 # Codex 精简上下文快照
 
-## 2026-08-03：远端直线技能命中合同与人物遮挡修复（未构建 APK）
+## 2026-08-03：远端直线技能命中合同与人物遮挡修复（Android 实机测试包）
+
+- 当前 Android 实机测试包由提交 `151c27a331d2dd3eca78e8a214d21de8f3f188ba` 隔离构建：`outputs/hardcore/HardCore-v63-caster-thrust-alignment-debug.apk`，大小 `244,489,650` 字节，SHA-256 `56F952EC1AB519C3A087438383B599E01809995EAA587A52CC75215C542016F0`。签名、包名、版本、横屏配置与运行时资源探针通过；已在 HONOR 90（REA-AN00）使用 `adb install -r` 保留数据覆盖安装并冷启动，回读 `versionCode=63`、`versionName=1.18.0-combat-unit-gu`、前台 `GodotAppLauncher` 与进程正常，启动日志无脚本错误、解析错误、Android 崩溃或 ANR。
 
 - 根因已经闭环：`GameRoot` 原先发出旧视觉合同 `skills.visual.geometry_cells.world_projection.v1`，而职业技能视觉只识别正式 `skills.visual.geometry_grid_steps.screen_px_projection.v2`。因此实机视觉会回退到原生/半径尺寸，伤害仍按正式连续 GU 条带结算，形成距离越远越明显的“动画碰到但不掉血”；刺杀远端、地狱火与疾光电影均纳入同一释放帧脚点/视觉中心线/伤害足印回归。
 - 集成发出端现在直接使用 `CasterSpellGeometry.CONTRACT_ID`；专业层保留旧 v1 输入兼容并统一规范化为 v2。地形把直线截断为 `0 GU` 时不再错误显示完整 5/8 GU 动画。正式范围没有扩大：刺杀仍为 `2.5 GU`，地狱火仍为 `5×1 GU`，疾光电影仍为 `8×1 GU`。
