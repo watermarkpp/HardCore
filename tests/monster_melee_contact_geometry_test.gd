@@ -1,6 +1,9 @@
 extends Node2D
 
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const SkillFootprintSnapshotScript := preload(
+	"res://scripts/skills/skill_footprint_snapshot.gd"
+)
 const START_DISTANCE_GU := 3.0
 const SETTLED_POSITION_EPSILON_GU := 0.002
 
@@ -27,6 +30,42 @@ func _run() -> void:
 	ranged_probe.setup(GameData.get_monster("火焰沃玛"), player, false)
 	assert(is_equal_approx(ranged_probe.attack_range_gu, 155.0 / 32.0), "远程旧PX范围未在adapter边界转换为GU")
 	assert(not ranged_probe._uses_player_melee_contact_contract(player))
+	ranged_probe.global_position = Vector2.ZERO
+	ranged_probe.set_physics_process(false)
+	add_child(ranged_probe)
+	player.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		Vector2(4.0, 0.0)
+	)
+	var ranged_hp_before := player.current_hp
+	ranged_probe._deal_melee_hit(player, 5)
+	assert(player.current_hp < ranged_hp_before, "ranged release sweep did not deal damage")
+	assert(
+		str(ranged_probe._last_attack_footprint_snapshot.shape_type)
+		== SkillFootprintSnapshotScript.SHAPE_SWEPT_CAPSULE_PATH,
+		"ranged release is not represented by a swept GU path",
+	)
+	assert(
+		str(ranged_probe._last_attack_footprint_snapshot.projection_relationship_id)
+		== EnemyActor.PROJECTION_RELATIONSHIP_PROJECTILE_SWEEP,
+		"ranged release does not declare projectile_sweep",
+	)
+	assert(
+		Vector2(ranged_probe._last_attack_footprint_snapshot.segment_start_ground_gu)
+		.is_equal_approx(
+			ranged_probe._screen_position_px_to_ground_position_gu(
+				ranged_probe.global_position
+			)
+		),
+		"ranged sweep does not start at the attacker release footpoint",
+	)
+	assert(
+		Vector2(ranged_probe._last_attack_footprint_snapshot.segment_end_ground_gu)
+		.is_equal_approx(
+			ranged_probe._screen_position_px_to_ground_position_gu(player.global_position)
+		),
+		"ranged sweep does not end at the selected target footpoint",
+	)
+	player.global_position = Vector2.ZERO
 	ranged_probe.free()
 
 	var final_distances_gu: Array[float] = []
@@ -80,6 +119,29 @@ func _run() -> void:
 			player.global_position - enemy.global_position
 		)
 		final_distances_gu.append(final_delta_ground_gu.length())
+		var hp_before := player.current_hp
+		enemy._deal_melee_hit(player, 5)
+		assert(player.current_hp < hp_before, "direction %d footprint contact did not deal damage" % direction_index)
+		assert(
+			SkillFootprintSnapshotScript.is_valid(enemy._last_attack_footprint_snapshot),
+			"direction %d attack did not publish a GU footprint snapshot" % direction_index,
+		)
+		assert(
+			str(enemy._last_attack_footprint_snapshot.shape_type)
+			== SkillFootprintSnapshotScript.SHAPE_CIRCLE,
+			"direction %d ordinary attack is not target-footprint geometry" % direction_index,
+		)
+		assert(
+			str(enemy._last_attack_footprint_snapshot.projection_relationship_id)
+			== EnemyActor.PROJECTION_RELATIONSHIP_RELEASE_CONTACT,
+			"direction %d melee release does not declare release_contact" % direction_index,
+		)
+		assert(
+			Vector2(enemy._last_attack_footprint_snapshot.origin_ground_gu).is_equal_approx(
+				enemy._screen_position_px_to_ground_position_gu(enemy.global_position)
+			),
+			"direction %d melee footprint origin is not the release footpoint" % direction_index,
+		)
 		enemy.queue_free()
 	await get_tree().physics_frame
 

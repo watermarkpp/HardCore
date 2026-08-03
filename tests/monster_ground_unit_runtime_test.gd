@@ -82,9 +82,14 @@ func _verify_fixed_area_range_in_32_ground_directions(enemy: EnemyActor) -> void
 		var direction_ground := Vector2.from_angle(TAU * float(direction_index) / 32.0)
 		var probe := CombatTarget.new()
 		add_child(probe)
-		probe.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(direction_ground * 3.999)
+		var target_radius_gu := enemy._target_combat_radius_gu(probe)
+		probe.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+			direction_ground * (4.0 + target_radius_gu - 0.001)
+		)
 		assert(enemy._area_attack_targets().has(probe), "fixed-area rejected inside GU boundary at direction %d" % direction_index)
-		probe.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(direction_ground * 4.01)
+		probe.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+			direction_ground * (4.0 + target_radius_gu + 0.001)
+		)
 		assert(not enemy._area_attack_targets().has(probe), "fixed-area accepted outside GU boundary at direction %d" % direction_index)
 		probe.free()
 
@@ -94,9 +99,14 @@ func _verify_boss_circle_range_in_32_ground_directions(enemy: EnemyActor) -> voi
 		var direction_ground := Vector2.from_angle(TAU * float(direction_index) / 32.0)
 		var probe := CombatTarget.new()
 		add_child(probe)
-		probe.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(direction_ground * 5.999)
+		var target_radius_gu := enemy._target_combat_radius_gu(probe)
+		probe.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+			direction_ground * (6.0 + target_radius_gu - 0.001)
+		)
 		assert(enemy._boss_skill_targets(6.0).has(probe), "boss circle rejected inside GU boundary at direction %d" % direction_index)
-		probe.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(direction_ground * 6.01)
+		probe.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+			direction_ground * (6.0 + target_radius_gu + 0.001)
+		)
 		assert(not enemy._boss_skill_targets(6.0).has(probe), "boss circle accepted outside GU boundary at direction %d" % direction_index)
 		probe.free()
 
@@ -115,12 +125,18 @@ func _verify_boss_cone_uses_ground_direction(enemy: EnemyActor) -> void:
 	}
 	for direction_index in range(16):
 		var center_direction_ground := Vector2.from_angle(TAU * float(direction_index) / 16.0)
-		var inside_direction_ground := center_direction_ground.rotated(HALF_ANGLE - 0.01)
-		var outside_direction_ground := center_direction_ground.rotated(HALF_ANGLE + 0.01)
 		var inside_probe := CombatTarget.new()
 		var outside_probe := CombatTarget.new()
 		add_child(inside_probe)
 		add_child(outside_probe)
+		var target_radius_gu := enemy._target_combat_radius_gu(inside_probe)
+		var footprint_angular_margin := asin(target_radius_gu / 4.9)
+		var inside_direction_ground := center_direction_ground.rotated(
+			HALF_ANGLE + footprint_angular_margin - 0.01
+		)
+		var outside_direction_ground := center_direction_ground.rotated(
+			HALF_ANGLE + footprint_angular_margin + 0.01
+		)
 		inside_probe.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(inside_direction_ground * 4.9)
 		outside_probe.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(outside_direction_ground * 4.9)
 		enemy._boss_skill_direction_ground = center_direction_ground
@@ -128,6 +144,11 @@ func _verify_boss_cone_uses_ground_direction(enemy: EnemyActor) -> void:
 		enemy._boss_warning = 0.001
 		enemy._update_boss_skill(0.002, 4.9)
 		assert(inside_probe.current_hp == 9999, "boss cone rejected ground-angle interior at direction %d" % direction_index)
+		assert(
+			str(enemy._last_attack_footprint_snapshot.projection_relationship_id)
+			== EnemyActor.PROJECTION_RELATIONSHIP_DIRECTED_CORE,
+			"boss cone does not declare directed_core at direction %d" % direction_index,
+		)
 		enemy.target = outside_probe
 		enemy._boss_warning = 0.001
 		enemy._update_boss_skill(0.002, 4.9)
