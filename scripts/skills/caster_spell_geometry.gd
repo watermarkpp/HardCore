@@ -581,6 +581,9 @@ static func visual_context_from_plan(
 		"formal_core_contract_id": str(
 			skill_footprint_snapshot.get("contract_id", "")
 		),
+		"debug_skill_visual_geometry": bool(
+			plan.get("debug_skill_visual_geometry", false)
+		),
 	}
 
 
