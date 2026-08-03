@@ -533,6 +533,20 @@ static func intersects_target_combat_footprint_ground_gu(
 			float(snapshot.get("path_radius_gu", 0.0))
 			+ safe_target_radius_gu
 		)
+	if str(snapshot.get("shape_type", "")) == SHAPE_CIRCLE:
+		return _circles_intersect_inclusive_ground_gu(
+			snapshot.get("center_ground_gu", Vector2.ZERO),
+			float(snapshot.get("radius_gu", 0.0)),
+			target_center_ground_gu,
+			safe_target_radius_gu
+		)
+	if str(snapshot.get("shape_type", "")) == SHAPE_TARGET_FOOTPRINT:
+		return _circles_intersect_inclusive_ground_gu(
+			snapshot.get("target_center_ground_gu", Vector2.ZERO),
+			float(snapshot.get("target_combat_radius_gu", 0.0)),
+			target_center_ground_gu,
+			safe_target_radius_gu
+		)
 	var target_polygon_ground_gu := PackedVector2Array()
 	for offset_ground_gu: Vector2 in (
 		WorldSpatialRulesScript.actor_footprint_ground_polygon_gu(
@@ -697,6 +711,23 @@ static func _swept_segment_intersects_circle_inclusive_ground_gu(
 	)
 	return (
 		closest_relative_gu.length_squared()
+		<= inclusive_radius_gu * inclusive_radius_gu
+	)
+
+
+static func _circles_intersect_inclusive_ground_gu(
+	left_center_ground_gu: Vector2,
+	left_radius_gu: float,
+	right_center_ground_gu: Vector2,
+	right_radius_gu: float
+) -> bool:
+	var inclusive_radius_gu := (
+		maxf(0.0, left_radius_gu)
+		+ maxf(0.0, right_radius_gu)
+		+ CONTACT_EPSILON_GU
+	)
+	return (
+		left_center_ground_gu.distance_squared_to(right_center_ground_gu)
 		<= inclusive_radius_gu * inclusive_radius_gu
 	)
 
