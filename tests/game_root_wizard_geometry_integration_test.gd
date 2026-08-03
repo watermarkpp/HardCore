@@ -189,6 +189,31 @@ func _run() -> void:
 		laser_aim_direction_ground_gu
 	))
 	assert(is_equal_approx(float(laser_strip.effect_length_gu), 8.0))
+	var visual_children_before := game.get_child_count()
+	game._spawn_canonical_cast_visual(
+		"wizard.laser",
+		game.player.global_position,
+		laser_aim_screen_px,
+		null,
+		game.player.global_position + laser_aim_screen_px,
+		[],
+		laser_strip
+	)
+	assert(game.get_child_count() == visual_children_before + 1)
+	var shared_geometry_visual := game.get_child(game.get_child_count() - 1)
+	assert(shared_geometry_visual is CasterSkillVisualEffect)
+	var expected_laser_screen_points: Array[Vector2] = (
+		SpellGeometry.continuous_line_screen_points_px(
+			laser_strip,
+			Callable(game, "_canonical_ground_gu_to_screen_px")
+		)
+	)
+	assert(not expected_laser_screen_points.is_empty())
+	assert(not shared_geometry_visual._geometry_screen_offsets_px.is_empty())
+	assert(shared_geometry_visual._geometry_screen_offsets_px.back().is_equal_approx(
+		expected_laser_screen_points.back() - game.player.global_position
+	))
+	shared_geometry_visual.free()
 	var near_laser_target := _make_enemy_at_fractional_tile(
 		game,
 		game.player,

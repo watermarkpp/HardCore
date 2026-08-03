@@ -1,5 +1,13 @@
 # Codex 精简上下文快照
 
+## 2026-08-03：远端直线技能命中合同与人物遮挡修复（未构建 APK）
+
+- 根因已经闭环：`GameRoot` 原先发出旧视觉合同 `skills.visual.geometry_cells.world_projection.v1`，而职业技能视觉只识别正式 `skills.visual.geometry_grid_steps.screen_px_projection.v2`。因此实机视觉会回退到原生/半径尺寸，伤害仍按正式连续 GU 条带结算，形成距离越远越明显的“动画碰到但不掉血”；刺杀远端、地狱火与疾光电影均纳入同一释放帧脚点/视觉中心线/伤害足印回归。
+- 集成发出端现在直接使用 `CasterSpellGeometry.CONTRACT_ID`；专业层保留旧 v1 输入兼容并统一规范化为 v2。地形把直线截断为 `0 GU` 时不再错误显示完整 5/8 GU 动画。正式范围没有扩大：刺杀仍为 `2.5 GU`，地狱火仍为 `5×1 GU`，疾光电影仍为 `8×1 GU`。
+- 魔法盾及所有与人物相交的通用施法特效固定使用世界渲染 `z=-1`，人物/怪物保持 `z=0`，地图背景仍低于特效；不再通过脚点偏移或 y-sort 微量偏移伪造层级。人物静止和移动时都应保持可见。
+- 移动速度审计结论：v62 的屏幕空间 `190 PX/s` 等价于不同方向 `4.1984..8.3969 GU/s`，方向间相差 2 倍；当前正式速度来自 `2 GU / 0.600s = 3.333333 GU/s`，32 个方向地面速度一致。因此当前较慢是正确的正式基线，禁止恢复旧 PX 速度；后续若需提速只能统一调整一个 `GU/s` 标量。
+- 验证：新增定向回归 `9/9`、完整 Warrior `25/25`、关键套件前段 `73` 项连续通过且 `0` 失败、外层 300 秒时限后的怪物尾段补跑 `18/18`。冻结的 236/240 头盔人工草稿与三份怪物脚点合同保持原哈希。
+
 ## 2026-08-03 COMBAT-UNIT-V1.0 全项目 GU/GS/PX 迁移完成
 
 - Android 固定构建提交为 `665c21beb894297617fdac6bccc342b4c052c4b1`；APK 为 `outputs/hardcore/HardCore-v63-combat-unit-gu-debug.apk`，大小 `244,485,554` 字节，SHA-256 `C380B2F050E8053D282B9740162A8D8C39D6A1CB4341DF6AB0ECCEA24ABC7F63`。包信息为 `versionCode=63`、`versionName=1.18.0-combat-unit-gu`、`HardCore`、`arm64-v8a`、`minSdk=24`、`targetSdk=36`，APK v2/v3 签名与运行时资源探针通过。

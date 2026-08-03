@@ -70,7 +70,6 @@ const SAFE_RING_TELEPORT_DISTANCES_GU := [
 const RANDOM_TELEPORT_MIN_DISTANCE_GU := 3.0
 const RANDOM_TELEPORT_MAX_DISTANCE_GU := 16.25
 const RANDOM_TELEPORT_ACTOR_CLEARANCE_GU := 0.25
-const CASTER_GEOMETRY_VISUAL_CONTRACT_ID := "skills.visual.geometry_cells.world_projection.v1"
 const CANONICAL_WIZARD_GEOMETRY_SKILLS := [
 	"wizard.hellfire",
 	"wizard.hell_lightning",
@@ -4352,7 +4351,11 @@ func _spawn_canonical_cast_visual(
 		"visual": visual_profile,
 		"visual_duration": CasterSkillVisualRegistry.animation_duration(stable_skill_id),
 		"visual_radius_px": 72.0,
-		"canonical_geometry_contract": CASTER_GEOMETRY_VISUAL_CONTRACT_ID,
+		# Visuals and damage must consume the exact same versioned geometry
+		# contract.  The former local v1 identifier was not recognized by
+		# CasterSpellGeometry.visual_context_from_plan(), so runtime visuals fell
+		# back to native/radius sizing while damage used the formal 5/8-GU strip.
+		"canonical_geometry_contract": CasterSpellGeometryScript.CONTRACT_ID,
 		"geometry_origin_screen_px": origin,
 		"geometry_grid_cells": geometry_grid_cells,
 		"geometry_screen_points_px": geometry_screen_points_px,
