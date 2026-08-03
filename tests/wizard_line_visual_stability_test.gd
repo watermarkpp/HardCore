@@ -276,7 +276,9 @@ func _line_plan(
 		tile_aim,
 		Vector2.RIGHT,
 		length_tiles,
-		1.0
+		1.0,
+		skill_id,
+		"stability_%s_%02d" % [skill_id, sample_index]
 	)
 	var world_points := SpellGeometry.continuous_line_screen_points_px(
 		strip,
@@ -300,6 +302,7 @@ func _line_plan(
 	plan["geometry_origin_screen_px"] = Vector2.ZERO
 	plan["geometry_grid_cells"] = []
 	plan["geometry_screen_points_px"] = world_points
+	plan["skill_footprint_snapshot"] = strip.skill_footprint_snapshot
 	return plan
 
 
