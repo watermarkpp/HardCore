@@ -31,6 +31,9 @@ const DISCRETE_CELL_FOOTPRINT_RESOLVER_CONTRACT_ID := (
 const EXACT_CELL_UNION_RELEASE_CONTRACT_ID := (
 	"skills.caster.ground_exact.cell_union_release_snapshot.v1"
 )
+const SNAPSHOT_VISUAL_PROJECTION_CONTRACT_ID := (
+	"skills.caster.snapshot_visual_projection_consumer.v1"
+)
 const CONTACT_EPSILON := 0.0001
 
 
@@ -433,13 +436,6 @@ static func visual_context_from_plan(
 	fallback_origin_screen_px: Vector2
 ) -> Dictionary:
 	var declared_contract := str(plan.get("canonical_geometry_contract", ""))
-	if not canonical_geometry_contract_is_supported(declared_contract):
-		return plan.get("visual_geometry_context", {}).duplicate(true)
-	var origin_screen_px: Vector2 = plan.get(
-		"geometry_origin_screen_px", fallback_origin_screen_px
-	)
-	var raw_screen_points_px: Variant = plan.get("geometry_screen_points_px", [])
-	var raw_grid_cells: Variant = plan.get("geometry_grid_cells", [])
 	var raw_skill_footprint_snapshot: Variant = plan.get(
 		"skill_footprint_snapshot", {}
 	)
@@ -453,6 +449,20 @@ static func visual_context_from_plan(
 		)
 		else {}
 	)
+	var snapshot_projection_context := snapshot_visual_projection_context(
+		skill_footprint_snapshot, fallback_origin_screen_px
+	)
+	if not canonical_geometry_contract_is_supported(declared_contract):
+		var compatibility_context: Dictionary = plan.get(
+			"visual_geometry_context", {}
+		).duplicate(true)
+		compatibility_context.merge(snapshot_projection_context, true)
+		return compatibility_context
+	var origin_screen_px: Vector2 = plan.get(
+		"geometry_origin_screen_px", fallback_origin_screen_px
+	)
+	var raw_screen_points_px: Variant = plan.get("geometry_screen_points_px", [])
+	var raw_grid_cells: Variant = plan.get("geometry_grid_cells", [])
 	var screen_points_px: Array[Vector2] = []
 	var screen_offsets_px: Array[Vector2] = []
 	if raw_screen_points_px is Array:
@@ -588,7 +598,7 @@ static func visual_context_from_plan(
 		formal_core_axis_screen_offset_px = skill_footprint_snapshot.get(
 			"axis_screen_offset_px", Vector2.ZERO
 		)
-	return {
+	var result := {
 		"contract_id": VISUAL_CONTRACT_ID,
 		"canonical_geometry_contract": CONTRACT_ID,
 		"canonical_geometry_source_wire_contract": declared_contract,
@@ -619,6 +629,90 @@ static func visual_context_from_plan(
 		),
 		"debug_skill_visual_geometry": bool(
 			plan.get("debug_skill_visual_geometry", false)
+		),
+	}
+	result.merge(snapshot_projection_context, true)
+	return result
+
+
+static func snapshot_visual_projection_context(
+	skill_footprint_snapshot: Dictionary,
+	fallback_origin_screen_px: Vector2
+) -> Dictionary:
+	if not SkillFootprintSnapshotScript.is_valid(skill_footprint_snapshot):
+		return {}
+	var shape_type := str(skill_footprint_snapshot.get("shape_type", ""))
+	var anchor_ground_gu: Vector2
+	var anchor_policy := "release_origin"
+	match shape_type:
+		SkillFootprintSnapshotScript.SHAPE_TARGET_FOOTPRINT:
+			anchor_ground_gu = skill_footprint_snapshot.get(
+				"target_center_ground_gu", Vector2.ZERO
+			)
+			anchor_policy = "target_release_frame_footpoint"
+		SkillFootprintSnapshotScript.SHAPE_CIRCLE:
+			anchor_ground_gu = skill_footprint_snapshot.get(
+				"center_ground_gu", Vector2.ZERO
+			)
+			anchor_policy = "circle_center_ground_gu"
+		SkillFootprintSnapshotScript.SHAPE_SWEPT_CAPSULE_PATH:
+			anchor_ground_gu = skill_footprint_snapshot.get(
+				"segment_start_ground_gu", Vector2.ZERO
+			)
+			anchor_policy = "sweep_segment_start_diagnostic_only"
+		_:
+			anchor_ground_gu = skill_footprint_snapshot.get(
+				"origin_ground_gu", Vector2.ZERO
+			)
+	var anchor_screen_px := (
+		GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+			anchor_ground_gu
+		)
+	)
+	var anchor_offset_from_effect_px := (
+		anchor_screen_px - fallback_origin_screen_px
+	)
+	var projected_polygons_from_anchor := (
+		SkillFootprintSnapshotScript.projected_polygons_screen_offset_px(
+			skill_footprint_snapshot
+		)
+	)
+	var projected_polygons_local_to_effect: Array[PackedVector2Array] = []
+	for polygon_from_anchor: PackedVector2Array in projected_polygons_from_anchor:
+		var local_polygon := PackedVector2Array()
+		for point_from_anchor: Vector2 in polygon_from_anchor:
+			local_polygon.append(
+				point_from_anchor + anchor_offset_from_effect_px
+			)
+		projected_polygons_local_to_effect.append(local_polygon)
+	var visual_core_policy := "projected_polygon_core"
+	if shape_type == SkillFootprintSnapshotScript.SHAPE_CELL_UNION:
+		visual_core_policy = "all_exact_cell_polygons_no_bounding_shape"
+	elif shape_type == SkillFootprintSnapshotScript.SHAPE_TARGET_FOOTPRINT:
+		visual_core_policy = "target_anchor_and_footprint_no_extra_area"
+	elif shape_type == SkillFootprintSnapshotScript.SHAPE_SWEPT_CAPSULE_PATH:
+		visual_core_policy = "diagnostic_only_do_not_force_capsule_visual"
+	return {
+		"snapshot_visual_projection_contract_id": (
+			SNAPSHOT_VISUAL_PROJECTION_CONTRACT_ID
+		),
+		"skill_footprint_snapshot": skill_footprint_snapshot,
+		"snapshot_shape_type": shape_type,
+		"snapshot_anchor_policy": anchor_policy,
+		"snapshot_anchor_ground_gu": anchor_ground_gu,
+		"snapshot_anchor_screen_px": anchor_screen_px,
+		"snapshot_anchor_offset_from_effect_px": (
+			anchor_offset_from_effect_px
+		),
+		"snapshot_projected_polygons_screen_offset_px": (
+			projected_polygons_from_anchor
+		),
+		"snapshot_projected_polygons_local_to_effect_px": (
+			projected_polygons_local_to_effect
+		),
+		"snapshot_visual_core_policy": visual_core_policy,
+		"decoration_sprite_transform_policy": (
+			"source_asset_unchanged_no_snapshot_rescale"
 		),
 	}
 

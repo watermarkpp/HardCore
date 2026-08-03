@@ -64,6 +64,9 @@ func _ready() -> void:
 			"target_position": target.global_position,
 			"direction": Vector2.RIGHT,
 			"teleport_destination": Vector2(144, 48),
+			"spatial_test_adapter_id": (
+				CasterSkillRuntime.NON_PRODUCTION_SPATIAL_ADAPTER_ID
+			),
 		})
 		assert(cast_result.accepted, "%s rejected: %s" % [skill_id, cast_result.get("reason", "")])
 		assert(cast_result.package_contract == "caster_profession_package.v1")

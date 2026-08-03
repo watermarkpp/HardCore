@@ -150,8 +150,12 @@ func _ready() -> void:
 		"origin": repulsion_origin_screen_px,
 		"direction": Vector2.RIGHT,
 		"affected_targets": [repulsion_target],
+		"spatial_test_adapter_id": (
+			CasterSkillRuntime.NON_PRODUCTION_SPATIAL_ADAPTER_ID
+		),
 	})
 	assert(repulsion_result.applied_count == 1)
+	assert(repulsion_result.compatibility_adapter_used)
 	assert(repulsion_target.global_position.is_equal_approx(
 		repulsion_origin_screen_px
 		+ GroundUnitSpace.ground_delta_gu_to_screen_delta_px(Vector2.RIGHT * 2.0)

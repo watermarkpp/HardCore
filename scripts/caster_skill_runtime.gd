@@ -9,6 +9,9 @@ const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
+const SkillSpatialProjectionContractScript := preload(
+	"res://scripts/skills/skill_spatial_projection_contract.gd"
+)
 const WorldSpatialRules := preload("res://scripts/world_spatial_rules.gd")
 const SkillDataLoaderScript := preload(
 	"res://scripts/skills/skill_data_loader.gd"
@@ -18,6 +21,12 @@ const CombatUnitLegacyAdapterScript := preload(
 )
 
 const RUNTIME_CONTRACT_ID := "caster_skill_runtime.ground_units.v2"
+const EXECUTION_SNAPSHOT_GATE_CONTRACT_ID := (
+	"caster_skill_execution.spatial_snapshot_gate.v1"
+)
+const NON_PRODUCTION_SPATIAL_ADAPTER_ID := (
+	"caster_skill_execution.non_production_spatial_test_adapter.v1"
+)
 const FIRE_WALL_CELL_SPACING_GU := 1.0
 const FIRE_WALL_EFFECT_RADIUS_GU := 0.5
 const FIRE_WALL_VISUAL_RADIUS_PX := 22.08
@@ -477,8 +486,12 @@ static func create_cast_nodes(
 
 static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 	var release_id := _release_id(plan, context)
+	var skill_id := str(plan.get("skill_id", ""))
+	var spatial_relationship := (
+		SkillSpatialProjectionContractScript.relationship_type(skill_id)
+	)
 	var result := {
-		"skill_id": str(plan.get("skill_id", "")),
+		"skill_id": skill_id,
 		"success": bool(plan.get("success", false)),
 		"operation": str(plan.get("operation", "")),
 		"applied_count": 0,
@@ -488,6 +501,14 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 		"runtime_contract": "caster_skill_execution.v1",
 		"release_id": release_id,
 		"skill_footprint_snapshot": {},
+		"spatial_relationship": spatial_relationship,
+		"spatial_snapshot_gate_contract": (
+			EXECUTION_SNAPSHOT_GATE_CONTRACT_ID
+		),
+		"spatial_snapshot_gate": "not_applicable",
+		"compatibility_adapter_used": false,
+		"compatibility_adapter_id": "",
+		"child_movement_snapshots": [],
 	}
 	if not result.success:
 		return result
@@ -505,6 +526,14 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 		return result
 	var caster := context.get("caster") as PlayerCharacter
 	var primary_target := context.get("primary_target") as Node2D
+	var raw_plan_snapshot: Variant = plan.get("skill_footprint_snapshot", {})
+	if (
+		raw_plan_snapshot is Dictionary
+		and _snapshot_matches_release(
+			raw_plan_snapshot as Dictionary, skill_id, release_id
+		)
+	):
+		result.skill_footprint_snapshot = raw_plan_snapshot
 	var targeted_release_actor: Node2D = primary_target
 	if (
 		targeted_release_actor == null
@@ -513,11 +542,11 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 		targeted_release_actor = caster
 	if (
 		targeted_release_actor != null
-		and TARGET_FOOTPRINT_SKILL_IDS.has(str(plan.get("skill_id", "")))
+		and TARGET_FOOTPRINT_SKILL_IDS.has(skill_id)
 	):
 		result.skill_footprint_snapshot = (
 			_create_target_footprint_snapshot(
-				str(plan.get("skill_id", "")),
+				skill_id,
 				release_id,
 				targeted_release_actor
 			)
@@ -525,12 +554,12 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 	var origin := context.get("origin", caster.global_position if caster != null else Vector2.ZERO) as Vector2
 	var geometry_cells_grid_steps := _geometry_cells_grid_steps(plan)
 	if (
-		GROUND_EXACT_SKILL_IDS.has(str(plan.get("skill_id", "")))
+		GROUND_EXACT_SKILL_IDS.has(skill_id)
 		and not geometry_cells_grid_steps.is_empty()
 	):
 		result.skill_footprint_snapshot = (
 			CasterSpellGeometryScript.create_exact_cell_union_release_snapshot(
-				str(plan.get("skill_id", "")),
+				skill_id,
 				release_id,
 				GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(origin),
 				geometry_cells_grid_steps
@@ -557,6 +586,36 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 			else fallback_target_position_screen_px
 		)
 	) as Vector2
+	if (
+		skill_id == "wizard.teleport"
+		and context.has("teleport_destination")
+		and caster != null
+	):
+		result.skill_footprint_snapshot = (
+			SkillFootprintSnapshotScript.create_target_footprint(
+				skill_id,
+				release_id,
+				GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+					target_position
+				),
+				_target_combat_radius_gu(caster),
+				caster.get_instance_id()
+			)
+		)
+	var deferred_snapshot_operation := operation in [
+		"projectile_damage", "ground_dot", "summon",
+	]
+	if (
+		SkillSpatialProjectionContractScript.requires_release_snapshot(skill_id)
+		and not deferred_snapshot_operation
+		and not _snapshot_matches_release(
+			result.skill_footprint_snapshot, skill_id, release_id
+		)
+	):
+		if not _use_non_production_spatial_adapter(context, result):
+			result.adapter_required = "skill_footprint_snapshot"
+			result.spatial_snapshot_gate = "blocked_missing_release_snapshot"
+			return result
 	var node_plan := plan.duplicate(true)
 	node_plan["release_id"] = release_id
 	node_plan["skill_footprint_snapshot"] = result.skill_footprint_snapshot
@@ -574,6 +633,38 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 		caster,
 		int(context.get("spiritual_power", 1)),
 		int(context.get("owner_level", 1))
+	)
+	for node: Node2D in nodes:
+		var node_snapshot := _node_release_snapshot(node)
+		if (
+			result.skill_footprint_snapshot.is_empty()
+			and _snapshot_matches_release(
+				node_snapshot, skill_id, release_id
+			)
+		):
+			result.skill_footprint_snapshot = node_snapshot
+	if (
+		SkillSpatialProjectionContractScript.requires_release_snapshot(skill_id)
+		and not _snapshot_matches_release(
+			result.skill_footprint_snapshot, skill_id, release_id
+		)
+		and not bool(result.compatibility_adapter_used)
+	):
+		for node: Node2D in nodes:
+			node.free()
+		result.adapter_required = "skill_footprint_snapshot"
+		result.spatial_snapshot_gate = "blocked_missing_runtime_node_snapshot"
+		return result
+	result.spatial_snapshot_gate = (
+		"explicit_non_production_adapter"
+		if bool(result.compatibility_adapter_used)
+		else (
+			"validated_release_snapshot"
+			if SkillSpatialProjectionContractScript.requires_release_snapshot(
+				skill_id
+			)
+			else "not_applicable"
+		)
 	)
 	var parent := context.get("parent") as Node
 	for node: Node2D in nodes:
@@ -598,9 +689,12 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 				if (
 					target is EnemyActor
 					and target == primary_target
-					and _target_matches_release_snapshot(
-						result.skill_footprint_snapshot,
-						target
+					and (
+						bool(result.compatibility_adapter_used)
+						or _target_matches_release_snapshot(
+							result.skill_footprint_snapshot,
+							target
+						)
 					)
 				):
 					_apply_direct_spell_damage(
@@ -616,8 +710,8 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 				if (
 					target is EnemyActor
 					and (
-						operation != "area_damage"
-						or _target_intersects_ground_exact_snapshot(
+						bool(result.compatibility_adapter_used)
+						or _target_intersects_release_snapshot(
 							result.skill_footprint_snapshot, target
 						)
 					)
@@ -635,20 +729,38 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 				if (
 					ally is PlayerCharacter
 					and ally == targeted_release_actor
-					and _target_matches_release_snapshot(
-						result.skill_footprint_snapshot,
-						ally
+					and (
+						bool(result.compatibility_adapter_used)
+						or _target_matches_release_snapshot(
+							result.skill_footprint_snapshot,
+							ally
+						)
 					)
 				):
 					ally.restore_health(int(plan.get("healing", 0)))
 					result.applied_count += 1
 		"heal_area":
 			for ally: Node2D in allies:
-				if ally is PlayerCharacter:
+				if (
+					ally is PlayerCharacter
+					and (
+						bool(result.compatibility_adapter_used)
+						or _target_intersects_release_snapshot(
+							result.skill_footprint_snapshot, ally
+						)
+					)
+				):
 					ally.restore_health(int(plan.get("healing", 0)))
 					result.applied_count += 1
 		"knockback":
 			for target: Node2D in targets:
+				if (
+					not bool(result.compatibility_adapter_used)
+					and not _target_intersects_release_snapshot(
+						result.skill_footprint_snapshot, target
+					)
+				):
+					continue
 				var target_delta_ground_gu := (
 					GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
 						target.global_position - origin
@@ -667,6 +779,26 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 				var push_delta_ground_gu := (
 					push_direction_ground_gu
 					* maxf(0.0, float(plan.get("push_distance_gu", 0.0)))
+				)
+				var target_start_ground_gu := (
+					GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+						target.global_position
+					)
+				)
+				var movement_index: int = result.child_movement_snapshots.size()
+				result.child_movement_snapshots.append(
+					SkillFootprintSnapshotScript.create_swept_capsule_path(
+						skill_id,
+						"%s:movement:%d" % [release_id, movement_index],
+						target_start_ground_gu,
+						target_start_ground_gu + push_delta_ground_gu,
+						_target_combat_radius_gu(target),
+						SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS / 2,
+						str(result.skill_footprint_snapshot.get(
+							"snapshot_id", ""
+						)),
+						movement_index
+					)
 				)
 				target.global_position += (
 					GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
@@ -711,14 +843,35 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 					float(plan.get("duration_seconds", 0.0))
 				)
 				result.applied_count = 1
-		"stealth", "stealth_area":
+		"stealth":
 			for ally: Node2D in allies:
 				if ally is PlayerCharacter:
 					ally.apply_stealth(float(plan.get("duration_seconds", 0.0)))
 					result.applied_count += 1
+		"stealth_area":
+			for ally: Node2D in allies:
+				if (
+					ally is PlayerCharacter
+					and (
+						bool(result.compatibility_adapter_used)
+						or _target_intersects_release_snapshot(
+							result.skill_footprint_snapshot, ally
+						)
+					)
+				):
+					ally.apply_stealth(float(plan.get("duration_seconds", 0.0)))
+					result.applied_count += 1
 		"magic_defense_buff", "physical_defense_buff":
 			for ally: Node2D in allies:
-				if ally is PlayerCharacter:
+				if (
+					ally is PlayerCharacter
+					and (
+						bool(result.compatibility_adapter_used)
+						or _target_intersects_release_snapshot(
+							result.skill_footprint_snapshot, ally
+						)
+					)
+				):
 					ally.apply_defense_buff(
 						float(plan.get("duration_seconds", 0.0)),
 						int(context.defense_bonus)
@@ -726,7 +879,15 @@ static func execute_cast(plan: Dictionary, context: Dictionary) -> Dictionary:
 					result.applied_count += 1
 		"root_ring":
 			for target: Node2D in targets:
-				if target is EnemyActor:
+				if (
+					target is EnemyActor
+					and (
+						bool(result.compatibility_adapter_used)
+						or _target_intersects_release_snapshot(
+							result.skill_footprint_snapshot, target
+						)
+					)
+				):
 					target.apply_control(float(plan.get("duration_seconds", 0.0)))
 					result.applied_count += 1
 		"show_target_health":
@@ -767,6 +928,16 @@ static func _release_id(plan: Dictionary, context: Dictionary) -> String:
 		var candidate := str(source.get("release_id", ""))
 		if not candidate.is_empty():
 			return candidate
+	var raw_snapshot: Variant = plan.get("skill_footprint_snapshot", {})
+	if (
+		raw_snapshot is Dictionary
+		and SkillFootprintSnapshotScript.is_valid(raw_snapshot as Dictionary)
+	):
+		var snapshot_release_id := str(
+			(raw_snapshot as Dictionary).get("release_id", "")
+		)
+		if not snapshot_release_id.is_empty():
+			return snapshot_release_id
 	return "%s:cast:%d" % [
 		str(plan.get("skill_id", "unbound.caster")),
 		Time.get_ticks_usec(),
@@ -783,14 +954,12 @@ static func _geometry_cells_grid_steps(plan: Dictionary) -> Array[Vector2i]:
 	return result
 
 
-static func _target_intersects_ground_exact_snapshot(
+static func _target_intersects_release_snapshot(
 	skill_footprint_snapshot: Dictionary,
 	target: Node2D
 ) -> bool:
 	if not SkillFootprintSnapshotScript.is_valid(skill_footprint_snapshot):
-		# Compatibility callers that have not supplied formal geometry remain an
-		# explicit adapter path. The production gate is enforced separately.
-		return true
+		return false
 	return SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
 		skill_footprint_snapshot,
 		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
@@ -798,6 +967,41 @@ static func _target_intersects_ground_exact_snapshot(
 		),
 		_target_combat_radius_gu(target)
 	)
+
+
+static func _snapshot_matches_release(
+	skill_footprint_snapshot: Dictionary,
+	skill_id: String,
+	release_id: String
+) -> bool:
+	return (
+		SkillFootprintSnapshotScript.is_valid(skill_footprint_snapshot)
+		and str(skill_footprint_snapshot.get("skill_id", "")) == skill_id
+		and str(skill_footprint_snapshot.get("release_id", "")) == release_id
+	)
+
+
+static func _node_release_snapshot(node: Node2D) -> Dictionary:
+	if node is SkillProjectile:
+		return node.skill_footprint_snapshot
+	if node is GroundSkillEffect:
+		return node.skill_footprint_snapshot
+	if node is SummonActor:
+		return node.summon_spawn_footprint_snapshot
+	return {}
+
+
+static func _use_non_production_spatial_adapter(
+	context: Dictionary,
+	result: Dictionary
+) -> bool:
+	if str(context.get("spatial_test_adapter_id", "")) != (
+		NON_PRODUCTION_SPATIAL_ADAPTER_ID
+	):
+		return false
+	result.compatibility_adapter_used = true
+	result.compatibility_adapter_id = NON_PRODUCTION_SPATIAL_ADAPTER_ID
+	return true
 
 
 static func _create_target_footprint_snapshot(
