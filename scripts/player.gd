@@ -582,6 +582,10 @@ func _emit_attack_after_windup(
 			true,
 			CombatReleaseGeometryScript.FACING_POLICY_LOCKED_INPUT_EIGHT_DIRECTION
 		)
+		release_geometry["release_id"] = "player:%d:action:%d" % [
+			get_instance_id(),
+			action_id,
+		]
 		_pending_attack_context = context.duplicate(true)
 		_pending_attack_context["release_geometry"] = release_geometry
 		var release_signal_payload := combat_release_signal_payload(
@@ -612,6 +616,10 @@ func _emit_skill_after_windup(
 			locked_target_instance_id,
 			track_locked_target
 		)
+		release_geometry["release_id"] = "player:%d:action:%d" % [
+			get_instance_id(),
+			action_id,
+		]
 		_pending_skill_context = {"release_geometry": release_geometry}
 		var release_signal_payload := combat_release_signal_payload(
 			release_geometry
