@@ -184,6 +184,13 @@ func _verify_point_and_monster_radius_boundaries() -> void:
 				monster_radius_gu
 			)
 		))
+	for lateral_gu: float in [0.749, 0.750]:
+		assert(Snapshot.intersects_target_combat_footprint_ground_gu(
+			snapshot, Vector2(4.0, lateral_gu), 0.25
+		))
+	assert(not Snapshot.intersects_target_combat_footprint_ground_gu(
+		snapshot, Vector2(4.0, 0.751), 0.25
+	))
 
 
 func _verify_common_shape_builders_and_footprint_contact() -> void:
@@ -198,6 +205,13 @@ func _verify_common_shape_builders_and_footprint_contact() -> void:
 	_assert_projected_snapshot(sector, Snapshot.SHAPE_SECTOR_ARC)
 	assert(Snapshot.intersects_target_combat_footprint_ground_gu(
 		sector, Vector2(1.45, 0.0), 0.10
+	))
+	for forward_gu: float in [1.599, 1.600]:
+		assert(Snapshot.intersects_target_combat_footprint_ground_gu(
+			sector, Vector2(forward_gu, 0.0), 0.10
+		))
+	assert(not Snapshot.intersects_target_combat_footprint_ground_gu(
+		sector, Vector2(1.601, 0.0), 0.10
 	))
 	assert(not Snapshot.intersects_target_combat_footprint_ground_gu(
 		sector, Vector2(0.0, 1.45), 0.10
@@ -231,6 +245,9 @@ func _verify_common_shape_builders_and_footprint_contact() -> void:
 		capsule, Snapshot.SHAPE_SWEPT_CAPSULE_PATH
 	)
 	assert(Snapshot.intersects_target_combat_footprint_ground_gu(
+		capsule, Vector2(1.5, 0.499), 0.30
+	))
+	assert(Snapshot.intersects_target_combat_footprint_ground_gu(
 		capsule, Vector2(1.5, 0.50), 0.30
 	))
 	assert(not Snapshot.intersects_target_combat_footprint_ground_gu(
@@ -252,6 +269,9 @@ func _verify_common_shape_builders_and_footprint_contact() -> void:
 		target_footprint.target_footprint_contract_id
 		== WorldSpatialRules.ACTOR_GROUND_FOOTPRINT_CONTRACT_ID
 	)
+	assert(Snapshot.intersects_target_combat_footprint_ground_gu(
+		target_footprint, Vector2(-1.341, 5.0), 0.33
+	))
 	assert(Snapshot.intersects_target_combat_footprint_ground_gu(
 		target_footprint, Vector2(-1.34, 5.0), 0.33
 	))
@@ -287,7 +307,13 @@ func _verify_common_shape_builders_and_footprint_contact() -> void:
 				)
 			)
 	assert(Snapshot.intersects_target_combat_footprint_ground_gu(
+		cell_union, Vector2(0.599, 0.0), 0.10
+	))
+	assert(Snapshot.intersects_target_combat_footprint_ground_gu(
 		cell_union, Vector2(0.60, 0.0), 0.10
+	))
+	assert(not Snapshot.intersects_target_combat_footprint_ground_gu(
+		cell_union, Vector2(0.601, 0.0), 0.10
 	))
 	assert(not Snapshot.intersects_target_combat_footprint_ground_gu(
 		cell_union, Vector2(1.0, 0.0), 0.10
