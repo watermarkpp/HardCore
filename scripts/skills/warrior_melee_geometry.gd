@@ -24,6 +24,9 @@ const FOOTPRINT_INTERSECTION_CONTRACT_ID := (
 const THRUST_CONTINUOUS_DAMAGE_AXIS_CONTRACT_ID := (
 	"gameplay.warrior.thrust.damage_axis.snapped_visual_8dir_snapshot.v1"
 )
+const RELEASE_FOOTPRINT_CONTRACT_ID := (
+	"gameplay.warrior.release_footprint.shared_snapshot.v1"
+)
 const TARGET_FOOTPRINT_CONTRACT_ID := (
 	WorldSpatialRulesScript.ACTOR_GROUND_FOOTPRINT_CONTRACT_ID
 )
@@ -339,6 +342,83 @@ static func thrust_footprint_slot_gu(
 	)
 
 
+static func attack_release_footprint_snapshot_ground_gu(
+	skill_id: String,
+	release_id: String,
+	origin_ground_gu: Vector2,
+	direction_index: int,
+	mode: String,
+	range_bonus_gu := 0.0
+) -> Dictionary:
+	var resolved_direction_index := posmod(direction_index, 8)
+	var direction_ground_gu := canonical_ground_direction_gu(
+		resolved_direction_index
+	)
+	match mode:
+		SKILL_THRUST:
+			return SkillFootprintSnapshotScript.create_directed_rectangle(
+				skill_id,
+				release_id,
+				origin_ground_gu,
+				direction_ground_gu,
+				reach_gu(SKILL_THRUST, range_bonus_gu),
+				THRUST_WIDTH_GU
+			)
+		SKILL_HALF_MOON:
+			# The approved four sectors are [-1, 0, +1, +2] relative to
+			# facing. Their exact union is one 180-degree sector centered
+			# half a direction step clockwise from the visual facing axis.
+			return SkillFootprintSnapshotScript.create_sector_arc(
+				skill_id,
+				release_id,
+				origin_ground_gu,
+				direction_ground_gu.rotated(PI / 8.0),
+				reach_gu(SKILL_HALF_MOON, range_bonus_gu),
+				PI / 2.0,
+				96
+			)
+		SKILL_NORMAL, SKILL_FIRE:
+			return SkillFootprintSnapshotScript.create_sector_arc(
+				skill_id,
+				release_id,
+				origin_ground_gu,
+				direction_ground_gu,
+				reach_gu(mode, range_bonus_gu),
+				PI / 8.0,
+				24
+			)
+	return {}
+
+
+static func wild_rush_release_footprint_snapshot_ground_gu(
+	release_id: String,
+	segment_start_ground_gu: Vector2,
+	segment_end_ground_gu: Vector2,
+	caster_combat_radius_gu: float
+) -> Dictionary:
+	return SkillFootprintSnapshotScript.create_swept_capsule_path(
+		"warrior.wild_rush",
+		release_id,
+		segment_start_ground_gu,
+		segment_end_ground_gu,
+		maxf(0.0, caster_combat_radius_gu)
+	)
+
+
+static func release_snapshot_intersects_target_footprint_ground_gu(
+	skill_footprint_snapshot: Dictionary,
+	target_center_ground_gu: Vector2,
+	target_combat_radius_gu: float
+) -> bool:
+	return (
+		SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
+			skill_footprint_snapshot,
+			target_center_ground_gu,
+			target_combat_radius_gu
+		)
+	)
+
+
 static func thrust_damage_axis_plan_ground_gu(
 	visual_direction_index: int,
 	release_geometry: Dictionary
@@ -357,13 +437,12 @@ static func thrust_damage_axis_plan_ground_gu(
 		"release_id", "unbound_release"
 	))
 	var skill_footprint_snapshot := (
-		SkillFootprintSnapshotScript.create_directed_rectangle(
+		attack_release_footprint_snapshot_ground_gu(
 			"warrior.thrusting",
 			release_id,
 			origin_ground_gu,
-			canonical_direction_ground_gu,
-			reach_gu(SKILL_THRUST),
-			THRUST_WIDTH_GU
+			resolved_visual_direction_index,
+			SKILL_THRUST
 		)
 	)
 	return {
