@@ -4,6 +4,9 @@ extends RefCounted
 const CombatDirectionSpaceScript := preload(
 	"res://scripts/skills/combat_direction_space.gd"
 )
+const CombatReleaseGeometryScript := preload(
+	"res://scripts/skills/combat_release_geometry.gd"
+)
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 
@@ -17,6 +20,9 @@ const TARGET_COUNT_POLICY_ID := "gameplay.warrior.melee_target_count.v1"
 const DIRECTION_SPACE_CONTRACT_ID := CombatDirectionSpaceScript.CONTRACT_ID
 const FOOTPRINT_INTERSECTION_CONTRACT_ID := (
 	"gameplay.warrior.melee_footprint_intersection.ground_gu_sat.v2"
+)
+const THRUST_CONTINUOUS_DAMAGE_AXIS_CONTRACT_ID := (
+	"gameplay.warrior.thrust.damage_axis.live_locked_same_visual_sector_gu.v1"
 )
 const TARGET_FOOTPRINT_CONTRACT_ID := (
 	WorldSpatialRulesScript.ACTOR_GROUND_FOOTPRINT_CONTRACT_ID
@@ -315,6 +321,8 @@ static func half_moon_footprint_relative_sector_gu(
 		):
 			return relative_direction
 	return -1
+
+
 static func thrust_footprint_slot_gu(
 	origin_ground_gu: Vector2,
 	target_center_ground_gu: Vector2,
@@ -322,6 +330,98 @@ static func thrust_footprint_slot_gu(
 	direction_index: int,
 	range_bonus_gu := 0.0
 ) -> int:
+	return thrust_footprint_slot_for_direction_ground_gu(
+		origin_ground_gu,
+		target_center_ground_gu,
+		target_combat_radius_gu,
+		canonical_ground_direction_gu(direction_index),
+		range_bonus_gu
+	)
+
+
+static func thrust_damage_axis_plan_ground_gu(
+	visual_direction_index: int,
+	release_geometry: Dictionary
+) -> Dictionary:
+	var resolved_visual_direction_index := posmod(visual_direction_index, 8)
+	var canonical_direction_ground_gu := canonical_ground_direction_gu(
+		resolved_visual_direction_index
+	)
+	var damage_direction_ground_gu := canonical_direction_ground_gu
+	var source := "canonical_visual_direction"
+	var fallback_reason := "no_valid_locked_target_axis"
+	var live_direction_ground_gu: Vector2 = release_geometry.get(
+		"live_locked_target_direction_ground_gu", Vector2.ZERO
+	)
+	var live_direction_index := int(
+		release_geometry.get("live_locked_target_direction_index", -1)
+	)
+	var has_valid_live_axis := (
+		bool(release_geometry.get("locked_target_valid_at_release", false))
+		and int(release_geometry.get("locked_target_instance_id", 0)) > 0
+		and str(release_geometry.get("live_locked_target_axis_contract_id", ""))
+		== CombatReleaseGeometryScript.LIVE_LOCKED_TARGET_AXIS_CONTRACT_ID
+		and live_direction_ground_gu.length_squared() > EPSILON * EPSILON
+		and live_direction_index >= 0
+	)
+	if has_valid_live_axis:
+		if live_direction_index == resolved_visual_direction_index:
+			damage_direction_ground_gu = live_direction_ground_gu.normalized()
+			source = "live_locked_target_same_visual_sector"
+			fallback_reason = ""
+		else:
+			fallback_reason = "locked_target_crossed_visual_direction"
+	return {
+		"contract_id": THRUST_CONTINUOUS_DAMAGE_AXIS_CONTRACT_ID,
+		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
+		"visual_direction_index": resolved_visual_direction_index,
+		"canonical_visual_direction_ground_gu": canonical_direction_ground_gu,
+		"damage_direction_ground_gu": damage_direction_ground_gu,
+		"damage_axis_source": source,
+		"uses_live_locked_target_axis": (
+			source == "live_locked_target_same_visual_sector"
+		),
+		"fallback_reason": fallback_reason,
+		"live_locked_target_direction_index": live_direction_index,
+		"effect_length_gu": reach_gu(SKILL_THRUST),
+		"effect_width_gu": THRUST_WIDTH_GU,
+		"primary_segment_end_gu": THRUST_PRIMARY_REACH_GU,
+	}
+
+
+static func thrust_footprint_slot_for_axis_plan_gu(
+	origin_ground_gu: Vector2,
+	target_center_ground_gu: Vector2,
+	target_combat_radius_gu: float,
+	damage_axis_plan: Dictionary,
+	range_bonus_gu := 0.0
+) -> int:
+	if (
+		str(damage_axis_plan.get("contract_id", ""))
+		!= THRUST_CONTINUOUS_DAMAGE_AXIS_CONTRACT_ID
+	):
+		return 0
+	return thrust_footprint_slot_for_direction_ground_gu(
+		origin_ground_gu,
+		target_center_ground_gu,
+		target_combat_radius_gu,
+		damage_axis_plan.get("damage_direction_ground_gu", Vector2.ZERO),
+		range_bonus_gu
+	)
+
+
+static func thrust_footprint_slot_for_direction_ground_gu(
+	origin_ground_gu: Vector2,
+	target_center_ground_gu: Vector2,
+	target_combat_radius_gu: float,
+	damage_direction_ground_gu: Vector2,
+	range_bonus_gu := 0.0
+) -> int:
+	if damage_direction_ground_gu.length_squared() <= EPSILON * EPSILON:
+		return 0
+	var normalized_damage_direction_ground_gu := (
+		damage_direction_ground_gu.normalized()
+	)
 	var target_polygon := target_footprint_polygon_ground_gu(
 		target_center_ground_gu,
 		target_combat_radius_gu
@@ -329,9 +429,9 @@ static func thrust_footprint_slot_gu(
 	# Test the primary segment first. A body straddling the 1.5-tile boundary is
 	# assigned once to slot 1, so integration cannot apply both damage bands.
 	if convex_polygons_intersect_inclusive(
-		_thrust_region_polygon(
+		_thrust_region_polygon_for_direction_ground_gu(
 			origin_ground_gu,
-			direction_index,
+			normalized_damage_direction_ground_gu,
 			0.0,
 			THRUST_PRIMARY_REACH_GU
 		),
@@ -339,9 +439,9 @@ static func thrust_footprint_slot_gu(
 	):
 		return 1
 	if convex_polygons_intersect_inclusive(
-		_thrust_region_polygon(
+		_thrust_region_polygon_for_direction_ground_gu(
 			origin_ground_gu,
-			direction_index,
+			normalized_damage_direction_ground_gu,
 			THRUST_PRIMARY_REACH_GU,
 			reach_gu(SKILL_THRUST, range_bonus_gu)
 		),
@@ -349,6 +449,8 @@ static func thrust_footprint_slot_gu(
 	):
 		return 2
 	return 0
+
+
 static func convex_polygons_intersect_inclusive(
 	first: PackedVector2Array,
 	second: PackedVector2Array
@@ -381,13 +483,30 @@ static func _thrust_region_polygon(
 	end_forward: float
 ) -> PackedVector2Array:
 	var forward := Vector2(facing_tile_step(direction_index)).normalized()
+	return _thrust_region_polygon_for_direction_ground_gu(
+		origin,
+		forward,
+		start_forward,
+		end_forward
+	)
+
+
+static func _thrust_region_polygon_for_direction_ground_gu(
+	origin_ground_gu: Vector2,
+	direction_ground_gu: Vector2,
+	start_forward_gu: float,
+	end_forward_gu: float
+) -> PackedVector2Array:
+	if direction_ground_gu.length_squared() <= EPSILON * EPSILON:
+		return PackedVector2Array()
+	var forward := direction_ground_gu.normalized()
 	var side := Vector2(forward.y, -forward.x)
 	var half_width := THRUST_WIDTH_GU * 0.5
 	return PackedVector2Array([
-		origin + forward * start_forward - side * half_width,
-		origin + forward * end_forward - side * half_width,
-		origin + forward * end_forward + side * half_width,
-		origin + forward * start_forward + side * half_width,
+		origin_ground_gu + forward * start_forward_gu - side * half_width,
+		origin_ground_gu + forward * end_forward_gu - side * half_width,
+		origin_ground_gu + forward * end_forward_gu + side * half_width,
+		origin_ground_gu + forward * start_forward_gu + side * half_width,
 	])
 
 

@@ -20,6 +20,9 @@ const WILD_RUSH_RELEASE_TARGET_POLICY_ID := (
 const TARGET_CENTERED_SPATIAL_RELEASE_POLICY_ID := (
 	"gameplay.wizard.target_centered_spatial.release_live_footpoint.v1"
 )
+const LIVE_LOCKED_TARGET_AXIS_CONTRACT_ID := (
+	"gameplay.professions.combat_release.live_locked_target_axis_gu.v1"
+)
 const TARGET_CENTERED_SPATIAL_SKILL_IDS := {
 	"wizard.exploding_flame": true,
 	"wizard.fire_wall": true,
@@ -99,29 +102,49 @@ static func resolve(
 		)
 	var had_locked_target := track_locked_target and locked_target_instance_id > 0
 	var valid_original_target := had_locked_target and locked_target_valid_at_release
-	if (
-		valid_original_target
-		and effective_facing_policy == FACING_POLICY_LIVE_LOCKED_TARGET
-	):
-		var live_delta_screen_px := (
-			locked_target_position_at_release - actor_position_at_release
-		)
-		var live_delta_ground_gu := (
-			GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-				live_delta_screen_px
-			)
-		)
-		if live_delta_ground_gu.length_squared() > EPSILON * EPSILON:
-			release_direction_ground_gu = live_delta_ground_gu.normalized()
-	var release_direction_screen_px := (
-		GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
-			release_direction_ground_gu
-		).normalized()
-	)
 	var origin_ground_gu := (
 		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
 			actor_position_at_release
 		)
+	)
+	var locked_target_ground_gu_at_release := Vector2.ZERO
+	var live_locked_target_delta_ground_gu := Vector2.ZERO
+	var live_locked_target_direction_ground_gu := Vector2.ZERO
+	var live_locked_target_direction_index := -1
+	if valid_original_target:
+		# Preserve the established release direction's single linear conversion.
+		# Converting two large absolute screen positions separately and subtracting
+		# introduced avoidable floating cancellation at some 16-way line angles.
+		live_locked_target_delta_ground_gu = (
+			GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+				locked_target_position_at_release - actor_position_at_release
+			)
+		)
+		locked_target_ground_gu_at_release = (
+			origin_ground_gu + live_locked_target_delta_ground_gu
+		)
+		if (
+			live_locked_target_delta_ground_gu.length_squared()
+			> EPSILON * EPSILON
+		):
+			live_locked_target_direction_ground_gu = (
+				live_locked_target_delta_ground_gu.normalized()
+			)
+			live_locked_target_direction_index = (
+				CombatDirectionSpaceScript.direction_index_for_ground_delta_gu(
+					live_locked_target_direction_ground_gu
+				)
+			)
+	if (
+		valid_original_target
+		and effective_facing_policy == FACING_POLICY_LIVE_LOCKED_TARGET
+	):
+		if not live_locked_target_direction_ground_gu.is_zero_approx():
+			release_direction_ground_gu = live_locked_target_direction_ground_gu
+	var release_direction_screen_px := (
+		GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+			release_direction_ground_gu
+		).normalized()
 	)
 	return {
 		"contract_id": CONTRACT_ID,
@@ -162,6 +185,13 @@ static func resolve(
 		),
 		"refresh_actor_footpoint_at_release": true,
 		"refresh_locked_target_footpoint_at_release": valid_original_target,
+		"live_locked_target_axis_contract_id": LIVE_LOCKED_TARGET_AXIS_CONTRACT_ID,
+		"locked_target_ground_gu_at_release": locked_target_ground_gu_at_release,
+		"live_locked_target_delta_ground_gu": live_locked_target_delta_ground_gu,
+		"live_locked_target_direction_ground_gu": (
+			live_locked_target_direction_ground_gu
+		),
+		"live_locked_target_direction_index": live_locked_target_direction_index,
 		"locked_target_instance_id": locked_target_instance_id if had_locked_target else 0,
 		"locked_target_valid_at_release": valid_original_target,
 		"allow_target_retarget": not had_locked_target,
